@@ -1,162 +1,160 @@
-Return-Path: <linux-pm+bounces-14446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD26B97C64A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 10:53:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4F4797C68D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 11:07:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73AB1281CCD
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 08:53:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68CDF1F25CBB
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 09:07:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0976E1991B1;
-	Thu, 19 Sep 2024 08:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0D3199E8D;
+	Thu, 19 Sep 2024 09:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VrVcQIQp"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="aP0e28+9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1D91990A1
-	for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2024 08:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726736002; cv=none; b=VqFckMOoN0lRErEW12/1PB+afYT6k8XNxKCLf/vSV5pZ8Dv0JHlFuKcdeqGiekZOd0lsgBoR4F2p0T2/nph8PZDQcVgZDp/J4Vnqqvq5B+OlO26xCqc6XsrLPF9J0yJY5ElyCyPb/QxM40/dK2zGNvMwaBpraJ2vwZC2W7euXTo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726736002; c=relaxed/simple;
-	bh=jmQGSHPQAAX/GFq/B1HD2tAS5MutC16GzgAMXMtyErU=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAB5199957;
+	Thu, 19 Sep 2024 09:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726736815; cv=pass; b=JYkbLfNezkniIXOEHgm+HHpkz4FY4UFQnyXbSKXUnVX7nED3Jp82K5tjgAdcOHqyVQWFGh6pPSK3uFR6/tafVKlR3HFZ4CYdNvWMo44yTuyrb5h9yGRdP1fcDgRT4v1uHtLUJSoEivU7CGnmHp7e0AohsIzFkzQK2WJYXslGX08=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726736815; c=relaxed/simple;
+	bh=WIyPR9I7SW6Am8W2Xo7ZAkLcKedMPAaJoNrnX9TxwDI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JYgj3jeytjihPdFtw6lr5MWGgi06u+AokWchwjM1nHJPf8nYh5j52DTWTVmLdGd1bhIQvsUFukjz87pU8he8MdT/lDQen9hodoBqi4p5D9rzwxVq+OTZOjtq7VbMjS+6BwKj+6gubfYN0v1qiZfe8WLzcdbcWD0ASfXORo1+V9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VrVcQIQp; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f753375394so4680511fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2024 01:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1726735997; x=1727340797; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9ip5fmGFn7hygDUeJp4dufO1rEFoOFFXq7aKfuDJ9XE=;
-        b=VrVcQIQp0aceaKbot7i8ZEXl8v+lcyWsAXbo+r+72B7NxUXwh9Pku0TPu0ZqsjDilX
-         QzeQTrBVB8QP8b5WXmWIzvo1d5Fv5fNd9xU7Le0GGX+SmEIFaHZreC1YxoJmM7nDJL85
-         2xKOIvG37p/aJFHsUmOKZNVsuQp8HV5iSDb8t/m0F03DeZlikJf7D0lb2JXPxZMFc4ly
-         NOBIXKeJfgm1+q4Wycka/y/x7GUZ/bujf1PnoMhqANcarS/PkTnoG0jhCW5wqpUC11sS
-         TaZFyE3tGJC3OeqMetUZrRrB6vuxkcmPviZLgySqrL3plHOOktupPzBn1Llz3cpRLXub
-         gs4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726735997; x=1727340797;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ip5fmGFn7hygDUeJp4dufO1rEFoOFFXq7aKfuDJ9XE=;
-        b=Fcw+DPytJ4vBDDETw+8cA8+BfIiXIf/ynzWVED2Bqpal6VOTVWi9WQVXWv8QZJsNXr
-         vyfMS2snkirD8Xegl7/jMosrpfn949Bb/hEdGg0/hDuDRZVkFsgRQi9QTNQ0Zs7Wrq0+
-         Y79ZtK/1QipQQdiG3Y/6SMqNIOM8p30MvV46DvPWm7f3pB4W7CghNeKza0UHcZAhKbvk
-         3w8y7vFwjklT36WXnlC5uUUr2XsE3HFnU7EajNswG6FC4yrSnzIrxph8e10RKSkd0DMe
-         DiSouLgXigF5QEUHwTpF+QaajjpEchA6gq4E7yM+IVxVGt5xZ6QGd0K2Ui1dS9Oyle5t
-         9gLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX68+K981iziaJyhJqNOqsf0ghqgkp5JuSUqhHJEDALZj3I+5GTWac125UXNL+X69J2uFgwxw2YTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvRWiJuV0T0HrG2zE8MZo7/G43IJOxf5LTj4iDSh0mH6Xf5qex
-	TBGha3BCq2NefStuc0BibTlBfbICHn4qhmMjQrpytcmwPZiAr9yAubNr1XD1SuA=
-X-Google-Smtp-Source: AGHT+IExHV10Jhw7pzq6Z+rh3ETzFIGUY1KRRXUiCBSFN21i+8wI32UjyZymk12trNBAHKYmGerSpA==
-X-Received: by 2002:a05:651c:1549:b0:2f7:631a:6e0d with SMTP id 38308e7fff4ca-2f787dc3b59mr141352651fa.12.1726735997390;
-        Thu, 19 Sep 2024 01:53:17 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945db10csm76076095ad.53.2024.09.19.01.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2024 01:53:16 -0700 (PDT)
-Date: Thu, 19 Sep 2024 10:53:05 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	regressions@lists.linux.dev,
-	John Ogness <john.ogness@linutronix.de>
-Subject: Re: Linux fails to ACPI S3 supend on Dell XPS 13 9630
- (6.11.0-04557-g2f27fce67173)
-Message-ID: <ZuvmcclM_HzdZtwP@pathway.suse.cz>
-References: <18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de>
- <154114fb-276f-45f6-bba0-98133c7c5d4d@molgen.mpg.de>
- <3b600845-77d5-42d3-8556-53cc0b2eab25@molgen.mpg.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iZwSJqGaYHqgpk//5R9F14omA1a+gpgDl3McyvQk6eTvdvAqvdAPqoW90q1jIQwj5WjEG5Ln8+td3kf5tZR88WE4MczJoFSA9iRusKZOU6zJpJOVdgMYfszRDEj37SC/Z6z2t7za0e9WLgliqfc2RhcPsHey9mU6pA/4NQlqmyc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=aP0e28+9; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1726736744; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=WjG2BOdH75Al6lv/8HNX+J4MZwf54noq6XT02LOFdOST4yvSHm7s95wvHBehc1ibo3irRiz3EWoRQEfwJhJ7u9CeVpnhvL7MTS5K2mYQfVTSH3SXdAG35+ZRgae8HPAaioQEvJy2l3iE527Jc2Trwe+kFkT66DgUIjRkZaSYpO0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1726736744; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=WIyPR9I7SW6Am8W2Xo7ZAkLcKedMPAaJoNrnX9TxwDI=; 
+	b=IX+AgYHmn9h0/JFMcQSb76kpnvvprbj+30Z/H7NWsE6UCw8CilmwCNIXi+zYyi5O0EwTEHF7dWTtTgeutdXSbgyO0GTcO5G+N5JbeljfaBuCKRLmu4urFbgkZFA7CX1S9zkT7mbMBtGO1RF80yyiAQysRRuT46Z63hmBrJwYLUo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726736744;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=WIyPR9I7SW6Am8W2Xo7ZAkLcKedMPAaJoNrnX9TxwDI=;
+	b=aP0e28+9MF1DAD9w61R9zdYhgHkXUjJgjquFdB9epwQpmoan9kk060se3CanuevN
+	gsKRjfRHKDNUukrlUk6TAVHjDo8/aLBau64DRYxp1VAeWihDccx0PvsOsXTxDubD0Ky
+	tYRiunm+tSWSE5RV/g6BCsqF+yTAIof8Vyj8OOew=
+Received: by mx.zohomail.com with SMTPS id 1726736742399817.1293742983563;
+	Thu, 19 Sep 2024 02:05:42 -0700 (PDT)
+Received: by mercury (Postfix, from userid 1000)
+	id 3C03B106031C; Thu, 19 Sep 2024 11:05:35 +0200 (CEST)
+Date: Thu, 19 Sep 2024 11:05:35 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?utf-8?B?QWRyacOhbiBNYXJ0w61uZXo=?= Larumbe <adrian.larumbe@collabora.com>, Boris Brezillon <boris.brezillon@collabora.com>, 
+	devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v1 0/6] Fix RK3588 GPU domain
+Message-ID: <vh5gsouseahs6ddauzevcdtcjutl35dcyoc5cv4pvn56lyyilv@rekmpklpbbyh>
+References: <20240910180530.47194-1-sebastian.reichel@collabora.com>
+ <CAPDyKFoMyGUagDdjdaBJXL_OEgewQjCeJcBBK+2PFk=vd+kjRg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2ey5cyrmazej6g4l"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3b600845-77d5-42d3-8556-53cc0b2eab25@molgen.mpg.de>
+In-Reply-To: <CAPDyKFoMyGUagDdjdaBJXL_OEgewQjCeJcBBK+2PFk=vd+kjRg@mail.gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/223.982.64
+X-ZohoMailClient: External
 
-On Thu 2024-09-19 10:17:24, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> Am 19.09.24 um 07:51 schrieb Paul Menzel:
-> 
-> > Am 19.09.24 um 07:51 schrieb Paul Menzel:
-> 
-> > > On the Intel Kaby Lake laptop Dell XPS 13, Linux 6.11.0-04557-
-> > > g2f27fce67173 (“6.12-rc0”) fails to ACPI S3 suspend the system. The
-> > > screen turns black (as expected) and the power button LED stays on.
-> > > 
-> > > Doing
-> > > 
-> > >      echo N | sudo tee /sys/module/printk/parameters/console_suspend
-> > > 
-> > > and on tty2
-> > > 
-> > >      sudo systemctl stop gdm3
-> > >      sudo systemctl start getty@tty1.service
-> > > 
-> > > and then on tty1
-> > > 
-> > >      sudo systemctl suspend
-> > > 
-> > > I see some panic messages and traces containing ktime_get or so, but
-> > > I failed to save the messages. (Hints very much appreciated.)
 
-You might try to enable the kernel crash dump.
+--2ey5cyrmazej6g4l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Or you might try to set some delay in /proc/sys/kernel/printk_delay and
-make a photo of the screen.
+Hi,
 
-John Ogness told me that there was a trick with a permanent memory.
-But it seems that there is no permanent memory on the laptop.
-Adding John into Cc.
+On Fri, Sep 13, 2024 at 01:59:10PM GMT, Ulf Hansson wrote:
+> On Tue, 10 Sept 2024 at 20:05, Sebastian Reichel
+> <sebastian.reichel@collabora.com> wrote:
+> > I got a report, that the Linux kernel crashes on Rock 5B when the panth=
+or
+> > driver is loaded late after booting. The crash starts with the following
+> > shortened error print:
+> >
+> > rockchip-pm-domain fd8d8000.power-management:power-controller: failed t=
+o set domain 'gpu', val=3D0
+> > rockchip-pm-domain fd8d8000.power-management:power-controller: failed t=
+o get ack on domain 'gpu', val=3D0xa9fff
+> > SError Interrupt on CPU4, code 0x00000000be000411 -- SError
+> >
+> > This series first does some cleanups in the Rockchip power domain
+> > driver and changes the driver, so that it no longer tries to continue
+> > when it fails to enable a domain. This gets rid of the SError interrupt
+> > and long backtraces. But the kernel still hangs when it fails to enable
+> > a power domain. I have not done further analysis to check if that can
+> > be avoided.
+> >
+> > Last but not least this provides a fix for the GPU power domain failing
+> > to get enabled - after some testing from my side it seems to require the
+> > GPU voltage supply to be enabled.
+> >
+> > I'm not really happy about the hack to get a regulator for a sub-node
+> > in the 5th patch, which I took over from the Mediatek driver. But to
+> > get things going and open a discussion around it I thought it would be
+> > best to send a first version as soon as possible.
+>=20
+> That creates a circular dependency from the fw_devlink point of view.
 
-> > > I try to test the printk changes, but otherwise bisecting is not
-> > > feasible, as it’s my production machine.
-> 
-> It’s not the printk changes.
+Yes.
 
-There should not be any visible changes at the moment because all
-console drivers still use the legacy code.
+> I assume that isn't a problem and fw_devlink takes care of this, so
+> the GPU power domain still can probe?
 
-The conversion of the 8250 serial console driver is still pending
-review, see the current version at
-https://lore.kernel.org/r/20240913140538.221708-1-john.ogness@linutronix.de
-But this patchset would have effect only when the serial console is enabled.
+This has been tested on Radxa Rock 5B and RK3588 EVB1. It properly
+probes the GPU power domain and fixes late probing of the GPU driver :)
 
-> I tested some commits, and assume it’s the timer core changes:
-> 
->     $ git log --oneline --merges daa394f0f9d3c -3 --no-decorate
->     daa394f0f9d3c Merge tag 'core-debugobjects-2024-09-16' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->     9ea925c806dbb Merge tag 'timers-core-2024-09-16' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->     cb69d86550b3f Merge tag 'irq-core-2024-09-16' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-> 
-> 
-> 1.  6.11.0-02659-gcb69d86550b3 succeeds to ACPI S3 suspend
-> 2.  6.11.0-02710-gdaa394f0f9d3 fails to ACPI S3 suspend
+> Other than this, I think this looks okay to me.
 
-Best Regards,
-Petr
+I will send a V2 with the minor things pointed out.
+
+Greetings,
+
+-- Sebastian
+
+--2ey5cyrmazej6g4l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmbr6VsACgkQ2O7X88g7
++prM1A//Tz6tsfCtFAfD+esskzA7MDO9OW+icEYWp1LK1xBvIu+Sx9kB+ggKKHar
+q09BTcQD+NSweJfBeabKpIScdmw4YRpMkbpqkGKQkQOYuy2h5udtt6g8nUrvbfIG
+BtCo3N1VELMevzo1bW2uYafy2HLqH9rBTUS9kRRxXTfUyYKSwRnmmxrgrhiZJjGx
+nrBPWVbj5HouXNoa2X4yuFs3XNG9MP3FkuFBFNZnKb6hcFCv6IApWvrJ71ESUivD
+JJjDDKcy3yoVzRxb/AvA49WpCefKi/L2ilOOlZQswtLbLjxJ0ED+3nsHCxDA4RDU
+6imPttrxcuEn+bKb8URAYGuxgK110w3TvaBY260JRaPS8EfiI8b439riBllY8aHv
+ydpVBNdpvVaT/qG2RvLntsYlk+vx0M+nGRQCFJ4N+JudicQWmHuExncL8qBe8XiL
+or6gVTsgmcZ9t3EiC8K/9d+S+icu0utnCDwyEV00byRbxKTrSBeZ2y+FUeEZLUSP
+GmpniTJtQ2QkF3afhJZaN/57qZchTg4HmedHlFmqHEBuoh/U1LGG/SDcjiWnKmvp
+DL6WYLIshIEAb1edyPmO/y/PdSUolodr2oeJhD9tFul8wC+eAirXa70AlOsS+EHH
+wHVJ9BXeOfwEornBUsr41u7LDkCnAcX43WBKVobwDIWltnHXW3I=
+=mFbG
+-----END PGP SIGNATURE-----
+
+--2ey5cyrmazej6g4l--
 
