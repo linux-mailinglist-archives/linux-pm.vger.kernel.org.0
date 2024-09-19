@@ -1,176 +1,175 @@
-Return-Path: <linux-pm+bounces-14463-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14464-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AD8A97C97E
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 14:50:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B36C497C9E0
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 15:14:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8539C1F23A95
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 12:50:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DC1C28306E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 13:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6117C19DFA4;
-	Thu, 19 Sep 2024 12:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD7219E7D1;
+	Thu, 19 Sep 2024 13:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTvUIWUA"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="f+jNah3f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3AA819D88C;
-	Thu, 19 Sep 2024 12:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DB119B3C0;
+	Thu, 19 Sep 2024 13:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726750239; cv=none; b=NDIA2Hf4+RWNFhyf6H5yPQ74rwSod9CRu/T3nCjpBdhRy3KXvi28nr6J19GDdYkNIja4Jy5TG1Cxec7ohtXDv/acweCxdOjLXArdWQfsBNr50TiiaB37Rip+JbVZ/W6LgeblqAax7ExxZbuQJTpJ7GsDQCMYjVy7vb1ZCQLvqCQ=
+	t=1726751691; cv=none; b=Na9kUqFuJIIe0XGsKsQT3D/4j/pu1rRqNsc+wgZRqFIb0Xatj8TYWe+KsDq9ASVEVUuACtS0WMrVb4zAwLXC2KFe6rIIEhRDzqGq9ETVnpIHUwQqDBYlMa07v+QjvnbML0zrE9aXijzAj00hRnBbJ/CpT23yo6MjwM9740RGsq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726750239; c=relaxed/simple;
-	bh=P2CnPHZ3uuaFOCRYko5ENjgy3AttJLJU7pg7w5qMQhc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V4X1uoTcRSF+XXl8QgGvVfWlt4HyWTsQmVokli6uBBXruMhtZrstUE/akmnwnDqI6H5v2tTV9NxZlpXN41DNa8NPj530LuyjkwEEF+fxZSeakTFCUSWzzkKkxu74/v2FA54J9gpIH/4w2gI02kNzp2Eh1/WTfWGzzdZEdLW1zrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTvUIWUA; arc=none smtp.client-ip=209.85.217.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-49bd76fa981so296206137.3;
-        Thu, 19 Sep 2024 05:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726750236; x=1727355036; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lynh9AqoNJtlb54yCwbo34NdMY498MNudPm3PDmLEVM=;
-        b=hTvUIWUA7iyITPEypNFVLojrZBi8omlrpCTRUiSOT052NuBYyTlKnaePx1d9j78TTl
-         XRdBVbfNvHG3U/uM/IGdGTAUqSAIRyPWjgm2g60xKVXwmhOjlENckdFN9wYVSehb+ltA
-         ZJtNottFFiyODkPQdklcZ23FnS/Fdyw9uS8YY6ptI1XfABocPVOnPIUG5+ycM34duarn
-         HCsdMr0EAsj14jxgstzxVWMKSWpRlLD4Ke4F/4RwLXEKo9Mg1Fvh2qGGxh5dmaDi1oRd
-         QizA6ODRWgw0TVHfO177j6HThethwAoB3LyuxYfzRU2XPkMPlYy6NLfBAFFDMaaJ6ieR
-         1iTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726750236; x=1727355036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lynh9AqoNJtlb54yCwbo34NdMY498MNudPm3PDmLEVM=;
-        b=ZyRuvlouTR+Oeb3kZgpoMQHw3VdVLo1g2yLnnJoVza+BVID3PQ9gjRoyqjYrLWrt3i
-         Nq6F8aiBXuwMNvRjLc1u4quIfZGlit+Xd+HDrJFANgCXyLr5Ij9SUPcr3zqkxK1MiZOP
-         zDYAgfB4Uwz/sI2rj17vD/uzMq7Xf8UApmQLxXCAOMYTdat91Be20x+1MusQSp/YAG62
-         3GkZswPLiREbEGX+ZBkfG09mRVDathXWA4qiZ7sg7RSf/3jM6Kh1C9DuXsK3h7ieAZIh
-         mKmtcu1nkNXHbOAUpbiEEKWzY5Ukg8F6yKMHsL9mNWg7NbVzM/vPasFy1QPcL6Q+n6o5
-         O1qg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSHiylbsSN41D8k4GRSh8iiSjYbxpfWTjaEH5pnk+qjtzjV6uRPNg9YVxsAKsIJ0pjNW/nQx7u71zH@vger.kernel.org, AJvYcCUpvIrvzHiyroGhnRKyriApawf/s+WUh2bxPlDAbLo3hX4I++oj7kTcLw4A/+86hV5sz5irtCWPn5MC@vger.kernel.org, AJvYcCV4gadrXPyOWoDWiYqmwox/jvfrk/MyjCx+Y73tqM9hnnqd1D20Qdi8T4CQzCtf5qbeldy9voi6Tnc=@vger.kernel.org, AJvYcCVOuhd4vZ5JoE+kF/NbLiNwXbZoetc0sdgLa+G2d0N5zUcoxcA6DJYrmY5jeu/LZZUzFY/Wtu0+REfa5w==@vger.kernel.org, AJvYcCVt6m8Ivjh/Ib8bojdbHucfdLqFK5T/gktl+VcMWE2SoU5OUSYZR4Bp45i7DTgHz6K+VtmDAvJ9/zM8oYjLn3ceNCM=@vger.kernel.org, AJvYcCWlnrM/aAJYAXSyLEqSk/IWQcZhJzsJzjexUJX2rMcc2LLPCGdRhBnlsTUEjpcXpupKUg83EzFihzyVmKs=@vger.kernel.org, AJvYcCXAJ45z2X1scgJn9URla5GOVF5tvL8SIh/VvShMh+awDYcVS5fWYTso0rlKhT0iuinWC1ctPHKBpZXTNmGl@vger.kernel.org, AJvYcCXVhh8NjI+bRlKMM+iduhmE1SIiDpvfbsFn8QPgilV8U1sMPZcQ9NxQE6b+E27lgxhbtpJVT9h6MtTY@vger.kernel.org, AJvYcCXvU2AC1rZAABd1JeUNp78w1qyFDPu3mWQgg4uqfuozCeiTlVLkyahhwYGdpJUsnU6h5B2PC8VPR836JNezbg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+U1uOxND4t4oQhX1nyw40gVrPxlU8jPOETFME31LdPf0XFrjE
-	l5x45mCvozUc7/bHc5oN97BWrEg+P7uI4UCM7L+2lDoIhCH7nOmmZPZ7u6p9FwxQYWqZxAlEwfG
-	spfJ1lemH0MS9AaYxq7VE4u1KgjU=
-X-Google-Smtp-Source: AGHT+IEKMNbTQZXLRsS7SXG2H/9yDkohzhnwPtb9QKmG2n0WI6EVG/Fv5duzKAwAkVqQrCI53KiuMLSBZ1iaMAbwZsI=
-X-Received: by 2002:a05:6102:e0d:b0:493:dee7:9b8a with SMTP id
- ada2fe7eead31-49d41513da0mr18959356137.13.1726750236464; Thu, 19 Sep 2024
- 05:50:36 -0700 (PDT)
+	s=arc-20240116; t=1726751691; c=relaxed/simple;
+	bh=/xmLIZTg25Qjq5h9nsT+FMqltJMCECrFHyT6Rqa27CI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=jXP6sxv7TChBFA/t3d1tK52bckHSN3jRZHIzYsS3H7j/fIv4SiUEOxhD7At9u14ZEGaj0ryIocxht8ZuelsJx0yTEE5BT3zkK2tkPSSjIH+wh7ufwbiamBiVgUvP0i6jhhAHZz7Y6IP9TFpClHtmvnSQ4zpuLDQQNHUcSxlfJ/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=f+jNah3f; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48JDEcwV089621;
+	Thu, 19 Sep 2024 08:14:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1726751678;
+	bh=4tCfpmlyfchADm/bZ7pZ5HVB9+FDOrdHQOSWgbMXHKs=;
+	h=From:Date:Subject:To:CC;
+	b=f+jNah3fSwz8RyAICCXSyZs2NEWoGB0TwRzd0MKkdnS6Dzydxq4xtepPJggAXTUIx
+	 8xl+r4bWbXYolxvSwGMnvZaMR/jmYF3fgQv5pNOHeW5PH7z+IgPHBnm6Z60vhbTDgy
+	 uOHuY3g0b7S4ym30MVscsMLYA6JJBaXy/kqTsiGc=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48JDEcmb050008
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 19 Sep 2024 08:14:38 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 19
+ Sep 2024 08:14:37 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 19 Sep 2024 08:14:37 -0500
+Received: from [127.0.1.1] (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48JDEYxa060794;
+	Thu, 19 Sep 2024 08:14:34 -0500
+From: Dhruva Gole <d-gole@ti.com>
+Date: Thu, 19 Sep 2024 18:43:40 +0530
+Subject: [PATCH v5] dt-bindings: opp: operating-points-v2-ti-cpu: Describe
+ opp-supported-hw
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
- <20240913-starqltechn_integration_upstream-v4-6-2d2efd5c5877@gmail.com> <bpujvanzp4yph2jkgog2rkvoywjtqad3jgk47kkex6v223flpb@66zporslyjzt>
-In-Reply-To: <bpujvanzp4yph2jkgog2rkvoywjtqad3jgk47kkex6v223flpb@66zporslyjzt>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Thu, 19 Sep 2024 15:50:25 +0300
-Message-ID: <CABTCjFCTKoZK58rXBnTd22J2w_mkPp5=nx292eOwW5dAMbp9OA@mail.gmail.com>
-Subject: Re: [PATCH v4 06/27] dt-bindings: mfd: add samsung,s2dos05
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
-	Sam Ravnborg <sam@ravnborg.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>, 
-	cros-qcom-dts-watchers@chromium.org, Konrad Dybcio <konradybcio@kernel.org>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240919-b4-opp-dt-binding-fix-v5-1-199216dc0991@ti.com>
+X-B4-Tracking: v=1; b=H4sIAIMj7GYC/4WNQQ6DIBBFr2Jm3WkAQaSr3qNxUQF1FgUDxLQx3
+ r3UC3T5XvLf3yH7RD7Drdkh+Y0yxVBBXRqwyzPMHslVBsGEZIa1OEqM64qu4EjBUZhxojfq1na
+ 9MFpxJ6Bu1+SrPruPofJCucT0OW82/rP/ihtHhpP2vO+k6pyZ7oWuNr5gOI7jC7qghGK3AAAA
+X-Change-ID: 20240903-b4-opp-dt-binding-fix-73c6829751d2
+To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen
+ Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: Viresh Kumar <viresh.kumar@linaro.org>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Dhruva Gole <d-gole@ti.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726751674; l=3557;
+ i=d-gole@ti.com; s=20240919; h=from:subject:message-id;
+ bh=/xmLIZTg25Qjq5h9nsT+FMqltJMCECrFHyT6Rqa27CI=;
+ b=bzLUyEtejxYDeR3eWj51T+q/pqIA1dZiT8O1FZelEeHpzkjoh91gEWYiLXRC65SC3FDUuswTs
+ 35h9VoGiYK1C1VEpC/2vcYCPJaB06G0Teqe70zjiWMhTzCPxdlLrvr9
+X-Developer-Key: i=d-gole@ti.com; a=ed25519;
+ pk=k8NnY4RbxVqeqGsYfTHeVn4hPOHkjg7Mii0Ixs4rghM=
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-=D0=BF=D0=BD, 16 =D1=81=D0=B5=D0=BD=D1=82. 2024=E2=80=AF=D0=B3. =D0=B2 12:1=
-4, Krzysztof Kozlowski <krzk@kernel.org>:
->
-> On Fri, Sep 13, 2024 at 06:07:49PM +0300, Dzmitry Sankouski wrote:
-> > Add samsung,s2dos05 MFD module binding.
-> >
-> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> >
-> > ---
-> > Changes in v4:
-> > - split long(>80) lines
-> > - fix indentation
-> > - merge with regulators binding
-> > - drop pmic suffix
-> > - drop unused labels in example
-> > - correct description
-> > ---
-> >  .../devicetree/bindings/mfd/samsung,s2dos05.yaml   | 99 ++++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |  1 +
-> >  2 files changed, 100 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mfd/samsung,s2dos05.yaml=
- b/Documentation/devicetree/bindings/mfd/samsung,s2dos05.yaml
-> > new file mode 100644
-> > index 000000000000..534434002045
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/samsung,s2dos05.yaml
-> > @@ -0,0 +1,99 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mfd/samsung,s2dos05.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Samsung S2DOS05 Power Management IC
-> > +
-> > +maintainers:
-> > +  - Dzmitry Sankouski <dsankouski@gmail.com>
-> > +
-> > +description:
-> > +  This is a device tree bindings for S2DOS family of Power Management =
-IC (PMIC).
->
-> Drop this sentence, not really useful. I know that I put it into other
-> Samsung PMIC bindings, but let's don't grow this pattern.
->
-> > +
-> > +  The S2DOS05 is a companion power management IC for the panel and tou=
-chscreen
-> > +  in smart phones. Provides voltage regulators and
-> > +  ADC for power/current measurements.
-> > +
-> > +  Regulator section has 4 LDO and 1 BUCK regulators and also
-> > +  provides ELVDD, ELVSS, AVDD lines.
->
-> What are these? Input supplies?
->
+It seems like we missed migrating the complete information from the old
+DT binding where we had described what the opp-supported-hw is supposed
+to describe. Hence, bring back the description from the previous binding
+to the current one along with a bit more context on what the values are
+supposed to be.
 
-ELVSS and ELVDD are common abbreviations for AMOLED panel backlight supplie=
-s,
-AVDD for panel electronics. I conclude that s2dos05 ic provides
-ELVSS, ELVDD, AVDD from the facts, it can measure its current and power.
-Those power lines are controlled by display hardware [1],
-i.e. vendor kernel driver has no clue how to control those regulators.
+Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+Changes in v5:
+- Fix the new lines inserted to seperate paragraphs.
+- /eg./example,/
+- Fix Odd line wrapping
+- Link to v4: https://lore.kernel.org/all/20240918173431.GA1833339-robh@kernel.org/
 
-I guess they just combined regular regulator ic with ELVSS, ELVDD, AVDD ic
-like [2].
+Changes in v4:
+- Fix dt_binding_check errors on previous revision.
+- As per Rob's suggestion, used a blank line in between description
+  and the paragraph.
+- Reworded the description a bit.
+- Link to v3: https://lore.kernel.org/all/20240917095252.1292321-1-d-gole@ti.com/
 
-[1]: https://github.com/klabit87/twrp_android_samsung_kernel_sdm845/blob/an=
-droid-8.0/drivers/gpu/drm/msm/samsung/S6E3HA8_AMB577PX01/dsi_panel_S6E3HA8_=
-AMB577PX01_wqhd_octa_cmd.dtsi#L3508
-[2]: https://www.st.com/resource/en/data_brief/stmp30.pdf
+Changes in v3:
+- Use the items: and then provide description for both required items.
+  This tries to address Rob's comments on previous revision.
+- I've not use min/max Items as the 2 descriptions items implicitly
+  imply that number of bitfields needed are 2.
+- Link to v2: https://lore.kernel.org/all/20240905-b4-opp-dt-binding-fix-v2-1-1e3d2a06748d@ti.com/
+
+Changes in v2:
+- Drop the patch where I updated Maintainers since it's already picked
+  by Viresh.
+- Add more details of how to populate the property based on device
+  documents like TRM/ datasheet.
+- Link to v1: https://lore.kernel.org/r/20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com
+---
+ .../bindings/opp/operating-points-v2-ti-cpu.yaml     | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+index fd0c8d5c5f3e7eacecb74523e052c2cbb076ce20..624d1f3f1382fb9cae576c6c4919a9be875cf061 100644
+--- a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
++++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+@@ -45,7 +45,25 @@ patternProperties:
+       clock-latency-ns: true
+       opp-hz: true
+       opp-microvolt: true
+-      opp-supported-hw: true
++      opp-supported-hw:
++        items:
++          items:
++            - description:
++                The revision of the SoC the OPP is supported by.
++                This can be easily obtained from the datasheet of the
++                part being ordered/used. For example, it will be 0x01 for SR1.0
++
++            - description:
++                The eFuse bits that indicate the particular OPP is available.
++                The device datasheet has a table talking about Device Speed Grades.
++                This table is to be sorted with only the unique elements of the
++                MAXIMUM OPERATING FREQUENCY starting from the first row which
++                tells the lowest OPP, to the highest. The corresponding bits
++                need to be set based on N elements of speed grade the device supports.
++                So, if there are 3 possible unique MAXIMUM OPERATING FREQUENCY
++                in the table, then BIT(0) | (1) | (2) will be set, which means
++                the value shall be 0x7.
++
+       opp-suspend: true
+       turbo-mode: true
+ 
+
+---
+base-commit: 3621a2c9142bd490af0666c0c02d52d60ce0d2a5
+change-id: 20240903-b4-opp-dt-binding-fix-73c6829751d2
+
+Best regards,
+-- 
+Dhruva Gole <d-gole@ti.com>
+
 
