@@ -1,153 +1,166 @@
-Return-Path: <linux-pm+bounces-14431-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E112B97C49A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 09:00:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A87897C5BF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 10:24:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 184C4B213AF
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 07:00:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12E3C1F21E94
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 08:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57A5191F61;
-	Thu, 19 Sep 2024 07:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6981957E7;
+	Thu, 19 Sep 2024 08:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p01w6N9S"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sD8ua67e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from master.debian.org (master.debian.org [82.195.75.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920C91917E1;
-	Thu, 19 Sep 2024 07:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE849190664;
+	Thu, 19 Sep 2024 08:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726729228; cv=none; b=NoMxZu53A74fnrPsETkrur50TWfZzKt0Yb+u921tINLobVMWK6I1y+wBbQyhHIdF6EqsGQZ9thXsOyyDkktuiVweio+o7xGs77/ch7A7AGQKFdpwmkuOlEFvv7tlAUIniNUMom80o7xX9/5VdctMGvcmO8pmWhbekqhGsHiUFT8=
+	t=1726734284; cv=none; b=UrlPUAVCnmBQhf1Sh4ijMQs6ADZJ2t5D52amUcc5C9WcFCB8Asv/bIZ7JfnBXAlE3pTKiRJlZzhZFj6IQyfNGJcE3OtMPQUTWW8+ScblaUHTk1DfBLxEXUVlgDGNFtwXTWrFWNwuZ8t71ESgIPojXDTws8jQkvWeilUAuv/QxN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726729228; c=relaxed/simple;
-	bh=t9RtZpRZoGBiHu7vK8NzRJulyoUBoTT7NAXEVYpBF0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O7bdJBucc+vXpT2XwkPZvJlftazfJ3dpKWha3CrdEzN7U/H433CtRoZgbAJdF4OskpoHj8uJacVn1DUZTfHOMnerBO4S5WkX1WXXlYIlMfwoi6SF6O1YlBoTlRIrAllDg3zdd2lySmbX5qgxFpq694u6uA1nojBGWHGmyAOw1Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p01w6N9S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B04BC4CEC4;
-	Thu, 19 Sep 2024 07:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726729228;
-	bh=t9RtZpRZoGBiHu7vK8NzRJulyoUBoTT7NAXEVYpBF0E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p01w6N9SmtQ8dez7aT8RhvBSczsPephbuWni4AnI7frtx5xWTa+i9Err35w827rj+
-	 OK9ZQVjmtA+Me4r88/dv/frvOXEasTpU+2ZlQRC1heeChyVR7zM+LfsU8NLOMEjY5i
-	 vCIqpBeHs2Fb59qtxk9DLkgE+a/VW8UYmXYPAefO9fNg1unuJL4t66fsJ1zEsrVR9T
-	 MZ2VUmf4gLEXzE030u8TH8QQMpQMBGyjKA5cxKD6HJzDBLUtuUQla63ZiitjLVOnVL
-	 bWg6mVy5Rtrqb3vtkO5ptBLQo2uq0E5LGvTeBVVIkGzrWUzq1knXC3wkJsTmofMmyG
-	 GBvpQhSHbNdXg==
-Message-ID: <6886f561-b9e4-468b-9515-72053d57911f@kernel.org>
-Date: Thu, 19 Sep 2024 09:00:13 +0200
+	s=arc-20240116; t=1726734284; c=relaxed/simple;
+	bh=AufR2rC810Q4YjbnIq0502kZyRC7aU9Fu0Tte+Po0X8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TT2Z8bIB0+D1v+v3sdSSX63WKJdRv23vCDc5yGp5nUslzz1YzZcV63TrWibAe69mO6XQ5CBMZj1ipAbIKVlS+XeV7+TCZMa/j61l5fhb6vrYdBvEysVHO2LaAUFUQqZQMpPUqm08lfyFD+T0cwPJ5E/cnDwAPaEXE71VJEZkLPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=master.debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sD8ua67e; arc=none smtp.client-ip=82.195.75.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=master.debian.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.master; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	In-Reply-To:References; bh=sxmYL+nS7Az6jrXUJv7A/FowDRA+Yf3UwSxFM9lo31A=; b=sD
+	8ua67eq5C4H2MnppB9UIj5vy1zi6Yc4PGZfJJQCNNEz88wxCsth8I5NGtrlLAhlRDf/hbpENblKsQ
+	J0ZBjVrVTCG8/I9Fsw4O/fc5UxbfEIgubM2DqvnRE0QJ6DEGx9YhwQakRO0bT2VQrFYaj5cRDBD2t
+	FAyjOk91Jnz98aoCHKN37cHhjBDowxLPzM9EBBC3gS+J95AVSfWqJfnu7l/tBUvqtk8XIZ1Oj2i6T
+	8VebJ3mR3lmkqlS2qTzaURHJdvzcsXmKTfqfLyY86RG4JayzhaclREkI8UKdZfK1fOXQRQjx/gUti
+	ujoEUwUcGnu4CevZaPy7f6PDCSWBtyeg==;
+Received: from ukleinek by master.debian.org with local (Exim 4.94.2)
+	(envelope-from <ukleinek@master.debian.org>)
+	id 1srCGW-000MYs-JV; Thu, 19 Sep 2024 08:11:52 +0000
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@debian.org>
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-pm@vger.kernel.org,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	linux-rt-users@vger.kernel.org,
+	xiao sheng wen <atzlinux@sina.com>
+Subject: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw spinlock
+Date: Thu, 19 Sep 2024 10:11:21 +0200
+Message-ID: <20240919081121.10784-2-ukleinek@debian.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 08/27] mfd: max77693: remove unused declarations
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson
- <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>,
- cros-qcom-dts-watchers@chromium.org, Konrad Dybcio <konradybcio@kernel.org>,
- Simona Vetter <simona.vetter@ffwll.ch>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org
-References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
- <20240913-starqltechn_integration_upstream-v4-8-2d2efd5c5877@gmail.com>
- <wywp6vj2pqqe7to55k7ssh5sbqrmy7emvwruvm2waytancf3r4@aygtw3y6huwx>
- <CABTCjFAvXYrRJS3Dwf-TMq3OW_vN1hskk+qPjosbRym7xOvy1Q@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CABTCjFAvXYrRJS3Dwf-TMq3OW_vN1hskk+qPjosbRym7xOvy1Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3401; i=ukleinek@debian.org; h=from:subject; bh=AufR2rC810Q4YjbnIq0502kZyRC7aU9Fu0Tte+Po0X8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBm69yp8uS182CL8KAYt+yDqMzeLt/dhwoj+m2O9 bazfmXoTsyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZuvcqQAKCRCPgPtYfRL+ TqW0CACJwbFamuKiP+ypB3yZbzct/y5pE5qttG5mi/bDPi51UU/NlBWR51cofnPFX9lWJFBjccn JvjQkeHvT8A31EpsZ0K13h7ZCQywqRf2BAiy/olKI4D2Wflp7NuLh3gS0mZBgEKfwU9SErA1mEu sUOlYybUXenbgLpbQRC83S5jlwagUxAHc+AybmdP28DEfsH367xDI6LUX4UAB3ELoMWqzXy7FMr lfHqOcDZFBMiBymY3I3b4AEaNzgL5TezPMTI+HEq+f+RAZtmRg/93pfQwFlKmGWGUDvyMGLWMtr EibPvWgHL+dbJkRfDGorurzfTBaB+nWN91r/QrQW88eim2mB
+X-Developer-Key: i=ukleinek@debian.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
-On 18/09/2024 14:53, Dzmitry Sankouski wrote:
-> пн, 16 сент. 2024 г. в 12:10, Krzysztof Kozlowski <krzk@kernel.org>:
->>
->> On Fri, Sep 13, 2024 at 06:07:51PM +0300, Dzmitry Sankouski wrote:
->>> Remove `enum max77693_irq_source` declaration because unused.
->>>
->>> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
->>> ---
->>>  include/linux/mfd/max77693-private.h | 11 -----------
->>>  1 file changed, 11 deletions(-)
->>
->> Please split your patchset per subsystems. There is no dependency on MFD
->> bits from your DTS... (if there is, this needs to be fixed anyway)
-> 
-> Indeed, my dts has no dependency on this patch.
-> However, my dts has dependency on MAX77705, so AFAIU,
-> I should send this patch separately, while leaving other drivers in same
-> patchset, right?
+notify_hwp_interrupt() is called via sysvec_thermal() ->
+smp_thermal_vector() -> intel_thermal_interrupt() in hard irq context.
+For this reason it must not use a simple spin_lock that sleeps with
+PREEMPT_RT enabled. So convert it to a raw spinlock.
 
-How DTS could have dependency on MAX77705? It's a clear no go - broken
-patch. And something very weird, almost never happening for new hardware.
+Reported-by: xiao sheng wen <atzlinux@sina.com>
+Link: https://bugs.debian.org/1076483
+Signed-off-by: Uwe Kleine-König <ukleinek@debian.org>
+---
+Hello,
 
-Best regards,
-Krzysztof
+this is deep in x86 land where I have *very* little experience and
+knowledge. Is sysvec_thermal() (defined in arch/x86/kernel/irq.c) really
+running in hard irq context? The stacktrace in the Debian bug report
+suggests that.
+
+So please double check my reasoning before applying this patch.
+
+Thanks
+Uwe
+
+ drivers/cpufreq/intel_pstate.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index aaea9a39eced..b0018f371ea3 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1845,7 +1845,7 @@ static void intel_pstate_notify_work(struct work_struct *work)
+ 	wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_STATUS, 0);
+ }
+ 
+-static DEFINE_SPINLOCK(hwp_notify_lock);
++static DEFINE_RAW_SPINLOCK(hwp_notify_lock);
+ static cpumask_t hwp_intr_enable_mask;
+ 
+ #define HWP_GUARANTEED_PERF_CHANGE_STATUS      BIT(0)
+@@ -1868,7 +1868,7 @@ void notify_hwp_interrupt(void)
+ 	if (!(value & status_mask))
+ 		return;
+ 
+-	spin_lock_irqsave(&hwp_notify_lock, flags);
++	raw_spin_lock_irqsave(&hwp_notify_lock, flags);
+ 
+ 	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
+ 		goto ack_intr;
+@@ -1876,13 +1876,13 @@ void notify_hwp_interrupt(void)
+ 	schedule_delayed_work(&all_cpu_data[this_cpu]->hwp_notify_work,
+ 			      msecs_to_jiffies(10));
+ 
+-	spin_unlock_irqrestore(&hwp_notify_lock, flags);
++	raw_spin_unlock_irqrestore(&hwp_notify_lock, flags);
+ 
+ 	return;
+ 
+ ack_intr:
+ 	wrmsrl_safe(MSR_HWP_STATUS, 0);
+-	spin_unlock_irqrestore(&hwp_notify_lock, flags);
++	raw_spin_unlock_irqrestore(&hwp_notify_lock, flags);
+ }
+ 
+ static void intel_pstate_disable_hwp_interrupt(struct cpudata *cpudata)
+@@ -1895,9 +1895,9 @@ static void intel_pstate_disable_hwp_interrupt(struct cpudata *cpudata)
+ 	/* wrmsrl_on_cpu has to be outside spinlock as this can result in IPC */
+ 	wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x00);
+ 
+-	spin_lock_irq(&hwp_notify_lock);
++	raw_spin_lock_irq(&hwp_notify_lock);
+ 	cancel_work = cpumask_test_and_clear_cpu(cpudata->cpu, &hwp_intr_enable_mask);
+-	spin_unlock_irq(&hwp_notify_lock);
++	raw_spin_unlock_irq(&hwp_notify_lock);
+ 
+ 	if (cancel_work)
+ 		cancel_delayed_work_sync(&cpudata->hwp_notify_work);
+@@ -1912,10 +1912,10 @@ static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
+ 	if (boot_cpu_has(X86_FEATURE_HWP_NOTIFY)) {
+ 		u64 interrupt_mask = HWP_GUARANTEED_PERF_CHANGE_REQ;
+ 
+-		spin_lock_irq(&hwp_notify_lock);
++		raw_spin_lock_irq(&hwp_notify_lock);
+ 		INIT_DELAYED_WORK(&cpudata->hwp_notify_work, intel_pstate_notify_work);
+ 		cpumask_set_cpu(cpudata->cpu, &hwp_intr_enable_mask);
+-		spin_unlock_irq(&hwp_notify_lock);
++		raw_spin_unlock_irq(&hwp_notify_lock);
+ 
+ 		if (cpu_feature_enabled(X86_FEATURE_HWP_HIGHEST_PERF_CHANGE))
+ 			interrupt_mask |= HWP_HIGHEST_PERF_CHANGE_REQ;
+
+base-commit: 3621a2c9142bd490af0666c0c02d52d60ce0d2a5
+-- 
+2.45.2
 
 
