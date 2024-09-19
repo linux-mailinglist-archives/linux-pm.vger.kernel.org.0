@@ -1,77 +1,78 @@
-Return-Path: <linux-pm+bounces-14483-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14484-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C00A97CD0E
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 19:29:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF1F97CD1A
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 19:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E26285574
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 17:29:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064611F24892
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 17:35:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E1D1A0B16;
-	Thu, 19 Sep 2024 17:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D007019F49D;
+	Thu, 19 Sep 2024 17:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yP7cVinC"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gj5FEd+D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECCA91DDD1;
-	Thu, 19 Sep 2024 17:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF171DA5F;
+	Thu, 19 Sep 2024 17:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726766953; cv=fail; b=a2JRHFyCHUvYQuR21E5YAObTIvVobIICF3XBPxnunn0BHH03l42iGhQ7wykuWWD43ofXERGUssr7TEoFfEHGSS/8ICvOFuBkqchIAv4p5ez8kJ1zv6W+nINkDpaqVj/7F2I/ob7eCxoxcyFgOeMl83WpoUIUie5m8LYvsdKdrhk=
+	t=1726767336; cv=fail; b=lL46aXifmxeDEYPuDd0/hVHM4A/idNZC0Al1vHvDaNMuKvbjy+ZDxZ+Yfp/1iLfMngGNP7hXVaIAVJ7hoT+aVgHzWhzIOL9JwXVFaG1y0qmK2dmYuF2DScwpzvH/a2pG8IHDi1eVZPDG7tR+1IY2Q4h5l61mvNBGoMe0zz0hEUU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726766953; c=relaxed/simple;
-	bh=6xx5sG1mivUm8oXalqaxBa7znUlnOqvwjScf3gaKQ9A=;
+	s=arc-20240116; t=1726767336; c=relaxed/simple;
+	bh=9IHkI8iLBtQMW4md79fcWJ8xZ6dLQE+x1UmY4KM9E8U=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Bjt4xB4Duvls372jmydey5d+uTwr4hXIGwVyK+Hl0e2Tfyyt5nBHo+Z86ztB0pa67nvXK8XsFeKkDzojq4n3rv5bP0njlzr2zoZ4hkfAOPpFNfatuWjcvcSdJNvARO06R1F1NgwlVBvpvxrKBoHgKA5M30bh2a4FNCgHKcbXSBk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yP7cVinC; arc=fail smtp.client-ip=40.107.220.83
+	 Content-Type:MIME-Version; b=sAHBn2YMIYBItd3tN9fVwSAhcDtNrhS9YQlT3Q99yYi69Ycw6LgpIgg+p87uZ8Nfq1OoX/iLyV/hAJybNdnrv/L6B4BC0aAcZ9+Q5H3IgzL2Qbg87wxHNJWReYCAGqb+cVYn1f+4hzi1mAqqWzjscpS4ethju19BTtpppOk7tXM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gj5FEd+D; arc=fail smtp.client-ip=40.107.223.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=y+Z17PgfOhgtveszc53BDaK7ixndQ4evr2EdmUp1rWp8kOwF02jhqZ6zH6vy4guUYQcqJ5lo2WWGoQN8EyLwjBtWbo6mc/ZH4YBMD90S9rcWkjTYoogGEMsYroBRchc0RSbcOEL9dcPoEI27+bL8jIwXX9ndvxNTFQ2ujP9TOPf+w7cJM1Ap+4bL4ifYH/tmQebNO9NLiuWX7q0MhFl/UoOj8G7Pw+RMHz7/yfstJ3T+xRZjFZKLIM6L7by2ie+VO6v1hA3QhZ9fdY8VctcG5P9LmuxDRKVJG32pLYQBXUfqdFrXEEJgEr6GThyXc27Q9mf4/4n3GLghKacO4HApYA==
+ b=gGZddYWld5aQNOToh9vWhexZVFb2EQIHerrn4VI9fiu+gu6ebWnxJG1GUlQBilerI7fOju2SGyxnrBM69/lhvUsq04Ki+rY6j1n26ZNz00yz1UIxAQjIXDCzbDeIe/trjAyv+VeFemCcqXdY3xtlVeaNcEip100U17FxzgSFDil3Ul0CEOBAkWnA4Ebht/t7saIEfnjj+9h/pE3Hr99fUzlnB+Q2tssXrtc0val7dCATsvUqxW6iFaBlQU6y71QyRQkvjgIQkOTBTrMtxckDsPPgolcefHtlONYpNa/kR4/7MZq+VjAowXI4i/Lh9wCd4ZyWWGlCewgZHzahpiTPDQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R2f5t5OG7OU/TN2wS+eVtGHQ1VRV2Fsx8pY4SSZaxwc=;
- b=LKBcRLQDyH7b+URIQnxmI+locKafFuu+5exio9/h1o8bhsZuAFS4srVl0+qXds1lxlrQepUzpfNg0D8S1VspY3tbMnND/ilAlQ1Y/mrpbA5uH2UwI0bxZYhwsFNpNqbusOjHD8QdYjMRAvwGOWi3GXnkglAxUlfgSMxm871YijIRzf13NfHfZvefdw9YhHlQVcS7FgHIrw1ZOXklxSvgh61D2oJPbgAuq9ujDaVNXPdv9kKtROI+3swXjmzcTFkBozZAzUgsPyufjTw3nkgRjGEe8KTuR6/SCnoB7Sl8195AYkZjAIIkakQ89I3xDNp05T5RDZfdPJ9mLvCkeCEGTw==
+ bh=FFWywz/KEgwnxxke9Cpx+Hyq3uoj24ap622s/JEy8fk=;
+ b=wcBMev1FWisdq9jiGHEWTPONdhPVDvOozLioykVDvt8+2oVtaYYba9QDvrAhauf/ec08bWL/UUGASFrjth8uF3Amb9FFwexgxPwooNAz67t/yD2AuvR2hrUPp0CI8GnBet1FCxEwrFo7RbPlBIfSni4bXmIiKZAjAGJET4lZ2+k8wEtpq2cpjEX+1aHhOkIWzQf7e05nqsr3YfdTDP1ZqSgMdcM2qFIN0KDOZRmefpC2E6ZpOK+fVtCdk3jE+61/k5CEQN1z/7iGzBUA4a2CaFRxMvZkG6a+PHkpvovQD0VTX9mX/JoHEptYmKTuzdP79doaGFBlJN2KgbhZ49UUWg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R2f5t5OG7OU/TN2wS+eVtGHQ1VRV2Fsx8pY4SSZaxwc=;
- b=yP7cVinCmKYgY1Bvwmy2NwNM87+eSy6Ai8vo3Yf7YFK3UfLroY5WE2D7zsZC7jKp7tVagRGI9olL3+Bizns0d/LxZV2FUyMxjANUhah8P26a9pww+1tUcg9rUqsNyYwYt7fj8wef71lgrzdNTnnM7CzQEkk8lAmBWZIr/XqoNMg=
+ bh=FFWywz/KEgwnxxke9Cpx+Hyq3uoj24ap622s/JEy8fk=;
+ b=gj5FEd+D/P6ShouyGaDeTAbBjom0QbpIx+LIrrMsZiTzg4Qxr0dpp9Qcrv7iWo7QF9n4+e21NXaI/90jZqCvjAZakoiJEnVRpqsxfSxM0TmVbcEDc6Ln0Mx/0/J2PgOXQ7pra5obxRA+aZX67hgydFdTdI3FfKo2PZR93NXU7Vw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS0PR12MB7511.namprd12.prod.outlook.com (2603:10b6:8:139::8) with
+ by PH0PR12MB7469.namprd12.prod.outlook.com (2603:10b6:510:1e9::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.22; Thu, 19 Sep
- 2024 17:29:09 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.17; Thu, 19 Sep
+ 2024 17:35:32 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7982.016; Thu, 19 Sep 2024
- 17:29:08 +0000
-Message-ID: <0f758a1a-958d-41d6-a572-cf544590450a@amd.com>
-Date: Thu, 19 Sep 2024 12:29:06 -0500
+ 17:35:32 +0000
+Message-ID: <1cbc0cda-549a-4333-9045-470c51981af5@amd.com>
+Date: Thu, 19 Sep 2024 12:35:29 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] acpi/x86: s2idle: add support for screen off and
- screen on callbacks
-To: Antheas Kapenekakis <lkml@antheas.dev>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 2/4] acpi/x86: s2idle: handle screen off/on calls
+ outside of suspend sequence
+To: Antheas Kapenekakis <lkml@antheas.dev>, linux-pm@vger.kernel.org,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
 Cc: platform-driver-x86@vger.kernel.org, luke@ljones.dev, me@kylegospodneti.ch
 References: <20240919171952.403745-1-lkml@antheas.dev>
- <20240919171952.403745-2-lkml@antheas.dev>
+ <20240919171952.403745-3-lkml@antheas.dev>
 Content-Language: en-US
 From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20240919171952.403745-2-lkml@antheas.dev>
+In-Reply-To: <20240919171952.403745-3-lkml@antheas.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN1PR12CA0107.namprd12.prod.outlook.com
- (2603:10b6:802:21::42) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA1P222CA0171.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c3::8) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -80,183 +81,161 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB7511:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7293b0c9-2ce9-4765-1013-08dcd8d09190
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH0PR12MB7469:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a5e0732-36f1-4685-1c72-08dcd8d175fa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?djJtaEFocE9FallaaVpzUnBDUC9kRVV4Mldzc005cU5HSUl2REJWdlFyYnZa?=
- =?utf-8?B?ZGZ3TThySFRrWW1SYnBaRTc5bVpNVkVkNUJ6MnNkRHlnU0xZcWJZUVVQek42?=
- =?utf-8?B?ZUR3dHdHV2ZqSklUQ3E1WTlob1dTdjJvSDBuY0Jad2tEWGxDanZHOU51dlFR?=
- =?utf-8?B?OTZOVFhaVlJZY3JFcitUbmVBWFFyME0rcW9NV1dIeXpMTkxxTlgwUnZtK1hI?=
- =?utf-8?B?RjJMbldkbTlWU0gvb2NZTjJQaWFXclFSenRuUytSSmFDd1N3YmMxa1hkZXZi?=
- =?utf-8?B?dWdiQThDV2Q0ZEVUZTlUSldGYVdOWE93SGYvdkl5Y1FWRFVXbjg1YXU1dE5p?=
- =?utf-8?B?VjNEVnZTUGIwaVc0QzZwYmRXRlpjck5hdVd3S1RURWZ6VTZISU9MRmhxeFEx?=
- =?utf-8?B?MzhFYUhBNS9nbGZ4M3dMRFh0NDJMcjNwRTR0SHRsSERFcXlFQ2ZzQWhnNWxa?=
- =?utf-8?B?L1JNMEdwZkI0Rnl6QllWN1pORHFQNnBwSE1mck8xUVFTbWxLRW5tZHdWUEpz?=
- =?utf-8?B?RzBrdDM3OGU0QnJ4ZTR0UVlsREVMMjB3TFRYaG9lMzBoSnpoT0h6Rk5PNzdM?=
- =?utf-8?B?WklVc3ZnYUN2Nmg5MjRvR0MwdEYvdVJuK0VveURodk1lUmt3NlBQbGxaNTht?=
- =?utf-8?B?cjl5RXFIK3Z6aTlQT1RQeU50SlltVzlicXFqMkxyNHg1SDJVQ1Q5aGpjRHBh?=
- =?utf-8?B?ZHpOeDY0azIxSTFIbklheDJSaXNYNklWZW5TeWExK0FkRUZqTzU4YzNuZUJz?=
- =?utf-8?B?NmF3MTB5M0htQ2FLNlNwVnQxUHdpdHFvanBpR0tRbFB6OFdsYlZSa0s3T29H?=
- =?utf-8?B?NXMxN28va0NpUG9qQURtMUpXVzdLMUkwQnNoNjNybWRHWG5tY3FSYklTRFBw?=
- =?utf-8?B?QUROOG9peEZLQnM5aFNrZzRKbHBCTzk1NVJ0UWNlZ1o4dkNTT0hKUXRQZHZ0?=
- =?utf-8?B?em9hQlNoTHR0MFN2VlRRUVB5TkZpQVRyc2hGTnFJUVN0QktCOTJuSE5rKzJa?=
- =?utf-8?B?dUUra3ZPbHdSWWw1VlF6YUhWLzhjblZCQTVKMzN5OWZDQXdwMnNrbmFKdU9r?=
- =?utf-8?B?ckdlTHdJU0dnOElIZHJFUHJwZnc5MzU0dWNoWnRDaDNlZkNyUStCZ3ZrM2M1?=
- =?utf-8?B?QzVYd1JGNlIrYlJBOUNoT2pScWVkUFhsTkdlb2Fub1k4eFZ3YTUxdC83di9x?=
- =?utf-8?B?MllpRy9SZDhhMnN6QXhQeFJuMnlZSXpqU2ViVzBZbVN5NCs3UHRPbUhYeFVS?=
- =?utf-8?B?UXovaytES0NIamRNdVVydEpBSi9Ya2RjRCs2UVVLTHRDcFNEZzhLVWYxMWNX?=
- =?utf-8?B?SldWUzEyNGgwKzBRei9nQllvVDkxellBQ3RCdUlxb0RBTjQ0ekJhTFJUUk9P?=
- =?utf-8?B?WGhYNTRHV1JTTW4xUXhRWit3blVhRW5GbEtyU1F2c1g3WTFQTnczNUVSNmF0?=
- =?utf-8?B?aWhyN250NEU4QUFtcGhjK3NUWjVmdStFQ2ZsWUltL05HKzBrSzhhSXEzV3lB?=
- =?utf-8?B?NmlWQW5uL2JpSkUzN3M0akduMkJsanZucjQzYWNTUHE2TURyYkxlWWVveDhk?=
- =?utf-8?B?dlcyT1hwbktQeGU4RDhVcnE2aWUrWWJNMEs0UWk0eGhYKzJHK2VSMk9Oa2JI?=
- =?utf-8?B?ZW9ISHVhbldURk5oUGJGVlZWMHpGNFRVS2Q4WUJHRW9WZXQzandkMG0xMjVG?=
- =?utf-8?B?TlNPbXo3ZmdCTUtSMEQ2dmtqbm12TEIvRlNWK2J5ZXBNckRtZGRoQzdCdHVM?=
- =?utf-8?B?YUJhRENwbk9YVWc5TjlvQkRLZWV2NEdzM3JORUQ1LzBlNExlN1o1U0Y3cnUy?=
- =?utf-8?Q?BywqQVZmK6/UHvPgsTAW3Tiy7Ky2GO7TyWZO0=3D?=
+	=?utf-8?B?ZjdKUFVGSnZzMHkyTk9DemRGR2Q4RW1SNkRLSFhnakpQMXVIMWRJYnZXdklh?=
+ =?utf-8?B?YVg5bUZpZ2hib2tLS1A0Z2xhdmVUSmcyeEt5MEw2YjhRZHBJOHRqWndGSlZO?=
+ =?utf-8?B?aThoRklEVXViSlZuNTZSVWdhd1lkbU1wNkp1U2NRY1lDdElLR21IWVlPY2Jv?=
+ =?utf-8?B?a1hYZytOTnlPTkZLczRBVUIwVHpleUdvMWtIQkNwLy9PUmo0UzloRjEvenBW?=
+ =?utf-8?B?SnpkY0hoOXk0dndrbUxFSkJvR2lRVEtuRmhhRndyY3RzRVlDOG54YTM3cW4w?=
+ =?utf-8?B?SmZvWjViWUcrbmc0UVF0VU91T3FBUlpicllkTm5seTM2cDJqdEUvd1J5WWNC?=
+ =?utf-8?B?b2o1cTJtblhFd3BxVVlteEh6OGoyMktSL2x4VTlaV0JnZm51UmsrSUFQMjFM?=
+ =?utf-8?B?WFVGWU9sYUswZ3RsT3FIS2Q3dVN0QzFENklSanJSS1ZYM2VLKy9MVW5scTFJ?=
+ =?utf-8?B?c00wbUxhVGEyWnF3Y1hrTWRodVZkUlY0YkNjZWU1MUtwY0RaRm1GNUNLc2JU?=
+ =?utf-8?B?amlVRG1xOFZJOU1wbTZrT3d1QkFzVGhaclRkY2twdVhxSDc1Z1VrUTQyZHYy?=
+ =?utf-8?B?VVlTOFlabnJidEg3bzJlclBGaE14dTR0ZU9BZS92VkNaQ0czendBeENjeSta?=
+ =?utf-8?B?QnRuT1NOUzVKWFRMaW5qZ2xuSjZyU3VFemI4ZkxpV2U1T1BxOHBKVWxGbXVN?=
+ =?utf-8?B?blA3N1IxQ0d0b1lKeUROYTN1WlYwbzRJSVhoaE1tZmZUYUdnaVJWTytZZkVQ?=
+ =?utf-8?B?dG90L2hzOVZGYjhuS1o2NHpXWkdLQkFEVUE5RHBONTFZY09aSHp1aUhHcFRU?=
+ =?utf-8?B?OFJIcjVKWTYvVkhLdmd5TWsxeUxTbC9FSEZPWkFEQjdsSWtiY3Y1N25YTWJU?=
+ =?utf-8?B?SzY4QUR3QnVhWm9lOXA2VmZnSmRaNWpSUjh1cFQ0aEliY1RyY1h6UEZ0K0tt?=
+ =?utf-8?B?a1VkUWtFVU9maXY4UE4yZWpacmNwbGFiK2ZWTEdub1FtNytoKzZlOUVpU3lY?=
+ =?utf-8?B?VjBDQzdEWHgrVUt6bjNEMUpKZElweEw0UXpHZklkMGFDVDZYME1CSFhZaXli?=
+ =?utf-8?B?SmFFZVRxc1RISTR0aVVLREc4aXlSdGwydjNrcFZhbURiR1RNVE1WQWhkWkI0?=
+ =?utf-8?B?UFRrQVZXZFZDaUU0NGF1a05ibVJBb0Q1c0hFT3BYZlZzcTZUTldwS01SMXNl?=
+ =?utf-8?B?VkE5c0grc3loVTdMbzg5dGxJU2IvMENSL3VFK2xrUHA0VCthV0R4bCtsYjRF?=
+ =?utf-8?B?VHJnZktPM0ZZSmtxU2NucVFGanpjVEh1L1pzVHZ3SVVFM2RqdkVJS1oxZXNj?=
+ =?utf-8?B?TnRhcjFlM3R6dXVydVRLOWpjWmg1bEt0NUc2SzRIOVNSUTRXNUdRWVVhUDRs?=
+ =?utf-8?B?WG1WdzZlQzJFck8rbnVoMmpmTlJLNTE0WWE4a2ZsZ2QwR0UwdWtzOXJTazNM?=
+ =?utf-8?B?WVc2c1NZQklnVjdnVE42RnE5cWpnc2NNQklZeTYwSXQxc3pmZVViQ2N0czND?=
+ =?utf-8?B?TkFNYVBKVGhwc2JuaG5oZkNPeTBlZEVKeUJEQnFtUTZLUG44ZjVKQzlTSHFl?=
+ =?utf-8?B?d2tjamhjTTdJYWlwcXVtaU9GMW5xZVBTZjhNWWlabE5yQ1ozM2lhWkxZTThx?=
+ =?utf-8?B?ZytMNklhTHJ4cnM5TURqZTBDdlloc3AzVnpJZnkrWCtFRXF3bGFuVU9ROXNr?=
+ =?utf-8?B?WVYyNytEVW4rTGpBeldqdkZ4TnpRNjBxSjAwTGtRcmtLZDhCanJjdmpxZHBQ?=
+ =?utf-8?Q?g2xt2wAKBcDBhlJ0WA=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b2dGVWZPcll2emFaMEd4M1gxUlJKdHAxNHdSRXp1QWE3a005dDIySTE5WDRT?=
- =?utf-8?B?MElMSGZGV1grTUowcG83ejZwMGk2M1oxSEIvd1FLZnpoVlFWR1lYVmNKcVA1?=
- =?utf-8?B?UG9CeUZyRHlMNmo2cEN0Q2dzcmxwU1VpRlJWWnN3aFVkYzlkbWdkS3BRV0E4?=
- =?utf-8?B?b3hTeUcrOGlGZ3ErNlByR0NvQStidW54cWdtVGVKL0JRQTZvRW05cG1McDZ2?=
- =?utf-8?B?TUZVQUZLdFFuRnFIY1Jac21zRThEa0ljSUJQUFhkcjJzTXJMUVFacGJBWVUx?=
- =?utf-8?B?VXpKZE0vNE9qNitXa0RpejFTT2ZOb1E4MXh2Z1Q4RDQ4VFI5MTM4ZXlORGwy?=
- =?utf-8?B?N1dJTDNmNjYwb1hoSUpxcVY5RmtEeXB5NFNXUnFURms1dnY4bTMyTlpDMkM0?=
- =?utf-8?B?a2FGak9rQ0lJWkt3KytjTEZjZUg4WkNoZTNBQ0Q5R2s1T0lKSU1rMVB0Vm5H?=
- =?utf-8?B?dWRwdGt1d25PYnpBV0pET3Y3RnA1SlN4UE4rcU1CZ2YzSHcwL0xxdlVUeUVT?=
- =?utf-8?B?bEVpQXpUaisvV1dhaGVrWTZaYWVGTll4a252T0hHMlVLZDQvOHVKTVNieW1C?=
- =?utf-8?B?VDJCYkZmSU95eWJCV2tqblRJNWhTTWhmR1hpWGpXR1I1K0lsby9IY3paNTND?=
- =?utf-8?B?WHNraWZNWjZLWURpQnNqM1k2RndkME9WcEFzeEhxdDN6NDdrOW45REl3bDRF?=
- =?utf-8?B?VkNtUTNsbEVYa09PbUtzVTlOWlJVQ2xLNjZ6bmR1V2EzeVM2cy9FeTEySTdX?=
- =?utf-8?B?Y3djc083Vm9WZS82RUlmczIwMDBaVGpDYXdmdkZaWWNTKzVUenZEL08xY0ZR?=
- =?utf-8?B?WkVXYWp0b3lFd2VSWStJTVBiZnpVTTE1Nmc0OS8yODdrZ1VibGhjY0IxaDNR?=
- =?utf-8?B?V2VsLzUxVDd6TURZRzczd2IraWlQZjFSRGlKN01kMTBBVVFCaEIrcCt3UUVI?=
- =?utf-8?B?Wkh1WjRrL1ZxNjBwUzdBLzlRTlJSRktEZWtxY1NLdzl3UXZ4SGJ6enl4UzRD?=
- =?utf-8?B?dmN5UFR4NnFJMStGOVIxaVlaU3lpQnVGVWtyd1hiV1ZMdkc3c2Fjemx4QXhQ?=
- =?utf-8?B?V1VSODdPOC82ck9Pb1pQRmlWRXlUanpYcEVicEMxeS9xa0lWZFNoajF4aHVN?=
- =?utf-8?B?cStWWFAzNzZsd09FcFRxTEljZTkrdE1TaEtneFd3aHpYdnNlMzAvNVFjMUc0?=
- =?utf-8?B?SG1Nd1YyaWpPZ3d1YisyMmY3cThTV25WREM0M0ZoUjRrbS81STRqZmNKNExn?=
- =?utf-8?B?elhldG0wcXh0cFNDQi83VC95S2g1V1hRTG4yVXppVnpSSDdYelYraWNNOERh?=
- =?utf-8?B?d3pFN2w3TndmL3ZJd284azI2blVvKzY3dHFZR0JkVVhPRmFVRVJibGNVTUlX?=
- =?utf-8?B?K0dnR1lwcWQ0RlBDbnY4QWhieUMwd1RqaGRodGZrWTVVWFhtTUM1VW9OSXFS?=
- =?utf-8?B?NnUveE4vRXQ0T3Y0MFhYcnExRUtuY0JJS3A0UllCbnpFVW5HVThNLzhaTk96?=
- =?utf-8?B?aU16cHJ3QnRxM25aTEJVQlJGUncrWVNBSEtYUFpSbkgxSE00alB2bnl6R0tO?=
- =?utf-8?B?dHdQbHJ0MTgzOTA5OTMzVG1oOERCOWFGYjB4UGlsaElWUUZ2WUt4WGgzZ0Ry?=
- =?utf-8?B?SXlLZkR3dzJSUGR3Z2NEZllnN0t0dnNrd2FEOGhWOGpMZGUvTFlzYVNEMVVN?=
- =?utf-8?B?aG9oaWVqYm5BM1RRbGh0L1c4VkthWVlyU0l5U2ljS0dTcGZJRHhLNlZpbUFv?=
- =?utf-8?B?WXVocTBhUUVOYUM4ajBYM0pLdElDR01QMmVkTnF5RHE4ZVlPbzhKZU1pR2ov?=
- =?utf-8?B?dUJmT0tWM20rUEhJQXVXVnY5V2ppOW00MUlaVGtRMGw4U0hGK2o0SWFJOW1G?=
- =?utf-8?B?ZHU1S090UU9JcC9qZ01tcGNBSTlpOVV4TXFLUWtPK2RjeHlCTDFwc0R4TUNP?=
- =?utf-8?B?cUtPb2dVZlQrWTV3V1VXRUtrS3o2aitpamJTMnhtVlFVTTBJdGFYNHI1TVhk?=
- =?utf-8?B?Tmw5WEczalY4cDYwNU56UVpLbG8zR3M1cnNGREMwKytJUDFiYUlsVEtJMnNJ?=
- =?utf-8?B?SmZTc3lpTFhvWFVQNVRONHYyaU4yM3l2V2c1TENHcUdheTlCRFRjakc2eWlv?=
- =?utf-8?Q?mBuzSDH6xP3COdxfWLQX9Muaz?=
+	=?utf-8?B?L3paS21IMzNqVHZaVzRLamU5Y2ZVRzNmT0U2YURjSEkrQ25rbVlZU08vbGdY?=
+ =?utf-8?B?c2dGMHI0QllhOE0zcGpEWmRoRTF0NllFbHRJVnk0clFtMzB1bU9KcnI1d0FL?=
+ =?utf-8?B?QnNBWi9PT0E4c0F2SWxtNzVDZ2VXZDhYZkNOTUF3alFZL3U2cFVIMnZZT3pC?=
+ =?utf-8?B?d0V1d2M4WTF2aTFvRXk5VWorNjN4Y1ZXZEJDNWhZazcxYStBeTk1OVhBNlor?=
+ =?utf-8?B?bVBVYVdnNTNCVVpoSjVQZExpQjdCMEF6VjNzdExYOEFQVElnUEJBK1BWRWdT?=
+ =?utf-8?B?eGM5ZGl1WmE5aWRsVWk5SE9TMzNXR3lZMFFLK29ybzVTbWpFM2ExdUh3cW45?=
+ =?utf-8?B?em5kV3lQMXRUU29FaUQxVU92VnhZcTZUa2NUN1VBWDRkYmZ6N3JJNnoyUGVm?=
+ =?utf-8?B?L0tKYmw5Sm1HNThpTFdGY05BTUxlSm5jalVWbjkwTElLbThkdmpGOVE5WGw4?=
+ =?utf-8?B?aitUVXRqeTJmeml4UUQ2am1LbmtjdmtSZStyWDZSTlNnT1I1SXlpQ3RnZ3pS?=
+ =?utf-8?B?U0YxSUhkWlZEa2t4Y0ZtQVVxTFNwZ2hJa1QzcmgyK1lFR25sc0pacUl1VEFO?=
+ =?utf-8?B?Z3R5cDJWREY3Vnd2ZTNSdmk0S1E0Vytsd3k4bTdOWFlGc0FJSVBFbDN1a3l0?=
+ =?utf-8?B?MlpaNjlNRDRMQjMxMGxpNVpXeWsxZXpJcjdkVjBrTHFkcTRMbUcxVSsyMW1P?=
+ =?utf-8?B?Z1hLZXlFb1Z2UUJxdFRDM1ZRNHI1SEJhSU1Ccys3NUNKTXhIUjArRUJIT3dF?=
+ =?utf-8?B?RUNNTnUxWStvbFJIam9uZXZyblNCdlg1MW5GaktpcEhUdXhEbmNSVVducjE2?=
+ =?utf-8?B?NG1GOWw3c3NLdmxicnpQd2Z6bCtrQmpKOWw0U293MG9Mcy9zOEdRWU5iOXpB?=
+ =?utf-8?B?Q2t3WWJpZnBPeDZ2UXRoUFJEMndoQ3JBdEJ1WHhFamNGMWhiblJ6Y2g0dUlh?=
+ =?utf-8?B?OGsvdEYzSllpR2Z6R01GQ3lGS3BxSnlEYU9kWHZOTVE4Y0hSM000UDJDVEtp?=
+ =?utf-8?B?eTU0dlQ1QUlFY2xqQ0pOZlFpb05XbGt0dVA0S1BhSjRFQXJPYkl3a0wyamc0?=
+ =?utf-8?B?b3JFY1RYS0tGUXVESE12STNYTzgxRDE1M1RLa0w2L0RhUDZhemtxS09EcXJU?=
+ =?utf-8?B?SkFYWGc2THNrRm5Ec2kxYmptTFE1WDYrOStwNHpQRmtXRDhZTVl2blB4WFVJ?=
+ =?utf-8?B?WFZTZVJiZVZYR0drVEVIWHJXbkFsS0lJOHhTelVQSTFDbVpZc3R0MHVsbVZC?=
+ =?utf-8?B?MmZKRnQrTHRMSXNsT3NVMjdNRTV1V0dtbEpvNU04NkpBRG1sRmJjSjVhUlFy?=
+ =?utf-8?B?NTVxV2RVTVplMS9sSTN2S3Z5VVJIQXVEekJjSWFJWEJRMnBOTGpac0YyS2ZB?=
+ =?utf-8?B?bzcyMCtzY2pGRzVoZDRRSFBlbkZ5M1VQekdzNHc2NGpCeS91MHA1S0l6aExI?=
+ =?utf-8?B?c1RGTDFoWHl0UXJ5eUJlMWo1S1JCdDF6RjVRand6OS9aZFkySW5VSXhMWDBn?=
+ =?utf-8?B?YVNDaXk0ZlVkRXZVczRVSHRvblFHNnBQbW0rdHRHK0o0LzB5Y1BSSWx2bnBx?=
+ =?utf-8?B?dmtHZk1QOVNXKzhzVzZ1SEtQci9DNkx2YjRSbkRFUzRiUWdReFdHdjBieWNp?=
+ =?utf-8?B?SHNGYVBlTWE0ODZvVE1iY0N3Q2xOWWZIM0lPZDRoWjlCdXFVL0JSU2c5L21j?=
+ =?utf-8?B?YWxSTUY4ZlNZa2dRd1VuZW9BTnRBZGRKSURkYnZJVy9Ka2NFaUxNNFZzeGFp?=
+ =?utf-8?B?QUdmbVJpaVAxdTRqMDV3K0xRWXFGM2l5amF6M2pxaE5pSjBNWmxpSHF3U2FM?=
+ =?utf-8?B?RXJ2c0dxaTgyZWxjcTFuZno4RXZqOFE3REh1MzdGeHdtMWhaTmZuYVBHRGQ5?=
+ =?utf-8?B?MWVxV1BJVTNxZWFyUG1kUnplMjNtcS9BZEw0czNVQlJ5d0dkdkpwRjgvUUJB?=
+ =?utf-8?B?ME4vMUtNZ0RyTnIzdVhBbmZJbjk4bkdpMUJ3ZzA1Z050eXorc2ZyODZOVllX?=
+ =?utf-8?B?UkdWL0pISVJDTjJJcDZBb3lmY3FDNmFoTjU4ZEhJclhsNVZOMlZsV3B3a2d3?=
+ =?utf-8?B?a3lhVHFXNkFIRm8zQW9Vc01Salc0R2l1WlU1WFdoTEpxaVQ2R1lDYTkyclBQ?=
+ =?utf-8?Q?9CV1nQDDCkI+MS/IcYg4fG16X?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7293b0c9-2ce9-4765-1013-08dcd8d09190
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a5e0732-36f1-4685-1c72-08dcd8d175fa
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2024 17:29:08.7995
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2024 17:35:32.0105
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iEAtrwk8ZbK0u12DKKabBO57yPUvs5wi1wqg+EQiWvsWmwY5iM4GhzUE7rYliwO3MJtKm4HjIyPnxw0wL6vxlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7511
+X-MS-Exchange-CrossTenant-UserPrincipalName: 44CwTzXMC9Jwb1wP8j1XtdvEhpY2duc2lQSOH93iszRM3JcwH/7TvGs/REJDcCoERE8qvWZRDtXNs+7JoUZC5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7469
+
++dri-devel
+
+For those joining late; this is the full series for context.
+
+https://lore.kernel.org/linux-pm/20240919171952.403745-1-lkml@antheas.dev/T/#maee308be5349d8df25c8ccf12144ea96bbd4cbbd
 
 On 9/19/2024 12:19, Antheas Kapenekakis wrote:
-> The screen off and screen on firmware functions are meant to signify
-> the system entering a state where the user is not actively interacting
-> with it (i.e., in Windows this state is called "Screen Off" and the
-> system enters it once it turns the screen off e.g., due to inactivity).
+> Currently, the screen off/on calls are handled within the suspend
+> sequence, which is a deviation from Windows. This causes issues with
+> certain devices, such as the ROG Ally, which expects this call to be
+> executed with the kernel fully awake. The subsequent half-suspended
+> state makes the controller of the device to fail to suspend properly.
 > 
-> In this state, the kernel and userspace are fully active, and the user
-> might still be interacting with the system somehow (such as with
-> listening to music or having a hotspot). Userspace is supposed to
-> minimize non-essential activities, but this is not required.
-> In addition, there is no requirement of suspending post the screen off
-> call. If the user interacts with the system, the kernel should call
-> screen on and resume normal operation.
-> 
-> This patch adds a set of callbacks to allow calling the screen on/off
-> callbacks outside of the suspend/resume path. It is based on
-> Mario Limonciello's patch on the superm1/dsm-screen-on-off branch.
-
-Based on?  It's nearly an identical patch [1].  The screen_off/screen_on 
-lines in struct platform_s2idle_ops are just placed in a different location.
-
-IMO there should be more attribution here, either a Co-developed-by tag 
-or sending my patch directly and adding your S-o-b to it.
-
-Link: 
-https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/commit/?h=superm1/dsm-screen-on-off&id=7b80581428315f973410dccf0402a86266fb0d9a 
-[1]
-
-> However, the intent here is completely different.
+> This patch calls the screen off/on callbacks before entering the suspend
+> sequence, which fixes this issue. In addition, it opens the possibility
+> of modelling a state such as "Screen Off" that mirrors Windows, as the
+> callbacks will be accessible and validated to work outside of the
+> suspend sequence.
 > 
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->   include/linux/suspend.h |  5 +++++
->   kernel/power/suspend.c  | 12 ++++++++++++
->   2 files changed, 17 insertions(+)
+>   kernel/power/suspend.c | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
 > 
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index da6ebca3ff77..96ceaad07839 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -132,6 +132,7 @@ struct platform_suspend_ops {
->   };
->   
->   struct platform_s2idle_ops {
-> +	int (*screen_off)(void);
->   	int (*begin)(void);
->   	int (*prepare)(void);
->   	int (*prepare_late)(void);
-> @@ -140,6 +141,7 @@ struct platform_s2idle_ops {
->   	void (*restore_early)(void);
->   	void (*restore)(void);
->   	void (*end)(void);
-> +	int (*screen_on)(void);
->   };
->   
->   #ifdef CONFIG_SUSPEND
-> @@ -160,6 +162,9 @@ extern unsigned int pm_suspend_global_flags;
->   #define PM_SUSPEND_FLAG_FW_RESUME	BIT(1)
->   #define PM_SUSPEND_FLAG_NO_PLATFORM	BIT(2)
->   
-> +int platform_suspend_screen_off(void);
-> +int platform_suspend_screen_on(void);
-> +
->   static inline void pm_suspend_clear_flags(void)
->   {
->   	pm_suspend_global_flags = 0;
 > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 09f8397bae15..19734b297527 100644
+> index 19734b297527..afa95271ef00 100644
 > --- a/kernel/power/suspend.c
 > +++ b/kernel/power/suspend.c
-> @@ -254,6 +254,18 @@ static bool sleep_state_supported(suspend_state_t state)
->   	       (valid_state(state) && !cxl_mem_active());
->   }
+> @@ -507,6 +507,19 @@ int suspend_devices_and_enter(suspend_state_t state)
 >   
-> +int platform_suspend_screen_off(void)
-> +{
-> +	return s2idle_ops && s2idle_ops->screen_off ? s2idle_ops->screen_off() : 0;
-> +}
-> +EXPORT_SYMBOL_GPL(platform_suspend_screen_off);
+>   	pm_suspend_target_state = state;
+>   
+> +	/*
+> +	 * Linux does not have the concept of a "Screen Off" state, so call
+> +	 * the platform functions for screen off prior to beginning the suspend
+> +	 * sequence, mirroring Windows which calls them outside of it as well.
+> +	 *
+> +	 * If Linux ever gains a "Screen Off" state, the following callbacks can
+> +	 * be replaced with a call that checks if we are in "Screen Off", in which
+> +	 * case they will NOOP and if not call them as a fallback.
+> +	 */
+> +	error = platform_suspend_screen_off();
+
+It's a bit muddy; but I wonder if calling 
+drm_atomic_helper_disable_all() makes sense here.
+
+> +	if (error)
+> +		goto Screen_on;
 > +
-> +int platform_suspend_screen_on(void)
-> +{
-> +	return s2idle_ops && s2idle_ops->screen_on ? s2idle_ops->screen_on() : 0;
-> +}
-> +EXPORT_SYMBOL_GPL(platform_suspend_screen_on);
+>   	if (state == PM_SUSPEND_TO_IDLE)
+>   		pm_set_suspend_no_platform();
+>   
+> @@ -540,6 +553,9 @@ int suspend_devices_and_enter(suspend_state_t state)
+>    Close:
+>   	platform_resume_end(state);
+>   	pm_suspend_target_state = PM_SUSPEND_ON;
 > +
->   static int platform_suspend_prepare(suspend_state_t state)
->   {
->   	return state != PM_SUSPEND_TO_IDLE && suspend_ops->prepare ?
+> + Screen_on:
+> +	platform_suspend_screen_on();
+
+The problem with my suggestion above is what would you put here for 
+symmetry?  drm_atomic_helper_resume() doesn't look right to me.
+
+Maybe it's a no-op from DRM perspective and the drivers handle it.
+
+>   	return error;
+>   
+>    Recover_platform:
 
 
