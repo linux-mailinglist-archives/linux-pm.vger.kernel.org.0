@@ -1,325 +1,194 @@
-Return-Path: <linux-pm+bounces-14428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5812897C3E8
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 07:48:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5EDB97C3E3
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 07:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFE6B1F21D55
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 05:48:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07D521C229A2
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 05:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C26655885;
-	Thu, 19 Sep 2024 05:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C79E1B7FD;
+	Thu, 19 Sep 2024 05:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oEhP7tbL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rb+UnqBE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE6B50288;
-	Thu, 19 Sep 2024 05:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F111BC39
+	for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2024 05:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726724907; cv=none; b=cE1mOt6187ixrMxdtoyGrqnD0AHMaCJKC9javANzyZNuhHH9yk4eDMicpRKfmKPD/umlQv+LdsdxBGfAHSNRSz87GR419QXJviQ05J77Il5FOeMvl47OpbDYedTkNAwDEeveSgrGCodUe7tRoD+FLyM8E0knYEKT3UiJT2suOsk=
+	t=1726723524; cv=none; b=Ysw1X+c7aGS4qnQHWSv7G6Uy1Zv7Ja9kCjKRuBoxhSvNr/kpNb5Pcur1G+4FYqAC+fBP2gnvKiUCD2wtu9t1DOfMWkX65zgIrlFlXXKVDjNtFCPMpOPQEWV+HKqSOLr8Nz87ZvoCn+uix9+3k9CveFtMjHfKt+AJQDS91wvPjPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726724907; c=relaxed/simple;
-	bh=G3HxZ6BFJgGUngUEdEqRvTO8h+Y5um2rH+ytTzIxaSk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gQkfo0aBc1PoqIsCVBlqVpt3YAYFlFJgaipMbmC5OveEez3zmx6+i9hNfiC15nPNvqpHeP/T2ssYwShSxlsHpQTkowZ+p6EAGzdR2cT086BO39PtjRzJlKFdmbhLTO9AkSSrT3KbQSvQwI4ASwrZFRzrP/OuqNmqcOU3xEDf1mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oEhP7tbL; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48IITF23009895;
-	Thu, 19 Sep 2024 05:02:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	message-id:subject:from:to:cc:date:in-reply-to:references
-	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
-	q5KuE0T+uQVKI2p30mdo6ySoLSIgxgeCS36MCTvmvCY=; b=oEhP7tbLz9/RhxJq
-	I3F+vXRDRp6pR4mHlGluOsxZWDFptR36jH0uSRN12/aq70D9zisDu+iGgf14ijwo
-	D2y0SF0sYzTsfk+UZFGZE/zVSEXRucnwrW7K3OzfULK5NYD1nsIXfrcXP/2mp530
-	7nVC+90CIXcW6TbHzxUcKKVHl8wqBrgp1JKG0NDofinujndyH9vfwk7+p7qPeNUc
-	uaEMYaFcYR63fVE8sEjFxb45turmj+z0SuECxC9aaU8bq1htG4trvMjw474tCKyo
-	CBW6lg2VFRawYMu/7v+QXNmRkJcYWT6aIZ64EnGLIU2THFjqq6YEvO+JErDLZx9K
-	JIh38Q==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3ujht8k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Sep 2024 05:02:26 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48J4Iklo030649;
-	Thu, 19 Sep 2024 05:02:24 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41npanf6t9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Sep 2024 05:02:24 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48J52Nvv32571674
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 05:02:23 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 67AF35803F;
-	Thu, 19 Sep 2024 05:02:23 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C288158054;
-	Thu, 19 Sep 2024 05:02:19 +0000 (GMT)
-Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.171.57.39])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 19 Sep 2024 05:02:19 +0000 (GMT)
-Message-ID: <6371848e9c260743f381be6e0114743ffab5e5bb.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/1] cpuidle/menu: Address performance drop from
- favoring physical over polling cpuidle state
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: Christian Loehle <christian.loehle@arm.com>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: gautam@linux.ibm.com, aboorvad@linux.ibm.com
-Date: Thu, 19 Sep 2024 10:32:17 +0530
-In-Reply-To: <4c897ab4-d592-427b-9a97-79c2b14d5c46@arm.com>
-References: <20240809073120.250974-1-aboorvad@linux.ibm.com>
-	 <93d9ffb2-482d-49e0-8c67-b795256d961a@arm.com>
-	 <9e5ef8ab0f0f3e7cb128291cd60591e3d07b33e4.camel@linux.ibm.com>
-	 <4c897ab4-d592-427b-9a97-79c2b14d5c46@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-26.el8_10) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wWktMu2_8I5AWkJTvgQEtICgsOHo0SMY
-X-Proofpoint-GUID: wWktMu2_8I5AWkJTvgQEtICgsOHo0SMY
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1726723524; c=relaxed/simple;
+	bh=nCW2JTmSVNMZoTicxEoqMRsbRQOdQtJDkAgeM6ZZxS4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=kq4OPEdPZ6PEODJExI9BHlOa3m73fHXVHSfetlSBZn60tPZyUTRNEat6F7Ar70Y0UeFAp+TNqVggf6Lv+tj41KQ2KALCzf+Bwc23A7AkmyF9eH5s/97x+DAN9EqAYoAvBKOrKae0fpQHfeQeNyQaxsk/AJNZ1K93sOlZoh+Y+gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rb+UnqBE; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726723522; x=1758259522;
+  h=date:from:to:cc:subject:message-id;
+  bh=nCW2JTmSVNMZoTicxEoqMRsbRQOdQtJDkAgeM6ZZxS4=;
+  b=Rb+UnqBE60jevx+ol8NOrMZs3bhncU5U0GwuvcYWMK/PcHcXKR5SOQT2
+   hOH6zQIgAV4e3vbyfBnzMdHefgrIH3idDeqIjTRSK4hXXfpIINzaPTNgO
+   v4AkSYXScnY6TqHFG/ZaS7Q6m9fxP7qy7rFI7GtPpbe/uNVqO8AFThSbH
+   H3R1Ct/0Lmzn6o16C07MTlxeTUfHQiuQSX61k+DMvUdp+q1maSOE9piRy
+   qzpJxVbzVIlxjbnV7ub6HTzSdAbG9p9CCDDaQLm5eMHW8RTe6igpy7rc8
+   3K08LLApQKhy2F8eirznVL/4KSsKF2m5pfd9xQv3KPG4H0l56HPpbyP/P
+   w==;
+X-CSE-ConnectionGUID: V+ah5/1rTvCLWv7RjM4b9A==
+X-CSE-MsgGUID: 66lDNwTJTq+Uo6mV7ko5dA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="25539729"
+X-IronPort-AV: E=Sophos;i="6.10,240,1719903600"; 
+   d="scan'208";a="25539729"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 22:25:22 -0700
+X-CSE-ConnectionGUID: NzqBwYkrSiSja0ig4ydWTw==
+X-CSE-MsgGUID: 5KiKEWvJQEOg3goaDNRkVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,240,1719903600"; 
+   d="scan'208";a="69687857"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 18 Sep 2024 22:25:20 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sr9fK-000Cxo-1P;
+	Thu, 19 Sep 2024 05:25:18 +0000
+Date: Thu, 19 Sep 2024 13:24:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
+ bc6115435d9412d4c28f73d0912bbdaecbf1b724
+Message-ID: <202409191333.vSgnLM6G-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-19_03,2024-09-18_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1011 bulkscore=0 suspectscore=0 mlxscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409190027
 
-On Wed, 2024-08-21 at 11:55 +0100, Christian Loehle wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
+branch HEAD: bc6115435d9412d4c28f73d0912bbdaecbf1b724  cpufreq/amd-pstate: Fix non kerneldoc comment
 
-> On 8/20/24 09:51, Aboorva Devarajan wrote:
-> > On Tue, 2024-08-13 at 13:56 +0100, Christian Loehle wrote:
-> > 
-...
-> The wakeup source(s), since they don't seem to be timer events would be
-> interesting, although a bit of a hassle to get right. 
-> What's the workload anyway?
-> 
+elapsed time: 2417m
 
-Hi Christian,
+configs tested: 101
+configs skipped: 3
 
-Apologies for the delayed response.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I identified the part of the internal workload responsible for performance
-improvement with the patch and it appears to be the OLTP queries, and yes
-the wakeup sources are not timer events.
+tested configs:
+alpha                             allnoconfig    gcc-13.3.0
+alpha                            allyesconfig    gcc-13.3.0
+arc                              alldefconfig    gcc-13.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                        nsim_700_defconfig    gcc-13.2.0
+arc                   randconfig-001-20240919    gcc-13.2.0
+arc                   randconfig-002-20240919    gcc-13.2.0
+arc                    vdk_hs38_smp_defconfig    gcc-13.2.0
+arm                               allnoconfig    clang-20
+arm                       imx_v4_v5_defconfig    clang-16
+arm                         lpc18xx_defconfig    clang-20
+arm                       multi_v4t_defconfig    clang-20
+arm                   randconfig-001-20240919    clang-20
+arm                   randconfig-002-20240919    clang-20
+arm                   randconfig-003-20240919    clang-20
+arm                   randconfig-004-20240919    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                 randconfig-001-20240919    gcc-14.1.0
+arm64                 randconfig-002-20240919    clang-15
+arm64                 randconfig-003-20240919    clang-20
+arm64                 randconfig-004-20240919    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+csky                  randconfig-001-20240919    gcc-14.1.0
+csky                  randconfig-002-20240919    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                          allyesconfig    clang-20
+hexagon               randconfig-001-20240919    clang-20
+hexagon               randconfig-002-20240919    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-002-20240918    gcc-12
+i386        buildonly-randconfig-003-20240918    gcc-12
+i386        buildonly-randconfig-004-20240918    gcc-12
+i386        buildonly-randconfig-005-20240918    clang-18
+i386        buildonly-randconfig-006-20240918    gcc-12
+i386                                defconfig    clang-18
+i386                  randconfig-001-20240918    clang-18
+i386                  randconfig-002-20240918    clang-18
+i386                  randconfig-003-20240918    clang-18
+i386                  randconfig-004-20240918    gcc-12
+i386                  randconfig-005-20240918    gcc-12
+i386                  randconfig-006-20240918    clang-18
+i386                  randconfig-011-20240918    gcc-12
+i386                  randconfig-012-20240918    clang-18
+i386                  randconfig-013-20240918    gcc-12
+i386                  randconfig-014-20240918    clang-18
+i386                  randconfig-015-20240918    clang-18
+i386                  randconfig-016-20240918    clang-18
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch             randconfig-001-20240919    gcc-14.1.0
+loongarch             randconfig-002-20240919    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                          amiga_defconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                  maltasmvp_eva_defconfig    gcc-13.2.0
+nios2                             allnoconfig    gcc-14.1.0
+nios2                 randconfig-001-20240919    gcc-14.1.0
+nios2                 randconfig-002-20240919    gcc-14.1.0
+openrisc                          allnoconfig    gcc-14.1.0
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-14.1.0
+openrisc                 simple_smp_defconfig    gcc-14.1.0
+parisc                            allnoconfig    gcc-14.1.0
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-14.1.0
+parisc                generic-32bit_defconfig    gcc-14.1.0
+parisc                randconfig-001-20240919    gcc-14.1.0
+parisc                randconfig-002-20240919    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    gcc-14.1.0
+powerpc                 mpc837x_rdb_defconfig    gcc-14.1.0
+powerpc               randconfig-001-20240919    gcc-14.1.0
+riscv                             allnoconfig    gcc-14.1.0
+s390                             allmodconfig    clang-20
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                                  defconfig    gcc-14.1.0
+sh                            migor_defconfig    gcc-14.1.0
+sparc                            allmodconfig    gcc-14.1.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-17
+um                               allyesconfig    gcc-12
+x86_64                            allnoconfig    clang-18
+x86_64                           allyesconfig    clang-18
+x86_64                              defconfig    gcc-11
+x86_64                           rhel-8.3-bpf    gcc-12
+x86_64                         rhel-8.3-kunit    gcc-12
+x86_64                           rhel-8.3-ltp    gcc-12
+x86_64                          rhel-8.3-rust    clang-18
+xtensa                            allnoconfig    gcc-14.1.0
 
----------------------------------------------------------------------
-
-Additionally to reproduce the issue using a more open and accessible
-benchmark, conducted similar experiments using pgbench and I observed
-similar improvements with the patch, particularly when running the
-read intensive select query benchmarks.
-
----------------------------------------------------------------------
-System Details
----------------------------------------------------------------------
-$ lscpu
-Architecture:             ppc64le
-  Byte Order:             Little Endian
-CPU(s):                   224
-  On-line CPU(s) list:    0-223
-Model name:               POWER10 (architected), altivec supported
-  Model:                  2.0 (pvr 0080 0200)
-  Thread(s) per core:     8
-  Core(s) per socket:     3
-  Socket(s):              8
-Virtualization features:  
-  Hypervisor vendor:      pHyp
-  Virtualization type:    para
----------------------------------------------------------------------
-
-$ cpupower idle-info
-CPUidle driver: pseries_idle
-CPUidle governor: menu
-analyzing CPU 0:
-
-Number of idle states: 2
-Available idle states: snooze CEDE
-snooze:
-Flags/Description: snooze
-
-Latency: 0
-Residency: 0
-Usage: 6229
-Duration: 402142
-CEDE:
-Flags/Description: CEDE
-Latency: 12
-Residency: 120
-Usage: 191411
-Duration: 36329999037
-
----------------------------------------------------------------------
-PostgreSQL Benchmark:
----------------------------------------------------------------------
-
-I ran pgbench with 224 clients and 20 threads for 600 seconds,
-performing only SELECT queries against the pgbench database to 
-evaluate performance under read-intensive workloads:
-
-$ pgbench -c 224 -j 20 -T 600 -S pgbench
-
-Latency:
-
-|---|-------------|------------|------------|
-| # | Before (ms) | After (ms) | Change (%) |
-|Run| Patch       | Patch      |            |
-|---|-------------|------------|------------|
-| 1 | 0.343       | 0.287      | -16.31%    |
-| 2 | 0.334       | 0.286      | -14.37%    |
-| 3 | 0.333       | 0.286      | -14.11%    |
-| 4 | 0.341       | 0.288      | -15.55%    |
-| 5 | 0.342       | 0.288      | -15.79%    |
-|---|-------------|------------|------------|
-
-Latency Reduction: After applying the patch, the latency decreased
-by 14% to 16% across multiple runs.
-
-Throughput per second:
-
-|---|-------------|------------|------------|
-| # | Before      | After      | Change (%) |
-|Run| Patch       | Patch      |            |
-|---|-------------|------------|------------|
-| 1 | 652,544.23  | 780,613.42 | +19.63%    |
-| 2 | 670,243.45  | 784,348.44 | +17.04%    |
-| 3 | 673,495.39  | 784,458.12 | +16.48%    |
-| 4 | 656,609.16  | 778,531.20 | +18.57%    |
-| 5 | 654,644.52  | 778,322.88 | +18.88%    |
-|---|-------------|------------|------------|
-
-Transactions per second Improvement: The patch led to an increase in
-TPS, ranging from 16% to 19%.
-
-This indicates that the patch significantly reduces latency while
-improving throughput (TPS).  pgbench is an OLTP benchmark and doesn't
-do timer based wakeups, this is in-line with the improvements
-I saw in the originally reported OLTP workload as well. 
-
----------------------------------------------------------------------
-Additional CPU Idle test with custom benchmark:
----------------------------------------------------------------------
-I also wrote a simple benchmark [1] to analyze the impact of cpuidle
-state selection, comparing timer-based wakeups and non-timer
-(pipe-based) wakeups.
-
-This test involves a single waker thread periodically waking up a
-single wakee thread, simulating a repeating sleep-wake pattern. The
-test was run with both timer-based and pipe-based wakeups, and cpuidle
-statistics (usage, time, above, below) were collected.
-
-Timer based wakeup:
-
-+------------------------+---------------------+---------------------+
-| Metric                 | Without Patch       | With Patch          |
-+------------------------+---------------------+---------------------+
-| Wakee thread - CPU     | 110                 | 110                 |
-| Waker thread - CPU     | 20                  | 20                  |
-| Sleep Interval         | 50 us               | 50 us               |
-| Total Wakeups          | -                   | -                   |
-| Avg Wakeup Latency     | -                   | -                   |
-| Actual Sleep time      | 52.639 us           | 52.627 us           |
-+------------------------+---------------------+---------------------+
-| Idle State 0 Usage Diff| 94,879              | 94,879              |
-| Idle State 0 Time Diff | 4,700,323 ns        | 4,697,576 ns        |
-| Idle State 1 Usage Diff| 0                   | 0                   |
-| Idle State 1 Time Diff | 0 ns                | 0 ns                |
-+------------------------+---------------------+---------------------+
-| Total Above Usage      | 0 (0.00%)           | (0.00%)             |
-+------------------------+---------------------+---------------------+
-| Total Below Usage      | 0 (0.00%)           | 0 (0.00%)           |
-+------------------------+---------------------+---------------------+
-
-In timer-based wakeups, the menu governor effectively predicts the idle
-duration both with and without the patch. This ensures that there are
-few or no instances of "Above" usage, allowing the CPU to remain in the
-correct idle state.
-
-The condition (s->target_residency_ns <= data->next_timer_ns) in the menu
-governor ensures that a physical idle state is not prioritized when a
-timer event is expected before the target residency of the first physical
-idle state.
-
-As a result, the patch has no impact in this case, and performance
-remains stable with timer based wakeups.
-
-Pipe based wakeup (non-timer wakeup):
-
-+------------------------+---------------------+---------------------+
-| Metric                 | Without Patch       | With Patch          |
-+------------------------+---------------------+---------------------+
-| Wakee thread - CPU     | 110                 | 110                 |
-| Waker thread - CPU     | 20                  | 20                  |
-| Sleep Interval         | 50 us               | 50 us               |
-| Total Wakeups          | 97031               | 96583               |
-| Avg Wakeup Latency     | 7.070 us            | 4.879 us            |
-| Actual Sleep time      | 51.366 us           | 51.605 us           |
-+------------------------+---------------------+---------------------+
-| Idle State 0 Usage Diff| 1209                | 96,586              |
-| Idle State 0 Time Diff | 55,579 ns           | 4,510,003 ns        |
-| Idle State 1 Usage Diff| 95,826              | 5                   |
-| Idle State 1 Time Diff | 4,522,639 ns        | 198 ns              |
-+------------------------+---------------------+---------------------+
-+------------------------+---------------------+---------------------+
-| **Total Above Usage**  | 95,824 (98.75%)     | 5 (0.01%)           |
-+------------------------+---------------------+---------------------+     
-+------------------------+---------------------+---------------------+
-| Total Below Usage      | 0 (0.00%)           | 0 (0.00%)           |
-+------------------------+---------------------+---------------------+
-
-In the pipe-based wakeup scenario, before the patch was applied, the 
-"Above" metric was notably high around 98.75%. This suggests that the
-menu governor frequently selected a deeper idle state like CEDE, even
-when the idle period was relatively short.
-
-This happened because the menu governor is inclined to prioritize the
-physical idle state (CEDE) even when the target residency time of the
-physical idle state (s->target_residency_ns) was longer than the
-predicted idle time (predicted_ns), so data->next_timer_ns won't be
-relevant here in non-timer wakeups.
-
-In this test, despite the actual idle period being around 50 microseconds,
-the menu governor still chose CEDE state, which has a target residency of
-120 microseconds.
-
----------------------------------------------------------------------
-
-While timer-based wakeups performed well even without the patch, workloads
-that don't have timers as wakeup source but have predictable idle durations
-shorter than the first idle state's target residency benefit significantly
-from the patch.
-
-It will be helpful to understand why prioritizing deep physical idle
-states over shallow ones even for short idle periods that don’t meet
-the target residency like mentioned above is considered more beneficial.
-
-Is there something I could be missing here?
-
-Any comments or suggestions will be really helpful.
-
-[1] https://github.com/AboorvaDevarajan/linux-utils/tree/main/cpuidle/cpuidle_wakeup
-
-Thanks,
-Aboorva
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
