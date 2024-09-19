@@ -1,166 +1,112 @@
-Return-Path: <linux-pm+bounces-14433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14432-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A87897C5BF
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 10:24:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C680E97C5B7
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 10:18:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12E3C1F21E94
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 08:24:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73C7F1F21A13
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 08:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6981957E7;
-	Thu, 19 Sep 2024 08:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sD8ua67e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73DA518C938;
+	Thu, 19 Sep 2024 08:17:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from master.debian.org (master.debian.org [82.195.75.110])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE849190664;
-	Thu, 19 Sep 2024 08:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072151CABA
+	for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2024 08:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726734284; cv=none; b=UrlPUAVCnmBQhf1Sh4ijMQs6ADZJ2t5D52amUcc5C9WcFCB8Asv/bIZ7JfnBXAlE3pTKiRJlZzhZFj6IQyfNGJcE3OtMPQUTWW8+ScblaUHTk1DfBLxEXUVlgDGNFtwXTWrFWNwuZ8t71ESgIPojXDTws8jQkvWeilUAuv/QxN4=
+	t=1726733879; cv=none; b=MG3O3Vwco9FIQiXG3+03l7aOgh0c0DIJGLvwPNW5ONC2f8x6LXgEomZ0Y4zpVlw0MpfcgPzBIjpD+k+Tr4o4reUTXT6TLCj8DUI98A1GcpmPqGo/ukIY/T6F/lA32YHW+0TyvqrChswM5P2W6yEMiMQJdGboH/pF/INRNVql0Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726734284; c=relaxed/simple;
-	bh=AufR2rC810Q4YjbnIq0502kZyRC7aU9Fu0Tte+Po0X8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TT2Z8bIB0+D1v+v3sdSSX63WKJdRv23vCDc5yGp5nUslzz1YzZcV63TrWibAe69mO6XQ5CBMZj1ipAbIKVlS+XeV7+TCZMa/j61l5fhb6vrYdBvEysVHO2LaAUFUQqZQMpPUqm08lfyFD+T0cwPJ5E/cnDwAPaEXE71VJEZkLPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=master.debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sD8ua67e; arc=none smtp.client-ip=82.195.75.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=master.debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.master; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	In-Reply-To:References; bh=sxmYL+nS7Az6jrXUJv7A/FowDRA+Yf3UwSxFM9lo31A=; b=sD
-	8ua67eq5C4H2MnppB9UIj5vy1zi6Yc4PGZfJJQCNNEz88wxCsth8I5NGtrlLAhlRDf/hbpENblKsQ
-	J0ZBjVrVTCG8/I9Fsw4O/fc5UxbfEIgubM2DqvnRE0QJ6DEGx9YhwQakRO0bT2VQrFYaj5cRDBD2t
-	FAyjOk91Jnz98aoCHKN37cHhjBDowxLPzM9EBBC3gS+J95AVSfWqJfnu7l/tBUvqtk8XIZ1Oj2i6T
-	8VebJ3mR3lmkqlS2qTzaURHJdvzcsXmKTfqfLyY86RG4JayzhaclREkI8UKdZfK1fOXQRQjx/gUti
-	ujoEUwUcGnu4CevZaPy7f6PDCSWBtyeg==;
-Received: from ukleinek by master.debian.org with local (Exim 4.94.2)
-	(envelope-from <ukleinek@master.debian.org>)
-	id 1srCGW-000MYs-JV; Thu, 19 Sep 2024 08:11:52 +0000
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@debian.org>
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Cc: linux-pm@vger.kernel.org,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	linux-rt-users@vger.kernel.org,
-	xiao sheng wen <atzlinux@sina.com>
-Subject: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw spinlock
-Date: Thu, 19 Sep 2024 10:11:21 +0200
-Message-ID: <20240919081121.10784-2-ukleinek@debian.org>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1726733879; c=relaxed/simple;
+	bh=DNopGvnld8pSSptoXLpTLBtQfMJgy+FaQwlZUQSCkPY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=VPCK2/6rst2H8o1BwOwxULPO6pwZIsp5bvsysyNPpeO7cORNKi/bdNip5c9kcHNhp7ZTlD7y5BuQOw5FBS06tbkwUtv7VUBtGL8sTHOLtBOVLauhoxORaf0nnW2uxJ4YxBhOwmG363OyzGceng0FV5r/2z8Ewa3ljEaJTkb70TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [172.30.4.124] (unknown [193.158.90.91])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 90EA361E5FE05;
+	Thu, 19 Sep 2024 10:17:25 +0200 (CEST)
+Message-ID: <3b600845-77d5-42d3-8556-53cc0b2eab25@molgen.mpg.de>
+Date: Thu, 19 Sep 2024 10:17:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3401; i=ukleinek@debian.org; h=from:subject; bh=AufR2rC810Q4YjbnIq0502kZyRC7aU9Fu0Tte+Po0X8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBm69yp8uS182CL8KAYt+yDqMzeLt/dhwoj+m2O9 bazfmXoTsyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZuvcqQAKCRCPgPtYfRL+ TqW0CACJwbFamuKiP+ypB3yZbzct/y5pE5qttG5mi/bDPi51UU/NlBWR51cofnPFX9lWJFBjccn JvjQkeHvT8A31EpsZ0K13h7ZCQywqRf2BAiy/olKI4D2Wflp7NuLh3gS0mZBgEKfwU9SErA1mEu sUOlYybUXenbgLpbQRC83S5jlwagUxAHc+AybmdP28DEfsH367xDI6LUX4UAB3ELoMWqzXy7FMr lfHqOcDZFBMiBymY3I3b4AEaNzgL5TezPMTI+HEq+f+RAZtmRg/93pfQwFlKmGWGUDvyMGLWMtr EibPvWgHL+dbJkRfDGorurzfTBaB+nWN91r/QrQW88eim2mB
-X-Developer-Key: i=ukleinek@debian.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+User-Agent: Mozilla Thunderbird
+Subject: Re: Linux fails to ACPI S3 supend on Dell XPS 13 9630
+ (6.11.0-04557-g2f27fce67173)
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ regressions@lists.linux.dev, Petr Mladek <pmladek@suse.com>
+References: <18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de>
+ <154114fb-276f-45f6-bba0-98133c7c5d4d@molgen.mpg.de>
+Content-Language: en-US
+In-Reply-To: <154114fb-276f-45f6-bba0-98133c7c5d4d@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-notify_hwp_interrupt() is called via sysvec_thermal() ->
-smp_thermal_vector() -> intel_thermal_interrupt() in hard irq context.
-For this reason it must not use a simple spin_lock that sleeps with
-PREEMPT_RT enabled. So convert it to a raw spinlock.
+Dear Linux folks,
 
-Reported-by: xiao sheng wen <atzlinux@sina.com>
-Link: https://bugs.debian.org/1076483
-Signed-off-by: Uwe Kleine-König <ukleinek@debian.org>
----
-Hello,
 
-this is deep in x86 land where I have *very* little experience and
-knowledge. Is sysvec_thermal() (defined in arch/x86/kernel/irq.c) really
-running in hard irq context? The stacktrace in the Debian bug report
-suggests that.
+Am 19.09.24 um 07:51 schrieb Paul Menzel:
 
-So please double check my reasoning before applying this patch.
+> Am 19.09.24 um 07:51 schrieb Paul Menzel:
 
-Thanks
-Uwe
+>> On the Intel Kaby Lake laptop Dell XPS 13, Linux 6.11.0-04557- 
+>> g2f27fce67173 (“6.12-rc0”) fails to ACPI S3 suspend the system. The 
+>> screen turns black (as expected) and the power button LED stays on.
+>>
+>> Doing
+>>
+>>      echo N | sudo tee /sys/module/printk/parameters/console_suspend
+>>
+>> and on tty2
+>>
+>>      sudo systemctl stop gdm3
+>>      sudo systemctl start getty@tty1.service
+>>
+>> and then on tty1
+>>
+>>      sudo systemctl suspend
+>>
+>> I see some panic messages and traces containing ktime_get or so, but I 
+>> failed to save the messages. (Hints very much appreciated.)
+>>
+>> I try to test the printk changes, but otherwise bisecting is not 
+>> feasible, as it’s my production machine.
 
- drivers/cpufreq/intel_pstate.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+It’s not the printk changes. I tested some commits, and assume it’s the 
+timer core changes:
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index aaea9a39eced..b0018f371ea3 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1845,7 +1845,7 @@ static void intel_pstate_notify_work(struct work_struct *work)
- 	wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_STATUS, 0);
- }
- 
--static DEFINE_SPINLOCK(hwp_notify_lock);
-+static DEFINE_RAW_SPINLOCK(hwp_notify_lock);
- static cpumask_t hwp_intr_enable_mask;
- 
- #define HWP_GUARANTEED_PERF_CHANGE_STATUS      BIT(0)
-@@ -1868,7 +1868,7 @@ void notify_hwp_interrupt(void)
- 	if (!(value & status_mask))
- 		return;
- 
--	spin_lock_irqsave(&hwp_notify_lock, flags);
-+	raw_spin_lock_irqsave(&hwp_notify_lock, flags);
- 
- 	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
- 		goto ack_intr;
-@@ -1876,13 +1876,13 @@ void notify_hwp_interrupt(void)
- 	schedule_delayed_work(&all_cpu_data[this_cpu]->hwp_notify_work,
- 			      msecs_to_jiffies(10));
- 
--	spin_unlock_irqrestore(&hwp_notify_lock, flags);
-+	raw_spin_unlock_irqrestore(&hwp_notify_lock, flags);
- 
- 	return;
- 
- ack_intr:
- 	wrmsrl_safe(MSR_HWP_STATUS, 0);
--	spin_unlock_irqrestore(&hwp_notify_lock, flags);
-+	raw_spin_unlock_irqrestore(&hwp_notify_lock, flags);
- }
- 
- static void intel_pstate_disable_hwp_interrupt(struct cpudata *cpudata)
-@@ -1895,9 +1895,9 @@ static void intel_pstate_disable_hwp_interrupt(struct cpudata *cpudata)
- 	/* wrmsrl_on_cpu has to be outside spinlock as this can result in IPC */
- 	wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x00);
- 
--	spin_lock_irq(&hwp_notify_lock);
-+	raw_spin_lock_irq(&hwp_notify_lock);
- 	cancel_work = cpumask_test_and_clear_cpu(cpudata->cpu, &hwp_intr_enable_mask);
--	spin_unlock_irq(&hwp_notify_lock);
-+	raw_spin_unlock_irq(&hwp_notify_lock);
- 
- 	if (cancel_work)
- 		cancel_delayed_work_sync(&cpudata->hwp_notify_work);
-@@ -1912,10 +1912,10 @@ static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
- 	if (boot_cpu_has(X86_FEATURE_HWP_NOTIFY)) {
- 		u64 interrupt_mask = HWP_GUARANTEED_PERF_CHANGE_REQ;
- 
--		spin_lock_irq(&hwp_notify_lock);
-+		raw_spin_lock_irq(&hwp_notify_lock);
- 		INIT_DELAYED_WORK(&cpudata->hwp_notify_work, intel_pstate_notify_work);
- 		cpumask_set_cpu(cpudata->cpu, &hwp_intr_enable_mask);
--		spin_unlock_irq(&hwp_notify_lock);
-+		raw_spin_unlock_irq(&hwp_notify_lock);
- 
- 		if (cpu_feature_enabled(X86_FEATURE_HWP_HIGHEST_PERF_CHANGE))
- 			interrupt_mask |= HWP_HIGHEST_PERF_CHANGE_REQ;
+     $ git log --oneline --merges daa394f0f9d3c -3 --no-decorate
+     daa394f0f9d3c Merge tag 'core-debugobjects-2024-09-16' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+     9ea925c806dbb Merge tag 'timers-core-2024-09-16' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+     cb69d86550b3f Merge tag 'irq-core-2024-09-16' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
 
-base-commit: 3621a2c9142bd490af0666c0c02d52d60ce0d2a5
--- 
-2.45.2
 
+1.  6.11.0-02659-gcb69d86550b3 succeeds to ACPI S3 suspend
+2.  6.11.0-02710-gdaa394f0f9d3 fails to ACPI S3 suspend
+
+
+Kind regards,
+
+Paul
 
