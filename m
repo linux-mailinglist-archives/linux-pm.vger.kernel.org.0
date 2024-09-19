@@ -1,241 +1,192 @@
-Return-Path: <linux-pm+bounces-14484-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14485-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF1F97CD1A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 19:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F179697CD20
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 19:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064611F24892
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 17:35:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6934C1F24ECF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 17:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D007019F49D;
-	Thu, 19 Sep 2024 17:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF4F1A08B0;
+	Thu, 19 Sep 2024 17:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gj5FEd+D"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="NKtbfV2k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF171DA5F;
-	Thu, 19 Sep 2024 17:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726767336; cv=fail; b=lL46aXifmxeDEYPuDd0/hVHM4A/idNZC0Al1vHvDaNMuKvbjy+ZDxZ+Yfp/1iLfMngGNP7hXVaIAVJ7hoT+aVgHzWhzIOL9JwXVFaG1y0qmK2dmYuF2DScwpzvH/a2pG8IHDi1eVZPDG7tR+1IY2Q4h5l61mvNBGoMe0zz0hEUU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726767336; c=relaxed/simple;
-	bh=9IHkI8iLBtQMW4md79fcWJ8xZ6dLQE+x1UmY4KM9E8U=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sAHBn2YMIYBItd3tN9fVwSAhcDtNrhS9YQlT3Q99yYi69Ycw6LgpIgg+p87uZ8Nfq1OoX/iLyV/hAJybNdnrv/L6B4BC0aAcZ9+Q5H3IgzL2Qbg87wxHNJWReYCAGqb+cVYn1f+4hzi1mAqqWzjscpS4ethju19BTtpppOk7tXM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gj5FEd+D; arc=fail smtp.client-ip=40.107.223.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gGZddYWld5aQNOToh9vWhexZVFb2EQIHerrn4VI9fiu+gu6ebWnxJG1GUlQBilerI7fOju2SGyxnrBM69/lhvUsq04Ki+rY6j1n26ZNz00yz1UIxAQjIXDCzbDeIe/trjAyv+VeFemCcqXdY3xtlVeaNcEip100U17FxzgSFDil3Ul0CEOBAkWnA4Ebht/t7saIEfnjj+9h/pE3Hr99fUzlnB+Q2tssXrtc0val7dCATsvUqxW6iFaBlQU6y71QyRQkvjgIQkOTBTrMtxckDsPPgolcefHtlONYpNa/kR4/7MZq+VjAowXI4i/Lh9wCd4ZyWWGlCewgZHzahpiTPDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FFWywz/KEgwnxxke9Cpx+Hyq3uoj24ap622s/JEy8fk=;
- b=wcBMev1FWisdq9jiGHEWTPONdhPVDvOozLioykVDvt8+2oVtaYYba9QDvrAhauf/ec08bWL/UUGASFrjth8uF3Amb9FFwexgxPwooNAz67t/yD2AuvR2hrUPp0CI8GnBet1FCxEwrFo7RbPlBIfSni4bXmIiKZAjAGJET4lZ2+k8wEtpq2cpjEX+1aHhOkIWzQf7e05nqsr3YfdTDP1ZqSgMdcM2qFIN0KDOZRmefpC2E6ZpOK+fVtCdk3jE+61/k5CEQN1z/7iGzBUA4a2CaFRxMvZkG6a+PHkpvovQD0VTX9mX/JoHEptYmKTuzdP79doaGFBlJN2KgbhZ49UUWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FFWywz/KEgwnxxke9Cpx+Hyq3uoj24ap622s/JEy8fk=;
- b=gj5FEd+D/P6ShouyGaDeTAbBjom0QbpIx+LIrrMsZiTzg4Qxr0dpp9Qcrv7iWo7QF9n4+e21NXaI/90jZqCvjAZakoiJEnVRpqsxfSxM0TmVbcEDc6Ln0Mx/0/J2PgOXQ7pra5obxRA+aZX67hgydFdTdI3FfKo2PZR93NXU7Vw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH0PR12MB7469.namprd12.prod.outlook.com (2603:10b6:510:1e9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.17; Thu, 19 Sep
- 2024 17:35:32 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7982.016; Thu, 19 Sep 2024
- 17:35:32 +0000
-Message-ID: <1cbc0cda-549a-4333-9045-470c51981af5@amd.com>
-Date: Thu, 19 Sep 2024 12:35:29 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/4] acpi/x86: s2idle: handle screen off/on calls
- outside of suspend sequence
-To: Antheas Kapenekakis <lkml@antheas.dev>, linux-pm@vger.kernel.org,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Cc: platform-driver-x86@vger.kernel.org, luke@ljones.dev, me@kylegospodneti.ch
-References: <20240919171952.403745-1-lkml@antheas.dev>
- <20240919171952.403745-3-lkml@antheas.dev>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20240919171952.403745-3-lkml@antheas.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0171.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c3::8) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AD3198A33;
+	Thu, 19 Sep 2024 17:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726767414; cv=none; b=JARgzVID+HrhoLJjMsg6aoptljbQ+QVHq3othvNkHi54Qcn4O3NVrzPg7NMcb/JiVQMRmGbmzPabZqqEIB6kL77QLq86DoEZStqt+qiyaxvPcssbvqM+XkI90YbSvaRWJfWlIvZ3g2Dkak6Z26Wl39xvmedJPXYSxPBEPUYjLXU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726767414; c=relaxed/simple;
+	bh=YfZOFvIcXWLUHkvEdJH8MXkt4BbsDKL4o47p1v9LFyc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c7riRiPqcMutUzJV+uSe1tFLd8Njl+jbnKLtuhbG0NGYDz4vnfU3MPrPE3TVD3X39z05iaassYF+SgDp89utX8J209KfvobzZFG0O4OTjxG937JvAYx0amT8GoSgh+IB0fE4jihZ/i7QlTdX5s4Qc9O6kg+XBtTOsJ0pf8b9Dq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=NKtbfV2k; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 9B60D2E09C22;
+	Thu, 19 Sep 2024 20:36:44 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1726767405;
+	bh=1V7eYe7VNVNxXo3maIvrt0DbBepNSvx/knbmHSFqtNo=;
+	h=Received:From:Subject:To;
+	b=NKtbfV2kvhBbpdzvdQ2onTBxXUlYq6B6GmvJG4SDBU4e0DzPzvkgNul1fX/7ux/Pv
+	 saFTcda+1bZt1vxN1Y4y7LVYy2JWsjam42k0A0VIPtD/3Ju3XttcC7zwNLC9ZgrKER
+	 nKfsfldaMkyYdlIJ+Co5AZXm5n3DDmSQDyp1qSJ8=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.179) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f179.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f179.google.com with SMTP id
+ 38308e7fff4ca-2f74b6e1810so9763981fa.2;
+        Thu, 19 Sep 2024 10:36:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVstHuCtsjnEURODmiXR/Eari8aL146OBW2CGXCvEphdEnjZPksC9jbWy4jKWTVnVs6ME5dpgPm85OH0Ob7bNCditsc@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUuaK+ri6vcnVeIW0ZK9WW+rXMDrPoxiNx9Lzcc0v/32ckx7jz
+	pxbrTVe6qz1UmF6mRT6QkEqvT9iyDaCHR95jSpSFrZkOPDmH8sFa+LCGaSt3bYSFOdlHknAbCwi
+	SNBS96DL8ziLGmKQ3eODUvNysNDU=
+X-Google-Smtp-Source: 
+ AGHT+IH0MX0BgWcbYPictzjYNHEGv06IfRe13L/hScZ3GhZPVpnuAWsphnjEAlRbc/fyAvMdBUnGdwoKZmJvTeaPpNs=
+X-Received: by 2002:a2e:a543:0:b0:2f7:4f93:ef8 with SMTP id
+ 38308e7fff4ca-2f7cb2f9141mr2513111fa.4.1726767403986; Thu, 19 Sep 2024
+ 10:36:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH0PR12MB7469:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a5e0732-36f1-4685-1c72-08dcd8d175fa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZjdKUFVGSnZzMHkyTk9DemRGR2Q4RW1SNkRLSFhnakpQMXVIMWRJYnZXdklh?=
- =?utf-8?B?YVg5bUZpZ2hib2tLS1A0Z2xhdmVUSmcyeEt5MEw2YjhRZHBJOHRqWndGSlZO?=
- =?utf-8?B?aThoRklEVXViSlZuNTZSVWdhd1lkbU1wNkp1U2NRY1lDdElLR21IWVlPY2Jv?=
- =?utf-8?B?a1hYZytOTnlPTkZLczRBVUIwVHpleUdvMWtIQkNwLy9PUmo0UzloRjEvenBW?=
- =?utf-8?B?SnpkY0hoOXk0dndrbUxFSkJvR2lRVEtuRmhhRndyY3RzRVlDOG54YTM3cW4w?=
- =?utf-8?B?SmZvWjViWUcrbmc0UVF0VU91T3FBUlpicllkTm5seTM2cDJqdEUvd1J5WWNC?=
- =?utf-8?B?b2o1cTJtblhFd3BxVVlteEh6OGoyMktSL2x4VTlaV0JnZm51UmsrSUFQMjFM?=
- =?utf-8?B?WFVGWU9sYUswZ3RsT3FIS2Q3dVN0QzFENklSanJSS1ZYM2VLKy9MVW5scTFJ?=
- =?utf-8?B?c00wbUxhVGEyWnF3Y1hrTWRodVZkUlY0YkNjZWU1MUtwY0RaRm1GNUNLc2JU?=
- =?utf-8?B?amlVRG1xOFZJOU1wbTZrT3d1QkFzVGhaclRkY2twdVhxSDc1Z1VrUTQyZHYy?=
- =?utf-8?B?VVlTOFlabnJidEg3bzJlclBGaE14dTR0ZU9BZS92VkNaQ0czendBeENjeSta?=
- =?utf-8?B?QnRuT1NOUzVKWFRMaW5qZ2xuSjZyU3VFemI4ZkxpV2U1T1BxOHBKVWxGbXVN?=
- =?utf-8?B?blA3N1IxQ0d0b1lKeUROYTN1WlYwbzRJSVhoaE1tZmZUYUdnaVJWTytZZkVQ?=
- =?utf-8?B?dG90L2hzOVZGYjhuS1o2NHpXWkdLQkFEVUE5RHBONTFZY09aSHp1aUhHcFRU?=
- =?utf-8?B?OFJIcjVKWTYvVkhLdmd5TWsxeUxTbC9FSEZPWkFEQjdsSWtiY3Y1N25YTWJU?=
- =?utf-8?B?SzY4QUR3QnVhWm9lOXA2VmZnSmRaNWpSUjh1cFQ0aEliY1RyY1h6UEZ0K0tt?=
- =?utf-8?B?a1VkUWtFVU9maXY4UE4yZWpacmNwbGFiK2ZWTEdub1FtNytoKzZlOUVpU3lY?=
- =?utf-8?B?VjBDQzdEWHgrVUt6bjNEMUpKZElweEw0UXpHZklkMGFDVDZYME1CSFhZaXli?=
- =?utf-8?B?SmFFZVRxc1RISTR0aVVLREc4aXlSdGwydjNrcFZhbURiR1RNVE1WQWhkWkI0?=
- =?utf-8?B?UFRrQVZXZFZDaUU0NGF1a05ibVJBb0Q1c0hFT3BYZlZzcTZUTldwS01SMXNl?=
- =?utf-8?B?VkE5c0grc3loVTdMbzg5dGxJU2IvMENSL3VFK2xrUHA0VCthV0R4bCtsYjRF?=
- =?utf-8?B?VHJnZktPM0ZZSmtxU2NucVFGanpjVEh1L1pzVHZ3SVVFM2RqdkVJS1oxZXNj?=
- =?utf-8?B?TnRhcjFlM3R6dXVydVRLOWpjWmg1bEt0NUc2SzRIOVNSUTRXNUdRWVVhUDRs?=
- =?utf-8?B?WG1WdzZlQzJFck8rbnVoMmpmTlJLNTE0WWE4a2ZsZ2QwR0UwdWtzOXJTazNM?=
- =?utf-8?B?WVc2c1NZQklnVjdnVE42RnE5cWpnc2NNQklZeTYwSXQxc3pmZVViQ2N0czND?=
- =?utf-8?B?TkFNYVBKVGhwc2JuaG5oZkNPeTBlZEVKeUJEQnFtUTZLUG44ZjVKQzlTSHFl?=
- =?utf-8?B?d2tjamhjTTdJYWlwcXVtaU9GMW5xZVBTZjhNWWlabE5yQ1ozM2lhWkxZTThx?=
- =?utf-8?B?ZytMNklhTHJ4cnM5TURqZTBDdlloc3AzVnpJZnkrWCtFRXF3bGFuVU9ROXNr?=
- =?utf-8?B?WVYyNytEVW4rTGpBeldqdkZ4TnpRNjBxSjAwTGtRcmtLZDhCanJjdmpxZHBQ?=
- =?utf-8?Q?g2xt2wAKBcDBhlJ0WA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?L3paS21IMzNqVHZaVzRLamU5Y2ZVRzNmT0U2YURjSEkrQ25rbVlZU08vbGdY?=
- =?utf-8?B?c2dGMHI0QllhOE0zcGpEWmRoRTF0NllFbHRJVnk0clFtMzB1bU9KcnI1d0FL?=
- =?utf-8?B?QnNBWi9PT0E4c0F2SWxtNzVDZ2VXZDhYZkNOTUF3alFZL3U2cFVIMnZZT3pC?=
- =?utf-8?B?d0V1d2M4WTF2aTFvRXk5VWorNjN4Y1ZXZEJDNWhZazcxYStBeTk1OVhBNlor?=
- =?utf-8?B?bVBVYVdnNTNCVVpoSjVQZExpQjdCMEF6VjNzdExYOEFQVElnUEJBK1BWRWdT?=
- =?utf-8?B?eGM5ZGl1WmE5aWRsVWk5SE9TMzNXR3lZMFFLK29ybzVTbWpFM2ExdUh3cW45?=
- =?utf-8?B?em5kV3lQMXRUU29FaUQxVU92VnhZcTZUa2NUN1VBWDRkYmZ6N3JJNnoyUGVm?=
- =?utf-8?B?L0tKYmw5Sm1HNThpTFdGY05BTUxlSm5jalVWbjkwTElLbThkdmpGOVE5WGw4?=
- =?utf-8?B?aitUVXRqeTJmeml4UUQ2am1LbmtjdmtSZStyWDZSTlNnT1I1SXlpQ3RnZ3pS?=
- =?utf-8?B?U0YxSUhkWlZEa2t4Y0ZtQVVxTFNwZ2hJa1QzcmgyK1lFR25sc0pacUl1VEFO?=
- =?utf-8?B?Z3R5cDJWREY3Vnd2ZTNSdmk0S1E0Vytsd3k4bTdOWFlGc0FJSVBFbDN1a3l0?=
- =?utf-8?B?MlpaNjlNRDRMQjMxMGxpNVpXeWsxZXpJcjdkVjBrTHFkcTRMbUcxVSsyMW1P?=
- =?utf-8?B?Z1hLZXlFb1Z2UUJxdFRDM1ZRNHI1SEJhSU1Ccys3NUNKTXhIUjArRUJIT3dF?=
- =?utf-8?B?RUNNTnUxWStvbFJIam9uZXZyblNCdlg1MW5GaktpcEhUdXhEbmNSVVducjE2?=
- =?utf-8?B?NG1GOWw3c3NLdmxicnpQd2Z6bCtrQmpKOWw0U293MG9Mcy9zOEdRWU5iOXpB?=
- =?utf-8?B?Q2t3WWJpZnBPeDZ2UXRoUFJEMndoQ3JBdEJ1WHhFamNGMWhiblJ6Y2g0dUlh?=
- =?utf-8?B?OGsvdEYzSllpR2Z6R01GQ3lGS3BxSnlEYU9kWHZOTVE4Y0hSM000UDJDVEtp?=
- =?utf-8?B?eTU0dlQ1QUlFY2xqQ0pOZlFpb05XbGt0dVA0S1BhSjRFQXJPYkl3a0wyamc0?=
- =?utf-8?B?b3JFY1RYS0tGUXVESE12STNYTzgxRDE1M1RLa0w2L0RhUDZhemtxS09EcXJU?=
- =?utf-8?B?SkFYWGc2THNrRm5Ec2kxYmptTFE1WDYrOStwNHpQRmtXRDhZTVl2blB4WFVJ?=
- =?utf-8?B?WFZTZVJiZVZYR0drVEVIWHJXbkFsS0lJOHhTelVQSTFDbVpZc3R0MHVsbVZC?=
- =?utf-8?B?MmZKRnQrTHRMSXNsT3NVMjdNRTV1V0dtbEpvNU04NkpBRG1sRmJjSjVhUlFy?=
- =?utf-8?B?NTVxV2RVTVplMS9sSTN2S3Z5VVJIQXVEekJjSWFJWEJRMnBOTGpac0YyS2ZB?=
- =?utf-8?B?bzcyMCtzY2pGRzVoZDRRSFBlbkZ5M1VQekdzNHc2NGpCeS91MHA1S0l6aExI?=
- =?utf-8?B?c1RGTDFoWHl0UXJ5eUJlMWo1S1JCdDF6RjVRand6OS9aZFkySW5VSXhMWDBn?=
- =?utf-8?B?YVNDaXk0ZlVkRXZVczRVSHRvblFHNnBQbW0rdHRHK0o0LzB5Y1BSSWx2bnBx?=
- =?utf-8?B?dmtHZk1QOVNXKzhzVzZ1SEtQci9DNkx2YjRSbkRFUzRiUWdReFdHdjBieWNp?=
- =?utf-8?B?SHNGYVBlTWE0ODZvVE1iY0N3Q2xOWWZIM0lPZDRoWjlCdXFVL0JSU2c5L21j?=
- =?utf-8?B?YWxSTUY4ZlNZa2dRd1VuZW9BTnRBZGRKSURkYnZJVy9Ka2NFaUxNNFZzeGFp?=
- =?utf-8?B?QUdmbVJpaVAxdTRqMDV3K0xRWXFGM2l5amF6M2pxaE5pSjBNWmxpSHF3U2FM?=
- =?utf-8?B?RXJ2c0dxaTgyZWxjcTFuZno4RXZqOFE3REh1MzdGeHdtMWhaTmZuYVBHRGQ5?=
- =?utf-8?B?MWVxV1BJVTNxZWFyUG1kUnplMjNtcS9BZEw0czNVQlJ5d0dkdkpwRjgvUUJB?=
- =?utf-8?B?ME4vMUtNZ0RyTnIzdVhBbmZJbjk4bkdpMUJ3ZzA1Z050eXorc2ZyODZOVllX?=
- =?utf-8?B?UkdWL0pISVJDTjJJcDZBb3lmY3FDNmFoTjU4ZEhJclhsNVZOMlZsV3B3a2d3?=
- =?utf-8?B?a3lhVHFXNkFIRm8zQW9Vc01Salc0R2l1WlU1WFdoTEpxaVQ2R1lDYTkyclBQ?=
- =?utf-8?Q?9CV1nQDDCkI+MS/IcYg4fG16X?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a5e0732-36f1-4685-1c72-08dcd8d175fa
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2024 17:35:32.0105
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 44CwTzXMC9Jwb1wP8j1XtdvEhpY2duc2lQSOH93iszRM3JcwH/7TvGs/REJDcCoERE8qvWZRDtXNs+7JoUZC5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7469
+References: <20240919171952.403745-1-lkml@antheas.dev>
+ <20240919171952.403745-2-lkml@antheas.dev>
+ <0f758a1a-958d-41d6-a572-cf544590450a@amd.com>
+In-Reply-To: <0f758a1a-958d-41d6-a572-cf544590450a@amd.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Thu, 19 Sep 2024 19:36:32 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwEquttfbzat4ZQbQ3h_7Gi2QZ7qDBr=QgaZBU0MejEQ6Q@mail.gmail.com>
+Message-ID: 
+ <CAGwozwEquttfbzat4ZQbQ3h_7Gi2QZ7qDBr=QgaZBU0MejEQ6Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] acpi/x86: s2idle: add support for screen off and
+ screen on callbacks
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	luke@ljones.dev, me@kylegospodneti.ch
+Content-Type: text/plain; charset="UTF-8"
+X-PPP-Message-ID: 
+ <172676740494.12056.6323259462321467673@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-+dri-devel
+As stated in the cover letter, I would like to add you as a co-author.
+Just did not (could not?) do it before asking.
 
-For those joining late; this is the full series for context.
+I will do it on the next revision. Just tell me which patches you think
+it should be on.
 
-https://lore.kernel.org/linux-pm/20240919171952.403745-1-lkml@antheas.dev/T/#maee308be5349d8df25c8ccf12144ea96bbd4cbbd
+(hit reply instead of reply all by mistake, so you have this email twice now)
 
-On 9/19/2024 12:19, Antheas Kapenekakis wrote:
-> Currently, the screen off/on calls are handled within the suspend
-> sequence, which is a deviation from Windows. This causes issues with
-> certain devices, such as the ROG Ally, which expects this call to be
-> executed with the kernel fully awake. The subsequent half-suspended
-> state makes the controller of the device to fail to suspend properly.
-> 
-> This patch calls the screen off/on callbacks before entering the suspend
-> sequence, which fixes this issue. In addition, it opens the possibility
-> of modelling a state such as "Screen Off" that mirrors Windows, as the
-> callbacks will be accessible and validated to work outside of the
-> suspend sequence.
-> 
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> ---
->   kernel/power/suspend.c | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 19734b297527..afa95271ef00 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -507,6 +507,19 @@ int suspend_devices_and_enter(suspend_state_t state)
->   
->   	pm_suspend_target_state = state;
->   
-> +	/*
-> +	 * Linux does not have the concept of a "Screen Off" state, so call
-> +	 * the platform functions for screen off prior to beginning the suspend
-> +	 * sequence, mirroring Windows which calls them outside of it as well.
-> +	 *
-> +	 * If Linux ever gains a "Screen Off" state, the following callbacks can
-> +	 * be replaced with a call that checks if we are in "Screen Off", in which
-> +	 * case they will NOOP and if not call them as a fallback.
-> +	 */
-> +	error = platform_suspend_screen_off();
+Best,
+Antheas
 
-It's a bit muddy; but I wonder if calling 
-drm_atomic_helper_disable_all() makes sense here.
-
-> +	if (error)
-> +		goto Screen_on;
-> +
->   	if (state == PM_SUSPEND_TO_IDLE)
->   		pm_set_suspend_no_platform();
->   
-> @@ -540,6 +553,9 @@ int suspend_devices_and_enter(suspend_state_t state)
->    Close:
->   	platform_resume_end(state);
->   	pm_suspend_target_state = PM_SUSPEND_ON;
-> +
-> + Screen_on:
-> +	platform_suspend_screen_on();
-
-The problem with my suggestion above is what would you put here for 
-symmetry?  drm_atomic_helper_resume() doesn't look right to me.
-
-Maybe it's a no-op from DRM perspective and the drivers handle it.
-
->   	return error;
->   
->    Recover_platform:
-
+On Thu, 19 Sept 2024 at 19:29, Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On 9/19/2024 12:19, Antheas Kapenekakis wrote:
+> > The screen off and screen on firmware functions are meant to signify
+> > the system entering a state where the user is not actively interacting
+> > with it (i.e., in Windows this state is called "Screen Off" and the
+> > system enters it once it turns the screen off e.g., due to inactivity).
+> >
+> > In this state, the kernel and userspace are fully active, and the user
+> > might still be interacting with the system somehow (such as with
+> > listening to music or having a hotspot). Userspace is supposed to
+> > minimize non-essential activities, but this is not required.
+> > In addition, there is no requirement of suspending post the screen off
+> > call. If the user interacts with the system, the kernel should call
+> > screen on and resume normal operation.
+> >
+> > This patch adds a set of callbacks to allow calling the screen on/off
+> > callbacks outside of the suspend/resume path. It is based on
+> > Mario Limonciello's patch on the superm1/dsm-screen-on-off branch.
+>
+> Based on?  It's nearly an identical patch [1].  The screen_off/screen_on
+> lines in struct platform_s2idle_ops are just placed in a different location.
+>
+> IMO there should be more attribution here, either a Co-developed-by tag
+> or sending my patch directly and adding your S-o-b to it.
+>
+> Link:
+> https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/commit/?h=superm1/dsm-screen-on-off&id=7b80581428315f973410dccf0402a86266fb0d9a
+> [1]
+>
+> > However, the intent here is completely different.
+> >
+> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > ---
+> >   include/linux/suspend.h |  5 +++++
+> >   kernel/power/suspend.c  | 12 ++++++++++++
+> >   2 files changed, 17 insertions(+)
+> >
+> > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> > index da6ebca3ff77..96ceaad07839 100644
+> > --- a/include/linux/suspend.h
+> > +++ b/include/linux/suspend.h
+> > @@ -132,6 +132,7 @@ struct platform_suspend_ops {
+> >   };
+> >
+> >   struct platform_s2idle_ops {
+> > +     int (*screen_off)(void);
+> >       int (*begin)(void);
+> >       int (*prepare)(void);
+> >       int (*prepare_late)(void);
+> > @@ -140,6 +141,7 @@ struct platform_s2idle_ops {
+> >       void (*restore_early)(void);
+> >       void (*restore)(void);
+> >       void (*end)(void);
+> > +     int (*screen_on)(void);
+> >   };
+> >
+> >   #ifdef CONFIG_SUSPEND
+> > @@ -160,6 +162,9 @@ extern unsigned int pm_suspend_global_flags;
+> >   #define PM_SUSPEND_FLAG_FW_RESUME   BIT(1)
+> >   #define PM_SUSPEND_FLAG_NO_PLATFORM BIT(2)
+> >
+> > +int platform_suspend_screen_off(void);
+> > +int platform_suspend_screen_on(void);
+> > +
+> >   static inline void pm_suspend_clear_flags(void)
+> >   {
+> >       pm_suspend_global_flags = 0;
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index 09f8397bae15..19734b297527 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -254,6 +254,18 @@ static bool sleep_state_supported(suspend_state_t state)
+> >              (valid_state(state) && !cxl_mem_active());
+> >   }
+> >
+> > +int platform_suspend_screen_off(void)
+> > +{
+> > +     return s2idle_ops && s2idle_ops->screen_off ? s2idle_ops->screen_off() : 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(platform_suspend_screen_off);
+> > +
+> > +int platform_suspend_screen_on(void)
+> > +{
+> > +     return s2idle_ops && s2idle_ops->screen_on ? s2idle_ops->screen_on() : 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(platform_suspend_screen_on);
+> > +
+> >   static int platform_suspend_prepare(suspend_state_t state)
+> >   {
+> >       return state != PM_SUSPEND_TO_IDLE && suspend_ops->prepare ?
+>
 
