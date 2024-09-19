@@ -1,40 +1,48 @@
-Return-Path: <linux-pm+bounces-14455-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14456-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6128397C766
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 11:46:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A20697C7BF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 12:07:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E363B1F2A218
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 09:46:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FA34B289E2
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 10:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B93719DF42;
-	Thu, 19 Sep 2024 09:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7A419923A;
+	Thu, 19 Sep 2024 10:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRYqlHFE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE3D0199249;
-	Thu, 19 Sep 2024 09:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F84F168BD;
+	Thu, 19 Sep 2024 10:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726739040; cv=none; b=WNWwKNh5ewY9HT/OowvwB8Wg4a9JB6GZef1TChLN2p3IAXBk+61spGD24FOHS/ryXFReobEMKzO87gwxjmAmqKpmW/zeUqNEF7ShcVatL6oGghp3MiWgQ0p1ex6TbTVbs4zWDxBQ0niyTdPMZvEtmB1uEEUXdg2TGHzP0T8bZV8=
+	t=1726740450; cv=none; b=sZLzQRp2cVJcVJJUVzIvEi5NPB8SHbDaE7+BCzBJwMPm5Mxk2z0NTJgbQqcWKbbuCJQKlhiKgYiF7gqa27CQ64jDVUUNH7B8hLcwVDzuYjnbPh0I4ExbieK9LEHNTz1nxnuqHiKI76dXqg4xwg6LEHDMn9OParT5uSf/H6+HASA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726739040; c=relaxed/simple;
-	bh=A6+YF+cSMCnWF3SRwu6F7ogw6m5qzYO7soS7KmRb54s=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=fXn2nm59t8ax+bWmB4pobQnHy3hDV/VYcue8qkAeIk2kx/5jN6TF6vEHhUfk0UQskNqNUS4SLgoESEkJe2adjQBOYmNVAJdBso8BJ9ew+ORCXthG/iOsyA3Csc0buZOigk8ZoXZOyWdJLtYSVcFDvg3mXhMnl25va/DM6tHGgEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46D391007;
-	Thu, 19 Sep 2024 02:44:26 -0700 (PDT)
-Received: from [192.168.0.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF9703F71A;
-	Thu, 19 Sep 2024 02:43:55 -0700 (PDT)
-Message-ID: <592a0c06-a23c-464a-9f67-2ce8ce91a306@arm.com>
-Date: Thu, 19 Sep 2024 10:43:53 +0100
+	s=arc-20240116; t=1726740450; c=relaxed/simple;
+	bh=d4RvRPTEv7tPLqG41lEQB6itRkuPxEa68ADL66VBu5w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=plc4iZmffFCe0DSJsuURaq8UwY2XEhhcdg8an2R/TAZcS9E23bo2jAPkRbcVUC4BtQVu+q1UvIA1EBLcERtpnqZzcmUVkLuVpj7Hs3OwJfrQpyvlm5JME3WCKCVDWHrHLsEqKFcrP2Sdu6ij8w0bZfY9jpbZuwpdUYtWCVgoRPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRYqlHFE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 764A1C4CEC4;
+	Thu, 19 Sep 2024 10:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726740450;
+	bh=d4RvRPTEv7tPLqG41lEQB6itRkuPxEa68ADL66VBu5w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CRYqlHFE4i74eKfXkGIR4Zfy5ZVQ3e0ae3aBMH7anfjVGG0Ktv076oaI0/z5p4vpa
+	 43W7z9WHHYVjyMJa0khbleMtyIg/a8hXLKpSJnT59ecpwYMw179veaiXezBCk6JUbe
+	 SgTCkgXedRj8fsxcx6Qep8bE1fwKxD7nU6T0r4n8fWPYh3JP+X1Wj1MF8dsgHw+/wb
+	 FntfkUoBe3e1mJPB61iyNMtaVKxHqn0OL3Ll9IQftYsEsSPrFJPShHMXkDv/PWw0Ts
+	 8lm9lJOis+SSPOsKJ4hbIzloXnytnv9MM2kZzetZmZrMcquB8kqb9af18XkxQVyjn7
+	 34uq//IiWHxJQ==
+Message-ID: <70df96b2-b84a-48c7-a417-6bac1f330d27@kernel.org>
+Date: Thu, 19 Sep 2024 12:07:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,155 +50,120 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/1] cpuidle/menu: Address performance drop from favoring
- physical over polling cpuidle state
-From: Christian Loehle <christian.loehle@arm.com>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org,
- daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: gautam@linux.ibm.com
-References: <20240809073120.250974-1-aboorvad@linux.ibm.com>
- <93d9ffb2-482d-49e0-8c67-b795256d961a@arm.com>
- <9e5ef8ab0f0f3e7cb128291cd60591e3d07b33e4.camel@linux.ibm.com>
- <4c897ab4-d592-427b-9a97-79c2b14d5c46@arm.com>
- <6371848e9c260743f381be6e0114743ffab5e5bb.camel@linux.ibm.com>
- <6ae997ca-9712-4497-b666-11b976b1816d@arm.com>
+Subject: Re: [PATCH v4 08/27] mfd: max77693: remove unused declarations
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson
+ <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
+ Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>,
+ cros-qcom-dts-watchers@chromium.org, Konrad Dybcio <konradybcio@kernel.org>,
+ Simona Vetter <simona.vetter@ffwll.ch>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org
+References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
+ <20240913-starqltechn_integration_upstream-v4-8-2d2efd5c5877@gmail.com>
+ <wywp6vj2pqqe7to55k7ssh5sbqrmy7emvwruvm2waytancf3r4@aygtw3y6huwx>
+ <CABTCjFAvXYrRJS3Dwf-TMq3OW_vN1hskk+qPjosbRym7xOvy1Q@mail.gmail.com>
+ <6886f561-b9e4-468b-9515-72053d57911f@kernel.org>
+ <CABTCjFDKuEM2wogLcJXX+0eCOTCDUSycPi7JCjvdRCbXaP2EOg@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-In-Reply-To: <6ae997ca-9712-4497-b666-11b976b1816d@arm.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CABTCjFDKuEM2wogLcJXX+0eCOTCDUSycPi7JCjvdRCbXaP2EOg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/19/24 09:49, Christian Loehle wrote:
-> On 9/19/24 06:02, Aboorva Devarajan wrote:
->> On Wed, 2024-08-21 at 11:55 +0100, Christian Loehle wrote:
-> 
+On 19/09/2024 10:40, Dzmitry Sankouski wrote:
+> чт, 19 сент. 2024 г. в 10:00, Krzysztof Kozlowski <krzk@kernel.org>:
 >>
->> Timer based wakeup:
+>> On 18/09/2024 14:53, Dzmitry Sankouski wrote:
+>>> пн, 16 сент. 2024 г. в 12:10, Krzysztof Kozlowski <krzk@kernel.org>:
+>>>>
+>>>> On Fri, Sep 13, 2024 at 06:07:51PM +0300, Dzmitry Sankouski wrote:
+>>>>> Remove `enum max77693_irq_source` declaration because unused.
+>>>>>
+>>>>> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+>>>>> ---
+>>>>>  include/linux/mfd/max77693-private.h | 11 -----------
+>>>>>  1 file changed, 11 deletions(-)
+>>>>
+>>>> Please split your patchset per subsystems. There is no dependency on MFD
+>>>> bits from your DTS... (if there is, this needs to be fixed anyway)
+>>>
+>>> Indeed, my dts has no dependency on this patch.
+>>> However, my dts has dependency on MAX77705, so AFAIU,
+>>> I should send this patch separately, while leaving other drivers in same
+>>> patchset, right?
 >>
->> +------------------------+---------------------+---------------------+
->> | Metric                 | Without Patch       | With Patch          |
->> +------------------------+---------------------+---------------------+
->> | Wakee thread - CPU     | 110                 | 110                 |
->> | Waker thread - CPU     | 20                  | 20                  |
->> | Sleep Interval         | 50 us               | 50 us               |
->> | Total Wakeups          | -                   | -                   |
->> | Avg Wakeup Latency     | -                   | -                   |
->> | Actual Sleep time      | 52.639 us           | 52.627 us           |
->> +------------------------+---------------------+---------------------+
->> | Idle State 0 Usage Diff| 94,879              | 94,879              |
->> | Idle State 0 Time Diff | 4,700,323 ns        | 4,697,576 ns        |
->> | Idle State 1 Usage Diff| 0                   | 0                   |
->> | Idle State 1 Time Diff | 0 ns                | 0 ns                |
->> +------------------------+---------------------+---------------------+
->> | Total Above Usage      | 0 (0.00%)           | (0.00%)             |
->> +------------------------+---------------------+---------------------+
->> | Total Below Usage      | 0 (0.00%)           | 0 (0.00%)           |
->> +------------------------+---------------------+---------------------+
+>> How DTS could have dependency on MAX77705? It's a clear no go - broken
+>> patch. And something very weird, almost never happening for new hardware.
 >>
->> In timer-based wakeups, the menu governor effectively predicts the idle
->> duration both with and without the patch. This ensures that there are
->> few or no instances of "Above" usage, allowing the CPU to remain in the
->> correct idle state.
->>
->> The condition (s->target_residency_ns <= data->next_timer_ns) in the menu
->> governor ensures that a physical idle state is not prioritized when a
->> timer event is expected before the target residency of the first physical
->> idle state.
->>
->> As a result, the patch has no impact in this case, and performance
->> remains stable with timer based wakeups.
->>
->> Pipe based wakeup (non-timer wakeup):
->>
->> +------------------------+---------------------+---------------------+
->> | Metric                 | Without Patch       | With Patch          |
->> +------------------------+---------------------+---------------------+
->> | Wakee thread - CPU     | 110                 | 110                 |
->> | Waker thread - CPU     | 20                  | 20                  |
->> | Sleep Interval         | 50 us               | 50 us               |
->> | Total Wakeups          | 97031               | 96583               |
->> | Avg Wakeup Latency     | 7.070 us            | 4.879 us            |
->> | Actual Sleep time      | 51.366 us           | 51.605 us           |
->> +------------------------+---------------------+---------------------+
->> | Idle State 0 Usage Diff| 1209                | 96,586              |
->> | Idle State 0 Time Diff | 55,579 ns           | 4,510,003 ns        |
->> | Idle State 1 Usage Diff| 95,826              | 5                   |
->> | Idle State 1 Time Diff | 4,522,639 ns        | 198 ns              |
->> +------------------------+---------------------+---------------------+
->> +------------------------+---------------------+---------------------+
->> | **Total Above Usage**  | 95,824 (98.75%)     | 5 (0.01%)           |
->> +------------------------+---------------------+---------------------+     
->> +------------------------+---------------------+---------------------+
->> | Total Below Usage      | 0 (0.00%)           | 0 (0.00%)           |
->> +------------------------+---------------------+---------------------+
->>
->> In the pipe-based wakeup scenario, before the patch was applied, the 
->> "Above" metric was notably high around 98.75%. This suggests that the
->> menu governor frequently selected a deeper idle state like CEDE, even
->> when the idle period was relatively short.
->>
->> This happened because the menu governor is inclined to prioritize the
->> physical idle state (CEDE) even when the target residency time of the
->> physical idle state (s->target_residency_ns) was longer than the
->> predicted idle time (predicted_ns), so data->next_timer_ns won't be
->> relevant here in non-timer wakeups.
->>
->> In this test, despite the actual idle period being around 50 microseconds,
->> the menu governor still chose CEDE state, which has a target residency of
->> 120 microseconds.
-> 
-> And the idle_miss statistics confirms that this was mostly wrong decisions
-> in hindsight.
-> I'll go through the menu code again, this indeed shouldn't be happening.
-> I'd be very surprised if upstream teo performed as badly (or actually badly
-> at all) on this, although it doesn't seem to help your actual workload,
-> would you mind giving that a try too?
-> 
-> Regards,
-> Christian
+> Oh right, dts only depends on driver bindings, not driver code, so I
+> can send dts
+> patches with bindings in separate series, and per subsystem series for new
+> driver code.
 
-So with a workload as static as this, the recent interval detection of menu
-should take affect. It records the last 8 idle interval lengths and does some
-statistics do see if they are somewhat stable and uses those instead of the
-next timer event.
-While I wouldn't vouch for the statistics just yet, the results don't seem
-to be completely unreasonable.
-Do you mind trying a) printing some snapshots of these intervals and the
-resulting return value of get_typical_interval()?
-b) Trying this out? Setting these values to some around 50us, that returns
-50us for me as expected and therefore should not select an idle state above
-that.
+This is how you can organize patchsets:
+https://lore.kernel.org/all/20231121-topic-sm8650-upstream-dt-v3-0-db9d0507ffd3@linaro.org/
 
--->8--
 
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -112,6 +112,8 @@ struct menu_device {
-        int             interval_ptr;
- };
- 
-+static int intervals_dummy[] = {50, 52, 48, 50, 51, 49, 51, 51};
-+
- static inline int which_bucket(u64 duration_ns, unsigned int nr_iowaiters)
- {
-        int bucket = 0;
-@@ -177,7 +179,7 @@ static unsigned int get_typical_interval(struct menu_device *data)
-        sum = 0;
-        divisor = 0;
-        for (i = 0; i < INTERVALS; i++) {
--               unsigned int value = data->intervals[i];
-+               unsigned int value = intervals_dummy[i];
-                if (value <= thresh) {
-                        sum += value;
-                        divisor++;
-@@ -200,7 +202,7 @@ static unsigned int get_typical_interval(struct menu_device *data)
-        /* Then try to determine variance */
-        variance = 0;
-        for (i = 0; i < INTERVALS; i++) {
--               unsigned int value = data->intervals[i];
-+               unsigned int value = intervals_dummy[i];
-                if (value <= thresh) {
-                        int64_t diff = (int64_t)value - avg;
-                        variance += diff * diff;
+Here is a brief description how to organize the patchset:
+https://lore.kernel.org/linux-samsung-soc/CADrjBPq_0nUYRABKpskRF_dhHu+4K=duPVZX==0pr+cjSL_caQ@mail.gmail.com/T/#m2d9130a1342ab201ab49670fa6c858ee3724c83c
+Best regards,
+Krzysztof
 
 
