@@ -1,48 +1,43 @@
-Return-Path: <linux-pm+bounces-14466-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC9A897CA9F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 16:00:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3A5B97CAB1
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 16:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A11F1F20ECD
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 14:00:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 660472847A0
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 14:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E86A819E96B;
-	Thu, 19 Sep 2024 14:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I5tsIDHN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C19C19F49E;
+	Thu, 19 Sep 2024 14:04:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A180619CD01;
-	Thu, 19 Sep 2024 14:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E5C19B59D
+	for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2024 14:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726754439; cv=none; b=mulSbgWrBSWhwoE+9WjpWFa72Z72XPDY+B90yjYuSOEnX+9cu6XQHr2BZ3LaIKKEDvIDkAqDY0gfGx6Zf04+phBkWQ6DHN4MfdlLDCVHPRphJmZVhGAFHLEb8BsiNQXadiRZC1s13GaGwwQH2uARbJ5tED25GHtpuXf7R3wmDFE=
+	t=1726754686; cv=none; b=J47427ji84o7xjTJm/iZCNs7dUhvsQFZ6D3EaPI5chHbkQ2L0ZeladICl16Bk4EfMtN6wFexz6pHT4/Kpn9Tg+q+utiS0ETtoI0dfSnx2WqsUQfEOPvlGSf7RPkZh54BjhiG5nKMuTiAzCdYoLCxBXWgZM2/Nx6/LFhe/vf57EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726754439; c=relaxed/simple;
-	bh=xsR/5exj7o7om66IEpVcbxeHqPW7nX2/GTDCySXOyjg=;
+	s=arc-20240116; t=1726754686; c=relaxed/simple;
+	bh=sTgene5gi8O99+OmHyr1eLk/+WtoSC6OcLy9MtHtQDg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oyF0LCDLAtOHLHtP1v6Krc81neAnnC83GeIv1GCq3Jfpl/mGnz4Qk1505jb1LrU4GjV4oGaNFRT+KRocql5SoHpe4Vj6fzRalSKxxaGmsCIiUBxHmtN5bXz+TkN5awTacCZf/1rOYBTPW2MkC46p4E6eWcZ70L0kOJajmQOcuFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I5tsIDHN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19DEC4CEC6;
-	Thu, 19 Sep 2024 14:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726754439;
-	bh=xsR/5exj7o7om66IEpVcbxeHqPW7nX2/GTDCySXOyjg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I5tsIDHNGhVj0N/fknYIDHJB39HdZU77iSdzD3QjcRhfhPXfJ0mA7ZXMoTufpLPRu
-	 hj2/ljNFYt4mo/s5LFlq8OSY5mf1fmb0vPYmlch2fPU6Jaxrml6Ve17ptUEhGAiT7d
-	 hKzWa6NcNY5VIRevaX/dbsFQU6Q+PDVsnNFWX+S5U3prVXGK/XW1woREfummlk8wpb
-	 NtY/VfLKcILzNRa+TrIN/MZgoquwJwAW4Ti+D3GceRH0DKz4rq0MPCdFs3TNJz73qD
-	 d/CJ0u7IEiLT79CJReBjt0ic52uu+C3N8MqVsr7oa0Q54W3KeYIMgsw7BTOWQqO87O
-	 rSbavqEeNIrmw==
-Message-ID: <e390ed47-1f24-4911-87f6-a66e45275b6c@kernel.org>
-Date: Thu, 19 Sep 2024 16:00:27 +0200
+	 In-Reply-To:Content-Type; b=WkjDz8sxCrp/ircRpmfskzXDwROP2MeSUU75WlbhIrsG8H8T7Ax86u8dTmIEvSt7OgZSxUiYQ5JO0JllJdogWhWo0OdT6sIatJPwULhE400TN7c36aqlWEb+XVAzfTfgDUVch109qihdHqyRFA5n/aWQeM6GGCPFq3+BuPHTfsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [172.30.4.253] (unknown [193.158.90.91])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7FF7F61E5FE05;
+	Thu, 19 Sep 2024 16:04:01 +0200 (CEST)
+Message-ID: <b3cc0791-6334-4143-90bc-d3ae04aae0de@molgen.mpg.de>
+Date: Thu, 19 Sep 2024 16:03:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,102 +45,100 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 23/27] arm64: dts: qcom: starqltechn: add display PMIC
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson
- <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>,
- cros-qcom-dts-watchers@chromium.org, Konrad Dybcio <konradybcio@kernel.org>,
- Simona Vetter <simona.vetter@ffwll.ch>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org
-References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
- <20240913-starqltechn_integration_upstream-v4-23-2d2efd5c5877@gmail.com>
- <rfoxnd4axyqxvexgq3mm2zntzvpihv4g424hepkoh7bfr2izjz@htjeqbfuq2gu>
- <CABTCjFCwg9HJcAQOG4+jeHviPiXoSiQgzX-ogUPQt1M2494aBQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: Linux fails to ACPI S3 supend on Dell XPS 13 9630
+ (6.11.0-04557-g2f27fce67173)
+To: Hans de Goede <hdegoede@redhat.com>, Marek Maslanka
+ <mmaslanka@google.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ regressions@lists.linux.dev, Petr Mladek <pmladek@suse.com>
+References: <18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de>
+ <154114fb-276f-45f6-bba0-98133c7c5d4d@molgen.mpg.de>
+ <3b600845-77d5-42d3-8556-53cc0b2eab25@molgen.mpg.de>
+ <1c10c0c4-f4d7-490f-85d2-0278c062fb87@molgen.mpg.de>
+ <aa60da75-7931-462d-addd-49adfbd9893b@redhat.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CABTCjFCwg9HJcAQOG4+jeHviPiXoSiQgzX-ogUPQt1M2494aBQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <aa60da75-7931-462d-addd-49adfbd9893b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 19/09/2024 15:17, Dzmitry Sankouski wrote:
->>> +             pmic@60 {
->>> +                     compatible = "samsung,s2dos05";
->>> +                     reg = <0x60>;
->>> +
->>> +                     regulators {
->>> +                             s2dos05_ldo1: ldo1 {
->>> +                                     regulator-active-discharge = <1>;
->>> +                                     regulator-enable-ramp-delay = <12000>;
->>> +                                     regulator-min-microvolt = <1500000>;
->>> +                                     regulator-max-microvolt = <2000000>;
->>> +                                     regulator-name = "s2dos05-ldo1";
+Dear Hans,
+
+
+Am 19.09.24 um 13:57 schrieb Hans de Goede:
+
+> On 19-Sep-24 1:03 PM, Paul Menzel wrote:
+
+>> Am 19.09.24 um 10:17 schrieb Paul Menzel:
 >>
->> Useless name. Please use rather names from the schematics, but I guess
->> you might not have them, so maybe downstream has reasonable name?
+>>> Am 19.09.24 um 07:51 schrieb Paul Menzel:
+>>>
+>>>> Am 19.09.24 um 07:51 schrieb Paul Menzel:
+>>>
+>>>>> On the Intel Kaby Lake laptop Dell XPS 13, Linux
+>>>>> 6.11.0-04557- g2f27fce67173 (“6.12-rc0”) fails to ACPI S3
+>>>>> suspend the system. The screen turns black (as expected) and
+>>>>> the power button LED stays on.
+>>>>>
+>>>>> Doing
+>>>>>
+>>>>>       echo N | sudo tee /sys/module/printk/parameters/console_suspend
+>>>>>
+>>>>> and on tty2
+>>>>>
+>>>>>       sudo systemctl stop gdm3
+>>>>>       sudo systemctl start getty@tty1.service
+>>>>>
+>>>>> and then on tty1
+>>>>>
+>>>>>       sudo systemctl suspend
+>>>>>
+>>>>> I see some panic messages and traces containing ktime_get or
+>>>>> so, but I failed to save the messages. (Hints very much
+>>>>> appreciated.)>>>>>
+>>>>> I try to test the printk changes, but otherwise bisecting is
+>>>>> not feasible, as it’s my production machine.>>>
+>>> It’s not the printk changes. I tested some commits, and assume it’s the timer core changes:
+>>>
+>>>       $ git log --oneline --merges daa394f0f9d3c -3 --no-decorate
+>>>       daa394f0f9d3c Merge tag 'core-debugobjects-2024-09-16' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>>       9ea925c806dbb Merge tag 'timers-core-2024-09-16' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>>       cb69d86550b3f Merge tag 'irq-core-2024-09-16' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>>
+>>>
+>>> 1.  6.11.0-02659-gcb69d86550b3 succeeds to ACPI S3 suspend
+>>> 2.  6.11.0-02710-gdaa394f0f9d3 fails to ACPI S3 suspend
+>> 
+>> It truns out your commit e86c8186d03a (platform/x86:intel/pmc:
+>> Enable the ACPI PM Timer to be turned off when suspended) causes
+>> the regression. The laptop defaults to s2idle, but due to
+>> problems, I force it to `deep`.
+>>
+>> Revert on master is not easily possible due to other changes it seems.
 > 
-> Unfortunately, downstream uses that same name.
+> First of all thank you for reporting this so early in the cycle and
+> for pinning it down to a specific commit. Both are really appreciated.
+> 
+> I guess that the power-savings from disabling the pm-timer are mostly
+> relevant for s0ix suspend. If regular S3 suspend is used the the
+> firmware is in control of the suspend and if necessary it should disable
+> the timer.
+> 
+> So I think we can fix this by limiting the new handling to s0ix suspend.
+> 
+> Can you please give the attached patch a try?
 
-Then "ldo1" is enough.
+Thank you so much for the instant reaction. Indeed, your patch makes 
+ACPI S3 suspend work.
 
-Best regards,
-Krzysztof
+Tested-by: Paul Menzel <pmenzel@molgen.mpg.de> # Dell XPS 13 
+9360/0596KF, BIOS 2.21.0 06/02/2022
 
+
+Kind regards,
+
+Paul
 
