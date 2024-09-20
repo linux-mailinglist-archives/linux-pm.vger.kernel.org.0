@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-14517-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14518-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C982797D5F7
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 15:08:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1CED97D605
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 15:12:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9C1B1C21BB1
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 13:08:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77B571F22F8C
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 13:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF251607AA;
-	Fri, 20 Sep 2024 13:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5E431714AF;
+	Fri, 20 Sep 2024 13:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btT//xYq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OnFKtuNq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE392D05E;
-	Fri, 20 Sep 2024 13:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A281121345;
+	Fri, 20 Sep 2024 13:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726837682; cv=none; b=QqQKp3LeNs9JadZB++qARgBznQBSCczpZ/fBLUMp5HSlGHmPCz1L4ptx+FdDmVMumDhjC3vs7fpwI3H1XdXE1PteVuL7lXqgppJ8c4Ets+lF7byPEb2fz4jPIqIECur0GTRl4qSWui9qHZGWX18vlk54aFkYB3H3NaI8zIs2+N4=
+	t=1726837968; cv=none; b=Ftu+u3mVQGHTxZFbqgJAImoJFzJaY/W58q8b5TfqP2vwyGlE/82sETAF0SlWDzcp+UqLq2sKuGdUoWZRKBiu9tyu9uNKl3znCKxkLK8mzjuGJpDaSIcLvsZ3MZFxezG0uJzDeqcj6ugeTfyrmYCAybTvj9a6UDtnqurTzBtHTc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726837682; c=relaxed/simple;
-	bh=mabWlWpMMaFoDX5d516OMJLSl8J/l5yNVWT/KJd5Euo=;
+	s=arc-20240116; t=1726837968; c=relaxed/simple;
+	bh=lUAFykvYPUz4NQbFfEAII3rPN26o6A5RLY8WrV//D94=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p8LWyPqx/lPZsqsEoudwMC9J5JocUjlVzjJJLmXctw+hdxjfUZtgsQt3eI/HquVyiAfTg5Gc3gLAd2oBG/0azhQL8ORsb5Flrv6vHHNdzIORJS0Rjp5ef7Ypr6k9MAagjAgBsgkB7qIHJuvBWWFyTbIICvp1PZqs0e55s5wmpCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btT//xYq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 103FCC4CEC3;
-	Fri, 20 Sep 2024 13:07:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=OmaCmDrZ82K+q2Ihx4zbIIiid6yzHGCvuYJDglHUmobp1AdNMQqLtqYlQI16zt89lKbS8q36tEkK7tNrlkUmlK1v4cJxuJFARNC4hCaq6WvEqQLlbgJQ6k2or6tPTEIghQMiPYYmuQvzbpitKDpkbdPfXJL0pCxHGmICcRO1ey8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OnFKtuNq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A0CC4CECD;
+	Fri, 20 Sep 2024 13:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726837682;
-	bh=mabWlWpMMaFoDX5d516OMJLSl8J/l5yNVWT/KJd5Euo=;
+	s=k20201202; t=1726837968;
+	bh=lUAFykvYPUz4NQbFfEAII3rPN26o6A5RLY8WrV//D94=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=btT//xYqRxmdnL8ZPn2q9UxsgcVxmEmYNVYXZN6gtlLJ8yiwkPeZPWdkhusXOrabC
-	 C0QtKrN3IEVBXHq/xSBpfLHHuCZdaw95MWKm3db0LnGk/ry1o5Xkf9dPzrJsrxbRfU
-	 pvwSUFjsbw4+sW21F+yr3rbHan5RfS6hQBHAgyK4LhEa8/i95pln2lRfQ4nv5h34Cm
-	 va0KcupotSVae3QoxGMQev0EjZSBg2Zn8uelkBBkBvUrzXbhlwAE2j/olx3j86ji5K
-	 KVdRRDqjqssih6SQLhGAmm78GbJPTM2bNTs5IwIiIxCUicFJINjqVv+h9qQjOgUg3g
-	 SyfRTXcbUhIaA==
-Message-ID: <0b6c3217-5156-4c4f-8aaa-0b1cecce1818@kernel.org>
-Date: Fri, 20 Sep 2024 15:07:49 +0200
+	b=OnFKtuNq5mhM569xDv1zOWYqZHvj6ypEkTpR7h3AAx9hTGZz8Qq0Utn00H08dv5RH
+	 97u+1YFsF5lppk+vIagjT9ba0q9w+8wbFBf0cTOPiucOEdeOf1NSHHOIjAUWbW895U
+	 9Y2I/GOw43qTikMbijjNfLUupDA+7KuqJpQCE3eLXf6EnT5ChNK+7QKen/VoPJSp01
+	 NZi9RIC3uzOS1wjrQWxyuXM/XvPeY6yRIeCYNsW6Aam2IiVBJb28rFy7Jeo/vWQyZL
+	 28ddDdlU88WG7LAfiT6br15EujOzmSHbwVBNLkoLSh3S+rUzEXRxtlkcb2VkMj5MbN
+	 taSDXiACsNLVg==
+Message-ID: <1e4aeeba-0d98-472d-aa58-8eff6a27a1e1@kernel.org>
+Date: Fri, 20 Sep 2024 15:12:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,35 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-To: Macpaul Lin <macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
- Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
- <olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH 1/2] dt-bindings: power: qcom,rpmpd: document qcs8300 RPMh
+ power domains
+To: Tingguo Cheng <quic_tingguoc@quicinc.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Sean Wang <sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
- Alexandre Mergnat <amergnat@baylibre.com>
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
- MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- Chen-Yu Tsai <wenst@chromium.org>
-References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
- <20240918064955.6518-2-macpaul.lin@mediatek.com>
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: kernel@quicinc.com, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, quic_fenglinw@quicinc.com,
+ quic_tingweiz@quicinc.com
+References: <20240920-add_qcs8300_powerdomains_driver_support-v1-0-96a2a08841da@quicinc.com>
+ <20240920-add_qcs8300_powerdomains_driver_support-v1-1-96a2a08841da@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -124,21 +107,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240918064955.6518-2-macpaul.lin@mediatek.com>
+In-Reply-To: <20240920-add_qcs8300_powerdomains_driver_support-v1-1-96a2a08841da@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/09/2024 08:49, Macpaul Lin wrote:
-> Convert the mfd: mediatek: mt6397 binding to DT schema format.
+On 20/09/2024 05:39, Tingguo Cheng wrote:
+> Add compatible string for the RPMh power domains on qcs8300 platform.
 > 
-> MT6323, MT6358, and MT6397 are PMIC devices with multiple function
-> subdevices. They share a common PMIC design but have variations in
-> subdevice combinations.
-> 
-> Key updates in this conversion:
+> Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
