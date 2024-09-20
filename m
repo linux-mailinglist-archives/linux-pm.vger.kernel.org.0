@@ -1,136 +1,119 @@
-Return-Path: <linux-pm+bounces-14513-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14514-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DAD797D443
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 12:38:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9875497D53D
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 14:09:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50FE51C21D82
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 10:38:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41B9B1F24586
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2024 12:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6E613C9D9;
-	Fri, 20 Sep 2024 10:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865DD14A636;
+	Fri, 20 Sep 2024 12:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="OUpivb/w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jF53a+nN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9320013AD33;
-	Fri, 20 Sep 2024 10:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414D313B2B0;
+	Fri, 20 Sep 2024 12:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726828697; cv=none; b=kw8nJv6t3Nm7fkjtWu+coTDh12yAFRDxw59CEjzxBgINHffxXPS575/eZYmt6GS0fT1wubVcKbXmYPSVbqIJDxcOy9SA4l+klseY+V2+8u3kU5ml8VrmYmkTEHbcAkFVB5FJZgfxRr0O+w/yTpOTiIO88TRj57Z3kZMHTq4xOBk=
+	t=1726834138; cv=none; b=WfPdV8jxjOU0I9gIsTMqyz98PUCXrimnhDEVOWTpqgp+tCWI0fGobcH3UOAyRaY2EGRHo8HCj/DYzKVlOwBhL4x8uW+UHaLK47OU3VZgnpo/ZHwi+hjuf6ZbTph6ocs8Ono9se9ITKx90+D8XF5/HQt1d6Evaet7SUgc5kFVlIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726828697; c=relaxed/simple;
-	bh=8i1Rxs9MnTmHKMKgDdgTC6ulzhSZH1r5exhnwHWEqUg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WCxyC8DsU3m69hkA1cPtWRLCA7zBZnZ1Dh3y2Mj75WyELVVE8/dFgjbrjs+dcAGrfEBLY5oe2nmq/tF/WRTb2G4fI11fG9EsbaqdWbiOHQCoLN564XVBZKKOG+47F98ovcqf1M18ujMghGW9s27XdOqvy90IzBrLoZUOV/AZ414=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=OUpivb/w; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48KAc1x5032225;
-	Fri, 20 Sep 2024 05:38:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1726828681;
-	bh=NqYwpS9NyJoR+caapWvLtulQ3v9DdbaKReZdZFv4B14=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=OUpivb/wr+ukIVRF5SEe8QdypaiKpPrJtWfgIcLNJfrFFBJldzP3YQr0F0ZJKBxzW
-	 OA3/S54a6Yqk5o4pskBONIjhLwXzZO+GK+l0OIP1s9j2Ex0cz8GpYSzyGejKlX1AmS
-	 1Cp7mSdQk737UAjvbUlUUCb0K26+qddJOV2TU2iE=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48KAc1UY049239
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 20 Sep 2024 05:38:01 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 20
- Sep 2024 05:38:00 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 20 Sep 2024 05:38:00 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48KAbxP2071575;
-	Fri, 20 Sep 2024 05:38:00 -0500
-Date: Fri, 20 Sep 2024 16:07:59 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Andrew Davis <afd@ti.com>
-CC: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero
- Kristo <kristo@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J
- . Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH V4 5/6] arm64: dts: ti: k3-am62: use opp_efuse_table for
- opp-table syscon
-Message-ID: <20240920103759.vypnmro6imsn52ge@lcpd911>
-References: <20240919082809.174589-1-d-gole@ti.com>
- <20240919082809.174589-6-d-gole@ti.com>
- <5a54f481-efaa-4719-ac38-b328a6c67762@ti.com>
+	s=arc-20240116; t=1726834138; c=relaxed/simple;
+	bh=Dveo4hxEkYa0QfM+j/lxJ05ymd8w4pLl6DdgOtEoiLE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3jtx32ST7AmDso8uf7FPhduIp9X/QVo16WEEuDPTcEB1av5nazcnr0YQ/2NjWu8daDgi/eFyfN4AcphPG4mAdpqzj+gtSGa7xWskQ88Dou8OOkNsGzWJHU0W7kwzmBhE4Ybf5ACxLNzReVJIOB4AycQp1cv7SSk4cBtZwbrHd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jF53a+nN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78E8C4CEC3;
+	Fri, 20 Sep 2024 12:08:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726834137;
+	bh=Dveo4hxEkYa0QfM+j/lxJ05ymd8w4pLl6DdgOtEoiLE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jF53a+nNNaE4e1rFkQxXGSP2HCmw0KAgztnLogKOJM241gdQCkwZzetbpk40xcHfU
+	 i8kGbn3aIMAsyVE6uWJdj5s+Vwif+vST8JbsqSjvqeQZjj2f0l7HaO+3wimcQgF6nq
+	 4UEKLXtMvGcWT9IJaOO3Lj5b4Nupjk+c81awNXvESu4O/VWKXzS3jj/0q24+WAImgE
+	 wc1nhLAqRS4JAnOtYuEcZOP0KdNNiHWm4Fh9iPFEd5L6HCjA1FaKrY5U+BDZ/9Ogeb
+	 ep943ptCeoVmm7ri/L43JI2LaRpnV2BhHhmLUCz+7sUtapO/l1KZWjL/eAASKjH11W
+	 6qm95xrR9H77w==
+Date: Fri, 20 Sep 2024 14:08:53 +0200
+From: Mark Brown <broonie@kernel.org>
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Sean Wang <sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v6 1/2] regulator: dt-bindings: mt6323: Convert to DT
+ schema
+Message-ID: <Zu1l1Tx7OeJ_Sw9z@finisterre.sirena.org.uk>
+References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="WEu7YOiBPgD/ryln"
 Content-Disposition: inline
-In-Reply-To: <5a54f481-efaa-4719-ac38-b328a6c67762@ti.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+In-Reply-To: <20240918064955.6518-1-macpaul.lin@mediatek.com>
+X-Cookie: Editing is a rewording activity.
 
-On Sep 19, 2024 at 11:40:31 -0500, Andrew Davis wrote:
-> On 9/19/24 3:28 AM, Dhruva Gole wrote:
-> > Add another entry in the wkup_conf for the syscon node, and then use
-> > that for the syscon in opp-table.
-> > 
-> > Marking entire wkup_conf as "syscon", "simple-mfd" is wrong and needs to
-> > be addressed similar to how other child-nodes in wkup_conf are implemented
-> > in the same file.
-> > 
-> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> > ---
-> > 
-> > **DEPENDS ON:** PATCH 6/6: cpufreq: ti-cpufreq: Update the efuse/rev offsets
-> > 
-> > Link to v1: https://lore.kernel.org/all/20240902093222.2828345-2-d-gole@ti.com/
-> > No changes, just combined it as part of Bryan's AM62A and AM62P series
-> > and sending it all together.
-> > 
-> > ---
-> >   arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 7 ++++++-
-> >   arch/arm64/boot/dts/ti/k3-am625.dtsi       | 2 +-
-> >   2 files changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-> > index e0afafd532a5..b2b65e31c7cf 100644
-> > --- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-> > +++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-> > @@ -10,7 +10,7 @@
-> >   &cbass_wakeup {
-> >   	wkup_conf: syscon@43000000 {
-> >   		bootph-all;
-> > -		compatible = "syscon", "simple-mfd";
-> > +		compatible = "simple-bus";
-> 
-> This can be done in a separate patch after this one. You'll also
-> want to change the syscon@43000000 to bus@43000000, and drop the
-> "reg = <>;" line at the same time.
-> 
-> Andrew
-> 
 
-Sure Andrew, thanks for pointing this out. I will do this in a separate
-patch.
+--WEu7YOiBPgD/ryln
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+On Wed, Sep 18, 2024 at 02:49:54PM +0800, Macpaul Lin wrote:
+> Convert the MT6323 regulator binding from the old text-based format to
+> the new DT schema style. The property "regulator-name" has been added
+> as required property to reflect current usage in mt6323.dtsi.
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--WEu7YOiBPgD/ryln
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbtZdIACgkQJNaLcl1U
+h9D6ngf/VZ7i9q1LeXU8VJ3HxrkMAX0WECwtWNu9qZxhaPiMOepEhNtSpPFkUAn+
+++QnnA56FwzRbteydQ8KQAO5odIeuPue/fBbFYOyugnXuASOUrKPo9DrK0ndH3Tt
+gL3J5neZq38dtz5E0/+lvB5V0OfzVOG0h19AaHiY9dsompN0NpZfiQteFhuJb/nm
+o3Y5qYJc2fJg1fEUr+bW36AgyYutLsaCvL5Vqxp9B7kpxtkvnZTeLGM+NJtqMwCp
+elPRl6clsrLyQQk1LrPLLGBqrrmsXoeUVRgpQccT5Bl2q5iNdEGZw81W7Dv+hv7c
+232TH+zLfaBTiYpzLFHcD8BysoeOug==
+=j0pA
+-----END PGP SIGNATURE-----
+
+--WEu7YOiBPgD/ryln--
 
