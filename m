@@ -1,241 +1,183 @@
-Return-Path: <linux-pm+bounces-14531-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14532-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E60A97DFB7
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 03:11:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2736D97DFD0
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 04:07:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A34A1C20AA2
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 01:11:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB14A281705
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 02:07:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA741917E7;
-	Sun, 22 Sep 2024 01:11:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF39618F2CF;
+	Sun, 22 Sep 2024 02:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iD17Jsmn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ctOj0FAL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0851917C4
-	for <linux-pm@vger.kernel.org>; Sun, 22 Sep 2024 01:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9D21E529;
+	Sun, 22 Sep 2024 02:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726967501; cv=none; b=lps+WtwCIIGrRVW0V4/orS8XzfHx+zajAqRW+cu1p7UAHV8C+NPLry0QT1b5ou4a7vbmkCh1QT6kJbE2t70GfgdZGfSufJ8I8uk7mlSBENgYq0kX4fnQEyP2fpoG3A2PlxZsbdRY5RVsDxzKuNof3XKbAQlRNTR43fZtd3W9Bhk=
+	t=1726970859; cv=none; b=JecuxHdAg450Mk81dTVHBWu6qmTUdm2RL1SnLX7mIrBaemSwgLjnchgfrQWxq1bD3XS3qyKcwvu+9lYL2kxj0GXB51vA+eeFtxVkV+BFodM+voc4MGumLzuMRJfFQ+wk7+D1H5reutbY3Nw5zqJPuIIB14KL2bOxaUVlQ6nqDFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726967501; c=relaxed/simple;
-	bh=mkPZTZ4+7X6YfRtxtJvsGondZDr3cT+dPb4FafRwtlc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=pfMYrF0towSWvckSoFD9QmcEmriZcMahv0MwVDbyNQYT7/bESxMf8Xlo8057F7FBOHuOuhnJ1VfuSDvzjFkKKBxnVO+Ebu2mKryUI4RPgCFShmXYR/f3JOO/Y6KLHffYDCVoBjPDbKHowWxVN6kZ3m/UAT+IPLKEayaK+IUE6Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iD17Jsmn; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c247dd0899so2811a12.1
-        for <linux-pm@vger.kernel.org>; Sat, 21 Sep 2024 18:11:38 -0700 (PDT)
+	s=arc-20240116; t=1726970859; c=relaxed/simple;
+	bh=Ga9yAiHhhCAY/j9jBJ+fqSp5cm7HoOFURxXd6JyAZqQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l8TkSbWHj+iGR1Mzl/WV5HCyTakBqBIocxR40Ibtr2JR8JCCYm5m0R3jkJRNAjyI+72VQiPpRugYOflK884C+jfy+yQOi6xWBGIUWWYPbX7bKIqMRqYJxjDVp7Ffac6mzKNSjkzI5YcuKXvvNpTKcnfl5vydYbjs8WzvH79KW7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ctOj0FAL; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42e5e758093so27530255e9.1;
+        Sat, 21 Sep 2024 19:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726967497; x=1727572297; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
-        b=iD17JsmnF63TWL61UBkCOk+f84qtZUYIeuK3yrghPIiJuXNAGzAu+g4RkSCi73pYXo
-         0FjSJONUGguXFtJQ5zCrHDtsKMn9uEAJOLOHkGODSSoctFoiaEsZEJGoe3gViEc6KiZy
-         QuG1r1z4wZX7k2T+OPk6JD9Dle/Wc1lP41GTML4fuivfbTOTCD5p0wYG4VUI/y9B7nJw
-         clvC0PcsIY1mvkb0aKPTXAnFLaAvajFPyjfiW3yvvWcN3SIh4XxvGMJCmdvebjWJWntj
-         ANIgfu9yycWFyuphNvDa+C4eYW65TL0Aa0VS1cpE9n4T4HBWWz360GD7mHRPoCCS3JRb
-         XIiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726967497; x=1727572297;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=gmail.com; s=20230601; t=1726970856; x=1727575656; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
-        b=aBwGdqFiaG5R6lBWjgpuxZevRZOBuzkAQ+2Zf5CAqSfvf6BCfahWu9u6DDBxmL/C90
-         eHT2xypu0PeKXu1O+FyfScKs2IR5TlYKegRw1nkdZw8kUZkKFg3KVPEPs/tGz5HdL+5X
-         PZJK1JFrJ7826KhEHiyqa61Ahhr6Yr503cxmO0Huds/5sBgNzdfShR4chsY8EQiBddKt
-         8XlZOl/shA9eEe1+LTk8DXslV6EjO8xOrYIk8yTyfwu2Yb07pLIq7Y0L9xDOJyTrTzLG
-         QTauOlAROX8jPcsowVLMs7rjAOz6/gsww13Hzt/PL7oIQzeZ1X6wrHhGxzGOz4llt7/+
-         DfeA==
-X-Gm-Message-State: AOJu0Ywiukwyyw751lPMSN1naMRvE4pMUqTZ5xiappQAjrlFWIpxadAw
-	R4VEyRVo9Ei4nXneM9p56O26USK891fpc7F2v6Wt9/oo7UUEfHj5UwUvyaSphrl5WsOMXqpnb2a
-	u7UbdvdPOHjPVNnJz4crf+o7nSu60lgEAVzM0
-X-Google-Smtp-Source: AGHT+IGDmCMq0c04L7WDXF6pJrRZIraPcPIIO/dV9PrR/c2TmXM8wUqd7VfSgbRwDhKV1hUl4eLr7f40znDL+x9wu5o=
-X-Received: by 2002:a05:6402:26c2:b0:5c4:6376:bb68 with SMTP id
- 4fb4d7f45d1cf-5c5b846d1aemr39682a12.3.1726967496849; Sat, 21 Sep 2024
- 18:11:36 -0700 (PDT)
+        bh=9oohvC6lTfiSYwOYed900cv9HTEJuIzCC7mv3WEC2cw=;
+        b=ctOj0FALDiV/HbB0n8gDItxMTFf5Mqa/5xhGjngPorh/5kGLH6uxh06SGf9L3ozyMH
+         8sUiu99drj2Whf9edImKX8oX29o5VC2HhTPdMdD/9nmZPJpBbWkrBi/Sgd9FsVp+jY/d
+         5qH4zeR6qRBYCcsf5JBOS9Yeenn9QVQdrXvAOxcWwac7VDeg5WH/9Batyu1g9XWbiWxl
+         ofwrfyDuS8euqzy6tQl29+MFpKQIHyVPEI1EFECwTtHt1+cvjiD1sV6Jfi1/isFWHQEI
+         1FQ8MaACUYpD8PKrpyixH24jevIoqv17reKtMAqjbzaIB6bCtlblYcOu7yav6p9/62GF
+         F1ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726970856; x=1727575656;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9oohvC6lTfiSYwOYed900cv9HTEJuIzCC7mv3WEC2cw=;
+        b=JS3Am89ILXp+fPMO8CUVZdQuQnnI+d1CbXWBGIXEJmndoFmYoobL+n/QGHjhQ/fpQi
+         OORwndp2peH52tfmDWF1aZUQmlA1gYPfflOlU+CuiNnQvjgnmQJbFBrxK3ZerJ7Dmy3q
+         k86FQ95zU76BT0gkaEjh1Eq4Y5EBdE+hivtqo++5oRsOJKkdfjQajIAdk7MOekKiE9be
+         KM0g0R57M2B+TBT+GfssOBBcbVeTu7jHuVZpCFF9QFMtYKGUwsifJyGnrj8gWt0mzBse
+         VmEkZcRaRKtyX53m6Y0qcR1HlapdTYN1jxJpTcC5IxcGBWxowAPLSQFsvvY9XphxYMyn
+         OOfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUED5dA/FQVdXlpsVnW9CKJBAFtNsdwfFAv8gOxlV/+Po87BaX2OzDCgmyFUuukc0JZTA8ZguEtJ72H2FxFVksc4Q/Flg==@vger.kernel.org, AJvYcCVhYTRmm33vTGCxXQDzcp8XEjRDPfdFn9hcADS1NPBQiDF/mOzs6kKAkuuieUV2Jxng12CQH4Empg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yznboycq+njyqs4lghEZoNdyyIz+ELNjNdASFyJboWxSLGVe8pY
+	GXpu5sSbTn2QI/YFF2HBvIgetXVJol+U+JSttpb5+utnbJDPkXYuWMXLtGJK
+X-Google-Smtp-Source: AGHT+IGcpkVwGXrA9CQpkzepX3rS1Hzev6lDrPPoCNhq91QaZXLWpV5OUk7yV2HUjGX1yR3URVkWhA==
+X-Received: by 2002:a05:600c:1907:b0:42c:b6db:4270 with SMTP id 5b1f17b1804b1-42e7abefbb6mr53611725e9.11.1726970856019;
+        Sat, 21 Sep 2024 19:07:36 -0700 (PDT)
+Received: from [192.168.1.127] ([151.95.37.234])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e7ae5fce0sm63606665e9.10.2024.09.21.19.07.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Sep 2024 19:07:35 -0700 (PDT)
+Message-ID: <30b8c512-d76e-4acf-892e-fad7a6bb1127@gmail.com>
+Date: Sun, 22 Sep 2024 04:07:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jann Horn <jannh@google.com>
-Date: Sun, 22 Sep 2024 03:10:59 +0200
-Message-ID: <CAG48ez1xYXWfvTy4N7Ut9MAs2+GGWNOwYgQb6zToRpJfQEacfg@mail.gmail.com>
-Subject: lockdep detected circular locking between rtnl_mutex and
- pm_chain_head.rwsem [wireguard and r8152]
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: linux-pm@vger.kernel.org, wireguard@lists.zx2c4.com, 
-	Network Development <netdev@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>, 
-	kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 3/4] acpi/x86: s2idle: call screen on and off as part
+ of callbacks
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, linux-pm@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, luke@ljones.dev, me@kylegospodneti.ch
+References: <20240919171952.403745-1-lkml@antheas.dev>
+ <20240919171952.403745-4-lkml@antheas.dev>
+ <7c604018-59a3-4b70-83d1-06f0ed858b73@amd.com>
+ <CAGwozwGSVAExH_9zCCKreC88J0FRU4ZM3RkBk==HvRwCUuuqLw@mail.gmail.com>
+ <25b14b4f-96b7-453c-b876-6a46c4f3789c@amd.com>
+ <CAGwozwHmd8yHzjbutOd4T39h5CZRh2rOWYH4V4AnLN+RXrRRnQ@mail.gmail.com>
+ <f164e172-0030-48d0-9c33-aaaa6d0cc6ff@gmail.com>
+ <CAGwozwGNg8XZcY0AhfMfKXJo4P4Xmvn7e2Bt2gZ-emSAsn24qA@mail.gmail.com>
+ <31eb2289-633d-47d8-8609-e9994d7f8353@gmail.com>
+ <CAGwozwHDW_m7gx8Fb-CQUz_TtSA=G7hx37NCqntm-hYKhRf8WA@mail.gmail.com>
+Content-Language: en-US, it-IT, en-US-large
+From: Denis Benato <benato.denis96@gmail.com>
+In-Reply-To: <CAGwozwHDW_m7gx8Fb-CQUz_TtSA=G7hx37NCqntm-hYKhRf8WA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi!
+On 21/09/24 21:44, Antheas Kapenekakis wrote:
+> Hi Denis,
+> 
 
-While trying out a kernel at commit
-88264981f2082248e892a706b2c5004650faac54 (latest mainline) with
-lockdep enabled, I hit a lockdep warning - it looks like wireguard
-takes the rtnl_lock in a PM callback (meaning pm_chain_head.rwsem is
-already held), while r8152 registers a PM callback in a context where
-the rtnl_lock is held, and this makes lockdep unhappy. But I don't
-know enough about the PM code to know which of those is the problem or
-whether this race could even occur. I'm also not sure whether this is
-a regression - I don't usually run lockdep kernels on this machine.
+Hello Antheas,
 
+>> Beside, as for necessary kernel/software quirks, the new firmware is
+>> expected to require none, at least for asus-wmi, so I ask you to leave
+>> csee calls where they are now as in the future those will be used only
+>> on non-updated firmware.
+> I'm happy you said that, as it means this patch will not conflict with
+> the new firmware and will just fix older devices.
+> 
 
-[ 1749.181131] PM: suspend entry (s2idle)
-[ 1749.209736] Filesystems sync: 0.028 seconds
+You are currently attempting to fix a problem that does not exists (or
+you haven't made us aware of), in a way that is causing regressions:
+no -- calling csee twice is not a problem and we have absolutely no reasons
+to suspect it is.
 
-[ 1749.220240] ======================================================
-[ 1749.220242] WARNING: possible circular locking dependency detected
-[ 1749.220244] 6.11.0-slowkasan+ #140 Not tainted
-[ 1749.220247] ------------------------------------------------------
-[ 1749.220249] systemd-sleep/5239 is trying to acquire lock:
-[ 1749.220252] ffffffffb1156c88 (rtnl_mutex){+.+.}-{3:3}, at:
-wg_pm_notification (drivers/net/wireguard/device.c:81
-drivers/net/wireguard/device.c:64)
-[ 1749.220265]
-but task is already holding lock:
-[ 1749.220267] ffffffffb077e170 ((pm_chain_head).rwsem){++++}-{3:3},
-at: blocking_notifier_call_chain_robust (kernel/notifier.c:128
-kernel/notifier.c:353 kernel/notifier.c:341)
-[ 1749.220277]
-which lock already depends on the new lock.
+First: the onus is on you to justify, with logs and a thorough explanation,
+why you are modifying a module. You have so far failed to do so.
 
-[ 1749.220279]
-the existing dependency chain (in reverse order) is:
-[ 1749.220281]
--> #1 ((pm_chain_head).rwsem){++++}-{3:3}:
-[ 1749.220287] down_write (./arch/x86/include/asm/preempt.h:79
-kernel/locking/rwsem.c:1304 kernel/locking/rwsem.c:1315
-kernel/locking/rwsem.c:1580)
-[ 1749.220292] blocking_notifier_chain_register (kernel/notifier.c:272
-kernel/notifier.c:290)
-[ 1749.220295] rtl8152_open (drivers/net/usb/r8152.c:6994)
-[ 1749.220300] __dev_open (net/core/dev.c:1476)
-[ 1749.220304] __dev_change_flags (net/core/dev.c:8837)
-[ 1749.220308] dev_change_flags (net/core/dev.c:8909)
-[ 1749.220311] do_setlink (net/core/rtnetlink.c:2900)
-[ 1749.220315] __rtnl_newlink (net/core/rtnetlink.c:3696)
-[ 1749.220318] rtnl_newlink (net/core/rtnetlink.c:3744)
-[ 1749.220322] rtnetlink_rcv_msg (net/core/rtnetlink.c:6646)
-[ 1749.220325] netlink_rcv_skb (net/netlink/af_netlink.c:2550)
-[ 1749.220329] netlink_unicast (net/netlink/af_netlink.c:1331
-net/netlink/af_netlink.c:1357)
-[ 1749.220332] netlink_sendmsg (net/netlink/af_netlink.c:1901)
-[ 1749.220335] ____sys_sendmsg (net/socket.c:730 net/socket.c:745
-net/socket.c:2603)
-[ 1749.220339] ___sys_sendmsg (net/socket.c:2659)
-[ 1749.220342] __sys_sendmsg (net/socket.c:2686)
-[ 1749.220344] do_syscall_64 (arch/x86/entry/common.c:52
-arch/x86/entry/common.c:83)
-[ 1749.220348] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-[ 1749.220352]
--> #0 (rtnl_mutex){+.+.}-{3:3}:
-[ 1749.220357] __lock_acquire (kernel/locking/lockdep.c:3159
-kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
-kernel/locking/lockdep.c:5199)
-[ 1749.220362] lock_acquire (kernel/locking/lockdep.c:467
-kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
-[ 1749.220365] __mutex_lock (kernel/locking/mutex.c:610
-kernel/locking/mutex.c:752)
-[ 1749.220369] wg_pm_notification (drivers/net/wireguard/device.c:81
-drivers/net/wireguard/device.c:64)
-[ 1749.220372] notifier_call_chain (kernel/notifier.c:93)
-[ 1749.220375] blocking_notifier_call_chain_robust
-(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
-[ 1749.220378] pm_notifier_call_chain_robust
-(./include/linux/notifier.h:207 kernel/power/main.c:104)
-[ 1749.220382] pm_suspend (kernel/power/suspend.c:367
-kernel/power/suspend.c:588 kernel/power/suspend.c:625)
-[ 1749.220386] state_store (kernel/power/main.c:746)
-[ 1749.220389] kernfs_fop_write_iter (fs/kernfs/file.c:334)
-[ 1749.220393] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
-[ 1749.220397] ksys_write (fs/read_write.c:736)
-[ 1749.220399] do_syscall_64 (arch/x86/entry/common.c:52
-arch/x86/entry/common.c:83)
-[ 1749.220402] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-[ 1749.220406]
-other info that might help us debug this:
+Second: give us explanation of why you think downloading games with screen off
+has something to do with the asus-wmi driver and belongs to the same patch series.
 
-[ 1749.220408]  Possible unsafe locking scenario:
+> The only change my patch does on the Ally specifically is pull CSEE
+> earlier and remove the extra call. There is nothing in this patch to
+> explain what you are experiencing. There are a lot of causes I could
+> point my finger to, but there is no point.
+> 
 
-[ 1749.220409]        CPU0                    CPU1
-[ 1749.220411]        ----                    ----
-[ 1749.220413]   rlock((pm_chain_head).rwsem);
-[ 1749.220416]                                lock(rtnl_mutex);
-[ 1749.220420]                                lock((pm_chain_head).rwsem);
-[ 1749.220423]   lock(rtnl_mutex);
-[ 1749.220426]
-*** DEADLOCK ***
+A compiled version of the kernel tag v6.11 has mcu_powersave=0 working flawlessly,
+that very same kernel, compiled with the very same .config, with your patches on
+top exhibits what was documented: there is no reason to use fingers here.
 
-[ 1749.220428] 5 locks held by systemd-sleep/5239:
-[ 1749.220430] #0: ffff888125d2e3f8 (sb_writers#6){.+.+}-{0:0}, at:
-ksys_write (fs/read_write.c:736)
-[ 1749.220439] #1: ffff8881e5cb9888 (&of->mutex){+.+.}-{3:3}, at:
-kernfs_fop_write_iter (fs/kernfs/file.c:326)
-[ 1749.220447] #2: ffff888460aee2d8 (kn->active#166){.+.+}-{0:0}, at:
-kernfs_fop_write_iter (fs/kernfs/file.c:326)
-[ 1749.220455] #3: ffffffffb0757008
-(system_transition_mutex){+.+.}-{3:3}, at: pm_suspend
-(kernel/power/suspend.c:574 kernel/power/suspend.c:625)
-[ 1749.220463] #4: ffffffffb077e170
-((pm_chain_head).rwsem){++++}-{3:3}, at:
-blocking_notifier_call_chain_robust (kernel/notifier.c:128
-kernel/notifier.c:353 kernel/notifier.c:341)
-[ 1749.220471]
-stack backtrace:
-[ 1749.220474] CPU: 1 UID: 0 PID: 5239 Comm: systemd-sleep Not tainted
-6.11.0-slowkasan+ #140
-[ 1749.220478] Hardware name: [...]
-[ 1749.220480] Call Trace:
-[ 1749.220483]  <TASK>
-[ 1749.220485] dump_stack_lvl (lib/dump_stack.c:124)
-[ 1749.220491] print_circular_bug (kernel/locking/lockdep.c:2077)
-[ 1749.220496] check_noncircular (kernel/locking/lockdep.c:2203)
-[...]
-[ 1749.220519] __lock_acquire (kernel/locking/lockdep.c:3159
-kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
-kernel/locking/lockdep.c:5199)
-[...]
-[ 1749.220546] lock_acquire (kernel/locking/lockdep.c:467
-kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
-[...]
-[ 1749.220577] __mutex_lock (kernel/locking/mutex.c:610
-kernel/locking/mutex.c:752)
-[...]
-[ 1749.220627] wg_pm_notification (drivers/net/wireguard/device.c:81
-drivers/net/wireguard/device.c:64)
-[ 1749.220631] notifier_call_chain (kernel/notifier.c:93)
-[ 1749.220636] blocking_notifier_call_chain_robust
-(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
-[...]
-[ 1749.220649] pm_notifier_call_chain_robust
-(./include/linux/notifier.h:207 kernel/power/main.c:104)
-[ 1749.220652] pm_suspend (kernel/power/suspend.c:367
-kernel/power/suspend.c:588 kernel/power/suspend.c:625)
-[ 1749.220656] state_store (kernel/power/main.c:746)
-[ 1749.220661] kernfs_fop_write_iter (fs/kernfs/file.c:334)
-[ 1749.220665] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
-[...]
-[ 1749.220693] ksys_write (fs/read_write.c:736)
-[...]
-[ 1749.220701] do_syscall_64 (arch/x86/entry/common.c:52
-arch/x86/entry/common.c:83)
-[ 1749.220704] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-[ 1749.220708] RIP: 0033:0x7fe2e2917240
-[...]
-[ 1749.220735]  </TASK>
-[ 1749.223599] Freezing user space processes
-[ 1749.226307] Freezing user space processes completed (elapsed 0.002 seconds)
+So... for one your patches do something else (and they seems to be related to
+activities done in background while in s2idle), and two you are saying that
+since you don't understand why a regression is happening it is okay to ignore that.
+
+> We will conduct our own testing, and this will include the original
+> Ally as well. A lot of them actually, and after initial testing this
+> will include thousands of devices, as we plan to fully dogfood this
+> patch.
+> 
+
+I will be here waiting for the result, when you have identified the reason of regression I
+documented, include me in CC or reach me out privately with the work ready to test.
+
+> I was a bit busy today, so I did not update the patch. I want to
+> rewrite part of the cover letter, as it includes some inconsistencies,
+> and rename some variables. The inconsistencies have to do with how I
+> describe the sleep stage, as I read up on some additional
+> documentation, it is not related to the contents of the patch. In
+> addition, it seems those sleep _DSMs cause problems on the Ally too,
+> related to TDP. And no, I will not wait half a year for a BIOS update
+> to fix those.
+> 
+> I am also looking into how to integrate Modern Standby into the
+> kernel, in a more full featured way. Downloading games in the
+> background is a very requested feature after all, and since looking
+> into the Ally's _DSM entries, it seems like it is built to support it.
+> Background here would mean the fan will be off and the suspend light
+> will be pulsing, so you can safely stow it in a bag while it is
+> downloading games. However, this is conjecture until the patch for
+> that is built and tested.
+> 
+
+Again, userspace software running in s2idle has absolutely nothing to do with
+acpi entries. You need to decide what this patch is all about:
+If it is about asus-wmi then identify and solve regressions before resubmitting.
+If it is about downloading games while sleeping then create a new idle driver
+(this way you won't risk breaking what has been confirmed working for months or years),
+do a request for comment on a proposal, or propose an interface to the userspace
+that applications will use to carry on tasks while hardware is in s2idle
+and drop the useless asus-wmi part as it does not belong there.
+
+As it stands this work does not solve any problem and does not allow downloads
+to happen while the console is sleeping: pick one and follow that route.
+
+> Antheas
+
+Best regards,
+Denis
 
