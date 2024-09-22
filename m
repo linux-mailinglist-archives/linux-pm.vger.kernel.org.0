@@ -1,159 +1,241 @@
-Return-Path: <linux-pm+bounces-14530-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14531-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF8F097DF12
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Sep 2024 23:23:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E60A97DFB7
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 03:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 455A71F214F3
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Sep 2024 21:23:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A34A1C20AA2
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 01:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F7014A60E;
-	Sat, 21 Sep 2024 21:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA741917E7;
+	Sun, 22 Sep 2024 01:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fB5fVd+Y"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iD17Jsmn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515DF1EA87;
-	Sat, 21 Sep 2024 21:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0851917C4
+	for <linux-pm@vger.kernel.org>; Sun, 22 Sep 2024 01:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726953791; cv=none; b=ZrVIEzmmvIQnoAXhyA52uwJwesJ7QUuN0cWfbjHKAn/evyOcAFUfrDPc8Fzc4qAqbWAYUoEDJ/iihQXz4eU8fwEl7rEvyvFI9wtPXybTnPCJXahhpNX9Uu7b6QJcEQyMolhEot/mejzaGdcPpJkFY58FwV3V4MtsBl19Dscjahk=
+	t=1726967501; cv=none; b=lps+WtwCIIGrRVW0V4/orS8XzfHx+zajAqRW+cu1p7UAHV8C+NPLry0QT1b5ou4a7vbmkCh1QT6kJbE2t70GfgdZGfSufJ8I8uk7mlSBENgYq0kX4fnQEyP2fpoG3A2PlxZsbdRY5RVsDxzKuNof3XKbAQlRNTR43fZtd3W9Bhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726953791; c=relaxed/simple;
-	bh=Y27mv5c38W4VcfyPm5vAZA7hFlbgZOODQTnHSX07YwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VJD9Q82dTPvDzxQk1NG7g1/62a/akjRiQHCI9/j31T0QeZD16A6UTme70Z3swgZTWPQ7/Tquhy62SmsrQrkV9tzqmvc+HQ1m/TWyLH1K63BfDvbRNZtDfewG5Y67dBSjAIWm4iTjW2rMuqCQV7iWesZvWX1vzXJ0UFyshDgttvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fB5fVd+Y; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71790ed8c2dso2766815b3a.3;
-        Sat, 21 Sep 2024 14:23:10 -0700 (PDT)
+	s=arc-20240116; t=1726967501; c=relaxed/simple;
+	bh=mkPZTZ4+7X6YfRtxtJvsGondZDr3cT+dPb4FafRwtlc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=pfMYrF0towSWvckSoFD9QmcEmriZcMahv0MwVDbyNQYT7/bESxMf8Xlo8057F7FBOHuOuhnJ1VfuSDvzjFkKKBxnVO+Ebu2mKryUI4RPgCFShmXYR/f3JOO/Y6KLHffYDCVoBjPDbKHowWxVN6kZ3m/UAT+IPLKEayaK+IUE6Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iD17Jsmn; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c247dd0899so2811a12.1
+        for <linux-pm@vger.kernel.org>; Sat, 21 Sep 2024 18:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726953790; x=1727558590; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x/xLtlfPfHuN+KQEVGSFjCi7DhUvsxCFBVvUZ5bRAQM=;
-        b=fB5fVd+Y8NP83vfX4KT8DSA7zwAhgZaqCigPp2roriQz1GmD4F7L6bKhp9YFjm5oGM
-         A4oFVY1Y6h7Bwe6MO4POV1VnJiSNms5ck3oqCBRfW4EyyYiA8kVuuookSK1CmKOAVQ2w
-         MXs1wDKtYavHzGfuVlCyMCZ4vQR+P1X3vXH9OrgUw8nRcAjZWbcsMnItlrZ90Zo5GyR4
-         iDZbZpXf56BiRtNobS4hClM1aDhqfEMwoSw1E6Z9xWLFJDqBa0OP6wFglMZXcw4Zp8nA
-         JCyxXHQhEu6X4rKo6Y6V5dym3NjeSKSTryE5LRKVrkAlKIVRmta30qKYobJKMVkjjYMQ
-         46wg==
+        d=google.com; s=20230601; t=1726967497; x=1727572297; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
+        b=iD17JsmnF63TWL61UBkCOk+f84qtZUYIeuK3yrghPIiJuXNAGzAu+g4RkSCi73pYXo
+         0FjSJONUGguXFtJQ5zCrHDtsKMn9uEAJOLOHkGODSSoctFoiaEsZEJGoe3gViEc6KiZy
+         QuG1r1z4wZX7k2T+OPk6JD9Dle/Wc1lP41GTML4fuivfbTOTCD5p0wYG4VUI/y9B7nJw
+         clvC0PcsIY1mvkb0aKPTXAnFLaAvajFPyjfiW3yvvWcN3SIh4XxvGMJCmdvebjWJWntj
+         ANIgfu9yycWFyuphNvDa+C4eYW65TL0Aa0VS1cpE9n4T4HBWWz360GD7mHRPoCCS3JRb
+         XIiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726953790; x=1727558590;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x/xLtlfPfHuN+KQEVGSFjCi7DhUvsxCFBVvUZ5bRAQM=;
-        b=vwDYMndiJhLA5BzupK4WEMi7YLpigAQBoNwp6zGlx5zbJVs2fxWBehC8MFi8zulYOd
-         HBhYqM/W/JZ/VSmHnAGijGCiTTzjPgl5g4B38jOyxlM424XPB68jMm4SX3t0v5IUQMZ1
-         MFjbcLcmo4A6tF1mclPAqzs7jxJT+G7WJcsnzMYomGkt5TFql0iDoHxwB3e1yybdjs9l
-         Fv1YM9/jCPnitmAtLKvJxNLHp5oj/bKCfx5qp95LPajWN+be4dyxVxTvgqCJT3GfGxKa
-         BVgL48MADE4+QIaE2NCKH3rHpZty3A9e3ulUh2uG4e5BUpuW7iKGOLllgc5GNLc6E90i
-         gLgw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXDJVQxfhgxtOt1iNgbdMWQgCaepCZj9K+EKOCUp5cZ6adQIkguG9df7R/NuQaDc3/fdrPD5/hPkcKmTo=@vger.kernel.org, AJvYcCVoP7htZrTnvzMQ3omb+wHiA3C1r6OmQxZDOCX0Jhxa/9v7F6XPGjGul6AKtZxUOChC7BLcqxdeFhM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxL575D3X8q7wCjhdbXNU0KsonzdkPpTmWlT+s4qEhxYMHl0XXT
-	T5gV95d+Cm8FoVCLDACBw6Z4YjQE34HRXPE0CduqK65yaWFGBqvZ
-X-Google-Smtp-Source: AGHT+IGL1ObQO6Jj8+FQybOWawDU9oKiKJig9LlUWYAGxZdVNM27O38IzzjibtkechpjoU76swKjjw==
-X-Received: by 2002:a05:6a00:3e18:b0:717:8ee0:4ea1 with SMTP id d2e1a72fcca58-7199cace840mr12479234b3a.0.1726953789610;
-        Sat, 21 Sep 2024 14:23:09 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944b9756bsm11655870b3a.160.2024.09.21.14.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Sep 2024 14:23:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 21 Sep 2024 14:23:07 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: "John B. Wyatt IV" <jwyatt@redhat.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-pm@vger.kernel.org,
-	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
-	Tomas Glozar <tglozar@redhat.com>, Arnaldo Melo <acme@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>
-Subject: Re: [PATCH v3 2/4] pm:cpupower: Add SWIG bindings files for
- libcpupower
-Message-ID: <0ff4937d-0e51-4d67-9b8a-d2bf1bebe1fb@roeck-us.net>
-References: <20240905021916.15938-1-jwyatt@redhat.com>
- <20240905021916.15938-3-jwyatt@redhat.com>
+        d=1e100.net; s=20230601; t=1726967497; x=1727572297;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2KUuVhA2iLT4DM8BXrMGBBR4oEH2j4WLFiTg/43RbgU=;
+        b=aBwGdqFiaG5R6lBWjgpuxZevRZOBuzkAQ+2Zf5CAqSfvf6BCfahWu9u6DDBxmL/C90
+         eHT2xypu0PeKXu1O+FyfScKs2IR5TlYKegRw1nkdZw8kUZkKFg3KVPEPs/tGz5HdL+5X
+         PZJK1JFrJ7826KhEHiyqa61Ahhr6Yr503cxmO0Huds/5sBgNzdfShR4chsY8EQiBddKt
+         8XlZOl/shA9eEe1+LTk8DXslV6EjO8xOrYIk8yTyfwu2Yb07pLIq7Y0L9xDOJyTrTzLG
+         QTauOlAROX8jPcsowVLMs7rjAOz6/gsww13Hzt/PL7oIQzeZ1X6wrHhGxzGOz4llt7/+
+         DfeA==
+X-Gm-Message-State: AOJu0Ywiukwyyw751lPMSN1naMRvE4pMUqTZ5xiappQAjrlFWIpxadAw
+	R4VEyRVo9Ei4nXneM9p56O26USK891fpc7F2v6Wt9/oo7UUEfHj5UwUvyaSphrl5WsOMXqpnb2a
+	u7UbdvdPOHjPVNnJz4crf+o7nSu60lgEAVzM0
+X-Google-Smtp-Source: AGHT+IGDmCMq0c04L7WDXF6pJrRZIraPcPIIO/dV9PrR/c2TmXM8wUqd7VfSgbRwDhKV1hUl4eLr7f40znDL+x9wu5o=
+X-Received: by 2002:a05:6402:26c2:b0:5c4:6376:bb68 with SMTP id
+ 4fb4d7f45d1cf-5c5b846d1aemr39682a12.3.1726967496849; Sat, 21 Sep 2024
+ 18:11:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240905021916.15938-3-jwyatt@redhat.com>
+From: Jann Horn <jannh@google.com>
+Date: Sun, 22 Sep 2024 03:10:59 +0200
+Message-ID: <CAG48ez1xYXWfvTy4N7Ut9MAs2+GGWNOwYgQb6zToRpJfQEacfg@mail.gmail.com>
+Subject: lockdep detected circular locking between rtnl_mutex and
+ pm_chain_head.rwsem [wireguard and r8152]
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-pm@vger.kernel.org, wireguard@lists.zx2c4.com, 
+	Network Development <netdev@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>, 
+	kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi!
 
-On Wed, Sep 04, 2024 at 10:19:09PM -0400, John B. Wyatt IV wrote:
-> SWIG is a tool packaged in Fedora and other distros that can generate
-> bindings from C and C++ code for several languages including Python,
-> Perl, and Go.
-> 
-> These bindings allows users to easily write scripts that use and extend
-> libcpupower's functionality. Currently, only Python is provided in the
-> makefile, but additional languages may be added if there is demand.
-> 
-> Added suggestions from Shuah Khan for the README and license discussion.
-> 
-> Note that while SWIG itself is GPL v3+ licensed; the resulting output,
-> the bindings code, is permissively licensed + the license of the .o
-> files. Please see
-> https://swig.org/legal.html and [1] for more details.
-> 
-> [1]
-> https://lore.kernel.org/linux-pm/Zqv9BOjxLAgyNP5B@hatbackup/
-> 
-> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: John B. Wyatt IV <jwyatt@redhat.com>
-> Signed-off-by: John B. Wyatt IV <sageofredondo@gmail.com>
-> ---
-> 
-> Changes in v3:
-> 	- Reordered patch series for cpupower stub implementation to be
-> 	  first.
-> 	- Added pm:cpupower prefix to header and Rafael to Cc.
-> 
-> Changes in v2:
-> 	- Implemented the function so SWIG will accept the header
-> 	  definition
-> ---
->  .../power/cpupower/bindings/python/.gitignore |   8 +
->  tools/power/cpupower/bindings/python/Makefile |  31 +++
->  tools/power/cpupower/bindings/python/README   |  59 +++++
->  .../bindings/python/raw_pylibcpupower.i       | 247 ++++++++++++++++++
->  4 files changed, 345 insertions(+)
->  create mode 100644 tools/power/cpupower/bindings/python/.gitignore
->  create mode 100644 tools/power/cpupower/bindings/python/Makefile
->  create mode 100644 tools/power/cpupower/bindings/python/README
->  create mode 100644 tools/power/cpupower/bindings/python/raw_pylibcpupower.i
+While trying out a kernel at commit
+88264981f2082248e892a706b2c5004650faac54 (latest mainline) with
+lockdep enabled, I hit a lockdep warning - it looks like wireguard
+takes the rtnl_lock in a PM callback (meaning pm_chain_head.rwsem is
+already held), while r8152 registers a PM callback in a context where
+the rtnl_lock is held, and this makes lockdep unhappy. But I don't
+know enough about the PM code to know which of those is the problem or
+whether this race could even occur. I'm also not sure whether this is
+a regression - I don't usually run lockdep kernels on this machine.
 
-This file is deleted when running "make mrproper".
 
-$ git reset --hard HEAD
-$ make mrproper
-$ git status
-On branch master
-Your branch is up to date with 'origin/master'.
+[ 1749.181131] PM: suspend entry (s2idle)
+[ 1749.209736] Filesystems sync: 0.028 seconds
 
-Changes not staged for commit:
-  (use "git add/rm <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	deleted:    tools/power/cpupower/bindings/python/raw_pylibcpupower.i
+[ 1749.220240] ======================================================
+[ 1749.220242] WARNING: possible circular locking dependency detected
+[ 1749.220244] 6.11.0-slowkasan+ #140 Not tainted
+[ 1749.220247] ------------------------------------------------------
+[ 1749.220249] systemd-sleep/5239 is trying to acquire lock:
+[ 1749.220252] ffffffffb1156c88 (rtnl_mutex){+.+.}-{3:3}, at:
+wg_pm_notification (drivers/net/wireguard/device.c:81
+drivers/net/wireguard/device.c:64)
+[ 1749.220265]
+but task is already holding lock:
+[ 1749.220267] ffffffffb077e170 ((pm_chain_head).rwsem){++++}-{3:3},
+at: blocking_notifier_call_chain_robust (kernel/notifier.c:128
+kernel/notifier.c:353 kernel/notifier.c:341)
+[ 1749.220277]
+which lock already depends on the new lock.
 
-That is a bit more than annoying when trying to switch branches after
-that happened.
+[ 1749.220279]
+the existing dependency chain (in reverse order) is:
+[ 1749.220281]
+-> #1 ((pm_chain_head).rwsem){++++}-{3:3}:
+[ 1749.220287] down_write (./arch/x86/include/asm/preempt.h:79
+kernel/locking/rwsem.c:1304 kernel/locking/rwsem.c:1315
+kernel/locking/rwsem.c:1580)
+[ 1749.220292] blocking_notifier_chain_register (kernel/notifier.c:272
+kernel/notifier.c:290)
+[ 1749.220295] rtl8152_open (drivers/net/usb/r8152.c:6994)
+[ 1749.220300] __dev_open (net/core/dev.c:1476)
+[ 1749.220304] __dev_change_flags (net/core/dev.c:8837)
+[ 1749.220308] dev_change_flags (net/core/dev.c:8909)
+[ 1749.220311] do_setlink (net/core/rtnetlink.c:2900)
+[ 1749.220315] __rtnl_newlink (net/core/rtnetlink.c:3696)
+[ 1749.220318] rtnl_newlink (net/core/rtnetlink.c:3744)
+[ 1749.220322] rtnetlink_rcv_msg (net/core/rtnetlink.c:6646)
+[ 1749.220325] netlink_rcv_skb (net/netlink/af_netlink.c:2550)
+[ 1749.220329] netlink_unicast (net/netlink/af_netlink.c:1331
+net/netlink/af_netlink.c:1357)
+[ 1749.220332] netlink_sendmsg (net/netlink/af_netlink.c:1901)
+[ 1749.220335] ____sys_sendmsg (net/socket.c:730 net/socket.c:745
+net/socket.c:2603)
+[ 1749.220339] ___sys_sendmsg (net/socket.c:2659)
+[ 1749.220342] __sys_sendmsg (net/socket.c:2686)
+[ 1749.220344] do_syscall_64 (arch/x86/entry/common.c:52
+arch/x86/entry/common.c:83)
+[ 1749.220348] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+[ 1749.220352]
+-> #0 (rtnl_mutex){+.+.}-{3:3}:
+[ 1749.220357] __lock_acquire (kernel/locking/lockdep.c:3159
+kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
+kernel/locking/lockdep.c:5199)
+[ 1749.220362] lock_acquire (kernel/locking/lockdep.c:467
+kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
+[ 1749.220365] __mutex_lock (kernel/locking/mutex.c:610
+kernel/locking/mutex.c:752)
+[ 1749.220369] wg_pm_notification (drivers/net/wireguard/device.c:81
+drivers/net/wireguard/device.c:64)
+[ 1749.220372] notifier_call_chain (kernel/notifier.c:93)
+[ 1749.220375] blocking_notifier_call_chain_robust
+(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
+[ 1749.220378] pm_notifier_call_chain_robust
+(./include/linux/notifier.h:207 kernel/power/main.c:104)
+[ 1749.220382] pm_suspend (kernel/power/suspend.c:367
+kernel/power/suspend.c:588 kernel/power/suspend.c:625)
+[ 1749.220386] state_store (kernel/power/main.c:746)
+[ 1749.220389] kernfs_fop_write_iter (fs/kernfs/file.c:334)
+[ 1749.220393] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
+[ 1749.220397] ksys_write (fs/read_write.c:736)
+[ 1749.220399] do_syscall_64 (arch/x86/entry/common.c:52
+arch/x86/entry/common.c:83)
+[ 1749.220402] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+[ 1749.220406]
+other info that might help us debug this:
 
-Guenter
+[ 1749.220408]  Possible unsafe locking scenario:
+
+[ 1749.220409]        CPU0                    CPU1
+[ 1749.220411]        ----                    ----
+[ 1749.220413]   rlock((pm_chain_head).rwsem);
+[ 1749.220416]                                lock(rtnl_mutex);
+[ 1749.220420]                                lock((pm_chain_head).rwsem);
+[ 1749.220423]   lock(rtnl_mutex);
+[ 1749.220426]
+*** DEADLOCK ***
+
+[ 1749.220428] 5 locks held by systemd-sleep/5239:
+[ 1749.220430] #0: ffff888125d2e3f8 (sb_writers#6){.+.+}-{0:0}, at:
+ksys_write (fs/read_write.c:736)
+[ 1749.220439] #1: ffff8881e5cb9888 (&of->mutex){+.+.}-{3:3}, at:
+kernfs_fop_write_iter (fs/kernfs/file.c:326)
+[ 1749.220447] #2: ffff888460aee2d8 (kn->active#166){.+.+}-{0:0}, at:
+kernfs_fop_write_iter (fs/kernfs/file.c:326)
+[ 1749.220455] #3: ffffffffb0757008
+(system_transition_mutex){+.+.}-{3:3}, at: pm_suspend
+(kernel/power/suspend.c:574 kernel/power/suspend.c:625)
+[ 1749.220463] #4: ffffffffb077e170
+((pm_chain_head).rwsem){++++}-{3:3}, at:
+blocking_notifier_call_chain_robust (kernel/notifier.c:128
+kernel/notifier.c:353 kernel/notifier.c:341)
+[ 1749.220471]
+stack backtrace:
+[ 1749.220474] CPU: 1 UID: 0 PID: 5239 Comm: systemd-sleep Not tainted
+6.11.0-slowkasan+ #140
+[ 1749.220478] Hardware name: [...]
+[ 1749.220480] Call Trace:
+[ 1749.220483]  <TASK>
+[ 1749.220485] dump_stack_lvl (lib/dump_stack.c:124)
+[ 1749.220491] print_circular_bug (kernel/locking/lockdep.c:2077)
+[ 1749.220496] check_noncircular (kernel/locking/lockdep.c:2203)
+[...]
+[ 1749.220519] __lock_acquire (kernel/locking/lockdep.c:3159
+kernel/locking/lockdep.c:3277 kernel/locking/lockdep.c:3901
+kernel/locking/lockdep.c:5199)
+[...]
+[ 1749.220546] lock_acquire (kernel/locking/lockdep.c:467
+kernel/locking/lockdep.c:5824 kernel/locking/lockdep.c:5787)
+[...]
+[ 1749.220577] __mutex_lock (kernel/locking/mutex.c:610
+kernel/locking/mutex.c:752)
+[...]
+[ 1749.220627] wg_pm_notification (drivers/net/wireguard/device.c:81
+drivers/net/wireguard/device.c:64)
+[ 1749.220631] notifier_call_chain (kernel/notifier.c:93)
+[ 1749.220636] blocking_notifier_call_chain_robust
+(kernel/notifier.c:129 kernel/notifier.c:353 kernel/notifier.c:341)
+[...]
+[ 1749.220649] pm_notifier_call_chain_robust
+(./include/linux/notifier.h:207 kernel/power/main.c:104)
+[ 1749.220652] pm_suspend (kernel/power/suspend.c:367
+kernel/power/suspend.c:588 kernel/power/suspend.c:625)
+[ 1749.220656] state_store (kernel/power/main.c:746)
+[ 1749.220661] kernfs_fop_write_iter (fs/kernfs/file.c:334)
+[ 1749.220665] vfs_write (fs/read_write.c:590 fs/read_write.c:683)
+[...]
+[ 1749.220693] ksys_write (fs/read_write.c:736)
+[...]
+[ 1749.220701] do_syscall_64 (arch/x86/entry/common.c:52
+arch/x86/entry/common.c:83)
+[ 1749.220704] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+[ 1749.220708] RIP: 0033:0x7fe2e2917240
+[...]
+[ 1749.220735]  </TASK>
+[ 1749.223599] Freezing user space processes
+[ 1749.226307] Freezing user space processes completed (elapsed 0.002 seconds)
 
