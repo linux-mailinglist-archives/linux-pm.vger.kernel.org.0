@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-14539-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14540-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9070F97E2BC
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 19:24:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 139BC97E2BE
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 19:24:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EE1F1C20F17
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 17:24:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8D6328151D
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2024 17:24:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CF639FFE;
-	Sun, 22 Sep 2024 17:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AD03FE55;
+	Sun, 22 Sep 2024 17:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="zh2atIWe"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="sAhl8EiJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A7E2B9A1;
-	Sun, 22 Sep 2024 17:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5949C3C092;
+	Sun, 22 Sep 2024 17:24:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727025875; cv=none; b=AvWuoV5ec0V8FIjUgZvkbJi/Hs0FCqGrwoy5KXqx8Ooz7f4i0L8wHS5r+0jLA4Ui7xpl9gpiykFVoSWEMOhHLHBVy5FdPLqBnDRs4U42qDPaeI3/oiUJmPQNIijHzIjr+YAgj4/gY6yXYdgsMlqY8IAMzfCBZvs6bajZ4sbTZdM=
+	t=1727025877; cv=none; b=P1HzX/9m06qVu6rHJqpoirg3MjE5Kn+5YeOfZzlXOWVLBzKJzu8QdRMTBp/mgWHta77yycOOq0/WOOuUi88pkID6msSmBPIINS8NTsUP63NNuOwHKkzrSgDmceYfl+sohZo5Jmzyj2Rk3tGosuRNFFa9ag0zvBcxaC+bTrd9Ank=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727025875; c=relaxed/simple;
-	bh=hdYiVrfxrtBaACQtrGawG/G1F0oam/9gpUa3/Msk+H0=;
+	s=arc-20240116; t=1727025877; c=relaxed/simple;
+	bh=xUPaNyKOYRw1XkLMhyngzDzY7C1vZMPdKSdizUoRUIU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U16itiI5ygSpZzy9ir0UjgyFCNteS8MB8HB2EQifYIaBVe9jbCWYb2mbnH+P9ozGFRHLNMqFiz4LZjc87GhhxTMyfixcjAG6netXLB8S7ln5cLwQ1WOj/A+gV2QE9WwI8j+q5+LRuZnaoLmMaWsLCqdjXXqXtF3H3j1YHmUi+W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=zh2atIWe; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=LqjISZN8U48W+ASlYpcHUiFQC0FHaY+1gA1ZgDtPe7gCSYWuTicJZd7nvhmaGyrBtGM4dmp78nmQpgcZfdVVjavdyLDeQQy8EEErTfJJiv12lCqmVVE8vAX8jdb5pIouPvDb0pdtj1ICE+3uR5lPQCORLmBkj1FktnuGH35H540=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=sAhl8EiJ; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id E77A92E09702;
-	Sun, 22 Sep 2024 20:24:29 +0300 (EEST)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 353A82E09700;
+	Sun, 22 Sep 2024 20:24:31 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1727025870;
-	bh=WEaCrXuILAhyNJftzE1NUauNPw6HjX292SCxgFJUUak=; h=From:To:Subject;
-	b=zh2atIWeZA6zALTnAcOlW/zp2ddwYpX6n4TwWGvH9Z9mQHzRtahOJmTaLy+fut9IX
-	 j72TAqb/2PNF9FiqHGEZMFNQTvGNeWMh2L/paFr5m3hZctk0LjLWTeMNdOs1kN/wRz
-	 p1LHXDCCZxD2pUuKbQ1FsZ4axLeTQzDTn2CG6LgU=
+	s=default; t=1727025872;
+	bh=2mLOpsI3OZHKEiKQT5M4Jl+h+Wp5+sbyyU/iexK8+Io=; h=From:To:Subject;
+	b=sAhl8EiJEUfwdtlOXTvMhDuYTGutk5EfrpEkxEmowGYGXnKyHefticVs5sbk8nE5R
+	 LLkM0YM71HoPHMd00vhoGq6EBOdE1G1cW+95YIrxZhDN0KJ0rx0brPdKB6FpAAFa+l
+	 d9rLufkzJUwFhiWAQN2rqrX/b4h1+TjnejOefcDg=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -51,10 +51,10 @@ Cc: platform-driver-x86@vger.kernel.org,
 	me@kylegospodneti.ch,
 	Denis Benato <benato.denis96@gmail.com>,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v2 4/5] acpi/x86: s2idle: call Display On/Off as part of
- callbacks and rename
-Date: Sun, 22 Sep 2024 19:22:57 +0200
-Message-ID: <20240922172258.48435-5-lkml@antheas.dev>
+Subject: [PATCH v2 5/5] platform/x86: asus-wmi: remove Ally (1st gen) and Ally
+ X suspend quirk
+Date: Sun, 22 Sep 2024 19:22:58 +0200
+Message-ID: <20240922172258.48435-6-lkml@antheas.dev>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240922172258.48435-1-lkml@antheas.dev>
 References: <20240922172258.48435-1-lkml@antheas.dev>
@@ -66,194 +66,122 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <172702587079.19655.3616447128571825577@linux1587.grserver.gr>
+ <172702587209.19708.13018070105160490087@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Move the Display On/Off notifications into dedicated callbacks that gate
-the ACPI mutex, so they can be called outside of the suspend path.
-This fixes issues on certain devices that expect kernel drivers to be
-fully active during the calls, and allows for the flexibility of calling
-them as part of a more elaborate userspace suspend sequence (such as
-with "Screen Off" in Windows Modern Standby).
+By moving the Display On/Off calls outside of the suspend sequence and
+introducing a slight delay after Display Off, the ROG Ally controller
+functions exactly as it does in Windows.
 
-In addition, rename the notifications from "screen_" to "display_", as
-there is no documentation referring to them as screen, either by
-Intel or Microsoft.
+Therefore, remove the quirk that fixed the controller only when the
+mcu_powersave attribute was disabled, while adding a large amount of
+delay to the suspend and wake process.
 
-Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/acpi/x86/s2idle.c | 89 +++++++++++++++++++++++++++------------
- 1 file changed, 62 insertions(+), 27 deletions(-)
+ drivers/platform/x86/asus-wmi.c | 54 ---------------------------------
+ 1 file changed, 54 deletions(-)
 
-diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-index dd0b40b9bbe8..a17e28b91326 100644
---- a/drivers/acpi/x86/s2idle.c
-+++ b/drivers/acpi/x86/s2idle.c
-@@ -39,8 +39,8 @@ static const struct acpi_device_id lps0_device_ids[] = {
- #define ACPI_LPS0_DSM_UUID	"c4eb40a0-6cd2-11e2-bcfd-0800200c9a66"
+diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+index 37636e5a38e3..2c9656e0afda 100644
+--- a/drivers/platform/x86/asus-wmi.c
++++ b/drivers/platform/x86/asus-wmi.c
+@@ -137,29 +137,10 @@ module_param(fnlock_default, bool, 0444);
+ #define ASUS_MINI_LED_2024_STRONG	0x01
+ #define ASUS_MINI_LED_2024_OFF		0x02
  
- #define ACPI_LPS0_GET_DEVICE_CONSTRAINTS	1
--#define ACPI_LPS0_SCREEN_OFF	3
--#define ACPI_LPS0_SCREEN_ON	4
-+#define ACPI_LPS0_DISPLAY_OFF	3
-+#define ACPI_LPS0_DISPLAY_ON	4
- #define ACPI_LPS0_ENTRY		5
- #define ACPI_LPS0_EXIT		6
- #define ACPI_LPS0_MS_ENTRY      7
-@@ -50,8 +50,8 @@ static const struct acpi_device_id lps0_device_ids[] = {
- #define ACPI_LPS0_DSM_UUID_AMD      "e3f32452-febc-43ce-9039-932122d37721"
- #define ACPI_LPS0_ENTRY_AMD         2
- #define ACPI_LPS0_EXIT_AMD          3
--#define ACPI_LPS0_SCREEN_OFF_AMD    4
--#define ACPI_LPS0_SCREEN_ON_AMD     5
-+#define ACPI_LPS0_DISPLAY_OFF_AMD   4
-+#define ACPI_LPS0_DISPLAY_ON_AMD    5
- 
- static acpi_handle lps0_device_handle;
- static guid_t lps0_dsm_guid;
-@@ -60,6 +60,7 @@ static int lps0_dsm_func_mask;
- static guid_t lps0_dsm_guid_microsoft;
- static int lps0_dsm_func_mask_microsoft;
- static int lps0_dsm_state;
-+static bool lsp0_dsm_in_display_off;
- 
- /* Device constraint entry structure */
- struct lpi_device_info {
-@@ -361,9 +362,9 @@ static const char *acpi_sleep_dsm_state_to_str(unsigned int state)
- {
- 	if (lps0_dsm_func_mask_microsoft || !acpi_s2idle_vendor_amd()) {
- 		switch (state) {
--		case ACPI_LPS0_SCREEN_OFF:
-+		case ACPI_LPS0_DISPLAY_OFF:
- 			return "screen off";
--		case ACPI_LPS0_SCREEN_ON:
-+		case ACPI_LPS0_DISPLAY_ON:
- 			return "screen on";
- 		case ACPI_LPS0_ENTRY:
- 			return "lps0 entry";
-@@ -376,9 +377,9 @@ static const char *acpi_sleep_dsm_state_to_str(unsigned int state)
- 		}
- 	} else {
- 		switch (state) {
--		case ACPI_LPS0_SCREEN_ON_AMD:
-+		case ACPI_LPS0_DISPLAY_ON_AMD:
- 			return "screen on";
--		case ACPI_LPS0_SCREEN_OFF_AMD:
-+		case ACPI_LPS0_DISPLAY_OFF_AMD:
- 			return "screen off";
- 		case ACPI_LPS0_ENTRY_AMD:
- 			return "lps0 entry";
-@@ -539,27 +540,69 @@ static struct acpi_scan_handler lps0_handler = {
- 	.attach = lps0_device_attach,
- };
- 
--int acpi_s2idle_prepare_late(void)
-+static int acpi_s2idle_display_off(void)
- {
--	struct acpi_s2idle_dev_ops *handler;
+-/* Controls the power state of the USB0 hub on ROG Ally which input is on */
+-#define ASUS_USB0_PWR_EC0_CSEE "\\_SB.PCI0.SBRG.EC0.CSEE"
+-/* 300ms so far seems to produce a reliable result on AC and battery */
+-#define ASUS_USB0_PWR_EC0_CSEE_WAIT 1500
 -
- 	if (!lps0_device_handle || sleep_no_lps0)
- 		return 0;
+ static const char * const ashs_ids[] = { "ATK4001", "ATK4002", NULL };
  
--	if (pm_debug_messages_on)
--		lpi_check_constraints();
-+	if (unlikely(WARN_ON(lsp0_dsm_in_display_off)))
-+		return -EINVAL;
-+
-+	lsp0_dsm_in_display_off = true;
-+	acpi_scan_lock_acquire();
+ static int throttle_thermal_policy_write(struct asus_wmi *);
  
--	/* Screen off */
-+	/* Display off */
- 	if (lps0_dsm_func_mask > 0)
- 		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
--					ACPI_LPS0_SCREEN_OFF_AMD :
--					ACPI_LPS0_SCREEN_OFF,
-+					ACPI_LPS0_DISPLAY_OFF_AMD :
-+					ACPI_LPS0_DISPLAY_OFF,
- 					lps0_dsm_func_mask, lps0_dsm_guid);
- 
- 	if (lps0_dsm_func_mask_microsoft > 0)
--		acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_OFF,
-+		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_OFF,
- 				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
- 
-+	acpi_scan_lock_release();
-+
-+	return 0;
-+}
-+
-+static int acpi_s2idle_display_on(void)
-+{
-+	if (!lps0_device_handle || sleep_no_lps0)
-+		return 0;
-+
-+	if (unlikely(WARN_ON(!lsp0_dsm_in_display_off)))
-+		return -EINVAL;
-+
-+	lsp0_dsm_in_display_off = false;
-+	acpi_scan_lock_acquire();
-+
-+	/* Display on */
-+	if (lps0_dsm_func_mask_microsoft > 0)
-+		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_ON,
-+				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
-+	if (lps0_dsm_func_mask > 0)
-+		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
-+					ACPI_LPS0_DISPLAY_ON_AMD :
-+					ACPI_LPS0_DISPLAY_ON,
-+					lps0_dsm_func_mask, lps0_dsm_guid);
-+
-+	acpi_scan_lock_release();
-+
-+	return 0;
-+}
-+
-+int acpi_s2idle_prepare_late(void)
-+{
-+	struct acpi_s2idle_dev_ops *handler;
-+
-+	if (!lps0_device_handle || sleep_no_lps0)
-+		return 0;
-+
-+	if (pm_debug_messages_on)
-+		lpi_check_constraints();
-+
- 	/* LPS0 entry */
- 	if (lps0_dsm_func_mask > 0 && acpi_s2idle_vendor_amd())
- 		acpi_sleep_run_lps0_dsm(ACPI_LPS0_ENTRY_AMD,
-@@ -623,19 +666,10 @@ void acpi_s2idle_restore_early(void)
- 		acpi_sleep_run_lps0_dsm(ACPI_LPS0_MS_EXIT,
- 				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
- 	}
+-static const struct dmi_system_id asus_ally_mcu_quirk[] = {
+-	{
+-		.matches = {
+-			DMI_MATCH(DMI_BOARD_NAME, "RC71L"),
+-		},
+-	},
+-	{
+-		.matches = {
+-			DMI_MATCH(DMI_BOARD_NAME, "RC72L"),
+-		},
+-	},
+-	{ },
+-};
 -
--	/* Screen on */
--	if (lps0_dsm_func_mask_microsoft > 0)
--		acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_ON,
--				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
--	if (lps0_dsm_func_mask > 0)
--		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
--					ACPI_LPS0_SCREEN_ON_AMD :
--					ACPI_LPS0_SCREEN_ON,
--					lps0_dsm_func_mask, lps0_dsm_guid);
+ static bool ashs_present(void)
+ {
+ 	int i = 0;
+@@ -269,9 +250,6 @@ struct asus_wmi {
+ 	u32 tablet_switch_dev_id;
+ 	bool tablet_switch_inverted;
+ 
+-	/* The ROG Ally device requires the MCU USB device be disconnected before suspend */
+-	bool ally_mcu_usb_switch;
+-
+ 	enum fan_type fan_type;
+ 	enum fan_type gpu_fan_type;
+ 	enum fan_type mid_fan_type;
+@@ -4698,8 +4676,6 @@ static int asus_wmi_add(struct platform_device *pdev)
+ 	asus->egpu_enable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU);
+ 	asus->dgpu_disable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_DGPU);
+ 	asus->kbd_rgb_state_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_STATE);
+-	asus->ally_mcu_usb_switch = acpi_has_method(NULL, ASUS_USB0_PWR_EC0_CSEE)
+-						&& dmi_check_system(asus_ally_mcu_quirk);
+ 
+ 	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_MINI_LED_MODE))
+ 		asus->mini_led_dev_id = ASUS_WMI_DEVID_MINI_LED_MODE;
+@@ -4892,34 +4868,6 @@ static int asus_hotk_resume(struct device *device)
+ 	return 0;
  }
  
- static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
-+	.display_off = acpi_s2idle_display_off,
- 	.begin = acpi_s2idle_begin,
- 	.prepare = acpi_s2idle_prepare,
- 	.prepare_late = acpi_s2idle_prepare_late,
-@@ -644,6 +678,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
- 	.restore_early = acpi_s2idle_restore_early,
- 	.restore = acpi_s2idle_restore,
- 	.end = acpi_s2idle_end,
-+	.display_on = acpi_s2idle_display_on,
+-static int asus_hotk_resume_early(struct device *device)
+-{
+-	struct asus_wmi *asus = dev_get_drvdata(device);
+-
+-	if (asus->ally_mcu_usb_switch) {
+-		/* sleep required to prevent USB0 being yanked then reappearing rapidly */
+-		if (ACPI_FAILURE(acpi_execute_simple_method(NULL, ASUS_USB0_PWR_EC0_CSEE, 0xB8)))
+-			dev_err(device, "ROG Ally MCU failed to connect USB dev\n");
+-		else
+-			msleep(ASUS_USB0_PWR_EC0_CSEE_WAIT);
+-	}
+-	return 0;
+-}
+-
+-static int asus_hotk_prepare(struct device *device)
+-{
+-	struct asus_wmi *asus = dev_get_drvdata(device);
+-
+-	if (asus->ally_mcu_usb_switch) {
+-		/* sleep required to ensure USB0 is disabled before sleep continues */
+-		if (ACPI_FAILURE(acpi_execute_simple_method(NULL, ASUS_USB0_PWR_EC0_CSEE, 0xB7)))
+-			dev_err(device, "ROG Ally MCU failed to disconnect USB dev\n");
+-		else
+-			msleep(ASUS_USB0_PWR_EC0_CSEE_WAIT);
+-	}
+-	return 0;
+-}
+-
+ static int asus_hotk_restore(struct device *device)
+ {
+ 	struct asus_wmi *asus = dev_get_drvdata(device);
+@@ -4964,8 +4912,6 @@ static const struct dev_pm_ops asus_pm_ops = {
+ 	.thaw = asus_hotk_thaw,
+ 	.restore = asus_hotk_restore,
+ 	.resume = asus_hotk_resume,
+-	.resume_early = asus_hotk_resume_early,
+-	.prepare = asus_hotk_prepare,
  };
  
- void __init acpi_s2idle_setup(void)
+ /* Registration ***************************************************************/
 -- 
 2.46.1
 
