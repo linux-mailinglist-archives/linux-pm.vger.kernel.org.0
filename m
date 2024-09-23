@@ -1,159 +1,222 @@
-Return-Path: <linux-pm+bounces-14557-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14558-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93A7997E91C
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 11:53:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA02F97E930
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 12:00:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 594CF281B02
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 09:53:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79AE92810B3
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 10:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5858D194AFE;
-	Mon, 23 Sep 2024 09:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 045A4195B18;
+	Mon, 23 Sep 2024 10:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MZ+hq6OI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dYF6H/nc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583EE8479;
-	Mon, 23 Sep 2024 09:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053AC19580B
+	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 10:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727085191; cv=none; b=LeTCLeYw4/vxkRyqI3nbPsIHUNSonuTIBYdT3KhUOwGhOLaxBl1s6w15YhR44Q3RD1CzI+bbhDvAF562SPnSRcLmbwIYOOD3DINYRMev2uP+ajECrTh7AU2rrwZ/mR86jZYBHwUyzNIQ2Zc6o6spsHuWu6kGZ8mNDFUes3bxw2k=
+	t=1727085613; cv=none; b=cwTvT1EWthp+4qZ18d08K0kyOe8YbqR+61/FOIUakb3poAA350pkIRLidI79tgBv11B+iWowOIu48S9+448BoZiW2V65hs1nVTPNlcRpSpuqp/FI6i2V53g6bWxoF15izYK6xnoQQhPHQ4EHG2dEDJgi1DXtcXG7zZXZ700wCvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727085191; c=relaxed/simple;
-	bh=oZq/tJZEKhLPOMgfoJYimVhT73cmX0YvXhNZwch10fw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d1Qu7lqr6AZUaNEsGMu9lNPVfB1qH2i3KYsNQz5wFFGTAf2GoX0QhYr9/bA1hQpwMNG1IgSmhL2tHXST+TXNZpTvcm4xEvDDzuapTf7t1Uh0dg5ocg7fcQYW/WEhkqUs6X2dehiS6eDoGhiYM/1GlOkO/yY4edHrspZBv5jNHYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=MZ+hq6OI; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1727085187;
-	bh=oZq/tJZEKhLPOMgfoJYimVhT73cmX0YvXhNZwch10fw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MZ+hq6OINW90+WpTkHHmPOoq2HKPAuvI+1xkqbswtdYsklz/MSFzr68+Q+giSL+I5
-	 OzP9T9Zr4wDKneB6nMIYOUVE4Fm3bAbN3ouV21gTJTi2xXnyp7DzwK9oRCcafr5ody
-	 WFj5GYNdLHfbZbXWSmPRUUGE0etUK0yOuZdYIbdXxTfyrvzezFQV8LHaNU197eITR9
-	 +c9hdBh2po9xsq8ZwmGclZ597SEZhcqwtqv3bVRGUxKmfMJ8PQbFuYjZBdEa1LsKZB
-	 wydLnlk5Im0F2Q9H+qjKlLAFoanlLXpwwrXA2ndHDXHHaqAx/wicl937ots20axw9F
-	 cIAGwuzXBkXfA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 57D9417E10C2;
-	Mon, 23 Sep 2024 11:53:06 +0200 (CEST)
-Message-ID: <122e5099-4f0b-41cc-93c9-7ccdfc0207ad@collabora.com>
-Date: Mon, 23 Sep 2024 11:53:06 +0200
+	s=arc-20240116; t=1727085613; c=relaxed/simple;
+	bh=h9wCXCzge/7pjHAsTiF24nQOEtdLPzhlTqX6X2I8S4Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e7cICBaK6Z1jzKeaZ/5vCCuGXboB1RDL+2GMZriWkQWZ1vaGffjQqZ19c87h62OkRRk++EBb014oGiqh5MaEtfn/MqTem3rTF295tfe+6Q0zzBqii9nDPONrjNZqq7TEItQvPOjWJ/EiJem4aIzV4eyf9Ojtdb5cqKi6ws23VIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dYF6H/nc; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-374bfc395a5so2672498f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 03:00:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727085610; x=1727690410; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sCDW5f7z1X54LYH7U789CJkJl+8jsyNS+1Q1CPdtMY4=;
+        b=dYF6H/ncWh+9wY6v8Xvjwzadif3cRKdwOHfpnqkbqwGp8zWsfeFk0VkCsunPiJKmOq
+         BCMXLftQq0auQY6yVkxD6q8FUdeMSNPwiq81/Supp3I6rf6piK3US1BFL/zHpcF+xWZg
+         ezDxo3MYoXGAjcAamKzYTNya2FGmN9CqA1Xd+obeWF54PY6fQkzc0HPLlrTOv3k4+J0R
+         qHltL2CRqz1AeGdHmNwY5A2hiWD/P5Nltt4DUX142froYr4r7k02vSg9t8yg+9Za6bWX
+         RVzSvmjW83ukuGbWlUaj8R51Pk2jHbnkD6UbdCWed/3ahTdAoAl0iFItkYxWnmnEThZX
+         q7Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727085610; x=1727690410;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sCDW5f7z1X54LYH7U789CJkJl+8jsyNS+1Q1CPdtMY4=;
+        b=Ogp5JjSA+EEQj49lHosvkkeC0dnckP1iL4Jh6Fv/4MWXYQroogHZN986tgUa5H0MSp
+         0Ie/oYCpqkZUyb3cwaeGod01mdHk+8B6dkfgb/bgHU64RMFubfRSSnG43pfM/e1edxPk
+         dGHwrYD5/qdTCEXbic7r8NSqWzw8wPtdGjQdBkGxFSXT4yGGTsbeyZ/KZym1cP+gLzSZ
+         njesAYoNXJRQxh3+uGxRsATAkBAxwA/+bJVmfAcr8BRw6s4lUUOUasWEuft3KPqE4iI/
+         2hs9KGbze4r0Z/kv3JOeNW2eYihAGrZSVgLbVLHPLqMf5TK+lJKhtWSvwDU4hCLU7xA0
+         zbNw==
+X-Gm-Message-State: AOJu0YwPM8pnY2LGxM3DNrdVgjC9CVydHS0BCCXdIifrJOdtBbzG+AbR
+	s1OVS4FgF87RB7ZYs3vffcp3SYlEfjYVxN71boGMDsO2NvgsWwHLiX1KDSHLup4gnWSu5wnB1LF
+	Y
+X-Google-Smtp-Source: AGHT+IH4V0HCRp/t3hMiZk8L3E6+v4tSqgvmFHWOc5Wvll52LzNGGm/gGiprpb2NvIF+kGoNHVK+gw==
+X-Received: by 2002:a5d:4f05:0:b0:374:d006:ffae with SMTP id ffacd0b85a97d-37a41497226mr7020882f8f.6.1727085610168;
+        Mon, 23 Sep 2024 03:00:10 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378e73f62dasm23977216f8f.49.2024.09.23.03.00.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Sep 2024 03:00:09 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: daniel.lezcano@linaro.org,
+	rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	lukasz.luba@arm.com,
+	quic_manafm@quicinc.com
+Subject: [PATCH v4 0/6] Add thermal user thresholds support
+Date: Mon, 23 Sep 2024 11:59:56 +0200
+Message-ID: <20240923100005.2532430-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-To: Macpaul Lin <macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
- Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
- <olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Sean Wang <sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
- Alexandre Mergnat <amergnat@baylibre.com>
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
- MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- Chen-Yu Tsai <wenst@chromium.org>
-References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
- <20240918064955.6518-2-macpaul.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20240918064955.6518-2-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 18/09/24 08:49, Macpaul Lin ha scritto:
-> Convert the mfd: mediatek: mt6397 binding to DT schema format.
-> 
-> MT6323, MT6358, and MT6397 are PMIC devices with multiple function
-> subdevices. They share a common PMIC design but have variations in
-> subdevice combinations.
-> 
-> Key updates in this conversion:
-> 
-> 1. RTC:
->     - Convert rtc-mt6397.txt and merge into parent MT6397 PMIC DT schema.
-> 
-> 2. Regulators:
->     - Align to generic name "regulators".
->     - Update references from .txt to .yaml for mt6323, mt6358, and mt6397
->       regulators.
->     - Simplify regulator name labels in device tree examples.
-> 
-> 3. Audio Codec:
->     - Convert sound/mt6358.txt and merge into parent MT6397 PMIC DT schema.
->     - Align to generic name "audio-codec" for codec and sound subdevices.
->     - Add "mediatek,dmic-mode" and "Avdd-supply" properties.
-> 
-> 4. Clocks:
->     - Align to generic name "clocks" for clockbuffer subdevices.
-> 
-> 5. LEDs:
->     - Convert leds-mt6323.txt and merge into parent MT6397 PMIC DT schema.
->     - Update LED binding.
-> 
-> 6. Keys:
->     - Add detailed descriptions for power and home keys.
->     - Add compatible: mediatek,mt6358-keys.
-> 
-> 7. Power Controller:
->     - Convert mt6323-poweroff.txt and merge into parent MT6397 PMIC DT
->       schema.
->     - Add #power-domain-cells property to fix dt-binding check error.
->     - Clarify "BBPU" as "Baseband power up".
-> 
-> 8. Pinctrl:
->     - Align to generic name "pinctrl" instead of "pin-controller".
-> 
-> 9. Compatible:
->     - Drop "mediatek,mt6357" since there is a separated DT Schema
->       for PMIC MT6357.
-> 
-> 10. Examples:
->     - MT6323: Retain complete examples for this PMIC.
->     - MT6358 and MT6397: simplify settings in regulators.
->      - Preserve "audio-codec", "clocks", "pinctrl", "rtc", and "keys"
->        sections as they contain typical settings for different PMICs.
-> 
-> Additional updates:
-> - MAINTAINERS: Add co-maintainers and reference to
->    mfd/mediatek,mt6397.yaml for LED and power-controller drivers.
-> - input/mediatek,pmic-keys.yaml: Update reference to
->    mfd/mediatek,mt6397.yaml.
-> 
-> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+The trip points are a firmware description of the temperature limits
+of a specific thermal zone where we associate an action which is done
+by the kernel. The time resolution is low.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The userspace has to deal with a more complex thermal management based
+on heuristics from different information coming from different
+places. The logic is much more complex but based on a bigger time
+resolution, usually one second based.
 
+The purpose of the userspace is to monitor the temperatures from
+different places and take actions. However, it can not be constantly
+reading the temperature to detect when a temperature threshold has
+been reached. This is especially bad for mobile or embedded system as
+that will lead to an unacceptable number of wakeup to check the
+temperature with nothing to do.
+
+On the other side, the sensors are now most of the time interrupt
+driven. That means the thermal framework will use the temperature trip
+points to program the sensor to trigger an interrupt when a
+temperature limit is crossed.
+
+Unfortunately, the userspace can not benefit this feature and current
+solutions found here and there, iow out-of-tree, are to add fake trip
+points in the firmware and enable the writable trip points.
+
+This is bad for different reasons, the trip points are for in-kernel
+actions, the semantic of their types is used by the thermal framework
+and by adding trip points in the device tree is a way to overcome the
+current limitation but tampering with how the thermal framework is
+supposed to work. The writable trip points is a way to adjust a
+temperature limit given a specific platform if the firmware is not
+accurate enough and TBH it is more a debug feature from my POV.
+
+The user thresholds mechanism is a way to have the userspace to tell
+thermal framework to send a notification when a temperature limit is
+crossed. There is no id, no hysteresis, just the temperature and the
+direction of the limit crossing. That means we can be notified when a
+temperature threshold is crossed the way up only, or the way down only
+or both ways. That allows to create hysteresis values if it is needed.
+
+Those thresholds are refered as user thresholds in order to do the
+difference with the trip points which are similar.
+
+An user threshold can be added, deleted or flushed. The latter means
+all user thresholds belonging to a thermal zone will be deleted.
+    
+When one or several user thresholds are crossed, an event is sent to
+the userspace.
+
+All aforementioned actions and events lead to a notification to the
+userspace. A user threshold change (add, delete and flush) is notified
+to the userspace with the process id responsible of the action.
+
+Along with the kernel changes, the thermal library has been extended
+to provide the different API to deal with the new user threshold
+netlink events and commands.
+
+In addition, the thermal-engine skeleton uses these new API by
+flushing and adding user thresholds as well as getting the
+notification about these actions.
+
+Overall the series has been tested with the thermal-engine skeleton
+and some selftests which are not part of this series.
+
+Changelog:
+  V4:
+    - Fix missing stubs when THERMAL_NETLINK=n (kernel test robot)
+
+  V3:
+    - the first patch of the v2 series has been merged
+
+    - Modified the description to split the information between the
+      cover letter and the patch 1 description (Rafael)
+
+    - Made the thresholds code as part of the core (Rafael)
+
+    - Converted the thresholds into a list and directly declared in
+      the thermal zone device structure (Rafael)
+
+    - Changed the name of the field in the thermal zone device
+      structure to user_thresholds (Rafael)
+
+    - Added #include "thermal_thresholds.h" (Rafael)
+
+    - Combined the conditions in the function
+      __thermal_threshold_is_crossed (Rafael)
+
+    - Moved the function thermal_thresholds_flush() before
+      thermal_thresholds_exit() (Rafael)
+
+    - Change thermal_thresholds_handle() to return void (Rafael)
+
+    - Move the list field on top the of the structure threshold and
+      renamed it list_node (Rafael)
+
+    - Changed THERMAL_THRESHOLD_* notifications to
+      THERMAL_TZ_THRESHOLD_* (Rafael)
+
+  V2:
+    - Compute min and max in thermal_zone_device_update() but keep
+      the loop as it is (Rafael)
+
+    - Include slab.h to fix compilation warnings on some architectures
+      with kmalloc and kfree (kernel test robot)
+
+Daniel Lezcano (6):
+  thermal/core: Add user thresholds support
+  thermal/core: Connect the threshold with the core
+  thermal/netlink: Add the commands and the events for the thresholds
+  tools/lib/thermal: Make more generic the command encoding function
+  tools/lib/thermal: Add the threshold netlink ABI
+  tools/thermal/thermal-engine: Take into account the thresholds API
+
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/thermal_core.c                |   9 +
+ drivers/thermal/thermal_core.h                |   2 +
+ drivers/thermal/thermal_netlink.c             | 239 +++++++++++++++++-
+ drivers/thermal/thermal_netlink.h             |  34 +++
+ drivers/thermal/thermal_thresholds.c          | 235 +++++++++++++++++
+ drivers/thermal/thermal_thresholds.h          |  19 ++
+ include/linux/thermal.h                       |   3 +
+ include/uapi/linux/thermal.h                  |  30 ++-
+ tools/lib/thermal/commands.c                  | 167 +++++++++++-
+ tools/lib/thermal/events.c                    |  58 ++++-
+ tools/lib/thermal/include/thermal.h           |  40 +++
+ tools/lib/thermal/libthermal.map              |   5 +
+ tools/lib/thermal/thermal.c                   |  17 ++
+ tools/thermal/lib/Makefile                    |   2 +-
+ tools/thermal/thermal-engine/thermal-engine.c | 109 +++++++-
+ 16 files changed, 921 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/thermal/thermal_thresholds.c
+ create mode 100644 drivers/thermal/thermal_thresholds.h
+
+-- 
+2.43.0
 
 
