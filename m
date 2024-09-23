@@ -1,149 +1,189 @@
-Return-Path: <linux-pm+bounces-14592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14593-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F88997EFF2
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 19:49:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A1F097F046
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 20:16:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52FB41C212C1
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 17:49:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B954A1F2277C
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 18:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738E419E990;
-	Mon, 23 Sep 2024 17:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7708B18054;
+	Mon, 23 Sep 2024 18:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="VEiXiiV2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hTJwnhu1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08966101DE
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 17:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFEA101DE;
+	Mon, 23 Sep 2024 18:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727113754; cv=none; b=ILzp75hYBhyRwzXNp7XhpVFFwB+kCbfTiORH4WK7jhG5KnTzIHGG7pTNXP9q9xhq9M5bwYD1+ikqrbW3Q7cxL9WCyrC70+k2OomAoiMOkg3ti09+MUjt5hj7MvUNpVT3CZ7YSpqRx1XV1IgCkp5AdLvX/z13sO7szwirrCl/6j0=
+	t=1727115399; cv=none; b=SFMOqGLmu95EmLxeQFmxYHgXzOr1KD5D0HuaeldxU0xC8voD/s+pWh2sP5KYRRY0DGC8YzmX1VRtaMK9E1FSORDITSrFbJoUWM2m/coIjcSfsNzfPAokd15xPI17bm3v+ONMG9PFRZUignNRLvBl/4gVKOA57sDQZvFfHfJlulA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727113754; c=relaxed/simple;
-	bh=mgVo3Ao6QAQukPpFI4gkBwKqQYbb5Wb+aTsANNGo2DM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UNKobGCKUXNeI0maXrlWNyC0vJdHw6FbkhCmIzPyJpDkGqpD7pvLsIaY9C5Vvx/+cpslFChqLhPk9/CuFDDjpnUsiD2xpCo7h7roEBnGgE+KRxUEK1ewWBOggRd3gsuNuUax6XkgbutoANFIgNzx40UWM9bbBq+bRyGf48WHLO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=VEiXiiV2; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 50AE32E03761
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 20:49:07 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1727113747;
-	bh=int5kvgORBBWIo01uZK+ECy/IcTdMAr4gK/x5zB/C+E=;
-	h=Received:From:Subject:To;
-	b=VEiXiiV2/l90Cib16KXw7oE6l9DxeFPON9P++XHRJCrqPThrjjCoXiZvjAqoQJtpv
-	 7jBOlFY3+rW+g++Rb5tH04EKOx/3n4rOE+nkgou+HFzV4jAZn/+zFo3dgQ5XGPHMMm
-	 s3g6PncvYFuV1kob2LsrDLKlrE6+64rswCHgqS6U=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.170) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f170.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f170.google.com with SMTP id
- 38308e7fff4ca-2f7657f9f62so51523691fa.3
-        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 10:49:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCUd3KePWzygXA+ohr+anvIYdM/W0GW6pzjLQRlFPIMvardMAXpeb44FsQL4dFVDmW6lzBII20t6XA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFmHBADeVS+uPODoLgWoFpWECrgIPfb9JkJ/9Hh9ZLVp3Xvpr9
-	YwJ5R1K6skYFCmXP1B/Pt+om5NXvmbMWMZuLb48/MgslmWPWKr0rMHR53IZknIw09Spdc3i+X9E
-	kUjAPZW4jVqCRX+7cRjiH4eYZ9gE=
-X-Google-Smtp-Source: 
- AGHT+IHA19n6XyxnfzeIzBStuaOkGgtDV4ro+UqmMG9ZWzZYxGjbq1/ylKX0EqBp1ikWVf0EcU6JMWcNiZRqNZHSpY4=
-X-Received: by 2002:a2e:b8cc:0:b0:2f4:50c:ab55 with SMTP id
- 38308e7fff4ca-2f7cc371150mr53707561fa.16.1727113746699; Mon, 23 Sep 2024
- 10:49:06 -0700 (PDT)
+	s=arc-20240116; t=1727115399; c=relaxed/simple;
+	bh=UpKtJGv072LI/6W86eXNjipHjl/buFg4OTYSd1Vr/g8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d4en4kWApi7IvG7PMkicDYHYHD8hb52rACq4l2XpOT5y4H2AjyATr3IFxVvItR1eNIuWngQMMRv93lb6pHA36uovpB5iw9aksJHu+bBLpX8eFW1+eAVYy6v7Nuu67S21p7/haxvAzrY5oQX25TjjJMD5pKx0XQmQfCR3frPvcAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hTJwnhu1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9ECC4CEC4;
+	Mon, 23 Sep 2024 18:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727115398;
+	bh=UpKtJGv072LI/6W86eXNjipHjl/buFg4OTYSd1Vr/g8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hTJwnhu1yx7tc0bAlCF9reyJ8Ye4MK/apmDuDflxL2RmLmMXvOYnMiEsIgiLuVdpp
+	 Geh3y5vw9vIjMZQ8BxsTchQ4LdbAqag8Z0jHPIRVWcwPLVTnmEIRsNvyWM6Xy2kFCl
+	 Mgt/L3acL6hQOma7EW73q8AcMPvfZZo91mSFDd9Gf3Knr3ybPJpa/usx45Z/cNN6sG
+	 Us/5jGuEJupc8hRKDlpLg7366Js72CYQkycpZDrexICfN/woMtkocDdDucSBcpwLS5
+	 4uChMguGLSKo04Z98RQID/FRjW+DDsQjQLhge4lFtz0H8Jxgj438u2tvqyRjovLpF9
+	 cVMGefu2DlaUg==
+Received: by pali.im (Postfix)
+	id 144B7775; Mon, 23 Sep 2024 20:16:32 +0200 (CEST)
+Date: Mon, 23 Sep 2024 20:16:31 +0200
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Jerry Lv <Jerry.Lv@axis.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Kernel <Kernel@axis.com>
+Subject: Re: [PATCH] power: supply: bq27xxx_battery: Do not return ENODEV
+ when busy
+Message-ID: <20240923181631.3plimohmg4vnjwtb@pali>
+References: <20240913-foo-fix2-v1-1-a0f499404f3a@axis.com>
+ <20240913212715.gmchsmmaqrhksmhx@pali>
+ <VI1PR02MB1007663D83495B0594DE794C7F4662@VI1PR02MB10076.eurprd02.prod.outlook.com>
+ <20240914082447.mrxtfgazkpaeqetu@pali>
+ <VI1PR02MB1007675ED9E1F1DBC6A915680F46F2@VI1PR02MB10076.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: 
- <CAGwozwHqHbHNi53T87m36-OZ8suCEo1wgJ9fPPgPdcLnt_+S4g@mail.gmail.com>
- <20240923013657.7464-1-derekjohn.clark@gmail.com>
- <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
- <b43f9654-4dd7-4f3c-95b5-575473c3bcc1@app.fastmail.com>
- <CAGwozwE_MXuqreQvDFyVyodrzH5HFB=Nab9LfxD9DMB+HGkt3Q@mail.gmail.com>
- <fa1cb9c1-8b56-4fbf-89aa-86ffc6dc837b@amd.com>
- <CAGwozwHvXkG824xHcfnr6E+B6iLr6KJiLEjJhx4hEhieHYob8g@mail.gmail.com>
- <358ca905-ae53-4d2d-b09a-8e708d6fadd8@amd.com>
- <CAGwozwGsyebGE78SKMckkm2=8uqDTX+S-Jnxrn61X_UHVEDcDA@mail.gmail.com>
- <ea2232b7-fb29-429b-af9d-af43a2c0cacb@amd.com>
-In-Reply-To: <ea2232b7-fb29-429b-af9d-af43a2c0cacb@amd.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 23 Sep 2024 19:48:55 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwF13C6oq1zY9sYx4i-FB_FiWienXGdMzKZ4+mu-g3O6_w@mail.gmail.com>
-Message-ID: 
- <CAGwozwF13C6oq1zY9sYx4i-FB_FiWienXGdMzKZ4+mu-g3O6_w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Luke Jones <luke@ljones.dev>,
- "Derek J. Clark" <derekjohn.clark@gmail.com>, me@kylegospodneti.ch,
-	Denis Benato <benato.denis96@gmail.com>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <172711374763.16513.3432105973774603347@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <VI1PR02MB1007675ED9E1F1DBC6A915680F46F2@VI1PR02MB10076.eurprd02.prod.outlook.com>
+User-Agent: NeoMutt/20180716
 
-> Considering the previous experience, maybe you can help to document
-> their update protocol?  I'm happy to collaborate on the fwupd side if
-> you can help push it along.
+Thank you for detailed information about i2c NAK. In this case try to
+consider if it would not be better to add retry logic in the
+bq27xxx_battery_i2c_read() function.
 
-If I get the time I might try to, but if this patch works on the
-original Ally, this fire is handled as far as I am concerned. Even if
-it does not merge and even with the little reboot quirk.
+If it is common that bq chipset itself returns i2c NAKs during normal
+operations then this affects any i2c read operation done by
+bq27xxx_battery_i2c_read() function.
 
-So it moves back in the stack of priorities. I still think fw and bios
-updates are important and I have been thinking about it too. More on
-the GUI side though.
+So this issue is not related just to reading "flags", but to anything.
+That is why I think that retry should be handled at lower layer.
 
-At least BIOS updates are kind of solved for both the Ally and the Go.
-However, the Go half bricks itself in almost all updates from WIndows.
-I had to power it off during a bios update twice and that's from
-Windows. I am not going near it any time soon.
-
-> AFAICT any need for this series goes away when you have an easy way to
-> update a handheld that is running Linux already.  I would take a pile of
-> userspace code over kernel quirks any day.
-
-I cannot agree with you more on skipping the kernel when possible. It
-is why most of my work is in userspace.
-
-"Oh custom TDP/Fan on the legion go? Custom TDP is mode 4 that does
-not map cleanly to a platform_profile, half of the BIOSes of the
-legion go forget the custom TDP when changing TDP profile, and there
-is a hw combo to change the TDP. Sniff the kernel net socket for ACPI
-events to capture TDP mode changes, then if in Custom mode, wait 2
-seconds, set the custom TDP the user saved previously, and then the
-fan curve. Want to disable the custom fan curve? Pick a random TDP
-profile, switch to it, and repeat."
-
-However, with the kernel firing the _DSMs Display Off and Screen Entry
-calls after the suspend sequence back to back with no delay when
-WIndows calls them seconds apart before the suspend sequence, I can
-personally see the eventuality.
-
-Three talented OSS devs + the Asus engineering team had to work for 1
-month on avoiding this table and now they have to move on to
-validating the firmware, shipping it, etc. I also spent too much work
-on making this upstreamable, but I plan to use this patch so it is
-kind of OK, unless the Sleep _DSM does not do much.
-
-Also, did I mention that the Ally gets stuck on 5W TDP semi randomly
-after suspend and has a really nice and complex _DSM sleep entry? And
-I am the only one that knows it because Handheld Daemon is the only
-TDP solution that does not use ryzenadj to set TDP on the Ally. So
-next step for me is doing the same series for the Sleep Entry/Exit and
-expanding the quirk table. I am not waiting for a BIOS update.
-
-Antheas
+On Monday 23 September 2024 08:14:13 Jerry Lv wrote:
+> Hi Pali,
+> 
+> Thanks for your excellent suggestion, I will change the code accordingly.
+> 
+> About the question: 
+> Anyway, which bus is BQ27Z561-R2 using (i2c?)? And how is EBUSY indicated or transferred over wire?
+> --- Yes, we connect the gauge BQ27Z561 to I2C. When it's busy, the feedback we got from the logic analyser is "NAK".
+> 
+> 
+> Best Regards,
+> Jerry Lv
+> 
+> ________________________________________
+> From: Pali Rohár <pali@kernel.org>
+> Sent: Saturday, September 14, 2024 4:24 PM
+> To: Jerry Lv
+> Cc: Sebastian Reichel; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Kernel
+> Subject: Re: [PATCH] power: supply: bq27xxx_battery: Do not return ENODEV when busy
+> 
+> Hello Jerry,
+> 
+> I think that this issue should be handled in different way.
+> 
+> First thing is to propagate error and not change it to -ENODEV. This is
+> really confusing and makes debugging harder.
+> 
+> Second thing, if bq27xxx_read() returns -EBUSY, sleep few milliseconds
+> and call bq27xxx_read() again.
+> 
+> This should cover the issue which you are observing and also fixing the
+> problem which you introduced in your change (interpreting error code as
+> bogus cache data).
+> 
+> Anyway, which bus is BQ27Z561-R2 using (i2c?)? And how is EBUSY
+> indicated or transferred over wire?
+> 
+> Pali
+> 
+> On Saturday 14 September 2024 02:57:39 Jerry Lv wrote:
+> > Hi Pali,
+> >
+> > (Sorry for inconvineient! previous email was rejected by some email list for some HTML part, so I edit it and send it again.)
+> >
+> > Yes, bq27xxx_read() will return -EBUSY, and bq27xxx_read() will be called in many functions.
+> >
+> > In our product, some different applications may access the gauge BQ27Z561-R2, and we see many times the returned error code is -ENODEV.
+> > After debugging it by oscillograph and adding some debug info, we found the device is busy sometimes, and it will recover very soon(a few milliseconds).
+> > So, we want to exclude the busy case before return -ENODEV.
+> >
+> > Best Regards,
+> > Jerry
+> >
+> > On Friday 13 September 2024 16:45:37 Jerry Lv wrote:
+> > > Multiple applications may access the device gauge at the same time, so the
+> > > gauge may be busy and EBUSY will be returned. The driver will set a flag to
+> > > record the EBUSY state, and this flag will be kept until the next periodic
+> > > update. When this flag is set, bq27xxx_battery_get_property() will just
+> > > return ENODEV until the flag is updated.
+> >
+> > I did not find any evidence of EBUSY. Which function and to which caller
+> > it returns? Do you mean that bq27xxx_read() returns -EBUSY?
+> >
+> > > Even if the gauge was busy during the last accessing attempt, returning
+> > > ENODEV is not ideal, and can cause confusion in the applications layer.
+> >
+> > It would be better to either propagate correct error or return old value
+> > from cache...
+> >
+> > > Instead, retry accessing the gauge to update the properties is as expected.
+> > > The gauge typically recovers from busy state within a few milliseconds, and
+> > > the cached flag will not cause issues while updating the properties.
+> > >
+> > > Signed-off-by: Jerry Lv <Jerry.Lv@axis.com>
+> > > ---
+> > >  drivers/power/supply/bq27xxx_battery.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+> > > index 750fda543308..eefbb5029a3b 100644
+> > > --- a/drivers/power/supply/bq27xxx_battery.c
+> > > +++ b/drivers/power/supply/bq27xxx_battery.c
+> > > @@ -2029,7 +2029,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+> > >                bq27xxx_battery_update_unlocked(di);
+> > >        mutex_unlock(&di->lock);
+> > >
+> > > -     if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
+> > > +     if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0 && di->cache.flags != -EBUSY)
+> > >                return -ENODEV;
+> >
+> > ... but ignoring error and re-using the error return value as flags in
+> > code later in this function is bad idea.
+> >
+> > >
+> > >        switch (psp) {
+> > >
+> > > ---
+> > > base-commit: da3ea35007d0af457a0afc87e84fddaebc4e0b63
+> > > change-id: 20240913-foo-fix2-a0d79db86a0b
+> > >
+> > > Best regards,
+> > > --
+> > > Jerry Lv <Jerry.Lv@axis.com>
+> > >
+> >
 
