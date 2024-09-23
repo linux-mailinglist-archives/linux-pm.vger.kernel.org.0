@@ -1,112 +1,169 @@
-Return-Path: <linux-pm+bounces-14581-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14582-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03E8497EEF2
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 18:12:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A03F97EEFD
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 18:15:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A281A1F2321B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 16:12:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4108281EF8
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 16:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E654719993C;
-	Mon, 23 Sep 2024 16:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAE4146A86;
+	Mon, 23 Sep 2024 16:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="BFuRfF7C"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="uWO/aCSJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AED6197A8A
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 16:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1194D7DA81;
+	Mon, 23 Sep 2024 16:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727107920; cv=none; b=eZrmRx1IGYGjB4FNTlgObke5fnrx1XoUEa0TaQphAz83sozmtK6CzMmiTOLKlCS9czk0/dmAgYmiiyQuJYZlYpltJUs32LoJebMRdsX6B6RKWzXXQv6Y5LTpYfe20svJMjQDw+EvzPWKVwF5fUus8XT3EU5mosI9eBgYh4XSsXc=
+	t=1727108132; cv=none; b=ivUMfOmVUOnG8KoLTAxZ2CdbZtNDQd77bZc2yFTDPRJG4VRPPSY2pxbtu08YUdX+Qn5MOhKp/5wK1uIdPl9iio9QY6XwgBkk6IOyLCOcL+/s2vYsH9tjfH8v3kegxOKQF+Ry27xjnngTIO1xDALgF08pONw3ZIFhbCLKQid+uFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727107920; c=relaxed/simple;
-	bh=/6o1pOmJfhZg8dV2ReKL++v56vOJZjHfOtUORNnncyA=;
+	s=arc-20240116; t=1727108132; c=relaxed/simple;
+	bh=L40ikmPqwa9pSrC17GqjzGQXqBPxu/HVqgcMX7iPnEs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OGMLcDP0Mv0Lj83qasPgjNYPdQJTYgJDTS53mPaZqevqrEVN5ZzoJq4jPJVQwXXbBNteuBNugj160iedADXqCUi87v03fLko7aEF1QCsLzqdWPhittKWhZJDEIumC9+pRCiGYaSiCjQIkvP+0X3mjVP2NekOuw5txJnBqKia4ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=BFuRfF7C; arc=none smtp.client-ip=185.138.42.100
+	 To:Cc:Content-Type; b=STmANvk7RP5Ur6AcgBJTV1kAtEaq/QEYryH4y/qA1oRmSTFAhDi/YoIRutPqRmk+K/ssbmK4OUGsNmCjxIaKMejkiwMdukf4ozneDKj7cK2PxKC8nKRw39QWDiiCEyW1f5rCC/WGG1ktiPgnT8QQFjlLTtwvdnSWdo7VA8CKOKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=uWO/aCSJ; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 5B5792E09622
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 19:11:54 +0300 (EEST)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 563C62E05EEA;
+	Mon, 23 Sep 2024 19:15:26 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1727107914;
-	bh=/6o1pOmJfhZg8dV2ReKL++v56vOJZjHfOtUORNnncyA=;
+	s=default; t=1727108126;
+	bh=fiBDYqLO9vwTDa0kENC/H8tsARqBxWrgVq2JSqvU140=;
 	h=Received:From:Subject:To;
-	b=BFuRfF7CZWvniLDF8lSEeV8ZJYMZyPpzjs6SWoRd7zRQVKZTRklw8ywCG30rIIG2K
-	 E1R0u20SqHzKgO7UqV5/cr0/w440DSkBpNS6/lB++5AHovMbTemd8LFNqd++AL7uLD
-	 cN3zquMMnHKkO17x0Ki0VsnArY+o43eEI63oyFWY=
+	b=uWO/aCSJoZvT9QiMcRAc5emQMKoX1xDFb7Y+7ba1B4pLai8uGPkA54FtKtjpvDmL4
+	 svqVwLEZBTL+smD9+/l+HT19SvijzmV3mwiWG95kzidBrcXv2qi4AjRJOlztidKTEN
+	 7f6CgvPm3smn8wLnEvq7i9FVnHSk/C0lxJtseqOo=
 Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.175) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f175.google.com
+        spf=pass (sender IP is 209.85.208.176) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f176.google.com
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f175.google.com with SMTP id
- 38308e7fff4ca-2f75b13c2a8so48673201fa.3
-        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 09:11:54 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id
+ 38308e7fff4ca-2f75aaaade6so46910411fa.1;
+        Mon, 23 Sep 2024 09:15:26 -0700 (PDT)
 X-Forwarded-Encrypted: i=1;
- AJvYcCVvZCs8FGSLqAJnNWlJLGvlSf+WcG05KMCmLPdHhJoQpjApi/hnXZH8DgCTh1+cPVIJ7ueKa4beHw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgmjiF02t4ssMLpdAaP7df1i2MxKKK4/IbbFT6I/u/ihPr+WiI
-	cphmZ7yq+pSeg1XrBbknUyh6t93JOCJW1ozWfnQEn+6qXrAPDUWdcvIaW5ICgff8IZfb5A4eJC0
-	aJSaK3YhMxOP4Tl5XkEHmj6GyFvg=
+ AJvYcCUdL2oN4bjr9DirNI11ZH6hb+CYmkOgHTb8dEXikYDpVuw/XLr2nT/RJURDwVjR1daVnP4QB1oda+h1cp1ZdKCdgeiU@vger.kernel.org
+X-Gm-Message-State: AOJu0YwR9i3Qm6XR93jNIqQlqLIL9CdezZSpadCDLTOJXEOQlseyFmYN
+	C6G1zwm2q6OlF3UEtnLsjMEu4WcB4B2v576ek0ZcSY5W5J1pAC0+EnPjjt902py3Q/02Fk2lMwz
+	SlrUXCC30qEAEamreLWOPt8BPvdY=
 X-Google-Smtp-Source: 
- AGHT+IHxhDtHBcWaPItsNShNwqAM9pqoNGMpLM/XDgKv5WFNyrsZVc6dddVOXhsz9TL7feyAEVsQ3BNttKFSrBev9lc=
-X-Received: by 2002:a2e:934a:0:b0:2f6:5fa7:2626 with SMTP id
- 38308e7fff4ca-2f7cb375d32mr45119131fa.39.1727107913719; Mon, 23 Sep 2024
- 09:11:53 -0700 (PDT)
+ AGHT+IFUSrYAetKzeKuNKxEW2XhzLTyBMU/I5sk722yjfHe0+ieu8kH1srSVCZGjB2iBMY4KO+h2hVIrpq3CDi3d2Zw=
+X-Received: by 2002:a05:651c:221b:b0:2f6:5f0a:9d00 with SMTP id
+ 38308e7fff4ca-2f7cc3578ffmr58494731fa.1.1727108125682; Mon, 23 Sep 2024
+ 09:15:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: 
- <CAGwozwHqHbHNi53T87m36-OZ8suCEo1wgJ9fPPgPdcLnt_+S4g@mail.gmail.com>
- <20240923013657.7464-1-derekjohn.clark@gmail.com>
- <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
- <b43f9654-4dd7-4f3c-95b5-575473c3bcc1@app.fastmail.com>
- <CAGwozwE_MXuqreQvDFyVyodrzH5HFB=Nab9LfxD9DMB+HGkt3Q@mail.gmail.com>
- <fa1cb9c1-8b56-4fbf-89aa-86ffc6dc837b@amd.com>
-In-Reply-To: <fa1cb9c1-8b56-4fbf-89aa-86ffc6dc837b@amd.com>
+References: <20240922172258.48435-1-lkml@antheas.dev>
+ <20240922172258.48435-3-lkml@antheas.dev>
+ <1a9b611c-51f0-4c3d-8bc2-62c6b6104fd2@amd.com>
+In-Reply-To: <1a9b611c-51f0-4c3d-8bc2-62c6b6104fd2@amd.com>
 From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 23 Sep 2024 18:11:42 +0200
+Date: Mon, 23 Sep 2024 18:15:14 +0200
 X-Gmail-Original-Message-ID: 
- <CAGwozwHvXkG824xHcfnr6E+B6iLr6KJiLEjJhx4hEhieHYob8g@mail.gmail.com>
+ <CAGwozwFwU=KMgDUmKsYRu323dsuUfQYa8e-aXV3JGGSkgF-RkQ@mail.gmail.com>
 Message-ID: 
- <CAGwozwHvXkG824xHcfnr6E+B6iLr6KJiLEjJhx4hEhieHYob8g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
+ <CAGwozwFwU=KMgDUmKsYRu323dsuUfQYa8e-aXV3JGGSkgF-RkQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] acpi/x86: s2idle: handle Display On/Off calls
+ outside of suspend sequence
 To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Luke Jones <luke@ljones.dev>,
- "Derek J. Clark" <derekjohn.clark@gmail.com>, me@kylegospodneti.ch,
-	Denis Benato <benato.denis96@gmail.com>, linux-pm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	luke@ljones.dev, me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-PPP-Message-ID: 
- <172710791475.19412.17319532649004629488@linux1587.grserver.gr>
+ <172710812674.31882.5644276653664857231@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-> I don't think it's possible to have it both ways that the ordering is
-> wrong AND the timing is wrong.
+Does DRM core handle virtual displays like VNC?
 
-I think the current firmware manifests 2 issues on the Ally X: Display
-On needed to be called once the kernel is ready otherwise it NOOPed
-and Display Off needed to be called 1 second before suspend. Then,
-there is the issue in my previous email that also exists in Windows.
+As mentioned in the cover letter, the _DSM specifies both virtual and
+actual displays.
 
-I tried from 0 - 4000ms for Display off and 0 - 1500ms for Display on.
-Display Off, as long as the RGB fades 100-200ms before, made no
-difference. Display On likewise made no difference.
+Also, Windows behavior is like a lockscreen. 5 seconds after screen
+turns off after inactivity, instantly when you press the power button.
 
-I am currently playing a bit with the calls in the Legion Go. Seems
-like one of them turns off its controller as well.
-
-I did not know fwupd could do microprocessors, if it is simple that
-would be great.
+I tend towards making a sysfs entry. Not sure.
 
 Antheas
+
+On Mon, 23 Sept 2024 at 18:03, Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On 9/22/2024 12:22, Antheas Kapenekakis wrote:
+> > Currently, the Display On/Off calls are handled within the suspend
+> > sequence, which is a deviation from Windows. This causes issues with
+> > certain devices, where the notification interacts with a USB device
+> > that expects the kernel to be fully awake.
+> >
+> > This patch calls the Display On/Off callbacks before entering the suspend
+> > sequence, which fixes this issue. In addition, it opens the possibility
+> > of modelling a state such as "Screen Off" that mirrors Windows, as the
+> > callbacks will be accessible and validated to work outside of the
+> > suspend sequence.
+> >
+> > Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > ---
+> >   kernel/power/suspend.c | 9 +++++++++
+> >   1 file changed, 9 insertions(+)
+> >
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index c527dc0ae5ae..610f8ecaeebd 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -589,6 +589,13 @@ static int enter_state(suspend_state_t state)
+> >       if (state == PM_SUSPEND_TO_IDLE)
+> >               s2idle_begin();
+> >
+> > +     /*
+> > +      * Linux does not have the concept of a "Screen Off" state, so call
+> > +      * the platform functions for Display On/Off prior to the suspend
+> > +      * sequence, mirroring Windows which calls them outside of it as well.
+> > +      */
+> > +     platform_suspend_display_off();
+> > +
+>
+> I thought about it some more over the weekend and if moving the screen
+> on/off _DSM at all I don't feel this is the right place for triggering it.
+>
+> IMO it should be called by DRM core.  That is when the number of CRTCs
+> active goes 1+ -> 0 call screen off and when it goes 0->1+ call screen on.
+>
+> There could be an argument made only for eDP this happens, but I think
+> that's a slippery slope if you end up with an AIO design that uses DP
+> instead of eDP or a desktop for example.  So the safest policy should be
+> across all CRTCs of all GPUs.  During the suspend sequence any that were
+> left on will get turned off, and then it could be triggered at that time
+> instead.
+>
+> By making such a change then when the compositor turns off all displays
+> at runtime you can potentially support dark screen background downloads
+> that have specifically called this _DSM and any actions that are taken
+> from doing so.
+>
+> >       if (sync_on_suspend_enabled) {
+> >               trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+> >               ksys_sync_helper();
+> > @@ -616,6 +623,8 @@ static int enter_state(suspend_state_t state)
+> >       suspend_finish();
+> >    Unlock:
+> >       mutex_unlock(&system_transition_mutex);
+> > +
+> > +     platform_suspend_display_on();
+> >       return error;
+> >   }
+> >
+>
 
