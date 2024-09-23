@@ -1,181 +1,172 @@
-Return-Path: <linux-pm+bounces-14569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E82DE97EC03
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 15:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C6B097EC10
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 15:12:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 255791C213E7
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 13:07:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F4261C21390
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 13:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75251991B0;
-	Mon, 23 Sep 2024 13:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755EE198846;
+	Mon, 23 Sep 2024 13:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2CcblEp8"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="danD9/M0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801BA198E6F;
-	Mon, 23 Sep 2024 13:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6608E13B7BD
+	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 13:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727096823; cv=none; b=CSYkP7AGMdErSEZwwo/t07/EwAVdAQF1/jGE1AcFftdSeMNmYJLWYnTU/K9UMaDh/TrnaP4+DbXIMI2Immo8cOZhipemQbZEyWCGuVs4myTJSjptJq0xT+mhcShAsT/MY7HRS5hnX2NX+4xdcH0+y9P2nZL8J2Dmf+fV2uZPRQI=
+	t=1727097136; cv=none; b=R8fkBPSoapFp59OpaJZpLqbPXuR8nC8xWtn488TIqMfVRsxsqGn6zrJoCMf+Gw5MuXeKgEvwHI0h5YkII68mRWoZjdx/z5HRGzn79KdI0x+NXUDlJDDHiDHrLU5q7D6ITkyWLmlrCrvDY6EPQ11CbEv5PUKuCGhv3dM9RLpiED8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727096823; c=relaxed/simple;
-	bh=o8HTBfVyR5kXn+aqXU7zjNAFtRfUn4jh6KoQZTzAbkc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J4LQCqyf/taqaCGXgE8spAoo+XlJLHmiMxI5o/GN0DrU7Y5N9rIC2FogVTcRF2HOAsY6zDrTeY6+PIDHptjepmGnHpZBJrmvGw1I7b1zJ4FFfoujEIg0SHYl+U8fMm/a5xMwvjjnuyrn4ZmiCr9dW1sjQXHdTTayukO/6HQ8JrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2CcblEp8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5D8C4CEC4;
-	Mon, 23 Sep 2024 13:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727096823;
-	bh=o8HTBfVyR5kXn+aqXU7zjNAFtRfUn4jh6KoQZTzAbkc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=2CcblEp8r66+Mre+tQmJTYKSydEuUo0Y964S1AwaEMY5uonHaHWBCK7YfYCFZ/d3J
-	 MrXCuFZrCqXhALLUj9Bid0XS/gH6mQrdCFsx+85UBZ8H/pCs4FNVxbbrNAH3vBXUKW
-	 G9lxZ7dua4SvCE3cIDrmsYfZa6GsEP2DeXkYNK60=
-Date: Mon, 23 Sep 2024 15:06:58 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: dengjie03 <dengjie03@kylinos.cn>
-Cc: rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, xiehongyu1@kylinos.cn,
-	duanchenghao@kylinos.cn, xiongxin <xiongxin@kylinos.cn>
-Subject: Re: [PATCH] KYLIN: USB: Fix the issue of S4 wakeup queisce phase
- where task resumption fails due to USB status
-Message-ID: <2024092355-chip-stuffy-bd93@gregkh>
-References: <20240923100553.119324-1-dengjie03@kylinos.cn>
+	s=arc-20240116; t=1727097136; c=relaxed/simple;
+	bh=SJIzmdHJpH/fbfEtC3KDt9Sex2b18qIxyMo9n9RsHQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rXlHO863nDXH53Um2rMtd753TkVsz3iMS/k1d5HLi/AUkjddAq3YgNYYHwh3TL8BAvMOk+8+EglHh5Xx3d2jeO2elVjudTxgjP503hE2ULHGKUgv26UZM8zVcemM7XwUJ/91qoBmyokGN8sKC0AZr50UgbjId56Y8+vaPBdpRWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=danD9/M0; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 3100F2E09373
+	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 16:12:01 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1727097121;
+	bh=SJIzmdHJpH/fbfEtC3KDt9Sex2b18qIxyMo9n9RsHQk=;
+	h=Received:From:Subject:To;
+	b=danD9/M0pLlTn3DaNbZx2c6als9HSMUN8pyOMY0/Sy3/JY2+kknY+nr7v6uRnfCKP
+	 OPEkv4QAkt9hRlKBdRVoTFrTj/I6WGhnOqaVGrm6KK2QlO/D+4QsuPP7HZ9cOu2tVf
+	 MST+m8cK+YxbQbxh2lUP1Iblq/ZbS4JMTzxaGi74=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.171) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f171.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f171.google.com with SMTP id
+ 38308e7fff4ca-2f761cfa5e6so43734431fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 06:12:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW2t1Xt9PGpvOQFG3sSy0/j87PKZeVZH3NI8WK2hwDuk1OUpWRYOJwmdpMow29c23hJxY6FFwglnA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHQUC4Yg3x9Vv/Dbf6Zxvr1PtzD+f6H892Y7AlsUTIxqMkLMeu
+	dm8PBmMkOfFvFEFACboEK6pfO3bYtsM9m8wFUts/BvMYQ8xlI2iWR+Btp1e7WqdDvW0AvSLVt37
+	hZS52PJPTFbfmSNtpCYDvUJWQUNA=
+X-Google-Smtp-Source: 
+ AGHT+IHqsvwJDWGEKrXzZ8xqYffThQxo5weKZgc11kYePXJfEya7oF6xo6BQQ/tnY/ashTMWDU7t8ttC5nad6J+cYyU=
+X-Received: by 2002:a2e:9fca:0:b0:2f7:77ff:d739 with SMTP id
+ 38308e7fff4ca-2f7cb2fc01cmr43099621fa.26.1727097120351; Mon, 23 Sep 2024
+ 06:12:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240923100553.119324-1-dengjie03@kylinos.cn>
+References: 
+ <CAGwozwHqHbHNi53T87m36-OZ8suCEo1wgJ9fPPgPdcLnt_+S4g@mail.gmail.com>
+ <20240923013657.7464-1-derekjohn.clark@gmail.com>
+ <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
+ <b43f9654-4dd7-4f3c-95b5-575473c3bcc1@app.fastmail.com>
+In-Reply-To: <b43f9654-4dd7-4f3c-95b5-575473c3bcc1@app.fastmail.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Mon, 23 Sep 2024 15:11:48 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwE_MXuqreQvDFyVyodrzH5HFB=Nab9LfxD9DMB+HGkt3Q@mail.gmail.com>
+Message-ID: 
+ <CAGwozwE_MXuqreQvDFyVyodrzH5HFB=Nab9LfxD9DMB+HGkt3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
+ outside suspend (fixes ROG Ally suspend)
+To: Luke Jones <luke@ljones.dev>
+Cc: "Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>, me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <172709712175.25933.17249161034798822277@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-On Mon, Sep 23, 2024 at 06:05:53PM +0800, dengjie03 wrote:
-> Reproduction of the problem: During the S4 stress test,
-> when a USB device is inserted or removed, there is a
-> probability that the S4 wakeup will turn into a reboot.
-> The following two points describe how to analyze and
-> locate the problem points:
-> 
-> 1. During the boot stage when S4 is awakened, after
-> the USB RootHub is initialized,it will enter the
-> runtime suspend state. From then on, whenever an
-> xhci port change event occurs, it will trigger a
-> remote wakeup request event and add wakeup_work to
-> pm_wq, where the subsequent RootHub runtime resume
-> process will be handled by pm_wq.
-> 
-> xhci runtime suspend flow：
-> S4 boot
->    |->xhci init
->        |->register_root_hub
-> 	   |->hub_probe
-> 	       |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
-> 
-> xhci runtime resume flow ：
-> xhci_irq()
->     |->xhci_handle_event()
-> 	|->handle_port_status()
->    	    |->if(hcd->state == HC_STATE_SUSPENDED)
-> 		 |->usb_hcd_resume_root_hub()
-> 		    |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
->   		    |->queue_work(pm_wq, &hcd->wakeup_work)
-> 			|->hcd_resume_work()			       /* hcd->wakeup_work */
-> 			    |->usb_remote_wakeup()
-> 				|->callback = RPM_GET_CALLBACK(dev, runtime_resume)
-> 				    |->usb_runtime_resume()            /* usb runtime resume  */
-> 					|->generic_resume()
-> 					    |->hcd_bus_resume()
-> 						|->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
-> 						  /* wakeup pending signal to be clear */
-> 
-> 2. However, during the quiesce phase of S4 wakeup,
-> freeze_kernel_threads() will freeze this pm_wq,
-> and between freeze_kernel_threads() and dpm_suspend_start(),
-> there exists a very time-consuming S4 image loading process.
-> This leads to a situation where, if an xhci port change event occurs
-> after freeze_kernel_threads(), triggering the wakeup pending
-> signal to be set,but it cannot be processed by pm_wq to clear
-> this wakeup_pending bit, it will result in a subsequent
-> dpm_suspend_start() where USB suspend_common() detects the
-> wakeup pending signal being set and returns an -EBUSY error,
-> interrupting the S4 quiesce process and reverting to a reboot.
-> 
-> S4 wakeup
->     |->resume_store
-> 	|->software_resume()
-> 	    |->freeze_kernel_threads()		/* will freeze pm_wq */
-> 	    |->load_image_and_restore()
-> 		  |->swsusp_read()    	        /* S4 image loading: time-consuming .
-> When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
-> However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
->    		  |->hibernation_restore
-> 			|->dpm_suspend_start(PMSG_QUIESCE)
-> 			    |->hcd_pci_suspend()
-> 				|->suspend_common()
-> 				    |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
-> 
-> Below is a description of the countermeasures taken to address this issue:
-> 1. Considering the restore process that occurs after
-> the quiesce phase during S4 wakeup, which essentially
-> resets all root hubs,checking this wakeup pending status
-> in USB suspend_common() during the quiesce phase is of
-> little significance and should therefore be filtered out.
-> 
-> S4 wakeup restore phase
->     |->dpm_resume(PMSG_RESTORE)
-> 	|->hcd_pci_restore()
-> 	    |->xhci_resume()		       /* reset all root hubs */
-> 
-> Fixes: 3904bdf0821c40352495f632862637080e6bd744(PM: hibernate: Freeze kernel threads in software_resume())
+Hi Luke,
 
-Please read the documentation for how to list a Fixes: tag, it should be
-a bit smaller than this line :)
+> What Derek is saying here is correct because it is based on data I have s=
+hared with him for testing to help ASUS engineers fix the root issue in fir=
+mware.
 
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> Co-developed-by: dengjie03 <dengjie03@kylinos.cn>
+Would be nice to back it up. Indeed, right now on the X i am facing an
+issue that Windows also has (see below), so it is not like Asus do not
+have their work cut out for them. I would have to test the new
+firmware and get back to you.
 
-As the documentation states, we need real names, not email aliases.
+> I have direct contact with engineers in ASUS and I am under NDA (extended=
+ to a few others) so certain information can not be shared. The proper fix =
+for Linux is done in the MCU firmware - this is something ASUS engineers wh=
+o work on the Ally devices have done with our aid in pinpointing the exact =
+cause.
 
-And fix up how you use co-developed-by please, again, the documentation
-shows how to do so.
+The proper fix for _Asus_. I need to support a lot of manufacturers
+and a lot of them use these _DSMs, so we need to get a better ordering
+here.
 
+> Denis was very clear I thought, perhaps you misread? Thank you for your t=
+horough testing Denis.
 
-> ---
->  drivers/base/power/main.c  |  5 +++++
->  drivers/usb/core/hcd-pci.c | 21 ++++++++++++++-------
->  include/linux/pm.h         |  1 +
->  3 files changed, 20 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index fb4d18a0b185..264d08b9e331 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -559,6 +559,11 @@ bool dev_pm_may_skip_resume(struct device *dev)
->  	return !dev->power.must_resume && pm_transition.event != PM_EVENT_RESTORE;
->  }
->  
-> +bool is_pm_queisce(void)
+Uh, Denis is never very clear unfortunately. From what I understood he
+hit the reboot bug once. But I could not get a feel for what his issue
+was. I know on V1, the XInput controller did not suspend properly.
 
-Bad name for a global function :(
+> It isn't about trying to suspend the thing "quickly enough". And I'm hopi=
+ng that with your analysing of that statement it provides you some insight =
+as to why it's a bad assumption to make and why things are always going to =
+be at risk of breaking with async linux suspend when you get another device=
+ like the Ally. At best the issue may be masked only to have seemingly rand=
+om fails that people can't reproduce easily.
 
-> +{
-> +	return pm_transition.event == PM_EVENT_QUIESCE;
+If you look into my patch series, you will see that unlike the
+variants you tried, there is no async within it. The calls and the
+delay are inserted before beginning the suspend sequence (which is
+async). I think this is a good compromise and can be blended with
+userspace going down, so it will not increase suspend delay in the
+long run for devices that need a quirk. For the Ally X, even without a
+delay, the controller always comes back online. Seems that it is the
+case on the original Ally as well. With a caveat.
 
-What happens if it changes right after this?  Where is the locking
-involved?  And why does USB only care about this and no other subsystem?
+That caveat has to do with the delay before suspend. If it is too
+little, the OG Ally XInput MCU does not turn off and the Ally X MCU
+loses its state. For the OG Ally, I guess Denis informed you about it.
+For the Ally X, this manifests itself as the MCU rebooting once when
+it receives the first command after suspend. When powersave is off,
+this happens when there is no delay, when it is on, it always happens.
 
-thanks,
+I can reproduce this bug on windows very easily right now too.
 
-greg k-h
+It is a small nit that can go unnoticed though. So hopefully you can
+test the new firmware (with whatever kernel you want) and report back.
+
+Hopefully you are right and it was a timing check and that timing
+check also fixes this.
+
+> It is perhaps best if I refer to what Denis and Derek told you about mode=
+rn standby: focus on background downloads and proceed in that direction - t=
+he firmware really does fix the suspend/resume/reboot issues. You can also =
+drop the asus-wmi patch (in submissions) as that will get dealt with soon e=
+nough.
+
+Indeed. I am the one with the problem here. I have too many Ally users
+and for me to require them to update their firmware right now (for
+basic functionality) is a non-starter. Which is why I was happy kind
+of keeping this patch to myself.
+
+I personally do not have a problem with making the next variant of
+this patch an RFC. But currently I think it has a good scope, so I
+would like to ask what other kernel maintainers think.
+Also, after we do a bit more testing on the OG Ally, if everything
+goes well, my version of the quirk is expected to have better behavior
+than the asus-wmi, so I do not see a reason in refactoring that,
+unless that refactoring ends in it completely removed. There is still
+the issue of old users in this case though.
+
+Antheas
 
