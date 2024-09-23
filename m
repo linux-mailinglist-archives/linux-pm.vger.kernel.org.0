@@ -1,165 +1,211 @@
-Return-Path: <linux-pm+bounces-14567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DAD097EA09
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 12:43:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 858C697EA7C
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 13:10:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE8611C20D92
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 10:43:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74A3C1C2141B
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 11:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D84195FEF;
-	Mon, 23 Sep 2024 10:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2530196DA4;
+	Mon, 23 Sep 2024 11:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="EmzD1NEH"
+	dkim=pass (2048-bit key) header.d=ljones.dev header.i=@ljones.dev header.b="flpcoaES";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="V/Z6N1dn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABA317543;
-	Mon, 23 Sep 2024 10:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A0A7DA95
+	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 11:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727088218; cv=none; b=fT06AN14CJrcymwCfJiiI64+GGhUU01l8NaRC7Zk0kFkvKwmVo34icrSNqIq3Xp9VHphLpRMrDJ90h0yH3OBjQWZYAQ10x6NU1K/hALNfM777FbWyx1UvsuFHkvsRFTpGo9wzG3ARmvS44L2SerDCr2GMQxCyaRL+0c1CYqGNU4=
+	t=1727089810; cv=none; b=fFYpq3xPw6NE4jKT5jMJ/noKJZP0mRFXt9JvneUTeOTZtXmONw5LsV+jkibtcndOEnT8lc0JbaBV08n+15fxYHdGaVWQSHPrci/N9+j5tDrdSHXJKzmd7RZL68O+pPy9b08JCk1ZGIVPPZspJmXlJ624F3/RN1r4agiAFy70hhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727088218; c=relaxed/simple;
-	bh=+xoSspNKJ5MEUo0tLVZmeEuaK5ipmpy6ZXvedGMFkMg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=cfwOW5pXUue36+6uNd7cdsBfwTIhajLzFxSkS1YbHsDpfKfnsc9h85Z2UzKGabazYbQznQkqil2kwSqfSHg4H4oCURl7hfsrHhNhOEXHB3Ss4ahxu4McF8EYd89Ll2/CYjq/psOmfK4dPtYtOVctJaydIyyyKcxtmQIZNS5e7OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=EmzD1NEH; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ac46e808799811efb66947d174671e26-20240923
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=lxJ2u/FvugU1hQiGyVxAGg7yfWlaUL7i8/K8f/CODxM=;
-	b=EmzD1NEHc00QO3MhkzE01AetGGypiXlLNuFwDv/+mf5KzfgIHWm/GRroijcpnlxvaLExCyYaymWknRde/ShztiAIRnciqIbjRd85HhxVq4xrQ3ME3gvh2juN95PR8QysuigX32l0+1Dx/TeOj7mQkDZzdprO1JdIDSzlOfOiRhI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:ab14257d-9121-42ff-9bcd-a013a3e0b8b0,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:c9ca9fd0-7921-4900-88a1-3aef019a55ce,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: ac46e808799811efb66947d174671e26-20240923
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1160707181; Mon, 23 Sep 2024 18:43:30 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 23 Sep 2024 18:43:27 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Mon, 23 Sep 2024 18:43:26 +0800
-Message-ID: <637aca9a-5d1e-6726-4b97-4d5db0ee30a3@mediatek.com>
-Date: Mon, 23 Sep 2024 18:43:23 +0800
+	s=arc-20240116; t=1727089810; c=relaxed/simple;
+	bh=zxCkSgct4j67PIK1+PlESTLdCFeo3N/UL4hFJgfJCIg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=ZzyuBbWRdecHI8Q33Swl5E1vw+aGwt+3/J+CG66t54bZQ3qGOIYqg0TseOCTxp//hO7oQMu+yxTV6UKy7IhJy3hX4SerYZn+mKfWAuhIS7JmA2gtFI7FuiB+AhnG1VI5sIgu0wDYrnU7V5MKKb63VmRASC6iSCJelTEoJJtN9hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ljones.dev; spf=none smtp.mailfrom=ljones.dev; dkim=pass (2048-bit key) header.d=ljones.dev header.i=@ljones.dev header.b=flpcoaES; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=V/Z6N1dn; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ljones.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ljones.dev
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 70AD911401DC;
+	Mon, 23 Sep 2024 07:10:06 -0400 (EDT)
+Received: from phl-imap-01 ([10.202.2.91])
+  by phl-compute-08.internal (MEProxy); Mon, 23 Sep 2024 07:10:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1727089806;
+	 x=1727176206; bh=FxLhnE3hvAdeEz4Shq8lNL9FJa+cXSDJbVFT2D8/WVI=; b=
+	flpcoaESYiYjgCILLCKF8MbU8yqsoLJs+hT6l4b4YMGDgA65OFGzzIKvbEjNBnJT
+	jnERNVscCfKDn3WGrQv/ypNGmlrsjV3zPoYBS9LRadZrpiIE4sheR/SNOyYkIKAV
+	LSddqxEAIiVfnJo1p9ADubkiQGSLQUb29xGT7oNZ3th42gZhblq8FX5x5FLEEa7+
+	PmF1Iw3j3bMvlLjIIC/JO7ymsKdwO5IMkJrTAHf8QiTwSdW0qElCnRvTSrv6/m3N
+	xP55P1i1MhoaDRt9ZDnmd6ZFeUfdFg54BFaKXLdk5OHU9PFmrVrIsNqGLfwwpvCs
+	/rrov/YEpoMLdVgJlfZLEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727089806; x=
+	1727176206; bh=FxLhnE3hvAdeEz4Shq8lNL9FJa+cXSDJbVFT2D8/WVI=; b=V
+	/Z6N1dnqjBIOIsjgiTyzla3S6ZK4388CujfYiwrrC8gLI+qiktdBUMVzOpBmi5Lw
+	TAammLoOei8MdHhNNvO+iXt2/qPMlMKI9LxbkQbKUl/0DkfuS1wXTI5T7XbOMsb5
+	NLw6L2Ewz53sAOucqqvHkvOvzuNzSjAR193EQKZincW6/MrodU106KZS8sc6V+ps
+	/nARR23VbRcvB/wLZYOpHXKsFBflNDCWhluLaJUWoxDVqwLJVLEmMavXLXH7OcCu
+	dVlt9wqzqrKkdAGeL2k7ILxzqyj0Rw+i8DgXyJAUIroQ5g7NTOLU3mdLpn22/Df9
+	hOFCuKzM1MGw9trqEuEOQ==
+X-ME-Sender: <xms:jUzxZobBNo3iOKRIbL7ozRJbJWnwvBnHfMX8B7cIY2oPC3qWPLMkDA>
+    <xme:jUzxZjbmrDWbC1HKE6IozShMMpLd1adoLzoARzprX3LTRi7GWEt89hi6HBJlf7p2r
+    FYZlj6zS5l56prQSwk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudelledgfeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedfnfhukhgvucflohhnvghsfdcuoehluhhkvgeslhhjohhnvghsrdguvg
+    hvqeenucggtffrrghtthgvrhhnpefgieffhedtgffhtedtiedutdefkedvjefgveehhfff
+    vedthfejleegfeffkedvveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghvpdhnsggprhgtphhtthhopeei
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmrghrihhordhlihhmohhntghivg
+    hllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhkmhhlsegrnhhthhgvrghsrdguvghv
+    pdhrtghpthhtohepsggvnhgrthhordguvghnihhsleeisehgmhgrihhlrdgtohhmpdhrtg
+    hpthhtohepuggvrhgvkhhjohhhnhdrtghlrghrkhesghhmrghilhdrtghomhdprhgtphht
+    thhopehmvgeskhihlhgvghhoshhpohgunhgvthhirdgthhdprhgtphhtthhopehlihhnuh
+    igqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:jUzxZi_hmjakYuvzFMZTk-H1EPluC3Q0MD-thLbbhUSe_i6jwXzOfA>
+    <xmx:jUzxZiqHeQQue9bHFOuNPfQY0bXQTmF5OWByTVi0AXa1VWav949vIg>
+    <xmx:jUzxZjoNKlo8D5cqRtGg_3NvWLZVyyBF49rVkEUd0I7kKTmvwet5Xg>
+    <xmx:jUzxZgRaKCqaeWkqYwavX9WVIkXObY9txkrb_Tj7wYg9CvJHeMF0BA>
+    <xmx:jkzxZkm55azb9Mis4bqTsa64dkSV6wgagrjxi_ydd9fqCmqdSYaKEN_0>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B4A7B3360077; Mon, 23 Sep 2024 07:10:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-Content-Language: en-US
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, "AngeloGioacchino Del
- Regno" <angelogioacchino.delregno@collabora.com>
-CC: Andrew Lunn <andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, "Liam
- Girdwood" <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Sean Wang
-	<sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
-	<netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Dmitry Torokhov
-	<dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Lee Jones
-	<lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Chen Zhong
-	<chen.zhong@mediatek.com>, <linux-input@vger.kernel.org>,
-	<linux-leds@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>, Alexandre Mergnat
-	<amergnat@baylibre.com>, Bear Wang <bear.wang@mediatek.com>, Pablo Sun
-	<pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, Chris-qj chen
-	<chris-qj.chen@mediatek.com>, MediaTek Chromebook Upstream
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai
-	<wenst@chromium.org>
-References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
- <20240918064955.6518-2-macpaul.lin@mediatek.com>
- <20240918115151c896f33f@mail.local> <20240918115651c1475d36@mail.local>
- <2af0621d-14ac-b7f3-b28d-2df698931121@mediatek.com>
- <d8b90ddf-efbc-4434-9ad0-4be6942d51a5@collabora.com>
- <202409201337500284902d@mail.local>
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <202409201337500284902d@mail.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--16.104600-8.000000
-X-TMASE-MatchedRID: QW5G6BKkLToOwH4pD14DsF2036HHwFm/C/ExpXrHizwJmdXzOhEMdq1X
-	iPUpd5urvhH72H3yPfRl52ofpDGzAUER5ddgnEDec2k2agnXN3xMkOX0Uoduuf5Ndkm9jGh5+k9
-	OmImxseHdNZBjAe+TD5j4oSfJftZ+Gmdo3OL/XyN17gHAyAFr0z49+ukeLY9133Nl3elSfspkDy
-	hB8FZCo0saY8ROPM6fB++TmiSdVlO6de0YULw0FnuTVkeYosXtYY0tNGdvli3qLnOUXH9QdIcqr
-	S3ZaIiqCEuVF6nuSDFftuJwrFEhTbew1twePJJB3QfwsVk0UbtuRXh7bFKB7n0Bw/xUOCRaQob8
-	Aj73RQ4BdZxBcFC/afKV0PghFKiIHIV02d1rpG8=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--16.104600-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 29BBBD91297B46FCBF23EA27127FA88C925FF1F3A72ACB71CB857985D524E1632000:8
+Date: Mon, 23 Sep 2024 23:09:45 +1200
+From: "Luke Jones" <luke@ljones.dev>
+To: "Antheas Kapenekakis" <lkml@antheas.dev>,
+ "Derek J. Clark" <derekjohn.clark@gmail.com>
+Cc: "Mario Limonciello" <mario.limonciello@amd.com>, me@kylegospodneti.ch,
+ "Denis Benato" <benato.denis96@gmail.com>, linux-pm@vger.kernel.org
+Message-Id: <b43f9654-4dd7-4f3c-95b5-575473c3bcc1@app.fastmail.com>
+In-Reply-To: 
+ <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
+References: 
+ <CAGwozwHqHbHNi53T87m36-OZ8suCEo1wgJ9fPPgPdcLnt_+S4g@mail.gmail.com>
+ <20240923013657.7464-1-derekjohn.clark@gmail.com>
+ <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls outside suspend
+ (fixes ROG Ally suspend)
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-
-On 9/20/24 21:37, Alexandre Belloni wrote:
-
-[snip]
-
->> > > > >  - RTC:
->> > > > >   - Drop "start-year"
->> > > > 
-
-[snip]
-
->> > 
->> 
->> Alexandre, I definitely agree with you on the fact that the MTK PMIC RTC driver
->> can (and needs to) be improved, and that it can make use of some nice cleanup...
->> 
->> ... but!
->> 
->> This series performs a conversion to schema, and the previous txt file didn't
->> say anything about the start-year property - which was not mandatory to support
->> at that time (nor now, afaik?), so adding support for that is out of scope for
->> this series.
+On Mon, 23 Sep 2024, at 5:57 PM, Antheas Kapenekakis wrote:
+> Hi Derek,
 > 
-> It is mandatory now. I agree this can be done in a subsequent series.
+> > I'm going to be somewhat brief here as I don't like repeating myself, you are
+> > working from incomplete information and from that you are inferring incorrect
+> > assertions. Due to NDA the full slate of information that would clarify this
+> > cannot be released here, but I will be clear: I am not sharing my opinion, I
+> > am stating facts. What you have described here is a missinterpretation of the
+> > symptoms and is not correct. The _DSM call is not relevant to the proper fix,
+> > the sequencing you observe is not applicable to Linux, and the sensitivity of
+> > the controller is another symptom of the Windows quirk behaving badly in Linux.
+> > Furthermore, the RGB "flourish" as you call it works as intended with the new
+> > firmware and no kernel changes required.
 > 
+> Only thing I am seeing here is a bit of heresay. Please get in touch
 
-Thanks you all for helping with the review and kindly understanding the
-situation. I see that Angelo has already submitted the RTC patch set.
-I'll check it with the internal driver owner. It seems okay with a quick 
-glance.
+What Derek is saying here is correct because it is based on data I have shared with him for testing to help ASUS engineers fix the root issue in firmware.
 
->> 
->> Eventually, that can come as a series on top, adding support for that in the
->> binding (and, of course, in the driver).
->> 
->> I should be able to tackle that... most probably next week - but still, the
->> improvements would come as a series on top of this one.
->> 
->> Cheers,
->> Angelo
+> with Asus, cross your t's and dot your i's, and share what you found
+> with the rest of the class.
+
+I have direct contact with engineers in ASUS and I am under NDA (extended to a few others) so certain information can not be shared. The proper fix for Linux is done in the MCU firmware - this is something ASUS engineers who work on the Ally devices have done with our aid in pinpointing the exact cause.
+
+> I am in no rush to see this merge, and as all gaming distributions
+> carry custom kernels that update on a weekly cadence and 90% of users
+> are on those kernels with the rest being able to figure it out, there
+> is no practical reason for this to merge quickly. Ubuntu (+variant)
+> users will get this fix after they've thrown their ally away anyway.
+
+Lucky for Ubuntu and variant users, they can simply update their firmware and have suspend/resume/reboot all work fine.
+
+> > What I can provide is information on a test we did that should hopefully
+> > elucidate the issue more clearly for you. We included a patch that allowed us
+> > to alter the delay in asus-wmi on the fly by writing to an attribute in sysfs.
+> > In addition, we pushed the _DSM calls as early as possible in the suspend
+> > sequence. We were unable to find a timing for this that would work consistently
+> > on different configurations. The same issue exists in your patch set and the
+> > testing bears this out with Denis still getting spurious wakes when using it.
+> > The problem with your approach is that you aren't listening to us despite our
+> > much broader understanding of the issue at hand. If this worked we would have
+> > submitted it ourselves nearly three weeks ago.
 > 
+> Here you assume I did not do the same. Yes, I did. The asus-wmi quirk
+> is subject to racing conditions that mean it will never work correctly
+> (well; without newer firmware maybe perhaps). This series is not, as
+> the calls happen before suspend starts.
+> 
+> Yes, my V1 of the patch did not include a delay at all. Since the
+> original Ally is XInput, one of the MCUs was left on, which caused
+> what Denis experienced. It also triggered a restart of the MCU on the
+> Ally X after resume. V2 fixes this restart on the Ally X and makes it
+> behave completely properly.
 
-Thanks
-Macpaul Lin
+With the fixed firmware no delay is required anywhere, no restructuring of suspend is required, no more trying to figure out an optimal ordering is required.
+
+> In fact, after being included in bazzite-testing yesterday, my Ally X
+> unit went on a deep slumber tonight with powersave on, and then woke
+> up today beautifully, having only lost 1% of battery.
+
+The Ally X is much less sensitive to things than the Ally 1 is and invariably when we thought we'd found a fix, someone with a different kernel config, distro, and compiler (maybe even with LTO) would change the timing of things just enough. We tried pretty much everything you seem to be trying.
+
+> It is not clear if the issue still exists on the original Ally, I
+> could not get a clear signal from Denis but do not worry, one of our
+> contributors is on it.
+
+Denis was very clear I thought, perhaps you misread? Thank you for your thorough testing Denis.
+
+> > *Our solution doesn't require any kernel changes for newer firmware*, as I
+> > already stated the solution from ASUS fixes the root cause of the problem. Your
+> > attempt at a solution attempts to outrace the symptoms of it. Please don't
+> > mischaracterize my statements.
+> 
+> I would hope that is not true and your solution completely removes the
+> quirk from asus-wmi for newer firmware, as it prolongs the suspend and
+> resume sequences noticeably. However, given my and Denis' limited
+
+Yes that excessive delay is awful. It was a misguided attempt to race or delay things much like you are doing right now.
+
+With the release of the new fixed firmware for the MCU imminent, this will be removed and all users should be strongly encouraged to update their firmware to the fixed version from ASUS.
+
+> testing, I doubt the controller is able to suspend quickly enough even
+> with new firmware (you can see the RGB cut before it's able to fade).
+
+It isn't about trying to suspend the thing "quickly enough". And I'm hoping that with your analysing of that statement it provides you some insight as to why it's a bad assumption to make and why things are always going to be at risk of breaking with async linux suspend when you get another device like the Ally. At best the issue may be masked only to have seemingly random fails that people can't reproduce easily.
+
+> In any case, this patch series is not expected to conflict with Asus'
+> newer firmware and is in fact complementary with it. Both fix the same
+> issue in a different way, which means our users will have a great
+> experience, squared. This series also greatly improves resume behavior
+> on the Ally, which, let me tell you, is blazing fast now.
+
+You are correct in that it won't conflict. That is because the firmware that ASUS engineers who worked with us to fix, fixes the root cause of the issue regardless of the USB state at suspend time - which fully removes the need to make changes to core suspend code, especially in regards to the Ally devices.
+
+It is perhaps best if I refer to what Denis and Derek told you about modern standby: focus on background downloads and proceed in that direction - the firmware really does fix the suspend/resume/reboot issues. You can also drop the asus-wmi patch (in submissions) as that will get dealt with soon enough.
+
+Sincerely,
+Luke.
 
