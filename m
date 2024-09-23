@@ -1,300 +1,160 @@
-Return-Path: <linux-pm+bounces-14546-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C0C497E4B1
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 03:54:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D413397E5CD
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 07:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EB41281177
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 01:54:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 551F41F21080
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 05:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9FF1372;
-	Mon, 23 Sep 2024 01:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C275D17543;
+	Mon, 23 Sep 2024 05:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="IuNktr06"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp153-170.sina.com.cn (smtp153-170.sina.com.cn [61.135.153.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728F7184
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 01:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.135.153.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94EB747F
+	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 05:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727056469; cv=none; b=hie2LKUwl2kuaus2yjk2NlK2vQfNuNkX3C3PK9wQ/NB4dwS8c7OOKovgS9QehPWVREfZcHC2Wu5NpELL6lQHoPoGSZFAn6Q+qGl1LWDaZfGiEbR+K0qVMXIqcVmXc2NvYIzMtUt5yfGk3UihXy0cgmuLjqOOKrkJwhQpcrhO71Y=
+	t=1727071066; cv=none; b=G4geDGhM+Bz19PMfBLByEaKzTOk9IrQBXKLa4sejvjvkB9oZHiYQH3CHwqNbv+3ICHca2YRUUiAdu8FeULMSFCO3QVFIx3LGZNYl3WLfpogRmU/BBcHbxXG8OUugQ0OFx/yAmK2AEzW7XlcJW5Dk9Q1l3Fixy0Kvwd/6ous0zeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727056469; c=relaxed/simple;
-	bh=rKrfOIQ16Dbs9jZR7wtDrAIvTCB5DJB/exD0j/AhOFw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LHGB21m36Fd6S3qCexJ/Z7Z4EA7JS9a23YY1J2Ry9a7PlZS5J9utrnWBc08g6r/WSlN6cpXLXWlW2aueXNc6ZpNCSkw4kAN5i64c6qWFhlnNdfdbfRKG9hknULgDgbpvsaJ5ly27SNdZw+KEYOWd/wIs0j52NQXFJg2b0S6+I54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=61.135.153.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-X-SMAIL-HELO: [172.20.10.11]
-Received: from unknown (HELO [172.20.10.11])([112.96.228.82])
-	by sina.com (10.182.253.22) with ESMTP
-	id 66F0CA1F0000685A; Mon, 23 Sep 2024 09:53:39 +0800 (CST)
-X-Sender: atzlinux@sina.com
-X-Auth-ID: atzlinux@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=atzlinux@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=atzlinux@sina.com
-X-SMAIL-MID: 2933186816266
-X-SMAIL-UIID: 4BF7B846D9734B30B3B158D97C35718B-20240923-095339-1
-Message-ID: <26829a6d-671c-45a4-bef4-4172f4f11615@sina.com>
-Date: Mon, 23 Sep 2024 09:53:34 +0800
+	s=arc-20240116; t=1727071066; c=relaxed/simple;
+	bh=Ar21FYPF7WFIbLHKSGNIn5ZsVF38vd0Rtapd9mViFQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VNpoXa8LmScQe+ZV09Ir+vZmKZra8INL9GYCc/7ImlV92c+taiQQrnFs0G5GBKgibZeslXIq7phfBgX/23fHwfvEbRPbn8Yj8KzcCBQWwcpoz1cdBtdMKPRTTH50wAEMbGlswkojsHXke9wGbIiND+H3OSW7AzV9MmXQZXc8x2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=IuNktr06; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id AFBD12E04650
+	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 08:57:38 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1727071059;
+	bh=Ar21FYPF7WFIbLHKSGNIn5ZsVF38vd0Rtapd9mViFQw=;
+	h=Received:From:Subject:To;
+	b=IuNktr06u2ApFX5sxErxI+3LScQolRIvaz4kMwABZHBTKM+D4/8oyVSeGJncDipX5
+	 NE50qhFYHgjxb9SMFk/mLaTcOyYHFXL2IMZHlh0nzCpa41jQ6TyUMLqiOQEWLrbKrs
+	 BW9B/dUfq279wb+kJk3SYDABPQoILxagHp8xx/KM=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.170) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f170.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f170.google.com with SMTP id
+ 38308e7fff4ca-2f7657f9f62so42507391fa.3
+        for <linux-pm@vger.kernel.org>; Sun, 22 Sep 2024 22:57:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCU4o6mnt0S94V9milZ6IUISS7dWqBjE/4+q13Q5WUs/zf/zW4KJgr2aInTLnqKiVPpQ81mDJ9/AtA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0HH33DujH4eROUZoWWmO9/H7vFmP9KD6/ARHsHXjKoTW9J+jq
+	3eqYIjkxbH3rTRM5WsRz9CvfOXWYDz989mOVYHco7e0dZk4IE6BmPMTDyyV65TIrYeUp+fOseQK
+	IUQaKx3aQWN0VlTN8WdwhMS6Q9kg=
+X-Google-Smtp-Source: 
+ AGHT+IFv2YSDzZvxOinmkIRqzEUv6+cO9JXtFcvefYFV3Hz3VsTDU5lcBVw1kkCmxKmjg7iAhjrFBaGurjanExAyOaU=
+X-Received: by 2002:a2e:8905:0:b0:2f7:9d1b:da59 with SMTP id
+ 38308e7fff4ca-2f7cc388652mr40841991fa.26.1727071057942; Sun, 22 Sep 2024
+ 22:57:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
- spinlock
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@debian.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- 1076483@bugs.debian.org
-Cc: linux-pm@vger.kernel.org, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, linux-rt-users@vger.kernel.org
-References: <20240919081121.10784-2-ukleinek@debian.org>
-Content-Language: en-US
-From: =?UTF-8?B?eGlhbyBzaGVuZyB3ZW4o6IKW55ub5paHKQ==?= <atzlinux@sina.com>
-Organization: https://www.atzlinux.com
-In-Reply-To: <20240919081121.10784-2-ukleinek@debian.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------xgMkEUA7s5SokUs3ZAzs7GDw"
+References: 
+ <CAGwozwHqHbHNi53T87m36-OZ8suCEo1wgJ9fPPgPdcLnt_+S4g@mail.gmail.com>
+ <20240923013657.7464-1-derekjohn.clark@gmail.com>
+In-Reply-To: <20240923013657.7464-1-derekjohn.clark@gmail.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Mon, 23 Sep 2024 07:57:25 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
+Message-ID: 
+ <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
+ outside suspend (fixes ROG Ally suspend)
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+ Luke Jones <luke@ljones.dev>, me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-PPP-Message-ID: 
+ <172707105909.26170.2524818982249126860@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------xgMkEUA7s5SokUs3ZAzs7GDw
-Content-Type: multipart/mixed; boundary="------------wVVrLy4gzt6dcNchLdddGcmy";
- protected-headers="v1"
-From: =?UTF-8?B?eGlhbyBzaGVuZyB3ZW4o6IKW55ub5paHKQ==?= <atzlinux@sina.com>
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@debian.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- 1076483@bugs.debian.org
-Cc: linux-pm@vger.kernel.org, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, linux-rt-users@vger.kernel.org
-Message-ID: <26829a6d-671c-45a4-bef4-4172f4f11615@sina.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
- spinlock
-References: <20240919081121.10784-2-ukleinek@debian.org>
-In-Reply-To: <20240919081121.10784-2-ukleinek@debian.org>
+Hi Derek,
 
---------------wVVrLy4gzt6dcNchLdddGcmy
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> I'm going to be somewhat brief here as I don't like repeating myself, you are
+> working from incomplete information and from that you are inferring incorrect
+> assertions. Due to NDA the full slate of information that would clarify this
+> cannot be released here, but I will be clear: I am not sharing my opinion, I
+> am stating facts. What you have described here is a missinterpretation of the
+> symptoms and is not correct. The _DSM call is not relevant to the proper fix,
+> the sequencing you observe is not applicable to Linux, and the sensitivity of
+> the controller is another symptom of the Windows quirk behaving badly in Linux.
+> Furthermore, the RGB "flourish" as you call it works as intended with the new
+> firmware and no kernel changes required.
 
-SSBhcHBseSB0aGlzIHBhdGNoIG9uIERlYmlhbiBrZXJuZWwgNi4xMS0xfmV4cDEgKDIwMjQt
-MDktMTkpIHNvdXJjZSBjb2RlLg0KDQp1bmFtZSAtYQ0KTGludXggYXR6bGludXgtY2UgNi4x
-MS1ydC1hbWQ2NCAjMSBTTVAgUFJFRU1QVF9SVCBhdHpsaW51eCA2LjExLTF+ZXhwMSANCigy
-MDI0LTA5LTE5KSB4ODZfNjQgR05VL0xpbnV4DQoNCkkgZ2V0IHRoZSBmb2xsb3dpbmcgZXJy
-b3JzIGluIGRtZXNnOg0KDQpbICAgIDcuMjczNjkwXSB1Y3NpX2FjcGkgVVNCQzAwMDowMDog
-cG9zc2libGUgVUNTSSBkcml2ZXIgYnVnIDINClsgICAgNy40NTE4MjJdIHVjc2lfYWNwaSBV
-U0JDMDAwOjAwOiBlcnJvciAtRUlOVkFMOiBQUE0gaW5pdCBmYWlsZWQNClsgICAgNy41Mzc3
-NDldIC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUgXS0tLS0tLS0tLS0tLQ0KWyAgICA3LjUzNzc1
-M10gV0FSTklORzogQ1BVOiAxMiBQSUQ6IDk2IGF0IGtlcm5lbC93b3JrcXVldWUuYzoyMjU5
-IA0KZGVsYXllZF93b3JrX3RpbWVyX2ZuKzB4NjMvMHg5MA0KWyAgICA3LjUzNzc2M10gTW9k
-dWxlcyBsaW5rZWQgaW46IHJmY29tbSBjbWFjIGFsZ2lmX2hhc2ggYWxnaWZfc2tjaXBoZXIg
-DQphZl9hbGcgc25kX3NlcV9kdW1teSBzbmRfaHJ0aW1lciBzbmRfc2VxIHNuZF9zZXFfZGV2
-aWNlIGJuZXAgYnR1c2IgDQp1dmN2aWRlbyBidHJ0bCBidGludGVsIHZpZGVvYnVmMl92bWFs
-bG9jIGJ0YmNtIHV2YyBidG10ayANCnZpZGVvYnVmMl9tZW1vcHMgdmlkZW9idWYyX3Y0bDIg
-Ymx1ZXRvb3RoIHZpZGVvZGV2IHZpZGVvYnVmMl9jb21tb24gbWMgDQpzbmRfc29jX3NrbF9o
-ZGFfZHNwIHNuZF9zb2NfaGRhY19oZG1pIHNuZF9zb2ZfcHJvYmVzIA0Kc25kX3NvY19pbnRl
-bF9oZGFfZHNwX2NvbW1vbiBiaW5mbXRfbWlzYyBubHNfYXNjaWkgbmxzX2NwNDM3IHZmYXQg
-ZmF0IA0Kc25kX2hkYV9jb2RlY19oZG1pIHNuZF9oZGFfY29kZWNfcmVhbHRlayBzbmRfaGRh
-X2NvZGVjX2dlbmVyaWMgDQpzbmRfaGRhX3Njb2RlY19jb21wb25lbnQgc25kX3NvY19kbWlj
-IHNuZF9zb2ZfcGNpX2ludGVsX3RnbCANCnNuZF9zb2ZfcGNpX2ludGVsX2NubCBzbmRfc29m
-X2ludGVsX2hkYV9nZW5lcmljIHNvdW5kd2lyZV9pbnRlbCANCnNvdW5kd2lyZV9nZW5lcmlj
-X2FsbG9jYXRpb24gc291bmR3aXJlX2NhZGVuY2Ugc25kX3NvZl9pbnRlbF9oZGFfY29tbW9u
-IA0Kc25kX3NvZl9pbnRlbF9oZGFfbWxpbmsgc25kX3NvZl9pbnRlbF9oZGEgc25kX3NvZl9w
-Y2kgc25kX3NvZl94dGVuc2FfZHNwIA0Kc25kX3NvZiBpd2xtdm0gc25kX3NvZl91dGlscyBp
-bnRlbF91bmNvcmVfZnJlcXVlbmN5IHNuZF9zb2NfaGRhY19oZGEgDQppbnRlbF91bmNvcmVf
-ZnJlcXVlbmN5X2NvbW1vbiBzbmRfc29jX2FjcGlfaW50ZWxfbWF0Y2ggDQp4ODZfcGtnX3Rl
-bXBfdGhlcm1hbCBpbnRlbF9wb3dlcmNsYW1wIHNuZF9zb2NfYWNwaSBzb3VuZHdpcmVfYnVz
-IA0KY29yZXRlbXAga3ZtX2ludGVsIHNuZF9jdGxfbGVkIG1hYzgwMjExIHNuZF9zb2NfYXZz
-IGt2bSANCnNuZF9zb2NfaGRhX2NvZGVjIHNuZF9oZGFfZXh0X2NvcmUgc25kX3NvY19jb3Jl
-IGxpYmFyYzQNClsgICAgNy41Mzc4MTFdICBjcmN0MTBkaWZfcGNsbXVsIHNuZF9jb21wcmVz
-cyBzbmRfcGNtX2RtYWVuZ2luZSANCmdoYXNoX2NsbXVsbmlfaW50ZWwgc2hhNTEyX3Nzc2Uz
-IHNuZF9oZGFfaW50ZWwgc2hhMjU2X3Nzc2UzIHNoYTFfc3NzZTMgDQppd2x3aWZpIHNuZF9p
-bnRlbF9kc3BjZmcgc25kX2ludGVsX3Nkd19hY3BpIHNuZF9oZGFfY29kZWMgYWVzbmlfaW50
-ZWwgDQpnZjEyOG11bCBzbmRfaGRhX2NvcmUgY3J5cHRvX3NpbWQgY3J5cHRkIHJhcGwgbWVp
-X2hkY3AgbWVpX3B4cCBtZWlfd2R0IA0Kc25kX2h3ZGVwIGludGVsX3JhcGxfbXNyIHByb2Nl
-c3Nvcl90aGVybWFsX2RldmljZV9wY2kgaW50ZWxfY3N0YXRlIA0KY2ZnODAyMTEgcHJvY2Vz
-c29yX3RoZXJtYWxfZGV2aWNlIHByb2Nlc3Nvcl90aGVybWFsX3d0X2hpbnQgaW50ZWxfdW5j
-b3JlIA0Kc25kX3BjbSB0aGlua3BhZF9hY3BpIHRoaW5rX2xtaSBpVENPX3dkdCBwcm9jZXNz
-b3JfdGhlcm1hbF9yZmltIG1laV9tZSANCmZpcm13YXJlX2F0dHJpYnV0ZXNfY2xhc3MgaW50
-ZWxfcG1jX2J4dCBwcm9jZXNzb3JfdGhlcm1hbF9yYXBsIHNuZF90aW1lciANCnVjc2lfYWNw
-aSBtZWkgaVRDT192ZW5kb3Jfc3VwcG9ydCBpbnRlbF9yYXBsX2NvbW1vbiBudnJhbSB0eXBl
-Y191Y3NpIA0Kd21pX2Jtb2Ygd2F0Y2hkb2cgcGxhdGZvcm1fcHJvZmlsZSBwcm9jZXNzb3Jf
-dGhlcm1hbF93dF9yZXEgcGNzcGtyIA0KcHJvY2Vzc29yX3RoZXJtYWxfcG93ZXJfZmxvb3Ig
-c25kIGlnZW42X2VkYWMgcHJvY2Vzc29yX3RoZXJtYWxfbWJveCANCnR5cGVjIHJvbGVzIHNv
-dW5kY29yZSByZmtpbGwgYWMgaW50MzQwM190aGVybWFsIGpveWRldiANCmludDM0MHhfdGhl
-cm1hbF96b25lIGludGVsX3BtY19jb3JlIGludDM0MDBfdGhlcm1hbCBpbnRlbF92c2VjIGlu
-dGVsX2hpZCANCnBtdF90ZWxlbWV0cnkgYWNwaV90aGVybWFsX3JlbCBzcGFyc2Vfa2V5bWFw
-IGFjcGlfdGFkIHBtdF9jbGFzcyBhY3BpX3BhZCANCmV2ZGV2IHNlcmlvX3JhdyBkbV9tb2Qg
-bG9vcCBjb25maWdmcyBlZmlfcHN0b3JlIGVmaXZhcmZzIGlwX3RhYmxlcw0KWyAgICA3LjUz
-Nzg2MV0gIHhfdGFibGVzIGF1dG9mczQgZXh0NCBjcmMxNiBtYmNhY2hlIGpiZDIgY3JjMzJj
-X2dlbmVyaWMgDQppOTE1IGRybV9idWRkeSBpMmNfYWxnb19iaXQgZHJtX2Rpc3BsYXlfaGVs
-cGVyIGNlYyBoaWRfbXVsdGl0b3VjaCANCnJjX2NvcmUgaGlkX2dlbmVyaWMgeGhjaV9wY2kg
-eGhjaV9oY2QgdHRtIGkyY19oaWRfYWNwaSBpMmNfaGlkIHVzYmNvcmUgDQpkcm1fa21zX2hl
-bHBlciBoaWQgaW50ZWxfbHBzc19wY2kgdmlkZW8gbnZtZSBpbnRlbF9scHNzIGNyYzMyX3Bj
-bG11bCANCmkyY19pODAxIHRodW5kZXJib2x0IHBzbW91c2UgZHJtIG52bWVfY29yZSBlMTAw
-MGUgY3JjMzJjX2ludGVsIGlkbWE2NCANCnVzYl9jb21tb24gaTJjX3NtYnVzIGZhbiBidXR0
-b24gYmF0dGVyeSB3bWkNClsgICAgNy41Mzc4ODddIENQVTogMTIgVUlEOiAwIFBJRDogOTYg
-Q29tbToga3RpbWVycy8xMiBOb3QgdGFpbnRlZCANCjYuMTEtcnQtYW1kNjQgIzEgIGF0emxp
-bnV4IDYuMTEtMX5leHAxDQpbICAgIDcuNTM3ODkxXSBIYXJkd2FyZSBuYW1lOiBMRU5PVk8g
-MjFIRDAwNzhDRC8yMUhEMDA3OENELCBCSU9TIA0KTjNRRVQ0N1cgKDEuNDcgKSAwNy8xOC8y
-MDI0DQpbICAgIDcuNTM3ODkzXSBSSVA6IDAwMTA6ZGVsYXllZF93b3JrX3RpbWVyX2ZuKzB4
-NjMvMHg5MA0KWyAgICA3LjUzNzg5OF0gQ29kZTogNjUgNDggOGIgM2QgM2YgYWQgYjQgNzcg
-NjUgOGIgMDUgNDAgYWQgYjQgNzcgOGIgOTcgDQowMCAwZCAwMCAwMCAyNSAwMCAwMCBmZiAw
-MCA4MSBlMiAwMCAwMSAwMCAwMCAwOSBkMCA3NSAwNiBmNiA0NyAyYyAyMCA3NSANCjBiIDww
-Zj4gMGIgNWIgNWQgNDEgNWMgYzMgY2MgY2MgY2MgY2MgZTggZmQgNzYgMDAgMDAgNDggODUg
-YzAgNzQgZWIgNDgNClsgICAgNy41Mzc5MDBdIFJTUDogMDAxODpmZmZmYmI5MDAwNDZiYzk4
-IEVGTEFHUzogMDAwMTAwMDYNClsgICAgNy41Mzc5MDNdIFJBWDogMDAwMDAwMDAwMDAwMDEw
-MCBSQlg6IGZmZmY5YTYxODIwNTMwMDAgUkNYOiANCmZmZmY5YTY0Y2Y3YTM1YzANClsgICAg
-Ny41Mzc5MDRdIFJEWDogMDAwMDAwMDAwMDAwMDEwMCBSU0k6IGZmZmZmZmZmODg0ZWFiODAg
-UkRJOiANCmZmZmY5YTYxODExMzAwMDANClsgICAgNy41Mzc5MDZdIFJCUDogMDAwMDAwMDAw
-MDAwMjAwMCBSMDg6IGZmZmY5YTY0Y2Y3YTM2MTAgUjA5OiANCmZmZmY5YTY0Y2Y3YTM2NTgN
-ClsgICAgNy41Mzc5MDddIFIxMDogMDAwMDAwMDAwMDAwMDAwMiBSMTE6IDAwMDAwMDAwMDAw
-MDAwMDEgUjEyOiANCmZmZmY5YTYxODNiZmE5MDANClsgICAgNy41Mzc5MDhdIFIxMzogZGVh
-ZDAwMDAwMDAwMDEyMiBSMTQ6IGZmZmZmZmZmODg0ZWFiODAgUjE1OiANCmZmZmY5YTYxODNi
-ZmE5MjANClsgICAgNy41Mzc5MTBdIEZTOiAgMDAwMDAwMDAwMDAwMDAwMCgwMDAwKSBHUzpm
-ZmZmOWE2NGNmNjAwMDAwKDAwMDApIA0Ka25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KWyAgICA3
-LjUzNzkxMl0gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDogMDAwMDAwMDA4MDA1
-MDAzMw0KWyAgICA3LjUzNzkxM10gQ1IyOiAwMDAwNTYxYzk0ZWQ0MDAwIENSMzogMDAwMDAw
-MDQxZDYyYzAwMCBDUjQ6IA0KMDAwMDAwMDAwMGY1MGVmMA0KWyAgICA3LjUzNzkxNV0gUEtS
-VTogNTU1NTU1NTQNClsgICAgNy41Mzc5MTZdIENhbGwgVHJhY2U6DQpbICAgIDcuNTM3OTE4
-XSAgPFRBU0s+DQpbICAgIDcuNTM3OTE5XSAgPyBkZWxheWVkX3dvcmtfdGltZXJfZm4rMHg2
-My8weDkwDQpbICAgIDcuNTM3OTIzXSAgPyBfX3dhcm4uY29sZCsweDkzLzB4ZWQNClsgICAg
-Ny41Mzc5MjZdICA/IGRlbGF5ZWRfd29ya190aW1lcl9mbisweDYzLzB4OTANClsgICAgNy41
-Mzc5MzNdICA/IHJlcG9ydF9idWcrMHhmZi8weDE0MA0KWyAgICA3LjUzNzkzN10gID8gaGFu
-ZGxlX2J1ZysweDNjLzB4ODANClsgICAgNy41Mzc5NDJdICA/IGV4Y19pbnZhbGlkX29wKzB4
-MTcvMHg3MA0KWyAgICA3LjUzNzk0NV0gID8gYXNtX2V4Y19pbnZhbGlkX29wKzB4MWEvMHgy
-MA0KWyAgICA3LjUzNzk0N10gID8gX19wZnhfZGVsYXllZF93b3JrX3RpbWVyX2ZuKzB4MTAv
-MHgxMA0KWyAgICA3LjUzNzk1MV0gID8gX19wZnhfZGVsYXllZF93b3JrX3RpbWVyX2ZuKzB4
-MTAvMHgxMA0KWyAgICA3LjUzNzk1NV0gID8gZGVsYXllZF93b3JrX3RpbWVyX2ZuKzB4NjMv
-MHg5MA0KWyAgICA3LjUzNzk1OF0gID8gX19wZnhfZGVsYXllZF93b3JrX3RpbWVyX2ZuKzB4
-MTAvMHgxMA0KWyAgICA3LjUzNzk2MV0gIGNhbGxfdGltZXJfZm4rMHgyNy8weDEyMA0KWyAg
-ICA3LjUzNzk2NV0gIF9fcnVuX3RpbWVycysweDE4ZC8weDMwMA0KWyAgICA3LjUzNzk2OV0g
-IHRpbWVyX2V4cGlyZV9yZW1vdGUrMHg1MS8weDgwDQpbICAgIDcuNTM3OTczXSAgdG1pZ3Jf
-aGFuZGxlX3JlbW90ZSsweDNjYy8weDQ3MA0KWyAgICA3LjUzNzk3OV0gIGhhbmRsZV9zb2Z0
-aXJxcy5pc3JhLjArMHhiNS8weDIzMA0KWyAgICA3LjUzNzk4Ml0gID8gX19wZnhfc21wYm9v
-dF90aHJlYWRfZm4rMHgxMC8weDEwDQpbICAgIDcuNTM3OTg2XSAgcnVuX3RpbWVyc2QrMHgz
-ZS8weDgwDQpbICAgIDcuNTM3OTg4XSAgc21wYm9vdF90aHJlYWRfZm4rMHhkYS8weDFkMA0K
-WyAgICA3LjUzNzk5Ml0gIGt0aHJlYWQrMHhjZi8weDEwMA0KWyAgICA3LjUzNzk5NV0gID8g
-X19wZnhfa3RocmVhZCsweDEwLzB4MTANClsgICAgNy41Mzc5OTddICByZXRfZnJvbV9mb3Jr
-KzB4MzEvMHg1MA0KWyAgICA3LjUzODAwMF0gID8gX19wZnhfa3RocmVhZCsweDEwLzB4MTAN
-ClsgICAgNy41MzgwMDFdICByZXRfZnJvbV9mb3JrX2FzbSsweDFhLzB4MzANClsgICAgNy41
-MzgwMDZdICA8L1RBU0s+DQpbICAgIDcuNTM4MDA3XSAtLS1bIGVuZCB0cmFjZSAwMDAwMDAw
-MDAwMDAwMDAwIF0tLS0NCg0KVGhlIHdob2xlIGRtZXNnIGlzOg0KaHR0cHM6Ly9saW51eC1o
-YXJkd2FyZS5vcmcvP3Byb2JlPTI4MDU3ZjllZDImbG9nPWRtZXNnDQoNCk15IG5vdGVib29r
-IGhhcmR3YXJlIGluZm8gaXM6DQpodHRwczovL2xpbnV4LWhhcmR3YXJlLm9yZy8/cHJvYmU9
-MjgwNTdmOWVkMg0KDQpJZiBuZWVkIGRvIG1vcmUgdGVzdCwgcGxlYXNlIHRlbGwgbWUuDQoN
-ClRoYW5rcyENCg0K5ZyoIDIwMjQvOS8xOSAxNjoxMSwgVXdlIEtsZWluZS1Lw7ZuaWcg5YaZ
-6YGTOg0KPiBub3RpZnlfaHdwX2ludGVycnVwdCgpIGlzIGNhbGxlZCB2aWEgc3lzdmVjX3Ro
-ZXJtYWwoKSAtPg0KPiBzbXBfdGhlcm1hbF92ZWN0b3IoKSAtPiBpbnRlbF90aGVybWFsX2lu
-dGVycnVwdCgpIGluIGhhcmQgaXJxIGNvbnRleHQuDQo+IEZvciB0aGlzIHJlYXNvbiBpdCBt
-dXN0IG5vdCB1c2UgYSBzaW1wbGUgc3Bpbl9sb2NrIHRoYXQgc2xlZXBzIHdpdGgNCj4gUFJF
-RU1QVF9SVCBlbmFibGVkLiBTbyBjb252ZXJ0IGl0IHRvIGEgcmF3IHNwaW5sb2NrLg0KPiAN
-Cj4gUmVwb3J0ZWQtYnk6IHhpYW8gc2hlbmcgd2VuIDxhdHpsaW51eEBzaW5hLmNvbT4NCj4g
-TGluazogaHR0cHM6Ly9idWdzLmRlYmlhbi5vcmcvMTA3NjQ4Mw0KPiBTaWduZWQtb2ZmLWJ5
-OiBVd2UgS2xlaW5lLUvDtm5pZyA8dWtsZWluZWtAZGViaWFuLm9yZz4NCj4gLS0tDQo+IEhl
-bGxvLA0KPiANCj4gdGhpcyBpcyBkZWVwIGluIHg4NiBsYW5kIHdoZXJlIEkgaGF2ZSAqdmVy
-eSogbGl0dGxlIGV4cGVyaWVuY2UgYW5kDQo+IGtub3dsZWRnZS4gSXMgc3lzdmVjX3RoZXJt
-YWwoKSAoZGVmaW5lZCBpbiBhcmNoL3g4Ni9rZXJuZWwvaXJxLmMpIHJlYWxseQ0KPiBydW5u
-aW5nIGluIGhhcmQgaXJxIGNvbnRleHQ/IFRoZSBzdGFja3RyYWNlIGluIHRoZSBEZWJpYW4g
-YnVnIHJlcG9ydA0KPiBzdWdnZXN0cyB0aGF0Lg0KPiANCj4gU28gcGxlYXNlIGRvdWJsZSBj
-aGVjayBteSByZWFzb25pbmcgYmVmb3JlIGFwcGx5aW5nIHRoaXMgcGF0Y2guDQo+IA0KPiBU
-aGFua3MNCj4gVXdlDQo+IA0KPiAgIGRyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyB8
-IDE2ICsrKysrKysrLS0tLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25z
-KCspLCA4IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY3B1ZnJl
-cS9pbnRlbF9wc3RhdGUuYyBiL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYw0KPiBp
-bmRleCBhYWVhOWEzOWVjZWQuLmIwMDE4ZjM3MWVhMyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVy
-cy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jDQo+ICsrKyBiL2RyaXZlcnMvY3B1ZnJlcS9pbnRl
-bF9wc3RhdGUuYw0KPiBAQCAtMTg0NSw3ICsxODQ1LDcgQEAgc3RhdGljIHZvaWQgaW50ZWxf
-cHN0YXRlX25vdGlmeV93b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAqd29yaykNCj4gICAJd3Jt
-c3JsX29uX2NwdShjcHVkYXRhLT5jcHUsIE1TUl9IV1BfU1RBVFVTLCAwKTsNCj4gICB9DQo+
-ICAgDQo+IC1zdGF0aWMgREVGSU5FX1NQSU5MT0NLKGh3cF9ub3RpZnlfbG9jayk7DQo+ICtz
-dGF0aWMgREVGSU5FX1JBV19TUElOTE9DSyhod3Bfbm90aWZ5X2xvY2spOw0KPiAgIHN0YXRp
-YyBjcHVtYXNrX3QgaHdwX2ludHJfZW5hYmxlX21hc2s7DQo+ICAgDQo+ICAgI2RlZmluZSBI
-V1BfR1VBUkFOVEVFRF9QRVJGX0NIQU5HRV9TVEFUVVMgICAgICBCSVQoMCkNCj4gQEAgLTE4
-NjgsNyArMTg2OCw3IEBAIHZvaWQgbm90aWZ5X2h3cF9pbnRlcnJ1cHQodm9pZCkNCj4gICAJ
-aWYgKCEodmFsdWUgJiBzdGF0dXNfbWFzaykpDQo+ICAgCQlyZXR1cm47DQo+ICAgDQo+IC0J
-c3Bpbl9sb2NrX2lycXNhdmUoJmh3cF9ub3RpZnlfbG9jaywgZmxhZ3MpOw0KPiArCXJhd19z
-cGluX2xvY2tfaXJxc2F2ZSgmaHdwX25vdGlmeV9sb2NrLCBmbGFncyk7DQo+ICAgDQo+ICAg
-CWlmICghY3B1bWFza190ZXN0X2NwdSh0aGlzX2NwdSwgJmh3cF9pbnRyX2VuYWJsZV9tYXNr
-KSkNCj4gICAJCWdvdG8gYWNrX2ludHI7DQo+IEBAIC0xODc2LDEzICsxODc2LDEzIEBAIHZv
-aWQgbm90aWZ5X2h3cF9pbnRlcnJ1cHQodm9pZCkNCj4gICAJc2NoZWR1bGVfZGVsYXllZF93
-b3JrKCZhbGxfY3B1X2RhdGFbdGhpc19jcHVdLT5od3Bfbm90aWZ5X3dvcmssDQo+ICAgCQkJ
-ICAgICAgbXNlY3NfdG9famlmZmllcygxMCkpOw0KPiAgIA0KPiAtCXNwaW5fdW5sb2NrX2ly
-cXJlc3RvcmUoJmh3cF9ub3RpZnlfbG9jaywgZmxhZ3MpOw0KPiArCXJhd19zcGluX3VubG9j
-a19pcnFyZXN0b3JlKCZod3Bfbm90aWZ5X2xvY2ssIGZsYWdzKTsNCj4gICANCj4gICAJcmV0
-dXJuOw0KPiAgIA0KPiAgIGFja19pbnRyOg0KPiAgIAl3cm1zcmxfc2FmZShNU1JfSFdQX1NU
-QVRVUywgMCk7DQo+IC0Jc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmaHdwX25vdGlmeV9sb2Nr
-LCBmbGFncyk7DQo+ICsJcmF3X3NwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmh3cF9ub3RpZnlf
-bG9jaywgZmxhZ3MpOw0KPiAgIH0NCj4gICANCj4gICBzdGF0aWMgdm9pZCBpbnRlbF9wc3Rh
-dGVfZGlzYWJsZV9od3BfaW50ZXJydXB0KHN0cnVjdCBjcHVkYXRhICpjcHVkYXRhKQ0KPiBA
-QCAtMTg5NSw5ICsxODk1LDkgQEAgc3RhdGljIHZvaWQgaW50ZWxfcHN0YXRlX2Rpc2FibGVf
-aHdwX2ludGVycnVwdChzdHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0YSkNCj4gICAJLyogd3Jtc3Js
-X29uX2NwdSBoYXMgdG8gYmUgb3V0c2lkZSBzcGlubG9jayBhcyB0aGlzIGNhbiByZXN1bHQg
-aW4gSVBDICovDQo+ICAgCXdybXNybF9vbl9jcHUoY3B1ZGF0YS0+Y3B1LCBNU1JfSFdQX0lO
-VEVSUlVQVCwgMHgwMCk7DQo+ICAgDQo+IC0Jc3Bpbl9sb2NrX2lycSgmaHdwX25vdGlmeV9s
-b2NrKTsNCj4gKwlyYXdfc3Bpbl9sb2NrX2lycSgmaHdwX25vdGlmeV9sb2NrKTsNCj4gICAJ
-Y2FuY2VsX3dvcmsgPSBjcHVtYXNrX3Rlc3RfYW5kX2NsZWFyX2NwdShjcHVkYXRhLT5jcHUs
-ICZod3BfaW50cl9lbmFibGVfbWFzayk7DQo+IC0Jc3Bpbl91bmxvY2tfaXJxKCZod3Bfbm90
-aWZ5X2xvY2spOw0KPiArCXJhd19zcGluX3VubG9ja19pcnEoJmh3cF9ub3RpZnlfbG9jayk7
-DQo+ICAgDQo+ICAgCWlmIChjYW5jZWxfd29yaykNCj4gICAJCWNhbmNlbF9kZWxheWVkX3dv
-cmtfc3luYygmY3B1ZGF0YS0+aHdwX25vdGlmeV93b3JrKTsNCj4gQEAgLTE5MTIsMTAgKzE5
-MTIsMTAgQEAgc3RhdGljIHZvaWQgaW50ZWxfcHN0YXRlX2VuYWJsZV9od3BfaW50ZXJydXB0
-KHN0cnVjdCBjcHVkYXRhICpjcHVkYXRhKQ0KPiAgIAlpZiAoYm9vdF9jcHVfaGFzKFg4Nl9G
-RUFUVVJFX0hXUF9OT1RJRlkpKSB7DQo+ICAgCQl1NjQgaW50ZXJydXB0X21hc2sgPSBIV1Bf
-R1VBUkFOVEVFRF9QRVJGX0NIQU5HRV9SRVE7DQo+ICAgDQo+IC0JCXNwaW5fbG9ja19pcnEo
-Jmh3cF9ub3RpZnlfbG9jayk7DQo+ICsJCXJhd19zcGluX2xvY2tfaXJxKCZod3Bfbm90aWZ5
-X2xvY2spOw0KPiAgIAkJSU5JVF9ERUxBWUVEX1dPUksoJmNwdWRhdGEtPmh3cF9ub3RpZnlf
-d29yaywgaW50ZWxfcHN0YXRlX25vdGlmeV93b3JrKTsNCj4gICAJCWNwdW1hc2tfc2V0X2Nw
-dShjcHVkYXRhLT5jcHUsICZod3BfaW50cl9lbmFibGVfbWFzayk7DQo+IC0JCXNwaW5fdW5s
-b2NrX2lycSgmaHdwX25vdGlmeV9sb2NrKTsNCj4gKwkJcmF3X3NwaW5fdW5sb2NrX2lycSgm
-aHdwX25vdGlmeV9sb2NrKTsNCj4gICANCj4gICAJCWlmIChjcHVfZmVhdHVyZV9lbmFibGVk
-KFg4Nl9GRUFUVVJFX0hXUF9ISUdIRVNUX1BFUkZfQ0hBTkdFKSkNCj4gICAJCQlpbnRlcnJ1
-cHRfbWFzayB8PSBIV1BfSElHSEVTVF9QRVJGX0NIQU5HRV9SRVE7DQo+IA0KPiBiYXNlLWNv
-bW1pdDogMzYyMWEyYzkxNDJiZDQ5MGFmMDY2NmMwYzAyZDUyZDYwY2UwZDJhNQ0KDQotLSAN
-CuiCluebm+aWhyB4aWFvIHNoZW5nIHdlbg0KRGViaWFuIFFBIHBhZ2U6IA0KaHR0cHM6Ly9x
-YS5kZWJpYW4ub3JnL2RldmVsb3Blci5waHA/bG9naW49YXR6bGludXglNDBzaW5hLmNvbQ0K
-RGViaWFuIHNhbHNhOiBodHRwczovL3NhbHNhLmRlYmlhbi5vcmcvYXR6bGludXgtZ3Vlc3QN
-CkdudVBHIFB1YmxpYyBLZXk6IDB4MDAxODY2MDIzMzkyNDBDQg0K
+Only thing I am seeing here is a bit of heresay. Please get in touch
+with Asus, cross your t's and dot your i's, and share what you found
+with the rest of the class.
 
---------------wVVrLy4gzt6dcNchLdddGcmy--
+I am in no rush to see this merge, and as all gaming distributions
+carry custom kernels that update on a weekly cadence and 90% of users
+are on those kernels with the rest being able to figure it out, there
+is no practical reason for this to merge quickly. Ubuntu (+variant)
+users will get this fix after they've thrown their ally away anyway.
 
---------------xgMkEUA7s5SokUs3ZAzs7GDw
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+> What I can provide is information on a test we did that should hopefully
+> elucidate the issue more clearly for you. We included a patch that allowed us
+> to alter the delay in asus-wmi on the fly by writing to an attribute in sysfs.
+> In addition, we pushed the _DSM calls as early as possible in the suspend
+> sequence. We were unable to find a timing for this that would work consistently
+> on different configurations. The same issue exists in your patch set and the
+> testing bears this out with Denis still getting spurious wakes when using it.
+> The problem with your approach is that you aren't listening to us despite our
+> much broader understanding of the issue at hand. If this worked we would have
+> submitted it ourselves nearly three weeks ago.
 
------BEGIN PGP SIGNATURE-----
+Here you assume I did not do the same. Yes, I did. The asus-wmi quirk
+is subject to racing conditions that mean it will never work correctly
+(well; without newer firmware maybe perhaps). This series is not, as
+the calls happen before suspend starts.
 
-wsF5BAABCAAjFiEEvGv7H5NUQYeSuhtTJ2Egg8PSprAFAmbwyh4FAwAAAAAACgkQJ2Egg8PSprAF
-HQ//ZUwyCNUH2t/rEQG4rqOzuqmdTvy8vR5ep61lIpsLL0SBh1kXYO94b6656lhvnAg8NPYtVFm6
-egSFlcku+BNpgW1FXU8dxKdJ/ip5QCbBJPMW5rOl+3FwvBSGHlsjPlVk3mnQXqmfRtrI5Daub1OV
-Zex5P4xM4/9lTpvSJZqmg6hNWdissjKkpISde3Rdw7puXUfNuiDo10aXxhnPV7qsnf7XBkSyVD81
-RXSvu1JoIMc5X2bCsaMjm8Kp2FXayiEIsxQ2u0BMctXZDVH9Ex5YuQc15z8unJO66nmpQ9RkCnZF
-AzyYp/cyTtVx1UoDC6wIs+epIuft94Dv+ZAjT+QT2UVfIaLUeKNPShrIfbIVwr/RfmFX394sTphj
-DiTs5hj1VBija97AAEuQBbzlzaVZ+VRhMJYGMo78QYfFY4Vv0z2Sqpkx1dLuU6/YcKTERu7H+XTx
-bze5rn6MuwQM9+VUWotFHQi6y2MmI0JGEm4YlzhNlpq9g7zpoSmNt3Y3okjVJ+jH3cEYjsKvh8Bz
-J4XqwJ7rlNJQzz2EZD7oN/xZjbt//+FsANnh78hk2uypFjtJ2Z3Rqb+/8QFluJ1KIBZ14OcSdTSl
-qWcKvci08JUjDA31ZoXBtakP+pgzbSIrlA6N2tIXZXCZoaVDlAzl1htSEIQaM9mkhfsFqrBQfmSO
-4WE=
-=x7Mo
------END PGP SIGNATURE-----
+Yes, my V1 of the patch did not include a delay at all. Since the
+original Ally is XInput, one of the MCUs was left on, which caused
+what Denis experienced. It also triggered a restart of the MCU on the
+Ally X after resume. V2 fixes this restart on the Ally X and makes it
+behave completely properly.
 
---------------xgMkEUA7s5SokUs3ZAzs7GDw--
+In fact, after being included in bazzite-testing yesterday, my Ally X
+unit went on a deep slumber tonight with powersave on, and then woke
+up today beautifully, having only lost 1% of battery.
+
+It is not clear if the issue still exists on the original Ally, I
+could not get a clear signal from Denis but do not worry, one of our
+contributors is on it.
+
+> *Our solution doesn't require any kernel changes for newer firmware*, as I
+> already stated the solution from ASUS fixes the root cause of the problem. Your
+> attempt at a solution attempts to outrace the symptoms of it. Please don't
+> mischaracterize my statements.
+
+I would hope that is not true and your solution completely removes the
+quirk from asus-wmi for newer firmware, as it prolongs the suspend and
+resume sequences noticeably. However, given my and Denis' limited
+testing, I doubt the controller is able to suspend quickly enough even
+with new firmware (you can see the RGB cut before it's able to fade).
+
+In any case, this patch series is not expected to conflict with Asus'
+newer firmware and is in fact complementary with it. Both fix the same
+issue in a different way, which means our users will have a great
+experience, squared. This series also greatly improves resume behavior
+on the Ally, which, let me tell you, is blazing fast now.
+
+Antheas
 
