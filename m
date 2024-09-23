@@ -1,158 +1,184 @@
-Return-Path: <linux-pm+bounces-14587-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14588-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B9CD97EFA4
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 18:55:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1711A97EFB6
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 19:02:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CA5B1F219A8
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 16:55:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39B2C1C21621
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 17:02:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B6661991D9;
-	Mon, 23 Sep 2024 16:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D33019E99B;
+	Mon, 23 Sep 2024 17:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="DYY30CjC"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="W2q3dPf1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D2019F40A
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 16:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05899197A97;
+	Mon, 23 Sep 2024 17:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727110496; cv=none; b=A/dzBAOmZdW+l6Wiq8IFEYt/GsUz7MPflLMUQafPPXIe+8sL2bW1wLa1U5v7ZqstFrfa2P07PlshtiCTGbk+sNJd/TmV7hPSpHNsL6B2dsBPvxaYMkHh9z2EuNiWUpobEVU42ab9QP19vleKQYKG2lhoMnJROGTMTgPlZn7C0M8=
+	t=1727110932; cv=none; b=Bv/Q7rIIvrPVw+q3D7WB0IcUTQ4qwsKZTbDxms2NJXx06Ewq0ui7aT+NmvLgj9xaDqBeSZwSkXpWSpxUdD4YzPywmn2MDFUy0lX7NIq4epgWfPnfSfXp9dovjqlvoow20V11cowLWI4vSeWCR2M7aC/gO3Hz87ggXEInx/O/5VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727110496; c=relaxed/simple;
-	bh=I3It6gBYooIu+p61xnrYJCenoDzRPtV0cjr/dPQN1F8=;
+	s=arc-20240116; t=1727110932; c=relaxed/simple;
+	bh=lvgmLZxYhCmVB7pq80qJENcOsyEl4GzyQ5Wm0/Yx1Rg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kOKiqQqGbPZtELFLbBfTE68umzZu3gnOz+7QocLvX537BFPR+TpucbAAAm8sDWfMUPQ97IZuROZS2lCtTDq0OAci/emxGChY9C5TSD+pfdiQYnwoafnK2ptg6DTAJf1bB0oYOzUJpfFgblc+l7AtTHx7uIQX+4dLyy40Uif3EKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=DYY30CjC; arc=none smtp.client-ip=185.138.42.100
+	 To:Cc:Content-Type; b=lwDQKnujEtX2rO8vvBR/ZZ7CxA020Q1IX4Iwwh1xXJ1gb1Um0QrvZe39tbPFAphs1JtHnUUVGepPO2pHi1Jj6XUl3mh0eSqgYZsc+PoUun4XtcgX3bXy2cvqgPZgaNZx92T6FY/szPuiIHA4zJ+RQwrZHdDc98QlLIaDlhnXRSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=W2q3dPf1; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 300D72E00D18
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 19:54:50 +0300 (EEST)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 3855F2E03433;
+	Mon, 23 Sep 2024 20:02:06 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1727110490;
-	bh=ea2nMGOBsfrVvo6L8+qxl8lkJQ/fxIwLdkiUDWVwcyA=;
+	s=default; t=1727110926;
+	bh=QVTFu8TbMYcEfJeTkBbY29SOm453LF+epw36MMSCM9k=;
 	h=Received:From:Subject:To;
-	b=DYY30CjCYptesm/XsiUK27+8LqJ5eNq4JDEB7Tq67+k/CaVFsR5E0zjjh5wqgpttB
-	 WrNcStPmEfblRypF4aZ4Hz3n7VNdvgETH5cfLLIg6TcjMkWSm4Uy8+21wFaol/syVm
-	 /7/B/hSHCoPWPG7KMAM5ZwsjtOwhwpCA3RmFTasI=
+	b=W2q3dPf17oXBWTw0wK6RNXr5Vp2G34bpuMQyF/SDpHnRD3w5OzM6pQAPaq/AeI3BZ
+	 OPCMBiEV5JEdL7/BGOsmHjzZyZb10x7pSI2eytGkl16MiO9CaNh0AEGzA2R0AC85Ds
+	 TJUsXF+XBR/WKTfIC6TpLuRvdSPNUhNn6zlLCwY4=
 Authentication-Results: linux1587.grserver.gr;
         spf=pass (sender IP is 209.85.208.181) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f181.google.com
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
 Received: by mail-lj1-f181.google.com with SMTP id
- 38308e7fff4ca-2f75d044201so44983311fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 09:54:50 -0700 (PDT)
+ 38308e7fff4ca-2f759b87f83so47593361fa.2;
+        Mon, 23 Sep 2024 10:02:06 -0700 (PDT)
 X-Forwarded-Encrypted: i=1;
- AJvYcCUbwsDqGLtGzx4m9mRMCL968DfEb5UwPJzVa65xePFQivgAm3TkrkHl2/dvP3vFkUzci4Qo72pdnw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNkP7karV+GKIQGzhkS74JTDUyAYBjCIit1KgPHTCr8Vd9MIBV
-	bxDYMenizu3rcjK5UjLUuDnJZVk7aeRhSWr4Ft5Tj4AzDDSyYtYzBZ60mnuIDTrKowUC4QzoSUN
-	TF2Dq88PYXEYnsWzr4IPNOwjmffk=
+ AJvYcCVbG60y2PW/p5v0Sa/a9SBZJIdw9xQaDbaOl3NWR0hCKgI8T3lPSy96LRri371iRGMStOYeialrMCfGjQbcD1dknd2y@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4e1AFC27af865pI91nqowJCZ2v3/Y7zCKSwtLhDpWim7PUnip
+	+0TjgcQXo2G27OybyStnO+uwf+p9RpilckWUQ032T1Bjyqg2NXvIEi2OmMDd12MaGZA08vcshP7
+	h+4mlK04CzgJKVt3dfozNdRzixmk=
 X-Google-Smtp-Source: 
- AGHT+IErGysnspOd41gQJRK9/rlbfBX1W4GjWUKg8R1uGNBVy8xspcKYoDlNFQr3OVvRT7+MkIEWGecd39WqUoJQS/4=
-X-Received: by 2002:a05:651c:1545:b0:2f7:a759:72a3 with SMTP id
- 38308e7fff4ca-2f8d0ba1958mr874191fa.24.1727110489354; Mon, 23 Sep 2024
- 09:54:49 -0700 (PDT)
+ AGHT+IEY4xY/TUAT45uRxdyb4AR46kNHOV3mrH3H1W2EiAWF+PTvfPM+N7H97UGePApOHlyFvpHThb9ksBza2TDOg5I=
+X-Received: by 2002:a05:651c:221b:b0:2f6:5f0a:9d00 with SMTP id
+ 38308e7fff4ca-2f7cc3578ffmr59473911fa.1.1727110925444; Mon, 23 Sep 2024
+ 10:02:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: 
- <CAGwozwHqHbHNi53T87m36-OZ8suCEo1wgJ9fPPgPdcLnt_+S4g@mail.gmail.com>
- <20240923013657.7464-1-derekjohn.clark@gmail.com>
- <CAGwozwHmS-XjhzYayNvT07vesw4eOBh+ZjWi_NDa4xsOangYDQ@mail.gmail.com>
- <b43f9654-4dd7-4f3c-95b5-575473c3bcc1@app.fastmail.com>
- <CAGwozwE_MXuqreQvDFyVyodrzH5HFB=Nab9LfxD9DMB+HGkt3Q@mail.gmail.com>
- <fa1cb9c1-8b56-4fbf-89aa-86ffc6dc837b@amd.com>
- <CAGwozwHvXkG824xHcfnr6E+B6iLr6KJiLEjJhx4hEhieHYob8g@mail.gmail.com>
- <358ca905-ae53-4d2d-b09a-8e708d6fadd8@amd.com>
-In-Reply-To: <358ca905-ae53-4d2d-b09a-8e708d6fadd8@amd.com>
+References: <20240922172258.48435-1-lkml@antheas.dev>
+ <20240922172258.48435-3-lkml@antheas.dev>
+ <1a9b611c-51f0-4c3d-8bc2-62c6b6104fd2@amd.com>
+ <CAGwozwFwU=KMgDUmKsYRu323dsuUfQYa8e-aXV3JGGSkgF-RkQ@mail.gmail.com>
+ <1eff4036-b785-4737-b919-d67c52efea65@amd.com>
+ <CAGwozwHbt8+hVDpyz8GM=Lwg8o=oLZDgCJ9JZN_HRzHLuwuknA@mail.gmail.com>
+In-Reply-To: 
+ <CAGwozwHbt8+hVDpyz8GM=Lwg8o=oLZDgCJ9JZN_HRzHLuwuknA@mail.gmail.com>
 From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 23 Sep 2024 18:54:37 +0200
+Date: Mon, 23 Sep 2024 19:01:54 +0200
 X-Gmail-Original-Message-ID: 
- <CAGwozwGsyebGE78SKMckkm2=8uqDTX+S-Jnxrn61X_UHVEDcDA@mail.gmail.com>
+ <CAGwozwHR-LgXbO+3Ot7AwVnEwmSR70gtfERSdt47ZbW62yX3Bw@mail.gmail.com>
 Message-ID: 
- <CAGwozwGsyebGE78SKMckkm2=8uqDTX+S-Jnxrn61X_UHVEDcDA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
+ <CAGwozwHR-LgXbO+3Ot7AwVnEwmSR70gtfERSdt47ZbW62yX3Bw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] acpi/x86: s2idle: handle Display On/Off calls
+ outside of suspend sequence
 To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Luke Jones <luke@ljones.dev>,
- "Derek J. Clark" <derekjohn.clark@gmail.com>, me@kylegospodneti.ch,
-	Denis Benato <benato.denis96@gmail.com>, linux-pm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	luke@ljones.dev, me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-PPP-Message-ID: 
- <172711049056.22266.6721309054129621677@linux1587.grserver.gr>
+ <172711092663.16734.1525279245002187014@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-> Part of the problem here is that we (Linux kernel developers) don't have
-> the details of how the MCU actually interacts with the OS vs how it
-> wants to interact with the OS.  Only ASUS knows this and all we can do
-> is guess (or join an NDA).
+Here I should note that I will not wait for systemd.
 
-I want to say that that is beginning to change, at least for these
-devices. Manufacturers want the experience that comes with owning the
-whole OS. Mobile phones and TVs figured that out long ago.
+As part of adding support for these devices with Handheld Daemon, I
+snag the powerbutton already and I only have one userspace app running
+anyway, Steam. The idea here would be double tap the powerbutton to
+enter a "Download Assistant", custom lockscreen pops up, and two
+seconds later DPMS triggers, system enters Sleep state and either when
+a battery target is reached or the download finishes, it transitions
+to actual suspend.
 
-> "For example" (not saying this is the problem; I don't know) if we have
-> a Linux sequence that we put the XHCI host controller into D3 but don't
-> turn off the port first this might not matter to most devices because
-> you're saving power by the controller being in D3.  But if the device is
-> looking for some sequence of packets there could be a failure if those
-> never happen or happen at the wrong time.
+The challenges here would be if the _DSM calls for Display Off and
+Sleep Entry are a nothingburger and do not save much battery and that
+Steam uses very heavy compression that does a lot of CPU.
 
-The problem here is probably that. Killing the power too early made it
-not save its state, asking it to be brought up before it powers on
-made it NOOP, and asking it to be brought up in prepare_early ended up
-with a bunch of race conditions with the kernel.
-
-Lenovo figured it out, so there is no reason Asus wouldn't. Although
-the latest bios from lenovo made the controllers take 2 seconds longer
-to wake up. We did not have any problem in Linux, that was in Windows.
-Unplugging XInput devices is really a mess.
-
-I am really happy with the patch on the Ally X. We will get to testing
-it on the Ally. It does a little reboot with powersave on, but that is
-a cosmetic failure and happens in Windows too. When Asus fixes that I
-will point them to Windows to update if they care about powersave so
-much.
-
-> >
-> > I am currently playing a bit with the calls in the Legion Go. Seems
-> > like one of them turns off its controller as well.
-> >
-> > I did not know fwupd could do microprocessors, if it is simple that
-> > would be great.
->
-> Yeah in this case it interacts with the USB HID interface.
->
-> Unfortunately we don't have the HID spec from ASUS, so the entire thing
-> would need to be reverse engineered.
->
-> I hope that more of these handhelds with MCUs that get regular updates
-> make the same investment.
-
-I do not think every manufacturer creates a HID spec for updates. They
-use the same cookiecutter stuff, for which there is no linux
-implementation at all, so kind of the same. Probably after we do 1-3,
-we will have all of them.
-
-I saw that HID interface though, and the Legion Go has one and I am
-none the wiser.
-
-I've been doing HID for over a year by now, so I am used to it.
-Biggest problem is you cannot trigger an update in Windows whenever
-you want to sniff it. At least on the Lenovo.
-
-However, I think I have bigger fish to fry, so it is not high in my
-priority list.
+If I find it not useful, maybe I will skip it.
 
 Antheas
+
+On Mon, 23 Sept 2024 at 18:43, Antheas Kapenekakis <lkml@antheas.dev> wrote=
+:
+>
+> > On 9/23/2024 11:15, Antheas Kapenekakis wrote:
+> > > Does DRM core handle virtual displays like VNC?
+> > >
+> >
+> > You can make use of virtual display connectors in amdgpu.  This is how
+> > drivers for new ASICs are first developed in emulation and also what's
+> > used for early hardware bring up.
+>
+> Microsoft specificies all displays "state where all displays=E2=80=94loca=
+l and
+> remote, if any=E2=80=94have been turned off"
+>
+> If any means that no displays =3D no call perhaps. Would be interesting
+> when designing a system for disabled people though. Given how it
+> interacts in Windows, I want to say the target here is inactivity.
+>
+> > > As mentioned in the cover letter, the _DSM specifies both virtual and
+> > > actual displays.
+> > >
+> > > Also, Windows behavior is like a lockscreen. 5 seconds after screen
+> > > turns off after inactivity, instantly when you press the power button=
+.
+> > >
+> > > I tend towards making a sysfs entry. Not sure.
+> > >
+> >
+> > Who would call this sysfs file?  Systemd?  The compositor?  When?
+> >
+> > In Linux the compositor is in charge of doing the modesets that involve
+> > turning on/off the screen.  In most cases if you press the power button
+> > in Linux systemd-logind picks up the event.  It triggers a behavior
+> > that's controlled by the logind configuration.  Typically that's turnin=
+g
+> > on a lockscreen and/or starting the suspend sequence.
+>
+> That's where it gets hairy and an area WIndows uniquely does not have
+> a problem with because the OS is monolithic.
+>
+> If it were me, yes, systemd would switch the system to the inactive
+> "Screen Off" state 5 seconds after the system displays are off due to
+> inactivity. If we are talking about implementing something Modern
+> Standby-like, then pressing the powerbutton would no longer suspend
+> the device. Instead systemd would use two tiers of activators like
+> windows (first tier for "Screen Off", second tier for "Sleep"; right
+> now there is only one tier that mirrors screen off) and once all those
+> activators are released, suspend the kernel.
+>
+> Then it would handle the transition from "Active" to "Screen Off" to
+> "Sleep" through a sysfs endpoint, with the platform responding by
+> e.g., lowering TDP and using a different fan curve.
+>
+> If the kernel is asked to suspend outside of the Sleep state, then it
+> does the transitions to reach that state and references the quirk
+> table to avoid racing conditions in manufacturer firmware (not with
+> the kernel), before it suspends.
+>
+> > Important to note; it DOESN'T explicitly turn off displays.  If you
+> > configured it to suspend then displays get turned off as part of the
+> > kernel suspend sequence (drm_atomic_helper_disable_all).
+> >
+> > If it is configured to trigger a lockscreen then the compositor will
+> > turn off displays after whatever the DPMS configuration is set to.
+>
+> The problem with a DRM atomic helper is that we cannot control how it
+> is called and do debouncing. WIndows does debouncing (part of that is
+> waiting for 5 seconds so that if you move the mouse the call is
+> skipped). You could have edge conditions that spam the calls.
+>
+> Antheas
 
