@@ -1,240 +1,163 @@
-Return-Path: <linux-pm+bounces-14565-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3303797E980
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 12:08:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0B497E98A
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 12:10:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 550CA1C217E2
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 10:08:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EE9A1C21775
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 10:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC87196434;
-	Mon, 23 Sep 2024 10:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC99198E7F;
+	Mon, 23 Sep 2024 10:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gn8Zuav4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F615194147;
-	Mon, 23 Sep 2024 10:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961A1195F17;
+	Mon, 23 Sep 2024 10:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727086002; cv=none; b=h9BG6VnUToeCfD/+WkP46OTL/RZRoRIKjGtxj4+ej6C/klLFheevI/2SeMhu8wD6zfkBvxbsgK7Fl/Q7UHEYMyMcEde+e/lf3KPwUD2lg344Sg/JFdfRzJL3lelZ11nA8GeDZTAlUwnigVIf0ye54W4Bg9AoADseUZL3GBdFG3Y=
+	t=1727086079; cv=none; b=B7/MRuRapQkeEL5Pu8OPzXfz+yFek+XJ0yBnjVHj+8wKRuRdQC1gMJ7Nj/z7IQMlzzqwCANkqC1nFqzbJDmEYRgayAyC/8x6hOjIBwnPmgF1VwjN8TJcHI2y0X5tcezntS/yxzeY+ZoGf1Yj+KWexuKDtfyLKYOaJveaD5ahnU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727086002; c=relaxed/simple;
-	bh=ffzbHq5Hxjou65anjwZoiCRcPCM2T49YDkJ7hdjajw4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Znau8z8mEcpaKaMRMtDGZD9DG9FLvGGg6jdWvO7I/y3IH/0d9JwiNCXWhGnoBU+SgqxDJ/+HsKDF4FI+EXEhPidQ7JQjaFL9uORY5Z/PU4KWbFx99US+xbVXntSm12qotS7izlDOtw7pYbBUbFu0abPqpeLpraDdITlLAKzFPaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 82833954799311efa216b1d71e6e1362-20240923
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_UNTRUSTED, SA_UNFAMILIAR, SN_UNTRUSTED, SN_LOWREP, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
-	AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:01411952-9c2b-433a-b0ca-69938fa81716,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-20
-X-CID-INFO: VERSION:1.1.38,REQID:01411952-9c2b-433a-b0ca-69938fa81716,IP:0,URL
-	:0,TC:0,Content:-25,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:-20
-X-CID-META: VersionHash:82c5f88,CLOUDID:2c730c01d596b5dd8a715c4187d3965e,BulkI
-	D:240920201331T4OCW1CK,BulkQuantity:6,Recheck:0,SF:38|72|19|66|102,TC:nil,
-	Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD
-X-UUID: 82833954799311efa216b1d71e6e1362-20240923
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1815315041; Mon, 23 Sep 2024 18:06:32 +0800
-From: dengjie03 <dengjie03@kylinos.cn>
-To: rjw@rjwysocki.net,
-	pavel@ucw.cz,
-	len.brown@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	xiehongyu1@kylinos.cn,
-	duanchenghao@kylinos.cn,
-	dengjie03 <dengjie03@kylinos.cn>,
-	xiongxin <xiongxin@kylinos.cn>
-Subject: [PATCH] KYLIN: USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
-Date: Mon, 23 Sep 2024 18:05:53 +0800
-Message-Id: <20240923100553.119324-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1727086079; c=relaxed/simple;
+	bh=g7FAc9OYW1op9fQgfvmM6BytK9IwD6jCDZ0xkaq076I=;
+	h=Message-ID:Date:MIME-Version:From:To:CC:Subject:Content-Type; b=i7sKC2ggAFvm28OTyMGXRtLIQZVQswhfquLyKMrLS9rLod/3sJqa0Z49xAlGpVE+lAKdGXh1XlAfuJVUKQGPlpprFtINjHtt6+nUWhSpuCwx6nkPMolRyXJCRAlAUXIz1a5nJsYE2g/SPn8Tt7j32W/PYkwFWPxgxLebzDihDGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Gn8Zuav4; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48MMkVXc008558;
+	Mon, 23 Sep 2024 10:07:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=End3JsuI3AjzcoV07bmLrz
+	l5uJ2BjznpOwfc+5yP960=; b=Gn8Zuav4+Tk/RH3MhRH0KxLhW0Rni5ZX9JiQ2M
+	Mq3KAisgCOkgkbOheLs1hEfsPMpsXW4k/DJeKbueoUIzhjo9cUEwgYOSMeEnN7EA
+	Z6vDc1vcXLl90NAZ/2ntkowehlNKZR6qbQ6wIFFDRx8IPetKepRDdModdlTp3yW2
+	nPRmHzvEO+fIgtGzbmGbZk6dcZ0g0gAHLnK5U1NQX0ykaDGBBFVpgHDiEPcHsAqU
+	h9EuWoFfh9ZOgZS00sYhdsHlPAu+0J9iGkUHGcnc1oa3ql9xlriu42OCF0snL/jv
+	IUg2xoi3lvmRuWrAHQ/h3Ydg+eTPanUfumirpfe+niBAWTvA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41sph6mju7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Sep 2024 10:07:43 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48NA7f50007981
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Sep 2024 10:07:41 GMT
+Received: from [10.231.195.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 23 Sep
+ 2024 03:07:38 -0700
+Message-ID: <370d023e-ec53-4bf2-a005-48524c9cb4b2@quicinc.com>
+Date: Mon, 23 Sep 2024 18:07:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Baochen Qiang <quic_bqiang@quicinc.com>
+To: <rafael@kernel.org>, <mika.westerberg@linux.intel.com>,
+        <ulf.hansson@linaro.org>, <bhelgaas@google.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <mpearson@lenovo.com>, <markpearson@lenovo.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+CC: <linux-acpi@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+Subject: unexptect ACPI GPE wakeup on Lenovo platforms
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: T8CvMl7AuuKOzCoV-KFOANAyj1yL6-RU
+X-Proofpoint-ORIG-GUID: T8CvMl7AuuKOzCoV-KFOANAyj1yL6-RU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxlogscore=949
+ mlxscore=0 adultscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409230074
 
-Reproduction of the problem: During the S4 stress test,
-when a USB device is inserted or removed, there is a
-probability that the S4 wakeup will turn into a reboot.
-The following two points describe how to analyze and
-locate the problem points:
+Hi,
 
-1. During the boot stage when S4 is awakened, after
-the USB RootHub is initialized,it will enter the
-runtime suspend state. From then on, whenever an
-xhci port change event occurs, it will trigger a
-remote wakeup request event and add wakeup_work to
-pm_wq, where the subsequent RootHub runtime resume
-process will be handled by pm_wq.
+recently it is reported that on some Lenovo machines (P16v, Z13 etc.) unexpected ACPI event wakeup is seen with kernel 6.10 [1][2]. To summary, the unexpected wakeup is triggered by simply unplug AC power or close lid of the laptop. Regression test shows this is caused by below commit, and with that reverted the issue is gone:
 
-xhci runtime suspend flow：
-S4 boot
-   |->xhci init
-       |->register_root_hub
-	   |->hub_probe
-	       |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/wireless/ath/ath11k?id=166a490f59ac10340ee5330e51c15188ce2a7f8f
 
-xhci runtime resume flow ：
-xhci_irq()
-    |->xhci_handle_event()
-	|->handle_port_status()
-   	    |->if(hcd->state == HC_STATE_SUSPENDED)
-		 |->usb_hcd_resume_root_hub()
-		    |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
-  		    |->queue_work(pm_wq, &hcd->wakeup_work)
-			|->hcd_resume_work()			       /* hcd->wakeup_work */
-			    |->usb_remote_wakeup()
-				|->callback = RPM_GET_CALLBACK(dev, runtime_resume)
-				    |->usb_runtime_resume()            /* usb runtime resume  */
-					|->generic_resume()
-					    |->hcd_bus_resume()
-						|->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
-						  /* wakeup pending signal to be clear */
+Well what confuses me is that this commit basically resets WLAN hardware before going to suspend. that said, WLAN target maintains limited functionality (PCIe link handling etc...) during system suspend and is thus not expected to wakeup system.
 
-2. However, during the quiesce phase of S4 wakeup,
-freeze_kernel_threads() will freeze this pm_wq,
-and between freeze_kernel_threads() and dpm_suspend_start(),
-there exists a very time-consuming S4 image loading process.
-This leads to a situation where, if an xhci port change event occurs
-after freeze_kernel_threads(), triggering the wakeup pending
-signal to be set,but it cannot be processed by pm_wq to clear
-this wakeup_pending bit, it will result in a subsequent
-dpm_suspend_start() where USB suspend_common() detects the
-wakeup pending signal being set and returns an -EBUSY error,
-interrupting the S4 quiesce process and reverting to a reboot.
+kernel log shows this is an ACPI GPE event wakeup:
 
-S4 wakeup
-    |->resume_store
-	|->software_resume()
-	    |->freeze_kernel_threads()		/* will freeze pm_wq */
-	    |->load_image_and_restore()
-		  |->swsusp_read()    	        /* S4 image loading: time-consuming .
-When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
-However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
-   		  |->hibernation_restore
-			|->dpm_suspend_start(PMSG_QUIESCE)
-			    |->hcd_pci_suspend()
-				|->suspend_common()
-				    |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
+Sep 22 22:34:32 fedora kernel: PM: Triggering wakeup from IRQ 9
+Sep 22 22:34:32 fedora kernel: ACPI: PM: ACPI non-EC GPE wakeup
+...
+Sep 22 22:34:32 fedora kernel: PM: noirq resume of devices complete after 693.757 msecs
+Sep 22 22:34:32 fedora kernel: ACPI: GPE event 0x07
+Sep 22 22:34:32 fedora kernel: ACPI: GPE event 0x0e
 
-Below is a description of the countermeasures taken to address this issue:
-1. Considering the restore process that occurs after
-the quiesce phase during S4 wakeup, which essentially
-resets all root hubs,checking this wakeup pending status
-in USB suspend_common() during the quiesce phase is of
-little significance and should therefore be filtered out.
+Consulting ACPI tables show GPE 0x07 is used by the EC and GPE 0x0e is used by GPP6 device:
 
-S4 wakeup restore phase
-    |->dpm_resume(PMSG_RESTORE)
-	|->hcd_pci_restore()
-	    |->xhci_resume()		       /* reset all root hubs */
+Scope (\_SB.PCI0.GPP6)
+{
+    ...
+    Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+    {
+        M460 ("PLA-ASL-\\_SB.PCI0.GPP6._PRW Return GPRW (0xE, 0x4)\n", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+        Return (Package (0x02)
+        {
+            0x0E,
+            0x04
+        })
+    }
+    ...
+}
 
-Fixes: 3904bdf0821c40352495f632862637080e6bd744(PM: hibernate: Freeze kernel threads in software_resume())
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-Co-developed-by: dengjie03 <dengjie03@kylinos.cn>
----
- drivers/base/power/main.c  |  5 +++++
- drivers/usb/core/hcd-pci.c | 21 ++++++++++++++-------
- include/linux/pm.h         |  1 +
- 3 files changed, 20 insertions(+), 7 deletions(-)
+while GPP6 is the PCI bridge (the PCIe root port in this case) to which WLAN target is attached to:
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index fb4d18a0b185..264d08b9e331 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -559,6 +559,11 @@ bool dev_pm_may_skip_resume(struct device *dev)
- 	return !dev->power.must_resume && pm_transition.event != PM_EVENT_RESTORE;
- }
- 
-+bool is_pm_queisce(void)
-+{
-+	return pm_transition.event == PM_EVENT_QUIESCE;
-+}
-+
- static pm_callback_t dpm_subsys_resume_noirq_cb(struct device *dev,
- 						pm_message_t state,
- 						const char **info_p)
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 77830f120834..7070548deb63 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -456,18 +456,25 @@ static int suspend_common(struct device *dev, bool do_wakeup)
- 		/* Optimization: Don't suspend if a root-hub wakeup is
- 		 * pending and it would cause the HCD to wake up anyway.
- 		 */
--		if (do_wakeup && HCD_WAKEUP_PENDING(hcd))
--			return -EBUSY;
--		if (do_wakeup && hcd->shared_hcd &&
--				HCD_WAKEUP_PENDING(hcd->shared_hcd))
-+		/* Considering the restore process that occurs after
-+		 * the quiesce phase during S4 wakeup, which essentially
-+		 * resets all root hubs,checking this wakeup pending status
-+		 * in USB suspend_common() during the quiesce phase is of
-+		 * little significance and should therefore be filtered out.
-+		 */
-+		if (!is_pm_queisce() && do_wakeup &&
-+		    (HCD_WAKEUP_PENDING(hcd) ||
-+		     (hcd->shared_hcd &&
-+		      HCD_WAKEUP_PENDING(hcd->shared_hcd))))
- 			return -EBUSY;
- 		retval = hcd->driver->pci_suspend(hcd, do_wakeup);
- 		suspend_report_result(hcd->driver->pci_suspend, retval);
- 
- 		/* Check again in case wakeup raced with pci_suspend */
--		if ((retval == 0 && do_wakeup && HCD_WAKEUP_PENDING(hcd)) ||
--				(retval == 0 && do_wakeup && hcd->shared_hcd &&
--				 HCD_WAKEUP_PENDING(hcd->shared_hcd))) {
-+		if (retval == 0 && !is_pm_queisce() && do_wakeup &&
-+		    (HCD_WAKEUP_PENDING(hcd) ||
-+		     (hcd->shared_hcd &&
-+		      HCD_WAKEUP_PENDING(hcd->shared_hcd)))) {
- 			if (hcd->driver->pci_resume)
- 				hcd->driver->pci_resume(hcd, false);
- 			retval = -EBUSY;
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 4c441be03079..48dab3b2501b 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -758,6 +758,7 @@ extern void pm_generic_complete(struct device *dev);
- 
- extern bool dev_pm_may_skip_resume(struct device *dev);
- extern bool dev_pm_smart_suspend_and_suspended(struct device *dev);
-+extern bool is_pm_queisce(void);
- 
- #else /* !CONFIG_PM_SLEEP */
- 
--- 
-2.25.1
+Device (GPP6)
+{
+    Name (_ADR, 0x00020002)  // _ADR: Address
+    ...
+}
 
+Scope (_SB.PCI0.GPP6)
+{
+    Device (WLAN)
+    {
+        ...
+    }
+    ...
+}
+
+and lspci also shows such relationship:
+
+$ lspci -vt
+-[0000:00]-+-00.0  Advanced Micro Devices, Inc. [AMD] Device 14e8
+           ...
+           +-02.2-[03]----00.0  Qualcomm Technologies, Inc QCNFA765 Wireless Network Adapter
+           ....
+
+Based on above info:
+#1 is that valid to get the conclusion that this unexpected wakeup is triggered directly by PCIe bridge?
+#2 if this is related to WLAN (seems so based on the regression test), is it the WLAN wake pin (a GPIO pin?) that originally triggers this? and how does it affect the bridge?
+#3 quick tests show that with GPP6 wakeup disabled this issue is gone. so a workaround is to disable GPP6 wakeup before going to suspend and enable it back after resume. But is it safe to do so?
+
+
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=219196
+[2] https://bugzilla.redhat.com/show_bug.cgi?id=2301921
 
