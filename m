@@ -1,211 +1,159 @@
-Return-Path: <linux-pm+bounces-14585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 178A097EF4D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 18:31:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA86597EF69
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 18:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C634D280DB4
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 16:30:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C96B1F221FE
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 16:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2494419CC3C;
-	Mon, 23 Sep 2024 16:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83CA19F105;
+	Mon, 23 Sep 2024 16:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="J5NUzlla"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="d+CArDqR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2049.outbound.protection.outlook.com [40.107.102.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B43428E7;
-	Mon, 23 Sep 2024 16:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727109055; cv=fail; b=J5Dt9Z794+WuGU1jMhs2HKVYlXrCllpK0XmZ1AcH1gkI4lIJk4HlHET2JTDEgjtOKrUrLeJYrxHraNmSXYS9ZgUoPhILmPJLGNYsGVmDAU/OvUhOsaEfOpb3kznwRt6F/5nctasLYBGfL2180gkl/pOXf1f0yWF37S0wDzKxR+Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727109055; c=relaxed/simple;
-	bh=lgO//OEXxYD9kD4CYEQIfbFmXiLytZCGcXnntKZqpTg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=I8ZYr4SM7aokjSy+qWOtkFb6UsTSyVV2iluYzKr81PG/lRIag5XIxWD5BhEE0f/8uRCS0jNbVxpGjDM6k3879jdXTkiLt1ArdHkenBTJZkRW7/IHMWoY2fDWcxLUczTp+VfGEYV/g6davgIkCaasuRVfOZj+W1e/OovsKMsH6Xo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=J5NUzlla; arc=fail smtp.client-ip=40.107.102.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yeSJjR04Jrbtkw4Fd896665TFYgvmDmPhojHOREuzQMugNKB6wqw4bxjDgL8AEgR7GPUl7LXQMsU/FUBvaZLpWle5Tafb15M+CeqToAj4hYSVIlN5u07QrRzpvq+gNPAVJ7BhRyFxw/LNJCyPxkGaUdBfqWoilczuTZ+/D+vz/Cue+PIg8PlDcUZfn9wb3+AzYzIypErcjtC6cekQ3a6kWcdgPBMdyIzgIVV3DK1sZPPP3SHPWUyvEYh56/zyULK5WQStJXk+f0ZQy93u1R+hye+R/O2e3tMmG4QOVxSkqvdphuV5FE1C8TZX6k4DwZBWJuNMCsuNnOgqvrw9kd9eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ge6DbYX/WWGdaIvoVXPTheJfA3N1WsSFqMRBgkeaLHM=;
- b=BLuPLnZkqjADtLV9j32PiHP4TL/TOpbenglsBR/ln5zmiizRy9wct0v7XtWkcnp61czXzWCTZSaAnl4Y3KOuVYP2AmcjCtfYh96dRi6IqNqk98YIrMAp3BSt4TQrc30WGYWQ45YbnGPtyZCQbo7lHYmOY5yqJn/Q1b00isjk7t2v1nf7/B8QbfzgG3mUzGe9oBw5HoCt0UIq0Qv1jFxdZolSb80fmWlbbItG+FapMRPEZQnHDakt00eWxHDtgTtEdmgseRwSEEXgte/tjiBxOj2nQlFgYCswrhx6oM/PRsNt3R/m+Y8Jk/2x2jKvTYAWVQjKpqN6LdkagPwBZp29sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ge6DbYX/WWGdaIvoVXPTheJfA3N1WsSFqMRBgkeaLHM=;
- b=J5NUzllaboOXWCR9ZmjhyzpeQYYfs50na53X8mM31TaSQKosJ0i5Z8ZPDdnLKmytzldv9n+7+/Ih2JJuwPKnwnEg/kjk1fgQeWN2xAS19jOsX0mkQNmZSsSuIDAhgrmgyglITDWgCdN3szUkYVRzlNp630T3Tg29+JgT1HGLxhs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM4PR12MB8523.namprd12.prod.outlook.com (2603:10b6:8:18e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.21; Mon, 23 Sep
- 2024 16:30:51 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7982.022; Mon, 23 Sep 2024
- 16:30:51 +0000
-Message-ID: <1eff4036-b785-4737-b919-d67c52efea65@amd.com>
-Date: Mon, 23 Sep 2024 11:30:49 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] acpi/x86: s2idle: handle Display On/Off calls
- outside of suspend sequence
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- luke@ljones.dev, me@kylegospodneti.ch,
- Denis Benato <benato.denis96@gmail.com>
-References: <20240922172258.48435-1-lkml@antheas.dev>
- <20240922172258.48435-3-lkml@antheas.dev>
- <1a9b611c-51f0-4c3d-8bc2-62c6b6104fd2@amd.com>
- <CAGwozwFwU=KMgDUmKsYRu323dsuUfQYa8e-aXV3JGGSkgF-RkQ@mail.gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <CAGwozwFwU=KMgDUmKsYRu323dsuUfQYa8e-aXV3JGGSkgF-RkQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0085.namprd11.prod.outlook.com
- (2603:10b6:806:d2::30) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1F219E995;
+	Mon, 23 Sep 2024 16:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727109827; cv=none; b=aj1JGrUbwEtCNgAEOKSgNDxBTdS4J+hQnucGnAlOnBmoXPfL4puRLnvdBt/ueOIdmDavSpASEfSt8EPxeBxNngufbAwXz3NY7tSb9WzPPYGiFOzQeNpDFViiZKMBaEtJh4SSeCtt36svWQk4B0U/qS7y/0O6ISQMTW8giFJyHNs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727109827; c=relaxed/simple;
+	bh=R0WZdlzZBu24b+2R8GP+PjziF2CyfhN0x2PiVR8BH3I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TCckZMACw3FCAPvl/umZjsgZI5YKG7WidMWkKA0AJqxoP9eXx5DHLbem1BKP4A63TuYuJ8mIJRqgWBpGNtcbFUu/0FvKVuNyJ8cpZVuH96iMGwx7EEK2kHm+qIKlQ+K3NYCLBQuX0pTj7UVlMhQQ4GCRdX3S9Vx6dCU++WwV5qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=d+CArDqR; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 2D0FC2E0085E;
+	Mon, 23 Sep 2024 19:43:41 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1727109821;
+	bh=Kjm8vl1DOoDtysvTZm5sJc604YqW2x3SecPQo2a2EBU=;
+	h=Received:From:Subject:To;
+	b=d+CArDqR6bNqEtslUR3AmiCZbSWsdYH0M7yCIHU2MG5gzUBQ7R2yglLnvux2iZw4L
+	 aYnCjzigT0ZYOAlxgM0QaFnBmsI8Iu3l0/bIOmPxZgyjqY88kLUt2fOvo9uOhd/QXD
+	 m8x5p4eEb3jk3IBI7IN82/mreRW3l/0wIM2seb90=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.169) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f169.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f169.google.com with SMTP id
+ 38308e7fff4ca-2f7528f4658so39763391fa.3;
+        Mon, 23 Sep 2024 09:43:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWMhzH/QbDOb1Oc/HeP3lr6lNHyBH256sncqubOCv7LMBa8BZhjXrRq+IOCq+PIfTKNjb8Lcl+2W45McvK6+6R/KM0H@vger.kernel.org
+X-Gm-Message-State: AOJu0YwD23I7GjGeotPraqQzhR1xj4VOpkMy4El5gIM4KNKyb5edoQAp
+	gEPyj914P9/iR3m8NCz7H0sWt5iKAhtlGyPVb/iVIkvrBO6iCqiGaUbjav5Zsl/ujWcuEw3qZZy
+	z1t2iGfQcUcuhB7tcWI2TshMEAlE=
+X-Google-Smtp-Source: 
+ AGHT+IGc60gL1gOAkHYMYuiHSxR7O5fB1FcmmLzF199/PpWvKj7QS2uBpDdK/69Q+yBUA5rHMyXUjpnAUI95I6YwO/I=
+X-Received: by 2002:a2e:b8d3:0:b0:2f7:90b9:7534 with SMTP id
+ 38308e7fff4ca-2f7cb2f638cmr53385191fa.11.1727109820435; Mon, 23 Sep 2024
+ 09:43:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB8523:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b56c288-35a8-4c7e-c358-08dcdbed169c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cG5HVmxYRXNSTXpaUFBBUEgwYWJWMmNRQTJUSi9yemtiTEdIN2pTVy9jcEVh?=
- =?utf-8?B?QnpLS0dPcmdtOW9FUEowdFB0Y2daRnRGMndpM0N4TGFVVzlhVUZYeE16eUpz?=
- =?utf-8?B?UFlVTUR5V1B0bXZ6QjN2VW5XT2NhaWp2dWZ4MjFuWmRKcDRvb2RVUExQLzIy?=
- =?utf-8?B?b3M3bXUybjJpaTNWSzRYQlRNS2V5WG5IcWVUZ0hqTVo1ajdQUlZ2WUh4UlNZ?=
- =?utf-8?B?V0hSaEhodW9CRGw1YThFZytLTElqcSs4QzNBN0dhc1JFYWM5ZSt6a0R1MDg1?=
- =?utf-8?B?eE1GczBJdGZsWGdrZVBiYi9tUzBIdzJITzJPTnZmdlZ4WkkvVEFXRlNPYjhY?=
- =?utf-8?B?OEs1bEFoR0ZkWFVyL3lpWVN2RGZlSkMvbURvRUZ4TnF3V0FYdTUrdzB2TGlM?=
- =?utf-8?B?WGcrZ0pvS3ZFTkpHcVlXV1ZHQlJWemRBcU9RMk1uWTJ2a2dLZC9jSkFNQ3I4?=
- =?utf-8?B?UkpkSmpmd3VlS0UrL2ZFQlhPaFdndFdCOGNiL21sMEJseGcxaCtTUjlzd0Z4?=
- =?utf-8?B?aTh1aFRDa2hSeWMzOHZZYlpRRGxKU3RlaStCRzdmOTdqcmw2SUdkcGxVekVI?=
- =?utf-8?B?emdLeDdkZkJUKy9sVnpkSEpXNWFVcmgxOFlkU1RQWUM4ZGkyaUJGQW5hdzZY?=
- =?utf-8?B?QUFjSWFsTnJOUlFXSFlDaG8xWGhBY3YvUHhqOUllTEptREZqaDJOZ1VIWmdp?=
- =?utf-8?B?NW1oWEFLeTJNYkl0WDRJb0FDU0NNTjMvY2JlVHk5K21sa3p5TlZhbWt5SmFC?=
- =?utf-8?B?dTBIajdzNU0zditOU3hObE5jUUVYelF1a3hkNDhIWEp3S3NzQXE5ZURIRS96?=
- =?utf-8?B?WkxkY2tLK1RLZ05UdmRYMEJLU1pTWGs3c1hQU2NvWEdDMWZXTFlKZk1TNDVM?=
- =?utf-8?B?RzIyY0ZqWmRGODV3akZYbHM4N042VUhSQUZMU3UxeHRhVXlvVDZMZEhROWk3?=
- =?utf-8?B?Ymdnd1BvQTJ5TUZvaEhNNWV5UVpiNGJuN2tiK0RIZk1rTDl4c3pwMjlhMHdz?=
- =?utf-8?B?ZnRqTXRDWjVwSTBUODBTclNuT1hVY3VodlBnRWU0RXlXVFBsaDlJNTlvRTFY?=
- =?utf-8?B?dXRiZEtpVnZiKzd2cFhNZTF1ZW8yMWc3MHY0SUVES2QrbXZlTFgxOEc2ZGJ1?=
- =?utf-8?B?enAyNmh6c2R4MHhTTi83QkFGbDh1WDJ0RnlIQ2RoNFdTNzVIVjZkT2pWeFIz?=
- =?utf-8?B?VEhQai9BNGlyWVgvMGlueXdGT1ozSUVrN2lFdHMvMWFFUGQ0N05GOWswSEs5?=
- =?utf-8?B?L2xuZVRPWTZaNGVqVU93RXlYM2tYeHdNNWJQUi9MUEYweTVxMG1tSEl1WUFB?=
- =?utf-8?B?QW5xMXAwWG42Sms3T3RtazNDYW13WFYzTmRJWnJyTy9vSDY3OWlZWngrVTJM?=
- =?utf-8?B?UmhrTzBNakI1dDlNbVdvcnNsdEpYdW5vT1JLN3pkUGx2ZzdVZ0dNQW5mdkRV?=
- =?utf-8?B?bS91RGVTSlo5dXkrWXVvQkRjZTRFL1QvNDE3YVNwMW1LM3BNdjRJMWpsSHp5?=
- =?utf-8?B?d2REK1NtaU93MnY5c3doM1FpcXIvc3NtR2FqSFprd0pJd3JXM1J0ckNGS2xo?=
- =?utf-8?B?alNnQmtRYTd5aU13OWZqTytyUDcxU25wTE9QNU8zNnFpNHRLWjlzcVVIb3Zj?=
- =?utf-8?B?bWtFdm91TERHdlpJSE15UFk0VjhUQ0tSS0p6dlh2WHhnOU14UFdYbEY5eFc1?=
- =?utf-8?B?VUxaS3RIZWdVVHpkTjd2ODFCblc5aVB1YkVDTW1uWUVhaENmbnBYVHlLeEdU?=
- =?utf-8?B?K1Y2TzU3UVdiTnlFSkxna085TkZCbFIzaDNjYnNET25uaGpaZHVIL1JEQ0Zi?=
- =?utf-8?Q?mDYBLxiy1ba5OhgUJ0nKxULAcmGVgxQkNvBkY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U3Z0dWs0bmliRm00ZVZISkF5RTVHTUVaVXdIK25BdW8zVnZScVF2bGFUNS9p?=
- =?utf-8?B?YzlTWkQ1S0ZpUHdvdVVNOC9qNjZNVFVSdnJlUDZrWEVOMEZDTStUakxIbWZB?=
- =?utf-8?B?N0Z3NjY1V1hHbTF3azlNQWdSMzZtdlBoOXhlNndDUUVUaXp3M3BiRzZzMHRi?=
- =?utf-8?B?WVFIaUhGR0ZjeUhXcmxBKzE3d2F4ZTVsdEtNNFVsZXByZGFTaFpVUUphZFBr?=
- =?utf-8?B?UllyeFc5c1NoSXk4dHR2T2lLUElWVEhOcXdpemZ4am1VeFI1K2gwVkNIODNJ?=
- =?utf-8?B?azhKWWxsZWFTVC9GSnYrNjBiYk5TVWNiTTJpc0Evcm44bW5GUURGRmJ1dmdx?=
- =?utf-8?B?Y0kwV1B6NXlEV1MvRldxWFI3U3p3Q3lCcG5XSVUzbldTdmFGQi9TOHp2RlVE?=
- =?utf-8?B?bVdRVm1DMEZlbTJQUUNySlNPUmI4d0VoM01xRUJlbjlNYnRWMndDeENJMkNm?=
- =?utf-8?B?d3JBV2o4SmVvVTJ5Z2ZNZWh5T3E0Vk5TWlE1ejlQaWlRU003TjBNRVBlUTE4?=
- =?utf-8?B?Q29DcWF2TFpOM2VvS05QNnd0eUZGWGZzOVhtNFFhTWMyNlJsOEtlR3RSb01M?=
- =?utf-8?B?NytDUUhoazE4dVNrNmR4STVFSXNWYWdyUHJ3dmhPS1l4L0xWVE9IaEp1SVFt?=
- =?utf-8?B?bS9wTDk1UXlWT29ncnlhNEZSYkpJTUdtZDhDMlV3VFM5WTRJWEcyOVdsNkVl?=
- =?utf-8?B?WXVRTWxsdzRBUithb25WV1VManRHanlDUENqUjNBYS8ya25XQ211a2dOQm9I?=
- =?utf-8?B?c3R5OThJQitEU29OVFliOG91SjRxTTcxVXREa1YyUjRZcm00QndZTlVBcVVQ?=
- =?utf-8?B?UWU0bmV0T2F1bGdCYXZ0a0V4aXFEOFhOd2RJc1M1TUVXSzYzbFg0cHZrbmtR?=
- =?utf-8?B?azk0K2hDM3pXRXhvS0hXc2ZxZHByQkdDSlRCbi9uWUFja0hNL3BkZVpUa216?=
- =?utf-8?B?eVdMVm4xVmhZcDRjTmNrelF6OXFzNzg1RkF5UVFVU2FPcWdxNDR0ZHFvK1ZP?=
- =?utf-8?B?TVBmOUtRK1RXa1FSUmVabnNMdWMvZkdTcFZBNmNBdVZ3UisrRldDcDRnM3l6?=
- =?utf-8?B?V0VFWG9MTmFydzdZc21QM1RpZVgzdXlOME9QQUNMMnVNTzJJZmpvNXZ5dXVH?=
- =?utf-8?B?b2dNTFRWNEkwZzk4M0NJTjRUVEVSdllOeW0yNUI2OUszLzRYcWc2SE1ZeUs3?=
- =?utf-8?B?WDczVzBJSTRDOHJHdEdyd2F4Nmw2OSswSWFibU9EL0hZQ0N6ckcwdjhMSFFQ?=
- =?utf-8?B?VEJGSEt4dWJPQVEwYkpUNGhNNmJRcEFtR1ZJeVJsSWQ2M0VtT0g1NmJlVlpD?=
- =?utf-8?B?R3FRYm9CWDl2Q3hvOXhxbTB2NFRVZExmTURaeC9aN2VSM1krRitCV3N0dUpv?=
- =?utf-8?B?L1R6ZWFXTzQ4c2pRT3hlU2FvcnFuU2l5dStsVytnKzNOb3lxUGpyVWFTdkw3?=
- =?utf-8?B?NC9SUVlnSGFVTWV1NTRZUVM0QW9Fc3lPaFdvY1V0eVlqb20wM1BFUUczTjQ0?=
- =?utf-8?B?bG5xM1hRSHdhN3FSNEJ1aUhWb2lZK0MyY2FCWUJWVS9NM3ZKbGphRTlqUUNE?=
- =?utf-8?B?VDh3dVQvTEdxZEZ5YXBCR1l3Z085OHR1Q1d4Ulh3d3NWMmlGWXN3eWRkS0hC?=
- =?utf-8?B?cEpJQ1RwM3Y4bS8wWkFXaVc1NnlxV3NETENYUEJicTh5endYUy9qRXhIZjVM?=
- =?utf-8?B?RXBEbkdpMjlXTFhmMmx4SUprSWl1ZmxTZmo3cS9Palc0akhtTCtiUTQ0VU5D?=
- =?utf-8?B?ZHRwOUZuc0g3TExlSW4yYkk4WjVzalRVK25YRFlJSTBMMjlmZVI5U2Z3cHBn?=
- =?utf-8?B?d0MzYzVlQkdjM2swMFFFcHBDaUNBMWtnZ3l4RlgyenZTWXp5OEFaczU4ajky?=
- =?utf-8?B?KzREb1hzaE9yemc5U09LZzFVcURITWk3K1NOYWlscTZOSllma3pUUzVoR3Z3?=
- =?utf-8?B?TFBMRGppTjcvd2YwR0ptSjFGdHJFb3h0TFdNZXVGbHM3aGZrMWdyME5lVUta?=
- =?utf-8?B?a0hiVHVya0ZoS3N1UWJkOVRXYkRLSmk5VExlZHhpa280OTZwSjNYc1VsM0kv?=
- =?utf-8?B?WTZPTFFDbjBpM1c5RCswNkNCaHBUZXRQUTlidGFEZ2xQZEIvbmxKS1YzeENM?=
- =?utf-8?Q?hhC/lfTkNIFu76wU3aKW3BB9J?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b56c288-35a8-4c7e-c358-08dcdbed169c
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2024 16:30:51.4205
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rpYklbt4nI9yLqNUgjqqo/fTqz1HciDMFKlWxubs024dDnhceT4mUxfg2Vjdyc5PV4FdQo6EimADi2SdKgaDqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8523
+References: <20240922172258.48435-1-lkml@antheas.dev>
+ <20240922172258.48435-3-lkml@antheas.dev>
+ <1a9b611c-51f0-4c3d-8bc2-62c6b6104fd2@amd.com>
+ <CAGwozwFwU=KMgDUmKsYRu323dsuUfQYa8e-aXV3JGGSkgF-RkQ@mail.gmail.com>
+ <1eff4036-b785-4737-b919-d67c52efea65@amd.com>
+In-Reply-To: <1eff4036-b785-4737-b919-d67c52efea65@amd.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Mon, 23 Sep 2024 18:43:28 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwHbt8+hVDpyz8GM=Lwg8o=oLZDgCJ9JZN_HRzHLuwuknA@mail.gmail.com>
+Message-ID: 
+ <CAGwozwHbt8+hVDpyz8GM=Lwg8o=oLZDgCJ9JZN_HRzHLuwuknA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] acpi/x86: s2idle: handle Display On/Off calls
+ outside of suspend sequence
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	luke@ljones.dev, me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <172710982155.20328.10703034457279960078@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-On 9/23/2024 11:15, Antheas Kapenekakis wrote:
-> Does DRM core handle virtual displays like VNC?
-> 
+> On 9/23/2024 11:15, Antheas Kapenekakis wrote:
+> > Does DRM core handle virtual displays like VNC?
+> >
+>
+> You can make use of virtual display connectors in amdgpu.  This is how
+> drivers for new ASICs are first developed in emulation and also what's
+> used for early hardware bring up.
 
-You can make use of virtual display connectors in amdgpu.  This is how 
-drivers for new ASICs are first developed in emulation and also what's 
-used for early hardware bring up.
+Microsoft specificies all displays "state where all displays=E2=80=94local =
+and
+remote, if any=E2=80=94have been turned off"
 
-You can see virtual_display from 
-https://www.kernel.org/doc/html/v6.11/gpu/amdgpu/module-parameters.html 
-for more details.
+If any means that no displays =3D no call perhaps. Would be interesting
+when designing a system for disabled people though. Given how it
+interacts in Windows, I want to say the target here is inactivity.
 
-> As mentioned in the cover letter, the _DSM specifies both virtual and
-> actual displays.
-> 
-> Also, Windows behavior is like a lockscreen. 5 seconds after screen
-> turns off after inactivity, instantly when you press the power button.
-> 
-> I tend towards making a sysfs entry. Not sure.
-> 
+> > As mentioned in the cover letter, the _DSM specifies both virtual and
+> > actual displays.
+> >
+> > Also, Windows behavior is like a lockscreen. 5 seconds after screen
+> > turns off after inactivity, instantly when you press the power button.
+> >
+> > I tend towards making a sysfs entry. Not sure.
+> >
+>
+> Who would call this sysfs file?  Systemd?  The compositor?  When?
+>
+> In Linux the compositor is in charge of doing the modesets that involve
+> turning on/off the screen.  In most cases if you press the power button
+> in Linux systemd-logind picks up the event.  It triggers a behavior
+> that's controlled by the logind configuration.  Typically that's turning
+> on a lockscreen and/or starting the suspend sequence.
 
-Who would call this sysfs file?  Systemd?  The compositor?  When?
+That's where it gets hairy and an area WIndows uniquely does not have
+a problem with because the OS is monolithic.
 
-In Linux the compositor is in charge of doing the modesets that involve 
-turning on/off the screen.  In most cases if you press the power button 
-in Linux systemd-logind picks up the event.  It triggers a behavior 
-that's controlled by the logind configuration.  Typically that's turning 
-on a lockscreen and/or starting the suspend sequence.
+If it were me, yes, systemd would switch the system to the inactive
+"Screen Off" state 5 seconds after the system displays are off due to
+inactivity. If we are talking about implementing something Modern
+Standby-like, then pressing the powerbutton would no longer suspend
+the device. Instead systemd would use two tiers of activators like
+windows (first tier for "Screen Off", second tier for "Sleep"; right
+now there is only one tier that mirrors screen off) and once all those
+activators are released, suspend the kernel.
 
-Important to note; it DOESN'T explicitly turn off displays.  If you 
-configured it to suspend then displays get turned off as part of the 
-kernel suspend sequence (drm_atomic_helper_disable_all).
+Then it would handle the transition from "Active" to "Screen Off" to
+"Sleep" through a sysfs endpoint, with the platform responding by
+e.g., lowering TDP and using a different fan curve.
 
-If it is configured to trigger a lockscreen then the compositor will 
-turn off displays after whatever the DPMS configuration is set to.
+If the kernel is asked to suspend outside of the Sleep state, then it
+does the transitions to reach that state and references the quirk
+table to avoid racing conditions in manufacturer firmware (not with
+the kernel), before it suspends.
+
+> Important to note; it DOESN'T explicitly turn off displays.  If you
+> configured it to suspend then displays get turned off as part of the
+> kernel suspend sequence (drm_atomic_helper_disable_all).
+>
+> If it is configured to trigger a lockscreen then the compositor will
+> turn off displays after whatever the DPMS configuration is set to.
+
+The problem with a DRM atomic helper is that we cannot control how it
+is called and do debouncing. WIndows does debouncing (part of that is
+waiting for 5 seconds so that if you move the mouse the call is
+skipped). You could have edge conditions that spam the calls.
+
+Antheas
 
