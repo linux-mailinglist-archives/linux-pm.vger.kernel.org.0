@@ -1,250 +1,314 @@
-Return-Path: <linux-pm+bounces-14624-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14625-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17715984953
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 18:13:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DDE5984A79
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 19:55:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A30CB242DF
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 16:13:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9E531C22ED2
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 17:55:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37491ABEB3;
-	Tue, 24 Sep 2024 16:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D361ABEBA;
+	Tue, 24 Sep 2024 17:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lPxw24MQ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="b5B+S3qf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2077.outbound.protection.outlook.com [40.107.220.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B432745B;
-	Tue, 24 Sep 2024 16:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727194388; cv=none; b=W3dmREttpdzbTDOJRngpsk+2JOPbePFItU4foZk1Qppdz6qrbLyE21vn3mX3vS+GAhqOPzU76/JIK8F9FzuIPdvbPmnybxWp2n8FMMTvHt7ucMizvz1488t6xUSrQWaUbU7FdIiUOFIXALibJO1nHvBuJynZUKHVEIQdqYP82ys=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727194388; c=relaxed/simple;
-	bh=HpcRgmWNCisXaoxbVVfwkSkZuAQGdv5km6C6JtSnPDs=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qY1NAVSdhF7LdQoX5nzlquvmQX0IzMnG9gDu6pFH6f6Aajb9kUJudP2lG3Lr60o9PnNB/8UqnCC/wzs+CyJluGqwbK8YxzrhH4upVY8TEJzNZCqoxgtpdoDz+uZBKnb/2CYbG/V+zKE2GHvISjNhWqudpn3ZkxZFFGo4eeCzafQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lPxw24MQ; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:To:From:Subject:Message-ID:Sender:Reply-To:Cc:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9NdC87PWC/rmPK2rzPPmAXcpdLbnJYcZs+fYf+Aquc4=; b=lPxw24MQrumLp5MnUP/b3XP1Pw
-	h7vEF/+mVWd3U+XlvxRV3MSNogrHd6Bm9+7dsJWCR7UYwfUOtGEQDdylJcW2kVai03c8StR23KGsP
-	7zPPEgFViwbQGChMgEcpYGz9LtT1tEvlEn61nIOx2N4Aolfnyy1lGC2lRNvkxMkfROnhmW8L4ytNe
-	2AVmI+sgVa4xAE/AnzMH7iq1LogKghZ3yBV1Tpv6tf11rNdqKvJZ+LTTYugu9xiHCYeC4RT+7MS5d
-	DExWICSV8E9YT3S4nJNsb/gkov4w/WmmXAUzjABKB+qKDDKxdKjkSglSp5xxCeMRckhIzXTe+C3Qy
-	8Hu/POag==;
-Received: from [2001:8b0:10b:5:58f5:7dd9:39e2:1ee3] (helo=u3832b3a9db3152.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1st89s-00000001wm3-3CTK;
-	Tue, 24 Sep 2024 16:13:01 +0000
-Message-ID: <222a439df0a08d48021e80b9cff7aeb373c9b060.camel@infradead.org>
-Subject: [PATCH v4 0/6] Add PSCI v1.3 SYSTEM_OFF2 support for hibernation
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, James
- Morse <james.morse@arm.com>,  Suzuki K Poulose <suzuki.poulose@arm.com>,
- Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown
- <len.brown@intel.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,  kvmarm@lists.linux.dev,
- linux-pm@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Date: Tue, 24 Sep 2024 17:13:00 +0100
-In-Reply-To: <20240924160512.4138879-1-dwmw2@infradead.org>
-References: <20240924160512.4138879-1-dwmw2@infradead.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-ovdIoLmCuf88mYSR4DLM"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A92C5464A;
+	Tue, 24 Sep 2024 17:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727200523; cv=fail; b=WAPCIUGJUYMiAd+C9JRo7OECraRiVz2c7b+fa2UzHnh/kWyb2jnktzYeoJ+VhszALdI6zUFrnAhmY8ufoxtUnzCwaMDnmy92Pfdtn0hUvO6blrKsjaxvkhzZxfmEI8/4Jj9FsPb+hHvvhAxrHD0k2o0Ad6LNSSu8vWZmsADuMXg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727200523; c=relaxed/simple;
+	bh=oBt+FDGp5/tCZK/aKoqJjQ5dnT3K1XHSFTgiDKxvZYY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=pRIfhqqW2uBletZiWUqxm/6sQwNc94u7/spmRk7sS62kezLQY+AZiLCeqNC2Q3vlIAEojPl5FmuEi8FRDOYNK+sYJgP7lktU5Cuips6D23hyL+1zsjkBFuPxluT5B4OuLyDPQkAeux6ObVQpMvY/zCxjtYrbgY4sA6j6aGYbjhs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=b5B+S3qf; arc=fail smtp.client-ip=40.107.220.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wps0NSxvMkFivv7PpjpaBIKhssoZrcg1KeR6vZUzjGxr2Pn2wm8d+iXiBbTeDxLMm3fT9ud8FkpAUNCG56omBaIkBvTq4Nv7ZyeH16CCy7278SC/k4nNBFebnfoEbTP4TyHVHL5SYQXSIrlmeEUUo3+XtEFatWd8cw559mZX3acZCoYrY/zU5L/UrF1320/XOrQmP9tp3lAXK5cXbZd8wHWvz1/g7ENTlA9Evh2mgsBmGFIyQatrgYU2VPUnY+va+ok54ZApR7jP2zTFMuQJbJXdULhisMHdOk1uqHSUiiofWryJhhw1+6eS+1g29wuk1XijGBN8Qd80GDpdEfmTBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6El/BGuoDI29VsKdTdYzFYXEYq3lLybU81BiccYQvtI=;
+ b=WLuVYLB/j9FSmxgTFZqukIAjGXUN+LVgxoQjkdW+IoGNV2ViqqMMXzQa7dIZWGeC9XsiWElW99RBMkOWJd0BPPQztpdmADCe4dfIt9q6gHkxQQXb3T4qqJcW04xnoBYkKYbbiPycy8IC7zv7i9s9MCIbnC78M8UZ8e4Q0eAoGGm6BDR0d+8WRHUQhYssrySCWn4sNeO43iHql3HmOp7oFjtDDZBjnolHNSIkz8p8eIkCkxrr0fk9mbeMGiXXkTCWBo/1u05K+juPH5WWO7teKVXRQbGMMENSbbeNUeBEJ6FSI8A+XPjJalL79a+ZDPasEtgIjO1gbvkDvypWnQzkAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6El/BGuoDI29VsKdTdYzFYXEYq3lLybU81BiccYQvtI=;
+ b=b5B+S3qfrGeJjGPw05n9sCA4SxlGsJYIEPUOz94bZ5+yJz9tjC+ohLiRs7GibBYtPQBY7xYK4oljD9UOCZgyCh8YhfLYf8iexE5CiXKpldF4FNm3liMHbIvfyjJ89zDmdoBA3lqBv9EFE3Fwx+i3KqMBx+ptHUPTyIiwPxpFMuM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SJ0PR12MB7459.namprd12.prod.outlook.com (2603:10b6:a03:48d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.28; Tue, 24 Sep
+ 2024 17:55:18 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7982.022; Tue, 24 Sep 2024
+ 17:55:17 +0000
+Message-ID: <91e179ca-ff2e-48b0-813d-7b819e300dca@amd.com>
+Date: Tue, 24 Sep 2024 12:55:15 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: unexptect ACPI GPE wakeup on Lenovo platforms
+To: Baochen Qiang <quic_bqiang@quicinc.com>, rafael@kernel.org,
+ mika.westerberg@linux.intel.com, ulf.hansson@linaro.org,
+ bhelgaas@google.com, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
+ mpearson@lenovo.com, markpearson@lenovo.com, Kalle Valo <kvalo@kernel.org>,
+ Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc: linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+References: <370d023e-ec53-4bf2-a005-48524c9cb4b2@quicinc.com>
+ <79d288c6-6042-4f73-b465-0ddcde14509a@amd.com>
+ <b51c89f0-035a-4e94-adc3-e1b4fc31dfdd@quicinc.com>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <b51c89f0-035a-4e94-adc3-e1b4fc31dfdd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA9P221CA0004.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:806:25::9) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ0PR12MB7459:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33201037-c905-4a7e-04cd-08dcdcc20cd0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VDZ1T1N6ZlNBVXNITUR0NjN3TkxGOE9XY2Mxc1BNb0ZXaUsvZGIxWlkrTHVC?=
+ =?utf-8?B?NUJpY2xIdkk4K0pTZFJ0L1c5dyszMXcySnBYd2cweW9EWEVTZVh0eWcvN2ty?=
+ =?utf-8?B?NDA1QlZMd083RllNMWozdFJ5Y2dSR2crZmpid2JPZlEvNEU2RnRQeDFxZDZt?=
+ =?utf-8?B?cnAwREpoY0JPUVVOM0lVSldEeXhNemZJQ0dXTm1rY1dVeUh4R3Q5RUVnSCtC?=
+ =?utf-8?B?SkZCWXN0MVBCZDI5a0RTemVKMGJNYkV3UE1rRTVxbXlVUXI3RldOdjkreGNW?=
+ =?utf-8?B?c1lqeXY3aWxRamtLMjlDcGtuSW9jNUx4S3lQaERSekFDY1NFY3ppRjJaRkN4?=
+ =?utf-8?B?dmRDTkhETzU1WE93R2ExSWtQR1JUTFRYbWlUc3N0cUtFSUN2cFRjNjJVS3Bo?=
+ =?utf-8?B?RytBZGVtVDlqbkw0VGdRMStabEZkQ1lHaVVNMUxjcDZDeWdsSkdxb1VuazZT?=
+ =?utf-8?B?U0pFaEx4WkRheEZqT1QzT3JhYTRQVjQxQ1QxWjBzckhjMlQ0QS9WVTFUSCtV?=
+ =?utf-8?B?NlJVN2NzbTQyeWpJOHdBWUw3TitzVlhvczB5TFRsbXpVcVdpdGFzZnlOMklF?=
+ =?utf-8?B?VjdsTnRXcnBVSEJCTlZocGorRXVucUo3VnRGU09CeXkxMW1tMTgwK1lLWXJz?=
+ =?utf-8?B?OUZBNGFUVGcvWndTcTMrRjhwcTV5N0l3SU9ubHYrcHcyU1QybzlOMVd2NVph?=
+ =?utf-8?B?ZkZ6eGhwSHdZZFJ1OEVMZXRWdW9UZHZyRE1HRjFkbDJKMWhkYkdJRHlydVRE?=
+ =?utf-8?B?VktMRmZKNUx4cTduaGhxcDdtdjVMbmxYSXhVTWhCSHNrVXc0UnZSQkhIb0l2?=
+ =?utf-8?B?ZUx3YXJDVzdCV2dueTB2dGdyOTlBZHBHYkhXVitTN2lOZVBkL3NYc3lzZnhy?=
+ =?utf-8?B?cklzRUVENDV5bVZUUmhXTDhLcGltL0lvNW9QZGErN3BTYi9tRytQQkoya2xE?=
+ =?utf-8?B?OHBRZmpEbGJDUTVlUVg2QkYwcng1OEl5Y01WbnpNcVlpL1UrZEM0M0luZHNx?=
+ =?utf-8?B?c2Izb09hcW5Iby9LYXRpY2dpMGJSc3lxZ01TdllmZ1kwbFd4MHZkWjRFVkUv?=
+ =?utf-8?B?OVdvOTdXZWhyV2RRbTlpY1hqckp0bVUzbHNlTXlQVzlSeWIzT0t1cU1ldHBp?=
+ =?utf-8?B?cEx3cytoSlhqdk45d2pGS3cxekhnSE5oVmhxbXRnQ1VFdlNBM0NWWFhsWlFW?=
+ =?utf-8?B?ZHJLVHdjeWxyeGU2M2VrTW41c1E2WC9KVkVzT3Vwemg3Y1o4SnR6ck04LzBK?=
+ =?utf-8?B?WWhuNXJ5cXR4cjNqb1lWTS9HcW5wNU53eitjTmRGa3QzdUQ0azJsTnNvMHhI?=
+ =?utf-8?B?WDkyL2ZSWU5FczVLZmIvMHJFa216SzZQa1ZYeGdkRGdWNkpSamtWa3AvQnZS?=
+ =?utf-8?B?UkVWb1FlOGtERnFqTEcwSkdhS2Q4YVNXdTd5VEs3dnJYbHF5dHFpNFZ3b2VL?=
+ =?utf-8?B?ZXVJenQ3RE9KeVlVSHE3aGsrejB5L2tZSFVkd09xL1pEQ3dEMnlobVozV2pE?=
+ =?utf-8?B?dEEyQmxIQnN0M3Y2RDJiS0NqRDhSSTIzbXlid3dGbEhLUE0rOHVTVVV0Nys4?=
+ =?utf-8?B?Zm5jSEFCdk92VDhKdFpURE1BZmdJQk5tRGFWNGhiRThxNEVoY2JqNk5nQ2pz?=
+ =?utf-8?B?YXBOOUxVQm5qT0JieWlaeDhXMUZ3OVVUcG9Dc2R5am9JWG9sQytOUUdjaTJV?=
+ =?utf-8?B?bkMyZUQwei9TbGwwVDRLRXIwQyt2d253elZBTC9qdGhWNlZSdk1wMEZSY24z?=
+ =?utf-8?B?Uzc5akRpY0FhSE9rMnR1YThaMTFtRWc1aXg0eEd5NTVCR1Bxc1BKay95YzZh?=
+ =?utf-8?Q?TBBM2UpcGUtpAks3Q6E1SKNsGMIwJL+xsxpYU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?elV2K1Y0YjJBK2JZbDEwNElSMjkyNmF4Q29nc1F0aHZhTUF4UlVmSTdxODJx?=
+ =?utf-8?B?U054aTBOMkFzNVVadlFoNTBlanlINCsycmRnMXdHSWJxekRramowNCszUExK?=
+ =?utf-8?B?SWFWSzBjRlFBenowMXo0MVZxUDZXZEtDSWd2T1VEYkJiN0FmQVVVczFkUlpZ?=
+ =?utf-8?B?R1k2Y3MzNnA4MG1ETm5zbEh2Qi9pU3c3bU5SdmdTQS91ZXFZc2Q4VHJPRTI0?=
+ =?utf-8?B?U0xOeDNpQmEvak53aW1nQWIzZUZ4TUt4cGI4anRsL1JkbXJvbkpDVlBNL29H?=
+ =?utf-8?B?ODhKUlp4eFl4b0RzQlZIVFB5TVNQZnJPcDU5Q1BOY3pUcWVhTzhHa1FRSVpR?=
+ =?utf-8?B?M3VtNkpES3dqRW05RGdQL3BQRjFmYTVtVFIvMm1nTVhDZlFOZDIvQzgvekpl?=
+ =?utf-8?B?Mk95d1FVOUdNeC9vb1l2bDhlb2VBZllDTzlHQ0pUaVdoREVPU1BXUnF4MS9z?=
+ =?utf-8?B?N0RPZ2JyL2NpdUt3Z0NRWk9GUFpPVmF3b0l3VTF3YUtXdGpMdUhZUVhrdHp5?=
+ =?utf-8?B?UVdnSjREQm5pQmYyNGN2Nk5MNUVXVlVCLzA1V00zMEd3WERXRXV2aUVwL25K?=
+ =?utf-8?B?WW00NTZEVzdoaU1JSStIQWxOa2FjaE1rem9ia0lUelJOT0hLc0NqeHNzc01H?=
+ =?utf-8?B?MmFsY05zSEYvc0VPZGN2aW5QMFE5cFYwdFh0c1I4Z1FEd0tOT3NWSnpJMVll?=
+ =?utf-8?B?SEJCc2lDOFdwWnhqSkZSYjhjTDhVczJoUGUxalZFSlh4LzdGYzR5NDU1ckVE?=
+ =?utf-8?B?V2UvM0k0c2FRMEdyV3Q2aDdGZ2ZYdjMrSVZtMVRwUW92YmVqTGNQc0NJaDVE?=
+ =?utf-8?B?RWhOVisyRTNlNHArbFpQdlEyeGVhbE8rN3NqVXhLL2I4aDJNLzJheENsZURR?=
+ =?utf-8?B?MnRIaGJDR0JrUG16ODVqTjRQM3dDc0ZHQ2pFb2FjMTRhWDl3SGpCdGxQMlo0?=
+ =?utf-8?B?UXV4bkk1cytYUHBFcWR3Mmd6aUwzVVNuM2lQOWFVSC9hcDB6RjNJQUtFdUhV?=
+ =?utf-8?B?Ynh3anNwTkt4NFd0N3JBN2t2ZGlEMEN2cnB4TjVYNkFlQWZJS1F2MGZCbSth?=
+ =?utf-8?B?bGc5T3VLYlNGRGx3NnB4VnQ2ZmdzWGd0UmxBZHptdFVNTWdRei9xS3pOQ01W?=
+ =?utf-8?B?UUZUYUVuMCtCbkU5MTdrZm44TkNZLytENzhGZ0tQZGRTNEdFV25PNmxpWjFs?=
+ =?utf-8?B?MnZQaDJrR2cvZnFaME1KVEN6SGM4ZkI2UGVnTjlzWktscktlWVFvalMvL2NX?=
+ =?utf-8?B?Qk15TmF3VU5tb3ZmVDRJckpYNnlmTGQ4cFViNEg1dDNvcEdIQTJLUkIveERh?=
+ =?utf-8?B?d05wYXdlSTlRdjQ1WlFkRldhZm1Ea21kQURxWmwySjNWUWtETkJBZEM4dkx5?=
+ =?utf-8?B?T0Uyb0VQMXJVKzcySWoxU2FxYnJjMDYxeSs3ZlpyVmlWeVU0bkdnK0ZhUW16?=
+ =?utf-8?B?Y1RTTmNaQktPNXd4RkprdXVXZmJwOGRjaS91bjloNDRmcTdIZlFCTmhlSi9h?=
+ =?utf-8?B?cStkdXp1TC9Lc3hFRWxkazA3ZlJzcFlFcWk0bnREbENpZktHOTZpb0pwTVAv?=
+ =?utf-8?B?c20xSStJSmljSyszcC9XdzJNMStKY2MvRElDTG1BZGR6SEFDUlRBM0RnSGtB?=
+ =?utf-8?B?VXMzL2ZNNEJ4UTlHUjVGYWZLS1V0N1NEQ1J4T0pWT2hGdkhkc1dEby9kYlVD?=
+ =?utf-8?B?WENPNDBTaU9QeGpFMTlDc2ZOblR2bWJKRUNaKy9KZzVDVW5yb3cwbVdCOFNz?=
+ =?utf-8?B?THFNTDBZM24wZUtBTHZiR3g4cm40T0JXeDd5QVZDN3B3M1Y3cW5XSzlvOU9I?=
+ =?utf-8?B?YjJVZmo1SFE4SS9qaEcxc3p5TFdPK3pDNEJkWXpBTCtBOEhRcTN5a242SlNi?=
+ =?utf-8?B?elNuYmsyQTBjK0dSRGJJSHJhby9iNS9UVnFNMzRXdU90bzBuRGhMSkhWbTlK?=
+ =?utf-8?B?SUFmN3lBekFidjZhMkdoZTVzbk9WRUQ5RlBwQVY5bDZEd3JhWFZyUVBwWmNG?=
+ =?utf-8?B?aE1UZnVxb0U3RG9pRzVxUzRKRjZlNTBGaTdPS0xCM3BHN3ZmS3lkejRkNHVs?=
+ =?utf-8?B?elhMSERWOHFqNGVKYllnMFZMbEhOZjNDNGp4Szhva2JhaHdvUVppQnFNN0l4?=
+ =?utf-8?Q?FhOMnCvFCzjdx5L96e9ybBqgV?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33201037-c905-4a7e-04cd-08dcdcc20cd0
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2024 17:55:17.8169
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J7Whc3blbS8XRnGln6EarZYVJGg8s7/qctkzacONYRNmmA3z6XDqmcqOtXhfaTFpUsa5RwUpGLljao2CsXgXoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7459
 
+On 9/24/2024 00:52, Baochen Qiang wrote:
+> 
+> 
+> On 9/23/2024 9:37 PM, Mario Limonciello wrote:
+>> On 9/23/2024 05:07, Baochen Qiang wrote:
+>>> Hi,
+>>>
+>>> recently it is reported that on some Lenovo machines (P16v, Z13 etc.) unexpected ACPI event wakeup is seen with kernel 6.10 [1][2]. To summary, the unexpected wakeup is triggered by simply unplug AC power or close lid of the laptop. Regression test shows this is caused by below commit, and with that reverted the issue is gone:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/wireless/ath/ath11k?id=166a490f59ac10340ee5330e51c15188ce2a7f8f
+>>>
+>>> Well what confuses me is that this commit basically resets WLAN hardware before going to suspend. that said, WLAN target maintains limited functionality (PCIe link handling etc...) during system suspend and is thus not expected to wakeup system.
+>>>
+>>> kernel log shows this is an ACPI GPE event wakeup:
+>>>
+>>> Sep 22 22:34:32 fedora kernel: PM: Triggering wakeup from IRQ 9
+>>> Sep 22 22:34:32 fedora kernel: ACPI: PM: ACPI non-EC GPE wakeup
+>>> ...
+>>> Sep 22 22:34:32 fedora kernel: PM: noirq resume of devices complete after 693.757 msecs
+>>> Sep 22 22:34:32 fedora kernel: ACPI: GPE event 0x07
+>>> Sep 22 22:34:32 fedora kernel: ACPI: GPE event 0x0e
+>>>
+>>> Consulting ACPI tables show GPE 0x07 is used by the EC and GPE 0x0e is used by GPP6 device:
+>>>
+>>> Scope (\_SB.PCI0.GPP6)
+>>> {
+>>>       ...
+>>>       Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+>>>       {
+>>>           M460 ("PLA-ASL-\\_SB.PCI0.GPP6._PRW Return GPRW (0xE, 0x4)\n", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+>>>           Return (Package (0x02)
+>>>           {
+>>>               0x0E,
+>>>               0x04
+>>>           })
+>>>       }
+>>>       ...
+>>> }
+>>>
+>>> while GPP6 is the PCI bridge (the PCIe root port in this case) to which WLAN target is attached to:
+>>>
+>>> Device (GPP6)
+>>> {
+>>>       Name (_ADR, 0x00020002)  // _ADR: Address
+>>>       ...
+>>> }
+>>>
+>>> Scope (_SB.PCI0.GPP6)
+>>> {
+>>>       Device (WLAN)
+>>>       {
+>>>           ...
+>>>       }
+>>>       ...
+>>> }
+>>>
+>>> and lspci also shows such relationship:
+>>>
+>>> $ lspci -vt
+>>> -[0000:00]-+-00.0  Advanced Micro Devices, Inc. [AMD] Device 14e8
+>>>              ...
+>>>              +-02.2-[03]----00.0  Qualcomm Technologies, Inc QCNFA765 Wireless Network Adapter
+>>>              ....
+>>>
+>>> Based on above info:
+>>> #1 is that valid to get the conclusion that this unexpected wakeup is triggered directly by PCIe bridge?
+>>> #2 if this is related to WLAN (seems so based on the regression test), is it the WLAN wake pin (a GPIO pin?) that originally triggers this? and how does it affect the bridge?
+>>> #3 quick tests show that with GPP6 wakeup disabled this issue is gone. so a workaround is to disable GPP6 wakeup before going to suspend and enable it back after resume. But is it safe to do so?
+>>>
+>>>
+>>>
+>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=219196
+>>> [2] https://bugzilla.redhat.com/show_bug.cgi?id=2301921
+>>>
+>>
+>> With pinctrl-amd there is an extra debugging message present [1] that is activated when you enable '/sys/power/pm_debug_messages' which will tell you if a GPIO is active during the suspend cycle.  That can help you to rule out whether this is the WoWLAN GPIO pin causing the behavior.
+>>
+>> [1] https://github.com/torvalds/linux/blob/v6.11/drivers/pinctrl/pinctrl-amd.c#L626
+> Thanks for the reminder, Mario.
+> 
+> I do notice that some reporters mentioned about this [1]. and I can also see this on my P16v machine:
+> 
+> [  881.799289] PM: suspend entry (s2idle)
+> ...
+> [  897.491440] PM: Triggering wakeup from IRQ 9
+> [  897.491714] ACPI: PM: ACPI non-EC GPE wakeup
+> [  897.491720] PM: resume from suspend-to-idle
+> ...
+> [  898.153259] PM: noirq resume of devices complete after 556.675 msecs
+> [  898.153443] ACPI: GPE event 0x07
+> [  898.153502] ACPI: GPE event 0x0e //GPE 0x0e triggered for the 1st time
+> ...
+> [  898.314804] mhi mhi0: Requested to power ON //WLAN begin to reinitialize
+> [  898.314841] mhi mhi0: Power on setup success
+> [  898.694562] mhi mhi0: Wait for device to enter SBL or Mission mode
+> [  899.305898] GPIO 18 is active: 0x10157a00 //I guess this is the WoWLAN GPIO pin
 
---=-ovdIoLmCuf88mYSR4DLM
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Yeah that's what it looks like to me too.  The easiest way to confirm 
+this (without a schematic that is) is to look at the _AEI / _EVT in the 
+SSDT and see what is notified when this is active.
 
-(oops, missed --compose on that command line. You can have the cover
-letter as a reply instead)
+> [  899.306089] ACPI: GPE event 0x0e //GPE 0x0e triggered for the 2nd time
+> [  899.333158] ath11k_pci 0000:03:00.0: chip_id 0x12 chip_family 0xb board_id 0xff soc_id 0x400c1211
+> [  899.333190] ath11k_pci 0000:03:00.0: fw_version 0x1106196e fw_build_timestamp 2024-01-12 11:30 fw_build_id WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.37
+> ...
+> [  899.826378] PM: suspend exit
+> 
+> 
+> But I don;t think it is the wakeup source, it is just toggled during WLAN reinitialize AFTER system wakeup. actually even with ath11k module removed I can also see this GPE wakeup, but without GPIO 18 toggled:
 
+I don't believe that just removing the kernel module is enough.  Can you 
+physically remove the hardware?
 
-The PSCI v1.3 spec (https://developer.arm.com/documentation/den0022)
-adds support for a SYSTEM_OFF2 function enabling a HIBERNATE_OFF state
-which is analogous to ACPI S4. This will allow hosting environments to
-determine that a guest is hibernated rather than just powered off, and
-ensure that they preserve the virtual environment appropriately to
-allow the guest to resume safely (or bump the hardware_signature in the
-FACS to trigger a clean reboot instead).
+> 
+> [ 2640.849342] PM: suspend entry (s2idle)
+> ...
+> [ 2650.806234] PM: Triggering wakeup from IRQ 9
+> ...
+> [ 2651.467653] PM: noirq resume of devices complete after 558.943 msecs
+> [ 2651.467880] ACPI: GPE event 0x07
+> [ 2651.467961] ACPI: GPE event 0x0e
+> ...
+> [ 2651.848848] PM: suspend exit
+> 
+> 
+> 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=219286
+> 
 
-This updates KVM to support advertising PSCI v1.3, and unconditionally
-enables the SYSTEM_OFF2 support when PSCI v1.3 is enabled.
+Is it possible for you to put a scope on the GPIO and/or PCIe analzyer 
+on the bus?
 
-For the guest side, add a new SYS_OFF_MODE_POWER_OFF handler with higher
-priority than the EFI one, but which *only* triggers when there's a
-hibernation in progress. There are other ways to do this (see the commit
-message for more details) but this seemed like the simplest.
+It sounds to me that most likely what's going on is PME being asserted 
+from WLAN controller.
 
-Version 2 of the patch series splits out the psci.h definitions into a
-separate commit (a dependency for both the guest and KVM side), and adds
-definitions for the other new functions added in v1.3. It also moves the
-pKVM psci-relay support to a separate commit; although in arch/arm64/kvm
-that's actually about the *guest* side of SYSTEM_OFF2 (i.e. using it
-from the host kernel, relayed through nVHE).
-
-Version 3 dropped the KVM_CAP which allowed userspace to explicitly opt
-in to the new feature like with SYSTEM_SUSPEND, and makes it depend only
-on PSCI v1.3 being exposed to the guest.
-
-Version 4 is no longer RFC, as the PSCI v1.3 spec is finally published.
-Minor fixes from the last round of review, and an added KVM self test.
-
-David Woodhouse (6):
-      firmware/psci: Add definitions for PSCI v1.3 specification
-      KVM: arm64: Add PSCI v1.3 SYSTEM_OFF2 function for hibernation
-      KVM: arm64: Add support for PSCI v1.2 and v1.3
-      KVM: selftests: Add test for PSCI SYSTEM_OFF2
-      KVM: arm64: nvhe: Pass through PSCI v1.3 SYSTEM_OFF2 call
-      arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
-
- Documentation/virt/kvm/api.rst                  | 11 +++++
- arch/arm64/include/uapi/asm/kvm.h               |  6 +++
- arch/arm64/kvm/hyp/nvhe/psci-relay.c            |  2 +
- arch/arm64/kvm/hypercalls.c                     |  2 +
- arch/arm64/kvm/psci.c                           | 43 ++++++++++++++++-
- drivers/firmware/psci/psci.c                    | 37 +++++++++++++++
- include/kvm/arm_psci.h                          |  4 +-
- include/uapi/linux/psci.h                       | 20 ++++++++
- kernel/power/hibernate.c                        |  5 +-
- tools/testing/selftests/kvm/aarch64/psci_test.c | 61 +++++++++++++++++++++=
-++++
- 10 files changed, 188 insertions(+), 3 deletions(-)
-
-
---=-ovdIoLmCuf88mYSR4DLM
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwOTI0MTYxMzAwWjAvBgkqhkiG9w0BCQQxIgQgK0Vq/hfz
-nQjBm1iJ/CmLwgch3GUiv5kT4IgMIdnnB6wwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAHfNQjTThMwZpzn6hGXYbosZrTf/EpxuEo
-nM0eB4aunXyVkTIHDwvAj+b6T8z3RMFZhK4SrIF9ef4DcmtEehdreZYM0zSm4i9Fyt6oyfU6AKGa
-SR7+/grlveB2oSaSsE8shImEjE5wbU5I5UUt/TYWvqPnL3VtLOvDkVPHiLecfJakw23/ezc/k3K0
-pUWbkXl0ayKRIN5/1ZpBCUso8ZURHADbjWeRO2BUr7ftlArd3IQ7g4E+bqJmjHJgJHbojVxTSdgl
-bgfcd8kQjuGrFYSfcdtQ4SLr0IGkQ9DJPpbxm2yuSAKEKCbkb52qRqFyz7LSSMkKKWxURCZaWHFq
-UXibsPyGMgb6W8F8KswkH11JSK90bapGO8AE7XWBnu/A5Kk3WI7UIYqwAtnH7CDhEvSNSH0zXKEb
-ofyGPQ5DdniunEscX4zASPfX5SpqN2B7LjUvQjXzRJAXf4YiQemK7Egb8XfR41qAYqkJblADEzaJ
-yP7bOdkX9KI/g8CC3lwuzzCSk04VEctz9H80J5mBD7lrycGuQuEgh1Hq193eRJZLOQVuepUSzXyk
-n5YsGDg+HLqAOeTGKwLaYO+Ve6kB3ODRto9swmv5zoMQIxqBDJg5CBQ6+Fr2tozL2/U5/fco6SoT
-Ee1KstdPHkotdD4NDrfzg8HNApwPL5wQimKbyoCUzQAAAAAAAA==
-
-
---=-ovdIoLmCuf88mYSR4DLM--
 
