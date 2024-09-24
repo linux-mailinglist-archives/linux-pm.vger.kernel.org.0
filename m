@@ -1,73 +1,82 @@
-Return-Path: <linux-pm+bounces-14614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14615-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AFDE9847A0
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 16:24:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 736629847D1
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 16:40:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20C212828B3
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 14:24:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A9351F2174F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 14:40:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECCB1AB502;
-	Tue, 24 Sep 2024 14:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8321AAE08;
+	Tue, 24 Sep 2024 14:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="nixSv3zh";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="sHp/KihZ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SkH2o1U6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158951AAE28;
-	Tue, 24 Sep 2024 14:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421681A4F1A;
+	Tue, 24 Sep 2024 14:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727187854; cv=none; b=nTWcceW+Gxi8sxCELKxxl9Z77MuNCDovYIlFRZJ444LUCoDUS6JDz+j9W7i5oPcGHxEsc9tl33jB9Ql5G7Ei+wNab0pp3hnQ/5UIeStfow/fAf6HOCZTFpQ9EKR7u15w+//wtYLUbTKDwzLTiGzgwgVwKFfDZtHxSPf5PH6ePbg=
+	t=1727188838; cv=none; b=Qv1Aswfr53sxL7rsNq68R4rmdTtm9Hb5gwTxkswmWS6MauKAKiWDV/8rT9JpCuqO4SLr0cqbvHNeGBAtVjuROMX/DiOkWywXjN0sGisKGi84ynWax8DmtePdppoAmp9vePeCh5+jJeOi2P6QNy+yX5nK6FIPcG3KFiRXcpb4c4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727187854; c=relaxed/simple;
-	bh=JcCYzesWxqDtx/pR9FhSxH4KbXiRZHPFo5QQaciYBFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=omn3Cl45zEXWLRIiFYwzgYTLZKS44CNbw6LLBQO4dtQVl1QXISxVStLLCX5l9OP/seQXmQE69TCGpTj/68uR90eLROjO0eiVZxxF7R+ebRF/VxXfSIr1QDag1X/imqdqs1WpT5KjA5ewGu9aXabfkS/FT36RM5nWi4oXFuFDhN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=nixSv3zh; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=sHp/KihZ; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4XChlq0LYnz9trK;
-	Tue, 24 Sep 2024 16:17:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1727187479;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uBYNsYxxyqoLVlRhhufzAZNp5xIY9E3/4hpzU0yAgig=;
-	b=nixSv3zhZusg/TK7WaBoTgAWWWANA02Bj8glSU3Btcf4G8jBkRBxGuq3ruPo8lvuLYbfEK
-	OWmsEtTrzzXgVDkLs6d60/0GkurdRfuOeViLp4mS1ezeqQ7LPpeePQ23dtzC7ee2yFot/F
-	ySlomJly04UWA/earKCXVd1pet3K1p0E4gPijt91PN8qWBjgf/+gH3E/LL69SXs5p+/Bbq
-	j9PJDO6ERwD9dNBSQeRS85DyLIuGaSQxnka3CmCqziHsNuIRP9D6PmshbPdTU43teUx7Tm
-	BZbPbI84911vOX4u1279iYCobzqZ0omBTEdRJOavvxYT/eTjMsU1KxeaJsiFVA==
-From: Tor Vic <torvic9@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1727187478;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uBYNsYxxyqoLVlRhhufzAZNp5xIY9E3/4hpzU0yAgig=;
-	b=sHp/KihZkEC0YwBhSNBjbVrCi07s3Rs7f8xsHRqVhNGz+q6s3JugJpDTh4oG5X2pcfbu0p
-	6CtjkWDU1l60F3V5H9X/a1gvj2hQ91NDsMnb5n0hRrYzELg27lPhZK38/YaJmApikotFcP
-	0H551wirnE+mO1c6a61rl3BLohfANGlK1Ydp5KfezOkz5pM19I/8+jtWtFGXh1KLuwfftd
-	TAZcdmzUWE99i7BUldohAzFEiXizR78EVhxC2sG4UsvL+Em8XNjI/wWj8eVSwZyJT68DrF
-	JKlKD5Vddc5eN0FciW0uWFeACtlCESvQz26wh7/LvvEF7NK+Ran8LvVCTIBRMg==
-To: trenn@suse.com,
-	shuah@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tor Vic <torvic9@mailbox.org>
-Subject: [PATCH] tools/power/cpupower: Add documentation for some recently introduced options
-Date: Tue, 24 Sep 2024 16:17:47 +0200
-Message-ID: <20240924141747.6428-1-torvic9@mailbox.org>
+	s=arc-20240116; t=1727188838; c=relaxed/simple;
+	bh=KjSaSCKnPUx/qabYBONGr30abPedeP3Zg8gsWKm71q4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oWMMyfMJ3hJ8qquSqZP2ae2u67QnvqPQnp2ORO533ViSc6uKf+aKRQriTWI8F2xJz8MRx+c2RrppOHFpdCoXr/hlOhmcPo7EFP58eC6ZTfW4uAsJpJOKCZNIZ7KIXJaKl/XfIIzC034c+z//Ncun66W8p68zuIHIeGhrZGMM1pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SkH2o1U6; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48O91luZ006521;
+	Tue, 24 Sep 2024 14:40:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=ZcNgnhYj7j2S9LTIwOI1cz
+	YdFt8zsm8sebb7RfgcRrM=; b=SkH2o1U6QPzEgfXbWnrdU2nzdSn1Gewl5NVkKa
+	fj1v2fb4futS+VnefejnEMp76CMoYUBaVTykwa1k64J3ZZmUdyUajAuVcI7X0o+5
+	Eu0Hgl3u/g8HgnGIF93yDBs/3qwBf5LTE5bDX9PKMkfzHjI3N8iWFvZuYv2sxpfy
+	1z9+mkjDaL8ZiwXKs+9OS9upEFXqpnUjvZthgHJsTlCLFIUVVB00u0W0Xbn1s/Ft
+	gtjRf/13J0tiPumLwSAxopPrw+I6vUN5HeTJ+lCUMWn0tWmdOx5UD7mIlj6WpQeK
+	ei0AtfmBmTxdCNIyRkiu/M5oZU81+HFAEHI6s0+3sRpFkDIQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41sqakghcx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Sep 2024 14:40:21 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48OEeIKl022463
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Sep 2024 14:40:19 GMT
+Received: from e20994d1867b.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 24 Sep 2024 07:40:14 -0700
+From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: Konrad Dybcio <konradybcio@kernel.org>,
+        Adam Skladowski
+	<a39.skl@gmail.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Neil
+ Armstrong" <neil.armstrong@linaro.org>,
+        Danila Tikhonov <danila@jiaxyga.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Sibi Sankar
+	<quic_sibis@quicinc.com>,
+        Odelu Kukatla <quic_okukatla@quicinc.com>,
+        "Mike
+ Tipton" <quic_mdtipton@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] Add interconnect support for QCS615 SoC
+Date: Tue, 24 Sep 2024 14:39:56 +0000
+Message-ID: <20240924143958.25-1-quic_rlaggysh@quicinc.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,89 +84,42 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: a4d2ce7d405e0b5a525
-X-MBO-RS-META: sfpe1ie5y3mfyddnq4wmqbzgbw5js8t6
-X-Rspamd-Queue-Id: 4XChlq0LYnz9trK
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: emt9xMxXpw1Lsp4PgXdKc0fbvxjSfXRD
+X-Proofpoint-GUID: emt9xMxXpw1Lsp4PgXdKc0fbvxjSfXRD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 suspectscore=0 phishscore=0 adultscore=0
+ clxscore=1011 malwarescore=0 lowpriorityscore=0 mlxlogscore=957
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409240104
 
-The 'cpupower-set' tool has learned new options with commits:
+Add interconnect dtbindings and driver support for Qualcomm QCS615 SoC.
 
-  f2ab5557119a "cpupower: Add EPP value change support"
-  df8776b03689 "cpupower: Add support for amd_pstate mode change"
-  eb426fc6bdd6 "cpupower: Add turbo-boost support in cpupower"
+Raviteja Laggyshetty (2):
+  dt-bindings: interconnect: document the RPMh Network-On-Chip
+    interconnect in QCS615 SoC
+  interconnect: qcom: add QCS615 interconnect provider driver
 
-However, the corresponding manpage was never updated.
+ .../interconnect/qcom,qcs615-rpmh.yaml        |   73 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/qcs615.c            | 1563 +++++++++++++++++
+ drivers/interconnect/qcom/qcs615.h            |  128 ++
+ .../interconnect/qcom,qcs615-rpmh.h           |  136 ++
+ 6 files changed, 1911 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/qcs615.c
+ create mode 100644 drivers/interconnect/qcom/qcs615.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,qcs615-rpmh.h
 
-Add a basic description of these new options to the existing manpage.
-
-Signed-off-by: Tor Vic <torvic9@mailbox.org>
----
- tools/power/cpupower/man/cpupower-set.1 | 38 +++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/tools/power/cpupower/man/cpupower-set.1 b/tools/power/cpupower/man/cpupower-set.1
-index 2bcc696f4496..500653ef98c7 100644
---- a/tools/power/cpupower/man/cpupower-set.1
-+++ b/tools/power/cpupower/man/cpupower-set.1
-@@ -3,7 +3,7 @@
- cpupower\-set \- Set processor power related kernel or hardware configurations
- .SH SYNOPSIS
- .ft B
--.B cpupower set [ \-b VAL ]
-+.B cpupower set [ \-b VAL | \-e POLICY | \-m MODE | \-t BOOL ]
- 
- 
- .SH DESCRIPTION
-@@ -19,7 +19,7 @@ described in the Options sections.
- Use \fBcpupower info \fP to read out current settings and whether they are
- supported on the system at all.
- 
--.SH Options
-+.SH OPTIONS
- .PP
- \-\-perf-bias, \-b
- .RS 4
-@@ -56,6 +56,40 @@ Use \fBcpupower -c all info -b\fP to verify.
- This options needs the msr kernel driver (CONFIG_X86_MSR) loaded.
- .RE
- 
-+.PP
-+\-\-epp, \-e
-+.RS 4
-+Sets the energy performance policy preference on supported Intel or AMD
-+processors which use the Intel or AMD P-State cpufreq driver respectively.
-+
-+Available policies can be found with
-+\fBcat /sys/devices/system/cpu/cpufreq/policy0/energy_performance_available_preferences\fP :
-+.RS 4
-+default performance balance_performance balance_power power
-+.RE
-+
-+.RE
-+
-+.PP
-+\-\-amd\-pstate\-mode, \-m
-+.RS 4
-+Sets the AMD P-State mode for supported AMD processors.
-+Available modes are "active", "guided" or "passive".
-+
-+Refer to the AMD P-State kernel documentation for further information.
-+
-+.RE
-+
-+.PP
-+\-\-turbo\-boost, \-t
-+.RS 4
-+This option is used to enable or disable the turbo boost feature on
-+supported Intel and AMD processors.
-+
-+This option takes as parameter either \fB1\fP to enable, or \fB0\fP to disable the feature.
-+
-+.RE
-+
- .SH "SEE ALSO"
- cpupower-info(1), cpupower-monitor(1), powertop(1)
- .PP
 -- 
-2.46.1
+2.39.2
 
 
