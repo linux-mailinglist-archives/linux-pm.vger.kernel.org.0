@@ -1,148 +1,110 @@
-Return-Path: <linux-pm+bounces-14611-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14612-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6ABA9844DE
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 13:36:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31FB39845C6
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 14:17:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54FDE1F26F7E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 11:36:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBF89283834
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 12:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E070B1A4F26;
-	Tue, 24 Sep 2024 11:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA97E1A4F21;
+	Tue, 24 Sep 2024 12:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="XDJWlRvo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B247C86277;
-	Tue, 24 Sep 2024 11:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8981F5FF;
+	Tue, 24 Sep 2024 12:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727177542; cv=none; b=oPvfTIHXhCiJfsues6mcUDhexkzOS9wbRmEwhcnJhlYMDcDtdDXNzRDb6z2pZGlb3a1/QcPYRpRITlEeeCKvCR2+YtYJWAyp1iRr83mGSVeJXhg7+gktnQ4dhsu6SbaQXZ+CJD5H5oq8P9JaBD1gUQ7gPpJJYF1tMctlmMvKIeQ=
+	t=1727180156; cv=none; b=c4yPpnncGoPRPRWF95R+FsRK5AUDA/EN1iqKKhaRgVu4STEEWw6/zUUgp4exTxtTCajA7sPeQVvQIuK8iNhz8ZLX/z/X1C/Y+FWAbpzpV4AcwkpH3adV/sE+OUN8E/rgXPbik+9ZprgQ02b2Iyj0pvqL4w2OJcWQusFnqJqHf8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727177542; c=relaxed/simple;
-	bh=274mWF5yEg9y+wkgxhf4U9sHZqXg34pBvu3HEUVXSrE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GEPQvljxFpebMkMFcQpo9O8nDqVpIrewVK3fqO8iXPiStl80GXLysSub6I0tCgVz+hmZhYW5pQw904VpTsXn2tR9sxQCAWo34YNOlUTwqAYjy54gMr4JxHp/2nMS1Y8dbT6EHDnjE6zSRFkH7bnbl2/ZCj7P1/xTxUvsJYdMCwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e1a9463037cso4304698276.2;
-        Tue, 24 Sep 2024 04:32:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727177539; x=1727782339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jm6h96BED8DQTfet2QAIovV1CqCtWAjpatPZ7/UosWI=;
-        b=O+FdUPxWG3BBt8tugF2UAreSMvSpqGm3qBzno0F/nxwd1e0810kPCFVNI721Dee6k0
-         /kejpfHO6bN6qMZUOEoOGL6WAX3s7J3GOzWuihkbg872ePFfzg3fxJOWObWU+8WXDvDU
-         5bRO9Izbpl3gS/1xjmSQ67wpvWovW9J4C/t7hkAxnLKcxkeFpbED44NLzGdgi2Op9Gyo
-         Qp0KUwdGc6A1KuKzAP7fRlWcq7CMc9vLidelweyahE3xTGTbJ0OwR70IuZYOUrgnpWYe
-         b6izvWhaSWTfmq1lYEjVOmhFu05kdaSBZAxkyjtL1jT+EJ6kEtvoQKJnY2oMgzEI9xqA
-         RBEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5P6ccXBzvGpHDE7MQHd0YrV2PvUZmFiRMszkplB1hzIg1WGXOGLtSyogf/0e4+UTMqCQnUM2vzCs=@vger.kernel.org, AJvYcCUMPNGoZorrpCJmLYbBYDhogP9IW4IGF+WMJpXQ3W2kQcJ2H5FbEeykrzSE5YtMF/1iHYFoXtKoexAy@vger.kernel.org, AJvYcCVGNliva32m4NIL3A8qRoUBKpB3MgX4c2T9vfHa8iBLXMwoxJZ47A6fmHUU01ZXuCxGKMCMH9tN7WPCrGREuRHltiE=@vger.kernel.org, AJvYcCVjizAiX2k1eUb9uRFmKnfrVdnzdG8UT5qCiWTwEkXYSnr6R4WY7pUZz+AbYSd4trMmTZ2Pyl7KuroJ@vger.kernel.org, AJvYcCX/84m2rNLWcyKJm5F9lRlq7WVa/bHtE/J8TsvnpEq9sJoJBxu0IqPbs0Aqh1XDPPVGfZ0bRoAqCaQK@vger.kernel.org, AJvYcCXwRd/1MEmNlP97mK/dXRYsJrxRddzQg03FuBycpibRSYWitdOkWL5Y4s8ox7KVgE0MVewKdSFr8q6BVYfl@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1V+5qE++4ULbYMEDrqV2LzjuMNgiPetjWP4vfRo8qfMZ8ozJL
-	9/RWpt90UVe+kJOQvCv1uCd3iX0XOwLFNm87ipseox1zgSWySRia27dDwie2
-X-Google-Smtp-Source: AGHT+IGd1dnlMbgebNUguoCcxM9oWkJXb0wuXHGJaBip1RtFNA0UIc2YRhkqnwJTUIzowHL1bZkcCg==
-X-Received: by 2002:a05:690c:2507:b0:647:7782:421a with SMTP id 00721157ae682-6dfef019bb1mr70492647b3.45.1727177538769;
-        Tue, 24 Sep 2024 04:32:18 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e20d2a7b4asm2117897b3.143.2024.09.24.04.32.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Sep 2024 04:32:17 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6da395fb97aso40617217b3.0;
-        Tue, 24 Sep 2024 04:32:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUeckDrUJBOL1K0zfCMg/uLugj4l6mcROczcwmycRmFIcBibsXEneeObLw8GZT4Tjp9nzlSSrvOLxJxtqg0C+J/VeA=@vger.kernel.org, AJvYcCUm1yLINOEa2+aQnyN46koR6dLCw5WhdvzkpL3ZHf9JFvpFzw1OYdWMHAJwzDuMudslYo3Xij6e1jmO@vger.kernel.org, AJvYcCV5ef23bMFkoIIf9rfPquqml7hVw5DkEJ1B1QKQq+3B55eqtvfRDSEFX0NnTqc6golq+88vlXzywUfX@vger.kernel.org, AJvYcCVxnEAcO7i7cxzBdVLLGzpOuEnH2+Wlf0im4jWjEYX2S7rcj5MVfu3sZnosi3DdHNrMPXiki1RQ8iE=@vger.kernel.org, AJvYcCWk1ZnXAolXPZx5b0vIowIiOI7Rt+Ph2/UNceHvOUsVL6FRPXDpsAR7A12sftELdIi7BinoEYKq7RaP@vger.kernel.org, AJvYcCWwZI/P5NQvoQdOI55FVLfA48XhbIYpPtVJKiEtWDFjKQO9djJAwE3tLaVuVo+bcpMvSNTMhB79v43m4dV5@vger.kernel.org
-X-Received: by 2002:a05:690c:48c1:b0:6af:eaaf:2527 with SMTP id
- 00721157ae682-6dfeed87f8cmr127931067b3.18.1727177537112; Tue, 24 Sep 2024
- 04:32:17 -0700 (PDT)
+	s=arc-20240116; t=1727180156; c=relaxed/simple;
+	bh=AOps8cGhPiFtT/KNmA1Dft44lgDw5MO3ktyTCH3A2Bs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cvhjkqiX4yBY7iPg1Ejr+XoXtFqwpgmNOZ0SyQV5MWvCbeAv0tbVumwaAW1v2bsXN4ZKoredolb2gIpS2mZlVANq3BOsrjDHxYM2EzzUNND8ICb43/++lEDjrT9v4U8w5g7igzUcDzJedu9BYGjrkM8tCofe6pp4cP3kDPObMk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=XDJWlRvo; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48OCFiMu110715;
+	Tue, 24 Sep 2024 07:15:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1727180145;
+	bh=LAOtKMRxpTwXeU3Hg8M5csb7fMwA7iWF4uLxR8Q9/X4=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=XDJWlRvokze7kmtQHx3h7BAvsnMpv9JQhno9adr3uoj+2LyQebzKinoj1MzhlJwah
+	 yZUkOeL0ijSao70htFg5Xv+rk0SVVQgNHkkTC7FablGGc07yiQCGPsurY2OyRu6Hyk
+	 soBjU9ucflNUWDF3qWRuKIcMtS9z2Bii/vlVUCyE=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48OCFiXR085220
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 24 Sep 2024 07:15:44 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 24
+ Sep 2024 07:15:44 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 24 Sep 2024 07:15:44 -0500
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48OCFinX064170;
+	Tue, 24 Sep 2024 07:15:44 -0500
+Date: Tue, 24 Sep 2024 07:15:44 -0500
+From: Nishanth Menon <nm@ti.com>
+To: Dhruva Gole <d-gole@ti.com>
+CC: Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Andrew Davis
+	<afd@ti.com>, Bryan Brattlof <bb@ti.com>
+Subject: Re: [PATCH v5 0/6] ti: k3-am62{a,p}x-sk: add opp frequencies
+Message-ID: <20240924121544.62my7eqnudc76orl@subscribe>
+References: <20240924-ti-cpufreq-fixes-v5-v5-0-cbe16b9ddb1b@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com> <20240822152801.602318-5-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240822152801.602318-5-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 24 Sep 2024 13:32:04 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
-Message-ID: <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
-Subject: Re: [PATCH 04/16] soc: renesas: Add SYSC driver for Renesas RZ/G3S
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
-	magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
-	biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org, 
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240924-ti-cpufreq-fixes-v5-v5-0-cbe16b9ddb1b@ti.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hi Claudiu,
+On 15:20-20240924, Dhruva Gole wrote:
+[...]
+> 
+> I am sorry that this breaks compatibility with older AM625 devicetree.
+> However, the old devicetree was marking the entire wkup_conf as "syscon",
+> "simple-mfd" which was wrong and needed to be fixed.
+> 
+> This series finally tries to bring order to DT and the driver.
+> 
+> However, if there is still any way to maintain the backward
+> compatibility, then I am open to suggestions. Please try
+> and understand here that the ask for backward compatibility here
+> is to ask the driver to support a case where the register offset itself
+> was to be picked from a different node. I am not sure if there's any
+> cleaner way to do this.
 
-On Thu, Aug 22, 2024 at 5:28=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> The RZ/G3S SYS Controller has 2 registers (one for PCIE one for USB) that
-> need to be configured before/after powering off/on the PCI or USB
-> ares. The bits in these registers control signals to PCIE and USB that
-> need to be de-asserted/asserted after/before power on/off event. For this
-> add SYSC controller driver that registers a reset controller driver on
-> auxiliary bus which allows USB, PCIE drivers to control these signals.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Thanks for your patch!
+Have you tried to handle this with quirks? I am not in favor of breaking
+backward compatibility.
 
-> --- /dev/null
-> +++ b/drivers/reset/reset-rzg3s-sysc.c
-> @@ -0,0 +1,140 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Renesas RZ/G3S SYSC reset driver
-> + *
-> + * Copyright (C) 2024 Renesas Electronics Corp.
-> + */
-> +
-> +#include <linux/auxiliary_bus.h>
-
-Using the Auxiliary Bus requires selecting AUXILIARY_BUS.
-Elsse you might run into build failures:
-
-aarch64-linux-gnu-ld: drivers/soc/renesas/rzg3s-sysc.o: in function
-`rzg3s_sysc_probe':
-rzg3s-sysc.c:(.text+0x21c): undefined reference to `auxiliary_device_init'
-aarch64-linux-gnu-ld: rzg3s-sysc.c:(.text+0x264): undefined reference
-to `__auxiliary_device_add'
-aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
-`rzg3s_sysc_reset_driver_init':
-reset-rzg3s-sysc.c:(.init.text+0x1c): undefined reference to
-`__auxiliary_driver_register'
-aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
-`rzg3s_sysc_reset_driver_exit':
-reset-rzg3s-sysc.c:(.exit.text+0x10): undefined reference to
-`auxiliary_driver_unregister'
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
