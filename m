@@ -1,185 +1,130 @@
-Return-Path: <linux-pm+bounces-14594-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14595-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DE0C97F1A0
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 22:19:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60E8F983B83
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 05:26:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B830F281804
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2024 20:19:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 097A81F22D27
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 03:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2251A0B1E;
-	Mon, 23 Sep 2024 20:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F0321A270;
+	Tue, 24 Sep 2024 03:26:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="h0rpA66u"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.b="O8SwsVsr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A5017BD6
-	for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 20:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4AF11CAF;
+	Tue, 24 Sep 2024 03:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.30.2.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727122747; cv=none; b=K3VfaXANtabTQAf4odRqi0bEUGbBz3xT+3w/Rlbd3ltUZCz84ERa7Atn3biNVTaHY652zFbPK9lizRRKEkkkZhSdQ7AoFRTWqVcgVtMwBzYvpkHz/u79p/PXiegUx2oaxJ2opONb8uPi1VLvV299YE1/3T9v8rEt+kY2uaT6XWM=
+	t=1727148386; cv=none; b=K3idLn5rv/U8Jt8I4oHlcEUcB8wIXejFOgheD5AGXgw6v0/GTs4qKsDkZla1Fx2uGuQy3eUPx1Z0mWcwrkqZ0kYIjxsnVoEqdbBZZqCD8R43rz/9wHljJ4rB+jIrWZ7NKBIKxqbqd1f1jc6Blg4rfNbvddiSTs6MiomkgC4GLOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727122747; c=relaxed/simple;
-	bh=/eSZTXDrWxp8WU3PcAncNTF6Ub7hlLotegTJAsNx5NU=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=r6CkrBCreDALRBqqb0o3ZVXJyzfvDPIb2maXznTQb1/z43D3R9LjHLaLOnTSRq+0h1t9unOYR7q95TOJY4rbyXABMTcddxxsRkfmAYpvQcMbhmJNQpj/D3oAM7uyhohsb04EokBLRvIGpmlMki6fvecWdF7FzmJe5SyicPsngRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=h0rpA66u; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-82a109bc459so206424739f.1
-        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2024 13:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727122744; x=1727727544; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWGul8N+EZy00peKKJT500hgW+GLPhHSqZNfkf+uAl8=;
-        b=h0rpA66usVBN2vYmrxB77XTaXVwp84kx3DW0yu8BAu702bS+QndSXkaRZo4aKSK/z3
-         0ajTUNjKUilzBhLIzJDbVMvh/65AEq5Bwb+BAhcp3NmNvIhzrzAkhWMohnhOPi4QBQkq
-         nMi74n3TTdaOSqSmtvxy94ak82G9mrFnVzTjM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727122744; x=1727727544;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DWGul8N+EZy00peKKJT500hgW+GLPhHSqZNfkf+uAl8=;
-        b=GSmtT+pBAIO5A1L0+Po0LwVuoE1oohFc8uuhEvyfXXy47bRFRvwuSUGuF3PaBcpkqq
-         CWHZYqJ08B2hWgvrDHuNWxeyw3kqmK81W0GAiTzyDwLvuQkvK4DbsHefjTi5Igjhg5OZ
-         Lird0bQf8qgEk6QM48UPoFeaa9YjUW8G1F7b2mdJxVJ7/ABKJYPqV0Qir4WNlQotjPFk
-         4qHp9itgcrUKrhP8zkMHfRv+XKFYp4DpvOiNpkQ4PhsxIX8SzMbuxtRjUctCwEwPNPi/
-         Gv+oa7QSMhuhq+3x2dsKXHkuTvZOVkt5KDSDx4DSTsNLu5/aPY3t83rYINuXZCajWFDH
-         1+Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMEEXz1I8hZBU2aSoDi+vAsTGIvYx5hT+IWHwiMG7Aqt0lEH51S/W5Ls+ZqMapm7sZYcUELe07Eg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNLs3t/ahznP50DXWpw52xFoJgrZMyLgnnOqb12WPHZTIusDfO
-	YeW8hIy+GTwNV/b7RQxAs2cHrOVGNE/Uxt4na0BLf5kLb4ns8my4ZPo30MuzurY=
-X-Google-Smtp-Source: AGHT+IHAp0QTMm7T/66VhAN9fo2hkuaNPKT29AKjYiwTUac4Fpmd+C6TbAgSOlaKv5WqEeG+sLXybg==
-X-Received: by 2002:a05:6e02:156c:b0:3a0:9030:e70b with SMTP id e9e14a558f8ab-3a1a2fec392mr9011545ab.4.1727122743800;
-        Mon, 23 Sep 2024 13:19:03 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d40f2f6e2asm24140173.154.2024.09.23.13.19.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Sep 2024 13:19:02 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------1JnQzwMA3Ss9TTIuQFjlnei6"
-Message-ID: <cf329845-48ee-4b25-9b5a-02a6e2b55e5a@linuxfoundation.org>
-Date: Mon, 23 Sep 2024 14:19:01 -0600
+	s=arc-20240116; t=1727148386; c=relaxed/simple;
+	bh=5do3pFCGviAlrYmjo+9gOkpJZ/1OrJuYNxeJZe4BR+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ykk3ju/GWP5lDwF3hX31AbBQfdEtz4JSte1RABsJI+pfVghoCm4TMyzQt16NmyugtRm2XFmiwjAHznOJngNv413wGp07fNFWgloaq8rX70KGXOnhw36ycqCk7M+5oijMJKVDq/zqsQvEr73FR/z367wKo+pAJYWhoD3pfLZc5A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu; spf=pass smtp.mailfrom=csail.mit.edu; dkim=pass (2048-bit key) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.b=O8SwsVsr; arc=none smtp.client-ip=128.30.2.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=outgoing.csail.mit.edu; s=test20231205; h=In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=cfKRFOqpf7Zq5W3HSKL69wx5R5uROv9DLNQhkhjGjN4=; t=1727148384; x=1728012384; 
+	b=O8SwsVsrrYzHHpqyySGIrKM62ss/557KWQmxJjslzHg/VQfeKwyGfmPVoW9df/G2DJzx+qE5v0I
+	MMijl75RAKEhbi3E9CMfD/QINt4vZ01xRlRMDzqp8kOste4gFYFJ7bt0+EP86EfbK+TlTDRn7VWJT
+	xUqrpXaDAETU+IGYg8bWVML+BPc5yt+WbiOCSDFQgf7AFPu1QT9mhM5r8+rDl/y7eAJXCm0sXl0hA
+	OG4lQETqHGsOfZtOJtgneAesli5sLRBLbSEC8VR8UPmJT47XJ/uI8Qtv+RpTvrCk4D7e3SRsy/a2O
+	fUcZtl6hkIGB1vJqKz8qjygYuhRlv/weq0GA==;
+Received: from [172.179.10.40] (helo=csail.mit.edu)
+	by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <srivatsa@csail.mit.edu>)
+	id 1sswBw-00EsUn-Nv;
+	Mon, 23 Sep 2024 23:26:20 -0400
+Date: Tue, 24 Sep 2024 03:26:14 +0000
+From: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+To: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, jikos@kernel.org, bentiss@kernel.org,
+	dmitry.torokhov@gmail.com, linux-hyperv@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ernis@microsoft.com, rafael@kernel.org, pavel@ucw.cz,
+	lenb@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/3] Disable Suspend-to-Idle in Hyper-V and Fix
+ Hibernation Interruptions
+Message-ID: <ZvIxVn1NKWuJ4u2k@csail.mit.edu>
+References: <1726176470-13133-1-git-send-email-ernis@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Guenter Roeck <linux@roeck-us.net>, "John B. Wyatt IV" <jwyatt@redhat.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] [GIT PULL] cpupower fixes for Linux 6.12-rc1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1726176470-13133-1-git-send-email-ernis@linux.microsoft.com>
 
-This is a multi-part message in MIME format.
---------------1JnQzwMA3Ss9TTIuQFjlnei6
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Vennela,
 
-Hi Rafael,
+[+linux-pm, Rafael, Pavel, Len]
 
-Please pull the following cpupower fixes update for Linux 6.12-rc1.
-Please send this up to Linus if at all possible before the merge
-window closes.
+Let's CC the linux-pm mailing list for discussions related to power
+management features (such as suspend/resume and hibernation).
 
-This cpupower fixes update consists fix to raw_pylibcpupower.i being
-removed by "make mrproper". "*.i", "*.o" files are generated during
-kernel compile and removed when the repo is cleaned by mrproper.
+On Thu, Sep 12, 2024 at 02:27:47PM -0700, Erni Sri Satya Vennela wrote:
+> It has been reported that Hyper-V VM users can unintentionally abort
+> hibernation by mouse or keyboard movements. To address this issue,
+> we have decided to remove the wakeup events for the Hyper-V keyboard
+> and mouse driver.
 
-The file is renamed to use .swg extension instead to avoid the problem.
-The second patch removes references to raw_pylibcpupower.i from .gitignore.
+From the description of the problem, it doesn't occur to me that this
+is specific to Hyper-V. I was wondering if VMs on other hypervisor
+platforms wouldn't face the same issue? I'd like to recommend
+exploring how this problem has been solved for other platforms, so
+that we can reuse the same approach here. (If it turns out that
+removing keyboard and mouse wakeup events is the way to go, then
+great; otherwise, we can learn and apply the recommended solution).
 
-diff is attached.
+> However, this change introduces another problem: 
+> Suspend-to-Idle brings the system down with no method to wake it back up.
+> 
+> Given that there are no real users of Suspend-to-Idle in Hyper-V,
+> we have decided to disable this feature for VMBus. This results in:
+> 
+> $echo freeze > /sys/power/state
+> > bash: echo: write error: Operation not supported
+> 
+> The keyboard and mouse were previously registered as wakeup sources to
+> interrupt the freeze operation in a VM. Since the freeze operation itself
+> is no longer supported, we are disabling them as wakeup events.
+> 
+> This patchset ensures that the system remains stable and prevents
+> unintended interruptions during hibernation.
+> 
+> Erni Sri Satya Vennela (3):
+>   Drivers: hv: vmbus: Disable Suspend-to-Idle for VMBus
+>   Revert "Input: hyperv-keyboard - register as a wakeup source"
+>   Revert "HID: hyperv: register as a wakeup source"
+> 
+>  drivers/hid/hid-hyperv.c              |  6 ------
+>  drivers/hv/vmbus_drv.c                | 15 ++++++++++++++-
+>  drivers/input/serio/hyperv-keyboard.c | 12 ------------
+>  3 files changed, 14 insertions(+), 19 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+> 
 
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 80e67f1802d0fc21543216557a68320c71d7dbe1:
-
-   pm:cpupower: Add error warning when SWIG is not installed (2024-09-06 10:58:35 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.12-rc1-fixes
-
-for you to fetch changes up to 6c56fb4434f59df9c777eded5f77cc812882cef3:
-
-   pm: cpupower: Clean up bindings gitignore (2024-09-23 09:06:03 -0600)
-
-----------------------------------------------------------------
-linux-cpupower-6.12-rc1-fixes
-
-This cpupower fixes update consists fix to raw_pylibcpupower.i being
-removed by "make mrproper". "*.i", "*.o" files are generated during
-kernel compile and removed when the repo is cleaned by mrproper.
-
-The file is renamed to use .swg extension instead to avoid the problem.
-The second patch removes references to raw_pylibcpupower.i from .gitignore.
-
-----------------------------------------------------------------
-John B. Wyatt IV (1):
-       pm: cpupower: Clean up bindings gitignore
-
-Min-Hua Chen (1):
-       pm: cpupower: rename raw_pylibcpupower.i
-
-  tools/power/cpupower/bindings/python/.gitignore                       | 3 +--
-  tools/power/cpupower/bindings/python/Makefile                         | 4 ++--
-  .../bindings/python/{raw_pylibcpupower.i => raw_pylibcpupower.swg}    | 0
-  3 files changed, 3 insertions(+), 4 deletions(-)
-  rename tools/power/cpupower/bindings/python/{raw_pylibcpupower.i => raw_pylibcpupower.swg} (100%)
-----------------------------------------------------------------
---------------1JnQzwMA3Ss9TTIuQFjlnei6
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-cpupower-6.12-rc1-fixes.diff"
-Content-Disposition: attachment; filename="linux-cpupower-6.12-rc1-fixes.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi8uZ2l0
-aWdub3JlIGIvdG9vbHMvcG93ZXIvY3B1cG93ZXIvYmluZGluZ3MvcHl0aG9uLy5naXRpZ25v
-cmUKaW5kZXggNWM5YTFmMDIxMmRkLi41MWNiYjg3OTljNDQgMTAwNjQ0Ci0tLSBhL3Rvb2xz
-L3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi8uZ2l0aWdub3JlCisrKyBiL3Rvb2xz
-L3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi8uZ2l0aWdub3JlCkBAIC0xLDggKzEs
-NyBAQAorIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vbmx5CiBfX3B5Y2Fj
-aGVfXy8KIHJhd19weWxpYmNwdXBvd2VyX3dyYXAuYwogKi5vCiAqLnNvCiAqLnB5CiAhdGVz
-dF9yYXdfcHlsaWJjcHVwb3dlci5weQotIyBnaXQga2VlcHMgaWdub3JpbmcgdGhpcyBmaWxl
-LCB1c2UgZ2l0IGFkZCAtZiByYXdfbGliY3B1cG93ZXIuaQotIXJhd19weWxpYmNwdXBvd2Vy
-LmkKZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi9N
-YWtlZmlsZSBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmls
-ZQppbmRleCBkYzA5YzViNjZlYWQuLmUxZWJiMWQ2MGNkNCAxMDA2NDQKLS0tIGEvdG9vbHMv
-cG93ZXIvY3B1cG93ZXIvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Bv
-d2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZQpAQCAtMjAsMTMgKzIwLDEz
-IEBAIF9yYXdfcHlsaWJjcHVwb3dlci5zbzogcmF3X3B5bGliY3B1cG93ZXJfd3JhcC5vCiBy
-YXdfcHlsaWJjcHVwb3dlcl93cmFwLm86IHJhd19weWxpYmNwdXBvd2VyX3dyYXAuYwogCSQo
-Q0MpIC1mUElDIC1jIHJhd19weWxpYmNwdXBvd2VyX3dyYXAuYyAkKFBZX0lOQ0xVREUpCiAK
-LXJhd19weWxpYmNwdXBvd2VyX3dyYXAuYzogcmF3X3B5bGliY3B1cG93ZXIuaQorcmF3X3B5
-bGliY3B1cG93ZXJfd3JhcC5jOiByYXdfcHlsaWJjcHVwb3dlci5zd2cKIGlmZXEgKCQoSEFW
-RV9TV0lHKSwwKQogCSQoZXJyb3IgInN3aWcgd2FzIG5vdCBmb3VuZC4gTWFrZSBzdXJlIHlv
-dSBoYXZlIGl0IGluc3RhbGxlZCBhbmQgaW4gdGhlIFBBVEggdG8gZ2VuZXJhdGUgdGhlIGJp
-bmRpbmdzLiIpCiBlbHNlIGlmZXEgKCQoSEFWRV9QWUNPTkZJRyksMCkKIAkkKGVycm9yICJw
-eXRob24tY29uZmlnIHdhcyBub3QgZm91bmQuIE1ha2Ugc3VyZSB5b3UgaGF2ZSBpdCBpbnN0
-YWxsZWQgYW5kIGluIHRoZSBQQVRIIHRvIGdlbmVyYXRlIHRoZSBiaW5kaW5ncy4iKQogZW5k
-aWYKLQlzd2lnIC1weXRob24gcmF3X3B5bGliY3B1cG93ZXIuaQorCXN3aWcgLXB5dGhvbiBy
-YXdfcHlsaWJjcHVwb3dlci5zd2cKIAogIyBXaWxsIG9ubHkgY2xlYW4gdGhlIGJpbmRpbmdz
-IGZvbGRlcjsgd2lsbCBub3QgY2xlYW4gdGhlIGFjdHVhbCBjcHVwb3dlciBmb2xkZXIKIGNs
-ZWFuOgpkaWZmIC0tZ2l0IGEvdG9vbHMvcG93ZXIvY3B1cG93ZXIvYmluZGluZ3MvcHl0aG9u
-L3Jhd19weWxpYmNwdXBvd2VyLmkgYi90b29scy9wb3dlci9jcHVwb3dlci9iaW5kaW5ncy9w
-eXRob24vcmF3X3B5bGliY3B1cG93ZXIuc3dnCnNpbWlsYXJpdHkgaW5kZXggMTAwJQpyZW5h
-bWUgZnJvbSB0b29scy9wb3dlci9jcHVwb3dlci9iaW5kaW5ncy9weXRob24vcmF3X3B5bGli
-Y3B1cG93ZXIuaQpyZW5hbWUgdG8gdG9vbHMvcG93ZXIvY3B1cG93ZXIvYmluZGluZ3MvcHl0
-aG9uL3Jhd19weWxpYmNwdXBvd2VyLnN3Zwo=
-
---------------1JnQzwMA3Ss9TTIuQFjlnei6--
+Regards,
+Srivatsa
+Microsoft Linux Systems Group
 
