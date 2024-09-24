@@ -1,221 +1,144 @@
-Return-Path: <linux-pm+bounces-14627-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14628-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6427C984B61
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 21:02:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 806D8984B64
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 21:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A29F1C229BB
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 19:02:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 397C2284BF5
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2024 19:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3148C1A;
-	Tue, 24 Sep 2024 19:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B8C73451;
+	Tue, 24 Sep 2024 19:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pWWWtsGc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kxboQR2i"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A138BF0;
-	Tue, 24 Sep 2024 19:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13711B85D2;
+	Tue, 24 Sep 2024 19:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727204528; cv=none; b=q+tRiwxs/KQvvuBXZjW1BZcKTfcsFQRrPVHlS14zCgZQBHKQIbpaCZoTbSRv0BULafrq7SGO9nqVhdRhz/Yw8Yk0LwV/a4aOedR4CjBdo8ewyx9DjY9uOTkJruDzMCfmGWBOVTEVsYvw6+Bhtnz2PZK3P1TyEW4U4i7MsF8nRMA=
+	t=1727204628; cv=none; b=Cpz4J7cAng1hYeEOiE9kcLS5qk4fWkGmEYnBQAMe9IWuflo1g6wnaJbzfS8RebsfTyX/FLGIVGwKxzXPMDGBTZHAIekjOrq/7nHniKu9HzfCWEMDmYHtpdTUYfVNSDqIgYfTwJkpGIr1hrVllbSsSXu1HMNgM78QCKGjQrWhJIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727204528; c=relaxed/simple;
-	bh=va5K5ZlrShpJ/LFW7p1UG1Pzj1oE+NuW9y7UG7YpXb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HMyKHRbJ7c+BxuoZgB6SSUL8Rn6pH5gAwLoygz0to6E8GqOx3yGklCo92FV8ybxc/OdFa7uyKsZWl/GXCZh9GoZnSqYwGsuyEjf40VKUewp8kUz3NMfp8+UGBMr2p5SXXP58PlwcPGnU6bV3eofJq5SSBGaL9BY/2dDwwHkL5Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pWWWtsGc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C516FC4CEC5;
-	Tue, 24 Sep 2024 19:02:07 +0000 (UTC)
+	s=arc-20240116; t=1727204628; c=relaxed/simple;
+	bh=dS3+273g6IfFSVUMs3zFlkFWLtDCj83qG48dfGXNT54=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A9PjFeHUUFwuuGyN/+QOhvgF6rOfFdGOw20XdOqhBf6OZ35YkuqRGlXntVrpWfEKm3hDxeHMrI1w0Wt7YlbybntDzibZ6pyau5mE6V32LV1tYMENflM+rXE9gv/oX09Nm6966rKu5DaigoJnGZZtP6EVGubdncVBOBDmke+di3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kxboQR2i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40FF8C4CEC4;
+	Tue, 24 Sep 2024 19:03:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727204528;
-	bh=va5K5ZlrShpJ/LFW7p1UG1Pzj1oE+NuW9y7UG7YpXb8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pWWWtsGcyrXIp0jVOs8hr4P8l+0r3VHQbvGYoLxWGYFUlrda7Hg8rnO/mVerU/4SE
-	 y8DQ+BwSO8z6W7CorsWMc9G3sM4VaRrGBNZaluf9W+yMyFwM4+eLsEK2Fj1nJVzc+r
-	 4FvmWM3VF+j0JTi0WNDN/Vf7ExXaJYSi4fJ3H4webPEUCS/H7a5KFdqfbfqFYPB5Re
-	 EqwkNU7Zx5QRg1shZukmErLERMY1IvTO/ZD9y7KqK0pA3u17mhvWtSVnyURqE7I4kn
-	 4w0kQa/1rwvqOZzxwSKbhvFh2jzcYdD/X+3sH1vtUj2osUg6cpg6QbOyaDlf1KO5OI
-	 tfI5jUul0Wh1Q==
-Received: by pali.im (Postfix)
-	id DC03A818; Tue, 24 Sep 2024 21:02:01 +0200 (CEST)
-Date: Tue, 24 Sep 2024 21:02:01 +0200
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Jerry Lv <Jerry.Lv@axis.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Kernel <Kernel@axis.com>
-Subject: Re: [PATCH] power: supply: bq27xxx_battery: Do not return ENODEV
- when busy
-Message-ID: <20240924190201.xvxf5ugpmrveyo5r@pali>
-References: <20240913-foo-fix2-v1-1-a0f499404f3a@axis.com>
- <20240913212715.gmchsmmaqrhksmhx@pali>
- <VI1PR02MB1007663D83495B0594DE794C7F4662@VI1PR02MB10076.eurprd02.prod.outlook.com>
- <20240914082447.mrxtfgazkpaeqetu@pali>
- <VI1PR02MB1007675ED9E1F1DBC6A915680F46F2@VI1PR02MB10076.eurprd02.prod.outlook.com>
- <20240923181631.3plimohmg4vnjwtb@pali>
- <VI1PR02MB10076AC00A9D65BEBBC1A0DC8F4682@VI1PR02MB10076.eurprd02.prod.outlook.com>
+	s=k20201202; t=1727204628;
+	bh=dS3+273g6IfFSVUMs3zFlkFWLtDCj83qG48dfGXNT54=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kxboQR2ivGZccLupnn+lS0+ms67/vkKqEDBLccR50iQ13xHpsyi8qk30NiG88gIRz
+	 l78z/lpzJWTtfmlvL9JE2+QHp5AnHQXFZDSGu4bQnBw+Jv/n9cyVrDXXTemftiM72O
+	 ncy/Yk+C9vSKUkIrFfBEQ9Vb0AQjFrBuXl9XnmwUf5eLGsHlMqso7oUgr0OUZPUkwr
+	 nsMawrIcaXMOydH6hplBFYTs/aqhwiZ68KSv03Qj2jhHE1fvPuq+PdS8fsju47m7L7
+	 +XCgVbI+J2ZAbIl7vM2u/ToZcaHeoStzMqfXuuBZM9XfbZP22JFNjHVvmiEvFXbCDn
+	 /PqKG2qt2vPyA==
+Message-ID: <902310fb-14fd-42ff-bcac-7814cbc0d635@kernel.org>
+Date: Tue, 24 Sep 2024 21:03:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <VI1PR02MB10076AC00A9D65BEBBC1A0DC8F4682@VI1PR02MB10076.eurprd02.prod.outlook.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: document the RPMh
+ Network-On-Chip interconnect in QCS615 SoC
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+ Adam Skladowski <a39.skl@gmail.com>,
+ Rajendra Nayak <quic_rjendra@quicinc.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Danila Tikhonov <danila@jiaxyga.com>,
+ Vladimir Lypak <vladimir.lypak@gmail.com>,
+ Sibi Sankar <quic_sibis@quicinc.com>,
+ Odelu Kukatla <quic_okukatla@quicinc.com>,
+ Mike Tipton <quic_mdtipton@quicinc.com>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240924143958.25-1-quic_rlaggysh@quicinc.com>
+ <20240924143958.25-2-quic_rlaggysh@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240924143958.25-2-quic_rlaggysh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello, as I do not have HW which is affected by this issue, I think that
-you would better know how to handle it. If you think that one retry is
-enough for normal usage then go ahead with it. I'm fine with it.
+On 24/09/2024 16:39, Raviteja Laggyshetty wrote:
+> Document the RPMh Network-On-Chip Interconnect of the QCS615 platform.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 
-Maybe if we want to be super precise we can measure probability how
-often gauge is busy and then calculate number of retries to have device
-driver working in usual conditions over one or two years. But this is
-overkill...
+...
 
-On Tuesday 24 September 2024 03:34:11 Jerry Lv wrote:
-> Hi Pali,
-> 
-> Just as you mentioned, when the gauge is busy, the other devices
-> connected to the same I2C will not response too. We rarely see
-> this in the normal use case, but sometimes see it in our stress test.
-> 
-> Since the gauge usually recovers from busy status very quickly, and
-> too many retry may affect other devices too. So could we just retry
-> one time, do you think is it enough?
-> 
-> Best Regards
-> Jerry Lv
-> 
-> ________________________________________
-> From: Pali Rohár <pali@kernel.org>
-> Sent: Tuesday, September 24, 2024 2:16 AM
-> To: Jerry Lv
-> Cc: Sebastian Reichel; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Kernel
-> Subject: Re: [PATCH] power: supply: bq27xxx_battery: Do not return ENODEV when busy
-> 
-> Thank you for detailed information about i2c NAK. In this case try to
-> consider if it would not be better to add retry logic in the
-> bq27xxx_battery_i2c_read() function.
-> 
-> If it is common that bq chipset itself returns i2c NAKs during normal
-> operations then this affects any i2c read operation done by
-> bq27xxx_battery_i2c_read() function.
-> 
-> So this issue is not related just to reading "flags", but to anything.
-> That is why I think that retry should be handled at lower layer.
-> 
-> On Monday 23 September 2024 08:14:13 Jerry Lv wrote:
-> > Hi Pali,
-> >
-> > Thanks for your excellent suggestion, I will change the code accordingly.
-> >
-> > About the question:
-> > Anyway, which bus is BQ27Z561-R2 using (i2c?)? And how is EBUSY indicated or transferred over wire?
-> > --- Yes, we connect the gauge BQ27Z561 to I2C. When it's busy, the feedback we got from the logic analyser is "NAK".
-> >
-> >
-> > Best Regards,
-> > Jerry Lv
-> >
-> > ________________________________________
-> > From: Pali Rohár <pali@kernel.org>
-> > Sent: Saturday, September 14, 2024 4:24 PM
-> > To: Jerry Lv
-> > Cc: Sebastian Reichel; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Kernel
-> > Subject: Re: [PATCH] power: supply: bq27xxx_battery: Do not return ENODEV when busy
-> >
-> > Hello Jerry,
-> >
-> > I think that this issue should be handled in different way.
-> >
-> > First thing is to propagate error and not change it to -ENODEV. This is
-> > really confusing and makes debugging harder.
-> >
-> > Second thing, if bq27xxx_read() returns -EBUSY, sleep few milliseconds
-> > and call bq27xxx_read() again.
-> >
-> > This should cover the issue which you are observing and also fixing the
-> > problem which you introduced in your change (interpreting error code as
-> > bogus cache data).
-> >
-> > Anyway, which bus is BQ27Z561-R2 using (i2c?)? And how is EBUSY
-> > indicated or transferred over wire?
-> >
-> > Pali
-> >
-> > On Saturday 14 September 2024 02:57:39 Jerry Lv wrote:
-> > > Hi Pali,
-> > >
-> > > (Sorry for inconvineient! previous email was rejected by some email list for some HTML part, so I edit it and send it again.)
-> > >
-> > > Yes, bq27xxx_read() will return -EBUSY, and bq27xxx_read() will be called in many functions.
-> > >
-> > > In our product, some different applications may access the gauge BQ27Z561-R2, and we see many times the returned error code is -ENODEV.
-> > > After debugging it by oscillograph and adding some debug info, we found the device is busy sometimes, and it will recover very soon(a few milliseconds).
-> > > So, we want to exclude the busy case before return -ENODEV.
-> > >
-> > > Best Regards,
-> > > Jerry
-> > >
-> > > On Friday 13 September 2024 16:45:37 Jerry Lv wrote:
-> > > > Multiple applications may access the device gauge at the same time, so the
-> > > > gauge may be busy and EBUSY will be returned. The driver will set a flag to
-> > > > record the EBUSY state, and this flag will be kept until the next periodic
-> > > > update. When this flag is set, bq27xxx_battery_get_property() will just
-> > > > return ENODEV until the flag is updated.
-> > >
-> > > I did not find any evidence of EBUSY. Which function and to which caller
-> > > it returns? Do you mean that bq27xxx_read() returns -EBUSY?
-> > >
-> > > > Even if the gauge was busy during the last accessing attempt, returning
-> > > > ENODEV is not ideal, and can cause confusion in the applications layer.
-> > >
-> > > It would be better to either propagate correct error or return old value
-> > > from cache...
-> > >
-> > > > Instead, retry accessing the gauge to update the properties is as expected.
-> > > > The gauge typically recovers from busy state within a few milliseconds, and
-> > > > the cached flag will not cause issues while updating the properties.
-> > > >
-> > > > Signed-off-by: Jerry Lv <Jerry.Lv@axis.com>
-> > > > ---
-> > > >  drivers/power/supply/bq27xxx_battery.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> > > > index 750fda543308..eefbb5029a3b 100644
-> > > > --- a/drivers/power/supply/bq27xxx_battery.c
-> > > > +++ b/drivers/power/supply/bq27xxx_battery.c
-> > > > @@ -2029,7 +2029,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
-> > > >                bq27xxx_battery_update_unlocked(di);
-> > > >        mutex_unlock(&di->lock);
-> > > >
-> > > > -     if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
-> > > > +     if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0 && di->cache.flags != -EBUSY)
-> > > >                return -ENODEV;
-> > >
-> > > ... but ignoring error and re-using the error return value as flags in
-> > > code later in this function is bad idea.
-> > >
-> > > >
-> > > >        switch (psp) {
-> > > >
-> > > > ---
-> > > > base-commit: da3ea35007d0af457a0afc87e84fddaebc4e0b63
-> > > > change-id: 20240913-foo-fix2-a0d79db86a0b
-> > > >
-> > > > Best regards,
-> > > > --
-> > > > Jerry Lv <Jerry.Lv@axis.com>
-> > > >
-> > >
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    gem_noc: interconnect@9680000 {
+> +        compatible = "qcom,qcs615-gem-noc";
+> +        reg = <0x9680000 0x3E200>;
+
+
+If there is going to be new version, then lowercase hex.
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Best regards,
+Krzysztof
+
 
