@@ -1,69 +1,69 @@
-Return-Path: <linux-pm+bounces-14699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14700-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E548C98634B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:23:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 887E19862A1
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:14:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13493B32E24
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:14:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB5C01C2706E
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69B918CC16;
-	Wed, 25 Sep 2024 15:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4585618EFC9;
+	Wed, 25 Sep 2024 15:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GFu9ndsn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CjZEe0yN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8E918C91A
-	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C178218CC1A
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276538; cv=none; b=qJXQ7ToaKgbImKfwAQsX7hCAUvjbbIxQQ3TUfgw9UBa1MAaZyFIMR4CrM3UitqpK7DrknKOo4bFfhDcGtQrCAcgBUNo4EjzvsyVv/Mif1a9612+ck2zPqQnus0PudBQIKZPMIlh+66DB8D9LLgEOPve00zkRtE+/E+3KpNRbBX0=
+	t=1727276542; cv=none; b=LiJQVJ1uIhnwKnnVs1iykztY8Nx37HgJP6JicOTy1qjb4XMPQ6QMIgRq9FBppLdggzd7scDTBZcDCaJ7AmQl4E7DCuOidmX62x1NQPS/2C0LhzhmAqZ4pRo0eAGYJzFtams3rAvYBegZ7bX19aZaFgaSmtty2qsXVpz1tzW+Q9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276538; c=relaxed/simple;
-	bh=UKT9SQcfQYmFYYWRpiFhP5glZL5JX0TJEX6TTbNQ3aU=;
+	s=arc-20240116; t=1727276542; c=relaxed/simple;
+	bh=JTcZMRf52oQJjvsrQbaaa26wNEschMPTichZxc3ZyTY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SyOoVc4w8HSnvOI5FU664Oe2L2DxlVB5kM6l4of/nBx3U4d0kzleylrjVxwWzg7Oa08kbH/5xMvrH+aXzBVCkaAf/y0qvTNt2q8xBKO2ly/ZPHvbZ23GVW1P+KjakHtIboR0/x8D4t9NbcKhErmN5jue9NTr71YyT4e46AY2Owk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GFu9ndsn; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=GWYSI81T3kze4m/VSBBj1TIPDMRmkhtrwTYupogMtOeZ9ulMVNzkF7rmN6vxBGFC+QkTzU1al513dITKbBkmLvo31CQS823UBbH8OU9iyi3DXXI5VJ82QBqo4w/9eVLtcsc42+PTGN0jH2nQ8ruNIYT5XctI83TGOVIAlvFO48Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CjZEe0yN; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6de0b23f4c5so13720147b3.1
-        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:02:16 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6d9e31e66eeso111472707b3.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276535; x=1727881335; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727276538; x=1727881338; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwy8kTVjZ/08dn4MFhxsJ/CPkFSWb32MIOuFSl+DFsU=;
-        b=GFu9ndsnRjzSFcE0ymWC4FAjAXMOdToQQro2m7qyhCSaggFnIjbbq3FpZ9qojdOI1s
-         0icht9YZ+QmexTkBBMna+b6TcfJ6SMyLaEYeP7uWtcH7NlzUmxwLuBH/jwabKj+rcKHD
-         1A3QfpZOmnZ1awDYuofRV/zXjo+F27c32ESQ2zd4+CO8fI+yiUCE2/aUQBHJP6z1F5l6
-         BWYglyCJd/yWtXSY6GhWHncUbFDipkvw4vOPtO2JYTWqZSgZyWg4X+jdafRAO2hkRySt
-         9TVjFeBL7Q4UGHa+PJA6ypNh1zBGT1EPxgpv3z3Y4saJIvvU8VraQ0+ltB6KCorCuUt4
-         5QwA==
+        bh=WebA59vxPkU4u7rhQajyH4BvEeqGZRhskbQXw1lowfs=;
+        b=CjZEe0yNT4EA/GcKFh/6Jssm8m05B25tkcW0KFhhtewe6SRdV2pEBLGa8yx/CpnYXJ
+         MfntbYWoR1EhxjADX4+aOngkHAyjORnocT0BwOjgiFWm6L9HcXyB25UtRC5WVEKXYQ8/
+         OBJp+RzevUhpU5cFWOu9jzr/vhzsqrDj6GDAUkaYRak0E/z6D3Yf/fm8f5JZrtMWcMnl
+         N2qyh7vfxeYL30RgFZtnhXpuFyZSZTj5isYZ0+Nn1pn+I+DNbcSSB5DAZw7YyVlBXAoM
+         1qDDv2bg/JAR0EqiibTG7Li9wPtqRa1ga4t+tABXo/xjQIYYy2wNNwNCHH8jY+xfdOcT
+         OWug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276535; x=1727881335;
+        d=1e100.net; s=20230601; t=1727276538; x=1727881338;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwy8kTVjZ/08dn4MFhxsJ/CPkFSWb32MIOuFSl+DFsU=;
-        b=S20KnBdAQwyXbJNPJyByKdEUogWc52/DR7YwIy+I18yZUR/1TABdtKSSbkDrubOSu8
-         QvLUbGuSpJuVGKKFi+ZPCRVTC+d49j6j7wZFnHMGhKa/8tvR/kspOyUFuBE40ERqL/kN
-         EJmibCJJWJzk1TYV/yv/lTNm2Lc8mNDP4m3JUmaCVH4gJFhR58Peh6E+NMpF51xJxS7b
-         NJK7HabJWOIDDjH/c7QG85bse+HalwEs44eJIdH0+REVHjsJkf5xyff+gx8d0UxPXjRV
-         MtFwEpKXQva4wrf5G4yFfdMyRn+6pwX8GVdMUeoruJyIyS91E11/3GeHfwyN6y7SnIJU
-         q6tA==
-X-Forwarded-Encrypted: i=1; AJvYcCX7w049tF7A8q3MPTJ1kkx7/wtYB10QcO2DqH+SSa2yeg7tulUfGASTY+iqI9SHdhsrmdnljTETjw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT3vnxoMhKkpyzTCEaGpa7uA5+jRqZtfFsGhY1b7EZ0DqHEki+
-	/2bDtDgMOGajiP86G06Finc07cpwTcEXPXytDTBK2yjQm+f/mrkK6GRPidPdr8AFEygRhw==
-X-Google-Smtp-Source: AGHT+IEEpXdESu+AVZ5xAH4ocoULrkWfhbmfoqTWPQarKhwafrufRJLTuhlZhXvWoZ56ZcFdzDjPCpOs
+        bh=WebA59vxPkU4u7rhQajyH4BvEeqGZRhskbQXw1lowfs=;
+        b=ex3tftR3z/BzGiCw7jkpwz6Nh3V19pW6Suu0lPH2iMzS7n1nrFA8OlhdT0xa2PC7fs
+         eRcIN1vLWW3LJchaNnWhExDAwBRBghrMXMK+cSKuH30J6NTbtxXsDvbQAz4KtJ4d3sIn
+         DvkKUMdolO2J+AtXwO8ak/g9UXRsSPG8VHhXmJ/hgaB+dgetSzJLQBVdjQgFVM4XVBkc
+         bJQI42bl4wlg9i6y+nG9Lgs04c2TqxuTF11UTHjrpH+JAZmrYrUK5hZzrj9wVqahx/KN
+         KdAWdELtfz1s2S+bTZqvkUnfbHZ9VcvGvhoGsIynwlcrNLYpbm9uqbO9HpPyUT0ciqge
+         g1QA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIPZX+5fdymSD8Ir3YNzcofFmVLstvy7IgxB5KcpQ9yL3PAAKBuhkkJ3RKp0pdnQusEiZ1qxyuFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOV+7zt46ag/FLMkz1wu44JH43AhKc6KwSjwS4lAZd1oDU/ZVl
+	ILqf9TraGUhyohTbsRDJ1Nn8LCnv9E6r+nDJ2jHPGavkqmiLCj/cJrxqvRo+uiQYt5Uu1A==
+X-Google-Smtp-Source: AGHT+IG1eaRHJ+k+oWi0MEewfWnHRvzWiyuPrZa2XUixnuMGDlz9gyzzCn4pjg7USYksDYWFG76nQbXB
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:690c:6a0d:b0:6da:3596:21b8 with SMTP id
- 00721157ae682-6e2089c8234mr1848507b3.4.1727276535155; Wed, 25 Sep 2024
- 08:02:15 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:10 +0200
+ (user=ardb job=sendgmr) by 2002:a81:7c46:0:b0:673:b39a:92ce with SMTP id
+ 00721157ae682-6e21da5ea7bmr151347b3.3.1727276537527; Wed, 25 Sep 2024
+ 08:02:17 -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:11 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4217; i=ardb@kernel.org;
- h=from:subject; bh=umOxUEgpm+XSdzq7sqW2wzWT3DKWlT715fLzy00ZrIc=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6q4zMe0fH8zn/6yon+W25vvljx/znOb8fBedfXMvk
- 4PJy+hrHaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiC5MZGX675CxMX+/71dxB
- RTLX6OaHWScZikUU3t9k3TfnWIl7YijDP8vjN+r/hng3npecsefHgZqi2WFz5zPUNTIeVXy24tT y6awA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3674; i=ardb@kernel.org;
+ h=from:subject; bh=R6ohiPGa3ul2ikQd2A7YE6wpEPvXq0bd6W2LGMrzZ/k=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6m4L/Wkc7n0aPQzsYULiEQZPMlgefsmsLHv4K8KPe
+ c6T1d0dpSwMYhwMsmKKLAKz/77beXqiVK3zLFmYOaxMIEMYuDgFYCLF8YwMhwNCO7WWnu4+bHJ/
+ R+KN+e/7+Z5GTZy4J83mRy0Xx+UbAowMLwuTAsXUc+SfqAVdK+gtnHdHT+jRjZtrv3D/ms77oD2 BCwA=
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-40-ardb+git@google.com>
-Subject: [RFC PATCH 10/28] x86/xen: Avoid relocatable quantities in Xen ELF notes
+Message-ID: <20240925150059.3955569-41-ardb+git@google.com>
+Subject: [RFC PATCH 11/28] x86/pvh: Avoid absolute symbol references in .head.text
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -105,107 +105,119 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Xen puts virtual and physical addresses into ELF notes that are treated
-by the linker as relocatable by default. Doing so is not only pointless,
-given that the ELF notes are only intended for consumption by Xen before
-the kernel boots. It is also a KASLR leak, given that the kernel's ELF
-notes are exposed via the world readable /sys/kernel/notes.
+The .head.text section contains code that may execute from a different
+address than it was linked at. This is fragile, given that the x86 ABI
+can refer to global symbols via absolute or relative references, and the
+toolchain assumes that these are interchangeable, which they are not in
+this particular case.
 
-So emit these constants in a way that prevents the linker from marking
-them as relocatable. This involves place-relative relocations (which
-subtract their own virtual address from the symbol value) and linker
-provided absolute symbols that add the address of the place to the
-desired value.
+In the case of the PVH code, there are some additional complications:
+- the absolute references are in 32-bit code, which get emitted with
+  R_X86_64_32 relocations, and these are not permitted in PIE code;
+- the code in question is not actually relocatable: it can only run
+  correctly from the physical load address specified in the ELF note.
+
+So rewrite the code to only rely on relative symbol references: these
+are always 32-bits wide, even in 64-bit code, and are resolved by the
+linker at build time.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/vmlinux.lds.S | 13 +++++++++++++
- arch/x86/platform/pvh/head.S  |  6 +++---
- arch/x86/tools/relocs.c       |  1 +
- arch/x86/xen/xen-head.S       |  6 ++++--
- 4 files changed, 21 insertions(+), 5 deletions(-)
+ arch/x86/platform/pvh/head.S | 39 ++++++++++++++------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 00f82db7b3e1..52b8db931d0f 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -111,6 +111,19 @@ PHDRS {
- SECTIONS
- {
- 	. = __START_KERNEL;
-+
-+#ifdef CONFIG_XEN_PV
-+xen_elfnote_entry_offset =
-+	ABSOLUTE(xen_elfnote_entry) + ABSOLUTE(startup_xen);
-+xen_elfnote_hypercall_page_offset =
-+	ABSOLUTE(xen_elfnote_hypercall_page) + ABSOLUTE(hypercall_page);
-+#endif
-+
-+#ifdef CONFIG_PVH
-+xen_elfnote_phys32_entry_offset =
-+	ABSOLUTE(xen_elfnote_phys32_entry) + ABSOLUTE(pvh_start_xen - LOAD_OFFSET);
-+#endif
-+
- #ifdef CONFIG_X86_32
- 	phys_startup_32 = ABSOLUTE(startup_32 - LOAD_OFFSET);
- #else
 diff --git a/arch/x86/platform/pvh/head.S b/arch/x86/platform/pvh/head.S
-index 11245ecdc08d..adbf57e83e4e 100644
+index adbf57e83e4e..e6cb7da40e09 100644
 --- a/arch/x86/platform/pvh/head.S
 +++ b/arch/x86/platform/pvh/head.S
-@@ -50,7 +50,7 @@
- #define PVH_CS_SEL		(PVH_GDT_ENTRY_CS * 8)
- #define PVH_DS_SEL		(PVH_GDT_ENTRY_DS * 8)
- 
--SYM_CODE_START_LOCAL(pvh_start_xen)
-+SYM_CODE_START(pvh_start_xen)
+@@ -54,7 +54,20 @@ SYM_CODE_START(pvh_start_xen)
  	UNWIND_HINT_END_OF_STACK
  	cld
  
-@@ -165,5 +165,5 @@ SYM_DATA_START_LOCAL(early_stack)
- 	.fill BOOT_STACK_SIZE, 1, 0
- SYM_DATA_END_LABEL(early_stack, SYM_L_LOCAL, early_stack_end)
+-	lgdt (_pa(gdt))
++	/*
++	 * This is position dependent code that can only execute correctly from
++	 * the physical address that the kernel was linked to run at. Use the
++	 * symbols emitted for the ELF note to construct the build time physical
++	 * address of pvh_start_xen(), without relying on absolute 32-bit ELF
++	 * relocations, as these are not supported by the linker when running in
++	 * -pie mode, and should be avoided in .head.text in general.
++	 */
++0:	mov $xen_elfnote_phys32_entry_offset - 0b, %ebp
++	sub $xen_elfnote_phys32_entry - 0b, %ebp
++
++	lea (gdt - pvh_start_xen)(%ebp), %eax
++	add %eax, 2(%eax)
++	lgdt (%eax)
  
--	ELFNOTE(Xen, XEN_ELFNOTE_PHYS32_ENTRY,
--	             _ASM_PTR (pvh_start_xen - __START_KERNEL_map))
-+	ELFNOTE(Xen, XEN_ELFNOTE_PHYS32_ENTRY, .global xen_elfnote_phys32_entry;
-+		xen_elfnote_phys32_entry: _ASM_PTR xen_elfnote_phys32_entry_offset - .)
-diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index 942c029a5067..22c2d3f07a57 100644
---- a/arch/x86/tools/relocs.c
-+++ b/arch/x86/tools/relocs.c
-@@ -57,6 +57,7 @@ static const char * const	sym_regex_kernel[S_NSYMTYPES] = {
- 	[S_ABS] =
- 	"^(xen_irq_disable_direct_reloc$|"
- 	"xen_save_fl_direct_reloc$|"
-+	"xen_elfnote_.+_offset$|"
- 	"VDSO|"
- 	"__kcfi_typeid_|"
- 	"__crc_)",
-diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-index faadac7c29e6..4d246a48a85f 100644
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -88,7 +88,8 @@ SYM_CODE_END(xen_cpu_bringup_again)
- 	ELFNOTE(Xen, XEN_ELFNOTE_VIRT_BASE,      _ASM_PTR __START_KERNEL_map)
- 	/* Map the p2m table to a 512GB-aligned user address. */
- 	ELFNOTE(Xen, XEN_ELFNOTE_INIT_P2M,       .quad (PUD_SIZE * PTRS_PER_PUD))
--	ELFNOTE(Xen, XEN_ELFNOTE_ENTRY,          _ASM_PTR startup_xen)
-+	ELFNOTE(Xen, XEN_ELFNOTE_ENTRY,          .globl xen_elfnote_entry;
-+		xen_elfnote_entry: _ASM_PTR xen_elfnote_entry_offset - .)
- 	ELFNOTE(Xen, XEN_ELFNOTE_FEATURES,       .ascii "!writable_page_tables")
- 	ELFNOTE(Xen, XEN_ELFNOTE_PAE_MODE,       .asciz "yes")
- 	ELFNOTE(Xen, XEN_ELFNOTE_L1_MFN_VALID,
-@@ -109,7 +110,8 @@ SYM_CODE_END(xen_cpu_bringup_again)
- #else
- # define FEATURES_DOM0 0
- #endif
--	ELFNOTE(Xen, XEN_ELFNOTE_HYPERCALL_PAGE, _ASM_PTR hypercall_page)
-+	ELFNOTE(Xen, XEN_ELFNOTE_HYPERCALL_PAGE, .globl xen_elfnote_hypercall_page;
-+		xen_elfnote_hypercall_page: _ASM_PTR xen_elfnote_hypercall_page_offset - .)
- 	ELFNOTE(Xen, XEN_ELFNOTE_SUPPORTED_FEATURES,
- 		.long FEATURES_PV | FEATURES_PVH | FEATURES_DOM0)
- 	ELFNOTE(Xen, XEN_ELFNOTE_LOADER,         .asciz "generic")
+ 	mov $PVH_DS_SEL,%eax
+ 	mov %eax,%ds
+@@ -62,14 +75,14 @@ SYM_CODE_START(pvh_start_xen)
+ 	mov %eax,%ss
+ 
+ 	/* Stash hvm_start_info. */
+-	mov $_pa(pvh_start_info), %edi
++	lea (pvh_start_info - pvh_start_xen)(%ebp), %edi
+ 	mov %ebx, %esi
+-	mov _pa(pvh_start_info_sz), %ecx
++	mov (pvh_start_info_sz - pvh_start_xen)(%ebp), %ecx
+ 	shr $2,%ecx
+ 	rep
+ 	movsl
+ 
+-	mov $_pa(early_stack_end), %esp
++	lea (early_stack_end - pvh_start_xen)(%ebp), %esp
+ 
+ 	/* Enable PAE mode. */
+ 	mov %cr4, %eax
+@@ -84,17 +97,21 @@ SYM_CODE_START(pvh_start_xen)
+ 	wrmsr
+ 
+ 	/* Enable pre-constructed page tables. */
+-	mov $_pa(init_top_pgt), %eax
++	lea (init_top_pgt - pvh_start_xen)(%ebp), %eax
+ 	mov %eax, %cr3
+ 	mov $(X86_CR0_PG | X86_CR0_PE), %eax
+ 	mov %eax, %cr0
+ 
+ 	/* Jump to 64-bit mode. */
+-	ljmp $PVH_CS_SEL, $_pa(1f)
++	lea  (1f - pvh_start_xen)(%ebp), %eax
++	push $PVH_CS_SEL
++	push %eax
++	lret
+ 
+ 	/* 64-bit entry point. */
+ 	.code64
+ 1:
++	UNWIND_HINT_END_OF_STACK
+ 	/* Clear %gs so early per-CPU references target the per-CPU load area */
+ 	mov $MSR_GS_BASE,%ecx
+ 	xor %eax, %eax
+@@ -108,10 +125,8 @@ SYM_CODE_START(pvh_start_xen)
+ 	call *%rax
+ 
+ 	/* startup_64 expects boot_params in %rsi. */
+-	mov $_pa(pvh_bootparams), %rsi
+-	mov $_pa(startup_64), %rax
+-	ANNOTATE_RETPOLINE_SAFE
+-	jmp *%rax
++	lea pvh_bootparams(%rip), %rsi
++	jmp startup_64
+ 
+ #else /* CONFIG_X86_64 */
+ 
+@@ -146,8 +161,8 @@ SYM_CODE_END(pvh_start_xen)
+ 	.section ".init.data","aw"
+ 	.balign 8
+ SYM_DATA_START_LOCAL(gdt)
+-	.word gdt_end - gdt_start
+-	.long _pa(gdt_start)
++	.word gdt_end - gdt_start - 1
++	.long gdt_start - gdt
+ 	.word 0
+ SYM_DATA_END(gdt)
+ SYM_DATA_START_LOCAL(gdt_start)
 -- 
 2.46.0.792.g87dc391469-goog
 
