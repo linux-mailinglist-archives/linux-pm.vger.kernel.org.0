@@ -1,69 +1,69 @@
-Return-Path: <linux-pm+bounces-14663-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14664-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 213BD98567F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 11:38:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5107985682
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 11:39:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A902284C69
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:38:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21E8E1C23691
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC0F15CD54;
-	Wed, 25 Sep 2024 09:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C27189BB2;
+	Wed, 25 Sep 2024 09:38:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TDkp/u7V"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="glgZyHQM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA1E183CD7
-	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 09:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5D715C131
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 09:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727257102; cv=none; b=CjuwqJhvwZgHhCiWLRXryn4vU4YndvxrB0htvRpQt6wdayRUmD8ap199tbE5t4+TgJgoKlhe9CHYz/QA2Gxx9UM/WKwyUagZAGOnnA9JfmlXkrEqw/Q/6e/yGEc28UuqZr4TDtMmotbaoesPP68IRwhtfdKAA8UqMy6Dj8L4yS4=
+	t=1727257105; cv=none; b=n4auwZhG25LCo/mVfJGHjH34iDWuNT60DiQolGrOAAYQFR+C1ogXnRoXtrjr5usoptRy5xRQ3S/RpmoFd1RjxLqVdHSafESBaIOYQGEuIV6jEB899Ekl1SjMamzlB2TEOMGmxeRxuhmDRzvU3TquEHUxPl6eNecXIaJz8G/azXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727257102; c=relaxed/simple;
-	bh=yIHPQabVkxjx7tzx5SzyX87nRu2AVwQVbaXvyp7mRHI=;
+	s=arc-20240116; t=1727257105; c=relaxed/simple;
+	bh=WhI5h6+Oaya6VO4wDUKB3EPlqBbBw4m7Ij0TCkx1zLI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qbCUN3uZ6wH5SO+eZmF9YC0yTpfLAPo075QkiGE19k6tNYJ8LAWSv5Xlm0Gp/DTkdxp/mb1R/zffkBQkTmUSfEGF378ulmsMXQW+i6NgCO/nva9iXqDHU0dD7bqKh7JtjgeihwMYIWMldX+o6DGcfdk55RWCjc1fDOQ1tLBcxj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TDkp/u7V; arc=none smtp.client-ip=209.85.215.175
+	 MIME-Version; b=QX/6XarL7pP3sbmnHAH48nEt09QqJwbhz238B++dLpE+7jhIxWUCjYdFFTULhGks5iDQeBi2PoYlK394L+gnXAJwYZF7q84AssxsBB1we4Ay0D1Jnz0f8yz5RMQ6ni0L9M8QVxCKV/yRKM141egI0Mh5prz5U7C8br3VTK7JaWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=glgZyHQM; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7db637d1e4eso4731479a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 02:38:20 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-719b17b2da1so2752058b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 02:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1727257100; x=1727861900; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1727257103; x=1727861903; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7bXktUyxRWkmvmoDnOf/TDCOPJhfZ68iG0bFgcdjWoY=;
-        b=TDkp/u7VGhaQ9OEvEadYZ65PBVUU+791OOObioavlRPLMy/xhzT6GL6epjslTC7qll
-         YDuSDp31QDizbg3wV6oO+4YnV7MjqEaxlnu47pjnDRQqFBBsDnDPWrObGTUkYhUirqZ1
-         c9jmO2Ceq7Vtdys0iZe/TnEu7S1WyAgX1IB+M=
+        bh=C76lYKqOaKFf1LWgw9jI+3gYXvFZ5Li6KGDavd2GlFk=;
+        b=glgZyHQM06bdqPe8yc5wkAgYbELyBXO2l3ZJFsiIBX6155LevNXE9g/DUoRIsUmyif
+         OipLRlXlwF3ZCNlQbUMp6cpH1ccrmEbjxupKUGS29WbQzRWvrJQIgYnFfseQsCpTGt0m
+         imAm++SpUqKxFobHqJqT0w64lWV3zm3SSrilc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727257100; x=1727861900;
+        d=1e100.net; s=20230601; t=1727257103; x=1727861903;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7bXktUyxRWkmvmoDnOf/TDCOPJhfZ68iG0bFgcdjWoY=;
-        b=M3aN2AQtslIEQXa9osVde1AV2q+CztMA2eXzhQNqRjneI34YzaAVfSoYe6X5DJunZ1
-         TV3ULbZn1VVjLS41ttti6PdKBs+glSpWyiRmGhMy8oXzKpaP1ViK/jKL1FwaRS3/0oFX
-         tQhA8BkTrj+8QwGvcpg2Z01gBCC+4RTJflGrTV0zbwA3VAwFxMMPJEYFp6XvlwAx7X+z
-         vNcI3I5x5doNbR02KnpQxeWC7mko8sSCcjQt93B+lXFEYcQgHGRVkUVAHu6zweG19jAH
-         R+M0HKjvsZ5IvhRoe8L9gtqfswQSrC6w+z+m942q2xdxF8ZcJ+diMT9xVtam9ovne5tx
-         z+DA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/5JE3OXFUVZx2qOQ8/+jANSiv+NwwPeNA8AmAC8IZ4SqffpLWMB2tT+xfANUQX3nVVWSk3QUIgA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVev/jXlbjfNTq1FWXmlDuAEEXyxk/7oYvz4thysYOU2x/e9dh
-	6eJfWsOZVaWESmXVi0FwY2h+qslYBgda2kkD7QAYhrjQY0iUMhRAW6St9KM2wA==
-X-Google-Smtp-Source: AGHT+IHiIptcOj4pohjGvFSBEsElP+b23Io+sJLV0MHs1RLHjwz1o2ogGe1jcYOVaKnKSawT4ThJ6Q==
-X-Received: by 2002:a05:6a21:3305:b0:1cf:31b6:18c6 with SMTP id adf61e73a8af0-1d4e0beb994mr2832996637.46.1727257099967;
-        Wed, 25 Sep 2024 02:38:19 -0700 (PDT)
+        bh=C76lYKqOaKFf1LWgw9jI+3gYXvFZ5Li6KGDavd2GlFk=;
+        b=hmV/P31inEHd5PIVSzscpMT0SssFfZejD9TwdaxEC9Vyff+TfYfaa28z9zXlvPzEIq
+         paFo4mH/InuaSlvJ3dnNCaRo4arXij1axJCio84HSClUI9D8gdZJYBk0O6/sM7ItFPPb
+         eaJ7wydzgta99HOCEoGCVaw/Z+3HrwJ4WA96YbeVMWpQkF9yE8Qp/PiE4atzws5ukDZG
+         khbyKFhM9vjoxhixrJbK2xxyaNCvBWTcjqtINYpvA4UFMmbCzuW8wlxf6d+cFwbHCOJ2
+         PciVEDRBkRgJ9nT9E6HxKur03Xoi7mCpYtVYfgfA3QQuzWeKXxQrEuBjhsPlgZEH6Rv7
+         HQdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVk7nmVemtMAtmFjPVj0qzCSoCBnQrZG5DHyNQ9KQ17s5dHODk9Gs6j6JYgR0l7WdLm4+aaOqan6w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTjiZ1ume+pIT7JMDihcaFY3e1ZWcFGrtASnr7XgLwNfz4zAB8
+	MD9F2dLCY9d0SlVhhmd1Q1/RkjuQWSYvBokDNxt8XKK82tj3ufLgEGfzQVPWLQ==
+X-Google-Smtp-Source: AGHT+IEIT60mHW/rWrUCbyRDTdBe2V8pmg+iP0bif2d5gdv8qwR5RMS+9ty2CUG5H+qVfEQgUwNthA==
+X-Received: by 2002:a05:6a00:14c6:b0:718:ddd7:dc3b with SMTP id d2e1a72fcca58-71b0ac5aad9mr3130147b3a.21.1727257103023;
+        Wed, 25 Sep 2024 02:38:23 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:2480:2c96:2b64:cdcb])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71afc8347fesm2432789b3a.35.2024.09.25.02.38.17
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71afc8347fesm2432789b3a.35.2024.09.25.02.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 02:38:19 -0700 (PDT)
+        Wed, 25 Sep 2024 02:38:22 -0700 (PDT)
 From: Chen-Yu Tsai <wenst@chromium.org>
 To: Ulf Hansson <ulf.hansson@linaro.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
@@ -81,9 +81,9 @@ Cc: Chen-Yu Tsai <wenst@chromium.org>,
 	Pablo Sun <pablo.sun@mediatek.com>,
 	Macpaul Lin <macpaul.lin@mediatek.com>,
 	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH v8 2/3] regulator: Add devres version of of_regulator_get_optional()
-Date: Wed, 25 Sep 2024 17:38:05 +0800
-Message-ID: <20240925093807.1026949-3-wenst@chromium.org>
+Subject: [PATCH v8 3/3] pmdomain: mediatek: Use OF-specific regulator API to get power domain supply
+Date: Wed, 25 Sep 2024 17:38:06 +0800
+Message-ID: <20240925093807.1026949-4-wenst@chromium.org>
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
 In-Reply-To: <20240925093807.1026949-1-wenst@chromium.org>
 References: <20240925093807.1026949-1-wenst@chromium.org>
@@ -95,173 +95,69 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are existing uses for a devres version of of_regulator_get_optional()
-in power domain drivers. On MediaTek platforms, power domains may have
-regulator supplies tied to them. The driver currently tries to use
-devm_regulator_get() to not have to manage the lifecycle, but ends up
-doing it in a very hacky way by replacing the device node of the power
-domain controller device to the device node of the power domain that is
-currently being registered, getting the supply, and reverting the device
-node.
+The MediaTek power domain driver contains a hack that assigns the device
+node of the power domain to the struct device of the power domain
+controller in order to use the devres regulator API.
 
-Provide a better API so that the hack can be replaced.
+Now that there is a proper OF-specific regulator API, and even a devres
+version, replace the hack with proper code.
+
+This change is incompatible with incomplete device trees. Instead of
+assigning the dummy regulator in cases where the power domain requires
+a supply but the device tree does not provide one, the driver will just
+error out. This will be seen on the MT8390 EVK, which is missing
+supplies for the IMG_VCORE and CAM_VCORE domains. And likely all the
+MediaTek EVBs, which have no power domain supplies specified. This is
+however the correct behavior. If the power domain's supply is missing,
+then it should not work. Relying on other parts of the system to keep
+the unattached regulator enabled is likely to break in ways less easier
+to understand.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
 Changes since v7:
 - New patch
----
- drivers/regulator/devres.c         | 39 ++++++++++++++++++++++++++++++
- drivers/regulator/internal.h       | 16 +++++++-----
- drivers/regulator/of_regulator.c   |  4 +--
- include/linux/regulator/consumer.h | 17 +++++++++++++
- 4 files changed, 68 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
-index 1b893cdd1aad..36164aec30e8 100644
---- a/drivers/regulator/devres.c
-+++ b/drivers/regulator/devres.c
-@@ -749,3 +749,42 @@ void *devm_regulator_irq_helper(struct device *dev,
- 	return ptr;
- }
- EXPORT_SYMBOL_GPL(devm_regulator_irq_helper);
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static struct regulator *_devm_of_regulator_get(struct device *dev, struct device_node *node,
-+						const char *id, int get_type)
-+{
-+	struct regulator **ptr, *regulator;
-+
-+	ptr = devres_alloc(devm_regulator_release, sizeof(*ptr), GFP_KERNEL);
-+	if (!ptr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	regulator = _of_regulator_get(dev, node, id, get_type);
-+	if (!IS_ERR(regulator)) {
-+		*ptr = regulator;
-+		devres_add(dev, ptr);
-+	} else {
-+		devres_free(ptr);
-+	}
-+
-+	return regulator;
-+}
-+
-+/**
-+ * devm_of_regulator_get_optional - Resource managed of_regulator_get_optional()
-+ * @dev: device used for dev_printk() messages and resource lifetime management
-+ * @node: device node for regulator "consumer"
-+ * @id:  supply name or regulator ID.
-+ *
-+ * Managed regulator_get_optional(). Regulators returned from this
-+ * function are automatically regulator_put() on driver detach. See
-+ * of_regulator_get_optional() for more information.
-+ */
-+struct regulator *devm_of_regulator_get_optional(struct device *dev, struct device_node *node,
-+						 const char *id)
-+{
-+	return _devm_of_regulator_get(dev, node, id, OPTIONAL_GET);
-+}
-+EXPORT_SYMBOL_GPL(devm_of_regulator_get_optional);
-+#endif
-diff --git a/drivers/regulator/internal.h b/drivers/regulator/internal.h
-index f62cacbbc729..b3d48dc38bc4 100644
---- a/drivers/regulator/internal.h
-+++ b/drivers/regulator/internal.h
-@@ -65,6 +65,13 @@ static inline struct regulator_dev *dev_to_rdev(struct device *dev)
- 	return container_of(dev, struct regulator_dev, dev);
- }
- 
-+enum regulator_get_type {
-+	NORMAL_GET,
-+	EXCLUSIVE_GET,
-+	OPTIONAL_GET,
-+	MAX_GET_TYPE
-+};
-+
- #ifdef CONFIG_OF
- struct regulator_dev *of_regulator_dev_lookup(struct device *dev,
- 					      struct device_node *np,
-@@ -74,6 +81,9 @@ struct regulator_init_data *regulator_of_get_init_data(struct device *dev,
- 				 struct regulator_config *config,
- 				 struct device_node **node);
- 
-+struct regulator *_of_regulator_get(struct device *dev, struct device_node *node,
-+				    const char *id, enum regulator_get_type get_type);
-+
- struct regulator_dev *of_parse_coupled_regulator(struct regulator_dev *rdev,
- 						 int index);
- 
-@@ -116,12 +126,6 @@ static inline bool of_check_coupling_data(struct regulator_dev *rdev)
- }
- 
- #endif
--enum regulator_get_type {
--	NORMAL_GET,
--	EXCLUSIVE_GET,
--	OPTIONAL_GET,
--	MAX_GET_TYPE
--};
- 
- int _regulator_get_common_check(struct device *dev, const char *id,
- 				enum regulator_get_type get_type);
-diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
-index 358c3ed791db..3d85762beda6 100644
---- a/drivers/regulator/of_regulator.c
-+++ b/drivers/regulator/of_regulator.c
-@@ -668,8 +668,8 @@ struct regulator_dev *of_regulator_dev_lookup(struct device *dev, struct device_
- 	return ERR_PTR(-ENODEV);
- }
- 
--static struct regulator *_of_regulator_get(struct device *dev, struct device_node *node,
--					   const char *id, enum regulator_get_type get_type)
-+struct regulator *_of_regulator_get(struct device *dev, struct device_node *node,
-+				    const char *id, enum regulator_get_type get_type)
+The other option is to follow what Rockchip will be doing: getting the
+regulator supply upon first use / enable [1]. This will result in less
+breakage: only the power domain that is missing its supplies will fail
+to be attached.
+
+[1] https://lore.kernel.org/all/20240919091834.83572-6-sebastian.reichel@collabora.com/
+---
+ drivers/pmdomain/mediatek/mtk-pm-domains.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+index 88406e9ac63c..3580913f25d3 100644
+--- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
++++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+@@ -353,7 +353,6 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
  {
- 	struct regulator_dev *r;
- 	int ret;
-diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/consumer.h
-index 2b22f07e491c..8c3c372ad735 100644
---- a/include/linux/regulator/consumer.h
-+++ b/include/linux/regulator/consumer.h
-@@ -172,6 +172,9 @@ void devm_regulator_put(struct regulator *regulator);
- struct regulator *__must_check of_regulator_get_optional(struct device *dev,
- 							 struct device_node *node,
- 							 const char *id);
-+struct regulator *__must_check devm_of_regulator_get_optional(struct device *dev,
-+							      struct device_node *node,
-+							      const char *id);
- #else
- static inline struct regulator *__must_check of_regulator_get_optional(struct device *dev,
- 								       struct device_node *node,
-@@ -179,6 +182,13 @@ static inline struct regulator *__must_check of_regulator_get_optional(struct de
- {
- 	return ERR_PTR(-ENODEV);
- }
-+
-+static inline struct regulator *__must_check devm_of_regulator_get_optional(struct device *dev,
-+									    struct device_node *node,
-+									    const char *id)
-+{
-+	return ERR_PTR(-ENODEV);
-+}
- #endif
+ 	const struct scpsys_domain_data *domain_data;
+ 	struct scpsys_domain *pd;
+-	struct device_node *root_node = scpsys->dev->of_node;
+ 	struct device_node *smi_node;
+ 	struct property *prop;
+ 	const char *clk_name;
+@@ -388,16 +387,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+ 	pd->scpsys = scpsys;
  
- int regulator_register_supply_alias(struct device *dev, const char *id,
-@@ -370,6 +380,13 @@ static inline struct regulator *__must_check of_regulator_get_optional(struct de
- 	return ERR_PTR(-ENODEV);
- }
- 
-+static inline struct regulator *__must_check devm_of_regulator_get_optional(struct device *dev,
-+									    struct device_node *node,
-+									    const char *id)
-+{
-+	return ERR_PTR(-ENODEV);
-+}
-+
- static inline void regulator_put(struct regulator *regulator)
- {
- }
+ 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_DOMAIN_SUPPLY)) {
+-		/*
+-		 * Find regulator in current power domain node.
+-		 * devm_regulator_get() finds regulator in a node and its child
+-		 * node, so set of_node to current power domain node then change
+-		 * back to original node after regulator is found for current
+-		 * power domain node.
+-		 */
+-		scpsys->dev->of_node = node;
+-		pd->supply = devm_regulator_get(scpsys->dev, "domain");
+-		scpsys->dev->of_node = root_node;
++		pd->supply = devm_of_regulator_get_optional(scpsys->dev, node, "domain");
+ 		if (IS_ERR(pd->supply))
+ 			return dev_err_cast_probe(scpsys->dev, pd->supply,
+ 				      "%pOF: failed to get power supply.\n",
 -- 
 2.46.0.792.g87dc391469-goog
 
