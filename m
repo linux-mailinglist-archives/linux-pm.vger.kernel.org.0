@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-14646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B616B9854A1
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 378019854C7
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:58:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B77B28822B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 07:53:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBC41281400
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 07:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF5E157A67;
-	Wed, 25 Sep 2024 07:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7809215854F;
+	Wed, 25 Sep 2024 07:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTTu6Zbp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLBRpWPc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5F0154C19;
-	Wed, 25 Sep 2024 07:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417FC15852E;
+	Wed, 25 Sep 2024 07:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727250793; cv=none; b=REK9XXOj7nynppojYPZBmJsW26l3tziUB88pmahbtu1RHMkCzKMiHMi8AQy9d4dRKLjfkWPvMMh/ge8njHSoPhAJBQam5vImrM1CZwNycCzgctruHO93gjfcnRyRxY4HxiUeKSrJKk0q7ddVDJNIvu81KulsEL+ZIEIoIvS/r0U=
+	t=1727251134; cv=none; b=rv2Wqgw4TBcR+/OCLqA5sB7eXWire5IRo8Ap0Wwp1weZSl7ktVbHpcvwbO9YSneSxDt7zmK+GmH8THLu/yOlSGw0wGyaU4NmZioI1bvdxMMFL6e1f1xanVYfc6yuOll8PpYwk6Y3OUa6Izzfs0CMrX3Q52lt3Ofl4XiNtfrb4Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727250793; c=relaxed/simple;
-	bh=JlkZaCujSCTgJbO5kGZerdxZ8O560A/44Dww/tnh8jg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QVJ1kdigUIcqDWlpmSuUtRoLjgreg0rxHL5cKBJuMRxc0FZW4PQbme4iE3ZyE4d02Yt8O8ivngmDhmAwh9gjvH5boRRmcJLR3jB3hIsHn41j9DVdgAXMxzHJ7FaX3yN1GL97JtAcPy/VGiCecatk7MV+yyVdAKB+GQqrPlq095c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTTu6Zbp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C1DC4CEC6;
-	Wed, 25 Sep 2024 07:53:09 +0000 (UTC)
+	s=arc-20240116; t=1727251134; c=relaxed/simple;
+	bh=cpn2XtszwCBZL4nk3PP1CHBOM36S+Rz+eeyhGr8BkME=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=umSbXVT6W/rpb2r9AvVFjmciG3mjkSgji7gLl9yw7glsAIkOI1lqAicg7andEqn4W1JHKJ/6w8s0nhHBGUN7lh0Q1fohSll2k+Zt6gOSbu3Tzb7rgH1SMCNx4WdB7jyWtaqewn5trKjq0LpIRpj5D7TMGm6hs053w9WcPE7/TIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLBRpWPc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCAEC4CEC3;
+	Wed, 25 Sep 2024 07:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727250793;
-	bh=JlkZaCujSCTgJbO5kGZerdxZ8O560A/44Dww/tnh8jg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RTTu6ZbpEXm+3108C+MCKpOe3cc7GDzplrAVh9usgsndAVm+APjBu7u0CCEnxobUO
-	 2enBjoa2k4bSRynYGNF7lciz7jltxlFxGi5UQSiACYJD2te2ujn9/tPX5DccdPqzg9
-	 UO32kfxRO9oSW/rOCcJNLJ8PKdjk5Em+jkdXxzAr8u1nthoAxJfImVkDnG5A6NG1dR
-	 QNem17diLh6Ivk5lN6rrphnMJ+6yqnbn55Cr9SGkpFe8UqjcX0P3/jf7zN/CQOmiR1
-	 XZM81UADMyTM7BiX6IeHK+nxtbSoAUgrwwAAnmgKgVRkbxlybgufVDhXPByGvTrV6o
-	 eKsLu7JNZd/Yg==
-Message-ID: <2012b494-ce72-455c-a298-85264dd2f648@kernel.org>
-Date: Wed, 25 Sep 2024 09:53:07 +0200
+	s=k20201202; t=1727251133;
+	bh=cpn2XtszwCBZL4nk3PP1CHBOM36S+Rz+eeyhGr8BkME=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=fLBRpWPcnktvpfCQmLOlZ6+3PfwYHcYGqc4POzoXlbxLq7toYa4STM1XKn9xH0CYL
+	 nvvDmsrU/+qNpKXMmVPVI+GmuXrO1c8hv22v5r1QgPsBl3s7sw8dBOh79+Ku1p2ZPx
+	 DHMogk+QT8emdQXlkyBcSBoJEWDqhof5C32ckFTOS6NpnIpMifh0741n4ANFoNtgzr
+	 Ka5l8Ys0TXHkmav4m0ocvmH7/j+akNcD+u/zRWg54w+odXkK1hoUIaFjK8X9wEsUQe
+	 Moa6hI1/aQanbaMu9Y26FatuxD1gAYexBu7YJCXkRJi8NVtMHyCgTHcEMaD1Lpwvud
+	 ttu1Q0ltkx90g==
+Message-ID: <29745775-2c90-40f8-8b6e-812a318d9061@kernel.org>
+Date: Wed, 25 Sep 2024 09:58:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,13 +52,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] dt-bindings: interconnect: qcom-bwmon: Document QCS8300
  bwmon compatibles
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Jingyi Wang <quic_jingyw@quicinc.com>, Georgi Djakov <djakov@kernel.org>,
  Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>
 Cc: quic_tengfan@quicinc.com, linux-arm-msm@vger.kernel.org,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240925-qcs8300_bwmon_binding-v1-1-a7bfd94b2854@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <2012b494-ce72-455c-a298-85264dd2f648@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -103,21 +104,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240925-qcs8300_bwmon_binding-v1-1-a7bfd94b2854@quicinc.com>
+In-Reply-To: <2012b494-ce72-455c-a298-85264dd2f648@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 25/09/2024 09:45, Jingyi Wang wrote:
-> Document QCS8300 BWMONs, which has two BWMONv4 instances for the CPU->LLCC
-> path and one BWMONv5 instance for LLCC->DDR path.
+On 25/09/2024 09:53, Krzysztof Kozlowski wrote:
+> On 25/09/2024 09:45, Jingyi Wang wrote:
+>> Document QCS8300 BWMONs, which has two BWMONv4 instances for the CPU->LLCC
+>> path and one BWMONv5 instance for LLCC->DDR path.
+> 
+> Please wrap commit message according to Linux coding style / submission
+> process (neither too early nor over the limit):
+> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
 
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
+Although it actually is wrapped at 75, so ignore above.
 
 Best regards,
 Krzysztof
