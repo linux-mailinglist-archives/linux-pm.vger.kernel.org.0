@@ -1,74 +1,141 @@
-Return-Path: <linux-pm+bounces-14642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F16E98530A
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:40:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD46985465
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:45:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7024F1C22C5C
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 06:40:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 152F51C23199
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 07:45:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71B2155385;
-	Wed, 25 Sep 2024 06:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C61714A0AE;
+	Wed, 25 Sep 2024 07:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="17CTynks"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="p8YG+41F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D0213D508;
-	Wed, 25 Sep 2024 06:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E46768E7;
+	Wed, 25 Sep 2024 07:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727246447; cv=none; b=UvFienfG3iotsNLpXKXNOUE8fplPMW071Xe0HcUC0ulUkaxwrp2plH3KRZONTlp+eUVU46Qe5vdf9ikQzHSB1xFOT0C5MWFmDWMWYp3Wp0nl/8aVA3/swfsPjZex6A2q8SAlQAlEMlOhTfZxUsbUKNp08LZZ3oKuufLGDS+dVXA=
+	t=1727250325; cv=none; b=A8pn2ZMk5Dwim1wtlPICLbMKebKTBxWQIBZei7386HO45Q3I9kLFspCITqEHF6ZfnRD+1prnxJ3GpOztA4B5R+Y88uEks3C9Yu7bitefmLwdwkGcRRgmicVgjVPTEl2iIEwDLIt8bEAs1/jzWprB2936fBS+tHpd9HimrSTkujo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727246447; c=relaxed/simple;
-	bh=iQIKQE0vVaTKBuk81h3G63n44CCBRTztZtJQG/783gQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=goUyYmZ/uRN4D8pb6sJd5fQLpN58Ip9l0YVMQj9qCZBFSxRwLlahyH/5/CzPIff0TmvU4i29ZwEPvpALfy673tvhfTNZwSnsgEdWKVv3wYN0niLgoa/yy+vi/JebBz9R92StQDXEbOMSjCqf1neeSky7cZ3AID3oaV3KVwhYWtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=17CTynks; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C60C4CEC3;
-	Wed, 25 Sep 2024 06:40:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727246447;
-	bh=iQIKQE0vVaTKBuk81h3G63n44CCBRTztZtJQG/783gQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=17CTynksmIsiMrPWPJxhIuVCIdEYBxIp098B6xF3coopY6gKNjTGS8udO2SZqIB0u
-	 LcH7gHZLz/3VZXnTqw2cN1uV7/KsApHroiPkviXEyvVLw4EmtOu0y9oM5iPPu+qASv
-	 o4ek3B1ANg/9J54zZWyo9ZANtbCFP9O9reu+ruRY=
-Date: Wed, 25 Sep 2024 08:40:44 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: dengjie <dengjie03@kylinos.cn>
-Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, xiehongyu1@kylinos.cn,
-	duanchenghao@kylinos.cn, xiongxin@kylinos.cn
-Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where
- task resumption fails due to USB status
-Message-ID: <2024092513-stout-subsidize-0c71@gregkh>
-References: <20240923100553.119324-1-dengjie03@kylinos.cn>
- <20240925025041.149206-1-dengjie03@kylinos.cn>
+	s=arc-20240116; t=1727250325; c=relaxed/simple;
+	bh=IE8ZVu2aiidjh+hRIBeJ/vw9AQM1Lg63nrhIP0/Uaaw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=suz3CNKQCBJ6MtJT8Ksp5ZhdgZSvDH/b1RHiS2aEXy76FbcKFFBl2oaH3ryYCnwYbFJgC+SPagyAbtR+J+0VRAd8c7K0T1n3phK+qRJZ9qpBvW02bKDuTT3NDMi1/waXCX5w12VZ+2rq59tNBDX7UUgQ3kU+GeDhKbP5/WYVglg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=p8YG+41F; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48OI25XF013399;
+	Wed, 25 Sep 2024 07:45:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=URXGrPY7ypUtdDqnCvuaAT
+	HIgW9AP3ddNNq9J4c23OQ=; b=p8YG+41FMP4G4TasYReDsIadY5uzVUhRX4xbs/
+	y6+9kWspjtAGr8MkdAJa+Z6sE2Y+g0Fe50xKrl+mEZmf5c6WfIKW1BHo6+dWqOFE
+	HAm6EAAEoto0UKo8KPvjIYehy98rSdeOLkNatFT0Zv6cTT+0MGqh8znCTGyzVeWB
+	hSA24aT3S1zXGnPV3y/2Ksq1B3Q3AEoMpIpLARP2h36j5z3eW0sY4E8nXFKCSlGV
+	fKap7zXLptjifw/mdhr8epXplwLemVwO3jVuZ6+JhLa9W6mloEeaHweDi0gikbZj
+	EyLF5TABxx2FOGTuVM5l6SHOmyWyweajWTdOm0Baqsu+fE4w==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41spc2u4en-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Sep 2024 07:45:20 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48P7jJbu001253
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Sep 2024 07:45:19 GMT
+Received: from jingyw-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 25 Sep 2024 00:45:17 -0700
+From: Jingyi Wang <quic_jingyw@quicinc.com>
+Date: Wed, 25 Sep 2024 15:45:06 +0800
+Subject: [PATCH] dt-bindings: interconnect: qcom-bwmon: Document QCS8300
+ bwmon compatibles
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925025041.149206-1-dengjie03@kylinos.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240925-qcs8300_bwmon_binding-v1-1-a7bfd94b2854@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAIG/82YC/x3MTQ5AMBBA4avIrDWptn6vIiKqg1kYtAkScXeN5
+ bd474GAnjBAkzzg8aRAG0dkaQLjMvCMglw0KKmMrFUujjFUWsreXuvGvSV2xLMoTOYqNHbSZQG
+ x3T1OdP/ftnvfDyLo2bRnAAAA
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov
+	<djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>
+CC: <quic_tengfan@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jingyi Wang <quic_jingyw@quicinc.com>
+X-Mailer: b4 0.15-dev-99b12
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727250316; l=1422;
+ i=quic_jingyw@quicinc.com; s=20240910; h=from:subject:message-id;
+ bh=IE8ZVu2aiidjh+hRIBeJ/vw9AQM1Lg63nrhIP0/Uaaw=;
+ b=aRTjs8Zvo3qvyumphImuX18BBp/XI8y7mkkYzjZBhWOTOfEPxRzrGRCEIK2BG8wNfFGw7bQr7
+ XmCks+84mhkAxTRKUqKRkyCBvfhVcyXL8DzDFl2gD59qRQh2RTyIPPS
+X-Developer-Key: i=quic_jingyw@quicinc.com; a=ed25519;
+ pk=ZRP1KgWMhlXXWlSYLoO7TSfwKgt6ke8hw5xWcSY+wLQ=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hDCOYzy3pQjHRyQHpjhFcjEiL5SLLOPp
+X-Proofpoint-ORIG-GUID: hDCOYzy3pQjHRyQHpjhFcjEiL5SLLOPp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=907
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409250054
 
-On Wed, Sep 25, 2024 at 10:50:41AM +0800, dengjie wrote:
-> Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
-> removed, there is a probability that the S4 wakeup will turn into a reboot.The following
-> two points describe how to analyze and locate the problem points:
+Document QCS8300 BWMONs, which has two BWMONv4 instances for the CPU->LLCC
+path and one BWMONv5 instance for LLCC->DDR path.
 
-Also please wrap your paragraphs at a much narrower line length like 72
-or 75 characters or so.
+Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
+---
+ Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-thanks,
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+index 189f5900ee50..251410aabf38 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+@@ -26,6 +26,7 @@ properties:
+       - items:
+           - enum:
+               - qcom,qcm2290-cpu-bwmon
++              - qcom,qcs8300-cpu-bwmon
+               - qcom,sa8775p-cpu-bwmon
+               - qcom,sc7180-cpu-bwmon
+               - qcom,sc7280-cpu-bwmon
+@@ -40,6 +41,7 @@ properties:
+           - const: qcom,sdm845-bwmon    # BWMON v4, unified register space
+       - items:
+           - enum:
++              - qcom,qcs8300-llcc-bwmon
+               - qcom,sa8775p-llcc-bwmon
+               - qcom,sc7180-llcc-bwmon
+               - qcom,sc8280xp-llcc-bwmon
 
-greg k-h
+---
+base-commit: 4d0326b60bb753627437fff0f76bf1525bcda422
+change-id: 20240925-qcs8300_bwmon_binding-641d8e4bf376
+
+Best regards,
+-- 
+Jingyi Wang <quic_jingyw@quicinc.com>
+
 
