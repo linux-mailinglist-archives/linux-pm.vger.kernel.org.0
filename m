@@ -1,167 +1,157 @@
-Return-Path: <linux-pm+bounces-14644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8BF985477
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18065985488
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:50:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD13E1C20CBA
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 07:48:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 497C81C20EF3
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 07:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AB7158218;
-	Wed, 25 Sep 2024 07:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9483C1581F0;
+	Wed, 25 Sep 2024 07:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="H14lax+p"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qTaOKFwu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E6B158208;
-	Wed, 25 Sep 2024 07:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19A913C83D
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 07:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727250475; cv=none; b=FmR80nEPSxlPzukz32J6hFSn2OQhldUkZX0TjiogDPLBjfSoEBUlVQ8rnlzP/GKaNPGX4fxUb+Gj53e4jfsCWTv9Mf2gA2VwRUUmsf3S0LempoRnun5gDBJ/gw2xBem0q5ZIdPtuI/NlJvqcd+jMxA+R5RP/3lgdnPIbt7Bz6jA=
+	t=1727250633; cv=none; b=d4q9TJdjQ+nIaCSNedlnr2a93aI/s6BHuoj4rxw8ELZ3ME7m+u7fOzlDfOQMVOS52t6g0dZ0/XUe/ds2KoWtGeOfmdzZpzO1LmD+P8s/i22rth3zR1iQ+wQUa7dvtAQMJVP61uNgMp6eL+OSEAFnkQjxuS1TszlqopZ2HQL2QnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727250475; c=relaxed/simple;
-	bh=AH30pQ+JgS5iaPpz3lQ/tcN+lDeS8h2ETDJoWhfx8Ew=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i9RBNE9FKMuo0c8BP1uNPQvDNuInqwi1VRuYFr0CNUM67Gd2urS03TPbbXhXhA0cVmB8QBkVtXtI83crgDqZbUn+UBoHkDmhSGu7d1FbiNH1X12+MvwVNQDFXyGBeJfKXThg8eP03eM+l840mbQYw7k840z6Z1hohVUCaPO3dAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=H14lax+p; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48P7leAh061514;
-	Wed, 25 Sep 2024 02:47:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1727250460;
-	bh=PQ0co4Ma+pPlFS7bCsPfeWHITDOj9G31dJEWavo3etw=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=H14lax+p2Ua6WxXGAuQ36/mYKeRoJ60KNBXzfyuDDTTBlXg0Y6nINFFF5c/eWY5Es
-	 zUKfM8K8sbo3q3QJx/VT409QnN0xW7Dsjr0fa4jb3DeTE6dgEKtQkb74S4P5z5hsl7
-	 qfJI530QHXRTcP2J2zY3fKnU3+RVVQA2o2+cPPtk=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48P7leSv093666
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 25 Sep 2024 02:47:40 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 25
- Sep 2024 02:47:39 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 25 Sep 2024 02:47:39 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48P7lcAW004872;
-	Wed, 25 Sep 2024 02:47:39 -0500
-Date: Wed, 25 Sep 2024 13:17:38 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Nishanth Menon <nm@ti.com>
-CC: Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>, Bryan Brattlof <bb@ti.com>,
-        Dhruva Gole <d-gole@ti.com>
-Subject: Re: [PATCH v5 0/6] ti: k3-am62{a,p}x-sk: add opp frequencies
-Message-ID: <20240925074738.a43uwqen4dvbd5mc@lcpd911>
-References: <20240924-ti-cpufreq-fixes-v5-v5-0-cbe16b9ddb1b@ti.com>
- <20240924121544.62my7eqnudc76orl@subscribe>
+	s=arc-20240116; t=1727250633; c=relaxed/simple;
+	bh=LQJL9XnZ7aqpWYvsQHqnHYPGaY781b2/pcH4k8tMXf0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S6YkkGDXk4Ijlupf4UL1vZSQWTo3Mn7w+/zBM8ejqDpOCUbXdvwEb+YztvCSjJVezVJ8bWwy4orkE0gAwG3cMAzEduHRfLhyD4AyFuFynuPHvMDB1xAgMx0/A5BTqJysQt0BMMfQYtD7z5jhfSk0jIOFViGZjje4kb+8OJ+G7Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qTaOKFwu; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3787ddbd5a2so3701180f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 00:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1727250629; x=1727855429; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YFiXClqbPRW4CJclRDKGkw40xsL++a9HxAmJhaouAR4=;
+        b=qTaOKFwur8NWzwTTOKUrLm2/lHaFRxfR3ELJKonQIhw+faVILbQrhWbbHFlQgiRd+4
+         o6pLBn+8gKElH5zchy3DKzfCY7waSwihtH1rOyWFkOv1i7Bl8MqLzaIKwaBHS4Mok+/m
+         SBTcQF6DT1edztz9ppNB8L4bTaem7rhnL5ooU6NV/39Oz+21dGxY2om7OhSlqzK+7VHu
+         qUBtovz2P508UiV0Odjs+yNPwKRYCWp7oaAXMC+txQ/Jzxvn5aDDC0R4dXetWNV+F+Ns
+         OhYMZLEpKunfm6ct24sL3wHb7Ud/u9ql5C98gadYlpIQO95GLGJCkTq99XI1FCm9f+70
+         9Adw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727250629; x=1727855429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YFiXClqbPRW4CJclRDKGkw40xsL++a9HxAmJhaouAR4=;
+        b=CfIRfiPr0esqS5dgDBstUGpb0LRP7tstUXYm2Mthpsg8JQchTRwGgsdpCcD8uLhbPq
+         tkD+Be3WcmaM6KzDe/qdwn4i/6ey/sP4DkR9GQ+9+Oz3nQBntljj1azkyxXc8ap0JndY
+         biuP3a8nWza5Mmu+Vf0mwUqGsE/EyrJfyb6t9WpEa68Zp3rR2mTE6PljbH+q7uPG9szu
+         KS20dvmbwszNTC5xHF/SYpcJqh9ULI3TPPA/B+XngJ1szvKEiRnctfhhzQXNjc7tEjW6
+         jd+i2ly9DtM2c7tkgL/5Wcb4IPRCWBWGyPQA8S2cnUI1aBQrdfoCtZzT7Vye6A3+Vlr6
+         vqnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVGUHLnCoNX6ICLKW1AD8eeBeBwP2A5fJWpY7SHxIteydv9eUlWrhhtmOC6FAh0VgKcrrK0kMv+5A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyAyqCv5mjO6D6TLWxJZ50t9BJTwPMXCaNqQL3XQ3D7GsBHqf6
+	0jinbbB5KqtP1zLdI5nVayJdxzXiDz/Z6LejWTUAVal266aJ+TfVBWlpK+hW//Q=
+X-Google-Smtp-Source: AGHT+IFSqrWOgvLYloNvVXm1vEQkjP+JD1QteKQEPhT8fVsIjwexzPr+xFJfYUTXmrkXaAxZ4I2zWw==
+X-Received: by 2002:adf:f58e:0:b0:36d:2984:ef6b with SMTP id ffacd0b85a97d-37cc2466ff9mr1203849f8f.11.1727250629008;
+        Wed, 25 Sep 2024 00:50:29 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.115])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e969feb45sm10046135e9.20.2024.09.25.00.50.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Sep 2024 00:50:27 -0700 (PDT)
+Message-ID: <23531a70-cf50-4b32-a9fd-81e6cfcbcf9d@tuxon.dev>
+Date: Wed, 25 Sep 2024 10:50:24 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240924121544.62my7eqnudc76orl@subscribe>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/16] soc: renesas: Add SYSC driver for Renesas RZ/G3S
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+ biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-5-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdVQsHx0nC3xwQWVRWyWMnbXd1=RokNn8rkJv3bfG_0p-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sep 24, 2024 at 07:15:44 -0500, Nishanth Menon wrote:
-> On 15:20-20240924, Dhruva Gole wrote:
-> [...]
-> > 
-> > I am sorry that this breaks compatibility with older AM625 devicetree.
-> > However, the old devicetree was marking the entire wkup_conf as "syscon",
-> > "simple-mfd" which was wrong and needed to be fixed.
-> > 
-> > This series finally tries to bring order to DT and the driver.
-> > 
-> > However, if there is still any way to maintain the backward
-> > compatibility, then I am open to suggestions. Please try
-> > and understand here that the ask for backward compatibility here
-> > is to ask the driver to support a case where the register offset itself
-> > was to be picked from a different node. I am not sure if there's any
-> > cleaner way to do this.
+Hi, Geert,
+
+On 24.09.2024 14:32, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
+> On Thu, Aug 22, 2024 at 5:28 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> The RZ/G3S SYS Controller has 2 registers (one for PCIE one for USB) that
+>> need to be configured before/after powering off/on the PCI or USB
+>> ares. The bits in these registers control signals to PCIE and USB that
+>> need to be de-asserted/asserted after/before power on/off event. For this
+>> add SYSC controller driver that registers a reset controller driver on
+>> auxiliary bus which allows USB, PCIE drivers to control these signals.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> Have you tried to handle this with quirks? I am not in favor of breaking
-> backward compatibility.
+> Thanks for your patch!
+> 
+>> --- /dev/null
+>> +++ b/drivers/reset/reset-rzg3s-sysc.c
+>> @@ -0,0 +1,140 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Renesas RZ/G3S SYSC reset driver
+>> + *
+>> + * Copyright (C) 2024 Renesas Electronics Corp.
+>> + */
+>> +
+>> +#include <linux/auxiliary_bus.h>
+> 
+> Using the Auxiliary Bus requires selecting AUXILIARY_BUS.
 
-I was thinking of something on those lines, but quirks makes sense for
-the case that there's a quirky behaviour in the SoC itself. Here it
-seems to me that we are adding a quirk to handle quirk in some old devicetree.
+Thank you for pointing it. I'll adjust it in the next version, if it will
+be one.
 
-There's no way to detect the devicetree version or somehow distinguish
-within the driver if it's an old or a new DT. One way I could think of
-is on these lines:
 
-8<---------------------------------------------------------------------------
-diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-index 870ab0b376c1..e1b22c5d4ab8 100644
---- a/drivers/cpufreq/ti-cpufreq.c
-+++ b/drivers/cpufreq/ti-cpufreq.c
-@@ -93,6 +93,7 @@ struct ti_cpufreq_soc_data {
-        bool multi_regulator;
- /* Backward compatibility hack: Might have missing syscon */
- #define TI_QUIRK_SYSCON_MAY_BE_MISSING 0x1
-+#define TI_QUIRK_SYSCON_MAY_BE_INCORRECT       0x2
-        u8 quirks;
- };
-
-@@ -317,6 +318,7 @@ static struct ti_cpufreq_soc_data am625_soc_data = {
-        .efuse_mask = 0x07c0,
-        .efuse_shift = 0x6,
-        .multi_regulator = false,
-+       .quirks = TI_QUIRK_SYSCON_MAY_BE_INCORRECT,
- };
-
- static struct ti_cpufreq_soc_data am62a7_soc_data = {
-@@ -349,6 +351,9 @@ static int ti_cpufreq_get_efuse(struct
-ti_cpufreq_data *opp_data,
-        u32 efuse;
-        int ret;
-
-+       if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_INCORRECT )
-+               opp_data->soc_data->efuse_offset = 0x0018;
-+
-        ret = regmap_read(opp_data->syscon,
-opp_data->soc_data->efuse_offset,
-                          &efuse);
-        if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING
-&& ret == -EIO) {
-
----------------------------------------------------------------------------->8
-
-Then, additionally read the soc_data->syscon value, compare it against
-some hard coded value to check if the address needs the 0x0018 offset or
-not... All this feels extremely hackish and hence I was against doing
-this.
-
-Am I missing some other obvious way to distinguish between old/new DT? I
-don't suppose we can just go ahead and create a new binding just for
-this.
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+> Elsse you might run into build failures:
+> 
+> aarch64-linux-gnu-ld: drivers/soc/renesas/rzg3s-sysc.o: in function
+> `rzg3s_sysc_probe':
+> rzg3s-sysc.c:(.text+0x21c): undefined reference to `auxiliary_device_init'
+> aarch64-linux-gnu-ld: rzg3s-sysc.c:(.text+0x264): undefined reference
+> to `__auxiliary_device_add'
+> aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
+> `rzg3s_sysc_reset_driver_init':
+> reset-rzg3s-sysc.c:(.init.text+0x1c): undefined reference to
+> `__auxiliary_driver_register'
+> aarch64-linux-gnu-ld: drivers/reset/reset-rzg3s-sysc.o: in function
+> `rzg3s_sysc_reset_driver_exit':
+> reset-rzg3s-sysc.c:(.exit.text+0x10): undefined reference to
+> `auxiliary_driver_unregister'
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
