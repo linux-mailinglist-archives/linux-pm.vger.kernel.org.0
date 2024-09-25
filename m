@@ -1,69 +1,69 @@
-Return-Path: <linux-pm+bounces-14710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14711-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E03FA986312
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:19:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2992D986318
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:19:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0623A1C27519
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:19:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBF9628D008
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C3D1946AA;
-	Wed, 25 Sep 2024 15:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84A1198A0D;
+	Wed, 25 Sep 2024 15:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TsAdLtYA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xpdc7b0r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0DD194C8B
-	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6009A18E342
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:02:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276568; cv=none; b=ekp6z63v6ziZALJOjtu8aC3dbDz1Lz6PXqeYtC9omtzwtVIcHiF1Kb7oT5NVpeUIN0t4w3y0AndRbUSx707zurpdDDydikbd9tecerb9p7y10op1YcjdebT9jUlWdU6D5mDKR2C4OcSU1gJdOBnizTVCDCDyV5vW+NvI7x49M80=
+	t=1727276571; cv=none; b=jta8gMTfyHQQ0MT0OiFGXCe9F5JVP0ewE+nvaG510jSOvw+TemzXsOp/8eyzfuZuB/o/WojKdMQ0TtcfASKDodIZnx/6sfilm8PB9CuXairI2x4qWElWbCXRi1f6HaBXTDvxKLkEEAZvO5ifHARO+jWpSiSQ7HjVnnMFQ+cbpCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276568; c=relaxed/simple;
-	bh=3JGT0Gp6Mz6RRG9jsRwcVhBESThd+LENzWfNaIpsWgo=;
+	s=arc-20240116; t=1727276571; c=relaxed/simple;
+	bh=4t4Zd7d88HUB4IQR7hyWqg3RF4QpMaNzLYFQ0q/SbWM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=n5nqr8rXolvN14idCeQwlAYxIhG8alR7VLTcT4qzykVpbB5ypIYo04AqjaRoJ1OStfxLxgtlP6PDvNXcRUk26BeE8KQhrhQ6yKVPZoqanUNmgMuRZVlVJLTVhCZGrK614T5/+wcGKgKlCWWfCTFBnCMETAHHE1BqcYRVGDAm5hQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TsAdLtYA; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=Sof7DKK/oSANXLxclLMPhjSAVI0+w+CYaDkZgQ1pMsW5/auZ8wLGObtMKpGShtPeq+ccueGA+b/DXqpq6mIDrqxnQ/RRWIj0lqaR4ySdAwXQ+oofElrYOqnpnfi90Jyg9EONI6mY/a+4762VA5ZYEagWLr0gimbaqWRMNbFpLgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xpdc7b0r; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0353b731b8so9801902276.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:02:44 -0700 (PDT)
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-374bfc57e2aso3602169f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:02:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276564; x=1727881364; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727276567; x=1727881367; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EvnpcmFQxcsGZvvXdDVNifJH/U/gKUWuX4k9X0rnjWY=;
-        b=TsAdLtYAaeJGU3uxeCnFRgjYC3zywHtu6kW+6MWpOyRNzrSw08zUCHdh6CU0oPm8gr
-         54tOTeHyOuanpEbdNRoeq8LiHt0Ly0sdjAsUk0tK4vAtiLDvGVLI4ChjS1/H1NP68DS/
-         wSfZ51QMisCY3gLGmgurQEDRdSja9nk83ak8rOou2KXBBOUOMoZvo6HyUrCUqmKGFclq
-         X79FiB7c9maDv32TWuRLLqa01GBzHCXym8JqphMQrvk/vyTCKLoJG/bfAtxBkbCui/JW
-         prbpIXqx2mZ0S0rjKfDQ90v+oF35A3ySYc1z/4V/6oMFpYVBD7CNN2WPxnCQcpMGvSPl
-         uaDQ==
+        bh=pNx8CgL2JjB1FACn8gZOCDgH3XlG/cZ7BMhQN82yM0M=;
+        b=xpdc7b0reBbwnnjkdvySuBhqxCUup4ROen4arCBet5tBUn/jAPZrevZ0XydaQWVEdR
+         NptfvC2h5L3r3+buanOYePlkab/2vDQbYR/I2i9wuWm4TvkCnKkf9vNjvdgt80uJ8+SW
+         iLr4Wbpv+HxRref707wqaz2SoYCW0MfU9uJo8GCadxjy+7NiRAnESsNrx2pnflAkCsms
+         o7NuB+N+ESfhIaXEtIqiTN+f95AS/6k7Spad2NqYoV//cdCFL0JwjorjV7Fhr1bPSoQ6
+         6GKDsf/GGwmOOxvTmd0CsCY8/y/kVK0718CGugnH/HehdzmKjcWznuNpm26kPgWMkSJ9
+         d2Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276564; x=1727881364;
+        d=1e100.net; s=20230601; t=1727276567; x=1727881367;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EvnpcmFQxcsGZvvXdDVNifJH/U/gKUWuX4k9X0rnjWY=;
-        b=JBLOy8bSsL1o38NquhenfXhn9ALtXgQo3zxJ0Nrv/js6+lin4ZqQf9nYbCSa+9dLAA
-         j2IuzIflbffmKq6rctlQIY3921jY7zkx12ZHG5dTQZGghj3Pv9QXCD320p38/jatob4K
-         RunTfRkJy4+AJ6OYNNCTT0Vrksy+t7MIxZCkdco+LTi0SgvA29BngszTCM8Mb4ouljmo
-         /Tok+sM7wbbihh0ZkNo/lac7N5Zx4G5AQ+SwbBeTBs/XuLoIN2D4J0pnKqMGBz4fE1w0
-         utpazQpIL1ovawRXAROX/Up84qL8DZcDkaS2UxY7NvUaUWjyLsQOyKUb+rp8MbbxuJAY
-         6cbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuEr6PTcNms+v64gXMBIMWuoJCkiJH8j2fOO7rNPDjr5uc2eP39GMm6E2Rx6XIw2EhwhN/lt9qtA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw7Pcgj0I+5HYwMPZpN5qCIJuZ/hy2baYVADrJoghyhf0Y4Ll0
-	OIMuGpfHAjwepD8Rx7S4/W5KgcxrCRF0pdlfjShUfTHV9SsQgUgPJNekxN9URyMcrFuf5g==
-X-Google-Smtp-Source: AGHT+IG8l7xPrwiQoCJNQ/ba3EMloi9V99YK0VEhh/KbnKIqVODzSQX4+kTe9p6XHA3xEE581cvXY/7/
+        bh=pNx8CgL2JjB1FACn8gZOCDgH3XlG/cZ7BMhQN82yM0M=;
+        b=AmrohkFeGEoKfWIqvW9HoVGZUxwgTcidDn4HCjF+LWFXAySkOS+Lt34t4mt67SIOQ+
+         bRweOGjdVnskI9RGf6l6DFXWzy6ue3GUt4lTy80TilW0cUBo6QYdIPq4vEecAIk3Iepp
+         N8XzYkZZB3az/GvOaqkRO0RkZI/Ehy4T8+YBazETpiOCMrW38z2A5xi/WbvnEhOCamOL
+         z7ahJNfwZwNA/jd4IUn4DAI3ch5PyuGfrGn3H3ng58Zdpi/4jBEfMaAjbIIJPav8kY4B
+         noc59/LunNS8/ifsiiUMkEnF1krmzrCOsSjedwaa+w25uWtLOx0mkLFj7QHxhA/H1ZX+
+         JXuA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBCwgZ++e4MxKTjIscRAQgCGgfDfDZRBAj2836HO1xCaYEqFRxFF79Xc3+dDth/yGDt5bxbuSduw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEJdsoKPT/P06DrwVp9Y/DkGMU/9o29CK8Xac2cVp9VLra+dJV
+	F7cYtNemUxlfwiwusNM1ymcNNpyepWD0bTK/j8YJWbROVy4xmjnJCMavfaGt+xsf/CsaQQ==
+X-Google-Smtp-Source: AGHT+IHtZA65C9eNefhgBWqmYh0kGm6u7UMHidCQ+DZrqbEOemMqvMt90MEtVjIphkQcIFg1qUNObHvF
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a25:fc20:0:b0:e25:17cb:352e with SMTP id
- 3f1490d57ef6-e2517cb37ebmr1573276.9.1727276563646; Wed, 25 Sep 2024 08:02:43
+ (user=ardb job=sendgmr) by 2002:a5d:5e04:0:b0:37c:c51b:d07f with SMTP id
+ ffacd0b85a97d-37cc51bd43bmr945f8f.9.1727276566478; Wed, 25 Sep 2024 08:02:46
  -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:21 +0200
+Date: Wed, 25 Sep 2024 17:01:22 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -73,15 +73,14 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2665; i=ardb@kernel.org;
- h=from:subject; bh=aFznGPhrIJfcYbFW/zJm7PxtyN4XPqpBJvJpRLs7DOQ=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6smrOU/sUlwy2LTW237rV4pUONJ8T3XtdLO2DQ3bj
- 80/F1nfUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACYyyZHhn8LWprti0g+tdKf9
- /bStUjGJXy/+qc4H120n962eP03h1yKG/wHHj7aK75zgynumw7x0V1PPmh2muXNy98WcvvZ74cO kJi4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4300; i=ardb@kernel.org;
+ h=from:subject; bh=LZda20wnQiwQiTXt6tiHm30A1wODb0KBnxm/teE+Lu4=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6unSO+7/NsayfzpQ7uW+6/sf035bm8SjMXouItt6v
+ vsqNLN3lLIwiHEwyIopsgjM/vtu5+mJUrXOs2Rh5rAygQxh4OIUgIlUFzIyLClfembn6Wlfb79Z
+ nLiyrmmade3VvmNH2xq0FwTP8FnOwsHwmyXhPONLDfu9MQfFQ+MyCsJWuy/VFOpa8t9x77FzLsv /8AAA
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-51-ardb+git@google.com>
-Subject: [RFC PATCH 21/28] x86/head: Use PIC-compatible symbol references in
- startup code
+Message-ID: <20240925150059.3955569-52-ardb+git@google.com>
+Subject: [RFC PATCH 22/28] asm-generic: Treat PIC .data.rel.ro sections as .rodata
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -106,85 +105,108 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Use RIP-relative symbol references to make them compatible with running
-the linker in PIE mode.
+When running the compiler in PIC/PIE mode, it will emit data objects
+that are 'const' in the context of the program into the .data.rel.ro
+section if they contain absolute addresses of statically allocated
+global objects. This helps the dynamic loader distinguish between
+objects that are truly const from objects that will need to be fixed up
+by the loader before starting the program.
+
+This is not a concern for the kernel, but it does mean those
+.data.rel.ro input sections need to be handled. So treat them as
+.rodata.
+
+It also means some explicit uses of .rodata for global structures
+containing absolute addresses need to be changed to .data.rel.ro to
+prevent the linker from warning about incompatible section flags.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head_64.S            | 14 +++++++++-----
- arch/x86/kernel/relocate_kernel_64.S |  6 ++++--
- 2 files changed, 13 insertions(+), 7 deletions(-)
+ include/asm-generic/vmlinux.lds.h       |  2 +-
+ include/linux/compiler.h                |  2 +-
+ scripts/kallsyms.c                      |  2 +-
+ tools/objtool/check.c                   | 11 ++++++-----
+ tools/objtool/include/objtool/special.h |  2 +-
+ 5 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index db71cf64204b..cc2fec3de4b7 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -182,8 +182,9 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	xorl	%r15d, %r15d
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index cc14d780c70d..2b079f73820f 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -456,7 +456,7 @@
+ 	. = ALIGN((align));						\
+ 	.rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {		\
+ 		__start_rodata = .;					\
+-		*(.rodata) *(.rodata.*)					\
++		*(.rodata .rodata.* .data.rel.ro*)			\
+ 		SCHED_DATA						\
+ 		RO_AFTER_INIT_DATA	/* Read only after init */	\
+ 		. = ALIGN(8);						\
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index ec55bcce4146..f7c48b7c0a6b 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -133,7 +133,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
  
- 	/* Derive the runtime physical address of init_top_pgt[] */
--	movq	phys_base(%rip), %rax
--	addq	$(init_top_pgt - __START_KERNEL_map), %rax
-+	leaq	init_top_pgt(%rip), %rax
-+	subq	$__START_KERNEL_map, %rax
-+	addq	phys_base(%rip), %rax
+ /* Annotate a C jump table to allow objtool to follow the code flow */
+-#define __annotate_jump_table __section(".rodata..c_jump_table")
++#define __annotate_jump_table __section(".data.rel.ro.c_jump_table")
  
- 	/*
- 	 * Retrieve the modifier (SME encryption mask if SME is active) to be
-@@ -314,7 +315,8 @@ SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
+ #else /* !CONFIG_OBJTOOL */
+ #define annotate_reachable()
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 9c34b9397872..1700e97400aa 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -357,7 +357,7 @@ static void write_src(void)
+ 	printf("#define ALGN .balign 4\n");
+ 	printf("#endif\n");
  
- .Lsetup_cpu:
- 	/* Get the per cpu offset for the given CPU# which is in ECX */
--	movq	__per_cpu_offset(,%rcx,8), %rdx
-+	leaq	__per_cpu_offset(%rip), %rdx
-+	movq	(%rdx,%rcx,8), %rdx
- #else
- 	xorl	%edx, %edx /* zero-extended to clear all of RDX */
- #endif /* CONFIG_SMP */
-@@ -325,7 +327,8 @@ SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
+-	printf("\t.section .rodata, \"a\"\n");
++	printf("\t.section .data.rel.ro, \"a\"\n");
+ 
+ 	output_label("kallsyms_num_syms");
+ 	printf("\t.long\t%u\n", table_cnt);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 01237d167223..04725bd83232 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2575,15 +2575,16 @@ static void mark_rodata(struct objtool_file *file)
+ 	 * Search for the following rodata sections, each of which can
+ 	 * potentially contain jump tables:
  	 *
- 	 * RDX contains the per-cpu offset
+-	 * - .rodata: can contain GCC switch tables
+-	 * - .rodata.<func>: same, if -fdata-sections is being used
+-	 * - .rodata..c_jump_table: contains C annotated jump tables
++	 * - .rodata .data.rel.ro		: can contain GCC switch tables
++	 * - .rodata.<func> .data.rel.ro.<func>	: same, if -fdata-sections is being used
++	 * - .data.rel.ro.c_jump_table		: contains C annotated jump tables
+ 	 *
+ 	 * .rodata.str1.* sections are ignored; they don't contain jump tables.
  	 */
--	movq	pcpu_hot + X86_current_task(%rdx), %rax
-+	leaq	pcpu_hot + X86_current_task(%rip), %rax
-+	movq	(%rax,%rdx), %rax
- 	movq	TASK_threadsp(%rax), %rsp
+ 	for_each_sec(file, sec) {
+-		if (!strncmp(sec->name, ".rodata", 7) &&
+-		    !strstr(sec->name, ".str1.")) {
++		if ((!strncmp(sec->name, ".rodata", 7) &&
++		     !strstr(sec->name, ".str1.")) ||
++		    !strncmp(sec->name, ".data.rel.ro", 12)) {
+ 			sec->rodata = true;
+ 			found = true;
+ 		}
+diff --git a/tools/objtool/include/objtool/special.h b/tools/objtool/include/objtool/special.h
+index 86d4af9c5aa9..89ee12b1a138 100644
+--- a/tools/objtool/include/objtool/special.h
++++ b/tools/objtool/include/objtool/special.h
+@@ -10,7 +10,7 @@
+ #include <objtool/check.h>
+ #include <objtool/elf.h>
  
- 	/*
-@@ -346,7 +349,8 @@ SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
- 	 */
- 	subq	$16, %rsp
- 	movw	$(GDT_SIZE-1), (%rsp)
--	leaq	gdt_page(%rdx), %rax
-+	leaq	gdt_page(%rip), %rax
-+	addq	%rdx, %rax
- 	movq	%rax, 2(%rsp)
- 	lgdt	(%rsp)
- 	addq	$16, %rsp
-diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
-index e9e88c342f75..cbfd0227ea3e 100644
---- a/arch/x86/kernel/relocate_kernel_64.S
-+++ b/arch/x86/kernel/relocate_kernel_64.S
-@@ -106,6 +106,9 @@ SYM_CODE_START_NOALIGN(relocate_kernel)
- 	/* setup a new stack at the end of the physical control page */
- 	lea	PAGE_SIZE(%r8), %rsp
+-#define C_JUMP_TABLE_SECTION ".rodata..c_jump_table"
++#define C_JUMP_TABLE_SECTION ".data.rel.ro.c_jump_table"
  
-+	/* take the virtual address of virtual_mapped() before jumping */
-+	leaq	virtual_mapped(%rip), %r14
-+
- 	/* jump to identity mapped page */
- 	addq	$(identity_mapped - relocate_kernel), %r8
- 	pushq	%r8
-@@ -225,8 +228,7 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
- 	movq	%rax, %cr3
- 	lea	PAGE_SIZE(%r8), %rsp
- 	call	swap_pages
--	movq	$virtual_mapped, %rax
--	pushq	%rax
-+	pushq	%r14
- 	ANNOTATE_UNRET_SAFE
- 	ret
- 	int3
+ struct special_alt {
+ 	struct list_head list;
 -- 
 2.46.0.792.g87dc391469-goog
 
