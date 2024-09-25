@@ -1,82 +1,78 @@
-Return-Path: <linux-pm+bounces-14651-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABF97985557
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:19:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A309855B0
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:41:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5EE01C22689
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:19:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D01F1F24357
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2668159568;
-	Wed, 25 Sep 2024 08:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDCC15AAC6;
+	Wed, 25 Sep 2024 08:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="fekwNvTo";
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="NpMD+N51"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66F615B968;
-	Wed, 25 Sep 2024 08:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852D8158DCA;
+	Wed, 25 Sep 2024 08:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727252320; cv=none; b=FZXmloXyTu+Un7KZ3ienUydPxZ31zZXdZxSz0E5IxbUXyxkABaprDzOiPfzcF+gFa+HDj6xHHMhLlx23lqUQnw6OsTZnLbtebta3SxuPonEfs03WKZ11jx9I/yT79nut59UjK9eJthnzNmybJKAym1HYxwpkPV7WcSFANzKehd8=
+	t=1727253677; cv=none; b=TFeUk9gGL43qN3+lk/2tkfbh1Hudpmyp03vDs2WXpXM7ZVsqgCoiD6eCFAZ7jxURVEtgYXaEZ7ZLAIIcElU1RUgppURoovNjTd8K9a5QRP37KXIsqqZhx67AU+q0OVhN3RQeKWNO0MwIxsZRWMWvVs6AytABiSs4FYsM32CMjG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727252320; c=relaxed/simple;
-	bh=+0YFLpub1Y4HInlgfqUnAB+eG+j44TxlEcYL8WdQX0Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OuJ/4qiWPGZXdv/zxmtKEgyg7wHQjZV5HMEA/HCqiKhdo/CxUJahazdbEQ6XPXVN2vCXgEb1ddvd8WiCostHyBteyBARcH370yI01hp6sfBBTW9BRLLxwwR+LY2IwDhp5cc16wkamjGuzCWzZ/Hc3/Il109nYr5RtzAMJ2+FmQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: bfe770927b1611efa216b1d71e6e1362-20240925
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_UNTRUSTED, SA_LOWREP, SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
-	AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:6f8d0b0c-46bc-49b8-bf8b-8ab908dc377f,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-INFO: VERSION:1.1.38,REQID:6f8d0b0c-46bc-49b8-bf8b-8ab908dc377f,IP:0,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:-5
-X-CID-META: VersionHash:82c5f88,CLOUDID:695219811593fbe85e15dfcede684a86,BulkI
-	D:240925144023207KTES0,BulkQuantity:9,Recheck:0,SF:64|66|17|19|817|102,TC:
-	nil,Content:0|-5,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:ni
-	l,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-UUID: bfe770927b1611efa216b1d71e6e1362-20240925
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2091786093; Wed, 25 Sep 2024 16:18:31 +0800
-From: dengjie <dengjie03@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: rafael@kernel.org,
-	pavel@ucw.cz,
-	len.brown@intel.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	xiehongyu1@kylinos.cn,
-	duanchenghao@kylinos.cn,
-	xiongxin@kylinos.cn
-Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
-Date: Wed, 25 Sep 2024 16:18:27 +0800
-Message-Id: <20240925081827.189845-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2024092543-enforcer-quaintly-9f3e@gregkh>
-References: <2024092543-enforcer-quaintly-9f3e@gregkh>
+	s=arc-20240116; t=1727253677; c=relaxed/simple;
+	bh=nM7iSF6c0w0QH1Vof8AfQe6JrilnzTkiXL14EjhKcg8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r362j44XPBexFvatOmCZ9TuPCjB1z3s94YV66wLk10vpMDSuoDm6aQJ01P1qQvx/Des4MUDtyaRqlLm9HPWDXKmgpPydHyc1uVOf5OG4rNjY9Ts9KeYZxntR05wX5UYfTSWjdUKCBA+ovJ9/9cv+z2AYsudEbvOJu0yWIiI28lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=fekwNvTo; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=NpMD+N51; arc=none smtp.client-ip=220.130.44.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1727253673;
+	bh=mUdi9yMu+UVLGMRC6gLui78O+3HasF3EwSVe5W6mxn4=; l=487;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=fekwNvToiCKUKjhunshSt0nkQa1Lb0XjunhQSqpQ05gPaTPOXQAlKXH//zlc/7wUu
+	 b+7qJ9F+HoiWEvS/vCOSHErcofXXtkzAWDbBj9g+H9LYsIPequdkpj6R+4fmivWpX+
+	 iLvC3qWeEBLIlBQXmiiJetTFEEQqqyTK3br3jrER5bMbX2AiJRZVzWraiuN+ZheekH
+	 qLxbhfHadK0nGwcpYfeTGl9K5DmB1Jnx0gr42gUnQwgr6J6Du2e+SOI1bACgCjlwyW
+	 YW8Qt6p/UjBFHzz5oLpw3Sx/eR7SIc26jYSM+flw+psMZNXYLXYymFhq11L44nM1J/
+	 goU9f50mGu1Mg==
+Received: from 192.168.8.21
+	by mg.richtek.com with MailGates ESMTP Server V3.0(3190227:0:AUTH_RELAY)
+	(envelope-from <prvs=1995EE0AA0=cy_huang@richtek.com>); Wed, 25 Sep 2024 16:41:12 +0800 (CST)
+X-MailGates: (compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1727253672;
+	bh=mUdi9yMu+UVLGMRC6gLui78O+3HasF3EwSVe5W6mxn4=; l=487;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=NpMD+N51Ywt47RXmlxrH0u/GQy9UoyJ/bpICzmA8sEKYQfqsnl0GCvrpRriMsx2WF
+	 TPyp2ntRQtirse4CdPemzkmY4o8jrrBgDQ/LcVsgYtXsRP7uZWzNXgG6t1SERjyo9V
+	 xwovulQg3nJjrGLVm+av6IwT8yMqvfhXK0IPctGHBaeqKnJitDf1lUKP72fiR9vGqx
+	 wZm7/ZzwMU+4bN0Q3aGG/QUMQ6S6MO8zrNYNaK8dXMRgbvqzGi3+HlnwmeMS1caUlL
+	 zKTGZ1qHzyyhOCmN0htLJIP4zbPFKpK7f/ramjPpNYU3tnpzaVipqGVTqOzWGG1+tg
+	 2pQxYl2cHUbXw==
+Received: from 192.168.10.47
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(1323018:0:AUTH_RELAY)
+	(envelope-from <cy_huang@richtek.com>)
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Wed, 25 Sep 2024 16:33:16 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 25 Sep
+ 2024 16:33:16 +0800
+Received: from git-send.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1544.11 via Frontend
+ Transport; Wed, 25 Sep 2024 16:33:16 +0800
+From: <cy_huang@richtek.com>
+To: 'Lucas Tsai ' <lucas_tsai@richtek.com>, Sebastian Reichel <sre@kernel.org>
+CC: ChiYuan Huang <cy_huang@richtek.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] power: supply: rt9471: Fix WDT bitfield and charger status
+Date: Wed, 25 Sep 2024 16:32:57 +0800
+Message-ID: <cover.1727252762.git.cy_huang@richtek.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,18 +80,22 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
->> Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
->> removed, there is a probability that the S4 wakeup will turn into a reboot.The following
->> two points describe how to analyze and locate the problem points:
->
->Also please wrap your paragraphs at a much narrower line length like 72
->or 75 characters or so.
->
-Thank you for pointing out the problem. I will pay attention to it in 
-the future.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Thanks,
+This patch series add the following fixes that reported from the end
+market included WDT bitfield and the real charger status.
 
-dengjie
+ChiYuan Huang (2):
+  power: supply: rt9471: Fix wrong WDT function regfield declaration
+  power: supply: rt9471: Use IC status regfield to report real charger
+    status
+
+ drivers/power/supply/rt9471.c | 52 ++++++++++++++++++++++-------------
+ 1 file changed, 33 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
+
 
