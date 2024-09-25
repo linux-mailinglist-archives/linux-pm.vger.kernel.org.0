@@ -1,57 +1,60 @@
-Return-Path: <linux-pm+bounces-14674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14675-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05381985D56
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:08:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAC75985DD1
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:21:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A52111F274B5
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 13:08:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74B0CB2C985
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 13:09:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A3251E0082;
-	Wed, 25 Sep 2024 12:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE5EB1E1A14;
+	Wed, 25 Sep 2024 12:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TpWs8iH3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiadWUYK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516531DFE3B;
-	Wed, 25 Sep 2024 12:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BE71E1A0E;
+	Wed, 25 Sep 2024 12:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727265798; cv=none; b=ZfTWbGhduhez0PpPe2smkzBuxwZoLx901+YwY3yB6nzflt+VyKyUyO0cGSlhvyKFoehPLQM1eXLWkNgfO6Y5aAYjh37EemLmpJDnd7AehJsAxn0r3Rc+OLmpEbKW4H+8M/zhFzBlS14x6Guli8+ow3lU/uXwNcnoNJifbIvOuMg=
+	t=1727265809; cv=none; b=OIabqF7l+8Wy+HWdVRePLFN/cw54p7l3I3TGJSuJmqlAYbB8QE4jMK5aXVXDn3Rj/D/4Mz9/Ha9iERXnxYk7/lB4J98tkAu6HN1b5yyIMCFVyDh/0e60cyOUH6r/qharRIrJYbyfk0+r0JHKtBambmAx4ASh6JtNvflXZe9dY/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727265798; c=relaxed/simple;
-	bh=Z5ySSR+BEZCRlW6ok+c9JHqTZnqbFibGazoAbKcH/UY=;
+	s=arc-20240116; t=1727265809; c=relaxed/simple;
+	bh=T2oTWp+g2oJvYD7RxFEZfHkI2F5at2sUHHBJkPxY5mc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dsAdFwbw60dC+EGhq4iSHIk21KzBte1Z+ffTXHET9k22Ooy/xMkFzwym9kmTADkZm0+TzFpF8SA0FZknAaMk9Wg7WpIgIAOSsnJrjqiqq1ibrsI/5Qqf46XlsZNGVr6ElGIXh92jQzLB+rUvCcQcr7d90ADYVikJTSAE3JpPSls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpWs8iH3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D42C4CECD;
-	Wed, 25 Sep 2024 12:03:16 +0000 (UTC)
+	 MIME-Version; b=fz6FU8QLi1SRUQT6wRmSaR6bFWkRKUk6rTOAAu+/mKRYJdprPGVQqbPlr7zBkE4xD0C0ERQcLhjia8OQ7wQxxaopGcZ3Mic2mPAFHJHUqmRqkvF50lACFOQMZFcY/czOVZGAHMx71XCZKKzQ4Rz1KlB7Fg5ezgtxwhsLu2RtU90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiadWUYK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02552C4CEC3;
+	Wed, 25 Sep 2024 12:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727265797;
-	bh=Z5ySSR+BEZCRlW6ok+c9JHqTZnqbFibGazoAbKcH/UY=;
+	s=k20201202; t=1727265809;
+	bh=T2oTWp+g2oJvYD7RxFEZfHkI2F5at2sUHHBJkPxY5mc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TpWs8iH3iemTED3XlQf7244EL2P/Ugyn4hWvbopAWKcKBpugC6EABCsj9NJNncoBj
-	 YQGRYUTCgU5ZASw2nFK2vBPiPwGSYEO0wJSjjsuzFlgskJj2FE4K87Voedpltp3EO7
-	 MOX/C/97k3A3yFkzLLNdTAKKo4N/8etOdjSyrWfCJzWp+kOafbwIFTgSuVdIr5R4Jx
-	 G3RsF9kv3AUMhaXRIr2y6HayQLFJtU0yzJaI3UAJ6reA9FegV0V70gdmsn2iC9WsTv
-	 CQT/fW+4YqJiRq0gAAF36RxnHMLqKTbUB+Y39BB5TtXF52DJ1go5vj8F2OnZJNe9eZ
-	 qGCMj9iyql4jQ==
+	b=XiadWUYKdTyu617uVlMM8bFTN2pr2bztr3ZJd6FFyPvcHdX8IxhYzYzcT5QPUkjjP
+	 SKTeHAozEX8EjRZy6Doi4qPbTkniPf4xyRaFtbC+IB7ZVByJtvc4hjJiRbzhKgmQdx
+	 0LR9lndxxAf5QLo+gspC10tGH3v4W4yNg3M2ei91JBTp/DLO6gv6PnjXt5VtQFoHFa
+	 B0V1yX0BSsIyaf9ozJx2PaSwflxWi70bImPkJ81/TyEtRsXcCotjNkhLuU3PNqRIzN
+	 z6la+1tG/KKWb/E8ubBJGcwWZp5RLbpI0L7ZTQlZY/yprqMPMXSZ9udrat/0xi64cP
+	 D9xfYAZHW8rNA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Raghavendra Kakarla <quic_rkakarla@quicinc.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+Cc: Andrew Davis <afd@ti.com>,
+	Dhruva Gole <d-gole@ti.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 100/197] pmdomain: core: Don't hold the genpd-lock when calling dev_pm_domain_set()
-Date: Wed, 25 Sep 2024 07:51:59 -0400
-Message-ID: <20240925115823.1303019-100-sashal@kernel.org>
+	sre@kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.10 105/197] power: reset: brcmstb: Do not go into infinite loop if reset fails
+Date: Wed, 25 Sep 2024 07:52:04 -0400
+Message-ID: <20240925115823.1303019-105-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240925115823.1303019-1-sashal@kernel.org>
 References: <20240925115823.1303019-1-sashal@kernel.org>
@@ -66,61 +69,36 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.10.11
 Content-Transfer-Encoding: 8bit
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Andrew Davis <afd@ti.com>
 
-[ Upstream commit b87eee38605c396f0e1fa435939960e5c6cd41d6 ]
+[ Upstream commit cf8c39b00e982fa506b16f9d76657838c09150cb ]
 
-There is no need to hold the genpd-lock, while assigning the
-dev->pm_domain. In fact, it becomes a problem on a PREEMPT_RT based
-configuration as the genpd-lock may be a raw spinlock, while the lock
-acquired through the call to dev_pm_domain_set() is a regular spinlock.
+There may be other backup reset methods available, do not halt
+here so that other reset methods can be tried.
 
-To fix the problem, let's simply move the calls to dev_pm_domain_set()
-outside the genpd-lock.
-
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Tested-by: Raghavendra Kakarla <quic_rkakarla@quicinc.com>  # qcm6490 with PREEMPT_RT set
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Link: https://lore.kernel.org/r/20240527142557.321610-3-ulf.hansson@linaro.org
+Signed-off-by: Andrew Davis <afd@ti.com>
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Link: https://lore.kernel.org/r/20240610142836.168603-5-afd@ti.com
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pmdomain/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/power/reset/brcmstb-reboot.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 623d15b68707e..c45819debde96 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -1694,7 +1694,6 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 	genpd_lock(genpd);
+diff --git a/drivers/power/reset/brcmstb-reboot.c b/drivers/power/reset/brcmstb-reboot.c
+index 0f2944dc93551..a04713f191a11 100644
+--- a/drivers/power/reset/brcmstb-reboot.c
++++ b/drivers/power/reset/brcmstb-reboot.c
+@@ -62,9 +62,6 @@ static int brcmstb_restart_handler(struct notifier_block *this,
+ 		return NOTIFY_DONE;
+ 	}
  
- 	genpd_set_cpumask(genpd, gpd_data->cpu);
--	dev_pm_domain_set(dev, &genpd->domain);
- 
- 	genpd->device_count++;
- 	if (gd)
-@@ -1703,6 +1702,7 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 	list_add_tail(&gpd_data->base.list_node, &genpd->dev_list);
- 
- 	genpd_unlock(genpd);
-+	dev_pm_domain_set(dev, &genpd->domain);
-  out:
- 	if (ret)
- 		genpd_free_dev_data(dev, gpd_data);
-@@ -1759,12 +1759,13 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
- 		genpd->gd->max_off_time_changed = true;
- 
- 	genpd_clear_cpumask(genpd, gpd_data->cpu);
--	dev_pm_domain_set(dev, NULL);
- 
- 	list_del_init(&pdd->list_node);
- 
- 	genpd_unlock(genpd);
- 
-+	dev_pm_domain_set(dev, NULL);
-+
- 	if (genpd->detach_dev)
- 		genpd->detach_dev(genpd, dev);
+-	while (1)
+-		;
+-
+ 	return NOTIFY_DONE;
+ }
  
 -- 
 2.43.0
