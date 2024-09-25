@@ -1,194 +1,140 @@
-Return-Path: <linux-pm+bounces-14640-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14641-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C58B59852EE
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:30:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F17C7985307
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:40:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85318282125
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 06:30:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C2A32833CF
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 06:40:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3520146D6D;
-	Wed, 25 Sep 2024 06:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F10155725;
+	Wed, 25 Sep 2024 06:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GIykPuBO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635DE81E;
-	Wed, 25 Sep 2024 06:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86AD6155385;
+	Wed, 25 Sep 2024 06:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727245823; cv=none; b=CkypWmjbu8RrHXzBQ43eWAhQLt06m03+sstCgxtg/aAq6L3hIL+VPLoaOz3r+YH+20a5EDTyqtjUL8tWF4/qqaiY/E8LQfVrAHOxACQuz6TSRQOG/fnmcSnmHSbXsogbSGBM8DOjCCHDJhmc4ZXUS91Yr3cbNl+GoDitrLSplnE=
+	t=1727246413; cv=none; b=ETw2K86LMwEdY2Iloj0LUejAgIBFfkdDUlP0hd+26i/mTp2AkhBvDztK9vBIu29j+RNYoTWDDjCSM+brvgzNYqsf3VlWvhlV63aD/XVynlCN6tr9GWV73t9VNc8m3vVb9I33953gNxMd2Wj8Anho7eMAhPiPfnfwNFuzVHkJNTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727245823; c=relaxed/simple;
-	bh=rY3m7yhYB/1rNY6tuLk33kopGZouZRv/J6mGg62Ah/U=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Pza/1BnCO7q0gsiZ+julfQI8cPQMe4JkdiNXdUkbvY6CUvr6FgfCLUq6w+JoHQ6VH/x8Dbzj2mp7hCpxeKe8NhStiMVfr+SA+58hzYdB+EFLzk3YNi+VQl2EVEPmDQck7MHunq+ukUwoXS7HhZx+h8c/W6KDl7eoz2eJxUN2b7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XD6Jk1kkpz1SBgD;
-	Wed, 25 Sep 2024 14:29:26 +0800 (CST)
-Received: from kwepemd100023.china.huawei.com (unknown [7.221.188.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id E6819140158;
-	Wed, 25 Sep 2024 14:30:13 +0800 (CST)
-Received: from [10.174.179.5] (10.174.179.5) by kwepemd100023.china.huawei.com
- (7.221.188.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 25 Sep
- 2024 14:30:12 +0800
-Subject: Re: [PATCH v3 2/2] cppc_cpufreq: Remove HiSilicon CPPC workaround
-To: Jie Zhan <zhanjie9@hisilicon.com>, <ionela.voinescu@arm.com>,
-	<beata.michalska@arm.com>, <viresh.kumar@linaro.org>, <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <wanghuiqiang@huawei.com>,
-	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <yangyicong@huawei.com>,
-	<liaochang1@huawei.com>, <zengheng4@huawei.com>
-References: <20240919084552.3591400-1-zhanjie9@hisilicon.com>
- <20240919084552.3591400-3-zhanjie9@hisilicon.com>
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <6305475a-3fbd-780d-e341-716fecf4b769@huawei.com>
-Date: Wed, 25 Sep 2024 14:30:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+	s=arc-20240116; t=1727246413; c=relaxed/simple;
+	bh=kdrnwHoFYuyZVWUkJlIRI7Jl8wZFEWKJnF4UzyiMJHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u4g/u8CiRA3Ir9Xf/cXbQRqwjkYEFFNzPvJdd32gxRKIn3CBP2LFDgpaZ52PzfcSw/2EiJQyifRE0CWakHQp2I3RsYnrKKEh8ZjEYhFIjdSxUS5Py/ozBEn/SNuj+e5jHR7RhihInM7g0t3vNJJ4S0/CZvSOWHnMulNcX4x3V7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GIykPuBO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 621D5C4CEC3;
+	Wed, 25 Sep 2024 06:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1727246412;
+	bh=kdrnwHoFYuyZVWUkJlIRI7Jl8wZFEWKJnF4UzyiMJHQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GIykPuBOtzCwWPL1TEM4Z1Knbrq7c40b8qyAAwJJJX6/eajG/M9HlP4MIOSYqWKqI
+	 FGFr/YqHFE7U8OOC1YZ1CsUOu8wFfLUfTIYpG80jo+jVu4cPV02ruPTYvbT/0PH1Bn
+	 vyHafCXhJUh7YP1MwX2EdtXhgKtR47uJ9zjTpMLU=
+Date: Wed, 25 Sep 2024 08:40:10 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: dengjie <dengjie03@kylinos.cn>
+Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, xiehongyu1@kylinos.cn,
+	duanchenghao@kylinos.cn, xiongxin@kylinos.cn
+Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where
+ task resumption fails due to USB status
+Message-ID: <2024092543-enforcer-quaintly-9f3e@gregkh>
+References: <20240923100553.119324-1-dengjie03@kylinos.cn>
+ <20240925025041.149206-1-dengjie03@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240919084552.3591400-3-zhanjie9@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemd100023.china.huawei.com (7.221.188.33)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240925025041.149206-1-dengjie03@kylinos.cn>
 
-Reviewed-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+On Wed, Sep 25, 2024 at 10:50:41AM +0800, dengjie wrote:
+> Reproduction of the problem: During the S4 stress test, when a USB device is inserted or
+> removed, there is a probability that the S4 wakeup will turn into a reboot.The following
+> two points describe how to analyze and locate the problem points:
+> 
+> 1. During the boot stage when S4 is awakened, after the USB RootHub is initialized,
+> it will enter the runtime suspend state. From then on, whenever an xhci port change
+> event occurs, it will trigger a remote wakeup request event and add wakeup_work
+> to pm_wq, where the subsequent RootHub runtime resume process will be handled by pm_wq.
+> 
+> xhci runtime suspend flow：
+> S4 boot
+>    |->xhci init
+>        |->register_root_hub
+> 	   |->hub_probe
+> 	       |->callback = RPM_GET_CALLBACK(dev, runtime_suspend)   /* xhci RootHub runtime suspend */
+> 
+> xhci runtime resume flow ：
+> xhci_irq()
+>     |->xhci_handle_event()
+> 	|->handle_port_status()
+>    	    |->if(hcd->state == HC_STATE_SUSPENDED)
+> 		 |->usb_hcd_resume_root_hub()
+> 		    |->set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags)   /* wakeup pending signal to be set */
+>   		    |->queue_work(pm_wq, &hcd->wakeup_work)
+> 			|->hcd_resume_work()			       /* hcd->wakeup_work */
+> 			    |->usb_remote_wakeup()
+> 				|->callback = RPM_GET_CALLBACK(dev, runtime_resume)
+> 				    |->usb_runtime_resume()            /* usb runtime resume  */
+> 					|->generic_resume()
+> 					    |->hcd_bus_resume()
+> 						|->clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+> 						  /* wakeup pending signal to be clear */
+> 
+> 2. However, during the quiesce phase of S4 wakeup, freeze_kernel_threads() will freeze this pm_wq,
+> and between freeze_kernel_threads() and dpm_suspend_start(), there exists a very time-consuming
+> S4 image loading process. This leads to a situation where, if an xhci port change event occurs
+> after freeze_kernel_threads(), triggering the wakeup pending signal to be set,but it cannot
+> be processed by pm_wq to clear this wakeup_pending bit, it will result in a subsequent
+> dpm_suspend_start() where USB suspend_common() detects the wakeup pending signal being
+> set and returns an -EBUSY error, interrupting the S4 quiesce process and reverting to a reboot.
+> 
+> S4 wakeup
+>     |->resume_store
+> 	|->software_resume()
+> 	    |->freeze_kernel_threads()		/* will freeze pm_wq */
+> 	    |->load_image_and_restore()
+> 		  |->swsusp_read()    	        /* S4 image loading: time-consuming .
+> When an xhci port change event occurs at this point, it triggers the wakeup pending signal to be set.
+> However, since the pm_wq is in a frozen state, the wakeup_pending bit cannot be cleared.*/
+>    		  |->hibernation_restore
+> 			|->dpm_suspend_start(PMSG_QUIESCE)
+> 			    |->hcd_pci_suspend()
+> 				|->suspend_common()
+> 				    |->if (do_wakeup && HCD_WAKEUP_PENDING(hcd))  return -EBUSY;
+> 
+> Below is a description of the countermeasures taken to address this issue:
+> 1. Considering the restore process that occurs after the quiesce phase during S4 wakeup,
+> which essentially resets all root hubs,checking this wakeup pending status in USB suspend_common()
+> during the quiesce phase is of little significance and should therefore be filtered out.
+> 
+> S4 wakeup restore phase
+>     |->dpm_resume(PMSG_RESTORE)
+> 	|->hcd_pci_restore()
+> 	    |->xhci_resume()		       /* reset all root hubs */
+> 
+> Fixes: 3904bdf0821c ("PM: hibernate: Freeze kernel threads in software_resume()")
+> Signed-off-by: dengjie <dengjie03@kylinos.cn>
 
-On 2024/9/19 16:45, Jie Zhan wrote:
-> Since commit 6c8d750f9784 ("cpufreq / cppc: Work around for Hisilicon CPPC
-> cpufreq"), we introduce a workround for HiSilicon platforms that do not
-> support performance feedback counters, whereas they can get the actual
-> frequency from the desired perf register.  Later on, FIE is disabled in
-> that workaround as well.
-> 
-> Now the workround can be handled by the common code.  Desired perf would be
-> read and converted to frequency if feedback counters don't change.  FIE
-> would be disabled if the CPPC regs are in PCC region.
-> 
-> Hence, the workaround is no longer needed and can be safely removed, in an
-> effort to consolidate the driver procedure.
-> 
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 71 ----------------------------------
->  1 file changed, 71 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index e55192303a9f..0e95ad2303ea 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -36,24 +36,6 @@ static LIST_HEAD(cpu_data_list);
->  
->  static bool boost_supported;
->  
-> -struct cppc_workaround_oem_info {
-> -	char oem_id[ACPI_OEM_ID_SIZE + 1];
-> -	char oem_table_id[ACPI_OEM_TABLE_ID_SIZE + 1];
-> -	u32 oem_revision;
-> -};
-> -
-> -static struct cppc_workaround_oem_info wa_info[] = {
-> -	{
-> -		.oem_id		= "HISI  ",
-> -		.oem_table_id	= "HIP07   ",
-> -		.oem_revision	= 0,
-> -	}, {
-> -		.oem_id		= "HISI  ",
-> -		.oem_table_id	= "HIP08   ",
-> -		.oem_revision	= 0,
-> -	}
-> -};
-> -
->  static struct cpufreq_driver cppc_cpufreq_driver;
->  
->  static enum {
-> @@ -78,7 +60,6 @@ struct cppc_freq_invariance {
->  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
->  static struct kthread_worker *kworker_fie;
->  
-> -static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
->  static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->  				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
->  				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
-> @@ -841,57 +822,6 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
->  	.name = "cppc_cpufreq",
->  };
->  
-> -/*
-> - * HISI platform does not support delivered performance counter and
-> - * reference performance counter. It can calculate the performance using the
-> - * platform specific mechanism. We reuse the desired performance register to
-> - * store the real performance calculated by the platform.
-> - */
-> -static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu)
-> -{
-> -	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> -	struct cppc_cpudata *cpu_data;
-> -	u64 desired_perf;
-> -	int ret;
-> -
-> -	if (!policy)
-> -		return -ENODEV;
-> -
-> -	cpu_data = policy->driver_data;
-> -
-> -	cpufreq_cpu_put(policy);
-> -
-> -	ret = cppc_get_desired_perf(cpu, &desired_perf);
-> -	if (ret < 0)
-> -		return -EIO;
-> -
-> -	return cppc_perf_to_khz(&cpu_data->perf_caps, desired_perf);
-> -}
-> -
-> -static void cppc_check_hisi_workaround(void)
-> -{
-> -	struct acpi_table_header *tbl;
-> -	acpi_status status = AE_OK;
-> -	int i;
-> -
-> -	status = acpi_get_table(ACPI_SIG_PCCT, 0, &tbl);
-> -	if (ACPI_FAILURE(status) || !tbl)
-> -		return;
-> -
-> -	for (i = 0; i < ARRAY_SIZE(wa_info); i++) {
-> -		if (!memcmp(wa_info[i].oem_id, tbl->oem_id, ACPI_OEM_ID_SIZE) &&
-> -		    !memcmp(wa_info[i].oem_table_id, tbl->oem_table_id, ACPI_OEM_TABLE_ID_SIZE) &&
-> -		    wa_info[i].oem_revision == tbl->oem_revision) {
-> -			/* Overwrite the get() callback */
-> -			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
-> -			fie_disabled = FIE_DISABLED;
-> -			break;
-> -		}
-> -	}
-> -
-> -	acpi_put_table(tbl);
-> -}
-> -
->  static int __init cppc_cpufreq_init(void)
->  {
->  	int ret;
-> @@ -899,7 +829,6 @@ static int __init cppc_cpufreq_init(void)
->  	if (!acpi_cpc_valid())
->  		return -ENODEV;
->  
-> -	cppc_check_hisi_workaround();
->  	cppc_freq_invariance_init();
->  	populate_efficiency_class();
->  
-> 
+What happened to the other authorship information?
+
+And again, please use your name, not an email alias.
+
+thanks,
+
+greg k-h
 
