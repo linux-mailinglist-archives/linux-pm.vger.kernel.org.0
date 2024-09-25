@@ -1,114 +1,120 @@
-Return-Path: <linux-pm+bounces-14665-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14666-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0025985757
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 12:46:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB659985766
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 12:53:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C485B2201C
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:46:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A902284829
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC87513BC3F;
-	Wed, 25 Sep 2024 10:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E1615C136;
+	Wed, 25 Sep 2024 10:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="sYqJeciW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CSibQZSz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F24C77107;
-	Wed, 25 Sep 2024 10:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F192177107;
+	Wed, 25 Sep 2024 10:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727261198; cv=none; b=WbamCzFRL6ecabKQ6nOvz3T1/ev8unxvgqmuDB4rJavKgTy7qKwApX6PlWNsqoAosLPDo2ISX59LvyAOThtO0e/UaFiZp/Pzfd8a51fxMveUshcGHgXfNShucpKs4nudP7OItcHLPP45w3C7u1vQv/5p/NAR/bpY8Nqt5XWf3Dk=
+	t=1727261601; cv=none; b=rJxpTLqF9nB9XSnubpWaSSZrNiqz8vJLSpW+uC6GtmJUumi9jbARp/dD4fK5zYfsSjCRs3n37LzW22GsA1AybZrQ+K8xerQJ4i5sFDTRjyyor6zIvm89EBHgX1bvmbKJSwcrthW0iQ+juWk0uxSyqxMXfnVol/f8sk34fy6SIpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727261198; c=relaxed/simple;
-	bh=SWqWWzBjCprqZ1fW0k2ZoOqt9RUXMUE/R/y7EdPVlUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d3IpkWoV1G/vfyCO5SBvHlrBiXT0K4e7U+AIu95JWsCSWP+XsM4nnkIpipWpsJi7aVSs5XZANrfYC3AonkaUAeXLh0lLX0UB8Tgx93QmxKV+69+MR81LwGiPhNGrToo2J6nSc2IhMG8OHotLRaPOtDXguAEZ0sC2jAPi+6fspS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=sYqJeciW; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=0OVXVlpvXCgQ9uuKa1lTkdFYJh3tlujOpkrdEUoBgsE=; t=1727261196;
-	x=1727693196; b=sYqJeciWknAsE5Q2mEVqqADgY8OyCchwpW6Lx134KcXt2BZeCmieUUfal0ZDl
-	5X0m7R4f7rNIbNNKf7237toG7IBxLhxwEtDFwE7wGiJUKtRxxIFvFnE/HVIWHy0Okh/Nyogz25Mjq
-	ZihywvdHCZIzakCjBQ+OxDIq3xoytK+qUiq3O4RJMMtzliZVzxk706lukoXxOq79h6D5OzZ2wEriq
-	EZ0XcFSh6HwmI9F0bzpJk83f4osIwMa/JR8Wq4zI0mP3CPKMCHhKNKFlXvPdnM/Ur2SZmsEuxQK84
-	ZHsoJyLFr1Nqcj1sW4NhOFS1b1jhrqBxb80S4fFFzCs9eHTDFw==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1stPXR-0000rL-Ny; Wed, 25 Sep 2024 12:46:29 +0200
-Message-ID: <f037f25b-153d-4fb7-92fd-e3900c9488f6@leemhuis.info>
-Date: Wed, 25 Sep 2024 12:46:28 +0200
+	s=arc-20240116; t=1727261601; c=relaxed/simple;
+	bh=UrggVek0lwhDuqSp26+4KJb/uG5YqBJR8jmgQcSwkr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2biOHkrAcZRMYREQsK65vcaAvpnv7XFpbt9IALoMrxo0alXVwSbzBTjc3RiiUrE3EBG2I6sDQdbfbP1k73lLGw3arh1kBq/0tEubNBoO1RtqkZC4FBKwcgdvylFMnu09z7ChfRtOBmG+J2gNA1T9d19vKBafn6IjcH8HpYMEdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CSibQZSz; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727261600; x=1758797600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UrggVek0lwhDuqSp26+4KJb/uG5YqBJR8jmgQcSwkr0=;
+  b=CSibQZSzRK4IAF2pnryeCYY9BqjUN+L7sIJ1HgpuA3PBBRrA+iXg6fT2
+   C7K1kTpGeVjW5APXztyNZk9zP/7FaQzBQtqzf5BDY0e9ofqyAVu/AMptx
+   b8ygCN6cTDuZzAIxOTjU0+uHr8m7hmS+O2txQUJrIKYyDaJDaYS1AAvC4
+   iohCyWKj85Lg2Kf314MfvFkfAag2yYJdJjaTYSq7XqgJFeYD0nURRvWwY
+   KKbxo0aXPo/JTc3KRYWUinTIPqY28IjKTiZJtUZZq+GCrpUdjV7mtarVw
+   XIguB9QvUVxqYKUUhFkzVTFb/LgpvZlFMu2hQWVJRoTjKPUppx1Ru5sNb
+   Q==;
+X-CSE-ConnectionGUID: 5MH7jcIsQcOi3vklXOC5tQ==
+X-CSE-MsgGUID: p4OxH3RbTM6jGg+/UBfeRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="43778482"
+X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
+   d="scan'208";a="43778482"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 03:53:19 -0700
+X-CSE-ConnectionGUID: tE8JEtRNTYaDYeepXkZmYg==
+X-CSE-MsgGUID: F12ogL8UTO6fX6+00sK67A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
+   d="scan'208";a="102491039"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 03:53:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1stPdw-0000000Cmma-3y2V;
+	Wed, 25 Sep 2024 13:53:12 +0300
+Date: Wed, 25 Sep 2024 13:53:12 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v8 1/3] regulator: Add of_regulator_get_optional() for
+ pure DT regulator lookup
+Message-ID: <ZvPrmJo5WWqAHrhb@smile.fi.intel.com>
+References: <20240925093807.1026949-1-wenst@chromium.org>
+ <20240925093807.1026949-2-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Linux fails to ACPI S3 supend on Dell XPS 13 9630
- (6.11.0-04557-g2f27fce67173)
-To: Hans de Goede <hdegoede@redhat.com>, Paul Menzel <pmenzel@molgen.mpg.de>,
- Marek Maslanka <mmaslanka@google.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
- regressions@lists.linux.dev, Petr Mladek <pmladek@suse.com>
-References: <18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de>
- <154114fb-276f-45f6-bba0-98133c7c5d4d@molgen.mpg.de>
- <3b600845-77d5-42d3-8556-53cc0b2eab25@molgen.mpg.de>
- <1c10c0c4-f4d7-490f-85d2-0278c062fb87@molgen.mpg.de>
- <aa60da75-7931-462d-addd-49adfbd9893b@redhat.com>
- <b3cc0791-6334-4143-90bc-d3ae04aae0de@molgen.mpg.de>
- <10f1c736-33e9-4e04-a31e-0f095cdd08d2@redhat.com>
- <28bef0a7-bc6c-47b8-9545-e6d867922e14@redhat.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: en-US, de-DE
-In-Reply-To: <28bef0a7-bc6c-47b8-9545-e6d867922e14@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1727261196;5058bb2c;
-X-HE-SMSGID: 1stPXR-0000rL-Ny
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925093807.1026949-2-wenst@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 19.09.24 18:55, Hans de Goede wrote:
-> On 19-Sep-24 6:53 PM, Hans de Goede wrote:
->> On 19-Sep-24 4:03 PM, Paul Menzel wrote:
->>> Am 19.09.24 um 13:57 schrieb Hans de Goede:
->>>> On 19-Sep-24 1:03 PM, Paul Menzel wrote:
->>>>> Am 19.09.24 um 10:17 schrieb Paul Menzel:
->>>>>> Am 19.09.24 um 07:51 schrieb Paul Menzel:
->>>>>>> Am 19.09.24 um 07:51 schrieb Paul Menzel:
->
->>>> So I think we can fix this by limiting the new handling to s0ix suspend.
->>>> Can you please give the attached patch a try?
->>> Thank you so much for the instant reaction. Indeed, your patch makes ACPI S3 suspend work.
->>> Tested-by: Paul Menzel <pmenzel@molgen.mpg.de> # Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
->
->> Thank you for testing. I've submitted this upstream now.
->>
->> I'll include this in the first pdx86 fixes pull-request over 6.11-rc1 is out.
+On Wed, Sep 25, 2024 at 05:38:04PM +0800, Chen-Yu Tsai wrote:
+> The to-be-introduced I2C component prober needs to enable regulator
+> supplies (and toggle GPIO pins) for the various components it intends
+> to probe. To support this, a new "pure DT lookup" method for getting
+> regulator supplies is needed, since the device normally requesting
+> the supply won't get created until after the component is probed to
+> be available.
 > 
-> That should be 6.12-rc1 of course.
+> Add a new of_regulator_get_optional() function for this. This mirrors
+> the existing regulator_get_optional() function, but is OF-specific.
+> The underlying code that supports the existing regulator_get*()
+> functions has been reworked in previous patches to support this
+> specific case.
+> 
+> Also convert an existing usage of "dev && dev->of_node" to
+> "dev_of_node(dev)".
 
-Out of curiosity: why not send the fix to Linus this week to get it into
-6.12-rc1 (and thus on track for stable backporting too, assuming Greg
-will pick it up)? Just asking, as I have seen some developers wrongly
-assuming it's not okay to queue fixes due to our "no newly developed
-patches should be merged to -next or mainlined during the merge window"
-rule.
+I thought I gave a tag already...
+Whatever, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Or did I misunderstood you plan or missing another reason why waiting
-might be wise? If so: sorry!
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Ciao, Thorsten
+
 
