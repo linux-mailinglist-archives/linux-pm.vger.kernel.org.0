@@ -1,125 +1,103 @@
-Return-Path: <linux-pm+bounces-14647-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14648-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 378019854C7
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:58:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FD2C985516
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:06:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBC41281400
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 07:58:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0882A1F244C4
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7809215854F;
-	Wed, 25 Sep 2024 07:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLBRpWPc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44F3158A33;
+	Wed, 25 Sep 2024 08:06:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417FC15852E;
-	Wed, 25 Sep 2024 07:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C6614D2BB;
+	Wed, 25 Sep 2024 08:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727251134; cv=none; b=rv2Wqgw4TBcR+/OCLqA5sB7eXWire5IRo8Ap0Wwp1weZSl7ktVbHpcvwbO9YSneSxDt7zmK+GmH8THLu/yOlSGw0wGyaU4NmZioI1bvdxMMFL6e1f1xanVYfc6yuOll8PpYwk6Y3OUa6Izzfs0CMrX3Q52lt3Ofl4XiNtfrb4Sc=
+	t=1727251603; cv=none; b=K+1NZnQJ++jaImyCFZ7PH1/fDIppj+gfrB0B/qE55LYfMXWa7cQjMI20qLossv42/B//Sm3DEOrppGaUn8INEFgmETe0UTL/mcD1uL4+eoGOtyl7OMpHeHOtKppJRB89XLaWIlHQF1wx9PMy7tEkWrRnI71voA+l3Simg2iDfso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727251134; c=relaxed/simple;
-	bh=cpn2XtszwCBZL4nk3PP1CHBOM36S+Rz+eeyhGr8BkME=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=umSbXVT6W/rpb2r9AvVFjmciG3mjkSgji7gLl9yw7glsAIkOI1lqAicg7andEqn4W1JHKJ/6w8s0nhHBGUN7lh0Q1fohSll2k+Zt6gOSbu3Tzb7rgH1SMCNx4WdB7jyWtaqewn5trKjq0LpIRpj5D7TMGm6hs053w9WcPE7/TIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLBRpWPc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCAEC4CEC3;
-	Wed, 25 Sep 2024 07:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727251133;
-	bh=cpn2XtszwCBZL4nk3PP1CHBOM36S+Rz+eeyhGr8BkME=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=fLBRpWPcnktvpfCQmLOlZ6+3PfwYHcYGqc4POzoXlbxLq7toYa4STM1XKn9xH0CYL
-	 nvvDmsrU/+qNpKXMmVPVI+GmuXrO1c8hv22v5r1QgPsBl3s7sw8dBOh79+Ku1p2ZPx
-	 DHMogk+QT8emdQXlkyBcSBoJEWDqhof5C32ckFTOS6NpnIpMifh0741n4ANFoNtgzr
-	 Ka5l8Ys0TXHkmav4m0ocvmH7/j+akNcD+u/zRWg54w+odXkK1hoUIaFjK8X9wEsUQe
-	 Moa6hI1/aQanbaMu9Y26FatuxD1gAYexBu7YJCXkRJi8NVtMHyCgTHcEMaD1Lpwvud
-	 ttu1Q0ltkx90g==
-Message-ID: <29745775-2c90-40f8-8b6e-812a318d9061@kernel.org>
-Date: Wed, 25 Sep 2024 09:58:48 +0200
+	s=arc-20240116; t=1727251603; c=relaxed/simple;
+	bh=yR8ZPzlojOuGQMgdvt6zlMZL1XkH4oy3FViFpSpTb2E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tccD4+4egIZypebCDA0PqpQ5BGfxqSNQc9dDATtN8jBnpOnrQeTS0g+1BaTyh8oEeHIw0EmmjYfg+D0/5t42HiJeDvb22bAVm67SXr1ItHZLynE/Vb3W3MWjq33WjwenRIvF+RZomIIHBO/i3/yzQMiOiOZnZQRhF9z1aBi36NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 0e5eb41c7b1511efa216b1d71e6e1362-20240925
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_UNTRUSTED, SA_LOWREP, SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:b315c855-bf32-4aa4-94cb-13f25471b335,IP:0,U
+	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:20
+X-CID-INFO: VERSION:1.1.38,REQID:b315c855-bf32-4aa4-94cb-13f25471b335,IP:0,URL
+	:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:20
+X-CID-META: VersionHash:82c5f88,CLOUDID:bd4ce6a220f2334224fd08cd28e9d75c,BulkI
+	D:240925144023207KTES0,BulkQuantity:5,Recheck:0,SF:66|17|19|102,TC:nil,Con
+	tent:0,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
+	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-UUID: 0e5eb41c7b1511efa216b1d71e6e1362-20240925
+X-User: dengjie03@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1980744408; Wed, 25 Sep 2024 16:06:23 +0800
+From: dengjie <dengjie03@kylinos.cn>
+To: gregkh@linuxfoundation.org
+Cc: rafael@kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	xiehongyu1@kylinos.cn,
+	duanchenghao@kylinos.cn,
+	xiongxin@kylinos.cn
+Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
+Date: Wed, 25 Sep 2024 16:06:18 +0800
+Message-Id: <20240925080618.188429-1-dengjie03@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2024092543-enforcer-quaintly-9f3e@gregkh>
+References: <2024092543-enforcer-quaintly-9f3e@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom-bwmon: Document QCS8300
- bwmon compatibles
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Jingyi Wang <quic_jingyw@quicinc.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: quic_tengfan@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240925-qcs8300_bwmon_binding-v1-1-a7bfd94b2854@quicinc.com>
- <2012b494-ce72-455c-a298-85264dd2f648@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <2012b494-ce72-455c-a298-85264dd2f648@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 25/09/2024 09:53, Krzysztof Kozlowski wrote:
-> On 25/09/2024 09:45, Jingyi Wang wrote:
->> Document QCS8300 BWMONs, which has two BWMONv4 instances for the CPU->LLCC
->> path and one BWMONv5 instance for LLCC->DDR path.
-> 
-> Please wrap commit message according to Linux coding style / submission
-> process (neither too early nor over the limit):
-> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+>> Fixes: 3904bdf0821c ("PM: hibernate: Freeze kernel threads in software_resume()")
+>> Signed-off-by: dengjie <dengjie03@kylinos.cn>
 
-Although it actually is wrapped at 75, so ignore above.
+>What happened to the other authorship information?
+>
+I'm very sorry, the information of other authors was 
+accidentally added when I was using the script template.
 
-Best regards,
-Krzysztof
+>And again, please use your name, not an email alias.
+>
+My name is Deng Jie, and dengjie03@kylinos.cn is the 
+email account registered with my name, where "03" is 
+added to avoid the problem of having the same name.
 
+Thanks,
+
+dengjie
 
