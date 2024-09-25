@@ -1,159 +1,185 @@
-Return-Path: <linux-pm+bounces-14657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B9A69855F2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:58:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFD1B98565C
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 11:30:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CA791C237D2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 08:58:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CD5BB226A3
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 09:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D83A15AAC6;
-	Wed, 25 Sep 2024 08:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B35715A842;
+	Wed, 25 Sep 2024 09:30:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843ED139579;
-	Wed, 25 Sep 2024 08:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA8315383F;
+	Wed, 25 Sep 2024 09:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727254724; cv=none; b=CtfyoN0k9ua21lHF/fJro1HxRAM/11gpjCz6kiprBbwmzUBSE6UCTNXuQ708st0PK+cGpOnx54Pk/WgX2MX8E+yfe/m6wnXAc09LbGxLjcXRrjdOe6rD8Nnvx5o2d9ZWSmz+5BXQ+3VcXdgmnATHgcVOCrgEJ+F4qC+IIZc0uIY=
+	t=1727256620; cv=none; b=bsKaFyNMmX5WxF4krrsQHzFVijIIyOeMDCZ62tMzKtkkOJrySexoPIzYvikAG7sgVDM89V0nMtyTzgVonj4O0KdTtdd5l52uUDWg6qrhpVpivOHYArl2t/4p81nl7lsAj2jd7EfwYHN1kKqw/PLThO1kgmcLhLKHH1YEJ7Z2JVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727254724; c=relaxed/simple;
-	bh=77TYbhk3FEQDvRMc1aKR+Jy7UbmeKedsMaovZa0q+Dw=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
-	 In-Reply-To:Content-Type; b=gol1XSicyEfjehcbjqq+oYdaxvBtx+F5oJAHpBYEh01A4gqMsW2kQcPYl1XxVgkhpZihg/msMrAxuAlv/uTMc+sEs+uImc6pbELNBO94N1GwmHf4Kj4eimbVs/0lpUOE+YmGUE9dykJyaMFQL4cAfFbBZ/RqwZqXCrILIrVkopQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XD9bD1h8Pz1T7y2;
-	Wed, 25 Sep 2024 16:57:12 +0800 (CST)
-Received: from dggpeml500019.china.huawei.com (unknown [7.185.36.137])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1E814180087;
-	Wed, 25 Sep 2024 16:58:37 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+	s=arc-20240116; t=1727256620; c=relaxed/simple;
+	bh=6Hh0lBFFpGjJhDhrFB+Bg8Z2YcZJu2K8J8vRcIFANrA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SyaDCnoW7zNdPTWpg6cFU9ehJ985OnZB0JFDfvw/iz1viK2plr7Wck2NbHr8e9C3gwDAZRxJPCUao0aHkl1POxj2hiTZ13fP/a9gTYqYTQHYUTu9tihK5Gc9741my9Q1F6y5nKdoEvnc0dHNf4mx4Hz+srDjmlj2S6gscg52/Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XDBJQ37smz1SBrm;
+	Wed, 25 Sep 2024 17:29:26 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
+	by mail.maildlp.com (Postfix) with ESMTPS id 48EE31401F0;
+	Wed, 25 Sep 2024 17:30:14 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
+ (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 25 Sep
- 2024 16:58:36 +0800
-Message-ID: <09887c82-2813-59c3-2ff2-0b7223b37b9e@hisilicon.com>
-Date: Wed, 25 Sep 2024 16:58:36 +0800
+ 2024 17:30:13 +0800
+Message-ID: <f888bd45-120a-a045-c35c-52ae40ae8a9a@huawei.com>
+Date: Wed, 25 Sep 2024 17:28:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-From: Jie Zhan <zhanjie9@hisilicon.com>
-Subject: Re: [PATCH v7 1/4] cpufreq: Introduce an optional cpuinfo_avg_freq
- sysfs entry
-To: Beata Michalska <beata.michalska@arm.com>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<ionela.voinescu@arm.com>, <sudeep.holla@arm.com>, <will@kernel.org>,
-	<catalin.marinas@arm.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <sumitg@nvidia.com>, <yang@os.amperecomputing.com>,
-	<vanshikonda@os.amperecomputing.com>, <lihuisong@huawei.com>
-References: <20240913132944.1880703-1-beata.michalska@arm.com>
- <20240913132944.1880703-2-beata.michalska@arm.com>
-In-Reply-To: <20240913132944.1880703-2-beata.michalska@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 1/2] cppc_cpufreq: Use desired perf if feedback ctrs
+ are 0 or unchanged
+To: Jie Zhan <zhanjie9@hisilicon.com>, <ionela.voinescu@arm.com>,
+	<beata.michalska@arm.com>, <wangxiongfeng2@huawei.com>,
+	<viresh.kumar@linaro.org>, <rafael@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <wanghuiqiang@huawei.com>,
+	<zhenglifeng1@huawei.com>, <yangyicong@huawei.com>, <liaochang1@huawei.com>,
+	<zengheng4@huawei.com>
+References: <20240919084552.3591400-1-zhanjie9@hisilicon.com>
+ <20240919084552.3591400-2-zhanjie9@hisilicon.com>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20240919084552.3591400-2-zhanjie9@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500019.china.huawei.com (7.185.36.137)
+ kwepemm600004.china.huawei.com (7.193.23.242)
 
-Hi Beata,
+Hi Jie,
 
-Great thanks for the update.
+LGTM except for some trivial,
+Reviewed-by: Huisong Li <lihuisong@huawei.com>
 
-On 13/09/2024 21:29, Beata Michalska wrote:
-> Currently the CPUFreq core exposes two sysfs attributes that can be used
-> to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
-> and scaling_cur_freq. Both provide slightly different view on the
-> subject and they do come with their own drawbacks.
-> 
-> cpuinfo_cur_freq provides higher precision though at a cost of being
-> rather expensive. Moreover, the information retrieved via this attribute
-> is somewhat short lived as frequency can change at any point of time
-> making it difficult to reason from.
-> 
-> scaling_cur_freq, on the other hand, tends to be less accurate but then
-> the actual level of precision (and source of information) varies between
-> architectures making it a bit ambiguous.
-> 
-> The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
-> distinct interface, exposing an average frequency of a given CPU(s), as
-> reported by the hardware, over a time frame spanning no more than a few
-> milliseconds. As it requires appropriate hardware support, this
-> interface is optional.
-> 
-> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+
+在 2024/9/19 16:45, Jie Zhan 写道:
+> The CPPC performance feedback counters could be 0 or unchanged when the
+> target cpu is in a low-power idle state, e.g. power-gated or clock-gated.
+>
+> When the counters are 0, cppc_cpufreq_get_rate() returns 0 KHz, which makes
+> cpufreq_online() get a false error and fail to generate a cpufreq policy.
+>
+> When the counters are unchanged, the existing cppc_perf_from_fbctrs()
+> returns a cached desired perf, but some platforms may update the real
+> frequency back to the desired perf reg.
+>
+> For the above cases in cppc_cpufreq_get_rate(), get the latest desired perf
+> to reflect the frequency; if failed, return the cached desired perf.
+>
+> Fixes: 6a4fec4f6d30 ("cpufreq: cppc: cppc_cpufreq_get_rate() returns zero in all error cases.")
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> Reviewed-by: Zeng Heng <zengheng4@huawei.com>
+> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
 > ---
->  Documentation/admin-guide/pm/cpufreq.rst | 10 ++++++++
->  drivers/cpufreq/cpufreq.c                | 31 ++++++++++++++++++++++++
->  include/linux/cpufreq.h                  |  1 +
->  3 files changed, 42 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
-> index fe1be4ad88cb..2204d6132c05 100644
-> --- a/Documentation/admin-guide/pm/cpufreq.rst
-> +++ b/Documentation/admin-guide/pm/cpufreq.rst
-> @@ -248,6 +248,16 @@ are the following:
->  	If that frequency cannot be determined, this attribute should not
->  	be present.
->  
-> +``cpuinfo_avg_freq``
-> +        An average frequency (in KHz) of all CPUs belonging to a given policy,
-> +        derived from a hardware provided feedback and reported on a time frame
-> +        spanning at most few milliseconds.
-
-I don't think it's necessary to put the 'at most few milliseconds'
-limitation on.
-
-It's supposed to be fine for other platforms to implement the interface
-with a longer time period, e.g. a few seconds, in the future.  Otherwise,
-this would probably force the implementation of 'cpuinfo_avg_freq' to be
-binded with the 'scale freq tick' stuff.
-
+>   drivers/cpufreq/cppc_cpufreq.c | 49 +++++++++++++++++++++++++++-------
+>   1 file changed, 39 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index bafa32dd375d..e55192303a9f 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+>   
+>   	perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
+>   				     &fb_ctrs);
+> +	if (!perf)
+> +		return;
 > +
-> +        This is expected to be based on the frequency the hardware actually runs
-> +        at and, as such, might require specialised hardware support (such as AMU
-> +        extension on ARM). If one cannot be determined, this attribute should
-> +        not be present.
+>   	cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+>   
+>   	perf <<= SCHED_CAPACITY_SHIFT;
+> @@ -726,11 +729,26 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+>   
+>   	/* Check to avoid divide-by zero and invalid delivered_perf */
+Now this comment can be removed, right?
+>   	if (!delta_reference || !delta_delivered)
+> -		return cpu_data->perf_ctrls.desired_perf;
+> +		return 0;
+>   
+>   	return (reference_perf * delta_delivered) / delta_reference;
+>   }
+>   
+> +static int cppc_get_perf_ctrs_sample(int cpu,
+> +				     struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+> +				     struct cppc_perf_fb_ctrs *fb_ctrs_t1)
+> +{
+> +	int ret;
 > +
->  ``cpuinfo_max_freq``
->  	Maximum possible operating frequency the CPUs belonging to this policy
->  	can run at (in kHz).
-
-...
-
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index d4d2f4d1d7cb..48262073707e 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -1195,6 +1195,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
->  #endif
->  
->  extern unsigned int arch_freq_get_on_cpu(int cpu);
-> +extern int arch_freq_avg_get_on_cpu(int cpu);
-
-It's werid to have two different functions with mostly the same behaviour,
-i.e. arch_freq_get_on_cpu() and arch_freq_avg_get_on_cpu().
-
-Appreciated that there would be some capatibility work with x86 at the
-moment if merging them, e.g. return type, default implementation, impact on
-some userspace tools, etc.
-
-Anyhow, are they supposed to be merged in the near future?
-
-
-Thanks,
-Jie
->  
->  #ifndef arch_set_freq_scale
->  static __always_inline
+> +	ret = cppc_get_perf_ctrs(cpu, fb_ctrs_t0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	udelay(2); /* 2usec delay between sampling */
+> +
+> +	return cppc_get_perf_ctrs(cpu, fb_ctrs_t1);
+> +}
+> +
+>   static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>   {
+>   	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+> @@ -746,18 +764,29 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>   
+>   	cpufreq_cpu_put(policy);
+>   
+> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+> -	if (ret)
+> -		return 0;
+> -
+> -	udelay(2); /* 2usec delay between sampling */
+> -
+> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+> -	if (ret)
+> -		return 0;
+> +	ret = cppc_get_perf_ctrs_sample(cpu, &fb_ctrs_t0, &fb_ctrs_t1);
+> +	if (ret) {
+> +		if (ret == -EFAULT)
+> +			goto out_invalid_counters;
+suggest that add some comments for ret == -EFAULT case.
+Because this error code depands on the implementation of cppc_get_perf_ctrs.
+If add a new exception case which also return -EFAULT, then this switch 
+is unreasonable.
+> +		else
+> +			return 0;
+> +	}
+>   
+>   	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+>   					       &fb_ctrs_t1);
+> +	if (!delivered_perf)
+> +		goto out_invalid_counters;
+> +
+> +	return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> +
+> +out_invalid_counters:
+> +	/*
+> +	 * Feedback counters could be unchanged or 0 when a cpu enters a
+> +	 * low-power idle state, e.g. clock-gated or power-gated.
+> +	 * Get the lastest or cached desired perf for reflecting frequency.
+> +	 */
+> +	if (cppc_get_desired_perf(cpu, &delivered_perf))
+> +		delivered_perf = cpu_data->perf_ctrls.desired_perf;
+>   
+>   	return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+>   }
 
