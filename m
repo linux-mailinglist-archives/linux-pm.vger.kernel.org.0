@@ -1,188 +1,136 @@
-Return-Path: <linux-pm+bounces-14721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14723-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3DB2986487
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 18:13:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FD4B986529
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 18:47:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BC7F1F28A16
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 16:13:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEB781F2782E
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 16:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5611208D1;
-	Wed, 25 Sep 2024 16:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18174644E;
+	Wed, 25 Sep 2024 16:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="qiJ7C2J0"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LHF6aAqO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863812F5B;
-	Wed, 25 Sep 2024 16:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C581117547
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 16:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727280784; cv=none; b=F+7CbzCJRYJt44wGPhpJ28S/Z+4ehJplYuGCt0L3g/n5/JA9EgRfeFUT01tdWOOu0SKQJxJeXJGEpWknTPEIQ/eoeDDH9Ux8465nbx++i80Ol12GkGUj7fE9iLHphfJSuRH70SxA5/NoYr7Kyxc27Je2pLts4bTSuRuWbPsrcC4=
+	t=1727282841; cv=none; b=rV4tGmwLxFFNgLEV2TiW78IGnROdI1OEUTBcaU9ZeEqg7qKNDDoJXgtCk5yPzUwLSa0wLRE+FINCJ7qDQLL6U2H9kLO8OvKp4KnfFk7oElHw3GrIFSyvsIsfMmytj1oVDMKnrwF5WdbZe66wvOgkOBwuGN2NPjA6OdFEUi+YFlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727280784; c=relaxed/simple;
-	bh=OO2N0MlWDN0Lh2XfHNJMedIUwrmR2LNmHR79B3i0gaY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SaK4kPlwOnprQa26mL83sj8EJ4H76MoY4YXRhIn4vkkitzoS31cV3GhJ+2AQTsAbzMA2blyxuT26TZPJGuZldaCln3cidM47Vs4lU1zC+PM6f9wjDDRAohxXNO5iyhrA9t7KS+WOgomq5tKu+xUkWUEEw3852HP3aZd9kQLzy/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=qiJ7C2J0; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48PGCrtI120414;
-	Wed, 25 Sep 2024 11:12:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1727280773;
-	bh=usMqwaFjtbUHhvdgniW/2exXtWe9frXJJ19B3XP9a3s=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=qiJ7C2J0oRE3zhKmtajbV0CEPR8+zhOJ390s1kgGaC7POUMZV8gx2WSyLP1x+cUef
-	 /FqczTibZkijzrx3p1HIimxX7yv4Gm3QBBt/GLMu5lOCiOUsv+uW7xoLhaMmflW3Li
-	 krwX48edxbL/me4Yd2yHCcnZpnMlUFdisUCae644=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48PGCrms015577
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 25 Sep 2024 11:12:53 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 25
- Sep 2024 11:12:52 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 25 Sep 2024 11:12:52 -0500
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48PGCqtA065205;
-	Wed, 25 Sep 2024 11:12:52 -0500
-Message-ID: <809b9eaa-a539-4309-95a3-c9fc9c39288b@ti.com>
-Date: Wed, 25 Sep 2024 11:12:52 -0500
+	s=arc-20240116; t=1727282841; c=relaxed/simple;
+	bh=/t+YSp2gvbsBW9hsAIIEsn2fOHY2XQVupxHXFI22op4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C4qE4GJnP8A9b62x6eU16jVEc8r8SbbKjEhS/BByyZ++m8NXMSWdcGopo1qKW1SFiuPftZ7Hn1EqmA4h05WsIrv47qLFG4k9O+tAalsuzWq8/zaLE8RWZEwj3OpGG+XX4SFpT6kfJMoGKcT/t0bVrIpaJOIXYBI6iDK1NvvMO3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LHF6aAqO; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a8d60e23b33so8514866b.0
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 09:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1727282838; x=1727887638; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nj8+qG2S/Bk0hHBrSluJoVQqRkgSfLVqxLrwhmmQqfQ=;
+        b=LHF6aAqOcAmrEbPN9CQFazK6DXmCZSiAwf51au+AQbIwgTx5WJHVbSVCt5ybHt+O8i
+         Hr7is4w25JX+hiNJOp6w7Xt97OsQnkuBzhdeZ6+CS7adP8GJHgTwlDzVc1BXXbprliGV
+         AGofM4ivEjkSQLZa8qHPkE5gMsQIuTQkAmFco=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727282838; x=1727887638;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nj8+qG2S/Bk0hHBrSluJoVQqRkgSfLVqxLrwhmmQqfQ=;
+        b=DfcilAJsVQ6O3NxrayEVnG1Pnb4RzslVDvxt+plmSs4eWq1zE7rG8RR9olkOlHoAiW
+         KLVnNvafy9fXan42Fmdkt/4Stn4v3+uMwuPGRE0ii32cWTPzaeqLYP3ZK9tVi6og+LVn
+         j/OmNn/QQgPfRART1l7nlO4jXYd1SSszOJJQ6iQV/FPM4RBzwqIT3jhY3jDqhYffr8dR
+         gbFC/2ZxJa5p0/f5fEbdGjoWbGO2W6/Wjvf3pc2/UUquTVyGm2GYnWowXQ209XAYANuQ
+         2P/xZuEzd9TAxbnNa+XqJYqnZQXb8uwPK3Ih81qsKfWbdZ22vOlk1O2QYOIB7+R+DD73
+         Qeaw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+mI/ojHT7C1PHMlTjbdFhnY4e2sKqZSMME+0eGJq3bohYr04sZlZ0t6iaJ6Yow9hm4CouJbmL1Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+HgnX4giR94X41VHZnoMHx4xBbKyO+4UUG6N0Xca6k8Zq9QEW
+	ivSUM6FP4clmMEFzfbt6a3kzL1K7uu+xkkgjf3fkQeyTz2k+cLS9jekRFPqoMMoOgpZZQaofIET
+	Bj2J3lg==
+X-Google-Smtp-Source: AGHT+IE8YD12soQuBHYuNlMlyAyRHmOciX1V4YOxsRBm4fy08h9O6A+h+K2EvPke+KmTcHihDKn2VQ==
+X-Received: by 2002:a17:907:7ea8:b0:a8d:6921:e179 with SMTP id a640c23a62f3a-a93a051c3c9mr268700266b.39.1727282837701;
+        Wed, 25 Sep 2024 09:47:17 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9392f34976sm226383266b.45.2024.09.25.09.47.17
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Sep 2024 09:47:17 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42cb8dac900so68416655e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 09:47:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUBMIblTjMAnQnztA/cx5CPc/m8HPI0dI9HyYoFJNc387jfrdzXeOrT+w/HZvgsZwHIlRbdTbiyIw==@vger.kernel.org
+X-Received: by 2002:a17:906:f5a9:b0:a86:9d39:a2a with SMTP id
+ a640c23a62f3a-a93a0330c37mr309689066b.8.1727282382886; Wed, 25 Sep 2024
+ 09:39:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 6/6] cpufreq: ti-cpufreq: Update efuse/rev offsets in
- AM62 family
-To: Dhruva Gole <d-gole@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh
- Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Bryan Brattlof
-	<bb@ti.com>
-References: <20240925-ti-cpufreq-fixes-v5-v6-0-46f41a903e01@ti.com>
- <20240925-ti-cpufreq-fixes-v5-v6-6-46f41a903e01@ti.com>
-Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20240925-ti-cpufreq-fixes-v5-v6-6-46f41a903e01@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+References: <20240925150059.3955569-30-ardb+git@google.com> <20240925150059.3955569-44-ardb+git@google.com>
+In-Reply-To: <20240925150059.3955569-44-ardb+git@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 25 Sep 2024 09:39:23 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiLYCoGSnqqPq+7fHWgmyf5DpO4SLDJ4kF=EGZVVZOX4A@mail.gmail.com>
+Message-ID: <CAHk-=wiLYCoGSnqqPq+7fHWgmyf5DpO4SLDJ4kF=EGZVVZOX4A@mail.gmail.com>
+Subject: Re: [RFC PATCH 14/28] x86/rethook: Use RIP-relative reference for
+ return address
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/25/24 9:54 AM, Dhruva Gole wrote:
-> With the Silicon revision being taken directly from socinfo, there's no
-> longer any need for reading any SOC register for revision from this driver.
-> Hence, we do not require any rev_offset for AM62 family of devices.
-> The efuse offset should be 0x0 for AM625 as well, as the syscon
-> register being used from DT refers to the efuse_offset directly.
-> 
-> However, to maintain the backward compatibility with old devicetree, also
-> add condition to handle the case where we have the wrong offset and add
-> the older efuse_offset value there such that we don't end up reading the
-> wrong register offset.
-> 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
->   drivers/cpufreq/ti-cpufreq.c | 23 +++++++++++++++++------
->   1 file changed, 17 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-> index ba621ce1cdda694c98867422dbb7f10c0df2afef..8a97b95b4c44a76b12cab76ddc0f9a5b8ae73f84 100644
-> --- a/drivers/cpufreq/ti-cpufreq.c
-> +++ b/drivers/cpufreq/ti-cpufreq.c
-> @@ -313,10 +313,9 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
->   
->   static struct ti_cpufreq_soc_data am625_soc_data = {
->   	.efuse_xlate = am625_efuse_xlate,
-> -	.efuse_offset = 0x0018,
-> +	.efuse_offset = 0x0,
->   	.efuse_mask = 0x07c0,
->   	.efuse_shift = 0x6,
-> -	.rev_offset = 0x0014,
->   	.multi_regulator = false,
->   };
->   
-> @@ -325,7 +324,6 @@ static struct ti_cpufreq_soc_data am62a7_soc_data = {
->   	.efuse_offset = 0x0,
->   	.efuse_mask = 0x07c0,
->   	.efuse_shift = 0x6,
-> -	.rev_offset = 0x0014,
->   	.multi_regulator = false,
->   };
->   
-> @@ -334,7 +332,6 @@ static struct ti_cpufreq_soc_data am62p5_soc_data = {
->   	.efuse_offset = 0x0,
->   	.efuse_mask = 0x07c0,
->   	.efuse_shift = 0x6,
-> -	.rev_offset = 0x0014,
->   	.multi_regulator = false,
->   };
->   
-> @@ -349,11 +346,25 @@ static int ti_cpufreq_get_efuse(struct ti_cpufreq_data *opp_data,
->   				u32 *efuse_value)
->   {
->   	struct device *dev = opp_data->cpu_dev;
-> +	struct device_node *np = opp_data->opp_node;
->   	u32 efuse;
->   	int ret;
->   
-> -	ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
-> -			  &efuse);
-> +	/*
-> +	 * The following check is used as a way to check if this is an older devicetree
+On Wed, 25 Sept 2024 at 08:16, Ard Biesheuvel <ardb+git@google.com> wrote:
+>
+> Instead of pushing an immediate absolute address, which is incompatible
+> with PIE codegen or linking, use a LEA instruction to take the address
+> into a register.
 
-"check is used as a way to check" sound redundant, maybe just:
+I don't think you can do this - it corrupts %rdi.
 
-This checks for old AM625 Devicetrees where the syscon was a phandle
-to the wkup_conf parent, this required a hard-coded offset to
-the efuse register.
+Yes, the code uses  %rdi later, but that's inside the SAVE_REGS_STRING
+/ RESTORE_REGS_STRING area.
 
-> +	 * being used where the entire wkup_conf node was marked as "syscon",
-> +	 * "simple-mfd".
-> +	 * Since this bug only affects AM625, make sure it enters this condition
-> +	 * only for that SoC.
-> +	 */
-> +	if (of_device_is_compatible(np, "simple-mfd") &&
-> +	    of_device_is_compatible(np, "ti,am625")) {
+And we do have special calling conventions that aren't the regular
+ones, so %rdi might actually be used elsewhere. For example,
+__get_user_X and __put_user_X all have magical calling conventions:
+they don't actually use %rdi, but part of the calling convention is
+that the unused registers aren't modified.
 
-Kinda hacky, but keeping backwards compat often is hacky..
+Of course, I'm not actually sure you can probe those and trigger this
+issue, but it all makes me think it's broken.
 
-Does `of_device_is_compatible(np, "ti,am625")` actually work here? I'm assuming you
-tested with an old DT to make sure this path ever got taken. Maybe put a warning
-here that an old DT is in use and the user should update at some point.
+And it's entirely possible that I'm wrong for some reason, but this
+just _looks_ very very wrong to me.
 
-Andrew
+I think you can do this with a "pushq mem" instead, and put the
+relocation into the memory location.
 
-> +		ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset + 0x0018,
-> +				  &efuse);
-> +	} else {
-> +		ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
-> +				  &efuse);
-> +	}
->   	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING && ret == -EIO) {
->   		/* not a syscon register! */
->   		void __iomem *regs = ioremap(OMAP3_SYSCON_BASE +
-> 
+                 Linus
 
