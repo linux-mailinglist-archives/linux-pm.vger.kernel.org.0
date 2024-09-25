@@ -1,205 +1,245 @@
-Return-Path: <linux-pm+bounces-14718-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14719-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8911B9863E1
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:42:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77B7B98649E
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 18:17:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18F3D1F26BB2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:42:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 175F5B26970
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D091D5ACA;
-	Wed, 25 Sep 2024 15:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A236322318;
+	Wed, 25 Sep 2024 15:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ht7cQ0fx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uBo8zCYc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C14DDC5
-	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055FC1B949
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727278958; cv=none; b=UYPDDZpX94Hzy3bWDCm5eYRQRWvIT3Qjo3v0XaMOrRKUkuks4opvWB9y1wDOzn067lyDSDC8P7hdNAuAGXqn0GEfkT/GdCb35FyK80lD3VSx2MuJAwhNRJ19ByM67ILhP82kUC7kC3JJFNkmm/gkLsHh64klvlZe/T9Rp8mEdQY=
+	t=1727279645; cv=none; b=asW7rjYd/Do0ZD/lqNHkctdkCygaPw4xA8MPXMlG5D6w7VVpoDgFWDIkIeOzyC5OLzydmque1Rnhu6VXSbXtKDIR4dJGE8/Mt2lohQaSxclmvssV6jmfQcG3PQU0WMsxdxBLRfO0Kjly/w5dZO7IAYk3/yARqbLLhy2e8/4E4bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727278958; c=relaxed/simple;
-	bh=xvnATvHCa+83G2f/pWeX9sm67m0mNXNq2Eh56EOEAuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G0+scapU2AHFUo5PG3ZbfphFFQmdvvkUAyKWw8Tn6WE1lguMnZ0zAEUSaPlzw/gPD8P1NgvSDPZjyP1Ox7Rb2dFNnl4xtfyn5YO2MnAUtLMuM31eQro8cPRoSJmV3BSLHUPGig2TK/UNosd1P+0Py/HSwvD+EDd0BTM0x2iUGt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ht7cQ0fx; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42cc43454d5so56732395e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:42:36 -0700 (PDT)
+	s=arc-20240116; t=1727279645; c=relaxed/simple;
+	bh=viYabtJz1TITnQz4Qa7lIMio94cIQKuN9RXprlUUn20=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j5cRiRt2jRHCVO0Q06+E0wv6wIczAV73t72p/5WQv53waTSZnzvK1SR8QLX5Elh0PUBTYylFGkSEByrgPKCfOCIyHyW5ZH6rSWgYh7HwI0guLhFLBHmNE+YZi19okkOQZ984OVuArIyxI4lPbdBI1/LxknMOOw41vqt0IpxHnCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uBo8zCYc; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3a1a662a633so313615ab.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:54:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727278954; x=1727883754; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g0mFpqnpoinOCXBInQEuDDX6aMSTJM1UcQ5ZlfmwjZY=;
-        b=ht7cQ0fxNiApLr3EzG2PLcCXlc/G3QN7e6uEDGmq07RgiXco2w9IWoRtLzSrGXlx5S
-         SMRCdarmwNtLA61KQI1TJozgw80ptxncIrfRDZ/1meY2LvnqNNZNcxT9tPIxwLwA/6bE
-         R6kSivyPz3aCNWX0yc3mcL4K8DCRAjHXIuhA+sYJUOqQ+Ohn5ss9a6qifALC65nem5bu
-         03AeCH+B2kN7m2oLxjMdm9xkETWpPkrUBhQkajZMgyUwpRStKI4Z/zj3I5LoYP8L1uzD
-         68iAOuQX3Vef6ZKBzGyfRWVrTv58+sxhoaNx9lzqip3P6PpMPBUJ1gAY3V99fg44F4bu
-         oE+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727278954; x=1727883754;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1727279642; x=1727884442; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g0mFpqnpoinOCXBInQEuDDX6aMSTJM1UcQ5ZlfmwjZY=;
-        b=v9RY3jqcQkAWv6pQyFLH/4GauLYwUMU1kNVVVwZklgwsicqYEOSnmU/nakswZCcvnF
-         9+C4B9BH5z+Avy4Z+Fxrv+Buv8boSnoiNVoNQ43/rjoPZ4GFdsovstxv2/e0S2VHdbQt
-         CFQCmPjLg+3NgfiqF0Zp6PCKfkiltoRASp9fBhpaTXw691BEGqK5JbamHE5F97EGiWLX
-         Rs915P5moDU59zTw0fzuevH2/gAANV5YxoEior3XiUkvSCXTtHTCsCKM9h26xVfmBwX5
-         7vA+vssjJvhY64unLPkwU1CXioyXoLuBxsBfNwtXt9ku075dQwBaSbaRS+RO5hg7DzPi
-         /Mtg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgWfliH6DNx7fjFfS3OkwIW7znl/wV2kyawBdXhvhOTtPxs8noWCocQPJIeNRRFz5AmF5bdmeKBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmImLzEVJeJThKv+07INChKMv7LBSXJhhPTYvLqEvcWCZeVg/O
-	by/eTYrF7lM/li1M0Pn2ZGdOab/fPf4w6FVYWsUxyNM7w00Y/qxQTUAfmoEXHAk=
-X-Google-Smtp-Source: AGHT+IEta/pHJEdAqwxpYPQh0rMmpm7cy3Xt5wwkMG/IZHQd+x44gnkhq/00wpsMnZ0byD/D2gbRjA==
-X-Received: by 2002:a05:600c:4f54:b0:426:6f27:379a with SMTP id 5b1f17b1804b1-42e9610ac8cmr18509225e9.13.1727278954480;
-        Wed, 25 Sep 2024 08:42:34 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cbc2cec21sm4288174f8f.52.2024.09.25.08.42.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 08:42:33 -0700 (PDT)
-Date: Wed, 25 Sep 2024 18:42:29 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Georgi Djakov <djakov@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-	conor@kernel.org, allen.lkml@gmail.com, broonie@kernel.org,
-	Jinjie Ruan <ruanjinjie@huawei.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>, linux-spi@vger.kernel.org,
-	Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 6.1 00/63] 6.1.111-rc1 review
-Message-ID: <32aa7502-ae52-4119-9e72-6347c32f1f23@stanley.mountain>
-References: <20240916114221.021192667@linuxfoundation.org>
- <CA+G9fYtsjFtddG8i+k-SpV8U6okL0p4zpsTiwGfNH5GUA8dWAA@mail.gmail.com>
- <b0dfa622-f4f7-4f76-9d67-621544cb2212@kernel.org>
+        bh=mtlWMtq+JiEyWaKdO0nlwORQa61CRpWkCRYLpleOmWc=;
+        b=uBo8zCYcIUJhS/PETf/69bupBGH621jT9YSETyyoKqXOKliYYHE14wU2XYwl3A0Sxs
+         avFXLpOlKG1iDnsgjPremaiZ/sL8gi+DhtPwdzSnvI9BAx2FWDnXRCsGB00rhwxzIPSC
+         y3Bmqq/uDBl+VjgBgr8MJd6URamV2xVVzRYBUjPI5rZAOeS5jZGZQZrKMFy1fM9TP5ji
+         K1iPoZA+53P9UDeQG5OUIKnrRY6lKNRw6n6gWP3NWCb6oLnR5jncL6e/W8GqmOJwZx/2
+         6CfvKnZYnueW+VBXDB4Z2aXesW6PBGjI7CM1zz957Cg0zLfk2PmXluePf7E1SPKoB+cz
+         tdrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727279642; x=1727884442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mtlWMtq+JiEyWaKdO0nlwORQa61CRpWkCRYLpleOmWc=;
+        b=T7ma9hQe49eJeEtYdXLonOHdXxTpudi5FXIzwKlNW4PwQQBSM5zb+Acu25Rw9erthC
+         moAF40ojjZebOZuIRL6ngw1+JG+mkXIDrJKRvjju1l1MQh2vAXcqRuK8S+qweVLwoGu1
+         W0MWQB5FrURvmEIsGpAnYUFx8Igc8++rme8rXsXWuaK79FIl9c+M3IjZct/ogNBoBUCm
+         v/o5ehL/wxOm1GhiH8BzeHtT5ZIwLMiDCOgrWJgWgnyhz22iWIbt9EcMvxl35bAx6Oek
+         qwBZ9ZLLvOk4PA4KQr8x2951JlUlRiwlN/13vV7ZoU13XPaZM4pzCDpNwI3S8qsBOmI2
+         sv/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXOwWA+s9nkIBXbo801gucnfmR0BYY1E1D79N9b0QMLtuqtYyumR7OVF6RkP+QnShYQaa34oaWpBQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAunL2Of9qES3OpVqpyBEtaGfdmWLXN177VSROi8tO8GhbDBrh
+	IVm7xXiBOOQ1OZVSLZO8C+5e5CZLv2fvsbIM+aqEFItoEtQmyGKzK+kVwjQcpi1nnoSU09WdiZz
+	36w0FdERjn9q/44ykux1r0myMlraBRgdqbdKZ
+X-Google-Smtp-Source: AGHT+IECKVgNpXJyra6xJfQTQh6aQ7i0vY0ZTk0QtA5OBdxknRIVX3nOfLE4llLAa859tdiG19FbtS4i20eJ0xsZ7pg=
+X-Received: by 2002:a05:6e02:b2e:b0:3a0:926a:8d35 with SMTP id
+ e9e14a558f8ab-3a27443ee75mr1540455ab.17.1727279641904; Wed, 25 Sep 2024
+ 08:54:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0dfa622-f4f7-4f76-9d67-621544cb2212@kernel.org>
+References: <20240925150059.3955569-30-ardb+git@google.com> <20240925150059.3955569-35-ardb+git@google.com>
+In-Reply-To: <20240925150059.3955569-35-ardb+git@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 25 Sep 2024 08:53:50 -0700
+Message-ID: <CAP-5=fXw1rcgWgMeDSVqiDYh2XYApyaJpNvukvJ7vMs7ZPMr6g@mail.gmail.com>
+Subject: Re: [RFC PATCH 05/28] x86: Define the stack protector guard symbol explicitly
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 18, 2024 at 03:08:13PM +0300, Georgi Djakov wrote:
-> > Warning log:
-> > --------
-> > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x517f803c]
-> > [    0.000000] Linux version 6.1.111-rc1 (tuxmake@tuxmake)
-> > (aarch64-linux-gnu-gcc (Debian 13.3.0-5) 13.3.0, GNU ld (GNU Binutils
-> > for Debian) 2.43) #1 SMP PREEMPT @1726489583
-> > [    0.000000] Machine model: Thundercomm Dragonboard 845c
-> > ...
-> > [    7.841428] ------------[ cut here ]------------
-> > [    7.841431] WARNING: CPU: 4 PID: 492 at
-> > drivers/interconnect/core.c:685 __icc_enable
-> > (drivers/interconnect/core.c:685 (discriminator 7))
-> > [    7.841442] Modules linked in: soundwire_bus(+) venus_core(+)
-> > qcom_camss(+) drm_dp_aux_bus bluetooth(+) qcom_stats mac80211(+)
-> > videobuf2_dma_sg drm_display_helper i2c_qcom_geni(+) i2c_qcom_cci
-> > camcc_sdm845(+) v4l2_mem2mem qcom_q6v5_mss(+) videobuf2_memops
-> > reset_qcom_pdc spi_geni_qcom(+) videobuf2_v4l2 phy_qcom_qmp_usb(+)
-> > videobuf2_common gpi(+) qcom_rng cfg80211 phy_qcom_qmp_ufs ufs_qcom(+)
-> > coresight_stm phy_qcom_qmp_pcie stm_core rfkill slim_qcom_ngd_ctrl
-> > qrtr pdr_interface lmh qcom_wdt slimbus icc_osm_l3 qcom_q6v5_pas(+)
-> > icc_bwmon llcc_qcom qcom_pil_info qcom_q6v5 qcom_sysmon qcom_common
-> > qcom_glink_smem qmi_helpers mdt_loader display_connector
-> > drm_kms_helper drm socinfo rmtfs_mem
-> > [    7.841494] CPU: 4 PID: 492 Comm: (udev-worker) Not tainted 6.1.111-rc1 #1
-> > [    7.841497] Hardware name: Thundercomm Dragonboard 845c (DT)
-> > [    7.841499] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    7.841502] pc : __icc_enable (drivers/interconnect/core.c:685
-> > (discriminator 7))
-> > [    7.841505] lr : icc_disable (drivers/interconnect/core.c:708)
-> > [    7.841508] sp : ffff800008b23660
-> > [    7.841509] x29: ffff800008b23660 x28: ffff800008b23c20 x27: 0000000000000000
-> > [    7.841513] x26: ffffdd85da6ea1c0 x25: 0000000000000008 x24: 00000000000f4240
-> > [    7.841516] x23: 0000000000000000 x22: ffff46a58b7ca580 x21: 0000000000000001
-> > [    7.841519] x20: ffff46a58b7ca5c0 x19: ffff46a58b54a800 x18: 0000000000000000
-> > [    7.841522] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> > [    7.841525] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> > [    7.841528] x11: fefefefefefefeff x10: 0000000000000bf0 x9 : ffffdd85d8c9b0bc
-> > [    7.841531] x8 : ffff800008b22f58 x7 : 0000000000000000 x6 : 0000000000024404
-> > [    7.841535] x5 : 0000000000000000 x4 : ffff46a58b64b180 x3 : ffffdd85daa5e810
-> > [    7.841537] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-> > [    7.841541] Call trace:
-> > [    7.841542] __icc_enable (drivers/interconnect/core.c:685 (discriminator 7))
-> > [    7.841545] icc_disable (drivers/interconnect/core.c:708)
-> > [    7.841547] geni_icc_disable (drivers/soc/qcom/qcom-geni-se.c:862)
-> > [    7.841553] spi_geni_runtime_suspend+0x3c/0x4c spi_geni_qcom
-> > [    7.841561] pm_generic_runtime_suspend (drivers/base/power/generic_ops.c:28)
-> > [    7.841565] __rpm_callback (drivers/base/power/runtime.c:395)
-> > [    7.841568] rpm_callback (drivers/base/power/runtime.c:532)
-> > [    7.841570] rpm_suspend (drivers/base/power/runtime.c:672)
-> > [    7.841572] rpm_idle (drivers/base/power/runtime.c:504 (discriminator 1))
-> > [    7.841574] update_autosuspend (drivers/base/power/runtime.c:1662)
-> > [    7.841576] pm_runtime_disable_action (include/linux/spinlock.h:401
-> > drivers/base/power/runtime.c:1703 include/linux/pm_runtime.h:599
-> > drivers/base/power/runtime.c:1517)
-> > [    7.841579] devm_action_release (drivers/base/devres.c:720)
-> > [    7.841581] release_nodes (drivers/base/devres.c:503)
-> > [    7.841583] devres_release_all (drivers/base/devres.c:532)
-> > [    7.841585] device_unbind_cleanup (drivers/base/dd.c:531)
-> > [    7.841589] really_probe (drivers/base/dd.c:710)
-> > [    7.841592] __driver_probe_device (drivers/base/dd.c:785)
-> > [    7.841594] driver_probe_device (drivers/base/dd.c:815)
-> > [    7.841596] __driver_attach (drivers/base/dd.c:1202)
-> > [    7.841598] bus_for_each_dev (drivers/base/bus.c:301)
-> > [    7.841600] driver_attach (drivers/base/dd.c:1219)
-> > [    7.841602] bus_add_driver (drivers/base/bus.c:618)
-> > [    7.841604] driver_register (drivers/base/driver.c:246)
-> > [    7.841607] __platform_driver_register (drivers/base/platform.c:868)
-> > [    7.841609] spi_geni_driver_init+0x28/0x1000 spi_geni_qcom
+On Wed, Sep 25, 2024 at 8:02=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Specify the guard symbol for the stack cookie explicitly, rather than
+> positioning it exactly 40 bytes into the per-CPU area. Doing so removes
+> the need for the per-CPU region to be absolute rather than relative to
+> the placement of the per-CPU template region in the kernel image, and
+> this allows the special handling for absolute per-CPU symbols to be
+> removed entirely.
+>
+> This is a worthwhile cleanup in itself, but it is also a prerequisite
+> for PIE codegen and PIE linking, which can replace our bespoke and
+> rather clunky runtime relocation handling.
+>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/Makefile                     |  4 ++++
+>  arch/x86/include/asm/init.h           |  2 +-
+>  arch/x86/include/asm/processor.h      | 11 +++--------
+>  arch/x86/include/asm/stackprotector.h |  4 ----
+>  tools/perf/util/annotate.c            |  4 ++--
+>  5 files changed, 10 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 6b3fe6e2aadd..b78b7623a4a9 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -193,6 +193,10 @@ else
+>          KBUILD_RUSTFLAGS +=3D -Cno-redzone=3Dy
+>          KBUILD_RUSTFLAGS +=3D -Ccode-model=3Dkernel
+>
+> +        ifeq ($(CONFIG_STACKPROTECTOR),y)
+> +                KBUILD_CFLAGS +=3D -mstack-protector-guard-symbol=3Dfixe=
+d_percpu_data
+> +        endif
+> +
+>          # Don't emit relaxable GOTPCREL relocations
+>          KBUILD_AFLAGS_KERNEL +=3D -Wa,-mrelax-relocations=3Dno
+>          KBUILD_CFLAGS_KERNEL +=3D -Wa,-mrelax-relocations=3Dno
+> diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+> index 14d72727d7ee..3ed0e8ec973f 100644
+> --- a/arch/x86/include/asm/init.h
+> +++ b/arch/x86/include/asm/init.h
+> @@ -2,7 +2,7 @@
+>  #ifndef _ASM_X86_INIT_H
+>  #define _ASM_X86_INIT_H
+>
+> -#define __head __section(".head.text")
+> +#define __head __section(".head.text") __no_stack_protector
+>
+>  struct x86_mapping_info {
+>         void *(*alloc_pgt_page)(void *); /* allocate buf for page table *=
+/
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/proc=
+essor.h
+> index 4a686f0e5dbf..56bc36116814 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -402,14 +402,9 @@ struct irq_stack {
+>  #ifdef CONFIG_X86_64
+>  struct fixed_percpu_data {
+>         /*
+> -        * GCC hardcodes the stack canary as %gs:40.  Since the
+> -        * irq_stack is the object at %gs:0, we reserve the bottom
+> -        * 48 bytes of the irq stack for the canary.
+> -        *
+> -        * Once we are willing to require -mstack-protector-guard-symbol=
+=3D
+> -        * support for x86_64 stackprotector, we can get rid of this.
+> +        * Since the irq_stack is the object at %gs:0, the bottom 8 bytes=
+ of
+> +        * the irq stack are reserved for the canary.
+>          */
+> -       char            gs_base[40];
+>         unsigned long   stack_canary;
+>  };
+>
+> @@ -418,7 +413,7 @@ DECLARE_INIT_PER_CPU(fixed_percpu_data);
+>
+>  static inline unsigned long cpu_kernelmode_gs_base(int cpu)
+>  {
+> -       return (unsigned long)per_cpu(fixed_percpu_data.gs_base, cpu);
+> +       return (unsigned long)&per_cpu(fixed_percpu_data, cpu);
+>  }
+>
+>  extern asmlinkage void entry_SYSCALL32_ignore(void);
+> diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm=
+/stackprotector.h
+> index 00473a650f51..d1dcd22a0a4c 100644
+> --- a/arch/x86/include/asm/stackprotector.h
+> +++ b/arch/x86/include/asm/stackprotector.h
+> @@ -51,10 +51,6 @@ static __always_inline void boot_init_stack_canary(voi=
+d)
+>  {
+>         unsigned long canary =3D get_random_canary();
+>
+> -#ifdef CONFIG_X86_64
+> -       BUILD_BUG_ON(offsetof(struct fixed_percpu_data, stack_canary) !=
+=3D 40);
+> -#endif
+> -
+>         current->stack_canary =3D canary;
+>  #ifdef CONFIG_X86_64
+>         this_cpu_write(fixed_percpu_data.stack_canary, canary);
+> diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> index 37ce43c4eb8f..7ecfedf5edb9 100644
+> --- a/tools/perf/util/annotate.c
+> +++ b/tools/perf/util/annotate.c
+> @@ -2485,10 +2485,10 @@ static bool is_stack_operation(struct arch *arch,=
+ struct disasm_line *dl)
+>
+>  static bool is_stack_canary(struct arch *arch, struct annotated_op_loc *=
+loc)
+>  {
+> -       /* On x86_64, %gs:40 is used for stack canary */
+> +       /* On x86_64, %gs:0 is used for stack canary */
+>         if (arch__is(arch, "x86")) {
+>                 if (loc->segment =3D=3D INSN_SEG_X86_GS && loc->imm &&
+> -                   loc->offset =3D=3D 40)
+> +                   loc->offset =3D=3D 0)
 
+As a new perf tool  can run on old kernels we may need to have this be
+something like:
+(loc->offset =3D=3D 40 /* pre v6.xx kernels */ || loc->offset =3D=3D 0 /*
+v6.xx and later */ )
 
-So it looks like spi_geni_probe() calls geni_icc_get() which fails.  It must
-be with -EPROBE_DEFER otherwise we would get a printk.  This could happen if
-of_icc_get_from_provider() fails for example.  There are two callers.  These
-were the only possibilities that I saw which didn't lead to a warning message.
+We could make this dependent on the kernel by processing the os_release str=
+ing:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/env.h#n55
+but that could well be more trouble than it is worth.
 
-The automatic cleanup tries to suspend and triggers the warning IS_ERR() warning
-in __icc_enable().
+Thanks,
+Ian
 
-	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+>                         return true;
+>         }
 
-The best option is probably to disable the warning for EPROBE_DEFER.  Another
-two options would be to disable the warning entirely.  A third option would be
-to do a work-around for EPROBE_DEFER in geni_icc_get().
-
-Please, could you take a look and give the Reported-by tag to Naresh?  Or I
-could send this patch if you want.
-
-regards,
-dan carpenter
-
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 4526ff2e1bd5..0caf8ead6573 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -682,6 +682,8 @@ static int __icc_enable(struct icc_path *path, bool enable)
- 	if (!path)
- 		return 0;
- 
-+	if (IS_ERR(path) && (PTR_ERR(path) == -EPROBE_DEFER))
-+		return 0;
- 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
- 		return -EINVAL;
- 
+>
+> --
+> 2.46.0.792.g87dc391469-goog
+>
 
