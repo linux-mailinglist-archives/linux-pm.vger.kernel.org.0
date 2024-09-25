@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-14671-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14672-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46FFC985A65
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 14:07:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3441E985A73
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 14:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 775B91C237E7
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 12:07:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1255B2625C
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 12:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42F791B580D;
-	Wed, 25 Sep 2024 11:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224EC1B5EB0;
+	Wed, 25 Sep 2024 11:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBYSqrbR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3S7GZEx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA0418C931;
-	Wed, 25 Sep 2024 11:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA08D1B5EA7;
+	Wed, 25 Sep 2024 11:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727264539; cv=none; b=ozT2SVfbEdN7Os0DLd1LhZq0yGbFmFMYtIBDVGEWVCM5OeyNGhs9lFzRJnIIeES4d6m7UtArxa4wJWOmYjDCsrHHxyst3yg/jL+BOvw/GOaL9rTRyBglngDEo9kCTKNYlK21O8mM6I5TBi9cOuMNEf1MD9lVZ8u1UDYQN3TIZ3M=
+	t=1727264541; cv=none; b=hpvxaO1SjboA8dcvXn/Then03hdjzmA3iaq+TYNZZ2DcXcje4Vm8DFRUsU850A4u3y6a9NFdynRgjeMU87fZEqv9xxrlBl+61Srtf1x33jghTZGyVbRJyVlTjbw8CG7jUoGkdUT/4BLzR8F20+DTPVXUOecRSqFf3koLX+KDJUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727264539; c=relaxed/simple;
-	bh=a5FKxM9TI86GXq66al+BZuV4NLTfkQo2ArkgmdetOpw=;
+	s=arc-20240116; t=1727264541; c=relaxed/simple;
+	bh=QxyhHlGqjynd10WnJVI7hQSbTdQXFAQM/iD8PYjcBb4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fR8+SNpaIcJbdheLv30au2ecOH+AwCT5is4wJB6q+59G0QYYOQfFXM4X6clMEfyR5IL0qpsajlw/q5jE/g56GNLgZaAcfJzoKgTI2w2l/QFYBOB3lZAmFcw3gXi37EZjzh35y0Wj3WK8qniE1Y4lXfzQPmXI+Dw2enwRznjaZ64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBYSqrbR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11CC0C4CED3;
-	Wed, 25 Sep 2024 11:42:17 +0000 (UTC)
+	 MIME-Version; b=fz6qkzHeFdiz5oJ9KCp/8qRSlOMcuPVx3U28iLdkOd1migh8MrL4/Xcoi4hTtVVpigHX1AWbB3686uUtR7zpcsb9Uk3OxEWxhVQcAOVYETz0QOlRWN99W38b5wZGMFCO1sOthfZNmyiqk+ssA6llve1Kd+pqysqkidg5d2CFiEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3S7GZEx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875E4C4CEC7;
+	Wed, 25 Sep 2024 11:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727264539;
-	bh=a5FKxM9TI86GXq66al+BZuV4NLTfkQo2ArkgmdetOpw=;
+	s=k20201202; t=1727264540;
+	bh=QxyhHlGqjynd10WnJVI7hQSbTdQXFAQM/iD8PYjcBb4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DBYSqrbR8MYz2ea69vbbhgmqN6mU4bW/uYWJCbOhH9G30InOMOKn3fDvyZTb9g2NT
-	 Iai1QuVrxyW04xf1ke8c031YumM7Jyn9rJ8+q8khd0tTYs9PFCIxE9Pfqm8F5HeId5
-	 Tv9xlfm4zrbPG1SOlTtvSWeleMIama78UTCBTAgkPw3hKbb0dA4pijURXKrY+xL+ET
-	 dq65HheF9c15Q0Sq24773MBWe+l/PSFa8xKW768UNylThfwtxAI2rqO1wHTVjGyzG9
-	 2P5yJuyR2hiJNrBAP0sdt3lQ7MZJKrl84+OssUG1A1m7ZwGDaycjJynlu5XjPf9cC+
-	 er7JdGopqfXhw==
+	b=g3S7GZExZxEcLIOQcFPSb3RCWzBM61gbIr8ls7XZ0C5rlzfpYyGcvQSTXkO51QbYJ
+	 X+NVb3ZeZsPEq1Htdx2zghxagTf186fE3Wmpdqh0saoYvvmXmijTzjyJRI4CWbMCdI
+	 20tpf/le02zCiu3XUauU2+qGURdwXdl6r+DBiul5aOxAYeHCGwAoVeTvwYaMBWqiyK
+	 RIYJbzJoeGBAxtNWHTQ5to6S3RzItERg620dDkOBR+il7QNPkPpZ6fAX2WNUVW1F9+
+	 +ykJz+wGLK6hE8QxkWr9n/Xydu0TurUNZ6rEMkoomvlOFEAZSnTuJfisTZsBdKHDbW
+	 hUT2bulvnAHOw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,9 +49,9 @@ Cc: Ulf Hansson <ulf.hansson@linaro.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.11 116/244] pmdomain: core: Don't hold the genpd-lock when calling dev_pm_domain_set()
-Date: Wed, 25 Sep 2024 07:25:37 -0400
-Message-ID: <20240925113641.1297102-116-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 117/244] pmdomain: core: Use dev_name() instead of kobject_get_path() in debugfs
+Date: Wed, 25 Sep 2024 07:25:38 -0400
+Message-ID: <20240925113641.1297102-117-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240925113641.1297102-1-sashal@kernel.org>
 References: <20240925113641.1297102-1-sashal@kernel.org>
@@ -68,60 +68,82 @@ Content-Transfer-Encoding: 8bit
 
 From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit b87eee38605c396f0e1fa435939960e5c6cd41d6 ]
+[ Upstream commit 9094e53ff5c86ebe372ad3960c3216c9817a1a04 ]
 
-There is no need to hold the genpd-lock, while assigning the
-dev->pm_domain. In fact, it becomes a problem on a PREEMPT_RT based
-configuration as the genpd-lock may be a raw spinlock, while the lock
-acquired through the call to dev_pm_domain_set() is a regular spinlock.
+Using kobject_get_path() means a dynamic memory allocation gets done, which
+doesn't work on a PREEMPT_RT based configuration while holding genpd's raw
+spinlock.
 
-To fix the problem, let's simply move the calls to dev_pm_domain_set()
-outside the genpd-lock.
+To fix the problem, let's convert into using the simpler dev_name(). This
+means the information about the path doesn't get presented in debugfs, but
+hopefully this shouldn't be an issue.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Tested-by: Raghavendra Kakarla <quic_rkakarla@quicinc.com>  # qcm6490 with PREEMPT_RT set
 Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Link: https://lore.kernel.org/r/20240527142557.321610-3-ulf.hansson@linaro.org
+Link: https://lore.kernel.org/r/20240527142557.321610-4-ulf.hansson@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pmdomain/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/pmdomain/core.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 7a61aa88c0614..7b2f8b1417de8 100644
+index 7b2f8b1417de8..17b31a524697a 100644
 --- a/drivers/pmdomain/core.c
 +++ b/drivers/pmdomain/core.c
-@@ -1758,7 +1758,6 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 	genpd_lock(genpd);
+@@ -3210,7 +3210,6 @@ static int genpd_summary_one(struct seq_file *s,
+ 		[GENPD_STATE_OFF] = "off"
+ 	};
+ 	struct pm_domain_data *pm_data;
+-	const char *kobj_path;
+ 	struct gpd_link *link;
+ 	char state[16];
+ 	int ret;
+@@ -3243,17 +3242,10 @@ static int genpd_summary_one(struct seq_file *s,
+ 	}
  
- 	genpd_set_cpumask(genpd, gpd_data->cpu);
--	dev_pm_domain_set(dev, &genpd->domain);
+ 	list_for_each_entry(pm_data, &genpd->dev_list, list_node) {
+-		kobj_path = kobject_get_path(&pm_data->dev->kobj,
+-				genpd_is_irq_safe(genpd) ?
+-				GFP_ATOMIC : GFP_KERNEL);
+-		if (kobj_path == NULL)
+-			continue;
+-
+-		seq_printf(s, "\n    %-50s  ", kobj_path);
++		seq_printf(s, "\n    %-50s  ", dev_name(pm_data->dev));
+ 		rtpm_status_str(s, pm_data->dev);
+ 		perf_status_str(s, pm_data->dev);
+ 		mode_status_str(s, pm_data->dev);
+-		kfree(kobj_path);
+ 	}
  
- 	genpd->device_count++;
- 	if (gd)
-@@ -1767,6 +1766,7 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 	list_add_tail(&gpd_data->base.list_node, &genpd->dev_list);
+ 	seq_puts(s, "\n");
+@@ -3422,23 +3414,14 @@ static int devices_show(struct seq_file *s, void *data)
+ {
+ 	struct generic_pm_domain *genpd = s->private;
+ 	struct pm_domain_data *pm_data;
+-	const char *kobj_path;
+ 	int ret = 0;
  
- 	genpd_unlock(genpd);
-+	dev_pm_domain_set(dev, &genpd->domain);
-  out:
+ 	ret = genpd_lock_interruptible(genpd);
  	if (ret)
- 		genpd_free_dev_data(dev, gpd_data);
-@@ -1823,12 +1823,13 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
- 		genpd->gd->max_off_time_changed = true;
+ 		return -ERESTARTSYS;
  
- 	genpd_clear_cpumask(genpd, gpd_data->cpu);
--	dev_pm_domain_set(dev, NULL);
- 
- 	list_del_init(&pdd->list_node);
+-	list_for_each_entry(pm_data, &genpd->dev_list, list_node) {
+-		kobj_path = kobject_get_path(&pm_data->dev->kobj,
+-				genpd_is_irq_safe(genpd) ?
+-				GFP_ATOMIC : GFP_KERNEL);
+-		if (kobj_path == NULL)
+-			continue;
+-
+-		seq_printf(s, "%s\n", kobj_path);
+-		kfree(kobj_path);
+-	}
++	list_for_each_entry(pm_data, &genpd->dev_list, list_node)
++		seq_printf(s, "%s\n", dev_name(pm_data->dev));
  
  	genpd_unlock(genpd);
- 
-+	dev_pm_domain_set(dev, NULL);
-+
- 	if (genpd->detach_dev)
- 		genpd->detach_dev(genpd, dev);
- 
+ 	return ret;
 -- 
 2.43.0
 
