@@ -1,156 +1,141 @@
-Return-Path: <linux-pm+bounces-14667-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14668-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E36098576E
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 12:57:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AE02985822
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 13:37:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CF102853E6
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 10:57:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3025E2829A3
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 11:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57ED015E5CC;
-	Wed, 25 Sep 2024 10:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C35B17DE15;
+	Wed, 25 Sep 2024 11:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nj/iaYoN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S+guAPOM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBE477107;
-	Wed, 25 Sep 2024 10:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6370317CA16;
+	Wed, 25 Sep 2024 11:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727261818; cv=none; b=j6qNL7c7wD8so+Qo2yiCcVAR9qOXOTBQOhJAHUe9IIobS3IImX0R4a9StIDEDzKZ5A6vwtGn8W3X3LaRSW7VsqjIZSd1lr4p8O2XgrpnqruqT/PuNl0RGBDB4m3Uqy15EA38UBekofMbm1DGH9G2tNM7qUxHYqMne4XMxVURs78=
+	t=1727264211; cv=none; b=bk6Tf7hPzk5nULYgEBCLH1cTilgs5YPc/gc/T8DTAMkdbKoa3nY1V7AdwHu4VX5Kd4A51eu+egkOAb/VL0ynjt2lyNlTqVROUK1vS6TY347E8LhYTQSpEZjHAFir2pDCXyy9aHRWvd2WOP3ghTFU5LPjhFCB7WvfQVeXccmMmWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727261818; c=relaxed/simple;
-	bh=S48zw2Thvj9X/sYDLC/eM5MCODm3HulyKneN0EYbB5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nUdvl6lFw9n/xfCexMFNM4LVmUC8dcXfSbjyibhIC8l5xZ24ilSuR0Z8xHMzKE8S5eBNzK6oapERdAzXnT32mCJXmhvOvrSqZiBMTfLKKbM307h9TR8T6sKLJnFNY5fXzv9gucK5zVTUwwuIzmx505Fbcs+FrEMZb6Mbr/HaBUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nj/iaYoN; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727261816; x=1758797816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S48zw2Thvj9X/sYDLC/eM5MCODm3HulyKneN0EYbB5w=;
-  b=Nj/iaYoNAhGEia5UvU14Lfq/RUv2ZBO4z+ouzpDZanrCxMn/22CUclJp
-   fEkgmr+skgEJLtZobenc4T67+KcfxKSuokh+0RkGwGY48csWGLImBN8Lu
-   XD+YM1q/L3HzLPAZveHk5+qGjuYLE2xOIapkZFS18sfcNbCMaPiqbO4r6
-   5uQLDn4K5Hw2YoK8XKWExH7Xr5di5Ctgd9CVcVwVFc4QVdyhP7BfXx8tE
-   GAQMWZQbfmwU4j1fDvRzujwjVOmZ+auT0aEeNIt6EuQhaB3CgCzUrDxWZ
-   ciy6O6uQn2g3M1I5eq3pu7+GD/MRCwcri+C2XfQexGwro+ihTXqfqT/vi
-   w==;
-X-CSE-ConnectionGUID: mUCd2YzeTsqOVhcOf/UH+g==
-X-CSE-MsgGUID: ssVWWP2QQ5eRktCyaF/s0Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="36966629"
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="36966629"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 03:56:56 -0700
-X-CSE-ConnectionGUID: kgu1xSJ6TYKBTwpGW5WPQg==
-X-CSE-MsgGUID: tZk4416rRMmvd+xhYjxAmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="76237879"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 03:56:53 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1stPhR-0000000CmpQ-3nEN;
-	Wed, 25 Sep 2024 13:56:49 +0300
-Date: Wed, 25 Sep 2024 13:56:49 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v8 2/3] regulator: Add devres version of
- of_regulator_get_optional()
-Message-ID: <ZvPscRdWlFPmtCyR@smile.fi.intel.com>
-References: <20240925093807.1026949-1-wenst@chromium.org>
- <20240925093807.1026949-3-wenst@chromium.org>
+	s=arc-20240116; t=1727264211; c=relaxed/simple;
+	bh=1KFSo2JJR5BRcSgzdzgu8XCHZUUmjaS5k4pywFzQCNc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o3gHPGk9lNgLfQvtX/CB8vDAbd+Cpdl7euCfQjpSkcHJ7HK5Vbh8UVrdaR+Vy1WuSbABnlfy6PyMohIvrJ80jG+psMr8iL9vJsahZCYdcfNccCdqgMBIgDmPk3QlQ/aZ5MjzXLX23O8pj/FvbL9anDSSP4UKvZ+KuhlXYlhrSpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S+guAPOM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A47C4CEC7;
+	Wed, 25 Sep 2024 11:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727264211;
+	bh=1KFSo2JJR5BRcSgzdzgu8XCHZUUmjaS5k4pywFzQCNc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=S+guAPOMGZ14rxao4C14fiyGoQDSC15PIvqt0Kv+zKB7/CfKvnD27r2m9RlECaM4I
+	 8wzjNcB4JK8q0vz0k3z+fs3HUi/uxuORbiQmBqocrm8i6LVUQQJKXP7pKczkXBJ8OJ
+	 CRI4Kjp1f5b3nCAuL+53L4wiRxG1IU+oezRnI/v+c+4YpjNvMl6IQ4GiXNKASgRVnE
+	 yOLndeANoV/wHAdeiQvx2HfVrKJSP77j2GoK+MDO+L3bfLOiSua9Gp5MhuJp7/g08W
+	 doPPtY86no6ChQxqpeBXZ3xusgW+2yMSPAR9tkPVAJ+c1xL1kB8ewVJvj5LiAYNUJh
+	 OZU+n2CsFWtSA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	jacob.jun.pan@linux.intel.com,
+	lenb@kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.11 005/244] intel_idle: Disable promotion to C1E on Jasper Lake and Elkhart Lake
+Date: Wed, 25 Sep 2024 07:23:46 -0400
+Message-ID: <20240925113641.1297102-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240925113641.1297102-1-sashal@kernel.org>
+References: <20240925113641.1297102-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925093807.1026949-3-wenst@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 25, 2024 at 05:38:05PM +0800, Chen-Yu Tsai wrote:
-> There are existing uses for a devres version of of_regulator_get_optional()
-> in power domain drivers. On MediaTek platforms, power domains may have
-> regulator supplies tied to them. The driver currently tries to use
-> devm_regulator_get() to not have to manage the lifecycle, but ends up
-> doing it in a very hacky way by replacing the device node of the power
-> domain controller device to the device node of the power domain that is
-> currently being registered, getting the supply, and reverting the device
-> node.
-> 
-> Provide a better API so that the hack can be replaced.
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-...
+[ Upstream commit 5bb33212b5c664396e5de4cd5a2999abb84a3978 ]
 
-> +#if IS_ENABLED(CONFIG_OF)
+PCIe ethernet throughut is sub-optimal on Jasper Lake and Elkhart Lake.
 
-Do we really need this?
+The CPU can take long time to exit to C0 to handle IRQ and perform DMA
+when C1E has been entered.
 
-> +static struct regulator *_devm_of_regulator_get(struct device *dev, struct device_node *node,
-> +						const char *id, int get_type)
-> +{
-> +	struct regulator **ptr, *regulator;
-> +
-> +	ptr = devres_alloc(devm_regulator_release, sizeof(*ptr), GFP_KERNEL);
-> +	if (!ptr)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	regulator = _of_regulator_get(dev, node, id, get_type);
-> +	if (!IS_ERR(regulator)) {
-> +		*ptr = regulator;
-> +		devres_add(dev, ptr);
-> +	} else {
-> +		devres_free(ptr);
-> +	}
-> +
-> +	return regulator;
+For this reason, adjust intel_idle to disable promotion to C1E and still
+use C-states from ACPI _CST on those two platforms.
 
-Why not using devm_add_action() / devm_add_action_or_reset()
-(whichever suits better here)?
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=219023
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Link: https://patch.msgid.link/20240820041128.102452-1-kai.heng.feng@canonical.com
+[ rjw: Subject and changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/idle/intel_idle.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-> +}
-
-> +#endif
-
-...
-
-> +static inline struct regulator *__must_check devm_of_regulator_get_optional(struct device *dev,
-> +									    struct device_node *node,
-> +									    const char *id)
-
-I don't know the conventions here, but I find better to have it as
-
-static inline __must_check struct regulator *
-devm_of_regulator_get_optional(struct device *dev, struct device_node *node, const char *id)
-
-Similar to other stubs and declarations.
-
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 9aab7abc2ae90..ac1c6f4f9c7f2 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1475,6 +1475,10 @@ static const struct idle_cpu idle_cpu_dnv __initconst = {
+ 	.use_acpi = true,
+ };
+ 
++static const struct idle_cpu idle_cpu_tmt __initconst = {
++	.disable_promotion_to_c1e = true,
++};
++
+ static const struct idle_cpu idle_cpu_snr __initconst = {
+ 	.state_table = snr_cstates,
+ 	.disable_promotion_to_c1e = true,
+@@ -1538,6 +1542,8 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT,	&idle_cpu_bxt),
+ 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_PLUS,	&idle_cpu_bxt),
+ 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_D,	&idle_cpu_dnv),
++	X86_MATCH_VFM(INTEL_ATOM_TREMONT,       &idle_cpu_tmt),
++	X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,     &idle_cpu_tmt),
+ 	X86_MATCH_VFM(INTEL_ATOM_TREMONT_D,	&idle_cpu_snr),
+ 	X86_MATCH_VFM(INTEL_ATOM_CRESTMONT,	&idle_cpu_grr),
+ 	X86_MATCH_VFM(INTEL_ATOM_CRESTMONT_X,	&idle_cpu_srf),
+@@ -2075,7 +2081,7 @@ static void __init intel_idle_cpuidle_driver_init(struct cpuidle_driver *drv)
+ 
+ 	drv->state_count = 1;
+ 
+-	if (icpu)
++	if (icpu && icpu->state_table)
+ 		intel_idle_init_cstates_icpu(drv);
+ 	else
+ 		intel_idle_init_cstates_acpi(drv);
+@@ -2209,7 +2215,11 @@ static int __init intel_idle_init(void)
+ 
+ 	icpu = (const struct idle_cpu *)id->driver_data;
+ 	if (icpu) {
+-		cpuidle_state_table = icpu->state_table;
++		if (icpu->state_table)
++			cpuidle_state_table = icpu->state_table;
++		else if (!intel_idle_acpi_cst_extract())
++			return -ENODEV;
++
+ 		auto_demotion_disable_flags = icpu->auto_demotion_disable_flags;
+ 		if (icpu->disable_promotion_to_c1e)
+ 			c1e_promotion = C1E_PROMOTION_DISABLE;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
