@@ -1,178 +1,295 @@
-Return-Path: <linux-pm+bounces-14688-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14689-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E8E9986223
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:08:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7539C986234
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 17:09:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C33CB28E040
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:08:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDD471F2750D
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2024 15:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99216188938;
-	Wed, 25 Sep 2024 14:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C83D3E49D;
+	Wed, 25 Sep 2024 15:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CDvtJlod"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HBWrXLE+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF666188934;
-	Wed, 25 Sep 2024 14:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799413A8D0
+	for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 15:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276111; cv=none; b=cfvKHGEF6Ni6347E2VlME9x65+PB703O+I3cgSXi3EiAyg8PeCFQkaLJ+LDk2jHDox4oRMEBhqq4I/VjaoBn6xw7XHZnAwrbrp/NDtqVe0JI2wPPfaYA/XDngv3aJCfAibfkW7cyifcipqaxeWj5kc690QKXPWmijlAac25fokI=
+	t=1727276513; cv=none; b=LQ/euDO4cRrkLip92KXervoLTlUpJwrthnbzWf2gL5f8oV1OPkXSCc6/QJShDnoQ1jhmRRttbyQ0A/TrcrQL9l9JMv4rt+/6cg8q+OghZqfBsLampC5HK/vjpZqE7PkfavjLUNv49PEyFbWNS8QG7kzAYUR+9pPxChbfCLEjXJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276111; c=relaxed/simple;
-	bh=xdbK3sX33TuJDpUjLbXTCDI0D2SFxjFhg9r0p9JHT54=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=SnXCM9KIJMfasgy/5X14fBtKkyulCNGOxQHeNQd9P2QUUlVpjenmzGjqgGNjWr7rXUZRi7zGbrWNJYN+3ypHvI5zimMhQOSwXVw0Ge/9n43K+ELJfBWhLItAlwppmFif+/Ph1Ld28tl2d6Vt3ugh5WPR7MGbAv9w0TyRf1eG9mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CDvtJlod; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48PEt4j0062997;
-	Wed, 25 Sep 2024 09:55:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1727276104;
-	bh=SoE3frTgrrAbkkW+0hWzW5YqidptuOBpjGiZMGx02Ew=;
-	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=CDvtJlodjAiDT7Nhnkp/7jYUbnMMzvkawKosGqASR/HqCJ1dsLuM6sWKATA2dHRnY
-	 oy2cqf05zgXHk4P8vbvNUGlgpYww7nNURikWbXxltfgF80lIvro4Bg2K5KtsQcAneo
-	 MzNGEktsZCQ/ks2QZwAXroZCZ4OmRZP5G0g7ofTo=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48PEt4D3092264
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 25 Sep 2024 09:55:04 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 25
- Sep 2024 09:55:04 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 25 Sep 2024 09:55:04 -0500
-Received: from [127.0.1.1] (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48PEsYCn110564;
-	Wed, 25 Sep 2024 09:55:00 -0500
-From: Dhruva Gole <d-gole@ti.com>
-Date: Wed, 25 Sep 2024 20:24:20 +0530
-Subject: [PATCH v6 6/6] cpufreq: ti-cpufreq: Update efuse/rev offsets in
- AM62 family
+	s=arc-20240116; t=1727276513; c=relaxed/simple;
+	bh=GyK5LYy4hT2Mza2Xl9rezrZ2kXob9EVtau0/Aicjkyk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=eXZtcrZHMQKKJ9CPZ5+CzI5DScUZ1R1q7G6QwrKeoG85AkjSdYpz+7rQlTmriIU/HnPuFSTciSA7OJIA0IMgXJayHetUps5pS7OtHW13uLGVjoWkxvlpWbUQ7kwsMv67DIEzqZSJljS0wLykO8yXQjiDqF2yO6fkUoGdfO63r90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HBWrXLE+; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e165fc5d94fso10698611276.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 08:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727276509; x=1727881309; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6z7k17OsGZKMVFB80yPIaoy18RpZ7zGlccSFIk096uA=;
+        b=HBWrXLE+RxrFNPpG2yxPXm0QKtrpPQwtZYwyUTWmsAgybBjgE+ZkiheCe+wEK2qhIC
+         d/OwUrHaR7BnsDQ13NmYMQ/T/Wxi2ngNY5h8VPXXWaJHhYbetQqkeu8aq1hjPTj5c9PW
+         F12qtXfhVCgQvbKpGGLwXP3lVR+FS4RxBTRCl4juHGkPeUJSzdGXWNveVg8EvVuJ4N0b
+         n4j2jj9BHczdrpbNCNb7o8/n3xibw3CH9qigfds7ZpiBeSfkGorPGe2XFwqB9V8/L7xS
+         WpgVQZn1xoY3UU0VM6Rs1+gNKrmFDLnP0OE/Gjp0Wlkz6a4YqIRuRZD34s3EH2vnC4ok
+         KCnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727276509; x=1727881309;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6z7k17OsGZKMVFB80yPIaoy18RpZ7zGlccSFIk096uA=;
+        b=UZwi8m3NGlKiS5UDLjjHebjYh69AiUfEXTY990z8018VyP9IB/hhQLcawWjc1ZWWK1
+         KURJ/IgCmMyRh0YLZbmxHzWfFihWoPo/v/alrTKtc1gHKNRO0vcKgFXzGlA/xZ8QAt7F
+         7B83JYKA4Jhm9r3y/SK15Wv+2kgzW+myoNuoRMXV7JnNoT9kk4zzfjPTZuLCfaZHkIVq
+         89/FgRbLeYIzErEOEM9nA1IXZlTs4buUqMfI/Tu91dRXglpS0awvFx+/9eELJ9GFoS4y
+         mmOMFx5Da+SPtBGsfSWoDCv28krl3R1AiryOw6b03KqmphDCfCk2yloxwtPnpXjc0fjr
+         AyYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX8Cg3umzWb/gzE8RBf8x9uLxmCmpNzhiU5tdEJYRX186ZeBS50xsp8tdctL8TtF/ywkW/fbaj4qg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG6qH5tyYA6SGWzl6mvEv8lPCR6PmslfZMAnauHJ94V5M/FrXV
+	HZZEufjGDsD/6tGN1pQ5Mwo1wI3iBkwg3C3Gid9SwRljO/iOiCJAbrOBkollUy+QZiJnCg==
+X-Google-Smtp-Source: AGHT+IGRJUFrs1DoPRrR5c+MJEZ6tG0DheITTu8FPFLiXZOk+NGplm3eXqMcHGaqBYVKwyJOtED+Rs3U
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
+ (user=ardb job=sendgmr) by 2002:a25:d695:0:b0:e24:9ec4:7297 with SMTP id
+ 3f1490d57ef6-e24da58666emr14424276.11.1727276509248; Wed, 25 Sep 2024
+ 08:01:49 -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240925-ti-cpufreq-fixes-v5-v6-6-46f41a903e01@ti.com>
-References: <20240925-ti-cpufreq-fixes-v5-v6-0-46f41a903e01@ti.com>
-In-Reply-To: <20240925-ti-cpufreq-fixes-v5-v6-0-46f41a903e01@ti.com>
-To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero
- Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael
- J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>, Bryan Brattlof <bb@ti.com>,
-        Dhruva Gole <d-gole@ti.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727276075; l=2875;
- i=d-gole@ti.com; s=20240919; h=from:subject:message-id;
- bh=xdbK3sX33TuJDpUjLbXTCDI0D2SFxjFhg9r0p9JHT54=;
- b=NmSRfzqh6TLYqUwObdIiSB6IE4akueqjdw/lEC4Fha1Jn88KcxDq7HkAmiVYRgZFBN5G6+uWR
- jR+3L1vtZzvDViVVX6hXPF+4Cc+vwrPq8p8x5/NQfUR3hut2Ojara8K
-X-Developer-Key: i=d-gole@ti.com; a=ed25519;
- pk=k8NnY4RbxVqeqGsYfTHeVn4hPOHkjg7Mii0Ixs4rghM=
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9188; i=ardb@kernel.org;
+ h=from:subject; bh=vMX7ogGZLEc8VPljv97RuDVJFn/JAzUBXeH6mBcebRA=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6pr9k37ZPn8uK8IvcW92T9PETT9Xrz4h19DckCOrf
+ uS7om11RykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZiIeBIjQ8cjt/vNFnlpcQoK
+ wSbqqaeUo8XjLsnZ2/zNu6XorPO9luG/9+LkrdV5d/tnvdg2VzHvwaxNexRvHney2v1TP02udn4 IIwA=
+X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
+Message-ID: <20240925150059.3955569-30-ardb+git@google.com>
+Subject: [RFC PATCH 00/28] x86: Rely on toolchain for relocatable code
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-With the Silicon revision being taken directly from socinfo, there's no
-longer any need for reading any SOC register for revision from this driver.
-Hence, we do not require any rev_offset for AM62 family of devices.
-The efuse offset should be 0x0 for AM625 as well, as the syscon
-register being used from DT refers to the efuse_offset directly.
+From: Ard Biesheuvel <ardb@kernel.org>
 
-However, to maintain the backward compatibility with old devicetree, also
-add condition to handle the case where we have the wrong offset and add
-the older efuse_offset value there such that we don't end up reading the
-wrong register offset.
+The x86_64 port has a number of historical quirks that result in a
+reliance on toolchain features that are either poorly specified or
+basically implementation details of the toolchain:
 
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
- drivers/cpufreq/ti-cpufreq.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+- the 'kernel' C model implemented by the compiler is intended for
+  position dependent code residing in the 'negative' 2 GiB of the
+  virtual address space, but is used to create a position independent
+  executable (for virtual KASLR);
 
-diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-index ba621ce1cdda694c98867422dbb7f10c0df2afef..8a97b95b4c44a76b12cab76ddc0f9a5b8ae73f84 100644
---- a/drivers/cpufreq/ti-cpufreq.c
-+++ b/drivers/cpufreq/ti-cpufreq.c
-@@ -313,10 +313,9 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
+- the 'kernel' C model has other properties that are not written down
+  anywhere, and may therefore deviate between compilers and versions,
+  which now includes the Rust compilers too (e.g., use %gs not %fs for
+  per-CPU references); 
+
+- the relocation format used to perform the PIE relocation at boot is
+  complicated and non-standard, as it deals with 3 types of
+  displacements, including 32-bit negative displacements for
+  RIP-relative per-CPU references that are not subject to relocation
+  fixups (as they are places in a separate, disjoint address space);
+
+- the relocation table is generated from static relocation metadata
+  taken from the ELF input objects into the linker, and these describe
+  the input not the output - relaxations or other linker tweaks may
+  result in a mismatch between the two, and GNU ld and LLD display
+  different behavior here;
+
+- this disjoint per-CPU address space requires elaborate hacks in the
+  linker script and the startup code;
+
+- some of the startup code executes from a 1:1 mapping of memory, where
+  RIP-relative references are mandatory, whereas RIP-relative per-CPU
+  variable references can only work correctly from the kernel virtual
+  mapping (as they need to wrap around from the negative 2 GiB space
+  into the 0x0 based per-CPU region);
+
+The reason for this odd situation wrt per-CPU variable addressing is the
+fact that we rely on the user-space TLS arrangement for per-task stack
+cookies, and this was implemented using a fixed offset of 40 bytes from
+%GS. If we bump the minimum GCC version to 8.1, we can switch to symbol
+based stack cookie references, allowing the same arrangement to be
+adopted as on other architectures, i.e., where the CPU register carries
+the per-CPU offset, and UP or boot-time per-CPU references point into
+the per-CPU load area directly (using an offset of 0x0).
+
+With that out of the way, we can untangle this whole thing, and replace
+the bespoke tooling and relocation formats with ordinary, linker
+generated relocation tables, using the RELR format that reduces the
+memory footprint of the relocation table by 20x. The compilers can
+efficiently generate position independent code these days, without
+unnecessary indirections via the Global Object Table (GOT) except for a
+handful of special cases (see the KVM patch for an example where a
+GOT-based indirection is the best choice for pushing the absolute
+address of a symbol onto the stack in a position independent manner when
+there are no free GPRs)
+
+It also brings us much closer to the ordinary PIE relocation model used
+for most of user space, which is therefore much better supported and
+less likely to create problems as we increase the range of compilers and
+linkers that need to be supported.
+
+Tested on GCC 8 - 14 and Clang 15 - 17, using EFI and bare metal boot
+using a variety of entry points (decompressor, EFI stub, XenPV, PVH)
  
- static struct ti_cpufreq_soc_data am625_soc_data = {
- 	.efuse_xlate = am625_efuse_xlate,
--	.efuse_offset = 0x0018,
-+	.efuse_offset = 0x0,
- 	.efuse_mask = 0x07c0,
- 	.efuse_shift = 0x6,
--	.rev_offset = 0x0014,
- 	.multi_regulator = false,
- };
- 
-@@ -325,7 +324,6 @@ static struct ti_cpufreq_soc_data am62a7_soc_data = {
- 	.efuse_offset = 0x0,
- 	.efuse_mask = 0x07c0,
- 	.efuse_shift = 0x6,
--	.rev_offset = 0x0014,
- 	.multi_regulator = false,
- };
- 
-@@ -334,7 +332,6 @@ static struct ti_cpufreq_soc_data am62p5_soc_data = {
- 	.efuse_offset = 0x0,
- 	.efuse_mask = 0x07c0,
- 	.efuse_shift = 0x6,
--	.rev_offset = 0x0014,
- 	.multi_regulator = false,
- };
- 
-@@ -349,11 +346,25 @@ static int ti_cpufreq_get_efuse(struct ti_cpufreq_data *opp_data,
- 				u32 *efuse_value)
- {
- 	struct device *dev = opp_data->cpu_dev;
-+	struct device_node *np = opp_data->opp_node;
- 	u32 efuse;
- 	int ret;
- 
--	ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
--			  &efuse);
-+	/*
-+	 * The following check is used as a way to check if this is an older devicetree
-+	 * being used where the entire wkup_conf node was marked as "syscon",
-+	 * "simple-mfd".
-+	 * Since this bug only affects AM625, make sure it enters this condition
-+	 * only for that SoC.
-+	 */
-+	if (of_device_is_compatible(np, "simple-mfd") &&
-+	    of_device_is_compatible(np, "ti,am625")) {
-+		ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset + 0x0018,
-+				  &efuse);
-+	} else {
-+		ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
-+				  &efuse);
-+	}
- 	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING && ret == -EIO) {
- 		/* not a syscon register! */
- 		void __iomem *regs = ioremap(OMAP3_SYSCON_BASE +
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Uros Bizjak <ubizjak@gmail.com>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Keith Packard <keithp@keithp.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Kan Liang  <kan.liang@linux.intel.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: xen-devel@lists.xenproject.org
+Cc: linux-efi@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-sparse@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: rust-for-linux@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+Ard Biesheuvel (28):
+  x86/pvh: Call C code via the kernel virtual mapping
+  Documentation: Bump minimum GCC version to 8.1
+  x86/tools: Use mmap() to simplify relocs host tool
+  x86/boot: Permit GOTPCREL relocations for x86_64 builds
+  x86: Define the stack protector guard symbol explicitly
+  x86/percpu: Get rid of absolute per-CPU variable placement
+  scripts/kallsyms: Avoid 0x0 as the relative base
+  scripts/kallsyms: Remove support for absolute per-CPU variables
+  x86/tools: Remove special relocation handling for per-CPU variables
+  x86/xen: Avoid relocatable quantities in Xen ELF notes
+  x86/pvh: Avoid absolute symbol references in .head.text
+  x86/pm-trace: Use RIP-relative accesses for .tracedata
+  x86/kvm: Use RIP-relative addressing
+  x86/rethook: Use RIP-relative reference for return address
+  x86/sync_core: Use RIP-relative addressing
+  x86/entry_64: Use RIP-relative addressing
+  x86/hibernate: Prefer RIP-relative accesses
+  x86/boot/64: Determine VA/PA offset before entering C code
+  x86/boot/64: Avoid intentional absolute symbol references in
+    .head.text
+  x64/acpi: Use PIC-compatible references in wakeup_64.S
+  x86/head: Use PIC-compatible symbol references in startup code
+  asm-generic: Treat PIC .data.rel.ro sections as .rodata
+  tools/objtool: Mark generated sections as writable
+  tools/objtool: Treat indirect ftrace calls as direct calls
+  x86: Use PIE codegen for the core kernel
+  x86/boot: Implement support for ELF RELA/RELR relocations
+  x86/kernel: Switch to PIE linking for the core kernel
+  x86/tools: Drop x86_64 support from 'relocs' tool
+
+ Documentation/admin-guide/README.rst    |   2 +-
+ Documentation/arch/x86/zero-page.rst    |   3 +-
+ Documentation/process/changes.rst       |   2 +-
+ arch/x86/Kconfig                        |   3 +-
+ arch/x86/Makefile                       |  22 +-
+ arch/x86/boot/Makefile                  |   1 +
+ arch/x86/boot/compressed/Makefile       |   2 +-
+ arch/x86/boot/compressed/misc.c         |  16 +-
+ arch/x86/entry/calling.h                |   9 +-
+ arch/x86/entry/entry_64.S               |  12 +-
+ arch/x86/entry/vdso/Makefile            |   1 +
+ arch/x86/include/asm/desc.h             |   1 -
+ arch/x86/include/asm/init.h             |   2 +-
+ arch/x86/include/asm/percpu.h           |  22 -
+ arch/x86/include/asm/pm-trace.h         |   4 +-
+ arch/x86/include/asm/processor.h        |  14 +-
+ arch/x86/include/asm/setup.h            |   3 +-
+ arch/x86/include/asm/stackprotector.h   |   4 -
+ arch/x86/include/asm/sync_core.h        |   3 +-
+ arch/x86/include/uapi/asm/bootparam.h   |   2 +-
+ arch/x86/kernel/acpi/wakeup_64.S        |  11 +-
+ arch/x86/kernel/head64.c                |  76 +++-
+ arch/x86/kernel/head_64.S               |  40 +-
+ arch/x86/kernel/irq_64.c                |   1 -
+ arch/x86/kernel/kvm.c                   |   8 +-
+ arch/x86/kernel/relocate_kernel_64.S    |   6 +-
+ arch/x86/kernel/rethook.c               |   3 +-
+ arch/x86/kernel/setup_percpu.c          |   9 +-
+ arch/x86/kernel/vmlinux.lds.S           |  75 ++--
+ arch/x86/platform/pvh/head.S            |  57 ++-
+ arch/x86/power/hibernate_asm_64.S       |   4 +-
+ arch/x86/realmode/rm/Makefile           |   1 +
+ arch/x86/tools/Makefile                 |   2 +-
+ arch/x86/tools/relocs.c                 | 425 +++-----------------
+ arch/x86/tools/relocs.h                 |  11 +-
+ arch/x86/tools/relocs_64.c              |  18 -
+ arch/x86/tools/relocs_common.c          |  11 +-
+ arch/x86/xen/xen-head.S                 |  16 +-
+ drivers/base/power/trace.c              |   6 +-
+ drivers/firmware/efi/libstub/x86-stub.c |   2 +
+ include/asm-generic/vmlinux.lds.h       |  10 +-
+ include/linux/compiler.h                |   2 +-
+ init/Kconfig                            |   5 -
+ kernel/kallsyms.c                       |  12 +-
+ scripts/kallsyms.c                      |  53 +--
+ scripts/link-vmlinux.sh                 |   4 -
+ tools/objtool/check.c                   |  43 +-
+ tools/objtool/elf.c                     |   2 +-
+ tools/objtool/include/objtool/special.h |   2 +-
+ tools/perf/util/annotate.c              |   4 +-
+ 50 files changed, 380 insertions(+), 667 deletions(-)
+ delete mode 100644 arch/x86/tools/relocs_64.c
 
 -- 
-2.34.1
+2.46.0.792.g87dc391469-goog
 
 
