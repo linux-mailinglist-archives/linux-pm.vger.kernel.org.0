@@ -1,118 +1,153 @@
-Return-Path: <linux-pm+bounces-14836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AABE2987945
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 20:46:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D40098792E
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 20:39:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33168B25DE0
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 18:46:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A39D71F226B2
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 18:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D06E177982;
-	Thu, 26 Sep 2024 18:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67FB91714B3;
+	Thu, 26 Sep 2024 18:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nEHxsSel"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWf169OI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A4F1D5ABC;
-	Thu, 26 Sep 2024 18:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB971D5AD0;
+	Thu, 26 Sep 2024 18:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727376367; cv=none; b=NL4+n145l0ETkiZMuFlD0Sua1oDkXyjP95H0Jo1SGhhwsMoqKlL4bIBXAcQRHWdkxydYXEXoIPaMFV/0BIEZzUu5Bbg54wXp5vJAxqTrym4DnMG4YQb5SYWREfItest0SCyJ4T57VavnvvMmVNHmofUoNOxLGp4uFznOXsw+bho=
+	t=1727375940; cv=none; b=XQaIvPMo4EBIr9uh9aiBrFyJqFwzxIBrBHcwzCcvhM4rh0VoLL6OOD0/2pHNUO4CyjNb4Q855Yv5QH78v9xCAWU0ZoxkdZgeP5NjHQjPf/O+3pwpdvnYTLOyEJpdyVNYXXxJnHaHrY9d2Nt855VrR+7/Ml4j4qQ4dg8PrkIwU7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727376367; c=relaxed/simple;
-	bh=+dCD6AZPxHSBa4BNwNlX6ikA85sfYkJhBtLZ/HQ4UUE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LCqM5hpQi5SV0/NLDspcW50vsIyEZS7+pTMkMtcWwrTrOjV5n+Zqk/w0tBQtVVC4H27IYP+s0nw0ZWFbde3/H/oy4biT1/DjSDLGFhfCkNDFBu0Y4jla0lv4DzAm8rgft4hJm4oxKGQG85tmWjRaOHSNzs2KsXzFgPWbOdEb5Aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nEHxsSel; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
-	Cc:Content-Type:Content-ID:Content-Description;
-	bh=t5+pyUN1sWxxhbIk0LBuAt0+sAfCDv06OwTbegq7gnw=; b=nEHxsSelvEuHOj/+u+QP04x/rg
-	ZMwVJxdXDlmfvNpVkwJG9JFHbfTQFgFJbOtleuud8XJGM6EiYnd8GDqv0UXTQXljM5wqHghTX8kQ6
-	WVZQw9FYrIqS6fe6uCNDZJrHngoeH6knJ9vDjB4Mjv8TPaVIkTT2nTXqNA16YosJIScRwuzW0RSZF
-	ysj3OBkUwg+11dX8CqTbBn3b1KxvwnZW4hBgzFrykxfeX1sFZQfjk8Fq7iUUwT27/oScJyu32cJw7
-	s9+2wA6Lin0bJTl3YV7cwRqHz7pVGhIaYCY3kZPN1K95IlNqjF9nIhcI4olCtIiBcKDT47YHzOElU
-	dbLMEEdA==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1sttUq-00000007NA9-2Vg4;
-	Thu, 26 Sep 2024 18:45:49 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sttUq-00000003Ybj-40qP;
-	Thu, 26 Sep 2024 19:45:48 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: [PATCH v5 5/5] KVM: arm64: nvhe: Pass through PSCI v1.3 SYSTEM_OFF2 call
-Date: Thu, 26 Sep 2024 19:38:00 +0100
-Message-ID: <20240926184546.833516-6-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240926184546.833516-1-dwmw2@infradead.org>
-References: <20240926184546.833516-1-dwmw2@infradead.org>
+	s=arc-20240116; t=1727375940; c=relaxed/simple;
+	bh=bqWGoAaO8nHvHaEKFlHMhxU2QHht9Hj9OjVvaSdtHig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MJiVdFo/oc3Pk/kqmqdQnTB694gm4fBT7/LVpb0co+1gQ9ksWlluEGyCrKmVW9sUxphKwsjcjdUI1FzgLcU8whWC22NFgLl1C9SFgiRjPFribQXU1XlKPabqPahPOjCxZWdyXIGgM+1mXKNPR9LetqnptGnylAIFlDPzk3mN1xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWf169OI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B59C4CEC5;
+	Thu, 26 Sep 2024 18:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727375939;
+	bh=bqWGoAaO8nHvHaEKFlHMhxU2QHht9Hj9OjVvaSdtHig=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tWf169OIK42LOs7v6xZBQ6TML/HPur+151d1OlRy1ckW8IleLofNaXQzFzsgOPZXM
+	 ATvRZZbqOHwzmdJNtoYa+m1Hy8uAFSxvT+3e5axvVoWmQ7FcpF1wzG0GQ3Xicza6t0
+	 yrugHX7dsLPzGmNxOBjEH17HNcBPciL2x/2TYqC+mFfwKxomtJt+yRYP95jl8rHYsE
+	 /fqkwAbX/y0NBOW6o3J+a5fkS4PTLXVPZTjLPc5Qf3fW47CJc+3Lynj8VFJJBDNrns
+	 u+7Xy2Zl8herudyztpaUYiGO3GiF13P7fOjTD/cjDng7VMFT9AZ8STclBWo5zoav4V
+	 FTC6weepR4hUA==
+Date: Thu, 26 Sep 2024 13:38:58 -0500
+From: Rob Herring <robh@kernel.org>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v5 2/7] dt-bindings: mfd: add maxim,max77705
+Message-ID: <20240926183858.GA2718844-robh@kernel.org>
+References: <20240617-starqltechn_integration_upstream-v5-0-e0033f141d17@gmail.com>
+ <20240617-starqltechn_integration_upstream-v5-2-e0033f141d17@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240617-starqltechn_integration_upstream-v5-2-e0033f141d17@gmail.com>
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Thu, Sep 26, 2024 at 01:20:19PM +0300, Dzmitry Sankouski wrote:
+> Add maxim,max77705 core binding part.
+> 
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> 
+> ---
+> Changes in v5:
+> - formatting changes
+> - add unevaluatedProperties: false for nodes referencing
+>   common schemas
+> - remove additionalProperties on nodes with
+>   unevaluatedProperties: false
+> - add min and max to led index
+> Changes in v4:
+> - change dts example intendation from tabs
+>  to spaces
+> - remove interrupt-names property
+> - remove obvious reg description
+> - split long(>80) lines
+> ---
+>  Documentation/devicetree/bindings/mfd/maxim,max77705.yaml | 177 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  MAINTAINERS                                               |   1 +
+>  2 files changed, 178 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77705.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77705.yaml
+> new file mode 100644
+> index 000000000000..214515f84c85
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77705.yaml
+> @@ -0,0 +1,177 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/maxim,max77705.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX77705 Companion Power Management IC and USB Type-C interface IC
+> +
+> +maintainers:
+> +  - Dzmitry Sankouski <dsankouski@gmail.com>
+> +
+> +description: |
+> +  This is a part of device tree bindings for Maxim MAX77705 multi functional
+> +  device.
 
-Pass through the SYSTEM_OFF2 function for hibernation, just like SYSTEM_OFF.
+Drop this sentence. Just describe the device.
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/arm64/kvm/hyp/nvhe/psci-relay.c | 2 ++
- 1 file changed, 2 insertions(+)
+> +
+> +  The Maxim MAX77705 is a Companion Power Management and Type-C
+> +  interface IC which includes charger, fuelgauge, LED, haptic motor driver and
+> +  Type-C management IC.
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77705
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  charger:
+> +    $ref: /schemas/power/supply/power-supply.yaml
+> +    unevaluatedProperties: true
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-index dfe8fe0f7eaf..9c2ce1e0e99a 100644
---- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-+++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-@@ -265,6 +265,8 @@ static unsigned long psci_1_0_handler(u64 func_id, struct kvm_cpu_context *host_
- 	case PSCI_1_0_FN_PSCI_FEATURES:
- 	case PSCI_1_0_FN_SET_SUSPEND_MODE:
- 	case PSCI_1_1_FN64_SYSTEM_RESET2:
-+	case PSCI_1_3_FN_SYSTEM_OFF2:
-+	case PSCI_1_3_FN64_SYSTEM_OFF2:
- 		return psci_forward(host_ctxt);
- 	case PSCI_1_0_FN64_SYSTEM_SUSPEND:
- 		return psci_system_suspend(func_id, host_ctxt);
--- 
-2.44.0
+Must be false.
 
+> +    properties:
+> +      compatible:
+> +        const: maxim,max77705-charger
+> +
+> +    required:
+> +      - compatible
+> +      - monitored-battery
+> +
+> +  fuel-gauge:
+> +    $ref: /schemas/power/supply/power-supply.yaml
+> +    type: object
+> +    unevaluatedProperties: true
+
+Must be false.
+
+Rob
 
