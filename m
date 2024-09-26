@@ -1,88 +1,100 @@
-Return-Path: <linux-pm+bounces-14827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D88599874E6
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 15:56:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62C9E9875E4
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 16:46:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 151F91C251E6
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 13:56:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DF371F27990
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 14:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1438B5FEED;
-	Thu, 26 Sep 2024 13:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A34640C15;
+	Thu, 26 Sep 2024 14:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vvw23nvo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE63312AAE2
-	for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 13:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B4C2A8C1
+	for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 14:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727358997; cv=none; b=nNoxGRv/kYss4RHoA9w7M8fBIUmunvRrA81vS9ywALtsqsnEix5Mamh5IOGqAUOEVRMnspGCJUMOi9/M1coAsKr7GKG1PPiMFmmVKEeC9slXelS9ceFQe9C2v6jw0ZqcPgJrdKKEo56jCKZ9CZcmjU1wBObjtVvoUfpgsexbPZ8=
+	t=1727361979; cv=none; b=WhgD/L7LwQvPlttCTDQypOARNG7rTXsQ1jE4FSYiXs0B2QG2i+oO1KnXFmJ9npuNRRDRLozzJkluaNg9X+CnFpD8X1rUBTt20WSVV6oVluBonSzcOoOe8XWxA+KaSpgzw6uLk3zZRue1DPK5GitQ+Kp6juGohAr6tBwh7Lnxjf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727358997; c=relaxed/simple;
-	bh=bY901IUEC/VGDtbIIg8MkoIJ6Eiy1Xc7yN5kFIK7X/Y=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uq9Ao5/AjQGXWt7v56ikoSDhvlcOpCz60iS12UAxrSfSpC2wluwrufwU+SaD/lFSDhW0N7sTujVCDZ5Yk0QI17oVJsfJOZ3Sypx9Jr6FrSUaX/OXsUtFwaQCrLfzmFxYouysQ6kLP9CveJSoecW1qkGgHsavYyBvfBDV4jGADDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XDw7S58mTzfcZc;
-	Thu, 26 Sep 2024 21:54:12 +0800 (CST)
-Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id 689C11800F2;
-	Thu, 26 Sep 2024 21:56:30 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemf500003.china.huawei.com
- (7.202.181.241) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 26 Sep
- 2024 21:56:29 +0800
-From: Zhang Zekun <zhangzekun11@huawei.com>
-To: <andersson@kernel.org>, <konradybcio@kernel.org>,
-	<ulf.hansson@linaro.org>, <linux-pm@vger.kernel.org>,
-	<dan.carpenter@linaro.org>
-CC: <chenjun102@huawei.com>, <zhangzekun11@huawei.com>
-Subject: [PATCH] pmdomain: qcom-cpr: Fix the return of uninitialized variable
-Date: Thu, 26 Sep 2024 21:42:11 +0800
-Message-ID: <20240926134211.45394-1-zhangzekun11@huawei.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1727361979; c=relaxed/simple;
+	bh=BYtR4OxJFCn6M3zTc3OKmhD9cnSm2YgHNzO+dz0uZ50=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z8rtlGIZ0w8ULikkzJ365/kprLT2Gfh2jDs0lOvLacjjPp6kW+mASuJogdTkTrgP/5jAItvxLw7hNaXRdAgXYXYBObWf52duXKu9euGFmL9WcvtNvbPbsevWExrRtS5vV2hTyudRauKY1aT3cjQWwANk3+FVJ65BAO+PMAVTkGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vvw23nvo; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3e0719668e8so512395b6e.0
+        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 07:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727361977; x=1727966777; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lwr827ER7/MK7+gZOLmMtEaMpGANHyPzdExsv2SssgQ=;
+        b=Vvw23nvowmDw/8uVxVwaiH3Cv8ldAH4gmj58AtA9lWNf//4QKoGmGtRJ6iSYBCiARn
+         n7tW1aFY9VMy8mhwu7SjcJIN/EEGt9Y+cj+S1U/3qAo6UBhmY5swRyMRKg/EUQ2BwwRz
+         JO4LzPrw5uwDevMxEkgQ9ogs62IRPXXK5HsJ1zg9ecInz2SQpTHNMd9l6ZhGkIZoqzVk
+         hRo2rSlTjlDDGvFpRHpsWVovfK32QHxwEN5Qprl1xaMHXf1MzCZ8YWa2jziXbcN5CNek
+         F63B2hbvbo+6KXUrGSvkHzwaeD0GxlvhTJhk1UPN4dGiZpBdkUvlnnSIJWNl1G0Iwbl5
+         qEbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727361977; x=1727966777;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lwr827ER7/MK7+gZOLmMtEaMpGANHyPzdExsv2SssgQ=;
+        b=ry7gJEuSQ+D+N5XWz22ak6RFojyxwHTHgLhLOWGk8Xu9lxRHv7dWL54B+Pn3vWMK+Q
+         fw4pNAcbflQw4DehzyPt/fotDiX/3C18i6ExzQN7HckxiouQYGQ9BdEBeIrxRuL2YfRI
+         B1rsQUbrI2RwnKo5Csn/uIAvaMTN3gi4A/RO9BVL9fkPIn7isnhdfASX9Z/h+YlUoM99
+         gBfXF/kM7oyERivK6ko9BGm93o3XCXo1WzEJCbakU4pWX3AaR387Goe5MMPWfXTLXRfG
+         gMqwb3sC3vkMXapgqi8mvmnho20rtPgFzsPbk8HVaelUX3kpFXm1E+COJzViJCo8CUqU
+         oZYA==
+X-Gm-Message-State: AOJu0Yz+SK3oVRq2Zm1LHZRRp/h67aQcSbS5MIQ7QdCUsTdNqtaE/McL
+	eYQOYEqIz9aCtzWeCHPhLGdy1sFOWz/qZt43e1ZpImb8QevjMfzh+8gEmHpm
+X-Google-Smtp-Source: AGHT+IGl4Dg99OQm6XYe+ukDAMoVgDVIM26FXdjFrIki9r2ntLdkf59s7Zj+ecJxXPQNlzAOzy7ZzQ==
+X-Received: by 2002:a05:6808:2013:b0:3e0:5c45:454c with SMTP id 5614622812f47-3e29b7d3cccmr5352313b6e.29.1727361976806;
+        Thu, 26 Sep 2024 07:46:16 -0700 (PDT)
+Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e39358753esm5268b6e.24.2024.09.26.07.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Sep 2024 07:46:16 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: sre@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/2] rk817_charger full charge capacity fixes
+Date: Thu, 26 Sep 2024 09:43:44 -0500
+Message-Id: <20240926144346.94630-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemf500003.china.huawei.com (7.202.181.241)
+Content-Transfer-Encoding: 8bit
 
-The of_property_read_u64() can fail and remain the variable uninitialized,
-which will then be returned. Initializing the variable "rate" to zero to
-fix this problem.
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Fixes: 181c8148556a ("pmdomain: qcom-cpr: Use scope based of_node_put() to simplify code.")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-pm/455a6a49-41d2-4a20-9a31-f57ee7a67920@huawei.com/T/#m0a62b501b453a6d6e94c52a428a66f65b5422c65
-Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
----
- drivers/pmdomain/qcom/cpr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The code for fully charged capacity is still causing problems when
+invalid values are reported by the charger (usually after resume from
+suspend). Stop attempting to auto calibrate this and instead allow the
+value to be writeable from userspace.
 
-diff --git a/drivers/pmdomain/qcom/cpr.c b/drivers/pmdomain/qcom/cpr.c
-index e1fca65b80be..26a60a101e42 100644
---- a/drivers/pmdomain/qcom/cpr.c
-+++ b/drivers/pmdomain/qcom/cpr.c
-@@ -1052,7 +1052,7 @@ static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
- 			of_parse_phandle(child_np, "required-opps", 0);
- 
- 		if (child_req_np == ref_np) {
--			u64 rate;
-+			u64 rate = 0;
- 
- 			of_property_read_u64(child_np, "opp-hz", &rate);
- 			return (unsigned long) rate;
+Chris Morgan (2):
+  power: supply: rk817: stop updating info in suspend
+  power: supply: rk817: Update battery capacity calibration
+
+ drivers/power/supply/rk817_charger.c | 112 ++++++++++++++++-----------
+ 1 file changed, 65 insertions(+), 47 deletions(-)
+
 -- 
-2.17.1
+2.34.1
 
 
