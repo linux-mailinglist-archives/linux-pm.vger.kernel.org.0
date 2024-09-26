@@ -1,146 +1,167 @@
-Return-Path: <linux-pm+bounces-14795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1CAC986F25
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 10:44:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE292986F42
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 10:49:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48B04B209C5
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:44:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0DFC2867A2
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5A61A4E8D;
-	Thu, 26 Sep 2024 08:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75EC1A4E9A;
+	Thu, 26 Sep 2024 08:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IGGNyu2G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBDA18F2F2;
-	Thu, 26 Sep 2024 08:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83E014AD17;
+	Thu, 26 Sep 2024 08:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727340283; cv=none; b=ChLYz+YkNCEVNVUABd1Z4R6dLxb1gRgzzkTzNOOSpckIazX0pXWh2WLWXEJuQqkUbtrZQD5lLYslOfHqppi2W9t7kdQsQsac8oE1zEnzhPv4HIl/IuSv6J+2l10DRZsWyV36ZtY6cnRobjpyJUKl/HLMhAOVLTuFdh7asood5H8=
+	t=1727340540; cv=none; b=jIe5uTVd2dHPzHjF7vbMKcImbxNB4Jwsh9IPrCz17Ze2AyPD8gmd8MbtUm+TtMcxA5x9CpJhZshi3Kx0TvSw2stfMjAljFJ0RVMG47RQhmv8jmPlvbwaccvDde4+1EdNWOyJNe+I5DLx6y8KOYmA6eXw1qdSVJYcYeFEcHfHebc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727340283; c=relaxed/simple;
-	bh=TgZ8xbjk0U5zw0mCJp1SNqt6tvdaH2wLHC49mMUW9EU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ewMAQRMcTa4M5iB9XovXclKLJX2Tx2hx8yE1aY73m2jVwWZBd1l8VwbzFXTsdv8lW2HtuJItDuU0sx43Am1EPKNIMAAlvJ2OADH734Du/9CfY/2+6qLxvSfnh92MMlj8xDb/UcdreCcQY2lf9AYQYvRd3RXPyd5d4ndN1TpIgMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XDnFH6Nk0z1SBqF;
-	Thu, 26 Sep 2024 16:43:47 +0800 (CST)
-Received: from dggpeml500019.china.huawei.com (unknown [7.185.36.137])
-	by mail.maildlp.com (Postfix) with ESMTPS id 05DA9180043;
-	Thu, 26 Sep 2024 16:44:37 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 26 Sep
- 2024 16:44:36 +0800
-Message-ID: <08f5f2fa-7bce-2374-f58b-a1df9f481255@hisilicon.com>
-Date: Thu, 26 Sep 2024 16:44:36 +0800
+	s=arc-20240116; t=1727340540; c=relaxed/simple;
+	bh=0H4dM9NzilQ5XHmjN1qEbEUXxix/9JrmttrPTQq+uvI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZbegXg8JJ0wb2QkEBE0Nvt8PsI9DuQY3c6TKrk8Xu3XaldFkFLL1Ywji5Id7VJqeDgPKBqLYG9HBOf4KtAiOmnwtg2dPC4qd+U1+GOYqRllaO3qKes5Q7oudNbQT8qIIYLOFV7n2szvmTYHhHDzFP6QSL67uMEliTfICpZFCidU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=IGGNyu2G; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1727340537;
+	bh=0H4dM9NzilQ5XHmjN1qEbEUXxix/9JrmttrPTQq+uvI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IGGNyu2GGhL861wp8iuj8doPxLtpFHdGi+14N43mzCZfjm5A5rwcPIYKHY1VMQXhr
+	 aggqvQMkA7uulzyzM1aBKZZ2yRP2uF3rjA8qHkaRJxSRzjrkFsWai5YAkG5Cqqeg45
+	 3Ycgkq5ttycO9PjosJ+zp6gIxNP3cNYhNEAFHKNTfZ/xGP+6AFnBbn6jq5rHF/Tl4p
+	 6E1XqaooOWMIA3YoFskEJkzmczduIivnTIqspTnh1tuRShqiTcFmrqlYGWCyb4X5HS
+	 IN75tPtPoNPClqOcM7CNdas3CVEC+40k9KEK4+3vVMTzeMBQ4x/sdlWJMD/yEvPAP9
+	 aZceBE4nfxWag==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A9D5717E107A;
+	Thu, 26 Sep 2024 10:48:56 +0200 (CEST)
+Message-ID: <e3eabcc4-1174-4a58-a084-d37467f63ced@collabora.com>
+Date: Thu, 26 Sep 2024 10:48:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 1/2] cppc_cpufreq: Use desired perf if feedback ctrs
- are 0 or unchanged
-To: "lihuisong (C)" <lihuisong@huawei.com>, <ionela.voinescu@arm.com>,
-	<beata.michalska@arm.com>, <wangxiongfeng2@huawei.com>,
-	<viresh.kumar@linaro.org>, <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <wanghuiqiang@huawei.com>,
-	<zhenglifeng1@huawei.com>, <yangyicong@huawei.com>, <liaochang1@huawei.com>,
-	<zengheng4@huawei.com>
-References: <20240919084552.3591400-1-zhanjie9@hisilicon.com>
- <20240919084552.3591400-2-zhanjie9@hisilicon.com>
- <f888bd45-120a-a045-c35c-52ae40ae8a9a@huawei.com>
- <887a977c-c5b0-10d5-256c-06f278b667f7@hisilicon.com>
- <e8fdf684-07ca-fc05-e490-72fca37657e4@huawei.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <e8fdf684-07ca-fc05-e490-72fca37657e4@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500019.china.huawei.com (7.185.36.137)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 3/3] pmdomain: mediatek: Use OF-specific regulator API
+ to get power domain supply
+To: Chen-Yu Tsai <wenst@chromium.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+ Johan Hovold <johan@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20240925093807.1026949-1-wenst@chromium.org>
+ <20240925093807.1026949-4-wenst@chromium.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240925093807.1026949-4-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 26/09/2024 14:07, lihuisong (C) wrote:
+Il 25/09/24 11:38, Chen-Yu Tsai ha scritto:
+> The MediaTek power domain driver contains a hack that assigns the device
+> node of the power domain to the struct device of the power domain
+> controller in order to use the devres regulator API.
 > 
-> 在 2024/9/26 10:57, Jie Zhan 写道:
->>
->> On 25/09/2024 17:28, lihuisong (C) wrote:
->>> Hi Jie,
->>>
->>> LGTM except for some trivial,
->>> Reviewed-by: Huisong Li <lihuisong@huawei.com>
->> Thanks.
->>
->>>
->>> 在 2024/9/19 16:45, Jie Zhan 写道:
->>>> The CPPC performance feedback counters could be 0 or unchanged when the
->>>> target cpu is in a low-power idle state, e.g. power-gated or clock-gated.
->>>>
->>>> When the counters are 0, cppc_cpufreq_get_rate() returns 0 KHz, which makes
->>>> cpufreq_online() get a false error and fail to generate a cpufreq policy.
->>>>
->>>> When the counters are unchanged, the existing cppc_perf_from_fbctrs()
->>>> returns a cached desired perf, but some platforms may update the real
->>>> frequency back to the desired perf reg.
->>>>
->>>> For the above cases in cppc_cpufreq_get_rate(), get the latest desired perf
->>>> to reflect the frequency; if failed, return the cached desired perf.
->>>>
->>>> Fixes: 6a4fec4f6d30 ("cpufreq: cppc: cppc_cpufreq_get_rate() returns zero in all error cases.")
->>>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
->>>> Reviewed-by: Zeng Heng <zengheng4@huawei.com>
->>>> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
->>>> ---
->>>>    drivers/cpufreq/cppc_cpufreq.c | 49 +++++++++++++++++++++++++++-------
->>>>    1 file changed, 39 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->>>> index bafa32dd375d..e55192303a9f 100644
->>>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>>> @@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
->>>>          perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
->>>>                         &fb_ctrs);
->>>> +    if (!perf)
->>>> +        return;
->>>> +
->>>>        cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
->>>>          perf <<= SCHED_CAPACITY_SHIFT;
->>>> @@ -726,11 +729,26 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->>>>          /* Check to avoid divide-by zero and invalid delivered_perf */
->>> Now this comment can be removed, right?
->> Didn't notice this comment, but, having a check, I think it still fits.
->> '!delta_reference' avoids divide-by zero, and '!delta_delivered' checks
->> invalid delivered_perf.
-> The comment  "avoid divide-by zero" is just for the below code: "(reference_perf * delta_delivered) / delta_reference".
-> So It is also useful, but I think It's obvious and it doesn't make much sense.
+> Now that there is a proper OF-specific regulator API, and even a devres
+> version, replace the hack with proper code.
 > 
-> The comment "avoid invalid delivered_perf" is for the return value.
-> Now this func return zero which can't count as a valid delivered_perf, right?
+> This change is incompatible with incomplete device trees. Instead of
+> assigning the dummy regulator in cases where the power domain requires
+> a supply but the device tree does not provide one, the driver will just
+> error out. This will be seen on the MT8390 EVK, which is missing
+> supplies for the IMG_VCORE and CAM_VCORE domains. And likely all the
+> MediaTek EVBs, which have no power domain supplies specified. This is
+> however the correct behavior. If the power domain's supply is missing,
+> then it should not work. Relying on other parts of the system to keep
+> the unattached regulator enabled is likely to break in ways less easier
+> to understand.
+> 
 
-so, what about this?
+Breaking something that was "working" (not really working though) before is a
+hard thing to justify, but I feel like this is one of the cases in which we
+have to swallow the pill.
 
-/*
- * Avoid divide-by zero and unchanged feedback counters.
- * Leave it for callers to handle.
- */
+This is a hack that I've always been angry about, and causing all sorts of
+random issues on MediaTek SoCs from time to time... that was fixed multiple
+times by hacking the previous hack which was needed for this hack to still
+work in a way or another.
 
->>
->> So I think we just leave it unchanged.
->>
+I am tempted to give you a R-b right now, but let me carefully test this on
+multiple devices before that.
 
-...
+Meanwhile, I just wanted to say that I agree with you about this commit and
+wanted to give a bit more context to people reading "this breaks things" so
+that they can understand what's going on (and that we're not crazy! ..or at
+least, not *that* much :-P).
+
+Cheers,
+Angelo
+
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+> Changes since v7:
+> - New patch
+> 
+> The other option is to follow what Rockchip will be doing: getting the
+> regulator supply upon first use / enable [1]. This will result in less
+> breakage: only the power domain that is missing its supplies will fail
+> to be attached.
+> 
+> [1] https://lore.kernel.org/all/20240919091834.83572-6-sebastian.reichel@collabora.com/
+> ---
+>   drivers/pmdomain/mediatek/mtk-pm-domains.c | 12 +-----------
+>   1 file changed, 1 insertion(+), 11 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> index 88406e9ac63c..3580913f25d3 100644
+> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> @@ -353,7 +353,6 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+>   {
+>   	const struct scpsys_domain_data *domain_data;
+>   	struct scpsys_domain *pd;
+> -	struct device_node *root_node = scpsys->dev->of_node;
+>   	struct device_node *smi_node;
+>   	struct property *prop;
+>   	const char *clk_name;
+> @@ -388,16 +387,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+>   	pd->scpsys = scpsys;
+>   
+>   	if (MTK_SCPD_CAPS(pd, MTK_SCPD_DOMAIN_SUPPLY)) {
+> -		/*
+> -		 * Find regulator in current power domain node.
+> -		 * devm_regulator_get() finds regulator in a node and its child
+> -		 * node, so set of_node to current power domain node then change
+> -		 * back to original node after regulator is found for current
+> -		 * power domain node.
+> -		 */
+> -		scpsys->dev->of_node = node;
+> -		pd->supply = devm_regulator_get(scpsys->dev, "domain");
+> -		scpsys->dev->of_node = root_node;
+> +		pd->supply = devm_of_regulator_get_optional(scpsys->dev, node, "domain");
+>   		if (IS_ERR(pd->supply))
+>   			return dev_err_cast_probe(scpsys->dev, pd->supply,
+>   				      "%pOF: failed to get power supply.\n",
+
+
+
 
