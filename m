@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-14792-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54730986EEC
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 10:36:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AC6A986EF0
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 10:37:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F40911F21E90
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:36:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E108287906
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75F41A704A;
-	Thu, 26 Sep 2024 08:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB211AC895;
+	Thu, 26 Sep 2024 08:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PgAobRUs"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dpARYpw5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AF21A4E9A;
-	Thu, 26 Sep 2024 08:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B831A727A;
+	Thu, 26 Sep 2024 08:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727339769; cv=none; b=pv3mjopgDyCKIxZ164U8nN9ixvRg0QuqTQtWdmfcxsj9aX5tezzLCQUdz0PmEAzGbrFsIJDAyOZiAeMXjYQUkfEDXjhR6Zc20B2e/2JF755jjd8zChaZSRKADivsXlHcNbJo0dOPm5l991/6XD+pPJft/VB3w3UCRwyOkiX07P0=
+	t=1727339772; cv=none; b=lBaWVQPZ05MDMlVkarla6GGO2+EqLpDUXUIbRPWDBDd8/tG6b2cvYQ7FMG5XZFqNIzZHihK+yd4VBSXaiXIpa55P2sBhfw9lFnR1p3H7O2r6Uso8oh4X0nShgQVpnxMRnlL12gT5qNJ6X2dhbVPvH7Mf/Zh4EGvf9BHoqaDA1DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727339769; c=relaxed/simple;
-	bh=gmxyRsRvrN/GW7kRQnE8u/bLH36aFbd2B6dpmrkb7U4=;
+	s=arc-20240116; t=1727339772; c=relaxed/simple;
+	bh=GJlBJ2nije3417X3Duk+yPak7aNIl/IkHg/i7Ff3tgs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Mjg4h8yWtJ69VD8kgi4n9mked5Vr9V4y2ObqTZ5kw3iRZHlWedARPITTgQNwM0pBHjcaTmo5HAq/Z+5u18uyetjlahNRx5J+2PeH6H3WhlMjsEhIDWgXiN6qjSQ8Mi68Re+GtcvAGVLnaJrLUfuKA6z4RsRkGwW1jKZ4vrpmx8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=PgAobRUs; arc=none smtp.client-ip=198.47.23.248
+	 In-Reply-To:To:CC; b=P//t8889myntImuB2iuCSI545jtN/9AFnxX3lD/fnoJ647fxF5l43n5m0mQKjhAMUm7B2bLfuHnU2BIrZyUTYfKeD0hPZwMCiDyi25POoPN9t/i9nxtpKUsg//8V+rKwcxQNxBPMpPathi9zBsM+76RTBABniePCtUl2IY2m7mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=dpARYpw5; arc=none smtp.client-ip=198.47.23.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48Q8ZtKL069839;
-	Thu, 26 Sep 2024 03:35:55 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48Q8a0Wp042677;
+	Thu, 26 Sep 2024 03:36:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1727339755;
-	bh=zLhShaVN27E261VkbondnBJqweCJB7QrnU+MuM8Qq0E=;
+	s=ti-com-17Q1; t=1727339760;
+	bh=/NklGAACFNInFGXKnjf+d7lTvw/WjOe5LVumCjbxEJg=;
 	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=PgAobRUso3AVh8p7H3FPRH8DprDnwv22vB3MjHljzbWQPV7ezfegr4yFpQsPR1zK+
-	 1anBJz7S5FJtwysbhW4Oty401aVm+S5LuMTX22JwhW90ua6itbc3mj/pAxjePoxn9D
-	 SVa9FWVOStqMsJk6f274oHOmTA+yfqc4AsBqnXhM=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48Q8ZtCG006550
+	b=dpARYpw56iNobO0+/RjIDcfeGv8VLqRjLssXsNpq2pGs52IWDiMmhgn+ycsi1lD9p
+	 eeECBMs7XUYpVu37T3RSsED/m4cDu+qYW1UxwX9TBs74kTq2coPGVDa/A328TTTCbK
+	 Bd0aR8Xytda1X3gP1CJHuTU7LA9tpIyj4v6MN4nc=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48Q8a0UT053894
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 26 Sep 2024 03:35:55 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 26 Sep 2024 03:36:00 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 26
- Sep 2024 03:35:54 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2024 03:35:59 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 26 Sep 2024 03:35:55 -0500
+ Frontend Transport; Thu, 26 Sep 2024 03:35:59 -0500
 Received: from [127.0.1.1] (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48Q8ZPK9064456;
-	Thu, 26 Sep 2024 03:35:50 -0500
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48Q8ZPKA064456;
+	Thu, 26 Sep 2024 03:35:55 -0500
 From: Dhruva Gole <d-gole@ti.com>
-Date: Thu, 26 Sep 2024 14:04:56 +0530
-Subject: [PATCH v7 5/6] arm64: dts: ti: k3-am62: use opp_efuse_table for
- opp-table syscon
+Date: Thu, 26 Sep 2024 14:04:57 +0530
+Subject: [PATCH v7 6/6] cpufreq: ti-cpufreq: Update efuse/rev offsets in
+ AM62 family
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240926-ti-cpufreq-fixes-v5-v7-5-3c94c398fe8f@ti.com>
+Message-ID: <20240926-ti-cpufreq-fixes-v5-v7-6-3c94c398fe8f@ti.com>
 References: <20240926-ti-cpufreq-fixes-v5-v7-0-3c94c398fe8f@ti.com>
 In-Reply-To: <20240926-ti-cpufreq-fixes-v5-v7-0-3c94c398fe8f@ti.com>
 To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -89,72 +89,92 @@ CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
 	<msp@baylibre.com>,
         Dhruva Gole <d-gole@ti.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727339725; l=2062;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727339725; l=2979;
  i=d-gole@ti.com; s=20240919; h=from:subject:message-id;
- bh=gmxyRsRvrN/GW7kRQnE8u/bLH36aFbd2B6dpmrkb7U4=;
- b=LlNNBZyVor5AP/eXka2i6tm8J6sR4UY+lHeRlH40FetDY2GEM0TFbGgM5my7l3rEoe0zJn2JC
- G7vSMXZr9UtAFmt+TrH7JKipBGa9+XgVDw/AAma9MCEdWSm/jrpTe40
+ bh=GJlBJ2nije3417X3Duk+yPak7aNIl/IkHg/i7Ff3tgs=;
+ b=SI6s16xvei2mPWIU04o5SUXvMFiKHAW3liKgNmSW0XtdgkRJ8RkPugTxuHbgmbDa5HTg7UGO5
+ JkLRdxsqcotCO9U0GLjHWzZ1Ds9v9RApTK770ZYGM9JHmcpG5xwsebk
 X-Developer-Key: i=d-gole@ti.com; a=ed25519;
  pk=k8NnY4RbxVqeqGsYfTHeVn4hPOHkjg7Mii0Ixs4rghM=
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Add another entry in the wkup_conf for the syscon node, and then use
-that for the syscon in opp-table.
+With the Silicon revision being taken directly from socinfo, there's no
+longer any need for reading any SOC register for revision from this driver.
+Hence, we do not require any rev_offset for AM62 family of devices.
+The efuse offset should be 0x0 for AM625 as well, as the syscon
+register being used from DT refers to the efuse_offset directly.
 
-Marking entire wkup_conf as "syscon", "simple-mfd" is wrong and needs to
-be addressed similar to how other child-nodes in wkup_conf are implemented
-in the same file.
-
-Also, rename syscon to bus and drop reg = <>;
+However, to maintain the backward compatibility with old devicetree, also
+add condition to handle the case where we have the wrong offset and add
+the older efuse_offset value there such that we don't end up reading the
+wrong register offset.
 
 Signed-off-by: Dhruva Gole <d-gole@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 10 +++++++---
- arch/arm64/boot/dts/ti/k3-am625.dtsi       |  2 +-
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ drivers/cpufreq/ti-cpufreq.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-index e0afafd532a5c63f29ca0dabc541ffa22dde609b..9933bb55b00532fbd5ea74fc90036ab0eadd50bc 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-@@ -8,10 +8,9 @@
- #include <dt-bindings/bus/ti-sysc.h>
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index ba621ce1cdda694c98867422dbb7f10c0df2afef..054eadd7a3bf98a15d765e0506dbfa7ed0706f4f 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -313,10 +313,9 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
  
- &cbass_wakeup {
--	wkup_conf: syscon@43000000 {
-+	wkup_conf: bus@43000000 {
- 		bootph-all;
--		compatible = "syscon", "simple-mfd";
--		reg = <0x00 0x43000000 0x00 0x20000>;
-+		compatible = "simple-bus";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		ranges = <0x0 0x00 0x43000000 0x20000>;
-@@ -22,6 +21,11 @@ chipid: chipid@14 {
- 			reg = <0x14 0x4>;
- 		};
+ static struct ti_cpufreq_soc_data am625_soc_data = {
+ 	.efuse_xlate = am625_efuse_xlate,
+-	.efuse_offset = 0x0018,
++	.efuse_offset = 0x0,
+ 	.efuse_mask = 0x07c0,
+ 	.efuse_shift = 0x6,
+-	.rev_offset = 0x0014,
+ 	.multi_regulator = false,
+ };
  
-+		opp_efuse_table: syscon@18 {
-+			compatible = "ti,am62-opp-efuse-table", "syscon";
-+			reg = <0x18 0x4>;
-+		};
-+
- 		cpsw_mac_syscon: ethernet-mac-syscon@200 {
- 			compatible = "ti,am62p-cpsw-mac-efuse", "syscon";
- 			reg = <0x200 0x8>;
-diff --git a/arch/arm64/boot/dts/ti/k3-am625.dtsi b/arch/arm64/boot/dts/ti/k3-am625.dtsi
-index c3d1db47dc9f351d217721c0b9e46a0c68995838..c249883a8a8d846aa21092c4c341fd443cfcec15 100644
---- a/arch/arm64/boot/dts/ti/k3-am625.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am625.dtsi
-@@ -108,7 +108,7 @@ cpu3: cpu@3 {
- 	a53_opp_table: opp-table {
- 		compatible = "operating-points-v2-ti-cpu";
- 		opp-shared;
--		syscon = <&wkup_conf>;
-+		syscon = <&opp_efuse_table>;
+@@ -325,7 +324,6 @@ static struct ti_cpufreq_soc_data am62a7_soc_data = {
+ 	.efuse_offset = 0x0,
+ 	.efuse_mask = 0x07c0,
+ 	.efuse_shift = 0x6,
+-	.rev_offset = 0x0014,
+ 	.multi_regulator = false,
+ };
  
- 		opp-200000000 {
- 			opp-hz = /bits/ 64 <200000000>;
+@@ -334,7 +332,6 @@ static struct ti_cpufreq_soc_data am62p5_soc_data = {
+ 	.efuse_offset = 0x0,
+ 	.efuse_mask = 0x07c0,
+ 	.efuse_shift = 0x6,
+-	.rev_offset = 0x0014,
+ 	.multi_regulator = false,
+ };
+ 
+@@ -349,11 +346,26 @@ static int ti_cpufreq_get_efuse(struct ti_cpufreq_data *opp_data,
+ 				u32 *efuse_value)
+ {
+ 	struct device *dev = opp_data->cpu_dev;
++	struct device_node *np = of_find_node_by_path("/bus@f0000/bus@b00000/syscon@43000000");
+ 	u32 efuse;
+ 	int ret;
+ 
+-	ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
+-			  &efuse);
++	/*
++	 * This checks for old AM625 Devicetrees where the syscon was a phandle to the
++	 * wkup_conf parent, this required a hard-coded offset to the efuse register.
++	 * This node had the compatibles "syscon", "simple-mfd".
++	 */
++	if (of_device_is_compatible(np, "simple-mfd") &&
++	    of_machine_is_compatible("ti,am625")) {
++		dev_warn(dev,
++			 "%s: An old devicetree is in use, please consider updating at some point!",
++			 __func__);
++		ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset + 0x0018,
++				  &efuse);
++	} else {
++		ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
++				  &efuse);
++	}
+ 	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING && ret == -EIO) {
+ 		/* not a syscon register! */
+ 		void __iomem *regs = ioremap(OMAP3_SYSCON_BASE +
 
 -- 
 2.34.1
