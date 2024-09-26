@@ -1,125 +1,125 @@
-Return-Path: <linux-pm+bounces-14775-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14776-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 691EE986CA5
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:37:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86202986D0B
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:57:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EAC028174E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 06:37:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30CFC1F24335
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 06:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EC2188A25;
-	Thu, 26 Sep 2024 06:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D7A1A4E70;
+	Thu, 26 Sep 2024 06:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blmOmNvh"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="R+wIwy0B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5911AAC4;
-	Thu, 26 Sep 2024 06:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E11718950D
+	for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 06:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727332667; cv=none; b=DI/sTaB+TwaDKiRcciNhse4avey5ccAYMgD3tQ3UoW17yPrSVKREJ8fF4baE4fCBvRe87CT5phr5C/xtPb6LfdFRprpMRnVlrY447LeXsFlPLMROID0vQKIBO/eVR3tG3JrskPeWA4B4UVGSRzz0P+cDcUyv4poTln0zhPyajkE=
+	t=1727333745; cv=none; b=ZwV09pgyzgRlv7sNKxKUB0ohw11D0J51ZuRxoNYcPCYNoYT7DHL6X2YiXyK+ieet9Tl28IWGYLjbtOq5vCTPbPTH72D838lH33/kZBXtEozynj5l2fEq+oDWLaA++/m4beICu/47vE5YH5B/XR9buZHlZhoT96kRiFaZEOPOdCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727332667; c=relaxed/simple;
-	bh=wOx3VDnN+2V5jk81bW4SKY4gtNi3PB26Lkiz+mCXQvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZkkWy8V2p/Ve2JKVPZB3KZoV4Gvk7QIAyHmssvoaEfhd0WhBAcK/48sbZLOAE52qAB2KKW8vQC0E9S/Ke5juinhbyc0GCCIupUOd7JK/cpNBSY1/Js33FCtrRaJghZKGSBwe7cyPnuYoJF3Il+f0kmIUsefKomsoauy3dJbnFQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blmOmNvh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073FAC4CEC5;
-	Thu, 26 Sep 2024 06:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727332665;
-	bh=wOx3VDnN+2V5jk81bW4SKY4gtNi3PB26Lkiz+mCXQvc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=blmOmNvhW6JmOiLUqwznaWXbNMXydDDV0n2TTTvP+qr5zFslhYUrZ9VazPfTNYUrG
-	 y/2QDRYPB/zoPYX3igZYY02ezQfrljlrw3u7zfVt7Hj1DJcsTqntprfWzc1LXReYlU
-	 YoEZq1Ht1F24fty55RN6q6RY9NpgsW13jRVWq/rn5q0gwiP8MsDvAQk2tP6w6vgpya
-	 wt6AAcWjPZmFDuZQa0i30ACYmEAJLijf8gDFzzITMzW9HELtnZguqSlz5cgeM+1daw
-	 tgYVXo/GS5drpRDCu9YHV41J0m8bKTGJtd9awjdOdypkfpDT5HlFEp1pgs9H5nr+E2
-	 oIfyLbxSQ7OpA==
-Date: Thu, 26 Sep 2024 08:37:42 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] mips: dts: realtek: Add I2C controllers
-Message-ID: <euqypyub7f3bd7wa7w6axdt6mrvmbvckptvrum2rou3ni6sqdf@ouwm7zjuarni>
-References: <20240925215847.3594898-1-chris.packham@alliedtelesis.co.nz>
- <20240925215847.3594898-6-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1727333745; c=relaxed/simple;
+	bh=V5qAw7P+eqzi/1Duiuys4SRbwKIjG57n1EAbl6sKbjA=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=bTz1OinnL35BbkMiSDDbt0mwB4r1p0wWhf9jvl4sGVhdku5zxWCfmayPll1Rhs18bJQrZS0AA8sxwRsB9uYt+1ASdCe0zWieUcts3g3YMeZhJ7v9OeTlxxqs43CaguTBcuS1qMmdWSR5Dw79IK4qNi6EeWTCetMpKW6o1Ox08eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=R+wIwy0B; arc=none smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-71100987d1cso364643a34.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2024 23:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1727333743; x=1727938543; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MzHfWrObFTebylfAMReMmx0H/fNyKd6EWjjqrhs5YS8=;
+        b=R+wIwy0BqFZfZ1ot5/7EyBWZ8e1cxDQ3kUYDN+jU6e1K+oKi1rKeSvnhwlcF00/C9r
+         MN9hJJbxH2ETUhzUJyaoMhxTnq8N5FbaFloE6mCw7yryW3y/Vji/quSRtqNllJMIQto0
+         jWWHPPLa+O3BZiyDYmxBQpz94pzIJx07LudcOy6mqkf+5T4Clk8SpFBSy1TKuKfz63v7
+         7B7u+BMyS0Jq1ixTXfWuQ2+mPT6b21Xlve8XyrQmJJiYekhEA4dDNRZF3Cz949x8JdFc
+         pAd8SbWYlntCM9JaWUx8imsMZSINYhYxaFzffAZqM0KFFv4lNQlQ5GyX6DjmKnyqvJOX
+         S6iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727333743; x=1727938543;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MzHfWrObFTebylfAMReMmx0H/fNyKd6EWjjqrhs5YS8=;
+        b=MG/8ZqcpgLtHjI5fP91LBz9nY91gAbSomCR3HJXh8eLALVNz0cHf9E2mGiduy4Q+2g
+         seLeEH+ylTK3KWhcLz3fHFP6sEO20OYEBUcv2fdfEAbU2U/qHnyHPmskRjcLi2ABRm37
+         fCHyjZBzcnituWcSF+SIlymLrgDYGaXNk/uyb1REt+nwmnWKl/pEfE1sJDHNk4GSrgGE
+         /TA3X79vJW+PMNE9+0hZpAFvns5iCHlXW6no1JeKSPk8q5dqHPWuPQEtRNlKVaASb6Ha
+         tqSxC1ATIxuWv2wppvOBpvvidfNp0a/PQKbqYXm8UoaXgNFWRH0uv4sGP+wOEX+2CC+v
+         Us7w==
+X-Forwarded-Encrypted: i=1; AJvYcCUexWu8uvNVzIyW5E26qV03j+XHYkzbGJTTJR7u+kbNhmCfZ/8KLv+eNXDaeTPTFuLtj+2EzH5rFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywi2YcfGpDZszA/njhiVDaEzVdJ+5BNIgDD2RnNx2I+dV89+Klw
+	WZxQAN4fkhSeH0p7ZITTXGwMBpKqevSutxr9/ps7fMpjpDA4hEdO4hsEywC1p8s=
+X-Google-Smtp-Source: AGHT+IFJjm9aCyo95+9/VI6IL66etpFOV0OLThx3WyZZ7tnWZyAbNEO+PfCso5aAFQN+3KjsS0OA1A==
+X-Received: by 2002:a05:6830:6e99:b0:711:c8:1a39 with SMTP id 46e09a7af769-713c7dc1258mr4573597a34.16.1727333743142;
+        Wed, 25 Sep 2024 23:55:43 -0700 (PDT)
+Received: from hsinchu35-syssw01.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6b7c73120sm3592352a12.68.2024.09.25.23.55.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 23:55:42 -0700 (PDT)
+From: Nick Hu <nick.hu@sifive.com>
+To: greentime.hu@sifive.com,
+	zong.li@sifive.com,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <anup@brainfault.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Mayuresh Chitale <mchitale@ventanamicro.com>,
+	Atish Patra <atishp@rivosinc.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Nick Hu <nick.hu@sifive.com>,
+	Samuel Ortiz <sameo@rivosinc.com>,
+	Sunil V L <sunilvl@ventanamicro.com>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/3] Support SSTC while PM operations
+Date: Thu, 26 Sep 2024 14:54:15 +0800
+Message-Id: <20240926065422.226518-1-nick.hu@sifive.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240925215847.3594898-6-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 26, 2024 at 09:58:46AM +1200, Chris Packham wrote:
-> Add the I2C controllers that are part of the RTL9300 SoC.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v5:
->     - Update compatibles
->     Changes in v4:
->     - Skipped due to combining patch series
->     Changes in v3:
->     - None
->     Changes in v2:
->     - Use reg property
-> 
->  arch/mips/boot/dts/realtek/rtl9302c.dtsi |  8 ++++++++
->  arch/mips/boot/dts/realtek/rtl930x.dtsi  | 16 ++++++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/arch/mips/boot/dts/realtek/rtl9302c.dtsi b/arch/mips/boot/dts/realtek/rtl9302c.dtsi
-> index 80d9f407e758..56c35e8b8b62 100644
-> --- a/arch/mips/boot/dts/realtek/rtl9302c.dtsi
-> +++ b/arch/mips/boot/dts/realtek/rtl9302c.dtsi
-> @@ -5,3 +5,11 @@
->  &switch0 {
->  	compatible = "realtek,rtl9302c-switch", "realtek,rtl9300-switch", "syscon", "simple-mfd";
->  };
-> +
-> +&i2c0 {
-> +	compatible = "realtek,rtl9302c-i2c", "realtek,rtl9300-i2c";
-> +};
-> +
-> +&i2c1 {
-> +	compatible = "realtek,rtl9302c-i2c", "realtek,rtl9300-i2c";
-> +};
-> diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> index 89b8854596cd..2fb8461af575 100644
-> --- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> +++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> @@ -41,6 +41,22 @@ reboot@c {
->  			reg = <0x0c 0x4>;
->  			value = <0x01>;
->  		};
-> +
-> +		i2c0: i2c@36c {
-> +			compatible = "realtek,rtl9300-i2c";
-> +			reg = <0x36c 0x14>;
-> +			status = "disabled";
+When the cpu is going to be hotplug, stop the stimecmp to prevent pending
+interrupt.
+When the cpu is going to be suspended, save the stimecmp before entering
+the suspend state and restore it in the resume path.
 
-Usual convention is to have status the last. Maybe MIPS has different,
-so keep whatever is consistent in your case.
+changes in v2:
+1. Add csr_read/write_hi_lo operations
+2. Apply the suggestion from Anup.
+link: https://lore.kernel.org/lkml/20240829033904.477200-3-nick.hu@sifive.com/T/#u
 
-Anyway:
+Nick Hu (3):
+  riscv: Add csr_read/write_hi_lo support
+  riscv: Add stimecmp save and restore
+  clocksource/drivers/timer-riscv: Stop stimecmp when cpu hotplug
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ arch/riscv/include/asm/csr.h      | 22 ++++++++++++++++++++++
+ arch/riscv/include/asm/suspend.h  |  1 +
+ arch/riscv/kernel/suspend.c       |  6 ++++++
+ drivers/clocksource/timer-riscv.c |  6 ++++++
+ 4 files changed, 35 insertions(+)
 
-Best regards,
-Krzysztof
+-- 
+2.34.1
 
 
