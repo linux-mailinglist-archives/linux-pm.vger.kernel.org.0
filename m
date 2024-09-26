@@ -1,62 +1,82 @@
-Return-Path: <linux-pm+bounces-14834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9A9C987921
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 20:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E53EF987947
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 20:46:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 080731C21702
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 18:34:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 169311C21702
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 18:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA36F16131A;
-	Thu, 26 Sep 2024 18:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041B917C9B0;
+	Thu, 26 Sep 2024 18:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="KuodYhZL"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SE29JUvJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from msa.smtpout.orange.fr (smtp-73.smtpout.orange.fr [80.12.242.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA4C1534E6;
-	Thu, 26 Sep 2024 18:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2989415DBB2;
+	Thu, 26 Sep 2024 18:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727375648; cv=none; b=OYIUEvV+hFqgtrV0qLxnnLPJvUUlI1Vn0RiSazqQlf9ORajuDmMZDnUQZTuEiJ1LAWx9XzfeJ/C+0b4zjtI+38KplxJQg+MaojDneEtMEUrkr59zqPL2wILiVewafEJzFIT/DgvHKDE7jcgJmMacOTUg87CoOylkY4PumPx4mgc=
+	t=1727376367; cv=none; b=afuXRuUE0+jEZLnvV8oxyv3RKkNddsXsmosn7AYWDbxb7BKOMR/7B5BuUrM9acSsX+pfSUm29pmed6KvuOkgQ6ae4AUNuq15Cy8dg8JpeBPkO15EO1eIBv2VvqIv2OsGo4tDNt9HqK4iB8+0YA+4fuSjyNKgeFRrOD1TKieL3pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727375648; c=relaxed/simple;
-	bh=3iuHCMpCaY/5WFrJneLSrvAgOGDV6yGyGWwA8luU3GI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NubtrGF1sQM1N3vwrf+EUrg8PRKm/v/eBB2zxceTiMIclKzvruKWMJAZGS0JyrOaOUSTFjisic9d9BdXbD3sGqDjv01w2e4WFwfFbOosCAxgj0tvG7wmfd3r1/5yAWJx7Nwp16j3gCeEZaC1/R3Aj12L0zjgT5Im9CBW1f3Oisk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=KuodYhZL; arc=none smtp.client-ip=80.12.242.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id ttJMsN3PhfghUttJMstZV4; Thu, 26 Sep 2024 20:33:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1727375637;
-	bh=3QlM06zztQktN3NIJ4DxdnB67HniBEmCvi/NMR3NrVA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=KuodYhZLbK4ZwM/vRiKVcRr+eCUZHWcwycWMRPW63AFa5JtMzyAhZ9aOCFOpkvq9A
-	 Z3PCZBnRBd5eLqYNbVvCCcUfSBjq0Y8xjfe6JIUqxl2PJjs8IJOqd2lsBNN2wiNAdN
-	 7KgSUgrYFEhT/8eyy9bkLTQXVUiZP46KifQwWNMtS0KVQyZmoGIwty/mQVVQ7G4OXM
-	 7z/WfWuuj9haGD92O2WG4Rb8uB4/fsMqD2QnTRE6ClNg97AggiRis54/Ty0I8YTKSZ
-	 OoaHlyz5fZ4+86NlJr6hUj0sv6GjNQtsdBGuQPiBOr70cIP6C5ooN0Xz4GxPel+C6E
-	 u5ZKrk24ih9yA==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 26 Sep 2024 20:33:57 +0200
-X-ME-IP: 90.11.132.44
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Georgi Djakov <djakov@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] interconnect: Remove a useless kfree_const() usage
-Date: Thu, 26 Sep 2024 20:33:49 +0200
-Message-ID: <06630f9ec3e153d0e7773b8d97a17e7c53e0d606.1727375615.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.46.1
+	s=arc-20240116; t=1727376367; c=relaxed/simple;
+	bh=K+bUjFKd41jFcNzn05wYMay17uH5DKFW9c2HEdgts0M=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=gP4bpPup8EgcPQNYboaQlUXLuqx73N0j/0Py9mOvy1coo87NZcpVS4GKBwipHcvi0oDH6+eiHaquk/G5ZYL4s+SRgRuoXFrhsT8mrDnhKWTJighfIFeEC0oSrDMfQYA5lZnZalqoz63fQHZIHmiT/bMVLp/cQ+HE9RNRPb/c9jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SE29JUvJ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Cc:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=9odw1NEG4SokToSv0eALme++DFz1wAP7aZWxWSDMshE=; b=SE29JUvJ3ULBV+pZtEembIWeN3
+	4DrAyjaK4JS5T3PvpvbygaM//MM6xPEAwYW0cYfUhWpKPooJYruSiyj2qBBgA1LDyS5PsTnlbs026
+	4zTn0PJISWejctvLHY1VwAqufiwFBnab8l0kpaEmEQ58ubv++yXPbAxlap8j1LINo18Z4dV2GWS6z
+	ftq9OgBhTcrrlt/Jt57IdMmUDFYFRSpowVphJYUwOuiF7X0uQRxVEpjlpGthnfRnk8njmthsqzDf5
+	z3GqaCWW7OdTrM7/2+LMQddaU5usF4rKyhcUJJ4sYDkKAtIq14hZ/klIN8Qooo8TsK3ExyfbMcmWC
+	KdV/Je6g==;
+Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1sttUq-00000007N9u-1wag;
+	Thu, 26 Sep 2024 18:45:49 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sttUq-00000003YbD-35bQ;
+	Thu, 26 Sep 2024 19:45:48 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Francesco Lavra <francescolavra.fl@gmail.com>,
+	Miguel Luis <miguel.luis@oracle.com>
+Subject: [PATCH v5 0/5] Add PSCI v1.3 SYSTEM_OFF2 support for hibernation
+Date: Thu, 26 Sep 2024 19:37:55 +0100
+Message-ID: <20240926184546.833516-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,43 +84,67 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-"path->name" is allocated in of_icc_get_by_index() using kasprintf(), so
-there is no point in using kfree_const() to free it.
+The PSCI v1.3 spec (https://developer.arm.com/documentation/den0022)
+adds support for a SYSTEM_OFF2 function enabling a HIBERNATE_OFF state
+which is analogous to ACPI S4. This will allow hosting environments to
+determine that a guest is hibernated rather than just powered off, and
+ensure that they preserve the virtual environment appropriately to
+allow the guest to resume safely (or bump the hardware_signature in the
+FACS to trigger a clean reboot instead).
 
-Switch to the more standard kfree() to free this.
+This updates KVM to support advertising PSCI v1.3, and unconditionally
+enables the SYSTEM_OFF2 support when PSCI v1.3 is enabled.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested only.
+For the guest side, add a new SYS_OFF_MODE_POWER_OFF handler with higher
+priority than the EFI one, but which *only* triggers when there's a
+hibernation in progress. There are other ways to do this (see the commit
+message for more details) but this seemed like the simplest.
 
-This is not a bug fix.
-kfree_const() works fine here, but is useless. It is equivalent to kfree().
+Version 2 of the patch series splits out the psci.h definitions into a
+separate commit (a dependency for both the guest and KVM side), and adds
+definitions for the other new functions added in v1.3. It also moves the
+pKVM psci-relay support to a separate commit; although in arch/arm64/kvm
+that's actually about the *guest* side of SYSTEM_OFF2 (i.e. using it
+from the host kernel, relayed through nVHE).
 
-Before commit 1597d453289b3 ("interconnect: Add of_icc_get_by_index()
-helper function"), using kfree_const() was needed.
+Version 3 dropped the KVM_CAP which allowed userspace to explicitly opt
+in to the new feature like with SYSTEM_SUSPEND, and makes it depend only
+on PSCI v1.3 being exposed to the guest.
 
-For the records, this patch is a clean-up effort related to discussions at:
-  - https://lore.kernel.org/all/ZvHurCYlCoi1ZTCX@skv.local/
-  - https://lore.kernel.org/all/20240924050937.697118-1-senozhatsky@chromium.org/
----
- drivers/interconnect/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Version 4 is no longer RFC, as the PSCI v1.3 spec is finally published.
+Minor fixes from the last round of review, and an added KVM self test.
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 7e9b996b47c8..8a993283da82 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -808,7 +808,7 @@ void icc_put(struct icc_path *path)
- 	mutex_unlock(&icc_bw_lock);
- 	mutex_unlock(&icc_lock);
- 
--	kfree_const(path->name);
-+	kfree(path->name);
- 	kfree(path);
- }
- EXPORT_SYMBOL_GPL(icc_put);
--- 
-2.46.1
+Version 5 drops some of the changes which didn't make it to the final 
+v1.3 spec, and cleans up a couple of places which still referred to it 
+as 'alpha' or 'beta'. It also temporarily drops the guest-side patch to 
+invoke SYSTEM_OFF2 for hibernation, pending confirmation that the final 
+PSCI v1.3 spec just has a typo where it changed to saying that 0x1 
+should be passed to mean HIBERNATE_OFF, even though it's advertised as 
+bit 0. That can be sent under separate cover, and perhaps should have 
+been anyway. The change in question doesn't matter for any of the KVM 
+patches, because we just treat SYSTEM_OFF2 like the existing 
+SYSTEM_RESET2, setting a flag to indicate that it was a SYSTEM_OFF2 
+call, but not actually caring about the argument; that's for userspace 
+to worry about.
+
+David Woodhouse (5):
+      firmware/psci: Add definitions for PSCI v1.3 specification
+      KVM: arm64: Add PSCI v1.3 SYSTEM_OFF2 function for hibernation
+      KVM: arm64: Add support for PSCI v1.2 and v1.3
+      KVM: selftests: Add test for PSCI SYSTEM_OFF2
+      KVM: arm64: nvhe: Pass through PSCI v1.3 SYSTEM_OFF2 call
+
+ Documentation/virt/kvm/api.rst                  | 11 +++++
+ arch/arm64/include/uapi/asm/kvm.h               |  6 +++
+ arch/arm64/kvm/hyp/nvhe/psci-relay.c            |  2 +
+ arch/arm64/kvm/hypercalls.c                     |  2 +
+ arch/arm64/kvm/psci.c                           | 43 ++++++++++++++++-
+ include/kvm/arm_psci.h                          |  4 +-
+ include/uapi/linux/psci.h                       |  5 ++
+ tools/testing/selftests/kvm/aarch64/psci_test.c | 61 +++++++++++++++++++++++++
+ 8 files changed, 132 insertions(+), 2 deletions(-)
 
 
