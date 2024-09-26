@@ -1,79 +1,136 @@
-Return-Path: <linux-pm+bounces-14767-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14768-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B8E5986B1E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 05:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92CE0986B79
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 05:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E128A1F2216C
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 03:00:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 423961F22C3B
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 03:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4759E1741D0;
-	Thu, 26 Sep 2024 03:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43097176AD8;
+	Thu, 26 Sep 2024 03:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="KSDhygar"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C161B960;
-	Thu, 26 Sep 2024 03:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FFE917ADFF;
+	Thu, 26 Sep 2024 03:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727319604; cv=none; b=gSlmRifPxJEl7oqRe/XZB4RUqtyC6quD0qzmMh4MTTHerUvxSMzZDN9uef/c5ttSwpTV0nb3JbnLDP83hxx2l0xHRPg/v4yFBw7ta3ShTz28xc3pubjulyF33cHrQX0Jtd8OPfwd14bBnW7Ba/VU5q+Z6bKQ+TxqoPbfEcrnLRU=
+	t=1727322310; cv=none; b=uFUUOEndy4AMjcTURc1RVPvjkMvQoW4XiqE0s5tOQSCL2PIjpLbmpY7ZDHcVmEkR73+qLbb4RQh+USV5A1wh9cgOo94m/22COSwxhwTqE247zv6wu9vqUP5kKpPDFaigCFfuYxZJicHfmDQBiB5O4zNefXLGCP5Y7JMByv2jVOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727319604; c=relaxed/simple;
-	bh=GhISuCKRlFKxOEjaVsoixEdLZGTTfuejqM68zZIUYHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=fh2UwjYwvgf/t81UhozfS0QUFlU9U6bryAH/o3cedbAv3NYCRZDu1mSp2q5I2t5r9zBJ3UFI/EP4kGGIPnASpSfuKoM0o5Rp9KHe4+CGsKtdnn1f6ravkoaPmszNp2U6l2GU+kdumksrfpCIlJ05j9M4YqpYTTD1QW18pDz6T8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XDdZr6Zv9z1T819;
-	Thu, 26 Sep 2024 10:58:28 +0800 (CST)
-Received: from dggpeml500019.china.huawei.com (unknown [7.185.36.137])
-	by mail.maildlp.com (Postfix) with ESMTPS id C674F14037E;
-	Thu, 26 Sep 2024 10:59:54 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 26 Sep
- 2024 10:59:54 +0800
-Message-ID: <6cda3a5a-7d9c-aa37-882c-38c192dc27db@hisilicon.com>
-Date: Thu, 26 Sep 2024 10:59:54 +0800
+	s=arc-20240116; t=1727322310; c=relaxed/simple;
+	bh=qji11PFodQTOGl0U/FI207nQGwy3hvtRdkGk+gDTKWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hg27w3fA8o+ykyLBdrxmdn3c8SqIIjuCew+FvBABNzwhyk0bTrUX0YnzAaWwUKEMj15X1oI4KGATeyZEJ4cgocYELV8N6EakUUbLuMYsm4H25vibbAHdufvXjM9zsmG/CL4uEz5GV/PQDpS3VA1YXJxBnS75g1a0WNpatT5Mu5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=KSDhygar; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: by linux.microsoft.com (Postfix, from userid 1173)
+	id 29D0B20C6B0A; Wed, 25 Sep 2024 20:45:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 29D0B20C6B0A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1727322308;
+	bh=DN5YSrMcwxqMpqpqgpFbw4VHtXj52g4zYkkDf2IuhRc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KSDhygarWPIt79snSww0jYF6WyHhTZpwoa3xCQ0EbmZ9LhBJ8MqixPMjphmP8ziE8
+	 7ekGubcopsjiyS9MDB3iRWpwKMeM2GrdFJ51NqO0waRt33DAOZ7lFfur3jL0grqm85
+	 9eTFo3go+j2oZcGVnf4yjMehKGXaruJbhl5BDQak=
+Date: Wed, 25 Sep 2024 20:45:08 -0700
+From: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
+To: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, jikos@kernel.org, bentiss@kernel.org,
+	dmitry.torokhov@gmail.com, linux-hyperv@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ernis@microsoft.com, rafael@kernel.org, pavel@ucw.cz,
+	lenb@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/3] Disable Suspend-to-Idle in Hyper-V and Fix
+ Hibernation Interruptions
+Message-ID: <20240926034508.GA25516@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1726176470-13133-1-git-send-email-ernis@linux.microsoft.com>
+ <ZvIxVn1NKWuJ4u2k@csail.mit.edu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 2/2] cppc_cpufreq: Remove HiSilicon CPPC workaround
-To: "lihuisong (C)" <lihuisong@huawei.com>, <ionela.voinescu@arm.com>,
-	<beata.michalska@arm.com>, <wangxiongfeng2@huawei.com>,
-	<viresh.kumar@linaro.org>, <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <wanghuiqiang@huawei.com>,
-	<zhenglifeng1@huawei.com>, <yangyicong@huawei.com>, <liaochang1@huawei.com>,
-	<zengheng4@huawei.com>
-References: <20240919084552.3591400-1-zhanjie9@hisilicon.com>
- <20240919084552.3591400-3-zhanjie9@hisilicon.com>
- <82f4fa82-ee37-5328-4792-3143a2f0ac6f@huawei.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <82f4fa82-ee37-5328-4792-3143a2f0ac6f@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500019.china.huawei.com (7.185.36.137)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZvIxVn1NKWuJ4u2k@csail.mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-
-
-On 25/09/2024 17:36, lihuisong (C) wrote:
-> LGTM,
+On Tue, Sep 24, 2024 at 03:26:14AM +0000, Srivatsa S. Bhat wrote:
+> Hi Vennela,
 > 
-> Reviewed-by: Huisong Li <lihuisong@huawei.com>
+> [+linux-pm, Rafael, Pavel, Len]
+> 
+> Let's CC the linux-pm mailing list for discussions related to power
+> management features (such as suspend/resume and hibernation).
+> 
+> On Thu, Sep 12, 2024 at 02:27:47PM -0700, Erni Sri Satya Vennela wrote:
+> > It has been reported that Hyper-V VM users can unintentionally abort
+> > hibernation by mouse or keyboard movements. To address this issue,
+> > we have decided to remove the wakeup events for the Hyper-V keyboard
+> > and mouse driver.
+> 
+> >From the description of the problem, it doesn't occur to me that this
+> is specific to Hyper-V. I was wondering if VMs on other hypervisor
+> platforms wouldn't face the same issue? I'd like to recommend
+> exploring how this problem has been solved for other platforms, so
+> that we can reuse the same approach here. (If it turns out that
+> removing keyboard and mouse wakeup events is the way to go, then
+> great; otherwise, we can learn and apply the recommended solution).
+> 
+This is how the keyboard and mouse devices can be disabled manually and
+is the proper way to address this issue.
+>echo disabled > /sys/bus/vmbus/drivers/hid_hyperv/$HV_MOUSE/power/wakeup
+>echo disabled > 
+>/sys/bus/vmbus/drivers/hyperv_keyboard/$HV_KEYBOARD/power/wakeup
+>systemctl hibernate
+But based on customer feedback we are totally eliminating them as wakeup
+events.
 
-Thanks, will pick it up.
+Initially, they were registered as wakeup events to wakeup from
+Suspend-to-Idle state. Since there is no real user of this operation,
+we are disabling them to ensure they do not interfere with hibernation
+process.
+> > However, this change introduces another problem: 
+> > Suspend-to-Idle brings the system down with no method to wake it back up.
+> > 
+> > Given that there are no real users of Suspend-to-Idle in Hyper-V,
+> > we have decided to disable this feature for VMBus. This results in:
+> > 
+> > $echo freeze > /sys/power/state
+> > > bash: echo: write error: Operation not supported
+> > 
+> > The keyboard and mouse were previously registered as wakeup sources to
+> > interrupt the freeze operation in a VM. Since the freeze operation itself
+> > is no longer supported, we are disabling them as wakeup events.
+> > 
+> > This patchset ensures that the system remains stable and prevents
+> > unintended interruptions during hibernation.
+> > 
+> > Erni Sri Satya Vennela (3):
+> >   Drivers: hv: vmbus: Disable Suspend-to-Idle for VMBus
+> >   Revert "Input: hyperv-keyboard - register as a wakeup source"
+> >   Revert "HID: hyperv: register as a wakeup source"
+> > 
+> >  drivers/hid/hid-hyperv.c              |  6 ------
+> >  drivers/hv/vmbus_drv.c                | 15 ++++++++++++++-
+> >  drivers/input/serio/hyperv-keyboard.c | 12 ------------
+> >  3 files changed, 14 insertions(+), 19 deletions(-)
+> > 
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> 
+> Regards,
+> Srivatsa
+> Microsoft Linux Systems Group
 
