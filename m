@@ -1,181 +1,168 @@
-Return-Path: <linux-pm+bounces-14784-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4140986E66
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 09:59:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD81986EA8
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 10:20:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E2611F22015
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 07:59:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D1901C211D3
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:20:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F3C1925AC;
-	Thu, 26 Sep 2024 07:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="M1YLduvK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF611A4B70;
+	Thu, 26 Sep 2024 08:20:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C8B192586
-	for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 07:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3059B143C4C;
+	Thu, 26 Sep 2024 08:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727337579; cv=none; b=B0ZbWmr/g5WgVBbM3Tw6KPd1mhCG3wGWHtc2Xa6gye8vPkZ004OC00B1dODjiCX6Nj8Ekn+GK1NoHM+5ivmIA3+nsDugqYPKh3M/q/XF3ODQa8uV31KgHsZY6PeP97Ztgn/ddVUvsALHNOPFs9UWjI4xQp2NBOIS+t1KkURGwXg=
+	t=1727338854; cv=none; b=RF4C/YH0NzIv4OMkXqsomXS3bkKpn80ZQN35m2wsp9Fy7Z+jGKE7OT2iC/ryMF5qRzpMON1b4bILFY8c6h9VVNY//2CtOhutAKGX/ZplVrZeoNzD7dkbPrBbYnRS9mck6L+bHuDE7/ieE+2GJvQZsg/qz8FkoGiok7nIkKlISKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727337579; c=relaxed/simple;
-	bh=PYpD0W40WiTPGYYolxMwxzjtPuxE2bqs82HjAE2I/Gg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J4jhZsurtIJEQQeWSad8EBu5uoBFi/LPlzjffy8cK6VSvldShPIslf/yXZNSRtgR+P3ZwPbz2FcnQ0rAa1hfqFGLeKFGwKMp1P9Tg9IXGKNZSoObY9MasiK2/F35xg7cmV52tZI3xusSG7uXoMNAXCxverQX29hXalcn0k+//OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=M1YLduvK; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42cb60aff1eso6172995e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 00:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1727337576; x=1727942376; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PpCiGEBlNu0mNZ7okeDi8cYacva/g1Cbr0GdHobTz6g=;
-        b=M1YLduvKvEyYp+Y46od5eQP3WFtaxXqvfCYew7xjs9qqwIAS476yXzvDw6ZL/yMRSb
-         guO3G/PGQjI7ANW/tp7QvCrhs7brvt2k9jcMYGr23WdV6L+gtl5ksAL61ie0Z5/TiGAd
-         CzIeEMIaNoJrOqEDedQazcxpRq5gsikDwqgMAp53f4axofQUeVJ+uQQxckPHTTmKxDuH
-         TM7Cbq2CDvI+qYmfmvl8ER/KkeoT95cnZzv4yaTmCG3+ui7ODMWGkPFfB3ueiAd8xcyH
-         llv5qLn5Aj/i3P4tc6XsCNebVopKOljjbznM9hJfBxCK7eqt2Ukazd+oWLmkR5HRdhiX
-         5u0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727337576; x=1727942376;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PpCiGEBlNu0mNZ7okeDi8cYacva/g1Cbr0GdHobTz6g=;
-        b=gn9esNUNpCOtqzgdK/d/RPF3OaIHAQfSLrwUwGETjJrCFsWDVZXCQwLp0NId+s5qeB
-         15shR+vsoV5Sn/r0NiqeLAyimQzDhpmF9DLRyPhcpVybHxVYwPTCSIht7yl0vz4ZbmRx
-         wYAx5EJQALKRfXT+GzqULDLw1KMVVXWZhTSujBKqGIVVcgAlS3WZkMPGVOGYT8zjhJWi
-         cfgC87xqIuEusdzsuY+EndNejaipHs60DDfmSvvDvaa6mGaPu2WhNJAqfAecW7KX2jdt
-         FQwrhgSILiuUmLIkgbv5DOjtT0a6ZjWBMEeN1ADsyXUxjuNFagi5tOQ2zk1TSIU/tWBj
-         wXDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpxdRQEc0xqaSh2++YxP4mxNsiOqdgn2u/PEykaHB3xrretQRYa4C4RprwE9yTTxgUOpJVU6eBnQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxPo+ThUyj8+nKK8vf9ts9jhM6CHiGmYVJxGJxUub12Ndjh6oi
-	mk4iU/mGTRQi4plhxrFGfF9HOuEqHevMAfOmvoRqQfGfMPxR/rzHk6dUHTY9Oj8=
-X-Google-Smtp-Source: AGHT+IH7ivAeF8lcHIJrAIXadm6iyognSZRY/aTKpYZz3gkdQWtorWwQDRTmTAf88fh/VevbkacKBg==
-X-Received: by 2002:adf:f64f:0:b0:37c:cbca:fd7c with SMTP id ffacd0b85a97d-37ccbcafe16mr2698906f8f.41.1727337576104;
-        Thu, 26 Sep 2024 00:59:36 -0700 (PDT)
-Received: from localhost (cst2-173-13.cust.vodafone.cz. [31.30.173.13])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd21129e6sm179018f8f.47.2024.09.26.00.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Sep 2024 00:59:35 -0700 (PDT)
-Date: Thu, 26 Sep 2024 09:59:32 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Nick Hu <nick.hu@sifive.com>
-Cc: greentime.hu@sifive.com, zong.li@sifive.com, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@ucw.cz>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Anup Patel <anup@brainfault.org>, 
-	Mayuresh Chitale <mchitale@ventanamicro.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Atish Patra <atishp@rivosinc.com>, Samuel Ortiz <sameo@rivosinc.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Sunil V L <sunilvl@ventanamicro.com>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] riscv: Add csr_read/write_hi_lo support
-Message-ID: <20240926-b96b7164b51b0be0c732235b@orel>
-References: <20240926065422.226518-1-nick.hu@sifive.com>
- <20240926065422.226518-2-nick.hu@sifive.com>
+	s=arc-20240116; t=1727338854; c=relaxed/simple;
+	bh=5SG9w7Q4WnBvy27ddGc1bzdc8ZHjDro5bwU/EkO6oNQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=MqwFNRjo4aNn/UzjR/9w+y1QNfoA6oX6zHrBiLNXiAx4IBhN5rWq34MTG8/H5VGGodJyDn+lHt4D03s35hl5OWFjcUhVqRubXAFlWg0vXGKDKSrVTOwsciXWflBU/dp5QRE6Yo4069mYlMCAOuRY45LIVKt8IAdg3pVp1dF20aA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 3787687c7be011efa216b1d71e6e1362-20240926
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_UNTRUSTED, SA_LOWREP, SA_EXISTED, SN_UNTRUSTED, SN_LOWREP
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1
+	AMN_GOOD, AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:7c3be859-750f-40b3-914d-316f1a05d482,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-INFO: VERSION:1.1.38,REQID:7c3be859-750f-40b3-914d-316f1a05d482,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:-5
+X-CID-META: VersionHash:82c5f88,CLOUDID:b629355be24ee38a092c299d6801b1bb,BulkI
+	D:240925144023207KTES0,BulkQuantity:13,Recheck:0,SF:64|66|17|19|102,TC:nil
+	,Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:
+	0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB
+X-UUID: 3787687c7be011efa216b1d71e6e1362-20240926
+X-User: dengjie03@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 866411718; Thu, 26 Sep 2024 16:20:40 +0800
+From: Deng Jie <dengjie03@kylinos.cn>
+To: gregkh@linuxfoundation.org
+Cc: rafael@kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	xiehongyu1@kylinos.cn,
+	duanchenghao@kylinos.cn,
+	xiongxin@kylinos.cn
+Subject: Re: [PATCH v2] USB: Fix the issue of S4 wakeup queisce phase where task resumption fails due to USB status
+Date: Thu, 26 Sep 2024 16:20:36 +0800
+Message-Id: <20240926082036.312203-1-dengjie03@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2024092525-envision-impotency-c1a6@gregkh>
+References: <2024092525-envision-impotency-c1a6@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240926065422.226518-2-nick.hu@sifive.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 26, 2024 at 02:54:16PM GMT, Nick Hu wrote:
-> In RV32, we may have the need to read both low 32 bit and high 32 bit of
-> the CSR. Therefore adding the csr_read_hi_lo() and csr_write_hi_lo() to
-> support such case.
-> 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Suggested-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Nick Hu <nick.hu@sifive.com>
-> ---
->  arch/riscv/include/asm/csr.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 25966995da04..54198284eb22 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -501,6 +501,17 @@
->  	__v;							\
->  })
->  
-> +#if __riscv_xlen < 64
-> +#define csr_read_hi_lo(csr)					\
-> +({								\
-> +	u32 hi = csr_read(csr##H);				\
-> +	u32 lo = csr_read(csr);					\
-> +	lo | ((u64)hi << 32);					\
-> +})
-> +#else
-> +#define csr_read_hi_lo	csr_read
-> +#endif
-> +
->  #define csr_write(csr, val)					\
->  ({								\
->  	unsigned long __v = (unsigned long)(val);		\
-> @@ -509,6 +520,17 @@
->  			      : "memory");			\
->  })
->  
-> +#if __riscv_xlen < 64
-> +#define csr_write_hi_lo(csr, val)				\
-> +({								\
-> +	u64 _v = (u64)(val);					\
-> +	csr_write(csr##H, (_v) >> 32);				\
-> +	csr_write(csr, (_v));					\
-> +})
-> +#else
-> +#define csr_write_hi_lo	csr_write
-> +#endif
-> +
->  #define csr_read_set(csr, val)					\
->  ({								\
->  	unsigned long __v = (unsigned long)(val);		\
-> -- 
-> 2.34.1
->
-
-I know I suggested this, but I'm having second thoughts. The nice thing
-about the
-
- csr_write(CSR, ...);
- if (__riscv_xlen < 64)
-    csr_write(CSRH, ...);
-
-pattern is that it matches the spec. With this helper we'll have
-
- csr_write_hi_lo(CSR, ...);
-
-for both rv32 and rv64. That looks odd for rv64 and hides the hi register
-access for rv32.
-
-We could avoid the oddness of the helper's name for rv64 if we instead
-added csr_write32 and csr_write64 which do the right things, but that
-still hides the hi register access for rv32. Hiding the hi register
-access is probably fine, though, since we can be pretty certain that
-the spec will rarely, if ever, deviate from naming high registers with
-the H suffix and/or not keep the upper bits compatible.
-
-In summary, I think I'm in favor of just dropping this patch, keeping
-the noisy, but explicit, pattern. Or, if the consensus is to add
-helpers, then I'd rather have all csr_<op>32/64 helpers. Then, code
-would match the spec by choosing the right helper based on the width
-of the CSR being accessed, when the CSR has an explicit width, or still
-use the current helpers for xlen-wide CSRs.
+Hi Greg,
+Do you think this plan is feasible? Do I need to add more explanations?
 
 Thanks,
-drew
+
+Deng Jie
+
+>---
+>v2:
+>	* Fix the formatting issues and function naming conventions in the v1 patch.
+>v1:
+>	* USB: Fix the issue of S4 wakeup queisce phase where task resumption fails
+> 	   due to USB status.
+>---
+>
+>diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>index fb4d18a0b185..7723e7082a36 100644
+>--- a/drivers/base/power/main.c
+>+++ b/drivers/base/power/main.c
+>@@ -559,6 +559,11 @@ bool dev_pm_may_skip_resume(struct device *dev)
+> 	return !dev->power.must_resume && pm_transition.event != PM_EVENT_RESTORE;
+> }
+> 
+>+bool pm_event_is_queisce(void)
+>+{
+>+	return pm_transition.event == PM_EVENT_QUIESCE;
+>+}
+>+
+> static pm_callback_t dpm_subsys_resume_noirq_cb(struct device *dev,
+> 						pm_message_t state,
+> 						const char **info_p)
+>diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+>index 77830f120834..af2c60049e4a 100644
+>--- a/drivers/usb/core/hcd-pci.c
+>+++ b/drivers/usb/core/hcd-pci.c
+>@@ -456,18 +456,25 @@ static int suspend_common(struct device *dev, bool do_wakeup)
+> 		/* Optimization: Don't suspend if a root-hub wakeup is
+> 		 * pending and it would cause the HCD to wake up anyway.
+> 		 */
+>-		if (do_wakeup && HCD_WAKEUP_PENDING(hcd))
+>-			return -EBUSY;
+>-		if (do_wakeup && hcd->shared_hcd &&
+>-				HCD_WAKEUP_PENDING(hcd->shared_hcd))
+>+		/* Considering the restore process that occurs after
+>+		 * the quiesce phase during S4 wakeup, which essentially
+>+		 * resets all root hubs,checking this wakeup pending status
+>+		 * in USB suspend_common() during the quiesce phase is of
+>+		 * little significance and should therefore be filtered out.
+>+		 */
+>+		if (!pm_event_is_queisce() && do_wakeup &&
+>+		    (HCD_WAKEUP_PENDING(hcd) ||
+>+		     (hcd->shared_hcd &&
+>+		      HCD_WAKEUP_PENDING(hcd->shared_hcd))))
+> 			return -EBUSY;
+> 		retval = hcd->driver->pci_suspend(hcd, do_wakeup);
+> 		suspend_report_result(hcd->driver->pci_suspend, retval);
+> 
+> 		/* Check again in case wakeup raced with pci_suspend */
+>-		if ((retval == 0 && do_wakeup && HCD_WAKEUP_PENDING(hcd)) ||
+>-				(retval == 0 && do_wakeup && hcd->shared_hcd &&
+>-				 HCD_WAKEUP_PENDING(hcd->shared_hcd))) {
+>+		if (retval == 0 && !pm_event_is_queisce() && do_wakeup &&
+>+		    (HCD_WAKEUP_PENDING(hcd) ||
+>+		     (hcd->shared_hcd &&
+>+		      HCD_WAKEUP_PENDING(hcd->shared_hcd)))) {
+> 			if (hcd->driver->pci_resume)
+> 				hcd->driver->pci_resume(hcd, false);
+> 			retval = -EBUSY;
+>diff --git a/include/linux/pm.h b/include/linux/pm.h
+>index 4c441be03079..dad87c9ecfee 100644
+>--- a/include/linux/pm.h
+>+++ b/include/linux/pm.h
+>@@ -758,6 +758,7 @@ extern void pm_generic_complete(struct device *dev);
+> 
+> extern bool dev_pm_may_skip_resume(struct device *dev);
+> extern bool dev_pm_smart_suspend_and_suspended(struct device *dev);
+>+extern bool pm_event_is_queisce(void);
+> 
+> #else /* !CONFIG_PM_SLEEP */
+>
 
