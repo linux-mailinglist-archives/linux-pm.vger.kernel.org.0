@@ -1,136 +1,108 @@
-Return-Path: <linux-pm+bounces-14768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92CE0986B79
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 05:45:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B44C986BE3
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 07:00:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 423961F22C3B
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 03:45:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FC2C1C2122E
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 05:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43097176AD8;
-	Thu, 26 Sep 2024 03:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="KSDhygar"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6974120B;
+	Thu, 26 Sep 2024 04:59:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FFE917ADFF;
-	Thu, 26 Sep 2024 03:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F5FBE6C;
+	Thu, 26 Sep 2024 04:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727322310; cv=none; b=uFUUOEndy4AMjcTURc1RVPvjkMvQoW4XiqE0s5tOQSCL2PIjpLbmpY7ZDHcVmEkR73+qLbb4RQh+USV5A1wh9cgOo94m/22COSwxhwTqE247zv6wu9vqUP5kKpPDFaigCFfuYxZJicHfmDQBiB5O4zNefXLGCP5Y7JMByv2jVOE=
+	t=1727326798; cv=none; b=M/g/uNQYasdaUJkUC9LeEOFb+znNE6NtbEd8arxyz4LRRJ0k0LiORTK/aMiOXtdbes+65oWKCeWAtWWzmBL0xU+oOqDJAmSSEoNmMcRGZrv0B1q+fOyXeI4pa9hO8G2HcrblhyBQdY7J+SAsum1VPd03zaeHlFwcCjSRIfZpQZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727322310; c=relaxed/simple;
-	bh=qji11PFodQTOGl0U/FI207nQGwy3hvtRdkGk+gDTKWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hg27w3fA8o+ykyLBdrxmdn3c8SqIIjuCew+FvBABNzwhyk0bTrUX0YnzAaWwUKEMj15X1oI4KGATeyZEJ4cgocYELV8N6EakUUbLuMYsm4H25vibbAHdufvXjM9zsmG/CL4uEz5GV/PQDpS3VA1YXJxBnS75g1a0WNpatT5Mu5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=KSDhygar; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1173)
-	id 29D0B20C6B0A; Wed, 25 Sep 2024 20:45:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 29D0B20C6B0A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1727322308;
-	bh=DN5YSrMcwxqMpqpqgpFbw4VHtXj52g4zYkkDf2IuhRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KSDhygarWPIt79snSww0jYF6WyHhTZpwoa3xCQ0EbmZ9LhBJ8MqixPMjphmP8ziE8
-	 7ekGubcopsjiyS9MDB3iRWpwKMeM2GrdFJ51NqO0waRt33DAOZ7lFfur3jL0grqm85
-	 9eTFo3go+j2oZcGVnf4yjMehKGXaruJbhl5BDQak=
-Date: Wed, 25 Sep 2024 20:45:08 -0700
-From: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-To: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, jikos@kernel.org, bentiss@kernel.org,
-	dmitry.torokhov@gmail.com, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ernis@microsoft.com, rafael@kernel.org, pavel@ucw.cz,
-	lenb@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/3] Disable Suspend-to-Idle in Hyper-V and Fix
- Hibernation Interruptions
-Message-ID: <20240926034508.GA25516@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1726176470-13133-1-git-send-email-ernis@linux.microsoft.com>
- <ZvIxVn1NKWuJ4u2k@csail.mit.edu>
+	s=arc-20240116; t=1727326798; c=relaxed/simple;
+	bh=2XIXGD2Rn6RQu8hB0JdURTj3F2UEZ6CeicHcLbUObOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VnuptMe5zOn4qRcmCUc9tNYqeH9WQeuKjJEZ7FsooBjLmlC2QjUoT4VJqFLbrb6c1grrsj9b86/2bvGW5ojcHSvqtfWP+SdNPux7b/FMSzbWByWbtdBayIxudVRRwWXGR8+ZRkSSFpmh0bGUqr/XXzWZXVJu8d8IH+F4+2k/L84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B71FC4CEC5;
+	Thu, 26 Sep 2024 04:59:55 +0000 (UTC)
+Date: Thu, 26 Sep 2024 00:59:52 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Yo-Jung (Leo) Lin" <0xff07@gmail.com>
+Cc: linux-kernel-mentees@lists.linuxfoundation.org, ricardo@marliere.net,
+ skhan@linuxfoundation.org, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Jonathan Corbet
+ <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, "Rafael J.
+ Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] trace doc: document the device_pm_callback events
+Message-ID: <20240926005952.5ba2fda4@rorschach.local.home>
+In-Reply-To: <20240922132636.34413-1-0xff07@gmail.com>
+References: <20240922132636.34413-1-0xff07@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZvIxVn1NKWuJ4u2k@csail.mit.edu>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 24, 2024 at 03:26:14AM +0000, Srivatsa S. Bhat wrote:
-> Hi Vennela,
-> 
-> [+linux-pm, Rafael, Pavel, Len]
-> 
-> Let's CC the linux-pm mailing list for discussions related to power
-> management features (such as suspend/resume and hibernation).
-> 
-> On Thu, Sep 12, 2024 at 02:27:47PM -0700, Erni Sri Satya Vennela wrote:
-> > It has been reported that Hyper-V VM users can unintentionally abort
-> > hibernation by mouse or keyboard movements. To address this issue,
-> > we have decided to remove the wakeup events for the Hyper-V keyboard
-> > and mouse driver.
-> 
-> >From the description of the problem, it doesn't occur to me that this
-> is specific to Hyper-V. I was wondering if VMs on other hypervisor
-> platforms wouldn't face the same issue? I'd like to recommend
-> exploring how this problem has been solved for other platforms, so
-> that we can reuse the same approach here. (If it turns out that
-> removing keyboard and mouse wakeup events is the way to go, then
-> great; otherwise, we can learn and apply the recommended solution).
-> 
-This is how the keyboard and mouse devices can be disabled manually and
-is the proper way to address this issue.
->echo disabled > /sys/bus/vmbus/drivers/hid_hyperv/$HV_MOUSE/power/wakeup
->echo disabled > 
->/sys/bus/vmbus/drivers/hyperv_keyboard/$HV_KEYBOARD/power/wakeup
->systemctl hibernate
-But based on customer feedback we are totally eliminating them as wakeup
-events.
 
-Initially, they were registered as wakeup events to wakeup from
-Suspend-to-Idle state. Since there is no real user of this operation,
-we are disabling them to ensure they do not interfere with hibernation
-process.
-> > However, this change introduces another problem: 
-> > Suspend-to-Idle brings the system down with no method to wake it back up.
-> > 
-> > Given that there are no real users of Suspend-to-Idle in Hyper-V,
-> > we have decided to disable this feature for VMBus. This results in:
-> > 
-> > $echo freeze > /sys/power/state
-> > > bash: echo: write error: Operation not supported
-> > 
-> > The keyboard and mouse were previously registered as wakeup sources to
-> > interrupt the freeze operation in a VM. Since the freeze operation itself
-> > is no longer supported, we are disabling them as wakeup events.
-> > 
-> > This patchset ensures that the system remains stable and prevents
-> > unintended interruptions during hibernation.
-> > 
-> > Erni Sri Satya Vennela (3):
-> >   Drivers: hv: vmbus: Disable Suspend-to-Idle for VMBus
-> >   Revert "Input: hyperv-keyboard - register as a wakeup source"
-> >   Revert "HID: hyperv: register as a wakeup source"
-> > 
-> >  drivers/hid/hid-hyperv.c              |  6 ------
-> >  drivers/hv/vmbus_drv.c                | 15 ++++++++++++++-
-> >  drivers/input/serio/hyperv-keyboard.c | 12 ------------
-> >  3 files changed, 14 insertions(+), 19 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
-> > 
-> > 
+This needs an ack from one of the power management maintainers.
+
+-- Steve
+
+
+On Sun, 22 Sep 2024 21:26:28 +0800
+"Yo-Jung (Leo) Lin" <0xff07@gmail.com> wrote:
+
+> Add documentation for the device_pm_callback_{start, end} events
+> under the "Subsystem Trace Points: power" section.
 > 
-> Regards,
-> Srivatsa
-> Microsoft Linux Systems Group
+> Signed-off-by: Yo-Jung (Leo) Lin <0xff07@gmail.com>
+> ---
+>  Documentation/trace/events-power.rst | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/Documentation/trace/events-power.rst b/Documentation/trace/events-power.rst
+> index f45bf11fa88d..7031954f7ed3 100644
+> --- a/Documentation/trace/events-power.rst
+> +++ b/Documentation/trace/events-power.rst
+> @@ -102,3 +102,30 @@ And, there are events used for CPU latency QoS add/update/remove request.
+>    pm_qos_remove_request     "value=%d"
+>  
+>  The parameter is the value to be added/updated/removed.
+> +
+> +5. Device PM callback events
+> +============================
+> +The device PM callback events are placed right before and after an invocation of
+> +a device PM callback during a system-wide suspend/resume attempt.
+> +::
+> +
+> +  device_pm_callback_start     "%s %s, parent: %s, %s[%s]"
+> +  device_pm_callback_end       "%s %s, err=%d"
+> +
+> +The first two parameters in both events are the same. They are:
+> +
+> +  - The name of the driver.
+> +  - The device whose PM callbacks get called.
+> +
+> +For device_pm_callback_start, the rest of the parameters are:
+> +
+> +  - The parent device of the device (if any).
+> +  - Level in the power management hierarchy the callback belongs to (e.g. power
+> +    domain, type, class, bus, driver). Some stages (e.g. early, late, noirq)
+> +    will also be explicitly mentioned in this string.
+> +  - The ongoing PM event. You may find definitions of those events in the
+> +    PM_EVENT_* macros in include/linux/pm.h
+> +
+> +For device_pm_callback_end, the only remaining parameter is:
+> +
+> +  - The return value of the PM callback.
+
 
