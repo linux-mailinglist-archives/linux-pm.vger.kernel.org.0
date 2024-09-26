@@ -1,139 +1,147 @@
-Return-Path: <linux-pm+bounces-14831-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14832-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 511879876E5
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 17:49:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4C0A98773A
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 18:05:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FC2B28707C
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 15:49:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9E16B2ADCB
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 16:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A72D14B086;
-	Thu, 26 Sep 2024 15:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C4E15C137;
+	Thu, 26 Sep 2024 16:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BKqJIntv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7HvlSFA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E492206E
-	for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 15:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487C3153BF7;
+	Thu, 26 Sep 2024 16:05:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727365795; cv=none; b=rryjUWzmwElByIzn0Mp4+PNCJvX/bELHgy7SYTxdkUuZ3JI/4QDNNPdbGw6xKGjenS5j/9cikkMlB8z3cbgnVR7sn87Wc2sqUBmJWWaCyWVgFpW4kRcF+wO9gMHcecasgnRujseNEP4hT2Ol43J/tqJpSs+QQBoUDbjW7cYQcXw=
+	t=1727366706; cv=none; b=L3RQWHXfW9++mjMcjJ3H+czJiNzcNPMFyQ7cLN2WqNd/YhFMzdGP4ocAe6uStjJh5agOXP/GHRDFTLlmns1eTuIActeWX5FqSzGh33rAEyaYFTs3Y+K46CAY3QmWQlLkWTjQr9sC6dPXD37A3VRsnBZ7xrFG9jQvttA/znQcuw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727365795; c=relaxed/simple;
-	bh=w14sq6XUk0SsNzgK6mSSVRdxP/9svZ9tMx+UgCkG04M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dZSLnfY40kekac/ujHcK19GCinb6R1IFc8Ees6iP5VrT9p9m47cxDJbv1VzK1P2XGIZaY9uamneB2gA82th7vK5thxCz+AI3GUtqL7vabsZUOk3V+XTunBFbFaJKLKbJQ9Mjpgthv6JkqvHxZ0wHGT3OtL09+dmX7aPF8GWM5y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BKqJIntv; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e252d1c5b25so1065010276.3
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 08:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727365793; x=1727970593; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q/C6W+i03PB1ReYtpl5/qyhBiUgWpLGUr9VE1GQJcEg=;
-        b=BKqJIntvXVws/7R07F/j1FCDPj6qOhKIpd2KmHUBJcuxaUWEVjjEo5dgDkZDgZCv+V
-         2cO5x/OUEKRKZ2Vu0b0jaqAMA4donXKuj0/fFGC71k4IcRAy1mH0oP/5lIJOW+CZo3ad
-         V34y+/BkWraJHHk9qr6uRr+JIN342aBSHSFw+zBvQ6WHqyRyK2om3lQUryeCrQd2MZwt
-         EdKkSQr+jB4M/JRiIayMxqjJnuGlCOq5XKURAFFvMsfjj4qZidLlKNOlXwrBHtk0/HIW
-         uy9lOl/tDUs7pWlcJBFNRtU4+nSidi5Hs4ylXld0uclgPazBRrgrUFGM1E3ZSxtbSsWO
-         lVIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727365793; x=1727970593;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q/C6W+i03PB1ReYtpl5/qyhBiUgWpLGUr9VE1GQJcEg=;
-        b=JlLk/36Yfin0tml4dKhSVIj7AZta72N0AbPqVlmbXtGOK9JmiMLZTiXw7Khy29e968
-         cNi6sqrKG4RzNWii2P25tmbxD51RjK6pyUml6lvYA9Rkmrny7FqcwRy4Y4v8g+2gqm+T
-         XINFvJx5b+rTeUmLuZEhvohgUit1LTtPsEPTF0D8LyPMoDSjiGX1CeROZ0KjWEG7jcfd
-         95scUfX7VbV0SX3lgKJ3omVP/dj5opK/p80MFl3u3gMRk3tup09rsu7oAKA+A5bjzBQG
-         wOdAj1UO+pYM4Ipy5gYlezNaDD6mi7tr7FNd98UVXeENgakexM62nyk7G9eL/6ewCZab
-         dd8w==
-X-Forwarded-Encrypted: i=1; AJvYcCWI9LUJ74n1QpjpFHHEC6/hObxSMoIoo/T7ezku3ms4XqAaanhiu3+rrkMja12uiHdHzc/OTMLUmg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoHcAnDUinh6VmqPddqeCVKZLyX/8UcugR+9Xet9lX46RRaQfv
-	IqZ/iDEn/XxuiDKqEncrvtAEA48KUGWcdfgKKWLZ1fUMPFslGL6l6OUxCHtLM/trSZzo0wtKNon
-	uPxIDtFeJRgzIUpzpcT0M/rnIcRY4iTqJVLhoukIplx/Ocg46QJs=
-X-Google-Smtp-Source: AGHT+IFqqGJreMRNFfnsSuthz64Gd/N9P25tYQ9qT6LFx4CM65znxx9CuUuNf/VeLj3Ht2p1xv5M9snqdM0j4M8TDec=
-X-Received: by 2002:a05:6902:2583:b0:e25:e2f5:38ce with SMTP id
- 3f1490d57ef6-e25e2f539e1mr696097276.37.1727365793039; Thu, 26 Sep 2024
- 08:49:53 -0700 (PDT)
+	s=arc-20240116; t=1727366706; c=relaxed/simple;
+	bh=8oF862eULQ8YFoJtKU6F4+GDmwMiUNpW0n24amXJv4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tdUV7R/R8VjhUZQNhdFxrC4cPzUpy7Az+yJSOhW/tQTK0RUAYydVi/Ihr9bPE1iXfPflR+lIXOXhXq5dYYubb7mohevwEv9OHLZY4pLTMtLVmtl7f4GKgVofq152W8CrcRIHGOwkxtqtM8HrkGb9Vlx9vAV5N4BzYZZXi4zYwKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7HvlSFA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F23C4CECE;
+	Thu, 26 Sep 2024 16:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727366705;
+	bh=8oF862eULQ8YFoJtKU6F4+GDmwMiUNpW0n24amXJv4A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i7HvlSFAY1HpayQkyF0ijnpGCTEfRC6oQ8lepirwQIRabQuVyr4k7Zzcja9HKmqns
+	 qEXlzEiGWQNyb51qNuW1buk6zlOnjz6AjfNry3FfJXnvsucsFAX/ef5PPnhepd0yTF
+	 AkQa0VVTifqwh1JO7LbhkCMLBmV+zkDrKfABvzFZYYmbWmI2TZ76y0DzHzZZBCb6NH
+	 gCrn/Dnjwp8evthCeCve3uNResHbQiJ1nsE7zcBoRsyruP478/CvfdqeM0NDg7o+v6
+	 uW9mjXvFiPkh3cpANJ2YUsIu+sqww1y4UJATUIBGnX6jR+F4+CHmY4850FpHo2/tFz
+	 QeSU6xNxdFMOQ==
+Date: Thu, 26 Sep 2024 17:04:58 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Eason Yen <eason.yen@mediatek.com>,
+	Jiaxin Yu <jiaxin.yu@mediatek.com>,
+	Shane Chien <shane.chien@mediatek.com>,
+	Hui Liu <hui.liu@mediatek.com>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-sound@vger.kernel.org,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH 2/3] dt-bindings: mfd: mediatek: mt6397: add compatible
+ for mt6359-codec
+Message-ID: <20240926-smokeless-clobber-0fb8a1cdc7ab@spud>
+References: <20240926092519.6556-1-macpaul.lin@mediatek.com>
+ <20240926092519.6556-2-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925093807.1026949-1-wenst@chromium.org>
-In-Reply-To: <20240925093807.1026949-1-wenst@chromium.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 26 Sep 2024 17:49:16 +0200
-Message-ID: <CAPDyKFqoqppLipOG1vK-8oU_6cMdZ3DV5Gxqhs5-+7+cQJ6=qQ@mail.gmail.com>
-Subject: Re: [PATCH v8 0/3] Add of_regulator_get_optional() and Fix MTK Power
- Domain Driver
-To: Chen-Yu Tsai <wenst@chromium.org>, Mark Brown <broonie@kernel.org>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Johan Hovold <johan@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Pablo Sun <pablo.sun@mediatek.com>, 
-	Macpaul Lin <macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="gtFGL1RUPZo9Sk8n"
+Content-Disposition: inline
+In-Reply-To: <20240926092519.6556-2-macpaul.lin@mediatek.com>
 
-On Wed, 25 Sept 2024 at 11:38, Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> Hi folks,
->
-> This series is split off from my "DT hardware prober" series [1].
->
-> Changes since v7:
-> - Added stub versions for of_regulator_get_optional() for !CONFIG_OF
->   and !CONFIG_REGULATOR
-> - Added new patches for devres version and converting MTK pmdomain
->   driver
->
-> At ELCE, Sebastian told me about his recent work on adding regulator
-> supply support to the Rockchip power domain driver [2], how the MediaTek
-> driver has been using the existing devm_regulator_get() API and
-> reassigning different device nodes to the device doing the lookup, and
-> how the new of_regulator_get_optional() is the proper fit for this.
->
-> Patch 1 adds a new of_regulator_get_optional() function to look up
-> regulator supplies using device tree nodes.
->
-> Patch 2 adds a devres version of the aforementioned function at
-> Sebastian's request for the two power domain drivers.
->
-> Patch 3 converts the MediaTek power domain driver to use function.
->
->
-> Each of the latter two patches depend on the previous one at build time.
-> Mark, would it be possible for you to put the two regulator patches
-> on an immutable branch / tag? Otherwise we could have Ulf ack the
-> pmdomain patch and merge it through your tree. Sebastian was fine
-> with converting the rockchip pmdomain some time later.
 
-Thanks for providing some context!
+--gtFGL1RUPZo9Sk8n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In my opinion I would prefer an immutable branch/tag of the regulator
-core changes, so I can carry the pmdomain changes for MTK through my
-pmdomain tree, but also because I would prefer if Sebastian could make
-the corresponding conversion for the Rockchip pmdomain driver. If this
-can get queued soon, there is really no need to have an intermediate
-step for Rockchip, I think.
+On Thu, Sep 26, 2024 at 05:25:18PM +0800, Macpaul Lin wrote:
+> This patch updates the audio-codec properties includes:
+>  - compatible:
+>   - Re-order the supported device items.
+>   - Add 'mt6359-codec' to compatible since MT6359 PMIC has been included
+>     in this DT Schema.
 
-Does it make sense - or do you prefer another way forward?
+>   - Set 'additionalProperties: true' for 'mt6359-codec'.
 
-[...]
+Why?
 
-Kind regards
-Uffe
+>=20
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b=
+/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> index 40cabaf60d0d..ffb5848a96d5 100644
+> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> @@ -104,7 +104,7 @@ properties:
+> =20
+>    audio-codec:
+>      type: object
+> -    additionalProperties: false
+> +    additionalProperties: true
+>      description:
+>        Audio codec support with MT6397 and MT6358.
+> =20
+> @@ -112,8 +112,9 @@ properties:
+>        compatible:
+>          oneOf:
+>            - enum:
+> -              - mediatek,mt6397-codec
+>                - mediatek,mt6358-sound
+> +              - mediatek,mt6359-codec
+> +              - mediatek,mt6397-codec
+>            - items:
+>                - enum:
+>                    - mediatek,mt6366-sound
+> --=20
+> 2.45.2
+>=20
+
+--gtFGL1RUPZo9Sk8n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvWGKgAKCRB4tDGHoIJi
+0nLMAPwNICZFxiXu4ZhvDLmOlTakmKiEVOTVZu/0hCQuyldZZQD+LrT5WwoJnbMH
+g+uamV5Vyo9o/jF8L1GRHbGmPCz4kg4=
+=sQf+
+-----END PGP SIGNATURE-----
+
+--gtFGL1RUPZo9Sk8n--
 
