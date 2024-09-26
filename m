@@ -1,195 +1,181 @@
-Return-Path: <linux-pm+bounces-14785-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9E08986E7A
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 10:04:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4140986E66
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 09:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6D6281FDA
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 08:04:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E2611F22015
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2024 07:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A16EC18B478;
-	Thu, 26 Sep 2024 08:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F3C1925AC;
+	Thu, 26 Sep 2024 07:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="fcqtXLfU"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="M1YLduvK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAB1135A53;
-	Thu, 26 Sep 2024 08:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C8B192586
+	for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 07:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727337858; cv=none; b=sanFMgEw+0Kwa2+ABS/lWu5qHnQcc6xgpyASaMAVjtLFcptGkmPdgiSvtFUZQNUNeCvFN3O2Ylz/GqZvLHmxdb4gtQD55VLmADuOEMKOw2LvQknJoHRuWvacNH9Ewuq867LTRzaz3BivWGTMiiiszK6jNAIxg5ZMwagwdiTVPiA=
+	t=1727337579; cv=none; b=B0ZbWmr/g5WgVBbM3Tw6KPd1mhCG3wGWHtc2Xa6gye8vPkZ004OC00B1dODjiCX6Nj8Ekn+GK1NoHM+5ivmIA3+nsDugqYPKh3M/q/XF3ODQa8uV31KgHsZY6PeP97Ztgn/ddVUvsALHNOPFs9UWjI4xQp2NBOIS+t1KkURGwXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727337858; c=relaxed/simple;
-	bh=Ohle+mSw6OKgmkTexCka+g0/+2Xqg7/h2dZCBBh3Xck=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N7eX+VnuDAqxBRw1MubW7OohEuH1bt0I9HCpVDXFkrkyAs/tFBzlpfSYzRI25QDkXFCy+Ij6N4qdOzL1M3DymjPvPeMP6fWAJjk1PlpwAeUQEQnzC+1lP6DxjYsVa55rzs9A0bgsKXvmAqE4GWleFBelA7v578BC9Xw6a32Df8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=fcqtXLfU; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Reply-To:Content-ID:Content-Description;
-	bh=KZQEtEFqUVCYlKWgRmtdxxygl4+pC7dy1IIxMbe5cg0=; b=fcqtXLfUs9b0sULv/yGdtMPUAG
-	C9xD76hz3naN3LSTALxxk4w4BNVXi5kRrF2VSnJGc4xMzQFEVr3A4zHlg3eRRts5wNy5LCIqdgAHK
-	+u/sCaAQ7dVJToa3UQcd5kXR6Yu9uw3uZ+I6HBCmdHK5DKdOx00yi+SQ55nIFeHRqPmKR6xDMgKbW
-	/0JA35CRO+2UsrXtE59d/992zfbKEcVd52QdBVvgksGjqhTrl2/ECVnXlSC9YGv1SC1TnjxhuGxli
-	7eyIvl1dxLWKehKye7NVE/Fd5iEesYH2O5GN+sBPTBv0DQkBUQxYU+JfgO11r9/t0Y5decbrbD6K4
-	6Wp9in8g==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	(Exim 4.94.2)
-	(envelope-from <ukleinek@debian.org>)
-	id 1stjEr-004i5t-8z; Thu, 26 Sep 2024 07:48:37 +0000
-Message-ID: <10a1def7-1abc-4455-b73b-c324a9e0c0dd@debian.org>
-Date: Thu, 26 Sep 2024 09:48:34 +0200
+	s=arc-20240116; t=1727337579; c=relaxed/simple;
+	bh=PYpD0W40WiTPGYYolxMwxzjtPuxE2bqs82HjAE2I/Gg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J4jhZsurtIJEQQeWSad8EBu5uoBFi/LPlzjffy8cK6VSvldShPIslf/yXZNSRtgR+P3ZwPbz2FcnQ0rAa1hfqFGLeKFGwKMp1P9Tg9IXGKNZSoObY9MasiK2/F35xg7cmV52tZI3xusSG7uXoMNAXCxverQX29hXalcn0k+//OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=M1YLduvK; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42cb60aff1eso6172995e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 00:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1727337576; x=1727942376; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PpCiGEBlNu0mNZ7okeDi8cYacva/g1Cbr0GdHobTz6g=;
+        b=M1YLduvKvEyYp+Y46od5eQP3WFtaxXqvfCYew7xjs9qqwIAS476yXzvDw6ZL/yMRSb
+         guO3G/PGQjI7ANW/tp7QvCrhs7brvt2k9jcMYGr23WdV6L+gtl5ksAL61ie0Z5/TiGAd
+         CzIeEMIaNoJrOqEDedQazcxpRq5gsikDwqgMAp53f4axofQUeVJ+uQQxckPHTTmKxDuH
+         TM7Cbq2CDvI+qYmfmvl8ER/KkeoT95cnZzv4yaTmCG3+ui7ODMWGkPFfB3ueiAd8xcyH
+         llv5qLn5Aj/i3P4tc6XsCNebVopKOljjbznM9hJfBxCK7eqt2Ukazd+oWLmkR5HRdhiX
+         5u0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727337576; x=1727942376;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PpCiGEBlNu0mNZ7okeDi8cYacva/g1Cbr0GdHobTz6g=;
+        b=gn9esNUNpCOtqzgdK/d/RPF3OaIHAQfSLrwUwGETjJrCFsWDVZXCQwLp0NId+s5qeB
+         15shR+vsoV5Sn/r0NiqeLAyimQzDhpmF9DLRyPhcpVybHxVYwPTCSIht7yl0vz4ZbmRx
+         wYAx5EJQALKRfXT+GzqULDLw1KMVVXWZhTSujBKqGIVVcgAlS3WZkMPGVOGYT8zjhJWi
+         cfgC87xqIuEusdzsuY+EndNejaipHs60DDfmSvvDvaa6mGaPu2WhNJAqfAecW7KX2jdt
+         FQwrhgSILiuUmLIkgbv5DOjtT0a6ZjWBMEeN1ADsyXUxjuNFagi5tOQ2zk1TSIU/tWBj
+         wXDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpxdRQEc0xqaSh2++YxP4mxNsiOqdgn2u/PEykaHB3xrretQRYa4C4RprwE9yTTxgUOpJVU6eBnQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxPo+ThUyj8+nKK8vf9ts9jhM6CHiGmYVJxGJxUub12Ndjh6oi
+	mk4iU/mGTRQi4plhxrFGfF9HOuEqHevMAfOmvoRqQfGfMPxR/rzHk6dUHTY9Oj8=
+X-Google-Smtp-Source: AGHT+IH7ivAeF8lcHIJrAIXadm6iyognSZRY/aTKpYZz3gkdQWtorWwQDRTmTAf88fh/VevbkacKBg==
+X-Received: by 2002:adf:f64f:0:b0:37c:cbca:fd7c with SMTP id ffacd0b85a97d-37ccbcafe16mr2698906f8f.41.1727337576104;
+        Thu, 26 Sep 2024 00:59:36 -0700 (PDT)
+Received: from localhost (cst2-173-13.cust.vodafone.cz. [31.30.173.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd21129e6sm179018f8f.47.2024.09.26.00.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Sep 2024 00:59:35 -0700 (PDT)
+Date: Thu, 26 Sep 2024 09:59:32 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Nick Hu <nick.hu@sifive.com>
+Cc: greentime.hu@sifive.com, zong.li@sifive.com, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@ucw.cz>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Anup Patel <anup@brainfault.org>, 
+	Mayuresh Chitale <mchitale@ventanamicro.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Atish Patra <atishp@rivosinc.com>, Samuel Ortiz <sameo@rivosinc.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Sunil V L <sunilvl@ventanamicro.com>, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] riscv: Add csr_read/write_hi_lo support
+Message-ID: <20240926-b96b7164b51b0be0c732235b@orel>
+References: <20240926065422.226518-1-nick.hu@sifive.com>
+ <20240926065422.226518-2-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
- spinlock
-To: =?UTF-8?B?eGlhbyBzaGVuZyB3ZW4o6IKW55ub5paHKQ==?= <atzlinux@sina.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- 1076483@bugs.debian.org
-Cc: linux-pm@vger.kernel.org, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, linux-rt-users@vger.kernel.org
-References: <20240919081121.10784-2-ukleinek@debian.org>
- <26829a6d-671c-45a4-bef4-4172f4f11615@sina.com>
-Content-Language: en-US, de-DE
-From: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@debian.org>
-In-Reply-To: <26829a6d-671c-45a4-bef4-4172f4f11615@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Debian-User: ukleinek
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240926065422.226518-2-nick.hu@sifive.com>
 
-Hello,
+On Thu, Sep 26, 2024 at 02:54:16PM GMT, Nick Hu wrote:
+> In RV32, we may have the need to read both low 32 bit and high 32 bit of
+> the CSR. Therefore adding the csr_read_hi_lo() and csr_write_hi_lo() to
+> support such case.
+> 
+> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> Suggested-by: Zong Li <zong.li@sifive.com>
+> Signed-off-by: Nick Hu <nick.hu@sifive.com>
+> ---
+>  arch/riscv/include/asm/csr.h | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 25966995da04..54198284eb22 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -501,6 +501,17 @@
+>  	__v;							\
+>  })
+>  
+> +#if __riscv_xlen < 64
+> +#define csr_read_hi_lo(csr)					\
+> +({								\
+> +	u32 hi = csr_read(csr##H);				\
+> +	u32 lo = csr_read(csr);					\
+> +	lo | ((u64)hi << 32);					\
+> +})
+> +#else
+> +#define csr_read_hi_lo	csr_read
+> +#endif
+> +
+>  #define csr_write(csr, val)					\
+>  ({								\
+>  	unsigned long __v = (unsigned long)(val);		\
+> @@ -509,6 +520,17 @@
+>  			      : "memory");			\
+>  })
+>  
+> +#if __riscv_xlen < 64
+> +#define csr_write_hi_lo(csr, val)				\
+> +({								\
+> +	u64 _v = (u64)(val);					\
+> +	csr_write(csr##H, (_v) >> 32);				\
+> +	csr_write(csr, (_v));					\
+> +})
+> +#else
+> +#define csr_write_hi_lo	csr_write
+> +#endif
+> +
+>  #define csr_read_set(csr, val)					\
+>  ({								\
+>  	unsigned long __v = (unsigned long)(val);		\
+> -- 
+> 2.34.1
+>
 
-On 9/23/24 03:53, xiao sheng wen(肖盛文) wrote:
-> I apply this patch on Debian kernel 6.11-1~exp1 (2024-09-19) source code.
-> 
-> uname -a
-> Linux atzlinux-ce 6.11-rt-amd64 #1 SMP PREEMPT_RT atzlinux 6.11-1~exp1 
-> (2024-09-19) x86_64 GNU/Linux
-> 
-> I get the following errors in dmesg:
-> 
-> [    7.273690] ucsi_acpi USBC000:00: possible UCSI driver bug 2
-> [    7.451822] ucsi_acpi USBC000:00: error -EINVAL: PPM init failed
-> [    7.537749] ------------[ cut here ]------------
-> [    7.537753] WARNING: CPU: 12 PID: 96 at kernel/workqueue.c:2259 
-> delayed_work_timer_fn+0x63/0x90
-> [    7.537763] Modules linked in: rfcomm cmac algif_hash algif_skcipher 
-> af_alg snd_seq_dummy snd_hrtimer snd_seq snd_seq_device bnep btusb 
-> uvcvideo btrtl btintel videobuf2_vmalloc btbcm uvc btmtk 
-> videobuf2_memops videobuf2_v4l2 bluetooth videodev videobuf2_common mc 
-> snd_soc_skl_hda_dsp snd_soc_hdac_hdmi snd_sof_probes 
-> snd_soc_intel_hda_dsp_common binfmt_misc nls_ascii nls_cp437 vfat fat 
-> snd_hda_codec_hdmi snd_hda_codec_realtek snd_hda_codec_generic 
-> snd_hda_scodec_component snd_soc_dmic snd_sof_pci_intel_tgl 
-> snd_sof_pci_intel_cnl snd_sof_intel_hda_generic soundwire_intel 
-> soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda_common 
-> snd_sof_intel_hda_mlink snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp 
-> snd_sof iwlmvm snd_sof_utils intel_uncore_frequency snd_soc_hdac_hda 
-> intel_uncore_frequency_common snd_soc_acpi_intel_match 
-> x86_pkg_temp_thermal intel_powerclamp snd_soc_acpi soundwire_bus 
-> coretemp kvm_intel snd_ctl_led mac80211 snd_soc_avs kvm 
-> snd_soc_hda_codec snd_hda_ext_core snd_soc_core libarc4
-> [    7.537811]  crct10dif_pclmul snd_compress snd_pcm_dmaengine 
-> ghash_clmulni_intel sha512_ssse3 snd_hda_intel sha256_ssse3 sha1_ssse3 
-> iwlwifi snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec aesni_intel 
-> gf128mul snd_hda_core crypto_simd cryptd rapl mei_hdcp mei_pxp mei_wdt 
-> snd_hwdep intel_rapl_msr processor_thermal_device_pci intel_cstate 
-> cfg80211 processor_thermal_device processor_thermal_wt_hint intel_uncore 
-> snd_pcm thinkpad_acpi think_lmi iTCO_wdt processor_thermal_rfim mei_me 
-> firmware_attributes_class intel_pmc_bxt processor_thermal_rapl snd_timer 
-> ucsi_acpi mei iTCO_vendor_support intel_rapl_common nvram typec_ucsi 
-> wmi_bmof watchdog platform_profile processor_thermal_wt_req pcspkr 
-> processor_thermal_power_floor snd igen6_edac processor_thermal_mbox 
-> typec roles soundcore rfkill ac int3403_thermal joydev 
-> int340x_thermal_zone intel_pmc_core int3400_thermal intel_vsec intel_hid 
-> pmt_telemetry acpi_thermal_rel sparse_keymap acpi_tad pmt_class acpi_pad 
-> evdev serio_raw dm_mod loop configfs efi_pstore efivarfs ip_tables
-> [    7.537861]  x_tables autofs4 ext4 crc16 mbcache jbd2 crc32c_generic 
-> i915 drm_buddy i2c_algo_bit drm_display_helper cec hid_multitouch 
-> rc_core hid_generic xhci_pci xhci_hcd ttm i2c_hid_acpi i2c_hid usbcore 
-> drm_kms_helper hid intel_lpss_pci video nvme intel_lpss crc32_pclmul 
-> i2c_i801 thunderbolt psmouse drm nvme_core e1000e crc32c_intel idma64 
-> usb_common i2c_smbus fan button battery wmi
-> [    7.537887] CPU: 12 UID: 0 PID: 96 Comm: ktimers/12 Not tainted 6.11- 
-> rt-amd64 #1  atzlinux 6.11-1~exp1
-> [    7.537891] Hardware name: LENOVO 21HD0078CD/21HD0078CD, BIOS 
-> N3QET47W (1.47 ) 07/18/2024
-> [    7.537893] RIP: 0010:delayed_work_timer_fn+0x63/0x90
-> [    7.537898] Code: 65 48 8b 3d 3f ad b4 77 65 8b 05 40 ad b4 77 8b 97 
-> 00 0d 00 00 25 00 00 ff 00 81 e2 00 01 00 00 09 d0 75 06 f6 47 2c 20 75 
-> 0b <0f> 0b 5b 5d 41 5c c3 cc cc cc cc e8 fd 76 00 00 48 85 c0 74 eb 48
-> [    7.537900] RSP: 0018:ffffbb900046bc98 EFLAGS: 00010006
-> [    7.537903] RAX: 0000000000000100 RBX: ffff9a6182053000 RCX: 
-> ffff9a64cf7a35c0
-> [    7.537904] RDX: 0000000000000100 RSI: ffffffff884eab80 RDI: 
-> ffff9a6181130000
-> [    7.537906] RBP: 0000000000002000 R08: ffff9a64cf7a3610 R09: 
-> ffff9a64cf7a3658
-> [    7.537907] R10: 0000000000000002 R11: 0000000000000001 R12: 
-> ffff9a6183bfa900
-> [    7.537908] R13: dead000000000122 R14: ffffffff884eab80 R15: 
-> ffff9a6183bfa920
-> [    7.537910] FS:  0000000000000000(0000) GS:ffff9a64cf600000(0000) 
-> knlGS:0000000000000000
-> [    7.537912] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    7.537913] CR2: 0000561c94ed4000 CR3: 000000041d62c000 CR4: 
-> 0000000000f50ef0
-> [    7.537915] PKRU: 55555554
-> [    7.537916] Call Trace:
-> [    7.537918]  <TASK>
-> [    7.537919]  ? delayed_work_timer_fn+0x63/0x90
-> [    7.537923]  ? __warn.cold+0x93/0xed
-> [    7.537926]  ? delayed_work_timer_fn+0x63/0x90
-> [    7.537933]  ? report_bug+0xff/0x140
-> [    7.537937]  ? handle_bug+0x3c/0x80
-> [    7.537942]  ? exc_invalid_op+0x17/0x70
-> [    7.537945]  ? asm_exc_invalid_op+0x1a/0x20
-> [    7.537947]  ? __pfx_delayed_work_timer_fn+0x10/0x10
-> [    7.537951]  ? __pfx_delayed_work_timer_fn+0x10/0x10
-> [    7.537955]  ? delayed_work_timer_fn+0x63/0x90
-> [    7.537958]  ? __pfx_delayed_work_timer_fn+0x10/0x10
-> [    7.537961]  call_timer_fn+0x27/0x120
-> [    7.537965]  __run_timers+0x18d/0x300
-> [    7.537969]  timer_expire_remote+0x51/0x80
-> [    7.537973]  tmigr_handle_remote+0x3cc/0x470
-> [    7.537979]  handle_softirqs.isra.0+0xb5/0x230
-> [    7.537982]  ? __pfx_smpboot_thread_fn+0x10/0x10
-> [    7.537986]  run_timersd+0x3e/0x80
-> [    7.537988]  smpboot_thread_fn+0xda/0x1d0
-> [    7.537992]  kthread+0xcf/0x100
-> [    7.537995]  ? __pfx_kthread+0x10/0x10
-> [    7.537997]  ret_from_fork+0x31/0x50
-> [    7.538000]  ? __pfx_kthread+0x10/0x10
-> [    7.538001]  ret_from_fork_asm+0x1a/0x30
-> [    7.538006]  </TASK>
-> [    7.538007] ---[ end trace 0000000000000000 ]---
-> 
-> The whole dmesg is:
-> https://linux-hardware.org/?probe=28057f9ed2&log=dmesg
+I know I suggested this, but I'm having second thoughts. The nice thing
+about the
 
-On a first glance this looks like an unrelated issue to me. Could you 
-test with CONFIG_X86_INTEL_PSTATE=n? (If doesn't matter if you do this 
-with my patch applied or not, without CONFIG_X86_INTEL_PSTATE the driver 
-isn't build.)
+ csr_write(CSR, ...);
+ if (__riscv_xlen < 64)
+    csr_write(CSRH, ...);
 
-Best regards
-Uwe
+pattern is that it matches the spec. With this helper we'll have
+
+ csr_write_hi_lo(CSR, ...);
+
+for both rv32 and rv64. That looks odd for rv64 and hides the hi register
+access for rv32.
+
+We could avoid the oddness of the helper's name for rv64 if we instead
+added csr_write32 and csr_write64 which do the right things, but that
+still hides the hi register access for rv32. Hiding the hi register
+access is probably fine, though, since we can be pretty certain that
+the spec will rarely, if ever, deviate from naming high registers with
+the H suffix and/or not keep the upper bits compatible.
+
+In summary, I think I'm in favor of just dropping this patch, keeping
+the noisy, but explicit, pattern. Or, if the consensus is to add
+helpers, then I'd rather have all csr_<op>32/64 helpers. Then, code
+would match the spec by choosing the right helper based on the width
+of the CSR being accessed, when the CSR has an explicit width, or still
+use the current helpers for xlen-wide CSRs.
+
+Thanks,
+drew
 
