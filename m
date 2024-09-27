@@ -1,134 +1,110 @@
-Return-Path: <linux-pm+bounces-14854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D43998808F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 10:42:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 276159880F5
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 10:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EB6F1C21A6F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 08:42:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2470D1C22BCD
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 08:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA964189B85;
-	Fri, 27 Sep 2024 08:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OoV6gyWm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 316AA18A922;
+	Fri, 27 Sep 2024 08:59:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4823317A597;
-	Fri, 27 Sep 2024 08:41:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8B718A6D0;
+	Fri, 27 Sep 2024 08:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727426518; cv=none; b=lzPY9rduxyD1H5FBQy0tU9T+7lbBE4N3LyTxJRVXa8PPZyck4ywA4MIpu6WYjaKNZIjSWdmAELpVpeClHT/ejJjNldxbQ6YazvuuccZ8sLyJlLMuYa9BlFGJTuBekXiwhvo2oXBmRsNM0/JpvJNzV/tDOgPpCuZebVBVpT6JYdo=
+	t=1727427564; cv=none; b=BkIq/lWwqZ2rlmlLGmit0m0Yvd1SDE+iwEU9cQppX7vBl5L5iX+wdhtP+Tk2EmAuadPHpUGLqfUgCOVX299w6grnl7IpiUZIxuJOeC/vCBveaktpl2qEiGZUSBCBLZdL8FRRijwJi+AtWV9/QIP1GS0zty6nZK/cZA4c3QCBge8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727426518; c=relaxed/simple;
-	bh=ytV+RKWr16EPZnpm5vSULbyMkvu+gR0uEaxOU2ESAeg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I2tcJLjLJ2sFHqsq6DSkcAbZ3alDLwQ9+eHCE4Ikx7vmgKLFEXYumgx07AqXYzIkVwxWnRPJG87v2SFFSnboJy3hNlaxzQ7mGPESmAUBIXRY18IZKEu+liy7l1kydtbhWPgK2A4dFv+ftnkY6Cj1Thbfqg72rqolhpzh30InVOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OoV6gyWm; arc=none smtp.client-ip=209.85.216.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-2e082bf1c7fso1412780a91.3;
-        Fri, 27 Sep 2024 01:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727426516; x=1728031316; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=17j1bSIskFw7QaKC5zjWPgo0WzP70In6+YzSESXBkrw=;
-        b=OoV6gyWmrOp/wKIk9sqjgwaH6ZLI2byxh7d76dNN+G77wNIbWyXHWE8mcvBN4wwk2r
-         XRidqYwgpq9TTnLPF1m7mCGiJfCtoKbYAm/1UxYXY/pw8+mP3V+5IuPPTxrj8VzxxVBH
-         FCGMxeSHNdMjXEbru28ZfArCyN3HP0GU8vdObNvQRKL6KNKXgRCk/P3H46SRZ5sGARx4
-         pZYFwjmXRRFLzeoD7+tapDhOgbBOFWkUVR+425+SoE9C2Ux+kww6ms/GuRa7xGEPiEu9
-         2XAc2+0OsOoJb/hj+wSETqGlZzSWc/Gd1JS7L/Hm2WDKWb0U/U2w2buzlpWe8lfVEBnX
-         Xd0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727426516; x=1728031316;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=17j1bSIskFw7QaKC5zjWPgo0WzP70In6+YzSESXBkrw=;
-        b=Jnz1OVmXnDMPEMpvfw1BkzOGFMgqLwurC7QrPl5VQMZufgl1whMbks1f9dI2DLm2Cy
-         RSKlCQJ38Ne5TPBlNcibLp9zEDkYGfQ7T7TmwevHd5tSvlI35BISUreATm6B4asNbMf7
-         0OLvLQgiwN9gi9WQh0cUsWU/62ueBI/9tNiwR488cqsl72ebEMyQBvgOsHRyEvU2MZLb
-         vZQqi1TcfwFGygyBCbNqFk+qtmPsfDL8hfBm6pOLwR8SuEnPrZsvftnByacWzdypi+50
-         Q15FwakVIUJMJm31NTUt1R8noDgu9cGv7BrL/pTQ4F2jLYXD8GDoYRfeZ3h/JIHpjTg+
-         m/jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV938jZ8VcjBSDawFuP2zUyNk1qV7vK1F3jhqPtv3yHgLU7cdJYr2+75RGEgi9LsHJj9+mk/r8fKv+mh7M=@vger.kernel.org, AJvYcCXRAkDJjvR5oB6kV0xFWpFLCatqs7aTYa2sHHYSUoJYZbUkmx8iXcxzNfk2QtjXC/U+JO/tTS7y@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCm/mmsPsOG+u50syuQhHyQoS7hojoBI3+t8VJQuR/DGLkyc1/
-	d6KejX7o/P8rgE+WpGAz3FOCwRaZ62Mu8SfW4uZj0KnEzGu0RSPf
-X-Google-Smtp-Source: AGHT+IGVauw5rskXtchfvjLWDwu4I2nJZYoxuqzvTcDMdlGrzH1o8b7kumnQvYBHNLq1gTNMti7uxA==
-X-Received: by 2002:a17:90a:ad91:b0:2d4:924:8891 with SMTP id 98e67ed59e1d1-2e0b8ede168mr2650912a91.38.1727426516430;
-        Fri, 27 Sep 2024 01:41:56 -0700 (PDT)
-Received: from tom-QiTianM540-A739.. ([106.39.42.164])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e06e1ae708sm4975371a91.13.2024.09.27.01.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 01:41:55 -0700 (PDT)
-From: Qiu-ji Chen <chenqiuji666@gmail.com>
-To: myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com,
-	cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	baijiaju1990@gmail.com,
-	Qiu-ji Chen <chenqiuji666@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] PM / devfreq: Fix atomicity violation in devfreq_update_interval()
-Date: Fri, 27 Sep 2024 16:41:45 +0800
-Message-Id: <20240927084145.7236-1-chenqiuji666@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1727427564; c=relaxed/simple;
+	bh=NGLIU0j9AdC9AAMMc2VPzHjSqyonkN6Gs5Ot0xEAcOk=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=JQ9JCneAcVN1/aAVqXg3FL+Adbxi0RA50Fx2mHQm0kxIY2M2c0gfMrBYhin8oar8o9bqMWJ0eCazx9lZ8uJE2g8eXBFKYryUofvyQmWlWGirTIh9k/bXu+BuA3SQJyiwso4Bo2mDB0xs0eoMRrZYkUEGtMYyD0iDjIuT20/PnDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3FBC514BF;
+	Fri, 27 Sep 2024 01:59:51 -0700 (PDT)
+Received: from [192.168.0.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CEE03F64C;
+	Fri, 27 Sep 2024 01:59:19 -0700 (PDT)
+Message-ID: <a4a70646-98a4-4b85-955e-62d66ba68927@arm.com>
+Date: Fri, 27 Sep 2024 09:59:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Juri Lelli <juri.lelli@redhat.com>
+Cc: Qais Yousef <qyousef@layalina.io>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm <linux-pm@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Pierre Gondois <pierre.gondois@arm.com>
+From: Christian Loehle <christian.loehle@arm.com>
+Subject: [PATCHv2] cpufreq/schedutil: Only bind threads if needed
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The atomicity violation occurs when the variables cur_delay and new_delay 
-are defined. Imagine a scenario where, while defining cur_delay and 
-new_delay, the values stored in devfreq->profile->polling_ms and the delay 
-variable change. After acquiring the mutex_lock and entering the critical 
-section, due to possible concurrent modifications, cur_delay and new_delay 
-may no longer represent the correct values. Subsequent usage, such as if 
-(cur_delay > new_delay), could cause the program to run incorrectly, 
-resulting in inconsistencies.
+Remove the unconditional binding of sugov kthreads to the affected CPUs
+if the cpufreq driver indicates that updates can happen from any CPU.
+This allows userspace to set affinities to either save power (waking up
+bigger CPUs on HMP can be expensive) or increasing performance (by
+letting the utilized CPUs run without preemption of the sugov kthread).
 
-To address this issue, it is recommended to acquire a lock in advance, 
-ensuring that devfreq->profile->polling_ms and delay are protected by the 
-lock when being read. This will help ensure the consistency of the program.
-
-This possible bug is found by an experimental static analysis tool
-developed by our team. This tool analyzes the locking APIs
-to extract function pairs that can be concurrently executed, and then
-analyzes the instructions in the paired functions to identify possible
-concurrency bugs including data races and atomicity violations.
-
-Fixes: 7e6fdd4bad03 ("PM / devfreq: Core updates to support devices which can idle")
-Cc: stable@vger.kernel.org
-Signed-off-by: Qiu-ji Chen <chenqiuji666@gmail.com>
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
 ---
- drivers/devfreq/devfreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- v2: Add comment for the dl_task_check_affinity return (Juri)
+v1: https://lore.kernel.org/lkml/480f2140-ea59-4e1d-a68d-18cbcec10941@arm.com/
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 98657d3b9435..9634739fc9cb 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -616,10 +616,10 @@ EXPORT_SYMBOL(devfreq_monitor_resume);
-  */
- void devfreq_update_interval(struct devfreq *devfreq, unsigned int *delay)
- {
-+	mutex_lock(&devfreq->lock);
- 	unsigned int cur_delay = devfreq->profile->polling_ms;
- 	unsigned int new_delay = *delay;
+ kernel/sched/cpufreq_schedutil.c | 6 +++++-
+ kernel/sched/syscalls.c          | 7 +++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index c6ba15388ea7..10faab849a3e 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -691,7 +691,11 @@ static int sugov_kthread_create(struct sugov_policy *sg_policy)
+ 	}
  
--	mutex_lock(&devfreq->lock);
- 	devfreq->profile->polling_ms = new_delay;
+ 	sg_policy->thread = thread;
+-	kthread_bind_mask(thread, policy->related_cpus);
++	if (policy->dvfs_possible_from_any_cpu)
++		set_cpus_allowed_ptr(thread, policy->related_cpus);
++	else
++		kthread_bind_mask(thread, policy->related_cpus);
++
+ 	init_irq_work(&sg_policy->irq_work, sugov_irq_work);
+ 	mutex_init(&sg_policy->work_lock);
  
- 	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
+diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+index aa70beee9895..2ef1cb8626bc 100644
+--- a/kernel/sched/syscalls.c
++++ b/kernel/sched/syscalls.c
+@@ -1172,6 +1172,13 @@ int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask)
+ 	if (!task_has_dl_policy(p) || !dl_bandwidth_enabled())
+ 		return 0;
+ 
++	/*
++	 * The special/sugov task isn't part of regular bandwidth/admission
++	 * control so let userspace change affinities.
++	 */
++	if (dl_entity_is_special(&p->dl))
++		return 0;
++
+ 	/*
+ 	 * Since bandwidth control happens on root_domain basis,
+ 	 * if admission test is enabled, we only admit -deadline
 -- 
 2.34.1
-
 
