@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-14859-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14860-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 698EA9881A6
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 11:46:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A81599881AD
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 11:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DD2328433F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 09:46:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 574BD285C19
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 09:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9755A1BC9EB;
-	Fri, 27 Sep 2024 09:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E041A1BB693;
+	Fri, 27 Sep 2024 09:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rRMhyZ1g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQ2WgeCV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565321BC066;
-	Fri, 27 Sep 2024 09:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F30A187561;
+	Fri, 27 Sep 2024 09:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727430273; cv=none; b=hl74QE+jqgMX0NdZ2/CzbawLR5ydZIVFlgxedhzVwVP/qo8l20oHIT7ZDe+eiGlveUpkZWCjmz0SGU701lOcWxjbUCUvENSNAYLdPLoPIZQfzdxFGyECyDvf7veGP6tzlLHWT+dMZhMrQ9YaLPWSsLpNpHKng8YWhfzI0nOAcn0=
+	t=1727430325; cv=none; b=su7A5n5zE4fve6wdbn2PjCXsYI74poMODoLD8LdOkhGP4YaPTuWIl6THdFbsVcwqLhSIz/oYUjn7v2noIEbwlgOzcvmHtpj1f89YeFjOAGOm7/iJSB/JKu3J8LGVCAeA/F8tunYzyXPIE44fRuQUM057cUJrzA8fkdORUN2Y+k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727430273; c=relaxed/simple;
-	bh=eKW5C8kPz0u7mkffe5kYyXMAAp3ulnatVh3dzHZzUQo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pPnAPb2nbIYHB/gxqfvci/Zjm9mhajBGHX2yApSVneTYHWnYvCRmmv3Hll2iFY3g+SWP0KWNogZ4pCuf27kWZxUEDLGjvblCxLpe9lwMcIG5XKhRgOXKVP2tfkTR6ChofTGO9rHDloVPKMUoYmIQlQfJ+sawufb8Pclhx/DY9E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rRMhyZ1g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AD1C4CEC9;
-	Fri, 27 Sep 2024 09:44:23 +0000 (UTC)
+	s=arc-20240116; t=1727430325; c=relaxed/simple;
+	bh=cwf8IiiGMd/tYm41ABqY1vKY44XgS/xx0rcgCwLxuEk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ucTYgt/Ek3blh14XLwbpKHcLus6jq8W7wDuyyaO7BrrUixKSTTOi4NBHh5nwav0ohyIk+emXtX6FdBIRw9DYLqNfF+eQ/JLVrrP92O8DOVD7zo3wVn0AQ6vdN38Q0ypxp78I+H5x+3LyO/bQJMueQHKEFATOayvPT4ZT9o/umf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQ2WgeCV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53229C4CEC4;
+	Fri, 27 Sep 2024 09:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727430272;
-	bh=eKW5C8kPz0u7mkffe5kYyXMAAp3ulnatVh3dzHZzUQo=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=rRMhyZ1g65CTnvRwWk73dj8KJ7M77MYZ95Y4/yO5DmGgihJGBhLZ0a0Dcu0Jist16
-	 hoKVsE+wzD0vf7aTv9ypylpHF4E4q79wx9okj+oCRkIfSCdEYuN7MHp6jpIcj73Xvq
-	 Fuz98SujU6rElB6q6eZhuPSUs6zrbw7XCIJwc4oaKtlb8toAbCUQMDHsy1VIgbFLT/
-	 8Eb2WowCIG/uzGnzPTwhV4ShHuRkGY6zxfemqzCtNZeza4OPiSGqX+9xwptJcJ90d5
-	 +08slEoCOQiuVeKIBLRgzyTYquYCiHkkXRUcyu+oLrMEtTrCN+yFRnGijcRmz/Iazf
-	 pP4/l9yOWsbaw==
-Message-ID: <665cd94e-7b09-428e-90b7-3ea861a01aa3@kernel.org>
-Date: Fri, 27 Sep 2024 11:44:21 +0200
+	s=k20201202; t=1727430325;
+	bh=cwf8IiiGMd/tYm41ABqY1vKY44XgS/xx0rcgCwLxuEk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mQ2WgeCVzDkapGr7rmirjLeMZvQ2+hGoTK4cneHRo9mSLFVJ3Rnx8wlvjiDAkEBDX
+	 DHaSFMkPAYGQ7Cl/JzVrOBtbrSNO0R1bsjGmtmWoVm6cv4RCtE54w0Htm6F8XEduCe
+	 uSWWFDFkP+a2IrGvGItIUJvKL4I5IWA7/F1Dk9oGsk+PkeiBt0JmYrVbNTkiWBduBc
+	 feJETcSw4c+2PaFgMdihdC+UL8dNJ2jM4j+ArVHQEk+XK/SulTpQmJ4cidgzfuPpX1
+	 BqLm9hnItb+cVVQ/xdJnCDsnQQs9xERH4NF4oU5RGVIit8CszBOSebkLqa4nCRT1Gb
+	 9BvCVcRSy9FZA==
+Message-ID: <339b4c83-201c-4f63-85d0-b0aa1eb164b0@kernel.org>
+Date: Fri, 27 Sep 2024 11:45:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,7 +52,6 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
  schema format
-From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Macpaul Lin <macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
  Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
  <olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>,
@@ -80,7 +79,7 @@ Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
  Chen-Yu Tsai <wenst@chromium.org>
 References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
  <20240918064955.6518-2-macpaul.lin@mediatek.com>
- <0b6c3217-5156-4c4f-8aaa-0b1cecce1818@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -125,27 +124,76 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <0b6c3217-5156-4c4f-8aaa-0b1cecce1818@kernel.org>
+In-Reply-To: <20240918064955.6518-2-macpaul.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 20/09/2024 15:07, Krzysztof Kozlowski wrote:
-> On 18/09/2024 08:49, Macpaul Lin wrote:
->> Convert the mfd: mediatek: mt6397 binding to DT schema format.
->>
->> MT6323, MT6358, and MT6397 are PMIC devices with multiple function
->> subdevices. They share a common PMIC design but have variations in
->> subdevice combinations.
->>
->> Key updates in this conversion:
+On 18/09/2024 08:49, Macpaul Lin wrote:
+> Convert the mfd: mediatek: mt6397 binding to DT schema format.
 > 
+> MT6323, MT6358, and MT6397 are PMIC devices with multiple function
+> subdevices. They share a common PMIC design but have variations in
+> subdevice combinations.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Key updates in this conversion:
+> 
+> 1. RTC:
+>    - Convert rtc-mt6397.txt and merge into parent MT6397 PMIC DT schema.
+> 
+> 2. Regulators:
+>    - Align to generic name "regulators".
+>    - Update references from .txt to .yaml for mt6323, mt6358, and mt6397
+>      regulators.
+>    - Simplify regulator name labels in device tree examples.
+> 
+> 3. Audio Codec:
+>    - Convert sound/mt6358.txt and merge into parent MT6397 PMIC DT schema.
+>    - Align to generic name "audio-codec" for codec and sound subdevices.
+>    - Add "mediatek,dmic-mode" and "Avdd-supply" properties.
+> 
+> 4. Clocks:
+>    - Align to generic name "clocks" for clockbuffer subdevices.
+> 
+> 5. LEDs:
+>    - Convert leds-mt6323.txt and merge into parent MT6397 PMIC DT schema.
+>    - Update LED binding.
+> 
+> 6. Keys:
+>    - Add detailed descriptions for power and home keys.
+>    - Add compatible: mediatek,mt6358-keys.
+> 
+> 7. Power Controller:
+>    - Convert mt6323-poweroff.txt and merge into parent MT6397 PMIC DT
+>      schema.
+>    - Add #power-domain-cells property to fix dt-binding check error.
+>    - Clarify "BBPU" as "Baseband power up".
+> 
+> 8. Pinctrl:
+>    - Align to generic name "pinctrl" instead of "pin-controller".
+> 
+> 9. Compatible:
+>    - Drop "mediatek,mt6357" since there is a separated DT Schema
+>      for PMIC MT6357.
+> 
+> 10. Examples:
+>    - MT6323: Retain complete examples for this PMIC.
+>    - MT6358 and MT6397: simplify settings in regulators.
+>     - Preserve "audio-codec", "clocks", "pinctrl", "rtc", and "keys"
+>       sections as they contain typical settings for different PMICs.
+> 
+> Additional updates:
+> - MAINTAINERS: Add co-maintainers and reference to
+>   mfd/mediatek,mt6397.yaml for LED and power-controller drivers.
+> - input/mediatek,pmic-keys.yaml: Update reference to
+>   mfd/mediatek,mt6397.yaml.
+> 
+> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-Unreviewed. This is incomplete.
+NAK
 
-Do not send incorrect patches and then followups for them. Just fix the
-incorrect patch before it gets applied.
+Follow up patch pointed out this is incorrect. I don't understand this
+concept of sending knowingly incorrect code, so please sort it out at v7.
 
 Best regards,
 Krzysztof
