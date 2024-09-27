@@ -1,251 +1,170 @@
-Return-Path: <linux-pm+bounces-14851-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14852-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAFF6987D9E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 06:38:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F42987FD8
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 09:58:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94F4E285001
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 04:38:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3580AB20FE0
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 07:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED31B16E863;
-	Fri, 27 Sep 2024 04:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDCC188A1F;
+	Fri, 27 Sep 2024 07:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="W5WMGoGb"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="pm+L6SuX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF73EEAA
-	for <linux-pm@vger.kernel.org>; Fri, 27 Sep 2024 04:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB83C16EBE6;
+	Fri, 27 Sep 2024 07:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727411930; cv=none; b=WtkWybiZH6qsMXJ3hHdF5rcc5K7thG7pkKSM0sP4rAAfnisHm1EfbIRDG6kEBFNrUEINKgsQKA+yjd04Ks1Z8VSQe3tM6WVs2W1FOr6Tnkydlgxsc0T6RCp619Bl7zrFUe9fHWws//XQwGhKLB+/ab/ndkP6i4KHioN3KybqRv0=
+	t=1727423891; cv=none; b=Lrw4GJd4HGTsdFs9Crnpsdryan9ZfADN0v2h7ORlZI2VI7ZD2q2FGedUf96uyyILv48i9VrGyUeRuWdmx/F1GQsnT730lr9sErOVDCiFW8fZUBvygkp6TOJsY1PLkDCDFcTHioi/msSzWH/kVrPxKMzZgmyVOpiOR6PzaDPQZso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727411930; c=relaxed/simple;
-	bh=XnZrFknTED31CpFW1xavqyjmQ1RP1hTTwJB5JF3Tth8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U/uOGFL+r304BU2f2ebh5OOi+OKTqDlDGQv0Hitie76v+ihPDzl/nPmvjXe2+za5xYMgqmCb5YHKPzCytXjwjtgbpGrR1+jWYt6PA+o7aiO6i50vMb0kXcAjet8PYL/pQJAiJ6aO82M29Y61Z5lb7REa2S6mvbgyMEQGLX1jhzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=W5WMGoGb; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5365aa568ceso2072608e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2024 21:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1727411927; x=1728016727; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h/P54adq5wqPeVhdzqGMRKbTP9qOT4nAYJ2m7pC5TLg=;
-        b=W5WMGoGbjzxR4OZua5UMBbYrGfebKWOsMKPHeWxlRVh8ZX1w06+/KxGXYsWMJvyUwv
-         O7zD4KYpHyQSj3fGhmcvyW/RmwG5KaP8XqbD/BKd4hSf7+b8HmAK6YJCXTfEeOgO2Wlt
-         /HIDH5gkJFduGJl/HBAsFRmAn+eL6AuZ8C4d4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727411927; x=1728016727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h/P54adq5wqPeVhdzqGMRKbTP9qOT4nAYJ2m7pC5TLg=;
-        b=hr+PqgR6VesEyOWQ69jpwGIwFQ8L90rQS2s1tr13S+TpQcKrlOdIriLsV20pJqV/P9
-         PH6LUimG1r5j/E1W/HUhW+E40sYrkgjA6ubSvEGxIpNv8zP/x2j+OFxe4/c/QVTfCkzL
-         r/9HgaeOtVXTV77FcJHjX1ddxQtdCuh8yTmznpFS0yU/swfOakq5Q80x0HWh43EPSN6Q
-         tW21nwfH/+/d6xHPaMJc7SOsGj7xaYIuzqzUoCEyGa5U/Jydz86JK5elRqYpqlXN/5UN
-         RYGxOcLaoSCYrIbKMK/lql+sBwDHrVp/qlqHHMlBnOi6cO89z9INBLfkcNyzrXjyGdDs
-         SkPg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0vqLb3tqYCyvtB2yM0JCqqR/2AknSwD9mRQFL5aimAKD4S4TAFzy50XS9AE+/X6f48WZ1O5ovyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxISUHJzt7ps7nWzjTnyn043z6T6q3fxibfJl5GjGDiXtVIkOb2
-	2UU+clSecTfkHs5gzs6fEJ6pgbRg6XyaEj5tUk+AMDo9QeUCUgCKKFNe8KSoSlJe4a7Sp7hzrVp
-	pLpZ7uBQ/OilZQLPHO1+sP1sqbEQ3enQe8z2Q
-X-Google-Smtp-Source: AGHT+IEuKMKaL9pm5ASOI7F2wVDmv6urgJgoH8ydyHLtVrSS2VSiUn0vrSHcCfRK5Gdvnw9KKS+IW86HHLQ+3e6fKoQ=
-X-Received: by 2002:a05:6512:3e05:b0:52c:cd77:fe03 with SMTP id
- 2adb3069b0e04-5389fc3bd31mr1339969e87.14.1727411927087; Thu, 26 Sep 2024
- 21:38:47 -0700 (PDT)
+	s=arc-20240116; t=1727423891; c=relaxed/simple;
+	bh=K4Ha9SzluEelrcb7mPJ+hSpYuWIb/WY9wcGQ3BuJxPU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=mZ5ErZuolZkgHIrozMLGN+9ouFC/SEohKNQUcuQav27yw6BMBYelzi8hv15mc4+C5Ul2w814YOzmE/XiQW2J0VR3zKvVe8iV/LsJ2RMknK43iCyGu8tOs/J2eA52qbMG09Jw0TNE3IkdFx1BO8dl8r/4rS0jchgXpjOcz3HuiwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=pm+L6SuX; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 3882a9787ca611ef8b96093e013ec31c-20240927
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=FSHvJiePihDHrvRm0P0iXE0axppBM5CqjqpGGZtkmaU=;
+	b=pm+L6SuXs8JD+H7o0asCxTFJPtH4P9Y8t1ICqDkmzKrf0tYRm36pa3rqRVnFUDHbTQUgPEYXfOoNC5dvgK7UModwFGXuHhm/HqX2nQlQgCQ44FRxL/E63G+g6mT2gCrGzX4v/lrJ99sj595JhPOjWVbSGXOkaNTEOXhctImRs7s=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:effb94ce-42ef-4fd9-b367-5cfcc011b8c5,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:00885818-b42d-49a6-94d2-a75fa0df01d2,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 3882a9787ca611ef8b96093e013ec31c-20240927
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1584982245; Fri, 27 Sep 2024 15:58:02 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 27 Sep 2024 15:58:00 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Fri, 27 Sep 2024 15:57:59 +0800
+Message-ID: <78381b10-eae6-1414-6913-994e1ed03410@mediatek.com>
+Date: Fri, 27 Sep 2024 15:57:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925093807.1026949-1-wenst@chromium.org> <20240925093807.1026949-3-wenst@chromium.org>
- <ZvPscRdWlFPmtCyR@smile.fi.intel.com> <CAGXv+5Gf9+rc+vLcr-JFhO561G8dw38ksV3drat+DyCfWEVakQ@mail.gmail.com>
- <ZvVS7ITg2t-RIh8C@smile.fi.intel.com>
-In-Reply-To: <ZvVS7ITg2t-RIh8C@smile.fi.intel.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Fri, 27 Sep 2024 12:38:35 +0800
-Message-ID: <CAGXv+5EV4nNiAneajqr4VBkX4TO3zV76yqBM_u81ZMNjU52Bvw@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] regulator: Add devres version of of_regulator_get_optional()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Mark Brown <broonie@kernel.org>, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
-	Johan Hovold <johan@kernel.org>, Pablo Sun <pablo.sun@mediatek.com>, 
-	Macpaul Lin <macpaul.lin@mediatek.com>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/3] dt-bindings: mfd: mediatek: mt6397: add compatible
+ for mt6359-codec
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+CC: Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, "Lee
+ Jones" <lee@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Liam Girdwood
+	<lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Eason Yen
+	<eason.yen@mediatek.com>, Jiaxin Yu <jiaxin.yu@mediatek.com>, Shane Chien
+	<shane.chien@mediatek.com>, Hui Liu <hui.liu@mediatek.com>,
+	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-sound@vger.kernel.org>,
+	Alexandre Mergnat <amergnat@baylibre.com>, Bear Wang
+	<bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin
+	<macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>, "MediaTek
+ Chromebook Upstream" <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	Chen-Yu Tsai <wenst@chromium.org>
+References: <20240926092519.6556-1-macpaul.lin@mediatek.com>
+ <20240926092519.6556-2-macpaul.lin@mediatek.com>
+ <20240926-smokeless-clobber-0fb8a1cdc7ab@spud>
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <20240926-smokeless-clobber-0fb8a1cdc7ab@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--15.744400-8.000000
+X-TMASE-MatchedRID: cgbqQT5W8hcOwH4pD14DsPHkpkyUphL9GNMTWh+TA9t+YesuCgkiXJsn
+	GP/L/vukQ2hUNgLaYpUvndTJnUi/SAAt/Fsc5wFGbc297PAGtWbXof+XRfBH287EPIkVcg+OD3J
+	fu36QI2GIi0Yt2qmJZR9K6LGpAwssZMLMXtQ7bzFsG7r4Qh7N3J6KYa03LCO2myiLZetSf8nJ4y
+	0wP1A6AKEwgORH8p/AjaPj0W1qn0Q7AFczfjr/7HPBXw4uHT3JyO9Fb+NyVxV9IeBCvU2xpOg2z
+	GJYtXDU5BRVekiXxRE=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--15.744400-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: AFFE03E053B385FE89437B5129CE9C73A9E0002E6ECFE675424FD8767641666F2000:8
 
-On Thu, Sep 26, 2024 at 8:26=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Sep 26, 2024 at 04:43:52PM +0800, Chen-Yu Tsai wrote:
-> > On Wed, Sep 25, 2024 at 6:56=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Wed, Sep 25, 2024 at 05:38:05PM +0800, Chen-Yu Tsai wrote:
->
-> ...
->
-> > > > +#if IS_ENABLED(CONFIG_OF)
-> > >
-> > > Do we really need this?
-> >
-> > What's the point of going through devres_* stuff if we already know
-> > _of_regulator_get() is going to fail anyway?
->
-> With devm_add_action*() this will be other way around and there are plent=
-y of
-> APIs done this way. The ifdeffery is simply ugly in the code.
+On 9/27/24 00:04, Conor Dooley wrote:
+> On Thu, Sep 26, 2024 at 05:25:18PM +0800, Macpaul Lin wrote:
+>> This patch updates the audio-codec properties includes:
+>>   - compatible:
+>>    - Re-order the supported device items.
+>>    - Add 'mt6359-codec' to compatible since MT6359 PMIC has been included
+>>      in this DT Schema.
+> 
+>>    - Set 'additionalProperties: true' for 'mt6359-codec'.
+> 
+> Why?
 
-It's still extra code that doesn't get compiled out.
+The mt6359-codec support these 3 properties:
+mediatek,mic-type0, mediatek,mic-type-1, mediatek-mic-type2.
+While mt6358-sound and mt6397-codec don't (at least, I didn't find
+these 3 properties in driver codes.
 
-> > Also, _of_regulator_get() does not have a stub version for !CONFIG_OF.
->
-> So, what prevents us from adding it?
+Set 'additionalProperties: true' is also required to fix the following
+dtbs_check errors:
+pmic: audio-codec: 'mediatek,mic-type-0', 'mediatek,mic-type-1',
+       'mediatek,mic-type-2' do not match any of the regexes:
+       'pinctrl-[0-9]+'
 
-Because there's no need if the only internal user isn't using it.
+>>
+>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>> ---
+>>   Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+>> index 40cabaf60d0d..ffb5848a96d5 100644
+>> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+>> @@ -104,7 +104,7 @@ properties:
+>>   
+>>     audio-codec:
+>>       type: object
+>> -    additionalProperties: false
+>> +    additionalProperties: true
+>>       description:
+>>         Audio codec support with MT6397 and MT6358.
+>>   
+>> @@ -112,8 +112,9 @@ properties:
+>>         compatible:
+>>           oneOf:
+>>             - enum:
+>> -              - mediatek,mt6397-codec
+>>                 - mediatek,mt6358-sound
+>> +              - mediatek,mt6359-codec
+>> +              - mediatek,mt6397-codec
+>>             - items:
+>>                 - enum:
+>>                     - mediatek,mt6366-sound
+>> -- 
+>> 2.45.2
+>>
 
-I could also move them over to of_regulator.c.
-
-_of_regulator_get() stays internal to that file, and devm_regulator_release=
-()
-gets exposed instead.
-
-Does that sound better?
-
-> > > > +static struct regulator *_devm_of_regulator_get(struct device *dev=
-, struct device_node *node,
-> > > > +                                             const char *id, int g=
-et_type)
-> > > > +{
-> > > > +     struct regulator **ptr, *regulator;
-> > > > +
-> > > > +     ptr =3D devres_alloc(devm_regulator_release, sizeof(*ptr), GF=
-P_KERNEL);
-> > > > +     if (!ptr)
-> > > > +             return ERR_PTR(-ENOMEM);
-> > > > +
-> > > > +     regulator =3D _of_regulator_get(dev, node, id, get_type);
-> > > > +     if (!IS_ERR(regulator)) {
-> > > > +             *ptr =3D regulator;
-> > > > +             devres_add(dev, ptr);
-> > > > +     } else {
-> > > > +             devres_free(ptr);
-> > > > +     }
-> > > > +
-> > > > +     return regulator;
-> > >
-> > > Why not using devm_add_action() / devm_add_action_or_reset()
-> > > (whichever suits better here)?
-> >
-> > Cargo cult from _devm_regulator_get() in this file. However since this =
-is
-> > meant to share the same release function, both functions need to use th=
-e
-> > same mechanism.
-> >
-> > I could also argue that this is not an action, but an allocation, and s=
-o
-> > devres_alloc() seems to make more sense.
->
-> It's rather matter of the naming of the devm_add_action*() APIs, but agai=
-n,
-> we have plenty of APIs using it when it's allocation and not strictly spe=
-aking
-> an action.
-
-OK. Still the mechanism used needs to match that of the existing API.
-So devres_add() it is for now.
-
-> > > > +}
-> > >
-> > > > +#endif
->
-> ...
->
-> > > > +static inline struct regulator *__must_check devm_of_regulator_get=
-_optional(struct device *dev,
-> > > > +                                                                  =
-       struct device_node *node,
-> > > > +                                                                  =
-       const char *id)
-> > >
-> > > I don't know the conventions here, but I find better to have it as
-> > >
-> > > static inline __must_check struct regulator *
-> > > devm_of_regulator_get_optional(struct device *dev, struct device_node=
- *node, const char *id)
-> > >
-> > > Similar to other stubs and declarations.
-> >
-> > I don't think there are any conventions. This file already has three ty=
-pes:
-> >
-> > 1. Wrap the line with the function name on the second line
-> > 2. Wrap the arguments; wrapped arguments aligned to the left parenthesi=
-s.
-> > 3. Wrap the arguments; wrapped arguments aligned with aribtrary number =
-of
-> >    tabs.
-> >
-> > I prefer the way I have put them.
->
-> The way you put it despite relaxed limit is slightly harder to read.
-> I don't remember many headers that do so-o indented parameters. Besides
-> your way defers the burden of resplit to the future in case one more para=
-meter
-> needs to be added which will excess the 100 limit.
->
-> Also __must_check is somehow misplaced in my opinion (talking from my
-> experience and this can be simply checked by grepping other headers).
-
-Seems correct to me. It's between the return type and the function name.
-From the coding style doc:
-
- __init void * __must_check action(enum magic value, size_t size, u8 count,
-                                   char *fmt, ...) __printf(4, 5) __malloc;
-
-The preferred order of elements for a function prototype is:
-
-- storage class (below, ``static __always_inline``, noting that
-``__always_inline``
-  is technically an attribute but is treated like ``inline``)
-- storage class attributes (here, ``__init`` -- i.e. section
-declarations, but also
-  things like ``__cold``)
-- return type (here, ``void *``)
-- return type attributes (here, ``__must_check``)
-- function name (here, ``action``)
-- function parameters (here, ``(enum magic value, size_t size, u8
-count, char *fmt, ...)``,
-  noting that parameter names should always be included)
-- function parameter attributes (here, ``__printf(4, 5)``)
-- function behavior attributes (here, ``__malloc``)
-
-
-> That said, I prefer the way I suggested or something alike.
-
-Two people arguing over style that is not clearly specified in the coding
-style doc is probably wasting time. I'll use what `clang-format` gave:
-
-static inline struct regulator *__must_check of_regulator_get_optional(
-       struct device *dev, struct device_node *node, const char *id)
-static inline struct regulator *__must_check devm_of_regulator_get_optional=
-(
-       struct device *dev, struct device_node *node, const char *id)
-
-
-ChenYu
+Thanks
+Macpaul Lin
 
