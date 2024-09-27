@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-14872-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14873-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C8D09883CB
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 14:02:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16A159883D0
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 14:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D9851C20DB3
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 12:02:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AC39B221EE
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2024 12:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377BC18B474;
-	Fri, 27 Sep 2024 12:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB33B18BB86;
+	Fri, 27 Sep 2024 12:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jLR6oLjR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OszslMAX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C29188CBE;
-	Fri, 27 Sep 2024 12:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D0918A92A;
+	Fri, 27 Sep 2024 12:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727438511; cv=none; b=oUX77c8EG187etGqZRmTBXc3MGlwje7IrhhtXAQ3IxL+W+v/BlokL4lfsKKMTREtMwT4c1wcjuaKP5DvXjdMeawqVGROSxiKYQF5y1G21GrJSRimBQXGyyVy5TVd2JGKTdmRo+NsbOirdGRimi4lN50OXMkUKu2R5tNq7O/hu3c=
+	t=1727438528; cv=none; b=CdGEvP+vVVPuv9D9AFeiU8aSIsq3LY7LUEIKw6MjqdLIOc0x/LfTzUPmIztH8oa0Vky7+KFLgbg+kgXNCXlh8nZ2acCLiZ5sY2ImRs8JJHaTqDfupVwlq1lnFMHb5O6gWQvVQqE/Yw1mNxj5EpLHL7g8LVIjL51NQ1KDbDSvFHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727438511; c=relaxed/simple;
-	bh=iiigvmi2oYfDnnJUmxQ2HMroTLtHWCI04zcoeDDFIcc=;
+	s=arc-20240116; t=1727438528; c=relaxed/simple;
+	bh=KIJtCjzp7yQ1wImdbJ9UZaHqYfO1EY9JsNdfo00+nJQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XQyG6OdQN6Nsfa/iNG6sP/LNt81oLlTmfsjtkBcLU/39re0mYfyTlkTvqRk2iU37JUq09Y2fFdbzwYcVSWMvIsvV0wgO5pt8jMPHkdYB6DvwCP/TryZZpDKMOgekzc8YeiKF01ZSuxDpP6Yj8/keJMkilWr4NlJjs8ly5Wul2KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jLR6oLjR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C0CC4CEC4;
-	Fri, 27 Sep 2024 12:01:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=XdR+X0XIV0DFPFAWqTjRPFn6Wx4ChOpdXiCNyrVJkDnCybfK4QEof6tYdCLkYrixUY3vgtY6qbzH2ufzj/NKsvwWTtRB827Ne/Kr48q+/MqHiJtplm0Pg7pCY1tNuuvSLVQ5HfI/DKGs0cWNi3qyNE7gPkEoIbh3ISxLjztYrkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OszslMAX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF72C4CECD;
+	Fri, 27 Sep 2024 12:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727438510;
-	bh=iiigvmi2oYfDnnJUmxQ2HMroTLtHWCI04zcoeDDFIcc=;
+	s=k20201202; t=1727438528;
+	bh=KIJtCjzp7yQ1wImdbJ9UZaHqYfO1EY9JsNdfo00+nJQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jLR6oLjRoSVe/0Bb+Wkjhf/J4G9/C8I+dpOvOBS8wcAPK9fwUjtro+RRjh106c02R
-	 z6f3QAuUxHE/kKBrC+Actgjz5KKm2Askg4rlFb9V9n+2sOFxq8+sPDSXDZaVb8f8Yw
-	 konSoLbSWsHUhUSXmWFAVP7FyKhnZmuVtgOo1rzYcvTtw6OESu3inDoqIsAUmyK2m+
-	 BQC13xtNV2SKFQILHvXLMriA7fVIAcfimbL1T7Py23UMazm9BtUoFzVNw4OCDJJU9x
-	 bJ827KgIznlg0iU9jeyxLXKn+cfPudO8vLRKgPu9IdNIfS0OQeFcFB4XogEaEKYJ4Y
-	 DsX9gcv1psS+w==
-Message-ID: <4d3cdb2b-e521-4b8d-b995-e1b3d8c63c2b@kernel.org>
-Date: Fri, 27 Sep 2024 14:01:44 +0200
+	b=OszslMAXvC9Z/5CjTG/GzVGUMti6N5S7gMTQFh3ceL36F2HigenMDgqMF0Ei/xieO
+	 soUzjR4AN6Z2L/lzuT5tnVTQf25TWN5Ws+mJgZvYHKj7nqLEd1RC9xC1Nc7Q4wu8ec
+	 vkUEvOKUcc5MLfPlraUSVrSv5u3xe6GMwdwd3bgZ4tDtEp0UsCtmkg8SqQggzq7+a7
+	 YO6Lw1XFU9PCXCtaC7ciFKzp890uaGdXJCbOuWW/wioaO5WsgPniRiV5bwRLlMhqIO
+	 2sgyHdHJwu/9fX5qxW+E9k3LLBuF2EJYegSDISOPLbkBvoGzVb2pzFO5rQKhS/O1Oc
+	 z/y1Wpa7HvgVA==
+Message-ID: <951087d0-8126-40c2-9bd8-9c07ef0575f6@kernel.org>
+Date: Fri, 27 Sep 2024 14:02:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: power: qcom,rpmpd: document qcs8300
+Subject: Re: [PATCH v2 3/4] dt-bindings: power: qcom,rpmpd: document qcs615
  RPMh power domains
 To: Tingguo Cheng <quic_tingguoc@quicinc.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -61,7 +61,7 @@ Cc: kernel@quicinc.com, linux-arm-msm@vger.kernel.org,
  linux-pm@vger.kernel.org, quic_fenglinw@quicinc.com,
  quic_tingweiz@quicinc.com
 References: <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-0-18c030ad7b68@quicinc.com>
- <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-1-18c030ad7b68@quicinc.com>
+ <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-3-18c030ad7b68@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,33 +107,16 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-1-18c030ad7b68@quicinc.com>
+In-Reply-To: <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-3-18c030ad7b68@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/09/2024 13:59, Tingguo Cheng wrote:
-> Add compatible string for the RPMh power domains on qcs8300 platform.
+> Add compatible string for the RPMh power domains on qcs615 platform.
 > 
 > Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
-> ---
 
-<form letter>
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
+So you expect all of us to do the same work twice?
 
 Best regards,
 Krzysztof
