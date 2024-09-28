@@ -1,141 +1,138 @@
-Return-Path: <linux-pm+bounces-14889-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14890-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37C18988F18
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2024 13:51:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FBF8988F4D
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2024 14:54:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDD45B20E2A
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2024 11:51:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE9EEB214BF
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2024 12:54:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B6D17DFFC;
-	Sat, 28 Sep 2024 11:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF488187FF1;
+	Sat, 28 Sep 2024 12:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="B9TX8qQk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LqRkZFV7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC2717085A
-	for <linux-pm@vger.kernel.org>; Sat, 28 Sep 2024 11:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAFD1DFF7;
+	Sat, 28 Sep 2024 12:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727524282; cv=none; b=JOIgrTB6c2vUr8HNxswD3ypF+zmNGJr8/Qek+naWAmNreYGyOBA/i6sqeztYBbAk5tU3AnF86jRAFEGi6l0FssmEhQJ0Dn+4TjyCFiTI9OCX/JWiQk2sr3igaKSgrwWYhEcUNjkqduSIMtZTlIUR9Zf1M224D2XNwBuEbsWBktc=
+	t=1727528064; cv=none; b=b7/O/H/b9t/s2ZeijF9+ymPs9a7EqCkRSExjj+s6XoGYBeksNkKE8UTtuSTWGE5PUjrYiKerUswokh9u/i4M0cWv2FApmJbK+rr3wsALe6SyWfkh27wKjaSdB1Kz8xV5gwsSW6YMfQV0qwlhnfOm8oiHT4h6p0qFk3+Y1MuqqXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727524282; c=relaxed/simple;
-	bh=W/sGthTrHg2+rnVrhitVYbaDyzOm++jxwY8NP+C0RfM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MMD802kkL44mLf9WXG8Cq0Kk2Iu2biGR0zTFw4KRYTyTZnps90P+lc8+zIZ1JdBm0rI7SmpRKe4+H1vw/N3lkuBqASGZGL1oM/xnoqR1u1D9jX6G17TJaNrkEM7ifM7L2WaOeYavkKzxDEl/VSMOFpuPx+K6+eVTpoAwvGhB5JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=B9TX8qQk; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c25f01879fso3740735a12.1
-        for <linux-pm@vger.kernel.org>; Sat, 28 Sep 2024 04:51:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1727524278; x=1728129078; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAMlCUjml3DAK3libUi7fTN1dV4zXkr078zCmgRlBsw=;
-        b=B9TX8qQkdNnIzY5oPFftn3e8iSJ7MoLBeWeSiCzaITm8kA8u7PHiB36O7XIXbdMN4B
-         e6o/GwsILDngyoWzpNqLoo2LUDiLtoi4QTzK6VcHKeShNlBtxIFyJ7oSpNi6Su9tY3kD
-         b0K5CfQfJLo3D86OmtsgmY5lN3u4M547eUFoXSB+qbhmPECj1wnf3kaJVqDYfqLvADdc
-         1tEc77Ux8ZN3cvXteJEoxrtnm3pfmqxW0doXqAlhxZI6ajpDrxil6IHofadXJPuL924W
-         87am2zezqHa5QlC4I7azUYkJV2On13Fp43g7/60Y0hwAJyvgegTlpmOZPfFf/565mq5X
-         KcPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727524278; x=1728129078;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZAMlCUjml3DAK3libUi7fTN1dV4zXkr078zCmgRlBsw=;
-        b=px90w1FegqfLnjF+OxzH61oMm+005LLpYlCftV8UVnyd0Osu0/72fNo4HwgDUQfTE6
-         aF7FnD5akWLDNdV5uu8cloFxOlaRopLGQZbv760436ZbRUaySQOCqafewOqTSLO17uyA
-         Rrp58jNL/GoiiuGzprDY7fVE9QP25ZxRedUQaYUwFtvpaSOE3GNrmXm9nELjdmw4wG8H
-         vKHUx4yw2sYYFh3WEO923U7xIyopg/xrLe3Uo6vtzR0IGG1xF1hzn5d2DhbACsXO0AHb
-         QIV6dkpIP8V7yMe+vhinUEwhc+Wtc7LpZGI37GV4m3t6HnfcumSwPU5ksR/m8RYX5Nwh
-         cioQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWoxD4MiQtp2Fn3ZBEFGBo7lC1Dybp2MdCfWy33mbQcFiEhH1shsgGYL0OlKsDsTUAvUZjFEEcJHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YySUu1lt05y61PvtXmsvVOMnskRz8R50MLQ+MxFVCOiCmDgbvwM
-	gib9JyLFiDA1ZwfdTtqGuJ358BhBWBd8AWAKNl/3mqqmjjE4NZxpYomd39pzrZc=
-X-Google-Smtp-Source: AGHT+IEkOL4DSNIcDJeD0gDlb0phDRVOzJpVEPozDzLi1nNa9X5/by0q5w2itm1dZJeTA0yKcYh67w==
-X-Received: by 2002:a17:906:c113:b0:a8a:7d13:297e with SMTP id a640c23a62f3a-a93c4c284cfmr637614466b.55.1727524278124;
-        Sat, 28 Sep 2024 04:51:18 -0700 (PDT)
-Received: from localhost ([89.207.171.167])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c2997d7dsm240829466b.195.2024.09.28.04.51.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Sep 2024 04:51:17 -0700 (PDT)
-Date: Sat, 28 Sep 2024 13:51:14 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	xiao sheng wen <atzlinux@sina.com>
-Cc: Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, linux-pm@vger.kernel.org, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
- spinlock
-Message-ID: <tehuoiymoyorpsyefsigeyn3fbdngi6jqgrhx4zerzonpezrz2@o7zuls45rtxl>
-References: <20240919081121.10784-2-ukleinek@debian.org>
- <229b9ff9ef6cf201b4e56d6ccb03c028c2d8f51f.camel@linux.intel.com>
+	s=arc-20240116; t=1727528064; c=relaxed/simple;
+	bh=7eInjk8rKWyJEFU9PAt4bj5scGmoe6yY4T/+7Mmv3DI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jTVR1tLrzLTO7EOuBCWHULi3TDdFNOL+FM/REI8KA5AGVeFrcvltshH8DlvcRrALD7qIecQngtg1FLfB4I0hcFeGTD5vdJVlv4WxcpUZX62DjStj5GDDv8eJrXDN9gTcuxqyaJe2tAJ4HQfBrmLHJRnE1x7F3uCxHuJNoqkzKuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LqRkZFV7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E05C4CEC3;
+	Sat, 28 Sep 2024 12:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727528064;
+	bh=7eInjk8rKWyJEFU9PAt4bj5scGmoe6yY4T/+7Mmv3DI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LqRkZFV77cIrmf6br7qf8CLcSZyVl+gQIO82hLutSbNFQ3TaAynPG0BoK+C0g/X8Y
+	 tLLVFpKYZf0TPdOXkMnhlYz2uQ7EF5BTg0zE/O7tpIuWTrB9xLFnyTjadShhEWBu7B
+	 cDMDDh77iyPWPpQYXwGZtV9MTl6MW4dXrV2u10WnBRlNZIM+VnG92U25OWaH4SpY6x
+	 GPPgwTFEOat5MOIlMzhjs8KFAI/hOCTEaNb1iz/YHO2Ym0XmJN3rec71q+9fOY4gnL
+	 6y0L4ov/cLHlL6ixCopFm5KoXjIsUr2qqz2EUmFOZtzprhWqGWTlT/UXwswGXPc6Pt
+	 +Q6k6EnLpv6dg==
+Message-ID: <100dff5a-a07a-487f-b1a4-50c3e94804b0@kernel.org>
+Date: Sat, 28 Sep 2024 14:54:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qvelzrlboxupsdk7"
-Content-Disposition: inline
-In-Reply-To: <229b9ff9ef6cf201b4e56d6ccb03c028c2d8f51f.camel@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/10] ARM: dts: samsung: exynos4212-tab3: Add battery
+ node with charge current value
+To: Artur Weber <aweber.kernel@gmail.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ ~postmarketos/upstreaming@lists.sr.ht, Henrik Grimler <henrik@grimler.se>,
+ Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
+ Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
+References: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
+ <20240729-max77693-charger-extcon-v3-8-02315a6869d4@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240729-max77693-charger-extcon-v3-8-02315a6869d4@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 29/07/2024 19:47, Artur Weber wrote:
+> This value was verified by comparing register dumps of the MAX77693
+> charger with on mainline with a downstream kernel under Android; the
+> value on downstream was set to 1.8 amps when charging with a proper
+> charger.
+> 
+> Add it to a new battery node and pass it to the MAX77693 charger
+> so that the fast charge current setting can be used for charging.
+> 
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+> Changes in v2:
+> - Switched to monitored-battery
+> ---
 
---qvelzrlboxupsdk7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please ping me or resend DTS when the bindings got accepted to power
+supply tree.
 
-Hello,
+Best regards,
+Krzysztof
 
-On Fri, Sep 27, 2024 at 03:47:08AM -0700, srinivas pandruvada wrote:
-> On Thu, 2024-09-19 at 10:11 +0200, Uwe Kleine-K=F6nig wrote:
-> > notify_hwp_interrupt() is called via sysvec_thermal() ->
-> > smp_thermal_vector() -> intel_thermal_interrupt() in hard irq
-> > context.
-> > For this reason it must not use a simple spin_lock that sleeps with
-> > PREEMPT_RT enabled. So convert it to a raw spinlock.
-> >=20
-> > Reported-by: xiao sheng wen <atzlinux@sina.com>
-> > Link: https://bugs.debian.org/1076483
-> > Signed-off-by: Uwe Kleine-K=F6nig <ukleinek@debian.org>
->=20
-> Missing Tested-by?
-
-Neither I nor anybody else did test that patch before I sent it to the
-list (apart from a build test). I guess xiao sheng wen might have
-replied with a Tested-by tag.
-
->     Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-
-Thanks
-Uwe
-
---qvelzrlboxupsdk7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmb37a8ACgkQj4D7WH0S
-/k4z1wgAldQj1AAKnKUONvJW51taLLRErmiVEx5PAyuvl5dPZRrSXzzF+JpiXM1L
-OhJ/7ipt/x4VMZh3LiKXNZIHw47u5sApQoPbOmxIdgzWa0MhLO99n1GWIZPkEKDI
-K73DlDQH2CL200BRtynb+ATzVdBVNhBjS/qXyxFP1B4LabjDgpvkQug7uSR9NFEs
-D50SkD4b8ZWJWeV+GG5BJKxTCu7QXFw1PD1gQwDehsIQ8il3VIC0v1aT5ssQwtFe
-FGc3YH4qMBo2DDq8jCCrr1Yhb7sLFzimXeXYHp1H7on9KrT+4rGaBK4N7Xta85BA
-nKSegZ2fojfYsb/1erEU+mFqQniJ1Q==
-=vnd3
------END PGP SIGNATURE-----
-
---qvelzrlboxupsdk7--
 
