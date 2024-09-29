@@ -1,99 +1,120 @@
-Return-Path: <linux-pm+bounces-14905-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14906-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BAF8989715
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 21:29:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D67F989740
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 22:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B87741C20A90
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 19:29:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 090291F213CD
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 20:17:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09BB54F8C;
-	Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0C57DA68;
+	Sun, 29 Sep 2024 20:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBTNOj50"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="KcJ7uV53"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DE32B9BC
-	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B0E18EAB
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 20:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727638155; cv=none; b=DMruSIe9tDHFJHPYvSFbAK3vyiYr2rZuEQLzPZ7GDUS5X5NIMcctm1upbG7+D5/XwbA0sW2DgaMmRX0x8OfD1GwCyYwCYaf+ZjITXLnoK1yrz0P84ybt2sBEnFrrM3ztXoYN/Hsw6y2DSUUqgzuztRheu1ZK3u22T0WsdB31fzk=
+	t=1727641059; cv=none; b=EVXxT8/BAzxDeE/YfpgsJZso1wOmsB5RGZcNNc71X+LHjNqYVDy92h4LhzR/3NEuzWW6Iop9Og/aBmjuIO54tzp65TWvLbik9JHXeWuHJiP2LxdtApYdWYfzhiEi+uE8qwUKFRwsYClM3lINt1Bq+n8qceapRgH5bOubYNf4u2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727638155; c=relaxed/simple;
-	bh=Q8cno5lfrpetC3xGew4+4YHkqJJ7dzS7Egkogg9TOfE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EXqF1vyN/Jl97gQrw08fiANB2xV+PO3LPGgFCGGuhSeyKFeF4viU49nvr0Bs3vEL/wxfpJpylBKtu9ROD4ww6R5ICzw8lHYuXG8FIAudrz1DjVOXkELU82pSz4KAcu2NN3pfVN29RMtxXYaQBUIgdlAdu63Yjd4GRssSHLLUHIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBTNOj50; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37D77C4CECD
-	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727638155;
-	bh=Q8cno5lfrpetC3xGew4+4YHkqJJ7dzS7Egkogg9TOfE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=MBTNOj50fWkWrvpF+l2wedBL42QaWLovVTlitOavtxlh8uaXHRxoENi13TgE6QRED
-	 SCCibXv6pg5vabZygLuS+fbRkugXAyoZr0CexYCrUSymXcsPZrYN3eq83xa/7nA7dk
-	 ai14A78qRDXciwSgkCIcEJ0soYQqn1yxF/dVXkD1wVzQM9sRRJMC1I3SrJp5pLy+eA
-	 KBOajBSC+frVnKDeEiIiMnXhXH03Cf5SMT5bPAL0aDXA7+x9dlY/C5b/EAAxMQRCpn
-	 Juthi0Ll4f99n9rMgwWrmL2Oyu/GIsO96cXig3c4MP9VG8p6v62LnstAY+Z8x+E5aN
-	 h1MVWsfyprM7g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 2B02BC53BC9; Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: =?UTF-8?B?W0J1ZyAyMTkzMzJdIC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2Nw?=
- =?UTF-8?B?dWZyZXEvcG9saWN5MC9lbmVyZ3lfcGVyZm9ybWFuY2VfcHJlZmVyZW5jZTog?=
- =?UTF-8?B?RGV2aWNlIG9yIHJlc291cmNlIGJ1c3k=?=
-Date: Sun, 29 Sep 2024 19:29:15 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219332-137361-IXkEwtfrc7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219332-137361@https.bugzilla.kernel.org/>
-References: <bug-219332-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1727641059; c=relaxed/simple;
+	bh=e/DLduMorhCuSFXTa5d51gLMRFOsS5++OOTim6BWp6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PM6iFPhnqXUVkBxKeABzjXcHF4vqiJ3PyU+ZMnNzi81ZkaDUKXXSl5bic1Up2iBqoFEtFQqmTN9qEmUVlA/Cz0JDqtxmPGKAdpVBMCJ1yo3NojstRF9/TJFqok97CaielFSExgQD/y9Q+kwDSBekl6e6Xyq+QyucVFcYFS87XQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=KcJ7uV53; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 364B32C04A9;
+	Mon, 30 Sep 2024 09:17:35 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1727641055;
+	bh=YN7kpomPes0I6UW4Xml3XD6fCY2IicArvQi2UkGGKzQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KcJ7uV53RcFvg4kIf3/n5E06cCXoeXbKSHtxaYjMTk6ruov8HxUtUq4Q5vmbBCqJC
+	 dQCn94K/rlodLeq0N8B3ibkv7ND7MXCtcbHtQjYZTpz4EJRp/zb/AdBhTx6gEg269C
+	 f8vNw5Kyjlsae6HdTF0HSe2JkP4yv3ztCLrdfJVvvcGn14wsNrOAOVfFwZaJMZkMkJ
+	 mbaaAJp1QixmZ4aaXKxU6HPoK71A4b9iwYPEy6QAxBtMfLcniE8Vo9R+8hZ6jCCrDD
+	 9IcCXmf8gwWLtL4PgBzgin56kLCVsigWmMW1Rj0xx7u62N6cmyIG4xqdrnX6NfzNI4
+	 ykqH8sy59j2ug==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B66f9b5df0000>; Mon, 30 Sep 2024 09:17:35 +1300
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 1B85B13EE36;
+	Mon, 30 Sep 2024 09:17:35 +1300 (NZDT)
+Message-ID: <0c94d0fc-dc0c-4e35-a6c1-2d7e01a3eb43@alliedtelesis.co.nz>
+Date: Mon, 30 Sep 2024 09:17:34 +1300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
+To: Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ =?UTF-8?Q?Thomas_Bogend=C3=B6rfer?= <tsbogend@alpha.franken.de>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
+ <096aebcd-778c-4160-b478-bb26025f3940@web.de>
+Content-Language: en-US
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <096aebcd-778c-4160-b478-bb26025f3940@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Id0kWnqa c=1 sm=1 tr=0 ts=66f9b5df a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=EaEq8P2WXUwA:10 a=P-IC7800AAAA:8 a=VwQbUJbxAAAA:8 a=czHN8OwSvR-A_l93-LoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=d3PnA9EDa4IxuAV0gXij:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219332
+Hi Markus,
 
---- Comment #5 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Can you please provide a kernel log with dynamic debugging turned on for
-drivers/cpufreq/amd-pstate.c so I can understand what it is doing with your
-hardware?
+On 29/09/24 21:45, Markus Elfring wrote:
+> =E2=80=A6
+>> +++ b/drivers/i2c/busses/i2c-rtl9300.c
+>> @@ -0,0 +1,422 @@
+> =E2=80=A6
+>> +static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,=
+ unsigned short flags,
+>> +				  char read_write, u8 command, int size,
+>> +				  union i2c_smbus_data *data)
+>> +{
+> =E2=80=A6
+>> +	mutex_lock(&i2c->lock);
+>> +	if (chan->sda_pin !=3D i2c->sda_pin) {
+> =E2=80=A6
+>> +out_unlock:
+>> +	mutex_unlock(&i2c->lock);
+>> +
+>> +	return ret;
+>> +}
+> =E2=80=A6
+>
+> Under which circumstances would you become interested to apply a statem=
+ent
+> like =E2=80=9Cguard(mutex)(&i2c->lock);=E2=80=9D?
+> https://elixir.bootlin.com/linux/v6.11/source/include/linux/mutex.h#L19=
+6
 
-Just a guess with no messages but it's very possible that because 6.11 does=
-n't
-have c3e093efbc6cac7bf9dc531dcb751b86daaa65b0 an error is being masked.
+At this stage I don't what to change unless Andi insists that I do.
 
-Perhaps you can try to add that commit and see if it changes?
+I can't find much mention of using guard() on=20
+https://www.kernel.org/doc/html/latest/ but I can see enough examples=20
+(although notably none in drivers/i2c) that I _think_ I can see how I=20
+could use it.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
