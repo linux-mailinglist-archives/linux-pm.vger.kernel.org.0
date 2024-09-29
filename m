@@ -1,120 +1,149 @@
-Return-Path: <linux-pm+bounces-14898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F7F39893D9
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 10:46:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E962798959A
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 15:13:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 497A7B21C2E
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 08:46:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D5FA1F22056
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 13:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C8C13CA99;
-	Sun, 29 Sep 2024 08:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7017B14A4F1;
+	Sun, 29 Sep 2024 13:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="YhHz00tV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCfCSN0A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5301DAD2F;
-	Sun, 29 Sep 2024 08:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE841E868
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 13:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727599592; cv=none; b=dAvUGxChAzn+pyNHoi56PRhFqhS+Iwsj+raep/ajN7wS3UMoBOoOGnfAAAuEB3Cwp3+IvkiIwvh0GRJThIwHVUTEYDb69JaWJY5vbMOpuF/wR1fb86QKzVMpFQEYyNtSCp40pm53E5O9YwPmIEDJUgLyQDZOD3Q7l3ZN4nRywaQ=
+	t=1727615592; cv=none; b=gb0Mf2KoYUh961/lIX2EM/wmBLlTm24nHFsU7tGESR9n9AiPS+CsH4pweXs3KDAkvbywb7l/s74rgnjAAn/EBO0c8LAit+6lTEZFekoou+/CCvms4/p8hrf/pUrwR7Z+JmvUBB4XQHORa96uRo63+Fwx/Hw+c43ynLoaXOoq96E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727599592; c=relaxed/simple;
-	bh=JQQZ1rM9Oe/C+rmEPljFG0dfaFJamoG0QhwDFME6AkA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=GnZWIB58N0WDpW97TZHrjCDX0UuDr5ALXzv5Ryl4r1vzHN0lTK7KMlynp19kTZiXfIeaSo1w7fD8VE5hMr8abEdZ31B+qzx16yYywPr7VtRUMp8BLK0x3C7th4BL2rcxoHni+98QdLAIe/WkBDoryCZZ8icYOUwMMCNj80Eu360=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=YhHz00tV; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1727599548; x=1728204348; i=markus.elfring@web.de;
-	bh=TFqeF6QIlkUpsuw2gD42mGoy6UZKPUpkQ/2SBkM3EzI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=YhHz00tVaQC06z/vzROSJSVuNRdkJ/fKOiQ4FOkZPPDQMphlVn4y9B789LfOrhXB
-	 6sclHfEhdeVpdbsBVKhMvbaQo0myy1W/mxRLp4FuZiJI8kJDpr6tn5mpZh4pc3Kln
-	 5yWxJsyiKAf5QYDurVhKW8iD96FiokhCgA+KXE1aD/9Sjm2uLOKzCfUwxJYrBhI+M
-	 5z8qTNaNPCEX7E9Q6huypLPiw3cLDEt+UKMeXkwPwcnJS56FqnITSCZtiy95nuUxS
-	 7IYz83an7oY/6x2z6jjyupnSAdb6WVR6/+Zp10xU+CtsIVvdgLbW/m1dx7LJetzE7
-	 zZ2kdAYRy1u6qM8Kxw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mty5w-1s39Xc0q44-00tjts; Sun, 29
- Sep 2024 10:45:48 +0200
-Message-ID: <096aebcd-778c-4160-b478-bb26025f3940@web.de>
-Date: Sun, 29 Sep 2024 10:45:44 +0200
+	s=arc-20240116; t=1727615592; c=relaxed/simple;
+	bh=gcYXd5v7dD5qquLvnmDblPiEZYC/XwlEE3hB5q4guOg=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=LmptI8jbjrX3u0xBZJMLqUS8qNpscFQt2V/nKen/ePzNYHmTkPqwI4+Xb2UMjmd1ZoYcW8OorC/2//BOYyEC4cBinvB7z3tDiki2yZx9r6eSINMEI6D6LuUXtWpaUH+Pezzhz/nTDHzeZ7nLmqxVTCi4pl4h2y4uvbTjHSN5BWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCfCSN0A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AD940C4CEC6
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 13:13:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727615591;
+	bh=gcYXd5v7dD5qquLvnmDblPiEZYC/XwlEE3hB5q4guOg=;
+	h=From:To:Subject:Date:From;
+	b=LCfCSN0AMH2C7CJ1f2470m5gwPBHXotu7rXuvMFFShOMvByZ+ndKpt2Y3EQ+QT2BE
+	 TH8WiiSYtIZS4MOhdveIedmSS6gmnqn3/jCSJEKecydXYyxTHCGlSymF7DZnFdAeGN
+	 A7/4UHlt4enau77bi567tx9KNMEYK/vu3j4AgN7F7lFj65Ve9oWczUHXVgUpCVc9zA
+	 j25oxrkPgH8m/hQH0IkKvjPfIfQSf22DcqazyuucZ9//8W2JbJ8CJuea1a2BwmuCor
+	 Nf9NbE2hRcmhAE//PcKRWlH+IMVUhqf5ZtAujIX4Bas/y2gcbrNRPA1agCauXLYOay
+	 340ihNfGw+N2w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8C714C53BBF; Sun, 29 Sep 2024 13:13:11 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: =?UTF-8?B?W0J1ZyAyMTkzMzJdIE5ldzogL3N5cy9kZXZpY2VzL3N5c3RlbS9j?=
+ =?UTF-8?B?cHUvY3B1ZnJlcS9wb2xpY3kwL2VuZXJneV9wZXJmb3JtYW5jZV9wcmVmZXJl?=
+ =?UTF-8?B?bmNlOiBEZXZpY2Ugb3IgcmVzb3VyY2UgYnVzeQ==?=
+Date: Sun, 29 Sep 2024 13:13:10 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-219332-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
- linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- Andi Shyti <andi.shyti@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- =?UTF-8?Q?Thomas_Bogend=C3=B6rfer?= <tsbogend@alpha.franken.de>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:i91wv59hcq2k2nFHmBRcakpMnqNJexrSho8sKn3t1TQfhs1bkEY
- U0msouL8ADNMLlyFjbiRTEZb5yHT4gFgylhdtxf32l12zE0L5TdsHTU/tSRbh6Z7tdiY/Mt
- mjL69hnym7cP0IzKw1uZczzRMASdSjJ0ib6eMexIyn+kYYV5BCHu6z+3wJIk3fJ66cYaaXf
- 4zHstsWnOAG95+8c6oDrw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:RjUmfED7P8M=;2Sd/hN3BTW3cL+opBdD5oxm2Mzr
- aPAxf00/cX3tI1141DE9P4TO87bpEreoqY83ifwUqD+ts3+i+KhsMXwQvgAN9lTlta1l9O745
- Oet2efTJMtWNpwxms458GXjW1Z2/06ZB1DjTz5lu8UwEztFK5xGui2XnxXDjKAvIw9ZXwiWJO
- a0pdlAofX3DEKEnZdBRqr2P5lFBk8EyDYldtqhVfh3ijJlZnBsl1wzTKJ5Rk8vOAY1+JkqQ1Z
- yT+ymyGUN6N1871odxtENslv3LXTVkaugGtRLEri8I5mQkCjcap8GdGLts1FAGVQB0oZ3W9MN
- kdrtRJzQ9O09PdDnMyJmCnGFIG2SFHbTNUqQXfV4/twiN0SV9AAMXbD9hjKD2nf72LRCpQdws
- Fr2FEC89QCkJdigtmBq9hDONp+LgDjoKsUGfJvx55esm02+5ci9bM5cS2AA0n5B4fO20VlbV2
- ihYxvK3R2nbfmMhSQGL+y8qlSrOezYQYy2E+d5hgBIa3J/+9d6fwSjqPCoKmQTgzhFd7V2Y7C
- jym/D95RmZEPYhySZnQXaBgXvuhyQRGSutDArg4lBpkCa+4wvCV/IXTCp+vNKybBIIZBHW99U
- aL+oo8Pgb5Q409zEe8nVq9i72WB5a7tROYhMiNTs5iwPudks1+PnEpXJHBnWHnxSlRGZ6Bihd
- OQxXl5lgIMjTtRdbrpGy2QYrJqkvSW5yVmoipWXm30TPUNbbqZk0L6VnCVx3IlAxXEpEtoIb4
- 6UDcCTTkBP3XoJw2RcYJBc22soaaitJmLlRpG9sbsBzkyPCaBk5TTyDRh1ST7CQZBiWkEmTgM
- VHwIWurAGaWfU1PGxvi3Z9Vg==
 
-=E2=80=A6
-> +++ b/drivers/i2c/busses/i2c-rtl9300.c
-> @@ -0,0 +1,422 @@
-=E2=80=A6
-> +static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, u=
-nsigned short flags,
-> +				  char read_write, u8 command, int size,
-> +				  union i2c_smbus_data *data)
-> +{
-=E2=80=A6
-> +	mutex_lock(&i2c->lock);
-> +	if (chan->sda_pin !=3D i2c->sda_pin) {
-=E2=80=A6
-> +out_unlock:
-> +	mutex_unlock(&i2c->lock);
-> +
-> +	return ret;
-> +}
-=E2=80=A6
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219332
 
-Under which circumstances would you become interested to apply a statement
-like =E2=80=9Cguard(mutex)(&i2c->lock);=E2=80=9D?
-https://elixir.bootlin.com/linux/v6.11/source/include/linux/mutex.h#L196
+            Bug ID: 219332
+           Summary: /sys/devices/system/cpu/cpufreq/policy0/energy_perform
+                    ance_preference: Device or resource busy
+           Product: Power Management
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: high
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: aros@gmx.com
+        Regression: No
 
-Regards,
-Markus
+Created attachment 306935
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306935&action=3Dedit
+A dump of /sys/devices/system/cpu
+
+I've played with various tee: /sys/devices/system/cpu/cpufreq/policy0/* opt=
+ions
+and now on Linux 6.11 and Ryzen 7 5800X I'm getting this:
+
+perfbias.sh power
+Now: performance
+Switching to: power
+tee: /sys/devices/system/cpu/cpufreq/policy0/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy10/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy11/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy12/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy13/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy14/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy15/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy1/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy2/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy4/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy5/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy6/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy7/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy8/energy_performance_preference:
+Device or resource busy
+tee: /sys/devices/system/cpu/cpufreq/policy9/energy_performance_preference:
+Device or resource busy
+Result: performance
+
+This doesn't seem right.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
