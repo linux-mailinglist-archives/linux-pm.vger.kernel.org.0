@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-14904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14905-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BB8A98970D
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 21:18:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BAF8989715
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 21:29:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3744CB21182
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 19:18:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B87741C20A90
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 19:29:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2EC36AEC;
-	Sun, 29 Sep 2024 19:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09BB54F8C;
+	Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UAdxIak+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBTNOj50"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0BD79FD
-	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 19:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DE32B9BC
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727637515; cv=none; b=I3VhWbCQBg70jJF+kFSlCfoWrjS9cnsTo07uKZcqkWFaaOLxQBexD+OgWp7WTg+JsREw7Px0Embnj6sqPKp4Dg5ffN+44Wybbtb3227f8eqM5ciFvORFF9DFBUs2VkeoukBFO578iY8bXS7p+bInBzSduTs7uaj7AWFC1bGM80M=
+	t=1727638155; cv=none; b=DMruSIe9tDHFJHPYvSFbAK3vyiYr2rZuEQLzPZ7GDUS5X5NIMcctm1upbG7+D5/XwbA0sW2DgaMmRX0x8OfD1GwCyYwCYaf+ZjITXLnoK1yrz0P84ybt2sBEnFrrM3ztXoYN/Hsw6y2DSUUqgzuztRheu1ZK3u22T0WsdB31fzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727637515; c=relaxed/simple;
-	bh=l54thSbkZtOPDEPIiUH3QUPc5LBJcwMH4XgxGB8rjKE=;
+	s=arc-20240116; t=1727638155; c=relaxed/simple;
+	bh=Q8cno5lfrpetC3xGew4+4YHkqJJ7dzS7Egkogg9TOfE=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VVgdVqNQsWDKxc6tXqlRsrbl2Ae6MFJYDAVQsfA3z2sFWlqdEbp4qNaoE/cB28yqPt3tGhbwY5k3ACK7ufuGbN3dt8GyRZasmqAhIi8RqTO0JpeovOL7bk8HPCCagzqy2XImZdhg49aTPmYkrlnffwcME1wfYv5Z0R5QtOz6Y+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UAdxIak+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 150ABC4CECD
-	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 19:18:35 +0000 (UTC)
+	 Content-Type:MIME-Version; b=EXqF1vyN/Jl97gQrw08fiANB2xV+PO3LPGgFCGGuhSeyKFeF4viU49nvr0Bs3vEL/wxfpJpylBKtu9ROD4ww6R5ICzw8lHYuXG8FIAudrz1DjVOXkELU82pSz4KAcu2NN3pfVN29RMtxXYaQBUIgdlAdu63Yjd4GRssSHLLUHIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBTNOj50; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37D77C4CECD
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727637515;
-	bh=l54thSbkZtOPDEPIiUH3QUPc5LBJcwMH4XgxGB8rjKE=;
+	s=k20201202; t=1727638155;
+	bh=Q8cno5lfrpetC3xGew4+4YHkqJJ7dzS7Egkogg9TOfE=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=UAdxIak+PjsflPNi7nqVCtRqsuHZHVtGiwaJPq16kJYMLkVfabp926doikFcXZ/bW
-	 VmnQ9EXQKBixtFKWA4tb0NE7rQotaU2VXlTADmae/+QZnIMvNETqKKHdKcSkrq3JUv
-	 9ZCDNNKJwYnuYGgraeJy6hF7+qzhLcygr/Sz+aQEnfdOkVM9xRQu8OJP1MH+1WeGfo
-	 RElTRtvDb8PZVSQulOxF1xcFDNJG6NIl4eZYBwxvNNIiTxt4OpygIzDHTsCBSSe1E4
-	 d3SC/mshnWFi5/I46iaLKhBU/fGea9umANnzlqDaDm35lZi5XPxtOUUg/f2r0ZCy64
-	 PBHNK4EtVBOSQ==
+	b=MBTNOj50fWkWrvpF+l2wedBL42QaWLovVTlitOavtxlh8uaXHRxoENi13TgE6QRED
+	 SCCibXv6pg5vabZygLuS+fbRkugXAyoZr0CexYCrUSymXcsPZrYN3eq83xa/7nA7dk
+	 ai14A78qRDXciwSgkCIcEJ0soYQqn1yxF/dVXkD1wVzQM9sRRJMC1I3SrJp5pLy+eA
+	 KBOajBSC+frVnKDeEiIiMnXhXH03Cf5SMT5bPAL0aDXA7+x9dlY/C5b/EAAxMQRCpn
+	 Juthi0Ll4f99n9rMgwWrmL2Oyu/GIsO96cXig3c4MP9VG8p6v62LnstAY+Z8x+E5aN
+	 h1MVWsfyprM7g==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 0858BC53BCA; Sun, 29 Sep 2024 19:18:35 +0000 (UTC)
+	id 2B02BC53BC9; Sun, 29 Sep 2024 19:29:15 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: =?UTF-8?B?W0J1ZyAyMTkzMzJdIC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2Nw?=
  =?UTF-8?B?dWZyZXEvcG9saWN5MC9lbmVyZ3lfcGVyZm9ybWFuY2VfcHJlZmVyZW5jZTog?=
  =?UTF-8?B?RGV2aWNlIG9yIHJlc291cmNlIGJ1c3k=?=
-Date: Sun, 29 Sep 2024 19:18:34 +0000
+Date: Sun, 29 Sep 2024 19:29:15 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -64,7 +64,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219332-137361-cyYW4nnmGg@https.bugzilla.kernel.org/>
+Message-ID: <bug-219332-137361-IXkEwtfrc7@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219332-137361@https.bugzilla.kernel.org/>
 References: <bug-219332-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -80,35 +80,16 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219332
 
---- Comment #4 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-[laugh]         Limonciello, Mario reacted to your message:
-________________________________
-From: bugzilla-daemon@kernel.org <bugzilla-daemon@kernel.org>
-Sent: Sunday, September 29, 2024 1:50:50 PM
-To: Limonciello, Mario <Mario.Limonciello@amd.com>
-Subject: [Bug 219332]
-/sys/devices/system/cpu/cpufreq/policy0/energy_performance_preference: Devi=
-ce
-or resource busy
+--- Comment #5 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Can you please provide a kernel log with dynamic debugging turned on for
+drivers/cpufreq/amd-pstate.c so I can understand what it is doing with your
+hardware?
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219332
+Just a guess with no messages but it's very possible that because 6.11 does=
+n't
+have c3e093efbc6cac7bf9dc531dcb751b86daaa65b0 an error is being masked.
 
---- Comment #3 from Artem S. Tashkinov (aros@gmx.com) ---
-Lastly,
-
-https://docs.kernel.org/admin-guide/pm/amd-pstate.html
-
-Doesn't specify how the driver can be completely disabled.
-
-I'm now using initcall_blacklist=3Damd_pstate_init amd_pstate.enable=3D0 bu=
-t I'm
-not sure if that's correct.
-
---
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are on the CC list for the bug.
+Perhaps you can try to add that commit and see if it changes?
 
 --=20
 You may reply to this email to add a comment.
