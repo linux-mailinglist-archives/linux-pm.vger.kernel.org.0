@@ -1,148 +1,127 @@
-Return-Path: <linux-pm+bounces-14892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A96B1989039
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2024 18:08:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B66CD9892BC
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 04:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F773B21468
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2024 16:08:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 716911F2394F
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 02:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9222444375;
-	Sat, 28 Sep 2024 16:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A8A518EB0;
+	Sun, 29 Sep 2024 02:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l+SeJtNx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M/ZjhZTb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B649222089;
-	Sat, 28 Sep 2024 16:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D631CA9C;
+	Sun, 29 Sep 2024 02:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727539712; cv=none; b=sYNf0KIE8EWxPmiWVJ3A81fpBQxX2y7BE4ZCxn2i/lLsCcfPgISSfbL547sSwhHcpo4tY2xuXNnCVjufvJkxU0gN6bHcJ5PG/tngRlNjinv7aM5y+XK3+0LxqLXEFDATDs+xqgvpvt7T2u8u2qkkNTRcW98hiH0ZnXEv0YwwZlg=
+	t=1727577735; cv=none; b=emUfCkSpaExNTJunyPubjPT6Q9I0iG9m8skb5CqqCm8zluNUEHgyGfKB5a3v33/DP4SmgZofeqirO8L66hkP++/EknliEHOQGWHrzf5tPPRh+GTNn+7sW6+8/ErQB8EfavPE7yZudqKd0gyfN2cXsrG7HBVovjrbtSR+QENvWNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727539712; c=relaxed/simple;
-	bh=fIMubsjAsUXbV/YGdV1q7TthGWEkg23AlPN/MkC1lnc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BQHp8/JopLvBgFuhyshPAO64QZtJk4EL7nQRTYaJMjFqUlnjsT2POcK84fmKGGLxmNb+u+yLLGzuJPYI7aLzbiQHoIDC/53MOBa02OU4WDAr6Q6YyA0DlM+Qjdb3FRqR+xivuQnBE5rSuS8/MJ5DwhSiYUduMQiywxuSASBuYW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=l+SeJtNx; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48SG0gl6017977;
-	Sat, 28 Sep 2024 16:08:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	1zgACunI07I9LNrrkDzVrZ7t0SaIRd/sniZLEKl4ay4=; b=l+SeJtNxcd/zArDk
-	jeYn7Ys8OaJ21QqsqKD8TqlRjOa5TmudMNolgFPQWq470L8/CBBMfOoNSc5EaHkk
-	SoR1IIc7gGdxNdnLZiF6umkqPAc+ZITfIN0Pgs877chalPaxaSxqUKo2juKTeoKR
-	N0rekNVPXgLrLmoUoyWCIjRV65B7k+IHVsxdXTgXNEgtiwpBt82NHEu8Q1jeEsb2
-	ZjP0OH1i6IR18qBBOqYOAV2o5091AErqKBW9faOYatufXpS4fC30PVmKMneX9EHo
-	YN8aqmnBnwkYsA79odvONLCvupUQmSvt1ZbDDlsJD+stbfvRxkzWopNN4bvwA0Oe
-	m13ihw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41xaym8u6y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 28 Sep 2024 16:08:14 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48SG8EUT005984
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 28 Sep 2024 16:08:14 GMT
-Received: from [10.253.39.0] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 28 Sep
- 2024 09:08:09 -0700
-Message-ID: <1ab63479-15d1-4116-ac70-9bc42b85a972@quicinc.com>
-Date: Sun, 29 Sep 2024 00:08:05 +0800
+	s=arc-20240116; t=1727577735; c=relaxed/simple;
+	bh=YPx5QA97jipQMMLwP45wplNXnHwAHBwZK8de9l31+I4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3EnOqbrJV7TYenwHZfQj7aN3XomNQMiyFAnCghFZxb8LmzMAOGtYoH7BLyNXSHMmJWL7F9qOudunuFj04f8EbIwjZXmNjxe7jgXg0gYATjBt/54Mc02oAgEj4dhmg+DWGkTdXLp4IBrBosLyzAt1QBQlvCtO3oGAtO4X6Ua7Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M/ZjhZTb; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727577734; x=1759113734;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YPx5QA97jipQMMLwP45wplNXnHwAHBwZK8de9l31+I4=;
+  b=M/ZjhZTbCBudGK/+mIeOdaK+ylyrhDE2zRJSBqsfgO17RuBcdLWPXHKD
+   t6xlLH1Lb6ojUB9iz7gPxPbGirV4RhmMES10Xt5JGqsyTyPH2XnQuxrFt
+   GMKDs2c1NNPHZQjpYecqn9eeRSVVZ7TzXL+3tZcY2uDarTN3c6Y1lgMmP
+   hB+KDuV6CT3xke0HxIHy8FqGWrNzzSsyO+gVnIdDVEnPBAT9oxQl1ACR1
+   Q8f+v1WkgEM+NFQBWDCEGkWNOpFwsJV3C937cBhFFU8uPGmB9kmWyRK37
+   WBN+s6i28U0crikhrtmYLAOxcccoM+I8PmVNtm6R2R/CZ1pbTx5mLUuEI
+   w==;
+X-CSE-ConnectionGUID: ygH1ZY9OTCCF+xgFMv0xpg==
+X-CSE-MsgGUID: dnH9syX+REefFvE42NwM8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="30390405"
+X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
+   d="scan'208";a="30390405"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 19:42:13 -0700
+X-CSE-ConnectionGUID: jGBL3PlkSTqpE3bOuJ2t/g==
+X-CSE-MsgGUID: LuVzNOm3T9uf/yX7GmShIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
+   d="scan'208";a="77311263"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 Sep 2024 19:42:10 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sujst-000NqV-1Z;
+	Sun, 29 Sep 2024 02:42:07 +0000
+Date: Sun, 29 Sep 2024 10:41:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org,
+	tsbogend@alpha.franken.de
+Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
+Message-ID: <202409291025.P4M4O1F2-lkp@intel.com>
+References: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] PM: sleep: wakeirq: Fix a serious logical error in
- dev_pm_disarm_wake_irq()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, Johan Hovold <johan+linaro@kernel.org>,
-        Tony
- Lindgren <tony@atomide.com>, Zijun Hu <zijun_hu@icloud.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <d-gole@ti.com>, <qingliang.li@mediatek.com>
-References: <20240928-fix_wakeirq-v1-1-25d13a7e13ba@quicinc.com>
- <2024092842-diabetic-suction-861a@gregkh>
-Content-Language: en-US
-From: quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <2024092842-diabetic-suction-861a@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xIX_KWAeKX7IacHfrQj0yP_fBpyXxkH5
-X-Proofpoint-GUID: xIX_KWAeKX7IacHfrQj0yP_fBpyXxkH5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- mlxscore=0 adultscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- clxscore=1011 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409280123
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
 
-On 9/28/2024 6:50 PM, Greg Kroah-Hartman wrote:
-> On Sat, Sep 28, 2024 at 02:26:27AM -0700, Zijun Hu wrote:
->> IT is a serious logical error for dev_pm_disarm_wake_irq() not to disable
->> the wake irq enabled by dev_pm_arm_wake_irq(), fixed by simply correcting
->> the wrong if condition.
->>
->> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> 
-> What commit id does this fix?
-> 
+Hi Chris,
 
-it is below commit ever mentioned.
+kernel test robot noticed the following build warnings:
 
-tony@atomide.com  2018-02-09
-Commit: 69728051f5bf ("PM / wakeirq: Fix unbalanced IRQ enable for wakeirq")
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on andi-shyti/i2c/i2c-host sre-power-supply/for-next linus/master v6.11 next-20240927]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> ---
->> List relevant commits as following:
->>
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/dt-bindings-reset-syscon-reboot-Add-reg-property/20240926-060355
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240925215847.3594898-7-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
+config: csky-randconfig-r111-20240929 (https://download.01.org/0day-ci/archive/20240929/202409291025.P4M4O1F2-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 14.1.0
+reproduce: (https://download.01.org/0day-ci/archive/20240929/202409291025.P4M4O1F2-lkp@intel.com/reproduce)
 
-there are one more related commit shown below:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409291025.P4M4O1F2-lkp@intel.com/
 
-qingliang.li@mediatek.com  2024-03-01
-Fixes: e7a7681c8596 ("PM: sleep: wakeirq: fix wake irq warning in system
-suspend")
+sparse warnings: (new ones prefixed by >>)
+>> drivers/i2c/busses/i2c-rtl9300.c:321:27: sparse: sparse: symbol 'rtl9300_i2c_quirks' was not declared. Should it be static?
 
->> johan+linaro@kernel.org  2023-07-13
->> Commit: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
->>
->> tony@atomide.com  2018-02-09
->> Commit: 69728051f5bf ("PM / wakeirq: Fix unbalanced IRQ enable for wakeirq")
->>
->> The former commit fixes the later.
-> 
-> I do not understand this series of commits, what exactly are you trying
-> to show here?
->
+vim +/rtl9300_i2c_quirks +321 drivers/i2c/busses/i2c-rtl9300.c
 
-there are total 3 history commits mentioned, and the 1st fixes the 2nd
-which in turn fixes the 3rd, and all these commits involves "unbalanced
-wake IRQ enablement"
+   320	
+ > 321	struct i2c_adapter_quirks rtl9300_i2c_quirks = {
+   322		.flags		= I2C_AQ_NO_CLK_STRETCH,
+   323		.max_read_len	= 16,
+   324		.max_write_len	= 16,
+   325	};
+   326	
 
-is the issue "unbalanced wake IRQ enablement" relevant to this weird
-logic which looks wrong ?
-
-> confused,
-> 
-> greg k-h
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
