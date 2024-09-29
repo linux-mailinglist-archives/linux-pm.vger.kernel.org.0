@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-14900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14901-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7067698959D
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 15:14:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7BF19895A8
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 15:24:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F15CB23134
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 13:14:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FDD51F21154
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2024 13:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8131F178384;
-	Sun, 29 Sep 2024 13:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8825E1E50B;
+	Sun, 29 Sep 2024 13:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j9sTfMLB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bWstnQc9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5E21E868
-	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 13:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7C6AD24
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 13:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727615641; cv=none; b=Nw8Blqvdwa4KiKuTP7QzuVYUSKKyTMXhUy/mJZxXeixMzocx2a3HDKcxTAMzS3uctn7+aCJLrEJQcJsSf2i5xy6gp+n4TNUPBjbGqhfWN+FSfXvbfOKudV7IlIYD/z53W0ygVBuCTi/52MKU+KVZpfUz4yvYCxU2C3S5qPIvAXI=
+	t=1727616277; cv=none; b=IFiXSJgflNPCpOKY70BB2Jzb2k7khDMwsoPByxLUd3sRHK0VLUH9c3nXuAFb4dnXDDGtktfQVC2eJ+EEAL/pVtRuyVKvaZpYCBg3YqjhoBVvyS9lVWeAUexwpHf9U+8I6xo5iK7Qc3I6gApWwIiFWewmk//p0D/v3haPHOTbTBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727615641; c=relaxed/simple;
-	bh=Lawi5HHq4gM+ArgEg57pjdrhPZni3nZga+/7q1Cfwg4=;
+	s=arc-20240116; t=1727616277; c=relaxed/simple;
+	bh=7OmB8953VLJbVKUmLzsw+2aajNTllyj7E9lmyPCNrc4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tKEL2JLqqKJxdVqSqLHgXW+ty27KY69D+oiRQzrGuNj2UjXp5egfV380OleDsUwMd/xPpkxSspPHZu+n51uDq8hINhAhyM6jOpjvl/0bOtXEMCiZRH8Na0aIIUIeTs3ZiU7VHm6X+nzwgqASQ6GMZPLISj6Mre9M5XXQg682fzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j9sTfMLB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1C5DC4CECD
-	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 13:14:00 +0000 (UTC)
+	 Content-Type:MIME-Version; b=XMGmqQ41StHTDyWXDbcBvQJ0Elec/GhvL/dSJ7og74kjlBtR1R8kFrW6zIbdXOtbDfGRnNVOCyEPlqoKxRXua+pAcG3hZFsiwNE5w4C0+f4fE9WxZuc+V05Wi/RzF5jEmmZPZy+24h0You38IcqMiiDbxw0zyX9CdI3fPsm77QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bWstnQc9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CBC3CC4CECD
+	for <linux-pm@vger.kernel.org>; Sun, 29 Sep 2024 13:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727615641;
-	bh=Lawi5HHq4gM+ArgEg57pjdrhPZni3nZga+/7q1Cfwg4=;
+	s=k20201202; t=1727616276;
+	bh=7OmB8953VLJbVKUmLzsw+2aajNTllyj7E9lmyPCNrc4=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=j9sTfMLBDWoufizjh1aqkjghYzk0ZXxEBQxtPpFKIPMQsfwx/G6xvwruoOHGR4LCX
-	 UOcDxdebDAC7qaXi7Tc4TOeTEPoBh8KMpYlNZtQEf3Gfs82rz91p1Go4aklTd9Nw3g
-	 PW8HTLlk52pievPdD9FOxkVmtmp6QFnLKdCJdgg02dSzKcBYJJrcSG7JFKQ2GoUo5p
-	 FF593vmaGj4qZTzEbfx8BpOLTwCtZltVT/apBSJvL3u2E7JD5XGw1YMsZGkCrDeKM9
-	 CHV8A9eDaZPQ25N2MeALyICUNYT0AZ8D5PTZxY9gsqqZMdmOUhSLH3ZpOkFs49D7KG
-	 YXLCYq5k4YhRA==
+	b=bWstnQc9HcQztdkmGqfPe7FiC4KJsz9cmbBcz9KoB89o3sfcPQOSEG+FNHMhj0Thu
+	 2IznrrBSd+YtfR3694zJfcXFjU1eAuhyv5YmpmsYyD3cRiOSazmssBEq8ihilkbUp8
+	 45NjDYudPCA67oH7rXzZ5eaYLlsYzbnSp4s3M/FX3dzLyswU5lTQM+9dDQeh3kdfaY
+	 /Q7AhP5En7sdDPg7uJrK/QObau5vSDhG/fUGGQGQGUXVNhFW3eVwr9akYa7XSYz6CD
+	 7uLLKsNLMZsvwKXsNx+llyggIpjf5omyfFKEzFqEsQHvBKEyrPwceeKxtAdiRIPrgI
+	 rMraGNckTvw5Q==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E37BBC53BC8; Sun, 29 Sep 2024 13:14:00 +0000 (UTC)
+	id 92EA3C53BC7; Sun, 29 Sep 2024 13:24:36 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: =?UTF-8?B?W0J1ZyAyMTkzMzJdIC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2Nw?=
  =?UTF-8?B?dWZyZXEvcG9saWN5MC9lbmVyZ3lfcGVyZm9ybWFuY2VfcHJlZmVyZW5jZTog?=
  =?UTF-8?B?RGV2aWNlIG9yIHJlc291cmNlIGJ1c3k=?=
-Date: Sun, 29 Sep 2024 13:14:00 +0000
+Date: Sun, 29 Sep 2024 13:24:35 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -63,8 +63,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219332-137361-uyaAMvdSFK@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219332-137361-UipnDTqQrh@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219332-137361@https.bugzilla.kernel.org/>
 References: <bug-219332-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -80,10 +80,14 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219332
 
---- Comment #1 from Artem S. Tashkinov (aros@gmx.com) ---
-Created attachment 306936
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306936&action=3Dedit
-perfbias.sh
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+What I also do NOT like at all, is that in Linux 6.11 amd-pstate gets loade=
+d by
+default and there is no information about that in dmesg.
+
+Please kprint() that amd-pstate has been loaded and is active.
+
+Thank you.
 
 --=20
 You may reply to this email to add a comment.
