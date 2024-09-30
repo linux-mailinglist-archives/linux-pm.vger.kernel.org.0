@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-14968-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14969-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6820598AA91
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 19:04:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 631DD98AADE
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 19:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A10B288AD7
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 17:04:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EE391F21564
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 17:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2262D1925B7;
-	Mon, 30 Sep 2024 17:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D6655E73;
+	Mon, 30 Sep 2024 17:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0agyBWU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NV2qOmSu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29C8191F9B
-	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 17:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0D7273FD
+	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 17:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727715891; cv=none; b=pVGVlyv0v5T5XdI26WrUk1BJR6IVh8ZIPPid6jAsUUsZ7lufOqig0A6RDnU8BE3L0uZck8HGQjttfpW1ZM8eqFGD3Y61j5+eDPfc1SsbJog5EXtMYH/Z5s5J5fbm7TeZkGW4ykC2JLbSgbryfV3ip3O60tJzKxdiNuv7p+keMuE=
+	t=1727716541; cv=none; b=u8oqIuEqWHfgX5cbTSrWCMSag2Gt5FuuR1n1RWIeFcT1op3dcc63S07NmYuAf22tiOdjUKA1FXPebEwOH+imIOWACAujsYxE36Fy1FPo+EvH5k/7RWhkuZdY2PjKSsIFbpUvQV1ovdVfVSbkC5hbmtQJO+rL0Ryt/YlcJswzEcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727715891; c=relaxed/simple;
-	bh=ezdp1C8xT5Oa2bu7esY6ORBiDiq8eTEqvncCpezuBRQ=;
+	s=arc-20240116; t=1727716541; c=relaxed/simple;
+	bh=tNrXvyMO7bZTu/l3FjwAyFbJc6ubJ8zd2kv92JuKo6k=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R0fR6Q067tjtdjYhiOYXS/FlZcaQjB3mPnpO/VLFLnvyPRPROR8kIs2BcAJTwygnWlxLt23jidFxHfPjOZlp68G4udGwlznvvmCF5qMoBj8U/6vA3VJfFoi71UzHuMuLHapmoM4rJRxj/JzGqXRLkxPiOsunxh0xUx/5XVEquYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0agyBWU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8084CC4CEC7
-	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 17:04:50 +0000 (UTC)
+	 Content-Type:MIME-Version; b=MeZG3+zmuozjQKB66veHcPRM2EmAHszoPU4LfU/6t2hDBoc9NdI1V2uFLetb/T8YOG61TxffRKxKrqtN8IJeeSodELaFOGOkL82GMYjLvsyPg2oy3lkzGDbzTOjfCBwL3qLETwXxlkNQ67Ab1eSKdcPdZJCyUSbe3hDgRnnlhuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NV2qOmSu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E46FC4CEC7
+	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 17:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727715890;
-	bh=ezdp1C8xT5Oa2bu7esY6ORBiDiq8eTEqvncCpezuBRQ=;
+	s=k20201202; t=1727716541;
+	bh=tNrXvyMO7bZTu/l3FjwAyFbJc6ubJ8zd2kv92JuKo6k=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=k0agyBWUyAvUZnPoJP49H8AFDB3oSjwN992JO3LMhLCmGjc8UltVMqZkXIQ7V5Gz3
-	 cJBgkPj3R8vnBVFQ3pT70PdJMovQMRQI9EJooyg3RDHVFXSQdyi1jGYz/5bPxjQUU9
-	 N6l9pEdiJnd2NBk05n/wnJXvJ2xljCzMJ+ohSbAPloBx/z5930lU96oHHFfu43CQJJ
-	 Sl83Xkq5GzkARL+pIpGeZ5/U0rzVcum7Pk67o5OGyIIZCd5YM+pNCh3RKbC++u2Fqd
-	 Wy8dLtCRiFzWVbUi7hoUrs5e7KNlfKRtFh17oxmFbWhlBH8SN7zOUJ5cExTHyZVWI2
-	 PZ25VinPKEJCg==
+	b=NV2qOmSuugBLefAdbrKkXiZHttPOxsOfNMlHZLWOuJieHEbCfEJdmtH0azvW8MqF0
+	 SWMjgcUc8RVpWzZC84QFntMmuZc9jmgJyZc015SE7wcYPzo4BzTc4O21EcJ0V6WOQS
+	 VD+ouaJgZToqP0uJdIwvM+RA7CZrdI8/2teva8U9i6PTQYXftxQ1KjcsWDu+jk0Ywm
+	 y2aBbkk9z7i86KcsaD7RpHdiV/GXP2gvzaIJNTQFbG3lFdIXz7/rzJh7pQ/dbWvWFi
+	 A2Mj2ykem3VIaQnsKNGXIK5ec1Mg/A4X7hAN7caUX31cCHILOsxIakqRmdgJtIeY1t
+	 umVRjQ73beBYQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 75AB8C53BC2; Mon, 30 Sep 2024 17:04:50 +0000 (UTC)
+	id E8462C53BC8; Mon, 30 Sep 2024 17:15:40 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: =?UTF-8?B?W0J1ZyAyMTkzMzJdIC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2Nw?=
  =?UTF-8?B?dWZyZXEvcG9saWN5MC9lbmVyZ3lfcGVyZm9ybWFuY2VfcHJlZmVyZW5jZTog?=
  =?UTF-8?B?RGV2aWNlIG9yIHJlc291cmNlIGJ1c3k=?=
-Date: Mon, 30 Sep 2024 17:04:50 +0000
+Date: Mon, 30 Sep 2024 17:15:40 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -57,14 +57,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: high
-X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Who: mario.limonciello@amd.com
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: ANSWERED
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-219332-137361-IzTzDr8zHR@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219332-137361-yIwwmpe9Cj@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219332-137361@https.bugzilla.kernel.org/>
 References: <bug-219332-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -80,24 +80,23 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219332
 
-Artem S. Tashkinov (aros@gmx.com) changed:
+--- Comment #11 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+> When `amd-pstate=3Dactive` whatever is written to
+> `/sys/devices/system/cpu/cpufreq/policy0/scaling_governor` has zero effec=
+t on
+> the CPU behavior/system thermals. That's what I was trying to say.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |ANSWERED
+I wouldn't say zero effect - it definitely can matter.  If you start out in
+powersave at a more efficiency biased EPP value then switching to performan=
+ce
+is going to increase power consumption and heat etc.
 
---- Comment #10 from Artem S. Tashkinov (aros@gmx.com) ---
-When `amd-pstate=3Dactive` whatever is written to
-`/sys/devices/system/cpu/cpufreq/policy0/scaling_governor` has zero effect =
-on
-the CPU behavior/system thermals. That's what I was trying to say.
+> I wonder if amd-pstate could "simply" hide/disable (i.e. make read-only)
+> scaling_available_governors AND scaling_governor.
 
-I wonder if amd-pstate could "simply" hide/disable (i.e. make read-only)
-scaling_available_governors AND scaling_governor.
-
-It looks like these two "variables" are remnants of acpi-cpufreq and should
-_not_ be exposed when amd-pstate is active.
+Userspace can still change the cpufreq governor from performance to powersa=
+ve
+and vice versa.  So it should not go away.
 
 --=20
 You may reply to this email to add a comment.
