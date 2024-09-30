@@ -1,133 +1,109 @@
-Return-Path: <linux-pm+bounces-14976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F022E98AEEB
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 23:17:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9F998AFD1
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 00:29:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0FEC283B09
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 21:17:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D04D1F23EB1
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 22:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F6151A0BDC;
-	Mon, 30 Sep 2024 21:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E5918891E;
+	Mon, 30 Sep 2024 22:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JC/rlRHf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h3h4fqv4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CE217C7B6;
-	Mon, 30 Sep 2024 21:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1BE186E56;
+	Mon, 30 Sep 2024 22:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727731072; cv=none; b=cpfWUm0h9Tio6mjmZ4/sOy+Nv6Kl+IicFjCn8VjvJ+KdVK0F5SefemiELjb6X5G0N8/zMAcoI/QwmGJswIBQqcSjzkLbZ5bfyjv/NYKvIzScYuxQxHO1sLTlsZQk4SJrv6NoOTUn3Jwu1PsUlZExw0MZBkQgl6GB6S4hvxzu0Sk=
+	t=1727735344; cv=none; b=D4kRVjBhLvcMSgFddM/euvPFegALWPEmNBkf46B6bYiSRUaWHath7zh0Iw7O/ErVv6KzN/X0sGjABMO9K2HwgFMH05YHD7thip7V/CdmZ9PW4O7+BCuB4Vt83GWg+NpKoD495DESVKGFo+fD87S1zlwhRVC4OJWKF/YN84Y+ovM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727731072; c=relaxed/simple;
-	bh=WrSj9ZX1B9V/JIXDijhV3zCe+pdwc5wf2BlVfULS1Pk=;
+	s=arc-20240116; t=1727735344; c=relaxed/simple;
+	bh=z+n2UQSWlwP+wMogZCWfmgbHLSl16zo+IImxnpZYpII=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ss8aFZxlsltDbm5sP6fw3s0mcYp8seL8LpMm7b/DUAT+NSkN02bqg6DpLxK3m9oZoVLBxI44VD/FE/XIpTec502RxXWXlTh++5rz3aM9HCc4fimqxlGK6gGnalrT4kp5CDI77BHtNRDVlQIsp2y2S5yw8XpoSAJnwsPItf/hOzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JC/rlRHf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D75C4CEC7;
-	Mon, 30 Sep 2024 21:17:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727731071;
-	bh=WrSj9ZX1B9V/JIXDijhV3zCe+pdwc5wf2BlVfULS1Pk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JC/rlRHfg1dx2NVHc3sB43rF+KNlK58NjQoGSF8Meg87Sty/HLR2CC/UPffukU47F
-	 fuMmtxsO0deqroK2QQNfxus1waaXd7FK+b/U/j8N85R2oDksfSabmB5GDty2vmyY5C
-	 TvAtpfV3Cv7vJdgvJDtOn1fFGfH86GI8+ZE9v2YjVxpJegQD6unJGh5TYmZD+vmhnb
-	 rNWtdqTM6oITJUqjSZGe6q4wCluFz8HZXsFQJt+Bql/n5nnQj9zBvFZKct5Q/CnBsv
-	 zaupxRDPFDQ6T9vwG70PCTrxOELjIDtEUxEScK/p6DLNf8QAifgYSnOBvpDFY37SVx
-	 dyo9g9lSdg7Tg==
-Date: Mon, 30 Sep 2024 22:17:49 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v9 0/3] Add of_regulator_get_optional() and Fix MTK Power
- Domain Driver
-Message-ID: <ZvsVfQ1fuSVZpF6A@finisterre.sirena.org.uk>
-References: <20240930044525.2043884-1-wenst@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E+Rwrord0mk6PONf4JUfC2Y/R7h9sEgo5yNNrTzs4sI8DqrDsTzndIw5ccxsPmxIUjdvHE8Et4js33FnWYV6EaOSTFdrXPOCzeKBVvszXcpAc/uHJl1M8VpgOFm4ufh5zpYqh4G+xJBX1URjYdxZNYROVLs7CpdBR8/9cX+QY/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h3h4fqv4; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727735343; x=1759271343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z+n2UQSWlwP+wMogZCWfmgbHLSl16zo+IImxnpZYpII=;
+  b=h3h4fqv4Ywxe7vsngfqt7Hs7U8HgqJ1X3TXQQwsoUfFhDwjyRD2dzVfY
+   oiDoeIXR88P9ksGr94SKHvLLIXNDC7pCOuX6tRUTyxA6fToxDAF4CQRcw
+   GgVBKlTFxCJB7jeNvpnvULnlyY0TufsEOV/dd+m+Is66NxQ6rUbtulDaK
+   k7Dpc5p91+K8LkQ3tjVzwRFq5NzeoB+28mqXnrHDI3ISvJJECJ2CznHqu
+   1/LgX69B04Lw/LSj9aEhjeJhwGxFIqlhcEMAUO+/Ukv4LmMY3iHZfd7SS
+   bJvjmWBQXWgczEKO7AU5jFVD+sR1e0B6h8VWNjpI5cw+t4kJVUrfxiWQT
+   A==;
+X-CSE-ConnectionGUID: 6Hn9b34URo+2eB2gYDhdkg==
+X-CSE-MsgGUID: 1wKoA3AlQ5il03poatb0ow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="44370266"
+X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
+   d="scan'208";a="44370266"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 15:29:02 -0700
+X-CSE-ConnectionGUID: 9+EZa6/5S/CEe3tXIltZDg==
+X-CSE-MsgGUID: Vrse0KvZTYacdmDOVFUJfQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
+   d="scan'208";a="78189235"
+Received: from smkirkla-mobl.amr.corp.intel.com (HELO desk) ([10.125.147.240])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 15:29:01 -0700
+Date: Mon, 30 Sep 2024 15:28:56 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	Brice Goglin <brice.goglin@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v4 00/10] Add CPU-type to topology
+Message-ID: <20240930222856.mwqqeexb4ezqq77z@desk>
+References: <20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com>
+ <0d054389-c60e-4b7f-bff2-e95f50c239f3@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Fps6D/pTHz3w7/40"
-Content-Disposition: inline
-In-Reply-To: <20240930044525.2043884-1-wenst@chromium.org>
-X-Cookie: Editing is a rewording activity.
-
-
---Fps6D/pTHz3w7/40
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <0d054389-c60e-4b7f-bff2-e95f50c239f3@intel.com>
 
-On Mon, Sep 30, 2024 at 12:45:20PM +0800, Chen-Yu Tsai wrote:
+On Mon, Sep 30, 2024 at 08:12:57AM -0700, Dave Hansen wrote:
+> On 9/30/24 07:47, Pawan Gupta wrote:
+> > This series adds support for CPU-type (CPUID.1A.EAX[31-24] on Intel) to
+> > differentiate between hybrid variants P+E, P-only, E-only that share the
+> > same Family/Model/Stepping. One of the use case for CPU-type is the
+> > affected CPU table for CPU vulnerabilities, which can now use the CPU-type
+> > to filter the unaffected variants.
+> 
+> The series looks fine to me now.  The diffstat is _almost_ even, despite
+> the series adding functionality.
+> 
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-> Patch 1 adds a new of_regulator_get_optional() function to look up
-> regulator supplies using device tree nodes.
-
-> Patch 2 adds a devres version of the aforementioned function at
-> Sebastian's request for the two power domain drivers.
-
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-of-get-optional
-
-for you to fetch changes up to 36ec3f437227470568e5f460997f367f5446a34d:
-
-  regulator: Add devres version of of_regulator_get_optional() (2024-09-30 01:11:41 +0200)
-
-----------------------------------------------------------------
-regulator: Add of_regulator_get_optional() APIs
-
-Add of_regulator_get_optional() APIs, which can be used by generic code
-to improve integration of regulator management helpers for their users.
-
-----------------------------------------------------------------
-Chen-Yu Tsai (2):
-      regulator: Add of_regulator_get_optional() for pure DT regulator lookup
-      regulator: Add devres version of of_regulator_get_optional()
-
- drivers/regulator/core.c           |  4 +--
- drivers/regulator/devres.c         | 39 +++++++++++++++++++++++++++++
- drivers/regulator/internal.h       | 18 +++++++++-----
- drivers/regulator/of_regulator.c   | 51 +++++++++++++++++++++++++++++++++-----
- include/linux/regulator/consumer.h | 37 +++++++++++++++++++++++++++
- 5 files changed, 135 insertions(+), 14 deletions(-)
-
---Fps6D/pTHz3w7/40
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb7FXwACgkQJNaLcl1U
-h9DV0gf+PbBLTWiI3UueE2aB67kwX91wx/qmPQxjrWVV++hT8uZ9AnmUou6nd9xd
-yRV87qVjzGK+5Qgrwku1B3I1lqkRwD//fkO9vs7bm32+JhQkhVc+nFe9DknkdZCy
-vNHtjaiLQBA6d0ylVnVhGVZxi3OTfAgv++OABCc+o9GfIerkYE7zvg0xmi4ixcxz
-DSdLDcpMcoW6L757WEZbuCEX4JPShLiO/MSo0z3ccGE2O73Lp/PqsyQaZhDmKDPA
-dd8DsTJ+ciIUYoiYAcFi+YJ3MqAbLAPTf674zHXsWpF3wdvWieif/dXRic+K3cFG
-sx/kycHc3xptypkZwFtZDCVgt/IJTQ==
-=4qpn
------END PGP SIGNATURE-----
-
---Fps6D/pTHz3w7/40--
+Thanks.
 
