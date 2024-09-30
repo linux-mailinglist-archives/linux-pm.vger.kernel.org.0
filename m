@@ -1,113 +1,110 @@
-Return-Path: <linux-pm+bounces-14978-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14979-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BACF98AFD5
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 00:29:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6528A98B0C2
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 01:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47D9D1F241E5
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 22:29:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23A75282C4C
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 23:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F9AF18892B;
-	Mon, 30 Sep 2024 22:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20ECB189502;
+	Mon, 30 Sep 2024 23:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5nCh1Zi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O+xqS8gj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49B818891C;
-	Mon, 30 Sep 2024 22:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7945339F
+	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 23:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727735354; cv=none; b=nmQlSeuqUjjax31Pg5V4xN1dnYQ1M6gWApSYqHCTYEcFAssx78Au7wnt/brwykMTgtuSCYRE0R9FuNCOZmd60d8b8GATlXt7eCzc7K03M/o6N7z3jWkPkb6484uUKLu0EW3rQhvyGmXZpkgSR9NU9NHiL/kr8+ukUExhEAMkVzY=
+	t=1727738541; cv=none; b=Ck5mBXVskSvMWXDHxeac9sBohgRWHDsQThJS8XoLyWqYwvg3/y5rWu4aBRpE8xxbf/96PGliLpOoFPCdVVtXlnD36BN+q1rNOtViTikakCDz/Qs+y3T9T8NCdapVyM2KmOCX0/Irm78K9YC4mDm+Tk/LMNKnCtqtFAxvFZ8VeoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727735354; c=relaxed/simple;
-	bh=nmH9qaJNjqw7Qc6T/lqnT06KkF7d1uYIKI94EUB9NQo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=IGxfE56WH/doCVM/kd+d4hLsupahi9sZ3FbrRc0U8ShkW5rPzN8nSEzd6oXLQx3hQ7i4xECfvUbmH1p8Vqv4PcO8MC++nE0BnAYnRUIpiErqaXPakkwBLY4j41YCoEeELVg6h+/1iof+q5rdJVjX9A7r76NUIc3VdiFsFo1BCoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5nCh1Zi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFA9C4CEC7;
-	Mon, 30 Sep 2024 22:29:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727735353;
-	bh=nmH9qaJNjqw7Qc6T/lqnT06KkF7d1uYIKI94EUB9NQo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=G5nCh1ZiP3M2UW5GbdgHysar+gLAEjEEkOJytKfAdtloFD65yi5i3gG4tLErO+JzU
-	 hAJR8PT3AVA1pnSLgwap4qkue4K0uMlq3QoI+tbFtc6UQwLmDpdZs7YYHMAXUc/8R8
-	 WBJNflBns8NYeysbjveMVRGvKUMTaOT42kacTBj9ZpHjeA25nNEctIpGi8BM0lGf3x
-	 PBUhCeJZuWGIlYNek6dLxAEdjsEMDsi9bP2AD3WmQ7k5CnzZb6vKd3Oah4wjscvcEO
-	 NTefxofKdZUbjv1p4bdXDfDbS3PBSJmHH2H83nFLJ4LPONS78kw4bSd3FS5zt0vkrA
-	 IPUdekfh1iGIQ==
-From: Mark Brown <broonie@kernel.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Chen-Yu Tsai <wenst@chromium.org>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
- Johan Hovold <johan@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
-In-Reply-To: <20240925093807.1026949-1-wenst@chromium.org>
-References: <20240925093807.1026949-1-wenst@chromium.org>
-Subject: Re: (subset) [PATCH v8 0/3] Add of_regulator_get_optional() and
- Fix MTK Power Domain Driver
-Message-Id: <172773535067.2224406.9733965694288102381.b4-ty@kernel.org>
-Date: Mon, 30 Sep 2024 23:29:10 +0100
+	s=arc-20240116; t=1727738541; c=relaxed/simple;
+	bh=5wMoQerhVfNthdnWkyVLl81spGHlLzs98yiY6oorZLs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c5ybbKLEfihXXJ+3zMx2ub9xz7+vMRNmhSta2xEcjaVJ9ql/OU7s1w5dSYWhPc9w0yMLmymsMqU4NugXRol+0QnKSu4u8z+4erupccn4D/t4XKb7483boY7f5iUpMNv9RFbRfN0q+Qb23S3c7aPxCTzP+cIiYzKg/VAMB+9TSZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O+xqS8gj; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727738537;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cw3TyvDfm5lZoBfW+yqVxJ0cUAPR/u8ZzH97gvuXA9Q=;
+	b=O+xqS8gj1hMA6E88XbXpWfcDLXduYuoOrrB6l2pS3vG1Jgs9JxbPfPhOlOJsSOqpDzANBS
+	9kPOG0c2R1/31G/97gWmZOTprX+6UsJ8P/eOplpwpY3kA8sPKUecjADltERSLH7eH83J7B
+	u22FHQ29+QbKbjGFQDODYuX7PmMWzk0=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-663-G5l0YcWWOnKqI7vWGyZNyw-1; Mon, 30 Sep 2024 19:22:15 -0400
+X-MC-Unique: G5l0YcWWOnKqI7vWGyZNyw-1
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-7c6b192a39bso3989846a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 16:22:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727738535; x=1728343335;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cw3TyvDfm5lZoBfW+yqVxJ0cUAPR/u8ZzH97gvuXA9Q=;
+        b=pUxRjVBzpvxnC2OEraq8nC6Xpg3k+x//GMEg3i428X5Mw+Uze8Y+2wMDaNtcWho9xf
+         2W1byL4ugUHp+ORKQQHEEO55ImC1R5nWYBGo6OdBAN8OkVm6U6QOsG8w/OfDGpUhKIZg
+         Bq8HMop/d9Z+KCXYrnIyr8L9imbtqI+U0iQLgTNqzkSzCL0V7LFtwEvIldNlx+8yFvvP
+         cAJaTZukr9NfD8WGtWXz0qOgDpjbkumNlIjLWVc71cPrvM8vuLIAypqChOiFeYif7Qf1
+         iXZlLrZcUrjP62khVkQ278Rf4nYzNXmQTIkXxU2buITFSs00PFMKHtL2qpVLDEMD8jDt
+         NUHg==
+X-Forwarded-Encrypted: i=1; AJvYcCXSUvJg+XNgfopNn280E46b5IlI9sOBYGPU9YU26BXWKUiw5rP9vrqnOMJ+Ic2W2pSrsHv1YHQgIg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9t+gGc5IhdpWsGNHL6f+ps09cbSlJLBU6ApP5v3kHI4R6RwQS
+	e2icnOU/UCnT41NZIb68CdcySo1fJHGrPqsWQL/ONoaoRvPxtkFuunEWhGpd7BdzVlqH1Newzxz
+	dcH+XFnML2NADBQwClNkSDCUzt/MmH+dkT3Xgp/HKUoc8BCioKfW5l3st
+X-Received: by 2002:a17:902:ce88:b0:20b:9998:e2f4 with SMTP id d9443c01a7336-20b9998e604mr29141625ad.61.1727738534848;
+        Mon, 30 Sep 2024 16:22:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFPJ0xdEclTCdVD0Cc7sUcJpQzyM5nnJoWiGEd7ndTGfu+IiZLg+4emBGAIZlH0JO0quOIjQ==
+X-Received: by 2002:a17:902:ce88:b0:20b:9998:e2f4 with SMTP id d9443c01a7336-20b9998e604mr29141435ad.61.1727738534544;
+        Mon, 30 Sep 2024 16:22:14 -0700 (PDT)
+Received: from rhfedora.redhat.com ([71.217.60.247])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37d685b9sm59241985ad.54.2024.09.30.16.22.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Sep 2024 16:22:14 -0700 (PDT)
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas Renninger <trenn@suse.com>
+Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
+	linux-pm@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	John Kacur <jkacur@redhat.com>,
+	"John B. Wyatt IV" <sageofredondo@gmail.com>
+Subject: [PATCH 0/2] pm: cpupower: bindings: improve test script
+Date: Mon, 30 Sep 2024 19:21:53 -0400
+Message-ID: <20240930232158.29024-1-jwyatt@redhat.com>
+X-Mailer: git-send-email 2.46.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-99b12
+Content-Transfer-Encoding: 8bit
 
-On Wed, 25 Sep 2024 17:38:03 +0800, Chen-Yu Tsai wrote:
-> This series is split off from my "DT hardware prober" series [1].
-> 
-> Changes since v7:
-> - Added stub versions for of_regulator_get_optional() for !CONFIG_OF
->   and !CONFIG_REGULATOR
-> - Added new patches for devres version and converting MTK pmdomain
->   driver
-> 
-> [...]
+Improve test_raw_pylibcpupower.py with some cleanup and catching more
+states. This includes confirming states have been disabled and a notice to
+use sudo.
 
-Applied to
+John B. Wyatt IV (2):
+  pm: cpupower: bindings: Improve disable c_state block
+  pm: cpupower: bindings: Add test to confirm cpu state is disabled
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+ .../bindings/python/test_raw_pylibcpupower.py | 28 +++++++++++++++----
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
-Thanks!
-
-[1/3] regulator: Add of_regulator_get_optional() for pure DT regulator lookup
-      commit: 5441b6975adc26aeaca316b9075e04a98238b1b3
-[2/3] regulator: Add devres version of of_regulator_get_optional()
-      commit: 36ec3f437227470568e5f460997f367f5446a34d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.46.2
 
 
