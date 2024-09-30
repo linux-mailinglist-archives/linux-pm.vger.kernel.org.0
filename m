@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-14980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14981-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BA2E98B0C4
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 01:22:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A96A98B0C5
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 01:22:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DDC81C22705
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 23:22:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AD1C1F227DF
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 23:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543A018CBEF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7799618952B;
 	Mon, 30 Sep 2024 23:22:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HnJs0RSd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nc14ZOv5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89C7188A17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76DA188A3B
 	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 23:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727738551; cv=none; b=ZIV2pPTFn1DBSfEv9PkCEcym0gRi5osOgYtdh3PX4PNRkRUddVdtBpYzYjD9/ladIRGsY8nUrTOKQ4/g0Cd2B/ukza0inu4X0DVTxkeopP0Pj6Muao1MkkfHy9hOXlN4To75/vQRR46X+VrmBc2eIFt9txBjP0wz83PwVzJL4r4=
+	t=1727738551; cv=none; b=MA6fcpMAkVdWTkh5fx0qpAv0ikdAZCRq6x9idXLjgHAt7MS2t+LdIGrSM7LfQDDAykuNG1fzqqzspzkRAShutkE4xsxS8gGEJ1E0ZLP3JsG6RwDUgPvBMXXOMkJCdPkUXHGvfkvX66M1TXHjNLxOIXVHOWVi/FBOBocy9NTsQ/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727738551; c=relaxed/simple;
-	bh=5+AiJaX4UtDbmRH5GAq9t1hjYK48PdL8+bwdm8fCAv8=;
+	bh=clfiWsrp4dGFaYI7d55/qc7iYZnYzDRDMc8mRva9740=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WlLY7YF/8oQ7/8wBrfsAxZgZrEfxbQbLt2cH4fIXDaXOnV+gT/4w966dy49bG1aosgEZYbvcz0FGUGOrZndWn1ovJhe2je5a5Kq3gzMgx4ONRjy0KI450t7A2ugg4LFYWMOJICjQeU7a8JT397Sn3laOltEe+lpuaCF6fvDsa1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HnJs0RSd; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=apyNCDerd5SH7gMRkCJbqmblOHkMkkWAidGtRQ0nAE0ViNaNfkbBwRkHJ0heZugDMrLuxXynCHkT/R8NYlAEvA1QGnsm06JGwtQYUQDFC52cZHbYU++ryAOYmnNSl9Go/wnDbGdiZB1J90wOtB3kD7xjE64TXfFmfpivdycNu4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nc14ZOv5; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
@@ -37,42 +37,42 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VKQ5wXzAVJ56Zv2qJN0G0ZqtK5sCYXvmcnZQ07OdvaQ=;
-	b=HnJs0RSdDzms0iWh+eMOCDdUVqS/WY7/HSHb8jPx33AzkMAKTt1X1GhaEmtlX7MkUl6ZUl
-	WGnlaI4aBYS6OUBmiBPbTOv0NWVbMH81inoKnBEIU3c1+QpkDD3Pca8lyJW6LkMIaZH6ny
-	neLyUtpTziCJPnDQw+tNwAtmJHcQe+E=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Hpg+FWuxwhA58ZIorLNy68eTkaxxlrOGEB+b9Y3QOMc=;
+	b=Nc14ZOv5g/5FykP0Gt0GMsqlhlijtppvHumEgstKNq9YPNzO2tPNdpaf/PRV8kMbH51MBB
+	WeM9SC5HqOW04Sxf5j3f9050gGSrSrBemovmwOO3JS9ugSHjcLUhQUW8C6ND+rYbaAQbch
+	ffKjKatNVCJh7Cnbl73Z04CR0DSADdQ=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-yURhVHjHOx6FuynfMYy_Fg-1; Mon, 30 Sep 2024 19:22:25 -0400
-X-MC-Unique: yURhVHjHOx6FuynfMYy_Fg-1
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2e08735ed9dso6758961a91.3
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 16:22:25 -0700 (PDT)
+ us-mta-16-1sJJYgsQNhufS3AKcuKGDw-1; Mon, 30 Sep 2024 19:22:27 -0400
+X-MC-Unique: 1sJJYgsQNhufS3AKcuKGDw-1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-20b4d8b489aso26742675ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 16:22:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727738544; x=1728343344;
+        d=1e100.net; s=20230601; t=1727738546; x=1728343346;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VKQ5wXzAVJ56Zv2qJN0G0ZqtK5sCYXvmcnZQ07OdvaQ=;
-        b=Bwnw9xVcas+37nxZeVX8gbqpZ/7RJTB/5ugRf/q8DYurDqLmAnhaEz9CWmcjWzM0CH
-         D9w7BA2UUCbh4rmM0h5K4NqJteuIS54ce/6nUL2MdpjP4N7OyVKfNeK1afLxfQ3MpLO3
-         cCZM9uVe13RJAwsP8v8GwzH87Bxrs8vA0+gpYA/Ri3d4CWcGIjF63e8EQDM1opXmdFiG
-         kLE+huj2MeMCna6GkRXogvQMDAKa7ucHl/YhjlCabWWn2p3iAxm7ra+Cmxxt7NQZJLFa
-         TT7jL8dTb47kYAZFoJSL8to2YxWPgNmOYZKOniO/QUEc6KawAXcbBNIyZjrpsv2erLxm
-         997w==
-X-Forwarded-Encrypted: i=1; AJvYcCVXJU3XpSMIhcnoeIc2V/PIqgrkOtJvWAexmCYtYhIW5hcotIwLATS9QAIlNAvUe5W0G+enQMcFRA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj7DEHjpObZFOv0DZk9WhD1yO7o1XBSMaS8v6bv8BivqNwC2ii
-	7n9AH4m5N62ti1uMUQUCPwV9Q7jIh84ZrJciMyLTzkmOM98GHzqNCSCWgYH92SpuNvL/tzrFI3Q
-	s+/cZh2FWXYOOwPzMzleKk5RdBNktM3DdLMwoxmPUjtfJreJeq59CfKDd
-X-Received: by 2002:a17:90a:e147:b0:2d8:a672:186d with SMTP id 98e67ed59e1d1-2e0b8b1bd0amr16498895a91.20.1727738544625;
-        Mon, 30 Sep 2024 16:22:24 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEpAD8gHdyuAIdyq8RdFdxD2qGC+R38kuvpPw+3wL6J/iRUtGseYVtWexsa41Ea35x3KpeH3Q==
-X-Received: by 2002:a17:90a:e147:b0:2d8:a672:186d with SMTP id 98e67ed59e1d1-2e0b8b1bd0amr16498876a91.20.1727738544307;
-        Mon, 30 Sep 2024 16:22:24 -0700 (PDT)
+        bh=Hpg+FWuxwhA58ZIorLNy68eTkaxxlrOGEB+b9Y3QOMc=;
+        b=mTE7GgwdYat4s3WHP+mHPcUJPhSMAx+rBfH3jRMvLTCCmQJhqylS1PpKpT8O11PoUE
+         Dvblc+v2W4D2gqhIuQ/bSQigcxW2QrYnzhgNFXAiOvqcdMNsvG9LbgihopXqorfF+A4o
+         n0klVoRaypT58HbNg+0DdaF4b68srQkvyij7TDMF9pXx4w+DYDNG7NhTypx1X16mrYDj
+         CcsS4W9x5XoFGCwCX7BMoSb7euKbJzxK9weQbClZeh6b1Xr5NGMsll6K/VA998ctZ5rP
+         8cRgbA2rwOmxeGeYHPxx/M3iA9yxu+HSn67nyyCUHpOnwwi4CTtM8pgOc9bT2TL6ApSJ
+         UMAA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBBEECO8fSG0jtTGjeJEpWxD415ifwGbkf0m0d0Y3oOMQSJHRNZgy6fs9+cfLqmBvXmqTsLfYdXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlRYDSyzghaWoueIVAotvuZidfCq/iy1dpmyNZe2a+v3KHFNm2
+	EczNYhkPuPvVvMGBG3Fhu3FYmgY5ZoaYTIQd1NXpF9wl0gT5gErxHdd4pp2bqO1IOLKwJmcjp2H
+	k7KFntaBYR0KTUpT8a3aYC+iW/ZSNOd696xNPOubjwBfo/v5BrPqq5tLw
+X-Received: by 2002:a17:902:cecb:b0:206:ac11:f3fd with SMTP id d9443c01a7336-20b36ec9b08mr214932935ad.30.1727738546509;
+        Mon, 30 Sep 2024 16:22:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEnYVM3rVsKkpiUQxEbwOG3luHyMLmr1bdJqCCYCtJdpCXHQ7vbgtwthaQeN36rNE2/HI+hAw==
+X-Received: by 2002:a17:902:cecb:b0:206:ac11:f3fd with SMTP id d9443c01a7336-20b36ec9b08mr214932605ad.30.1727738546155;
+        Mon, 30 Sep 2024 16:22:26 -0700 (PDT)
 Received: from rhfedora.redhat.com ([71.217.60.247])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37d685b9sm59241985ad.54.2024.09.30.16.22.22
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37d685b9sm59241985ad.54.2024.09.30.16.22.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 16:22:24 -0700 (PDT)
+        Mon, 30 Sep 2024 16:22:25 -0700 (PDT)
 From: "John B. Wyatt IV" <jwyatt@redhat.com>
 To: Shuah Khan <skhan@linuxfoundation.org>,
 	Thomas Renninger <trenn@suse.com>
@@ -83,9 +83,9 @@ Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	John Kacur <jkacur@redhat.com>,
 	"John B. Wyatt IV" <sageofredondo@gmail.com>
-Subject: [PATCH 1/2] pm: cpupower: bindings: Improve disable c_state block
-Date: Mon, 30 Sep 2024 19:21:54 -0400
-Message-ID: <20240930232158.29024-2-jwyatt@redhat.com>
+Subject: [PATCH 2/2] pm: cpupower: bindings: Add test to confirm cpu state is disabled
+Date: Mon, 30 Sep 2024 19:21:55 -0400
+Message-ID: <20240930232158.29024-3-jwyatt@redhat.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <20240930232158.29024-1-jwyatt@redhat.com>
 References: <20240930232158.29024-1-jwyatt@redhat.com>
@@ -97,49 +97,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit fixes a bad comment, removes an unneeded code block, and
-catches a few more states that cpuidle_state_disable with the test
-script. Part of the motivation for this commit was I kept forgetting to
-use sudo.
+Add a simple test to confirm and print out the cpu state.
 
 Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
 Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
 ---
- .../bindings/python/test_raw_pylibcpupower.py        | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ .../bindings/python/test_raw_pylibcpupower.py    | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py b/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-index 3d6f62b9556a..bb2b26db8b10 100755
+index bb2b26db8b10..ca5aa46c9b20 100755
 --- a/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
 +++ b/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-@@ -15,21 +15,21 @@ else:
-     print(f"cstate count error: return code: {cpu_cstates_count}")
- 
- """
--Disable cstate (will fail if the above is 0, ex: a virtual machine)
-+Disable cstate (will fail if the above returns is under 1, ex: a virtual machine)
- """
- cstate_disabled = p.cpuidle_state_disable(0, 0, 1)
--if cpu_cstates_count == 0:
--    print(f"CPU 0 has {cpu_cstates_count} c-states")
--else:
--    print(f"cstate count error: return code: {cpu_cstates_count}")
- 
- match cstate_disabled:
-     case 0:
-         print(f"CPU state disabled")
-     case -1:
-         print(f"Idlestate not available")
-+    case -2:
-+        print(f"Disabling is not supported by the kernel")
-+    case -3:
-+        print(f"No write access to disable/enable C-states: try using sudo")
+@@ -31,6 +31,22 @@ match cstate_disabled:
      case _:
--        print(f"Not documented")
-+        print(f"Not documented: {cstate_disabled}")
+         print(f"Not documented: {cstate_disabled}")
  
++"""
++Test cstate is disabled
++"""
++is_cstate_disabled = p.cpuidle_is_state_disabled(0, 0)
++
++match is_cstate_disabled:
++    case 1:
++        print(f"CPU is disabled")
++    case 0:
++        print(f"CPU is enabled")
++    case -1:
++        print(f"Idlestate not available")
++    case -2:
++        print(f"Disabling is not supported by kernel")
++    case _:
++        print(f"Not documented: {is_cstate_disabled}")
  
  # Pointer example
+ 
 -- 
 2.46.2
 
