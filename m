@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-14923-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14926-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B51989C83
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 10:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D48989C8D
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 10:20:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4769A1C2184C
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 08:19:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E75F1C21884
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 08:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D6517839C;
-	Mon, 30 Sep 2024 08:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8E517E01C;
+	Mon, 30 Sep 2024 08:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MMfdhUHi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NmgOj39y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA2F152E1C;
-	Mon, 30 Sep 2024 08:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1AF178CCA;
+	Mon, 30 Sep 2024 08:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727684388; cv=none; b=PNvVJueasPb7XsPRmvch4jqoZrsg+SThp9JQNmA6ODj7Lvo+bT+GFCWKrd1TGSjYdHtkKpAZcjWJVTvgfMva72oY3O61rcPyqFZbmrfXY7jlsibKv+oUyeWKy18lu/w4iqZz/9Jd4khoz/P901cBEeY3lmxPjifS0tX9IHv1c1A=
+	t=1727684390; cv=none; b=X+q5H3aY3ZgOq9hhOsHH3vGlqPkeLrTVR9dSsGQEWQuyMQSsJCxKs4MioIHhRyZDgRxELuTC0jrCNw29Dob2TD9rXo8ksW7AwB/rdaM73kUOWy+DOGxIQBaWxl2DbdHFGFd7+2XNyhJ27juDPZXJPBKhZy8rs9M6krT0st2cOHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727684388; c=relaxed/simple;
-	bh=UiBl2UAfZ5jkKQJ30HaG7GtfKxgzF3LqEHQ9vzopWMA=;
+	s=arc-20240116; t=1727684390; c=relaxed/simple;
+	bh=w0jLDzy95ysPhd7nXSw/LGQtr8lMj9+9LTOOTudlOUg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=l06ugBKa7ww4aee/4myJEFAgHRBT8zLhZAzEnBb1RcN1vqBr3PFsJ5FOPLjuGiTTqpllx3I+QEM+NvldFRXxx00u5rUvlgJio8unP8itE3cQRQlCxJ31NDWkoQpRuynP6yzNF4tFit7CDdA1dZgl+zBTM6muk5IQs8Y3nsidArM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MMfdhUHi; arc=none smtp.client-ip=198.175.65.19
+	 MIME-Version; b=mZQw4lWIisQo0clD3W7j43qrri0q8UAfHvbP2mrlr6H9BqdQFy72DmALdqo6YbMk+2I6xcka//wOgo2OuT90RitBxHSxxDs2NkK7+91rxZnI0eapglTh6GBZHoGgoIL3iEFAFW34ZSueBgauUUYzwrziSlr8iogzewYl2wZyQms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NmgOj39y; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727684387; x=1759220387;
+  t=1727684388; x=1759220388;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UiBl2UAfZ5jkKQJ30HaG7GtfKxgzF3LqEHQ9vzopWMA=;
-  b=MMfdhUHiFfB9ozCdROocbFJQdYcBaLt15UPlAd5yQEv9KMHA8X+FqTxR
-   ozyJ5rz65itEPD2wMMvB4ejySIeKCnm7TM9iktdSJ3E/aw3OgWQFGdx2M
-   aXCuIF0DfWHBAiqkP7gWlyVN1Q9zZ6ZoF8MsozNozDy2vh0Ep8MyEZ7MV
-   i8b9I4GD9N7oPlXKITClhIhOic6WAJaKiJCUQEei2C6GoNtI/hB93UWKz
-   FAGfyQkeMOts7ND2JFq2sQYYXWbjQZOcIKpXiSx4dcdFGHNoiWVogeV7h
-   ErJ2ZrEMyFDyT9Nsyo5U/vI5j8Yh1k7ofmWvcLavouBPPV53dV3HvoU4o
-   Q==;
-X-CSE-ConnectionGUID: pH3j0GcHSmaMxmMKVn0z6w==
-X-CSE-MsgGUID: qlFpR4PIRS6RbeketBntnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="26638958"
+  bh=w0jLDzy95ysPhd7nXSw/LGQtr8lMj9+9LTOOTudlOUg=;
+  b=NmgOj39yVK+hOpZjRPY2msINphbmjC3NbXONrJ8tfEDEqRKotVuBxWxp
+   EDZzHtdHBiWvuDjg2qmQUy/uJIjHOJOEPbGrH1kMCNjykCG280xxRYKuI
+   0SewYcflXYc6U5lYsKFvQw/V907QhKQQ0pw34AP3jf89f5zAUbaBzXzBq
+   7kUxMftAkQ//cYP3m5/a7xO8cJiQ0rEYDDvWKVxWTwyaT1PzGTNLgcW11
+   dHeB2KGGVql0jXctPkdXUUo4+eUTzD6hpSs2zTI+CXtqBqAMyG/UxqGGl
+   F2IXQ/kywSvVjDqiCSoSWQT/iFzIIAO29WNIvuYKCXwPLKAKJTkV5uCwd
+   w==;
+X-CSE-ConnectionGUID: 9BTQTAZ0SB2wv5ab25Q9zw==
+X-CSE-MsgGUID: NjPItvR+Qe+IXfHG7Xbthg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="26638963"
 X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="26638958"
+   d="scan'208";a="26638963"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:18:28 -0700
-X-CSE-ConnectionGUID: 2i3p16WMQveSKdAuEexl2A==
-X-CSE-MsgGUID: xZO9lH2hQ++vts/VA9pNTw==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:18:34 -0700
+X-CSE-ConnectionGUID: NFUJ900GRhm8m5rC8KQ0dA==
+X-CSE-MsgGUID: t84cBhS4RjCsPsUL6pAfTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="96549423"
+   d="scan'208";a="96549434"
 Received: from unknown (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.245.243.126])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:18:24 -0700
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:18:26 -0700
 From: Zhang Rui <rui.zhang@intel.com>
 To: rafael.j.wysocki@intel.com
 Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	srinivas.pandruvada@intel.com
-Subject: [PATCH 2/6] thermal: proc_thermal: Fix WARNING during module unload
-Date: Mon, 30 Sep 2024 16:17:57 +0800
-Message-Id: <20240930081801.28502-3-rui.zhang@intel.com>
+Subject: [PATCH 3/6] powercap: intel_rapl_tpmi: Ignore minor version change
+Date: Mon, 30 Sep 2024 16:17:58 +0800
+Message-Id: <20240930081801.28502-4-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240930081801.28502-1-rui.zhang@intel.com>
 References: <20240930081801.28502-1-rui.zhang@intel.com>
@@ -77,72 +77,67 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-proc_thermal driver uses pcim_device_enable() to enable the pci device,
-which means the device will be automatically disabled on driver detach.
-Thus there is no need to call pci_disable_device() again.
+The hardware definition of every TPMI feature contains a major and minor
+version. When there is a change in the MMIO offset or change in the
+definition of a field, hardware will change major version. For addition
+of new fields without modifying existing MMIO offsets or fields, only the
+minor version is changed.
 
-With recent PCI device resource management improvements, e.g. commit
-f748a07a0b64 ("PCI: Remove legacy pcim_release()"), this problem is
-exposed and triggers below WARNING,
+Driver is developed to support RAPL functionality for a major and minor
+version. If the hardware changes major version, since offsets and
+definitions are changed, driver cannot continue to provide RAPL interface
+to users. Driver can still function with a minor version change as it will
+just miss the new functionality added by the hardware. The current
+implementation doesn't ignore any version change.
 
- [  224.010735] proc_thermal_pci 0000:00:04.0: disabling already-disabled device
- [  224.010747] WARNING: CPU: 8 PID: 4442 at drivers/pci/pci.c:2250 pci_disable_device+0xe5/0x100
- ...
- [  224.010844] Call Trace:
- [  224.010845]  <TASK>
- [  224.010847]  ? show_regs+0x6d/0x80
- [  224.010851]  ? __warn+0x8c/0x140
- [  224.010854]  ? pci_disable_device+0xe5/0x100
- [  224.010856]  ? report_bug+0x1c9/0x1e0
- [  224.010859]  ? handle_bug+0x46/0x80
- [  224.010862]  ? exc_invalid_op+0x1d/0x80
- [  224.010863]  ? asm_exc_invalid_op+0x1f/0x30
- [  224.010867]  ? pci_disable_device+0xe5/0x100
- [  224.010869]  ? pci_disable_device+0xe5/0x100
- [  224.010871]  ? kfree+0x21a/0x2b0
- [  224.010873]  pcim_disable_device+0x20/0x30
- [  224.010875]  devm_action_release+0x16/0x20
- [  224.010878]  release_nodes+0x47/0xc0
- [  224.010880]  devres_release_all+0x9f/0xe0
- [  224.010883]  device_unbind_cleanup+0x12/0x80
- [  224.010885]  device_release_driver_internal+0x1ca/0x210
- [  224.010887]  driver_detach+0x4e/0xa0
- [  224.010889]  bus_remove_driver+0x6f/0xf0
- [  224.010890]  driver_unregister+0x35/0x60
- [  224.010892]  pci_unregister_driver+0x44/0x90
- [  224.010894]  proc_thermal_pci_driver_exit+0x14/0x5f0 [processor_thermal_device_pci]
- ...
- [  224.010921] ---[ end trace 0000000000000000 ]---
+If there is mismatch with the minor version, continue with an information
+log message. If there is mismatch with the major version, log error and
+exit.
 
-Remove the pci_disable_device() calls.
-
-Fixes: acd65d5d1cf4 ("thermal/drivers/int340x/processor_thermal: Add PCI MMIO based thermal driver")
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- .../intel/int340x_thermal/processor_thermal_device_pci.c        | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/powercap/intel_rapl_tpmi.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-index 006614921870..ba5d36d36fc4 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -416,7 +416,6 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
- 	if (!pci_info->no_legacy)
- 		proc_thermal_remove(proc_priv);
- 	proc_thermal_mmio_remove(pdev, proc_priv);
--	pci_disable_device(pdev);
+diff --git a/drivers/powercap/intel_rapl_tpmi.c b/drivers/powercap/intel_rapl_tpmi.c
+index 7435df083ea4..645fd1dc51a9 100644
+--- a/drivers/powercap/intel_rapl_tpmi.c
++++ b/drivers/powercap/intel_rapl_tpmi.c
+@@ -15,7 +15,8 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
  
- 	return ret;
- }
-@@ -438,7 +437,6 @@ static void proc_thermal_pci_remove(struct pci_dev *pdev)
- 	proc_thermal_mmio_remove(pdev, pci_info->proc_priv);
- 	if (!pci_info->no_legacy)
- 		proc_thermal_remove(proc_priv);
--	pci_disable_device(pdev);
- }
+-#define TPMI_RAPL_VERSION 1
++#define TPMI_RAPL_MAJOR_VERSION 0
++#define TPMI_RAPL_MINOR_VERSION 1
  
- #ifdef CONFIG_PM_SLEEP
+ /* 1 header + 10 registers + 5 reserved. 8 bytes for each. */
+ #define TPMI_RAPL_DOMAIN_SIZE 128
+@@ -154,11 +155,21 @@ static int parse_one_domain(struct tpmi_rapl_package *trp, u32 offset)
+ 	tpmi_domain_size = tpmi_domain_header >> 16 & 0xff;
+ 	tpmi_domain_flags = tpmi_domain_header >> 32 & 0xffff;
+ 
+-	if (tpmi_domain_version != TPMI_RAPL_VERSION) {
+-		pr_warn(FW_BUG "Unsupported version:%d\n", tpmi_domain_version);
++	if (tpmi_domain_version == TPMI_VERSION_INVALID) {
++		pr_warn(FW_BUG "Invalid version\n");
+ 		return -ENODEV;
+ 	}
+ 
++	if (TPMI_MAJOR_VERSION(tpmi_domain_version) != TPMI_RAPL_MAJOR_VERSION) {
++		pr_warn(FW_BUG "Unsupported major version:%ld\n",
++			TPMI_MAJOR_VERSION(tpmi_domain_version));
++		return -ENODEV;
++	}
++
++	if (TPMI_MINOR_VERSION(tpmi_domain_version) > TPMI_RAPL_MINOR_VERSION)
++		pr_info("Ignore: Unsupported minor version:%ld\n",
++			TPMI_MINOR_VERSION(tpmi_domain_version));
++
+ 	/* Domain size: in unit of 128 Bytes */
+ 	if (tpmi_domain_size != 1) {
+ 		pr_warn(FW_BUG "Invalid Domain size %d\n", tpmi_domain_size);
 -- 
 2.34.1
 
