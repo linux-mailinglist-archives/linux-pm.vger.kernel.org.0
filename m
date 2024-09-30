@@ -1,110 +1,96 @@
-Return-Path: <linux-pm+bounces-14928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17DED989C97
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 10:21:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C53D989D73
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 10:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1461F21695
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 08:21:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6104EB20C96
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 08:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600DF174EF0;
-	Mon, 30 Sep 2024 08:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E18183094;
+	Mon, 30 Sep 2024 08:57:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yh7CbrtV"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NwvMWhBK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABECF1865FA;
-	Mon, 30 Sep 2024 08:19:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67B217F505;
+	Mon, 30 Sep 2024 08:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727684397; cv=none; b=PDhPx6Pnjs2WOy0lBHcitpmAQyPPBKqI90QcyNObZDdSGITz5l49Uj6jmMKS4JUI3olN3ibeGJ8hnYM0AW9/e7jmNPCAidOFHZjn6igsGoO019BMGHVCUqSNYTZ3D0ti5tzU/QZcO6cH+HJef9H0pktp34mF5P9OQoHAE5pBKTI=
+	t=1727686624; cv=none; b=GzUBKqOikmAGit9I/eOo1Ky0AZtamMBWEkQDfdiLRXOnNMHTDlraaqj071GDpR4dGM9hJXnvorki2vv32YlgIndVVbQKFW+C8b6x87w/Wo2TN32OjuF+/UY3CmxXJ7t4liZ85XYh9wmqPT6MiV0COpKkzSpO8I7tKySQwAx1zEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727684397; c=relaxed/simple;
-	bh=G1F3xKKqYqFRkpf4/9hLMQCgirSonqyikM+KdGa0CCk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lN9Co/UUYlxxczsQBHYKmbOzD8eEqwnkF5zTApccID0vAnIMGvxdRh4AvT9fWXokxqSLgAUw9fG6F1fRlCQL0gyREUfGgwgpPoMdq5f+bE3OnOlQGbaJStzgb1zi9et6WkuTxRmfBh5mDDBtlWkYNO3a9pRlr9GtV+V7txTAZTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yh7CbrtV; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727684395; x=1759220395;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=G1F3xKKqYqFRkpf4/9hLMQCgirSonqyikM+KdGa0CCk=;
-  b=Yh7CbrtVDvGfp1ntxOyMe+q9UMJjiak2aNC4JSbkpYJIv06Z3A5xaYrq
-   LStZvNDC8e+INAg+2mEAoL3Vm+h0d2tB4nm+7NU28BFvA8HnI/WB0oSPl
-   DfYg7gwTRo5p+wcnP5NQjLk1/hxBSa8EGY99laonSmD7oS7Xh/gwHWEaX
-   DrdCbrI/bi+107WK+wMNljFH/En3TkcxwAJ1UsME+QOGy3YsppvJVQMH+
-   mhj6MCHjXh1PNv0vi0G3Ny1Y0VmpxXd4JU149YyQgQed2b6P0C9QteliF
-   SF0WWZw8Smv300/BPRArnxLQQpiAiVeM1sh8L/ANbdDx7SeMUJCDwkqoq
-   A==;
-X-CSE-ConnectionGUID: 3/aVEVAcSkifSfnTbipvyA==
-X-CSE-MsgGUID: khm7z/ppRs6udpCPfH1a0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="26638976"
-X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="26638976"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:18:35 -0700
-X-CSE-ConnectionGUID: hxFe0sJWSy+FeogIkFDpqQ==
-X-CSE-MsgGUID: DlgVrjrrRmqKZS3TgwQLPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="96549491"
-Received: from unknown (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.245.243.126])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:18:33 -0700
-From: Zhang Rui <rui.zhang@intel.com>
-To: rafael.j.wysocki@intel.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	srinivas.pandruvada@intel.com
-Subject: [PATCH 6/6] thermal: proc_thermal: Add MMIO RAPL PL4 support
-Date: Mon, 30 Sep 2024 16:18:01 +0800
-Message-Id: <20240930081801.28502-7-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240930081801.28502-1-rui.zhang@intel.com>
-References: <20240930081801.28502-1-rui.zhang@intel.com>
+	s=arc-20240116; t=1727686624; c=relaxed/simple;
+	bh=1Wz1b+aWVRLx1CDCw9KifBrN59wS+Rx3ztAM1uWIgvM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CkkCqiGGWXid9vdqLo64fAtTPUU61EvYWqkKX+/MzIfAQIP+unqmxT8qTUjO8KWxRISuPvEis6gpmEhL2FKjRAleuKLIt46iYQYDfdVr1DAi5dBHMubpwWa5B3Ej5sGE/WqPkxYBZrYzS++Xc/wDFmIgzejTxaWLofLIskST2U0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NwvMWhBK; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1727686621;
+	bh=1Wz1b+aWVRLx1CDCw9KifBrN59wS+Rx3ztAM1uWIgvM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NwvMWhBKgOhb2wTuDuLJhlE4paPhhxKWACA+v+Cid6YECRLIJlhBlpF7m6YryRsxS
+	 FHRy0VmMs5bvpenWE3gf0k4buEaA1WRmqOOiYKBVUWmam6ROs0j1xB/K4rl9LoWfZO
+	 vOCI4sXRPcapSLY7BnPygOtdatFDSr0X/vT8w8CZAg/8GST/o+mMexGIjM7J7/TDvf
+	 9ygaDTU+2BtuWlYVxiP1+imn4XI73J/vxVxTXnvou9QjfvSpuat+YlCmO+wzt+nvXD
+	 7UsPQaON2MeHhOoTf+y4L3IyWeAjNY9fztGhvrHaCr3soaGQ0kBccrfFxgeJ1NKeGf
+	 EXiGAp/vpu4Dw==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9319117E0EB3;
+	Mon, 30 Sep 2024 10:57:00 +0200 (CEST)
+Message-ID: <70779c00-7f2a-4038-9241-b8bb2004948f@collabora.com>
+Date: Mon, 30 Sep 2024 10:57:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 2/3] regulator: Add devres version of
+ of_regulator_get_optional()
+To: Chen-Yu Tsai <wenst@chromium.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+ Johan Hovold <johan@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20240930044525.2043884-1-wenst@chromium.org>
+ <20240930044525.2043884-3-wenst@chromium.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240930044525.2043884-3-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Similar to MSR RAPL interface, MMIO RAPL also has PL4 support.
+Il 30/09/24 06:45, Chen-Yu Tsai ha scritto:
+> There are existing uses for a devres version of of_regulator_get_optional()
+> in power domain drivers. On MediaTek platforms, power domains may have
+> regulator supplies tied to them. The driver currently tries to use
+> devm_regulator_get() to not have to manage the lifecycle, but ends up
+> doing it in a very hacky way by replacing the device node of the power
+> domain controller device to the device node of the power domain that is
+> currently being registered, getting the supply, and reverting the device
+> node.
+> 
+> Provide a better API so that the hack can be replaced.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Add PL4 support for MMIO RAPL. As a result, the powercap sysfs for MMIO
-RAPL will show a new "peak power" constraint.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../thermal/intel/int340x_thermal/processor_thermal_rapl.c    | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-index 769510e748c0..bde2cc386afd 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-@@ -13,9 +13,9 @@ static struct rapl_if_priv rapl_mmio_priv;
- 
- static const struct rapl_mmio_regs rapl_mmio_default = {
- 	.reg_unit = 0x5938,
--	.regs[RAPL_DOMAIN_PACKAGE] = { 0x59a0, 0x593c, 0x58f0, 0, 0x5930},
-+	.regs[RAPL_DOMAIN_PACKAGE] = { 0x59a0, 0x593c, 0x58f0, 0, 0x5930, 0x59b0},
- 	.regs[RAPL_DOMAIN_DRAM] = { 0x58e0, 0x58e8, 0x58ec, 0, 0},
--	.limits[RAPL_DOMAIN_PACKAGE] = BIT(POWER_LIMIT2),
-+	.limits[RAPL_DOMAIN_PACKAGE] = BIT(POWER_LIMIT2) | BIT(POWER_LIMIT4),
- 	.limits[RAPL_DOMAIN_DRAM] = BIT(POWER_LIMIT2),
- };
- 
--- 
-2.34.1
 
 
