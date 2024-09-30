@@ -1,227 +1,271 @@
-Return-Path: <linux-pm+bounces-14971-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F1598AB9D
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 20:04:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E2D498AC03
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 20:23:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C352B1C21673
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 18:04:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D0D4B2121C
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 18:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A00199930;
-	Mon, 30 Sep 2024 18:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99689199FAE;
+	Mon, 30 Sep 2024 18:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoKpjvYg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ioUrR/UN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B250919922D;
-	Mon, 30 Sep 2024 18:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7CD199933;
+	Mon, 30 Sep 2024 18:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727719438; cv=none; b=DVrDzfaleIhp7UkOmejkqqY0ebqv4T4pn5o1hbvfz35WgInPogmEo5Vmy9sOT+O+4CWM3T+XO0lGH3Zp/uYcJ0Yrd7r1def3SL0Oil4q15xmJ1DBGSJvPtTfmzqeTQnr5hAxqFmMRipeTUzODIogIoyK/lJwg3sFkv55GhyGNoU=
+	t=1727720537; cv=none; b=HnLKkhcvGJIiYCv54IKevcq4ZUA2Jo77ea6PNAs7wkc9YEDNLynRf6eRbODmtt1+Ik8AfWCSRLo82KDI+DpfrO/0ZCWDSeYhUEC7CqzxHjTBjd4QC2YehVV0VBW/MeN6ViLWcUjdZ/ReFrtnjmo/Kum50zdt8SX+rIgzUNoQa70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727719438; c=relaxed/simple;
-	bh=ZEOnbltI4OSiFpvW76m8lvrTI7x6MCWSM6rlKozq8Zs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C5C5Ae6yPrpOA9Keh5r9Yi3nidecu/oLbaCdUE+BfeRkGPej1Fa/MQoC4XSZNhVFC3qOqiEZBDtWsodHYQDrjo4jjA9BGsN8ohkjLCVWKR/3l23+Gj4g+27/inYIKxu+uSNUKQ8l3Fr+1bpFGBi0zZKajdzS/K9hUAwxwks1AcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eoKpjvYg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1A5C4CECF;
-	Mon, 30 Sep 2024 18:03:58 +0000 (UTC)
+	s=arc-20240116; t=1727720537; c=relaxed/simple;
+	bh=/pJ74pdlnuOKjRnnxAqN0F9sQN50xyetEDeX3R0qWr4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ic7qO3nbGWL3i933BRtGhffYKNPuS4IQWn9KAbuQISwFt14cboNrKth8maS++yEgXhREsYGMwdHww0/P9AmpZvcVL75PbAYA3mW+CkqkYdcG+PC0LqEP96MPkFEXfkweTUZ5nSL6oRKrsbbJRfz5k7WY9tyGiPC0b/U0iv/YSVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ioUrR/UN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E47F2C4CEC7;
+	Mon, 30 Sep 2024 18:22:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727719438;
-	bh=ZEOnbltI4OSiFpvW76m8lvrTI7x6MCWSM6rlKozq8Zs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eoKpjvYghAEVM9YD+8Xz0Bci8m8jaRwZzktRuto5oIVxe6FvP18hhbptJwiFUpvLg
-	 UkZIswBW3/m4RmNIJq1FS+Uw75OiKEGRxUgUtChe9wv4Tfyd8KhzuHFTCfLcGKKbHp
-	 99eUFzOS/2x6xSRjIH7LGm2DTVonU03I31YsS+pcwHFRnLnIZi7IeDBu1b/QRHNJ2v
-	 dgFycosVrLhgHjG3cQ0+6+YKPoAFzZoL4Bka+x2rbMwqDrU2fWLYu0v9zXpN0LkxZQ
-	 pvLfbSlwPqV3W+Y2x+D2b099OHs+kP4tzkKOdeNe0n9zKpxx7tyP3skblYNH9cjVBO
-	 Ni1e7m7y99uJg==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5e57b7cac4fso2768771eaf.1;
-        Mon, 30 Sep 2024 11:03:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU4funPCt2EuWOOHSjIySrSz5bD8p3OQ23tl2j7uF5uIVAVMAf7jtDQ1LcPkqe+Nw/vxXvU7hgSJH1wQpo=@vger.kernel.org, AJvYcCUqOTBgN+IwNmcj8CcPUKb05NoEQz5WyKvghZxyAyHfEmHxDxpYvduNlu6JVuBSOJYefw8oeYtXVP32E6vT@vger.kernel.org, AJvYcCWYp1iSqhvOAxhC/x6iNhxNpzfGvFKhQ/dorZ3J41bltwIRt1cx5D0jWS9D2D94QQplv3t5HgQaFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMMlkLV0qy4WH29bxvh+pY2KuJ3QMqwrR2SHJarzXj5XoJjsy9
-	EJT0PkUdDeqWMRw7PZTQK4M3RLFDGPmCRMTD68hJQtexsUiaf0a5kCSHEvvMwFveUJnbdHAyQN5
-	iML2HyiOMbxArDSBX3DDokrXBkBk=
-X-Google-Smtp-Source: AGHT+IG3ujjyRdCEUsPatj+no7TnwxN27pJHjwq1ZLvHYOHrgYDrLwHqMQ2l/ksLAGCgBBvDMYnZEP24XZVr/DcuPnI=
-X-Received: by 2002:a05:6820:2208:b0:5e5:7086:ebe8 with SMTP id
- 006d021491bc7-5e77244736emr7313486eaf.0.1727719437428; Mon, 30 Sep 2024
- 11:03:57 -0700 (PDT)
+	s=k20201202; t=1727720537;
+	bh=/pJ74pdlnuOKjRnnxAqN0F9sQN50xyetEDeX3R0qWr4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ioUrR/UNPdNnrtciGUGy5Y+MBwXqMlsO1NUGtUWfjHpYCGWZOW/q1kXLEAoyQAnHk
+	 aRTT3fRdH9pMqC0vxs4KQbDPf7erIMSwuMiwZ9NQUxyJYuRzdPZMN9rqajXZnuCYLR
+	 LXjLmSa5tzSd/MTteO6nJpENL5ym+nY2eDjxGgoRwOXXFaaRBGRhHY9b3vzdRlmYz0
+	 /e2SmLFoDFBoAeDvrq3DWGLMlD53EC8ta9JjkgjmBjWTFrp24JIRaxqDP10GrWTrdr
+	 y1ZNqUkUhCWpObk6vPEHuC5ZQoMPE/ihIEvP1Kr3UX89ErzSXM+Vx7mV68WAop7J0a
+	 FH+VdKgJE6OsQ==
+Date: Mon, 30 Sep 2024 08:22:15 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Yipeng Zou <zouyipeng@huawei.com>,
+	Linux Power Management <linux-pm@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	liaochang1@huawei.com,
+	Daniel Hodges <hodges.daniel.scott@gmail.com>
+Subject: Re: [RFC PATCH 0/2] cpufreq_ext: Introduce cpufreq ext governor
+Message-ID: <ZvrsV-A1Jizokuef@slm.duckdns.org>
+References: <20240927101342.3240263-1-zouyipeng@huawei.com>
+ <CAADnVQJmVo4BU345irnnLNxQ_sT1cOEx8ky4T2iH_ZKpAyFfww@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240905092645.2885200-1-christian.loehle@arm.com> <20240905092645.2885200-7-christian.loehle@arm.com>
-In-Reply-To: <20240905092645.2885200-7-christian.loehle@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 30 Sep 2024 20:03:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i3ULQ-Mzu=6yzo4whnWne0g1sxcgPL_u828Jyy1Qu1Zg@mail.gmail.com>
-Message-ID: <CAJZ5v0i3ULQ-Mzu=6yzo4whnWne0g1sxcgPL_u828Jyy1Qu1Zg@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/8] cpufreq: intel_pstate: Remove iowait boost
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, rafael@kernel.org, 
-	peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com, 
-	dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org, 
-	Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org, 
-	bvanassche@acm.org, andres@anarazel.de, asml.silence@gmail.com, 
-	linux-block@vger.kernel.org, io-uring@vger.kernel.org, qyousef@layalina.io, 
-	dsmythies@telus.net, axboe@kernel.dk, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJmVo4BU345irnnLNxQ_sT1cOEx8ky4T2iH_ZKpAyFfww@mail.gmail.com>
 
-+Srinivas who can say more about the reasons why iowait boosting makes
-a difference for intel_pstate than I do.
+(cc'ing Daniel Hodges and quoting the whole body)
 
-On Thu, Sep 5, 2024 at 11:27=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> Analogous to schedutil, remove iowait boost for the same reasons.
+On Sun, Sep 29, 2024 at 09:56:02AM -0700, Alexei Starovoitov wrote:
+> On Fri, Sep 27, 2024 at 3:03 AM Yipeng Zou <zouyipeng@huawei.com> wrote:
+> >
+> > Hi everyone,
+> >
+> > I am currently working on a patch for a CPU frequency governor based on
+> > BPF, which can use BPF to customize and implement various frequency
+> > scaling strategies.
+> >
+> > If you have any feedback or suggestions, please do let me know.
+> >
+> > Motivation
+> > ----------
+> >
+> > 1. Customization
+> >
+> > Existing cpufreq governors in the kernel are designed for general
+> > scenarios, which may not always be optimal for specific or specialized
+> > workloads.
+> >
+> > The userspace governor allows direct control over cpufreq, but users
+> > often require guidance from the kernel to achieve the desired frequency.
+> >
+> > Cpufreq_ext aims to address this by providing a customizable framework that
+> > can be tailored to the unique needs of different systems and applications.
+> >
+> > While cpufreq governors can be implemented within a kernel module,
+> > maintaining a ko tailored for specific scenarios can be challenging.
+> > The complexity and overhead associated with kernel modules make it
+> > difficult to quickly adapt and deploy custom frequency scaling strategies.
+> >
+> > Cpufreq_ext leverages BPF to offer a more lightweight and flexible approach
+> > to implementing customized strategies, allowing for easier maintenance and
+> > deployment.
+> >
+> > 2. Integration with sched_ext:
+> >
+> > sched_ext is a scheduler class whose behavior can be defined by a set of
+> > BPF programs - the BPF scheduler.
+> >
+> > Look for more about sched_ext in [1]:
+> >
+> >         [1] https://www.kernel.org/doc/html/next/scheduler/sched-ext.html
+> >
+> > The interaction between CPU frequency scaling and task scheduling is
+> > critical for performance.
+> >
+> > cpufreq_ext can work with sched_ext to ensure that both scheduling
+> > decisions and frequency adjustments are made in a coordinated manner,
+> > optimizing system responsiveness and power consumption.
+> 
+> I think sched-ext already has a mechanism to influence cpufreq.
+> How is this different ?
 
-Well, first of all, iowait boosting was added to intel_pstate to help
-some workloads that otherwise were underperforming.  I'm not sure if
-you can simply remove it without introducing performance regressions
-in those workloads.
+FWIW, sched_ext's cpufreq implementation is through the schedutil governor.
+All that the BPF scheduler does is providing utilization signal to the
+governor. This seems to work fine for sched_ext schedulers (this doesn't
+preclude more direct BPF governor).
 
-While you can argue that it is not useful in schedutil any more due to
-the improved scheduler input for it, you can hardly extend that
-argument to intel_pstate because it doesn't use all of the scheduler
-input used by schedutil.
+> Pls cc sched-ext folks in the future.
 
-Also, the EAS and UCLAMP_MAX arguments are not applicable to
-intel_pstate because it doesn't support any of them.
+Yeah, it'd be great if you can cc Daniel, me and sched-ext@meta.com.
 
-This applies to the ondemand cpufreq governor either.
+> > Overview
+> > --------
+> >
+> > The cpufreq ext is a BPF based cpufreq governor, we can customize
+> > cpufreq governor in BPF program.
+> >
+> > CPUFreq ext works as common cpufreq governor with cpufreq policy.
+> >
+> >                    --------------------------
+> >                   |        BPF governor      |
+> >                    --------------------------
+> >                                |
+> >                                v
+> >                           BPF Register
+> >                                |
+> >                                v
+> >             --------------------------------------
+> >            |             CPUFreq ext              |
+> >             --------------------------------------
+> >               ^                ^               ^
+> >               |                |               |
+> >            ---------       ---------       ---------
+> >           | policy0 | ... | policy1 | ... | policyn |
+> >            ---------       ---------       ---------
+> >
+> > We can register serval function hooks to cpufreq ext by BPF Struct OPS.
+> >
+> > The first patch define a dbs_governor, and it's works like other
+> > governor.
+> >
+> > The second patch gives a sample how to use it, implement one
+> > typical cpufreq governor, switch to max cpufreq when VIP task
+> > is running on target cpu.
+> >
+> > Detail
+> > ------
+> >
+> > The cpufreq ext use bpf_struct_ops to register serval function hooks.
+> >
+> >         struct cpufreq_governor_ext_ops {
+> >                 ...
+> >         }
+> >
+> > Cpufreq_governor_ext_ops defines all the functions that BPF programs can
+> > implement customly.
+> >
+> > If you need to add a custom function, you only need to define it in this
+> > struct.
+> >
+> > At the moment we have defined the basic functions.
+> >
+> > 1. unsigned long (*get_next_freq)(struct cpufreq_policy *policy)
+> >
+> >         Make decision how to adjust cpufreq here.
+> >         The return value represents the CPU frequency that will be
+> >         updated.
+> >
+> > 2. unsigned int (*get_sampling_rate)(struct cpufreq_policy *policy)
+> >
+> >         Make decision how to adjust sampling_rate here.
+> >         The return value represents the governor samplint rate that
+> >         will be updated.
+> >
+> > 3. unsigned int (*init)(void)
+> >
+> >         BPF governor init callback, return 0 means success.
+> >
+> > 4. void (*exit)(void)
+> >
+> >         BPF governor exit callback.
+> >
+> > 5. char name[CPUFREQ_EXT_NAME_LEN]
+> >
+> >         BPF governor name.
+> >
+> > The cpufreq_ext also add sysfs interface which refer to governor status.
+> >
+> > 1. ext/stat attribute:
+> >
+> >         Access to current BPF governor status.
+> >
+> >         # cat /sys/devices/system/cpu/cpufreq/ext/stat
+> >         Stat: CPUFREQ_EXT_INIT
+> >         BPF governor: performance
+> >
+> > There are number of constraints on the cpufreq_ext:
+> >
+> > 1. Only one ext governor can be registered at a time.
+> >
+> > 2. By default, it operates as a performance governor when no BPF
+> >    governor is registered.
+> >
+> > 3. The cpufreq_ext governor must be selected before loading a BPF
+> >    governor; otherwise, the installation of the BPF governor will fail.
+> >
+> > TODO
+> > ----
+> >
+> > The current patch is a starting point, and future work will focus on
+> > expanding its capabilities.
+> >
+> > I plan to leverage the BPF ecosystem to introduce innovative features,
+> > such as real-time adjustments and optimizations based on system-wide
+> > observations and analytics.
+> >
+> > And I am looking forward to any insights, critiques, or suggestions you
+> > may have.
+> >
+> > Yipeng Zou (2):
+> >   cpufreq_ext: Introduce cpufreq ext governor
+> >   cpufreq_ext: Add bpf sample
+> >
+> >  drivers/cpufreq/Kconfig        |  23 ++
+> >  drivers/cpufreq/Makefile       |   1 +
+> >  drivers/cpufreq/cpufreq_ext.c  | 525 +++++++++++++++++++++++++++++++++
+> >  samples/bpf/.gitignore         |   1 +
+> >  samples/bpf/Makefile           |   8 +-
+> >  samples/bpf/cpufreq_ext.bpf.c  | 113 +++++++
+> >  samples/bpf/cpufreq_ext_user.c |  48 +++
+> >  7 files changed, 718 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/cpufreq/cpufreq_ext.c
+> >  create mode 100644 samples/bpf/cpufreq_ext.bpf.c
+> >  create mode 100644 samples/bpf/cpufreq_ext_user.c
+> >
+> > --
+> > 2.34.1
+> >
 
-
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 50 ++--------------------------------
->  1 file changed, 3 insertions(+), 47 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index c0278d023cfc..7f30b2569bb3 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -191,7 +191,6 @@ struct global_params {
->   * @policy:            CPUFreq policy value
->   * @update_util:       CPUFreq utility callback information
->   * @update_util_set:   CPUFreq utility callback is set
-> - * @iowait_boost:      iowait-related boost fraction
->   * @last_update:       Time of the last update.
->   * @pstate:            Stores P state limits for this CPU
->   * @vid:               Stores VID limits for this CPU
-> @@ -245,7 +244,6 @@ struct cpudata {
->         struct acpi_processor_performance acpi_perf_data;
->         bool valid_pss_table;
->  #endif
-> -       unsigned int iowait_boost;
->         s16 epp_powersave;
->         s16 epp_policy;
->         s16 epp_default;
-> @@ -2136,28 +2134,7 @@ static inline void intel_pstate_update_util_hwp_lo=
-cal(struct cpudata *cpu,
->  {
->         cpu->sample.time =3D time;
->
-> -       if (cpu->sched_flags & SCHED_CPUFREQ_IOWAIT) {
-> -               bool do_io =3D false;
-> -
-> -               cpu->sched_flags =3D 0;
-> -               /*
-> -                * Set iowait_boost flag and update time. Since IO WAIT f=
-lag
-> -                * is set all the time, we can't just conclude that there=
- is
-> -                * some IO bound activity is scheduled on this CPU with j=
-ust
-> -                * one occurrence. If we receive at least two in two
-> -                * consecutive ticks, then we treat as boost candidate.
-> -                */
-> -               if (time_before64(time, cpu->last_io_update + 2 * TICK_NS=
-EC))
-> -                       do_io =3D true;
-> -
-> -               cpu->last_io_update =3D time;
-> -
-> -               if (do_io)
-> -                       intel_pstate_hwp_boost_up(cpu);
-> -
-> -       } else {
-> -               intel_pstate_hwp_boost_down(cpu);
-> -       }
-> +       intel_pstate_hwp_boost_down(cpu);
->  }
->
->  static inline void intel_pstate_update_util_hwp(struct update_util_data =
-*data,
-> @@ -2240,9 +2217,6 @@ static inline int32_t get_target_pstate(struct cpud=
-ata *cpu)
->         busy_frac =3D div_fp(sample->mperf << cpu->aperf_mperf_shift,
->                            sample->tsc);
->
-> -       if (busy_frac < cpu->iowait_boost)
-> -               busy_frac =3D cpu->iowait_boost;
-> -
->         sample->busy_scaled =3D busy_frac * 100;
->
->         target =3D READ_ONCE(global.no_turbo) ?
-> @@ -2303,7 +2277,7 @@ static void intel_pstate_adjust_pstate(struct cpuda=
-ta *cpu)
->                 sample->aperf,
->                 sample->tsc,
->                 get_avg_frequency(cpu),
-> -               fp_toint(cpu->iowait_boost * 100));
-> +               0);
->  }
->
->  static void intel_pstate_update_util(struct update_util_data *data, u64 =
-time,
-> @@ -2317,24 +2291,6 @@ static void intel_pstate_update_util(struct update=
-_util_data *data, u64 time,
->                 return;
->
->         delta_ns =3D time - cpu->last_update;
-> -       if (flags & SCHED_CPUFREQ_IOWAIT) {
-> -               /* Start over if the CPU may have been idle. */
-> -               if (delta_ns > TICK_NSEC) {
-> -                       cpu->iowait_boost =3D ONE_EIGHTH_FP;
-> -               } else if (cpu->iowait_boost >=3D ONE_EIGHTH_FP) {
-> -                       cpu->iowait_boost <<=3D 1;
-> -                       if (cpu->iowait_boost > int_tofp(1))
-> -                               cpu->iowait_boost =3D int_tofp(1);
-> -               } else {
-> -                       cpu->iowait_boost =3D ONE_EIGHTH_FP;
-> -               }
-> -       } else if (cpu->iowait_boost) {
-> -               /* Clear iowait_boost if the CPU may have been idle. */
-> -               if (delta_ns > TICK_NSEC)
-> -                       cpu->iowait_boost =3D 0;
-> -               else
-> -                       cpu->iowait_boost >>=3D 1;
-> -       }
->         cpu->last_update =3D time;
->         delta_ns =3D time - cpu->sample.time;
->         if ((s64)delta_ns < INTEL_PSTATE_SAMPLING_INTERVAL)
-> @@ -2832,7 +2788,7 @@ static void intel_cpufreq_trace(struct cpudata *cpu=
-, unsigned int trace_type, in
->                 sample->aperf,
->                 sample->tsc,
->                 get_avg_frequency(cpu),
-> -               fp_toint(cpu->iowait_boost * 100));
-> +               0);
->  }
->
->  static void intel_cpufreq_hwp_update(struct cpudata *cpu, u32 min, u32 m=
-ax,
-> --
-> 2.34.1
->
+-- 
+tejun
 
