@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-14946-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14947-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2CED98A7A8
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 16:49:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F6A898A7AA
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 16:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6956C1F23D7A
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 14:49:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C21B2842CD
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 14:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA8B194AD1;
-	Mon, 30 Sep 2024 14:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E191925A0;
+	Mon, 30 Sep 2024 14:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PHRHdPmF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RUsyK9Pa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F5B19408B;
-	Mon, 30 Sep 2024 14:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C4519258D;
+	Mon, 30 Sep 2024 14:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727707667; cv=none; b=j7trrSWtDghZdRravFEHoSTsePlwuLqyP4NSYI2Z6/YigByauuqk286U+OYiWzPEZQzy3iP88rDK1/ZDpS4vpFs3cn1h039Kbb5FQrcwvV4bSGj3ceYf4k/pEp8kN3CMhVGZI+zU8hGBWUkPCkWqXjhOznMljcNt8U0PumW5I1k=
+	t=1727707674; cv=none; b=ONJCdrWtK4lu66ZDvrlaP6VpQTbCgIbhqnOuauFErvmWo7OD3pzxCLQXpD6RtL5Qb2UTaJf7q9CgR59rTWiTuvWcprN8MLTDw13m6CM28WMJyd00QR6iG+Cgcd9brcPrweXTGINTyveebDi5TcKWIMR8xzuZnlJWQctTdHXisHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727707667; c=relaxed/simple;
-	bh=V23pI7XlhviW2A8a02uvxkE0YvRgDgFLL75aIgLJCf4=;
+	s=arc-20240116; t=1727707674; c=relaxed/simple;
+	bh=SP+/KsXlmksqCUnnBpNTZI8xe57AbdDUhmT+OnpB+RQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rrnXfTBCNw2AjClqCSRM4DGuwqBX1jOI9b8aOJyn2NyEa5NYYmTov9LeMJ6Rmf176i9rtLptDv/gGfQt/2VjB7mKrokR4Qb4pPsquTr7b8vFtrsZhwjTkAujkMHvBA3agfDMtD7KFh85rZs6RNmi+L6T9M3ywH1CcBNXssEWl9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PHRHdPmF; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=tA584S0nvMZOcw6o9pKDnWEd93PZYJs4LOH1/YGM3gkI9VU91VwOj9cghvTtHUBOjrkb5Cw8q8c7ZFJAgslzSy8m66Io7/WJbpuDzSk2/mn7wKWsL539dmwzjwZ/lv0Ai2ja+yVlAsULlCJ9y3/Im7QAIhQQU92Muz5MVnR4e8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RUsyK9Pa; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727707666; x=1759243666;
+  t=1727707673; x=1759243673;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=V23pI7XlhviW2A8a02uvxkE0YvRgDgFLL75aIgLJCf4=;
-  b=PHRHdPmF/YcKSdUHp5vwb06MvLaViFB6MjbWbZQK4l5MrWEA4TVzr2CP
-   VbZIrdaFFEnKWu+7u0oDxQgfIT52Mi9p4MBCrzIorV8EE3zushDeMeqN0
-   9beO3XJbWWErkFrM3LC3aw3rC70ukRFgnk0NRQHgEwjka8eIY3DbjRzXq
-   Ur1T3vN+dHqMAEN7clFo7BOoJP221vN/NM/S6fNggbHc9y5pAJRwH9GNr
-   K6+cG/3MdIX6dTNH+KA+YTuV3PWU3YARFDfD8pshb5U8BkBpznHcUd754
-   qpNcjebe0Hi0bjOb7dwWAv6XiMwOmcztE7OrQvCSiRHUcf40oFtp0uDFN
-   w==;
-X-CSE-ConnectionGUID: XF4pClrjSsyD3wbFvc4uHg==
-X-CSE-MsgGUID: Kap6bwqmSvCUZ3js+7kn/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="38187368"
+  bh=SP+/KsXlmksqCUnnBpNTZI8xe57AbdDUhmT+OnpB+RQ=;
+  b=RUsyK9PaF0XBcynmOMoLwH4UvKLi6XdVWOPHOFprirhQXTZJpnq2Aftl
+   DPhr5RAEIicq0KgAAOpIYYKWPD6FvnkmDViciCU9WQLTIub3MPShbBpnk
+   hIrVbUy+dUqNg6TKe5AZBQyZ37TghsEE1Uy/cWS4bsZzU2HdupyPGzStv
+   pbCixIyyNgr8+LFIov2hoIeYtVy9gS3LleVgQi6znfa0MgtRzEBkcUM2C
+   xvcODheMic9CGPe9zeL09I3JI02lgjGrzTaxm/42jbWtWJSyOSmnlzbC9
+   mh8COM/VJZAjYcDdH+cBp3VwPH9D1h1XyCWo4Kci013gN8NQoG43LGdIE
+   Q==;
+X-CSE-ConnectionGUID: 6E7BxJvtTTm/vfEc/yWJIA==
+X-CSE-MsgGUID: IE2Gq3uWRoCyJGVcrTK11w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="44262231"
 X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="38187368"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 07:47:45 -0700
-X-CSE-ConnectionGUID: PozQ5gHtR7a6Wf1BDdtZkg==
-X-CSE-MsgGUID: AoqZgpNeSU+HXkPnqfNOTw==
+   d="scan'208";a="44262231"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 07:47:52 -0700
+X-CSE-ConnectionGUID: mq8Z+ARNRyicyNVR1uubIQ==
+X-CSE-MsgGUID: 1r/x5kyvSHiWvlFRv+1CIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="72996091"
+   d="scan'208";a="73455084"
 Received: from smkirkla-mobl.amr.corp.intel.com (HELO desk) ([10.125.147.240])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 07:47:44 -0700
-Date: Mon, 30 Sep 2024 07:47:44 -0700
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 07:47:51 -0700
+Date: Mon, 30 Sep 2024 07:47:50 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -76,8 +76,9 @@ Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Perry Yuan <Perry.Yuan@amd.com>,
 	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH v4 05/10] x86/cpu: Remove get_this_hybrid_cpu_type()
-Message-ID: <20240930-add-cpu-type-v4-5-104892b7ab5f@linux.intel.com>
+Subject: [PATCH v4 06/10] x86/cpu: Name CPU matching macro more generically
+ (and shorten)
+Message-ID: <20240930-add-cpu-type-v4-6-104892b7ab5f@linux.intel.com>
 X-Mailer: b4 0.14.1
 References: <20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com>
 Precedence: bulk
@@ -90,66 +91,211 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com>
 
-Because calls to get_this_hybrid_cpu_type() were replaced by
-topology_hw_cpu_type().
+To add cpu-type to the existing CPU matching infrastructure, the base macro
+X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE need to append _CPU_TYPE. This
+makes an already long name longer, and somewhat incomprehensible.
+
+To avoid this, rename the base macro to X86_MATCH_CPU. The macro name
+doesn't need to explicitly tell everything that it matches. The arguments
+to the macro already hints what it matches.
+
+For consistency, use this base macro to define X86_MATCH_VFM and friends.
 
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- arch/x86/include/asm/cpu.h  |  6 ------
- arch/x86/kernel/cpu/intel.c | 16 ----------------
- 2 files changed, 22 deletions(-)
+ arch/x86/include/asm/cpu_device_id.h | 100 ++++++++++-------------------------
+ 1 file changed, 29 insertions(+), 71 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index 2244dd86066a..c53a98751a92 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -31,7 +31,6 @@ extern void __init sld_setup(struct cpuinfo_x86 *c);
- extern bool handle_user_split_lock(struct pt_regs *regs, long error_code);
- extern bool handle_guest_split_lock(unsigned long ip);
- extern void handle_bus_lock(struct pt_regs *regs);
--u8 get_this_hybrid_cpu_type(void);
- u32 intel_native_model_id(struct cpuinfo_x86 *c);
- #else
- static inline void __init sld_setup(struct cpuinfo_x86 *c) {}
-@@ -47,11 +46,6 @@ static inline bool handle_guest_split_lock(unsigned long ip)
+diff --git a/arch/x86/include/asm/cpu_device_id.h b/arch/x86/include/asm/cpu_device_id.h
+index e4121d9aa9e1..dee45332b682 100644
+--- a/arch/x86/include/asm/cpu_device_id.h
++++ b/arch/x86/include/asm/cpu_device_id.h
+@@ -58,7 +58,7 @@
  
- static inline void handle_bus_lock(struct pt_regs *regs) {}
- 
--static inline u8 get_this_hybrid_cpu_type(void)
--{
--	return 0;
+ #define X86_STEPPINGS(mins, maxs)    GENMASK(maxs, mins)
+ /**
+- * X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE - Base macro for CPU matching
++ * X86_MATCH_CPU -  Base macro for CPU matching
+  * @_vendor:	The vendor name, e.g. INTEL, AMD, HYGON, ..., ANY
+  *		The name is expanded to X86_VENDOR_@_vendor
+  * @_family:	The family number or X86_FAMILY_ANY
+@@ -75,19 +75,7 @@
+  * into another macro at the usage site for good reasons, then please
+  * start this local macro with X86_MATCH to allow easy grepping.
+  */
+-#define X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE(_vendor, _family, _model, \
+-						    _steppings, _feature, _data) { \
+-	.vendor		= X86_VENDOR_##_vendor,				\
+-	.family		= _family,					\
+-	.model		= _model,					\
+-	.steppings	= _steppings,					\
+-	.feature	= _feature,					\
+-	.flags		= X86_CPU_ID_FLAG_ENTRY_VALID,			\
+-	.driver_data	= (unsigned long) _data				\
 -}
 -
- static u32 intel_native_model_id(struct cpuinfo_x86 *c)
- {
- 	return 0;
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index e56401c5c050..4536206e6b3c 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -1284,22 +1284,6 @@ void __init sld_setup(struct cpuinfo_x86 *c)
- 	sld_state_show();
- }
- 
--#define X86_HYBRID_CPU_TYPE_ID_SHIFT	24
--
--/**
-- * get_this_hybrid_cpu_type() - Get the type of this hybrid CPU
+-#define X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(_vendor, _family, _model, \
+-						    _steppings, _feature, _data) { \
++#define X86_MATCH_CPU(_vendor, _family, _model, _steppings, _feature, _data) { \
+ 	.vendor		= _vendor,					\
+ 	.family		= _family,					\
+ 	.model		= _model,					\
+@@ -107,13 +95,10 @@
+  * @_data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
 - *
-- * Returns the CPU type [31:24] (i.e., Atom or Core) of a CPU in
-- * a hybrid processor. If the processor is not hybrid, returns 0.
-- */
--u8 get_this_hybrid_cpu_type(void)
--{
--	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
--		return 0;
--
--	return cpuid_eax(0x0000001a) >> X86_HYBRID_CPU_TYPE_ID_SHIFT;
--}
--
- u32 intel_native_model_id(struct cpuinfo_x86 *c)
- {
- 	return c->topo.intel_core_native_model_id;
+- * The steppings arguments of X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE() is
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model, feature, data) \
+-	X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE(vendor, family, model, \
+-						X86_STEPPING_ANY, feature, data)
++#define X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model, feature, data)	\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, model, X86_STEPPING_ANY,		\
++		      feature, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FAM_FEATURE - Macro for matching vendor, family and CPU feature
+@@ -124,13 +109,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM_FEATURE(vendor, family, feature, data)	\
+-	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family,		\
+-					   X86_MODEL_ANY, feature, data)
++#define X86_MATCH_VENDOR_FAM_FEATURE(vendor, family, feature, data)		\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, X86_MODEL_ANY,		\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FEATURE - Macro for matching vendor and CPU feature
+@@ -140,12 +122,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FEATURE(vendor, feature, data)			\
+-	X86_MATCH_VENDOR_FAM_FEATURE(vendor, X86_FAMILY_ANY, feature, data)
++#define X86_MATCH_VENDOR_FEATURE(vendor, feature, data)				\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, X86_FAMILY_ANY, X86_MODEL_ANY,	\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /**
+  * X86_MATCH_FEATURE - Macro for matching a CPU feature
+@@ -153,12 +133,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_FEATURE(feature, data)				\
+-	X86_MATCH_VENDOR_FEATURE(ANY, feature, data)
++#define X86_MATCH_FEATURE(feature, data)					\
++	X86_MATCH_CPU(X86_VENDOR_ANY, X86_FAMILY_ANY, X86_MODEL_ANY,		\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FAM_MODEL - Match vendor, family and model
+@@ -169,13 +147,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, data)		\
+-	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model,	\
+-					   X86_FEATURE_ANY, data)
++#define X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, data)			\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, model, X86_STEPPING_ANY,	\
++		      X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FAM - Match vendor and family
+@@ -185,12 +160,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments to X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set of wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM(vendor, family, data)			\
+-	X86_MATCH_VENDOR_FAM_MODEL(vendor, family, X86_MODEL_ANY, data)
++#define X86_MATCH_VENDOR_FAM(vendor, family, data)				\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, X86_MODEL_ANY,		\
++		      X86_STEPPING_ANY, X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VFM - Match encoded vendor/family/model
+@@ -198,15 +171,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is cast to unsigned long internally.
+- *
+- * Stepping and feature are set to wildcards
+  */
+-#define X86_MATCH_VFM(vfm, data)			\
+-	X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(	\
+-		VFM_VENDOR(vfm),			\
+-		VFM_FAMILY(vfm),			\
+-		VFM_MODEL(vfm),				\
+-		X86_STEPPING_ANY, X86_FEATURE_ANY, data)
++#define X86_MATCH_VFM(vfm, data)						\
++	X86_MATCH_CPU(VFM_VENDOR(vfm), VFM_FAMILY(vfm),	VFM_MODEL(vfm),		\
++		      X86_STEPPING_ANY, X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VFM_STEPPINGS - Match encoded vendor/family/model/stepping
+@@ -215,15 +183,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is cast to unsigned long internally.
+- *
+- * feature is set to wildcard
+  */
+-#define X86_MATCH_VFM_STEPPINGS(vfm, steppings, data)	\
+-	X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(	\
+-		VFM_VENDOR(vfm),			\
+-		VFM_FAMILY(vfm),			\
+-		VFM_MODEL(vfm),				\
+-		steppings, X86_FEATURE_ANY, data)
++#define X86_MATCH_VFM_STEPPINGS(vfm, steppings, data)				\
++	X86_MATCH_CPU(VFM_VENDOR(vfm), VFM_FAMILY(vfm), VFM_MODEL(vfm),		\
++		      steppings, X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VFM_FEATURE - Match encoded vendor/family/model/feature
+@@ -232,15 +195,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is cast to unsigned long internally.
+- *
+- * Steppings is set to wildcard
+  */
+-#define X86_MATCH_VFM_FEATURE(vfm, feature, data)	\
+-	X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(	\
+-		VFM_VENDOR(vfm),			\
+-		VFM_FAMILY(vfm),			\
+-		VFM_MODEL(vfm),				\
+-		X86_STEPPING_ANY, feature, data)
++#define X86_MATCH_VFM_FEATURE(vfm, feature, data)				\
++	X86_MATCH_CPU(VFM_VENDOR(vfm), VFM_FAMILY(vfm), VFM_MODEL(vfm),		\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /*
+  * Match specific microcode revisions.
 
 -- 
 2.34.1
