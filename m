@@ -1,126 +1,227 @@
-Return-Path: <linux-pm+bounces-14970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 115B598AB0F
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 19:24:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41F1598AB9D
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 20:04:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE4CC1F23998
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 17:24:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C352B1C21673
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 18:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B245D197A7A;
-	Mon, 30 Sep 2024 17:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A00199930;
+	Mon, 30 Sep 2024 18:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hmtwNMOG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoKpjvYg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9F4194096
-	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 17:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B250919922D;
+	Mon, 30 Sep 2024 18:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727717080; cv=none; b=MwjFyKVi99RESFX+Kio/94c6q3Kfu1mDjH02Ip4hgKhYkT8VP3EqLffz8jiQTvWogMXa+MIViLR+Lc25JK2llneRAFHOGvV3DlWaCj/WLMuFzxA7VKwGRpzsSZO6zyYp840LJF3kDjzxuNIVx3BMuVOL7IF5ZkzA55ne6FnxfDk=
+	t=1727719438; cv=none; b=DVrDzfaleIhp7UkOmejkqqY0ebqv4T4pn5o1hbvfz35WgInPogmEo5Vmy9sOT+O+4CWM3T+XO0lGH3Zp/uYcJ0Yrd7r1def3SL0Oil4q15xmJ1DBGSJvPtTfmzqeTQnr5hAxqFmMRipeTUzODIogIoyK/lJwg3sFkv55GhyGNoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727717080; c=relaxed/simple;
-	bh=BolYtsI0w27oJm0hSUK/ybbZTbg7JDNiF7yhR32OlO0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=imAcLO93VUnvztda44DPK/++zq2PzjZH/kHiaCM3FlHrPgAlsf5XTUtdjJqZN8Veaiuo76TenUOrSmBovY8q7FqOrJlIYsV4GPBx+NNIw81yeOG+0YFwmwduUUCpk3ZfF4gM48KAd5pdpH78I2YbEGHrGjSp11i9bt2CavfutEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hmtwNMOG; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1727717077;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Tm9+U99BoHPZZgfkmyq7/8cg3UOwPJZ9OVw/oJ0v7VU=;
-	b=hmtwNMOGzhXemHXggxlvjFU9tB8AM5+/iRmrZrEsPX4HJ3bk15Q37xZo8gukYZOGrSSBIF
-	dZysH6JRYFuUGJUIRcfDyhGkjwExHXfxyGpWTzceoNzqzikXxHmUvuJ3XqSe+FbbNQO96a
-	bvM7q4uoae4x1PrkruDD3J1CdkOqfwQ=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-167-aJp3Lxu7PlSghH2XxNHs5w-1; Mon, 30 Sep 2024 13:24:35 -0400
-X-MC-Unique: aJp3Lxu7PlSghH2XxNHs5w-1
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-5e1c8fa5032so3631511eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 10:24:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727717075; x=1728321875;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tm9+U99BoHPZZgfkmyq7/8cg3UOwPJZ9OVw/oJ0v7VU=;
-        b=chgnyRGJrOeWDj+MhU6kP7iZawdxP0lxBR+kp6lJ3TGcxUGn/d6GG7FTRbikcTepf+
-         sy4TwWbchKF4My+5ElQwVJoyX1YDq7yO3ckszlTyUrYKDIXOHJNSWoxUQtGyhCqxBbP+
-         LJdILjY3sbJeNqQc19yP/GYSKD5hDepR1hITHsQz6OXJYzOgrjZHXdeVWOHptTHckAK9
-         nvmGk2uOXojgz+CYnDmkKspEDWfRTAXk8VmvfbC/DOrmykRd2LWjQ4o2FWcpwBn2ybtG
-         hWPilVF3jqJNHxoJ3Ver98LoB7M4P+raXWhoYtAlY5hIkbtMnH+C4iF96XBGJno0ceQp
-         WOHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXB31vHRdzj3T78OtVs09lGjyRYCpHz6KHPVqA19+L2FfFOrw2/Cmdhuxm+3T02mqkWQs3JKzvVsQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJcVBx06SII6WttGo/RhUiOn4s23gmgg60yUWiezlChBtlpwxx
-	a04lOqHyc0Zyyxl/eTeP5ISQ1dVs7wQ3J5IYIqaNPm0S6meH/cl5HvZfnTA4aUbOmHi73bKiBa9
-	cBIhiGDBGZxCwIwsEwwa8+G1hFDK7Kyc7dnxpp1zEOgwvNgBBws1JnL/O
-X-Received: by 2002:a05:6359:5f8f:b0:1ba:426f:f2c6 with SMTP id e5c5f4694b2df-1becbc9779dmr492828455d.13.1727717075075;
-        Mon, 30 Sep 2024 10:24:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHxsS7haYLIHqPnAUcqGoVnp3ePyKSCRBSWq3cPAljqcqD8NotPXmxtODb0Y6K/EFfLbKhjkQ==
-X-Received: by 2002:a05:6359:5f8f:b0:1ba:426f:f2c6 with SMTP id e5c5f4694b2df-1becbc9779dmr492824955d.13.1727717074738;
-        Mon, 30 Sep 2024 10:24:34 -0700 (PDT)
-Received: from rhfedora.redhat.com ([71.217.60.247])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ae377bc91asm431522785a.25.2024.09.30.10.24.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 10:24:34 -0700 (PDT)
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Renninger <trenn@suse.com>
-Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	John Kacur <jkacur@redhat.com>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>
-Subject: [PATCH] pm: cpupower: gitignore: Add compile_commands.json
-Date: Mon, 30 Sep 2024 13:22:55 -0400
-Message-ID: <20240930172330.7076-1-jwyatt@redhat.com>
-X-Mailer: git-send-email 2.46.2
+	s=arc-20240116; t=1727719438; c=relaxed/simple;
+	bh=ZEOnbltI4OSiFpvW76m8lvrTI7x6MCWSM6rlKozq8Zs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C5C5Ae6yPrpOA9Keh5r9Yi3nidecu/oLbaCdUE+BfeRkGPej1Fa/MQoC4XSZNhVFC3qOqiEZBDtWsodHYQDrjo4jjA9BGsN8ohkjLCVWKR/3l23+Gj4g+27/inYIKxu+uSNUKQ8l3Fr+1bpFGBi0zZKajdzS/K9hUAwxwks1AcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eoKpjvYg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1A5C4CECF;
+	Mon, 30 Sep 2024 18:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727719438;
+	bh=ZEOnbltI4OSiFpvW76m8lvrTI7x6MCWSM6rlKozq8Zs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=eoKpjvYghAEVM9YD+8Xz0Bci8m8jaRwZzktRuto5oIVxe6FvP18hhbptJwiFUpvLg
+	 UkZIswBW3/m4RmNIJq1FS+Uw75OiKEGRxUgUtChe9wv4Tfyd8KhzuHFTCfLcGKKbHp
+	 99eUFzOS/2x6xSRjIH7LGm2DTVonU03I31YsS+pcwHFRnLnIZi7IeDBu1b/QRHNJ2v
+	 dgFycosVrLhgHjG3cQ0+6+YKPoAFzZoL4Bka+x2rbMwqDrU2fWLYu0v9zXpN0LkxZQ
+	 pvLfbSlwPqV3W+Y2x+D2b099OHs+kP4tzkKOdeNe0n9zKpxx7tyP3skblYNH9cjVBO
+	 Ni1e7m7y99uJg==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5e57b7cac4fso2768771eaf.1;
+        Mon, 30 Sep 2024 11:03:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU4funPCt2EuWOOHSjIySrSz5bD8p3OQ23tl2j7uF5uIVAVMAf7jtDQ1LcPkqe+Nw/vxXvU7hgSJH1wQpo=@vger.kernel.org, AJvYcCUqOTBgN+IwNmcj8CcPUKb05NoEQz5WyKvghZxyAyHfEmHxDxpYvduNlu6JVuBSOJYefw8oeYtXVP32E6vT@vger.kernel.org, AJvYcCWYp1iSqhvOAxhC/x6iNhxNpzfGvFKhQ/dorZ3J41bltwIRt1cx5D0jWS9D2D94QQplv3t5HgQaFg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMMlkLV0qy4WH29bxvh+pY2KuJ3QMqwrR2SHJarzXj5XoJjsy9
+	EJT0PkUdDeqWMRw7PZTQK4M3RLFDGPmCRMTD68hJQtexsUiaf0a5kCSHEvvMwFveUJnbdHAyQN5
+	iML2HyiOMbxArDSBX3DDokrXBkBk=
+X-Google-Smtp-Source: AGHT+IG3ujjyRdCEUsPatj+no7TnwxN27pJHjwq1ZLvHYOHrgYDrLwHqMQ2l/ksLAGCgBBvDMYnZEP24XZVr/DcuPnI=
+X-Received: by 2002:a05:6820:2208:b0:5e5:7086:ebe8 with SMTP id
+ 006d021491bc7-5e77244736emr7313486eaf.0.1727719437428; Mon, 30 Sep 2024
+ 11:03:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240905092645.2885200-1-christian.loehle@arm.com> <20240905092645.2885200-7-christian.loehle@arm.com>
+In-Reply-To: <20240905092645.2885200-7-christian.loehle@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 30 Sep 2024 20:03:45 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i3ULQ-Mzu=6yzo4whnWne0g1sxcgPL_u828Jyy1Qu1Zg@mail.gmail.com>
+Message-ID: <CAJZ5v0i3ULQ-Mzu=6yzo4whnWne0g1sxcgPL_u828Jyy1Qu1Zg@mail.gmail.com>
+Subject: Re: [RFC PATCH 6/8] cpufreq: intel_pstate: Remove iowait boost
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, rafael@kernel.org, 
+	peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com, 
+	dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org, 
+	Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org, 
+	bvanassche@acm.org, andres@anarazel.de, asml.silence@gmail.com, 
+	linux-block@vger.kernel.org, io-uring@vger.kernel.org, qyousef@layalina.io, 
+	dsmythies@telus.net, axboe@kernel.dk, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A compile_commands.json file is used by the LSP in tools like VSCode and
-Neovim to look up function and type information. The file is specific to
-the state of the current system; add it to the gitignore.
++Srinivas who can say more about the reasons why iowait boosting makes
+a difference for intel_pstate than I do.
 
-Note: the kernel root's gitignore has a similar entry:
+On Thu, Sep 5, 2024 at 11:27=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> Analogous to schedutil, remove iowait boost for the same reasons.
 
-/compile_commands.json
+Well, first of all, iowait boosting was added to intel_pstate to help
+some workloads that otherwise were underperforming.  I'm not sure if
+you can simply remove it without introducing performance regressions
+in those workloads.
 
-I am not sure why they use '/' for a file as it is used for directories.
+While you can argue that it is not useful in schedutil any more due to
+the improved scheduler input for it, you can hardly extend that
+argument to intel_pstate because it doesn't use all of the scheduler
+input used by schedutil.
 
-Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
-Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
----
- tools/power/cpupower/.gitignore | 3 +++
- 1 file changed, 3 insertions(+)
+Also, the EAS and UCLAMP_MAX arguments are not applicable to
+intel_pstate because it doesn't support any of them.
 
-diff --git a/tools/power/cpupower/.gitignore b/tools/power/cpupower/.gitignore
-index 7677329c42a6..5113d5a7aee0 100644
---- a/tools/power/cpupower/.gitignore
-+++ b/tools/power/cpupower/.gitignore
-@@ -27,3 +27,6 @@ debug/i386/intel_gsic
- debug/i386/powernow-k8-decode
- debug/x86_64/centrino-decode
- debug/x86_64/powernow-k8-decode
-+
-+# Clang's compilation database file
-+compile_commands.json
--- 
-2.46.2
+This applies to the ondemand cpufreq governor either.
 
+
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 50 ++--------------------------------
+>  1 file changed, 3 insertions(+), 47 deletions(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
+e.c
+> index c0278d023cfc..7f30b2569bb3 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -191,7 +191,6 @@ struct global_params {
+>   * @policy:            CPUFreq policy value
+>   * @update_util:       CPUFreq utility callback information
+>   * @update_util_set:   CPUFreq utility callback is set
+> - * @iowait_boost:      iowait-related boost fraction
+>   * @last_update:       Time of the last update.
+>   * @pstate:            Stores P state limits for this CPU
+>   * @vid:               Stores VID limits for this CPU
+> @@ -245,7 +244,6 @@ struct cpudata {
+>         struct acpi_processor_performance acpi_perf_data;
+>         bool valid_pss_table;
+>  #endif
+> -       unsigned int iowait_boost;
+>         s16 epp_powersave;
+>         s16 epp_policy;
+>         s16 epp_default;
+> @@ -2136,28 +2134,7 @@ static inline void intel_pstate_update_util_hwp_lo=
+cal(struct cpudata *cpu,
+>  {
+>         cpu->sample.time =3D time;
+>
+> -       if (cpu->sched_flags & SCHED_CPUFREQ_IOWAIT) {
+> -               bool do_io =3D false;
+> -
+> -               cpu->sched_flags =3D 0;
+> -               /*
+> -                * Set iowait_boost flag and update time. Since IO WAIT f=
+lag
+> -                * is set all the time, we can't just conclude that there=
+ is
+> -                * some IO bound activity is scheduled on this CPU with j=
+ust
+> -                * one occurrence. If we receive at least two in two
+> -                * consecutive ticks, then we treat as boost candidate.
+> -                */
+> -               if (time_before64(time, cpu->last_io_update + 2 * TICK_NS=
+EC))
+> -                       do_io =3D true;
+> -
+> -               cpu->last_io_update =3D time;
+> -
+> -               if (do_io)
+> -                       intel_pstate_hwp_boost_up(cpu);
+> -
+> -       } else {
+> -               intel_pstate_hwp_boost_down(cpu);
+> -       }
+> +       intel_pstate_hwp_boost_down(cpu);
+>  }
+>
+>  static inline void intel_pstate_update_util_hwp(struct update_util_data =
+*data,
+> @@ -2240,9 +2217,6 @@ static inline int32_t get_target_pstate(struct cpud=
+ata *cpu)
+>         busy_frac =3D div_fp(sample->mperf << cpu->aperf_mperf_shift,
+>                            sample->tsc);
+>
+> -       if (busy_frac < cpu->iowait_boost)
+> -               busy_frac =3D cpu->iowait_boost;
+> -
+>         sample->busy_scaled =3D busy_frac * 100;
+>
+>         target =3D READ_ONCE(global.no_turbo) ?
+> @@ -2303,7 +2277,7 @@ static void intel_pstate_adjust_pstate(struct cpuda=
+ta *cpu)
+>                 sample->aperf,
+>                 sample->tsc,
+>                 get_avg_frequency(cpu),
+> -               fp_toint(cpu->iowait_boost * 100));
+> +               0);
+>  }
+>
+>  static void intel_pstate_update_util(struct update_util_data *data, u64 =
+time,
+> @@ -2317,24 +2291,6 @@ static void intel_pstate_update_util(struct update=
+_util_data *data, u64 time,
+>                 return;
+>
+>         delta_ns =3D time - cpu->last_update;
+> -       if (flags & SCHED_CPUFREQ_IOWAIT) {
+> -               /* Start over if the CPU may have been idle. */
+> -               if (delta_ns > TICK_NSEC) {
+> -                       cpu->iowait_boost =3D ONE_EIGHTH_FP;
+> -               } else if (cpu->iowait_boost >=3D ONE_EIGHTH_FP) {
+> -                       cpu->iowait_boost <<=3D 1;
+> -                       if (cpu->iowait_boost > int_tofp(1))
+> -                               cpu->iowait_boost =3D int_tofp(1);
+> -               } else {
+> -                       cpu->iowait_boost =3D ONE_EIGHTH_FP;
+> -               }
+> -       } else if (cpu->iowait_boost) {
+> -               /* Clear iowait_boost if the CPU may have been idle. */
+> -               if (delta_ns > TICK_NSEC)
+> -                       cpu->iowait_boost =3D 0;
+> -               else
+> -                       cpu->iowait_boost >>=3D 1;
+> -       }
+>         cpu->last_update =3D time;
+>         delta_ns =3D time - cpu->sample.time;
+>         if ((s64)delta_ns < INTEL_PSTATE_SAMPLING_INTERVAL)
+> @@ -2832,7 +2788,7 @@ static void intel_cpufreq_trace(struct cpudata *cpu=
+, unsigned int trace_type, in
+>                 sample->aperf,
+>                 sample->tsc,
+>                 get_avg_frequency(cpu),
+> -               fp_toint(cpu->iowait_boost * 100));
+> +               0);
+>  }
+>
+>  static void intel_cpufreq_hwp_update(struct cpudata *cpu, u32 min, u32 m=
+ax,
+> --
+> 2.34.1
+>
 
