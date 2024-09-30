@@ -1,64 +1,65 @@
-Return-Path: <linux-pm+bounces-14932-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E155A989E6B
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 11:33:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 902BF989E68
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 11:32:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1FDE28858B
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 09:33:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C805B20392
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 09:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91C9418871D;
-	Mon, 30 Sep 2024 09:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C3D1885B9;
+	Mon, 30 Sep 2024 09:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Vs5zXpy/"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="bu8KFRKC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CB31885B9;
-	Mon, 30 Sep 2024 09:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FD8186E39;
+	Mon, 30 Sep 2024 09:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727688779; cv=none; b=HqJD86zRN+PpwFsGf/efK69VM+YFazTtaCZJ+ALP+0s017jDWLGQf/iHegXzyZ4kxOwN1wRg1+9YlYgqlCnSdmmn++ONCF2o0tbpzNCpz0ltbSRK2g5LQ+tGiGVnedJVROnMXXF7h+Vz+CqjTwVK5jLpniWLvodrY45xNaJb38A=
+	t=1727688771; cv=none; b=m1NEJTO/OReNO5TsDGEXHxJKhWrh0SKMZQZGrf23GXRWXAXPAsISY2MC2TGk9nAjma2SVQCLel2pCzt+pGiPUUo6F5BPpNW+fgu8rv6x/iEP2Msu4O7HPmu0wo15vpy1aLG/nyMumyZ5T+EttuFDg1t8t/mPO521VxncHjuyQTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727688779; c=relaxed/simple;
-	bh=V+A0Ou56M6vRoU0patGc9ECKhCoDzL11ztYMDea7pDc=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=rJvnBGWsBYfYJb7uICnJe4UunINIQUWhXnYU2aZlMA9iqQlM1p7N05RCIIPytY/1Iq2Oy2pEZJ7q2hDC+I7nEB770/YuLg6eqvdzz7RWZ8IrJvTtQHfkUnY2zaJoKzAVbHvcPykDe1S6d0WkdXu4Cp5SEVktuiyKoO/Fcs3ZJkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Vs5zXpy/; arc=none smtp.client-ip=198.47.23.248
+	s=arc-20240116; t=1727688771; c=relaxed/simple;
+	bh=hKcPQZ9QKW/4Ct9ay+psYCygKDSfJ1VBcEhEWjpP3ZM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=d4rGZKbzqBphbeAcikCdgtI+kob+YHiDuFayE+t0QB9+vDxMNG8AOL/PusUnbLdEqpb/x0uaTZ3p0jcM4emKapTNtLccY6BjUP0OFBCA0+5fVLwMo37imGGpYbTAbGagY75UTbaBzRvopu8YMKQVNEgsk1rQjf3cvtmMrW1cy10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=bu8KFRKC; arc=none smtp.client-ip=198.47.23.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48U9WfcB113827;
-	Mon, 30 Sep 2024 04:32:41 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48U9Wiht112873;
+	Mon, 30 Sep 2024 04:32:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1727688761;
-	bh=N6VXLOB+A2YGsY5wrKf8qTzqYzOMWaSGIZdY10Hn+KE=;
-	h=From:Subject:Date:To:CC;
-	b=Vs5zXpy/2kOULXGGyVTEBaXhuISt7J3tHQS4kScu/ThNwvU1pET+vE33g0DkX4U+F
-	 bGrq/fpmrDgdUlYPMumaad/F8GMgFojNnrNkX6cnUOT/JLBV5XxziBlPNv1tko+Jtm
-	 nC1X0glAvppQmmqPTQCTBAN8y29kV6GrOOBT2Ipo=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48U9Wfi9008525;
-	Mon, 30 Sep 2024 04:32:41 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+	s=ti-com-17Q1; t=1727688764;
+	bh=A669c3bVbFMDVyx44DfUvaicChB8YijXim3cmihVDGs=;
+	h=From:Date:Subject:References:In-Reply-To:To:CC;
+	b=bu8KFRKCV0yyx9Fp9hi4U/Bp+BfUndbrCDkeqHdg8+mxofQz5R8bNHMnfIRnDZ994
+	 NEhaAnxjgr1DyV4+qO163J0/JVI2X3UOZfXeN3xNgnO8QoxHsi3gdq2fXL11d+efkG
+	 rlRq+bqCyogaX92qGaR+3UG32ViNF1gjOzx88XsA=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48U9Wid6081887
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 30 Sep 2024 04:32:44 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 30
- Sep 2024 04:32:41 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2024 04:32:44 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 30 Sep 2024 04:32:41 -0500
+ Frontend Transport; Mon, 30 Sep 2024 04:32:43 -0500
 Received: from [127.0.1.1] (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48U9Wcv9021643;
-	Mon, 30 Sep 2024 04:32:39 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48U9WcvA021643;
+	Mon, 30 Sep 2024 04:32:41 -0500
 From: Dhruva Gole <d-gole@ti.com>
-Subject: [PATCH 0/2] ti-cpufreq: AM62: Backward compatibility for syscon
- and update offsets
-Date: Mon, 30 Sep 2024 15:02:08 +0530
-Message-ID: <20240930-b4-ti-cpufreq-am62-quirk-v1-0-b5e04f0f899b@ti.com>
+Date: Mon, 30 Sep 2024 15:02:09 +0530
+Subject: [PATCH 1/2] cpufreq: ti-cpufreq: Allow backward compatibility for
+ efuse syscon
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,10 +68,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABhw+mYC/x3M3QpAQBBA4VfRXJtaY1O8ilwsBpP8zVopeXeby
- +/inAc8q7CHKnlA+RIv2xqRpQl0k1tHRumjgQxZU+YGW4unYLeHQflAtxSERxCd0RZkifPeOWo
- h5rvyIPe/rpv3/QDJVAqNagAAAA==
-X-Change-ID: 20240930-b4-ti-cpufreq-am62-quirk-46242e3daa2b
+Message-ID: <20240930-b4-ti-cpufreq-am62-quirk-v1-1-b5e04f0f899b@ti.com>
+References: <20240930-b4-ti-cpufreq-am62-quirk-v1-0-b5e04f0f899b@ti.com>
+In-Reply-To: <20240930-b4-ti-cpufreq-am62-quirk-v1-0-b5e04f0f899b@ti.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar
 	<viresh.kumar@linaro.org>
@@ -80,50 +80,64 @@ CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis <afd@ti.com>, Dhruva
  Gole <d-gole@ti.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727688758; l=1497;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727688758; l=1968;
  i=d-gole@ti.com; s=20240919; h=from:subject:message-id;
- bh=V+A0Ou56M6vRoU0patGc9ECKhCoDzL11ztYMDea7pDc=;
- b=Cv67XpFDRnjp0A0mboBPuZUP7yx4pitiDbDFk0zZJXOKl1ZjAGIV5leaOg/urz592MIx8kRVX
- 6ZhBbMXCEORDnXncGSiHMx0fw3hvOE31yfGcnfDdFCcuqXLeTTFXv63
+ bh=hKcPQZ9QKW/4Ct9ay+psYCygKDSfJ1VBcEhEWjpP3ZM=;
+ b=1OBx1oHuSJtuOsD4aPoUrMyK5PptXJOecrzebu3uR4exev77TZElFDVncPBV1rRTzBdCDV8Yx
+ mjm5yalLCYTC51kOvF4rV92JeBoXlpeFpUmvAs0V1p3NlH6CfelFjZE
 X-Developer-Key: i=d-gole@ti.com; a=ed25519;
  pk=k8NnY4RbxVqeqGsYfTHeVn4hPOHkjg7Mii0Ixs4rghM=
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-With the Silicon revision being taken directly from socinfo, there's no
-longer any need for reading any SOC register for revision from this driver.
-Hence, we do not require any rev_offset for AM62 family of devices.
+The AM625 syscon for efuse was being taken earlier from the wkup_conf node
+where the entire wkup_conf was marked as "syscon". This is wrong and will
+be fixed in the devicetree. However, whenever that does happen will end up
+breaking this driver for that device because of the change in efuse offset.
 
-Also, maintain the backward compatibility with old devicetree, and hence
-add condition to handle the case where we have the zero offset such that we
-don't end up reading the wrong register offset in new AM625 DTs whenever we fix
-them up.
+Hence, to avoid breaking any sort of backward compatibility of devicetrees
+use a quirk to distinguish and accordingly use 0x0 offset for the new
+syscon node.
 
-These patches have been in discussion as part of another series, which is now
-being split up as per discussions with Nishanth. Ref. the following link for
-more context on the same:
-https://lore.kernel.org/all/20240926-ti-cpufreq-fixes-v5-v7-0-3c94c398fe8f@ti.com/
-
-**DEPENDS ON:**
-"mfd: syscon: Use regmap max_register_is_0 as needed"
-https://lore.kernel.org/linux-arm-kernel/20240903184710.1552067-1-nm@ti.com/
-
-This series has been tested on AM625 on top of above patch:
-https://gist.github.com/DhruvaG2000/40b80cc04a9ac90c86445d6e67ece4cb
-
+Suggested-by: Nishanth Menon <nm@ti.com>
 Signed-off-by: Dhruva Gole <d-gole@ti.com>
 ---
-Dhruva Gole (2):
-      cpufreq: ti-cpufreq: Allow backward compatibility for efuse syscon
-      cpufreq: ti-cpufreq: Remove revision offsets in AM62 family
+ drivers/cpufreq/ti-cpufreq.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- drivers/cpufreq/ti-cpufreq.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
----
-base-commit: cea5425829f77e476b03702426f6b3701299b925
-change-id: 20240930-b4-ti-cpufreq-am62-quirk-46242e3daa2b
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index ba621ce1cdda694c98867422dbb7f10c0df2afef..7014cebb41e3490cadd14834e0c3e057419f2abb 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -93,6 +93,8 @@ struct ti_cpufreq_soc_data {
+ 	bool multi_regulator;
+ /* Backward compatibility hack: Might have missing syscon */
+ #define TI_QUIRK_SYSCON_MAY_BE_MISSING	0x1
++/* Backward compatibility hack: new syscon size is 1 register wide */
++#define TI_QUIRK_SYSCON_IS_SINGLE_REG	0x2
+ 	u8 quirks;
+ };
+ 
+@@ -318,6 +320,7 @@ static struct ti_cpufreq_soc_data am625_soc_data = {
+ 	.efuse_shift = 0x6,
+ 	.rev_offset = 0x0014,
+ 	.multi_regulator = false,
++	.quirks = TI_QUIRK_SYSCON_IS_SINGLE_REG,
+ };
+ 
+ static struct ti_cpufreq_soc_data am62a7_soc_data = {
+@@ -354,6 +357,10 @@ static int ti_cpufreq_get_efuse(struct ti_cpufreq_data *opp_data,
+ 
+ 	ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
+ 			  &efuse);
++
++	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_IS_SINGLE_REG && ret == -EIO)
++		ret = regmap_read(opp_data->syscon, 0x0, &efuse);
++
+ 	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING && ret == -EIO) {
+ 		/* not a syscon register! */
+ 		void __iomem *regs = ioremap(OMAP3_SYSCON_BASE +
 
-Best regards,
 -- 
-Dhruva Gole <d-gole@ti.com>
+2.34.1
 
 
