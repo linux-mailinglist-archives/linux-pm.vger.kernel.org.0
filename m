@@ -1,117 +1,99 @@
-Return-Path: <linux-pm+bounces-14935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14936-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 321DD989EBF
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 11:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A3B989EC5
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 11:53:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63E691C21C58
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 09:53:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14BB81C21AFB
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 09:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E59F18873F;
-	Mon, 30 Sep 2024 09:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jk35nnik"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE8D189F5C;
+	Mon, 30 Sep 2024 09:53:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D0417CA03;
-	Mon, 30 Sep 2024 09:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1B2189BAC;
+	Mon, 30 Sep 2024 09:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727690005; cv=none; b=acg+6/cp2vcwxwwe6BXlaIYgDXHP0su3qtluv1pavlUqKwq/cfGTMDL+sehDXdS3WmnRkHLI9/Di6tviFcDbfeN6LOaDeTRY5/3LPh3mlL8dC3FPkRa10eTNLz2007WeTVk9bVy2Y6Q3CY4a3MFc3UXbxOCVxNi87cfunYGI/t0=
+	t=1727690028; cv=none; b=gEFKHZPeuwmXJSD6IriGYOYuSB4iszHe++ixNS9cR3fvbbTOOo1W2I16lkch2xTLA86kt+VPZ1g+LPkZ7p8vZWupkkMbZdJ2KmzLobaQaS/5XvBMGKx5uicDnekA2SW5OLLJml9F1USm11mXJ/sr4RtX/CNjXhX+YKALv8egsi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727690005; c=relaxed/simple;
-	bh=WwryNFNTrADMEFUUK+4XYSIziZV7c2lL0fLFpgjvOeM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G6C8DN08CiJHYYa+gXtftNNTcavcgoTaircHjGx5AYn4wT2smZ0EC12Ga+QaTVCgNP+twA2DDI7qCfP2ylyUKdzFxVit6S3NBqPW68bPD1hFOI2lLn3V00+S5rqkcX29KUUvwjSBtqY4fc/OHFNnSQh8RvWCAle8D4gOMK8k0II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jk35nnik; arc=none smtp.client-ip=209.85.218.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-a8d0d82e76aso684245266b.3;
-        Mon, 30 Sep 2024 02:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727690002; x=1728294802; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WwryNFNTrADMEFUUK+4XYSIziZV7c2lL0fLFpgjvOeM=;
-        b=Jk35nnikQOn+d8kDnV+dvj8HTj+ngfjmToiEJVAEVz6UUVAVjJWpH1BKmPriearFwm
-         sVCSAqPTehMjBA+tsasw5QNfUIMB3rS+xmznoM59yhzNA7KADoBCAGnemwF+X/rsy6Zs
-         dVmFIIMfsQDalz+5VmdcAWUJ0dPYCOaaIDUKHNi96miaN0w7l0y4U9pCQkEMUdZ+2syv
-         XscW/Qds17iKA+bQKJuEpRVkWBxuW9dIjsQ7sGpmq10xj26Si68kw5paAmiphd531BAb
-         qaI6ANJDcmJytGvZfdl6SyRRkBgNUzBZhGz0yVte/03GV7MIWEbZI9+6jZwWC2r1mDVn
-         U2FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727690002; x=1728294802;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WwryNFNTrADMEFUUK+4XYSIziZV7c2lL0fLFpgjvOeM=;
-        b=qthdeg8EBEJFIlHs8RrIqIVxuniu5o/faHJ7LDcBtm/qZlzqLpQTYLIXd9A1u0NTUF
-         eC2fyJ2Lh9faLWGQNKoEi6I8FFT7E08s1lqqz3KYf62x9r4vjyMcdGLTqbfaWFF3uU7i
-         AY3oaKtI8qhrPtajnis3D/94EQ9alCoUCq3qGojLEfQU0oi8R9XwjkaTf8w8BxQLHm8/
-         XyyWDzYQ5LN7dTHnjqIltuXaE1/5TJ9OOXzbWRyFf1x6KdhwRsdgUYT74FBTXf/6Vft8
-         upk/hvQencSGXY3RP4DeG7NuDLgKFF438hFdRsQRb3NIQubtQfi719b1ajaVEBGHIUQw
-         NAFg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4cxkoekSJpkMZ5T03BpiFEfRXWrbZmlnK/Nk1JkcHtlmxQ3v1FaimyHRJprS0o8pSTZDaexIL@vger.kernel.org, AJvYcCVjlhoB+1cZw9qkWxE/2snfx43lMkh1MGogj53Q1Je841OYvavBZt7UPqmr61G9f9qvHLx7BTEFzt5sp4A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlPzoDnC0oMP/eEMQHGdxG35hEGldqq8TBjqRE63KPRnRxApoY
-	nXoV7CAHeTeuKUOllCSBnkIhwwn3q+G/QU1ZOhnEubM+JwBbSJ+HmRIZ3OhxCmqBZaBbLkzxSgf
-	G8DxrHlrPysv+ks0sia26ZjWk53o=
-X-Google-Smtp-Source: AGHT+IFesu17FMSgHtqPjFAqDx+2j9HupmLvPFbzuG/osg6DHX7YGrWz9BBrfdV/IaFOEJ6v1+i2n+tRLAeTNs09GKc=
-X-Received: by 2002:a17:907:7e85:b0:a8d:1284:6de5 with SMTP id
- a640c23a62f3a-a93c49042e6mr1187463066b.14.1727690000776; Mon, 30 Sep 2024
- 02:53:20 -0700 (PDT)
+	s=arc-20240116; t=1727690028; c=relaxed/simple;
+	bh=RmgnHYxboZxokVh2pEqYY1w2qrz1HXqLTNCsYRXejHQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:CC:From:
+	 In-Reply-To:Content-Type; b=l/BggMCApHVvwJJMf0VMIbjHxAGLw7l2oDEE0f/ZXv6bkW8yPVl9SomI53tdtes4ouoj6ZvXyGfbVY6rGm1dPPevwgMjD///mRxc/6Rrs80wZbB6TMqFurPzL+yVzc57cZNhcGYTubZyZXl1tSu3V4tB0+v8SjUgcxU9Bq2LYlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4XHGb55qGWz2Dd5j;
+	Mon, 30 Sep 2024 17:52:49 +0800 (CST)
+Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8667214013B;
+	Mon, 30 Sep 2024 17:53:43 +0800 (CST)
+Received: from [10.174.176.82] (10.174.176.82) by
+ kwepemf500003.china.huawei.com (7.202.181.241) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 30 Sep 2024 17:53:42 +0800
+Message-ID: <6436838e-8b2d-4727-b207-e6c3168960e5@huawei.com>
+Date: Mon, 30 Sep 2024 17:53:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240927084145.7236-1-chenqiuji666@gmail.com>
-In-Reply-To: <20240927084145.7236-1-chenqiuji666@gmail.com>
-From: Qiu-ji Chen <chenqiuji666@gmail.com>
-Date: Mon, 30 Sep 2024 17:53:09 +0800
-Message-ID: <CANgpojVi8q9kaUsOY9-GGGbKbUe9H_eghqPbDEH1=U=ZZGkfwg@mail.gmail.com>
-Subject: Re: [PATCH] PM / devfreq: Fix atomicity violation in devfreq_update_interval()
-To: myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	baijiaju1990@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] pmdomain: qcom: cpr: Fix possible uninitialized value
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+References: <20240930094456.2593136-1-ruanjinjie@huawei.com>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>,
+	<ulf.hansson@linaro.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+From: "zhangzekun (A)" <zhangzekun11@huawei.com>
+In-Reply-To: <20240930094456.2593136-1-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemf500003.china.huawei.com (7.202.181.241)
 
-Hi MyungJoo Ham,
+Hi, Jinjie
 
-Based on our understanding of the code, the variable cur_delay stores
-the old value of devfreq->profile->polling_ms. We also agree that
-reading from *delay does not need to be protected by the lock. The
-reason we moved both definitions inside the lock is to maintain the
-original order of the code. We apologize for the misunderstanding this
-may have caused.
+I have sent a patch with the same modification before:
 
-If the read of devfreq->profile->polling_ms is not protected by the
-lock, the cur_delay that enters the critical section would not store
-the actual old value of devfreq->profile->polling_ms, which would
-affect the subsequent checks like if (!cur_delay) and if (cur_delay >
-new_delay), potentially causing the driver to perform incorrect
-operations.
+https://lore.kernel.org/linux-pm/20240926134211.45394-1-zhangzekun11@huawei.com/
 
-We believe that moving the read of devfreq->profile->polling_ms inside
-the lock is beneficial as it ensures that cur_delay stores the true
-old value of devfreq->profile->polling_ms, ensuring the correctness of
-the later checks.
+Best Regards,
+Zekun
 
-As for acquiring the lock in the caller, we believe that this is not
-suitable in this case because it may require introducing a new lock.
-Furthermore, the function takes a struct devfreq *devfreq as a
-parameter and accesses devfreq->profile->polling_ms, so holding
-devfreq->lock prevents devfreq->profile->polling_ms from being
-modified. Protecting the read operation with devfreq->lock seems
-natural and ensures that the retrieved value is the real old value of
-devfreq->profile->polling_ms, which we believe is effective.
-
-Thank you for your response, and we welcome further discussion.
-
-Qiu-ji Chen
+在 2024/9/30 17:44, Jinjie Ruan 写道:
+> of_property_read_u64() can fail and left "rate" uninitialized,
+> and the zero check in cpr_corner_init() for cpr_get_opp_hz_for_req()
+> can not prevent it and it will assign cdata[level - 1].freq to random
+> value, so init it to fix it.
+> 
+> Cc: stable@vger.kernel.org # v6.12
+> Fixes: 181c8148556a ("pmdomain: qcom-cpr: Use scope based of_node_put() to simplify code.")
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>   drivers/pmdomain/qcom/cpr.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pmdomain/qcom/cpr.c b/drivers/pmdomain/qcom/cpr.c
+> index e1fca65b80be..26a60a101e42 100644
+> --- a/drivers/pmdomain/qcom/cpr.c
+> +++ b/drivers/pmdomain/qcom/cpr.c
+> @@ -1052,7 +1052,7 @@ static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+>   			of_parse_phandle(child_np, "required-opps", 0);
+>   
+>   		if (child_req_np == ref_np) {
+> -			u64 rate;
+> +			u64 rate = 0;
+>   
+>   			of_property_read_u64(child_np, "opp-hz", &rate);
+>   			return (unsigned long) rate;
 
