@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-15007-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15008-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5DED98B7B4
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 10:57:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9B6298B82D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 11:19:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9E911C22E99
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 08:56:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 226E1B24873
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:19:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741DB19D08A;
-	Tue,  1 Oct 2024 08:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE3619DFA6;
+	Tue,  1 Oct 2024 09:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSp7UlM0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bniC7btZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F4A19D069;
-	Tue,  1 Oct 2024 08:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD5319D88B;
+	Tue,  1 Oct 2024 09:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727773009; cv=none; b=mtByrJStvWwstqt6Sqhir5GaMsSeHmvoLP686DV7B7c9PZBtFGrmHYLJCsnvfil5XTAlQ9MlFChhhgguPPByOvvRtQWZAE3QxbEMzuYm1/rd96DN0l+YQG9GjKTUe/citrAqEuUzte2LzTiII1E0crVPtJDywaTNiwSn+MP9Syg=
+	t=1727774373; cv=none; b=mWromkobNSdDf32R2uEOYOKYL00DD6o1pBLzrT/oCm6KHuJpu8as+dLCIMiuupF6BAzDMBVawGB0B9Ka2lBsP8ZzuTYeN5jT5T+dx/ob0lMYoVPulSATLAYKzqZQRT3X0ajLhpNuZxi2vwQs3tIU8g+fBqE3rPEMMhEiDNflpH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727773009; c=relaxed/simple;
-	bh=tPeuuHjO/gc3KpzJhDGRGcTjGt9PH6B/7enynVNU7nM=;
+	s=arc-20240116; t=1727774373; c=relaxed/simple;
+	bh=0+zqq8I71YD8M7Pz4rGT1nU7HRi8uRpkJ2RPt7fmdjA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=geM0F9eyDxXGZE6m9SFe7yv0pWP6Ioq542OFrH3cjST0mqZHZEEdyylstNnFXoZK3UNCO4bI/CKcY1mNWd3bBLrgWv24caQl/Olha9ZG7Bu9AQuw8l2FDRE7fNRkdgz9Aq4c76pfnRSNDLAjWh387dC70HjJXW8mOx9ei1wDnp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSp7UlM0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6C9C4CEC6;
-	Tue,  1 Oct 2024 08:56:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bIaULyBZ5gmdJUrp4CUgl9rHLYYiFsfxkR3zp9wwJJBZmPTrAdz7PYv6DLJR44g9RLDE4EBIzKxZ79A6aiqt+5RCaIKZ5kx+fYK2vtj0ZAjsNSAr01FZ1r9bxWoNKQm1CsElCsCIRQ5VbsBL8iSLaDVT5FJCbmUiFjn4b0kaiAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bniC7btZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2044C4CEC6;
+	Tue,  1 Oct 2024 09:19:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727773008;
-	bh=tPeuuHjO/gc3KpzJhDGRGcTjGt9PH6B/7enynVNU7nM=;
+	s=k20201202; t=1727774372;
+	bh=0+zqq8I71YD8M7Pz4rGT1nU7HRi8uRpkJ2RPt7fmdjA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OSp7UlM0nTNa8Nrrl3+8dUlo/4/2N8SY3JbcIoy2sshsAm5HN8PNQ/wVs4vQHm9mB
-	 UAzGasHvSves+1+Wey8UB4ArN23nLxoMh1U5Vh8MECiRQgfZrIG9R2B5onh6/BiWTN
-	 R23pVigmSH0rKu+2qsRfHnN3w1nayoUf/EhVTth9RiMjfxDy7+K4CX26tstOc8cL1p
-	 8/i07L2PKW56bzHw9US7gMgavPCipUzSJxaUb+CWFrIt1Bkg6wxKvLZjzH71DzQ2ak
-	 DImJiBS8hrwj/Flb7hPrNYhlCcvJ9hV9Y9kENC44e0LonXz/DLsv3v4aMoCqMQQokU
-	 NaDSL8LExYTeQ==
-Message-ID: <f9a8921e-7eb8-4e4f-ba73-39ae13570cca@kernel.org>
-Date: Tue, 1 Oct 2024 10:56:33 +0200
+	b=bniC7btZlUHkCtMRf0aGPtEX3e8TvkmBGT5ALusS0Qwh4dOskRdfJZJPnZjp1BSIV
+	 NliuEjW1maWMizkE2jmY/C69iEcCz1E1Ii8efDMtofgF4BUBOKWsQpY9PHf1iRoleh
+	 tUDOCRyyDivLcXgp3tmXax3Ii9arnA8kVh1MSmkmzwj7udPvNDm8RdNyo8TcMkT0U0
+	 7+uG1p3OHBjlha52YZQQKigchEIgISHVonylkKz5foit0T/MvtUXD2WfqRjdMmMApV
+	 1d01SoPTlHdyXZIlRoFo1AUqaDWSyvXXS5MMAJvDq+qIXzEExukq9MdCgUdiVZsv3q
+	 hK92KL9EKT+UQ==
+Message-ID: <79204678-166b-4009-b8d2-86d6cb120705@kernel.org>
+Date: Tue, 1 Oct 2024 11:19:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,6 +79,7 @@ References: <20240930073311.1486-1-macpaul.lin@mediatek.com>
  <20240930073311.1486-2-macpaul.lin@mediatek.com>
  <6l6hb264yvhd6e6neurd5t4gmv5z5c5gpg27icijif3hq4cuu7@pbhfkdxb2eam>
  <42dc4e9a-efcd-e166-b4fd-d4fe0dcd3c77@mediatek.com>
+ <c2fb40cc-491f-1c1a-7343-c70a60b3a031@mediatek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -124,44 +125,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <42dc4e9a-efcd-e166-b4fd-d4fe0dcd3c77@mediatek.com>
+In-Reply-To: <c2fb40cc-491f-1c1a-7343-c70a60b3a031@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 01/10/2024 09:05, Macpaul Lin wrote:
-> On 10/1/24 14:34, Krzysztof Kozlowski wrote:
+On 01/10/2024 09:50, Macpaul Lin wrote:
 > 
-> [snip]
 > 
->>> +description: |
->>> +  The communication between MT6358 and SoC is through Mediatek PMIC wrapper.
->>> +  For more detail, please visit Mediatek PMIC wrapper documentation.
->>> +  Must be a child node of PMIC wrapper.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - mediatek,mt6366-sound
->>> +      - mediatek,mt6358-sound
->>> +    const: mediatek,mt6358-sound
+> On 10/1/24 15:05, Macpaul Lin wrote:
+>> On 10/1/24 14:34, Krzysztof Kozlowski wrote:
 >>
->> This wasn't ever tested.
+>> [snip]
+>>
+>>>> +description: |
+>>>> +  The communication between MT6358 and SoC is through Mediatek PMIC 
+>>>> wrapper.
+>>>> +  For more detail, please visit Mediatek PMIC wrapper documentation.
+>>>> +  Must be a child node of PMIC wrapper.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - mediatek,mt6366-sound
+>>>> +      - mediatek,mt6358-sound
+>>>> +    const: mediatek,mt6358-sound
+>>>
+>>> This wasn't ever tested.
+>>
+>> Hum, I have indeed tested it with linux-next/master branch.
+>> Ran dt_binding_check with dtschema trunk with this single file
+>> but didn't get any warning or errors.
+>> 'make dt_binding_check DT_SCHEMA_FILES=mt6358.yaml'
+>>
+>> Could you please help to paste the error log for me?
+>> If there are new errors, I need to check if there is any
+>> environment issue.
 > 
-> Hum, I have indeed tested it with linux-next/master branch.
-> Ran dt_binding_check with dtschema trunk with this single file
-> but didn't get any warning or errors.
-> 'make dt_binding_check DT_SCHEMA_FILES=mt6358.yaml'
-> 
-> Could you please help to paste the error log for me?
-> If there are new errors, I need to check if there is any
-> environment issue.
+> I've both tested both of the following format pass dt_binding_check.
+> #1.
+> properties:
+>    compatible:
+>      items:
+>        - enum:
+>            - mediatek,mt6366-sound
+>            - mediatek,mt6358-sound
+>        - const: mediatek,mt6358-sound
 
-Hm, I don't know, indeed Rob's does not report failure here, so my
-comment was not right. Syntax is unexpected or wrong - const with enum.
-Is this a list? If list then you duplicated compatible. Then maybe
-implicit oneOf?
-
-BTW, filenames are expected to match compatible.
+I don't understand what you wanted here. neither oneOf nor ietms make
+any sense. Why "mediatek,mt6358-sound", "mediatek,mt6358-sound" is a
+correct compatible?
 
 Best regards,
 Krzysztof
