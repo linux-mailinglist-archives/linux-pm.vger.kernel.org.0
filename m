@@ -1,120 +1,167 @@
-Return-Path: <linux-pm+bounces-14983-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14984-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB2BD98B322
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 06:54:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C33E98B3A0
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 07:27:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D536B229C0
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 04:54:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEE1A282DA6
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 05:27:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B6A1BB6B5;
-	Tue,  1 Oct 2024 04:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F68194A43;
+	Tue,  1 Oct 2024 05:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iHYq1pQE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZqChmdl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F21E1BAEF8
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 04:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAD8653;
+	Tue,  1 Oct 2024 05:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727758487; cv=none; b=WyIRBohFuOyPUYMALGYGJfjPtD7+85iasHutenghMuQLeByuAP45ihB3waQB7roW4IietYG6D+cfjf4vtTnveHSKlkwcld5F+6A+2t8l6WBbc+XiUe/f+J9h5W73I73SmQo9mSbK0nqS6fLh85Rt55QnCZ5O0xRdRl0F3UgmHHY=
+	t=1727760435; cv=none; b=LbwnlUoESw3I13eD/xBkfxSLidqmDaPTjm/WU5hUI5XmkNkhStESsOXUFmye5UwucLT/evCnVQDBVHKxGUZxZc3EGf4+quYkA1513F435fP8X/XztC85QyczNCv7qkxX/Ae4nzYjMhAqNOtA455RlGz04J8Jem3JYZywSZg+Uts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727758487; c=relaxed/simple;
-	bh=SFcYxeh6D6hQziheMn4w8C17Py5ysIvLmDhsp6Mf3As=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=grQMNEh0jSXwQR7r4SIQP6l0+lEE1C679AZmZCHn1tKZRGXml62oN2otFT+0b51FzOibTkdLWzB3jjSPHOZRIRz4F8Xp7djJ1pYvQL3gwhTdIizCMmxsfKR4AUNoef0o2kPCgVH6dX8i8ZAWcSLs3DEGR5IyWPeH7QfgQjYcUcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iHYq1pQE; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20ba733b904so8368755ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 21:54:46 -0700 (PDT)
+	s=arc-20240116; t=1727760435; c=relaxed/simple;
+	bh=oKI19iAtAvAoJtl1exIQLMbgeJ3sVbyO3DmgF8Sh0Pc=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=p3Bs2Mvj6G5hOX3DcoRv9Fcs2vLF8Bh5k4HQs100VsX3dGcwHY8OrWDc9P7mpbwet+jZEXTUEKH56RTKhIrWozP5GGsSiUJA7sY8L0s3YMmjYG8y8qprp7DDOxqTPR+WEPoHxKeuGeL4GO2qn8yWZyyTRh/F8mbr1iD+TiLsov8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZqChmdl; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42cae4eb026so49164675e9.0;
+        Mon, 30 Sep 2024 22:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727758485; x=1728363285; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgOc1RXmYSlrn8XevR/ExtFztBKGG/uI3XFCUWmMOYA=;
-        b=iHYq1pQE4OFhqEcRNCWzXSpQpGikDECahaO2bokKhrol7KN15rkEAZ7ZYxJqDLdFaA
-         ssc4BON7E4pcFQeK+OU16YFUvWxbTACAM7tS9urPZsCH/VN7Z9JvObFao0CvMajEPDNc
-         p0GQpqV8tB+Yxvm0YM0g7l3/X82tP5v0Lpt6rj6b9RkAI83DGWvkdCodk9aYUuutUPRF
-         yqO85BLlWgUx95gbj1PA13jHNhETFfkRl4XTiQqUbYC2Rr6QCQmRufUMMoy8ErmOd+Ru
-         hSE3ox77YLf37RNVnH0hGy7iPmall1pWp0pRlqYUi1sh2Sy1k2EDuQm0R/qyhqphZ4Oa
-         ZNIg==
+        d=gmail.com; s=20230601; t=1727760432; x=1728365232; darn=vger.kernel.org;
+        h=mime-version:date:references:organization:in-reply-to:subject:cc:to
+         :from:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=mSNy5y8MRampAtLcSp3doOd62kowEaAUNqS9Ck/CGwo=;
+        b=ZZqChmdlVD528ISyj2fVV8VIrpihTF+Zspe4FdV7BWtXGFlHuaPIu4Wd3NZLMCex35
+         8uzFmfA8CJdExJNsxkG9GbbIdg9QW/OwiJtBIOFrymd19d5T7NeKqW5iOSioAWdxwM7e
+         M0cVmfyDYzx/z66P0JhOPzbowtAhl7YWCwURC2HwLs5sT2dGUkJIBOYg6eZWwIwPox/q
+         0szFym46vqx1GQpLi4fFFHsRz+of45S1nOx0hLeNzmlOr9T/FON4hGONwEs3KDvWbiZC
+         VSJFdEI67D/hlq4UZbmcYcUlE6tA3XlfQzt0Gqbg/7D+9nePDqiid7mcdW6gj9StzAGs
+         RILw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727758485; x=1728363285;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1727760432; x=1728365232;
+        h=mime-version:date:references:organization:in-reply-to:subject:cc:to
+         :from:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZgOc1RXmYSlrn8XevR/ExtFztBKGG/uI3XFCUWmMOYA=;
-        b=N3WIoSw6XVPWye9othwZdesuW8ph4QOBbvYmNLVIyHcta1jTDZTA35hw1lyA4OZESu
-         HHKfsOJ6JIPuOSntLCyLIl+aj7SWefsmWIaghyidvKmW180MU0WCPzDZBDQvdnFu0DGy
-         LwUeUjUdzVWxtop0pWxnSfj2RzT45scbk92cVujcbYnGbiZWuvb0yPrOl9NeUFVRj00p
-         P0seymMuRlqXtI8xAJqEXUAGTKNWnG0VB6gFRlc0ofzqpekCA/XY1Fg+LMExx7su8MBd
-         pN3TV3uldmikvXYj5km5vvh+Yl18OaVUY9O2lG/sah8/AiISNppvu6Hg4AVwgqgPYPWQ
-         h/kw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0fc56igkij0lM+l80G0KJCKfx93CA4UQG7YncGBMht06x+CxzL4stlLWWD5NPTHbBn0Dz/gpuEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVkEiDf3lFK1FP6qGp+fbVTsx7w/wN9vhJVBbXSJZLW0O1y1dP
-	0FrQJnKShklIj8yYoDo2H1p3lucV0uj3Cf4U0cAIlhERtbEwa2e+54Coc4FNYaQ=
-X-Google-Smtp-Source: AGHT+IEimOh3pb8T09w8gjZKssoPclvF61Bdah2TzwsD7k8Ppv+rvDr/IX+I89OOAH9g09+8afhcLA==
-X-Received: by 2002:a17:903:22cc:b0:20b:7388:f73 with SMTP id d9443c01a7336-20b738814e7mr124493935ad.42.1727758485621;
-        Mon, 30 Sep 2024 21:54:45 -0700 (PDT)
-Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e51811sm62200475ad.259.2024.09.30.21.54.44
+        bh=mSNy5y8MRampAtLcSp3doOd62kowEaAUNqS9Ck/CGwo=;
+        b=SxngGykeRM6cmgvjPy4y8eE3wKW99lc+pXykc/+HPEk+KccFyB0ZP2MSLk+iz+bchs
+         ZlvPnf1ozZHdwLbecHPXR1aK6w5Z4xrQoa1eEugFTiCvnU/zAVcw2bkqe+fRAa7z7+v2
+         jpQAOQ1G2teBZYzyXXEFkd84laWQjzq2oDKwNUrDudUmkg9u4a7ajc9rWdEymbTIFxMS
+         XXHwesZJDWCVZTr2/Ycrn/RlDq+5JLVYu9itQDef+IGxYJFDSxQVTqkXwBe7n2qwdU1p
+         UjAckSyntsTkrSq2yZM8cD2xwHm9CIFkK7ky+o+bLYPfW9rUS1B/erzgK/6MtQk2+uFs
+         Q3bw==
+X-Forwarded-Encrypted: i=1; AJvYcCUTyuqVQnI0vZTeuU0/17KNjYcEVQbeUD5hsYeAPIzxELkPWlv2cALlL5ynfsfvcvI9ikdbauepT0w+sqs=@vger.kernel.org, AJvYcCXC6qOupcADzuuB+grqOviHtOCcubPYyBGkM/YxIWnddpAO84d3xtfwXRkek+V30EdKq1jUH/pox1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxfoirw6O8a3uXaymJPsLV6A3S3Dclr3pTuIVT5tK50nKMqt5FN
+	l5rdTe6gpInGdfGHTAoLYZi0DUej+KBC7XkGTs9eyKrGxyyAIKkv
+X-Google-Smtp-Source: AGHT+IH4/tldL4pRTuNdDUjX9RV3d5PPP0q/x4GoUfPF0RdBDxFK2Me8cmWrcOvnSLCnT0x768oJ4A==
+X-Received: by 2002:a05:600c:a4b:b0:42c:b6e4:e3aa with SMTP id 5b1f17b1804b1-42f5840d0e8mr107343195e9.5.1727760431641;
+        Mon, 30 Sep 2024 22:27:11 -0700 (PDT)
+Received: from localhost ([37.72.3.43])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e969ffa22sm170038555e9.25.2024.09.30.22.27.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 21:54:44 -0700 (PDT)
-Date: Tue, 1 Oct 2024 10:24:42 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Zhang Zekun <zhangzekun11@huawei.com>
-Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-	linux-pm@vger.kernel.org, chenjun102@huawei.com
-Subject: Re: [PATCH] OPP: Remove unused declarations in header file
-Message-ID: <20241001045442.y6oh3bpka27rjstd@vireshk-i7>
-References: <20240907080701.102266-1-zhangzekun11@huawei.com>
+        Mon, 30 Sep 2024 22:27:10 -0700 (PDT)
+Message-ID: <66fb882e.7b0a0220.1118d5.90ca@mx.google.com>
+X-Google-Original-Message-ID: <871q1075qr.fsf@>
+From: =?utf-8?Q?Miquel_Sabat=C3=A9_Sol=C3=A0?= <mikisabate@gmail.com>
+To: rafael@kernel.org
+Cc: viresh.kumar@linaro.org,  linux-pm@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Avoid a bad reference count on CPU node
+In-Reply-To: <20240917134246.584026-1-mikisabate@gmail.com> ("Miquel
+ =?utf-8?Q?Sabat=C3=A9=09Sol=C3=A0=22's?= message of "Tue, 17 Sep 2024
+ 15:42:46 +0200")
+Organization: Linux Private Site
+References: <20240917134246.584026-1-mikisabate@gmail.com>
+Date: Tue, 01 Oct 2024 07:27:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240907080701.102266-1-zhangzekun11@huawei.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha512; protocol="application/pgp-signature"
 
-On 07-09-24, 16:07, Zhang Zekun wrote:
-> The definition of _update_set_required_opps() has been removed since
-> commit e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required
-> OPPs").
-> 
-> Besides, the definition of _put_opp_list_kref() has been removed since
-> commit 03758d60265c ("opp: Replace list_kref with a local counter").
-> Let's remove the empty declarations in header file.
-> 
-> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+On dt., de set. 17 2024, Miquel Sabat=C3=A9 Sol=C3=A0 wrote:
+
+> In the parse_perf_domain function, if the call to
+> of_parse_phandle_with_args returns an error, then the reference to the
+> CPU device node that was acquired at the start of the function would not
+> be properly decremented.
+>
+> Address this by declaring the variable with the __free(device_node)
+> cleanup attribute.
+>
+> Signed-off-by: Miquel Sabat=C3=A9 Sol=C3=A0 <mikisabate@gmail.com>
 > ---
->  drivers/opp/opp.h | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-> index 318a4ecbabf1..641e4bccf68e 100644
-> --- a/drivers/opp/opp.h
-> +++ b/drivers/opp/opp.h
-> @@ -263,9 +263,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *o
->  int _opp_add_v1(struct opp_table *opp_table, struct device *dev, struct dev_pm_opp_data *data, bool dynamic);
->  void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
->  struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
-> -void _put_opp_list_kref(struct opp_table *opp_table);
->  void _required_opps_available(struct dev_pm_opp *opp, int count);
-> -void _update_set_required_opps(struct opp_table *opp_table);
->  
->  static inline bool lazy_linking_pending(struct opp_table *opp_table)
+>  include/linux/cpufreq.h | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index d4d2f4d1d7cb..aabec598f79a 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1113,10 +1113,9 @@ static inline int parse_perf_domain(int cpu, const=
+ char *list_name,
+>  				    const char *cell_name,
+>  				    struct of_phandle_args *args)
 >  {
+> -	struct device_node *cpu_np;
+>  	int ret;
+>=20=20
+> -	cpu_np =3D of_cpu_device_node_get(cpu);
+> +	struct device_node *cpu_np __free(device_node) =3D of_cpu_device_node_g=
+et(cpu);
+>  	if (!cpu_np)
+>  		return -ENODEV;
+>=20=20
+> @@ -1124,9 +1123,6 @@ static inline int parse_perf_domain(int cpu, const =
+char *list_name,
+>  					 args);
+>  	if (ret < 0)
+>  		return ret;
+> -
+> -	of_node_put(cpu_np);
+> -
+>  	return 0;
+>  }
 
-Applied. Thanks.
+Gently ping :)
 
--- 
-viresh
+Do you have some time to take a look at this fix?
+
+Thanks,
+Miquel
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJJBAEBCgAzFiEEG6U8esk9yirP39qXlr6Mb9idZWUFAmb7iCwVHG1pa2lzYWJh
+dGVAZ21haWwuY29tAAoJEJa+jG/YnWVl+FYQAJiRWLjb+cys0g8k9a5Ga1kqMuuw
+j+TxywI/JQvzbbdH+hKfiCh/AtoobXrpxl7rKZG0TKvVIGShEdJ9oBkul2XY4KF4
+RWyKgo6AEHLIK7dUtdqoaQbvdkSo4VXpaHUScYwsLVXtwWKDZchQPaaRlz9TVkVX
+0hR+EIP+9fLSzKyEu3KXidwajZsaHdH15EFPwsiPtAyVDFvFdPrbXXmBita5Bkn1
+P2yIfja1kmdYlugRVATbRm6m75vYw5A6PbhpTT0h0k8U3v3c+tN6Fiy56ZVxzgku
+iuXTz1J8Q4QBmNIRTmul+cmvk0ldPJxFi7G4wHgR0Jj+CN0XngQDPukrjy99tDx/
+EADEsj5iFfzWB5H1tFo4OpVI8YiTJViZ1e35pb67niM32bUxY7NTm5ETH0OoClId
+2SGhtkQ2hKKhQrZDAMUUCreOrp5WFNPjaDAiYWHOzL0NabXfuadpOICH3yTFk9i6
+xX9GMKZAM7XUyml0vAr5O4ZBefTWQ+CayHyZQlM6NQUE3R4yN766BJAfWL5V8eE5
+8qYNqPaly2DLudg+eqdbwi4N2sH4k8HkFeUj13BFPg2F/4vEzQ3X8oXsXlNSXRZZ
+tFdERZ/MEpQsASXvPgXFM4I4hgUz7xKNQe44l1h6HP5DlSnUM324+lPE1f9vS6bo
+JbAzs6baX9cDSu82
+=i1bU
+-----END PGP SIGNATURE-----
+--=-=-=--
 
