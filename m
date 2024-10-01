@@ -1,155 +1,142 @@
-Return-Path: <linux-pm+bounces-15028-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E74398C1BC
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 17:36:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0235098C56B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 20:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41611286EB5
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 15:36:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B07C81F255FD
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 18:32:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A788E1CB314;
-	Tue,  1 Oct 2024 15:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327321CCB3F;
+	Tue,  1 Oct 2024 18:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FR5sHTrm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQKkEate"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA331C9EC1
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 15:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091C4194083;
+	Tue,  1 Oct 2024 18:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727796971; cv=none; b=JENWMWev8CwLFcZ6UQ7+p7AuIuejcZ/bKDzb6h7K3HIr1yJ4CwakJ2Jwkup+dJqzrnnKQVbd3t823Sfgsdc9kxLnKrSN4ogX0mMwYJw6XuzfueRnS7A7cTRlBBZv3iUmULn72GOn7ZCZBoRQlur/1yO9dxSQZYZ6ioxdhIcAVj4=
+	t=1727807482; cv=none; b=j5U14i+f4XU+E5J7f+ZkEFdu6JtnA53rtqjuSy6zOzZwxNvyfb6llFDAYY5YMOHMFzWibPzbIDJH/Xy5gOF7sgYrlxZ1P4tvDXpjXo1KQrYM9hjp9cUvGnFguWf6OxdbhBLcUddUUcNCkhe6R1hm3mUseWS8quz46Fc9btOtN6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727796971; c=relaxed/simple;
-	bh=kN1p3bVPBmWTODx3fCU3W9xMzs9MpIS/egm2ExIsaZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cal0DyQjFW308z5j1zS8MSNXMMb+smogHRUiUL+B4vYxZSkm/1JTy7FAqPalq4g+xRSuz3v2gIGLXukBjxL2r5btkkhuAfMpyds8Dky09jzB+DBnmXzM8nR6+BIlaAIwxSngijYZ4o1JJaYPRmmQxP4tuf/mnvkn7I4JKExokAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FR5sHTrm; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 1 Oct 2024 08:35:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1727796967;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=32Q5lzmZrkJ5L4hpQaXBrF/A6/szWXXqzVVtbQ1nd7E=;
-	b=FR5sHTrmIz5pif3i2vsHSSam8/HnX26X81OIgTcwQTF1+8b1qzHuS1Uqm82hOXM1VmJrTB
-	Wm4vMkgTbsYpUIJZSEX2UwsnjjQu6FEdEokcLlunUrZFfHMDYEeQG/HpVO6sVUH/SEB8+t
-	3Dy9ZPsJwINeQoLOZhUt1OTywf6nu7o=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: Re: [PATCH v5 3/5] KVM: arm64: Add support for PSCI v1.2 and v1.3
-Message-ID: <ZvwW1y1pWln5l99M@linux.dev>
-References: <20240926184546.833516-1-dwmw2@infradead.org>
- <20240926184546.833516-4-dwmw2@infradead.org>
+	s=arc-20240116; t=1727807482; c=relaxed/simple;
+	bh=2tk1PpL1DZ09dcBp6tnCEGsXYDa9FLALHb+6UNzOzgc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IeS142DIH/Y4HI/D2pW03Pikw+7yGMbbujTRJrNm23WZCgRaEoEb8gthDjIfrX6KJJIQ0gfk7yZOhs9Iy7RDIJYRGu0N/l2CaUcT8PrCCzwaS4I03KUdgdH4MkMxJI24Mq1vyQDBJnbvOQuZXsS6IVYXgJLP6hKg/wgkdRjsp/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQKkEate; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850BBC4CEC6;
+	Tue,  1 Oct 2024 18:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727807481;
+	bh=2tk1PpL1DZ09dcBp6tnCEGsXYDa9FLALHb+6UNzOzgc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BQKkEate0N5vja8cnlVKCkyZGcDsOadL/GrC5VOCMAsKaJlX5Dfj6vTRhUgatearA
+	 ABiX4Y93rq1vRH2kufQygARWvkE0y7ih9gcIjAqAUhbyd7akTfursAGlnaK5LruEft
+	 bnweoqCkFVlfF6UAXzscUgHI/lbJjqhGxkUr+YBS17OAkb/eJJlpEZ1NtBUO/5FaXd
+	 JSBlHEFoidWgRs4Mn/rIwURmnHRUEHMoAZn2vEWT+MiqSmt6/Sa/XCxfrGcx79t9/8
+	 rQpaXrlZMPSnVsL8BCRXRAixyABQdb+mPN4c55bBaf5cj6M2SaIyFoLUsYktkclpvU
+	 TAXkurPi5XXIA==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5e20de1d302so2835125eaf.0;
+        Tue, 01 Oct 2024 11:31:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVX5lhjAUrsUVnbPeeSkl/McReMD7u8QYEQUuFgFB1bwrKc5RL22Z9wWcczRarC5TdF+Wblj+RjN+NO8Js=@vger.kernel.org, AJvYcCXRQeniD0GrK/lw07PNBaF1OdSRlIyP9wokI75Bk3sEwPo2FLXsFP0/L8NaZHSIsiPuP0hIHNI77IE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDk+XtljrVYxSJa+UCj7DkJ91PM8aYVYa3qDLozt1GVueMrM8x
+	mMuIesoP2zS59fOhBMUV2LQRfTqRmGjIzT5fi/GTeHY3E24tczPwBWyUVIcA4cH7/CQzdw/QWIN
+	odCjsLw78w548U4Mh4U9t9OF4b8M=
+X-Google-Smtp-Source: AGHT+IE2fKou/vy3MQNwqhzWobPpz2dXeNFsWUlf6kqsQzfiaJnKTG+dCtuITQruIeDcjUr5Zz9ZgzlsfmwvD2dyJjg=
+X-Received: by 2002:a05:6820:80d:b0:5e5:b745:f73b with SMTP id
+ 006d021491bc7-5e7b1ccbe0dmr726796eaf.1.1727807480907; Tue, 01 Oct 2024
+ 11:31:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240926184546.833516-4-dwmw2@infradead.org>
-X-Migadu-Flow: FLOW_OUT
+References: <a4a70646-98a4-4b85-955e-62d66ba68927@arm.com>
+In-Reply-To: <a4a70646-98a4-4b85-955e-62d66ba68927@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 1 Oct 2024 20:31:09 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jpdZBX5tJgdiOvEZbdRJ0kXxT6+uX=s++NG=dNrCMntQ@mail.gmail.com>
+Message-ID: <CAJZ5v0jpdZBX5tJgdiOvEZbdRJ0kXxT6+uX=s++NG=dNrCMntQ@mail.gmail.com>
+Subject: Re: [PATCHv2] cpufreq/schedutil: Only bind threads if needed
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Qais Yousef <qyousef@layalina.io>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-pm <linux-pm@vger.kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Pierre Gondois <pierre.gondois@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 26, 2024 at 07:37:58PM +0100, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+On Fri, Sep 27, 2024 at 10:59=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> Remove the unconditional binding of sugov kthreads to the affected CPUs
+> if the cpufreq driver indicates that updates can happen from any CPU.
+> This allows userspace to set affinities to either save power (waking up
+> bigger CPUs on HMP can be expensive) or increasing performance (by
+> letting the utilized CPUs run without preemption of the sugov kthread).
+>
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
 
-Please, add changelogs to your patches.
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-What we really need here is the detail on *why* we can just bump the
-PSCI version like this, i.e. no new required ABI. On top of that, you
-could mention that KVM has made the implementation choice to provide
-SYSTEM_OFF2 unconditionally in its PSCIv1.3 implementation.
+and I'm assuming that this will go in via tip.
 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 > ---
->  arch/arm64/kvm/hypercalls.c | 2 ++
->  arch/arm64/kvm/psci.c       | 6 +++++-
->  include/kvm/arm_psci.h      | 4 +++-
->  3 files changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> index 5763d979d8ca..9c6267ca2b82 100644
-> --- a/arch/arm64/kvm/hypercalls.c
-> +++ b/arch/arm64/kvm/hypercalls.c
-> @@ -575,6 +575,8 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->  		case KVM_ARM_PSCI_0_2:
->  		case KVM_ARM_PSCI_1_0:
->  		case KVM_ARM_PSCI_1_1:
-> +		case KVM_ARM_PSCI_1_2:
-> +		case KVM_ARM_PSCI_1_3:
->  			if (!wants_02)
->  				return -EINVAL;
->  			vcpu->kvm->arch.psci_version = val;
-> diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
-> index fd0f82464f7d..5177dda5a411 100644
-> --- a/arch/arm64/kvm/psci.c
-> +++ b/arch/arm64/kvm/psci.c
-> @@ -328,7 +328,7 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
->  
->  	switch(psci_fn) {
->  	case PSCI_0_2_FN_PSCI_VERSION:
-> -		val = minor == 0 ? KVM_ARM_PSCI_1_0 : KVM_ARM_PSCI_1_1;
-> +		val = PSCI_VERSION(1, minor);
->  		break;
->  	case PSCI_1_0_FN_PSCI_FEATURES:
->  		arg = smccc_get_arg1(vcpu);
-> @@ -486,6 +486,10 @@ int kvm_psci_call(struct kvm_vcpu *vcpu)
->  	}
->  
->  	switch (version) {
-> +	case KVM_ARM_PSCI_1_3:
-> +		return kvm_psci_1_x_call(vcpu, 3);
-> +	case KVM_ARM_PSCI_1_2:
-> +		return kvm_psci_1_x_call(vcpu, 2);
->  	case KVM_ARM_PSCI_1_1:
->  		return kvm_psci_1_x_call(vcpu, 1);
->  	case KVM_ARM_PSCI_1_0:
-> diff --git a/include/kvm/arm_psci.h b/include/kvm/arm_psci.h
-> index e8fb624013d1..cbaec804eb83 100644
-> --- a/include/kvm/arm_psci.h
-> +++ b/include/kvm/arm_psci.h
-> @@ -14,8 +14,10 @@
->  #define KVM_ARM_PSCI_0_2	PSCI_VERSION(0, 2)
->  #define KVM_ARM_PSCI_1_0	PSCI_VERSION(1, 0)
->  #define KVM_ARM_PSCI_1_1	PSCI_VERSION(1, 1)
-> +#define KVM_ARM_PSCI_1_2	PSCI_VERSION(1, 2)
-> +#define KVM_ARM_PSCI_1_3	PSCI_VERSION(1, 3)
->  
-> -#define KVM_ARM_PSCI_LATEST	KVM_ARM_PSCI_1_1
-> +#define KVM_ARM_PSCI_LATEST	KVM_ARM_PSCI_1_3
->  
->  static inline int kvm_psci_version(struct kvm_vcpu *vcpu)
->  {
-> -- 
-> 2.44.0
-> 
-
--- 
-Thanks,
-Oliver
+> - v2: Add comment for the dl_task_check_affinity return (Juri)
+> v1: https://lore.kernel.org/lkml/480f2140-ea59-4e1d-a68d-18cbcec10941@arm=
+.com/
+>
+>  kernel/sched/cpufreq_schedutil.c | 6 +++++-
+>  kernel/sched/syscalls.c          | 7 +++++++
+>  2 files changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_sche=
+dutil.c
+> index c6ba15388ea7..10faab849a3e 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -691,7 +691,11 @@ static int sugov_kthread_create(struct sugov_policy =
+*sg_policy)
+>         }
+>
+>         sg_policy->thread =3D thread;
+> -       kthread_bind_mask(thread, policy->related_cpus);
+> +       if (policy->dvfs_possible_from_any_cpu)
+> +               set_cpus_allowed_ptr(thread, policy->related_cpus);
+> +       else
+> +               kthread_bind_mask(thread, policy->related_cpus);
+> +
+>         init_irq_work(&sg_policy->irq_work, sugov_irq_work);
+>         mutex_init(&sg_policy->work_lock);
+>
+> diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+> index aa70beee9895..2ef1cb8626bc 100644
+> --- a/kernel/sched/syscalls.c
+> +++ b/kernel/sched/syscalls.c
+> @@ -1172,6 +1172,13 @@ int dl_task_check_affinity(struct task_struct *p, =
+const struct cpumask *mask)
+>         if (!task_has_dl_policy(p) || !dl_bandwidth_enabled())
+>                 return 0;
+>
+> +       /*
+> +        * The special/sugov task isn't part of regular bandwidth/admissi=
+on
+> +        * control so let userspace change affinities.
+> +        */
+> +       if (dl_entity_is_special(&p->dl))
+> +               return 0;
+> +
+>         /*
+>          * Since bandwidth control happens on root_domain basis,
+>          * if admission test is enabled, we only admit -deadline
+> --
+> 2.34.1
 
