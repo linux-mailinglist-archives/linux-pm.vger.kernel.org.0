@@ -1,138 +1,154 @@
-Return-Path: <linux-pm+bounces-14981-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14982-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A96A98B0C5
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 01:22:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A77A998B1E8
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 03:45:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AD1C1F227DF
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2024 23:22:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05FD6B217AC
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 01:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7799618952B;
-	Mon, 30 Sep 2024 23:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nc14ZOv5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417106FBF;
+	Tue,  1 Oct 2024 01:45:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp153-141.sina.com.cn (smtp153-141.sina.com.cn [61.135.153.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76DA188A3B
-	for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 23:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2089980B
+	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 01:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.135.153.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727738551; cv=none; b=MA6fcpMAkVdWTkh5fx0qpAv0ikdAZCRq6x9idXLjgHAt7MS2t+LdIGrSM7LfQDDAykuNG1fzqqzspzkRAShutkE4xsxS8gGEJ1E0ZLP3JsG6RwDUgPvBMXXOMkJCdPkUXHGvfkvX66M1TXHjNLxOIXVHOWVi/FBOBocy9NTsQ/w=
+	t=1727747144; cv=none; b=LMthAW+HwA8N7PiY+jj1Dk7u7h87Z4yuXRkwELPE8ejM+4MQHN5vXk6GSitcWbDbJNv5PgPp+MY8oTYvJ9Q+9yim/uPiDO0HXkcVMZ5kXy8+EHio9izXJN2DGdt9CfIXkDoSkw7mubE6vA3gIAIQ3eYwUGx5p7CSEkRZfHjk1zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727738551; c=relaxed/simple;
-	bh=clfiWsrp4dGFaYI7d55/qc7iYZnYzDRDMc8mRva9740=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=apyNCDerd5SH7gMRkCJbqmblOHkMkkWAidGtRQ0nAE0ViNaNfkbBwRkHJ0heZugDMrLuxXynCHkT/R8NYlAEvA1QGnsm06JGwtQYUQDFC52cZHbYU++ryAOYmnNSl9Go/wnDbGdiZB1J90wOtB3kD7xjE64TXfFmfpivdycNu4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nc14ZOv5; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1727738548;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hpg+FWuxwhA58ZIorLNy68eTkaxxlrOGEB+b9Y3QOMc=;
-	b=Nc14ZOv5g/5FykP0Gt0GMsqlhlijtppvHumEgstKNq9YPNzO2tPNdpaf/PRV8kMbH51MBB
-	WeM9SC5HqOW04Sxf5j3f9050gGSrSrBemovmwOO3JS9ugSHjcLUhQUW8C6ND+rYbaAQbch
-	ffKjKatNVCJh7Cnbl73Z04CR0DSADdQ=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-16-1sJJYgsQNhufS3AKcuKGDw-1; Mon, 30 Sep 2024 19:22:27 -0400
-X-MC-Unique: 1sJJYgsQNhufS3AKcuKGDw-1
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-20b4d8b489aso26742675ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 16:22:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727738546; x=1728343346;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hpg+FWuxwhA58ZIorLNy68eTkaxxlrOGEB+b9Y3QOMc=;
-        b=mTE7GgwdYat4s3WHP+mHPcUJPhSMAx+rBfH3jRMvLTCCmQJhqylS1PpKpT8O11PoUE
-         Dvblc+v2W4D2gqhIuQ/bSQigcxW2QrYnzhgNFXAiOvqcdMNsvG9LbgihopXqorfF+A4o
-         n0klVoRaypT58HbNg+0DdaF4b68srQkvyij7TDMF9pXx4w+DYDNG7NhTypx1X16mrYDj
-         CcsS4W9x5XoFGCwCX7BMoSb7euKbJzxK9weQbClZeh6b1Xr5NGMsll6K/VA998ctZ5rP
-         8cRgbA2rwOmxeGeYHPxx/M3iA9yxu+HSn67nyyCUHpOnwwi4CTtM8pgOc9bT2TL6ApSJ
-         UMAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBBEECO8fSG0jtTGjeJEpWxD415ifwGbkf0m0d0Y3oOMQSJHRNZgy6fs9+cfLqmBvXmqTsLfYdXg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlRYDSyzghaWoueIVAotvuZidfCq/iy1dpmyNZe2a+v3KHFNm2
-	EczNYhkPuPvVvMGBG3Fhu3FYmgY5ZoaYTIQd1NXpF9wl0gT5gErxHdd4pp2bqO1IOLKwJmcjp2H
-	k7KFntaBYR0KTUpT8a3aYC+iW/ZSNOd696xNPOubjwBfo/v5BrPqq5tLw
-X-Received: by 2002:a17:902:cecb:b0:206:ac11:f3fd with SMTP id d9443c01a7336-20b36ec9b08mr214932935ad.30.1727738546509;
-        Mon, 30 Sep 2024 16:22:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEnYVM3rVsKkpiUQxEbwOG3luHyMLmr1bdJqCCYCtJdpCXHQ7vbgtwthaQeN36rNE2/HI+hAw==
-X-Received: by 2002:a17:902:cecb:b0:206:ac11:f3fd with SMTP id d9443c01a7336-20b36ec9b08mr214932605ad.30.1727738546155;
-        Mon, 30 Sep 2024 16:22:26 -0700 (PDT)
-Received: from rhfedora.redhat.com ([71.217.60.247])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37d685b9sm59241985ad.54.2024.09.30.16.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 16:22:25 -0700 (PDT)
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Renninger <trenn@suse.com>
-Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	John Kacur <jkacur@redhat.com>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>
-Subject: [PATCH 2/2] pm: cpupower: bindings: Add test to confirm cpu state is disabled
-Date: Mon, 30 Sep 2024 19:21:55 -0400
-Message-ID: <20240930232158.29024-3-jwyatt@redhat.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20240930232158.29024-1-jwyatt@redhat.com>
-References: <20240930232158.29024-1-jwyatt@redhat.com>
+	s=arc-20240116; t=1727747144; c=relaxed/simple;
+	bh=Pv65x14kKQDmuoVj/72q/ycoe3hBU4L70K0ii5GtrM4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nmjUP5AICYSVum/XlNp4E5VWRSLFFr6GHNFHwPaRqMUTJp2rRhs1rOEhg7h8Rr5o7/emddqmYidGPl3dJHtg2oq5xHH2hxeoxlecu8fypyeh7mIG5iF+dApnKELtBRQYDCI1rqNGdbOWGERBcIx5XkF05cbJb1vBN4+zysDlJcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=61.135.153.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
+X-SMAIL-HELO: [172.20.10.11]
+Received: from unknown (HELO [172.20.10.11])([112.96.224.72])
+	by sina.com (10.182.253.25) with ESMTP
+	id 66FB540E000056D6; Tue, 1 Oct 2024 09:44:51 +0800 (CST)
+X-Sender: atzlinux@sina.com
+X-Auth-ID: atzlinux@sina.com
+Authentication-Results: sina.com;
+	 spf=none smtp.mailfrom=atzlinux@sina.com;
+	 dkim=none header.i=none;
+	 dmarc=none action=none header.from=atzlinux@sina.com
+X-SMAIL-MID: 68018512058798
+X-SMAIL-UIID: CD729F66496E431EA18B4152FD9FDECA-20241001-094451-1
+Message-ID: <18b21f90-ff6b-44b0-a0ae-49603594a22a@sina.com>
+Date: Tue, 1 Oct 2024 09:44:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
+ spinlock
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ linux-pm@vger.kernel.org, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-rt-users@vger.kernel.org, 1076483@bugs.debian.org
+References: <20240919081121.10784-2-ukleinek@debian.org>
+ <229b9ff9ef6cf201b4e56d6ccb03c028c2d8f51f.camel@linux.intel.com>
+ <tehuoiymoyorpsyefsigeyn3fbdngi6jqgrhx4zerzonpezrz2@o7zuls45rtxl>
+Content-Language: en-US
+From: =?UTF-8?B?eGlhbyBzaGVuZyB3ZW4o6IKW55ub5paHKQ==?= <atzlinux@sina.com>
+Organization: https://www.atzlinux.com
+In-Reply-To: <tehuoiymoyorpsyefsigeyn3fbdngi6jqgrhx4zerzonpezrz2@o7zuls45rtxl>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------GcmRZtzZhh0ND7fr81egPDRQ"
 
-Add a simple test to confirm and print out the cpu state.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------GcmRZtzZhh0ND7fr81egPDRQ
+Content-Type: multipart/mixed; boundary="------------sL6WyUaCDcGT8ekMA14QEP9R";
+ protected-headers="v1"
+From: =?UTF-8?B?eGlhbyBzaGVuZyB3ZW4o6IKW55ub5paHKQ==?= <atzlinux@sina.com>
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ linux-pm@vger.kernel.org, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-rt-users@vger.kernel.org, 1076483@bugs.debian.org
+Message-ID: <18b21f90-ff6b-44b0-a0ae-49603594a22a@sina.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
+ spinlock
+References: <20240919081121.10784-2-ukleinek@debian.org>
+ <229b9ff9ef6cf201b4e56d6ccb03c028c2d8f51f.camel@linux.intel.com>
+ <tehuoiymoyorpsyefsigeyn3fbdngi6jqgrhx4zerzonpezrz2@o7zuls45rtxl>
+In-Reply-To: <tehuoiymoyorpsyefsigeyn3fbdngi6jqgrhx4zerzonpezrz2@o7zuls45rtxl>
 
-Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
-Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
----
- .../bindings/python/test_raw_pylibcpupower.py    | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+--------------sL6WyUaCDcGT8ekMA14QEP9R
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py b/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-index bb2b26db8b10..ca5aa46c9b20 100755
---- a/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-+++ b/tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-@@ -31,6 +31,22 @@ match cstate_disabled:
-     case _:
-         print(f"Not documented: {cstate_disabled}")
- 
-+"""
-+Test cstate is disabled
-+"""
-+is_cstate_disabled = p.cpuidle_is_state_disabled(0, 0)
-+
-+match is_cstate_disabled:
-+    case 1:
-+        print(f"CPU is disabled")
-+    case 0:
-+        print(f"CPU is enabled")
-+    case -1:
-+        print(f"Idlestate not available")
-+    case -2:
-+        print(f"Disabling is not supported by kernel")
-+    case _:
-+        print(f"Not documented: {is_cstate_disabled}")
- 
- # Pointer example
- 
--- 
-2.46.2
+5ZyoIDIwMjQvOS8yOCAxOTo1MSwgVXdlIEtsZWluZS1Lw7ZuaWcg5YaZ6YGTOg0KPiBIZWxs
+bywNCj4gDQo+IE9uIEZyaSwgU2VwIDI3LCAyMDI0IGF0IDAzOjQ3OjA4QU0gLTA3MDAsIHNy
+aW5pdmFzIHBhbmRydXZhZGEgd3JvdGU6DQo+PiBPbiBUaHUsIDIwMjQtMDktMTkgYXQgMTA6
+MTEgKzAyMDAsIFV3ZSBLbGVpbmUtS8O2bmlnIHdyb3RlOg0KPj4+IG5vdGlmeV9od3BfaW50
+ZXJydXB0KCkgaXMgY2FsbGVkIHZpYSBzeXN2ZWNfdGhlcm1hbCgpIC0+DQo+Pj4gc21wX3Ro
+ZXJtYWxfdmVjdG9yKCkgLT4gaW50ZWxfdGhlcm1hbF9pbnRlcnJ1cHQoKSBpbiBoYXJkIGly
+cQ0KPj4+IGNvbnRleHQuDQo+Pj4gRm9yIHRoaXMgcmVhc29uIGl0IG11c3Qgbm90IHVzZSBh
+IHNpbXBsZSBzcGluX2xvY2sgdGhhdCBzbGVlcHMgd2l0aA0KPj4+IFBSRUVNUFRfUlQgZW5h
+YmxlZC4gU28gY29udmVydCBpdCB0byBhIHJhdyBzcGlubG9jay4NCj4+Pg0KPj4+IFJlcG9y
+dGVkLWJ5OiB4aWFvIHNoZW5nIHdlbiA8YXR6bGludXhAc2luYS5jb20+DQo+Pj4gTGluazog
+aHR0cHM6Ly9idWdzLmRlYmlhbi5vcmcvMTA3NjQ4Mw0KPj4+IFNpZ25lZC1vZmYtYnk6IFV3
+ZSBLbGVpbmUtS8O2bmlnIDx1a2xlaW5la0BkZWJpYW4ub3JnPg0KPj4NCj4+IE1pc3Npbmcg
+VGVzdGVkLWJ5Pw0KPiANCj4gTmVpdGhlciBJIG5vciBhbnlib2R5IGVsc2UgZGlkIHRlc3Qg
+dGhhdCBwYXRjaCBiZWZvcmUgSSBzZW50IGl0IHRvIHRoZQ0KPiBsaXN0IChhcGFydCBmcm9t
+IGEgYnVpbGQgdGVzdCkuIEkgZ3Vlc3MgeGlhbyBzaGVuZyB3ZW4gbWlnaHQgaGF2ZQ0KPiBy
+ZXBsaWVkIHdpdGggYSBUZXN0ZWQtYnkgdGFnLg0KWWVzLCBJIGhhZCB0ZXN0ZWQgdGhpcyBw
+YXRjaCBvbiBteSBub3RlYm9vayhiYXNlIG9uIERlYmlhbiBrZXJuZWwgDQo2LjEwLjExLTEg
+KDIwMjQtMDktMjIpIHNvdXJjZSBjb2RlKS4NCldvcmsgcGVyZmVjdCENCg0KVGhpcyBidWcg
+ZXhpc3QgaW4gNi45LjktcnQtYW1kNjQgIzEgIERlYmlhbiA2LjkuOS0xOg0KaHR0cHM6Ly9s
+aW51eC1oYXJkd2FyZS5vcmcvP3Byb2JlPWQ1N2Y0ZDI5YTgmbG9nPWRtZXNnDQoNClRoaXMg
+YnVnIGZpeGVkIGluIFBSRUVNUFRfUlQgYXR6bGludXggNi4xMC4xMS0xICgyMDI0LTA5LTIy
+KSB3aXRoIHRoaXMgDQpwYXRjaDoNCmh0dHBzOi8vbGludXgtaGFyZHdhcmUub3JnLz9wcm9i
+ZT1kZTVhNDQzNzRhJmxvZz1kbWVzZw0KDQpUZXN0ZWQtYnk6IHhpYW8gc2hlbmcgd2VuIDxh
+dHpsaW51eEBzaW5hLmNvbT4NCg0KPiANCj4+ICAgICAgQWNrZWQtYnk6IFNyaW5pdmFzIFBh
+bmRydXZhZGEgPHNyaW5pdmFzLnBhbmRydXZhZGFAbGludXguaW50ZWwuY29tPg0KPiANCj4g
+VGhhbmtzDQo+IFV3ZQ0KDQpSZWdhcmRzLA0KLS0gDQrogpbnm5vmlocgeGlhbyBzaGVuZyB3
+ZW4NCkRlYmlhbiBRQSBwYWdlOiANCmh0dHBzOi8vcWEuZGViaWFuLm9yZy9kZXZlbG9wZXIu
+cGhwP2xvZ2luPWF0emxpbnV4JTQwc2luYS5jb20NCkRlYmlhbiBzYWxzYTogaHR0cHM6Ly9z
+YWxzYS5kZWJpYW4ub3JnL2F0emxpbnV4LWd1ZXN0DQpHbnVQRyBQdWJsaWMgS2V5OiAweDAw
+MTg2NjAyMzM5MjQwQ0INCg==
 
+--------------sL6WyUaCDcGT8ekMA14QEP9R--
+
+--------------GcmRZtzZhh0ND7fr81egPDRQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEEvGv7H5NUQYeSuhtTJ2Egg8PSprAFAmb7VA4FAwAAAAAACgkQJ2Egg8PSprDb
+7Q//RYFRV9Z00mKSSTwdbvajx4XmdlUANLL0R/k/sROoJSwueX/LlE213a0v8Rq2zTAnseXarNTH
+y12BJuM2zLVyAehEHWL/oBNfG8RMP1P936GxENu2k1ZoQTONyciBigTyL9201AAZLEoHFYaEWJB0
+6B38ZtKCD/OKsX0N7CVULHt08SZ/T6Q4T4o/BbAIoC39Hxtst+jak3+UpSkulmlN+Y7s7yJyJQ4N
+vPoavHOnn1oLldi4x4FDK+t6eHs6v5FzoVYeQCNIdmc2QyQSMC0C+jLC1vjMBFRdJKeuAA3F+14n
+r0Ektqk/rfkLihwVN/NyF8uiofbLLkTvAQlPfDgNB1OS4iRB2/VTCGiRL/m+IWAyXTtQ6glI4FNs
+MGcpCLT44MeKeVQRLokrPMOMUUfVl0aNGAey+G0AbHrZS4ArzlR/k7fdtiI8ExlVOE3Un8Ke78J2
+gosXIe6UQw9To34Iq06xL+Y0A5kkfw6fUfa6Kevn0ZcATM+bmQKtiPUaJSIr90o8hiDyx6sF7jsu
+uclIfuxPbGpTYjZRthKDNqH/0YV3uYtlcQuvPEAcMmi6i5CD7Tn4jNwAxQhbXDjJPNt3vfsY1e/l
+xrkxpOB6wSMt6XiHKJfwEEJ865pDBBq39moAy/JZBnGe5CD4LKL3g3eb0Isyi+1ISL4m39ZtYsRW
+DR0=
+=+vRC
+-----END PGP SIGNATURE-----
+
+--------------GcmRZtzZhh0ND7fr81egPDRQ--
 
