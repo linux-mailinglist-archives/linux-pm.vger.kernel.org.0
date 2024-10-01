@@ -1,125 +1,113 @@
-Return-Path: <linux-pm+bounces-15025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15026-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A4D98C181
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 17:24:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FCD898C18D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 17:26:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD44F285659
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 15:24:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2232B2393A
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 15:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041001C9ECF;
-	Tue,  1 Oct 2024 15:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07261C9DCB;
+	Tue,  1 Oct 2024 15:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XRzJGVkV"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IsRCdtlk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8C51C9EBF
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 15:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD69B645;
+	Tue,  1 Oct 2024 15:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727796281; cv=none; b=f/EVC5zUjrr7sA4kW0k1bIvpYWnix8/LM46tmVDbcb/ok4bccIKJOfWlTFEIJ9uQxixjWUxENnTmgpyzMDsq2d1APm8g6q2cL2vavO3Q2VsXMH3wCqjbRjm6k30+iASyLTymkiwWbiUoO4+ItFED+74GkTXTZtjzGQC5YDEBl78=
+	t=1727796368; cv=none; b=mGZ0AuJzQoHuM9PejuY5QP4gQooH4WG+TdvEi9BDVStWk0dZB4nNqN1f8E1Ep6Uy8ipQpktGxyye6nBeUkFScjTdqVompceUjRnHEnV+l9UNeKfzVM1khfRAJehV/t0iBi/IZbUe4ZQKYuBUJed8jN7NcVptNestcD/MotNsNV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727796281; c=relaxed/simple;
-	bh=von7HGYPPt3GYDWzaPe5IFX1KPbsWjjFdkuYVkZQ2Vc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p/z5MDt/FSOdHkdTCcR5R+aS+2SrLAG1ooLJvOgY/C84yK3N8fj4QiO+TMLn/NB6pX4N1i53rtgHJWlXzK0wSTQLw+02+MGOskCKKFDhu3n+rmlLML6E1ETKgjSeGhhxHcVoORgMIKvbRWx50uBiVqzq4eo0R1eqBPmEZ5qa0mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XRzJGVkV; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 1 Oct 2024 08:24:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1727796277;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2hl11LMqGSp9at+HMjXIsFHZ/DScXnW36d/r3sG9uQo=;
-	b=XRzJGVkVOLg+1C5VqKjeZ8+kU7+TmI6xKAymLx02M8t0sAYuYFUERF7HRUe6eERr7iIYIT
-	khH+D5OBz/NItgnK6j2LMfkj15iL5HB/0SL84vxrPzgEe5ID8xg7OyV7D7ArZgFiA/6/hC
-	yX8vZMqfFjJuV08GRJ3rMaOwi93atAY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: Re: [PATCH v5 2/5] KVM: arm64: Add PSCI v1.3 SYSTEM_OFF2 function
- for hibernation
-Message-ID: <ZvwUK34LYeGuBV2H@linux.dev>
-References: <20240926184546.833516-1-dwmw2@infradead.org>
- <20240926184546.833516-3-dwmw2@infradead.org>
+	s=arc-20240116; t=1727796368; c=relaxed/simple;
+	bh=+YZZSxfbdyiIr93tIMUZDxqaYcghUxhFXzEBtAfe9Sw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KO6SYNQfkuGY/Y33xFzaMGeWP2McpihAovPxVgW/3SdQFJG2HtNvM6nBWkajzZN5o//9CqzVE5rkF8HgFdwWIGnj8G0Q/mN0OdzjP8j9OvDn3qg4EBTteP5z1nsFcdcat70RorInKYx4hHByM4Zz1x2XhSBI2fTmHNUTvGgdjmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=IsRCdtlk; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1727796364;
+	bh=+YZZSxfbdyiIr93tIMUZDxqaYcghUxhFXzEBtAfe9Sw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IsRCdtlkZPMbwZhF685OXK4Jrwj57OtfDIQHj1ZDuS1AA3K5BX0ZP7O0HY8uDgHna
+	 Ej9yVcpiofM61HL21cd/KWYTTG2XmHoQIbJw7PznJ8mJQbT2GCInkt4SLh65yLIgyv
+	 vD+5Sf3esOwjR3PIhtzxULPXDsWeHX2eyLV10QW1jsAqU5tQqLu8lQPTPBjFcp7j5m
+	 8UvMF9Z1ApUljwa9IkHvwwYMrbP+eaKpqnMiDV4++YPNdyqvuwhp4adlvQkxPvIQpn
+	 ShnMZmveHuhDrVOB1oV5YCJHVEmEqyhf+jw1fB1Pd5B9trw/EdBfFOdrAeLh50tW50
+	 phIwzx9zBxqhA==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9B21417E0FDC;
+	Tue,  1 Oct 2024 17:26:03 +0200 (CEST)
+Message-ID: <a3089f16-bc43-4ee0-b313-94e5a37cb449@collabora.com>
+Date: Tue, 1 Oct 2024 17:26:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240926184546.833516-3-dwmw2@infradead.org>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 1/3] regulator: dt-bindings: mt6323: Convert to DT
+ schema
+To: Macpaul Lin <macpaul.lin@mediatek.com>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+ Andrew Lunn <andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-sound@vger.kernel.org, Alexandre Mergnat <amergnat@baylibre.com>
+Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+ Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
+ MediaTek Chromebook Upstream
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+ Chen-Yu Tsai <wenst@chromium.org>
+References: <20241001104145.24054-1-macpaul.lin@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20241001104145.24054-1-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi David,
+Il 01/10/24 12:41, Macpaul Lin ha scritto:
+> Convert the MT6323 regulator binding from the old text-based format to
+> the new DT schema style. The property "regulator-name" has been added
+> as required property to reflect current usage in mt6323.dtsi.
+> 
+> Examples have been streamlined and relocated to the parent schema file:
+>    mfd/mediatek,mt6397.yaml.
+> 
+> Update maintainer and submitter information with new entries from MediaTek.
+> 
+> The reference document cited in "mediatek,mt7530.yaml" has been updated
+> to point to this new DT schema file
+> 
+> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Acked-by: Mark Brown <broonie@kernel.org>
 
-On Thu, Sep 26, 2024 at 07:37:57PM +0100, David Woodhouse wrote:
-> @@ -392,6 +403,32 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
->  			break;
->  		}
->  		break;
-> +	case PSCI_1_3_FN_SYSTEM_OFF2:
-> +		kvm_psci_narrow_to_32bit(vcpu);
-> +		fallthrough;
-> +	case PSCI_1_3_FN64_SYSTEM_OFF2:
-> +		if (minor < 3)
-> +			break;
-> +
-> +		arg = smccc_get_arg1(vcpu);
-> +		if (arg != PSCI_1_3_HIBERNATE_TYPE_OFF) {
-> +			val = PSCI_RET_INVALID_PARAMS;
-> +			break;
-> +		}
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-This is missing a check that arg2 must be zero.
 
-> +		kvm_psci_system_off2(vcpu);
-> +		/*
-> +		 * We shouldn't be going back to guest VCPU after
-> +		 * receiving SYSTEM_OFF2 request.
-> +		 *
-> +		 * If user space accidentally/deliberately resumes
-> +		 * guest VCPU after SYSTEM_OFF2 request then guest
-> +		 * VCPU should see internal failure from PSCI return
-> +		 * value. To achieve this, we preload r0 (or x0) with
-> +		 * PSCI return value INTERNAL_FAILURE.
-> +		 */
-> +		val = PSCI_RET_INTERNAL_FAILURE;
-> +		ret = 0;
-> +		break;
->  	default:
->  		return kvm_psci_0_2_call(vcpu);
->  	}
-> -- 
-> 2.44.0
->
-
--- 
-Thanks,
-Oliver
 
