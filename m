@@ -1,118 +1,144 @@
-Return-Path: <linux-pm+bounces-14995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14996-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4983298B4DC
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 08:47:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B014B98B4F8
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 08:56:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E66481F24E98
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 06:47:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C2BE1F22317
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 06:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110B11BC084;
-	Tue,  1 Oct 2024 06:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76AB1BC08D;
+	Tue,  1 Oct 2024 06:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zra1fMuM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwBYHQaz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B5819046D
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 06:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8905C27468;
+	Tue,  1 Oct 2024 06:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727765250; cv=none; b=WEeKDHveYfVAZvGakZrrs34JdCDYNcPRxNxOSuMMDgV4mQCVXjmY2H0EgF8v8RDLeIPzNEv33fhUSBMyJZcIPnOCePJ8aYKPx9BnkdkTwrNzO7ELgVqvG4LQ1EJm4dBB/Dx3UY31iXtjAIZorALBFJ8Fyp9cdRbgJh6wOS7/HEE=
+	t=1727765786; cv=none; b=WwI9bai10R1XdL5LvCdb60Ruj9EB4kX1IGGN+h9nI5NZ9qPbYpIkMeyT5OTlNhgLB+lgqIZpgiIEI0WnXPUoCP9QKPi8W28/awQxt9RFTUXWQc3Uys3Q+YAeHh9ufhWGPMP/5ka6xxDme+P+dyWtvbW0YkkoKpNk9j85/RXHcq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727765250; c=relaxed/simple;
-	bh=n+ms9eas/yrSMAHRy5Y7bBaQ+oTS1E29qNA+U/tw/OY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jrA31MV5GyXmOVD9ea1WNUs4JiZcW2/LhvEwdeqvIC8pnwv3ENZXMAaC+SApHZbzhXLcSpDC71cvQihRqvNcRVdR0/y6YtncBEOT/qh2crgHOSw9+Ww5NiZ2D+PxCw1EXSdwLoKqxL0Xo3QfdbpTWZXQTMP//z8uPa64rQ3w0lM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Zra1fMuM; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20bb92346caso788305ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 23:47:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727765247; x=1728370047; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ATsOy61DsddooGaPEa2CzZYQXPNTRfIT95jkUv1EcB4=;
-        b=Zra1fMuM2UnfbDUHPoXqC6pIqfDYr4/hfdZ51jq+bwYL18RCwOgqwTWHhhuTZYm7/B
-         6O9T/U2VegBMsIlwFcSYvZL6n90GM2baeHL1Otmw4zWBwrm3BKg5U51HR4N8HTic+XZ/
-         Jh1051u5I4pE2tsxpknXhJgPIFSP6Smd9KPe16iP1rTlLW0zSZ3HuuMRZvQjjwZB/caQ
-         qLm/lxt4FC0UfjWrbiCT33xuwk4lkTbYnQTHI0pvXOoriQd7Tn6T1wew8hLbn2DAVOFj
-         XMGkuFsYHawMs3L1TNR16Edj2lJTV6byOXqYzkunpOTysfsmxk5SDK32V4cHdHR7xu1o
-         C91A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727765247; x=1728370047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ATsOy61DsddooGaPEa2CzZYQXPNTRfIT95jkUv1EcB4=;
-        b=ZsrZ8hIXN/fwZrUJXrp/bnkwIKY8bHVlKOmLB4Vcq4bN+R81HKDAmtR3lsU+BubT/2
-         gGaqr7S32i9jlnWvMQpKZCHkY98jqivQ8tpHmA/tN8rbq/o8teOkEDnjU/obl5wPouNi
-         vwmxxANnouDIJWuiw73GEMrrsQ1pFFNlQAQHLhWXmHigAB3cC9ZJQrDragD5ElNfjr72
-         /KDKCCnLn6ephlQy2mxO1+UZSObE6ZzkR1VgI8TBl7EzYVYpoqPyWeISliXpuVycX7Ny
-         f8isEuUJadPaJTDJ62am8KKyXZ9c4cETKu4gUEwHKp+8p6lRGa9VOC1plVoqQitvwYxR
-         Kr0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVnc/oZWTuNcj/uMce/H6GuVEMC+doI4DqFgvFSfN8XFcDxQeZDDK6E33C40pLIOqyWFdyas+c7Zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhlYEqMtCnSzvahIqhrHuX8/gvgOt6PFLVjzSuTYXFHSxZRVZ8
-	JlgM6yT1UWUs6r0/3jT0xKpwJg3BxniPExuREiVM1mp3wvNDPIrXizOZDnrIa2I=
-X-Google-Smtp-Source: AGHT+IEgEGAOc6QjgeVL09WHHyQC8Ps+y20CMVXh86yh6HQzv64PoeqKdtTv/zU4U5RmhWTExsEsxQ==
-X-Received: by 2002:a17:902:f541:b0:205:6c15:7b75 with SMTP id d9443c01a7336-20ba9eb2654mr31998995ad.7.1727765246768;
-        Mon, 30 Sep 2024 23:47:26 -0700 (PDT)
-Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e61c4csm64001915ad.274.2024.09.30.23.47.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 23:47:26 -0700 (PDT)
-Date: Tue, 1 Oct 2024 12:17:24 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Nikunj Kela <quic_nkela@quicinc.com>, rafael@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@quicinc.com,
-	quic_psodagud@quicinc.com
-Subject: Re: [PATCH v3] dt-bindings: cpufreq: qcom-hw: document support for
- SA8255p
-Message-ID: <20241001064724.o4yz2d6xlcrbx6ro@vireshk-i7>
-References: <20240912175043.2262697-1-quic_nkela@quicinc.com>
- <crsuqys5tlgtf4667fwaojn5z5ri4uf3te4n5a2bcalidgobo2@up62meevaxwn>
+	s=arc-20240116; t=1727765786; c=relaxed/simple;
+	bh=D6cq+9W5AquN6Xivssj0gJ1Jk4JQ0mfYEn2CA9+npXI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CxADuRegO1vz5uNQcUlg99joUnxiXrQXHSTRxJYot8Pq1tCJjYCwa80x7P2k0gSL8iyvT71njphVgQkQUFvITGEgs2P6ZWUjgyIwZPPyDMOwVBXwoCR7wRBBsr2qb39kovT9ncNHFtza4nqLDn4umvNMnEPrpBLKwFThMo5Yxtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwBYHQaz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6F4C4CED6;
+	Tue,  1 Oct 2024 06:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727765786;
+	bh=D6cq+9W5AquN6Xivssj0gJ1Jk4JQ0mfYEn2CA9+npXI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XwBYHQazazbTC4OwId3vnrFAgc6CpLItRV3CT+Z8Gu23wph58CKcedFo7OLdarXFj
+	 CfBr/fhizt+I319h5X05aQeNiGEwLpOlTkxFwdMvZp5tn26hL9grIrgluiUanZgVrj
+	 0ryllcIGgHjRky7zD5Cq7OsKZqK4RkRI4/CJstCL2fYk+KBEVoQob6cme8zRgaORsv
+	 8IC6faZd2aGl4jfIjpTmpGu86/o4/aahDo/ckVnRLhdwe1cSJTcyxtGmwBVe5kWta6
+	 zAbfWFj5Dzv5UH3KDkLJ7Igmws7XQ8kbnjqJSF3yJWaphRu3BKFYLpSFA19jzUWCHz
+	 4bi5hwVR6eikg==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f75c56f16aso60880411fa.0;
+        Mon, 30 Sep 2024 23:56:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUb5hyErHg8L+nlaYnCMwManPT29OgGG75N5SMSKloatCgBuklXXMSx2eV4yimmif3wUk8ctXjcp+vHOMVG@vger.kernel.org, AJvYcCUiBBqDH1Rk5CQ8vLslCmC/Xi7qfEu1NX1BRQKP+EkyP2E2Nxqt67MaUQJC2NBcMlkyWJ7BNb4szZUvsAtmjdo=@vger.kernel.org, AJvYcCUm6kZGpEHb76YAe/a1ZfTGVchBQlyX4EUgpNQJijcgQRPxvVg0m69emcfJL0xlA1ObScZoM0+UmgWo9PMd@vger.kernel.org, AJvYcCVR23sffSw7+s8WHHsh/QRWZqSUnBSfBzFlHy3NdQaSePyRp27+SUuWpX3dUSA+s7btKv4KtlpfYmsc@vger.kernel.org, AJvYcCVk7EvOcGbNafkzEELiaW0XX4/dAMKhzeaP9myUqJqYPUW+CaA72tq2XrwVjJcbalYY0KIWAQ2Ox6I9qrCtHBjbWQ==@vger.kernel.org, AJvYcCVkqg2FaRqXxkztdXl6Qg2ZLbyRAxc2++5Icc2R0fpNfIdY7w/OUH2F5t1fyxYuXRrjA9F6fJvJhWjB@vger.kernel.org, AJvYcCWJUthhIvNr4CBi7JTh00/Xf1hcUNTTMWspSCRlOgkq8BnBYIUFIahac9hC/CIWpK4L8K4=@vger.kernel.org, AJvYcCWMyKtbai3/+CMUxxUAWRaUoxT63Z6NiQHeXfwlK375Wkv/AXfBxKIUq9xOBgn0rLyBsG1TO3IKXQUHNQ==@vger.kernel.org, AJvYcCWazTJ/MRGwc1ZpLlQfAWrTj54guFFdiwwwZU2AwyRDc04z+N9tCqfvuKOXEKqEthvzJvjNPjXmmw8=@vger.kernel.org, AJvYcCWk4JcjjEkIQZslMHYb9A45
+ qkunEL5rjByj2wasO2nknJYRCQbyly1eTO7stb84m02o0HvxOYqZAK3wIjIp@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqCf21TVLxRAj0tdVi4muVfet14Czx+Po9K0dRbSUE3e13C7ZA
+	FwfRn3JNAuGYoPW7FQfz3unhiD5XPLAeSVO+cjc6yjjLmGndQpraItuRkPFrv5+hLyJ1eBVfCej
+	WbVPyB8lHYF9xlgLA6eI+GQreT8I=
+X-Google-Smtp-Source: AGHT+IGjtx2HGlRUUxfHLsgxZrMc5HOLfFzS5jvtirjyIPXJpZcKEYpq6gBAXQaDQEq6eyp0Tbbah6SY1D/EzYnBAjs=
+X-Received: by 2002:a05:6512:3b8d:b0:52b:bf8e:ffea with SMTP id
+ 2adb3069b0e04-5389fc6429dmr8367147e87.40.1727765784329; Mon, 30 Sep 2024
+ 23:56:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <crsuqys5tlgtf4667fwaojn5z5ri4uf3te4n5a2bcalidgobo2@up62meevaxwn>
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-34-ardb+git@google.com> <20241001053318.elfwwiyluw6rlynz@treble>
+In-Reply-To: <20241001053318.elfwwiyluw6rlynz@treble>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 1 Oct 2024 08:56:12 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFyd7zDqnFzHTZmcR+ktxRVdOnuF-VOW+E0PYPNaQGXzQ@mail.gmail.com>
+Message-ID: <CAMj1kXFyd7zDqnFzHTZmcR+ktxRVdOnuF-VOW+E0PYPNaQGXzQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/28] x86/boot: Permit GOTPCREL relocations for
+ x86_64 builds
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 16-09-24, 11:44, Krzysztof Kozlowski wrote:
-> On Thu, Sep 12, 2024 at 10:50:43AM -0700, Nikunj Kela wrote:
-> > Add compatible for the cpufreq engine representing support on SA8255p.
-> > 
-> > Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
-> > ---
-> > 
-> > Changes in v3:
-> > 	- Added compatible to the correct constraint list
-> > 	- Removed the new constraint block added in v2
-> > 	- Removed the patch from original series[1]
-> > 
-> > Changes in v2:
-> > 	- Added new constraints
-> > 
-> > [1]: https://lore.kernel.org/all/20240903220240.2594102-1-quic_nkela@quicinc.com/
-> > ---
-> >  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+On Tue, 1 Oct 2024 at 07:33, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> On Wed, Sep 25, 2024 at 05:01:04PM +0200, Ard Biesheuvel wrote:
+> > +             if (r_type == R_X86_64_GOTPCREL) {
+> > +                     Elf_Shdr *s = &secs[sec->shdr.sh_info].shdr;
+> > +                     unsigned file_off = offset - s->sh_addr + s->sh_offset;
+> > +
+> > +                     /*
+> > +                      * GOTPCREL relocations refer to instructions that load
+> > +                      * a 64-bit address via a 32-bit relative reference to
+> > +                      * the GOT.  In this case, it is the GOT entry that
+> > +                      * needs to be fixed up, not the immediate offset in
+> > +                      * the opcode. Note that the linker will have applied an
+> > +                      * addend of -4 to compensate for the delta between the
+> > +                      * relocation offset and the value of RIP when the
+> > +                      * instruction executes, and this needs to be backed out
+> > +                      * again. (Addends other than -4 are permitted in
+> > +                      * principle, but make no sense in practice so they are
+> > +                      * not supported.)
+> > +                         */
+> > +                     if (rel->r_addend != -4) {
+> > +                             die("invalid addend (%ld) for %s relocation: %s\n",
+> > +                                 rel->r_addend, rel_type(r_type), symname);
+> > +                             break;
+> > +                     }
+>
+> For x86 PC-relative addressing, the addend is <reloc offset> -
+> <subsequent insn offset>.  So a PC-relative addend can be something
+> other than -4 when the relocation applies to the middle of an
+> instruction, e.g.:
+>
+>    5b381:       66 81 3d 00 00 00 00 01 06      cmpw   $0x601,0x0(%rip)        # 5b38a <generic_validate_add_page+0x4a> 5b384: R_X86_64_PC32    boot_cpu_data-0x6
+>
+>    5f283:       81 3d 00 00 00 00 ff ff ff 00   cmpl   $0xffffff,0x0(%rip)        # 5f28d <x86_acpi_suspend_lowlevel+0x9d>      5f285: R_X86_64_PC32    smpboot_control-0x8
+>
+>    72f67:       c6 05 00 00 00 00 01    movb   $0x1,0x0(%rip)        # 72f6e <sched_itmt_update_handler+0x6e>   72f69: R_X86_64_PC32    x86_topology_update-0x5
+>
+> Presumably that could also happen with R_X86_64_GOTPCREL?
+>
 
-Applied. Thanks.
+In theory, yes.
 
--- 
-viresh
+But for the class of GOTPCREL relaxable instructions listed in the
+psABI, the addend is always -4, and these are the only ones we might
+expect from the compiler when using -fpic with 'hidden' visibility
+and/or -mdirect-extern-access. Note that the memory operand
+foo@GOTPCREL(%rip) produces the *address* of foo, and so it is always
+the source operand, appearing at the end of the encoding.
+
+Alternatively, we might simply subtract the addend from 'offset'
+before applying the displacement from the opcode.
+
+Note that this code gets removed again in the last patch, after
+switching to PIE linking.
 
