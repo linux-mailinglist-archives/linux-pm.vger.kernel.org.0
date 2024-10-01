@@ -1,196 +1,125 @@
-Return-Path: <linux-pm+bounces-15036-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15037-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDDF298C87B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 00:59:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 309D498C984
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 01:33:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5C23286630
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 22:59:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7E43B228D8
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 23:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA671CF282;
-	Tue,  1 Oct 2024 22:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BF71CF5DF;
+	Tue,  1 Oct 2024 23:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B8FGKgXA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HfLMWihO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C7C1CEEB5;
-	Tue,  1 Oct 2024 22:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD38C1CDFBC
+	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 23:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727823552; cv=none; b=d48wXTZwc0+ny71hCfxKX6d7OfyezRBHoqBWwJqxmpkgu+tJ1Z5ELL6cxx+g2hVWhk2YgyY3wO2zrXjlwnEu83ZWUuJqOcJvi+Kr6sDw5XoasTB+Tgwxb3/l7o0ugZLzIR9FOQFBYSH8sK24FMdqV+3vKLLFomAqxgr/u7LFq1E=
+	t=1727825595; cv=none; b=ne+4KNSTPpq3s6fGn+DVclNDkcXEc/kcy/WnNSJzxYP6tWwS2MXX4RO8+jSkcw/QVmdI2eUkrXMI4NjuQWvhb4wFsRgZtoT3ChxV7sskcdHbACuVQWramG/TT/6Kpnn28UCclA6xdG+KjWGX/oPp/a4u4Y1sx28QXG71kEZRYC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727823552; c=relaxed/simple;
-	bh=YLAvbo/FGLUh/8VxvI6dGnsAo7AT/XO1bfUSzRiyZmo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=RM2iM4R0XrrDYMelGSFQ3a9/uyri5boB87eBPxvionBtY93OEKYENeftRXXcViQaIRn1H40hQ7tbRnMPlOsCGf1h9dw445E72LBAodbzm/yooFAOOxDJbjXuFqAhMaflvij4SiceGG5YQ5QqTEGFvOoUJIMs29v1G8qWcDrCRU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B8FGKgXA; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727823551; x=1759359551;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YLAvbo/FGLUh/8VxvI6dGnsAo7AT/XO1bfUSzRiyZmo=;
-  b=B8FGKgXAovXDnKoYXwQSF6m6eRShtr5wqzEGmPxq1ZliLUL9d8kHmUv+
-   KcrvForj+Niw0SDvt0sxGHH4gt1zmlq4LgcwE1Ed1M/T9T0rAL9L6UPwq
-   AU+SFQs/h0WeYI1J2SR26oSySC6w4iN2oybvkrgN5lniUhBsEgIHkI7Ny
-   PH82tfK/x9NVbDakuuL/4kBUufGMPZTbEYdVRuLLPuvgfNHsZdwBsMucZ
-   ichYWyY9G7cRrtmmvVe5ZgUlYCMF8lQQ4D/5WlgdKD3eZBTkX6HBZQLhC
-   XObW1+AO/5TXBUGbyib1fbSqPKi0h/oiz6IjS2lMoPmmNTDzyzy+cGDvo
-   Q==;
-X-CSE-ConnectionGUID: 6/89CwUFQDiGB75M/3F0Pw==
-X-CSE-MsgGUID: 5YPkfJqLT7GkMt5j9w7GWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11212"; a="26936074"
-X-IronPort-AV: E=Sophos;i="6.11,169,1725346800"; 
-   d="scan'208";a="26936074"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 15:59:10 -0700
-X-CSE-ConnectionGUID: T+UUANdXSumQyKOWMp8j1Q==
-X-CSE-MsgGUID: 7XLDfa76S7mV3P/vzOuV7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,169,1725346800"; 
-   d="scan'208";a="78576156"
-Received: from iherna2-mobl4.amr.corp.intel.com (HELO debox1-desk4.intel.com) ([10.125.109.6])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 15:59:10 -0700
-From: "David E. Box" <david.e.box@linux.intel.com>
-To: david.e.box@intel.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rjw@rjwysocki.net
-Subject: [PATCH] platform/x86/intel/pmc: Disable C1 auto-demotion during suspend
-Date: Tue,  1 Oct 2024 15:58:59 -0700
-Message-ID: <20241001225901.135564-1-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1727825595; c=relaxed/simple;
+	bh=UsT54fmI8CdBIwP9723yQfC/u5N0lQNbGULTor+sqf8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j4wEavnmSWFRuFYI8dVmFwgNMMSBl9s5xHjiGZYy7a/50sAQlhw3Ri1ZcRa8eEPqyd+CKka8kBBLPlAoboKsY57j+mi/2BIPf50ky04e/6mMTaG5x6OKkI5CVJWbMWlEvBu2+EAuQ/HcQHgHZV9YkrytC67zWS5gPDsZb+tr2zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HfLMWihO; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e26048d1235so4266374276.0
+        for <linux-pm@vger.kernel.org>; Tue, 01 Oct 2024 16:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727825593; x=1728430393; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+iYkZq+iPYxvfl8T236DGt51ZM6/khmDSEwZJd75PA=;
+        b=HfLMWihOcLRZTVDe0cvhgjE/j10iD4cv3EN3AMzJrK39v8zU0mKojZQxDioH3p6v9n
+         7Ei/UV1iPUrAAX9DT2jYfEjGcdLhjVTNKwKSvgRu/QUs6zvRoJYZqHKv8ffcT/LIU4Om
+         Lw6HENgj0d+QJSQwfi9T96HtmId9eX2/94p23m3lYG0dMpt1kDxupKbRCZugc2XjQuuM
+         5JqSU59Gg1w4+9OOQZJ1cfna/ngh1GsrrcPCiLUOwNgAaWuUgyDxamA67b1W1mjn2wqz
+         czSlF6YyXLV9HuRlgBFSLBhLlXalo0hc30uzPNUM7boqDGpVLu8OXTcDEJBEx9ageeEn
+         9Wwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727825593; x=1728430393;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a+iYkZq+iPYxvfl8T236DGt51ZM6/khmDSEwZJd75PA=;
+        b=Zw5wk0BKV0b9HDfAhfB6c/ppErIeKpH3qBZGmW5TkE81BKd2S0XE3PAXJgC0+p5Z4W
+         dRqIWfindIsZQRlLjHRQCQ4Q2qhQIUWpv65VzKLMOMOVxb1ottj7K+iy26HEmJmf5hHE
+         XyOtWSW9sAfEOWoX0Mii0scVbvHbtrks3XGXi+ISue9+tl89Sq84I6TM+9mc9fYTyQOp
+         0a8ew3Iw2/wMf2E0ROr6t6oxED0qXIVRWJLYMdLy6jh3Bh/nrStAEUCG0oJkpmE1yoNf
+         rayks0ZtVzDT95a7zFEZn5wj8zKdU+Avt2ffjFwORL0YizltiXLVk27mZwcRW4B3qUh9
+         sXBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXDrZKUjnkW0Vc4yLOSPDe09+5MPXg7P1pRRAWPA6a/IE8iaTQhR3VS5JZndT1t0wqW81Q/7USMfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxliLq1ntA4Tnrb+prgstKLvUY0GB7o1djtxzGE5u6roZbSgopn
+	zpIxpjjOWvatn6eATgknuUkPVP9nhCIy2HrFNmr50ZkP72rog92rYU840MpyEN75kD1QXST3SX+
+	XMXOrazv5RaKhJq4e7eG5EyVKsj2dask1rL49bA==
+X-Google-Smtp-Source: AGHT+IGlQk6Wy4Pl3cVwIcZh6+8USnAEqDwhrOdOkfctDiC/uDN6CWaRfdqiyEtKTbeKtfvYLZFZut29QuK5LjGg7PY=
+X-Received: by 2002:a05:6902:2202:b0:e1d:af44:46b5 with SMTP id
+ 3f1490d57ef6-e2638382ec1mr1166673276.2.1727825592680; Tue, 01 Oct 2024
+ 16:33:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <3f3660af-4ea0-4a89-b3b7-58de7b16d7a5@stanley.mountain>
+In-Reply-To: <3f3660af-4ea0-4a89-b3b7-58de7b16d7a5@stanley.mountain>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 2 Oct 2024 01:32:36 +0200
+Message-ID: <CAPDyKFpBEJi6m+V_xVogcAAiJjqbAH+=xQGAYizy=+1BKddQpQ@mail.gmail.com>
+Subject: Re: [PATCH] OPP: fix error code in dev_pm_opp_set_config()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On some platforms, aggressive C1 auto-demotion may lead to failure to enter
-the deepest C-state during suspend-to-idle, causing high power consumption.
-To prevent this, disable C1 auto-demotion during suspend and re-enable on
-resume.
+On Mon, 16 Sept 2024 at 16:07, Dan Carpenter <dan.carpenter@linaro.org> wrote:
+>
+> This is an error path so set the error code.  Smatch complains about the
+> current code:
+>
+>     drivers/opp/core.c:2660 dev_pm_opp_set_config()
+>     error: uninitialized symbol 'ret'.
+>
+> Fixes: e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/arl.c |  3 +--
- drivers/platform/x86/intel/pmc/cnp.c | 28 +++++++++++++++++++++++++++-
- drivers/platform/x86/intel/pmc/lnl.c |  3 +--
- drivers/platform/x86/intel/pmc/mtl.c |  3 +--
- 4 files changed, 30 insertions(+), 7 deletions(-)
+Applied for fixes and by adding a stable-tag, thanks!
 
-diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
-index e10527c4e3e0..05dec4f5019f 100644
---- a/drivers/platform/x86/intel/pmc/arl.c
-+++ b/drivers/platform/x86/intel/pmc/arl.c
-@@ -687,9 +687,8 @@ static void arl_d3_fixup(void)
- static int arl_resume(struct pmc_dev *pmcdev)
- {
- 	arl_d3_fixup();
--	pmc_core_send_ltr_ignore(pmcdev, 3, 0);
- 
--	return pmc_core_resume_common(pmcdev);
-+	return cnl_resume(pmcdev);
- }
- 
- int arl_core_init(struct pmc_dev *pmcdev)
-diff --git a/drivers/platform/x86/intel/pmc/cnp.c b/drivers/platform/x86/intel/pmc/cnp.c
-index 513c02670c5a..5b8b3ac7f061 100644
---- a/drivers/platform/x86/intel/pmc/cnp.c
-+++ b/drivers/platform/x86/intel/pmc/cnp.c
-@@ -7,7 +7,8 @@
-  * All Rights Reserved.
-  *
-  */
--
-+#define DEBUG
-+#include <linux/suspend.h>
- #include "core.h"
- 
- /* Cannon Lake: PGD PFET Enable Ack Status Register(s) bitmap */
-@@ -206,8 +207,24 @@ const struct pmc_reg_map cnp_reg_map = {
- 	.etr3_offset = ETR3_OFFSET,
- };
- 
-+
-+static DEFINE_PER_CPU(u64, pkg_cst_config);
-+
- void cnl_suspend(struct pmc_dev *pmcdev)
- {
-+	if (!pm_suspend_via_firmware()) {
-+		u64 val;
-+		int cpunum;
-+
-+		for_each_online_cpu(cpunum) {
-+			rdmsrl_on_cpu(cpunum, MSR_PKG_CST_CONFIG_CONTROL, &val);
-+			per_cpu(pkg_cst_config, cpunum) = val;
-+			val &= ~NHM_C1_AUTO_DEMOTE;
-+			wrmsrl_on_cpu(cpunum, MSR_PKG_CST_CONFIG_CONTROL, val);
-+			pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum, val);
-+		}
-+	}
-+
- 	/*
- 	 * Due to a hardware limitation, the GBE LTR blocks PC10
- 	 * when a cable is attached. To unblock PC10 during suspend,
-@@ -220,6 +237,15 @@ int cnl_resume(struct pmc_dev *pmcdev)
- {
- 	pmc_core_send_ltr_ignore(pmcdev, 3, 0);
- 
-+	if (!pm_suspend_via_firmware()) {
-+		int cpunum;
-+
-+		for_each_online_cpu(cpunum) {
-+			pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum, per_cpu(pkg_cst_config, cpunum));
-+			wrmsrl_on_cpu(cpunum, MSR_PKG_CST_CONFIG_CONTROL, per_cpu(pkg_cst_config, cpunum));
-+		}
-+	}
-+
- 	return pmc_core_resume_common(pmcdev);
- }
- 
-diff --git a/drivers/platform/x86/intel/pmc/lnl.c b/drivers/platform/x86/intel/pmc/lnl.c
-index e7a8077d1a3e..be029f12cdf4 100644
---- a/drivers/platform/x86/intel/pmc/lnl.c
-+++ b/drivers/platform/x86/intel/pmc/lnl.c
-@@ -546,9 +546,8 @@ static void lnl_d3_fixup(void)
- static int lnl_resume(struct pmc_dev *pmcdev)
- {
- 	lnl_d3_fixup();
--	pmc_core_send_ltr_ignore(pmcdev, 3, 0);
- 
--	return pmc_core_resume_common(pmcdev);
-+	return cnl_resume(pmcdev);
- }
- 
- int lnl_core_init(struct pmc_dev *pmcdev)
-diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
-index 91f2fa728f5c..fc6a89b8979f 100644
---- a/drivers/platform/x86/intel/pmc/mtl.c
-+++ b/drivers/platform/x86/intel/pmc/mtl.c
-@@ -988,9 +988,8 @@ static void mtl_d3_fixup(void)
- static int mtl_resume(struct pmc_dev *pmcdev)
- {
- 	mtl_d3_fixup();
--	pmc_core_send_ltr_ignore(pmcdev, 3, 0);
- 
--	return pmc_core_resume_common(pmcdev);
-+	return cnl_resume(pmcdev);
- }
- 
- int mtl_core_init(struct pmc_dev *pmcdev)
--- 
-2.43.0
+Kind regards
+Uffe
 
+
+> ---
+>  drivers/opp/core.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 494f8860220d..3aa18737470f 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2630,8 +2630,10 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+>
+>         /* Attach genpds */
+>         if (config->genpd_names) {
+> -               if (config->required_devs)
+> +               if (config->required_devs) {
+> +                       ret = -EINVAL;
+>                         goto err;
+> +               }
+>
+>                 ret = _opp_attach_genpd(opp_table, dev, config->genpd_names,
+>                                         config->virt_devs);
+> --
+> 2.45.2
+>
 
