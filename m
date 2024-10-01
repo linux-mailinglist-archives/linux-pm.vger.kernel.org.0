@@ -1,336 +1,539 @@
-Return-Path: <linux-pm+bounces-15015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0948798B9C2
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 12:31:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D08B198B9E4
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 12:42:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D0411C235C2
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 10:31:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 000961C22D9C
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 10:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A081A08DD;
-	Tue,  1 Oct 2024 10:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE97A1AF4E9;
+	Tue,  1 Oct 2024 10:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H/vakxwD"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="C1NGsjKl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF331A08A0
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 10:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D72F1A08BD;
+	Tue,  1 Oct 2024 10:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727778673; cv=none; b=UqrUbpWSAxRc3cAumk9LsY1i2swXdtqXU8SruozqviLEg6rnaG7b+xA9Mr8uPdanMxW2o+4GyTNOHBHmk1O0wX261RUnDH5Wya7iGYZJHAQDf/qQKwYGaDYIXrtsuhiIKwdVwcZ7gN78rLuTfEsIlqRVMi+7HXcFpOJ5FuGReO4=
+	t=1727779367; cv=none; b=lW9QZeguUk5LYjVl9a4XDDdTe3IadRrcRK8vn22yfpwoBcUlEixJvQgXUld/KE1bbCD/3odaR89214KTojAZz9ASgs9zcEInJOazaY1xoBUfenJrcfb0PQVCrExiXbNx2whZcjlef52IR4sS2FRPif34qPS+gyX4To2+70VDPzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727778673; c=relaxed/simple;
-	bh=yAGmCdd75QeGH57D0Rkzl9n6Wfz8ZCLvGKoFlHP6kwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VksX3+A8nVo7qmtVpLrREOLQ/z4mAOBtQBtJyFtPinKde0r+DYMSvXUJ/+3Mf/DZ9JgkpxywF5/D7ImJtY0xX0pLPqVG28X9zLjUrogtOeUy9CC09h+0qYj43WxZVgfRylmnXqwmTlx5iM9rmM3I6CLiO47ObycLY4cchqlcK+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H/vakxwD; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20b90ab6c19so18520855ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Oct 2024 03:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727778669; x=1728383469; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4Dw4l+G9an39KsWSxDP94YiTolCS89KFp0iqjxw1BCE=;
-        b=H/vakxwD1bog1BTb3X0nLZ/k3Kp6E+krMYILAJVyphCBQM1N7yCLUAu/qXciOHb5f2
-         NU7uvFZmI28dEBj1e0J8GCOMc6Ml9/K1G8BrK0H7mutT1mwPD3b+eLj5bBGIatOomBbP
-         mj95kDCmPfxK8moaG6S62ZspywmeM/33Xdcd1uXoCc+hZJUaO/SBsSYe/LyM6YDFxHsR
-         fHnmyuivJFHE3seXbiXMGjTGK7MCaGm0WiD8VQ7w4gwwkdXbDMpmx0sL8YxdicL1OUwH
-         84rKHkmMayv9WRmJqSmQfgNODc1IHi+boDleybrfe/2UodIsiDW2yWk7t8o3NZB640lx
-         z7HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727778669; x=1728383469;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Dw4l+G9an39KsWSxDP94YiTolCS89KFp0iqjxw1BCE=;
-        b=ofs+D7VilbS/IRuTSXp1HiJmVKwFyT3GnNUEt8K2bgLl7HO5uWsLrCml9H0fi/FVfu
-         FpWio6W1r3khXq5rArTbCH7YpyCI47upasA710rHm8FLZLa0erbAYe5CbhBeQnJhmqTp
-         NunfEsWLdU8GDTsIf+WxepsgWiULhC39qQJxwIaSjUWY37XdEQrNF5UNYSn5lcUJ+JxK
-         VX6LvbseNPS/viY6kEd/GTV+DsTqaDy1Uea/HM2Vmegqqh4pjEXl945RXrig80bXWXwU
-         0+njaGfoXrACdgoGSXywHkrzNQXejqxE2OqJ5nNVOoF2Q3So8e/ArWhTWqg18Is6Wt3m
-         NUQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEhRUHdxg6K24tEnLrxzBH2v6Fuc4ewrmB+00Vt9Kdbg56bJeEJishiQwkvOVMZRyx0JDG6/ofGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxua3w/JZCTtjeEqmD9CxyNiVzgDR3DLrTscfI2KHzXmqtHkAfN
-	qR1VWhUSNUzzLyogGTos4C3o1zjM/S2mUMOILeN3sPCKH65TRZALpeVCxun93A==
-X-Google-Smtp-Source: AGHT+IHqO9KzY9cSNcbXgmO/4uNrXciRkUPaBdjGBGmaPpdZ66MJOhRQSux7SW0iEBiaCBGsg5MTmQ==
-X-Received: by 2002:a17:902:ecc7:b0:20b:5fb1:ea52 with SMTP id d9443c01a7336-20b5fb1ee30mr173097865ad.21.1727778668557;
-        Tue, 01 Oct 2024 03:31:08 -0700 (PDT)
-Received: from thinkpad ([36.255.17.150])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e629acsm66932665ad.270.2024.10.01.03.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 03:31:08 -0700 (PDT)
-Date: Tue, 1 Oct 2024 16:01:00 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-	quic_parass@quicinc.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Mayank Rana <quic_mrana@quicinc.com>,
-	Markus Elfring <Markus.Elfring@web.de>, linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4] PCI: Enable runtime pm of the host bridge
-Message-ID: <20241001103100.ewzgmq3apmxtrsr7@thinkpad>
-References: <20240708-runtime_pm-v4-1-c02a3663243b@quicinc.com>
- <20240816204539.GA73302@bhelgaas>
- <CAJZ5v0j0ck2yKPzisggkdKTFz-AVKG7q+6WnBiiT_43VT4Fbvg@mail.gmail.com>
- <b0d8e51d-cf53-dc75-0e57-4e2e85a14827@quicinc.com>
- <CAJZ5v0jMSrkH7jCk0Ayb21vdXjCnYHHiSqdbifNFwq2OucEMtQ@mail.gmail.com>
- <bfdc6c20-926e-533b-a8e3-0d5a3ef8be8c@quicinc.com>
- <CAJZ5v0gHw=BUGn7MkRaLnAQ9ki-YDOL3SpNxd0X9YmTVG-ofzw@mail.gmail.com>
- <0506433c-62c5-e7c0-8c8a-55744a5e87d6@quicinc.com>
+	s=arc-20240116; t=1727779367; c=relaxed/simple;
+	bh=PBR2XbLbwEgZTvbKy4D8ETn+7ULQJ9J3luy9HzPVZ1k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h2IF3dP32ke6qR1QceAZd+pOZCR/3oHwxeNcriZ/eNC71QUFv8uc2hL8W81EkdwlNTy3PxAI5+VjVvbwZHaqW6V50Dw4K+eryzOpga5AWHbGN5RZ23w8AnWOjm4DAfAAeaUQUZ7CCiVDO0an26nRnzN6fcz4jEIOvGYYWimbnGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=C1NGsjKl; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: e0ccc6487fe111ef8b96093e013ec31c-20241001
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=c8MJ6ThBy74cyDGkTROWXQuwTZC3fJ/77mQ0JIWUhxg=;
+	b=C1NGsjKlY6P+kQ+7K4KaNtsmo4YtPqlHfm8m2OZCggWh2ltnl4SQTKrXY21sK2NbRweThi0zul9pztDb4DLX9un64cxmaakdHNYTbnUzaGUbtT6bhFDgPF1KrWrQUaQIDblv3EHAdRJYJZ4GtCBuoRzfhnCrXIB0XII5aki3G6s=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:31999dc5-c90a-4a8b-a403-3c80e123eeb1,IP:0,U
+	RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:6dc6a47,CLOUDID:9b6c0dd1-7921-4900-88a1-3aef019a55ce,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: e0ccc6487fe111ef8b96093e013ec31c-20241001
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1804667157; Tue, 01 Oct 2024 18:42:38 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 1 Oct 2024 18:42:37 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 1 Oct 2024 18:42:37 +0800
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+	<lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, Sen Chu
+	<sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Macpaul Lin
+	<macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>, Florian Fainelli
+	<f.fainelli@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Sebastian
+ Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
+	<broonie@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	<linux-input@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>, Alexandre Mergnat
+	<amergnat@baylibre.com>
+CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai
+	<wenst@chromium.org>
+Subject: [PATCH v8 1/3] regulator: dt-bindings: mt6323: Convert to DT schema
+Date: Tue, 1 Oct 2024 18:41:43 +0800
+Message-ID: <20241001104145.24054-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0506433c-62c5-e7c0-8c8a-55744a5e87d6@quicinc.com>
+Content-Type: text/plain
+X-MTK: N
 
-On Fri, Sep 27, 2024 at 09:26:51AM +0530, Krishna Chaitanya Chundru wrote:
-> Hi Bjorn,
-> 
-> when you get time can you look into this.
-> if there are no further concerns I will respin this patch.
-> 
+Convert the MT6323 regulator binding from the old text-based format to
+the new DT schema style. The property "regulator-name" has been added
+as required property to reflect current usage in mt6323.dtsi.
 
-Please do not top post.
+Examples have been streamlined and relocated to the parent schema file:
+  mfd/mediatek,mt6397.yaml.
 
-FWIW, suggestions from Rafael makes sense to me. Thanks Rafael!
+Update maintainer and submitter information with new entries from MediaTek.
 
-- Mani
+The reference document cited in "mediatek,mt7530.yaml" has been updated
+to point to this new DT schema file
 
-> - Krishna Chaitanya.
-> 
-> On 9/12/2024 9:00 PM, Rafael J. Wysocki wrote:
-> > On Thu, Sep 12, 2024 at 2:13 PM Krishna Chaitanya Chundru
-> > <quic_krichai@quicinc.com> wrote:
-> > > 
-> > > 
-> > > 
-> > > On 9/12/2024 5:27 PM, Rafael J. Wysocki wrote:
-> > > > On Thu, Sep 12, 2024 at 1:52 PM Krishna Chaitanya Chundru
-> > > > <quic_krichai@quicinc.com> wrote:
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > On 9/12/2024 5:12 PM, Rafael J. Wysocki wrote:
-> > > > > > On Fri, Aug 16, 2024 at 10:45 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > 
-> > > > > > > [+cc Rafael, Mayank, Markus (when people have commented on previous
-> > > > > > > versions, please cc them on new versions).  I'm still hoping Rafael
-> > > > > > > will have a chance to chime in]
-> > > > > > > 
-> > > > > > > On Mon, Jul 08, 2024 at 10:19:40AM +0530, Krishna chaitanya chundru wrote:
-> > > > > > > > The Controller driver is the parent device of the PCIe host bridge,
-> > > > > > > > PCI-PCI bridge and PCIe endpoint as shown below.
-> > > > > > > > 
-> > > > > > > >            PCIe controller(Top level parent & parent of host bridge)
-> > > > > > > >                            |
-> > > > > > > >                            v
-> > > > > > > >            PCIe Host bridge(Parent of PCI-PCI bridge)
-> > > > > > > >                            |
-> > > > > > > >                            v
-> > > > > > > >            PCI-PCI bridge(Parent of endpoint driver)
-> > > > > > > >                            |
-> > > > > > > >                            v
-> > > > > > > >                    PCIe endpoint driver
-> > > > > > > > 
-> > > > > > > > Now, when the controller device goes to runtime suspend, PM framework
-> > > > > > > > will check the runtime PM state of the child device (host bridge) and
-> > > > > > > > will find it to be disabled.
-> > > > > > > 
-> > > > > > > I guess "will find it to be disabled"  means the child (host bridge)
-> > > > > > > has runtime PM disabled, not that the child device is disabled, right?
-> > > > > > > 
-> > > > > > > > So it will allow the parent (controller
-> > > > > > > > device) to go to runtime suspend. Only if the child device's state was
-> > > > > > > > 'active' it will prevent the parent to get suspended.
-> > > > > > > 
-> > > > > > > Can we include a hint like the name of the function where the PM
-> > > > > > > framework decides this?  Maybe this is rpm_check_suspend_allowed()?
-> > > > > > > 
-> > > > > > > rpm_check_suspend_allowed()  checks ".ignore_children", which sounds
-> > > > > > > like it could be related, and AFAICS .ignore_children == false here,
-> > > > > > > so .child_count should be relevant.
-> > > > > > > 
-> > > > > > > But I'm still confused about why we can runtime suspend a bridge that
-> > > > > > > leads to devices that are not suspended.
-> > > > > > 
-> > > > > > That should only be possible if runtime PM is disabled for those devices.
-> > > > > > 
-> > > > > > > > Since runtime PM is disabled for host bridge, the state of the child
-> > > > > > > > devices under the host bridge is not taken into account by PM framework
-> > > > > > > > for the top level parent, PCIe controller. So PM framework, allows
-> > > > > > > > the controller driver to enter runtime PM irrespective of the state
-> > > > > > > > of the devices under the host bridge. And this causes the topology
-> > > > > > > > breakage and also possible PM issues like controller driver goes to
-> > > > > > > > runtime suspend while endpoint driver is doing some transfers.
-> > > > > > 
-> > > > > > Why is it a good idea to enable runtime PM for a PCIe controller?
-> > > > > > 
-> > > > > PCIe controller can do certain actions like keeping low power state,
-> > > > > remove bandwidth votes etc as part of runtime suspend as when we know
-> > > > > the client drivers already runtime suspended.
-> > > > 
-> > > > Surely they can, but enabling runtime PM for devices that have
-> > > > children with runtime PM disabled and where those children have
-> > > > children with runtime PM enabled is a bug.
-> > > > 
-> > > we are trying to enable the runtime PM of host bridge here, so that we
-> > > can enable runtime PM of the controller.
-> > 
-> > So this is a preliminary step.  That was unclear to me.
-> > 
-> > > If this change got accepted the child here(host bridge) runtime pm will
-> > > be enabled then i think there will no issue in enabling the runtime pm
-> > > of the controller then.
-> > > > > > > What does "topology breakage" mean?  Do you mean something other than
-> > > > > > > the fact that an endpoint DMA might fail if the controller is
-> > > > > > > suspended?
-> > > > > > > 
-> > > > > > > > So enable runtime PM for the host bridge, so that controller driver
-> > > > > > > > goes to suspend only when all child devices goes to runtime suspend.
-> > > > > > 
-> > > > > > This by itself makes sense to me.
-> > > > > > 
-> > > > > > > IIUC, the one-sentence description here is that previously, the PCI
-> > > > > > > host controller could be runtime suspended even while an endpoint was
-> > > > > > > active, which caused DMA failures.  And this patch changes that so the
-> > > > > > > host controller is only runtime suspended after the entire hierarchy
-> > > > > > > below it is runtime suspended?  Is that right?
-> > > > > > > 
-> > > > > > > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > > > > > > ---
-> > > > > > > > Changes in v4:
-> > > > > > > 
-> > > > > > > (Note: v4 applies cleanly to v6.10-rc1 and to v6.11-rc1 with a small
-> > > > > > > offset).
-> > > > > > > 
-> > > > > > > > - Changed pm_runtime_enable() to devm_pm_runtime_enable() (suggested by mayank)
-> > > > > > > > - Link to v3: https://lore.kernel.org/lkml/20240609-runtime_pm-v3-1-3d0460b49d60@quicinc.com/
-> > > > > > > > Changes in v3:
-> > > > > > > > - Moved the runtime API call's from the dwc driver to PCI framework
-> > > > > > > >      as it is applicable for all (suggested by mani)
-> > > > > > > > - Updated the commit message.
-> > > > > > > > - Link to v2: https://lore.kernel.org/all/20240305-runtime_pm_enable-v2-1-a849b74091d1@quicinc.com
-> > > > > > > > Changes in v2:
-> > > > > > > > - Updated commit message as suggested by mani.
-> > > > > > > > - Link to v1: https://lore.kernel.org/r/20240219-runtime_pm_enable-v1-1-d39660310504@quicinc.com
-> > > > > > > > ---
-> > > > > > > > 
-> > > > > > > > ---
-> > > > > > > >     drivers/pci/probe.c | 4 ++++
-> > > > > > > >     1 file changed, 4 insertions(+)
-> > > > > > > > 
-> > > > > > > > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> > > > > > > > index 8e696e547565..fd49563a44d9 100644
-> > > > > > > > --- a/drivers/pci/probe.c
-> > > > > > > > +++ b/drivers/pci/probe.c
-> > > > > > > > @@ -3096,6 +3096,10 @@ int pci_host_probe(struct pci_host_bridge *bridge)
-> > > > > > > >          }
-> > > > > > > > 
-> > > > > > > >          pci_bus_add_devices(bus);
-> > > > > > > > +
-> > > > > > > > +     pm_runtime_set_active(&bridge->dev);
-> > > > > > > > +     devm_pm_runtime_enable(&bridge->dev);
-> > > > > > > > +
-> > > > > > > >          return 0;
-> > > > > > > >     }
-> > > > > > > >     EXPORT_SYMBOL_GPL(pci_host_probe);
-> > > > > > 
-> > > > > > This will effectively prevent the host bridge from being
-> > > > > > runtime-suspended at all IIUC, so the PCIe controller will never
-> > > > > > suspend too after this change.
-> > > > > > 
-> > > > > No we are having a different observations here.
-> > > > > Without this change the PCIe controller driver can go to runtime suspend
-> > > > > without considering the state of the client drivers i.e even when the
-> > > > > client drivers are active.
-> > > > > After adding this change we see the pcie controller is getting runtime
-> > > > > suspended only after the client drivers are runtime suspended which is
-> > > > > the expected behaviour.
-> > > > 
-> > > > OK, but then when and how is it going to be resumed?
-> > > 
-> > > sorry I am not expert of the pm framework here, what we observed is when
-> > > client drivers are trying to resume using runtime_get we see the
-> > > controller driver is also getting resume properly with this change.
-> > > let me dig in and see in code on how this is happening.
-> > > 
-> > > Bjorn has this view on this change in previous v2 version[1]
-> > > "My expectation is that adding new functionality should only require
-> > > changes in drivers that want to take advantage of it.  For example, if
-> > > we add runtime PM support in the controller driver, the result should
-> > > be functionally correct even if we don't update drivers for downstream
-> > > devices.
-> > > 
-> > > If that's not the way it works, I suggest that would be a problem in
-> > > the PM framework.
-> > 
-> > You can say so, but that's how it goes.
-> > 
-> > If there are any devices with runtime PM disabled in a dependency
-> > chain, the runtime PM framework cannot follow that chain as a whole.
-> > If enabling runtime PM for a device leads to this situation, it is not
-> > correct.
-> > 
-> > > The host bridge might be a special case because we don't have a
-> > > separate "host bridge" driver; that code is kind of integrated with
-> > > the controller drivers.  So maybe it's OK to do controller + host
-> > > bridge runtime PM support at the same time, as long as any time we add
-> > > runtime PM to a controller, we sure it's also set up for the host
-> > > bridge"
-> > 
-> > I think that you can enable runtime PM for host bridge devices in
-> > general, as long as they don't need to be resumed without resuming any
-> > of their children.
-> > 
-> > If that's the case, resuming one of its children will also cause the
-> > host bridge to resume and all should be fine, although you also need
-> > to ensure that system-wide suspend handling is in agreement with this.
-> > 
-> > I would suggest calling pm_runtime_no_callbacks() for the host bridge device.
-> > 
-> > > [1] https://lore.kernel.org/all/20240307215505.GA632869@bhelgaas/
-> > 
-> > And this is the information to put into your patch changelog:
-> > 
-> > 1. It is a property of the runtime PM framework that it can only
-> > follow continuous dependency chains.  That is, if there is a device
-> > with runtime PM disabled in a dependency chain, runtime PM cannot be
-> > enabled for devices below it and above it in that chain both at the
-> > same time.
-> > 
-> > 2. Because of the above, in order to enable runtime PM for a PCIe
-> > controller device, one needs to ensure that runtime PM is enabled for
-> > all devices in every dependency chain between it and any PCIe endpoint
-> > (as runtime PM is enabled for PCIe endpoints).
-> > 
-> > 3. This means that runtime PM needs to be enabled for the host bridge
-> > device, which is present in all of these dependency chains.
-> > 
-> > 4. After this change, the host bridge device will be runtime-suspended
-> > by the runtime PM framework automatically after suspending its last
-> > child and it will be runtime-resumed automatically before resuming its
-> > first child which will allow the runtime PM framework to track
-> > dependencies between the host bridge device and all of its
-> > descendants.
-> > 
-> > Thanks!
+Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Mark Brown <broonie@kernel.org>
+---
+ .../bindings/net/dsa/mediatek,mt7530.yaml     |   4 +-
+ .../regulator/mediatek,mt6323-regulator.yaml  | 119 +++++++++
+ .../bindings/regulator/mt6323-regulator.txt   | 237 ------------------
+ 3 files changed, 121 insertions(+), 239 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+ delete mode 100644 Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
 
+Changes for v1 and v2:
+ - This is the first version of converting mt6323-regulator.
+   This is because converting mt6323-regulator together
+   with mfd/mediatek,mt6397.yaml, so we've create a patch set
+   instead of single patch for each skydives.
+ - This patch has been made base on linux-next/master git repo.
+
+Changes for v3:
+ - Rebased on linux-next/master git repo near next-20240906.
+ - Added 'regulator-name' to 'requried' property to reflect current usage.
+ - replace ^(buck_)? and ^(ldo_)? to ^buck_ and ^ldo_ prefix.
+ - Update file name of 'mediatek,mt6323-regulator.yaml' in
+   'mediatek,mt7530.yaml'
+
+Changes for v4:
+ - No change.
+
+Changes for v5:
+ - Add "Reviewed-by" in commit message. Thanks for the review!
+ - Remove a blank line at EOF whcih causes whitespace warning
+   when 'git am' the patch.
+
+Changes for v6:
+ - No change.
+
+Changes for v7:
+ - Add "Acked-by" tag, Thanks for the review.
+
+Changes for v8:
+ - No change
+
+diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+index ea979bcae1d6..413db386f090 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+@@ -129,8 +129,8 @@ properties:
+   io-supply:
+     description: |
+       Phandle to the regulator node necessary for the I/O power.
+-      See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
+-      details for the regulator setup on these boards.
++      See Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
++      for details for the regulator setup on these boards.
+ 
+   mediatek,mcm:
+     type: boolean
+diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+new file mode 100644
+index 000000000000..9bc9aa9a4eb7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+@@ -0,0 +1,119 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/mediatek,mt6323-regulator.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek MT6323 Regulator
++
++maintainers:
++  - John Crispin <john@phrozen.org>
++  - Sen Chu <sen.chu@mediatek.com>
++  - Macpaul Lin <macpaul.lin@mediatek.com>
++
++description: |
++  Regulator node of the PMIC. This node should under the PMIC's device node.
++  All voltage regulators provided by the PMIC are described as sub-nodes of
++  this node.
++
++properties:
++  compatible:
++    items:
++      - const: mediatek,mt6323-regulator
++
++patternProperties:
++  "^buck_v(pa|proc|sys)$":
++    description: Buck regulators
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++  "^ldo_v(camio|cn18)$":
++    description: LDO with fixed 1.8V output and 0~100/10mV tuning
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++  "^ldo_v((io|rf)18)$":
++    description: LDOs with fixed 1.825V output and 0~100/10mV tuning
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++  "^ldo_v(a|rtc|tcxo|(cn|io)28)$":
++    description: LDOs with fixed 2.8V output and 0~100/10mV tuning
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++  "^ldo_v(usb)$":
++    description: LDOs with fixed 3.3V output and 0~100/10mV tuning
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++  "^ldo_v(cn33_(bt|wifi))$":
++    description: LDOs with variable 3.3V output and 0~100/10mV tuning
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++  "^ldo_v(cama|camaf|camd|emc3v3|gp[123]|ibr|m|mc|mch|sim[12])$":
++    description: LDOs with variable output and 0~100/10mV tuning
++    type: object
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-allowed-modes: false
++
++    unevaluatedProperties: false
++
++    required:
++      - regulator-name
++
++required:
++  - compatible
++
++additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/regulator/mt6323-regulator.txt b/Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+deleted file mode 100644
+index a48749db4df3..000000000000
+--- a/Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
++++ /dev/null
+@@ -1,237 +0,0 @@
+-Mediatek MT6323 Regulator
+-
+-All voltage regulators are defined as subnodes of the regulators node. A list
+-of regulators provided by this controller are defined as subnodes of the
+-PMIC's node. Each regulator is named according to its regulator type,
+-buck_<name> and ldo_<name>. The definition for each of these nodes is defined
+-using the standard binding for regulators at
+-Documentation/devicetree/bindings/regulator/regulator.txt.
+-
+-The valid names for regulators are::
+-BUCK:
+-  buck_vproc, buck_vsys, buck_vpa
+-LDO:
+-  ldo_vtcxo, ldo_vcn28, ldo_vcn33_bt, ldo_vcn33_wifi, ldo_va, ldo_vcama,
+-  ldo_vio28, ldo_vusb, ldo_vmc, ldo_vmch, ldo_vemc3v3, ldo_vgp1, ldo_vgp2,
+-  ldo_vgp3, ldo_vcn18, ldo_vsim1, ldo_vsim2, ldo_vrtc, ldo_vcamaf, ldo_vibr,
+-  ldo_vrf18, ldo_vm, ldo_vio18, ldo_vcamd, ldo_vcamio
+-
+-Example:
+-
+-	pmic: mt6323 {
+-		mt6323regulator: regulators {
+-			mt6323_vproc_reg: buck_vproc{
+-				regulator-name = "vproc";
+-				regulator-min-microvolt = < 700000>;
+-				regulator-max-microvolt = <1350000>;
+-				regulator-ramp-delay = <12500>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vsys_reg: buck_vsys{
+-				regulator-name = "vsys";
+-				regulator-min-microvolt = <1400000>;
+-				regulator-max-microvolt = <2987500>;
+-				regulator-ramp-delay = <25000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vpa_reg: buck_vpa{
+-				regulator-name = "vpa";
+-				regulator-min-microvolt = < 500000>;
+-				regulator-max-microvolt = <3650000>;
+-			};
+-
+-			mt6323_vtcxo_reg: ldo_vtcxo{
+-				regulator-name = "vtcxo";
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
+-				regulator-enable-ramp-delay = <90>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vcn28_reg: ldo_vcn28{
+-				regulator-name = "vcn28";
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
+-				regulator-enable-ramp-delay = <185>;
+-			};
+-
+-			mt6323_vcn33_bt_reg: ldo_vcn33_bt{
+-				regulator-name = "vcn33_bt";
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3600000>;
+-				regulator-enable-ramp-delay = <185>;
+-			};
+-
+-			mt6323_vcn33_wifi_reg: ldo_vcn33_wifi{
+-				regulator-name = "vcn33_wifi";
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3600000>;
+-				regulator-enable-ramp-delay = <185>;
+-			};
+-
+-			mt6323_va_reg: ldo_va{
+-				regulator-name = "va";
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
+-				regulator-enable-ramp-delay = <216>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vcama_reg: ldo_vcama{
+-				regulator-name = "vcama";
+-				regulator-min-microvolt = <1500000>;
+-				regulator-max-microvolt = <2800000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vio28_reg: ldo_vio28{
+-				regulator-name = "vio28";
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
+-				regulator-enable-ramp-delay = <216>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vusb_reg: ldo_vusb{
+-				regulator-name = "vusb";
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <216>;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vmc_reg: ldo_vmc{
+-				regulator-name = "vmc";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <36>;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vmch_reg: ldo_vmch{
+-				regulator-name = "vmch";
+-				regulator-min-microvolt = <3000000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <36>;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vemc3v3_reg: ldo_vemc3v3{
+-				regulator-name = "vemc3v3";
+-				regulator-min-microvolt = <3000000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <36>;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vgp1_reg: ldo_vgp1{
+-				regulator-name = "vgp1";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vgp2_reg: ldo_vgp2{
+-				regulator-name = "vgp2";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <3000000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vgp3_reg: ldo_vgp3{
+-				regulator-name = "vgp3";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vcn18_reg: ldo_vcn18{
+-				regulator-name = "vcn18";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vsim1_reg: ldo_vsim1{
+-				regulator-name = "vsim1";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <3000000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vsim2_reg: ldo_vsim2{
+-				regulator-name = "vsim2";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <3000000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vrtc_reg: ldo_vrtc{
+-				regulator-name = "vrtc";
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vcamaf_reg: ldo_vcamaf{
+-				regulator-name = "vcamaf";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vibr_reg: ldo_vibr{
+-				regulator-name = "vibr";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-enable-ramp-delay = <36>;
+-			};
+-
+-			mt6323_vrf18_reg: ldo_vrf18{
+-				regulator-name = "vrf18";
+-				regulator-min-microvolt = <1825000>;
+-				regulator-max-microvolt = <1825000>;
+-				regulator-enable-ramp-delay = <187>;
+-			};
+-
+-			mt6323_vm_reg: ldo_vm{
+-				regulator-name = "vm";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-enable-ramp-delay = <216>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vio18_reg: ldo_vio18{
+-				regulator-name = "vio18";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-enable-ramp-delay = <216>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			mt6323_vcamd_reg: ldo_vcamd{
+-				regulator-name = "vcamd";
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-
+-			mt6323_vcamio_reg: ldo_vcamio{
+-				regulator-name = "vcamio";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-enable-ramp-delay = <216>;
+-			};
+-		};
+-	};
 -- 
-மணிவண்ணன் சதாசிவம்
+2.45.2
+
 
