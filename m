@@ -1,112 +1,110 @@
-Return-Path: <linux-pm+bounces-15010-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15011-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF9098B84E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 11:27:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BEEE98B8BC
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 11:57:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4A111F22D51
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:27:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 936321C218D1
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6444319D8BB;
-	Tue,  1 Oct 2024 09:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tYOhn4dW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444AD19F430;
+	Tue,  1 Oct 2024 09:57:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0E219ADBB
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 09:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7B419D8B3;
+	Tue,  1 Oct 2024 09:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727774851; cv=none; b=OJvXSH/dWGukRlW0zOeWvzDDUZOKBZuAGfOyH/oR5kQObjhjNGmffN3eNaI1c1wK0/oYILNL5NXliWc2Gud+HByNWiCOnJzfChJZcOx+2OslWQBtb+RVqG3sPM30D6nBKOYGSaMyzlGTPj6r4S/KCWcM7AlzFCD9qHajKU9wBEs=
+	t=1727776632; cv=none; b=ngPc1HHrgYMNryDbbJIloEDXlC/Rj39aJfmC1mgWA0YSyXB0FUMVWFK6jOrOnsgrX+sdcs3XWdUIHnkzQoRSedF2jWMb6y3zrhoRxo4971pTrvlOZTG0Ow3+mwL/x+1bSqhKrvbXRxIdMb/Vbk5Gfd/NxmQk6vgsaefGRJbjA4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727774851; c=relaxed/simple;
-	bh=4Ryu3s8DIY9w2EWhCp6rkVgwZ4x/ryar1OMX8E8y0iM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B8YRV4WTLqZP827pUq8KuM5w71SGEc5gC16hhAKxwBS3GNMCK87fontDE+xKdtAC7ESTwSttl+xy409pp9z68zjzrPZ6CiaFySGBzU4Xjenh1K99zHuCnNZzlli8rKRDvM9vkR1moW2G7OoUCmvHjngYgOW1/Lxk52ClSImyj90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tYOhn4dW; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20bb92346caso1684725ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Oct 2024 02:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727774849; x=1728379649; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Og4qek53uPO62BEgd+L4MRUck7YuRmK/RV5zjsrt7W4=;
-        b=tYOhn4dWar/wUg0BdROG1mFnjDOxFii6+/26chQ9Gx9jwQv6qkI8sGJQCuSnmCiogg
-         z/Efn4MkXuESJDbLGi/Mwn69362ku7hf4yfy9kOhF7Cu9F4XSNbbizX3867073RRVU57
-         EQFf7SrO90k4bxa1Kz4XVPmYNSRFFHEJxr4sekXFGZdifB2W8lYBfeqlPrWWt875Bddq
-         htlbfOzFPrLO7D43+dEqMoMCRuKevFr21tzvKauCBzJMFNkWIQMF167nm48fwJ8WBXoO
-         ocQDAVpaetWAr6clC9mrDn5iXsnR+Cget+U3EvgPvuE4Hfm6fVPbDz3rk6Uv85P1K2Fh
-         cKzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727774849; x=1728379649;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Og4qek53uPO62BEgd+L4MRUck7YuRmK/RV5zjsrt7W4=;
-        b=KrPjh0rN/DjfKWBpVeMxU4YpHGYURFT6hTV6ehnmkyVthg1iaFP2O+590cjBrT9hA0
-         QtGN0ELoMW2Vjiqo13xQ8+Izv14ns/wd/IRKrVDTCY6RaSRb5FkQ7VpLtHTMV1Lr8LZg
-         FQXCM2YRX0WtXLy4QWAvRbUWi/5N5844/fHqIScPBRq/0BEsqyKqKdtQJxf/MvA5urr3
-         Ugl1K4P/WrSAU6/qzp1rqumuFJrzhgPJ3zxCHEBKiJcy7PXH7YH+hQCNoZLN+HX1dehx
-         UiYgJJdqKHzGj8WHNN/obmgBf/HyG4knGeD7G6oSiY2A28Qp8k9de4Y6xpRdNNzJWjWl
-         dA5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWGJB/twYQj3J0n1jZfGpdITa3rBvf2NX3kvf+ClvSIw07bvb4g1Jtft7cH/ARH+EiNH3hvHO1HdQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0aOSmEo6dyytIifw4dDEs8Yr2UYC0u6d3ykmVaKCtdzKXa9zr
-	rZLphPRY3K7TCscBV8SZvXNacj8MW0ztFRMy5OgKo4MGyiXomaQJa0P1ZLHIR8k=
-X-Google-Smtp-Source: AGHT+IHVPuoXnXRJAR07g3gOgSdK8XkN/G7SK7XnEebEhiQftRjz1s9ZhVl89pcJe3sb70cJEpliOg==
-X-Received: by 2002:a17:902:c411:b0:205:7998:3deb with SMTP id d9443c01a7336-20ba9f188f0mr38962845ad.19.1727774849340;
-        Tue, 01 Oct 2024 02:27:29 -0700 (PDT)
-Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6db617088sm7700651a12.93.2024.10.01.02.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 02:27:28 -0700 (PDT)
-Date: Tue, 1 Oct 2024 14:57:26 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] dt-bindings: opp: operating-points-v2-ti-cpu:
- Describe opp-supported-hw
-Message-ID: <20241001092726.rrx2wpu6tu4q4gjf@vireshk-i7>
-References: <20240919-b4-opp-dt-binding-fix-v5-1-199216dc0991@ti.com>
+	s=arc-20240116; t=1727776632; c=relaxed/simple;
+	bh=H0q9iztMRd0pzuiH5IupS+REpCUjAfJeJx6mUfo/qhE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pmBwrwCB9G/fqD8rOCy2GQM0PVnchdu4iD+1JjLx/ScQ73zvVCCo81+s6Bwy2O8T+93BkNDAavc3cjfU+mYkWQE+V0aWm6B1yjNVV/wld72gwP9wCntyp5ahpknSYCMo5VOa0GRDkz/NHsu2nBYc8Bz9T3WGna2ZfCzoyzmiEuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1285F339;
+	Tue,  1 Oct 2024 02:57:39 -0700 (PDT)
+Received: from [10.1.28.63] (e127648.arm.com [10.1.28.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78FFB3F58B;
+	Tue,  1 Oct 2024 02:57:05 -0700 (PDT)
+Message-ID: <fa623b5e-721a-47fd-84c8-1088d9a6a24a@arm.com>
+Date: Tue, 1 Oct 2024 10:57:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240919-b4-opp-dt-binding-fix-v5-1-199216dc0991@ti.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 6/8] cpufreq: intel_pstate: Remove iowait boost
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
+ dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
+ Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
+ bvanassche@acm.org, andres@anarazel.de, asml.silence@gmail.com,
+ linux-block@vger.kernel.org, io-uring@vger.kernel.org, qyousef@layalina.io,
+ dsmythies@telus.net, axboe@kernel.dk
+References: <20240905092645.2885200-1-christian.loehle@arm.com>
+ <20240905092645.2885200-7-christian.loehle@arm.com>
+ <CAJZ5v0i3ULQ-Mzu=6yzo4whnWne0g1sxcgPL_u828Jyy1Qu1Zg@mail.gmail.com>
+ <0a0186cad5a9254027d0ac6a7f39e39f5473665c.camel@linux.intel.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <0a0186cad5a9254027d0ac6a7f39e39f5473665c.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 19-09-24, 18:43, Dhruva Gole wrote:
-> It seems like we missed migrating the complete information from the old
-> DT binding where we had described what the opp-supported-hw is supposed
-> to describe. Hence, bring back the description from the previous binding
-> to the current one along with a bit more context on what the values are
-> supposed to be.
+On 9/30/24 21:35, srinivas pandruvada wrote:
+> On Mon, 2024-09-30 at 20:03 +0200, Rafael J. Wysocki wrote:
+>> +Srinivas who can say more about the reasons why iowait boosting
+>> makes
+>> a difference for intel_pstate than I do.
+>>
+
+Hi Srinivas,
+
+> It makes difference on Xeons and also GFX performance.
+
+AFAIU the GFX performance with iowait boost is a regression though,
+because it cuts into the system power budget (CPU+GPU), especially
+on desktop and mobile chips (but also some servers), no?
+https://lore.kernel.org/lkml/20180730220029.81983-1-srinivas.pandruvada@linux.intel.com/
+https://lore.kernel.org/lkml/e7388bf4-deb1-34b6-97d7-89ced8e78ef1@intel.com/
+Or is there a reported case where iowait boosting helps
+graphics workloads?
+
+> The actual gains will be model specific as it will be dependent on
+> hardware algorithms and EPP.
 > 
-> Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
-> Changes in v5:
-> - Fix the new lines inserted to seperate paragraphs.
-> - /eg./example,/
-> - Fix Odd line wrapping
-> - Link to v4: https://lore.kernel.org/all/20240918173431.GA1833339-robh@kernel.org/
+> It was introduced to solve regression in Skylake xeons. But even in the
+> recent servers there are gains.
+> Refer to
+> https://lkml.iu.edu/hypermail/linux/kernel/1806.0/03574.html
 
-Applied. Thanks.
+Did you look into PELT utilization values at that time?
+I see why intel_pstate might be worse off than schedutil wrt removing
+iowait boosting and do see two remedies essentially:
+1. Boost after all sleeps (less aggressively), although I'm not a huge fan of
+this.
+2. If the gap between util_est and HWP-determined frequency is too large
+then apply some boost. A sort of fallback on a schedutil strategy.
+That would of course require util_est to be significantly large in those
+scenarios.
 
--- 
-viresh
+I might try to propose something for 2, although as you can probably
+guess, playing with HWP is somewhat uncharted waters for me.
+
+Since intel_pstate will actually boost into unsustainable P-states,
+there should be workloads that regress with iowait boosting. I'll
+go looking for those.
+
+
 
