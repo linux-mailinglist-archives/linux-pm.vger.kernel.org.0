@@ -1,188 +1,184 @@
-Return-Path: <linux-pm+bounces-15023-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15024-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6B9898C099
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 16:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B713F98C142
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 17:12:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 463AE1F21F55
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 14:46:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61F241F21C9D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 15:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E63C71C9DC1;
-	Tue,  1 Oct 2024 14:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512301C8FD7;
+	Tue,  1 Oct 2024 15:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MI4mTUNa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhXZBah1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2344C1C9B82;
-	Tue,  1 Oct 2024 14:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224601C5782;
+	Tue,  1 Oct 2024 15:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727794003; cv=none; b=l8RRTCqNONJdBdYajalFtvWxkeG64YrhFcrKbOVL28/EJTABWOekiCUOAoIoqOJhnfffSP1twKkU/CV0bNHVE5N+8o1t2d9n5p9zN7Mx6Wg3XHtsIOx+VuYH6IqWHzZPLUgcifUwCmede7hfG2oGOLSPnM/C4tZpMYD35FcWMB0=
+	t=1727795545; cv=none; b=J3k7cVXB0tjq6SQSVrw5Xf1jWClURgJPxPytafDaNvs7p7eVpvXySHAtwvyZj8zFsraZzWC0A3kI2YuU1QAKWmeoM/kKLRZ3NSKFX1URoVZOVzdWoZeGSmJRnSflRvS7jWdo3GdPa4UiNZiqdPV8q5afoE4LWLwLSth24iJKhWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727794003; c=relaxed/simple;
-	bh=qeu2p0M191IZpPsImbZWXrJj32UkejC5lQR1EYkKbAo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GcEPRwbXu0zqqLC9zjCnFn7yr8J99NZJTyDzZ/jYxnEt1hMvlOkeJTz30bPgfws+/8FS/DGQwIhJKxdSFDWypvsGGdKjlRGoFG0+uCem0wTFpOtz+EO0v2KjDoKSvCjt/rAbZm7oEoB3Jq0wlyLo9/qaMSWu7YFnRox3wE50Zr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MI4mTUNa; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727794002; x=1759330002;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=qeu2p0M191IZpPsImbZWXrJj32UkejC5lQR1EYkKbAo=;
-  b=MI4mTUNaO95HgBmSiueZkjA/0CnfJcZ766+aPCBRvSjBwIwlgrFNdmea
-   ybyHhsWOQ/Q/zsraoH3McIU64pVChUCaydOReKqCaYo3oTYI2ZTgsfQWm
-   Jp6xijsLMb2KGBL0y/rbIrFmGnV1PX3kb7Yu2HhrqRfEeUWpePZXzEbxV
-   G3kwCI2XuzPljZ0zcNuYS7G/HVdkikIpDm07Vch61c/4nAIQ2TrLlvsZM
-   mnBxXgQ0B8yo2KMJGpYCY2X4MMnYiQ5jJKyGkfjBJxPGE3F3W7/k2GEgM
-   xYhGXphYr09f5AJ2ZQRXrkYgL4jmyArtXKqScd0+AdVcfIx4QPpGboFRO
-   A==;
-X-CSE-ConnectionGUID: qPf19ojMRv2jdEFGqmCBFA==
-X-CSE-MsgGUID: 76ccR8GaTn6N8qlNq9LwCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11212"; a="26435938"
-X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="26435938"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 07:46:41 -0700
-X-CSE-ConnectionGUID: Y4Yhc432QH2y9kMfwC2UMQ==
-X-CSE-MsgGUID: 72gVyCxAS0OmaDCKq/Gi7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="73358083"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.125.108.208])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 07:46:40 -0700
-Message-ID: <95b31cafb584c055bf303dc79ed7c389538d29c5.camel@linux.intel.com>
-Subject: Re: [RFC PATCH 6/8] cpufreq: intel_pstate: Remove iowait boost
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki"
-	 <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com, 
- dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org, 
- Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com,
- ulf.hansson@linaro.org,  bvanassche@acm.org, andres@anarazel.de,
- asml.silence@gmail.com,  linux-block@vger.kernel.org,
- io-uring@vger.kernel.org, qyousef@layalina.io,  dsmythies@telus.net,
- axboe@kernel.dk
-Date: Tue, 01 Oct 2024 07:46:40 -0700
-In-Reply-To: <fa623b5e-721a-47fd-84c8-1088d9a6a24a@arm.com>
-References: <20240905092645.2885200-1-christian.loehle@arm.com>
-	 <20240905092645.2885200-7-christian.loehle@arm.com>
-	 <CAJZ5v0i3ULQ-Mzu=6yzo4whnWne0g1sxcgPL_u828Jyy1Qu1Zg@mail.gmail.com>
-	 <0a0186cad5a9254027d0ac6a7f39e39f5473665c.camel@linux.intel.com>
-	 <fa623b5e-721a-47fd-84c8-1088d9a6a24a@arm.com>
-Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
- keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
- YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
- y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
- NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
- GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
- TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
- oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
- AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
- b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
- AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
- oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
- UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
- ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
- wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
- NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
- J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
- oOfCQxricddC
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1727795545; c=relaxed/simple;
+	bh=vOb2cBg3YKOeU1ZQj9lyC4Y3LiyaLbKnBFaVZsWE8tU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=efReEvhenN6yW4bXJmJIIdgZBu923tfbZVlgcEfode4D2Hb9VSwcmm3ddxdDP7i+FNmg0uabwjLhc3+bbg+pdzY1osQcSb6IfKkkBAGaxWB0wfrxJDUCmOzXMDukfza+8ZxvDEMJt6zjvn0GIWwofO6+YbQ1/+xlwOKRt+KKR9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhXZBah1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C3CC4CEC6;
+	Tue,  1 Oct 2024 15:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727795544;
+	bh=vOb2cBg3YKOeU1ZQj9lyC4Y3LiyaLbKnBFaVZsWE8tU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=GhXZBah1Y6sKXkPJI7tFDxk20ayMPtxsnaNyUwQeoVsKfqciNGf3JYQKHL7WGbOoG
+	 E+JIbvZcF6g0ido/TbG24JklHmVPopw0iuZ8sMbADdQlsBFUpWyWt7zlbZDsgkXZLX
+	 u69IvToo3r30hSgP+lhik7L/DGTzfPCpqELVAIByURdU698WQMxQm7WiGX0VseyC/e
+	 BlUBl7s17UKGtZw82x0GdjBKVENNfjQ0FKJbu2WS7QiWYv3faisL8A+E6BcqJRGBzC
+	 KWbFSRV3pcweX59QdzEowGU0MiZAua6SSrtvUaBXvhauK0FIlDi8Nt9Ck/1Jx9Kfir
+	 23JK5jbUiDa9Q==
+From: Roger Quadros <rogerq@kernel.org>
+Date: Tue, 01 Oct 2024 18:12:18 +0300
+Subject: [PATCH] usb: dwc3: core: Fix system suspend on TI AM62 platforms
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFER/GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSyNj3cRcMyPdnIJc3dLiJN00EyMDS0PzpBRzA3MloJaCotS0zAqwcdG
+ xtbUAp0RjS14AAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>, 
+ Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>, 
+ msp@baylibre.com, srk@ti.com, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-usb@vger.kernel.org, stable@vger.kernel.org, 
+ Roger Quadros <rogerq@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3335; i=rogerq@kernel.org;
+ h=from:subject:message-id; bh=vOb2cBg3YKOeU1ZQj9lyC4Y3LiyaLbKnBFaVZsWE8tU=;
+ b=owEBbQKS/ZANAwAIAdJaa9O+djCTAcsmYgBm/BFUmouOCKLwG6BHWujLlPbceU+uDh1JXzuaN
+ T5ReiYdaGeJAjMEAAEIAB0WIQRBIWXUTJ9SeA+rEFjSWmvTvnYwkwUCZvwRVAAKCRDSWmvTvnYw
+ k+9iEADHF+B7kkPnLXj5BsQ6N26i2Onk+8W6BI9VD6ucCARaZaNEOAxf+PHo+mo0srj2T3ad+C4
+ eWghHfB0UrOK9uSQ6vW+pGxJFVJttdgx2o+QPMMrQiyVK6vnZ2YMGI8WgPE/EndyWClyuVLCB0Z
+ cdihhJWLOObontSlsdwbjCNTjGMIjdgzSCFMH9x7fFE+ypmXHbJxvaNDH7XwqOMANfjS32db925
+ isHnZvzNcrdJ5lD4IR3HXq2qK+aN2ln6AThY6EVi2qeEd8Db2vZSq6W30BzTjsLLY7Rg2/4qlHz
+ HTQGgHye1in1Yvk4y0D2W6Yr532LcFz0GmlhTt7u4xAKnxkb8dmuNezTsZTUcJpKt7jFP/kJSby
+ eGuykYnZHzKANbAuzBjipu18wYPgNa4hi8zfsyOAyJM15L2MLoK4sEnnkBZTmO/c0UzypUQZUNQ
+ yiokqis4ws4QC4g6XeH3u5awmFEhaKsepnpQyTcsYTuQ6W60Ir8z477YAVEJVSTRJS3dFe+HUyC
+ E6fdGtfrKK6h+Ey7uL0dqxR172US/ToOURzaZLVtzQOQUUkrkCOC4qWUiOZlCiC0vj1/v1sKPRv
+ VbXY0Y3easAjSPRIbur2BAPFqzfQ2mdicU1RxXcqg5hcmqI7LJ9WX9/pD6NBE+UBnCbF+GbTesJ
+ UE802tTXBsx4Rvg==
+X-Developer-Key: i=rogerq@kernel.org; a=openpgp;
+ fpr=412165D44C9F52780FAB1058D25A6BD3BE763093
 
-Hi Christian,
+Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
+system suspend is broken on AM62 TI platforms.
 
-On Tue, 2024-10-01 at 10:57 +0100, Christian Loehle wrote:
-> On 9/30/24 21:35, srinivas pandruvada wrote:
-> > On Mon, 2024-09-30 at 20:03 +0200, Rafael J. Wysocki wrote:
-> > > +Srinivas who can say more about the reasons why iowait boosting
-> > > makes
-> > > a difference for intel_pstate than I do.
-> > >=20
->=20
-> Hi Srinivas,
->=20
-> > It makes difference on Xeons and also GFX performance.
->=20
-> AFAIU the GFX performance with iowait boost is a regression though,
-> because it cuts into the system power budget (CPU+GPU), especially
-> on desktop and mobile chips (but also some servers), no?
-> https://lore.kernel.org/lkml/20180730220029.81983-1-srinivas.pandruvada@l=
-inux.intel.com/
-> https://lore.kernel.org/lkml/e7388bf4-deb1-34b6-97d7-89ced8e78ef1@intel.c=
-om/
-> Or is there a reported case where iowait boosting helps
-> graphics workloads?
->=20
-GFX is complex as you have both cases depending on the generation. We
-don't enable the control by default. There is a user space control, so
-that it can be selected when it helps.
+Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
+bits (hence forth called 2 SUSPHY bits) were being set during core
+initialization and even during core re-initialization after a system
+suspend/resume.
 
+These bits are required to be set for system suspend/resume to work correctly
+on AM62 platforms.
 
-> > The actual gains will be model specific as it will be dependent on
-> > hardware algorithms and EPP.
-> >=20
-> > It was introduced to solve regression in Skylake xeons. But even in
-> > the
-> > recent servers there are gains.
-> > Refer to
-> > https://lkml.iu.edu/hypermail/linux/kernel/1806.0/03574.html
->=20
-> Did you look into PELT utilization values at that time?
-No. But boost is needed for idle or semi-idle CPUs, otherwise HWP would
-have already running at higher frequency. But we could avoid boot if
-util is above a threshold.
+Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
+driver is not loaded and started.
+For Host mode, the 2 SUSPHY bits are set before the first system suspend but
+get cleared at system resume during core re-init and are never set again.
 
+This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
+before system suspend and restored to the original state during system resume.
 
-> I see why intel_pstate might be worse off than schedutil wrt removing
-> iowait boosting and do see two remedies essentially:
-> 1. Boost after all sleeps (less aggressively), although I'm not a
-> huge fan of
-> this.
-> 2. If the gap between util_est and HWP-determined frequency is too
-> large
-> then apply some boost. A sort of fallback on a schedutil strategy.
-> That would of course require util_est to be significantly large in
-> those
-> scenarios.
->=20
-> I might try to propose something for 2, although as you can probably
-> guess, playing with HWP is somewhat uncharted waters for me.
->=20
-Now we sample the last HWP determined frequency at every tick and can
-use to avoid boost. So need some experiments.
+Cc: stable@vger.kernel.org # v6.9+
+Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
+Link: https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+---
+ drivers/usb/dwc3/core.c | 16 ++++++++++++++++
+ drivers/usb/dwc3/core.h |  2 ++
+ 2 files changed, 18 insertions(+)
 
-> Since intel_pstate will actually boost into unsustainable P-states,
-> there should be workloads that regress with iowait boosting. I'll
-> go looking for those.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9eb085f359ce..1233922d4d54 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2336,6 +2336,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 	u32 reg;
+ 	int i;
+ 
++	dwc->susphy_state = !!(dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
++			    DWC3_GUSB2PHYCFG_SUSPHY);
++
+ 	switch (dwc->current_dr_role) {
+ 	case DWC3_GCTL_PRTCAP_DEVICE:
+ 		if (pm_runtime_suspended(dwc->dev))
+@@ -2387,6 +2390,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 		break;
+ 	}
+ 
++	if (!PMSG_IS_AUTO(msg)) {
++		if (!dwc->susphy_state)
++			dwc3_enable_susphy(dwc, true);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -2454,6 +2462,14 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+ 		break;
+ 	}
+ 
++	if (!PMSG_IS_AUTO(msg)) {
++		/* dwc3_core_init_for_resume() disables SUSPHY so just handle
++		 * the enable case
++		 */
++		if (dwc->susphy_state)
++			dwc3_enable_susphy(dwc, true);
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index c71240e8f7c7..b2ed5aba4c72 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1150,6 +1150,7 @@ struct dwc3_scratchpad_array {
+  * @sys_wakeup: set if the device may do system wakeup.
+  * @wakeup_configured: set if the device is configured for remote wakeup.
+  * @suspended: set to track suspend event due to U3/L2.
++ * @susphy_state: state of DWC3_GUSB2PHYCFG_SUSPHY before PM suspend.
+  * @imod_interval: set the interrupt moderation interval in 250ns
+  *			increments or 0 to disable.
+  * @max_cfg_eps: current max number of IN eps used across all USB configs.
+@@ -1382,6 +1383,7 @@ struct dwc3 {
+ 	unsigned		sys_wakeup:1;
+ 	unsigned		wakeup_configured:1;
+ 	unsigned		suspended:1;
++	unsigned		susphy_state:1;
+ 
+ 	u16			imod_interval;
+ 
 
-Xeons power limit is in order of 100s of Watts. So boost doesn't
-generally to unsustainable state. Even if all cores boost at the same
-time, the worst case we still get all core turbo.
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20240923-am62-lpm-usb-f420917bd707
 
-Thanks,
-Srinivas
-
-
-
-
->=20
->=20
+Best regards,
+-- 
+Roger Quadros <rogerq@kernel.org>
 
 
