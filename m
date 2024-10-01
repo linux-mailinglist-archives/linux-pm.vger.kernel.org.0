@@ -1,155 +1,168 @@
-Return-Path: <linux-pm+bounces-15001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909F398B5E5
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:40:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1AA98B61F
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:50:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7F38B2172E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 07:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67C88280EF5
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 07:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5521BD508;
-	Tue,  1 Oct 2024 07:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D751BDA83;
+	Tue,  1 Oct 2024 07:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aDEbkzH3"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="qyHtKOEu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C521BCA1E;
-	Tue,  1 Oct 2024 07:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991DD63D;
+	Tue,  1 Oct 2024 07:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727768399; cv=none; b=FHlkAm/AgEWHMQiUW0g6KjUHD3HMVjZVKPnv0z+0mv8/1wElV0xDqYs/NU46utlIhUewOJ6Sh+cKntx0HfEaDxkNteiBFcs2wKFfa5I6k2mlYNawb/G091wpiZztc18RZZ8wYcBi0eZMl+3SiRhg6v2rybJUxn7z5AnDDJSLwno=
+	t=1727769025; cv=none; b=ULXbIAQLLrdPJCz3oakoRgr0awQsJBMNgE3/sKlqaxlIfRw4hSnMwPgiRkwcOt2paGsZxbV5SXkKULqY4uucIFoZSdsYUBPXE0TAglHNMkqRu0E/bTNejks21uiYuHgm+y6flMacYDsoUn72dKS4gV5iGE/NJ/LqB8TwpCIl3UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727768399; c=relaxed/simple;
-	bh=za16NxIQDUGjjHP2c29sw6PI8ZU3lXszSx4jSWmr5Jk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gs1Vlb39N+XmFyhOeSWV4HH9lzSLiE41NhmnxX/eJOYaPkrQukle5QKp6eexE760VeACnvemTTg6q4R2woDbDQ4SYtmLCljnKwuIRo26inm4taTB+AwKKdD8HDrvig05ViTX9WH7/7r/ALZGLDecw2+p7SyXoYJu8vH9a16f76I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aDEbkzH3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09567C4CECE;
-	Tue,  1 Oct 2024 07:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727768399;
-	bh=za16NxIQDUGjjHP2c29sw6PI8ZU3lXszSx4jSWmr5Jk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aDEbkzH31TMYxyPZ0U4IqFDz2ggAiyQ93AuGH6DFWD852wq66X3Juctv++qrVnY1E
-	 6ZxaDC6+h3KE0C3l6NuZeDDiDBRF3EQr23e6H7GtHVX072wWjX7iI/+gFopMi4XBCn
-	 BQre8YouOhT4yPxzR2ekUT/nh48OGc3LLs9GaU55B4BLhQp30yz1hZOr+kIXvYG3ih
-	 OZ3IX+Rt7jhZPHye/HmzQ++7Vy95pRJ5j3zgDMATlOYnW26kd2Y9d5yDOCNbt7sReu
-	 G4umcThdYU5KCIUGRK/jsPgHtwnY8ozG6RFsniIyYbjsaaJ8GQzJdc9VLHuOINxJqx
-	 dhb3f3MUsJE9A==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5398d171fa2so2783454e87.0;
-        Tue, 01 Oct 2024 00:39:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU/4nIGRrbGh3fKfqUG5lBSWj4sLs7BomAA5/iJNOngPTrRwE2j9edU1IW53QqIB/XvPxm2/p5+bYtMMTjBXD+imw==@vger.kernel.org, AJvYcCVHBvlJPF69wQJrLI29PPI5avcaApjG9AlqhTLFEPzHipbItjFqkgeMwOKf52H3ExcZXO4rwwadaEs8@vger.kernel.org, AJvYcCVgQgKOxio5O6CEGiiFsPbIMX8HHp0rwpUPgHFECYWRHZJlsrunalwFkzpr/RqUkG8k6enjVaAneQqxu6rZ@vger.kernel.org, AJvYcCVpj2nxLH2Ocx3TJVYA3WxBMLn6Zyjn5nVORL82cXS2VqcsSjOcK17rv+W3EpQOtE/DUIQH73pjJxGo@vger.kernel.org, AJvYcCW7r+HxAZ94V7SnxSOZuF25B5VS/qgMYUYYZkw3l+h9hAcYspPtmbKdf5QIM5ZTjU+K6PYKIWxLNbGO1WC8@vger.kernel.org, AJvYcCWnj89cLq4UDpSVTsnQc0CeSQU6avwkubSZ6Fq02ILdogiS85IaE0+b8Y+31C7euDIXsSE=@vger.kernel.org, AJvYcCWnx1dX2weYGF3LZ2hgZ4LfD0EmZlGluFwMZm43Fnywg32fiqqiVMns604gn0hfr40HXhYtAPtTp5QJIw==@vger.kernel.org, AJvYcCWupMnXRcWfp77XHQviOgHVVj6sZCHyGs8GzsyFreayGMY1d2SqNzeQnBkCJF1hbzYvl25h6qWfFJw=@vger.kernel.org, AJvYcCXVR91nchlBpGtG38m1ufl3kVJoZSiCAKwTPPQpH09dl/hLTMbs78rJ5e/ovgq24kqkpqOn69j1SV7OlnAb2Y0=@vger.kernel.org, AJvYcCXnYcweb4CyvmNYsZQgBSFW
- tATkU1HvWQoID6SRBDGbgxp7topIHiOONqv5sQnhu87iBTnMG3HYWzOyAPRh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxzc8oZ1zlQFg/X12ociZ3RcFG7M3WM4l/p9iaTi8/3BitDc1Ut
-	mjGrNFR4ZS5vRzDNfBYiDBFts4PfyJJH85g5A554V5lRplMTDLTbeFFnOHG50guQmOFoOAsz/bd
-	Pg6KoOwt/dD4RwOq4UBP8VJSdMOQ=
-X-Google-Smtp-Source: AGHT+IGSGW+uzmUjxyeIFaLft3PnZ2kaCaMuKqb2T+GLgytq3+U5XTQLxKYTu05fD4+Ir4Uuwo1LuIK4EgJ7mk97UG4=
-X-Received: by 2002:a05:6512:b9e:b0:539:8e20:105 with SMTP id
- 2adb3069b0e04-5398e200266mr5005657e87.28.1727768396993; Tue, 01 Oct 2024
- 00:39:56 -0700 (PDT)
+	s=arc-20240116; t=1727769025; c=relaxed/simple;
+	bh=H8GT7CQPQCP0iqDT0akwe9NghW+v/5sAgRRAbcbb5Wo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=YAcLIo74mrIfQAvGzYPqFtJF88U6v3vSmN5ciGW6zaSk4BJSfslUDPpJk1PPTL+VnqfdVmgC+qO4KZplKeGUrZvddBd3F6P9HdmItyWVOheIcKfq6orzqwYYPVJ6fIiDLg/8nKcQowU7buhOdkLXE9WRW4oSI0/KpAhsOzDqwo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=qyHtKOEu; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: ccdfc1c07fc911efb66947d174671e26-20241001
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:CC:To:From:Subject:MIME-Version:Date:Message-ID; bh=FlXzrXpPCzLcSODdsG8c3PiQzj81rbhZ9JEiAPkX18g=;
+	b=qyHtKOEuOk6q6+jzGD1iSnaFQHlFcBrsieaxCfeRvA4W8KDlpk926lBA2sxf4FRJXNE4kxdX+/3t5NZhVbS+EbjFGG7HudBW8762A5ZXLyChg9v78v3HH8Ee+ohLNkbFr3+Z1ICpJ4lePfo5K0vLYoxIKYgRZfm/jXekpou276c=;
+X-CID-CACHE: Type:Local,Time:202410011505+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:f4145b70-66da-4fe0-ad2c-5b0a2bbc4e74,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:f94b0ad1-7921-4900-88a1-3aef019a55ce,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: ccdfc1c07fc911efb66947d174671e26-20241001
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1105446460; Tue, 01 Oct 2024 15:50:17 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 1 Oct 2024 15:50:16 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs13n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Tue, 1 Oct 2024 15:50:14 +0800
+Message-ID: <c2fb40cc-491f-1c1a-7343-c70a60b3a031@mediatek.com>
+Date: Tue, 1 Oct 2024 15:50:12 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-54-ardb+git@google.com> <20241001071841.yrc7cxdp2unnzju7@treble>
-In-Reply-To: <20241001071841.yrc7cxdp2unnzju7@treble>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 1 Oct 2024 09:39:45 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGA785Z2_AWuTTXPkvH9Mis=28rn_paOZe=gdaXjpu-=A@mail.gmail.com>
-Message-ID: <CAMj1kXGA785Z2_AWuTTXPkvH9Mis=28rn_paOZe=gdaXjpu-=A@mail.gmail.com>
-Subject: Re: [RFC PATCH 24/28] tools/objtool: Treat indirect ftrace calls as
- direct calls
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, 1 Oct 2024 at 09:18, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Wed, Sep 25, 2024 at 05:01:24PM +0200, Ard Biesheuvel wrote:
-> > +             if (insn->type == INSN_CALL_DYNAMIC) {
-> > +                     if (!reloc)
-> > +                             continue;
-> > +
-> > +                     /*
-> > +                      * GCC 13 and older on x86 will always emit the call to
-> > +                      * __fentry__ using a relaxable GOT-based symbol
-> > +                      * reference when operating in PIC mode, i.e.,
-> > +                      *
-> > +                      *   call   *0x0(%rip)
-> > +                      *             R_X86_64_GOTPCRELX  __fentry__-0x4
-> > +                      *
-> > +                      * where it is left up to the linker to relax this into
-> > +                      *
-> > +                      *   call   __fentry__
-> > +                      *   nop
-> > +                      *
-> > +                      * if __fentry__ turns out to be DSO local, which is
-> > +                      * always the case for vmlinux. Given that this
-> > +                      * relaxation is mandatory per the x86_64 psABI, these
-> > +                      * calls can simply be treated as direct calls.
-> > +                      */
-> > +                     if (arch_ftrace_match(reloc->sym->name)) {
-> > +                             insn->type = INSN_CALL;
-> > +                             add_call_dest(file, insn, reloc->sym, false);
-> > +                     }
->
-> Can the compiler also do this for non-fentry direct calls?
-
-No, it is essentially an oversight in GCC that this happens at all,
-and I fixed it [0] for GCC 14, i.e., to honour -mdirect-extern-access
-when emitting these calls.
-
-But even without that, it is peculiar at the very least that the
-compiler would emit GOT based indirect calls at all.
-
-Instead of
-
-  call *__fentry__@GOTPCREL(%rip)
-
-it should simply emit
-
-  call __fentry__@PLT
-
-and leave it up to the linker to resolve this directly or
-lazily/eagerly via a PLT jump (assuming -fno-plt is not being used)
-
-> If so would
-> it make sense to generalize this by converting all
-> INSN_CALL_DYNAMIC+reloc to INSN_CALL?
->
-> And maybe something similar for add_jump_destinations().
->
-
-I suppose that the pattern INSN_CALL_DYNAMIC+reloc is unambiguous, and
-can therefore always be treated as INSN_CALL. But I don't anticipate
-any other occurrences here, and if they do exist, they indicate some
-other weirdness in the compiler, so perhaps it is better not to add
-general support for these.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 2/3] ASoC: dt-bindings: mt6358: Convert to DT Schema
+Content-Language: en-US
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+	<lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, Sen Chu
+	<sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Andrew Lunn
+	<andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
+	<olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Sebastian Reichel <sre@kernel.org>, Liam Girdwood
+	<lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, <linux-input@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-leds@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+	<linux-sound@vger.kernel.org>, Alexandre Mergnat <amergnat@baylibre.com>,
+	Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai
+	<wenst@chromium.org>
+References: <20240930073311.1486-1-macpaul.lin@mediatek.com>
+ <20240930073311.1486-2-macpaul.lin@mediatek.com>
+ <6l6hb264yvhd6e6neurd5t4gmv5z5c5gpg27icijif3hq4cuu7@pbhfkdxb2eam>
+ <42dc4e9a-efcd-e166-b4fd-d4fe0dcd3c77@mediatek.com>
+In-Reply-To: <42dc4e9a-efcd-e166-b4fd-d4fe0dcd3c77@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-[0] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=bde21de1205c0456f6df68c950fb7ee631fcfa93
+
+On 10/1/24 15:05, Macpaul Lin wrote:
+> On 10/1/24 14:34, Krzysztof Kozlowski wrote:
+> 
+> [snip]
+> 
+>>> +description: |
+>>> +  The communication between MT6358 and SoC is through Mediatek PMIC 
+>>> wrapper.
+>>> +  For more detail, please visit Mediatek PMIC wrapper documentation.
+>>> +  Must be a child node of PMIC wrapper.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - mediatek,mt6366-sound
+>>> +      - mediatek,mt6358-sound
+>>> +    const: mediatek,mt6358-sound
+>>
+>> This wasn't ever tested.
+> 
+> Hum, I have indeed tested it with linux-next/master branch.
+> Ran dt_binding_check with dtschema trunk with this single file
+> but didn't get any warning or errors.
+> 'make dt_binding_check DT_SCHEMA_FILES=mt6358.yaml'
+> 
+> Could you please help to paste the error log for me?
+> If there are new errors, I need to check if there is any
+> environment issue.
+
+I've both tested both of the following format pass dt_binding_check.
+#1.
+properties:
+   compatible:
+     items:
+       - enum:
+           - mediatek,mt6366-sound
+           - mediatek,mt6358-sound
+       - const: mediatek,mt6358-sound
+
+#2.
+properties:
+   compatible:
+     enum:
+       - mediatek,mt6366-sound
+       - mediatek,mt6358-sound
+     const: mediatek,mt6358-sound
+
+>> Do not send untested code, it's a waste of reviewers' time.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>>
+> Thanks
+> Macpaul Lin
+
+Should I update it with format #1?
+
+Thanks
+Macpaul Lin
 
