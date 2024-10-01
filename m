@@ -1,168 +1,130 @@
-Return-Path: <linux-pm+bounces-14988-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14989-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41FA898B457
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 08:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C055A98B472
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 08:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 664931C23451
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 06:29:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E91681C2095E
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 06:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D41A1BC084;
-	Tue,  1 Oct 2024 06:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0868E7DA62;
+	Tue,  1 Oct 2024 06:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n5d0fRzj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QyNjBOHz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13B41BD01A
-	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 06:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE7F2A1D3
+	for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2024 06:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727764164; cv=none; b=bqdyEEDemR12IW0tCAyNqUiH6jFOjvT4gEB6pPN0ANUOASwI8qHGBMllc/Jen2IR+9d3+lc0+Yt9Kt2ZWrIReI5QA7VxmAwyth8e5ykPSI1CvJ0RXCsFTc2zN+6661sTG9W5eAKq+8LcEu6LrgVAeC6EmCw8yq3t35MTtZQ+ejY=
+	t=1727764344; cv=none; b=UzXp7Rc+VrEqtSsdrfJvxTqoFQo5/pVoUhm07GTCXkI+WevS/4DHRf4GNsSvB8zowoHdJxYpHxnR1e+JcCeyoKBQHVfBZq+wMQAV6nub7L9suW63QCExgBc85HG6HVfVGyS0FkQ/9DHrhnnk04RbeoflhvU2AHPzezuU+f8xQD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727764164; c=relaxed/simple;
-	bh=keWJVidIttSnqnT4xpvTji00h7Qff1uIofjU7I/h5oI=;
+	s=arc-20240116; t=1727764344; c=relaxed/simple;
+	bh=V6TjkPr9+R6KJJiOq70SGV+fxgdPrkENkBp7L85cO6I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WhAth+DPAoG3YOBzpTAzLuB0HG35XUdxHp16o8wrQEOZDvZ0U8xg+44okrnkI2ohuCLOrsy2x+DzNLeAhtKLE9wywRAw+gRn0QZGeL2wH7T4enLsIfqoQII+bvqtix4/C1nTC6LcDNCIIRdTJZsleIu+CQqK+wKnwV/z8XhEeKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n5d0fRzj; arc=none smtp.client-ip=209.85.210.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=uYdWgo4YQq9UpJnxKy96hPHrDzEBI3xBgYgCsLaDq7UJd3sGetoAinSY2QMh25P+AdveBk9WI6vUaoOmc9N3OZ/BGrtBYvXq6q4ndwQgaLO/lFQ+8L1fYjWrpYR25gMa4QsjwQKf0AfVVboxqWLpODxZsNA/DSykD9w45K5N/lI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QyNjBOHz; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-71970655611so4775194b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 23:29:22 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20b6458ee37so31153815ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2024 23:32:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727764162; x=1728368962; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3bN8Z32ZYFp79u4ESDr0JtiT5Y+0BkedNOJG76r5aVU=;
-        b=n5d0fRzjOFmuY6/QRMeHQEG72DjDLbOxpr5WhMlbUtlnWzblkvVoEvHGs9xcJWDHv9
-         3W2YqtQIFhoqwM5sZ/D4q3NklAiSbI32/FbruNnqUFnu16EBVJNpiTkqf8P6TFPgqnrE
-         h29bgNHc7IPhGW+EEmo2kZpZeRohMY2t7gpNwEW43kO71xoOLNtRNdFSBcrqigKb/kTP
-         s13/Q0c+73dmNiNzWLj2M24BW7ycTbUaBUYofljTXROTTzi6MpYWuoB16hrSv4wWu007
-         ay1u8AL2HU4Eb1P2SeFkZdoQhZlsTFn0ODq1cAJ0G0oWupwT9RS9k/dsyz+zsweCgBIL
-         qylg==
+        d=linaro.org; s=google; t=1727764343; x=1728369143; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+XSZPD5xW7VFeqBF4W+qcKsdoMfcWLE5iqzfZIrlUcc=;
+        b=QyNjBOHzk2fs0H3kk2M3vfRNsqtLMMw9bo7AptxvVqqF7O2GHuPE05UAM/kfuhru0j
+         9bHtGDYQIki6ix0PkPXKgVgE0tw5Kg9u/CyPYhQQhVX7d7Hw/D+Nhk8p9NmkkKHd6q5c
+         ChuVDGvHSWSOn8y4wMaq+JaU140wwtXWyUhLwzebtMN4QIgF2RMe9UqugGyVTu9P5RSQ
+         9t1BQXoCSPeq7ayH49tnoopIhiU8Kj8T6kHwegqPQFbv1dgNFBk1QbMxX11E+ma+LomN
+         AqGXZOGFDaNczTdYqtTONqLbAXwz36YTDEhCBHsT0hiusihH7vhhX5QrKVJz9bZWQcyW
+         lXWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727764162; x=1728368962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3bN8Z32ZYFp79u4ESDr0JtiT5Y+0BkedNOJG76r5aVU=;
-        b=qizNAf0TsITFM6RdFioTEni2Dj4mGYE9YpVtaf8RmSXPKokNSG4Z0IX1w2ZPsAK14r
-         miIxT3gm4k+P7WBk/vCBO/Koro4GFKoVumcSx6Q95XRyh+OXv5xrkCNblkkpSQiJTNtm
-         M+cmv8w6Iiaudodx1HwhCVyVkkCT8y6q8PtV/3BIQGPHg8xDTzSyPjwbbYpdZWCdVN7H
-         tf0XuwPkdPWVuYxPe/+dD82/Lo+yliU5p3uk9JHxDspBIH0PIYjFT9WudQfxASSdundi
-         EdXSNW5b1Eh5gMEqYHthpQ85cCmd9V1YTGPIUQMKL26AtRWDYViVXi6NmuB6UelzG6G2
-         erGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUO8H96iZH073R3DS+S7eaoLgoltKMC16V4bcCyOPoHrrK2FfcP6lEeJXhfw3TjIf6SnDI5Up4okw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnnisOw5Ifp7BKz66lGAMf/MdebQ/4JU1ibBn+WwJI2mzSKheb
-	/MWxAr4Jvsp2zPNNNyH1gXjjsfPSc45MRuErBJFF00JIQ2UgrP2wRLG1JQ7cc8Y=
-X-Google-Smtp-Source: AGHT+IFS0TwjIfYbU4AYwdFFwJyZDZr/OxwEkGF9SOjZRel7hMDu0IAJ9SCdvkP5YjsrT8BAIPSUVQ==
-X-Received: by 2002:a05:6a00:3d44:b0:717:8a87:7d02 with SMTP id d2e1a72fcca58-71b26070191mr24640287b3a.23.1727764162142;
-        Mon, 30 Sep 2024 23:29:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1727764343; x=1728369143;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+XSZPD5xW7VFeqBF4W+qcKsdoMfcWLE5iqzfZIrlUcc=;
+        b=FKtGgntKVfhvwUr1L9kC3wVXerQMwggGsd7hFULl/DDttnc5n2p2gJQtm8xmdfby1w
+         QBsM8JdSQxvVsF7Mk9mhwAyytc0QwRVLn/UlEEBN0PgQaML6OZ+4Kk428s+WwbjU3mQl
+         s5GiTCZ9UJRD6NHGeogsji0jV+coYPoymTtyZlNshOk1LTZD1YsimrOibM/uw28CK/s2
+         zt0rEkzOEROCBxB+J1rEIGbl+yKwXwHlnxVamHU4uYdKvB0ax9/KhjsJYCnk4IUI/Cb6
+         243I+YEYdzecPvM1T8Cz5Y7dJqGHSVz5unKabqo0rq3g4gkanAP6ckR2CQNBV/mDksVa
+         ltnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3f8ybOMzzJfdnOA3XAVqJ9HVBy0fF1XHO79pf7OgCIRS7ZM+yzkWofy/Z++XawQpPet4QiaL1bw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIC0RsFrIfjxQjy9sriJF10GR8KYVfpcelnTEnjm/OxG3pkq4S
+	kt/KYXIPDGf0/8BQ+UAhuUcsKIJt02zkf7wA1LFnnk0EqkyW65RwthDoAyCLVgg=
+X-Google-Smtp-Source: AGHT+IGhD8CqwwDqtINDFXy8AwF4nvh1FlgzTbLa13kA3Pv2DSQX6ig9iYUdAdW8f5pr5cwUEyiVcA==
+X-Received: by 2002:a17:902:e5c6:b0:20b:9379:f1f7 with SMTP id d9443c01a7336-20b9379f32fmr59308725ad.40.1727764342760;
+        Mon, 30 Sep 2024 23:32:22 -0700 (PDT)
 Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b264b7db0sm7272924b3a.49.2024.09.30.23.29.21
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e14defsm63326945ad.131.2024.09.30.23.32.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 23:29:21 -0700 (PDT)
-Date: Tue, 1 Oct 2024 11:59:19 +0530
+        Mon, 30 Sep 2024 23:32:22 -0700 (PDT)
+Date: Tue, 1 Oct 2024 12:02:20 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH V4 6/6] cpufreq: ti-cpufreq: Update efuse/rev offsets in
- AM62 family
-Message-ID: <20241001062919.ftlf3oobxreiulnb@vireshk-i7>
-References: <20240919082809.174589-1-d-gole@ti.com>
- <20240919082809.174589-7-d-gole@ti.com>
+To: Miquel =?utf-8?B?U2FiYXTDqSBTb2zDoA==?= <mikisabate@gmail.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Avoid a bad reference count on CPU node
+Message-ID: <20241001063220.dj53f3dbdiwnpkrh@vireshk-i7>
+References: <20240917134246.584026-1-mikisabate@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240919082809.174589-7-d-gole@ti.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240917134246.584026-1-mikisabate@gmail.com>
 
-On 19-09-24, 13:58, Dhruva Gole wrote:
-> With the Silicon revision being taken directly from socinfo, there's no
-> longer any need for reading any SOC register for revision from this driver.
-> Hence, we do not require any rev_offset for AM62 family of devices.
-> The efuse offset should be 0x0 for AM625 as well, as the syscon
-> register being used from DT refers to the efuse_offset directly.
+On 17-09-24, 15:42, Miquel Sabaté Solà wrote:
+> In the parse_perf_domain function, if the call to
+> of_parse_phandle_with_args returns an error, then the reference to the
+> CPU device node that was acquired at the start of the function would not
+> be properly decremented.
 > 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> Address this by declaring the variable with the __free(device_node)
+> cleanup attribute.
+> 
+> Signed-off-by: Miquel Sabaté Solà <mikisabate@gmail.com>
 > ---
+>  include/linux/cpufreq.h | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
-> Viresh, Nishanth, Vignesh,
-> 
-> This driver fix is better to go with PATCH 5/6.
-> 
-> Subject: [PATCH V4 5/6] arm64: dts: ti: k3-am62: use opp_efuse_table for
->  opp-table syscon
-> 
-> That patch fixes the efuse offset in the AM625 DT.
-> Without it, the driver will read from an incorrect efuse offset, and end
-> up breaking things in -next till all the DT changes make it in.
-> Hence, it would be preferrable if this entire series goes via a single
-> maintainer's tree.
-> Viresh, perhaps if you can ack this single patch, then Vignesh/Nishanth
-> could take it up if there are no objections?
-> 
-> I am sorry that this break compatibility with older AM625 devicetree.
-> However, the old devicetree was marking the entire wkup_conf as "syscon",
-> "simple-mfd" which was wrong and needed to be fixed.
-> 
-> This series finally tries to bring order to DT and the driver.
-> 
-> However, if there is still any way to maintain the backward
-> compatibility, then I am open to suggestions. Please try
-> and understand here that the ask for backward compatibility here
-> is to ask the driver to support a case where the register offset itself
-> was to be picked from a different node. I am not sure there's any
-> clean way to do this.
-> 
-> ---
->  drivers/cpufreq/ti-cpufreq.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-> index ba621ce1cdda..870ab0b376c1 100644
-> --- a/drivers/cpufreq/ti-cpufreq.c
-> +++ b/drivers/cpufreq/ti-cpufreq.c
-> @@ -313,10 +313,9 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index d4d2f4d1d7cb..aabec598f79a 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1113,10 +1113,9 @@ static inline int parse_perf_domain(int cpu, const char *list_name,
+>  				    const char *cell_name,
+>  				    struct of_phandle_args *args)
+>  {
+> -	struct device_node *cpu_np;
+>  	int ret;
 >  
->  static struct ti_cpufreq_soc_data am625_soc_data = {
->  	.efuse_xlate = am625_efuse_xlate,
-> -	.efuse_offset = 0x0018,
-> +	.efuse_offset = 0x0,
->  	.efuse_mask = 0x07c0,
->  	.efuse_shift = 0x6,
-> -	.rev_offset = 0x0014,
->  	.multi_regulator = false,
->  };
+> -	cpu_np = of_cpu_device_node_get(cpu);
+> +	struct device_node *cpu_np __free(device_node) = of_cpu_device_node_get(cpu);
+>  	if (!cpu_np)
+>  		return -ENODEV;
 >  
-> @@ -325,7 +324,6 @@ static struct ti_cpufreq_soc_data am62a7_soc_data = {
->  	.efuse_offset = 0x0,
->  	.efuse_mask = 0x07c0,
->  	.efuse_shift = 0x6,
-> -	.rev_offset = 0x0014,
->  	.multi_regulator = false,
->  };
->  
-> @@ -334,7 +332,6 @@ static struct ti_cpufreq_soc_data am62p5_soc_data = {
->  	.efuse_offset = 0x0,
->  	.efuse_mask = 0x07c0,
->  	.efuse_shift = 0x6,
-> -	.rev_offset = 0x0014,
->  	.multi_regulator = false,
->  };
+> @@ -1124,9 +1123,6 @@ static inline int parse_perf_domain(int cpu, const char *list_name,
+>  					 args);
+>  	if (ret < 0)
+>  		return ret;
+> -
+> -	of_node_put(cpu_np);
+> -
+>  	return 0;
+>  }
 
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
