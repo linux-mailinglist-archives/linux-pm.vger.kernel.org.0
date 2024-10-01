@@ -1,168 +1,174 @@
-Return-Path: <linux-pm+bounces-15002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB1AA98B61F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:50:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F7FB98B62A
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 09:52:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67C88280EF5
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 07:50:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37A0E1C218E8
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2024 07:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D751BDA83;
-	Tue,  1 Oct 2024 07:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0BC51BDA8C;
+	Tue,  1 Oct 2024 07:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="qyHtKOEu"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="oDUIUkx9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991DD63D;
-	Tue,  1 Oct 2024 07:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD9119992D;
+	Tue,  1 Oct 2024 07:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727769025; cv=none; b=ULXbIAQLLrdPJCz3oakoRgr0awQsJBMNgE3/sKlqaxlIfRw4hSnMwPgiRkwcOt2paGsZxbV5SXkKULqY4uucIFoZSdsYUBPXE0TAglHNMkqRu0E/bTNejks21uiYuHgm+y6flMacYDsoUn72dKS4gV5iGE/NJ/LqB8TwpCIl3UM=
+	t=1727769161; cv=none; b=PjLbZutkSATbawLh5Hf5JqiUPIGUnymMMHivH9cC6U38yiRf/LbKnfm2i8ZlYHWHkpGDFakiQKV9ETk0//acM+RBbGrAtHqRvd4SPRJDv5OmjiW0onbBvAvQ/R0yX+0FTu3VDc0qVhEpOuGbMmuZCA20CRM9LYdRblSJc+VFf6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727769025; c=relaxed/simple;
-	bh=H8GT7CQPQCP0iqDT0akwe9NghW+v/5sAgRRAbcbb5Wo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=YAcLIo74mrIfQAvGzYPqFtJF88U6v3vSmN5ciGW6zaSk4BJSfslUDPpJk1PPTL+VnqfdVmgC+qO4KZplKeGUrZvddBd3F6P9HdmItyWVOheIcKfq6orzqwYYPVJ6fIiDLg/8nKcQowU7buhOdkLXE9WRW4oSI0/KpAhsOzDqwo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=qyHtKOEu; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ccdfc1c07fc911efb66947d174671e26-20241001
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:CC:To:From:Subject:MIME-Version:Date:Message-ID; bh=FlXzrXpPCzLcSODdsG8c3PiQzj81rbhZ9JEiAPkX18g=;
-	b=qyHtKOEuOk6q6+jzGD1iSnaFQHlFcBrsieaxCfeRvA4W8KDlpk926lBA2sxf4FRJXNE4kxdX+/3t5NZhVbS+EbjFGG7HudBW8762A5ZXLyChg9v78v3HH8Ee+ohLNkbFr3+Z1ICpJ4lePfo5K0vLYoxIKYgRZfm/jXekpou276c=;
-X-CID-CACHE: Type:Local,Time:202410011505+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:f4145b70-66da-4fe0-ad2c-5b0a2bbc4e74,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:f94b0ad1-7921-4900-88a1-3aef019a55ce,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
-	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: ccdfc1c07fc911efb66947d174671e26-20241001
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1105446460; Tue, 01 Oct 2024 15:50:17 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 1 Oct 2024 15:50:16 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Tue, 1 Oct 2024 15:50:14 +0800
-Message-ID: <c2fb40cc-491f-1c1a-7343-c70a60b3a031@mediatek.com>
-Date: Tue, 1 Oct 2024 15:50:12 +0800
+	s=arc-20240116; t=1727769161; c=relaxed/simple;
+	bh=Os8GcwVVpz/gCq3tXdMr+TKVOtO50iLyU13IOY6tL1Q=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KaDcmB2AENc4NF3oetG/t0UDUOLwwsonjiVN5q6cEsaVCdtoaN/bL0WylvTqHXSbFqB99OEZBstbQeWLsq1ipOs+/kM7ObPUGEhhQor/sKg7cqNLw2jpwRDdogSmckgJrAXGQDqcQTgeuJb59NBBuJNQzg9UFeig5CbEYzgiwaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=oDUIUkx9; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4917qWFH017647;
+	Tue, 1 Oct 2024 02:52:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1727769152;
+	bh=WT3J0nlP0gt082jLaewz4ht1d32o5bYLmpagACQUtvc=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=oDUIUkx9GX0hYaw9eDqcP9oQzbHa4w+BhnijMhHxLxrarTvEUcLoM6dSGMH1aamLH
+	 Un+Tq3/QNw5zZKEuXRwwyiUYMAKOAHFG3Y22qJEBZnIXOQ5hdUbqos4iUwij0i+Fki
+	 LYzJ/ixinGLkQrz6B2qOGArS9BEiWSZaCMDi7p0k=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4917qWf5128927;
+	Tue, 1 Oct 2024 02:52:32 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 1
+ Oct 2024 02:52:31 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 1 Oct 2024 02:52:31 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4917qVh8112464;
+	Tue, 1 Oct 2024 02:52:31 -0500
+Date: Tue, 1 Oct 2024 13:22:30 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero
+ Kristo <kristo@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: Re: [PATCH V4 6/6] cpufreq: ti-cpufreq: Update efuse/rev offsets in
+ AM62 family
+Message-ID: <20241001075230.j6rpis57la2zn4iu@lcpd911>
+References: <20240919082809.174589-1-d-gole@ti.com>
+ <20240919082809.174589-7-d-gole@ti.com>
+ <20241001062919.ftlf3oobxreiulnb@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7 2/3] ASoC: dt-bindings: mt6358: Convert to DT Schema
-Content-Language: en-US
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones
-	<lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino
- Del Regno <angelogioacchino.delregno@collabora.com>, Sen Chu
-	<sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Andrew Lunn
-	<andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
-	<olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Sebastian Reichel <sre@kernel.org>, Liam Girdwood
-	<lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, <linux-input@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-leds@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-	<linux-sound@vger.kernel.org>, Alexandre Mergnat <amergnat@baylibre.com>,
-	Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai
-	<wenst@chromium.org>
-References: <20240930073311.1486-1-macpaul.lin@mediatek.com>
- <20240930073311.1486-2-macpaul.lin@mediatek.com>
- <6l6hb264yvhd6e6neurd5t4gmv5z5c5gpg27icijif3hq4cuu7@pbhfkdxb2eam>
- <42dc4e9a-efcd-e166-b4fd-d4fe0dcd3c77@mediatek.com>
-In-Reply-To: <42dc4e9a-efcd-e166-b4fd-d4fe0dcd3c77@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241001062919.ftlf3oobxreiulnb@vireshk-i7>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-
-
-On 10/1/24 15:05, Macpaul Lin wrote:
-> On 10/1/24 14:34, Krzysztof Kozlowski wrote:
+On Oct 01, 2024 at 11:59:19 +0530, Viresh Kumar wrote:
+> On 19-09-24, 13:58, Dhruva Gole wrote:
+> > With the Silicon revision being taken directly from socinfo, there's no
+> > longer any need for reading any SOC register for revision from this driver.
+> > Hence, we do not require any rev_offset for AM62 family of devices.
+> > The efuse offset should be 0x0 for AM625 as well, as the syscon
+> > register being used from DT refers to the efuse_offset directly.
+> > 
+> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> > ---
+> > 
+> > Viresh, Nishanth, Vignesh,
+> > 
+> > This driver fix is better to go with PATCH 5/6.
+> > 
+> > Subject: [PATCH V4 5/6] arm64: dts: ti: k3-am62: use opp_efuse_table for
+> >  opp-table syscon
+> > 
+> > That patch fixes the efuse offset in the AM625 DT.
+> > Without it, the driver will read from an incorrect efuse offset, and end
+> > up breaking things in -next till all the DT changes make it in.
+> > Hence, it would be preferrable if this entire series goes via a single
+> > maintainer's tree.
+> > Viresh, perhaps if you can ack this single patch, then Vignesh/Nishanth
+> > could take it up if there are no objections?
+> > 
+> > I am sorry that this break compatibility with older AM625 devicetree.
+> > However, the old devicetree was marking the entire wkup_conf as "syscon",
+> > "simple-mfd" which was wrong and needed to be fixed.
+> > 
+> > This series finally tries to bring order to DT and the driver.
+> > 
+> > However, if there is still any way to maintain the backward
+> > compatibility, then I am open to suggestions. Please try
+> > and understand here that the ask for backward compatibility here
+> > is to ask the driver to support a case where the register offset itself
+> > was to be picked from a different node. I am not sure there's any
+> > clean way to do this.
+> > 
+> > ---
+> >  drivers/cpufreq/ti-cpufreq.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> > index ba621ce1cdda..870ab0b376c1 100644
+> > --- a/drivers/cpufreq/ti-cpufreq.c
+> > +++ b/drivers/cpufreq/ti-cpufreq.c
+> > @@ -313,10 +313,9 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
+> >  
+> >  static struct ti_cpufreq_soc_data am625_soc_data = {
+> >  	.efuse_xlate = am625_efuse_xlate,
+> > -	.efuse_offset = 0x0018,
+> > +	.efuse_offset = 0x0,
+> >  	.efuse_mask = 0x07c0,
+> >  	.efuse_shift = 0x6,
+> > -	.rev_offset = 0x0014,
+> >  	.multi_regulator = false,
+> >  };
+> >  
+> > @@ -325,7 +324,6 @@ static struct ti_cpufreq_soc_data am62a7_soc_data = {
+> >  	.efuse_offset = 0x0,
+> >  	.efuse_mask = 0x07c0,
+> >  	.efuse_shift = 0x6,
+> > -	.rev_offset = 0x0014,
+> >  	.multi_regulator = false,
+> >  };
+> >  
+> > @@ -334,7 +332,6 @@ static struct ti_cpufreq_soc_data am62p5_soc_data = {
+> >  	.efuse_offset = 0x0,
+> >  	.efuse_mask = 0x07c0,
+> >  	.efuse_shift = 0x6,
+> > -	.rev_offset = 0x0014,
+> >  	.multi_regulator = false,
+> >  };
 > 
-> [snip]
-> 
->>> +description: |
->>> +  The communication between MT6358 and SoC is through Mediatek PMIC 
->>> wrapper.
->>> +  For more detail, please visit Mediatek PMIC wrapper documentation.
->>> +  Must be a child node of PMIC wrapper.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - mediatek,mt6366-sound
->>> +      - mediatek,mt6358-sound
->>> +    const: mediatek,mt6358-sound
->>
->> This wasn't ever tested.
-> 
-> Hum, I have indeed tested it with linux-next/master branch.
-> Ran dt_binding_check with dtschema trunk with this single file
-> but didn't get any warning or errors.
-> 'make dt_binding_check DT_SCHEMA_FILES=mt6358.yaml'
-> 
-> Could you please help to paste the error log for me?
-> If there are new errors, I need to check if there is any
-> environment issue.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I've both tested both of the following format pass dt_binding_check.
-#1.
-properties:
-   compatible:
-     items:
-       - enum:
-           - mediatek,mt6366-sound
-           - mediatek,mt6358-sound
-       - const: mediatek,mt6358-sound
+Really sorry for any confusion here, but this series has been overall
+split up and posted afresh here:
+https://lore.kernel.org/all/20240930-b4-ti-cpufreq-am62-quirk-v1-0-b5e04f0f899b@ti.com/
 
-#2.
-properties:
-   compatible:
-     enum:
-       - mediatek,mt6366-sound
-       - mediatek,mt6358-sound
-     const: mediatek,mt6358-sound
+This was done to avoid breaking any backward compatibility issues with
+older DTs in a clean way.
 
->> Do not send untested code, it's a waste of reviewers' time.
->>
->> Best regards,
->> Krzysztof
->>
->>
-> Thanks
-> Macpaul Lin
-
-Should I update it with format #1?
-
-Thanks
-Macpaul Lin
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
