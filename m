@@ -1,237 +1,272 @@
-Return-Path: <linux-pm+bounces-15071-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15074-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59A3898DF51
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 17:35:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CAFA98E01A
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 18:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13ABB28584A
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 15:35:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB47F1F212D9
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 16:04:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141771D0DF5;
-	Wed,  2 Oct 2024 15:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201841D0E06;
+	Wed,  2 Oct 2024 16:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvZ48ukx"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="KNk2/wF6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FC51D0DD9;
-	Wed,  2 Oct 2024 15:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4E433D1
+	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 16:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727883344; cv=none; b=RYnwtZjO0O+ZFZUIMbf1jmfQUc0dfaONa8+bKtCihN5Wxxcjc8fqJ6dQjcnNOZa4tcwOpRLHZCVdX00/eDwEopBxoR/kQv4RqUi0qSf9j0JQz8TAUhOvK/L4vJJa8qkxaVnrEfplMPFCqIQrlneHsYjsQBDmnYJ5YnNFh71cByo=
+	t=1727885066; cv=none; b=aHgYNrKcBep2niHvGc9aU08zTkbIFbqILIED7oz75kh/aypEvagHGPSlanru9RnAq87iv0btbapBaq94Q4jebwn/1odsQuWn06iOhqHvpHIXVKGmngTSOMtob/86B0h1d9hTgFScRcQo38xAHl6QI6aj6+XBP44fMmvBncWO5SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727883344; c=relaxed/simple;
-	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQ5iwQ/2ABMp30aiiUKMjLqvalzp4G8Jdu+R3KMqHwN0w+qPsrEDsoL/9TLj34Ri7yvKlnUvxezwlsRR6lhdyVula/HAoJgQ25kff4XkrLPXk1KZ5voP4/O8BQSQ2KIo0/h7AhuDRwJAFibA7JOrJLjebK3/il36ize+xN/IiBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvZ48ukx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF281C4CECD;
-	Wed,  2 Oct 2024 15:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727883343;
-	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gvZ48ukxkvlA/tROM+XWQCC+GQjn1xdlFnYHeifEYVq3bNZE7U+/awWbv/IXObCLK
-	 Ysc1gbU85mEH1o377fQn2byyXFnnUwqVzaCVMUJDVsA8bKlOmU5vmNabqZmvyRGbGc
-	 X/7kX4t1SPLDknV2pBJAyf8aXxdc31pTUtOn2E1xJQ91H6DmdnOUL0nKg75YA48ga8
-	 /xwVQ+krKvfrEpXXbqzBZXcjjpO8Rpksw4EdnWB1XquWOMs6zS79szHrzEoSX0ZE31
-	 jvaKCO00kXJudpcVy4IoBnDzj6q4gdEc1EpMNZp4UTrHDbHjavRHXl1tGXmhrSbzdl
-	 mkgFXnebCgzIw==
-Date: Wed, 2 Oct 2024 16:35:36 +0100
-From: Lee Jones <lee@kernel.org>
-To: Junhao Xie <bigfoot@classfun.cn>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Sebastian Reichel <sre@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Heiko Stuebner <heiko@sntech.de>, Chukun Pan <amadeus@jmu.edu.cn>
-Subject: Re: [PATCH 7/9] leds: add Photonicat PMU LED driver
-Message-ID: <20241002153536.GG7504@google.com>
-References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-8-bigfoot@classfun.cn>
+	s=arc-20240116; t=1727885066; c=relaxed/simple;
+	bh=ADo2eAuLUDak/UxL/+FxzAkoEOpUdqUa8rqjo8djY1c=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=eHH/O8eyFRb2Ehe66HGtXHdMazX2IIQxpO1M6APOZLysdeP0urKmGw0n+3z7EAD2IIbmimfoEGv7Yl0+bWT9RsHdEkoajWof2YgRYDmuRYqAAa+nuuY3dVoFP6/+emApjX3PBe9+zfLxA9/Ww7qBy0z63PogIlh3nY9sR1QUdwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=KNk2/wF6; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7d4fa972cbeso5158668a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 09:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1727885063; x=1728489863; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=J9ntgIOyyaclphgpu99w0Y16HmhSoK1GgbJgzZ36KnU=;
+        b=KNk2/wF6ziRRgCWLKvsHyFebmOAEGA780v8/4rbHIn1NbB1a/kg/N1JGwnbpHVBIXb
+         UiLMShPAgwN2ShutFYvdxHjljM6jdlbx+rlWiqJs7tuWkCkfr7Uuvz6RGaoxVyTNv+XN
+         bFyMjlp6yPuh9kgoqMiuY4AT+13MBF98zseMd9j1ta6O5pf2+p7Vkv0Qq6qSiiPiLVfp
+         JxV/FkxGCsVpiK+OhSVvu7QNGxhtcwlpNw1o5JrFtZ7e5jJZQ7jW4UhCwMbD84YIGm5o
+         8C0ouv9Siz8qpNh9xw8z43cd2Z3wrIfthsmkoXcki23hDMy1bUxgBB4K21fjpkjCKCXO
+         It6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727885063; x=1728489863;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J9ntgIOyyaclphgpu99w0Y16HmhSoK1GgbJgzZ36KnU=;
+        b=b60DGbdPi18sLSvApkwuUHqQ5BX3h2hq2xGm2rcJnTUKI/jIuR9jN5cF5n9JyzGFiR
+         86I+2pfOI6p0QPvVzfXCApAzVqntk/hztsKfdOMeyMTAsvrJUDBUzgudanP81r1wZqfG
+         Gq9H4albkXIjYeUqKFydUslZ4IXV/MpKneYVb5rMtRIVU5aQHhMWdw7d8PAEqtkuF6z8
+         LavnE9/Aty9/TcuQkZI/SFqYD7CTt2n9BBe82bkQj0KAXr0anOBewgP5iafaE9Xvep4V
+         hEOjYiWDpAO3Xf4cZ0iTDSsbmVvmwH6In7LmXpMXee11wZXpGsmB7qBv23RE3kj40v9u
+         C3BQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUEcR8bsp3BKHrmSruQKMWg0AgC87+kflyonv14Hx5k4iW0+ephYsJCYsD9bgo7vJln321iZAS1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1b3hJ4yB7zzNBJJPwfoPDXgS51iYZSg+otK863y9XiM+BdIWc
+	HA5MCfKBORpWzshpb5DRh4Cr9WKG1HIvxEw611CI+YHEUwtopOx9C3ImRnfMotQ=
+X-Google-Smtp-Source: AGHT+IEjMrriJHuo+TxnLg+h7rvFKHjV3/hewuv8O59wFT43g7UiolMTTd2M8J12OfvbLmg8FRQEPw==
+X-Received: by 2002:a05:6a20:d809:b0:1cf:3f2a:d1dd with SMTP id adf61e73a8af0-1d5db20c0aemr5897651637.12.1727885063043;
+        Wed, 02 Oct 2024 09:04:23 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b26517bcesm10272164b3a.99.2024.10.02.09.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2024 09:04:22 -0700 (PDT)
+Message-ID: <66fd6f06.050a0220.b749e.c4aa@mx.google.com>
+Date: Wed, 02 Oct 2024 09:04:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240906093630.2428329-8-bigfoot@classfun.cn>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.12-rc1-12-g7f8922773211e
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 23 warnings (v6.12-rc1-12-g7f8922773211e)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, 06 Sep 2024, Junhao Xie wrote:
+pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.12-rc1-12-g=
+7f8922773211e)
 
-> Photonicat has a network status LED that can be controlled by system.
-> The LED status can be set through command 0x19.
-> 
-> Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
-> ---
->  drivers/leds/Kconfig           | 11 +++++
->  drivers/leds/Makefile          |  1 +
->  drivers/leds/leds-photonicat.c | 75 ++++++++++++++++++++++++++++++++++
->  3 files changed, 87 insertions(+)
->  create mode 100644 drivers/leds/leds-photonicat.c
-> 
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index 8d9d8da376e4..539adb5944e6 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -381,6 +381,17 @@ config LEDS_PCA9532_GPIO
->  	  To use a pin as gpio pca9532_type in pca9532_platform data needs to
->  	  set to PCA9532_TYPE_GPIO.
->  
-> +config LEDS_PHOTONICAT_PMU
-> +	tristate "LED Support for Photonicat PMU"
-> +	depends on LEDS_CLASS
-> +	depends on MFD_PHOTONICAT_PMU
-> +	help
-> +	  Photonicat has a network status LED that can be controlled by system,
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+12-rc1-12-g7f8922773211e/
 
-"the system"
+Tree: pm
+Branch: testing
+Git Describe: v6.12-rc1-12-g7f8922773211e
+Git Commit: 7f8922773211e77ea1e506a708bc995ce8010c9e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> +	  this option enables support for LEDs connected to the Photonicat PMU.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called leds-photonicat.
-> +
->  config LEDS_GPIO
->  	tristate "LED Support for GPIO connected LEDs"
->  	depends on LEDS_CLASS
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index 18afbb5a23ee..dcd5312aee12 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -76,6 +76,7 @@ obj-$(CONFIG_LEDS_PCA9532)		+= leds-pca9532.o
->  obj-$(CONFIG_LEDS_PCA955X)		+= leds-pca955x.o
->  obj-$(CONFIG_LEDS_PCA963X)		+= leds-pca963x.o
->  obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
-> +obj-$(CONFIG_LEDS_PHOTONICAT_PMU)	+= leds-photonicat.o
->  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
->  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
->  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
-> diff --git a/drivers/leds/leds-photonicat.c b/drivers/leds/leds-photonicat.c
-> new file mode 100644
-> index 000000000000..3aa5ce525b83
-> --- /dev/null
-> +++ b/drivers/leds/leds-photonicat.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
-> + */
-> +
-> +#include <linux/mfd/photonicat-pmu.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/leds.h>
+Warnings Detected:
 
-Alphabetical.
+arc:
+    haps_hs_smp_defconfig (gcc-12): 2 warnings
 
-> +struct pcat_leds {
-> +	struct device *dev;
+arm64:
 
-Where is this used?
+arm:
 
-> +	struct pcat_pmu *pmu;
+i386:
 
-Why do you need to store this?
+mips:
+    32r2el_defconfig (gcc-12): 3 warnings
 
-Can't you get this at the call-site by:
+riscv:
 
-  dev_get_drvdata(cdev->dev->parent)
+sparc:
+    sparc64_defconfig (gcc-12): 18 warnings
 
-> +	struct led_classdev cdev;
-> +};
-> +
-> +static int pcat_led_status_set(struct led_classdev *cdev,
-> +			       enum led_brightness brightness)
-> +{
-> +	struct pcat_leds *leds = container_of(cdev, struct pcat_leds, cdev);
-> +	struct pcat_data_cmd_led_setup setup = { 0, 0, 0 };
-> +
-> +	if (brightness)
-> +		setup.on_time = 100;
-> +	else
-> +		setup.down_time = 100;
-> +	return pcat_pmu_write_data(leds->pmu, PCAT_CMD_NET_STATUS_LED_SETUP,
-> +				   &setup, sizeof(setup));
-> +}
-> +
-> +static int pcat_leds_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
+x86_64:
 
-Small sized variables at the bottom please.
 
-> +	struct device *dev = &pdev->dev;
-> +	struct pcat_leds *leds;
-> +	const char *label;
-> +
-> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
-> +	if (!leds)
-> +		return -ENOMEM;
-> +
-> +	leds->dev = dev;
+Warnings summary:
 
-Where is this used?
+    2    kernel/fork.c:3078:2: warning: #warning clone3() entry point is mi=
+ssing, please fix [-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    3078 | #warning clone3() entry point is missing, please fix
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
+ missing .note.GNU-stack section implies executable stack
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
+g .note.GNU-stack section implies executable stack
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
 
-> +	leds->pmu = dev_get_drvdata(dev->parent);
-> +	platform_set_drvdata(pdev, leds);
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-Where do you platform_get_drvdata()
+Detailed per-defconfig build reports:
 
-> +	ret = of_property_read_string(dev->of_node, "label", &label);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "No label property\n");
-> +
-> +	leds->cdev.name = label;
-> +	leds->cdev.max_brightness = 1;
-> +	leds->cdev.brightness_set_blocking = pcat_led_status_set;
-> +
-> +	return devm_led_classdev_register(dev, &leds->cdev);
-> +}
-> +
-> +static const struct of_device_id pcat_leds_dt_ids[] = {
-> +	{ .compatible = "ariaboard,photonicat-pmu-leds", },
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
 
-How many LEDs are there?
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
 
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, pcat_leds_dt_ids);
-> +
-> +static struct platform_driver pcat_leds_driver = {
-> +	.driver = {
-> +		.name = "photonicat-leds",
-> +		.of_match_table = pcat_leds_dt_ids,
-> +	},
-> +	.probe = pcat_leds_probe,
-> +};
-> +module_platform_driver(pcat_leds_driver);
-> +
-> +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
-> +MODULE_DESCRIPTION("Photonicat PMU Status LEDs");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.46.0
-> 
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
--- 
-0)
-Lee Jones [李琼斯]
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    kernel/fork.c:3078:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3078 | #warning clone3() entry point is missing, please fix
+    kernel/fork.c:3078:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3078 | #warning clone3() entry point is missing, please fix
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
