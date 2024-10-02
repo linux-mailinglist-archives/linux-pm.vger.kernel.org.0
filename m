@@ -1,104 +1,87 @@
-Return-Path: <linux-pm+bounces-15068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15069-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F20B198D8F7
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 16:07:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 437F498DE9C
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 17:15:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26AFB1C20B3F
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:07:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46BB2B2B219
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 15:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BF01D27AB;
-	Wed,  2 Oct 2024 14:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB5719CD16;
+	Wed,  2 Oct 2024 14:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="I9t430To"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF401D0DD9;
-	Wed,  2 Oct 2024 14:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A42198A1A;
+	Wed,  2 Oct 2024 14:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727877730; cv=none; b=gNl9uLMbElpQ1ERMMpNNjiRIfTBCkofG8OtKjEZX/ZBZr86yNwAC12lLDI4+h7e/rw1bYBna3g9VEwvWgy2tTW1vQevT9KvYUUVRiit+dcqUI8sHTCj4pw2QMQmwjFoVPI5btljMsVYIUZ+vds2WjAGzLPro7e/vGwa6+rwU/Ho=
+	t=1727881182; cv=none; b=igRGsq6tB3fOo4vBDbToDE0t1EFCynvkkkR7a8xB7xjXThSfPl/pli8lctN9Ohgz/hmF5n7K+2N4cGzdKcBqElFZHXUInivSVzsBu+Vg2ymBbli2D6GIRPykwoNi75PQYpv0pFiq3P5bCTAoj1s4QO6AVUiFI9ZHd59/vSZHPcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727877730; c=relaxed/simple;
-	bh=VOJQuCqdUBhRksuB8YpG1sADNdGbpcrZPuEXdhuf4HM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hkr4DqQXyHAj8wZha+BCaDCRgrKkrNKuYDqvE9rYT3f8hHrccN7Fqz3u77pksnc1GzwgfiwpZBP3eX0J3oRU1/pln3+LFxsHhwx4iFG17/35z0gjjckWpzYu3KeBiiWOHA1q1C5v6BGa3BvCXfvT/Do84dkEhclpWCgvWAPJMic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89A51339;
-	Wed,  2 Oct 2024 07:02:37 -0700 (PDT)
-Received: from [10.57.75.246] (unknown [10.57.75.246])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 997F33F58B;
-	Wed,  2 Oct 2024 07:02:05 -0700 (PDT)
-Message-ID: <2ac9bab0-2a00-44c8-bf43-2469b6d60b92@arm.com>
-Date: Wed, 2 Oct 2024 15:02:04 +0100
+	s=arc-20240116; t=1727881182; c=relaxed/simple;
+	bh=1WsnBfCy13pQWfVFi5UfPBzeJ+ETI+B5ITCwL0hQe2o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tFmWl86VuNev25F6W1zB3vBve61caLeosuvb5ilUPFz0h9mYxMcWZ3rFVOk83WJ14dt0JCYy7jk9FLvp1OBbkMfiGEiiTIzyPzd6pUMUpIomze/EGwTD72lIqzLH0y5lF6OUZb9/2L4RpidYp+Ryi4zJYfset0bIpgN4Fv1dO3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=I9t430To; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 0a227049cb5da60b; Wed, 2 Oct 2024 16:59:36 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7DCA17F587A;
+	Wed,  2 Oct 2024 16:59:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1727881176;
+	bh=1WsnBfCy13pQWfVFi5UfPBzeJ+ETI+B5ITCwL0hQe2o=;
+	h=From:Subject:Date;
+	b=I9t430To1wvd5ufjVhD/3/vkid8RVP4Wm14JULFKaL/bIDDowoKkxujyB1a2c746p
+	 6+0nUAt7sVfc1evChQSDQYFFrq6r6vLUWhdi4fwLsJwijvLkLo8nQD4MMyl+9Z6R2l
+	 hPg1z+n/IpoQ2eMCjRX3OvEilfYOKFQfd2ZG9wdCQhHhjpwJxaZyXGaLK+O6ROExN8
+	 1Msj/Q1iQig7S635diPXP2QKzOqs8SWFP1tZQaTOu7GORW2KgPoXwsMaXKIST8zc8o
+	 RmkxLdhGUjwRWMkwANiaaxq4uAf4d76n+rFBIFxcQ3CLO9KOo2cyrxPLfszq3gqEy8
+	 3kLdiQZ+cagEw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v1 0/2] thermal: core: Fix potential use-after-free issues
+Date: Wed, 02 Oct 2024 16:56:06 +0200
+Message-ID: <12541117.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] dt-bindings: power: rockchip: add regulator
- support
-To: Sebastian Reichel <sebastian.reichel@collabora.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Elaine Zhang <zhangqing@rock-chips.com>,
- =?UTF-8?Q?Adri=C3=A1n_Mart=C3=ADnez_Larumbe?=
- <adrian.larumbe@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>, Chen-Yu Tsai
- <wens@csie.org>, devicetree@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, kernel@collabora.com
-References: <20240919091834.83572-1-sebastian.reichel@collabora.com>
- <20240919091834.83572-5-sebastian.reichel@collabora.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20240919091834.83572-5-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvdduledgjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohe
+X-DCC--Metrics: v370.home.net.pl 0; Body=6 Fuz1=6 Fuz2=6
 
-On 2024-09-19 10:12 am, Sebastian Reichel wrote:
-> Add optional support for a voltage supply required to enable a
-> power domain. The binding follows the way it is handled by the
-> Mediatek binding to keep things consistent.
-> 
-> This will initially be used by the RK3588 GPU power domain, which
-> fails to be enabled when the GPU regulator is not enabled.
+Hi Everyone,
 
-Note that this applies equally to RK3399 and quite possibly others too, 
-it's just that so far it's always been bodged by making the relevant 
-regulator always-on (e.g. [1]).
+These fix potential use-after-free issues in the thermal netlink code
+and in the thermal core (during thermal zone unregistration).
 
-Cheers,
-Robin.
+They have been found by code inspection, but nevertheless they should be
+addressed ASAP IMV.
 
-[1] https://lore.kernel.org/all/20210619121446.7802-1-knaerzche@gmail.com/
+Thanks!
 
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->   .../devicetree/bindings/power/rockchip,power-controller.yaml   | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
-> index 0d5e999a58f1..0b4c5b174812 100644
-> --- a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
-> +++ b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
-> @@ -131,6 +131,9 @@ $defs:
->             A number of phandles to clocks that need to be enabled
->             while power domain switches state.
->   
-> +      domain-supply:
-> +        description: domain regulator supply.
-> +
->         pm_qos:
->           $ref: /schemas/types.yaml#/definitions/phandle-array
->           items:
+
+
 
