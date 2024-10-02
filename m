@@ -1,196 +1,237 @@
-Return-Path: <linux-pm+bounces-15070-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15071-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D92C698DF1A
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 17:28:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A3898DF51
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 17:35:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 919E4286B3B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 15:28:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13ABB28584A
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 15:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5341D1757;
-	Wed,  2 Oct 2024 15:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141771D0DF5;
+	Wed,  2 Oct 2024 15:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFl7hH8b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvZ48ukx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E94A1D1747;
-	Wed,  2 Oct 2024 15:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FC51D0DD9;
+	Wed,  2 Oct 2024 15:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727882769; cv=none; b=pxdDcpYNhQzaFrbfWWTdoAy5T2lzBk36UAcJylwYNZnzgz7oIZa7yGEWrRWsjEwQzjF52DDfE+54Ep3V2sLxCV8QzOStNvcLerPGyXrJQpH4arJcbCIpoevP+hCUt5ZXKrPR91XS8nhrlsR1O3NqvuUjcZs+ky9x/HauWjGL0E0=
+	t=1727883344; cv=none; b=RYnwtZjO0O+ZFZUIMbf1jmfQUc0dfaONa8+bKtCihN5Wxxcjc8fqJ6dQjcnNOZa4tcwOpRLHZCVdX00/eDwEopBxoR/kQv4RqUi0qSf9j0JQz8TAUhOvK/L4vJJa8qkxaVnrEfplMPFCqIQrlneHsYjsQBDmnYJ5YnNFh71cByo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727882769; c=relaxed/simple;
-	bh=h4ubFnE46xeI8wN9+4BYkWAbARBnOtNFKXLTjQ3iYxs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N/0WAUaW4NJwGkxGX5009XaAeckcRtfkKx7gfzvlM4Gkocb9cmCxHF2L5lWCj2rn8N47J8Ez/zcF4zlL7sQk5DftsnBlzSLAPnXoBKB3bV6fVlicf+0qdaeNWh/SNlS5TqYjVvRDSPp01RUfzGD+aUF3fkVbuDTOpd9YXrdSw1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFl7hH8b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E446C4CEDA;
-	Wed,  2 Oct 2024 15:26:08 +0000 (UTC)
+	s=arc-20240116; t=1727883344; c=relaxed/simple;
+	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rQ5iwQ/2ABMp30aiiUKMjLqvalzp4G8Jdu+R3KMqHwN0w+qPsrEDsoL/9TLj34Ri7yvKlnUvxezwlsRR6lhdyVula/HAoJgQ25kff4XkrLPXk1KZ5voP4/O8BQSQ2KIo0/h7AhuDRwJAFibA7JOrJLjebK3/il36ize+xN/IiBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvZ48ukx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF281C4CECD;
+	Wed,  2 Oct 2024 15:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727882768;
-	bh=h4ubFnE46xeI8wN9+4BYkWAbARBnOtNFKXLTjQ3iYxs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KFl7hH8baEyBXLc9YdutCabBIIsebd7h0c09OkpKue3HyYk0dPbzyKEPIAYZw8EA0
-	 OSqK38e9b/ZQqENWs+TnswX2GzFQqN2nL0SRR4IVxtTfVUlSFGfffBS7Jg4BMNQIz8
-	 HMkEBAAndduR9nNbwqZIze+PTqfQzCMnCy8hpJdW/BS84scv9IwY4mniaBcqBDDZua
-	 ZBd9lUJThYLwrBMX2si1+483PfVcboCG4r+GJNcdiKhotGYBsctAy1Sareu7r1J5jh
-	 Wd6eNnpiy5IQorN76AsuNn8HDWHvuwIblRMKj84P4HPuwkx+3e6SIsEVpTzuDrCbzg
-	 6kBiHvv5uu5wg==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fad15b3eeeso33591821fa.2;
-        Wed, 02 Oct 2024 08:26:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU922GEKNn6LZhgnjGS2QUeFmjo+wnFmMpy6eLQ9G1fz3j8xjPAdP4x+bgpZT5yNeZM2iOTOyrEr9RVWLOG+10PUA==@vger.kernel.org, AJvYcCU9kYaw7wsEzF4tsjQJLxFZNX25xxykStLPwqRBfhbVTHZNmKJWrxmuoRjTCmpm/SYJBL410TQPDCI=@vger.kernel.org, AJvYcCUB2rkMUyu2bNGeO8wBtIsMLvKa7lZydMJbMW4Bxxwrpvbko+jXVLVm2TFB0QhNmbJHDKztlSMs/CZ30cgq@vger.kernel.org, AJvYcCUZR7aY4XoONkPxt8Jcbz94wfoixa6beFi/SKdvhW7JfaTkMo+dA8QeVnzzRB5vcawoSZcsEB7cPdnK@vger.kernel.org, AJvYcCUsoQRScStowdXVQtBdYa3HvUL9e5/dG45q/I83H+AQW+ho8c2SudVrPnoxlEqbjKOzkRKnKqbYV+2wvw==@vger.kernel.org, AJvYcCUu9InXWCk13ff5Oj0NQcOKHn/6NTaWalcta+coZJmsqYAmPcPyeYAGEbtRQ29JyUuzbHLhyV7UKeL3FHlz@vger.kernel.org, AJvYcCVKr38Oz3ZFNutXiDquBZrOwm5m+8wRi5xnsOrR3kLvhzLszjawCfumBbNc4Hkj69L2ZIDl7sJh7y3w@vger.kernel.org, AJvYcCVaaUroALnYz6xKiYm88LhCZuu19l96wAufzFzsmH8wIIBp7TwOoNoO9e8g4ik/Djm/1/3TnAZWfUre3Xnp@vger.kernel.org, AJvYcCWMHAODt0YnDCyNxv3MmFkzwUecMJydYA4sVjLanfncSGmSDC4moqSDxZeT7+1o3gYbqfvm5u4FvRGKla64Vfk=@vger.kernel.org, AJvYcCWtQclJEh22
- PR9XC9EWOF4gjdoQ+uWRmSHmaZk6bVROo408of0WP2MKFvMJme9Xz6p/6zw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTwyEdmFi8ER46JM4uTfUuPkVftZSGfO7CrZlzB1Ow2LT9BTD/
-	fAjRiNVRf70MN79/xoOJN3u9o0V2lTeXhQaRKLB3vAKfNVN5zkxRRzHU94c0OhveBmDUZK8frAK
-	GxV187uqGsHmJFwQqHvVvZJw05Xg=
-X-Google-Smtp-Source: AGHT+IFjphesp/WsGS3U0PINOY0QAoUmw2aq4caedP0chVHCCyNa6a0rrCXQNZVU8wv2cCgEaQKnFwQhCH9Io7gBKbI=
-X-Received: by 2002:a05:651c:1502:b0:2fa:d84a:bd83 with SMTP id
- 38308e7fff4ca-2fae106e266mr23266981fa.24.1727882766692; Wed, 02 Oct 2024
- 08:26:06 -0700 (PDT)
+	s=k20201202; t=1727883343;
+	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gvZ48ukxkvlA/tROM+XWQCC+GQjn1xdlFnYHeifEYVq3bNZE7U+/awWbv/IXObCLK
+	 Ysc1gbU85mEH1o377fQn2byyXFnnUwqVzaCVMUJDVsA8bKlOmU5vmNabqZmvyRGbGc
+	 X/7kX4t1SPLDknV2pBJAyf8aXxdc31pTUtOn2E1xJQ91H6DmdnOUL0nKg75YA48ga8
+	 /xwVQ+krKvfrEpXXbqzBZXcjjpO8Rpksw4EdnWB1XquWOMs6zS79szHrzEoSX0ZE31
+	 jvaKCO00kXJudpcVy4IoBnDzj6q4gdEc1EpMNZp4UTrHDbHjavRHXl1tGXmhrSbzdl
+	 mkgFXnebCgzIw==
+Date: Wed, 2 Oct 2024 16:35:36 +0100
+From: Lee Jones <lee@kernel.org>
+To: Junhao Xie <bigfoot@classfun.cn>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Heiko Stuebner <heiko@sntech.de>, Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH 7/9] leds: add Photonicat PMU LED driver
+Message-ID: <20241002153536.GG7504@google.com>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240906093630.2428329-8-bigfoot@classfun.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
-In-Reply-To: <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 2 Oct 2024 17:25:54 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
-Message-ID: <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
-Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240906093630.2428329-8-bigfoot@classfun.cn>
 
-Hi Peter,
+On Fri, 06 Sep 2024, Junhao Xie wrote:
 
-Thanks for taking a look.
+> Photonicat has a network status LED that can be controlled by system.
+> The LED status can be set through command 0x19.
+> 
+> Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
+> ---
+>  drivers/leds/Kconfig           | 11 +++++
+>  drivers/leds/Makefile          |  1 +
+>  drivers/leds/leds-photonicat.c | 75 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 87 insertions(+)
+>  create mode 100644 drivers/leds/leds-photonicat.c
+> 
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index 8d9d8da376e4..539adb5944e6 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -381,6 +381,17 @@ config LEDS_PCA9532_GPIO
+>  	  To use a pin as gpio pca9532_type in pca9532_platform data needs to
+>  	  set to PCA9532_TYPE_GPIO.
+>  
+> +config LEDS_PHOTONICAT_PMU
+> +	tristate "LED Support for Photonicat PMU"
+> +	depends on LEDS_CLASS
+> +	depends on MFD_PHOTONICAT_PMU
+> +	help
+> +	  Photonicat has a network status LED that can be controlled by system,
 
-On Tue, 1 Oct 2024 at 23:13, H. Peter Anvin <hpa@zytor.com> wrote:
->
-> On 9/25/24 08:01, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > As an intermediate step towards enabling PIE linking for the 64-bit x86
-> > kernel, enable PIE codegen for all objects that are linked into the
-> > kernel proper.
-> >
-> > This substantially reduces the number of relocations that need to be
-> > processed when booting a relocatable KASLR kernel.
-> >
->
-> This really seems like going completely backwards to me.
->
-> You are imposing a more restrictive code model on the kernel, optimizing
-> for boot time in a way that will exert a permanent cost on the running
-> kernel.
->
+"the system"
 
-Fair point about the boot time. This is not the only concern, though,
-and arguably the least important one.
+> +	  this option enables support for LEDs connected to the Photonicat PMU.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called leds-photonicat.
+> +
+>  config LEDS_GPIO
+>  	tristate "LED Support for GPIO connected LEDs"
+>  	depends on LEDS_CLASS
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index 18afbb5a23ee..dcd5312aee12 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -76,6 +76,7 @@ obj-$(CONFIG_LEDS_PCA9532)		+= leds-pca9532.o
+>  obj-$(CONFIG_LEDS_PCA955X)		+= leds-pca955x.o
+>  obj-$(CONFIG_LEDS_PCA963X)		+= leds-pca963x.o
+>  obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
+> +obj-$(CONFIG_LEDS_PHOTONICAT_PMU)	+= leds-photonicat.o
+>  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
+>  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
+>  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
+> diff --git a/drivers/leds/leds-photonicat.c b/drivers/leds/leds-photonicat.c
+> new file mode 100644
+> index 000000000000..3aa5ce525b83
+> --- /dev/null
+> +++ b/drivers/leds/leds-photonicat.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
+> + */
+> +
+> +#include <linux/mfd/photonicat-pmu.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/leds.h>
 
-As I responded to Andi before, it is also about using a code model and
-relocation model that matches the reality of how the code is executed:
-- the early C code runs from the 1:1 mapping, and needs special hacks
-to accommodate this
-- KASLR runs the kernel from a different virtual address than the one
-we told the linker about
+Alphabetical.
 
-> There is a *huge* difference between the kernel and user space here:
->
-> KERNEL MEMORY IS PERMANENTLY ALLOCATED, AND IS NEVER SHARED.
->
+> +struct pcat_leds {
+> +	struct device *dev;
 
-No need to shout.
+Where is this used?
 
-> Dirtying user pages requires them to be unshared and dirty, which is
-> undesirable. Kernel pages are *always* unshared and dirty.
->
+> +	struct pcat_pmu *pmu;
 
-I guess you are referring to the use of a GOT? That is a valid
-concern, but it does not apply here. With hidden visibility and
-compiler command line options like -mdirect-access-extern, all emitted
-symbol references are direct. Disallowing text relocations could be
-trivially enabled with this series if desired, and actually helps
-avoid the tricky bugs we keep fixing in the early startup code that
-executes from the 1:1 mapping (the C code in .head.text)
+Why do you need to store this?
 
-So it mostly comes down to minor differences in addressing modes, e.g.,
+Can't you get this at the call-site by:
 
-  movq $sym, %reg
+  dev_get_drvdata(cdev->dev->parent)
 
-actually uses more bytes than
+> +	struct led_classdev cdev;
+> +};
+> +
+> +static int pcat_led_status_set(struct led_classdev *cdev,
+> +			       enum led_brightness brightness)
+> +{
+> +	struct pcat_leds *leds = container_of(cdev, struct pcat_leds, cdev);
+> +	struct pcat_data_cmd_led_setup setup = { 0, 0, 0 };
+> +
+> +	if (brightness)
+> +		setup.on_time = 100;
+> +	else
+> +		setup.down_time = 100;
+> +	return pcat_pmu_write_data(leds->pmu, PCAT_CMD_NET_STATUS_LED_SETUP,
+> +				   &setup, sizeof(setup));
+> +}
+> +
+> +static int pcat_leds_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
 
-  leaq sym(%rip), %reg
+Small sized variables at the bottom please.
 
-whereas
+> +	struct device *dev = &pdev->dev;
+> +	struct pcat_leds *leds;
+> +	const char *label;
+> +
+> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
+> +	if (!leds)
+> +		return -ENOMEM;
+> +
+> +	leds->dev = dev;
 
-  movq sym, %reg
+Where is this used?
 
-and
+> +	leds->pmu = dev_get_drvdata(dev->parent);
+> +	platform_set_drvdata(pdev, leds);
 
-  movq sym(%rip), %reg
+Where do you platform_get_drvdata()
 
-are the same length.
+> +	ret = of_property_read_string(dev->of_node, "label", &label);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "No label property\n");
+> +
+> +	leds->cdev.name = label;
+> +	leds->cdev.max_brightness = 1;
+> +	leds->cdev.brightness_set_blocking = pcat_led_status_set;
+> +
+> +	return devm_led_classdev_register(dev, &leds->cdev);
+> +}
+> +
+> +static const struct of_device_id pcat_leds_dt_ids[] = {
+> +	{ .compatible = "ariaboard,photonicat-pmu-leds", },
 
-OTOH, indexing a statically allocated global array like
+How many LEDs are there?
 
-  movl array(,%reg1,4), %reg2
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, pcat_leds_dt_ids);
+> +
+> +static struct platform_driver pcat_leds_driver = {
+> +	.driver = {
+> +		.name = "photonicat-leds",
+> +		.of_match_table = pcat_leds_dt_ids,
+> +	},
+> +	.probe = pcat_leds_probe,
+> +};
+> +module_platform_driver(pcat_leds_driver);
+> +
+> +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
+> +MODULE_DESCRIPTION("Photonicat PMU Status LEDs");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.46.0
+> 
 
-will be converted into
-
-  leaq array(%rip), %reg2
-  movl (%reg2,%reg1,4), %reg2
-
-and is therefore less efficient in terms of code footprint. But in
-general, the x86_64 ISA and psABI are quite flexible in this regard,
-and extrapolating from past experiences with PIC code on i386 is not
-really justified here.
-
-As Andi also pointed out, what ultimately matters is the performance,
-as well as code size where it impacts performance, through the I-cache
-footprint. I'll do some testing before reposting, and maybe not bother
-if the impact is negative.
-
-> > It also brings us much closer to the ordinary PIE relocation model used
-> > for most of user space, which is therefore much better supported and
-> > less likely to create problems as we increase the range of compilers and
-> > linkers that need to be supported.
->
-> We have been resisting *for ages* making the kernel worse to accomodate
-> broken compilers. We don't "need" to support more compilers -- we need
-> the compilers to support us. We have working compilers; any new compiler
-> that wants to play should be expected to work correctly.
->
-
-We are in a much better place now than we were before in that regard,
-which is actually how this effort came about: instead of lying to the
-compiler, and maintaining our own pile of scripts and relocation
-tools, we can just do what other arches are doing in Linux, and let
-the toolchain do it for us.
+-- 
+0)
+Lee Jones [李琼斯]
 
