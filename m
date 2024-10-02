@@ -1,73 +1,72 @@
-Return-Path: <linux-pm+bounces-15053-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15054-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 804DB98D2F9
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:22:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDB3798D2FD
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:23:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0303D1F23361
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 12:22:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E218B22F23
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 12:23:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09241CFED8;
-	Wed,  2 Oct 2024 12:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1E51D0159;
+	Wed,  2 Oct 2024 12:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OXshoZqi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bNqwpn5U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062571CF7C6
-	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 12:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CAE1CFED2
+	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 12:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727871765; cv=none; b=Bkm+6Cl6r8JuTXZxoTg6fQCnVDM0H+rJN3qJfPwDq/ZlyDeWR4mIUVfV9+C3lh4XlsfAtJmUlIu5eVFGrmLtTjdDYDo57otr2i0Ic7i3H+HzaggwRIKhrSHHwsXPnX0mPbceHB8LW1zkJ7teE1/HEONDyojBZj0KdvtMLy2mM74=
+	t=1727871767; cv=none; b=pZJ7xRzqbdJQTl1ic9b/IVXEkOgeu4QzRJZgiuVt4qRuCoU/o4z6iQErCI/Xjpx85+4uUX2RSLQQGtBwEJURlcLB86/PhVYu43TG+FJkQrIM2Us6wzskYN4fere3EXx3vIVTMIjetD5BWaPRgSLgSXKSGZ4GOB+gECj1ECO5X8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727871765; c=relaxed/simple;
-	bh=bHtjzPG/Hb+7ZqaAKxtS3yoYjps3dQcwfj0ujdDPyg4=;
+	s=arc-20240116; t=1727871767; c=relaxed/simple;
+	bh=bzcM5H+oeqTzoW0VCpVpOTPFzApwGE8O5mfZWirVFUw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DCYIu3uUJ4RW4zHSzSEQ1UzdMaqwZ0YnmTaqPVR0ln6n7bjV8bniysrXRnmafJusfEHaR5gLfGjqcFOeezleDfMgj04B6MxITsLvJrohtYD5IkEdY1/j4QbwDs1XCtHoFmE3yUebgjNcZ4C2eWhglSjRw6Ywxk+UtEsCeW9EIhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OXshoZqi; arc=none smtp.client-ip=209.85.167.43
+	 MIME-Version; b=WKE7kuR0tCMHI/QjYCwzA3h6DGovfNuMPm0WDT9gx8e6puujjk4+gMKnXyUgZ1B1+jotiTopEf3EBkO3TGZOEWHG09ReHkhPMI9H6ygoZ8SuNCrcDTfzivrQeKZ3wyI+hEBM+eoC18Io0ce2kNX5m0QFAPDmI2iT/nVM+6dmino=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bNqwpn5U; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5398ec2f3c3so993928e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 05:22:43 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5398b2f43b9so707862e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 05:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727871762; x=1728476562; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1727871764; x=1728476564; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eSX9EU17ASlDm3AgTKh4ubal0EGKVpY/9w9SUmxv4Ak=;
-        b=OXshoZqiEfStsTOGcDG8w+vDkCQh0boU7rqDrgyxZIDcJ8S+pnfgSxSFWl5zDK38Ch
-         7Z3QkM3o2CAeZeXaX5OcjbeHlIhTccy9uM4fy2pDOhfeBeGqVw9i3UFjiJlYIkVUxJoc
-         mgXbQbIb0csjJL1nFWkzYvP1aDVxCwsTJcWcrvTI7lDJJIOv2ZCZW07GvvBPoY/L49/O
-         pQVIMpw65Sa6lUMOBEQYqDhwK8VzPyq/WgV9uhS1CwIvGRLVAiZ7E+uyvpUMdsF8i+Ao
-         FcjrUu5jDX1BJAbkDI6EEnqpTKs9gOi2HuFmLaC2Q0WFOE+3Z1mC5sdqkSByZbhlUlRV
-         Metw==
+        bh=GnPQMJcE35HfZ9AP9Q+AP3/u7Io2rZuoy0lFJRDyvTQ=;
+        b=bNqwpn5UC3ukEVpwcZ2gZGXBEg4mE9A3Izra5X0tMznDOu23o0D+bjMflFV+rSiRGZ
+         2fT8jbvbswLr9mtxWRS9hfBZR+SGezcNfe/myc8IMm2vY9mOeBnM8OF5P4N+aCaKgZWP
+         aUyU+FFQC0DHM41FfZjtCiw/ko8jYYesNDUbi8O0y1QXOIcpJe9tQef1mvRozgQpc96Z
+         e7OYSkZTOc0eb2FfDa7+4/LTjBgKzWwlP6UT6LtBYnJbE2RPnKJw0Drxd90O6GvSv51A
+         zalFiQpcJPBCzZH4jG99J7UkWSrLmC4utxAoNFpMtI3f0k5ZmvC45sknzcbVt2U8cbl7
+         l4cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727871762; x=1728476562;
+        d=1e100.net; s=20230601; t=1727871764; x=1728476564;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eSX9EU17ASlDm3AgTKh4ubal0EGKVpY/9w9SUmxv4Ak=;
-        b=RuasjwNXx9kfoVbC/2G86uIj9hbGMJDxabditv0GLLcj9rghbuauDxyx8DQe1qFIE/
-         F6phga0uuPtCMdD8FsOUiFxeCdAm6768pZPcYX66atl5Sv1skKEe31yxwjsi5zPZqqCz
-         4XN3finh8VvvPdmTf3u7SVe3g4ufLeCeLVIcfBU2PossZUEcN5drniqTGsB5qKDBIWtt
-         RX5ct7seHyJJlNh6bnS4oumH6jAuEhs8CFvfoo7ZmbGRuSSI/vSa37isVa7uoeyyeGoR
-         XjnA02mH/H3Y/RoKdZLMeq1zVL8dMYclri9AJiNOzqx30ClvdA2wYLhcc8IJMDYllUP2
-         /BJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlJbjSMa8Fl0hCA7JL+A6hwwmjuBWWU4jV597VrBiUH/pr792uxmkfeLm2Ivx1gVvuTBE2vnyCZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzca4gUvDZAYtdAfIIXj/FnPiGNqN/Ju0Elyt3DMsTzIRWr/iMW
-	QFPw7ggrBEpBhGSFzVo+3Dhn4vYV574eCLw/M+KfkDhpGuhp7/0dIUQpa+OIV3A18u5onnh+Cbj
-	F
-X-Google-Smtp-Source: AGHT+IHEvwRxBb9GrNyhgaRg0+vv+PetyLiU75/JMXFKI6h0PdYDgnClXnPqY2gTN5ud9jelhP1j5g==
-X-Received: by 2002:a05:6512:280a:b0:530:d088:233f with SMTP id 2adb3069b0e04-539a079f870mr1678944e87.40.1727871762024;
-        Wed, 02 Oct 2024 05:22:42 -0700 (PDT)
+        bh=GnPQMJcE35HfZ9AP9Q+AP3/u7Io2rZuoy0lFJRDyvTQ=;
+        b=ZL4jZU8+ShXcidyI+bxxWHeGcdueVjG9i1Gg/NAWcPcJLvm3mTKNjS5hHaUBhPQN7M
+         X9cSLnIEpPfuR9R4c20f+aiVbj8sGLBjbf1cPmXeJ2MesG/0N8r/eMeNndmyhUfvMmX5
+         cZK9kCnYBRyS5vyn/sfJ8ezmbpolT9oKijiRS/V+moAZ3ze9wKLdvxnt7HBNlEwCAmVs
+         iIBwBy+IieVQE6uHqKcQZiUdhqsc7DPLzi4jQn4v9nGk0UJNx2S83ij7H2BxRp7m+9gC
+         S4Yczr0jFXea3m2GYQnhvRNDzS3y8fvFRxJ3yRgU16/hrJTEUxj/4w5EJ1dOxtZiQl8f
+         23mg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhPrjTgu0iCgtJYMCymRNothjXpV+IcVI6L52NK3TvCIGiexGiZTZd7pHgZWs9ko6KurAK6JPvuw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkgmWyt6bURv1PmPTBrI3BmH29vNnjCn1z0VP2EqE5UgcrqS/L
+	S9d4pMBh8IYoo7Sm6d2SlhUszi899SB+Vg4Y06zdEvF2wBBkCoVqzALI5dJjAxo=
+X-Google-Smtp-Source: AGHT+IH3lbHH/Ci/Lm2nPio+9vcLRk9yL/BoeI12+KlsgJmqos4Z7kBLLfAx4B214LknbA9lF9GWVw==
+X-Received: by 2002:a05:6512:239c:b0:538:9d49:f740 with SMTP id 2adb3069b0e04-539a014dd0dmr1050179e87.15.1727871763458;
+        Wed, 02 Oct 2024 05:22:43 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-538a043204fsm1912659e87.165.2024.10.02.05.22.39
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-538a043204fsm1912659e87.165.2024.10.02.05.22.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 05:22:41 -0700 (PDT)
+        Wed, 02 Oct 2024 05:22:42 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Viresh Kumar <vireshk@kernel.org>,
 	Nishanth Menon <nm@ti.com>,
@@ -89,10 +88,11 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 01/11] Revert "drm/tegra: gr3d: Convert into dev_pm_domain_attach|detach_list()"
-Date: Wed,  2 Oct 2024 14:22:22 +0200
-Message-Id: <20241002122232.194245-2-ulf.hansson@linaro.org>
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v4 02/11] PM: domains: Fix alloc/free in dev_pm_domain_attach|detach_list()
+Date: Wed,  2 Oct 2024 14:22:23 +0200
+Message-Id: <20241002122232.194245-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241002122232.194245-1-ulf.hansson@linaro.org>
 References: <20241002122232.194245-1-ulf.hansson@linaro.org>
@@ -104,125 +104,82 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This reverts commit f790b5c09665cab0d51dfcc84832d79d2b1e6c0e.
+The dev_pm_domain_attach|detach_list() functions are not resource managed,
+hence they should not use devm_* helpers to manage allocation/freeing of
+data. Let's fix this by converting to the traditional alloc/free functions.
 
-The reverted commit was not ready to be applied due to dependency on other
-OPP/pmdomain changes that didn't make it for the last release cycle. Let's
-revert it to fix the behaviour.
-
+Fixes: 161e16a5e50a ("PM: domains: Add helper functions to attach/detach multiple PM domains")
+Cc: stable@vger.kernel.org
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
 
 Changes in v4:
 	- New patch.
-	- Thierry, I intend to queue this via my pmdomain tree as a fix for
-	v6.12. Please let me know, if you have any issues with that.
-
+		
 ---
- drivers/gpu/drm/tegra/gr3d.c | 46 ++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 13 deletions(-)
+ drivers/base/power/common.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/tegra/gr3d.c b/drivers/gpu/drm/tegra/gr3d.c
-index 4de1ea0fc7c0..00c8564520e7 100644
---- a/drivers/gpu/drm/tegra/gr3d.c
-+++ b/drivers/gpu/drm/tegra/gr3d.c
-@@ -46,7 +46,6 @@ struct gr3d {
- 	unsigned int nclocks;
- 	struct reset_control_bulk_data resets[RST_GR3D_MAX];
- 	unsigned int nresets;
--	struct dev_pm_domain_list *pd_list;
- 
- 	DECLARE_BITMAP(addr_regs, GR3D_NUM_REGS);
- };
-@@ -370,12 +369,18 @@ static int gr3d_power_up_legacy_domain(struct device *dev, const char *name,
- 	return 0;
- }
- 
-+static void gr3d_del_link(void *link)
-+{
-+	device_link_del(link);
-+}
-+
- static int gr3d_init_power(struct device *dev, struct gr3d *gr3d)
- {
--	struct dev_pm_domain_attach_data pd_data = {
--		.pd_names = (const char *[]) { "3d0", "3d1" },
--		.num_pd_names = 2,
--	};
-+	static const char * const opp_genpd_names[] = { "3d0", "3d1", NULL };
-+	const u32 link_flags = DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME;
-+	struct device **opp_virt_devs, *pd_dev;
-+	struct device_link *link;
-+	unsigned int i;
- 	int err;
- 
- 	err = of_count_phandle_with_args(dev->of_node, "power-domains",
-@@ -409,10 +414,29 @@ static int gr3d_init_power(struct device *dev, struct gr3d *gr3d)
- 	if (dev->pm_domain)
+diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
+index 8c34ae1cd8d5..cca2fd0a1aed 100644
+--- a/drivers/base/power/common.c
++++ b/drivers/base/power/common.c
+@@ -195,6 +195,7 @@ int dev_pm_domain_attach_list(struct device *dev,
+ 	struct device *pd_dev = NULL;
+ 	int ret, i, num_pds = 0;
+ 	bool by_id = true;
++	size_t size;
+ 	u32 pd_flags = data ? data->pd_flags : 0;
+ 	u32 link_flags = pd_flags & PD_FLAG_NO_DEV_LINK ? 0 :
+ 			DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME;
+@@ -217,19 +218,17 @@ int dev_pm_domain_attach_list(struct device *dev,
+ 	if (num_pds <= 0)
  		return 0;
  
--	err = dev_pm_domain_attach_list(dev, &pd_data, &gr3d->pd_list);
--	if (err < 0)
-+	err = devm_pm_opp_attach_genpd(dev, opp_genpd_names, &opp_virt_devs);
-+	if (err)
- 		return err;
+-	pds = devm_kzalloc(dev, sizeof(*pds), GFP_KERNEL);
++	pds = kzalloc(sizeof(*pds), GFP_KERNEL);
+ 	if (!pds)
+ 		return -ENOMEM;
  
-+	for (i = 0; opp_genpd_names[i]; i++) {
-+		pd_dev = opp_virt_devs[i];
-+		if (!pd_dev) {
-+			dev_err(dev, "failed to get %s power domain\n",
-+				opp_genpd_names[i]);
-+			return -EINVAL;
-+		}
-+
-+		link = device_link_add(dev, pd_dev, link_flags);
-+		if (!link) {
-+			dev_err(dev, "failed to link to %s\n", dev_name(pd_dev));
-+			return -EINVAL;
-+		}
-+
-+		err = devm_add_action_or_reset(dev, gr3d_del_link, link);
-+		if (err)
-+			return err;
+-	pds->pd_devs = devm_kcalloc(dev, num_pds, sizeof(*pds->pd_devs),
+-				    GFP_KERNEL);
+-	if (!pds->pd_devs)
+-		return -ENOMEM;
+-
+-	pds->pd_links = devm_kcalloc(dev, num_pds, sizeof(*pds->pd_links),
+-				     GFP_KERNEL);
+-	if (!pds->pd_links)
+-		return -ENOMEM;
++	size = sizeof(*pds->pd_devs) + sizeof(*pds->pd_links);
++	pds->pd_devs = kcalloc(num_pds, size, GFP_KERNEL);
++	if (!pds->pd_devs) {
++		ret = -ENOMEM;
++		goto free_pds;
 +	}
-+
- 	return 0;
- }
++	pds->pd_links = (void *)(pds->pd_devs + num_pds);
  
-@@ -503,13 +527,13 @@ static int gr3d_probe(struct platform_device *pdev)
- 
- 	err = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
- 	if (err)
--		goto err;
-+		return err;
- 
- 	err = host1x_client_register(&gr3d->client.base);
- 	if (err < 0) {
- 		dev_err(&pdev->dev, "failed to register host1x client: %d\n",
- 			err);
--		goto err;
-+		return err;
+ 	if (link_flags && pd_flags & PD_FLAG_DEV_LINK_ON)
+ 		link_flags |= DL_FLAG_RPM_ACTIVE;
+@@ -272,6 +271,9 @@ int dev_pm_domain_attach_list(struct device *dev,
+ 			device_link_del(pds->pd_links[i]);
+ 		dev_pm_domain_detach(pds->pd_devs[i], true);
  	}
- 
- 	/* initialize address register map */
-@@ -517,9 +541,6 @@ static int gr3d_probe(struct platform_device *pdev)
- 		set_bit(gr3d_addr_regs[i], gr3d->addr_regs);
- 
- 	return 0;
--err:
--	dev_pm_domain_detach_list(gr3d->pd_list);
--	return err;
++	kfree(pds->pd_devs);
++free_pds:
++	kfree(pds);
+ 	return ret;
  }
- 
- static void gr3d_remove(struct platform_device *pdev)
-@@ -528,7 +549,6 @@ static void gr3d_remove(struct platform_device *pdev)
- 
- 	pm_runtime_disable(&pdev->dev);
- 	host1x_client_unregister(&gr3d->client.base);
--	dev_pm_domain_detach_list(gr3d->pd_list);
+ EXPORT_SYMBOL_GPL(dev_pm_domain_attach_list);
+@@ -363,6 +365,9 @@ void dev_pm_domain_detach_list(struct dev_pm_domain_list *list)
+ 			device_link_del(list->pd_links[i]);
+ 		dev_pm_domain_detach(list->pd_devs[i], true);
+ 	}
++
++	kfree(list->pd_devs);
++	kfree(list);
  }
+ EXPORT_SYMBOL_GPL(dev_pm_domain_detach_list);
  
- static int __maybe_unused gr3d_runtime_suspend(struct device *dev)
 -- 
 2.34.1
 
