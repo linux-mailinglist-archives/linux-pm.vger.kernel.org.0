@@ -1,121 +1,137 @@
-Return-Path: <linux-pm+bounces-15047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15048-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F186398D1DE
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 13:01:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A909498D1E0
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 13:01:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F3E71C21F5C
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 11:01:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C3901F210DC
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 11:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1ED020012D;
-	Wed,  2 Oct 2024 10:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C39201269;
+	Wed,  2 Oct 2024 11:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hybYEvhu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZclqHa+H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BD5200129
-	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 10:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C63120013E
+	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 11:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727866787; cv=none; b=HJ6YvFH3q2+x7V+gsKKF+aLDnJXxO4Ym9vYJi8jGrWwFFPkSO3PITDVZ/vo2Z+/mssCUH6drxN6e2A29zW+L0T+C+QAttjMrqZYB5kZEyJSQgo2qvDXzjfoas3qBIQpJWi8vs8gg0n4jLZWGQRAkDQPcPvtLGez4ZAIhpgJr3Vk=
+	t=1727866806; cv=none; b=g2z5jfEB0sXn9wQFNg5/ycpe4Ap8fTiBvWKBZyqVgFrdX4A3ujsR28n3L9g9UaGhV8KdlkQr6yoRwFvSJ5byTT13AxFJ3LidGTPG8AT02NSKmPCkseikhCBVKqhK+iMd/i8xJaEntPWJum17adDP3B8lC92D3b9Kg1g6/4zIaAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727866787; c=relaxed/simple;
-	bh=arWEj26OYvQPspC84HQha4peufBrbKdb6Dt00ZcNb/o=;
+	s=arc-20240116; t=1727866806; c=relaxed/simple;
+	bh=PcrWdbduYxZeMb0YqP69rh1ZAPaHmW5lP2887js9ovI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f5/a8/BWrqu2cqhgbPpQztSk8qwffmi6lpKIVQFSeHB1AE0KFxWkP13bwxw3wq8sKKxx7XM2BI3skWcBWzZfly1Nvyg5hWFtsZ2BK8RDORoucRizYr75p4yFFOQtX/eK8d1wnr1i7lWd/pRFAqUaIi90+01m9HGiZmtUZgp83QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hybYEvhu; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=uQHrJCzPFdciMR6yxQk3kFH5xiy4mIpQqfgTFxx9vTpzycORlB5Pi72BDrFUYfOjjGcC0b+cBNa9LKIdoZN58aldPiqzhB74b5NA04dCnJUL3L63oBPn43601LEl6si1VHIjARYbosWGou87yE3zinoVRKhY0trl5MO1BhRI22g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZclqHa+H; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e263920b6bbso597051276.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 03:59:45 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e026a2238d8so6175104276.0
+        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 04:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727866785; x=1728471585; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1727866804; x=1728471604; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eNwGlqBOvojI8yNCjRtK6m3A2XGZPqaWNHHuGGkMaAc=;
-        b=hybYEvhu4iOS6lvWeMx8qto+LFfpkAmYVi4yk/BirYwvzlXOsCXd/OcnRt/PxMtmtu
-         maNC1C8eN1/EG1f6dhxnaGfaiffXakQgYB5aneAn7oOguk2nnO8asffDJVz9JQi0+BDv
-         KHn33uaQmfSARj5Nz1XFeK8LxE+rxx4P/hroo7rvVE0NLc+59p7gGCLEyC1joXOMCxds
-         oT/XsPKdKD+JR0+dg78zSi/L0BJgFWqqKxAodZp4X48Zgy3/7TXBETNhr3beICfx+omt
-         6ZhMbQmehhevFNVh04jOJYVMjUjf7UbZ5tlQXoV0gQczaiufDvj6pduHqfsrcH/KbK2Z
-         wjhA==
+        bh=vqnwKXMtIPuvcjdLi+y6QFMRS5xvKxcyBVOpz9PIUOs=;
+        b=ZclqHa+H1zINNbkQKDCsfby5e2TbHpaQTKh81t3q9+VTQOm0GTB/yB87ZS5xVH9Jge
+         IJsvPdGfqjbu0AteWJ789ZrMI9ge5hS/7cCyw21imRBgSWoBaVeT9zpz/BFEAXenhUxh
+         2vUd2zbXkXNRfQIJHJ8YhCjilXdbcpXLIzz7eyzpVaGRq7zlm702Anku4x7DcYR8yGkG
+         CCPppspyzuu0dw8uLyZ2fRioG9rJ4FiTGXNAemn5mdITD7UJJ1QTiRa5pGmA3cjzftQl
+         CkiEuFLQJrRqifSrET3kBkfmBQL0A032a3P76o3cq9dqzZl3IY+QkjgHCt3otKn4tn4K
+         f/XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727866785; x=1728471585;
+        d=1e100.net; s=20230601; t=1727866804; x=1728471604;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eNwGlqBOvojI8yNCjRtK6m3A2XGZPqaWNHHuGGkMaAc=;
-        b=FMOBHXHE4kmR+/1gxH7d+vF/9wiPjamGnKMsl8sAwpvlcyhd9yPx3z6qpCo2R942QQ
-         2wfkOjz/j6wiTeApFNvKbccvxwlNuqaMo1PJACMi3y+IoDdyhdQJVhqlCd5znCiqF4lG
-         zlHPQTSwHzKyGn2jujyBW3bMqjGWu8X2jVRF4Gaxa8FCfKruTX8Wr7S6E8rp9ksQvE/b
-         DTrBJFXJiE3c5u37leMrFVMMxuaReirQQ1h+E+YnL9orBTyPaxwa0lz/FCp/uXOKHXbF
-         FLSVZAZPcOFMLCr2uR/sgId+MvhBzHxtba/dOeTXT2JcGleVwM6gw/XcFHbbKDlXQ9QY
-         BIAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXOKNlEdTnhUXXu8ysndNlK00oOjwZMxY9SmGaYpp2Eyd5ewd5/4N+2mZRjrjxCO9Df758SdVj/XQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRWIJFHIirjA9b6hhAoaK7yiVgod3ml+4StYYe/9ptkU+thei6
-	B4cGpKmasGlY9d5petrZbO9m0Qej4+6yG9jlFYA2SQ1uTY4Gcp66mArElgTpOE9Pfs7LGffZGl8
-	/gktxtZsDNowUzy5mK5I3g3FkjBswnIMwmCqh4A==
-X-Google-Smtp-Source: AGHT+IEDoNnpjZ8L1Ywdhj5U3o1j/X3Z3qd9+DvHP0OLqdPF5OZl/Kdeth9Den9N5+QIL/8SSqu54jIDEMZQvg/eiOg=
-X-Received: by 2002:a05:6902:e0e:b0:e1a:9024:85e8 with SMTP id
- 3f1490d57ef6-e26383cacc9mr1889771276.10.1727866784903; Wed, 02 Oct 2024
- 03:59:44 -0700 (PDT)
+        bh=vqnwKXMtIPuvcjdLi+y6QFMRS5xvKxcyBVOpz9PIUOs=;
+        b=wkctMjlQCMI7JmIbLy39GN0tiLgfChNtCUFj6phs6YwH1sZVFsgUGMUxoEtu2TCrjX
+         kjR3pEBb9ypZ876UycR8V6EJiRsdTFDFRcWJAp0+q3fqHxppdMth2vKoKrGeye8nZzZv
+         LcmqXMSAAd8OAGf+jtxIOMxdQ5l4cNcdA2N7M/0tRujV0rJhb9fOfZYs2uV+tSS5UDf0
+         HM8UVIER6Zc2Hgn3MMe5EBvcBQfwM3kHQui0wsPZWoIavSruRXOd2iwQKDo7vpwTxnAg
+         cVuZrPlpRMZLu2kGfqbWwyDGuXsW6I8iLdWUy1yzwUG0qfBMuMK0tqQx+dVsZHvv1QTN
+         oAEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXORsvF4DPHtGokuaDKXNn6uiNVDl5vZ5aS1mZUV6Ot4BXtANRST/CO93dVHd1wy3sVaG/JFQYM7w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTsT1oZIBxxHJJjRpHPwzrMha0z6eh/qLXoFL8TxI9J4lUM6jy
+	0Lac7b/A7G26fDK1jLOFphGP6kVnJpnW5C7hQiYLTHrwlNncz7+N2Hrc3bhlRXPAE1xGwbIBBQm
+	87Cz+umZtlliwZuL9W2BxBpopYh13h4kNyiEcp8FFrUYzW/mt
+X-Google-Smtp-Source: AGHT+IGgpG+SeCoc89v9XXZAV+0OdGnBa1rr8GBqp7ZNHU2T0IKW4tijQJBHMruJay+8D5hiheKAuakS+Pmfcp7B/3o=
+X-Received: by 2002:a05:6902:1a49:b0:e24:fea0:f9b4 with SMTP id
+ 3f1490d57ef6-e263840fdd3mr1985992276.38.1727866802706; Wed, 02 Oct 2024
+ 04:00:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240926134211.45394-1-zhangzekun11@huawei.com>
-In-Reply-To: <20240926134211.45394-1-zhangzekun11@huawei.com>
+References: <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-0-18c030ad7b68@quicinc.com>
+In-Reply-To: <20240927-add_qcs615_qcs8300_powerdomains_driver_support-v2-0-18c030ad7b68@quicinc.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 2 Oct 2024 12:59:08 +0200
-Message-ID: <CAPDyKFogjPsZMDPQ3pBR-8WhkOMH0W76FX_sQY2ZKRGC5XMugw@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: qcom-cpr: Fix the return of uninitialized variable
-To: Zhang Zekun <zhangzekun11@huawei.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, linux-pm@vger.kernel.org, 
-	dan.carpenter@linaro.org, chenjun102@huawei.com
+Date: Wed, 2 Oct 2024 12:59:27 +0200
+Message-ID: <CAPDyKFqXNC41VySryugwg-BOObPEqtnbyRZcR8NXj2R5tNPqfA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Add rpmhpd powerdomains support for QCS615/QCS8300
+To: Tingguo Cheng <quic_tingguoc@quicinc.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, kernel@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	quic_fenglinw@quicinc.com, quic_tingweiz@quicinc.com, 
+	Shazad Hussain <quic_shazhuss@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 26 Sept 2024 at 15:56, Zhang Zekun <zhangzekun11@huawei.com> wrote:
+On Fri, 27 Sept 2024 at 14:00, Tingguo Cheng <quic_tingguoc@quicinc.com> wrote:
 >
-> The of_property_read_u64() can fail and remain the variable uninitialized,
-> which will then be returned. Initializing the variable "rate" to zero to
-> fix this problem.
+> Document the qcom,qcs8300-rpmhpd compatible and add power domains in
+> rpmhpd driver to support QCS8300.
+> Document the qcom,qcs615-rpmhpd compatible and add power domains in
+> rpmhpd driver to support QCS615.
 >
-> Fixes: 181c8148556a ("pmdomain: qcom-cpr: Use scope based of_node_put() to simplify code.")
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/linux-pm/455a6a49-41d2-4a20-9a31-f57ee7a67920@huawei.com/T/#m0a62b501b453a6d6e94c52a428a66f65b5422c65
-> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+> Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
 
-Applied for fixes, thanks!
+The series applied for next and by adding  Krzysztof's ack on the DT
+patches (next time, please carry them forward when posting new
+versions), thanks!
+
+Note that the DT patch is also available on the immutable dt branch.
 
 Kind regards
 Uffe
 
 
 > ---
->  drivers/pmdomain/qcom/cpr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes in v2:
+> - Rebased patchsets on next-20240927.
+> - Combined 2 patchsets into one to resolve merge conflicts of touching
+>   the same part of code.
+>   - Current Patchset
+>   |
+>   |->Patchset 1:https://lore.kernel.org/r/20240920-add_qcs615_powerdomains_driver_support-v1-0-8846efaf9454@quicinc.com
+>   |->Patchset 2:https://lore.kernel.org/r/20240920-add_qcs8300_powerdomains_driver_support-v1-0-96a2a08841da@quicinc.com
 >
-> diff --git a/drivers/pmdomain/qcom/cpr.c b/drivers/pmdomain/qcom/cpr.c
-> index e1fca65b80be..26a60a101e42 100644
-> --- a/drivers/pmdomain/qcom/cpr.c
-> +++ b/drivers/pmdomain/qcom/cpr.c
-> @@ -1052,7 +1052,7 @@ static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
->                         of_parse_phandle(child_np, "required-opps", 0);
+> - Link to v1: https://lore.kernel.org/r/20240920-add_qcs8300_powerdomains_driver_support-v1-0-96a2a08841da@quicinc.com
 >
->                 if (child_req_np == ref_np) {
-> -                       u64 rate;
-> +                       u64 rate = 0;
+> ---
+> Tingguo Cheng (4):
+>       dt-bindings: power: qcom,rpmpd: document qcs8300 RPMh power domains
+>       pmdomain: qcom: rpmhpd: Add qcs8300 power domains
+>       dt-bindings: power: qcom,rpmpd: document qcs615 RPMh power domains
+>       pmdomain: qcom: rpmhpd: Add qcs615 power domains
 >
->                         of_property_read_u64(child_np, "opp-hz", &rate);
->                         return (unsigned long) rate;
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml      |  2 ++
+>  drivers/pmdomain/qcom/rpmhpd.c                     | 36 ++++++++++++++++++++++
+>  2 files changed, 38 insertions(+)
+> ---
+> base-commit: 40e0c9d414f57d450e3ad03c12765e797fc3fede
+> change-id: 20240927-add_qcs615_qcs8300_powerdomains_driver_support-7cd487126340
+>
+> Best regards,
 > --
-> 2.17.1
+> Tingguo Cheng <quic_tingguoc@quicinc.com>
 >
 
