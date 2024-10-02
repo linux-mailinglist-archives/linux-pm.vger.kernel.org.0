@@ -1,360 +1,500 @@
-Return-Path: <linux-pm+bounces-15063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD8FA98D320
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:25:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F13C998D324
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:26:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E9BF283C9B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 12:25:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89B09285906
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 12:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B65A1D0BBA;
-	Wed,  2 Oct 2024 12:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF1D1D0DE6;
+	Wed,  2 Oct 2024 12:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ajrdUhGQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T1IvGDbn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8D61D0B9B
-	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 12:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B630F1D0B98
+	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 12:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727871786; cv=none; b=dCF4P57MGB5sSi3iSokd/E/i0PwMkPmwcBxMa8WdFDr//hYDylmpn1PJo73GioVDhutNPiELYwpYTi4T9ppi/Gm11Ffp0j5WwJUiZUOIaHqhNW2T75P83Mpbo5RWLbCz36b5wokljuQ7Z87PfXfzEJHOrYT9J9M9QXufME3XYIQ=
+	t=1727871792; cv=none; b=a00jrT/q5tAsbxt/KNwNDvykREUkJzSDt+p1idVr89HLNSfofKBe8pPxTMGvPebn2W+xNEOG5vuN9gHO3xgKDmnoMF8rr0f7LnIN5dCfqbuP4NN5V4T7ps352IXNnCtI8mnaV+ug7ttUrSZdyhUF9ogEgSHJnbi5zVsm2PQfu5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727871786; c=relaxed/simple;
-	bh=B+cxcgnBoCbaeNr/2/pJBjD+nouj1vfJ4FbwWfvcU8U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f9+R/vhAjGnxqQ8JE/RvtESq5uGxHDRRiZaW9+EXTuLV7Vl6mZl57CtuDEyGAEsd1h/fJP8mm02PlxK139FyxQ4p04GNSw6tFhVYIjGBPFzzAMNv2Fs5DBPGv8pQT8cKei89Pfl8lsVoGnh7sHapFb96DkEPrL6l6afpX1Zlr0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ajrdUhGQ; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53993c115cfso4202406e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 05:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727871782; x=1728476582; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R/TIVUQtU3PI71l1Gg1zwcb6OPzLgVwsx6x/KydYFvA=;
-        b=ajrdUhGQJ4X540cSO3QmFF6ArknkA+VgLOI6S61KDlDibFtYOAkqLgfI7SlpSx1yzS
-         N9AFRod+hqZHvbqTyjKoU/Uox9ws0LCe3sCaswc6BcuiEI/14in+EY1lGi9zAVOa5k4u
-         dqZEob9D66w4Xj9DrPQMLqnutbl6QH5TEVDoryjO2VbFhr7nD/mRBORxEe0jtSeIjgch
-         LG0JcPNhNlECRlPZYADOI0UaCFH4Wx1RvtDx+ciZOl2u8hDvj+JBVZxBcrep/sTpe8Vj
-         AOellouJV9FSEpe+Iil/2k88YsO+P6tmsV7U4pEQX/Svuh4IaFXXxisuGS4VAg825x1+
-         ROiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727871782; x=1728476582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R/TIVUQtU3PI71l1Gg1zwcb6OPzLgVwsx6x/KydYFvA=;
-        b=FGo3MEnbuP6o9qHnTLWZi6D1Bs1jES/X4BiyWrmO57qyTVyc11Au+hJB9PUpBLKlCP
-         7scqVs7jGtys8/ZNR7Bb4izDGhVGTFItTTOrX1xW2kWRKh8argWkzuJgSkyRc5Q+1oE3
-         NgoLNHiaZ6fwpIGkm9um3zG1BOLSPQ+Z4MtYJEaehHYQLxfl9YCcznC0VUi51TxS4QRC
-         i6jcuqj0/CZ67Xy3efiy6l6INXCc7jnKMXApy+XTip91mCGSg9gbOH8tM++A14dfv/lE
-         mR6+BTuy8sDUPgykt8XJANGZp0X7vcm4m3eVfRJK5vbe/f0XHGUYHbBVp3MbOepgzk/I
-         yx5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWDLOlcbn18/U7SxlUz6GXW08g/NmejMPkRnxZFV+6pEXa78u+rH1uiNbX5Ue6XIwDVyfyEB8xGDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLtNeEss/CIdATu2U3pFzCFrSLqM0GpgAOFugb3DkGzoKjz0nH
-	FZvJr1arbKHu6Ii4qWuQdBhonEGCRZIy5ttbHBWBhePXVNm0wvmhajR4S8mUEVE=
-X-Google-Smtp-Source: AGHT+IFawbKX+I8rk+bpYYckI/zcGZtQxnHsS92WEjhwf3PwCQ2ejxH/QFVFPUhojNeLCdjjKr54Vg==
-X-Received: by 2002:a05:6512:1393:b0:536:53c2:8179 with SMTP id 2adb3069b0e04-539a079e87fmr1798776e87.37.1727871781914;
-        Wed, 02 Oct 2024 05:23:01 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-538a043204fsm1912659e87.165.2024.10.02.05.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 05:23:01 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Vedang Nagar <quic_vnagar@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <quic_kdybcio@quicinc.com>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Ilia Lin <ilia.lin@kernel.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Subject: [PATCH v4 11/11] OPP: Drop redundant *_opp_attach|detach_genpd()
-Date: Wed,  2 Oct 2024 14:22:32 +0200
-Message-Id: <20241002122232.194245-12-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241002122232.194245-1-ulf.hansson@linaro.org>
-References: <20241002122232.194245-1-ulf.hansson@linaro.org>
+	s=arc-20240116; t=1727871792; c=relaxed/simple;
+	bh=AhS9cz/bw+KQ7jlXagpfAk61nCzBKqArj1oFXgIn91M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bggb4v0tJyCuMrtwAu2kTkmHoKHsGlx/wUxTZFYc+9DLjY/4eERQCaswvxbMfwjNjf227GMKtP9Nw4RI4kcQVjwBf9Dcd5DkrEGkWlpxiYSSxnp+hD6suODn3n++a/2/M9e1b6ZJ+skfWt/Q7xRadMWG+IOqaLCrRPL6gPhSpfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T1IvGDbn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4478AC4AF60
+	for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2024 12:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727871792;
+	bh=AhS9cz/bw+KQ7jlXagpfAk61nCzBKqArj1oFXgIn91M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=T1IvGDbnY+vGPpuy76dCPF83pz3JWTFNHv6DinmnBfD5fxFE9Wm22EOK++O6Xl1Ux
+	 xbTNXNgiBRt0R++s3RIKHR+CZoUYbPUJ9ZI64S0Yd5JzFRy5CR9EmOMpEm1RVeL/hD
+	 r3/4/92IXLdbpVfWqsUb+CWW+2sWnAsy0NBE223pWBLmTreXt5lrbp9UVp6P08ZBh5
+	 gW6kdXt78As7kPSLxQC+WNGYE+ps1ewW2dabcWstfhJvSMq8k25W/lCGaM/vang07r
+	 hOKercOoOYpSlybX05Uk8hrjmF5Mm9HzeUP6ba+WgyMFJ9WyiTIrgcsJayph1wHUKl
+	 rrCw9l4OSbdzw==
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e082f2a427so4962334a91.3
+        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2024 05:23:12 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwQsm2zeaQGmwFI/Wc1LNU2KteWxzj9Zk/S+XXVILZk6O88+PwN
+	JuP380OKUNck6WFtiRhwgNNWwcHirCJruU7a9ZHNMbuaNAmqmNYOHms6gDvh7M7hSnWHBuLkZ5+
+	HxwdfRtvPFuRTYWimKWyh7fg9XzQ=
+X-Google-Smtp-Source: AGHT+IEJ6E4XXQ824Kt1Z3BKDTEqmCOqcmozL/0H7qdwJ8JgmeLOanGvxnQ7RQZ5+oLlCBy2Autb9VMnt2WNOV5yh4Y=
+X-Received: by 2002:a17:90b:695:b0:2d8:f99d:48d2 with SMTP id
+ 98e67ed59e1d1-2e1849009a6mr3605934a91.29.1727871791649; Wed, 02 Oct 2024
+ 05:23:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240923100005.2532430-1-daniel.lezcano@linaro.org>
+ <20240923100005.2532430-2-daniel.lezcano@linaro.org> <CAJZ5v0i9N_ie_duMXYSumQSnFDVxHj1h1ikSyrApJyEjXs_mQg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i9N_ie_duMXYSumQSnFDVxHj1h1ikSyrApJyEjXs_mQg@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 2 Oct 2024 14:22:58 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jCOHAmpmniVRuGCrtvKj6+YtCKidKSJf1t+HitwpKrwg@mail.gmail.com>
+Message-ID: <CAJZ5v0jCOHAmpmniVRuGCrtvKj6+YtCKidKSJf1t+HitwpKrwg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] thermal/core: Add user thresholds support
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org, lukasz.luba@arm.com, quic_manafm@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-All users of *_opp_attach|detach_genpd(), have been converted to use
-dev|devm_pm_domain_attach|detach_list(), hence let's drop it along with its
-corresponding exported functions.
+On Tue, Oct 1, 2024 at 9:57=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> On Mon, Sep 23, 2024 at 12:00=E2=80=AFPM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+> >
+> > The user thresholds mechanism is a way to have the userspace to tell
+> > the thermal framework to send a notification when a temperature limit
+> > is crossed. There is no id, no hysteresis, just the temperature and
+> > the direction of the limit crossing. That means we can be notified
+> > when a threshold is crossed the way up only, or the way down only or
+> > both ways. That allows to create hysteresis values if it is needed.
+> >
+> > A threshold can be added, deleted or flushed. The latter means all
+> > thresholds belonging to a thermal zone will be deleted.
+> >
+> > When a threshold is added:
+> >
+> >  - if the same threshold (temperature and direction) exists, an error
+> >    is returned
+> >
+> >  - if a threshold is specified with the same temperature but a
+> >    different direction, the specified direction is added
+> >
+> >  - if there is no threshold with the same temperature then it is
+> >    created
+> >
+> > When a threshold is deleted:
+> >
+> >  - if the same threshold (temperature and direction) exists, it is
+> >    deleted
+> >
+> >  - if a threshold is specified with the same temperature but a
+> >    different direction, the specified direction is removed
+> >
+> >  - if there is no threshold with the same temperature, then an error
+> >    is returned
+> >
+> > When the threshold are flushed:
+> >
+> >  - All thresholds related to a thermal zone are deleted
+> >
+> > When a threshold is crossed:
+> >
+> >  - the userspace does not need to know which threshold(s) have been
+> >    crossed, it will be notified with the current temperature and the
+> >    previous temperature
+> >
+> >  - if multiple thresholds have been crossed between two updates only
+> >    one notification will be send to the userspace, it is pointless to
+> >    send a notification per thresholds crossed as the userspace can
+> >    handle that easily when it has the temperature delta information
+> >
+> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > ---
+> >  drivers/thermal/Makefile             |   1 +
+> >  drivers/thermal/thermal_core.h       |   2 +
+> >  drivers/thermal/thermal_thresholds.c | 229 +++++++++++++++++++++++++++
+> >  drivers/thermal/thermal_thresholds.h |  19 +++
+> >  include/linux/thermal.h              |   3 +
+> >  include/uapi/linux/thermal.h         |   2 +
+> >  6 files changed, 256 insertions(+)
+> >  create mode 100644 drivers/thermal/thermal_thresholds.c
+> >  create mode 100644 drivers/thermal/thermal_thresholds.h
+> >
+> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > index 41c4d56beb40..1e1559bb971e 100644
+> > --- a/drivers/thermal/Makefile
+> > +++ b/drivers/thermal/Makefile
+> > @@ -6,6 +6,7 @@ CFLAGS_thermal_core.o           :=3D -I$(src)
+> >  obj-$(CONFIG_THERMAL)          +=3D thermal_sys.o
+> >  thermal_sys-y                  +=3D thermal_core.o thermal_sysfs.o
+> >  thermal_sys-y                  +=3D thermal_trip.o thermal_helpers.o
+> > +thermal_sys-y                  +=3D thermal_thresholds.o
+> >
+> >  # netlink interface to manage the thermal framework
+> >  thermal_sys-$(CONFIG_THERMAL_NETLINK)          +=3D thermal_netlink.o
+> > diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_c=
+ore.h
+> > index 50b858aa173a..8f320d17d927 100644
+> > --- a/drivers/thermal/thermal_core.h
+> > +++ b/drivers/thermal/thermal_core.h
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/thermal.h>
+> >
+> >  #include "thermal_netlink.h"
+> > +#include "thermal_thresholds.h"
+> >  #include "thermal_debugfs.h"
+> >
+> >  struct thermal_attr {
+> > @@ -139,6 +140,7 @@ struct thermal_zone_device {
+> >  #ifdef CONFIG_THERMAL_DEBUGFS
+> >         struct thermal_debugfs *debugfs;
+> >  #endif
+> > +       struct list_head user_thresholds;
+> >         struct thermal_trip_desc trips[] __counted_by(num_trips);
+> >  };
+> >
+> > diff --git a/drivers/thermal/thermal_thresholds.c b/drivers/thermal/the=
+rmal_thresholds.c
+> > new file mode 100644
+> > index 000000000000..f33b6d5474d8
+> > --- /dev/null
+> > +++ b/drivers/thermal/thermal_thresholds.c
+> > @@ -0,0 +1,229 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright 2024 Linaro Limited
+> > + *
+> > + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > + *
+> > + * Thermal thresholds
+> > + */
+> > +#include <linux/list.h>
+> > +#include <linux/list_sort.h>
+> > +#include <linux/slab.h>
+> > +
+> > +#include "thermal_core.h"
+> > +#include "thermal_thresholds.h"
+> > +
+> > +int thermal_thresholds_init(struct thermal_zone_device *tz)
+> > +{
+> > +       INIT_LIST_HEAD(&tz->user_thresholds);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +void thermal_thresholds_flush(struct thermal_zone_device *tz)
+> > +{
+> > +       struct list_head *thresholds =3D &tz->user_thresholds;
+> > +       struct user_threshold *entry, *tmp;
+> > +
+> > +       lockdep_assert_held(&tz->lock);
+> > +
+> > +       list_for_each_entry_safe(entry, tmp, thresholds, list_node) {
+> > +               list_del(&entry->list_node);
+> > +               kfree(entry);
+> > +       }
+> > +
+> > +       __thermal_zone_device_update(tz, THERMAL_TZ_FLUSH_THRESHOLDS);
+> > +}
+> > +
+> > +void thermal_thresholds_exit(struct thermal_zone_device *tz)
+> > +{
+> > +       thermal_thresholds_flush(tz);
+> > +}
+> > +
+> > +static int __thermal_thresholds_cmp(void *data,
+> > +                                   const struct list_head *l1,
+> > +                                   const struct list_head *l2)
+> > +{
+> > +       struct user_threshold *t1 =3D container_of(l1, struct user_thre=
+shold, list_node);
+> > +       struct user_threshold *t2 =3D container_of(l2, struct user_thre=
+shold, list_node);
+> > +
+> > +       return t1->temperature - t2->temperature;
+> > +}
+> > +
+> > +static struct user_threshold *__thermal_thresholds_find(const struct l=
+ist_head *thresholds,
+> > +                                                       int temperature=
+)
+> > +{
+> > +       struct user_threshold *t;
+> > +
+> > +       list_for_each_entry(t, thresholds, list_node)
+> > +               if (t->temperature =3D=3D temperature)
+> > +                       return t;
+> > +
+> > +       return NULL;
+> > +}
+> > +
+> > +static bool __thermal_threshold_is_crossed(struct user_threshold *thre=
+shold, int temperature,
+> > +                                          int last_temperature, int di=
+rection,
+> > +                                          int *low, int *high)
+> > +{
+> > +
+> > +       if (temperature >=3D threshold->temperature) {
+> > +               if (threshold->temperature > *low &&
+> > +                   THERMAL_THRESHOLD_WAY_DOWN & threshold->direction)
+> > +                       *low =3D threshold->temperature;
+> > +
+> > +               if (last_temperature < threshold->temperature &&
+> > +                   threshold->direction & direction)
+> > +                       return true;
+> > +       } else {
+> > +               if (threshold->temperature < *high && THERMAL_THRESHOLD=
+_WAY_UP
+> > +                   & threshold->direction)
+> > +                       *high =3D threshold->temperature;
+> > +
+> > +               if (last_temperature >=3D threshold->temperature &&
+> > +                   threshold->direction & direction)
+> > +                       return true;
+> > +       }
+> > +
+> > +       return false;
+> > +}
+> > +
+> > +static bool thermal_thresholds_handle_raising(struct list_head *thresh=
+olds, int temperature,
+> > +                                             int last_temperature, int=
+ *low, int *high)
+> > +{
+> > +       struct user_threshold *t;
+> > +
+> > +       list_for_each_entry(t, thresholds, list_node) {
+> > +               if (__thermal_threshold_is_crossed(t, temperature, last=
+_temperature,
+> > +                                                  THERMAL_THRESHOLD_WA=
+Y_UP, low, high))
+> > +                       return true;
+> > +       }
+> > +
+> > +       return false;
+> > +}
+> > +
+> > +static bool thermal_thresholds_handle_dropping(struct list_head *thres=
+holds, int temperature,
+> > +                                              int last_temperature, in=
+t *low, int *high)
+> > +{
+> > +       struct user_threshold *t;
+> > +
+> > +       list_for_each_entry_reverse(t, thresholds, list_node) {
+> > +               if (__thermal_threshold_is_crossed(t, temperature, last=
+_temperature,
+> > +                                                  THERMAL_THRESHOLD_WA=
+Y_DOWN, low, high))
+> > +                       return true;
+> > +       }
+> > +
+> > +       return false;
+> > +}
+> > +
+> > +void thermal_thresholds_handle(struct thermal_zone_device *tz, int *lo=
+w, int *high)
+> > +{
+> > +       struct list_head *thresholds =3D &tz->user_thresholds;
+> > +
+> > +       int temperature =3D tz->temperature;
+> > +       int last_temperature =3D tz->last_temperature;
+> > +       bool notify;
+> > +
+> > +       lockdep_assert_held(&tz->lock);
+> > +
+> > +       /*
+> > +        * We need a second update in order to detect a threshold being=
+ crossed
+> > +        */
+> > +       if (last_temperature =3D=3D THERMAL_TEMP_INVALID)
+> > +               return;
+> > +
+> > +       /*
+> > +        * The temperature is stable, so obviously we can not have
+> > +        * crossed a threshold.
+> > +        */
+> > +       if (last_temperature =3D=3D temperature)
+> > +               return;
+> > +
+> > +       /*
+> > +        * Since last update the temperature:
+> > +        * - increased : thresholds are crossed the way up
+> > +        * - decreased : thresholds are crossed the way down
+> > +        */
+> > +       if (temperature > last_temperature)
+> > +               notify =3D thermal_thresholds_handle_raising(thresholds=
+, temperature,
+> > +                                                          last_tempera=
+ture, low, high);
+> > +       else
+> > +               notify =3D thermal_thresholds_handle_dropping(threshold=
+s, temperature,
+> > +                                                           last_temper=
+ature, low, high);
+> > +
+> > +       if (notify)
+> > +               pr_debug("A threshold has been crossed the way %s, with=
+ a temperature=3D%d, last_temperature=3D%d\n",
+> > +                        temperature > last_temperature ? "up" : "down"=
+, temperature, last_temperature);
+> > +}
+> > +
+> > +int thermal_thresholds_add(struct thermal_zone_device *tz, int tempera=
+ture, int direction)
+> > +{
+> > +       struct list_head *thresholds =3D &tz->user_thresholds;
+> > +       struct user_threshold *t;
+> > +
+> > +       lockdep_assert_held(&tz->lock);
+> > +
+> > +       t =3D __thermal_thresholds_find(thresholds, temperature);
+> > +       if (t) {
+> > +               if (t->direction =3D=3D direction)
+> > +                       return -EEXIST;
+> > +
+> > +               t->direction |=3D direction;
+> > +       } else {
+> > +
+> > +               t =3D kmalloc(sizeof(*t), GFP_KERNEL);
+> > +               if (!t)
+> > +                       return -ENOMEM;
+> > +
+> > +               INIT_LIST_HEAD(&t->list_node);
+> > +               t->temperature =3D temperature;
+> > +               t->direction =3D direction;
+> > +               list_add(&t->list_node, thresholds);
+> > +               list_sort(NULL, thresholds, __thermal_thresholds_cmp);
+> > +       }
+> > +
+> > +       __thermal_zone_device_update(tz, THERMAL_TZ_ADD_THRESHOLD);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +int thermal_thresholds_delete(struct thermal_zone_device *tz, int temp=
+erature, int direction)
+> > +{
+> > +       struct list_head *thresholds =3D &tz->user_thresholds;
+> > +       struct user_threshold *t;
+> > +
+> > +       lockdep_assert_held(&tz->lock);
+> > +
+> > +       t =3D __thermal_thresholds_find(thresholds, temperature);
+> > +       if (!t)
+> > +               return -ENOENT;
+> > +
+> > +       if (t->direction =3D=3D direction) {
+> > +               list_del(&t->list_node);
+> > +               kfree(t);
+> > +       } else {
+> > +               t->direction &=3D ~direction;
+> > +       }
+> > +
+> > +       __thermal_zone_device_update(tz, THERMAL_TZ_DEL_THRESHOLD);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +int thermal_thresholds_for_each(struct thermal_zone_device *tz,
+> > +                               int (*cb)(struct user_threshold *, void=
+ *arg), void *arg)
+> > +{
+> > +       struct list_head *thresholds =3D &tz->user_thresholds;
+> > +       struct user_threshold *entry;
+> > +       int ret;
+> > +
+> > +       lockdep_assert_held(&tz->lock);
+> > +
+> > +       list_for_each_entry(entry, thresholds, list_node) {
+> > +               ret =3D cb(entry, arg);
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > diff --git a/drivers/thermal/thermal_thresholds.h b/drivers/thermal/the=
+rmal_thresholds.h
+> > new file mode 100644
+> > index 000000000000..232f4e8089af
+> > --- /dev/null
+> > +++ b/drivers/thermal/thermal_thresholds.h
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __THERMAL_THRESHOLDS_H__
+> > +#define __THERMAL_THRESHOLDS_H__
+> > +
+> > +struct user_threshold {
+> > +       struct list_head list_node;
+> > +       int temperature;
+> > +       int direction;
+> > +};
+> > +
+> > +int thermal_thresholds_init(struct thermal_zone_device *tz);
+> > +void thermal_thresholds_exit(struct thermal_zone_device *tz);
+> > +void thermal_thresholds_flush(struct thermal_zone_device *tz);
+> > +void thermal_thresholds_handle(struct thermal_zone_device *tz, int *lo=
+w, int *high);
+> > +int thermal_thresholds_add(struct thermal_zone_device *tz, int tempera=
+ture, int direction);
+> > +int thermal_thresholds_delete(struct thermal_zone_device *tz, int temp=
+erature, int direction);
+> > +int thermal_thresholds_for_each(struct thermal_zone_device *tz,
+> > +                               int (*cb)(struct user_threshold *, void=
+ *arg), void *arg);
+> > +#endif
+> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> > index 25ea8fe2313e..bcaa92732e14 100644
+> > --- a/include/linux/thermal.h
+> > +++ b/include/linux/thermal.h
+> > @@ -56,6 +56,9 @@ enum thermal_notify_event {
+> >         THERMAL_TZ_UNBIND_CDEV, /* Cooling dev is unbind from the therm=
+al zone */
+> >         THERMAL_INSTANCE_WEIGHT_CHANGED, /* Thermal instance weight cha=
+nged */
+> >         THERMAL_TZ_RESUME, /* Thermal zone is resuming after system sle=
+ep */
+> > +       THERMAL_TZ_ADD_THRESHOLD, /* Threshold added */
+> > +       THERMAL_TZ_DEL_THRESHOLD, /* Threshold deleted */
+> > +       THERMAL_TZ_FLUSH_THRESHOLDS, /* All thresholds deleted */
+> >  };
+> >
+> >  /**
+> > diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.=
+h
+> > index fc78bf3aead7..3e7c1c2e71a7 100644
+> > --- a/include/uapi/linux/thermal.h
+> > +++ b/include/uapi/linux/thermal.h
+> > @@ -3,6 +3,8 @@
+> >  #define _UAPI_LINUX_THERMAL_H
+> >
+> >  #define THERMAL_NAME_LENGTH    20
+> > +#define THERMAL_THRESHOLD_WAY_UP       0x1
+> > +#define THERMAL_THRESHOLD_WAY_DOWN     0x2
+>
+> It would be somewhat better to use BIT(0) and BIT(1) here IMO, but
+> apart from that this patch and patch [2/6] are fine with me (even
+> though my implementation of threshold crossing detection would be
+> different).
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+I'm inclined to apply these 2 patches with the change mentioned above,
+so that I can base my 6.13 work on them.
 
-Changes in v4:
-	- A plain rebase.
-
----
- drivers/opp/core.c     | 131 +----------------------------------------
- drivers/opp/opp.h      |   3 +-
- include/linux/pm_opp.h |  38 +-----------
- 3 files changed, 3 insertions(+), 169 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 42b7c8f2e71e..55c4c2c39a93 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2360,119 +2360,6 @@ static void _opp_put_config_regulators_helper(struct opp_table *opp_table)
- 		opp_table->config_regulators = NULL;
- }
- 
--static void _opp_detach_genpd(struct opp_table *opp_table)
--{
--	int index;
--
--	for (index = 0; index < opp_table->required_opp_count; index++) {
--		if (!opp_table->required_devs[index])
--			continue;
--
--		dev_pm_domain_detach(opp_table->required_devs[index], false);
--		opp_table->required_devs[index] = NULL;
--	}
--}
--
--/*
-- * Multiple generic power domains for a device are supported with the help of
-- * virtual genpd devices, which are created for each consumer device - genpd
-- * pair. These are the device structures which are attached to the power domain
-- * and are required by the OPP core to set the performance state of the genpd.
-- * The same API also works for the case where single genpd is available and so
-- * we don't need to support that separately.
-- *
-- * This helper will normally be called by the consumer driver of the device
-- * "dev", as only that has details of the genpd names.
-- *
-- * This helper needs to be called once with a list of all genpd to attach.
-- * Otherwise the original device structure will be used instead by the OPP core.
-- *
-- * The order of entries in the names array must match the order in which
-- * "required-opps" are added in DT.
-- */
--static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
--			const char * const *names, struct device ***virt_devs)
--{
--	struct device *virt_dev, *gdev;
--	struct opp_table *genpd_table;
--	int index = 0, ret = -EINVAL;
--	const char * const *name = names;
--
--	if (!opp_table->required_devs) {
--		dev_err(dev, "Required OPPs not available, can't attach genpd\n");
--		return -EINVAL;
--	}
--
--	/* Genpd core takes care of propagation to parent genpd */
--	if (opp_table->is_genpd) {
--		dev_err(dev, "%s: Operation not supported for genpds\n", __func__);
--		return -EOPNOTSUPP;
--	}
--
--	/* Checking only the first one is enough ? */
--	if (opp_table->required_devs[0])
--		return 0;
--
--	while (*name) {
--		if (index >= opp_table->required_opp_count) {
--			dev_err(dev, "Index can't be greater than required-opp-count - 1, %s (%d : %d)\n",
--				*name, opp_table->required_opp_count, index);
--			goto err;
--		}
--
--		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
--		if (IS_ERR_OR_NULL(virt_dev)) {
--			ret = virt_dev ? PTR_ERR(virt_dev) : -ENODEV;
--			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
--			goto err;
--		}
--
--		/*
--		 * The required_opp_tables parsing is not perfect, as the OPP
--		 * core does the parsing solely based on the DT node pointers.
--		 * The core sets the required_opp_tables entry to the first OPP
--		 * table in the "opp_tables" list, that matches with the node
--		 * pointer.
--		 *
--		 * If the target DT OPP table is used by multiple devices and
--		 * they all create separate instances of 'struct opp_table' from
--		 * it, then it is possible that the required_opp_tables entry
--		 * may be set to the incorrect sibling device.
--		 *
--		 * Cross check it again and fix if required.
--		 */
--		gdev = dev_to_genpd_dev(virt_dev);
--		if (IS_ERR(gdev)) {
--			ret = PTR_ERR(gdev);
--			goto err;
--		}
--
--		genpd_table = _find_opp_table(gdev);
--		if (!IS_ERR(genpd_table)) {
--			if (genpd_table != opp_table->required_opp_tables[index]) {
--				dev_pm_opp_put_opp_table(opp_table->required_opp_tables[index]);
--				opp_table->required_opp_tables[index] = genpd_table;
--			} else {
--				dev_pm_opp_put_opp_table(genpd_table);
--			}
--		}
--
--		opp_table->required_devs[index] = virt_dev;
--		index++;
--		name++;
--	}
--
--	if (virt_devs)
--		*virt_devs = opp_table->required_devs;
--
--	return 0;
--
--err:
--	_opp_detach_genpd(opp_table);
--	return ret;
--
--}
--
- static int _opp_set_required_dev(struct opp_table *opp_table,
- 				 struct device *dev,
- 				 struct device *required_dev,
-@@ -2539,9 +2426,6 @@ static void _opp_clear_config(struct opp_config_data *data)
- {
- 	if (data->flags & OPP_CONFIG_REQUIRED_DEV)
- 		_opp_put_required_dev(data->opp_table, data->index);
--	else if (data->flags & OPP_CONFIG_GENPD)
--		_opp_detach_genpd(data->opp_table);
--
- 	if (data->flags & OPP_CONFIG_REGULATOR)
- 		_opp_put_regulators(data->opp_table);
- 	if (data->flags & OPP_CONFIG_SUPPORTED_HW)
-@@ -2653,20 +2537,7 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
- 		data->flags |= OPP_CONFIG_REGULATOR;
- 	}
- 
--	/* Attach genpds */
--	if (config->genpd_names) {
--		if (config->required_devs) {
--			ret = -EINVAL;
--			goto err;
--		}
--
--		ret = _opp_attach_genpd(opp_table, dev, config->genpd_names,
--					config->virt_devs);
--		if (ret)
--			goto err;
--
--		data->flags |= OPP_CONFIG_GENPD;
--	} else if (config->required_dev) {
-+	if (config->required_dev) {
- 		ret = _opp_set_required_dev(opp_table, dev,
- 					    config->required_dev,
- 					    config->required_dev_index);
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 5b5a4bd89c9e..318a4ecbabf1 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -34,8 +34,7 @@ extern struct list_head opp_tables;
- #define OPP_CONFIG_REGULATOR_HELPER	BIT(2)
- #define OPP_CONFIG_PROP_NAME		BIT(3)
- #define OPP_CONFIG_SUPPORTED_HW		BIT(4)
--#define OPP_CONFIG_GENPD		BIT(5)
--#define OPP_CONFIG_REQUIRED_DEV		BIT(6)
-+#define OPP_CONFIG_REQUIRED_DEV		BIT(5)
- 
- /**
-  * struct opp_config_data - data for set config operations
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index bc74bc69107a..568183e3e641 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -62,11 +62,7 @@ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
-  * @supported_hw: Array of hierarchy of versions to match.
-  * @supported_hw_count: Number of elements in the array.
-  * @regulator_names: Array of pointers to the names of the regulator, NULL terminated.
-- * @genpd_names: Null terminated array of pointers containing names of genpd to
-- *		attach. Mutually exclusive with required_dev.
-- * @virt_devs: Pointer to return the array of genpd virtual devices. Mutually
-- *		exclusive with required_dev.
-- * @required_dev: Required OPP device. Mutually exclusive with genpd_names/virt_devs.
-+ * @required_dev: The required OPP device.
-  * @required_dev_index: The index of the required OPP for the @required_dev.
-  *
-  * This structure contains platform specific OPP configurations for the device.
-@@ -80,8 +76,6 @@ struct dev_pm_opp_config {
- 	const unsigned int *supported_hw;
- 	unsigned int supported_hw_count;
- 	const char * const *regulator_names;
--	const char * const *genpd_names;
--	struct device ***virt_devs;
- 	struct device *required_dev;
- 	unsigned int required_dev_index;
- };
-@@ -677,36 +671,6 @@ static inline void dev_pm_opp_put_config_regulators(int token)
- 	dev_pm_opp_clear_config(token);
- }
- 
--/* genpd helpers */
--static inline int dev_pm_opp_attach_genpd(struct device *dev,
--					  const char * const *names,
--					  struct device ***virt_devs)
--{
--	struct dev_pm_opp_config config = {
--		.genpd_names = names,
--		.virt_devs = virt_devs,
--	};
--
--	return dev_pm_opp_set_config(dev, &config);
--}
--
--static inline void dev_pm_opp_detach_genpd(int token)
--{
--	dev_pm_opp_clear_config(token);
--}
--
--static inline int devm_pm_opp_attach_genpd(struct device *dev,
--					   const char * const *names,
--					   struct device ***virt_devs)
--{
--	struct dev_pm_opp_config config = {
--		.genpd_names = names,
--		.virt_devs = virt_devs,
--	};
--
--	return devm_pm_opp_set_config(dev, &config);
--}
--
- /* prop-name helpers */
- static inline int dev_pm_opp_set_prop_name(struct device *dev, const char *name)
- {
--- 
-2.34.1
-
+I'll send my comments for the [3/6] shortly.
 
