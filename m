@@ -1,98 +1,87 @@
-Return-Path: <linux-pm+bounces-15043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15044-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E72E198CCD2
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 08:00:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EACD898CEB8
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 10:24:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24B941C2122D
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 06:00:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C7F11C212FD
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 08:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D74839E4;
-	Wed,  2 Oct 2024 06:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37675194A6B;
+	Wed,  2 Oct 2024 08:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FnygEbgB"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="vhUXUy9F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0991FA4;
-	Wed,  2 Oct 2024 06:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A490E193430;
+	Wed,  2 Oct 2024 08:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727848806; cv=none; b=caqSdRI9w8b5oduII6C11pISDJr9O8Oa/PS+8L6Vb/rKQ4O+zOWc4vIYhTjZgzJEi178MkOZLGESvHDxbxQBo0acaXW5rke/m9z7XawPvNGT5n+8bu3cgI8zG2lFMsEDDTYSc9fB1+CW2J4lc+m3nOPXpfOtPtOPMcLEO4njT9E=
+	t=1727857473; cv=none; b=RcJxQWYxy+HjQ3mUd5z62xqvqelhRMabr/u0F67v3LOqTLqm7BSI+k/XJTtp5dr/6xUvfDGeiESeQEZt/8kLaF0GjpK/hpBgLIqya7L8p2iUajLGOsjZcsrOscBLrHg2SKEEryHx5Vaf0TBMdAL+ZAtFq56vXKCb0yKDE9xEHvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727848806; c=relaxed/simple;
-	bh=YmyRultSw5BRCdfX+vz1b1pAJmjxiqHaXaUw3Qf4NSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jCaho7zs9LMsNJxI1tpEvWl5O8kFOrNZH0eueG0N8YhmzoUqlP6QHEDIzWyVFZBMBN/QkXSZ2WvwLCMyFqAv065VGgc0tl/86MprVenEjv7jcS7Jo2fYFSrVh7nNby+3w6MnKisVQ1R8vYpyKfYiSRTnjO200GXdzX7c4wG0BGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FnygEbgB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9E7C4CEC5;
-	Wed,  2 Oct 2024 06:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727848805;
-	bh=YmyRultSw5BRCdfX+vz1b1pAJmjxiqHaXaUw3Qf4NSQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FnygEbgBOmOpwEinItg2k89GczU0li+e5cDqzUx0juIPwCOpo9zMzARiKnT0wWgrg
-	 t7CrdqVnrWN8eUczeo2f9Q4bonF2DTIxJjh2pxFT5XWFf3H2pOTo5q8p6JVMIYyF+q
-	 3KWl0qK7t+eBG6FQmmoKrnJdkMJlT74K94xbphT4g5BlJNo8Pzba2Iwcl3AZDjX5EQ
-	 7PVUUd3IPDAq/gvLuqCgSrjVaxQtU1sc5s9aFK5tT2vGucGpaCJTmxQYbWiXjetDdD
-	 FnLqKkOSI0bW9u5GJhpfgFU+RXVf5QnosvKM4paCn8LtzyEylmcUhBANelRKlT8+UL
-	 ONgPRpshQ92Eg==
-Date: Wed, 2 Oct 2024 08:00:01 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Sen Chu <sen.chu@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org, 
-	Alexandre Mergnat <amergnat@baylibre.com>, Bear Wang <bear.wang@mediatek.com>, 
-	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, 
-	Chris-qj chen <chris-qj.chen@mediatek.com>, 
-	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v8 3/3] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-Message-ID: <5nvshurbpmjkqysphfrfxhekq3c6od6a2uqai4rfxns64mdvf7@ftjvgjnivr3k>
-References: <20241001104145.24054-1-macpaul.lin@mediatek.com>
- <20241001104145.24054-3-macpaul.lin@mediatek.com>
+	s=arc-20240116; t=1727857473; c=relaxed/simple;
+	bh=/u/jfm3/qwaoY8xrrOI+K4ccbBqaESHARxnwj8bBIh4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S+10/JSYGHZyKQeBulPCysTKRGSEqEo92ETb8fFuGIfjCzbG7CJdCUaqDxzH8xrPJcNYrE+G/KLtJ/WYvHksLjHADVzWdmteRAmxuLrleBnTOAEA/URo9Vd2ggfE4rxXN0kyv6NYJfsgTpvJWHTpEAVneqF7zdObd3orhSBmZjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=vhUXUy9F; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
+	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Reply-To:Content-ID:Content-Description;
+	bh=sBwEgQ8rZHCopaQ9fm1IvXzQ4um7p5uh9+XaFpmgOus=; b=vhUXUy9Fp1++pTtfYyAEBnix9c
+	VMdcXgBdg7ypfgBgZbi2N0UuQtJsA82vUNB5+gU44WfEqJcXW84O/cN6SgJg4C3oHP1I9nsrYA9Z8
+	TVAOvb3h/n6Pmm6WGeFx/AMvq2aBdVumCtU2Qi9DBUKokCzTaQM4O27SmF582t0wFerFb771Lvi3u
+	wO0H+SOuafp9ctEzP9I3HSJA/EZ+t290y9a1s5WS1QRDrm703qEWYttNAbFRaoPxIiic3+9nj6pBo
+	JWlmNAwFWPNCrfbnId817H/ccZLLnb2OcltGeEcVYw/Ajffm38bJo4jcPYSpPBqkI+/f/labaEHgf
+	jP+w/tkA==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	(Exim 4.94.2)
+	(envelope-from <ukleinek@debian.org>)
+	id 1svueS-009xvh-VR; Wed, 02 Oct 2024 08:24:05 +0000
+Message-ID: <5cf6b249-d2d3-470e-874a-ba6b914f4b0b@debian.org>
+Date: Wed, 2 Oct 2024 10:24:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241001104145.24054-3-macpaul.lin@mediatek.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw
+ spinlock
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ linux-pm@vger.kernel.org, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-rt-users@vger.kernel.org, xiao sheng wen <atzlinux@sina.com>
+References: <20240919081121.10784-2-ukleinek@debian.org>
+ <CAJZ5v0hz+w3eFYQpHqwe0Fv3axe8LBDEf+oMd01dEQMuN=Dy5g@mail.gmail.com>
+Content-Language: en-US, de-DE
+From: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@debian.org>
+In-Reply-To: <CAJZ5v0hz+w3eFYQpHqwe0Fv3axe8LBDEf+oMd01dEQMuN=Dy5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Debian-User: ukleinek
 
-On Tue, Oct 01, 2024 at 06:41:45PM +0800, Macpaul Lin wrote:
-> Convert the mfd: mediatek: mt6397 binding to DT schema format.
-> 
-> MT6323, MT6358, and MT6397 are PMIC devices with multiple function
-> subdevices. They share a common PMIC design but have variations in
-> subdevice combinations.
-> 
-> Key updates in this conversion:
-> 
-> 1. RTC:
->    - Convert rtc-mt6397.txt and merge into parent MT6397 PMIC DT schema.
+Hello Rafael,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 10/1/24 20:39, Rafael J. Wysocki wrote:
+> Applied as 6.12-rc material, thanks!
 
-Best regards,
-Krzysztof
+Thanks. Triggered by this patch not being in today's next I looked at 
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git and 
+didn't find it there. What am I missing?
 
+Best regards
+Uwe
 
