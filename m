@@ -1,89 +1,97 @@
-Return-Path: <linux-pm+bounces-15050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 892EE98D2A7
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:00:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08BD398D2D9
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 14:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CB312843F0
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 12:00:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AC5D1C21C12
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2024 12:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE26C1C9DDC;
-	Wed,  2 Oct 2024 12:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238CC1CF5F7;
+	Wed,  2 Oct 2024 12:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YmNIGeaD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IVRSAECv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8341218D65A;
-	Wed,  2 Oct 2024 12:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6DB1CF2BA;
+	Wed,  2 Oct 2024 12:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727870451; cv=none; b=fEGYtOhQ9/ZxbXDtUXyQ+NyZBV4O6T58JDok4ohWbJtHjhD8Hhg14GO1p2de0lIGBud5QkHL6ksQMmvzLXUz06SUBLcelF+pTzPoBOG6v7biHN1t5UFmJqC/9OMGqi1taFKmabpEkpLfmZ7h+M1550p39ZpFUtyjLkKV0cJ4kJU=
+	t=1727871155; cv=none; b=AoomzjqFRpzwNEmRHpWXHaH5EUMNVJZmljguE830WAjG5WlM6OSa1RPDeJ4Wkg0CTBAN+NjPaA1OgmQZT9iyxMTGWrwLYgUBwNC4cNPLB1fTg6QXRxQBhic5MxLcWpPl/tsoiOMmvNRFijdaU+d7Gm2LPky2B8ei5ORISzbFw6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727870451; c=relaxed/simple;
-	bh=YsTB5TK8M68Gw9MSGX27NlhMbpOE2i3AlirRP7ds5ww=;
+	s=arc-20240116; t=1727871155; c=relaxed/simple;
+	bh=rhrIpTNZ2VtYreXMVjhuJ3JQzILZNQWimt3AV3sYgIs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I9lKRYJpLtNdV3M4Pz+mt8UNNfDPLuNMXaAmyfdPS1dC83+kigs3xWTONY8kxnAfK+BtilXH69ciJUcErBHXuOHJCe6IHolw4A35WJeU3omN2LqwjEtzV7L6uv3V2UYoZgfsb0rVHOExSMKNjjkUgdTbGICIu9ViB4pO2OeYrdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YmNIGeaD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12499C4CECD;
-	Wed,  2 Oct 2024 12:00:51 +0000 (UTC)
+	 To:Cc:Content-Type; b=idVkpJoTgTVDUqwD1UZDo8F/6gaDlO4s2f3vT6PGZP+FMayPy1F2b4WOcKHB/z5iLWS3aQOaPrVIguWHQC1LDjd7y/Hp0Z1hF0PhlJSRSZVkdmQKLh2McgkOTQGsTnuHK1aoaHtkTKA81xouwwYVjDHyGV3tcxUrw+8NsX05EHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IVRSAECv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D3D2C4CECF;
+	Wed,  2 Oct 2024 12:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727870451;
-	bh=YsTB5TK8M68Gw9MSGX27NlhMbpOE2i3AlirRP7ds5ww=;
+	s=k20201202; t=1727871154;
+	bh=rhrIpTNZ2VtYreXMVjhuJ3JQzILZNQWimt3AV3sYgIs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YmNIGeaDjmT878Q1nsighoNGmb+oz/Wdk5jYrVtKkcJSRa4TXRIaMh4PwgD5Ha3X0
-	 0ytng8ZMJPQUx+43UG9Z7RUtFK2h/pDg/JjtW7m8aFBW0v22eOOa4ZAn8oqw6+K6wh
-	 CDysRBZ1oWNTBtlpbqjAL/cTbs3ivBkmtNVgxVD39NUk0fsnUY3giS5rmgLbyl1MpX
-	 Rfp33GOiZIu5uIHHj8neBmx2BWOclgwc/5D7FzYTH4AqkW7M8fJFaf2ZIJ+U3KmI+v
-	 qiEBF3HO+z8pDcLi4V5eWKpE8TSXf3hEuKY+gQp0xEp+H9NY8mz6TFWhfU+YYxk/im
-	 Nfs5FE0bi3icQ==
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e137183587so2529348a91.3;
-        Wed, 02 Oct 2024 05:00:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVuinrTjV/ze2uEX4kwvEXXg8SxVH0W/5VObFBCFC9/aRr0DWpLm9PbBoNXL6u+1YhhehhW/JfxHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSJazFa3w+eYFweZXSfHKqozScGY0cU7AVo/uBBJ6GDSgTlC+t
-	tk5m2GU4qdA4W9nHOJ1stGEJmjQlh87mD03EksbUV3rqJWcCfuUoK/aob9YKiDecftcmD4iEjMf
-	kFA9BiDPS1vT8OmjqC8aeEy3nNS0=
-X-Google-Smtp-Source: AGHT+IF9AdfL9AiVrvU/jnF0/V2Vadvf9H1lGZLc5Tjseo2j3fW+PAuVogLMV64dlQeiM2IJ/WOfP4tG3FAw8eYMO0M=
-X-Received: by 2002:a17:90a:ba95:b0:2e0:b755:c461 with SMTP id
- 98e67ed59e1d1-2e18454ca88mr3379854a91.6.1727870450685; Wed, 02 Oct 2024
- 05:00:50 -0700 (PDT)
+	b=IVRSAECvIV3NI/dOiGNpVSx91e5XmlDRfecznuO7K+v848sJKLoq5C5T7e0CloUNz
+	 ZEaTcQgful9EqVzr2wc4aQe+YVcxkR+mLDxnwJuxHI2RJuAaWc/qyArKxox5Z2gtTX
+	 kpXuwKVoCm95l2Cwwam1pZKXARNQxbHzG/K8GvfSPt8tC4+f+QmdIM025VQvc+4man
+	 OwqnRStlykCYFLMbqZm5BjP8lgy2Mp+oYchSpWU2htBqHSK4ifDC7c7seuLm0HSlCi
+	 SQhf3n7aAVZ4uUnNyPAmZaAKuZhfdcK9bwWl0ZdbDVMJAsHB7UFmbdXOyLZFdRY/fj
+	 /BxL7gr3LCtIA==
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2e0b9bca173so4071541a91.0;
+        Wed, 02 Oct 2024 05:12:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+pcp8HQCb8broIGzctzZTDgqixZn0OiuanGNNFtzZAIlGl1P0PpTUvj2o7WISS/Qq2gEiVGbqKg==@vger.kernel.org, AJvYcCVZWsqWXuh9VisbmtYjbvm6ognD8XEEaPiMSG4vMNj5RMjlXxBL5+V4jkmr7Uv5+Dfq4WvS/lD0iSnXmRYbqTM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiwH1+K1zXjAajBA/Jn67afagD6qjjq81HAgkG5cc4XJP2FSek
+	yprjumThN9SN8MUYepD1RwDZe+Ktlec/OVtjrcfE9ozgm+f5pVfHYqL4ldKOP4TSk9vZTSusMq1
+	bW9vVfWZoEL6RqugCYFgtp0K0Vvk=
+X-Google-Smtp-Source: AGHT+IGZFxFogIvTpiKI0z3HN8+AhPPdccH9ntorQd36OQYI0HaPzrK7SGFdiaf2z7pK6SJMA+cVdsSheE0E60o0T4U=
+X-Received: by 2002:a17:90b:368c:b0:2d8:e7db:9996 with SMTP id
+ 98e67ed59e1d1-2e18466e1aemr3482997a91.13.1727871153945; Wed, 02 Oct 2024
+ 05:12:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6274fdb7-ba80-4c34-94c8-04b7ff29a8c9@gmx.de>
-In-Reply-To: <6274fdb7-ba80-4c34-94c8-04b7ff29a8c9@gmx.de>
+References: <20240919081121.10784-2-ukleinek@debian.org> <CAJZ5v0hz+w3eFYQpHqwe0Fv3axe8LBDEf+oMd01dEQMuN=Dy5g@mail.gmail.com>
+ <5cf6b249-d2d3-470e-874a-ba6b914f4b0b@debian.org>
+In-Reply-To: <5cf6b249-d2d3-470e-874a-ba6b914f4b0b@debian.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 2 Oct 2024 14:00:35 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hwUrnooYRTvpRogDjmn=tsEsR=uSPHkDAOtoDNT+poBg@mail.gmail.com>
-Message-ID: <CAJZ5v0hwUrnooYRTvpRogDjmn=tsEsR=uSPHkDAOtoDNT+poBg@mail.gmail.com>
-Subject: Re: s2idle issue on Dell G51 5155
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: linux-acpi@vger.kernel.org, Mario Limonciello <mario.limonciello@amd.com>, 
-	Linux PM <linux-pm@vger.kernel.org>
+Date: Wed, 2 Oct 2024 14:12:20 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jdUB753KJ5Du+59yCWJMhf-R9gaW6=cfKg4=VWnkUMNQ@mail.gmail.com>
+Message-ID: <CAJZ5v0jdUB753KJ5Du+59yCWJMhf-R9gaW6=cfKg4=VWnkUMNQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Make hwp_notify_lock a raw spinlock
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@debian.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, linux-pm@vger.kernel.org, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-rt-users@vger.kernel.org, 
+	xiao sheng wen <atzlinux@sina.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-+Mario and linux-pm
+Hi Uwe,
 
-On Wed, Oct 2, 2024 at 10:08=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wrote:
+On Wed, Oct 2, 2024 at 10:24=E2=80=AFAM Uwe Kleine-K=C3=B6nig <ukleinek@deb=
+ian.org> wrote:
 >
-> Hello,
+> Hello Rafael,
 >
-> it seems a user has problems suspending its Dell G51 5155 using s2idle, s=
-ee
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D218337 for details.
+> On 10/1/24 20:39, Rafael J. Wysocki wrote:
+> > Applied as 6.12-rc material, thanks!
 >
-> Does anyone have an idea on how to debug this?
->
-> Thanks,
-> Armin Wolf
->
->
+> Thanks. Triggered by this patch not being in today's next I looked at
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git and
+> didn't find it there. What am I missing?
+
+It's in my bleeding-edge branch where things go before hitting
+linux-next so they can receive some build testing coverage upfront.
+
+It'll show up in linux-next tomorrow.
 
