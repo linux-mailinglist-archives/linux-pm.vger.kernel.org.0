@@ -1,397 +1,339 @@
-Return-Path: <linux-pm+bounces-15123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969F298F828
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 22:37:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 504F998F90D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 23:40:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0546EB2296B
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 20:37:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0CEB1F226EA
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 21:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3328A1AD41F;
-	Thu,  3 Oct 2024 20:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B212E1BF7E9;
+	Thu,  3 Oct 2024 21:40:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE141AAE38
-	for <linux-pm@vger.kernel.org>; Thu,  3 Oct 2024 20:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311971AC429;
+	Thu,  3 Oct 2024 21:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727987846; cv=none; b=KDroCaBrkXMHm3KAWAcl0fLwRuE0bSuRJszab8XJzxL28e/U7OnaRxQDYPqkdrb3npNBdeNv8Oy6nhA9AAw/0Lx+slCpenyS/mHbGZ1MxnPD3V69vur1X7UQV5ELItuY6XssKJ1/pwQ8VnddXaq8wysR3Ul09beGaq3VBUwsKdU=
+	t=1727991631; cv=none; b=QmumErQNl1xKTwLuMa8ZkRRdUoXm5VpNpwn5Y7uxaXUx333X1aH85v7uW/oNd3gBfKEdoykUtCj5AmIWQRetIsA5Ocz6d8GQq+KetzUzeosrMuZihd2e1Jeot2KxvjUOvGytq9fpEAIO4Iex+v5ei3IEnbWrZHIH+sMtuBjvHKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727987846; c=relaxed/simple;
-	bh=9WfR3E8rL/t4jEdZVyE735sV+wbRLe+GZPcYunM97+o=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=hdr6Vw3noln21I9jxaTiBGSAWFyjAFfFgapVBNZlxQd6XhlB21QqMAkHCl632mvmSwURxm1sRP2OJVlfOe2Xs9bdCaWJKVFXzCT0VhFurMVMHRnvz/awoEU7gU62gZLCXuQCnxCaMloNgVE2NNO8IE25VDXy7veBxLEZjhwMRQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a345a02c23so14658345ab.1
-        for <linux-pm@vger.kernel.org>; Thu, 03 Oct 2024 13:37:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727987843; x=1728592643;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VTqjy8372TJNApdQHUYuln7NssfJrkTFFq2hUVewtH0=;
-        b=v6lGodTwfS4BTZuBmS00fZYMrn8cvMvWBKBi61np2BRp0VfzoNWY270aeNEh2HshqF
-         i+3UmzawklZVO59UGAxxIeY71jGClORL4GgAWeJjA8FoPIdy1nIxeq1NfzPHrOGh9FdI
-         YW2INReQof+euQADktF6DJGHnHunY9Gzr7mdM2XiF5hnU24kATEZKs+DnM7ZoB7zhtv/
-         1gORuFFfqv1mBT4lfI+3XBGEQiO6r7ViEVWw4BhI5EUrThymR2rcic/0TWHeT2vPx+Cz
-         /p9xlJcVK/nNLB6SEHSb+DB184dfxnLiwkOert8FGab//HDK1/V/YhstiL/V3JTwiMbO
-         ykzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWI/GZ40UDrc5ne6NbKT3Z6p38a+CJv+RTiJMAcR9zZbbZWapH8CcqrVZwRmmA1rYUAOyv26fjwig==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuzbpB6zomr9cCly0igoTMGMzaa0xVTTcNreHjKrcTTEBhW3Qm
-	unlXQdZVeOZN9N9/mzyJOdHT/Nhx5U8GrC7UJf059AmDgkdmYZ5d+HkLo+dNTqUVvj4LuwMly/K
-	e8JZsGSaE/XLH8HeqY+9oRC4C0/HpMfnOPTPIcdE7Ugo38sxkR+ALJ+g=
-X-Google-Smtp-Source: AGHT+IGIsJoMCcOcUdlisxRjXIZ1HQtZPB1JPyc1pg8+fp6t7HGKLUAzgaMvI49KLbUIgmEmPHWwRwdE37sLBcEMiJ1195tw3Mar
+	s=arc-20240116; t=1727991631; c=relaxed/simple;
+	bh=Bl14JPkbnPHMrFxTgJmPevJUeaQZa9YL+n6s3sVSO4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FSMwx9pN5bmNCOofIoKMwuKYlKlvkGQvEVRluC95/3nmyHahxv+I1ygxpBVBcrmQpz0r4MjUMcEot1mB2OnyIBG3u2tVuiiFZo+JYNdMcO6yD4qZNWHQZJ6DvYlG8HKGYLWUOBQz5Qoeuf3NJNLX8XzlWXXfe1CQ4PKIlisVkRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A97AF339;
+	Thu,  3 Oct 2024 14:40:57 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 385E23F640;
+	Thu,  3 Oct 2024 14:40:24 -0700 (PDT)
+Date: Thu, 3 Oct 2024 23:39:54 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
+Cc: Sumit Gupta <sumitg@nvidia.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org,
+	catalin.marinas@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	yang@os.amperecomputing.com, lihuisong@huawei.com,
+	zhanjie9@hisilicon.com, linux-tegra <linux-tegra@vger.kernel.org>,
+	Bibek Basu <bbasu@nvidia.com>
+Subject: Re: [PATCH v7 3/4] arm64: Provide an AMU-based version of
+ arch_freq_avg_get_on_cpu
+Message-ID: <Zv8PKlr_PJgxazro@arm.com>
+References: <20240913132944.1880703-1-beata.michalska@arm.com>
+ <20240913132944.1880703-4-beata.michalska@arm.com>
+ <aa254516-968e-4665-bb5b-981c296ffc35@nvidia.com>
+ <ZvU4mR_FZa7jXUgk@arm.com>
+ <ylcfqw4swz6xjxxfoyljyifs4ibbueywogqxusxfz3a3fgh3du@cfaajchbwgvn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:180d:b0:3a3:67b1:3080 with SMTP id
- e9e14a558f8ab-3a375997255mr5732365ab.7.1727987843224; Thu, 03 Oct 2024
- 13:37:23 -0700 (PDT)
-Date: Thu, 03 Oct 2024 13:37:23 -0700
-In-Reply-To: <0000000000001e66f5061fe3b883@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <66ff0083.050a0220.49194.03bb.GAE@google.com>
-Subject: Re: [syzbot] [cgroups?] possible deadlock in console_lock_spinning_enable
- (5)
-From: syzbot <syzbot+622acb507894a48b2ce9@syzkaller.appspotmail.com>
-To: cgroups@vger.kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	len.brown@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-serial@vger.kernel.org, pavel@ucw.cz, rafael@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ylcfqw4swz6xjxxfoyljyifs4ibbueywogqxusxfz3a3fgh3du@cfaajchbwgvn>
 
-syzbot has found a reproducer for the following issue on:
-
-HEAD commit:    5f5673607153 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1237cb9f980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dedbcb1ff4387972
-dashboard link: https://syzkaller.appspot.com/bug?extid=622acb507894a48b2ce9
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1637cb9f980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f0f580580000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/40172aed5414/disk-5f567360.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/58372f305e9d/vmlinux-5f567360.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d2aae6fa798f/Image-5f567360.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/de597512c7c3/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+622acb507894a48b2ce9@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-======================================================
-WARNING: possible circular locking dependency detected
-6.11.0-rc7-syzkaller-g5f5673607153 #0 Not tainted
-------------------------------------------------------
-kworker/0:2/5992 is trying to acquire lock:
-ffff80008f7436e0 (console_owner){....}-{0:0}, at: console_lock_spinning_enable+0x88/0xec kernel/printk/printk.c:1869
-
-but task is already holding lock:
-ffff0001b36ade18 (&pool->lock){-.-.}-{2:2}, at: start_flush_work kernel/workqueue.c:4125 [inline]
-ffff0001b36ade18 (&pool->lock){-.-.}-{2:2}, at: __flush_work+0x178/0x954 kernel/workqueue.c:4176
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (&pool->lock){-.-.}-{2:2}:
-       __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-       _raw_spin_lock+0x48/0x60 kernel/locking/spinlock.c:154
-       __queue_work+0x8b0/0x1308
-       queue_work_on+0xe0/0x1a0 kernel/workqueue.c:2392
-       queue_work include/linux/workqueue.h:621 [inline]
-       rpm_suspend+0xc20/0x1470 drivers/base/power/runtime.c:662
-       rpm_idle+0x570/0x8c0 drivers/base/power/runtime.c:536
-       __pm_runtime_idle+0x114/0x1d4 drivers/base/power/runtime.c:1104
-       pm_runtime_put include/linux/pm_runtime.h:448 [inline]
-       __device_attach+0x34c/0x434 drivers/base/dd.c:1047
-       device_initial_probe+0x24/0x34 drivers/base/dd.c:1078
-       bus_probe_device+0x178/0x240 drivers/base/bus.c:532
-       device_add+0x728/0xa6c drivers/base/core.c:3682
-       serial_base_port_add+0x25c/0x370 drivers/tty/serial/serial_base_bus.c:179
-       serial_core_port_device_add drivers/tty/serial/serial_core.c:3388 [inline]
-       serial_core_register_port+0x2fc/0x1bf4 drivers/tty/serial/serial_core.c:3429
-       serial_ctrl_register_port+0x28/0x38 drivers/tty/serial/serial_ctrl.c:41
-       uart_add_one_port+0x28/0x38 drivers/tty/serial/serial_port.c:143
-       pl011_register_port+0x1b4/0x44c drivers/tty/serial/amba-pl011.c:2744
-       sbsa_uart_probe+0x488/0x608 drivers/tty/serial/amba-pl011.c:2914
-       platform_probe+0x148/0x1c0 drivers/base/platform.c:1404
-       really_probe+0x38c/0x8fc drivers/base/dd.c:657
-       __driver_probe_device+0x194/0x374 drivers/base/dd.c:799
-       driver_probe_device+0x78/0x330 drivers/base/dd.c:829
-       __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:957
-       bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
-       __device_attach+0x2b4/0x434 drivers/base/dd.c:1029
-       device_initial_probe+0x24/0x34 drivers/base/dd.c:1078
-       bus_probe_device+0x178/0x240 drivers/base/bus.c:532
-       device_add+0x728/0xa6c drivers/base/core.c:3682
-       platform_device_add+0x3e8/0x6e8 drivers/base/platform.c:716
-       platform_device_register_full+0x4f0/0x608 drivers/base/platform.c:844
-       acpi_create_platform_device+0x5bc/0x744 drivers/acpi/acpi_platform.c:177
-       acpi_default_enumeration+0x6c/0xdc drivers/acpi/scan.c:2193
-       acpi_bus_attach+0x804/0xad4 drivers/acpi/scan.c:2304
-       acpi_dev_for_one_check+0xa0/0xb4 drivers/acpi/bus.c:1145
-       device_for_each_child+0xec/0x174 drivers/base/core.c:4011
-       acpi_dev_for_each_child+0xc4/0x108 drivers/acpi/bus.c:1157
-       acpi_bus_attach+0x868/0xad4 drivers/acpi/scan.c:2309
-       acpi_dev_for_one_check+0xa0/0xb4 drivers/acpi/bus.c:1145
-       device_for_each_child+0xec/0x174 drivers/base/core.c:4011
-       acpi_dev_for_each_child+0xc4/0x108 drivers/acpi/bus.c:1157
-       acpi_bus_attach+0x868/0xad4 drivers/acpi/scan.c:2309
-       acpi_bus_scan+0x118/0x4f0 drivers/acpi/scan.c:2590
-       acpi_scan_init+0x214/0x6b0 drivers/acpi/scan.c:2727
-       acpi_init+0x190/0x254 drivers/acpi/bus.c:1462
-       do_one_initcall+0x24c/0x9c0 init/main.c:1267
-       do_initcall_level+0x154/0x214 init/main.c:1329
-       do_initcalls+0x58/0xac init/main.c:1345
-       do_basic_setup+0x8c/0xa0 init/main.c:1364
-       kernel_init_freeable+0x324/0x478 init/main.c:1578
-       kernel_init+0x24/0x2a0 init/main.c:1467
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-
--> #2 (&dev->power.lock){-...}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x5c/0x7c kernel/locking/spinlock.c:162
-       __pm_runtime_resume+0xf0/0x180 drivers/base/power/runtime.c:1171
-       pm_runtime_get include/linux/pm_runtime.h:396 [inline]
-       __uart_start+0x154/0x3d8 drivers/tty/serial/serial_core.c:148
-       uart_write+0x154/0x374 drivers/tty/serial/serial_core.c:633
-       process_output_block drivers/tty/n_tty.c:574 [inline]
-       n_tty_write+0xaec/0xed0 drivers/tty/n_tty.c:2389
-       iterate_tty_write drivers/tty/tty_io.c:1021 [inline]
-       file_tty_write+0x410/0x7b8 drivers/tty/tty_io.c:1096
-       tty_write drivers/tty/tty_io.c:1117 [inline]
-       redirected_tty_write+0xac/0x14c drivers/tty/tty_io.c:1140
-       new_sync_write fs/read_write.c:497 [inline]
-       vfs_write+0x940/0xc80 fs/read_write.c:590
-       ksys_write+0x15c/0x26c fs/read_write.c:643
-       __do_sys_write fs/read_write.c:655 [inline]
-       __se_sys_write fs/read_write.c:652 [inline]
-       __arm64_sys_write+0x7c/0x90 fs/read_write.c:652
-       __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:49
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:132
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:151
-       el0_svc+0x54/0x168 arch/arm64/kernel/entry-common.c:712
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:730
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:598
-
--> #1 (&port_lock_key){....}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x5c/0x7c kernel/locking/spinlock.c:162
-       uart_port_lock_irqsave include/linux/serial_core.h:618 [inline]
-       pl011_console_write+0x148/0x724 drivers/tty/serial/amba-pl011.c:2316
-       console_emit_next_record kernel/printk/printk.c:2983 [inline]
-       console_flush_all+0x570/0xafc kernel/printk/printk.c:3049
-       console_unlock+0xfc/0x3d4 kernel/printk/printk.c:3118
-       vprintk_emit+0x224/0x3a4 kernel/printk/printk.c:2348
-       vprintk_default+0xa0/0xe4 kernel/printk/printk.c:2363
-       vprintk+0x200/0x2d4 kernel/printk/printk_safe.c:45
-       _printk+0xdc/0x128 kernel/printk/printk.c:2373
-       register_console+0x6e8/0xa74 kernel/printk/printk.c:3654
-       uart_configure_port drivers/tty/serial/serial_core.c:2672 [inline]
-       serial_core_add_one_port drivers/tty/serial/serial_core.c:3200 [inline]
-       serial_core_register_port+0x1428/0x1bf4 drivers/tty/serial/serial_core.c:3437
-       serial_ctrl_register_port+0x28/0x38 drivers/tty/serial/serial_ctrl.c:41
-       uart_add_one_port+0x28/0x38 drivers/tty/serial/serial_port.c:143
-       pl011_register_port+0x1b4/0x44c drivers/tty/serial/amba-pl011.c:2744
-       sbsa_uart_probe+0x488/0x608 drivers/tty/serial/amba-pl011.c:2914
-       platform_probe+0x148/0x1c0 drivers/base/platform.c:1404
-       really_probe+0x38c/0x8fc drivers/base/dd.c:657
-       __driver_probe_device+0x194/0x374 drivers/base/dd.c:799
-       driver_probe_device+0x78/0x330 drivers/base/dd.c:829
-       __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:957
-       bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
-       __device_attach+0x2b4/0x434 drivers/base/dd.c:1029
-       device_initial_probe+0x24/0x34 drivers/base/dd.c:1078
-       bus_probe_device+0x178/0x240 drivers/base/bus.c:532
-       device_add+0x728/0xa6c drivers/base/core.c:3682
-       platform_device_add+0x3e8/0x6e8 drivers/base/platform.c:716
-       platform_device_register_full+0x4f0/0x608 drivers/base/platform.c:844
-       acpi_create_platform_device+0x5bc/0x744 drivers/acpi/acpi_platform.c:177
-       acpi_default_enumeration+0x6c/0xdc drivers/acpi/scan.c:2193
-       acpi_bus_attach+0x804/0xad4 drivers/acpi/scan.c:2304
-       acpi_dev_for_one_check+0xa0/0xb4 drivers/acpi/bus.c:1145
-       device_for_each_child+0xec/0x174 drivers/base/core.c:4011
-       acpi_dev_for_each_child+0xc4/0x108 drivers/acpi/bus.c:1157
-       acpi_bus_attach+0x868/0xad4 drivers/acpi/scan.c:2309
-       acpi_dev_for_one_check+0xa0/0xb4 drivers/acpi/bus.c:1145
-       device_for_each_child+0xec/0x174 drivers/base/core.c:4011
-       acpi_dev_for_each_child+0xc4/0x108 drivers/acpi/bus.c:1157
-       acpi_bus_attach+0x868/0xad4 drivers/acpi/scan.c:2309
-       acpi_bus_scan+0x118/0x4f0 drivers/acpi/scan.c:2590
-       acpi_scan_init+0x214/0x6b0 drivers/acpi/scan.c:2727
-       acpi_init+0x190/0x254 drivers/acpi/bus.c:1462
-       do_one_initcall+0x24c/0x9c0 init/main.c:1267
-       do_initcall_level+0x154/0x214 init/main.c:1329
-       do_initcalls+0x58/0xac init/main.c:1345
-       do_basic_setup+0x8c/0xa0 init/main.c:1364
-       kernel_init_freeable+0x324/0x478 init/main.c:1578
-       kernel_init+0x24/0x2a0 init/main.c:1467
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-
--> #0 (console_owner){....}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3133 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3252 [inline]
-       validate_chain kernel/locking/lockdep.c:3868 [inline]
-       __lock_acquire+0x33d8/0x779c kernel/locking/lockdep.c:5142
-       lock_acquire+0x240/0x728 kernel/locking/lockdep.c:5759
-       console_lock_spinning_enable+0xb4/0xec kernel/printk/printk.c:1873
-       console_emit_next_record kernel/printk/printk.c:2977 [inline]
-       console_flush_all+0x53c/0xafc kernel/printk/printk.c:3049
-       console_unlock+0xfc/0x3d4 kernel/printk/printk.c:3118
-       vprintk_emit+0x224/0x3a4 kernel/printk/printk.c:2348
-       vprintk_default+0xa0/0xe4 kernel/printk/printk.c:2363
-       vprintk+0x200/0x2d4 kernel/printk/printk_safe.c:45
-       _printk+0xdc/0x128 kernel/printk/printk.c:2373
-       __warn_printk+0x27c/0x484 kernel/panic.c:785
-       check_flush_dependency+0x27c/0x330 kernel/workqueue.c:3702
-       start_flush_work kernel/workqueue.c:4139 [inline]
-       __flush_work+0x21c/0x954 kernel/workqueue.c:4176
-       flush_work kernel/workqueue.c:4233 [inline]
-       flush_delayed_work+0xcc/0xf8 kernel/workqueue.c:4255
-       hfs_file_fsync+0xec/0x148 fs/hfs/inode.c:681
-       vfs_fsync_range+0x168/0x188 fs/sync.c:188
-       generic_write_sync include/linux/fs.h:2822 [inline]
-       dio_complete+0x4f0/0x65c fs/direct-io.c:314
-       dio_aio_complete_work+0x28/0x38 fs/direct-io.c:326
-       process_one_work+0x79c/0x15b8 kernel/workqueue.c:3231
-       process_scheduled_works kernel/workqueue.c:3312 [inline]
-       worker_thread+0x978/0xec4 kernel/workqueue.c:3389
-       kthread+0x288/0x310 kernel/kthread.c:389
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-
-other info that might help us debug this:
-
-Chain exists of:
-  console_owner --> &dev->power.lock --> &pool->lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&pool->lock);
-                               lock(&dev->power.lock);
-                               lock(&pool->lock);
-  lock(console_owner);
-
- *** DEADLOCK ***
-
-7 locks held by kworker/0:2/5992:
- #0: ffff0000cc19e148 ((wq_completion)dio/loop0){+.+.}-{0:0}, at: process_one_work+0x624/0x15b8 kernel/workqueue.c:3205
- #1: ffff8000a2e57c20 ((work_completion)(&dio->complete_work)){+.+.}-{0:0}, at: process_one_work+0x6a0/0x15b8 kernel/workqueue.c:3205
- #2: ffff0000c5989620 (&sb->s_type->i_mutex_key#16){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:800 [inline]
- #2: ffff0000c5989620 (&sb->s_type->i_mutex_key#16){+.+.}-{3:3}, at: hfs_file_fsync+0xa0/0x148 fs/hfs/inode.c:674
- #3: ffff80008f74dfa0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x10/0x4c include/linux/rcupdate.h:325
- #4: ffff0001b36ade18 (&pool->lock){-.-.}-{2:2}, at: start_flush_work kernel/workqueue.c:4125 [inline]
- #4: ffff0001b36ade18 (&pool->lock){-.-.}-{2:2}, at: __flush_work+0x178/0x954 kernel/workqueue.c:4176
- #5: ffff80008f62b000 (console_lock){+.+.}-{0:0}, at: vprintk_emit+0x208/0x3a4 kernel/printk/printk.c:2347
- #6: ffff80008f62ac30 (console_srcu){....}-{0:0}, at: rcu_try_lock_acquire+0x10/0x4c include/linux/rcupdate.h:330
-
-stack backtrace:
-CPU: 0 UID: 0 PID: 5992 Comm: kworker/0:2 Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-Workqueue: dio/loop0 dio_aio_complete_work
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:319
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:326
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:119
- dump_stack+0x1c/0x28 lib/dump_stack.c:128
- print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2059
- check_noncircular+0x310/0x404 kernel/locking/lockdep.c:2186
- check_prev_add kernel/locking/lockdep.c:3133 [inline]
- check_prevs_add kernel/locking/lockdep.c:3252 [inline]
- validate_chain kernel/locking/lockdep.c:3868 [inline]
- __lock_acquire+0x33d8/0x779c kernel/locking/lockdep.c:5142
- lock_acquire+0x240/0x728 kernel/locking/lockdep.c:5759
- console_lock_spinning_enable+0xb4/0xec kernel/printk/printk.c:1873
- console_emit_next_record kernel/printk/printk.c:2977 [inline]
- console_flush_all+0x53c/0xafc kernel/printk/printk.c:3049
- console_unlock+0xfc/0x3d4 kernel/printk/printk.c:3118
- vprintk_emit+0x224/0x3a4 kernel/printk/printk.c:2348
- vprintk_default+0xa0/0xe4 kernel/printk/printk.c:2363
- vprintk+0x200/0x2d4 kernel/printk/printk_safe.c:45
- _printk+0xdc/0x128 kernel/printk/printk.c:2373
- __warn_printk+0x27c/0x484 kernel/panic.c:785
- check_flush_dependency+0x27c/0x330 kernel/workqueue.c:3702
- start_flush_work kernel/workqueue.c:4139 [inline]
- __flush_work+0x21c/0x954 kernel/workqueue.c:4176
- flush_work kernel/workqueue.c:4233 [inline]
- flush_delayed_work+0xcc/0xf8 kernel/workqueue.c:4255
- hfs_file_fsync+0xec/0x148 fs/hfs/inode.c:681
- vfs_fsync_range+0x168/0x188 fs/sync.c:188
- generic_write_sync include/linux/fs.h:2822 [inline]
- dio_complete+0x4f0/0x65c fs/direct-io.c:314
- dio_aio_complete_work+0x28/0x38 fs/direct-io.c:326
- process_one_work+0x79c/0x15b8 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x978/0xec4 kernel/workqueue.c:3389
- kthread+0x288/0x310 kernel/kthread.c:389
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-workqueue: WQ_MEM_RECLAIM dio/loop0:dio_aio_complete_work is flushing !WQ_MEM_RECLAIM events_long:flush_mdb
-WARNING: CPU: 0 PID: 5992 at kernel/workqueue.c:3706 check_flush_dependency+0x27c/0x330 kernel/workqueue.c:3702
-Modules linked in:
-CPU: 0 UID: 0 PID: 5992 Comm: kworker/0:2 Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-Workqueue: dio/loop0 dio_aio_complete_work
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_flush_dependency+0x27c/0x330 kernel/workqueue.c:3702
-lr : check_flush_dependency+0x27c/0x330 kernel/workqueue.c:3702
-sp : ffff8000a2e57790
-x29: ffff8000a2e57790 x28: 0000000000000000 x27: 1fffe0001858492b
-x26: 0000000000000000 x25: ffff8000927b6000 x24: ffff0000cc19e000
-x23: dfff800000000000 x22: ffff0000d12a2e18 x21: ffff0000cc19e170
-x20: ffff800081211778 x19: ffff0000c0029000 x18: 0000000000000008
-x17: 0000000000000000 x16: ffff800083032784 x15: 0000000000000001
-x14: 1fffe000366d325a x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000003 x10: 0000000000ff0100 x9 : 9770cdebfc84a400
-x8 : 9770cdebfc84a400 x7 : 0000000000000001 x6 : 0000000000000001
-x5 : ffff8000a2e56ed8 x4 : ffff80008f65b620 x3 : ffff8000806051a0
-x2 : 0000000000000001 x1 : 0000000100000001 x0 : 0000000000000000
-Call trace:
- check_flush_dependency+0x27c/0x330 kernel/workqueue.c:3702
- start_flush_work kernel/workqueue.c:4139 [inline]
- __flush_work+0x21c/0x954 kernel/workqueue.c:4176
- flush_work kernel/workqueue.c:4233 [inline]
- flush_delayed_work+0xcc/0xf8 kernel/workqueue.c:4255
- hfs_file_fsync+0xec/0x148 fs/hfs/inode.c:681
- vfs_fsync_range+0x168/0x188 fs/sync.c:188
- generic_write_sync include/linux/fs.h:2822 [inline]
- dio_complete+0x4f0/0x65c fs/direct-io.c:314
- dio_aio_complete_work+0x28/0x38 fs/direct-io.c:326
- process_one_work+0x79c/0x15b8 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x978/0xec4 kernel/workqueue.c:3389
- kthread+0x288/0x310 kernel/kthread.c:389
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-irq event stamp: 73714
-hardirqs last  enabled at (73713): [<ffff80008b3388f8>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:85 [inline]
-hardirqs last  enabled at (73713): [<ffff80008b3388f8>] exit_to_kernel_mode+0xdc/0x10c arch/arm64/kernel/entry-common.c:95
-hardirqs last disabled at (73714): [<ffff80008b42e1b4>] __raw_spin_lock_irq include/linux/spinlock_api_smp.h:117 [inline]
-hardirqs last disabled at (73714): [<ffff80008b42e1b4>] _raw_spin_lock_irq+0x28/0x70 kernel/locking/spinlock.c:170
-softirqs last  enabled at (73712): [<ffff8000801f8e88>] softirq_handle_end kernel/softirq.c:400 [inline]
-softirqs last  enabled at (73712): [<ffff8000801f8e88>] handle_softirqs+0xa3c/0xbfc kernel/softirq.c:582
-softirqs last disabled at (73693): [<ffff800080020de8>] __do_softirq+0x14/0x20 kernel/softirq.c:588
----[ end trace 0000000000000000 ]---
-
+On Thu, Sep 26, 2024 at 04:21:14PM -0700, Vanshidhar Konda wrote:
+> On Thu, Sep 26, 2024 at 12:34:01PM GMT, Beata Michalska wrote:
+> > On Tue, Sep 17, 2024 at 05:41:09PM +0530, Sumit Gupta wrote:
+> > > Hi Beata,
+> > Hi Sumit,
+> > > 
+> > > Thank you for the patches.
+> > Thank you for having a look at those.
+> > > 
+> > > On 13/09/24 18:59, Beata Michalska wrote:
+> > > > External email: Use caution opening links or attachments
+> > > >
+> > > >
+> > > > With the Frequency Invariance Engine (FIE) being already wired up with
+> > > > sched tick and making use of relevant (core counter and constant
+> > > > counter) AMU counters, getting the average frequency for a given CPU,
+> > > > can be achieved by utilizing the frequency scale factor which reflects
+> > > > an average CPU frequency for the last tick period length.
+> > > >
+> > > > The solution is partially based on APERF/MPERF implementation of
+> > > > arch_freq_get_on_cpu.
+> > > >
+> > > > Suggested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> > > > ---
+> > > >   arch/arm64/kernel/topology.c | 109 +++++++++++++++++++++++++++++++----
+> > > >   1 file changed, 99 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> > > > index cb180684d10d..22e510733336 100644
+> > > > --- a/arch/arm64/kernel/topology.c
+> > > > +++ b/arch/arm64/kernel/topology.c
+> > > > @@ -17,6 +17,7 @@
+> > > >   #include <linux/cpufreq.h>
+> > > >   #include <linux/init.h>
+> > > >   #include <linux/percpu.h>
+> > > > +#include <linux/sched/isolation.h>
+> > > >
+> > > >   #include <asm/cpu.h>
+> > > >   #include <asm/cputype.h>
+> > > > @@ -88,18 +89,28 @@ int __init parse_acpi_topology(void)
+> > > >    * initialized.
+> > > >    */
+> > > >   static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, arch_max_freq_scale) =  1UL << (2 * SCHED_CAPACITY_SHIFT);
+> > > > -static DEFINE_PER_CPU(u64, arch_const_cycles_prev);
+> > > > -static DEFINE_PER_CPU(u64, arch_core_cycles_prev);
+> > > >   static cpumask_var_t amu_fie_cpus;
+> > > >
+> > > > +struct amu_cntr_sample {
+> > > > +       u64             arch_const_cycles_prev;
+> > > > +       u64             arch_core_cycles_prev;
+> > > > +       unsigned long   last_scale_update;
+> > > > +};
+> > > > +
+> > > > +static DEFINE_PER_CPU_SHARED_ALIGNED(struct amu_cntr_sample, cpu_amu_samples);
+> > > > +
+> > > >   void update_freq_counters_refs(void)
+> > > >   {
+> > > > -       this_cpu_write(arch_core_cycles_prev, read_corecnt());
+> > > > -       this_cpu_write(arch_const_cycles_prev, read_constcnt());
+> > > > +       struct amu_cntr_sample *amu_sample = this_cpu_ptr(&cpu_amu_samples);
+> > > > +
+> > > > +       amu_sample->arch_core_cycles_prev = read_corecnt();
+> > > > +       amu_sample->arch_const_cycles_prev = read_constcnt();
+> > > >   }
+> > > >
+> > > >   static inline bool freq_counters_valid(int cpu)
+> > > >   {
+> > > > +       struct amu_cntr_sample *amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
+> > > > +
+> > > >          if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
+> > > >                  return false;
+> > > >
+> > > > @@ -108,8 +119,8 @@ static inline bool freq_counters_valid(int cpu)
+> > > >                  return false;
+> > > >          }
+> > > >
+> > > > -       if (unlikely(!per_cpu(arch_const_cycles_prev, cpu) ||
+> > > > -                    !per_cpu(arch_core_cycles_prev, cpu))) {
+> > > > +       if (unlikely(!amu_sample->arch_const_cycles_prev ||
+> > > > +                    !amu_sample->arch_core_cycles_prev)) {
+> > > >                  pr_debug("CPU%d: cycle counters are not enabled.\n", cpu);
+> > > >                  return false;
+> > > >          }
+> > > > @@ -152,17 +163,22 @@ void freq_inv_set_max_ratio(int cpu, u64 max_rate)
+> > > >
+> > > >   static void amu_scale_freq_tick(void)
+> > > >   {
+> > > > +       struct amu_cntr_sample *amu_sample = this_cpu_ptr(&cpu_amu_samples);
+> > > >          u64 prev_core_cnt, prev_const_cnt;
+> > > >          u64 core_cnt, const_cnt, scale;
+> > > >
+> > > > -       prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
+> > > > -       prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
+> > > > +       prev_const_cnt = amu_sample->arch_const_cycles_prev;
+> > > > +       prev_core_cnt = amu_sample->arch_core_cycles_prev;
+> > > >
+> > > >          update_freq_counters_refs();
+> > > >
+> > > > -       const_cnt = this_cpu_read(arch_const_cycles_prev);
+> > > > -       core_cnt = this_cpu_read(arch_core_cycles_prev);
+> > > > +       const_cnt = amu_sample->arch_const_cycles_prev;
+> > > > +       core_cnt = amu_sample->arch_core_cycles_prev;
+> > > >
+> > > > +       /*
+> > > > +        * This should not happen unless the AMUs have been reset and the
+> > > > +        * counter values have not been restored - unlikely
+> > > > +        */
+> > > >          if (unlikely(core_cnt <= prev_core_cnt ||
+> > > >                       const_cnt <= prev_const_cnt))
+> > > >                  return;
+> > > > @@ -182,6 +198,8 @@ static void amu_scale_freq_tick(void)
+> > > >
+> > > >          scale = min_t(unsigned long, scale, SCHED_CAPACITY_SCALE);
+> > > >          this_cpu_write(arch_freq_scale, (unsigned long)scale);
+> > > > +
+> > > > +       amu_sample->last_scale_update = jiffies;
+> > > >   }
+> > > >
+> > > >   static struct scale_freq_data amu_sfd = {
+> > > > @@ -189,6 +207,77 @@ static struct scale_freq_data amu_sfd = {
+> > > >          .set_freq_scale = amu_scale_freq_tick,
+> > > >   };
+> > > >
+> > > > +static __always_inline bool amu_fie_cpu_supported(unsigned int cpu)
+> > > > +{
+> > > > +       return cpumask_available(amu_fie_cpus) &&
+> > > > +               cpumask_test_cpu(cpu, amu_fie_cpus);
+> > > > +}
+> > > > +
+> > > > +#define AMU_SAMPLE_EXP_MS      20
+> > > > +
+> > > > +int arch_freq_avg_get_on_cpu(int cpu)
+> > > > +{
+> > > > +       struct amu_cntr_sample *amu_sample;
+> > > > +       unsigned int start_cpu = cpu;
+> > > > +       unsigned long last_update;
+> > > > +       unsigned int freq = 0;
+> > > > +       u64 scale;
+> > > > +
+> > > > +       if (!amu_fie_cpu_supported(cpu) || !arch_scale_freq_ref(cpu))
+> > > > +               return -EOPNOTSUPP;
+> > > > +
+> > > > +retry:
+> > > > +       amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
+> > > > +
+> > > > +       last_update = amu_sample->last_scale_update;
+> > > > +
+> > > > +       /*
+> > > > +        * For those CPUs that are in full dynticks mode, and those that have
+> > > 'or those' to match with if condition?
+> > Yeah, might be.
+> > > 
+> > > > +        * not seen tick for a while, try an alternative source for the counters
+> > > > +        * (and thus freq scale), if available, for given policy: this boils
+> > > > +        * down to identifying an active cpu within the same freq domain, if any.
+> > > > +        */
+> > > > +       if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
+> > > > +           time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
+> > > > +               struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> > > > +               int ref_cpu = cpu;
+> > > > +
+> > > > +               if (!policy)
+> > > > +                       return 0;
+> > > > +
+> > > 
+> > > We can skip the rest of code if policy has a single cpu. AFAIR, one of the
+> > > previous versions had similar check.
+> > > 
+> > >       if (!policy_is_shared(policy)) {
+> > >               cpufreq_cpu_put(policy);
+> > >               goto freq_comput;
+> > >       }
+> > True, we could but then this case is covered by cpumask_next_wrap
+> > which for single-cpu policies will render the ref_cpu invalid,
+> > so policy_is_shared check seemed unnecessary.
+> > > 
+> > > > +               if (!cpumask_intersects(policy->related_cpus,
+> > > > +                                       housekeeping_cpumask(HK_TYPE_TICK))) {
+> > > > +                       cpufreq_cpu_put(policy);
+> > > > +                       return -EOPNOTSUPP;
+> > > > +               }
+> > > > +
+> > > > +
+> > > > +               do {
+> > > > +                       ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
+> > > > +                                                   start_cpu, false);
+> > > > +
+> > > > +               } while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
+> > > > +
+> > > > +               cpufreq_cpu_put(policy);
+> > > > +
+> > > > +               if (ref_cpu >= nr_cpu_ids)
+> > > > +                       /* No alternative to pull info from */
+> > > > +                       return 0;
+> > > > +
+> > > 
+> > > The 'cpuinfo_avg_freq' node gives 'unknown' value for single CPU per policy
+> > > as 'ref_cpu' increments to 'nr_cpu_ids'. We can use the same CPU instead of
+> > > returning zero if no alternative CPU.
+> > > 
+> > >   # cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_avg_freq
+> > >   <unknown>
+> > > 
+> > >   ----
+> > >       if (ref_cpu >= nr_cpu_ids)
+> > >           /* Use same CPU if no alternative to pull info from */
+> > >           goto freq_comput;
+> > > 
+> > >     ..
+> > >   freq_comput:
+> > >     scale = arch_scale_freq_capacity(cpu);
+> > >     freq = scale * arch_scale_freq_ref(cpu);
+> > >   ----
+> > > 
+> > This boils down to the question what that function, and the information it
+> > provides, represent really. The 'unknown' here simply says the CPU has been idle
+> > for a while and as such the frequency data is a bit stale and it does not
+> > represent the average freq the CPU is actually running at anymore, which is
+> > the intention here really. Or, that the given CPU is a non-housekeeping one.
+> > Either way I believe this is a useful information, instead of providing
+> > stale data with no indication on whether the frequency is really the 'current'
+> > one or not.
+> > 
+> > If that is somehow undesirable we can discuss this further, though I'd rather
+> > avoid exposing an interface where the feedback provided is open to
+> > interpretation at all times.
+> 
+> Would it make sense to identify that the frequency reporting is unknown due to
+> cpu being idle vs some other issue like being a non-housekeeping CPU? Would
+> returning a value of 0 make it easier for tools to represent that the CPU is
+> currently idle?
+That is an option.
+Another one would be to return an error for those cases. This would make it
+easier to distinguish between valid frequency &/| idle CPU vs tickless CPU
+(EINVAL vs ENOENT) ?
 
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+BR
+Beata
+> 
+> Thanks,
+> Vanshidhar
+> 
+> > 
+> > ---
+> > Best Regards
+> > Beata
+> > > Thank you,
+> > > Sumit Gupta
+> > > 
+> > > P.S. Will be on afk for next 2 weeks with no access to email. Please expect
+> > > a delay in response.
+> > > 
+> > > > +               cpu = ref_cpu;
+> > > > +               goto retry;
+> > > > +       }
+> > > > +       /*
+> > > > +        * Reversed computation to the one used to determine
+> > > > +        * the arch_freq_scale value
+> > > > +        * (see amu_scale_freq_tick for details)
+> > > > +        */
+> > > > +       scale = arch_scale_freq_capacity(cpu);
+> > > > +       freq = scale * arch_scale_freq_ref(cpu);
+> > > > +       freq >>= SCHED_CAPACITY_SHIFT;
+> > > > +       return freq;
+> > > > +}
+> > > > +
+> > > 
+> > > >   static void amu_fie_setup(const struct cpumask *cpus)
+> > > >   {
+> > > >          int cpu;
+> > > > --
+> > > > 2.25.1
+> > > >
 
