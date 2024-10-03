@@ -1,208 +1,158 @@
-Return-Path: <linux-pm+bounces-15098-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15099-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ACA998ECFB
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 12:31:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1587D98EDA8
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 13:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF4201C216BF
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 10:31:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A4BE2828B2
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 11:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DECA14A099;
-	Thu,  3 Oct 2024 10:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA67A153836;
+	Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jo5b2EyM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE8A1B969;
-	Thu,  3 Oct 2024 10:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8964414431B;
+	Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727951461; cv=none; b=mSgnwQ5NRF6J1i736XLJ6UJ0BFE06qSKs6BaY3gaIaS7mAA2VclD0+4QiV+aOES1DlPLnSnYIJMcYbQmVA2VN4RW09dywldyTZuIeif/j0ZMNF6YS2XI+Cm3o8AlvSwg7VWIul56XpHkmAtx+Fe3QWELicQYDO20ilh6fKAH9oA=
+	t=1727954034; cv=none; b=RnTvpHk6QXcQiB6o8HEEdYp8nOUGzI3YA7ilzFIfB6XHeHjGlH52mUXXYc0xr8HH5ohBBM32wXftJYcoLJTqkYSOwB29SnKVn7+mJYhWBsY2ufYWKwDtfu0f3b3R081vXJt7iviSeHGBGmYRzzXSmWqwRzhAhvqSDH6qZyOxJK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727951461; c=relaxed/simple;
-	bh=28Rp7iMfYu9uJMVMaa86uq9UWaNfDuDfeBBD55rbIZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HG6OPjK98BUhUL4sT8YccemaR+IJbAQxYv6REiHbiRQTDKjbAPebzdrjb/whI9Hw+eNiBexk4vhaXQtyMH50p7cnAufoSUlUw764Dt6uMwMrmenn3LTM7R2ZSHtxOG0cv54b/gx1ZyRW+h5pTMJEPKKVb2F2J+GodrYqpDFjglU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2422339;
-	Thu,  3 Oct 2024 03:31:27 -0700 (PDT)
-Received: from [10.1.38.55] (e127648.arm.com [10.1.38.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EB173F64C;
-	Thu,  3 Oct 2024 03:30:53 -0700 (PDT)
-Message-ID: <6e21e8f1-e3b4-4915-87cc-6ce77f54cc8a@arm.com>
-Date: Thu, 3 Oct 2024 11:30:52 +0100
+	s=arc-20240116; t=1727954034; c=relaxed/simple;
+	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kPHSvaGKTWN8C0Nx37QsvMHDiJT6HLS64DtcWGxae2zf39VWSoA27me9CYpyUqVRwF4+8WeJMGg4N5tNvpBE+56XS0M66lBlX14WFwtEEYSRYswezlEZzDTamgqwcsSlUDI9I83gZnikxGS0BA6+RFEgARFxKs9gz5EtnPICyPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jo5b2EyM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02029C4CED4;
+	Thu,  3 Oct 2024 11:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727954034;
+	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Jo5b2EyMOS3uk9JDlHSQeU5R1aJyjAs0+fTPWkZCep6Wfe3FtEcKX92qY2mtaY2EK
+	 Ci8TPn6Ee42qRsmfrcj1l+x8zMsi6bvfBaExW2NU/fSlbTuDXDF1+X8cFBydkm8Y27
+	 lb+XzyBozg7zRqcDdBoznF0nnozWrNcR9tzS6b9UomNb4g91qxhdupQuTqUK4zEuA4
+	 z7g+nzwCR3g6dyxU7168Y4P6qlP/X9DMrNre/R3uCNKxAg+BkBWF+gHp9jrQW3cTIh
+	 xrWMcRuCjU0dRKRqqjEvI0IIIfAguu/05IPATBt+DaAJfq3OXiy9Jf7zCzIbXi+uOl
+	 853BOc6UvNv1A==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53995380bb3so1051099e87.1;
+        Thu, 03 Oct 2024 04:13:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUMZ83aPs6Y9Mc8/76A84iJla1AJCX9Et2K13+KujubLe2sgHbvnKgZl4NuiD05HVtyE8WoJyooTELHDKJc@vger.kernel.org, AJvYcCUol65TBElcH6VRPdOKTevF5/Lg0Bgvr04QoHuzeJ3vv0tXAom1N8dA6JhOhqxEsnpwFieSoEgOiaao@vger.kernel.org, AJvYcCV2cpTVxzMwed+BQGXixWf2l6Z1qOjOhdS+ZPRILONG3juJVUAa0l4Zf0jyUO+AN/tX3AubuqvbL+Ht2w==@vger.kernel.org, AJvYcCV7SHMXRybZNmiZtR6oeW3XlhWJ1sPvIu0OCAp6W/yr/M2Cr8GVxev0QSXYb8S9gB2bsNWEFlveQx67vqKTdRY1vw==@vger.kernel.org, AJvYcCVJycArIR3VPg10j8rte3NuVKrN4Dmbp658AY1jhRwXGJa6NxFlF4vgRLHCCLJxjzLUtOflFlJdVswb13Kq@vger.kernel.org, AJvYcCVKCH+27bj3KprvYndBy1OLWcz2gzFauQzBYu9karbRPFXS4JY+qZ4NI2zETiEcLm3JbJYurHJFJ5km@vger.kernel.org, AJvYcCVcx5OIiA5GHF2O32Qr+FTzWaMyGUhNjGDurLGNpEP0zFwdIVFyFcGZXSv+fycttd4RGuQJgTfOEOqmVPTc@vger.kernel.org, AJvYcCVvZrcqj31MD4y8rXNg+pz6HKBUIvYSj4JzJcBz5q6QkdO4qgoD/0iJh9oAg1i2BZougKDDXCgcp0ZWV9zi33E=@vger.kernel.org, AJvYcCWmGLvSpl1papB8MvSTPgS3BfainKQddGsUq0U3iaLkR/wjmAjqJFIMpmXpdpYTYMxfqmwnOXYCzns=@vger.kernel.org, AJvYcCXEL4X4VlMI
+ XN6mutoyZsnTaiRR8MYaOjH0ixRxr5SsiEgXOfAD6OYUkpqwMxpR9paJcRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYusTtmvHCpx+fbQj35DhxxIcDdBxZMUegSYe4vdI008LT62L9
+	POZO1ex2ELV2iUqAp2JCPWCr6iQo88kkk52Cdhf6Ls8/9HA/oIsCmBfOcw6nZCIp93wnszGav6m
+	/VNPGY8sBWRRCLFdtEFGdi7TAss8=
+X-Google-Smtp-Source: AGHT+IH0sWh3HiA/Y/FG77TM2NrCKaNhbA4eJ/qwHE/WqxSdpNeBFdDDl6WpEY+OacY7yD9godh5OoCJmImz57qPZ+Q=
+X-Received: by 2002:a05:6512:1241:b0:536:9ef0:d829 with SMTP id
+ 2adb3069b0e04-539a07a1db9mr3832198e87.44.1727954032228; Thu, 03 Oct 2024
+ 04:13:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 5/8] cpufreq/schedutil: Remove iowait boost
-To: Quentin Perret <qperret@google.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
- dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
- Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
- bvanassche@acm.org, andres@anarazel.de, asml.silence@gmail.com,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org, qyousef@layalina.io,
- dsmythies@telus.net, axboe@kernel.dk
-References: <20240905092645.2885200-1-christian.loehle@arm.com>
- <20240905092645.2885200-6-christian.loehle@arm.com>
- <CAJZ5v0hJWwsErT193i394bHOczvCQwU_5AVVTJ1oKDe7kTW82g@mail.gmail.com>
- <Zv5oTvxPsiTWCJIo@google.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <Zv5oTvxPsiTWCJIo@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+ <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com> <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+In-Reply-To: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 3 Oct 2024 13:13:40 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	x86@kernel.org, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/3/24 10:47, Quentin Perret wrote:
-> On Monday 30 Sep 2024 at 18:34:24 (+0200), Rafael J. Wysocki wrote:
->> On Thu, Sep 5, 2024 at 11:27 AM Christian Loehle
->> <christian.loehle@arm.com> wrote:
->>>
->>> iowait boost in schedutil was introduced by
->>> commit ("21ca6d2c52f8 cpufreq: schedutil: Add iowait boosting").
->>> with it more or less following intel_pstate's approach to increase
->>> frequency after an iowait wakeup.
->>> Behaviour that is piggy-backed onto iowait boost is problematic
->>> due to a lot of reasons, so remove it.
->>>
->>> For schedutil specifically these are some of the reasons:
->>> 1. Boosting is applied even in scenarios where it doesn't improve
->>> throughput.
->>
->> Well, I wouldn't argue this way because it is kind of like saying that
->> air conditioning is used even when it doesn't really help.  It is
->> sometimes hard to know in advance whether or not it will help though.
->>
->>> 2. The boost is not accounted for in EAS: a) feec() will only consider
->>>  the actual task utilization for task placement, but another CPU might
->>>  be more energy-efficient at that capacity than the boosted one.)
->>>  b) When placing a non-IO task while a CPU is boosted compute_energy()
->>>  assumes a lower OPP than what is actually applied. This leads to
->>>  wrong EAS decisions.
->>
->> That's a very good point IMV and so is the one regarding UCLAMP_MAX (8
->> in your list).
-> 
-> I would actually argue that this is also an implementation problem
-> rather than something fundamental about boosting. EAS could be taught
-> about iowait boosting and factor that into the decisions.
+On Wed, 2 Oct 2024 at 22:02, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, 2 Oct 2024 at 08:31, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > I guess you are referring to the use of a GOT? That is a valid
+> > concern, but it does not apply here. With hidden visibility and
+> > compiler command line options like -mdirect-access-extern, all emitted
+> > symbol references are direct.
+>
+> I absolutely hate GOT entries. We definitely shouldn't ever do
+> anything that causes them on x86-64.
+>
+> I'd much rather just do boot-time relocation, and I don't think the
+> "we run code at a different location than we told the linker" is an
+> arghument against it.
+>
+> Please, let's make sure we never have any of the global offset table horror.
+>
+> Yes, yes, you can't avoid them on other architectures.
+>
 
-Definitely, and I did do exactly that.
+GCC/binutils never needs them. GCC 13 and older will emit some
+horrible indirect fentry hook calls via the GOT, but those are NOPed
+out by objtool anyway, so that is easily fixable.
 
-> 
->> If the goal is to set the adequate performance for a given utilization
->> level (either actual or prescribed), boosting doesn't really play well
->> with this and it shouldn't be used at least in these cases.
-> 
-> There's plenty of cases where EAS will correctly understand that
-> migrating a task away will not reduce the OPP (e.g. another task on the
-> rq has a uclamp_min request, or another CPU in the perf domain has a
-> higher request), so iowait boosting could probably be added.
-> 
-> In fact if the iowait boost was made a task property, EAS could easily
-> understand the effect of migrating that boost with the task (it's not
-> fundamentally different from migrating a task with a high uclamp_min
-> from the energy model perspective).
+Clang/LLD is slightly trickier, because Clang emits relaxable GOTPCREL
+relocations, but LLD doesn't update the relocations emitted via
+--emit-relocs, so the relocs tool gets confused. This is one of the
+reasons I had for proposing to simply switch to PIE linking, and let
+the linker deal with all of that. Note that Clang may emit these even
+when not generating PIC/PIE code at all.
 
-True.
-> 
->>> 3. Actual IO heavy workloads are hardly distinguished from infrequent
->>> in_iowait wakeups.
->>
->> Do infrequent in_iowait wakeups really cause the boosting to be
->> applied at full swing?
->>
->>> 4. The boost isn't accounted for in task placement.
->>
->> I'm not sure what exactly this means.  "Big" vs "little" or something else?
->>
->>> 5. The boost isn't associated with a task, it therefore lingers on the
->>> rq even after the responsible task has migrated / stopped.
->>
->> Fair enough, but this is rather a problem with the implementation of
->> boosting and not with the basic idea of it.
-> 
-> +1
-> 
->>> 6. The boost isn't associated with a task, it therefore needs to ramp
->>> up again when migrated.
->>
->> Well, that again is somewhat implementation-related IMV, and it need
->> not be problematic in principle.  Namely, if a task migrates and it is
->> not the only one in the "new" CPUs runqueue, and the other tasks in
->> there don't use in_iowait, maybe it's better to not boost it?
->>
->> It also means that boosting is not very consistent, though, which is a
->> valid point.
->>
->>> 7. Since schedutil doesn't know which task is getting woken up,
->>> multiple unrelated in_iowait tasks lead to boosting.
->>
->> Well, that's by design: it boosts, when "there is enough IO pressure
->> in the runqueue", so to speak.
->>
->> Basically, it is a departure from the "make performance follow
->> utilization" general idea and it is based on the observation that in
->> some cases performance can be improved by taking additional
->> information into account.
->>
->> It is also about pure performance, not about energy efficiency.
->>
->>> 8. Boosting is hard to control with UCLAMP_MAX (which is only active
->>> when the task is on the rq, which for boosted tasks is usually not
->>> the case for most of the time).
-> 
-> Sounds like another reason to make iowait boosting per-task to me :-)
-> 
-> I've always thought that turning iowait boosting into some sort of
-> in-kernel uclamp_min request would be a good approach for most of the
-> issues mentioned above. Note that I'm not necessarily saying to use the
-> actual uclamp infrastructure (though it's valid option), I'm really just
-> talking about the concept. Is that something you've considered?
-> 
-> I presume we could even factor out the 'logic' part of the code that
-> decides out to request the boost into its own thing, and possibly have
-> different policies for different use-cases, but that might be overkill.
+So this is the reason I wanted to add support for GOTPCREL relocations
+in the relocs tool - it is really quite trivial to do, and makes our
+jobs slightly easier when dealing with these compiler quirks. The
+alternative would be to teach objtool how to relax 'movq
+foo@GOTPCREL(%rip)' into 'leaq foo(%rip)' - these are GOTPCREL
+relaxations described in the x86_64 psABI for ELF, which is why
+compilers are assuming more and more that emitting these is fine even
+without -fpic, given that the linker is supposed to elide them if
+possible.
 
-See the cover-letter part on per-task iowait boosting, specifically:
-[1]
-v1 per-task io boost
-https://lore.kernel.org/lkml/20240304201625.100619-1-christian.loehle@arm.com/
-v2 per-task io boost
-https://lore.kernel.org/lkml/20240518113947.2127802-2-christian.loehle@arm.com/
-[2]
-OSPM24 discussion iowait boosting
-https://www.youtube.com/watch?v=MSQGEsSziZ4
+Note that there are 1 or 2 cases in the asm code where it is actually
+quite useful to refer to the address of foo as 'foo@GOTPCREL(%rip)' in
+instructions that take memory operands, but those individual cases are
+easily converted to something else if even having a GOT with just 2
+entries is a dealbreaker for you.
 
-These are the main issues with transforming the existing mechanism into
-a per-task attribute.
-Almost unsolvable is: Does reducing "iowait pressure" (be it per-task or per-rq)
-actually improve throughput even (assuming for now that this throughput is
-something we care about, I'm sure you know that isn't always the case, e.g.
-background tasks). With MCQ devices and some reasonable IO workload that is
-IO-bound our iowait boosting is often just boosting CPU frequency (which uses
-power obviously) to queue in yet another request for a device which has essentially
-endless pending requests. If pending request N+1 arrives x usecs earlier or
-later at the device then makes no difference in IO throughput.
-If boosting would improve e.g. IOPS (of that device) is something the block layer
-(with a lot of added infrastructure, but at least in theory it would know what
-device we're iowaiting on, unlike the scheduler) could tell us about. If that is
-actually useful for user experience (i.e. worth the power) only userspace can decide
-(and then we're back at uclamp_min anyway).
-(The above all assumes that iowait even means "is waiting for block IO and
-about to send another block IO" which is far from reality.)
+> That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
+> feel are a complete no-brainer and should be done regardless of any
+> other code generation issues.
+>
 
-Thanks Quentin for getting involved, your input is very much appreciated!
+Yes, this is the primary reason I ended up looking into this in the
+first place. Earlier this year, we ended up having to introduce
+RIP_REL_REF() to emit those RIP-relative references explicitly, in
+order to prevent the C code that is called via the early 1:1 mapping
+from exploding. The amount of C code called in that manner has been
+growing steadily over time with the introduction of 5-level paging and
+SEV-SNP and TDX support, which need to play all kinds of tricks before
+the normal kernel mappings are created.
 
-Regards,
-Christian
+Compiling with -fpie and linking with --pie -z text produces an
+executable that is guaranteed to have only RIP-relative references in
+the .text segment, removing the need for RIP_REL_REF entirely (it
+already does nothing when __pic__ is #define'd).
 
