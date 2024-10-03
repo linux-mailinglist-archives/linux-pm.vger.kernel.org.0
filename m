@@ -1,190 +1,128 @@
-Return-Path: <linux-pm+bounces-15094-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15095-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F408198EC11
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 11:10:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD2298EC1E
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 11:14:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AEB91F2223C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 09:10:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AD99B22156
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 09:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EB513E41A;
-	Thu,  3 Oct 2024 09:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13FEB14601C;
+	Thu,  3 Oct 2024 09:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="F/0jDQt5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1486126C13;
-	Thu,  3 Oct 2024 09:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51EF14431B;
+	Thu,  3 Oct 2024 09:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727946651; cv=none; b=bpqnuZ1cfPozR8tTQQ73lYV58fnHDkLR26gavfDhjEtoKP6kCWWCwU2D1eFWeVGRlZnxGQhtULsoai0Zz/uV2t7QBk66zWElsZPWZjYu/LwbovL77c8cjaglRbuQWtS8hOLZpvPlrnZaqeBK5zRdqy2ublA8urCg/qLmZ7H6VuA=
+	t=1727946835; cv=none; b=lbyFkubhFrbXdzB9jZZgolS/azz6ycqViAe3Y0zV3VNZdziTg7u3RgXVCiaobZ8Eu6UHXdC6I2mw8/YIrirZvxeAv8WDv5YvQ/yXE0RlVeAG1RxvIU1ki+j36/SfH+xV8fQnf/TSMOGjdxs1I59RXAOYtFi0mjDSzqRYAPvD6hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727946651; c=relaxed/simple;
-	bh=uGC8uf7Ag5AeV9OKxPQvM6LpMczuiDRZTeqo8Xz56+Y=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=t+7xbBact4NHNOeu4LeV+TmFvFvemBtvNN50QAopjpFiFGFJeyg9GHhkZmUMY7ykY1JDA2FCuM/ujbR5exOuqGdkhcRKXrpK5mxN3vyt9fRVHEtx7/LrM7UsV/mc8+qBap9dEaex3jsl1ArpYduWYYEwGgfkwSuf3pJ/+QylBRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9277339;
-	Thu,  3 Oct 2024 02:11:16 -0700 (PDT)
-Received: from [10.1.38.55] (e127648.arm.com [10.1.38.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42F0B3F640;
-	Thu,  3 Oct 2024 02:10:43 -0700 (PDT)
-Message-ID: <61565cd6-a6e7-4ed5-a52e-dc3bc3e99869@arm.com>
-Date: Thu, 3 Oct 2024 10:10:41 +0100
+	s=arc-20240116; t=1727946835; c=relaxed/simple;
+	bh=toM0gEntkHjlBdR+blvrK5iEU20Q5GbOQW2p2SGFFxI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BV2kSAm7ykZpLgaVP4uMa7sNGPHXY/t9rcTS/tHR/Bc6OCO6ZpQP7EyUVGxT1KrRLGJ5UBF/DRX6OK3ydd4geN1DzkGK6vdeszJKCCRBcmc1MOkpgDIvyu+9Q1kPcJY1yAQl/kkL8/3PH1ANz1/nXT7UrPH2POvzXKBujAcdzCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=F/0jDQt5; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4939Dhdt122708;
+	Thu, 3 Oct 2024 04:13:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1727946823;
+	bh=svebMRmilDSAYnzcIPP+zNnJjL2aKZ4U6KKBYyGGxn0=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=F/0jDQt5N/KC2Q0rZ3EePbJSN6nKNaE/vv/Xpf9o+7dV1HZxbtYzQw6hUDVPDq6cI
+	 pPSk6iESRYdQ4c28wZLl+areNFG1YeiIk688PJaq93pY2+eAFwtUdGUjWKig2pfKj1
+	 3tPw0Xlo/0rz8jh67f32gkOn2qS31G0YoUbtJINw=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4939DhLu026511
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 3 Oct 2024 04:13:43 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 3
+ Oct 2024 04:13:42 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 3 Oct 2024 04:13:42 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4939Df77128905;
+	Thu, 3 Oct 2024 04:13:42 -0500
+Date: Thu, 3 Oct 2024 14:43:41 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Bryan Brattlof <bb@ti.com>,
+        Nishanth Menon
+	<nm@ti.com>, Andrew Davis <afd@ti.com>,
+        Lee Jones <lee@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Mark
+ Brown <broonie@kernel.org>
+Subject: Re: [PATCH 0/2] ti-cpufreq: AM62: Backward compatibility for syscon
+ and update offsets
+Message-ID: <20241003091341.elvgzscchqngmgod@lcpd911>
+References: <20240930-b4-ti-cpufreq-am62-quirk-v1-0-b5e04f0f899b@ti.com>
+ <20241001075759.o2a6vhjia5sl6vhr@lcpd911>
+ <20241001080400.diqfgbkje77pjby7@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [RFC PATCH 5/8] cpufreq/schedutil: Remove iowait boost
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
- dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
- Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
- bvanassche@acm.org, andres@anarazel.de, asml.silence@gmail.com,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org, qyousef@layalina.io,
- dsmythies@telus.net, axboe@kernel.dk
-References: <20240905092645.2885200-1-christian.loehle@arm.com>
- <20240905092645.2885200-6-christian.loehle@arm.com>
- <CAJZ5v0hJWwsErT193i394bHOczvCQwU_5AVVTJ1oKDe7kTW82g@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAJZ5v0hJWwsErT193i394bHOczvCQwU_5AVVTJ1oKDe7kTW82g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241001080400.diqfgbkje77pjby7@vireshk-i7>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 9/30/24 17:34, Rafael J. Wysocki wrote:
-> On Thu, Sep 5, 2024 at 11:27 AM Christian Loehle
-> <christian.loehle@arm.com> wrote:
->>
->> iowait boost in schedutil was introduced by
->> commit ("21ca6d2c52f8 cpufreq: schedutil: Add iowait boosting").
->> with it more or less following intel_pstate's approach to increase
->> frequency after an iowait wakeup.
->> Behaviour that is piggy-backed onto iowait boost is problematic
->> due to a lot of reasons, so remove it.
->>
->> For schedutil specifically these are some of the reasons:
->> 1. Boosting is applied even in scenarios where it doesn't improve
->> throughput.
-> 
-> Well, I wouldn't argue this way because it is kind of like saying that
-> air conditioning is used even when it doesn't really help.  It is
-> sometimes hard to know in advance whether or not it will help though.
+Viresh,
 
-Right, it's a heuristic that's often wrong and costs energy when it
-triggers is what I was trying to say.
+On Oct 01, 2024 at 13:34:00 +0530, Viresh Kumar wrote:
+> On 01-10-24, 13:27, Dhruva Gole wrote:
+> > On Sep 30, 2024 at 15:02:08 +0530, Dhruva Gole wrote:
+> > > With the Silicon revision being taken directly from socinfo, there's no
+> > > longer any need for reading any SOC register for revision from this driver.
+> > > Hence, we do not require any rev_offset for AM62 family of devices.
+> > > 
+> > > Also, maintain the backward compatibility with old devicetree, and hence
+> > > add condition to handle the case where we have the zero offset such that we
+> > > don't end up reading the wrong register offset in new AM625 DTs whenever we fix
+> > > them up.
+> > > 
+> > > These patches have been in discussion as part of another series, which is now
+> > > being split up as per discussions with Nishanth. Ref. the following link for
+> > > more context on the same:
+> > > https://lore.kernel.org/all/20240926-ti-cpufreq-fixes-v5-v7-0-3c94c398fe8f@ti.com/
+> > > 
+> > > **DEPENDS ON:**
+> > > "mfd: syscon: Use regmap max_register_is_0 as needed"
+> > > https://lore.kernel.org/linux-arm-kernel/20240903184710.1552067-1-nm@ti.com/
+> > 
+> > Just an update, the above dependency patch is now taken in by Lee Jones [1].
+> > Waiting for it to finally appear in -next.
+> > 
+> > + Lee just because we are users of that patch.
+> > 
+> > [1]
+> > https://lore.kernel.org/linux-arm-kernel/172770742318.523866.16912261914335612487.b4-ty@kernel.org/
+> 
+> Ping me once this series is ready to be applied and all dependencies
+> are merged somewhere I can rebase.
 
-> 
->> 2. The boost is not accounted for in EAS: a) feec() will only consider
->>  the actual task utilization for task placement, but another CPU might
->>  be more energy-efficient at that capacity than the boosted one.)
->>  b) When placing a non-IO task while a CPU is boosted compute_energy()
->>  assumes a lower OPP than what is actually applied. This leads to
->>  wrong EAS decisions.
-> 
-> That's a very good point IMV and so is the one regarding UCLAMP_MAX (8
-> in your list).
-> 
-> If the goal is to set the adequate performance for a given utilization
-> level (either actual or prescribed), boosting doesn't really play well
-> with this and it shouldn't be used at least in these cases.
-> 
->> 3. Actual IO heavy workloads are hardly distinguished from infrequent
->> in_iowait wakeups.
-> 
-> Do infrequent in_iowait wakeups really cause the boosting to be
-> applied at full swing?
+I can see the dependency is part of next-20241003, please feel free to pick the
+series now if it looks ok to you.
 
-Maybe not full swing, but the relatively high rate_limit_us and TICK_NSEC
-found on Android deivces does indeed lead to occasional boosting periods
-even for 'infrequent'/unrelated wakeups.
-
-> 
->> 4. The boost isn't accounted for in task placement.
-> 
-> I'm not sure what exactly this means.  "Big" vs "little" or something else?
-
-That should be "[...] in task placement for HMP", you're right.
-Essentially if we were to consider a task to be 100% of capacity boost-worthy,
-we need to consider that at task placement. Now we cap out at the local CPU,
-which might be rather small. (~10% of the biggest CPU on mobile).
-Logically this argument (a CAS argument essentially), should probably come
-before the EAS one to make more sense.
-
->> 5. The boost isn't associated with a task, it therefore lingers on the
->> rq even after the responsible task has migrated / stopped.
-> 
-> Fair enough, but this is rather a problem with the implementation of
-> boosting and not with the basic idea of it.
-
-Unfortunately the lingering (or to use a term with less negative connotation:
-holding) almost is a necessity, too, as described in the cover-letter.
-If we only boost at enqueue (and immediately scale down on dequeue) we lose
-out massively, as the interrupt isn't boosted and we have to run at the lower
-frequency for the DVFS transition delay (even if on x86 that may be close to
-negligible). IMO this is the main reason why the mechanism can't evolve (into
-something like a per-task strategy).
-Even a per-task strategy would need to a) set a timer in case the iowait
-period is too long and b) remove boost from prev_cpu if enqueued somewhere
-else.
-
-> 
->> 6. The boost isn't associated with a task, it therefore needs to ramp
->> up again when migrated.
-> 
-> Well, that again is somewhat implementation-related IMV, and it need
-> not be problematic in principle.  Namely, if a task migrates and it is
-> not the only one in the "new" CPUs runqueue, and the other tasks in
-> there don't use in_iowait, maybe it's better to not boost it?
-
-Agreed, this can be argued about (and also isn't a huge problem in
-practice).
-
-> 
-> It also means that boosting is not very consistent, though, which is a
-> valid point.
-> 
->> 7. Since schedutil doesn't know which task is getting woken up,
->> multiple unrelated in_iowait tasks lead to boosting.
-> 
-> Well, that's by design: it boosts, when "there is enough IO pressure
-> in the runqueue", so to speak.> 
-> Basically, it is a departure from the "make performance follow
-> utilization" general idea and it is based on the observation that in
-> some cases performance can be improved by taking additional
-> information into account.
-> 
-> It is also about pure performance, not about energy efficiency.
-
-And the lines between those become more and more blurry, see the GFX
-regression. There's very few free lunches up for grabs these days, if
-you're boosting performance on X, you're likely paying for it on Y.
-That is fine as long as boosting X is deliberate which iowait boosting
-very much is not.
-
-> 
->> 8. Boosting is hard to control with UCLAMP_MAX (which is only active
->> when the task is on the rq, which for boosted tasks is usually not
->> the case for most of the time).
->>
->> One benefit of schedutil specifically is the reliance on the
->> scheduler's utilization signals, which have evolved a lot since it's
->> original introduction. Some cases that benefitted from iowait boosting
->> in the past can now be covered by e.g. util_est.
-> 
-> And it would be good to give some examples of this.
-> 
-> IMV you have a clean-cut argument in the EAS and UCLAMP_MAX cases, but
-> apart from that it is all a bit hand-wavy.
-
-Thanks Rafael, you brought up some good points!
-
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
