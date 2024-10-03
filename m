@@ -1,158 +1,127 @@
-Return-Path: <linux-pm+bounces-15099-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15100-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1587D98EDA8
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 13:14:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA6E298EDAE
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 13:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A4BE2828B2
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 11:14:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5507A1F22D9F
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 11:14:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA67A153836;
-	Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8FB153828;
+	Thu,  3 Oct 2024 11:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jo5b2EyM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dNjMm1OM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8964414431B;
-	Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D595213C3C2;
+	Thu,  3 Oct 2024 11:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727954034; cv=none; b=RnTvpHk6QXcQiB6o8HEEdYp8nOUGzI3YA7ilzFIfB6XHeHjGlH52mUXXYc0xr8HH5ohBBM32wXftJYcoLJTqkYSOwB29SnKVn7+mJYhWBsY2ufYWKwDtfu0f3b3R081vXJt7iviSeHGBGmYRzzXSmWqwRzhAhvqSDH6qZyOxJK0=
+	t=1727954095; cv=none; b=qnjfCZCXhRgyg6Fr39bvnaUFlIG0Uv68uQ6ehvLrHK786QV8J57JIBStu1Sv37zioJY02gSb2mUh8+RNttMvpY2cZ1o2hDnc+o0UXPDywihuf17EGpmZM6YPq6u7BZHst2k7LBHE/7X3hQqDPiawv2eATriJnPBs7h7JOf0KEDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727954034; c=relaxed/simple;
-	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kPHSvaGKTWN8C0Nx37QsvMHDiJT6HLS64DtcWGxae2zf39VWSoA27me9CYpyUqVRwF4+8WeJMGg4N5tNvpBE+56XS0M66lBlX14WFwtEEYSRYswezlEZzDTamgqwcsSlUDI9I83gZnikxGS0BA6+RFEgARFxKs9gz5EtnPICyPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jo5b2EyM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02029C4CED4;
-	Thu,  3 Oct 2024 11:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727954034;
-	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Jo5b2EyMOS3uk9JDlHSQeU5R1aJyjAs0+fTPWkZCep6Wfe3FtEcKX92qY2mtaY2EK
-	 Ci8TPn6Ee42qRsmfrcj1l+x8zMsi6bvfBaExW2NU/fSlbTuDXDF1+X8cFBydkm8Y27
-	 lb+XzyBozg7zRqcDdBoznF0nnozWrNcR9tzS6b9UomNb4g91qxhdupQuTqUK4zEuA4
-	 z7g+nzwCR3g6dyxU7168Y4P6qlP/X9DMrNre/R3uCNKxAg+BkBWF+gHp9jrQW3cTIh
-	 xrWMcRuCjU0dRKRqqjEvI0IIIfAguu/05IPATBt+DaAJfq3OXiy9Jf7zCzIbXi+uOl
-	 853BOc6UvNv1A==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53995380bb3so1051099e87.1;
-        Thu, 03 Oct 2024 04:13:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUMZ83aPs6Y9Mc8/76A84iJla1AJCX9Et2K13+KujubLe2sgHbvnKgZl4NuiD05HVtyE8WoJyooTELHDKJc@vger.kernel.org, AJvYcCUol65TBElcH6VRPdOKTevF5/Lg0Bgvr04QoHuzeJ3vv0tXAom1N8dA6JhOhqxEsnpwFieSoEgOiaao@vger.kernel.org, AJvYcCV2cpTVxzMwed+BQGXixWf2l6Z1qOjOhdS+ZPRILONG3juJVUAa0l4Zf0jyUO+AN/tX3AubuqvbL+Ht2w==@vger.kernel.org, AJvYcCV7SHMXRybZNmiZtR6oeW3XlhWJ1sPvIu0OCAp6W/yr/M2Cr8GVxev0QSXYb8S9gB2bsNWEFlveQx67vqKTdRY1vw==@vger.kernel.org, AJvYcCVJycArIR3VPg10j8rte3NuVKrN4Dmbp658AY1jhRwXGJa6NxFlF4vgRLHCCLJxjzLUtOflFlJdVswb13Kq@vger.kernel.org, AJvYcCVKCH+27bj3KprvYndBy1OLWcz2gzFauQzBYu9karbRPFXS4JY+qZ4NI2zETiEcLm3JbJYurHJFJ5km@vger.kernel.org, AJvYcCVcx5OIiA5GHF2O32Qr+FTzWaMyGUhNjGDurLGNpEP0zFwdIVFyFcGZXSv+fycttd4RGuQJgTfOEOqmVPTc@vger.kernel.org, AJvYcCVvZrcqj31MD4y8rXNg+pz6HKBUIvYSj4JzJcBz5q6QkdO4qgoD/0iJh9oAg1i2BZougKDDXCgcp0ZWV9zi33E=@vger.kernel.org, AJvYcCWmGLvSpl1papB8MvSTPgS3BfainKQddGsUq0U3iaLkR/wjmAjqJFIMpmXpdpYTYMxfqmwnOXYCzns=@vger.kernel.org, AJvYcCXEL4X4VlMI
- XN6mutoyZsnTaiRR8MYaOjH0ixRxr5SsiEgXOfAD6OYUkpqwMxpR9paJcRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYusTtmvHCpx+fbQj35DhxxIcDdBxZMUegSYe4vdI008LT62L9
-	POZO1ex2ELV2iUqAp2JCPWCr6iQo88kkk52Cdhf6Ls8/9HA/oIsCmBfOcw6nZCIp93wnszGav6m
-	/VNPGY8sBWRRCLFdtEFGdi7TAss8=
-X-Google-Smtp-Source: AGHT+IH0sWh3HiA/Y/FG77TM2NrCKaNhbA4eJ/qwHE/WqxSdpNeBFdDDl6WpEY+OacY7yD9godh5OoCJmImz57qPZ+Q=
-X-Received: by 2002:a05:6512:1241:b0:536:9ef0:d829 with SMTP id
- 2adb3069b0e04-539a07a1db9mr3832198e87.44.1727954032228; Thu, 03 Oct 2024
- 04:13:52 -0700 (PDT)
+	s=arc-20240116; t=1727954095; c=relaxed/simple;
+	bh=+kSGnXkoPKavIBGRDvSzfj5Pdagy64X694bm9u+MYDE=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=ZIphHMti1J6+VGPCUuMf3DqDB2ayg3KC/iky4bYPfhTWAcwdfsdD1kepvAZB860our5SvMGAPcHOietpTCiGXxwdvOmMNUDAtPgWrBnwdd64ZvcBFGDn6c27OLsgGCBOhO1D+62cb85+M3OwasUW4AmNTZgafy+mu4WfEcg2nSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dNjMm1OM; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727954094; x=1759490094;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=+kSGnXkoPKavIBGRDvSzfj5Pdagy64X694bm9u+MYDE=;
+  b=dNjMm1OMVQrmEXvHb4rt6Dhn9MIddiVypSiM0Zcbrw5ZXCl1qCdEBIR3
+   GwGTCtMGNsiyLBw6kavn5i0kxUVEE1YYvlKdifFbav7I1uVDpDJVmYh2z
+   75z4mPaPj+8UhJ4oujZRqH7EzmWx/PQrdpSVv5309LpnoDWyN1Jp0I5Wi
+   SYdm7nWAIBlCYJ7lYcWaA3dOGaBZdcnd8rr4iKii/Kt6RFMY7sWyDasyu
+   s49SPiQlFgfELYMibqDD81ZYF97Qsa/o8xK2YM9hroIjuiV5Q0lm6rmrk
+   0Un5brUdGeC+rmaPahRwEnwOYIPExDcnlZ/3Jz1/CpOYutGIciAwpMrkG
+   A==;
+X-CSE-ConnectionGUID: zniEK7WpRfGs7zDuIfL9nw==
+X-CSE-MsgGUID: N0cUdwsbQR6lsTlPKGrh3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="49666184"
+X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
+   d="scan'208";a="49666184"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 04:14:54 -0700
+X-CSE-ConnectionGUID: CqugsmqbTOiLE5nN7WrH0Q==
+X-CSE-MsgGUID: /d/Pn8ncQRmMxWn5ljdUhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
+   d="scan'208";a="78734014"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.198])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 04:14:51 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 3 Oct 2024 14:14:47 +0300 (EEST)
+To: "David E. Box" <david.e.box@linux.intel.com>
+cc: Hans de Goede <hdegoede@redhat.com>, 
+    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, david.e.box@intel.com, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-pm@vger.kernel.org, rjw@rjwysocki.net
+Subject: Re: [PATCH] platform/x86/intel/pmc: Disable C1 auto-demotion during
+ suspend
+In-Reply-To: <f621da34-32a7-c56e-2c99-54a5f03c7e6f@linux.intel.com>
+Message-ID: <856e2489-d92a-4203-feae-b4f41af8ed04@linux.intel.com>
+References: <20241001225901.135564-1-david.e.box@linux.intel.com> <f621da34-32a7-c56e-2c99-54a5f03c7e6f@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
- <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com> <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
-In-Reply-To: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 3 Oct 2024 13:13:40 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
-Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
-Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="8323328-992593729-1727954088=:970"
 
-On Wed, 2 Oct 2024 at 22:02, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, 2 Oct 2024 at 08:31, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > I guess you are referring to the use of a GOT? That is a valid
-> > concern, but it does not apply here. With hidden visibility and
-> > compiler command line options like -mdirect-access-extern, all emitted
-> > symbol references are direct.
->
-> I absolutely hate GOT entries. We definitely shouldn't ever do
-> anything that causes them on x86-64.
->
-> I'd much rather just do boot-time relocation, and I don't think the
-> "we run code at a different location than we told the linker" is an
-> arghument against it.
->
-> Please, let's make sure we never have any of the global offset table horror.
->
-> Yes, yes, you can't avoid them on other architectures.
->
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-GCC/binutils never needs them. GCC 13 and older will emit some
-horrible indirect fentry hook calls via the GOT, but those are NOPed
-out by objtool anyway, so that is easily fixable.
+--8323328-992593729-1727954088=:970
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Clang/LLD is slightly trickier, because Clang emits relaxable GOTPCREL
-relocations, but LLD doesn't update the relocations emitted via
---emit-relocs, so the relocs tool gets confused. This is one of the
-reasons I had for proposing to simply switch to PIE linking, and let
-the linker deal with all of that. Note that Clang may emit these even
-when not generating PIC/PIE code at all.
+On Wed, 2 Oct 2024, Ilpo J=E4rvinen wrote:
 
-So this is the reason I wanted to add support for GOTPCREL relocations
-in the relocs tool - it is really quite trivial to do, and makes our
-jobs slightly easier when dealing with these compiler quirks. The
-alternative would be to teach objtool how to relax 'movq
-foo@GOTPCREL(%rip)' into 'leaq foo(%rip)' - these are GOTPCREL
-relaxations described in the x86_64 psABI for ELF, which is why
-compilers are assuming more and more that emitting these is fine even
-without -fpic, given that the linker is supposed to elide them if
-possible.
+> On Tue, 1 Oct 2024, David E. Box wrote:
+>=20
+> > On some platforms, aggressive C1 auto-demotion may lead to failure to e=
+nter
+> > the deepest C-state during suspend-to-idle, causing high power consumpt=
+ion.
+> > To prevent this, disable C1 auto-demotion during suspend and re-enable =
+on
+> > resume.
+> >=20
+> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > ---
 
-Note that there are 1 or 2 cases in the asm code where it is actually
-quite useful to refer to the address of foo as 'foo@GOTPCREL(%rip)' in
-instructions that take memory operands, but those individual cases are
-easily converted to something else if even having a GOT with just 2
-entries is a dealbreaker for you.
+> > @@ -220,6 +237,15 @@ int cnl_resume(struct pmc_dev *pmcdev)
+> >  {
+> >  =09pmc_core_send_ltr_ignore(pmcdev, 3, 0);
+> > =20
+> > +=09if (!pm_suspend_via_firmware()) {
+> > +=09=09int cpunum;
+> > +
+> > +=09=09for_each_online_cpu(cpunum) {
+> > +=09=09=09pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum, per_cpu(p=
+kg_cst_config, cpunum));
+> > +=09=09=09wrmsrl_on_cpu(cpunum, MSR_PKG_CST_CONFIG_CONTROL, per_cpu(pkg=
+_cst_config, cpunum));
+>=20
+> Is the set of onlined CPUs iterated by the suspend and resume handlers=20
+> guaranteed to be the same?
 
-> That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
-> feel are a complete no-brainer and should be done regardless of any
-> other code generation issues.
->
+I asked about this from more knowledgeable people than me and got a=20
+response that during suspend/resume userspace cannot offline any CPUs so=20
+it should be guaranteed to remain the same for resume.
 
-Yes, this is the primary reason I ended up looking into this in the
-first place. Earlier this year, we ended up having to introduce
-RIP_REL_REF() to emit those RIP-relative references explicitly, in
-order to prevent the C code that is called via the early 1:1 mapping
-from exploding. The amount of C code called in that manner has been
-growing steadily over time with the introduction of 5-level paging and
-SEV-SNP and TDX support, which need to play all kinds of tricks before
-the normal kernel mappings are created.
+--=20
+ i.
 
-Compiling with -fpie and linking with --pie -z text produces an
-executable that is guaranteed to have only RIP-relative references in
-the .text segment, removing the need for RIP_REL_REF entirely (it
-already does nothing when __pic__ is #define'd).
+--8323328-992593729-1727954088=:970--
 
