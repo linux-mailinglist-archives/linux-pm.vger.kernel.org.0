@@ -1,55 +1,97 @@
-Return-Path: <linux-pm+bounces-15086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADB098E9C8
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 08:49:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F1698EA31
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 09:14:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9D9E1F24307
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 06:49:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB27F1F2100F
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 07:14:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4FEA53363;
-	Thu,  3 Oct 2024 06:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762B780BFC;
+	Thu,  3 Oct 2024 07:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Eocqt0n3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VnRZwKqg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B9C182BD;
-	Thu,  3 Oct 2024 06:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F157484A22
+	for <linux-pm@vger.kernel.org>; Thu,  3 Oct 2024 07:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727938191; cv=none; b=ap4t/gut6KpQg+TnhmRr0SkZvOOJQzNAlRKftvBvgA7eRnAqkQUvoq3P1Gbp/PUEcoJe7Wu9eSGj+aVmy+zr8jnFJrvFmHe+3hdlQHz3k+oe0099UfW3p/NqY+Gpa7juBpew43n61BAUANQeq3Z/cu7dKsfNmGAlFsDm/4SalpM=
+	t=1727939656; cv=none; b=UYTUSuCZMhusY5dESIWS0lOvJpx3o4HZzvm62Fy6gdfU8rvyotkuPxnDPM7CbSkQX1BvjGI9ycbyojrp/PQFyIwIuVvIGLeS75vN8oL61TVidRVvNBi4d5dBqVklV6nWUNWklfPzK7tQ0w13iRmvU78JjDEM0m4TqSNYqWfWSBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727938191; c=relaxed/simple;
-	bh=id394XafWKs5+IGxLhe/wjMGXBRD50Tn5M66uNYwUp0=;
+	s=arc-20240116; t=1727939656; c=relaxed/simple;
+	bh=rnCYbVwISgvzQVboy21nf7Z1AYb6vbTzmAfkgBhkYAw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNxQDP0r/8gkMTRr2CynYn0fgT/MBhNVdTcfI9eKiuhaO83Ov3GzAwFwF91G/nCm50rX5OAvH6g4LNTQs1/8T8GHyw0ifhzaqMAFWZo5TfJoiVIgAV8XmjaIJbvZjERLE470ZE4qaBSIW85aW3gorN4ZNMvf2mf/OXMQXvgaU8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Eocqt0n3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BF3C4CEC7;
-	Thu,  3 Oct 2024 06:49:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1727938191;
-	bh=id394XafWKs5+IGxLhe/wjMGXBRD50Tn5M66uNYwUp0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Eocqt0n3uAHiEzDzQ9YPQfF+WxHzge1hqa9d1x/xL89W92pAUCOh0KdEEMf8TUnTh
-	 vqaEWVI68n3GI9NCTPA7/UbNPlMk82NBxrmgbuUEe4wbjJHkEnRNXVxsWdLuB1Vgyw
-	 GOD/VGRXLuGd8eiDSdZPUdUVQptBYuSisC7ivb3E=
-Date: Thu, 3 Oct 2024 08:49:48 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>, Vishal Mahaveer <vishalm@ti.com>,
-	Kevin Hilman <khilman@baylibre.com>, Dhruva Gole <d-gole@ti.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PM: QoS: Export dev_pm_qos_read_value
-Message-ID: <2024100336-left-shadily-3321@gregkh>
-References: <20241002194446.269775-1-msp@baylibre.com>
- <2024100333-maternity-equity-c7fa@gregkh>
- <tqsrnsvciupbovlalqsnrp5whst2mrpqntjblvymcunpesvake@o3gxa7vik7he>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JPiAf7mnCOF199RtYfsVomjiK6V/AcetEbeCm51kJdf+awkpyfNAPTCX95ZkoVEnTaMJGKap2+6Lvj+2GCAhvGiLXvzvQ84pzBCqKkYFtXWH6LQ/KRyRa4kkNhNDtlDTeUXRD16E5Wdsfnlq72e6S/rLYazi09cmucbGBLqyCho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VnRZwKqg; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20b8be13cb1so5865405ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 03 Oct 2024 00:14:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727939654; x=1728544454; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0/Uq9tkcCY4Z9Y0M4J4n4ZTY4ZNPUaY8aYtXqjP/jKI=;
+        b=VnRZwKqg+PIHfAql4DCT6/P7/taq98tr9YuhYDJey0U+JUUnz6nDkW/D/d3ZNSVCm5
+         GnXwjYNooZSXeUf0lPa/kOcfT2uSYrvUG8O1AoV0tRlWtKl8LpUgx4q1EBQmCq3kxvt/
+         sG4nuTxoIOrbtfrUNFbn20+6ePUTGCEweeoZFK0U9c98vXbHd9TjUAxgfgtFxoU2Xj+a
+         RNZm8/nIlSMpBhBaY8MTwhzgSuhE7DSJ6zfG7c09WksyN9RCWz8o9DfDa84YYWtcNCD3
+         cGvzlqkXYkBEQxxWCnbxP3qdxbdBF+TPLWmPm1xx6weQR0xr28aClfImbZA39ixfsHZp
+         F0Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727939654; x=1728544454;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/Uq9tkcCY4Z9Y0M4J4n4ZTY4ZNPUaY8aYtXqjP/jKI=;
+        b=QSYSttp+e4F7eXzpN9Stxft0gKn/zY2BkrcGn6BOLBR111bRwm4qdhO3/I/NaobMS6
+         KeohFUK2D5D5Qb5crO4QfDowCbEdqfScJePathJ2XO/novGSW28eertPWG/CWC4u8JNx
+         kBZWtHwDdgoDb0DTucScXqlgxxl8mr3GFvAqAed7jNmMsXLTv0OhStuCFpZZq4lnP0GH
+         424VEg/cfId2DCw7mrylTq4GQXcXv4yjKZ6+zjUITrxfQxR/qFEyE0s/5LuXQYONg2zV
+         98xvnc3terNT7da9g4BLqxGxbHhWCAB4QIdVvb34jxhzj0SPcEmOxva61wxElZKzuSLX
+         0aFg==
+X-Forwarded-Encrypted: i=1; AJvYcCURky9R5+NQuT0Hiwatl1z39jGxwqKIGPWgr65AucnkB9kSZg4YpsdHZm+dbdMjF2HziYLn5jKi/Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyloYGqw8+G0tJbQI/kWuLtq0ORrlVtAVvko9kEgt2f62qk8mmA
+	ZjIQosO6PE1oc/3an51iMeqz4rO4RdTzrFA3CRgC8vG+PnX47jatekIQAQn2OEc=
+X-Google-Smtp-Source: AGHT+IH5ip0y/7dbLpJy/zrNgjlhVxLD8xYzpS7Yi6sWbO5a8a6piAQZB8S2CXnGMq1Q1WPiBAhy/w==
+X-Received: by 2002:a17:902:d491:b0:20b:4875:2c51 with SMTP id d9443c01a7336-20bc5a01e73mr79268295ad.27.1727939654336;
+        Thu, 03 Oct 2024 00:14:14 -0700 (PDT)
+Received: from localhost ([122.172.83.237])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e18f770b30sm2919794a91.15.2024.10.03.00.14.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2024 00:14:13 -0700 (PDT)
+Date: Thu, 3 Oct 2024 12:44:11 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Vedang Nagar <quic_vnagar@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <quic_kdybcio@quicinc.com>,
+	Nikunj Kela <nkela@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Ilia Lin <ilia.lin@kernel.org>,
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 03/11] OPP: Rework _set_required_devs() to manage a
+ single device per call
+Message-ID: <20241003071411.vvhqb6bxxnrbkaw7@vireshk-i7>
+References: <20241002122232.194245-1-ulf.hansson@linaro.org>
+ <20241002122232.194245-4-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,31 +100,25 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tqsrnsvciupbovlalqsnrp5whst2mrpqntjblvymcunpesvake@o3gxa7vik7he>
+In-Reply-To: <20241002122232.194245-4-ulf.hansson@linaro.org>
 
-On Thu, Oct 03, 2024 at 08:28:12AM +0200, Markus Schneider-Pargmann wrote:
-> On Thu, Oct 03, 2024 at 08:02:04AM GMT, Greg Kroah-Hartman wrote:
-> > On Wed, Oct 02, 2024 at 09:44:46PM +0200, Markus Schneider-Pargmann wrote:
-> > > Export the function dev_pm_qos_read_value(). Most other functions
-> > > mentioned in Documentation/power/pm_qos_interface.rst are already
-> > > exported, so export this one as well.
-> > > 
-> > > This function will be used to read the resume latency in a driver that
-> > > can also be compiled as a module.
-> > 
-> > We don't add exports for no in-kernel users, sorry.  Send this as part
-> > of a series that requires it.
-> 
-> Sorry if this was unclear, it is for an in-kernel driver (ti_sci.c) that
-> can be built as a module. When built as a module it can't use this
-> function if it is not exported.
+On 02-10-24, 14:22, Ulf Hansson wrote:
+>  /**
+>   * struct opp_config_data - data for set config operations
+>   * @opp_table: OPP table
+>   * @flags: OPP config flags
+> + * @index: The position in the array of required_devs
+>   *
+>   * This structure stores the OPP config information for each OPP table
+>   * configuration by the callers.
+> @@ -48,6 +49,7 @@ extern struct list_head opp_tables;
+>  struct opp_config_data {
+>  	struct opp_table *opp_table;
+>  	unsigned int flags;
+> +	unsigned int index;
 
-So the current kernel build is broken?  If so, please add a "Fixes:" tag
-and say this in the changelog.
+Maybe name this required_dev_index as well ?
 
-If not, again, just make it part of the series where it is needed.
-
-thanks,
-
-greg k-h
+-- 
+viresh
 
