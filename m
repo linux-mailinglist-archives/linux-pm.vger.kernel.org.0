@@ -1,118 +1,97 @@
-Return-Path: <linux-pm+bounces-15152-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15153-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 007129904D8
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 15:52:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDE079905E4
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 16:22:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A71861F21523
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 13:52:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5FD05B2377B
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 14:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6212212EEB;
-	Fri,  4 Oct 2024 13:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6D2217300;
+	Fri,  4 Oct 2024 14:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjiPKyH5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BC8C156678;
-	Fri,  4 Oct 2024 13:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34709215F5D
+	for <linux-pm@vger.kernel.org>; Fri,  4 Oct 2024 14:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728049928; cv=none; b=O8X+2q3WLyjw/IBg9MVD3sjALotwA9TEvOTq4W3Qm08Os+W/C7NVDE3HR/ZZ25dKPgdnDkolyMXVOrpvLlaEDs4PTNJ7e57CvJky+t1QyUR+PFicUw7rflZyk7iOSWpmtInPXGCbjWnu+Yt9tYxL6Uo5qKtGF9ETM31GQUQeci0=
+	t=1728051715; cv=none; b=P0wpsiJdztczj6exVOjS5mMI/sU73Qhhh6F6oed4Ix67TedD18iDPYvJWRLZUKB5WlhG3jFQZXGfiqEd3Jz6iWb0k9zqaCj8bnbbxYXXdhtdDgrWYExjLJlvl+Itfe7O7jrEKXnhwKMFlxT7e7sBJ9H6pFxwg89DORjCcSxSkEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728049928; c=relaxed/simple;
-	bh=z9rJf3VSM5rW82ltr4/yb3bcP3enExc8iYKWhR+CLec=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YLWNSgBemk3Uli9IFjzmzi4LWn9VGfOpplzEiKjidYcE56nPR92bo3SS0nSAlD4wZ/H8juAS/+w5792cJAvdnyg0zQJ9E7BetDR+t/CyD7FRJOZXTrA7I1m5oJkLjfZgLOycIWMvvb4bw8e5aSfLCMf38e5mzblRHq2R/P16SaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F2FA339;
-	Fri,  4 Oct 2024 06:52:35 -0700 (PDT)
-Received: from [10.57.77.142] (unknown [10.57.77.142])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 394B73F58B;
-	Fri,  4 Oct 2024 06:52:04 -0700 (PDT)
-Message-ID: <a42ebcff-10f8-4888-a3d8-fd2705da41b3@arm.com>
-Date: Fri, 4 Oct 2024 14:53:03 +0100
+	s=arc-20240116; t=1728051715; c=relaxed/simple;
+	bh=aGtuSNyHXHa3AiDA1LvfxTDp7x3zICWhu5Tg6wwe45k=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Uxd8PTUa5pF6Cgmlm5x+2F1AX4sZIKNXva30Uiqdf33VKqNCeuuxrKTX35hjYQeMWPd3z4SP5byzYNf8nn6T5H7PsYrXACCDt4OWYEkyZOfqmYZxbz4++0NiYjddpdASbg3m28EYM7EQ2AObDeo74UY2c8Yo1toLjuHijSnasA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjiPKyH5; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-287b8443affso641412fac.1
+        for <linux-pm@vger.kernel.org>; Fri, 04 Oct 2024 07:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728051713; x=1728656513; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aGtuSNyHXHa3AiDA1LvfxTDp7x3zICWhu5Tg6wwe45k=;
+        b=jjiPKyH5M1soAUSuviJBZyz/KkI4XWjbpfCJe0zmGAk3EnS8K/OEp2+5CQhH0cpuae
+         BA3oYPMZ4R8viE8ZPHPV0E8f0q8nm4KfgyvfcERwQ2pQtJXutdICu5KFBJTChzGheq/w
+         g5U1t6t7R+8yr0JOZdlfQYjq2ACcAjRSwKujBPEKVoATJh5fBwrT2wcFD4XZtf0gnppB
+         FUwATGFoXa1AFJG3opkPZ4MPb4zfSyI9UUCT3vDYyGY8UAkYYfiWYrid1cJ6IAfDOIzi
+         KQDHfVM0CHYX83Ccz+JAY5pyj8S07MLX+Bnhh3NkU6MqG/OJpaIJFvj9Lk/kS5kS2+4a
+         ZmrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728051713; x=1728656513;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aGtuSNyHXHa3AiDA1LvfxTDp7x3zICWhu5Tg6wwe45k=;
+        b=luCpbqDxFbeMpt28ecoaj92i/DlsH+bCItZMBvtMbo9nFftvq6vsT9QOKaWs3IsbAm
+         E6DwnRA7Jx3uvZVwKZxLLT7IAGFds1IlEpQmw2slKVoIKjmA3MU2PsL9Vj7PVNEPfb5l
+         pxNdIEowZgHDrAspV87Jo8ajJHWEPy6Tdvl2+BEBqU56KgoPPV2wWTbl3XSZTZKl+Pu/
+         Cwq6Z420BL8Yjr7CAAYtMIABUqWz0BPReC99g/lW3t6zAKqr16ltcV2OCqZbO+Qe8LHT
+         WSmoVYbYps2eTTL69mNBkL5SYC8bziDkBBT9gS6UhXaCJuUm1E0NCfptWEPlSzZS1FBK
+         Nodg==
+X-Gm-Message-State: AOJu0YztRRb465f+DUWJrfdzBPkbr3RTFq5y3QwkLGE/TQCZmnhDfPjb
+	CkYt1SEae3mpl4YEoogIy7M/ZCin+p6Jm0SyFaNKUMxuTWOZcuWuIooZW5SA1FMXrrGPsHo40pt
+	fUvka0z9ety85WUJDd7OnM8VWVggVEg==
+X-Google-Smtp-Source: AGHT+IGuULZKBhBCRmE3cTBM/ZpqgWYEZbWu25RKJBtWyjkIr0AzROtEzTXOghmSVDyZdOncrRlFxMLsjFQwwUih7qs=
+X-Received: by 2002:a05:6870:ac29:b0:278:986:1e44 with SMTP id
+ 586e51a60fabf-287c1da9eafmr1909115fac.18.1728051712912; Fri, 04 Oct 2024
+ 07:21:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] thermal: core: Reference count the zone in
- thermal_zone_get_by_id()
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <12549318.O9o76ZdvQC@rjwysocki.net>
- <6112242.lOV4Wx5bFT@rjwysocki.net>
- <b2d949a2-2586-44ec-b0e7-0879fd3ac7cf@arm.com>
- <CAJZ5v0g494bUwLbFDF_WHwLSMbu1iTxiynNwDqKktv3-4049Sw@mail.gmail.com>
- <5222419a-2664-4bb5-b1d4-77a46677bb4d@arm.com>
- <CAJZ5v0jkbQG4A+saKDfCz6g2-A=rZ2y34k2v9jA9uhp9A17ZBw@mail.gmail.com>
- <CAJZ5v0iSb=RGiuXrBPq6V0ZObhPedznuv7CGgAyO1MMshCQrMg@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0iSb=RGiuXrBPq6V0ZObhPedznuv7CGgAyO1MMshCQrMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Darrion Ramos <darrionramos@gmail.com>
+Date: Fri, 4 Oct 2024 10:21:41 -0400
+Message-ID: <CAE=33HW51jO-9g7nLKLros9=up5ziYsYJyoUKyW+0=vF-76QNQ@mail.gmail.com>
+Subject: Question on Obtaining Suspend Code Coverage After Crashes
+To: linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hello, my group is conducting some research into the kernel power
+management systems and related driver interactions. We are interested
+in reproducing some of the PM bugs within the drivers such as how
+interrupt handlers interfere with suspend/sleep events.
 
+To accomplish this, we would like to identify what PM and USB/HID
+driver code was last executed if the machine cannot resume from a
+suspend to ram. This way we would be able to capture some information
+about the context of execution.
 
-On 10/4/24 14:48, Rafael J. Wysocki wrote:
-> On Fri, Oct 4, 2024 at 3:43 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> On Fri, Oct 4, 2024 at 3:37 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>>
->>>
->>> On 10/4/24 14:25, Rafael J. Wysocki wrote:
->>>> Hi Łukasz,
->>>>
->>>> On Fri, Oct 4, 2024 at 10:01 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>
->>>>> Hi Rafael,
->>>>>
->>>>> On 10/3/24 13:25, Rafael J. Wysocki wrote:
->>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>>>
+I am assuming that during the development of the suspend features
+there was some way to recover a trace of the code after a failure. Is
+there any such tool that we could leverage? Or were there very
+specific development setups for this?
 
-[snip]
-
->>>>>>
->>>>>
->>>>> I wasn't aware of that helpers in cleanup.h.
->>>>>
->>>>> Could you help me to understand when this this
->>>>> 'if (_T) put_device((&_T->device)' will be called?
->>>>
->>>> When the pointer variable initialized via the CLASS() macro goes out
->>>> of scope (that is, before freeing the memory occupied by the pointer
->>>> itself).
->>>
->>>
->>> OK, so do we still need the old code in
->>> thermal_zone_device_unregister(), which calls
->>> put_device(&tz->device) ?
->>
->> Yes, we do.
->>
->>> Maybe that code can go away?
->>
->> That particular one drops the reference acquired by device_register()
->> and I don't see an alternative clean way to drop it.
-> 
-> The problem there is that local variable tz goes out of scope at the
-> end of the function (at least formally) and put_device(&tz->device)
-> needs to be called before the wait_for_completion(&tz->removal) which
-> definitely needs tz to be still around.
-
-OK, I see now. That makes sense. With that feel free to add:
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+I have looked through the provided power management documentation but
+have not found any suitable tool. Additionally, note that we would
+like to use a VM to preserve kernel integrity between tests. We
+appreciate your time and any tools or feedback you can provide,
+thanks.
 
