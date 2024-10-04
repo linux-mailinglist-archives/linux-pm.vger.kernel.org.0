@@ -1,79 +1,118 @@
-Return-Path: <linux-pm+bounces-15160-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15161-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E69C990F7E
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 22:00:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CDCB990FE5
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 22:12:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4815428280C
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 20:00:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CE4D1C2260C
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 20:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 475081F9408;
-	Fri,  4 Oct 2024 19:04:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0636F1E04BF;
+	Fri,  4 Oct 2024 19:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kotMDb/0"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="vBL47Fg+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9941F9401;
-	Fri,  4 Oct 2024 19:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE501E04AF;
+	Fri,  4 Oct 2024 19:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728068659; cv=none; b=QPrhunq5anJDOBaGXD1TthcXqpcqo7I+6Tr3NGp9YVQlK4CO+h83/MdpqJ6p03+5oO/6rj8sU/C8HU1vmqnXKoscXfxxxoznAoAytWfxsjk7geBFymVAid0vauZKdrm3i8xC1OWDgo/pd7fRTYmDrK9iwOOWgMF3b2WVStZd9tM=
+	t=1728070992; cv=none; b=SPIlPNLSar8U2B11/CliNl10yd1Bjl6gWqBlDdoC9UURbZkYaSCantj9YcW9K5M26rlhw8c+HQqlQRdbJpPF8+MDTer4A4jq57aSRl15HmVI+UQF/upCqJrE7mgd2ECgV53alD6WXoRLKcIUyKP1CSlbFvIEJXWrjot4ffzmty8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728068659; c=relaxed/simple;
-	bh=dW6LClOokcp76Blkok3lLgQhE08zfgLdNRZRsKjHXdE=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=fGs04k9dBGVdh+PL5V9y6UYvzAZJ8jvTjXFS5k/vPOqEXXUtUBoYLhEzCCJJO3Ggcm/titky9VNUco9nVjYNZZ6qn59OU6vZozsIYI4/ioJpIXF9Giry+UFVKTH64gVAjnd9m+LnJlV/xoqRsHgIegKTxUQNs+xKc/26oAZkMQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kotMDb/0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57085C4CECD;
-	Fri,  4 Oct 2024 19:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728068658;
-	bh=dW6LClOokcp76Blkok3lLgQhE08zfgLdNRZRsKjHXdE=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=kotMDb/0T061T1sh8A7W+c8gOxKPH8A1v+zHnkGpF7nNZoJj7HVIi6HPFIY4HcnWP
-	 pIKgkSmqwJMmTrNAsx2RwwkixJ7pBGrgIsnFpPlI7UKrW+Ngjli1GJIASad6Ph1PJr
-	 7Lm2WjbwXrkLZ2rKYnlKhzfyVSYykxqVnqAL9cIMwN3N3XcXcACJIf93JatpGFwz0n
-	 pIdZrmfk24NJ+qCzaT/9mdRDaDMz5mE+4bRJkpIaAMsUYMxTQoE3S0IZzrKpa8LBXy
-	 c6GnKXX3rEZjcZUMLak5XGdxzd6ry9jhE2VjYJP/KozGrjiG66rZnlg/irqEzY9s24
-	 +LL4vyS+atmKw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33A6939F76FF;
-	Fri,  4 Oct 2024 19:04:23 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI updates for v6.12-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0izSML-nVycdK69DwRuqdixnvriqkMm2ZM1eYRiqddYMQ@mail.gmail.com>
-References: <CAJZ5v0izSML-nVycdK69DwRuqdixnvriqkMm2ZM1eYRiqddYMQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0izSML-nVycdK69DwRuqdixnvriqkMm2ZM1eYRiqddYMQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.12-rc2
-X-PR-Tracked-Commit-Id: 3be5c171025baece9a0793170eb3b47ad08bf6c9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e1043b6765d6ca310a10be342e25d5451d58ee53
-Message-Id: <172806866163.2706447.11424712123365524863.pr-tracker-bot@kernel.org>
-Date: Fri, 04 Oct 2024 19:04:21 +0000
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+	s=arc-20240116; t=1728070992; c=relaxed/simple;
+	bh=cy+WwnoBRC6rdTFM1PR8NdUhf8lZXn2Da1cPNppT9P8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RMKmZRgBTRzY5tEK71kdF+xXom965oyoM8abV4/+2/3Nlh3sxbJJVFMBjxc2nWt3VbNlwo915C6Cm7INEnwn+ZnmVMHkMoOwsr0GPHjVfajUF3YCaXVQ8F2d0X+cYiFPgEpmKCu63vLC2v0ylqqKVKU0bkKrx5rqtPgn6k7EtRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=vBL47Fg+; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id cef8527249cd07f2; Fri, 4 Oct 2024 21:43:09 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CC1DC6A9505;
+	Fri,  4 Oct 2024 21:43:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1728070988;
+	bh=cy+WwnoBRC6rdTFM1PR8NdUhf8lZXn2Da1cPNppT9P8=;
+	h=From:Subject:Date;
+	b=vBL47Fg+IAWLfp/gXX1j57XJRUlzqO5q2WuYNjwI1Ywzk/xLbQ7pOuR+Cw1JRpk/w
+	 qmEYEDR8cL30IPUa7X3PmtvDZrGhlLlP8RpvGGYmHz7PoF1kyU5AA8B/Bg4VnqbxeQ
+	 3TFeWRqHjyr2mNcsO6GcEaOWXfvzQzEijf0H0TnoUYN/xUARe2gtBe5lJl9eHBwlCp
+	 Ts/EVkrSsTMczHARfYmHSJ3lMBfDtzHIHhPxSSehC7Vda5ciRSLeM25xiJ4ZWeSYx4
+	 fvmXRmryXDvQGPv6fPNJ3UT7MJ6rNq+RPTRHvkaVZnhaLcFOrdIxOD5niSAAx7qcrh
+	 9QnUg/vCYqGfw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 00/12] thermal: core: Fixes and cleanups,
+ mostly related to thermal zone init and exit
+Date: Fri, 04 Oct 2024 21:01:34 +0200
+Message-ID: <2215082.irdbgypaU6@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvfedgudegtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhg
+X-DCC--Metrics: v370.home.net.pl 0; Body=6 Fuz1=6 Fuz2=6
 
-The pull request you sent on Fri, 4 Oct 2024 19:40:07 +0200:
+Hi Everyone,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.12-rc2
+After posting the two series of thermal core patches for 6.13:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e1043b6765d6ca310a10be342e25d5451d58ee53
+https://lore.kernel.org/linux-pm/4920970.GXAFRqVoOG@rjwysocki.net/
 
-Thank you!
+and
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://lore.kernel.org/linux-pm/6100907.lOV4Wx5bFT@rjwysocki.net/
+
+before the 6.12 merge window, I have decided to reorder the changes included in
+these series, so that fixes and more significant cleanups (for example, changing
+they layout of data structures) go first, followed by the changes related to
+using guards for locking, and the optimization involving sorted lists becomes
+the last piece.
+
+This series is the first part and the majority of patches in it come from the
+second (RFC) series mentioned above.  Of course, they needed to be rebased to
+be applied in the new order.  It is on top of 6.12-rc1 with
+
+https://lore.kernel.org/linux-pm/12549318.O9o76ZdvQC@rjwysocki.net/
+
+applied and it will be added to my thermal-core-testing branch.  It is in v2
+to start with because all of the patches in it have already been posted in
+some form.
+
+The first 10 patches fix some potential issues related to thermal zone
+initialization and exit (for example, user space may start to interact with
+a thermal zone during its initialization before it's ready and system suspend
+taking place at a wrong time may skip a new thermal zone so it is not suspended)
+and do some cleanups related to that.  This concludes with the removal of the
+need_update field from struct thermal_zone_device.
+
+The last two patches move lists of thermal instances from thermal zones to
+trip point descriptors and clean up some code on top of that.
+
+Please refer to the individual patch changelogs for details.
+
+Thanks!
+
+
+
 
