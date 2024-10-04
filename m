@@ -1,118 +1,166 @@
-Return-Path: <linux-pm+bounces-15128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15130-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A42598FA57
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 01:17:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE19098FC79
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 05:02:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C04BC2825C1
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2024 23:17:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA16B1C222BB
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 03:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450981CF28D;
-	Thu,  3 Oct 2024 23:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1701D45007;
+	Fri,  4 Oct 2024 03:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="JtxXIg4s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754DA1ABEAB;
-	Thu,  3 Oct 2024 23:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075712B2DA;
+	Fri,  4 Oct 2024 03:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727997453; cv=none; b=lY/t7qbrEKuxEWQ4Jw1fpSY9GfAYAEsqsxpFh2y55dmnoU/6yZGEuIz2vOYvDnR/jRQNUKf4IODPGOgMj0hpBeUBxCewj1y2jOMBmr3wuk2+i3xo2WIQeF0mfexETEdliDs1qs/jjQOMwx4QbvIgoAWzn2vZJYahJY/dpaGc19U=
+	t=1728010931; cv=none; b=TRF2PYQ/I5EgDI1AZ8pPwCj3Fy6+vec3eWY4NAvSWHRS3YNZ64usFbncyISy7xueetlC3U/0YRjlwcs/5Cbhr53rcQfA3vXnRs0L2GmyRESQsQKXqyqRlvQjfH8XPdB7pRu7RQFr/o4cYUg+TKgqplXXl/AaXBaS6L59SZ1KwnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727997453; c=relaxed/simple;
-	bh=P5UcpAipfbHxuw26N/La74wzuf3cWkCq92gj8uBLqhI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=kNLb7RItqkMDJxsZn54dDxtbuEn3e1yUbv9JPRJHbX3as5OkYBbPTL8u/+VxM6yM4sl7/pRVaO/cVasN0adkPa0KyIuUEGNtGI+lIhZnimcJ6PrG5R09Wa7Pa7uHpYqwj7n9tcwThZyBtULIFKRBQ08aQvL5Y1Gk2fAe7ggoUXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.1.164] (77-32-42-93.dyn.eolo.it [77.32.42.93])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9600561E5FE05;
-	Fri,  4 Oct 2024 01:16:20 +0200 (CEST)
-Message-ID: <862f7737-c88b-4e19-a384-52a3ecb43111@molgen.mpg.de>
-Date: Fri, 4 Oct 2024 01:16:19 +0200
+	s=arc-20240116; t=1728010931; c=relaxed/simple;
+	bh=GstCkWPShMQ/UszwQe5t8ZxgyO018igh7DIxzE2l6KQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lvXGiK9eonvpqzuFCh8E/aBfFVp3swg8OINBjwpPK0flNRTE2J057DnLEV3cqGIGR9FcChWR+/rjhz6ILo6v8IQ1QSbot4lDi95dKakepoweQcWvp/iLzBGHn6T9Pp8B2iptkgMUYhs7Fsj4GdHOoYEJTFYpEr9qzK7/HQGswFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=JtxXIg4s; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 07a1587a81fd11efb66947d174671e26-20241004
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=I5K+nSN5T2E6nZK8faQwTndLJFZXOZd9+jaIpIgcUmI=;
+	b=JtxXIg4se85SUpMfFG/MS9btK5uNS+KI/iGLan25sATf+ad+KRzf2qwAXFPyD9ODpPXXKi42xEaxnu1po6btao0EZB3kw4bIX2Eu/HjMaGtKwVBP03hsxE/k5z1FVoaSFOU+MvKJLZ2+YQOWhbbSLyfeIEVPhFmrHYEGENBGId8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:5ba1abf4-9ec8-4cc1-93df-cde14933b573,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:68614326-5902-4533-af4f-d0904aa89b3c,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-UUID: 07a1587a81fd11efb66947d174671e26-20241004
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1143322155; Fri, 04 Oct 2024 11:02:02 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 4 Oct 2024 11:01:59 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 4 Oct 2024 11:01:59 +0800
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, Alexandre Mergnat
+	<amergnat@baylibre.com>
+CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai
+	<wenst@chromium.org>
+Subject: [PATCH v2 1/2] dt-bindings: mfd: mediatek: mt6397: add adc, codec and regulators for mt6359
+Date: Fri, 4 Oct 2024 11:01:47 +0800
+Message-ID: <20241004030148.13366-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH] platform/x86:intel/pmc: Disable ACPI PM Timer disabling
- on Sky and Kabe Lake
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
- David E Box <david.e.box@intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>, Todd Brandt <todd.e.brandt@intel.com>,
- Marek Maslanka <mmaslanka@google.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, regressions@lists.linux.dev,
- linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org
-References: <20241003202614.17181-1-hdegoede@redhat.com>
- <20241003202614.17181-2-hdegoede@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20241003202614.17181-2-hdegoede@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--5.650800-8.000000
+X-TMASE-MatchedRID: 4TOfFruLyYi6lIBLPjRk6RWCVBr+Ay98wQ0CCpqVHSz98u70/pR9GipO
+	gudjiL0DF8NKa4AxCmBzNWqZAVqAAh9J5bZqJbIJvHKClHGjjr0W40XiUkbrG9zOQo7mTgA+cCE
+	8iA5iVa0ZoBsQWiqLArpjAjMHHtZlHxPMjOKY7A8LbigRnpKlKWxlRJiH43972G1cTkcL58gA5L
+	rtblF1DqM775K4TBnPkhIGp65r72JaobKNZg9nXg==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--5.650800-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	3EB65091C26E2076BB07561CB10BB184BCAB13156FBE39F3D07547B13E47422F2000:8
+X-MTK: N
 
-Dear Hans,
+Since MT6359 PMIC has been added as one of the compatibles of
+"mediatek,mt6397.yaml", the sub-device node of "MT6359 PMIC AUXADC",
+"MT6359 Audio Codec"  and "MT6359 PMIC Regulators" should also be
+contained in this DT Schema as well.
 
+This patch includes:
+ - add 'adc' property and $ref for 'mediatek,mt6359-auxadc'.
+ - add 'mt6359-regulator' to the compatibles of regulators.
+ - add 'mt6359-codec' to the compatibles of audio-codec.
 
-Thank you for the patch.
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+---
+ .../devicetree/bindings/mfd/mediatek,mt6397.yaml          | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Am 03.10.24 um 22:26 schrieb Hans de Goede:
-> There have been multiple reports that the ACPI PM Timer disabling is
-> causing Sky and Kabe Lake systems to hang on all suspend (s2idle, s3,
+Changes for v2:
+ - Rebase on top of the DT schema conversion patch V8 (should be final version)
+   without adc, audio-codec, and regulator.
+   [1] https://lore.kernel.org/all/20241001104145.24054-3-macpaul.lin@mediatek.com/
+ - Add 'mt6359-codec' to the compatibles of 'audio-codec' property.
+   Please help to review it again.
 
-Kab*y* (also in the summary)
+diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+index 95e9566fc535..35c4bc199b4e 100644
+--- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
++++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+@@ -17,6 +17,7 @@ description: |
+   MT6397/MT6323 is a multifunction device with the following sub modules:
+   - Regulators
+   - RTC
++  - ADC
+   - Audio codec
+   - GPIO
+   - Clock
+@@ -86,6 +87,7 @@ properties:
+           - enum:
+               - mediatek,mt6323-regulator
+               - mediatek,mt6358-regulator
++              - mediatek,mt6359-regulator
+               - mediatek,mt6397-regulator
+           - items:
+               - enum:
+@@ -95,6 +97,11 @@ properties:
+     required:
+       - compatible
+ 
++  adc:
++    type: object
++    $ref: /schemas/iio/adc/mediatek,mt6359-auxadc.yaml#
++    unevaluatedProperties: false
++
+   audio-codec:
+     type: object
+     description:
+@@ -106,6 +113,7 @@ properties:
+         oneOf:
+           - enum:
+               - mediatek,mt6358-sound
++              - mediatek,mt6359-codec
+               - mediatek,mt6397-codec
+           - items:
+               - enum:
+-- 
+2.45.2
 
-> hibernate) methods.
-> 
-> Remove the acpi_pm_tmr_ctl_offset and acpi_pm_tmr_disable_bit settings from
-> spt_reg_map to disable the ACPI PM Timer disabling on Sky and Kabe Lake to
-
-Ditto.
-
-> fix the hang on suspend.
-> 
-> Fixes: e86c8186d03a ("platform/x86:intel/pmc: Enable the ACPI PM Timer to be turned off when suspended")
-> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Closes: https://lore.kernel.org/linux-pm/18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de/
-> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219346
-> Cc: Marek Maslanka <mmaslanka@google.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->   drivers/platform/x86/intel/pmc/spt.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/spt.c b/drivers/platform/x86/intel/pmc/spt.c
-> index 2cd2b3c68e46..ab993a69e33e 100644
-> --- a/drivers/platform/x86/intel/pmc/spt.c
-> +++ b/drivers/platform/x86/intel/pmc/spt.c
-> @@ -130,8 +130,6 @@ const struct pmc_reg_map spt_reg_map = {
->   	.ppfear_buckets = SPT_PPFEAR_NUM_ENTRIES,
->   	.pm_cfg_offset = SPT_PMC_PM_CFG_OFFSET,
->   	.pm_read_disable_bit = SPT_PMC_READ_DISABLE_BIT,
-> -	.acpi_pm_tmr_ctl_offset = SPT_PMC_ACPI_PM_TMR_CTL_OFFSET,
-> -	.acpi_pm_tmr_disable_bit = SPT_PMC_BIT_ACPI_PM_TMR_DISABLE,
->   	.ltr_ignore_max = SPT_NUM_IP_IGN_ALLOWED,
->   	.pm_vric1_offset = SPT_PMC_VRIC1_OFFSET,
->   };
-
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de> # Dell XPS 13 
-9360/0596KF, BIOS 2.21.0 06/02/2022 (suspend/resume with deep and s2idle)
-
-
-Kind regards,
-
-Paul
 
