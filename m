@@ -1,157 +1,192 @@
-Return-Path: <linux-pm+bounces-15131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DE7498FC7D
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 05:10:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE37798FCBE
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 06:33:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE7091C22561
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 03:10:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E97E71C22551
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 04:33:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91E53CF65;
-	Fri,  4 Oct 2024 03:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8723D55D;
+	Fri,  4 Oct 2024 04:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ulEN/Oui"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H9cNpvhZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1335A374D1;
-	Fri,  4 Oct 2024 03:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0928828F3;
+	Fri,  4 Oct 2024 04:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728011397; cv=none; b=fZtkzTur6tPgSmlfjcox+9fidiadzTVfEk2BVDZD3RmBoDPrtiQmYXt4qSgQbSCb2JGafO5QC/rQG0AGcJSSTL9OrFa8Q+ZgrnUuGTYhmInyf1gZ50HjVSYQgb/27ub86uoV9yU8kaH4AtnzUcUwey6J47LALHq957z2qq0dS5U=
+	t=1728016405; cv=none; b=Wg3UqfJYicZWUMCX9BiefR4PmJ2gguikZw1ANQJDixf5y5hPsBPNnTDHzAoczhaKYIpfzTyRlFaH/9DqGZtl98nsYBG9j42UGbXGwUrN3ANkCgUF7PeomzeFLLg3DqjGMM0n1vcE/5l825TCckI1ioMwJf0g7sxfe7uxi6Wyqf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728011397; c=relaxed/simple;
-	bh=TakFGvtVJzmBRexHftyc2Tev3KJSy9KNVE0p6Xlr594=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=Z1bjYvNBFJb3ZTlw0KPdbjpSpid+GrjEfRRKk2bwaW0RRYAV2iCzOWuHGtC3iHsuroxZIb64xYHOe30h3owtB4wByz1YIZ0yIK7qnzsoOMX8Es/Nv4CpSzfjRCuo2hgvMCuD1dM4vjEUw70KMMhNFjpKD2P8EtoKOwv/aYrAk/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ulEN/Oui; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 1ebf174481fe11efb66947d174671e26-20241004
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:CC:To:From:Subject:MIME-Version:Date:Message-ID; bh=FCUbhenGMf5+wIxJ4JWL1bgoO1/T6c4+0JMhIL3Tzh0=;
-	b=ulEN/OuimOcgB0b9XoKJLbkQyPoPM8fTE3lDVpnUMKVjr+dhtyra98dUNgbzdX55cq141b6cKj/MAJlT75yi2znK3E2jjV1LSeE2kFDAQngit8LIG5uYBXtZrWCRE1cVxtSN8i/MWpRoTcfmti+7XvvFlrZyfTqS6m3+C0MZmK8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:530f634c-5443-4f95-8eff-879c3814e4ee,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:875bba40-8751-41b2-98dd-475503d45150,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
-	l,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: 1ebf174481fe11efb66947d174671e26-20241004
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1417756100; Fri, 04 Oct 2024 11:09:50 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 4 Oct 2024 11:09:48 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Fri, 4 Oct 2024 11:09:47 +0800
-Message-ID: <ced5e434-c2f8-9900-5a00-1808540ab2d7@mediatek.com>
-Date: Fri, 4 Oct 2024 11:09:47 +0800
+	s=arc-20240116; t=1728016405; c=relaxed/simple;
+	bh=F2URxu3+s9T4/haLxi1mElRi/bRX+TcMYZp/lHnLGIk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ppkNLe+Nv43KoHbUypl3pxwfRDx50pKl0eJdxFE/bj1W4pC12fH/bNC9gB249xc8VXWUy+9DLoTD3e/uR8d1dgRAJiGSh+m3h4CHsHMRQzWfF2Pi00oEBX6ss6WXLrLvYIe/ib/vdgOjl4veMJHUH1uBGmD0aRmx7ZJRF/s+Ylk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H9cNpvhZ; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-718d6ad6050so1500444b3a.0;
+        Thu, 03 Oct 2024 21:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728016402; x=1728621202; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4H3N+8kws/awip/ldfxoLN4w9GM+lHkkjqCa2TtcbMw=;
+        b=H9cNpvhZoPFe1x5nh9lZtv/rYrmRzg0BUoC0LpPjPizC4JjkjFJTWwnTuAiHQizAMs
+         Izh6e7AAlGFDaav9grDaHYnG7kG4oxQSySWczLGeq39Qpr0D3jmIBT28ZmJ4piIDgCQ1
+         EEW8Qg7rxv8OvIw5zJ9FnQqdkeRZRMi4icCVn7TwmBdfb7M0HYfwhB+C0uhhB/drehvb
+         ffUNIqlBpni1I6H8pu14pNUQ91AGX8WpDGJke7akVX0S8t7N08wBXEtEGgXPTgJBnG9R
+         uk2jR/GuzsMYO3rPbdDIEha1wNodHgIF2ODQp70oLuICAg6rAejF1oV+WjjbY3yUNtyc
+         9sLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728016402; x=1728621202;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4H3N+8kws/awip/ldfxoLN4w9GM+lHkkjqCa2TtcbMw=;
+        b=YB14CJ4oFAY8F8NPs9OEMC10MBZH75Gkr33r+b23icFCfoGzbPY5WWcxb+3j1jseBD
+         dtr/+zmirK+j32YyyJzHdlnhhJihfWMGiuIb4r+MxXPHHFEmgysc+JdW449n1XVh5rbc
+         uNrkY5jmXZM3Y7QgpwV3zAqkuCL7q//4+sgAB26HJyIORRfhJ79B86YfZOqurr425jpS
+         Z0fqayv8LiCinwyb8FgW23z+SLaRHZqZ7iyUuQaN999+Q5cnpn4xwuUh98z1OuOM2lX2
+         iUH2sDKLkz01YMFmZWtcRG+1JZM1STMZkecA1w9exIDLKwLzSpvxwzMRSmDJ9xd536H2
+         FGgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLTWga3hUz+JGqMi/uGK01kEscVyAgMXZlXAuxUj4Lbu/Th1JGVgIx8B+I6POE0uWqqq0feT2Ge2GNejo=@vger.kernel.org, AJvYcCXg9w00+4w1ItHFgwzrA0hJkqFVpJsISTnBo4S7SshA2FvoYSj9Q4+s7dr6CtEKnGpzkj4hRvsT+fE=@vger.kernel.org, AJvYcCXs63Rx6hhBm2hlCrsmykasYGHqx4RJp9qEg+lnZ2czzGf5q5z6I4Yx9dpxvmSBfFn+x60q2ia61j7M@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUYStziQlAu4uCB3uy3SRyCY3qLcgFMZrrOsJ0w/pQssDmQit2
+	Q5okx1Des20Sr8JIngvWNOqZqvYPXOm+2mRJBVLAR/DDVurr1QaH
+X-Google-Smtp-Source: AGHT+IHZ/dlDw1HTSCwlBso46egI2fiF3PmvQAr4tfWTXWWWlKdvB8u+56cni/cWhWAl+GoC/F8YYA==
+X-Received: by 2002:a05:6a00:a470:b0:71d:ea77:e954 with SMTP id d2e1a72fcca58-71dea7814b1mr315163b3a.14.1728016402200;
+        Thu, 03 Oct 2024 21:33:22 -0700 (PDT)
+Received: from acelan-precision5470 (220-135-95-34.hinet-ip.hinet.net. [220.135.95.34])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71dd9d8bfcdsm2258221b3a.80.2024.10.03.21.33.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2024 21:33:21 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+Date: Fri, 4 Oct 2024 12:33:16 +0800
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com,
+	mika.westerberg@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
+Message-ID: <Zv9wDGp-7-lC8FhZ@acelan-precision5470>
+References: <20240911190516.GA644336@bhelgaas>
+ <319e5419-3b12-4672-9f51-f90c5e142e29@amd.com>
+ <fa504022-acb3-4930-b6b8-87a8dcb912c3@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: mfd: mediatek: mt6397: add adc and
- regulators for mt6359
-Content-Language: en-US
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>
-CC: Pablo Sun <pablo.sun@mediatek.com>, Alexandre Mergnat
-	<amergnat@baylibre.com>, Sean Wang <sean.wang@mediatek.com>, Sen Chu
-	<sen.chu@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	<linux-arm-kernel@lists.infradead.org>, Chris-qj chen
-	<chris-qj.chen@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
-	<linux-kernel@vger.kernel.org>, Chen-Yu Tsai <wenst@chromium.org>, "Conor
- Dooley" <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, "MediaTek
- Chromebook Upstream" <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-pm@vger.kernel.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>,
-	<linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>, Bear Wang
-	<bear.wang@mediatek.com>
-References: <20240925171156.9115-1-macpaul.lin@mediatek.com>
- <172731883694.2430476.10157265874067724564.robh@kernel.org>
- <bd6376df-baea-d29d-6b74-68d350cbf797@mediatek.com>
-In-Reply-To: <bd6376df-baea-d29d-6b74-68d350cbf797@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--10.508200-8.000000
-X-TMASE-MatchedRID: 7ySqCuYCpfgOwH4pD14DsPHkpkyUphL9meN8m2FdGic3xO2R3boBWFbu
-	qIY+/skQkABPgKBt/0qOGmN9nEzx3i2W7Y+Npd9RqWsZCJMnBwQmlwEyKUIIaFwpnAAvAwaz8Sd
-	VWKPY/enHIiXypGH+EHXdOQc5s1eB9ZRkVakSSW2eAiCmPx4NwFkMvWAuahr8+gD2vYtOFhgqtq
-	5d3cxkNeZmFbgdmZJSvU+7a+iFp4LJ+ob9w+Cdu3jDsGn4QLiDwUyMN90/km4=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--10.508200-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: BA7F69DBC496223544DAB2C3B492BC27F1AD1D744F94D11AD6B13F73221C96B02000:8
+In-Reply-To: <fa504022-acb3-4930-b6b8-87a8dcb912c3@amd.com>
 
+On Wed, Sep 11, 2024 at 02:38:20PM -0500, Mario Limonciello wrote:
+> On 9/11/2024 14:16, Mario Limonciello wrote:
+> > On 9/11/2024 14:05, Bjorn Helgaas wrote:
+> > > On Fri, Jul 12, 2024 at 02:24:11PM +0800, Kai-Heng Feng wrote:
+> > > > Some laptops wake up after poweroff when HP Thunderbolt Dock G4 is
+> > > > connected.
+> > > > 
+> > > > The following error message can be found during shutdown:
+> > > > pcieport 0000:00:1d.0: AER: Correctable error message received
+> > > > from 0000:09:04.0
+> > > > pcieport 0000:09:04.0: PCIe Bus Error: severity=Correctable,
+> > > > type=Data Link Layer, (Receiver ID)
+> > > > pcieport 0000:09:04.0:   device [8086:0b26] error
+> > > > status/mask=00000080/00002000
+> > > > pcieport 0000:09:04.0:    [ 7] BadDLLP
+> > > > 
+> > > > Calling aer_remove() during shutdown can quiesce the error message,
+> > > > however the spurious wakeup still happens.
+> > > > 
+> > > > The issue won't happen if the device is in D3 before system shutdown, so
+> > > > putting device to low power state before shutdown to solve the issue.
+> > > > 
+> > > > I don't have a sniffer so this is purely guesswork, however I believe
+> > > > putting device to low power state it's the right thing to do.
+> > > 
+> > > My objection here is that we don't have an explanation of why this
+> > > should matter or a pointer to any spec language about this situation,
+> > > so it feels a little bit random.
+> > > 
+> > > I suppose the problem wouldn't happen if AER interrupts were disabled?
+> > > We already do disable them in aer_suspend(), but maybe that's not used
+> > > in the shutdown path?
+> > > 
+> > > My understanding is that .shutdown() should turn off device interrupts
+> > > and stop DMA.  So maybe we need an aer_shutdown() that disables
+> > > interrupts?
+> > > 
+> > 
+> > IMO I see this commit as two problems with the same solution.
+> > 
+> > I don't doubt that cleaning up AER interrupts in the shutdown path would
+> > help AER messages, but you really don't "want" devices to be in D0 when
+> > the system is "off" because even if the system is off some rails are
+> > still active and the device might still be powered.
+> > 
+> > A powered device could cause interrupts (IE a spurious wakeup).
+> 
+> It's a bit of a stretch, but ACPI 7.4.2.5 and 7.4.2.6 are the closest
+> corollary to a spec I can find.
+> 
+> "Devices states are compatible with the current Power Resource states. In
+> other words, all devices are in the D3 state when the system state is S4."
+> 
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mgmt/oem-supplied-system-level-control-methods.html
+Hi,
 
+I'd like to revive this thread and support this description from the
+ACPI spec.
 
-On 9/30/24 13:53, Macpaul Lin wrote:
-> 
-> 
-> On 9/26/24 10:47, Rob Herring (Arm) wrote:
->>
->>
->> External email : Please do not click links or open attachments until 
->> you have verified the sender or the content.
->>
->> On Thu, 26 Sep 2024 01:11:55 +0800, Macpaul Lin wrote:
->>> Since MT6359 PMIC has been added as one of the compatibles of
->>> "mediatek,mt6397.yaml", the sub-device node of "MT6359 PMIC AUXADC" and
->>> "MT6359 PMIC Regulators" should also be contained in this DT Schema as
->>> well.
->>>
->>> This patch includes:
->>> Â - add 'adc' property and $ref for 'mediatek,mt6359-auxadc'.
->>> Â - add 'mt6359-regulator' to the compatibles of regulators.
->>>
->>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
->>> ---
->>> Â Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 7 +++++++
->>> Â 1 file changed, 7 insertions(+)
->>>
->>
->> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
->>
-> 
-> Thanks for the review. This patch will be merged into v7 patch of
-> the conversion of
-> Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml'
-> 
-> Thanks!
-> Macpaul Lin
-> 
+In ACPI 7.4.2.5, it states: "All devices are in the D3 state when the
+system state is S4," and in ACPI 7.4.2.6, it says: "The S5 state is
+similar to the S4 state except that OSPM does not save any context."
 
-Updated:
-Since the nearly the final version patch of v8 of 
-'mfd/mediatek,mt6397.yaml' is without adc, audio-codec, and regulator
-of mt6359
-([1] 
-https://lore.kernel.org/all/20241001104145.24054-3-macpaul.lin@mediatek.com/),
-a patchset v2 has been send.
-[2] 
-https://lore.kernel.org/all/20241004030148.13366-1-macpaul.lin@mediatek.com/
+I believe this implies that devices should also be in D3 when the
+system is in S5.
 
-Thanks
-Macpaul Lin
+> 
+> > 
+> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=219036
+> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > ---
+> > > >   drivers/pci/pci-driver.c | 8 ++++++++
+> > > >   1 file changed, 8 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > > > index af2996d0d17f..4c6f66f3eb54 100644
+> > > > --- a/drivers/pci/pci-driver.c
+> > > > +++ b/drivers/pci/pci-driver.c
+> > > > @@ -510,6 +510,14 @@ static void pci_device_shutdown(struct device *dev)
+> > > >       if (drv && drv->shutdown)
+> > > >           drv->shutdown(pci_dev);
+> > > > +    /*
+> > > > +     * If driver already changed device's power state, it can mean the
+> > > > +     * wakeup setting is in place, or a workaround is used.
+> > > > Hence keep it
+> > > > +     * as is.
+> > > > +     */
+> > > > +    if (!kexec_in_progress && pci_dev->current_state == PCI_D0)
+> > > > +        pci_prepare_to_sleep(pci_dev);
+> > > > +
+> > > >       /*
+> > > >        * If this is a kexec reboot, turn off Bus Master bit on the
+> > > >        * device to tell it to not continue to do DMA. Don't touch
+> > > > -- 
+> > > > 2.43.0
+> > > > 
+> > 
+> 
 
