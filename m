@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-15177-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15178-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E94C9911DD
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 23:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 471E699132F
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 01:39:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B7C128493C
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 21:55:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A2DD284D8B
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 23:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1A51B4F19;
-	Fri,  4 Oct 2024 21:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 475301547C5;
+	Fri,  4 Oct 2024 23:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QEmpZJ78"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S02Ad3Hy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294AB1AE00E;
-	Fri,  4 Oct 2024 21:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B7815381F;
+	Fri,  4 Oct 2024 23:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728078948; cv=none; b=JqLW3ibGqXp/GyBCN0LsaVurX/aCkiwah/X1I61y+wwf1XXsvZE02QsULTOKi1h8NcWz36wcZfpNuZchYGxxXu/rpqGwBUe+a18jG+/zoGr2Y87IeURKfG9bkQk+2t65ZVipPryxzxhXeojd26+zN7M4Qhlxy6/oOlizWUGIPIc=
+	t=1728085191; cv=none; b=GnX+XNgJ4qtr3B700I4vE3rV+XdzHJkXiVmnu6n1EjVNf+f+F4XiS0gMajmvsrO1CKorJrTt7cNCU4yMKPU6bBoyFPIKz9kaEH4H481Fe/OL98i+KzMGxJxzw15tHSSLYtQuS4lq3RJrQOfYuVi5OcGZKW/SwD4F7dY1GSb02pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728078948; c=relaxed/simple;
-	bh=BpScfyaXtguykCyLfRMZlJO/4CWI6IRgWrwXuzufp1A=;
+	s=arc-20240116; t=1728085191; c=relaxed/simple;
+	bh=qn/t4LoP2AiEczzxO0xIU1CZNre1jHKaCVdh5Ta1IwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D2/BAqdP0A0gxFyr04/HkX3a0hXUvjnLr3HMg0pAmW/mygtTJtQZiguLLOZzAQv3SwyDDQvBtRdrbAydgcxsgo3fhmnvcnCF9/qQyqz83T0Y8SZ+LGBr0ki4oJCJDt2H6bSOYBGfxYOBfN1/YkRtK8FG+KuFl4RiDnXxmW3c38c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QEmpZJ78; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=bq7h+9jNrZP0RBOXfS+mzkQoJP9bef3lCuIKJXtlxb2JLwm5ZYv40CJuUmXSCdmjmCUD04x+O9BHV5YyIQVsLiXIUbI+yM+aM+8BanaRRZ0Z1+LlS17kTCGJoOLULAQ2tHsd1jFeQfOez88DGeprXzEWPURJE3pjofIE1Cc8c8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S02Ad3Hy; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728078947; x=1759614947;
+  t=1728085189; x=1759621189;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BpScfyaXtguykCyLfRMZlJO/4CWI6IRgWrwXuzufp1A=;
-  b=QEmpZJ78zDscJGZXovttvXY+S5XFG4LaXOQlgtTb/W/z/cOieXI9kBDq
-   bdpmGzOofBpeXtGqCbSh94xhH+I7X3Lo908V2dUvIgVmGat7FHM86mDP7
-   T41BwDOSzmyPaDw8h7rGI/TIRg1KcUPOUvmfFBGBEvX9HDVGiBJ/q5iRr
-   uE6sP+4fAmW8OGA+/y0eyWsAIvmvLGK7LOVkLrX3vFyBa7qvdFy8GN005
-   eSZQ268FZgKG8+Ioa2cTwZmfE09auxnCoJ55+jsoIBgxBTtlrYe5fbbMc
-   wgmk1kXRqRkVdR5sPLYNyC6QkMwhvVFpnuXxksJAq2NWY+RZxZvJic3O8
-   g==;
-X-CSE-ConnectionGUID: PMOfkH9XQ/6W2C8gzdKgpg==
-X-CSE-MsgGUID: A8usB7y6QfCwfTaEk4phIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="37971046"
+  bh=qn/t4LoP2AiEczzxO0xIU1CZNre1jHKaCVdh5Ta1IwM=;
+  b=S02Ad3HybkEbGNIHypUY0MsfPDxsg5yPWHwlU+jNNq/uQCpXVNr3mELM
+   0Z0rEv/qsrWJoRIPk03g9F/qJDt3V05aAVW6UQUB86w/B/awribe6qf2n
+   n2LXlqmoLQLc7QjdQrBd6ozUVxFe/Ap7kN2IoSyBgsaNzIAZAImBm/LGo
+   2KkRxgHXi0N2YDY3kwJrI6nH8QOk6RNM/IrZyUiBtTtq2yeHMUPY58AOS
+   nvPw/Dm+gFqJbtnu6kQQqf3gMw6VL57k8lsvjuTodPk2yz3GNqZ8TcMGy
+   iwtX/NwLuWZOOj0y6zs+2NxZBm/K+GYeUF1SbaK463O0bGHUnG1MWakrb
+   w==;
+X-CSE-ConnectionGUID: GUu6iSh/R8KnsURd//t0Wg==
+X-CSE-MsgGUID: covznv2JTweg/wXPyqcr3w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="30204505"
 X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="37971046"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 14:55:46 -0700
-X-CSE-ConnectionGUID: 00plaSr1RDiS95nW/2XneQ==
-X-CSE-MsgGUID: 3wd4ccD5TKWDpB869++Y/A==
+   d="scan'208";a="30204505"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 16:39:49 -0700
+X-CSE-ConnectionGUID: 9TBlvmm2T2aq9/ECvRIJIw==
+X-CSE-MsgGUID: NqsC5WaFT6ehU/1rYsetKw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="78814829"
+   d="scan'208";a="74977977"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Oct 2024 14:55:43 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 04 Oct 2024 16:39:45 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swqGy-0002G2-3D;
-	Fri, 04 Oct 2024 21:55:40 +0000
-Date: Sat, 5 Oct 2024 05:55:20 +0800
+	id 1swrtf-0002Kc-12;
+	Fri, 04 Oct 2024 23:39:43 +0000
+Date: Sat, 5 Oct 2024 07:38:53 +0800
 From: kernel test robot <lkp@intel.com>
 To: Matteo Martelli <matteomartelli3@gmail.com>,
 	Jonathan Cameron <jic23@kernel.org>,
@@ -72,13 +72,13 @@ To: Matteo Martelli <matteomartelli3@gmail.com>,
 	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>,
 	Paul Cercueil <paul@crapouillou.net>,
 	Sebastian Reichel <sre@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-pm@vger.kernel.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
 	Matteo Martelli <matteomartelli3@gmail.com>
 Subject: Re: [PATCH 7/7] power: supply: ingenic-battery: free scale buffer
  after use
-Message-ID: <202410050547.Pybj1FLp-lkp@intel.com>
+Message-ID: <202410050737.0PgqTuD1-lkp@intel.com>
 References: <20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -100,25 +100,24 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Matteo-Martelli/iio-core-
 base:   fec496684388685647652ab4213454fbabdab099
 patch link:    https://lore.kernel.org/r/20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0%40gmail.com
 patch subject: [PATCH 7/7] power: supply: ingenic-battery: free scale buffer after use
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410050547.Pybj1FLp-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050547.Pybj1FLp-lkp@intel.com/reproduce)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410050737.0PgqTuD1-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050737.0PgqTuD1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410050547.Pybj1FLp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410050737.0PgqTuD1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/power/supply/ingenic-battery.c: In function 'ingenic_battery_set_scale':
->> drivers/power/supply/ingenic-battery.c:120:9: error: implicit declaration of function 'kfree'; did you mean 'kvfree'? [-Wimplicit-function-declaration]
+>> drivers/power/supply/ingenic-battery.c:120:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      120 |         kfree(scale_raw);
-         |         ^~~~~
-         |         kvfree
+         |         ^
+   1 error generated.
 
 
-vim +120 drivers/power/supply/ingenic-battery.c
+vim +/kfree +120 drivers/power/supply/ingenic-battery.c
 
     59	
     60	/* Set the most appropriate IIO channel voltage reference scale
