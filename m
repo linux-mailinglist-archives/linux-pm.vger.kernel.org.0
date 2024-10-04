@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-15173-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15172-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51482990FF4
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 22:13:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16156990FF3
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 22:12:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11F2728258D
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 20:13:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2916282D7F
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 20:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51691FCC6D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354C21FB3D5;
 	Fri,  4 Oct 2024 19:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="v2dArrfn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ilmKNxCo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38DC1E2610;
-	Fri,  4 Oct 2024 19:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C701E25EF;
+	Fri,  4 Oct 2024 19:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728070996; cv=none; b=pzt6TeZSCPsTwfaGTvnDe6OIcpWAS6QybZHmd4sBo8mEYYAgUD304riG4Nl+DRtat+CQcciwlamQQflPRXK9nL8YZsHaWKxGs75GcDD/S+8i/B8SH8DLr61g/TplrOga7tQqUdRYdG3ZDodDMmjSul18hbid5XUhR39gbflyGvY=
+	t=1728070996; cv=none; b=aCuAo8SMN1KLlOTBqwx7YYj3+AHzhQgnairQKTE1gTPmdk1qZ5BW/EYP5ssF4xVxlIFq7R0kk2ajTkFbAJm0y5cjghUc4iJOSmk6xb6vnHkHoBAqPizv3FnY93MOghMLGM/Ga9/Js9ml/Zep6C7vAwZse83TEXDNspRqYG3Slyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728070996; c=relaxed/simple;
-	bh=aF/ZafH9fewvu7He3RpxJK2jI/zoWOyt4l+8tCp7+sw=;
+	bh=140pHCdKnsVyPWmjFYFklYH1T5pXhEHTWMhrqpvI+eI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E/zylLhq1h+kxjBIqLzRj2zDjNcbV9wq46/Moma8Cyy8ME99X2GadsEr+CU4851RGeFzHc2SsI/plf39vjIQHx2VRrPlPLd/cHDgPEmG2IhSAiYaxvZZhuMP2+KXVN1MPrx7sPvkF7taVmnkMPber0hr8Nb+kq3xSKLN39Y5V6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=v2dArrfn reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=aMUw6WPKJLW8SmUatdYJRKC3fcX89JKuIkIwj0Zl9lb9YC48/RaiDwwUXMaIlrCcNxF8Vb3e2cKjaBzJsS4Z2r97WbVpuYbEbMzEdS2RiKSmy8DGZtWcUej8NURInVdJXyxTzG7bmHPGExBWCkrTsohQ7P8HX5fuZchHLl4sICg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ilmKNxCo reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id a25b5504b765ecac; Fri, 4 Oct 2024 21:43:07 +0200
+ id 0224cdf6660a5cb0; Fri, 4 Oct 2024 21:43:06 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E776B6A9505;
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 692386A9505;
 	Fri,  4 Oct 2024 21:43:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1728070987;
-	bh=aF/ZafH9fewvu7He3RpxJK2jI/zoWOyt4l+8tCp7+sw=;
+	s=dkim; t=1728070986;
+	bh=140pHCdKnsVyPWmjFYFklYH1T5pXhEHTWMhrqpvI+eI=;
 	h=From:Subject:Date;
-	b=v2dArrfnO2gbPKgCly97lCm8C5CMlFiCxbH0gq2aPr0vIOZUFSBH5g+7/DYDh2LO0
-	 XEZZEZ4/klTd+fIDjQSRivGvfegrEhkruWe7+EuT2qfMsUs1nJjBjDkNfkwJN7ajRN
-	 u5I1WnhjRCbbFWTVirHdc0e/MRaxping15JuKpiT3Gv13lVX3Anw/JsBOrz+CbD1Un
-	 OiZkzzjcPxUDGoik0hJ+HDEQbzKLaa9H+Ob7rgyYyZCQtOCfSB6x1eVuILGPv8RNzc
-	 5xPpa9bVXJiMOkmJ183YNrTGFWGBopYtJCZAOqf06OJ6eq4k1dfbFO4QbvjxHs5gLM
-	 RfTPpjsTj2Kvw==
+	b=ilmKNxCoYvMLKDS/WXxrAOSe+LE1iYqM9nFABakaxE5QRrHKXBgLtLc0dpZRmVgpz
+	 kkyc5IMfJl2iHVty620iwTsg2ovzb8k1Nwl5yJqzdHzytntmkDuvZb5etxSH8gB8x3
+	 gQsWKOwGKHe+IhkQlr9I2pgdZFX9s0vMRbhXUjkXsJx7+yDDKY6ERrbCzP28Wrkcit
+	 FweMlK6ytSsdKTbhPYWipc2iAJrSV62APGEfT26Xd3sWyxTyxbX9rivPTdHkldW8WS
+	 VJtf0w46wAAztV6OBBi2EVKw2OYF840VnKopxp5yxyVt4QaoqOdoUrYB6WCfH6lJkU
+	 3lEyL9AO60fcA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -57,10 +57,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Subject:
- [PATCH v2 04/12] thermal: core: Mark thermal zones as initializing to start
- with
-Date: Fri, 04 Oct 2024 21:15:04 +0200
-Message-ID: <9360231.CDJkKcVGEf@rjwysocki.net>
+ [PATCH v2 05/12] thermal: core: Fix race between zone registration and system
+ suspend
+Date: Fri, 04 Oct 2024 21:19:21 +0200
+Message-ID: <8490245.NyiUUSuA9g@rjwysocki.net>
 In-Reply-To: <2215082.irdbgypaU6@rjwysocki.net>
 References: <2215082.irdbgypaU6@rjwysocki.net>
 Precedence: bulk
@@ -79,107 +79,90 @@ X-DCC--Metrics: v370.home.net.pl 0; Body=6 Fuz1=6 Fuz2=6
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-After thermal_zone_device_register_with_trips() has called
-device_register() and it has registered the new thermal zone device
-with the driver core, user space may access its sysfs attributes and,
-among other things, it may enable the thermal zone before it is ready.
+If the registration of a thermal zone takes place at the time when
+system suspend is started, thermal_pm_notify() can run before the new
+thermal zone is added to thermal_tz_list and its "suspended" flag will
+not be set.  Consequently, if __thermal_zone_device_update() is called
+for that thermal zone, it will not return early as expected which may
+cause some destructive interference with the system suspend or resume
+flow to occur.
 
-To address this, introduce a new thermal zone state flag for
-initialization and set it before calling device_register() in
-thermal_zone_device_register_with_trips().  This causes
-__thermal_zone_device_update() to return early until the new flag
-is cleared.
+To avoid that, make thermal_zone_init_complete() introduced previously
+set the "suspended" flag for new thermal zones if it runs during system
+suspend or resume.
 
-To clear it when the thermal zone is ready, introduce a new
-function called thermal_zone_init_complete() that will also invoke
-__thermal_zone_device_update() after clearing that flag (both under the
-thernal zone lock) and make thermal_zone_device_register_with_trips()
-call the new function instead of checking need_update and calling
-thermal_zone_device_update() when it is set.
-
-After this change, if user space enables the thermal zone prematurely,
-__thermal_zone_device_update() will return early for it until
-thermal_zone_init_complete() is called.  In turn, if the thermal zone
-is not enabled by user space before thermal_zone_init_complete() is
-called, the __thermal_zone_device_update() call in it will return early
-because the thermal zone has not been enabled yet, but that function
-will be invoked again by thermal_zone_device_set_mode() when the thermal
-zone is enabled and it will not return early this time.
-
-The checking of need_update is not necessary any more because the
-__thermal_zone_device_update() calls potentially triggered by cooling
-device binding take place before calling thermal_zone_init_complete(),
-so they all will return early, which means that
-thermal_zone_init_complete() must call __thermal_zone_device_update()
-in case the thermal zone is enabled prematurely by user space.
-
-Fixes: 203d3d4aa482 ("the generic thermal sysfs driver")
+Fixes: 4e814173a8c4 ("thermal: core: Fix thermal zone suspend-resume synchronization")
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
 This is a new iteration of
 
-https://lore.kernel.org/linux-pm/2973309.e9J7NaK4W3@rjwysocki.net/
+https://lore.kernel.org/linux-pm/3335807.44csPzL39Z@rjwysocki.net/
 
-v1 -> v2: Rebase and add a Fixes tag.
+v1 -> v2: Rebase and add a fixes tag.
 
 ---
- drivers/thermal/thermal_core.c |   16 +++++++++++++---
- drivers/thermal/thermal_core.h |    1 +
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ drivers/thermal/thermal_core.c |   18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
 Index: linux-pm/drivers/thermal/thermal_core.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/thermal_core.c
 +++ linux-pm/drivers/thermal/thermal_core.c
-@@ -1332,6 +1332,16 @@ int thermal_zone_get_crit_temp(struct th
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+@@ -40,6 +40,8 @@ static DEFINE_MUTEX(thermal_governor_loc
  
-+static void thermal_zone_init_complete(struct thermal_zone_device *tz)
-+{
-+	mutex_lock(&tz->lock);
+ static struct thermal_governor *def_governor;
+ 
++static bool thermal_pm_suspended;
 +
-+	tz->state &= ~TZ_STATE_FLAG_INIT;
-+	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ /*
+  * Governor section: set of functions to handle thermal governors
+  *
+@@ -1337,6 +1339,14 @@ static void thermal_zone_init_complete(s
+ 	mutex_lock(&tz->lock);
+ 
+ 	tz->state &= ~TZ_STATE_FLAG_INIT;
++	/*
++	 * If system suspend or resume is in progress at this point, the
++	 * new thermal zone needs to be marked as suspended because
++	 * thermal_pm_notify() has run already.
++	 */
++	if (thermal_pm_suspended)
++		tz->state |= TZ_STATE_FLAG_SUSPENDED;
 +
-+	mutex_unlock(&tz->lock);
-+}
+ 	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 
+ 	mutex_unlock(&tz->lock);
+@@ -1514,10 +1524,10 @@ thermal_zone_device_register_with_trips(
+ 	list_for_each_entry(cdev, &thermal_cdev_list, node)
+ 		thermal_zone_cdev_bind(tz, cdev);
+ 
+-	mutex_unlock(&thermal_list_lock);
+-
+ 	thermal_zone_init_complete(tz);
+ 
++	mutex_unlock(&thermal_list_lock);
 +
- /**
-  * thermal_zone_device_register_with_trips() - register a new thermal zone device
-  * @type:	the thermal zone device type
-@@ -1451,6 +1461,8 @@ thermal_zone_device_register_with_trips(
- 	tz->passive_delay_jiffies = msecs_to_jiffies(passive_delay);
- 	tz->recheck_delay_jiffies = THERMAL_RECHECK_DELAY;
- 
-+	tz->state = TZ_STATE_FLAG_INIT;
-+
- 	/* sys I/F */
- 	/* Add nodes that are always present via .groups */
- 	result = thermal_zone_create_device_groups(tz);
-@@ -1504,9 +1516,7 @@ thermal_zone_device_register_with_trips(
- 
- 	mutex_unlock(&thermal_list_lock);
- 
--	/* Update the new thermal zone and mark it as already updated. */
--	if (atomic_cmpxchg(&tz->need_update, 1, 0))
--		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+	thermal_zone_init_complete(tz);
- 
  	thermal_notify_tz_create(tz);
  
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -63,6 +63,7 @@ struct thermal_governor {
+ 	thermal_debug_tz_add(tz);
+@@ -1737,6 +1747,8 @@ static int thermal_pm_notify(struct noti
+ 	case PM_SUSPEND_PREPARE:
+ 		mutex_lock(&thermal_list_lock);
  
- #define	TZ_STATE_FLAG_SUSPENDED	BIT(0)
- #define	TZ_STATE_FLAG_RESUMING	BIT(1)
-+#define	TZ_STATE_FLAG_INIT	BIT(2)
++		thermal_pm_suspended = true;
++
+ 		list_for_each_entry(tz, &thermal_tz_list, node)
+ 			thermal_zone_pm_prepare(tz);
  
- #define TZ_STATE_READY		0
+@@ -1747,6 +1759,8 @@ static int thermal_pm_notify(struct noti
+ 	case PM_POST_SUSPEND:
+ 		mutex_lock(&thermal_list_lock);
+ 
++		thermal_pm_suspended = false;
++
+ 		list_for_each_entry(tz, &thermal_tz_list, node)
+ 			thermal_zone_pm_complete(tz);
  
 
 
