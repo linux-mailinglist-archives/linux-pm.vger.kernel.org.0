@@ -1,211 +1,139 @@
-Return-Path: <linux-pm+bounces-15171-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15174-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC40990FF2
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 22:12:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9885D991124
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 23:07:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DD201F24B5A
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 20:12:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C88631C23229
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 21:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7721E2856;
-	Fri,  4 Oct 2024 19:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2AC31AE002;
+	Fri,  4 Oct 2024 21:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="wGUJLqiI"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="RHbE3DVW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16981E04A8;
-	Fri,  4 Oct 2024 19:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B0D15A856;
+	Fri,  4 Oct 2024 21:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728070995; cv=none; b=nNRPZDT03J/YwZIzqCvmhmglqKBLBrLDSf584YURSYg/MqQRmGsgBJVpNz4UxemtF/4MHAAfhuhpJDdYQKSF9JgbcnUNjU655bPd04I1dLRgF5rFcL8L5UTbJmZsq/D22dh39zdCaMdde08vPDswaZfURts5pO7aqvRKVAhIEKM=
+	t=1728076028; cv=none; b=HX3tiEHE3g3E+iv4vFbwD56WbToiow0pXr+fdqncIB/p7KXy1hQvfmdDiQlCqG954E/lLntHKbJVlcXcB5ZZRnQFZJbgFSQP26DIgofB5qNdaE8t7PhqFXo15rPrtJHZ/A/RSGfGM/vCDH6qymExHz1Rg6oI0nTlvXhcpSBjIvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728070995; c=relaxed/simple;
-	bh=4pAfbQul88O+wGLg5waluc8OVCGkgwNeqB9CD5lAYhg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YWJgQv5TVtPam3LgTdtViykop+gOXYBDHSb5Akny6ig2Zb8hF/3rolBRlXHSKDKb6b1sw5KhZo71qzvc5jsoP8Jzjv5oT4GZ2cI296VIMVB0Oee1XXtOUGR57uKYJfZ3MK5XV5hhjybadbEfiMk0DQawhPyCkO3albMjkaQPtw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=wGUJLqiI reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id 644555929af29ed5; Fri, 4 Oct 2024 21:43:02 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3918B6A9505;
-	Fri,  4 Oct 2024 21:43:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1728070982;
-	bh=4pAfbQul88O+wGLg5waluc8OVCGkgwNeqB9CD5lAYhg=;
-	h=From:Subject:Date;
-	b=wGUJLqiI3sxwPwhlxe+M5VeIJgC6ZH8tBMKL2s9fnsqj/hWBTEM5n/FcIHDT1jj8B
-	 n6/sElIvFDbO63iyQpGu533l4lkz/1N+xmnmxz29k5604EgMwq8+8mhzYXeJzWo7tP
-	 ijucRWfSj7URVIAfcH57e70l2U2eM9baz7xaSiSKMuMpXp0MTTCBzqXMR0u7WP0H+U
-	 p/WIDpYNXu3pCzbbCQsaAmLg05WvrruN06knzCEnwRuUwT7LpOrvDDtU9gvkUoeHMV
-	 ocWiT1jjkTsC2NK4I3cF3N3/2e3xGorpXaa55M34zx4w9YnHHEEFTronspa9ezUxFl
-	 3rrPMhpXdOO8A==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject:
- [PATCH v2 12/12] thermal: core: Pass trip descriptors to trip bind/unbind
- functions
-Date: Fri, 04 Oct 2024 21:42:19 +0200
-Message-ID: <2246211.NgBsaNRSFp@rjwysocki.net>
-In-Reply-To: <2215082.irdbgypaU6@rjwysocki.net>
-References: <2215082.irdbgypaU6@rjwysocki.net>
+	s=arc-20240116; t=1728076028; c=relaxed/simple;
+	bh=35IOoHe/X7gnxDSJ+PKxFRsGFeTWY6fFlRdddCjRNEQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tdtkxW6MbI+05i9d38gtjKiz5qeF6Gk04sACgPAQYTGrvyyozgy4S/lYhS6fr8KGi4SRfZ9/4Yg1t2iOdrD9item5bYAWKorJ775LgCjdUhOYnhxRfACoQ+ntz9I+KmnOdkS7fd6tBE5Q2LDEBf+1UzaC0XxeEdr7ZSPhkIsIr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=RHbE3DVW; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [172.27.3.244] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 494L65GU1102942
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 4 Oct 2024 14:06:05 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 494L65GU1102942
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024091601; t=1728075968;
+	bh=XsIxGCLuwc7oDprSmGh/r3HcUoLTGC5y0f+hwyxMfwo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RHbE3DVWEQje/BMw0MYaccvz1CZHwlX6EAgZGBVxHM2N6A8Bs+1jWvQpqHAmpUzya
+	 B92rCcmXrNdl6GfJQOI48PxiDK98iUmhievUBaOuzvKW3PAg7k45+MO2DgOhre9Bqd
+	 MrXnCq+SHnBPZaEqYPEh1ZZWpqzvtfcpjsowsK7ZSQpJE3n6P52zeuoQxt6YTsZKnI
+	 eOmpzoP5V4jl/5Ek7xSXJuKz/8Ygm8jcSxEYWiVLw5Mr50hkZ5MwtV2JsKhIo4+1yl
+	 R0hI44pjMEjCP35l4UByBpjxQS3xPtcQR5w0P8PyQOSjLhz1QZW4Zg4KVQGx8RJEXl
+	 n08E+BHxsQUWw==
+Message-ID: <5c7490bb-aa74-427b-849e-c28c343b7409@zytor.com>
+Date: Fri, 4 Oct 2024 14:06:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvfedgudegtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdi
-X-DCC--Metrics: v370.home.net.pl 0; Body=6 Fuz1=6 Fuz2=6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: Ard Biesheuvel <ardb@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>,
+        Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Keith Packard <keithp@keithp.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com>
+ <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+ <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+ <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+ <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+Content-Language: en-US
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 10/3/24 04:13, Ard Biesheuvel wrote:
+> 
+>> That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
+>> feel are a complete no-brainer and should be done regardless of any
+>> other code generation issues.
+> 
+> Yes, this is the primary reason I ended up looking into this in the
+> first place. Earlier this year, we ended up having to introduce
+> RIP_REL_REF() to emit those RIP-relative references explicitly, in
+> order to prevent the C code that is called via the early 1:1 mapping
+> from exploding. The amount of C code called in that manner has been
+> growing steadily over time with the introduction of 5-level paging and
+> SEV-SNP and TDX support, which need to play all kinds of tricks before
+> the normal kernel mappings are created.
+> 
 
-The code is somewhat cleaner if struct thermal_trip_desc pointers are
-passed to thermal_bind_cdev_to_trip(), thermal_unbind_cdev_from_trip(),
-and print_bind_err_msg() instead of struct thermal_trip pointers, so
-modify it accordingly.
+movq $sym to leaq sym(%rip) which you said ought to be smaller (and in 
+reality appears to be the same size, 7 bytes) seems like a no-brainer 
+and can be treated as a code quality issue -- in other words, file bug 
+reports against gcc and clang.
 
-No intentional functional impact.
+> Compiling with -fpie and linking with --pie -z text produces an
+> executable that is guaranteed to have only RIP-relative references in
+> the .text segment, removing the need for RIP_REL_REF entirely (it
+> already does nothing when __pic__ is #define'd).
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+But -fpie has a considerable cost; specifically when we have indexed 
+references, as in that case the base pointer needs to be manifest in a 
+register, *and* it takes up a register slot in the EA, which may end 
+converting one instruction into three.
 
-This is a new iteration of
+Now, the "kernel" memory model is defined in the ABI document, but there 
+is nothing that prevents us from making updates to it if we need to; 
+e.g. the statement that movq $sym can be used is undesirable, of course.
 
-https://lore.kernel.org/linux-pm/2954063.e9J7NaK4W3@rjwysocki.net/
-
-v1 -> v2: Rebase and drop the leftover Subject: field from the preamble.
-
----
- drivers/thermal/thermal_core.c |   27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -757,9 +757,9 @@ struct thermal_zone_device *thermal_zone
- /**
-  * thermal_bind_cdev_to_trip - bind a cooling device to a thermal zone
-  * @tz:		pointer to struct thermal_zone_device
-- * @trip:	trip point the cooling devices is associated with in this zone.
-+ * @td:		descriptor of the trip point to bind @cdev to
-  * @cdev:	pointer to struct thermal_cooling_device
-- * @cool_spec:	cooling specification for @trip and @cdev
-+ * @cool_spec:	cooling specification for the trip point and @cdev
-  *
-  * This interface function bind a thermal cooling device to the certain trip
-  * point of a thermal zone device.
-@@ -768,11 +768,10 @@ struct thermal_zone_device *thermal_zone
-  * Return: 0 on success, the proper error value otherwise.
-  */
- static int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
--				     struct thermal_trip *trip,
-+				     struct thermal_trip_desc *td,
- 				     struct thermal_cooling_device *cdev,
- 				     struct cooling_spec *cool_spec)
- {
--	struct thermal_trip_desc *td = trip_to_trip_desc(trip);
- 	struct thermal_instance *dev, *instance;
- 	bool upper_no_limit;
- 	int result;
-@@ -796,7 +795,7 @@ static int thermal_bind_cdev_to_trip(str
- 		return -ENOMEM;
- 
- 	dev->cdev = cdev;
--	dev->trip = trip;
-+	dev->trip = &td->trip;
- 	dev->upper = cool_spec->upper;
- 	dev->upper_no_limit = upper_no_limit;
- 	dev->lower = cool_spec->lower;
-@@ -867,7 +866,7 @@ free_mem:
- /**
-  * thermal_unbind_cdev_from_trip - unbind a cooling device from a thermal zone.
-  * @tz:		pointer to a struct thermal_zone_device.
-- * @trip:	trip point the cooling devices is associated with in this zone.
-+ * @td:		descriptor of the trip point to unbind @cdev from
-  * @cdev:	pointer to a struct thermal_cooling_device.
-  *
-  * This interface function unbind a thermal cooling device from the certain
-@@ -875,10 +874,9 @@ free_mem:
-  * This function is usually called in the thermal zone device .unbind callback.
-  */
- static void thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
--					  struct thermal_trip *trip,
-+					  struct thermal_trip_desc *td,
- 					  struct thermal_cooling_device *cdev)
- {
--	struct thermal_trip_desc *td = trip_to_trip_desc(trip);
- 	struct thermal_instance *pos, *next;
- 
- 	mutex_lock(&cdev->lock);
-@@ -930,11 +928,11 @@ static struct class *thermal_class;
- 
- static inline
- void print_bind_err_msg(struct thermal_zone_device *tz,
--			const struct thermal_trip *trip,
-+			const struct thermal_trip_desc *td,
- 			struct thermal_cooling_device *cdev, int ret)
- {
- 	dev_err(&tz->device, "binding cdev %s to trip %d failed: %d\n",
--		cdev->type, thermal_zone_trip_id(tz, trip), ret);
-+		cdev->type, thermal_zone_trip_id(tz, &td->trip), ret);
- }
- 
- static bool __thermal_zone_cdev_bind(struct thermal_zone_device *tz,
-@@ -947,7 +945,6 @@ static bool __thermal_zone_cdev_bind(str
- 		return false;
- 
- 	for_each_trip_desc(tz, td) {
--		struct thermal_trip *trip = &td->trip;
- 		struct cooling_spec c = {
- 			.upper = THERMAL_NO_LIMIT,
- 			.lower = THERMAL_NO_LIMIT,
-@@ -955,12 +952,12 @@ static bool __thermal_zone_cdev_bind(str
- 		};
- 		int ret;
- 
--		if (!tz->ops.should_bind(tz, trip, cdev, &c))
-+		if (!tz->ops.should_bind(tz, &td->trip, cdev, &c))
- 			continue;
- 
--		ret = thermal_bind_cdev_to_trip(tz, trip, cdev, &c);
-+		ret = thermal_bind_cdev_to_trip(tz, td, cdev, &c);
- 		if (ret) {
--			print_bind_err_msg(tz, trip, cdev, ret);
-+			print_bind_err_msg(tz, td, cdev, ret);
- 			continue;
- 		}
- 
-@@ -1279,7 +1276,7 @@ static void __thermal_zone_cdev_unbind(s
- 	struct thermal_trip_desc *td;
- 
- 	for_each_trip_desc(tz, td)
--		thermal_unbind_cdev_from_trip(tz, &td->trip, cdev);
-+		thermal_unbind_cdev_from_trip(tz, td, cdev);
- }
- 
- static void thermal_zone_cdev_unbind(struct thermal_zone_device *tz,
-
-
+	-hpa
 
 
