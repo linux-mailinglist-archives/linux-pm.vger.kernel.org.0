@@ -1,85 +1,109 @@
-Return-Path: <linux-pm+bounces-15178-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15179-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471E699132F
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 01:39:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D0BD99138A
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 02:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A2DD284D8B
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2024 23:39:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A48E1C2225E
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 00:39:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 475301547C5;
-	Fri,  4 Oct 2024 23:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A044C7C;
+	Sat,  5 Oct 2024 00:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S02Ad3Hy"
+	dkim=pass (2048-bit key) header.d=anarazel.de header.i=@anarazel.de header.b="FLcE3F+I";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="g2n7d9H5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B7815381F;
-	Fri,  4 Oct 2024 23:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450C529CA;
+	Sat,  5 Oct 2024 00:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728085191; cv=none; b=GnX+XNgJ4qtr3B700I4vE3rV+XdzHJkXiVmnu6n1EjVNf+f+F4XiS0gMajmvsrO1CKorJrTt7cNCU4yMKPU6bBoyFPIKz9kaEH4H481Fe/OL98i+KzMGxJxzw15tHSSLYtQuS4lq3RJrQOfYuVi5OcGZKW/SwD4F7dY1GSb02pE=
+	t=1728088753; cv=none; b=c71/mPDmgeD5ZBue3k9Hs2yWoQSQMAgW+h553UdtfUM0O4/C/GLcyOm80buEu9++GODyPOtvl4+p0EDiChpMQaB/tBqWt1giV3mdbgILRpAJxfaOFt7tPN4sq/petq8IifNw/OM9sdFgCrrMhzLXyN8R4DK2Iy4hbDfv6QJox4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728085191; c=relaxed/simple;
-	bh=qn/t4LoP2AiEczzxO0xIU1CZNre1jHKaCVdh5Ta1IwM=;
+	s=arc-20240116; t=1728088753; c=relaxed/simple;
+	bh=t4ox1moCdNVjEYfw/SHgaraLE+A3E0RXcZOmdLZSsiw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bq7h+9jNrZP0RBOXfS+mzkQoJP9bef3lCuIKJXtlxb2JLwm5ZYv40CJuUmXSCdmjmCUD04x+O9BHV5YyIQVsLiXIUbI+yM+aM+8BanaRRZ0Z1+LlS17kTCGJoOLULAQ2tHsd1jFeQfOez88DGeprXzEWPURJE3pjofIE1Cc8c8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S02Ad3Hy; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728085189; x=1759621189;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qn/t4LoP2AiEczzxO0xIU1CZNre1jHKaCVdh5Ta1IwM=;
-  b=S02Ad3HybkEbGNIHypUY0MsfPDxsg5yPWHwlU+jNNq/uQCpXVNr3mELM
-   0Z0rEv/qsrWJoRIPk03g9F/qJDt3V05aAVW6UQUB86w/B/awribe6qf2n
-   n2LXlqmoLQLc7QjdQrBd6ozUVxFe/Ap7kN2IoSyBgsaNzIAZAImBm/LGo
-   2KkRxgHXi0N2YDY3kwJrI6nH8QOk6RNM/IrZyUiBtTtq2yeHMUPY58AOS
-   nvPw/Dm+gFqJbtnu6kQQqf3gMw6VL57k8lsvjuTodPk2yz3GNqZ8TcMGy
-   iwtX/NwLuWZOOj0y6zs+2NxZBm/K+GYeUF1SbaK463O0bGHUnG1MWakrb
-   w==;
-X-CSE-ConnectionGUID: GUu6iSh/R8KnsURd//t0Wg==
-X-CSE-MsgGUID: covznv2JTweg/wXPyqcr3w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="30204505"
-X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="30204505"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 16:39:49 -0700
-X-CSE-ConnectionGUID: 9TBlvmm2T2aq9/ECvRIJIw==
-X-CSE-MsgGUID: NqsC5WaFT6ehU/1rYsetKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="74977977"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 04 Oct 2024 16:39:45 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swrtf-0002Kc-12;
-	Fri, 04 Oct 2024 23:39:43 +0000
-Date: Sat, 5 Oct 2024 07:38:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matteo Martelli <matteomartelli3@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Alisa-Dariana Roman <alisa.roman@analog.com>,
-	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-	Matteo Martelli <matteomartelli3@gmail.com>
-Subject: Re: [PATCH 7/7] power: supply: ingenic-battery: free scale buffer
- after use
-Message-ID: <202410050737.0PgqTuD1-lkp@intel.com>
-References: <20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qK2q22u1M0KM4LuAXdTFUrStw+dc2mTqsPsa+qWVK3CsEaopvLMkJRU4flTY29qIPCBDcBex4B6AEv8/KC+ev5fDXDUrAddKg77XAzDhPJn2C0vAwdTITxba0vZHImgW2MkjPozsWv7kg5xTbiP0PLTV/kjeu0c2PizVM2YOVo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=anarazel.de; spf=pass smtp.mailfrom=anarazel.de; dkim=pass (2048-bit key) header.d=anarazel.de header.i=@anarazel.de header.b=FLcE3F+I; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=g2n7d9H5; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=anarazel.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=anarazel.de
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 24A5C13805E2;
+	Fri,  4 Oct 2024 20:39:10 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Fri, 04 Oct 2024 20:39:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1728088750; x=1728175150; bh=lL/jeDhQ0T
+	2sVRGSKsBanrFa3Wo3OgPVAPdrzYDOaZU=; b=FLcE3F+I3TrTMVjYyDkHVlZ1n5
+	vEYCC2QDkMDZBebW5oFYwMAtAmdxjAmVqLtqznvEI/8GNJOmak+0ZVMGWrOwLxlM
+	ffJADAQQwmGH0tgBhirF0Ksvh+q0WWflOO7BJF6cnG3ggxzTUC2Ejo62LwuX4Ik4
+	WhI+wpukN2w/MbDJANbSnopVgn/UDBsSQkfRKGiib+BCKJ4w0QWgBlWhaDZE1UVf
+	/ATcabESghztfA8cGEs8tfCeFC6E3p2NwGluTm6rl8tbIPRKn0Hslb7CoLTllViM
+	HApgSgN60haygR/zKM0BWUdSCGRq5KcCsZG0Cjrf1wyQNEvr7PoSaSHTcbpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1728088750; x=1728175150; bh=lL/jeDhQ0T2sVRGSKsBanrFa3Wo3
+	OgPVAPdrzYDOaZU=; b=g2n7d9H5qF2VLDZmYmKun1q1hn/Iu9i8re2x4x0PKc2R
+	wvD3XeYKzspl/qLzJNWZ7aKQSqqIINW05/ukUfG//Qh6fG9sPTsHKHzos0T9+A+z
+	v3ZXjMWq93ywpOvqs8IS62Np/dw2o0ZbxgdE7CHiHbhenXjRQ2OPgNF1GMlYFTW0
+	3ELaPnT6J5l0cAWDHp0Gr1Hgm5QiKY0egi3VQSUf7ykoyQnSmUPF/YKAYmkHsBuq
+	cUCExSWZ3BF4XrSjnWkXFS7y2K/YITFzTXtK8uchNmIF21P8Gahv1eiqvY0e7SZJ
+	r/kxjh7N01iHSeV2ar/wMqX9TS5YgNGz6PFQZzdwXA==
+X-ME-Sender: <xms:rYoAZ_3FW5MbKjgL9PdOD64TaYWoBmrlMrm4YFuySfkOn1GogX8nOg>
+    <xme:rYoAZ-G2JmWxFA0ua5DzEbmEyBJcUXETtyL2Jm2bf8iY7il5o1440cCQ81zqj3cUC
+    _8NA9HBUVcBLnTFYg>
+X-ME-Received: <xmr:rYoAZ_5blobP6qtwk42B_OtikgmWS8lMc-jJ3xg8IWRMvWReOCbKikyIfXfVxUBTghnGE_VQ7zXNDVRla45iHAgnjZz2x2d2Qzzvz_1TSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvgedgfeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddtvden
+    ucfhrhhomheptehnughrvghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivg
+    hlrdguvgeqnecuggftrfgrthhtvghrnhepfeffgfelvdffgedtveelgfdtgefghfdvkefg
+    geetieevjeekteduleevjefhueegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghnughrvghssegrnhgrrhgriigvlhdruggvpdhnsggprhgt
+    phhtthhopedvuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghvrghnrghssh
+    gthhgvsegrtghmrdhorhhgpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovghhlhgv
+    segrrhhmrdgtohhmpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmhgrnhhnsegrrh
+    hmrdgtohhmpdhrtghpthhtoheprghsmhhlrdhsihhlvghntggvsehgmhgrihhlrdgtohhm
+    pdhrtghpthhtohepqhhpvghrrhgvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepph
+    gvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprggurhhirghnrdhh
+    uhhnthgvrhesihhnthgvlhdrtghomhdprhgtphhtthhopegrgigsohgvsehkvghrnhgvlh
+    drughkpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:rYoAZ03Ltrv3p59gBHhTY4FxT2sSl3xMzXIVBbfA1nRXa7W5Hfdvsg>
+    <xmx:rYoAZyGCu5QE_Ho3nDlpzGWyENASseovlZ7ERK4hpLfr14tBGW66gQ>
+    <xmx:rYoAZ1-qEuCjBO4ER8GUjAGBb9sRHoG8Wp4HaUK_qr3aqLh6gI-HZg>
+    <xmx:rYoAZ_l1NRE4Y4W15VPejdSx8vmeCVzmapLq_40PO5TOaYfZjilf1A>
+    <xmx:rooAZ2MgYa13qAD6m7jbaRPID47t20DOaN6SylC6RlOOm9xFY3AcQ58x>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 4 Oct 2024 20:39:09 -0400 (EDT)
+Date: Fri, 4 Oct 2024 20:39:09 -0400
+From: Andres Freund <andres@anarazel.de>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Quentin Perret <qperret@google.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com, 
+	dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org, 
+	Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org, 
+	bvanassche@acm.org, asml.silence@gmail.com, linux-block@vger.kernel.org, 
+	io-uring@vger.kernel.org, qyousef@layalina.io, dsmythies@telus.net, axboe@kernel.dk
+Subject: Re: [RFC PATCH 5/8] cpufreq/schedutil: Remove iowait boost
+Message-ID: <io3xcj5vpqbkojoktbp3fuuj77gqqkf2v3gg62i4aep4ps36dc@we2zwwp5hsyt>
+References: <20240905092645.2885200-1-christian.loehle@arm.com>
+ <20240905092645.2885200-6-christian.loehle@arm.com>
+ <CAJZ5v0hJWwsErT193i394bHOczvCQwU_5AVVTJ1oKDe7kTW82g@mail.gmail.com>
+ <Zv5oTvxPsiTWCJIo@google.com>
+ <6e21e8f1-e3b4-4915-87cc-6ce77f54cc8a@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,104 +112,84 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0@gmail.com>
+In-Reply-To: <6e21e8f1-e3b4-4915-87cc-6ce77f54cc8a@arm.com>
 
-Hi Matteo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on fec496684388685647652ab4213454fbabdab099]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matteo-Martelli/iio-core-add-read_avail_release_resource-callback-to-fix-race/20241004-013654
-base:   fec496684388685647652ab4213454fbabdab099
-patch link:    https://lore.kernel.org/r/20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0%40gmail.com
-patch subject: [PATCH 7/7] power: supply: ingenic-battery: free scale buffer after use
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410050737.0PgqTuD1-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050737.0PgqTuD1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410050737.0PgqTuD1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/power/supply/ingenic-battery.c:120:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     120 |         kfree(scale_raw);
-         |         ^
-   1 error generated.
+Hi,
 
 
-vim +/kfree +120 drivers/power/supply/ingenic-battery.c
+A caveat: I'm a userspace developer that occasionally strays into kernel land
+(see e.g. the io_uring iowait thing). So I'm likely to get some kernel side
+things wrong.
 
-    59	
-    60	/* Set the most appropriate IIO channel voltage reference scale
-    61	 * based on the battery's max voltage.
-    62	 */
-    63	static int ingenic_battery_set_scale(struct ingenic_battery *bat)
-    64	{
-    65		const int *scale_raw;
-    66		int scale_len, scale_type, best_idx = -1, best_mV, max_raw, i, ret;
-    67		u64 max_mV;
-    68	
-    69		ret = iio_read_max_channel_raw(bat->channel, &max_raw);
-    70		if (ret) {
-    71			dev_err(bat->dev, "Unable to read max raw channel value\n");
-    72			return ret;
-    73		}
-    74	
-    75		ret = iio_read_avail_channel_attribute(bat->channel, &scale_raw,
-    76						       &scale_type, &scale_len,
-    77						       IIO_CHAN_INFO_SCALE);
-    78		if (ret < 0) {
-    79			dev_err(bat->dev, "Unable to read channel avail scale\n");
-    80			return ret;
-    81		}
-    82		if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2) {
-    83			ret = -EINVAL;
-    84			goto out;
-    85		}
-    86	
-    87		max_mV = bat->info->voltage_max_design_uv / 1000;
-    88	
-    89		for (i = 0; i < scale_len; i += 2) {
-    90			u64 scale_mV = (max_raw * scale_raw[i]) >> scale_raw[i + 1];
-    91	
-    92			if (scale_mV < max_mV)
-    93				continue;
-    94	
-    95			if (best_idx >= 0 && scale_mV > best_mV)
-    96				continue;
-    97	
-    98			best_mV = scale_mV;
-    99			best_idx = i;
-   100		}
-   101	
-   102		if (best_idx < 0) {
-   103			dev_err(bat->dev, "Unable to find matching voltage scale\n");
-   104			ret = -EINVAL;
-   105			goto out;
-   106		}
-   107	
-   108		/* Only set scale if there is more than one (fractional) entry */
-   109		if (scale_len > 2) {
-   110			ret = iio_write_channel_attribute(bat->channel,
-   111							  scale_raw[best_idx],
-   112							  scale_raw[best_idx + 1],
-   113							  IIO_CHAN_INFO_SCALE);
-   114			if (ret)
-   115				goto out;
-   116		}
-   117	
-   118		ret = 0;
-   119	out:
- > 120		kfree(scale_raw);
-   121		return ret;
-   122	}
-   123	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 2024-10-03 11:30:52 +0100, Christian Loehle wrote:
+> These are the main issues with transforming the existing mechanism into
+> a per-task attribute.
+> Almost unsolvable is: Does reducing "iowait pressure" (be it per-task or per-rq)
+> actually improve throughput even (assuming for now that this throughput is
+> something we care about, I'm sure you know that isn't always the case, e.g.
+> background tasks). With MCQ devices and some reasonable IO workload that is
+> IO-bound our iowait boosting is often just boosting CPU frequency (which uses
+> power obviously) to queue in yet another request for a device which has essentially
+> endless pending requests. If pending request N+1 arrives x usecs earlier or
+> later at the device then makes no difference in IO throughput.
+
+That's sometimes true, but definitely not all the time? There are plenty
+workloads with low-queue-depth style IO. Which often are also rather latency
+sensitive.
+
+E.g. the device a database journal resides on will typically have a low queue
+depth. It's extremely common in OLTPish workloads to be bound by the latency
+of journal flushes. If, after the journal flush completes, the CPU is clocked
+low and takes a while to wake up, you'll see substantially worse performance.
+
+
+
+
+> If boosting would improve e.g. IOPS (of that device) is something the block layer
+> (with a lot of added infrastructure, but at least in theory it would know what
+> device we're iowaiting on, unlike the scheduler) could tell us about. If that is
+> actually useful for user experience (i.e. worth the power) only userspace can decide
+> (and then we're back at uclamp_min anyway).
+
+I think there are many cases where userspace won't realistically be able to do
+anything about that.
+
+For one, just because, for some workload, a too deep idle state is bad during
+IO, doesn't mean userspace won't ever want to clock down. And it's probably
+going to be too expensive to change any attributes around idle states for
+individual IOs.
+
+Are there actually any non-privileged APIs around this that userspace *could*
+even change? I'd not consider moving to busy-polling based APIs a realistic
+alternative.
+
+
+For many workloads cpuidle is way too aggressive dropping into lower states
+*despite* iowait. But just disabling all lower idle states obviously has
+undesirable energy usage implications. It surely is the answer for some
+workloads, but I don't think it'd be good to promote it as the sole solution.
+
+
+It's easy to under-estimate the real-world impact of a change like this. When
+benchmarking we tend to see what kind of throughput we can get, by having N
+clients hammering the server as fast as they can. But in the real world that's
+pretty rare for anything latency sensitive to go full blast - rather there's a
+rate of requests incoming and that the clients are sensitive to requests being
+processed more slowly.
+
+
+That's not to say that the current situation can't be improved - I've seen way
+too many workloads where the only ways to get decent performance were one of:
+
+- disable most idle states (via sysfs or /dev/cpu_dma_latency)
+- just have busy loops when idling - doesn't work when doing synchronous
+  syscalls that block though
+- have some lower priority tasks scheduled that just burns CPU
+
+I'm just worried that removing iowait will make this worse.
+
+Greetings,
+
+Andres Freund
 
