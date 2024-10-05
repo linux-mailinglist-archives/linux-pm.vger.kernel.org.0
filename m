@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-15183-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15184-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D734C9914BE
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 08:05:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25B609914C4
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 08:05:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E6F71F237C0
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 06:05:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43272836C3
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 06:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A6276036;
-	Sat,  5 Oct 2024 06:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA2612FB34;
+	Sat,  5 Oct 2024 06:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="OfODbaa6"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="4ybJeQwy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F394085D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DA125761;
 	Sat,  5 Oct 2024 06:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728108318; cv=none; b=ADX7CXmBU6/Hkks6us6gMjM4aiwyVdUZLXXcna8NjfOvRVJ27dxefoVvw3SjqPOpK/5JbP4FlOg3aoy0AXVbYtMuz8MlQkIB9goimEtn8fQiN50aayN+pXd/nLtmZao+FEpRcBPXweC34q8mcUikKnNAVK/t0if4JNqdE2teZOE=
+	t=1728108319; cv=none; b=EZW8oxjySXhlCoGmmx3uAvoY5TeQ/NBd9UpUquQl6nSw4bIww9fgI5UvuS8a1sJoNE9yCcL4qKoa+fELOeTT4rEFR8iJCLFtGna5IRdSX8KaGz9x8Tkn+OD2d5t888ejuUloQX0nH58onCJ49n9+2hiCZZrpZD0C8pQ/7W+upxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728108318; c=relaxed/simple;
-	bh=XPng8doE9Qj+7g0BVLSwFlpUxkCTiQ2wJFS8zuO51xs=;
+	s=arc-20240116; t=1728108319; c=relaxed/simple;
+	bh=yiQQZDD6QSNVxY4ACyJ8QcOaJxXST5yvWz5JfGWP6wY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rKEPr9Jz5ainwuI6jhkFXcNhjIcVW+xUR6jCPeLNbiVEJ4pgWBA04JrTJR7Bwvlaou3J244fXZf+L1BcEnsM48IW2xkQo1Ech/ASbQrt3OYuqkhsNDTYD2FfrkdD3HeOdKtPc7sC5f0KxURGGMbGh13gE+RwE63a7SWPZf+x/zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=OfODbaa6; arc=none smtp.client-ip=178.238.236.174
+	 MIME-Version; b=WOLTJgIurPp/cxQECITulx1vSvElLY3gkT3XWgQ1Hq3hrOERsWcSApeykOWfOfC7FKhO514WU+AJzn+b/XiLHHCt12KCTcdSpLLNli4CwKUU+WAYA7KVJb30Vp4UxWUkU6v4H93v7OrWdwRVoQy13PyPkbJ54OAhatdeWG/WtTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=4ybJeQwy; arc=none smtp.client-ip=178.238.236.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=+dJ97ivHNuSVoqD5oW9Fz/1QiIDk+GWOc7V0CKxc+5Q=; b=OfODbaa6egnapi2js0seThZQ5G
-	VXaQ6GJXFqTnsFMEwUK1C8AUywQgsiC1cKGilWdp7wwR2V+eDJTf6GZlA9yK9rtJGY2oK6XhcpDvy
-	jaGfWGHdPYGnEB6j53AgMjaWKI+dMCmBYV1k0gEMbeFs0p3/gjPcS4PNpBimNoBLHc44FOPpePIXz
-	tIJA2Bt1fuMQPKXm3jl/KJFRVP6uxTFYdWyxYwRtifgCbf/xmU0udzSYV4+MlKvDsll+kaKtxahUK
-	ks28xcS7aQVJ163wAeHLxewTznFXbJ/jA2qU5gTTm3jkWGuk6ZfhNXX11uqBG1fSWjNJb9PSKHBDY
-	rJQhD3tQ==;
+	bh=wbOntimuwMRlj4Bv93aA0g0ubjkJNOwEkjhEMUXeecE=; b=4ybJeQwytnm4/H5amtXUCnlpct
+	gCJJMddaccdBzxSInylwkMK5aqsK+V51NiOW8TSM1BZ27atSuvUCjlM6VgojHIQtdF7wWwSbNpe7C
+	jZ71VsQixImX9dTawcliWgT6qcQOK+azLkzFawinBwA/uguzJCHUQhhM/jXnsSYz4nTbrai5R7zy9
+	Zly4KPGoatfiCowhab+6dbnWVs7jLr6y6C+5+7gXw7UO8zLEhYsAxCtUthw6MA0Fe5enrDN67iaye
+	1ex5TxZJKQy8hASj2OeLpr2dCKDn8UPc1sulwG5UIRAOfsczK/tG+Aqvx80w/qRxT1em3qR89AzDV
+	ygSd2Y7Q==;
 From: Andreas Kemnade <andreas@kemnade.info>
 To: Sebastian Reichel <sre@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -53,11 +53,10 @@ To: Sebastian Reichel <sre@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	devicetree@vger.kernel.org,
 	Rob Herring <robh@kernel.org>
-Cc: Andreas Kemnade <andreas@kemnade.info>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 1/4] dt-bindings: power: supply: Add TI TWL603X charger
-Date: Sat,  5 Oct 2024 08:05:08 +0200
-Message-Id: <20241005060511.1334049-2-andreas@kemnade.info>
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v3 2/4] dt-bindings: mfd: twl: add charger node also for TWL603x
+Date: Sat,  5 Oct 2024 08:05:09 +0200
+Message-Id: <20241005060511.1334049-3-andreas@kemnade.info>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20241005060511.1334049-1-andreas@kemnade.info>
 References: <20241005060511.1334049-1-andreas@kemnade.info>
@@ -69,72 +68,89 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use a fallback compatible since for especially for generic
-defensive setup of parameters, both 6030 and 6032 are the same and
-U-Boot actually uses a generic 6030/32 function to enable the
-charger.
+Also the TWL603X devices have a charger, so allow to specify it here.
 
 Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../power/supply/ti,twl6030-charger.yaml      | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
+ .../devicetree/bindings/mfd/ti,twl.yaml       | 30 +++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml b/Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
-new file mode 100644
-index 0000000000000..fc604d8a469df
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/ti,twl6030-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+index e94b0fd7af0f8..e772d13adbfdc 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+@@ -54,7 +54,7 @@ allOf:
+           $ref: /schemas/iio/adc/ti,twl4030-madc.yaml
+           unevaluatedProperties: false
+ 
+-        bci:
++        charger:
+           type: object
+           $ref: /schemas/power/supply/twl4030-charger.yaml
+           unevaluatedProperties: false
+@@ -105,6 +105,11 @@ allOf:
+             regulator-initial-mode: false
+ 
+       properties:
++        charger:
++          type: object
++          properties:
++            compatible:
++              const: ti,twl6030-charger
+         gpadc:
+           type: object
+           properties:
+@@ -136,6 +141,13 @@ allOf:
+             regulator-initial-mode: false
+ 
+       properties:
++        charger:
++          type: object
++          properties:
++            compatible:
++              items:
++                - const: ti,twl6032-charger
++                - const: ti,twl6030-charger
+         gpadc:
+           type: object
+           properties:
+@@ -169,6 +181,12 @@ properties:
+   "#clock-cells":
+     const: 1
+ 
++  charger:
++    type: object
++    additionalProperties: true
++    properties:
++      compatible: true
 +
-+title: TWL6030/32 BCI (Battery Charger Interface)
+   rtc:
+     type: object
+     additionalProperties: false
+@@ -222,6 +240,14 @@ examples:
+         interrupt-controller;
+         #interrupt-cells = <1>;
+ 
++        charger {
++          compatible = "ti,twl6030-charger";
++          interrupts = <2>, <5>;
++          io-channels = <&gpadc 10>;
++          io-channel-names = "vusb";
++          monitored-battery = <&bat>;
++        };
 +
-+description:
-+  The battery charger needs to be configured to do any charging besides of
-+  precharging. The GPADC in the PMIC has to be used to get the related
-+  voltages.
-+
-+maintainers:
-+  - Andreas Kemnade <andreas@kemnade.info>
-+
-+allOf:
-+  - $ref: power-supply.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: ti,twl6030-charger
-+      - items:
-+          - const: ti,twl6032-charger
-+          - const: ti,twl6030-charger
-+
-+  interrupts:
-+    items:
-+      - description: Charger Control Interrupt
-+      - description: Charger Fault Interrupt
-+
-+  io-channels:
-+    items:
-+      - description: VBUS Voltage Channel
-+
-+  io-channel-names:
-+    items:
-+      - const: vusb
-+
-+  monitored-battery: true
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - monitored-battery
-+
-+additionalProperties: false
+         gpadc {
+           compatible = "ti,twl6030-gpadc";
+           interrupts = <6>;
+@@ -259,7 +285,7 @@ examples:
+         interrupt-controller;
+         #interrupt-cells = <1>;
+ 
+-        bci {
++        charger {
+           compatible = "ti,twl4030-bci";
+           interrupts = <9>, <2>;
+           bci3v1-supply = <&vusb3v1>;
 -- 
 2.39.2
 
