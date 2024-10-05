@@ -1,123 +1,135 @@
-Return-Path: <linux-pm+bounces-15217-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15218-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 833F29918F4
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 19:41:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E85F9919C3
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 20:57:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A34B1F22315
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 17:41:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B849C282F29
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 18:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE78F158D8F;
-	Sat,  5 Oct 2024 17:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD6415F3EF;
+	Sat,  5 Oct 2024 18:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="ma98UlFw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eNJ4Rw5E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C8814D29B;
-	Sat,  5 Oct 2024 17:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298D21369BC;
+	Sat,  5 Oct 2024 18:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728150058; cv=none; b=AK8TVhwYJGXjB1ap56VS5/SjOYZgXOTAkQjj9SjFvQ5mUcx5hcxvUICDuRQpP5gSL/a7WWq6nG4u9dStzJc4bVf9v52Xvb+kkVvjNKECe+o1UJbMfeyZIzuZvc1PHi/q2f6LCAIMWb+xwuAcOZTAIJqnmq8D/EF8mqyXXkwbOmU=
+	t=1728154643; cv=none; b=RbGQ9YzyqZSFwn7jBWMexoS/pujgKmdQ29w4y+N9yU5fPwNUCXi43+RyCVkIQ2FTiwY1Qsb+Nk6O1t3+cEWr/nZpeM5zEC1aRDryykUAHeunFlDGgx8qr6QQ/g1/EhKgv4+5RI0oHDrFMf63z55mpwbmtPNUZsa1B/E9/BLyUEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728150058; c=relaxed/simple;
-	bh=VAd/yLm3XIw5HQaf5ZKgozvfO8p4FW4SgJ4KYjCCJTg=;
+	s=arc-20240116; t=1728154643; c=relaxed/simple;
+	bh=bUzrElpcmZy00FDHR/UrYDu1AHlhoN1235+oQw1lFjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ifEuwtabuU3AHAdWSAjCKCBOBPqUkbVMAKX6L+8KoXrStUteYgiuRJPznE95Rj5kldRFDq3kH4haPKYKOBYURxr5EP4bHMDHWbPUTw9ONJjwvWZvmqaa1ONFX2M8VRwKpoQ0ouEEbEPD8dZthL49azf1+MBbGrJ3nqDPj5yaz0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=ma98UlFw; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 05B701C0082; Sat,  5 Oct 2024 19:40:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1728150053;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n9vZfUZ8s2oPLQ0d9T0cl/XttnMZ/kA6jZ27FANk90U=;
-	b=ma98UlFwwgyHwQW/JPb1qMmH7qbwgN2At3u69m7SUyv1X7fETQPtnotSpchORkcgIxU0eV
-	OBmukeo7C2JeVSkrimRGOtM5+ngF8c8fX16msEB6TqA3VAIzrgg7qFJNVxHRjqzMcGVSQC
-	GpPONkwfOgrzTbJOQeBmPj1muReAc2Q=
-Date: Sat, 5 Oct 2024 19:40:52 +0200
-From: Pavel Machek <pavel@ucw.cz>
-To: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	linux-pm <linux-pm@vger.kernel.org>, linux-kernel@vger.kernel.org,
-	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Subject: Re: Root filesystem read access for firmware load during hibernation
- image writing
-Message-ID: <ZwF6JEHIQda92sIL@duo.ucw.cz>
-References: <3c95fb54-9cac-4b4f-8e1b-84ca041b57cb@maciej.szmigiero.name>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FqLBzSdMVzonFpop4W4Jqxr+NTRKpYqpiBtlNEQuR1CA2HgQRvXp6wJNLm94MV2D94zIvcy7rs+XRRz1TS6rtzyZ3OJs4PCZ0i31XTTgvEoQaoSrA+XTf/Q1hZI+325PBxnlqhvImmdRU4o9VGqYlyKm42Atz09eeDB/OyIr0QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eNJ4Rw5E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765A1C4CEC2;
+	Sat,  5 Oct 2024 18:57:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728154642;
+	bh=bUzrElpcmZy00FDHR/UrYDu1AHlhoN1235+oQw1lFjU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eNJ4Rw5EnTkMqwFtWfHJ78gew7KNhf2tBTGben4UzqCy6C7DCci1zzmqLFT/1gF23
+	 lU1TRWSM2jC0D0WU3SvjtK+PRpE3ih2n7TKA5NUwiB0mochG2qvhtRCcWqPMf/mM5/
+	 FsULZsWYP5rdZe13rz4A7HPh3+XPfV2gSVqdipAQbBCqlovWv/BTNl4AE5zGmWMiS6
+	 OXBoKC7PX2glSS7f62COrifq8EbPZzZM+vPElmybVVcwXetsopcz0nPQDirQBnCCeu
+	 qak4k6wO/zXIJoUcNVIVq1bF5bXP6zXmR+kgXWd34TG5/kKx2MysCbx7Be9xWyaX/v
+	 6nzks70GS3aew==
+Date: Sat, 5 Oct 2024 13:57:21 -0500
+From: Rob Herring <robh@kernel.org>
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, tony@atomide.com,
+	linux-kernel@vger.kernel.org, khilman@baylibre.com,
+	linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] dt-bindings: mfd: twl: add charger node also for
+ TWL603x
+Message-ID: <20241005185721.GA524539-robh@kernel.org>
+References: <20241005060511.1334049-1-andreas@kemnade.info>
+ <20241005060511.1334049-3-andreas@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="AzanCVSKuR7/7bLf"
-Content-Disposition: inline
-In-Reply-To: <3c95fb54-9cac-4b4f-8e1b-84ca041b57cb@maciej.szmigiero.name>
-
-
---AzanCVSKuR7/7bLf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241005060511.1334049-3-andreas@kemnade.info>
 
-Hi!
+On Sat, Oct 05, 2024 at 08:05:09AM +0200, Andreas Kemnade wrote:
+> Also the TWL603X devices have a charger, so allow to specify it here.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  .../devicetree/bindings/mfd/ti,twl.yaml       | 30 +++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> index e94b0fd7af0f8..e772d13adbfdc 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> @@ -54,7 +54,7 @@ allOf:
+>            $ref: /schemas/iio/adc/ti,twl4030-madc.yaml
+>            unevaluatedProperties: false
+>  
+> -        bci:
+> +        charger:
+>            type: object
+>            $ref: /schemas/power/supply/twl4030-charger.yaml
+>            unevaluatedProperties: false
+> @@ -105,6 +105,11 @@ allOf:
+>              regulator-initial-mode: false
+>  
+>        properties:
+> +        charger:
+> +          type: object
+> +          properties:
+> +            compatible:
+> +              const: ti,twl6030-charger
+>          gpadc:
+>            type: object
+>            properties:
+> @@ -136,6 +141,13 @@ allOf:
+>              regulator-initial-mode: false
+>  
+>        properties:
+> +        charger:
+> +          type: object
+> +          properties:
+> +            compatible:
+> +              items:
+> +                - const: ti,twl6032-charger
+> +                - const: ti,twl6030-charger
+>          gpadc:
+>            type: object
+>            properties:
+> @@ -169,6 +181,12 @@ properties:
+>    "#clock-cells":
+>      const: 1
+>  
+> +  charger:
+> +    type: object
+> +    additionalProperties: true
+> +    properties:
+> +      compatible: true
 
-> In my case, a USB device (RTL8821CU) gets reset at that stage due to
-> commit 04b8c8143d46 ("btusb: fix Realtek suspend/resume") and so it tries
-> to request_firmware() from the root filesystem after that thaw/reset,
-> when the hibernation image is being written.
->=20
-> It usually succeeds, however often it deadlocks somewhere in Btrfs code
-> resulting in the system failing to power off after writing the hibernate
-> image:
-> power_off() calls dpm_suspend_start(), which calls dpm_prepare(), which
-> waits for device probe to finish.
->=20
-> And device probe is stuck forever trying to load that USB stick firmware
-> from the filesystem - so in the end the system never powers off during
-> (after) hibernation.
->=20
-> That's why I wonder whether this firmware load is supposed to work correc=
-tly
-> during that hibernation state and so the system may be hitting some kind =
-of
-> a swsusp/btrfs/block layer race condition.
->=20
-> Or, alternatively, maybe  reading files is not supported at this point and
-> so this is really a btrtl/rtw88 bug?
+I think the behavior you're after is:
 
-I'd say not supported at this point. Reading file may still read to
-atime update, etc, and we can't really can't support that easily.
+required:
+  - compatible
 
-Suggestion is to keep firmware cached in memory, or at least cache it
-in memory when hibernation begins.
+Because what you have is true when compatible is not present.
 
-BR,
-										Pavel
-									=09
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+With that,
 
---AzanCVSKuR7/7bLf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZwF6JAAKCRAw5/Bqldv6
-8iNhAJ9rXSgZSqHjgeaD4NEroan26onCyACdG2iw2e9t1Xw164dPfjFJlAMuVa0=
-=QhxX
------END PGP SIGNATURE-----
-
---AzanCVSKuR7/7bLf--
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
