@@ -1,302 +1,173 @@
-Return-Path: <linux-pm+bounces-15219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD890991AF0
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 23:47:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CD57991B2E
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 00:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 791A6283CB0
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 21:47:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C2B7B21EF7
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 22:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD7F165EEF;
-	Sat,  5 Oct 2024 21:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C42E142624;
+	Sat,  5 Oct 2024 22:16:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bV8WQzKe"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="3ze2R4oV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C4A156677
-	for <linux-pm@vger.kernel.org>; Sat,  5 Oct 2024 21:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F104E1CA;
+	Sat,  5 Oct 2024 22:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728164867; cv=none; b=pq0Kipw7pXHWTLeGNvN0iTXhP7MmFgBA3anT0ng71tOryyDjz3Mn0iH9GclD6nAVfZclPGKlcGIFua7ueZIZWX7071yOs6nUb4HESHuQPuGY70+zDovBeFvJRJfsoFmkPFmwDErB7LECWA1DMaNdZC1BA63z+cLP0yI2r6upacw=
+	t=1728166571; cv=none; b=WKOJRGY6jhYIpZDARPBx7Cb+xee7CORiLHzn0cJyv5wY2meiH9RN8klL9BeAASLgCzo012geotUMfxJRfup06KN4vN3MtRQZbUgfA8NhOVi9u/MTGwDTFr8+msFv98PVo2p+w7icnw6VsjHz/bzozNKDy+Hv09fB1Zm7Mq+4RaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728164867; c=relaxed/simple;
-	bh=NdWB6tkTfJQBTHuHMl/LqhuaodLimA7O/JaRYDI1rLs=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=aMP37yva6YGUJQ1R7v/QpgzSLXGvf0OsSG6t6+djEizo3SWCzQkshvuEyrcS5rECQ/ZOQE28rTY48ffKlqlqOgSQgvcWVm9wFZmbI8sbHr/6k4OSuWVKWrKz7emsBTDZOELPLcgIePX3fc6y+9uq2uVZqkBLnPdcHi9hQMAJEUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bV8WQzKe; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728164863;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s0NSJiR66+W771sdnOGv74U1sxc3iHB99ouGFHcVcZU=;
-	b=bV8WQzKeO6qp2CRihT8b3KTfPZF1UtpUGYHK585tNGRrQAsIF7z/MNa8Z1yArcMY+gxsh7
-	Zhw1gQD62UanNlXrrcI2SkffbaWBFcAf/OzQ1zzqMObzPZssYAkjHuc8MTSMd70XlnDgnD
-	Cgu+0xPLdvm4Vy+NfzB1l/IDDnUe7UE=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-631-nPILxdcyNSOdQL3ISUMNgQ-1; Sat, 05 Oct 2024 17:47:42 -0400
-X-MC-Unique: nPILxdcyNSOdQL3ISUMNgQ-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a994d8d6004so395866b.2
-        for <linux-pm@vger.kernel.org>; Sat, 05 Oct 2024 14:47:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728164861; x=1728769661;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0NSJiR66+W771sdnOGv74U1sxc3iHB99ouGFHcVcZU=;
-        b=jzD3QyVAHKdDCaMNMqBcwXBTv0A1z3KUOLoTnaLJhYz2rAAY84CGq8UsR+9jAqfSPv
-         ep24w+usrIrJ7eUzAyg4LDz2vuabDIVjlaTPxv3lI5+X6f5lRdijOni72yfzpaUxWNGs
-         ZPne1T7tWDWYgclMm8RLFuTMHbMCf9cz2Xch38o6ugnNKWlBxfUwm2aLiNWviVqEhyiN
-         C86csr1h9QiXuerarVe/++bX2kTBUSyGyCUxhETUO6sJvx5RGXVj46MQO1NmFLGuS56R
-         GURlG311xXwlOGHq5uRfG77sfpnBOJfzp8AJQg9bNOW9DcB+mXeM2b/QxXQd1SB0g0ON
-         JYZw==
-X-Gm-Message-State: AOJu0Yw5LVZufbvHI2Ul44F7q8z3g6neEZi660/GhWiM11VCCkBDGUu9
-	Q30y5rRBrHQF3um0knTKI2nv9xWw1UX6OJrzyWrAcu2mjNZUgzVT8LeuCJ/HLiC3xvUw+1EJfhr
-	lriMHZmZEAwlijKTdW1gLmQ1/O0bfzU85WF8Hck9sMZV7Jq1f6Hi7YUxm
-X-Received: by 2002:a17:907:6d10:b0:a99:4b63:f810 with SMTP id a640c23a62f3a-a994b6400d6mr48917966b.46.1728164860633;
-        Sat, 05 Oct 2024 14:47:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGQ2nIqt2GW2qnkJIS/piJpH6dU7yov1f0/TF+eMzKyEOyYD3cwOf8O3sX7Dr71grfuaa8Srw==
-X-Received: by 2002:a17:907:6d10:b0:a99:4b63:f810 with SMTP id a640c23a62f3a-a994b6400d6mr48916266b.46.1728164860134;
-        Sat, 05 Oct 2024 14:47:40 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9945cdcc60sm54460366b.28.2024.10.05.14.47.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Oct 2024 14:47:39 -0700 (PDT)
-Message-ID: <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
-Date: Sat, 5 Oct 2024 23:47:39 +0200
+	s=arc-20240116; t=1728166571; c=relaxed/simple;
+	bh=/zDwBqr1YcZcrLHfJXKpEaXDRKBq4cUxi1JobrekPaA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PYcbseClX55yMWo85ktKV95CPN9qaCr0OY1gu6YEXT5QwYGOhz0jHnDp8nnZ4J2Rli1BwjYQMwYwtRNLaZyuT5dQzD8hMBI1Y9Sx1798By4uRFTCd5Q6mJ8TU8CKQQFNq0d7JCbMRU/XkA/aJX4DAk0fCZJkmPRTOpvjxeemMys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=3ze2R4oV; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id BD5F72E02014;
+	Sun,  6 Oct 2024 01:16:03 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1728166564;
+	bh=/zDwBqr1YcZcrLHfJXKpEaXDRKBq4cUxi1JobrekPaA=;
+	h=Received:From:Subject:To;
+	b=3ze2R4oVbamPn9tlh61Bsch5cIiqLkZoalFUGBnEnNFFkiRXjvfvN8mQsD6G5Gv8w
+	 CEy1ntX2cll9MlKoDaYzVirQB6mwtWKoSBfFD7HHuT7gGNfKocUBGoTlwlW2j851ra
+	 lZW3EXc8/yUcugoJ5BdPAc02hnbXr42/pv1gR3d4=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.173) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f173.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f173.google.com with SMTP id
+ 38308e7fff4ca-2fad100dd9fso45752981fa.3;
+        Sat, 05 Oct 2024 15:16:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW76OzXr/bMAzZj67m3GbOVzW8MYTSG8IHKDqhpWkYIdWim5USY04vbEmsgzfM42pEX9jnbbXQCdCRTsNwEGCS1Zfq1@vger.kernel.org
+X-Gm-Message-State: AOJu0YyurfbrQzWHsTc2rVpU20gbC+m45784zI08TYvyefhhSTbOaqr8
+	0LvZ9HnNrIYzTZabbBe+JezKQ8SVJBYzUTRN4oghxhMNh/21LzQHeHtT6sjcp+tcnu3XrEATpsR
+	8Vvi6znC0SUxPuNSGR9Ljh0lmS6c=
+X-Google-Smtp-Source: 
+ AGHT+IGpPEFXgJZu+u9+/Gz8Z9Al6yz2ynde5Sp5IYaQ+x5SfyFVIqf94L5lpYpHGF6P+kGvoN3iOEC1PFjkyFr3Ugk=
+X-Received: by 2002:a05:651c:1989:b0:2fa:d49d:45ae with SMTP id
+ 38308e7fff4ca-2faf3c0c2bcmr48943331fa.8.1728166563050; Sat, 05 Oct 2024
+ 15:16:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
- platform-driver-x86@vger.kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>, luke@ljones.dev,
- me@kylegospodneti.ch, Denis Benato <benato.denis96@gmail.com>
 References: <20240922172258.48435-1-lkml@antheas.dev>
  <134adbb7-06c5-4b6a-a8b9-abb973784f73@redhat.com>
  <CAGwozwG49xkWoFVybsVzpa=eG1U2YVCMdr8qc-HwRWSqEKCv0g@mail.gmail.com>
  <c19490b6-dc4b-47b3-b422-d244a6b87e5e@redhat.com>
-Content-Language: en-US, nl
-In-Reply-To: <c19490b6-dc4b-47b3-b422-d244a6b87e5e@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
+In-Reply-To: <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Sun, 6 Oct 2024 00:15:51 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
+Message-ID: 
+ <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
+ outside suspend (fixes ROG Ally suspend)
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	platform-driver-x86@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>, luke@ljones.dev,
+ me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <172816656422.23588.9215590334041796372@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Hi Antheas,
+<skip>
 
-On 5-Oct-24 6:24 PM, Hans de Goede wrote:
-> Hi Antheas,
-> 
-> On 5-Oct-24 5:10 PM, Antheas Kapenekakis wrote:
->> Hi Hans,
->>
->>> Thank you for your work on this and thank you for the comprehensive write-up
->>> on how Windows does modern standby.
->>>
->>> First of all may I suggest that you take the above write-up, minus the ROG
->>> Ally specific bits and turn this into a new documentation file under
->>> Documentation/power ?  And also document at which point Linux currently
->>> makes the various transitions.
->>
->> I will try to move some of that documentation there, this is a great idea.
->>
->>> And then in patches where you move the transitions, also update the docs
->>> on what Linux does to match.
->>>
->>> I have read the discussion about tying the display on/off calls to CRTC state
->>> and/or exposing a userspace knob for that. I think that this needs more
->>> discussion / design work.
->>
->> Yes, you are right. To become a knob this would require a much bigger
->> discussion. I would also like to move Sleep calls as part of that. The
->> Legion Go and OneXPlayer devices turn off their controllers as part of
->> that and other modern standby devices limit their power envelope
->> (perhaps the Legion Go too). I think the Sleep call is where most of
->> the userspace usability will come from. Display On/Off is a bit of a
->> NOOP on most devices.
->>
->> As for the LSB0 enter and exit, I do not know where the correct place
->> for those would be, and perhaps someone from Microsoft needs to be
->> consulted on that. The documentation is very vague. However it is
->> clear to me that they should be close to where they are right now, so
->> they very likely do not need to move.
->>
->> There is also the new _DSM intent to turn display on 9 call. Which
->> meshes with the sleep call. That call is made before Sleep Exit, if
->> the kernel knows that the wake-up will cause the display to turn on,
->> to boost the thermal envelope of the device and help it wake up
->> quicker. If the Sleep call is moved then we would also have to
->> introduce that somewhere to avoid wake-up time regressions on devices
->> that support it, which also raises the question of how would the
->> kernel decide if an interrupt will cause the display to turn on before
->> unfreezing userspace (bulk of resume) (or should it be done after
->> unfreezing?).
->>
->>> OTOH IMHO it would be good to take patches 1 - 3 . Certainly 1 + 2 would
->>> be good to have. 3 is a bit unfortunate and not necessary with the current
->>> special ROG Ally handling in the asus-wmi driver. It might be better to
->>> just keep the quirks there.
->>
->> From what I know Luke plans to remove that quirk ASAP due to new
->> firmware. I would keep it around until this patch series merges
->> personally and remove it as part of that.
-> 
-> Ack I replied to Luke to say something like that.
-> 
->> As it will probably cause regressions if both are in place
-> 
-> I don't see how having both this patch-sets + the asus-wmi
-> quirks will cause regressions?  The suspend delay will be done
-> twice, but that is harmless. 
-> 
->> and require manual intervention if
->> either is not. I will also note that the quirk in asus-wmi calls the
->> Display On/Off calls a second time and during the suspend sequence,
->> which is not in any way proper.
-> 
-> AFAICT asus-wmi does not call the display on / off callbacks instead
-> it directly calls "\\_SB.PCI0.SBRG.EC0.CSEE" to control the power ?
-> 
->> So if future devices need this kind of
->> quirk, it really does not seem like a good idea to me to paper over
->> their problems by calling the notifications a second time in random
->> platform drivers. There is the question of where that quirk should be
->> placed, that is true, but I IMO it should be a pm problem.
->>
->> Perhaps not in the location where I put it though and perhaps it
->> should be done with LSB0 callbacks instead. Although, being done this
->> way allows for it to blend with the suspend sequence. Ideally, the
->> Display Off delay would be blended with userspace going down such that
->> if e.g., there is heavy userspace activity that requires ~2s to
->> freeze, the quirk would add no delay. Instead, it would only add delay
->> if userspace freezes quickly (less than .5s). Same can be said with
->> Sleep Entry and beginning prepare_late, which blocks the EC interrupts
->> (that would need a lot of investigation though).
->>
->> On that note, it seems to me that the Ally has 2 bugs related to the
->> _DSM calls 3 and 4. First bug is that Display On is gated on current
->> firmware and only works when the USB subsystem is powered on.
->> Allegedly, this is fixed on the upcoming firmware but it is not
->> something I have verified personally. I will verify it in 10 days or
->> so, if the new firmware does not fail QA I guess.
->>
->> However, there is a second bug with Display Off in _DSM 4. The
->> controller of the Ally needs time to power off, around 500ms.
->> Otherwise it gets its power clipped and/or does not power off
->> correctly. This causes the issues mentioned in the discussion and I
->> have no indication that this is fixed with newer controller firmware.
->> It is also my understanding that most of the testing of the new
->> firmware happened with the asus-wmi quirk in place, which papers over
->> that issue, so removing the quirk might be premature in any case.
-> 
-> Ok.
-> 
->> We have currently released this patch series in Bazzite and I am happy
->> to report that it completely fixes all controller related issues in
->> the Ally devices and makes them behave exactly as they do in Windows,
->> regardless of firmware and bug for bug.
->>
->> So we will be keeping it around and extending it as appropriate to
->> include the Sleep calls. I am reminded multiple times per week that
->> the Ally has TDP suspend bugs, where if the user is playing a heavy
->> game, the EC of the device tends to get stuck at 6W and fail to
->> respond after waking the device. So moving calls 7, 8 is the natural
->> next step in this investigation. I already have a draft patch on
->> standby, that we plan to AB test soon.
->>
->>> IMHO it would be good to submit a v2 of just patches 1 - 3 run through
->>> checkpatch. Also the commit message of patch 3 should point to the existing
->>> quirk code in asus-wmi.c and mention that then is no longer necessary after
->>> patch 3, then we can discuss what is the best place for these quirks.
->>
->> I did run it through before sending the patch. However, some of the
->> warnings were a bit cryptic to me... I will run it again.
->>
->> I will add a note for asus-wmi on future patch series.
->>
->> First 3 patches of the series are designed to NOOP before patch 4. Did
->> you mean patch 3 (which adds the delay) instead of 4?
-> 
-> Ah I misread the series and failed to notice that patch 4 actually hooks
-> things up, I was under the impression that patch 4 hooks things up.
-> 
-> But I did mean that patch 3 might lead to discussion not patch 4.
-> 
-> Now that I have taken a better look some more detailed review comments:
-> 
-> * Patches 1 and 2 should be squashed into a single patch IMHO.
-> 
-> * Patch 3 adds the quirks to kernel/power/suspend.c but this
-> really should be added to drivers/acpi/x86/s2idle.c and then do
-> the sleep as part of the display_off callback.
-> 
-> * Given my comment on patch 3 I would swap the order of patch 3 and 4
->   and only add the quirks after moving the display off ACPI call to
->   the new callback
-> 
-> * Patch 4 does too much in a single patch, specifically besides
-> actually implementing the new callbacks it also does s/SCREEN/DISPLAY
-> on all the ACPI_LPS0_* defines. This renaming of the defines must
-> be done in a separate patch.
+> Thinking some more about this I am having second doubts about
+> moving the LPS0 display power off call to before devices are suspended,
+> doing so would mean that the display might still be on when that call
+> is made and that call could disable power-resources which are necessary
+> for the display causing issues when the display driver's suspend method
+> runs.
 
-Thinking some more about this I am having second doubts about
-moving the LPS0 display power off call to before devices are suspended,
-doing so would mean that the display might still be on when that call
-is made and that call could disable power-resources which are necessary
-for the display causing issues when the display driver's suspend method
-runs.
+Is there any device where that is used for display powersaving?
 
-So I think that we need something closer to Mario's POC from:
+> So I think that we need something closer to Mario's POC from:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?h=
+=3Dsuperm1/dsm-screen-on-off
+>
+> here where the call is made when the last display is turned off.
+>
+> IOW have the drm modesetting core call this.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?h=superm1/dsm-screen-on-off
+I can see two problems with this approach: 1) it would happen in a
+random point in the suspend sequence, introducing race conditions with
+sensitive modern standby devices (e.g., Ally). 2) It would not be
+gated and debounced properly, so a drm driver could call it 5 times
+when you e.g., plug in an HDMI cable.
 
-here where the call is made when the last display is turned off.
+And indeed that is the case, that PR horribly breaks the Ally even
+while any asus-wmi quirk was active. Perhaps DRM can be consulted
+though, see below.
 
-IOW have the drm modesetting core call this.
+> Maybe have something like a enabled_displays counter in the
+> drm-core which gets increased / decreased by helpers and
+> have the drm-core call platform_suspend_screen_off() /
+> platform_suspend_screen_on() when the counter goes from 1 -> 0
+> resp. 0 -> 1, ignoring the very first 0 -> 1 transition
+> which will be done when the first GPU with an enabled
+> output is found ?
 
-Maybe have something like a enabled_displays counter in the
-drm-core which gets increased / decreased by helpers and
-have the drm-core call platform_suspend_screen_off() /
-platform_suspend_screen_on() when the counter goes from 1 -> 0
-resp. 0 -> 1, ignoring the very first 0 -> 1 transition
-which will be done when the first GPU with an enabled
-output is found ?
+To quote Microsoft [1], "This _DSM Function will be invoked when the
+operating system has entered a state where all displays=E2=80=94local and
+*remote*, if any=E2=80=94have been turned off."
 
-The idea being that the first increase() call gets made when
-a drm/kms driver probes a display and finds outputs which are
-light up during probe() and then further increase / decrease
-calls are made either when all displays go off; or maybe
-per crtc when the crtc gets enabled / disabled.
+Since it says remote, binding it to DRM could prove difficult. In
+addition, the call in Windows is made 5 seconds after the displays
+turn off due to inactivity. To mirror this behavior you would need
+userspace.
 
-Anyways how best to do this at display off time should be
-discussed with the drm/kms community on the dri-devel list.
+If there is strong indication that the Display On/Off calls interfere
+with the DRM subsystem, e.g., turn off a GPU in certain laptops, the
+call could be gated with a counter similar to Mario's PR and error
+out. In that way, it is still controllable by userspace while ensuring
+the device display is off. Is there such an indication/do we know of
+such a device?
 
-Regards,
+The Ally and Legion Go which I tested happily had their display turn
+on after I yanked their display on and sleep exit callbacks. The
+Legion Go even had its suspend light blink while the screen was on.
+And both had disabled controllers. This behavior was sticky even after
+a reboot. I suppose this is due to the fact that the device might
+hibernate, so the EC would have to remember the last state before
+power off.
 
-Hans
+> The idea being that the first increase() call gets made when
+> a drm/kms driver probes a display and finds outputs which are
+> light up during probe() and then further increase / decrease
+> calls are made either when all displays go off; or maybe
+> per crtc when the crtc gets enabled / disabled.
+>
+> Anyways how best to do this at display off time should be
+> discussed with the drm/kms community on the dri-devel list.
 
+I can cc on the next version.
 
+Link: https://learn.microsoft.com/en-us/windows-hardware/design/device-expe=
+riences/modern-standby-firmware-notifications#display-off-notification-func=
+tion-3
+[1]
 
-
-
-
-
-
-
+Antheas
 
