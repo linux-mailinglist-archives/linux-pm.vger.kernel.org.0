@@ -1,144 +1,156 @@
-Return-Path: <linux-pm+bounces-15207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15209-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A0BC9915D7
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 12:09:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43FE099172F
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 16:05:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEBFB283190
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 10:09:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C05521F20C85
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 14:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F9F14F11E;
-	Sat,  5 Oct 2024 10:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hlwLF6jW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4931C6A3;
+	Sat,  5 Oct 2024 14:05:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from vps-ovh.mhejs.net (vps-ovh.mhejs.net [145.239.82.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F12A136349;
-	Sat,  5 Oct 2024 10:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09C715AF6;
+	Sat,  5 Oct 2024 14:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.239.82.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728122794; cv=none; b=HmevpeV1wbwnNQpUM7iwmwUsEtWgjZbwFpwGCyZ2c0/4MGnSnn1/GsbYkxFHKukBxrEFLIpxNvpAJSzWhThz7p0FfPMcYlbyXIgzEO+naxOQrGVRVxjg6c2UGF0WAh4WkjlmzVn/IlDeel19nZEG/GIRMZ8wVWzal1eE8ZswLkc=
+	t=1728137132; cv=none; b=qL5K+61qYG94qJ3SEra4H89amX1PVdNHlnEyovXne5ccUZzsIs6xagaT4PG5tdZsLE0irmqr8JZW8wjYNxNKCbE50LpXJhTYFOl3+aneXO3nUE9PGXOQ3G9KhqfckmOddSWpWxOVlCw8aftJ+ypRD0g1rLOtkMvvOB4oLCx6+y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728122794; c=relaxed/simple;
-	bh=bp8YF7paCLm/RvDn/3zn9PMgwl2X0VG26YtAWU1mujA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RABPJ3031J2X/4y5f5hglXdj6oR/xK309CsV3FYHGYzFcwB1qDLFzeD2PGo7bzYuc62G7U8Kx/RctrMr+5qO+1BWbVh4X7BT2rGpC8jCh9Y2CXdC+PdaD2nblgjjmAD1ETbEt7/+V9JPfXJWnNyRNvxhk5ME+aFp8Qdn+WAGK6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hlwLF6jW; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1728122791;
-	bh=bp8YF7paCLm/RvDn/3zn9PMgwl2X0VG26YtAWU1mujA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hlwLF6jWQlw4oV3ojO3Xn8/kjOpAucA3XhZ1dpgkV2Wu9c0EJ/QDyAcghHeliHVFo
-	 81zgu2JFqh11fKzAfDLozLQ6lKbWib5YHcYhNlAAIDmy6IVUnCEMwUaCB/vrMyY7pK
-	 fLOl6zjbI5FgOdKo16ccoJgvjD4md8JQZZ07qzgo=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 05 Oct 2024 12:06:18 +0200
-Subject: [PATCH 4/4] power: supply: hwmon: move interface to private header
+	s=arc-20240116; t=1728137132; c=relaxed/simple;
+	bh=fUcwfSgvkcE7Ic79KuksBiU7kEwLsGaeMLge1N+Ssx4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CqvqSfXeNwn1UNuTbo3x60HDyDwfcx6nJ0hTaLI2HUb7qil2XilXvmX0vOSf2PEnRL5UJuCqlF9LToZh3fkepyDYGrVXvbYCEC+HDdlF9TbBtmq5+EdGtJhyiD/6Jub0KIp/WcS4imONjlzVhypzQmmdofw5F0krpkP6NMqeifU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name; spf=none smtp.mailfrom=vps-ovh.mhejs.net; arc=none smtp.client-ip=145.239.82.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vps-ovh.mhejs.net
+Received: from MUA
+	by vps-ovh.mhejs.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.98)
+	(envelope-from <mhej@vps-ovh.mhejs.net>)
+	id 1sx4e9-00000000I5R-2Aq0;
+	Sat, 05 Oct 2024 15:16:33 +0200
+Message-ID: <413b1e99-8cfe-4018-9ef3-2f3e21806bad@maciej.szmigiero.name>
+Date: Sat, 5 Oct 2024 15:16:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Root filesystem read access for firmware load during hibernation
+ image writing
+From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>
+Cc: linux-pm <linux-pm@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>,
+ Danilo Krummrich <dakr@redhat.com>
+References: <3c95fb54-9cac-4b4f-8e1b-84ca041b57cb@maciej.szmigiero.name>
+Content-Language: en-US, pl-PL
+Autocrypt: addr=mail@maciej.szmigiero.name; keydata=
+ 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
+Disposition-Notification-To: "Maciej S. Szmigiero"
+ <mail@maciej.szmigiero.name>
+In-Reply-To: <3c95fb54-9cac-4b4f-8e1b-84ca041b57cb@maciej.szmigiero.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241005-power-supply-cleanups-v1-4-45303b2d0a4d@weissschuh.net>
-References: <20241005-power-supply-cleanups-v1-0-45303b2d0a4d@weissschuh.net>
-In-Reply-To: <20241005-power-supply-cleanups-v1-0-45303b2d0a4d@weissschuh.net>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728122791; l=2714;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=bp8YF7paCLm/RvDn/3zn9PMgwl2X0VG26YtAWU1mujA=;
- b=48AkzMo+dKj7vs/k8ZubFmHBHA1FfhdCzmZr2McYD7vhswHU07iIm+E/rCjGtK3+hoz39uH/J
- PltiCQNeQB0DX0IPG6cljtsPNP5QaiN3uu8QVxZirsYJKBYNcTXEjOw
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Sender: mhej@vps-ovh.mhejs.net
 
-The interface of power_supply_hwmon.c is only meant to be used by the
-psy core. Remove it from the public header file and use the private one
-instead.
+The issue below still happens on kernel version 6.11.1.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/power/supply/power_supply.h       | 17 +++++++++++++++++
- drivers/power/supply/power_supply_hwmon.c |  2 ++
- include/linux/power_supply.h              | 13 -------------
- 3 files changed, 19 insertions(+), 13 deletions(-)
+Created a kernel bugzilla entry for it:
+https://bugzilla.kernel.org/show_bug.cgi?id=219353
 
-diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
-index 4c558fb3db7211a610134960292790ea3584b363..7434a6f2477504ee6c0a3c7420e1444387b41180 100644
---- a/drivers/power/supply/power_supply.h
-+++ b/drivers/power/supply/power_supply.h
-@@ -44,3 +44,20 @@ static inline int power_supply_create_triggers(struct power_supply *psy)
- static inline void power_supply_remove_triggers(struct power_supply *psy) {}
- 
- #endif /* CONFIG_LEDS_TRIGGERS */
-+
-+#ifdef CONFIG_POWER_SUPPLY_HWMON
-+
-+int power_supply_add_hwmon_sysfs(struct power_supply *psy);
-+void power_supply_remove_hwmon_sysfs(struct power_supply *psy);
-+
-+#else
-+
-+static inline int power_supply_add_hwmon_sysfs(struct power_supply *psy)
-+{
-+	return 0;
-+}
-+
-+static inline
-+void power_supply_remove_hwmon_sysfs(struct power_supply *psy) {}
-+
-+#endif /* CONFIG_POWER_SUPPLY_HWMON */
-diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 01be04903d7d2465ae2acb9eeb0b55a87868bb87..9b30175ba9aefb0ebc0fbe73fdd158fcefc3bdda 100644
---- a/drivers/power/supply/power_supply_hwmon.c
-+++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -9,6 +9,8 @@
- #include <linux/slab.h>
- #include "power_supply.h"
- 
-+#include "power_supply.h"
-+
- struct power_supply_hwmon {
- 	struct power_supply *psy;
- 	unsigned long *props;
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index ea0ba149f296644bd18717d91f338172602eb6d6..58264343fb8a1590d02ec18a2d7fe9d874e3bc31 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -943,19 +943,6 @@ static inline bool power_supply_is_watt_property(enum power_supply_property psp)
- 	return false;
- }
- 
--#ifdef CONFIG_POWER_SUPPLY_HWMON
--int power_supply_add_hwmon_sysfs(struct power_supply *psy);
--void power_supply_remove_hwmon_sysfs(struct power_supply *psy);
--#else
--static inline int power_supply_add_hwmon_sysfs(struct power_supply *psy)
--{
--	return 0;
--}
--
--static inline
--void power_supply_remove_hwmon_sysfs(struct power_supply *psy) {}
--#endif
--
- #ifdef CONFIG_SYSFS
- ssize_t power_supply_charge_behaviour_show(struct device *dev,
- 					   unsigned int available_behaviours,
+It would be nice to at least know whether the filesystem read access supposed is
+to be working normally at PMSG_THAW hibernation stage to assign the issue accordingly.
 
--- 
-2.46.2
+CC: request_firmware() maintainers
+
+Thanks,
+Maciej
+
+On 28.08.2024 21:08, Maciej S. Szmigiero wrote:
+> Hi,
+> 
+> I have a quick question about hibernation "image writing" state - is
+> (root) filesystem *read* access supposed to be working normally at that point?
+> 
+> Specifically, I know that devices are resumed (PMSG_THAW) after preparing
+> the hibernation image.
+> 
+> In my case, a USB device (RTL8821CU) gets reset at that stage due to
+> commit 04b8c8143d46 ("btusb: fix Realtek suspend/resume") and so it tries
+> to request_firmware() from the root filesystem after that thaw/reset,
+> when the hibernation image is being written.
+> 
+> It usually succeeds, however often it deadlocks somewhere in Btrfs code
+> resulting in the system failing to power off after writing the hibernate
+> image:
+> power_off() calls dpm_suspend_start(), which calls dpm_prepare(), which
+> waits for device probe to finish.
+> 
+> And device probe is stuck forever trying to load that USB stick firmware
+> from the filesystem - so in the end the system never powers off during
+> (after) hibernation.
+> 
+> That's why I wonder whether this firmware load is supposed to work correctly
+> during that hibernation state and so the system may be hitting some kind of
+> a swsusp/btrfs/block layer race condition.
+> 
+> Or, alternatively, maybe  reading files is not supported at this point and
+> so this is really a btrtl/rtw88 bug?
+> 
+> CCing Btrfs people in case it is some known Btrfs issue.
+> 
+> Btw, this is on upstream kernel 6.10.6 and the "Show Blocked State" trace
+> during that failed power off is attached below.
 
 
