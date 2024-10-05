@@ -1,173 +1,158 @@
-Return-Path: <linux-pm+bounces-15220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD57991B2E
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 00:16:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A650B991B66
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 01:38:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C2B7B21EF7
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 22:16:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BA921F220F1
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2024 23:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C42E142624;
-	Sat,  5 Oct 2024 22:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80B215F418;
+	Sat,  5 Oct 2024 23:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="3ze2R4oV"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="BghJEQ18"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F104E1CA;
-	Sat,  5 Oct 2024 22:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1E11F61C;
+	Sat,  5 Oct 2024 23:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728166571; cv=none; b=WKOJRGY6jhYIpZDARPBx7Cb+xee7CORiLHzn0cJyv5wY2meiH9RN8klL9BeAASLgCzo012geotUMfxJRfup06KN4vN3MtRQZbUgfA8NhOVi9u/MTGwDTFr8+msFv98PVo2p+w7icnw6VsjHz/bzozNKDy+Hv09fB1Zm7Mq+4RaQ=
+	t=1728171493; cv=none; b=MkhGRwL5kySByy9jseb/PRjoGzZEjYHZqSM9MBOnAp2ecQFsCnF50/W2SnQcDzILLdEC0fegXM6EZoF6XSu10aSdrzth/NiwFYR+J/yTnJvMVU6eu44tkgvgYybA2cgRWV/b69iVSRblOPf/wg9wQPSF9e8jnKSG1jwq5oE1PhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728166571; c=relaxed/simple;
-	bh=/zDwBqr1YcZcrLHfJXKpEaXDRKBq4cUxi1JobrekPaA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PYcbseClX55yMWo85ktKV95CPN9qaCr0OY1gu6YEXT5QwYGOhz0jHnDp8nnZ4J2Rli1BwjYQMwYwtRNLaZyuT5dQzD8hMBI1Y9Sx1798By4uRFTCd5Q6mJ8TU8CKQQFNq0d7JCbMRU/XkA/aJX4DAk0fCZJkmPRTOpvjxeemMys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=3ze2R4oV; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id BD5F72E02014;
-	Sun,  6 Oct 2024 01:16:03 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1728166564;
-	bh=/zDwBqr1YcZcrLHfJXKpEaXDRKBq4cUxi1JobrekPaA=;
-	h=Received:From:Subject:To;
-	b=3ze2R4oVbamPn9tlh61Bsch5cIiqLkZoalFUGBnEnNFFkiRXjvfvN8mQsD6G5Gv8w
-	 CEy1ntX2cll9MlKoDaYzVirQB6mwtWKoSBfFD7HHuT7gGNfKocUBGoTlwlW2j851ra
-	 lZW3EXc8/yUcugoJ5BdPAc02hnbXr42/pv1gR3d4=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.173) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f173.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f173.google.com with SMTP id
- 38308e7fff4ca-2fad100dd9fso45752981fa.3;
-        Sat, 05 Oct 2024 15:16:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCW76OzXr/bMAzZj67m3GbOVzW8MYTSG8IHKDqhpWkYIdWim5USY04vbEmsgzfM42pEX9jnbbXQCdCRTsNwEGCS1Zfq1@vger.kernel.org
-X-Gm-Message-State: AOJu0YyurfbrQzWHsTc2rVpU20gbC+m45784zI08TYvyefhhSTbOaqr8
-	0LvZ9HnNrIYzTZabbBe+JezKQ8SVJBYzUTRN4oghxhMNh/21LzQHeHtT6sjcp+tcnu3XrEATpsR
-	8Vvi6znC0SUxPuNSGR9Ljh0lmS6c=
-X-Google-Smtp-Source: 
- AGHT+IGpPEFXgJZu+u9+/Gz8Z9Al6yz2ynde5Sp5IYaQ+x5SfyFVIqf94L5lpYpHGF6P+kGvoN3iOEC1PFjkyFr3Ugk=
-X-Received: by 2002:a05:651c:1989:b0:2fa:d49d:45ae with SMTP id
- 38308e7fff4ca-2faf3c0c2bcmr48943331fa.8.1728166563050; Sat, 05 Oct 2024
- 15:16:03 -0700 (PDT)
+	s=arc-20240116; t=1728171493; c=relaxed/simple;
+	bh=Ub3jK6SsxvGHuG2/fm1/AWnleUfV4tsAHwDVlmCsMmY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fsp5e8A7E/+CgIw2ZhxqRBNo6yYefh/KcUqW/IQt39vspBwwIddvQRNhjttpjKqVJtTpfJ/9vKh02hU/e/0Lfm340B124eoPK3F5z0Sm997jsfTUc5h2DciUsJNPnZ0Pwa+Y5MIVa0o6ve6TZmWck19e03LFoYECI+3oag3a9MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=BghJEQ18; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [172.27.0.16] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 495NapwS1593555
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Sat, 5 Oct 2024 16:36:52 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 495NapwS1593555
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024091601; t=1728171417;
+	bh=m2bDCv+JjGunSzRwzd1ZUTedJ+jUnwm4JpAQk4uZ2LU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BghJEQ18w7kVZdQoBcXCZs0SU3bcgDNp6CXGpXr7UatIaOcHRnO7Ki4rpVZIgv9pe
+	 Nz/Yk9sWAKxmvlzBMFe+EzcwMpOVx8UY7o5nMcwClHG2k8LpXw0UQzSqj2Ekiu9nFP
+	 wt8vdbGEEzYAHkF9s6cSQNFQmtVxTKG2NMzwvRANGuDKm19FSlXxR5j1m1jSvaYdtx
+	 sgCWbTe/DYdl96GonJp4olM5FfNyVaxnYW3tvOSS7nL1Z6OVpcsDWxBZnYXqBOzYxJ
+	 3JEuMDZsQny031HV9xMehx7Re34CsvirpbQ/mcBdKSCBdY6WlekkljNm2jzhEgdjiU
+	 mKVdT3IwdQMNA==
+Message-ID: <3bbb85ae-8ba5-4777-999f-d20705c386e7@zytor.com>
+Date: Sat, 5 Oct 2024 16:36:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240922172258.48435-1-lkml@antheas.dev>
- <134adbb7-06c5-4b6a-a8b9-abb973784f73@redhat.com>
- <CAGwozwG49xkWoFVybsVzpa=eG1U2YVCMdr8qc-HwRWSqEKCv0g@mail.gmail.com>
- <c19490b6-dc4b-47b3-b422-d244a6b87e5e@redhat.com>
- <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
-In-Reply-To: <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Sun, 6 Oct 2024 00:15:51 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
-Message-ID: 
- <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	platform-driver-x86@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>, luke@ljones.dev,
- me@kylegospodneti.ch,
-	Denis Benato <benato.denis96@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <172816656422.23588.9215590334041796372@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Dennis Zhou <dennis@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>,
+        Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Keith Packard <keithp@keithp.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com>
+ <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+ <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+ <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+ <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+ <5c7490bb-aa74-427b-849e-c28c343b7409@zytor.com>
+ <CAFULd4Yj9LfTnWFu=c1M7Eh44+XFk0ibwL57r5H7wZjvKZ8yaA@mail.gmail.com>
+Content-Language: en-US
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <CAFULd4Yj9LfTnWFu=c1M7Eh44+XFk0ibwL57r5H7wZjvKZ8yaA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-<skip>
+On 10/5/24 01:31, Uros Bizjak wrote:
+>>
+>> movq $sym to leaq sym(%rip) which you said ought to be smaller (and in
+>> reality appears to be the same size, 7 bytes) seems like a no-brainer
+>> and can be treated as a code quality issue -- in other words, file bug
+>> reports against gcc and clang.
+> 
+> It is the kernel assembly source that should be converted to
+> rip-relative form, gcc (and probably clang) have nothing with it.
+> 
 
-> Thinking some more about this I am having second doubts about
-> moving the LPS0 display power off call to before devices are suspended,
-> doing so would mean that the display might still be on when that call
-> is made and that call could disable power-resources which are necessary
-> for the display causing issues when the display driver's suspend method
-> runs.
+Sadly, that is not correct; neither gcc nor clang uses lea:
 
-Is there any device where that is used for display powersaving?
+	-hpa
 
-> So I think that we need something closer to Mario's POC from:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?h=
-=3Dsuperm1/dsm-screen-on-off
->
-> here where the call is made when the last display is turned off.
->
-> IOW have the drm modesetting core call this.
 
-I can see two problems with this approach: 1) it would happen in a
-random point in the suspend sequence, introducing race conditions with
-sensitive modern standby devices (e.g., Ally). 2) It would not be
-gated and debounced properly, so a drm driver could call it 5 times
-when you e.g., plug in an HDMI cable.
+gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC)
 
-And indeed that is the case, that PR horribly breaks the Ally even
-while any asus-wmi quirk was active. Perhaps DRM can be consulted
-though, see below.
+hpa@tazenda:/tmp$ cat foo.c
+int foobar;
 
-> Maybe have something like a enabled_displays counter in the
-> drm-core which gets increased / decreased by helpers and
-> have the drm-core call platform_suspend_screen_off() /
-> platform_suspend_screen_on() when the counter goes from 1 -> 0
-> resp. 0 -> 1, ignoring the very first 0 -> 1 transition
-> which will be done when the first GPU with an enabled
-> output is found ?
+int *where_is_foobar(void)
+{
+         return &foobar;
+}
 
-To quote Microsoft [1], "This _DSM Function will be invoked when the
-operating system has entered a state where all displays=E2=80=94local and
-*remote*, if any=E2=80=94have been turned off."
+hpa@tazenda:/tmp$ gcc -mcmodel=kernel -O2 -c -o foo.o foo.c
+hpa@tazenda:/tmp$ objdump -dr foo.o
 
-Since it says remote, binding it to DRM could prove difficult. In
-addition, the call in Windows is made 5 seconds after the displays
-turn off due to inactivity. To mirror this behavior you would need
-userspace.
+foo.o:     file format elf64-x86-64
 
-If there is strong indication that the Display On/Off calls interfere
-with the DRM subsystem, e.g., turn off a GPU in certain laptops, the
-call could be gated with a counter similar to Mario's PR and error
-out. In that way, it is still controllable by userspace while ensuring
-the device display is off. Is there such an indication/do we know of
-such a device?
 
-The Ally and Legion Go which I tested happily had their display turn
-on after I yanked their display on and sleep exit callbacks. The
-Legion Go even had its suspend light blink while the screen was on.
-And both had disabled controllers. This behavior was sticky even after
-a reboot. I suppose this is due to the fact that the device might
-hibernate, so the EC would have to remember the last state before
-power off.
+Disassembly of section .text:
 
-> The idea being that the first increase() call gets made when
-> a drm/kms driver probes a display and finds outputs which are
-> light up during probe() and then further increase / decrease
-> calls are made either when all displays go off; or maybe
-> per crtc when the crtc gets enabled / disabled.
->
-> Anyways how best to do this at display off time should be
-> discussed with the drm/kms community on the dri-devel list.
+0000000000000000 <where_is_foobar>:
+    0:   48 c7 c0 00 00 00 00    mov    $0x0,%rax
+                         3: R_X86_64_32S foobar
+    7:   c3                      ret
 
-I can cc on the next version.
+clang version 18.1.8 (Fedora 18.1.8-1.fc40)
 
-Link: https://learn.microsoft.com/en-us/windows-hardware/design/device-expe=
-riences/modern-standby-firmware-notifications#display-off-notification-func=
-tion-3
-[1]
+hpa@tazenda:/tmp$ clang -mcmodel=kernel -O2 -c -o foo.o foo.c
+hpa@tazenda:/tmp$ objdump -dr foo.o
 
-Antheas
+foo.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <where_is_foobar>:
+    0:   48 c7 c0 00 00 00 00    mov    $0x0,%rax
+                         3: R_X86_64_32S foobar
+    7:   c3                      ret
+
 
