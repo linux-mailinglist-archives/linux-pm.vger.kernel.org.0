@@ -1,159 +1,178 @@
-Return-Path: <linux-pm+bounces-15228-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15229-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1A00991E1E
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 13:30:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A645A991EB5
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 16:03:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F5DBB20C86
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 11:30:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5A741C20D1B
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 14:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD711741C9;
-	Sun,  6 Oct 2024 11:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="U2GJcr0e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D060317BA4;
+	Sun,  6 Oct 2024 14:03:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps-ovh.mhejs.net (vps-ovh.mhejs.net [145.239.82.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39182171099;
-	Sun,  6 Oct 2024 11:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B1C19A;
+	Sun,  6 Oct 2024 14:03:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.239.82.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728214198; cv=none; b=pBzSyiJS54gyDzdPF46DY5b0PqiJU0mH8HxiZy9rmiE+JtD6bWlbaStZbgcnL2cIK17GVaabgI5D88S3ghsQSK3YU+XWAINlP26x+jHZcY/CTMNJg575bLIxvZKfyV3mOu/+U6JcgsxFYU6kLj2FSh7DaetwNyX7AvMWpoQEClM=
+	t=1728223387; cv=none; b=QFRB4Ukh4YCEboifTUIK9GNr2IvW5sH/cACrsgpkeEumQ9Tjs0xE8xb1666fB2leNDhWa50FDMNmrfeDgRMzVC0rbwsbvesqzO1PXKFk8yPtFpDFeXIWkedfgCdgM5J11KmukmQbzWEuX0SP998yClFVnmkI6UBFg5zYE2bLTDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728214198; c=relaxed/simple;
-	bh=fLYp7ZEeGSe5/a+8GLeNuqNLIEAcEu6AMk4pNEA0csw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lp5MpNM/Qjg1cqlKHc5KbcLnF2GYEsUseH64218iJC/0KXnp+BjY9iWKbEVKV9Kzsy2W/9ldym9kLkSEGvdep6afFsFCRt0YVgyw49f2h5ii/VhuV8ZfmB/7f5l4jM42hYC0Udqc912M3oasN5t/+UOSIquC7dT9fkQzQOaxTeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=U2GJcr0e; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 93A282E098AE;
-	Sun,  6 Oct 2024 14:29:51 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1728214192;
-	bh=fLYp7ZEeGSe5/a+8GLeNuqNLIEAcEu6AMk4pNEA0csw=;
-	h=Received:From:Subject:To;
-	b=U2GJcr0eYpzDbf34HbuybEseprIbys4SuZMQcWVZFVsRCLenssPXDgajXgeG/kamy
-	 o3GAPERLJ7yfK8lGPkfYXXmCNaGUdHBze23FoffQvYJwGZkxVWlgOz7eH9A+Q8g2DD
-	 YPFEF93oe5vKzrMY0Mo8svHwBFnB/kQK3lhRWGz4=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.181) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f181.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f181.google.com with SMTP id
- 38308e7fff4ca-2fad75b46a3so32092601fa.2;
-        Sun, 06 Oct 2024 04:29:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCWo3hPp7P1aYp3RvtAuGGtOJvLLQN1x3RajD3cRTHn45nC4gN/Mv8zkf0Fs8aW8c8wX8QmjoPqBlO0rim+e89GPmZ4j@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9QHslXw4AU/Ma/ppcizNRgHxZzXiXuGj2pibYsnBrYowueXHi
-	F5hZo8PRwmk9qfvwderovlFnMo/3BRdnJg9s36a7rfCs9gqRFBg5PCwsNOsJf7KhMn+F7w+gPHu
-	c7fDQqDKC9sdDZY5qe1lrHKDXHj4=
-X-Google-Smtp-Source: 
- AGHT+IFkLrWbh9r2iEIUbQHp5+W+GOAPe57WgHm8C7CpyzUiGt7zsncV3GpOoiygOtk2NCQ9k09vFXMXePwy8KH2F54=
-X-Received: by 2002:a05:651c:545:b0:2fa:bba7:2699 with SMTP id
- 38308e7fff4ca-2faf3c15aa4mr36986611fa.16.1728214190717; Sun, 06 Oct 2024
- 04:29:50 -0700 (PDT)
+	s=arc-20240116; t=1728223387; c=relaxed/simple;
+	bh=cg01ApAm6HeYDHmPuYyBqTkaWNBkTkRXVLXFFpAWDr8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eZZ9T92nnCwSY8i2WEOFwy+o3JpMmlvKpN9hzgq4DSfinQhz9R1R9FYkvQns9YuZqpV+DtlxAH7SdG+UAvJDBNJi1/LSw6M5uMvjqF2EfWt6UOr+W00RlqLZ/LvLp6yLpVy/iu8PVgAYP0yCasuIJ6KB8t3U89FRaoC0+TX4sM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name; spf=none smtp.mailfrom=vps-ovh.mhejs.net; arc=none smtp.client-ip=145.239.82.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vps-ovh.mhejs.net
+Received: from MUA
+	by vps-ovh.mhejs.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.98)
+	(envelope-from <mhej@vps-ovh.mhejs.net>)
+	id 1sxRqU-00000000KMu-40zv;
+	Sun, 06 Oct 2024 16:02:50 +0200
+Message-ID: <fac3f1f0-f76e-45bd-902c-60c395afcc16@maciej.szmigiero.name>
+Date: Sun, 6 Oct 2024 16:02:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240922172258.48435-1-lkml@antheas.dev>
- <134adbb7-06c5-4b6a-a8b9-abb973784f73@redhat.com>
- <CAGwozwG49xkWoFVybsVzpa=eG1U2YVCMdr8qc-HwRWSqEKCv0g@mail.gmail.com>
- <c19490b6-dc4b-47b3-b422-d244a6b87e5e@redhat.com>
- <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
- <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
- <fca2e4bd-10c6-462c-82a2-37627a797cb9@redhat.com>
-In-Reply-To: <fca2e4bd-10c6-462c-82a2-37627a797cb9@redhat.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Sun, 6 Oct 2024 13:29:39 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwFEbKSCDcZHCf0g=BST89eGqNbxzAxWpOj-re2sPUUKnQ@mail.gmail.com>
-Message-ID: 
- <CAGwozwFEbKSCDcZHCf0g=BST89eGqNbxzAxWpOj-re2sPUUKnQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	platform-driver-x86@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>, luke@ljones.dev,
- me@kylegospodneti.ch,
-	Denis Benato <benato.denis96@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <172821419210.17046.18308113948475448672@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: Root filesystem read access for firmware load during hibernation
+ image writing
+To: Pavel Machek <pavel@ucw.cz>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ linux-pm <linux-pm@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ Ping-Ke Shih <pkshih@realtek.com>,
+ linux-wireless <linux-wireless@vger.kernel.org>,
+ Marcel Holtmann <marcel@holtmann.org>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ linux-bluetooth@vger.kernel.org
+References: <3c95fb54-9cac-4b4f-8e1b-84ca041b57cb@maciej.szmigiero.name>
+ <ZwF6JEHIQda92sIL@duo.ucw.cz>
+Content-Language: en-US, pl-PL
+From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Autocrypt: addr=mail@maciej.szmigiero.name; keydata=
+ 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
+Disposition-Notification-To: "Maciej S. Szmigiero"
+ <mail@maciej.szmigiero.name>
+In-Reply-To: <ZwF6JEHIQda92sIL@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: mhej@vps-ovh.mhejs.net
 
-Hi Hans,
-there is no rush from my end to see this series merge. The current
-asus-wmi quirk works well for the Ally, all firmwares. New firmware is
-also supposed to fix powersaving with it.
+On 5.10.2024 19:40, Pavel Machek wrote:
+> Hi!
+> 
+>> In my case, a USB device (RTL8821CU) gets reset at that stage due to
+>> commit 04b8c8143d46 ("btusb: fix Realtek suspend/resume") and so it tries
+>> to request_firmware() from the root filesystem after that thaw/reset,
+>> when the hibernation image is being written.
+>>
+>> It usually succeeds, however often it deadlocks somewhere in Btrfs code
+>> resulting in the system failing to power off after writing the hibernate
+>> image:
+>> power_off() calls dpm_suspend_start(), which calls dpm_prepare(), which
+>> waits for device probe to finish.
+>>
+>> And device probe is stuck forever trying to load that USB stick firmware
+>> from the filesystem - so in the end the system never powers off during
+>> (after) hibernation.
+>>
+>> That's why I wonder whether this firmware load is supposed to work correctly
+>> during that hibernation state and so the system may be hitting some kind of
+>> a swsusp/btrfs/block layer race condition.
+>>
+>> Or, alternatively, maybe  reading files is not supported at this point and
+>> so this is really a btrtl/rtw88 bug?
+> 
+> I'd say not supported at this point. Reading file may still read to
+> atime update, etc, and we can't really can't support that easily.
 
-Yes, that quirk is suboptimal as it adds a noticeable delay to suspend
-and resume and blocks powersaving from working correctly in old
-firmwares. However, as most Ally users are on custom kernels anyway,
-and this patch series can be merged quite easily into them, broadly
-speaking it is a non-issue if the mainline kernel has ideal behavior
-on the Ally for the next few months. From user feedback, they did not
-notice changing to this patch anyway, other than the powersaving
-benefit ("did you change anything? my ally just uses less power now").
+Thanks for this clarification.
 
-Next revision I will cc dri so we get feedback from there too.
+I've dropped btrfs folks from the CC list since this isn't a btrfs issue
+after all and added rtw88/btrtl maintainers instead.
+  
+> Suggestion is to keep firmware cached in memory, or at least cache it
+> in memory when hibernation begins.
 
-> >> Thinking some more about this I am having second doubts about
-> >> moving the LPS0 display power off call to before devices are suspended,
-> >> doing so would mean that the display might still be on when that call
-> >> is made and that call could disable power-resources which are necessary
-> >> for the display causing issues when the display driver's suspend method
-> >> runs.
-> >
-> > Is there any device where that is used for display powersaving?
->
-> The problem is that we cannot rule out that the LPS0 display off
-> call relies on the displays actually being off.
->
-> I have seen ACPI AML code do all sort of crazy stuff.
+Since a WiFi/BT NIC is hardly useful for hibernation snapshot writing
+operation it seems that an easier option would be to simply return
+something like -EPROBE_DEFER from both rtw88 and btrtl probe callbacks
+during PMSG_THAW hibernation stage.
+That -EPROBE_DEFER will hopefully handle the unlikely case that the
+hibernation snapshot writing fails or someone is running a
+HIBERNATION_TEST_RESUME.
 
-Indeed, as this series shows (for other reasons).
+In turn, the easiest trigger for this would be the "in_suspend"
+variable being set, however this would require EXPORTing it - it looks
+like system_entering_hibernation() only covers the case when the
+system is hibernating using platform hibernation support.
 
-> So IMHO we really need to make sure that all physical displays
-> are off before we make the LPS0 display off call.
+I will see whether this workaround works for me, if someone wants
+to implement the "firmware caching" approach instead then feel
+free to do so.
 
-In my use-case I'd like to be able to fire the display off
-notification prior to turning off the screen or turn on the screen
-after both Display Off and Sleep Entry have fired to be able to show a
-dim lockscreen if the user briefly interacts with the device. I will
-be doing this downstream for a limited set of prevalidated devices
-though.
 
-Therefore, before we block this behavior in a non-certain manner (as
-it will be up to each gpu driver to do it), there needs to be some
-documentation showing there is an issue, certain manufacturers rely on
-the behavior, or that Microsoft has guaranteed that this is the case
-in Windows. Even with any of the former, a blacklist quirk for those
-manufacturers can be put in place in their GPU driver that blocks the
-Display Off _DSM from firing and automatically calls the Display On
-_DSM if the GPU wants to wake up the display.
+By the way, I don't see any reason why other USB devices that load
+firmware at their probe time can't be affected too since that
+lock_device_hotplug() call in hibernate() seems to only prevent
+CPU/RAM/ACPI hotplug, not USB hotplug.
 
-> I have read what you wrote about this also applying to virtual
-> displays, I guess that means that there should be no rendering done
-> (so also no GPU non display tasks) when this is called.
->
-> IOW it might be best to tie this to all VGA class PCI devices
-> being in D3 as Mario suggested.
+So if such USB device happens to get reset during hibernation time
+(for example from hub EMI) it would suffer the same issue.
 
-GPU can do stuff while the screen is off: render videos, hold browser
-videos in main memory, have a game in the background, etc. If by D3
-you mean the whole GPU has powered off, this would be a deviation from
-Windows.
+> BR,
+> 										Pavel
+> 										
 
-Antheas
+Thanks,
+Maciej
+
 
