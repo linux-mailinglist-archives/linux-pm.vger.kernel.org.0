@@ -1,79 +1,80 @@
-Return-Path: <linux-pm+bounces-15226-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15227-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 409CD991DBA
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 12:16:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2BA2991DE0
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 12:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01BB6282299
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 10:16:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 309641F21AE8
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 10:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93D6171E43;
-	Sun,  6 Oct 2024 10:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2431171E65;
+	Sun,  6 Oct 2024 10:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VBRomvD8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pg3Zmx7E"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23B413E898
-	for <linux-pm@vger.kernel.org>; Sun,  6 Oct 2024 10:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500D67F6
+	for <linux-pm@vger.kernel.org>; Sun,  6 Oct 2024 10:38:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728209787; cv=none; b=t/3GhtU3jm3Zy1u+hIxa/NXkfYfGWz79kw6DB58+d25xgYirG+SVpIXq/I1f6sCuppZFDtXv+ZgTt6DK3Vjuq0ITMs3x5DJqGl5+Q791DfuuUosTOzEMVcIWvoSYUSvgDQ9Q0p8kuHst5WvMe2xcKK7cM4JnzCpkv08htMP9me4=
+	t=1728211087; cv=none; b=tMZbarZW0NR60wS4T3kUu9wVUADZDvb0UYmxRal8hWPHieIsNQuqzlFMQew2e+bK/oIb9VPijpTXp3a6GNyNZ2AaJKWMIik/3FAC1h/XEJpPjyjR0oFa0bJKvsMnA8Wgw7xW8oU5r6RJEIcEZgle1mVY7FdSUi0vuuH2Gy+MXrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728209787; c=relaxed/simple;
-	bh=czdJFddf0lGiLijfqEYaodaKlernOaz5qOaANje/0yk=;
+	s=arc-20240116; t=1728211087; c=relaxed/simple;
+	bh=Bq7Tz41q+fa0j+3ZQeIlm1+u4L9RWU0OmleWy7EWtKY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T4GrT0Vqd1YUg0KfpKyqidFPyKSLTIjn3E8Iqm+1LBX62tg9Pajihmw1RgsVjgo5+C1vVeY3fCiXXoxxcMPsqb0/CaWYErHiU7LnV6IvAo09L4vR/hymrBLY7+U5w6SkrRgz5/IyYUwY38HKJWKdDZQyz+nX8pK6PYJ2vnSsbhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VBRomvD8; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=NeQErl2rVxD2E+hZ4DLjMfqBYuv4RYLTqvhKPwXQqZzBSxOAS8Yn5bM6TYbhWvmGj8AnDSaac/5C0r8qeyhVLZ8ztTyqRnUjYrSBv8K8cPVEQwpA/BzP+DP1aHqB8RR1nYDLbekT/A6+jGlhx+s4Knrvj5+d1lQmBzomxK5OYn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pg3Zmx7E; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728209784;
+	s=mimecast20190719; t=1728211085;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Ng9JIenGICGjXeL7hhRxhQDhU9dTLTqIS0nWkJBBNmI=;
-	b=VBRomvD8sRoq9SXKgp9i8Mr09P37MitztoF9WJiX7Ki6OrRbWydV2n2FG3SjUPCW3yho9V
-	Z0UsofJv/OQGlotoq51eX0sw9Bx4fhce+VqDMmFnxxecIx1H6KgkBI+ogk6Kq1Hy7j15z0
-	0Zo4KCwWMhtmPMI7NsigAC29ZBrUa/M=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=1ItPi/oOw2IPhVtK1a1NEvIYqd7WVKNv5sJgtuuovmM=;
+	b=Pg3Zmx7E6ivGHNO4qEBNzMfmnQIBvDRdErfBHDXCE2FKNJ0JokRLk6Bo4wLmIzmiBCLy2c
+	v05oEV2kGVJdZiYMzB/hBorlBzV04jm5UrIr/QrL7GpG8ET9dizvhzLcn6nmw2q+bGkVIY
+	gkAVHe0QPrSwspk5K1MGcQ6LB2akBek=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-374-0-GH0MHaOlyq0STZ43PymQ-1; Sun, 06 Oct 2024 06:16:21 -0400
-X-MC-Unique: 0-GH0MHaOlyq0STZ43PymQ-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5c87b5179d9so3470803a12.1
-        for <linux-pm@vger.kernel.org>; Sun, 06 Oct 2024 03:16:21 -0700 (PDT)
+ us-mta-54-BdeedVRtM1uZRM6X94sneA-1; Sun, 06 Oct 2024 06:38:04 -0400
+X-MC-Unique: BdeedVRtM1uZRM6X94sneA-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a7d2d414949so324092166b.0
+        for <linux-pm@vger.kernel.org>; Sun, 06 Oct 2024 03:38:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728209780; x=1728814580;
+        d=1e100.net; s=20230601; t=1728211083; x=1728815883;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ng9JIenGICGjXeL7hhRxhQDhU9dTLTqIS0nWkJBBNmI=;
-        b=TJEnNsP9KzPkrfZOYOdZoi/JiaWrHnV+sM59XiKyrGVYO8KPOpumUFoGChROiwLPua
-         kHwBsPPc595Okscowfg2ngqn27LBGTogcncmifl8LLqI67vBFw9xjQ/QyiJLs/kudAfo
-         uXEQdAfu/13RyxLLSEkAUUo3P1MnryvmRjS7P236PQgQy8n6OYMzmg1hB6E273ve8UNu
-         TsVSfp/Fik09Qw0Ouw8dSFReD/pxeRPJ6cAIJOrm5Yo9GKq6u3aKj+4J/ajfnzxBSuL0
-         hs6/yIHYvSV9LQubk/i6209W2B2TxmMYCyO/YwiZEe3KBVMsuB3/sqOh+kX4OQKUoqMA
-         NJnQ==
-X-Gm-Message-State: AOJu0Ywf+nDxQ3d53eim9nxhrHZsDFdNgt2z7IXGDY1l1Zh9Preznf6T
-	+Fa08zAkTvatpGszJOAmSjAKe8hIBFDT+Hxc72WUIAMgSqyofmVrIJeeW6kLHEBYaxg6rFgY61b
-	83xqUI30WXe+YzbmU0Sbh15D6zJLr5VRZUHhwoLQEaCvNaFxhj7qT9CJl
-X-Received: by 2002:a17:907:1b88:b0:a99:35eb:1301 with SMTP id a640c23a62f3a-a9935eb1502mr303059866b.18.1728209780281;
-        Sun, 06 Oct 2024 03:16:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEHNBW5PIDMq0nN3WBBBDEYbdU6s/1ImewKuAcl7siV/9qjjP0LnyaWLPAhKCj/WCyiSv9dSA==
-X-Received: by 2002:a17:907:1b88:b0:a99:35eb:1301 with SMTP id a640c23a62f3a-a9935eb1502mr303058666b.18.1728209779814;
-        Sun, 06 Oct 2024 03:16:19 -0700 (PDT)
+        bh=1ItPi/oOw2IPhVtK1a1NEvIYqd7WVKNv5sJgtuuovmM=;
+        b=nFxSWCDlfzjJS1lmNBSILVfvYkQfXvFYYatgCDOkx1AeacmlhW5wsbHAw9McNGx0dM
+         AXypm6qfgXkJIrKnTu0V9Axje5XTKWDNJAYgMDAR+0iVfJ2EC0x+GJn2rK8c7sHML7fB
+         OTHo8STfKrnlq2/1WHPB9ZNOOPDe3+/2PAXz1njhvQIq5d+tTSdA8q7a/vWLNuR48BBx
+         nkKdn/kz4CEIqaDz3GKUEtBMUnMyF80+iaKwhvJhgeHgYC+/oSEcRV1FhDyPqMS8bFR2
+         ssNWI2s3ZxpCZhZCQeyEClKD3hu0gB3T1cVraVTDqVpjElr0/npkNdwFKJZKEvC1m8gp
+         JqYw==
+X-Forwarded-Encrypted: i=1; AJvYcCX1ZbUrZ8v5IISfN+iJiSjgGIHGo81GRo4xN+Xee3VwKzKHQ5dM5ZdXCoK0iO8Wrz13ryrc7iJviw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7ToBtunko866MHa/RklLBtfyKgFiHccBkSa6Oqlu8Jp9KIyZK
+	WR7TaC0uT2mBBkTbl9WwR0tF2k164Z0zuNz99IUNHOVTVM69Sjra/HHRg8Lw42Ag9mZkqLQyKd1
+	Kpgk7ziVdNv0Lq1ZAVUMoikGzASHQ2hCKs5TdzXPVawU1AiHRcah7foRK
+X-Received: by 2002:a17:907:980a:b0:a99:4152:1cb4 with SMTP id a640c23a62f3a-a99415220a5mr372218466b.42.1728211082683;
+        Sun, 06 Oct 2024 03:38:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEMr8aLIFGNj6c7j0ibRW7YvJlcGsorT3VikyA0OZXv+aCTbD1uwOyPVfMak4HF5NdQnAho6g==
+X-Received: by 2002:a17:907:980a:b0:a99:4152:1cb4 with SMTP id a640c23a62f3a-a99415220a5mr372216966b.42.1728211082275;
+        Sun, 06 Oct 2024 03:38:02 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99332a9bd7sm223931666b.212.2024.10.06.03.16.18
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9944839974sm125210766b.218.2024.10.06.03.38.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Oct 2024 03:16:18 -0700 (PDT)
-Message-ID: <fca2e4bd-10c6-462c-82a2-37627a797cb9@redhat.com>
-Date: Sun, 6 Oct 2024 12:16:17 +0200
+        Sun, 06 Oct 2024 03:38:01 -0700 (PDT)
+Message-ID: <7deea96e-61bd-4bb1-b478-d908ff735d70@redhat.com>
+Date: Sun, 6 Oct 2024 12:38:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,53 +82,48 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
- outside suspend (fixes ROG Ally suspend)
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
- platform-driver-x86@vger.kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>, luke@ljones.dev,
- me@kylegospodneti.ch, Denis Benato <benato.denis96@gmail.com>
-References: <20240922172258.48435-1-lkml@antheas.dev>
- <134adbb7-06c5-4b6a-a8b9-abb973784f73@redhat.com>
- <CAGwozwG49xkWoFVybsVzpa=eG1U2YVCMdr8qc-HwRWSqEKCv0g@mail.gmail.com>
- <c19490b6-dc4b-47b3-b422-d244a6b87e5e@redhat.com>
- <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
- <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
+Subject: Re: [PATCH] platform/x86:intel/pmc: Disable ACPI PM Timer disabling
+ on Sky and Kabe Lake
+To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@intel.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Todd Brandt
+ <todd.e.brandt@intel.com>, Marek Maslanka <mmaslanka@google.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, regressions@lists.linux.dev,
+ linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org
+References: <20241003202614.17181-1-hdegoede@redhat.com>
+ <20241003202614.17181-2-hdegoede@redhat.com>
 Content-Language: en-US, nl
 From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
+In-Reply-To: <20241003202614.17181-2-hdegoede@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 Hi,
 
-On 6-Oct-24 12:15 AM, Antheas Kapenekakis wrote:
-> <skip>
+On 3-Oct-24 10:26 PM, Hans de Goede wrote:
+> There have been multiple reports that the ACPI PM Timer disabling is
+> causing Sky and Kabe Lake systems to hang on all suspend (s2idle, s3,
+> hibernate) methods.
 > 
->> Thinking some more about this I am having second doubts about
->> moving the LPS0 display power off call to before devices are suspended,
->> doing so would mean that the display might still be on when that call
->> is made and that call could disable power-resources which are necessary
->> for the display causing issues when the display driver's suspend method
->> runs.
+> Remove the acpi_pm_tmr_ctl_offset and acpi_pm_tmr_disable_bit settings from
+> spt_reg_map to disable the ACPI PM Timer disabling on Sky and Kabe Lake to
+> fix the hang on suspend.
 > 
-> Is there any device where that is used for display powersaving?
+> Fixes: e86c8186d03a ("platform/x86:intel/pmc: Enable the ACPI PM Timer to be turned off when suspended")
+> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Closes: https://lore.kernel.org/linux-pm/18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de/
+> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219346
+> Cc: Marek Maslanka <mmaslanka@google.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-The problem is that we cannot rule out that the LPS0 display off
-call relies on the displays actually being off.
+I've now applied this patch to my review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-I have seen ACPI AML code do all sort of crazy stuff.
-
-So IMHO we really need to make sure that all physical displays
-are off before we make the LPS0 display off call.
-
-I have read what you wrote about this also applying to virtual
-displays, I guess that means that there should be no rendering done
-(so also no GPU non display tasks) when this is called.
-
-IOW it might be best to tie this to all VGA class PCI devices
-being in D3 as Mario suggested.
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
 
 Regards,
 
@@ -136,77 +132,22 @@ Hans
 
 
 
-
-
-
-
->> So I think that we need something closer to Mario's POC from:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?h=superm1/dsm-screen-on-off
->>
->> here where the call is made when the last display is turned off.
->>
->> IOW have the drm modesetting core call this.
+> ---
+>  drivers/platform/x86/intel/pmc/spt.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> I can see two problems with this approach: 1) it would happen in a
-> random point in the suspend sequence, introducing race conditions with
-> sensitive modern standby devices (e.g., Ally). 2) It would not be
-> gated and debounced properly, so a drm driver could call it 5 times
-> when you e.g., plug in an HDMI cable.
-> 
-> And indeed that is the case, that PR horribly breaks the Ally even
-> while any asus-wmi quirk was active. Perhaps DRM can be consulted
-> though, see below.
-> 
->> Maybe have something like a enabled_displays counter in the
->> drm-core which gets increased / decreased by helpers and
->> have the drm-core call platform_suspend_screen_off() /
->> platform_suspend_screen_on() when the counter goes from 1 -> 0
->> resp. 0 -> 1, ignoring the very first 0 -> 1 transition
->> which will be done when the first GPU with an enabled
->> output is found ?
-> 
-> To quote Microsoft [1], "This _DSM Function will be invoked when the
-> operating system has entered a state where all displays—local and
-> *remote*, if any—have been turned off."
-> 
-> Since it says remote, binding it to DRM could prove difficult. In
-> addition, the call in Windows is made 5 seconds after the displays
-> turn off due to inactivity. To mirror this behavior you would need
-> userspace.
-> 
-> If there is strong indication that the Display On/Off calls interfere
-> with the DRM subsystem, e.g., turn off a GPU in certain laptops, the
-> call could be gated with a counter similar to Mario's PR and error
-> out. In that way, it is still controllable by userspace while ensuring
-> the device display is off. Is there such an indication/do we know of
-> such a device?
-> 
-> The Ally and Legion Go which I tested happily had their display turn
-> on after I yanked their display on and sleep exit callbacks. The
-> Legion Go even had its suspend light blink while the screen was on.
-> And both had disabled controllers. This behavior was sticky even after
-> a reboot. I suppose this is due to the fact that the device might
-> hibernate, so the EC would have to remember the last state before
-> power off.
-> 
->> The idea being that the first increase() call gets made when
->> a drm/kms driver probes a display and finds outputs which are
->> light up during probe() and then further increase / decrease
->> calls are made either when all displays go off; or maybe
->> per crtc when the crtc gets enabled / disabled.
->>
->> Anyways how best to do this at display off time should be
->> discussed with the drm/kms community on the dri-devel list.
-> 
-> I can cc on the next version.
-> 
-> Link: https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-firmware-notifications#display-off-notification-function-3
-> [1]
-> 
-> Antheas
-> 
-
-
+> diff --git a/drivers/platform/x86/intel/pmc/spt.c b/drivers/platform/x86/intel/pmc/spt.c
+> index 2cd2b3c68e46..ab993a69e33e 100644
+> --- a/drivers/platform/x86/intel/pmc/spt.c
+> +++ b/drivers/platform/x86/intel/pmc/spt.c
+> @@ -130,8 +130,6 @@ const struct pmc_reg_map spt_reg_map = {
+>  	.ppfear_buckets = SPT_PPFEAR_NUM_ENTRIES,
+>  	.pm_cfg_offset = SPT_PMC_PM_CFG_OFFSET,
+>  	.pm_read_disable_bit = SPT_PMC_READ_DISABLE_BIT,
+> -	.acpi_pm_tmr_ctl_offset = SPT_PMC_ACPI_PM_TMR_CTL_OFFSET,
+> -	.acpi_pm_tmr_disable_bit = SPT_PMC_BIT_ACPI_PM_TMR_DISABLE,
+>  	.ltr_ignore_max = SPT_NUM_IP_IGN_ALLOWED,
+>  	.pm_vric1_offset = SPT_PMC_VRIC1_OFFSET,
+>  };
 
 
