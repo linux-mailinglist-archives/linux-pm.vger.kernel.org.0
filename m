@@ -1,153 +1,159 @@
-Return-Path: <linux-pm+bounces-15227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15228-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2BA2991DE0
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 12:38:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A00991E1E
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 13:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 309641F21AE8
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 10:38:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F5DBB20C86
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2024 11:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2431171E65;
-	Sun,  6 Oct 2024 10:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD711741C9;
+	Sun,  6 Oct 2024 11:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pg3Zmx7E"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="U2GJcr0e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500D67F6
-	for <linux-pm@vger.kernel.org>; Sun,  6 Oct 2024 10:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39182171099;
+	Sun,  6 Oct 2024 11:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728211087; cv=none; b=tMZbarZW0NR60wS4T3kUu9wVUADZDvb0UYmxRal8hWPHieIsNQuqzlFMQew2e+bK/oIb9VPijpTXp3a6GNyNZ2AaJKWMIik/3FAC1h/XEJpPjyjR0oFa0bJKvsMnA8Wgw7xW8oU5r6RJEIcEZgle1mVY7FdSUi0vuuH2Gy+MXrc=
+	t=1728214198; cv=none; b=pBzSyiJS54gyDzdPF46DY5b0PqiJU0mH8HxiZy9rmiE+JtD6bWlbaStZbgcnL2cIK17GVaabgI5D88S3ghsQSK3YU+XWAINlP26x+jHZcY/CTMNJg575bLIxvZKfyV3mOu/+U6JcgsxFYU6kLj2FSh7DaetwNyX7AvMWpoQEClM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728211087; c=relaxed/simple;
-	bh=Bq7Tz41q+fa0j+3ZQeIlm1+u4L9RWU0OmleWy7EWtKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NeQErl2rVxD2E+hZ4DLjMfqBYuv4RYLTqvhKPwXQqZzBSxOAS8Yn5bM6TYbhWvmGj8AnDSaac/5C0r8qeyhVLZ8ztTyqRnUjYrSBv8K8cPVEQwpA/BzP+DP1aHqB8RR1nYDLbekT/A6+jGlhx+s4Knrvj5+d1lQmBzomxK5OYn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pg3Zmx7E; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728211085;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1ItPi/oOw2IPhVtK1a1NEvIYqd7WVKNv5sJgtuuovmM=;
-	b=Pg3Zmx7E6ivGHNO4qEBNzMfmnQIBvDRdErfBHDXCE2FKNJ0JokRLk6Bo4wLmIzmiBCLy2c
-	v05oEV2kGVJdZiYMzB/hBorlBzV04jm5UrIr/QrL7GpG8ET9dizvhzLcn6nmw2q+bGkVIY
-	gkAVHe0QPrSwspk5K1MGcQ6LB2akBek=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-54-BdeedVRtM1uZRM6X94sneA-1; Sun, 06 Oct 2024 06:38:04 -0400
-X-MC-Unique: BdeedVRtM1uZRM6X94sneA-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a7d2d414949so324092166b.0
-        for <linux-pm@vger.kernel.org>; Sun, 06 Oct 2024 03:38:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728211083; x=1728815883;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ItPi/oOw2IPhVtK1a1NEvIYqd7WVKNv5sJgtuuovmM=;
-        b=nFxSWCDlfzjJS1lmNBSILVfvYkQfXvFYYatgCDOkx1AeacmlhW5wsbHAw9McNGx0dM
-         AXypm6qfgXkJIrKnTu0V9Axje5XTKWDNJAYgMDAR+0iVfJ2EC0x+GJn2rK8c7sHML7fB
-         OTHo8STfKrnlq2/1WHPB9ZNOOPDe3+/2PAXz1njhvQIq5d+tTSdA8q7a/vWLNuR48BBx
-         nkKdn/kz4CEIqaDz3GKUEtBMUnMyF80+iaKwhvJhgeHgYC+/oSEcRV1FhDyPqMS8bFR2
-         ssNWI2s3ZxpCZhZCQeyEClKD3hu0gB3T1cVraVTDqVpjElr0/npkNdwFKJZKEvC1m8gp
-         JqYw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1ZbUrZ8v5IISfN+iJiSjgGIHGo81GRo4xN+Xee3VwKzKHQ5dM5ZdXCoK0iO8Wrz13ryrc7iJviw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7ToBtunko866MHa/RklLBtfyKgFiHccBkSa6Oqlu8Jp9KIyZK
-	WR7TaC0uT2mBBkTbl9WwR0tF2k164Z0zuNz99IUNHOVTVM69Sjra/HHRg8Lw42Ag9mZkqLQyKd1
-	Kpgk7ziVdNv0Lq1ZAVUMoikGzASHQ2hCKs5TdzXPVawU1AiHRcah7foRK
-X-Received: by 2002:a17:907:980a:b0:a99:4152:1cb4 with SMTP id a640c23a62f3a-a99415220a5mr372218466b.42.1728211082683;
-        Sun, 06 Oct 2024 03:38:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEMr8aLIFGNj6c7j0ibRW7YvJlcGsorT3VikyA0OZXv+aCTbD1uwOyPVfMak4HF5NdQnAho6g==
-X-Received: by 2002:a17:907:980a:b0:a99:4152:1cb4 with SMTP id a640c23a62f3a-a99415220a5mr372216966b.42.1728211082275;
-        Sun, 06 Oct 2024 03:38:02 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9944839974sm125210766b.218.2024.10.06.03.38.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Oct 2024 03:38:01 -0700 (PDT)
-Message-ID: <7deea96e-61bd-4bb1-b478-d908ff735d70@redhat.com>
-Date: Sun, 6 Oct 2024 12:38:00 +0200
+	s=arc-20240116; t=1728214198; c=relaxed/simple;
+	bh=fLYp7ZEeGSe5/a+8GLeNuqNLIEAcEu6AMk4pNEA0csw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lp5MpNM/Qjg1cqlKHc5KbcLnF2GYEsUseH64218iJC/0KXnp+BjY9iWKbEVKV9Kzsy2W/9ldym9kLkSEGvdep6afFsFCRt0YVgyw49f2h5ii/VhuV8ZfmB/7f5l4jM42hYC0Udqc912M3oasN5t/+UOSIquC7dT9fkQzQOaxTeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=U2GJcr0e; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 93A282E098AE;
+	Sun,  6 Oct 2024 14:29:51 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1728214192;
+	bh=fLYp7ZEeGSe5/a+8GLeNuqNLIEAcEu6AMk4pNEA0csw=;
+	h=Received:From:Subject:To;
+	b=U2GJcr0eYpzDbf34HbuybEseprIbys4SuZMQcWVZFVsRCLenssPXDgajXgeG/kamy
+	 o3GAPERLJ7yfK8lGPkfYXXmCNaGUdHBze23FoffQvYJwGZkxVWlgOz7eH9A+Q8g2DD
+	 YPFEF93oe5vKzrMY0Mo8svHwBFnB/kQK3lhRWGz4=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.181) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f181.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f181.google.com with SMTP id
+ 38308e7fff4ca-2fad75b46a3so32092601fa.2;
+        Sun, 06 Oct 2024 04:29:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWo3hPp7P1aYp3RvtAuGGtOJvLLQN1x3RajD3cRTHn45nC4gN/Mv8zkf0Fs8aW8c8wX8QmjoPqBlO0rim+e89GPmZ4j@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9QHslXw4AU/Ma/ppcizNRgHxZzXiXuGj2pibYsnBrYowueXHi
+	F5hZo8PRwmk9qfvwderovlFnMo/3BRdnJg9s36a7rfCs9gqRFBg5PCwsNOsJf7KhMn+F7w+gPHu
+	c7fDQqDKC9sdDZY5qe1lrHKDXHj4=
+X-Google-Smtp-Source: 
+ AGHT+IFkLrWbh9r2iEIUbQHp5+W+GOAPe57WgHm8C7CpyzUiGt7zsncV3GpOoiygOtk2NCQ9k09vFXMXePwy8KH2F54=
+X-Received: by 2002:a05:651c:545:b0:2fa:bba7:2699 with SMTP id
+ 38308e7fff4ca-2faf3c15aa4mr36986611fa.16.1728214190717; Sun, 06 Oct 2024
+ 04:29:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/x86:intel/pmc: Disable ACPI PM Timer disabling
- on Sky and Kabe Lake
-To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
- David E Box <david.e.box@intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Todd Brandt
- <todd.e.brandt@intel.com>, Marek Maslanka <mmaslanka@google.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, regressions@lists.linux.dev,
- linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org
-References: <20241003202614.17181-1-hdegoede@redhat.com>
- <20241003202614.17181-2-hdegoede@redhat.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241003202614.17181-2-hdegoede@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240922172258.48435-1-lkml@antheas.dev>
+ <134adbb7-06c5-4b6a-a8b9-abb973784f73@redhat.com>
+ <CAGwozwG49xkWoFVybsVzpa=eG1U2YVCMdr8qc-HwRWSqEKCv0g@mail.gmail.com>
+ <c19490b6-dc4b-47b3-b422-d244a6b87e5e@redhat.com>
+ <ede128c0-46e7-4c94-ac7f-39db0efa612d@redhat.com>
+ <CAGwozwESYc=znHvgJidjxoUskRuzxgoVGY7=fnmPQyYOLJP_0w@mail.gmail.com>
+ <fca2e4bd-10c6-462c-82a2-37627a797cb9@redhat.com>
+In-Reply-To: <fca2e4bd-10c6-462c-82a2-37627a797cb9@redhat.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Sun, 6 Oct 2024 13:29:39 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwFEbKSCDcZHCf0g=BST89eGqNbxzAxWpOj-re2sPUUKnQ@mail.gmail.com>
+Message-ID: 
+ <CAGwozwFEbKSCDcZHCf0g=BST89eGqNbxzAxWpOj-re2sPUUKnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] acpi/x86: s2idle: move Display off/on calls
+ outside suspend (fixes ROG Ally suspend)
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	platform-driver-x86@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>, luke@ljones.dev,
+ me@kylegospodneti.ch,
+	Denis Benato <benato.denis96@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-PPP-Message-ID: 
+ <172821419210.17046.18308113948475448672@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Hi,
+Hi Hans,
+there is no rush from my end to see this series merge. The current
+asus-wmi quirk works well for the Ally, all firmwares. New firmware is
+also supposed to fix powersaving with it.
 
-On 3-Oct-24 10:26 PM, Hans de Goede wrote:
-> There have been multiple reports that the ACPI PM Timer disabling is
-> causing Sky and Kabe Lake systems to hang on all suspend (s2idle, s3,
-> hibernate) methods.
-> 
-> Remove the acpi_pm_tmr_ctl_offset and acpi_pm_tmr_disable_bit settings from
-> spt_reg_map to disable the ACPI PM Timer disabling on Sky and Kabe Lake to
-> fix the hang on suspend.
-> 
-> Fixes: e86c8186d03a ("platform/x86:intel/pmc: Enable the ACPI PM Timer to be turned off when suspended")
-> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Closes: https://lore.kernel.org/linux-pm/18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de/
-> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219346
-> Cc: Marek Maslanka <mmaslanka@google.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Yes, that quirk is suboptimal as it adds a noticeable delay to suspend
+and resume and blocks powersaving from working correctly in old
+firmwares. However, as most Ally users are on custom kernels anyway,
+and this patch series can be merged quite easily into them, broadly
+speaking it is a non-issue if the mainline kernel has ideal behavior
+on the Ally for the next few months. From user feedback, they did not
+notice changing to this patch anyway, other than the powersaving
+benefit ("did you change anything? my ally just uses less power now").
 
-I've now applied this patch to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Next revision I will cc dri so we get feedback from there too.
 
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
+> >> Thinking some more about this I am having second doubts about
+> >> moving the LPS0 display power off call to before devices are suspended,
+> >> doing so would mean that the display might still be on when that call
+> >> is made and that call could disable power-resources which are necessary
+> >> for the display causing issues when the display driver's suspend method
+> >> runs.
+> >
+> > Is there any device where that is used for display powersaving?
+>
+> The problem is that we cannot rule out that the LPS0 display off
+> call relies on the displays actually being off.
+>
+> I have seen ACPI AML code do all sort of crazy stuff.
 
-Regards,
+Indeed, as this series shows (for other reasons).
 
-Hans
+> So IMHO we really need to make sure that all physical displays
+> are off before we make the LPS0 display off call.
 
+In my use-case I'd like to be able to fire the display off
+notification prior to turning off the screen or turn on the screen
+after both Display Off and Sleep Entry have fired to be able to show a
+dim lockscreen if the user briefly interacts with the device. I will
+be doing this downstream for a limited set of prevalidated devices
+though.
 
+Therefore, before we block this behavior in a non-certain manner (as
+it will be up to each gpu driver to do it), there needs to be some
+documentation showing there is an issue, certain manufacturers rely on
+the behavior, or that Microsoft has guaranteed that this is the case
+in Windows. Even with any of the former, a blacklist quirk for those
+manufacturers can be put in place in their GPU driver that blocks the
+Display Off _DSM from firing and automatically calls the Display On
+_DSM if the GPU wants to wake up the display.
 
+> I have read what you wrote about this also applying to virtual
+> displays, I guess that means that there should be no rendering done
+> (so also no GPU non display tasks) when this is called.
+>
+> IOW it might be best to tie this to all VGA class PCI devices
+> being in D3 as Mario suggested.
 
-> ---
->  drivers/platform/x86/intel/pmc/spt.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/spt.c b/drivers/platform/x86/intel/pmc/spt.c
-> index 2cd2b3c68e46..ab993a69e33e 100644
-> --- a/drivers/platform/x86/intel/pmc/spt.c
-> +++ b/drivers/platform/x86/intel/pmc/spt.c
-> @@ -130,8 +130,6 @@ const struct pmc_reg_map spt_reg_map = {
->  	.ppfear_buckets = SPT_PPFEAR_NUM_ENTRIES,
->  	.pm_cfg_offset = SPT_PMC_PM_CFG_OFFSET,
->  	.pm_read_disable_bit = SPT_PMC_READ_DISABLE_BIT,
-> -	.acpi_pm_tmr_ctl_offset = SPT_PMC_ACPI_PM_TMR_CTL_OFFSET,
-> -	.acpi_pm_tmr_disable_bit = SPT_PMC_BIT_ACPI_PM_TMR_DISABLE,
->  	.ltr_ignore_max = SPT_NUM_IP_IGN_ALLOWED,
->  	.pm_vric1_offset = SPT_PMC_VRIC1_OFFSET,
->  };
+GPU can do stuff while the screen is off: render videos, hold browser
+videos in main memory, have a game in the background, etc. If by D3
+you mean the whole GPU has powered off, this would be a deviation from
+Windows.
 
+Antheas
 
