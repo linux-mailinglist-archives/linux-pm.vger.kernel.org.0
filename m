@@ -1,123 +1,149 @@
-Return-Path: <linux-pm+bounces-15289-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15290-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD1E4993416
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 18:57:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E9CE9934C7
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 19:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD37C1C23380
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 16:57:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE04D282738
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 17:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031EA1DC72A;
-	Mon,  7 Oct 2024 16:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A2401DCB30;
+	Mon,  7 Oct 2024 17:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jf/5GY9/"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="IQTpJbB8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE481DC071;
-	Mon,  7 Oct 2024 16:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F851DD523;
+	Mon,  7 Oct 2024 17:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728319917; cv=none; b=pcgZdVTMk+EIdF+B2qD6s/Rz7L+W9bsDkCveV68/GKR9uWNJMLVGqh56i6wuxE4JhkitwhAgrGeoA+kpHUwcoijbcbtYwB6/bz8ooJZmBrumDDkNkTEWDrsUedE2QGAjPNETmLH0fsS1OWhIeFA6wZIAS62WzodZvEahzYHrjjI=
+	t=1728321645; cv=none; b=hpIJDKSHK9dEXoRK1Aa63Y008XY1Dq+qgLu7f0MgFlCswTbFT2H1AmHQkH7wbuOrtj8LGEcFCpP2PDXzE2GWXZpjK6ZmP/9YzZaCTwaMQkhpYn9j/t3bBSuphKSM7jMduTG9KimO8Z1n/c51yNldCZCdZuFTHG/NoNceIBbPb2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728319917; c=relaxed/simple;
-	bh=mQ692TNlccdh3ekLUIq5Y+tz2OVkv0kzgv7FGWTnYH8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=apIPFFiQl7m7qG/+Y+fRozG2lFRdcV+8HfJ6QHt+fUZP3DQ4qcpGxu0qXC7R1ITc86cOpE+Y1WJ1dVqiaouR3bxms6l/UI86wPkaCHYTxWYfMAPdBa8Wb5nShDszMk+wHoaL1kGDI52hZKk5mVI550vLiHsppx2NB04kAlrB1SY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jf/5GY9/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74304C4AF09;
-	Mon,  7 Oct 2024 16:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728319917;
-	bh=mQ692TNlccdh3ekLUIq5Y+tz2OVkv0kzgv7FGWTnYH8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jf/5GY9/+s9+S/fNqb6a9j4iizFNkCCIFLgf0GS1WuymVUkh6OqgLRuOPyb1sga88
-	 ksuposVNbs+QCJ6FQn2JLB0OvqumFQijkGIPrUCYVNiG4byQk2mqO5OrcUAQbJMqnd
-	 U23+OSc+zBnnVMaTQUTYKPalZwLKTiufDGxgS5tPKvLkxLeUe8Zm2rv4suoVYi7tDj
-	 43ovlqLX06AGJhn3FunQfxRIAZTOHoImAbytxffp+Q3SQYa5RODHGBDoBrC1nZGn+l
-	 4rwJux+Ap6V8/is9wMOZn1Tu8kh+51Sjrb2bD+SiRGRD2DGxpUWQfukTgr0UeXYgwj
-	 x+Oif5/pv9uJg==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3e06b72f3e7so2161148b6e.0;
-        Mon, 07 Oct 2024 09:51:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU7BbmIlI7rFJrFB+PsZpYzlMj6Zt6ohJWtahD9iSBAkAeWbh2DVrTWKsa5azRmKP+qxvTUfg574SzW@vger.kernel.org, AJvYcCW4vd213RJsPQMcQB8wI7qHt6/p4uCUSVxD12cTiUyXFCe/F03lp8djh2fWxK6JmwdeDsK1IAJ6jC080jEA@vger.kernel.org, AJvYcCWmKNVZOxqX0iH3+OlRPM3gVFduTMWYkK95S9UOMT19l14P3iZSGI0uperHQ2LZTzkxTGO6Fqea47M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTZMy7+an7/wfRbOtmqD8Xzo71W1lVffmTWLNoMRTFrMMSy5HF
-	YWIKx2UNWKPAYT2/IaQDI/82FhXpbTqM1lJo2NLp/wKBGkvwoqumXu8/2A2hSpmFXuN5qdwz89G
-	Z3CjnLcRA5qbzyZd+8fGnxZxnbIE=
-X-Google-Smtp-Source: AGHT+IFiOIOqw/qc4ZTHJxfoSzE6KMoRDbdjxV+x8/xIF8IxxUPacNXZKL7rCHi5nnkzXzSbE7rIDVx1ilQP30xw0C0=
-X-Received: by 2002:a05:6808:228d:b0:3df:a2f:4ad3 with SMTP id
- 5614622812f47-3e3db5cc315mr123616b6e.11.1728319916851; Mon, 07 Oct 2024
- 09:51:56 -0700 (PDT)
+	s=arc-20240116; t=1728321645; c=relaxed/simple;
+	bh=BiWtr4IVq/5xsgaa3fV0CRaC4Xyzet6pkUEDfK38hs4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cLv2TxBJnBt7ckErol67xvp+SgImQbrKvAt+SV9kEUuVXCCTuWtNOjrqiAEMhcSm+KCOI62/lYDEQ2M7oYDYZUCjiejibreGqplTCMbsZUnVXERjqnxRDGZv0D1G5Cq2vZR8eKQi0fWb+RPiq307QS/7Q38QbHfYuas9lEqUPyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=IQTpJbB8; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 497Gp6sJ026632;
+	Mon, 7 Oct 2024 17:20:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=B
+	iWtr4IVq/5xsgaa3fV0CRaC4Xyzet6pkUEDfK38hs4=; b=IQTpJbB8enCB8eIe5
+	TM9cZLlsiuhRrkwpZUnTTuD4yHMdxnpz2bZUbpzFmMAOcSxrtRS/h5fQ5mDlPyhu
+	N22jTxVXsInbS79nFqkg/MOEXzBpfrq0sICEQWWX/O7zAgXpdeqhxipUiVFJPQ/G
+	VkXPGnwZrpZCPT4EJ5BDTvBGfB4p3otISAMHFjfafGux4GgU+e382JXPabPi/idE
+	ql+QEr+4dquq6u3bNhuluRtgUCdjManO1l/lKjiW7EW836749y3QIFiV93l8ru7F
+	t+CenrHC+b/Hv1eNHBtnTP8J+Uz/i3CT1Q3AAKeUpqCuq/c/muui9b2Ro8a+BRja
+	tZhug==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 424kgyg5c5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 07 Oct 2024 17:20:20 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 497HKJfc022703;
+	Mon, 7 Oct 2024 17:20:19 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 424kgyg5c2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 07 Oct 2024 17:20:19 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 497FUWrN022852;
+	Mon, 7 Oct 2024 17:20:18 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg0qjf7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 07 Oct 2024 17:20:18 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 497HKGtn49152382
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 7 Oct 2024 17:20:17 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DDE5420043;
+	Mon,  7 Oct 2024 17:20:16 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4FAB620040;
+	Mon,  7 Oct 2024 17:20:13 +0000 (GMT)
+Received: from [9.39.16.71] (unknown [9.39.16.71])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  7 Oct 2024 17:20:13 +0000 (GMT)
+Message-ID: <ae65e4aa-3407-4fb0-b1f1-eb7c2626f768@linux.ibm.com>
+Date: Mon, 7 Oct 2024 22:50:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241005-power-supply-no-wakeup-source-v1-0-1d62bf9bcb1d@weissschuh.net>
- <20241005-power-supply-no-wakeup-source-v1-2-1d62bf9bcb1d@weissschuh.net>
-In-Reply-To: <20241005-power-supply-no-wakeup-source-v1-2-1d62bf9bcb1d@weissschuh.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 7 Oct 2024 18:51:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j=P9orUe9k0bsUfxE0YA8stsbAi=k+ge4_XBeuHVnyrw@mail.gmail.com>
-Message-ID: <CAJZ5v0j=P9orUe9k0bsUfxE0YA8stsbAi=k+ge4_XBeuHVnyrw@mail.gmail.com>
-Subject: Re: [PATCH 2/8] ACPI: battery: Register power supply with power_supply_register()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Sebastian Reichel <sre@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	=?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
+To: Qais Yousef <qyousef@layalina.io>,
+        "Rafael J. Wysocki"
+ <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christian Loehle <christian.loehle@arm.com>,
+        Hongyan Xia <hongyan.xia2@arm.com>, John Stultz <jstultz@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240728184551.42133-1-qyousef@layalina.io>
+Content-Language: en-US
+From: Anjali K <anjalik@linux.ibm.com>
+In-Reply-To: <20240728184551.42133-1-qyousef@layalina.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ty1IRVPvPrRYZTNQU7ANS6Pxd5XiQ0w0
+X-Proofpoint-ORIG-GUID: FYLorLhiWLWSPUEUUKsj3t3mlEz4qhjB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-07_10,2024-10-07_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ spamscore=0 suspectscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=599 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410070121
 
-On Sat, Oct 5, 2024 at 12:05=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
->
-> power_supply_register_no_ws() is going to be removed.
-> Switch to the general registration API.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+Hi, I tested this patch to see if it causes any regressions on bare-metal power9 systems with microbenchmarks.
+The test system is a 2 NUMA node 128 cpu powernv power9 system. The conservative governor is enabled.
+I took the baseline as the 6.10.0-rc1 tip sched/core kernel.
+No regressions were found.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@inte;.com>
++------------------------------------------------------+--------------------+----------+
+|                     Benchmark                        |      Baseline      | Baseline |
+|                                                      |  (6.10.0-rc1 tip   | + patch  |
+|                                                      |  sched/core)       |          |
++------------------------------------------------------+--------------------+----------+
+|Hackbench run duration (sec)                          |         1          |   1.01   |
+|Lmbench simple fstat (usec)                           |         1          |   0.99   |
+|Lmbench simple open/close (usec)                      |         1          |   1.02   |
+|Lmbench simple read (usec)                            |         1          |   1      |
+|Lmbench simple stat (usec)                            |         1          |   1.01   |
+|Lmbench simple syscall (usec)                         |         1          |   1.01   |
+|Lmbench simple write (usec)                           |         1          |   1      |
+|stressng (bogo ops)                                   |         1          |   0.94   |
+|Unixbench execl throughput (lps)                      |         1          |   0.97   |
+|Unixbench Pipebased Context Switching throughput (lps)|         1          |   0.94   |
+|Unixbench Process Creation (lps)                      |         1          |   1      |
+|Unixbench Shell Scripts (1 concurrent) (lpm)          |         1          |   1      |
+|Unixbench Shell Scripts (8 concurrent) (lpm)          |         1          |   1.01   |
++------------------------------------------------------+--------------------+----------+
 
-and I'm assuming this to be handled along with the rest of the series.
+Thank you,
+Anjali K
 
-> ---
->  drivers/acpi/battery.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-> index 65fa3444367a13ac83644444076a11f08152c382..9a3a475f8ad334bb365e6a027=
-3084034b8baa3bd 100644
-> --- a/drivers/acpi/battery.c
-> +++ b/drivers/acpi/battery.c
-> @@ -853,6 +853,7 @@ static int sysfs_add_battery(struct acpi_battery *bat=
-tery)
->         struct power_supply_config psy_cfg =3D {
->                 .drv_data =3D battery,
->                 .attr_grp =3D acpi_battery_groups,
-> +               .no_wakeup_source =3D true,
->         };
->         bool full_cap_broken =3D false;
->
-> @@ -888,7 +889,7 @@ static int sysfs_add_battery(struct acpi_battery *bat=
-tery)
->         battery->bat_desc.type =3D POWER_SUPPLY_TYPE_BATTERY;
->         battery->bat_desc.get_property =3D acpi_battery_get_property;
->
-> -       battery->bat =3D power_supply_register_no_ws(&battery->device->de=
-v,
-> +       battery->bat =3D power_supply_register(&battery->device->dev,
->                                 &battery->bat_desc, &psy_cfg);
->
->         if (IS_ERR(battery->bat)) {
->
-> --
-> 2.46.2
->
 
