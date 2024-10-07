@@ -1,94 +1,158 @@
-Return-Path: <linux-pm+bounces-15269-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15274-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62455993056
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 17:02:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 279019930E0
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 17:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 150E428CB9F
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 15:02:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80A17B23A0D
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 15:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0591D8DED;
-	Mon,  7 Oct 2024 15:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCB61D798C;
+	Mon,  7 Oct 2024 15:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="C3jR8ClV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbB3Igva"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D420D1D86FB;
-	Mon,  7 Oct 2024 15:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF765338D;
+	Mon,  7 Oct 2024 15:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728313286; cv=none; b=PaMQXfUbu0GVcIR0fpAaJU0gq4roGVcDOS3p/gqY+OanHMAJZgmgtk7hO77EdNx0tdjgtF5JcbzFo9gYTl+p7xi9OAMShGA3LHMaBv7eK2q+9Xdvhvkp1VRfLnOzj+DBeS+NYX92jwsq5LBLKMAz8CPyxmecTaYw94SPT6BizWo=
+	t=1728314117; cv=none; b=b+ARTTIxGLlkQzCVr/1QmCLolFsEy1naMYS0MRO6atohvLKrMl3VaP4E/jGe4t8dXT2xfFnBZZDymRxWvSEwLGRbGUo7GQRZ9pQ8kVsxvZ3c9vxeM1xR8CQ1dHS97MukKLGETdrgcvx6YjEdnwUgxJ5seMqwgQ4MiAPtDdlLA5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728313286; c=relaxed/simple;
-	bh=avbkBuu+IeylLDazEvd0vZ3GdpIvrosWqQVh97Iqy/0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=O9VwlCTFD+nGBB4sJDi9hZslxUwxx5tbvtGnXx6RJZd4MjNIA9n11MofZK8oYii7Zj+pyF1H2J72ML2lxCWSkzeMgC4UD2BvGc/YnIGbVNuP9piJ8KDoBqiPsec5tvpHJ7OJ3OLtWG87yillxzu0CfF8QS+UC8Yr7qY+OoJCu+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=C3jR8ClV; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=PbKIZr1whktnbITD00APK/aUO0+aJL4weKLvHytG4m4=; b=C3jR8ClViDioxjAcrq1vPh4VfJ
-	+zSbxcQFf67GutFF1H4SRmvWbkN+HeMdWqk1yQSj6UcW3ufc+ZP0YIOTnI87iepjxkpfz+XLlNlbQ
-	wxFuWR6BkQjVOZhgOTRDomsOslmQPSdb0Qks2C3sjN0bg+nCc16Xok1DnZLuuoRmkzkWpRtO43iSZ
-	399OvgXEmVNQWhBzU0qjGmC2R9dLTz92HhFPDAjImRPcvq20HmyAH+QoZr/b6EH3dCQIeDttqcSLH
-	HNV1mK891h/TqC7Iojbw7Sz2Y2j1pO9XWJMEGFKTTRVVLrMxkuinOcWC9pQu0b0UfS3wDArICYu7I
-	Azk4JHMg==;
-From: Andreas Kemnade <andreas@kemnade.info>
-To: devicetree@vger.kernel.org,
-	Lee Jones <lee@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	tony@atomide.com,
-	Rob Herring <robh@kernel.org>,
-	linux-pm@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	khilman@baylibre.com,
-	linux-omap@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v4 4/4] ARM: dts: ti/omap: use standard node name for twl4030 charger
-Date: Mon,  7 Oct 2024 17:01:20 +0200
-Message-Id: <20241007150120.1416698-5-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241007150120.1416698-1-andreas@kemnade.info>
-References: <20241007150120.1416698-1-andreas@kemnade.info>
+	s=arc-20240116; t=1728314117; c=relaxed/simple;
+	bh=gunTeazw+ZrkxkOgLjuxsBZi3IH0C+YwzRH8GZ2kJxs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Br4KwzR3rdTSyKmb6gm1D/a1yIwhZVip9/wVaHGUIyA4aPL3i4GAbZT2mV5jVSQ77lOnLIW1Jm3ZvihOTtMwreueFJJy9KsiYXsa1FpD/Q5Vt4sdmWZU7n959D4IgJ6M2JlOA2nH+G/0PbM32zF55mxwVYC1UPR3r+LSQM6V+5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbB3Igva; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a99415adecaso307637466b.0;
+        Mon, 07 Oct 2024 08:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728314114; x=1728918914; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PN07q14I0ERr6DSt1fbUdHvm12enYACHqhoLOwef/JQ=;
+        b=cbB3Igva2WQ7uE7PEFKGjejUc46YT2BOh91hAWH3WrNolyF1dDQYLoHG0e2xF0is7M
+         qB8a9BrOE5od4su5HLQTkhJf49JFlwCJOiEb2Pj8DntgfQGTzTk8Qj3ybKS8aD5Blutn
+         vbVPwdRAazlZ+v+lOkj/UDRNBr3iJFmj3t75RqOJmybBYIKd/+Fwq2QmDBl+nuBrzV1a
+         my8SQRubMH2u/OJcRhzUIa1liMAOWM9WabFw254YnjZ59KKEXu0nj9ZRUJONyYCSkRLT
+         hc67NUvsaJ+f5U0oAYaCBZ2yYF0ZLvwJw7UoWhDkdlSN3rYn+AE62q4KHa7TMS6g3ZOl
+         hJ+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728314114; x=1728918914;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PN07q14I0ERr6DSt1fbUdHvm12enYACHqhoLOwef/JQ=;
+        b=GUVHplkKaMY6Ox7TgK7lt0k7A2GG8OOljyxSS9ICCHO/OCD37UVMxiKlgQQoTAL/hO
+         rBY/k2DOAvh3yvM9kGDZH2vlBCjXkeu4Jlqe8/j+8XQHq8Av1KL2PGajOTezfUoUR0z7
+         zLKIVI75N2hOPb9K4gq770zc7gO9KIk8vxlRYPbwk+VgFCd9XwU1niX3HIZEdZggQOFU
+         QBlpE1OsJpswrTShBeNhw0spwKFrxirMXrPHxwUn7Hw9PYLUxRdLGnEd7o8TX6vGSdk4
+         aWRBBupjJI9sb5EDgVH7qWSMEgo3AbQx4CjWy1aKvxoARl5KoAIJS1gMY7MGzcE6BjnS
+         it4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUGjbCPmuJvG4tEK+hvvCd9HGsi2OFm2GBHhaouiD7QgHpp/Y5NDo7iU/dMQbH/Vonuo2FX12r4k/0=@vger.kernel.org, AJvYcCVHb6TIRAPYI9Qiw49T81Pyj+hoLas747MfZ1eNRDiRPUcQl/aa83ZqgYsK3YMh4Ln2YsxLmf39MPRePj8=@vger.kernel.org, AJvYcCViSVKgvFI4G79ntIZZBz6lTewCa3meGYM/YOIvVvMwYNDvGsnfPwlcrhVCFvSHZ4i83iAfjpv4GK/KvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUrjg2rQtfwih1uzIA4Wno47+KOca35jqftMYc5cLe875c51LC
+	/W7iZvzEQULfqaPy3uePrY2t80ykHV3alEiW+Rr7tH1Ixr1fu5s2oLCV4wzc
+X-Google-Smtp-Source: AGHT+IEkPYPI+5UiY0ODqposUxSq+duU2m4ZE0vN/XilFUXU5SaI4dF8VsvgVyvujSmlc0AzpSmEpA==
+X-Received: by 2002:a17:907:36c8:b0:a8d:43c5:9a16 with SMTP id a640c23a62f3a-a991cede585mr1334495166b.6.1728314114235;
+        Mon, 07 Oct 2024 08:15:14 -0700 (PDT)
+Received: from ?IPv6:2001:a61:34c9:ea01:14b4:7ed9:5135:9381? ([2001:a61:34c9:ea01:14b4:7ed9:5135:9381])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a993ddeddadsm328187566b.198.2024.10.07.08.15.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 08:15:14 -0700 (PDT)
+Message-ID: <8a5f6f12c2cb6989cef1d09957fc0f6f7a512b26.camel@gmail.com>
+Subject: Re: [PATCH v2 5/7] iio: inkern: copy/release available info from
+ producer
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Matteo Martelli <matteomartelli3@gmail.com>, Jonathan Cameron
+ <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
+ <alisa.roman@analog.com>,  Christian Eggers <ceggers@arri.de>, Peter Rosin
+ <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
+ <sre@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Mon, 07 Oct 2024 17:15:13 +0200
+In-Reply-To: <20241007-iio-read-avail-release-v2-5-245002d5869e@gmail.com>
+References: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
+	 <20241007-iio-read-avail-release-v2-5-245002d5869e@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Use the established node name for the charger.
+On Mon, 2024-10-07 at 10:37 +0200, Matteo Martelli wrote:
+> Consumers need to call the read_avail_release_resource after reading the
+> available info. To call the release with info_exists locked, copy the
+> available info from the producer and immediately call its release
+> callback. With this change, users of iio_read_avail_channel_raw() and
+> iio_read_avail_channel_attribute() must free the copied avail info after
+> calling them.
+>=20
+> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+> ---
+> =C2=A0drivers/iio/inkern.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 64 +++++++++++++++++++++++++++++++++-----------
+> =C2=A0include/linux/iio/consumer.h |=C2=A0 4 +--
+> =C2=A02 files changed, 50 insertions(+), 18 deletions(-)
+>=20
+> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> index
+> 7f325b3ed08fae6674245312cf8f57bb151006c0..cc65ef79451e5aa2cea447e168007a4=
+47ffc0d91
+> 100644
+> --- a/drivers/iio/inkern.c
+> +++ b/drivers/iio/inkern.c
+> @@ -760,9 +760,25 @@ static int iio_channel_read_avail(struct iio_channel=
+ *chan,
+> =C2=A0	if (!iio_channel_has_available(chan->channel, info))
+> =C2=A0		return -EINVAL;
+> =C2=A0
+> -	if (iio_info->read_avail)
+> -		return iio_info->read_avail(chan->indio_dev, chan->channel,
+> -					=C2=A0=C2=A0=C2=A0 vals, type, length, info);
+> +	if (iio_info->read_avail) {
+> +		const int *vals_tmp;
+> +		int ret;
+> +
+> +		ret =3D iio_info->read_avail(chan->indio_dev, chan->channel,
+> +					=C2=A0=C2=A0 &vals_tmp, type, length, info);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		*vals =3D kmemdup_array(vals_tmp, *length, sizeof(int), GFP_KERNEL);
+> +		if (!*vals)
+> +			return -ENOMEM;
+> +
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- arch/arm/boot/dts/ti/omap/twl4030.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not a big deal but I would likely prefer to avoid yet another copy. If I'm
+understanding things correctly, I would rather create an inkern wrapper API=
+ like=20
+iio_channel_read_avail_release_resource() - maybe something with a smaller =
+name :).
+Hence, the lifetime of the data would be only controlled by the producer of=
+ it. It
+would also produce a smaller diff (I think). I just find it a bit confusing=
+ that we
+duplicate the data in here and the producer also duplicates it on the ->rea=
+d_avail()
+call. Another advantage I see is that often the available data is indeed co=
+nst in
+which case no kmemdup_array() is needed at all.
 
-diff --git a/arch/arm/boot/dts/ti/omap/twl4030.dtsi b/arch/arm/boot/dts/ti/omap/twl4030.dtsi
-index a5d9c5738317a..07b9ca942e78d 100644
---- a/arch/arm/boot/dts/ti/omap/twl4030.dtsi
-+++ b/arch/arm/boot/dts/ti/omap/twl4030.dtsi
-@@ -16,7 +16,7 @@ rtc {
- 		interrupts = <11>;
- 	};
- 
--	charger: bci {
-+	charger: charger {
- 		compatible = "ti,twl4030-bci";
- 		interrupts = <9>, <2>;
- 		bci3v1-supply = <&vusb3v1>;
--- 
-2.39.2
+- Nuno S=C3=A1
+
 
 
