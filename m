@@ -1,48 +1,82 @@
-Return-Path: <linux-pm+bounces-15260-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15261-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B001A992A8D
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 13:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E312992CCB
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 15:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AB7B1F215DD
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 11:44:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4E501F23B0B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 13:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9691D1E96;
-	Mon,  7 Oct 2024 11:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9461D359F;
+	Mon,  7 Oct 2024 13:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p4lTXEaF"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Rk7PlXyt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF915199235;
-	Mon,  7 Oct 2024 11:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC921D2B35
+	for <linux-pm@vger.kernel.org>; Mon,  7 Oct 2024 13:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728301483; cv=none; b=QzwtzfPyIZ+LTt/6Pg1Xde8erCnLkYFmekTiupyAGN/SQ9ur0pZSCHx3/u1S2iwNf3r5ysLstl2y+JbjnNT7pzSgzpNwhfs17fRskRXjrdaaWUly0JHsRVSzoYHVzpm6FSvHkjuzNtAX99Cozn54sg8axf/L7uGa9OZFycOHKIo=
+	t=1728306852; cv=none; b=nNGlyxLirwk6SpDakwDoqN2w8CSAQZB3gqewierP84rhky1vMByHc8OryeoARH37J6P8GhHQYYnQwxcdgQ12v7dLO+vuu4IDedqY2A+NS5wxmwQHaiNmmyDK3TdlJr0wpSuH9/C4enDKQ68FLT6XOl9synZd5XpKojKZg+ROMwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728301483; c=relaxed/simple;
-	bh=BdagRc9kDm8QW5L4yx71h6tv7jwW8Ojd8Q3cbF5c6CU=;
+	s=arc-20240116; t=1728306852; c=relaxed/simple;
+	bh=aoZ6Ab2vT/zv5gBysjB0k30FjuEJ24iQqrKlS0K2iTo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gs31NWBukt6brdmIguYCBhObZgSQpMofGflXlt4J0TBYIPRjcfpAUjsf0GbJklWZmp75kvSVWcq4f7rbSCg7LVnXJTNrrTTfS3vytIWu88iSritNedfZXnqbSUqYSGv515+meTE/WVvIIOJf+CvTnvQ40J6QAiaFm0EuoYlHdEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p4lTXEaF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27D7C4CEC6;
-	Mon,  7 Oct 2024 11:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728301482;
-	bh=BdagRc9kDm8QW5L4yx71h6tv7jwW8Ojd8Q3cbF5c6CU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p4lTXEaFcv2P0OnXd5GZOTtWQLLF+wfcvWE0on94SJrz+Sn2Yzoc05REKGvvsLA+2
-	 U6jk9UL9xpE0OTLvMPvpOmMgOAHGGAwwo6GL4GqK8UlMOiSbZ1lxYomsaXLqiJCic0
-	 rRUKVHX+ua1Fz1HIn7rryFLRP/+jnCJ7YfKrEMrl7OJQjJo/eLdG5pr5xjb4XFygur
-	 gk3o0GNq8o4aukr0tIt+k/nSrBF+dUOVtc/GHSwelRzSplndQgqnUyklBsH65EQSmm
-	 jIb1QJ0yg4HpclchjPUmDrXyD6rbf1vVIHX3Tnyh/fSvRGIufkvDHRLI4FhaBHGuM4
-	 uWWLQVAcrZAxA==
-Message-ID: <5e6bb315-7896-4e63-86aa-1a219b7a7fb3@kernel.org>
-Date: Mon, 7 Oct 2024 14:44:35 +0300
+	 In-Reply-To:Content-Type; b=JJxa8bLBl6cUYUkWI8+3fitUqi54CAFDd3WEtBhwnknJc0gG7gcrgMWovgKGsWeu8MPTaPPAApk+T4Yp5m2wEGxLQopT9VAcRfq7zRx2MtGbb7GQ6p1xtGdad6364bxuIU6Oh8WjLzwgtP8EKlE4NmbWqZD3zJ8lxJzRHhl+oqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Rk7PlXyt; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4974T7wK019241
+	for <linux-pm@vger.kernel.org>; Mon, 7 Oct 2024 13:14:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	lagPHIZttZDMUwYWdXVzJKUqDahMn43dORef7ZZpNvk=; b=Rk7PlXytr1YHYGI2
+	foDnifwZQTqFUtnW+s3xpBvEczDraD02voigsUqk3CUbu2qBxoq3B8La7Zvwh8sp
+	cYb4AzRYYPWY2gmbBKAid1ycLTzf36fFt2Y1Ik74L6X6TyWiMNyZ8rWzieRU4UV8
+	ab2wn6VDw3nsloKKcHBc+LyfHDDEw14+dzGyvq0gVQdsOtTlx+AiOhCeX11zouIG
+	SlPsAPugVkMCnXTDrKb9P4SeeG8E0ALvnGAMDp5PwaCTl37ltSgKkdehXvSsw9L+
+	zMFkflejufD9edOD5YmpGoC5qWeArbhNBbNYvsFkznGwprXMFyyBsIwYaqmsEyrU
+	43MFHg==
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 422xsn48js-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2024 13:14:09 +0000 (GMT)
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5c884af74b5so467551a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2024 06:14:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728306848; x=1728911648;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lagPHIZttZDMUwYWdXVzJKUqDahMn43dORef7ZZpNvk=;
+        b=GLhHoxWsbMGj+k1/dj1lyesURbcBGV+Qb98KxIAxLJJ43sHq+rQMWuyEjw0AwbbR7V
+         23aNJ6tvhqCOvQear1an3XQ4+ULWRWE3YGXGrNqnuhxuKoS3DHoa1bOpQqO8ImuHtJkx
+         EuZ5xpj0k1Ome5D8RKFa9L+SroqJjYc+C1/XIIY/azOwn6b2BIq3i7P9MI5IcIJhC9P/
+         53t4TUziReZzLfEqphSjQyucomwblcsnsvl4YsaWZzAyWiBHaGU+lqgajHRDJ8MW3kNH
+         L9+1bEH6AtYDshS3gD5suEcV6iUIJKUve9exi5n4z6iz0SYYLK7IBxKAi1NlChw16hFt
+         DqFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfOmxADBeTCuv3gRh3lgBwC6NMqUiTpqBzg4CbdOvZaHfW+hzK/E8t7Cgb/YHwRa8iQwgFUr21qQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5DslhzOpuIWiK7ZWH2nrX66TdgCb61yjQmudyNSVfKE+uJRQ4
+	LumsvQHnOyI08rJ77E3awY4JeitASVVpWmth3kRD3LARJkJ5s3CGS1P0SEPuw0kacHPKxvdBXz4
+	6FfPtO8tmvzOeKBvOh6f0SyUNLAOJw1o/r8i0y2OwGKG/IoTcPOxThKdlzg==
+X-Received: by 2002:a17:907:928c:b0:a7a:a33e:47cd with SMTP id a640c23a62f3a-a991bd427e1mr582895966b.8.1728306847961;
+        Mon, 07 Oct 2024 06:14:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG99yzel8woEN3MfN94DmcG3qCsQPgg06GOvsb7ccyx/jB9qBtMungcx0dHjaKg7+ABpfb/Qg==
+X-Received: by 2002:a17:907:928c:b0:a7a:a33e:47cd with SMTP id a640c23a62f3a-a991bd427e1mr582892166b.8.1728306847312;
+        Mon, 07 Oct 2024 06:14:07 -0700 (PDT)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99420bcc1esm287761166b.199.2024.10.07.06.14.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Oct 2024 06:14:07 -0700 (PDT)
+Message-ID: <d1f12236-220a-43de-a69a-12831bc8a691@oss.qualcomm.com>
+Date: Mon, 7 Oct 2024 15:14:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,181 +84,52 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: core: Fix system suspend on TI AM62 platforms
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
- Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
- "msp@baylibre.com" <msp@baylibre.com>, "srk@ti.com" <srk@ti.com>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org>
- <20241005010355.zyb54bbqjmpdjnce@synopsys.com>
+Subject: Re: [PATCH V3 4/4] mailbox: qcom-cpucp: Mark the irq with
+ IRQF_NO_SUSPEND flag
+To: Sibi Sankar <quic_sibis@quicinc.com>, sudeep.holla@arm.com,
+        cristian.marussi@arm.com, ulf.hansson@linaro.org,
+        jassisinghbrar@gmail.com
+Cc: linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        johan@kernel.org, konradybcio@kernel.org, linux-pm@vger.kernel.org,
+        tstrudel@google.com, rafael@kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
+ <20241007060642.1978049-5-quic_sibis@quicinc.com>
 Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241005010355.zyb54bbqjmpdjnce@synopsys.com>
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241007060642.1978049-5-quic_sibis@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: yo4pDS1ZCp2J39dXIS0CyhXff8jJKMHI
+X-Proofpoint-GUID: yo4pDS1ZCp2J39dXIS0CyhXff8jJKMHI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1011
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2410070093
 
-Hi,
+On 7.10.2024 8:06 AM, Sibi Sankar wrote:
+> The qcom-cpucp mailbox irq is expected to function during suspend-resume
+> cycle particularly when the scmi cpufreq driver can query the current
+> frequency using the get_level message after the cpus are brought up during
+> resume. Hence mark the irq with IRQF_NO_SUSPEND flag to fix the do_xfer
+> failures we see during resume.
+> 
+> Err Logs:
+> arm-scmi firmware:scmi: timed out in resp(caller:do_xfer+0x164/0x568)
+> cpufreq: cpufreq_online: ->get() failed
+> 
+> Reported-by: Johan Hovold <johan+linaro@kernel.org>
+> Closes: https://lore.kernel.org/lkml/ZtgFj1y5ggipgEOS@hovoldconsulting.com/
+> Fixes: 0e2a9a03106c ("mailbox: Add support for QTI CPUCP mailbox controller")
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
 
-On 05/10/2024 04:04, Thinh Nguyen wrote:
-> Hi,
-> 
-> On Tue, Oct 01, 2024, Roger Quadros wrote:
->> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
->> system suspend is broken on AM62 TI platforms.
->>
->> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->> bits (hence forth called 2 SUSPHY bits) were being set during core
->> initialization and even during core re-initialization after a system
->> suspend/resume.
->>
->> These bits are required to be set for system suspend/resume to work correctly
->> on AM62 platforms.
->>
->> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
->> driver is not loaded and started.
->> For Host mode, the 2 SUSPHY bits are set before the first system suspend but
->> get cleared at system resume during core re-init and are never set again.
->>
->> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
->> before system suspend and restored to the original state during system resume.
->>
->> Cc: stable@vger.kernel.org # v6.9+
->> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
->> Link: https://urldefense.com/v3/__https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/__;!!A4F2R9G_pg!ahChm4MaKd6VGYqbnM4X1_pY_jqavYDv5HvPFbmicKuhvFsBwlEFi1xO5itGuHmfjbRuUSzReJISf5-1gXpr$ 
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  drivers/usb/dwc3/core.c | 16 ++++++++++++++++
->>  drivers/usb/dwc3/core.h |  2 ++
->>  2 files changed, 18 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 9eb085f359ce..1233922d4d54 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -2336,6 +2336,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>  	u32 reg;
->>  	int i;
->>  
->> +	dwc->susphy_state = !!(dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->> +			    DWC3_GUSB2PHYCFG_SUSPHY);
->> +
->>  	switch (dwc->current_dr_role) {
->>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>  		if (pm_runtime_suspended(dwc->dev))
->> @@ -2387,6 +2390,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>  		break;
->>  	}
->>  
->> +	if (!PMSG_IS_AUTO(msg)) {
->> +		if (!dwc->susphy_state)
->> +			dwc3_enable_susphy(dwc, true);
->> +	}
->> +
->>  	return 0;
->>  }
->>  
->> @@ -2454,6 +2462,14 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>  		break;
->>  	}
->>  
->> +	if (!PMSG_IS_AUTO(msg)) {
->> +		/* dwc3_core_init_for_resume() disables SUSPHY so just handle
->> +		 * the enable case
->> +		 */
-> 
-> Can we note that this is a particular behavior needed for AM62 here?
-> And can we use this comment style:
-> 
-> /*
->  * xxxxx
->  * xxxxx
->  */
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-OK.
-
-> 
-> 
->> +		if (dwc->susphy_state)
-> 
-> Shouldn't we check for if (!dwc->susphy_state) and clear the susphy
-> bits?
-
-In that case it would have already been cleared so no need to check
-and clear again.
-
-> 
->> +			dwc3_enable_susphy(dwc, true);
-> 
-> The dwc3_enable_susphy() set and clear both GUSB3PIPECTL_SUSPHY and
-> GUSB2PHYCFG_SUSPHY, perhaps we should split that function out so we can
-> only need to set for GUSB2PHYCFG_SUSPHY since you only track for that.
-
-As  dwc3_enable_susphy() sets and clears both GUSB3PIPECTL_SUSPHY and
-GUSB2PHYCFG_SUSPHY together it doesn't really help to track both
-separately, but just complicates things.
-
-> 
->> +	}
->> +
->>  	return 0;
->>  }
->>  
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index c71240e8f7c7..b2ed5aba4c72 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1150,6 +1150,7 @@ struct dwc3_scratchpad_array {
->>   * @sys_wakeup: set if the device may do system wakeup.
->>   * @wakeup_configured: set if the device is configured for remote wakeup.
->>   * @suspended: set to track suspend event due to U3/L2.
->> + * @susphy_state: state of DWC3_GUSB2PHYCFG_SUSPHY before PM suspend.
->>   * @imod_interval: set the interrupt moderation interval in 250ns
->>   *			increments or 0 to disable.
->>   * @max_cfg_eps: current max number of IN eps used across all USB configs.
->> @@ -1382,6 +1383,7 @@ struct dwc3 {
->>  	unsigned		sys_wakeup:1;
->>  	unsigned		wakeup_configured:1;
->>  	unsigned		suspended:1;
->> +	unsigned		susphy_state:1;
->>  
->>  	u16			imod_interval;
->>  
->>
->> ---
->> base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
->> change-id: 20240923-am62-lpm-usb-f420917bd707
->>
->> Best regards,
->> -- 
->> Roger Quadros <rogerq@kernel.org>
->>
-> 
-> <rant/>
-> While reviewing your change, I see that we misuse the
-> dis_u2_susphy_quirk to make this property a conditional thing during
-> suspend and resume for certain platform. That bugs me because we can't
-> easily change it without the reported hardware to test.
-> </rant>
-
-No it is not conditional. if dis_u2_susphy_quirk or dis_u3_susphy_quirk
-is set then we never enable the respective U2/U3 SUSPHY bit.
-
-> 
-> Thanks for the patch!
-> 
-> BR,
-> Thinh
-
--- 
-cheers,
--roger
+Konrad
 
