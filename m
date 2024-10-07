@@ -1,291 +1,315 @@
-Return-Path: <linux-pm+bounces-15237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71551992325
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 05:45:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD969923AB
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 06:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BA6928142B
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 03:45:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48BA71F2125F
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 04:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1719B210EC;
-	Mon,  7 Oct 2024 03:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D8578276;
+	Mon,  7 Oct 2024 04:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qA9s63Y8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F4122089
-	for <linux-pm@vger.kernel.org>; Mon,  7 Oct 2024 03:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728272728; cv=none; b=M4PZTWpYZ7iF587eztbmhqvLMN3gvw/to8LMIwrLklKacUJjUuiO4nONqd6xefiePJsyNpUpDYzl/R9ddORHsq6D36hk7x8mYxK1OiIuK3sHG/MDYhONn8OhWOsutQxRICGLLyk+rk648/fVWOH+Vx1YVTnWuxzNqGInLPIaitU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728272728; c=relaxed/simple;
-	bh=0rEOej+eeIy2aV6tTdznd+XFRwHAORlpFAS+RP9YmB0=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=phJ1P3wZKQ8S1fpMR8X83f4rxoLUs2g/mw26pZ7MTzNbeRo2Xxr5SiIZs3Des2NpzQnIJZ5YG2aiDh3IQUNJbtysu/Jju+4jOeqU4/rdwLR/xYlCqSVg173Hnle5emHR9clH+pNv5s5xf+fIj/Lzwn5yE2Xf3NiaarOeVwh7mGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a0ce4692a4so37565645ab.0
-        for <linux-pm@vger.kernel.org>; Sun, 06 Oct 2024 20:45:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728272725; x=1728877525;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EHDFllNFkJYjZMg3+UKblc+rJSGQvVCNk33TyfmVclQ=;
-        b=FdaHYyEQrBOcpppZ5/8TXiRxsVyfJPz8rBg5/SP9GMbvXSdgLqmyR3yNqJYj6+ORP4
-         D39X4Pb8bzloyBRYCzEysIEYUhq+G+i03SVn/XTcOdR8w2oAajah14NlQWXSgAocDOhb
-         mAfawHKBEsSeFAN4Bz2Y9zFi0lYAXDGtdsq3nLNWJjb67G+V2nlPTbR75XgazW4yyQch
-         kXCumFVoUAmRwpHgGmRnywaj7WP9b2oZqBZdHF9PMYz6qQC/I2uGwKAiB636KXXDw7gW
-         SnETFWA+HZRPlio3y0ld2H3QIKaE5ucO+ZLYsaOIwr3QH4H0RkcgpaNK/9gG9mUUzfAL
-         XXVA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKzkYfh8R72Kfm2xNmRbG0rlfgAU1m3K46oNObl/OlvO33gT+Ea1Jv5/20P8JWqm3R0uz1MW5mug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyASM7dTSuy7Oq/rtuZacQjbiNFmmPcCe2S2Dqj5X6rHzGw8rdc
-	NZ1I9l/BQRgHn9f00eFWaZS3UmwuyrWGzcrlb+lEqVpBgSfP2rRVcz1+f4hkw7kNmDgkkOvgujP
-	Pi+FdKWG4vD95JuxH8VC6rWzGhhjJO7Ge11qRsP0UVBSXsVC97UUqPj4=
-X-Google-Smtp-Source: AGHT+IFSSQ0O5NWCPHLfJ5FTMmjfexyxQ1RllCpsR04JHvoL9xjwUXEmb4lw+HPAshkq7f3cP1F1kXhMVWg4ypVjqBwph10rhpdp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF31C1292CE;
+	Mon,  7 Oct 2024 04:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728276024; cv=fail; b=ZmZzsMWkTDo3nCvmKjsM2l8PtloiPgxVQwI6S5HqdEw9b4jKbcpO9I7mYguS0GAOMEw0n2KIbuVP8TB382zgBNu1zfZpolxcZMiTTD+gC2E58Y1sGpHtJMgDJXlPcV+NftNI/9tN3u0yjU0myDT4le01ahmt8SLMCOoHj8+STuo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728276024; c=relaxed/simple;
+	bh=otvecs/ZHC72c5bMOLvUvL51nK0viUbSTrAcG68W7c4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=isUIVKHPHFPlaGeGy3F5BQdHXO1v46EKhpn7bsf+P1rr0AF+F8ZzAICweyAy79yWYheVyOHBYM7rBwUGcgZTZxB3Cr+ZZf6MDU+cZQ7AXUmDzYgbYM9PVtO936VymBelpZOlmXP6+mFp1m+4eAwOuO9cV0ucA2rYOHuiKqU2m10=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qA9s63Y8; arc=fail smtp.client-ip=40.107.243.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=s7S0K49h/hSUA6q8u8+6HRXlp0Fcnu2BkkuiAsNz5rah0DGH/7jB59tq0yJC+r6dwmVTlB7m1XLTXX6XpA4kiJgWC9w1E02rtA/a0kLdtk6aL6tIRjpaLF2yRv4jxRqk/AdLR5Zoyyq1suXLndr9VMfimYiDPKU+V9nHyTc3jUAs+sVrYB9CqLvP09jmAxKK7bUBzuDJPsdfZYqkLYqLNrouL/3kfQb9X9c3Sq1CBCMV+WUmSznmsjYv7bDcWo4i0yNz2eXnG8+Qx4K35VDP4EwjuvWwPu4keLbBI/lImariIA5tSxev7tDj1WycQi8XT9vrLiGBDOvtiouueE9SaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JvDLpSbr2LWAVgH6nkcY3e7ig4NM7CtH2xiz9Og9CvI=;
+ b=ZVPDzPgmd9H53ssKxTb2zYVZsQvceYwyuryLMx3jOCBbOxV2olbIaF50bXpHhdkkHp8gVSZSl5dfnSwAwIEEiNM2nNBKtx2ON6mT/4AcNg56hpsh3HBLvrHiqtCm1cY5x9IIzK2kAFdQ3qYQWxhwYDC3m1WyV3Ka4gFLWJ5T+oc9vdpUMJNjNMBUzIqWsPNuhvEBjsH+I+wDGsodur+uI+W2uhJRayBXdFDGfNOv7T9Zy0yLSeMHws9nKoFYNjg0ZqMFJoiqcqTEWcC/3T03kIwLbXhk3vMXuOCgIGVehanbaRydjFzJINn5zRw0YxfLztjlv9OjNOV6MXMYcvFSjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JvDLpSbr2LWAVgH6nkcY3e7ig4NM7CtH2xiz9Og9CvI=;
+ b=qA9s63Y8n07wsOWh3RPnUHRFI0vfWicg3i1VCq8B0m1z8jzhowim2Mjgddy5xZd8XoByUW69UDEI6lMqxvdk7bV67ms52nShoE9jwTSCHN9P5tx515WptxK4RIvYv6aD1xMR0z5t7MS3fc4r0URzUQANz/pHbyTcfjkJpOLzrM4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
+ by MW6PR12MB9018.namprd12.prod.outlook.com (2603:10b6:303:241::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.23; Mon, 7 Oct
+ 2024 04:40:19 +0000
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9%7]) with mapi id 15.20.8026.020; Mon, 7 Oct 2024
+ 04:40:19 +0000
+Message-ID: <ac6aab6d-51d8-47e8-8508-8cc52aba227b@amd.com>
+Date: Mon, 7 Oct 2024 10:10:07 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] cpufreq: Add a callback to update the min_freq_req
+ from drivers
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: gautham.shenoy@amd.com, mario.limonciello@amd.com, perry.yuan@amd.com,
+ ray.huang@amd.com, viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241003083952.3186-1-Dhananjay.Ugwekar@amd.com>
+ <20241003083952.3186-2-Dhananjay.Ugwekar@amd.com>
+ <CAJZ5v0hoiPo6Q=K=q-EoCNsunr0zLGPJgK39LwnjsSr=btmjOw@mail.gmail.com>
+Content-Language: en-US
+From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+In-Reply-To: <CAJZ5v0hoiPo6Q=K=q-EoCNsunr0zLGPJgK39LwnjsSr=btmjOw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BMXP287CA0002.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:2c::17) To LV8PR12MB9207.namprd12.prod.outlook.com
+ (2603:10b6:408:187::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:148b:b0:395:e85e:f2fa with SMTP id
- e9e14a558f8ab-3a375c3a577mr79101665ab.1.1728272725250; Sun, 06 Oct 2024
- 20:45:25 -0700 (PDT)
-Date: Sun, 06 Oct 2024 20:45:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67035955.050a0220.49194.04f6.GAE@google.com>
-Subject: [syzbot] [pm?] INFO: task hung in rpm_resume
-From: syzbot <syzbot+73932f4591b9b973aa0c@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, len.brown@intel.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, pavel@ucw.cz, 
-	rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|MW6PR12MB9018:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7956e762-1d1e-43e1-a546-08dce68a25ae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UFhkOFR2LzFGMnhKc1VwZkZ2b1A4bHNMd0JERXZrdWl5Y0JxbHBaZU9CRUU1?=
+ =?utf-8?B?WjZ5ckdibFFGU1VKYjcrUGdxZ1BxSW9ReURFREYzZXFoUkIxMHE1d3VyQkF4?=
+ =?utf-8?B?QmpEVnd5ZjUvUFB1SFljODUxR011bTh6bGsxenJyYlZEdk1ycVNOV3FWdk1w?=
+ =?utf-8?B?UzRPeVd1eC9FejlEaTVXeXhLWkZ3NndHYThDMnJkd1Z2dFJCeFpCanJQRFhB?=
+ =?utf-8?B?SDFKVzFRMkJVb2ZWZXZsMHFqV2JWMUhLcS9oZEFNYWhBYXdLNHVNWmdrZlN2?=
+ =?utf-8?B?OFBldmxCVS8xeFFuWWpVSXZqdUlZejA4SE5zb2ZNSFBUaVRkcmt6VUsyZjNH?=
+ =?utf-8?B?TG1xdWp6R29sdWhDcFBHZmpNWGpuTUJEM0o1b2xFNUFtaFAzRjJrNmw3dk9Z?=
+ =?utf-8?B?QTQ0ZzZiTnVyVmVMZ1FvQ2EwWWtCOXRiOEhDQ01mYXdibmI5dUhnck1FbGdL?=
+ =?utf-8?B?a0pKZ1oxUWhqYldkYnNyV3c2RTF4VzZhRm9ERitHTFEwbkRXU3V6amc1YVNH?=
+ =?utf-8?B?dDJ1YU5KYjdIb2ZpOTJSR1RzS09LSUdoeHYvbGJjMGxZdGc5TzRETHRaRnpZ?=
+ =?utf-8?B?ZkFCOXNLOVlZYzNleHd1ZFFtWVJnbkw4VmZDWU9NQ3djUUEzaHZ3QldKR25T?=
+ =?utf-8?B?NjgrYmVJU0F0VVJOQzhpWG5VWmFTMERla1o5cUNXQ1MvenhNeDBGTVFMSjhF?=
+ =?utf-8?B?cW9MYTlBbk96MGY4ZVFqdFJYUHJuK296N3R0QllDcVluNkpqWnFSM3V2YkxF?=
+ =?utf-8?B?Lzk4V2dqREJGOHc5QVFrS0swZ1dDN0NFcVkvamprcHI2SVF5a3FtOHpOb28z?=
+ =?utf-8?B?SE9JaXlycjVIK3JQcTBydFUvM3BJOVZiMVNWaTU1QUg5U0hoUUlzUUZlcDdk?=
+ =?utf-8?B?aURxMFc2V1AvM2pmdmFVQjJNTTBoTGl0cTY4blBVTml4LzRWVkZTZktjTXFZ?=
+ =?utf-8?B?dHNITmtKUUhyR2lEanhBWGJHbFIrS3JyNWRacW1rcWdxdWhKUm1Pcms2Q2Iy?=
+ =?utf-8?B?NktxWWphbmt5WUZLOXBacVRyL2hjY2E5WmNpQ2ZUbjQ1QmQxdjRCSm51aUxv?=
+ =?utf-8?B?VnkyY0l3clVWdmVoelNVR0lBUFZkN1B0WDJzOWtmWGkyQVk0MDQwZHFHSG9l?=
+ =?utf-8?B?MlRrL0x2QVd0RjZpQ3hUb3AwVGgralJjT0ZVQTViTVM3eEVpc2d5R2c4ODEy?=
+ =?utf-8?B?L3RRZTRidnNoOWJlZzBobEVDK1VtajFiYmNmclcyRk0xL2tXWGlLeXZLSkxE?=
+ =?utf-8?B?a0VmeW9sVzVsQjRvb0s0TEFWbXRTN0dyZTdMZzFtZEhCcThid2tNbmlhOEFi?=
+ =?utf-8?B?eUNSWko2NmhFQUVUWExDWHFwNXNFd3EzYm1uVElEVGRqN0x5dW9tZGwvdnIx?=
+ =?utf-8?B?b2ZVTWk2aXpnNlZPS1Yyay93MmpicmhFYWJLV1pkcE45UHc3c1ZOTmNjWGRI?=
+ =?utf-8?B?aFE4cmtZOVY0TElCUnVTZ2x0eVBoZEpWZWJvRFVPMTBhaEJOdlhvYjVYL2dw?=
+ =?utf-8?B?UEVEa3B2azQrUlhZOXdadUo3aThOb0VrajROV3hPc1BGQ3dWRkxGcHdvOW9E?=
+ =?utf-8?B?MHlJS3pQVDkvaFM5M0IrTzdJcERkYWFaVDZzSTY0bXVPUWFWa0R5eFoyLzVk?=
+ =?utf-8?B?WFYySmJxU2xQcDdBeVNzRHNKcEFRYkR3MW1vaTlYWm91ZzBCRSswd3BiMVAz?=
+ =?utf-8?B?Z3VpT1JycjRyLysxZHBjbG9wTGNwNUtkYWxPQVRDdEI4eDFUbUlvbmd3PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N1RCdlBPbVVkajFhcFdWdVNDbEJ2OFcvWTNKQkxvOWdqbGlLMnNwKzNlYk9V?=
+ =?utf-8?B?dmh1dm4wbVBubkNjVVpRZWFzbUx6QmNMdFB4MDV3RGFxZmVlZzhRcDRkK1hm?=
+ =?utf-8?B?OEdVTjR5S2F2TWVSdnZkOGtycTh6YzFKRWswbW1vOWNkNGM5RnorOVI5b3lt?=
+ =?utf-8?B?a0wzeGVBMkpUMHplK05wZ1FhcCtlaStlRFI3UEF2WmtkbVI4enpUelNSMFhw?=
+ =?utf-8?B?R3FwYlZWQzNvZjZJcXRqeXZHMG9DdXIrYVlQUXNza1JuUldRWWV5SUFJSDN2?=
+ =?utf-8?B?UVRrRGViQ3FPUTMxTzFLOUp6dEpEUUNoblhzK3VjOGRTVHQ3Q0FLUk1uUXpE?=
+ =?utf-8?B?b25PZUNsdDY2Q090dGZmcVZNb1hVM2VIN2lDSGtzUWV3dENJMHVYM2JpbHZX?=
+ =?utf-8?B?Nlg3NnNzY2R6V3IzSEJjeGpaZEdwOXpTNDJra0g2bEpKRzhyNHQvNzlYTXNm?=
+ =?utf-8?B?UG5UMTF4c3dlTVFCYmxlUi9lN2RNQjNkZ1hZMnorcktwZndwQVpOTHp6bTIw?=
+ =?utf-8?B?OVhMeENTR21Semx2VEVzOEx4L3lsNmY4UnhLMXFHTGkyODVXSFhVOGdKdmx6?=
+ =?utf-8?B?ZERmY21aeGdONVBNNG43UUw3US9kbHhRNzN0VWJ5cXlFVVVjTENsSS9rRWpW?=
+ =?utf-8?B?eGhsRmtaNC9NTEs2bEp6QldLdW9BTG9maTFmQmVKUk9nV2JxSU1iODJCNG1y?=
+ =?utf-8?B?UXdXU3RkVVovdXdmQWUzc1pjME1vclh5TXJKK3QrU1RPUnB6MWZRcWFQeERs?=
+ =?utf-8?B?dzcrQ216RVdUcE5XeWRISHFnTTg4dC8raEFmZGxnMjRYbldCYjhweXN5SXF5?=
+ =?utf-8?B?amk4V2VUQ1FQSjVGc3ZGejA3STBOeFloZVFGL0ZoMnJvdzJOUi9TUTdITHNT?=
+ =?utf-8?B?UXljVkRyZ29ZY2Z2b1YzemFYQW1CS2ZOQUlieUYvY0FPRGx2NXkyVnlnS3lq?=
+ =?utf-8?B?VXRCdEdUT0p3a1MyT2ZZYlNNRTY2OXRlRU0ySXRwUXJrNnk1eWdMWS95bzM2?=
+ =?utf-8?B?SEFmVUhKUjJscWJta0tHTkFPZTVWUFhxZHJXdkkzbE5JTlNydi9rcm0yckt3?=
+ =?utf-8?B?aTNnSTBjZytYZE5IYWt6dVhNbkQ0VStvZmdRR0tKc3RmalJabHlOMjdKQmFZ?=
+ =?utf-8?B?MlVZTkx5YTUvRXR1eGtqancxZlFzTEFQallUcnFOR3FpZ1FBTnpnRE5VNXJZ?=
+ =?utf-8?B?NW1NVmFxckM5djMxcHpNSEVtbWJyTC8xbFlGUUdZVUUxTXlXbVpucCtEYzJq?=
+ =?utf-8?B?eHo0cGNvdTMyeGdIMmozemp1ckdsektPa2ZSTEdtNWFFcmM4TzhOd0RoajBa?=
+ =?utf-8?B?NXJReEN1RWhUeVFETTlIYWVIQXR5YllHZHdBNzdrdFVMTk9zUXEzb3lxZjA2?=
+ =?utf-8?B?enZXTS9ISlJiNXNOWlUxdXRkWlVtZURGS21aV3FyUVkwSGhaWHZYTW54bXNu?=
+ =?utf-8?B?Ry9Td2ZYN0hya3cyRXdQazRIZ2FydGFtMWZwc2gxaU8vYUZXQXVFUThnbk1M?=
+ =?utf-8?B?ZitHcGZWczBIMXdMRDh4N1FLMXFhcEh2QUhKcVBzSytIVG16REx6VS9pblJz?=
+ =?utf-8?B?NkxyRS9QcXpLeHNrWEo5Mm8xdkVaK3VVeVFhSGplV2h3Yk1IcE12ZklQSExK?=
+ =?utf-8?B?WFptRjgwa3A5WE9sWWNGSDQzUjUzem51Ung2VEwwNUZHcW9sK25uSEpDSFlx?=
+ =?utf-8?B?emR0VUp4eXlyTjQrZ3BoNXpOL0FzdDZlNmpEeGY2T3FsR0JYVEduWHVZdUpr?=
+ =?utf-8?B?blVSTVBJbFJ6MndQbkM3Q0lneGxVUVZ0SFpHRUIzUlJnNm9mREpXbE8zbmho?=
+ =?utf-8?B?STNxbm5RYjQ4YVFoVFVXL1dQZEUwbDdqNEV0SFIrd20zaU9JaVFzazY3VytG?=
+ =?utf-8?B?cjREOXhBaTJjTEh0aUNId09ZZHJKTzhDRTNCMjByTUsydFd6eHRpN0ZtNnhi?=
+ =?utf-8?B?OWRCNjh2YjBaM2dwbXVXR2JiTEFWemo5L0F2S01YamFFZkRiL21mdVhIaDY3?=
+ =?utf-8?B?bUN2NVRkWXpIemlUUGlHQU8wa2UrM1NqOTFqd1o0eE8zU21UUU5uWnFiT1FE?=
+ =?utf-8?B?WS9PbThlWUFpT2NCdGwzVUY0aWl6QTlBc3hQYWVxOHdjQmFyTEpObkFZanVU?=
+ =?utf-8?Q?9qp2mB1UtK8g4CqCSfZfIyprm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7956e762-1d1e-43e1-a546-08dce68a25ae
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2024 04:40:19.5117
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7vDNJm0YPDrGoHFUuobzKsuFQIITqd+o8OeWA1hRTWaqONoUGaqawALgU553c3gxSYb7b8fXaKP3dORT8Ankqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9018
 
-Hello,
+Hello Rafael,
 
-syzbot found the following issue on:
+On 10/4/2024 11:47 PM, Rafael J. Wysocki wrote:
+> On Thu, Oct 3, 2024 at 10:44 AM Dhananjay Ugwekar
+> <Dhananjay.Ugwekar@amd.com> wrote:
+>>
+>> Currently, there is no proper way to update the initial lower frequency
+>> limit from cpufreq drivers.
+> 
+> Why do you want to do it?
 
-HEAD commit:    8f602276d390 Merge tag 'bcachefs-2024-10-05' of git://evil..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16837380580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9775e9a1af839423
-dashboard link: https://syzkaller.appspot.com/bug?extid=73932f4591b9b973aa0c
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+We want to set the initial lower frequency limit at a more efficient level 
+(lowest_nonlinear_freq) than the lowest frequency, which helps save power in 
+some idle scenarios, and also improves benchmark results in some scenarios. 
+At the same time, we want to allow the user to set the lower limit back to 
+the inefficient lowest frequency.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks,
+Dhananjay
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0ee98512e98a/disk-8f602276.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/49013050a378/vmlinux-8f602276.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b8c78e7f7a33/bzImage-8f602276.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+73932f4591b9b973aa0c@syzkaller.appspotmail.com
-
-INFO: task syz.1.4401:14591 blocked for more than 143 seconds.
-      Not tainted 6.12.0-rc1-syzkaller-00349-g8f602276d390 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz.1.4401      state:D stack:21664 pid:14591 tgid:14591 ppid:5216   flags:0x00000004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5315 [inline]
- __schedule+0x1843/0x4ae0 kernel/sched/core.c:6675
- __schedule_loop kernel/sched/core.c:6752 [inline]
- schedule+0x14b/0x320 kernel/sched/core.c:6767
- rpm_resume+0x504/0x1670 drivers/base/power/runtime.c:834
- rpm_resume+0x8fe/0x1670 drivers/base/power/runtime.c:892
- __pm_runtime_resume+0x120/0x180 drivers/base/power/runtime.c:1172
- pm_runtime_resume_and_get include/linux/pm_runtime.h:430 [inline]
- usb_autopm_get_interface+0x22/0xf0 drivers/usb/core/driver.c:1833
- wdm_manage_power+0x1c/0xa0 drivers/usb/class/cdc-wdm.c:1134
- wdm_release+0x20f/0x460 drivers/usb/class/cdc-wdm.c:779
- __fput+0x23f/0x880 fs/file_table.c:431
- task_work_run+0x24f/0x310 kernel/task_work.c:228
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:114 [inline]
- exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
- syscall_exit_to_user_mode+0x168/0x370 kernel/entry/common.c:218
- do_syscall_64+0x100/0x230 arch/x86/entry/common.c:89
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f9a6fb7dff9
-RSP: 002b:00007ffddf8ae408 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
-RAX: 0000000000000000 RBX: 00007f9a6fd37a80 RCX: 00007f9a6fb7dff9
-RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
-RBP: 00007f9a6fd37a80 R08: 0000000000000006 R09: 00007ffddf8ae6ff
-R10: 00000000005ea99c R11: 0000000000000246 R12: 00000000000441aa
-R13: 00007ffddf8ae510 R14: 0000000000000032 R15: ffffffffffffffff
- </TASK>
-
-Showing all locks held in the system:
-3 locks held by kworker/u8:0/11:
- #0: ffff88801ac89148 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3204 [inline]
- #0: ffff88801ac89148 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x93b/0x1850 kernel/workqueue.c:3310
- #1: ffffc90000107d00 ((linkwatch_work).work){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3205 [inline]
- #1: ffffc90000107d00 ((linkwatch_work).work){+.+.}-{0:0}, at: process_scheduled_works+0x976/0x1850 kernel/workqueue.c:3310
- #2: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: linkwatch_event+0xe/0x60 net/core/link_watch.c:276
-1 lock held by khungtaskd/30:
- #0: ffffffff8e937de0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:337 [inline]
- #0: ffffffff8e937de0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffffffff8e937de0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x2a0 kernel/locking/lockdep.c:6720
-7 locks held by kworker/u8:3/51:
- #0: ffff88801baeb148 ((wq_completion)netns){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3204 [inline]
- #0: ffff88801baeb148 ((wq_completion)netns){+.+.}-{0:0}, at: process_scheduled_works+0x93b/0x1850 kernel/workqueue.c:3310
- #1: ffffc90000bc7d00 (net_cleanup_work){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3205 [inline]
- #1: ffffc90000bc7d00 (net_cleanup_work){+.+.}-{0:0}, at: process_scheduled_works+0x976/0x1850 kernel/workqueue.c:3310
- #2: ffffffff8fcb2cd0 (pernet_ops_rwsem){++++}-{3:3}, at: cleanup_net+0x16a/0xcc0 net/core/net_namespace.c:580
- #3: ffff8880604220e8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #3: ffff8880604220e8 (&dev->mutex){....}-{3:3}, at: devl_dev_lock net/devlink/devl_internal.h:108 [inline]
- #3: ffff8880604220e8 (&dev->mutex){....}-{3:3}, at: devlink_pernet_pre_exit+0x13b/0x440 net/devlink/core.c:506
- #4: ffff888060423250 (&devlink->lock_key#2){+.+.}-{3:3}, at: devl_lock net/devlink/core.c:276 [inline]
- #4: ffff888060423250 (&devlink->lock_key#2){+.+.}-{3:3}, at: devl_dev_lock net/devlink/devl_internal.h:109 [inline]
- #4: ffff888060423250 (&devlink->lock_key#2){+.+.}-{3:3}, at: devlink_pernet_pre_exit+0x14d/0x440 net/devlink/core.c:506
- #5: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: nsim_destroy+0x71/0x5c0 drivers/net/netdevsim/netdev.c:773
- #6: ffffffff8e7d1dd0 (cpu_hotplug_lock){++++}-{0:0}, at: flush_all_backlogs net/core/dev.c:6025 [inline]
- #6: ffffffff8e7d1dd0 (cpu_hotplug_lock){++++}-{0:0}, at: unregister_netdevice_many_notify+0x5ea/0x1da0 net/core/dev.c:11384
-2 locks held by getty/4973:
- #0: ffff88802e81e0a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
- #1: ffffc900031332f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6a6/0x1e00 drivers/tty/n_tty.c:2211
-7 locks held by kworker/1:4/5270:
- #0: ffff888144af2d48 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3204 [inline]
- #0: ffff888144af2d48 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x93b/0x1850 kernel/workqueue.c:3310
- #1: 
-ffffc90004317d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3205 [inline]
-ffffc90004317d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x976/0x1850 kernel/workqueue.c:3310
- #2: ffff888144f8b190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #2: ffff888144f8b190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1fe/0x5150 drivers/usb/core/hub.c:5849
- #3: ffff88807b70f190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #3: ffff88807b70f190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x8e/0x520 drivers/base/dd.c:1005
- #4: ffff88805f9fc160 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #4: ffff88805f9fc160 (&dev->mutex){....}-{3:3}, at: __device_attach+0x8e/0x520 drivers/base/dd.c:1005
- #5: ffff8880286d1a20 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #5: ffff8880286d1a20 (&dev->mutex){....}-{3:3}, at: __device_attach+0x8e/0x520 drivers/base/dd.c:1005
- #6: ffffffff8f599410 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x13a/0x5a0 drivers/usb/core/file.c:134
-8 locks held by kworker/1:7/5273:
-3 locks held by kworker/1:8/5301:
- #0: ffff88801c293148 ((wq_completion)pm){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3204 [inline]
- #0: ffff88801c293148 ((wq_completion)pm){+.+.}-{0:0}, at: process_scheduled_works+0x93b/0x1850 kernel/workqueue.c:3310
- #1: ffffc90004407d00 ((work_completion)(&dev->power.work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3205 [inline]
- #1: ffffc90004407d00 ((work_completion)(&dev->power.work)){+.+.}-{0:0}, at: process_scheduled_works+0x976/0x1850 kernel/workqueue.c:3310
- #2: ffff8880284d4510 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3206 [inline]
- #2: ffff8880284d4510 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_port_suspend+0x1c6/0x14d0 drivers/usb/core/hub.c:3463
-1 lock held by syz.1.4401/14591:
- #0: ffffffff8f621188 (wdm_mutex){+.+.}-{3:3}, at: wdm_release+0x4f/0x460 drivers/usb/class/cdc-wdm.c:764
-2 locks held by syz.4.5516/17073:
- #0: ffffffff8f599410 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x30/0x1d0 drivers/usb/core/file.c:38
- #1: ffffffff8f621188 (wdm_mutex){+.+.}-{3:3}, at: wdm_open+0x56/0x550 drivers/usb/class/cdc-wdm.c:715
-2 locks held by syz.4.5516/17097:
- #0: ffffffff8f599410 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x30/0x1d0 drivers/usb/core/file.c:38
- #1: ffffffff8f621188 (wdm_mutex){+.+.}-{3:3}, at: wdm_open+0x56/0x550 drivers/usb/class/cdc-wdm.c:715
-1 lock held by syz.1.5856/17832:
- #0: ffffffff8f599410 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x30/0x1d0 drivers/usb/core/file.c:38
-1 lock held by syz.2.5915/17956:
- #0: ffff888144f8b190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #0: ffff888144f8b190 (&dev->mutex){....}-{3:3}, at: usbdev_open+0x156/0x770 drivers/usb/core/devio.c:1051
-1 lock held by syz.3.6186/18612:
- #0: ffff888144f8b190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1014 [inline]
- #0: ffff888144f8b190 (&dev->mutex){....}-{3:3}, at: usbdev_open+0x156/0x770 drivers/usb/core/devio.c:1051
-1 lock held by syz-executor/18673:
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: __tun_chr_ioctl+0x48c/0x2400 drivers/net/tun.c:3121
-1 lock held by syz-executor/18677:
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:79 [inline]
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x6e6/0xcf0 net/core/rtnetlink.c:6643
-1 lock held by syz-executor/18682:
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:79 [inline]
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x6e6/0xcf0 net/core/rtnetlink.c:6643
-1 lock held by syz-executor/18684:
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:79 [inline]
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: __rtnl_newlink net/core/rtnetlink.c:3720 [inline]
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_newlink+0xab7/0x20a0 net/core/rtnetlink.c:3743
-1 lock held by syz.2.6228/18755:
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:79 [inline]
- #0: ffffffff8fcbf7c8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x6e6/0xcf0 net/core/rtnetlink.c:6643
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 30 Comm: khungtaskd Not tainted 6.12.0-rc1-syzkaller-00349-g8f602276d390 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
- nmi_cpu_backtrace+0x49c/0x4d0 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x198/0x320 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:162 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:223 [inline]
- watchdog+0xff4/0x1040 kernel/hung_task.c:379
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 5273 Comm: kworker/1:7 Not tainted 6.12.0-rc1-syzkaller-00349-g8f602276d390 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-Workqueue: events nsim_dev_trap_report_work
-RIP: 0010:check_kcov_mode kernel/kcov.c:183 [inline]
-RIP: 0010:__sanitizer_cov_trace_pc+0x28/0x70 kernel/kcov.c:217
-Code: 90 90 f3 0f 1e fa 48 8b 04 24 65 48 8b 0c 25 80 d7 03 00 65 8b 15 50 01 6f 7e 81 e2 00 01 ff 00 74 11 81 fa 00 01 00 00 75 35 <83> b9 1c 16 00 00 00 74 2c 8b 91 f8 15 00 00 83 fa 02 75 21 48 8b
-RSP: 0018:ffffc90000a18ad8 EFLAGS: 00000246
-RAX: ffffffff898cbc1f RBX: 0000000000000001 RCX: ffff88807e6ada00
-RDX: 0000000000000100 RSI: 0000000000000001 RDI: 0000000000000008
-RBP: ffffc90000a18c08 R08: ffffffff898cbc11 R09: 1ffffffff285211d
-R10: dffffc0000000000 R11: fffffbfff285211e R12: ffff8880b8740168
-R13: ffff8880b87402b0 R14: 0000000000000001 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f517f114100 CR3: 00000000317e0000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <NMI>
- </NMI>
- <IRQ>
- process_backlog+0x2ff/0x15b0 net/core/dev.c:6107
- __napi_poll+0xcb/0x490 net/core/dev.c:6775
- napi_poll net/core/dev.c:6844 [inline]
- net_rx_action+0x89b/0x1240 net/core/dev.c:6966
- handle_softirqs+0x2c5/0x980 kernel/softirq.c:554
- do_softirq+0x11b/0x1e0 kernel/softirq.c:455
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0x1bb/0x200 kernel/softirq.c:382
- spin_unlock_bh include/linux/spinlock.h:396 [inline]
- nsim_dev_trap_report drivers/net/netdevsim/dev.c:820 [inline]
- nsim_dev_trap_report_work+0x75d/0xaa0 drivers/net/netdevsim/dev.c:850
- process_one_work kernel/workqueue.c:3229 [inline]
- process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
- worker_thread+0x870/0xd30 kernel/workqueue.c:3391
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> 
+>> Only way is to add a new min_freq qos
+>> request from the driver side, but it leads to the issue explained below.
+>>
+>> The QoS infrastructure collates the constraints from multiple
+>> subsystems and saves them in a plist. The "current value" is defined to
+>> be the highest value in the plist for min_freq constraint.
+>>
+>> The cpufreq core adds a qos_request for min_freq to be 0 and the amd-pstate
+>> driver today adds qos request for min_freq to be lowest_freq, where
+>> lowest_freq corresponds to CPPC.lowest_perf.
+>>
+>> Eg: Suppose WLOG considering amd-pstate driver, lowest_freq is 400000 KHz,
+>> lowest_non_linear_freq is 1200000 KHz.
+>>
+>> At this point of time, the min_freq QoS plist looks like:
+>>
+>> head--> 400000 KHz (registered by amd-pstate) --> 0 KHz (registered by
+>> cpufreq core)
+>>
+>> When a user updates /sys/devices/system/cpu/cpuX/cpufreq/scaling_min_freq,
+>> it only results in updating the cpufreq-core's node in the plist, where
+>> say 0 becomes the newly echoed value.
+>>
+>> Now, if the user echoes a value 1000000 KHz, to scaling_min_freq, then the
+>> new list would be
+>>
+>> head--> 1000000 KHz (registered by cpufreq core) --> 400000 KHz (registered
+>> by amd-pstate)
+>>
+>> and the new "current value" of the min_freq QoS constraint will be 1000000
+>> KHz, this is the scenario where it works as expected.
+>>
+>> Suppose we change the amd-pstate driver code's min_freq qos constraint
+>> to lowest_non_linear_freq instead of lowest_freq, then the user will
+>> never be able to request a value below that, due to the following:
+>>
+>> At boot time, the min_freq QoS plist would be
+>>
+>> head--> 1200000 KHz (registered by amd-pstate) --> 0 KHz (registered by
+>> cpufreq core)
+>>
+>> When the user echoes a value of 1000000 KHz, to
+>> /sys/devices/..../scaling_min_freq, then the new list would be
+>>
+>> head--> 1200000 KHz (registered by amd-pstate) --> 1000000 KHz (registered
+>> by cpufreq core)
+>>
+>> with the new "current value" of the min_freq QoS remaining 1200000 KHz.
+> 
+> Yes, that's how frequency QoS works.
+> 
+>> Since the current value has not changed, there won't be any notifications
+>> sent to the subsystems which have added their QoS constraints. In
+>> particular, the amd-pstate driver will not get the notification, and thus,
+>> the user's request to lower the scaling_min_freq will be ineffective.
+> 
+> The value written by user space to scaling_min_freq is a vote, not a
+> request.  It may not be physically possible to reduce the frequency
+> below a certain minimum level that need not be known to the user.
+> 
+>> Hence, it is advisable to have a single source of truth for the min and
+>> max freq QoS constraints between the cpufreq and the cpufreq drivers.
+>>
+>> So add a new callback get_init_min_freq() add in struct cpufreq_driver,
+>> which allows amd-pstate (or any other cpufreq driver) to override the
+>> default min_freq value being set in the policy->min_freq_req. Now
+>> scaling_min_freq can be modified by the user to any value (lower or
+>> higher than the init value) later on if desired.
+>>
+>> Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+>> ---
+>>  drivers/cpufreq/cpufreq.c | 6 +++++-
+>>  include/linux/cpufreq.h   | 6 ++++++
+>>  2 files changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index f98c9438760c..2923068cf5f4 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -1361,6 +1361,7 @@ static int cpufreq_online(unsigned int cpu)
+>>         bool new_policy;
+>>         unsigned long flags;
+>>         unsigned int j;
+>> +       u32 init_min_freq = FREQ_QOS_MIN_DEFAULT_VALUE;
+>>         int ret;
+>>
+>>         pr_debug("%s: bringing CPU%u online\n", __func__, cpu);
+>> @@ -1445,9 +1446,12 @@ static int cpufreq_online(unsigned int cpu)
+>>                         goto out_destroy_policy;
+>>                 }
+>>
+>> +               if (cpufreq_driver->get_init_min_freq)
+>> +                       init_min_freq = cpufreq_driver->get_init_min_freq(policy);
+>> +
+>>                 ret = freq_qos_add_request(&policy->constraints,
+>>                                            policy->min_freq_req, FREQ_QOS_MIN,
+>> -                                          FREQ_QOS_MIN_DEFAULT_VALUE);
+>> +                                          init_min_freq);
+>>                 if (ret < 0) {
+>>                         /*
+>>                          * So we don't call freq_qos_remove_request() for an
+>> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+>> index e0e19d9c1323..b20488b55f6c 100644
+>> --- a/include/linux/cpufreq.h
+>> +++ b/include/linux/cpufreq.h
+>> @@ -414,6 +414,12 @@ struct cpufreq_driver {
+>>          * policy is properly initialized, but before the governor is started.
+>>          */
+>>         void            (*register_em)(struct cpufreq_policy *policy);
+>> +
+>> +       /*
+>> +        * Set by drivers that want to initialize the policy->min_freq_req with
+>> +        * a value different from the default value (0) in cpufreq core.
+>> +        */
+>> +       int             (*get_init_min_freq)(struct cpufreq_policy *policy);
+>>  };
+>>
+>>  /* flags */
+>> --
+>> 2.34.1
+>>
 
