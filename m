@@ -1,135 +1,143 @@
-Return-Path: <linux-pm+bounces-15261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E312992CCB
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 15:14:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE213992D05
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 15:20:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4E501F23B0B
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 13:14:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6B828662A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 13:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9461D359F;
-	Mon,  7 Oct 2024 13:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59671D358F;
+	Mon,  7 Oct 2024 13:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Rk7PlXyt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z1CIejin"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC921D2B35
-	for <linux-pm@vger.kernel.org>; Mon,  7 Oct 2024 13:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F711D2F7C;
+	Mon,  7 Oct 2024 13:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728306852; cv=none; b=nNGlyxLirwk6SpDakwDoqN2w8CSAQZB3gqewierP84rhky1vMByHc8OryeoARH37J6P8GhHQYYnQwxcdgQ12v7dLO+vuu4IDedqY2A+NS5wxmwQHaiNmmyDK3TdlJr0wpSuH9/C4enDKQ68FLT6XOl9synZd5XpKojKZg+ROMwE=
+	t=1728307195; cv=none; b=ShqjUFB0BskUQC4Z9huzQ3BAg8JF/jEJZfTV7+WRYB4LE2wgeZjLsYdAR5w9M1FM91+qdyGbQx79VEgRiswzi53aKlxedkbxJppGzfwLm09x0KbR/l49nwPHMZCujrc0hcybzKU3Fim3MpZ7GVY5SLuqi55qSo473KYJh75wt80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728306852; c=relaxed/simple;
-	bh=aoZ6Ab2vT/zv5gBysjB0k30FjuEJ24iQqrKlS0K2iTo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JJxa8bLBl6cUYUkWI8+3fitUqi54CAFDd3WEtBhwnknJc0gG7gcrgMWovgKGsWeu8MPTaPPAApk+T4Yp5m2wEGxLQopT9VAcRfq7zRx2MtGbb7GQ6p1xtGdad6364bxuIU6Oh8WjLzwgtP8EKlE4NmbWqZD3zJ8lxJzRHhl+oqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Rk7PlXyt; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4974T7wK019241
-	for <linux-pm@vger.kernel.org>; Mon, 7 Oct 2024 13:14:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lagPHIZttZDMUwYWdXVzJKUqDahMn43dORef7ZZpNvk=; b=Rk7PlXytr1YHYGI2
-	foDnifwZQTqFUtnW+s3xpBvEczDraD02voigsUqk3CUbu2qBxoq3B8La7Zvwh8sp
-	cYb4AzRYYPWY2gmbBKAid1ycLTzf36fFt2Y1Ik74L6X6TyWiMNyZ8rWzieRU4UV8
-	ab2wn6VDw3nsloKKcHBc+LyfHDDEw14+dzGyvq0gVQdsOtTlx+AiOhCeX11zouIG
-	SlPsAPugVkMCnXTDrKb9P4SeeG8E0ALvnGAMDp5PwaCTl37ltSgKkdehXvSsw9L+
-	zMFkflejufD9edOD5YmpGoC5qWeArbhNBbNYvsFkznGwprXMFyyBsIwYaqmsEyrU
-	43MFHg==
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 422xsn48js-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2024 13:14:09 +0000 (GMT)
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5c884af74b5so467551a12.2
-        for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2024 06:14:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728306848; x=1728911648;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lagPHIZttZDMUwYWdXVzJKUqDahMn43dORef7ZZpNvk=;
-        b=GLhHoxWsbMGj+k1/dj1lyesURbcBGV+Qb98KxIAxLJJ43sHq+rQMWuyEjw0AwbbR7V
-         23aNJ6tvhqCOvQear1an3XQ4+ULWRWE3YGXGrNqnuhxuKoS3DHoa1bOpQqO8ImuHtJkx
-         EuZ5xpj0k1Ome5D8RKFa9L+SroqJjYc+C1/XIIY/azOwn6b2BIq3i7P9MI5IcIJhC9P/
-         53t4TUziReZzLfEqphSjQyucomwblcsnsvl4YsaWZzAyWiBHaGU+lqgajHRDJ8MW3kNH
-         L9+1bEH6AtYDshS3gD5suEcV6iUIJKUve9exi5n4z6iz0SYYLK7IBxKAi1NlChw16hFt
-         DqFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfOmxADBeTCuv3gRh3lgBwC6NMqUiTpqBzg4CbdOvZaHfW+hzK/E8t7Cgb/YHwRa8iQwgFUr21qQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5DslhzOpuIWiK7ZWH2nrX66TdgCb61yjQmudyNSVfKE+uJRQ4
-	LumsvQHnOyI08rJ77E3awY4JeitASVVpWmth3kRD3LARJkJ5s3CGS1P0SEPuw0kacHPKxvdBXz4
-	6FfPtO8tmvzOeKBvOh6f0SyUNLAOJw1o/r8i0y2OwGKG/IoTcPOxThKdlzg==
-X-Received: by 2002:a17:907:928c:b0:a7a:a33e:47cd with SMTP id a640c23a62f3a-a991bd427e1mr582895966b.8.1728306847961;
-        Mon, 07 Oct 2024 06:14:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG99yzel8woEN3MfN94DmcG3qCsQPgg06GOvsb7ccyx/jB9qBtMungcx0dHjaKg7+ABpfb/Qg==
-X-Received: by 2002:a17:907:928c:b0:a7a:a33e:47cd with SMTP id a640c23a62f3a-a991bd427e1mr582892166b.8.1728306847312;
-        Mon, 07 Oct 2024 06:14:07 -0700 (PDT)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99420bcc1esm287761166b.199.2024.10.07.06.14.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Oct 2024 06:14:07 -0700 (PDT)
-Message-ID: <d1f12236-220a-43de-a69a-12831bc8a691@oss.qualcomm.com>
-Date: Mon, 7 Oct 2024 15:14:04 +0200
+	s=arc-20240116; t=1728307195; c=relaxed/simple;
+	bh=/e2E4Nsq+0Xkd5BF5AuSOGCkhvFjFskozi3D9yL97JI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UdRaOzKFB8oz4CdCQxt0oICXnT3QIEALtdV87ncPTkT4rCUSkP6DCLIwJfbEjjcuklFgW8eOYyq8PHk9ClD4CH9WxeSGNv1wFHjhcIXpu3kBS7FQPsbba1JcGI49+UY/RtnJBGH93ODc/O9P2V5rOubspf74ziCXlmZlMM7a/qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z1CIejin; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728307195; x=1759843195;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/e2E4Nsq+0Xkd5BF5AuSOGCkhvFjFskozi3D9yL97JI=;
+  b=Z1CIejinADd8ZpXr+BCqfl3GRVqNwH5Z2b+p66W09VT/IPbNwDImKnVD
+   0yLaKjjCd9ZRExGJL8MqFjXK5P+M20lG8rZOgduJsb7ip2tMC+0aLl66t
+   Qk0YHxgY22tDFQRWEbB7iiYDKL6WqT1mO4OE0fsEV9tuH0cgZjHYyHhNz
+   mTguJNC9SoD0ZIBwoG9JEy3BRJnIrG9MFpBOtTORJg2ocKrn6i6yZBTTt
+   628Fu5nZmcYSflISuFysd3qiCXSC032Ihf43ZgtoOISsSCuZcMmgQ3CeC
+   BnkvcLD/GOpWXcBhPpV9Vw+CQMsDH7FcGoHNj1R++3sk51cIl4YWTMFsY
+   Q==;
+X-CSE-ConnectionGUID: FWLPKi5wRyOE8iI46dVxxA==
+X-CSE-MsgGUID: pH2cOo3XTmaGvg4JZtq+JQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="27265844"
+X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
+   d="scan'208";a="27265844"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 06:19:54 -0700
+X-CSE-ConnectionGUID: fh6P6qQvQMq8c9iM7VC/xQ==
+X-CSE-MsgGUID: JSDqF9XzRSqXW0n+5D48+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
+   d="scan'208";a="106306643"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 07 Oct 2024 06:19:51 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sxneP-00051K-2P;
+	Mon, 07 Oct 2024 13:19:49 +0000
+Date: Mon, 7 Oct 2024 21:19:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Sebastian Reichel <sre@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 4/4] power: supply: hwmon: move interface to private
+ header
+Message-ID: <202410072120.3jlD28CJ-lkp@intel.com>
+References: <20241005-power-supply-cleanups-v1-4-45303b2d0a4d@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 4/4] mailbox: qcom-cpucp: Mark the irq with
- IRQF_NO_SUSPEND flag
-To: Sibi Sankar <quic_sibis@quicinc.com>, sudeep.holla@arm.com,
-        cristian.marussi@arm.com, ulf.hansson@linaro.org,
-        jassisinghbrar@gmail.com
-Cc: linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        johan@kernel.org, konradybcio@kernel.org, linux-pm@vger.kernel.org,
-        tstrudel@google.com, rafael@kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
- <20241007060642.1978049-5-quic_sibis@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241007060642.1978049-5-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: yo4pDS1ZCp2J39dXIS0CyhXff8jJKMHI
-X-Proofpoint-GUID: yo4pDS1ZCp2J39dXIS0CyhXff8jJKMHI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1011
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2410070093
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241005-power-supply-cleanups-v1-4-45303b2d0a4d@weissschuh.net>
 
-On 7.10.2024 8:06 AM, Sibi Sankar wrote:
-> The qcom-cpucp mailbox irq is expected to function during suspend-resume
-> cycle particularly when the scmi cpufreq driver can query the current
-> frequency using the get_level message after the cpus are brought up during
-> resume. Hence mark the irq with IRQF_NO_SUSPEND flag to fix the do_xfer
-> failures we see during resume.
-> 
-> Err Logs:
-> arm-scmi firmware:scmi: timed out in resp(caller:do_xfer+0x164/0x568)
-> cpufreq: cpufreq_online: ->get() failed
-> 
-> Reported-by: Johan Hovold <johan+linaro@kernel.org>
-> Closes: https://lore.kernel.org/lkml/ZtgFj1y5ggipgEOS@hovoldconsulting.com/
-> Fixes: 0e2a9a03106c ("mailbox: Add support for QTI CPUCP mailbox controller")
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
+Hi Thomas,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+kernel test robot noticed the following build errors:
 
-Konrad
+[auto build test ERROR on 27cc6fdf720183dce1dbd293483ec5a9cb6b595e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/power-supply-core-use-device-mutex-wrappers/20241005-181114
+base:   27cc6fdf720183dce1dbd293483ec5a9cb6b595e
+patch link:    https://lore.kernel.org/r/20241005-power-supply-cleanups-v1-4-45303b2d0a4d%40weissschuh.net
+patch subject: [PATCH 4/4] power: supply: hwmon: move interface to private header
+config: x86_64-randconfig-003-20241007 (https://download.01.org/0day-ci/archive/20241007/202410072120.3jlD28CJ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410072120.3jlD28CJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410072120.3jlD28CJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/power/supply/power_supply_hwmon.c:12:
+>> drivers/power/supply/power_supply.h:41:20: error: redefinition of 'power_supply_update_leds'
+      41 | static inline void power_supply_update_leds(struct power_supply *psy) {}
+         |                    ^
+   drivers/power/supply/power_supply.h:41:20: note: previous definition is here
+      41 | static inline void power_supply_update_leds(struct power_supply *psy) {}
+         |                    ^
+   In file included from drivers/power/supply/power_supply_hwmon.c:12:
+>> drivers/power/supply/power_supply.h:42:19: error: redefinition of 'power_supply_create_triggers'
+      42 | static inline int power_supply_create_triggers(struct power_supply *psy)
+         |                   ^
+   drivers/power/supply/power_supply.h:42:19: note: previous definition is here
+      42 | static inline int power_supply_create_triggers(struct power_supply *psy)
+         |                   ^
+   In file included from drivers/power/supply/power_supply_hwmon.c:12:
+>> drivers/power/supply/power_supply.h:44:20: error: redefinition of 'power_supply_remove_triggers'
+      44 | static inline void power_supply_remove_triggers(struct power_supply *psy) {}
+         |                    ^
+   drivers/power/supply/power_supply.h:44:20: note: previous definition is here
+      44 | static inline void power_supply_remove_triggers(struct power_supply *psy) {}
+         |                    ^
+   3 errors generated.
+
+
+vim +/power_supply_update_leds +41 drivers/power/supply/power_supply.h
+
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04  40  
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04 @41  static inline void power_supply_update_leds(struct power_supply *psy) {}
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04 @42  static inline int power_supply_create_triggers(struct power_supply *psy)
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04  43  { return 0; }
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04 @44  static inline void power_supply_remove_triggers(struct power_supply *psy) {}
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04  45  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
