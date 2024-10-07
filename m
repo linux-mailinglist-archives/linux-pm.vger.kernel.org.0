@@ -1,159 +1,89 @@
-Return-Path: <linux-pm+bounces-15258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15259-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C9C299273C
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 10:40:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A273992967
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 12:42:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54182283CBE
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 08:40:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B36FE1F241A9
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 10:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8224B18E368;
-	Mon,  7 Oct 2024 08:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CyPjUdb6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 225211C0DED;
+	Mon,  7 Oct 2024 10:42:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D060818D637;
-	Mon,  7 Oct 2024 08:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC5B14AD17;
+	Mon,  7 Oct 2024 10:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728290290; cv=none; b=EU8cZFdDWgRL0tmXbUqVn3NoMpZSAML0vQzBkuzHiyByOrIhU39uU5jtejZ0+47AL2gQ0XhRGh8o+haVdFAlHC4KwlXu1oNSe90JZlaCumAbGw79LRzRHyFksIjvlBgc8odq9TkOCbx9n2zn62lsTv1e9SVyOBM2otlqLjJDD+E=
+	t=1728297765; cv=none; b=qKX7z77Riog+sr762yRyKrpx/8e1+C2eCfyho4Tn47iPqi3xoSlzoonr28d0FYg7M7n9r2oiJ2u6vL2yUaHixOKlL3NBnZ0zLL6829/oCkPrDgus0VSD536kqj/aaqmWexGCGcEGDvVzccR9gidgT/9QHot8xqIiDFwqN7/KKkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728290290; c=relaxed/simple;
-	bh=mIojD9CDR7umMqrpnB2F3ciGt1tvIMi9E/u0hIezCWA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ieCjfClBfOvrlr9me1uxntAHThSoRjjQ2Oi6XVDHKRKkpo2XnmhmnLFTh3ZUhohPKXGoOGynUNNAO0vfMwiY6u2YKuref+Awknrab9/O2GDyvsmp/7+GuGYsfekTWFPHH4Xj31KQm52uXdlyRgNBNW3pP6y8LkMGgHzY/1QGb2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CyPjUdb6; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a9951fba3b4so123672666b.1;
-        Mon, 07 Oct 2024 01:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728290287; x=1728895087; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QKltXJ63QuedW8DsSUo0BYVkH+UQGKq0Hkk8QNeBeDg=;
-        b=CyPjUdb6oqCmnPR35JuiJMG3UmNbrRH7HBcULvu+Srkgb1mlRVQVDFAre3UAC1DQLE
-         l0NOS7w0LHhvRu6+pDb/m+tsaykZlLtFUaxG+8S+u65nyQWrftIAv6vyMr7irpC9b2Dx
-         fMowwhyfVWkwJB+ZpsOE9YV7L3jB+b98LN4Jhbr2LqKipXToORl2yGx6dJyMDd9Sn3Yd
-         EHfm3+hqxCmSpb+VrkS0MtGJGqLKcbRzzvuAlv6axbkyNwT+YJXkUFZUZivs2Iw6PGMi
-         pRPJ/VzixsrDvXxs4bAP5UdRgsMgixDeFnx5FRgIbmxpWWlM2WWbrYpEDN/j8wxFt2UK
-         ItZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728290287; x=1728895087;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QKltXJ63QuedW8DsSUo0BYVkH+UQGKq0Hkk8QNeBeDg=;
-        b=hv514cm/ZdHHrYmf95HEBKqx6weTTLsOQuN8iQYic3Z6j4AfEfSLzQBVwpOvdcNQVq
-         mEn7kby0ZqjM9r/TLGKCS/AIsqmTJ93O1IPp1LV+DUh3f0XkbcO8SO0qaLsRP0nES4Xx
-         bhYWXih1r1Yp5ke7H9hQtP0nMUnaXWpVAN0JklFkatx41ESxrlKL8TFozcT2Yr+OR6UL
-         UbscwqhcYj1+RgSZrbuRyccTyuyWH16vLlInRyLKOPx6xP4ZxRw3VEJRIm0vl6a1WybQ
-         Pq7aVUPDSz+AS/2pqxN86jhyxhy+6VhnmpwRRVPQnZHyPPjk+xQixLHpXJjVnLn4eEkX
-         5MaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6fspWrwknXCaqmFkb4/6hueYXrDBNBIIjW9BF28dgkBR16zNNGudkAdCDU5aEMszqwPOQF/ndeZ1DYg==@vger.kernel.org, AJvYcCV8hOfBpb9HDU1dIyjB4QpMnxVBKoYd5VTW4KUp9v73eHHvo6FrprSFiqSNTegZRFoFh3HZiY6hkro=@vger.kernel.org, AJvYcCXj98uW2+EboeIpBcL6MuzEOmGQRo/LAAL9trFxCkrNyddkz2cFTRgGoeg/20EPyNMXsHBaNat1TUjN1RQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywnsjc1Tu3B+gKRlS9MFb6UJrRzo9hYiCqW7o3qktCBGmVEbMOX
-	y3KPy41fbqX6aIUeRI20zTbi3H6EG2Zs1PzHmpTqwR4xCsVSuNLX
-X-Google-Smtp-Source: AGHT+IHowlj9xEF88dnf54Y6o+cqTSCDpvredrMjpaDbjhyspMpJEWwL7BumMGw6mcaRzgRxFQfWig==
-X-Received: by 2002:a17:907:70a:b0:a86:7ba9:b061 with SMTP id a640c23a62f3a-a991c02397amr1249862866b.64.1728290287045;
-        Mon, 07 Oct 2024 01:38:07 -0700 (PDT)
-Received: from localhost (host-79-19-52-27.retail.telecomitalia.it. [79.19.52.27])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9953d48594sm121254166b.176.2024.10.07.01.38.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2024 01:38:06 -0700 (PDT)
-From: Matteo Martelli <matteomartelli3@gmail.com>
-Date: Mon, 07 Oct 2024 10:37:16 +0200
-Subject: [PATCH v2 7/7] power: supply: ingenic-battery: free scale buffer
- after use
+	s=arc-20240116; t=1728297765; c=relaxed/simple;
+	bh=JH57S4uvMEkOBCydwIZLIfePSx+J/9+QDPMg343I4Fo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ukHmcbH4lk23RPPEhuGKyM/B3PCtTGXVkZovPx00ANfnP7aJnfp79Cpwq+Yv3Q7hXMHXNvXWgk5/8k1n6end7oD2hN9RarrY8aeWuMG0MXoWiokB5u6blJlOBYF7oh9w3xlpywRMlky8pcQgH3wlpW5Fle9DA7fiAFtpLWawc98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BF1CFEC;
+	Mon,  7 Oct 2024 03:43:12 -0700 (PDT)
+Received: from [10.1.26.21] (unknown [10.1.26.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E0623F64C;
+	Mon,  7 Oct 2024 03:42:40 -0700 (PDT)
+Message-ID: <e09f3682-ee0c-4abc-b387-5358bbdf6e79@arm.com>
+Date: Mon, 7 Oct 2024 11:42:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241007-iio-read-avail-release-v2-7-245002d5869e@gmail.com>
-References: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
-In-Reply-To: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
-To: Jonathan Cameron <jic23@kernel.org>, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Alisa-Dariana Roman <alisa.roman@analog.com>, 
- Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, 
- Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
- Matteo Martelli <matteomartelli3@gmail.com>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv2] cpufreq/schedutil: Only bind threads if needed
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Qais Yousef
+ <qyousef@layalina.io>, Vincent Guittot <vincent.guittot@linaro.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm <linux-pm@vger.kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Pierre Gondois <pierre.gondois@arm.com>
+References: <a4a70646-98a4-4b85-955e-62d66ba68927@arm.com>
+ <CAJZ5v0jpdZBX5tJgdiOvEZbdRJ0kXxT6+uX=s++NG=dNrCMntQ@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0jpdZBX5tJgdiOvEZbdRJ0kXxT6+uX=s++NG=dNrCMntQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The iio_read_avail_channel_attribute() iio interface now allocates a
-copy of the available info buffer that must be freed after use.
+On 10/1/24 19:31, Rafael J. Wysocki wrote:
+> On Fri, Sep 27, 2024 at 10:59 AM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> Remove the unconditional binding of sugov kthreads to the affected CPUs
+>> if the cpufreq driver indicates that updates can happen from any CPU.
+>> This allows userspace to set affinities to either save power (waking up
+>> bigger CPUs on HMP can be expensive) or increasing performance (by
+>> letting the utilized CPUs run without preemption of the sugov kthread).
+>>
+>> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> 
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> 
+> and I'm assuming that this will go in via tip.
 
-Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
----
- drivers/power/supply/ingenic-battery.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+Peter, is that fine with you?
 
-diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/supply/ingenic-battery.c
-index 0a40f425c27723ccec49985b8b5e14a737b6a7eb..3db000d9fff9a7a6819631314547b3d16db7f967 100644
---- a/drivers/power/supply/ingenic-battery.c
-+++ b/drivers/power/supply/ingenic-battery.c
-@@ -12,6 +12,7 @@
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
- #include <linux/property.h>
-+#include <linux/slab.h>
- 
- struct ingenic_battery {
- 	struct device *dev;
-@@ -79,8 +80,10 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
- 		dev_err(bat->dev, "Unable to read channel avail scale\n");
- 		return ret;
- 	}
--	if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2)
--		return -EINVAL;
-+	if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
- 
- 	max_mV = bat->info->voltage_max_design_uv / 1000;
- 
-@@ -99,7 +102,8 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
- 
- 	if (best_idx < 0) {
- 		dev_err(bat->dev, "Unable to find matching voltage scale\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 
- 	/* Only set scale if there is more than one (fractional) entry */
-@@ -109,10 +113,13 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
- 						  scale_raw[best_idx + 1],
- 						  IIO_CHAN_INFO_SCALE);
- 		if (ret)
--			return ret;
-+			goto out;
- 	}
- 
--	return 0;
-+	ret = 0;
-+out:
-+	kfree(scale_raw);
-+	return ret;
- }
- 
- static enum power_supply_property ingenic_battery_properties[] = {
+@Juri: I didn't add your (somewhat implied?) ACK on v2, so I'd be happy to
+get it on the dl_task_check_affinity() part.
 
--- 
-2.46.2
+
+Regards,
+Christian
+
+
 
 
