@@ -1,156 +1,236 @@
-Return-Path: <linux-pm+bounces-15250-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15251-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6880992584
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 09:11:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB37F99271A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 10:38:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D283A1C222B1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 07:11:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 046EE280AB3
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2024 08:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D7218C037;
-	Mon,  7 Oct 2024 07:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1DC518BB9F;
+	Mon,  7 Oct 2024 08:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k9gJOplw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kUdAtgYt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E1B17DE15;
-	Mon,  7 Oct 2024 07:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E120A38F97;
+	Mon,  7 Oct 2024 08:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728284954; cv=none; b=U4h3PZ1xgEyv5/e+Lp6NxtlYghv/b3cCKjThT1A+KgbrJyZQsXFohKgr2WQl3/sxszHOEMxdS+4v5VroORJz/CfL2h9sUOW9khlGI6SBIp8cZ8/MSxqeyAh6dPuHlTH/RgRQub7XSo/2TuszwLjegLCTEjM6y1hAPJkvcaPgQVY=
+	t=1728290281; cv=none; b=sqDhg9ZXKyaqI+GYbrJmO9SuZIjZDEAfvRQUgNcVW1h6vr3FGXjbZOEui6qb7rLjfIrmlG5HDX+2nEcEdtOfFZg2vwAmJqcDY2Br4zAILyBdTz0m/fh+KtWOTyCegi+bzpqt6+VrVVrMPWhAKs4AkdGGn76hxMtmENKeSjv+yUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728284954; c=relaxed/simple;
-	bh=HaYluipwIXVvdOFAJ9zPfQ+R9ZmE1ePxVV5rbpyspfQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=jkUGw1sqGTvVF70XDuATq/YepnVnuOW8q3HbLrpIBVtGxicTdOIsqU9x3WEvf9k72G7zUQMM11ZTMBfTEz56nRtu9tUuXPaRHSbzuzjyx2wInLbIViutu4gblqu69XH0JflREkbc2KnFbBE9J5boDYZblR5bnuBZUYOAGFVniqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k9gJOplw; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4974TXLZ005308;
-	Mon, 7 Oct 2024 07:08:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	7OiBlFCcy+EsRXW8qMeYAkYGqWC12eyHX2jjrnsKEvk=; b=k9gJOplwfo2xbQDp
-	ch32EP1Ytroil0LNAerBlCuQvEKaHge45GuBVxRk/tLQPPvlyYCAeYKkXwbz/1j0
-	c4vBuLn/Nh31krpOjb0BuTZtVEXm6UJe+LxvwrYgEiKr7N+OMinirn76hYdkf4O/
-	4+XtoPUNfqP1FsolhpQnG+vrYUiFNP8nirlMwXdGr1nDTAr9UGUPbnBMOGt+bB5S
-	NbG0Flssu/Nf0bgkrrxtlg8ipUEagpU/rdivUbyJr0sd/Q1AiR47osuQCjXho0Ft
-	NEpvE/1c4as75bIMHTXG6O+TzqC7koWBhj3aptPGmKIR4gwyf1rZoRbKKTRWDECJ
-	4bY7Jw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 422xqnu8yc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Oct 2024 07:08:57 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49778uPS004008
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 7 Oct 2024 07:08:56 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 7 Oct 2024
- 00:08:52 -0700
-Message-ID: <25015664-22a7-2d4b-7ba7-ef9611fb3045@quicinc.com>
-Date: Mon, 7 Oct 2024 12:38:49 +0530
+	s=arc-20240116; t=1728290281; c=relaxed/simple;
+	bh=Oeh5joalKy2O1l1ofs7SMwVAjlzWpMmner7kCMi4Ht0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sySHF4u02moD+vWhO6s/4wVjqIAX0DFy0FlsvlcvWebgJS2OBcqguE2lgdaJ1Gns7NaYalRH5/rbAIHc2a+YynsfQ5cMeoWl2PXd81oos0WEfcJ3CmziwMdiwPjvgTV0vNu7CIDMyy4R9MDJAk5YL8qS/4pxqCRDLPiRsveH9LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kUdAtgYt; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a9960371b62so20265066b.3;
+        Mon, 07 Oct 2024 01:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728290278; x=1728895078; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1KCefhIgB4CxeRwKM8FJGG9oAd37UtqwBPKKJLl0eM=;
+        b=kUdAtgYtFHjbZnUAfZ74ogHZKNcGaZ24en/Ia6KClgkPEh7+AsduKaMDALDm5vPwm2
+         nD44tBaSK8v1vanrBLYSXhbhUaRteUnDER7R8DbeZOUGBolNOkSvvhtTPrfHyuZhLzxs
+         TEYoqCu3EVb37pho3vVfwr0RyFldTKpeNOKoQ2YUKvzvwD2wWyZnJTpNsL6cfYrAFpjT
+         qrzey6MqSlit/vGZpqqKnJhgUkzQxAQUEvvAyDsUQlixekGjBEfldqbKyfkU5oK8zqqv
+         lQj78q2XfbQzRMSiB0BnGCpzn8GuEpNHCqzjhX5FtTrb/vElPxgB+GyX49ttkcBR5xWr
+         R+/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728290278; x=1728895078;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s1KCefhIgB4CxeRwKM8FJGG9oAd37UtqwBPKKJLl0eM=;
+        b=bmc7biUUHEoWRYGTa/ISS9SIJg0vdqckEMzWZn2nREaBXtB51dzQ2v1QmVJKJdaj+a
+         BFRwGrpy7RpyJ/O9rd7XiPhpX93iImGqdE7Vu8o9M6qKz1VJ9QUne2GBD3+Doj6lFsu/
+         70LdlyKy4ZwIMB3tRJ6TZ5TedpupfdNLvSHXkPoaeF359B5oqqlBHhJp0GvfIFIWSw2V
+         r1T0xrEBUapqqbc9Grz13t6ef189a0RKHAJ7XOiD6SMB2ya55qcbAO301NI+4eYAUtSq
+         2eR8LJhCPmZFGpAsz5Lryy3qbCQu+jlm2tBe2eZ2FfyASxBSNf55u7mw5JohSoqrevXO
+         EfXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9LelcPDNtRQwy9UQo7iJXuMz9r3EqF2CEPMR5WlZljqZXhc7DnBO/3qr1/ItInW8ApHxvbq73IgV6NKU=@vger.kernel.org, AJvYcCUP/qzjSk0XebSC8skQjY8pjFBPcwzchmcQjabXx2hu+DHyl8dyD3hmD9DQdufd4xCZ8RbQ5kc91mUa4Q==@vger.kernel.org, AJvYcCUwBsDOP7y4CFlF6k+hckwl4GD5QU+azM5lTLy3rChQEO7cwsO35TSaO+L3iP0Mm3jxFRVviQ46E7s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzFjQKP2A6mwj8rmnj3/stT6PFpV2gu58AEM6hGZy/n9FFA0h5
+	GIsQbHgwn8HZ/c7rNHdmBUM8wuFLemXb82F4t5F+IYOdJEfjT2j5
+X-Google-Smtp-Source: AGHT+IFEVoWgG2fpExbT8FyoATYywnhQ5M1s4in44ZtXMWi9nC+Tq5efNSh4l4HI03lMwMpOSB5NcA==
+X-Received: by 2002:a17:907:26c7:b0:a86:fa3d:e984 with SMTP id a640c23a62f3a-a991bd401d1mr1270869366b.20.1728290277768;
+        Mon, 07 Oct 2024 01:37:57 -0700 (PDT)
+Received: from localhost (host-79-19-52-27.retail.telecomitalia.it. [79.19.52.27])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a992e7b24e9sm349974166b.156.2024.10.07.01.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 01:37:57 -0700 (PDT)
+From: Matteo Martelli <matteomartelli3@gmail.com>
+Subject: [PATCH v2 0/7] iio: fix possible race condition during access of
+ available info lists
+Date: Mon, 07 Oct 2024 10:37:09 +0200
+Message-Id: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] pmdomain: arm: Fix debugfs node creation failure
-To: Sudeep Holla <sudeep.holla@arm.com>, Ulf Hansson <ulf.hansson@linaro.org>
-CC: <cristian.marussi@arm.com>, <linux-kernel@vger.kernel.org>,
-        <arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
-        <johan@kernel.org>, Peng Fan <peng.fan@nxp.com>
-References: <20240703110741.2668800-1-quic_sibis@quicinc.com>
- <ZoZ6Pk7NSUNDB74i@bogus> <064274c4-3783-c59e-e293-dd53a8595d8e@quicinc.com>
- <Zofvc31pPU23mjnp@bogus>
- <CAPDyKFrESupeNS4BO8TPHPGpXFLsNqLPrUEw3xzr8oh8FsLHeA@mail.gmail.com>
- <Zryxrdodn2Y2xsej@bogus>
- <CAPDyKFqmV7yvMdLjGhDHJN4CFiUun3FXprEk7uGFV_qmn9vA8Q@mail.gmail.com>
- <Zr4GsOndEEMI-6ap@bogus>
-Content-Language: en-US
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <Zr4GsOndEEMI-6ap@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6rlIe34IG3MUdHAYsCgaAX2GUJsA_PUm
-X-Proofpoint-GUID: 6rlIe34IG3MUdHAYsCgaAX2GUJsA_PUm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- malwarescore=0 mlxscore=0 phishscore=0 spamscore=0 suspectscore=0
- adultscore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410070049
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALWdA2cC/3WNQQ6CMBBFr0Jm7ZhpMQFceQ/DokxHmASoaU2jI
+ dzdyt7dvP/z32yQJKokuFYbRMmaNKwF7KkCntw6CqovDJbshVqyqBowivPostO5nLO4JMhD7a0
+ zYoauhTJ+Rnno+xDf+8KTpleIn+NPNr/0UBqi+p8yGyTkhpgb37EVuo1L6c8cFuj3ff8C1ew8C
+ LwAAAA=
+X-Change-ID: 20240802-iio-read-avail-release-cb3d2a1e1b98
+To: Jonathan Cameron <jic23@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Alisa-Dariana Roman <alisa.roman@analog.com>, 
+ Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, 
+ Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Matteo Martelli <matteomartelli3@gmail.com>
+X-Mailer: b4 0.14.2
 
+Some iio drivers currently share an available info list buffer that
+might be changed while iio core prints it to sysfs. This could cause the
+buffer shared with iio core to be corrupted. However, note that I was
+able to trigger the race condition only by adding a delay between each
+sysfs_emit_at calls in the iio_format_list() to force the concurrent
+access to the shared available list buffer.
 
+This patch set extends the iio APIs and fixes some affected drivers.
 
-On 8/15/24 19:16, Sudeep Holla wrote:
-> On Thu, Aug 15, 2024 at 12:46:15PM +0200, Ulf Hansson wrote:
->> On Wed, 14 Aug 2024 at 15:31, Sudeep Holla <sudeep.holla@arm.com> wrote:
->>>
->>> On Wed, Aug 14, 2024 at 02:38:24PM +0200, Ulf Hansson wrote:
->>>>
->>>> Sudeep, while I understand your point and I agree with it, it's really
->>>> a simple fix that $subject patch is proposing. As the unique name
->>>> isn't mandated by the SCMI spec, it looks to me that we should make a
->>>> fix for it on the Linux side.
->>>>
->>>
->>> Yes, I did come to the conclusion that this is inevitable but hadn't
->>> thought much on the exact solution. This email and you merging the original
->>> patch made me think a bit quickly now 😉
->>
->> Alright, great!
->>
->>>
->>>> I have therefore decided to queue up $subject patch for fixes. Please
->>>> let me know if you have any other proposals/objections moving forward.
->>>
->>> The original patch may not work well with the use case Peng presented.
->>> As the name and id may also match in their case, I was wondering if we
->>> need to add some prefix like perf- or something to avoid the potential
->>> clash across power and perf genpds ? I may be missing something still as
->>> it is hard to visualise all possible case that can happen with variety
->>> of platform and their firmware.
->>>
->>> In short, happy to have some fix for the issue in some form whichever
->>> works for wider set of platforms.
->>
->> Okay, so I have dropped the $subject patch from my fixes branch for
->> now, to allow us and Sibi to come up with an improved approach.
->>
->> That said, it looks to me that the proper fix needs to involve
->> pm_genpd_init() in some way, as this problem with unique device naming
->> isn't really limited to SCMI. Normally we use an "ida" to get a unique
->> index that we tag on to the device's name, but maybe there is a better
->> strategy here!?
-> 
-> Yes using "ida" for unique index might work here as well AFAIU. It can be
-> one of the possible solution for sure.
+Summary:
+- Patch 1: iio core: introduce a iio info release callback to let
+  drivers share a copy of their available info list and later free it.
 
-Just re-spun it with ida, I've also shared how the output looks
-with those additional device ids added to the device name. Have
-a look at it when you get time.
+- Patch 2: pac1921: handle the current scale available info via the
+  read_avail+read_avail_release_resource APIs instead of using an ad-hoc
+  ext_info attribute. The latter was used to avoid the risk of a race in
+  the available list.
 
--Sibi
+- Patch 3,4: ad7192, as73211: fix the possible race in the drivers by
+  copying/releasing the affected available lists.
 
-> 
+- Patch 5: inkern: make consumers copy and release the available info
+  lists of their producers, necessary after patch 1.
+
+- Patch 6,7: iio-mux, iio-rescale, dpot-dac, ingenic-battery: adapt
+  consumers to inkern API change by freeing the now copied available
+  lists of their producers.
+
+Tested:
+- pac1921: could not reproduce the race condition with the new APIs,
+  even with additional delays among the sysfs_emit_at calls during a
+  shunt resistor write. No new issue found after the change.
+
+- iio-mux, iio-rescale, dpot-dac: tested with pac1921 as producer, which
+  was adapted to produce a mock raw available info list.
+  The tests did not cover the driver features but focused on assessing
+  the function call sequence. For example the following traced function
+  graph shows a read of the dpot mocked out voltage (with ftrace
+  filters: pac1921* iio* dpot* kmemdup_array* kfree*):
+
+ 3)               |  iio_read_channel_info_avail [industrialio]() {
+ 3)               |    dpot_dac_read_avail [dpot_dac]() {
+ 3)               |      iio_read_avail_channel_raw [industrialio]() {
+ 3)               |        iio_channel_read_avail [industrialio]() {
+ 3)               |          pac1921_read_avail [pac1921]() {
+ 3)   5.208 us    |            kmemdup_array();
+ 3) + 11.459 us   |          }
+ 3)   3.167 us    |          kmemdup_array();
+ 3)               |          pac1921_read_avail_release_res [pac1921]() {
+ 3)   1.709 us    |            kfree();
+ 3)   4.458 us    |          }
+ 3) + 25.750 us   |        }
+ 3) + 31.792 us   |      }
+ 3) + 35.000 us   |    }
+ 3) + 37.083 us   |    iio_format_list [industrialio]();
+ 3)               |    dpot_dac_read_avail_release_res [dpot_dac]() {
+ 3)   1.583 us    |      kfree();
+ 3)   4.250 us    |    }
+ 3) + 84.292 us   |  }
+
+- ingenic-battery: also tested with mock available info produced by the
+  pac1921 driver. Following the traced graph part that should correspond
+  to the ingenic_battery_set_scale() flow (which is not traceable with
+  the additional ingenic* ftrace filter for some reason):
+
+ 2)               |  ingenic_battery_probe [ingenic_battery]() {
+                ...
+ 2)               |    iio_read_max_channel_raw [industrialio]() {
+ 2)               |      iio_channel_read_avail [industrialio]() {
+ 2)               |        pac1921_read_avail [pac1921]() {
+ 2)   4.333 us    |          kmemdup_array();
+ 2) + 10.834 us   |        }
+ 2)   3.500 us    |        kmemdup_array();
+ 2)               |        pac1921_read_avail_release_res [pac1921]() {
+ 2)   1.791 us    |          kfree();
+ 2)   4.625 us    |        }
+ 2) + 26.291 us   |      }
+ 2)   1.583 us    |      kfree();
+ 2) + 35.750 us   |    }
+ 2)               |    iio_read_avail_channel_attribute [industrialio]() {
+ 2)               |      iio_channel_read_avail [industrialio]() {
+ 2)               |        pac1921_read_avail [pac1921]() {
+ 2)   3.250 us    |          kmemdup_array();
+ 2)   8.209 us    |        }
+ 2)   3.458 us    |        kmemdup_array();
+ 2)               |        pac1921_read_avail_release_res [pac1921]() {
+ 2)   1.542 us    |          kfree();
+ 2)   4.292 us    |        }
+ 2) + 21.417 us   |      }
+ 2) + 26.333 us   |    }
+ 2)               |    iio_write_channel_attribute [industrialio]() {
+ 2)   4.375 us    |      pac1921_write_raw [pac1921]();
+ 2)   9.625 us    |    }
+ 2)   1.666 us    |    kfree();
+ 2) * 47810.08 us |  }
+
+Not tested:
+- ad7192, as73211
+
+Link: https://lore.kernel.org/linux-iio/20240724-iio-pac1921-v4-0-723698e903a3@gmail.com/
+
+Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+---
+Changes in v2:
+- Patch 4: as73211: remove one blank line
+- Patch 6: consumers: fix typo in commit message
+- Patch 7: ingenic-battery: add missing header include
+- Link to v1: https://lore.kernel.org/r/20241003-iio-read-avail-release-v1-0-c70cc7d9c2e0@gmail.com
+
+---
+Matteo Martelli (7):
+      iio: core: add read_avail_release_resource callback to fix race
+      iio: pac1921: use read_avail+release APIs instead of custom ext_info
+      iio: ad7192: copy/release available filter frequencies to fix race
+      iio: as73211: copy/release available integration times to fix race
+      iio: inkern: copy/release available info from producer
+      iio: consumers: release available info buffer copied from producer
+      power: supply: ingenic-battery: free scale buffer after use
+
+ drivers/iio/adc/ad7192.c               |  22 +++++-
+ drivers/iio/adc/pac1921.c              | 128 ++++++++++++---------------------
+ drivers/iio/afe/iio-rescale.c          |   8 +++
+ drivers/iio/dac/dpot-dac.c             |   8 +++
+ drivers/iio/industrialio-core.c        |  14 +++-
+ drivers/iio/inkern.c                   |  64 ++++++++++++-----
+ drivers/iio/light/as73211.c            |  22 +++++-
+ drivers/iio/multiplexer/iio-mux.c      |   8 +++
+ drivers/power/supply/ingenic-battery.c |  17 +++--
+ include/linux/iio/consumer.h           |   4 +-
+ include/linux/iio/iio.h                |   4 ++
+ 11 files changed, 185 insertions(+), 114 deletions(-)
+---
+base-commit: fec496684388685647652ab4213454fbabdab099
+change-id: 20240802-iio-read-avail-release-cb3d2a1e1b98
+
+Best regards,
+-- 
+Matteo Martelli <matteomartelli3@gmail.com>
+
 
