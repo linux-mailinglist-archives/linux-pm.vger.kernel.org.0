@@ -1,336 +1,275 @@
-Return-Path: <linux-pm+bounces-15329-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15330-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C6A6994A75
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 14:33:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79B0A994EF1
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 15:23:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F83A28A6A5
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 12:33:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4E8FB24D8C
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 13:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C52761DED4E;
-	Tue,  8 Oct 2024 12:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C3D1DEFC6;
+	Tue,  8 Oct 2024 13:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X96B4HIX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QfLUy8VF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A517F1DE890;
-	Tue,  8 Oct 2024 12:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160631DEFEA
+	for <linux-pm@vger.kernel.org>; Tue,  8 Oct 2024 13:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728390792; cv=none; b=Zg3M4yXeYDwjspdbAJsmVtQsrLEPG95Q/2p/cYr2vUToFpug24km7x/o8y4BRxEBJoaYU9LG77JObImkhNheP/5gC+CwAw3kmko8KRlRDqfvWhSu7CKm3IYVNXulWcDlphPTWgnaZZJGJIyYOFuiQBnsvsIK7cxKMmGxV3GyEDs=
+	t=1728393340; cv=none; b=kpn9MDckrQRgaMPuqtSBw1skh5SC4Ycf8JGzpUrr0kQfiSz9HTNb63Ql9iMmvqxCXwYY4F/ys1QC9SeU09YE9Xkv1mymLYvfheVits32sjJKTk2e0DS/6tCNLrkcKu73u5+xz8vyPOdqBVsxkPREvtArIU14pihTK2NJS1KkXC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728390792; c=relaxed/simple;
-	bh=i5aFXLeJhi97VF25NeRAbiywEu1GSWWwgfZFZYm44JU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ko9Jnxxcf1ZIGmGgck7VyceBYfignkV90iKqXycXTDTA8Tz3WMsawy9LaiuWj8/QcuMOAd5ExQBGyNeFEjWYy8A+Weq476xweGPL+wH3M936cIijD/oTr1x4ahtLaO/ECVRNsxKcDHRvMcU4aN++J9JPPZMiMHW38Hzp2YUk188=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X96B4HIX; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37ce8458ae3so5053994f8f.1;
-        Tue, 08 Oct 2024 05:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728390789; x=1728995589; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=i5aFXLeJhi97VF25NeRAbiywEu1GSWWwgfZFZYm44JU=;
-        b=X96B4HIXc9xcXMFcKXgauDJFbTPt/JM+E3cVgUH8InTdAtg72dSo8ohgXzpd41MNUp
-         8QmGaLBORWSkG0qfkLiF0P+3/CanFsV64rol8deBHmPpLvkzDYGbDQin2erdgXthfkYk
-         c0bzcJQoR4JsDOk01CYmTcalXmR6+a2bA2yGpGSxbnYl2TYBvTF3XMIfZQxJwUH6Nklo
-         dEAcpMKjiZgW8Xp5dynp+/27PQuXrdBCbJuW/sjsuziCGWY67KEx0A0UjnDVHyq5ybBI
-         HLiWdGeZ+LM7KNKujF067QGkIQTZA0jDX24ezm39DQyXTLbajbG7l/fWAj8MnZ3oB/Lb
-         2x6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728390789; x=1728995589;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i5aFXLeJhi97VF25NeRAbiywEu1GSWWwgfZFZYm44JU=;
-        b=MNMPPORKedKafkgQ025ennikTQ0xVXL1ZsKFqbgCrcjSygHQgIKs4xUvgzQIdM1vst
-         eneI//H1glY4vvEXIta8xV2jT5+If/rGRw4mp7qNY3aMjTjQQyi9hgfpJ9i8g3vzYUhp
-         Lgx0d+IbkScI3vCzRO/+qRSM6xhFGYxyt8/Pmz7v/YqtS7yy1URIcAPbCqWU2nT6rkRB
-         5mMpC05hZ6ns7WcYGoCRLfTbMciEW0IOMZdKEAAXG3ORGHvQ2cVGWch+4lDOJEJ8sO2+
-         N25INivdj4fKlamUX1JSPjvlTq5n1K7oTIfogun390oBf5Uf1xpl5MmoGjQ3zn6SXKoB
-         a1UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW30BnGI4hZ7gy38XhNVu+F6QJb3WXZbbvfzboz7W9bj1zQSoC4sNUgFMtLgFsMZaUfWAkIWHI1GgqEfw==@vger.kernel.org, AJvYcCWZOE365fVFicWCGuTuqbB+CNOJ/LVzrDOApwNAyUK0t04fcZePV86xloJooj5Vof3eMsAugBrHzW0=@vger.kernel.org, AJvYcCXAGCJl6DQT8FYCjD1xcucUBPnEXJAQUe6h0nV6r9QXB3MQKOLdQvzGjD/pl3BfeYvCICS2N6u0GgrQfNk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzNCK0Hj4FWlAKD4DIN5lvbHBhvNQNUBkr/fzlASTSpihrnnoc
-	zhBoXxrGH2PYIclK1fquYgakCNfoW8izYm/fX7oMgaI7EUHTUw6Cop0DXb+kfAY=
-X-Google-Smtp-Source: AGHT+IEeLNN3olYlcDCqSgEErwvb2uX3gPED4kOShUzKkbZJZHDGOwbTEVIYvGwH0rXKRIXEHMIE5A==
-X-Received: by 2002:a05:6000:1b8b:b0:37c:c4c0:9b78 with SMTP id ffacd0b85a97d-37d0e8f05e8mr12469328f8f.48.1728390788727;
-        Tue, 08 Oct 2024 05:33:08 -0700 (PDT)
-Received: from ?IPv6:2003:f6:ef02:2700:7b7e:80b8:b4bb:6d07? (p200300f6ef0227007b7e80b8b4bb6d07.dip0.t-ipconnect.de. [2003:f6:ef02:2700:7b7e:80b8:b4bb:6d07])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99429c8bb9sm406329066b.196.2024.10.08.05.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2024 05:33:08 -0700 (PDT)
-Message-ID: <27e0d7b2a70015300047d9388edc87a8ece0c0dc.camel@gmail.com>
-Subject: Re: [PATCH v2 5/7] iio: inkern: copy/release available info from
- producer
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Matteo Martelli <matteomartelli3@gmail.com>, Alisa-Dariana Roman	
- <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Jonathan
- Cameron	 <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
- Hennerich	 <Michael.Hennerich@analog.com>, Paul Cercueil
- <paul@crapouillou.net>, Peter Rosin <peda@axentia.se>, Sebastian Reichel
- <sre@kernel.org>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
-Date: Tue, 08 Oct 2024 14:37:22 +0200
-In-Reply-To: <172837459910.12274.5022869861872605261@njaxe.localdomain>
-References: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
-	 <20241007-iio-read-avail-release-v2-5-245002d5869e@gmail.com>
-	 <8a5f6f12c2cb6989cef1d09957fc0f6f7a512b26.camel@gmail.com>
-	 <172837007815.3337.5869213289160447430@njaxe.localdomain>
-	 <8241b4caf9ebacb116f50bfe1503f325cc576066.camel@gmail.com>
-	 <172837459910.12274.5022869861872605261@njaxe.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.0 
+	s=arc-20240116; t=1728393340; c=relaxed/simple;
+	bh=rbn5ZjU1GFfLAGzA7y1KsOiIKmAUwNkN+x8uvShbUKI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MUaan+x1L3WA7pciXqh8DAx+EBZsD78k7CIi1wgUk7ZOlMngriLh1mZ5maKg/L/QCciS13k6nG5kqZDTsbRqZYZW11uVoUU2SxqfU3C/H+BsDXA7Xv80WcDb1zksiaHx0p83MEDWadDKExfeDCKsutQPTyNVDPfS07bHziCuo3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QfLUy8VF; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728393338; x=1759929338;
+  h=date:from:to:cc:subject:message-id;
+  bh=rbn5ZjU1GFfLAGzA7y1KsOiIKmAUwNkN+x8uvShbUKI=;
+  b=QfLUy8VFrqnQyZJAp5aIAWmPrjcro9Q4GBB/JrPZ+HZIVidMwBpy0553
+   xIDg5t/MjWH8pNQTHkkZbxO8u1gxkIE9LewVtZMTS8L870TfwHFPn+29y
+   ap+DU2iXnV1edE35p0Wa39IAIg8/JkaRvJ1diRxt/6SjEuBoGT1sPyfp3
+   b+eVSZTPrnSFeH+jucvbyS7c96ahkKDbuZJ3kGwirtmQrrGOwqme5Herb
+   l5iLKfvRQRjnOgWLnfCkZid4dBLtJ/U6HIswFDPic4glEANINkyDtLKaO
+   Cv/S6hCJNtYmOH/vD8ifJgJdhgUZhZ446kCdKwQVuEcZ3egeW4vzbj0o1
+   w==;
+X-CSE-ConnectionGUID: 0NkcVmBbRvKIC5iT4Bd43Q==
+X-CSE-MsgGUID: I2FJ3/GBSEGZI68Cp1Uqmg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27678422"
+X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
+   d="scan'208";a="27678422"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 06:15:37 -0700
+X-CSE-ConnectionGUID: 7elbrzSNQa+jxtadQx7PUQ==
+X-CSE-MsgGUID: CgfTBVyJSg+sscwHIK9GVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
+   d="scan'208";a="76091319"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 08 Oct 2024 06:15:37 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1syA3o-0007Zi-2t;
+	Tue, 08 Oct 2024 13:15:32 +0000
+Date: Tue, 08 Oct 2024 21:15:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:amd-pstate-fixes] BUILD SUCCESS
+ c10e50a469b5ec91eabf653526a22bdce03a9bca
+Message-ID: <202410082150.S5Bm32Ut-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Tue, 2024-10-08 at 10:03 +0200, Matteo Martelli wrote:
-> Quoting Nuno S=C3=A1 (2024-10-08 09:29:14)
-> > On Tue, 2024-10-08 at 08:47 +0200, Matteo Martelli wrote:
-> > > Quoting Nuno S=C3=A1 (2024-10-07 17:15:13)
-> > > > On Mon, 2024-10-07 at 10:37 +0200, Matteo Martelli wrote:
-> > > > > Consumers need to call the read_avail_release_resource after read=
-ing
-> > > > > the
-> > > > > available info. To call the release with info_exists locked, copy=
- the
-> > > > > available info from the producer and immediately call its release
-> > > > > callback. With this change, users of iio_read_avail_channel_raw()=
- and
-> > > > > iio_read_avail_channel_attribute() must free the copied avail inf=
-o
-> > > > > after
-> > > > > calling them.
-> > > > >=20
-> > > > > Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
-> > > > > ---
-> > > > > =C2=A0drivers/iio/inkern.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 64 +++++++++++++++++++++++++++++++++--
-> > > > > ----
-> > > > > -----
-> > > > > =C2=A0include/linux/iio/consumer.h |=C2=A0 4 +--
-> > > > > =C2=A02 files changed, 50 insertions(+), 18 deletions(-)
-> > > > >=20
-> > > > > diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> > > > > index
-> > > > > 7f325b3ed08fae6674245312cf8f57bb151006c0..cc65ef79451e5aa2cea447e=
-16800
-> > > > > 7a44
-> > > > > 7ffc0d91
-> > > > > 100644
-> > > > > --- a/drivers/iio/inkern.c
-> > > > > +++ b/drivers/iio/inkern.c
-> > > > > @@ -760,9 +760,25 @@ static int iio_channel_read_avail(struct
-> > > > > iio_channel
-> > > > > *chan,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!iio_channel_has_available(cha=
-n->channel, info))
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return -EINVAL;
-> > > > > =C2=A0
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0 if (iio_info->read_avail)
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 return iio_info->read_avail(chan->indio_dev, chan-
-> > > > > >channel,
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 =C2=A0=C2=A0=C2=A0 vals, type, length, info);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 if (iio_info->read_avail) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 const int *vals_tmp;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 int ret;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 ret =3D iio_info->read_avail(chan->indio_dev, chan-
-> > > > > >channel,
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 =C2=A0=C2=A0 &vals_tmp, type, length,
-> > > > > info);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (ret < 0)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 *vals =3D kmemdup_array(vals_tmp, *length, sizeof(int),
-> > > > > GFP_KERNEL);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (!*vals)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
-> > > > > +
-> > > >=20
-> > > > Not a big deal but I would likely prefer to avoid yet another copy.=
- If
-> > > > I'm
-> > > > understanding things correctly, I would rather create an inkern wra=
-pper
-> > > > API
-> > > > like=20
-> > > > iio_channel_read_avail_release_resource() - maybe something with a
-> > > > smaller
-> > > > name :).
-> > > > Hence, the lifetime of the data would be only controlled by the pro=
-ducer
-> > > > of
-> > > > it. It
-> > > > would also produce a smaller diff (I think). I just find it a bit
-> > > > confusing
-> > > > that we
-> > > > duplicate the data in here and the producer also duplicates it on t=
-he -
-> > > > > read_avail()
-> > > > call. Another advantage I see is that often the available data is i=
-ndeed
-> > > > const in
-> > > > which case no kmemdup_array() is needed at all.
-> > >=20
-> > >=20
-> > > If I understand correctly your suggestion you would leave the inkern
-> > > iio_channel_read_avail() untouched, then add a new inkern wrapper,
-> > > something
-> > > like iio_channel_read_avail_release_resource(), that would call the
-> > > producer's
-> > > read_avail_release_resource(). The consumer would invoke this new wra=
-pper
-> > > in
-> > > its
-> > > own read_avail_release_resource() avoiding the additional copy. The c=
-all
-> > > stack
-> > > would look something like the following:
-> > >=20
-> > > iio_read_channel_info_avail() {
-> > > =C2=A0=C2=A0=C2=A0 consumer->read_avail() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 iio_read_avail_channel_raw=
-() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ii=
-o_channel_read_avail() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 producer->read_avail() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kmemdup_array();
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0 }
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0 iio_format_list();
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0 consumer->read_avail_release_resource() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 iio_read_avail_channel_rel=
-ease_resource() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr=
-oducer->read_avail_release_resource() {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 kfree();
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0 }
-> > > }
-> >=20
-> > Yeah, exactly what came to mind...
-> >=20
-> > >=20
-> > >=20
-> > > I was going with the simpler solution you described, but my concern w=
-ith
-> > > it
-> > > was
-> > > that the info_exists_lock mutex would be unlocked between a
-> > > iio_channel_read_avail()
-> > > call and its corresponding iio_channel_read_avail_release_resource() =
-call.
-> > > To my understanding, this could potentially allow for the device to b=
-e
-> > > unregistered between the two calls and result in a memleak of the ava=
-il
-> > > buffer
-> > > allocated by the producer.
-> > >=20
-> > > However, I have been trying to reproduce a similar case by adding a d=
-elay
-> > > between the consumer->read_avail() and the
-> > > consumer->read_avail_release_resources(), and by unbinding the driver
-> > > during
-> > > that delay, thus with the info_exists_lock mutex unlocked. In this ca=
-se
-> > > the
-> > > driver is not unregistered until the iio_read_channel_info_avail()
-> > > function
-> > > completes, likely because of some other lock on the sysfs file after =
-the
-> > > call
-> > > of
-> > > cdev_device_del() in iio_device_unregister().
-> > >=20
-> >=20
-> > Yes, you need to have some sync point at the kernfs level otherwise we =
-could
-> > always be handling a sysfs attr while the device is being removed under=
- our
-> > feet. But I'm not sure what you're trying to do... IIUC, the problem mi=
-ght
-> > come
-> > if have:
-> >=20
-> > consumer->read_avail_channel_attribute()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 producer->info_lock()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 producer->read_avail()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 producer->kmalloc()
-> >=20
-> > ...
-> > // producer unbound
-> > ...
-> > consumer->read_avail_release()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
-> >=20
-> > // producer->kmalloc() never get's freed...
-> >=20
-> > The above is your problem right? And I think it should be a valid one s=
-ince
-> > between ->read_avail_channel_attribute() and read_avail_release() there=
-'s
-> > nothing preventing the producer from being unregistered...
->=20
-> Yes, that's the problem.
->=20
-> >=20
-> > If I'm not missing nothing one solution would be for the producer to do
-> > devm_kmalloc() and devm_kfree() on read_avail() and release_resources()=
- but
-> > at
-> > that point I'm not sure it's better than what you have since it's odd e=
-nough
-> > for
-> > being missed in reviews...
->=20
-> I honestly didn't think of this and it would in fact prevent the
-> additional copy. But I agree that it could be missed in new drivers,
-> maybe a comment in the iio_info read_avail_release_resource() callback
-> declaration would help?
-> >=20
-At this point I would say whatever you or Jonathan prefer :)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git amd-pstate-fixes
+branch HEAD: c10e50a469b5ec91eabf653526a22bdce03a9bca  cpufreq/amd-pstate: Fix amd_pstate mode switch on shared memory systems
 
-- Nuno S=C3=A1
->=20
+elapsed time: 1196m
+
+configs tested: 182
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            alldefconfig    gcc-13.2.0
+alpha                             allnoconfig    gcc-13.3.0
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                              allyesconfig    gcc-13.2.0
+arc                      axs103_smp_defconfig    gcc-13.2.0
+arc                                 defconfig    gcc-14.1.0
+arc                     nsimosci_hs_defconfig    gcc-13.2.0
+arc                   randconfig-001-20241008    gcc-14.1.0
+arc                   randconfig-002-20241008    gcc-14.1.0
+arc                    vdk_hs38_smp_defconfig    gcc-13.2.0
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                              allyesconfig    gcc-14.1.0
+arm                       aspeed_g4_defconfig    gcc-13.2.0
+arm                                 defconfig    gcc-14.1.0
+arm                      footbridge_defconfig    gcc-13.2.0
+arm                          ixp4xx_defconfig    gcc-13.2.0
+arm                         orion5x_defconfig    gcc-13.2.0
+arm                   randconfig-001-20241008    gcc-14.1.0
+arm                   randconfig-002-20241008    gcc-14.1.0
+arm                   randconfig-003-20241008    gcc-14.1.0
+arm                   randconfig-004-20241008    gcc-14.1.0
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                               defconfig    gcc-14.1.0
+arm64                 randconfig-001-20241008    gcc-14.1.0
+arm64                 randconfig-002-20241008    gcc-14.1.0
+arm64                 randconfig-003-20241008    gcc-14.1.0
+arm64                 randconfig-004-20241008    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+csky                                defconfig    gcc-14.1.0
+csky                  randconfig-001-20241008    gcc-14.1.0
+csky                  randconfig-002-20241008    gcc-14.1.0
+hexagon                          alldefconfig    gcc-13.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+hexagon                             defconfig    gcc-14.1.0
+hexagon               randconfig-001-20241008    gcc-14.1.0
+hexagon               randconfig-002-20241008    gcc-14.1.0
+i386                             allmodconfig    clang-18
+i386                              allnoconfig    clang-18
+i386                             allyesconfig    clang-18
+i386        buildonly-randconfig-001-20241008    clang-18
+i386        buildonly-randconfig-002-20241008    clang-18
+i386        buildonly-randconfig-002-20241008    gcc-12
+i386        buildonly-randconfig-003-20241008    clang-18
+i386        buildonly-randconfig-003-20241008    gcc-12
+i386        buildonly-randconfig-004-20241008    clang-18
+i386        buildonly-randconfig-004-20241008    gcc-12
+i386        buildonly-randconfig-005-20241008    clang-18
+i386        buildonly-randconfig-006-20241008    clang-18
+i386                                defconfig    clang-18
+i386                  randconfig-001-20241008    clang-18
+i386                  randconfig-002-20241008    clang-18
+i386                  randconfig-002-20241008    gcc-12
+i386                  randconfig-003-20241008    clang-18
+i386                  randconfig-003-20241008    gcc-12
+i386                  randconfig-004-20241008    clang-18
+i386                  randconfig-005-20241008    clang-18
+i386                  randconfig-005-20241008    gcc-12
+i386                  randconfig-006-20241008    clang-18
+i386                  randconfig-006-20241008    gcc-12
+i386                  randconfig-011-20241008    clang-18
+i386                  randconfig-012-20241008    clang-18
+i386                  randconfig-013-20241008    clang-18
+i386                  randconfig-013-20241008    gcc-12
+i386                  randconfig-014-20241008    clang-18
+i386                  randconfig-014-20241008    gcc-12
+i386                  randconfig-015-20241008    clang-18
+i386                  randconfig-016-20241008    clang-18
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch                           defconfig    gcc-14.1.0
+loongarch             randconfig-001-20241008    gcc-14.1.0
+loongarch             randconfig-002-20241008    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                          atari_defconfig    gcc-13.2.0
+m68k                                defconfig    gcc-14.1.0
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                          defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                malta_qemu_32r6_defconfig    gcc-13.2.0
+mips                    maltaup_xpa_defconfig    gcc-13.2.0
+mips                           xway_defconfig    gcc-13.2.0
+nios2                         10m50_defconfig    gcc-13.2.0
+nios2                             allnoconfig    gcc-14.1.0
+nios2                               defconfig    gcc-14.1.0
+nios2                 randconfig-001-20241008    gcc-14.1.0
+nios2                 randconfig-002-20241008    gcc-14.1.0
+openrisc                          allnoconfig    gcc-14.1.0
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    gcc-14.1.0
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-12
+parisc                generic-32bit_defconfig    gcc-13.2.0
+parisc                randconfig-001-20241008    gcc-14.1.0
+parisc                randconfig-002-20241008    gcc-14.1.0
+parisc64                            defconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    gcc-14.1.0
+powerpc                          allyesconfig    gcc-14.1.0
+powerpc                      cm5200_defconfig    gcc-13.2.0
+powerpc                  iss476-smp_defconfig    gcc-13.2.0
+powerpc                   lite5200b_defconfig    gcc-13.2.0
+powerpc                     mpc512x_defconfig    gcc-13.2.0
+powerpc                      pasemi_defconfig    gcc-13.2.0
+powerpc                         ps3_defconfig    gcc-13.2.0
+powerpc               randconfig-001-20241008    gcc-14.1.0
+powerpc               randconfig-002-20241008    gcc-14.1.0
+powerpc               randconfig-003-20241008    gcc-14.1.0
+powerpc                      tqm8xx_defconfig    gcc-13.2.0
+powerpc64             randconfig-001-20241008    gcc-14.1.0
+powerpc64             randconfig-002-20241008    gcc-14.1.0
+powerpc64             randconfig-003-20241008    gcc-14.1.0
+riscv                            allmodconfig    gcc-14.1.0
+riscv                             allnoconfig    gcc-14.1.0
+riscv                            allyesconfig    gcc-14.1.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20241008    gcc-14.1.0
+riscv                 randconfig-002-20241008    gcc-14.1.0
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20241008    gcc-14.1.0
+s390                  randconfig-002-20241008    gcc-14.1.0
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                         ap325rxa_defconfig    gcc-13.2.0
+sh                         apsh4a3a_defconfig    gcc-13.2.0
+sh                                  defconfig    gcc-12
+sh                 kfr2r09-romimage_defconfig    gcc-13.2.0
+sh                          r7785rp_defconfig    gcc-13.2.0
+sh                    randconfig-001-20241008    gcc-14.1.0
+sh                    randconfig-002-20241008    gcc-14.1.0
+sh                          rsk7203_defconfig    gcc-13.2.0
+sh                           se7722_defconfig    gcc-13.2.0
+sh                           se7780_defconfig    gcc-13.2.0
+sh                              ul2_defconfig    gcc-13.2.0
+sh                          urquell_defconfig    gcc-13.2.0
+sparc                            allmodconfig    gcc-14.1.0
+sparc                       sparc32_defconfig    gcc-13.2.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20241008    gcc-14.1.0
+sparc64               randconfig-002-20241008    gcc-14.1.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-17
+um                               allyesconfig    clang-20
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20241008    gcc-14.1.0
+um                    randconfig-002-20241008    gcc-14.1.0
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-18
+x86_64                           allyesconfig    clang-18
+x86_64                              defconfig    clang-18
+x86_64                                  kexec    clang-18
+x86_64                                  kexec    gcc-12
+x86_64                               rhel-8.3    gcc-12
+x86_64                          rhel-8.3-rust    clang-18
+xtensa                            allnoconfig    gcc-14.1.0
+xtensa                generic_kc705_defconfig    gcc-13.2.0
+xtensa                randconfig-001-20241008    gcc-14.1.0
+xtensa                randconfig-002-20241008    gcc-14.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
