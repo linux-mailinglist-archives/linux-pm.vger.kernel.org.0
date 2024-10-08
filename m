@@ -1,83 +1,73 @@
-Return-Path: <linux-pm+bounces-15301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D2D89942A8
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 10:49:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06D0299435F
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 11:03:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53FD5B21312
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 08:48:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DD5B1C2344B
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 09:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9165D1DCB3F;
-	Tue,  8 Oct 2024 08:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED281C4613;
+	Tue,  8 Oct 2024 09:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="jiWqMnzR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WzjUrhdU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0604713AA4E
-	for <linux-pm@vger.kernel.org>; Tue,  8 Oct 2024 08:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DCDE1C2448
+	for <linux-pm@vger.kernel.org>; Tue,  8 Oct 2024 09:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728375634; cv=none; b=ajY2Axvp722IPJyAO77Vvhy1GqG4q4JkqIgLpl4ZZpHNh/tq+Hdco9mew4TdeIzsWiR9eEADbPYSLeyxSZak/RqfRJTig/RNy38qqyXdIAm0hNOUj13KsUZRFdCCwfX0v2as5MwznmTRCXjk6e5bw80WgC6W8aGCriwDqLv+aew=
+	t=1728378022; cv=none; b=K3+EJRNZOlODEPns2lLPcSslBDErfmZNOb6HOQBb/NNaQdkbQUq2NZ77t4wfM2X8bXtj2jrAk9FTqx3jdzDBShg9wLqdA1KYWGq3dEbaadS8X8XU280i6m4IvKlUH7gNvA0NQqzMyg3SJGYNI+ZS1zYfzGv+QyqYlT6r+6oCfIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728375634; c=relaxed/simple;
-	bh=SA7p1pK7GJRdZ2aSXfBMJYpiT/f4erZ1sHELDMvQa1U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GpFhGwNEi8cufmlZIBmzIYXrzCpWAOYCSUx5Cu1QJopCE/Bkvk/SIHWVj+7kuQknIt1Cdn7sa0yYq+scN86o4F4PH+QV0ywH19vjAXnvdPOXAv8N93V5JdXcvBfJc44K/1IZ73l6GiL4LsnJwDAWhRBkXYGjf4F2M6lqjgPB0Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=jiWqMnzR; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42f6bec84b5so55239465e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Oct 2024 01:20:32 -0700 (PDT)
+	s=arc-20240116; t=1728378022; c=relaxed/simple;
+	bh=dOaAo7NARlHfBILXFifIyTQJ6/ayWSqio+ubJS4mi6g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D34F5p7UfGdUwLJ6dW4FWG0n5ZIttuT8iWq2b7E/CJEhr4h7h782aL0KbHCj89ITyaP9OGbNFLSSJbNTNgMOVSy7oSjY4LDkjs5UXUP93J1nSIEHxlFcEr+hoYl+gHIhxSfETTCpn2GOfKvhPjl7ul+xAHEHPR4qlTMkKSP2F14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WzjUrhdU; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5c877f18276so971826a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 08 Oct 2024 02:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1728375630; x=1728980430; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eLA7sL4jTUFGJMFkMOPtXgp1AzpZdyeuaRidXBBLnMU=;
-        b=jiWqMnzRn8Y9zK5G5EK7k9+mVH35CHwV9h5jIfITQDrJ1ZNsG2yWlJPv0dYWBjvvaW
-         3SizMgrQrC6bnv15r48HS4Nd7nOdLhB9oWK22uhcUSAW/i56EBgtltpUUXtKObNzkZLL
-         UgfU6Ao3RqFQIyKY52X0W3kaL5lcc8GUkdR9bFtPewSotm2PwSbhJ+8CIV+HFP6qJdAW
-         Z9mdOT+HWgzFszhE5J3Tgl9FAUSA6Tk+t42dMM/2IqZ7l1aIAgVWkUkYEvpP2ewMowVT
-         f2njWlb2IG4YiGREMrkLh+4VNtmvD20ZZEM/5/FZTnS2XULMEdbbkvfpLORCvPauOrCF
-         BANg==
+        d=linaro.org; s=google; t=1728378018; x=1728982818; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MXPa4fFlrpkPdHCBu+fsHa7xsZh6Iyys6CsrsjuF75w=;
+        b=WzjUrhdU69QA4v475hGwua10V58niEJIiChLodaAR2cYowRkF2JyoXZdamVfVCoYej
+         TlovS3jSpCPhQEo+c2dqeu5PUwQ4RG0KIMHPbW+TFZUPvrI9hCMBxw3I/0Ggkmd9EQfF
+         iJn6WiOUkUQi/fri53XEeRBGYkiiuVVEABNjEnD8L4Z48wcxyMM9Xs88XXsO9SaQY2SE
+         HYZCunxW6I/Sg3bLCABlhJkE50EpdsL1J5XcbO/J2Ygmdqlj6vkXVT0wk4CPF+HI9ItA
+         z0kAu/OMdjDoOBs5FsOHT5DExBHYobsBX7dTdz7Y+a3g6n9D3Fd1Nx/Xm8g2aYOVzJ/7
+         c2LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728375630; x=1728980430;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eLA7sL4jTUFGJMFkMOPtXgp1AzpZdyeuaRidXBBLnMU=;
-        b=gUGDQpuhwpu4zn6gOFL0HhtXMmjU7b86FAetZjFEbGdflbTxEI3UXm0kkj1LrJaVVx
-         0cgnSTX0xy0Aw9yJdR5d0ZGmhtBAzlnly4XEZz4FPaZZdakTplha23lhr2OVbqD2DVHZ
-         GEBHLxstENop3ES+2k44nkwcIxAIxJIv6LG+swS2WrLlZsXx+YhRwvW/83RLSd/d82+l
-         IwvK4PbYdEyReZwSEtnI6hR7S1q0Aw5m/qSKMkagHFAzi6WAeZ2360x6hNLAJque5Lpw
-         mvgRSATCITSE25P8wNUW26YKhLmnYD1/v0UeSyIOAjJWtuHF+H6tfYjaGktCW5gp3rWv
-         wQ5w==
-X-Gm-Message-State: AOJu0Yyq7xmWFLUoDU/2UkxiMW71H58tzolbstv46KJ23+FpM5Rr3IVp
-	Ih9itkcAXWtsIeigEworOJtXCVUeHqzuvft+GWzWXImQpoJvyCMOk+MyYILIDmm/HysOmIVGzgR
-	z
-X-Google-Smtp-Source: AGHT+IGy6e2hyfBM6ucgCV6S78O4kJP6vjQ+Tn8p8Qf2UI4J3EG8HRiCChmfiVkttgsGMH7vG0IS2Q==
-X-Received: by 2002:a05:600c:35c9:b0:42c:cd88:d0f4 with SMTP id 5b1f17b1804b1-42f85ae8efbmr117465365e9.22.1728375630285;
-        Tue, 08 Oct 2024 01:20:30 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:738a:20da:f541:94ff])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d1697024fsm7467370f8f.95.2024.10.08.01.20.29
+        d=1e100.net; s=20230601; t=1728378018; x=1728982818;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MXPa4fFlrpkPdHCBu+fsHa7xsZh6Iyys6CsrsjuF75w=;
+        b=mOOUHZlwNiqkKbwUDYyNConFqIJD28zn3hQ+bUn6TNh87NcIAvFOlg9ORstqKBpB6e
+         79D3FVkkofwzr14ch65PR8FAaXsofGFk8g9+fkshXei25JwtWX4WO0qphX4LC11j9P2y
+         KJvkRki4iV/9olZcUadtQva+z+ynxUNf5S7e5usw8OSdnlvxulvjPp85knFPnDR0584A
+         YFmqLf8195CM903aG1J43jVM61U2OXBsArswrC7CxJI1XLPAexoALc53j2a1LhmoiGts
+         U6Fhk3w16Up/a34b76TdtyWR/n2WhZR7SQJMHYedYu21nsRxouaZ0zQVgLCTxspw9vDx
+         qn/A==
+X-Gm-Message-State: AOJu0YwkhrfxkQIS/IDg2YOEcYXXVjj5Z+ctMCpI235EU9L89ypmUFen
+	+xRVL/6J2mWPrS1RGtPQNB3zH1v8StPN01Tg1dr6d5HLz0vQFzcxq1vRYpP+2fs=
+X-Google-Smtp-Source: AGHT+IEq6O3RO4uEDoXe09VkiTBtsNLE0dDuH6C5d6cgLS0mDm3/gMWkLxOZY1XH6RAF/fAV0B+Iew==
+X-Received: by 2002:a17:907:7b8d:b0:a99:5cd4:67f with SMTP id a640c23a62f3a-a995cd4554bmr185284066b.3.1728378018194;
+        Tue, 08 Oct 2024 02:00:18 -0700 (PDT)
+Received: from [127.0.1.1] ([178.197.211.167])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a994e6e571asm294701166b.85.2024.10.08.02.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2024 01:20:29 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] power: sequencing: make the QCom PMU pwrseq driver depend on CONFIG_OF
-Date: Tue,  8 Oct 2024 10:20:28 +0200
-Message-ID: <172837562698.35030.232807683263443584.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004130449.51725-1-brgl@bgdev.pl>
-References: <20241004130449.51725-1-brgl@bgdev.pl>
+        Tue, 08 Oct 2024 02:00:17 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/6] thermal: scope/cleanup.h improvements
+Date: Tue, 08 Oct 2024 11:00:00 +0200
+Message-Id: <20241008-b4-cleanup-h-of-node-put-thermal-v3-0-825122398f71@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,24 +75,81 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJD0BGcC/5XNsQ7CIBSF4VcxzF4DlEDr5HsYB6SXlqRCAy3RN
+ H13aSfddPzP8J2FJIwOEzkfFhIxu+SCL1EdD8T02ncIri1NOOWC1kzAXYAZUPt5hB6CBR9ahHG
+ eYOoxPvQAnMtaCGqMtIoUZoxo3XO/uN5K9y5NIb72x8y29Q88M6CgNKtqhkxyhZfBeR3DKcSOb
+ Hrmn6L8QeRFNIiNNaKhQtVf4rqub5vtQHIjAQAA
+X-Change-ID: 20240814-b4-cleanup-h-of-node-put-thermal-2268440cc6f7
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Chen-Yu Tsai <wenst@chromium.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1618;
+ i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
+ bh=dOaAo7NARlHfBILXFifIyTQJ6/ayWSqio+ubJS4mi6g=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBnBPSX/J8HUTPruAZlvbvad0CCX4evRlZ4uxfRH
+ Ef97A3Jq2mJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZwT0lwAKCRDBN2bmhouD
+ 1/PZD/9w03iNlw5sbATN88IYXSHnnTDi7OSN9Luom0fCP4yBDI6hs1udVwvVxL2F4BZmpYf/u3f
+ wgbM/XXPY/+KAsF+zr5gCEJr42/uuELCMW1dBhyRKWzxnniEnTsnR1QoBN2Ch12UkKj3qvHuI39
+ mUl7ViJFTMQyFZicJQYZwJNuDw8TCoyOuJD4aLJ3BH6PeSEcNmZAavYAuZMlu9XEHBlxc/DG3wg
+ uCaPPhIhcPihqw/71CcF/zjGAz4Aw7q13otMHmeJVjA82CmJS5QzYuYgtBwCeidJ17dChiCp5jl
+ Nf8y6HUHs+WPKvtQEt5nvxsqVPC2TDqagdrsjDlw0eqa6EeTQEVtwEH/0htQ9FV+xIvljT1Vw2X
+ Gp2EApkWATLZeF42IfmQvU/F763XtuKNkhb/Id1VqAL9DtAD1R4olp/wyntz1wV+5lVCY3M1Iqx
+ CCegUa14EQNt+cNikea9jSfnw/iiNnq/Z/orxm2/s4BgMGhhJXRcPPxKSGF/WPZqXOZ5FIbWmjJ
+ p4rymvJK+8TJugViklUDUnYU24yzTKPst9pBJlnYZ9NQIMTeNBvU3iIsTIpfH3yoMm1eSIxcoMC
+ hMu8TrZD6I1jVgZ2aOdU7k6Z4hDEY/j2TShMIrFo+e7/dscOVDM9ToKBaTfOLmGtc4OKZhN7mYC
+ /Y2AT5LpvVp2zTw==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
+ fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Changes in v3:
+- Rebase, because there was bigger rework in thermal code.
+  This made two patches obsolete, but brought new one:
+  1/6: thermal: of: Simplify thermal_of_should_bind with scoped for each OF child
 
+- Link to v2: https://lore.kernel.org/r/20240816-b4-cleanup-h-of-node-put-thermal-v2-0-cee9fc490478@linaro.org
 
-On Fri, 04 Oct 2024 15:04:49 +0200, Bartosz Golaszewski wrote:
-> This driver uses various OF-specific functions and depends on phandle
-> parsing. There's no reason to make it available to non-OF systems so add
-> a relevant dependency switch to its Kconfig entry.
-> 
-> 
+Changes in v2:
+- Drop left-over of_node_put in regular exit path (Chen-Yu)
+- Link to v1: https://lore.kernel.org/r/20240814-b4-cleanup-h-of-node-put-thermal-v1-0-7a1381e1627e@linaro.org
 
-Applied, thanks!
+Few code simplifications with scope/cleanup.h.
 
-[1/1] power: sequencing: make the QCom PMU pwrseq driver depend on CONFIG_OF
-      commit: a85bbe01a320eb3f1398da3430384596b1c51663
+Best regards,
+Krzysztof
+
+---
+Krzysztof Kozlowski (6):
+      thermal: of: Simplify thermal_of_should_bind with scoped for each OF child
+      thermal: of: Use scoped device node handling to simplify thermal_of_trips_init()
+      thermal: of: Use scoped device node handling to simplify of_thermal_zone_find()
+      thermal: qcom-spmi-adc-tm5: Simplify with scoped for each OF child loop
+      thermal: tegra: Simplify with scoped for each OF child loop
+      thermal: sun8i: Use scoped device node handling to simplify error paths
+
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c |  7 ++----
+ drivers/thermal/sun8i_thermal.c          | 11 ++++-----
+ drivers/thermal/tegra/soctherm.c         |  5 ++--
+ drivers/thermal/thermal_of.c             | 39 ++++++++++----------------------
+ 4 files changed, 21 insertions(+), 41 deletions(-)
+---
+base-commit: 33ce24234fca4c083e6685a18b460a18ebb5d5c1
+change-id: 20240814-b4-cleanup-h-of-node-put-thermal-2268440cc6f7
 
 Best regards,
 -- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
