@@ -1,147 +1,111 @@
-Return-Path: <linux-pm+bounces-15355-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15356-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F79E9953D1
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 17:52:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C20E995446
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 18:22:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E903AB21FEB
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 15:52:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D37341F266BC
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 16:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26781E008E;
-	Tue,  8 Oct 2024 15:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7761F1E0E04;
+	Tue,  8 Oct 2024 16:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="gE3Col35"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE5A93BBDE
-	for <linux-pm@vger.kernel.org>; Tue,  8 Oct 2024 15:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-m2418.xmail.ntesmail.com (mail-m2418.xmail.ntesmail.com [45.195.24.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA6C1D31A0;
+	Tue,  8 Oct 2024 16:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.195.24.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728402755; cv=none; b=VrgPPmKsCPtvT/yEIQrHy/IomriutUXAY1cLvXWVyZ0vnNqvOExMJbFVqE3yy0yqiRGCRB597DB7+7ry1k49wlxBSg79B17IYOhozDktGOvG/f4NeWvcMN15EmhOe2QHbZeW2/m+6luHHgENy3w5MHMpvRRUDoLe380ztWytT1g=
+	t=1728404510; cv=none; b=PFFVdVBPRSzGQ/KmcZ+BW0lPmtGgRBhh4Lo4Z43HA5e54GNJpYzMZSesv8t2LlPnSTxMRSL2fEqn6vtxEDFidwDKmidkm1FCL9LGcoxJm3/J356RB0reDuIyj1ZWRmxQnKZVhavPuh1SlqoVdJJAPb8KvFP/Qqe08WrM5jdWDVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728402755; c=relaxed/simple;
-	bh=7pirjy+jOY6XMziFKRyws/AqPW4k3VyV4m42JkFBf+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=br7E0gue01dy4mFQChrU1lYedYCkpaSpfo0DgIs+SOYN5YZ7Da3Ku8pXxKVP060IivChhkmoVuKNNV8hDSeq7bh12M67ZFoDFb4tMn/0m82jprTd6stqWHWr0LHqT90yV1q97rLk+9xcMokCbdsbZlgO0KledKPM0dfJrIh1qtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA48FDA7;
-	Tue,  8 Oct 2024 08:53:02 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.77])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E0FA3F73F;
-	Tue,  8 Oct 2024 08:52:32 -0700 (PDT)
-Date: Tue, 8 Oct 2024 16:52:30 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Vivek yadav <linux.ninja23@gmail.com>
-Cc: linux-pm@vger.kernel.org, lpieralisi@kernel.org, ulf.hansson@linaro.org,
-	Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: ARM64: Where do I get CPU Sleep states parameters ?
-Message-ID: <ZwVVPtVXxX4rGFbx@bogus>
-References: <CAO6a-9-cp7CazJ4+-b3gwD2Q5n4SaA=5=Ps3ycJ9Xq_ZidDB+A@mail.gmail.com>
+	s=arc-20240116; t=1728404510; c=relaxed/simple;
+	bh=yl4dISq0YVEakYYH4ZI4/QRARPq5MlVOrJ85VNE9HGQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=KozsBG4NQshCjg2j+dhRFD7CiJ9ORTjkkF5nkBSrKTRc0pLPyYheMe1H+Khlv4AFmW+6oksVwgTsfuCRTOo2LV5Qs9jkffSoZY4+hjj0VvjAMcJBrvWhR2/VPfbCk3WHSfXcKht0WjsdxTtPQBwj1srmi9/AYZbgTYh+2Vr1WJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=gE3Col35; arc=none smtp.client-ip=45.195.24.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+DKIM-Signature: a=rsa-sha256;
+	b=gE3Col35CqUoFKgMiIJEIyITc9DndpI+HTvrNvd8zfyrYhKjcV6+pk9WbIvKoVwieeZ4GHcW6lV0tKtvOvbZztpU7nMT8rkSdF20DiAW12Im8BhL+n+Osh/U6J5Zt23Av17hPIqQ55zwetvxRiX22larxJmTF+NsgtVDdqMjjVg=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=X2RVKuuepMJ71UkowB4el7fjeh2DFavVJ1nWfvVkGV4=;
+	h=date:mime-version:subject:message-id:from;
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id 7081F520718;
+	Tue,  8 Oct 2024 14:16:33 +0800 (CST)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v3 3/5] soc: rockchip: add header for suspend mode SIP interface
+Date: Tue,  8 Oct 2024 14:15:28 +0800
+Message-Id: <1728368130-37213-4-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkJPTVZOGhlCThpCT0hMSkxWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a926ac5b36903afkunm7081f520718
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRg6GBw5GjIvNhYOTi1MNw1W
+	Ex8aCQpVSlVKTElDSE1DSkJOS0pJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhKQ0o3Bg++
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO6a-9-cp7CazJ4+-b3gwD2Q5n4SaA=5=Ps3ycJ9Xq_ZidDB+A@mail.gmail.com>
 
-On Tue, Oct 08, 2024 at 08:46:52PM +0530, Vivek yadav wrote:
-> Hi @all
->
-> Recently I was exploring the CPUIdle menu governor. I found out that
-> there are CPUIdle states. These C- states are defined in the device
-> tree based on these `cpu-idle-state` parameters. The menu governor
-> makes intelligent decisions. So it can save precious power resources.
->
-> I had one custom SoC which had a CPU `arm,cortex-a55`. Now I am
-> looking for CPU properties i.e exit_latency, entry_latency and
-> min-residency.
->
-> Below there are two different SoC using the same arm,cortex-a55 CPU. But
-> they are using different values.
->
-> Q.1: There are entry | exit | min-latency-us. Where will I get all that
-> information? I searched into ARM manuals but I did not get it ? Please
-> point me in the right direction if you know about this.
+Add ROCKCHIP_SIP_SUSPEND_MODE to pass down parameters to Trusted Firmware
+in order to decide suspend mode. Currently only add ROCKCHIP_SLEEP_PD_CONFIG
+which teaches firmware to power down controllers or not.
 
-It is completely SoC/platform or even board specific parameter. One needs
-to measure it for that configuration and then populate the value in DT.
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+---
 
-> Q.2: It looks like every SoC is using any value ? Why is there no fixed
-> latency time ?
+Changes in v3: None
+Changes in v2: None
 
-There can't be a fixed value that works across platforms as the value
-is depends on various characteristics of a given platform.
+ include/soc/rockchip/rockchip_sip.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Q.3:  What is the meaning of ``arm,psci-suspend-param`` ? Where do I get
-> this information? It is some fixed value.
+diff --git a/include/soc/rockchip/rockchip_sip.h b/include/soc/rockchip/rockchip_sip.h
+index c46a9ae..501ad1f 100644
+--- a/include/soc/rockchip/rockchip_sip.h
++++ b/include/soc/rockchip/rockchip_sip.h
+@@ -6,6 +6,9 @@
+ #ifndef __SOC_ROCKCHIP_SIP_H
+ #define __SOC_ROCKCHIP_SIP_H
+ 
++#define ROCKCHIP_SIP_SUSPEND_MODE		0x82000003
++#define ROCKCHIP_SLEEP_PD_CONFIG		0xff
++
+ #define ROCKCHIP_SIP_DRAM_FREQ			0x82000008
+ #define ROCKCHIP_SIP_CONFIG_DRAM_INIT		0x00
+ #define ROCKCHIP_SIP_CONFIG_DRAM_SET_RATE	0x01
+-- 
+2.7.4
 
-Even this is not fixed, but if you follow some guidelines in the spec,
-you can have a fixed pattern based values. But that is completely optional.
-The firmware may choose a value compliant to the spec and you just put that
-in the DT for OS to use it when entering the required state.
-
-> Q.4: Is it necessary to add  ``local-timer-stop`` ? In ``config`` file we
-> are providing information about the CPU periodic tick whether we want to
-> use a tickless governor or not ?
-
-Again it depends. The DT bindings explain all these IIRC. Anyways if you
-CPU local timers(it will be mostly architected timer on arm64) gets turned
-off when the CPU enters the C state, then you need to add this boolean
-property.
-
->
-> FILE NAME :::   ``arch/arm64/boot/dts/mediatek/mt8186.dtsi``.
->
-> ``` <Code Block>
->                 idle-states {
->                         entry-method = "psci";
->
->                         cpu_ret_l: cpu-retention-l {
->                                 compatible = "arm,idle-state";
->                                 arm,psci-suspend-param = <0x00010001>;
->                                 local-timer-stop;
-
-It is unlikely a retention state will have its local CPU timer turned off
-but it may be true on this platform. I don't know.
-
->                                 entry-latency-us = <50>;
->                                 exit-latency-us = <100>;
->                                 min-residency-us = <1600>;
->                         };
->
->                         cpu_ret_b: cpu-retention-b {
->                                 compatible = "arm,idle-state";
->                                 arm,psci-suspend-param = <0x00010001>;
->                                 local-timer-stop;
->                                 entry-latency-us = <50>;
->                                 exit-latency-us = <100>;
->                                 min-residency-us = <1400>;
->                         };
->
->                         cpu_off_l: cpu-off-l {
->                                 compatible = "arm,idle-state";
->                                 arm,psci-suspend-param = <0x01010001>;
->                                 local-timer-stop;
->                                 entry-latency-us = <100>;
->                                 exit-latency-us = <250>;
->                                 min-residency-us = <2100>;
->                         };
->
->                         cpu_off_b: cpu-off-b {
->                                 compatible = "arm,idle-state";
->                                 arm,psci-suspend-param = <0x01010001>;
-
-These psci-suspend-param looks like they have followed the recommendation/
-example in the specification.
-
---
-Regards,
-Sudeep
 
