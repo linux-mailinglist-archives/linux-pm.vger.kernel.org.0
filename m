@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-15352-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15353-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3736995329
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 17:18:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85129995323
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 17:18:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8842B239F7
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 15:17:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 316BD1F26AA4
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 15:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE321DFE1D;
-	Tue,  8 Oct 2024 15:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285B61E0B8B;
+	Tue,  8 Oct 2024 15:17:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49224144D21;
-	Tue,  8 Oct 2024 15:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA841E0081;
+	Tue,  8 Oct 2024 15:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728400621; cv=none; b=mjltXAtUDRsfV8qt52THV395fjn47l48jxmpZzgKk5FI+VeA+tnZ/hgrrpIsH7eAhNCG4VDis5x3xLE9v204u1deXaXb3D6ywzBYWnBqKZvc5luH+0xUds/6wksfE+qWFvTViBamwpTus9UD9LTnjxuZKXIdOzl05svMvVkYbOA=
+	t=1728400665; cv=none; b=ODaVMZKW3k2y3ZZfGfQZRO3M1Gnke5EAwE1Xint1YYcZHxuvldIxOro0hvSwSOdLg2Qc5d/fJBVLKcVgxux9h0+DIlSB3rq2ZsO6il5eE/f/fcURzogG9cbF//fL8TkCsqISJjl3mrWcXeaWsPX9raaDDIU0Kn+qVJdng0/l15E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728400621; c=relaxed/simple;
-	bh=x0v6wKBxloqxd6ftXN0Rhhzo7IbMzrRL3YhX/jccxGo=;
+	s=arc-20240116; t=1728400665; c=relaxed/simple;
+	bh=CNfpff1IU0uef2UsgIC+OwyYHv3DbTsFpmqGCXVkFqc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h+iLcyAsNrcGaaVs5w0ySkjqRr3sVUw5bsbUcjXYhRonHT7UydtXNDIleQyXmBwJ8SVRKyT1MZBuqjm8e03HXP3XtnTXaHLpG39OvhkyAXci3mfCnyColF/GzjBT8AohprRJtIOXs/Uy9GF99eFH45dprA0BnavzLxF9P9f0MnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
+	 To:Cc:Content-Type; b=YWubqpknR6/UBM7W1g8BwuRpK6QnPh103lbSf9YpvniGWVzEwpO27VjphMUOXUH3wAKKyiv4lVlsQqeAIvPGMxtazYXjJPZ++9bJEAUNGmNZoDZ1KwWU+Yj/PsCQiLiRjFx0/bgqbZegbXdboF2Lo1Baolp9ZPCnKWHnVr4FuAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6db20e22c85so45577897b3.0;
-        Tue, 08 Oct 2024 08:17:00 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6e214c3d045so43716007b3.0;
+        Tue, 08 Oct 2024 08:17:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728400619; x=1729005419;
+        d=1e100.net; s=20230601; t=1728400661; x=1729005461;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xNkp0597olvl4BH+GQsjOjO3dePD7p4cBzVhPvQBAu0=;
-        b=WIKseKYYNHfk1nGaFWDUdJYhQbSsfcUR/ZGSUglFKA3NiOTkLUFg8/LL3sKj9xYu30
-         0ARtcALzrjTCCUZ1C2e/7cpTwyPDlGsYn2Rxbp1mHHmu4W/e5540h/Ell/oC8R4p+fOO
-         73UUTz7GF/9ObJLMQv3Q8fSOhNjO14rCy3qm1wvxSwSCt/556DJWr6u6lnMN12RtpAsU
-         p3Hf3cX8CzIi08DVxdQQY3sIlbd41YechTE6UnnLerK8MX+4Qm870a1OkC7of1HwAg+K
-         5+5/t5kS+fCqrqmKOLVNDDWOMTS90VELTTQhfNTRmRL7J1PRQ3HoC6WACM+B3I/BYqYF
-         HK5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUZxsnTEp7eX4f4i/Fy2GQLnqAledGCydbwvua89w/Ht/u7rPYTRYI1Lh56mOy17YmwYN7ekMdbYZER@vger.kernel.org, AJvYcCV+b+yYkJ2g38tuRye3ERI2AJQvqHB9X6mCCC7uBlJ8n5WhPykPUCDWxhWfjnsvDBM//NOJtEU+mH9ly9q9@vger.kernel.org, AJvYcCVeYtxUOLLTtFRBzVk21YQ2tPaUZK7jHJsOQbDLHvZIrngqp5pIk4ovjusEi2ZbNEh67Wz0xY4isGFx@vger.kernel.org, AJvYcCVusz5u8dWyqZnoSRf3R2fyL1Yt3iDErXKH3dkjZSrutYApMpspFASULxA6ntYv7r5U3Ti5GkgOitQD@vger.kernel.org, AJvYcCVwci6IK2rrcgzUoslFFHmlguNGy1NtfU8IVv+xJeLYekGvZD21twK87LPqAM2/+zuOG9C1IfIshI8=@vger.kernel.org, AJvYcCWciWM5nv7qFX+DQTbsBx0RPViyi4SDAHEKUB5U9kP0zpwzkmGWAvHqvpV6WT6gE3rF39baxKhvNnmxywBKCtTSh3I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh+serDkK7WtJPcqrpt6HtzAqVFqmT+4ejmU2JGY+xz7NqyTmo
-	2SwXWg2bRwLyyyG4lFG9kCG4XiW6NvdKuLhi3AhfBkqmk0Y80nB3Yjzfpn//
-X-Google-Smtp-Source: AGHT+IEmwzQ4S21ySvIXl6lnzyeEe5/Tmdjn9/vqEVzOfpRH8NvZm0XibBuRYOEO0Uy0dRT2nJmMOg==
-X-Received: by 2002:a05:690c:6a86:b0:6dd:fe5e:8828 with SMTP id 00721157ae682-6e2c72b2c16mr146723657b3.42.1728400615300;
-        Tue, 08 Oct 2024 08:16:55 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e30e745d7esm3695727b3.74.2024.10.08.08.16.53
+        bh=7+Bc4GjkC6icbPY7vgYqwmn4fwzMIGosWjslnYJ1NAQ=;
+        b=Z6xGjxTDEJzFedHYkSqOcKIWXV2PaSwQpmGLa6yEW8uPLKVCUHlOzhezdlhi7O3V6X
+         5FXRYXMG6ijW+vmIpKlccCsOG1yQ+fShl2dxM06GQ0uy/NxYy1k4NUvKED3QRVmxlvs2
+         bkHXCTZQ0sDDJkgpBKtUgoewl3oi0wG2lkIGmOiM5ZoNohoB7GaWBpbXFjG+QFopXid5
+         6swb5Wo24OCGA3ihZpNHdRtLigJaVaswXReTjvujdIlsBp4ym7IIWl36NBtWFA/IGsGp
+         bnJAJvS1aWDQq5POqeTgM9WilmFAy8kZfh8PQQUCi2NkI7VxspqkO1us6A47RudxqJOX
+         MbJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUTLXi+dhaDWnK9/SIp9SIVi9NCkqg+HxcQFdLwYny/3l9Iz9frdAN1Hqq8LZ9a99Y+pJDAdaSirlo7@vger.kernel.org, AJvYcCUh90DKFh9xMHuT6+MVct0BFBv5ZB61yhOXIRVEeJOe2bEXzr12O2RnhTV7vYNZH9I29T5X6y8+VuZigFG6@vger.kernel.org, AJvYcCWdWXLWHU4klCZJYkbRmorAqI9FJ8BHhF5Wl0doSCWNSiX3QIE3Sk2oaPo92ncZ6y+v79gYmSAUeVi010XECidwCeg=@vger.kernel.org, AJvYcCWhy1feBVoYLOCLl6pqOncP7O/GyTn6pc4c6kYfHO+TxKozOvpeayW7sUqyy6lQSewA8RSAJBzp7NtR@vger.kernel.org, AJvYcCWn4PovJ+Z4oijeH0Cwyrj67A7N4SVqPoPj5GZJvXEmumO3g/ZmRFGFSwfDrA8QAJUDR7DZ62sXwdM=@vger.kernel.org, AJvYcCXlXOIYh0ImVkOZBBVWSxH2/pMyDsLX1POtJnwYZw1WvxqI4iGuEk+aEUbgJtS4rm+rjJPaF7Zx/iJA@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPShSvIUlKxT2+qRiF2qx5JaCXDIvya4HyqTcYNbRU1PE7qUlE
+	Hc5L32QPx+8mG04A5jXZ5SkGbx27VuRD+5ZDgctrKpQo4HvYXbdr9nrASCDY
+X-Google-Smtp-Source: AGHT+IFncmSsH7yrnX/eyOpZR+QLjBuLgW6DnB8bMCb9jvZlTVCdf602XDBtn1f3VXEZNiffiStKUw==
+X-Received: by 2002:a05:690c:101:b0:6b1:735c:a2fc with SMTP id 00721157ae682-6e2c72466ccmr126208907b3.27.1728400661563;
+        Tue, 08 Oct 2024 08:17:41 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e2d9387dc3sm14494807b3.64.2024.10.08.08.17.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Oct 2024 08:16:54 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6d6891012d5so47861267b3.2;
-        Tue, 08 Oct 2024 08:16:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUF6Ko1eAfISunr5S7d2Yjd4Fd/x57pGQfwgXkKNc7e7HRu5bhUjVXVh2An2Z55Bviuu+0kAR0gIp40Iv5B@vger.kernel.org, AJvYcCV09BBm8FNLG10sCg9pF9njqXJwc4IjqrDNTIXboGvYd2Xq0tuZi1I0jiTfYFFmEmVOr7Z+qhcLEinD@vger.kernel.org, AJvYcCVLiH+I5QcKlBg5Vo4/f4cJbXD9/BJnqPQtDmuodr+Bk55ETA+SP3wMR6SjxUtbHSO9kDfwEfGdHZ8t@vger.kernel.org, AJvYcCVWjNnu7RDx1ZZMV2mkS8D3M89Awj27SDhX4BsCEYWXy/KhJeLAaR35Ir/r63f4lz/52PUcSTsWzwqT@vger.kernel.org, AJvYcCVsR4jc0UeCphLYY4QlE19OtC1F80fZIAqdbj5G20uREiWV36/7z9+abIon3xVqBWge8Ad0ukW+sUA=@vger.kernel.org, AJvYcCXmXP+9+bInS6s9nld1Plb7b0lkJTiT/zfq0M1L5dnn1W5GdTdMzNa7unmSpI2jDjl+2PivrQ6m2vKpFAoIqbvu5dk=@vger.kernel.org
-X-Received: by 2002:a05:690c:f88:b0:6e2:3e17:1849 with SMTP id
- 00721157ae682-6e2ecb69a8amr76258537b3.2.1728400613366; Tue, 08 Oct 2024
- 08:16:53 -0700 (PDT)
+        Tue, 08 Oct 2024 08:17:41 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e25cf3c7278so5074391276.3;
+        Tue, 08 Oct 2024 08:17:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW7GSiNio/ld7dQg8K8yJBGLbf2eXhSO3V3+dc4Q1FNG4/cZ/jbpYfL2MUfShv9nTj1GV8CFPjIq1c=@vger.kernel.org, AJvYcCW7mCpM5CjDt1xbdbpCN+cslxVVGLdnqD8GrkgyyGIgEJp+vcLypMCBXi5sg9GS5ZXfPBRtC0tAIlU3@vger.kernel.org, AJvYcCWFOeX0vVKK6hYlf3JXHTOtl/YpeBGt0jSrS+kcwmqxFTjfAc6kB05c71RDMYxqn3sX5ockQolusk6g@vger.kernel.org, AJvYcCWvIuqaz7VJqcBv8FOCxFm4S3EqB6fi2sR+WdjAT+HR7y08iLR2AYpkmPdNZ2vgtSZ9S6NdCI2XJ/tqUgnFDd0z5As=@vger.kernel.org, AJvYcCX4PUIJPck43NL/U+hzfnG4ltm7x2/sUkEb1OMvCdvcvH69XQcw/19T+iphya3EMEouI4BcIhHTtQvM@vger.kernel.org, AJvYcCXjFW63+pHVQpBg0byFrFm+4MG9ztMxhbEQk/5NCUqvH4ve22tDTgnHptXfl4t0B12026uzPhBQQh9SRFj7@vger.kernel.org
+X-Received: by 2002:a05:690c:fc4:b0:6e3:1a7b:9c9b with SMTP id
+ 00721157ae682-6e31a7b9d75mr9665837b3.3.1728400660642; Tue, 08 Oct 2024
+ 08:17:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com> <20240822152801.602318-16-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240822152801.602318-16-claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com> <20240822152801.602318-17-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-17-claudiu.beznea.uj@bp.renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 8 Oct 2024 17:16:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXbNRO--0ZGO4owi3At5n1dTMMWo4PTaubyNWEkVnPFFA@mail.gmail.com>
-Message-ID: <CAMuHMdXbNRO--0ZGO4owi3At5n1dTMMWo4PTaubyNWEkVnPFFA@mail.gmail.com>
-Subject: Re: [PATCH 15/16] arm64: dts: renesas: rzg3s-smarc: Enable USB support
+Date: Tue, 8 Oct 2024 17:17:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWqnSGnqUE1qOHBSxh15kOJwssx=sa0gSxRLzGyoFoGCw@mail.gmail.com>
+Message-ID: <CAMuHMdWqnSGnqUE1qOHBSxh15kOJwssx=sa0gSxRLzGyoFoGCw@mail.gmail.com>
+Subject: Re: [PATCH 16/16] arm64: defconfig: Enable RZ/G3S SYSC reset driver
 To: Claudiu <claudiu.beznea@tuxon.dev>
 Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
 	conor+dt@kernel.org, p.zabel@pengutronix.de, magnus.damm@gmail.com, 
@@ -85,39 +85,16 @@ Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Claudiu,
-
 On Thu, Aug 22, 2024 at 5:28=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
 wrote:
 > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> Enable USB support (host, device, USB PHYs and sysc).
+> Enable RZ/G3S SYSC reset driver. This exports the control to 2 signals
+> (one for USB, one for PCI).
 >
 > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Thanks for your patch!
-
-> --- a/arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi
-> @@ -144,3 +188,20 @@ &sdhi1 {
->         max-frequency =3D <125000000>;
->         status =3D "okay";
->  };
-> +
-> +&sysc {
-> +       status =3D "okay";
-> +};
-> +
-
-To avoid regressions (/sys/devices/soc0/ disappearing), enabling sysc
-is a dependency for "[PATCH 05/16] soc: renesas: sysc: Move RZ/G3S
-SoC detection on SYSC driver", so I think it makes sense to change
-its status to "okay" in r9a08g045.dtsi instead, and spin that off into
-its own patch.  I am not super-worried, so doing the driver and DTS
-changes in separate patches should be fine, as long as they meet each
-other in next or upstream.
-
-The rest LGTM.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
