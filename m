@@ -1,275 +1,155 @@
-Return-Path: <linux-pm+bounces-15330-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15331-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79B0A994EF1
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 15:23:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AFCE994F25
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 15:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4E8FB24D8C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 13:16:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 044152850CF
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2024 13:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C3D1DEFC6;
-	Tue,  8 Oct 2024 13:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D511E0481;
+	Tue,  8 Oct 2024 13:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QfLUy8VF"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Hxf4swEa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160631DEFEA
-	for <linux-pm@vger.kernel.org>; Tue,  8 Oct 2024 13:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF99C1DF727;
+	Tue,  8 Oct 2024 13:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728393340; cv=none; b=kpn9MDckrQRgaMPuqtSBw1skh5SC4Ycf8JGzpUrr0kQfiSz9HTNb63Ql9iMmvqxCXwYY4F/ys1QC9SeU09YE9Xkv1mymLYvfheVits32sjJKTk2e0DS/6tCNLrkcKu73u5+xz8vyPOdqBVsxkPREvtArIU14pihTK2NJS1KkXC0=
+	t=1728393815; cv=none; b=fMY0hiiZfALJyWP/E1n+pUAbNYj0aS1a0IEGswlRs5Q2HOLeeXq15Y4U1IydZwVdscfgJJIJdr6sUPaOdmR2Kn/ue4X2VeaU6YQhwses0EJQwTZJ0Um1/Ofo6AqiG6fh7AQYyf3RL+qcib856D7ZnfiQPAt8tanzB6nezUWPEss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728393340; c=relaxed/simple;
-	bh=rbn5ZjU1GFfLAGzA7y1KsOiIKmAUwNkN+x8uvShbUKI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MUaan+x1L3WA7pciXqh8DAx+EBZsD78k7CIi1wgUk7ZOlMngriLh1mZ5maKg/L/QCciS13k6nG5kqZDTsbRqZYZW11uVoUU2SxqfU3C/H+BsDXA7Xv80WcDb1zksiaHx0p83MEDWadDKExfeDCKsutQPTyNVDPfS07bHziCuo3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QfLUy8VF; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728393338; x=1759929338;
-  h=date:from:to:cc:subject:message-id;
-  bh=rbn5ZjU1GFfLAGzA7y1KsOiIKmAUwNkN+x8uvShbUKI=;
-  b=QfLUy8VFrqnQyZJAp5aIAWmPrjcro9Q4GBB/JrPZ+HZIVidMwBpy0553
-   xIDg5t/MjWH8pNQTHkkZbxO8u1gxkIE9LewVtZMTS8L870TfwHFPn+29y
-   ap+DU2iXnV1edE35p0Wa39IAIg8/JkaRvJ1diRxt/6SjEuBoGT1sPyfp3
-   b+eVSZTPrnSFeH+jucvbyS7c96ahkKDbuZJ3kGwirtmQrrGOwqme5Herb
-   l5iLKfvRQRjnOgWLnfCkZid4dBLtJ/U6HIswFDPic4glEANINkyDtLKaO
-   Cv/S6hCJNtYmOH/vD8ifJgJdhgUZhZ446kCdKwQVuEcZ3egeW4vzbj0o1
-   w==;
-X-CSE-ConnectionGUID: 0NkcVmBbRvKIC5iT4Bd43Q==
-X-CSE-MsgGUID: I2FJ3/GBSEGZI68Cp1Uqmg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27678422"
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="27678422"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 06:15:37 -0700
-X-CSE-ConnectionGUID: 7elbrzSNQa+jxtadQx7PUQ==
-X-CSE-MsgGUID: CgfTBVyJSg+sscwHIK9GVw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="76091319"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 08 Oct 2024 06:15:37 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syA3o-0007Zi-2t;
-	Tue, 08 Oct 2024 13:15:32 +0000
-Date: Tue, 08 Oct 2024 21:15:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:amd-pstate-fixes] BUILD SUCCESS
- c10e50a469b5ec91eabf653526a22bdce03a9bca
-Message-ID: <202410082150.S5Bm32Ut-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1728393815; c=relaxed/simple;
+	bh=gZI4zFHa2e3Jdn+kJosnAimGicEmqHUGxYA00Iu9Bwg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PiF40lzLV4zgVupb+zsteuuDruEA8zLbUAJt0nAd7Pvu3xxYt1LDTcMyH6JVwmQtpkh3OzmdJnvSOGA7yuG38BIdkZjVhhMbtnRH/YhfYr9zo98mDdkHLxUAq18LdulueSJCe0neSvbv7Cex0SPk0Iga6elv9PKA6ls34G5p8fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Hxf4swEa; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 498DNCoK089883;
+	Tue, 8 Oct 2024 08:23:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1728393792;
+	bh=eOUyiXZrWUlgS0aqjqNzddLEJrGYEGZYP5a/M8Xpl08=;
+	h=From:To:CC:Subject:Date;
+	b=Hxf4swEaaKX4z+w5N1I/CHucF28eg/Mo8KdALbCCJigp/SqMBP56Bzk6CjazCJNi+
+	 yge5IfaN1pTsP9b7ZuRUaH416mJYSENKGsjGih7KHFWuDomUfsRSxICEhmGyIpIMKY
+	 E3WvPqsQpERzpepnV/HsD11DwXux+ZSmvnfdWfj8=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 498DNCMh097903
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 8 Oct 2024 08:23:12 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 8
+ Oct 2024 08:23:12 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 8 Oct 2024 08:23:12 -0500
+Received: from lcpd911.dhcp.ti.com (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 498DN82C098273;
+	Tue, 8 Oct 2024 08:23:09 -0500
+From: Dhruva Gole <d-gole@ti.com>
+To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero
+ Kristo <kristo@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Dhruva Gole <d-gole@ti.com>, Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Bryan Brattlof <bb@ti.com>
+Subject: [PATCH V8 0/4] arm64: dts: ti: k3-am62{a,p}x-sk: add opp frequencies
+Date: Tue, 8 Oct 2024 18:50:49 +0530
+Message-ID: <20241008132052.407994-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git amd-pstate-fixes
-branch HEAD: c10e50a469b5ec91eabf653526a22bdce03a9bca  cpufreq/amd-pstate: Fix amd_pstate mode switch on shared memory systems
+Hello everyone
 
-elapsed time: 1196m
+This series adds in the OPPs for the Cortex-A53s on the AM62Ax and 
+AM62Px SoC families along with the defining the 
+WKUP_MMR0_WKUP0_CTRL_MMR0_JTAG_USER_ID which we can use to to properly 
+limit the OPPs available for that variant.
 
-configs tested: 182
-configs skipped: 3
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Changelog:
+---
 
-tested configs:
-alpha                            alldefconfig    gcc-13.2.0
-alpha                             allnoconfig    gcc-13.3.0
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                              allyesconfig    gcc-13.2.0
-arc                      axs103_smp_defconfig    gcc-13.2.0
-arc                                 defconfig    gcc-14.1.0
-arc                     nsimosci_hs_defconfig    gcc-13.2.0
-arc                   randconfig-001-20241008    gcc-14.1.0
-arc                   randconfig-002-20241008    gcc-14.1.0
-arc                    vdk_hs38_smp_defconfig    gcc-13.2.0
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                              allyesconfig    gcc-14.1.0
-arm                       aspeed_g4_defconfig    gcc-13.2.0
-arm                                 defconfig    gcc-14.1.0
-arm                      footbridge_defconfig    gcc-13.2.0
-arm                          ixp4xx_defconfig    gcc-13.2.0
-arm                         orion5x_defconfig    gcc-13.2.0
-arm                   randconfig-001-20241008    gcc-14.1.0
-arm                   randconfig-002-20241008    gcc-14.1.0
-arm                   randconfig-003-20241008    gcc-14.1.0
-arm                   randconfig-004-20241008    gcc-14.1.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-arm64                 randconfig-001-20241008    gcc-14.1.0
-arm64                 randconfig-002-20241008    gcc-14.1.0
-arm64                 randconfig-003-20241008    gcc-14.1.0
-arm64                 randconfig-004-20241008    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-csky                  randconfig-001-20241008    gcc-14.1.0
-csky                  randconfig-002-20241008    gcc-14.1.0
-hexagon                          alldefconfig    gcc-13.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-hexagon               randconfig-001-20241008    gcc-14.1.0
-hexagon               randconfig-002-20241008    gcc-14.1.0
-i386                             allmodconfig    clang-18
-i386                              allnoconfig    clang-18
-i386                             allyesconfig    clang-18
-i386        buildonly-randconfig-001-20241008    clang-18
-i386        buildonly-randconfig-002-20241008    clang-18
-i386        buildonly-randconfig-002-20241008    gcc-12
-i386        buildonly-randconfig-003-20241008    clang-18
-i386        buildonly-randconfig-003-20241008    gcc-12
-i386        buildonly-randconfig-004-20241008    clang-18
-i386        buildonly-randconfig-004-20241008    gcc-12
-i386        buildonly-randconfig-005-20241008    clang-18
-i386        buildonly-randconfig-006-20241008    clang-18
-i386                                defconfig    clang-18
-i386                  randconfig-001-20241008    clang-18
-i386                  randconfig-002-20241008    clang-18
-i386                  randconfig-002-20241008    gcc-12
-i386                  randconfig-003-20241008    clang-18
-i386                  randconfig-003-20241008    gcc-12
-i386                  randconfig-004-20241008    clang-18
-i386                  randconfig-005-20241008    clang-18
-i386                  randconfig-005-20241008    gcc-12
-i386                  randconfig-006-20241008    clang-18
-i386                  randconfig-006-20241008    gcc-12
-i386                  randconfig-011-20241008    clang-18
-i386                  randconfig-012-20241008    clang-18
-i386                  randconfig-013-20241008    clang-18
-i386                  randconfig-013-20241008    gcc-12
-i386                  randconfig-014-20241008    clang-18
-i386                  randconfig-014-20241008    gcc-12
-i386                  randconfig-015-20241008    clang-18
-i386                  randconfig-016-20241008    clang-18
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-loongarch             randconfig-001-20241008    gcc-14.1.0
-loongarch             randconfig-002-20241008    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                          atari_defconfig    gcc-13.2.0
-m68k                                defconfig    gcc-14.1.0
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                malta_qemu_32r6_defconfig    gcc-13.2.0
-mips                    maltaup_xpa_defconfig    gcc-13.2.0
-mips                           xway_defconfig    gcc-13.2.0
-nios2                         10m50_defconfig    gcc-13.2.0
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-nios2                 randconfig-001-20241008    gcc-14.1.0
-nios2                 randconfig-002-20241008    gcc-14.1.0
-openrisc                          allnoconfig    gcc-14.1.0
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    gcc-14.1.0
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-parisc                generic-32bit_defconfig    gcc-13.2.0
-parisc                randconfig-001-20241008    gcc-14.1.0
-parisc                randconfig-002-20241008    gcc-14.1.0
-parisc64                            defconfig    gcc-14.1.0
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    gcc-14.1.0
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                      cm5200_defconfig    gcc-13.2.0
-powerpc                  iss476-smp_defconfig    gcc-13.2.0
-powerpc                   lite5200b_defconfig    gcc-13.2.0
-powerpc                     mpc512x_defconfig    gcc-13.2.0
-powerpc                      pasemi_defconfig    gcc-13.2.0
-powerpc                         ps3_defconfig    gcc-13.2.0
-powerpc               randconfig-001-20241008    gcc-14.1.0
-powerpc               randconfig-002-20241008    gcc-14.1.0
-powerpc               randconfig-003-20241008    gcc-14.1.0
-powerpc                      tqm8xx_defconfig    gcc-13.2.0
-powerpc64             randconfig-001-20241008    gcc-14.1.0
-powerpc64             randconfig-002-20241008    gcc-14.1.0
-powerpc64             randconfig-003-20241008    gcc-14.1.0
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    gcc-14.1.0
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-riscv                 randconfig-001-20241008    gcc-14.1.0
-riscv                 randconfig-002-20241008    gcc-14.1.0
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20241008    gcc-14.1.0
-s390                  randconfig-002-20241008    gcc-14.1.0
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                         ap325rxa_defconfig    gcc-13.2.0
-sh                         apsh4a3a_defconfig    gcc-13.2.0
-sh                                  defconfig    gcc-12
-sh                 kfr2r09-romimage_defconfig    gcc-13.2.0
-sh                          r7785rp_defconfig    gcc-13.2.0
-sh                    randconfig-001-20241008    gcc-14.1.0
-sh                    randconfig-002-20241008    gcc-14.1.0
-sh                          rsk7203_defconfig    gcc-13.2.0
-sh                           se7722_defconfig    gcc-13.2.0
-sh                           se7780_defconfig    gcc-13.2.0
-sh                              ul2_defconfig    gcc-13.2.0
-sh                          urquell_defconfig    gcc-13.2.0
-sparc                            allmodconfig    gcc-14.1.0
-sparc                       sparc32_defconfig    gcc-13.2.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20241008    gcc-14.1.0
-sparc64               randconfig-002-20241008    gcc-14.1.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-17
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20241008    gcc-14.1.0
-um                    randconfig-002-20241008    gcc-14.1.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-18
-x86_64                           allyesconfig    clang-18
-x86_64                              defconfig    clang-18
-x86_64                                  kexec    clang-18
-x86_64                                  kexec    gcc-12
-x86_64                               rhel-8.3    gcc-12
-x86_64                          rhel-8.3-rust    clang-18
-xtensa                            allnoconfig    gcc-14.1.0
-xtensa                generic_kc705_defconfig    gcc-13.2.0
-xtensa                randconfig-001-20241008    gcc-14.1.0
-xtensa                randconfig-002-20241008    gcc-14.1.0
+Changes in v8:
+- Split the driver fixes out and sent a separate series for that.
+- This series is now the same as it was in v3. Just rebased on 6.12-rc1
+- Link to v7: https://lore.kernel.org/all/20240926-ti-cpufreq-fixes-v5-v7-0-3c94c398fe8f@ti.com/
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changes in v7:
+- Based on Andrew's comments, re-worded the comment in the driver and also
+  used a different approach for finding old DT, this way it's less error prone
+  than how things were done in v6.
+- Added a warning print when using old DT:
+https://gist.github.com/DhruvaG2000/63f5e28636d52787488f776e5bf39498#file-am62x-cpufreq-test-log-old-dt-txt-L220
+- Link to v6: https://lore.kernel.org/r/20240925-ti-cpufreq-fixes-v5-v6-0-46f41a903e01@ti.com
+
+Changes in v6:
+- Ensure backward compaibility for AM625 DT, by handling the old DT in a special
+way inside the cpufreq driver itself. This is based on feedback from Nishanth
+where we are not okay to break the old DT working with new kernels.
+- Link to v5: https://lore.kernel.org/r/20240924-ti-cpufreq-fixes-v5-v5-0-cbe16b9ddb1b@ti.com
+
+Changes in v5:
+- Based on Andrew's review on v4 of "arm64: dts: ti: k3-am62: use opp_efuse_table for opp-table syscon",
+	- s/syscon@43000000/bus@43000000/
+	- Drop the "reg = <>;" line
+- Link to v4: https://lore.kernel.org/all/20240919082809.174589-1-d-gole@ti.com/
+
+Changes in v4:
+- Add 2 more patches to this series:
+	- Driver cleanup as described above.
+	- AM625 DT fixups (Link to v1 of that patch: https://lore.kernel.org/all/20240902093222.2828345-2-d-gole@ti.com/)
+- Link to v3: https://lore.kernel.org/all/20240826-opp-v3-0-0934f8309e13@ti.com/
+
+Changes in v3:
+- Miscellaneous spelling fixes in commit body
+- Link to v2: https://lore.kernel.org/r/20240823-opp-v2-0-e2f67b37c299@ti.com
+
+Changes in v2:
+- Expanded on commit descriptions
+- Split board file and SoC fdt changes into different patches
+- Link to v1: https://lore.kernel.org/r/20240809-opp-v1-0-fea8efeaf963@ti.com
+
+---
+
+Bryan Brattlof (4):
+  arm64: dts: ti: k3-am62a: add opp frequencies
+  arm64: dts: ti: k3-am62a7-sk: add 1.4ghz opp entry
+  arm64: dts: ti: k3-am62p: add opp frequencies
+  arm64: dts: ti: k3-am62p5-sk: add 1.4ghz opp entry
+
+ arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi   |  5 ++
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts       |  9 ++++
+ arch/arm64/boot/dts/ti/k3-am62a7.dtsi         | 51 +++++++++++++++++++
+ .../dts/ti/k3-am62p-j722s-common-wakeup.dtsi  |  5 ++
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts       |  9 ++++
+ arch/arm64/boot/dts/ti/k3-am62p5.dtsi         | 47 +++++++++++++++++
+ 6 files changed, 126 insertions(+)
+
+
+base-commit: 33ce24234fca4c083e6685a18b460a18ebb5d5c1
+-- 
+2.34.1
+
 
