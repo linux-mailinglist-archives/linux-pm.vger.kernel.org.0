@@ -1,135 +1,186 @@
-Return-Path: <linux-pm+bounces-15370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 827E49960B3
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 09:21:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 793C6996240
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 10:18:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 272E81F21346
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 07:21:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29E292810E4
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 08:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24CFD181D00;
-	Wed,  9 Oct 2024 07:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C7E17C220;
+	Wed,  9 Oct 2024 08:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GC4dEgtn"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="g360Lcbm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E7817E472;
-	Wed,  9 Oct 2024 07:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A4B183CA7
+	for <linux-pm@vger.kernel.org>; Wed,  9 Oct 2024 08:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728458446; cv=none; b=CELZ8pCOcV8PjXSBVX6GM63CEKi5/L6KYrZPX1OgYrb/EcTBNtZCjpe1qQSQLWhuuTMrYl9IFvktYolH4cdrwM2Q/T5ayIHYuiHFC/+wKPPgelnNvTHJKtEOttY51FZtcS/bMQGwsgZZCSX+xd9XrAxlxSxqkRefczjCSClbacU=
+	t=1728461918; cv=none; b=EtosSMMPaqVNaKybS9PYwrlNgpjXgbTHXTsdlpV1slD9kg7c7yGgKZCzN5afr+a8jF3NyFKB6Wb9cNQgpo3J/G4Ccwxlw8CJZuFAlf5IUZa4PkQuD25OtdziEGii8iPqsstrAUirwgglO0hS7b9BkVwWZnUvko3bduHP8mi2fNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728458446; c=relaxed/simple;
-	bh=YBfWibQiqVBu4MOLsbYd+xmlanrOBi8rPl49d/uOn9Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JhD2WiKjeRVq1mJobUa0+stE7JBbkfjr+tg8/MEXSjC12JtyiC3VxW3Qtxn1FROXdUvkz5D21sMZOqguZFfUxlrQl8FTRf3GiRy6AVu60nJHJN7Zty6pwLstjlYlFQ/BoEe/s4m/tE0AByb5xkezE4HOa1T7FJxs2j/rL0UHZUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GC4dEgtn; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728458444; x=1759994444;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YBfWibQiqVBu4MOLsbYd+xmlanrOBi8rPl49d/uOn9Y=;
-  b=GC4dEgtnuHLVy127UemN4dlmgdw+afPT9/8fe56rC2f/TDFoZ7ZdPpi2
-   GtJ2fOPI4QOzVlkKhRx7dXYXYaK+1nbSefBun4d7NVYNSQ9vpewedj/DJ
-   R80HXXo8QuvXmLPYRh+xzLJuDHSNlfvo38iehAhjP5ouRdPhFsQHSBsiA
-   H/2QxN6pn5bzRa0dt7FpRfN0ivCiUmh9RL4kwzHDKlhnYIGpiIJ6fSdG3
-   /iF8zJxbxf9NBAo7P5rjfGv+gK+ZIqwsTJ/nRIJ0uGE+AmyqTGYTRCP+e
-   fNd/iXxFr9a8tSniQxpWgozSDKyn+dykcBZC/4Ld8bthX8og9PfqbIyg5
-   A==;
-X-CSE-ConnectionGUID: OLP/zl0yS2+eFwkhrMxfIA==
-X-CSE-MsgGUID: 9MhfriK2Sz2i+kqQzBWl5Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="31630185"
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="31630185"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 00:20:43 -0700
-X-CSE-ConnectionGUID: XX8vDn1wQd6SSHAfNVw+1g==
-X-CSE-MsgGUID: CHv5mVwCRJS9Na/X+T0FCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="80665010"
-Received: from unknown (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.245.243.187])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 00:20:38 -0700
-From: Zhang Rui <rui.zhang@intel.com>
-To: tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	rafael.j.wysocki@intel.com,
-	x86@kernel.org,
-	linux-pm@vger.kernel.org
-Cc: hpa@zytor.com,
-	peterz@infradead.org,
-	thorsten.blum@toblux.com,
-	yuntao.wang@linux.dev,
-	tony.luck@intel.com,
-	len.brown@intel.com,
-	srinivas.pandruvada@intel.com,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH V2] x86/apic: Stop the TSC Deadline timer during lapic timer shutdown
-Date: Wed,  9 Oct 2024 15:20:01 +0800
-Message-Id: <20241009072001.509508-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1728461918; c=relaxed/simple;
+	bh=9LHuyWaTTb+OHbKLa/jE5lFrhl+fzC9T/Zu5XX+ZipA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=im9q588ZMqC1iOfPo4WdOWwxTyEhQiWjQrNkR1ShYqNS7AYnCFp1WJbuWAAI58IOjWuKqtXXGC8hfScD2fN2hbWoO2siW9GSKYpXxpzd+XAsmZLE/JPRVUjz+husnZNh3zXzCgWNbvCE+gOMtELvACaPeXJIHQvDg6eDxZXnfn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=g360Lcbm; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a9951fba3b4so462771166b.1
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2024 01:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1728461914; x=1729066714; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aUVCZs6FF5zExuXlSUHIIIcYWTginjrwLlNpSDmwoQY=;
+        b=g360Lcbm6bLEmhIzfeMwnCOsEm1OZ63Dg2sXoSxeYnWzPBA3aVHe4E+uBDShgi8ZSL
+         tiRS3OoqJa8I1RiaFI2DzB/AtOcMCdoINKe7UCHCAxxeqg0u9Lx1P9L25p37RkqApmUG
+         o+FsqCAU876ypEsqoBfRQLQgPQ1I6fD713zAyfaoXBoKf6uxLZ7TV+l9s0InJEKT7Vnf
+         GApMk+8sPls54Pvwo7woo4QkEMT0FlBO+7pFBBOhFU+ZHo8YighXZM6e/zL0K3HrrOTN
+         9q/uBI6HZO57MLGZWZ/pj4YmvXr8IBALofDRYyFmiX6hawewATGz2mG6oLNoW+QqkgGC
+         h/bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728461914; x=1729066714;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aUVCZs6FF5zExuXlSUHIIIcYWTginjrwLlNpSDmwoQY=;
+        b=bjFO72oaio94/T7WagxbKEEtX6eQw1qz4kfFN4s/wmtFryjMf5zgk05D+Q9AMm71uT
+         NHpQgsvtLw23bRkuZ9UjvNA9Mb1mqTQoNxI7wrwUEvHZVdsNkxEpKPHJZ85ol7OU9E1X
+         qIePjV84JSCmqg9Z2ACUpx+8MOu1cXvS6/C7DuygKYxYzRCnNd6ob1YHHtdxnAQPQJgE
+         tb9675lG+djiFlG4IR0OPdk5J7GC2gEPyKsIOSsGZ5YjfjQVgM4b5n4jUZnQO8DlOiY7
+         Fbfsrl1KJk1ZqmtdwbajzO+dtq0zBuCzp8deJ4NIvGtG0qIajduQAw7WR84bHtkcmfJm
+         hddA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNVXyN5sgXkFAjRO0hS4kylc7lSpjCejsa7tefZIDROvfPRVbDvh5T86z0NceYTkgMDO/0KWjUAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4gklAlvh/0OCBvd+XX9GFWp8bS8VBQCElMEIoGLt466XnuSM1
+	/0bzxX9mQEBVkb2we6PzbT5ycFlqkJfErZPo/Abk4cU/Ok3vvZqWDW29WjPCNgE=
+X-Google-Smtp-Source: AGHT+IF+RTY8Mc5Y4QDpOu5pSnyj1yytrBqNaKWSxPAKfIOt+KORUehPKsu2YUBaEqqQNuBrLDhuSw==
+X-Received: by 2002:a17:907:9625:b0:a99:529d:8199 with SMTP id a640c23a62f3a-a998d33172bmr129577166b.62.1728461914465;
+        Wed, 09 Oct 2024 01:18:34 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.23])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a997a6b7013sm173247666b.70.2024.10.09.01.18.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Oct 2024 01:18:34 -0700 (PDT)
+Message-ID: <90990ed5-5c98-4a10-8593-bb3331a8c3a4@tuxon.dev>
+Date: Wed, 9 Oct 2024 11:18:32 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] clk: renesas: rzg2l-cpg: Move PM domain power on
+ in rzg2l_cpg_pd_setup()
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org,
+ linux@roeck-us.net, ulf.hansson@linaro.org,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240902132402.2628900-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240902132402.2628900-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdWF=3svkFT8sVEtTahtDh3tJG4FjqmqhJJKs9JYNd+WCQ@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdWF=3svkFT8sVEtTahtDh3tJG4FjqmqhJJKs9JYNd+WCQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This 12-year-old bug prevents some modern processors from achieving
-maximum power savings during suspend. For example, Lunar Lake systems
-gets 0% package C-states during suspend to idle and this causes energy
-star compliance tests to fail.
+Hi, Geert,
 
-According to Intel SDM, for the local APIC timer,
-1. "The initial-count register is a read-write register. A write of 0 to
-   the initial-count register effectively stops the local APIC timer, in
-   both one-shot and periodic mode."
-2. "In TSC deadline mode, writes to the initial-count register are
-   ignored; and current-count register always reads 0. Instead, timer
-   behavior is controlled using the IA32_TSC_DEADLINE MSR."
-   "In TSC-deadline mode, writing 0 to the IA32_TSC_DEADLINE MSR disarms
-   the local-APIC timer."
+On 07.10.2024 17:18, Geert Uytterhoeven wrote:
+> Hi Claudiu,
+> 
+> On Mon, Sep 2, 2024 at 3:24 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Move the PM domain power on in rzg2l_cpg_pd_setup(). With this the
+>> previously always-on power domains got
+>> struct generic_pm_domain::{power_on, power_off} populated (and
+>> registered with simple_qos_governor if #power-domain-cells = <1> and
+>> with pm_domain_always_on_gov if #power-domain-cells = <0>). The values for
+>> struct generic_pm_domain::{power_on, power_off} are now populated for
+>> all registered domains but used by core only for the domains that can
+>> use them (the PM domain should be non always-on and registered with
+>> simple_qos_governor). Moreover, the power on/off functions check if the
+>> mstop support is valid. The mstop is populated only by the RZ/G3S
+>> initialization code at the moment.
+>>
+>> This approach was chosen to keep the code simple and use the same code
+>> across different implementations. There should be no issues with this
+>> approach as the always on domains are registered with GENPD_FLAG_ALWAYS_ON
+>> and the PM domain core takes care of it.
+>>
+>> This approach allows doing further cleanups on the rzg2l_cpg power domain
+>> registering code that will be handled by the next commit.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>
+>> Changes in v3:
+>> - none; this patch is new
+> 
+> Thanks for your patch!
+> 
+>> --- a/drivers/clk/renesas/rzg2l-cpg.c
+>> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+>> @@ -1680,23 +1680,26 @@ static int rzg2l_cpg_power_off(struct generic_pm_domain *domain)
+>>         return 0;
+>>  }
+>>
+>> -static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, bool always_on)
+>> +static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd,
+>> +                                    struct dev_power_governor *governor)
+>>  {
+>> -       struct dev_power_governor *governor;
+>> +       bool always_on = !!(pd->genpd.flags & GENPD_FLAG_ALWAYS_ON);
+>> +       int ret;
+>>
+>>         pd->genpd.flags |= GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP;
+>>         pd->genpd.attach_dev = rzg2l_cpg_attach_dev;
+>>         pd->genpd.detach_dev = rzg2l_cpg_detach_dev;
+>> -       if (always_on) {
+>> -               pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
+>> -               governor = &pm_domain_always_on_gov;
+>> -       } else {
+>> -               pd->genpd.power_on = rzg2l_cpg_power_on;
+>> -               pd->genpd.power_off = rzg2l_cpg_power_off;
+>> -               governor = &simple_qos_governor;
+>> -       }
+>> +       pd->genpd.power_on = rzg2l_cpg_power_on;
+>> +       pd->genpd.power_off = rzg2l_cpg_power_off;
+>> +
+>> +       ret = pm_genpd_init(&pd->genpd, governor, !always_on);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       if (governor == &simple_qos_governor && always_on)
+>> +               ret = rzg2l_cpg_power_on(&pd->genpd);
+> 
+> I think you can drop the check for simple_qos_governor: in the single
 
-Stop the TSC Deadline timer in lapic_timer_shutdown() by writing 0 to
-MSR_IA32_TSC_DEADLINE.
+I remember I tried this but I don't remember for sure why I kept it like
+here. I'll double check it anyway.
 
-Cc: stable@vger.kernel.org
-Fixes: 279f1461432c ("x86: apic: Use tsc deadline for oneshot when available")
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
-Changes since V1
-- improve changelog
----
- arch/x86/kernel/apic/apic.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Thank you,
+Claudiu Beznea
 
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 6513c53c9459..d1006531729a 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -441,6 +441,10 @@ static int lapic_timer_shutdown(struct clock_event_device *evt)
- 	v |= (APIC_LVT_MASKED | LOCAL_TIMER_VECTOR);
- 	apic_write(APIC_LVTT, v);
- 	apic_write(APIC_TMICT, 0);
-+
-+	if (boot_cpu_has(X86_FEATURE_TSC_DEADLINE_TIMER))
-+		wrmsrl(MSR_IA32_TSC_DEADLINE, 0);
-+
- 	return 0;
- }
- 
--- 
-2.34.1
-
+> clock domain case, pd->conf.mstop is zero, so rzg2l_cpg_power_{off,on}()
+> become no-ops.  That would also allow you to drop passing the governor
+> as a parameter, as it can be set based on the always_on flag, as before.
+> 
+> Regardless:
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
