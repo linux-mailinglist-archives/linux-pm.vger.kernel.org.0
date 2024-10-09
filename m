@@ -1,139 +1,137 @@
-Return-Path: <linux-pm+bounces-15390-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FB0A996827
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 13:14:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17E839968B7
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 13:25:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9E66B215E7
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 11:14:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7DA6281A6D
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 11:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B6B1917E7;
-	Wed,  9 Oct 2024 11:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C441917E7;
+	Wed,  9 Oct 2024 11:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mGjffzzI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NZSUDezJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3185D1917C2
-	for <linux-pm@vger.kernel.org>; Wed,  9 Oct 2024 11:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FF3191489;
+	Wed,  9 Oct 2024 11:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728472480; cv=none; b=YI1IqfVrF8vJ2U9cRDYzOcDpEDUwAci4GXzcbDCaQ/KTSXxsJeu90EqYNcQWq/PfcRDV+Fo5c8iGgV1IIKsCEMyw/V03wO5lqWLY9UsOqqhqgu617jypm02lWmq3MtAQYvaviepSAXS1MLjVU3D9tQIQTRqeupgh+icT1qfddLE=
+	t=1728473104; cv=none; b=RNDzG5ZA94ssV+PgZ0tTBfp42HPv7uPeDlmfgu3I1QpsjxvADnrIVp0oLRP8HFORu+QeTe5csmPqDZEUuDnKjwCwDSOnj9QoSCD137XkvidWOjbqh2m+ogcOEVwaH/woesPYFy3JaQERhOB2qQAdKfeYvy15caVOEwCPXjj7W0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728472480; c=relaxed/simple;
-	bh=7c54uW3lN5rc1TC5au4z8TqSBDgGhRE5e0/oetoH02Y=;
+	s=arc-20240116; t=1728473104; c=relaxed/simple;
+	bh=wdVK+v3QsEtuvtnCGTz3cveAy5vFTYupGy1jeTMyays=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EqGHd+ny2Vjp0Lf++DqSGtpT2pTNh/qnp4UjztcSRHT9kl+8bBEA+epkgaFgdonwYQOjUdcqUq7JWXHc4xCBteBj/R5rD8Z5bxnxVDbF8POrYqUyzTLbnnQsZskpwu7DYhfei+9j48l/9V2bf/89IJx0S5xQW+Ki16gcv/YW+EA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mGjffzzI; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e25cf3c7278so5935411276.3
-        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2024 04:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728472478; x=1729077278; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFC+bB9pGan8WcQNSrPQe6GRFwl+FEQ9GC351PPtFXE=;
-        b=mGjffzzIqYr+ZH8poDEJpDtGIb/hnhQrWzEdwG3Js+0IgiZ8r+RkkEvnjeRjB+r4c/
-         CJTx42blS/TUkPbtJQhBmfcv/k7W69m7mu2jj/+Za9YAqzqfATn/PU+UPSvcCR5JplB3
-         6MRu3s4SdpWZ81zDJ3mZgdzhpR3Q/FTXfOMKbXCN1sBNWfD7qLBjk54IYHJEENV2KPoX
-         J7Mgd4TwBWUiFGYOjcUjYwBSy6q+uVigUjOpDuOEGNrnOZRNfn/7fCGtyqtQFIPLgwnR
-         QE+/e4Hr83pQIu8W0CFBSgnUNRfZ7IEiLSU1EHLSaWPLcnDneQr74dqngpDO/peT270W
-         fE6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728472478; x=1729077278;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fFC+bB9pGan8WcQNSrPQe6GRFwl+FEQ9GC351PPtFXE=;
-        b=MkTSZ8w+xqEDm03ze7pQ7leVq+4InckTbBuLNV53yeU+MPLCSJ/ZJrcFlQbd1WDn0m
-         WozJQRI/GyR1nJ3j7zRl/zsC/1LpB9LP3alYF/idl0VnElfsGhWGOpUUtbMI4008u0cz
-         19PaZkoVYmcuI/kh1RQB0JirIx6g4/oVsihD7pGIWOK56mLQ9fZeRplFShuTxnaLwHx+
-         6rGZNiSCm4WOD2RU5P5fEA7owSvt5Cye6cn4aU5955jRIc88MJ9sbvwbtMngckdVxNCx
-         a3DWtOsfDnY5zPE0E91ECbEAQFYcOGCPYeMbd0D6CVDBRE/qGcdOFo3xEoK7r1SwkF/9
-         wRXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGYVXkMo/TFSNqJui/ROXYXZVsb3DHdnsENfrIRlbZcb9vUD/ox2zAFWc3JtZ1YMm1HYk4u4zjgA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHkPjrUTd+RfCct94TZyfpXlnfAigEKKBPcss4yCHo32STS7a/
-	s+q5YnkNkJrpWg0jCXCRfOWbRkDKW7uAqGCp8duVHo3/OK6VGczoASyK5fSFd/EksrQBIQEvyg+
-	qTCJDrBu44zaDhiiolqGXr26vVHVMnrifgxBt4Q==
-X-Google-Smtp-Source: AGHT+IGoX0qo0TwHIFzuDhJ8uRvT8liLFL0dVJP7Xz1NBAOVSmENTvV/zOkcv3Wjec8D5Sxd9qEo1roy0l5OEKEWDTI=
-X-Received: by 2002:a05:6902:10cd:b0:e28:f0e5:3805 with SMTP id
- 3f1490d57ef6-e28fe36482amr1767867276.18.1728472478141; Wed, 09 Oct 2024
- 04:14:38 -0700 (PDT)
+	 To:Cc:Content-Type; b=JmEKga+J54OQYhwXW0sv3RHVFoerUSMW8HI2FxhWEATjjqw/Z38NL2XXwmQrj1C0iNt5fRLIyKEo7BCQ/AlulGdvIgk2UstSWBi4yn/uWnv4qdenh8comgetp0Gu9Ugra8OZOKCGc9tNHNqKp4x2kadESYw1+X4QKTU2YBBT4ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NZSUDezJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FF0C4CED6;
+	Wed,  9 Oct 2024 11:25:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728473103;
+	bh=wdVK+v3QsEtuvtnCGTz3cveAy5vFTYupGy1jeTMyays=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=NZSUDezJr2FNFo/5h9MKHZHW9EpDC5PTRl5QmmhfEUlHboopx1SfK8ijFoEim4CyS
+	 ZSNzs+XUL506O/vthSP4UelQF23X80UeMY1C+aT/MoIw5Jn5Zm02elXH0/zxheFGIT
+	 oMiTCz04oSw+ki+urg7LVIlejCcdOmosxEcNEXOQ6sLJbSnjJ2Tu/ojpHlBl6qCkrO
+	 +MD1hOOT1LulLnpKgCbshuHySZez+AA7RtxZJ69bNhrojP1MDPKhhoKPMYt/DI5IvP
+	 4rgRgPg0psnAbv/6cFWcJGm5fRd53IKc1qtPQbOQJiGNA8296n10/KKsaURa+Zk0dM
+	 KFXsNM5m9BVyA==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5e7ffcd95c1so808207eaf.2;
+        Wed, 09 Oct 2024 04:25:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU6ynlh+XN+/p47Jb4fso9TdKk7NsKf/16iMeAR7yPFh0+bzdrFu3mWN1jYMqsfipVKvBsDheiqtf0=@vger.kernel.org, AJvYcCVuzWEB9P5Hu5+0uSYqNsHvbRlB8XhAUHTokvmtO47+zoHwxdA6LfZ4GJ8BExLos7DJCcqUKQzU@vger.kernel.org, AJvYcCWhw9HE2DjGBZmn1VC7rddPGMdC3yGe+iRcgf3At6Bb8LOobfQ9DtuKxZ/7gozYwC9YKIRM8ZfI48oq1iU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOL+dxND07bXc0ZalNi8gbzNYvW4f20SAeUjURSFR32NEQ/1Fy
+	FxFeyzIEQfWNnD9r9i/9IbKVvUKrZd6gDqMkXxYNmzV90/s0kTKnxISz/rO9t+PcfJvOHp8uBUi
+	rq+/2xevusdXcyyQeBJQmCf88n6M=
+X-Google-Smtp-Source: AGHT+IH0r0T4Yr7HCO5EeAhxWkHvjmc/vhMxtPCtEhpbLjDxfuVyQYl4TBosMbKKV5BA0/S5YXTDNHg7rcUm2F11z9U=
+X-Received: by 2002:a05:6820:1b8c:b0:5e5:76ac:11f with SMTP id
+ 006d021491bc7-5e987c062a6mr1195870eaf.5.1728473102707; Wed, 09 Oct 2024
+ 04:25:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
-In-Reply-To: <20241007060642.1978049-1-quic_sibis@quicinc.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 9 Oct 2024 13:14:02 +0200
-Message-ID: <CAPDyKFqnvEy5D6xXTbnYsRKRfXTJ4o+3V1QpVDh1SyqJambd4g@mail.gmail.com>
-Subject: Re: [PATCH V3 0/4] firmware: arm_scmi: Misc Fixes
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, jassisinghbrar@gmail.com, 
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	johan@kernel.org, konradybcio@kernel.org, linux-pm@vger.kernel.org, 
-	tstrudel@google.com, rafael@kernel.org
+References: <20241009072001.509508-1-rui.zhang@intel.com>
+In-Reply-To: <20241009072001.509508-1-rui.zhang@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 9 Oct 2024 13:24:51 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hVhYhKbiNc_DAqbZqRNe=MAmS9QCiL4uAw-m-U19M=2A@mail.gmail.com>
+Message-ID: <CAJZ5v0hVhYhKbiNc_DAqbZqRNe=MAmS9QCiL4uAw-m-U19M=2A@mail.gmail.com>
+Subject: Re: [PATCH V2] x86/apic: Stop the TSC Deadline timer during lapic
+ timer shutdown
+To: Zhang Rui <rui.zhang@intel.com>, x86@kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, rafael.j.wysocki@intel.com, 
+	linux-pm@vger.kernel.org, hpa@zytor.com, peterz@infradead.org, 
+	thorsten.blum@toblux.com, yuntao.wang@linux.dev, tony.luck@intel.com, 
+	len.brown@intel.com, srinivas.pandruvada@intel.com, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 7 Oct 2024 at 08:07, Sibi Sankar <quic_sibis@quicinc.com> wrote:
+On Wed, Oct 9, 2024 at 9:20=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wrot=
+e:
 >
-> The series addresses the kernel warnings reported by Johan at [1] and are
-> are required to X1E cpufreq device tree changes [2] to land.
+> This 12-year-old bug prevents some modern processors from achieving
+> maximum power savings during suspend. For example, Lunar Lake systems
+> gets 0% package C-states during suspend to idle and this causes energy
+> star compliance tests to fail.
 >
-> [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
-> [2] - https://lore.kernel.org/lkml/20240612124056.39230-1-quic_sibis@quicinc.com/
+> According to Intel SDM, for the local APIC timer,
+> 1. "The initial-count register is a read-write register. A write of 0 to
+>    the initial-count register effectively stops the local APIC timer, in
+>    both one-shot and periodic mode."
+> 2. "In TSC deadline mode, writes to the initial-count register are
+>    ignored; and current-count register always reads 0. Instead, timer
+>    behavior is controlled using the IA32_TSC_DEADLINE MSR."
+>    "In TSC-deadline mode, writing 0 to the IA32_TSC_DEADLINE MSR disarms
+>    the local-APIC timer."
 >
-> The following warnings remain unadressed:
-> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> Stop the TSC Deadline timer in lapic_timer_shutdown() by writing 0 to
+> MSR_IA32_TSC_DEADLINE.
 >
-> Duplicate levels:
-> arm-scmi arm-scmi.0.auto: Level 2976000 Power 218062 Latency 30us Ifreq 2976000 Index 10
-> arm-scmi arm-scmi.0.auto: Level 3206400 Power 264356 Latency 30us Ifreq 3206400 Index 11
-> arm-scmi arm-scmi.0.auto: Level 3417600 Power 314966 Latency 30us Ifreq 3417600 Index 12
-> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> arm-scmi arm-scmi.0.auto: Level 4012800 Power 528848 Latency 30us Ifreq 4012800 Index 15
->
-> ^^ exist because SCP reports duplicate values for the highest sustainable
-> freq for perf domains 1 and 2. These are the only freqs that appear as
-> duplicates and will be fixed with a firmware update. FWIW the warnings
-> that we are addressing in this series will also get fixed by a firmware
-> update but they still have to land for devices already out in the wild.
->
-> V2:
-> * Include the fix for do_xfer timeout
-> * Include the fix debugfs node creation failure
-> * Include Cristian's fix for skipping opp duplication
->
-> V1:
-> * add missing MSG_SUPPORTS_FASTCHANNEL definition.
->
-> Base branch: next-20241004
->
-> Cristian Marussi (1):
->   firmware: arm_scmi: Skip adding bad duplicates
->
-> Sibi Sankar (3):
->   firmware: arm_scmi: Ensure that the message-id supports fastchannel
->   pmdomain: core: Fix debugfs node creation failure
->   mailbox: qcom-cpucp: Mark the irq with IRQF_NO_SUSPEND flag
->
+> Cc: stable@vger.kernel.org
+> Fixes: 279f1461432c ("x86: apic: Use tsc deadline for oneshot when availa=
+ble")
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Is there a preferred way to merge this?
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I can certainly pick the pmdomain patch, as it looks independent for
-the other. Or let me know if you prefer that I take them all?
+x86 folks, this is quite nasty, so please make it high-prio.
 
-Kind regards
-Uffe
+Alternatively, I can take it through the PM tree.
+
+> ---
+> Changes since V1
+> - improve changelog
+> ---
+>  arch/x86/kernel/apic/apic.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+> index 6513c53c9459..d1006531729a 100644
+> --- a/arch/x86/kernel/apic/apic.c
+> +++ b/arch/x86/kernel/apic/apic.c
+> @@ -441,6 +441,10 @@ static int lapic_timer_shutdown(struct clock_event_d=
+evice *evt)
+>         v |=3D (APIC_LVT_MASKED | LOCAL_TIMER_VECTOR);
+>         apic_write(APIC_LVTT, v);
+>         apic_write(APIC_TMICT, 0);
+> +
+> +       if (boot_cpu_has(X86_FEATURE_TSC_DEADLINE_TIMER))
+> +               wrmsrl(MSR_IA32_TSC_DEADLINE, 0);
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.34.1
+>
+>
 
