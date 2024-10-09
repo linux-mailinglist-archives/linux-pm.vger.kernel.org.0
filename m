@@ -1,99 +1,97 @@
-Return-Path: <linux-pm+bounces-15411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15412-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ECBB997117
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 18:20:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4217F99719B
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 18:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 767151C22022
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 16:20:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E1201C2033E
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 16:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3507D1E0B95;
-	Wed,  9 Oct 2024 16:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924181E5715;
+	Wed,  9 Oct 2024 16:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VKW6Ou+W"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bApfItvi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED42197A77
-	for <linux-pm@vger.kernel.org>; Wed,  9 Oct 2024 16:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64A31E0481;
+	Wed,  9 Oct 2024 16:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728490011; cv=none; b=OxEnwzfuSr8P6AOUvdhs27phAthIueagmMD5/WzpglqAyeAkz1j/X6T9ioGNb134O8veZUoIYTi4Fr6F4UPqxWPPk2Sa/sP+UyTyEE8Jei4KyUdgyITrPzv6BFgSvF3LU2WAX7NGhDRdwY4ueI7dz4EAeK1gs2+nqc4qYQmRtxA=
+	t=1728491277; cv=none; b=Y6ltpNiu1NPm4Um6+xovLvWdU1nXkB4/Pv1raQTBbZWygSKH0gKFuNthUiGTm8uI5opnalgCAtV/Xi48RN3l29jg2X0h4nB9lnImkXRrsIPpLnpBpQDQNN6fx4ZeV+Nr4g9nu3nNxmxgXyg+GYGFwEc+J0TCsHGexMFSiOulj3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728490011; c=relaxed/simple;
-	bh=nkfcKspWQ8hexMjCW+X8wh5gyfzaCeAToCi4rgQ7REw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CD9qyE6IC3xGzDsHbbBBgQ2DjDHh52N7m5IEoRTFUNYijgqSQhHkNCL0FQWo0NPt56Xg/6MSRBUxCrASQ9ABgRowUFZv88PUXuGnMOKuCDF6EMeiYCzYci/dtDByivFaw79y0/0abeNuWGNFwHWX3J5LIIJUz7duYt//mAUFiIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VKW6Ou+W; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6e235a61bcbso6874877b3.1
-        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2024 09:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728490008; x=1729094808; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nkfcKspWQ8hexMjCW+X8wh5gyfzaCeAToCi4rgQ7REw=;
-        b=VKW6Ou+WFI6CYLkbWHCWM50aVe77PG3KQEyt7XEV88psUHzfK4smhXKMLRfyvx0Vv4
-         FO8gUno2MoyDAT0p5NqE+Il/RHEfSSZRDIqFJAxLRjeEEea3sxC2Tot2FoLTsay++34h
-         /FNTNWoUu2lNR1TY+d3CgDhreupc3NbWoqQTtUdAiPMjHLGz7manVa2Hlluzc8X+TCWZ
-         Kbcd6Jmqp7SLz2s8ePMxjip9aI0UIDyA3AlEU7OxP716YkQbFwPj1Jz2J+LLqrE6Rhnp
-         ViCtzrIw2L81FMMuQsu6wHgfp6m55erNcq6G/Cw268SSlBul3uktkr7HO0oWBRFKq7yf
-         Sdeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728490008; x=1729094808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nkfcKspWQ8hexMjCW+X8wh5gyfzaCeAToCi4rgQ7REw=;
-        b=xJb1xT/ZlwKjdhLiolf68fReNdRIVcGijpGMuWS/HcA0hCv1U1DQXN+KxT7YpIfRpZ
-         q4+js3C+BDrhqLTxkU7Sc/2E/Mj4Bn4q1ezJ3feZP5cPDqOnaTkhpkumrWRJlId1wBj0
-         PCpjw8YgKuNYMbxojxpepG9YOAXqB+Sc+o4atVab4A/RSo0qsiKJUo8JTTU4tofBGkfH
-         vx7ekXiqz8E8cVZdJEIuVSt2xWIkzX4Wr09pJrVAyS5BsD+dnfI7oNvlNfcpLNi4Yuyu
-         QzIbKxHUSRg3pHf4mr8UygQbLej1ls05j0idhodTdPGf5WaERmbIzGaHJ0lOldvBa160
-         Nhzg==
-X-Forwarded-Encrypted: i=1; AJvYcCULiqEcUur+JD8of+iAfiknoyz6SgLKvnyGV2qme1LMqbW6b8xs7Nj8Hgd3/rDZ0QsEryK5y26KRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfEftOVpZVtI2CtvFoVbIpNn88jpnSlFRinCBL136QU0C+sx4H
-	oZ/FQg1JaXNvTL6ZGgpnqgioovj+FpR5B5A4EMtTBnfHChltkjm0H8dnoEOkvdVFIDj6QPHc7zA
-	llvwkXlY4n8nmSfqR7mbptvG6+md/LbvVLjg6+Q==
-X-Google-Smtp-Source: AGHT+IEB7615ehnAAzSlp9QeY7Exo9QxBnJB+eLgmqzfktq+2EhfQ1a1O+UY0RdpmmKJABEdhGOUsHTE88vgiT+tHak=
-X-Received: by 2002:a05:690c:f93:b0:6dd:ddf6:90aa with SMTP id
- 00721157ae682-6e32f134e85mr1925237b3.5.1728490008640; Wed, 09 Oct 2024
- 09:06:48 -0700 (PDT)
+	s=arc-20240116; t=1728491277; c=relaxed/simple;
+	bh=5IONwWAaygzDPnMaidc2cVsIS1VTE48ucYzxzIFEfRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=czzc0gFI5J3ouR2ZvzD1TfZS/WkR98zbBZiLZxG2PqgrA2gg7zAZaO1raRT80X+UstvwayVAWPwCUm2I3gruHY+eB8qTg84urOyf3JoexTWcHRoEZT4HVRtSHAJ51654SnbYKQ6WHJwoDFoDw4USGG9It+rQdaF3FRKR/JUNLRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bApfItvi; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728491276; x=1760027276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5IONwWAaygzDPnMaidc2cVsIS1VTE48ucYzxzIFEfRs=;
+  b=bApfItviV/I1Z0u3zLELfP9Wianikem1TIuWehvTqQcVHqyYVuzfj5+g
+   +MvVkBI/fTZoeCXa+1uw3Y5MdWjd28cDXio9OyszSKkqbWVStdvBVBfxi
+   KB+PTelXv9yGxHIFssu3LaRt5R7G5PmEXMFuIcEBEuuUyzSdz+8g+A9Wa
+   LlOeDj0XuDQmjfP8LRuwdNBEVFQOQwmMdrrNagfZki6mn/j8JoevqmMXY
+   U2rDWhSU9qrkwJZ/2ZtI03IYpxz8iEus1GoVq37vQgPlFX5MLNjwmJGB4
+   PaVn2nntkhS5xZa84QHhKKKqRGDQgO0NGL/nS7msZo8Sv3wS6mIrfW3L5
+   A==;
+X-CSE-ConnectionGUID: EpHP8rbZSiu9n8Z57vJU9A==
+X-CSE-MsgGUID: my6SKx7dQh2nmUustK0M4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="27923222"
+X-IronPort-AV: E=Sophos;i="6.11,190,1725346800"; 
+   d="scan'208";a="27923222"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 09:27:55 -0700
+X-CSE-ConnectionGUID: oQoVtMfHTjmqz0Cmn1i1Zg==
+X-CSE-MsgGUID: CPHxacxfT/GicCpeJ5tzmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,190,1725346800"; 
+   d="scan'208";a="80292162"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 09:27:54 -0700
+Date: Wed, 9 Oct 2024 09:33:44 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, rafael.j.wysocki@intel.com,
+	x86@kernel.org, linux-pm@vger.kernel.org, hpa@zytor.com,
+	peterz@infradead.org, thorsten.blum@toblux.com,
+	yuntao.wang@linux.dev, tony.luck@intel.com, len.brown@intel.com,
+	srinivas.pandruvada@intel.com, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH V2] x86/apic: Stop the TSC Deadline timer during lapic
+ timer shutdown
+Message-ID: <20241009163344.GA25814@ranerica-svr.sc.intel.com>
+References: <20241009072001.509508-1-rui.zhang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241005-power-supply-battery-const-v1-0-c1f721927048@weissschuh.net>
-In-Reply-To: <20241005-power-supply-battery-const-v1-0-c1f721927048@weissschuh.net>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 9 Oct 2024 18:06:34 +0200
-Message-ID: <CACRpkdZtUHAaF1cqmyJcthp=6-w4quYAF=PMdknU4iQZ3_E-Tw@mail.gmail.com>
-Subject: Re: [PATCH 0/7] power: supply: constify ocv and resistance tables
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Sebastian Reichel <sre@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009072001.509508-1-rui.zhang@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Sat, Oct 5, 2024 at 12:04=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
+On Wed, Oct 09, 2024 at 03:20:01PM +0800, Zhang Rui wrote:
+> This 12-year-old bug prevents some modern processors from achieving
+> maximum power savings during suspend. For example, Lunar Lake systems
 
-> These tables are nevery modified. Reflect this in the API and constify
-> the table definitions.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+Two nits:
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> gets 0% package C-states during suspend to idle and this causes energy
+> star compliance tests to fail.
 
-Yours,
-Linus Walleij
+s/gets/get/
+s/energy start/Energy Star/
 
