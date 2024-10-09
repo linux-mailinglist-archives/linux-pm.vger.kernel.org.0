@@ -1,114 +1,136 @@
-Return-Path: <linux-pm+bounces-15407-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15408-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56889970DC
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 18:15:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EAB99970EE
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 18:17:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 131761C2209E
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 16:15:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25BEF1F21ACC
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 16:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EAD1E3DF6;
-	Wed,  9 Oct 2024 15:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13661E5730;
+	Wed,  9 Oct 2024 15:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="azT6oxO9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mEh1XN+d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A111E0DF0;
-	Wed,  9 Oct 2024 15:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA031E5703
+	for <linux-pm@vger.kernel.org>; Wed,  9 Oct 2024 15:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728489153; cv=none; b=BaKd1ajzjtRR+A3YUC9hmd2MoBlpboy/SJ5XYA1ySZElokuEfdIaLg9PutG7GWsZaQMoG/ggYUFt0NM8gDQbIRxD1DpMemZcBdMRytgdlI7TkEZdbtLRJsy5Qt2JYZ0JxBgIwl6dLtAXO8dZRjbGqGItP66IG97/EltdI66wD6E=
+	t=1728489332; cv=none; b=cOHaElQhleF1GXfST43AgjdNo4myH8Tw58/Oj5zvclONSoTFuXZWWTGAphvOSJSYG7IyjUJEKYT8XBy7sPjP1Ik7dlOyZ8ggNa/mQcwBzAC/yWuLcORYZHFweBXuLpLugd+T8piwx0hEd3wPvVcx0n6MKTNF2GUx7iY9JBdATH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728489153; c=relaxed/simple;
-	bh=3opAzplvKjVglSivCDPrg441vYhzAuPR3tmj9pIPgGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jicJwHVz9dEGsvLxYMifNery/UP2s2by2xhiiqGYCSActwMyTSMGy1qli72V+iK5U98ozYPc2iKamd3K2Zz04liTL86/1kPyUH9SzsgLSGFKJcm8fWZqdsiEGYYZYn7lNiYjaYZfr19YJmELVEcjMnmmGxbyvNjEQqhkWZ+HDdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=azT6oxO9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858BCC4CEC3;
-	Wed,  9 Oct 2024 15:52:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728489152;
-	bh=3opAzplvKjVglSivCDPrg441vYhzAuPR3tmj9pIPgGg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=azT6oxO9H+KxyL5DtHqGVzaw6VvkwhCRZgi1s6K6jyeWDPYKNq9NU8WNE4Y7aZ/SL
-	 UG+VkA3yrXSNOTlFfHz4zK+Lm4pTxmHvfewkwPfhfg3fYwpSSE+83fbfkcd3HpK1vP
-	 Xmjx8YBICRi9S1DP9dYVz5AN1Edh1ISqu4+QulIRl5vZCf4SWU4b+fTrh+KanQLlqb
-	 Vmyx9hwwbV42F+c4A9yUYZFeFg6d05ibkOE6QMLn6bQ4ir7OERXL79h7LJYHSPZtd/
-	 oFM6PIv8M335szmQLptKsy/a99iR75ThRECQ6gcjWw+/lOSTHh9ZjK+o75IJCDI4fn
-	 nn3obwpSqL8Dw==
-Date: Wed, 9 Oct 2024 16:52:22 +0100
-From: Lee Jones <lee@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Macpaul Lin <macpaul.lin@mediatek.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-	netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	Alexandre Mergnat <amergnat@baylibre.com>,
-	Bear Wang <bear.wang@mediatek.com>,
-	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v8 3/3] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-Message-ID: <20241009155222.GB637580@google.com>
-References: <20241001104145.24054-1-macpaul.lin@mediatek.com>
- <20241001104145.24054-3-macpaul.lin@mediatek.com>
- <5nvshurbpmjkqysphfrfxhekq3c6od6a2uqai4rfxns64mdvf7@ftjvgjnivr3k>
+	s=arc-20240116; t=1728489332; c=relaxed/simple;
+	bh=9IyxbRxcXn3W/ovlgPhTagWUE9DYLB2d0t3NLu1GTEc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dc22eQgRjymLe3GfXTAFpPhSB+1FqVz1iiN57Pg/65VBaXvQ0AaszWZdOYJnGIsSvKQ3v4Ihf0fSH3LGajNjWAfE/Dig6zqZcO0WbazBa6lKxfMOHrRA5gAFxTOdn0sl4Twks5k9RoscuO3JjdoTCxZTVd6bse+VfG75G3Amh50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mEh1XN+d; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e28ea358f65so917382276.0
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2024 08:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728489330; x=1729094130; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PL9hRQRfd6A1OkAh+5JXcnzv2ciGXqoLre3DkSp5z4s=;
+        b=mEh1XN+dut+tJeZiI+F8yL2JB7TX6+Hjpcb76sZMjsqI+SyWRnsOlaaAzKV5wBrQgs
+         MOCCSuOm58I99hLeuZRlnZMX3pMngqTDsmhlHrWoM8eBWYZ36zfkcGki6Ao6pStOgolh
+         BEilJDpEs5E4UmOor0mN74rWGBocqoRaSHoWn9x4gjBIWWjcBz+Dy91YUugv6zPLbYmI
+         zE7HeUAn/Qe8+nJPchw4lVjWDmJvlcGtkkpigfI4KFM7h6Ev/A3tTeIRnZtSTPnf91Cb
+         KO1Jp1sp7x4vJmySQ5VelBb0wbxCaKs9RPMEOp1GBdjI8hsLPpdZzDpTNhYI91gwcvtX
+         J9Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728489330; x=1729094130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PL9hRQRfd6A1OkAh+5JXcnzv2ciGXqoLre3DkSp5z4s=;
+        b=ef8udahALcby0jxz1V1c1qHeo4w/rvAtWnrWnDSZ1jQ2gAdMdHULouzQKk6OLSXE3n
+         XJ1sNNSKQApYnorSwXKpha3OH96o9NT6ksyF1Jhhyl208X65uLI0HCI30SX052u4CxRt
+         XDu2sjwEw+O289Zk+CmWpTHSMm8aYCmSNOA5jP1X6ZSxa37qRZ1YUsh+McKi1fZmUH56
+         pfYg8Cj/IBpFxh7YGSUSqNiHcFYxx2g/KCe4HsQoUAm3UvBFrbd9s25N8uULe3aUaMwI
+         5z9PMclufxwMpKgfl1R0CtK/xOu3ocJL2phTYQ/bGgdU80HHdMqSPvBiMLjbNfzT1UYc
+         OH2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUmKX1UutBqcI9FXHd+HgXUSsoO0NtcQN0Bbo+pU00O9ffNFjcRBmaixInEnlxEW/mmTJtp5mla4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzczrWECDHBrT7DqNtfeH6Y6kB6519fTXzZ/BEiTQ8d1qYBFkH5
+	FyhqveQE+LFsWE8aKpKjAnDrYcTYKB7uT9opxoP9AsA6Hi1NS0jcxEKCVxlm/8yATveOklONfYp
+	NMAfefKzv+Jaly7WMrfVS20Xrs5Dhl1QS0lPPRw==
+X-Google-Smtp-Source: AGHT+IGr4JUYzFp39IBCDliI2NU/uIXqk9gKPXFzdTH3f5egjT/5+Vhap/s8Mz6XqzPyfQOagIBhPrN+2Q7yfWV9SU0=
+X-Received: by 2002:a25:fc28:0:b0:e1a:90ef:3b6d with SMTP id
+ 3f1490d57ef6-e290b5ddff5mr83158276.7.1728489329967; Wed, 09 Oct 2024 08:55:29
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5nvshurbpmjkqysphfrfxhekq3c6od6a2uqai4rfxns64mdvf7@ftjvgjnivr3k>
+References: <20241002122232.194245-1-ulf.hansson@linaro.org>
+ <20241002122232.194245-4-ulf.hansson@linaro.org> <20241003071411.vvhqb6bxxnrbkaw7@vireshk-i7>
+ <CAPDyKFodrKnmFNjqLWfv2AExqkfRo9DRrf7wqB4ht=XwjZDhtw@mail.gmail.com> <20241009154807.4i5qse7utnqbsoib@vireshk-i7>
+In-Reply-To: <20241009154807.4i5qse7utnqbsoib@vireshk-i7>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 9 Oct 2024 17:54:53 +0200
+Message-ID: <CAPDyKFoL5ZB45s6sgxDusjXk6PhUCA6U-n73XGZGHbvwCtVrLg@mail.gmail.com>
+Subject: Re: [PATCH v4 03/11] OPP: Rework _set_required_devs() to manage a
+ single device per call
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Dikshita Agarwal <quic_dikshita@quicinc.com>, 
+	Vedang Nagar <quic_vnagar@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <quic_kdybcio@quicinc.com>, Nikunj Kela <nkela@quicinc.com>, 
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 02 Oct 2024, Krzysztof Kozlowski wrote:
+On Wed, 9 Oct 2024 at 17:48, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 09-10-24, 15:55, Ulf Hansson wrote:
+> > On Thu, 3 Oct 2024 at 09:14, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 02-10-24, 14:22, Ulf Hansson wrote:
+> > > >  /**
+> > > >   * struct opp_config_data - data for set config operations
+> > > >   * @opp_table: OPP table
+> > > >   * @flags: OPP config flags
+> > > > + * @index: The position in the array of required_devs
+> > > >   *
+> > > >   * This structure stores the OPP config information for each OPP table
+> > > >   * configuration by the callers.
+> > > > @@ -48,6 +49,7 @@ extern struct list_head opp_tables;
+> > > >  struct opp_config_data {
+> > > >       struct opp_table *opp_table;
+> > > >       unsigned int flags;
+> > > > +     unsigned int index;
+> > >
+> > > Maybe name this required_dev_index as well ?
+> >
+> > Sure!
+> >
+> > Did you manage to get some time to look at the other patches in the series yet?
+>
+> Ahh, they looked okay and most of them were already Acked by me I guess :)
 
-> On Tue, Oct 01, 2024 at 06:41:45PM +0800, Macpaul Lin wrote:
-> > Convert the mfd: mediatek: mt6397 binding to DT schema format.
-> > 
-> > MT6323, MT6358, and MT6397 are PMIC devices with multiple function
-> > subdevices. They share a common PMIC design but have variations in
-> > subdevice combinations.
-> > 
-> > Key updates in this conversion:
-> > 
-> > 1. RTC:
-> >    - Convert rtc-mt6397.txt and merge into parent MT6397 PMIC DT schema.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Right, it was mostly patch 3 and patch4 that I would appreciate an
+ack/reviewed-by tag from you.
 
-Everyone okay with me taking this without a pull-request?
+If I make the rename to "required_dev_index" according to your
+suggestion above, it sounds like I could add the acks from you?
 
--- 
-Lee Jones [李琼斯]
+>
+> Sorry for the confusion.
+
+No worries!
+
+Kind regards
+Uffe
 
