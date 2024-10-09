@@ -1,168 +1,95 @@
-Return-Path: <linux-pm+bounces-15386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13E13996623
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 11:56:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50A44996788
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 12:45:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 984751F27034
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 09:56:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C886EB21005
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 10:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF1918FDAE;
-	Wed,  9 Oct 2024 09:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC52218D658;
+	Wed,  9 Oct 2024 10:45:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC6D18FC93;
-	Wed,  9 Oct 2024 09:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07CFD17C7CC
+	for <linux-pm@vger.kernel.org>; Wed,  9 Oct 2024 10:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728467668; cv=none; b=MozJbKU3/Wa+mFOZfFfUPvCRtBcaWhY6Hp+51BHqcpWU9g+DSwxDlRxv/clqk/jUnIONiQanQKPVDrIt+AsCJjDL/YpwrPokzvPURedFVQhF0aQCU9VmPnLkfdPpZBgQwPpokVaqWdSeTUFEwLfb9YsL71ReDA3Yfm29ip/qxm0=
+	t=1728470721; cv=none; b=WBfI9Jp7x74xShIqtTAMOtfpv292k6JuW66otXNS4OYXxq9sF2poPU0USFi6QqBxN0nm2vbW24TeICUyDnU6KW82824pPkkhNLii1lgiKzTxfMgUTL3IV+oNFbtU4FeN+aYINiqD22Lh6uu7OJpcylmoxwSWUyxuUBPfDv85N84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728467668; c=relaxed/simple;
-	bh=VBotJtPDGGEmR2CyFHFYZxMHWD41xoURujuuBIez2GI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oz0VsCvRq71W5DCEr98oF6wnjeNl84a2ng9XN5YonnIlRfwfDC9KKVFAsdkwlHwh3FTnrLGapQHUaP8Ji7gDe2Gab5LwFBJSFfd6IaAwSi68JpWseJh78FKXQ+zu+nSYaAkxxiblpNEQd6ox7tt4sPVmcnZNJ7ArH5hnbSzusxw=
+	s=arc-20240116; t=1728470721; c=relaxed/simple;
+	bh=/L/wlpeabUbvg27h4GCPWZbC0VS25xvv1ryvsUKZs44=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G0/eAseT6lA6KxbnFNXVsYWhTGGpaXs7NsgHbnUjjc15FYRaEBHwKOqE3hYcqT8zJwBFbpcBxHeNe0UkDhmE1xRMQmmCB12p3+8+6e3JYSnMNrOmaOZaaAuzv2Gg+lXTpRx7rZrbrnGy0Hp0FD0x7eTe78yTy6GIcwxiVJaCKqw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83E14FEC;
-	Wed,  9 Oct 2024 02:54:55 -0700 (PDT)
-Received: from [10.1.30.40] (e127648.arm.com [10.1.30.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A79E3F64C;
-	Wed,  9 Oct 2024 02:54:21 -0700 (PDT)
-Message-ID: <c53236ad-b94e-4508-8f3a-7229e32f62bc@arm.com>
-Date: Wed, 9 Oct 2024 10:54:18 +0100
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F575FEC;
+	Wed,  9 Oct 2024 03:45:49 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.77])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94F373F64C;
+	Wed,  9 Oct 2024 03:45:18 -0700 (PDT)
+Date: Wed, 9 Oct 2024 11:45:15 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Vivek yadav <linux.ninja23@gmail.com>
+Cc: linux-pm@vger.kernel.org, lpieralisi@kernel.org, ulf.hansson@linaro.org,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: ARM64: Where do I get CPU Sleep states parameters ?
+Message-ID: <ZwZeu_0hKiBPstp2@bogus>
+References: <CAO6a-9-cp7CazJ4+-b3gwD2Q5n4SaA=5=Ps3ycJ9Xq_ZidDB+A@mail.gmail.com>
+ <ZwVVPtVXxX4rGFbx@bogus>
+ <CAO6a-98koymFJM3X1QDdoybz+SdR_g+C5=vbt_BjS=dYOQJBAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 5/8] cpufreq/schedutil: Remove iowait boost
-To: Andres Freund <andres@anarazel.de>
-Cc: Quentin Perret <qperret@google.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
- dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
- Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
- bvanassche@acm.org, asml.silence@gmail.com, linux-block@vger.kernel.org,
- io-uring@vger.kernel.org, qyousef@layalina.io, dsmythies@telus.net,
- axboe@kernel.dk
-References: <20240905092645.2885200-1-christian.loehle@arm.com>
- <20240905092645.2885200-6-christian.loehle@arm.com>
- <CAJZ5v0hJWwsErT193i394bHOczvCQwU_5AVVTJ1oKDe7kTW82g@mail.gmail.com>
- <Zv5oTvxPsiTWCJIo@google.com> <6e21e8f1-e3b4-4915-87cc-6ce77f54cc8a@arm.com>
- <io3xcj5vpqbkojoktbp3fuuj77gqqkf2v3gg62i4aep4ps36dc@we2zwwp5hsyt>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <io3xcj5vpqbkojoktbp3fuuj77gqqkf2v3gg62i4aep4ps36dc@we2zwwp5hsyt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO6a-98koymFJM3X1QDdoybz+SdR_g+C5=vbt_BjS=dYOQJBAg@mail.gmail.com>
 
-On 10/5/24 01:39, Andres Freund wrote:
-> Hi,
-> 
-> 
-> A caveat: I'm a userspace developer that occasionally strays into kernel land
-> (see e.g. the io_uring iowait thing). So I'm likely to get some kernel side
-> things wrong.
+On Wed, Oct 09, 2024 at 07:47:18AM +0530, Vivek yadav wrote:
+> >> Hi @all
+> >>
+> >> Recently I was exploring the CPUIdle menu governor. I found out that
+> >> there are CPUIdle states. These C- states are defined in the device
+> >> tree based on these `cpu-idle-state` parameters. The menu governor
+> >> makes intelligent decisions. So it can save precious power resources.
+> >>
+> >> I had one custom SoC which had a CPU `arm,cortex-a55`. Now I am
+> >> looking for CPU properties i.e exit_latency, entry_latency and
+> >> min-residency.
+> >>
+> >> Below there are two different SoC using the same arm,cortex-a55 CPU. But
+> >> they are using different values.
+> >>
+> >> Q.1: There are entry | exit | min-latency-us. Where will I get all that
+> >> information? I searched into ARM manuals but I did not get it ? Please
+> >> point me in the right direction if you know about this.
+> >
+> >It is completely SoC/platform or even board specific parameter. One needs
+> >to measure it for that configuration and then populate the value in DT.
+>
+> One needs to measure it means there are tools to measure CPUIdle time
+> OR  do you mean these latency values need to be fine tuned by developer
+> via hit and trial method. Which suits the SoC/board.
+> Please correct me if I am wrong.
+>
 
-Thank you for your input!
+I wouldn't say trial and error. It involved trying to hit worst case scenario
+and taking some timing info on the platform(via trace or whatever suits best
+on the platform and the firmware running). E.g. Can you access cache memory on
+DRAM in such a way that achieves maximum dirty cacheline ? Some power
+measurements by forceful wakeup so that you can get better tuned value for
+minimum residency.
 
-> 
-> On 2024-10-03 11:30:52 +0100, Christian Loehle wrote:
->> These are the main issues with transforming the existing mechanism into
->> a per-task attribute.
->> Almost unsolvable is: Does reducing "iowait pressure" (be it per-task or per-rq)
->> actually improve throughput even (assuming for now that this throughput is
->> something we care about, I'm sure you know that isn't always the case, e.g.
->> background tasks). With MCQ devices and some reasonable IO workload that is
->> IO-bound our iowait boosting is often just boosting CPU frequency (which uses
->> power obviously) to queue in yet another request for a device which has essentially
->> endless pending requests. If pending request N+1 arrives x usecs earlier or
->> later at the device then makes no difference in IO throughput.
-> 
-> That's sometimes true, but definitely not all the time? There are plenty
-> workloads with low-queue-depth style IO. Which often are also rather latency
-> sensitive.
-> 
-> E.g. the device a database journal resides on will typically have a low queue
-> depth. It's extremely common in OLTPish workloads to be bound by the latency
-> of journal flushes. If, after the journal flush completes, the CPU is clocked
-> low and takes a while to wake up, you'll see substantially worse performance.
 
-Yeah absolutely and if we knew what a latency-sensitive journal flush is tuning
-cpuidle and cpufreq to it would probably be reasonable.
-I did test mmtests filebench-oltp that looked fine, do you have any other
-benchmarks you would like to see?
-
->> If boosting would improve e.g. IOPS (of that device) is something the block layer
->> (with a lot of added infrastructure, but at least in theory it would know what
->> device we're iowaiting on, unlike the scheduler) could tell us about. If that is
->> actually useful for user experience (i.e. worth the power) only userspace can decide
->> (and then we're back at uclamp_min anyway).
-> 
-> I think there are many cases where userspace won't realistically be able to do
-> anything about that.
-> 
-> For one, just because, for some workload, a too deep idle state is bad during
-> IO, doesn't mean userspace won't ever want to clock down. And it's probably
-> going to be too expensive to change any attributes around idle states for
-> individual IOs.
-
-So the kernel currently applies these to all of them essentially.
-
-> 
-> Are there actually any non-privileged APIs around this that userspace *could*
-> even change? I'd not consider moving to busy-polling based APIs a realistic
-> alternative.
-
-No and I'm not sure an actual non-privileged API would be a good idea, would
-it? It is essentially changing hardware behavior.
-So does busy-polling of course, but the kernel can at least curb that and
-maintain fairness and so forth.
-
-> 
-> For many workloads cpuidle is way too aggressive dropping into lower states
-> *despite* iowait. But just disabling all lower idle states obviously has
-> undesirable energy usage implications. It surely is the answer for some
-> workloads, but I don't think it'd be good to promote it as the sole solution.
-
-Right, but we (cpuidle) don't know how to distinguish the two, we just do it
-for all of them. Whether kernel or userspace applies the same (awful) heuristic
-doesn't make that much of a difference in practice.
-
-> 
-> It's easy to under-estimate the real-world impact of a change like this. When
-> benchmarking we tend to see what kind of throughput we can get, by having N
-> clients hammering the server as fast as they can. But in the real world that's
-> pretty rare for anything latency sensitive to go full blast - rather there's a
-> rate of requests incoming and that the clients are sensitive to requests being
-> processed more slowly.
-
-Agreed, this series is posted as RFT and I'm happy to take a look at any
-regressions for both the cpufreq and cpuidle parts of it.
-
-> 
-> 
-> That's not to say that the current situation can't be improved - I've seen way
-> too many workloads where the only ways to get decent performance were one of:
-> 
-> - disable most idle states (via sysfs or /dev/cpu_dma_latency)
-> - just have busy loops when idling - doesn't work when doing synchronous
->   syscalls that block though
-> - have some lower priority tasks scheduled that just burns CPU
-> 
-> I'm just worried that removing iowait will make this worse.
-
-I just need to mention again that almost all of what you replied does refer to
-cpuidle, not cpufreq (which this particular patch was about), not to create more
-confusion.
-
+--
 Regards,
-Christian
+Sudeep
 
