@@ -1,136 +1,104 @@
-Return-Path: <linux-pm+bounces-15400-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15401-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BCCF996BC9
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 15:24:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1624996C8F
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 15:46:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09935B20B30
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 13:24:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A853F1F237B2
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 13:46:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30DB51990C2;
-	Wed,  9 Oct 2024 13:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jd9GIFDH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353B81990C8;
+	Wed,  9 Oct 2024 13:46:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E27D18C92A
-	for <linux-pm@vger.kernel.org>; Wed,  9 Oct 2024 13:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF50538DE5;
+	Wed,  9 Oct 2024 13:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728480239; cv=none; b=H6ny4nL6szAOhCXa+gyHYR9Cc4QPpaJyo2HaQEbThIZE/n56/C6bkFSeKw41aBDktPwyqO1yOnY6gORQRHc2oqKoYcJvrQmuLaMRNupmwk7Q2hb/aPgR9aGx3WF7q8MKCJlQ6YGpEc9MNOinlJu0s2M1qV/1wWhs9G11aenhQF4=
+	t=1728481609; cv=none; b=SPq7gkpujA3eROVdWy9n3U6WoDBdDrQjh9QMx2XCmObdaIIRHk0UCXb1MgEVvqyFP+KNzGIN3XoYt219gBW/TyyawMd6D+c8xRpBOzmy4W/ESCmFtmwQtFuBfxOwGLfxYmuAehLiLICmvBxa3A0A/szIZkaIOe9uQ5DBRjCOTEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728480239; c=relaxed/simple;
-	bh=hCS7BTVujCtp4m6ljZNLdynbztIjz790mAoDFaqAogs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d+GMLOYdA3Q4snJoV9RvYDJ933Ad9i6wTey1QQBUWyAPhtli+icYZ9sw/EUn3RfckNMQLxkuGrMn+CQCVfH3yRjPoAu0RE5KZW71bU6lWsOos9YVxev90tVTu1A13HmKE8ctrhzuAyaxphoHXNWMJ9BG5UXlfXe5vd5uHNnfd8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jd9GIFDH; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e2903a48ef7so539692276.2
-        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2024 06:23:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728480236; x=1729085036; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eKg7bGv/gDwJ8Dj8f1rz2qShUBIy5wA6pg80JRqhvBw=;
-        b=jd9GIFDHrIh9UNCbtZ6Hyz7OhPAYjdrg5W+G5SnJbMCud9AyjG9RQPm/WkWVNYcKZu
-         91La/RRVirAMuFoReGdRujb7qLKZqcUZbfxukcOHXh7mnFg1neAeJJ2xmAv8KFg5tn7c
-         JuuiPqaqCyPUMm6xzW2f7C1Bed5Ws+PeE8knEhuVxCXJ/QrcXCA2fwtzqbkAu8V1farB
-         qU1k9TKvzS6Y8cnaTImDebEnFfgmbVYW08xoE7UUNyRRz9fD3pZ/+N70KtYAlr1CUxZy
-         3S12fkRXlgQ2D7EwZBf1Xhw9GSixYf2JIdoiqK5R2ChEI+3Ds+7Vr6bxHSklH/16CyE8
-         7Iyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728480236; x=1729085036;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eKg7bGv/gDwJ8Dj8f1rz2qShUBIy5wA6pg80JRqhvBw=;
-        b=kyfiYqw88Sf53Ia7D6YaSgA1zcVYuxsyynQM9pTttxOWftayyeFs4HZucsvhbI5A1E
-         v31ISc3vCLWNPaB+hA9yUjM31fpolUxwoVmmboCEKP5PiDkwkkQHTUrOqvNyftu+LOF4
-         wf8579kMUJMMic+xgPmCPaKpiecoP3I9RbkKMcQArl0m30n5N+ijrLTfSb8cax5VWojw
-         66jGxHzTuxXb5JKFSaHvFroXH0TyP0Y/0a8JC9bcLhJBBIqnB6J5N5FSd4sSD4kB4kL0
-         uai6NbQQ9P8c6p6c/IkbVtM9mVE6Qhv5Oy+M4hTxHRYx3c9PLkkq0RX5rkqLbTBg9JeW
-         OmLg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9s45jKkOstWGtO1RLtQU8NNwZM13qJH4V2JXjtL6OyB5lx/yicJmjssRLjd7X9XXQdvlnMsDM4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz32KOBscbzWE4UVhhSNhdz84X8LT+IE+HoBgFHoj0bHkqoGvhk
-	MNIlXNFD+Y5QZgByVB9M3eIiSIpGCWWRmShDJp8758A7DUV+XuQQECVQRzHPUTXG3VSzIequ3Q5
-	KNkFJJJnMxzOmQkrDQs1H3tKx4GdDeekJj2cS1g==
-X-Google-Smtp-Source: AGHT+IHdjIJEGNBc42+O7+FXjnfNDEy5mnh1GgAZbWvtts8h8pDmYrsy1bp7WIFON/JsxIYQBTwc7aUIRRTMf2jauEU=
-X-Received: by 2002:a05:6902:2b8d:b0:e28:f7c9:49e6 with SMTP id
- 3f1490d57ef6-e28fe41eae1mr2537348276.8.1728480236424; Wed, 09 Oct 2024
- 06:23:56 -0700 (PDT)
+	s=arc-20240116; t=1728481609; c=relaxed/simple;
+	bh=bLKZ5gZUn7I4XAOhOy9/2kjUpjXZpY9A0U/l2hd18XY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EBcmLWAG3Qn/rYPPBW/fX6uG9oXFGSDcFPhbIxrWgaWemRNgUayweLzfWL0Muwig/BZ1dTWn+02oe6zqJ0hAooQeSLV3m58CK3Fpk1K755T5EBUEmCtzWGZg7tED5AKwl9HGvz6hINq5N+dnQxM2xQjZJ4tDH5kKzCx0s7Dk6jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6E92FEC;
+	Wed,  9 Oct 2024 06:47:15 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.77])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F65F3F58B;
+	Wed,  9 Oct 2024 06:46:44 -0700 (PDT)
+Date: Wed, 9 Oct 2024 14:46:42 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: <cristian.marussi@arm.com>, <ulf.hansson@linaro.org>,
+	<jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
+	<arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-arm-msm@vger.kernel.org>, <johan@kernel.org>,
+	<konradybcio@kernel.org>, <linux-pm@vger.kernel.org>,
+	<tstrudel@google.com>, <rafael@kernel.org>,
+	"Johan Hovold" <johan+linaro@kernel.org>
+Subject: Re: [PATCH V3 1/4] firmware: arm_scmi: Ensure that the message-id
+ supports fastchannel
+Message-ID: <ZwaJQmO4a7cM7MFY@bogus>
+References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
+ <20241007060642.1978049-2-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com> <1728368130-37213-5-git-send-email-shawn.lin@rock-chips.com>
-In-Reply-To: <1728368130-37213-5-git-send-email-shawn.lin@rock-chips.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 9 Oct 2024 15:23:20 +0200
-Message-ID: <CAPDyKFprgKOBGnnvJUvVxXUTPEHGJMXXQa_HssXxEt01aBRoVA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] soc: rockchip: power-domain: Add
- GENPD_FLAG_RPM_ALWAYS_ON support
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Rob Herring <robh+dt@kernel.org>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241007060642.1978049-2-quic_sibis@quicinc.com>
 
-On Tue, 8 Oct 2024 at 08:16, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+On Mon, Oct 07, 2024 at 11:36:39AM +0530, Sibi Sankar wrote:
+> Currently the perf and powercap protocol relies on the protocol domain
+> attributes, which just ensures that one fastchannel per domain, before
+> instantiating fastchannels for all possible message-ids. Fix this by
+> ensuring that each message-id supports fastchannel before initialization.
 >
-> If low level driver claims to keep its own power domain always on,
-> let pd driver respect the flag of GENPD_FLAG_RPM_ALWAYS_ON.
->
-> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+
+Looks good to me. With the minor nit below addressed,
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+(assuming you will take this all via pmdomain or qcom soc tree)
+
+> Reported-by: Johan Hovold <johan+linaro@kernel.org>
+> Closes: https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+> Fixes: 6f9ea4dabd2d ("firmware: arm_scmi: Generalize the fast channel support")
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 > ---
+>  drivers/firmware/arm_scmi/driver.c    | 9 +++++++++
+>  drivers/firmware/arm_scmi/protocols.h | 2 ++
+>  2 files changed, 11 insertions(+)
 >
-> Changes in v3: None
-> Changes in v2: None
+> diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+> index 88c5c4ff4bb6..80a9a615672a 100644
+> --- a/drivers/firmware/arm_scmi/driver.c
+> +++ b/drivers/firmware/arm_scmi/driver.c
+> @@ -56,6 +56,9 @@ static atomic_t transfer_last_id;
 >
->  drivers/pmdomain/rockchip/pm-domains.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  static struct dentry *scmi_top_dentry;
 >
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> index cb0f938..b2bb458 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -621,6 +621,9 @@ static int rockchip_pd_power_off(struct generic_pm_domain *domain)
->  {
->         struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
->
-> +       if (pd->genpd.flags & GENPD_FLAG_RPM_ALWAYS_ON)
-> +               return 0;
-
-During system suspend, genpd may try to power off the PM domains that
-have the GENPD_FLAG_RPM_ALWAYS_ON being set.
-
-It seems like you need to prevent the PM domains from being power off
-during system suspend too, right? In that case, why not use
-GENPD_FLAG_ALWAYS_ON instead?
-
-Or maybe the use case is different, let's continue to discuss patch5 first.
-
-> +
->         return rockchip_pd_power(pd, false);
->  }
->
-> --
-> 2.7.4
+> +static int scmi_protocol_msg_check(const struct scmi_protocol_handle *ph,
+> +				   u32 message_id, u32 *attributes);
 >
 
-Kind regards
-Uffe
+I prefer to just move the function above if possible to avoid this extra
+declaration just keep keep it consistent with other such internal/static
+function calls within this file. No hard opinion, just preference to avoid
+me thinking(or scratching my head) why only this is done different few
+months down the line.
+
+--
+Regards,
+Sudeep
 
