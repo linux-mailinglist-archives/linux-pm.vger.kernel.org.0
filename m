@@ -1,206 +1,176 @@
-Return-Path: <linux-pm+bounces-15428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15429-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3448C997BCB
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 06:27:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABB5A997C01
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 06:52:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB703281EC3
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 04:27:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B269B1C2223E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 04:52:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BF3F19D89B;
-	Thu, 10 Oct 2024 04:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB9619ADBF;
+	Thu, 10 Oct 2024 04:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="JUEgjjWs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uo7clEvs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m92233.xmail.ntesmail.com (mail-m92233.xmail.ntesmail.com [103.126.92.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5DC19C549;
-	Thu, 10 Oct 2024 04:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.126.92.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0827339AB;
+	Thu, 10 Oct 2024 04:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728534419; cv=none; b=a54UXNQTyYa9WMxhJ5+3E6qcn1czWwGpZHbVaR9OZ80ehCmt4otnIJfbbaIl8RSw97kQRptqBNJ4Gsm/JIxmxaoeFZ5pyf1c9RXCD2N303nbKp2itfy6gJVFVt8c8kNozuibA2todr49gy1oldH0GYLcxPTv9jTts9GQ8xO7tYY=
+	t=1728535930; cv=none; b=rqFLxHlsiB8M9S/Mfy3/FfE9/E8s9LOoIfOLzcBjy2eJyQJZQvPfukpc8mnNeW3bxHub9Dy4Jf/j1hicgvXejjq6CDQx1lgQXoIPLOFNaK3AneSggqHqGbHo02f5EQNyviDXBUkuArbYycLoLfX/5oUK0Z+baBYFVNdwle1Wshw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728534419; c=relaxed/simple;
-	bh=6//KWScm9mX9fW3ydl5GhjP8SzMNCQwOOC0JNpGmk/4=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=j7ZPNAK9ZKpa9XahOa9VYXY1saFihGH4M+jBYbVBuvdANevWojIeMfDb03QZo7K29X4DnnUbzFYBl1ZMZtDy1jnNvrVQKYTVEAlZ4ORQLe5PAY3zwnk/jz8Z8iVRXeqTW9Q53K6BS68PVPxcpHarA78I2DV2HAIYHCvrOu9tWek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=JUEgjjWs; arc=none smtp.client-ip=103.126.92.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-DKIM-Signature: a=rsa-sha256;
-	b=JUEgjjWsw8WkgYb+mcECVsI9IkmmXko4RB2udUoVTr19YR+jrI2EiCkwocKdrB85u2ooGalZr4zn1fVqmOtcGX/SUp90/dS2xkk0galBmo+k5nbZW6RqSLhusQYNH/rZ1r4xyCOArDJMFmu40t95UgPPWeBGiwNqZlyEss0tugs=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=aKBu267PcSvUBWDRFu4xvYcquBPnRNKWPIvfJjrnkG4=;
-	h=date:mime-version:subject:message-id:from;
-Received: from [172.16.12.45] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id 114E95203C3;
-	Thu, 10 Oct 2024 09:21:08 +0800 (CST)
-Message-ID: <3969bae0-eeb8-447a-86a5-dfdac0b136cd@rock-chips.com>
-Date: Thu, 10 Oct 2024 09:21:08 +0800
+	s=arc-20240116; t=1728535930; c=relaxed/simple;
+	bh=vG+z0hB9QOJAHw7x1DQKho8mZLiIEA5OhquV4KvSbaI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZwSNEpOAEn8Q6tTYPnHNcUNjU0txABZTOikZqSIs0Zo2Ua9Zbh/2mr3vr/bPxJUAggCjU3Dxx7y6boLYPeCCOOeQDR6zv/GnsIMhkFlF7R3mAPhoT3bF2aW3ko/G20tVTV/B05Er7JsFyatlxGzDQ0yEqKwYzdnvkCGGOQWExhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uo7clEvs; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728535929; x=1760071929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=vG+z0hB9QOJAHw7x1DQKho8mZLiIEA5OhquV4KvSbaI=;
+  b=Uo7clEvsazoVhJBGvKkdJhIAys22eRiBJ0OXT1SpifV84PPEw/359RM5
+   m3+P+JPluDOnnqH0RSxwRrtt2dta6xSKwR6ScsZVaxW8pG83Lf0sbkOH5
+   Zii5E4XOQ6p+RGD7HTg+VdmI+HR+M8tQtCaQX/aqP+XwyWSE3q2QLdjKq
+   a1dSH7vkVNk56wB20u6es+lbBzafGrKbEE+6Wcak/6MMtRcdOI95zJ6aR
+   h8ytr8xOxp523WQKEenCbBN1oBsuG/yqJpvtFIxFw9QMEiIfxcZ0YpohJ
+   /Q7b2g5NBaInP2/VJ9NsHEGfLiRKOLC0zLa3nAixIbMefqbJkulxYTsO7
+   g==;
+X-CSE-ConnectionGUID: 83kku5j0S2SmU9k1GTuENQ==
+X-CSE-MsgGUID: qrKsjTjdRGGTgC/nIR/+Zw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="39264005"
+X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
+   d="scan'208";a="39264005"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 21:52:08 -0700
+X-CSE-ConnectionGUID: /DGeCitOQ7+oGY3FaPEeUA==
+X-CSE-MsgGUID: J+o820GlQ96eYYYvJipFbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
+   d="scan'208";a="77296249"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 09 Oct 2024 21:52:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 7D3ED192; Thu, 10 Oct 2024 07:52:04 +0300 (EEST)
+Date: Thu, 10 Oct 2024 07:52:04 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Kai-Heng Feng <kaihengfeng@gmail.com>, bhelgaas@google.com,
+	mario.limonciello@amd.com, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
+Message-ID: <20241010045204.GE275077@black.fi.intel.com>
+References: <20240913080123.GP275077@black.fi.intel.com>
+ <20241009222403.GA507767@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: shawn.lin@rock-chips.com, Rob Herring <robh+dt@kernel.org>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
- Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] scsi: ufs: rockchip: initial support for UFS
-To: Ulf Hansson <ulf.hansson@linaro.org>
-References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
- <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
- <CAPDyKForpLcmkqruuTfD6kkJhp_4CKFABWRxFVYNskGL1tjO=w@mail.gmail.com>
-Content-Language: en-GB
-From: Shawn Lin <shawn.lin@rock-chips.com>
-In-Reply-To: <CAPDyKForpLcmkqruuTfD6kkJhp_4CKFABWRxFVYNskGL1tjO=w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkJCTFYdSUNMTh5LS0lPTR9WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
-	NVSktLVUpCS0tZBg++
-X-HM-Tid: 0a927403f43303afkunm114e95203c3
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MT46Shw6SjIpFA9LHw89NxcJ
-	Pz9PCgtVSlVKTElDTklISU1CTExNVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU1CTEg3Bg++
+In-Reply-To: <20241009222403.GA507767@bhelgaas>
 
-Hi Ulf
+On Wed, Oct 09, 2024 at 05:24:03PM -0500, Bjorn Helgaas wrote:
+> On Fri, Sep 13, 2024 at 11:01:23AM +0300, Mika Westerberg wrote:
+> > On Fri, Sep 13, 2024 at 02:00:58PM +0800, Kai-Heng Feng wrote:
+> > > On Fri, Sep 13, 2024 at 12:57 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Thu, Sep 12, 2024 at 11:00:43AM +0800, Kai-Heng Feng wrote:
+> > > > > On Thu, Sep 12, 2024 at 3:05 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Fri, Jul 12, 2024 at 02:24:11PM +0800, Kai-Heng Feng wrote:
+> > > > > > > Some laptops wake up after poweroff when HP Thunderbolt
+> > > > > > > Dock G4 is connected.
+> > > > > > >
+> > > > > > > The following error message can be found during shutdown:
+> > > > > > > pcieport 0000:00:1d.0: AER: Correctable error message received from 0000:09:04.0
+> > > > > > > pcieport 0000:09:04.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
+> > > > > > > pcieport 0000:09:04.0:   device [8086:0b26] error status/mask=00000080/00002000
+> > > > > > > pcieport 0000:09:04.0:    [ 7] BadDLLP
+> > > > > > >
+> > > > > > > Calling aer_remove() during shutdown can quiesce the error
+> > > > > > > message, however the spurious wakeup still happens.
+> > > > > > >
+> > > > > > > The issue won't happen if the device is in D3 before
+> > > > > > > system shutdown, so putting device to low power state
+> > > > > > > before shutdown to solve the issue.
+> > > > > > >
+> > > > > > > I don't have a sniffer so this is purely guesswork,
+> > > > > > > however I believe putting device to low power state it's
+> > > > > > > the right thing to do.
+> > > > > >
+> > > > > > My objection here is that we don't have an explanation of
+> > > > > > why this should matter or a pointer to any spec language
+> > > > > > about this situation, so it feels a little bit random.
+> > ...
+> 
+> > I don't mean to confuse you guys but with this one too, I wonder if you
+> > tried to "disable" the device instead of putting it into D3? On another
+> > thread (Mario at least is aware of this) I mentioned that our PCIe SV
+> > folks identified a couple issues in Linux implementation around power
+> > management and one thing that we are missing is to disable I/O and MMIO
+> > upon entering D3.
+> > ...
+> 
+> This is really interesting -- did they discover a functional problem,
+> or did they just notice that we don't follow the PCI PM spec?
 
-在 2024/10/9 21:15, Ulf Hansson 写道:
-> [...]
-> 
->> +
->> +static int ufs_rockchip_runtime_suspend(struct device *dev)
->> +{
->> +       struct ufs_hba *hba = dev_get_drvdata(dev);
->> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
->> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-> 
-> pd_to_genpd() isn't safe to use like this. It's solely to be used by
-> genpd provider drivers.
-> 
->> +
->> +       clk_disable_unprepare(host->ref_out_clk);
->> +
->> +       /*
->> +        * Shouldn't power down if rpm_lvl is less than level 5.
-> 
-> Can you elaborate on why we must not power-off the power-domain when
-> level is less than 5?
-> 
+The latter.
 
-Because ufshcd driver assume the controller is active and the link is on
-if level is less than 5. So the default resume policy will not try to
-recover the registers until the first error happened. Otherwise if the
-level is >=5, it assumes the controller is off and the link is down,
-then it will restore the registers and link.
+> > +++ b/drivers/pci/pci.c
+> > @@ -2218,6 +2218,13 @@ static void do_pci_disable_device(struct pci_dev *dev)
+> >  		pci_command &= ~PCI_COMMAND_MASTER;
+> >  		pci_write_config_word(dev, PCI_COMMAND, pci_command);
+> >  	}
+> > +	/*
+> > +	 * PCI PM 1.2 sec 8.2.2 says that when a function is put into D3
+> > +	 * the OS needs to disable I/O and MMIO space in addition to bus
+> > +	 * mastering so do that here.
+> > +	 */
+> > +	pci_command &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
+> > +	pci_write_config_word(dev, PCI_COMMAND, pci_command);
+> >  
+> >  	pcibios_disable_device(dev);
+> >  }
+> 
+> This do_pci_disable_device() proposal is interesting.
+> 
+> pci_enable_device() turns on PCI_COMMAND_MEMORY and PCI_COMMAND_IO,
+> which enables the device to respond to MMIO and I/O port accesses to
+> its BARs from the driver.  It also makes sure the device is in D0,
+> because BAR access only works in D0.
+> 
+> pci_set_master() turns on PCI_COMMAND_MASTER, which enables the device
+> to perform DMA (including generating MSIs).
+> 
+> pci_disable_device() *sounds* like it should be the opposite of
+> pci_enable_device(), but it's currently basically the same as
+> pci_clear_master(), which clears PCI_COMMAND_MASTER to prevent DMA.
+> I didn't know about this text in 8.2.2, and I wish I knew why we
+> don't currently clear PCI_COMMAND_MEMORY and PCI_COMMAND_IO.
+> 
+> If we want to pursue this, I think it should be split to its own patch
+> and moved out of pci_disable_device() because I don't think this path
+> necessary implies putting the device in D3, so I think it would fit
+> better with the spec if we cleared PCI_COMMAND_MEMORY and
+> PCI_COMMAND_IO in a path that explicitly does put it in D3.
+> 
+> I think there's a significant chance of breaking something because
+> drivers are currently able to access BARs after pci_disable_device(),
+> and there are a LOT of callers.  But if there's a problem it would
+> fix, we should definitely explore it.
 
-And the level is changeable via sysfs.
-
-> What happens if we power-off anyway when the level is less than 5?
-> 
->> +        * This flag will be passed down to platform power-domain driver
->> +        * which has the final decision.
->> +        */
->> +       if (hba->rpm_lvl < UFS_PM_LVL_5)
->> +               genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
->> +       else
->> +               genpd->flags &= ~GENPD_FLAG_RPM_ALWAYS_ON;
-> 
-> The genpd->flags is not supposed to be changed like this - and
-> especially not from a genpd consumer driver.
-> 
-> I am trying to understand a bit more of the use case here. Let's see
-> if that helps me to potentially suggest an alternative approach.
-> 
-
-I was not familiar with the genpd part, so I haven't come up with 
-another solution. It would be great if you can guide me to the right
-way.
-
->> +
->> +       return ufshcd_runtime_suspend(dev);
->> +}
->> +
->> +static int ufs_rockchip_runtime_resume(struct device *dev)
->> +{
->> +       struct ufs_hba *hba = dev_get_drvdata(dev);
->> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
->> +       int err;
->> +
->> +       err = clk_prepare_enable(host->ref_out_clk);
->> +       if (err) {
->> +               dev_err(hba->dev, "failed to enable ref out clock %d\n", err);
->> +               return err;
->> +       }
->> +
->> +       reset_control_assert(host->rst);
->> +       usleep_range(1, 2);
->> +       reset_control_deassert(host->rst);
->> +
->> +       return ufshcd_runtime_resume(dev);
->> +}
->> +
->> +static int ufs_rockchip_system_suspend(struct device *dev)
->> +{
->> +       struct ufs_hba *hba = dev_get_drvdata(dev);
->> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
->> +
->> +       /* Pass down desired spm_lvl to Firmware */
->> +       arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
->> +                       host->pd_id, hba->spm_lvl < 5 ? 1 : 0, 0, 0, 0, 0, NULL);
-> 
-> Can you please elaborate on what goes on here? Is this turning off the
-> power-domain that the dev is attached to - or what is actually
-> happening?
-> 
-
-This smc call is trying to ask firmware not to turn off the power-domian
-that the UFS is attached to and also not to turn off the power of UFS
-conntroller.
-
-Per your comment at patch 4, should I use GENPD_FLAG_ALWAYS_ON +
-arm_smccc_smc here in system suspend?
-
->> +
->> +       return ufshcd_system_suspend(dev);
->> +}
->> +
->> +static const struct dev_pm_ops ufs_rockchip_pm_ops = {
->> +       SET_SYSTEM_SLEEP_PM_OPS(ufs_rockchip_system_suspend, ufshcd_system_resume)
->> +       SET_RUNTIME_PM_OPS(ufs_rockchip_runtime_suspend, ufs_rockchip_runtime_resume, NULL)
->> +       .prepare         = ufshcd_suspend_prepare,
->> +       .complete        = ufshcd_resume_complete,
->> +};
->> +
->> +static struct platform_driver ufs_rockchip_pltform = {
->> +       .probe = ufs_rockchip_probe,
->> +       .remove = ufs_rockchip_remove,
->> +       .driver = {
->> +               .name = "ufshcd-rockchip",
->> +               .pm = &ufs_rockchip_pm_ops,
->> +               .of_match_table = ufs_rockchip_of_match,
->> +       },
->> +};
->> +module_platform_driver(ufs_rockchip_pltform);
->> +
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
+At the moment it does not seem to fix anything as far as I can tell so
+not sure how important it is. Of course from spec perspective we should
+probably deal with it.
 
