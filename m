@@ -1,150 +1,142 @@
-Return-Path: <linux-pm+bounces-15425-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15426-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C955A997878
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 00:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04EB5997991
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 02:19:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 047771C22720
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2024 22:24:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D83FB1C21F12
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 00:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71991E32B7;
-	Wed,  9 Oct 2024 22:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50FEA63D;
+	Thu, 10 Oct 2024 00:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ciayY5H6"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PRUq9Kk0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5EA19923C;
-	Wed,  9 Oct 2024 22:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021218BEC
+	for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 00:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728512646; cv=none; b=GM/njAk5nij07jeH3fpwZKcRKInT8ch3QWZLwptdLX7XqXijO4BA0gWnDAEuQs+HHywpcK9bBWAm21FWgtzsD5E0MB2yxEO0W50+ORQRaaWFFQd/8llA3giewnh5RyE8ilbRchM8k3ZcY7q6hWmQahQEVF3N/Zo4H9XhCcgt4+o=
+	t=1728519577; cv=none; b=iGIbIgtBDyEIK0LVnxSG0HJFIiACzUA8HxRGz2Z9KSkT/7hS5yDgUCPA5HlN00zhkhzLzIjd9D+KKnrUCxM80MZCs9bbCuRQahzJoc3UhhdRe1w/Dkb0E2mfi12wRbAiCXWW+Yk6YuMFJGd7ZsN5H8LXGNq8W4nax6TPakFi8uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728512646; c=relaxed/simple;
-	bh=Q1IRoaSIpPaBToI0HSWzg6kfGu2RhTlvkYSuzXw7Tc0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=fSqDTO1sqaI8wUtMMIqArHQ2w25ucQh4vC0F5bw1UsrMqu9FnfYc1zxvAb9Ys38Mz/0sXspv7FBtGQ/xV4xfQZWR6M0JG1mauct6RBJb9rgEtLfk1J86uxIg1EcletJnKbRaw5g6MkTNQtt/ifh8UBIzOFNgrgUkmD1YkUxzqgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ciayY5H6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4189AC4CECC;
-	Wed,  9 Oct 2024 22:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728512645;
-	bh=Q1IRoaSIpPaBToI0HSWzg6kfGu2RhTlvkYSuzXw7Tc0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=ciayY5H63RROmQEDj/ybuztTAOuK2JyjBZwr1S6BCB+ABhoNGcr32/uVlrV68Eh33
-	 K0u51+jxwUGn9ETCjcJ7vF7oP+mIA5H/QpFyzbLk4l6rmxw7haIyYMCWMj7r81N60X
-	 hHwP6cSPUC2c5FMH0GHtpJryayTtxc1f31A66PJYbl8fyTsWcbTXv8/EMkW8qEKAK0
-	 PqhdRfkm1lal8eY8G+mtkAvL9Jm4uHhuI/pD0jKsO+B6Ho59FxXng0OQyuYjjQgKfB
-	 maEyLQ8Rg/XYlUScqBjxaUMrLJUwTfeqkd0DJjBKqTzKk3a7vZS2bGrxD9rDXIX95j
-	 S9t7sNnQmTxZA==
-Date: Wed, 9 Oct 2024 17:24:03 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Kai-Heng Feng <kaihengfeng@gmail.com>, bhelgaas@google.com,
-	mario.limonciello@amd.com, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
-Message-ID: <20241009222403.GA507767@bhelgaas>
+	s=arc-20240116; t=1728519577; c=relaxed/simple;
+	bh=SFNWuHwKZc6gHwh8fVddaI3cpGflv1ca3j33w2CBd2Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=W6h9NWBDUjDvLVjX1fTZNbAbpMhNAYrDZnZ41ehocureBx3DLWT8ZHCkYlk9vjRjqPKb5GlSMgZljA8aTQq2W8HgU/rJEntgyt013/z3xcE07vemHfM9hKMKOG0qAjdBy9EIYNliI7vKiQLMvd6hNMJ5YrK1bQ7r2YQg2LB+esQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=PRUq9Kk0; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7db54269325so275154a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2024 17:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1728519573; x=1729124373; darn=vger.kernel.org;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5oEEOIJNVv5T0TeWex13g8S0i310/CeWWhyQlNL8TqA=;
+        b=PRUq9Kk0XLJ8z1rNQAJnLVNbYY7q66aq5eRNaCsLO410zl20AbWGrgACf6BXGhoOcS
+         jDp1nxEMvLizkuLFfl5GaqgtoqI6ZezmuyvYWD59RnP3VksTOcT76tWQ3OVfx4H6gXCR
+         vjt4WjDZZgcUQ7xomE+fi+CJ4lItAEvBcfQ0fyJWgnWe69XdoACpym70Kvr8IXAQiHDI
+         BUa3JhJuEcM93CeBkWgOEwFM+G50ePGCXYAI+G72vpmUXQX3mwIXqnyMllOLPzB3whpM
+         3XwimR8Zs+rOXT5xOhF2v3Lx97YUavW9C+il1we41+rst1DGApaFT4fZgji5rQZ/rK0S
+         2JDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728519573; x=1729124373;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5oEEOIJNVv5T0TeWex13g8S0i310/CeWWhyQlNL8TqA=;
+        b=uoAHuryvFjvyzbs0SK3sZJ2mnnClNNBXaPGzakTw3Thwra6yXnUa4EKD86UpLQrl8s
+         ZLRLcCGFZ+9PX4MHIbeB3fVVuTdyafFG3aM68a/HEm2Lq64GegevKawKsz4YUi0vsk5P
+         bwDZwY0u4jH6BBZ8k+XH9KXg5kUK56zTxRu5idMQiAP94TWkGxiUf7s4+2C1aRuFp9O/
+         ifJrkad+pWx4SH90L8p2RIqKV1pgAK3JkdmvmL//FrkgmU+CoyoTN7UTIBxxVDMAuLq5
+         iE1F/TF5LqAzQR4wkH+hau8OSatbfdGx6St1iJRDZAfrPcmkDQEtwBUXC08PhAzE1VIo
+         WRvw==
+X-Forwarded-Encrypted: i=1; AJvYcCV9VoyBI4YaYQ4hQRHYEKcovi0XXxRdOwYyH+KikaOBPF01bKYVW9WgR5FwpKynS73/gFCQd/muUg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyg5hnVKFkOwZWJURKTK3fO5Z8JLX9WQFYAzJ89FmH1lY037fSl
+	ghYRN509MFN+Z/rJAhhbe+arnkq+NR1xhx0YHsUKxHjjsM49wu0QYMoE3M10ueg=
+X-Google-Smtp-Source: AGHT+IEAOtkGiFzJXWZ7utojQpdMsBfu7PmU0MntDUkwmLoOU+Z0HD8z3hXWDYdA9qJt7EHCM6txxg==
+X-Received: by 2002:a05:6a21:3a44:b0:1cf:6c86:231c with SMTP id adf61e73a8af0-1d8a3c3b5e0mr8104461637.26.1728519572988;
+        Wed, 09 Oct 2024 17:19:32 -0700 (PDT)
+Received: from localhost ([71.212.170.185])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2aa937b5sm8015b3a.125.2024.10.09.17.19.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 17:19:32 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Saravana Kannan
+ <saravanak@google.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
+ linux-pm@vger.kernel.org
+Subject: arm64 s2idle vs. workqueues
+Date: Wed, 09 Oct 2024 17:19:31 -0700
+Message-ID: <7ho73shkrw.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240913080123.GP275077@black.fi.intel.com>
+Content-Type: text/plain
 
-On Fri, Sep 13, 2024 at 11:01:23AM +0300, Mika Westerberg wrote:
-> On Fri, Sep 13, 2024 at 02:00:58PM +0800, Kai-Heng Feng wrote:
-> > On Fri, Sep 13, 2024 at 12:57 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Thu, Sep 12, 2024 at 11:00:43AM +0800, Kai-Heng Feng wrote:
-> > > > On Thu, Sep 12, 2024 at 3:05 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Fri, Jul 12, 2024 at 02:24:11PM +0800, Kai-Heng Feng wrote:
-> > > > > > Some laptops wake up after poweroff when HP Thunderbolt
-> > > > > > Dock G4 is connected.
-> > > > > >
-> > > > > > The following error message can be found during shutdown:
-> > > > > > pcieport 0000:00:1d.0: AER: Correctable error message received from 0000:09:04.0
-> > > > > > pcieport 0000:09:04.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
-> > > > > > pcieport 0000:09:04.0:   device [8086:0b26] error status/mask=00000080/00002000
-> > > > > > pcieport 0000:09:04.0:    [ 7] BadDLLP
-> > > > > >
-> > > > > > Calling aer_remove() during shutdown can quiesce the error
-> > > > > > message, however the spurious wakeup still happens.
-> > > > > >
-> > > > > > The issue won't happen if the device is in D3 before
-> > > > > > system shutdown, so putting device to low power state
-> > > > > > before shutdown to solve the issue.
-> > > > > >
-> > > > > > I don't have a sniffer so this is purely guesswork,
-> > > > > > however I believe putting device to low power state it's
-> > > > > > the right thing to do.
-> > > > >
-> > > > > My objection here is that we don't have an explanation of
-> > > > > why this should matter or a pointer to any spec language
-> > > > > about this situation, so it feels a little bit random.
-> ...
+Hello,
 
-> I don't mean to confuse you guys but with this one too, I wonder if you
-> tried to "disable" the device instead of putting it into D3? On another
-> thread (Mario at least is aware of this) I mentioned that our PCIe SV
-> folks identified a couple issues in Linux implementation around power
-> management and one thing that we are missing is to disable I/O and MMIO
-> upon entering D3.
-> ...
+Looking for some pointers/tips on debugging s2idle, and in particular
+why it is not staying in an idle state as long as expected.
 
-This is really interesting -- did they discover a functional problem,
-or did they just notice that we don't follow the PCI PM spec?
+I'm attempting to use s2idle on a 4-core, single cluster ARM64 SoC (TI
+AM62x), which doesn't (yet) have any DT defined idle-states, so is just
+doing a WFI when idle.
 
-> +++ b/drivers/pci/pci.c
-> @@ -2218,6 +2218,13 @@ static void do_pci_disable_device(struct pci_dev *dev)
->  		pci_command &= ~PCI_COMMAND_MASTER;
->  		pci_write_config_word(dev, PCI_COMMAND, pci_command);
->  	}
-> +	/*
-> +	 * PCI PM 1.2 sec 8.2.2 says that when a function is put into D3
-> +	 * the OS needs to disable I/O and MMIO space in addition to bus
-> +	 * mastering so do that here.
-> +	 */
-> +	pci_command &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
-> +	pci_write_config_word(dev, PCI_COMMAND, pci_command);
->  
->  	pcibios_disable_device(dev);
->  }
+I'm doing an 8-second s2idle with RTC wakeup by using:
 
-This do_pci_disable_device() proposal is interesting.
+  rtcwake -m freeze -s8
 
-pci_enable_device() turns on PCI_COMMAND_MEMORY and PCI_COMMAND_IO,
-which enables the device to respond to MMIO and I/O port accesses to
-its BARs from the driver.  It also makes sure the device is in D0,
-because BAR access only works in D0.
+and what I see is that 3 of the CPUs stay in their idle state for the
+full 8 seconds, but one of them keeps waking due to the A53
+arm_arch_timer firing, and processing misc. workqueue related activity
+(example work listed below[1].)
 
-pci_set_master() turns on PCI_COMMAND_MASTER, which enables the device
-to perform DMA (including generating MSIs).
+I realize that these workqueues are not WQ_FREEZABLE, so I don't expect
+the freezer part of suspend to stop/freeze them.  However, I am a bit
+surprised to see this non-frozen workqueue activity happening often
+enough (few times per second) to prevent all 4 CPUs from being idle for
+long periods at the same time, thus preventing a deeper cluster-idle
+state.
 
-pci_disable_device() *sounds* like it should be the opposite of
-pci_enable_device(), but it's currently basically the same as
-pci_clear_master(), which clears PCI_COMMAND_MASTER to prevent DMA.
-I didn't know about this text in 8.2.2, and I wish I knew why we
-don't currently clear PCI_COMMAND_MEMORY and PCI_COMMAND_IO.
+Is there something else I'm missing that is needed to keep these
+workqueues quiet for longer?  I had assumed that most of this workqueue
+work would be deferred, and shouldn't need to wakeup a CPU just to run.
 
-If we want to pursue this, I think it should be split to its own patch
-and moved out of pci_disable_device() because I don't think this path
-necessary implies putting the device in D3, so I think it would fit
-better with the spec if we cleared PCI_COMMAND_MEMORY and
-PCI_COMMAND_IO in a path that explicitly does put it in D3.
+In case it's helpful I have published a trace.dat from trace-cmd which
+captures power, sched, irq, timer and workqueue events.  With
+kernelshark, it's pretty obvious to visualize what's happening: CPU0,1,3
+are all nicely idle for 8 sec while CPU2 is waking due to the timer and
+workqueue activity.
 
-I think there's a significant chance of breaking something because
-drivers are currently able to access BARs after pci_disable_device(),
-and there are a LOT of callers.  But if there's a problem it would
-fix, we should definitely explore it.
+Any pointers to how to improve this situation, or what else needs to be
+tweaked here would be greatly appreciated,
 
-Bjorn
+Thanks,
+
+Kevin
+
+
+[1]
+function, workqueue name
+------------------------
+- page_pool_release_retry(), "events"
+- vmstat_shepherd(), "events"
+- vmstat_update(), "mm_percpu_wq"
+- crng_reseed(), "events_unbound"
+- kfree_rcu_monitor(), "events"
+- flush_memcg_stats_dwork(), "events_unbound"
+- neigh_managed_work(), "events_power_efficient"
+- async_run_entry_fn(), "async"
+- deferred_probe_work_func(), "events"
+- tcp_orphan_update(), timer expiry
+
+[2] https://drive.google.com/file/d/1U51eTTeb4_13-CZWa2llHXTh9DfZ_4sF/view?usp=sharing
 
