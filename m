@@ -1,154 +1,237 @@
-Return-Path: <linux-pm+bounces-15461-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15462-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20953998AC1
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 17:01:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5C3E998B90
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 17:28:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0FA2B3207C
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 14:27:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87773B359FC
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 14:39:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7231CBEAF;
-	Thu, 10 Oct 2024 14:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFB501F470C;
+	Thu, 10 Oct 2024 14:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="THu5v9dm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="urJG02DX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29E01CC175
-	for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 14:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CFA1F1319;
+	Thu, 10 Oct 2024 14:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728570110; cv=none; b=Ynvvlh9Og3T3rO45pekFS04rjy952/9/pwVOdL3GrSvwB2SNclFnwypnZO4hbo4NZF7K6KYQDj0fe9z+z6L5NHOxtzBelvIhP8YAJk3dhNDcfCiY002ozcy4qZrK3WlD2vIvcKZAX8QshWooZBzQTMFIQRXjUBfC19OFlJ3UJHo=
+	t=1728570609; cv=none; b=IABHbn+ydsABsePS9+RHaaAIQ9a60QiOM/CmHhx9i3YwOh34Ra5Ws365Eq9ufiJpR7wPZb8eiQI9402jLujrZ7y21iYMVuCZYR9BUPHbQmMci5BX4D9n5aw+z446zWbGj1bYGAlHy4oG0vlrfFlr1nLBnuRjOL8Cd0ebdpPjbkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728570110; c=relaxed/simple;
-	bh=Pn+/ovAfKzaZgF1lOOQemSoa3w7I63F4I3qtxW0337Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RqbDc3TOvOkQOcoJgtQFP+IWPZTxKpLPiTMJN7RTZZv4xLTYycyP3PzxCx5z+lxf4lQ72ISJii6GKzXcOjnwqB+hXEZpmWjweXD2WI0jgtVgSh95HYUBa7903om2K7aBHAMzJZQH+L+39c7L1tZV5xNCijBlV3VPLIbWPBsCVKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=THu5v9dm; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-460464090d5so4278141cf.2
-        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 07:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1728570108; x=1729174908; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vtQNH6rvFcrdxN4zHa126S8BT47FK08wSbNoHwbhRl0=;
-        b=THu5v9dmI28MJFTQc4Ws0lmriBo44cwiS+kcTBpct3vKr65hdmxTCm7XmxDpcD3vGY
-         712FO30yPRA4XizJigNhRDoxF2Y9Wqvu9fAZlwJ6tbpkHkr/dNf5OGAAay0lqpgz0zi7
-         fhC9A02nuJzcnpPngUbh65iCAsx11KDl6MKM9uL7ooatlvuvOS5X4ESWroEOOScikla7
-         leaKPIljZAWH6akBgVf8awbU/V9pBWAsgpGjqU16tAPTpdvVDGYT0iY9GGpqOANnxL8o
-         UHPkfgpb/qEsPQVBSFKm6yHFtb0TekkeIoUCfrnDvZy1TDuWZOwjKoZT6u93kuEXAF4P
-         d5QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728570108; x=1729174908;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vtQNH6rvFcrdxN4zHa126S8BT47FK08wSbNoHwbhRl0=;
-        b=cJIbnWe3gHtMQ1WDI0lVV7a173uCs1BF2XWBjaviFwx/t3S8Xdl8bb/FBI9xJmuyIG
-         Q6dyqt5QD51HowYir8HNXmchBKmsi5ybwqFBIZvCjFNFTCUjKCJRlkq6nyFzXtSsHrS7
-         Trp4+/RwJ6FSaP1zE1sMbQx8sPM5WJJogOKNG32S4t0xYU1Y69HOaBZAkPFySx3KrrP7
-         sdlbTC2RrjQWzDZVNQbFa6U6S5RZglBDCmTWi+v9b9IaO+AjdpOdSRlEegpl3MkeGJx+
-         YcaO8uc8++nI5lsRNF9f4cKKh1B9tG3B2Xa4wvlSVM8D7/SdtsAqLkx+qxv1p3ivyqDv
-         K9ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXU5wPluDUTVf/lmBTZhAco9PwhwFLqmXPp0x3iJ8dkEb0pFZRRUxdZwSeE7j6k0sWYO6unAPJueQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9VpiDnpUymmRxuCFl+eZ1LaxfkAC67t6FznWcNumr4qcAW6Ho
-	+TFk+Zw84jQ4LT1eqtNOc8DSBf4uU8lGalfdvWTy6BjzzM6cN2+D1C6li76Zig==
-X-Google-Smtp-Source: AGHT+IE+UsnOG49Pq5AyS2xIUjW9P9DXzZJGhEQefQupzSZHTswqoW16lQIgXA8ZNNhcWysuNuhDWQ==
-X-Received: by 2002:ac8:7d46:0:b0:44f:f14c:6a63 with SMTP id d75a77b69052e-45fa5ec0fe9mr96443611cf.11.1728570107392;
-        Thu, 10 Oct 2024 07:21:47 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::31c2])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-460427d5178sm5748291cf.25.2024.10.10.07.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 07:21:47 -0700 (PDT)
-Date: Thu, 10 Oct 2024 10:21:43 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: duanchenghao <duanchenghao@kylinos.cn>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Hongyu Xie <xy521521@gmail.com>, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
-	stanley_chang@realtek.com, tj@kernel.org,
-	Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-Message-ID: <d70e070f-5224-402c-ac27-0703b4010b18@rowland.harvard.edu>
-References: <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
- <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
- <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
- <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
- <bddecd4e-d3c8-448e-8a22-84bbc98c4d1b@kylinos.cn>
- <b2ec107d4797f6e1e8e558f97c0ad1be6d46572c.camel@kylinos.cn>
- <84a4f66a-5b0e-46a8-8746-be6cd7d49629@rowland.harvard.edu>
- <fa347849defa66a7d4af23ac6317ae5b37357ea4.camel@kylinos.cn>
- <2c368013-8363-4a4e-bfee-2f0b14d01162@rowland.harvard.edu>
- <5f2f6b979e95e4c2bc33ea0277112939164f6024.camel@kylinos.cn>
+	s=arc-20240116; t=1728570609; c=relaxed/simple;
+	bh=OXYTseSavrvP5Laj4WRn5qD6AAIg2e7hd5QYSkTyaJ4=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=LWLpIaRXW7yoRWIE3R1Nb9zOpif2XZA8AKRQY9BOEmS5hw+JHZeP49yoywDNm64DSAVRCSYPKmv8JYFuxRJeTFjZBVBkcIRBOD6FmwjsgtGCjJHr2r0BQlKX7m/7TW5ZPShgbPmLebFshPbcF1RMqid5NfQvZ/hKab6a+2t8G4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=urJG02DX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8317AC4CEC5;
+	Thu, 10 Oct 2024 14:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728570609;
+	bh=OXYTseSavrvP5Laj4WRn5qD6AAIg2e7hd5QYSkTyaJ4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=urJG02DXdX02b2LP/wiaLOZwLu16lu8GyI4Jk1sRkMWWOfKWKjVVQCUReypybEDy3
+	 +cIQnCL3c6MUiKuSx5DkwuzFqMXyG0OPFRaWFLfk7pNEYEMBew3GfMj9Dd1qVxk50Y
+	 E3JUtZ8LeQNZBj/PChmbTCTmGecLlwKFPR6v3hKE8sZ48ZECOi44eUhXgxRQFt1KU+
+	 S9nKcEtAYMgTY5oV+MPlw0c47c/ycMLXj8IhZ0F6F36noUClXQNwB0z57pF0CYFC1C
+	 jvtsZzMg5N7o58qFRe83ugeXZtUuLZYBS9KBA9OToliDfrxNxYvl3foIByt4aKoNEH
+	 7pqBLnDZg3PGg==
+Date: Thu, 10 Oct 2024 09:30:08 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f2f6b979e95e4c2bc33ea0277112939164f6024.camel@kylinos.cn>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc: alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+ claudiu.beznea@tuxon.dev, nicolas.ferre@microchip.com, krzk+dt@kernel.org, 
+ sre@kernel.org, mihai.sain@microchip.com, devicetree@vger.kernel.org, 
+ linux-pm@vger.kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20241010120142.92057-1-varshini.rajendran@microchip.com>
+References: <20241010120142.92057-1-varshini.rajendran@microchip.com>
+Message-Id: <172857036103.1533272.15935981992235971511.robh@kernel.org>
+Subject: Re: [PATCH v8 0/9] Add support for sam9x7 SoC family
 
-On Thu, Oct 10, 2024 at 01:59:08PM +0800, duanchenghao wrote:
-> Hi Alan,
 
-> Thank you very much for your evaluation of the scheme. I have a
-> question regarding why the set_bit operation for the
-> HCD_FLAG_WAKEUP_PENDING flag is performed in the top half of an
-> interrupt handler, while the clear_bit operation is done in the bottom
-> half. This seems to contradict conventional practices. The issue is not
-> limited to S4; if other processes freeze the work queue in the bottom
-> half, the same problem may arise.
+On Thu, 10 Oct 2024 17:31:42 +0530, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
+> 
+>  Changes in v8:
+>  --------------
+> 
+>  - Dropped patches that are applied from the series
+>  - Picked up Reviewed-by tags
+>  - Changed the node name from leds to led-controller in the board dts
+>    file.
+> 
+>  Changes in v7:
+>  --------------
+> 
+>  - Addressed all the review comments in the patches
+>  - Dropped patches that are applied from the series
+>  - Removed sfr node from the DT to add it later after creating the right
+>    DT documentation for microchip sfr IPs.
+>  - All the specific changes are captured in the corresponding patches
+> 
+>  Changes in v6:
+>  --------------
+> 
+>  - Addressed all the review comments in the patches
+>  - Picked up all Acked-by and Reviewed-by tags
+>  - Reverted the IRQ patch to that of version 3 of the same series
+>  - All the specific changes are captured in the corresponding patches
+> 
+>  Changes in v5:
+>  --------------
+> 
+>  - Addressed all the review comments in the patches
+>  - Picked up all Acked-by and Reviewed-by tags
+>  - Dropped applied patches from the series
+>  - Addressed the ABI breakage reported in the IRQ patch
+>  - All the specific changes are captured in the corresponding patches
+> 
+>  Changes in v4:
+>  --------------
+> 
+>  - Addressed all the review comments in the patches
+>  - Picked up all Acked-by and Reviewed-by tags
+>  - Dropped applied patches from the series
+>  - Added pwm node and related dt binding documentation
+>  - Added support for exporting some clocks to DT
+>  - Dropped USB related patches and changes. See NOTE.
+>  - All the specific changes are captured in the corresponding patches
+> 
+>  NOTE: Owing to the discussion here
+>  https://lore.kernel.org/linux-devicetree/CAL_JsqJ9PrX6fj-EbffeJce09MXs=B7t+KS_kOinxaRx38=WxA@mail.gmail.com/
+>  the USB related changes are dropped from this series in order to enable
+>  us to work on the mentioned issues before adding new compatibles as
+>  said. The issues/warnings will be addressed in subsequent patches.
+>  After which the USB related support for sam9x7 SoCs will be added. Hope
+>  this works out fine.
+> 
+>  Changes in v3:
+>  --------------
+> 
+>  - Fixed the DT documentation errors pointed out in v2.
+>  - Dropped Acked-by tag in tcb DT doc patch as it had to be adapted
+>    according to sam9x7 correctly.
+>  - Picked by the previously missed tags.
+>  - Dropped this patch "dt-bindings: usb: generic-ehci: Document clock-names
+>    property" as the warning was not found while validating DT-schema for
+>    at91-sam9x75_curiosity.dtb.
+>  - Dropped redundant words in the commit message.
+>  - Fixed the CHECK_DTBS warnings validated against
+>    at91-sam9x75_curiosity.dtb.
+>  - Renamed dt nodes according to naming convention.
+>  - Dropped unwanted status property in dts.
+>  - Removed nodes that are not in use from the board dts.
+>  - Removed spi DT doc patch from the series as it was already applied
+>    and a fix patch was applied subsequently. Added a patch to remove the
+>    compatible to adapt sam9x7.
+>  - Added sam9x7 compatibles in usb dt documentation.
+> 
+> 
+>  Changes in v2:
+>  --------------
+> 
+>  - Added sam9x7 specific compatibles in DT with fallbacks
+>  - Documented all the newly added DT compatible strings
+>  - Added device tree for the target board sam9x75 curiosity and
+>    documented the same in the DT bindings documentation
+>  - Removed the dt nodes that are not supported at the moment
+>  - Removed the configs added by previous version that are not supported
+>    at the moment
+>  - Fixed all the corrections in the commit message
+>  - Changed all the instances of copyright year to 2023
+>  - Added sam9x7 flag in PIT64B configuration
+>  - Moved macro definitions to header file
+>  - Added another divider in mck characteristics in the pmc driver
+>  - Fixed the memory leak in the pmc driver
+>  - Dropped patches that are no longer needed
+>  - Picked up Acked-by and Reviewed-by tags
+> 
+> Varshini Rajendran (9):
+>   dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
+>   power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
+>   power: reset: at91-reset: add reset support for sam9x7 SoC
+>   power: reset: at91-reset: add sdhwc support for sam9x7 SoC
+>   dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7
+>   dt-bindings: power: reset: atmel,sama5d2-shdwc: add sam9x7
+>   ARM: dts: at91: sam9x7: add device tree for SoC
+>   dt-bindings: arm: add sam9x75 curiosity board
+>   ARM: dts: microchip: sam9x75_curiosity: add sam9x75 curiosity board
+> 
+>  .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
+>  .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
+>  .../power/reset/atmel,sama5d2-shdwc.yaml      |    3 +
+>  .../reset/atmel,at91sam9260-reset.yaml        |    4 +
+>  arch/arm/boot/dts/microchip/Makefile          |    3 +
+>  .../dts/microchip/at91-sam9x75_curiosity.dts  |  324 +++++
+>  arch/arm/boot/dts/microchip/sam9x7.dtsi       | 1220 +++++++++++++++++
+>  drivers/power/reset/Kconfig                   |    4 +-
+>  drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
+>  9 files changed, 1564 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dts
+>  create mode 100644 arch/arm/boot/dts/microchip/sam9x7.dtsi
+> 
+> --
+> 2.25.1
+> 
+> 
+> 
 
-The flag is treated this way because that's what it means: A wakeup is 
-pending.  The kernel first learns about the wakeup when it receives the 
-wakeup interrupt from the host controller, so that's when it sets the 
-flag -- in the top half of the interrupt handler.  The wakeup procedure 
-isn't complete until the root hub has been resumed, so the flag remains 
-set until that resume is finished, in the bottom half.
 
-You say "the same problem may arise", but I don't think it is a problem.  
-If the system is about to suspend the host controller with wakeups 
-enabled, and a wakeup request has already been received but the system 
-has not yet finished acting on it, then the suspend _should_ fail.  
-After all, if the wakeup interrupt had arrived just after the host 
-controller was suspended rather than just before, it would have caused 
-the host controller to be resumed right away -- with exactly the same 
-effect as if the controller had never been suspended in the first place.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-> The solution you described below should be able to resolve the current
-> S4 issue, but for now, we haven't identified any other scenarios that
-> require the same operation.
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-Perhaps because there aren't any.
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
->  Based on my understanding, the USB device
-> is woken up in the bottom half of the interrupt,
+  pip3 install dtschema --upgrade
 
-You are failing to distinguish between the host controller and the root 
-hub.  The host controller (which is a PCI device on your system, not a 
-USB device) is woken up in the top half of the interrupt handler.  The 
-root hub (which is a virtual USB device) is woken up in the bottom half.  
-Both operations have to occur before the wakeup can be considered fully 
-complete.
 
->  and both the set_bit
-> and clear_bit operations for the HCD_FLAG_WAKEUP_PENDING flag should be
-> executed within the same thread in the bottom half. May I ask if there
-> are any other reasons why the set_bit is executed in the top half?
+New warnings running 'make CHECK_DTBS=y microchip/at91-sam9x75_curiosity.dtb' for 20241010120142.92057-1-varshini.rajendran@microchip.com:
 
-Because the root hub's wakeup becomes pending when the host controller 
-is resumed, in the top half.
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/dma-controller@f0008000: failed to match any schema with compatible: ['microchip,sam9x7-dma', 'atmel,sama5d4-dma']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/dma-controller@f0008000: failed to match any schema with compatible: ['microchip,sam9x7-dma', 'atmel,sama5d4-dma']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ssc@f0010000: failed to match any schema with compatible: ['microchip,sam9x7-ssc', 'atmel,at91sam9g45-ssc']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ssc@f0010000: failed to match any schema with compatible: ['microchip,sam9x7-ssc', 'atmel,at91sam9g45-ssc']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0028000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0028000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0040000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0040000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/matrix@ffffde00: failed to match any schema with compatible: ['microchip,sam9x7-matrix', 'atmel,at91sam9x5-matrix', 'syscon']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/matrix@ffffde00: failed to match any schema with compatible: ['microchip,sam9x7-matrix', 'atmel,at91sam9x5-matrix', 'syscon']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ecc-engine@ffffe000: failed to match any schema with compatible: ['microchip,sam9x7-pmecc', 'atmel,at91sam9g45-pmecc']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ecc-engine@ffffe000: failed to match any schema with compatible: ['microchip,sam9x7-pmecc', 'atmel,at91sam9g45-pmecc']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/mpddrc@ffffe800: failed to match any schema with compatible: ['microchip,sam9x7-ddramc', 'atmel,sama5d3-ddramc']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/mpddrc@ffffe800: failed to match any schema with compatible: ['microchip,sam9x7-ddramc', 'atmel,sama5d3-ddramc']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/smc@ffffea00: failed to match any schema with compatible: ['microchip,sam9x7-smc', 'atmel,at91sam9260-smc', 'syscon']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/smc@ffffea00: failed to match any schema with compatible: ['microchip,sam9x7-smc', 'atmel,at91sam9260-smc', 'syscon']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/syscon@fffffe60: failed to match any schema with compatible: ['microchip,sam9x7-gpbr', 'atmel,at91sam9260-gpbr', 'syscon']
+arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/syscon@fffffe60: failed to match any schema with compatible: ['microchip,sam9x7-gpbr', 'atmel,at91sam9260-gpbr', 'syscon']
 
-Alan Stern
+
+
+
 
 
