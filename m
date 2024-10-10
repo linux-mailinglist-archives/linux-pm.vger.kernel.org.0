@@ -1,124 +1,101 @@
-Return-Path: <linux-pm+bounces-15497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15509-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3A37999499
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 23:44:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D3A999521
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 00:24:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1712284C58
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 21:44:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86FE1C2303B
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 22:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AE41E1A23;
-	Thu, 10 Oct 2024 21:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00BCF1EC01D;
+	Thu, 10 Oct 2024 22:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BByj7kYW"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="NDXHXXSW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80028F6A
-	for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 21:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674C81E7C12;
+	Thu, 10 Oct 2024 22:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728596675; cv=none; b=k4Dbhdf5nt1Qud14N9Dx4Mjw0O84PMv77IID2B6u8H2bPsxeLAbe3Im2WciJ1Zqh6C6jpaxKg6p9rZq8DsuaChVLn2mqZp2S0C4TAI+M/bXC+BY/fTr+vYMPXyEGQeOQ7MNcFro4+4axWfvwq+/lQzCbHPknn8LXUASmj7FqztI=
+	t=1728598961; cv=none; b=qwLyuR3+mnPi9LObeE0+9+8P8JG9naCghomQUrvPSnAODtsEOpNvXvTEIMRslavFLb8QwexmHw+EYJ9A2/4IxNhDray+wNZ4yVE4V6b6HyFv0kJ6dXnEYR39k6qBnD11TtOD7iK4uxJATij+oAuZqigXmt6g92KaP5l2Gm/5WWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728596675; c=relaxed/simple;
-	bh=AcSuf/vPOT9tcrdfVuyWUs/nU36TWjtWhqEsOkTBf6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=psrAEKBiSYknoPqvpGALpqyXcwo3l1+USxpQmHWo9ifbPqkN8fTP+/YbifcWuRijBgc3p8mUUjBUEwYTdN9eai6W/e8oov4T2imvo+ZRQGzcmGQ8no3LdiR9qLHzesNwMGMxYaeoIzUe4CTgvV/b2b7lUhrjErmkn0w69RQvyrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BByj7kYW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BD6C4CED0
-	for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 21:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728596674;
-	bh=AcSuf/vPOT9tcrdfVuyWUs/nU36TWjtWhqEsOkTBf6Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BByj7kYWr6v1AYC0PpS/wTMPryUM99SC5xpsRL3+IR/8CU60Wtf0Dz2YWoxK9IfuI
-	 NGxg0jehRnLqOJaUHi5sFg41OAtDWxyWXDYlbL2oeHNuQNpKrZDNRcRgt56U5SDIYV
-	 ncesf+pvf6yp6Q2yphSnXC+1yJ5f19/Mi00dWPQbOAbwa7Vd3FZ3BPcChvZUel8pUu
-	 C47q33m+VPwG00nzICHsyJ+Tnb0zstzqwzLBZBNNokjkGDPaoJvura/PrCjwhvWk6z
-	 E8InsePTvoTOoOk+hxWV3r4H1jUy0tZ/LCe6Jac9TZ2YXxa2kZAg1P3DNHhT4tYRSJ
-	 UiHDjFxVPx2Nw==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3e4444b0788so902252b6e.1
-        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 14:44:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUTWtMRlcW4Rd4RhAIg36e8JS4iMnIkbPYO+wgEAC+HwhzFaQnfy2GHAnd+/apRWgxRNoz7SHgnvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCNXIhzrQCgeZCemkg8JjPwKtkBTDSVJI7Vu87aAC2uA663Stf
-	49utg518doTThJggJ05HXo18zE1sfQ/KhgLbYlJppaJUKB93xG1zNPZcu+G4HoTeYR9yxMN1uCG
-	z8u9/7SF/KTjRZ9pssfof+87wN6s=
-X-Google-Smtp-Source: AGHT+IE7p/kIgeXrs0GvEiAOUPA4iQg9W6ZwMYzWxstWg3J26yClZVVQp7xfzhPzUK45aJHFHKdFbsByRDWomkB8HGI=
-X-Received: by 2002:a05:6808:1b2a:b0:3e4:d7aa:dfc9 with SMTP id
- 5614622812f47-3e5c9144ac1mr408325b6e.46.1728596673718; Thu, 10 Oct 2024
- 14:44:33 -0700 (PDT)
+	s=arc-20240116; t=1728598961; c=relaxed/simple;
+	bh=HA4TfzmPcQgOlDGx1HKQ4a7Us7mD3RLmcsM9rkBT370=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b4wxO+qenEJOY0tVbzSLU52CTsrSwFaYuKTY17lCXJaEr1rj+YIxyHfa/T1zfwJ47XkUIK6iPJPRo7Y6GBONqnlahGg2zc4XxX3RSv3rNmamGFbzFk2JFVTNIOkhXSNZOwtSUKra6sQKGhdnNci5dBjYpzp/CSuBQR2Dy4f8s/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=NDXHXXSW; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 66c1623ba68ce2f1; Fri, 11 Oct 2024 00:22:29 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B368369EF02;
+	Fri, 11 Oct 2024 00:22:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1728598949;
+	bh=HA4TfzmPcQgOlDGx1HKQ4a7Us7mD3RLmcsM9rkBT370=;
+	h=From:Subject:Date;
+	b=NDXHXXSWAkb0AHeUfDwQtNoW56Tvn8vvKdnQ5hyBTqaV2dghgsOGXd6Zv6XDUPTrH
+	 dRkBHZ1GkHUYg/I01GtKFUZDjpQyq+4sR3VFScHBlL0zRY7wXeDfMRFf8RF+bVVnjZ
+	 hbl1xcgZKqZY6KVdRNPpb25ssvH1RDUvEsAoFHhX2ybpXo+iNeozsWu4tzWy4Qhind
+	 6dvYW8W+SbY80gvHTqub5fE/EogsFle83IIOVN0UWRV505xzsfL47jokUrrqStciw0
+	 tXf9aIqbCyztFrRHD3q8yd4gbuSDucXwxnSwx4LnokzRk6/NleTA2fLcr13iur4brV
+	 JfLwtfCu9lehA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 00/11] thermal: core: Reimplement locking through guards
+Date: Thu, 10 Oct 2024 23:59:35 +0200
+Message-ID: <4985597.31r3eYUQgx@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240923100005.2532430-1-daniel.lezcano@linaro.org>
- <20240923100005.2532430-2-daniel.lezcano@linaro.org> <CAJZ5v0i9N_ie_duMXYSumQSnFDVxHj1h1ikSyrApJyEjXs_mQg@mail.gmail.com>
- <CAJZ5v0jCOHAmpmniVRuGCrtvKj6+YtCKidKSJf1t+HitwpKrwg@mail.gmail.com>
- <d9682276-1068-4b90-8478-bf1f5047d306@linaro.org> <CAJZ5v0iUYnJi61TAaUz5exRhH7fjwDSXCCeVVUQgm80L-ujfnw@mail.gmail.com>
- <bb4741a1-0a1a-42a9-b71a-0ecd9d34b231@linaro.org>
-In-Reply-To: <bb4741a1-0a1a-42a9-b71a-0ecd9d34b231@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 10 Oct 2024 23:44:22 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jWFrs4XQLSG9r_WeMTHsRZWdvqXv4C_snBPAE2DFSJOw@mail.gmail.com>
-Message-ID: <CAJZ5v0jWFrs4XQLSG9r_WeMTHsRZWdvqXv4C_snBPAE2DFSJOw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] thermal/core: Add user thresholds support
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, lukasz.luba@arm.com, 
-	quic_manafm@quicinc.com
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefjedguddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprhhuihdriihhrgh
+X-DCC--Metrics: v370.home.net.pl 0; Body=6 Fuz1=6 Fuz2=6
 
-On Wed, Oct 9, 2024 at 6:44=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> On 09/10/2024 17:59, Rafael J. Wysocki wrote:
-> > Hi Daniel,
-> >
-> > On Wed, Oct 9, 2024 at 5:40=E2=80=AFPM Daniel Lezcano <daniel.lezcano@l=
-inaro.org> wrote:
-> >>
-> >>
-> >> Hi Rafael,
-> >>
-> >> On 02/10/2024 14:22, Rafael J. Wysocki wrote:
-> >>> On Tue, Oct 1, 2024 at 9:57=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
-el.org> wrote:
-> >>>>
-> >>>> On Mon, Sep 23, 2024 at 12:00=E2=80=AFPM Daniel Lezcano
-> >>>> <daniel.lezcano@linaro.org> wrote:
-> >>>>>
-> >>>>> The user thresholds mechanism is a way to have the userspace to tel=
-l
-> >>>>> the thermal framework to send a notification when a temperature lim=
-it
-> >>>>> is crossed. There is no id, no hysteresis, just the temperature and
-> >>>>> the direction of the limit crossing. That means we can be notified
-> >>>>> when a threshold is crossed the way up only, or the way down only o=
-r
-> >>>>> both ways. That allows to create hysteresis values if it is needed.
-> >>
-> >> [ ... ]
-> >>
-> >>
-> >>> I'm inclined to apply these 2 patches with the change mentioned above=
-,
-> >>> so that I can base my 6.13 work on them.
-> >>
-> >> I was expecting you to pick these two patches and do the modifications
-> >> but I don't see them in your tree. Did I misunderstood your comment?
-> >
-> > That's still the plan, I've been waiting for you to respond and confirm=
-.
-> >
-> > I gather that this is OK then.
->
-> Yes, it is ;)
+Hi Everyone,
 
-Applied now, sorry for the delay.
+This is a continuation of
+
+https://lore.kernel.org/linux-pm/2215082.irdbgypaU6@rjwysocki.net/
+
+and (quite obviously) it is based on that series.
+
+The majority of the patches in it are new iterations of patches included in
+
+https://lore.kernel.org/linux-pm/6100907.lOV4Wx5bFT@rjwysocki.net/
+
+and there is one new patch ([02/11]).
+
+All of these patches are related to locking, but some of them are preparatory.
+
+The series as a whole introduces guards for thermal zones and cooling devices
+and uses them to re-implement locking in the thermal core.  It also uses mutex
+guards for thermal_list_lock and thermal_governor_lock locking.
+
+As usual, the details are described by the individual patch changelogs.
+
+Thanks!
+
+
+
 
