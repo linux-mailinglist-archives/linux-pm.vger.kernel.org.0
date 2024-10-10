@@ -1,105 +1,100 @@
-Return-Path: <linux-pm+bounces-15434-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15435-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 178A3997F2B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 10:17:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C593B997EEA
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 10:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A59EB254EE
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 08:17:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC7D91C22EC5
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 08:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20651CDA31;
-	Thu, 10 Oct 2024 07:12:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEAF1C3F11;
+	Thu, 10 Oct 2024 07:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="btSHV4JP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GZX5RYL9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569121C1AC9;
-	Thu, 10 Oct 2024 07:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C681C3F0D
+	for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 07:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728544353; cv=none; b=FFLpwC/jl4s9EMPmY9m8rnyTJJYHNkoEjwO/fVYaBDm2qheD877eGzVYe4A0EJa6k4kLgWRneZzg9s92lNcxhFMd3MoQNzK+8sLGwAihuUdRsvm3GdDXij9uKSCNR+nQXJvhFMa0ZmA3P1i6M9RMj0r3BnOgErDr6QniQu8fDOI=
+	t=1728545001; cv=none; b=GxWAHrFp5P8e+9oLcwTVP7ZFwSoGdK9UTOdbOWVrtih4G08eUvE7o/q87l1gYNthfqlVwE7PBZXOjjxtJ5gKszs3K06q/XzB5HgoQS47ghfpI6S3eNXjwBvBLkhc94H44CcV1LRTEIoVDjzgu3sZKLoIk73LEDySHHmkhd4aP2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728544353; c=relaxed/simple;
-	bh=Cn4B1F4k0S5ou9J1Z37x5AXecRflwso2j6cZdMR+zes=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BM7L60Fk5NFGL4fsVN5Gbt3zb0tph3S/yoCqetbFDWDwdJuPOmQwJlA2BOqHiw7oh0+wdOrnvSdXhGjGhYIuWWIEsFyokLOAFOV7ZMoX37fXAG6+imNYEA1fPMne7pSzWVAYX2mkPFDk8s958w+UrNk8p1xqyY6egRloTW9mrBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=btSHV4JP; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AB8161C0006;
-	Thu, 10 Oct 2024 07:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728544349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eZhJCmqORkBi7oe0upO8alJrZ9x/l0/NdakZ2rFJ6Nk=;
-	b=btSHV4JPklv8RMfZ2wfFB3tKpMR4PyGYB3cKus0VrB2MvhLr9/AaCB/9112DxD9gBMUJB4
-	uiMZM5BFgcKec9iA1PEaMrCyEbd5w61aylY8Yn5BsFocOWTBmUPfnTMQa3MsJtC2h3FnRb
-	FnxDfG3lM3q7m3nIlpA/DK8jMI9ZD+ZJyMwg4Ct9BWpUxmDAy4nXAKCuFf95fveHwnQfvi
-	WBM+KcUH/8ATrOvOEBysNb6X2efRUO24kviJKPRIg/35nVWNjLlMKL6PhZ82Nd+fwP38Fb
-	QErayO7QEZpQfRU/yQ+lOd4bG7VRNBGFvf/r70PX9FAR/arBwS8+bgB8EYM/cg==
-Message-ID: <fc2c103c-f113-4eca-91fb-3b9904d31d67@bootlin.com>
-Date: Thu, 10 Oct 2024 09:12:28 +0200
+	s=arc-20240116; t=1728545001; c=relaxed/simple;
+	bh=S8BM5kLv/7qbIRBH2YHsWBUe3PgMv6WbjQqYtXXBAYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R4lWEo54X2oJPrRIPvCKakCnUCPGvD+GzRN3iV2c5Jlxzm2qXo8reEoUYPAPrCdymB5jA2vTR27qIhGfybuc0z04kt3dJ1EGj+eM8dBozy5BXBKmjSctEWVPqQHc7bzte2KDnlSeAbsWkcaVXzP3ADNhYZ9ZavPU+J+z9I0H4pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GZX5RYL9; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c77459558so5017785ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 00:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728544999; x=1729149799; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p+5Prl37y+oPOxtW/B94jgcZLfAINjWfeSjyFICOOrw=;
+        b=GZX5RYL9DksYWkZnaI1w1kgGwVMCLzHgER9wSpn2CRnrdhSsQOHf4WAFQILqnyG+03
+         qVgAB7bIe9YFbPGE2XmS3RpC2vF7RN0N4JkQo0p3lNOCZWZA79sSLFgxObGq2RFfNQUt
+         grf43sWyNii3+PB1PJldJ0FLtL49nKIXVLjZTGIxxWtSXrkXtNSQwRjWA4uWKkUwFjP0
+         Y/PhnyX/4LDea/v3aiQj/ibYXztv4i75aIl/8WFhJbnpBP+hBiHnmL5gfYhERaLpfNat
+         O+o9BOXA41qeB2/EB9a/818Z/CDmIegGYzjYYyaezD1PcmMyqUcca3sn3vYt3ImetFmI
+         osjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728544999; x=1729149799;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p+5Prl37y+oPOxtW/B94jgcZLfAINjWfeSjyFICOOrw=;
+        b=Q1FX6g4nzGqp6KyDO7HGmgrz8BtqM7Li9ANjCKnR66O6+7pK2i99crIByT+2j6ZEXY
+         H/fJmkaHp3bz7OpgLT4iOFh4ISRVFVUqmRYuNMPblAxL1kEdmmx8Mmb5gQUtulvjnp4j
+         aBTlUYEpB6rH76/xMfUQLXJuxIqir6i2W9CfZJ1XUYB1Q6l39nzgPAag8NxbgvdY/7el
+         3L7HsltNN+KMnxLZ1Z9eS/YTORrgI5XnLuDIU0aOIgmR/rfPYLTDxSCSVsfaeiadYJQh
+         kNwN8BssQompcSx5cCHEdfIS7q8c+Y76DKXyrMFIwrWOPHfNICnObXlSlyY4lJ4OprYN
+         LI0A==
+X-Forwarded-Encrypted: i=1; AJvYcCVrNrBuXU8+Ys3msmY3jocqx6gzhNpa4F5Gj4s0VfBY83+pxTkSGAmH/TOm+cH0CpFV1oxk0mP5Jg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/JwE8MQi9AU3wiwu5qmMLEU1q/Wb0GyqlwN+nIiJ1uTuSCIYA
+	9kaTwZ0AZAcCda4qY5w9uVphg4kI8PCJ5R5GgOluuFRR/UvvoqwSJZM98zoTrC48VMEHxAhamgJ
+	Y
+X-Google-Smtp-Source: AGHT+IHlSq5Z9PAO24zIaW9ZLvOAcQlxWCcK7dr0pBIbwWDMyARBkWlbkLgBOQTRvY3gm7azHJDyiw==
+X-Received: by 2002:a17:902:d48a:b0:20b:770b:ad3b with SMTP id d9443c01a7336-20c7ea67808mr31061605ad.0.1728544999024;
+        Thu, 10 Oct 2024 00:23:19 -0700 (PDT)
+Received: from localhost ([122.172.84.231])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8bc1b9f3sm4463965ad.76.2024.10.10.00.23.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 00:23:18 -0700 (PDT)
+Date: Thu, 10 Oct 2024 12:53:16 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Nishanth Menon <nm@ti.com>
+Cc: Dhruva Gole <d-gole@ti.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bryan Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH 0/2] ti-cpufreq: AM62: Backward compatibility for syscon
+ and update offsets
+Message-ID: <20241010072316.y7irfuex6wa63an6@vireshk-i7>
+References: <20240930-b4-ti-cpufreq-am62-quirk-v1-0-b5e04f0f899b@ti.com>
+ <20241003171349.lphhvxy7lgwwdhay@marital>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] pmdomain: ti-sci: set the GENPD_FLAG_ACTIVE_WAKEUP
- flag for all PM domains
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- Santosh Shilimkar <ssantosh@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, u-kumar1@ti.com, tony@atomide.com,
- khilman@kernel.org, gregory.clement@bootlin.com,
- thomas.petazzoni@bootlin.com, theo.lebrun@bootlin.com,
- richard.genoud@bootlin.com
-References: <20241008-8250-omap-no-console-suspend-v1-0-e7f0365c02f0@bootlin.com>
- <20241008-8250-omap-no-console-suspend-v1-1-e7f0365c02f0@bootlin.com>
- <CAPDyKFroumouYavhaHp=aSh=0WsDO=_4kbVgS-+Y7CADyO-Kmg@mail.gmail.com>
-Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <CAPDyKFroumouYavhaHp=aSh=0WsDO=_4kbVgS-+Y7CADyO-Kmg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: thomas.richard@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241003171349.lphhvxy7lgwwdhay@marital>
 
-On 10/9/24 15:17, Ulf Hansson wrote:
-> On Tue, 8 Oct 2024 at 11:34, Thomas Richard <thomas.richard@bootlin.com> wrote:
->>
->> With this flag, if a device is marked on the wakeup path, the corresponding
->> PM domain is kept powered on.
-> 
-> Perhaps extend this with some more information that it fixes a problem
-> for the uart console too?
+On 03-10-24, 12:13, Nishanth Menon wrote:
+> The existing device tree works with this changes even without the
+> dependency being merged. DT update can happen in the next window once
+> the pieces are merged together.
 
-Yes, I'll send a v2 (only the patch 1/2) with a more verbose commit message.
+Ahh, so I can just apply them directly. Thanks for clarifying that.
 
-> 
->>
->> Suggested-by: Théo Lebrun <theo.lebrun@bootlin.com>
->> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> 
-> Should we add a stable/fixes tag?
-
-I guess no.
-The first implementation, which was reverted, didn't have a stable/fixes
-tag.
-
-Regards,
-
-Thomas
-
+-- 
+viresh
 
