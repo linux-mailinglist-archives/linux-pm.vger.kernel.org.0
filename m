@@ -1,156 +1,104 @@
-Return-Path: <linux-pm+bounces-15455-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15456-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE722998790
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 15:24:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8838B9987FB
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 15:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEB5C1C21D07
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 13:24:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33F281F2205E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2024 13:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429D01C9B9F;
-	Thu, 10 Oct 2024 13:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F2F1C9DD3;
+	Thu, 10 Oct 2024 13:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="plgBF/Aa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c6mvVe/J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pv50p00im-ztdg10012001.me.com (pv50p00im-ztdg10012001.me.com [17.58.6.51])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8D41C9DC6
-	for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2024 13:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406B11C9DC1;
+	Thu, 10 Oct 2024 13:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728566684; cv=none; b=c6NxJTsCzHflXN+YRdYisNLAKn870ly0dc+jnVNPwu8HCz+GI7t5pZuS+lvAFWWua245Eaitbd+2tNiD1Da9qKOeeNpClsKxJ6CNvplG2HxsSKoDqrze3n5bJ2ZpCq+ZH63NJOLUeA0Jpdm0TL4TiIexKf5E3+ZqRhbt9RfHj4w=
+	t=1728567611; cv=none; b=c6cPc4Vm/gX5f9Zd+wgeKS6jpE1hN2BhNo5LkU7RXl4Cho9CBqdgHMUkrAKsQuESJZ1Y4AihQ6kv2hME2g3TKBs5qjQyVgd6CEIXlW0A2HHHwRLKm//fNBVJ1igduYdrfFtptcL+SIRulwpHPJXnLO0/9LC7+QsZgesjl2jxynE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728566684; c=relaxed/simple;
-	bh=RPUzWRPmZGtFyZr0kjLm7nOCKdJiTpjtAznJ/S9/Fu0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t7mJ+8D9/J48/IGudX4z5CmAGWfyES2/N9IZXvm9aybz3TWyPtwgAcucYS55QbSpzo0EdRJKD976VUZ63foAojQIaaqJLufx4RahYfhkzsxds3xlRmYDI8CxFFC832GI4m5g/o6HJugWXFocbOoFpPOX5RvGnXdGNOJBfrAaPNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=plgBF/Aa; arc=none smtp.client-ip=17.58.6.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1728566682;
-	bh=UN6iJmBioqcajfS273owz7jWyQHQYDCLoGRNIcRMsEc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	b=plgBF/AaALXUyCcwEzSU725LOltypIU++Xw3KTDZBrfeb+NkpQIy1PZHcKM5PE5E/
-	 7+2wFplxuHJcQDAS9iotTBjlMz0O4UsYdMhKWpi+XeB9oZmuUqIWn9CFkZPJUTa6zW
-	 kuuXZ80nBQ/GE+AyhxLlHbVZoPXq5B0YGS57pbgkjRWHdqXAGyZLbsWOOI+AaJHppm
-	 u+SW5KtExW6p5IlAjKENcOfqzU0Ai9/W8XZp9lPxoHTojRctSIMwVu/eDfip34Sw5d
-	 zIGUPJg+Zb94ClR2vvJqqZnf8fNPcys1Io96FVjiE6HpKuMxcx2AzEuk6QeGcIU9gM
-	 D5/X6C3Aa1zrQ==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10012001.me.com (Postfix) with ESMTPSA id 92FC5A009C;
-	Thu, 10 Oct 2024 13:24:38 +0000 (UTC)
-Message-ID: <d1438cf0-8bea-4125-a046-6e4abfbba2fd@icloud.com>
-Date: Thu, 10 Oct 2024 21:24:34 +0800
+	s=arc-20240116; t=1728567611; c=relaxed/simple;
+	bh=n/dQBktwFVqrKxgnovAEk3fFnolb1PkxiAtuIMvs3KA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=etuKWeMOKjMtPlNgQOXdQMCKwYPn3GH0Wf61/931olgKlMowhul9u2lW8CV3IghETUCufRQBguqF870xAob1N0sEFY9snfe6k88D5FSKz8Kxgvpbb/sODb9AdcCaH5y9OPUSQDI8NaBW3e4Ka6GFA7lLSgdI9lIWggYdjH9pLrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c6mvVe/J; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728567611; x=1760103611;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n/dQBktwFVqrKxgnovAEk3fFnolb1PkxiAtuIMvs3KA=;
+  b=c6mvVe/JidVs5hLGbpm3pWW3mhkx6thk/VI6WNIEugC9o0fhpvanpeBG
+   USTuFxG4dSNXBO/So/fgJQtCmwtf6d1lAyvfh6zBMBtC/CRd5aNA9yeJw
+   cK8XBOxqsLa+U5dF+bT8aBZZu12zxYo4IaJBaJgdl7Oum9/qdPUtTvnty
+   z1w+IpRIgI+FOupy+6W0UxHD2m457NYzS9CFv1rxrtP0E+8enmKAsf7Qm
+   mn9vXMEKHNCuB4GBiNdosFDFUr0SgfqC0hcQkUWXW+lFZebS+hOhoMWp5
+   xMGUmno3ZwYLi5OihVA6vdEt2lLVLHcU1RrmLq2458wFtpUq7Ax4vxvhE
+   A==;
+X-CSE-ConnectionGUID: rxpHeRr5T8W3ZgQRqCPQng==
+X-CSE-MsgGUID: nf4lZJz7RUCOl9dfLkU9Ag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="31718272"
+X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
+   d="scan'208";a="31718272"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 06:40:10 -0700
+X-CSE-ConnectionGUID: TRxLachoTrahhBw9FFbh2A==
+X-CSE-MsgGUID: CI0PdumRRDqPTdPnycgRVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
+   d="scan'208";a="81114913"
+Received: from oandoniu-mobl3.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.12])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 06:40:05 -0700
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rafael.j.wysocki@intel.com,
+	len.brown@intel.com,
+	artem.bityutskiy@linux.intel.com,
+	dave.hansen@linux.intel.com,
+	patryk.wlazlyn@linux.intel.com
+Subject: [PATCH 0/3] SRF: Fix offline CPU preventing pc6 entry
+Date: Thu, 10 Oct 2024 15:39:52 +0200
+Message-ID: <20241010133955.7749-1-patryk.wlazlyn@linux.intel.com>
+X-Mailer: git-send-email 2.46.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] PM: sleep: wakeirq: Fix a serious logical error in
- dev_pm_disarm_wake_irq()
-To: Johan Hovold <johan@kernel.org>, Zijun Hu <quic_zijuhu@quicinc.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Johan Hovold <johan+linaro@kernel.org>,
- Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240928-fix_wakeirq-v1-1-25d13a7e13ba@quicinc.com>
- <ZvqigTC7RvngLpme@hovoldconsulting.com>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <ZvqigTC7RvngLpme@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: 3dxJ_xHJTHPaMZnECM4qYor-VgcqZdeW
-X-Proofpoint-GUID: 3dxJ_xHJTHPaMZnECM4qYor-VgcqZdeW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-10_11,2024-10-10_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0
- clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2410100089
+Content-Transfer-Encoding: 8bit
 
-On 2024/9/30 21:07, Johan Hovold wrote:
-> On Sat, Sep 28, 2024 at 02:26:27AM -0700, Zijun Hu wrote:
->> IT is a serious logical error for dev_pm_disarm_wake_irq() not to disable
->> the wake irq enabled by dev_pm_arm_wake_irq()
-> 
-> You need to explain *why* you believe this is an error.
-> 
+The current implementation of the mwait_play_dead() uses undocumented
+way of looking up the mwait hint for the deepest cstate and using it in
+cpu offline code. This prevents entering pc6 when the CPU gets offlined
+on Sierra Forest. The solution is to allow the idle driver to force the
+mwait hint.
 
-thank you for code review.
-sorry to give reply late due to travel.
+This problem was first observed on SRF, but since determining the
+deepest mwait hint is non-architectural, the hint is forced for all of
+the models that intel_idle has custom table for.
 
-by convention, dev_pm_disarm_wake_irq() needs to undo the jobs done by
-dev_pm_arm_wake_irq(). but actually it does not do that.
+Patryk Wlazlyn (3):
+  x86/smp: Move mwait hint computation out of mwait_play_dead
+  x86/smp: Allow forcing the mwait hint for play dead loop
+  intel_idle: Identify the deepest cstate for SRF
 
->> fixed by simply correcting
->> the wrong if condition.
-> 
-> Your commit message is basically just claims "P is wrong, fix P", which
-> doesn't really explain anything.
-> 
-> Writing good commit messages explaining what the problem is is not just
-> required because this is a collaborative project where others need to
-> understand your reasoning, but it also forces you as the author to think
-> through your changes, which can often prevent broken patches from being
-> submitted in the first place.
-> 
+ arch/x86/include/asm/smp.h |  3 +++
+ arch/x86/kernel/smpboot.c  | 54 ++++++++++++++++++++++++++------------
+ drivers/idle/intel_idle.c  | 12 +++++++++
+ 3 files changed, 52 insertions(+), 17 deletions(-)
 
-thanks for these good suggestions and will follow it for further patches
-(^^)(^^)
-
->> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
->> ---
->> List relevant commits as following:
->>
->> johan+linaro@kernel.org  2023-07-13
->> Commit: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
->>
->> tony@atomide.com  2018-02-09
->> Commit: 69728051f5bf ("PM / wakeirq: Fix unbalanced IRQ enable for wakeirq")
->>
->> The former commit fixes the later.
-> 
-> These references are relevant, but you need to include them in your
-> commit messages (above ---) and explain why.
-> 
-
-got it, thank you
-
->> ---
->>  drivers/base/power/wakeirq.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
->> index 5a5a9e978e85..8b15f9a0e8f9 100644
->> --- a/drivers/base/power/wakeirq.c
->> +++ b/drivers/base/power/wakeirq.c
->> @@ -356,7 +356,7 @@ void dev_pm_disarm_wake_irq(struct wake_irq *wirq)
->>  		disable_irq_wake(wirq->irq);
->>  
->>  		if (wirq->status & WAKE_IRQ_DEDICATED_ALLOCATED &&
->> -		    !(wirq->status & WAKE_IRQ_DEDICATED_ENABLED))
->> +		    (wirq->status & WAKE_IRQ_DEDICATED_ENABLED))
->>  			disable_irq_nosync(wirq->irq);
-> 
-> I think the current code works as intended.
->
-
-thank you for this point and let me do more investigation.
-(^^)
-
->>  	}
->>  }
-> 
-> Johan
+-- 
+2.46.2
 
 
