@@ -1,131 +1,106 @@
-Return-Path: <linux-pm+bounces-15549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A16A99AB98
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 20:55:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44DBF99AB9E
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 20:55:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AD96284667
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 18:55:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2F92B231BB
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 18:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A331D1F77;
-	Fri, 11 Oct 2024 18:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F5E1CF7AD;
+	Fri, 11 Oct 2024 18:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hBGXVSgz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XekxK868"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7839D1D1F50;
-	Fri, 11 Oct 2024 18:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB697868B;
+	Fri, 11 Oct 2024 18:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728672634; cv=none; b=tDn163CNYEAWu6iYv5eEiJD9O/T/9k9InEx1Ck6bF7KcyBIOUac8jO8CkShEwpNUEV9mP7tyAQK3BP1ZS3l8ocmbd4YMaAQT5Cey/M4263YAHvMDH+e1GGmb2tvgwYTu1/GH99DqKMLe/Zjxs7ArrU5cVSzXHCMlDjyNZhXlUzY=
+	t=1728672721; cv=none; b=G7gf/NpP1YKLMwtGkTCHCAMWKZgrMcKoiULYFI5jSA6HG6La9LYqv9VFBK/0M0ZS2glncFAqP1tsaP47N62kkOG4A1jtw2MEzgb9bywBcNvuIiLNvGFSAxogPH19Gh4aBC7tZ+1/9W7H6gE76k/ZqvZa2DOkK6KqHmN1RNStdDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728672634; c=relaxed/simple;
-	bh=KGqrwrz9rijYsZOFZQqOgtqWXnVwlvn+wECMYTeCqto=;
+	s=arc-20240116; t=1728672721; c=relaxed/simple;
+	bh=Jc/nk5LTKrWWlFX/B0O6+1ZZuWFZCL6ha1DyHuXXhvI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n4AvubizTamE9jBaTWEfrTMqmCBfJBjITAGpfL+QSABJ3eqHDq3RzdhFNfmYAZmG5QNvi+8qkX2Pc2DhbL+C/jHQiCpEaJBIQ8rdG4hP65lfJId8qFD/n4S41AXQqeQlu1UGIVoGJrhB2bNdcgt/aUGLFzjl1wsSS+0+pc+rLdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hBGXVSgz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E551C4CED0;
-	Fri, 11 Oct 2024 18:50:34 +0000 (UTC)
+	 To:Cc:Content-Type; b=C0P4B86BZ3xw5K1ZlW5to8d33gixsqZD7iKifJNWywttR4nqKzfNcslenHfXHdnJm3899Llh9DxHhCjDVMtyJEy9DV95lvFO6VJm0H+VyhhVMuBptRMd5blwdNNWFdQFgfv8GKsIq15pAlgUE6++tVd73oex8HsYyyK69zsxeRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XekxK868; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C653AC4CECD;
+	Fri, 11 Oct 2024 18:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728672634;
-	bh=KGqrwrz9rijYsZOFZQqOgtqWXnVwlvn+wECMYTeCqto=;
+	s=k20201202; t=1728672720;
+	bh=Jc/nk5LTKrWWlFX/B0O6+1ZZuWFZCL6ha1DyHuXXhvI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hBGXVSgz812BzTB2UGwYHPoFRAXz7b+FlayuWUW3msWatkV52R9P8AHejKdjRKNOx
-	 X/kQiKWzKny/lSWCoHfyO8ht0i3d672nU5/k7p2dzKkOkb5Wvmo6JWwkZXGFftz8T0
-	 WAFhijnEVLK5+FGlibey/gl7nF9afHEi+422gop5CqS3Y0Wjs9X5ugUBcsRDtKCN+w
-	 15eAD6QoqKqLwESXIRkxYm39CUcOBO6QkAGs6AkFaoY0a/e/6B5ryf6a+BR/PbBXgh
-	 sa6qmrp4mUdrQySO5iI2sq55Yx+uVoAHiu8Pm8j9WwvDtRR/sCeIcG3I7UXJF10tOM
-	 g2gHPO3XoN0ng==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3e5c89b013aso718529b6e.1;
-        Fri, 11 Oct 2024 11:50:33 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwMLL7r/0AnyAaGuPRI8t3FJcs+0Y3m4DHIggFEN1UOJDkRntMx
-	ygK0hXKjeeZqsiRE7pMw6SA6c34L4QApY4MMRRg/ALSxfL//g72IeSjTBe7kT7h42QX75tBIQvx
-	OWMRceT+lWPtgXydDfDQvNZh9J6s=
-X-Google-Smtp-Source: AGHT+IH9VgVC4JpV+eM6owJCRSUovcu4KkR6W0cCww4iTZUWy71hO6bqGE47jJCheZl6Ru+TkBFhu9s3SdRcvXwvf7k=
-X-Received: by 2002:a05:6808:4491:b0:3e3:a933:67e0 with SMTP id
- 5614622812f47-3e5c902ea16mr4218769b6e.0.1728672633361; Fri, 11 Oct 2024
- 11:50:33 -0700 (PDT)
+	b=XekxK868/qmIr+WV4Gdx643wi/FAPj1+Dr5/cd5E1nBZ7arwhUMgMH8lay+xOSN7L
+	 Axo0j9S+xZLB617xe5K7YTctJlA6eGUaa/a6YT9MQZEmftga4m04tH1hHiWw2aH+BG
+	 n+dsUqyfrSRF4OJOEnvwTc9A7tjRi4bpFRk96mHPYK1UlODShOfj4Mhmpt5jOLPBU+
+	 A+fHU+sjXRPEl22W5+AeWx9WqxzfLMCG92AFGH0Dx7QzoOgPN/JJDHvCly1GMDxIru
+	 JS53WiZItW0dicO5fISih4iAbma1zYB1AAzPQ4FMumTzN4oATSYhUe874Zb+g2xCfZ
+	 zM4to4FOOKUWA==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5e98ea02c9dso1013092eaf.2;
+        Fri, 11 Oct 2024 11:52:00 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwFinu3UG7yIMmowMEJ/rfsqVNUTDj5Zh5EzhJXpNsfSEi7xL83
+	Cu3E6bztZSSQxnBDCVdx6SuyGykas8Ld+WhwEA0F2+AJ0DIZJ/jRt4tle29jdHGzFwjpShb421S
+	ZsLFWeVt8UMDR6bFR+UK7s2ZDlZk=
+X-Google-Smtp-Source: AGHT+IEd67iJL9BcP9kjnUS1DPfAWINDJ9CFPDmjc8Imw0r0o5tqFW+CEMI0HOFVpbVlrJcCb2HUIW2I+X77ucbctsI=
+X-Received: by 2002:a4a:ee85:0:b0:5e5:b652:9d14 with SMTP id
+ 006d021491bc7-5eb19edd573mr2166175eaf.1.1728672720097; Fri, 11 Oct 2024
+ 11:52:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2215082.irdbgypaU6@rjwysocki.net>
-In-Reply-To: <2215082.irdbgypaU6@rjwysocki.net>
+References: <4985597.31r3eYUQgx@rjwysocki.net>
+In-Reply-To: <4985597.31r3eYUQgx@rjwysocki.net>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 11 Oct 2024 20:50:22 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jYzw7hXaX+5AvO407d8vo725_-wHLQW6Q1fqXXJGSb6g@mail.gmail.com>
-Message-ID: <CAJZ5v0jYzw7hXaX+5AvO407d8vo725_-wHLQW6Q1fqXXJGSb6g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] thermal: core: Fixes and cleanups, mostly
- related to thermal zone init and exit
+Date: Fri, 11 Oct 2024 20:51:49 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iV4-3-sqmK12ZoRQXzUSgO0NDySe5LZ3z7FMQOFJCymQ@mail.gmail.com>
+Message-ID: <CAJZ5v0iV4-3-sqmK12ZoRQXzUSgO0NDySe5LZ3z7FMQOFJCymQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] thermal: core: Reimplement locking through guards
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, 
 	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
 	Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 4, 2024 at 10:11=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
-t> wrote:
+On Fri, Oct 11, 2024 at 12:22=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.n=
+et> wrote:
 >
 > Hi Everyone,
 >
-> After posting the two series of thermal core patches for 6.13:
+> This is a continuation of
 >
-> https://lore.kernel.org/linux-pm/4920970.GXAFRqVoOG@rjwysocki.net/
+> https://lore.kernel.org/linux-pm/2215082.irdbgypaU6@rjwysocki.net/
 >
-> and
+> and (quite obviously) it is based on that series.
+>
+> The majority of the patches in it are new iterations of patches included =
+in
 >
 > https://lore.kernel.org/linux-pm/6100907.lOV4Wx5bFT@rjwysocki.net/
 >
-> before the 6.12 merge window, I have decided to reorder the changes inclu=
-ded in
-> these series, so that fixes and more significant cleanups (for example, c=
-hanging
-> they layout of data structures) go first, followed by the changes related=
- to
-> using guards for locking, and the optimization involving sorted lists bec=
-omes
-> the last piece.
+> and there is one new patch ([02/11]).
 >
-> This series is the first part and the majority of patches in it come from=
- the
-> second (RFC) series mentioned above.  Of course, they needed to be rebase=
-d to
-> be applied in the new order.  It is on top of 6.12-rc1 with
+> All of these patches are related to locking, but some of them are prepara=
+tory.
 >
-> https://lore.kernel.org/linux-pm/12549318.O9o76ZdvQC@rjwysocki.net/
+> The series as a whole introduces guards for thermal zones and cooling dev=
+ices
+> and uses them to re-implement locking in the thermal core.  It also uses =
+mutex
+> guards for thermal_list_lock and thermal_governor_lock locking.
 >
-> applied and it will be added to my thermal-core-testing branch.  It is in=
- v2
-> to start with because all of the patches in it have already been posted i=
-n
-> some form.
->
-> The first 10 patches fix some potential issues related to thermal zone
-> initialization and exit (for example, user space may start to interact wi=
-th
-> a thermal zone during its initialization before it's ready and system sus=
-pend
-> taking place at a wrong time may skip a new thermal zone so it is not sus=
-pended)
-> and do some cleanups related to that.  This concludes with the removal of=
- the
-> need_update field from struct thermal_zone_device.
->
-> The last two patches move lists of thermal instances from thermal zones t=
-o
-> trip point descriptors and clean up some code on top of that.
->
-> Please refer to the individual patch changelogs for details.
+> As usual, the details are described by the individual patch changelogs.
 
-This material is now present in the thermal-core-testing and
-thermal-core-experimental branches in linux-pm.git.
+This material is now present in the thermal-core-experimental branch
+in linux-pm.git.
 
