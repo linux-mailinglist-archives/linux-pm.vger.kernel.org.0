@@ -1,119 +1,94 @@
-Return-Path: <linux-pm+bounces-15534-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15535-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E87C299A04F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 11:44:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CFBE99A146
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 12:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A21A71F2259D
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 09:44:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30FFE1F22A6B
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 10:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD45C20CCD0;
-	Fri, 11 Oct 2024 09:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB03216440;
+	Fri, 11 Oct 2024 10:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSkibddR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAXdd8BD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFA319413B
-	for <linux-pm@vger.kernel.org>; Fri, 11 Oct 2024 09:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F72C2141BD;
+	Fri, 11 Oct 2024 10:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728639858; cv=none; b=uqRCC76ugCy4zJPYbMw/qVq1ozO6bTDg79VL2VpsSMRZK38Xwj88WLVWVE8ji6jYwaePllkn7Mstnuv8UOG7ls/djsXEltAuJ0JBeta9qHPe4LYp+tCga5F/vtN/qAHaBLkxA6gbkN6f2jOS3qSDPzhT9YhnNlV1BvCa3z0PWto=
+	t=1728642344; cv=none; b=rsCwta1RSt6boDqsU9/yUQjYFIHk15/0i6KKOonMPrc7G3zxzE/8LI0tOXDC94GQdEUU0ywJvaAXY1Eqklqv4aQaDDQv632kHMCdKctQw8Tf5yuYcbsy9ad6CGZv0YDFsysdh6A5LRpra1y4wagBT4bbAH7nhDTcNQ4BT0azxFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728639858; c=relaxed/simple;
-	bh=8aQ6J79fQfCrxuHKR9Fn/uk4gMfL8jKvRrtRNj0C+38=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Up227xTZVWAbQ36o+/XiIk0DHFRUXKcuTYdW7umDjRDk4E8uErKWdGNOJwvitJpS8Oc6INoWvm8vZGYqjS5X+ybFzz/rHIGQnMKaGPu4K6c7oPgNsm5dMtODBhpOvD9AnXameHRLbP9X9CC3b2eMiJBfzzhBK4caEaMjyNZYiXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSkibddR; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7e9e38dd5f1so1521047a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 11 Oct 2024 02:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728639856; x=1729244656; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=J+Nh6mE3eJyVTicxPgevEK+F//iCb2H2eXpbFWvWH00=;
-        b=NSkibddRfVva1v9/48vj4GgOuq3S7CCF37w+HlbRPYdinMGCpYpVJP3LwXCgj0bj8Q
-         pm/dfkgqYzWoPxmP8Axgn0pouO97gSFyR6plm762pSgcw8ZNxyV5D3dqFRFaQjn30Zmu
-         Dke49Cegzc7pljuq4sZknsdop0p6+LVuAo+IwTtA/+GyDlMWFB6zzFr0NzijmYyKwJSU
-         cH+Z0nyWNJbrZukyA5baMDymRIq9vdOYKx04a2ZOfp8Xqm2i2s2sG7cx3Ulgid78TV2e
-         X1TPDNs/pdRWrmS5oDCoWF+qmmtuHX1cY8FqzOCZGiyRe6eEEIuEMOl1L0EWvGPqxP2V
-         asTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728639856; x=1729244656;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J+Nh6mE3eJyVTicxPgevEK+F//iCb2H2eXpbFWvWH00=;
-        b=Ym2ttarxBO6O578pkA5aggXSKvjl4TVAbU0GNnHB6GDV+TcHX9QVvS21Gri2xxoNQy
-         ELTEIpvktdyElK4tjuEb5wuUX4JUoJmpA8WB43fB5KWuTX292bh8Qam0hTGIfHEFf15O
-         wiE2ub8542xKiOVtcBhBSMw/MXM9FJxjRVN3TAzS2rHkzJ93O3rLTwDaqpNoNr2az9b3
-         2fuS2SQ2vLVTAjxTzo3Y4AdXVGIQYq//vrVDrEnMhH/CFKbHR93w2P3UbbLHO0OIIfTH
-         TQLVumnzTcJxPf7DzeKtge5HKDA1ehtm3zHR4Sx9fEsSZS4PimNnvPhJsSs/UXcRk9nz
-         yXIQ==
-X-Gm-Message-State: AOJu0YwRwBWBxjA7RARARmycF0LUFMcqd4yx00218UAwoW7K7yyP4tzi
-	GmAUkJ+lXWQeaPKPpnkftpRYHsYhlB8Y74VDATt+WFxbxcLMqL9tiZXUEbUOumij22rtbCxUveb
-	Yo7WjJtXuT2EYEfmwv1tqp1l/UOvnxpGI
-X-Google-Smtp-Source: AGHT+IEINHlVlEnaCkcmEkBdg7Lqkibjyjp22h5mmqhDc+flUnu6QcpAXk3uY9Gc0G8NuIEhF+A2yDU1vECGlvYUxIU=
-X-Received: by 2002:a05:6a21:4d8c:b0:1d8:a3ab:720e with SMTP id
- adf61e73a8af0-1d8bcef69b3mr3115938637.3.1728639856515; Fri, 11 Oct 2024
- 02:44:16 -0700 (PDT)
+	s=arc-20240116; t=1728642344; c=relaxed/simple;
+	bh=5Bn7ngZJW3LBa/gYlkIJl17Lw1N5Eu2tNA3hab6Hz/Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pgw8tQqva/6KQReOBvSUzNo0SaQDRvhklhvuieOA9ZwIlFqIn5GkiPlctTfGnOsO0bUtkIhRCzsixMKY5FST8WMhHUBUIm9svJy5/G5ukjlQkUxgoCTtpsUt/v/5nhF6f+DAJGpRImTZau9X0L1uec15FanQ7/ykznhTN2sKSBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAXdd8BD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38E8C4CED1;
+	Fri, 11 Oct 2024 10:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728642342;
+	bh=5Bn7ngZJW3LBa/gYlkIJl17Lw1N5Eu2tNA3hab6Hz/Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gAXdd8BD4VOEfuPzd9wLwMRqEFdEFpB9Psy6VdBfYcWH2WthctQF9CqmyAoZg0Rn6
+	 CGMVx0tqCsZ5Vvzfw5Wum14JQanACsKjphuHEobmXFZnyH2rm3HgD46dch2+zwsUwZ
+	 3YIqX04rJZBJbLz4kW5Lf4BfUqlRc3qAJSu5PAqt58hNvuxYt4RiOF1+9dFQ1rTXI8
+	 Eqo33CjOdN+fSddBLetXy8mYDhEkvtSGQWWU8K11kPE5S2DkGj9192uLbTfh8GoGZg
+	 qvbffuoPkxrftCsCdYah8+FZNQXd/xHaikxVL6yOcin8Wao9q+6Xwx65MDLeh0Mb1S
+	 PZNl9r+hEDAPg==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-716f9721ed0so936730a34.1;
+        Fri, 11 Oct 2024 03:25:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUCVyXw48CUVeoiNjqmKWh9cJRILEwdXyF7oT2wDv9bFGyJQdo7usa4JWhjSB62XLQuTiHVVyFy@vger.kernel.org, AJvYcCVZPA7i6BK2p7p/xLxOj1hRtLHYRnANFH961iWrzxSbdaF2W/G08KaNmnBNNUmXAMZmuelhHqfjlHk=@vger.kernel.org, AJvYcCX58Wb9aJ6nRoirfTA4X5FHc6K9fioQ7wEyBwNU+eVxQLs7A52PjKdxaitAfDDYzPpFmGqJT7ZP75H34Hk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7mcQucT2j16sjcJ6QRCXcaclVqKpEuXUTVgnWyG1JGXJaBnzV
+	qedCxu61ZXTibJHhD1GYIyWusIJU+AbZyTf0SGANoOfXln+uymVRp7M/KFaDALWdnx9nTsuE5CH
+	LBEUlcshknZ4V57dba/lfNtDzp9g=
+X-Google-Smtp-Source: AGHT+IFXmbS5nFxJANrK29sR08R9J3f4mYiy8JY0oLyd1mfI5MmSCDoG3m/7Zfk7hn2Pc3mEqoE1E2wJdZx82mUICbU=
+X-Received: by 2002:a05:6870:d249:b0:288:23a4:7955 with SMTP id
+ 586e51a60fabf-2886d885d67mr1255145fac.21.1728642342109; Fri, 11 Oct 2024
+ 03:25:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Vivek yadav <linux.ninja23@gmail.com>
-Date: Fri, 11 Oct 2024 15:14:05 +0530
-Message-ID: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
-Subject: ARM64: CPUIdle driver is not select any Idle state other then WFI
-To: linux-pm@vger.kernel.org
+References: <20241009072001.509508-1-rui.zhang@intel.com> <f568dbbc-ac60-4c25-80d1-87e424bd649c@intel.com>
+ <CAJZ5v0gHn9iOPZXgBPA7O0zcN=S89NBP4JFsjpdWbwixtRrqqQ@mail.gmail.com> <edb18687-9cd7-439e-b526-0eda6585e386@intel.com>
+In-Reply-To: <edb18687-9cd7-439e-b526-0eda6585e386@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 11 Oct 2024 12:25:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hF381EHwO7AECgOM08kAQjppq3x9f2e-UHQYdYySCwBg@mail.gmail.com>
+Message-ID: <CAJZ5v0hF381EHwO7AECgOM08kAQjppq3x9f2e-UHQYdYySCwBg@mail.gmail.com>
+Subject: Re: [PATCH V2] x86/apic: Stop the TSC Deadline timer during lapic
+ timer shutdown
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, tglx@linutronix.de, 
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, 
+	rafael.j.wysocki@intel.com, x86@kernel.org, linux-pm@vger.kernel.org, 
+	hpa@zytor.com, peterz@infradead.org, thorsten.blum@toblux.com, 
+	yuntao.wang@linux.dev, tony.luck@intel.com, len.brown@intel.com, 
+	srinivas.pandruvada@intel.com, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi @all,
+On Fri, Oct 11, 2024 at 2:43=E2=80=AFAM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> How about something like the completely untested attached patch?
+>
+> IMNHO, it improves on what was posted here because it draws a parallel
+> with an AMD erratum and also avoids writes to APIC_TMICT that would get
+> ignored anyway.
 
-I am working on one custom SoC. Where I add one CPUIdle state for
-``arm,cortex-a55`` processor.
+Please feel free to add
 
-idle-states {
-      entry-method = "psci";
-       cpu_ret_l: cpu-retention-l {
-         compatible = "arm,idle-state";
-         arm,psci-suspend-param = <0x00010001>;
-         local-timer-stop;
-         entry-latency-us = <55>;
-          exit-latency-us = <140>;
-          min-residency-us = <780>;
-    };
-};
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I am using ``Menu governor`` with the ``psci_idle driver`` in its original form.
-After booting Linux I find out that the CPUIdle core is never going
-inside the ``cpu-retention`` state.
-To check time spent by CPU in any state. I am using the below command.
-
-``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``
-
-OUTPUT:
-0 ===>CPU0 state0 (WFI)
-0 ===>CPU0 state1 (cpu-retention)
-
-increasing some time value ===>CPU1 state0 (WFI)
-0 ===>CPU1 state1 (cpu-retention)
-
-increasing some time value
-0
-
-increasing some time value
-0
-
-What am I doing wrong? Why does ``cpu-retention`` state time not increase?
-Any pointer will be helpful.
-
-Regards,
-Vivek
+to this one when it's ready.
 
