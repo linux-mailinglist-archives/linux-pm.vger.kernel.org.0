@@ -1,273 +1,159 @@
-Return-Path: <linux-pm+bounces-15545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15546-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC7C499A902
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 18:37:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F04499A950
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 18:59:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC2E71C21819
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 16:37:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B56171F2283A
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 16:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B03A19D080;
-	Fri, 11 Oct 2024 16:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA90A19F11E;
+	Fri, 11 Oct 2024 16:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C/+2WHEP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q7eTRUzD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80D4199932;
-	Fri, 11 Oct 2024 16:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22577F9;
+	Fri, 11 Oct 2024 16:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728664615; cv=none; b=kjhUTWQkNnj65IAs4VwvLoGsymhHIRMzPqFHhqvloC28KROP3nAZbY17ayHcNRQ1VJQVvgMVsICrWaAId70kSf4amp3fbcDSXVv7qlOpjJ//B37UCXWhxwkAWHnY83TaAKwBx5A/S++8m8Cq5HFCUbLa9iKXNphKa+nrhtl2Arc=
+	t=1728665971; cv=none; b=Xu1d6BwpUBdyc+ZZr8HjZJUod8jKs/RAMj8CS57e80Y2yAmVr2bNJ5kfJjI4SQorSq4tmiLidYFlmFw3V2BYd5QMhcBlRTs3jmsottg59HwNY9+2D6gJgCaqRQX12Mbham+qW5MILsS9j0nD1Lyf4VwJnRnXAZ5J94/GY6Jf1IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728664615; c=relaxed/simple;
-	bh=0DOctPhcXkXwaU6mc08w+rbLhDERb4wCWL/N4+tis1E=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uda8mfLnU6GHx8Uw8bX0gA5Xvyqy9o/dUMY66/lZEanNxE5vSVstTWSj7NjdPBP1dMgYtp0VaSafwMqfTMB0AMDParmEvef1XCIuRlEQuEi1vdiNoI3QZP5YE9OYQmRW0qacpdMjG0rjcgu9eFcfbw/V8kRHNT0AkGiWVI0+NmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C/+2WHEP; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1728665971; c=relaxed/simple;
+	bh=0bEaUbP5pxv2hiicfcPV9gdJhdDYsTu7CZu1IuYMxF0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GNCuMkfNoDAqgmBT4uDwoNVSqlFfgWNkSYd9g1CEKV/LRMYNRSD8Q+xrw/7W/URC2ngIDw4a+3hte/ayDU7+DCCBWKDaRAwqaur32RqxqqEY9m5IubXiNMgVYm+da2Qs7MRpF3wURoJn7G09Cz2Ik6DctE/iSuaNp/aPC43Yk+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q7eTRUzD; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728664614; x=1760200614;
-  h=message-id:subject:from:to:date:in-reply-to:references:
-   content-transfer-encoding:mime-version;
-  bh=0DOctPhcXkXwaU6mc08w+rbLhDERb4wCWL/N4+tis1E=;
-  b=C/+2WHEPX7qXTQJwtRG4oCLsz2lhdj7jsiZ5XxSGy4znEkGvaSQ+q9x7
-   Urlwbv0fg8refzpGmPn/hlp42tPRSfBkbS9ivbEs/0wi0Gdm5+qVxEnou
-   2o5nX97C/+FvrVOLr7CiM965ZQd9LwDGwf+nKd59ttSsHcoF9br8mXjFD
-   eOONePExtSq5jICI7/JuUIwGdvOS92ytRlHO9v7Pj9BTYUj6U5+r4v8Qd
-   q9xjQWPR4aa4YYC10I34bT0yBGuryzFD1q1IkIQRmsKaJHCIv8I0ki4Si
-   XqF+IjlrPr5DMa2kdrHaIHBYh5pHIctFTpLdLH9BFT23H4tclbBiG7Q9W
+  t=1728665970; x=1760201970;
+  h=date:from:to:cc:subject:message-id;
+  bh=0bEaUbP5pxv2hiicfcPV9gdJhdDYsTu7CZu1IuYMxF0=;
+  b=Q7eTRUzDomcyxodv949J0/SUsHEC2MubP2+Q+LtuUiivPvl0cKJT3D/2
+   DDB1akV2rT80QSpjUFmz3m5G0aaVlU9NTi92XjsOOxXIpwk5205FcvpuR
+   dy3ajBZb8GbRljUGDRBP6WyDQ0HnB9mN+B0DDrYHrGY1l+BnBM/zD0xvH
+   LWWV2AvW2f78x67hU/zrx8F7dlJKpoGfgU903Rt2O36RU6r/Kko5A9KIf
+   nfYcYtb9TO5FgWaM+lSfZ+dVZfebCLFm5mnOYTBRiGcazkHU8ilDnhE6k
+   ieYfQFKh+5OE7bMZlcAB/m9AVzotBgRrEBlRsKdmmq2jVFzTrjx416oOs
    w==;
-X-CSE-ConnectionGUID: teAb+/UpSXWr261THYdhwg==
-X-CSE-MsgGUID: 0G6d1uVXQumHVnbau1fqEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28232824"
+X-CSE-ConnectionGUID: a/PnXuBIQgOeyPP8aOtErQ==
+X-CSE-MsgGUID: fD0MtB51RQ+NY9QbwOn19Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="27963352"
 X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
-   d="scan'208";a="28232824"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 09:36:53 -0700
-X-CSE-ConnectionGUID: lCFmQ9YCTWi1Aa1mt9+pKA==
-X-CSE-MsgGUID: cMQuFs0YQHCNTzvTehFA8g==
+   d="scan'208";a="27963352"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 09:59:30 -0700
+X-CSE-ConnectionGUID: oZjb1cOiTlitnJN5DWtw6w==
+X-CSE-MsgGUID: Sh+FbtyiRNCUx6JkxuXXFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
-   d="scan'208";a="81738379"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.125.111.157])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 09:36:52 -0700
-Message-ID: <462d0bd9eb9c461e01ef27a8da9cd02f92ce8f9f.camel@linux.intel.com>
-Subject: Re: [PATCH V2 2/2] platform/x86/intel/pmc: Disable C1 auto-demotion
- during suspend
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: david.e.box@linux.intel.com, hdegoede@redhat.com, 
-	ilpo.jarvinen@linux.intel.com, rjw@rjwysocki.net, 
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Date: Fri, 11 Oct 2024 09:36:52 -0700
-In-Reply-To: <c9410dd42e01c1ba26fbb43f97a8777f1c95b9af.camel@linux.intel.com>
-References: <20241011003640.1613812-1-david.e.box@linux.intel.com>
-	 <20241011003640.1613812-2-david.e.box@linux.intel.com>
-	 <c4513e7857b15ec9146a7b75d00e99987787ced4.camel@linux.intel.com>
-	 <c9410dd42e01c1ba26fbb43f97a8777f1c95b9af.camel@linux.intel.com>
-Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
- keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
- YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
- y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
- NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
- GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
- TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
- oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
- AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
- b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
- AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
- oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
- UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
- ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
- wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
- NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
- J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
- oOfCQxricddC
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+   d="scan'208";a="81963334"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 11 Oct 2024 09:59:28 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1szIz7-000CWX-2A;
+	Fri, 11 Oct 2024 16:59:25 +0000
+Date: Sat, 12 Oct 2024 00:58:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 9b8e59244dc48920c1a58d8185cf83550ddb68b8
+Message-ID: <202410120013.SuyZF9d4-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2024-10-10 at 20:50 -0700, David E. Box wrote:
-> On Thu, 2024-10-10 at 19:09 -0700, srinivas pandruvada wrote:
-> > On Thu, 2024-10-10 at 17:36 -0700, David E. Box wrote:
-> > > On some platforms, aggressive C1 auto-demotion may lead to
-> > > failure to
-> > > enter
-> > > the deepest C-state during suspend-to-idle, causing high power
-> > > consumption.
-> > > To prevent this, disable C1 auto-demotion during suspend and re-
-> > > enable on
-> > > resume.
-> > >=20
-> > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > ---
-> > >=20
-> > > V2 - Remove #define DEBUG
-> > > =C2=A0=C2=A0 - Move refactor of cnl_resume() to separate patch
-> > > =C2=A0=C2=A0 - Use smp_call_function() to disable and restore
-> > > C1_AUTO_DEMOTE
-> > > =C2=A0=C2=A0 - Add comment that the MSR is per core, not per package.
-> > > =C2=A0=C2=A0 - Add comment that the online cpu mask remains unchanged
-> > > during
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 suspend due to frozen userspace.
-> > >=20
-> > > =C2=A0drivers/platform/x86/intel/pmc/cnp.c | 53
-> > > ++++++++++++++++++++++++++++
-> > > =C2=A01 file changed, 53 insertions(+)
-> > >=20
-> > > diff --git a/drivers/platform/x86/intel/pmc/cnp.c
-> > > b/drivers/platform/x86/intel/pmc/cnp.c
-> > > index 513c02670c5a..f12d4f0f9e93 100644
-> > > --- a/drivers/platform/x86/intel/pmc/cnp.c
-> > > +++ b/drivers/platform/x86/intel/pmc/cnp.c
-> > > @@ -8,6 +8,8 @@
-> > > =C2=A0 *
-> > > =C2=A0 */
-> > > =C2=A0
-> > > +#include <linux/smp.h>
-> > > +#include <linux/suspend.h>
-> > > =C2=A0#include "core.h"
-> > > =C2=A0
-> > > =C2=A0/* Cannon Lake: PGD PFET Enable Ack Status Register(s) bitmap *=
-/
-> > > @@ -206,8 +208,52 @@ const struct pmc_reg_map cnp_reg_map =3D {
-> > > =C2=A0	.etr3_offset =3D ETR3_OFFSET,
-> > > =C2=A0};
-> > > =C2=A0
-> > > +
-> > > +/*
-> > > + * Disable C1 auto-demotion
-> > > + *
-> > > + * Aggressive C1 auto-demotion may lead to failure to enter the
-> > > deepest C-state
-> > > + * during suspend-to-idle, causing high power consumption. To
-> > > prevent this, we
-> > > + * disable C1 auto-demotion during suspend and re-enable on
-> > > resume.
-> > > + *
-> > > + * Note that, although MSR_PKG_CST_CONFIG_CONTROL has 'package'
-> > > in
-> > > its name, it
-> > > + * is actually a per-core MSR on client platforms, affecting
-> > > only a
-> > > single CPU.
-> > > + * Therefore, it must be configured on all online CPUs. The
-> > > online
-> > > cpu mask is
-> > > + * unchanged during the phase of suspend/resume as user space is
-> > > frozen.
-> > > + */
-> > > +
-> > > +static DEFINE_PER_CPU(u64, pkg_cst_config);
-> > > +
-> > > +static void disable_c1_auto_demote(void *unused)
-> > > +{
-> > > +	int cpunum =3D smp_processor_id();
-> > > +	u64 val;
-> > > +
-> > > +	rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
-> > > +	per_cpu(pkg_cst_config, cpunum) =3D val;
-> > > +	val &=3D ~NHM_C1_AUTO_DEMOTE;
-> > > +	wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
-> > > +	pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum,
-> > > val);
-> > Do you want to leave pr_debug?
->=20
-> Thought it could be useful but it can be removed.
->=20
-> >=20
-> > > +}
-> > > +
-> > > +static void restore_c1_auto_demote(void *unused)
-> > > +{
-> > > +	int cpunum =3D smp_processor_id();
-> > > +
-> > > +	pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum,
-> > > +		 per_cpu(pkg_cst_config, cpunum));
-> > > +	wrmsrl(MSR_PKG_CST_CONFIG_CONTROL,
-> > > per_cpu(pkg_cst_config,
-> > > cpunum));
-> > > +}
-> > > +
-> > > =C2=A0void cnl_suspend(struct pmc_dev *pmcdev)
-> > > =C2=A0{
-> > > +	if (!pm_suspend_via_firmware()) {
-> > > +		preempt_disable();
-> > Why do you need this?
->=20
-> To ensure that the cpu doesn't change between the next two calls.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 9b8e59244dc48920c1a58d8185cf83550ddb68b8  Merge branch 'thermal-core-experimental' into bleeding-edge
 
-Correct. You need for smp_processor_id()
+elapsed time: 1129m
 
-Generally for this avoiding issue with smp_processor_id(), you can use
-get_cpu(), which gives current cpu as return value and also disable
-preemption.
+configs tested: 65
+configs skipped: 2
 
-Something like this
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-                this_cpu =3D get_cpu();
-                disable_c1_auto_demote(&this_cpu);
-smp_call_function_many(cpu_online_mask, disable_c1_auto_demote, NULL,
-0);
-                put_cpu();
+tested configs:
+alpha            allnoconfig    gcc-14.1.0
+alpha           allyesconfig    clang-20
+arc             allmodconfig    clang-20
+arc              allnoconfig    gcc-14.1.0
+arc             allyesconfig    clang-20
+arm             allmodconfig    clang-20
+arm              allnoconfig    gcc-14.1.0
+arm             allyesconfig    clang-20
+arm64           allmodconfig    clang-20
+arm64            allnoconfig    gcc-14.1.0
+csky             allnoconfig    gcc-14.1.0
+hexagon         allmodconfig    clang-20
+hexagon          allnoconfig    gcc-14.1.0
+hexagon         allyesconfig    clang-20
+i386            allmodconfig    clang-18
+i386             allnoconfig    clang-18
+i386            allyesconfig    clang-18
+i386               defconfig    clang-18
+loongarch       allmodconfig    gcc-14.1.0
+loongarch        allnoconfig    gcc-14.1.0
+m68k            allmodconfig    gcc-14.1.0
+m68k             allnoconfig    gcc-14.1.0
+m68k            allyesconfig    gcc-14.1.0
+microblaze      allmodconfig    gcc-14.1.0
+microblaze       allnoconfig    gcc-14.1.0
+microblaze      allyesconfig    gcc-14.1.0
+mips             allnoconfig    gcc-14.1.0
+nios2            allnoconfig    gcc-14.1.0
+openrisc         allnoconfig    clang-20
+openrisc        allyesconfig    gcc-14.1.0
+openrisc           defconfig    gcc-12
+parisc          allmodconfig    gcc-14.1.0
+parisc           allnoconfig    clang-20
+parisc          allyesconfig    gcc-14.1.0
+parisc             defconfig    gcc-12
+powerpc         allmodconfig    gcc-14.1.0
+powerpc          allnoconfig    clang-20
+powerpc         allyesconfig    gcc-14.1.0
+riscv           allmodconfig    gcc-14.1.0
+riscv            allnoconfig    clang-20
+riscv           allyesconfig    gcc-14.1.0
+riscv              defconfig    gcc-12
+s390            allmodconfig    gcc-14.1.0
+s390             allnoconfig    clang-20
+s390            allyesconfig    gcc-14.1.0
+s390               defconfig    gcc-12
+sh              allmodconfig    gcc-14.1.0
+sh               allnoconfig    gcc-14.1.0
+sh              allyesconfig    gcc-14.1.0
+sh                 defconfig    gcc-12
+sparc           allmodconfig    gcc-14.1.0
+sparc64            defconfig    gcc-12
+um              allmodconfig    clang-20
+um               allnoconfig    clang-20
+um              allyesconfig    clang-20
+um                 defconfig    gcc-12
+um            i386_defconfig    gcc-12
+um          x86_64_defconfig    gcc-12
+x86_64           allnoconfig    clang-18
+x86_64          allyesconfig    clang-18
+x86_64             defconfig    clang-18
+x86_64                 kexec    gcc-12
+x86_64              rhel-8.3    gcc-12
+x86_64         rhel-8.3-rust    clang-18
+xtensa           allnoconfig    gcc-14.1.0
 
-
-But fine, this makes your code more complex as you have to pass now a
-param and use for local_cpu and use smp_procesor_id() for remote call
-via smp_call..
-
-
-Thanks,
-Srinivas
-
->=20
-> David
->=20
-> >=20
-> >=20
-> > Thanks,
-> > Srinivas
-> >=20
-> > > +		disable_c1_auto_demote(NULL);
-> > > +		smp_call_function(disable_c1_auto_demote, NULL,
-> > > 0);
-> > > +		preempt_enable();
-> > > +	}
-> > > +
-> > > =C2=A0	/*
-> > > =C2=A0	 * Due to a hardware limitation, the GBE LTR blocks PC10
-> > > =C2=A0	 * when a cable is attached. To unblock PC10 during
-> > > suspend,
-> > > @@ -218,6 +264,13 @@ void cnl_suspend(struct pmc_dev *pmcdev)
-> > > =C2=A0
-> > > =C2=A0int cnl_resume(struct pmc_dev *pmcdev)
-> > > =C2=A0{
-> > > +	if (!pm_suspend_via_firmware()) {
-> > > +		preempt_disable();
-> > > +		restore_c1_auto_demote(NULL);
-> > > +		smp_call_function(restore_c1_auto_demote, NULL,
-> > > 0);
-> > > +		preempt_enable();
-> > > +	}
-> > > +
-> > > =C2=A0	pmc_core_send_ltr_ignore(pmcdev, 3, 0);
-> > > =C2=A0
-> > > =C2=A0	return pmc_core_resume_common(pmcdev);
-> >=20
->=20
->=20
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
