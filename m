@@ -1,202 +1,180 @@
-Return-Path: <linux-pm+bounces-15558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69EE99AD8F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 22:31:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D575199AE8E
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2024 00:15:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FE55287454
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 20:31:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 263E0B23A54
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2024 22:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D498E1D174A;
-	Fri, 11 Oct 2024 20:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EB41D1753;
+	Fri, 11 Oct 2024 22:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="i/mycbrp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zjn5h6bx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3521D14E0;
-	Fri, 11 Oct 2024 20:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B58E1CFEAD;
+	Fri, 11 Oct 2024 22:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728678644; cv=none; b=rfELKhaOLnQtmnZMO8C9VpIoE91wtANas+eeRexwVs9fU+esfwWrg6KIkCvk9Sf4jgXA8Cv/+hCdw3Sl2JPBfMYGS1SjHNKbRBuUkubRU135UOXO4ag5l8sRwhyrKtKIyTNHMOpRwgOitcU0tTrQIsJRMYKjuZz+f0Y9zwuArLc=
+	t=1728684921; cv=none; b=Cq0lHPdPTSkM2aAQWzyfyUOfpWFyMHFaGW7RnFNrsWWe8Irtq+U5fS61YGmXK7HwSacqvkOUsInP987oGDlUMuTQsgGdUQyoyyTGjmfpb6+PyZJtyFeLNgvTVdoEGgwCWbfKge7ERqOKldY5Pev1pZj2VCR5DHcoJzFIaPEgy18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728678644; c=relaxed/simple;
-	bh=kSN6Qf/np2JHr04GL7BD7rr7xGnCoT7orLpsgMOvUb0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=DN7AoH+1OMpiAokRgSar7zGRpyHSZUQ6cN1NF37nrDCq60TJOOoKm1jTkQrn2SicRrf8WinAf6rkvCsRkIsg6r8g0IOFW6frqXl8z94n9x2KfwnzUy4AA87UEuXa/EbSxX/97a6FhN7FNtE64ORW/HI9FWBMkX2+r4hojl4KGuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=i/mycbrp; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49BFf04a023975;
-	Fri, 11 Oct 2024 20:30:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	aLkvekefPD3B+IbGrBJhkngClyZCmFG0RTm3Wfr5X68=; b=i/mycbrpGHFzdnO+
-	3nvL5eNZZSwUAX9R3IfD7P/Yq/kkYOR+NFAFoUWEL6F8Da7ZFaee96KCMWQ3kK/i
-	jMKNMqG78IdoSouoN6gqwgcwGFUNwWSKT+xmQWAx6lsFjsgZmGr0br+lMp3NeD6W
-	hcg+sFiMkT5EJ4OWkRhmgh3f2b3NrYKpLaCiqERH8vAgsb8gFUbXbv75HJVsnscO
-	c/inlf9uQof4w1diMOatbMeDh9c4ICWk8K87fHax9bd9rK9ao3wLG6XKUh5rcpVc
-	lVKyd+Fxggjb95cqGonZ1xYdznsX8kPyrji6k0HoLFhHwWaOKZJMf6a+7lBk4XJn
-	yv8urQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 426y3vt6nn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Oct 2024 20:30:31 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49BKUUIH024900
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Oct 2024 20:30:30 GMT
-Received: from [10.213.111.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 11 Oct
- 2024 13:30:24 -0700
-From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Date: Sat, 12 Oct 2024 01:59:30 +0530
-Subject: [PATCH RFC 3/3] arm64: dts: qcom: x1e80100: Add ACD levels for GPU
+	s=arc-20240116; t=1728684921; c=relaxed/simple;
+	bh=ELP8L478B16ztqydobuxgj5YxtYig7+S68KIYDDeqLY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k0mjjmxaSFpYrpWnpcrdgGN7kYDXJk2Zect1MV3t04vinv1Be8mFQg8edwiT6pcQabhxfm+bpXmDPeLgF8KG+dFxrsDivHSC0/bBt+Ikl+X2+O9yCHylW7PM8LrhRHIALTt79tbwxLok7Vy/ePOR+ai2hPEvaJGpbQKeuHn6inc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zjn5h6bx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A234EC4CED1;
+	Fri, 11 Oct 2024 22:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728684920;
+	bh=ELP8L478B16ztqydobuxgj5YxtYig7+S68KIYDDeqLY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Zjn5h6bxsTfHdSjmsw3xZzC9NnFt9LLBRiL1gLEZ9MPe2rHf2VFBr3wdq0x0zPlO0
+	 TmhfWnV4qr9xzLDdO5oFi0dQ6r4vsHF1GbotmtsS9f6GJnv3zfyZjIYQMMSDn3hp/k
+	 ZboIwLveYUg8zUwlImOW81JC2JSKpOSm/2gYCnynXm1r+f2phrg1TsIprInpBGxCPB
+	 R9rql6nRINUG7I0zAG+4AGCkXnwhltA2nz9nxglxlbuAmvCQ6nLY3wH+i3IvS7SFZC
+	 SoDq2bzKlC+4Cl/Ax8NoWbkJJTUKciau9ofuJsTa7IxaEekYlkjnQAc2CejxazXYkv
+	 F3I91Ig4z+ckA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53997328633so4197849e87.3;
+        Fri, 11 Oct 2024 15:15:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUdCah1OpgQ2TVUBFQi3EpDKlJ+FEP2mAGM2omC5jcZib74QWcWxh0aUDM8vkryju/Jn0Hl7LMdr1UR@vger.kernel.org, AJvYcCWSiGZY5NwjixB38Ext7ntheO5Ee3QO+FLn9cS9+CHYT6Je7nkCKRP0d/bNSPdepyhKSTAEIJjiiURmqPMU@vger.kernel.org, AJvYcCXBDjbNe03uHnw96GQEPjxPuH3EbEXNqi0+otuTzotfphoR5AqkRsjEaOj1y9Prj11L4IF7IUzqlXY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2fVTImkw0BjrZk/Se8s7CrHKVwt3UYVseznhm5cWLhUwcUtVQ
+	UAYc+6XWifq9VrgD5jeWptEb9ZOjPsR/eXJsgzIyHaSIvMJPIk1hSD0xypOfcHaeTurv1bT2gDx
+	QNrQY2zMKc9D/zjbwF5xBFCY62w==
+X-Google-Smtp-Source: AGHT+IGF99XBUxkOenEdwmIQtOgExe7ME91mPqvFEk96liE+RiiXVBhJMUT6h/UsrdC6DJPbt++sPunoF7UITTYb8zQ=
+X-Received: by 2002:a05:6512:e9d:b0:535:6a34:b8c3 with SMTP id
+ 2adb3069b0e04-539e54d772bmr770312e87.5.1728684918931; Fri, 11 Oct 2024
+ 15:15:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20241012-gpu-acd-v1-3-1e5e91aa95b6@quicinc.com>
-References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
-In-Reply-To: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
-To: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        "Konrad
- Dybcio" <konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten
-	<marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, "Simona
- Vetter" <simona@ffwll.ch>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
-	<nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728678606; l=2450;
- i=quic_akhilpo@quicinc.com; s=20240726; h=from:subject:message-id;
- bh=kSN6Qf/np2JHr04GL7BD7rr7xGnCoT7orLpsgMOvUb0=;
- b=MSKX1CdntVYslBe60UodsXukJZmLDmIj49ZIwGM10LW/kMOCcYAhBKElvADQn4JaYdpOKbIlR
- ZppX7VivdJGDn7pv9vwXe7i0l/0VGPsKhpZdd0d0M3ssDIpdFsqO+Ou
-X-Developer-Key: i=quic_akhilpo@quicinc.com; a=ed25519;
- pk=lmVtttSHmAUYFnJsQHX80IIRmYmXA4+CzpGcWOOsfKA=
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Ce3s_howiHHxhiASQSkqKbOlgcp0X-tk
-X-Proofpoint-GUID: Ce3s_howiHHxhiASQSkqKbOlgcp0X-tk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
- clxscore=1015 mlxscore=0 phishscore=0 impostorscore=0 adultscore=0
- mlxlogscore=785 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410110143
+References: <20240610085735.147134-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240610085735.147134-1-angelogioacchino.delregno@collabora.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 11 Oct 2024 17:15:05 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+F_pwhVLD1HF7=sYLp2w5kpc53UmzzffxyKzwh8WZthw@mail.gmail.com>
+Message-ID: <CAL_Jsq+F_pwhVLD1HF7=sYLp2w5kpc53UmzzffxyKzwh8WZthw@mail.gmail.com>
+Subject: Re: [PATCH v6 0/7] MediaTek DVFSRC Bus Bandwidth and Regulator knobs
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: djakov@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org, 
+	keescook@chromium.org, gustavoars@kernel.org, henryc.chen@mediatek.com, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, kernel@collabora.com, wenst@chromium.org, 
+	amergnat@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Update GPU node to include acd level values.
+On Mon, Jun 10, 2024 at 3:57=E2=80=AFAM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Changes in v6:
+>  - Fixed build with clang (thanks Nathan!)
+>  - Removed unused mtk_rmw() macro in mtk-dvfsrc.c
+>  - Added MODULE_DESCRIPTION() to mtk-dvfsrc-regulator.c
+>
+> Changes in v5:
+>  - Fixed Kconfig dependencies in interconnect
+>  - Fixed module build for dvfsrc and interconnect
+>
+> Changes in v4:
+>  - Updated patch [3/7] to actually remove address/size cells
+>    as the old version got unexpectedly pushed in v3.
+>
+> Changes in v3:
+>  - Removed examples from interconnect and regulator bindings
+>    and kept example node with interconnect and regulator in
+>    the main DVFSRC binding as suggested
+>  - Removed 'reg' from interconnect and regulator, removed both
+>    address and size cells from the main DVFSRC binding as that
+>    was not really needed
+>  - Added anyOf-required entries in the regulator binding as it
+>    doesn't make sense to probe it without any regulator subnode
+>
+> Changes in v2:
+>  - Fixed issues with regulator binding about useless quotes and
+>    wrong binding path (oops)
+>  - Removed useless 'items' from DVFSRC main binding
+>  - Allowed address/size cells to DVFSRC main binding to resolve
+>    validation issues on the regulator and interconnect bindings
+>  - Changed dvfsrc node name to `system-controller`, as the DVFSRC
+>    is actually able to control multiple system components.
+>  - Added a commit to remove mtk-dvfs-regulator.c before adding the
+>    new, refactored regulator driver
+>
+>
+> This series adds support for the MediaTek Dynamic Voltage and Frequency
+> Scaling Resource Controller (DVFSRC), found on many MediaTek SoCs.
+>
+> This hardware collects requests from both software and the various remote
+> processors embededd into the SoC, and decides about a minimum operating
+> voltage and a minimum DRAM frequency to fulfill those requests, in an
+> effort to provide the best achievable performance per watt.
+>
+> Such hardware IP is capable of transparently performing direct register
+> R/W on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
+>
+> Summarizing how the DVFSRC works for Interconnect:
+>
+>              ICC provider         ICC Nodes
+>                               ----          ----
+>              _________       |CPU |   |--- |VPU |
+>     _____   |         |-----  ----    |     ----
+>    |     |->|  DRAM   |       ----    |     ----
+>    |DRAM |->|scheduler|----- |GPU |   |--- |DISP|
+>    |     |->|  (EMI)  |       ----    |     ----
+>    |_____|->|_________|---.   -----   |     ----
+>                /|\         `-|MMSYS|--|--- |VDEC|
+>                 |             -----   |     ----
+>                 |                     |     ----
+>                 | change DRAM freq    |--- |VENC|
+>              --------                 |     ----
+>     SMC --> | DVFSRC |                |     ----
+>              --------                 |--- |IMG |
+>                                       |     ----
+>                                       |     ----
+>                                       |--- |CAM |
+>                                             ----
+>
+> ...and for regulators, it's simply...
+>    SMC -> DVFSRC -> Regulator voltage decider -> (vreg) Registers R/W
+>
+> Please note that this series is based on an old (abandoned) series from
+> MediaTek [1], and reuses some parts of the code found in that.
+>
+> Besides, included in this series, there's also a refactoring of the
+> mtk-dvfsrc-regulator driver, which never got compiled at all, and would
+> not build anyway because of missing headers and typos: that commit did
+> not get any Fixes tag because, well, backporting makes no sense at all
+> as the DVFSRC support - which is critical for that driver to work - is
+> introduced with *this series*! :-)
+>
+> P.S.: The DVFSRC regulator is a requirement for the MediaTek UFSHCI
+>       controller's crypto boost feature, which is already upstream but
+>       lacking the actual regulator to work....... :-)
+>
+> [1]: https://lore.kernel.org/all/20210812085846.2628-1-dawei.chien@mediat=
+ek.com/
+>
+> AngeloGioacchino Del Regno (7):
+>   dt-bindings: regulator: Add bindings for MediaTek DVFSRC Regulators
+>   dt-bindings: interconnect: Add MediaTek EMI Interconnect bindings
+>   dt-bindings: soc: mediatek: Add DVFSRC bindings for MT8183 and MT8195
+>   soc: mediatek: Add MediaTek DVFS Resource Collector (DVFSRC) driver
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
- arch/arm64/boot/dts/qcom/x1e80100.dtsi | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Looks like the driver got picked up, but not the binding.
+mediatek,mt8183-dvfsrc and mediatek,mt8195-dvfsrc show up in next as
+undocumented.
 
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-index a36076e3c56b..e6c500480eb1 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-@@ -3323,60 +3323,69 @@ zap-shader {
- 			};
- 
- 			gpu_opp_table: opp-table {
--				compatible = "operating-points-v2";
-+				compatible = "operating-points-v2-adreno";
- 
- 				opp-1100000000 {
- 					opp-hz = /bits/ 64 <1100000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
- 					opp-peak-kBps = <16500000>;
-+					qcom,opp-acd-level = <0xa82a5ffd>;
- 				};
- 
- 				opp-1000000000 {
- 					opp-hz = /bits/ 64 <1000000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
- 					opp-peak-kBps = <14398438>;
-+					qcom,opp-acd-level = <0xa82b5ffd>;
- 				};
- 
- 				opp-925000000 {
- 					opp-hz = /bits/ 64 <925000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
- 					opp-peak-kBps = <14398438>;
-+					qcom,opp-acd-level = <0xa82b5ffd>;
- 				};
- 
- 				opp-800000000 {
- 					opp-hz = /bits/ 64 <800000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
- 					opp-peak-kBps = <12449219>;
-+					qcom,opp-acd-level = <0xa82c5ffd>;
- 				};
- 
- 				opp-744000000 {
- 					opp-hz = /bits/ 64 <744000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
- 					opp-peak-kBps = <10687500>;
-+					qcom,opp-acd-level = <0x882e5ffd>;
- 				};
- 
- 				opp-687000000 {
- 					opp-hz = /bits/ 64 <687000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
- 					opp-peak-kBps = <8171875>;
-+					qcom,opp-acd-level = <0x882e5ffd>;
- 				};
- 
- 				opp-550000000 {
- 					opp-hz = /bits/ 64 <550000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
- 					opp-peak-kBps = <6074219>;
-+					qcom,opp-acd-level = <0xc0285ffd>;
- 				};
- 
- 				opp-390000000 {
- 					opp-hz = /bits/ 64 <390000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 					opp-peak-kBps = <3000000>;
-+					qcom,opp-acd-level = <0xc0285ffd>;
- 				};
- 
- 				opp-300000000 {
- 					opp-hz = /bits/ 64 <300000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D1>;
- 					opp-peak-kBps = <2136719>;
-+					qcom,opp-acd-level = <0xc02b5ffd>;
- 				};
- 			};
- 		};
-
--- 
-2.45.2
-
+Rob
 
