@@ -1,258 +1,195 @@
-Return-Path: <linux-pm+bounces-15574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68D1C99B65E
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2024 19:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E69F99B66E
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2024 19:46:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D54B31F22121
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2024 17:36:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C62231F22406
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2024 17:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B12C80C13;
-	Sat, 12 Oct 2024 17:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5DB4F1F2;
+	Sat, 12 Oct 2024 17:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p9e3ggNM"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zzK6GAR4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0181E73451
-	for <linux-pm@vger.kernel.org>; Sat, 12 Oct 2024 17:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728754612; cv=none; b=S6mmXsoOIwf9EOXARVhJEn1+nNwYLxgd2Dp4QVetfH1d4dNXbKp08arwafUq5bmnab4hTBYn/CqRdVmStVUE6NfFGUAJxqy4Gg5MukO58xPUEAtX5Yiul+w4bowGmisaKJGZxiVqlR2AkaFIeXd6D5vSgICiU7KAECBg8DWzAAk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728754612; c=relaxed/simple;
-	bh=VTFAZUo1jWroJup+5Oj1h3G2EQRSljNLX0E8GCBsdac=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oCux8QgZUdWx6LKpiAQXt9d5I46FIxA233+RIFowJ7mc7cBrYyvq1azZ87AODnyjKh5Es9fNKCjf+b1GMlcu3s0XDf4o7dMfY2cEgzDizEeFb9lDtSgkpo3PipLRaCQQVe5u5rLBIpx8MANElpX8tlhps9vXjlf/KErFkOSDsRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p9e3ggNM; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-37d5038c653so1618963f8f.2
-        for <linux-pm@vger.kernel.org>; Sat, 12 Oct 2024 10:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728754609; x=1729359409; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xgo5+DAesyu/s+M+VpCsYqJzs884V/twSlVy87GZ0Xo=;
-        b=p9e3ggNMm8ou8LuAZhZvd70mj8wpM7RX7AT0fBrNxPnCK+jekvAtA50NpQqQgMzMyw
-         x4/RPTQoSweinCexRoHKPWQxB/aCIAcN3sRRZmWPCdmaY8WcWXZwzg8iDCjNJNL7/fex
-         41SRG80o0hxzn2btpCEMStjOB42br+uDoqALWJueMOz9uJNyz2X4ec3STzuox5VnCFKH
-         r3dandOLvJkgBTy1RuZ3UIb0JdZ7KaEZAngb8bRvsNjtEDX4HuvrhP7MLJMlswYCW7ie
-         lDFvhj6I2hcpg7ndluzEzRuFbA81HOLQ6k5NwoW0ShFLThxdrmFny9p1eRcI9aBkFfHx
-         OtRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728754609; x=1729359409;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xgo5+DAesyu/s+M+VpCsYqJzs884V/twSlVy87GZ0Xo=;
-        b=AAXNNsK0Hb1jykeQRZKnFqasIl7HrhSf4dVIpdReFsvjMHjxW8pkI3z66MtUhrZnxe
-         fijffPGWj9xwF/GCkXyb4MCm6eDE+uAYCOcfb6h437OXzXZFQhKgmJsUaEwZJDoqrSSB
-         fWYzoOG1YvLIunZi0oWMC8xEj/K7jYfe+atyWgaK2vGg76raR4/3iRb1XutUL66LS252
-         IVDxPAUKXP5nFdCreP+ZWZFRyfO8bf9cRs0HISzdG1F0+yvrCrplT3aRoCR0Rt2W4CaI
-         ioJFZTWRi5FRj+H3k1nt1/DwD5LHt2NdKYSo1qeQeqprwsWmw+mSvOsBIWbBrFY7A+tY
-         oLiA==
-X-Gm-Message-State: AOJu0Yycl+WSAeRpS9GFLUJtT3EkztHQQDxvaRLzq8+wpU6LM/GYPRfV
-	nYXT/UKyq596SGklngX6uKf9V54h0plcDwykbhIzRyzj8IKkBBeTuszXp/TsZ00=
-X-Google-Smtp-Source: AGHT+IH3Xc37kLOKDoz2wLO86kOQR1oYW3JWANAffm5w6Qw6xfMKIPU8G5yqdE5HhDLq6XSSIJO3tA==
-X-Received: by 2002:a5d:5351:0:b0:37d:4870:dedf with SMTP id ffacd0b85a97d-37d551d3fc5mr4731093f8f.19.1728754608677;
-        Sat, 12 Oct 2024 10:36:48 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-37d4b6cfc37sm6790078f8f.55.2024.10.12.10.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Oct 2024 10:36:47 -0700 (PDT)
-Message-ID: <a7f39a96-d042-4ac5-99d4-825100a748d8@linaro.org>
-Date: Sat, 12 Oct 2024 19:36:46 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CF517579;
+	Sat, 12 Oct 2024 17:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728755158; cv=fail; b=TnW8ANo0RIVikXrzL+Aw+y3kLp2j7y7eR1GrcY1M8VhjMpurQ55XHk/a7aQ5ah5gGnowJP/iJ6uVs2M5K6rcb5E9Dw/YGirCzr+Ms+2+UDRUsfEbdjA4q1MU9NfokAvvf+BcnJKY7FqKY/e0C89siH8gyHCF5BpRkLVQqqm1TSU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728755158; c=relaxed/simple;
+	bh=Rws0x9OTrZrU9iu4g0s3ECprm+SsDyl52nAu2LSxSk8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IIszE7PxRk5qeKH3gWndO+p7zVGkfPAoDbm3sreNtWceJ98K7uosjsgv1O9skl6WxJaN0iOqyDTWEdGAOe5awlnr4Wv4obimLLfbyzHOytC+ac7n1pYThxxFVfTv/xD41VhI1waM9LgVNNoKDEEx5/CAlbqBQLMXNQNboH2RZvM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zzK6GAR4; arc=fail smtp.client-ip=40.107.94.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TMDFj6FdwsBaSIeIWuT/3wyE57EbXsR32k103Rj2tyVJnmzfWmznQEjghpm5eC7nh7a2otUf4+6XLeMB+XSeCgAwAnK6u0+Fw5+KZjn3Al9Niib+u1kiWotxrSPxRcPa4UuxCA96/gLzYoDQ6CW+g/j0yO4CBKY2HDAGDqa2nGv1IfO8VVDASNAAPRmHMkl9eUq/nF4jad0QIMUAh4ryHdWNJNbIaSGxh2WzzDAhwBpWeV5LtV7lq61ekA9O9unimnjfc71cz289q6D+7njjdONlkJIs5pDtU7zZFlvvM9dVPjja51/PbY6f83CaOD30TU/Os1XwO/sg2OetdvVltA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pe8wpd5Ju0riSwsXApkWKKcTYOnpimsaFc+E+fA4Bm0=;
+ b=v3xD+exNqWr+fMKS/E7axRqzVaHyIUQ+vOum6ATvMch/T2P70NMzaV7ymwgQY8i/9b8zPhZoJ3hnV+Fg4ZW4KmwPBWPOEVPJJjEfzLUVIR6N4pBlPCavDt7GX9p1kmGU1i7T0UHkMavQAl8XArhkwS55fLzUvxUbNzG8JeE+dA6e0s7jAwCFqWgZbGluZprV+46pbkz5f3w+Qqkr5HmwF+XPnLp9xAMfSIuzMKFbf3FfRN22mVYa5Fi2L3BtWhFcoUgfkfbG+MsKOuCd3F+nz3XbsBdPOoGme/5+RW0uhsBUqn++Pfro167qkboZD0m6+3Teos6C6ftd7epctAxWnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pe8wpd5Ju0riSwsXApkWKKcTYOnpimsaFc+E+fA4Bm0=;
+ b=zzK6GAR40PewZRQ2Hu9FNPylDc2ObTbDrobI2mU9dtmD/DMMuHXQAYxjhmr9s6JALEVmTGZXD+N0UKZRsKUq8IaR4vB0tYrYdsjXL1BFOCsb6mtATV8LRKUuBRLdrakGaOMutJ7cHd7rnhIVNY0M2Ts2yQsKUF/clmard7ylJsY=
+Received: from MW4PR03CA0145.namprd03.prod.outlook.com (2603:10b6:303:8c::30)
+ by DM6PR12MB4433.namprd12.prod.outlook.com (2603:10b6:5:2a1::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.22; Sat, 12 Oct
+ 2024 17:45:52 +0000
+Received: from SJ1PEPF000023CB.namprd02.prod.outlook.com
+ (2603:10b6:303:8c:cafe::2f) by MW4PR03CA0145.outlook.office365.com
+ (2603:10b6:303:8c::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.21 via Frontend
+ Transport; Sat, 12 Oct 2024 17:45:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF000023CB.mail.protection.outlook.com (10.167.244.5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8048.13 via Frontend Transport; Sat, 12 Oct 2024 17:45:52 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 12 Oct
+ 2024 12:45:50 -0500
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+CC: Perry Yuan <perry.yuan@amd.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>, Peter Jung
+	<ptr1337@cachyos.org>
+Subject: [PATCH 1/4] cpufreq/amd-pstate: Use nominal perf for limits when boost is disabled
+Date: Sat, 12 Oct 2024 12:45:16 -0500
+Message-ID: <20241012174519.897-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/6] thermal/netlink: Add the commands and the events
- for the thresholds
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, lukasz.luba@arm.com, quic_manafm@quicinc.com
-References: <20240923100005.2532430-1-daniel.lezcano@linaro.org>
- <20240923100005.2532430-4-daniel.lezcano@linaro.org>
- <CAJZ5v0gpHpH70YTRpNgPiAtCpkRS6i4h_YS4-a3HL8qLkk9zZg@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gpHpH70YTRpNgPiAtCpkRS6i4h_YS4-a3HL8qLkk9zZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CB:EE_|DM6PR12MB4433:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0eed917a-ea3c-4c6b-24d6-08dceae5b732
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?jYM5FjYOalzUxAaGFQ9GppbB3HQYR5G385mzIHgu7Wj8Q0Ur79AO06mMvhdD?=
+ =?us-ascii?Q?RlUVc1xwkq427BkgNC3diQikPDomIdZMxhvIuCJRPdiZlAHtD3YIDa3FarTQ?=
+ =?us-ascii?Q?OJg6OIPw8NMLfN3PqVytp5qzlEco6M/ttA18xjBPNLpq8QOSCbQhtbR3S3a6?=
+ =?us-ascii?Q?f93FePkDTjxZ2DPsIhwxd9f7kzXufWM7EuY2xn3H7QYHb6YfY+JJdScSo26Q?=
+ =?us-ascii?Q?smpkk6kHLWzk7rVjV1ed7STBDIvWMCCkvWTFy3nJCNV5g3n97MLg25pe7Lan?=
+ =?us-ascii?Q?PToYLNfB+LEMamqV5EUesz56fx1gf2foCWIiwCuN3LFRiBBagPpW4wtjC3/Q?=
+ =?us-ascii?Q?K+tdBH8Oqoo1Miohq22Ko04/zdShQlJrLKMtGzCYb9SQm/QZHy/M52IWyS7S?=
+ =?us-ascii?Q?u9dgjHyWxSLkCSmFgMB12wMF/SL5uGHyDcQFVSb6SIbVVgcAaFoQVAHuRGcO?=
+ =?us-ascii?Q?pRVIKow8KWysdgpbOM8T8JOh/XFnw0gv1M+uJNxdxkoHBqruNGina1zoakdQ?=
+ =?us-ascii?Q?veB79dX19R193bbXf8HtFyWr8fpTglwrgQhJxin4ohUMHkF9ivLCVgHF9tzx?=
+ =?us-ascii?Q?itO2BV0/cEdDRq4lrO9Iz7bpMlSpnvJTpv+FLC//FcngP4S+zniDvH14MZFh?=
+ =?us-ascii?Q?tUIrJSCZND5lbDMYjH7JM3Au4Lx20dH4xcOqryYmKv8vy2MAS00hThIO+4qs?=
+ =?us-ascii?Q?1QqOS4wqyiKFHJx2WjRpYBYzLFU1Yc6PAB1EcY+nSU4Nr7xrOe4bDzjYJbnS?=
+ =?us-ascii?Q?GrXlBWOQnxSnsPSI1E7QT7z2HebolTcbqMfYonERWfhk6GDY+6xNBxYasf6W?=
+ =?us-ascii?Q?KFhLUvUddavPQMPuO7S90rjG2Xe8qSt+Ci4PP9/5TMd5+gRSYAZvXkfJmwGJ?=
+ =?us-ascii?Q?yTykDGcmX3RAEyG8tdx1cfhDDkN920TfGA83RjEsKAgENbjUhKXMBqhdHZrj?=
+ =?us-ascii?Q?AMj2T0+8EqxuK7y4fGILI1wU6xk0WER9xVgkl0ficvNqN4y6pJh6IN4OFuVo?=
+ =?us-ascii?Q?lijc4J01tcmsomPKKJkfoardD7rn9CHu+zA+67GoVEC7kxaICFKFUZAc6gz3?=
+ =?us-ascii?Q?zyViNe4XshkKT+KK2OaONahskl1VtauxUF7oMq4EZtO5NkUDw+g+Hh/S3dWE?=
+ =?us-ascii?Q?pyC0ptXe78gns7L+e9bUTer/S2MEPHlMTXujilkAFYlU3mSATVzW48OsPagR?=
+ =?us-ascii?Q?kJYZgCX2JWs7AvkeCspbnrcl1HbUzsXm2T34ze7ypYN7E2fhwerTBuXlMyn3?=
+ =?us-ascii?Q?+T8q9pe1Q0GtP9DNPTEgusaMUxYor6/LHsjs2xw0FA4fD/+jgHRfwx4OBsEG?=
+ =?us-ascii?Q?BMjMn1cJUSFfDpPGfHT7WLqLI2KAJEfC+S5svYWIGzCeUePo8/IYouvevf8D?=
+ =?us-ascii?Q?wVJEm7UMK8E7bnELbkXnrQzxoXQG?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2024 17:45:52.0288
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0eed917a-ea3c-4c6b-24d6-08dceae5b732
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023CB.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4433
 
-On 02/10/2024 14:53, Rafael J. Wysocki wrote:
-> On Mon, Sep 23, 2024 at 12:00 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> The thresholds exist but there is no notification neither action code
->> related to them yet.
->>
->> These changes implement the netlink for the notifications when the
->> thresholds are crossed, added, deleted or flushed as well as the
->> commands which allows to get the list of the thresholds, flush them,
->> add and delete.
-> 
-> The last three commands need special privileges I would think because
-> they essentially cause the kernel to either allocate or free memory
-> and they may interfere with what the other processes in user space do.
-> For instance, one process may flush the thresholds for a given thermal
-> zone while another process is using them.
-> 
-> What controls the level of privilege required to use these commands?
+When boost has been disabled the limit for perf should be nominal perf not
+the highest perf.  Using the latter to do calculations will lead to
+incorrect values that are still above nominal.
 
-I would say we can start with CAP_SYS_ADMIN and then if needed we can 
-introduce later a new capability CAP_SYS_THERMAL ?
+Fixes: ad4caad58d91 ("cpufreq: amd-pstate: Merge amd_pstate_highest_perf_set() into amd_get_boost_ratio_numerator()")
+Reported-by: Peter Jung <ptr1337@cachyos.org>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219348
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/cpufreq/amd-pstate.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
->> As different processes in userspace can interact with the thresholds,
->> the process id responsible of the action (add, delete or flush) will
->> be added in the notification.
-> 
-> This may leak PIDs between containers which has been pointed out as an
-> issue (for example, see
-> https://lore.kernel.org/linux-pm/20240704-umsatz-drollig-38db6b84da7b@brauner/).
-
-> OTOH, the thermal engine should not need the extra information because
-> it knows which thresholds were added by it, so any other thresholds
-> would be added by someone else, wouldn't they?
-
-Ok I will remove this information.
-
->> This way a thermal engine is able to
->> detect if another process is interfering with the thresholds. A
->> process id of zero is the kernel as it is by convention usually.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/thermal/thermal_netlink.c    | 239 ++++++++++++++++++++++++++-
->>   drivers/thermal/thermal_netlink.h    |  34 ++++
->>   drivers/thermal/thermal_thresholds.c |  38 +++--
->>   drivers/thermal/thermal_thresholds.h |   6 +-
->>   include/uapi/linux/thermal.h         |  28 +++-
->>   5 files changed, 313 insertions(+), 32 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
->> index 97157c453630..8d92ebeb72fc 100644
->> --- a/drivers/thermal/thermal_netlink.c
->> +++ b/drivers/thermal/thermal_netlink.c
->> @@ -9,6 +9,7 @@
->>   #include <linux/module.h>
->>   #include <linux/notifier.h>
->>   #include <linux/kernel.h>
->> +#include <net/sock.h>
->>   #include <net/genetlink.h>
->>   #include <uapi/linux/thermal.h>
->>
->> @@ -49,12 +50,19 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
->>          [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]           = { .type = NLA_U32 },
->>          [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]  = { .type = NLA_U32 },
->>          [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]   = { .type = NLA_U32 },
->> +
->> +       /* Thresholds */
->> +       [THERMAL_GENL_ATTR_THRESHOLD]           = { .type = NLA_NESTED },
->> +       [THERMAL_GENL_ATTR_THRESHOLD_TEMP]      = { .type = NLA_U32 },
->> +       [THERMAL_GENL_ATTR_THRESHOLD_WAY]       = { .type = NLA_U32 },
-> 
-> It would be better to call this THERMAL_GENL_ATTR_THRESHOLD_DIR IMV.
-
-Sure
-
->> +       [THERMAL_GENL_ATTR_THRESHOLD_PID]       = { .type = NLA_U32 },
->>   };
->>
->>   struct param {
->>          struct nlattr **attrs;
->>          struct sk_buff *msg;
->>          const char *name;
->> +       pid_t pid;
-> 
-> I'd rather not add it as mentioned above.
-
-ok, no pid info
-
->>          int tz_id;
->>          int cdev_id;
->>          int trip_id;
->> @@ -62,6 +70,8 @@ struct param {
->>          int trip_type;
->>          int trip_hyst;
->>          int temp;
->> +       int last_temp;
-> 
-> Or prev_temp?  It should be less ambiguous than last_temp.
-
-Makes sens
-
->> +       int direction;
->>          int cdev_state;
->>          int cdev_max_state;
->>          struct thermal_genl_cpu_caps *cpu_capabilities;
->> @@ -234,6 +244,36 @@ static int thermal_genl_event_cpu_capability_change(struct param *p)
->>          return -EMSGSIZE;
->>   }
-
-[ ... ]
-
->> +static int thermal_genl_cmd_threshold_get(struct param *p)
->> +{
->> +       struct thermal_zone_device *tz;
->> +       struct sk_buff *msg = p->msg;
->> +       struct nlattr *start_trip;
->> +       int id, ret;
->> +
->> +       if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID])
->> +               return -EINVAL;
->> +
->> +       id = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_TZ_ID]);
->> +
->> +       tz = thermal_zone_get_by_id(id);
->> +       if (!tz)
->> +               return -EINVAL;
-> 
-> What prevents the thermal zone from going away right here?
-> 
-> It looks like thermal_zone_get_by_id() should do a get_device() on the
-> thermal zone object it is about to return and then the caller should
-> do a put_device() on it.
-> 
-> Granted, this problem is present already in the thermal netlink code,
-> so it needs to be fixed (I'm going to send a patch to address it) and
-> this patch will need to be adjusted.
-
-Ok, I'll have a look at the recent patches
-
->> +
->> +       start_trip = nla_nest_start(msg, THERMAL_GENL_ATTR_THRESHOLD);
->> +       if (!start_trip)
->> +               return -EMSGSIZE;
->> +
->> +       mutex_lock(&tz->lock);
->> +       ret = thermal_thresholds_for_each(tz, __thermal_genl_cmd_threshold_get, msg);
->> +       mutex_unlock(&tz->lock);
-> 
-> I think that the locking can be moved to
-> thermal_thresholds_for_each().  At least there are no other callers of
-> it AFAICS.
-> 
-
-Ok
-
-Thanks for the review
-
-   -- Daniel
-
-
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 30415c30d8b4..dfa9a146769b 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -536,11 +536,16 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+ 
+ static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
+ {
+-	u32 max_limit_perf, min_limit_perf, lowest_perf;
++	u32 max_limit_perf, min_limit_perf, lowest_perf, max_perf;
+ 	struct amd_cpudata *cpudata = policy->driver_data;
+ 
+-	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
+-	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
++	if (cpudata->boost_supported && !policy->boost_enabled)
++		max_perf = READ_ONCE(cpudata->nominal_perf);
++	else
++		max_perf = READ_ONCE(cpudata->highest_perf);
++
++	max_limit_perf = div_u64(policy->max * max_perf, policy->cpuinfo.max_freq);
++	min_limit_perf = div_u64(policy->min * max_perf, policy->cpuinfo.max_freq);
+ 
+ 	lowest_perf = READ_ONCE(cpudata->lowest_perf);
+ 	if (min_limit_perf < lowest_perf)
+@@ -1506,10 +1511,13 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+ 	u64 value;
+ 	s16 epp;
+ 
+-	max_perf = READ_ONCE(cpudata->highest_perf);
++	if (cpudata->boost_supported && !policy->boost_enabled)
++		max_perf = READ_ONCE(cpudata->nominal_perf);
++	else
++		max_perf = READ_ONCE(cpudata->highest_perf);
+ 	min_perf = READ_ONCE(cpudata->lowest_perf);
+-	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
+-	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
++	max_limit_perf = div_u64(policy->max * max_perf, policy->cpuinfo.max_freq);
++	min_limit_perf = div_u64(policy->min * max_perf, policy->cpuinfo.max_freq);
+ 
+ 	if (min_limit_perf < min_perf)
+ 		min_limit_perf = min_perf;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.43.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
