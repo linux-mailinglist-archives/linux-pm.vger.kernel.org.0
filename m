@@ -1,253 +1,455 @@
-Return-Path: <linux-pm+bounces-15610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15611-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B0E899C61E
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 11:43:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5029E99C6EF
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 12:14:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29519287A6F
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 09:43:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 825E9B213D8
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 10:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7172515852F;
-	Mon, 14 Oct 2024 09:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAB8158D6A;
+	Mon, 14 Oct 2024 10:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fq9EPuTT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mb9JhZjl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFE7156230
-	for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 09:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B701BC58;
+	Mon, 14 Oct 2024 10:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728899001; cv=none; b=tXpXbom38pLsG/przIcLu5ZUx/13WWutnRPqoD5id1dowrw+9ApmugbLOAu8/T6a4XLCqck+i5tcI+Kh3wpPcEjX1jaWaNdmzJ/AdjuTxcxQ6rFFtafi31hAMZbR+GQrMeyL01WAID92M60AdPo8K+sWFcNW4rBKuIMgRFNIJGQ=
+	t=1728900866; cv=none; b=ehISrkK1lI0mf5SWgLRmABzI0ySBIgGGPUOMRs46ojPZQLxlgLk+EAji2zO6W6HUUGHHgYKMiBmylLGA9D0Yo3cY7PKN9JkMnc4jyYu2EJ+oIo9mBYjkaslaPXQ2zGK/FGSRJ30EEBFufEO5ISqmnQhac93IKSDSXl0bnkFDX2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728899001; c=relaxed/simple;
-	bh=CFyUGr+OCOKUEMxGpwHO/7pvPomEJi6ycUUMM14sA78=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sb1rxpwFqHgqOVS3CvLjq+TPC5t5hcWIaCUegIRqxJGBR24/zIhK/VNGvIsXmJvS76KyibTFi2s+O+yz/Rj6nEHCBCo94rU4DFGqMRto+010uQjRvNvMT7zPerO6MplDLJpSFXlUtUMbNT5RhjcZJvS3hpysOdAfqDz4ajm99fQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fq9EPuTT; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d4c1b1455so2959137f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 02:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728898997; x=1729503797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D7xyDcI7TmzPvnMDt6ZfVSppfa8WOze76GT53KeZ51g=;
-        b=Fq9EPuTTcp9aLHURAVJap/CNPYdxoG/mUc4TdlsmWA1NQh5lk++oMHMvNPkL/Q67wD
-         shZfxoGElzFUYzW+/9K025PbVfwR6HYmYjkuf+JBFfRftNVYocWEsZ8lIgBOUJzT6zJq
-         5blYuJ1h1MYm1YclNGNnQR0OsOFfq+/xIFkX1nYhOmalCJ1FESuBeIq7InRD6I1gZhkp
-         POm0xfR0aARpiNkl8kdnJlEQGgNyTYgOkZXq6kTY53RKPCihVVfIYI1CcMPzx45FIix6
-         hMYuRoebn8QHatIzmZ0RsMPeobFD28XdeCVKHpbSXNg92vct1jbbTsMXkYR6rjOa8808
-         d82w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728898997; x=1729503797;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D7xyDcI7TmzPvnMDt6ZfVSppfa8WOze76GT53KeZ51g=;
-        b=IjYDMl/qpG7jnXKQSLWaxYYFD1NO0NktQO5oZf+16twM3wCrtgz4M/KRiP+6o9Rq63
-         aFGl7NjcjjjX3f30nBx7SfiF6aBTL+7hcWlKPmK2NKMbLwm9NqcRtUhDy3VHdm1XZJII
-         J/DZ9mi+5kygiSDFCkEG7ZwV4wmxCZRjiJZCmfzVH/xiVQKUw10r8C+7kH6SXnodPorl
-         xSsjc/ldFu7JE/Kvw3h0/lhMZH/cLBfXGplEqTGXDEvEHokQEGcIrxwadR4iQiRKcw7N
-         P8qf1aOyPLHKCFOFoF6rfVy3w9XLseh7cpBZ+7TG6X0T0OQX7E9WCHN42Fjc6DevclgF
-         zWJQ==
-X-Gm-Message-State: AOJu0YxF/VDTacqSFL3qVgY7IVvnt/YIucHOucsS7Q9/OAyMg+QcKBWg
-	na2FIS3I6gLr8OD+bSH+NrCaajuIS4T+x+TF+geBSRQJrFLducoKA+Yy+Asv4f0KXEL6ZRQTOUt
-	i
-X-Google-Smtp-Source: AGHT+IHlrEW88aU8kMJS/u40PpiwL42sJsI7+c534FEiXNyH5y4Oy5A1atYsSynCvof4bBp9f16MNQ==
-X-Received: by 2002:a5d:460f:0:b0:37c:d23a:1e4 with SMTP id ffacd0b85a97d-37d551e0644mr7377025f8f.30.1728898996776;
-        Mon, 14 Oct 2024 02:43:16 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6d0203sm10935840f8f.57.2024.10.14.02.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2024 02:43:16 -0700 (PDT)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: daniel.lezcano@linaro.org,
-	rafael@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	lukasz.luba@arm.com,
-	quic_manafm@quicinc.com
-Subject: [PATCH v5 4/4] tools/thermal/thermal-engine: Take into account the thresholds API
-Date: Mon, 14 Oct 2024 11:43:07 +0200
-Message-ID: <20241014094309.1430126-5-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241014094309.1430126-1-daniel.lezcano@linaro.org>
-References: <20241014094309.1430126-1-daniel.lezcano@linaro.org>
+	s=arc-20240116; t=1728900866; c=relaxed/simple;
+	bh=WSfdIdbikJBmvjnqt9T+LbkLqxcwGf4Wx4fWItSV2ys=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=NHWp5oopuVbDNznxWAsb54LqrLjucn5OXOTP+wTIE0RUwU7haUrhXT4ngtzMNKMR7571QJ36HOapXnySZJGMvPKdtkgzTuCiOS69YnJX+vAVKcJL27vQt6p9zgjh9vyc+ET9EFWV+C+dZZ7PWtT2vB7WVVFtwb33L1y1CFTYdN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mb9JhZjl; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728900865; x=1760436865;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WSfdIdbikJBmvjnqt9T+LbkLqxcwGf4Wx4fWItSV2ys=;
+  b=mb9JhZjlH0tj1//Fz2Bt7fFrbBh+xoJMs2NCil43RiJBMLr18ZzhdBLI
+   bsgzrHfUYUg1uGk9Yt9qejKSsXOTMo0IVyCqf5AwJutf1FQ7qN3l0cn4X
+   Bya6UaajxoradjYH1aRsye2hZrc6H/a85Qz0oKOpIMFOxFdNgXTzvRkvs
+   bLs8zYhRBs5p9SEHjk8ikBRPrW3CMUgpGL8VKsFADm0l61ubnJsqanNZt
+   AlwYd71BY+Xs68WyT2ErcZPn2yiHEWLYVGdneQn+Wk90ValogT9h+2k2q
+   MUMjKpJJ1K7cGKgJhuJ7FBt/W9wJ6h72K0M3PnA3t65L1igs2XnS1nMpv
+   g==;
+X-CSE-ConnectionGUID: C1OEcvTERqOq9rRFnOoAkg==
+X-CSE-MsgGUID: mAilXZAvRg+E66A8ToKwVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28195837"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28195837"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:14:25 -0700
+X-CSE-ConnectionGUID: y/3a9hZEQYqZ5EoJbjDO5w==
+X-CSE-MsgGUID: v8ogmImySgq1K8o8/jXoKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
+   d="scan'208";a="78359179"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.80])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:14:21 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 14 Oct 2024 13:14:17 +0300 (EEST)
+To: Mario Limonciello <mario.limonciello@amd.com>
+cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>, 
+    x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
+    Perry Yuan <perry.yuan@amd.com>, LKML <linux-kernel@vger.kernel.org>, 
+    linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
+    platform-driver-x86@vger.kernel.org, 
+    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+    Perry Yuan <Perry.Yuan@amd.com>
+Subject: Re: [PATCH v2 06/13] platform/x86: hfi: parse CPU core ranking data
+ from shared memory
+In-Reply-To: <20241010193705.10362-7-mario.limonciello@amd.com>
+Message-ID: <21e35bbf-a7d7-2b6b-60bf-e4eeceeb9bd3@linux.intel.com>
+References: <20241010193705.10362-1-mario.limonciello@amd.com> <20241010193705.10362-7-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-Enhance the thermal-engine skeleton with the thresholds added in the
-kernel and use the API exported by the thermal library.
+On Thu, 10 Oct 2024, Mario Limonciello wrote:
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- tools/thermal/thermal-engine/thermal-engine.c | 105 +++++++++++++++---
- 1 file changed, 92 insertions(+), 13 deletions(-)
+> From: Perry Yuan <Perry.Yuan@amd.com>
+> 
+> When `amd_hfi` driver is loaded, it will use PCCT subspace type 4 table
+> to retrieve the shared memory address which contains the CPU core ranking
+> table. This table includes a header that specifies the number of ranking
+> data entries to be parsed and rank each CPU core with the Performance and
+> Energy Efficiency capability as implemented by the CPU power management
+> firmware.
+> 
+> Once the table has been parsed, each CPU is assigned a ranking score
+> within its class. Subsequently, when the scheduler selects cores, it
+> chooses from the ranking list based on the assigned scores in each class,
+> thereby ensuring the optimal selection of CPU cores according to their
+> predefined classifications and priorities.
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2:
+>  * Rework amd_hfi_fill_metatadata to directly use structure instead of
+>    pointer math.
+> ---
+>  drivers/platform/x86/amd/hfi/hfi.c | 215 ++++++++++++++++++++++++++++-
+>  1 file changed, 212 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
+> index da2e667107e8..10651399cf75 100644
+> --- a/drivers/platform/x86/amd/hfi/hfi.c
+> +++ b/drivers/platform/x86/amd/hfi/hfi.c
+> @@ -18,22 +18,78 @@
+>  #include <linux/io.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/mailbox_client.h>
+>  #include <linux/mutex.h>
+> +#include <linux/percpu-defs.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/printk.h>
+>  #include <linux/smp.h>
+>  #include <linux/string.h>
+> +#include <linux/topology.h>
+> +#include <linux/workqueue.h>
+> +
+> +#include <asm/cpu_device_id.h>
+> +
+> +#include <acpi/pcc.h>
+> +#include <acpi/cppc_acpi.h>
+>  
+>  #define AMD_HFI_DRIVER		"amd_hfi"
+> +#define AMD_HFI_MAILBOX_COUNT	1
+> +#define AMD_HETERO_RANKING_TABLE_VER	2
+> +
+>  #define AMD_HETERO_CPUID_27	0x80000027
+> +
+>  static struct platform_device *device;
+>  
+> +/**
+> + * struct amd_shmem_info - Shared memory table for AMD HFI
+> + *
+> + * @signature:	The PCC signature. The signature of a subspace is computed by
+> + *		a bitwise of the value 0x50434300 with the subspace ID.
+> + * @flags:	Notify on completion
+> + * @length:	Length of payload being transmitted including command field
+> + * @command:	Command being sent over the subspace
+> + * @version_number:		Version number of the table
+> + * @n_logical_processors:	Number of logical processors
+> + * @n_capabilities:		Number of ranking dimensions (performance, efficiency, etc)
+> + * @table_update_context:	Command being sent over the subspace
+> + * @n_bitmaps:			Number of 32-bit bitmaps to enumerate all the APIC IDs
+> + *				This is based on the maximum APIC ID enumerated in the system
+> + * @reserved:			24 bit spare
+> + * @table_data:			Bit Map(s) of enabled logical processors
+> + *				Followed by the ranking data for each logical processor
+> + */
+> +struct amd_shmem_info {
+> +	struct acpi_pcct_ext_pcc_shared_memory header;
+> +	u32	version_number		:8,
+> +		n_logical_processors	:8,
+> +		n_capabilities		:8,
+> +		table_update_context	:8;
+> +	u32	n_bitmaps		:8,
+> +		reserved		:24;
+> +	u32	table_data[];
+> +} __packed;
+> +
+>  struct amd_hfi_data {
+>  	const char	*name;
+>  	struct device	*dev;
+>  	struct mutex	lock;
+> +
+> +	/* PCCT table related*/
+> +	struct pcc_mbox_chan	*pcc_chan;
+> +	void __iomem		*pcc_comm_addr;
+> +	struct acpi_subtable_header	*pcct_entry;
+> +	struct amd_shmem_info	*shmem;
+>  };
+>  
+> +/**
+> + * struct amd_hfi_classes - HFI class capabilities per CPU
+> + * @perf:	Performance capability
+> + * @eff:	Power efficiency capability
+> + *
+> + * Capabilities of a logical processor in the ranking table. These capabilities
+> + * are unitless and specific to each HFI class.
+> + */
+>  struct amd_hfi_classes {
+>  	u32	perf;
+>  	u32	eff;
+> @@ -42,23 +98,105 @@ struct amd_hfi_classes {
+>  /**
+>   * struct amd_hfi_cpuinfo - HFI workload class info per CPU
+>   * @cpu:		cpu index
+> + * @apic_id:		apic id of the current cpu
+>   * @cpus:		mask of cpus associated with amd_hfi_cpuinfo
+>   * @class_index:	workload class ID index
+>   * @nr_class:		max number of workload class supported
+> + * @ipcc_scores:	ipcc scores for each class
+>   * @amd_hfi_classes:	current cpu workload class ranking data
+>   *
+>   * Parameters of a logical processor linked with hardware feedback class
+>   */
+>  struct amd_hfi_cpuinfo {
+>  	int		cpu;
+> +	u32		apic_id;
+>  	cpumask_var_t	cpus;
+>  	s16		class_index;
+>  	u8		nr_class;
+> +	int		*ipcc_scores;
+>  	struct amd_hfi_classes	*amd_hfi_classes;
+>  };
+>  
+>  static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index = -1};
+>  
+> +static int find_cpu_index_by_apicid(unsigned int target_apicid)
+> +{
+> +	int cpu_index;
+> +
+> +	for_each_possible_cpu(cpu_index) {
+> +		struct cpuinfo_x86 *info = &cpu_data(cpu_index);
+> +
+> +		if (info->topo.apicid == target_apicid) {
+> +			pr_debug("match APIC id %d for CPU index: %d",
 
-diff --git a/tools/thermal/thermal-engine/thermal-engine.c b/tools/thermal/thermal-engine/thermal-engine.c
-index 9b1476a2680f..0764dc754771 100644
---- a/tools/thermal/thermal-engine/thermal-engine.c
-+++ b/tools/thermal/thermal-engine/thermal-engine.c
-@@ -38,6 +38,14 @@ struct thermal_data {
- 	struct thermal_handler *th;
- };
- 
-+static int show_threshold(struct thermal_threshold *th, __maybe_unused void *arg)
-+{
-+	INFO("threshold temp=%d, direction=%d\n",
-+	     th->temperature, th->direction);
-+
-+	return 0;
-+}
-+
- static int show_trip(struct thermal_trip *tt, __maybe_unused void *arg)
- {
- 	INFO("trip id=%d, type=%d, temp=%d, hyst=%d\n",
-@@ -70,6 +78,8 @@ static int show_tz(struct thermal_zone *tz, __maybe_unused void *arg)
- 
- 	for_each_thermal_trip(tz->trip, show_trip, NULL);
- 
-+	for_each_thermal_threshold(tz->thresholds, show_threshold, NULL);
-+
- 	show_temp(tz, arg);
- 
- 	show_governor(tz, arg);
-@@ -77,6 +87,30 @@ static int show_tz(struct thermal_zone *tz, __maybe_unused void *arg)
- 	return 0;
- }
- 
-+static int set_threshold(struct thermal_zone *tz, __maybe_unused void *arg)
-+{
-+	struct thermal_handler *th = arg;
-+	int thresholds[] = { 43000, 65000, 49000, 55000, 57000 };
-+	size_t i;
-+
-+	INFO("Setting threshold for thermal zone '%s', id=%d\n", tz->name, tz->id);
-+
-+	if (thermal_cmd_threshold_flush(th, tz)) {
-+		ERROR("Failed to flush all previous thresholds\n");
-+		return -1;
-+	}
-+
-+	for (i = 0; i < sizeof(thresholds) / sizeof(thresholds[0]); i++)
-+		if (thermal_cmd_threshold_add(th, tz, thresholds[i],
-+					      THERMAL_THRESHOLD_WAY_UP |
-+					      THERMAL_THRESHOLD_WAY_DOWN)) {
-+			ERROR("Failed to set threshold\n");
-+			return -1;
-+		}
-+
-+	return 0;
-+}
-+
- static int tz_create(const char *name, int tz_id, __maybe_unused void *arg)
- {
- 	INFO("Thermal zone '%s'/%d created\n", name, tz_id);
-@@ -197,20 +231,62 @@ static int gov_change(int tz_id, const char *name, __maybe_unused void *arg)
- 	return 0;
- }
- 
-+static int threshold_add(int tz_id, int temp, int direction, __maybe_unused void *arg)
-+{
-+	INFO("Threshold added tz_id=%d: temp=%d, direction=%d\n", tz_id, temp, direction);
-+
-+	return 0;
-+}
-+
-+static int threshold_delete(int tz_id, int temp, int direction, __maybe_unused void *arg)
-+{
-+	INFO("Threshold deleted tz_id=%d: temp=%d, direction=%d\n", tz_id, temp, direction);
-+
-+	return 0;
-+}
-+
-+static int threshold_flush(int tz_id, __maybe_unused void *arg)
-+{
-+	INFO("Thresholds flushed tz_id=%d\n", tz_id);
-+
-+	return 0;
-+}
-+
-+static int threshold_up(int tz_id, int temp, int prev_temp, __maybe_unused void *arg)
-+{
-+	INFO("Threshold crossed way up tz_id=%d: temp=%d, prev_temp=%d\n",
-+	     tz_id, temp, prev_temp);
-+
-+	return 0;
-+}
-+
-+static int threshold_down(int tz_id, int temp, int prev_temp, __maybe_unused void *arg)
-+{
-+	INFO("Threshold crossed way down tz_id=%d: temp=%d, prev_temp=%d\n",
-+	     tz_id, temp, prev_temp);
-+
-+	return 0;
-+}
-+
- static struct thermal_ops ops = {
--	.events.tz_create	= tz_create,
--	.events.tz_delete	= tz_delete,
--	.events.tz_disable	= tz_disable,
--	.events.tz_enable	= tz_enable,
--	.events.trip_high	= trip_high,
--	.events.trip_low	= trip_low,
--	.events.trip_add	= trip_add,
--	.events.trip_delete	= trip_delete,
--	.events.trip_change	= trip_change,
--	.events.cdev_add	= cdev_add,
--	.events.cdev_delete	= cdev_delete,
--	.events.cdev_update	= cdev_update,
--	.events.gov_change	= gov_change
-+	.events.tz_create		= tz_create,
-+	.events.tz_delete		= tz_delete,
-+	.events.tz_disable		= tz_disable,
-+	.events.tz_enable		= tz_enable,
-+	.events.trip_high		= trip_high,
-+	.events.trip_low		= trip_low,
-+	.events.trip_add		= trip_add,
-+	.events.trip_delete		= trip_delete,
-+	.events.trip_change		= trip_change,
-+	.events.cdev_add		= cdev_add,
-+	.events.cdev_delete		= cdev_delete,
-+	.events.cdev_update		= cdev_update,
-+	.events.gov_change		= gov_change,
-+	.events.threshold_add		= threshold_add,
-+	.events.threshold_delete	= threshold_delete,
-+	.events.threshold_flush		= threshold_flush,
-+	.events.threshold_up		= threshold_up,
-+	.events.threshold_down		= threshold_down,
- };
- 
- static int thermal_event(__maybe_unused int fd, __maybe_unused void *arg)
-@@ -280,6 +356,7 @@ enum {
- 	THERMAL_ENGINE_DAEMON_ERROR,
- 	THERMAL_ENGINE_LOG_ERROR,
- 	THERMAL_ENGINE_THERMAL_ERROR,
-+	THERMAL_ENGINE_THRESHOLD_ERROR,
- 	THERMAL_ENGINE_MAINLOOP_ERROR,
- };
- 
-@@ -318,6 +395,8 @@ int main(int argc, char *argv[])
- 		return THERMAL_ENGINE_THERMAL_ERROR;
- 	}
- 
-+	for_each_thermal_zone(td.tz, set_threshold, td.th);
-+
- 	for_each_thermal_zone(td.tz, show_tz, td.th);
- 
- 	if (mainloop_init()) {
+Missing \n
+
+> +				 info->topo.apicid, cpu_index);
+> +			return cpu_index;
+> +		}
+> +	}
+> +
+> +	return -ENODEV;
+> +}
+> +
+> +static int amd_hfi_fill_metadata(struct amd_hfi_data *amd_hfi_data)
+> +{
+> +	struct acpi_pcct_ext_pcc_slave *pcct_ext =
+> +		(struct acpi_pcct_ext_pcc_slave *)amd_hfi_data->pcct_entry;
+> +	void __iomem *pcc_comm_addr;
+> +
+> +	pcc_comm_addr = acpi_os_ioremap(amd_hfi_data->pcc_chan->shmem_base_addr,
+> +					amd_hfi_data->pcc_chan->shmem_size);
+> +	if (!pcc_comm_addr) {
+> +		pr_err("failed to ioremap PCC common region mem\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	memcpy_fromio(amd_hfi_data->shmem, pcc_comm_addr, pcct_ext->length);
+> +	iounmap(pcc_comm_addr);
+> +
+> +	if (amd_hfi_data->shmem->header.signature != PCC_SIGNATURE) {
+> +		pr_err("Invalid signature in shared memory\n");
+> +		return -EINVAL;
+> +	}
+> +	if (amd_hfi_data->shmem->version_number != AMD_HETERO_RANKING_TABLE_VER) {
+> +		pr_err("Invalid veresion %d\n", amd_hfi_data->shmem->version_number);
+
+version
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (u32 i = 0; i < amd_hfi_data->shmem->n_bitmaps; i++) {
+> +		u32 bitmap = amd_hfi_data->shmem->table_data[i];
+> +
+> +		for (u32 j = 0; j < BITS_PER_TYPE(u32); j++) {
+
+Are these u32 really the types you want to use for the loop vars, why?
+
+> +			struct amd_hfi_cpuinfo *info;
+> +			int apic_id = i * BITS_PER_TYPE(u32) + j;
+> +			int cpu_index;
+> +
+> +			if (!(bitmap & BIT(j)))
+> +				continue;
+> +
+> +			cpu_index = find_cpu_index_by_apicid(apic_id);
+> +			if (cpu_index < 0) {
+> +				pr_warn("APIC ID %d not found\n", apic_id);
+> +				continue;
+> +			}
+> +
+> +			info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu_index);
+> +			info->apic_id = apic_id;
+> +
+> +			/* Fill the ranking data for each logical processor */
+> +			info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu_index);
+> +			for (int k = 0; k < info->nr_class; k++) {
+
+unsigned int
+
+> +				u32 *table = amd_hfi_data->shmem->table_data +
+> +					     amd_hfi_data->shmem->n_bitmaps +
+> +					     i * info->nr_class;
+> +
+> +				info->amd_hfi_classes[k].eff = table[apic_id + 2 * k];
+> +				info->amd_hfi_classes[k].perf = table[apic_id + 2 * k + 1];
+> +			}
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+>  {
+>  	struct amd_hfi_cpuinfo *hfi_cpuinfo;
+> @@ -68,8 +206,7 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+>  
+>  	nr_class_id = cpuid_eax(AMD_HETERO_CPUID_27);
+>  	if (nr_class_id < 0 || nr_class_id > 255) {
+> -		dev_warn(dev, "failed to get supported class number from CPUID %d\n",
+> -				AMD_HETERO_CPUID_27);
+> +		dev_warn(dev, "failed to get number of supported classes\n");
+
+This message was added in the previous patch and now immediately changed.
+
+>  		return -EINVAL;
+>  	}
+>  
+> @@ -79,7 +216,10 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+>  				sizeof(struct amd_hfi_classes), GFP_KERNEL);
+>  		if (!hfi_cpuinfo->amd_hfi_classes)
+>  			return -ENOMEM;
+> -
+> +		hfi_cpuinfo->ipcc_scores = devm_kcalloc(dev, nr_class_id,
+> +							sizeof(int), GFP_KERNEL);
+> +		if (!hfi_cpuinfo->ipcc_scores)
+> +			return -ENOMEM;
+>  		hfi_cpuinfo->nr_class = nr_class_id;
+>  	}
+>  
+> @@ -93,6 +233,70 @@ static void amd_hfi_remove(struct platform_device *pdev)
+>  	mutex_destroy(&dev->lock);
+>  }
+>  
+> +static int amd_hfi_metadata_parser(struct platform_device *pdev,
+> +				   struct amd_hfi_data *amd_hfi_data)
+> +{
+> +	struct acpi_pcct_ext_pcc_slave *pcct_ext;
+> +	struct acpi_subtable_header *pcct_entry;
+> +	struct mbox_chan *pcc_mbox_channels;
+> +	struct acpi_table_header *pcct_tbl;
+> +	struct pcc_mbox_chan *pcc_chan;
+> +	acpi_status status;
+> +	int ret;
+> +
+> +	pcc_mbox_channels = devm_kcalloc(&pdev->dev, AMD_HFI_MAILBOX_COUNT,
+> +					 sizeof(*pcc_mbox_channels), GFP_KERNEL);
+> +	if (!pcc_mbox_channels) {
+> +		ret = -ENOMEM;
+> +		goto out;
+
+Please return directly if there is nothing to rollback.
+
+> +	}
+> +
+> +	pcc_chan = devm_kcalloc(&pdev->dev, AMD_HFI_MAILBOX_COUNT,
+> +				sizeof(*pcc_chan), GFP_KERNEL);
+> +	if (!pcc_chan) {
+> +		ret = -ENOMEM;
+> +		goto out;
+
+Ditto.
+
+> +	}
+> +
+> +	status = acpi_get_table(ACPI_SIG_PCCT, 0, &pcct_tbl);
+> +	if (ACPI_FAILURE(status) || !pcct_tbl) {
+> +		ret = -ENODEV;
+> +		goto out;
+
+Ditto.
+
+> +	}
+> +
+> +	/* get pointer to the first PCC subspace entry */
+> +	pcct_entry = (struct acpi_subtable_header *) (
+> +			(unsigned long)pcct_tbl + sizeof(struct acpi_table_pcct));
+> +
+> +	pcc_chan->mchan = &pcc_mbox_channels[0];
+> +
+> +	amd_hfi_data->pcc_chan = pcc_chan;
+> +	amd_hfi_data->pcct_entry = pcct_entry;
+> +	pcct_ext = (struct acpi_pcct_ext_pcc_slave *)pcct_entry;
+> +
+> +	if (pcct_ext->length <= 0) {
+> +		ret = -EINVAL;
+> +		goto out;
+
+Ditto.
+
+> +	}
+> +
+> +	amd_hfi_data->shmem = devm_kmalloc(amd_hfi_data->dev, pcct_ext->length, GFP_KERNEL);
+
+Why kmalloc ?
+
+> +	if (!amd_hfi_data->shmem) {
+> +		ret = -ENOMEM;
+> +		goto out;
+
+Return directly.
+
+> +	}
+> +
+> +	pcc_chan->shmem_base_addr = pcct_ext->base_address;
+> +	pcc_chan->shmem_size = pcct_ext->length;
+> +
+> +	/* parse the shared memory info from the pcct table */
+> +	ret = amd_hfi_fill_metadata(amd_hfi_data);
+> +
+> +	acpi_put_table(pcct_tbl);
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+>  static const struct acpi_device_id amd_hfi_platform_match[] = {
+>  	{ "AMDI0104", 0},
+>  	{ }
+> @@ -121,6 +325,11 @@ static int amd_hfi_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto out;
+
+This should do return ret; directly, not jump to out label which does 
+nothing but return.
+
+>  
+> +	/* parse PCCT table */
+> +	ret = amd_hfi_metadata_parser(pdev, amd_hfi_data);
+> +	if (ret)
+> +		goto out;
+> +
+>  out:
+>  	return ret;
+
+Might again be there for churn avoidance, otherwise, please consider:
+
+	return amd_hfi_metadata_parser(pdev, amd_hfi_data);
+
+That goto out should again just return ret directly.
+
+>  }
+> 
+
 -- 
-2.43.0
+ i.
 
 
