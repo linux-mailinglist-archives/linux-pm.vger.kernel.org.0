@@ -1,272 +1,405 @@
-Return-Path: <linux-pm+bounces-15616-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15617-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0BF99C764
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 12:47:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 333B699C7F6
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 13:02:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40B841F21766
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 10:46:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 563F71C23D7C
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 11:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B450A158DC4;
-	Mon, 14 Oct 2024 10:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="eKIYbuQn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E247F1AA7B9;
+	Mon, 14 Oct 2024 11:00:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAD854670
-	for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 10:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3C61AA7A4;
+	Mon, 14 Oct 2024 11:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728902809; cv=none; b=CVokgflqQkDg/sSS9/SWpa7g93JT3AGMmgcry/P/nhvqwk4yyFeYXeh3W9u9RQHXmjrrLhjTknjbhwaehysbI3AiLiCRAwkHfCxK/ZkqKdBoXBmV3EBtOBnMO2dHgyxweTr890IYeX2mR1NHRo8bOBl0GnoteuXCqMVTNVCX4fE=
+	t=1728903613; cv=none; b=RWB7cb7ZyNTHXvHbjMQLMvSkEZjgpnEZBNTPHFy5IOr70B3JfVl62wD/rg1N+lbX22HdJcT2yztdOq1KjNcGODSPf7KPDEWPvMRMVTGXckEc9KCOLnjhpWi/NyOsFKA8QXuSlKubbrU+EmDhtr4QifptixUeS7/7fg6428dggRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728902809; c=relaxed/simple;
-	bh=j+HUo7u5CDbDPCiFVqz68+9FI6rYIg/ZKl4SUc1cCmA=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=IW9M57rVOLv7xiTp8y84JeWBL/8p2zINVtaeNx50O+4HoJZE70zUYbEl49VFdv6ZIRDqMuDgE22y70s3jsWUGE/odupoSDNO9/PIyQaaDb9M/oXpYwwkhKpkv9eR8L+2yw5TlaSIxJwH/+ojy5FAW085MDU3xdWI0j0MUW6HamY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=eKIYbuQn; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20cdda5cfb6so10108055ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 03:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728902806; x=1729507606; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3a1dZt/blHMQJ/A8CDc6DrVuskD6SldxfK5V65gFnM=;
-        b=eKIYbuQnC4bw9DFHcsNkLTQ0rq182DlMniV3d1qocEyWX8re5fjMgggNOdOxQt0wV9
-         BTB1bCrNAOuSFRqJjQFwS9D2lX9hjr3x9hzrJ2H2tb8LfjrSCfFb7FfBHrp8fyunTU98
-         1NA6Y9/0u8RzxuYfpVnd01L8bHLfmKnZN+mBD+1qmatq45y+w7rqj+f0gg40iZtHcj6e
-         TbGsjeWeMDHV39zgwi1f6eYT93odPbq2JqUm5TIpbky2p3sXWfpFssbQgVIQizRblmCp
-         zWjEsBwQGbRrO1j8I/PU6GGv0wBS0g0e9tN88mjsUGF96qOk76jHKvv2zbQ/an5xVMBU
-         ZmIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728902806; x=1729507606;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q3a1dZt/blHMQJ/A8CDc6DrVuskD6SldxfK5V65gFnM=;
-        b=Xw441VL+cqtkrxlFjFbu2SFmZWjEldgZKeWY9TPlaYkAXMgkxmOUdWJD3zSkXVcn59
-         qW6dh80l3VuzypR+wlEI46WiluBBJbdIaa68zANHdLMEZH+n9hintd5XmVkoxCU6M99e
-         qT+FDXx00OOCa1UFrPCaQuklMmXkRTPkQTr+r7IYvkBn0a57LbFVDAo4brrBMWyLoSdl
-         KXNGsQrGyp0ImrUrqLXEG+WEZYo499vQY8vfyO+zWF8p/OX4hcTfXH67n2HnLpQSu1pH
-         zLFBUWzTWET3S5R13NfV//+jx769mPRHGdkCl8RSvdTYXpJ7RzPw3oGvptYtMierPh2T
-         QGcg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6tN7g7686pJj1CkJmGFTowLWUnXW8MEXb+Lr0Ncs5NnSXDFwtRjwxy4Cctb5tbNvBRtzx3eVqtw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8gkuvAU+KNenukMhCBuveWl++7v3P5szhpgSawjMPxG15raY9
-	0e3xNXzTH8dfcvY21FsFB7YNFxZr4hstO7rJ+DAGDJSkdsHKzCQxrY9Fx8uep84=
-X-Google-Smtp-Source: AGHT+IEmn+LMAr1xW+I43P6fd7/X7Hzh16LLM4tJfTcSsVoT84AJF3DS2JW+foN81A/KvpydRXeueg==
-X-Received: by 2002:a17:902:cccb:b0:20b:c287:202d with SMTP id d9443c01a7336-20ca16d3476mr137417335ad.55.1728902805918;
-        Mon, 14 Oct 2024 03:46:45 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c213028sm62999505ad.208.2024.10.14.03.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2024 03:46:45 -0700 (PDT)
-Message-ID: <670cf695.170a0220.4f3dd.1d8a@mx.google.com>
-Date: Mon, 14 Oct 2024 03:46:45 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1728903613; c=relaxed/simple;
+	bh=Yxb1puFdmCzj+zqRyhar+QOClnGRONkrA3hd8BvcUvY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WDlC20raYNMFzuBTCXzPWJCe6LOY7euG1hPEBkdDvcetYO/YZtnfwGwGIMrFzSlgkmL8SGmdddNquAs3ye2VVk3SBXPSaNXJniGsi0dMmY+YXFIbh6Y8rVLVT8L/RQpAWPELzNswbbXeriy8cVmqb7leJ/M3r+sK5B2eLDPmCaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15DE8168F;
+	Mon, 14 Oct 2024 04:00:41 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC2633F51B;
+	Mon, 14 Oct 2024 04:00:08 -0700 (PDT)
+From: Ryan Roberts <ryan.roberts@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	David Hildenbrand <david@redhat.com>,
+	Greg Marsden <greg.marsden@oracle.com>,
+	Ivan Ivanov <ivan.ivanov@suse.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Matthias Brugger <mbrugger@suse.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Will Deacon <will@kernel.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-pm@vger.kernel.org
+Subject: [RFC PATCH v1 14/57] pm/hibernate: Remove PAGE_SIZE compile-time constant assumption
+Date: Mon, 14 Oct 2024 11:58:21 +0100
+Message-ID: <20241014105912.3207374-14-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241014105912.3207374-1-ryan.roberts@arm.com>
+References: <20241014105514.3206191-1-ryan.roberts@arm.com>
+ <20241014105912.3207374-1-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.12-rc2-33-g54ad5ae82ff89
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 23 warnings (v6.12-rc2-33-g54ad5ae82ff89)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.12-rc2-33-g=
-54ad5ae82ff89)
+To prepare for supporting boot-time page size selection, refactor code
+to remove assumptions about PAGE_SIZE being compile-time constant. Code
+intended to be equivalent when compile-time page size is active.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-12-rc2-33-g54ad5ae82ff89/
+"struct linked_page", "struct swap_map_page" and "struct swsusp_header"
+were all previously sized to be exactly PAGE_SIZE. Refactor those
+structures to remove the padding, then superimpose them on a page at
+runtime.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.12-rc2-33-g54ad5ae82ff89
-Git Commit: 54ad5ae82ff8916c2277fada38327efe7892e401
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+"struct cmp_data" and "struct dec_data" previously contained embedded
+"unc" and "cmp" arrays, who's sizes were derived from PAGE_SIZE. We
+can't use flexible array approach here since there are 2 arrays in the
+structure, so convert to pointers and define an allocator and
+deallocator for each struct.
 
-Warnings Detected:
-
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-12): 18 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    kernel/fork.c:3075:2: warning: #warning clone3() entry point is mi=
-ssing, please fix [-Wcpp]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    3075 | #warning clone3() entry point is missing, please fix
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
-For more info write to <info@kernelci.org>
+
+***NOTE***
+Any confused maintainers may want to read the cover note here for context:
+https://lore.kernel.org/all/20241014105514.3206191-1-ryan.roberts@arm.com/
+
+ kernel/power/power.h    |   2 +-
+ kernel/power/snapshot.c |   2 +-
+ kernel/power/swap.c     | 129 +++++++++++++++++++++++++++++++++-------
+ 3 files changed, 108 insertions(+), 25 deletions(-)
+
+diff --git a/kernel/power/power.h b/kernel/power/power.h
+index de0e6b1077f23..74af2eb8d48a4 100644
+--- a/kernel/power/power.h
++++ b/kernel/power/power.h
+@@ -16,7 +16,7 @@ struct swsusp_info {
+ 	unsigned long		image_pages;
+ 	unsigned long		pages;
+ 	unsigned long		size;
+-} __aligned(PAGE_SIZE);
++} __aligned(PAGE_SIZE_MAX);
+ 
+ #ifdef CONFIG_HIBERNATION
+ /* kernel/power/snapshot.c */
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 405eddbda4fc5..144e92f786e35 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -155,7 +155,7 @@ struct pbe *restore_pblist;
+ 
+ struct linked_page {
+ 	struct linked_page *next;
+-	char data[LINKED_PAGE_DATA_SIZE];
++	char data[];
+ } __packed;
+ 
+ /*
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 82b884b67152f..ffd4c864acfa2 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -59,6 +59,7 @@ static bool clean_pages_on_decompress;
+  */
+ 
+ #define MAP_PAGE_ENTRIES	(PAGE_SIZE / sizeof(sector_t) - 1)
++#define NEXT_SWAP_INDEX		MAP_PAGE_ENTRIES
+ 
+ /*
+  * Number of free pages that are not high.
+@@ -78,8 +79,11 @@ static inline unsigned long reqd_free_pages(void)
+ }
+ 
+ struct swap_map_page {
+-	sector_t entries[MAP_PAGE_ENTRIES];
+-	sector_t next_swap;
++	/*
++	 * A PAGE_SIZE structure with (PAGE_SIZE / sizeof(sector_t)) entries.
++	 * The last entry, [NEXT_SWAP_INDEX], is `.next_swap`.
++	 */
++	sector_t entries[1];
+ };
+ 
+ struct swap_map_page_list {
+@@ -103,8 +107,6 @@ struct swap_map_handle {
+ };
+ 
+ struct swsusp_header {
+-	char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
+-	              sizeof(u32) - sizeof(u32)];
+ 	u32	hw_sig;
+ 	u32	crc32;
+ 	sector_t image;
+@@ -113,6 +115,7 @@ struct swsusp_header {
+ 	char	sig[10];
+ } __packed;
+ 
++static char *swsusp_header_pg;
+ static struct swsusp_header *swsusp_header;
+ 
+ /*
+@@ -315,7 +318,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
+ {
+ 	int error;
+ 
+-	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header, NULL);
++	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header_pg, NULL);
+ 	if (!memcmp("SWAP-SPACE",swsusp_header->sig, 10) ||
+ 	    !memcmp("SWAPSPACE2",swsusp_header->sig, 10)) {
+ 		memcpy(swsusp_header->orig_sig,swsusp_header->sig, 10);
+@@ -329,7 +332,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
+ 		if (flags & SF_CRC32_MODE)
+ 			swsusp_header->crc32 = handle->crc32;
+ 		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
+-				      swsusp_resume_block, swsusp_header, NULL);
++				      swsusp_resume_block, swsusp_header_pg, NULL);
+ 	} else {
+ 		pr_err("Swap header not found!\n");
+ 		error = -ENODEV;
+@@ -466,7 +469,7 @@ static int swap_write_page(struct swap_map_handle *handle, void *buf,
+ 		offset = alloc_swapdev_block(root_swap);
+ 		if (!offset)
+ 			return -ENOSPC;
+-		handle->cur->next_swap = offset;
++		handle->cur->entries[NEXT_SWAP_INDEX] = offset;
+ 		error = write_page(handle->cur, handle->cur_swap, hb);
+ 		if (error)
+ 			goto out;
+@@ -643,8 +646,8 @@ struct cmp_data {
+ 	wait_queue_head_t done;                   /* compression done */
+ 	size_t unc_len;                           /* uncompressed length */
+ 	size_t cmp_len;                           /* compressed length */
+-	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
+-	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
++	unsigned char *unc;                       /* uncompressed buffer */
++	unsigned char *cmp;                       /* compressed buffer */
+ };
+ 
+ /* Indicates the image size after compression */
+@@ -683,6 +686,45 @@ static int compress_threadfn(void *data)
+ 	return 0;
+ }
+ 
++static void free_cmp_data(struct cmp_data *data, unsigned nr_threads)
++{
++	int i;
++
++	if (!data)
++		return;
++
++	for (i = 0; i < nr_threads; i++) {
++		vfree(data[i].unc);
++		vfree(data[i].cmp);
++	}
++
++	vfree(data);
++}
++
++static struct cmp_data *alloc_cmp_data(unsigned nr_threads)
++{
++	struct cmp_data *data = NULL;
++	int i = -1;
++
++	data = vzalloc(array_size(nr_threads, sizeof(*data)));
++	if (!data)
++		goto fail;
++
++	for (i = 0; i < nr_threads; i++) {
++		data[i].unc = vzalloc(UNC_SIZE);
++		if (!data[i].unc)
++			goto fail;
++		data[i].cmp = vzalloc(CMP_SIZE);
++		if (!data[i].cmp)
++			goto fail;
++	}
++
++	return data;
++fail:
++	free_cmp_data(data, nr_threads);
++	return NULL;
++}
++
+ /**
+  * save_compressed_image - Save the suspend image data after compression.
+  * @handle: Swap map handle to use for saving the image.
+@@ -724,7 +766,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
+ 		goto out_clean;
+ 	}
+ 
+-	data = vzalloc(array_size(nr_threads, sizeof(*data)));
++	data = alloc_cmp_data(nr_threads);
+ 	if (!data) {
+ 		pr_err("Failed to allocate %s data\n", hib_comp_algo);
+ 		ret = -ENOMEM;
+@@ -902,7 +944,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
+ 			if (data[thr].cc)
+ 				crypto_free_comp(data[thr].cc);
+ 		}
+-		vfree(data);
++		free_cmp_data(data, nr_threads);
+ 	}
+ 	if (page) free_page((unsigned long)page);
+ 
+@@ -1036,7 +1078,7 @@ static int get_swap_reader(struct swap_map_handle *handle,
+ 			release_swap_reader(handle);
+ 			return error;
+ 		}
+-		offset = tmp->map->next_swap;
++		offset = tmp->map->entries[NEXT_SWAP_INDEX];
+ 	}
+ 	handle->k = 0;
+ 	handle->cur = handle->maps->map;
+@@ -1150,8 +1192,8 @@ struct dec_data {
+ 	wait_queue_head_t done;                   /* decompression done */
+ 	size_t unc_len;                           /* uncompressed length */
+ 	size_t cmp_len;                           /* compressed length */
+-	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
+-	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
++	unsigned char *unc;                       /* uncompressed buffer */
++	unsigned char *cmp;                       /* compressed buffer */
+ };
+ 
+ /*
+@@ -1189,6 +1231,45 @@ static int decompress_threadfn(void *data)
+ 	return 0;
+ }
+ 
++static void free_dec_data(struct dec_data *data, unsigned nr_threads)
++{
++	int i;
++
++	if (!data)
++		return;
++
++	for (i = 0; i < nr_threads; i++) {
++		vfree(data[i].unc);
++		vfree(data[i].cmp);
++	}
++
++	vfree(data);
++}
++
++static struct dec_data *alloc_dec_data(unsigned nr_threads)
++{
++	struct dec_data *data = NULL;
++	int i = -1;
++
++	data = vzalloc(array_size(nr_threads, sizeof(*data)));
++	if (!data)
++		goto fail;
++
++	for (i = 0; i < nr_threads; i++) {
++		data[i].unc = vzalloc(UNC_SIZE);
++		if (!data[i].unc)
++			goto fail;
++		data[i].cmp = vzalloc(CMP_SIZE);
++		if (!data[i].cmp)
++			goto fail;
++	}
++
++	return data;
++fail:
++	free_dec_data(data, nr_threads);
++	return NULL;
++}
++
+ /**
+  * load_compressed_image - Load compressed image data and decompress it.
+  * @handle: Swap map handle to use for loading data.
+@@ -1231,7 +1312,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
+ 		goto out_clean;
+ 	}
+ 
+-	data = vzalloc(array_size(nr_threads, sizeof(*data)));
++	data = alloc_dec_data(nr_threads);
+ 	if (!data) {
+ 		pr_err("Failed to allocate %s data\n", hib_comp_algo);
+ 		ret = -ENOMEM;
+@@ -1510,7 +1591,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
+ 			if (data[thr].cc)
+ 				crypto_free_comp(data[thr].cc);
+ 		}
+-		vfree(data);
++		free_dec_data(data, nr_threads);
+ 	}
+ 	vfree(page);
+ 
+@@ -1569,9 +1650,9 @@ int swsusp_check(bool exclusive)
+ 	hib_resume_bdev_file = bdev_file_open_by_dev(swsusp_resume_device,
+ 				BLK_OPEN_READ, holder, NULL);
+ 	if (!IS_ERR(hib_resume_bdev_file)) {
+-		clear_page(swsusp_header);
++		clear_page(swsusp_header_pg);
+ 		error = hib_submit_io(REQ_OP_READ, swsusp_resume_block,
+-					swsusp_header, NULL);
++					swsusp_header_pg, NULL);
+ 		if (error)
+ 			goto put;
+ 
+@@ -1581,7 +1662,7 @@ int swsusp_check(bool exclusive)
+ 			/* Reset swap signature now */
+ 			error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
+ 						swsusp_resume_block,
+-						swsusp_header, NULL);
++						swsusp_header_pg, NULL);
+ 		} else {
+ 			error = -EINVAL;
+ 		}
+@@ -1631,12 +1712,12 @@ int swsusp_unmark(void)
+ 	int error;
+ 
+ 	hib_submit_io(REQ_OP_READ, swsusp_resume_block,
+-			swsusp_header, NULL);
++			swsusp_header_pg, NULL);
+ 	if (!memcmp(HIBERNATE_SIG,swsusp_header->sig, 10)) {
+ 		memcpy(swsusp_header->sig,swsusp_header->orig_sig, 10);
+ 		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
+ 					swsusp_resume_block,
+-					swsusp_header, NULL);
++					swsusp_header_pg, NULL);
+ 	} else {
+ 		pr_err("Cannot find swsusp signature!\n");
+ 		error = -ENODEV;
+@@ -1653,9 +1734,11 @@ int swsusp_unmark(void)
+ 
+ static int __init swsusp_header_init(void)
+ {
+-	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
+-	if (!swsusp_header)
++	swsusp_header_pg = (char *)__get_free_page(GFP_KERNEL);
++	if (!swsusp_header_pg)
+ 		panic("Could not allocate memory for swsusp_header\n");
++	swsusp_header = (struct swsusp_header *)(swsusp_header_pg +
++				PAGE_SIZE - sizeof(struct swsusp_header));
+ 	return 0;
+ }
+ 
+-- 
+2.43.0
+
 
