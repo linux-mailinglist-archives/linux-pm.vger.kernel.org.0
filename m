@@ -1,70 +1,69 @@
-Return-Path: <linux-pm+bounces-15604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15605-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4216099C54D
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 11:19:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C420899C576
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 11:23:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDD6728A461
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 09:19:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 840A028B338
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 09:23:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE56A173328;
-	Mon, 14 Oct 2024 09:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122581527BB;
+	Mon, 14 Oct 2024 09:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JdIXoIHA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DQpJZQ+w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BD31586DB;
-	Mon, 14 Oct 2024 09:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1434828E3F;
+	Mon, 14 Oct 2024 09:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728897056; cv=none; b=kvjLwVNTBSqiMx+/0RFpOGX3H17dLko3Y8f2Bzx8mkYkuLT1qAy+bUHDFlXwbLscgieNhuUIqbnZ84TLahG980L+rR5aL3YQV89c9OG3NpN+Wu0q7lXTxHOCAzXFKJPlbLCrdgi28y+DRH0yVtCm+dyEJY64BUb3kZ2rn7BfOFU=
+	t=1728897636; cv=none; b=td7ssvCBJI0eU8xO/D8joYQySmzjRgfYVKzQb7yTXKNdSA721EGhApsJe4s5XiirBXCsbmgJjaZt8SlE+RIuceLlAj4KQ1ODnYhAQzKflMxmMohxEUg3YpYlvYQjk82ojDYjPT4jT4htfSQ0cxIVk4R0SdJVRHsmH5jsA3ZakP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728897056; c=relaxed/simple;
-	bh=pj/4vXezejO6hwNkzrgwkT2VSUKS5K7IdQ7Wgr2sqb4=;
+	s=arc-20240116; t=1728897636; c=relaxed/simple;
+	bh=W3sRDXv41J+/powE+KBweF3bBkroOGVIC4lP346qlxA=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ikt702ME80q8D8SGYsTmvqfYbE8Otxx70RRaUL+FvBFLg/20WKtVAOzuLc6ePy0aPt/Mj2JL6i/4ICXK7Vx/q7HYXp4/D2HwLnzIobwVXCVDTOG6NPewaIIh13gb8KFeGQCTM1d/LWi1xOfmIAfxqNRzskeFwKSrthsH3NXrCV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JdIXoIHA; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version:Content-Type; b=A+A9ZJNbVhri4bDXXtOgZpjPfJsCe+1MjY8QXNdGT+r4XG4H8bSiesqJpejk9//cSGcbeWmpBbwD4Qra8a6rMrIN7G10rn0Qft7rsqWW4n7ttfKqCk+XQDASZsIbXdKMTP6tyriLbk00XrkhZn6KQMt4Co9kRPWed34qzvQnhCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DQpJZQ+w; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728897055; x=1760433055;
+  t=1728897634; x=1760433634;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=pj/4vXezejO6hwNkzrgwkT2VSUKS5K7IdQ7Wgr2sqb4=;
-  b=JdIXoIHAYpof02MSq6NcTgIA5eiSUfgxENEsNyR4h1geAn/4rJyxdqNW
-   6j8IyrNsAO1zUq1YdfcLwJey3z7qn4VOjZkfqyVSuYmtxJ3g6Q/+eDsyN
-   7A23rwpKVVDQXPTsC7WMwja/XVSQC2iEEiUpNiFJPTsOZ/4V+WoOnhl9T
-   E+G/Ct+XbEaW8V5RyBG7E7GDK6qtbMaPVLJF1mg/vgLXZY/jboKtpj+mb
-   XxoSKzYjYiCKzbudSsnhVUZyIlrt7gBghbLJQA+njejsKilcmtXLO5u4K
-   Vj8HcigfAAddop2/xyE4r0TTFuuJXx7G3HmuxBIekb2sFM8yujqa/R0Uv
-   w==;
-X-CSE-ConnectionGUID: WKhotZnlTJS45N1D8AcFog==
-X-CSE-MsgGUID: e4NqBx8JS/+//zhn5LvDpw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="15866717"
+  bh=W3sRDXv41J+/powE+KBweF3bBkroOGVIC4lP346qlxA=;
+  b=DQpJZQ+w0As6Hq9rI3TsZz1rpbyOuTVUakPcBZx7kJjpd/BP6jGiv5lv
+   nL0VpKBzGV9oyrHiIHetoShSEz6lb4APbqvEa/m+XqqKvxRp44fxzJppK
+   uuPnVqriOVRWZWfidKyGkUyLsFWRfQHR1Pn9A+P8uKWMj1IEkYbJYIL2I
+   J5N9guxPghiABPsSv9jjDZKOfEegD0voKprFPcjvy1pG/51qK5sc6+yWj
+   iRZMPSi579eavWELCWD9XPNBVqdGpkQT+rEj3F6YwwyncbsglHrYinbUh
+   vSVRGl/deOGdXf6mAI+11D7zwR3S/MlVn9KEfGiwuM969bYQJsJ6o0YSz
+   g==;
+X-CSE-ConnectionGUID: UNytgrD1RMSF7HzyTbkhUQ==
+X-CSE-MsgGUID: zkJqZo7iREO0rvLduGUGdA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="27695098"
 X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
-   d="scan'208";a="15866717"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 02:10:54 -0700
-X-CSE-ConnectionGUID: L9trt/X3R9SrAwYF+gIx9w==
-X-CSE-MsgGUID: xgEXbdzVT+a4Y4lsj+Fxzg==
+   d="scan'208";a="27695098"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 02:20:33 -0700
+X-CSE-ConnectionGUID: 0YVEgNFYS8upNGef+BiuXA==
+X-CSE-MsgGUID: SiObIwzOT0CNtihGicpmEQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
-   d="scan'208";a="77707883"
+   d="scan'208";a="81512459"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.80])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 02:10:51 -0700
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 02:20:29 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 14 Oct 2024 12:10:47 +0300 (EEST)
+Date: Mon, 14 Oct 2024 12:20:25 +0300 (EEST)
 To: Mario Limonciello <mario.limonciello@amd.com>
 cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>, 
-    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
     x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
-    Perry Yuan <perry.yuan@amd.com>, linux-kernel@vger.kernel.org, 
+    Perry Yuan <perry.yuan@amd.com>, LKML <linux-kernel@vger.kernel.org>, 
     linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
     platform-driver-x86@vger.kernel.org, 
     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
@@ -72,7 +71,7 @@ cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
 Subject: Re: [PATCH v2 05/13] platform/x86: hfi: Introduce AMD Hardware
  Feedback Interface Driver
 In-Reply-To: <20241010193705.10362-6-mario.limonciello@amd.com>
-Message-ID: <f655d71c-7995-bf6b-7ef6-7939f1d609a4@linux.intel.com>
+Message-ID: <b0e36a35-9890-5700-c0df-9dc47c6cc389@linux.intel.com>
 References: <20241010193705.10362-1-mario.limonciello@amd.com> <20241010193705.10362-6-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -210,9 +209,6 @@ On Thu, 10 Oct 2024, Mario Limonciello wrote:
 > + *
 > + * Author: Perry Yuan <Perry.Yuan@amd.com>
 > + *
-
-Extra line.
-
 > + */
 > +
 > +#define pr_fmt(fmt)  "amd-hfi: " fmt
@@ -230,7 +226,15 @@ Extra line.
 > +#include <linux/printk.h>
 > +#include <linux/smp.h>
 > +#include <linux/string.h>
-> +
+
+One more,
+
+string.h doesn't look like being used but I could have failed to notice 
+something.
+
+-- 
+ i.
+
 > +#define AMD_HFI_DRIVER		"amd_hfi"
 > +#define AMD_HETERO_CPUID_27	0x80000027
 > +static struct platform_device *device;
@@ -245,9 +249,6 @@ Extra line.
 > +	u32	perf;
 > +	u32	eff;
 > +} __packed;
-
-Unnecessary packed.
-
 > +
 > +/**
 > + * struct amd_hfi_cpuinfo - HFI workload class info per CPU
@@ -287,11 +288,6 @@ Unnecessary packed.
 > +		hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, idx);
 > +		hfi_cpuinfo->amd_hfi_classes = devm_kmalloc(dev, nr_class_id *
 > +				sizeof(struct amd_hfi_classes), GFP_KERNEL);
-
-I recommend splitting this line differently.
-
-Why it's not using kzalloc?
-
 > +		if (!hfi_cpuinfo->amd_hfi_classes)
 > +			return -ENOMEM;
 > +
@@ -329,27 +325,14 @@ Why it's not using kzalloc?
 > +	amd_hfi_data->dev = &pdev->dev;
 > +
 > +	mutex_init(&amd_hfi_data->lock);
-
-No idea why the empty line is put between these initializations of the 
-data structure fields.
-
 > +	platform_set_drvdata(pdev, amd_hfi_data);
 > +
 > +	/* alloc data array for hardware feedback class data */
-
-Unnecessary comment? Isn't the function name enough to tell it?
-
 > +	ret = amd_hfi_alloc_class_data(pdev);
 > +	if (ret)
 > +		goto out;
 > +
 > +out:
-
-I'm guessing this might be to reduce churn in some patch after this, 
-if not, this is enough:
-
-	return amd_hfi_alloc_class_data(pdev);
-
 > +	return ret;
 > +}
 > +
@@ -375,11 +358,6 @@ if not, this is enough:
 > +	device = platform_device_register_simple(AMD_HFI_DRIVER, -1, NULL, 0);
 > +	if (IS_ERR(device)) {
 > +		pr_err("unable to register hfi platform device\n");
-
-I assume HFI is the correct capitalization given I see some comments with 
-that. Please correct any user visible print outs to use the capitalized 
-form.
-
 > +		return PTR_ERR(device);
 > +	}
 > +
@@ -401,8 +379,4 @@ form.
 > +MODULE_LICENSE("GPL");
 > +MODULE_DESCRIPTION("AMD Hardware Feedback Interface Driver");
 > 
-
--- 
- i.
-
 
