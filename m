@@ -1,207 +1,108 @@
-Return-Path: <linux-pm+bounces-15623-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15624-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4D0599D3E6
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 17:50:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B19199D42E
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 18:04:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91C83285F37
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 15:50:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CE211F2220A
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 16:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E151ADFFC;
-	Mon, 14 Oct 2024 15:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJY9JEAU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FCAC1ABEB8;
+	Mon, 14 Oct 2024 16:04:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05151ABEBF
-	for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 15:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39954156256;
+	Mon, 14 Oct 2024 16:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728920981; cv=none; b=ujlKx1YkATsJ/4kW1Rvemsbsuko1R8c7oV/YhDnFPJDH5uIJ+jNFpCPCf+w7bpQ0MuHYOLwkOlylPoks0zaIod2Nk2Z0KY01AFZNMlmVo8iL2J3yk5J/uqaBhmJKtGiDYbPD9/8xsf8MBP27k3WjsyG+RGwrv5VzwT41bZfLBxc=
+	t=1728921881; cv=none; b=E49giC3m+fZaShoPznq2kqISG+O5gJta41oEHpPvbEB/bImDZEIU3e4f3QkPQsuO8bQ1fCdfRZppC6BNchNE1X3g8NI2XcSEKYDX3l9s0KlOztujHdFdzhOX++gYEJPfB+0PTNvTKeHPf+a5pSYPxgeV3Qrf2dlGxfCHvFAKnZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728920981; c=relaxed/simple;
-	bh=6Rk+CsJHP/5bU2ebHLle484nqc5+6RIwkQCiFpPLr30=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=loLo39bx1NAk2KHeNNCXGrz4ZtlB7AwyX4XxS2SprQeah/IkGrijMpuxm8zjPWN9auDPEWJUe7z3Juu0I8VEybp4+vjCHunkMhRN5mPAB7v0M+4IeBYRNvuFQy2Axh4sR2QGFwoAKKwR0clMk8blBJRp3qX9SoJGWdHtI6GOr6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CJY9JEAU; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20cdb889222so12144255ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 08:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728920979; x=1729525779; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w8vvi2k1+xPVR/+IFZrtVc9C6c+JYAf699k6QTmej64=;
-        b=CJY9JEAUJ1OZ8Lvg0UslaH8uijDPLabqnNhUZ5hnmzR0x8ho5ZxkCJAHR7DqCN5XU1
-         JNDjW8p4XbH3ZgRy7Nmz8UuyergToWwCKS29y6on6FibXClT3bxrPZqQjFjw1a/eKHtm
-         8CPVBS2s9i0NToFzfApROzP5TUk0AvUzEFE9rNqFBg+9abna7a4i+rflQHY3KUin9d2B
-         G+sqmSCHiIl/eUQ8FDrVvUqh9Lr9a+u6MdhcfWSfc4+MWIkMwzwHRAc3meoPDLZQoLly
-         XSIyCkK+R3fHlgbi346uRs5TZ2RZKoqhKt/Dvnn6bUy7la8XCnt0gIsIA39iJjB4TfAz
-         zKXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728920979; x=1729525779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w8vvi2k1+xPVR/+IFZrtVc9C6c+JYAf699k6QTmej64=;
-        b=s3H8ShRlZdOYIs1dNfUnONGG23a1zP8DyVrVu69mPV0ygZ5/w/CqtRXDAxBWSP7DQR
-         kuTx91YNz7o6laeB9VJx1CUFTcS3QDCDGkPmkDcu4bbD43uMjcVFjeVm/GQ6mPoYsQ8w
-         4P8PalPTbOENYzGYUl+p6Woj9iTEdHQsyWawuDI9NN57CcZ+7pgbuPKb0wi66BRNjwvH
-         qpYbfcFBCzp6cwANp4xGl4Y7VHQFnFkHphIkl+T8KhGWzgDwQB2/8JnoAP/e+qVcAa7C
-         GSbebNmkY2IQoHOY/hLtohXFQ1YrZAl3xkHkv09T9L3dobyaSX7gWxMwqszANWOwVi9C
-         IxIA==
-X-Gm-Message-State: AOJu0YxkEMDkdGJi42fHK8Kcm3fuSkIk7oAAuRsI9cskRTRwSDdfM+au
-	Sq0g5uN6vztwBQp8yxnTEVvMppGJLd/8DzUQA+hcaJBb8tdpZFsOghLDBMohPRzh4ImtNB9Gju4
-	9Zy3M5fqng8RkaThqvtWP9Nq2X/4=
-X-Google-Smtp-Source: AGHT+IF8vtIgUyG+0l7+fos81jwUrtPZe82Svsiss2TtgFzBld4+aevyJdhmzSNUNcnSLbcAnomQEi2tpiltZWurgW4=
-X-Received: by 2002:a17:903:240e:b0:20b:7ec0:ee21 with SMTP id
- d9443c01a7336-20ca1434e12mr218909175ad.19.1728920979125; Mon, 14 Oct 2024
- 08:49:39 -0700 (PDT)
+	s=arc-20240116; t=1728921881; c=relaxed/simple;
+	bh=141OZSwUZquYB5d7J1zr2IvqrEuo8P55ju64vN7jspU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VWhF6nDnqcDrNXlxjeXtH5kkVoDmNyij7ZxuvY2Tz7aYXG8goLe492qiDDLTsgcdt/oRGbFoWaAaCTc2p6aCDa8y1FSnGsOz31dD6cDbo75yHVNEh7WXDeVMfJRfkq/SuMxW7DuugF1nENDvMzN9Ud7idd1x+9YKj12N/CkmWKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 377621007;
+	Mon, 14 Oct 2024 09:05:08 -0700 (PDT)
+Received: from [10.1.33.17] (e127648.arm.com [10.1.33.17])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57AFD3F71E;
+	Mon, 14 Oct 2024 09:04:36 -0700 (PDT)
+Message-ID: <d67d420f-8cd4-4b56-8a93-ebbd513268e8@arm.com>
+Date: Mon, 14 Oct 2024 17:04:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
- <CAO6a-9-Gd44qiM7obURXwd8hrarZQ_8BpdbQPWQojh+yhO4oRw@mail.gmail.com> <5055c0ce-00cb-4319-beac-650436d4ad15@arm.com>
-In-Reply-To: <5055c0ce-00cb-4319-beac-650436d4ad15@arm.com>
-From: Vivek yadav <linux.ninja23@gmail.com>
-Date: Mon, 14 Oct 2024 21:19:27 +0530
-Message-ID: <CAO6a-99xVXE-XgnRWMCK5OPC3aYCvhJoGqEbxJOGGy8-yK7W8g@mail.gmail.com>
-Subject: Re: Fwd: ARM64: CPUIdle driver is not select any Idle state other
- then WFI
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-newbie@vger.kerne, 
-	daniel.lezcano@linaro.org, lpieralisi@kernel.org, krzk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 08/16] sched/fair: Extend util_est to improve rampup
+ time
+To: Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, John Stultz
+ <jstultz@google.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240820163512.1096301-1-qyousef@layalina.io>
+ <20240820163512.1096301-9-qyousef@layalina.io>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20240820163512.1096301-9-qyousef@layalina.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Christian,
+On 8/20/24 17:35, Qais Yousef wrote:
+> Utilization invariance can cause big delays. When tasks are running,
+> accumulate non-invairiant version of utilization to help tasks to settle
+> down to their new util_avg values faster.
+> 
+> Keep track of delta_exec during runnable across activations to help
+> update util_est for a long running task accurately. util_est shoudl
+> still behave the same at enqueue/dequeue.
 
-> What is the value of
-> cat /sys/devices/system/cpu/cpu*/cpuidle/state*/usage?
+For periodic tasks that have longer slices (~tick) this overestimates
+util_est by a lot.
+AFAICS this also breaks util_est for co-scheduling tasks of different slice
+lengths.
 
-0 =3D=3D=3D>CPU0 state0 (WFI)
-0 =3D=3D=3D>CPU0 state1 (cpu-retention)
-408 =3D=3D> these values are increasing
-0
-38
-0
-14
-0
+I'm testing with HZ=1000, but should work for any. On a RK3399, all pinned
+to one big.
 
-> What if you disable state0 on all CPUs?
-> echo 1 > /sys/devices/system/cpu/cpu*/cpuidle/state0/disable
+Having task A be 10ms period with 20% util (running for 2ms when scheduled)
+and tasks B+ with 1ms period and 1% util.
 
-After executing above command.  CPU Idle state WFI time stopped. But
-no change in ``state1`` time.
-
-``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``
-
-OUTPUT:
-0 =3D=3D=3D>CPU0 state0 (WFI)
-0 =3D=3D=3D>CPU0 state1 (cpu-retention)
-
-increasing some time value(23968) =3D=3D=3D>CPU1 state0 (WFI)
-0 =3D=3D=3D>CPU1 state1 (cpu-retention)
-
-increasing some time value(17512) =3D=3D> now it also not increasing
-0
-
-increasing some time value(6661)
-0
-
-``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/usage``
-
-0 =3D=3D=3D>CPU0 state0 (WFI)
-0 =3D=3D=3D>CPU0 state1 (cpu-retention)
-
-408 =3D=3D> now these values also stop increasing
-0
-
-42
-0
-
-14
-0
-
-Regards
-Vivek
+I guess 9/16 tries to work around that somewhat but without any leeway that
+doesn't work. Even rt-app tasks will vary slightly in their util_est values:
 
 
+Task A only:
+mainline:
+A:
+util_avg: 192 util_est: 204
 
+9/16 sched/fair: util_est: Take into account periodic tasks
+A:
+util_avg: 185 util_est: 423
 
+8 tasks:
+mainline:
+A:
+util_avg: 229 util_est: 229
+The rest
+util_avg:  12 util_est:  24
 
-Regards
-Vivek
-
-On Mon, Oct 14, 2024 at 6:24=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 10/14/24 11:28, Vivek yadav wrote:
-> > ---------- Forwarded message ---------
-> > From: Vivek yadav <linux.ninja23@gmail.com>
-> > Date: Fri, Oct 11, 2024 at 3:14=E2=80=AFPM
-> > Subject: ARM64: CPUIdle driver is not select any Idle state other then =
-WFI
-> > To: <linux-pm@vger.kernel.org>
-> >
-> >
-> > Hi @all,
-> >
-> > I am working on one custom SoC. Where I add one CPUIdle state for
-> > ``arm,cortex-a55`` processor.
-> >
-> > idle-states {
-> >       entry-method =3D "psci";
-> >        cpu_ret_l: cpu-retention-l {
-> >          compatible =3D "arm,idle-state";
-> >          arm,psci-suspend-param =3D <0x00010001>;
-> >          local-timer-stop;
-> >          entry-latency-us =3D <55>;
-> >           exit-latency-us =3D <140>;
-> >           min-residency-us =3D <780>;
-> >     };
-> > };
-> >
-> > I am using ``Menu governor`` with the ``psci_idle driver`` in its origi=
-nal form.
-> > After booting Linux I find out that the CPUIdle core is never going
-> > inside the ``cpu-retention`` state.
-> > To check time spent by CPU in any state. I am using the below command.
-> >
-> > ``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``
-> >
-> > OUTPUT:
-> > 0 =3D=3D=3D>CPU0 state0 (WFI)
-> > 0 =3D=3D=3D>CPU0 state1 (cpu-retention)
-> >
-> > increasing some time value =3D=3D=3D>CPU1 state0 (WFI)
-> > 0 =3D=3D=3D>CPU1 state1 (cpu-retention)
-> >
-> > increasing some time value
-> > 0
-> >
-> > increasing some time value
-> > 0
-> >
-> > What am I doing wrong? Why does ``cpu-retention`` state time not increa=
-se?
-> > Any pointer will be helpful.
->
-> What is the value of
-> cat /sys/devices/system/cpu/cpu*/cpuidle/state*/usage
-> ?
-> Does state1 usage increase?
->
-> What if you disable state0 on all CPUs?
-> echo 1 > /sys/devices/system/cpu/cpu*/cpuidle/state0/disable
+9/16 sched/fair: util_est: Take into account periodic tasks
+A:
+util_avg: 242 util_est: 643
+The rest:
+util_avg:  12 util_est:  50
 
