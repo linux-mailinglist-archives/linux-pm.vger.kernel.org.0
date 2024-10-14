@@ -1,134 +1,163 @@
-Return-Path: <linux-pm+bounces-15614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15615-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A39F399C725
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 12:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2020F99C72B
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 12:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D5731F23556
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 10:28:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9F2D1F2383A
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 10:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C1D15B97E;
-	Mon, 14 Oct 2024 10:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD1415D5C5;
+	Mon, 14 Oct 2024 10:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7/x9rlM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LOTmEKiV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1581581F4
-	for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 10:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F61F15CD6E;
+	Mon, 14 Oct 2024 10:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728901720; cv=none; b=u0u45/G6IFQe9S1kBYNpR2jHD1cobxMgQbIhrNf4+h/VylxNk94TYX+B/Rso/ZHHDFclR4uJZ5DL+GuhGwmzcIk8Nljn1TpuAA1G5NJMLUN4vqiP2UjGwWOxC5ahZE3kcG6i5JLUHinSqOsDrpcIoIi7MKtkolqRrQ9ZAJ5sNOc=
+	t=1728901762; cv=none; b=fYGGuvlYBCgUb3UhjHwZeQJ+txdJuEVbvFWL9LDh/Sx0+2+x8BUSbzBV5i2b5bVAka/j5dNQ2UB1bJDKhxF1Ledh++txa9UFxLj29E+iLyof6176ZksidyhoQVx/+sP9hv/KxKCr8u7LmV7PpKaOpKihwaXM5t5FvbL7g50mYdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728901720; c=relaxed/simple;
-	bh=WhDyfTRjdHhiECOrnWMKnYpaTc//VDik3ULegFlNTaI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UGgLviYA4xIfoRs65YsXRy6xdj4YyHvwJrvDnw+O9blYqLFCOIf6MnnEiffWqxL1rAI6oalHj92TM/hNHUo6yWsvecO0/sGf1WoTBQLUHXSHE7Ld8guwqvuI7POVsOzii0USydtYFohpD9mMRX9IBdSmiEtF+xl5QT4/8Yore9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7/x9rlM; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20cb89a4e4cso13435435ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 03:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728901718; x=1729506518; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AWWwDH82oJMReDPEBGrwZ6eQwvp6vhmDAyPgW2sjeXc=;
-        b=B7/x9rlMKN0OSLdlKEUZ5zncEV5UdJbRhXVfPro1h046trRVwYb9QjhOw+qnISvdii
-         B6r89B7jSLmG6dfQ5a9C0Qh7Bcc9R2ph9Lt/zfIjuCZRwkDMGpr3IXMeDBwh8QYjb8ZL
-         5OgTfOaY8CWF5ylF/JE78/OGOBV/N1yO8z7KbQkieZRSH5T6cJzyMoHeyo6DEKR4zaOG
-         zxyH75F6fG6P7RALG6jX+gfu83RNu4zyVdKTh71awipPYGEl8e4TIUqpZgxRPrrxRvCu
-         ZIIiz5CvmCOczcRpo1iBfeiWOR6Fxg2vJeDGWJD/mZrjbkpWOD9nJ2r5o3UTX2nz7iXi
-         vktQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728901718; x=1729506518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AWWwDH82oJMReDPEBGrwZ6eQwvp6vhmDAyPgW2sjeXc=;
-        b=PpHBiUSSdESrDlqab6MxQJZlBkjLMCp4nwpC08IUT0uGXcn+czqhxTjSwKedKZYgaR
-         Qx850acFIeZYB0OwiCkWGAWR0vGnTb8LySD666Z9IM1sJv9kU9B17o+0nMZq1oboXuMj
-         KbHnbSLVl7X90UYSKG5TTJQx5/6XNkNUSWjdLvFJi1miBYOpUUZmuz24XRqLRXom+gMg
-         NGO6y35pTew9GE2bS/ip65OsZ26nNUUPYSLbLNOzkjrjcoRXUStQHMg3ITIFB37/cCpW
-         9fxKHFGWQUBY+8QKbP50vEABJeK6N5zPlB4SWw6vYZPHI2GowamAzo2mx6GS8L7LFliN
-         OYOQ==
-X-Gm-Message-State: AOJu0YzxBy7/npwNuaiID3wec4uDdHucVjjJDZciL2/Za3RyME2aPt5y
-	daxNnhf2NTcNKPJJjj+5QKHrhakfh6DhGDkgbP+iY/V00y/mCn3gJeS5krTU9u7KnhigDnDMoL6
-	FIstTebgiEaTfMYGjeTx8w0LQRrRK+CFB
-X-Google-Smtp-Source: AGHT+IHarVCnqEH9tKz5RNXTZmO+aI+t/TB5SY8xNMTTngdyPOsz5qW7h7md/yGFOsrnLu2zINT1DICEVRQs/gItGvQ=
-X-Received: by 2002:a17:902:e543:b0:20c:d2d9:766f with SMTP id
- d9443c01a7336-20cd2d977e0mr98208095ad.14.1728901717780; Mon, 14 Oct 2024
- 03:28:37 -0700 (PDT)
+	s=arc-20240116; t=1728901762; c=relaxed/simple;
+	bh=O1zDNala9EX9k298pR/ciiTZ0akbpeN3NpSMWyoMxbo=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=uQPiBBbu8K266X00pb1rawlMCgPP094IZO8oLun2st68FbvJFfZLLKZrNnOLwMDgQ51944EFOOYeua5pkYZJmLtN/AfNjb3sLHU2eBU4AxPr0RLPk7v3IO06Ge/WLsgzpb9ZRtQcZ0krKDRMcxBF/SliIpQ2ch+yRUEvuM43070=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LOTmEKiV; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728901761; x=1760437761;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=O1zDNala9EX9k298pR/ciiTZ0akbpeN3NpSMWyoMxbo=;
+  b=LOTmEKiVspVm40m1EBv9GqLply8B0BtMV0H07oNxKxC0rC/llKZX6oLh
+   WB1oiSm6ovU48ujFIZSS9SEVrJjSTgNNZgVRSgFn0CuwJYC3ltNC3hU3r
+   fMpJrrDK9tU9oMJ9qvht06DGTJ/01Itk7/yhnDrpFyaFfAFVSc1bFgoHC
+   RKzOJyw6Ohn+qTOPd4PtPcgZFkUvWrILAGiF1R1EehYUP6OsXyTNtfCgh
+   EMuMu+5h53B00bwlJ24r/Zj8cNT0FR1rgSPK3EcB1nfqTHwbqI5GJvtUc
+   pF5JJ58hyD/gdkTeuK1hkmm/+ThgYJVjwRLXTUTidS/fUp4XGE33M0aOa
+   A==;
+X-CSE-ConnectionGUID: 6MfdOEbCSlu6pULaLAwETw==
+X-CSE-MsgGUID: FT34iGjZRneqA9o7NbMFsg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="45748579"
+X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
+   d="scan'208";a="45748579"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:29:14 -0700
+X-CSE-ConnectionGUID: IAnYW3iKRMGEwWR+Bt1iHg==
+X-CSE-MsgGUID: Oi6qp8o+RueXZiG1amHnMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
+   d="scan'208";a="77545723"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.80])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:29:10 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 14 Oct 2024 13:29:07 +0300 (EEST)
+To: Mario Limonciello <mario.limonciello@amd.com>
+cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>, 
+    x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
+    Perry Yuan <perry.yuan@amd.com>, LKML <linux-kernel@vger.kernel.org>, 
+    linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
+    platform-driver-x86@vger.kernel.org, 
+    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+    Perry Yuan <Perry.Yuan@amd.com>
+Subject: Re: [PATCH v2 09/13] platform/x86: hfi: add power management
+ callback
+In-Reply-To: <20241010193705.10362-10-mario.limonciello@amd.com>
+Message-ID: <d83fb93d-322a-180d-1cc6-6b898ad63b92@linux.intel.com>
+References: <20241010193705.10362-1-mario.limonciello@amd.com> <20241010193705.10362-10-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
-In-Reply-To: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
-From: Vivek yadav <linux.ninja23@gmail.com>
-Date: Mon, 14 Oct 2024 15:58:25 +0530
-Message-ID: <CAO6a-9-Gd44qiM7obURXwd8hrarZQ_8BpdbQPWQojh+yhO4oRw@mail.gmail.com>
-Subject: Fwd: ARM64: CPUIdle driver is not select any Idle state other then WFI
-To: linux-pm@vger.kernel.org, linux-newbie@vger.kerne
-Cc: daniel.lezcano@linaro.org, lpieralisi@kernel.org, krzk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
----------- Forwarded message ---------
-From: Vivek yadav <linux.ninja23@gmail.com>
-Date: Fri, Oct 11, 2024 at 3:14=E2=80=AFPM
-Subject: ARM64: CPUIdle driver is not select any Idle state other then WFI
-To: <linux-pm@vger.kernel.org>
+On Thu, 10 Oct 2024, Mario Limonciello wrote:
 
+> From: Perry Yuan <Perry.Yuan@amd.com>
+> 
+> Introduces power management callbacks for the `amd_hfi` driver.
+> Specifically, the `suspend` and `resume` callbacks have been added
+> to handle the necessary operations during system low power states
+> and wake-up.
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2:
+>  * Whitespace changes
+>  * Use on online CPUs not present ones
+> ---
+>  drivers/platform/x86/amd/hfi/hfi.c | 33 ++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
+> index c969ee7ea5ee..0263993b0a94 100644
+> --- a/drivers/platform/x86/amd/hfi/hfi.c
+> +++ b/drivers/platform/x86/amd/hfi/hfi.c
+> @@ -407,6 +407,38 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
+>  	return ret;
+>  }
+>  
+> +static int amd_hfi_pm_resume(struct device *dev)
+> +{
+> +	int ret, cpu;
+> +
+> +	for_each_present_cpu(cpu) {
+> +		ret = amd_hfi_set_state(cpu, true);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to enable workload class config: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int amd_hfi_pm_suspend(struct device *dev)
+> +{
+> +	int ret, cpu;
+> +
+> +	for_each_online_cpu(cpu) {
+> +		ret = amd_hfi_set_state(cpu, false);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to disable workload class config: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(amd_hfi_pm_ops, amd_hfi_pm_suspend, amd_hfi_pm_resume);
+> +
+>  static const struct acpi_device_id amd_hfi_platform_match[] = {
+>  	{ "AMDI0104", 0},
+>  	{ }
+> @@ -458,6 +490,7 @@ static struct platform_driver amd_hfi_driver = {
+>  	.driver = {
+>  		.name = AMD_HFI_DRIVER,
+>  		.owner = THIS_MODULE,
+> +		.pm	= &amd_hfi_pm_ops,
 
-Hi @all,
+This is inconsistent.
 
-I am working on one custom SoC. Where I add one CPUIdle state for
-``arm,cortex-a55`` processor.
+>  		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
+>  	},
+>  	.probe = amd_hfi_probe,
+> 
 
-idle-states {
-      entry-method =3D "psci";
-       cpu_ret_l: cpu-retention-l {
-         compatible =3D "arm,idle-state";
-         arm,psci-suspend-param =3D <0x00010001>;
-         local-timer-stop;
-         entry-latency-us =3D <55>;
-          exit-latency-us =3D <140>;
-          min-residency-us =3D <780>;
-    };
-};
+-- 
+ i.
 
-I am using ``Menu governor`` with the ``psci_idle driver`` in its original =
-form.
-After booting Linux I find out that the CPUIdle core is never going
-inside the ``cpu-retention`` state.
-To check time spent by CPU in any state. I am using the below command.
-
-``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``
-
-OUTPUT:
-0 =3D=3D=3D>CPU0 state0 (WFI)
-0 =3D=3D=3D>CPU0 state1 (cpu-retention)
-
-increasing some time value =3D=3D=3D>CPU1 state0 (WFI)
-0 =3D=3D=3D>CPU1 state1 (cpu-retention)
-
-increasing some time value
-0
-
-increasing some time value
-0
-
-What am I doing wrong? Why does ``cpu-retention`` state time not increase?
-Any pointer will be helpful.
-
-Regards,
-Vivek
 
