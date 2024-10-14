@@ -1,182 +1,202 @@
-Return-Path: <linux-pm+bounces-15600-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15601-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD3699C283
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 10:06:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9C8D99C323
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 10:28:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 734371F23790
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 08:06:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 811782843C1
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 08:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B38F147C98;
-	Mon, 14 Oct 2024 08:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBDC13D537;
+	Mon, 14 Oct 2024 08:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="jGAGlW9q"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Fy3lN9uL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72AD9474;
-	Mon, 14 Oct 2024 08:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885AA156F42
+	for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 08:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728893201; cv=none; b=pN3wJFIZV4jsOScOjW7+pwcyYoDG0ZOCU/QsQKvn7QWvQsBKlD52c+yV+ABc7J8256kC96Rh1Tt/qNJ6Kq68yZC+hwVXwXpj3pr8QT+AXqHAuXKSWGI5r92alBHPvRogEne6Xu9YhW3XBnlEinbNdCdbBb0Fdk4y40fGSGmNcB8=
+	t=1728894303; cv=none; b=cqnAkhiLDNH/ct/Cy6oOOjgazDCnBa5yld+Antnorh4pAwjHYy0XO7GNXne8TBb3TmKZNz2bqAFxvUIZAjC2izGOnbmdlBKhuScwdUOn2fXqxIveR2Ga2hSsf8uwTxhdjfc4p5CwoMcQmjLM6EDYpQowvstTZhfIgJ+ORCqnlaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728893201; c=relaxed/simple;
-	bh=sSQ/JLtfOylYmetmA4x1PJlINm2mWwdgTelJNw1+qv8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kx7p0J2lh8OkBMqKEZlelU5zdC1jrqmNVI4BOL59Iml47bLkQVaMx6AQRDnD2azMunK/x1w0Ls0JYCjONcD5J1viBc8qW8OgY+IQFV6bkjDy9iF+RJeoQc1yAhW5R8UsA0JenjCjJn3Nq1vcaFVCRCxi6sIK+1qzpUPg50ZciEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=jGAGlW9q; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1728893198;
-	bh=sSQ/JLtfOylYmetmA4x1PJlINm2mWwdgTelJNw1+qv8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jGAGlW9qACfI26EUDUV9ViwMCdDvwOhgDdmF4wXFH4qKTONWDsWczOgCX4imvaOmH
-	 RcTOLerC2LWpfDhNXVQVpqUrA3eph8tCQiy0N29Vv2JLTv2HvR+lvSzkwUsL29oYPW
-	 9HgsBum46bSbUbojdRFc3n5OQOR8FiKBO/Xjzi2/yzhc87WdFFFv3cBjiTm3h0taW6
-	 mIn/VBWwLEpExGXCoPSXPm7SdaiuDZoJRsE2+t3QCxwcOt7mnY7Nbqmcss56oEsHbz
-	 HyqhcxIjjTTSgMxoVHsCrioltl/OgvtX3naJY5Oawcx5ntQ2bycFqv4gBdqFkMCUNE
-	 FbpmQOqJqH7Ag==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5405217E10C7;
-	Mon, 14 Oct 2024 10:06:37 +0200 (CEST)
-Message-ID: <863458cb-cac7-40c0-856d-edc0fa6ee6a6@collabora.com>
-Date: Mon, 14 Oct 2024 10:06:36 +0200
+	s=arc-20240116; t=1728894303; c=relaxed/simple;
+	bh=bSrAWudPARldXiHGKpyEAcNe5O1DAJpIzRa/IHav+Zg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=swhkerhkU7LzJ0BQT1Nh4f5+xGc1XEBMLUG+bwFnWjIvbgFaA0Mk45RnwlhEgQB760U3fgT0CwjFHl007bhSpL8+Fa5bw6iFLKjmCvU7SfjsaFrVaucHZRwCZnBFO1yhcmHtJW0umWDNACkknnCcdBRzA3lSzU3NFFXEcJTElFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Fy3lN9uL; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539f58c68c5so1015396e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 01:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1728894300; x=1729499100; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6hfW7J9erMIlvZVwH40xlH7a/MeCGU64sFdySDdF9nk=;
+        b=Fy3lN9uL80qP27J9QuVJRSZ8ci7oljt/rjWTQdrM5Qsu+NVrTHkx3jLiWRpNIUvZRW
+         DXu11c/Vtff6CBJRwHpTrus/rO+JulBLTukZ+EPpGT5jwh/5vV1xo3sUYVQPEjO/DBRN
+         yCO7fD7C/CzAP9QEbElJ/GmKSSHGQcsYGIpCU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728894300; x=1729499100;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6hfW7J9erMIlvZVwH40xlH7a/MeCGU64sFdySDdF9nk=;
+        b=dr02QqJZlfxfHDGVRhzc/4DXKmRajOdwVx05aMh67hkrIWFiH6VU+kNXUv6+X/BzbH
+         3ZST3MIXlguPm5QFsxHQ9rmxCjeWhVj8dyzQ0wPVrFaZVU+gmASiXkCTeLyX66+j4S3x
+         8PELaRzv4rLxVtElgAirJ9iqZzXOk9Aqenwv7t9N+qXS0xLbddSOFzgB69teWUgbs2RU
+         d5J72wfifqLOSypmvnb402JMleEAYIUNeOVz5vMVSdNzWhnkZt93wSjI2BNpJw0/MW/k
+         K6t8v5QtXoH79iVEUo0q6qWo0ixJFBQ17XKT6ojjK15/K2TqevhMW0J6iHKYFluxqoRO
+         4rnw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWRi2wC5iUEqTifr5CIPUHpPN5H50gD1YiBCi57HDlIa1Dlt+82hhi8w3Thbe2mmH5CcRlw68L/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw5n9vyBus/plSDMIeeTz/TEkaUrNTtBlnD/YW3W8uVmMuK201
+	PRY7cl6eJxAGKN/lm6dz+zMdXY1omZMmIPYtTKIrm0V78dCW1cRCJiv5/xgEsLTRmq0ikJnIlXm
+	qF1RjedCtvK59bb2oqMgxPws6zfUivxt+4w5X
+X-Google-Smtp-Source: AGHT+IEy3zplL4+qLOG9nz0L5a8N8FX81DMds6yZSQeoAH/iFm1yiRg+sf+trJRZ9wYaT+OFA6JfzdNx+UxUjfbOmPU=
+X-Received: by 2002:a05:6512:31d2:b0:539:9155:e8c1 with SMTP id
+ 2adb3069b0e04-539e54d76cbmr3219847e87.8.1728894299616; Mon, 14 Oct 2024
+ 01:24:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/7] MediaTek DVFSRC Bus Bandwidth and Regulator knobs
-To: Rob Herring <robh@kernel.org>
-Cc: djakov@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
- broonie@kernel.org, keescook@chromium.org, gustavoars@kernel.org,
- henryc.chen@mediatek.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- kernel@collabora.com, wenst@chromium.org, amergnat@baylibre.com
-References: <20240610085735.147134-1-angelogioacchino.delregno@collabora.com>
- <CAL_Jsq+F_pwhVLD1HF7=sYLp2w5kpc53UmzzffxyKzwh8WZthw@mail.gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <CAL_Jsq+F_pwhVLD1HF7=sYLp2w5kpc53UmzzffxyKzwh8WZthw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20241010-b4-cleanup-h-of-node-put-thermal-v4-0-bfbe29ad81f4@linaro.org>
+ <20241010-b4-cleanup-h-of-node-put-thermal-v4-2-bfbe29ad81f4@linaro.org>
+In-Reply-To: <20241010-b4-cleanup-h-of-node-put-thermal-v4-2-bfbe29ad81f4@linaro.org>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Mon, 14 Oct 2024 16:24:48 +0800
+Message-ID: <CAGXv+5EJvy6KwJZWCUTNQiec03WdB9m-XeEp4yicxD8FuWVrMQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] thermal: of: Use scoped memory and OF handling to
+ simplify thermal_of_trips_init()
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il 12/10/24 00:15, Rob Herring ha scritto:
-> On Mon, Jun 10, 2024 at 3:57 AM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Changes in v6:
->>   - Fixed build with clang (thanks Nathan!)
->>   - Removed unused mtk_rmw() macro in mtk-dvfsrc.c
->>   - Added MODULE_DESCRIPTION() to mtk-dvfsrc-regulator.c
->>
->> Changes in v5:
->>   - Fixed Kconfig dependencies in interconnect
->>   - Fixed module build for dvfsrc and interconnect
->>
->> Changes in v4:
->>   - Updated patch [3/7] to actually remove address/size cells
->>     as the old version got unexpectedly pushed in v3.
->>
->> Changes in v3:
->>   - Removed examples from interconnect and regulator bindings
->>     and kept example node with interconnect and regulator in
->>     the main DVFSRC binding as suggested
->>   - Removed 'reg' from interconnect and regulator, removed both
->>     address and size cells from the main DVFSRC binding as that
->>     was not really needed
->>   - Added anyOf-required entries in the regulator binding as it
->>     doesn't make sense to probe it without any regulator subnode
->>
->> Changes in v2:
->>   - Fixed issues with regulator binding about useless quotes and
->>     wrong binding path (oops)
->>   - Removed useless 'items' from DVFSRC main binding
->>   - Allowed address/size cells to DVFSRC main binding to resolve
->>     validation issues on the regulator and interconnect bindings
->>   - Changed dvfsrc node name to `system-controller`, as the DVFSRC
->>     is actually able to control multiple system components.
->>   - Added a commit to remove mtk-dvfs-regulator.c before adding the
->>     new, refactored regulator driver
->>
->>
->> This series adds support for the MediaTek Dynamic Voltage and Frequency
->> Scaling Resource Controller (DVFSRC), found on many MediaTek SoCs.
->>
->> This hardware collects requests from both software and the various remote
->> processors embededd into the SoC, and decides about a minimum operating
->> voltage and a minimum DRAM frequency to fulfill those requests, in an
->> effort to provide the best achievable performance per watt.
->>
->> Such hardware IP is capable of transparently performing direct register
->> R/W on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
->>
->> Summarizing how the DVFSRC works for Interconnect:
->>
->>               ICC provider         ICC Nodes
->>                                ----          ----
->>               _________       |CPU |   |--- |VPU |
->>      _____   |         |-----  ----    |     ----
->>     |     |->|  DRAM   |       ----    |     ----
->>     |DRAM |->|scheduler|----- |GPU |   |--- |DISP|
->>     |     |->|  (EMI)  |       ----    |     ----
->>     |_____|->|_________|---.   -----   |     ----
->>                 /|\         `-|MMSYS|--|--- |VDEC|
->>                  |             -----   |     ----
->>                  |                     |     ----
->>                  | change DRAM freq    |--- |VENC|
->>               --------                 |     ----
->>      SMC --> | DVFSRC |                |     ----
->>               --------                 |--- |IMG |
->>                                        |     ----
->>                                        |     ----
->>                                        |--- |CAM |
->>                                              ----
->>
->> ...and for regulators, it's simply...
->>     SMC -> DVFSRC -> Regulator voltage decider -> (vreg) Registers R/W
->>
->> Please note that this series is based on an old (abandoned) series from
->> MediaTek [1], and reuses some parts of the code found in that.
->>
->> Besides, included in this series, there's also a refactoring of the
->> mtk-dvfsrc-regulator driver, which never got compiled at all, and would
->> not build anyway because of missing headers and typos: that commit did
->> not get any Fixes tag because, well, backporting makes no sense at all
->> as the DVFSRC support - which is critical for that driver to work - is
->> introduced with *this series*! :-)
->>
->> P.S.: The DVFSRC regulator is a requirement for the MediaTek UFSHCI
->>        controller's crypto boost feature, which is already upstream but
->>        lacking the actual regulator to work....... :-)
->>
->> [1]: https://lore.kernel.org/all/20210812085846.2628-1-dawei.chien@mediatek.com/
->>
->> AngeloGioacchino Del Regno (7):
->>    dt-bindings: regulator: Add bindings for MediaTek DVFSRC Regulators
->>    dt-bindings: interconnect: Add MediaTek EMI Interconnect bindings
->>    dt-bindings: soc: mediatek: Add DVFSRC bindings for MT8183 and MT8195
->>    soc: mediatek: Add MediaTek DVFS Resource Collector (DVFSRC) driver
-> 
-> Looks like the driver got picked up, but not the binding.
-> mediatek,mt8183-dvfsrc and mediatek,mt8195-dvfsrc show up in next as
-> undocumented.
-> 
-Thanks for making me notice. Adding it up right now.
+On Fri, Oct 11, 2024 at 2:06=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Obtain the device node reference and allocate memory with
+> scoped/cleanup.h to reduce error handling and make the code a bit
+> simpler.
+>
+> The code is not equivalent in one minor aspect: outgoing parameter
+> "*ntrips" will not be zeroed on errors of memory allocation.  This
+> difference is not important, because code was already not zeroing it in
+> case of earlier errors and the only caller does not rely on ntrips being
+> 0 in case of errors.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Chen-Yu Tsai <wenst@chromium.org>
+>
+> Changes in v4:
+> 1. Significant change: kzalloc() also with scoped-handling so the entire
+>    error handling could be removed.
+> 2. Due to above, drop review-tags (Chen-Yu, Jonathan).
 
-Cheers,
-Angelo
+The additional changes are the same as what I had done, except that
+I used "return_ptr(tt)" instead of "return no_free_ptr(tt)", and I
+had reset *ntrips to 0 at the beginning.
+
+So,
+
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+> Changes in v2:
+> 1. Drop left-over of_node_put in regular exit path (Chen-Yu)
+> ---
+>  drivers/thermal/thermal_of.c | 31 ++++++++-----------------------
+>  1 file changed, 8 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index f0ffc0e335ba9406f4fd858d6c561f9d23f4b842..37db435b54b124abf25b1d75d=
+6cc4fb75f1c1e5c 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -95,11 +95,9 @@ static int thermal_of_populate_trip(struct device_node=
+ *np,
+>
+>  static struct thermal_trip *thermal_of_trips_init(struct device_node *np=
+, int *ntrips)
+>  {
+> -       struct thermal_trip *tt;
+> -       struct device_node *trips;
+>         int ret, count;
+>
+> -       trips =3D of_get_child_by_name(np, "trips");
+> +       struct device_node *trips __free(device_node) =3D of_get_child_by=
+_name(np, "trips");
+>         if (!trips) {
+>                 pr_err("Failed to find 'trips' node\n");
+>                 return ERR_PTR(-EINVAL);
+> @@ -108,36 +106,23 @@ static struct thermal_trip *thermal_of_trips_init(s=
+truct device_node *np, int *n
+>         count =3D of_get_child_count(trips);
+>         if (!count) {
+>                 pr_err("No trip point defined\n");
+> -               ret =3D -EINVAL;
+> -               goto out_of_node_put;
+> +               return ERR_PTR(-EINVAL);
+>         }
+>
+> -       tt =3D kzalloc(sizeof(*tt) * count, GFP_KERNEL);
+> -       if (!tt) {
+> -               ret =3D -ENOMEM;
+> -               goto out_of_node_put;
+> -       }
+> -
+> -       *ntrips =3D count;
+> +       struct thermal_trip *tt __free(kfree) =3D kzalloc(sizeof(*tt) * c=
+ount, GFP_KERNEL);
+> +       if (!tt)
+> +               return ERR_PTR(-ENOMEM);
+>
+>         count =3D 0;
+>         for_each_child_of_node_scoped(trips, trip) {
+>                 ret =3D thermal_of_populate_trip(trip, &tt[count++]);
+>                 if (ret)
+> -                       goto out_kfree;
+> +                       return ERR_PTR(ret);
+>         }
+>
+> -       of_node_put(trips);
+> +       *ntrips =3D count;
+>
+> -       return tt;
+> -
+> -out_kfree:
+> -       kfree(tt);
+> -       *ntrips =3D 0;
+> -out_of_node_put:
+> -       of_node_put(trips);
+> -
+> -       return ERR_PTR(ret);
+> +       return no_free_ptr(tt);
+>  }
+>
+>  static struct device_node *of_thermal_zone_find(struct device_node *sens=
+or, int id)
+>
+> --
+> 2.43.0
+>
 
