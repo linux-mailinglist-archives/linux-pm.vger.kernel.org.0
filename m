@@ -1,405 +1,148 @@
-Return-Path: <linux-pm+bounces-15617-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15618-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333B699C7F6
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 13:02:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B593999C8E4
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 13:29:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 563F71C23D7C
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 11:02:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70A2E29128A
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2024 11:29:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E247F1AA7B9;
-	Mon, 14 Oct 2024 11:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B2C18A6A0;
+	Mon, 14 Oct 2024 11:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="1GwqD3NT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3C61AA7A4;
-	Mon, 14 Oct 2024 11:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D11633998
+	for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 11:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728903613; cv=none; b=RWB7cb7ZyNTHXvHbjMQLMvSkEZjgpnEZBNTPHFy5IOr70B3JfVl62wD/rg1N+lbX22HdJcT2yztdOq1KjNcGODSPf7KPDEWPvMRMVTGXckEc9KCOLnjhpWi/NyOsFKA8QXuSlKubbrU+EmDhtr4QifptixUeS7/7fg6428dggRk=
+	t=1728905377; cv=none; b=qCxC9x2kMTqudh1LdZjzmtlAwL4vnb6KxLnLw8oBSASQnMvVE6miKp2per1LdJJy0qGXcLmZ5CkFkQLIslTRfQ1ZNJ8k6ZJCOkvRVew1XjeOf4eEltUYanWbkXL/AYWjKYYXhrQUyzxwV1byPaf5iS8FyzKuI2vHU2zt+7ey7sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728903613; c=relaxed/simple;
-	bh=Yxb1puFdmCzj+zqRyhar+QOClnGRONkrA3hd8BvcUvY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WDlC20raYNMFzuBTCXzPWJCe6LOY7euG1hPEBkdDvcetYO/YZtnfwGwGIMrFzSlgkmL8SGmdddNquAs3ye2VVk3SBXPSaNXJniGsi0dMmY+YXFIbh6Y8rVLVT8L/RQpAWPELzNswbbXeriy8cVmqb7leJ/M3r+sK5B2eLDPmCaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15DE8168F;
-	Mon, 14 Oct 2024 04:00:41 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC2633F51B;
-	Mon, 14 Oct 2024 04:00:08 -0700 (PDT)
-From: Ryan Roberts <ryan.roberts@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	David Hildenbrand <david@redhat.com>,
-	Greg Marsden <greg.marsden@oracle.com>,
-	Ivan Ivanov <ivan.ivanov@suse.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Matthias Brugger <mbrugger@suse.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Will Deacon <will@kernel.org>
-Cc: Ryan Roberts <ryan.roberts@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org
-Subject: [RFC PATCH v1 14/57] pm/hibernate: Remove PAGE_SIZE compile-time constant assumption
-Date: Mon, 14 Oct 2024 11:58:21 +0100
-Message-ID: <20241014105912.3207374-14-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241014105912.3207374-1-ryan.roberts@arm.com>
-References: <20241014105514.3206191-1-ryan.roberts@arm.com>
- <20241014105912.3207374-1-ryan.roberts@arm.com>
+	s=arc-20240116; t=1728905377; c=relaxed/simple;
+	bh=ks8/fOYfMDxkydrHmFLeBApwuoib/XPJpWAmhBcvjsM=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=WjXEegRHEj0+yvUa3L0FT7ROBM/J26NBpuBO0rqMC0s8jlgRzUCoDNUv+QCcopyR/gtya0qSc7u4/Z4d+6obipYHNDabEUaxwFxNzYnuzDVDZUx9msuTNjsKrkXYa9oWqNukeajw3KSaWoYFQYJmTdWxkivNFjOco2G60y4VWwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=1GwqD3NT; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c70abba48so26328765ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2024 04:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728905375; x=1729510175; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xx5tq6bIQoFcnp3rcYZF0ORIZLg97qHcP5OOE0i+yR8=;
+        b=1GwqD3NTy/vWbNrQoifRq0AonY9BOIT6JF1eE6txmoWFlGD+t+iaFQ0uUtoNBi442O
+         vRjzy1DZZodf/Eo1baA4J9aCypZhG2u4a+em0C1Wd5hR0A9R9vnSWXvpXzicgBx3K9Pl
+         On9AOYgW1w3RH+j0692EaGKPABLzcXHNyfhioYnU865WIecLqEGZESBqCtpNDo3k/Q3U
+         vZQvpKI/eVrIUO4cPT4kyOHOMaKrrJNn/NzOJds54bTCes/oTb0nlcjqmALViz6o7cO4
+         2aAr4aanBetq8q0Fm9CCPMdR8xIudJETJa6s6feexvaogs5+/aOc2S/WWoqFDfOU3CUB
+         O+IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728905375; x=1729510175;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xx5tq6bIQoFcnp3rcYZF0ORIZLg97qHcP5OOE0i+yR8=;
+        b=V6sUX7KChv9Wi1r4qBmMD35PkCHegpikhrxy4OBomZcvxO0IiwDzfKgBHpxKHn4vuq
+         QFj62vN2QKaZIM++xUIhr2owH4pM/hnPYWG3vQOXQOujWlyFYEMX3uJDjH4EOu2cLayS
+         82+EW2r2c3DKUYLCH++a7P3Wej/QsRSPz6yzFIbBlei+mPd0ubMBc/tmbuZT81c63beC
+         dTdiBn4Oe2yesJq1RzHWCzWQZgdxwHxMkVswOmA4dBrWq3nE7zqCieBu99wDxoPgc/1H
+         rjPcUfE1PrGzpeYBMMTRWyQ0upJZRW4lIUzLyxwv7SClOLUjp+cOy7XQ15h6JdpY4LMs
+         Sd3w==
+X-Forwarded-Encrypted: i=1; AJvYcCXmIId4hboKG3W8DfoQWZrvJusn8NPs0WgApQSQDQVLpQIS3WVkC81uYEE8VlhSvYm26VXtf8GctA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyodHfcuMYha3MUle54uSowX3C/xVyk1wsK9gYEIDqHpcJyCDTJ
+	XYBimyZYaAJQsPB0fLB/CshIREoUg2Cx3enVaRRd3gcBFbVSHozfhDO//JfJwhw=
+X-Google-Smtp-Source: AGHT+IHGx/jEK8kUgBh1QCxKxRreqpqASoFCobCfG9qOgAZ+WyxbnMc9qShfaGtIHoPbSnE1W3xo9w==
+X-Received: by 2002:a17:902:e852:b0:20c:61a2:5ca4 with SMTP id d9443c01a7336-20cbb18357emr114029775ad.10.1728905375631;
+        Mon, 14 Oct 2024 04:29:35 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8bad33cbsm63853485ad.25.2024.10.14.04.29.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 04:29:35 -0700 (PDT)
+Message-ID: <670d009f.170a0220.e27fb.1fa9@mx.google.com>
+Date: Mon, 14 Oct 2024 04:29:35 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.12-rc2-33-g54ad5ae82ff89
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 30 runs,
+ 1 regressions (v6.12-rc2-33-g54ad5ae82ff89)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-To prepare for supporting boot-time page size selection, refactor code
-to remove assumptions about PAGE_SIZE being compile-time constant. Code
-intended to be equivalent when compile-time page size is active.
+pm/testing baseline: 30 runs, 1 regressions (v6.12-rc2-33-g54ad5ae82ff89)
 
-"struct linked_page", "struct swap_map_page" and "struct swsusp_header"
-were all previously sized to be exactly PAGE_SIZE. Refactor those
-structures to remove the padding, then superimpose them on a page at
-runtime.
+Regressions Summary
+-------------------
 
-"struct cmp_data" and "struct dec_data" previously contained embedded
-"unc" and "cmp" arrays, who's sizes were derived from PAGE_SIZE. We
-can't use flexible array approach here since there are 2 arrays in the
-structure, so convert to pointers and define an allocator and
-deallocator for each struct.
+platform                    | arch | lab         | compiler | defconfig    =
+      | regressions
+----------------------------+------+-------------+----------+--------------=
+------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig | 1          =
 
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
----
 
-***NOTE***
-Any confused maintainers may want to read the cover note here for context:
-https://lore.kernel.org/all/20241014105514.3206191-1-ryan.roberts@arm.com/
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.12-rc=
+2-33-g54ad5ae82ff89/plan/baseline/
 
- kernel/power/power.h    |   2 +-
- kernel/power/snapshot.c |   2 +-
- kernel/power/swap.c     | 129 +++++++++++++++++++++++++++++++++-------
- 3 files changed, 108 insertions(+), 25 deletions(-)
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.12-rc2-33-g54ad5ae82ff89
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      54ad5ae82ff8916c2277fada38327efe7892e401 =
 
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index de0e6b1077f23..74af2eb8d48a4 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -16,7 +16,7 @@ struct swsusp_info {
- 	unsigned long		image_pages;
- 	unsigned long		pages;
- 	unsigned long		size;
--} __aligned(PAGE_SIZE);
-+} __aligned(PAGE_SIZE_MAX);
- 
- #ifdef CONFIG_HIBERNATION
- /* kernel/power/snapshot.c */
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 405eddbda4fc5..144e92f786e35 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -155,7 +155,7 @@ struct pbe *restore_pblist;
- 
- struct linked_page {
- 	struct linked_page *next;
--	char data[LINKED_PAGE_DATA_SIZE];
-+	char data[];
- } __packed;
- 
- /*
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 82b884b67152f..ffd4c864acfa2 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -59,6 +59,7 @@ static bool clean_pages_on_decompress;
-  */
- 
- #define MAP_PAGE_ENTRIES	(PAGE_SIZE / sizeof(sector_t) - 1)
-+#define NEXT_SWAP_INDEX		MAP_PAGE_ENTRIES
- 
- /*
-  * Number of free pages that are not high.
-@@ -78,8 +79,11 @@ static inline unsigned long reqd_free_pages(void)
- }
- 
- struct swap_map_page {
--	sector_t entries[MAP_PAGE_ENTRIES];
--	sector_t next_swap;
-+	/*
-+	 * A PAGE_SIZE structure with (PAGE_SIZE / sizeof(sector_t)) entries.
-+	 * The last entry, [NEXT_SWAP_INDEX], is `.next_swap`.
-+	 */
-+	sector_t entries[1];
- };
- 
- struct swap_map_page_list {
-@@ -103,8 +107,6 @@ struct swap_map_handle {
- };
- 
- struct swsusp_header {
--	char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
--	              sizeof(u32) - sizeof(u32)];
- 	u32	hw_sig;
- 	u32	crc32;
- 	sector_t image;
-@@ -113,6 +115,7 @@ struct swsusp_header {
- 	char	sig[10];
- } __packed;
- 
-+static char *swsusp_header_pg;
- static struct swsusp_header *swsusp_header;
- 
- /*
-@@ -315,7 +318,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
- {
- 	int error;
- 
--	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header, NULL);
-+	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header_pg, NULL);
- 	if (!memcmp("SWAP-SPACE",swsusp_header->sig, 10) ||
- 	    !memcmp("SWAPSPACE2",swsusp_header->sig, 10)) {
- 		memcpy(swsusp_header->orig_sig,swsusp_header->sig, 10);
-@@ -329,7 +332,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
- 		if (flags & SF_CRC32_MODE)
- 			swsusp_header->crc32 = handle->crc32;
- 		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
--				      swsusp_resume_block, swsusp_header, NULL);
-+				      swsusp_resume_block, swsusp_header_pg, NULL);
- 	} else {
- 		pr_err("Swap header not found!\n");
- 		error = -ENODEV;
-@@ -466,7 +469,7 @@ static int swap_write_page(struct swap_map_handle *handle, void *buf,
- 		offset = alloc_swapdev_block(root_swap);
- 		if (!offset)
- 			return -ENOSPC;
--		handle->cur->next_swap = offset;
-+		handle->cur->entries[NEXT_SWAP_INDEX] = offset;
- 		error = write_page(handle->cur, handle->cur_swap, hb);
- 		if (error)
- 			goto out;
-@@ -643,8 +646,8 @@ struct cmp_data {
- 	wait_queue_head_t done;                   /* compression done */
- 	size_t unc_len;                           /* uncompressed length */
- 	size_t cmp_len;                           /* compressed length */
--	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
--	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
-+	unsigned char *unc;                       /* uncompressed buffer */
-+	unsigned char *cmp;                       /* compressed buffer */
- };
- 
- /* Indicates the image size after compression */
-@@ -683,6 +686,45 @@ static int compress_threadfn(void *data)
- 	return 0;
- }
- 
-+static void free_cmp_data(struct cmp_data *data, unsigned nr_threads)
-+{
-+	int i;
-+
-+	if (!data)
-+		return;
-+
-+	for (i = 0; i < nr_threads; i++) {
-+		vfree(data[i].unc);
-+		vfree(data[i].cmp);
-+	}
-+
-+	vfree(data);
-+}
-+
-+static struct cmp_data *alloc_cmp_data(unsigned nr_threads)
-+{
-+	struct cmp_data *data = NULL;
-+	int i = -1;
-+
-+	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-+	if (!data)
-+		goto fail;
-+
-+	for (i = 0; i < nr_threads; i++) {
-+		data[i].unc = vzalloc(UNC_SIZE);
-+		if (!data[i].unc)
-+			goto fail;
-+		data[i].cmp = vzalloc(CMP_SIZE);
-+		if (!data[i].cmp)
-+			goto fail;
-+	}
-+
-+	return data;
-+fail:
-+	free_cmp_data(data, nr_threads);
-+	return NULL;
-+}
-+
- /**
-  * save_compressed_image - Save the suspend image data after compression.
-  * @handle: Swap map handle to use for saving the image.
-@@ -724,7 +766,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 		goto out_clean;
- 	}
- 
--	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-+	data = alloc_cmp_data(nr_threads);
- 	if (!data) {
- 		pr_err("Failed to allocate %s data\n", hib_comp_algo);
- 		ret = -ENOMEM;
-@@ -902,7 +944,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 			if (data[thr].cc)
- 				crypto_free_comp(data[thr].cc);
- 		}
--		vfree(data);
-+		free_cmp_data(data, nr_threads);
- 	}
- 	if (page) free_page((unsigned long)page);
- 
-@@ -1036,7 +1078,7 @@ static int get_swap_reader(struct swap_map_handle *handle,
- 			release_swap_reader(handle);
- 			return error;
- 		}
--		offset = tmp->map->next_swap;
-+		offset = tmp->map->entries[NEXT_SWAP_INDEX];
- 	}
- 	handle->k = 0;
- 	handle->cur = handle->maps->map;
-@@ -1150,8 +1192,8 @@ struct dec_data {
- 	wait_queue_head_t done;                   /* decompression done */
- 	size_t unc_len;                           /* uncompressed length */
- 	size_t cmp_len;                           /* compressed length */
--	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
--	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
-+	unsigned char *unc;                       /* uncompressed buffer */
-+	unsigned char *cmp;                       /* compressed buffer */
- };
- 
- /*
-@@ -1189,6 +1231,45 @@ static int decompress_threadfn(void *data)
- 	return 0;
- }
- 
-+static void free_dec_data(struct dec_data *data, unsigned nr_threads)
-+{
-+	int i;
-+
-+	if (!data)
-+		return;
-+
-+	for (i = 0; i < nr_threads; i++) {
-+		vfree(data[i].unc);
-+		vfree(data[i].cmp);
-+	}
-+
-+	vfree(data);
-+}
-+
-+static struct dec_data *alloc_dec_data(unsigned nr_threads)
-+{
-+	struct dec_data *data = NULL;
-+	int i = -1;
-+
-+	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-+	if (!data)
-+		goto fail;
-+
-+	for (i = 0; i < nr_threads; i++) {
-+		data[i].unc = vzalloc(UNC_SIZE);
-+		if (!data[i].unc)
-+			goto fail;
-+		data[i].cmp = vzalloc(CMP_SIZE);
-+		if (!data[i].cmp)
-+			goto fail;
-+	}
-+
-+	return data;
-+fail:
-+	free_dec_data(data, nr_threads);
-+	return NULL;
-+}
-+
- /**
-  * load_compressed_image - Load compressed image data and decompress it.
-  * @handle: Swap map handle to use for loading data.
-@@ -1231,7 +1312,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 		goto out_clean;
- 	}
- 
--	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-+	data = alloc_dec_data(nr_threads);
- 	if (!data) {
- 		pr_err("Failed to allocate %s data\n", hib_comp_algo);
- 		ret = -ENOMEM;
-@@ -1510,7 +1591,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 			if (data[thr].cc)
- 				crypto_free_comp(data[thr].cc);
- 		}
--		vfree(data);
-+		free_dec_data(data, nr_threads);
- 	}
- 	vfree(page);
- 
-@@ -1569,9 +1650,9 @@ int swsusp_check(bool exclusive)
- 	hib_resume_bdev_file = bdev_file_open_by_dev(swsusp_resume_device,
- 				BLK_OPEN_READ, holder, NULL);
- 	if (!IS_ERR(hib_resume_bdev_file)) {
--		clear_page(swsusp_header);
-+		clear_page(swsusp_header_pg);
- 		error = hib_submit_io(REQ_OP_READ, swsusp_resume_block,
--					swsusp_header, NULL);
-+					swsusp_header_pg, NULL);
- 		if (error)
- 			goto put;
- 
-@@ -1581,7 +1662,7 @@ int swsusp_check(bool exclusive)
- 			/* Reset swap signature now */
- 			error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
- 						swsusp_resume_block,
--						swsusp_header, NULL);
-+						swsusp_header_pg, NULL);
- 		} else {
- 			error = -EINVAL;
- 		}
-@@ -1631,12 +1712,12 @@ int swsusp_unmark(void)
- 	int error;
- 
- 	hib_submit_io(REQ_OP_READ, swsusp_resume_block,
--			swsusp_header, NULL);
-+			swsusp_header_pg, NULL);
- 	if (!memcmp(HIBERNATE_SIG,swsusp_header->sig, 10)) {
- 		memcpy(swsusp_header->sig,swsusp_header->orig_sig, 10);
- 		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
- 					swsusp_resume_block,
--					swsusp_header, NULL);
-+					swsusp_header_pg, NULL);
- 	} else {
- 		pr_err("Cannot find swsusp signature!\n");
- 		error = -ENODEV;
-@@ -1653,9 +1734,11 @@ int swsusp_unmark(void)
- 
- static int __init swsusp_header_init(void)
- {
--	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
--	if (!swsusp_header)
-+	swsusp_header_pg = (char *)__get_free_page(GFP_KERNEL);
-+	if (!swsusp_header_pg)
- 		panic("Could not allocate memory for swsusp_header\n");
-+	swsusp_header = (struct swsusp_header *)(swsusp_header_pg +
-+				PAGE_SIZE - sizeof(struct swsusp_header));
- 	return 0;
- }
- 
--- 
-2.43.0
 
+
+Test Regressions
+---------------- =
+
+
+
+platform                    | arch | lab         | compiler | defconfig    =
+      | regressions
+----------------------------+------+-------------+----------+--------------=
+------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/670cf4f3d72eac39f3c8685e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.12-rc2-33-g54ad5=
+ae82ff89/arm/multi_v7_defconfig/gcc-12/lab-broonie/baseline-stm32mp157a-dhc=
+or-avenger96.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.12-rc2-33-g54ad5=
+ae82ff89/arm/multi_v7_defconfig/gcc-12/lab-broonie/baseline-stm32mp157a-dhc=
+or-avenger96.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/670cf4f3d72eac39f3c86=
+85f
+        new failure (last pass: v6.12-rc2-21-g04fe2b1b0ff57) =
+
+ =20
 
