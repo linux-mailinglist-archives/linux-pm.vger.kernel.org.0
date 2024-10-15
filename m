@@ -1,81 +1,118 @@
-Return-Path: <linux-pm+bounces-15650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E017899E6AB
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 13:44:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D46A199E84F
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 14:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3F42284BAC
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 11:44:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 896BF1F2263E
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 12:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E93B1EABAB;
-	Tue, 15 Oct 2024 11:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ee+LUZmf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F8871E7658;
+	Tue, 15 Oct 2024 12:04:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0361E884C;
-	Tue, 15 Oct 2024 11:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505031CFEA9;
+	Tue, 15 Oct 2024 12:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728992630; cv=none; b=OPLwdfpF2GFQUa/jsgC/Acj9iE5MwhY2DWWVgIoCNsbGPM9cfI/og+Q6GIITlut1aHAfImI9fnvWY9p74+P7fC2sQJXN9HGPsgHQbEp9hxNjZoXWK5fHom9FMZ8Grt9khblp6bn/vuJk2YsmO/EbwBw8EdB9UcE/RQXZcdmAAtI=
+	t=1728993860; cv=none; b=lvXbWwLTgGFf63WoguD3Bvd41rw9tcL+hembZRvIrDQY+84x2PR5gQ+gx33Rb4AKaGNy37csJomnCXcVOunD98yveXr2HmQq4zdbNx1EBRbT36AXUV2vLOE6WNERXqejKGHz+kPK/JPtzC1lZ/cHl7kKEsIgaFUV/S9m7rNULoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728992630; c=relaxed/simple;
-	bh=mo/gQH4hkR/5aTytPaB8K9yOU0NG0/ishx8d4c82Usw=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=j2stq3vWEIT599VbHH77BSTAHufFAJwH3V8a4ga0NyeA/Xd9OTVxIPXWK8EIv0LIqVPevDCpl0IGsfkA+Vj3PjOn2y0FhVX6FC2SCbGc99sSWcYVDvz4IUKdpZSvRLfukwaNK1VnNGbbaP2ivcP8oq6jGMtm+fzAlWPpvLTyrH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ee+LUZmf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01EDBC4CEC6;
-	Tue, 15 Oct 2024 11:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728992630;
-	bh=mo/gQH4hkR/5aTytPaB8K9yOU0NG0/ishx8d4c82Usw=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=ee+LUZmf7X/dLPb6sy14WZNVzdqMubo1HQky6XpYfr+9FhlTkGzNGrfm1DRF80VgY
-	 5V1cwcbdKpBYQSt1Qy27MOoMy8NYuwRFuc7crB3zm3iplC1RFJNS/7EJJNyujsjxar
-	 9ylTuS9UovxQldRhGL0ONByc8Qt1sGdhwGaSjZcxKUnHwYvgF1NeQ/iSZVPQnjGJiM
-	 80NDUlbOSN1ZCre1Eft7KAGtklR0eID082lIydag+LrnXTh3hBn+jXI50xr4cZhdlq
-	 apb4ydR1nPKVw/g1ZPrYA0iAm58wAemZC7Yq3vMxQsfttUfN/FWlW652KZ+1FVEDh3
-	 hBWrwmNkQn2jw==
-From: Lee Jones <lee@kernel.org>
-To: devicetree@vger.kernel.org, Lee Jones <lee@kernel.org>, 
- linux-kernel@vger.kernel.org, tony@atomide.com, 
- Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, khilman@baylibre.com, 
- linux-omap@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>, Andreas Kemnade <andreas@kemnade.info>
-In-Reply-To: <20241007150120.1416698-3-andreas@kemnade.info>
-References: <20241007150120.1416698-1-andreas@kemnade.info>
- <20241007150120.1416698-3-andreas@kemnade.info>
-Subject: Re: (subset) [PATCH v4 2/4] dt-bindings: mfd: twl: add charger
- node also for TWL603x
-Message-Id: <172899262774.511730.12889214471457383320.b4-ty@kernel.org>
-Date: Tue, 15 Oct 2024 12:43:47 +0100
+	s=arc-20240116; t=1728993860; c=relaxed/simple;
+	bh=XMjnB8RwZmkonCHDLqHmGR5FGhVnHjb/lhHRhE0YbNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kv9dFTm312wBJG2IFsESHrUgPeC1o76Kp92BCRIr9yVzxpdiWKJ02bc0W5uKyk8QXbaNx00syVjgSGpoHoAMx85yeAmqJZlEf2XmWGnfHedYfVo+BgjvO9/stERJY95qz30PsdnBDaylWxAPa4mpfreK2PwsN1JGV8oIGY0kHTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258F0C4CEC6;
+	Tue, 15 Oct 2024 12:04:14 +0000 (UTC)
+Date: Tue, 15 Oct 2024 13:04:12 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org,
+	arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
+	harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com,
+	cl@gentwo.org, misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+	konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
+ smp_cond_load_relaxed()
+Message-ID: <Zw5aPAuVi5sxdN5-@arm.com>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
+ <20240925232425.2763385-2-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925232425.2763385-2-ankur.a.arora@oracle.com>
 
-On Mon, 07 Oct 2024 17:01:18 +0200, Andreas Kemnade wrote:
-> Also the TWL603X devices have a charger, so allow to specify it here.
-> 
-> 
+On Wed, Sep 25, 2024 at 04:24:15PM -0700, Ankur Arora wrote:
+> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> index 9b6d90a72601..fc1204426158 100644
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -21,21 +21,20 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+>  
+>  	raw_local_irq_enable();
+>  	if (!current_set_polling_and_test()) {
+> -		unsigned int loop_count = 0;
+>  		u64 limit;
+>  
+>  		limit = cpuidle_poll_time(drv, dev);
+>  
+>  		while (!need_resched()) {
+> -			cpu_relax();
+> -			if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> -				continue;
+> -
+> -			loop_count = 0;
+> +			unsigned int loop_count = 0;
+>  			if (local_clock_noinstr() - time_start > limit) {
+>  				dev->poll_time_limit = true;
+>  				break;
+>  			}
+> +
+> +			smp_cond_load_relaxed(&current_thread_info()->flags,
+> +					      VAL & _TIF_NEED_RESCHED ||
+> +					      loop_count++ >= POLL_IDLE_RELAX_COUNT);
 
-Applied, thanks!
+The above is not guaranteed to make progress if _TIF_NEED_RESCHED is
+never set. With the event stream enabled on arm64, the WFE will
+eventually be woken up, loop_count incremented and the condition would
+become true. However, the smp_cond_load_relaxed() semantics require that
+a different agent updates the variable being waited on, not the waiting
+CPU updating it itself. Also note that the event stream can be disabled
+on arm64 on the kernel command line.
 
-[2/4] dt-bindings: mfd: twl: add charger node also for TWL603x
-      commit: 8a2ef90ff7924250db535454ef92ba2961b80fba
+Does the code above break any other architecture? I'd say if you want
+something like this, better introduce a new smp_cond_load_timeout()
+API. The above looks like a hack that may only work on arm64 when the
+event stream is enabled.
 
---
-Lee Jones [李琼斯]
+A generic option is udelay() (on arm64 it would use WFE/WFET by
+default). Not sure how important it is for poll_idle() but the downside
+of udelay() that it won't be able to also poll need_resched() while
+waiting for the timeout. If this matters, you could instead make smaller
+udelay() calls. Yet another problem, I don't know how energy efficient
+udelay() is on x86 vs cpu_relax().
 
+So maybe an smp_cond_load_timeout() would be better, implemented with
+cpu_relax() generically and the arm64 would use LDXR, WFE and rely on
+the event stream (or fall back to cpu_relax() if the event stream is
+disabled).
+
+-- 
+Catalin
 
