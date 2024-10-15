@@ -1,253 +1,123 @@
-Return-Path: <linux-pm+bounces-15678-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FAF999F400
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:26:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 462A399F3E1
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:19:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0848B1F240A9
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:26:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3E87B20DA3
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B381FAF13;
-	Tue, 15 Oct 2024 17:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE9E1F76CF;
+	Tue, 15 Oct 2024 17:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="Mfc8Y4JZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMC7MkId"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82011FAEFA;
-	Tue, 15 Oct 2024 17:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C71D514C;
+	Tue, 15 Oct 2024 17:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729013156; cv=none; b=Iy6iH9aebE3xs0lJV/WWTI0pnOuws1t8wpn1ItkPyXz2cXB+1m0iosExu4pus3lw0itbTN0ZJPX1oxQ7yQNuhYr+AmDBIClcfpGtZ8Z3M1RvwFJUzxIUW1W1wfxm5aodu2CFaVJqL1qmA8qS8RJ3vhyTSBPD+YLDpuzXYv9cogk=
+	t=1729012742; cv=none; b=n1pW9J+8266TZkBuwQ9TYoC5hdnUxmxhYmcRXhTNpkYhK/cf+G2JHMMapbQg/Zj2mC9p7slP3/mEC+E04nOS8uide5vet50zA7n/HUI/+XYKseoxI2oB0X0fgoKLUJ6zpStY2Kku7iA14KGqUjUlImtxwbJva0biXzejxGKol7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729013156; c=relaxed/simple;
-	bh=oztAA0ZEr8ALi79MZ8lt5XVT9ypqqdhFgTyRDxHAlOQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=UNF2RLT9eNuS+VeVcZYZLJLsj1PVYgdvf65YhwZ8x96TZNFxOhKkxSR5WaJPUM18WaWLO17cDhlzp3GoJOo4AxRrfyflYn4qkfGQKWQ2JLOefwPOsn0AfC1QO//nN01oMJEqLY0Ta+7MonbCE15ZoWzc9Vj0HhFaxOO3aY9H3+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=Mfc8Y4JZ; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1729012633;
-	bh=oztAA0ZEr8ALi79MZ8lt5XVT9ypqqdhFgTyRDxHAlOQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=Mfc8Y4JZQxrBiku2lskGuhzklrMFOH5ILuyqUjOPO2aQH5VYprpcBCZpkkgiFDzsO
-	 0azy0TcH9MVMmTlrEWn23X/l7qTj3gCdj6ZQRK9FRkNZi1HuCOQ+Vb6WXdAQzzaR2u
-	 s3/o7IEnIAqCPK1RDIbsucRsonzVO7deGbv9XnC4=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id CF53D401D1; Tue, 15 Oct 2024 10:17:13 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id CD932400C9;
-	Tue, 15 Oct 2024 10:17:13 -0700 (PDT)
-Date: Tue, 15 Oct 2024 10:17:13 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org, 
-    kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    linux-kernel@vger.kernel.org, will@kernel.org, tglx@linutronix.de, 
-    mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, 
-    x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com, 
-    vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
-    peterz@infradead.org, arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, 
-    harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com, 
-    misono.tomohiro@fujitsu.com, maobibo@loongson.cn, 
-    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
-    konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
- smp_cond_load_relaxed()
-In-Reply-To: <Zw6dZ7HxvcHJaDgm@arm.com>
-Message-ID: <1e56e83e-83b3-d4fd-67a8-0bc89f3e3d20@gentwo.org>
-References: <20240925232425.2763385-1-ankur.a.arora@oracle.com> <20240925232425.2763385-2-ankur.a.arora@oracle.com> <Zw5aPAuVi5sxdN5-@arm.com> <086081ed-e2a8-508d-863c-21f2ff7c5490@gentwo.org> <Zw6dZ7HxvcHJaDgm@arm.com>
+	s=arc-20240116; t=1729012742; c=relaxed/simple;
+	bh=/4d7EoBzIlhcHDH9qkC6J52wMGKWA7EO9n7isAB5FvA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rcj1tZMkPiqVRHOyG/UzPHMLH45fn9PGeYJTRwGux5/WDcN/dfaNZ1r9T50FHiAi5jIqlZ8/FDV6U2h7xtmZSwrRishV6EIq3OjX6lFKlWvj+R7SjJy9fdovB43OeuqnuAne10ma+x9rWrVlLxKjsOTl39AiG6AImj3QTrQ3T2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMC7MkId; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c960af31daso4320765a12.3;
+        Tue, 15 Oct 2024 10:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729012739; x=1729617539; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSRsu/greOiguhxWKwTVAbA1IuBqHC3TjNHFAMMX7g8=;
+        b=NMC7MkIdTzN5NSzZsXZklkGTBMOkkMmZUDU9h8oaWw42bA6mp4g1GqzFPAbSeugQmx
+         uxEwhvzGltDWXSfUjHLvlfPwh17kM3OQGOtCV5Dp1yZozzuPam0UOdafOSt8R/1ROqiH
+         JzPp4etNY1j+cOFLXVQLI8/SikXxxvuxgq+zZCyIv81UswSDTlSeU5Mxf9UDb/j21svX
+         QU/A971st+QJp7OwcLk5qPkYyGiRSCRobWAIfBCbVt1rqyt+G/HHT63oIC0UJ7kmvHnQ
+         2XuL9rATgsGZ0O2PDXBgQC2SNkcaYOwaB07kKr0vfWuB+sj/J335l7lqXAfpYg7TrowE
+         M3iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729012739; x=1729617539;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zSRsu/greOiguhxWKwTVAbA1IuBqHC3TjNHFAMMX7g8=;
+        b=c49CzxF6BykYp9DC+N6MZBdiMUD+Nr5Gwa5bdU+lfTouV4aGANbB4PUeyd4ohxqixi
+         KGlb5J5UhMd/YdDmJJuueU5urAY8anLtcQ6PSQFf2U2QSu2snDf+ZtzsTIXKFWqvs9nB
+         rBT7uYHUE1qJcDi3GLyOtNMZsPnFsCJnArxUIakLFAXeopDiZnRUzjLvCEtMTdGZxaeK
+         70fVliFfZPLw4WLjbSXHh/5RZ6Iw4wKajpy2JlY130shsNYYirzg2MMWRp0b063zkGrC
+         NwtHJXYWuVHhy//XkzJtMqReIIBZYCaNqv8UEy9A764N+jRC+snPMPhrRtcmtsID5T6k
+         JQKA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4D73cAYhXkupaOYdJB4Yi4jfCr5nxIXwQ+Lf54OCi7uKNIx9Ymo0EPGlQZz0do9E6/PIlin8/n3HIZRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9FeyvX+tXBjgWWn7eN4nPBBeAFixx22M4M9dJXSGrZ3/CKhwt
+	aW04k92ZsNMI5FzKXYQywaIUpbojA1y4d/WjAvwzYqgDK0V6AbG6
+X-Google-Smtp-Source: AGHT+IEguhQUTD1gQ7IIpJaup7vCYhfOUC8FaXMG8j8bXdOvxgWzgi4JiTqF9brhLY3lJq9JtSN/rw==
+X-Received: by 2002:a05:6402:51cd:b0:5c9:5ac1:df6c with SMTP id 4fb4d7f45d1cf-5c95ac1e675mr8462466a12.33.1729012739130;
+        Tue, 15 Oct 2024 10:18:59 -0700 (PDT)
+Received: from emdj-bno.. (0x5da5fe69.static.cust.fastspeed.dk. [93.165.254.105])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c98d507a14sm911763a12.49.2024.10.15.10.18.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 10:18:58 -0700 (PDT)
+From: juhl.emildahl@gmail.com
+X-Google-Original-From: emdj@bang-olufsen.dk
+To: rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Emil Dahl Juhl <emdj@bang-olufsen.dk>
+Subject: [PATCH RESEND] tools/lib/thermal: fix sampling handler context ptr
+Date: Tue, 15 Oct 2024 19:18:26 +0200
+Message-ID: <20241015171826.170154-1-emdj@bang-olufsen.dk>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1657094188-1729012633=:314176"
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Emil Dahl Juhl <emdj@bang-olufsen.dk>
 
---8323329-1657094188-1729012633=:314176
-Content-Type: text/plain; charset=US-ASCII
+The sampling handler, provided by the user alongside a void* context,
+was invoked with an internal structure instead of the user context.
 
-On Tue, 15 Oct 2024, Catalin Marinas wrote:
+Correct the invocation of the sampling handler to pass the user context
+pointer instead.
 
-> > Setting of need_resched() from another processor involves sending an IPI
-> > after that was set. I dont think we need to smp_cond_load_relaxed since
-> > the IPI will cause an event. For ARM a WFE would be sufficient.
->
-> I'm not worried about the need_resched() case, even without an IPI it
-> would still work.
->
-> The loop_count++ side of the condition is supposed to timeout in the
-> absence of a need_resched() event. You can't do an smp_cond_load_*() on
-> a variable that's only updated by the waiting CPU. Nothing guarantees to
-> wake it up to update the variable (the event stream on arm64, yes, but
-> that's generic code).
+Note that the approach taken is similar to that in events.c, and will
+reduce the chances of this mistake happening if additional sampling
+callbacks are added.
 
-Hmm... I have WFET implementation here without smp_cond modelled after
-the delay() implementation ARM64 (but its not generic and there is
-an additional patch required to make this work. Intermediate patch
-attached)
-
-
-From: Christoph Lameter (Ampere) <cl@gentwo.org>
-Subject: [Haltpoll: Implement waiting using WFET
-
-Use WFET if the hardware supports it to implement
-a wait until something happens to wake up the cpu.
-
-If WFET is not available then use the stream event
-source to periodically wake up until an event happens
-or the timeout expires.
-
-The smp_cond_wait() is not necessary because the scheduler
-will create an event on the targeted cpu by sending an IPI.
-
-Without cond_wait we can simply take the basic approach
-from the delay() function and customize it a bit.
-
-Signed-off-by: Christoph Lameter <cl@linux.com>
-
+Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
+Signed-off-by: Emil Dahl Juhl <emdj@bang-olufsen.dk>
 ---
- drivers/cpuidle/poll_state.c | 43 +++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+ tools/lib/thermal/sampling.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Index: linux/drivers/cpuidle/poll_state.c
-===================================================================
---- linux.orig/drivers/cpuidle/poll_state.c
-+++ linux/drivers/cpuidle/poll_state.c
-@@ -5,48 +5,41 @@
+diff --git a/tools/lib/thermal/sampling.c b/tools/lib/thermal/sampling.c
+index 70577423a9f0..f67c1f9ea1d7 100644
+--- a/tools/lib/thermal/sampling.c
++++ b/tools/lib/thermal/sampling.c
+@@ -16,6 +16,8 @@ static int handle_thermal_sample(struct nl_msg *n, void *arg)
+ 	struct thermal_handler_param *thp = arg;
+ 	struct thermal_handler *th = thp->th;
 
- #include <linux/cpuidle.h>
- #include <linux/sched.h>
--#include <linux/sched/clock.h>
- #include <linux/sched/idle.h>
--
--#ifdef CONFIG_ARM64
--/*
-- * POLL_IDLE_RELAX_COUNT determines how often we check for timeout
-- * while polling for TIF_NEED_RESCHED in thread_info->flags.
-- *
-- * Set this to a low value since arm64, instead of polling, uses a
-- * event based mechanism.
-- */
--#define POLL_IDLE_RELAX_COUNT	1
--#else
--#define POLL_IDLE_RELAX_COUNT	200
--#endif
-+#include <clocksource/arm_arch_timer.h>
-
- static int __cpuidle poll_idle(struct cpuidle_device *dev,
- 			       struct cpuidle_driver *drv, int index)
- {
--	u64 time_start;
--
--	time_start = local_clock_noinstr();
-+	const cycles_t start = get_cycles();
-
- 	dev->poll_time_limit = false;
-
- 	raw_local_irq_enable();
- 	if (!current_set_polling_and_test()) {
--		u64 limit;
-
--		limit = cpuidle_poll_time(drv, dev);
-+		const cycles_t end = start + ARCH_TIMER_NSECS_TO_CYCLES(cpuidle_poll_time(drv, dev));
-
- 		while (!need_resched()) {
--			unsigned int loop_count = 0;
--			if (local_clock_noinstr() - time_start > limit) {
--				dev->poll_time_limit = true;
--				break;
--			}
-
--			smp_cond_load_relaxed(&current_thread_info()->flags,
--					      VAL & _TIF_NEED_RESCHED ||
--					      loop_count++ >= POLL_IDLE_RELAX_COUNT);
-+			if (alternative_has_cap_unlikely(ARM64_HAS_WFXT)) {
++	arg = thp->arg;
 +
-+				/* We can power down for a configurable interval while waiting */
-+				while (!need_resched() && get_cycles() < end)
-+						wfet(end);
-+
-+			} else if (arch_timer_evtstrm_available()) {
-+				const cycles_t timer_period = ARCH_TIMER_USECS_TO_CYCLES(ARCH_TIMER_EVT_STREAM_PERIOD_US);
-+
-+				/* Wake up periodically during evstream events */
-+				while (!need_resched() && get_cycles() + timer_period <= end)
-+						wfe();
-+			}
- 		}
-+
-+		/* In case time is not up yet due to coarse time intervals above */
-+		while (!need_resched() && get_cycles() < end)
-+					cpu_relax();
- 	}
- 	raw_local_irq_disable();
+ 	genlmsg_parse(nlh, 0, attrs, THERMAL_GENL_ATTR_MAX, NULL);
 
---8323329-1657094188-1729012633=:314176
-Content-Type: text/plain; charset=US-ASCII; name=export_nsecs_to_cycles
-Content-Transfer-Encoding: BASE64
-Content-ID: <8127300c-6816-9bbd-c067-979ed715171d@gentwo.org>
-Content-Description: arch timr mods
-Content-Disposition: attachment; filename=export_nsecs_to_cycles
+ 	switch (genlhdr->cmd) {
+--
+2.45.0
 
-RnJvbTogQ2hyaXN0b3BoIExhbWV0ZXIgKEFtcGVyZSkgPGNsQGxpbnV4LmNv
-bT4NCg0KTW92ZSB0aGUgY29udmVyc2lvbiBmcm9tIHRpbWUgdG8gY3ljbGVz
-IG9mIGFyY2hfdGltZXINCmludG8gYXJjaF90aW1lci5oLiBBZGQgbnNlYyBj
-b252ZXJzaW9uIHNpbmNlIHdlIHdpbGwgbmVlZCB0aGF0IHNvb24uDQoNClNp
-Z25lZC1vZmYtYnk6IENocmlzdG9waCBMYW1ldGVyIDxjbEBsaW51eC5jb20+
-DQoNCkluZGV4OiBsaW51eC9hcmNoL2FybTY0L2xpYi9kZWxheS5jDQo9PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09DQotLS0gbGludXgub3JpZy9hcmNoL2FybTY0
-L2xpYi9kZWxheS5jDQorKysgbGludXgvYXJjaC9hcm02NC9saWIvZGVsYXku
-Yw0KQEAgLTE1LDE0ICsxNSw2IEBADQogDQogI2luY2x1ZGUgPGNsb2Nrc291
-cmNlL2FybV9hcmNoX3RpbWVyLmg+DQogDQotI2RlZmluZSBVU0VDU19UT19D
-WUNMRVModGltZV91c2VjcykJCQlcDQotCXhsb29wc190b19jeWNsZXMoKHRp
-bWVfdXNlY3MpICogMHgxMEM3VUwpDQotDQotc3RhdGljIGlubGluZSB1bnNp
-Z25lZCBsb25nIHhsb29wc190b19jeWNsZXModW5zaWduZWQgbG9uZyB4bG9v
-cHMpDQotew0KLQlyZXR1cm4gKHhsb29wcyAqIGxvb3BzX3Blcl9qaWZmeSAq
-IEhaKSA+PiAzMjsNCi19DQotDQogdm9pZCBfX2RlbGF5KHVuc2lnbmVkIGxv
-bmcgY3ljbGVzKQ0KIHsNCiAJY3ljbGVzX3Qgc3RhcnQgPSBnZXRfY3ljbGVz
-KCk7DQpAQCAtMzksNyArMzEsNyBAQCB2b2lkIF9fZGVsYXkodW5zaWduZWQg
-bG9uZyBjeWNsZXMpDQogCQkJd2ZldChlbmQpOw0KIAl9IGVsc2UgCWlmIChh
-cmNoX3RpbWVyX2V2dHN0cm1fYXZhaWxhYmxlKCkpIHsNCiAJCWNvbnN0IGN5
-Y2xlc190IHRpbWVyX2V2dF9wZXJpb2QgPQ0KLQkJCVVTRUNTX1RPX0NZQ0xF
-UyhBUkNIX1RJTUVSX0VWVF9TVFJFQU1fUEVSSU9EX1VTKTsNCisJCQlBUkNI
-X1RJTUVSX1VTRUNTX1RPX0NZQ0xFUyhBUkNIX1RJTUVSX0VWVF9TVFJFQU1f
-UEVSSU9EX1VTKTsNCiANCiAJCXdoaWxlICgoZ2V0X2N5Y2xlcygpIC0gc3Rh
-cnQgKyB0aW1lcl9ldnRfcGVyaW9kKSA8IGN5Y2xlcykNCiAJCQl3ZmUoKTsN
-CkBAIC01Miw3ICs0NCw3IEBAIEVYUE9SVF9TWU1CT0woX19kZWxheSk7DQog
-DQogaW5saW5lIHZvaWQgX19jb25zdF91ZGVsYXkodW5zaWduZWQgbG9uZyB4
-bG9vcHMpDQogew0KLQlfX2RlbGF5KHhsb29wc190b19jeWNsZXMoeGxvb3Bz
-KSk7DQorCV9fZGVsYXkoYXJjaF90aW1lcl94bG9vcHNfdG9fY3ljbGVzKHhs
-b29wcykpOw0KIH0NCiBFWFBPUlRfU1lNQk9MKF9fY29uc3RfdWRlbGF5KTsN
-CiANCkluZGV4OiBsaW51eC9pbmNsdWRlL2Nsb2Nrc291cmNlL2FybV9hcmNo
-X3RpbWVyLmgNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCi0tLSBsaW51eC5v
-cmlnL2luY2x1ZGUvY2xvY2tzb3VyY2UvYXJtX2FyY2hfdGltZXIuaA0KKysr
-IGxpbnV4L2luY2x1ZGUvY2xvY2tzb3VyY2UvYXJtX2FyY2hfdGltZXIuaA0K
-QEAgLTkwLDYgKzkwLDE5IEBAIGV4dGVybiB1NjQgKCphcmNoX3RpbWVyX3Jl
-YWRfY291bnRlcikodm8NCiBleHRlcm4gc3RydWN0IGFyY2hfdGltZXJfa3Zt
-X2luZm8gKmFyY2hfdGltZXJfZ2V0X2t2bV9pbmZvKHZvaWQpOw0KIGV4dGVy
-biBib29sIGFyY2hfdGltZXJfZXZ0c3RybV9hdmFpbGFibGUodm9pZCk7DQog
-DQorI2luY2x1ZGUgPGxpbnV4L2RlbGF5Lmg+DQorDQorc3RhdGljIGlubGlu
-ZSB1bnNpZ25lZCBsb25nIGFyY2hfdGltZXJfeGxvb3BzX3RvX2N5Y2xlcyh1
-bnNpZ25lZCBsb25nIHhsb29wcykNCit7DQorCXJldHVybiAoeGxvb3BzICog
-bG9vcHNfcGVyX2ppZmZ5ICogSFopID4+IDMyOw0KK30NCisNCisjZGVmaW5l
-IEFSQ0hfVElNRVJfVVNFQ1NfVE9fQ1lDTEVTKHRpbWVfdXNlY3MpCQkJXA0K
-KwlhcmNoX3RpbWVyX3hsb29wc190b19jeWNsZXMoKHRpbWVfdXNlY3MpICog
-MHgxMEM3VUwpDQorDQorI2RlZmluZSBBUkNIX1RJTUVSX05TRUNTX1RPX0NZ
-Q0xFUyh0aW1lX25zZWNzKQkJCVwNCisJYXJjaF90aW1lcl94bG9vcHNfdG9f
-Y3ljbGVzKCh0aW1lX25zZWNzKSAqIDB4NVVMKQ0KKw0KICNlbHNlDQogDQog
-c3RhdGljIGlubGluZSB1MzIgYXJjaF90aW1lcl9nZXRfcmF0ZSh2b2lkKQ0K
-
---8323329-1657094188-1729012633=:314176--
 
