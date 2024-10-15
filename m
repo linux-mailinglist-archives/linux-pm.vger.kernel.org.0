@@ -1,128 +1,165 @@
-Return-Path: <linux-pm+bounces-15639-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15640-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19FE799DDBB
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 07:55:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 653D899DE06
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 08:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B7091C21475
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 05:55:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24854281A01
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 06:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A761779BB;
-	Tue, 15 Oct 2024 05:55:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0141714C9;
+	Tue, 15 Oct 2024 06:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pQzcS5yC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="irBSJEDR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A13A173357;
-	Tue, 15 Oct 2024 05:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20762582;
+	Tue, 15 Oct 2024 06:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728971715; cv=none; b=XF5YWw1DS9+38Fl6nZaaZ271faqmYcuxWpwsCIPoJ59lf8n+Nc6i4McnYd0UYZUyKP1RQ+v1HPiUKSP3ge28JAeHUJlhVQB4fPVnGmaeOZGkveZ0nT05u59MwY5p5IFOZ1VzrOfQ/A1FUWGG/tV7F17g4Krg5L6v2K3dfQjGHWw=
+	t=1728972937; cv=none; b=bHWanLRSaeQSWkVljGdLNlRG2eg/plbnMzHizrDgN/I1/Q+wnCe8Lh/i7Umu0Q4PWwY6GoUVarTv1RlRFE26JkhvqEoM9FOLEXjP1xHmpxG7VAjfn9aF/N6nuUwIsFK7rtN+V1tJjjy8wWzf71FWD6myGogA+/yEj618746+8uM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728971715; c=relaxed/simple;
-	bh=kWLHVvcvN2bSXqY2RMOj0qilVEgJsGNToj1Exm2AhDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pfUUKeJJo+TFzWODXFIxyqvpBD75o7SCzj1WBACYEtmWZo+PsbXaLASlgLHUkLBcKQrhMV/0oaKAytKIow6EYmcUG+MKcqSsplL0uyaVxeizIE0AP9RFlQrPT9iys1kjTmFRzjTsrrgBcKKOW0NMAT7AgECCPPUMyjPvDtND20Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pQzcS5yC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0225EC4CEC7;
-	Tue, 15 Oct 2024 05:55:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728971714;
-	bh=kWLHVvcvN2bSXqY2RMOj0qilVEgJsGNToj1Exm2AhDk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pQzcS5yC3K7U2OtzrX9rJTMPbuxRjLQ/xE4Arr24JdSI122irbNpZKtg9JFDS5BAR
-	 uqtPQrhOmK0ymnIn1cz2zWQyybcNw6N9U4nEJmXGd/WDTQ/Z4GQmxMVoLZfaUg+v2d
-	 YDrRQ1Re6eyLMjQxlPf91GZ421QJIZ4rjMtJPRMbMjSLDKuBkPvmKo9lFyK3TMkI7c
-	 8jrpWZ5G6dy/ScldF/+n1sVM4+A4R4lBsl76kAYIpc1e5Pd9bhy51i1VwdwwYxZW3K
-	 jjUh+LDT3yBvxcu0HPKi+Pl+8/bfG8aApthurePHwd5k9S1/C14U0ME0mvgAMCffWi
-	 deWNravhRvZrw==
-Date: Tue, 15 Oct 2024 07:55:10 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Haylen Chu <heylenay@4d2.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang <jszhang@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: thermal: sophgo,cv1800-thermal: Add
- Sophgo CV1800 thermal
-Message-ID: <4ey46hxumhldwrbzalyw6xzn2l52cejggxvg6e3imus3qqzsjn@r55xpxvkpodu>
-References: <20241014073813.23984-1-heylenay@4d2.org>
- <20241014073813.23984-2-heylenay@4d2.org>
+	s=arc-20240116; t=1728972937; c=relaxed/simple;
+	bh=J3AEEHWFdXK99qmd51njSmIbev5atRLnRYTFUmdmIwU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tM3LlLQgTuK9RD+OWgbVPaTN4LrczfPV1qYmlJcS/Dw6r3dSNGXjJVdJJHAw+07C1fds2N9iQqwML/fNFtm337joZoU3WVmGul3UlAAxx7boBRRYI4hIVM4cjdOflq1xpF+FgNQEUojc2715UQ3D1VQvKC+TXpohaU9l480gaz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=irBSJEDR; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728972936; x=1760508936;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J3AEEHWFdXK99qmd51njSmIbev5atRLnRYTFUmdmIwU=;
+  b=irBSJEDRVbmiEtJJ1+puM78qFiDI5s7If0EclsKWYeji9vGboS/UyG9I
+   g9fMzFuSGJqU7ogcLRg4Qq2pSYZTQb9DZRGuJhJDk2YFwj0MKqXU9Cc31
+   rsASE9AYsitkjKZa/jnlMpku87m7m09yPnBTwxn5qF3fM4cKiPJVXIaMD
+   aSFLaX221DIBOR/hVNUWcMSmHs0lmoFCyeB4T3KxbpFHjtPnlvmMcQx7O
+   FUypEgVAJWqGkuWu3/+VhJudLnZjDmBpnVCmMJgmqPk8kW4Itb5GQHruu
+   rxy58SuVyZHBnh9qLxXaOXEbJno2Sd49uEj/1xfFasKNt+5PnnN0T+elf
+   w==;
+X-CSE-ConnectionGUID: fIY17HwZSQ6j1a2zVFyrpQ==
+X-CSE-MsgGUID: H4x5SoGoSUmvvTpVbHraAA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="39721986"
+X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
+   d="scan'208";a="39721986"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 23:15:35 -0700
+X-CSE-ConnectionGUID: oOMMFqeMR3u/cwaAPy56aw==
+X-CSE-MsgGUID: Cc8Kwl+kT0Ch4xj8sPpPpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
+   d="scan'208";a="101135730"
+Received: from rzhang1-mobl7.sh.intel.com ([10.238.6.124])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 23:15:30 -0700
+From: Zhang Rui <rui.zhang@intel.com>
+To: tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	rafael.j.wysocki@intel.com,
+	x86@kernel.org,
+	linux-pm@vger.kernel.org
+Cc: hpa@zytor.com,
+	peterz@infradead.org,
+	thorsten.blum@toblux.com,
+	yuntao.wang@linux.dev,
+	tony.luck@intel.com,
+	len.brown@intel.com,
+	srinivas.pandruvada@intel.com,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH V4] x86/apic: Always explicitly disarm TSC-deadline timer
+Date: Tue, 15 Oct 2024 14:15:22 +0800
+Message-Id: <20241015061522.25288-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241014073813.23984-2-heylenay@4d2.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 14, 2024 at 07:38:11AM +0000, Haylen Chu wrote:
-> Add devicetree binding documentation for thermal sensors integrated in
-> Sophgo CV1800 SoCs.
-> 
-> Signed-off-by: Haylen Chu <heylenay@4d2.org>
-> ---
->  .../thermal/sophgo,cv1800-thermal.yaml        | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
-> new file mode 100644
-> index 000000000000..14abeb7a272a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sophgo,cv1800-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sophgo CV1800 on-SoC Thermal Sensor
-> +
-> +maintainers:
-> +  - Haylen Chu <heylenay@4d2.org>
-> +
-> +description: Sophgo CV1800 on-SoC thermal sensor
-> +
-> +$ref: thermal-sensor.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sophgo,cv1800-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  sample-rate-hz:
-> +    minimum: 1
-> +    maximum: 1908
-> +    default: 1
+New processors have become pickier about the local APIC timer state
+before entering low power modes. These low power modes are used (for
+example) when you close your laptop lid and suspend. If you put your
+laptop in a bag in this unnecessarily-high-power state, it is likely
+to get quite toasty while it quickly sucks the battery dry.
 
-1. Why this is a property of a board?
-2. I do not see this property defined in any common schema and I am not
-sure if it even should. Sample rate appears from time to time, but not
-in context of thermal sensors, so this should have vendor prefix.
+The problem boils down to some CPUs' inability to power down until the
+kernel fully disables the local APIC timer. The current kernel code
+works in one-shot and periodic modes but does not work for deadline
+mode. Deadline mode has been the supported and preferred mode on
+Intel CPUs for over a decade and uses an MSR to drive the timer
+instead of an APIC register.
 
-Best regards,
-Krzysztof
+Disable the TSC Deadline timer in lapic_timer_shutdown() by writing to
+MSR_IA32_TSC_DEADLINE when in TSC-deadline mode. Also avoid writing
+to the initial-count register (APIC_TMICT) which is ignored in
+TSC-deadline mode.
+
+Note: The APIC_LVTT|=APIC_LVT_MASKED operation should theoretically be
+enough to tell the hardware that the timer will not fire in any of the
+timer modes. But mitigating AMD erratum 411[1] also requires clearing
+out APIC_TMICT. Solely setting APIC_LVT_MASKED is also ineffective in
+practice on Intel Lunar Lake systems, which is the motivation for this
+change.
+
+1. 411 Processor May Exit Message-Triggered C1E State Without an Interrupt if Local APIC Timer Reaches Zero - https://www.amd.com/content/dam/amd/en/documents/archived-tech-docs/revision-guides/41322_10h_Rev_Gd.pdf
+
+Cc: stable@vger.kernel.org
+Fixes: 279f1461432c ("x86: apic: Use tsc deadline for oneshot when available")
+Suggested-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Tested-by: Todd Brandt <todd.e.brandt@intel.com>
+---
+V2
+- Improve changelog
+V3
+- Subject and changelog rewrite
+- Check LAPIC Timer mode using APIC_LVTT value instead of extra CPU feature flag check
+- Avoid APIC_TMICT write which is ignored in TSC-deadline mode
+V4
+- Add back Fixes tag and stable tag which was missing in V3
+- Update patch recipients
+---
+ arch/x86/kernel/apic/apic.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 6513c53c9459..5436a4083065 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -440,7 +440,19 @@ static int lapic_timer_shutdown(struct clock_event_device *evt)
+ 	v = apic_read(APIC_LVTT);
+ 	v |= (APIC_LVT_MASKED | LOCAL_TIMER_VECTOR);
+ 	apic_write(APIC_LVTT, v);
+-	apic_write(APIC_TMICT, 0);
++
++	/*
++	 * Setting APIC_LVT_MASKED should be enough to tell the
++	 * hardware that this timer will never fire. But AMD
++	 * erratum 411 and some Intel CPU behavior circa 2024
++	 * say otherwise. Time for belt and suspenders programming,
++	 * mask the timer and zero the counter registers:
++	 */
++	if (v & APIC_LVT_TIMER_TSCDEADLINE)
++		wrmsrl(MSR_IA32_TSC_DEADLINE, 0);
++	else
++		apic_write(APIC_TMICT, 0);
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
 
