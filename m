@@ -1,124 +1,113 @@
-Return-Path: <linux-pm+bounces-15637-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15638-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BCF99DCFC
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 05:46:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40DEF99DDB4
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 07:52:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7018B20E97
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 03:46:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E04D51F21EA1
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 05:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D16A16EB5D;
-	Tue, 15 Oct 2024 03:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 728C6176FB4;
+	Tue, 15 Oct 2024 05:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lj6S8VVR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3cH8pKR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946C546B8;
-	Tue, 15 Oct 2024 03:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A4B17623F;
+	Tue, 15 Oct 2024 05:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728963998; cv=none; b=iWW/HIvdD5epifiTCMIwN6ZRgoESKUY7XC34pxWFmgYB9jmUffFxhgxC8wY9QN80I2TvLJ3qasNQu30aGGAlfj9x5PwbleUwitpL3xYHGGATyvGgVIyQGHmT7Q835VttEBuf1Cz5I8jHH1/vjE1/JGI1QSOuEGv/CPpfdJCee0c=
+	t=1728971558; cv=none; b=m7nZjmP3QJU2iiZWBHkr5t/WBmS88RTHmh50WXViXyq3830FuSpIjTMKBGMcFUDPUIugf3AMFbv6UnAP5CIJ1Y/D26z53peOBDAHG/pbhSGzIOhh49uBYCBk3zyHX+AaPl+dNCCx0zcfSa07EiNSCQLriSI7wp7ypZPyu0zPdO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728963998; c=relaxed/simple;
-	bh=VhP4ufTp43pJg/B1YzAD8L/O5ZhgPE90KANbJg7mQno=;
+	s=arc-20240116; t=1728971558; c=relaxed/simple;
+	bh=gjwGiR+lw8swhi0FBcZZp7bPpunXeeBui+cUFrOI3EA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QVmBBOqjoWrCLEsINyPAniBcLZXfAS8EXPcArVLM6HJzQRMurUto8yjxp3ZHecgOkBNW2NPl1AgDTS1x3OfUHK6SmS6/lrEtvuVIQg4cg5NCubPVIXK3QT8/KdAcxfangze7eAhgftVRZhg1gQC0uMX7VHmDPuOu2yKHZXXNn+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lj6S8VVR; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728963997; x=1760499997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VhP4ufTp43pJg/B1YzAD8L/O5ZhgPE90KANbJg7mQno=;
-  b=lj6S8VVRdFFlUF7DscBtUFidf+3J41dgXnmXrGdNT7S2LFC/Yq4nvuOY
-   1EbqYBpXzomDa/KWYuNPugK6Zhr3hr5kJ6liSiO3EJ0LqU49kRU9qhMQN
-   n9Lbx+4iRLsTVUSYQDDtuqkTYGCPO0t5O1pHtiw+ZKzv2qfvTbG5rc8uS
-   qUnjipaEms/oc+2CL9fdAFfUeqA1card6bAhOhC98BTO0veJtmCqgOicB
-   8B7kYEuGe5/7tTIaiCvQbjRe/qEt95T8iGDoIONjZzrKZ2gxGMD8+JmDb
-   l3I0cttwJe8WE6fbVfG9XL5JmpiaVSReZNeOrTurK4JZvRZUdJ11eAvTb
-   Q==;
-X-CSE-ConnectionGUID: zz9aVldMS7W5QtnNsSM5hQ==
-X-CSE-MsgGUID: ezzSmEbtSCiPO7RRgiFp6A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="32030702"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="32030702"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 20:46:36 -0700
-X-CSE-ConnectionGUID: bwm9j0/VTpKek/bv8SBTww==
-X-CSE-MsgGUID: xHSe1yZgSUWFVMsljU7kNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
-   d="scan'208";a="82789775"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 20:46:36 -0700
-Date: Mon, 14 Oct 2024 20:52:33 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Subject: Re: [PATCH v2 05/13] platform/x86: hfi: Introduce AMD Hardware
- Feedback Interface Driver
-Message-ID: <20241015035233.GA28522@ranerica-svr.sc.intel.com>
-References: <20241010193705.10362-1-mario.limonciello@amd.com>
- <20241010193705.10362-6-mario.limonciello@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TJEavKpQQIrGxiB7HOSVOAMhxpa9YJ9brEpKF2uf3wgzGcV/8jUdFSZT5z3pLu60L5aErhotp670O7QDQgxOXGY2dbNK0Xi+ZWeDscrOOqz9NsMMsguFsPnEC0DcBNk0iQ2atFlOKLp8KpBJbLXDIs8omONNC/T80dz0uauLUd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3cH8pKR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5050C4CEC7;
+	Tue, 15 Oct 2024 05:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728971557;
+	bh=gjwGiR+lw8swhi0FBcZZp7bPpunXeeBui+cUFrOI3EA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a3cH8pKRcQm+R7SqtNvAwMWjn5Hja1PiemGxo5EFTe88ND22q0ULdIBCFVwvJh1+r
+	 eYUxLZ9zD8nIRIx0bN7dfLTj6JHDCiLvuyrkC1P/JDTpvqF9Ud7lT2GP1E5X2teQuX
+	 zgsVuXL0VlMWmckhsYn2G8AUWWC4tIjqGFBebWx2LxQb1gUIPU4oPMyiERrQazD9IA
+	 Qno6aUjATKNr9gS3TnV4RSqPmhLUaPQ36kt/dKq4klLNlm0r9Y+4h0dLqpkR6/vOHP
+	 V1HkZsN1Nf0KSjERkBY+2vKPBrrVeUqvrTF9PaQoAnkITjQJyrH67W5O+K2JR9vYgR
+	 oV8oTtV67DNkg==
+Date: Tue, 15 Oct 2024 07:52:33 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Haylen Chu <heylenay@4d2.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang <jszhang@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: thermal: sophgo,cv1800-thermal: Add
+ Sophgo CV1800 thermal
+Message-ID: <cycdlsi3tb6nqgbzzmypmblpcxxqmn3slqcbf5mq2okw3lqrdr@ghvswymvnslp>
+References: <20241014073813.23984-1-heylenay@4d2.org>
+ <20241014073813.23984-2-heylenay@4d2.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241010193705.10362-6-mario.limonciello@amd.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20241014073813.23984-2-heylenay@4d2.org>
 
-On Thu, Oct 10, 2024 at 02:36:57PM -0500, Mario Limonciello wrote:
-> From: Perry Yuan <Perry.Yuan@amd.com>
+On Mon, Oct 14, 2024 at 07:38:11AM +0000, Haylen Chu wrote:
+> Add devicetree binding documentation for thermal sensors integrated in
+> Sophgo CV1800 SoCs.
 > 
-> The AMD Heterogeneous core design and Hardware Feedback Interface (HFI)
-> provide behavioral classification and a dynamically updated ranking table
-> for the scheduler to use when choosing cores for tasks.
+> Signed-off-by: Haylen Chu <heylenay@4d2.org>
+> ---
+>  .../thermal/sophgo,cv1800-thermal.yaml        | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
 > 
-> There are two CPU core types defined: `Classic Core` and `Dense Core`.
-> "Classic" cores are the standard performance cores, while "Dense" cores
-> are optimized for area and efficiency.
-> 
-> Heterogeneous compute refers to CPU implementations that are comprised
-> of more than one architectural class, each with two capabilities. This
-> means each CPU reports two separate capabilities: "perf" and "eff".
-> 
-> Each capability lists all core ranking numbers between 0 and 255, where
-> a higher number represents a higher capability.
-> 
-> Heterogeneous systems can also extend to more than two architectural
-> classes.
-> 
-> The purpose of the scheduling feedback mechanism is to provide information
-> to the operating system scheduler in real time, allowing the scheduler to
-> direct threads to the optimal core during task scheduling.
-> 
-> All core ranking data are provided by the BIOS via a shared memory ranking
-> table, which the driver reads and uses to update core capabilities to the
-> scheduler. When the hardware updates the table, it generates a platform
-> interrupt to notify the OS to read the new ranking table.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
+> diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
+> new file mode 100644
+> index 000000000000..14abeb7a272a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/sophgo,cv1800-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sophgo CV1800 on-SoC Thermal Sensor
+> +
+> +maintainers:
+> +  - Haylen Chu <heylenay@4d2.org>
+> +
+> +description: Sophgo CV1800 on-SoC thermal sensor
+> +
+> +$ref: thermal-sensor.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sophgo,cv1800-thermal
 
-I tried to find the HFI details on the documents in this "bug" but I could
-not find them. What document in specific could I look at?
+Not much improved, judging by other patches there is no "CV1800" SoC,
+but that's a family name.  Otherwise please point us to bindings or DTS
+using this SoC.
 
-Thanks and BR,
-Ricardo
+Best regards,
+Krzysztof
+
 
