@@ -1,164 +1,253 @@
-Return-Path: <linux-pm+bounces-15676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ACE099F3D3
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:16:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FAF999F400
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:26:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 289961F236AF
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:16:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0848B1F240A9
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2E81F9EDF;
-	Tue, 15 Oct 2024 17:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B381FAF13;
+	Tue, 15 Oct 2024 17:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k9ysL/1I"
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="Mfc8Y4JZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACC61F9EBA
-	for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 17:16:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82011FAEFA;
+	Tue, 15 Oct 2024 17:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729012592; cv=none; b=Qz9lSTJm/XssIMZ/6GaTSUrb5adbu9PW5iiOLUBEWd1kWV1btJDDCcbQJkNuh9N+PSNNyfj/yMbZZjWHaoNF5ujdazPA9RMXaSKgkfb+WatXMoTb37psrs+X5oack/05EjadVoS8qB+1+/J/5bvFG5cQsvlPexY7trJnLxq1+54=
+	t=1729013156; cv=none; b=Iy6iH9aebE3xs0lJV/WWTI0pnOuws1t8wpn1ItkPyXz2cXB+1m0iosExu4pus3lw0itbTN0ZJPX1oxQ7yQNuhYr+AmDBIClcfpGtZ8Z3M1RvwFJUzxIUW1W1wfxm5aodu2CFaVJqL1qmA8qS8RJ3vhyTSBPD+YLDpuzXYv9cogk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729012592; c=relaxed/simple;
-	bh=aqe7ZBAXHSE2gzwDaIJiDGMt8akPLQVMlvbhK5NT45Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DUGMhVPavMjaGhMBJ7Cmdx3DfvmyAbJO0gBjZboBAghOXzGaQzWABuG5T/ygAhb+oB/AlKVh9ptjRw4PDzzY2DPXCbmKDLrGw+zw28a8ahV8q3OtVPxfyWl3VR1AmuCpDvDI+a3XLXs21+SCqs5vTDdng4iBm1a6Xy/yMDPcBqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k9ysL/1I; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 15 Oct 2024 10:16:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729012583;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yw0BRkFp5Fq3zNmseLDS7BgS3nwlhhSku9PTDEcx65A=;
-	b=k9ysL/1Ifn3FGFggblukp1Eo7eWxiC94YkkDmiW+eIx7Z2qkCTpZr/39b66tE5EmHP5Ud8
-	yFPqwzKytZHX1ljq9MJbqNSmsUPocgUQ/PzredAkviNPxEBWqICQTKvMEcgPLoqVBC0nfM
-	OOvIGjkIz7nkQq+w6IjgWj+mICM0Oe8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: Re: [PATCH v5 4/5] KVM: selftests: Add test for PSCI SYSTEM_OFF2
-Message-ID: <Zw6jXEWwdW3S5Y6c@linux.dev>
-References: <20240926184546.833516-1-dwmw2@infradead.org>
- <20240926184546.833516-5-dwmw2@infradead.org>
- <ZvwWM7rQd075o6nb@linux.dev>
- <408b137dbf60ff4d189cbd98b7cf8cd833579f61.camel@infradead.org>
- <Zw6Svts5hqpIoKwN@linux.dev>
+	s=arc-20240116; t=1729013156; c=relaxed/simple;
+	bh=oztAA0ZEr8ALi79MZ8lt5XVT9ypqqdhFgTyRDxHAlOQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=UNF2RLT9eNuS+VeVcZYZLJLsj1PVYgdvf65YhwZ8x96TZNFxOhKkxSR5WaJPUM18WaWLO17cDhlzp3GoJOo4AxRrfyflYn4qkfGQKWQ2JLOefwPOsn0AfC1QO//nN01oMJEqLY0Ta+7MonbCE15ZoWzc9Vj0HhFaxOO3aY9H3+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=Mfc8Y4JZ; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1729012633;
+	bh=oztAA0ZEr8ALi79MZ8lt5XVT9ypqqdhFgTyRDxHAlOQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=Mfc8Y4JZQxrBiku2lskGuhzklrMFOH5ILuyqUjOPO2aQH5VYprpcBCZpkkgiFDzsO
+	 0azy0TcH9MVMmTlrEWn23X/l7qTj3gCdj6ZQRK9FRkNZi1HuCOQ+Vb6WXdAQzzaR2u
+	 s3/o7IEnIAqCPK1RDIbsucRsonzVO7deGbv9XnC4=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id CF53D401D1; Tue, 15 Oct 2024 10:17:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id CD932400C9;
+	Tue, 15 Oct 2024 10:17:13 -0700 (PDT)
+Date: Tue, 15 Oct 2024 10:17:13 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org, 
+    kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+    linux-kernel@vger.kernel.org, will@kernel.org, tglx@linutronix.de, 
+    mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, 
+    x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com, 
+    vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
+    peterz@infradead.org, arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, 
+    harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com, 
+    misono.tomohiro@fujitsu.com, maobibo@loongson.cn, 
+    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
+    konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
+ smp_cond_load_relaxed()
+In-Reply-To: <Zw6dZ7HxvcHJaDgm@arm.com>
+Message-ID: <1e56e83e-83b3-d4fd-67a8-0bc89f3e3d20@gentwo.org>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com> <20240925232425.2763385-2-ankur.a.arora@oracle.com> <Zw5aPAuVi5sxdN5-@arm.com> <086081ed-e2a8-508d-863c-21f2ff7c5490@gentwo.org> <Zw6dZ7HxvcHJaDgm@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zw6Svts5hqpIoKwN@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/mixed; boundary="8323329-1657094188-1729012633=:314176"
 
-On Tue, Oct 15, 2024 at 09:05:18AM -0700, Oliver Upton wrote:
-> On Sat, Oct 12, 2024 at 10:28:10AM +0100, David Woodhouse wrote:
-> > On Tue, 2024-10-01 at 08:33 -0700, Oliver Upton wrote:
-> > > On Thu, Sep 26, 2024 at 07:37:59PM +0100, David Woodhouse wrote:
-> > > > +       vm = setup_vm(guest_test_system_off2, &source, &target);
-> > > > +       vcpu_get_reg(target, KVM_REG_ARM_PSCI_VERSION, &psci_version);
-> > > > +       TEST_ASSERT(psci_version >= PSCI_VERSION(0, 2),
-> > > > +                   "Unexpected PSCI version %lu.%lu",
-> > > > +                   PSCI_VERSION_MAJOR(psci_version),
-> > > > +                   PSCI_VERSION_MINOR(psci_version));
-> > > > +
-> > > > +       if (psci_version < PSCI_VERSION(1,3))
-> > > > +               goto skip;
-> > > 
-> > > I'm not following this. Is there a particular reason why we'd want to
-> > > skip for v1.2 and fail the test for anything less than that?
-> > 
-> > These tests unconditionally set KVM_ARM_VCPU_PSCI_0_2 in setup_vm().
-> > Which is probably OK assuming support for that that predates
-> > KVM_CAP_ARM_SYSTEM_SUSPEND (which is already a TEST_REQUIRE() right at
-> > the start).
-> > 
-> > So the world is very broken if KVM actually starts a VM but the version
-> > isn't at least 0.2, and it seemed like it warranted an actual failure.
-> 
-> If we're looking at this from a testing lens then KVM coming up with any
-> PSCI version other than KVM_ARM_PSCI_LATEST (i.e. v1.3) is a bug. So
-> maybe we can tighten that assertion because...
-> 
-> > > Just do TEST_REQUIRE(psci_version >= PSCI_VERSION(1, 3)), it makes the
-> > > requirements obvious in the case someone runs new selftests on an old
-> > > kernel.
-> > 
-> > I don't think we want to put that in main() and skip the other checks
-> > that would run on earlier kernels.
-> 
-> Running KVM selftests on older kernels in a meaningful way isn't
-> something we support. At all. An example of this is commit
-> 8a53e1302133 ("KVM: selftests: Require KVM_CAP_USER_MEMORY2 for
-> tests that create memslots"), which skips ~everything for kernels older
-> than 6.8.
-> 
-> > (Even if we had easy access to
-> > psci_version without actually running a test and starting a VM).
-> > 
-> > I could put it into host_test_system_off2() which runs last (and
-> > comment the invocations in main() to say that they're in increasing
-> > order of PSCI version) to accommodate such). But then it seems that I'd
-> > be the target of this comment in ksft_exit_skip()...
-> > 
-> >         /*
-> >          * FIXME: several tests misuse ksft_exit_skip so produce
-> >          * something sensible if some tests have already been run
-> >          * or a plan has been printed.  Those tests should use
-> >          * ksft_test_result_skip or ksft_exit_fail_msg instead.
-> >          */
-> > 
-> > I suspect the real answer here is that the individual tests here be
-> > calling ksft_test_result_pass(), and the system_off2 one should call
-> > ksft_test_result_skip() if it skips?
-> 
-> modulo a few one-offs, KVM selftests doesn't use the kselftest harness
-> so it isn't subject to this comment. Since there's no test plan, we can
-> skip at any time.
-> 
-> > I'll add an explicit comment about the 0.2 check though, saying that it
-> > should never happen so we might as well have the ASSERT for it.
-> 
-> After looking at this again, I think we should do one of the following:
-> 
->  - TEST_REQUIRE() that the PSCI version is at least v1.3, making the
->    dependency clear on older kernels.
-> 
->  - TEST_REQUIRE() for v1.3, which would provide better test coverage on
->    upstream.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Sorry, I meant TEST_ASSERT() here.
+--8323329-1657094188-1729012633=:314176
+Content-Type: text/plain; charset=US-ASCII
 
-> -- 
-> Thanks,
-> Oliver
-> 
+On Tue, 15 Oct 2024, Catalin Marinas wrote:
+
+> > Setting of need_resched() from another processor involves sending an IPI
+> > after that was set. I dont think we need to smp_cond_load_relaxed since
+> > the IPI will cause an event. For ARM a WFE would be sufficient.
+>
+> I'm not worried about the need_resched() case, even without an IPI it
+> would still work.
+>
+> The loop_count++ side of the condition is supposed to timeout in the
+> absence of a need_resched() event. You can't do an smp_cond_load_*() on
+> a variable that's only updated by the waiting CPU. Nothing guarantees to
+> wake it up to update the variable (the event stream on arm64, yes, but
+> that's generic code).
+
+Hmm... I have WFET implementation here without smp_cond modelled after
+the delay() implementation ARM64 (but its not generic and there is
+an additional patch required to make this work. Intermediate patch
+attached)
+
+
+From: Christoph Lameter (Ampere) <cl@gentwo.org>
+Subject: [Haltpoll: Implement waiting using WFET
+
+Use WFET if the hardware supports it to implement
+a wait until something happens to wake up the cpu.
+
+If WFET is not available then use the stream event
+source to periodically wake up until an event happens
+or the timeout expires.
+
+The smp_cond_wait() is not necessary because the scheduler
+will create an event on the targeted cpu by sending an IPI.
+
+Without cond_wait we can simply take the basic approach
+from the delay() function and customize it a bit.
+
+Signed-off-by: Christoph Lameter <cl@linux.com>
+
+---
+ drivers/cpuidle/poll_state.c | 43 +++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
+
+Index: linux/drivers/cpuidle/poll_state.c
+===================================================================
+--- linux.orig/drivers/cpuidle/poll_state.c
++++ linux/drivers/cpuidle/poll_state.c
+@@ -5,48 +5,41 @@
+
+ #include <linux/cpuidle.h>
+ #include <linux/sched.h>
+-#include <linux/sched/clock.h>
+ #include <linux/sched/idle.h>
+-
+-#ifdef CONFIG_ARM64
+-/*
+- * POLL_IDLE_RELAX_COUNT determines how often we check for timeout
+- * while polling for TIF_NEED_RESCHED in thread_info->flags.
+- *
+- * Set this to a low value since arm64, instead of polling, uses a
+- * event based mechanism.
+- */
+-#define POLL_IDLE_RELAX_COUNT	1
+-#else
+-#define POLL_IDLE_RELAX_COUNT	200
+-#endif
++#include <clocksource/arm_arch_timer.h>
+
+ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+ 			       struct cpuidle_driver *drv, int index)
+ {
+-	u64 time_start;
+-
+-	time_start = local_clock_noinstr();
++	const cycles_t start = get_cycles();
+
+ 	dev->poll_time_limit = false;
+
+ 	raw_local_irq_enable();
+ 	if (!current_set_polling_and_test()) {
+-		u64 limit;
+
+-		limit = cpuidle_poll_time(drv, dev);
++		const cycles_t end = start + ARCH_TIMER_NSECS_TO_CYCLES(cpuidle_poll_time(drv, dev));
+
+ 		while (!need_resched()) {
+-			unsigned int loop_count = 0;
+-			if (local_clock_noinstr() - time_start > limit) {
+-				dev->poll_time_limit = true;
+-				break;
+-			}
+
+-			smp_cond_load_relaxed(&current_thread_info()->flags,
+-					      VAL & _TIF_NEED_RESCHED ||
+-					      loop_count++ >= POLL_IDLE_RELAX_COUNT);
++			if (alternative_has_cap_unlikely(ARM64_HAS_WFXT)) {
++
++				/* We can power down for a configurable interval while waiting */
++				while (!need_resched() && get_cycles() < end)
++						wfet(end);
++
++			} else if (arch_timer_evtstrm_available()) {
++				const cycles_t timer_period = ARCH_TIMER_USECS_TO_CYCLES(ARCH_TIMER_EVT_STREAM_PERIOD_US);
++
++				/* Wake up periodically during evstream events */
++				while (!need_resched() && get_cycles() + timer_period <= end)
++						wfe();
++			}
+ 		}
++
++		/* In case time is not up yet due to coarse time intervals above */
++		while (!need_resched() && get_cycles() < end)
++					cpu_relax();
+ 	}
+ 	raw_local_irq_disable();
+
+--8323329-1657094188-1729012633=:314176
+Content-Type: text/plain; charset=US-ASCII; name=export_nsecs_to_cycles
+Content-Transfer-Encoding: BASE64
+Content-ID: <8127300c-6816-9bbd-c067-979ed715171d@gentwo.org>
+Content-Description: arch timr mods
+Content-Disposition: attachment; filename=export_nsecs_to_cycles
+
+RnJvbTogQ2hyaXN0b3BoIExhbWV0ZXIgKEFtcGVyZSkgPGNsQGxpbnV4LmNv
+bT4NCg0KTW92ZSB0aGUgY29udmVyc2lvbiBmcm9tIHRpbWUgdG8gY3ljbGVz
+IG9mIGFyY2hfdGltZXINCmludG8gYXJjaF90aW1lci5oLiBBZGQgbnNlYyBj
+b252ZXJzaW9uIHNpbmNlIHdlIHdpbGwgbmVlZCB0aGF0IHNvb24uDQoNClNp
+Z25lZC1vZmYtYnk6IENocmlzdG9waCBMYW1ldGVyIDxjbEBsaW51eC5jb20+
+DQoNCkluZGV4OiBsaW51eC9hcmNoL2FybTY0L2xpYi9kZWxheS5jDQo9PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09DQotLS0gbGludXgub3JpZy9hcmNoL2FybTY0
+L2xpYi9kZWxheS5jDQorKysgbGludXgvYXJjaC9hcm02NC9saWIvZGVsYXku
+Yw0KQEAgLTE1LDE0ICsxNSw2IEBADQogDQogI2luY2x1ZGUgPGNsb2Nrc291
+cmNlL2FybV9hcmNoX3RpbWVyLmg+DQogDQotI2RlZmluZSBVU0VDU19UT19D
+WUNMRVModGltZV91c2VjcykJCQlcDQotCXhsb29wc190b19jeWNsZXMoKHRp
+bWVfdXNlY3MpICogMHgxMEM3VUwpDQotDQotc3RhdGljIGlubGluZSB1bnNp
+Z25lZCBsb25nIHhsb29wc190b19jeWNsZXModW5zaWduZWQgbG9uZyB4bG9v
+cHMpDQotew0KLQlyZXR1cm4gKHhsb29wcyAqIGxvb3BzX3Blcl9qaWZmeSAq
+IEhaKSA+PiAzMjsNCi19DQotDQogdm9pZCBfX2RlbGF5KHVuc2lnbmVkIGxv
+bmcgY3ljbGVzKQ0KIHsNCiAJY3ljbGVzX3Qgc3RhcnQgPSBnZXRfY3ljbGVz
+KCk7DQpAQCAtMzksNyArMzEsNyBAQCB2b2lkIF9fZGVsYXkodW5zaWduZWQg
+bG9uZyBjeWNsZXMpDQogCQkJd2ZldChlbmQpOw0KIAl9IGVsc2UgCWlmIChh
+cmNoX3RpbWVyX2V2dHN0cm1fYXZhaWxhYmxlKCkpIHsNCiAJCWNvbnN0IGN5
+Y2xlc190IHRpbWVyX2V2dF9wZXJpb2QgPQ0KLQkJCVVTRUNTX1RPX0NZQ0xF
+UyhBUkNIX1RJTUVSX0VWVF9TVFJFQU1fUEVSSU9EX1VTKTsNCisJCQlBUkNI
+X1RJTUVSX1VTRUNTX1RPX0NZQ0xFUyhBUkNIX1RJTUVSX0VWVF9TVFJFQU1f
+UEVSSU9EX1VTKTsNCiANCiAJCXdoaWxlICgoZ2V0X2N5Y2xlcygpIC0gc3Rh
+cnQgKyB0aW1lcl9ldnRfcGVyaW9kKSA8IGN5Y2xlcykNCiAJCQl3ZmUoKTsN
+CkBAIC01Miw3ICs0NCw3IEBAIEVYUE9SVF9TWU1CT0woX19kZWxheSk7DQog
+DQogaW5saW5lIHZvaWQgX19jb25zdF91ZGVsYXkodW5zaWduZWQgbG9uZyB4
+bG9vcHMpDQogew0KLQlfX2RlbGF5KHhsb29wc190b19jeWNsZXMoeGxvb3Bz
+KSk7DQorCV9fZGVsYXkoYXJjaF90aW1lcl94bG9vcHNfdG9fY3ljbGVzKHhs
+b29wcykpOw0KIH0NCiBFWFBPUlRfU1lNQk9MKF9fY29uc3RfdWRlbGF5KTsN
+CiANCkluZGV4OiBsaW51eC9pbmNsdWRlL2Nsb2Nrc291cmNlL2FybV9hcmNo
+X3RpbWVyLmgNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCi0tLSBsaW51eC5v
+cmlnL2luY2x1ZGUvY2xvY2tzb3VyY2UvYXJtX2FyY2hfdGltZXIuaA0KKysr
+IGxpbnV4L2luY2x1ZGUvY2xvY2tzb3VyY2UvYXJtX2FyY2hfdGltZXIuaA0K
+QEAgLTkwLDYgKzkwLDE5IEBAIGV4dGVybiB1NjQgKCphcmNoX3RpbWVyX3Jl
+YWRfY291bnRlcikodm8NCiBleHRlcm4gc3RydWN0IGFyY2hfdGltZXJfa3Zt
+X2luZm8gKmFyY2hfdGltZXJfZ2V0X2t2bV9pbmZvKHZvaWQpOw0KIGV4dGVy
+biBib29sIGFyY2hfdGltZXJfZXZ0c3RybV9hdmFpbGFibGUodm9pZCk7DQog
+DQorI2luY2x1ZGUgPGxpbnV4L2RlbGF5Lmg+DQorDQorc3RhdGljIGlubGlu
+ZSB1bnNpZ25lZCBsb25nIGFyY2hfdGltZXJfeGxvb3BzX3RvX2N5Y2xlcyh1
+bnNpZ25lZCBsb25nIHhsb29wcykNCit7DQorCXJldHVybiAoeGxvb3BzICog
+bG9vcHNfcGVyX2ppZmZ5ICogSFopID4+IDMyOw0KK30NCisNCisjZGVmaW5l
+IEFSQ0hfVElNRVJfVVNFQ1NfVE9fQ1lDTEVTKHRpbWVfdXNlY3MpCQkJXA0K
+KwlhcmNoX3RpbWVyX3hsb29wc190b19jeWNsZXMoKHRpbWVfdXNlY3MpICog
+MHgxMEM3VUwpDQorDQorI2RlZmluZSBBUkNIX1RJTUVSX05TRUNTX1RPX0NZ
+Q0xFUyh0aW1lX25zZWNzKQkJCVwNCisJYXJjaF90aW1lcl94bG9vcHNfdG9f
+Y3ljbGVzKCh0aW1lX25zZWNzKSAqIDB4NVVMKQ0KKw0KICNlbHNlDQogDQog
+c3RhdGljIGlubGluZSB1MzIgYXJjaF90aW1lcl9nZXRfcmF0ZSh2b2lkKQ0K
+
+--8323329-1657094188-1729012633=:314176--
 
