@@ -1,149 +1,128 @@
-Return-Path: <linux-pm+bounces-15667-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15668-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED46299F2C5
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 18:33:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 096E799F2E1
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 18:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8C042830F8
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 16:33:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F314B20CF8
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 16:39:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E471DD0E6;
-	Tue, 15 Oct 2024 16:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC2CC1F6668;
+	Tue, 15 Oct 2024 16:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DoF/VWt9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kk/+1tqy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE78B158DB9;
-	Tue, 15 Oct 2024 16:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8325B1B3931
+	for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 16:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729010012; cv=none; b=pwKy2VMF8BI8saqtMj8pstFbZCJNc0QGFru9qBSsaCKJXyEa/syHj/Gf//qThch1k17fc02lt6h9i1EAlV8SLjOmPPm2SStH20dLgwM98VJNPtNaLtRIU6Ir3P7PxhY1lP1NY/bdnKB1ApfoROOmcZrG3hmLx8WuYCRtccsXHQs=
+	t=1729010391; cv=none; b=tDZwIc06FqvujrjWYFm7YqPCt0u7tfNtlTJh7rcvZvYcuT9fTmcK11j5Kr5q0rxxOsOHqJLIJSevq0qMPdinbYJ2o5uUjtgZfS6ttcJhyaDa/QxDz4+E8Dj0koK0huPArMjKi8zoMHXY6iB8LAl6DYXi5ChdTJH/y5ojwQge2AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729010012; c=relaxed/simple;
-	bh=xfI79rRGcda0a66L5yluw3psyRMrTfQn6bvg/mdHebM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p9ml+jb10LYbn8izAl1XdPMjUsuj4EH4M5ra9suqasEG+28/LDz/jkRX+bdnUvsk5FMcGzz21w7jaHxJGj08rOZAA1+3oPOEz24lzroj9WesxYZtNXeSBFtQzNXozcN2wcKkj5RPSe5OpldWDRySwM/OlbKguEcgOCbieJ5BlTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DoF/VWt9; arc=none smtp.client-ip=209.85.214.193
+	s=arc-20240116; t=1729010391; c=relaxed/simple;
+	bh=dM8wlTh1KzQ/FY66FG8WTb1mZEusB68zRjpPQOlcWEA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VbWXSWEOBd75HJVridBWwTjOZcxQFKt7Q3fI0fv195sdfPkQpVhSaFARhiRc85VR1QUTmtV9/O9/UiSn6e/0LEnCIne/YNg5D2EiRgbsaHTx173PkDA74a/zgvqfOvZpqk7AzYi42fSPdOr7c/eTI2aaTbH/qLAtfTj4QSDi05I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kk/+1tqy; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-20c803787abso216485ad.0;
-        Tue, 15 Oct 2024 09:33:30 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7d4f85766f0so4230076a12.2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 09:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729010010; x=1729614810; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729010390; x=1729615190; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jXS006kl3x2FfCHKdgorpQBPHYthQinsFnXKbdJpjnM=;
-        b=DoF/VWt9sJ7vKCxisx2bjXBXcWagWeGDUPRWF3CMyWe1dRoI/qRLATFZ6Z5UjImVne
-         nqIpy56I1bbMLalGQKR+GTyn98MA1RafxK23IDklaJN0yYtNuSrFQSCqGOFt/12sv1Ps
-         AW7hJuYdUrEAZ9VGVAi9W6F5Bu/2lzgI4N1FZ0kQvd/FVrAkG9BFjd8g0Oh/U4JI3+h0
-         4QpMc2dGhXiMmvzWaQb71YGkBhhObh1NfSVGq80vMtv6ydXTQnoQAZnM+yDDSgSz9l2f
-         RwBa7DnSCk6EisisV9VMFpkBxiAvfCZJ2O8dYFkFloA/OE5maIs2sdGyVaqD4+XoRQZY
-         /y/A==
+        bh=Demn3B9j3O8UgM925wdwEtYzhjsd7vY3/OdViFNwJas=;
+        b=kk/+1tqy9CoN/Q1MyCA0GamuyZH0Xc+GAUOKAtb9626oiOXNs8Mb/jLdGPj2DBPZ2i
+         P4t2n16rPwJ4YmJ5epEK7eR9sH0YR605EO5UvdVAKCyxhqcjL7iOLIFs0LcZ8UqnEzAv
+         Ylr5n6FElNunbfTQo3J9vJM6c+Gk4GZtHH5iykxh67SK/JnACUYlBAbfMfEPWyeuQFgS
+         43AfiEzRqsEvj0l2R+JZOpYijjwRcpMP+o+mPAy8Ng305MCHlt5G4DAPbAiZlmY3gqoy
+         DO8FOjbVT3/j6zKvbIdNsM76GP5gEEE0YoBFTUJ+TBMeiqk7JzyE1M80PpfiTwg8u0hf
+         n5wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729010010; x=1729614810;
+        d=1e100.net; s=20230601; t=1729010390; x=1729615190;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jXS006kl3x2FfCHKdgorpQBPHYthQinsFnXKbdJpjnM=;
-        b=cxZfLetMYCSJarDCpNtyCA1/rhHh9xIZ1S8+cB6JfBuZaX+y/wxn8/FierOLai4vwY
-         HbTEWiP5QIlNv43qW2AKU5gUHvryqoW/1MIWCaRl0bnuthY7Se7zyI+2NQeNwOjrbZme
-         TFS7rOgUCr0ZCnyEUxSWKWBNNZBoGJj0BRmZjwW111RHAwoIqBLLFZaLcuJRpz4yOyS8
-         sPK/PbDiB9lHG+YUDn/+fInk5PNju0ShYksxXtOn2J3/w/PB0o3z5kg4gGGZ+rLrltcQ
-         DTtEyHdCw4S2ZdbWS3vADWC7oy8uk3wywY5IGejCOscRr+VulqurrdFSamCq714M5CAh
-         NhvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXW57INXo+AdLIGohBoZCLJUPayRZbchsin5qiIpY6tRxxouL68ASAmU5LId84C4x7lCwDk2rWpn9vScg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwtIkodRRAqh5zwJUMlgyntQTOtmKtctcnMpCK8Re4OQdF3Ve5
-	YzWvJA2HJRWHmwDeOMcJxZl5Ioo96dEDUwtgz+5MagcAOh2tyx+zEA6cuMmWig1uEg==
-X-Google-Smtp-Source: AGHT+IEwSPeJhQ2rLmXfTF1o0rxMiMgqmoPx5dLLtCtqVAxq5kz7Qd1SE2jHoZhngIpgdJyHf0DRWQ==
-X-Received: by 2002:a17:902:f545:b0:20b:8bd0:738a with SMTP id d9443c01a7336-20d270580acmr15673225ad.20.1729010009810;
-        Tue, 15 Oct 2024 09:33:29 -0700 (PDT)
-Received: from localhost.localdomain ([180.119.112.183])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea9c706129sm1553753a12.67.2024.10.15.09.33.28
+        bh=Demn3B9j3O8UgM925wdwEtYzhjsd7vY3/OdViFNwJas=;
+        b=bICSxdS2gyNiph86dCqyXCH3pIN/nZCicBw2ZqShC4LnVrEbwXjY6Og3IA6g+Lm9eF
+         I3lFdf47l7aAcqHlQKOCMppcGYXLBSVnYkmzKg2MFrXmq/wMbTvg+PYnSfdNq6SNIDzY
+         6XQe2NGwuMq5lljaNqSUgbUbtNhBQdiACQ40NEqtPH9ZjZXRwsJaDzk8mpr8HdB/VB1/
+         4esGTT4Jd8Lmw2o32CPnrWGyyXAXtNtUXPll0WwHE6CMCum/41QOsDO8o7pnxLps6vDp
+         omvfw9K7pzuhifMJ5hzTn0z+kA+zwTHP+0Lw2+F/GDXLzHUV1Xinr4Rpmt6ssx1O1xrs
+         iBWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUkj6w3RSL88fZCrv3IVfovGj1+NR6LYxGA0bKATs9ZgUBhzCZG4VqUrneyrDn3lHCD+mNoRjPM6w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQeCUZEnyCU4tJrDZjHxpSIVsuPgwbnB8Lcu3f78r4KvpUl9L3
+	2zHqX+UyzLfM16Phg4CNFKipSGJ6Tg9lVf9D8cnYiAHtdAFmy9sJ
+X-Google-Smtp-Source: AGHT+IFH2cUV1TaEl/8noj9S9uyE3/W7F8IRbGr/E2tfGusYrLVnM7DUL0Vjnv9ivuBV6Z5SgIMg+Q==
+X-Received: by 2002:a05:6a21:9d83:b0:1d8:a759:525b with SMTP id adf61e73a8af0-1d8bcfa53e0mr23353418637.34.1729010389743;
+        Tue, 15 Oct 2024 09:39:49 -0700 (PDT)
+Received: from BiscuitBobby.am.students.amrita.edu ([175.184.253.10])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e773717dcsm1490460b3a.20.2024.10.15.09.39.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 09:33:29 -0700 (PDT)
-From: Kieran Moy <kfatyuip@gmail.com>
-To: shuah@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kieran Moy <kfatyuip@gmail.com>
-Subject: [PATCH v2] cpupower: Add Chinese Simplified translation
-Date: Wed, 16 Oct 2024 00:33:18 +0800
-Message-ID: <20241015163319.9114-1-kfatyuip@gmail.com>
-X-Mailer: git-send-email 2.47.0
+        Tue, 15 Oct 2024 09:39:49 -0700 (PDT)
+From: Siddharth Menon <simeddon@gmail.com>
+To: shuah@kernel.org,
+	trenn@suse.com,
+	jwyatt@redhat.com,
+	jkacur@redhat.com
+Cc: Siddharth Menon <simeddon@gmail.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] cpupower: add checks for xgettext and msgfmt
+Date: Tue, 15 Oct 2024 22:08:54 +0530
+Message-Id: <20241015163854.35204-1-simeddon@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Sorry for disturbing, here is patch v2, thanks!
+Check whether xgettext and msgfmt are available on the system before
+attempting to generate the .pot and .gmo files and generate.
+In case of missing dependency, generate error message directing user
+to install the necessary package.
 
-Changes in v2:
- - appplied sugested changes
-
-Signed-off-by: Kieran Moy <kfatyuip@gmail.com>
+Signed-off-by: Siddharth Menon <simeddon@gmail.com>
 ---
- tools/power/cpupower/po/zh_CN.po | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/power/cpupower/Makefile | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/tools/power/cpupower/po/zh_CN.po b/tools/power/cpupower/po/zh_CN.po
-index 456cde997..33fb3f000 100644
---- a/tools/power/cpupower/po/zh_CN.po
-+++ b/tools/power/cpupower/po/zh_CN.po
-@@ -19,11 +19,11 @@ msgstr ""
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index 6c02f401069e..38e7daacecf4 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -220,12 +220,20 @@ endif
  
- #: utils/idle_monitor/nhm_idle.c:36
- msgid "Processor Core C3"
--msgstr "处理器核心 C3"
-+msgstr "处理器 Core C3"
+ $(OUTPUT)po/$(PACKAGE).pot: $(UTIL_SRC)
+ 	$(ECHO) "  GETTEXT " $@
+-	$(QUIET) xgettext --default-domain=$(PACKAGE) --add-comments \
+-		--keyword=_ --keyword=N_ $(UTIL_SRC) -p $(@D) -o $(@F)
++	$(QUIET) if ! command -v xgettext > /dev/null; then \
++		echo "Error: gettext not found. Please install gettext."; \
++	else \
++		xgettext --default-domain=$(PACKAGE) --add-comments \
++		--keyword=_ --keyword=N_ $(UTIL_SRC) -p $(@D) -o $(@F); \
++	fi
  
- #: utils/idle_monitor/nhm_idle.c:43
- msgid "Processor Core C6"
--msgstr "处理器核心 C6"
-+msgstr "处理器 Core C6"
+ $(OUTPUT)po/%.gmo: po/%.po
+ 	$(ECHO) "  MSGFMT  " $@
+-	$(QUIET) msgfmt -o $@ po/$*.po
++	$(QUIET) if ! command -v msgfmt > /dev/null; then \
++		echo "Error: msgfmt not found. Make sure gettext is set up correctly."; \
++	else \
++		msgfmt -o $@ po/$*.po; \
++	fi
  
- #: utils/idle_monitor/nhm_idle.c:51
- msgid "Processor Package C3"
-@@ -35,7 +35,7 @@ msgstr "处理器套件 C6"
+ create-gmo: ${GMO_FILES}
  
- #: utils/idle_monitor/snb_idle.c:33
- msgid "Processor Core C7"
--msgstr "处理器核心 C7"
-+msgstr "处理器 Core C7"
- 
- #: utils/idle_monitor/snb_idle.c:40
- msgid "Processor Package C2"
-@@ -47,7 +47,7 @@ msgstr "处理器套件 C7"
- 
- #: utils/idle_monitor/amd_fam14h_idle.c:56
- msgid "Package in sleep state (PC1 or deeper)"
--msgstr "处于睡眠状态的包（PC1 或更深）"
-+msgstr "Package in sleep state （PC1 或更深）"
- 
- #: utils/idle_monitor/amd_fam14h_idle.c:63
- msgid "Processor Package C1"
-@@ -59,11 +59,11 @@ msgstr "北桥 P1 布尔计数器（返回 0 或 1）"
- 
- #: utils/idle_monitor/mperf_monitor.c:35
- msgid "Processor Core not idle"
--msgstr "处理器核心不空闲"
-+msgstr "处理器 Core不空闲"
- 
- #: utils/idle_monitor/mperf_monitor.c:42
- msgid "Processor Core in an idle state"
--msgstr "处理器核心处于空闲状态"
-+msgstr "处理器 Core处于空闲状态"
- 
- #: utils/idle_monitor/mperf_monitor.c:50
- msgid "Average Frequency (including boost) in MHz"
 -- 
-2.47.0
+2.39.5
 
 
