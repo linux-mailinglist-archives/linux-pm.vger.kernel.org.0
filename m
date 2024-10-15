@@ -1,123 +1,100 @@
-Return-Path: <linux-pm+bounces-15677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 462A399F3E1
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:19:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3622F99F439
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3E87B20DA3
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:19:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB8731C223C0
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE9E1F76CF;
-	Tue, 15 Oct 2024 17:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMC7MkId"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9BE1F9ECF;
+	Tue, 15 Oct 2024 17:40:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C71D514C;
-	Tue, 15 Oct 2024 17:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305D81F6690;
+	Tue, 15 Oct 2024 17:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729012742; cv=none; b=n1pW9J+8266TZkBuwQ9TYoC5hdnUxmxhYmcRXhTNpkYhK/cf+G2JHMMapbQg/Zj2mC9p7slP3/mEC+E04nOS8uide5vet50zA7n/HUI/+XYKseoxI2oB0X0fgoKLUJ6zpStY2Kku7iA14KGqUjUlImtxwbJva0biXzejxGKol7k=
+	t=1729014020; cv=none; b=MWxiuil4uGLipEe2D0mhxdqfnIou/YUPKjSY9cB+ru6Sg7QzxeNY1pEQkO55jDsE38i8CGNAHgJ5HHe9Gu8T3OSG1Y+RZ3Z5Cvt50jsg8qd4STtn72hHHtkfwOlCFO1biS62bz5ACiyxtSzsYZN2paImWxvJTIQXj45Ip+QRtGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729012742; c=relaxed/simple;
-	bh=/4d7EoBzIlhcHDH9qkC6J52wMGKWA7EO9n7isAB5FvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rcj1tZMkPiqVRHOyG/UzPHMLH45fn9PGeYJTRwGux5/WDcN/dfaNZ1r9T50FHiAi5jIqlZ8/FDV6U2h7xtmZSwrRishV6EIq3OjX6lFKlWvj+R7SjJy9fdovB43OeuqnuAne10ma+x9rWrVlLxKjsOTl39AiG6AImj3QTrQ3T2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMC7MkId; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c960af31daso4320765a12.3;
-        Tue, 15 Oct 2024 10:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729012739; x=1729617539; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSRsu/greOiguhxWKwTVAbA1IuBqHC3TjNHFAMMX7g8=;
-        b=NMC7MkIdTzN5NSzZsXZklkGTBMOkkMmZUDU9h8oaWw42bA6mp4g1GqzFPAbSeugQmx
-         uxEwhvzGltDWXSfUjHLvlfPwh17kM3OQGOtCV5Dp1yZozzuPam0UOdafOSt8R/1ROqiH
-         JzPp4etNY1j+cOFLXVQLI8/SikXxxvuxgq+zZCyIv81UswSDTlSeU5Mxf9UDb/j21svX
-         QU/A971st+QJp7OwcLk5qPkYyGiRSCRobWAIfBCbVt1rqyt+G/HHT63oIC0UJ7kmvHnQ
-         2XuL9rATgsGZ0O2PDXBgQC2SNkcaYOwaB07kKr0vfWuB+sj/J335l7lqXAfpYg7TrowE
-         M3iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729012739; x=1729617539;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zSRsu/greOiguhxWKwTVAbA1IuBqHC3TjNHFAMMX7g8=;
-        b=c49CzxF6BykYp9DC+N6MZBdiMUD+Nr5Gwa5bdU+lfTouV4aGANbB4PUeyd4ohxqixi
-         KGlb5J5UhMd/YdDmJJuueU5urAY8anLtcQ6PSQFf2U2QSu2snDf+ZtzsTIXKFWqvs9nB
-         rBT7uYHUE1qJcDi3GLyOtNMZsPnFsCJnArxUIakLFAXeopDiZnRUzjLvCEtMTdGZxaeK
-         70fVliFfZPLw4WLjbSXHh/5RZ6Iw4wKajpy2JlY130shsNYYirzg2MMWRp0b063zkGrC
-         NwtHJXYWuVHhy//XkzJtMqReIIBZYCaNqv8UEy9A764N+jRC+snPMPhrRtcmtsID5T6k
-         JQKA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4D73cAYhXkupaOYdJB4Yi4jfCr5nxIXwQ+Lf54OCi7uKNIx9Ymo0EPGlQZz0do9E6/PIlin8/n3HIZRo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9FeyvX+tXBjgWWn7eN4nPBBeAFixx22M4M9dJXSGrZ3/CKhwt
-	aW04k92ZsNMI5FzKXYQywaIUpbojA1y4d/WjAvwzYqgDK0V6AbG6
-X-Google-Smtp-Source: AGHT+IEguhQUTD1gQ7IIpJaup7vCYhfOUC8FaXMG8j8bXdOvxgWzgi4JiTqF9brhLY3lJq9JtSN/rw==
-X-Received: by 2002:a05:6402:51cd:b0:5c9:5ac1:df6c with SMTP id 4fb4d7f45d1cf-5c95ac1e675mr8462466a12.33.1729012739130;
-        Tue, 15 Oct 2024 10:18:59 -0700 (PDT)
-Received: from emdj-bno.. (0x5da5fe69.static.cust.fastspeed.dk. [93.165.254.105])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c98d507a14sm911763a12.49.2024.10.15.10.18.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 10:18:58 -0700 (PDT)
-From: juhl.emildahl@gmail.com
-X-Google-Original-From: emdj@bang-olufsen.dk
-To: rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Emil Dahl Juhl <emdj@bang-olufsen.dk>
-Subject: [PATCH RESEND] tools/lib/thermal: fix sampling handler context ptr
-Date: Tue, 15 Oct 2024 19:18:26 +0200
-Message-ID: <20241015171826.170154-1-emdj@bang-olufsen.dk>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1729014020; c=relaxed/simple;
+	bh=SXa0grFaq7RR+AfMviCRfUEadq71ICMwPBX1B8iFRoM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aY/VWKCRpJ0XvG7ft0fbYpMCkBVZxV453sV3WjiZMkKZ6URBGtEfUss0nHYEO1TrNp9nLkVRuo9u+foO7t5ngi8f9GexY210FMoU7eIbvmgdjvdUeO5EaNZxibMA6NWOTwPYrTNMw0clNL6++WJmoD5MHa6hoGxsLSGlCPJ4+jI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD607C4CEC6;
+	Tue, 15 Oct 2024 17:40:14 +0000 (UTC)
+Date: Tue, 15 Oct 2024 18:40:12 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, will@kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
+	wanpengli@tencent.com, vkuznets@redhat.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+	lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+	mtosatti@redhat.com, sudeep.holla@arm.com,
+	misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+	konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
+ smp_cond_load_relaxed()
+Message-ID: <Zw6o_OyhzYd6hfjZ@arm.com>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
+ <20240925232425.2763385-2-ankur.a.arora@oracle.com>
+ <Zw5aPAuVi5sxdN5-@arm.com>
+ <086081ed-e2a8-508d-863c-21f2ff7c5490@gentwo.org>
+ <Zw6dZ7HxvcHJaDgm@arm.com>
+ <1e56e83e-83b3-d4fd-67a8-0bc89f3e3d20@gentwo.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e56e83e-83b3-d4fd-67a8-0bc89f3e3d20@gentwo.org>
 
-From: Emil Dahl Juhl <emdj@bang-olufsen.dk>
+On Tue, Oct 15, 2024 at 10:17:13AM -0700, Christoph Lameter (Ampere) wrote:
+> On Tue, 15 Oct 2024, Catalin Marinas wrote:
+> > > Setting of need_resched() from another processor involves sending an IPI
+> > > after that was set. I dont think we need to smp_cond_load_relaxed since
+> > > the IPI will cause an event. For ARM a WFE would be sufficient.
+> >
+> > I'm not worried about the need_resched() case, even without an IPI it
+> > would still work.
+> >
+> > The loop_count++ side of the condition is supposed to timeout in the
+> > absence of a need_resched() event. You can't do an smp_cond_load_*() on
+> > a variable that's only updated by the waiting CPU. Nothing guarantees to
+> > wake it up to update the variable (the event stream on arm64, yes, but
+> > that's generic code).
+> 
+> Hmm... I have WFET implementation here without smp_cond modelled after
+> the delay() implementation ARM64 (but its not generic and there is
+> an additional patch required to make this work. Intermediate patch
+> attached)
 
-The sampling handler, provided by the user alongside a void* context,
-was invoked with an internal structure instead of the user context.
+At least one additional patch ;). But yeah, I suggested hiding all this
+behind something like smp_cond_load_timeout() which would wait on
+current_thread_info()->flags but with a timeout. The arm64
+implementation would follow some of the logic in __delay(). Others may
+simply poll with cpu_relax().
 
-Correct the invocation of the sampling handler to pass the user context
-pointer instead.
+Alternatively, if we get an IPI anyway, we can avoid smp_cond_load() and
+rely on need_resched() and some new delay/cpu_relax() API that waits for
+a timeout or an IPI, whichever comes first. E.g. cpu_relax_timeout()
+which on arm64 it's just a simplified version of __delay() without the
+'while' loops.
 
-Note that the approach taken is similar to that in events.c, and will
-reduce the chances of this mistake happening if additional sampling
-callbacks are added.
-
-Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
-Signed-off-by: Emil Dahl Juhl <emdj@bang-olufsen.dk>
----
- tools/lib/thermal/sampling.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/lib/thermal/sampling.c b/tools/lib/thermal/sampling.c
-index 70577423a9f0..f67c1f9ea1d7 100644
---- a/tools/lib/thermal/sampling.c
-+++ b/tools/lib/thermal/sampling.c
-@@ -16,6 +16,8 @@ static int handle_thermal_sample(struct nl_msg *n, void *arg)
- 	struct thermal_handler_param *thp = arg;
- 	struct thermal_handler *th = thp->th;
-
-+	arg = thp->arg;
-+
- 	genlmsg_parse(nlh, 0, attrs, THERMAL_GENL_ATTR_MAX, NULL);
-
- 	switch (genlhdr->cmd) {
---
-2.45.0
-
+-- 
+Catalin
 
