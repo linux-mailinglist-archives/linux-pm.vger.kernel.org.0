@@ -1,98 +1,181 @@
-Return-Path: <linux-pm+bounces-15679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6140999F42D
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 19:35:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A86E99F320
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 18:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69AF3B2326F
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 17:35:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71F0DB22C6F
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 16:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B12A1F9EAA;
-	Tue, 15 Oct 2024 17:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9531F76BF;
+	Tue, 15 Oct 2024 16:48:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="nJn8gjEc"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="YdZcjEDf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26F91AF0CF;
-	Tue, 15 Oct 2024 17:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D431F76AF
+	for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 16:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729013750; cv=none; b=k6mMo3LEywrdk9OANKTfHyMTUvAH4d2UulvWGHgexD1D7QxgvOq82gwVZL2r+lOGtXr9fDn8SygnQCxOQnWyacvJidt1aEpP1+fOPbVJtOUgHsBJJjGjsRvoKKcBgnHztZbf7BAQgocflXPnZMgaavbg9C3SOYXxU6+L8W+DnWQ=
+	t=1729010881; cv=none; b=IoT3O7zi9Dqevw5LA4bJpeliicsG6sjzdEe551UzATcwOqjWt9nUFFf3VXWyVreijym7JCce4jptP8QgO5WiaSagQkEtodlMsPbEfmQg3Ne7GfPr2glgmQ0Y6jAtHxicbrwdDQfvO4LtF7/LCS6cUUpcAm6XDuSytNiJjik7Xh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729013750; c=relaxed/simple;
-	bh=cWMHCrc2KGBoFiC6OYY7D7UPHuPq4qD8qiR/FJ6zDqs=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=mFf7YSRTsN/CYshhB6FRocCLjCpmD6IIQrlyUzA5LabjEfoE12VbK98Xz5+YKLdrCCQL3ZP9Jx9zrC6IwmmD8xmf/tcrUmyUDHaagzkQnPeXKmdgMERdhZ0nT1jcm2Ktg2jO0TyaeCpQC4tQFEqIlIBseZa3BAGONS5OzkMVo5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=nJn8gjEc; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1729010576;
-	bh=cWMHCrc2KGBoFiC6OYY7D7UPHuPq4qD8qiR/FJ6zDqs=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=nJn8gjEcns9QtZPWujGYoego966NtFG+DQFIQmKyMGAnUW9JBTjiSf6sWR7RZEI7L
-	 3LUdyIhNuC9lB2N7aGxIMWS+CCddJ7e5CU/e0udwPcRcjF9/lot+WiEMQrkq6b3/Aq
-	 7SvA05+7Mywk3mkqiZkazpb4pqkVDYLbVbwdDfNc=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 3F7834040C; Tue, 15 Oct 2024 09:42:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 3D9DA400C9;
-	Tue, 15 Oct 2024 09:42:56 -0700 (PDT)
-Date: Tue, 15 Oct 2024 09:42:56 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org, 
-    kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    linux-kernel@vger.kernel.org, will@kernel.org, tglx@linutronix.de, 
-    mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, 
-    x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com, 
-    vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
-    peterz@infradead.org, arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, 
-    harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com, 
-    misono.tomohiro@fujitsu.com, maobibo@loongson.cn, 
-    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
-    konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
- smp_cond_load_relaxed()
-In-Reply-To: <Zw5aPAuVi5sxdN5-@arm.com>
-Message-ID: <086081ed-e2a8-508d-863c-21f2ff7c5490@gentwo.org>
-References: <20240925232425.2763385-1-ankur.a.arora@oracle.com> <20240925232425.2763385-2-ankur.a.arora@oracle.com> <Zw5aPAuVi5sxdN5-@arm.com>
+	s=arc-20240116; t=1729010881; c=relaxed/simple;
+	bh=Rfdl8vCaCgCBwnWghnvEo1yd6nA2LiUGF75OpPkqLJg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ei/Eujb3uzOgy/B8cn1fhTSfIjdZAYvkkmTg+3jbBWF3RrpIEsKS+JZmnAOJrmM1bPLDFJ1xo53rTR8KRWwaLx2i+UQ+bmUlbMFUfGspHzeuhS3Al3ryAE+y7Bak1VQbSpBAMqxJ94yF0RqbBf+Qn0Bs0+P6Jv+6ESs5dypKVfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=YdZcjEDf; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42f6bec84b5so53902525e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 09:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1729010877; x=1729615677; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2AR2YrUQqk7+xhhqenve/PPACMkVnDOGTvsrnF2dq74=;
+        b=YdZcjEDfq/J+Z3YHHh0pQpap/YGfBY+dzQN+qIcnGF4Clrq2O3TfVr5jWZIZfm6Y4b
+         xbBBXruAUYpa06Og3lqAl5asC6RDlZOZPDubNhShHo+l9etKaaNBXD2ZYZmgiXUe/WGi
+         kPh102rRpFCf2DO0Znknj+EqiZjddKXQGReaDO0uRcnwEsn/bZlqKvLVRiuN6g0NwrEP
+         5gYgrbkDyuP/frjjNX93UzYsIUzMi9ZlDDB0kFxnkeDtY3UjXqDcHLgvsgNoO3zSzoVj
+         5NhDoarB5pyb7ntKKIrUsY+/4VSHXrClw+Y9ko+a56Y5BsN8yoduKFwJWa67GnuJt2hT
+         15Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729010877; x=1729615677;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2AR2YrUQqk7+xhhqenve/PPACMkVnDOGTvsrnF2dq74=;
+        b=UOdlKawTS+ARdfi75DG1Xk3SQoK1MMUMsYXx8s2zpR3fVc7QKJN8O1ycBuR9BFfgir
+         8+12jegu6fGkkfMiGZbooDVnoCakQJqQJl8LVpigH18zZBvcCCsomCwuXGQpdwdYR9y+
+         CWV20wOxorHAZbd0O9j9lIiGZpUNsybmIDK99U/95EeIzgIkoGRVG0xciacwOsEIUJJb
+         hT/2u9UII/GGp5cfVF32LBexbQ5qG4rmjYOggWZXZXG0+JyqrttTvfYjIb9JBPpUH251
+         crsbq1mBYMqwL77WnA/RNdf4WLZCAl0SAEq5ABGiHFW9EKw6hTyX14Zoc4IEcEA0fFMw
+         zzHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXp90bYebKcmPwazHk6OCzG4YVxgc7/mt3Fxkh8bHA6wfBEx+Ldr6Xfsx/oDbpSra1jynFRovziZw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwywMEbQQTrchFdIls2uUvhIN1W5koJH45xypN5Kj07y6K1bLGe
+	JnpZgCLFwcxRjm/E78LA/vsk02IDAopWlQ1CChXNjT4OSwPUmgOXxcbt8louHJ4=
+X-Google-Smtp-Source: AGHT+IEdGlWQWan5QcF5MUQh7T+UcHlApVXWyd8jtWLk9XCMAYKoLdf78C58GnMJlSXZGx70acXOsw==
+X-Received: by 2002:a05:600c:1991:b0:431:44aa:ee2e with SMTP id 5b1f17b1804b1-4314a29549amr10259345e9.4.1729010876670;
+        Tue, 15 Oct 2024 09:47:56 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.23])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f56eab2sm22882045e9.26.2024.10.15.09.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 09:47:55 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: geert+renesas@glider.be,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	ulf.hansson@linaro.org
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v4 0/4] watchdog: rzg2l_wdt: Enable properly the watchdog clocks and power domain
+Date: Tue, 15 Oct 2024 19:47:28 +0300
+Message-Id: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Oct 2024, Catalin Marinas wrote:
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-> > +			unsigned int loop_count = 0;
-> >  			if (local_clock_noinstr() - time_start > limit) {
-> >  				dev->poll_time_limit = true;
-> >  				break;
-> >  			}
-> > +
-> > +			smp_cond_load_relaxed(&current_thread_info()->flags,
-> > +					      VAL & _TIF_NEED_RESCHED ||
-> > +					      loop_count++ >= POLL_IDLE_RELAX_COUNT);
->
-> The above is not guaranteed to make progress if _TIF_NEED_RESCHED is
-> never set. With the event stream enabled on arm64, the WFE will
-> eventually be woken up, loop_count incremented and the condition would
-> become true. However, the smp_cond_load_relaxed() semantics require that
-> a different agent updates the variable being waited on, not the waiting
-> CPU updating it itself. Also note that the event stream can be disabled
-> on arm64 on the kernel command line.
+Hi,
+
+Watchdog device available on RZ/G3S SoC is part of a software-controlled
+power domain. The watchdog driver implements struct
+watchdog_ops::restart() handler which is called in atomic context via
+this call chain:
+
+kernel_restart() ->
+  machine_restart() ->
+    do_kernel_restart() ->
+      atomic_notifier_call_chain() ->
+        watchdog_restart_notifier()
+          rzg2l_wdt_restart()
+
+When the rzg2l_wdt_restart() is called it may happen that the watchdog
+clocks to be disabled and the associated power domain to be off.
+Accessing watchdog registers in this state leads to aborts and system
+blocks.
+
+To solve this issue the watchdog power domain was marked as IRQ safe
+as well as watchdog device (as proposed by Ulf Hansson). Along with
+it the clk_prepare_enable() calls from the watchdog restart() handler
+were removed and all is based now on pm_runtime_resume_and_get()
+as explained in patch 03/03.
+
+Series contains also power domain driver changes to be able to
+register the watchdog PM domain as an IRQ safe one.
+
+Initial RFC series for solving this issue was posted at [1].
+
+It is safe to merge watchdog and PM domain driver changes though
+different trees.
+
+Thank you,
+Claudiu Beznea
+
+[1] https://lore.kernel.org/all/20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com/
+
+Changes in v4:
+- in patch 1/1, function rzg2l_cpg_pd_setup():
+-- call rzg2l_cpg_power_on() unconditionally of governor
+-- drop governor's parameter and decide what governor to use based on
+   always_on
+- collected tags
+
+Changes in v3:
+- added patch "clk: renesas: rzg2l-cpg: Move PM domain power on in
+  rzg2l_cpg_pd_setup()"
+- addressed review comments
+- collected tags
+- per-patch changes are listed in individual patches
+
+Changes in v2:
+- adjusted patch title for patch 02/03
+- adjusted description for patch 03/03 along with comment
+  from code
+
+Changes since RFC:
+- dropped patches 01/03, 02/03 from RFC
+- adjusted power domain driver to be able to register the
+  watchdog PM domain as an IRQ safe one
+- drop clock prepare approach from watchdog driver presented in RFC
+  and rely only on pm_runtime_resume_and_get()
+- mark the watchdog device as IRQ safe
 
 
-Setting of need_resched() from another processor involves sending an IPI
-after that was set. I dont think we need to smp_cond_load_relaxed since
-the IPI will cause an event. For ARM a WFE would be sufficient.
+Claudiu Beznea (4):
+  clk: renesas: rzg2l-cpg: Move PM domain power on in
+    rzg2l_cpg_pd_setup()
+  clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags instead of local ones
+  clk: renesas: r9a08g045: Mark the watchdog and always-on PM domains as
+    IRQ safe
+  watchdog: rzg2l_wdt: Power on the watchdog domain in the restart
+    handler
+
+ drivers/clk/renesas/r9a08g045-cpg.c | 52 +++++++++++------------------
+ drivers/clk/renesas/rzg2l-cpg.c     | 41 ++++++++++++-----------
+ drivers/clk/renesas/rzg2l-cpg.h     | 10 ++----
+ drivers/watchdog/rzg2l_wdt.c        | 20 +++++++++--
+ 4 files changed, 63 insertions(+), 60 deletions(-)
+
+-- 
+2.39.2
 
 
