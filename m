@@ -1,46 +1,47 @@
-Return-Path: <linux-pm+bounces-15691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15692-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0160699F873
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF2699F874
 	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 23:01:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACA531F22A84
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B15082863F0
 	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 21:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693D11FAF02;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4C81FAF18;
 	Tue, 15 Oct 2024 21:01:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F51B1F81AE
-	for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 21:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F56D1F9EB5;
+	Tue, 15 Oct 2024 21:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729026086; cv=none; b=tffUszvaJ0Z9p4idm/i4y9Oe5pRMCqwUeop1504Q6WSsIkB58L2DsvSONH8QgSLqJ+ubEPi05qbQsewMVsY0xmXxn2UhobNrA3TgX+IiDSzYljfyzyJCXCSU3CdAwYKeOYmTfwO/+hqSYglbwAeiHq77Vvh3wX3ILJ7bsX/qCQs=
+	t=1729026086; cv=none; b=PvvTeQa1XYL5UPW30nNiDc+yRuyyWO+3Ge4hm+A57DQkJ2OwTzj0EctXuR3jMBwF3ZMxK2D+Ss5hvcPjS4CHuPtcPKq5GSvKNQOJfu3n+0VnPnmcIrijGdRUBncPsZryA+iKLQeflMffm7dXbcJtobG1O37rpn7jRSbdHrDc+Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729026086; c=relaxed/simple;
-	bh=X8VxlrF95bHg1vXinTQLkCSFCRZx2w+VJvKpebozsiQ=;
+	bh=rFP5aiFo5gPBll5iSGgzw2eSuiBpiYmPQVeMX6hiXHM=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nL98lzm9E9E4Stgv+vw2dZtF7Rb01EM6HFbo5VYYWEnMUssOyN9WvRD5KOwGiDHzjsOiqwlqPmBiQtakP12/Pn9oi2iJq9+iMz9IE9TagN0L8hfWzjhJHE51aWw/PK7xOEL5wfHj8CY+am4ZAf0XNOWkveyDZTab41at5nlbYrs=
+	 MIME-Version:Content-Type; b=YVo3dlClpJAzohBhVV1aJGX9jdpE3IPP+FQG4IrC24PFLxF1e5PoJ60Wa8At/XhVoLxsVu083z8MUtaGA8EjVuC/TEJI+r0unpcEYELKCumGOGGpufuHoaWWEg6yYmBzJmtwD9HQP3GSCDioRUSpkCEn+i4vfpNaLFb4Dyp3aGU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64C1C4CED1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD191C4CED0;
 	Tue, 15 Oct 2024 21:01:25 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 701BC106043A; Tue, 15 Oct 2024 23:01:23 +0200 (CEST)
+	id 6595A1060433; Tue, 15 Oct 2024 23:01:23 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Sebastian Reichel <sre@kernel.org>, 
- Bart Van Assche <bvanassche@acm.org>
-Cc: linux-pm@vger.kernel.org, Kyle Tso <kyletso@google.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20240917193914.47566-1-bvanassche@acm.org>
-References: <20240917193914.47566-1-bvanassche@acm.org>
-Subject: Re: [PATCH] power: supply: core: Remove might_sleep() from
- power_supply_put()
-Message-Id: <172902608344.467915.10870231038524401450.b4-ty@collabora.com>
+ Linus Walleij <linus.walleij@linaro.org>, Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20241005-power-supply-battery-const-v1-0-c1f721927048@weissschuh.net>
+References: <20241005-power-supply-battery-const-v1-0-c1f721927048@weissschuh.net>
+Subject: Re: [PATCH 0/7] power: supply: constify ocv and resistance tables
+Message-Id: <172902608335.467915.16942683889560111430.b4-ty@collabora.com>
 Date: Tue, 15 Oct 2024 23:01:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -49,24 +50,32 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.14.2
 
 
-On Tue, 17 Sep 2024 12:39:14 -0700, Bart Van Assche wrote:
-> The put_device() call in power_supply_put() may call
-> power_supply_dev_release(). The latter function does not sleep so
-> power_supply_put() doesn't sleep either. Hence, remove the might_sleep()
-> call from power_supply_put(). This patch suppresses false positive
-> complaints about calling a sleeping function from atomic context if
-> power_supply_put() is called from atomic context.
+On Sat, 05 Oct 2024 12:04:16 +0200, Thomas Weißschuh wrote:
+> These tables are nevery modified. Reflect this in the API and constify
+> the table definitions.
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[1/1] power: supply: core: Remove might_sleep() from power_supply_put()
-      commit: f6da4553ff24a5d1c959c9627c965323adc3d307
+[1/7] power: supply: core: constify power_supply_battery_info::resist_table
+      commit: 58797abed49d6b78c7af99b03b037f20c7ffb203
+[2/7] power: supply: ab8500: constify resistance table
+      commit: 40d00fa5a8be87812a7acb6524eb3d8fd3ea42b9
+[3/7] power: supply: samsung-sdi-battery: constify resistance table
+      commit: 27fde3aa4f924793966c8aa5b10506c41ce933e1
+[4/7] power: supply: sc27xx: use const reference to ocv table
+      commit: 840683c341907b37173e270798607a83462118f1
+[5/7] power: supply: core: constify power_supply_battery_info::ocv_table
+      commit: ce20d5b9e37099a035ab34d4d3f59e1744756385
+[6/7] power: supply: ab8500: constify ocv table
+      commit: b7b6bf444529c2ead9416e79d8dd8a2cb832cd24
+[7/7] power: supply: samsung-sdi-battery: constify ocv table
+      commit: b5289ba57a27a212acad14b81ec6597ce140e01d
 
 Best regards,
 -- 
