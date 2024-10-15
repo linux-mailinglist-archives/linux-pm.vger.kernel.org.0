@@ -1,45 +1,50 @@
-Return-Path: <linux-pm+bounces-15690-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15693-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00CBE99F872
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 23:01:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 680CB99F875
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 23:01:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA6572861BA
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 21:01:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 997911C230E8
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 21:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390B21CBE8A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D821FBF44;
 	Tue, 15 Oct 2024 21:01:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3941F80DD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5C61F9ED8;
 	Tue, 15 Oct 2024 21:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729026086; cv=none; b=Xe1kmqZl1EE3V3jrau1HK97PMxoVHV59JH6W5wqMPtiXCD/OKBin/uJS4zyMDmYS38H40H6Ap4AGgBMoPvPptUmXfPz3o4mhk1gcnjUiWdCewhJkasXeUGWE9cqtWa58Ee17DL4k9nFw3yS6Pb/IZzqeGNj3jiidjvO7xpjGlCg=
+	t=1729026086; cv=none; b=kvBpcqDoYI8Nvw7oHQ38ajeW06Cga+Muu1ihBuzv5xe8OTo80H+0sNP+/AeIkpggBIHeZmnMRVEQPKxG3d5jD3E0V5VlCn+tZj5DptMMDNX/+HdHCeOCMFEKlxZM5/ssULwB7nwSgRMSUrQcNA1t+/xKPmAB41Xr/a9jJBNjoSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729026086; c=relaxed/simple;
-	bh=xarUmdbVzPfkkVn8qJpxRr/f8UXtfltD/Zh9VR4i2qc=;
+	bh=N1hEchc/2XTzoorfyS2708tEKgnm+DrlsQ7RPL4btDc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RxSK0CnmsS04KM26yuBvDf/GVkn83eKQfmYC+AJ4tCaKD/2CbQ2L6QCkY84aIPHlsVIemhaJeH8s5GkMBkcDXDhpGb7Bej6Zoc5Tl14pgC/x3MGZ26URGnzrkb7usB+GA5hSZktIxsWKvwpqkpVAe1sPfPEBLEvuYEk5vdepYD4=
+	 MIME-Version:Content-Type; b=glF+xJxRuOaPqODuqSmod+3ntUkI+Ahjp5FSAWs0zI0LnFQhMaWk9iquBat5kUPL5/FJhIzPepSNnIvLWBVZYZ2zZ4VDnZEuLuGWtffHOzQbdDdVADms9g8A21FBfb5jC47Se6M88CSmcM3PVbJ+BsI6gPm0xqh35j3kP72Yxzg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C979DC4CEC7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C205CC4CEC6;
 	Tue, 15 Oct 2024 21:01:25 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 7851D1060447; Tue, 15 Oct 2024 23:01:23 +0200 (CEST)
+	id 6BFDE1060437; Tue, 15 Oct 2024 23:01:23 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Michael Hennerich <Michael.Hennerich@analog.com>, 
- Sebastian Reichel <sre@kernel.org>, Andrew Kreimer <algonell@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+ =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel-janitors@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
-In-Reply-To: <20240912125303.44118-1-algonell@gmail.com>
-References: <20240912125303.44118-1-algonell@gmail.com>
-Subject: Re: [PATCH] power: supply: Fix a typo
-Message-Id: <172902608348.467915.17200257005038972619.b4-ty@collabora.com>
+ linux-acpi@vger.kernel.org, chrome-platform@lists.linux.dev
+In-Reply-To: <20241005-power-supply-no-wakeup-source-v1-0-1d62bf9bcb1d@weissschuh.net>
+References: <20241005-power-supply-no-wakeup-source-v1-0-1d62bf9bcb1d@weissschuh.net>
+Subject: Re: [PATCH 0/8] power: supply: core: remove
+ {,devm_}power_supply_register_no_ws()
+Message-Id: <172902608343.467915.12779076525660728753.b4-ty@collabora.com>
 Date: Tue, 15 Oct 2024 23:01:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -48,19 +53,38 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.14.2
 
 
-On Thu, 12 Sep 2024 15:52:51 +0300, Andrew Kreimer wrote:
-> Fix a typo in comments.
+On Sat, 05 Oct 2024 12:05:02 +0200, Thomas Weißschuh wrote:
+> The meaning of the _no_ws() suffix is not immediately clear when reading
+> the code. Furthermore there is already a dedicated API to configure the
+> details of the created power supply in "struct power_supply_config".
+> Migrate the functionality to "struct power_supply_config" and remove the
+> special functions.
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] power: supply: Fix a typo
-      commit: 24227455dd089b965e82cc5d2142c83f40529534
+[1/8] power: supply: core: add wakeup source inhibit by power_supply_config
+      commit: 49000fee9e639f62ba1f965ed2ae4c5ad18d19e2
+[2/8] ACPI: battery: Register power supply with power_supply_register()
+      commit: 2de244e91ddf5cfcf7d88275ad2dbe7f0367e57e
+[3/8] power: supply: acer_a500_battery: register power supply with devm_power_supply_register()
+      commit: 8c3985bb4e78fb487621dce733fae387fce174a8
+[4/8] power: supply: bq27xxx_battery: register power supply with power_supply_register()
+      commit: 1011646d4bd6c2eedb68d131ba7ddaf9ecd2aa9e
+[5/8] power: supply: cros_usbpd-charger: register power supply with devm_power_supply_register()
+      commit: e8d2dfa6d246b2b879287c79098a1960b3856533
+[6/8] power: supply: lenovo_yoga_c630_battery: register power supplies with power_supply_register()
+      commit: 705833305a7a68d6ff163626abd81735940b7751
+[7/8] power: supply: max77976_charger: register power supply with devm_power_supply_register()
+      commit: 79b9630e6fc80f225e1564b42cae154970f31136
+[8/8] power: supply: core: remove {,devm_}power_supply_register_no_ws()
+      commit: 85d319e14f301e1c68131b74c1dceabae73d1e81
 
 Best regards,
 -- 
