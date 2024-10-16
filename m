@@ -1,45 +1,48 @@
-Return-Path: <linux-pm+bounces-15804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E09D99A1506
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 23:42:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0747B9A1508
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 23:42:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA6A0B246E6
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 21:42:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 954CF1F23936
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 21:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E381D318F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FDC1D31B5;
 	Wed, 16 Oct 2024 21:41:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532841D2B39;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD971D2B2F;
 	Wed, 16 Oct 2024 21:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729114919; cv=none; b=X/uDvy8a6sAh9dcAhtGhGGW68fmKnY3XFSIKcdT9FDnTe+mAAn0bPqibi3ENevQnHBcKtptzQPx8l61iaYSn5aotiM4OheoIinsLYPX4d/01xdXzfPukCHDG99x7B3gNZE9GnlcU6gNLFq6fap9d3Fn586J9zQTIfqwW0pWFbEw=
+	t=1729114919; cv=none; b=TcD3Pe+Mmx404JpX6gL8848w6M95GA3mlk0GeGmML9r8SE1tDzgg36QGT0F0ovSQw4sxHvXeWdpuRH/Q/UAmHqDhWOZisGL8FpEtLOa7GumLYWoF4RzEP9+UUvRnKsSrwiIPNeEyTb11n7rlRyJoFenJaGeFnWnhElaGq033Mx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729114919; c=relaxed/simple;
-	bh=wIyJk825vxE1cB6sJzT4gQT3wkEZCWbDwEm4otlzDjs=;
+	bh=S3EfK2JVGZ3joMiaZUylXW+vGex1gp8GJngUZrzgF2k=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TaN3pD+2vNGJBu3TYfWCQuIzV1U3HV3WTaSBIaL9yWec7Q4NEzOOFJCcMF+9zYPP1rd/dXE/zLdghoO6Mp9yhaXl0MiIe6fxmXnBEU7aQnJSm/hc+sYe7BMsqvbM4yAavpHz5XsaAzpHPYJO7OmRbeK6ObBP5pyYMHRum+yuFu8=
+	 MIME-Version:Content-Type; b=YVd+npUtg7Yh5JTpEd+B+jCiRkk3DSuH0ygYZ8bqHsyGVlM/YI4Xtk7b4uJ6myuFv4AfF+l8xurRJXkR2ZgsOPn/QXGELHi+wiGMCgj3tOVdjNFjHSy9f7sYJ8hHlZdvn7hXBvQnH2VK4mr+hiju3dHlvwfc5xsJBaYYNTCU5b8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2643C4AF09;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA4ACC4CECD;
 	Wed, 16 Oct 2024 21:41:58 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 4DDDE106045D; Wed, 16 Oct 2024 23:41:56 +0200 (CEST)
+	id 46BE01060453; Wed, 16 Oct 2024 23:41:56 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20241005-power-supply-cleanups-v1-0-45303b2d0a4d@weissschuh.net>
-References: <20241005-power-supply-cleanups-v1-0-45303b2d0a4d@weissschuh.net>
-Subject: Re: (subset) [PATCH 0/4] power: supply: core: random cleanups and
- optimizations
-Message-Id: <172911491630.630785.7870261570020412690.b4-ty@collabora.com>
+To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+ conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, 
+ tsbogend@alpha.franken.de, markus.stockhausen@gmx.de, 
+ Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-mips@vger.kernel.org
+In-Reply-To: <20241015225948.3971924-1-chris.packham@alliedtelesis.co.nz>
+References: <20241015225948.3971924-1-chris.packham@alliedtelesis.co.nz>
+Subject: Re: (subset) [PATCH v6 0/6] RTL9300 support for reboot and i2c
+Message-Id: <172911491628.630785.7202407720248115906.b4-ty@collabora.com>
 Date: Wed, 16 Oct 2024 23:41:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -48,23 +51,28 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Sat, 05 Oct 2024 12:06:14 +0200, Thomas Weißschuh wrote:
-> Some independent cleanups and optimizations.
+On Wed, 16 Oct 2024 11:59:42 +1300, Chris Packham wrote:
+> As requested I've combined my two series into a single one to provide some
+> better context for reviewers. I'm not sure which trees the patches should go in
+> via. The first two are reasonably independent and could go in via linux-pm. I
+> guess technically the last one could go via linux-i2c but it needs the and the
+> bindings/dts updates which would probably make sense to come via linux-mips.
 > 
+> --
+> 2.46.1
 > 
+> [...]
 
 Applied, thanks!
 
-[1/4] power: supply: core: use device mutex wrappers
-      commit: bd3ee57b9d4c58edbf6f7bba071f6e508c7ff1c6
-[2/4] power: supply: core: unexport power_supply_property_is_writeable()
-      commit: cf70da29c4993bf23df68b67a82dfa3da8234e75
-[3/4] power: supply: core: mark attribute arrays as ro_after_init
-      commit: 3120b5f218ca8e2b375d496e2ff3f4f861fbc013
+[1/6] dt-bindings: reset: syscon-reboot: Add reg property
+      commit: e7af7d13316dc5e2293c4f777f71bd8331f5d7a5
+[2/6] power: reset: syscon-reboot: Accept reg property
+      commit: ce38cdc908557953604ffb0a91ef5ae3fbdf1c6b
 
 Best regards,
 -- 
