@@ -1,91 +1,175 @@
-Return-Path: <linux-pm+bounces-15747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15746-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2B309A051A
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 11:10:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01119A0505
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 11:07:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23F09B2605E
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 09:10:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99CE41F256DA
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 09:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901DD1D172E;
-	Wed, 16 Oct 2024 09:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2513205E24;
+	Wed, 16 Oct 2024 09:06:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E29517D378;
-	Wed, 16 Oct 2024 09:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FF6134A8;
+	Wed, 16 Oct 2024 09:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729069851; cv=none; b=C2Pk5W1XhrTu+bEsFmlXKVTDlvrQuRS6qkLzZCL7HBrXFJdzzf48rSAUaZlV7KZoyD0ixa3l3Fiw4NSmPPyyn3kD/jnjfF85faohoCS8cjw3DLJBMILweA2p9s7ckKyCJZblvVineoVM8EBWm4RVssRuL5hDSNc/RJSxiGkaYQ4=
+	t=1729069608; cv=none; b=FlUedtPvN4ibNqlQJNM8Uz5959UPLFCh/sWYMzNYjELrWH3syXyADY7QC9tchUSo6Gpw/dBrCHxwSxhafHtZwGRoDfnAeEuSKQW9pS/1dMj8bJSjYvxRq6onbnu6+ATd/fQLRieBSQR4oJ+DW22iliSvxU4xJCxsuRQvHgA4AmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729069851; c=relaxed/simple;
-	bh=ni1/h5ZUuU9JvygnJZuD78bSfAoXblxXrT5jzOTJs/0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A38LrOeCSQ8J+ThSwIH7sz06uSOrQ6doOz69WxqdFOrJYA/dyvQ90E/IPEfMutwCTnMwjSVU8KrJJ6wiX4+WP6FcjnDe1Op/8CevtWbcntr2cZwNX7pqQXTZQwpGDvHYrEieAvAF6+koYg38wDAo5zE0WQ6Zz3bvV0/T7tlKUmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XT4sn04Qpz1j9ks;
-	Wed, 16 Oct 2024 17:09:33 +0800 (CST)
-Received: from dggpeml500024.china.huawei.com (unknown [7.185.36.10])
-	by mail.maildlp.com (Postfix) with ESMTPS id EE18E140361;
-	Wed, 16 Oct 2024 17:10:46 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
- (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 16 Oct
- 2024 17:10:46 +0800
-From: Yuan Can <yuancan@huawei.com>
-To: <jiaxun.yang@flygoat.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-	<ralf@linux-mips.org>, <wuzhangjin@gmail.com>, <linux-mips@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>
-CC: <yuancan@huawei.com>
-Subject: [PATCH v2] cpufreq: loongson2: Unregister platform_driver on failure
-Date: Wed, 16 Oct 2024 17:06:15 +0800
-Message-ID: <20241016090615.128678-1-yuancan@huawei.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1729069608; c=relaxed/simple;
+	bh=M21iJxKBohEOGhKfsJRGUH3NcVRWz3N3rmaMz9F2myU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eLHDTFJiJmYrcgYXFe+eD5O3TB20HsKkd8UND/Ip1Q0ZtLxJhhc9buCsas5qUUaE9i1kjH6hz2mhgw6IQvwSvnoprE0z5HmA11uj5JiCTZfac+l9A40HLGJfxSHHa09RBqDgMeO97Nu2JnCrjOcalvg0jN1NB2QVM/D7tvA9lU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f0700d228b9d11efa216b1d71e6e1362-20241016
+X-CTIC-Tags:
+	HR_CC_ADR_NAME, HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CTE_QP
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:e04fd5a5-f0b3-46d0-99ce-3f7750ff3f28,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+	N:release,TS:23
+X-CID-INFO: VERSION:1.1.38,REQID:e04fd5a5-f0b3-46d0-99ce-3f7750ff3f28,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTION:
+	release,TS:23
+X-CID-META: VersionHash:82c5f88,CLOUDID:d528c2f09eaffe99a0633234e5393f0b,BulkI
+	D:2409062205428B690IWE,BulkQuantity:62,Recheck:0,SF:64|66|38|17|19|102,TC:
+	nil,Content:1|-5,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:40|20,QS:nil,BEC
+	:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB,
+	TF_CID_SPAM_FCD,TF_CID_SPAM_ULS
+X-UUID: f0700d228b9d11efa216b1d71e6e1362-20241016
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 46819346; Wed, 16 Oct 2024 17:06:33 +0800
+Message-ID: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: "Gopal, Saranya" <saranya.gopal@intel.com>, Alan Stern
+	 <stern@rowland.harvard.edu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Hongyu Xie
+ <xy521521@gmail.com>,  "gregkh@linuxfoundation.org"
+ <gregkh@linuxfoundation.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
+ <linux-pm@vger.kernel.org>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "niko.mauno@vaisala.com"
+ <niko.mauno@vaisala.com>,  "pavel@ucw.cz" <pavel@ucw.cz>,
+ "stanley_chang@realtek.com" <stanley_chang@realtek.com>,  "tj@kernel.org"
+ <tj@kernel.org>, Hongyu Xie <xiehongyu1@kylinos.cn>
+Date: Wed, 16 Oct 2024 17:06:24 +0800
+In-Reply-To: <DS0PR11MB74570B2F9CB54FADA323CDE9E3462@DS0PR11MB7457.namprd11.prod.outlook.com>
+References: <bddecd4e-d3c8-448e-8a22-84bbc98c4d1b@kylinos.cn>
+	 <b2ec107d4797f6e1e8e558f97c0ad1be6d46572c.camel@kylinos.cn>
+	 <84a4f66a-5b0e-46a8-8746-be6cd7d49629@rowland.harvard.edu>
+	 <fa347849defa66a7d4af23ac6317ae5b37357ea4.camel@kylinos.cn>
+	 <2c368013-8363-4a4e-bfee-2f0b14d01162@rowland.harvard.edu>
+	 <5f2f6b979e95e4c2bc33ea0277112939164f6024.camel@kylinos.cn>
+	 <d70e070f-5224-402c-ac27-0703b4010b18@rowland.harvard.edu>
+	 <0ad92e8fef2f07672aa8e97bc04f20657469ac6e.camel@kylinos.cn>
+	 <b8eb28f3-504d-4d26-8b02-ca1ae7309a70@rowland.harvard.edu>
+	 <f27bcdb6c5ddd4e91a1dc9f86b4f0c55c50671a8.camel@kylinos.cn>
+	 <74848334-7cd7-4ce1-ad96-5dd29d70d3bb@rowland.harvard.edu>
+	 <eb119532f37c84aedab32df9169e64abf894f006.camel@kylinos.cn>
+	 <DS0PR11MB74570B2F9CB54FADA323CDE9E3462@DS0PR11MB7457.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500024.china.huawei.com (7.185.36.10)
 
-When cpufreq_register_driver() returns error, the cpufreq_init() returns
-without unregister platform_driver, fix by add missing
-platform_driver_unregister() when cpufreq_register_driver() failed.
+Hi Saranya,
 
-Fixes: f8ede0f700f5 ("MIPS: Loongson 2F: Add CPU frequency scaling support")
-Signed-off-by: Yuan Can <yuancan@huawei.com>
----
-Changes since v1:
-- Change to style suggested by Viresh Kumar.
----
- drivers/cpufreq/loongson2_cpufreq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+=E5=9C=A8 2024-10-16=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 08:57 +0000=EF=BC=
+=8CGopal, Saranya=E5=86=99=E9=81=93=EF=BC=9A
+> Hi Duan Chenghao,
+>=20
+> > -----Original Message-----
+> > From: duanchenghao <duanchenghao@kylinos.cn>
+> > Sent: Monday, October 14, 2024 7:11 AM
+> > To: Alan Stern <stern@rowland.harvard.edu>; Gopal, Saranya
+> > <saranya.gopal@intel.com>
+> > Cc: Rafael J. Wysocki <rafael@kernel.org>; Hongyu Xie
+> > <xy521521@gmail.com>; gregkh@linuxfoundation.org; linux-
+> > kernel@vger.kernel.org; linux-pm@vger.kernel.org; linux-
+> > usb@vger.kernel.org; niko.mauno@vaisala.com; pavel@ucw.cz;
+> > stanley_chang@realtek.com; tj@kernel.org; Hongyu Xie
+> > <xiehongyu1@kylinos.cn>
+> > Subject: Re: [PATCH] USB: Fix the issue of task recovery failure
+> > caused
+> > by USB status when S4 wakes up
+> >=20
+> > =E5=9C=A8 2024-10-12=E6=98=9F=E6=9C=9F=E5=85=AD=E7=9A=84 11:01 -0400=EF=
+=BC=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> > Hi Saranya,
+> >=20
+> > > On Sat, Oct 12, 2024 at 05:51:41PM +0800, duanchenghao wrote:
+> > > >=20
+> > > > Hi Alan,
+> > > >=20
+> > > > The V3 patch has been sent. Please review it to check if it
+> > > > aligns
+> > > > with
+> > > > the solution you described.
+> > >=20
+> > > Yes, that is what I meant.
+> > >=20
+> > > Have you and all the other people at kylinos.cn tested the patch
+> > > to
+> > > make
+> > > sure that it fixes the problem?
+> > >=20
+> > > Alan Stern
+> >=20
+> > If you have time, you can arrange to test your issue using the V3
+> > version. This way, we can jointly verify whether the problem has
+> > been
+> > resolved.
+> >=20
+> My testing completed today.
+> I couldn't reproduce the issue when I ran 1500 S4 cycles with v3
+> version of your patch.
+> The issue was anyway rare before with an occurrence rate of 20/1500
+> cycles in our system.
+> So, please conclude after verifying from your side also.
+>=20
 
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index 6a8e97896d38..ed1a6dbad638 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -148,7 +148,9 @@ static int __init cpufreq_init(void)
- 
- 	ret = cpufreq_register_driver(&loongson2_cpufreq_driver);
- 
--	if (!ret && !nowait) {
-+	if (ret) {
-+		platform_driver_unregister(&platform_driver);
-+	} else if (!nowait) {
- 		saved_cpu_wait = cpu_wait;
- 		cpu_wait = loongson2_cpu_wait;
- 	}
--- 
-2.17.1
+Thank you very much for your verification. I am currently conducting
+parallel testing on multiple machines, and the results should be
+available soon as well.
+
+Thanks,
+Duan Chenghao
+
+> Thanks,
+> Saranya
+>=20
+> > Thanks
+> > Duan Chenghao
+> >=20
+> >=20
+>=20
 
 
