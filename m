@@ -1,645 +1,223 @@
-Return-Path: <linux-pm+bounces-15721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15724-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA40599FBFA
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 01:01:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F6E99FFFC
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 06:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31FEC1F259B3
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2024 23:01:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39E371F22594
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 04:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A28A1FE0FA;
-	Tue, 15 Oct 2024 23:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450D4176237;
+	Wed, 16 Oct 2024 04:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="GmGB1ZXN"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="pwjP2XaA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CA71F81A2
-	for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2024 22:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729033202; cv=none; b=PQAIomPv5zePbZTwzyURqyxXtPh0TJ6rF6NYTfNazP7G+EF27SdmE6L3x8A4TUZjBlA3/mLrWt5YSC4siSQzm9HX7t+CMu1VKQkPKx+1mo8skyArcPjLeVFZsXPrAW4YW97xI6d7O0HmeJWkeCWBeXP9yTSUCbVss6EaOmrSeRw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729033202; c=relaxed/simple;
-	bh=Yqqx7s4vfWwQCfz5QG5ogC/+0JwE69c3NcNuG8xJwKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rSgQUq/WzKeEGFCRl1NBmlPYEPZbwPuuq579s9rKifNfPlvlkTN+3lF0vtn1SrIm+NLngp3PJhKHpOG8vzgsOuRRxPJFsTqoWVou4u2fwRh4cAmn4N/6LRjEQ8T6IJxjBCQNZeN5IRDT8+XXCdPfVH25e9scFwRDTdmA83U9I8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=GmGB1ZXN; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 079092C0709;
-	Wed, 16 Oct 2024 11:59:53 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1729033193;
-	bh=T1GxPiNWfLoJkbEBuS64PccAY7oiaSSRCJapg3rcL/M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GmGB1ZXNXZCNY/8aBrTnWCKLNLrKvKydtTdRb9xGOTwcajeMbNHl8rgDMyi+OEpME
-	 ptLyVLZCrG3ED6HHa9hMIbY4b72gzSXiIo3i0EK2mHeagqtEqulboCaA7iBX2dEZtV
-	 +K7TtyUqSCcyomlM43O+sTCFy8m+wGYVjbRtb35s+j93kCO14z+d3mq+ropAEgiMDq
-	 RjNqusCJW79Y0JBD4nxlSwgZACyOLxO6wwDLlDepq+NXTJ6VWNswSrmvgmJSey31q5
-	 EUtJL5P6TI0sfNhpshpswPdGZn1+DVOw/iVlrUvnr1z6oTiaTgzXAbHljxz7r5z3ow
-	 f9HVMfCxrSM+A==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B670ef3e80006>; Wed, 16 Oct 2024 11:59:52 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 4FF4813ED7B;
-	Wed, 16 Oct 2024 11:59:52 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 4E73C2820D4; Wed, 16 Oct 2024 11:59:52 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: andi.shyti@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	lee@kernel.org,
-	sre@kernel.org,
-	tsbogend@alpha.franken.de,
-	markus.stockhausen@gmx.de
-Cc: linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6394415E5CA;
+	Wed, 16 Oct 2024 04:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.79
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729051856; cv=fail; b=ZSW6rGNmAzMh2JP7uye1PJNEYX2kvwQGOfhU0+RqlprLO4SYpnD8OGNM8C6Zqd/Cy7LU6qAwXsfOlWqA3sf+eCvsyJg+6BZY3qnoat5WDqVCbbE1hLz57U0k8wYbYNM47/yDrAIIryXVkcEzpX0tg1STCi/wa46nS53oNxYjzk8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729051856; c=relaxed/simple;
+	bh=zKKHSgPFi/hZamy2FPclwyOlMyDMA04QoVq/rxk5zFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=PgT463J6EtQXtP98yWKUZzO9e9KY8ac5yuI+u1w9a2wVbs+0xhx4iE6viVt89ACn11hLodzMoDVgu2BPSE1hJ/iht2dYsmamvriOzYLR7GrG32d1bOx0oeP/UPeSOU3XdgbPoLP4aqZrGLtXw9Z/9qzkMnL7+nB67J5piJgPzp8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=pwjP2XaA; arc=fail smtp.client-ip=40.107.220.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Jb6WrX5DmTxrDp+sAfCK21yYHnKjOcAaOg730S+y3O7Y9+BJ37iPRR2E+APtCf12QOS0vHBEXm5bWM3PIkEm7fqHQVuaXv71Af9FtTnnRU3yFxHOJ7q5PbshyWwqZCRDPkE22xyHNbV8QOFjXZ6Zx75Ip6n+uLmhPaE+sxtVlP2TNWXzuWgoldSGEw93TBOKlBjYStwykIUyFSnw2alyFZpqwmkeAOyDVUG0PrX2P8al1TiARVxxJb37rwFynXDt44/9v1p4AwIyQ3FH2Bv6ren6++ZP6SJRdVjfghD0x0OSuZCwiVe98f8Vd9YIObljQsZlStUnqWhQEWKF8EGPJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r+0p4ulNz2RAigH7mO4rFNWHIvDqe0Kihf8K1wDSUc8=;
+ b=vxJM7iakNjpS+9UEGV1F9E9X+QZ92ahhBKdBdBcMWK2YydZ4MKw8cl2bNSCB8xWqWnCUpIKaLwhACJ28ipHxc+f1b6U1cX1Mx39peLQgZzpdTEjbXhCVJ+NzfrGWNZuD0xO0QL279UsKW1YpTnRx1i0Lf0/JMuIA7M2oFyPsCcxuRR1QycFXTvrnClE/Zvuhrvqs/yhK/rB7usT8EnWK8LFgQtHx9aBDgL4HlcMH961WE5U3IuuLM1SeRb1d8zc42V1Q3lRf5OzsKY4yVXTP2wJSlQhffUqO89Pb319COF5iX6sNXb8AN+oZPzqkLhm+YJIMWGP6u/cVR0jeF1HmAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r+0p4ulNz2RAigH7mO4rFNWHIvDqe0Kihf8K1wDSUc8=;
+ b=pwjP2XaAWEkcnp7Z19TPD1ufokLyGQuIZ9MKACFs8E9dezxmPCHupGAqctewuzDKRMtIoQuMPEz9j6671Wh5gpcLyJEpiV302/fnS+yf4NuHXppeuGBfJ+j9VWM5FTC4ook/l2yGE5DAZL3EcHePD2Il3C/JQpIKuLBtvss6cBk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ SJ0PR12MB7473.namprd12.prod.outlook.com (2603:10b6:a03:48d::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8048.16; Wed, 16 Oct 2024 04:10:51 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%4]) with mapi id 15.20.8048.020; Wed, 16 Oct 2024
+ 04:10:51 +0000
+Date: Wed, 16 Oct 2024 09:40:40 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Perry Yuan <perry.yuan@amd.com>, linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v6 6/6] i2c: Add driver for the RTL9300 I2C controller
-Date: Wed, 16 Oct 2024 11:59:48 +1300
-Message-ID: <20241015225948.3971924-7-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241015225948.3971924-1-chris.packham@alliedtelesis.co.nz>
-References: <20241015225948.3971924-1-chris.packham@alliedtelesis.co.nz>
+	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	Peter Jung <ptr1337@cachyos.org>
+Subject: Re: [PATCH 1/4] cpufreq/amd-pstate: Use nominal perf for limits when
+ boost is disabled
+Message-ID: <Zw88wPX6WqCRYyRt@BLRRASHENOY1.amd.com>
+References: <20241012174519.897-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241012174519.897-1-mario.limonciello@amd.com>
+X-ClientProxiedBy: PN1PEPF000067EF.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c04::2b) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=670ef3e8 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=DAUX931o1VcA:10 a=jdP34snFAAAA:8 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=UgJECxHJAAAA:8 a=aaOI7ajaZ5fHE1syFM0A:9 a=3ZKOabzyN94A:10 a=jlphF6vWLdwq7oh3TaWq:22 a=-El7cUbtino8hM1DCn8D:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SJ0PR12MB7473:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54533c49-b82c-488f-7521-08dced9885ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?X4T9fQn5AHZogpQv8Y62NvALt1HhOScntWSyvXMYOmxGpMJOY8k1c5oo1PwN?=
+ =?us-ascii?Q?Fce5Wyi2lv8SkSAMUANTbyGNms2Pu0TWpJMAguf0CS4tmeLJONamDSNy53jT?=
+ =?us-ascii?Q?0H3zrPJaN4hj726aNc95ziNw9JyXuHAmUXGVDmEfs7+g65AyLywsXaTVLTHH?=
+ =?us-ascii?Q?Tgl7jaIku5KekJTFatq6T5ghHqucE3wx3AhrzwFmQloTaFpIMsQxDaGy3dd7?=
+ =?us-ascii?Q?MFOhZSvcaQYxF6Qs43bKDzta2A7VigsvvYeyS05605kkiNPRQhV/r2Ru7sUs?=
+ =?us-ascii?Q?3U/A0am1n4jbhhUW35UL2/lxaHzw3aqoWX0xooUZ7vT/qsm3Y3bK8kyP/TTJ?=
+ =?us-ascii?Q?X3q5/LVnjZjkfikujSqNP9YhmOue9dz7oHd6z5ukxigThfOCG0PfCo+jQ5st?=
+ =?us-ascii?Q?a9quFLsLZxLIvw6qJq4zhMp/MEJgQsqGLLsv8RCAu024uIXdbuhGHa7GosvQ?=
+ =?us-ascii?Q?EEVQ7q2AKg6DlecEIk3KuXlPAPPw2s0taeod5eJFBZnWliwrS+gKSatN3Qv9?=
+ =?us-ascii?Q?z1wT9qmQq6fhi+UFS5kCUqxrUnp/V5Xk+ARZ10ZBz1El9yEJruoimr6xh0tt?=
+ =?us-ascii?Q?dXKeyitGJOFBfliAuqNsP3zROY6ukT4yLs/veOxonvoHTR5OgXp64WSaj0Za?=
+ =?us-ascii?Q?ZG1z1Lk8r0/HySWqwkx8/Yq28OWtos1bjLFHIuXoctWXEGwayBS2W3Kh6Jni?=
+ =?us-ascii?Q?3rIATYaY6OhGtpqezQyaRRnIWMUvNqv+/RqT3S6bEx0QOrepyEFPjmwWnLp9?=
+ =?us-ascii?Q?Ld3B+0ZEVZeKttMed1oiwaVS23+NOEoZqIc8RHvafulce0l2inIosZXywqcE?=
+ =?us-ascii?Q?DIjqPrBA/LBrnDzCI9B/O7kWFBq1HKlCu8UgjUt+fGHjLRX1fj3GrPlhk7Lg?=
+ =?us-ascii?Q?8Hszr+vPxnNM6PJh/7viMNlP0fnPa7xNdRAgsFE3HuYyNZ5IcsPg+3qk8RSh?=
+ =?us-ascii?Q?MNZDPfJMbRx6+FrMeNkGlzEgtCzUOZ0BpMYcVIf0DXTuaLM8ej1KY4as8EIO?=
+ =?us-ascii?Q?BLVI0s0fGFqpLqthVHK110L4IOZU12JodWpasHVyckEEpvj6Qa7VtFq8YoN7?=
+ =?us-ascii?Q?vtNZQWtLiTzf1uH1npZXjhQtLLiq73JKn6nOFNS7Abb9RhU1abX5RuIm7o1t?=
+ =?us-ascii?Q?IfS9MhC/SYW79GZRjzV0LfJiOcLq5SI79AT4H2U6V7RsZNF8oTTsZCC3ru5H?=
+ =?us-ascii?Q?CMAnESPVweQP5i8AE4eJnbGDnvt2nYgBBSLrIYQbVC9M3U2apnSIG2acx7C9?=
+ =?us-ascii?Q?eaTzm2pfB5znODam4ffK0hx0LxfcCYa5YIplbsGxCQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Ms8d9VgF/H0nfBiTRcI/yLHqJ075lNwjUNo/jWh3qa8sJibEeVh4HXU0rUDU?=
+ =?us-ascii?Q?WSKxyZGXk2WDdFBOKrARY6fUfYd1o1pZTv3Fi1I07Y7WNKTMw2qZkcvH9bDg?=
+ =?us-ascii?Q?pHQieqnWOQW5rLwKwThULk/KelgVC0+uiFGqtzSqgjAtLuvmSMLrA6KsDyMM?=
+ =?us-ascii?Q?+iOUm1kHAW+S1GdlOsPZlajV0I9BQh1znNDbQckEYqbqcLyO+Bz08iDYANks?=
+ =?us-ascii?Q?+yXJxlJ2rS22+aE0w/QWOejzov6ivynd4MSozYYH5vntd/gD1DoydqU1A1eP?=
+ =?us-ascii?Q?L++cElL4Ag+4aWV5GBdwOokxWk9KwZE58PEtMneNXiTe+3FAT0Zdx7Lhl1eA?=
+ =?us-ascii?Q?myT09zXkDZFucdALCRTF46p8mc2Yx2qPkqecjDC3gvQdBaMEP6aYeUXjjJud?=
+ =?us-ascii?Q?WzUGfh99pn+a8AhSYwkjOTVzZAIpKwbGYCypu2pgRdDhgIM33PXKxDkV8mkK?=
+ =?us-ascii?Q?tlg2yf44fee6HH0nk4hASw5SFAQHRpXY8ovsve6revMaRVorp4A4ZdQtajtu?=
+ =?us-ascii?Q?DzmTajpcQiJkgReGvZogLBETevSGsDwiKPZ7knNPs0tbbk9sJ8PxFL+IK1uP?=
+ =?us-ascii?Q?yvDOk8SkK+ShX3A1F8A3KxppsZDc0Dtno1t1zW2UIqAA5wOmmSK3PLKEXr7E?=
+ =?us-ascii?Q?9omO+FqiNmHSunj62V+UNnTt//kt0EaLVikZk9+yiGdgfSRgBKlTZAIgTJfa?=
+ =?us-ascii?Q?g1tvlhq8SR5XDlzguFPU7wG5zCi8fGz9vezIf1iqqVAGKaCn9Oto9Hb/rpan?=
+ =?us-ascii?Q?zDW5ug/b6PB+odlXxjFohAhQ/DDJHpuh3lmdcdcvFhx2Dk71VWwl6vaNsJGN?=
+ =?us-ascii?Q?Lw26CNKtvjga46h6NN87G33Gkx1OS9mBLU49uVk6GGR3U5FGkhcM4b/R5e21?=
+ =?us-ascii?Q?epaHiQQ7qqJrNnHm447LQYZnNkwud3zcaTJ6mRY/eg1QapDo6plL7nSPn+pY?=
+ =?us-ascii?Q?30XrX4WErxenhpeKOVvSS3+ER4gxvbVElLAa1+iEsV3sVewvO/A3ssvNKkun?=
+ =?us-ascii?Q?mdqErUuFcqlIWSBx9ANAgKfQaM4T2jUAip9ytuKkmMUYaqvAksy/joDvtfII?=
+ =?us-ascii?Q?JeOQEaW0a3PLFrRJCChmUcygLVk/G/3QBnB9Nt95dZSW6+tsauH35ula4GEO?=
+ =?us-ascii?Q?IMAp8sbvtF790cO2FiooV/TGZyZP5jQC00zFOmfI15SsiQN29t1UNgCF2+rb?=
+ =?us-ascii?Q?mjdCUkMvFBMTM7DWGZvugwnFUpDrNbY+ebIAxmZhBvm1/Ts6EpJ0jIvQ4F7c?=
+ =?us-ascii?Q?+aIcH5v9l/xoJHYu4EU+tSMwP06Kbw0L1kEC4YD4VJ++1yX1jurZIPQ5gsv7?=
+ =?us-ascii?Q?s3yk6KM2MuiAt+0oneF8tom89o7v6Pfvn1jPrfqIkUpSxoarMra3BAmPtDsd?=
+ =?us-ascii?Q?KEpbQSCNBwYtEbhzU+bfF2agxoY3hmRj4bm+XQvZ1by7Di37uCThTnamSIp6?=
+ =?us-ascii?Q?COlejvZfgbW0qb7z6mian+4TqGqA+40ZRLkmuFcMDiN8wZgWiOxVnir1G7G+?=
+ =?us-ascii?Q?8VZ6pzMSSXf5dCoG05L6FpXu/AXCftR9QynXgGhl4/LUzovKpQVbFay3GRyr?=
+ =?us-ascii?Q?zQ8i08wRWTaY0SmIOAxSPjJRusIhMI5tsnOu42Dm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54533c49-b82c-488f-7521-08dced9885ac
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 04:10:51.6703
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mZGf08UpZRSWtWIZZgaJTe2SRF2kQZb71iA2UgXjRXZvfWkWKH7imkAmuh01fdTH7AHgQ2VmvDhizlhn5w1Rrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7473
 
-Add support for the I2C controller on the RTL9300 SoC. There are two I2C
-controllers in the RTL9300 that are part of the Ethernet switch register
-block. Each of these controllers owns a SCL pin (GPIO8 for the fiorst
-I2C controller, GPIO17 for the second). There are 8 possible SDA pins
-(GPIO9-16) that can be assigned to either I2C controller. This
-relationship is represented in the device tree with a child node for
-each SDA line in use.
+Hello Mario,
 
-This is based on the openwrt implementation[1] but has been
-significantly modified
+On Sat, Oct 12, 2024 at 12:45:16PM -0500, Mario Limonciello wrote:
+> When boost has been disabled the limit for perf should be nominal perf not
+> the highest perf.  Using the latter to do calculations will lead to
+> incorrect values that are still above nominal.
+> 
+> Fixes: ad4caad58d91 ("cpufreq: amd-pstate: Merge amd_pstate_highest_perf_set() into amd_get_boost_ratio_numerator()")
+> Reported-by: Peter Jung <ptr1337@cachyos.org>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219348
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-[1] - https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob;f=3Dtarge=
-t/linux/realtek/files-5.15/drivers/i2c/busses/i2c-rtl9300.c
+The patch looks good to me.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
-Notes:
-    Changes in v6:
-    - Make rtl9300_i2c_quirks static
-    - Drop wildcard compatible
-    - Add SoC specific compatibles
-    Changes in v5:
-    - Make lock part of struct rtl9300_i2c
-    - Fix alignment in rtl9300_i2c_smbus_xfer
-    Changes in v4:
-    - skipped due to combining patch series
-    Changes in v3:
-    - None
-    Changes in v2:
-    - Replace a number of return 0; with tail calls
-    - Add enum rtl9300_bus_freq
-    - Use RTL9300_ prefix on new defines
-    - Use reg property for register offset
-    - Hard code RTL9300_I2C_MST_GLB_CTRL address as this does not need to
-      come from DT binding
-    - Use GENMASK() where appropriate
-    - Propagate read/write errors through to rtl9300_i2c_smbus_xfer()
-    - Don't error out on bad clock-frequency
-    - Use devm_i2c_add_adapter()
-    - Put more information in the commit message
-    - Integrated multiplexing function, an adapter is created per SDA lin=
-e
+--
+Thanks and Regards
+gautham.
 
- MAINTAINERS                      |   7 +
- drivers/i2c/busses/Kconfig       |  10 +
- drivers/i2c/busses/Makefile      |   1 +
- drivers/i2c/busses/i2c-rtl9300.c | 425 +++++++++++++++++++++++++++++++
- 4 files changed, 443 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-rtl9300.c
+> ---
+>  drivers/cpufreq/amd-pstate.c | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 30415c30d8b4..dfa9a146769b 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -536,11 +536,16 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+>  
+>  static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
+>  {
+> -	u32 max_limit_perf, min_limit_perf, lowest_perf;
+> +	u32 max_limit_perf, min_limit_perf, lowest_perf, max_perf;
+>  	struct amd_cpudata *cpudata = policy->driver_data;
+>  
+> -	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
+> -	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
+> +	if (cpudata->boost_supported && !policy->boost_enabled)
+> +		max_perf = READ_ONCE(cpudata->nominal_perf);
+> +	else
+> +		max_perf = READ_ONCE(cpudata->highest_perf);
+> +
+> +	max_limit_perf = div_u64(policy->max * max_perf, policy->cpuinfo.max_freq);
+> +	min_limit_perf = div_u64(policy->min * max_perf, policy->cpuinfo.max_freq);
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f328373463b0..79c67e95a682 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19887,6 +19887,13 @@ S:	Maintained
- T:	git https://github.com/pkshih/rtw.git
- F:	drivers/net/wireless/realtek/rtl8xxxu/
-=20
-+RTL9300 I2C DRIVER (rtl9300-i2c)
-+M:	Chris Packham <chris.packham@alliedtelesis.co.nz>
-+L:	linux-i2c@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
-+F:	drivers/i2c/busses/i2c-rtl9300.c
-+
- RTRS TRANSPORT DRIVERS
- M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
- M:	Jack Wang <jinpu.wang@ionos.com>
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a22f9125322a..927b583002c7 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1041,6 +1041,16 @@ config I2C_RK3X
- 	  This driver can also be built as a module. If so, the module will
- 	  be called i2c-rk3x.
-=20
-+config I2C_RTL9300
-+	tristate "Realtek RTL9300 I2C controller"
-+	depends on MACH_REALTEK_RTL || COMPILE_TEST
-+	help
-+	  Say Y here to include support for the I2C controller in Realtek
-+	  RTL9300 SoCs.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called i2c-rtl9300.
-+
- config I2C_RZV2M
- 	tristate "Renesas RZ/V2M adapter"
- 	depends on ARCH_RENESAS || COMPILE_TEST
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 78d0561339e5..ac2f9f22803c 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -102,6 +102,7 @@ obj-$(CONFIG_I2C_QCOM_GENI)	+=3D i2c-qcom-geni.o
- obj-$(CONFIG_I2C_QUP)		+=3D i2c-qup.o
- obj-$(CONFIG_I2C_RIIC)		+=3D i2c-riic.o
- obj-$(CONFIG_I2C_RK3X)		+=3D i2c-rk3x.o
-+obj-$(CONFIG_I2C_RTL9300)	+=3D i2c-rtl9300.o
- obj-$(CONFIG_I2C_RZV2M)		+=3D i2c-rzv2m.o
- obj-$(CONFIG_I2C_S3C2410)	+=3D i2c-s3c2410.o
- obj-$(CONFIG_I2C_SH7760)	+=3D i2c-sh7760.o
-diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rt=
-l9300.c
-new file mode 100644
-index 000000000000..cf3f322e45bd
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-rtl9300.c
-@@ -0,0 +1,425 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/bits.h>
-+#include <linux/i2c.h>
-+#include <linux/i2c-mux.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+enum rtl9300_bus_freq {
-+	RTL9300_I2C_STD_FREQ,
-+	RTL9300_I2C_FAST_FREQ,
-+};
-+
-+struct rtl9300_i2c;
-+
-+struct rtl9300_i2c_chan {
-+	struct i2c_adapter adap;
-+	struct rtl9300_i2c *i2c;
-+	enum rtl9300_bus_freq bus_freq;
-+	u8 sda_pin;
-+};
-+
-+#define RTL9300_I2C_MUX_NCHAN	8
-+
-+struct rtl9300_i2c {
-+	struct regmap *regmap;
-+	struct device *dev;
-+	struct rtl9300_i2c_chan chans[RTL9300_I2C_MUX_NCHAN];
-+	u32 reg_base;
-+	u8 sda_pin;
-+	struct mutex lock;
-+};
-+
-+#define RTL9300_I2C_MST_CTRL1			0x0
-+#define  RTL9300_I2C_MST_CTRL1_MEM_ADDR_OFS	8
-+#define  RTL9300_I2C_MST_CTRL1_MEM_ADDR_MASK	GENMASK(31, 8)
-+#define  RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_OFS	4
-+#define  RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_MASK	GENMASK(6, 4)
-+#define  RTL9300_I2C_MST_CTRL1_GPIO_SCL_SEL	BIT(3)
-+#define  RTL9300_I2C_MST_CTRL1_RWOP		BIT(2)
-+#define  RTL9300_I2C_MST_CTRL1_I2C_FAIL		BIT(1)
-+#define  RTL9300_I2C_MST_CTRL1_I2C_TRIG		BIT(0)
-+#define RTL9300_I2C_MST_CTRL2			0x4
-+#define  RTL9300_I2C_MST_CTRL2_RD_MODE		BIT(15)
-+#define  RTL9300_I2C_MST_CTRL2_DEV_ADDR_OFS	8
-+#define  RTL9300_I2C_MST_CTRL2_DEV_ADDR_MASK	GENMASK(14, 8)
-+#define  RTL9300_I2C_MST_CTRL2_DATA_WIDTH_OFS	4
-+#define  RTL9300_I2C_MST_CTRL2_DATA_WIDTH_MASK	GENMASK(7, 4)
-+#define  RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_OFS	2
-+#define  RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_MASK	GENMASK(3, 2)
-+#define  RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS	0
-+#define  RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK	GENMASK(1, 0)
-+#define RTL9300_I2C_MST_DATA_WORD0		0x8
-+#define RTL9300_I2C_MST_DATA_WORD1		0xc
-+#define RTL9300_I2C_MST_DATA_WORD2		0x10
-+#define RTL9300_I2C_MST_DATA_WORD3		0x14
-+
-+#define RTL9300_I2C_MST_GLB_CTRL  0x384
-+
-+static int rtl9300_i2c_reg_addr_set(struct rtl9300_i2c *i2c, u32 reg, u1=
-6 len)
-+{
-+	u32 val, mask;
-+	int ret;
-+
-+	val =3D len << RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_OFS;
-+	mask =3D RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_MASK;
-+
-+	ret =3D regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST=
-_CTRL2, mask, val);
-+	if (ret)
-+		return ret;
-+
-+	val =3D reg << RTL9300_I2C_MST_CTRL1_MEM_ADDR_OFS;
-+	mask =3D RTL9300_I2C_MST_CTRL1_MEM_ADDR_MASK;
-+
-+	return regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_=
-CTRL1, mask, val);
-+}
-+
-+static int rtl9300_i2c_config_io(struct rtl9300_i2c *i2c, u8 sda_pin)
-+{
-+	int ret;
-+	u32 val, mask;
-+
-+	ret =3D regmap_update_bits(i2c->regmap, RTL9300_I2C_MST_GLB_CTRL, BIT(s=
-da_pin), BIT(sda_pin));
-+	if (ret)
-+		return ret;
-+
-+	val =3D (sda_pin << RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_OFS) |
-+		RTL9300_I2C_MST_CTRL1_GPIO_SCL_SEL;
-+	mask =3D RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_MASK | RTL9300_I2C_MST_CTRL1=
-_GPIO_SCL_SEL;
-+
-+	return regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_=
-CTRL1, mask, val);
-+}
-+
-+static int rtl9300_i2c_config_xfer(struct rtl9300_i2c *i2c, struct rtl93=
-00_i2c_chan *chan,
-+				   u16 addr, u16 len)
-+{
-+	u32 val, mask;
-+
-+	val =3D chan->bus_freq << RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS;
-+	mask =3D RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK;
-+
-+	val |=3D addr << RTL9300_I2C_MST_CTRL2_DEV_ADDR_OFS;
-+	mask |=3D RTL9300_I2C_MST_CTRL2_DEV_ADDR_MASK;
-+
-+	val |=3D ((len - 1) & 0xf) << RTL9300_I2C_MST_CTRL2_DATA_WIDTH_OFS;
-+	mask |=3D RTL9300_I2C_MST_CTRL2_DATA_WIDTH_MASK;
-+
-+	mask |=3D RTL9300_I2C_MST_CTRL2_RD_MODE;
-+
-+	return regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_=
-CTRL2, mask, val);
-+}
-+
-+static int rtl9300_i2c_read(struct rtl9300_i2c *i2c, u8 *buf, int len)
-+{
-+	u32 vals[4] =3D {};
-+	int i, ret;
-+
-+	if (len > 16)
-+		return -EIO;
-+
-+	ret =3D regmap_bulk_read(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_D=
-ATA_WORD0,
-+			       vals, ARRAY_SIZE(vals));
-+	if (ret)
-+		return ret;
-+
-+	for (i =3D 0; i < len; i++) {
-+		buf[i] =3D vals[i/4] & 0xff;
-+		vals[i/4] >>=3D 8;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rtl9300_i2c_write(struct rtl9300_i2c *i2c, u8 *buf, int len)
-+{
-+	u32 vals[4] =3D {};
-+	int i;
-+
-+	if (len > 16)
-+		return -EIO;
-+
-+	for (i =3D 0; i < len; i++) {
-+		if (i % 4 =3D=3D 0)
-+			vals[i/4] =3D 0;
-+		vals[i/4] <<=3D 8;
-+		vals[i/4] |=3D buf[i];
-+	}
-+
-+	return regmap_bulk_write(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_D=
-ATA_WORD0,
-+				vals, ARRAY_SIZE(vals));
-+}
-+
-+static int rtl9300_i2c_writel(struct rtl9300_i2c *i2c, u32 data)
-+{
-+	return regmap_write(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_DATA_W=
-ORD0, data);
-+}
-+
-+static int rtl9300_i2c_execute_xfer(struct rtl9300_i2c *i2c, char read_w=
-rite,
-+				int size, union i2c_smbus_data *data, int len)
-+{
-+	u32 val, mask;
-+	int ret;
-+
-+	val =3D read_write =3D=3D I2C_SMBUS_WRITE ? RTL9300_I2C_MST_CTRL1_RWOP =
-: 0;
-+	mask =3D RTL9300_I2C_MST_CTRL1_RWOP;
-+
-+	val |=3D RTL9300_I2C_MST_CTRL1_I2C_TRIG;
-+	mask |=3D RTL9300_I2C_MST_CTRL1_I2C_TRIG;
-+
-+	ret =3D regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST=
-_CTRL1, mask, val);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D regmap_read_poll_timeout(i2c->regmap, i2c->reg_base + RTL9300_I=
-2C_MST_CTRL1,
-+				       val, !(val & RTL9300_I2C_MST_CTRL1_I2C_TRIG), 100, 2000);
-+	if (ret)
-+		return ret;
-+
-+	if (val & RTL9300_I2C_MST_CTRL1_I2C_FAIL)
-+		return -EIO;
-+
-+	if (read_write =3D=3D I2C_SMBUS_READ) {
-+		if (size =3D=3D I2C_SMBUS_BYTE || size =3D=3D I2C_SMBUS_BYTE_DATA) {
-+			ret =3D regmap_read(i2c->regmap,
-+					  i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, &val);
-+			if (ret)
-+				return ret;
-+			data->byte =3D val & 0xff;
-+		} else if (size =3D=3D I2C_SMBUS_WORD_DATA) {
-+			ret =3D regmap_read(i2c->regmap,
-+					  i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, &val);
-+			if (ret)
-+				return ret;
-+			data->word =3D val & 0xffff;
-+		} else {
-+			ret =3D rtl9300_i2c_read(i2c, &data->block[0], len);
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, un=
-signed short flags,
-+				  char read_write, u8 command, int size,
-+				  union i2c_smbus_data *data)
-+{
-+	struct rtl9300_i2c_chan *chan =3D i2c_get_adapdata(adap);
-+	struct rtl9300_i2c *i2c =3D chan->i2c;
-+	int len =3D 0, ret;
-+
-+	mutex_lock(&i2c->lock);
-+	if (chan->sda_pin !=3D i2c->sda_pin) {
-+		ret =3D rtl9300_i2c_config_io(i2c, chan->sda_pin);
-+		if (ret)
-+			goto out_unlock;
-+		i2c->sda_pin =3D chan->sda_pin;
-+	}
-+
-+	switch (size) {
-+	case I2C_SMBUS_QUICK:
-+		ret =3D rtl9300_i2c_config_xfer(i2c, chan, addr, 0);
-+		if (ret)
-+			goto out_unlock;
-+		ret =3D rtl9300_i2c_reg_addr_set(i2c, 0, 0);
-+		if (ret)
-+			goto out_unlock;
-+		break;
-+
-+	case I2C_SMBUS_BYTE:
-+		if (read_write =3D=3D I2C_SMBUS_WRITE) {
-+			ret =3D rtl9300_i2c_config_xfer(i2c, chan, addr, 0);
-+			if (ret)
-+				goto out_unlock;
-+			ret =3D rtl9300_i2c_reg_addr_set(i2c, command, 1);
-+			if (ret)
-+				goto out_unlock;
-+		} else {
-+			ret =3D rtl9300_i2c_config_xfer(i2c, chan, addr, 1);
-+			if (ret)
-+				goto out_unlock;
-+			ret =3D rtl9300_i2c_reg_addr_set(i2c, 0, 0);
-+			if (ret)
-+				goto out_unlock;
-+		}
-+		break;
-+
-+	case I2C_SMBUS_BYTE_DATA:
-+		ret =3D rtl9300_i2c_reg_addr_set(i2c, command, 1);
-+		if (ret)
-+			goto out_unlock;
-+		ret =3D rtl9300_i2c_config_xfer(i2c, chan, addr, 1);
-+		if (ret)
-+			goto out_unlock;
-+		if (read_write =3D=3D I2C_SMBUS_WRITE) {
-+			ret =3D rtl9300_i2c_writel(i2c, data->byte);
-+			if (ret)
-+				goto out_unlock;
-+		}
-+		break;
-+
-+	case I2C_SMBUS_WORD_DATA:
-+		ret =3D rtl9300_i2c_reg_addr_set(i2c, command, 1);
-+		if (ret)
-+			goto out_unlock;
-+		ret =3D rtl9300_i2c_config_xfer(i2c, chan, addr, 2);
-+		if (ret)
-+			goto out_unlock;
-+		if (read_write =3D=3D I2C_SMBUS_WRITE) {
-+			ret =3D rtl9300_i2c_writel(i2c, data->word);
-+			if (ret)
-+				goto out_unlock;
-+		}
-+		break;
-+
-+	case I2C_SMBUS_BLOCK_DATA:
-+		ret =3D rtl9300_i2c_reg_addr_set(i2c, command, 1);
-+		if (ret)
-+			goto out_unlock;
-+		ret =3D rtl9300_i2c_config_xfer(i2c, chan, addr, data->block[0]);
-+		if (ret)
-+			goto out_unlock;
-+		if (read_write =3D=3D I2C_SMBUS_WRITE) {
-+			ret =3D rtl9300_i2c_write(i2c, &data->block[1], data->block[0]);
-+			if (ret)
-+				goto out_unlock;
-+		}
-+		len =3D data->block[0];
-+		break;
-+
-+	default:
-+		dev_err(&adap->dev, "Unsupported transaction %d\n", size);
-+		ret =3D -EOPNOTSUPP;
-+		goto out_unlock;
-+	}
-+
-+	ret =3D rtl9300_i2c_execute_xfer(i2c, read_write, size, data, len);
-+
-+out_unlock:
-+	mutex_unlock(&i2c->lock);
-+
-+	return ret;
-+}
-+
-+static u32 rtl9300_i2c_func(struct i2c_adapter *a)
-+{
-+	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
-+	       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
-+	       I2C_FUNC_SMBUS_BLOCK_DATA;
-+}
-+
-+static const struct i2c_algorithm rtl9300_i2c_algo =3D {
-+	.smbus_xfer	=3D rtl9300_i2c_smbus_xfer,
-+	.functionality	=3D rtl9300_i2c_func,
-+};
-+
-+static struct i2c_adapter_quirks rtl9300_i2c_quirks =3D {
-+	.flags		=3D I2C_AQ_NO_CLK_STRETCH,
-+	.max_read_len	=3D 16,
-+	.max_write_len	=3D 16,
-+};
-+
-+static int rtl9300_i2c_probe(struct platform_device *pdev)
-+{
-+	struct device *dev =3D &pdev->dev;
-+	struct rtl9300_i2c_chan *chan;
-+	struct rtl9300_i2c *i2c;
-+	struct i2c_adapter *adap;
-+	u32 clock_freq, sda_pin;
-+	int ret, i =3D 0;
-+	struct fwnode_handle *child;
-+
-+	i2c =3D devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-+	if (!i2c)
-+		return -ENOMEM;
-+
-+	i2c->regmap =3D syscon_node_to_regmap(dev->parent->of_node);
-+	if (IS_ERR(i2c->regmap))
-+		return PTR_ERR(i2c->regmap);
-+	i2c->dev =3D dev;
-+
-+	mutex_init(&i2c->lock);
-+
-+	ret =3D device_property_read_u32(dev, "reg", &i2c->reg_base);
-+	if (ret)
-+		return ret;
-+
-+	platform_set_drvdata(pdev, i2c);
-+
-+	if (device_get_child_node_count(dev) >=3D RTL9300_I2C_MUX_NCHAN)
-+		return dev_err_probe(dev, -EINVAL, "Too many channels\n");
-+
-+	device_for_each_child_node(dev, child) {
-+		chan =3D &i2c->chans[i];
-+		adap =3D &chan->adap;
-+
-+		ret =3D fwnode_property_read_u32(child, "reg", &sda_pin);
-+		if (ret)
-+			return ret;
-+
-+		ret =3D fwnode_property_read_u32(child, "clock-frequency", &clock_freq=
-);
-+		if (ret)
-+			clock_freq =3D I2C_MAX_STANDARD_MODE_FREQ;
-+
-+		switch (clock_freq) {
-+		case I2C_MAX_STANDARD_MODE_FREQ:
-+			chan->bus_freq =3D RTL9300_I2C_STD_FREQ;
-+			break;
-+
-+		case I2C_MAX_FAST_MODE_FREQ:
-+			chan->bus_freq =3D RTL9300_I2C_FAST_FREQ;
-+			break;
-+		default:
-+			dev_warn(i2c->dev, "SDA%d clock-frequency %d not supported using defa=
-ult\n",
-+				 sda_pin, clock_freq);
-+			break;
-+		}
-+
-+		chan->sda_pin =3D sda_pin;
-+		chan->i2c =3D i2c;
-+		adap =3D &i2c->chans[i].adap;
-+		adap->owner =3D THIS_MODULE;
-+		adap->algo =3D &rtl9300_i2c_algo;
-+		adap->quirks =3D &rtl9300_i2c_quirks;
-+		adap->retries =3D 3;
-+		adap->dev.parent =3D dev;
-+		i2c_set_adapdata(adap, chan);
-+		adap->dev.of_node =3D to_of_node(child);
-+		snprintf(adap->name, sizeof(adap->name), "%s SDA%d\n", dev_name(dev), =
-sda_pin);
-+		i++;
-+
-+		ret =3D devm_i2c_add_adapter(dev, adap);
-+		if (ret)
-+			return ret;
-+	}
-+	i2c->sda_pin =3D 0xff;
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id i2c_rtl9300_dt_ids[] =3D {
-+	{ .compatible =3D "realtek,rtl9301-i2c" },
-+	{ .compatible =3D "realtek,rtl9302b-i2c" },
-+	{ .compatible =3D "realtek,rtl9302c-i2c" },
-+	{ .compatible =3D "realtek,rtl9303-i2c" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, i2c_rtl9300_dt_ids);
-+
-+static struct platform_driver rtl9300_i2c_driver =3D {
-+	.probe =3D rtl9300_i2c_probe,
-+	.driver =3D {
-+		.name =3D "i2c-rtl9300",
-+		.of_match_table =3D i2c_rtl9300_dt_ids,
-+	},
-+};
-+
-+module_platform_driver(rtl9300_i2c_driver);
-+
-+MODULE_DESCRIPTION("RTL9300 I2C controller driver");
-+MODULE_LICENSE("GPL");
---=20
-2.47.0
 
+>  
+>  	lowest_perf = READ_ONCE(cpudata->lowest_perf);
+>  	if (min_limit_perf < lowest_perf)
+> @@ -1506,10 +1511,13 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>  	u64 value;
+>  	s16 epp;
+>  
+> -	max_perf = READ_ONCE(cpudata->highest_perf);
+> +	if (cpudata->boost_supported && !policy->boost_enabled)
+> +		max_perf = READ_ONCE(cpudata->nominal_perf);
+> +	else
+> +		max_perf = READ_ONCE(cpudata->highest_perf);
+>  	min_perf = READ_ONCE(cpudata->lowest_perf);
+> -	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
+> -	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
+> +	max_limit_perf = div_u64(policy->max * max_perf, policy->cpuinfo.max_freq);
+> +	min_limit_perf = div_u64(policy->min * max_perf, policy->cpuinfo.max_freq);
+>  
+>  	if (min_limit_perf < min_perf)
+>  		min_limit_perf = min_perf;
+> -- 
+> 2.43.0
+> 
 
