@@ -1,241 +1,342 @@
-Return-Path: <linux-pm+bounces-15787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 507D39A0F5F
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 18:09:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22CCE9A0F67
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 18:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAD391F238C2
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:09:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 459BC1C2025F
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D6F20F5DD;
-	Wed, 16 Oct 2024 16:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36D920F5D7;
+	Wed, 16 Oct 2024 16:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="b2a+nhkR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OAhaIuiV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0876720F5B1;
-	Wed, 16 Oct 2024 16:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729094983; cv=fail; b=n+LjmRGGf2eT4eCG3/Wq6IXomFhQZdkXSOcvdx4HI5nNT7Sw8x4qVnEFcDWo55Iz5sk6VvwLagP/JfkjBMiafvOTXb0yMLY6Xy2otlxj8LaRckHOwbK7KeXcfT1HYLZFQmTF4BX7JhPsu8i8y5ed8ZrpH3KGrw0+D4IGRhEFeDk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729094983; c=relaxed/simple;
-	bh=A8A+SJbbfbFRYCaMwMTBf2/xLzJeJANoFcE+WAvvESo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TXs3LVzZvyEBbkvOrf9xUCy/ruCUDhtPlQC+vKLPd9Ux/mwVGlZbYpz4BQxWCNzBIwDAuNm2XX2qXwQojynf+bANUnt7vtAGN9Xa1jPs8NuYm0qzZzkr+luTGxG7VKIG7QeCdO7hAu2sIBXE9iPMY10DSOszx0W41E++2/+UAmk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=b2a+nhkR; arc=fail smtp.client-ip=40.107.92.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LwIURhIHBtKr9Y0vc23NMW9Gw9e0zQeG4FkMbSq4cqqNfz/d/qYQKubi7lWa3ulLNqhht7JwWNFp3b48jyV6cB46IbSBv29XMXyD6NQizinV8IurX6nuWevRHhiLFHHfQo8K05b0GRARM7uoUA17YEPsTkiCqtZFmG0yZxrqO2lq/chwHbIAr2kzoXxx/vStPf4PcCo4NEWG6rSacpoQqWH4wVM+/HRNo4BjHZRrCVRRWkLgDsBHqRDhtMhfpnZEvoY/uOzRq6r3F5wxbSJ9Yiugyv1EBXfvQkGcn/JdtlDy+vPGhs4LyxWCPO+7aEbCgnRldA+QFA27dYEWFRVvIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OuLPiA5/iY8hmINCjV2Xt4suJmJB9chWFgjkuncU+CU=;
- b=CvkifZqGIp+dh4UH2iupbr2hrKAjhuqjVVocmy9Q9pJV0jGNXjX14RUqANx3y8ZjpqjeDUQ41fv3TqeI4gWWFH+QO+Y9wbHBngMLhX0e1udUYHNC32qespAbA4qkD+uOrDI0gi9JXEz7hzX9uqsTog9p5dJ3DJXFChEIqeNtiKcfSZAiKWsJ6i0M+PQFs8cyeNvT8adMpw/6Uoso5lQHM//n6AAmwLDoEruZUwtgFbKD10ioWO8FFQNJbqAbVcUpeiFBPigOVArVHg47uVqE3Zl1vbuO3HW2bKVOnqtD3/a8gNmNjFCAJCgXlzypwroBfpXAuh7j3wF8z1XdLZ4IXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OuLPiA5/iY8hmINCjV2Xt4suJmJB9chWFgjkuncU+CU=;
- b=b2a+nhkREuIt15LY1WofVyYwN+9kDAbpgCVEVY8C/qmZFboD+OW8f/XyGtemNGnMFhE9jbq7A8kXEqYjjIMlsxhEQBdzCEc7YZo/ISBN7f9SKxXQmJCDnD+byOUa8uA17yN54mvnuK1X7IyTO7t6knJgyvyBAwjeNGc+csR7E08=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH0PR12MB7982.namprd12.prod.outlook.com (2603:10b6:510:28d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.19; Wed, 16 Oct
- 2024 16:09:38 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.8069.016; Wed, 16 Oct 2024
- 16:09:37 +0000
-Message-ID: <6b67a84b-eeb6-4b53-b3c7-2a0925c6bea0@amd.com>
-Date: Wed, 16 Oct 2024 11:09:35 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 14/14] platform/x86: hfi: Add debugfs support
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
- x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
- platform-driver-x86@vger.kernel.org,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-References: <20241015213645.1476-1-mario.limonciello@amd.com>
- <20241015213645.1476-15-mario.limonciello@amd.com>
- <7b3a2e3b-9c37-09a3-238a-9cc90726c929@linux.intel.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <7b3a2e3b-9c37-09a3-238a-9cc90726c929@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN7PR18CA0014.namprd18.prod.outlook.com
- (2603:10b6:806:f3::26) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB66208D95;
+	Wed, 16 Oct 2024 16:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729095090; cv=none; b=i7mXjaJBH9XWRWbpzfFvIWHWFGRP2scu83OOXjawfVAjkMv5UrkjQj5e/B2wolmjW1ZvqeDOjMPmTndJ7WfbIUZ+jdaVgbCtravftt4/0EchF9/EIUN9avEaROAi0BHv1gXw58nGzV0UmAbiXXM5h0ioXRZNquC3VBFQGwvIX9w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729095090; c=relaxed/simple;
+	bh=GkwoMJPR4Ged0NBe+yNQ6l3TsL4se3UOYjUy0eJJ+is=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PU5/Dq1ZW8QIBYJvSVaVrrjAUm7/gCK2R0/XEVfhGaCf6Uv0wJHWmhV4mhjfhMTSOqaSoxCkx9c+SX0OkUwY4dZ8vIoaU2r4M3Y5/+n2bFOTLqDkE2K58OL0EvrLH6ZbFZCk+zSCcDVR6Ri+zABPX4lim3mUw6ZC99U1RfmQK1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OAhaIuiV; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a993a6348e0so499976866b.1;
+        Wed, 16 Oct 2024 09:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729095087; x=1729699887; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oTUckH6zOuy9FTfTza0YDv0Ru2Gr+Jvp5+oob2O/eN0=;
+        b=OAhaIuiVr4biDzPrOKZKPo77Ac9Z/x2m+4dKAay/gUbur3Xe+uyKxSh5gopESGRe2t
+         0eVkhURyMs4JAWFrgD0rqP/SrpQXFfzheLRz2LDIoGwiBy5eZaI0g3dp69lgDOM9J3yz
+         iy5MyJMPtum7Gf0s/nW+YItebnu57QvcTaRGJBwk1ILf4NCXj7QnsFrDSU4Uk8aISJAy
+         jSx3k3nMro4Xy42SX9a1fEdT4Y4JWp0TEhSD+CNKmo1LAwjIiybHblYUsGxR5/QtHezo
+         +FvkOjR2BtgtUpUnmnkunEpBsQh5n1DLhArIinPdZeAjIsqOqiiCv8jk3hwfW7BnP0rA
+         4LEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729095087; x=1729699887;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oTUckH6zOuy9FTfTza0YDv0Ru2Gr+Jvp5+oob2O/eN0=;
+        b=Px1hNWVEG3e9lWs5A2inh5tR3dMS7K93HA6gXFD3NQc02xfkgkkXviqrwNmU3zwary
+         ibe6+/Tu9WEdq3pQK/aNUtYzuI3Q/fut/XzTNFVh9gdfWhOyZBwLMZVK+rM5Aewim/v8
+         bU27tiqMJJFh14i1nnX6dYR9ZZKEM4xKDYjOI+Rb79PDXjC5z8H33jtS7nkTfka9G7fa
+         CuJlBQU1v0weoqr/y+WWY4APKQL/F653L5Lp8dKdp3CYVrgd8wGo3ccuBRbARbmCjJgF
+         nbr0pHtCkENdRAjHwXnU4nkRWuc/+ABdfA2r63Ghpu6/bwQw/7bjv+Lnf91PB9+1j6Ze
+         mHXA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3j9bzoc3bL3G7uJUDbgUHSC0BDZHfj2Cfa0AoMnblUNFiKIeFDDRutaJYYCYnWWLSKCswLurSw9o=@vger.kernel.org, AJvYcCXSESKHFHltlqR4A/cGQ9OXITIvotyNfUsOx0wJaniz63BbyFFqb36Pt/BT0GnPkGquZgaz7+fNPKYXyBo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyuo5CWBozzBshb1DFBSHfeS80Yc8OUix2BGDzal2cUetSeHVKg
+	2tGwnEgUjQfJt5jbvk6wW0LRSo2PwZvIFKqFWp0KXDaobnqADcOD
+X-Google-Smtp-Source: AGHT+IGcWZWpa4Xcog+I37stvatkjqCx3aRmUmCCXT9QP/ovwSe0FBaPVi6YpwpDqjR+m91p0uCtig==
+X-Received: by 2002:a05:6402:340a:b0:5c9:288d:d6c3 with SMTP id 4fb4d7f45d1cf-5c95ac63be5mr16722474a12.31.1729095086980;
+        Wed, 16 Oct 2024 09:11:26 -0700 (PDT)
+Received: from localhost.localdomain ([62.19.118.125])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c98d4d6297sm1855691a12.15.2024.10.16.09.11.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2024 09:11:25 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	upstream@airoha.com
+Cc: Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH] cpufreq: airoha: Add EN7581 Cpufreq SMC driver
+Date: Wed, 16 Oct 2024 18:10:22 +0200
+Message-ID: <20241016161044.28745-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH0PR12MB7982:EE_
-X-MS-Office365-Filtering-Correlation-Id: c543c558-04a9-4dbd-57a8-08dcedfceedd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?enpyY1RDT2hOOTQ4cVJHTXBvRGt3eUVsdHU4bS9YS2lNZ0pnR1VIckY5Q0lI?=
- =?utf-8?B?a3lBQWlRT2xWRUtCRWtZaVZjaHN1MmFpK2Y3eEZMQlA3eExadW9NaitIT09u?=
- =?utf-8?B?R2JleGltSWw2YWdkK2ZKQjN6eFBlWTZVZFl6V3U2c3JwcHVOZlc0WCs0cEJj?=
- =?utf-8?B?VlJhejNsWnBVNC9OdWN0ZDNzcE4xOEp6WHZXaVBwdlVWU243cWhwWUhlMys3?=
- =?utf-8?B?MWlOdm9MUVUvMEVRT01ydkt1VmU1Um5KMjhLYUF5SStCaERIWkJRS0RuaEUx?=
- =?utf-8?B?dmRqYmlkQ0VuUE9qTE9ISUJWQ1R6dTEwSFV4SktJa2tBMzZxM1lyd2xWa255?=
- =?utf-8?B?Q2tMRDBkWE5UY1V1WUVTZ2RVcVZiRTZtRjNEZXVhMU42c2pwdjd6VjM0MzdU?=
- =?utf-8?B?OVhYUitiQW5mSGRqOXhDcWQvVU9XQUJFbS8vci9XZUl0ZkJJN2EwRFZLZTF5?=
- =?utf-8?B?bFRPSzJWNkVlbzdvNjJDNGpVMkdUMFZwdEc0RmFoTjlkRzRxVHNpYkFWQldm?=
- =?utf-8?B?cXdua1BuL2tWWnNZSW9ObzhSa3A4S1FxS0Z4T1lHcHlFcjRLK3Y2STZIamZa?=
- =?utf-8?B?Z1RMRlFrL0JVRjQycUFXOGVqRUR3OUFRbTZTS21EUXNtOVVZVGlvc2tCcjZr?=
- =?utf-8?B?NmlCZFZmN080RVJxV1kxWXJjS3V3am56NGphc2llY2FmL3FtekduV1BmTFhn?=
- =?utf-8?B?K0EvYVU4OFplaklOdkR0WUhhMDMrWDBZUDhDWTVWdnFPZVpCblI0a25vNmJG?=
- =?utf-8?B?N1lvemwvak9IQ2F4SERNa3BOWjFJMno4WmxvZXlVUVZrMEhscUp3Q3paTjJu?=
- =?utf-8?B?OTNsemsrUWtaTDk3MWcxa0xIVGpBUDRVQWRXbTdkWHFkbkVXSHhwL2NBMXFn?=
- =?utf-8?B?aktXaGY1d1luTnNJWUFRVUpBMDkrREM2TnVsZXovRE1QanN4Q1VOY00yb0F6?=
- =?utf-8?B?WU9TSHhFbzhxaXByOXR1aGNVQXdmSUF6OThrMjc2VHJuMmw0TTNVNW13bTd1?=
- =?utf-8?B?TnN3VWZ4WmtEdGlwUUtnWTJDM0NXajRTZUlocnVRZ0tYU3hPUGJvc24rd3ZJ?=
- =?utf-8?B?MlQ5dmREc0hReSs0WWszcDBNamlKbXJtYXM4VG1XSFlvTHVIc3lUUmdNWXNX?=
- =?utf-8?B?MWhaeDNJeVZkSXg5aEZyWXg2ZzRzaTA4SHNrTFJ0Z3FmeE1rdmJ6OTJtU0RJ?=
- =?utf-8?B?ZkplOVpTRjk0L0ZZNHM4b0M2aXRVZG01eGJGK1pWZzRQQzc5WCtrNHI2UFk3?=
- =?utf-8?B?VVpBcUg5QnN2OHh1NStweVdpZm56Z05zVUhqeitmQlo2dkVUaGpzV0RnK0l0?=
- =?utf-8?B?cTgwRUt3SFBqaWc3VjFXbC81S05ZaUlTRWFDekRaZTRuSTlId3FiNGZYQXpE?=
- =?utf-8?B?VUQ1bnh5SVJWaThIL2RKSjJnUHQxYjFoZUszU2xxZlVLZjBYQzd1ZTVWTjJs?=
- =?utf-8?B?VHFaQnhVMCttelNVa2JXdWRPRFAzamdqUWpBVW5EblN2MnJOdVBpY3dvaEls?=
- =?utf-8?B?Rm96RDM1eVBZQWtQK0RVdFRjNTArQ2ZLOXZEVEVhQTUzMXJ0TFF0QnovVkdR?=
- =?utf-8?B?NE9QRnhNTUczVnc2Q1ZuMU92bDcxVDVzTjB3WkdEQlpNV3c2ZXdYTlVmYjI0?=
- =?utf-8?B?MWx3QXZlV2RnamhvVXJveHV2Ym01aHZmbmNpTEI4cWkzQ09LQTNldy9aWVEy?=
- =?utf-8?B?dEpHUFdLOWVCb1BJSk1GWW9idy9kVHMwOStCenZhZHE3NHpGanFBV2lnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dW5aVWRsSUp1cyt5RzZlNkZ5SWFzT2kzYjU5YVhzTGxUbWtmcDhzTkhhYWxG?=
- =?utf-8?B?cTVhck93dDU5V2tqUWZyeFdTTjdGZUZnWUN2Nk1uQmhCeHZlU1NKcjJUYWhX?=
- =?utf-8?B?TzZaUDFkVDNOeXJxMlhHQ2VZSGhGTTRCVDFBQkJvVHVvUFZqQWdaN0lpWU5V?=
- =?utf-8?B?YXRRZ1BBM0VTYmlIVkdyQk1hSis0Z2ROZm1IaGVSY1FYaDBXR0U1VmxSdzJt?=
- =?utf-8?B?MytHalBOT1pWNGpJd253eGdkYjJXRmQ2SHczc20yT0JWMmRqR1cwQmo2RmxB?=
- =?utf-8?B?MUJrVkdJSTR2UVk1QWpEQWp6UkdiNTd1bG9uaUVobWNrR1lSc2prRlBGem1y?=
- =?utf-8?B?a0Q2U2daUnlrNDBOcUgybGM5dE9tU1VmaEh2RjJPblZZdmg5SnZwY2dzNmVj?=
- =?utf-8?B?T3pVb05aWjRFME9DMGNER084ZXkrek96T2d6dWJqR3F6dkFIeTJsOXRMb01E?=
- =?utf-8?B?bThjQ096OTE3TVJQVWhMWk94TlpPbUlYNGZTdlFlbVNEenh0MDhYcU5NYVpK?=
- =?utf-8?B?NkhER0RMNlQ1bXpFOWZwdEpxcDJyeWVCVC9adEYwNkZrZzJpbDhTc08rMEFI?=
- =?utf-8?B?VWFZV0p1elhLRnFldFJRQ2pCQy9TcUlGQ1ZkYVdDamh3ZzFLSUN0UGpidnNu?=
- =?utf-8?B?WDJINVVMN3RDYUozZlZNcGNreXovNTdNYlpEdVE4OHVNVlJiTTNGK09YNDBM?=
- =?utf-8?B?c3Q5dElVaVJ0c0Y0NC9sYUlnUWlOZHpacHo1d0NkUTVqWENLRi9WaU95VEhm?=
- =?utf-8?B?U25IRzY2UTBBNDU0Snh0TVdZS2tjZTBjOVdMbE9ObVhpbnM3cFhDQ0xxNUhm?=
- =?utf-8?B?cGFaTFU5S2xQYnJkUlVjVE11Z3kyR0lETnloTW5zSGg1OFJyYzZrT0liam9D?=
- =?utf-8?B?MDh5amRDdXNCaytqSVlsK2JwSmsxRFo5WGNRSjBpRFpaTXkvM295TVVFUUxR?=
- =?utf-8?B?U0tyTW5HcmhDTnNJZ0d2VnBLMnVVbklST1kreVUyQ2VuUHM1VENkdUlTd05t?=
- =?utf-8?B?ZEJ1azFEcUNpQjJBRWRpUDhuRUhYVzFGZklhNjZkU1JGTFdKUmZTM09YQ2RK?=
- =?utf-8?B?S2NJTlg1Sm5VazNIdUl5Tk1aR3FKa1VSVUJMZGtOQjNOaG5OM2JSdmtFdzJt?=
- =?utf-8?B?ZmJrZ2orbVMxWVl4RGdaVlNTTWhNemt2NVN2bGpWR2ExbkdiQ1ljcFRQb3Bq?=
- =?utf-8?B?OXkwWitPUUdFSXRaREVMWVFSaUgzT1JSQlMvTk40TzJmR3VIQndaVnVNOE1Y?=
- =?utf-8?B?dHpwSmRLR3htaUlJQnljMFBqNlZsamtoVkx0amd5RXVmSGNwd0RZMTJ2WjZS?=
- =?utf-8?B?UFh6V1dPOEQ3bGdtVDFMSEtrQlBzRkk2eit1NEFmU0QrQVpoN1hlS29zdHBL?=
- =?utf-8?B?MEhmY0FrQi9VM242WUkxSlZQK1lqOVZYUXhoWk5jZnF1aEU2emR1UFkrQWFE?=
- =?utf-8?B?UUIyd2FpVmF4cXpuL2lIQ0xWd2hndmJLUG5kRUt4eEJBQnNya2tlWE9WZVpE?=
- =?utf-8?B?WEp5ZEQzRVJxZ3dvVUozbDBMelBuTTJhNEo2RVpBV0FrR3FBV3p0a2ZxdGRG?=
- =?utf-8?B?TWJDZ0pNamxVMWk1MlFHWjhTQmQrOERvRE00bzlDU0FweVFkdWxwTXkvOTdi?=
- =?utf-8?B?dk5KdXplaGtIU0tubkNYdzRXTVBJa2tWNGtMc3dJWWtUbGlsc09nMnZXamdz?=
- =?utf-8?B?MkprMlNObmwreTR4UWZsVlB0MlJLVFZDcUFPZ2o5azF0SkVnR1lkSnFzVWZt?=
- =?utf-8?B?dUk5anlzbDZSeGVuYlZSMzFSZDZYUm9ZYVVKZWNKcXhvOXEzbWRXT3d0b09r?=
- =?utf-8?B?ekJiSHVEcXE5WDRrU0pYa2REcmlrODMrbTVUNFMyWUhmSTBGUVRQL09iQWY3?=
- =?utf-8?B?dnJIdm94b1dOSnFLS09yZDVjUkZYOGxJK1hrQkR4UWRrM1k2c1FqRkRqM1h5?=
- =?utf-8?B?bWZSNUdmR2hLMmRtSnd2a1l3bk1wclN6akJxVFJUYW9qZEl3Rlp2V2RwVUNz?=
- =?utf-8?B?M2FJSkZ2d211VWc0dEhYeFNSL3MrTi8zdjM4QjhIQlY0Zm1yZGRhdzgrM0lt?=
- =?utf-8?B?czFpdzhITHdmYVVJYXJ2ZnBaVFhoMlF5VkxSRTljbVJmcDdzVUJDdXE2QThv?=
- =?utf-8?Q?AD9FMaHi1GkZ0JDZ85iSaDySi?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c543c558-04a9-4dbd-57a8-08dcedfceedd
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 16:09:37.6427
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cPL3vPmI0krti5TV8GUM4Mxmt17a9tTXC7pnzubP4aKSgpmztwjsteU96m0e+0SZxN4emCZ5WoeEy0756xBs9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7982
+Content-Transfer-Encoding: 8bit
 
-On 10/16/2024 07:38, Ilpo Järvinen wrote:
-> On Tue, 15 Oct 2024, Mario Limonciello wrote:
-> 
->> Add a dump of the class and capabilities table to debugfs to assist
->> with debugging scheduler issues.
->>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->> v2->v3:
->>    * New patch
->> ---
->>   drivers/platform/x86/amd/hfi/hfi.c | 31 ++++++++++++++++++++++++++++++
->>   1 file changed, 31 insertions(+)
->>
->> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
->> index 6c90b50f0a40..6df80f6ac73c 100644
->> --- a/drivers/platform/x86/amd/hfi/hfi.c
->> +++ b/drivers/platform/x86/amd/hfi/hfi.c
->> @@ -13,6 +13,7 @@
->>   #include <linux/acpi.h>
->>   #include <linux/cpu.h>
->>   #include <linux/cpumask.h>
->> +#include <linux/debugfs.h>
->>   #include <linux/gfp.h>
->>   #include <linux/init.h>
->>   #include <linux/io.h>
->> @@ -79,6 +80,8 @@ struct amd_hfi_data {
->>   	void __iomem		*pcc_comm_addr;
->>   	struct acpi_subtable_header	*pcct_entry;
->>   	struct amd_shmem_info	*shmem;
->> +
->> +	struct dentry *dbgfs_dir;
->>   };
->>   
->>   /**
->> @@ -243,6 +246,8 @@ static void amd_hfi_remove(struct platform_device *pdev)
->>   {
->>   	struct amd_hfi_data *dev = platform_get_drvdata(pdev);
->>   
->> +	debugfs_remove_recursive(dev->dbgfs_dir);
->> +
->>   	mutex_destroy(&dev->lock);
->>   }
->>   
->> @@ -400,6 +405,28 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
->>   	return ret;
->>   }
->>   
->> +static int class_capabilities_show(struct seq_file *s, void *unused)
->> +{
->> +	int cpu, idx;
->> +
->> +	seq_puts(s, "CPU #\tWLC\tPerf\tEff\n");
->> +	for_each_present_cpu(cpu) {
->> +		struct amd_hfi_cpuinfo *hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
->> +
->> +		seq_printf(s, "%d\t", cpu);
->> +		for (idx = 0; idx < hfi_cpuinfo->nr_class; idx++) {
->> +			seq_printf(s, "%s%d\t%d\t%d\n",
->> +				   idx == 0 ? "" : "\t",
-> 
-> Is this conditional printing really required? Why cannot you just print \t
-> always here and remove it from the cpu print line?
-> 
+Add simple Cpufreq driver for Airoha EN7581 SoC that control CPU
+frequency scaling with SMC APIs.
 
-Thanks for the suggestion, will include in v4.
+All CPU share the same frequency and can't be controlled independently.
+Current shared CPU frequency is returned by the related SMC command.
+
+Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
+driver is needed with OPP v2 nodes declared in DTS.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/cpufreq/Kconfig.arm          |   8 ++
+ drivers/cpufreq/Makefile             |   1 +
+ drivers/cpufreq/airoha-cpufreq.c     | 183 +++++++++++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+ 4 files changed, 194 insertions(+)
+ create mode 100644 drivers/cpufreq/airoha-cpufreq.c
+
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 5f7e13e60c80..704e84d00639 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -15,6 +15,14 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called sun50i-cpufreq-nvmem.
+ 
++config ARM_AIROHA_SOC_CPUFREQ
++	tristate "Airoha EN7581 SoC CPUFreq support"
++	depends on ARCH_AIROHA || COMPILE_TEST
++	select PM_OPP
++	default ARCH_AIROHA
++	help
++	  This adds the CPUFreq driver for Airoha EN7581 SoCs.
++
+ config ARM_APPLE_SOC_CPUFREQ
+ 	tristate "Apple Silicon SoC CPUFreq support"
+ 	depends on ARCH_APPLE || (COMPILE_TEST && 64BIT)
+diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+index 0f184031dd12..8e5a37a95d36 100644
+--- a/drivers/cpufreq/Makefile
++++ b/drivers/cpufreq/Makefile
+@@ -52,6 +52,7 @@ obj-$(CONFIG_X86_AMD_FREQ_SENSITIVITY)	+= amd_freq_sensitivity.o
+ 
+ ##################################################################################
+ # ARM SoC drivers
++obj-$(CONFIG_ARM_AIROHA_SOC_CPUFREQ)	+= airoha-cpufreq.o
+ obj-$(CONFIG_ARM_APPLE_SOC_CPUFREQ)	+= apple-soc-cpufreq.o
+ obj-$(CONFIG_ARM_ARMADA_37XX_CPUFREQ)	+= armada-37xx-cpufreq.o
+ obj-$(CONFIG_ARM_ARMADA_8K_CPUFREQ)	+= armada-8k-cpufreq.o
+diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
+new file mode 100644
+index 000000000000..34006dffd81b
+--- /dev/null
++++ b/drivers/cpufreq/airoha-cpufreq.c
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/cpufreq.h>
++#include <linux/module.h>
++#include <linux/arm-smccc.h>
++
++#define AIROHA_SIP_AVS_HANDLE			0x82000301
++#define AIROHA_AVS_OP_BASE			0xddddddd0
++#define AIROHA_AVS_OP_MASK			GENMASK(1, 0)
++#define AIROHA_AVS_OP_FREQ_DYN_ADJ		(AIROHA_AVS_OP_BASE | \
++						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x1))
++#define AIROHA_AVS_OP_GET_FREQ			(AIROHA_AVS_OP_BASE | \
++						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
++
++struct airoha_cpufreq_priv {
++	struct list_head list;
++
++	cpumask_var_t cpus;
++	struct device *cpu_dev;
++	struct cpufreq_frequency_table *freq_table;
++};
++
++static LIST_HEAD(priv_list);
++
++static unsigned int airoha_cpufreq_get(unsigned int cpu)
++{
++	const struct arm_smccc_1_2_regs args = {
++		.a0 = AIROHA_SIP_AVS_HANDLE,
++		.a1 = AIROHA_AVS_OP_GET_FREQ,
++	};
++	struct arm_smccc_1_2_regs res;
++
++	arm_smccc_1_2_smc(&args, &res);
++
++	return (int)(res.a0 * 1000);
++}
++
++static int airoha_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
++{
++	const struct arm_smccc_1_2_regs args = {
++		.a0 = AIROHA_SIP_AVS_HANDLE,
++		.a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
++		.a3 = index,
++	};
++	struct arm_smccc_1_2_regs res;
++
++	arm_smccc_1_2_smc(&args, &res);
++
++	/* SMC signal correct apply by unsetting BIT 0 */
++	return res.a0 & BIT(0) ? -EINVAL : 0;
++}
++
++static struct airoha_cpufreq_priv *airoha_cpufreq_find_data(int cpu)
++{
++	struct airoha_cpufreq_priv *priv;
++
++	list_for_each_entry(priv, &priv_list, list) {
++		if (cpumask_test_cpu(cpu, priv->cpus))
++			return priv;
++	}
++
++	return NULL;
++}
++
++static int airoha_cpufreq_init(struct cpufreq_policy *policy)
++{
++	struct airoha_cpufreq_priv *priv;
++	struct device *cpu_dev;
++
++	priv = airoha_cpufreq_find_data(policy->cpu);
++	if (!priv)
++		return -ENODEV;
++
++	cpu_dev = priv->cpu_dev;
++	cpumask_copy(policy->cpus, priv->cpus);
++	policy->driver_data = priv;
++	policy->freq_table = priv->freq_table;
++
++	return 0;
++}
++
++static struct cpufreq_driver airoha_cpufreq_driver = {
++	.flags		= CPUFREQ_NEED_INITIAL_FREQ_CHECK |
++			  CPUFREQ_IS_COOLING_DEV,
++	.verify		= cpufreq_generic_frequency_table_verify,
++	.target_index	= airoha_cpufreq_set_target,
++	.get		= airoha_cpufreq_get,
++	.init		= airoha_cpufreq_init,
++	.attr		= cpufreq_generic_attr,
++	.name		= "airoha-cpufreq",
++};
++
++static int airoha_cpufreq_driver_init_cpu(int cpu)
++{
++	struct airoha_cpufreq_priv *priv;
++	struct device *cpu_dev;
++	int ret;
++
++	cpu_dev = get_cpu_device(cpu);
++	if (!cpu_dev)
++		return -EPROBE_DEFER;
++
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
++		return -ENOMEM;
++
++	cpumask_set_cpu(cpu, priv->cpus);
++	priv->cpu_dev = cpu_dev;
++
++	ret = dev_pm_opp_of_get_sharing_cpus(cpu_dev, priv->cpus);
++	if (ret)
++		goto err;
++
++	ret = dev_pm_opp_of_cpumask_add_table(priv->cpus);
++	if (ret)
++		goto err;
++
++	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &priv->freq_table);
++	if (ret)
++		goto err;
++
++	list_add(&priv->list, &priv_list);
++
++	return 0;
++
++err:
++	dev_pm_opp_of_cpumask_remove_table(priv->cpus);
++	free_cpumask_var(priv->cpus);
++
++	return ret;
++}
++
++static void airoha_cpufreq_release(void)
++{
++	struct airoha_cpufreq_priv *priv, *tmp;
++
++	list_for_each_entry_safe(priv, tmp, &priv_list, list) {
++		dev_pm_opp_free_cpufreq_table(priv->cpu_dev, &priv->freq_table);
++		dev_pm_opp_of_cpumask_remove_table(priv->cpus);
++		free_cpumask_var(priv->cpus);
++		list_del(&priv->list);
++		kfree(priv);
++	}
++}
++
++static int __init airoha_cpufreq_driver_probe(void)
++{
++	int cpu, ret;
++
++	if (!of_machine_is_compatible("airoha,en7581"))
++		return -ENODEV;
++
++	for_each_possible_cpu(cpu) {
++		ret = airoha_cpufreq_driver_init_cpu(cpu);
++		if (ret)
++			goto err;
++	}
++
++	ret = cpufreq_register_driver(&airoha_cpufreq_driver);
++	if (ret)
++		goto err;
++
++	return 0;
++
++err:
++	airoha_cpufreq_release();
++	return ret;
++}
++module_init(airoha_cpufreq_driver_probe);
++
++static void __exit airoha_cpufreq_driver_remove(void)
++{
++	cpufreq_unregister_driver(&airoha_cpufreq_driver);
++	airoha_cpufreq_release();
++}
++module_exit(airoha_cpufreq_driver_remove);
++
++MODULE_AUTHOR("Christian Marangi <ansuelsmth@gmail.com>");
++MODULE_DESCRIPTION("CPUfreq driver for Airoha SoCs");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 18942bfe9c95..5ecd8234bfac 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -103,6 +103,8 @@ static const struct of_device_id allowlist[] __initconst = {
+  * platforms using "operating-points-v2" property.
+  */
+ static const struct of_device_id blocklist[] __initconst = {
++	{ .compatible = "airoha,en7581", },
++
+ 	{ .compatible = "allwinner,sun50i-h6", },
+ 	{ .compatible = "allwinner,sun50i-h616", },
+ 	{ .compatible = "allwinner,sun50i-h618", },
+-- 
+2.45.2
+
 
