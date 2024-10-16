@@ -1,214 +1,176 @@
-Return-Path: <linux-pm+bounces-15773-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15774-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF019A0A7F
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 14:46:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B8259A0C33
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:01:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E86E2837D7
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 12:46:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC53C1C25F85
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 14:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A6C208980;
-	Wed, 16 Oct 2024 12:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQwALbME"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F69E20C01C;
+	Wed, 16 Oct 2024 13:58:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF32720968C;
-	Wed, 16 Oct 2024 12:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB88820C009;
+	Wed, 16 Oct 2024 13:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729082542; cv=none; b=lPg6UHLfRoT00xOcjks6PxUgUdlSKBE/y3YX+uitF0+lZhm3xS2F2/AcsYOoZ56PkcjMaFnZuqhNzqb6BP6bjxhBFnGU7DatBZdRmxxs5z+kNlVi/XVFzwekkdw3M94otJj9Nwj3+q2WS+z+Hu3e8+HSc29/EvLEGis/56lKZUI=
+	t=1729087139; cv=none; b=c+UdFEoQEGP7nSpk/W1kB0dX5sc3Qo8pBk4bofE9lZ5tywDQYW6Q54DuvWrL96vE7Z1p1d2oXcy9cnTAvnIpkqLWi73zztwj8JqCwXROlBl1QpGkMz96w6Szscnvl9JnyaTjF/C2QnPaPesC2XuX54IFWY1Wbw+UWjlP/Y9LcOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729082542; c=relaxed/simple;
-	bh=mfZCS/YvQRfbKpF5PwATL1VgEMe7ftuAp3U7oxYxOcY=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=aXFidbwHxOPvvzCmb7UUX7236/kTgBglV2Xo0Z3NPbbIm3Qm1dZGClrZEbeQun5hfEsz1HkJh3KtwAvXEtzMaVHTAT83sPwEp2uztnIwTxUhxG0yyAN/7SlWomLjk3zVu6YAxJ+frohaBg4Fm1pnKMjqlOPfKBeh1w4oYxPJnP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQwALbME; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729082541; x=1760618541;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=mfZCS/YvQRfbKpF5PwATL1VgEMe7ftuAp3U7oxYxOcY=;
-  b=GQwALbMEucedPIyH6C5l1NToilDMgL3rvMbsJdLqnr2OP5dbXVzbeKI5
-   QBGRChCJ5hJ2/dm++kKWRHcgw3rXATQoQsdh0xTXB2gihIrjrIiTkNWWx
-   qWzd0BQ6GfpbY6WiKVBDvDgPm3ywuR9bgvkDFPIkHjXjbxeLGpJ7oLCBb
-   FN0F1nFbilTRyU/OQ7l3J1s774wHPlWqGuekVOpgdz9zi/o9AE9xBn8bC
-   F2sKONPwsGVFsjW2pqQzA+mix/d/tUH4mz5XkX/v7Cvw/gAK+U8guw/3f
-   2t/AG95WOHBPoiiwtHAPH+o+8u8Mmo4WRjK9lKcagkEh7XUAwzSB+Ja+r
-   w==;
-X-CSE-ConnectionGUID: l4N3fxzzRrq1JoppQe0iuA==
-X-CSE-MsgGUID: RrsPbNbdSwGTlHsW0keocw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28671998"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28671998"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 05:42:18 -0700
-X-CSE-ConnectionGUID: RvbG9njdQ3eEa7qBocmhhA==
-X-CSE-MsgGUID: GpQNHvBGTCOvagr6XZctEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="78559016"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.221])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 05:42:14 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 16 Oct 2024 15:42:10 +0300 (EEST)
-To: Mario Limonciello <mario.limonciello@amd.com>
-cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>, 
-    x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
-    Perry Yuan <perry.yuan@amd.com>, LKML <linux-kernel@vger.kernel.org>, 
-    linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
-    platform-driver-x86@vger.kernel.org, 
-    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-    Perry Yuan <Perry.Yuan@amd.com>
-Subject: Re: [PATCH v3 08/14] platform/x86: hfi: add online and offline
- callback support
-In-Reply-To: <20241015213645.1476-9-mario.limonciello@amd.com>
-Message-ID: <9b401086-5020-b85c-697b-39a8be5b49fa@linux.intel.com>
-References: <20241015213645.1476-1-mario.limonciello@amd.com> <20241015213645.1476-9-mario.limonciello@amd.com>
+	s=arc-20240116; t=1729087139; c=relaxed/simple;
+	bh=DCwW1BXaEzYmomHtjqvPhEnDGnecHTjUZgJNEcpFnTA=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oV+a8Ndu+BJiDoBSdy205lZFwASoKPuT/2qnXi7suJfPXiNV8QyBT0PXTd8/RSZv0z7t7ZLeTukmM6avmil9VQ3ODZ2duG7RaLkO+1dEcbTHhMmu7xNqSHmZ/TFGk6tTXgX7aHvIrOVklu6Nn0F1A1rzq5hjM9/f1xMjSYCH1MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XTCGw6RFvz6D8Y7;
+	Wed, 16 Oct 2024 21:58:16 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 54E9E140B67;
+	Wed, 16 Oct 2024 21:58:54 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 16 Oct
+ 2024 15:58:52 +0200
+Date: Wed, 16 Oct 2024 14:58:51 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, Amit Kucheria <amitk@kernel.org>, Thara Gopinath
+	<thara.gopinath@gmail.com>, Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>, Vasily Khoruzhick
+	<anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai
+	<wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+	<samuel@sholland.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-sunxi@lists.linux.dev>, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v4 2/6] thermal: of: Use scoped memory and OF handling
+ to simplify thermal_of_trips_init()
+Message-ID: <20241016145851.00004e90@Huawei.com>
+In-Reply-To: <20241010-b4-cleanup-h-of-node-put-thermal-v4-2-bfbe29ad81f4@linaro.org>
+References: <20241010-b4-cleanup-h-of-node-put-thermal-v4-0-bfbe29ad81f4@linaro.org>
+	<20241010-b4-cleanup-h-of-node-put-thermal-v4-2-bfbe29ad81f4@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Tue, 15 Oct 2024, Mario Limonciello wrote:
+On Thu, 10 Oct 2024 20:06:18 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> From: Perry Yuan <Perry.Yuan@amd.com>
+> Obtain the device node reference and allocate memory with
+> scoped/cleanup.h to reduce error handling and make the code a bit
+> simpler.
 > 
-> There are some firmware parameters that need to be configured
-> when a CPU core is brought online or offline.
+> The code is not equivalent in one minor aspect: outgoing parameter
+> "*ntrips" will not be zeroed on errors of memory allocation.  This
+> difference is not important, because code was already not zeroing it in
+> case of earlier errors and the only caller does not rely on ntrips being
+> 0 in case of errors.
 > 
-> when CPU is online, it will initialize the workload classification
-> parameters to CPU firmware which will trigger the workload class ID
-> updating function.
-> 
-> Once the CPU is going to offline, it will need to disable the workload
-> classification function and clear the history.
-> 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Trivial unrelated comment inline + maybe return_ptr() is the way to go as
+Chen-Yu mentioned.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
-> v2->v3:
->  * Use guard() (Ilpo)
->  * Whitespace changes (Ilpo)
->  * Remove labels for unwind (Ilpo)
-> ---
->  drivers/platform/x86/amd/hfi/hfi.c | 79 ++++++++++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
 > 
-> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-> index 63e66ab60655..d971ec1124af 100644
-> --- a/drivers/platform/x86/amd/hfi/hfi.c
-> +++ b/drivers/platform/x86/amd/hfi/hfi.c
-> @@ -249,6 +249,80 @@ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
->  	return 0;
->  }
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> Changes in v4:
+> 1. Significant change: kzalloc() also with scoped-handling so the entire
+>    error handling could be removed.
+> 2. Due to above, drop review-tags (Chen-Yu, Jonathan).
+> 
+> Changes in v2:
+> 1. Drop left-over of_node_put in regular exit path (Chen-Yu)
+> ---
+>  drivers/thermal/thermal_of.c | 31 ++++++++-----------------------
+>  1 file changed, 8 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index f0ffc0e335ba9406f4fd858d6c561f9d23f4b842..37db435b54b124abf25b1d75d6cc4fb75f1c1e5c 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -95,11 +95,9 @@ static int thermal_of_populate_trip(struct device_node *np,
 >  
-> +static int amd_hfi_set_state(unsigned int cpu, bool state)
-> +{
-> +	int ret;
-> +
-> +	ret = wrmsrl_on_cpu(cpu, AMD_WORKLOAD_CLASS_CONFIG, state);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return wrmsrl_on_cpu(cpu, AMD_WORKLOAD_HRST, 0x1);
-> +}
-> +
-> +/**
-> + * amd_hfi_online() - Enable workload classification on @cpu
-> + * @cpu: CPU in which the workload classification will be enabled
-> + *
-> + * Return: 0 on success, negative error code on failure
-> + */
-> +static int amd_hfi_online(unsigned int cpu)
-> +{
-> +	struct amd_hfi_cpuinfo *hfi_info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
-> +	struct amd_hfi_classes *hfi_classes;
-> +	int ret;
-> +
-> +	if (WARN_ON_ONCE(!hfi_info))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Check if @cpu as an associated, initialized and ranking data must be filled
-> +	 */
-> +	hfi_classes = hfi_info->amd_hfi_classes;
-> +	if (!hfi_classes)
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&hfi_cpuinfo_lock);
-> +
-> +	if (!zalloc_cpumask_var(&hfi_info->cpus, GFP_KERNEL))
-> +		return -ENOMEM;
-> +
-> +	cpumask_set_cpu(cpu, hfi_info->cpus);
-> +
-> +	ret = amd_hfi_set_state(cpu, true);
-> +	if (ret)
-> +		pr_err("WCT enable failed for cpu %d\n", cpu);
-
-cpu -> CPU
-
--- 
- i.
-
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * amd_hfi_offline() - Disable workload classification on @cpu
-> + * @cpu: CPU in which the workload classification will be disabled
-> + *
-> + * Remove @cpu from those covered by its HFI instance.
-> + *
-> + * Return: 0 on success, negative error code on failure
-> + */
-> +static int amd_hfi_offline(unsigned int cpu)
-> +{
-> +	struct amd_hfi_cpuinfo *hfi_info = &per_cpu(amd_hfi_cpuinfo, cpu);
-> +	int ret;
-> +
-> +	if (WARN_ON_ONCE(!hfi_info))
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&hfi_cpuinfo_lock);
-> +
-> +	ret = amd_hfi_set_state(cpu, false);
-> +	if (ret)
-> +		pr_err("WCT disable failed for CPU %d\n", cpu);
-> +
-> +	free_cpumask_var(hfi_info->cpus);
-> +
-> +	return ret;
-> +}
-> +
->  static int update_hfi_ipcc_scores(void)
+>  static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *ntrips)
 >  {
->  	int cpu;
-> @@ -352,6 +426,11 @@ static int amd_hfi_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
+> -	struct thermal_trip *tt;
+> -	struct device_node *trips;
+>  	int ret, count;
 >  
-> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/amd_hfi:online",
-> +				amd_hfi_online, amd_hfi_offline);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	return 0;
+> -	trips = of_get_child_by_name(np, "trips");
+> +	struct device_node *trips __free(device_node) = of_get_child_by_name(np, "trips");
+>  	if (!trips) {
+>  		pr_err("Failed to find 'trips' node\n");
+>  		return ERR_PTR(-EINVAL);
+> @@ -108,36 +106,23 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
+>  	count = of_get_child_count(trips);
+>  	if (!count) {
+>  		pr_err("No trip point defined\n");
+> -		ret = -EINVAL;
+> -		goto out_of_node_put;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> -	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
+> -	if (!tt) {
+> -		ret = -ENOMEM;
+> -		goto out_of_node_put;
+> -	}
+> -
+> -	*ntrips = count;
+> +	struct thermal_trip *tt __free(kfree) = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
+
+Trivial and unrelated, but maybe kcalloc(count, sizeof(tt), GFP_KERNEL);
+
+> +	if (!tt)
+> +		return ERR_PTR(-ENOMEM);
+>  
+>  	count = 0;
+>  	for_each_child_of_node_scoped(trips, trip) {
+>  		ret = thermal_of_populate_trip(trip, &tt[count++]);
+>  		if (ret)
+> -			goto out_kfree;
+> +			return ERR_PTR(ret);
+>  	}
+>  
+> -	of_node_put(trips);
+> +	*ntrips = count;
+>  
+> -	return tt;
+> -
+> -out_kfree:
+> -	kfree(tt);
+> -	*ntrips = 0;
+> -out_of_node_put:
+> -	of_node_put(trips);
+> -
+> -	return ERR_PTR(ret);
+> +	return no_free_ptr(tt);
 >  }
 >  
+>  static struct device_node *of_thermal_zone_find(struct device_node *sensor, int id)
 > 
+
 
