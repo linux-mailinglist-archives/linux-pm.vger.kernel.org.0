@@ -1,176 +1,412 @@
-Return-Path: <linux-pm+bounces-15774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B8259A0C33
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:01:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A5629A0CEB
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:39:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC53C1C25F85
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 14:01:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 498BD283BF9
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 14:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F69E20C01C;
-	Wed, 16 Oct 2024 13:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DAD20C008;
+	Wed, 16 Oct 2024 14:39:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB88820C009;
-	Wed, 16 Oct 2024 13:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE426156225;
+	Wed, 16 Oct 2024 14:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729087139; cv=none; b=c+UdFEoQEGP7nSpk/W1kB0dX5sc3Qo8pBk4bofE9lZ5tywDQYW6Q54DuvWrL96vE7Z1p1d2oXcy9cnTAvnIpkqLWi73zztwj8JqCwXROlBl1QpGkMz96w6Szscnvl9JnyaTjF/C2QnPaPesC2XuX54IFWY1Wbw+UWjlP/Y9LcOU=
+	t=1729089593; cv=none; b=nvym71o0dMy2WsfUf19HGf7hGK6Bcrzbg7zxqn7UzSsxTib8FqQx6CzGmiWCi/Qg+D71mqV7GvXcSYI7lKPdMKGvM7LH0O2bnKegQBDIxw5Dl71cM/yVHW8Mlp56xXy94u3lE2MsV3pOY/mIKfKB0a4QPLbVUbypyWZgo8quIes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729087139; c=relaxed/simple;
-	bh=DCwW1BXaEzYmomHtjqvPhEnDGnecHTjUZgJNEcpFnTA=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oV+a8Ndu+BJiDoBSdy205lZFwASoKPuT/2qnXi7suJfPXiNV8QyBT0PXTd8/RSZv0z7t7ZLeTukmM6avmil9VQ3ODZ2duG7RaLkO+1dEcbTHhMmu7xNqSHmZ/TFGk6tTXgX7aHvIrOVklu6Nn0F1A1rzq5hjM9/f1xMjSYCH1MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XTCGw6RFvz6D8Y7;
-	Wed, 16 Oct 2024 21:58:16 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 54E9E140B67;
-	Wed, 16 Oct 2024 21:58:54 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 16 Oct
- 2024 15:58:52 +0200
-Date: Wed, 16 Oct 2024 14:58:51 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
-	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
-	<lukasz.luba@arm.com>, Amit Kucheria <amitk@kernel.org>, Thara Gopinath
-	<thara.gopinath@gmail.com>, Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, Vasily Khoruzhick
-	<anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai
-	<wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
-	<samuel@sholland.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-sunxi@lists.linux.dev>, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v4 2/6] thermal: of: Use scoped memory and OF handling
- to simplify thermal_of_trips_init()
-Message-ID: <20241016145851.00004e90@Huawei.com>
-In-Reply-To: <20241010-b4-cleanup-h-of-node-put-thermal-v4-2-bfbe29ad81f4@linaro.org>
-References: <20241010-b4-cleanup-h-of-node-put-thermal-v4-0-bfbe29ad81f4@linaro.org>
-	<20241010-b4-cleanup-h-of-node-put-thermal-v4-2-bfbe29ad81f4@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1729089593; c=relaxed/simple;
+	bh=L582LjD+0pZ8yV200KKoH79nl/ZsEIKpXDIERyP81dE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ssmhOts9KzxHXRfECEvN349l9VK7/UpNXOcFjScwtvHgi0iDp4ZgUUDuShuO4MGCgv8Sy5Rb/Nr4d3MHWKKTFdI/VbLsuDsV8yj59RJPYnuKWvStU1hZe6+VE3oChTOUsesdXesrqu5UorwU+dWmat1W/3tp1FXSieJVmh87VJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9F6AFEC;
+	Wed, 16 Oct 2024 07:40:20 -0700 (PDT)
+Received: from [10.1.28.177] (XHFQ2J9959.cambridge.arm.com [10.1.28.177])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFFEE3F71E;
+	Wed, 16 Oct 2024 07:39:47 -0700 (PDT)
+Message-ID: <dd7b7268-7e75-4ec9-9a17-f5fdb325dd2e@arm.com>
+Date: Wed, 16 Oct 2024 15:39:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 14/57] pm/hibernate: Remove PAGE_SIZE compile-time
+ constant assumption
+Content-Language: en-GB
+To: Andrew Morton <akpm@linux-foundation.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Ard Biesheuvel <ardb@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ David Hildenbrand <david@redhat.com>, Greg Marsden
+ <greg.marsden@oracle.com>, Ivan Ivanov <ivan.ivanov@suse.com>,
+ Kalesh Singh <kaleshsingh@google.com>, Marc Zyngier <maz@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Matthias Brugger <mbrugger@suse.com>,
+ Miroslav Benes <mbenes@suse.cz>, Will Deacon <will@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-pm@vger.kernel.org
+References: <20241014105514.3206191-1-ryan.roberts@arm.com>
+ <20241014105912.3207374-1-ryan.roberts@arm.com>
+ <20241014105912.3207374-14-ryan.roberts@arm.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20241014105912.3207374-14-ryan.roberts@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Thu, 10 Oct 2024 20:06:18 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
++ Rafael J. Wysocki, Len Brown, Pavel Machek
 
-> Obtain the device node reference and allocate memory with
-> scoped/cleanup.h to reduce error handling and make the code a bit
-> simpler.
+This was a rather tricky series to get the recipients correct for and my script
+did not realize that "supporter" was a pseudonym for "maintainer" so you were
+missed off the original post. Appologies!
+
+More context in cover letter:
+https://lore.kernel.org/all/20241014105514.3206191-1-ryan.roberts@arm.com/
+
+
+On 14/10/2024 11:58, Ryan Roberts wrote:
+> To prepare for supporting boot-time page size selection, refactor code
+> to remove assumptions about PAGE_SIZE being compile-time constant. Code
+> intended to be equivalent when compile-time page size is active.
 > 
-> The code is not equivalent in one minor aspect: outgoing parameter
-> "*ntrips" will not be zeroed on errors of memory allocation.  This
-> difference is not important, because code was already not zeroing it in
-> case of earlier errors and the only caller does not rely on ntrips being
-> 0 in case of errors.
+> "struct linked_page", "struct swap_map_page" and "struct swsusp_header"
+> were all previously sized to be exactly PAGE_SIZE. Refactor those
+> structures to remove the padding, then superimpose them on a page at
+> runtime.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Trivial unrelated comment inline + maybe return_ptr() is the way to go as
-Chen-Yu mentioned.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+> "struct cmp_data" and "struct dec_data" previously contained embedded
+> "unc" and "cmp" arrays, who's sizes were derived from PAGE_SIZE. We
+> can't use flexible array approach here since there are 2 arrays in the
+> structure, so convert to pointers and define an allocator and
+> deallocator for each struct.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 > ---
 > 
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Chen-Yu Tsai <wenst@chromium.org>
+> ***NOTE***
+> Any confused maintainers may want to read the cover note here for context:
+> https://lore.kernel.org/all/20241014105514.3206191-1-ryan.roberts@arm.com/
 > 
-> Changes in v4:
-> 1. Significant change: kzalloc() also with scoped-handling so the entire
->    error handling could be removed.
-> 2. Due to above, drop review-tags (Chen-Yu, Jonathan).
+>  kernel/power/power.h    |   2 +-
+>  kernel/power/snapshot.c |   2 +-
+>  kernel/power/swap.c     | 129 +++++++++++++++++++++++++++++++++-------
+>  3 files changed, 108 insertions(+), 25 deletions(-)
 > 
-> Changes in v2:
-> 1. Drop left-over of_node_put in regular exit path (Chen-Yu)
-> ---
->  drivers/thermal/thermal_of.c | 31 ++++++++-----------------------
->  1 file changed, 8 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index f0ffc0e335ba9406f4fd858d6c561f9d23f4b842..37db435b54b124abf25b1d75d6cc4fb75f1c1e5c 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -95,11 +95,9 @@ static int thermal_of_populate_trip(struct device_node *np,
+> diff --git a/kernel/power/power.h b/kernel/power/power.h
+> index de0e6b1077f23..74af2eb8d48a4 100644
+> --- a/kernel/power/power.h
+> +++ b/kernel/power/power.h
+> @@ -16,7 +16,7 @@ struct swsusp_info {
+>  	unsigned long		image_pages;
+>  	unsigned long		pages;
+>  	unsigned long		size;
+> -} __aligned(PAGE_SIZE);
+> +} __aligned(PAGE_SIZE_MAX);
 >  
->  static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *ntrips)
->  {
-> -	struct thermal_trip *tt;
-> -	struct device_node *trips;
->  	int ret, count;
+>  #ifdef CONFIG_HIBERNATION
+>  /* kernel/power/snapshot.c */
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 405eddbda4fc5..144e92f786e35 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -155,7 +155,7 @@ struct pbe *restore_pblist;
 >  
-> -	trips = of_get_child_by_name(np, "trips");
-> +	struct device_node *trips __free(device_node) = of_get_child_by_name(np, "trips");
->  	if (!trips) {
->  		pr_err("Failed to find 'trips' node\n");
->  		return ERR_PTR(-EINVAL);
-> @@ -108,36 +106,23 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
->  	count = of_get_child_count(trips);
->  	if (!count) {
->  		pr_err("No trip point defined\n");
-> -		ret = -EINVAL;
-> -		goto out_of_node_put;
-> +		return ERR_PTR(-EINVAL);
->  	}
+>  struct linked_page {
+>  	struct linked_page *next;
+> -	char data[LINKED_PAGE_DATA_SIZE];
+> +	char data[];
+>  } __packed;
 >  
-> -	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
-> -	if (!tt) {
-> -		ret = -ENOMEM;
-> -		goto out_of_node_put;
-> -	}
-> -
-> -	*ntrips = count;
-> +	struct thermal_trip *tt __free(kfree) = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
-
-Trivial and unrelated, but maybe kcalloc(count, sizeof(tt), GFP_KERNEL);
-
-> +	if (!tt)
-> +		return ERR_PTR(-ENOMEM);
+>  /*
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index 82b884b67152f..ffd4c864acfa2 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -59,6 +59,7 @@ static bool clean_pages_on_decompress;
+>   */
 >  
->  	count = 0;
->  	for_each_child_of_node_scoped(trips, trip) {
->  		ret = thermal_of_populate_trip(trip, &tt[count++]);
->  		if (ret)
-> -			goto out_kfree;
-> +			return ERR_PTR(ret);
->  	}
+>  #define MAP_PAGE_ENTRIES	(PAGE_SIZE / sizeof(sector_t) - 1)
+> +#define NEXT_SWAP_INDEX		MAP_PAGE_ENTRIES
 >  
-> -	of_node_put(trips);
-> +	*ntrips = count;
->  
-> -	return tt;
-> -
-> -out_kfree:
-> -	kfree(tt);
-> -	*ntrips = 0;
-> -out_of_node_put:
-> -	of_node_put(trips);
-> -
-> -	return ERR_PTR(ret);
-> +	return no_free_ptr(tt);
+>  /*
+>   * Number of free pages that are not high.
+> @@ -78,8 +79,11 @@ static inline unsigned long reqd_free_pages(void)
 >  }
 >  
->  static struct device_node *of_thermal_zone_find(struct device_node *sensor, int id)
-> 
+>  struct swap_map_page {
+> -	sector_t entries[MAP_PAGE_ENTRIES];
+> -	sector_t next_swap;
+> +	/*
+> +	 * A PAGE_SIZE structure with (PAGE_SIZE / sizeof(sector_t)) entries.
+> +	 * The last entry, [NEXT_SWAP_INDEX], is `.next_swap`.
+> +	 */
+> +	sector_t entries[1];
+>  };
+>  
+>  struct swap_map_page_list {
+> @@ -103,8 +107,6 @@ struct swap_map_handle {
+>  };
+>  
+>  struct swsusp_header {
+> -	char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
+> -	              sizeof(u32) - sizeof(u32)];
+>  	u32	hw_sig;
+>  	u32	crc32;
+>  	sector_t image;
+> @@ -113,6 +115,7 @@ struct swsusp_header {
+>  	char	sig[10];
+>  } __packed;
+>  
+> +static char *swsusp_header_pg;
+>  static struct swsusp_header *swsusp_header;
+>  
+>  /*
+> @@ -315,7 +318,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
+>  {
+>  	int error;
+>  
+> -	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header, NULL);
+> +	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header_pg, NULL);
+>  	if (!memcmp("SWAP-SPACE",swsusp_header->sig, 10) ||
+>  	    !memcmp("SWAPSPACE2",swsusp_header->sig, 10)) {
+>  		memcpy(swsusp_header->orig_sig,swsusp_header->sig, 10);
+> @@ -329,7 +332,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
+>  		if (flags & SF_CRC32_MODE)
+>  			swsusp_header->crc32 = handle->crc32;
+>  		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
+> -				      swsusp_resume_block, swsusp_header, NULL);
+> +				      swsusp_resume_block, swsusp_header_pg, NULL);
+>  	} else {
+>  		pr_err("Swap header not found!\n");
+>  		error = -ENODEV;
+> @@ -466,7 +469,7 @@ static int swap_write_page(struct swap_map_handle *handle, void *buf,
+>  		offset = alloc_swapdev_block(root_swap);
+>  		if (!offset)
+>  			return -ENOSPC;
+> -		handle->cur->next_swap = offset;
+> +		handle->cur->entries[NEXT_SWAP_INDEX] = offset;
+>  		error = write_page(handle->cur, handle->cur_swap, hb);
+>  		if (error)
+>  			goto out;
+> @@ -643,8 +646,8 @@ struct cmp_data {
+>  	wait_queue_head_t done;                   /* compression done */
+>  	size_t unc_len;                           /* uncompressed length */
+>  	size_t cmp_len;                           /* compressed length */
+> -	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
+> -	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
+> +	unsigned char *unc;                       /* uncompressed buffer */
+> +	unsigned char *cmp;                       /* compressed buffer */
+>  };
+>  
+>  /* Indicates the image size after compression */
+> @@ -683,6 +686,45 @@ static int compress_threadfn(void *data)
+>  	return 0;
+>  }
+>  
+> +static void free_cmp_data(struct cmp_data *data, unsigned nr_threads)
+> +{
+> +	int i;
+> +
+> +	if (!data)
+> +		return;
+> +
+> +	for (i = 0; i < nr_threads; i++) {
+> +		vfree(data[i].unc);
+> +		vfree(data[i].cmp);
+> +	}
+> +
+> +	vfree(data);
+> +}
+> +
+> +static struct cmp_data *alloc_cmp_data(unsigned nr_threads)
+> +{
+> +	struct cmp_data *data = NULL;
+> +	int i = -1;
+> +
+> +	data = vzalloc(array_size(nr_threads, sizeof(*data)));
+> +	if (!data)
+> +		goto fail;
+> +
+> +	for (i = 0; i < nr_threads; i++) {
+> +		data[i].unc = vzalloc(UNC_SIZE);
+> +		if (!data[i].unc)
+> +			goto fail;
+> +		data[i].cmp = vzalloc(CMP_SIZE);
+> +		if (!data[i].cmp)
+> +			goto fail;
+> +	}
+> +
+> +	return data;
+> +fail:
+> +	free_cmp_data(data, nr_threads);
+> +	return NULL;
+> +}
+> +
+>  /**
+>   * save_compressed_image - Save the suspend image data after compression.
+>   * @handle: Swap map handle to use for saving the image.
+> @@ -724,7 +766,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
+>  		goto out_clean;
+>  	}
+>  
+> -	data = vzalloc(array_size(nr_threads, sizeof(*data)));
+> +	data = alloc_cmp_data(nr_threads);
+>  	if (!data) {
+>  		pr_err("Failed to allocate %s data\n", hib_comp_algo);
+>  		ret = -ENOMEM;
+> @@ -902,7 +944,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
+>  			if (data[thr].cc)
+>  				crypto_free_comp(data[thr].cc);
+>  		}
+> -		vfree(data);
+> +		free_cmp_data(data, nr_threads);
+>  	}
+>  	if (page) free_page((unsigned long)page);
+>  
+> @@ -1036,7 +1078,7 @@ static int get_swap_reader(struct swap_map_handle *handle,
+>  			release_swap_reader(handle);
+>  			return error;
+>  		}
+> -		offset = tmp->map->next_swap;
+> +		offset = tmp->map->entries[NEXT_SWAP_INDEX];
+>  	}
+>  	handle->k = 0;
+>  	handle->cur = handle->maps->map;
+> @@ -1150,8 +1192,8 @@ struct dec_data {
+>  	wait_queue_head_t done;                   /* decompression done */
+>  	size_t unc_len;                           /* uncompressed length */
+>  	size_t cmp_len;                           /* compressed length */
+> -	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
+> -	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
+> +	unsigned char *unc;                       /* uncompressed buffer */
+> +	unsigned char *cmp;                       /* compressed buffer */
+>  };
+>  
+>  /*
+> @@ -1189,6 +1231,45 @@ static int decompress_threadfn(void *data)
+>  	return 0;
+>  }
+>  
+> +static void free_dec_data(struct dec_data *data, unsigned nr_threads)
+> +{
+> +	int i;
+> +
+> +	if (!data)
+> +		return;
+> +
+> +	for (i = 0; i < nr_threads; i++) {
+> +		vfree(data[i].unc);
+> +		vfree(data[i].cmp);
+> +	}
+> +
+> +	vfree(data);
+> +}
+> +
+> +static struct dec_data *alloc_dec_data(unsigned nr_threads)
+> +{
+> +	struct dec_data *data = NULL;
+> +	int i = -1;
+> +
+> +	data = vzalloc(array_size(nr_threads, sizeof(*data)));
+> +	if (!data)
+> +		goto fail;
+> +
+> +	for (i = 0; i < nr_threads; i++) {
+> +		data[i].unc = vzalloc(UNC_SIZE);
+> +		if (!data[i].unc)
+> +			goto fail;
+> +		data[i].cmp = vzalloc(CMP_SIZE);
+> +		if (!data[i].cmp)
+> +			goto fail;
+> +	}
+> +
+> +	return data;
+> +fail:
+> +	free_dec_data(data, nr_threads);
+> +	return NULL;
+> +}
+> +
+>  /**
+>   * load_compressed_image - Load compressed image data and decompress it.
+>   * @handle: Swap map handle to use for loading data.
+> @@ -1231,7 +1312,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
+>  		goto out_clean;
+>  	}
+>  
+> -	data = vzalloc(array_size(nr_threads, sizeof(*data)));
+> +	data = alloc_dec_data(nr_threads);
+>  	if (!data) {
+>  		pr_err("Failed to allocate %s data\n", hib_comp_algo);
+>  		ret = -ENOMEM;
+> @@ -1510,7 +1591,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
+>  			if (data[thr].cc)
+>  				crypto_free_comp(data[thr].cc);
+>  		}
+> -		vfree(data);
+> +		free_dec_data(data, nr_threads);
+>  	}
+>  	vfree(page);
+>  
+> @@ -1569,9 +1650,9 @@ int swsusp_check(bool exclusive)
+>  	hib_resume_bdev_file = bdev_file_open_by_dev(swsusp_resume_device,
+>  				BLK_OPEN_READ, holder, NULL);
+>  	if (!IS_ERR(hib_resume_bdev_file)) {
+> -		clear_page(swsusp_header);
+> +		clear_page(swsusp_header_pg);
+>  		error = hib_submit_io(REQ_OP_READ, swsusp_resume_block,
+> -					swsusp_header, NULL);
+> +					swsusp_header_pg, NULL);
+>  		if (error)
+>  			goto put;
+>  
+> @@ -1581,7 +1662,7 @@ int swsusp_check(bool exclusive)
+>  			/* Reset swap signature now */
+>  			error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
+>  						swsusp_resume_block,
+> -						swsusp_header, NULL);
+> +						swsusp_header_pg, NULL);
+>  		} else {
+>  			error = -EINVAL;
+>  		}
+> @@ -1631,12 +1712,12 @@ int swsusp_unmark(void)
+>  	int error;
+>  
+>  	hib_submit_io(REQ_OP_READ, swsusp_resume_block,
+> -			swsusp_header, NULL);
+> +			swsusp_header_pg, NULL);
+>  	if (!memcmp(HIBERNATE_SIG,swsusp_header->sig, 10)) {
+>  		memcpy(swsusp_header->sig,swsusp_header->orig_sig, 10);
+>  		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
+>  					swsusp_resume_block,
+> -					swsusp_header, NULL);
+> +					swsusp_header_pg, NULL);
+>  	} else {
+>  		pr_err("Cannot find swsusp signature!\n");
+>  		error = -ENODEV;
+> @@ -1653,9 +1734,11 @@ int swsusp_unmark(void)
+>  
+>  static int __init swsusp_header_init(void)
+>  {
+> -	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
+> -	if (!swsusp_header)
+> +	swsusp_header_pg = (char *)__get_free_page(GFP_KERNEL);
+> +	if (!swsusp_header_pg)
+>  		panic("Could not allocate memory for swsusp_header\n");
+> +	swsusp_header = (struct swsusp_header *)(swsusp_header_pg +
+> +				PAGE_SIZE - sizeof(struct swsusp_header));
+>  	return 0;
+>  }
+>  
 
 
