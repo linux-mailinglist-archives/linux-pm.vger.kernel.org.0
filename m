@@ -1,412 +1,181 @@
-Return-Path: <linux-pm+bounces-15775-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15776-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5629A0CEB
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:39:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A399A9A0D2D
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 16:48:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 498BD283BF9
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 14:39:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6A9E1C21883
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 14:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DAD20C008;
-	Wed, 16 Oct 2024 14:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1019209F59;
+	Wed, 16 Oct 2024 14:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ho90/ADn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE426156225;
-	Wed, 16 Oct 2024 14:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729089593; cv=none; b=nvym71o0dMy2WsfUf19HGf7hGK6Bcrzbg7zxqn7UzSsxTib8FqQx6CzGmiWCi/Qg+D71mqV7GvXcSYI7lKPdMKGvM7LH0O2bnKegQBDIxw5Dl71cM/yVHW8Mlp56xXy94u3lE2MsV3pOY/mIKfKB0a4QPLbVUbypyWZgo8quIes=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729089593; c=relaxed/simple;
-	bh=L582LjD+0pZ8yV200KKoH79nl/ZsEIKpXDIERyP81dE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ssmhOts9KzxHXRfECEvN349l9VK7/UpNXOcFjScwtvHgi0iDp4ZgUUDuShuO4MGCgv8Sy5Rb/Nr4d3MHWKKTFdI/VbLsuDsV8yj59RJPYnuKWvStU1hZe6+VE3oChTOUsesdXesrqu5UorwU+dWmat1W/3tp1FXSieJVmh87VJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9F6AFEC;
-	Wed, 16 Oct 2024 07:40:20 -0700 (PDT)
-Received: from [10.1.28.177] (XHFQ2J9959.cambridge.arm.com [10.1.28.177])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFFEE3F71E;
-	Wed, 16 Oct 2024 07:39:47 -0700 (PDT)
-Message-ID: <dd7b7268-7e75-4ec9-9a17-f5fdb325dd2e@arm.com>
-Date: Wed, 16 Oct 2024 15:39:46 +0100
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2055.outbound.protection.outlook.com [40.107.237.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3017514A4E2;
+	Wed, 16 Oct 2024 14:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729090089; cv=fail; b=HPabOXfa/hbDLSVg9SB4tB/+iMJXlvR0x2+BIwonI3Bn3m+g1veKbw7JEeZNGtt7c76GrUmrn99UV1eKIa+/xDSq28pDD+iBlFL4Ezic8Mk4HAsz+6jDXDZ6d70BMvT+yyBvrqC77G8epkx12AKQdtIDftjo+cE8B/4/2ChtTSQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729090089; c=relaxed/simple;
+	bh=XXGVR4oMU+vnVsxoeMq9s2IqncjCUyyQeRQmJCs4Olc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UA/FSPsVZz5NOl38qZ8jQIPuRhj7M6+dNzjhPf13UjJBJ+Lfjwn+Gl18ps2MCDWM4SXOiC4/wJjqBDPYvklOF1qj2YVEPRdWLiepVHhLhPaZTthR4JOLaSG1xW/E4nLP3AGUDcoDrohTN9qSKwu2wGbOWkXmVLY9EifDbQMo7p8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ho90/ADn; arc=fail smtp.client-ip=40.107.237.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PBJvPytShh3jJX6bnen0Ee05QCeaOJBht1zKZXq6HRB5/4SPCbAVC3ryckjH/H03Nt5PbfketdvQ0aRQ77wRRWU+pOo9lz6qPObk1/2QpBi2lXNDnAoQtaBMVFTgJ/XIqky354c2iDgvGeK9Cje2heWvMm6sg7bvUmS6St62CZ+yvjx8b0qVIp3WnodMr2lE23ffpajxOzQ6oODxNRw6y5jGgw9X1Mwdj7UexVlAaqhF7d1BAdhcy7T7LLojuIUtyyZywiqr7WWCQ3Ii58jKJXMI1DpEw1I+CQad8EprtwQ2a594NKCQSDbRmXnJIQ45LT5xSNZfGr84IxbLklgLUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8sb7CJIo4cG8jRWf25sjzLUHQFtap6osLkjKtKRHD94=;
+ b=s8LKqK6ocl1zzOQRQqv9+xWw4a1xIiF40vv0Ay1ELq180DSDppq3RbfiIb2vgCMjefzFxbghXz2q9dFFMVnVg+KGeZrr/nuMY10CG4zKs/b74vvG1JAqD7PyHOkXuE/J32llrLFPx9hBv+oQtK8X8rJUCCkB3N/+ZeKsjynjY6ZLcoEcYSPqiei2jDyN34p4Xn1htxBjjLZw32tQeK9JpdWqZDozTMOFmt2EobGjJnmns1qbPNuHkLJUQUcIbyUX2JH0uhaAYBPIAVeQvksXRd87QiATd3SmdQhV7vUmCBv6htAZ8FeGdzmmoL4UxWwVnZY4WRukjCzw+ifynIMWug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8sb7CJIo4cG8jRWf25sjzLUHQFtap6osLkjKtKRHD94=;
+ b=ho90/ADnvQmJZFgSQdbhNlfUTdeQX3eAOxb+uIjc288KBT3Q5gvE2woHrEcMVb1mXwCksmM8pRFgtb7JAh8hY0XdelVOikq553zJXNqphVgNhrBXziILEYghOyqFBVQg3qkVMdLs7EtazK4nCyo3JmSlrvBvg1QlG6yh4oEQ4Js=
+Received: from MW4PR04CA0148.namprd04.prod.outlook.com (2603:10b6:303:84::33)
+ by DM4PR12MB5772.namprd12.prod.outlook.com (2603:10b6:8:63::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Wed, 16 Oct
+ 2024 14:48:04 +0000
+Received: from CO1PEPF000075F4.namprd03.prod.outlook.com
+ (2603:10b6:303:84:cafe::4) by MW4PR04CA0148.outlook.office365.com
+ (2603:10b6:303:84::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18 via Frontend
+ Transport; Wed, 16 Oct 2024 14:48:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000075F4.mail.protection.outlook.com (10.167.249.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 14:48:04 +0000
+Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 16 Oct
+ 2024 09:47:59 -0500
+From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+To: <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
+	<perry.yuan@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Dhananjay
+ Ugwekar" <Dhananjay.Ugwekar@amd.com>
+Subject: [PATCH v2 0/2] cpufreq/amd-pstate: Set initial min_freq to lowest_nonlinear_freq
+Date: Wed, 16 Oct 2024 14:46:38 +0000
+Message-ID: <20241016144639.135610-1-Dhananjay.Ugwekar@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 14/57] pm/hibernate: Remove PAGE_SIZE compile-time
- constant assumption
-Content-Language: en-GB
-To: Andrew Morton <akpm@linux-foundation.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Ard Biesheuvel <ardb@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- David Hildenbrand <david@redhat.com>, Greg Marsden
- <greg.marsden@oracle.com>, Ivan Ivanov <ivan.ivanov@suse.com>,
- Kalesh Singh <kaleshsingh@google.com>, Marc Zyngier <maz@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Matthias Brugger <mbrugger@suse.com>,
- Miroslav Benes <mbenes@suse.cz>, Will Deacon <will@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-pm@vger.kernel.org
-References: <20241014105514.3206191-1-ryan.roberts@arm.com>
- <20241014105912.3207374-1-ryan.roberts@arm.com>
- <20241014105912.3207374-14-ryan.roberts@arm.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20241014105912.3207374-14-ryan.roberts@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000075F4:EE_|DM4PR12MB5772:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7725879c-7b68-4d46-2bc1-08dcedf18a3e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Ifz9ckyhO4Q/1FuUn0D3JhJeca/oSkt4PLWHObTKrPhtPnAebqtfPTor/GHc?=
+ =?us-ascii?Q?Tm8e8es1gC8TAe+tlvDIM4hhEpfRgsLJr7ikfelfbKenSEYLr7Zd7x64eXti?=
+ =?us-ascii?Q?D9gvsm5l5GtCLb2Hz4x8Mkl/ZMiR3Q/TQ82ZqXaGDRVGemmdOk6YBQNrWYDG?=
+ =?us-ascii?Q?bSAJRNy6Bai3/gltNRkr6WuZrR+HeSNpMuYnps4dI0+aExuzCp1t+KDY/rFq?=
+ =?us-ascii?Q?6CJSMSaAPUZwJFDwSfV05xJ/B4Bf5Ox3v5inZaKNCSeq/quYcmNYwG+A3y/6?=
+ =?us-ascii?Q?hXNv8BaeUHbmd8x+zRZIqsj+atvZS15UPXfvd4X8wzOYmpZxmtcQxQ92328U?=
+ =?us-ascii?Q?w9MDkS6OiW7qoxuCfTZ+7hSp/TNWeQPeQKGrc9CWp+z+4I4HcJwgJTcg7n81?=
+ =?us-ascii?Q?Mn31TGev8sLKfGnxjDj+AMf4hMJCJGrE9E1WXhNCzCBt2UxW1JtkZ9gpgBmc?=
+ =?us-ascii?Q?Kf/aRZR7sB06JyTJKHPGQlRSECVi7Gu4GIabk8ZblK4GKJS+v3xU4mLmSFxE?=
+ =?us-ascii?Q?g9wk42PuidcDpMT1Y1xdzfdFYMVtV0gklZ0fA0O2Hm0R7puImcOBHwNRAeXV?=
+ =?us-ascii?Q?EPYc5E91kni9TEm3OoP8tktB06rmM9bWsuxDeAkybkWIrWTOFSx9w1IrOyp6?=
+ =?us-ascii?Q?tMwuhbcFIfqRyZ6vjdKW0P4qMDDdH9BK5k5+5IPgvr1pMSOzigWz83D0Lt7i?=
+ =?us-ascii?Q?8FWqVkcjTqk2aRZfYfNNrrCAPwSFSjLgASNjGFpKUI/Fw7CU8D27v/LVZNYD?=
+ =?us-ascii?Q?Zabn/i1vBvVPEO95BH46r184R7dllJJuv1GZCZGRDvqJiczviie7i/oA6UEj?=
+ =?us-ascii?Q?iRwx2BqbcOaNfyxTyHlHXdijMKJdyoOzvb9/41tsqWP6AbNLLTXazHcr5Vue?=
+ =?us-ascii?Q?7lZq5RklPNTpOre7oPVD0NAWTMEPi+IIMPlJYLmNTYrWHoPkQzl/slIeddvQ?=
+ =?us-ascii?Q?+xyzVgXH4ivWdA9ULGEnci7IvMH3A94vK89zvqDLMrNdo4mbq8XXZ2tJOR2g?=
+ =?us-ascii?Q?dfMJP09KQoQ+otd4CI2nhxfM8qNhRCm7+n3s6Ki/l3ImBvApepIuf6FChYIz?=
+ =?us-ascii?Q?mMS6TJy6Gyo9se399ZDB0CpEkNXESad+itsFvPacw0DhJGu2Zn0XJr1yXk2e?=
+ =?us-ascii?Q?KY9tLcB8zeAoKKR02BwlCtSZE3MzWDHe7vx/shpbXXJcEHVzLwGGgDWZdhIJ?=
+ =?us-ascii?Q?Qk0zUw9USDsK6wnpsOfj0Py/d2o8a2CifowneROiuxqr03cP5eXLQhLPe0p1?=
+ =?us-ascii?Q?mIHa0dchXR6kMArHJXBbn7R3ZVFZI1yNyYRkJ/+R832rAUjYeGShppnDMz5s?=
+ =?us-ascii?Q?m69TQCpKcCp0BO2GV7eu8o50zp6aGwnDoD+L9Ol84Uu8JAcNJ8XH1Yi/pMsF?=
+ =?us-ascii?Q?0znPJ/7wGxB5Fr8AUWtNLgC4yvS5?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 14:48:04.0436
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7725879c-7b68-4d46-2bc1-08dcedf18a3e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000075F4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5772
 
-+ Rafael J. Wysocki, Len Brown, Pavel Machek
+According to the AMD architectural programmer's manual volume 2 [1], 
+in section "17.6.4.1 CPPC_CAPABILITY_1" lowest_nonlinear_perf is described 
+as "Reports the most energy efficient performance level (in terms of 
+performance per watt). Above this threshold, lower performance levels 
+generally result in increased energy efficiency. Reducing performance 
+below this threshold does not result in total energy savings for a given 
+computation, although it reduces instantaneous power consumption". So 
+lowest_nonlinear_perf is the most power efficient performance level, and 
+going below that would lead to a worse performance/watt.
 
-This was a rather tricky series to get the recipients correct for and my script
-did not realize that "supporter" was a pseudonym for "maintainer" so you were
-missed off the original post. Appologies!
+Also setting the minimum frequency to lowest_nonlinear_freq (instead of
+lowest_freq) allows the CPU to idle at a higher frequency which leads
+to more time being spent in a deeper idle state (as trivial idle tasks
+are completed sooner). This has shown a power benefit in some systems.
+In other systems, power consumption has increased but so has the
+throughput/watt.
 
-More context in cover letter:
-https://lore.kernel.org/all/20241014105514.3206191-1-ryan.roberts@arm.com/
+Our objective here is to update the initial lower frequency limit to 
+lowest_nonlinear_freq, while allowing the user to later update the lower 
+limit to anywhere between lowest_freq to highest_freq for the platform.
 
+So, set the policy->min to lowest_nonlinear_freq in the ->verify() 
+callback, only if the original value is equal to FREQ_QOS_MIN_DEFAULT_VALUE
+(i.e. 0). Merge the two identical verify functions while at it.
 
-On 14/10/2024 11:58, Ryan Roberts wrote:
-> To prepare for supporting boot-time page size selection, refactor code
-> to remove assumptions about PAGE_SIZE being compile-time constant. Code
-> intended to be equivalent when compile-time page size is active.
-> 
-> "struct linked_page", "struct swap_map_page" and "struct swsusp_header"
-> were all previously sized to be exactly PAGE_SIZE. Refactor those
-> structures to remove the padding, then superimpose them on a page at
-> runtime.
-> 
-> "struct cmp_data" and "struct dec_data" previously contained embedded
-> "unc" and "cmp" arrays, who's sizes were derived from PAGE_SIZE. We
-> can't use flexible array approach here since there are 2 arrays in the
-> structure, so convert to pointers and define an allocator and
-> deallocator for each struct.
-> 
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> ---
-> 
-> ***NOTE***
-> Any confused maintainers may want to read the cover note here for context:
-> https://lore.kernel.org/all/20241014105514.3206191-1-ryan.roberts@arm.com/
-> 
->  kernel/power/power.h    |   2 +-
->  kernel/power/snapshot.c |   2 +-
->  kernel/power/swap.c     | 129 +++++++++++++++++++++++++++++++++-------
->  3 files changed, 108 insertions(+), 25 deletions(-)
-> 
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index de0e6b1077f23..74af2eb8d48a4 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -16,7 +16,7 @@ struct swsusp_info {
->  	unsigned long		image_pages;
->  	unsigned long		pages;
->  	unsigned long		size;
-> -} __aligned(PAGE_SIZE);
-> +} __aligned(PAGE_SIZE_MAX);
->  
->  #ifdef CONFIG_HIBERNATION
->  /* kernel/power/snapshot.c */
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 405eddbda4fc5..144e92f786e35 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -155,7 +155,7 @@ struct pbe *restore_pblist;
->  
->  struct linked_page {
->  	struct linked_page *next;
-> -	char data[LINKED_PAGE_DATA_SIZE];
-> +	char data[];
->  } __packed;
->  
->  /*
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 82b884b67152f..ffd4c864acfa2 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -59,6 +59,7 @@ static bool clean_pages_on_decompress;
->   */
->  
->  #define MAP_PAGE_ENTRIES	(PAGE_SIZE / sizeof(sector_t) - 1)
-> +#define NEXT_SWAP_INDEX		MAP_PAGE_ENTRIES
->  
->  /*
->   * Number of free pages that are not high.
-> @@ -78,8 +79,11 @@ static inline unsigned long reqd_free_pages(void)
->  }
->  
->  struct swap_map_page {
-> -	sector_t entries[MAP_PAGE_ENTRIES];
-> -	sector_t next_swap;
-> +	/*
-> +	 * A PAGE_SIZE structure with (PAGE_SIZE / sizeof(sector_t)) entries.
-> +	 * The last entry, [NEXT_SWAP_INDEX], is `.next_swap`.
-> +	 */
-> +	sector_t entries[1];
->  };
->  
->  struct swap_map_page_list {
-> @@ -103,8 +107,6 @@ struct swap_map_handle {
->  };
->  
->  struct swsusp_header {
-> -	char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
-> -	              sizeof(u32) - sizeof(u32)];
->  	u32	hw_sig;
->  	u32	crc32;
->  	sector_t image;
-> @@ -113,6 +115,7 @@ struct swsusp_header {
->  	char	sig[10];
->  } __packed;
->  
-> +static char *swsusp_header_pg;
->  static struct swsusp_header *swsusp_header;
->  
->  /*
-> @@ -315,7 +318,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
->  {
->  	int error;
->  
-> -	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header, NULL);
-> +	hib_submit_io(REQ_OP_READ, swsusp_resume_block, swsusp_header_pg, NULL);
->  	if (!memcmp("SWAP-SPACE",swsusp_header->sig, 10) ||
->  	    !memcmp("SWAPSPACE2",swsusp_header->sig, 10)) {
->  		memcpy(swsusp_header->orig_sig,swsusp_header->sig, 10);
-> @@ -329,7 +332,7 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
->  		if (flags & SF_CRC32_MODE)
->  			swsusp_header->crc32 = handle->crc32;
->  		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
-> -				      swsusp_resume_block, swsusp_header, NULL);
-> +				      swsusp_resume_block, swsusp_header_pg, NULL);
->  	} else {
->  		pr_err("Swap header not found!\n");
->  		error = -ENODEV;
-> @@ -466,7 +469,7 @@ static int swap_write_page(struct swap_map_handle *handle, void *buf,
->  		offset = alloc_swapdev_block(root_swap);
->  		if (!offset)
->  			return -ENOSPC;
-> -		handle->cur->next_swap = offset;
-> +		handle->cur->entries[NEXT_SWAP_INDEX] = offset;
->  		error = write_page(handle->cur, handle->cur_swap, hb);
->  		if (error)
->  			goto out;
-> @@ -643,8 +646,8 @@ struct cmp_data {
->  	wait_queue_head_t done;                   /* compression done */
->  	size_t unc_len;                           /* uncompressed length */
->  	size_t cmp_len;                           /* compressed length */
-> -	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
-> -	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
-> +	unsigned char *unc;                       /* uncompressed buffer */
-> +	unsigned char *cmp;                       /* compressed buffer */
->  };
->  
->  /* Indicates the image size after compression */
-> @@ -683,6 +686,45 @@ static int compress_threadfn(void *data)
->  	return 0;
->  }
->  
-> +static void free_cmp_data(struct cmp_data *data, unsigned nr_threads)
-> +{
-> +	int i;
-> +
-> +	if (!data)
-> +		return;
-> +
-> +	for (i = 0; i < nr_threads; i++) {
-> +		vfree(data[i].unc);
-> +		vfree(data[i].cmp);
-> +	}
-> +
-> +	vfree(data);
-> +}
-> +
-> +static struct cmp_data *alloc_cmp_data(unsigned nr_threads)
-> +{
-> +	struct cmp_data *data = NULL;
-> +	int i = -1;
-> +
-> +	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-> +	if (!data)
-> +		goto fail;
-> +
-> +	for (i = 0; i < nr_threads; i++) {
-> +		data[i].unc = vzalloc(UNC_SIZE);
-> +		if (!data[i].unc)
-> +			goto fail;
-> +		data[i].cmp = vzalloc(CMP_SIZE);
-> +		if (!data[i].cmp)
-> +			goto fail;
-> +	}
-> +
-> +	return data;
-> +fail:
-> +	free_cmp_data(data, nr_threads);
-> +	return NULL;
-> +}
-> +
->  /**
->   * save_compressed_image - Save the suspend image data after compression.
->   * @handle: Swap map handle to use for saving the image.
-> @@ -724,7 +766,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
->  		goto out_clean;
->  	}
->  
-> -	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-> +	data = alloc_cmp_data(nr_threads);
->  	if (!data) {
->  		pr_err("Failed to allocate %s data\n", hib_comp_algo);
->  		ret = -ENOMEM;
-> @@ -902,7 +944,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
->  			if (data[thr].cc)
->  				crypto_free_comp(data[thr].cc);
->  		}
-> -		vfree(data);
-> +		free_cmp_data(data, nr_threads);
->  	}
->  	if (page) free_page((unsigned long)page);
->  
-> @@ -1036,7 +1078,7 @@ static int get_swap_reader(struct swap_map_handle *handle,
->  			release_swap_reader(handle);
->  			return error;
->  		}
-> -		offset = tmp->map->next_swap;
-> +		offset = tmp->map->entries[NEXT_SWAP_INDEX];
->  	}
->  	handle->k = 0;
->  	handle->cur = handle->maps->map;
-> @@ -1150,8 +1192,8 @@ struct dec_data {
->  	wait_queue_head_t done;                   /* decompression done */
->  	size_t unc_len;                           /* uncompressed length */
->  	size_t cmp_len;                           /* compressed length */
-> -	unsigned char unc[UNC_SIZE];              /* uncompressed buffer */
-> -	unsigned char cmp[CMP_SIZE];              /* compressed buffer */
-> +	unsigned char *unc;                       /* uncompressed buffer */
-> +	unsigned char *cmp;                       /* compressed buffer */
->  };
->  
->  /*
-> @@ -1189,6 +1231,45 @@ static int decompress_threadfn(void *data)
->  	return 0;
->  }
->  
-> +static void free_dec_data(struct dec_data *data, unsigned nr_threads)
-> +{
-> +	int i;
-> +
-> +	if (!data)
-> +		return;
-> +
-> +	for (i = 0; i < nr_threads; i++) {
-> +		vfree(data[i].unc);
-> +		vfree(data[i].cmp);
-> +	}
-> +
-> +	vfree(data);
-> +}
-> +
-> +static struct dec_data *alloc_dec_data(unsigned nr_threads)
-> +{
-> +	struct dec_data *data = NULL;
-> +	int i = -1;
-> +
-> +	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-> +	if (!data)
-> +		goto fail;
-> +
-> +	for (i = 0; i < nr_threads; i++) {
-> +		data[i].unc = vzalloc(UNC_SIZE);
-> +		if (!data[i].unc)
-> +			goto fail;
-> +		data[i].cmp = vzalloc(CMP_SIZE);
-> +		if (!data[i].cmp)
-> +			goto fail;
-> +	}
-> +
-> +	return data;
-> +fail:
-> +	free_dec_data(data, nr_threads);
-> +	return NULL;
-> +}
-> +
->  /**
->   * load_compressed_image - Load compressed image data and decompress it.
->   * @handle: Swap map handle to use for loading data.
-> @@ -1231,7 +1312,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
->  		goto out_clean;
->  	}
->  
-> -	data = vzalloc(array_size(nr_threads, sizeof(*data)));
-> +	data = alloc_dec_data(nr_threads);
->  	if (!data) {
->  		pr_err("Failed to allocate %s data\n", hib_comp_algo);
->  		ret = -ENOMEM;
-> @@ -1510,7 +1591,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
->  			if (data[thr].cc)
->  				crypto_free_comp(data[thr].cc);
->  		}
-> -		vfree(data);
-> +		free_dec_data(data, nr_threads);
->  	}
->  	vfree(page);
->  
-> @@ -1569,9 +1650,9 @@ int swsusp_check(bool exclusive)
->  	hib_resume_bdev_file = bdev_file_open_by_dev(swsusp_resume_device,
->  				BLK_OPEN_READ, holder, NULL);
->  	if (!IS_ERR(hib_resume_bdev_file)) {
-> -		clear_page(swsusp_header);
-> +		clear_page(swsusp_header_pg);
->  		error = hib_submit_io(REQ_OP_READ, swsusp_resume_block,
-> -					swsusp_header, NULL);
-> +					swsusp_header_pg, NULL);
->  		if (error)
->  			goto put;
->  
-> @@ -1581,7 +1662,7 @@ int swsusp_check(bool exclusive)
->  			/* Reset swap signature now */
->  			error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
->  						swsusp_resume_block,
-> -						swsusp_header, NULL);
-> +						swsusp_header_pg, NULL);
->  		} else {
->  			error = -EINVAL;
->  		}
-> @@ -1631,12 +1712,12 @@ int swsusp_unmark(void)
->  	int error;
->  
->  	hib_submit_io(REQ_OP_READ, swsusp_resume_block,
-> -			swsusp_header, NULL);
-> +			swsusp_header_pg, NULL);
->  	if (!memcmp(HIBERNATE_SIG,swsusp_header->sig, 10)) {
->  		memcpy(swsusp_header->sig,swsusp_header->orig_sig, 10);
->  		error = hib_submit_io(REQ_OP_WRITE | REQ_SYNC,
->  					swsusp_resume_block,
-> -					swsusp_header, NULL);
-> +					swsusp_header_pg, NULL);
->  	} else {
->  		pr_err("Cannot find swsusp signature!\n");
->  		error = -ENODEV;
-> @@ -1653,9 +1734,11 @@ int swsusp_unmark(void)
->  
->  static int __init swsusp_header_init(void)
->  {
-> -	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
-> -	if (!swsusp_header)
-> +	swsusp_header_pg = (char *)__get_free_page(GFP_KERNEL);
-> +	if (!swsusp_header_pg)
->  		panic("Could not allocate memory for swsusp_header\n");
-> +	swsusp_header = (struct swsusp_header *)(swsusp_header_pg +
-> +				PAGE_SIZE - sizeof(struct swsusp_header));
->  	return 0;
->  }
->  
+Link: https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/24593.pdf [1]
+
+Changes from v1:
+* Modify the initial min_freq from verify callback, instead of adding a
+  new callback in cpufreq_driver struct. (Rafael)
+
+v1 Link: https://lore.kernel.org/linux-pm/20241003083952.3186-1-Dhananjay.Ugwekar@amd.com/
+
+Dhananjay Ugwekar (2):
+  cpufreq/amd-pstate: Remove the redundant verify() function
+  cpufreq/amd-pstate: Set the initial min_freq to lowest_nonlinear_freq
+
+ drivers/cpufreq/amd-pstate.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
+
+-- 
+2.34.1
 
 
