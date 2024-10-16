@@ -1,100 +1,111 @@
-Return-Path: <linux-pm+bounces-15797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB7939A1424
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 22:37:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38C5B9A1426
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 22:38:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBE6C1C22046
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 20:37:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D264F1F211FE
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 20:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48C32144C3;
-	Wed, 16 Oct 2024 20:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BC02144CD;
+	Wed, 16 Oct 2024 20:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZYa5g+i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMQS1ea/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79982F9C1;
-	Wed, 16 Oct 2024 20:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1F7F9C1
+	for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2024 20:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729111068; cv=none; b=VhDvxB8qJidDIY9daNC2+dCRSEXyRig8FuAZYsv2moPKL3zlm8TIXYdzoCWAM6UnSW/WBwhQDPmnFYsLXszNZJSTFSHPOX18tbrD/T4okDVG79e6Ab2rpqawJTsi6aeKVRJA/TQbrfABbf0/w1ycyNN7WcjXOI4YeoAhaQBzixs=
+	t=1729111114; cv=none; b=liPGQXGGE/mAat647vurdFpWu+NneLBbLWKvbTIVSH1w78NLR0PdS1FJFxCuT1DCQ3dMT7dfYHl1E5PSBPPgJs6oOfym9VxUB3bdEyVmuLf3nhZ0nDTxjlxIw525eLZbRFAD7UCDruMV3scvQJfJ07rzfqek2AyJJcBQJ/nF3vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729111068; c=relaxed/simple;
-	bh=a22KOg6/0QhVhl9Q7ie8IX+K0Lw+hQnqXMS7D/S42Rk=;
+	s=arc-20240116; t=1729111114; c=relaxed/simple;
+	bh=V1pUvQwk4o+EVtTgXpUUyfg0t6vdXJcxl66hUr9cydE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NukGL1EOmW9tANXgEIlko1WT2ucf0JX1tLh+is8NNgWbCVw1BhL3ycoEvCNM+kFvw1Q76kEOmV9G602OPmaobC6bixbuIfNVb3pT7t2TxqhLzyvEXF5hr3rXTERdgveCtvXtpjt5GIWMgm3sNH5PF/A4pcYeCM02i++ejCG8+JY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZYa5g+i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00961C4CEC5;
-	Wed, 16 Oct 2024 20:37:47 +0000 (UTC)
+	 To:Cc:Content-Type; b=Yub7vsrN8vf/OJq5nxhCgJm+J4wkXFkYCj08zszgUX1YBA3aX2tf2k4aJjjRzLyludJOYLyJ6M40helS3gkKjjPhMBqibzArbzQDLfz0MG45fZrpG1oql1GSPiujLxLiQcPfppYubEJEB4VHHS6X/JthAb4wY7c5yTgM5+JqhpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMQS1ea/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4980CC4CED0
+	for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2024 20:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729111068;
-	bh=a22KOg6/0QhVhl9Q7ie8IX+K0Lw+hQnqXMS7D/S42Rk=;
+	s=k20201202; t=1729111114;
+	bh=V1pUvQwk4o+EVtTgXpUUyfg0t6vdXJcxl66hUr9cydE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PZYa5g+iSMaI4H5wmQ4oSvbR9hp8rIEufxOAoRfsbcY5gJNfndqb2PnXBF4SUWpqN
-	 OBfa2fFvLfw+9/bEBB9vfg3kkZKvmeOARtxOk7wLhZK8cLK0xJFiB0/z7clyH1Xn5W
-	 7s5aNSjwslLWsyaRb9d82bQtWkWZD+9XQQ3zCoZYvLFP4zR22K/iEiJQ0CW+BxeeaH
-	 T5+iUuk8t2Tb5GfV2h5Pcb802WrBUflLDa4X3ytbVMw+qT/KeIiaK40Fytfhnygd1g
-	 sa9N/UtvGqRqDX7V/cL/1FTgykQFkl6KmjURsFKFcyo2uY/pRk68y+NDyKV49zQqdS
-	 9ABV+14ola9Og==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7157c2aca3eso125101a34.0;
-        Wed, 16 Oct 2024 13:37:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUmrVbTBAwuEgPP/XCKb1JMPk3nE+QfAmkYIJp0sDXCBXK8hS2ClXxWnoI4VXQy79M5KxjKw7ojdBk=@vger.kernel.org, AJvYcCVlX3KATGsy3oIV8gnHEyAEFMVuhOp4NLozmR5xFl4dgzIG/TYiZ1yyPD/zrtR0Ngg/j+hDm3Y+wcaYz/Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXVpXqXELx5U8gtEHaGV51+PdtADiUUyNIfIY1CWq8vjCySF9O
-	6hM2rOVN0R50R2yv98GyNJjhBa9AuOxAb7zWHWqjsNO66D2z9L+SckvBsOcLpbwC9gvPleIhYJA
-	Oey4fxSmuf6rT7SJL3dNQYEUPgBY=
-X-Google-Smtp-Source: AGHT+IHo0sXK0iP3u2ux2CHT2+gWa5VRrHGENK7IhQm+2J1J7nU3kp/59ByTRPw2WRaI7ITK0nLwVjoGKyiz3l03lEw=
-X-Received: by 2002:a05:6870:56ac:b0:260:ee13:e665 with SMTP id
- 586e51a60fabf-288edfb72e6mr4523159fac.37.1729111067309; Wed, 16 Oct 2024
- 13:37:47 -0700 (PDT)
+	b=AMQS1ea/VIAunBjeeIZGL1slqemZoWl6bs7mjKGb8EDZLs+711EI5PHif7ZkiTsr7
+	 vNfNgcmSs3gPGckCX2nKtM6mGm9oPpsQFsFHOpf4SxrCgcmoPrGqYQc3jSHy16VKKl
+	 m5ePl+k5/RXTcY8zIuiRsI5HyKPOaaWP10xPBrBtChnohWKsFxSbCLE8iwvWZG9p03
+	 3NTyzw+iEquWeConpC+QR1axyUvlnWPbECnrqnBIpS1P5tAUQanmQXlOPADhko4G8M
+	 GML7ydz50g294optW9hZ55vxrPLfaEXI0/xSnAzzfFAQw4WXyt9K66/FkeGKpcCB0Y
+	 +IK0yh9e8p1jQ==
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7157c2aca3eso125459a34.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2024 13:38:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWGurlndDEsTFoVGpc1yBu3x/aTLr4l0nwp2zKRTcbwQzCYQMHsnsAf83wfvjS2H+9bYwyvLpFihg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRZTTy8jbY7WZqKJhK4HGhvFklNpz9plR+n9qGL4ElA1Mnk9gV
+	2M9wUFVaYMjZzi+kZ7ogNkGiok5g6UWSo0zBHDGhbFC6/O1Qo4pYZT5FqRXpwszjRUW5yyOlKEb
+	ooIOTO1w6ciKp+kmgqURWiESirMg=
+X-Google-Smtp-Source: AGHT+IENApk8PoHr0Kzy4KS2OmK2BByWTaZxuscrl7TyDkZpRWiXzdHUE4TLvVqX2bPc9+cMOngMhQ+QzTuApRWzDsk=
+X-Received: by 2002:a05:6871:205:b0:277:fe14:e68c with SMTP id
+ 586e51a60fabf-288edfb6ea0mr4680500fac.33.1729111113551; Wed, 16 Oct 2024
+ 13:38:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241016154851.1293654-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20241016154851.1293654-1-srinivas.pandruvada@linux.intel.com>
+References: <c5fe5144-f014-4786-9f56-a04743d1a6d2@amd.com>
+In-Reply-To: <c5fe5144-f014-4786-9f56-a04743d1a6d2@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 16 Oct 2024 22:37:34 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gDH6w-gjE+cr-c4Dp1ekZnMgjjSgyo5f_qfQQ9OpT99w@mail.gmail.com>
-Message-ID: <CAJZ5v0gDH6w-gjE+cr-c4Dp1ekZnMgjjSgyo5f_qfQQ9OpT99w@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl_msr: Add PL4 support for Arrowlake-H
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Wed, 16 Oct 2024 22:38:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iJyzKNCgVuk2EZ7xWr-QtxkLb079kvP6BFRKUKUBjGQg@mail.gmail.com>
+Message-ID: <CAJZ5v0iJyzKNCgVuk2EZ7xWr-QtxkLb079kvP6BFRKUKUBjGQg@mail.gmail.com>
+Subject: Re: Second round of amd-pstate fixes for 6.12
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 16, 2024 at 5:49=E2=80=AFPM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Wed, Oct 16, 2024 at 7:49=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Add PL4 support for ArrowLake-H platform.
+> The following changes since commit c10e50a469b5ec91eabf653526a22bdce03a9b=
+ca:
 >
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  drivers/powercap/intel_rapl_msr.c | 1 +
->  1 file changed, 1 insertion(+)
+>    cpufreq/amd-pstate: Fix amd_pstate mode switch on shared memory
+> systems (2024-10-07 11:32:05 -0500)
 >
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_r=
-apl_msr.c
-> index 1f4c5389676a..cbe07450de93 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -148,6 +148,7 @@ static const struct x86_cpu_id pl4_support_ids[] =3D =
-{
->         X86_MATCH_VFM(INTEL_METEORLAKE, NULL),
->         X86_MATCH_VFM(INTEL_METEORLAKE_L, NULL),
->         X86_MATCH_VFM(INTEL_ARROWLAKE_U, NULL),
-> +       X86_MATCH_VFM(INTEL_ARROWLAKE_H, NULL),
->         {}
->  };
+> are available in the Git repository at:
 >
-> --
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+> tags/amd-pstate-v6.12-2024-10-16
+>
+>
+>
+>                                                                  for you
+> to fetch changes up to 18d9b52271213890da295a7c63ef8880ed570cd8:
+>
+>    cpufreq/amd-pstate: Use nominal perf for limits when boost is
+> disabled (2024-10-15 23:54:15 -0500)
+>
+> ----------------------------------------------------------------
+> Fix a regression introduced where boost control malfunctioned in amd-psta=
+te
+>
+>
+>
+>
+> ----------------------------------------------------------------
+> Mario Limonciello (1):
+>        cpufreq/amd-pstate: Use nominal perf for limits when boost is
+> disabled
+>
+>   drivers/cpufreq/amd-pstate.c | 20 ++++++++++++++------
+>   1 file changed, 14 insertions(+), 6 deletions(-)
 
-Applied as 6.12-rc material, thanks!
+Pulled and added to the linux-next branch in linux-pm.git, thanks!
 
