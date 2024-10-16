@@ -1,166 +1,161 @@
-Return-Path: <linux-pm+bounces-15782-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15783-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA4179A0DC6
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 17:14:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 951999A0E71
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 17:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42A2B1F269F1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 15:14:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26132B21F8D
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 15:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BAB20F5B0;
-	Wed, 16 Oct 2024 15:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939D320E029;
+	Wed, 16 Oct 2024 15:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="V4xFNbMf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4hnsSRC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3975120E01E;
-	Wed, 16 Oct 2024 15:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D1B107A0;
+	Wed, 16 Oct 2024 15:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729091619; cv=none; b=Ps186gYUk9cGD/3wdNyvy+F+TsmribsblcNKNPi1uVrDMKWlWMA5OF59+yfFQIjR7KwDS8N+QDthwLibuFo2pSw8pnleujyF5xgCutNolwK3QtzWXkVQSVk/sw+1DchWmOCRL5dN911Adrhd9qsLSmEfMen0+ZBMv3tmMYApZEw=
+	t=1729093013; cv=none; b=sAMJWUAU2oo8jyef0hVDSMtux2+8nrDSsAGIGLCd+8JxMMElECWYMpD8o4OgkuivXwKv2N34C6TAIcXOf8C9gP1SW7Po0uhiZmSxLtdjCOZtflYFEmQhfF157X26YO3Oyb3xZShUa75Qrv6vrva4tiMaXgGV/AmIsqRwT3Nlzd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729091619; c=relaxed/simple;
-	bh=RbNoppU1jJEGR3Vd1Y0PaSScVe5f5fou0RTSnQVa8/M=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=PagRik3FkeWlRAk9/VB9sDwsewxXPkY6VrP99CaioYei3KnijVoWz6fh48IxLIrvKzQCtIgZUANyvoRIOOZvc5gPCrY0g6qrB9TKXg0qkASL6BNBOzxhu/pTJpVc5XiMcldQ+fStwUAN6ReSzKyKydLd2FMwxxvxKiSGKciE7+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=V4xFNbMf; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1729093013; c=relaxed/simple;
+	bh=xkb8b0ItzLeiZrA+CiYd5exlClYZEZIB0U5kfNMG0cs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=GHcFUOkX7I8KchUD+XbYsihJvdFsn/QRP3yVZKIrnqaTt43hgiKYOXQB7pt+GkThMCux9jDcMYB3aHxtbcjj/k4rrGYNDz8Zn8DY4xHETlznTtwr83DoLFRp6NwGI8ieeD1wG7RIdq+dr/BHJimeO3H9NaqqigXevDFgFyPYj5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4hnsSRC; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a9a156513a1so440162566b.0;
+        Wed, 16 Oct 2024 08:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1729091618; x=1760627618;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=RbNoppU1jJEGR3Vd1Y0PaSScVe5f5fou0RTSnQVa8/M=;
-  b=V4xFNbMfElfix0SDo2+HaEJDgXYviaSbCsM1FOl5fof/6Cr2LdmGHgM8
-   nCklzKtmzUdSenryKb8uTe6kcfiaiZ/zXju11MLmmrtlC96LwTnng58SK
-   9S772VxWW7Z1OaHlMBWi9SYJK1YxWzvimve1cXSVdyM9ktvizPPn4Zpid
-   Y=;
-X-IronPort-AV: E=Sophos;i="6.11,208,1725321600"; 
-   d="scan'208";a="33725006"
-Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via smp_cond_load_relaxed()
-Thread-Topic: [PATCH v8 01/11] cpuidle/poll_state: poll via smp_cond_load_relaxed()
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 15:13:35 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:30986]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.37.107:2525] with esmtp (Farcaster)
- id 6f9f4824-dc53-49cb-9ebc-0b9ca29d87dc; Wed, 16 Oct 2024 15:13:33 +0000 (UTC)
-X-Farcaster-Flow-ID: 6f9f4824-dc53-49cb-9ebc-0b9ca29d87dc
-Received: from EX19D001UWA004.ant.amazon.com (10.13.138.251) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Wed, 16 Oct 2024 15:13:33 +0000
-Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
- EX19D001UWA004.ant.amazon.com (10.13.138.251) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Wed, 16 Oct 2024 15:13:33 +0000
-Received: from EX19D001UWA003.ant.amazon.com ([fe80::256a:26de:3ee6:48a2]) by
- EX19D001UWA003.ant.amazon.com ([fe80::256a:26de:3ee6:48a2%7]) with mapi id
- 15.02.1258.035; Wed, 16 Oct 2024 15:13:33 +0000
-From: "Okanovic, Haris" <harisokn@amazon.com>
-To: "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>
-CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "rafael@kernel.org"
-	<rafael@kernel.org>, "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>, "wanpengli@tencent.com"
-	<wanpengli@tencent.com>, "cl@gentwo.org" <cl@gentwo.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>, "maobibo@loongson.cn"
-	<maobibo@loongson.cn>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "misono.tomohiro@fujitsu.com"
-	<misono.tomohiro@fujitsu.com>, "daniel.lezcano@linaro.org"
-	<daniel.lezcano@linaro.org>, "arnd@arndb.de" <arnd@arndb.de>,
-	"lenb@kernel.org" <lenb@kernel.org>, "will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>, "peterz@infradead.org"
-	<peterz@infradead.org>, "boris.ostrovsky@oracle.com"
-	<boris.ostrovsky@oracle.com>, "vkuznets@redhat.com" <vkuznets@redhat.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "Okanovic, Haris"
-	<harisokn@amazon.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>, "mtosatti@redhat.com" <mtosatti@redhat.com>,
-	"x86@kernel.org" <x86@kernel.org>, "mark.rutland@arm.com"
-	<mark.rutland@arm.com>
-Thread-Index: AQHbD6IrafcYoukOUEmO4vkMpFXSV7KH1W0AgAHHPIA=
-Date: Wed, 16 Oct 2024 15:13:33 +0000
-Message-ID: <7f7ffdcdb79eee0e8a545f544120495477832cd5.camel@amazon.com>
-References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
-	 <20240925232425.2763385-2-ankur.a.arora@oracle.com>
-	 <Zw5aPAuVi5sxdN5-@arm.com>
-In-Reply-To: <Zw5aPAuVi5sxdN5-@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <33D05FD08416A74EA8AC33C9DA3B4688@amazon.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20230601; t=1729093010; x=1729697810; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5fQzn5M9AjqoW0Bg4PEUOl2UHPKd6sbQpASpgMZ5Coo=;
+        b=A4hnsSRCFWaG9Xt9x+i5Al26fI0rOzlnHLU+RWOQJVXMbTrync+bM9mZF9U5Bl4a6f
+         fKDfzsqrE4Jet1uJwLY1STefkO9MyYKIpYEGR+iAL876jnLxLOD6Rji3w6zCKxmbXV4D
+         NadidRAYpMS1TZ1ygMwk+CxTcqJBZFD1G+6djMjQtUMEkh27gxmpd8a62X1LwUilqbkR
+         hu3x4zTfSkmyBzl6/0uR6YyGbCZSNrsb8SzNg2POsIwnjW7HalF8LLwUr77HVhRN5rfQ
+         MWiuZRPZc0xu7/BBn2QNAMWhb5IMe/7OhFTmdoikBNijHXCB910HpmhexYgM63A2OOBD
+         Mupg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729093010; x=1729697810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5fQzn5M9AjqoW0Bg4PEUOl2UHPKd6sbQpASpgMZ5Coo=;
+        b=nJok6IU3JTMoOv2ikIl5dyOloKy8ZkUg5dkCQH4IKRN+bQZJpWpHyGoTZTkZh5cs15
+         7L6XLI++0hd09Yn0lUY6IvYpyy03bs9yJQH3byddRmE483qflmHKnTZvjCPG/YyHUeb5
+         2Sy30omGylyDbR96rKCvB+NcIyQIJoHoorTZRJISSN5Xs0cJVfAIRuuon5+9XtpAIW6f
+         lRF/gIWaieYnHRwRsJOZtC4CTToS0KNEnVAyblq4E2MUF3qhK0mC4xMqLC6YOxOx5eIk
+         kyYuzfm4csyNnRZB/g2lqSuR0CgS5TdOij6SjMSGbbOiQmmpHN1DmMHIPSH2zOc32Hep
+         8IYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVYQSU/V3bgwMbQX2Y7dXO4r3ZzltUJZ1BCZN0Z7JhXy5FvbASzMzYaO+03IGhtWRL/iQaLXM9n3Pp/iS1b@vger.kernel.org, AJvYcCVvFSCJEVUKxAaYJLhaDQnDKLPBOipHt9OGKNAIcMj/aJgo/oK9Kf70F+1SWwq+8cJ6jKo8r4Va0Pw=@vger.kernel.org, AJvYcCW4aLtYG9g+ZFl0EVc29Y2w0hKHA+qWjVaMlxrx+H/gskAY9UU7Tl4OzHI+09VwJmdTOPOsb6Qm7vg4@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrW9upi0Y/U4Sml0XOxnKLrsvMPd98KDyT6JEwVbsAdM1ef6J1
+	pup2ci5es68HvSlA55DHn9xLoN3U0ZAOGZp0vhW1zwlwa5w7FnaF
+X-Google-Smtp-Source: AGHT+IG5Ra7K8yYd8HJ9d4E2o2lEEQjASQ+GHxw8TzN9H/8ONKK7TJckyZHoENBY1fg18pub8WvD1Q==
+X-Received: by 2002:a17:906:d7c2:b0:a99:4152:1cb4 with SMTP id a640c23a62f3a-a9a34dfeb58mr371922666b.42.1729093009880;
+        Wed, 16 Oct 2024 08:36:49 -0700 (PDT)
+Received: from localhost.localdomain ([62.19.118.125])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9a2988afa0sm195951466b.208.2024.10.16.08.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2024 08:36:49 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	upstream@airoha.com
+Subject: [PATCH 1/2] dt-bindings: thermal: Add support for Airoha EN7581 thermal sensor
+Date: Wed, 16 Oct 2024 17:35:48 +0200
+Message-ID: <20241016153613.25501-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-T24gVHVlLCAyMDI0LTEwLTE1IGF0IDEzOjA0ICswMTAwLCBDYXRhbGluIE1hcmluYXMgd3JvdGU6
-DQo+IENBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9y
-Z2FuaXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUu
-DQo+IA0KPiANCj4gDQo+IE9uIFdlZCwgU2VwIDI1LCAyMDI0IGF0IDA0OjI0OjE1UE0gLTA3MDAs
-IEFua3VyIEFyb3JhIHdyb3RlOg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWlkbGUvcG9s
-bF9zdGF0ZS5jIGIvZHJpdmVycy9jcHVpZGxlL3BvbGxfc3RhdGUuYw0KPiA+IGluZGV4IDliNmQ5
-MGE3MjYwMS4uZmMxMjA0NDI2MTU4IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvY3B1aWRsZS9w
-b2xsX3N0YXRlLmMNCj4gPiArKysgYi9kcml2ZXJzL2NwdWlkbGUvcG9sbF9zdGF0ZS5jDQo+ID4g
-QEAgLTIxLDIxICsyMSwyMCBAQCBzdGF0aWMgaW50IF9fY3B1aWRsZSBwb2xsX2lkbGUoc3RydWN0
-IGNwdWlkbGVfZGV2aWNlICpkZXYsDQo+ID4gDQo+ID4gICAgICAgcmF3X2xvY2FsX2lycV9lbmFi
-bGUoKTsNCj4gPiAgICAgICBpZiAoIWN1cnJlbnRfc2V0X3BvbGxpbmdfYW5kX3Rlc3QoKSkgew0K
-PiA+IC0gICAgICAgICAgICAgdW5zaWduZWQgaW50IGxvb3BfY291bnQgPSAwOw0KPiA+ICAgICAg
-ICAgICAgICAgdTY0IGxpbWl0Ow0KPiA+IA0KPiA+ICAgICAgICAgICAgICAgbGltaXQgPSBjcHVp
-ZGxlX3BvbGxfdGltZShkcnYsIGRldik7DQo+ID4gDQo+ID4gICAgICAgICAgICAgICB3aGlsZSAo
-IW5lZWRfcmVzY2hlZCgpKSB7DQo+ID4gLSAgICAgICAgICAgICAgICAgICAgIGNwdV9yZWxheCgp
-Ow0KPiA+IC0gICAgICAgICAgICAgICAgICAgICBpZiAobG9vcF9jb3VudCsrIDwgUE9MTF9JRExF
-X1JFTEFYX0NPVU5UKQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVl
-Ow0KPiA+IC0NCj4gPiAtICAgICAgICAgICAgICAgICAgICAgbG9vcF9jb3VudCA9IDA7DQo+ID4g
-KyAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGludCBsb29wX2NvdW50ID0gMDsNCj4gPiAg
-ICAgICAgICAgICAgICAgICAgICAgaWYgKGxvY2FsX2Nsb2NrX25vaW5zdHIoKSAtIHRpbWVfc3Rh
-cnQgPiBsaW1pdCkgew0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRldi0+cG9s
-bF90aW1lX2xpbWl0ID0gdHJ1ZTsNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBi
-cmVhazsNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgfQ0KPiA+ICsNCj4gPiArICAgICAgICAg
-ICAgICAgICAgICAgc21wX2NvbmRfbG9hZF9yZWxheGVkKCZjdXJyZW50X3RocmVhZF9pbmZvKCkt
-PmZsYWdzLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-VkFMICYgX1RJRl9ORUVEX1JFU0NIRUQgfHwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIGxvb3BfY291bnQrKyA+PSBQT0xMX0lETEVfUkVMQVhfQ09VTlQp
-Ow0KPiANCj4gVGhlIGFib3ZlIGlzIG5vdCBndWFyYW50ZWVkIHRvIG1ha2UgcHJvZ3Jlc3MgaWYg
-X1RJRl9ORUVEX1JFU0NIRUQgaXMNCj4gbmV2ZXIgc2V0LiBXaXRoIHRoZSBldmVudCBzdHJlYW0g
-ZW5hYmxlZCBvbiBhcm02NCwgdGhlIFdGRSB3aWxsDQo+IGV2ZW50dWFsbHkgYmUgd29rZW4gdXAs
-IGxvb3BfY291bnQgaW5jcmVtZW50ZWQgYW5kIHRoZSBjb25kaXRpb24gd291bGQNCj4gYmVjb21l
-IHRydWUuIEhvd2V2ZXIsIHRoZSBzbXBfY29uZF9sb2FkX3JlbGF4ZWQoKSBzZW1hbnRpY3MgcmVx
-dWlyZSB0aGF0DQo+IGEgZGlmZmVyZW50IGFnZW50IHVwZGF0ZXMgdGhlIHZhcmlhYmxlIGJlaW5n
-IHdhaXRlZCBvbiwgbm90IHRoZSB3YWl0aW5nDQo+IENQVSB1cGRhdGluZyBpdCBpdHNlbGYuIEFs
-c28gbm90ZSB0aGF0IHRoZSBldmVudCBzdHJlYW0gY2FuIGJlIGRpc2FibGVkDQo+IG9uIGFybTY0
-IG9uIHRoZSBrZXJuZWwgY29tbWFuZCBsaW5lLg0KDQpBbHRlcm5hdGVseSBjb3VsZCB3ZSBjb25k
-aXRpb24gYXJjaF9oYWx0cG9sbF93YW50KCkgb24NCmFyY2hfdGltZXJfZXZ0c3RybV9hdmFpbGFi
-bGUoKSwgbGlrZSB2Nz8NCg0KPiANCj4gRG9lcyB0aGUgY29kZSBhYm92ZSBicmVhayBhbnkgb3Ro
-ZXIgYXJjaGl0ZWN0dXJlPyBJJ2Qgc2F5IGlmIHlvdSB3YW50DQo+IHNvbWV0aGluZyBsaWtlIHRo
-aXMsIGJldHRlciBpbnRyb2R1Y2UgYSBuZXcgc21wX2NvbmRfbG9hZF90aW1lb3V0KCkNCj4gQVBJ
-LiBUaGUgYWJvdmUgbG9va3MgbGlrZSBhIGhhY2sgdGhhdCBtYXkgb25seSB3b3JrIG9uIGFybTY0
-IHdoZW4gdGhlDQo+IGV2ZW50IHN0cmVhbSBpcyBlbmFibGVkLg0KPiANCj4gQSBnZW5lcmljIG9w
-dGlvbiBpcyB1ZGVsYXkoKSAob24gYXJtNjQgaXQgd291bGQgdXNlIFdGRS9XRkVUIGJ5DQo+IGRl
-ZmF1bHQpLiBOb3Qgc3VyZSBob3cgaW1wb3J0YW50IGl0IGlzIGZvciBwb2xsX2lkbGUoKSBidXQg
-dGhlIGRvd25zaWRlDQo+IG9mIHVkZWxheSgpIHRoYXQgaXQgd29uJ3QgYmUgYWJsZSB0byBhbHNv
-IHBvbGwgbmVlZF9yZXNjaGVkKCkgd2hpbGUNCj4gd2FpdGluZyBmb3IgdGhlIHRpbWVvdXQuIElm
-IHRoaXMgbWF0dGVycywgeW91IGNvdWxkIGluc3RlYWQgbWFrZSBzbWFsbGVyDQo+IHVkZWxheSgp
-IGNhbGxzLiBZZXQgYW5vdGhlciBwcm9ibGVtLCBJIGRvbid0IGtub3cgaG93IGVuZXJneSBlZmZp
-Y2llbnQNCj4gdWRlbGF5KCkgaXMgb24geDg2IHZzIGNwdV9yZWxheCgpLg0KPiANCj4gU28gbWF5
-YmUgYW4gc21wX2NvbmRfbG9hZF90aW1lb3V0KCkgd291bGQgYmUgYmV0dGVyLCBpbXBsZW1lbnRl
-ZCB3aXRoDQo+IGNwdV9yZWxheCgpIGdlbmVyaWNhbGx5IGFuZCB0aGUgYXJtNjQgd291bGQgdXNl
-IExEWFIsIFdGRSBhbmQgcmVseSBvbg0KPiB0aGUgZXZlbnQgc3RyZWFtIChvciBmYWxsIGJhY2sg
-dG8gY3B1X3JlbGF4KCkgaWYgdGhlIGV2ZW50IHN0cmVhbSBpcw0KPiBkaXNhYmxlZCkuDQo+IA0K
-PiAtLQ0KPiBDYXRhbGluDQoNCg==
+Add support for Airoha EN7581 thermal sensor and monitor. This is a
+simple sensor for the CPU or SoC Package that provide thermal sensor and
+trip point for hot low and critical condition to fire interrupt and
+react on the abnormal state.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ .../thermal/airoha,en7581-thermal.yaml        | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+
+diff --git a/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+new file mode 100644
+index 000000000000..ca0242ef0378
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/airoha,en7581-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Airoha EN7581 Thermal Sensor and Monitor
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++properties:
++  compatible:
++    const: airoha,en7581-thermal
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  airoha,chip-scu:
++    description: phandle to the chip SCU syscon
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - airoha,chip-scu
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    thermal-sensor@1efbd800 {
++        compatible = "airoha,en7581-thermal";
++        reg = <0x1efbd000 0xd5c>;
++        interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
++        airoha,chip-scu = <&chip_scu>;
++
++        #thermal-sensor-cells = <0>;
++    };
+-- 
+2.45.2
+
 
