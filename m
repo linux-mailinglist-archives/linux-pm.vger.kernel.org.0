@@ -1,160 +1,116 @@
-Return-Path: <linux-pm+bounces-15739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15741-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17B9B9A0388
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 10:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B88B9A0392
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 10:05:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96F84B25B83
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 08:04:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD592B2705A
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 08:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A0F71D4171;
-	Wed, 16 Oct 2024 08:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E951D270D;
+	Wed, 16 Oct 2024 08:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EdZQu0lv"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="ViUJ/ZGW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F045A1D1E99;
-	Wed, 16 Oct 2024 08:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB6A1D1F7B;
+	Wed, 16 Oct 2024 08:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729065779; cv=none; b=DE6uYgVRiN86KbhGp3yKCDmLdKtjuWTx6jKQOKkusxUXNKVTsGceFl4UZzxdXw0fI4sF6Fpgs7H+27H5mHxo1xvIntIrBmHApNfpnLmvHDGc6Uy4s5AOgqhwqsiY1pNK2xTbfmQ9Jofe1XN2gSEx/ddegWrD6mwCRebHfMU3LyI=
+	t=1729065807; cv=none; b=tvDIvgAQ8N6SavcVz7wHx+JlOjuCW3lqqlUIYujTQ/wI/r+/bWDL8L+RMOE0Ae3WrH4ItZ52DkOLt7fJdArQFzDnF0yICSB41nENJkOnQsyMmrEIwGodfhixxalvUjDgKPb2S0hclMcJ40flB5Y7P9YXFKaQxyzM3OR5qgIKX58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729065779; c=relaxed/simple;
-	bh=VQWxLbP46Yk3JT2ruUu0Qw3xjvSUtKf+K6RBYmBe+lM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mPV/PDB+UNRic1w+yJ6soybzyVhgoHYyloyAVzP1cMRNVMMoIBsosv8Hd9/aFUgYWKow9cxKhv4ypPSDdcfYoJ4Qz1aT0w3jTgniVmhDZJywINcqiI2N5rzTpOLWKReUtPEkQdtCJdHU1+ItC2OXvtB9fwS469Ipt6W7GrcpE9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EdZQu0lv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CC7C4CED0;
-	Wed, 16 Oct 2024 08:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729065778;
-	bh=VQWxLbP46Yk3JT2ruUu0Qw3xjvSUtKf+K6RBYmBe+lM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EdZQu0lvkqQKp6i7wnzriOv0ggkWZWcHotek7nZZSEdw35cKxZpgEDMR9IrMPXZbQ
-	 WYoop23uy1X0RnPZxv+h22a0dffsyAWGe47B3VkLwdnV46GNOwJL0i3dnbOWnL5pqV
-	 omdNB+UMVqzfLHYIcQhnCKXUFkU6z65UbCHDFkDyHmnnjxUI+O5bzUMFG8CnQdhrus
-	 XL9m9kdJ61u2FNby/2sWKy01wPxw1/DeGD4aTCMMTOmDF7gVJmeIWCVkItZEaRNeJH
-	 MyKxVJEiK6L05viEsJafMLkbLfvaL3SZzmumCECEL5gaUXlP26Z9cagMEpkoaYU6ij
-	 1iyG5JVbDWBUg==
-Date: Wed, 16 Oct 2024 09:02:48 +0100
-From: Lee Jones <lee@kernel.org>
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	s=arc-20240116; t=1729065807; c=relaxed/simple;
+	bh=1eBE8U39+8j137AwN33pMYfhhzaw9VZgdIiKVZwF988=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=XxViUjxt58qOqLrDDTIZWvqeUlCq8iYfPZFAR9S0tHm4sBqGojGetJz7atkPQ/y5CHsY1pafSPmzJteMjCQk3G9Z5xpfbidCYR5dnVzz23yWtWtoseVyMO/F9lj8Pk5E1MWh/WvA1csvJ6ikkPCYF1M8h4XJ9wjBzWPntlPSWdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=ViUJ/ZGW; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=c9rfrELr3kRzTw8yZu4HzqoH7y14nBKXVdFWDw/SolM=; b=ViUJ/ZGWKl2UB9Qk8ombMz0OHE
+	3u0VaMVhgjskeFwTVmisO1nbpWGjVx+p+uCIPMG9zTklCvTZXgC+xCJ7Q313H1vOyILsWICgs7g6h
+	1kYjsOfosZA+p9AoRXuaxAAMHlLIeAmdjeU2nsghWMVnueHAZyf6aoaykNRrbwG0sqnw9tDSPSJh8
+	LKU9RmjqObc8v0JYXz3BZ8qpuGFenSkMNWdDXClPK/eaJaGT3dgqMG2RrQ64rW9hWCtexvtGNGdWZ
+	D8LbKuWhTE6M+5Q7snp6VigiWaywvCAzL/+SgK11v5Oy9G6FgDShe4ai1Y8UvW/0SrdWp+J0pSrnH
+	HseQYJUA==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: khilman@baylibre.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
 	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-	netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	Alexandre Mergnat <amergnat@baylibre.com>,
-	Bear Wang <bear.wang@mediatek.com>,
-	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v8 3/3] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-Message-ID: <20241016080248.GN8348@google.com>
-References: <20241001104145.24054-1-macpaul.lin@mediatek.com>
- <20241001104145.24054-3-macpaul.lin@mediatek.com>
+	Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org,
+	Lee Jones <lee@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	tony@atomide.com,
+	linux-omap@vger.kernel.org
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v5 0/3] power: supply: twl6030/32 charger
+Date: Wed, 16 Oct 2024 10:03:11 +0200
+Message-Id: <20241016080314.222674-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241001104145.24054-3-macpaul.lin@mediatek.com>
 
-Argh, I couldn't bring myself to do it!  Here's a PR instead:
+Add basic support for the charger in the TWL6030/32. Supported is the USB
+path. AC path is not handled yet, also there is no entry yet
+in /sys/class/power_supply with type battery yet.
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Without this series, devices will happily drain battery when running
+on mainline.
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+Changes in v5:
+- set fwnode
+- drop mfd patch as it is already applied
 
-are available in the Git repository at:
+Changes in v4:
+- require compatible in charger node
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-dt-mfd-input-leds-power-rtc-v6.13
+Changes in v3:
+- define charger in toplevel
+- s/bci/charger for twl4030
 
-for you to fetch changes up to 6e357f572638547e9c9e8d8abb7dc572c12032f3:
+Changes in v2:
+- s/bci/charger in mfd schema
+- additionalProperties for charger node
+- extended example in mfd schema
+- no quotes for compatibles in charger schema
+- no example in charger schema
+- interrupt description in charger schema
+- replace device_is_compatible by driver data
+- clang compile fix
+- removed alias
+- style fixes
 
-  dt-bindings: mfd: mediatek: mt6397: Convert to DT schema format (2024-10-16 09:00:38 +0100)
+Andreas Kemnade (3):
+  dt-bindings: power: supply: Add TI TWL603X charger
+  power: supply: initial support for TWL6030/32
+  ARM: dts: ti/omap: use standard node name for twl4030 charger
 
-----------------------------------------------------------------
-Immutable branch between DT, MFD, Input, LEDs Power and RTC due for the v6.13 merge window
-
-----------------------------------------------------------------
-Macpaul Lin (1):
-      dt-bindings: mfd: mediatek: mt6397: Convert to DT schema format
-
- .../bindings/input/mediatek,pmic-keys.yaml         |   2 +-
- .../devicetree/bindings/leds/leds-mt6323.txt       |  63 ---
- .../devicetree/bindings/mfd/mediatek,mt6397.yaml   | 588 +++++++++++++++++++++
- Documentation/devicetree/bindings/mfd/mt6397.txt   | 110 ----
- .../bindings/power/reset/mt6323-poweroff.txt       |  20 -
- .../devicetree/bindings/rtc/rtc-mt6397.txt         |  31 --
- MAINTAINERS                                        |   8 +-
- 7 files changed, 595 insertions(+), 227 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-mt6323.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/mt6397.txt
- delete mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txtThe following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-dt-mfd-input-leds-power-rtc-v6.13
-
-for you to fetch changes up to 6e357f572638547e9c9e8d8abb7dc572c12032f3:
-
-  dt-bindings: mfd: mediatek: mt6397: Convert to DT schema format (2024-10-16 09:00:38 +0100)
-
-----------------------------------------------------------------
-Immutable branch between DT, MFD, Input, LEDs Power and RTC due for the v6.13 merge window
-
-----------------------------------------------------------------
-Macpaul Lin (1):
-      dt-bindings: mfd: mediatek: mt6397: Convert to DT schema format
-
- .../bindings/input/mediatek,pmic-keys.yaml         |   2 +-
- .../devicetree/bindings/leds/leds-mt6323.txt       |  63 ---
- .../devicetree/bindings/mfd/mediatek,mt6397.yaml   | 588 +++++++++++++++++++++
- Documentation/devicetree/bindings/mfd/mt6397.txt   | 110 ----
- .../bindings/power/reset/mt6323-poweroff.txt       |  20 -
- .../devicetree/bindings/rtc/rtc-mt6397.txt         |  31 --
- MAINTAINERS                                        |   8 +-
- 7 files changed, 595 insertions(+), 227 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-mt6323.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/mt6397.txt
- delete mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+ .../power/supply/ti,twl6030-charger.yaml      |  48 ++
+ arch/arm/boot/dts/ti/omap/twl4030.dtsi        |   2 +-
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/twl6030_charger.c        | 581 ++++++++++++++++++
+ 5 files changed, 641 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
+ create mode 100644 drivers/power/supply/twl6030_charger.c
 
 -- 
-Lee Jones [李琼斯]
+2.39.2
+
 
