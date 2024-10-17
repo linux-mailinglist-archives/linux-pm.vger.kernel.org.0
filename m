@@ -1,117 +1,140 @@
-Return-Path: <linux-pm+bounces-15853-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15854-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E23C29A1F85
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 12:11:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B526B9A1F89
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 12:12:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 808921F2866F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 10:11:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A5411F21880
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 10:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C26B1DA10B;
-	Thu, 17 Oct 2024 10:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Yj48kNOS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED621DA0E0;
+	Thu, 17 Oct 2024 10:12:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A001D6DB4
-	for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 10:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFED1D6DB4;
+	Thu, 17 Oct 2024 10:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729159865; cv=none; b=m1ZWCIg+DAwsch4Dgspd9jvbBowCw3Oudz8Xy5nDV1XZbT1sv+xE89damEYFVQougPcZHiX8+lol0XhBqWj0q2sI+Q9RdtVkeCtfjaIDd07MJvv1VIsC2jHF9dQYFi/fEJSNZ38SrpdbBgvOz8f3EV0iLmsCB9N4RGo+PhZDO2w=
+	t=1729159944; cv=none; b=Gf/WTfifdXl742PmityH11P8q9ooIByOtMHc+wRESe7NOajdBcy2gV8KkJFsQpMD6SF3GFSIQMxt9ToXzADSeN1qX6LjhkCAEBgfwAgIMFgfuo9/VUVmswDtwst+XcuYaEiSgP1o208ThwcYdOZWJKnCPV44R7PoVyZ5o04rJ7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729159865; c=relaxed/simple;
-	bh=lc00AdCTq/2/t/BtdkukbdZlvrRHBBk0m7Agx+nLNRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EAAmWACRtSncljAg7Fml371B60F8VRC4YjlMnwh+Yaymh9ERykGw3/jDNi2BjPzs+azZwXKh0LdS9ILfey48BnqY9ijhmBeVYkNFwGzY9J3wRWkTqCLrF6IrHrpkmpJT1uxNM/XPDZkCvg9FRBt4epNjjhN0TZdc+5+UPFBu/Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Yj48kNOS; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-431286f50e1so10916215e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 03:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729159859; x=1729764659; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kwSUtbC2QG30gzod5C51rIfQVl2oLZUpp827zDQsEaw=;
-        b=Yj48kNOSHe/z1qV06+sEyMnPtZv8Hrj3S2SRAyPcsH3pPOefEhEtd9TBFIJOOzuXDJ
-         u6/ndbYAbcln/YE3KHWMVB/5i4RsIvHO/KuhNvep9Cg+qSGpawV+o6fl/7DgkvPPL6Iy
-         yH13uPXc4mP3+gPJXDA8DpFaPpD0nfR3Hfn+kiT5IdS4dccwA1w4qCJPtpaQCjnwyl8f
-         OsXoBIA7I7fq8zewHLPFAaWM7zqpQ3R50U1tGhLGQoDthSWoAe0Z07jWTMUMCWNZKNxu
-         luls8wbWrFzkDZ/2ZHeKIb4wTeDacY3y4cmJHCVPMHyLkp4YbHCSNlnD0s1bso6P685J
-         ZdLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729159859; x=1729764659;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwSUtbC2QG30gzod5C51rIfQVl2oLZUpp827zDQsEaw=;
-        b=L/qxL9au7vZjNcJfOL8cBfWVP3Ka0GBLeI/fvhDQSVwnTOcKnh5lskGxUlATSafYSJ
-         ybPDrBkSxwU4ddo7hDgsOCT+9G9XsypB6U+NQP7mO2J2NbrXLLPnS5euQZPsachIEgGs
-         A+SrXR4bFEAL4qxfUAfPiDrV77weQOGi9aaTX//VsNDoE5lOX0THdbTx4mj+A5KY392A
-         7BbvioSoGN7EHLCTOSVvgSMt+ED6Enm4o0GEwcrRWFQxRHDKiHHEKvlRRvQmhqWf+CX1
-         X4t97Dl1wkLNEOXRAXNeVrAp+ZCUU5CnnQ3puOqw6IQxQgL9nQgIKYvJ/Amj0px9Z9Uu
-         7N1g==
-X-Gm-Message-State: AOJu0Yy19/GSoYsn7rSpEPdNu9IInv3z9AzsDIDgonHIsqiOGRzCc6Xm
-	XrQ0bR3GBoOSbq6tfuCoRrEcPZAEMPyVCksPMNN8zJDuXJJRWUK3EKg8mgqHK7U=
-X-Google-Smtp-Source: AGHT+IFDQUgdscbI1Z5kPHdk5TBnLr4yFEtXtID8TH+QUdBD6eqOKePMA6XnxQ0TdtETvjOCosrMlA==
-X-Received: by 2002:a05:600c:3d89:b0:42e:8d0d:bc95 with SMTP id 5b1f17b1804b1-431255ceac1mr198501805e9.6.1729159859499;
-        Thu, 17 Oct 2024 03:10:59 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4314f1c3197sm37677105e9.0.2024.10.17.03.10.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Oct 2024 03:10:59 -0700 (PDT)
-Message-ID: <523d2a1b-7a6e-4447-b74c-9ccd5a6ff870@linaro.org>
-Date: Thu, 17 Oct 2024 12:10:58 +0200
+	s=arc-20240116; t=1729159944; c=relaxed/simple;
+	bh=YzeVeOLHzuEbx+F9HKk7j53SetYaUbEgSj9ZRMYNBhM=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oMhtt8e9RpR7wcFh980FEa6LMB8enPPSvEm5KM1Hute40TNB7g8iKnFpo+XbTkrrNjkCD40cwnVDXbpdtpi9L16vy05hX0OSjIuFd32h09wZdJ0Rh8usN8DSBfqD/6AQee2x8ecauQuM6ki/UukLmEvCOSPwDhYxf9Y6p0btSwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XTk9h708Dz6GBxS;
+	Thu, 17 Oct 2024 18:10:32 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id B37BA1400F4;
+	Thu, 17 Oct 2024 18:12:16 +0800 (CST)
+Received: from localhost (10.126.174.164) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 17 Oct
+ 2024 12:12:15 +0200
+Date: Thu, 17 Oct 2024 11:12:13 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC: <linux-pci@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, "Lorenzo
+ Pieralisi" <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, "Maciej W. Rozycki"
+	<macro@orcam.me.uk>, Lukas Wunner <lukas@wunner.de>, Alexandru Gagniuc
+	<mr.nuke.me@gmail.com>, Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>, Smita Koralahalli
+	<Smita.KoralahalliChannabasappa@amd.com>, Jonathan Corbet <corbet@lwn.net>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Amit Kucheria <amitk@kernel.org>, Zhang Rui
+	<rui.zhang@intel.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v8 1/8] PCI: Protect Link Control 2 Register with RMW
+ locking
+Message-ID: <20241017111213.00005d4f@Huawei.com>
+In-Reply-To: <20241009095223.7093-2-ilpo.jarvinen@linux.intel.com>
+References: <20241009095223.7093-1-ilpo.jarvinen@linux.intel.com>
+	<20241009095223.7093-2-ilpo.jarvinen@linux.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] tools/lib/thermal: fix sampling handler context
- ptr
-To: juhl.emildahl@gmail.com, rui.zhang@intel.com, lukasz.luba@arm.com,
- rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Emil Dahl Juhl <emdj@bang-olufsen.dk>
-References: <20241015171826.170154-1-emdj@bang-olufsen.dk>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20241015171826.170154-1-emdj@bang-olufsen.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On 15/10/2024 19:18, juhl.emildahl@gmail.com wrote:
-> From: Emil Dahl Juhl <emdj@bang-olufsen.dk>
-> 
-> The sampling handler, provided by the user alongside a void* context,
-> was invoked with an internal structure instead of the user context.
-> 
-> Correct the invocation of the sampling handler to pass the user context
-> pointer instead.
-> 
-> Note that the approach taken is similar to that in events.c, and will
-> reduce the chances of this mistake happening if additional sampling
-> callbacks are added.
-> 
-> Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
-> Signed-off-by: Emil Dahl Juhl <emdj@bang-olufsen.dk>
+On Wed,  9 Oct 2024 12:52:16 +0300
+Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
+
+> PCIe Bandwidth Controller performs RMW accesses the Link Control 2
+> Register which can occur concurrently to other sources of Link Control
+> 2 Register writes. Therefore, add Link Control 2 Register among the PCI
+> Express Capability Registers that need RMW locking.
+>=20
+> Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Totally trivial comment inline.
+
+LGTM
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
+>  Documentation/PCI/pciebus-howto.rst | 14 +++++++++-----
+>  include/linux/pci.h                 |  1 +
+>  2 files changed, 10 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/Documentation/PCI/pciebus-howto.rst b/Documentation/PCI/pcie=
+bus-howto.rst
+> index f344452651e1..375d9ce171f6 100644
+> --- a/Documentation/PCI/pciebus-howto.rst
+> +++ b/Documentation/PCI/pciebus-howto.rst
+> @@ -217,8 +217,12 @@ capability structure except the PCI Express capabili=
+ty structure,
+>  that is shared between many drivers including the service drivers.
+>  RMW Capability accessors (pcie_capability_clear_and_set_word(),
+>  pcie_capability_set_word(), and pcie_capability_clear_word()) protect
+> -a selected set of PCI Express Capability Registers (Link Control
+> -Register and Root Control Register). Any change to those registers
+> -should be performed using RMW accessors to avoid problems due to
+> -concurrent updates. For the up-to-date list of protected registers,
+> -see pcie_capability_clear_and_set_word().
+> +a selected set of PCI Express Capability Registers:
+> +
+> +* Link Control Register
+> +* Root Control Register
+> +* Link Control 2 Register
+> +
+> +Any change to those registers should be performed using RMW accessors to
+> +avoid problems due to concurrent updates. For the up-to-date list of
+> +protected registers, see pcie_capability_clear_and_set_word().
 
-Applied, thanks
+If I were super fussy I'd ask for a precursor patch doing the reformat.
 
+Meh - up to Bjorn, but for me this is small enough to not be worth
+the effort.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 573b4c4c2be6..be5ed534c39c 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1274,6 +1274,7 @@ static inline int pcie_capability_clear_and_set_wor=
+d(struct pci_dev *dev,
+>  {
+>  	switch (pos) {
+>  	case PCI_EXP_LNKCTL:
+> +	case PCI_EXP_LNKCTL2:
+>  	case PCI_EXP_RTCTL:
+>  		return pcie_capability_clear_and_set_word_locked(dev, pos,
+>  								 clear, set);
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
