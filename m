@@ -1,132 +1,165 @@
-Return-Path: <linux-pm+bounces-15875-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E14399A246E
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 16:01:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D534A9A2542
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 16:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78A602866E1
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 14:01:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EBED1F21730
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 14:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDCB1DDC34;
-	Thu, 17 Oct 2024 14:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1051DE880;
+	Thu, 17 Oct 2024 14:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O/otaqd5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA96439FE5;
-	Thu, 17 Oct 2024 14:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBA410F2;
+	Thu, 17 Oct 2024 14:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729173714; cv=none; b=APEKMNaaSkJY3ZrMv3CbYP+hKWbPFu+GX1do4KpEVf7gCvGOAtaML8Hrlgz/Em/cN2rIAj6CMiphy7Ym7pntI0ZkhaZA5KcBf62lSmqH9Gj+K6mfQqRBYNmOHI0hGu+o9bWVrZ2B9nmZs7rVI6yoDiKnq9m6Li+Nexqt8pZBVY0=
+	t=1729175953; cv=none; b=ujGaueW01mFF7krj0AvMZz6vTeZ+v2SrGy/uHDc2Gk4XoSzGimZEROVrvNdPm/1iThdB+PGNsE3Sjf5h1B4ONvSNxQTy6KTAOKxmyYiMFynLofJrHF4XH38LrZHROWJvAMgXaYvXFejs3Imc7C28LaTYfKk4xuR42rU9RF+4N/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729173714; c=relaxed/simple;
-	bh=YIGa7aKF3zPBjTfPQwEODkjyQxe13e+PbHCs5IPylfQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LqX/Fj4v7D1CHtaOjLwSkdrdSEzQDusF8li+I4TgINOkYbB2dPK4f6QiTh3xAEMmXQ44wdtSLYRJZ6sveV+caz+VO81BxnJkHIZmZtt7UqjQqFiVYNfOeCf5rqBQRTGPX4TM8jIKGisReT/FYoKlQ2PFTEeTMcYqWASv9Q2bN7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D0FC4CEC3;
-	Thu, 17 Oct 2024 14:01:49 +0000 (UTC)
-Date: Thu, 17 Oct 2024 15:01:47 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: "Okanovic, Haris" <harisokn@amazon.com>
-Cc: "ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-	"wanpengli@tencent.com" <wanpengli@tencent.com>,
-	"cl@gentwo.org" <cl@gentwo.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"maobibo@loongson.cn" <maobibo@loongson.cn>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"arnd@arndb.de" <arnd@arndb.de>,
-	"lenb@kernel.org" <lenb@kernel.org>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-	"vkuznets@redhat.com" <vkuznets@redhat.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"mtosatti@redhat.com" <mtosatti@redhat.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"mark.rutland@arm.com" <mark.rutland@arm.com>
-Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
- smp_cond_load_relaxed()
-Message-ID: <ZxEYy9baciwdLnqh@arm.com>
-References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
- <20240925232425.2763385-2-ankur.a.arora@oracle.com>
- <Zw5aPAuVi5sxdN5-@arm.com>
- <7f7ffdcdb79eee0e8a545f544120495477832cd5.camel@amazon.com>
+	s=arc-20240116; t=1729175953; c=relaxed/simple;
+	bh=RSdMFumWyD7Mx4sKNxKfjNlsDJaTB6uemxsTmcKyHuo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=hlpZP5XB7GSFq7to4x/E6s8BtXZYyC0xI5kKxtGWGjZymLQjxyTUPjszPA2tbDAYw0ODstaxkfEU62P45h+kSTo7z6F6ZkK8c21sOCeLienJS8ZURt8tohd/gtOyV7jRwsyHnFyvEuPEBl6C9ms9m/A/gK2mcNJoJ7rPk0iAAIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O/otaqd5; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-37d4b0943c7so747985f8f.1;
+        Thu, 17 Oct 2024 07:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729175947; x=1729780747; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NRHQQGm7cGssgdoLEtNCNKA/IiRlPKI/cHGPt5rH+50=;
+        b=O/otaqd54QBlBX+Op+mhyy76V1F5w0K1G9/Ie+1LuK/n03BTM/mk1ZDFsaCgQM4j3q
+         NhX0BNGFqPHMzsTYS6CfSk9EFmO9Vknnv64Ps+rlf8ArHKuwi0/G7bA7LVsjyjBSQWlq
+         mLdxp8rXjmAj/6OPEpCIqMJ1anPxb1XSsuGO7a9HOoOXX4u3epiCbynd+6gVxGYlRjoA
+         ofpsP3M1/BWZG4k1xPQ/jEaNyAwHRJ7c8RgcPEj8Dm56V5x5Qd8Jens2tpIKohrwr5UF
+         p11EKOXL6IOPeeOEHeXANXLAD2faj+X1qYBttQXtuWjUu60cvQd6Nxuygjr6lJs1TRLY
+         DdiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729175947; x=1729780747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NRHQQGm7cGssgdoLEtNCNKA/IiRlPKI/cHGPt5rH+50=;
+        b=epG9GhFwzfqZxSy5i2wfsd9lmAk/XFDztWh46U963cDheqiVQrY6JEzmASNHTIw++E
+         oi6Qdy795R9/699qOcuNhG4ow7T8KFjafRU6T1xkMnmTNm1PmpPJmAJ+5qoW8R3Y99UF
+         Cjgs4rzVNm6f6Gc4Pjrt2tVQFydzsnpUzXb4FIv82ncwHqu7nHoPQbL7fw+Bhey5pK2S
+         kgXtHXuOhHcGvAXOdx/iBBMEYmPjz3BcfKgWOAy5VS5HQ3FYZME+oxAyNIL16QU87f/8
+         pp6kTPtD9V0KPaqu2ItMWvf1si146lbmNlzMQL+HUi8WC+VnedVKu1F7oU4aos5AgYou
+         +9gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHiWQ/AqpdV/k4s8XbBfXgXjkgXDLQ4oJSqH3HvL+esd60HMU1rvUitMw0GwDwctw0Ouh4fQSmbK23@vger.kernel.org, AJvYcCW0UKUa895ZfTWqbYdJ9QgJEqVgCJZ0vPfbUgCmPJ4g44B7RrOTVvVMGreHDR2MHVkH+bcL2dnrwzWt5zpP@vger.kernel.org, AJvYcCWGqngQRDaPB3nSiwFm+M0u8s8RgKn6+5mtc/vYr4IamPNAF+rqQpL+l1j4Gp/eJi4TcPanUi82XKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0Wg13bz25bEHDQh0jOwxlW1lUdqwvWOcacTMcQTBNcVekpFuU
+	ud0/DsMEkbEAvjGuxFz/bulg58isOGEttlI0sHOW3nNJpWSMe6Fh
+X-Google-Smtp-Source: AGHT+IHurhqL3M/WK0hFCGWAVhEuLelLlozmUE30CPXOnitE4Wu9IcCt+oBAvpCfr+HSmToSGIUGRQ==
+X-Received: by 2002:a5d:5985:0:b0:37d:511b:aecc with SMTP id ffacd0b85a97d-37d86d6fec8mr6196339f8f.54.1729175946450;
+        Thu, 17 Oct 2024 07:39:06 -0700 (PDT)
+Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-37d7fa7a12fsm7442784f8f.6.2024.10.17.07.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2024 07:39:06 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	upstream@airoha.com
+Subject: [PATCH v2 1/2] dt-bindings: thermal: Add support for Airoha EN7581 thermal sensor
+Date: Thu, 17 Oct 2024 16:37:56 +0200
+Message-ID: <20241017143830.1656-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f7ffdcdb79eee0e8a545f544120495477832cd5.camel@amazon.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 16, 2024 at 03:13:33PM +0000, Okanovic, Haris wrote:
-> On Tue, 2024-10-15 at 13:04 +0100, Catalin Marinas wrote:
-> > On Wed, Sep 25, 2024 at 04:24:15PM -0700, Ankur Arora wrote:
-> > > diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-> > > index 9b6d90a72601..fc1204426158 100644
-> > > --- a/drivers/cpuidle/poll_state.c
-> > > +++ b/drivers/cpuidle/poll_state.c
-> > > @@ -21,21 +21,20 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
-> > > 
-> > >       raw_local_irq_enable();
-> > >       if (!current_set_polling_and_test()) {
-> > > -             unsigned int loop_count = 0;
-> > >               u64 limit;
-> > > 
-> > >               limit = cpuidle_poll_time(drv, dev);
-> > > 
-> > >               while (!need_resched()) {
-> > > -                     cpu_relax();
-> > > -                     if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> > > -                             continue;
-> > > -
-> > > -                     loop_count = 0;
-> > > +                     unsigned int loop_count = 0;
-> > >                       if (local_clock_noinstr() - time_start > limit) {
-> > >                               dev->poll_time_limit = true;
-> > >                               break;
-> > >                       }
-> > > +
-> > > +                     smp_cond_load_relaxed(&current_thread_info()->flags,
-> > > +                                           VAL & _TIF_NEED_RESCHED ||
-> > > +                                           loop_count++ >= POLL_IDLE_RELAX_COUNT);
-> > 
-> > The above is not guaranteed to make progress if _TIF_NEED_RESCHED is
-> > never set. With the event stream enabled on arm64, the WFE will
-> > eventually be woken up, loop_count incremented and the condition would
-> > become true. However, the smp_cond_load_relaxed() semantics require that
-> > a different agent updates the variable being waited on, not the waiting
-> > CPU updating it itself. Also note that the event stream can be disabled
-> > on arm64 on the kernel command line.
-> 
-> Alternately could we condition arch_haltpoll_want() on
-> arch_timer_evtstrm_available(), like v7?
+Add support for Airoha EN7581 thermal sensor and monitor. This is a
+simple sensor for the CPU or SoC Package that provide thermal sensor and
+trip point for hot low and critical condition to fire interrupt and
+react on the abnormal state.
 
-No. The problem is about the smp_cond_load_relaxed() semantics - it
-can't wait on a variable that's only updated in its exit condition. We
-need a new API for this, especially since we are changing generic code
-here (even it was arm64 code only, I'd still object to such
-smp_cond_load_*() constructs).
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+---
+Changes v2:
+- Add Reviewed-by tag
 
+ .../thermal/airoha,en7581-thermal.yaml        | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+
+diff --git a/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+new file mode 100644
+index 000000000000..ca0242ef0378
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/airoha,en7581-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Airoha EN7581 Thermal Sensor and Monitor
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++properties:
++  compatible:
++    const: airoha,en7581-thermal
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  airoha,chip-scu:
++    description: phandle to the chip SCU syscon
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - airoha,chip-scu
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    thermal-sensor@1efbd800 {
++        compatible = "airoha,en7581-thermal";
++        reg = <0x1efbd000 0xd5c>;
++        interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
++        airoha,chip-scu = <&chip_scu>;
++
++        #thermal-sensor-cells = <0>;
++    };
 -- 
-Catalin
+2.45.2
+
 
