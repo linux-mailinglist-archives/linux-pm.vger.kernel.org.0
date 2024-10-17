@@ -1,159 +1,152 @@
-Return-Path: <linux-pm+bounces-15885-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15886-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1BEA9A27E8
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 18:04:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1548F9A280B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 18:10:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EFBF1C20A19
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 16:04:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94026B22295
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 16:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8341D417C;
-	Thu, 17 Oct 2024 16:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49921DEFEA;
+	Thu, 17 Oct 2024 16:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="S7/586hG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MRkt+j3e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145B617ADF0
-	for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 16:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508CD1DE4CB
+	for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 16:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729181074; cv=none; b=lyKvlIgSjxYSd4xI1wqWWgF839+29fRB9oPU0C7SG+1sAEgiE17BBV4eTfOi3j9Qj3+FjkE7UeBsTIxZLgxpjYJjaof32WBsPEX8ypC4D/K1g0vkWaa8cMjDWOBM2m6RV8laU01i7s78iaV5Um+hje9FZf/995KxE1KNK4/yVUU=
+	t=1729181371; cv=none; b=mX2O325qQE6bjU3JAEl0pdVqpeUB3wru5s4txFCN6K9wPqvUB4piMbUr1+msDer1BXwISpnBqfgZwIF/zE+wy2/FV5qNuP6cXZvsB9IKBPSGHqXd15dvCe6mdCOfw54+YCaWA1SzKETBPWSC2mJrW35JHpvq4ZJcj3skJkneX7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729181074; c=relaxed/simple;
-	bh=Nh+K209FOYxiR6nvbGIUFanQpljyDYYu3FWKfknECbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tD6w2gyxZ58CkKeHZ41ciLEdkkyCukZa7JTXPunFHDURO6gwtjrxiEeNJPlqUHjZsQMp9a7H1O1f5VziRoBFBYMb+ue28Y78F/TFLHB9Rk7d/v9tCnBCHU8KT7GLx5/tu/4ixtRxC9c9S95RzEipoD/Kq4h5ftFlEiuUqy+uwdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=S7/586hG; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3a3b7442db5so4075605ab.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 09:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729181071; x=1729785871; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1HcKzCWxvWAVqUtCS9GFF6dDhjA+3HfqRto0OwBOEug=;
-        b=S7/586hGciCbY2l3unZ7+QB9Jl/SuFrdKycWwIqn+yO3QjLNZweh0Q8ebDMRY7fSVE
-         XZ+OvZ4I2LigDZeH7IOXn/1RzzgKxtDY2442qCmL4/e/unDWwfiYQ3kF/Vz2nz1wqY2Q
-         IkrYcc5DulpciSG+wkyb/OT9kf/lNIPd697M0=
+	s=arc-20240116; t=1729181371; c=relaxed/simple;
+	bh=XWK2CQKBoDnkFJt4/MwIKSAF02nWN2yyjN0bWXOENEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mRPwJ1e009rK6qwAqr4zHDICs35Sv9Dy7AIuVHCNWt1azNBn/ayJjvs42G2CWmbKWDbiu0nram+eMG7QNnc6Tg0gc8hsUoIYh/nZtFoisIAvWoNxEZ91DL6+zbWSOgxheb9Qj12mg6CP/GGRy8zZdOyylzKl81rqERqpc48rg+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MRkt+j3e; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729181369;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DkS5RbL+ncBye36HbvV2swXtYfvhlqwDI5lNtBAyr/g=;
+	b=MRkt+j3etiA3uCxQHE7ZvUAxeLmr23xDwr79ke8bO+TAMGe0/29tEUu2ZR9AZEufnCh1K0
+	ycVNF6tbnEyik6htw3yvcjbmzSSNkj0KdklDiDooEwwaBd5tmKeWu6uY16vMhxUnN4Q33M
+	uWMuKzWPVW4KaBTH71nxfXjGXdUOCXs=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-zj-J-moePWONCe-OcFKsgA-1; Thu, 17 Oct 2024 12:09:26 -0400
+X-MC-Unique: zj-J-moePWONCe-OcFKsgA-1
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-718107b2091so906403a34.3
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 09:09:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729181071; x=1729785871;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1HcKzCWxvWAVqUtCS9GFF6dDhjA+3HfqRto0OwBOEug=;
-        b=rxhruuFMI8GVXI58scY18ooV8dtKZ5Qk/qXUxqPIIeopPwBVhhMEq3shYIRuvuEGtO
-         jZ0Lu16wYvof2MQBrtUNkHOmsojBVvQh82yFz8i+xJzE9Uk/Ja0Zb4SJvzbyDbefUSoF
-         5r9qv8STCFJF19GI2xfIgSs3RMEOT6uELYGQ2KE2SfWY1kxagXIFjQFCsHMRk1DmA1D3
-         D66s2Ybv7Dxd7Ek4Xp7KDNQyW+x2Lj3ENZz+hXM8cNQxr0COC+aqHb4MNcoBTdazP0mj
-         k9mlHEbUE6y9wqXZfoe7pA48UVNO1bOQpQ3189CQjiC4YeF2GFFaN/mVE2k7WrcWPTcL
-         Yerw==
-X-Gm-Message-State: AOJu0YwqvLCzlUJnOLldvo36Aw9YtdHUhHnvnhofsFMgpL6QU0+3yTOT
-	fsVR+5jXd69Y7Q4igjYVYz0lQZV6N2z9ebjhQgsp0F0nbj9pLdO597MstdWIoL8=
-X-Google-Smtp-Source: AGHT+IGErwQ8mMJoQjk4kVqKA/5LU1jckk232FVcAxJwq7JCrOudWi4KhFaQqDUnaVP7BixbuPz+SQ==
-X-Received: by 2002:a05:6e02:1d9e:b0:3a2:5b:7065 with SMTP id e9e14a558f8ab-3a3dc4e5531mr77252645ab.18.1729181070910;
-        Thu, 17 Oct 2024 09:04:30 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbec9b252bsm1405250173.57.2024.10.17.09.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Oct 2024 09:04:30 -0700 (PDT)
-Message-ID: <d027a0be-b1b1-4679-89d6-351e0f313e4f@linuxfoundation.org>
-Date: Thu, 17 Oct 2024 10:04:29 -0600
+        d=1e100.net; s=20230601; t=1729181365; x=1729786165;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkS5RbL+ncBye36HbvV2swXtYfvhlqwDI5lNtBAyr/g=;
+        b=tIa9hI7mdH/qhTyASmkUTMBq8iwDy3uVPah9HNWWrKFkW8rr2seBBM8kYXXBVnwQDZ
+         al4QB0xpoxKLNSmsJUOZ0d/2dy6KFzhe2KiO9y2pLR6HVL9G5UAm5wFXAs74i7Rd91ba
+         opbr27fkd37PRjxN61LnD3pKnELdK0SzI6flHv8rSpw8yqPgRKEtSwrDpKUk3bo9+Mgm
+         RptwxchP5RtEzbnJLEWYroxbegfYDLTpMyS6iR7qJFh3VzBkFxDcyNgRKdnyNquFCuHF
+         3iTphL8NCiDn+L0RpMOkXdW6LgseOMOokT7bTl/Gd7wP/aplZjDXZii5WG9a0z1J4aBj
+         ijvg==
+X-Forwarded-Encrypted: i=1; AJvYcCVkmwSsqAo8R24v7HaUyTV4Ug4AkEkKw4zdcAgd/bLgxypth/gRhHzkG6/X7vbvmAMUoEQmLvVMHQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx43IO4cPSZ7WeJef3rPjmgg6Yp4JykwVic0Q+5XstCFIuffxxj
+	b9vetR05yrlnWigxwQGHRS9pBI5QupsKhtT2PI9YAEmLVL3Y55jgeKCRsjH84D7+IusVFtWNC+G
+	d/f/e2gxX/AIu/XdB3nIXK934b4uEHaWobhD0/osXvPCPFg9NIiF4yEPg
+X-Received: by 2002:a05:6358:9490:b0:1c3:75c6:599a with SMTP id e5c5f4694b2df-1c3784bf6admr683541055d.21.1729181365635;
+        Thu, 17 Oct 2024 09:09:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGfPycPZTZP+D3KLarN8Q1dwMVP6y29vgjcgbThfVJWEkcsbXkg/dm4qCNq6FkIFwCOC2vr1Q==
+X-Received: by 2002:a05:6358:9490:b0:1c3:75c6:599a with SMTP id e5c5f4694b2df-1c3784bf6admr683537955d.21.1729181365317;
+        Thu, 17 Oct 2024 09:09:25 -0700 (PDT)
+Received: from localhost.localdomain (2603-9001-3d00-5353-0000-0000-0000-14c1.inf6.spectrum.com. [2603:9001:3d00:5353::14c1])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-50d7b2a5a67sm881914e0c.42.2024.10.17.09.09.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2024 09:09:23 -0700 (PDT)
+From: Jennifer Berringer <jberring@redhat.com>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Maxime Ripard <mripard@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Jennifer Berringer <jberring@redhat.com>
+Subject: [PATCH 1/3] nvmem: core: improve range check for nvmem_cell_write()
+Date: Thu, 17 Oct 2024 12:09:02 -0400
+Message-ID: <20241017160904.2803663-1-jberring@redhat.com>
+X-Mailer: git-send-email 2.46.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] cpupower: add checks for xgettext and msgfmt
-To: Siddharth Menon <simeddon@gmail.com>, shuah@kernel.org, trenn@suse.com,
- jwyatt@redhat.com, jkacur@redhat.com
-Cc: linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241017133223.53070-1-simeddon@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241017133223.53070-1-simeddon@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/17/24 07:32, Siddharth Menon wrote:
-> Check whether xgettext and msgfmt are available on the system before
-> attempting to  generate GNU gettext Language Translations.
-> In case of missing dependency, generate warning message directing user
-> to install the necessary package.
-> 
-> Signed-off-by: Siddharth Menon <simeddon@gmail.com>
-> ---
->   v1->v2:
->   - Checks for gettext tools outside the target definitions instead
->   of inline
->   - Replace command with which
->   v2->v3:
->   - Update commit message
+When __nvmem_cell_entry_write() is called for an nvmem cell that does
+not need bit shifting, it requires that the len parameter exactly
+matches the nvmem cell size. However, when the nvmem cell has a nonzero
+bit_offset, it was skipping this check.
 
-Looks like there is more than just updating commit log
-in this version. You fixed a problem in your v2. :)
+Accepting values of len larger than the cell size results in
+nvmem_cell_prepare_write_buffer() trying to write past the end of a heap
+buffer that it allocates. This patch adds a check to avoid that problem
+and instead return -EINVAL when len is too large.
 
-Also when someone suggests an approach and give you a
-diff, the practice is to add Suggested-by
+Rather than unconditionally checking that len exactly matches the nvmem
+cell size, allowing len to be smaller when bit shifts are involved may
+be helpful because some devices have nvmem cells that are less than 8
+bits but span two bytes, although no current devices or drivers that do
+this seem to rely on nvmem_cell_write(). This possibility can be handled
+by nvmem_cell_prepare_write_buffer() because it allocates an
+appropriately-sized heap buffer and avoids reading past the end of buf.
 
-John, Do you have time to test this? Asking since you
-tested the previous version. Just want to make sure
-this one works as well.
+Fixes: 69aba7948cbe ("nvmem: Add a simple NVMEM framework for consumers")
 
->   
->   tools/power/cpupower/Makefile | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-> index 6c02f401069e..84987f91d11f 100644
-> --- a/tools/power/cpupower/Makefile
-> +++ b/tools/power/cpupower/Makefile
-> @@ -218,17 +218,28 @@ else
->   endif
->   	$(QUIET) $(STRIPCMD) $@
->   
-> +ifeq (, $(shell which xgettext))
-> +$(warning "Install xgettext to extract translatable strings.")
-> +else
->   $(OUTPUT)po/$(PACKAGE).pot: $(UTIL_SRC)
->   	$(ECHO) "  GETTEXT " $@
->   	$(QUIET) xgettext --default-domain=$(PACKAGE) --add-comments \
->   		--keyword=_ --keyword=N_ $(UTIL_SRC) -p $(@D) -o $(@F)
-> +endif
->   
-> +ifeq (, $(shell which msgfmt))
-> +$(warning "Install msgfmt to generate binary message catalogs.")
-> +else
->   $(OUTPUT)po/%.gmo: po/%.po
->   	$(ECHO) "  MSGFMT  " $@
->   	$(QUIET) msgfmt -o $@ po/$*.po
-> +endif
->   
->   create-gmo: ${GMO_FILES}
->   
-> +ifeq (, $(shell which msgmerge))
-> +$(warning "Install msgmerge to merge translations.")
-> +else
->   update-po: $(OUTPUT)po/$(PACKAGE).pot
->   	$(ECHO) "  MSGMRG  " $@
->   	$(QUIET) @for HLANG in $(LANGUAGES); do \
-> @@ -241,6 +252,7 @@ update-po: $(OUTPUT)po/$(PACKAGE).pot
->   			rm -f $(OUTPUT)po/$$HLANG.new.po; \
->   		fi; \
->   	done;
-> +endif
->   
->   compile-bench: $(OUTPUT)libcpupower.so.$(LIB_MAJ)
->   	@V=$(V) confdir=$(confdir) $(MAKE) -C bench O=$(OUTPUT)
+Signed-off-by: Jennifer Berringer <jberring@redhat.com>
+---
+ drivers/nvmem/core.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 33ffa2aa4c11..74bf4d35a7a7 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1767,8 +1767,7 @@ static int __nvmem_cell_entry_write(struct nvmem_cell_entry *cell, void *buf, si
+ 	struct nvmem_device *nvmem = cell->nvmem;
+ 	int rc;
+ 
+-	if (!nvmem || nvmem->read_only ||
+-	    (cell->bit_offset == 0 && len != cell->bytes))
++	if (!nvmem || nvmem->read_only)
+ 		return -EINVAL;
+ 
+ 	/*
+@@ -1780,9 +1779,13 @@ static int __nvmem_cell_entry_write(struct nvmem_cell_entry *cell, void *buf, si
+ 		return -EINVAL;
+ 
+ 	if (cell->bit_offset || cell->nbits) {
++		if (len > cell->bytes)
++			return -EINVAL;
+ 		buf = nvmem_cell_prepare_write_buffer(cell, buf, len);
+ 		if (IS_ERR(buf))
+ 			return PTR_ERR(buf);
++	} else if (len != cell->bytes) {
++		return -EINVAL;
+ 	}
+ 
+ 	rc = nvmem_reg_write(nvmem, cell->offset, buf, cell->bytes);
+
+base-commit: 98f7e32f20d28ec452afb208f9cffc08448a2652
+-- 
+2.46.2
+
 
