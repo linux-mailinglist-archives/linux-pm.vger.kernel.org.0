@@ -1,168 +1,91 @@
-Return-Path: <linux-pm+bounces-15841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15842-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 951259A1B4F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 09:06:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34F349A1C11
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 09:56:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54AEC2815A8
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 07:06:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0A191F233F9
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 07:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436641C1AC8;
-	Thu, 17 Oct 2024 07:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71FC1D079F;
+	Thu, 17 Oct 2024 07:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBiq9cTZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdA4yceQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1532D194A4B;
-	Thu, 17 Oct 2024 07:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6B11CFEC2;
+	Thu, 17 Oct 2024 07:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729148759; cv=none; b=oXC1yFLf31qyT+j4g2qVx2siHT86uifVpjMmq0BDR714u6ASeAQ4caURGwOxZIED4Mz/MsPSjiMC3eF5GNq+evA0OIDoNq+yTpKdAT7q/kzpiEg6d+hCopDmA0+ip1ov0n6I+uQQBrvc8kEFRcbjwcy82IofJtzc7MdLpsRMN0w=
+	t=1729151813; cv=none; b=rP6GksLSkrEZHolIbt7gtq3+lcUCz3iNFNSwGwwu5o2YykQu6jNFAY01o7eQi04ruDrS5yVGEMrhicE1JhkshgfUkcdOEMx2gxxTtqyx6CMMM/VHGLNj9xGCZDKYyysUx+uMbDgyjiFx1l5VZyzPfSYebTh7oxpYmVcNFfEW1Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729148759; c=relaxed/simple;
-	bh=SgFpsbC6Tqy3VGi3P39l2FUvNyodARhjLejF5vHrNI8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Te00oM8ytD+xntoTAoqKyDJGjD2dm64rhypmz3zhMokKSoeFkFc5aBroRs9fZxtkFcg+NUi1HntPGY2/QP2YrqWxX0aTOBJMConoKHlk5TBgVzxh7/gxHcgTnovofojGJOvT2fpvgU2K8ozClsR9QXjR6w6jceq77+6ozFaLpOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBiq9cTZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DA9C4CEC3;
-	Thu, 17 Oct 2024 07:05:52 +0000 (UTC)
+	s=arc-20240116; t=1729151813; c=relaxed/simple;
+	bh=KHj182ceY1l+tWN+yPMGSpqPxinzby8wZiaWb6NY2n8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oll3KDEy/kIfvSDdawZFFBG3Kd4xjBtVq069DVJHt5Qm6857QLjy/K9Ph4Bm1yXc6BkrFYxV86HpcAaVOcPMrGYXYCP73oIxupkQrImkDiVbU2RfC1v1+yFwcjvbvGP5MriNOn840os8zNZzlBmLjpEmFFKkcCdtSwvJv5TPIJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdA4yceQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D8A6C4CEC3;
+	Thu, 17 Oct 2024 07:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729148758;
-	bh=SgFpsbC6Tqy3VGi3P39l2FUvNyodARhjLejF5vHrNI8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SBiq9cTZ1A8xPrct3fK/+oI4NN2GEibr/B8kJCEZNOsPE8mD/1zlVSlShLx+DVEIw
-	 GYbNxYrE9eU/T2LkyLm0SkCQQQqA94df3vBxdCjmME5ZtHnaBqpnZcdNoSzVSF9qhk
-	 aQA2ouVIwt3URWtJxgM0kKAtNwRKPgfT7fz2AHGzh39E9h4AJObAc1z5Xl3uUgEOHl
-	 BQUOenlS/1/t77+I0Z92LxsCQKQUEqn/d9v1CRf6Lq9HE7tsvpQKAFvshMZXMra+iw
-	 mm7mZFzxC0Cw+TxHG3l/F7BB0DLG2JTx3YfcYBDgr9T8IaVUyBY9GMa1wqyXMQvKoG
-	 4D6/2m7xmGVRw==
-Message-ID: <9ac861ae-b0b1-4f7a-a002-7d2048132ef3@kernel.org>
-Date: Thu, 17 Oct 2024 09:05:50 +0200
+	s=k20201202; t=1729151813;
+	bh=KHj182ceY1l+tWN+yPMGSpqPxinzby8wZiaWb6NY2n8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jdA4yceQ7A32VhcQ3hbmjeOzriFjb3hcgTaN5EYow5ZEp4MelTgM5ZBEFmtgj8tu9
+	 AI8BDCBld/MbHK2FQaf+lJA7yPwV2pVgYoTu9pFSGtfI5QyWlJb2BH7tOPv9EbTrdC
+	 Iij8p9deJgXxsXw4WNdseQBZQjXo7GNEhVGd4hPof9oZeDW434BhFAzYTZwD6Xb3dQ
+	 Dg5/HXailnbgXK9VbBpsO7zLJPvCX4jcuRnmjchLEOGP+qdVYs82/BlAMMSJSTn9CV
+	 MqgS/YBSyXtGw0sry3fOLtx6z7wSi48aJLatHOom9e3pCzyVrWCIOW18UhmHVe0y0K
+	 gwmd6w+AFtsHg==
+Date: Thu, 17 Oct 2024 09:56:49 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
+	markus.stockhausen@gmx.de, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v7 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
+ peripherals
+Message-ID: <qftyzxnlvfyhdavhrivuef7o4den7yhjjy54eps5mngtce5iva@jq4wuhf4v4xw>
+References: <20241017001653.178399-1-chris.packham@alliedtelesis.co.nz>
+ <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 3/3] arm64: dts: qcom: x1e80100: Add ACD levels for
- GPU
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
- <20241012-gpu-acd-v1-3-1e5e91aa95b6@quicinc.com>
- <5axuqj4hetfkgg2f53ph4um24b7xfyumktreglxqyzfsdhy25e@deucq7vqxq5l>
- <20241015193540.mcpp2dvkmikruncj@hu-akhilpo-hyd.qualcomm.com>
- <921d3a39-d95c-4156-b376-44e8dc6a6467@kernel.org>
- <20241017061217.mmq27egyg5cdlubb@hu-akhilpo-hyd.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241017061217.mmq27egyg5cdlubb@hu-akhilpo-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
 
-On 17/10/2024 08:12, Akhil P Oommen wrote:
-> On Wed, Oct 16, 2024 at 09:50:04AM +0200, Krzysztof Kozlowski wrote:
->> On 15/10/2024 21:35, Akhil P Oommen wrote:
->>> On Mon, Oct 14, 2024 at 09:40:13AM +0200, Krzysztof Kozlowski wrote:
->>>> On Sat, Oct 12, 2024 at 01:59:30AM +0530, Akhil P Oommen wrote:
->>>>> Update GPU node to include acd level values.
->>>>>
->>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->>>>> ---
->>>>>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 11 ++++++++++-
->>>>>  1 file changed, 10 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
->>>>> index a36076e3c56b..e6c500480eb1 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
->>>>> @@ -3323,60 +3323,69 @@ zap-shader {
->>>>>  			};
->>>>>  
->>>>>  			gpu_opp_table: opp-table {
->>>>> -				compatible = "operating-points-v2";
->>>>> +				compatible = "operating-points-v2-adreno";
->>>>
->>>> This nicely breaks all existing users of this DTS. Sorry, no. We are way
->>>> past initial bringup/development. One year past.
+On Thu, Oct 17, 2024 at 01:16:50PM +1300, Chris Packham wrote:
+> Add device tree schema for the Realtek RTL9300 switches. The RTL9300
+> family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
+> have the same SoC differ in the Ethernet switch/SERDES arrangement.
 > 
-> How do I identify when devicetree is considered stable? An arbitrary
-> time period doesn't sound like a good idea. Is there a general consensus
-> on this?
+> Currently the only supported features are the syscon-reboot and i2c
+> controllers. The syscon-reboot is needed to be able to reboot the board.
+> The I2C controllers are slightly unusual because they each own an SCL
+> pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
+> common SDA pins which can be assigned to either controller (but not
+> both).
 > 
-> X1E chipset is still considered under development at least till the end of this
-> year, right?
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v7:
+>     - Set additionalProperties: false
+>     - Remove extraneous examples from i2c binding
 
-Stable could be when people already get their consumer/final product
-with it. I got some weeks ago Lenovo T14s laptop and since yesterday
-working fine with Ubuntu:
-https://discourse.ubuntu.com/t/ubuntu-24-10-concept-snapdragon-x-elite/48800
+Thanks for the changes!
 
-All chipsets are under development, even old SM8450, but we avoid
-breaking it while doing that.
-
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
