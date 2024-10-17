@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-15845-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15846-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DB169A1D93
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 10:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD5B29A1D97
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 10:52:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C793283364
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 08:52:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C7B1284610
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 08:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2D41D5CCD;
-	Thu, 17 Oct 2024 08:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06F51D619D;
+	Thu, 17 Oct 2024 08:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZHX5l13p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuXI4RuY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B9E1C07C7;
-	Thu, 17 Oct 2024 08:51:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861FF1D5AD4;
+	Thu, 17 Oct 2024 08:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729155121; cv=none; b=WuB8+RIkZj6b1Gwv0vyJ6GMDdiHmAqIESarEL7YoVW7/5o9RmlpoTNb1vA1ODDQNFXekqkvQcaMcsTz85VnNBA07oEtzBU66gxkyd82ODjMR9R6lOW/D231A4CC9JQZUvyghn9Gg13L/A6QsLzeyilc+ukHQToPgsCfhbU81CKw=
+	t=1729155125; cv=none; b=QAtnun0cuECk7iPi4RW4e2lflLdhbAfwjjMK3w69F0XC6s/Le5z/N0NZr9K90JMMewzHCGCBViI+JD7tv5LxPkSpmpioBpQzcxP+Cvx4Svb+uMIZkPJ4+FasJDuudyFu7Xr5jmyLCRQ1Hoq2mNWXCN9oVgAqUCbyDGMX8a529Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729155121; c=relaxed/simple;
-	bh=26Jw6nHZi5IebIm7GrQ5mqzq6U+LxqTLhaoBfJPlUvw=;
+	s=arc-20240116; t=1729155125; c=relaxed/simple;
+	bh=gEvb6Lvc7GI3LGcawTs2HtCBndRHTWo+uYHTSmyA5Ro=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=drXPM0Mi03j87TIaOYBqrC0Pw5Sp1n1t2cmUsTR0ZPtsuPjDmLDDsjUo8qdPYfaYQeppJBKqEQLmRo6svp/BoNEAfgLZnshDJLIsSAGRuJhkgDkC3ODtOd8h0N/mNnJnXtz1gKUE67WHL0BzJ+c4nbvITuMuNLypRMMvsb/QJFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZHX5l13p; arc=none smtp.client-ip=209.85.208.45
+	 MIME-Version; b=CGuc5XoStSy348x1K8TfLftGirL0GjMp1DZmEuvkOa+L015ZFCQ7uE9ZFMsJgL+QRxRR7pmu1CWfg6XjzcCLDORZzwM5mwlOr9GI/p2bDZ4JiPpdcV0fC8yBScmwJE/7rMDGktyENUyUOnZFRenB+Wg/1ZJIAleeUsqOOnySu3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuXI4RuY; arc=none smtp.client-ip=209.85.208.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c9625cfe4dso929435a12.0;
-        Thu, 17 Oct 2024 01:51:58 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb50e84ec7so6329211fa.1;
+        Thu, 17 Oct 2024 01:52:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729155117; x=1729759917; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729155120; x=1729759920; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/z+P8UNvqP2F207yqlUX6ImNjWsCKBW8fNTzu+b0Lqk=;
-        b=ZHX5l13pExyffVpOvkZ6dzm7Toa/TPlyGJ7hj/zkrYPG+36w3GgDzYVBgxtgrSzuXx
-         pZe1Ue3jz8e4hFWwEO2r8uug87z+wQ4j9pBtdCkBWHVTSaaVCsAZ0Qi42EUoo9n+oaYP
-         BQfj7W+0HXoxbArNmLGWHFdYUvQ+6FkVatsv1HT25SEQPrtAorAfPvEHThtSSEWiYqjA
-         MX4uK0sEBw30vPQJid92ilj5I8+B0Sax3K/tR6J7N8CWz8ol4t/Ks1Nb6sOYZDZGu2ma
-         yT9lmSQnXR1xKhqNPqERTEXaPXP8yfO7a2r1c+q74eEZYa9TG2wCh1BFiKiE5Wjq7csL
-         DvOg==
+        bh=RIKQOSn+OzCMfWxjDnYu4Cj5q8Asx6TloHeXxyGjmj8=;
+        b=kuXI4RuYnWOyb6TEdcxEfCpU3dLUdz+dlcX9a1yeB12KNyrL+OdyPIQJ7oUXQKTSJK
+         T+cp4hdWaX78aqC/FO/N1jPBK8Lc3njuAQtQhfOvKhtDhD/XdeL7hDK4F0/MeqL64LhN
+         4UildAcD4xYD1aCluUHWCFe1mkkyJ+CMTaHoTmdENl5Sb10cjfUdLEUWbKT4pl1i9zaB
+         rUmmO+aVwBSyPsOvImxAGLKgz5NsFowxVNO1Nk2fqD/DfwCPbvgecfofoL9JekwWjZOM
+         YeJ92ktmeJNHsjKkpYgDouQF447YUmzHE5mC2WBg7HIO6yO+DTvBs6J0C3/Mc8yToz/o
+         HZZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729155117; x=1729759917;
+        d=1e100.net; s=20230601; t=1729155120; x=1729759920;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/z+P8UNvqP2F207yqlUX6ImNjWsCKBW8fNTzu+b0Lqk=;
-        b=tzQcf1iEkysNYyh8207TE60e86HvISJbbXF0sfxJoS6PSe7Xut2iJX9g4bqv8aiIGD
-         rJB9Ubt3N783cIZpxqSdsIz84iNuJvVGvI88LiA2aHQUdXpIBMFnix223RJlzDW+oxeV
-         AVZ7UwXcSPcrEtutb/BOw5az/ZL4ZYR6Ff76kYxRRQw6Q84WuY/7ITgupncsYy1uph1+
-         NUwfLAIVCd912POf36kR04kHpgHkWwP/76NxjP0EZ8Lc0kO/3A+ol8xnhznlB8xwsl16
-         vY03WHCP9NXF2pea8iV+lr5aKbZIutanIHQ6ZbLCUWxeAzv7Dg6zNtUzWBehFqcjunbV
-         PU0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUipaxmk6N2V+IityOQBM8L/y19dVHJO22X0Gc0xgzKcTeezc+0aiYCl11KJabBCcHaLyXtdC5DaJexPj8L@vger.kernel.org, AJvYcCVBq/ay1l1Z5wowBkMu/hlXrIFTU3OHrUWZ2HDtEQ5Dfw2K0/tCnHkukD+vqhpBXe6onVON99AoXUiY@vger.kernel.org, AJvYcCWcF3ty4YKSdw/FZS5LEqHU/MOxORt9Z16RUnSi+3odIX6CLTS3Jmg6lKv3uiAxN0yNpCB+eNJ0i2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1dkS18fmKjFNA2Eedt/ZRHbgPVwNNDhtmw6TKpTn6hZ8sw3oU
-	FjRKoSFVvPZNXZnKvaKfaZuk1RPhSe3goEPLTr+5cZI6miNMcFFT
-X-Google-Smtp-Source: AGHT+IHasxy8ZcBwQ63aPHXND9H4VsUQyIbWvOQ1NFxI6SZCCyCKPXsoumTK68tT8iJu7uplyyd/TQ==
-X-Received: by 2002:a17:907:848:b0:a99:d587:6045 with SMTP id a640c23a62f3a-a99e3b319efmr1895383266b.19.1729155116394;
-        Thu, 17 Oct 2024 01:51:56 -0700 (PDT)
+        bh=RIKQOSn+OzCMfWxjDnYu4Cj5q8Asx6TloHeXxyGjmj8=;
+        b=YBGx3GsoP992sjUWm3gej2Ne6/Bqw/fs2nQx0vo/wijEcB/7ju6w99M0ZWP+EguSoL
+         t+1Oj8luN8iNn2HTzZbfaBbRy5MgqjbVfuVeYUDY+UQe4AyniV398w0t/yc4/7vu+eec
+         ODiy/2nCy0xlGOEGLqQiorzXWQuCHZgDNC52gYr4LTgOqRW0Sy3QEh0nmLoQvutplInF
+         quwMQl0GkP90OkKrc94k2O/JaqMIYLW9CY/E5JkKLaslKHN4uKR+d0t5aruasqChoVjO
+         zlxrMngzWzKBNR1q5jqmBB5LO96i9h7aHacCVKEmslCwr6fcMKECLm4tzjr0jF8JizYP
+         o7uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUemRSw6x42O64kl02N+MOUC/YaGZBa7zO/OTfvX+2aPsGlS3TEXDv/cDoWK6PUcN50dsd/pDWqseOh@vger.kernel.org, AJvYcCUqK53F487c8zCYiDTT90DjO5wAwczqvYKdh5zbrp0+VOrkTHDR3XWWn9tJI0i7MZVzK5kYgjcKzQE=@vger.kernel.org, AJvYcCVPz9kE7SJltIi53xdKLN94pNmCfUrKY8yAiWC6gbsXnLWsdbUZc+5T7dFc/YDLNNIBYTjWGxAHAYQyO2Zf@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDG3HHmwb0v4ia7wyPNSkKX1pfu5vNAz0ME9WyDP468RNdgx0w
+	BffLrECt11DvVnBvkd56qZVlBFGd7Xxq0VqGdgV5XqmGdov5HezQ
+X-Google-Smtp-Source: AGHT+IFa05Tw/OxDuv2XAa8AxBAc26dQ4PJSNT2cz40KikvUKyt7MVPDkF5xJw0vAU4W5HtGJocRug==
+X-Received: by 2002:a05:6512:3994:b0:539:f2b9:c4d0 with SMTP id 2adb3069b0e04-53a03f8865amr4887610e87.52.1729155119163;
+        Thu, 17 Oct 2024 01:51:59 -0700 (PDT)
 Received: from zenbook.agu.edu.tr ([95.183.227.32])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a29816c24sm267045266b.110.2024.10.17.01.51.54
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a29816c24sm267045266b.110.2024.10.17.01.51.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2024 01:51:55 -0700 (PDT)
+        Thu, 17 Oct 2024 01:51:58 -0700 (PDT)
 From: Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To: Rob Herring <robh@kernel.org>,
@@ -89,9 +89,9 @@ Cc: Yassine Oudjana <y.oudjana@protonmail.com>,
 	linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 1/2] dt-bindings: power: Add binding for MediaTek MT6735 power controller
-Date: Thu, 17 Oct 2024 11:51:34 +0300
-Message-ID: <20241017085136.68053-2-y.oudjana@protonmail.com>
+Subject: [PATCH v3 2/2] soc: mediatek: pm-domains: Add support for MT6735
+Date: Thu, 17 Oct 2024 11:51:35 +0300
+Message-ID: <20241017085136.68053-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241017085136.68053-1-y.oudjana@protonmail.com>
 References: <20241017085136.68053-1-y.oudjana@protonmail.com>
@@ -105,60 +105,181 @@ Content-Transfer-Encoding: 8bit
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add DT binding for MediaTek MT6735 SCPSYS power controller.
+Add support for SCPSYS power domains of MT6735. All non-CPU power domains
+are added except for MD2 (C2K modem), which is left out due to issues
+with powering it on.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../bindings/power/mediatek,power-controller.yaml  |  1 +
- .../devicetree/bindings/soc/mediatek/scpsys.txt    |  1 +
- .../power/mediatek,mt6735-power-controller.h       | 14 ++++++++++++++
- 3 files changed, 16 insertions(+)
- create mode 100644 include/dt-bindings/power/mediatek,mt6735-power-controller.h
+ drivers/pmdomain/mediatek/mt6735-pm-domains.h | 96 +++++++++++++++++++
+ drivers/pmdomain/mediatek/mtk-pm-domains.c    |  5 +
+ drivers/pmdomain/mediatek/mtk-pm-domains.h    |  2 +
+ include/linux/soc/mediatek/infracfg.h         |  5 +
+ 4 files changed, 108 insertions(+)
+ create mode 100644 drivers/pmdomain/mediatek/mt6735-pm-domains.h
 
-diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-index 8985e2df8a566..6d37c06b2f65b 100644
---- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-+++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-@@ -23,6 +23,7 @@ properties:
- 
-   compatible:
-     enum:
-+      - mediatek,mt6735-power-controller
-       - mediatek,mt6795-power-controller
-       - mediatek,mt8167-power-controller
-       - mediatek,mt8173-power-controller
-diff --git a/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt b/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt
-index 2bc367793aec1..3530a6668b486 100644
---- a/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt
-+++ b/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt
-@@ -20,6 +20,7 @@ Required properties:
- - compatible: Should be one of:
- 	- "mediatek,mt2701-scpsys"
- 	- "mediatek,mt2712-scpsys"
-+	- "mediatek,mt6735-scpsys"
- 	- "mediatek,mt6765-scpsys"
- 	- "mediatek,mt6797-scpsys"
- 	- "mediatek,mt7622-scpsys"
-diff --git a/include/dt-bindings/power/mediatek,mt6735-power-controller.h b/include/dt-bindings/power/mediatek,mt6735-power-controller.h
+diff --git a/drivers/pmdomain/mediatek/mt6735-pm-domains.h b/drivers/pmdomain/mediatek/mt6735-pm-domains.h
 new file mode 100644
-index 0000000000000..6957075fcb9e5
+index 0000000000000..71896be68e227
 --- /dev/null
-+++ b/include/dt-bindings/power/mediatek,mt6735-power-controller.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++++ b/drivers/pmdomain/mediatek/mt6735-pm-domains.h
+@@ -0,0 +1,96 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +
-+#ifndef _DT_BINDINGS_POWER_MT6735_POWER_CONTROLLER_H
-+#define _DT_BINDINGS_POWER_MT6735_POWER_CONTROLLER_H
++#ifndef __SOC_MEDIATEK_MT6735_PM_DOMAINS_H
++#define __SOC_MEDIATEK_MT6735_PM_DOMAINS_H
 +
-+#define MT6735_POWER_DOMAIN_MD1		0
-+#define MT6735_POWER_DOMAIN_CONN	1
-+#define MT6735_POWER_DOMAIN_DIS		2
-+#define MT6735_POWER_DOMAIN_MFG		3
-+#define MT6735_POWER_DOMAIN_ISP		4
-+#define MT6735_POWER_DOMAIN_VDE		5
-+#define MT6735_POWER_DOMAIN_VEN		6
++#include "mtk-pm-domains.h"
++#include <dt-bindings/power/mediatek,mt6735-power-controller.h>
 +
-+#endif
++/*
++ * MT6735 power domain support
++ */
++
++static const struct scpsys_domain_data scpsys_domain_data_mt6735[] = {
++	[MT6735_POWER_DOMAIN_MD1] = {
++		.name = "md1",
++		.sta_mask = PWR_STATUS_MD1,
++		.ctl_offs = SPM_MD1_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(8, 8),
++		.sram_pdn_ack_bits = 0,
++		.bp_cfg = {
++			BUS_PROT_INFRA_UPDATE_TOPAXI(MT6735_TOP_AXI_PROT_EN_MD1),
++		},
++	},
++	[MT6735_POWER_DOMAIN_CONN] = {
++		.name = "conn",
++		.sta_mask = PWR_STATUS_CONN,
++		.ctl_offs = SPM_CONN_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(8, 8),
++		.sram_pdn_ack_bits = 0,
++		.bp_cfg = {
++			BUS_PROT_INFRA_UPDATE_TOPAXI(MT6735_TOP_AXI_PROT_EN_CONN),
++		},
++	},
++	[MT6735_POWER_DOMAIN_DIS] = {
++		.name = "dis",
++		.sta_mask = PWR_STATUS_DISP,
++		.ctl_offs = SPM_DIS_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(11, 8),
++		.sram_pdn_ack_bits = GENMASK(12, 12),
++		.bp_cfg = {
++			BUS_PROT_INFRA_UPDATE_TOPAXI(MT8173_TOP_AXI_PROT_EN_MM_M0),
++		},
++	},
++	[MT6735_POWER_DOMAIN_MFG] = {
++		.name = "mfg",
++		.sta_mask = PWR_STATUS_MFG,
++		.ctl_offs = SPM_MFG_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(11, 8),
++		.sram_pdn_ack_bits = GENMASK(12, 12),
++		.bp_cfg = {
++			BUS_PROT_INFRA_UPDATE_TOPAXI(MT8173_TOP_AXI_PROT_EN_MFG_S),
++		},
++	},
++	[MT6735_POWER_DOMAIN_ISP] = {
++		.name = "isp",
++		.sta_mask = PWR_STATUS_ISP,
++		.ctl_offs = SPM_ISP_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(11, 8),
++		.sram_pdn_ack_bits = GENMASK(13, 12),
++	},
++	[MT6735_POWER_DOMAIN_VDE] = {
++		.name = "vde",
++		.sta_mask = PWR_STATUS_VDEC,
++		.ctl_offs = SPM_VDE_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(11, 8),
++		.sram_pdn_ack_bits = GENMASK(12, 12),
++	},
++	[MT6735_POWER_DOMAIN_VEN] = {
++		.name = "ven",
++		.sta_mask = BIT(8),
++		.ctl_offs = SPM_VEN_PWR_CON,
++		.pwr_sta_offs = SPM_PWR_STATUS,
++		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND,
++		.sram_pdn_bits = GENMASK(11, 8),
++		.sram_pdn_ack_bits = GENMASK(15, 12),
++	},
++};
++
++static const struct scpsys_soc_data mt6735_scpsys_data = {
++	.domains_data = scpsys_domain_data_mt6735,
++	.num_domains = ARRAY_SIZE(scpsys_domain_data_mt6735),
++};
++
++#endif /* __SOC_MEDIATEK_MT6735_PM_DOMAINS_H */
+diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+index 3580913f25d39..b866b006af699 100644
+--- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
++++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+@@ -16,6 +16,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/soc/mediatek/infracfg.h>
+ 
++#include "mt6735-pm-domains.h"
+ #include "mt6795-pm-domains.h"
+ #include "mt8167-pm-domains.h"
+ #include "mt8173-pm-domains.h"
+@@ -608,6 +609,10 @@ static void scpsys_domain_cleanup(struct scpsys *scpsys)
+ }
+ 
+ static const struct of_device_id scpsys_of_match[] = {
++	{
++		.compatible = "mediatek,mt6735-power-controller",
++		.data = &mt6735_scpsys_data,
++	},
+ 	{
+ 		.compatible = "mediatek,mt6795-power-controller",
+ 		.data = &mt6795_scpsys_data,
+diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.h b/drivers/pmdomain/mediatek/mtk-pm-domains.h
+index aaba5e6b0536f..2ac96804b9853 100644
+--- a/drivers/pmdomain/mediatek/mtk-pm-domains.h
++++ b/drivers/pmdomain/mediatek/mtk-pm-domains.h
+@@ -21,6 +21,7 @@
+ #define SPM_ISP_PWR_CON			0x0238
+ #define SPM_DIS_PWR_CON			0x023c
+ #define SPM_CONN_PWR_CON		0x0280
++#define SPM_MD1_PWR_CON			0x0284
+ #define SPM_VEN2_PWR_CON		0x0298
+ #define SPM_AUDIO_PWR_CON		0x029c
+ #define SPM_MFG_2D_PWR_CON		0x02c0
+@@ -30,6 +31,7 @@
+ #define SPM_PWR_STATUS			0x060c
+ #define SPM_PWR_STATUS_2ND		0x0610
+ 
++#define PWR_STATUS_MD1			BIT(0)
+ #define PWR_STATUS_CONN			BIT(1)
+ #define PWR_STATUS_DISP			BIT(3)
+ #define PWR_STATUS_MFG			BIT(4)
+diff --git a/include/linux/soc/mediatek/infracfg.h b/include/linux/soc/mediatek/infracfg.h
+index 6c6cccc848f48..9956e18c5ffa9 100644
+--- a/include/linux/soc/mediatek/infracfg.h
++++ b/include/linux/soc/mediatek/infracfg.h
+@@ -434,6 +434,11 @@
+ #define MT7622_TOP_AXI_PROT_EN_WB		(BIT(2) | BIT(6) | \
+ 						 BIT(7) | BIT(8))
+ 
++#define MT6735_TOP_AXI_PROT_EN_CONN		(BIT(2) | BIT(8))
++#define MT6735_TOP_AXI_PROT_EN_MD1		(BIT(24) | BIT(25) | \
++						 BIT(26) | BIT(27) | \
++						 BIT(28))
++
+ #define INFRA_TOPAXI_PROTECTEN			0x0220
+ #define INFRA_TOPAXI_PROTECTSTA1		0x0228
+ #define INFRA_TOPAXI_PROTECTEN_SET		0x0260
 -- 
 2.47.0
 
