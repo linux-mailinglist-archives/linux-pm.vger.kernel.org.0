@@ -1,267 +1,238 @@
-Return-Path: <linux-pm+bounces-15836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D0709A1A5A
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 08:01:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CCAC9A1A58
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 08:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F05CE1F254C2
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 06:01:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C3AB2887C4
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 06:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 146CF1791ED;
-	Thu, 17 Oct 2024 06:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AFCB16FF26;
+	Thu, 17 Oct 2024 06:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Vfudumw1"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Z06Jh9f6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B3217580;
-	Thu, 17 Oct 2024 06:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729144875; cv=none; b=m8uDE6HhFlqh1bOD0VaRc2LGNZsI7o1h1APBY02bNVQImSA2TZbfULO9cc9P1BM89y/jckdfgWT73qL1GD8F7rhtPH7jwaMNe8Eq3WW70rUhrSDqf0R6y2PbOY/AN2H+Lo0VAmsLqYoJXTwpdbeziP6WGvIjgrZBcJA1N78VnIk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729144875; c=relaxed/simple;
-	bh=Go4R4kNnkFQqRMwHqKfSeRO9WDM6o7fjEUWrhrCLcOo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FNFqPMGmpUUAwvNnth3Md+8/dX17gnUZJLMjavLPHPbK9ioPY8TTvgK6r8EF5EPGjmtapV3WAQGX1JKndvU1XVRBDfna/gy/dbjj8HK/193fetBoSTkpI7AVTpkeTEUwLW3uAJPqSn/jR7IBHg/lle0HWKlSSwJTlJgGKER8ptg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Vfudumw1; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GGVHnW031506;
-	Thu, 17 Oct 2024 06:00:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=I2dJHSILrtgjFG6PlUEjpzHR
-	lJvtIybWLmLkKd+eYOU=; b=Vfudumw1OKzQml2AwCjQ6nnsvmsQ4+nSMTJITN8b
-	GHb7Q3t1Gt7z+V3y55l3SHDIWWziu007YNA/AvGoKwAygFx5gMaFmDL1UYdiObcB
-	/9hErl5oK37iXEp+cYXyKZLho+ouiaOm8eUn3nRibrSioLg1baGz5VJgGHMoNywi
-	T7M9P+r62v5akgAaWyskuBTTNW/A4VHX/f3M1lgLYyVxC3qRtREwuR/KmS8W7Pc0
-	ePUtGR37KUs6ZbIE6m3FaQ9qHmle2rP7cm6279K8Xy9APgi2/8oFty0UmN9LfjrB
-	xKwp7IMYXB36p7BuIjzZV8ZNAWeFvhl/ef1SH7G3zEhMrQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42a8nq3hf6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Oct 2024 06:00:56 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49H60tL1032240
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Oct 2024 06:00:55 GMT
-Received: from hu-akhilpo-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 16 Oct 2024 23:00:49 -0700
-Date: Thu, 17 Oct 2024 11:30:45 +0530
-From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        "Konrad
- Dybcio" <konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten
-	<marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, "Simona
- Vetter" <simona@ffwll.ch>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
-	<nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH RFC 2/3] dt-bindings: opp: Add v2-qcom-adreno vendor
- bindings
-Message-ID: <20241017060045.q2cz3o77aejq4g5m@hu-akhilpo-hyd.qualcomm.com>
-References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
- <20241012-gpu-acd-v1-2-1e5e91aa95b6@quicinc.com>
- <he6cfrofgmdw2se4mcok25c54sboovevmlli42xh6ttnqiogat@ja6el35jyd65>
- <20241015191314.pbz5v5u65gbpjheg@hu-akhilpo-hyd.qualcomm.com>
- <294bf353-4aff-4d89-a5d7-5d2d19b089c1@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAC31304B0;
+	Thu, 17 Oct 2024 06:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729144874; cv=fail; b=jKBg3gjDw5FsrrEnqeZCx1Ob0saJjxYZ5uO2xiHuaL3Lu2CXUt5VjVTxi/aiafdrUuc/dTX4NcggOcUpg9R2DjgaoB5xi1Fnc93wZachPQWGPkxEID63CWc1R7jmfg2aRhWq9+491Tra1mYlLUY+1CHvVaSoYK+GtvFkLnca/lA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729144874; c=relaxed/simple;
+	bh=OFDLSqUdxaEvgSS2y98R4qWtsqkTmWN4S2AvX90q7CM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=EvwlVKAaZch3V3l/5f+OJJZSWuEyfZFiBeM3HUdmTxTbP+C2WI1V4DlSW5NeHTgx2SB7BUbrI3dWaIjP9PQLog75nf0Efv5EPwRnVzA3wc8n0PU/ZeOCkQIcJSo4WNgB6FGP6WLRrD5nH4xfo6qQLObVi2LCmCZz6BubqVzc8ks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Z06Jh9f6; arc=fail smtp.client-ip=40.107.223.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cVElfYwj3oiE0sq4N3soZ6tyGhdCtH4N8h7XnGm0ZaTQCT4FMaHxMR1nWUn6LGvdeMprDu4e6Jq6nD/KUlZXJCiTN3OwC0Fla6HlULtM8GU1WXM+AsBGh6Gifki6VBrvIDqu7ObLsT+GJ2yeyhjDQTh4g20rk6PVcCRjzb6EHXWqCVki9Pz/wfpPaohkK7u/mcJrkp7NODjPvyrzlz0AVzjM5BTN+zz7LxnDcjPGGWxELWQ4QSzRJJ+CZpflwVBrIC7MssMSCygrI5cU4oQjNi6vJf1FPg++1mEBozr3L86ofsHQItzUFrq/eV8xmIB719gwoLdAxpeZ08oA5is3og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GuhK2nxsK33hkdcb510TvSUj5SQ6iCXfGqj/L+AvZAI=;
+ b=iMjzTeISOgmRbb9HZ91gULKCrDoh5aJUIuTRls5+tLMLjKppj1xBOEFMhLW1hUh8aqTl3yav3NI48zpJU4V+B81pS/K4ZifweXa/enG8734m0AGcAby0PEA4BBLWLNrINSLdYq9od10f7VrVnp1NNfsRS3rz3WuP1Oqcrjf0ocqPmQBG520DZxW3Vz7imRMcpyPPwAA/9NEAULI3Pjq7U7Ah4OmDSQOCf80O7nHUpdf7PVBGYZzA5BtpHWGh3SpRVWvl7j1jFPWo54To67Rd474eObPCI6FgWaro2B+5Cn7OU7KoOiDFCrr1yNIoETHRZ2l5Kinz8eq8rFik7n3ORw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GuhK2nxsK33hkdcb510TvSUj5SQ6iCXfGqj/L+AvZAI=;
+ b=Z06Jh9f6+Shg7sL+p2Z1dQUUIAJPkVbFjMdSLQ3SEutMMv2gyOoHiXMbhAZcW0CR/ahVOQ90ZEmd65JCVyIz3zTGTvzPWryUHfy59bVzTjceywCGPyDce+shKMsJbq+fgeEdZy+I1Nn1E9cDCnBWPMa5cFoG2WEiadeTjV5rdRU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ PH7PR12MB7258.namprd12.prod.outlook.com (2603:10b6:510:206::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8069.18; Thu, 17 Oct 2024 06:01:08 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%5]) with mapi id 15.20.8069.019; Thu, 17 Oct 2024
+ 06:01:07 +0000
+Date: Thu, 17 Oct 2024 11:30:59 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	x86@kernel.org, Perry Yuan <perry.yuan@amd.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: Re: [PATCH v3 09/14] platform/x86: hfi: add power management callback
+Message-ID: <ZxCoG7vaLmvTMXFT@BLRRASHENOY1.amd.com>
+References: <20241015213645.1476-1-mario.limonciello@amd.com>
+ <20241015213645.1476-10-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015213645.1476-10-mario.limonciello@amd.com>
+X-ClientProxiedBy: PN2PR01CA0074.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:23::19) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <294bf353-4aff-4d89-a5d7-5d2d19b089c1@kernel.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OQCJ3d2kKtMLuWMuKguzHp4nbwFHygGB
-X-Proofpoint-GUID: OQCJ3d2kKtMLuWMuKguzHp4nbwFHygGB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501
- suspectscore=0 adultscore=0 spamscore=0 bulkscore=0 clxscore=1011
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410170039
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|PH7PR12MB7258:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31964292-4b05-4514-e15a-08dcee7117a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?VwlAmqcRxX9IcyQBN8Ns/gz3vkcF/FxWYPHlvUs0M6M5Loeh0bOGqyaBLe0t?=
+ =?us-ascii?Q?jpdX6KjIzOR7Qw53l75Yh0Flr3JwlLjfAfVz5+ONWURvDh9/nkAGEwZ2D9B5?=
+ =?us-ascii?Q?WjkUjJZNp1+jN8LlGO/EoR4EPMBahXZWetKUrLpNcJ+bat+I+Og7Sy+xIU7S?=
+ =?us-ascii?Q?vbyl7o7uV588PP6yw2fU178CSYTZEP3yN3921B1aWOjErZciuEePV9fO+ro+?=
+ =?us-ascii?Q?vuBorbjUgqN9Ctc4tHi9fZ8Tib25WezNm/VD9J+vcRym2X7ou+EHJvqshxd+?=
+ =?us-ascii?Q?yJ/wAZdaZ6QMpEiCuCk/H0n5nmMIisKzVo6csaRFL/x4kZ2x0UnLyJ+SOcpD?=
+ =?us-ascii?Q?usE0RYZXlLjvsQ/WF7gjSN6SYirxFpj5yaKvAQcEYYKKde2+9SzjdCeAWmEK?=
+ =?us-ascii?Q?1Yy1ClU4N2WW30UmcBsFTaHIQV1q4ot4jApmGAcxbr/q7uoTQySeiC3jQO7x?=
+ =?us-ascii?Q?a1Hv9EzMgdULRQNS0j+sLQ5W40soCq91CtajiTNCQtsjmhgCj3kCBPffO1AW?=
+ =?us-ascii?Q?+oXNTdaVM04yLlWf0xSLzew7S5s9/paDeOEjwxaRtwgf1Yor2JXrVw6rskLr?=
+ =?us-ascii?Q?FMPOFvn62obfkOZehm3Z3yDsQbC4iCaiTmRb/YxPwE0VEtGHtobSr5/q7Xdc?=
+ =?us-ascii?Q?dpcs/MpK4rsThb0Hs5cHC78twjlWYojRo0cHZiC8Mor1jJohCHKsEKW/vx6D?=
+ =?us-ascii?Q?wfG0oLN4oqWzeb4UWjPFCQ/W4Yz1pomrH5gO7y+LENcTrUiUNzfZTQFkrJC0?=
+ =?us-ascii?Q?t8gj9D3JBWbTipww4VxzFweuiSZqfpxkH0kGLl5AKB5h24tpmTRuEAiGQvkr?=
+ =?us-ascii?Q?h0jRiXW8Y+L4oOn65HEOJNbFWJO740AlOKyDejRhLoF45nS/OihfHCfa3ifr?=
+ =?us-ascii?Q?OzBO0Z8ci/ifNYFrV4NgnI92g8SFKbBKhlsxzCoSeBMKuaP8TuEv7H6tQYjs?=
+ =?us-ascii?Q?FXZ9yNHRCyk9I/iLBY99yvw0OrW2jnTbdRQdhqX84vUrS8fLKPIR+UMAn5eJ?=
+ =?us-ascii?Q?4Pq9aSIq1++V4WF/5zdVYIwym6xVGjqaHblRBSJbdVPBa1C4aIz1NNAQOnCO?=
+ =?us-ascii?Q?o7z8IK3euUfwkzMsynR22nH+8vK0qInDCv3EkdEmj7ncY8pnOUzl34lZxJSr?=
+ =?us-ascii?Q?HtEw0FYvI3Yp3TAcD+DbR/rhMnRgMVOWVlR2sqJhgTNrRJMYE9B5TFw4g7yG?=
+ =?us-ascii?Q?qPF3TshVbW72Ss7+JI6OqgWQZTlUSvk11BmDJWDKOr+f3/uRZhCufI2PM0TI?=
+ =?us-ascii?Q?4s56ELIE2nrAmfjdf4fqdMBW9YqtoOap/V/DgpPzoygLL7eB120VHNjcCX3s?=
+ =?us-ascii?Q?x8me1ubwKdifDwqOAudQE+Do?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?v5PkO+mK5hjatP1WPPstOX/LQ3hBUAvFDt8sXxctFV0bgC+VPPHrHg7COEiO?=
+ =?us-ascii?Q?ecguiGAVZ0RalE8bYD2K1jzIAHVLz4awnbYo2piRYvS2qbUrpd+XLo3qGO5z?=
+ =?us-ascii?Q?OCGdIFiretjQ2AdjVneGkjr++MOWPLz4mxv4EyAby0gEGbHPd+eFCozjg/XY?=
+ =?us-ascii?Q?V7naO2WwUwp7AnA08GymalIhXIIyOvObKBXy/O3uRVHqrd6b5pheBvBkfWmK?=
+ =?us-ascii?Q?wyrRJ/Emf+ar7xaAfYQl6Zs8t0yp93R7HjtOlioFyEUxprEoL+C31ADoJB4e?=
+ =?us-ascii?Q?5Egp7Ds0lXZAW7ZkwyC3GPzwUoeFVaT/K7QTiQdU/5yihXTZ41dIN/YNtEDm?=
+ =?us-ascii?Q?PbIjMmkuUlbcFVZr2jtVnAPS7Qk8/8jEIEgNh1VgQwrPAR6G7GQexmyJ4zjS?=
+ =?us-ascii?Q?mnJLRZqZV4KrKA7nzL7xkJ66I4Vp/2nrMkYquzgjBxV1lQw7zmlKLEJ6fIi3?=
+ =?us-ascii?Q?AfzuXzL9hlWpzn/GNgNjIyNjZNc4HEJNrd7U0UfkURFnQJW88ZGjWGjjltLF?=
+ =?us-ascii?Q?Bo+ZTCWZVJe3jy6pIVLYmxBIfSOw2o3QFu7GlkYWWZghPF7RSzaCzNZGMGPQ?=
+ =?us-ascii?Q?bH8tztoF/AltYr5n7JGRQX2Sedgl/y8Piub9jiLPtKW4r8GlpE+/EB+ug0Sa?=
+ =?us-ascii?Q?Mybs6Notk7RQ2rAeV+TEv7Sh3L/LBdi/nrGXy+MU4MDV1WdgpSiKLPIQ86sF?=
+ =?us-ascii?Q?5PDrfNhOyZhqtMOcI60rJ8h3kCrUh3q+kTnDHGa3xLfJUa/4yMcYCSTLjcjT?=
+ =?us-ascii?Q?hMiXHe6OxQchCBXx6JU1is2FvtxpYWPLCz+qQ/5mrztj3kMAfxZdsNxjadS1?=
+ =?us-ascii?Q?eIJFsh/HhenDze2piD+DAuTMQbPD5ekx0CqiTONnUHsi+5u8CmLfYzd0bpAS?=
+ =?us-ascii?Q?BfEe9alrC5aNk7Kb/eJiTfysr/Kj2Qz1UZpGMI4Knvtm2GhMioX+kOnz5Dbs?=
+ =?us-ascii?Q?J+DMhmPNXS7xbgGGn4TLHQy78UKDNWpOcTAVNitrh7/jILLTbfK0QtNjler7?=
+ =?us-ascii?Q?74mfK6AYlaZtzIH1sCKcZsfjzRVaDQhCsJHy9nwwyOvDktFVyGfzekfh7Xnw?=
+ =?us-ascii?Q?9tNaacMg9F7OTCt3XcDlX4BQMUitUmAMuVdWC0jATaCijp2c/xnpgtg32o+b?=
+ =?us-ascii?Q?AlrHbbU5jmxb5APYoEz4dwBGZvENsnhQ2jW7lfpO212gZinZ/ZpO1LET9CFB?=
+ =?us-ascii?Q?SGl5Pm6/0TXBnzeQIFObTj/qAIVu0DV/qU7lFdD+tWn0WHmuXRQzgnccx1o8?=
+ =?us-ascii?Q?SqtBtXIUNdCAQjS2uIbDP/dcgyVbBYufZgFMpXUv5ps4fCXz58ifuTifgaVB?=
+ =?us-ascii?Q?Vvhy03UEhBmdudnyuoVZYSBoL1E6DPHIdXLmyCCrsVxPAjsH/Eh8jH2ml3BD?=
+ =?us-ascii?Q?wrtv1BZeSoxl09f4IwQ+VtBudYdz9FUTO3iftF5AMTmjxzX7Ga8K4ysbEPUs?=
+ =?us-ascii?Q?16f3JiEKKQkgMXGRNv+gNkiS1+LU38lnPlpIteyIKadHCC2mNWoyi4Jn9AbF?=
+ =?us-ascii?Q?GoiRAHElSo+2pJcJsNDhTPlh04bU97H56BWj7H9azIdPTni0hJvA0IngTFAI?=
+ =?us-ascii?Q?kK5p9j7aA1Aw9gP+hvYCmKOU9ILYB04kTXY07Mmk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31964292-4b05-4514-e15a-08dcee7117a2
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 06:01:07.8344
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fct/sBL25m1EhqET3T5JtZX+QgjRyhX0ApXveWeyHlKgIOF4YE8UHJrCVr/9BrtCQEV2ihdbzBrAZjQeXn0AuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7258
 
-On Wed, Oct 16, 2024 at 09:53:58AM +0200, Krzysztof Kozlowski wrote:
-> On 15/10/2024 21:13, Akhil P Oommen wrote:
-> > On Mon, Oct 14, 2024 at 09:39:01AM +0200, Krzysztof Kozlowski wrote:
-> >> On Sat, Oct 12, 2024 at 01:59:29AM +0530, Akhil P Oommen wrote:
-> >>> Add a new schema which extends opp-v2 to support a new vendor specific
-> >>> property required for Adreno GPUs found in Qualcomm's SoCs. The new
-> >>> property called "qcom,opp-acd-level" carries a u32 value recommended
-> >>> for each opp needs to be shared to GMU during runtime.
-> >>>
-> >>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> >>> ---
-> >>>  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 84 ++++++++++++++++++++++
-> >>>  1 file changed, 84 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..9fb828e9da86
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> >>> @@ -0,0 +1,84 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Qualcomm Adreno compatible OPP supply
-> >>> +
-> >>> +description:
-> >>> +  Adreno GPUs present in Qualcomm's Snapdragon chipsets uses an OPP specific
-> >>> +  ACD related information tailored for the specific chipset. This binding
-> >>> +  provides the information needed to describe such a hardware value.
-> >>> +
-> >>> +maintainers:
-> >>> +  - Rob Clark <robdclark@gmail.com>
-> >>> +
-> >>> +allOf:
-> >>> +  - $ref: opp-v2-base.yaml#
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    const: operating-points-v2-adreno
-> >>> +
-> >>> +patternProperties:
-> >>> +  '^opp-?[0-9]+$':
-> >>> +    type: object
-> >>> +    additionalProperties: false
-> >>> +
-> >>> +    properties:
-> >>> +      opp-hz: true
-> >>> +
-> >>> +      opp-level: true
-> >>> +
-> >>> +      opp-peak-kBps: true
-> >>> +
-> >>> +      opp-supported-hw: true
-> >>> +
-> >>> +      qcom,opp-acd-level:
-> >>> +        description: |
-> >>> +          A positive value representing the acd level associated with this
-> >>
-> >> What is acd?
-> > 
-> > Adaptive Clock Distribution, a fancy name for clock throttling during voltage
-> > droop. I will update the description to capture this.
-> > 
-> >>
-> >>> +          OPP node. This value is shared to GMU during GPU wake up. It may
-> >>
-> >> What is GMU?
-> > 
-> > A co-processor which does power management for Adreno GPU.
+On Tue, Oct 15, 2024 at 04:36:40PM -0500, Mario Limonciello wrote:
+> From: Perry Yuan <Perry.Yuan@amd.com>
 > 
-> Everything, except obvious GPU, should be explained. GMU is not really
-> that obvious:
-> https://en.wikipedia.org/wiki/GMU
-
-Will do.
-
+> Introduces power management callbacks for the `amd_hfi` driver.
+> Specifically, the `suspend` and `resume` callbacks have been added
+> to handle the necessary operations during system low power states
+> and wake-up.
 > 
-> > 
-> >>
-> >>> +          not be present for some OPPs and GMU will disable ACD while
-> >>
-> >> acd or ACD?
-> > 
-> > should be uppercase everywhere in description.
-> > 
-> >>
-> >>> +          transitioning to that OPP.
-> >>> +        $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +
-> >>> +    required:
-> >>> +      - opp-hz
-> >>> +      - opp-level
-> >>> +
-> >>> +required:
-> >>> +  - compatible
-> >>> +
-> >>> +additionalProperties: false
-> >>> +
-> >>> +examples:
-> >>> +  - |
-> >>> +
-> >>
-> >> Drop blank line
-> >>
-> >>> +    #include <dt-bindings/power/qcom-rpmpd.h>
-> >>> +
-> >>> +    gpu_opp_table: opp-table {
-> >>> +        compatible = "operating-points-v2-adreno";
-> >>> +
-> >>> +        opp-550000000 {
-> >>> +                opp-hz = /bits/ 64 <550000000>;
-> >>> +                opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
-> >>> +                opp-peak-kBps = <6074219>;
-> >>> +                qcom,opp-acd-level = <0xc0285ffd>;
-> >>> +        };
-> >>> +
-> >>> +        opp-390000000 {
-> >>> +                opp-hz = /bits/ 64 <390000000>;
-> >>> +                opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
-> >>> +                opp-peak-kBps = <3000000>;
-> >>> +                qcom,opp-acd-level = <0xc0285ffd>;
-> >>
-> >> That's the same value used everywhere. What's the point? Just encode it
-> >> in the driver.
-> > 
-> > I will update this to keep a different value. In a real implmentation,
-> > these values may vary between OPPs. For eg:, please check the DT patch
-> > in this series:
-> > 
-> > https://patchwork.freedesktop.org/patch/619413/
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2->v3:
+>  * Whitespace (Ilpo)
+> ---
+>  drivers/platform/x86/amd/hfi/hfi.c | 33 ++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 > 
-> OK. I still have concerns that it is just some magic hex value. Which
-> looks exactly how downstream code. No explanation, no meaning: neither
-> in property description nor in actual value (at least I could not spot it).
-> 
-> And why this is hex? Unit of "level" is either some logical meaning,
-> like "high" or "low", or some unit, e.g. Hertz or kBps. None of them are
-> hex values in real world.
+> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
+> index d971ec1124af..79963c423d35 100644
+> --- a/drivers/platform/x86/amd/hfi/hfi.c
+> +++ b/drivers/platform/x86/amd/hfi/hfi.c
+> @@ -392,6 +392,38 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
+>  	return ret;
+>  }
+>  
+> +static int amd_hfi_pm_resume(struct device *dev)
+> +{
+> +	int ret, cpu;
+> +
+> +	for_each_present_cpu(cpu) {
 
-This value (which is identified after characterization) encodes a voltage
-threshold for the ACD hardware and few other knobs required for each OPP.
-The intepretation of the bitfields changes between SoCs.
+Shouldn't this be for_each_online_cpu() in light of the hotplug
+notifier callbacks implemented in Patch 8?
 
-Another point is that ACD is a requirement for higher GPU frequencies to
-meet the hw spec. So OPP dt node is the natural place to keep this info,
-which also helps to share this data between different OS.
+> +		ret = amd_hfi_set_state(cpu, true);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to enable workload class config: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int amd_hfi_pm_suspend(struct device *dev)
+> +{
+> +	int ret, cpu;
+> +
+> +	for_each_present_cpu(cpu) {
 
--Akhil
+Ditto..
 
-> 
-> Best regards,
-> Krzysztof
-> 
+> +		ret = amd_hfi_set_state(cpu, false);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to disable workload class config: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(amd_hfi_pm_ops, amd_hfi_pm_suspend, amd_hfi_pm_resume);
+> +
+>  static const struct acpi_device_id amd_hfi_platform_match[] = {
+>  	{ "AMDI0104", 0},
+>  	{ }
+> @@ -438,6 +470,7 @@ static struct platform_driver amd_hfi_driver = {
+>  	.driver = {
+>  		.name = AMD_HFI_DRIVER,
+>  		.owner = THIS_MODULE,
+> +		.pm = &amd_hfi_pm_ops,
+>  		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
+>  	},
+>  	.probe = amd_hfi_probe,
+> -- 
+> 2.43.0
+
+--
+Thanks and Regards
+gautham.
 
