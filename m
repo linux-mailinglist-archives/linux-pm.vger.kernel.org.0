@@ -1,160 +1,130 @@
-Return-Path: <linux-pm+bounces-15814-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15818-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8F0E9A1639
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 01:45:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D8369A16BF
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 02:17:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13DB01C21E04
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2024 23:45:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4319E284E55
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 00:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90CF81D4326;
-	Wed, 16 Oct 2024 23:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B88CC1D540;
+	Thu, 17 Oct 2024 00:17:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="U8r9mTNo"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="o+GtQB78"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4804282FA;
-	Wed, 16 Oct 2024 23:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9338494
+	for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 00:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729122329; cv=none; b=iedt/Zy8DB7WbTgI4SxdPU7AgfHP6Zodspdt/I3ZfWO8gCPspVv+s5UQlSZiTYHsN7YemKg5rkZahSEhIv0MYuwqonDSY/3i3oIgxApq+F2dw2XnFlH6Evkv86+Iugt9xCUpB+tfelB65qE+N5qwiJqG5kFyLmqYgFsjzuQOAVE=
+	t=1729124228; cv=none; b=NLTNHHpH2hh5z6SA/srBwYyfXt2Kf3B3/nz5Ltz1nTNRcrzRCT8vJzpqJxlu7OTjY/SFWBcUZLY3eztZ3FiqOgugdNfgd4EBzCWp+OvKPqWv13vbe1AF0CKn6C9oF6zwt4/jRk4ZJP1YZS+ciuCRI8DK5H/XX6YS0bbU501yB1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729122329; c=relaxed/simple;
-	bh=rOMnaHFbyrqkDa3kCV5cdJC9ZJsY+QGyGyxmU8Hs3fs=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dJwvB5GzGPvO4TzGIpjLHcnY7R0MWd/5e/6g4uGbXq2j+j3jvGCwUWO7J3NG3ND9DacCE9jaX0oa5Yadd10h6DUqVLN9IJL44XuXnwZcIc1Dmv1Gx4EbFu9ru5EU3toz4X5nGb8nlPx+ox/+6giXo6xTAb4S2rS05qwLKBnS95A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=U8r9mTNo; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GIFv6J001733;
-	Wed, 16 Oct 2024 23:45:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=FQhUz+ODVS1Mtj88e10qGXt5
-	mYqZRtinSKk8mKi1F+s=; b=U8r9mTNoVCTaX1/2abgmh3pNN4WpCxK0sdUFW/oB
-	sNX5wBIjq13ZXDwTELI6uPSaDItbHT1qrm92Vbk4xAIHkkAvLhC/1ICuzADM0N+1
-	L9aahHfyr47HXhwXGSvqZHYcjqyjcxlXBJwfBqcOa3ND2ZwYFLxhjkPafmNV7v+z
-	r8cd6DfUTsoBGUfEZtcFdX4aOT81rFB7b3QSVCA2IGjgpz1vOPQtQ0QhbajOjNOA
-	6vucz+poZa8FYXbKlp2a40bn1YBW837slTBrSgNK8tAI39s4vq4Hj+4A9u1ePsOI
-	Eq2MYH++iqK1vIXogQLGwCdmh1P52Ww5bWUmnI6peAUaQg==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42ajm58nks-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Oct 2024 23:45:17 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49GNjGQi031586
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Oct 2024 23:45:16 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 16 Oct 2024 16:45:16 -0700
-Date: Wed, 16 Oct 2024 16:45:15 -0700
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
-        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>,
-        <pierre.gondois@arm.com>, <vincent.guittot@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH V5 1/1] cpufreq: scmi: Register for limit change
- notifications
-Message-ID: <20241016234514.GA17864@hu-mdtipton-lv.qualcomm.com>
-References: <20240603192654.2167620-1-quic_sibis@quicinc.com>
- <20240603192654.2167620-2-quic_sibis@quicinc.com>
+	s=arc-20240116; t=1729124228; c=relaxed/simple;
+	bh=E+7u6KTQexlJ6wdE3PWO5eMFpGPF18HoZLoHSCNHy+M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NFV1yxX1dIiJWEYz4XvcKpP6PN3VrAoR7eugX6EKkGTvuRcuTrXPMtdLR7t5vMCWHS7Vg5D1cTa2T//uObEx6NLI+Bo6kOSOWm70zfegllg3hgqybDBpNH4FrGNSgjLyThkxDojAsF9TdGpYNTFPO4C828QXxc7+khEYV2bNzfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=o+GtQB78; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9979A2C0517;
+	Thu, 17 Oct 2024 13:16:57 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1729124217;
+	bh=5yDFp/uQn/srePUknm1E5IBHytrSxM87aWnogIJlLxo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=o+GtQB78608usSf9v0Q/rYqIFcdipEpfmxCb1+pveLoF6U06tFZsuGYPz403nonXT
+	 bwiiatkZheF0R5eX0vnZs16DP57bqyqx+OoDnsev1XTl3Xr31gTQlon6QgkxjZMQUk
+	 PGV1PW8QP7+id/IWJYkczcGaYCOJiuV0YHEAUmpG1fAEOBbwCjMAkP8wNSaALcph0O
+	 gIo9XbdYxDK3vtuAJ4PKr5COHSiyVeVM3165b799331rWHXuZqERJMUd7OoO071yO5
+	 oFSCAfi+l/2O1w8zAIrs+UEuLJ/ngIbMhjt+u3vHozJn2udxO5lJ0wBwVp1b8NZ/YV
+	 1nlyQCfIF9laA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B671057790000>; Thu, 17 Oct 2024 13:16:57 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 2E93813EE32;
+	Thu, 17 Oct 2024 13:16:57 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 274E02807F7; Thu, 17 Oct 2024 13:16:57 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	lee@kernel.org,
+	sre@kernel.org,
+	tsbogend@alpha.franken.de,
+	markus.stockhausen@gmx.de
+Cc: linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v7 0/6] RTL9300 support for reboot and i2c
+Date: Thu, 17 Oct 2024 13:16:47 +1300
+Message-ID: <20241017001653.178399-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240603192654.2167620-2-quic_sibis@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7_7Zy98waBdmcNbs49DXZjcvcob6oB9b
-X-Proofpoint-ORIG-GUID: 7_7Zy98waBdmcNbs49DXZjcvcob6oB9b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- mlxscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 suspectscore=0 clxscore=1011 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410160152
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=67105779 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=DAUX931o1VcA:10 a=bFzpBXSQfSLquZs-7NAA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Tue, Jun 04, 2024 at 12:56:54AM +0530, Sibi Sankar wrote:
-> Register for limit change notifications if supported and use the throttled
-> frequency from the notification to apply HW pressure.
-> 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
-> 
-> v5:
-> * Drop patch 1 and use pm_qos to update constraints. [Vincent]
-> * Use sdev instead of cpu_dev in dev_warn. [Christian]
-> * Pass sdev directly through private data. [Christian]
-> * Dropping Rb's for now.
-> 
->  drivers/cpufreq/scmi-cpufreq.c | 36 ++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+As requested I've combined my two series into a single one to provide som=
+e
+better context for reviewers. I'm not sure which trees the patches should=
+ go in
+via. The first two have already been applied by Sebastian (thanks). The b=
+inding
+and dts changes (patches 3-5) would make sense to go in via linux-mips wi=
+th
+acks from the dt maintainers and the driver itself (patch 6) can go via
+linux-i2c.
 
-Tested-by: Mike Tipton <quic_mdtipton@quicinc.com>
+--
+2.46.1
 
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index b87fd127aa43..0edfa55d8e49 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -16,6 +16,7 @@
->  #include <linux/export.h>
->  #include <linux/module.h>
->  #include <linux/pm_opp.h>
-> +#include <linux/pm_qos.h>
->  #include <linux/slab.h>
->  #include <linux/scmi_protocol.h>
->  #include <linux/types.h>
-> @@ -25,7 +26,9 @@ struct scmi_data {
->  	int domain_id;
->  	int nr_opp;
->  	struct device *cpu_dev;
-> +	struct cpufreq_policy *policy;
->  	cpumask_var_t opp_shared_cpus;
-> +	struct notifier_block limit_notify_nb;
->  };
->  
->  static struct scmi_protocol_handle *ph;
-> @@ -174,6 +177,25 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
->  	NULL,
->  };
->  
-> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
-> +{
-> +	struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
-> +	struct scmi_perf_limits_report *limit_notify = data;
-> +	struct cpufreq_policy *policy = priv->policy;
-> +	unsigned int limit_freq_khz;
-> +	int ret;
-> +
-> +	limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
-> +
-> +	policy->max = clamp(limit_freq_khz, policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
-> +
-> +	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
-> +	if (ret < 0)
-> +		pr_warn("failed to update freq constraint: %d\n", ret);
+Chris Packham (6):
+  dt-bindings: reset: syscon-reboot: Add reg property
+  power: reset: syscon-reboot: Accept reg property
+  dt-bindings: mfd: Add Realtek RTL9300 switch peripherals
+  mips: dts: realtek: Add syscon-reboot node
+  mips: dts: realtek: Add I2C controllers
+  i2c: Add driver for the RTL9300 I2C controller
 
-This would be better as a dev_warn() with the cpu device. Other than
-that, looks good to me.
+ .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  69 +++
+ .../bindings/mfd/realtek,rtl9301-switch.yaml  | 114 +++++
+ .../bindings/power/reset/syscon-reboot.yaml   |  11 +-
+ MAINTAINERS                                   |   7 +
+ .../cameo-rtl9302c-2x-rtl8224-2xge.dts        |   2 +-
+ arch/mips/boot/dts/realtek/rtl9302c.dtsi      |  15 +
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  29 ++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-rtl9300.c              | 425 ++++++++++++++++++
+ drivers/power/reset/syscon-reboot.c           |   3 +-
+ 11 files changed, 683 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9301=
+-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/realtek,rtl9301=
+-switch.yaml
+ create mode 100644 arch/mips/boot/dts/realtek/rtl9302c.dtsi
+ create mode 100644 drivers/i2c/busses/i2c-rtl9300.c
+
+--=20
+2.47.0
+
 
