@@ -1,247 +1,346 @@
-Return-Path: <linux-pm+bounces-15901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D759B9A2C48
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 20:37:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B30299A2D53
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 21:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 072141C20D13
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 18:37:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38D0C1F2860E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 19:08:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C39F18452C;
-	Thu, 17 Oct 2024 18:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0535D21BAFB;
+	Thu, 17 Oct 2024 19:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="OIP8Hums";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="zPbEKvqw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyrgnER7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD15C18C919;
-	Thu, 17 Oct 2024 18:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729190261; cv=fail; b=NQKAjh66gAwIxLIX/oh+RctKmYdvzZOr3dwMs+NpMxSQ/APCiK6dVWrvacSa1ZptYS/tnHQ3wHEhx0wl5n6Rre7P6nFwkpOzhJcnyz3oWTknYHdMhbp2YEBM5TnJ1NJF9qWEeyz//EvwBrKK7GG3HtL8gNDIf2Z9chGMm6OjdBU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729190261; c=relaxed/simple;
-	bh=cCnSwD+dpd2RqxEfDA3u80lPWG8q+up2FrQkKm6wu80=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=tPHZVAS40LcrxLLNzZYerOMRPmgSbXiHzf2Cmp3EUHs8OYKXwoVKBijWKz7wkjxo9LHnP3ob/tw9CubTB38nrCaAoiJxFzfNFaAvBvfb+iUZ5lEeADWgNx86buWQfEyguo4/NTlcZ+OPYUBAeEs38jcHfKfALMLfkRklaLEgVg4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=OIP8Hums; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=zPbEKvqw; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBerC025106;
-	Thu, 17 Oct 2024 18:36:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=tz8HlIv4wJH89jeX5N
-	0hzYF30lT1+Br1sUBnKfTnoB0=; b=OIP8HumsGXqTMTP6zVo95CJesul1IXqfm5
-	LIpesgvcnHBbvwlHnpdNJxSCOfy8kTWhwxrVZ7/5o9olXxKrC9uJhUWb3RB1TTqe
-	f0T6buW+yrwuVSyrTjx+CXccyVCsjEiDHZVT5CVDu0qczt0CmJFCeiSrhGfsJ8uj
-	QvglurmqgxRzYX/bVmbS0yDLisP8TeMaIAHNVyGc8S0R5/cj5NStCVtkYwZMVsyT
-	lBqllmpsBsBDqVarefc0k23TjQk+lEeNqW1P7wdffONNeiM405ChaaEdIALra2p5
-	8WDaepOqye23wepG35kj7UwG0W1bJ5c+p1pZjYNzMq7/DaogZgGA==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427g1apxqr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 18:36:51 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HH26CT026314;
-	Thu, 17 Oct 2024 18:36:50 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2049.outbound.protection.outlook.com [104.47.56.49])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fjamwmp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 18:36:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CiTfU+i8sBJWbfjAAX/48rlmUWklfari1C3xDDjgvjgsZeffLu+Tbjy/ZiRm3Jm5m05roBHL2Jkf5pnGQ+3tlyg1H4yFxlIFlrwrSB/6HQEf+jYi3ASD8rje+DbvschAk8ux62lF0K16dBN5Qg5GBXPA8pCbd0+snFIodeMUYg3OUAYlfIVt29YwjGi4rcwdp29HEJ4Xp1OmRpp05idiUgapTloNRSzXrjOEx50LnsozZq5dbkc4M+sVOfC/96umSMnEVgiH1y0h2bWfIUGDeTzdYMTZPIuYpLOWvbOmvKqJvzmAWZ/VqLGVLKE9bULxH2CMhhJIP/pbjl9nvSAwdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tz8HlIv4wJH89jeX5N0hzYF30lT1+Br1sUBnKfTnoB0=;
- b=Z3VWQ7R/nyRqKP1wqrGY3MdzzlHUucgdgkGmE/IvAVUdxOGTq7iHYBySe6vVKzey8R5nmSz0sBuVgpdOUPy91hkqL5LxAc/7tYJMO7mFtVWTop0w3JNK6n/4P2PLENs7Igv+lTkbQckJ6ol3+plww3ZQC/RlM+kg27l8lC7DD0VTuXxmADBLp1CUeY815iAmkEvZeYYj0/TwekOj/bC+SGUrbmG7fGiWcKvhzQ0WclLUX7kSK9RcuNMn4+BVKkrdToTKCn2dtxN34iVOrlZNwDafSGiC5HDeMIzjEUZOr0nGb3MWLOJWpU8bq+exvhJNrw0AEU8UKBXEWDVB6jjGFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159061E0DC3;
+	Thu, 17 Oct 2024 19:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729192125; cv=none; b=EfFOpDegz0WgvQvtQkVtIsasVF2dNbmocUZB+/nBWXKuiLJdBr3MeOIZzfRJWGT9FUMCKIJeYVXgVIeRS8xHOVrRUOKxslraNQ1BMkGI9xHKr2s9uIXjmkAJTutnnF/M/0Gj0fugBY33sNj5U57SArSYuY4DSxjf0yKT/2kw+po=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729192125; c=relaxed/simple;
+	bh=OGIEndB9wShg9BStQXMdBRJ7aaSCXzA/2FCTr3qyVEU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R6ij0FVVyPPFpZLGiuHaROpkJIV1ntzNtzuImF0/tN4hy9rN4dOTHxpBvIag1h2OXfGS5hANwrpB87xU8U/zvzPVw8x5hxPsFZqnPHwEr0ufFq9GoDemOxQSIfYII28ZLJO2TO5Yz2X7zhjGgVZGEJkCAWZowPkytfeXd8z0mlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyrgnER7; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4315baec69eso9088385e9.2;
+        Thu, 17 Oct 2024 12:08:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tz8HlIv4wJH89jeX5N0hzYF30lT1+Br1sUBnKfTnoB0=;
- b=zPbEKvqwKd0ijLLf2sWIi4wHHJsE+nii6X93dYz6ZWqbaq4c0uJrevVDI7vmlazC5Yr7rOXyrTZiQGENvMKHYtns9ClbYSFGkrxifJsxa4fLuc8hoE9h5dMLI9iIcOe6fvGQ2+cwVvDd04qyekd+URQ6rpZIYrvqAqeHFoYvWmU=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by DS7PR10MB7323.namprd10.prod.outlook.com (2603:10b6:8:ec::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8048.26; Thu, 17 Oct 2024 18:36:47 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::25a9:32c2:a7b0:de9e]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::25a9:32c2:a7b0:de9e%4]) with mapi id 15.20.8069.019; Thu, 17 Oct 2024
- 18:36:46 +0000
-References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
- <20240925232425.2763385-2-ankur.a.arora@oracle.com>
- <Zw5aPAuVi5sxdN5-@arm.com>
- <086081ed-e2a8-508d-863c-21f2ff7c5490@gentwo.org>
- <Zw6dZ7HxvcHJaDgm@arm.com>
- <1e56e83e-83b3-d4fd-67a8-0bc89f3e3d20@gentwo.org>
- <Zw6o_OyhzYd6hfjZ@arm.com> <87jze9rq15.fsf@oracle.com>
- <2c232dc6-6a13-e34b-bdcc-691c966796d4@gentwo.org>
- <87frowr0fo.fsf@oracle.com>
- <a07fb08b-d9d0-c9cc-8e03-3857d0adffdf@gentwo.org>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>,
-        Catalin Marinas
- <catalin.marinas@arm.com>, linux-pm@vger.kernel.org,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
-        wanpengli@tencent.com, vkuznets@redhat.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
-        lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
-        mtosatti@redhat.com, sudeep.holla@arm.com, misono.tomohiro@fujitsu.com,
-        maobibo@loongson.cn, joao.m.martins@oracle.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
- smp_cond_load_relaxed()
-In-reply-to: <a07fb08b-d9d0-c9cc-8e03-3857d0adffdf@gentwo.org>
-Date: Thu, 17 Oct 2024 11:36:45 -0700
-Message-ID: <87zfn2o9tu.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4P222CA0004.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:114::9) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+        d=gmail.com; s=20230601; t=1729192122; x=1729796922; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Da4xfni/iRqV29H1FugSQneULVwbsYh57qiyb47G3eQ=;
+        b=RyrgnER73kklk+3cReUYi7Ctd9hrA68M0yJCFsqUotPp79scFBvdePujcJii5+w31d
+         dM4QnNbLByPYtjzp73+HpZ44Cc6+7JFORoOOZciiwVfiaJMrM6E1lm7Mu6NDHNZROT8r
+         m4h8a1Nh5UfoEvZaAZ4aXIwnXPRbJA3o7c4FanLChtChgKBPfmoEGJRVVL3yN2KtwtIY
+         P0upwFzfL/IPjskZFjodyy+QC4F4HmcPVtcbaq/GdI/0zODT3+O53ESC067YF+t7Q5Nj
+         hHC06v8fhxRVQMMRx0VNmTFO8uzy8PiR4Vj1dulyUzeJJLXPXoNgBT/NM2v1HDXWbH1I
+         4mWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729192122; x=1729796922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Da4xfni/iRqV29H1FugSQneULVwbsYh57qiyb47G3eQ=;
+        b=YpzC0HqpEvhTZr6d+bi5Sbpq8QaLPqMYhAzRDTofXMfmpOzHU/+1ZJ9cGDXLt2Dv+a
+         268jZRj1GnUt5BmowcIJ3MVajR6SImCejwpqOsgPWENG+XPi01NlHH+eqx2DzTTzrQfA
+         cp8sCo8FK0AiiyqyVxuVUCvTRvgE2aXg8KhMG27TDBtec7roEJcoVXQXRj/uTO4hli4d
+         6BbfBWv7hv0By6EDtNusQFBpeW1EQU9Xd/BBvQThmpDa33u7CmkqLhqPbyLPyHxpKf96
+         Nh3q1n9VVc8UO7h5O7eUOievjp7S5injm304bpdF37JVRqeSHEsZyO7nFucH9wY9g6Gy
+         FKjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6DD3fC674FkmdiDNc4IFEHhwZVIulCzKe9z4OkGXgKHKNDbJxTB7mHHnN2NFHCKxc1tgaThUe2t0=@vger.kernel.org, AJvYcCXgiWbYHvdSFts2tP6nfL6MK5OyxHuBIaJ9VB3rU0an1iHdGCzWCpdiB1j/I95WQ5AK3xZbbM4gXUaZyqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqL2qXT/NUa4ycPE44QoeIPIowW7NTSerj5ntrMrB/V8goWrfG
+	s4WC1GYEp30+cZ4l+1urT1F9DffvpdFVR0pjVcR9JHgp1YHPniIK
+X-Google-Smtp-Source: AGHT+IGCE6QJnDZjgbHzy+3T/i4OVG/RXpdVfSj/U8JdIeLQ+Tpp+F0D4gJT7lqUBM/+GtdPOaS33w==
+X-Received: by 2002:a05:600c:5023:b0:431:542d:2592 with SMTP id 5b1f17b1804b1-431542d2d1fmr42046435e9.27.1729192121917;
+        Thu, 17 Oct 2024 12:08:41 -0700 (PDT)
+Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-37d7fc27ed9sm8035311f8f.97.2024.10.17.12.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2024 12:08:41 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	upstream@airoha.com
+Cc: Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v2] cpufreq: airoha: Add EN7581 Cpufreq SMC driver
+Date: Thu, 17 Oct 2024 21:07:49 +0200
+Message-ID: <20241017190809.16942-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|DS7PR10MB7323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9ed3391a-a837-4e65-a06f-08dceedaa7d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?bTJlXQT2WSaGwtBRcB18Fmeyg72kHpbq0uzG204YR10cbW2KhiHbxwyBQEU8?=
- =?us-ascii?Q?HqwGquBznwfxDSCc2mawOSKu9+4YwPOGZorIHUpzK6oKBtthHZIr4EhbrHFp?=
- =?us-ascii?Q?Fj1D70OazQr1IDjwvWPoiPLR/b7S9Y7F0lkBW/fzlQUJbLHLZdoS6wKGyuEJ?=
- =?us-ascii?Q?8AhVZE4aMpTu/2fLY0eNm5/Q0TD+od7jLWJWHTc1iTZmBSK+2nk2RMG6IdwF?=
- =?us-ascii?Q?Fpmwtqmc5EXVXcQ/17Du9aqIHTUO/9OdzgjU8kE9ZsU6O+WMMWmlKswkF62R?=
- =?us-ascii?Q?sDlrs2x1sqnwuMvCqY8J/Qkd2lZm2rzhKbgkvA2Yxtbrl5dPBjR/7RJCadO/?=
- =?us-ascii?Q?QWY5mLu44Vs+x4qWhaZwqxMtSu2mzrQn7/oW4dMWDjd9UWdxxE70apW9FhlV?=
- =?us-ascii?Q?rJ6cDL/4dCxaCywhNUQx6jlpvMWVwTRx8FOVTQTu/a0SmGyXE8JkGTAJgW/e?=
- =?us-ascii?Q?BJqFYvwtEoiH8OgEEuQLXned01VW/ZiDz+shF8pW2sg4vOoyA+nPaGrT2PR9?=
- =?us-ascii?Q?6StRXarJcQdClOfAu/NlpnOvfqPWr6vU/ct1gCzRCmWZK4q6ClALMLdJ2F6G?=
- =?us-ascii?Q?4oDV4HeWEm7S+D8jVzgP5wl8Jb7teaXz7xO1cb8rqGESwzWb8esqUuhzIZGt?=
- =?us-ascii?Q?6j1MdelN0+wUlfEDSVOZ0EQ0ebnDzQ3paE6pFXdU5V2CtM8dwMuiP4HTLmuR?=
- =?us-ascii?Q?GzISKTAYgOo8StUE3e8+cYKsbBi7RogJ4aynACcY/WWrQP5+bop6YMmnp+tX?=
- =?us-ascii?Q?VohsTNk8HS/+NqBsKsu82qXuvet1WcBX2H8NCtHKLTeEdPL/e4m7j8x69dOT?=
- =?us-ascii?Q?V1I+VC4pDYCLl9hNLSGCkVBT+xka/kZekx2m07FO3wN9GaIch+USPpFjGxfh?=
- =?us-ascii?Q?h2tCpAAgFW5BQqwwvtkR5gPbqeocDgo0Ng5izdbWIOAymEY8PdBPZHWH10FK?=
- =?us-ascii?Q?S9ElZyHSCDDOofFAy0o/fygAqj3jZJu3fP+kJ/vVPzn6Ym892pUUAUIK5XD7?=
- =?us-ascii?Q?CBxq+SfrfRE/HbAgYfs4pXQ5jc1WkaPxhC9uPaen/x6j9tSvwykhiN8wF3EZ?=
- =?us-ascii?Q?kHdRzXOmVHNKGQjhQxeuvmtkQ51TblQ+T1pcdwBpDSPujEBZZ46L4/TMpJBw?=
- =?us-ascii?Q?xxiFTwuTBK3fAAln8vc9cyuB0dqe+fUa8HHR/Nzu2D8IegMCuWLfFVXj5Gax?=
- =?us-ascii?Q?fwAtVCiF3irNGbZPQbvd4w6KihsIC8tjeWL1eoHo3lnMjNtxETccuM6DnjV1?=
- =?us-ascii?Q?FrV8fiOz2S3AfjEKF2oWviY6mnFcXfTjiCx7vRckcIcBMtoM/EzFmZ+x8WFn?=
- =?us-ascii?Q?+/fKatZY9OqcNTK2/6yMCxaL?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NsVrVQolV5Kh+UPSTwyWLbIB7wbERJ4nvJR6yo0esuzSvs06Mse9xkR+4MzK?=
- =?us-ascii?Q?yRenY7aYvWjsjt17UCSS9gH4Iuef2NIzzvRwbEKlc0Z/4yig/elVLyP3WZ3P?=
- =?us-ascii?Q?N+TGc7wlYB+IfMe57j2xqFJfyNaby6q6lq8zrWhoBYBsEML5EHjMykrAyr6a?=
- =?us-ascii?Q?hpBXo2bwf3DkMztEqvE9zEIEkr7ll8iuDQLisz20/igLCV6CJp51jlJ3jarz?=
- =?us-ascii?Q?cZFv8Qr3veEPrHs+SQt7lPfaN1FVX4H6hTloBr+OPmF9dt8DZ1Fraru3rVQE?=
- =?us-ascii?Q?lfJvCbZBnffWUvTx6zIRFJ1L9R2AUH1RyCXEWacb+j6qqwGT8NeJrKLM9WR/?=
- =?us-ascii?Q?k94y2k/dPRKe1oOnZbGb2kwRzsNTKLRe2JRGtJDgkcTcrLHF6Ok1PKMFmlpM?=
- =?us-ascii?Q?Jwl3tvkjzU3+gyLeptCz5EDIJBIf898/2CuAMwvgafyUyKXSykkZzawm3a8Y?=
- =?us-ascii?Q?eKKJbO7TPi6x8IClXvBJM75VMEfPPcQofBFkDpnxDtFNLyu5LO3tYqY+bW1D?=
- =?us-ascii?Q?03izqo/YBhooQ2zgRl6uHFjmaxWvFtSb6kn+UOsELPYc3zJ+DT6AKyQnrzqO?=
- =?us-ascii?Q?zB34HHWVJBsKfRmouI+ln4x3ozVKzKj84mkKa8IODOb6eX7fg++GMTMReHrL?=
- =?us-ascii?Q?mgf447I2WJeFg/c9piDqDWyoTlg4KID05f/BiQmTTLpzC0T6ISfg9W7o0iIt?=
- =?us-ascii?Q?sgSIIoTuKqsbD0cmXhn7UZoNd/C/3C92ME4iQ0JS6pqz/+CzfWCwcfoRyT7p?=
- =?us-ascii?Q?Z4alRtMWB9auuUYf7yESmds0xpeVMuRnOcc8u/5i1+YZHwGlEwpu5/1A7rfh?=
- =?us-ascii?Q?i1lxhRFC7ZcVr82EA3vp9/YfLgCM9juAlRzPpWrRSGvNrX4Pp99VADZIN9YU?=
- =?us-ascii?Q?F+g82yywBwt/4Gb87QimCPxRoBNiHcDmBexe0lXHK+7yyoD3mAfteT/sR/V6?=
- =?us-ascii?Q?LK1RBovbrMVr3rhtha9Cxn2O/lpxp482dgzMZQs0kvT6mOnG7bqYcyNokRhN?=
- =?us-ascii?Q?tV4y0SCA7vSM09D4wTt3Q6gq6ZhzTiBbOwa8oFFtxWf7VEhLNTQ6mPb4HVTL?=
- =?us-ascii?Q?xJpzAWee6z4AAVUZf4az7uYPOor3WPTCKZ5Y8U1XzquZqHaVMJR7fPfV4q3u?=
- =?us-ascii?Q?7Tj5zkGu1uE2EUNKWPC0OxgsEg8gHND0H/zK22sZIw2lnZztKYF1v2eOtfxa?=
- =?us-ascii?Q?BSdpojloPbViX2WelHfpu0++GP+IQUWgq+hAC2gMzTnj8EUfTNdPjN74Xr43?=
- =?us-ascii?Q?havj0V5bxxf1XRvqS7GfzenZavEOvjXRbVye4sdFmClkslGcK35Puddz5vru?=
- =?us-ascii?Q?gYg5FYh3Nb2MISrbzo4H+Ptd8kG9VJ58blwj1rbhzNfIHtIiaFGBCGLXkrfz?=
- =?us-ascii?Q?SaClz1JKhfrBj0dps3VIbloz8FK0s2VdCC2QVXXZV0aRL1Vn/6ErrOqazNWI?=
- =?us-ascii?Q?cKOiusXO356kXX1eQftwAYGfHqY6GGAcc7m0aYm5Ryf+c+pWiOcx1/jowT/F?=
- =?us-ascii?Q?YfGrXQX9wR3TxsYoNQDumAlOXCfKuDeGX4B+AQNcdHIYN2v/OuLu4Iix29TO?=
- =?us-ascii?Q?TLSMnKgT72Co0RtgVWmVV1Y39tOJICVIu3r5Gz/H?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	IlsDOfvRWJipysdp3sRqgso84o8Rb9/boos+V3YWkbjV5F1hVdXh0Vejyg94tt0BEwulQ+OAWjSZH/QccH4+l6sUffWebhwJMksI91uZ+AmTnQwJpYNF5ddQMMNsddsFHK645pgcTk6wL1xLMVlB2eb+zoZ1n59LrXMsSNsXxI/5YDJhuuQ5V2NBal5vfHANDwuMr328syf1FxiWD+zrqi307Oxi7UcNfMUQ8Vs+kWzPXu5cz+nbby9cjN16qWmxPDPaw8OhGPi4b7eUEcAIkv+ZsUT4RVFwE7O7PqJf+4JJpoHH3aCI3rtNv8+QnTQv1BxKQurTVWrHK/CqIUblw4KVTPIiY2IGWwff83p8Z0aTtBHfwEL/pbMAxOSMzcr+R0/nJ9FeGonFTLePGbWefFkojjtrPImVg8TdAIrRnQndI4rlZbdZLxy2bwFWHGzi0yat1P1buVgFbzsb0/h8LFLQ5Ej4lUMCjKSRw7V4mcRAXHJWw3O21wFM3hU+qrWMouuZDlucBPx9SDCy4KMknrUKIZFNFKO2lL9xGT5mGuaEJ2Slot+DS+TBSF4ARDO0iF9wp5FCXvsMynFpEuYcLBM4Uur52RBvS1sRiFjDXNo=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ed3391a-a837-4e65-a06f-08dceedaa7d0
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 18:36:46.6824
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eZcnWOI+dOtiJpsyUNrpm2hV9eSnEIHqYA40fZOuyyfG1oYD8N6sYVovqcg7u4i+Tf3ICiywSIZc7hGNgmtlcG11+UncrMTG3gX7BQS/m8Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7323
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-17_21,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
- bulkscore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410170126
-X-Proofpoint-GUID: UvNgXcL609wtTSNPwP2xmtS7fWneHPCe
-X-Proofpoint-ORIG-GUID: UvNgXcL609wtTSNPwP2xmtS7fWneHPCe
+Content-Transfer-Encoding: 8bit
 
+Add simple Cpufreq driver for Airoha EN7581 SoC that control CPU
+frequency scaling with SMC APIs.
 
-Christoph Lameter (Ampere) <cl@gentwo.org> writes:
+All CPU share the same frequency and can't be controlled independently.
+Current shared CPU frequency is returned by the related SMC command.
 
-> On Wed, 16 Oct 2024, Ankur Arora wrote:
->
->> > The other core will wake our core up by sending an IPI. The IPI will
->> > invoke a scheduler function on our core and the WFE will continue.
->>
->> Why? The target core is not sleeping. It is *polling* on a memory
->> address (on arm64, via LDXR; WFE). Ergo an IPI is not needed to tell
->> it that a need-resched bit is set.
->
-> The IPI is sent to interrupt the process that is not sleeping. This is
-> done so the busy processor can reschedule the currently running process
-> and respond to the event.
+Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
+driver is needed with OPP v2 nodes declared in DTS.
 
-The scheduler treats idle specially (if the architecture defines
-TIF_POLLING_NRFLAG). There's also the sched_wake_idle_without_ipi
-tracepoint for this path.
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+Changes v2:
+- Fix kernel bot error with missing slab.h and bitfield.h header
+- Limit COMPILE_TEST to ARM64 due to smcc 1.2
 
-$ sudo perf stat -e sched:sched_wake_idle_without_ipi perf bench sched pipe
-# Running 'sched/pipe' benchmark:
-# Executed 1000000 pipe operations between two processes
+ drivers/cpufreq/Kconfig.arm          |   8 ++
+ drivers/cpufreq/Makefile             |   1 +
+ drivers/cpufreq/airoha-cpufreq.c     | 183 +++++++++++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+ 4 files changed, 194 insertions(+)
+ create mode 100644 drivers/cpufreq/airoha-cpufreq.c
 
-     Total time: 5.173 [sec]
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 5f7e13e60c80..338fc54276f2 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -15,6 +15,14 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called sun50i-cpufreq-nvmem.
+ 
++config ARM_AIROHA_SOC_CPUFREQ
++	tristate "Airoha EN7581 SoC CPUFreq support"
++	depends on ARCH_AIROHA || (COMPILE_TEST && ARM64)
++	select PM_OPP
++	default ARCH_AIROHA
++	help
++	  This adds the CPUFreq driver for Airoha EN7581 SoCs.
++
+ config ARM_APPLE_SOC_CPUFREQ
+ 	tristate "Apple Silicon SoC CPUFreq support"
+ 	depends on ARCH_APPLE || (COMPILE_TEST && 64BIT)
+diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+index 0f184031dd12..8e5a37a95d36 100644
+--- a/drivers/cpufreq/Makefile
++++ b/drivers/cpufreq/Makefile
+@@ -52,6 +52,7 @@ obj-$(CONFIG_X86_AMD_FREQ_SENSITIVITY)	+= amd_freq_sensitivity.o
+ 
+ ##################################################################################
+ # ARM SoC drivers
++obj-$(CONFIG_ARM_AIROHA_SOC_CPUFREQ)	+= airoha-cpufreq.o
+ obj-$(CONFIG_ARM_APPLE_SOC_CPUFREQ)	+= apple-soc-cpufreq.o
+ obj-$(CONFIG_ARM_ARMADA_37XX_CPUFREQ)	+= armada-37xx-cpufreq.o
+ obj-$(CONFIG_ARM_ARMADA_8K_CPUFREQ)	+= armada-8k-cpufreq.o
+diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
+new file mode 100644
+index 000000000000..f8bbc142837c
+--- /dev/null
++++ b/drivers/cpufreq/airoha-cpufreq.c
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bitfield.h>
++#include <linux/cpufreq.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/arm-smccc.h>
++
++#define AIROHA_SIP_AVS_HANDLE			0x82000301
++#define AIROHA_AVS_OP_BASE			0xddddddd0
++#define AIROHA_AVS_OP_MASK			GENMASK(1, 0)
++#define AIROHA_AVS_OP_FREQ_DYN_ADJ		(AIROHA_AVS_OP_BASE | \
++						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x1))
++#define AIROHA_AVS_OP_GET_FREQ			(AIROHA_AVS_OP_BASE | \
++						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
++
++struct airoha_cpufreq_priv {
++	struct list_head list;
++
++	cpumask_var_t cpus;
++	struct device *cpu_dev;
++	struct cpufreq_frequency_table *freq_table;
++};
++
++static LIST_HEAD(priv_list);
++
++static unsigned int airoha_cpufreq_get(unsigned int cpu)
++{
++	const struct arm_smccc_1_2_regs args = {
++		.a0 = AIROHA_SIP_AVS_HANDLE,
++		.a1 = AIROHA_AVS_OP_GET_FREQ,
++	};
++	struct arm_smccc_1_2_regs res;
++
++	arm_smccc_1_2_smc(&args, &res);
++
++	return (int)(res.a0 * 1000);
++}
++
++static int airoha_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
++{
++	const struct arm_smccc_1_2_regs args = {
++		.a0 = AIROHA_SIP_AVS_HANDLE,
++		.a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
++		.a3 = index,
++	};
++	struct arm_smccc_1_2_regs res;
++
++	arm_smccc_1_2_smc(&args, &res);
++
++	/* SMC signal correct apply by unsetting BIT 0 */
++	return res.a0 & BIT(0) ? -EINVAL : 0;
++}
++
++static struct airoha_cpufreq_priv *airoha_cpufreq_find_data(int cpu)
++{
++	struct airoha_cpufreq_priv *priv;
++
++	list_for_each_entry(priv, &priv_list, list) {
++		if (cpumask_test_cpu(cpu, priv->cpus))
++			return priv;
++	}
++
++	return NULL;
++}
++
++static int airoha_cpufreq_init(struct cpufreq_policy *policy)
++{
++	struct airoha_cpufreq_priv *priv;
++
++	priv = airoha_cpufreq_find_data(policy->cpu);
++	if (!priv)
++		return -ENODEV;
++
++	cpumask_copy(policy->cpus, priv->cpus);
++	policy->driver_data = priv;
++	policy->freq_table = priv->freq_table;
++
++	return 0;
++}
++
++static struct cpufreq_driver airoha_cpufreq_driver = {
++	.flags		= CPUFREQ_NEED_INITIAL_FREQ_CHECK |
++			  CPUFREQ_IS_COOLING_DEV,
++	.verify		= cpufreq_generic_frequency_table_verify,
++	.target_index	= airoha_cpufreq_set_target,
++	.get		= airoha_cpufreq_get,
++	.init		= airoha_cpufreq_init,
++	.attr		= cpufreq_generic_attr,
++	.name		= "airoha-cpufreq",
++};
++
++static int airoha_cpufreq_driver_init_cpu(int cpu)
++{
++	struct airoha_cpufreq_priv *priv;
++	struct device *cpu_dev;
++	int ret;
++
++	cpu_dev = get_cpu_device(cpu);
++	if (!cpu_dev)
++		return -EPROBE_DEFER;
++
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
++		return -ENOMEM;
++
++	cpumask_set_cpu(cpu, priv->cpus);
++	priv->cpu_dev = cpu_dev;
++
++	ret = dev_pm_opp_of_get_sharing_cpus(cpu_dev, priv->cpus);
++	if (ret)
++		goto err;
++
++	ret = dev_pm_opp_of_cpumask_add_table(priv->cpus);
++	if (ret)
++		goto err;
++
++	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &priv->freq_table);
++	if (ret)
++		goto err;
++
++	list_add(&priv->list, &priv_list);
++
++	return 0;
++
++err:
++	dev_pm_opp_of_cpumask_remove_table(priv->cpus);
++	free_cpumask_var(priv->cpus);
++
++	return ret;
++}
++
++static void airoha_cpufreq_release(void)
++{
++	struct airoha_cpufreq_priv *priv, *tmp;
++
++	list_for_each_entry_safe(priv, tmp, &priv_list, list) {
++		dev_pm_opp_free_cpufreq_table(priv->cpu_dev, &priv->freq_table);
++		dev_pm_opp_of_cpumask_remove_table(priv->cpus);
++		free_cpumask_var(priv->cpus);
++		list_del(&priv->list);
++		kfree(priv);
++	}
++}
++
++static int __init airoha_cpufreq_driver_probe(void)
++{
++	int cpu, ret;
++
++	if (!of_machine_is_compatible("airoha,en7581"))
++		return -ENODEV;
++
++	for_each_possible_cpu(cpu) {
++		ret = airoha_cpufreq_driver_init_cpu(cpu);
++		if (ret)
++			goto err;
++	}
++
++	ret = cpufreq_register_driver(&airoha_cpufreq_driver);
++	if (ret)
++		goto err;
++
++	return 0;
++
++err:
++	airoha_cpufreq_release();
++	return ret;
++}
++module_init(airoha_cpufreq_driver_probe);
++
++static void __exit airoha_cpufreq_driver_remove(void)
++{
++	cpufreq_unregister_driver(&airoha_cpufreq_driver);
++	airoha_cpufreq_release();
++}
++module_exit(airoha_cpufreq_driver_remove);
++
++MODULE_AUTHOR("Christian Marangi <ansuelsmth@gmail.com>");
++MODULE_DESCRIPTION("CPUfreq driver for Airoha SoCs");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 18942bfe9c95..5ecd8234bfac 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -103,6 +103,8 @@ static const struct of_device_id allowlist[] __initconst = {
+  * platforms using "operating-points-v2" property.
+  */
+ static const struct of_device_id blocklist[] __initconst = {
++	{ .compatible = "airoha,en7581", },
++
+ 	{ .compatible = "allwinner,sun50i-h6", },
+ 	{ .compatible = "allwinner,sun50i-h616", },
+ 	{ .compatible = "allwinner,sun50i-h618", },
+-- 
+2.45.2
 
-       5.173613 usecs/op
-         193288 ops/sec
-
- Performance counter stats for 'perf bench sched pipe':
-
-         1,992,368      sched:sched_wake_idle_without_ipi
-
-       5.178976487 seconds time elapsed
-
-       0.396076000 seconds user
-       6.999566000 seconds sys
-
---
-ankur
 
