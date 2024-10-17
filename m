@@ -1,393 +1,246 @@
-Return-Path: <linux-pm+bounces-15869-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15870-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B35C9A233F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 15:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2EA9A2370
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 15:18:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F13B1C28AD8
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 13:14:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3344E1C26062
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 13:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92851DE4C7;
-	Thu, 17 Oct 2024 13:12:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924BE1DE2D7;
+	Thu, 17 Oct 2024 13:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M90qfR5h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FRC1bi0f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41551DE3D8;
-	Thu, 17 Oct 2024 13:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9F21DE3DD;
+	Thu, 17 Oct 2024 13:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729170749; cv=none; b=g8gF9VmPb6eMdP8Wa/deVu15+3Jlq0q+fi3fDRV2ej95sB4BCC6wcmfeS7oHzB5lamwM1MyNGPPZy46cDdigP06rbAs+rRuAoP/Fl/TnMEO6HAAqmjatZO84dlPd75dJ7pAWqClcTbdDuZD/msj/O+awVdcmBk3bYeAraGkgVlE=
+	t=1729171015; cv=none; b=CBYjTEtB+OL4+I1jcKJ25SZfoukhIvG6/vCbOT3nAG8VbsUxdJfQIIjtTf2bFnOJzv077svD3vciqGuw8XeFclpX7YYWAPAEI50GwEO4f5PXzwR1cAhesXCSNwUfeydHZaiSXV9+4bcHhld4UdTmvupnjqPuYvVSwZ2/SQ+9tbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729170749; c=relaxed/simple;
-	bh=z6DoODhaSQ1MauMVN+zE0qV0NEEBtXP29YMduO1kw6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F5wQcKq8m9BVZJViHNnhJkCYSxh+7ORg7IhGCvr/6iwxfRvO/SvLJ/0GV4+l6S2Sv6pquG+1oAXJOrcdfNVCaq/DHhhizspoO6GPx7zvZ2Nq4tR+KkQDlNLU33ftYA4MNHLYNB6H5aD/Vt42SmJNb06muPmI5vhI1dDEb7C81mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M90qfR5h; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729171015; c=relaxed/simple;
+	bh=8/VHn17r/Dn2bT1CmRUWZnXjoztZOFZAY1vbgtcprKI=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=eutp5cg+0vn5tHdEnCtgmKEOJGdROjIQb5QId6nZsCZen7phEJcW+6r31wUiyRc9aEi2tgwsITBqeL8qp3uRQdwSsiLmzoIjiPo4Zvo/rcAOzBg2K4RbjZGXFnYDyYXCSPpopQE6P+jU3RsYnpCRQVxo05+5nC0Izm56g/FALiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FRC1bi0f; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729170746; x=1760706746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z6DoODhaSQ1MauMVN+zE0qV0NEEBtXP29YMduO1kw6I=;
-  b=M90qfR5hmw4WeLa/2XItPwYbKOi0s5034tKgCBRILhW5vFugtXRPI0b3
-   9JFXYDxQVEVZujZefDzSJDjs187RB8PdwwwTl7Sr9oigcXKKKC9dBmvh4
-   Pkb2XKBr15wkDrJbx5k/rFghzPF3E29xD4atmRp4ug+GpHga8vRVn+/D/
-   UUA18iThnEVZknCRU9UOaH61QJXu9V32QoYgdJ3z9Wug4opvD3hLcmpFt
-   3M0K4ApiXs1iElcYpJEKXt9ZZTiJM3y+UzX1gzTvIJAU7jjpGf8mHbFaP
-   kLRsnrb2C2Rv/jeqYofzBtMkeUiO7BQbChrIU8Jjh7LPMBaR+CNXk9ZcK
-   g==;
-X-CSE-ConnectionGUID: HUNq7yTgS+iyY/ng96o69w==
-X-CSE-MsgGUID: T0tG/FJbSKawpBxWpFpPgw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="32452565"
+  t=1729171012; x=1760707012;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=8/VHn17r/Dn2bT1CmRUWZnXjoztZOFZAY1vbgtcprKI=;
+  b=FRC1bi0fzV0oQvvs2xIfyLIH8x4TRGi3V9Roid7AYe0YPdrnJFo13Nsx
+   bpvTHrhb/7eL0RUu3xzlfXEbToDVp1LkJgfJuUwmwWUn8ZvPRz8eQoKZH
+   2t+V8dkoXelIDxSXH6ATjQNbSqyDST6Umocu1sRCCO3BnloUKcDltjLES
+   9U4p23PDACD6Ku/1T+CCV3AJTchZUKyHSyyqkmM6QfJDCnWgMBc45yMYA
+   51KBmJojrc6oaztd41LO9Vni0avbf9VPbgBFEQckLMifoesegaMRBI1sn
+   EuTalWrUqBc0u8fpiW2ZRwKyVv47loGHbk3n1EmGoGLTlomKKOeRlem76
+   w==;
+X-CSE-ConnectionGUID: KpaDdSdnT0ebnJFj5P+9sQ==
+X-CSE-MsgGUID: +9X+f2wFQs+BOD3y7JluKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="39243615"
 X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="32452565"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 06:12:26 -0700
-X-CSE-ConnectionGUID: xFswveiFQSakBOInpOFLXQ==
-X-CSE-MsgGUID: DU0bhVPFRkuksfWreldL/Q==
+   d="scan'208";a="39243615"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 06:16:51 -0700
+X-CSE-ConnectionGUID: R6uK7DS/RgyKD2r3Cn1WeA==
+X-CSE-MsgGUID: gTkdf9heQySJc+/lhrck1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="83315305"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 17 Oct 2024 06:12:24 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1QIf-000MM3-1l;
-	Thu, 17 Oct 2024 13:12:21 +0000
-Date: Thu, 17 Oct 2024 21:11:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Lorenzo Bianconi <lorenzo@kernel.org>, upstream@airoha.com
-Cc: oe-kbuild-all@lists.linux.dev, Christian Marangi <ansuelsmth@gmail.com>
-Subject: Re: [PATCH] cpufreq: airoha: Add EN7581 Cpufreq SMC driver
-Message-ID: <202410172028.AdkR2sEw-lkp@intel.com>
-References: <20241016161044.28745-1-ansuelsmth@gmail.com>
+   d="scan'208";a="78582011"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.91])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 06:16:46 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 17 Oct 2024 16:16:43 +0300 (EEST)
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, 
+    Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, 
+    Rob Herring <robh@kernel.org>, 
+    =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>, 
+    "Maciej W. Rozycki" <macro@orcam.me.uk>, Lukas Wunner <lukas@wunner.de>, 
+    Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
+    Krishna chaitanya chundru <quic_krichai@quicinc.com>, 
+    Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+    "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+    Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, 
+    LKML <linux-kernel@vger.kernel.org>, 
+    Daniel Lezcano <daniel.lezcano@linaro.org>, 
+    Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+    Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v8 6/8] PCI/bwctrl: Add API to set PCIe Link Speed
+In-Reply-To: <20241017120211.00005b1e@Huawei.com>
+Message-ID: <79ada41b-5d10-e063-1d15-3ed5e78f3720@linux.intel.com>
+References: <20241009095223.7093-1-ilpo.jarvinen@linux.intel.com> <20241009095223.7093-7-ilpo.jarvinen@linux.intel.com> <20241017120211.00005b1e@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241016161044.28745-1-ansuelsmth@gmail.com>
+Content-Type: multipart/mixed; BOUNDARY="8323328-761507247-1729163516=:929"
+Content-ID: <c0f80b6b-b7f7-c65e-f330-85ac2a2d4041@linux.intel.com>
 
-Hi Christian,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-kernel test robot noticed the following build errors:
+--8323328-761507247-1729163516=:929
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <ef38b944-4235-46bb-c7d7-058c0c5e58cc@linux.intel.com>
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.12-rc3 next-20241017]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Thu, 17 Oct 2024, Jonathan Cameron wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/cpufreq-airoha-Add-EN7581-Cpufreq-SMC-driver/20241017-001217
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20241016161044.28745-1-ansuelsmth%40gmail.com
-patch subject: [PATCH] cpufreq: airoha: Add EN7581 Cpufreq SMC driver
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241017/202410172028.AdkR2sEw-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241017/202410172028.AdkR2sEw-lkp@intel.com/reproduce)
+> On Wed,  9 Oct 2024 12:52:21 +0300
+> Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
+>=20
+> > Currently, PCIe Link Speeds are adjusted by custom code rather than in
+> > a common function provided in PCI core. PCIe bandwidth controller
+> > (bwctrl) introduces an in-kernel API to set PCIe Link Speed.
+> >=20
+> > Convert Target Speed quirk to use the new API. The Target Speed quirk
+> > runs very early when bwctrl is not yet probed for a Port and can also
+> > run later when bwctrl is already setup for the Port, which requires the
+> > per port mutex (set_speed_mutex) to be only taken if the bwctrl setup
+> > is already complete.
+> >=20
+> > The new API is also intended to be used in an upcoming commit that adds
+> > a thermal cooling device to throttle PCIe bandwidth when thermal
+> > thresholds are reached.
+> >=20
+> > The PCIe bandwidth control procedure is as follows. The highest speed
+> > supported by the Port and the PCIe device which is not higher than the
+> > requested speed is selected and written into the Target Link Speed in
+> > the Link Control 2 Register. Then bandwidth controller retrains the
+> > PCIe Link.
+> >=20
+> > Bandwidth Notifications enable the cur_bus_speed in the struct pci_bus
+> > to keep track PCIe Link Speed changes. While Bandwidth Notifications
+> > should also be generated when bandwidth controller alters the PCIe Link
+> > Speed, a few platforms do not deliver LMBS interrupt after Link
+> > Training as expected. Thus, after changing the Link Speed, bandwidth
+> > controller makes additional read for the Link Status Register to ensure
+> > cur_bus_speed is consistent with the new PCIe Link Speed.
+> >=20
+> > Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+>=20
+> Trivial stuff inline.  The mutex_destroy discussion is a just a consisten=
+cy
+> thing given that call is rarely bothered with but here it might help with
+> debug.
+>=20
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>=20
+> Jonathan
+>=20
+> > ---
+> >  drivers/pci/pci.h         |  20 +++++
+> >  drivers/pci/pcie/bwctrl.c | 161 +++++++++++++++++++++++++++++++++++++-
+> >  drivers/pci/quirks.c      |  17 +---
+> >  include/linux/pci.h       |  10 +++
+> >  4 files changed, 193 insertions(+), 15 deletions(-)
+>=20
+>=20
+> > diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
+> > index 1b11b5da79d4..1d3680ea8e06 100644
+> > --- a/drivers/pci/pcie/bwctrl.c
+> > +++ b/drivers/pci/pcie/bwctrl.c
+> > @@ -7,6 +7,11 @@
+>=20
+> >  static void pcie_bwnotif_enable(struct pcie_device *srv)
+> >  {
+> >  =09struct pcie_bwctrl_data *data =3D get_service_data(srv);
+> > @@ -135,6 +288,7 @@ static int pcie_bwnotif_probe(struct pcie_device *s=
+rv)
+> >  =09if (!data)
+> >  =09=09return -ENOMEM;
+> > =20
+> > +=09mutex_init(&data->set_speed_mutex);
+> >  =09set_service_data(srv, data);
+> > =20
+> >  =09ret =3D request_threaded_irq(srv->irq, NULL, pcie_bwnotif_irq_threa=
+d,
+> > @@ -142,8 +296,10 @@ static int pcie_bwnotif_probe(struct pcie_device *=
+srv)
+> >  =09if (ret)
+> >  =09=09return ret;
+> > =20
+> > -=09port->link_bwctrl =3D no_free_ptr(data);
+> > -=09pcie_bwnotif_enable(srv);
+> > +=09scoped_guard(rwsem_write, &pcie_bwctrl_remove_rwsem) {
+>=20
+> Calling it remove_rwsem and using it to protect against not yet
+> present seems odd. Maybe rename, pcie_bwctrl_bound_rswem or something lik=
+e that?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410172028.AdkR2sEw-lkp@intel.com/
+Okay but there's one related issue I need to address:
 
-All error/warnings (new ones prefixed by >>):
+I came across recursive locking splat from pcie_bwctrl_remove_rwsem
+(seems I had lockdep off for some odd reason in my config so it didn't
+trigger during my testing until now). The splat is because of:
 
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_get':
->> drivers/cpufreq/airoha-cpufreq.c:27:22: error: variable 'args' has initializer but incomplete type
-      27 |         const struct arm_smccc_1_2_regs args = {
-         |                      ^~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/airoha-cpufreq.c:28:18: error: 'const struct arm_smccc_1_2_regs' has no member named 'a0'
-      28 |                 .a0 = AIROHA_SIP_AVS_HANDLE,
-         |                  ^~
->> drivers/cpufreq/airoha-cpufreq.c:7:49: warning: excess elements in struct initializer
-       7 | #define AIROHA_SIP_AVS_HANDLE                   0x82000301
-         |                                                 ^~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:28:23: note: in expansion of macro 'AIROHA_SIP_AVS_HANDLE'
-      28 |                 .a0 = AIROHA_SIP_AVS_HANDLE,
-         |                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:7:49: note: (near initialization for 'args')
-       7 | #define AIROHA_SIP_AVS_HANDLE                   0x82000301
-         |                                                 ^~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:28:23: note: in expansion of macro 'AIROHA_SIP_AVS_HANDLE'
-      28 |                 .a0 = AIROHA_SIP_AVS_HANDLE,
-         |                       ^~~~~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/airoha-cpufreq.c:29:18: error: 'const struct arm_smccc_1_2_regs' has no member named 'a1'
-      29 |                 .a1 = AIROHA_AVS_OP_GET_FREQ,
-         |                  ^~
->> drivers/cpufreq/airoha-cpufreq.c:13:50: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
-      13 |                                                  FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
-         |                                                  ^~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:29:23: note: in expansion of macro 'AIROHA_AVS_OP_GET_FREQ'
-      29 |                 .a1 = AIROHA_AVS_OP_GET_FREQ,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:12:49: warning: excess elements in struct initializer
-      12 | #define AIROHA_AVS_OP_GET_FREQ                  (AIROHA_AVS_OP_BASE | \
-         |                                                 ^
-   drivers/cpufreq/airoha-cpufreq.c:29:23: note: in expansion of macro 'AIROHA_AVS_OP_GET_FREQ'
-      29 |                 .a1 = AIROHA_AVS_OP_GET_FREQ,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:12:49: note: (near initialization for 'args')
-      12 | #define AIROHA_AVS_OP_GET_FREQ                  (AIROHA_AVS_OP_BASE | \
-         |                                                 ^
-   drivers/cpufreq/airoha-cpufreq.c:29:23: note: in expansion of macro 'AIROHA_AVS_OP_GET_FREQ'
-      29 |                 .a1 = AIROHA_AVS_OP_GET_FREQ,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/airoha-cpufreq.c:27:41: error: storage size of 'args' isn't known
-      27 |         const struct arm_smccc_1_2_regs args = {
-         |                                         ^~~~
->> drivers/cpufreq/airoha-cpufreq.c:31:35: error: storage size of 'res' isn't known
-      31 |         struct arm_smccc_1_2_regs res;
-         |                                   ^~~
->> drivers/cpufreq/airoha-cpufreq.c:33:9: error: implicit declaration of function 'arm_smccc_1_2_smc'; did you mean 'arm_smccc_1_1_smc'? [-Wimplicit-function-declaration]
-      33 |         arm_smccc_1_2_smc(&args, &res);
-         |         ^~~~~~~~~~~~~~~~~
-         |         arm_smccc_1_1_smc
->> drivers/cpufreq/airoha-cpufreq.c:31:35: warning: unused variable 'res' [-Wunused-variable]
-      31 |         struct arm_smccc_1_2_regs res;
-         |                                   ^~~
->> drivers/cpufreq/airoha-cpufreq.c:27:41: warning: unused variable 'args' [-Wunused-variable]
-      27 |         const struct arm_smccc_1_2_regs args = {
-         |                                         ^~~~
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_set_target':
-   drivers/cpufreq/airoha-cpufreq.c:40:22: error: variable 'args' has initializer but incomplete type
-      40 |         const struct arm_smccc_1_2_regs args = {
-         |                      ^~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:41:18: error: 'const struct arm_smccc_1_2_regs' has no member named 'a0'
-      41 |                 .a0 = AIROHA_SIP_AVS_HANDLE,
-         |                  ^~
->> drivers/cpufreq/airoha-cpufreq.c:7:49: warning: excess elements in struct initializer
-       7 | #define AIROHA_SIP_AVS_HANDLE                   0x82000301
-         |                                                 ^~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:41:23: note: in expansion of macro 'AIROHA_SIP_AVS_HANDLE'
-      41 |                 .a0 = AIROHA_SIP_AVS_HANDLE,
-         |                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:7:49: note: (near initialization for 'args')
-       7 | #define AIROHA_SIP_AVS_HANDLE                   0x82000301
-         |                                                 ^~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:41:23: note: in expansion of macro 'AIROHA_SIP_AVS_HANDLE'
-      41 |                 .a0 = AIROHA_SIP_AVS_HANDLE,
-         |                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:42:18: error: 'const struct arm_smccc_1_2_regs' has no member named 'a1'
-      42 |                 .a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
-         |                  ^~
-   drivers/cpufreq/airoha-cpufreq.c:10:49: warning: excess elements in struct initializer
-      10 | #define AIROHA_AVS_OP_FREQ_DYN_ADJ              (AIROHA_AVS_OP_BASE | \
-         |                                                 ^
-   drivers/cpufreq/airoha-cpufreq.c:42:23: note: in expansion of macro 'AIROHA_AVS_OP_FREQ_DYN_ADJ'
-      42 |                 .a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c:10:49: note: (near initialization for 'args')
-      10 | #define AIROHA_AVS_OP_FREQ_DYN_ADJ              (AIROHA_AVS_OP_BASE | \
-         |                                                 ^
-   drivers/cpufreq/airoha-cpufreq.c:42:23: note: in expansion of macro 'AIROHA_AVS_OP_FREQ_DYN_ADJ'
-      42 |                 .a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/airoha-cpufreq.c:43:18: error: 'const struct arm_smccc_1_2_regs' has no member named 'a3'
-      43 |                 .a3 = index,
-         |                  ^~
-   drivers/cpufreq/airoha-cpufreq.c:43:23: warning: excess elements in struct initializer
-      43 |                 .a3 = index,
-         |                       ^~~~~
-   drivers/cpufreq/airoha-cpufreq.c:43:23: note: (near initialization for 'args')
-   drivers/cpufreq/airoha-cpufreq.c:40:41: error: storage size of 'args' isn't known
-      40 |         const struct arm_smccc_1_2_regs args = {
-         |                                         ^~~~
-   drivers/cpufreq/airoha-cpufreq.c:45:35: error: storage size of 'res' isn't known
-      45 |         struct arm_smccc_1_2_regs res;
-         |                                   ^~~
-   drivers/cpufreq/airoha-cpufreq.c:45:35: warning: unused variable 'res' [-Wunused-variable]
-   drivers/cpufreq/airoha-cpufreq.c:40:41: warning: unused variable 'args' [-Wunused-variable]
-      40 |         const struct arm_smccc_1_2_regs args = {
-         |                                         ^~~~
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_init':
->> drivers/cpufreq/airoha-cpufreq.c:68:24: warning: variable 'cpu_dev' set but not used [-Wunused-but-set-variable]
-      68 |         struct device *cpu_dev;
-         |                        ^~~~~~~
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_driver_init_cpu':
->> drivers/cpufreq/airoha-cpufreq.c:103:16: error: implicit declaration of function 'kzalloc' [-Wimplicit-function-declaration]
-     103 |         priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-         |                ^~~~~~~
->> drivers/cpufreq/airoha-cpufreq.c:103:14: error: assignment to 'struct airoha_cpufreq_priv *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     103 |         priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-         |              ^
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_release':
->> drivers/cpufreq/airoha-cpufreq.c:145:17: error: implicit declaration of function 'kfree'; did you mean 'kvfree'? [-Wimplicit-function-declaration]
-     145 |                 kfree(priv);
-         |                 ^~~~~
-         |                 kvfree
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_get':
->> drivers/cpufreq/airoha-cpufreq.c:36:1: warning: control reaches end of non-void function [-Wreturn-type]
-      36 | }
-         | ^
-   drivers/cpufreq/airoha-cpufreq.c: In function 'airoha_cpufreq_set_target':
-   drivers/cpufreq/airoha-cpufreq.c:51:1: warning: control reaches end of non-void function [-Wreturn-type]
-      51 | }
-         | ^
+pcie_set_target_speed()
+   scoped_guard(rwsem_read, &pcie_bwctrl_remove_rwsem) =20
+   -> pcie_bwctrl_change_speed
+      -> pcie_retrain_link()
+         -> pcie_reset_lbms_count()
+            guard(rwsem_read)(&pcie_bwctrl_remove_rwsem);
 
+I wouldn't want to special case pcie_retrain_link() just for BW=20
+control's sake, I plan to solve that by splitting pcie_bwctrl_remove_rwsem=
+=20
+to have one for LBMS API and another for set speed API so split it into:
 
-vim +/args +27 drivers/cpufreq/airoha-cpufreq.c
+- pcie_bwctrl_setspeed_rwsem
+- pcie_bwctrl_lbms_rwsem
 
-     6	
-   > 7	#define AIROHA_SIP_AVS_HANDLE			0x82000301
-     8	#define AIROHA_AVS_OP_BASE			0xddddddd0
-     9	#define AIROHA_AVS_OP_MASK			GENMASK(1, 0)
-    10	#define AIROHA_AVS_OP_FREQ_DYN_ADJ		(AIROHA_AVS_OP_BASE | \
-    11							 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x1))
-    12	#define AIROHA_AVS_OP_GET_FREQ			(AIROHA_AVS_OP_BASE | \
-  > 13							 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
-    14	
-    15	struct airoha_cpufreq_priv {
-    16		struct list_head list;
-    17	
-    18		cpumask_var_t cpus;
-    19		struct device *cpu_dev;
-    20		struct cpufreq_frequency_table *freq_table;
-    21	};
-    22	
-    23	static LIST_HEAD(priv_list);
-    24	
-    25	static unsigned int airoha_cpufreq_get(unsigned int cpu)
-    26	{
-  > 27		const struct arm_smccc_1_2_regs args = {
-  > 28			.a0 = AIROHA_SIP_AVS_HANDLE,
-  > 29			.a1 = AIROHA_AVS_OP_GET_FREQ,
-    30		};
-  > 31		struct arm_smccc_1_2_regs res;
-    32	
-  > 33		arm_smccc_1_2_smc(&args, &res);
-    34	
-    35		return (int)(res.a0 * 1000);
-  > 36	}
-    37	
-    38	static int airoha_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
-    39	{
-    40		const struct arm_smccc_1_2_regs args = {
-    41			.a0 = AIROHA_SIP_AVS_HANDLE,
-    42			.a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
-  > 43			.a3 = index,
-    44		};
-    45		struct arm_smccc_1_2_regs res;
-    46	
-    47		arm_smccc_1_2_smc(&args, &res);
-    48	
-    49		/* SMC signal correct apply by unsetting BIT 0 */
-    50		return res.a0 & BIT(0) ? -EINVAL : 0;
-    51	}
-    52	
-    53	static struct airoha_cpufreq_priv *airoha_cpufreq_find_data(int cpu)
-    54	{
-    55		struct airoha_cpufreq_priv *priv;
-    56	
-    57		list_for_each_entry(priv, &priv_list, list) {
-    58			if (cpumask_test_cpu(cpu, priv->cpus))
-    59				return priv;
-    60		}
-    61	
-    62		return NULL;
-    63	}
-    64	
-    65	static int airoha_cpufreq_init(struct cpufreq_policy *policy)
-    66	{
-    67		struct airoha_cpufreq_priv *priv;
-  > 68		struct device *cpu_dev;
-    69	
-    70		priv = airoha_cpufreq_find_data(policy->cpu);
-    71		if (!priv)
-    72			return -ENODEV;
-    73	
-    74		cpu_dev = priv->cpu_dev;
-    75		cpumask_copy(policy->cpus, priv->cpus);
-    76		policy->driver_data = priv;
-    77		policy->freq_table = priv->freq_table;
-    78	
-    79		return 0;
-    80	}
-    81	
-    82	static struct cpufreq_driver airoha_cpufreq_driver = {
-    83		.flags		= CPUFREQ_NEED_INITIAL_FREQ_CHECK |
-    84				  CPUFREQ_IS_COOLING_DEV,
-    85		.verify		= cpufreq_generic_frequency_table_verify,
-    86		.target_index	= airoha_cpufreq_set_target,
-    87		.get		= airoha_cpufreq_get,
-    88		.init		= airoha_cpufreq_init,
-    89		.attr		= cpufreq_generic_attr,
-    90		.name		= "airoha-cpufreq",
-    91	};
-    92	
-    93	static int airoha_cpufreq_driver_init_cpu(int cpu)
-    94	{
-    95		struct airoha_cpufreq_priv *priv;
-    96		struct device *cpu_dev;
-    97		int ret;
-    98	
-    99		cpu_dev = get_cpu_device(cpu);
-   100		if (!cpu_dev)
-   101			return -EPROBE_DEFER;
-   102	
- > 103		priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-   104		if (!priv)
-   105			return -ENOMEM;
-   106	
-   107		if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
-   108			return -ENOMEM;
-   109	
-   110		cpumask_set_cpu(cpu, priv->cpus);
-   111		priv->cpu_dev = cpu_dev;
-   112	
-   113		ret = dev_pm_opp_of_get_sharing_cpus(cpu_dev, priv->cpus);
-   114		if (ret)
-   115			goto err;
-   116	
-   117		ret = dev_pm_opp_of_cpumask_add_table(priv->cpus);
-   118		if (ret)
-   119			goto err;
-   120	
-   121		ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &priv->freq_table);
-   122		if (ret)
-   123			goto err;
-   124	
-   125		list_add(&priv->list, &priv_list);
-   126	
-   127		return 0;
-   128	
-   129	err:
-   130		dev_pm_opp_of_cpumask_remove_table(priv->cpus);
-   131		free_cpumask_var(priv->cpus);
-   132	
-   133		return ret;
-   134	}
-   135	
-   136	static void airoha_cpufreq_release(void)
-   137	{
-   138		struct airoha_cpufreq_priv *priv, *tmp;
-   139	
-   140		list_for_each_entry_safe(priv, tmp, &priv_list, list) {
-   141			dev_pm_opp_free_cpufreq_table(priv->cpu_dev, &priv->freq_table);
-   142			dev_pm_opp_of_cpumask_remove_table(priv->cpus);
-   143			free_cpumask_var(priv->cpus);
-   144			list_del(&priv->list);
- > 145			kfree(priv);
-   146		}
-   147	}
-   148	
+It requires taking both in .probe and .remove which is not as elegant I'd=
+=20
+want but definitely seems more elegant compared with differentiating=20
+pcie_retrain_link().
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you, for some reason would instead prefer I differentiated=20
+pcie_retrain_link() for cases when holding pcie_bwctrl_remove_rwsem=20
+already (or pcie_bwctrl_bound_rwsem as suggested by you), please let me=20
+know.
+
+> > +=09=09port->link_bwctrl =3D no_free_ptr(data);
+> > +=09=09pcie_bwnotif_enable(srv);
+> > +=09}
+> > =20
+> >  =09pci_dbg(port, "enabled with IRQ %d\n", srv->irq);
+> > =20
+> > @@ -159,6 +315,7 @@ static void pcie_bwnotif_remove(struct pcie_device =
+*srv)
+> >  =09=09srv->port->link_bwctrl =3D NULL;
+> > =20
+> >  =09free_irq(srv->irq, srv);
+> > +=09mutex_destroy(&data->set_speed_mutex);
+>
+> Probably not worth doing.  Also you don't do error handling for this abov=
+e.
+
+I'm not sure what error handling you're referring to?
+
+> Ideal is use devm_ for data and then devm_mutex_init()
+
+I've now converted alloc, irq, and mutex to devm. I had them at one point=
+=20
+but then Lukas said it's the wrong direction consider what lies in future=
+=20
+but since the future seeming has now changed I've no problem of making our
+lives easier with devm. :-)
+
+I also got rid of the service data use for your convinience.
+
+--=20
+ i.
+--8323328-761507247-1729163516=:929--
 
