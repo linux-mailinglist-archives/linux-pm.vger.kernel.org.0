@@ -1,60 +1,73 @@
-Return-Path: <linux-pm+bounces-15874-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15875-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A55A9A242D
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 15:44:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14399A246E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 16:01:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA6A5B22116
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 13:44:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78A602866E1
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2024 14:01:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20AF1DE2D1;
-	Thu, 17 Oct 2024 13:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="pwipJPgh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDCB1DDC34;
+	Thu, 17 Oct 2024 14:01:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79CD71DDC13;
-	Thu, 17 Oct 2024 13:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA96439FE5;
+	Thu, 17 Oct 2024 14:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729172679; cv=none; b=fGwbvzuhtEveNuDdQWiIe8cw9iRbLSCx4hVeA4QcwrxVoGcPMNMY7XRW5sKuVieoE9m93Qh492tp2mwOnDVDhShUXyO8vPteh7ag5qcKy/fQf/ntp2UMMdKlnGVy/KKmZjZOZr5BwCUg0ZYiOJuMQBf+N4842jMWoDX34IBwYQQ=
+	t=1729173714; cv=none; b=APEKMNaaSkJY3ZrMv3CbYP+hKWbPFu+GX1do4KpEVf7gCvGOAtaML8Hrlgz/Em/cN2rIAj6CMiphy7Ym7pntI0ZkhaZA5KcBf62lSmqH9Gj+K6mfQqRBYNmOHI0hGu+o9bWVrZ2B9nmZs7rVI6yoDiKnq9m6Li+Nexqt8pZBVY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729172679; c=relaxed/simple;
-	bh=n2EFG63bGzW9S581rBsKFCEcX4yWMCHqi4dxGIAZZi4=;
+	s=arc-20240116; t=1729173714; c=relaxed/simple;
+	bh=YIGa7aKF3zPBjTfPQwEODkjyQxe13e+PbHCs5IPylfQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QF10jIlraPwu3Hf9vRa9l8HqC79h9gFquFx4qiinuRN8dIJ91rjTAjVbO2/d8zekuQb82J4CBQ1dFMp2XIhJFqqfPXIJ231YGqgP0H6m8RHsf+nlkaJ9jk071+8NvXW6gb0xLU0vcDmSyMdQkmK3T54A/A3rbCPV7397heEdCIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=pwipJPgh; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1173)
-	id 1862620F9C35; Thu, 17 Oct 2024 06:44:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1862620F9C35
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1729172678;
-	bh=qx/YBdba0jv89H/1hhUhVBDc8FvxlfjK8tVIcDA3Ols=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pwipJPgh22Ep7TQ93uBIHGTulYAC4DEGZTcGyd7E7q+CqC4EoPcLJox8sg14H299I
-	 tJTRutjLyXndztFBG+tdfSsuhY6HxypobtINLE40VXHXU+0HQZV8MVlW6ReV2GJ5jj
-	 Xd2nVsgek7kenZAoNP5S9ifLPOt9H4yJB9H77Lxo=
-Date: Thu, 17 Oct 2024 06:44:38 -0700
-From: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	jikos@kernel.org, bentiss@kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ernis@microsoft.com, rafael@kernel.org, pavel@ucw.cz,
-	lenb@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/3] Revert "Input: hyperv-keyboard - register as a
- wakeup source"
-Message-ID: <20241017134438.GA14386@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1726176470-13133-1-git-send-email-ernis@linux.microsoft.com>
- <1726176470-13133-3-git-send-email-ernis@linux.microsoft.com>
- <ZvIx85NmYB/HzKtI@csail.mit.edu>
- <Zv-j0qtWXsDz4Hah@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LqX/Fj4v7D1CHtaOjLwSkdrdSEzQDusF8li+I4TgINOkYbB2dPK4f6QiTh3xAEMmXQ44wdtSLYRJZ6sveV+caz+VO81BxnJkHIZmZtt7UqjQqFiVYNfOeCf5rqBQRTGPX4TM8jIKGisReT/FYoKlQ2PFTEeTMcYqWASv9Q2bN7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D0FC4CEC3;
+	Thu, 17 Oct 2024 14:01:49 +0000 (UTC)
+Date: Thu, 17 Oct 2024 15:01:47 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Okanovic, Haris" <harisokn@amazon.com>
+Cc: "ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+	"wanpengli@tencent.com" <wanpengli@tencent.com>,
+	"cl@gentwo.org" <cl@gentwo.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"arnd@arndb.de" <arnd@arndb.de>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"will@kernel.org" <will@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+	"vkuznets@redhat.com" <vkuznets@redhat.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"mtosatti@redhat.com" <mtosatti@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"mark.rutland@arm.com" <mark.rutland@arm.com>
+Subject: Re: [PATCH v8 01/11] cpuidle/poll_state: poll via
+ smp_cond_load_relaxed()
+Message-ID: <ZxEYy9baciwdLnqh@arm.com>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
+ <20240925232425.2763385-2-ankur.a.arora@oracle.com>
+ <Zw5aPAuVi5sxdN5-@arm.com>
+ <7f7ffdcdb79eee0e8a545f544120495477832cd5.camel@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,68 +76,57 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zv-j0qtWXsDz4Hah@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <7f7ffdcdb79eee0e8a545f544120495477832cd5.camel@amazon.com>
 
-On Fri, Oct 04, 2024 at 01:14:10AM -0700, Dmitry Torokhov wrote:
-> On Tue, Sep 24, 2024 at 03:28:51AM +0000, Srivatsa S. Bhat wrote:
-> > [+linux-pm, Rafael, Len, Pavel]
+On Wed, Oct 16, 2024 at 03:13:33PM +0000, Okanovic, Haris wrote:
+> On Tue, 2024-10-15 at 13:04 +0100, Catalin Marinas wrote:
+> > On Wed, Sep 25, 2024 at 04:24:15PM -0700, Ankur Arora wrote:
+> > > diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> > > index 9b6d90a72601..fc1204426158 100644
+> > > --- a/drivers/cpuidle/poll_state.c
+> > > +++ b/drivers/cpuidle/poll_state.c
+> > > @@ -21,21 +21,20 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+> > > 
+> > >       raw_local_irq_enable();
+> > >       if (!current_set_polling_and_test()) {
+> > > -             unsigned int loop_count = 0;
+> > >               u64 limit;
+> > > 
+> > >               limit = cpuidle_poll_time(drv, dev);
+> > > 
+> > >               while (!need_resched()) {
+> > > -                     cpu_relax();
+> > > -                     if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> > > -                             continue;
+> > > -
+> > > -                     loop_count = 0;
+> > > +                     unsigned int loop_count = 0;
+> > >                       if (local_clock_noinstr() - time_start > limit) {
+> > >                               dev->poll_time_limit = true;
+> > >                               break;
+> > >                       }
+> > > +
+> > > +                     smp_cond_load_relaxed(&current_thread_info()->flags,
+> > > +                                           VAL & _TIF_NEED_RESCHED ||
+> > > +                                           loop_count++ >= POLL_IDLE_RELAX_COUNT);
 > > 
-> > On Thu, Sep 12, 2024 at 02:27:49PM -0700, Erni Sri Satya Vennela wrote:
-> > > This reverts commit 62238f3aadc9bc56da70100e19ec61b9f8d72a5f.
-> > > 
-> > > Remove keyboard as wakeup source since Suspend-to-Idle feature
-> > > is disabled.
-> > > 
-> > > Signed-off-by: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-> > > ---
-> > >  drivers/input/serio/hyperv-keyboard.c | 12 ------------
-> > >  1 file changed, 12 deletions(-)
-> > > 
-> > > diff --git a/drivers/input/serio/hyperv-keyboard.c b/drivers/input/serio/hyperv-keyboard.c
-> > > index 31d9dacd2fd1..b42c546636bf 100644
-> > > --- a/drivers/input/serio/hyperv-keyboard.c
-> > > +++ b/drivers/input/serio/hyperv-keyboard.c
-> > > @@ -162,15 +162,6 @@ static void hv_kbd_on_receive(struct hv_device *hv_dev,
-> > >  			serio_interrupt(kbd_dev->hv_serio, scan_code, 0);
-> > >  		}
-> > >  		spin_unlock_irqrestore(&kbd_dev->lock, flags);
-> > > -
-> > > -		/*
-> > > -		 * Only trigger a wakeup on key down, otherwise
-> > > -		 * "echo freeze > /sys/power/state" can't really enter the
-> > > -		 * state because the Enter-UP can trigger a wakeup at once.
-> > > -		 */
-> > > -		if (!(info & IS_BREAK))
-> > > -			pm_wakeup_hard_event(&hv_dev->device);
-> > > -
-> > >  		break;
-> > >  
-> > >  	default:
-> > > @@ -356,9 +347,6 @@ static int hv_kbd_probe(struct hv_device *hv_dev,
-> > >  		goto err_close_vmbus;
-> > >  
-> > >  	serio_register_port(kbd_dev->hv_serio);
-> > > -
-> > > -	device_init_wakeup(&hv_dev->device, true);
+> > The above is not guaranteed to make progress if _TIF_NEED_RESCHED is
+> > never set. With the event stream enabled on arm64, the WFE will
+> > eventually be woken up, loop_count incremented and the condition would
+> > become true. However, the smp_cond_load_relaxed() semantics require that
+> > a different agent updates the variable being waited on, not the waiting
+> > CPU updating it itself. Also note that the event stream can be disabled
+> > on arm64 on the kernel command line.
 > 
-> If you do not want the keyboard to be a wakeup source by default maybe
-> change this to:
-> 
-> 	device_set_wakeup_capable(&hv_dev->device, true);
-> 
-> and leave the rest of the driver alone?
-> 
-> Same for the HID change.
-> 
-> Thanks.
->
-device_set_wakeup_capable() sets the @dev's power.can_wakeup flag and
-adds wakeup-related attributes in sysfs.
+> Alternately could we condition arch_haltpoll_want() on
+> arch_timer_evtstrm_available(), like v7?
 
-Could you please help me understand why explicitly calling this function 
-can be helpful in our use case?
+No. The problem is about the smp_cond_load_relaxed() semantics - it
+can't wait on a variable that's only updated in its exit condition. We
+need a new API for this, especially since we are changing generic code
+here (even it was arm64 code only, I'd still object to such
+smp_cond_load_*() constructs).
 
-> -- 
-> Dmitry
+-- 
+Catalin
 
