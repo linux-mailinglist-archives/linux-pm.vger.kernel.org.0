@@ -1,108 +1,84 @@
-Return-Path: <linux-pm+bounces-15916-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15917-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0029A3519
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 08:07:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAB109A3532
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 08:15:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDFC51F215F2
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 06:07:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9E481C23460
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 06:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E004E17BB34;
-	Fri, 18 Oct 2024 06:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34EB3161320;
+	Fri, 18 Oct 2024 06:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="j9s2LE4d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cnfp2lxz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF4B20E30C
-	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 06:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6FFA2D;
+	Fri, 18 Oct 2024 06:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729231661; cv=none; b=pvXj6gV5G4zNA3ubKh3TMMvyO0qQgHDAtjLZAWLOweXfZ/xizHOEpZLQWerTx2ZyLIfQBkvw2lnzolN8o/hY2CHnK8Xf0B3iGej8lEaShh9jlDkZ9ppWdqD1D1SDfUXfP4R2GbfgufOd6uT3PkEOq9iUFFdTu+Mqrf8iLfvXP80=
+	t=1729232132; cv=none; b=W8OkfE4fvg+cshNRRCzAqSxjYgFXl+Tpf3qc2/kMTFPT8HHN7GG9cWvGMxh2oWwBlLhp8elIfy1i8jywN8Ir4Ycx4XQuvdwmQRTI5d6MgxC0dsxn2198QYyHEK8byspe/uGo9Zxmc6TbHyGpPvAkK+ehkXkFfkiC//HB7I8nacU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729231661; c=relaxed/simple;
-	bh=qx8oTXUXtYli7sWJmWyke/yTU53z4iBIbZPNVW4VM3o=;
-	h=Date:From:Subject:To:Cc:Message-Id:MIME-Version:Content-Type; b=cnFpA4ywCpnrUYilYMhFzyid/q12N86yubLweg4QpYCaBKp4Zac8CSYSQCctfWqRGGFsasjxxIHi9bcsGXuCDFnvPBjYC5Eqko/Amcq4FVVHhfVDlqOmMEV6X5rTIi3CAeG19148FLDGDskaBJW/nrUnWAwDdhmx+3kVy+E015g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=j9s2LE4d; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d461162b8so1155678f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 23:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1729231658; x=1729836458; darn=vger.kernel.org;
-        h=mime-version:message-id:cc:to:subject:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+neT5OpriWjps6KWJbIFkh/0/1ZoC1TLK72bxGIagaY=;
-        b=j9s2LE4dDJFykp3jRtgvFUDfut9UHJrGZl9HPC0MG/CJcSD8UNNQ1FL51y/H2lbnzK
-         JqR+LEuDVedfegvGH3bMcHmjZh0fO1SPUnltwKDCEwbCDklmbb/My36auSJPl2C795gI
-         mmp2WJy8Ealj4tsJJ6RfJ1m8Y9CMGxZ3A5Y7Ii2IwuAjETbASfxMNLrib25iMUkmv8fV
-         L+AHtR5nKg0mX0CJmcQXQmVjAV8nCm3ZNi4RWQV4D4bGEox1SJ7WK7QW0wtxBHj8MefP
-         2D6yw34yrUc4bGcR+LaMzoUfAIBBYx4SITSHxWGaDYAylzUN4cfLwu4RGllBsN91hMet
-         T7Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729231658; x=1729836458;
-        h=mime-version:message-id:cc:to:subject:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+neT5OpriWjps6KWJbIFkh/0/1ZoC1TLK72bxGIagaY=;
-        b=hKPDGdPVMgMawmMuB8oTuNzZ4ojUUnebsX5H+nkYz5YSs6lJGbhISPL4ZNAooLjws9
-         vNCr+G9y41ZiyYATpJj9+3Xm282iYtHHx7LZV4K4gAVEQO4d7oCSNY7FrHQ1gFAWe3Uc
-         j5Ip0OiLSCDvaiFMOQ+LnFK00pyUSstL7DfrWsB6g+x0ME7PThhuKBoUeGnPZ3Co3IMM
-         B3p0bJTKiPn/xW52zsBwiubIDqu7QL6kpdn2em0GGj1oQpdE/+XOgzUaoqDxT3LRyHf8
-         lwTt260zXKsPOi6jY5WcgbNWSeYVsRssnE5lf0LpRYA1XIxvPNcE9MZF3OhnqJqD91EO
-         6zwg==
-X-Gm-Message-State: AOJu0Yy5QYPhLwK2UMemeStFQ3Uq3QLQLc4jgJ3FJkuOMZnl6OzasQwi
-	9sxQuCziP86Rt43QtDE/yzmEI//cd5DD4qMtQBk/LhG9TDmsOw/cX9Qvbw==
-X-Google-Smtp-Source: AGHT+IHpl5/hGJVbSRbu76Pbt3D3nd73JqcA+FmPyiKSp7+epboy3/jCCcWZ7Z8yarGgtxPGKIKaRg==
-X-Received: by 2002:a5d:5e10:0:b0:37e:d2b7:acd5 with SMTP id ffacd0b85a97d-37ed2b7afc9mr104331f8f.8.1729231657902;
-        Thu, 17 Oct 2024 23:07:37 -0700 (PDT)
-Received: from ada ([2a00:23c6:7616:8b01:c50d:30d2:69a0:7638])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ecf046bdfsm981043f8f.31.2024.10.17.23.07.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2024 23:07:37 -0700 (PDT)
-Date: Fri, 18 Oct 2024 07:07:30 +0100
-From: Ed Robbins <edd.robbins@googlemail.com>
-Subject: [PATCH] pmu_battery: Set power supply type to BATTERY
-To: linux-pm@vger.kernel.org
-Cc: sre@kernel.org, linuxppc-dev@lists.ozlabs.org
-Message-Id: <IOFJLS.120OJ5KJG9R72@googlemail.com>
-X-Mailer: geary/40.0
+	s=arc-20240116; t=1729232132; c=relaxed/simple;
+	bh=6M6kNuQkv1KZSwfaWc/t2QEfSgBi8V5I8EBEhHPPuXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rwl0ZBlMkX2h1I4P1J0kkUy4tPlz42ILE3/jh/Z/mSlp730024l/Mu3wmWc6AoNapt8bF0Ae4Gcl1MAspkv7AXGxJfNTdi0Q3N96hVxXs8b0it1HC6R5yOTgFCx49IwUxRw5GpKjjQYhPJ7PHl+x+XDPiQ2iiqduidEp/ycYKoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cnfp2lxz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC74C4CEC3;
+	Fri, 18 Oct 2024 06:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729232131;
+	bh=6M6kNuQkv1KZSwfaWc/t2QEfSgBi8V5I8EBEhHPPuXg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cnfp2lxzmyhGDgkVgPNqX/zLvY1I51HXCYPPhcmDv0eJIgeoUEyF0OUefj46Vk+S2
+	 jMV+hXgMKzqJwtzDtgIwWntIiyr0wgIBjd7Bd544Czk7g9o8ppK3rEkbiDSJycpQyI
+	 Ae5nmI9mAjbtPp3h3ZDHPge5LSFXd1YPCUfZ54mlijNySG6iioyUyNBhWlrPJ6Ty6C
+	 7ZCbgJW4/Wlic4ven3lc7pcceHjTxXNuq27romS1yHsUiWJ6OGg7jDdoxGSRtyQINi
+	 xwdXJBD+ncPuillu4R6x5euP7g568dI9r9ACYYfI7BKMw4V/svtGp6F/vbIB5Wrmy6
+	 zr2CYpva1F2UA==
+Date: Fri, 18 Oct 2024 08:15:28 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Alexandre Mergnat <amergnat@baylibre.com>, 
+	Fabien Parent <fparent@baylibre.com>, Markus Schneider-Pargmann <msp@baylibre.com>, 
+	Alexandre Bailon <abailon@baylibre.com>, Chen-Yu Tsai <wenst@chromium.org>, 
+	Eugen Hristev <eugen.hristev@collabora.com>, MandyJH Liu <mandyjh.liu@mediatek.com>, 
+	Yassine Oudjana <y.oudjana@protonmail.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: power: Add binding for MediaTek
+ MT6735 power controller
+Message-ID: <gdksnrs34k5ypuvdxp6vecqakhxrjcswkxjmfwnbiyi24m42ix@4aekpbfy56pt>
+References: <20241017085136.68053-1-y.oudjana@protonmail.com>
+ <20241017085136.68053-2-y.oudjana@protonmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241017085136.68053-2-y.oudjana@protonmail.com>
 
-If the power supply type is not set it defaults to "Unknown" and upower
-does not recognise it. In turn battery monitor applications do not see a
-battery. Setting to POWER_SUPPLY_TYPE_BATTERY fixes this.
+On Thu, Oct 17, 2024 at 11:51:34AM +0300, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add DT binding for MediaTek MT6735 SCPSYS power controller.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Signed-off-by: Ed Robbins <edd.robbins@gmail.com>
----
- drivers/power/supply/pmu_battery.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/power/supply/pmu_battery.c 
-b/drivers/power/supply/pmu_battery.c
-index eaab7500d9..ed83c5e05c 100644
---- a/drivers/power/supply/pmu_battery.c
-+++ b/drivers/power/supply/pmu_battery.c
-@@ -170,6 +170,7 @@ static int __init pmu_bat_init(void)
- 		pbat->bat_desc.properties = pmu_bat_props;
- 		pbat->bat_desc.num_properties = ARRAY_SIZE(pmu_bat_props);
- 		pbat->bat_desc.get_property = pmu_bat_get_property;
-+		pbat->bat_desc.type = POWER_SUPPLY_TYPE_BATTERY;
- 		pbat->pbi = &pmu_batteries[i];
- 		psy_cfg.drv_data = pbat;
-
--- 
-2.34.1
-
-
+Best regards,
+Krzysztof
 
 
