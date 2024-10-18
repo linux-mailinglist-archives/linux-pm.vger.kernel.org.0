@@ -1,169 +1,114 @@
-Return-Path: <linux-pm+bounces-15984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A4F9A4413
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 18:46:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BD949A4422
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 18:49:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B80151C20ABF
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 16:46:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A5401C213E5
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 16:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C954E2036F2;
-	Fri, 18 Oct 2024 16:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F312036E9;
+	Fri, 18 Oct 2024 16:48:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePM3feaM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKGVXcOE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE1E202651;
-	Fri, 18 Oct 2024 16:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27689202644;
+	Fri, 18 Oct 2024 16:48:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729269992; cv=none; b=CpVGEfrPhrTA+bP6Bt8BWIOQL+90W39U6muyQJw7lB0iG0VdLfiWf866t20S9D0Uof+Wt6q1ImVBnVzq6auTlT9JzGcv1ffdop+ivIJNTxYLhI04/rh2Zma9epiQDgDxCJXHWkhsEvMCyoxuyd4ttlwaXppRxITOQ9JBH1WIYZg=
+	t=1729270135; cv=none; b=AJambIODVDr2j6RjAKWvg3L5etf1K46Lqyxqn7pLKG5eHxtUg9OYOhNUK97a/lX1QMoi9qS+v1Jjph/Kq2TXdHm2OegCfHHZyuUxdJuqCO9h2kUnZmf7bfNT9P0SqDU77BY4DENpnSZ8/eKVQ4iylNMdBvrREfYDtWhkQxeHGC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729269992; c=relaxed/simple;
-	bh=HvetEVA4zCK8RL7HD2ZOs/3kgdfuNgxZCJtcWYYCeBI=;
+	s=arc-20240116; t=1729270135; c=relaxed/simple;
+	bh=5be1HF+hOuNGC1SEF5sFVkWpnDgYkPHvPN/yVsMnXRU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wp2e872br0WOo57ghex0Ragd5s+KDimCu0ifaqIPtyZ/6lxKWZlt3H3+D+/4L2C4vrU9y+5hXyCBI3P3EUdp9nEyohp5x7QnxfyCF1IdMPp58SG241jGHhq4BRqcIr9IIs6OU6RYA8/haaetyoeD6+1lYWGITYlKDHoGrUlY4Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePM3feaM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3354CC4CECF;
-	Fri, 18 Oct 2024 16:46:31 +0000 (UTC)
+	 To:Cc:Content-Type; b=RdxSioRiUhUiRghy7PEht8HfTaeXH0iUCH0ggc82vEXxfZjPXWmB+XEIddgK5ZHbPAIseWpS+jjXuOaWtRAN35a4dxnr2uKox34XkYhPAa0AOs5M13pF+RH9sTUtTDvZCbQMjd097rmRoQ04FCtgfA9dMA+LmOSKqSNZ/mBVC18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKGVXcOE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7837C4CEC7;
+	Fri, 18 Oct 2024 16:48:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729269991;
-	bh=HvetEVA4zCK8RL7HD2ZOs/3kgdfuNgxZCJtcWYYCeBI=;
+	s=k20201202; t=1729270134;
+	bh=5be1HF+hOuNGC1SEF5sFVkWpnDgYkPHvPN/yVsMnXRU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ePM3feaML+QDjb7Hk9W3VtQNSvOD/e6yi0wwNvPZHnc9nBxfQXvqjbmHLxiBE08m5
-	 H1jfEEsUwMrnlATY3BdP/4Sid8rJzkxv/oFuj61BOUHaSgfPZf7p7eNQ9+U9KI4Pku
-	 NNF6x8xNfg69pvky/iOo46zaBE9EDisG9rrAREk4DbVH5sE4gdzLVY+a8D+Z3/TU39
-	 hP5C8bVPDekko9rI4jF4Ik8C6Hj6+RRz80g0xk3XJR5VwIkJqO+o8fEb14e1KdhB9/
-	 zcgZbFtwaxaflJQx8kxyaEeDk+uQpgMkIGirIZ92f6lQtXvgtbI/8V91fpulyyflRR
-	 Erxp6aDKzs3VQ==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5eb8099f2e2so761071eaf.3;
-        Fri, 18 Oct 2024 09:46:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUiX60UwZcWHdqL0k7SvQcGamsAeGyxA8arpFfm07FtWS3zJeElH2DGAYnEeACSYcH860r6GBB0/s+nrASU@vger.kernel.org, AJvYcCV5cmGKyqt56DjJ9wbtTKeEzSBcL2fkgex2tD76bGhXvGcw1soJImPs/PHwrgkVH5tZgXkZb6PTFxnb2DKH@vger.kernel.org, AJvYcCVQ0KBUBoiH+pZj4LV/l0rNtUqge1wMnC0vv5ZD+CVALcVphB0ODHZLsW4E1EU/Bv0JHx+eUF/EpgQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsWnd6GEujfQV70mpTGXkeJR3/uQcv85kLGKFbs27gT3QAHV3z
-	7lISdri0xeYd1TCrUEM4bZjPRxdi8gj1PfqTSMlQwFet7P7mvG5ai6xmljJ1pFjeuruZWhcPbtY
-	dEofBBYxXlkW4hvTNwcpxB/vaygU=
-X-Google-Smtp-Source: AGHT+IGXyq0dmldYiwmz+afHivTsSjfiM4J/KBaxukLyYzlQwRaqDq01j8jkT5ZetrgHgl22GBLb8mkwRLI2wrLMxa0=
-X-Received: by 2002:a05:6870:ac22:b0:287:b133:8aca with SMTP id
- 586e51a60fabf-2892c3425demr3187518fac.25.1729269990416; Fri, 18 Oct 2024
- 09:46:30 -0700 (PDT)
+	b=sKGVXcOEv0LzJtWBs3cEBKbBmWOVbsZgEyhtR1EXZhA38z0n044vWHh44mQRJSjXp
+	 18zzwtvR577Z1SayWoTDnd/c1rg26SA5sr4eqoodEiFGXVDosKsqwUaY3381wyHfsp
+	 P1yln48Mb2YPAj4LTz4BQLm8qlaNBkf9r6d7zlOdH5QzJV+JYaqhjNI3jbrJLFCIO5
+	 FGP8qr2IXAQwDJyjAbjL+VpDLsJl7/iCJCkZS1n9aG02hFtoyVLC0b8LxSTilK5b9Q
+	 FeOnSo93Zdyu/47CvudpeipFXMuazmceRYT+UHP5Hp93oP72LKiu+U4P0jBD1j7jL6
+	 r7HRecQOYcdJQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-287b8444ff3so1041894fac.1;
+        Fri, 18 Oct 2024 09:48:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUWgIZhr+wytn01YCbrQmtP6DiicIVY0NWcM1X7KJswogRPiETxE/pmYL3igv1qlqbqexoH41kRpj9yKQ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxdr2Y/A4+FOPx8D1YuWq2XeZ9+U4tgLjk9CRTS37zPIWfSXiZi
+	c1m+d2jAOzz0+htOF7tnjksHorc3p8yO56EMtCKwRQSguMahF1LwDVFQPnU8A2oOBys0E6mYbyn
+	rIbYkfwX7ARdxON4Zkxv53GPCI0Q=
+X-Google-Smtp-Source: AGHT+IH79d4xgd9a9Uis4M0NH+AfruKXwqTKgrXhahKWvCU5Il0ONkuo0LSfgfyOmFDIrbusLgmNZQVeSfOhAAsq2rs=
+X-Received: by 2002:a05:6870:82a0:b0:277:d360:8971 with SMTP id
+ 586e51a60fabf-2892c549c2amr3314534fac.43.1729270133982; Fri, 18 Oct 2024
+ 09:48:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240927081018.8608-1-shenlichuan@vivo.com>
-In-Reply-To: <20240927081018.8608-1-shenlichuan@vivo.com>
+References: <20240909095529.2325103-1-marcin.juszkiewicz@linaro.org> <CAKohpokMUqaMUJaSfdyY39idmh_ycYj+hi5sMSBmZV1CQ511qA@mail.gmail.com>
+In-Reply-To: <CAKohpokMUqaMUJaSfdyY39idmh_ycYj+hi5sMSBmZV1CQ511qA@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 18 Oct 2024 18:46:19 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h3ZfsjOn05xBzpmFVi2Cm5Coa7006YRSGfoCe+HBv1ww@mail.gmail.com>
-Message-ID: <CAJZ5v0h3ZfsjOn05xBzpmFVi2Cm5Coa7006YRSGfoCe+HBv1ww@mail.gmail.com>
-Subject: Re: [PATCH v1] cpuidle: Correct some typos in comments
-To: Shen Lichuan <shenlichuan@vivo.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	opensource.kernel@vivo.com
+Date: Fri, 18 Oct 2024 18:48:43 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ic-b6-dqcfMDTwkEL=MKcVCgHtJ7WH6o==vFDbQy9YPQ@mail.gmail.com>
+Message-ID: <CAJZ5v0ic-b6-dqcfMDTwkEL=MKcVCgHtJ7WH6o==vFDbQy9YPQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: use proper units for frequency
+To: Viresh Kumar <viresh.kumar@linaro.org>, 
+	Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 27, 2024 at 10:10=E2=80=AFAM Shen Lichuan <shenlichuan@vivo.com=
-> wrote:
+On Wed, Sep 18, 2024 at 5:04=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
-> Fixed some confusing typos that were currently identified with codespell,
-> the details are as follows:
+> On Mon, 9 Sept 2024 at 15:25, Marcin Juszkiewicz
+> <marcin.juszkiewicz@linaro.org> wrote:
+> >
+> > When I booted my RK3588 based system I noticed that cpufreq complained
+> > about system clock:
+> >
+> > [  +0.007211] cpufreq: cpufreq_online: CPU0: Running at unlisted initia=
+l frequency: 816000 KHz, changing to: 1008000 KHz
+> >
+> > Then I realized that unit is displayed wrong: "KHz" instead of "kHz".
+> >
+> > Signed-off-by: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 04fc786dd2c0..76da29c2bd3f 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1539,7 +1539,7 @@ static int cpufreq_online(unsigned int cpu)
+> >                          * frequency for longer duration. Hence, a BUG_=
+ON().
+> >                          */
+> >                         BUG_ON(ret);
+> > -                       pr_info("%s: CPU%d: Running at unlisted initial=
+ frequency: %u KHz, changing to: %u KHz\n",
+> > +                       pr_info("%s: CPU%d: Running at unlisted initial=
+ frequency: %u kHz, changing to: %u kHz\n",
+> >                                 __func__, policy->cpu, old_freq, policy=
+->cur);
+> >                 }
+> >         }
 >
-> -in the code comments:
-> drivers/cpuidle/cpuidle-arm.c:142: registeration =3D=3D> registration
-> drivers/cpuidle/cpuidle-qcom-spm.c:51: accidently =3D=3D> accidentally
-> drivers/cpuidle/cpuidle.c:409: dependant =3D=3D> dependent
-> drivers/cpuidle/driver.c:264: occuring =3D=3D> occurring
-> drivers/cpuidle/driver.c:299: occuring =3D=3D> occurring
->
-> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
-> ---
->  drivers/cpuidle/cpuidle-arm.c      | 2 +-
->  drivers/cpuidle/cpuidle-qcom-spm.c | 2 +-
->  drivers/cpuidle/cpuidle.c          | 2 +-
->  drivers/cpuidle/driver.c           | 4 ++--
->  4 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.=
-c
-> index 7cfb980a357d..caba6f4bb1b7 100644
-> --- a/drivers/cpuidle/cpuidle-arm.c
-> +++ b/drivers/cpuidle/cpuidle-arm.c
-> @@ -139,7 +139,7 @@ static int __init arm_idle_init_cpu(int cpu)
->   *
->   * Initializes arm cpuidle driver for all CPUs, if any CPU fails
->   * to register cpuidle driver then rollback to cancel all CPUs
-> - * registeration.
-> + * registration.
->   */
->  static int __init arm_idle_init(void)
->  {
-> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle=
--qcom-spm.c
-> index 1fc9968eae19..3ab240e0e122 100644
-> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
-> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-> @@ -48,7 +48,7 @@ static int qcom_cpu_spc(struct spm_driver_data *drv)
->         ret =3D cpu_suspend(0, qcom_pm_collapse);
->         /*
->          * ARM common code executes WFI without calling into our driver a=
-nd
-> -        * if the SPM mode is not reset, then we may accidently power dow=
-n the
-> +        * if the SPM mode is not reset, then we may accidentally power d=
-own the
->          * cpu when we intended only to gate the cpu clock.
->          * Ensure the state is set to standby before returning.
->          */
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 9e418aec1755..06ace16f9e71 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -406,7 +406,7 @@ void cpuidle_reflect(struct cpuidle_device *dev, int =
-index)
->   * Min polling interval of 10usec is a guess. It is assuming that
->   * for most users, the time for a single ping-pong workload like
->   * perf bench pipe would generally complete within 10usec but
-> - * this is hardware dependant. Actual time can be estimated with
-> + * this is hardware dependent. Actual time can be estimated with
->   *
->   * perf bench sched pipe -l 10000
->   *
-> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-> index cf5873cc45dc..9bbfa594c442 100644
-> --- a/drivers/cpuidle/driver.c
-> +++ b/drivers/cpuidle/driver.c
-> @@ -261,7 +261,7 @@ static void __cpuidle_unregister_driver(struct cpuidl=
-e_driver *drv)
->   * @drv: a pointer to a valid struct cpuidle_driver
->   *
->   * Register the driver under a lock to prevent concurrent attempts to
-> - * [un]register the driver from occuring at the same time.
-> + * [un]register the driver from occurring at the same time.
->   *
->   * Returns 0 on success, a negative error code (returned by
->   * __cpuidle_register_driver()) otherwise.
-> @@ -296,7 +296,7 @@ EXPORT_SYMBOL_GPL(cpuidle_register_driver);
->   * @drv: a pointer to a valid struct cpuidle_driver
->   *
->   * Unregisters the cpuidle driver under a lock to prevent concurrent att=
-empts
-> - * to [un]register the driver from occuring at the same time.  @drv has =
-to
-> + * to [un]register the driver from occurring at the same time.  @drv has=
- to
->   * match the currently registered driver.
->   */
->  void cpuidle_unregister_driver(struct cpuidle_driver *drv)
-> --
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 Applied as 6.13 material, thanks!
 
