@@ -1,117 +1,124 @@
-Return-Path: <linux-pm+bounces-15973-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15974-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F23A89A4262
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 17:32:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99C589A42C0
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 17:43:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D5F31C228E3
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 15:32:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B63A2814DD
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 15:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEBB2022E0;
-	Fri, 18 Oct 2024 15:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BBCE202651;
+	Fri, 18 Oct 2024 15:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LF17OhnF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z9HavkLn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9329B42AAF
-	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 15:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDCE20264C
+	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 15:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729265515; cv=none; b=UM5ZYJJFfrnpvju/FIHHEYLcVplYweWU8YkK13KGweDxPSyuuFNnxxQUhBadhMWDBus/V7YSlJMN/7eVmArL642nusEZGqKUswd5Zq8bmunoMomiggbE0wGgGkT1BNWHOGf3k2trc1lYszELXHOYkBMNi5sfA2sVIRkC7vAW9vo=
+	t=1729266201; cv=none; b=rgOWnfcen9h5GPTgj7vN4u9bwwbQ1HGHb/p0xtV6Efs7GrY2b+7xK/xY10mwQOzR3LW/IAQHTpBd5P6HzyqCjelnQlkxv8C2X80w/qjTjANpj+zKxyJUFOTaOC1GYCU0pi/iyEVBYLEFN4t5FeJD98G23krqTjbohFjDBlv15Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729265515; c=relaxed/simple;
-	bh=gQeddZA7AUNwll6ggmREqwiuhKzdOjqoIFQvMRD4+w0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fpMVAtRI5qpyQr4CY/1oMDGP2vYcLpEZrat1MuJF/K1bNt17bldhlAGJBJq1WfxApXeCzJf2yNtPxYFiS2AGyCUCdcMxytdAE0FBHbmeCiBdLzU8P2kO4g5QqBipW5V/HJC1lUmScZdC6vp4kDLM97RyjFK9XOUJk7WB/wDlgLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LF17OhnF; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-539e690479cso2611087e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 08:31:53 -0700 (PDT)
+	s=arc-20240116; t=1729266201; c=relaxed/simple;
+	bh=c0Eoe6/nO4lN/XxFgwsBWWXoK2ooRSnbrUJPmSJTiYE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W/q4HZQ0pdL2Qy03Ri26/R6ReG3sEWTQFrujoOaAbHA5/gNobnWC7grKjhyOCuaiCaepjkT5C+lpneOcHSRn7oU6ESfT9Vjj8aAXV3qCciOFV/0qQYGraDGxwW1+DurvosaOjTEn5swbMsTsvbfQtDWvHuBlX2oQTjok9rgTMjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z9HavkLn; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539e681ba70so21385e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 08:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729265512; x=1729870312; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0nybU+upPHt2Dx8CJHCDz0JeIFRaZFDVbO6aBhUo3w=;
-        b=LF17OhnFOdHr6XdlCUdYLDWBUF1bmSIVRBulPKzehc8LJtbTlpu/nRFQu08tH+Vrqb
-         iBQeBKSOOYWCR1TH5WStbIG73V1hGT0OEImMwNg6Oo0V/pTbqP3I2EFDv2uLqTYFhYrB
-         XKjPWarJP4aV4taRbbFcVoYa3V4M+IkieYHZhIGC1676Njl2UK6Qpeckxp2/EpckNutn
-         RePP4oiO/9S+i3yIQkKsfGJdBVT1W9FIY3fOxNGMVRiQaU7EA1aMkO6iSZ/s6knAyRe4
-         rwGbjXAIRONn6I6qGPWZ36/BRMB2yXS0amjSzKrr9MsNtCA2qIXtUscjbY6Cen0jHi1a
-         xKWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729265512; x=1729870312;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1729266198; x=1729870998; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v0nybU+upPHt2Dx8CJHCDz0JeIFRaZFDVbO6aBhUo3w=;
-        b=jTFqrwiDBLH/qnigq8KNRzArsUw9S1ZtBm/leXU5XsEGDWCaKUxombxwbpUXVeAO2H
-         gI33cCIvTd+tO5F3+uZKeqfEZix/wTcPYmHoNj2R8Uo/rgdO6howTMlUxd0pPoXeYa+1
-         WQOyrPsHhSMx4o+6DRofgBLgjrxgLCBDpjKj5sybh/M/a1TF1AYZVAWIeZ9ZUi1qNqg3
-         q1g24x33WB+Q5oXHOvr3Vbd1nso8QMKMS4qZHs4V86wH9ZxVsgTOP0Gw3ZdWZBSwXWpf
-         TbgnMr0hfBUQ1utlUomwMnUx7EZqEHysuV9+B9wUfmvFuZj6a+4p8yNKtgydp1A+hY1Q
-         S8HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXb4IAw+G5di9WZAuw3XpuztWrfknLFAv8LFz7AS9QeUmoY+nHipmLdq6CvvkI0nwvPyud7+NaARA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywq9V5z47buQHRMenSbQ1CS6mM7fMqDcUnm/O54KAxLop9pF5jQ
-	6E1I1niwSHs1fNKVIMEs0pEGaQPzrvEO03gyrviBM1S1QIu7ribnUWAFsMNfw8I=
-X-Google-Smtp-Source: AGHT+IEYN8Z/8ko7R/xwHM1JXJhtjnqNmKTe/HKd0kHZ6O4I/L4D+iF6YO0NLqlfFP8rSbsSSvLPgA==
-X-Received: by 2002:a05:6512:12c3:b0:539:d870:9a51 with SMTP id 2adb3069b0e04-53a154f8ebbmr1992715e87.48.1729265511562;
-        Fri, 18 Oct 2024 08:31:51 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a151b934esm246241e87.100.2024.10.18.08.31.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 08:31:51 -0700 (PDT)
-Date: Fri, 18 Oct 2024 18:31:48 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Johan Hovold <johan+linaro@kernel.org>, Kalle Valo <kvalo@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v6 2/6] power: sequencing: qcom-wcn: improve support for
- wcn6855
-Message-ID: <gqgawgpcuw7ojttxh33fsymmucpfixeqhed23fkic5gz6n4nya@ubz23tw5x7vd>
-References: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
- <20241018-sc8280xp-pwrseq-v6-2-8da8310d9564@linaro.org>
- <fee25ac2-14b8-412b-b093-1526443498e7@oss.qualcomm.com>
+        bh=pNvrrma6BTw3zL2RctfT/cmV6V0njwbtezNVin6wtIY=;
+        b=z9HavkLnqBdnMlcQBgaNWdRs1VuPPPRKuSCUAhWYtz3Jgfawyn7OpnKYZOBvpxauem
+         hQOufs05xvtJPDv6pGqe/e+zPrrtgzAJ9XaTaV69DPSIF96fnkIxi3DLfuwQbHPATdEP
+         rkzzXDrLefj3cT0WVbrVwFIq3I7kw3kuUDBVpfweeOFS9sdkrtfSeArLaDIUlnuzrl4C
+         tW0foaI5kYT+smhUmHw+w3GneEPj5BC5kz8mGHEVEPDWaD8Nh5pzM5+BIYVX/eRFP/yY
+         H+SyqSd6Rf6W4eRAZhSI/+DJS5NLQFqU+qYHG0/I2BCKPVxFXkr2LMWUf2/w9dqcLfhi
+         Hc0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729266198; x=1729870998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pNvrrma6BTw3zL2RctfT/cmV6V0njwbtezNVin6wtIY=;
+        b=Vc/4H2qKZatt1RUqPb2NsNZ3j/QABCKnXP6bjdBnGRG7uq5Ks9z4XShskisdIFqoSo
+         8+2Hwo2970mn0/K9entLHDVXEe+hIOdM1NGffr1f5yERRCFdiqoKa6tfU0gb9Uo8OEuD
+         b8ImxSKpN4ceEzSOASYJ1HTr0xZmwqy5hZtSYIAZY4WCQRJ2lEbD+U35160PtsrN3K1k
+         IOUQDdf0DAlTcbzg/pAMjsFX+ovgf/78nhBX2AcaZOcwAGMNhz0QQI78RGX3oTm0+gWC
+         8GCRNKMSLTNQJaDJwbrfNM5sytFfzLpFy00vNnMGRPCgxjtkvKzIyjdofZ3DBA6qEBsj
+         aD8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXZAYw3eRwH0U89tOnY2djoiyoETEEsuV9WiHjmFKK2hh9dq8aTsqAE9BlHWHyoCAm359mxqf9N9A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoQr5ooYDFp8/FZtqZYv8gAuewQDSIFVSR+fWnNK9ft2qDnXCW
+	Jn+KMq3DTIDPI+VaAAfxq2sjeE9X8kugnqfMeTS5pGc843kB1WztC9DkQzSxynUZ3B3NlxF8NNM
+	r3JZBizOKgJ9UX/P6G1k3dLPkPvBlZ7mtVjhb
+X-Google-Smtp-Source: AGHT+IG3vlKjb4acLUJQrUf0wlFP+haGvVjOhpoNLq0EbhvWYHGGjdYzHwcPP6dx45ZVtSwlmUALpiqDUA+ttbmBIQY=
+X-Received: by 2002:a05:6512:130b:b0:539:e436:f1d1 with SMTP id
+ 2adb3069b0e04-53a157591eemr413396e87.1.1729266197161; Fri, 18 Oct 2024
+ 08:43:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fee25ac2-14b8-412b-b093-1526443498e7@oss.qualcomm.com>
+References: <67124175.050a0220.10f4f4.0012.GAE@google.com> <671260bd.050a0220.1e4b4d.0016.GAE@google.com>
+In-Reply-To: <671260bd.050a0220.1e4b4d.0016.GAE@google.com>
+From: Jann Horn <jannh@google.com>
+Date: Fri, 18 Oct 2024 17:42:39 +0200
+Message-ID: <CAG48ez2VAMZ2K8AvWL0UoEvFCaKEzVYbaJ=syezoXj9Y_P5UVw@mail.gmail.com>
+Subject: Re: [syzbot] [pm?] WARNING in thermal_thresholds_flush
+To: syzbot <syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com>
+Cc: andreyknvl@gmail.com, daniel.lezcano@linaro.org, elver@google.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, lukasz.luba@arm.com, 
+	rafael@kernel.org, rui.zhang@intel.com, syzkaller-bugs@googlegroups.com, 
+	vbabka@suse.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 18, 2024 at 04:30:17PM +0200, Konrad Dybcio wrote:
-> On 18.10.2024 2:49 PM, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > 
-> > WCN6855 (also known as QCA6490) is similar to the already supported
-> > QCA6390 but takes in two more supplies so add a new vregs list for it.
-> > 
-> > On sm8450-hdk it also requires a short assert of the xo-clk pin so add
-> > handling for it in a dedicated unit.
-> 
-> Any chance this fits into what
-> 
-> Documentation/devicetree/bindings/clock/gated-fixed-clock.yaml
-> 
-> describes?
+On Fri, Oct 18, 2024 at 3:21=E2=80=AFPM syzbot
+<syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this issue to:
+>
+> commit b8c8ba73c68bb3c3e9dad22f488b86c540c839f9
+> Author: Jann Horn <jannh@google.com>
+> Date:   Fri Aug 9 15:36:56 2024 +0000
+>
+>     slub: Introduce CONFIG_SLUB_RCU_DEBUG
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D14cc4c5f98=
+0000
+> start commit:   15e7d45e786a Add linux-next specific files for 20241016
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12cc4c5f98000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dc36416f1c5464=
+0c0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Df24dd060c1911fe=
+54c85
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1192f887980=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1417e83058000=
+0
+>
+> Reported-by: syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com
+> Fixes: b8c8ba73c68b ("slub: Introduce CONFIG_SLUB_RCU_DEBUG")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
 
-No, this is a software controlled set of straps for the WCN device.
-
--- 
-With best wishes
-Dmitry
+This looks like a bogus bisection - the blamed commit was already in
+v6.12-rc1, while the file that contains this warning
+(drivers/thermal/thermal_thresholds.c) doesn't even exist in mainline
+yet.
 
