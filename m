@@ -1,142 +1,152 @@
-Return-Path: <linux-pm+bounces-15978-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15979-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37C5D9A435A
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 18:10:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F829A43A0
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 18:20:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA1E328132D
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 16:10:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D888D1C22E83
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 16:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2752E202F7D;
-	Fri, 18 Oct 2024 16:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C69203705;
+	Fri, 18 Oct 2024 16:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lbiqDEw0"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AXqYqzwA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4DF20262C
-	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 16:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CE8202651;
+	Fri, 18 Oct 2024 16:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729267844; cv=none; b=gz2E0mXrDp259VIH9kpLCcorYtDkr29Gdz97aVLWigIz+kxraNfZQrI/UsDvBFr8NzCVGyHfvRiQUNAKRs/7HxBDZCiV8b3lhZg6SX1lkQxM9cjUnaU7ynMl5NoqwmRZWKHmiBDmGNlFoB5ZuVrJDcMEzsV/Kc6+KvjZ+5J51DM=
+	t=1729268431; cv=none; b=g+fIqG2eTvqsnxuqnYPPiO5jCTZvgbQflTTrQabySsITYD13eLhRSdLuH4wlyh15s7xtx05q4M1X3MeE5xjljHzVGYlUAeJxTNOZzCi7ufNkTAFpt4CkJVurPQZ6nPvYNzhKWXbEYByMVwst0dXqfiTfzGHbThjigH22Q/EaIWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729267844; c=relaxed/simple;
-	bh=JuJzQzslhTotDMx0+6eb0uKjnXES4M9TQkjrM1Mz/Ak=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H/WkPupISiuLZrmLJo8s8StIYx+4R+vYZpi70IkQS7fZ0k4m2IGUu2HB8JxH0ulmZ2ib8ggH+PtsrtZ78L4jgQn7qoIYjztnfMMpqtQ4NdIFdQ2GKcTuB2Y+LfJywCxT55uXoBq0Hs5RHs13GWDkz4QVqWHjq0XJXu1lwuXjUjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lbiqDEw0; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e2cc469c62so1649828a91.2
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 09:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729267841; x=1729872641; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wzcmIoSnnRoqVjkfImEkXgtaHxqUHP3HJ7pJbZDej0I=;
-        b=lbiqDEw058Wdc7lykBpnzJuj95ENL+gOIUsRC8SLUqZT16XjdW7gRHTFb5Qy8SNCIJ
-         j1ctA4wCqqxkDtn6QlTHMMqynmfBa0Ly9ab4CqUuTDyPOckOPN+eq4u/uXTJCHY04Fe2
-         Xr25T1/QM6D6HN6JjGkydNVbSDduAWmjSLMg3hZxSkCbhd5+6HPpgU/u5rT20OF3zIeU
-         jiJvPqaiNlMzV6Q8zbpu91SfcXTDAo9/SjCwKaxf9xS6X6ymDQopt/TjnQMi5GgqIgoo
-         CYQ4JNRmWl76AQltEHe02oVmjeBhd+CcRmmtglAwp69cwdbY3n5LPIwn5NJss56B8YZa
-         0akA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729267841; x=1729872641;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wzcmIoSnnRoqVjkfImEkXgtaHxqUHP3HJ7pJbZDej0I=;
-        b=J4ZHSI1yFqwt3XceiBpb50qSEkeb4mva6aeiRpXByU9iRXwhAJ+T4uuHX8yNCfBDKJ
-         qJuoaR/J4ZAdJvOIMoneWjADzURN206wnRf4sJxdyTCpe01klu5bp8ddai59VSvZKbFA
-         nxt6iMd0mOHnAoyuw+3WRf9awnNFLm9foYNPy09zdosCGgKwntLcjyZytAN3I/cSTpHB
-         19Cd9Z3WoQyIa7cJxNKsLAM9UkVA+1n5WDSTQnFI2z2gwMJaBOmxYXurpETYgBqqdoPy
-         +ePYf4mE5gDIb3l9wOhZoI90wStRakB1Re6A8ExsKsEbYnpbsv826g/DHWVHDU7yLPDX
-         ItAg==
-X-Forwarded-Encrypted: i=1; AJvYcCVOA2VNDHMl53lQfQG2HFXFpbpDH+5PG6FjF3lot6NyQxyB0MUohIwd2HYU88m2C3kxUSbKve3jug==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6VxPY/qAbRoV96fmBsJp8aUSFvRuaJKQXWioNgsF1dBsX8V1j
-	G+xrLkeQ9+K34H2sKwXrlZb+q1a+8MguGXQh8MC6WGWwO/xUQoYBAZuznVJJqR4RRH6jT8pk8n2
-	6myx/SjQp60Raxvt1xC8vTeZwLWh4nW+ERrOmgaiGxN8MeK2Mp5pB
-X-Google-Smtp-Source: AGHT+IEIaDHKGx3a03jjnaRAfVjQU/2C59OteMdtaOvSmLoZgagpqk8t3RjA9wfG7jz6Ng70z3qsoKYAO9sjNrgLdbc=
-X-Received: by 2002:a17:90a:7346:b0:2e2:b719:d581 with SMTP id
- 98e67ed59e1d1-2e5616c1e83mr3496300a91.5.1729267841051; Fri, 18 Oct 2024
- 09:10:41 -0700 (PDT)
+	s=arc-20240116; t=1729268431; c=relaxed/simple;
+	bh=mkVYt2W5JOK0CvpUDNHo8dPYoJDfSL/8UCOFmOypSx8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L3IZfFnyTAftYlM/oSUwiO8oOk8lDVd1/5kIlX4XKr1HXEZqxsq/kWxL9z66eV1VqMQ6gpzOTsIrfP62l8BEFGkXVevWhaOjSAGYQxeVomQ+ndf58fb1e0pwvnZ7k+cSRPhfSmJr/ujW3a++8uS1+98AkwLqELMqTTkzvMMDJrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AXqYqzwA; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C9A8540E015F;
+	Fri, 18 Oct 2024 16:20:26 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id YDifM9s0iqSI; Fri, 18 Oct 2024 16:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729268422; bh=xAbSibuOma7sKDAZvFzI/jo58IkQccgwolksqNCMrZw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AXqYqzwACXfOfbviQ0eFvl2TZ9vjOqJa7IjGA7k8wTzcpUBXvT6z3scpSlc78Al5l
+	 e3U+LTW3XTLt14U/oWiEkpWKstLPvs5tlQiIWb/wdVDwD7HOV8N+n5gQImeV3f0dRs
+	 c0kAAE0Ig0mJOcaz5szPcgjTZxbFEtopiFOG9f8OVECMDwjKNXo+n0U3fv12b1VHj0
+	 z90Hxin8C3MjK8kWI3bOq/7TR7eP/fvRxreYX08yZ9oSwewdHO9dZDnnyACCFJuhEm
+	 OFfQSr7LREtkK1oEqyiYbGgdWB3i+ywexHJlwAOKSlMKv077jqPT2dWSjRCDMFX3by
+	 w3Z0ODCFu84H2KCMOS5FITEuI/AYU57ca4H+4Vk/doI7lbVqn5KUZmlYsOuf8BTNJf
+	 U5VuoNMqzLbZFsApKN/hN5moZojCxEQXAQe1j74uziOn9KznkijIN7miDTwLpsNnzM
+	 XqU9mgKyzRXUvI+vFuCVHkmh4fCHAu2hPunxKio1WvR02hUmAJL9Qb6DfgAW4NM4cz
+	 Xvib9NsejahQM29aqxQWW0wZZDtkdUIbeCeKeguK8DaWd4h3J6fmA8As9FBNR0tu7u
+	 /RlczOwf8IAHA13/Xl76hFvIYnP8jJm/x8Dz0nbtbq+IsKtLBaw6olo8Js5KfX/wZV
+	 mMFEsUtI+X5qvRglS4q3VZGI=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1B37540E0169;
+	Fri, 18 Oct 2024 16:20:02 +0000 (UTC)
+Date: Fri, 18 Oct 2024 18:19:56 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	Brice Goglin <brice.goglin@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: Re: [PATCH v4 02/10] x86/cpu/topology: Add CPU type to struct
+ cpuinfo_topology
+Message-ID: <20241018161956.GCZxKKrLeTg0VTdfWA@fat_crate.local>
+References: <20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com>
+ <20240930-add-cpu-type-v4-2-104892b7ab5f@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <67124175.050a0220.10f4f4.0012.GAE@google.com> <671260bd.050a0220.1e4b4d.0016.GAE@google.com>
- <CAG48ez2VAMZ2K8AvWL0UoEvFCaKEzVYbaJ=syezoXj9Y_P5UVw@mail.gmail.com>
-In-Reply-To: <CAG48ez2VAMZ2K8AvWL0UoEvFCaKEzVYbaJ=syezoXj9Y_P5UVw@mail.gmail.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Fri, 18 Oct 2024 18:10:27 +0200
-Message-ID: <CANp29Y7UFVPYtdd0jVUbkUjdkpXXrv7Z+sczmKvZytNmtgx1hA@mail.gmail.com>
-Subject: Re: [syzbot] [pm?] WARNING in thermal_thresholds_flush
-To: Jann Horn <jannh@google.com>
-Cc: syzbot <syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com>, 
-	andreyknvl@gmail.com, daniel.lezcano@linaro.org, elver@google.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, lukasz.luba@arm.com, 
-	rafael@kernel.org, rui.zhang@intel.com, syzkaller-bugs@googlegroups.com, 
-	vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240930-add-cpu-type-v4-2-104892b7ab5f@linux.intel.com>
 
-Hi Jann,
+On Mon, Sep 30, 2024 at 07:47:24AM -0700, Pawan Gupta wrote:
+> Subject: Re: [PATCH v4 02/10] x86/cpu/topology: Add CPU type to struct...
 
-On Fri, Oct 18, 2024 at 5:43=E2=80=AFPM 'Jann Horn' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> On Fri, Oct 18, 2024 at 3:21=E2=80=AFPM syzbot
-> <syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has bisected this issue to:
-> >
-> > commit b8c8ba73c68bb3c3e9dad22f488b86c540c839f9
-> > Author: Jann Horn <jannh@google.com>
-> > Date:   Fri Aug 9 15:36:56 2024 +0000
-> >
-> >     slub: Introduce CONFIG_SLUB_RCU_DEBUG
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D14cc4c5f=
-980000
-> > start commit:   15e7d45e786a Add linux-next specific files for 20241016
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D12cc4c5f980=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dc36416f1c54=
-640c0
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Df24dd060c1911=
-fe54c85
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1192f8879=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1417e830580=
-000
-> >
-> > Reported-by: syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com
-> > Fixes: b8c8ba73c68b ("slub: Introduce CONFIG_SLUB_RCU_DEBUG")
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bise=
-ction
->
-> This looks like a bogus bisection - the blamed commit was already in
-> v6.12-rc1, while the file that contains this warning
-> (drivers/thermal/thermal_thresholds.c) doesn't even exist in mainline
-> yet.
->
+x86/cpu: ...
 
-Indeed, the bisection result is wrong :( At one of the steps, syzbot
-has hit too many random "lost connection to test machine" crashes,
-which derailed the process.
+is enough.
 
-I've filed https://github.com/google/syzkaller/issues/5414. Once
-implemented, that should get rid of this class of false positives.
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index 4a686f0e5dbf..61c8336bc99b 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -105,6 +105,17 @@ struct cpuinfo_topology {
+>  	// Cache level topology IDs
+>  	u32			llc_id;
+>  	u32			l2c_id;
+> +
+> +	// Hardware defined CPU-type
+> +	union {
+> +		u32		hw_cpu_type;
+> +		struct {
+> +			/* CPUID.1A.EAX[23-0] */
 
---=20
-Aleksandr
+Might as well stick to only // comments as we do those in headers now.
+
+> +			u32	intel_core_native_model_id:24;
+
+wow, that needs a whole breath to speak: "intel_core_native_model_id".
+
+"core" and "native" look like they wanna go. What is that field supposed to
+mean even?
+
+> +			/* CPUID.1A.EAX[31-24] */
+> +			u32	intel_core_type:8;
+> +		};
+> +	};
+>  };
+
+...
+
+> +enum x86_topology_hw_cpu_type topology_hw_cpu_type(struct cpuinfo_x86 *c)
+> +{
+> +	if (c->x86_vendor == X86_VENDOR_INTEL)
+> +		return c->topo.intel_core_type;
+> +
+> +	return c->topo.hw_cpu_type;
+
+Huh, the other vendors are not enabled. This should return
+TOPO_HW_CPU_TYPE_UNKNOWN then.
+
+I know, it does but make explicit pls.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
