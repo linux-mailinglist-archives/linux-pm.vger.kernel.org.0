@@ -1,146 +1,169 @@
-Return-Path: <linux-pm+bounces-15983-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15984-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94CFE9A43FB
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 18:41:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0A4F9A4413
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 18:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F8F31F2433E
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 16:41:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B80151C20ABF
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 16:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DF22038B6;
-	Fri, 18 Oct 2024 16:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C954E2036F2;
+	Fri, 18 Oct 2024 16:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cPlEruck"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePM3feaM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2C1203715
-	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 16:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE1E202651;
+	Fri, 18 Oct 2024 16:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729269690; cv=none; b=rzmHsC/zythDWHwsBdWGNX114XTVbvw+77JGN5LoFe0ZpkP0wTVwkJq1QeDecTwoGz17b1iLb/uFPWou72KBtedMm37ytex4hG9mfCvBeMHka1fsT7OQgleKHYCZmuaLBcOeopcGkQlY+6Bb5vfUJiHlOwwt5TDmE/hCfo4YkE8=
+	t=1729269992; cv=none; b=CpVGEfrPhrTA+bP6Bt8BWIOQL+90W39U6muyQJw7lB0iG0VdLfiWf866t20S9D0Uof+Wt6q1ImVBnVzq6auTlT9JzGcv1ffdop+ivIJNTxYLhI04/rh2Zma9epiQDgDxCJXHWkhsEvMCyoxuyd4ttlwaXppRxITOQ9JBH1WIYZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729269690; c=relaxed/simple;
-	bh=slE2uqtFzPyn/ppGD0xcZ7NY0c0d+kFHBGm4TrvMrJ4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=i8fQ0kLoBQ7G9ESxyZWgHMTqfu09tKwZqNFeP9pp3VmAL15Lkxaw5vYv9RScmdMQFa7vVjFlapr7WI8XF0j54rf/otvEcWE5RXI4HO1TzgaYkc6TdtrSE9F1pGfAGk5bPld8MJU2ASQeXb9evd76GbrI993pcJuMc+/amX5C39k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cPlEruck; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb5740a03bso27822831fa.1
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 09:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729269686; x=1729874486; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fgkgp+Y+TtjrV790qUB8MXr2pVx4CxRwBMGP4K422CE=;
-        b=cPlEruckboFpJFN/T/OUt5PoVjn/JPFcgcDvy4kO44FeHvV6lPbub/tZ17IdjIWX0y
-         e70d7kCsQBh0nm8GM3qcPqSyG3RlOZpWNAyVqF0FL/4gJNlKRyaxAHukaNrBMKtAcAOp
-         KbdYpLKkE6y1JUnJsKHSbsmsX1fMk+4YAVGUxC/NudDiopSd1y9TFnxSNTPYbiFW596e
-         04EtorkCNePHWwhDzXjMudAHowRvhqHX4mY5O6bdQMb+4BJLcGjAP81l7cGgG0kBkXm3
-         zoLCNZ1iwNMqwH4ToErnuxl1HMGx3oe/g+YaUssjXgkfG+0RKrnDSdCZmRgfOl2t3BEQ
-         afgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729269686; x=1729874486;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fgkgp+Y+TtjrV790qUB8MXr2pVx4CxRwBMGP4K422CE=;
-        b=ezg/vIY+IVImovPSYRVKy0qXJYfnGkF4GBnfRRHPVe/4JUMBRoU75GitAfp0Vn4E8Y
-         QS1O4JzPURV/wuiM45ogBjgoQz+pV7V/yyGvhQg9MhRHgQQLFKso3vjEc89LSE/1v/Vg
-         Cd9fXPoP/2nP5tJYAMs7gvxYM0/HLWdk1a1sRQgnH384TUhka0bIpyOta3r20XaKiNv/
-         z6ZU6YL/CE2rmxK4GzszOPOHh3zrYrEg36JCTN0uB/82KjbgFtPO/ZQTe7jIVuBroBTR
-         Vs0ck5J54PSqJMONJcylHGKQWTecH8GLoqsDZestYmyLb/PWCrFCN/WnpxCqCBMoJwLN
-         F69A==
-X-Gm-Message-State: AOJu0YyzIX8zLSpqgf/Du0UloN69mY2c4qKQz1oinKZW6n4+kAGkzOzg
-	QzhXkXLr7bJlhVnIgSGUWjZajrPb86+++4pEmNCscCZgdqD4o+ZJrx6k7Utl09Q=
-X-Google-Smtp-Source: AGHT+IFFs5iNbJpTNH8ttbNV1wdfH7PRz8uQHbVsYMtlg+K3St/aJPmHNAFBBNjDD03OkpRXSEuHiw==
-X-Received: by 2002:a2e:be26:0:b0:2fb:4c5c:3f7d with SMTP id 38308e7fff4ca-2fb82e948ebmr17489121fa.5.1729269686448;
-        Fri, 18 Oct 2024 09:41:26 -0700 (PDT)
-Received: from [127.0.1.1] (2001-14ba-a0c3-3a00-70b-e6fc-b322-6a1b.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:70b:e6fc:b322:6a1b])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fb809b21e2sm2483901fa.32.2024.10.18.09.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 09:41:25 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 18 Oct 2024 19:41:23 +0300
-Subject: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SAR2130P
- compatible
+	s=arc-20240116; t=1729269992; c=relaxed/simple;
+	bh=HvetEVA4zCK8RL7HD2ZOs/3kgdfuNgxZCJtcWYYCeBI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wp2e872br0WOo57ghex0Ragd5s+KDimCu0ifaqIPtyZ/6lxKWZlt3H3+D+/4L2C4vrU9y+5hXyCBI3P3EUdp9nEyohp5x7QnxfyCF1IdMPp58SG241jGHhq4BRqcIr9IIs6OU6RYA8/haaetyoeD6+1lYWGITYlKDHoGrUlY4Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePM3feaM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3354CC4CECF;
+	Fri, 18 Oct 2024 16:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729269991;
+	bh=HvetEVA4zCK8RL7HD2ZOs/3kgdfuNgxZCJtcWYYCeBI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ePM3feaML+QDjb7Hk9W3VtQNSvOD/e6yi0wwNvPZHnc9nBxfQXvqjbmHLxiBE08m5
+	 H1jfEEsUwMrnlATY3BdP/4Sid8rJzkxv/oFuj61BOUHaSgfPZf7p7eNQ9+U9KI4Pku
+	 NNF6x8xNfg69pvky/iOo46zaBE9EDisG9rrAREk4DbVH5sE4gdzLVY+a8D+Z3/TU39
+	 hP5C8bVPDekko9rI4jF4Ik8C6Hj6+RRz80g0xk3XJR5VwIkJqO+o8fEb14e1KdhB9/
+	 zcgZbFtwaxaflJQx8kxyaEeDk+uQpgMkIGirIZ92f6lQtXvgtbI/8V91fpulyyflRR
+	 Erxp6aDKzs3VQ==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5eb8099f2e2so761071eaf.3;
+        Fri, 18 Oct 2024 09:46:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUiX60UwZcWHdqL0k7SvQcGamsAeGyxA8arpFfm07FtWS3zJeElH2DGAYnEeACSYcH860r6GBB0/s+nrASU@vger.kernel.org, AJvYcCV5cmGKyqt56DjJ9wbtTKeEzSBcL2fkgex2tD76bGhXvGcw1soJImPs/PHwrgkVH5tZgXkZb6PTFxnb2DKH@vger.kernel.org, AJvYcCVQ0KBUBoiH+pZj4LV/l0rNtUqge1wMnC0vv5ZD+CVALcVphB0ODHZLsW4E1EU/Bv0JHx+eUF/EpgQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsWnd6GEujfQV70mpTGXkeJR3/uQcv85kLGKFbs27gT3QAHV3z
+	7lISdri0xeYd1TCrUEM4bZjPRxdi8gj1PfqTSMlQwFet7P7mvG5ai6xmljJ1pFjeuruZWhcPbtY
+	dEofBBYxXlkW4hvTNwcpxB/vaygU=
+X-Google-Smtp-Source: AGHT+IGXyq0dmldYiwmz+afHivTsSjfiM4J/KBaxukLyYzlQwRaqDq01j8jkT5ZetrgHgl22GBLb8mkwRLI2wrLMxa0=
+X-Received: by 2002:a05:6870:ac22:b0:287:b133:8aca with SMTP id
+ 586e51a60fabf-2892c3425demr3187518fac.25.1729269990416; Fri, 18 Oct 2024
+ 09:46:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241018-sar2130p-cpufreq-v1-1-822e00b9a663@linaro.org>
-X-B4-Tracking: v=1; b=H4sIALKPEmcC/x3MQQqAIBBA0avErBMci6SuEi0sx5pN2UgRSHdPW
- r7F/xkSCVOCocogdHPiYy/AuoJlc/tKin0xGG1a1GhVcmKw0VEt8QpCp/J2dh2a4HtvoWRRKPD
- zL8fpfT+Dax6kYgAAAA==
-X-Change-ID: 20241017-sar2130p-cpufreq-d7ba612fd9d7
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1355;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=slE2uqtFzPyn/ppGD0xcZ7NY0c0d+kFHBGm4TrvMrJ4=;
- b=owEBbQKS/ZANAwAKARTbcu2+gGW4AcsmYgBnEo+z1oNg4lZAW2ySrmFj1Gyz8DlKjVpzL9Krh
- bgNM6PTEvOJAjMEAAEKAB0WIQRdB85SOKWMgfgVe+4U23LtvoBluAUCZxKPswAKCRAU23LtvoBl
- uFwED/9n11ULaxlEVKCMmbKsncK4bERrRvch4dl8uHeJqQdxzzq0EdEP/1STkXXsKLHV6Xuydg6
- fuUYfTMzdI7OPVKweDFBrKpbyxLyAeT1Fl6oPDnDJvUXSHMTsA1CQOiLgTJLHN5yib7748gKwCM
- XXTS28SmzFQh1yPAHu2W2Tew5f13ozRQ5uKBC7DpUbwbMx5BB1EVvcm1p/Ru7a3O86cdV9FlM/5
- MIx+NLFjOeu3+Mr3YMj0456rhg4FlG0njKk6jxDl4H5A7CW8muUA/plF0a+ZNBe0iPjqog+7zKV
- kQ6a9Hb2GV8f86QWqcs1EnHxXKhBFlgi9U0DjFYKhxCu/SGJrYZkltj54yoLDztVlhsMZKYI5QV
- MqeMmdF0aIObOChkDZuvWANcLHA2JXT0pwQYZeKAxTED93Vrr7v2DaVNwjcXUiURtDsdooFcCTo
- ngLe5mpQq/+7GWJbTAgguIBJ99/rF6Vi9F/Be0iMDfDqjHv4I9J4aTZqf1G85WnR8qxkCvpR+wV
- TIRrhqsp9/91kSvGAoSrg7RxqKdqau4k1IxNUGsh9CPtqpMQGbA0u8LU0rmdk7Fgs/WBBFrB2yd
- +3HqCYYq5IEKvM4hQ+MFj68CZQh/oiUJD+dsnpN0LQzYgpSVePcVj0N6bYtDoFUvv2lF/CbQ/Zg
- 0pIotTgdJCd3xkQ==
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+References: <20240927081018.8608-1-shenlichuan@vivo.com>
+In-Reply-To: <20240927081018.8608-1-shenlichuan@vivo.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 18 Oct 2024 18:46:19 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h3ZfsjOn05xBzpmFVi2Cm5Coa7006YRSGfoCe+HBv1ww@mail.gmail.com>
+Message-ID: <CAJZ5v0h3ZfsjOn05xBzpmFVi2Cm5Coa7006YRSGfoCe+HBv1ww@mail.gmail.com>
+Subject: Re: [PATCH v1] cpuidle: Correct some typos in comments
+To: Shen Lichuan <shenlichuan@vivo.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	opensource.kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document compatible for cpufreq hardware on Qualcomm SAR2130P platform.
+On Fri, Sep 27, 2024 at 10:10=E2=80=AFAM Shen Lichuan <shenlichuan@vivo.com=
+> wrote:
+>
+> Fixed some confusing typos that were currently identified with codespell,
+> the details are as follows:
+>
+> -in the code comments:
+> drivers/cpuidle/cpuidle-arm.c:142: registeration =3D=3D> registration
+> drivers/cpuidle/cpuidle-qcom-spm.c:51: accidently =3D=3D> accidentally
+> drivers/cpuidle/cpuidle.c:409: dependant =3D=3D> dependent
+> drivers/cpuidle/driver.c:264: occuring =3D=3D> occurring
+> drivers/cpuidle/driver.c:299: occuring =3D=3D> occurring
+>
+> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
+> ---
+>  drivers/cpuidle/cpuidle-arm.c      | 2 +-
+>  drivers/cpuidle/cpuidle-qcom-spm.c | 2 +-
+>  drivers/cpuidle/cpuidle.c          | 2 +-
+>  drivers/cpuidle/driver.c           | 4 ++--
+>  4 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.=
+c
+> index 7cfb980a357d..caba6f4bb1b7 100644
+> --- a/drivers/cpuidle/cpuidle-arm.c
+> +++ b/drivers/cpuidle/cpuidle-arm.c
+> @@ -139,7 +139,7 @@ static int __init arm_idle_init_cpu(int cpu)
+>   *
+>   * Initializes arm cpuidle driver for all CPUs, if any CPU fails
+>   * to register cpuidle driver then rollback to cancel all CPUs
+> - * registeration.
+> + * registration.
+>   */
+>  static int __init arm_idle_init(void)
+>  {
+> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle=
+-qcom-spm.c
+> index 1fc9968eae19..3ab240e0e122 100644
+> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
+> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+> @@ -48,7 +48,7 @@ static int qcom_cpu_spc(struct spm_driver_data *drv)
+>         ret =3D cpu_suspend(0, qcom_pm_collapse);
+>         /*
+>          * ARM common code executes WFI without calling into our driver a=
+nd
+> -        * if the SPM mode is not reset, then we may accidently power dow=
+n the
+> +        * if the SPM mode is not reset, then we may accidentally power d=
+own the
+>          * cpu when we intended only to gate the cpu clock.
+>          * Ensure the state is set to standby before returning.
+>          */
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 9e418aec1755..06ace16f9e71 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -406,7 +406,7 @@ void cpuidle_reflect(struct cpuidle_device *dev, int =
+index)
+>   * Min polling interval of 10usec is a guess. It is assuming that
+>   * for most users, the time for a single ping-pong workload like
+>   * perf bench pipe would generally complete within 10usec but
+> - * this is hardware dependant. Actual time can be estimated with
+> + * this is hardware dependent. Actual time can be estimated with
+>   *
+>   * perf bench sched pipe -l 10000
+>   *
+> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+> index cf5873cc45dc..9bbfa594c442 100644
+> --- a/drivers/cpuidle/driver.c
+> +++ b/drivers/cpuidle/driver.c
+> @@ -261,7 +261,7 @@ static void __cpuidle_unregister_driver(struct cpuidl=
+e_driver *drv)
+>   * @drv: a pointer to a valid struct cpuidle_driver
+>   *
+>   * Register the driver under a lock to prevent concurrent attempts to
+> - * [un]register the driver from occuring at the same time.
+> + * [un]register the driver from occurring at the same time.
+>   *
+>   * Returns 0 on success, a negative error code (returned by
+>   * __cpuidle_register_driver()) otherwise.
+> @@ -296,7 +296,7 @@ EXPORT_SYMBOL_GPL(cpuidle_register_driver);
+>   * @drv: a pointer to a valid struct cpuidle_driver
+>   *
+>   * Unregisters the cpuidle driver under a lock to prevent concurrent att=
+empts
+> - * to [un]register the driver from occuring at the same time.  @drv has =
+to
+> + * to [un]register the driver from occurring at the same time.  @drv has=
+ to
+>   * match the currently registered driver.
+>   */
+>  void cpuidle_unregister_driver(struct cpuidle_driver *drv)
+> --
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-index 1d1f8637bc03f0322f5e749761171de1ce886968..729f68c1f81d32e54e170879c4f7dd91c0d7c80a 100644
---- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-+++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-@@ -36,6 +36,7 @@ properties:
-               - qcom,qdu1000-cpufreq-epss
-               - qcom,sa8255p-cpufreq-epss
-               - qcom,sa8775p-cpufreq-epss
-+              - qcom,sar2130p-cpufreq-epss
-               - qcom,sc7280-cpufreq-epss
-               - qcom,sc8280xp-cpufreq-epss
-               - qcom,sdx75-cpufreq-epss
-@@ -108,6 +109,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,qcm2290-cpufreq-hw
-+              - qcom,sar2130p-cpufreq-epss
-     then:
-       properties:
-         reg:
-
----
-base-commit: 7df1e7189cecb6965ce672e820a5ec6cf499b65b
-change-id: 20241017-sar2130p-cpufreq-d7ba612fd9d7
-
-Best regards,
--- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+Applied as 6.13 material, thanks!
 
