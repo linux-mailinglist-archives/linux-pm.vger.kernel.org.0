@@ -1,352 +1,93 @@
-Return-Path: <linux-pm+bounces-15957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 724049A3ED2
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 14:51:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F35F9A3F6F
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 15:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C2AA1C241DF
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 12:51:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F5B8282B17
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 13:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8465C1FCF7F;
-	Fri, 18 Oct 2024 12:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="QNudas2H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768691D3182;
+	Fri, 18 Oct 2024 13:21:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C145B1EE000
-	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 12:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D221CDA17
+	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 13:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729255790; cv=none; b=HF+yAd/sf1qyXXjnlEcEHPhPuSpilUM2vXUzD2nGnFSUoFFIs83xYbkp8spUm28yeUntQGf/XfGfeygwk4tB0gwvg8To2yHpThtf/TS0iwr+Z0W0Ov625Cu/Q+m73Qnh5hb4RXQAqbKEr5BLMmSuh9iofPshpboBUGHMkopD5FU=
+	t=1729257664; cv=none; b=HXF7ebEJn09BcUczyahkji6z6ab30qjBwPp/LDi+CCwPO1QFwLdrHOiqV4mnmlnGwgtp6o/PmiYhl8hcATw5tq4WBiAHE8WdQaaDN1cLLHjfLV8xltdVN0gSAozTPPu1bX3S674Knxi8LXlRPrXCjJb6Xo696Y+VEiGQKymNITE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729255790; c=relaxed/simple;
-	bh=3k37DmjvVVitbZLKPGImu5/pI96IV+YohC0dbWztqgw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tXZXpUWwRfTHekMmh3BmVL+KQmVgXxSHOSrQQ7b7TspKbTHtLqpZw+dvmxQ6YNMyxQpuh9Y8QiuknCNxZ0Bt6WQ14HBNFaN2kelVToMsp7dcVMyt4UWrCFDNCfRUR3aUEhnVtfSNMpfo7E0gX9ko5EZrN3xJhNI5Whcku3jXQio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=QNudas2H; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4314fa33a35so20604605e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 05:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729255785; x=1729860585; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6cqwZVP+zqyJHBNtjkA+B0HPwS7hbZ/3iwJT6bTaS8o=;
-        b=QNudas2HMPcXKznENmgH9tD2OK++aB2Ivs6ErTx3uesmUaeYvtr2l3bVNRNue0ez5w
-         paX+VUlr1/FxjXZLF7Asto5JgJyxZ7SE3z0mMLaG+hgS064kX43jjXJt+z+9TQemoP5e
-         HlGhrGaxw9K9zchwdxVD7pZ5WSwlmldosrNLK+Iv6t33Pz6FYBJGz5gSvwZ1zpq4Cxrd
-         KmBa3SlIaUQJLRIxu1Evb8NcubO4NbamgN5YzRcMLvn7EiBPK53LTakjVVicIFpSKcwf
-         dKv8+EVMVYyzyNnPeuUJcdXRakFXWKr4eJBvzNEtWYvoTelosc9pYLc3iGnNCCFEZaX+
-         WfOA==
+	s=arc-20240116; t=1729257664; c=relaxed/simple;
+	bh=J2ISKYJq+P9aWYzcvEmJNTpTQm3p+pYlylkV+zAb+uc=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=KG29uCPydyYrjSiOaLMD0eSaroGvtt5IStZgdrEgwtwbpAyMkvPHcLDx6jiH1321i7fNT0/OER4G0f8ve+fNMzhFFISq22e+ANW+iCHHczaCAhHvQAEg10o9mjc+62JuKc1ahdGKrSCFcWCfO0B0hJ4ZnyEoyAnJWdEBHOHhK5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3b45bfc94so20885345ab.2
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 06:21:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729255785; x=1729860585;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6cqwZVP+zqyJHBNtjkA+B0HPwS7hbZ/3iwJT6bTaS8o=;
-        b=FpRS9QIY/BnhB6ID/1NnmZXz52tLKk+efmzAz6S4L7cJoWKvdKKiGzOc3yTDFoX9Pu
-         K130Nf8i3R0CDNVLxwoPANJA24Cy8ZT8LQxr/BvlbvAnsrZgb1JuTx8ebNtVbUoGK6OE
-         VT21ycijue5AlUx0+nBRA/4xlmvpIoAi3pzqmY0KXlC9qaomRHiv6cB4yR73lFs1Czzs
-         cvwSXMSaCZ834Ts7wwjJmpQHUgvF78r3hdELi4vpT60vyDgaTKdrM8fLgxBys3RKDACk
-         +SVX/5VCwjf1J2p/oTqleuYBlRPS1jjpoix/cdc5LNHTKCJxkex4UXwQUYU4QbJ+/VoJ
-         AG5g==
-X-Forwarded-Encrypted: i=1; AJvYcCVv+ro8LB4sgidYx+bH4ZKFGO3tMwxSCLwr4K14anl0bcik9CgD0OKY2tMjuUEhVHrKRqa+pJBibQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yytzctehzf7S36YmV1f+rJptDwe8T+O3SgzTgLDNYNQFzq/ENNM
-	j/kWxwt2CJA44YBNSCcKpxDjhc95l400T6Oy6JaLGnkKrzvdn3s/Qozdco0AbKQ=
-X-Google-Smtp-Source: AGHT+IHLkVNVhQBqO7zNNKeqKThK+CBSku3/uu/wTH7YA3otDEk1NvjE+42e7TZmZ+HlcqalO8sWIQ==
-X-Received: by 2002:a05:600c:468a:b0:431:5187:28dd with SMTP id 5b1f17b1804b1-4316168edc6mr19255125e9.28.1729255785071;
-        Fri, 18 Oct 2024 05:49:45 -0700 (PDT)
-Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:45a3:93e:5196:d8ce])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43160695d8fsm26640835e9.27.2024.10.18.05.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 05:49:44 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 18 Oct 2024 14:49:16 +0200
-Subject: [PATCH v6 6/6] arm64: dts: qcom: sm8450-hdk: model the PMU of the
- on-board wcn6855
+        d=1e100.net; s=20230601; t=1729257661; x=1729862461;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dsYwuI0Th+uVtMN7AlSOhFIFxHsr2HBMLpKgQ2C5NDw=;
+        b=KYDu7q3qb/VDwqUbB3ao5NMUheRUZNF9zut1u5I+fO9w5Y69hVa/qKvq+V+giBJJHY
+         AhGufHkXgqWlHb9E3Usb2fgwnh98XqkL/30pn3J/i5CL99XfcUiN3fHN3e4xu26YiO0X
+         e/Z5L0iHo52ya+kUWGaIuEC06aTIR4UmrsN92DRyMOMoWRGO6Rn1Ua+n2VgV+VzV3m9S
+         YipbehNwpDLWAziHlbQSiImMpZdn+OJahnt05Ndn3SMzYUUWqg+npifPsC5d3Rapw65j
+         2HvH7sQ0KMbmpOnaA/YFkga8D7u0HctLLpYEp1vJx+6pkpMJQ6RwTuPQ7KKOP5xopPH0
+         JkNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrGc69PQKAzWVdClNpERhWiNXbL9tS50I+2d/A23v8nCKzwVeVZE9/pfWsx1HaP3WYVAchvLwLkg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzGC/K/PLkVqI5odx+tQeoDUBexg+qROeO7uVpflVtFof+OUyT
+	NkdE2W28n0PSpPCkfbkx25lVirT5PzzYERHXykqc8xKsW3bTLEsBn7zYPbC+h+eGPkx5gQV7kn0
+	3aJpXdp5/ywtYyzjs8qI4owyEBKMisuIEJpVkQmdYRVFV6y9MH/UWuaM=
+X-Google-Smtp-Source: AGHT+IEBJH2H0YkAN3+kej2jAA+6Y4/nJq8KL+MjWGl3zwECcftJ2IWflNZlanDCdJEEAH367yNS/cixQ+dw4rG7mqrgBuHaxm1q
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241018-sc8280xp-pwrseq-v6-6-8da8310d9564@linaro.org>
-References: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
-In-Reply-To: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Johan Hovold <johan+linaro@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Abel Vesa <abel.vesa@linaro.org>, Manivannan Sadhasivam <mani@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5563;
- i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=1R0dZeOAv50eWbW4Hszj2kUWLcatmibvSfqEpRoAU7g=;
- b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBnEllgjbd04ztjzNExSs78CJOOz337EN0NxtRd/
- 6gbQKZKbQaJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCZxJZYAAKCRARpy6gFHHX
- ch9mEADBKXRTjzn7x8VnOkmoocbJwx64bVMcwPh/++m2yzmBzTYKWIiwWrB7R8Ely+i6yH75N0G
- TEzdL22l49vqCuAKbnegOKtBLnhn8pDheNcnaLLDYU46aDwZIDLwGnRWVroEOizyZTDb/IaFEsf
- mQ+LSu77Via9GacpG5/UgMlxhxuxP6lEO95y+FnYPOx7PlKLnu/PkdPlH3NrGmLGTofa+FOSspm
- qTVyT3CPQesxgSTYlcx6wLHkZ+YSV303q+GYCXh3zIG4BzDGe1jTEP+RW/Gad/QeUbWYMhuwoIY
- bpMk7KxNIpQxmGGoJ7yrK7i1ykdb79auFjNePh9DsBnPFptJkEjqxjwTy1LpCUMOHSbpWpfhNjT
- dlurZvNDmx0aeMxeObhq3yR8/ZjpTMLLTiWeFLlW84JN4ES5Djix2EDVDMCdoOBJjbNkyYOsLID
- KW+bLfXEfC/RNFofJhYmW/UTbLMg9n/LSi0xlGSVmeEcnoPNjT3DT+jW2+8akBaZ9e5QYMPGJkG
- PqLjKONZIZsrs4c3UPNO6OfziRdpAb3rB+BPc3CazgDHAbImkJH8Yor7LAT33osfUWkf6d7zH5Q
- NJcTCrerA4ERcNub+h7JGId1Nt3BPY8kLQrIcdtiMW25/s/MMGQlmwc78GOLggdCPCbNlqe1x8B
- O9WGTT60S76XGAA==
-X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+X-Received: by 2002:a05:6e02:214c:b0:3a3:9337:4cf4 with SMTP id
+ e9e14a558f8ab-3a3f40500famr20935825ab.4.1729257661749; Fri, 18 Oct 2024
+ 06:21:01 -0700 (PDT)
+Date: Fri, 18 Oct 2024 06:21:01 -0700
+In-Reply-To: <67124175.050a0220.10f4f4.0012.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <671260bd.050a0220.1e4b4d.0016.GAE@google.com>
+Subject: Re: [syzbot] [pm?] WARNING in thermal_thresholds_flush
+From: syzbot <syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com>
+To: andreyknvl@gmail.com, daniel.lezcano@linaro.org, elver@google.com, 
+	jannh@google.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	lukasz.luba@arm.com, rafael@kernel.org, rui.zhang@intel.com, 
+	syzkaller-bugs@googlegroups.com, vbabka@suse.cz
+Content-Type: text/plain; charset="UTF-8"
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+syzbot has bisected this issue to:
 
-Add nodes for the WCN6855 PMU, the WLAN and BT modules and relevant
-regulators and pin functions to fully describe how the wifi is actually
-wired on this platform.
+commit b8c8ba73c68bb3c3e9dad22f488b86c540c839f9
+Author: Jann Horn <jannh@google.com>
+Date:   Fri Aug 9 15:36:56 2024 +0000
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 157 ++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8450.dtsi    |   2 +-
- 2 files changed, 158 insertions(+), 1 deletion(-)
+    slub: Introduce CONFIG_SLUB_RCU_DEBUG
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-index 67443822653d..2ff40a120aad 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-@@ -26,6 +26,7 @@ / {
- 
- 	aliases {
- 		serial0 = &uart7;
-+		serial1 = &uart20;
- 	};
- 
- 	wcd938x: audio-codec {
-@@ -247,6 +248,71 @@ active-config0 {
- 		};
- 	};
- 
-+	wcn6855-pmu {
-+		compatible = "qcom,wcn6855-pmu";
-+
-+		pinctrl-0 = <&bt_en>, <&wlan_en>, <&xo_clk_default>;
-+		pinctrl-names = "default";
-+
-+		wlan-enable-gpios = <&tlmm 80 GPIO_ACTIVE_HIGH>;
-+		bt-enable-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-+		swctrl-gpios = <&tlmm 82 GPIO_ACTIVE_HIGH>;
-+		xo-clk-gpios = <&tlmm 204 GPIO_ACTIVE_HIGH>;
-+
-+		vddio-supply = <&vreg_s10b_1p8>;
-+		vddaon-supply = <&vreg_s11b_0p95>;
-+		vddpmu-supply = <&vreg_s12b_1p25>;
-+		vddpmumx-supply = <&vreg_s2e_0p85>;
-+		vddpmucx-supply = <&vreg_s11b_0p95>;
-+		vddrfa0p95-supply = <&vreg_s11b_0p95>;
-+		vddrfa1p3-supply = <&vreg_s12b_1p25>;
-+		vddrfa1p9-supply = <&vreg_s1c_1p86>;
-+		vddpcie1p3-supply = <&vreg_s12b_1p25>;
-+		vddpcie1p9-supply = <&vreg_s1c_1p86>;
-+
-+		regulators {
-+			vreg_pmu_rfa_cmn_0p8: ldo0 {
-+				regulator-name = "vreg_pmu_rfa_cmn_0p8";
-+			};
-+
-+			vreg_pmu_aon_0p8: ldo1 {
-+				regulator-name = "vreg_pmu_aon_0p8";
-+			};
-+
-+			vreg_pmu_wlcx_0p8: ldo2 {
-+				regulator-name = "vreg_pmu_wlcx_0p8";
-+			};
-+
-+			vreg_pmu_wlmx_0p8: ldo3 {
-+				regulator-name = "vreg_pmu_wlmx_0p8";
-+			};
-+
-+			vreg_pmu_btcmx_0p8: ldo4 {
-+				regulator-name = "vreg_pmu_btcmx_0p8";
-+			};
-+
-+			vreg_pmu_pcie_1p8: ldo5 {
-+				regulator-name = "vreg_pmu_pcie_1p8";
-+			};
-+
-+			vreg_pmu_pcie_0p9: ldo6 {
-+				regulator-name = "vreg_pmu_pcie_0p9";
-+			};
-+
-+			vreg_pmu_rfa_0p8: ldo7 {
-+				regulator-name = "vreg_pmu_rfa_0p8";
-+			};
-+
-+			vreg_pmu_rfa_1p2: ldo8 {
-+				regulator-name = "vreg_pmu_rfa_1p2";
-+			};
-+
-+			vreg_pmu_rfa_1p7: ldo9 {
-+				regulator-name = "vreg_pmu_rfa_1p7";
-+			};
-+		};
-+	};
-+
- 	vph_pwr: vph-pwr-regulator {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vph_pwr";
-@@ -685,6 +751,23 @@ &pcie0_phy {
- 	vdda-pll-supply = <&vreg_l6b_1p2>;
- };
- 
-+&pcieport0 {
-+	wifi@0 {
-+		compatible = "pci17cb,1103";
-+		reg = <0x10000 0x0 0x0 0x0 0x0>;
-+
-+		vddrfacmn-supply = <&vreg_pmu_rfa_cmn_0p8>;
-+		vddaon-supply = <&vreg_pmu_aon_0p8>;
-+		vddwlcx-supply = <&vreg_pmu_wlcx_0p8>;
-+		vddwlmx-supply = <&vreg_pmu_wlmx_0p8>;
-+		vddpcie1p8-supply = <&vreg_pmu_pcie_1p8>;
-+		vddpcie0p9-supply = <&vreg_pmu_pcie_0p9>;
-+		vddrfa0p8-supply = <&vreg_pmu_rfa_0p8>;
-+		vddrfa1p2-supply = <&vreg_pmu_rfa_1p2>;
-+		vddrfa1p8-supply = <&vreg_pmu_rfa_1p7>;
-+	};
-+};
-+
- &pcie1 {
- 	status = "okay";
- };
-@@ -892,6 +975,10 @@ &qupv3_id_1 {
- 	status = "okay";
- };
- 
-+&qupv3_id_2 {
-+	status = "okay";
-+};
-+
- &sdhc_2 {
- 	cd-gpios = <&tlmm 92 GPIO_ACTIVE_HIGH>;
- 	pinctrl-names = "default", "sleep";
-@@ -1069,6 +1156,26 @@ &uart7 {
- 	status = "okay";
- };
- 
-+&uart20 {
-+	pinctrl-0 = <&uart20_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "qcom,wcn6855-bt";
-+
-+		vddrfacmn-supply = <&vreg_pmu_rfa_cmn_0p8>;
-+		vddaon-supply = <&vreg_pmu_aon_0p8>;
-+		vddwlcx-supply = <&vreg_pmu_wlcx_0p8>;
-+		vddwlmx-supply = <&vreg_pmu_wlmx_0p8>;
-+		vddbtcmx-supply = <&vreg_pmu_btcmx_0p8>;
-+		vddrfa0p8-supply = <&vreg_pmu_rfa_0p8>;
-+		vddrfa1p2-supply = <&vreg_pmu_rfa_1p2>;
-+		vddrfa1p8-supply = <&vreg_pmu_rfa_1p7>;
-+	};
-+};
-+
- &ufs_mem_hc {
- 	status = "okay";
- 
-@@ -1130,6 +1237,14 @@ &vamacro {
- };
- 
- &tlmm {
-+	bt_en: bt-en-state {
-+		pins = "gpio81";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		output-low;
-+		bias-pull-down;
-+	};
-+
- 	spkr_1_sd_n_active: spkr-1-sd-n-active-state {
- 		pins = "gpio1";
- 		function = "gpio";
-@@ -1153,4 +1268,46 @@ wcd_default: wcd-reset-n-active-state {
- 		bias-disable;
- 		output-low;
- 	};
-+
-+	wlan_en: wlan-en-state {
-+		pins = "gpio80";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		output-low;
-+		bias-pull-down;
-+	};
-+
-+	uart20_default: uart20-default-state {
-+		cts-pins {
-+			pins = "gpio76";
-+			function = "qup20";
-+			bias-disable;
-+		};
-+
-+		rts-pins {
-+			pins = "gpio77";
-+			function = "qup20";
-+			bias-disable;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio78";
-+			function = "qup20";
-+			bias-disable;
-+		};
-+
-+		tx-pins {
-+			pins = "gpio79";
-+			function = "qup20";
-+			bias-disable;
-+		};
-+	};
-+
-+	xo_clk_default: xo-clk-state {
-+		pins = "gpio204";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		output-low;
-+		bias-pull-down;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 1b5dc5b8cecb..be876a919455 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1880,7 +1880,7 @@ opp-8000000 {
- 				};
- 			};
- 
--			pcie@0 {
-+			pcieport0: pcie@0 {
- 				device_type = "pci";
- 				reg = <0x0 0x0 0x0 0x0 0x0>;
- 				bus-range = <0x01 0xff>;
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14cc4c5f980000
+start commit:   15e7d45e786a Add linux-next specific files for 20241016
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12cc4c5f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c36416f1c54640c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=f24dd060c1911fe54c85
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1192f887980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1417e830580000
 
--- 
-2.43.0
+Reported-by: syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com
+Fixes: b8c8ba73c68b ("slub: Introduce CONFIG_SLUB_RCU_DEBUG")
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
