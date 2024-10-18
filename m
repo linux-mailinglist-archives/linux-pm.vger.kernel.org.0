@@ -1,169 +1,163 @@
-Return-Path: <linux-pm+bounces-15944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FA4B9A3B2E
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 12:18:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 251339A3BAF
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 12:36:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30F49284135
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 10:18:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEA0428157D
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 10:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF46120265F;
-	Fri, 18 Oct 2024 10:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6BD201108;
+	Fri, 18 Oct 2024 10:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZEfnDiN"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="n6U8NUEs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6D420262F;
-	Fri, 18 Oct 2024 10:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01502010EC;
+	Fri, 18 Oct 2024 10:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729246625; cv=none; b=GrUVR+ODjW5itMpvAY/1oVSM8yl6FR0KPiFiuKbDw4CBccfzo28g9LCcqcArknAbMqixfFP8iNHt0QeEsluPdC/P6k6DyiQ1EPCDaMEYGoZo5JezUpAl5mwUkowfbNXEP6n4wxDk3C+hdZYRbgJo7wYQpCKXtmMees0rJJyfWYo=
+	t=1729247788; cv=none; b=CSMGjbXX1TMhrgeWix1R+WyD1VHBCsU6lND+AyCYWJvJM8B1w3rEAjw//sVqhT7AiOuu4nSCp6SxFtFHo0SXpSPyTeNQ5QsrKyvSZgCq0e94Awjocc1hRo4tCp0PbS7B1xCJCWqMIoz/VnkRddOmpb5iTNRlxHsr0PtJx/fsago=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729246625; c=relaxed/simple;
-	bh=zPhyRDG9F+zgzh0+HIEmtXBb7OQBzROgLZ7mJASXsvQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ji5U242up16IbWqr98Ru3+w63BRvhY5UEx1DWRFW1F1Sh8plnkqO6W/vIdw6/7W5RXHl2VG3r3se3+VrfDcY7NBVuvqHwENvT2KC2lFa0oTM+HT1BdUrF71l/c2NLUL6VNNpWMrDA1zNsrkJUkils3uwwzSTJolwgRtinY/qHuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KZEfnDiN; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4311c285bc9so19132635e9.3;
-        Fri, 18 Oct 2024 03:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729246622; x=1729851422; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yg5C99O5lFsD3GMjKIKiUiVjWoF4T1zlBP/PbUaocsA=;
-        b=KZEfnDiNukXZzeCNsmYRTFp4l+1S0hhJ6MZA9fycmEXMwCOd0IckNeQojiJHTHY+4l
-         jXgTw49k3+7dFTc5AZqCk9apqimEn5Z1uw0P2A4hiYuVEcWcFX6ogesGtj0Tx4FKYM9d
-         0BLHzVruluyvhWhjVnyojwwspo0qGn+ocpnSu9FzSh1TWbe99zB6h/hV/OyLvqGvmNPh
-         WBcIorX6oTa38vcMREvKALeagQmoPEQIgH9+FZXUezhjAFpMETH8MMZe29HCg75lq8l2
-         vLkly61mALj0m4VNibAMgansStrONoY5nujcG3D0V/Ia5g8hsyQmJTJ5z4rhlxcJJl7o
-         OsOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729246622; x=1729851422;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yg5C99O5lFsD3GMjKIKiUiVjWoF4T1zlBP/PbUaocsA=;
-        b=l0QNUKgLikyREu+doQ/NeE+9q656JGwZ3IRjlqOh5FYJl696ePbRBoVj2jcriEemVH
-         MIgYb5ZSJpUOr/bOTSijO3WaNBgCWIDuOl4lsV9eN1vsPOpg5jszgDHmyLlGIKrQFIO9
-         SIXcgH6JpACyRbdAGZFsCK2+wLG+2PFmtuAOmp6qz5rnpZ2ZhOuOazxMaWfpbgxiULiA
-         TTTUVA7RnsFgvCVGYtBvlDuPYVU0q1JBxZ1RitUW9DsA8ncja5sOZwa+HZVwmvkZOHeE
-         78MvCYzsyzeZRRWzz8OOAf28/V8/+B3dOzzHqoycycSDKY+HPYQcIWudIOc943PkimmG
-         0gmA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJH6/7dbfyrXffsX62nC8cwpeuLpDoaeBiRnFGDY9DbjC9vNXNXAE6yD5dAJekMEILtvbfyP3kcsEPWuQ=@vger.kernel.org, AJvYcCXU6UTTZfbV9a47G3wYtAew97yrXWJGT7+YUdUZNZalrKeUQJJNkV7iC1vBzXMUWIeBxyRibmPzc/4=@vger.kernel.org, AJvYcCXjJ+mrn/81FbqxWlKCV3fLjV3ZEnPcdIrNcWCbI/tMe+OY5VWUdR/HM7b7p/iFOp5KjsZXoT7rWt/Uug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpD+OOQzEuCF70sDmhFP4CeJExmjhgOF8NvMMlyoNW1R+7aSdy
-	MV28v2Js7JgMg6kzzqsMmf2+WuguTaUAk6xGecn+Bf/voye2wuIjwwwBgZ0ggf0=
-X-Google-Smtp-Source: AGHT+IEeLVJ7h84WQ4/+u3k4S9ShFi1dHNq8ZcXPQUIGtlWymZVFe8HnRUMIjBIrqeVsPikZlvPQ7g==
-X-Received: by 2002:a05:600c:3d99:b0:431:588a:4498 with SMTP id 5b1f17b1804b1-4316164dd18mr16051385e9.14.1729246621980;
-        Fri, 18 Oct 2024 03:17:01 -0700 (PDT)
-Received: from localhost (host-79-18-120-72.retail.telecomitalia.it. [79.18.120.72])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ecf146e2asm1512707f8f.116.2024.10.18.03.17.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 03:17:01 -0700 (PDT)
-From: Matteo Martelli <matteomartelli3@gmail.com>
-Date: Fri, 18 Oct 2024 12:16:44 +0200
-Subject: [PATCH v4 5/5] iio: as73211: copy/release available integration
- times to fix race
+	s=arc-20240116; t=1729247788; c=relaxed/simple;
+	bh=zpaf4oJ/9WocXriS7wtNGD1VFviEdWLhjfYzbGHb59w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=SIfueSfd/pWOi5hEgLl0WG/oQpT9S/F0KCah8wASiKrTuzclZvl1AIUzUHVcYo1YmQgWJ+8cXwhCp4OwKAy3l65CmB6SZcIRtKp2/4FTq55KDaVC6nW33nfV/3YjGy3VafRsSagaXll4LEXCZlirKzsezj4rjGxUcxGU3Gvz1lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=n6U8NUEs; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49I9FDL0025003;
+	Fri, 18 Oct 2024 10:36:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=aO4qcXMHeJ9YzQUS8yus9DWqiYoGjT
+	dGSEwB2gwrr40=; b=n6U8NUEsSA8dnOZc486WRFWsUt0YLVeGeuHDH9k5TlTwa4
+	Hy5u834hMrDeada2h41WBkNtVEYkd3Cj0nKEM2tMyoAGX31zsZvUVL4jVEQ5sH6K
+	FjuiI4rZovis9tq162kefAnLCGm+0pg1ph0RzbZ+iyERCiLoy/kxPsjMSVJ5kbpQ
+	g0a/fzojFgD+T4X9taHlo90E/OcV0QshoV0PvHxjfW+OMm5UCNU6GsRAh34quOz+
+	QQ08J6SnoMlZpAyRuUEPzUwoV9mikqHOYIKO7V3xO273JlF1gfE26KPwKqSISmtH
+	o3WlifHmLa+MBLFGc3kyJ8O0rN1nsQBm1oY3XGYw==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42asbd8fmj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 10:36:18 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49I9Us1l005906;
+	Fri, 18 Oct 2024 10:36:17 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 428651bjdj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 10:36:17 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49IAaFGm20906492
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 18 Oct 2024 10:36:15 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B89EF20040;
+	Fri, 18 Oct 2024 10:36:15 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1E57720043;
+	Fri, 18 Oct 2024 10:36:14 +0000 (GMT)
+Received: from li-c6426e4c-27cf-11b2-a85c-95d65bc0de0e.ibm.com (unknown [9.204.206.66])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 18 Oct 2024 10:36:13 +0000 (GMT)
+Date: Fri, 18 Oct 2024 16:06:11 +0530
+From: Gautam Menghani <gautam@linux.ibm.com>
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, christian.loehle@arm.com
+Subject: Re: [PATCH 1/1] cpuidle/menu: avoid prioritizing physical state over
+ polling state
+Message-ID: <mq5nkqfyivbo2cbpcgr2pwz4iil2dcejbyxiynxvg34bgf4h5h@ixuoyqzn4qjc>
+References: <20240809073120.250974-1-aboorvad@linux.ibm.com>
+ <20240809073120.250974-2-aboorvad@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240809073120.250974-2-aboorvad@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CFxHRrhfTYIp-DNhOdFQNoSyMc1kr1QA
+X-Proofpoint-GUID: CFxHRrhfTYIp-DNhOdFQNoSyMc1kr1QA
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
-References: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
-In-Reply-To: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
-To: Jonathan Cameron <jic23@kernel.org>, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Alisa-Dariana Roman <alisa.roman@analog.com>, 
- Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, 
- Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
- Matteo Martelli <matteomartelli3@gmail.com>
-X-Mailer: b4 0.14.2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ clxscore=1011 adultscore=0 priorityscore=1501 mlxlogscore=880
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410180067
 
-While available integration times are being printed to sysfs by iio core
-(iio_read_channel_info_avail), the sampling frequency might be changed.
-This could cause the buffer shared with iio core to be corrupted. To
-prevent it, make a copy of the integration times buffer and free it in
-the read_avail_release_resource callback.
+On Fri, Aug 09, 2024 at 01:01:20PM GMT, Aboorva Devarajan wrote:
+> Update the cpuidle menu governor to avoid prioritizing physical states
+> over polling states when predicted idle duration is lesser than the
+> physical states target residency duration for performance gains.
+> 
+> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+> ---
+>  drivers/cpuidle/governors/menu.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
+> index f3c9d49f0f2a..cf99ca103f9b 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -354,17 +354,6 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>  			idx = i; /* first enabled state */
+>  
+>  		if (s->target_residency_ns > predicted_ns) {
+> -			/*
+> -			 * Use a physical idle state, not busy polling, unless
+> -			 * a timer is going to trigger soon enough.
+> -			 */
+> -			if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
+> -			    s->exit_latency_ns <= latency_req &&
+> -			    s->target_residency_ns <= data->next_timer_ns) {
+> -				predicted_ns = s->target_residency_ns;
+> -				idx = i;
+> -				break;
+> -			}
+>  			if (predicted_ns < TICK_NSEC)
+>  				break;
+>  
+> -- 
+> 2.39.3
+> 
 
-Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
----
- drivers/iio/light/as73211.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+I tried to identify the number of times we enter the snooze and CEDE states
+on a pseries machine with and without this patch applied while running
+the daytrader database benchmark[1]. The results show that the number of
+times we enter CEDE goes down considerably:
 
-diff --git a/drivers/iio/light/as73211.c b/drivers/iio/light/as73211.c
-index be0068081ebbbb37fdfb252b67a77b302ff725f6..c4c94873e6a1cc926cfb724d906b07222773c43f 100644
---- a/drivers/iio/light/as73211.c
-+++ b/drivers/iio/light/as73211.c
-@@ -108,7 +108,8 @@ struct as73211_spec_dev_data {
-  * @creg1:  Cached Configuration Register 1.
-  * @creg2:  Cached Configuration Register 2.
-  * @creg3:  Cached Configuration Register 3.
-- * @mutex:  Keeps cached registers in sync with the device.
-+ * @mutex:  Keeps cached registers in sync with the device and protects
-+ *          int_time_avail concurrent access for updating and reading.
-  * @completion: Completion to wait for interrupt.
-  * @int_time_avail: Available integration times (depend on sampling frequency).
-  * @spec_dev: device-specific configuration.
-@@ -493,17 +494,32 @@ static int as73211_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec co
- 		*type = IIO_VAL_INT;
- 		return IIO_AVAIL_LIST;
- 
--	case IIO_CHAN_INFO_INT_TIME:
-+	case IIO_CHAN_INFO_INT_TIME: {
- 		*length = ARRAY_SIZE(data->int_time_avail);
--		*vals = data->int_time_avail;
- 		*type = IIO_VAL_INT_PLUS_MICRO;
--		return IIO_AVAIL_LIST;
- 
-+		guard(mutex)(&data->mutex);
-+
-+		*vals = kmemdup_array(data->int_time_avail, *length,
-+				      sizeof(int), GFP_KERNEL);
-+		if (!*vals)
-+			return -ENOMEM;
-+
-+		return IIO_AVAIL_LIST;
-+	}
- 	default:
- 		return -EINVAL;
- 	}
- }
- 
-+static void as73211_read_avail_release_res(struct iio_dev *indio_dev,
-+					   struct iio_chan_spec const *chan,
-+					   const int *vals, long mask)
-+{
-+	if (mask == IIO_CHAN_INFO_INT_TIME)
-+		kfree(vals);
-+}
-+
- static int _as73211_write_raw(struct iio_dev *indio_dev,
- 			       struct iio_chan_spec const *chan __always_unused,
- 			       int val, int val2, long mask)
-@@ -699,6 +715,7 @@ static irqreturn_t as73211_trigger_handler(int irq __always_unused, void *p)
- static const struct iio_info as73211_info = {
- 	.read_raw = as73211_read_raw,
- 	.read_avail = as73211_read_avail,
-+	.read_avail_release_resource = as73211_read_avail_release_res,
- 	.write_raw = as73211_write_raw,
- };
- 
+// Current upstream 6.11
 
--- 
-2.47.0
+| STATE | NO. OF TIMES ENTERED 	| TOTAL TIME SPENT IN STATE (US) | AVG TIME SPENT IN STATE (US)	|
+|Snooze | 6,389		        | 221,592			 | 34.68			|
+| CEDE	| 160,368		| 13,288,855			 | 82.86			|
 
+
+// Current upstream 6.11 - with above patch applied
+
+| STATE | NO. OF TIMES ENTERED 	| TOTAL TIME SPENT IN STATE (US) | AVG TIME SPENT IN STATE (US)	|
+|Snooze | 140,267	        | 6,400,073			 | 45.63			|
+| CEDE	| 50,884		| 6,553,641			 | 128.80			|
+
+Above data was gathered with the help of power:cpu_idle tracepoint, and
+was recorded for 45 secs while the daytrader benchmark was running.
+
+[1] : https://github.com/WASdev/sample.daytrader7
+
+Thanks,
+Gautam
 
