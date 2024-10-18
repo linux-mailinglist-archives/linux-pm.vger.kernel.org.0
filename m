@@ -1,158 +1,174 @@
-Return-Path: <linux-pm+bounces-15914-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-15915-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D1F59A33F7
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 06:53:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A9739A3486
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 07:50:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EDBD1C20DB6
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 04:53:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8AD21F2498D
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2024 05:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760CB16F8EF;
-	Fri, 18 Oct 2024 04:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD8317C22B;
+	Fri, 18 Oct 2024 05:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UNa7p8iW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aRl36x8/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BB013AA3F
-	for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 04:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBE717279E;
+	Fri, 18 Oct 2024 05:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729227193; cv=none; b=JuPsZo7aXshh8m0XockCsXh5vxjTAtgiNRoqLE6Rj9m4XdGHmTnVJceRmlAdCvaEHclzcNy2wBqYP6tPQZs0Mon8wnJOhLZCk+KrU48fPXfujLbqBsVmt0i3qYAuSMK0T1lBmg2xzdD8KQ6Pmp3XP+8cwX9ZRRJkGbKYwKBYLbQ=
+	t=1729230494; cv=none; b=iqiVZ2f4T8SBZm39sFtfaTr/g+Susztvfs4IsGFfz+9fqClmZIica8CJfNsUsNI5kBKfNRNOlpSnNzQcqxVoma4fzNffthbisUjZV2cvzC0dhB1EFCcuLwj2k24rcRbNSyyee5QTFct6yFyE7xYMAjK9ppUUgJxEllMcUJxiuCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729227193; c=relaxed/simple;
-	bh=z9lpcwdlXA2KeJYX8Y1zpgGOdVm40/mQ5tHpkO3H1N4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=b1pR8NCI+S6Z7uYvhMYo7aUHQT/6T7EoqLnMoDnfGuLaeuqh+2GFISbBI86IGTQHyVNl6cxj1XSL3hVdP1Lf2DthI8hS6s/8f7iVoyraKF6T3UDpz+8PlveddnKqSSId0X7XCn7LnFKs4wvsmnGCPcE5kpaOplGxIIWx+vKi0VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UNa7p8iW; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-718e9c8bd83so2037766b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2024 21:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729227191; x=1729831991; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EUM68sDm3swWUHIcOs0kpY1MQ+31ZApbU6jqhI1AgKE=;
-        b=UNa7p8iWRC57uq2AnJ8KydDeUtMWxR1hgh7nImdcPJ8du00K7/Ccn1T3+iZ8LEnjDG
-         hartD5wpHKtuIqh2LOXD0bxnl4gADyb5XwoAwFTwox5d6BSAIIDhXreRFnf6y7+yZ18E
-         9sQuudWvT5JiWuIAQkmW75iCWo6YLL2BVmfovBwmAX31RBWVblM86cwfA6bWI+GGHu2P
-         qIqF/hMvWEU9MeiSlQXwfpWZYN7g9PDKtrnLYo34oGCDFHMMmKgzmf+A25JA4BEhjD7U
-         0/QxIzOtvNDI7Cfev8rGAIAvhY8JXidi3x0gu2S7e69r2rNJE0oMZz8wboFUtvWFQzvX
-         L3aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729227191; x=1729831991;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EUM68sDm3swWUHIcOs0kpY1MQ+31ZApbU6jqhI1AgKE=;
-        b=mCTNl0pWh5xOAdGf/xZORGUUBt4lFUcUXojCuIrgBFJoeAYadr4bnPwvwWAZh7c3Yu
-         3UH7Ux1Kct9xiAxbtK3Z9NNyRT8LDhRi6iQs4MMAk9yYRrVedp2YHnN9PVWdYXENrKwR
-         7axGhARJrxhvBuO7ruUHGFyOH29gdD1iJf9QlCVTdPTGwtZk/FhfmlDfOe6hION6lZ0R
-         9SwD1AGUIxLVhPSNOXFP5ELKyL//BRYPa9+bnUkYk3dzXPgzUlrR3k4ptC/jI3HNC+Re
-         6TYuFYa8KmHC4e25Ex0laauOakYvG7z44fML0oDWSuO8xrj453L9phN9QTQj8ArUSEoG
-         07TA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSBoRr2L6UnjPt/uPmj0xLWfqNt3SWG5Wdl+kimv8nyRshvTDtsPVDcFr34lTzXmjAgf5/Zn//EA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEvH+zQ8apgNmDMlO+8mPeONXtjSrURZuzlzbB879mx4HtQVZi
-	5LuXtTi6XVA17wTH1t3DOs1Z55+rzqvp7frM0+FN7CUQMNQ0a6l3
-X-Google-Smtp-Source: AGHT+IHap8eyDqegI30D8SMqekZLAsLe6xv/XWlwJ0ttVB9Gl2b0I46AgamIUhWrfolOBTL3+XpHEg==
-X-Received: by 2002:a05:6a00:1493:b0:71e:667c:8384 with SMTP id d2e1a72fcca58-71ea4259bcemr1473380b3a.9.1729227191168;
-        Thu, 17 Oct 2024 21:53:11 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4073:2ec8:87f1:8c25:95c6:b05c:ec36])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ea34a9a07sm537671b3a.192.2024.10.17.21.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2024 21:53:10 -0700 (PDT)
-From: Siddharth Menon <simeddon@gmail.com>
-To: shuah@kernel.org,
-	trenn@suse.com,
-	jwyatt@redhat.com,
-	jkacur@redhat.com
-Cc: Siddharth Menon <simeddon@gmail.com>,
-	"John B . Wyatt IV" <sageofredondo@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v4] cpupower: add checks for xgettext and msgfmt
-Date: Fri, 18 Oct 2024 10:22:48 +0530
-Message-Id: <20241018045249.9373-1-simeddon@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1729230494; c=relaxed/simple;
+	bh=5ed+YXIRKt4R1p86u7Yp1C2teLt4n1R3+K0CLW/7p24=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZRiswBOYD8NmMtpIeIo6Z2Uwb+rogKCHoLrK1Ev6htRyzBUtx5SdYubJyZYGZquD2ji3+GTHr4O5W18SAOEJUXyQbzDCyz1sc13h9tejqPRIE0/Hb7NVl0FHnVaSemWRuuEaajOCblVJcPBMTqApEI9EL+uaLuSnQqHAfq9w4c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aRl36x8/; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729230493; x=1760766493;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5ed+YXIRKt4R1p86u7Yp1C2teLt4n1R3+K0CLW/7p24=;
+  b=aRl36x8/D1h9NsBWJN8xWlVoAXSen3uH/8fG9zf1LoNl+KPeUFer9brq
+   G2d2hhG6sd/spdVrdt4Cr/BlBsMFJXXdmiStLHegX6t1hRzPVU13xLKt9
+   J6pQdnEgADVIx6sKguk8EhoRiE3yvOCRT8evhqb8WCyD2rtz9ALa16LtC
+   YDEoae2qVY6qVQs5dv/7We4G5+U0fvg+Mb09jx/tfyhEqi/BpWumHhbAj
+   P75pZhqB5Sgi8GtzmyGqA6YIWEtCUaDGBtbXdvlZda/VbnbMKQFoM4VSQ
+   z0TAND3pRU7Edfg7J3XNd/+ZQqHa5Vb/2FZo7BaH9FrDWfOOUqx9AWBWF
+   w==;
+X-CSE-ConnectionGUID: k1eHSKoyTIm9kY0Z57x/DQ==
+X-CSE-MsgGUID: mE/v2xKdRwi+OBvC4PB+SA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28847431"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28847431"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 22:48:13 -0700
+X-CSE-ConnectionGUID: fqPiXShaQuKN4thSghkR9w==
+X-CSE-MsgGUID: r8blsmJFSrCj+OKC6tfH1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="83596370"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 17 Oct 2024 22:48:09 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t1fqI-000NK7-1Q;
+	Fri, 18 Oct 2024 05:48:06 +0000
+Date: Fri, 18 Oct 2024 13:47:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Lorenzo Bianconi <lorenzo@kernel.org>, upstream@airoha.com
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] thermal: Add support for Airoha EN7581 thermal
+ sensor
+Message-ID: <202410181340.S74lBfUS-lkp@intel.com>
+References: <20241017143830.1656-2-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017143830.1656-2-ansuelsmth@gmail.com>
 
-Check whether xgettext and msgfmt are available on the system before
-attempting to generate GNU gettext Language Translations.
-In case of missing dependency, generate error message directing user
-to install the necessary package.
+Hi Christian,
 
-Tested-by: John B. Wyatt IV <jwyatt@redhat.com>
-Tested-by: John B. Wyatt IV <sageofredondo@gmail.com>
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Siddharth Menon <simeddon@gmail.com>
----
- v1->v2:
- As suggested by Shuah:
- - Checks for gettext tools outside the target definitions instead
- of inline
- - Replace command with which
- v2->v3:
- - Update commit message
- - Removed the unwanted space under msgmerge introduced in v2
- v3->v4:
- - Added suggested-by and tested-by tags
- - Updated changelog to be more descriptive
- 
- tools/power/cpupower/Makefile | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 6c02f401069e..84987f91d11f 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -218,17 +218,28 @@ else
- endif
- 	$(QUIET) $(STRIPCMD) $@
- 
-+ifeq (, $(shell which xgettext))
-+$(warning "Install xgettext to extract translatable strings.")
-+else
- $(OUTPUT)po/$(PACKAGE).pot: $(UTIL_SRC)
- 	$(ECHO) "  GETTEXT " $@
- 	$(QUIET) xgettext --default-domain=$(PACKAGE) --add-comments \
- 		--keyword=_ --keyword=N_ $(UTIL_SRC) -p $(@D) -o $(@F)
-+endif
- 
-+ifeq (, $(shell which msgfmt))
-+$(warning "Install msgfmt to generate binary message catalogs.")
-+else
- $(OUTPUT)po/%.gmo: po/%.po
- 	$(ECHO) "  MSGFMT  " $@
- 	$(QUIET) msgfmt -o $@ po/$*.po
-+endif
- 
- create-gmo: ${GMO_FILES}
- 
-+ifeq (, $(shell which msgmerge))
-+$(warning "Install msgmerge to merge translations.")
-+else
- update-po: $(OUTPUT)po/$(PACKAGE).pot
- 	$(ECHO) "  MSGMRG  " $@
- 	$(QUIET) @for HLANG in $(LANGUAGES); do \
-@@ -241,6 +252,7 @@ update-po: $(OUTPUT)po/$(PACKAGE).pot
- 			rm -f $(OUTPUT)po/$$HLANG.new.po; \
- 		fi; \
- 	done;
-+endif
- 
- compile-bench: $(OUTPUT)libcpupower.so.$(LIB_MAJ)
- 	@V=$(V) confdir=$(confdir) $(MAKE) -C bench O=$(OUTPUT)
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.12-rc3 next-20241017]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/thermal-Add-support-for-Airoha-EN7581-thermal-sensor/20241017-224102
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20241017143830.1656-2-ansuelsmth%40gmail.com
+patch subject: [PATCH v2 2/2] thermal: Add support for Airoha EN7581 thermal sensor
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20241018/202410181340.S74lBfUS-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410181340.S74lBfUS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410181340.S74lBfUS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/thermal/airoha_thermal.c: In function 'airoha_thermal_get_temp':
+>> drivers/thermal/airoha_thermal.c:239:46: error: invalid use of undefined type 'struct thermal_zone_device'
+     239 |         struct airoha_thermal_priv *priv = tz->devdata;
+         |                                              ^~
+   drivers/thermal/airoha_thermal.c: In function 'airoha_thermal_set_trips':
+   drivers/thermal/airoha_thermal.c:268:46: error: invalid use of undefined type 'struct thermal_zone_device'
+     268 |         struct airoha_thermal_priv *priv = tz->devdata;
+         |                                              ^~
+   drivers/thermal/airoha_thermal.c: In function 'airoha_thermal_probe':
+   drivers/thermal/airoha_thermal.c:466:17: error: invalid use of undefined type 'struct thermal_zone_device'
+     466 |         priv->tz->tzp->offset = priv->default_offset;
+         |                 ^~
+   drivers/thermal/airoha_thermal.c:467:17: error: invalid use of undefined type 'struct thermal_zone_device'
+     467 |         priv->tz->tzp->slope = priv->default_slope;
+         |                 ^~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [m]:
+   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+
+
+vim +239 drivers/thermal/airoha_thermal.c
+
+   236	
+   237	static int airoha_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+   238	{
+ > 239		struct airoha_thermal_priv *priv = tz->devdata;
+   240		int min, max, avg_temp, temp_adc;
+   241		int i;
+   242	
+   243		/* Get the starting temp */
+   244		temp_adc = airoha_get_thermal_ADC(priv);
+   245		min = temp_adc;
+   246		max = temp_adc;
+   247		avg_temp = temp_adc;
+   248	
+   249		/* Make 5 more measurement and average the temp ADC difference */
+   250		for (i = 0; i < 5; i++) {
+   251			temp_adc = airoha_get_thermal_ADC(priv);
+   252			avg_temp += temp_adc;
+   253			if (temp_adc > max)
+   254				max = temp_adc;
+   255			if (temp_adc < min)
+   256				min = temp_adc;
+   257		}
+   258		avg_temp = avg_temp - max - min;
+   259		avg_temp /= 4;
+   260	
+   261		*temp = RAW_TO_TEMP(priv, avg_temp);
+   262		return 0;
+   263	}
+   264	
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
