@@ -1,224 +1,224 @@
-Return-Path: <linux-pm+bounces-16001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9C8B9A4B54
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 07:42:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A24B9A4B7A
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 08:06:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42201C21726
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 05:42:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE5DA282E4C
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 06:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5821D63CD;
-	Sat, 19 Oct 2024 05:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DC11D5ABA;
+	Sat, 19 Oct 2024 06:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R06mnRgt"
+	dkim=pass (1024-bit key) header.d=arri.de header.i=@arri.de header.b="k8YIcyZV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2054.outbound.protection.outlook.com [40.107.247.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871951D27BE
-	for <linux-pm@vger.kernel.org>; Sat, 19 Oct 2024 05:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729316571; cv=none; b=gOtkzH3Mo+vU7oi+3fpDmBtDtjU+5vZ8NrxorkVUqy3bDwj8AXtCL0HGtkJdWGe4r7BEllhzH5ovD7wVRrX4khDBp2kTIB61K9PoHLaL/2qmIEdV8BdidHRES91+p4i66gub7x15Wjnl6gxyefKk3oiSnzX3MdL9dairXN3lEzE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729316571; c=relaxed/simple;
-	bh=Fz8SqKP1uHowIapTRbRFvVKoMLY1FsF7+S4uGHynG6c=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tm5KH1Sz9kGyZ4MKO7WA8ZTi4+xqZZ7adTTB5/J5KwF6M7enwcZXl34oupR9tItvKn/nVyUOxem04iQOxvvZXkLJ8GOWHWsX/YD6eTDP+Xl6UtKyed+Ybum8x4buu6nXfNcCUl1xJYtOPuuwERk7t4+O6sT+SeJcdqGvbkG/OSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=R06mnRgt; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4609d75e2f8so22225631cf.1
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 22:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729316568; x=1729921368; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=38uHeg7U8taINS003z4nsL0moH37te8cu6msh48JjeU=;
-        b=R06mnRgtfwUkZ3EgYXRMKTF5PzB1X6kPlOWHtKsg8HsK9pVraIaxYNmWNT9/2atcAU
-         lSlwtGXun+gjw6jVGU/rMYn0PocaNFqkvfzGjHkFUxw2yWMwmv1bSxQWhyuKbLLhzO8w
-         tfGfxQ1W/4HpyRhuJNPh6anJLE5C9zervdvEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729316568; x=1729921368;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=38uHeg7U8taINS003z4nsL0moH37te8cu6msh48JjeU=;
-        b=G7FRUvQxL+A6UKRtZYIZdUvwJnSsp7Mi3rXazEgDMKKTo7r7PBOyy5uTVbDZ2S2dRH
-         bfc1egUqcHh6f5AhnGtaZtj5T2tkBHVnZeI6AhuktorHwlS07n0taGH/abpstWliOPMS
-         nYYW3rpZe+038I8FXHUifMhitgRrcXd+34iaQXgS+DOgH87RAdoUTxdbKsMPmms06hWw
-         a9SckshCjkYBI3srfk724EjiO2XpRCd9cdC5KIWIXllMB/vh+fenfpIbMxBHjS5/9WJD
-         I6uou2FlTz3r9GX+NwETSjZhieA+eDPex0pZfldacElzst3+ag3iTrYKHIcnvivYuiTM
-         AJQw==
-X-Forwarded-Encrypted: i=1; AJvYcCW3sdz8WR2qsP23/FP1K2xPrcuR6HP36hPzpVyjOQZklH6hgpS//7Zw3F4tO0PdeBg3O2mh4LHgzw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo+ZTIqOMzs+yAutC9zLh2lU0hUyNOTf2kvBUtIYxodcvybNMe
-	+pIpTVpscJ31UAtoI0LNTV1V+W9pgYPI4BI90rNzmxeUPziUgLH2+ycHhDxAGKyVvhCgfwNFFUE
-	9CLMTrKU9NwCnR8rIwxASqMD45FSQI+p0TyYf
-X-Google-Smtp-Source: AGHT+IHcrn2IEf1cChfNodoLs2wc3W9pzjfl5TJdUYdOATX2Xw0JIz86mzqzlYVx37yQ/m7JwvB1D/0HhOqmDTq9w38=
-X-Received: by 2002:a05:622a:5148:b0:451:b77e:a8c1 with SMTP id
- d75a77b69052e-4609b44cbf0mr165252061cf.3.1729316568440; Fri, 18 Oct 2024
- 22:42:48 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 18 Oct 2024 22:42:46 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58F728EF;
+	Sat, 19 Oct 2024 06:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729317978; cv=fail; b=BCEpirCeNNzyfScnOeNlcfJ15FomwypZqtxQMChMyDxf2QpHSMFHUWjRjzUsLtAEMoHNsN7hh61LKGEWzaFBB06VnhTilNQ42Uawb7pC9RzLGbgnQfdgu7b37pPNJPSamr8rHmghoME2IgUEjbjRiksghMuc46G5b0sgw7GksHA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729317978; c=relaxed/simple;
+	bh=Yx68Su07o2Z3sSp5kw2SrUMjs/g9ybcgS3CMI3nViUM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pv6sS6BG454jIYkdpF1KFHwNquMPlPFxfZJa03pD5/SXJIcli6KLlOGh9M6T+dYRdlmUPnWT057BYLEwvvG8ULfyLSOed3S9CcUJ1rKSHr4neIOK9WKudHkz4oMJ/cMGPYh6g+G5/Gi8HBkv/NSVPosBcNJ8fEI5IFonBN5FqAI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arri.de; spf=pass smtp.mailfrom=arri.de; dkim=pass (1024-bit key) header.d=arri.de header.i=@arri.de header.b=k8YIcyZV; arc=fail smtp.client-ip=40.107.247.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arri.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arri.de
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vbtTcY+9LxRSdSBekCuBFvzsVJHruOnBy2Wd63t9ayV0BTqojXjciTjYM6icdX+GBaDrmeWB0nuk6yPMM51dxiEQgsfpZYvNMbqq144r2E/gagtJlwCOALhCZTYUoxrp7buemek1xVwPKenP6BtyZv8wHXY+ArxUhMp9H4mYQjGuymGYaK8QyQQ+6T2L5OjQ7Wcb0gkMR6UgklUug11ETlDZ6z/SUdJnRNaaXXOrceJVVm0honqQVOFE2ksgR/kMfw9elVUoACtWyANh5UFzvH/VVc9FiMvJLS+M0pYX2UgbqbL7UN11UWqLoLLALb312SKQ0R5vY51N4VrR69cL+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wu+JDIvrVQ1ki2lRe1/jFW4LWmQMbP+wEb6hHVOMJJU=;
+ b=PnEy6ZY90Yp+29d9uvTlwpGO5QBVRwedUEMJCy7P0nHq67eUnpbpwfvCX7swM52XKUNlB55dP0o6FW0h17WbO5R8mYBR/iNC7OcApm2pSU5bgcf2Quf4gXC8ZeXVLSs5shRHFesDWz2uQsmgkllKg3BhcN6u+O0cuAKYCJf2164fe8tMV+HdFU/rYAZcLtwWlrk/+3WEJepVW71hz4ftYlzZJ36foUR2nkaKLTPm+t32Jx8DWsRZTqRHIZzvII3e73RwIPqb+Uqi0wnkIFfhPhY1N1vq18urw6nBH9QAbcqIDwYjlGk6cUSG27Qd8MHKwW9YuYwgdQ5zZWV+Fv+l3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.7) smtp.rcpttodomain=kernel.org smtp.mailfrom=arri.de; dmarc=fail
+ (p=none sp=none pct=100) action=none header.from=arri.de; dkim=none (message
+ not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arri.de; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wu+JDIvrVQ1ki2lRe1/jFW4LWmQMbP+wEb6hHVOMJJU=;
+ b=k8YIcyZVE1WHnDQMCU1/5uyRJRaT4lTSvGN4AmlJwcoNy6P3vCdvEW/IIv7c3KqiciW3PIFbkk2JCswIpv/TiNcXTQbRydwR6kiMtMMIzcbQP1pYG837lpxxvSirIvbCMhboLFu2d6jsjMDnenNQCIgLFOTqIbnmsRzlLeNxI4Y=
+Received: from AM0PR04CA0131.eurprd04.prod.outlook.com (2603:10a6:208:55::36)
+ by DBBPR07MB7612.eurprd07.prod.outlook.com (2603:10a6:10:1e3::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Sat, 19 Oct
+ 2024 06:06:08 +0000
+Received: from AMS0EPF0000019E.eurprd05.prod.outlook.com
+ (2603:10a6:208:55:cafe::8a) by AM0PR04CA0131.outlook.office365.com
+ (2603:10a6:208:55::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.26 via Frontend
+ Transport; Sat, 19 Oct 2024 06:06:08 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.7; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.7) by
+ AMS0EPF0000019E.mail.protection.outlook.com (10.167.16.250) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8069.17 via Frontend Transport; Sat, 19 Oct 2024 06:06:08 +0000
+Received: from n9w6sw14.localnet (192.168.54.11) by mta.arri.de (10.10.18.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Sat, 19 Oct
+ 2024 08:06:07 +0200
+From: Christian Eggers <ceggers@arri.de>
+To: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
+	<alisa.roman@analog.com>, Peter Rosin <peda@axentia.se>, Paul Cercueil
+	<paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>, Matteo Martelli
+	<matteomartelli3@gmail.com>
+CC: <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-pm@vger.kernel.org>, Matteo Martelli
+	<matteomartelli3@gmail.com>
+Subject: Re: [PATCH v4 5/5] iio: as73211: copy/release available integration times to
+ fix race
+Date: Sat, 19 Oct 2024 08:06:06 +0200
+Message-ID: <2721272.vuYhMxLoTh@n9w6sw14>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
+References: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
+ <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
-References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com>
- <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
-From: Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date: Fri, 18 Oct 2024 22:42:46 -0700
-Message-ID: <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/5] firmware: psci: Read and use vendor reset types
-To: Andy Yan <andy.yan@rock-chips.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Elliot Berman <quic_eberman@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org
-Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Melody Olvera <quic_molvera@quicinc.com>, 
-	Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, linux-pm@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS0EPF0000019E:EE_|DBBPR07MB7612:EE_
+X-MS-Office365-Filtering-Correlation-Id: f3e0eb9a-352a-4005-ee83-08dcf0041fc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|7416014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?KRbci8JN6rdGqzNpJI65wMwLI6QkxfU9ihdK0rHVtXMeS4haL0Zrgnyy77Si?=
+ =?us-ascii?Q?yv/Cs5zjRgsCyDHY5+SG2uxSb16I2bhg9EsNvrjZYkzXHcofyvr+gdSgk+0k?=
+ =?us-ascii?Q?RBPprAcTOe/QdC3ET4kkBYAacubliiuv3Cbkc8wYuyISALlxM8jgZ6qT1+8q?=
+ =?us-ascii?Q?lFHloJUtFirSNz8rtuQuWbmCuAT8HJsPDTiLDiHeDxjWCHgUisq1zUQAtWC/?=
+ =?us-ascii?Q?2x3UWSkLzqJp7CBTYkKTz3P/UuyB4xre11q2ByNWYJxub4qijV3SWh0nQyxH?=
+ =?us-ascii?Q?GqwjQveG3JgGo89IGaxxb8B53eH9fCP8XSfH0QgKAjE5XGY1XSidf0zQQixy?=
+ =?us-ascii?Q?b7FRI5bSEp5226MWEEzirgNsbxZcrtpAR92BfqsNoyMXauqz8z6CFoXVMM2b?=
+ =?us-ascii?Q?GOnsaNkdvLytuRANK34MNjx+Gm9WUStPakGwbk7r84ypuSd4zQPw1h1ny807?=
+ =?us-ascii?Q?/mn7LsVe5/KBVZv3wxdGXgmq7tOLMucFyJfCDJv+ulUikm3nI6mg7VgzWcAt?=
+ =?us-ascii?Q?0qYKQWIU9+aiupRxkVJlIvzuqQ7mlQZu//MqHLYWtYLxhwmQadow90LPYdfy?=
+ =?us-ascii?Q?vki+k3CO2IVO/9WMiIgfLHkekpxfQwIs8G0HKMux+4vxI4GQ5G0QZ06iYn9S?=
+ =?us-ascii?Q?K4hP4iYOYRIV5+EpxrXlG3N8bzKRURSFt2eNhaQunuGY7/CSuFhGxjswjfxy?=
+ =?us-ascii?Q?HGrP/oMECRcg3LzMm513xWTn0tn8ZQG5diq/0GEOwjXPCX5+KT8jeFjbC/Bd?=
+ =?us-ascii?Q?6gpJ2A795Ir22VSMuSGYjOB3tJI+lTDTBAZ16Yrr8/XnbkZP1T++h9xtSCDp?=
+ =?us-ascii?Q?Gf38nmuBQP4ccsFaRauzd+zq+o8vzSMeDPnHjZZ9zVICTviHVbYgPvnLD4a7?=
+ =?us-ascii?Q?/Ge7EGKc2Sot93u5HWIgZ+wrb5U8/pPgcesq1ADhAtwtCcN1GpKZRgtg7QOa?=
+ =?us-ascii?Q?/tKqUdiGAE4YZuSHJ6XKmiX79KuWn3z0j/8bJ3+4THINqJS5v7+KNg106c/3?=
+ =?us-ascii?Q?NZELmdv+BM5nyRjYgwtmY6kvPxClOFZYQCz0P6GI9VNOK2mtrcCjldl0mH+c?=
+ =?us-ascii?Q?nzi4uNCTOg3lXDA3mrO9b/8okt8ZoPyH/GAdYSsmSXWiQJ+awJKiNZRwHU3A?=
+ =?us-ascii?Q?/RJNRzSXU1RBuO/81TEAbVMji9qw/id2CbiYl+nQ9lVqcJr9y8di3n5kVumP?=
+ =?us-ascii?Q?kq6cpt+/aMPPfEcGZ6eSwP24OLB6T0GzNuMr/C6d3vFX71Qh8RvSP0B5wwxT?=
+ =?us-ascii?Q?42MtpJ4EUTjlnWJc7x7W6hjxih6o4jQwwAhDQ81R9HlOrppse90y+xEuSfD5?=
+ =?us-ascii?Q?IihjwUs72pBJGnK/cAnkEB0JxU3bXrrh9WMgz88QLNKyxJSJ9XASVfKj0cRJ?=
+ =?us-ascii?Q?GvKx1J7Zs95xNTErEynVP2BYTIGgSgWHQxbPWSDmjgd46M9Iag=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2024 06:06:08.2899
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3e0eb9a-352a-4005-ee83-08dcf0041fc5
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF0000019E.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR07MB7612
 
-Quoting Elliot Berman (2024-10-18 12:39:48)
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index 2328ca58bba6..60bc285622ce 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -29,6 +29,8 @@
->  #include <asm/smp_plat.h>
->  #include <asm/suspend.h>
->
-> +#define REBOOT_PREFIX "mode-"
-
-Maybe move this near the function that uses it.
-
+On Friday, 18 October 2024, 12:16:44 CEST, Matteo Martelli wrote:
+> While available integration times are being printed to sysfs by iio core
+> (iio_read_channel_info_avail), the sampling frequency might be changed.
+> This could cause the buffer shared with iio core to be corrupted. To
+> prevent it, make a copy of the integration times buffer and free it in
+> the read_avail_release_resource callback.
+> 
+> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+> ---
+>  drivers/iio/light/as73211.c | 25 +++++++++++++++++++++----
+>  1 file changed, 21 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/light/as73211.c b/drivers/iio/light/as73211.c
+> index be0068081ebbbb37fdfb252b67a77b302ff725f6..c4c94873e6a1cc926cfb724d906b07222773c43f 100644
+> --- a/drivers/iio/light/as73211.c
+> +++ b/drivers/iio/light/as73211.c
+> @@ -108,7 +108,8 @@ struct as73211_spec_dev_data {
+>   * @creg1:  Cached Configuration Register 1.
+>   * @creg2:  Cached Configuration Register 2.
+>   * @creg3:  Cached Configuration Register 3.
+> - * @mutex:  Keeps cached registers in sync with the device.
+> + * @mutex:  Keeps cached registers in sync with the device and protects
+> + *          int_time_avail concurrent access for updating and reading.
+>   * @completion: Completion to wait for interrupt.
+>   * @int_time_avail: Available integration times (depend on sampling frequency).
+>   * @spec_dev: device-specific configuration.
+> @@ -493,17 +494,32 @@ static int as73211_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec co
+>  		*type = IIO_VAL_INT;
+>  		return IIO_AVAIL_LIST;
+>  
+> -	case IIO_CHAN_INFO_INT_TIME:
+> +	case IIO_CHAN_INFO_INT_TIME: {
+>  		*length = ARRAY_SIZE(data->int_time_avail);
+> -		*vals = data->int_time_avail;
+>  		*type = IIO_VAL_INT_PLUS_MICRO;
+> -		return IIO_AVAIL_LIST;
+>  
+> +		guard(mutex)(&data->mutex);
 > +
->  /*
->   * While a 64-bit OS can make calls with SMC32 calling conventions, for some
->   * calls it is necessary to use SMC64 to pass or return 64-bit values.
-> @@ -305,9 +315,29 @@ static int get_set_conduit_method(const struct device_node *np)
->         return 0;
+> +		*vals = kmemdup_array(data->int_time_avail, *length,
+> +				      sizeof(int), GFP_KERNEL);
+> +		if (!*vals)
+> +			return -ENOMEM;
+> +
+> +		return IIO_AVAIL_LIST;
+> +	}
+>  	default:
+>  		return -EINVAL;
+>  	}
 >  }
->
-> +static void psci_vendor_sys_reset2(unsigned long action, void *data)
+>  
+> +static void as73211_read_avail_release_res(struct iio_dev *indio_dev,
+> +					   struct iio_chan_spec const *chan,
+> +					   const int *vals, long mask)
 > +{
-> +       const char *cmd = data;
-> +       unsigned long ret;
-> +       size_t i;
-> +
-> +       for (i = 0; i < num_psci_reset_params; i++) {
-> +               if (!strcmp(psci_reset_params[i].mode, cmd)) {
-> +                       ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
-> +                                            psci_reset_params[i].reset_type,
-> +                                            psci_reset_params[i].cookie, 0);
-> +                       pr_err("failed to perform reset \"%s\": %ld\n",
-> +                               cmd, (long)ret);
-
-Do this intentionally return? Should it be some other function that's
-__noreturn instead and a while (1) if the firmware returns back to the
-kernel?
-
-> +               }
-> +       }
+> +	if (mask == IIO_CHAN_INFO_INT_TIME)
+> +		kfree(vals);
 > +}
 > +
->  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
->                           void *data)
->  {
-> +       if (data && num_psci_reset_params)
-> +               psci_vendor_sys_reset2(action, data);
-> +
->         if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
->             psci_system_reset2_supported) {
->                 /*
-> @@ -750,6 +780,68 @@ static const struct of_device_id psci_of_match[] __initconst = {
->         {},
+>  static int _as73211_write_raw(struct iio_dev *indio_dev,
+>  			       struct iio_chan_spec const *chan __always_unused,
+>  			       int val, int val2, long mask)
+> @@ -699,6 +715,7 @@ static irqreturn_t as73211_trigger_handler(int irq __always_unused, void *p)
+>  static const struct iio_info as73211_info = {
+>  	.read_raw = as73211_read_raw,
+>  	.read_avail = as73211_read_avail,
+> +	.read_avail_release_resource = as73211_read_avail_release_res,
+>  	.write_raw = as73211_write_raw,
 >  };
->
-> +static int __init psci_init_system_reset2_modes(void)
-> +{
-> +       const size_t len = strlen(REBOOT_PREFIX);
-> +       struct psci_reset_param *param;
-> +       struct device_node *psci_np __free(device_node) = NULL;
-> +       struct device_node *np __free(device_node) = NULL;
-> +       struct property *prop;
-> +       size_t count = 0;
-> +       u32 magic[2];
-> +       int num;
-> +
-> +       if (!psci_system_reset2_supported)
-> +               return 0;
-> +
-> +       psci_np = of_find_matching_node(NULL, psci_of_match);
-> +       if (!psci_np)
-> +               return 0;
-> +
-> +       np = of_find_node_by_name(psci_np, "reset-types");
-> +       if (!np)
-> +               return 0;
-> +
-> +       for_each_property_of_node(np, prop) {
-> +               if (strncmp(prop->name, REBOOT_PREFIX, len))
-> +                       continue;
-> +               num = of_property_count_elems_of_size(np, prop->name, sizeof(magic[0]));
+>  
+> 
+> 
 
-Use of_property_count_u32_elems()?
+Thanks for fixing this.
 
-> +               if (num != 1 && num != 2)
-> +                       continue;
-> +
-> +               count++;
-> +       }
-> +
-> +       param = psci_reset_params = kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
-> +       if (!psci_reset_params)
-> +               return -ENOMEM;
-> +
-> +       for_each_property_of_node(np, prop) {
-> +               if (strncmp(prop->name, REBOOT_PREFIX, len))
-> +                       continue;
-> +
-> +               param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
-> +               if (!param->mode)
-> +                       continue;
-> +
-> +               num = of_property_read_variable_u32_array(np, prop->name, magic, 1, 2);
+Tested-by: Christian Eggers <ceggers@arri.de>
 
-ARRAY_SIZE(magic)?
 
-> +               if (num < 0) {
 
-Should this be less than 1?
-
-> +                       pr_warn("Failed to parse vendor reboot mode %s\n", param->mode);
-> +                       kfree_const(param->mode);
-> +                       continue;
-> +               }
-> +
-> +               /* Force reset type to be in vendor space */
-> +               param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
-> +               param->cookie = num == 2 ? magic[1] : 0;
-
-ARRAY_SIZE(magic)?
-
-> +               param++;
-> +               num_psci_reset_params++;
-> +       }
-> +
-> +       return 0;
 
