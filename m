@@ -1,53 +1,54 @@
-Return-Path: <linux-pm+bounces-16004-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16006-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A2679A4D3A
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 13:51:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DFFB9A4D40
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 13:51:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9CAEB21BB5
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 11:50:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE2281F21C24
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 11:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747AA1E00A1;
-	Sat, 19 Oct 2024 11:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002AE1E0B82;
+	Sat, 19 Oct 2024 11:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="qgmcqSq5"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Dzl/peBA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817821BDAB3;
-	Sat, 19 Oct 2024 11:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F9B1DE4D8;
+	Sat, 19 Oct 2024 11:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729338650; cv=none; b=s34caBVWmf/3r4I1PqwRAnhMvAE756FeD8d22q86mX8bU/Shz+714X1Xz0dAk3eGXiMnKVqNaj9tcLiwoEtZu9XLOKoZp7uQ1k5OgkI/KD8k3SwCsB7r6QHX4Ssn37e+e6bZtaKXuoQeupxUEUc4K3vzRAw8S+nFqKnnvW8C/mw=
+	t=1729338651; cv=none; b=NZLS9Vg6O2mby4OIeiufE8eDoWAtH0VXHfpJhMdRxmiFBeHnrxf32USV4jpu2pcauoE1dsQErS0OZqsmJ0jxDxBoCwpwDgT+82AAvbZnni6jtVnXr0yUrIcxs+z63ilfKjKliJUgw9J9cxKEph+QWQs2C4zSQ1gF2XW8NdOEHY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729338650; c=relaxed/simple;
-	bh=ALf1wUJN+0Fpqn4qKACsZmuH0gCwBAlL/6YKtoXClYM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T5XAsswTJP/53kAwQKS3rNICnlIcsHOcAW/xzYSN1hXSG4QhH5/l20/Kr+I/xn+XSAQ9K9vqdRNZ8yJJwD1XJT9Pzfuz5tTtwMngjvE6JsbAxry2lOSZpMvAgECIavBKgGw+qbinUCsrnsVYIJ5Ttw2eZMSnSL2XVgb/yc/Qy7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=qgmcqSq5; arc=none smtp.client-ip=5.75.144.95
+	s=arc-20240116; t=1729338651; c=relaxed/simple;
+	bh=WQ5LcC5dxomf+Jk8o6tbrfygW77imH/aaZDIzSsjPZM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EC6dgiQQLSAHtZiFjwbXOruzNSrZ9RZA4TblelqOPGBozyxYtSLkF5C9+COWqVfVfyeU7K/hUgd+mUWzVAojyoS5HNQLoSNWWb4ECnoIexAOf96Z8e4cFZ1PE8lKy19EOXFNLeYid9UbR4j+luGEUwF4qzt17wcsNWh7TSoxe48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Dzl/peBA; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.1.130] (51B6DD9D.dsl.pool.telekom.hu [81.182.221.157])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 8A16CE4205;
-	Sat, 19 Oct 2024 11:50:40 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id 8E8A9E459D;
+	Sat, 19 Oct 2024 11:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1729338641;
+	s=psm; t=1729338642;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=w5/Ny1lSvVpnnZjsjk77MC94wGjYZgVT23cJY+JO8UE=;
-	b=qgmcqSq5Xj804Q6kJVeqDFLbV2owDZQFILwAoWxkpX8O07AdxeLX+NZIh14802cQ3UIYMz
-	tevodF2arg8Gbw4JJc9xQLhUXUH21ROZuG255M/MWFzqEaTXbTdEeo2LqFSddg4KrSYDEX
-	M5JSClxYShOteVa7Vnws4ZxE2WL0+9Eb9ia7HrnqXLh6g0NF8p4xhVJwjz4XIK2LpMnXUc
-	ZSCV2AhMZdbTC+uzBXIxg03KwYqFdaTNh7AJRCZKodzGxicpSQspNQfJt9TNDH0z+E/GoO
-	pfbrkRAYSetQQ5kDF5P3jsyvRaIgzI1LCribvu7/H8SEz5zIsivc0jACVSQQjg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q8cvryaZPKYiI0Nyj6A8ssk4KjXnZlrTtmSMkN+/r2k=;
+	b=Dzl/peBADOvEWtYvEcgR0HdIs230YvCiAK8U9ujq8ZuTSFA+qXTue7gg6/7JDF2I9FheEW
+	MbRThb8thwZy6h2gAolyWffomDeg42fFJ+hKXamJ/4us8ORJtLiYG0pWyvVlMuK5o4M4cr
+	nLEPnS2PAAPS2gsq9pTNDk7C5+OPMlbBGsmkyKPG6iKp6b5uA3EI2CmbddQc0GFGkLNBU1
+	jNoX5wkrX09WHWGCVQmFrZQfvZkFPX/uE8mlURBadEH6hSaWSa3Uf85hm3UCzkzKr6fVlq
+	sSZixrSBnzz1HoBwEKP4enVX8D0pu4zmjHm8n5MLME8sBzUN08ueuiq/hFvXjg==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Subject: [PATCH RFC 00/14] Add MSM8917/PM8937/Redmi 5A
-Date: Sat, 19 Oct 2024 13:50:37 +0200
-Message-Id: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
+Date: Sat, 19 Oct 2024 13:50:38 +0200
+Subject: [PATCH RFC 01/14] dt-bindings: pinctrl: qcom,pmic-gpio: add PM8937
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,10 +57,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAA2dE2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDA0NL3dziXAtLQ3NdQ/Nk4xSDtDSTRFMjJaDqgqLUtMwKsEnRSkFuzkq
- xtbUAZhhrRl4AAAA=
-X-Change-ID: 20241019-msm8917-17c3d0ff4a52
+Message-Id: <20241019-msm8917-v1-1-f1f3ca1d88e5@mainlining.org>
+References: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
+In-Reply-To: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
  Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -74,70 +74,54 @@ To: Bjorn Andersson <andersson@kernel.org>,
 Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
- Dang Huynh <danct12@riseup.net>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1729338640; l=2491;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1729338640; l=1585;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=ALf1wUJN+0Fpqn4qKACsZmuH0gCwBAlL/6YKtoXClYM=;
- b=//sMc2I0RKJ4/BL5T24JEig0g4tJgPwPviUpFku/VIpxRCbYlfRs9Kf7YA4Gtfc7uqHS8gBG1
- 2a53R/G22z5Bog8X97Aer/qVcSS5rD2E3dgYmwseZmXvUI4V5zSHjCW
+ bh=WQ5LcC5dxomf+Jk8o6tbrfygW77imH/aaZDIzSsjPZM=;
+ b=f0IA5PHv7MnjhaEhvKgo5IuG1YbuSqNz+AQYQbX8T/8jJmY0r0y9k9sXToJfDUBhE1LF/Uw8Y
+ 2OE2FCXyCZiCM5zHZTqR3/9RraAOHiPTFes5Q0PRnRBvrUCtRc/OEP1
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-This patch series add support for MSM8917 soc with PM8937 and
-Xiaomi Redmi 5A (riva).
+Document the 8 GPIOs found on PM8937. It has holes on
+3,4 and 6 pins.
 
 Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
-Barnabás Czémán (11):
-      dt-bindings: pinctrl: qcom,pmic-gpio: add PM8937
-      pinctrl: qcom-pmic-gpio: add support for PM8937
-      dt-bindings: pinctrl: qcom,pmic-mpp: Document PM8937 compatible
-      pinctrl: qcom: spmi-mpp: Add PM8937 compatible
-      dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl bindings
-      dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8917
-      dt-bindings: thermal: tsens: Add MSM8917 compatible
-      dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU to SMMUv1 compatibles
-      dt-bindings: nvmem: Add compatible for MS8917
-      dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
-      arm64: dts: qcom: Add Xiaomi Redmi 5A
+ Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Dang Huynh (1):
-      arm64: dts: qcom: Add PM8937 PMIC
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+index c1b799167d81b0b4e1edff6a6fce557fa88fd1ea..055cea5452eb62ab6e251a3a9193d1e5da293ccb 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+@@ -48,6 +48,7 @@ properties:
+           - qcom,pm8916-gpio
+           - qcom,pm8917-gpio
+           - qcom,pm8921-gpio
++          - qcom,pm8937-gpio
+           - qcom,pm8941-gpio
+           - qcom,pm8950-gpio
+           - qcom,pm8953-gpio
+@@ -184,6 +185,7 @@ allOf:
+               - qcom,pm8226-gpio
+               - qcom,pm8350b-gpio
+               - qcom,pm8550ve-gpio
++              - qcom,pm8937-gpio
+               - qcom,pm8950-gpio
+               - qcom,pm8953-gpio
+               - qcom,pmi632-gpio
+@@ -468,6 +470,7 @@ $defs:
+                  - gpio1-gpio6 for pm8550vs
+                  - gpio1-gpio38 for pm8917
+                  - gpio1-gpio44 for pm8921
++                 - gpio1-gpio8 for pm8937 (hole on gpio3, gpio4 and gpio6)
+                  - gpio1-gpio36 for pm8941
+                  - gpio1-gpio8 for pm8950 (hole on gpio3)
+                  - gpio1-gpio8 for pm8953 (hole on gpio3 and gpio6)
 
-Otto Pflüger (2):
-      pinctrl: qcom: Add MSM8917 tlmm pinctrl driver
-      arm64: dts: qcom: Add initial support for MSM8917
-
- Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
- .../devicetree/bindings/iommu/qcom,iommu.yaml      |    1 +
- .../devicetree/bindings/mfd/qcom,tcsr.yaml         |    1 +
- .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
- .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     |  155 ++
- .../bindings/pinctrl/qcom,pmic-gpio.yaml           |    3 +
- .../devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml |    2 +
- .../devicetree/bindings/thermal/qcom-tsens.yaml    |    1 +
- arch/arm64/boot/dts/qcom/Makefile                  |    1 +
- arch/arm64/boot/dts/qcom/msm8917-pins.dtsi         |  344 +++++
- arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  295 ++++
- arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1557 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/pm8916.dtsi               |    9 +-
- arch/arm64/boot/dts/qcom/pm8937.dtsi               |  216 +++
- drivers/pinctrl/qcom/Kconfig.msm                   |    6 +
- drivers/pinctrl/qcom/Makefile                      |    1 +
- drivers/pinctrl/qcom/pinctrl-msm8917.c             | 1622 ++++++++++++++++++++
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c           |    2 +
- drivers/pinctrl/qcom/pinctrl-spmi-mpp.c            |    1 +
- 19 files changed, 4224 insertions(+), 1 deletion(-)
----
-base-commit: f2493655d2d3d5c6958ed996b043c821c23ae8d3
-change-id: 20241019-msm8917-17c3d0ff4a52
-
-Best regards,
 -- 
-Barnabás Czémán <barnabas.czeman@mainlining.org>
+2.47.0
 
 
