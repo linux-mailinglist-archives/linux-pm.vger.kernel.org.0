@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-16026-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB5C9A4E2D
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 15:21:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 062449A4E33
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 15:21:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B83E31F257B1
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 13:21:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD18A286CB6
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 13:21:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FD338FAD;
-	Sat, 19 Oct 2024 13:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5CDF13D281;
+	Sat, 19 Oct 2024 13:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uj3yPaep"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMgHac0X"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59ED93307B;
-	Sat, 19 Oct 2024 13:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9998B179BC;
+	Sat, 19 Oct 2024 13:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729344073; cv=none; b=AXZT8eFXwxpkUylMbPt1X8g8217fv75Yb8XRN9VuaoQkhnXFtrbr25qCDey3s4l242rSC7djlXPOwTycJBWcrZs7HzlfMA6XLllkWYHPPo1WdSzJX7+6LKBP7Z4m2BJE98AfIDbvs9wWuX23z3qpOKpOLn1fQboU1/XxFpTBjdQ=
+	t=1729344075; cv=none; b=RoSFuJEfAm6R5p9zjXJj+j0zRNbhxVJCAUYnXpu4nf55WpNqR0G/lR99+f0ynXfk1+EAH74HWhN2Wq44btx4T8qVOLKBIBqx1hLc/9RK+wxkNmf2HSzLMqVTtn/7IXI0v/rnGvEweYpoyt767TE30OtRXGRYStShGV3k0+1BdAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729344073; c=relaxed/simple;
-	bh=viuTmcbCblXw8rPN5stleAfhO8dzDYFzTsz+0HcbEm4=;
+	s=arc-20240116; t=1729344075; c=relaxed/simple;
+	bh=1gvvEFBwFBXin6yqZrPUD4LNna7GVVr8y4TfyI5EhGc=;
 	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=tesE2gijFS5fsWlOvfHLZoFN9myTcBl7NXc9sJqM2nu5HSknfUDBf7PjBpSQhVRiEv7gH8eBsh+noBe1QCEnK9p8k8ItngqF1qLKqejN6sWH3rrwo46iZnLFcF1fK3DubQ760xlQe+52olxyQijZQN17Ox9ItYzRjhugB9rLZnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uj3yPaep; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB15C4CEDB;
-	Sat, 19 Oct 2024 13:21:12 +0000 (UTC)
+	 Message-Id:Subject; b=daih3A3yc6Yr3UklUqDHBwipvOHbjXkvNU1RSAJpiZRTvAjA9hwsv15Potc9iw0q1vzQ1YDZp9C2Wz5/7O+MtVpkcdKKIwR3zt+Jn66t/6vc8Q4Q4JFsOvMenWKdvJb+fYm2TrYZ1yyLJLKFhFIhrwFdzH5lQwUAqE3QkdK9vOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMgHac0X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B49EC4CEC5;
+	Sat, 19 Oct 2024 13:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729344073;
-	bh=viuTmcbCblXw8rPN5stleAfhO8dzDYFzTsz+0HcbEm4=;
+	s=k20201202; t=1729344074;
+	bh=1gvvEFBwFBXin6yqZrPUD4LNna7GVVr8y4TfyI5EhGc=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=Uj3yPaepkLEzW6/48Cjl1VIE37rP0q+xMTManMLFpdh3apvzEciGyjqJaoktE3pQc
-	 H9iGyhgSClZWoLoINMD+bi7K/rDt53qx59ilhQaIop8PZUf2V6d/rqwaJf/9wtyIkA
-	 zJEcnOqSBL0oCdZ5W9v0bcFu5ZIuRtuL2yfB8g1VHzf6QidLgP5s9IAZGoEN88IEFM
-	 c9Iz7mtQq+Hkd2Qx3a7E9urM4PjF2g+/zDBFWUOMj3VMI/XEpSfUsndDO4rmEGoi8T
-	 kXWJOFHRkiTwecGuP/MlfQScwOwVT6Irg1QBVpEIBQ6HKCFbX8U+1VdwNc6qjkMBbd
-	 rSCnVf/OgdVoA==
-Date: Sat, 19 Oct 2024 08:21:11 -0500
+	b=HMgHac0Xd7kobhbzUZcWGaaEuq7saSmCEn06k2s4BgPwobRuq6T3tgiw9O/LurHCI
+	 xpCicdfBk4LumpdixiQfJanSV1AsEphPqnx+l/rMVo9ye5zKuLDLeo5hSxfH9M3OaJ
+	 LmAP3zVZ4spdT0onD9xT+bI2CwvGiRFntG7JC/1TwqEUeMYrFrZvu8nN9LP3hwQ+6G
+	 SSKY4Xqy8zu7yT8YQ+7NrO0WoOOGaZY7bi1HQud5wDdC3wTA3qbf6xuERq0Hia9Rll
+	 x1Va+UXOVKKDEv9aO2h6INIceYHeCBFuUL0oum31Rdv9saFNkt71DC/zTO/lphGZPt
+	 CVzt05Jdc5p6g==
+Date: Sat, 19 Oct 2024 08:21:13 -0500
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,34 +52,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Cc: linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>, 
- Will Deacon <will@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
- Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org, 
- Amit Kucheria <amitk@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
- Lee Jones <lee@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+Cc: Bjorn Andersson <andersson@kernel.org>, linux-pm@vger.kernel.org, 
+ Joerg Roedel <joro@8bytes.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ devicetree@vger.kernel.org, Konrad Dybcio <konradybcio@kernel.org>, 
+ linux-gpio@vger.kernel.org, 
  Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
- linux-gpio@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>, 
- Conor Dooley <conor+dt@kernel.org>, iommu@lists.linux.dev, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Linus Walleij <linus.walleij@linaro.org>
-In-Reply-To: <20241019-msm8917-v1-3-f1f3ca1d88e5@mainlining.org>
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, iommu@lists.linux.dev, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Lee Jones <lee@kernel.org>, Will Deacon <will@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ Robin Murphy <robin.murphy@arm.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>
+In-Reply-To: <20241019-msm8917-v1-6-f1f3ca1d88e5@mainlining.org>
 References: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
- <20241019-msm8917-v1-3-f1f3ca1d88e5@mainlining.org>
-Message-Id: <172934406194.3231604.1407605892101052446.robh@kernel.org>
-Subject: Re: [PATCH RFC 03/14] dt-bindings: pinctrl: qcom,pmic-mpp:
- Document PM8937 compatible
+ <20241019-msm8917-v1-6-f1f3ca1d88e5@mainlining.org>
+Message-Id: <172934406329.3231662.1363402863577036185.robh@kernel.org>
+Subject: Re: [PATCH RFC 06/14] dt-bindings: pinctrl: qcom: Add MSM8917
+ pinctrl bindings
 
 
-On Sat, 19 Oct 2024 13:50:40 +0200, Barnabás Czémán wrote:
-> Document the Device Tree binding for PM8937 MPPs.
+On Sat, 19 Oct 2024 13:50:43 +0200, Barnabás Czémán wrote:
+> Add device tree bindings documentation for Qualcomm MSM8917
+> pinctrl driver.
 > 
 > Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 > ---
->  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     | 155 +++++++++++++++++++++
+>  1 file changed, 155 insertions(+)
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
@@ -87,11 +89,11 @@ My bot found errors running 'make dt_binding_check' on your patch:
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,msm8917-pinctrl.yaml: ignoring, error parsing file
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241019-msm8917-v1-3-f1f3ca1d88e5@mainlining.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241019-msm8917-v1-6-f1f3ca1d88e5@mainlining.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
