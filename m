@@ -1,234 +1,195 @@
-Return-Path: <linux-pm+bounces-16047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F5509A500E
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 19:26:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 553729A5052
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 20:29:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 705401C237C8
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 17:26:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16933283D6C
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 18:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DE4192B6B;
-	Sat, 19 Oct 2024 17:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD9219046E;
+	Sat, 19 Oct 2024 18:29:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aJMdKFy7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V1QnCC33"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3011917E6;
-	Sat, 19 Oct 2024 17:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5204C13C682;
+	Sat, 19 Oct 2024 18:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729358718; cv=none; b=Nyj+fFX5rqgMdSbd44wnqr4fGli56antfK0IbL7byuXCJm7wjQIYzu0f9LO9YgZbVB1NuN9Y4K3nMKepQzyn34VfcYNjoyt0dfCLthsdgaIOjzT4SRzqwoJOJmtkN4lOqui9Q7z3ne+f157bUp7LISZjQSI7Xtc/SsZpd3IlH/s=
+	t=1729362547; cv=none; b=OcRD6fkCaDQOckSBCQwU6Kb7Blsft+gEXcUBw1ZC059spc8G5CHE1+jSSKBGrgT9vJYdah9lLtbjNukZxVJUCHqJad54aVrJ2zo9MwHZZw7qP23U8q6Tt9hIijdHAGFrRIIjyE5pDoI6OwMQzij+V12474GQ2gwtz87nzPV9LhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729358718; c=relaxed/simple;
-	bh=K2m8obFhWuwPQuikGUdYpspkIHuhwoUO0TZOETINH7I=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hlQYFIk3KVTck5f0rCeCAhufN/+fiWco35JUyL98adgJxXZf1GKax9x36k3pin2+gW3OqqPESYrzyudICGHlSc7z05Krc8nJeivwM8HN6tH/nW7bIbsQ/XSbR4Kq+rqa7K4kOo6ChpZ6Usy8xB4OAm/hgZI3qAgkl0jpfVsZUbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=aJMdKFy7; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
-	Cc:Content-Type:Content-ID:Content-Description;
-	bh=T/6p2P3AuQICDZdTmCqeIRHYUbD9P11W996yxXSWcPU=; b=aJMdKFy7DJvlTP1XnRcUjL6xbY
-	Q5EoK5K3U51yRlgxxEb40YRiBgw/w7hBzAWytf0A1aXUXARRqTR8mw4PqxNKx+HwUEscYrVaMJ6UG
-	liArW3tl3xOmGMt4Dpt5nfhKf9vp8d8pBn8fEF0P4V48jTe19emOfLUMSKevdrre9oaVr0tzxPX68
-	KfkJ/EsRHkgLLB5dH7lDB4jVFjJfjpSy7Y5Mw2LDmiGnt1LIQ4CxfZRhtcrH3zNvWAd2AAUQHcieH
-	OM3tssMkLM/axWzt9O7aiyFjtlV312lwVSI0HPBT/9ylp6SB+/poGIBPaux2rtzL8LJBP7GtVHMPr
-	/yWn6Ahw==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t2DCK-0000000EUiq-3cTV;
-	Sat, 19 Oct 2024 17:25:07 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1t2DCI-00000009TKv-3xjU;
-	Sat, 19 Oct 2024 18:25:02 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
-Date: Sat, 19 Oct 2024 18:15:47 +0100
-Message-ID: <20241019172459.2241939-7-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20241019172459.2241939-1-dwmw2@infradead.org>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
+	s=arc-20240116; t=1729362547; c=relaxed/simple;
+	bh=3eWD6IyQ9v4ZUcBeqZCxI2eezCWFh+ZZgimWzYafS1A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=TN6iqPxP7q4lybNr6TuLe+SW9/g/zcwZzvgzRgcIWnVstRUWP1nQCmTeWVdkcTzX+7stMTM7hDN86YCpkhLPN5JKR9gpujD2v8rfKPsX5xUEDCvFT6wTc+6hYkMJjbIgbGWk2i//HIuJXzDH+UeoYcT+aiuyVrgzrSaAjtqvFAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V1QnCC33; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729362544; x=1760898544;
+  h=date:from:to:cc:subject:message-id;
+  bh=3eWD6IyQ9v4ZUcBeqZCxI2eezCWFh+ZZgimWzYafS1A=;
+  b=V1QnCC33Xiom0vlwYyH0itfNTm4frHxyuSTTkkrmgUQ+1f/mfbrlU12s
+   5Uij7q1SzZjLGPaZ30IVAnThLliL/TVdlJEalCnbfWH0iKeSLdQvxLwud
+   QdnISL6LliPjwK7uaV9Xq6zre2qBWe/J2NNZ80qaUh35oXmTGYxUyh0M2
+   QeoS6EzX/epKz1RvJSo/+JlPLq0xFkslk1KgarklNfoGFnRTHerufc8DG
+   /75KIRML8irbwUanQE6vv6at3AotPxtO2tZfp88i2+g3wbIK5h3fyhoaF
+   6s0ndYpK4/D1oy5zXO4GsPIzfRIwJiDmXX89GtXgSMe/pNxqxfP+YgkXQ
+   g==;
+X-CSE-ConnectionGUID: ZJo4JSwtQWqMUaiZHXCcHA==
+X-CSE-MsgGUID: bpZiHAYaSRCrspAiWRHwjg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28671763"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28671763"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 11:29:03 -0700
+X-CSE-ConnectionGUID: iZ7Xx73nQ+SD6I5yrqHVOA==
+X-CSE-MsgGUID: KL0QgASYRqmWmhkVoeUH/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
+   d="scan'208";a="109912283"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 19 Oct 2024 11:28:48 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t2EBy-000PNg-1N;
+	Sat, 19 Oct 2024 18:28:46 +0000
+Date: Sun, 20 Oct 2024 02:28:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ fbfaf5db0dad86929bc8349eb817dff881523920
+Message-ID: <202410200217.9E8FTLCg-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: fbfaf5db0dad86929bc8349eb817dff881523920  Merge branch 'pm-cpufreq' into bleeding-edge
 
-The PSCI v1.3 specification adds support for a SYSTEM_OFF2 function
-which is analogous to ACPI S4 state. This will allow hosting
-environments to determine that a guest is hibernated rather than just
-powered off, and handle that state appropriately on subsequent launches.
+elapsed time: 1487m
 
-Since commit 60c0d45a7f7a ("efi/arm64: use UEFI for system reset and
-poweroff") the EFI shutdown method is deliberately preferred over PSCI
-or other methods. So register a SYS_OFF_MODE_POWER_OFF handler which
-*only* handles the hibernation, leaving the original PSCI SYSTEM_OFF as
-a last resort via the legacy pm_power_off function pointer.
+configs tested: 101
+configs skipped: 5
 
-The hibernation code already exports a system_entering_hibernation()
-function which is be used by the higher-priority handler to check for
-hibernation. That existing function just returns the value of a static
-boolean variable from hibernate.c, which was previously only set in the
-hibernation_platform_enter() code path. Set the same flag in the simpler
-code path around the call to kernel_power_off() too.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-An alternative way to hook SYSTEM_OFF2 into the hibernation code would
-be to register a platform_hibernation_ops structure with an ->enter()
-method which makes the new SYSTEM_OFF2 call. But that would have the
-unwanted side-effect of making hibernation take a completely different
-code path in hibernation_platform_enter(), invoking a lot of special dpm
-callbacks.
+tested configs:
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                                 defconfig    gcc-14.1.0
+arc                        vdk_hs38_defconfig    clang-20
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                                 defconfig    gcc-14.1.0
+arm                         nhk8815_defconfig    clang-20
+arm                       omap2plus_defconfig    clang-20
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                               defconfig    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+csky                                defconfig    gcc-14.1.0
+hexagon                          alldefconfig    clang-20
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+hexagon                             defconfig    gcc-14.1.0
+i386                             allmodconfig    clang-18
+i386                              allnoconfig    clang-18
+i386                             allyesconfig    clang-18
+i386        buildonly-randconfig-001-20241019    clang-18
+i386        buildonly-randconfig-002-20241019    clang-18
+i386        buildonly-randconfig-003-20241019    clang-18
+i386        buildonly-randconfig-004-20241019    clang-18
+i386        buildonly-randconfig-005-20241019    clang-18
+i386        buildonly-randconfig-006-20241019    clang-18
+i386                                defconfig    clang-18
+i386                  randconfig-001-20241019    clang-18
+i386                  randconfig-002-20241019    clang-18
+i386                  randconfig-003-20241019    clang-18
+i386                  randconfig-004-20241019    clang-18
+i386                  randconfig-005-20241019    clang-18
+i386                  randconfig-006-20241019    clang-18
+i386                  randconfig-011-20241019    clang-18
+i386                  randconfig-012-20241019    clang-18
+i386                  randconfig-013-20241019    clang-18
+i386                  randconfig-014-20241019    clang-18
+i386                  randconfig-015-20241019    clang-18
+i386                  randconfig-016-20241019    clang-18
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch                           defconfig    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                                defconfig    gcc-14.1.0
+m68k                        m5307c3_defconfig    clang-20
+m68k                          sun3x_defconfig    clang-20
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                          defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                          eyeq5_defconfig    clang-20
+mips                         rt305x_defconfig    clang-20
+nios2                             allnoconfig    gcc-14.1.0
+nios2                               defconfig    gcc-14.1.0
+openrisc                          allnoconfig    clang-20
+openrisc                            defconfig    gcc-12
+parisc                            allnoconfig    clang-20
+parisc                              defconfig    gcc-12
+parisc                generic-32bit_defconfig    clang-20
+parisc64                            defconfig    gcc-14.1.0
+powerpc                           allnoconfig    clang-20
+powerpc                   currituck_defconfig    clang-20
+powerpc                       holly_defconfig    clang-20
+powerpc                    mvme5100_defconfig    clang-20
+powerpc                     tqm8541_defconfig    clang-20
+riscv                             allnoconfig    clang-20
+riscv                               defconfig    gcc-12
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                                  defconfig    gcc-12
+sh                      rts7751r2d1_defconfig    clang-20
+sparc                            allmodconfig    gcc-14.1.0
+sparc64                             defconfig    gcc-12
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-18
+x86_64                           allyesconfig    clang-18
+x86_64                              defconfig    clang-18
+x86_64                                  kexec    gcc-12
+x86_64                               rhel-8.3    gcc-12
+xtensa                            allnoconfig    gcc-14.1.0
+xtensa                  cadence_csp_defconfig    clang-20
 
-Another option might be to add a new SYS_OFF_MODE_HIBERNATE mode, with
-fallback to SYS_OFF_MODE_POWER_OFF. Or to use the sys_off_data to
-indicate whether the power off is for hibernation.
-
-But this version works and is relatively simple.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
----
- drivers/firmware/psci/psci.c | 42 ++++++++++++++++++++++++++++++++++++
- kernel/power/hibernate.c     |  5 ++++-
- 2 files changed, 46 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index 2328ca58bba6..8809455a61a6 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -78,6 +78,7 @@ struct psci_0_1_function_ids get_psci_0_1_function_ids(void)
- 
- static u32 psci_cpu_suspend_feature;
- static bool psci_system_reset2_supported;
-+static bool psci_system_off2_hibernate_supported;
- 
- static inline bool psci_has_ext_power_state(void)
- {
-@@ -333,6 +334,33 @@ static void psci_sys_poweroff(void)
- 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
- }
- 
-+#ifdef CONFIG_HIBERNATION
-+static int psci_sys_hibernate(struct sys_off_data *data)
-+{
-+	/*
-+	 * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
-+	 * and is supported by hypervisors implementing an earlier version
-+	 * of the pSCI v1.3 spec.
-+	 */
-+	if (system_entering_hibernation())
-+		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2),
-+			       0 /*PSCI_1_3_OFF_TYPE_HIBERNATE_OFF*/, 0, 0);
-+	return NOTIFY_DONE;
-+}
-+
-+static int __init psci_hibernate_init(void)
-+{
-+	if (psci_system_off2_hibernate_supported) {
-+		/* Higher priority than EFI shutdown, but only for hibernate */
-+		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+					 SYS_OFF_PRIO_FIRMWARE + 2,
-+					 psci_sys_hibernate, NULL);
-+	}
-+	return 0;
-+}
-+subsys_initcall(psci_hibernate_init);
-+#endif
-+
- static int psci_features(u32 psci_func_id)
- {
- 	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
-@@ -364,6 +392,7 @@ static const struct {
- 	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
- 	PSCI_ID(1_1, MEM_PROTECT),
- 	PSCI_ID_NATIVE(1_1, MEM_PROTECT_CHECK_RANGE),
-+	PSCI_ID_NATIVE(1_3, SYSTEM_OFF2),
- };
- 
- static int psci_debugfs_read(struct seq_file *s, void *data)
-@@ -525,6 +554,18 @@ static void __init psci_init_system_reset2(void)
- 		psci_system_reset2_supported = true;
- }
- 
-+static void __init psci_init_system_off2(void)
-+{
-+	int ret;
-+
-+	ret = psci_features(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2));
-+	if (ret < 0)
-+		return;
-+
-+	if (ret & PSCI_1_3_OFF_TYPE_HIBERNATE_OFF)
-+		psci_system_off2_hibernate_supported = true;
-+}
-+
- static void __init psci_init_system_suspend(void)
- {
- 	int ret;
-@@ -655,6 +696,7 @@ static int __init psci_probe(void)
- 		psci_init_cpu_suspend();
- 		psci_init_system_suspend();
- 		psci_init_system_reset2();
-+		psci_init_system_off2();
- 		kvm_init_hyp_services();
- 	}
- 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index e35829d36039..1f87aa01ba44 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -685,8 +685,11 @@ static void power_down(void)
- 		}
- 		fallthrough;
- 	case HIBERNATION_SHUTDOWN:
--		if (kernel_can_power_off())
-+		if (kernel_can_power_off()) {
-+			entering_platform_hibernation = true;
- 			kernel_power_off();
-+			entering_platform_hibernation = false;
-+		}
- 		break;
- 	}
- 	kernel_halt();
--- 
-2.44.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
