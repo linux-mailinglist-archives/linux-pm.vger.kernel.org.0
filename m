@@ -1,581 +1,215 @@
-Return-Path: <linux-pm+bounces-16041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16042-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1940A9A4FDE
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 18:34:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 138F79A4FF0
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 19:14:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 725681F25EC6
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 16:34:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73BD8B24B66
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 17:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA7E18455B;
-	Sat, 19 Oct 2024 16:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6264C18B48B;
+	Sat, 19 Oct 2024 17:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Sm26cgir"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TQfL/YBt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4E6256F
-	for <linux-pm@vger.kernel.org>; Sat, 19 Oct 2024 16:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6D21F937;
+	Sat, 19 Oct 2024 17:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729355666; cv=none; b=LmGTZW0ab+JW3DC9WET0XN5RZ1rMB5zoH1YDacIZ2da0h80Xupx538ElPThelkz8YvqgEmrO+lpEAc1FpX3Hs705fRucMVUA4oW1G3IwO0ve26iGpU8V2JWkeyiiwaQsoP1TN9phVnjbwIo4dVPS+PcfyOVefilJSJnnMr4FCYs=
+	t=1729358088; cv=none; b=XWqsFJuep3mVTjH5vLFngqU5EZIpMU8Dz7TbJ/56wKCvLGdWFQQkTicb2gMLuh6RDcIc5nChnqVuNsFAuflHZvTjfGnUJTnCRAYL7jKDhgGXQQ6TYg8Sk67QJW6IEdDxvwMmBOL+Dgrw5Y/SPI4g0lCbzdhkCIyP7tCId7mJ9r0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729355666; c=relaxed/simple;
-	bh=aRRn7FOMR1wqi0jWKcBBbLTNqyFCac2Z0qIc/Xra310=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SyTu5FxeBq2155D/9Hq9rSOhiTwzT0BRfxiRCz4n6Vv21pMH4Ju4WZuSHtDqovA1xBLNPqtZ44EFky986uNmY0DTvRoeEe8eaqpJUZmCCraJYMermYlmdFXXHsK714C2wzgjI/+wdVW1PbbyddYfWt2uPqXNusAuaw7RdBt6nzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Sm26cgir; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a991fedbd04so207537066b.3
-        for <linux-pm@vger.kernel.org>; Sat, 19 Oct 2024 09:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729355661; x=1729960461; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hg9iFzNh4P99a8tg4t9/uhZ4l+VvPZHWO5Yn+n21E8w=;
-        b=Sm26cgirH/IkQ774VL2eBFgHYcQvq8wCvW6xK2DIamCivRkzkeoqQrAnX5YdY87JiW
-         vl2nK20ovXFQjKRMtOSUbdQ+4snucRRiAnrZrswe8CD570m2SGGlcLYS8iGNAJe3vaoV
-         giHn9dGPPoHkhP9rY1lu+rI/W4ttsZY2WHw+OYDTR4rNelYkGOep+CKTSI8bV7NtHnR5
-         RzO/OXVO9roNl6sh/wg/+1HCBa0p+sOySPfVldVgsC73Apxldq9ACe3FjVIPRQQDCpMI
-         1IExeYb4PLY2wt49vjdHzxZuzJ8hdG87Tp2NqAIJ+8IJ6DgqF7wKkmKAJ4OFzolje6b5
-         bk5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729355661; x=1729960461;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hg9iFzNh4P99a8tg4t9/uhZ4l+VvPZHWO5Yn+n21E8w=;
-        b=N7yudbil+lcOmjXchYJCHGkDxppt0msMV09eJkdYZoXa4UrYm6Kex921chHjkEcELB
-         H6Avv+H4Aler8aaoOB/adeHk9KR82CCJwDSHuymBsYV+P7/KRHBJ7hXn2Bi7QyOl0LJJ
-         MkhSeWtWBZPF0NZb6Y7Ibuki2sCL5mJgfo+bxYpNJ25nOG8ud9HByyX0VI0K4vud39wR
-         1xP3W7fD5sYzWFiQlHFoXQa3CeVw6svA0QbwrVG7h2M5RJZdtea8qQFxfccDmuXERdn9
-         Z6FZE6WHb6CIEJcMbbZHbBWZ2plnD3L70DxweSV1jgwYyeV+FMP7nyW3yn5EIDuD3K4g
-         /Hmw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1ICJsI9GgCGPPqWt7SoTCUsGdQEmZvu7Du3dYyrHe/YAyWnO57wWNo3T15xmUrM70GKaBHL+dJA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvHALPWRYeJOipfipjKrgChj6nPrnp/BTvzw93TLOpg56Q8xjY
-	5tczbkNku81AoTb6aQYJU4eZcJRZ5pMaKeiu5KD7KZ5J0gLk2yFm8TbwxUBSCwA=
-X-Google-Smtp-Source: AGHT+IFVnHFrtbgeVMnY2xoNIP2JyFdVPf8LyAd2gWYoQSjniYG+Dx+/TWuBPPEwlMn4i5Xc2LOXrg==
-X-Received: by 2002:a05:6402:2747:b0:5c9:4b8c:b92e with SMTP id 4fb4d7f45d1cf-5ca0ae814bbmr6651756a12.26.1729355660668;
-        Sat, 19 Oct 2024 09:34:20 -0700 (PDT)
-Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ca0b0ff773sm1974195a12.92.2024.10.19.09.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 09:34:20 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: Switch back to struct platform_driver::remove()
-Date: Sat, 19 Oct 2024 18:34:11 +0200
-Message-ID: <20241019163412.304422-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1729358088; c=relaxed/simple;
+	bh=rteAWrDx+YChjAvq+kDrfxBNgng9dmVTtFrF02KC67M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WJ6gso/wWMj+eWgHqw9lXrptko4s3S69VXiMO5QtEei7eI1fuqxuxWUflJSC7AEb4tq1gG719MZVp15Y8C9sk7EsS/corWbcCutvJQOm/hKw5j1yqDfGGn1fjZfHdEPxUnaLoRABPAo1oBaNcKLvUn7SxtzV6lE7DqAzo3/W3Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TQfL/YBt; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=rteAWrDx+YChjAvq+kDrfxBNgng9dmVTtFrF02KC67M=; b=TQfL/YBtG6SuzZQWdVgiSh+v2z
+	ARHzfI4xfLxI3pGs9DMRe9/xXBsR5Jc/wMNHEFE+/EiHL7q4eEDeLj7HTpO+SpqeohZBbKpROAfFA
+	Rji+2QiEunIKDHcW86HuIv+9h2WT/v539fdU8OhoBJ/wDhVVABtmOF8IzOnCrZ5W1FqmCI9pZbViB
+	HS85aCJARMWuJ4c6UUtA/Ohp8Pf0vi/LH/hjgWw3KTwuBu7cbnFtOch2AGBu60c3lCvMwm20mq94N
+	y3frsWPJwlR2qoOiWNbC7puXoqZbNikBNp8x3Jzp6kn8eW1PCixtQfTk77cM3xBffB5EuzIbh3OUe
+	/OOyEuYw==;
+Received: from [2001:8b0:10b:5:d113:3be8:859d:21d1] (helo=u3832b3a9db3152.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t2D27-0000000EUKb-02V2;
+	Sat, 19 Oct 2024 17:14:31 +0000
+Message-ID: <0fbd9ca12f85d28dcc2eed5f0fe9c49762b83a35.camel@infradead.org>
+Subject: Re: [PATCH v5 4/5] KVM: selftests: Add test for PSCI SYSTEM_OFF2
+From: David Woodhouse <dwmw2@infradead.org>
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>,  Zenghui Yu <yuzenghui@huawei.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel
+ Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Shuah Khan
+ <shuah@kernel.org>,  kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev,  linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Francesco Lavra
+ <francescolavra.fl@gmail.com>, Miguel Luis <miguel.luis@oracle.com>
+Date: Sat, 19 Oct 2024 18:14:30 +0100
+In-Reply-To: <Zw6jXEWwdW3S5Y6c@linux.dev>
+References: <20240926184546.833516-1-dwmw2@infradead.org>
+	 <20240926184546.833516-5-dwmw2@infradead.org> <ZvwWM7rQd075o6nb@linux.dev>
+	 <408b137dbf60ff4d189cbd98b7cf8cd833579f61.camel@infradead.org>
+	 <Zw6Svts5hqpIoKwN@linux.dev> <Zw6jXEWwdW3S5Y6c@linux.dev>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-Z4tEqxCYA8JprReii9RU"
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=20834; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=aRRn7FOMR1wqi0jWKcBBbLTNqyFCac2Z0qIc/Xra310=; b=kA0DAAoBj4D7WH0S/k4ByyZiAGcT34TIzQ7I9CVTWtYuyJGT2d/LGviiRBCXYiYflzG98T5N8 IkBMwQAAQoAHRYhBD+BrGk6eh5Zia3+04+A+1h9Ev5OBQJnE9+EAAoJEI+A+1h9Ev5O2EIIAK3x TERUTK4p5SriC6CvLTy21c7J+hc3iNYkeR0UldpVyCxZ9zGldbNiq10U/eNrmqkI+2bsBoUrxox 15xY7Z2snDyyq9uRZqq3gS/4ZKpwAqb3lJK3/3zzj3hDW6/EqseIet/RYd6yT9exxeBmIA53v6q E2yKidy9NOS98LPRz+TwWfCN0vFNPe6cNk/TAM8/mf/7REe6ROepLzhwhaliZ28AKbY7acX+sKO coUfv0ajYjClsxECeyqR3vWtBQlH2j7iLvreHwqd4aKidD7znwssVBqy9snt31Q0u+ceWL05qKa K92o7k/0gEd9qfUT/tc+dIx3Ffj5IBaa3Jh8UXg=
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-return void") .remove() is (again) the right callback to implement for
-platform drivers.
 
-Convert all platform drivers below drivers/thermalto use .remove(), with
-the eventual goal to drop struct platform_driver::remove_new(). As
-.remove() and .remove_new() have the same prototypes, conversion is done
-by just changing the structure member name in the driver initializer.
+--=-Z4tEqxCYA8JprReii9RU
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On the way make a few whitespace changes to make indention consistent.
+On Tue, 2024-10-15 at 10:16 -0700, Oliver Upton wrote:
+>=20
+> > After looking at this again, I think we should do one of the following:
+> >=20
+> > =C2=A0 - TEST_REQUIRE() that the PSCI version is at least v1.3, making =
+the
+> > =C2=A0=C2=A0=C2=A0 dependency clear on older kernels.
+> >=20
+> > =C2=A0 - TEST_REQUIRE() for v1.3, which would provide better test cover=
+age on
+> > =C2=A0=C2=A0=C2=A0 upstream.
+>=20
+> Sorry, I meant TEST_ASSERT() here.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
-Hello,
+Ack. I'll do the latter.
 
-given the simplicity of the individual changes I do this all in a single
-patch. I you don't agree, please tell and I will happily split it.
+--=-Z4tEqxCYA8JprReii9RU
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-It's based on Friday's next, feel free to drop changes that result in a
-conflict when you come around to apply this. I'll care for the fallout
-at a later time then. (Having said that, if you use b4 am -3 and git am
--3, there should be hardly any conflict.)
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQxMDE5MTcxNDMwWjAvBgkqhkiG9w0BCQQxIgQgiKhOkDFX
+0K//XRSRufPb5ypFMUcQ4oczXuDUjF5JLKIwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCzeVupJ+7ZwTt7nBJJuinTdqciEsNdKqbr
+vocyp9sVL0WI0c2FD/RxTiqkAZ79u7UtcNS6nbbSRul0WuoiM4OGYuDhwhMcV1MeLAsljSy8KSCq
+gArXQ49nYPxyx4Fsy2kv2rnyftn1UrgBTq9TuaC2AI8dsuVyeXfPPHehkJK7NcEiU/1W3qHu/Qdf
+K7ch9PmactLlyXAKcz8fx1OValkS3RGvmvr4UjKscjysBQNKR/5XHx5+9bhB0zgU/bufnXbXEXNO
+z10yAnuMDK4UZcDuMW1O/xaye9m72yeV5J9bQOGwhitAY52pxeBIIrMn4OsnsJnbRuapii6FND7E
+MeSPf6cCVbw7KHMa/nmPCOZntpZRKpciqH91GtSSgpUz6lUNiefwuFbI2one6kN6bqmi5tojsg5Z
+XnegNtJBCrrlKqmZwGDf0fFhDGqQZpna/QKbAvDRsDyazrP0VwgVbFmonl+lt5obT36SiEhNPjdo
+OzVmnkOI4M6S/+kRJMsJA4fEHSbmjk+Qfs7bejIkwjzeJDIqZugS8AMJnQe/5GQJXi6P2IzXqQ3w
+T73SC8Ux1N5R50Z9xt2FZeFMsqjfFGRlOe/ARi3Y4Ha2NMpUYLSmu3rIwkRT+BG5BWfEnlPoCii/
+sypR1Jt1Fucz6DIMQZViwmLnnGmCkEapTld7mAVPLQAAAAAAAA==
 
-Note I didn't Cc: all the individual driver maintainers to not trigger
-sending limits and spam filters.
 
-Best regards
-Uwe
-
- drivers/thermal/amlogic_thermal.c                       | 2 +-
- drivers/thermal/armada_thermal.c                        | 2 +-
- drivers/thermal/broadcom/bcm2835_thermal.c              | 2 +-
- drivers/thermal/broadcom/ns-thermal.c                   | 2 +-
- drivers/thermal/da9062-thermal.c                        | 6 +++---
- drivers/thermal/dove_thermal.c                          | 2 +-
- drivers/thermal/hisi_thermal.c                          | 4 ++--
- drivers/thermal/imx8mm_thermal.c                        | 2 +-
- drivers/thermal/imx_thermal.c                           | 2 +-
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3401_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3402_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3406_thermal.c | 2 +-
- drivers/thermal/k3_bandgap.c                            | 2 +-
- drivers/thermal/k3_j72xx_bandgap.c                      | 2 +-
- drivers/thermal/kirkwood_thermal.c                      | 2 +-
- drivers/thermal/mediatek/lvts_thermal.c                 | 2 +-
- drivers/thermal/qcom/tsens.c                            | 2 +-
- drivers/thermal/renesas/rcar_gen3_thermal.c             | 2 +-
- drivers/thermal/renesas/rcar_thermal.c                  | 2 +-
- drivers/thermal/renesas/rzg2l_thermal.c                 | 2 +-
- drivers/thermal/rockchip_thermal.c                      | 2 +-
- drivers/thermal/samsung/exynos_tmu.c                    | 2 +-
- drivers/thermal/spear_thermal.c                         | 2 +-
- drivers/thermal/sprd_thermal.c                          | 2 +-
- drivers/thermal/st/st_thermal_memmap.c                  | 2 +-
- drivers/thermal/st/stm_thermal.c                        | 2 +-
- drivers/thermal/tegra/soctherm.c                        | 2 +-
- drivers/thermal/tegra/tegra-bpmp-thermal.c              | 2 +-
- drivers/thermal/ti-soc-thermal/ti-bandgap.c             | 2 +-
- drivers/thermal/uniphier_thermal.c                      | 2 +-
- 32 files changed, 35 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
-index cd4776aa805e..3c5f7dbddf2c 100644
---- a/drivers/thermal/amlogic_thermal.c
-+++ b/drivers/thermal/amlogic_thermal.c
-@@ -333,7 +333,7 @@ static struct platform_driver amlogic_thermal_driver = {
- 		.of_match_table = of_amlogic_thermal_match,
- 	},
- 	.probe = amlogic_thermal_probe,
--	.remove_new = amlogic_thermal_remove,
-+	.remove = amlogic_thermal_remove,
- };
- 
- module_platform_driver(amlogic_thermal_driver);
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index fdcb077cfd54..9bff21068721 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -970,7 +970,7 @@ static void armada_thermal_exit(struct platform_device *pdev)
- 
- static struct platform_driver armada_thermal_driver = {
- 	.probe = armada_thermal_probe,
--	.remove_new = armada_thermal_exit,
-+	.remove = armada_thermal_exit,
- 	.driver = {
- 		.name = "armada_thermal",
- 		.of_match_table = armada_thermal_id_table,
-diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
-index 7d61493082b5..7fbba2233c4c 100644
---- a/drivers/thermal/broadcom/bcm2835_thermal.c
-+++ b/drivers/thermal/broadcom/bcm2835_thermal.c
-@@ -268,7 +268,7 @@ static void bcm2835_thermal_remove(struct platform_device *pdev)
- 
- static struct platform_driver bcm2835_thermal_driver = {
- 	.probe = bcm2835_thermal_probe,
--	.remove_new = bcm2835_thermal_remove,
-+	.remove = bcm2835_thermal_remove,
- 	.driver = {
- 		.name = "bcm2835_thermal",
- 		.of_match_table = bcm2835_thermal_of_match_table,
-diff --git a/drivers/thermal/broadcom/ns-thermal.c b/drivers/thermal/broadcom/ns-thermal.c
-index 5eaf79c490f0..8b5b32f749ee 100644
---- a/drivers/thermal/broadcom/ns-thermal.c
-+++ b/drivers/thermal/broadcom/ns-thermal.c
-@@ -80,7 +80,7 @@ MODULE_DEVICE_TABLE(of, ns_thermal_of_match);
- 
- static struct platform_driver ns_thermal_driver = {
- 	.probe		= ns_thermal_probe,
--	.remove_new	= ns_thermal_remove,
-+	.remove		= ns_thermal_remove,
- 	.driver = {
- 		.name = "ns-thermal",
- 		.of_match_table = ns_thermal_of_match,
-diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
-index a27aff88cd96..2077e85ef5ca 100644
---- a/drivers/thermal/da9062-thermal.c
-+++ b/drivers/thermal/da9062-thermal.c
-@@ -250,10 +250,10 @@ static void da9062_thermal_remove(struct platform_device *pdev)
- 
- static struct platform_driver da9062_thermal_driver = {
- 	.probe	= da9062_thermal_probe,
--	.remove_new = da9062_thermal_remove,
-+	.remove	= da9062_thermal_remove,
- 	.driver	= {
--		.name	= "da9062-thermal",
--		.of_match_table = da9062_compatible_reg_id_table,
-+		.name		= "da9062-thermal",
-+		.of_match_table	= da9062_compatible_reg_id_table,
- 	},
- };
- 
-diff --git a/drivers/thermal/dove_thermal.c b/drivers/thermal/dove_thermal.c
-index ac30de3c0a5f..f9157a47156b 100644
---- a/drivers/thermal/dove_thermal.c
-+++ b/drivers/thermal/dove_thermal.c
-@@ -170,7 +170,7 @@ MODULE_DEVICE_TABLE(of, dove_thermal_id_table);
- 
- static struct platform_driver dove_thermal_driver = {
- 	.probe = dove_thermal_probe,
--	.remove_new = dove_thermal_exit,
-+	.remove = dove_thermal_exit,
- 	.driver = {
- 		.name = "dove_thermal",
- 		.of_match_table = dove_thermal_id_table,
-diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
-index f1fe0f8ab04f..7e918bd3f100 100644
---- a/drivers/thermal/hisi_thermal.c
-+++ b/drivers/thermal/hisi_thermal.c
-@@ -637,10 +637,10 @@ static struct platform_driver hisi_thermal_driver = {
- 	.driver = {
- 		.name		= "hisi_thermal",
- 		.pm		= pm_sleep_ptr(&hisi_thermal_pm_ops),
--		.of_match_table = of_hisi_thermal_match,
-+		.of_match_table	= of_hisi_thermal_match,
- 	},
- 	.probe	= hisi_thermal_probe,
--	.remove_new = hisi_thermal_remove,
-+	.remove	= hisi_thermal_remove,
- };
- 
- module_platform_driver(hisi_thermal_driver);
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index d74ed6ce2974..719d71f5b235 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -399,7 +399,7 @@ static struct platform_driver imx8mm_tmu = {
- 		.of_match_table = imx8mm_tmu_table,
- 	},
- 	.probe = imx8mm_tmu_probe,
--	.remove_new = imx8mm_tmu_remove,
-+	.remove = imx8mm_tmu_remove,
- };
- module_platform_driver(imx8mm_tmu);
- 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index b8e85a405351..bab52e6b3b15 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -861,7 +861,7 @@ static struct platform_driver imx_thermal = {
- 		.of_match_table = of_imx_thermal_match,
- 	},
- 	.probe		= imx_thermal_probe,
--	.remove_new	= imx_thermal_remove,
-+	.remove		= imx_thermal_remove,
- };
- module_platform_driver(imx_thermal);
- 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index b0c0f0ffdcb0..b2fc02c3a767 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -707,7 +707,7 @@ MODULE_DEVICE_TABLE(acpi, int3400_thermal_match);
- 
- static struct platform_driver int3400_thermal_driver = {
- 	.probe = int3400_thermal_probe,
--	.remove_new = int3400_thermal_remove,
-+	.remove = int3400_thermal_remove,
- 	.driver = {
- 		   .name = "int3400 thermal",
- 		   .acpi_match_table = ACPI_PTR(int3400_thermal_match),
-diff --git a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-index 193645a73861..96d6277a5a8c 100644
---- a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-@@ -60,7 +60,7 @@ static SIMPLE_DEV_PM_OPS(int3401_proc_thermal_pm, int3401_thermal_suspend,
- 
- static struct platform_driver int3401_driver = {
- 	.probe = int3401_add,
--	.remove_new = int3401_remove,
-+	.remove = int3401_remove,
- 	.driver = {
- 		.name = "int3401 thermal",
- 		.acpi_match_table = int3401_device_ids,
-diff --git a/drivers/thermal/intel/int340x_thermal/int3402_thermal.c b/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-index ab8bfb5a3946..543b03960e99 100644
---- a/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-@@ -89,7 +89,7 @@ MODULE_DEVICE_TABLE(acpi, int3402_thermal_match);
- 
- static struct platform_driver int3402_thermal_driver = {
- 	.probe = int3402_thermal_probe,
--	.remove_new = int3402_thermal_remove,
-+	.remove = int3402_thermal_remove,
- 	.driver = {
- 		   .name = "int3402 thermal",
- 		   .acpi_match_table = int3402_thermal_match,
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index c094a422ded3..04aa0afb3b1d 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -281,7 +281,7 @@ MODULE_DEVICE_TABLE(acpi, int3403_device_ids);
- 
- static struct platform_driver int3403_driver = {
- 	.probe = int3403_add,
--	.remove_new = int3403_remove,
-+	.remove = int3403_remove,
- 	.driver = {
- 		.name = "int3403 thermal",
- 		.acpi_match_table = int3403_device_ids,
-diff --git a/drivers/thermal/intel/int340x_thermal/int3406_thermal.c b/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-index 1c266493c1aa..e21fcbccf4ba 100644
---- a/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-@@ -195,7 +195,7 @@ MODULE_DEVICE_TABLE(acpi, int3406_thermal_match);
- 
- static struct platform_driver int3406_thermal_driver = {
- 	.probe = int3406_thermal_probe,
--	.remove_new = int3406_thermal_remove,
-+	.remove = int3406_thermal_remove,
- 	.driver = {
- 		   .name = "int3406 thermal",
- 		   .acpi_match_table = int3406_thermal_match,
-diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
-index 2a703770fc91..678d6ed711b5 100644
---- a/drivers/thermal/k3_bandgap.c
-+++ b/drivers/thermal/k3_bandgap.c
-@@ -250,7 +250,7 @@ MODULE_DEVICE_TABLE(of, of_k3_bandgap_match);
- 
- static struct platform_driver k3_bandgap_sensor_driver = {
- 	.probe = k3_bandgap_probe,
--	.remove_new = k3_bandgap_remove,
-+	.remove = k3_bandgap_remove,
- 	.driver = {
- 		.name = "k3-soc-thermal",
- 		.of_match_table	= of_k3_bandgap_match,
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index 9bc279ac131a..ccd42db97177 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -594,7 +594,7 @@ MODULE_DEVICE_TABLE(of, of_k3_j72xx_bandgap_match);
- 
- static struct platform_driver k3_j72xx_bandgap_sensor_driver = {
- 	.probe = k3_j72xx_bandgap_probe,
--	.remove_new = k3_j72xx_bandgap_remove,
-+	.remove = k3_j72xx_bandgap_remove,
- 	.driver = {
- 		.name = "k3-j72xx-soc-thermal",
- 		.of_match_table	= of_k3_j72xx_bandgap_match,
-diff --git a/drivers/thermal/kirkwood_thermal.c b/drivers/thermal/kirkwood_thermal.c
-index a18158ebe65f..7c2265231668 100644
---- a/drivers/thermal/kirkwood_thermal.c
-+++ b/drivers/thermal/kirkwood_thermal.c
-@@ -102,7 +102,7 @@ MODULE_DEVICE_TABLE(of, kirkwood_thermal_id_table);
- 
- static struct platform_driver kirkwood_thermal_driver = {
- 	.probe = kirkwood_thermal_probe,
--	.remove_new = kirkwood_thermal_exit,
-+	.remove = kirkwood_thermal_exit,
- 	.driver = {
- 		.name = "kirkwood_thermal",
- 		.of_match_table = kirkwood_thermal_id_table,
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 1997e91bb3be..292ea2e0a617 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -1788,7 +1788,7 @@ static const struct dev_pm_ops lvts_pm_ops = {
- 
- static struct platform_driver lvts_driver = {
- 	.probe = lvts_probe,
--	.remove_new = lvts_remove,
-+	.remove = lvts_remove,
- 	.driver = {
- 		.name = "mtk-lvts-thermal",
- 		.of_match_table = lvts_of_match,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 0b4421bf4785..3fbb0834af6c 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -1360,7 +1360,7 @@ static void tsens_remove(struct platform_device *pdev)
- 
- static struct platform_driver tsens_driver = {
- 	.probe = tsens_probe,
--	.remove_new = tsens_remove,
-+	.remove = tsens_remove,
- 	.driver = {
- 		.name = "qcom-tsens",
- 		.pm	= &tsens_pm_ops,
-diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
-index 810f86677461..1ec169aeacfc 100644
---- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-+++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-@@ -603,7 +603,7 @@ static struct platform_driver rcar_gen3_thermal_driver = {
- 		.of_match_table = rcar_gen3_thermal_dt_ids,
- 	},
- 	.probe		= rcar_gen3_thermal_probe,
--	.remove_new	= rcar_gen3_thermal_remove,
-+	.remove		= rcar_gen3_thermal_remove,
- };
- module_platform_driver(rcar_gen3_thermal_driver);
- 
-diff --git a/drivers/thermal/renesas/rcar_thermal.c b/drivers/thermal/renesas/rcar_thermal.c
-index ddc8341e5c3f..00a66ee0a5b0 100644
---- a/drivers/thermal/renesas/rcar_thermal.c
-+++ b/drivers/thermal/renesas/rcar_thermal.c
-@@ -579,7 +579,7 @@ static struct platform_driver rcar_thermal_driver = {
- 		.of_match_table = rcar_thermal_dt_ids,
- 	},
- 	.probe		= rcar_thermal_probe,
--	.remove_new	= rcar_thermal_remove,
-+	.remove		= rcar_thermal_remove,
- };
- module_platform_driver(rcar_thermal_driver);
- 
-diff --git a/drivers/thermal/renesas/rzg2l_thermal.c b/drivers/thermal/renesas/rzg2l_thermal.c
-index 0e1cb9045ee6..b588be628640 100644
---- a/drivers/thermal/renesas/rzg2l_thermal.c
-+++ b/drivers/thermal/renesas/rzg2l_thermal.c
-@@ -240,7 +240,7 @@ static struct platform_driver rzg2l_thermal_driver = {
- 		.of_match_table = rzg2l_thermal_dt_ids,
- 	},
- 	.probe = rzg2l_thermal_probe,
--	.remove_new = rzg2l_thermal_remove,
-+	.remove = rzg2l_thermal_remove,
- };
- module_platform_driver(rzg2l_thermal_driver);
- 
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index 086ed42dd16c..f551df48eef9 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -1689,7 +1689,7 @@ static struct platform_driver rockchip_thermal_driver = {
- 		.of_match_table = of_rockchip_thermal_match,
- 	},
- 	.probe = rockchip_thermal_probe,
--	.remove_new = rockchip_thermal_remove,
-+	.remove = rockchip_thermal_remove,
- };
- 
- module_platform_driver(rockchip_thermal_driver);
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 96cffb2c44ba..47a99b3c5395 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -1164,7 +1164,7 @@ static struct platform_driver exynos_tmu_driver = {
- 		.of_match_table = exynos_tmu_match,
- 	},
- 	.probe = exynos_tmu_probe,
--	.remove_new = exynos_tmu_remove,
-+	.remove = exynos_tmu_remove,
- };
- 
- module_platform_driver(exynos_tmu_driver);
-diff --git a/drivers/thermal/spear_thermal.c b/drivers/thermal/spear_thermal.c
-index 60a871998b07..bb96be947521 100644
---- a/drivers/thermal/spear_thermal.c
-+++ b/drivers/thermal/spear_thermal.c
-@@ -173,7 +173,7 @@ MODULE_DEVICE_TABLE(of, spear_thermal_id_table);
- 
- static struct platform_driver spear_thermal_driver = {
- 	.probe = spear_thermal_probe,
--	.remove_new = spear_thermal_exit,
-+	.remove = spear_thermal_exit,
- 	.driver = {
- 		.name = "spear_thermal",
- 		.pm = &spear_thermal_pm_ops,
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index dfd1d529c410..e546067c9621 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -534,7 +534,7 @@ static const struct dev_pm_ops sprd_thermal_pm_ops = {
- 
- static struct platform_driver sprd_thermal_driver = {
- 	.probe = sprd_thm_probe,
--	.remove_new = sprd_thm_remove,
-+	.remove = sprd_thm_remove,
- 	.driver = {
- 		.name = "sprd-thermal",
- 		.pm = &sprd_thermal_pm_ops,
-diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
-index 97493d2b2f49..8f76e50ea567 100644
---- a/drivers/thermal/st/st_thermal_memmap.c
-+++ b/drivers/thermal/st/st_thermal_memmap.c
-@@ -174,7 +174,7 @@ static struct platform_driver st_mmap_thermal_driver = {
- 		.of_match_table = st_mmap_thermal_of_match,
- 	},
- 	.probe		= st_mmap_probe,
--	.remove_new	= st_mmap_remove,
-+	.remove		= st_mmap_remove,
- };
- 
- module_platform_driver(st_mmap_thermal_driver);
-diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-index ffd988600ed6..6e90eb9f414d 100644
---- a/drivers/thermal/st/stm_thermal.c
-+++ b/drivers/thermal/st/stm_thermal.c
-@@ -582,7 +582,7 @@ static struct platform_driver stm_thermal_driver = {
- 		.of_match_table = stm_thermal_of_match,
- 	},
- 	.probe		= stm_thermal_probe,
--	.remove_new	= stm_thermal_remove,
-+	.remove		= stm_thermal_remove,
- };
- module_platform_driver(stm_thermal_driver);
- 
-diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-index a023c948afbd..6f1501e3fcc4 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -2269,7 +2269,7 @@ static SIMPLE_DEV_PM_OPS(tegra_soctherm_pm, soctherm_suspend, soctherm_resume);
- 
- static struct platform_driver tegra_soctherm_driver = {
- 	.probe = tegra_soctherm_probe,
--	.remove_new = tegra_soctherm_remove,
-+	.remove = tegra_soctherm_remove,
- 	.driver = {
- 		.name = "tegra_soctherm",
- 		.pm = &tegra_soctherm_pm,
-diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-index 72ce14c980cd..997d77ce30d9 100644
---- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
-+++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-@@ -315,7 +315,7 @@ MODULE_DEVICE_TABLE(of, tegra_bpmp_thermal_of_match);
- 
- static struct platform_driver tegra_bpmp_thermal_driver = {
- 	.probe = tegra_bpmp_thermal_probe,
--	.remove_new = tegra_bpmp_thermal_remove,
-+	.remove = tegra_bpmp_thermal_remove,
- 	.driver = {
- 		.name = "tegra-bpmp-thermal",
- 		.of_match_table = tegra_bpmp_thermal_of_match,
-diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-index caadfc61be93..ba43399d0b38 100644
---- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-@@ -1281,7 +1281,7 @@ MODULE_DEVICE_TABLE(of, of_ti_bandgap_match);
- 
- static struct platform_driver ti_bandgap_sensor_driver = {
- 	.probe = ti_bandgap_probe,
--	.remove_new = ti_bandgap_remove,
-+	.remove = ti_bandgap_remove,
- 	.driver = {
- 			.name = "ti-soc-thermal",
- 			.pm = DEV_PM_OPS,
-diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
-index 0325b7195136..1a04294effea 100644
---- a/drivers/thermal/uniphier_thermal.c
-+++ b/drivers/thermal/uniphier_thermal.c
-@@ -371,7 +371,7 @@ MODULE_DEVICE_TABLE(of, uniphier_tm_dt_ids);
- 
- static struct platform_driver uniphier_tm_driver = {
- 	.probe = uniphier_tm_probe,
--	.remove_new = uniphier_tm_remove,
-+	.remove = uniphier_tm_remove,
- 	.driver = {
- 		.name = "uniphier-thermal",
- 		.of_match_table = uniphier_tm_dt_ids,
-
-base-commit: f2493655d2d3d5c6958ed996b043c821c23ae8d3
--- 
-2.45.2
+--=-Z4tEqxCYA8JprReii9RU--
 
