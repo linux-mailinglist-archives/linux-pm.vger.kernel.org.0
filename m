@@ -1,139 +1,224 @@
-Return-Path: <linux-pm+bounces-16000-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16001-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89FD79A4A9F
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 02:27:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C8B9A4B54
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 07:42:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EFC71F22D4D
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 00:27:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42201C21726
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 05:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D07170A0C;
-	Sat, 19 Oct 2024 00:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5821D63CD;
+	Sat, 19 Oct 2024 05:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UX7YVdUx"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R06mnRgt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E546166F00;
-	Sat, 19 Oct 2024 00:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871951D27BE
+	for <linux-pm@vger.kernel.org>; Sat, 19 Oct 2024 05:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729297637; cv=none; b=DVIjtW1plu3U54eQ2pdzWTBGHkcIyjWhTzzbZkpSguYKrqm/TZ8B2As2gWilKWrsee9RUC03TYWsHBzI2wL2PCHqEUnwRcHGOlf1eVw7EOmPix4lTAzi0SAciOPGlXzBlN04+R6ka4VRRSEriSG9CIhG8NYrsPNLN4GpEYlTjaU=
+	t=1729316571; cv=none; b=gOtkzH3Mo+vU7oi+3fpDmBtDtjU+5vZ8NrxorkVUqy3bDwj8AXtCL0HGtkJdWGe4r7BEllhzH5ovD7wVRrX4khDBp2kTIB61K9PoHLaL/2qmIEdV8BdidHRES91+p4i66gub7x15Wjnl6gxyefKk3oiSnzX3MdL9dairXN3lEzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729297637; c=relaxed/simple;
-	bh=XpzszTUw/nXjc6n+zFmxRLkcGB/oPankYYv5sQFIh/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o49r6pnSdl27Gz47o4VH89g3/8Xy+CiUYegLCGjTvIaFpZ9KfD33DzZkxiQIKVpA4a4Mi/WmyKS/Q8ZoS6nkqGs0nXcQ27GLrpE82tKGdRrOwvC08FiQohcy4zFtdfqjMgpuqnAVJVBTuJtyvo4JHaL1ITDtakK7e53nss69vgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UX7YVdUx; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729297635; x=1760833635;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XpzszTUw/nXjc6n+zFmxRLkcGB/oPankYYv5sQFIh/Y=;
-  b=UX7YVdUxnzjzxwJ5fZegEWPT1rgn3QUTsNyGecCbs8VdVQWAvr7wiDmS
-   FOmt04Ck5/YoRXj0NSt1DRomwLcQEZ3BkPAxIbApiZb2iIdDpq9WMRuGg
-   yFBQN2gAzZCordoIShtn9cwoM6i4mRimWvkLD4k86s1s9xLluxyXE0Syt
-   FccyI0QriapOCzozFqsaEOnBAE9SpBUsZwWl6/QepZhplhxjZ0okqmJgh
-   ek8v10VefBNLyTGltnCrNg5m/GAVzuDJ5HrmQV299XZntVkNAkgCmqYn6
-   D6/WvSWFRuc75zMkb5i+v2QHpEV69c/Gj8tg1SL2oU8Jkn7eLiLz2fIF8
-   g==;
-X-CSE-ConnectionGUID: Wo4GxFC2Rs+IDsNColV4zA==
-X-CSE-MsgGUID: rNPjA97xRt+uTf0G1vw8lw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="28977087"
-X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="28977087"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 17:27:15 -0700
-X-CSE-ConnectionGUID: bccPquIaRFSenCipGZI1Lw==
-X-CSE-MsgGUID: ZsMos1PaRsWVxJHIHDYSzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="116470078"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 18 Oct 2024 17:27:13 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1xJG-000OT3-24;
-	Sat, 19 Oct 2024 00:27:10 +0000
-Date: Sat, 19 Oct 2024 08:26:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jennifer Berringer <jberring@redhat.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Maxime Ripard <mripard@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Jennifer Berringer <jberring@redhat.com>
-Subject: Re: [PATCH 3/3] power: reset: nvmem-reboot-mode: fix write for small
- cells
-Message-ID: <202410190829.e98plEvU-lkp@intel.com>
-References: <20241017160904.2803663-3-jberring@redhat.com>
+	s=arc-20240116; t=1729316571; c=relaxed/simple;
+	bh=Fz8SqKP1uHowIapTRbRFvVKoMLY1FsF7+S4uGHynG6c=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tm5KH1Sz9kGyZ4MKO7WA8ZTi4+xqZZ7adTTB5/J5KwF6M7enwcZXl34oupR9tItvKn/nVyUOxem04iQOxvvZXkLJ8GOWHWsX/YD6eTDP+Xl6UtKyed+Ybum8x4buu6nXfNcCUl1xJYtOPuuwERk7t4+O6sT+SeJcdqGvbkG/OSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=R06mnRgt; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4609d75e2f8so22225631cf.1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2024 22:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1729316568; x=1729921368; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38uHeg7U8taINS003z4nsL0moH37te8cu6msh48JjeU=;
+        b=R06mnRgtfwUkZ3EgYXRMKTF5PzB1X6kPlOWHtKsg8HsK9pVraIaxYNmWNT9/2atcAU
+         lSlwtGXun+gjw6jVGU/rMYn0PocaNFqkvfzGjHkFUxw2yWMwmv1bSxQWhyuKbLLhzO8w
+         tfGfxQ1W/4HpyRhuJNPh6anJLE5C9zervdvEs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729316568; x=1729921368;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=38uHeg7U8taINS003z4nsL0moH37te8cu6msh48JjeU=;
+        b=G7FRUvQxL+A6UKRtZYIZdUvwJnSsp7Mi3rXazEgDMKKTo7r7PBOyy5uTVbDZ2S2dRH
+         bfc1egUqcHh6f5AhnGtaZtj5T2tkBHVnZeI6AhuktorHwlS07n0taGH/abpstWliOPMS
+         nYYW3rpZe+038I8FXHUifMhitgRrcXd+34iaQXgS+DOgH87RAdoUTxdbKsMPmms06hWw
+         a9SckshCjkYBI3srfk724EjiO2XpRCd9cdC5KIWIXllMB/vh+fenfpIbMxBHjS5/9WJD
+         I6uou2FlTz3r9GX+NwETSjZhieA+eDPex0pZfldacElzst3+ag3iTrYKHIcnvivYuiTM
+         AJQw==
+X-Forwarded-Encrypted: i=1; AJvYcCW3sdz8WR2qsP23/FP1K2xPrcuR6HP36hPzpVyjOQZklH6hgpS//7Zw3F4tO0PdeBg3O2mh4LHgzw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo+ZTIqOMzs+yAutC9zLh2lU0hUyNOTf2kvBUtIYxodcvybNMe
+	+pIpTVpscJ31UAtoI0LNTV1V+W9pgYPI4BI90rNzmxeUPziUgLH2+ycHhDxAGKyVvhCgfwNFFUE
+	9CLMTrKU9NwCnR8rIwxASqMD45FSQI+p0TyYf
+X-Google-Smtp-Source: AGHT+IHcrn2IEf1cChfNodoLs2wc3W9pzjfl5TJdUYdOATX2Xw0JIz86mzqzlYVx37yQ/m7JwvB1D/0HhOqmDTq9w38=
+X-Received: by 2002:a05:622a:5148:b0:451:b77e:a8c1 with SMTP id
+ d75a77b69052e-4609b44cbf0mr165252061cf.3.1729316568440; Fri, 18 Oct 2024
+ 22:42:48 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 18 Oct 2024 22:42:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017160904.2803663-3-jberring@redhat.com>
+In-Reply-To: <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
+References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com>
+ <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date: Fri, 18 Oct 2024 22:42:46 -0700
+Message-ID: <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/5] firmware: psci: Read and use vendor reset types
+To: Andy Yan <andy.yan@rock-chips.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Elliot Berman <quic_eberman@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org
+Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Melody Olvera <quic_molvera@quicinc.com>, 
+	Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, linux-pm@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jennifer,
+Quoting Elliot Berman (2024-10-18 12:39:48)
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index 2328ca58bba6..60bc285622ce 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -29,6 +29,8 @@
+>  #include <asm/smp_plat.h>
+>  #include <asm/suspend.h>
+>
+> +#define REBOOT_PREFIX "mode-"
 
-kernel test robot noticed the following build errors:
+Maybe move this near the function that uses it.
 
-[auto build test ERROR on 98f7e32f20d28ec452afb208f9cffc08448a2652]
+> +
+>  /*
+>   * While a 64-bit OS can make calls with SMC32 calling conventions, for some
+>   * calls it is necessary to use SMC64 to pass or return 64-bit values.
+> @@ -305,9 +315,29 @@ static int get_set_conduit_method(const struct device_node *np)
+>         return 0;
+>  }
+>
+> +static void psci_vendor_sys_reset2(unsigned long action, void *data)
+> +{
+> +       const char *cmd = data;
+> +       unsigned long ret;
+> +       size_t i;
+> +
+> +       for (i = 0; i < num_psci_reset_params; i++) {
+> +               if (!strcmp(psci_reset_params[i].mode, cmd)) {
+> +                       ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+> +                                            psci_reset_params[i].reset_type,
+> +                                            psci_reset_params[i].cookie, 0);
+> +                       pr_err("failed to perform reset \"%s\": %ld\n",
+> +                               cmd, (long)ret);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jennifer-Berringer/nvmem-core-add-nvmem_cell_write_variable_u32/20241018-001140
-base:   98f7e32f20d28ec452afb208f9cffc08448a2652
-patch link:    https://lore.kernel.org/r/20241017160904.2803663-3-jberring%40redhat.com
-patch subject: [PATCH 3/3] power: reset: nvmem-reboot-mode: fix write for small cells
-config: i386-randconfig-015-20241019 (https://download.01.org/0day-ci/archive/20241019/202410190829.e98plEvU-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190829.e98plEvU-lkp@intel.com/reproduce)
+Do this intentionally return? Should it be some other function that's
+__noreturn instead and a while (1) if the firmware returns back to the
+kernel?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410190829.e98plEvU-lkp@intel.com/
+> +               }
+> +       }
+> +}
+> +
+>  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+>                           void *data)
+>  {
+> +       if (data && num_psci_reset_params)
+> +               psci_vendor_sys_reset2(action, data);
+> +
+>         if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+>             psci_system_reset2_supported) {
+>                 /*
+> @@ -750,6 +780,68 @@ static const struct of_device_id psci_of_match[] __initconst = {
+>         {},
+>  };
+>
+> +static int __init psci_init_system_reset2_modes(void)
+> +{
+> +       const size_t len = strlen(REBOOT_PREFIX);
+> +       struct psci_reset_param *param;
+> +       struct device_node *psci_np __free(device_node) = NULL;
+> +       struct device_node *np __free(device_node) = NULL;
+> +       struct property *prop;
+> +       size_t count = 0;
+> +       u32 magic[2];
+> +       int num;
+> +
+> +       if (!psci_system_reset2_supported)
+> +               return 0;
+> +
+> +       psci_np = of_find_matching_node(NULL, psci_of_match);
+> +       if (!psci_np)
+> +               return 0;
+> +
+> +       np = of_find_node_by_name(psci_np, "reset-types");
+> +       if (!np)
+> +               return 0;
+> +
+> +       for_each_property_of_node(np, prop) {
+> +               if (strncmp(prop->name, REBOOT_PREFIX, len))
+> +                       continue;
+> +               num = of_property_count_elems_of_size(np, prop->name, sizeof(magic[0]));
 
-All errors (new ones prefixed by >>):
+Use of_property_count_u32_elems()?
 
-   drivers/power/reset/nvmem-reboot-mode.c: In function 'nvmem_reboot_mode_write':
->> drivers/power/reset/nvmem-reboot-mode.c:27:15: error: implicit declaration of function 'nvmem_cell_write_variable_u32'; did you mean 'nvmem_cell_read_variable_le_u32'? [-Werror=implicit-function-declaration]
-      27 |         ret = nvmem_cell_write_variable_u32(nvmem_rbm->cell, magic);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               nvmem_cell_read_variable_le_u32
-   cc1: some warnings being treated as errors
+> +               if (num != 1 && num != 2)
+> +                       continue;
+> +
+> +               count++;
+> +       }
+> +
+> +       param = psci_reset_params = kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
+> +       if (!psci_reset_params)
+> +               return -ENOMEM;
+> +
+> +       for_each_property_of_node(np, prop) {
+> +               if (strncmp(prop->name, REBOOT_PREFIX, len))
+> +                       continue;
+> +
+> +               param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+> +               if (!param->mode)
+> +                       continue;
+> +
+> +               num = of_property_read_variable_u32_array(np, prop->name, magic, 1, 2);
 
+ARRAY_SIZE(magic)?
 
-vim +27 drivers/power/reset/nvmem-reboot-mode.c
+> +               if (num < 0) {
 
-    18	
-    19	static int nvmem_reboot_mode_write(struct reboot_mode_driver *reboot,
-    20					    unsigned int magic)
-    21	{
-    22		int ret;
-    23		struct nvmem_reboot_mode *nvmem_rbm;
-    24	
-    25		nvmem_rbm = container_of(reboot, struct nvmem_reboot_mode, reboot);
-    26	
-  > 27		ret = nvmem_cell_write_variable_u32(nvmem_rbm->cell, magic);
-    28		if (ret < 0)
-    29			dev_err(reboot->dev, "update reboot mode bits failed\n");
-    30	
-    31		return ret;
-    32	}
-    33	
+Should this be less than 1?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +                       pr_warn("Failed to parse vendor reboot mode %s\n", param->mode);
+> +                       kfree_const(param->mode);
+> +                       continue;
+> +               }
+> +
+> +               /* Force reset type to be in vendor space */
+> +               param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
+> +               param->cookie = num == 2 ? magic[1] : 0;
+
+ARRAY_SIZE(magic)?
+
+> +               param++;
+> +               num_psci_reset_params++;
+> +       }
+> +
+> +       return 0;
 
