@@ -1,412 +1,168 @@
-Return-Path: <linux-pm+bounces-16018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16020-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8C769A4D7D
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 13:54:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88A6C9A4D9D
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 14:04:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EBE61F25D4D
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 11:54:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 099D7B222B4
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 12:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4871E2828;
-	Sat, 19 Oct 2024 11:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C781DF997;
+	Sat, 19 Oct 2024 12:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="b/iPHZV1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QhQq5cRR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD6A1E1A15;
-	Sat, 19 Oct 2024 11:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D73628EF;
+	Sat, 19 Oct 2024 12:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729338659; cv=none; b=IAOlAV5234j9zXh2kCe47Jt0Vb9ehSN0lG4r68PKjxSytEfXfhOzas2twa0NgIgP8fVTNbLs7wyNz9c3Hs9YR/VVp9aVdYDCoQ/JlSr1JNJQ1DVlEPt0nPFAy6r/entf0Tca7B8ejreBE0PYORTu2ccy6eQS0d3ckrnFDnbGUG4=
+	t=1729339463; cv=none; b=Q9RYNQw5MCDUcW4OMqos+cVzUxKFuFl4Bg9IARYqlKrl/eZS353mHKsZk6cL3jDM58Chne+iLMdQ9AmHQKnCzD986dLWoGCPG1VemtUznbNId4lWxKNg2iFR8MkpOIQney2JWs+50Vyw1xH2fWTnxF6ApiPAmxkutjJMM3E7EOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729338659; c=relaxed/simple;
-	bh=+ht4DlMNaXgXRO8D2BEpmRFGbLZJwEQL59rC0tuSAeo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sgY4aknCULom2OdvyJgap4TGGe6/pX0bT3VmbXlW8wJwcPbD8DPQvm8Dx00imV+NnQaHlnj02sKcKCtY/wdMN8JdR3DfPzhdt4sCkGr71NaiOr0d+zqoHTgpPW0g5ZO58ka7VMZeHgIYivDOXPHN+LUkn+ITyVM4wJX9kBs8L8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=b/iPHZV1; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [192.168.1.130] (51B6DD9D.dsl.pool.telekom.hu [81.182.221.157])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 6F498E4205;
-	Sat, 19 Oct 2024 11:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1729338651;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zp0tKVwTU8TS66qVxT5hpORGc3/VihCAGc5nVbSMSs=;
-	b=b/iPHZV1oLAJ1Gy2NPxiM7ibY66wzTx4RYEZZIJBonPf88PFLhNPcM/kqCSSkD9CyLtNWr
-	Wms3v8rZyfd/dTESfTRMA1LMIwGW+KWGG0Un6gCTdkLcPBKfnxcdJ6m+UPeDpXHvOIlfAZ
-	yOE4v3hilzggLGtcvthtep2Hi6eHQU+YZYOqMyKFZ6hZCetQSFSlrG/65vRudxpVxv5cDJ
-	Nd3IwwRRPgqeMpx/g4L9BOaBwGDL6AY84RjOKy3LW8BK0NG7UWzdynSiTxOkKKooSMEBfz
-	e7Suit4aS70rSk/3Xf6s/Kf/QWLX0bOpzeUTqlN5yQyiSWwaOqxqI0IZMCCAMA==
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Sat, 19 Oct 2024 13:50:51 +0200
-Subject: [PATCH RFC 14/14] arm64: dts: qcom: Add Xiaomi Redmi 5A
+	s=arc-20240116; t=1729339463; c=relaxed/simple;
+	bh=iflsmVDvSJnfEanvEwKT7iKmKWPw5/HBrPRt8P5wumo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Kk6ZSTtTZgLDhEM2+vXaqD0Te7jakCa1sUuIsaYvJFWFMHJbtMAeRgVHxomCDuyh38yVwl8G7fI3bOvwJcz5TVaR7tG1cevoyaw/tzcBaT6fYD832JC7E8Ov7zCvK0aD2YwkY40M6VKWx32dm0wIblfQO8EO86Q1dBXfefSgen4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QhQq5cRR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E05BC4CEC5;
+	Sat, 19 Oct 2024 12:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729339462;
+	bh=iflsmVDvSJnfEanvEwKT7iKmKWPw5/HBrPRt8P5wumo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=QhQq5cRRAhhGNy2tm1ca4/8glZTU1ZwSBNrJyEg0X0W/4uGoYwPAuGX/CNtdLj9kb
+	 lMmHw85uJRe6Yvx99fS8KyX+LMvPzu3lB99lHMlj/8BeWJPmC3p3C7S9OwZJd63OP6
+	 e98gSMZJYEZmUlt8EM6uXywQB4PA24MAla3kdXCCcw/NyL9FcMw75lEl8fiaCUkAzq
+	 /mZ7XNueFiLbeMRZ9xmb96/OGJ8YYMiovov1qcV10TEyoorwPpwHmI6OWyH/XDvb2j
+	 Xol5gF6kDqZ2xlqlfBhx+eS/1GEyEk+9NRXELu2Fr5n80EVMYb/TF0iAExloDReIHE
+	 cy0yAT6zUy9BQ==
+Date: Sat, 19 Oct 2024 13:04:14 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
+ <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin
+ <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
+ <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] iio: consumers: copy/release available info from
+ producer to fix race
+Message-ID: <20241019130414.014a6384@jic23-huawei>
+In-Reply-To: <20241018-iio-read-avail-release-v4-2-53c8ac618585@gmail.com>
+References: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
+	<20241018-iio-read-avail-release-v4-2-53c8ac618585@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241019-msm8917-v1-14-f1f3ca1d88e5@mainlining.org>
-References: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
-In-Reply-To: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
- Lee Jones <lee@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1729338640; l=8108;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=+ht4DlMNaXgXRO8D2BEpmRFGbLZJwEQL59rC0tuSAeo=;
- b=uGVA/xHEiShSUaCt76MsHKo4bryVydpN+sPm3T6n4mcGhBT3ZE/EXnlI8ZGmSfU8gtxFMA1X9
- X1nfj8cWdzIB0GKu76S8xibOWXnRsKKg8BppDcxWPy1Wa4fTKI4I8Vz
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add initial support for Xiaomi Redmi 5A (riva).
+On Fri, 18 Oct 2024 12:16:41 +0200
+Matteo Martelli <matteomartelli3@gmail.com> wrote:
 
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
- arch/arm64/boot/dts/qcom/Makefile                |   1 +
- arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts | 295 +++++++++++++++++++++++
- 2 files changed, 296 insertions(+)
+> Consumers need to call the producer's read_avail_release_resource()
+> callback after reading producer's available info. To avoid a race
+> condition with the producer unregistration, change inkern
+> iio_channel_read_avail() so that it copies the available info from the
+> producer and immediately calls its release callback with info_exists
+> locked.
+> 
+> Also, modify the users of iio_read_avail_channel_raw() and
+> iio_read_avail_channel_attribute() to free the copied available buffers
+> after calling these functions.
+> 
+> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+Hi Matteo,
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 065bb19481c16db2affd291826d420c83a89c52a..79add0e07d8a5f3362d70b0aaaaa9b8c48e31239 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -59,6 +59,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86518.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86528.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..7553f73603fc87797b0d424a2af6f2da65c90f5f
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
-@@ -0,0 +1,295 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2023, Barnabas Czeman
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/linux-event-codes.h>
-+#include <dt-bindings/leds/common.h>
-+#include "msm8917.dtsi"
-+#include "pm8937.dtsi"
-+
-+/ {
-+	model = "Xiaomi Redmi 5A (riva)";
-+	compatible = "xiaomi,riva", "qcom,msm8917";
-+	chassis-type = "handset";
-+
-+	qcom,msm-id = <QCOM_ID_MSM8917 0>;
-+	qcom,board-id = <0x1000b 2>, <0x2000b 2>;
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3000000>;
-+		energy-full-design-microwatt-hours = <11500000>;
-+		constant-charge-current-max-microamp = <1000000>;
-+		constant-charge-voltage-max-microvolt = <4400000>;
-+		precharge-current-microamp = <256000>;
-+		charge-term-current-microamp = <60000>;
-+		voltage-min-design-microvolt = <3400000>;
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		stdout-path = "framebuffer0";
-+
-+		framebuffer0: framebuffer@90001000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x0 0x90001000 0x0 (720 * 1280 * 3)>;
-+			width = <720>;
-+			height = <1280>;
-+			stride = <(720 * 3)>;
-+			format = "r8g8b8";
-+
-+			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_MDSS_AXI_CLK>,
-+				 <&gcc GCC_MDSS_VSYNC_CLK>,
-+				 <&gcc GCC_MDSS_MDP_CLK>,
-+				 <&gcc GCC_MDSS_BYTE0_CLK>,
-+				 <&gcc GCC_MDSS_PCLK0_CLK>,
-+				 <&gcc GCC_MDSS_ESC0_CLK>;
-+			power-domains = <&gcc MDSS_GDSC>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		key-volup {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	reserved-memory {
-+		/delete-node/ reserved@85b00000;
-+		qseecom_mem: reserved@84a00000 {
-+			reg = <0x0 0x84a00000 0x0 0x1900000>;
-+			no-map;
-+		};
-+
-+		framebuffer_mem: memory@90001000 {
-+			reg = <0x0 0x90001000 0x0 (720 * 1280 * 3)>;
-+			no-map;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&blsp_i2c3 {
-+	status = "okay";
-+
-+	touchscreen@38 {
-+		compatible = "edt,edt-ft5306";
-+		reg = <0x38>;
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <65 0x2008>;
-+		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+		vcc-supply = <&pm8937_l10>;
-+		iovcc-supply = <&pm8937_l5>;
-+
-+		touchscreen-size-x = <720>;
-+		touchscreen-size-y = <1280>;
-+	};
-+};
-+
-+&blsp_i2c5 {
-+	status = "okay";
-+
-+	bq27426@55 {
-+		compatible = "ti,bq27426";
-+		reg = <0x55>;
-+		monitored-battery = <&battery>;
-+	};
-+
-+	bq25601@6b{
-+		compatible = "ti,bq25601";
-+		reg = <0x6b>;
-+		monitored-battery = <&battery>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <61 IRQ_TYPE_EDGE_FALLING>;
-+
-+		input-voltage-limit-microvolt = <4400000>;
-+		input-current-limit-microamp = <1000000>;
-+	};
-+};
-+
-+&pm8937_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&pm8937_spmi_regulators {
-+	pm8937_s5: s5 {
-+		regulator-min-microvolt = <1050000>;
-+		regulator-max-microvolt = <1350000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm8937-regulators";
-+
-+		vdd_s1-supply = <&vph_pwr>;
-+		vdd_s2-supply = <&vph_pwr>;
-+		vdd_s3-supply = <&vph_pwr>;
-+		vdd_s4-supply = <&vph_pwr>;
-+
-+		vdd_l1_l19-supply = <&pm8937_s3>;
-+		vdd_l2_l23-supply = <&pm8937_s3>;
-+		vdd_l3-supply = <&pm8937_s3>;
-+		vdd_l4_l5_l6_l7_l16-supply = <&pm8937_s4>;
-+		vdd_l8_l11_l12_l17_l22-supply = <&vph_pwr>;
-+		vdd_l9_l10_l13_l14_l15_l18-supply = <&vph_pwr>;
-+
-+		pm8937_s1: s1 {
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8937_s3: s3 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8937_s4: s4 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8937_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8937_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l8: l8 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l9: l9 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l10: l10 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8937_l11: l11 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8937_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8937_l13: l13 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+
-+		pm8937_l14: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l16: l16 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l17: l17 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l19: l19 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8937_l22: l22 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+		};
-+
-+		pm8937_l23: l23 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+	};
-+
-+};
-+
-+&sdhc_1 {
-+	vmmc-supply = <&pm8937_l8>;
-+	vqmmc-supply = <&pm8937_l5>;
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 67 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&pm8937_l11>;
-+	vqmmc-supply = <&pm8937_l12>;
-+	status = "okay";
-+};
-+
-+&wcnss {
-+	vddpx-supply = <&pm8937_l5>;
-+	status = "okay";
-+
-+};
-+
-+&wcnss_iris {
-+	compatible = "qcom,wcn3620";
-+	vddxo-supply = <&pm8937_l7>;
-+	vddrfa-supply = <&pm8937_l19>;
-+	vddpa-supply = <&pm8937_l9>;
-+	vdddig-supply = <&pm8937_l5>;
-+};
-+
-+&wcnss_mem {
-+	status = "okay";
-+};
+The cleanup.h stuff is new and comes with footguns. As such the
+'rules' applied are perhaps stricter than then will be in the long term.
+https://lore.kernel.org/all/172294149613.2215.3274492813920223809.tip-bot2@tip-bot2/
+is what we have today. Particularly the last few paragraphs on usage.
 
--- 
-2.47.0
+> @@ -857,7 +879,7 @@ static int iio_channel_read_min(struct iio_channel *chan,
+>  				int *val, int *val2, int *type,
+>  				enum iio_chan_info_enum info)
+>  {
+> -	const int *vals;
+> +	const int *vals __free(kfree) = NULL;
+
+Unlike below this one is 'almost' ok because there isn't much below. However,
+still not good because of the risk of future code putting something in between.
+At very minimum move it down to just before the place it's allocated.
+
+It's a bit messy but maybe what we need is:
+
+int *iio_read_avail_channel_attribute_retvals(struct iio_channel *chan,
+				     	      int *type, int *length,
+				              enum iio_chan_info_enum attr)
+{
+	int *vals;
+	int ret;
+
+	ret = iio_read_avail_channel_attribute(chan, &vals, type, len, attr;
+	if (ret)
+		return ERR_PTR(ret);
+
+	return vals;
+}
+
+Then you can do
+	const int *vals __free(kfree) =
+		iio_channel_read_avail_retvals(chan, type, &length, info);
+
+	if (IS_ERR(vals))
+		...
+
+and obey the suggested style for cleanup.h usage.
+
+Would need some clear comments on why it exists though!
+(+ maybe a better name)
+
+
+>  	int length;
+>  	int ret;
+>  
+
+> diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/supply/ingenic-battery.c
+> index 0a40f425c27723ccec49985b8b5e14a737b6a7eb..6b7856e69f5fb7b8b73166b9b6825f4af7b19129 100644
+> --- a/drivers/power/supply/ingenic-battery.c
+> +++ b/drivers/power/supply/ingenic-battery.c
+> @@ -6,12 +6,14 @@
+>   * based on drivers/power/supply/jz4740-battery.c
+>   */
+>  
+> +#include <linux/cleanup.h>
+>  #include <linux/iio/consumer.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/power_supply.h>
+>  #include <linux/property.h>
+> +#include <linux/slab.h>
+>  
+>  struct ingenic_battery {
+>  	struct device *dev;
+> @@ -62,7 +64,7 @@ static int ingenic_battery_get_property(struct power_supply *psy,
+>   */
+>  static int ingenic_battery_set_scale(struct ingenic_battery *bat)
+>  {
+> -	const int *scale_raw;
+> +	const int *scale_raw __free(kfree) = NULL;
+This isn't a good pattern as per the docs I just replied to v3 with.
+Whilst the code is functionally correct today, it is fragile for the reasons
+in those docs.
+
+>  	int scale_len, scale_type, best_idx = -1, best_mV, max_raw, i, ret;
+>  	u64 max_mV;
+>  
 
 
