@@ -1,150 +1,148 @@
-Return-Path: <linux-pm+bounces-16038-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 283BB9A4EBF
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 16:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA519A4F90
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 18:05:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68EC2B2557C
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 14:40:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DBFBB25743
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 16:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5BA152E12;
-	Sat, 19 Oct 2024 14:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="T2bU+FCR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93ED414D71E;
+	Sat, 19 Oct 2024 16:05:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from vps-ovh.mhejs.net (vps-ovh.mhejs.net [145.239.82.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7037C2E3;
-	Sat, 19 Oct 2024 14:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776982F3E;
+	Sat, 19 Oct 2024 16:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.239.82.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729348838; cv=none; b=Op6wvePMvclMbRYHmRnpPh5unfCiP+PLBTzRD7KVw43gtlq6BJyvhU4dMo7MdPPpoyz+zz2zr4WrxGb2ewNqW/PlsQ+PQYln+hsJJJbEtagLo41h3H9yZNb9MJu4bilVWAA0MWS1/WgCz//g3EyYHtbH7Cmc+HbLkNyiJluazXc=
+	t=1729353934; cv=none; b=G0YlJ0TK9XSocRCiP4pbzAFQ9VFYXtZNeyP1xReOUkyMY4Jr7hcFUiYYlwSxZZmQxw5Bu2TelsMOuGJnH/14yFKHFh+xOBmCxfW8t/KnIHWYhXzNQ/NHA5JiKwlT/tkqo8BnBt+5WLkhIwd/OTDj7OX5NHqnjx826rkYKRNB9Bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729348838; c=relaxed/simple;
-	bh=pkgwufm+bq8k6WekP/FLv0/EPjklZE3HX5XQ5xReyWg=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=Xdi+CqauHG2okYmbRhANy/OGtyww4p2ghi1Fb50syPXg8BaZntklLV1s/zxbp4akUbg2LOnDFrF/nRja70bOd3lHJMjG0P0q7D9icV8QIl3hkx9AAa6hX8BOiQPviAZ+xboOi2PlgsqaqzUnNLpdaygRDNlx4aFAAQI+yzFJ1M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=T2bU+FCR; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from localhost (docker-mailserver-web-1.docker-mailserver_default [172.22.0.5])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 79FECE459F;
-	Sat, 19 Oct 2024 14:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1729348834;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1EZ0o3avbZ9UgAo2nPmXkLtdwekuw0WM/Mf7T+3Ys1k=;
-	b=T2bU+FCRFyKGaxMlZXvxwhZf/FHRJPk9dBBdMB1UrkI8g1aPy3YwXm11G1FcATi5m77a4+
-	GcjqkQ0wMy4MaMSfZ9lMXNH+mANNM5Xv4oK8m3bodjnVMWoxdueKjLJYsypPJgWW5ZxEmg
-	jfHWSOqCiVzoxsNp5n/cqXW8ZrlDp5KAyIZeFaWgOZDukNuqqGkH1RPstqr4iWzja4BIlu
-	U5+TGygcbaJ82mwMP2oG7jrIccZpHtca3ZD9jYRuOcjG8VPRiwF8fGBR6U/RYyfyPuy7Gd
-	ZceC7KQxoybbNKIUSdZatvPlLGg2HJogceaiYb/R8HJCG0SjQvszDjxJ1g65uQ==
+	s=arc-20240116; t=1729353934; c=relaxed/simple;
+	bh=D6GF2QLuPg+veL1kNJams82Ezzj9cCPIbLHUxuwnxJI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Td8UFi0GnBNfNTQHtrC1G0LZWYzhbVgXYxmQiNruPFrD5WbjS5CmsdnLPu+ma6nKM5smzxxCh2Rj4Q2aucaUogfFR0OrxJ+E+7p20BT0z9TNdYGCJz3a16lkqYr8Kfcgu+aXVY5KwJTw6NM98Ua33l/V786n7Po6oN5/9wjNGmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name; spf=none smtp.mailfrom=vps-ovh.mhejs.net; arc=none smtp.client-ip=145.239.82.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vps-ovh.mhejs.net
+Received: from MUA
+	by vps-ovh.mhejs.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.98)
+	(envelope-from <mhej@vps-ovh.mhejs.net>)
+	id 1t2B45-00000000lhD-1AsZ;
+	Sat, 19 Oct 2024 17:08:25 +0200
+Message-ID: <1ededf38-8f2a-49ef-8453-85399bf4fe12@maciej.szmigiero.name>
+Date: Sat, 19 Oct 2024 17:08:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 19 Oct 2024 16:40:34 +0200
-From: barnabas.czeman@mainlining.org
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Konrad
- Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>, Amit Kucheria
- <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Joerg
- Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy
- <robin.murphy@arm.com>, Srinivas Kandagatla
- <srinivas.kandagatla@linaro.org>, linux-arm-msm@vger.kernel.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- iommu@lists.linux.dev
-Subject: Re: [PATCH RFC 14/14] arm64: dts: qcom: Add Xiaomi Redmi 5A
-In-Reply-To: <jj4ky6uuidv3rdjl7q4ehe7cdgcjxtnmtcufmy462gznkjiex2@pptv6aufsudj>
-References: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
- <20241019-msm8917-v1-14-f1f3ca1d88e5@mainlining.org>
- <pyr3t3kcpjj5zor226fwembjsbpp5zh7mpe2a3bqmwnbqccj7h@a55efscym3s7>
- <46f7b167220a7d54242e9457d00d67e2@mainlining.org>
- <jj4ky6uuidv3rdjl7q4ehe7cdgcjxtnmtcufmy462gznkjiex2@pptv6aufsudj>
-Message-ID: <d55a8f5d7f9b371fd2b51ec079adbf8d@mainlining.org>
-X-Sender: barnabas.czeman@mainlining.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: Root filesystem read access for firmware load during hibernation
+ image writing
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: "Darrick J. Wong" <djwong@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>, linux-pm <linux-pm@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, Russ Weight <russ.weight@linux.dev>,
+ Danilo Krummrich <dakr@redhat.com>, Ping-Ke Shih <pkshih@realtek.com>,
+ linux-wireless <linux-wireless@vger.kernel.org>,
+ Marcel Holtmann <marcel@holtmann.org>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
+References: <3c95fb54-9cac-4b4f-8e1b-84ca041b57cb@maciej.szmigiero.name>
+ <413b1e99-8cfe-4018-9ef3-2f3e21806bad@maciej.szmigiero.name>
+ <ZwmwtZivKP8UDx1V@bombadil.infradead.org>
+Content-Language: en-US, pl-PL
+From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Autocrypt: addr=mail@maciej.szmigiero.name; keydata=
+ xsFNBFpGusUBEADXUMM2t7y9sHhI79+2QUnDdpauIBjZDukPZArwD+sDlx5P+jxaZ13XjUQc
+ 6oJdk+jpvKiyzlbKqlDtw/Y2Ob24tg1g/zvkHn8AVUwX+ZWWewSZ0vcwp7u/LvA+w2nJbIL1
+ N0/QUUdmxfkWTHhNqgkNX5hEmYqhwUPozFR0zblfD/6+XFR7VM9yT0fZPLqYLNOmGfqAXlxY
+ m8nWmi+lxkd/PYqQQwOq6GQwxjRFEvSc09m/YPYo9hxh7a6s8hAP88YOf2PD8oBB1r5E7KGb
+ Fv10Qss4CU/3zaiyRTExWwOJnTQdzSbtnM3S8/ZO/sL0FY/b4VLtlZzERAraxHdnPn8GgxYk
+ oPtAqoyf52RkCabL9dsXPWYQjkwG8WEUPScHDy8Uoo6imQujshG23A99iPuXcWc/5ld9mIo/
+ Ee7kN50MOXwS4vCJSv0cMkVhh77CmGUv5++E/rPcbXPLTPeRVy6SHgdDhIj7elmx2Lgo0cyh
+ uyxyBKSuzPvb61nh5EKAGL7kPqflNw7LJkInzHqKHDNu57rVuCHEx4yxcKNB4pdE2SgyPxs9
+ 9W7Cz0q2Hd7Yu8GOXvMfQfrBiEV4q4PzidUtV6sLqVq0RMK7LEi0RiZpthwxz0IUFwRw2KS/
+ 9Kgs9LmOXYimodrV0pMxpVqcyTepmDSoWzyXNP2NL1+GuQtaTQARAQABzTBNYWNpZWogUy4g
+ U3ptaWdpZXJvIDxtYWlsQG1hY2llai5zem1pZ2llcm8ubmFtZT7CwZQEEwEIAD4CGwMFCwkI
+ BwIGFQoJCAsCBBYCAwECHgECF4AWIQRyeg1N257Z9gOb7O+Ef143kM4JdwUCZdEV4gUJDWuO
+ nQAKCRCEf143kM4JdyzED/0Qwk2KVsyNwEukYK2zbJPHp7CRbXcpCApgocVwtmdabAubtHej
+ 7owLq89ibmkKT0gJxc6OfJJeo/PWTJ/Qo/+db48Y7y03Xl+rTbFyzsoTyZgdR21FQGdgNRG9
+ 3ACPDpZ0UlEwA4VdGT+HKfu0X8pVb0G0D44DjIeHC7lBRzzE5JXJUGUVUd2FiyUqMFqZ8xP3
+ wp53ekB5p5OstceqyZIq+O/r1pTgGErZ1No80JrnVC/psJpmMpw1Q56t88JMaHIe+Gcnm8fB
+ k3LyWNr7gUwVOus8TbkP3TOx/BdS/DqkjN3GvXauhVXfGsasmHHWEFBE0ijNZi/tD63ZILRY
+ wUpRVRU2F0UqI+cJvbeG3c+RZ7jqMAAZj8NB8w6iviX1XG3amlbJgiyElxap6Za1SQ3hfTWf
+ c6gYzgaNOFRh77PQbzP9BcAVDeinOqXg2IkjWQ89o0YVFKXiaDHKw7VVld3kz2FQMI8PGfyn
+ zg5vyd9id1ykISCQQUQ4Nw49tqYoSomLdmIgPSfXDDMOvoDoENWDXPiMGOgDS2KbqRNYCNy5
+ KGQngJZNuDicDBs4r/FGt9/xg2uf8M5lU5b8vC78075c4DWiKgdqaIhqhSC+n+qcHX0bAl1L
+ me9DMNm0NtsVw+mk65d7cwxHmYXKEGgzBcbVMa5C+Yevv+0GPkkwccIvps7AzQRaRrwiAQwA
+ xnVmJqeP9VUTISps+WbyYFYlMFfIurl7tzK74bc67KUBp+PHuDP9p4ZcJUGC3UZJP85/GlUV
+ dE1NairYWEJQUB7bpogTuzMI825QXIB9z842HwWfP2RW5eDtJMeujzJeFaUpmeTG9snzaYxY
+ N3r0TDKj5dZwSIThIMQpsmhH2zylkT0jH7kBPxb8IkCQ1c6wgKITwoHFjTIO0B75U7bBNSDp
+ XUaUDvd6T3xd1Fz57ujAvKHrZfWtaNSGwLmUYQAcFvrKDGPB5Z3ggkiTtkmW3OCQbnIxGJJw
+ /+HefYhB5/kCcpKUQ2RYcYgCZ0/WcES1xU5dnNe4i0a5gsOFSOYCpNCfTHttVxKxZZTQ/rxj
+ XwTuToXmTI4Nehn96t25DHZ0t9L9UEJ0yxH2y8Av4rtf75K2yAXFZa8dHnQgCkyjA/gs0ujG
+ wD+Gs7dYQxP4i+rLhwBWD3mawJxLxY0vGwkG7k7npqanlsWlATHpOdqBMUiAR22hs02FikAo
+ iXNgWTy7ABEBAAHCwXwEGAEIACYCGwwWIQRyeg1N257Z9gOb7O+Ef143kM4JdwUCZdEWBwUJ
+ DWuNXAAKCRCEf143kM4Jd5OdD/0UXMpMd4eDWvtBBQkoOcz2SqsWwMj+vKPJS0BZ33MV/wXT
+ PaTbzAFy23/JXbyBPcb0qgILCmoimBNiXDzYBfcwIoc9ycNwCMBBN47Jxwb8ES5ukFutjS4q
+ +tPcjbPYu+hc9qzodl1vjAhaWjgqY6IzDGe4BAmM+L6UUID4Vr46PPN02bpm4UsL31J6X+lA
+ Vj5WbY501vKMvTAiF1dg7RkHPX7ZVa0u7BPLjBLqu6NixNkpSRts8L9G4QDpIGVO7sOC9oOU
+ 2h99VYY1qKml0qJ9SdTwtDj+Yxz+BqW7O4nHLsc4FEIjILjwF71ZKY/dlTWDEwDl5AJR7bhy
+ HXomkWae2nBTzmWgIf9fJ2ghuCIjdKKwOFkDbFUkSs8HjrWymvMM22PHLTTGFx+0QbjOstEh
+ 9i56FZj3DoOEfVKvoyurU86/4sxjIbyhqL6ZiTzuZAmB0RICOIGilm5x03ESkDztiuCtQL2u
+ xNT833IQSNqyuEnxG9/M82yYa+9ClBiRKM2JyvgnBEbiWA15rAQkOqZGJfFJ3bmTFePx4R/I
+ ZVehUxCRY5IS1FLe16tymf9lCASrPXnkO2+hkHpBCwt75wnccS3DwtIGqwagVVmciCxAFg9E
+ WZ4dI5B0IUziKtBxgwJG4xY5rp7WbzywjCeaaKubtcLQ9bSBkkK4U8Fu58g6Hg==
+Disposition-Notification-To: "Maciej S. Szmigiero"
+ <mail@maciej.szmigiero.name>
+In-Reply-To: <ZwmwtZivKP8UDx1V@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: mhej@vps-ovh.mhejs.net
 
-On 2024-10-19 16:38, Dmitry Baryshkov wrote:
-> On Sat, Oct 19, 2024 at 03:57:54PM +0200, 
-> barnabas.czeman@mainlining.org wrote:
->> On 2024-10-19 15:48, Dmitry Baryshkov wrote:
->> > On Sat, Oct 19, 2024 at 01:50:51PM +0200, Barnabás Czémán wrote:
->> > > Add initial support for Xiaomi Redmi 5A (riva).
->> > >
->> > > Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
->> > > ---
->> > >  arch/arm64/boot/dts/qcom/Makefile                |   1 +
->> > >  arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts | 295
->> > > +++++++++++++++++++++++
->> > >  2 files changed, 296 insertions(+)
->> > >
->> > > diff --git a/arch/arm64/boot/dts/qcom/Makefile
->> > > b/arch/arm64/boot/dts/qcom/Makefile
->> > > index 065bb19481c16db2affd291826d420c83a89c52a..79add0e07d8a5f3362d70b0aaaaa9b8c48e31239
->> > > 100644
->> > > --- a/arch/arm64/boot/dts/qcom/Makefile
->> > > +++ b/arch/arm64/boot/dts/qcom/Makefile
->> > > @@ -59,6 +59,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+=
->> > > msm8916-wingtech-wt86518.dtb
->> > >  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86528.dtb
->> > >  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
->> > >  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
->> > > +dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
->> > >  dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
->> > >  dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
->> > >  dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
->> > > diff --git a/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
->> > > b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
->> > > new file mode 100644
->> > > index 0000000000000000000000000000000000000000..7553f73603fc87797b0d424a2af6f2da65c90f5f
->> > > --- /dev/null
->> > > +++ b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
->> > > @@ -0,0 +1,295 @@
->> > > +// SPDX-License-Identifier: BSD-3-Clause
->> > > +/*
->> > > + * Copyright (c) 2023, Barnabas Czeman
->> > > + */
->> > > +
->> > > +/dts-v1/;
->> > > +
->> > > +#include <dt-bindings/arm/qcom,ids.h>
->> > > +#include <dt-bindings/gpio/gpio.h>
->> > > +#include <dt-bindings/input/linux-event-codes.h>
->> > > +#include <dt-bindings/leds/common.h>
->> > > +#include "msm8917.dtsi"
->> > > +#include "pm8937.dtsi"
->> > > +
->> > > +/ {
->> > > +	model = "Xiaomi Redmi 5A (riva)";
->> > > +	compatible = "xiaomi,riva", "qcom,msm8917";
->> > > +	chassis-type = "handset";
->> > > +
->> > > +	qcom,msm-id = <QCOM_ID_MSM8917 0>;
->> > > +	qcom,board-id = <0x1000b 2>, <0x2000b 2>;
->> >
->> > Is this required to boot?
->> Yes
+On 12.10.2024 01:11, Luis Chamberlain wrote:
+> On Sat, Oct 05, 2024 at 03:16:27PM +0200, Maciej S. Szmigiero wrote:
+>> The issue below still happens on kernel version 6.11.1.
+>>
+>> Created a kernel bugzilla entry for it:
+>> https://bugzilla.kernel.org/show_bug.cgi?id=219353
+>>
+>> It would be nice to at least know whether the filesystem read access supposed is
+>> to be working normally at PMSG_THAW hibernation stage to assign the issue accordingly.
 > 
-> Hmm, did you verify the dts against DT bindings? I think you need to 
-> fix
-> them.
-I have checked with this `make CHECK_DTBS=1 
-qcom/msm8917-xiaomi-riva.dtb`
+> No, there are races possible if you trigger IO to a fs before a suspend
+> is going on. If you have *more* IO ongoing, then you are likely to stall
+> suspend and not be able to recover.
+
+That's more or less the same answer as Pavel wrote 2 weeks ago,
+but thanks for confirming it and providing more details on the subject.
+
+Since it essentially makes this an rtw88/btrtl specific issue (and not
+a generic PM/hibernation one) I have updated and reassigned the
+aforementioned kernel bug accordingly.
+
+As it is just my personal system that is affected by this hibernation
+issue I'm content with just patching its kernel with a simple
+workaround [1].
+WiFi/BT NIC is hardly useful for hibernation snapshot writing anyway.
+
+But of course if someone has the bandwidth to get a clean fix merged
+then it would be great to have this fixed upstream for everyone.
+
+>    Luis
+
+Thanks,
+Maciej
+
+[1]: https://github.com/maciejsszmigiero/linux/commit/f6188a940324b4bc8f51dcb1a9ae1a489e57bd1d
+
 
