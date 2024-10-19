@@ -1,224 +1,167 @@
-Return-Path: <linux-pm+bounces-16002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A24B9A4B7A
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 08:06:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 549CD9A4C05
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 10:30:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE5DA282E4C
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 06:06:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C17FC1F21123
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 08:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DC11D5ABA;
-	Sat, 19 Oct 2024 06:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09DFD1DED6D;
+	Sat, 19 Oct 2024 08:30:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arri.de header.i=@arri.de header.b="k8YIcyZV"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ORUMewL+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2054.outbound.protection.outlook.com [40.107.247.54])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58F728EF;
-	Sat, 19 Oct 2024 06:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729317978; cv=fail; b=BCEpirCeNNzyfScnOeNlcfJ15FomwypZqtxQMChMyDxf2QpHSMFHUWjRjzUsLtAEMoHNsN7hh61LKGEWzaFBB06VnhTilNQ42Uawb7pC9RzLGbgnQfdgu7b37pPNJPSamr8rHmghoME2IgUEjbjRiksghMuc46G5b0sgw7GksHA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729317978; c=relaxed/simple;
-	bh=Yx68Su07o2Z3sSp5kw2SrUMjs/g9ybcgS3CMI3nViUM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pv6sS6BG454jIYkdpF1KFHwNquMPlPFxfZJa03pD5/SXJIcli6KLlOGh9M6T+dYRdlmUPnWT057BYLEwvvG8ULfyLSOed3S9CcUJ1rKSHr4neIOK9WKudHkz4oMJ/cMGPYh6g+G5/Gi8HBkv/NSVPosBcNJ8fEI5IFonBN5FqAI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arri.de; spf=pass smtp.mailfrom=arri.de; dkim=pass (1024-bit key) header.d=arri.de header.i=@arri.de header.b=k8YIcyZV; arc=fail smtp.client-ip=40.107.247.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arri.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arri.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vbtTcY+9LxRSdSBekCuBFvzsVJHruOnBy2Wd63t9ayV0BTqojXjciTjYM6icdX+GBaDrmeWB0nuk6yPMM51dxiEQgsfpZYvNMbqq144r2E/gagtJlwCOALhCZTYUoxrp7buemek1xVwPKenP6BtyZv8wHXY+ArxUhMp9H4mYQjGuymGYaK8QyQQ+6T2L5OjQ7Wcb0gkMR6UgklUug11ETlDZ6z/SUdJnRNaaXXOrceJVVm0honqQVOFE2ksgR/kMfw9elVUoACtWyANh5UFzvH/VVc9FiMvJLS+M0pYX2UgbqbL7UN11UWqLoLLALb312SKQ0R5vY51N4VrR69cL+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wu+JDIvrVQ1ki2lRe1/jFW4LWmQMbP+wEb6hHVOMJJU=;
- b=PnEy6ZY90Yp+29d9uvTlwpGO5QBVRwedUEMJCy7P0nHq67eUnpbpwfvCX7swM52XKUNlB55dP0o6FW0h17WbO5R8mYBR/iNC7OcApm2pSU5bgcf2Quf4gXC8ZeXVLSs5shRHFesDWz2uQsmgkllKg3BhcN6u+O0cuAKYCJf2164fe8tMV+HdFU/rYAZcLtwWlrk/+3WEJepVW71hz4ftYlzZJ36foUR2nkaKLTPm+t32Jx8DWsRZTqRHIZzvII3e73RwIPqb+Uqi0wnkIFfhPhY1N1vq18urw6nBH9QAbcqIDwYjlGk6cUSG27Qd8MHKwW9YuYwgdQ5zZWV+Fv+l3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=kernel.org smtp.mailfrom=arri.de; dmarc=fail
- (p=none sp=none pct=100) action=none header.from=arri.de; dkim=none (message
- not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arri.de; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wu+JDIvrVQ1ki2lRe1/jFW4LWmQMbP+wEb6hHVOMJJU=;
- b=k8YIcyZVE1WHnDQMCU1/5uyRJRaT4lTSvGN4AmlJwcoNy6P3vCdvEW/IIv7c3KqiciW3PIFbkk2JCswIpv/TiNcXTQbRydwR6kiMtMMIzcbQP1pYG837lpxxvSirIvbCMhboLFu2d6jsjMDnenNQCIgLFOTqIbnmsRzlLeNxI4Y=
-Received: from AM0PR04CA0131.eurprd04.prod.outlook.com (2603:10a6:208:55::36)
- by DBBPR07MB7612.eurprd07.prod.outlook.com (2603:10a6:10:1e3::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Sat, 19 Oct
- 2024 06:06:08 +0000
-Received: from AMS0EPF0000019E.eurprd05.prod.outlook.com
- (2603:10a6:208:55:cafe::8a) by AM0PR04CA0131.outlook.office365.com
- (2603:10a6:208:55::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.26 via Frontend
- Transport; Sat, 19 Oct 2024 06:06:08 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- AMS0EPF0000019E.mail.protection.outlook.com (10.167.16.250) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8069.17 via Frontend Transport; Sat, 19 Oct 2024 06:06:08 +0000
-Received: from n9w6sw14.localnet (192.168.54.11) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Sat, 19 Oct
- 2024 08:06:07 +0200
-From: Christian Eggers <ceggers@arri.de>
-To: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
-	<alisa.roman@analog.com>, Peter Rosin <peda@axentia.se>, Paul Cercueil
-	<paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>, Matteo Martelli
-	<matteomartelli3@gmail.com>
-CC: <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-pm@vger.kernel.org>, Matteo Martelli
-	<matteomartelli3@gmail.com>
-Subject: Re: [PATCH v4 5/5] iio: as73211: copy/release available integration times to
- fix race
-Date: Sat, 19 Oct 2024 08:06:06 +0200
-Message-ID: <2721272.vuYhMxLoTh@n9w6sw14>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
-References: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
- <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31E51DE3B8;
+	Sat, 19 Oct 2024 08:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729326622; cv=none; b=oCLCl3WHjXMETuRLDf2iI0edE7eoo6u+dTkHogb1B/2CJKvw9hfNolsaOrQrUHqQt5/Iv6aYfMsxk+sXjDN3tuhH0X9F7tL9D9UVinIxLQqFKjtXEQaXz28LOS6B4p/CNbgH3E2GE1+cXVNNiAUa2aKTRTE53hnCT9y4AnQ2Xds=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729326622; c=relaxed/simple;
+	bh=wTzKEK+zguBgJkUF22dXSocOn+at58n7Xma9AE7SZIc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I3Yj/6eCfa+FSqCYNM1162DRkVHrjcIlNZrTf6P1CszjzBGCmfpj0aQDq4R5JwD5fJyjBfXIi68Fencb2STqFZzRNM20YyICCV3h9KTke4qFCfU4deb/5mgGmZ9vdT4j/sv0Apv7JIIgx7Wx6z0nFy5AB/9bQnMuQxk43OkO+0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ORUMewL+; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49J805p3030117;
+	Sat, 19 Oct 2024 08:29:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=emllR5JbPryq2TscDbpDv5cW
+	SwVM0+1pn14ciuws77o=; b=ORUMewL+t29qNQUByzmn/UrHs2WSjgY3CzAo/A8B
+	ES+WXGn7JXLm1rS2HrpdzDm2cRlCW4ku18nZ9+GpT5D6VCggPuX4aH3PT7SMTDbf
+	8lbPSUDot1yhi3XONHNXv8R1+aq4sx+0cHdEwts8JNvYhy6hI6dK0Y9Xszmysl/6
+	IxH2KMJgqqwJZJZt4X/VR7qAvTiPnlZZltc6zKEMGN96nhtUoEuPjnFwRgAz7qKD
+	krzzVgCgpjwysFyBWlqBIBxY9fXF4Sv0+Ttxzec+bpJC1xRI3k95xBaZiC6XNZaP
+	Rx4KyUCuw0uSTy51gabOqhj2L7aMIF5FWQ9CZz1hRe81sA==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6sj87r9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 19 Oct 2024 08:29:56 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49J8TtIm015223
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 19 Oct 2024 08:29:55 GMT
+Received: from hu-akhilpo-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sat, 19 Oct 2024 01:29:48 -0700
+Date: Sat, 19 Oct 2024 13:59:44 +0530
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+	<nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH RFC 3/3] arm64: dts: qcom: x1e80100: Add ACD levels for
+ GPU
+Message-ID: <20241019082944.w2xnks54i34vj4qx@hu-akhilpo-hyd.qualcomm.com>
+References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
+ <20241012-gpu-acd-v1-3-1e5e91aa95b6@quicinc.com>
+ <5axuqj4hetfkgg2f53ph4um24b7xfyumktreglxqyzfsdhy25e@deucq7vqxq5l>
+ <20241015193540.mcpp2dvkmikruncj@hu-akhilpo-hyd.qualcomm.com>
+ <921d3a39-d95c-4156-b376-44e8dc6a6467@kernel.org>
+ <20241017061217.mmq27egyg5cdlubb@hu-akhilpo-hyd.qualcomm.com>
+ <9ac861ae-b0b1-4f7a-a002-7d2048132ef3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF0000019E:EE_|DBBPR07MB7612:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3e0eb9a-352a-4005-ee83-08dcf0041fc5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|7416014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KRbci8JN6rdGqzNpJI65wMwLI6QkxfU9ihdK0rHVtXMeS4haL0Zrgnyy77Si?=
- =?us-ascii?Q?yv/Cs5zjRgsCyDHY5+SG2uxSb16I2bhg9EsNvrjZYkzXHcofyvr+gdSgk+0k?=
- =?us-ascii?Q?RBPprAcTOe/QdC3ET4kkBYAacubliiuv3Cbkc8wYuyISALlxM8jgZ6qT1+8q?=
- =?us-ascii?Q?lFHloJUtFirSNz8rtuQuWbmCuAT8HJsPDTiLDiHeDxjWCHgUisq1zUQAtWC/?=
- =?us-ascii?Q?2x3UWSkLzqJp7CBTYkKTz3P/UuyB4xre11q2ByNWYJxub4qijV3SWh0nQyxH?=
- =?us-ascii?Q?GqwjQveG3JgGo89IGaxxb8B53eH9fCP8XSfH0QgKAjE5XGY1XSidf0zQQixy?=
- =?us-ascii?Q?b7FRI5bSEp5226MWEEzirgNsbxZcrtpAR92BfqsNoyMXauqz8z6CFoXVMM2b?=
- =?us-ascii?Q?GOnsaNkdvLytuRANK34MNjx+Gm9WUStPakGwbk7r84ypuSd4zQPw1h1ny807?=
- =?us-ascii?Q?/mn7LsVe5/KBVZv3wxdGXgmq7tOLMucFyJfCDJv+ulUikm3nI6mg7VgzWcAt?=
- =?us-ascii?Q?0qYKQWIU9+aiupRxkVJlIvzuqQ7mlQZu//MqHLYWtYLxhwmQadow90LPYdfy?=
- =?us-ascii?Q?vki+k3CO2IVO/9WMiIgfLHkekpxfQwIs8G0HKMux+4vxI4GQ5G0QZ06iYn9S?=
- =?us-ascii?Q?K4hP4iYOYRIV5+EpxrXlG3N8bzKRURSFt2eNhaQunuGY7/CSuFhGxjswjfxy?=
- =?us-ascii?Q?HGrP/oMECRcg3LzMm513xWTn0tn8ZQG5diq/0GEOwjXPCX5+KT8jeFjbC/Bd?=
- =?us-ascii?Q?6gpJ2A795Ir22VSMuSGYjOB3tJI+lTDTBAZ16Yrr8/XnbkZP1T++h9xtSCDp?=
- =?us-ascii?Q?Gf38nmuBQP4ccsFaRauzd+zq+o8vzSMeDPnHjZZ9zVICTviHVbYgPvnLD4a7?=
- =?us-ascii?Q?/Ge7EGKc2Sot93u5HWIgZ+wrb5U8/pPgcesq1ADhAtwtCcN1GpKZRgtg7QOa?=
- =?us-ascii?Q?/tKqUdiGAE4YZuSHJ6XKmiX79KuWn3z0j/8bJ3+4THINqJS5v7+KNg106c/3?=
- =?us-ascii?Q?NZELmdv+BM5nyRjYgwtmY6kvPxClOFZYQCz0P6GI9VNOK2mtrcCjldl0mH+c?=
- =?us-ascii?Q?nzi4uNCTOg3lXDA3mrO9b/8okt8ZoPyH/GAdYSsmSXWiQJ+awJKiNZRwHU3A?=
- =?us-ascii?Q?/RJNRzSXU1RBuO/81TEAbVMji9qw/id2CbiYl+nQ9lVqcJr9y8di3n5kVumP?=
- =?us-ascii?Q?kq6cpt+/aMPPfEcGZ6eSwP24OLB6T0GzNuMr/C6d3vFX71Qh8RvSP0B5wwxT?=
- =?us-ascii?Q?42MtpJ4EUTjlnWJc7x7W6hjxih6o4jQwwAhDQ81R9HlOrppse90y+xEuSfD5?=
- =?us-ascii?Q?IihjwUs72pBJGnK/cAnkEB0JxU3bXrrh9WMgz88QLNKyxJSJ9XASVfKj0cRJ?=
- =?us-ascii?Q?GvKx1J7Zs95xNTErEynVP2BYTIGgSgWHQxbPWSDmjgd46M9Iag=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2024 06:06:08.2899
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3e0eb9a-352a-4005-ee83-08dcf0041fc5
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF0000019E.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR07MB7612
+Content-Disposition: inline
+In-Reply-To: <9ac861ae-b0b1-4f7a-a002-7d2048132ef3@kernel.org>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gCOussZQS0CKV-Lk2cyLze9bBgMj7q8d
+X-Proofpoint-ORIG-GUID: gCOussZQS0CKV-Lk2cyLze9bBgMj7q8d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 phishscore=0 mlxlogscore=289 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2410190059
 
-On Friday, 18 October 2024, 12:16:44 CEST, Matteo Martelli wrote:
-> While available integration times are being printed to sysfs by iio core
-> (iio_read_channel_info_avail), the sampling frequency might be changed.
-> This could cause the buffer shared with iio core to be corrupted. To
-> prevent it, make a copy of the integration times buffer and free it in
-> the read_avail_release_resource callback.
+On Thu, Oct 17, 2024 at 09:05:50AM +0200, Krzysztof Kozlowski wrote:
+> On 17/10/2024 08:12, Akhil P Oommen wrote:
+> > On Wed, Oct 16, 2024 at 09:50:04AM +0200, Krzysztof Kozlowski wrote:
+> >> On 15/10/2024 21:35, Akhil P Oommen wrote:
+> >>> On Mon, Oct 14, 2024 at 09:40:13AM +0200, Krzysztof Kozlowski wrote:
+> >>>> On Sat, Oct 12, 2024 at 01:59:30AM +0530, Akhil P Oommen wrote:
+> >>>>> Update GPU node to include acd level values.
+> >>>>>
+> >>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> >>>>> ---
+> >>>>>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 11 ++++++++++-
+> >>>>>  1 file changed, 10 insertions(+), 1 deletion(-)
+> >>>>>
+> >>>>> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> >>>>> index a36076e3c56b..e6c500480eb1 100644
+> >>>>> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> >>>>> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> >>>>> @@ -3323,60 +3323,69 @@ zap-shader {
+> >>>>>  			};
+> >>>>>  
+> >>>>>  			gpu_opp_table: opp-table {
+> >>>>> -				compatible = "operating-points-v2";
+> >>>>> +				compatible = "operating-points-v2-adreno";
+> >>>>
+> >>>> This nicely breaks all existing users of this DTS. Sorry, no. We are way
+> >>>> past initial bringup/development. One year past.
+> > 
+> > How do I identify when devicetree is considered stable? An arbitrary
+> > time period doesn't sound like a good idea. Is there a general consensus
+> > on this?
+> > 
+> > X1E chipset is still considered under development at least till the end of this
+> > year, right?
 > 
-> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
-> ---
->  drivers/iio/light/as73211.c | 25 +++++++++++++++++++++----
->  1 file changed, 21 insertions(+), 4 deletions(-)
+> Stable could be when people already get their consumer/final product
+> with it. I got some weeks ago Lenovo T14s laptop and since yesterday
+> working fine with Ubuntu:
+> https://discourse.ubuntu.com/t/ubuntu-24-10-concept-snapdragon-x-elite/48800
 > 
-> diff --git a/drivers/iio/light/as73211.c b/drivers/iio/light/as73211.c
-> index be0068081ebbbb37fdfb252b67a77b302ff725f6..c4c94873e6a1cc926cfb724d906b07222773c43f 100644
-> --- a/drivers/iio/light/as73211.c
-> +++ b/drivers/iio/light/as73211.c
-> @@ -108,7 +108,8 @@ struct as73211_spec_dev_data {
->   * @creg1:  Cached Configuration Register 1.
->   * @creg2:  Cached Configuration Register 2.
->   * @creg3:  Cached Configuration Register 3.
-> - * @mutex:  Keeps cached registers in sync with the device.
-> + * @mutex:  Keeps cached registers in sync with the device and protects
-> + *          int_time_avail concurrent access for updating and reading.
->   * @completion: Completion to wait for interrupt.
->   * @int_time_avail: Available integration times (depend on sampling frequency).
->   * @spec_dev: device-specific configuration.
-> @@ -493,17 +494,32 @@ static int as73211_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec co
->  		*type = IIO_VAL_INT;
->  		return IIO_AVAIL_LIST;
->  
-> -	case IIO_CHAN_INFO_INT_TIME:
-> +	case IIO_CHAN_INFO_INT_TIME: {
->  		*length = ARRAY_SIZE(data->int_time_avail);
-> -		*vals = data->int_time_avail;
->  		*type = IIO_VAL_INT_PLUS_MICRO;
-> -		return IIO_AVAIL_LIST;
->  
-> +		guard(mutex)(&data->mutex);
-> +
-> +		*vals = kmemdup_array(data->int_time_avail, *length,
-> +				      sizeof(int), GFP_KERNEL);
-> +		if (!*vals)
-> +			return -ENOMEM;
-> +
-> +		return IIO_AVAIL_LIST;
-> +	}
->  	default:
->  		return -EINVAL;
->  	}
->  }
->  
-> +static void as73211_read_avail_release_res(struct iio_dev *indio_dev,
-> +					   struct iio_chan_spec const *chan,
-> +					   const int *vals, long mask)
-> +{
-> +	if (mask == IIO_CHAN_INFO_INT_TIME)
-> +		kfree(vals);
-> +}
-> +
->  static int _as73211_write_raw(struct iio_dev *indio_dev,
->  			       struct iio_chan_spec const *chan __always_unused,
->  			       int val, int val2, long mask)
-> @@ -699,6 +715,7 @@ static irqreturn_t as73211_trigger_handler(int irq __always_unused, void *p)
->  static const struct iio_info as73211_info = {
->  	.read_raw = as73211_read_raw,
->  	.read_avail = as73211_read_avail,
-> +	.read_avail_release_resource = as73211_read_avail_release_res,
->  	.write_raw = as73211_write_raw,
->  };
->  
+> All chipsets are under development, even old SM8450, but we avoid
+> breaking it while doing that.
+> 
+I still have questions about the practicality especially in IoT/Auto chipsets,
+but I will try to get it clarified when I face them.
+
+I will go ahead and send out the v2 series addressing the suggestions.
+
+-Akhil.
+
 > 
 > 
-
-Thanks for fixing this.
-
-Tested-by: Christian Eggers <ceggers@arri.de>
-
-
-
+> Best regards,
+> Krzysztof
+> 
 
