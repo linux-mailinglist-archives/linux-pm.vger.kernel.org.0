@@ -1,83 +1,168 @@
-Return-Path: <linux-pm+bounces-16021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AEF59A4DA9
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 14:07:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 766729A4DD6
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 14:43:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFCABB259EE
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 12:07:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F350B25D87
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2024 12:43:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925451E0497;
-	Sat, 19 Oct 2024 12:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C5C1E009C;
+	Sat, 19 Oct 2024 12:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XujOr3JA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+uj0LNc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551E41917E4;
-	Sat, 19 Oct 2024 12:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87802629D;
+	Sat, 19 Oct 2024 12:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729339656; cv=none; b=lwnjPdxDaA1IqkcRMaQ1gSqrKfqDBdAEDLteo1tLTcCp8PxoSMvhvqbbPPBglpaeIB18iLmSZnS0JgVNDpUsjp0C2K7L/zRQjFmylPejZs4WtJpo9HNrtq7AoWNLyNGOnTPE3MAM9UyhH2mDoPfKzUfnEu3rrl0THFQ2DTtZ4KY=
+	t=1729341796; cv=none; b=TKAAqcMytyU7WolFKGHT3Xhg9gzqgEvztwHuKLKw+0zoJV0gs1vE82R4H0LHCRWCU5t+7xsreznP3bWvje5oECqm+pq1B8ySQnjsmP4BL52F8qJ9bzCsXIUgSdYxUIPqLTbFhUo7WwzU1tri2iKNUHgM8RbQScISgrpZsiv+eok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729339656; c=relaxed/simple;
-	bh=XMU5vMblnxpY3oDtwaA2eTHZOans/yr06uh4/zpbhX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ITlnY7IwzALFFQPtT4zONOpFiZUZKCqGUbVDqCrY2IjM8cPfsf1sFUzqc3q9+9eLIcvJmGEiIr2H2HgYGZvGKGJ9mHsrWZzoHLEHddKDwjDbrOQ/e63okkypxX6TiAMWoPP80GWxYWvRzd1W0bUjKaeV5K7IeWgmX3PJIuBkE4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XujOr3JA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9F5C4CEC5;
-	Sat, 19 Oct 2024 12:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729339655;
-	bh=XMU5vMblnxpY3oDtwaA2eTHZOans/yr06uh4/zpbhX0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XujOr3JACR8UKLh9hYZFA6NZM2KBqppF8I4rpjSpbF0AKa01oA477sAxPHTneEA+T
-	 3BtA7jxNFZ4qG8ijSjvevKS1W4T3Sz1G3SkHNLuB/7SdwajSiGPILN8YyO6uHjgERY
-	 W2LcPYjSPFD0mA/UH51l4MNNDJC+Chy/rpH9P68H5mccBUkqjSIRSH002Kjr9iFuJt
-	 JAqWw3MsDEVGcMMKECGMw/BH/7N3WhPqWeVi1GntxJpDSG35Iu0yE3Srwxbkx0gI8H
-	 gVxw2gbLNEpFKlEUwR6IeAG7G8GoE57Kaq19gEpNCJzq1N1wLd40DNHAKuZOPdplgy
-	 9XALvVhk4q4zQ==
-Date: Sat, 19 Oct 2024 13:07:26 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Matteo Martelli <matteomartelli3@gmail.com>
-Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
- <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin
- <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
- <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 0/5] iio: fix possible race condition during access
- of available info lists
-Message-ID: <20241019130726.336a76d7@jic23-huawei>
-In-Reply-To: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
-References: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729341796; c=relaxed/simple;
+	bh=GCbkQiCCMKqEcJmM4aFS45i6RcNkOzlh+2Z+T0yQros=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kX1DFkzv4iFSUu70CRSBWa1Mo02Zr/4deh6o3uM68BNhxaar1L4sFvtCq3DKw/OTR1Jg5dPdBqh8E21hB0Zi2Ys5GOtEHEdntv8hgUwdWdmfjMjGiNxJ02nJpP8/f9m225YqntOuj8jNIYy4+kEmO0Eg20K8KPUlcbqRpvK6tZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+uj0LNc; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20c9978a221so35711165ad.1;
+        Sat, 19 Oct 2024 05:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729341794; x=1729946594; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTPLw4mbvudBDdndIwqX0EgEn9opTe0HakiCP5Mrd3o=;
+        b=f+uj0LNc07wrrbxmPWnqLKhEHYlguC+oRGBlCowrewDVEEvnwHUCIkN2Wfx+K9wWWw
+         q7/riVF1D0iuFldeqHM4qf0zEXXbeDcr0zs4OZGvMINac2snIUgLU9VXcYEXyEVJUQMc
+         VAwTv8cSX2L8KeIvJilgH5B5H6F0DaFfm6gAMRtHtQ1nNcgR7R+GEbyXDwdLnIX3O05b
+         GSw2gECYE6JfjOrR0gC+C9/sPbjrcC4v3i5fNbEG/FnlI7SJ4g9r/ebKteCHlbEs47bA
+         PwS1IhJvFQuK7P5c8E9QBZbsHPVd93xkPS5mIzrsZsJYdl0X4hIdWjNfiPqPUCY0ccWI
+         27Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729341794; x=1729946594;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hTPLw4mbvudBDdndIwqX0EgEn9opTe0HakiCP5Mrd3o=;
+        b=ON+9q4ilxEcRRGJU/DmcylcOcV44TkriCZgbrYGBP0ZR3itAmKr/GUVTZDQtDbhArs
+         Hv/bDHAZWQSdkrmPuj635VxeoaVNm7ElJitmSq3HIQPA0kONi/ggWcljRf+OyjS/VOpZ
+         +9PBKzcQwjtZAiSPU4FOFDTo9cGd9Jv8fNueSv0D3njbOJrBaniVdHceAozHbFagxuTC
+         wTibHWV8QNCiH1GeUohmccDMmSL0Spqir0lGA0ym2xQwCzxID9MO5m4UKhw2yQd4/wc/
+         mjssOeXwVBFf90g/9e65cMUBnw0iy3vEWdU2zyddOout+3GUOuqv0/bTv2TXizyZY4Vg
+         7PEQ==
+X-Gm-Message-State: AOJu0YyDAOkYCAt3zvWbrFnRlPimcUHUk0jK+Jk06VoWUcHCFz/1FKOK
+	c2qa+YApU+bF5Uecyanz3ZcTcBRo1IavpbAqr67fby0aC1N1WKCG
+X-Google-Smtp-Source: AGHT+IGXy72rqnIuR9mCgk6ykiptdauTnKZPgHwcjrZldo3SbHRED6L3mR58z5gcIlocw3/QtDHfLA==
+X-Received: by 2002:a17:902:ce87:b0:20c:9c09:8280 with SMTP id d9443c01a7336-20e5a92a675mr69776725ad.54.1729341793862;
+        Sat, 19 Oct 2024 05:43:13 -0700 (PDT)
+Received: from vishnu-pc ([120.61.204.118])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e5a90fcc3sm27098575ad.266.2024.10.19.05.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2024 05:43:13 -0700 (PDT)
+From: Vishnu Sanal T <t.v.s10123@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	trenn@suse.com,
+	shuah@kernel.org,
+	jwyatt@redhat.com,
+	jkacur@redhat.com,
+	Vishnu Sanal T <t.v.s10123@gmail.com>
+Subject: [PATCH] implement set_enabled functions on powercap.c
+Date: Sat, 19 Oct 2024 18:12:34 +0530
+Message-ID: <20241019124233.194140-2-t.v.s10123@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 18 Oct 2024 12:16:39 +0200
-Matteo Martelli <matteomartelli3@gmail.com> wrote:
+Implement the functions sysfs_set_enabled, powercap_set_enabled,
+and powercap_zone_set_enabled on powercap.c.
 
-> Some iio drivers currently share an available info list buffer that
-> might be changed while iio core prints it to sysfs. This could cause the
-> buffer shared with iio core to be corrupted. However, note that I was
-> able to trigger the race condition only by adding a delay between each
-> sysfs_emit_at calls in the iio_format_list() to force the concurrent
-> access to the shared available list buffer.
+Signed-off-by: Vishnu Sanal T <t.v.s10123@gmail.com>
+---
+ tools/power/cpupower/lib/powercap.c | 43 +++++++++++++++++++++++++----
+ 1 file changed, 37 insertions(+), 6 deletions(-)
 
-Other than the 'rules' developing around cleanup.h usage, the series looks
-good to me.  Sadly that stuff is a can of worms for the unwary (and for
-various reasons the usage doc got lost so the guidance is not quite in yet)!
+diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+index 94a0c69e55ef..1cf2b0de5536 100644
+--- a/tools/power/cpupower/lib/powercap.c
++++ b/tools/power/cpupower/lib/powercap.c
+@@ -70,6 +70,29 @@ static int sysfs_get_enabled(char *path, int *mode)
+ 	return ret;
+ }
+ 
++static int sysfs_set_enabled(char *path, int mode)
++{
++	int fd;
++	char yes_no = (char) (mode + '0');
++	int ret = 0;
++
++	fd = open(path, O_RDWR);
++	if (fd == -1) {
++		ret = -1;
++		goto out;
++	}
++
++	if (write(fd, &yes_no, 1) != 1) {
++		ret = -1;
++		goto out_close;
++	}
++
++out_close:
++	close(fd);
++out:
++	return ret;
++}
++
+ int powercap_get_enabled(int *mode)
+ {
+ 	char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
+@@ -77,12 +100,11 @@ int powercap_get_enabled(int *mode)
+ 	return sysfs_get_enabled(path, mode);
+ }
+ 
+-/*
+- * TODO: implement function. Returns dummy 0 for now.
+- */
+ int powercap_set_enabled(int mode)
+ {
+-	return 0;
++	char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
++
++	return sysfs_set_enabled(path, mode);
+ }
+ 
+ /*
+@@ -180,8 +202,17 @@ int powercap_zone_get_enabled(struct powercap_zone *zone, int *mode)
+ 
+ int powercap_zone_set_enabled(struct powercap_zone *zone, int mode)
+ {
+-	/* To be done if needed */
+-	return 0;
++	char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP;
++
++	if ((strlen(PATH_TO_POWERCAP) + strlen(zone->sys_name)) +
++	    strlen("/enabled") + 1 >= SYSFS_PATH_MAX)
++		return -1;
++
++	strcat(path, "/");
++	strcat(path, zone->sys_name);
++	strcat(path, "/enabled");
++
++	return sysfs_set_enabled(path, mode);
+ }
+ 
+ 
+-- 
+2.47.0
 
-Jonathan
 
