@@ -1,132 +1,130 @@
-Return-Path: <linux-pm+bounces-16053-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16054-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78D629A54CD
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2024 17:42:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E02729A568E
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2024 21:53:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 558C6B20F34
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2024 15:42:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 960B61F20EEC
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2024 19:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E933F193417;
-	Sun, 20 Oct 2024 15:42:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845BB19596F;
+	Sun, 20 Oct 2024 19:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ySIUH8mR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zb50/3Q+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D421DA21
-	for <linux-pm@vger.kernel.org>; Sun, 20 Oct 2024 15:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC82D194C92;
+	Sun, 20 Oct 2024 19:53:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729438970; cv=none; b=EB4x4FdHoJpgDG2phpVz7gEQSLesU2s0R0Vn53w8zTC/EIdjx7ap27i/ihahdhT7WtJuzrfaZrDRoXroxSGVtysgeQLEfTcnKBngP5ZXYXLlyXWv6MzW1Y9zGqLCMiU4vezIit1mUrtU4GY3hqE9EjkK5h4zGThCT6vHrS5DQig=
+	t=1729454001; cv=none; b=RS0uq1UC+c1WcysKI5iT3nf4/m7y4NBND/3AfhgeTiqhprRzjeFTNe481ZyL+i7pLji1aa0KxL+JIQfCfErdNoFCq0Sz+kdUDB01rkF5JYlkozfByv4/ueec5NabVH7mNdWxKAPQIzAXY5jRhinPDvpVt7hGfCvyIVjN05pgwPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729438970; c=relaxed/simple;
-	bh=mrrbItg7Fa3vwJSaxoBFSg8BtlpbfwsZ+YE9cz19utc=;
+	s=arc-20240116; t=1729454001; c=relaxed/simple;
+	bh=NUl5wLKfXrlmAITdUKRsm1jobjctTNRygTvb2ezjcr4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I2jMkk7D380Kx5u63Ufz6iQFBydchFPNNjkahdIjbH9mbDFUZTo8x2dKkAxX4ZRS1/35kLm/Ab4+iisbFle6JaEwpyO3fmWvOK5/WuAYHTDXbDp7+aKNmhjEkYMttV6/40RO0Pg5uEzoQ7F3rfwYvLElOe5tqqq/A9zbuJyxLls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ySIUH8mR; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a99eb8b607aso372777166b.2
-        for <linux-pm@vger.kernel.org>; Sun, 20 Oct 2024 08:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729438966; x=1730043766; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mrrbItg7Fa3vwJSaxoBFSg8BtlpbfwsZ+YE9cz19utc=;
-        b=ySIUH8mRjEmYLx4IB8m8HDo5/h8EmRPp5KdVNUkRDwyIsMw/bLJsBqVf2hKLTOKB9z
-         ZG7Ew3R4qzPBvNZjctsV9LI5WHFVGG7mLInlocs/NNn0tTpN2GDqs0D/23p5c4IrgiSZ
-         dZj9Lw8EjMXRTyMu9u0lJPIt9dwEQM1PccgmdK2Fg6w1ZMKGeATtHyRobBobNup+p2qw
-         73Xcs+x24kR51Hnz6nsXpxdv7gMRceJXFNWl4f/Zwfh4pG/4JuWTIH9vy/Y1+IUSUpDg
-         44aLVNAX3f9G1YcpaX0slZhR+8DiyFHtfOFD3mfucWCCXbG62vuPTQUZOw0uyei0RrKY
-         0Gww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729438966; x=1730043766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mrrbItg7Fa3vwJSaxoBFSg8BtlpbfwsZ+YE9cz19utc=;
-        b=UHQHXK3QoEmh2rPflEBXm0Yh1VZ8YeD0SbcFU1dcQqShY63vmEzert/XCxl6k83yZm
-         8VoeV52YTg8k15eBiL/CcbwxCqfUwLe8qCkpYa3d2x9zrE8uN09SaOax0be3nHkGoBzY
-         5otNIXjXLZSObP45ESmKA8gLGIFIctduke5qAmPGaoc77JKFbkKUyBQ024A8rJ/2X/2W
-         c/VOu3EyrP8udTF8WE1suwk/gykUjDZIbjnPn0V9Z+ThhnNbeIqTSnzMoYHh3FfltpHB
-         GeWADLUMGQ7km5AFxf2Agv+UgwnqSKZRuHYm0K27OhKCCCmx4R2X90SCUuvCnleR9Zni
-         M2UA==
-X-Forwarded-Encrypted: i=1; AJvYcCXPylFLrhOBR0Chq9z+zQNEKdYRMJjkaHkB1iovcz1Y7/fHtxFNMiDuRbnZqc6lpuZ2inBgPXdQHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVtneOH3KXfrMPyHK66iCqwabRr9Dtq1kDXYFMLtu2qXZmaSnK
-	HDo1QIBBJR3gShTdOThJVNCpp1abjDIugMBjdj6+ULYTuS4YjQ8eUTI3R4mxHJAx2njaw/8M6go
-	D
-X-Google-Smtp-Source: AGHT+IF6IJk1T6or/XVP4cIGVd1E3uyM7kluwzpSDn1ZEuSroTV3F89va7ZHyWQyAiJFhlaWtZ0T+A==
-X-Received: by 2002:a17:907:7f04:b0:a9a:1585:dd3b with SMTP id a640c23a62f3a-a9a69a680ddmr815339266b.21.1729438965548;
-        Sun, 20 Oct 2024 08:42:45 -0700 (PDT)
-Received: from localhost ([2a02:8071:b783:6940:2fbe:bcb5:676d:98da])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a912d623fsm101754266b.9.2024.10.20.08.42.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2024 08:42:44 -0700 (PDT)
-Date: Sun, 20 Oct 2024 17:42:41 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH] thermal: Switch back to struct platform_driver::remove()
-Message-ID: <xrrogvkxtepavpmxnfj7mlggv3lubrgzx4jobdq2rdzyzduczc@kyatfjnrb73j>
-References: <20241019163412.304422-2-u.kleine-koenig@baylibre.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=umqnRuk+g6svxKdzF907CTfc87ZnLqHukci6+A0sN0y7k+fr5/iRDHNXPoDFUBkD8Rrs8LS0v3HGW9Z/82U5WVCfKhrLJACaSTi8VPxqeyLjZ8nisVLO2wQhlGhpcnGPY/+riNshPeV7wvWUWOVQ+HXJLs6tv0UfXSqGZcgyoGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zb50/3Q+; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729453999; x=1760989999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NUl5wLKfXrlmAITdUKRsm1jobjctTNRygTvb2ezjcr4=;
+  b=Zb50/3Q+xQ9dioyQnBdpdIQDVXy6kPlFfDtVSgGaFbFB+rLgPGskZEnP
+   ODhCFAN6pg6LTofokMnjMPeVKEREWn5gLnmhuhCjhqeuaSc/Jp6yp3LKY
+   IJ1D+SJmqeNGN/KPyNcg4evsFV2BRkky8glCBLY6j8bc6Q7ZzgVVGcCP9
+   vftvLrBEQLThqgIjFHa7u1yctKVmntZfBPNZSO+TxGswtvOMM7gv3t5/+
+   SypeR3UmHr+uQBfyNPA0v66MIdvNuUqL5EVSFZ+yAbrJtDmRcFx9NadXi
+   BbFFHKCGHr5+NNd+zFtsdC2sj9QGrPEgQpNvwwa/pp+6IrX5ZTu2Om3vp
+   w==;
+X-CSE-ConnectionGUID: /4bZzvmVS52N8GCtJzwwvA==
+X-CSE-MsgGUID: JDa8pBFhS/qRfxwvOy5L5Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="16557546"
+X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
+   d="scan'208";a="16557546"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 12:53:18 -0700
+X-CSE-ConnectionGUID: Tc2MKGXrSiunSGsS93Nz/w==
+X-CSE-MsgGUID: uK0e0n9VTDK3tsFpNpMgHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
+   d="scan'208";a="78989802"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 20 Oct 2024 12:53:12 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t2bzC-000Qkv-01;
+	Sun, 20 Oct 2024 19:53:10 +0000
+Date: Mon, 21 Oct 2024 03:52:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Elliot Berman <quic_eberman@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Shivendra Pratap <quic_spratap@quicinc.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v6 5/5] arm64: dts: qcom: Add PSCI SYSTEM_RESET2 types
+ for sa8775p-ride
+Message-ID: <202410210333.KGHmzwGN-lkp@intel.com>
+References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-5-50cbe88b0a24@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pkxywnfv7d47k4dd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241019163412.304422-2-u.kleine-koenig@baylibre.com>
+In-Reply-To: <20241018-arm-psci-system_reset2-vendor-reboots-v6-5-50cbe88b0a24@quicinc.com>
 
+Hi Elliot,
 
---pkxywnfv7d47k4dd
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] thermal: Switch back to struct platform_driver::remove()
-MIME-Version: 1.0
+kernel test robot noticed the following build errors:
 
-Hello,
+[auto build test ERROR on 98f7e32f20d28ec452afb208f9cffc08448a2652]
 
-On Sat, Oct 19, 2024 at 06:34:11PM +0200, Uwe Kleine-K=F6nig wrote:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
->=20
-> Convert all platform drivers below drivers/thermalto use .remove(), with
+url:    https://github.com/intel-lab-lkp/linux/commits/Elliot-Berman/dt-bindings-power-reset-Convert-mode-properties-to-array/20241019-034308
+base:   98f7e32f20d28ec452afb208f9cffc08448a2652
+patch link:    https://lore.kernel.org/r/20241018-arm-psci-system_reset2-vendor-reboots-v6-5-50cbe88b0a24%40quicinc.com
+patch subject: [PATCH v6 5/5] arm64: dts: qcom: Add PSCI SYSTEM_RESET2 types for sa8775p-ride
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241021/202410210333.KGHmzwGN-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241021/202410210333.KGHmzwGN-lkp@intel.com/reproduce)
 
-while using this commit log as template for the next patch of this type
-I noticed a missing space in the line above. s/thermalto/thermal to/.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410210333.KGHmzwGN-lkp@intel.com/
 
-Would be great if this could be fixed up when applying, or should I
-resend with this fixed?
+All errors (new ones prefixed by >>):
 
-Best regards
-Uwe
+>> Error: arch/arm64/boot/dts/qcom/sa8775p-ride.dtsi:504.12-13 syntax error
+   FATAL ERROR: Unable to parse input tree
 
---pkxywnfv7d47k4dd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmcVJOwACgkQj4D7WH0S
-/k48VwgAgPgBaGfPB4Sexo8gle54LEQvWIAeSg/nVXKMbePE0FFNyM1Kamz2ze+z
-WAGRh2v5Dv34Qs4Oa3Z/UwprHIfqT8tYylWwZtEdo6J6OTq2XkCdf8oNgRLqlNPA
-O9oTpofcuUxl1hmQM6bikDuLaL0dpd2ZQHSAVeOSqrAqOiiueaHYra9yBmv35n0L
-jT/mLWFepujpsmPSGCWQtfogKr1mEJHK7iTFVbMoTtbyot7q0dK5OkRK82JqQH/B
-PPryONeS1bSgg4KWNfBKTNr8AXeDHbYb4bQnOrDSR7QR+CM0mDY8OIXyYeOcWbdy
-Axc+ACJoJJBSPa8pYwQkP164G42blA==
-=kwDH
------END PGP SIGNATURE-----
-
---pkxywnfv7d47k4dd--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
