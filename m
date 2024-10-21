@@ -1,117 +1,133 @@
-Return-Path: <linux-pm+bounces-16163-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16164-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5B7C9A9388
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 00:45:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3622C9A93A0
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 01:04:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F360B1C22DA3
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 22:45:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A32031F22CBB
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 23:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FAE1FF033;
-	Mon, 21 Oct 2024 22:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3949F1FEFD6;
+	Mon, 21 Oct 2024 23:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UulntUYq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA0A1FF027;
-	Mon, 21 Oct 2024 22:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3F91E2840;
+	Mon, 21 Oct 2024 23:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729550693; cv=none; b=GfJ1AlyL66FZR8PX93gz2uSXPPvWF834JvWzN0LtvRL10pWLqtdxAyAQ2OaFYXWHBbqLcM9M8aCPV8SgFgRwFKZY7HB+AJHihdLe7Q+2Gv7XVO+SWYfmZBwy1uBVIk/vrF5sl71DMCzuX/VCrp2wSIBqt/G6jKfpZifkPEnin3g=
+	t=1729551838; cv=none; b=lEFN93u6VM1S54fAinj9HDwejPFowgRUEgStSPWLoW+/ydGEg5ym3tY+oKlv16JVfVMIxbfvHDpwNIrswGY9uXQn/oJoQySVVxUZu03oHaBKW27B2Qekp3VglcidRxCNwpW83T33DtQYgYnY9mk7lc4ntdg6CqTgfw53qX4+pJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729550693; c=relaxed/simple;
-	bh=acAw/44I1oLwjeL5x81Va7waaF1wBIBcPPenBS0EQ7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SmJ1IgFPSmKQsak2xhXwDP0pu03apGB4C4mXCaWNzXMVcFmN5iwJY6l9QZkaOcxlrPfgMx6Wo6K3U22g9U092fNWu0E2ZP2JaVgOjeTjuZXTxZRdsNaFMpyrdeyvbp8Ilh41DPizWT1R++4iSEvNmq4xUFZJMB5uKt1mryrPo/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83AD4497;
-	Mon, 21 Oct 2024 15:45:20 -0700 (PDT)
-Received: from [10.57.65.103] (unknown [10.57.65.103])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B5B23F71E;
-	Mon, 21 Oct 2024 15:44:49 -0700 (PDT)
-Message-ID: <e77b2e7d-771e-40dc-8953-8f2cded7cb7f@arm.com>
-Date: Mon, 21 Oct 2024 23:45:59 +0100
+	s=arc-20240116; t=1729551838; c=relaxed/simple;
+	bh=wD0hmRmTZUqp0PKJmH8+a/bou63wvSt5Pm+QZwl+y44=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U6EP2j5i+kcf0WtSzy/q70UCDt39eKDiMaETgfKEpIYHbRenL+r69L4bBvwUAYdVKB69M63Kfl9kqzT9FLsHUdISHrMV2B3MoKSyVKpHFKcOXC/v/gYJFLq3HJdqbd1Lftp5ZWJS0YUJhtucvaXLpEJPhwMhMLi/wGKV1UMJmxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UulntUYq; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49LIeYoR020550;
+	Mon, 21 Oct 2024 23:03:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=ByC03Gijfdpnx/8ym05Seg
+	S4GuWvCxyuXb4cbLMvcis=; b=UulntUYqrpc2JPpvWB+Vo+2aVJRvyLdr+Mlw2b
+	AUlBNjFreZpsVVVmWjm1JMiQRu3hAmun3E4lDbWG1Q7TYZ5Bp2WcG/67XVzGjyB1
+	XY1qk/MoxQ7jKHPXPYj+O/KlrgeeVXldMA/37Tr/h3ZATsyHbhmYDvAYh/azb67e
+	OtDVurWDQpuSXizF/wqThja3JnsPgCJ74koX9CLJamKHRK2nsCjRgh/fSHI0SNyg
+	pXEqIr8Yo2lNP3m4Rh2T+H4cAYZROmmCUbo/eAMjdrxcnYIcUEpXEhtZaDxpQURk
+	ulMZfbFXZf936kRPSWqWYMDvF6OKn13TZtENT8YCkscvyfgw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6vxx8jd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 21 Oct 2024 23:03:47 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49LN3kpO010268
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 21 Oct 2024 23:03:46 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 21 Oct 2024 16:03:46 -0700
+From: Melody Olvera <quic_molvera@quicinc.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Tingguo Cheng
+	<quic_tingguoc@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>, Luca Weiss
+	<luca@lucaweiss.eu>,
+        =?UTF-8?q?Otto=20Pfl=C3=BCger?=
+	<otto.pflueger@abscue.de>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Bjorn Andersson
+	<quic_bjorande@quicinc.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "Abel Vesa" <abel.vesa@linaro.org>,
+        Jishnu Prakash
+	<quic_jprakash@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya
+ Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>
+Subject: [PATCH 0/3] pmdomain: qcom: Introduce power domains for SM8750
+Date: Mon, 21 Oct 2024 16:03:30 -0700
+Message-ID: <20241021230333.2632368-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/12] thermal: core: Fixes and cleanups, mostly
- related to thermal zone init and exit
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <2215082.irdbgypaU6@rjwysocki.net>
- <CAJZ5v0jYzw7hXaX+5AvO407d8vo725_-wHLQW6Q1fqXXJGSb6g@mail.gmail.com>
- <CAJZ5v0gEgr7Q49JSQQ37_2VbdXBTDPZmoYHuCSACJW_3gdmuwQ@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0gEgr7Q49JSQQ37_2VbdXBTDPZmoYHuCSACJW_3gdmuwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5cSEt40YkRU0LFeiLdBS9pf6tWlVLQJ2
+X-Proofpoint-GUID: 5cSEt40YkRU0LFeiLdBS9pf6tWlVLQJ2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ clxscore=1011 malwarescore=0 mlxlogscore=756 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410210163
 
-Hi Rafael,
+Add power domains needed for the SM8750 SoC.
 
-On 10/21/24 12:05, Rafael J. Wysocki wrote:
-> On Fri, Oct 11, 2024 at 8:50 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> On Fri, Oct 4, 2024 at 10:11 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->>>
->>> Hi Everyone,
->>>
->>> After posting the two series of thermal core patches for 6.13:
->>>
->>> https://lore.kernel.org/linux-pm/4920970.GXAFRqVoOG@rjwysocki.net/
->>>
->>> and
->>>
->>> https://lore.kernel.org/linux-pm/6100907.lOV4Wx5bFT@rjwysocki.net/
->>>
->>> before the 6.12 merge window, I have decided to reorder the changes included in
->>> these series, so that fixes and more significant cleanups (for example, changing
->>> they layout of data structures) go first, followed by the changes related to
->>> using guards for locking, and the optimization involving sorted lists becomes
->>> the last piece.
->>>
->>> This series is the first part and the majority of patches in it come from the
->>> second (RFC) series mentioned above.  Of course, they needed to be rebased to
->>> be applied in the new order.  It is on top of 6.12-rc1 with
->>>
->>> https://lore.kernel.org/linux-pm/12549318.O9o76ZdvQC@rjwysocki.net/
->>>
->>> applied and it will be added to my thermal-core-testing branch.  It is in v2
->>> to start with because all of the patches in it have already been posted in
->>> some form.
->>>
->>> The first 10 patches fix some potential issues related to thermal zone
->>> initialization and exit (for example, user space may start to interact with
->>> a thermal zone during its initialization before it's ready and system suspend
->>> taking place at a wrong time may skip a new thermal zone so it is not suspended)
->>> and do some cleanups related to that.  This concludes with the removal of the
->>> need_update field from struct thermal_zone_device.
->>>
->>> The last two patches move lists of thermal instances from thermal zones to
->>> trip point descriptors and clean up some code on top of that.
->>>
->>> Please refer to the individual patch changelogs for details.
->>
->> This material is now present in the thermal-core-testing and
->> thermal-core-experimental branches in linux-pm.git.
-> 
-> I gather that it is not controversial and it has been around for quite
-> a while, and it was discussed during the PM+TC session at the LPC, so
-> I've just applied it for 6.13.
+The Qualcomm Technologies, Inc. SM8750 SoC is the latest in the line of
+consumer mobile device SoCs. See more at:
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/images/company/news-media/media-center/press-kits/snapdragon-summit-2024/day-1/documents/Snapdragon8EliteProductBrief.pdf
 
-I hope it wasn't too late. The patch set looks good and I have
-added my reviewed tags.
+Jishnu Prakash (2):
+  dt-bindings: power: Add additional RPMh levels
+  pmdomain: qcom: rpmhpd: Add rpmhpd support for SM8750
 
-Regards,
-Lukasz
+Taniya Das (1):
+  dt-bindings: power: qcom,rpmpd: document the SM8750 RPMh Power Domains
+
+ .../devicetree/bindings/power/qcom,rpmpd.yaml |  1 +
+ drivers/pmdomain/qcom/rpmhpd.c                | 26 +++++++++++++++++++
+ include/dt-bindings/power/qcom-rpmpd.h        |  2 ++
+ 3 files changed, 29 insertions(+)
+
+
+base-commit: 63b3ff03d91ae8f875fe8747c781a521f78cde17
+-- 
+2.46.1
+
 
