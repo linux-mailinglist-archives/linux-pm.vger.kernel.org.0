@@ -1,117 +1,150 @@
-Return-Path: <linux-pm+bounces-16079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDCD19A668A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 13:25:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6ED9A668B
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 13:25:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F31A31C21178
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 11:25:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74CA7282D21
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 11:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18F941E5037;
-	Mon, 21 Oct 2024 11:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AD81E5731;
+	Mon, 21 Oct 2024 11:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyO5fFB8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ep4kxYow"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50ED198E6F
-	for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2024 11:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55707198E6F;
+	Mon, 21 Oct 2024 11:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729509913; cv=none; b=Qq5qKoXYsqitMer8OsBn41jPadUyyzSDGAbrAoVqxfJskj3Q7PzDRjSwczbKbeYp5+tWv/DgKuPshLVoyib/Z0En00ivyv29PYM4gti3TXRuSy2pyvKDFKn90W9YS+k8fSoGlQADuWbtWjspZrCVIQ8+xI8fNW1UGJXJC4HC1a0=
+	t=1729509953; cv=none; b=rfwJ3xL1lC/x4s4hmZJR85H4+IpPqk0cK4MsWR4bbMvnQoaaa+5Do/mkxLM1s5rS31orcDao5UdWeaybtMGqEbgcpiHDp7KWYREh83l15k3QbALgKer+NgoMHFPYKNpGEwVdh/B2Nnrbo1jTrkojDvh+hvQrJEO66IvwuEc8HuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729509913; c=relaxed/simple;
-	bh=dkMziRQuwM1+e9aIl91xc/6QsKx9OpO5FahTuMFhHhA=;
+	s=arc-20240116; t=1729509953; c=relaxed/simple;
+	bh=kidBKixLtnMuE9rR19t/2A2K9WwQ8lRlnp3CMuwuu8s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YLKnY3QqbmpsAD+j10b8Bg1eQfkGVuadG9Rgqc7Rf/gJbgh1/ZJ+BAcaQ5Jk5PIA11DXgpI9Pqht/DiuK84bbWXTERqTwhJvL+1yyNNxHHjxopwPfOR+5fEVPovtWPtnj7MrYiW20OQvy4Dw38+jXV2nN4uDy5UUetIyppbfp18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyO5fFB8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843ABC4CEC3
-	for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2024 11:25:12 +0000 (UTC)
+	 To:Cc:Content-Type; b=m+oxPh4VDsKokUD3nu9zLqj6w3+r12u+Jhl8WXMNFnoebDk+KhRtR9Akmc25Oey+vErnPAKGg7m2+3xq+K5ihopxKoLgCrpTuvVsuYXmv2abVhgi7XDyhPVb/CbfcPsHWgl0tWdkhzqP/Zp6npK3kbgyz08UNCUYL/Se67WNyvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ep4kxYow; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DF2C4CEE8;
+	Mon, 21 Oct 2024 11:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729509912;
-	bh=dkMziRQuwM1+e9aIl91xc/6QsKx9OpO5FahTuMFhHhA=;
+	s=k20201202; t=1729509953;
+	bh=kidBKixLtnMuE9rR19t/2A2K9WwQ8lRlnp3CMuwuu8s=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iyO5fFB846GlXYK+wrPzNvaa+8FXjdDhehA+4FfVwERaRC96gQlos5Vx/xPdqV+U6
-	 sOQXvkEQPr/QKP7bDhmT9oNn+kqDLQqagi0DZ4Adwdc9artMLoEJay3bPz3jZXFsJC
-	 cQfRWoyhz85tNsPhRTtdcb3W18i3rFXzuhGzmc1HF6PwQ/atI+mIE6+xIYkQIEpGvP
-	 1AuzhE05+rdVJz5AAxRlOAMWxTdKkQGkkQQT1QM9Xg5bvC5zgOZ9bn4Kdcj3vRUVc0
-	 Sywqyu8NltREiY0B3unmXVj7akPRqvgKUIg0sh2aTcawEM7W1AeNO9kgRGBMcBKYbU
-	 1LHoWRWGDYaMg==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2884a6b897cso2025389fac.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2024 04:25:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVgljbSymsBBKfzzSwtizT0ogK9C+nQgDG89Z101cTvGK0CCv7ZsThzikjjtTvpRblhhx2T6zM0CQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT8aAdQ4/XI3u2EUFshJeldQbZikZqiYfRKB8beXmQI1G4wOdh
-	WbwNa7HCtduPpWUjvvYJicWKzyClcNhjDArfuXhmnaKHPPO/I8CSXnNHvMEpZZ5I2j91I4gXRZT
-	dl3tR6hUUDX2beVlJh8J5MebxJqE=
-X-Google-Smtp-Source: AGHT+IFO9ySmzQAO+Ftl1R22wPOby6uIn5xeSZw64xmiXTVraPi/nsQEC97ewaqPr3E8VBmpGEIn1eJimVBtCfhmdM4=
-X-Received: by 2002:a05:6870:d202:b0:27c:a414:b907 with SMTP id
- 586e51a60fabf-2892c49e923mr8762418fac.33.1729509911774; Mon, 21 Oct 2024
- 04:25:11 -0700 (PDT)
+	b=Ep4kxYowAlls3QUxskCza2E5n0THxWIW3Ct+kM4AKuawXGkpYPH+s0isw9e3cP7kI
+	 dv0FusCzKoWCyHnlopUrz5eaFwRzXLTVGh9wM+g+uAwXBN1uF4sl7dbfayBVABJFvN
+	 G3iSTo7kF1Mx5Oe94ywOx6C7aR0876RRRv82PIhzMmVlUTd6NxcYky/7+S1Vu1kBjP
+	 iP9K3fl+p6wclj8xS7kh/Q5csUDj6wtGUleGUh4YnkbXBzSYFR9h1KhoMukA46X7H6
+	 gukiQUKNPpmZTReQVFpmlqgnJmyP10cAM7qmZILOgal5sBj3ObcwRzhRAw4jpI8LAv
+	 Fd9BvU9RSHUbw==
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-718065d6364so1879260a34.3;
+        Mon, 21 Oct 2024 04:25:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUlMtVJRGIRIGQWgZ7NcXKQgpBHPoN+NiEL6j0j+kwd+jBeqFea2OQPKo81xQt0K/aTZPIQ32XlUPxls4A=@vger.kernel.org, AJvYcCV/U1lqBQtMpQLqeCusovYpxJx498Ga2ddOlX/u+k/C852ZZux7q6CAHxpdCQI+orzwBG9gwp8c30g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzJxcrAECfWdw687upSkk2CWfLPPJYxDyVGlHJfLHhdUqc2nWR
+	xHDbglt56Gm/cOUvlkNd/y4b0nNBxsfzk0UQyHZBb4H5hsFw1FQwgByCNnCQ/MqDlywyMkxE7jx
+	ROt+B5SlMZHb6zzorDwasquumXds=
+X-Google-Smtp-Source: AGHT+IGFFNpp6aTsR4aUfp2235k+qBsJMEgTGd6S2hLn6tmVFPVkE1Gb+cptvWXlnAFq6hhnEDIFpZxK7Hfw4+METnY=
+X-Received: by 2002:a05:6870:440e:b0:277:f51d:3ed3 with SMTP id
+ 586e51a60fabf-2892c2def2emr8700988fac.16.1729509952304; Mon, 21 Oct 2024
+ 04:25:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241018021205.46460-1-yuancan@huawei.com> <c13e95ff-649d-4a43-a899-8f0088f3fc7f@arm.com>
-In-Reply-To: <c13e95ff-649d-4a43-a899-8f0088f3fc7f@arm.com>
+References: <46853b6e-bad5-4ace-9b23-ff157f234ae3@arm.com>
+In-Reply-To: <46853b6e-bad5-4ace-9b23-ff157f234ae3@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 21 Oct 2024 13:24:56 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hx1d5TJCQ9yrghtniUn1xhZrMouXzj60iaitHxw2S0xA@mail.gmail.com>
-Message-ID: <CAJZ5v0hx1d5TJCQ9yrghtniUn1xhZrMouXzj60iaitHxw2S0xA@mail.gmail.com>
-Subject: Re: [PATCH] powercap/dtpm_devfreq: Fix error check against dev_pm_qos_add_request()
-To: Lukasz Luba <lukasz.luba@arm.com>, Yuan Can <yuancan@huawei.com>
-Cc: daniel.lezcano@kernel.org, rafael@kernel.org, linux-pm@vger.kernel.org
+Date: Mon, 21 Oct 2024 13:25:36 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iBHEA3PPST1TxUbBrJKYxwb89GU6JzqRz1QkzmU_j_Uw@mail.gmail.com>
+Message-ID: <CAJZ5v0iBHEA3PPST1TxUbBrJKYxwb89GU6JzqRz1QkzmU_j_Uw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: docs: Reflect latency changes in docs
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Qais Yousef <qyousef@layalina.io>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-pm <linux-pm@vger.kernel.org>, 
+	"corbet@lwn.net" <corbet@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 18, 2024 at 10:23=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
+On Fri, Oct 18, 2024 at 12:00=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
 >
-> Hi Yuan,
+> There were two changes related to transition latency recently.
+> Namely commit e13aa799c2a6 ("cpufreq: Change default transition delay
+> to 2ms") and
+> commit 37c6dccd6837 ("cpufreq: Remove LATENCY_MULTIPLIER").
 >
-> On 10/18/24 03:12, Yuan Can wrote:
-> > The caller of the function dev_pm_qos_add_request() checks again a non
-> > zero value but dev_pm_qos_add_request() can return '1' if the request
-> > already exists. Therefore, the setup function fails while the QoS
-> > request actually did not failed.
-> >
-> > Fix that by changing the check against a negative value like all the
-> > other callers of the function.
-> >
-> > Fixes: e44655617317 ("powercap/drivers/dtpm: Add dtpm devfreq with ener=
-gy model support")
-> > Signed-off-by: Yuan Can <yuancan@huawei.com>
-> > ---
-> >   drivers/powercap/dtpm_devfreq.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/powercap/dtpm_devfreq.c b/drivers/powercap/dtpm_de=
-vfreq.c
-> > index f40bce8176df..d1dff6ccab12 100644
-> > --- a/drivers/powercap/dtpm_devfreq.c
-> > +++ b/drivers/powercap/dtpm_devfreq.c
-> > @@ -178,7 +178,7 @@ static int __dtpm_devfreq_setup(struct devfreq *dev=
-freq, struct dtpm *parent)
-> >       ret =3D dev_pm_qos_add_request(dev, &dtpm_devfreq->qos_req,
-> >                                    DEV_PM_QOS_MAX_FREQUENCY,
-> >                                    PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> > -     if (ret) {
-> > +     if (ret < 0) {
-> >               pr_err("Failed to add QoS request: %d\n", ret);
-> >               goto out_dtpm_unregister;
-> >       }
+> Both changed the defaults / maximums so let the documentation
+> reflect that.
 >
-> Good catch thanks!
-> Indeed in the doc of that API there is '1' as return value.
-> I will check other places of that QoS usage.
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>  Documentation/admin-guide/pm/cpufreq.rst | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 >
+> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/adm=
+in-guide/pm/cpufreq.rst
+> index fe1be4ad88cb..a21369eba034 100644
+> --- a/Documentation/admin-guide/pm/cpufreq.rst
+> +++ b/Documentation/admin-guide/pm/cpufreq.rst
+> @@ -425,8 +425,8 @@ This governor exposes only one tunable:
 >
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>  ``rate_limit_us``
+>         Minimum time (in microseconds) that has to pass between two conse=
+cutive
+> -       runs of governor computations (default: 1000 times the scaling dr=
+iver's
+> -       transition latency).
+> +       runs of governor computations (default: 1.5 times the scaling dri=
+ver's
+> +       transition latency or the maximum 2ms).
+>
+>         The purpose of this tunable is to reduce the scheduler context ov=
+erhead
+>         of the governor which might be excessive without it.
+> @@ -474,17 +474,17 @@ This governor exposes the following tunables:
+>         This is how often the governor's worker routine should run, in
+>         microseconds.
+>
+> -       Typically, it is set to values of the order of 10000 (10 ms).  It=
+s
+> -       default value is equal to the value of ``cpuinfo_transition_laten=
+cy``
+> -       for each policy this governor is attached to (but since the unit =
+here
+> -       is greater by 1000, this means that the time represented by
+> -       ``sampling_rate`` is 1000 times greater than the transition laten=
+cy by
+> -       default).
+> +       Typically, it is set to values of the order of 2000 (2 ms).  Its
+> +       default value is to add a 50% breathing room
+> +       to ``cpuinfo_transition_latency`` on each policy this governor is
+> +       attached to. The minimum is typically the length of two scheduler
+> +       ticks.
+>
+>         If this tunable is per-policy, the following shell command sets t=
+he time
+> -       represented by it to be 750 times as high as the transition laten=
+cy::
+> +       represented by it to be 1.5 times as high as the transition laten=
+cy
+> +       (the default)::
+>
+> -       # echo `$(($(cat cpuinfo_transition_latency) * 750 / 1000)) > ond=
+emand/sampling_rate
+> +       # echo `$(($(cat cpuinfo_transition_latency) * 3 / 2)) > ondemand=
+/sampling_rate
+>
+>  ``up_threshold``
+>         If the estimated CPU load is above this value (in percent), the g=
+overnor
+> --
 
 Applied as 6.12-rc material, thanks!
 
