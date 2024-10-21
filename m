@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-16134-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24C139A71DE
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 20:05:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A349A71D4
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 20:05:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9684F1F2212E
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 18:05:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3321F1F213D5
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 18:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E17241FBF76;
-	Mon, 21 Oct 2024 18:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA061FBC9B;
+	Mon, 21 Oct 2024 18:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jXB2iAs4"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aB5E9h0S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2051.outbound.protection.outlook.com [40.107.236.51])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2041.outbound.protection.outlook.com [40.107.102.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C95E1FB3CB;
-	Mon, 21 Oct 2024 18:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7950B1FAC52;
+	Mon, 21 Oct 2024 18:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729533811; cv=fail; b=N2iA5ZGLr1EzzPVrZDrO+6iHCmVwyVFAms4SxFjPtvY3GpLU6eNqE1XnShLPiMCg+rgrajuZ0+XLKZkOqWBGmqvwrVEq4MGUdW6FGG6X4uO7wMUoQrZ/rJVBVLmDRm1CopAD4zYQVjNNO1ftLXndPjRL6j54YZkb0PYSvaTjQDg=
+	t=1729533810; cv=fail; b=fW2OuXNRP//9/PKMcsjtGy+0/NmkEfoaSH6aN4m4sQoDYuiFF2qdw10sZd4HnfmfioutH8qGnJMvPYrOiA2GhbVcxiVccfXKvqRf14tZfpW/PjaT8mGnbUTN5pTbS6lo7t9yjh4TXMullIMSE9MzaZXSQH0iogAlaXu1HpECWiE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729533811; c=relaxed/simple;
-	bh=KPzuI8HE8WHHX/zzyZJkcJkbwtWd3Vvff/paWvnlU0U=;
+	s=arc-20240116; t=1729533810; c=relaxed/simple;
+	bh=WUMJ4tMFtI9aLeB6TwcfcVLz4Cw7Ep78f4agmYwg7+g=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZYu7YTq8531IGeCNkDmbPv+eYGZ+kGEYyjblVh64TatVWbcHZsnoiY3JDSrc1/SS1U4ql5fvCR4wbzd6/tXg1Rb4to66qyEkKaHfwym1sNUJ9AiL7xc86aaBSmQ5ZeTfJFq5JtQaEWru6rIcKMgh8PSRvxCnxEjQO8A6kZeRbY0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jXB2iAs4; arc=fail smtp.client-ip=40.107.236.51
+	 MIME-Version:Content-Type; b=ait7G2Mn1vO9HHGLMhVSuJcjpySjh6YW/175y+O4nevHEOkIIlZut3PuZf0s+JvhVmqHXwzDEKk5b9uhH+JsdzCCyAdx7BfX7Fg4/UyxGZ4gWcTbpqzgJcsLRzUyShvgT34vAkRs/1f4JqqSo7GnqRgeO2fO8Ty9VniAGHrOVuc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aB5E9h0S; arc=fail smtp.client-ip=40.107.102.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r9a6CBzwA0/Hgsf9r+RATgLysWPU438ErN5hLir/mlQ4pZ1y5AaoSt9/nDRTUPUbyPukVeeNW6kCcBxeGP872aJCMS7Byb8m7XsHdpIXFyNqByOp3KCSxvwdIiU0RMEMxc84CjFY0Pol+RqPKwbPcO71xLSeEnlnFMn2DcBWKgqY9gewPkIh9JIlY8B0gvC7eWKZfdMooYqbmAmN4BX7sUUvw+RFN9pYGL4V1pSVDDRjRPIscEU/riETGi5AibT/KWEynT+CX3bVK4BelteVvpkKEPSyfRyl5SkqnjbpXH0mIjjBh+LJntPOV+AfiR+pCFvpGn+8bbfGc6qhfgWHfg==
+ b=m5zOSGQX6iaN1v4srZ1XOtctnBhGhumI6PWwOfbtQFu/bthKQWCn31g9jOMMa7n/eeDHNLcSqiZcmopytQ8QWR+OY4WzxqOhwG3HUL/bZsglky6Z7kYfNiezcSOL4NrF/TGh4u0kkhNH08LKRk5egN5+vSISU+dTYIsOZT6hQvLMKs/pLaiOKJIbhTVRd23xjE9rIrPhzmL84EKCJuvj5NHAj0N2wQCVKnUwnytYS+PnFHUePbGmVKLtxv1xNNGMFuFGJT5bDoc9GG6MFCcmLIwk0bHIw5w3Aqbx8bYsaroF1l+kIGRuVsHn27GJURKVz0yxvArmnpxLqeCwE4iiHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xq4U4YF25FviaREC9j0lyNGCKcnYOubI1fSCJ0fcrQY=;
- b=rNX92IYpqJXWIXxYMitTFeR1kYaZfuQWwJs9rvl72rPNMKrMoJbAvlo6AFfzUQ1btDAUSz4SYPNQyNrJtoXUGtjoA61AtUV92tFky8Qu3EzdjDpunD9uKGdPIIwZaymaCJl3sZQWOd/bq0JKL8jUautkdTF/e3HZyY2Xgg55r9KF/35cWfYgEIaM2hEWXXoHdHwOblrJIbpBHqWSN4BhPpx+P5zKvv5imf57G0+t9qdr6iC3HVUtZTG+MJKhPGhJQGvIyiVetA21MGHYRQ70iM7EuWC6HEauJuj72Eq8TH5EQg63oiq1dgxDZa6nSXR22cWfS76HYKREcQrFltT1KQ==
+ bh=fG23CyCbUHpkJ8l2ycoJy26nAaExlnKcYSpDGGV/GEM=;
+ b=uEH3yB94trQ+eSZyFZDH2TAUiYKEWO76BH10c0qjLnXzmx16E4c4KpCoTJeC78YH6vraYFerXpkM2bBGcWd0MWTcpY71URkOIXS459IRAUf7vekX8Yl22Bajb7bsZFia8rR5/h8WbsWV4Nk9cBPu31c7V3QtYnMxoGrJ+cjwC2UkHWcQgAChBRw9dnORrA4MFcTGnYnmDsNSpcVh1aTh6cV0tSrqSNAJAuirEGOtBZ2NLJYqL187ZcGU4DuDIqjsdZCJsjsuVCkFZKRU7LZphBvBec31cz8wgm3kX2Lo8h1g/UbDjcM/po19jbYyV3I9B9JHtSOXwtEmzq4YTc1UKw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xq4U4YF25FviaREC9j0lyNGCKcnYOubI1fSCJ0fcrQY=;
- b=jXB2iAs43FlS3qOzs3A67ATLO7m9DALUVSFlr6/NTOmZzmNhckjMyyObNkO8ZfE1/wIRpmgetqU/KBsnN4cOnw0nJfgivlLkwnqBLXLobVsFB6OyyE2r7gQBo8Fxbo4+Nt6trCY/nzq48YEfjuoq62U4FC+s60kUM1sQ4u3dZw4=
-Received: from BY3PR05CA0049.namprd05.prod.outlook.com (2603:10b6:a03:39b::24)
- by CY8PR12MB7362.namprd12.prod.outlook.com (2603:10b6:930:52::5) with
+ bh=fG23CyCbUHpkJ8l2ycoJy26nAaExlnKcYSpDGGV/GEM=;
+ b=aB5E9h0STnYwlTKXhbDgz7t6xIhB5aAE8Q6lWfnv61tcWSR0EuQozLIoxkdd0/s9F6eT9Nnz7l6BUeuvX6km558AxgOs64Tn/+Moihup8ghDPSCq7nTNpSGhIj0dPYDGCfRy/A1nKp/UpcD+IjhytrZYRE82cg1mmomlPFz6A+4=
+Received: from BY3PR05CA0056.namprd05.prod.outlook.com (2603:10b6:a03:39b::31)
+ by MN2PR12MB4110.namprd12.prod.outlook.com (2603:10b6:208:1dd::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Mon, 21 Oct
- 2024 18:03:23 +0000
+ 2024 18:03:24 +0000
 Received: from SJ1PEPF000023D0.namprd02.prod.outlook.com
- (2603:10b6:a03:39b:cafe::49) by BY3PR05CA0049.outlook.office365.com
- (2603:10b6:a03:39b::24) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:a03:39b:cafe::1d) by BY3PR05CA0056.outlook.office365.com
+ (2603:10b6:a03:39b::31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.15 via Frontend
- Transport; Mon, 21 Oct 2024 18:03:23 +0000
+ Transport; Mon, 21 Oct 2024 18:03:24 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,7 +65,7 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SJ1PEPF000023D0.mail.protection.outlook.com (10.167.244.4) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8093.14 via Frontend Transport; Mon, 21 Oct 2024 18:03:23 +0000
+ 15.20.8093.14 via Frontend Transport; Mon, 21 Oct 2024 18:03:24 +0000
 Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 21 Oct
@@ -77,10 +77,10 @@ CC: <x86@kernel.org>, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, "Mario
  Limonciello" <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>,
 	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
 	<linux-pm@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>, "Shyam
- Sundar S K" <Shyam-sundar.S-k@amd.com>, Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v4 09/13] platform/x86: hfi: add power management callback
-Date: Mon, 21 Oct 2024 13:02:48 -0500
-Message-ID: <20241021180252.3531-10-mario.limonciello@amd.com>
+ Sundar S K" <Shyam-sundar.S-k@amd.com>
+Subject: [PATCH v4 10/13] x86/process: Clear hardware feedback history for AMD processors
+Date: Mon, 21 Oct 2024 13:02:49 -0500
+Message-ID: <20241021180252.3531-11-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241021180252.3531-1-mario.limonciello@amd.com>
 References: <20241021180252.3531-1-mario.limonciello@amd.com>
@@ -96,121 +96,175 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D0:EE_|CY8PR12MB7362:EE_
-X-MS-Office365-Filtering-Correlation-Id: 329e59bd-5729-4a9f-d6ba-08dcf1faa7a4
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D0:EE_|MN2PR12MB4110:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac4828cb-97c7-4c0e-9710-08dcf1faa806
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/STAUvap7c06xNrzXp4tYnbjEHnT8sNce7vRjY6mFjCAwNJBO7OtHqCwOCRH?=
- =?us-ascii?Q?C2pzlUvL6o63xWP+l4OIzSUk9owfdhwbSE7lTf7T9iblhSleyrmdblDAOLY3?=
- =?us-ascii?Q?i805hBoY7dN2nqx6Mz8lqsAR5RkF8IZG02LZr8wfgnkUp2G27Ot5t24/baL5?=
- =?us-ascii?Q?qNlnEIzMTjmy3CWzWQfB5PgnDXokLYAGn4p9fmnKbEnjnWy1M7PgUYTfcRMM?=
- =?us-ascii?Q?M38xllqsktEScqH1JyaFCtI54ZIGDvIiLCOapXSrNtttgS96UJM3b9++2864?=
- =?us-ascii?Q?Ib8bJ3oJ56GaM+ov7ur2TKTkVWCmkUyKk1MP9eM2RfJghBh5+h/3dFE9nAEL?=
- =?us-ascii?Q?a/CDZnLtgUCzjlnpJ2B53dBruPlstQXSSlClHo8/2fsumgZmMQHs4S1tSQEb?=
- =?us-ascii?Q?VQkQ2gp8/r+DGKz9jDYVy19PYZDURhRVBebMOBVpk7ACQ5scRe/9CRk0QcGY?=
- =?us-ascii?Q?WEe7BjE0fU4vdB+cj/kcqYWhUMkbduwGJUJEZjnNs0EB0dV5jUvFng8nTIy1?=
- =?us-ascii?Q?llWxbLzI1ie9KDRgiPPVJio0wS0TFJL8XQfJBGKEvKFljpBa0VQYdLrmYZFT?=
- =?us-ascii?Q?ejwJqwB/k6MeZb2ivTR9i4DE/MpZ/f/uGG4us8quareLoTaAfr/LuIDy2K4J?=
- =?us-ascii?Q?O9w01GRWupLh5NojTdbqVxiYq8JuZXhmmIuSNXd7ohc76AriQf3a9s6eYhYa?=
- =?us-ascii?Q?FUxaAvxwNOxYQqEc55/CYed6Qe+HptNoaXefJe0cCmuoDHNtZsrUwtIEJGKl?=
- =?us-ascii?Q?PNP3mKHz+h9RTou3bM0wt9vK6fU3k0M90m1/GKJOcklexyDKjO9py1ennUQs?=
- =?us-ascii?Q?QY1mRiW436ette/LR9rbZpo+dngI+XsRhJaYVxnptXxM8bh/3h3esnoCvXSZ?=
- =?us-ascii?Q?H4ZxC77hNHpUo8ldV/nNUOAqJktSd2nukk9UTusSOJ4IMXhaSROn2KSXL5vh?=
- =?us-ascii?Q?EhTQBT0hA8vOsx1ZC7PbvrtmxorUF4Q+QnpqgZv3oAkbr/M0Pn2w5y/WJp3B?=
- =?us-ascii?Q?pd59l5QypTdkZy1ShBPZwvcJbWNgWIMZ+zG/74dxaKVwWrBGasBlXxBf3eX1?=
- =?us-ascii?Q?JSgETI9rmvVa7nN/e7WIE6jgJvZNe+4tPnP1vipQSh6LKaXNAl5r6k95JhQA?=
- =?us-ascii?Q?BwQI6mhQ0W10shLOY6Iy+7u9XxkJOVCjFt4X9rD0KjmSLNjZSJ0nJulUQCOG?=
- =?us-ascii?Q?Zu0+gvZg5DS8OLcZeNeYBwAg8oEgEdTR9wc3Esyxa0E3JOrfcNnTv0rotuLt?=
- =?us-ascii?Q?RgZfTCJHfgbMomVTRh+KLqAM4fCxjcOkqnl6dL6Umm8xL5KeFxMGKH82EHIS?=
- =?us-ascii?Q?To8lmlwXydcD1RoQ5Tw7M3qoQ9JT2UpNhO//5IariPBj6NKyKUT9f7tluQ7i?=
- =?us-ascii?Q?kjFnUttmTP5eldsbfsfRQgvYLr/MKM/OqnkkTqd9HCLi58V0cQ=3D=3D?=
+	=?us-ascii?Q?ftIeH/a2Aqtt/FYwZyUNfMBnkglowKgTimntiS0uH+4n8nnEKNRq8KlLpar6?=
+ =?us-ascii?Q?edpGCBPrtWdAYkO87PryskZTozUksQ61rMEn4/Mo5IL41Zfp64qAyG1U36Pt?=
+ =?us-ascii?Q?hh0c4nemp+yqlPBVSBja0is3do1Vd1fOWhSP8VI/ZeiM6Tgv7MQsQin65aKN?=
+ =?us-ascii?Q?gNBP/75kb9b7I+u5R+LJ7MWJ/0FNJgq4rR40Av6F+FddKepPQ1qkHsr6aobx?=
+ =?us-ascii?Q?flWGXvC2RKPPDPZPRIPIAU42jSzv8DF4VYiER5l4zsztISQ5fIypJA4bdIXC?=
+ =?us-ascii?Q?JMbBaW4NVyTmBmoJYESZkwerTNLivGa+NUlRhju8vEQjoBnRzyzOIBYFzK67?=
+ =?us-ascii?Q?tcqeNpXHmlaUiWkon7WLTyCMhWdP7sEv+TgekpmizOvwzqvZgkTN/6FTeCYY?=
+ =?us-ascii?Q?1DJfHonUXGXtCMFxyObKawvHZPR36eYv0Yuh/iSE9geukve/XxFLtQm1Vm65?=
+ =?us-ascii?Q?sQQEtJva1GZOtaV6k5uxIhcfzG+k/J8yPtxVw3ptBk/RtGWpaq3W5dNHsxYJ?=
+ =?us-ascii?Q?dr5ukvNMVKkf+jXRyf4gMEZu3VaqwzECVQHmbipBGxJOyVKMZ5VqeI4hiTwp?=
+ =?us-ascii?Q?6Syqaz0R1Vq1fMAR3mqXgjTIWy4JXcmsq6UXe1UWd7ZVRDGdpldefQoEauYD?=
+ =?us-ascii?Q?YFjZXD/kqD/DCNpKZlXtrR2TauyHhy/52STypUvZA3AdxIcSvH/zZ5akip9z?=
+ =?us-ascii?Q?53tv+Ml7IBEsuCpsniOWwnWZSwjqMFbINCnNVXzXcu2pNM0u9UjBJiCE4u9B?=
+ =?us-ascii?Q?76H6S+bHYpF5+YkM38ElmCXSV21Sl42mO9BVUJUr7w/a7rTd9a9mbVSCFGaz?=
+ =?us-ascii?Q?E0z4/qokayu1EFFuozV4RO27sO3kIi/zKLrZCBd3Voi9BQWsMxRHCXL79k1k?=
+ =?us-ascii?Q?JUjKl+D+dF/+FGI62A8+bKsl0IuKf6CbqqJBTomBR2FsCX+dI26MddI3JShF?=
+ =?us-ascii?Q?coBvUG5vjNGJEJuaYIjNc0rn2hLolv2Bj6Miem+JJ1G96J9w5g4yeMN/6ISh?=
+ =?us-ascii?Q?AU87n1J6wy+SVQcAP/ocfrhmybvjbdRGi3ZJyb8mUjgM+uQ6ArUg6QF/66jS?=
+ =?us-ascii?Q?FGGSmpspJR+/4NBHIeYZfcyBzL5aBC2+jAMlzExczuE+dnAns5BhRrqYwnMn?=
+ =?us-ascii?Q?n053sbWsc2bi9DrjshZhRAL1r4zUqkwM0OJmFcY+rH59EkBKYkWiWySlJGrH?=
+ =?us-ascii?Q?9kTawx6yYk7+LkHcufxbkM+Xiqxh9HIr3Ud08KpIAHyNLV0Pxf2I8GUeFroB?=
+ =?us-ascii?Q?o/wClgRmXLQ/2Wc8hIPMngCG7+mxU6QrybLLkr7bbtGbfVW8hwAoxnv8kI8E?=
+ =?us-ascii?Q?e67CoaolxdTGzR+A1edYXpycjIMZ/WRm2HorFauppXBasajuyDbugK9Hj6nu?=
+ =?us-ascii?Q?h6E9vFRGYfPc2HdRPaNNBSVvT8Y05yn2JgFYDN0ZAcqmwpbdZA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2024 18:03:23.4921
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2024 18:03:24.1483
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 329e59bd-5729-4a9f-d6ba-08dcf1faa7a4
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac4828cb-97c7-4c0e-9710-08dcf1faa806
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ1PEPF000023D0.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7362
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4110
 
-From: Perry Yuan <Perry.Yuan@amd.com>
+From: Perry Yuan <perry.yuan@amd.com>
 
-Introduces power management callbacks for the `amd_hfi` driver.
-Specifically, the `suspend` and `resume` callbacks have been added
-to handle the necessary operations during system low power states
-and wake-up.
+Incorporate a mechanism within the context switching code to reset
+the hardware history for AMD processors. Specifically, when a task
+is switched in, the class ID was read and reset the hardware workload
+classification history of CPU firmware and then it start to trigger
+workload classification for the next running thread.
 
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v3->v4:
- * Use for_each_online_cpu (Gautham)
-v2->v3:
- * Whitespace (Ilpo)
----
- drivers/platform/x86/amd/hfi/hfi.c | 33 ++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ arch/x86/include/asm/hreset.h |  6 ++++++
+ arch/x86/kernel/cpu/common.c  | 15 +++++++++++++++
+ arch/x86/kernel/process_32.c  |  3 +++
+ arch/x86/kernel/process_64.c  |  3 +++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 arch/x86/include/asm/hreset.h
 
-diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-index 70ddde37f283f..c8fe03d0c9ccd 100644
---- a/drivers/platform/x86/amd/hfi/hfi.c
-+++ b/drivers/platform/x86/amd/hfi/hfi.c
-@@ -388,6 +388,38 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
- 	return ret;
+diff --git a/arch/x86/include/asm/hreset.h b/arch/x86/include/asm/hreset.h
+new file mode 100644
+index 0000000000000..ae1f72602bbd0
+--- /dev/null
++++ b/arch/x86/include/asm/hreset.h
+@@ -0,0 +1,6 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_HRESET_H
++
++void reset_hardware_history_hetero(void);
++
++#endif /* _ASM_X86_HRESET_H */
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 07a34d7235057..658c8fb4e25df 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -57,6 +57,7 @@
+ #include <asm/mce.h>
+ #include <asm/msr.h>
+ #include <asm/cacheinfo.h>
++#include <asm/hreset.h>
+ #include <asm/memtype.h>
+ #include <asm/microcode.h>
+ #include <asm/intel-family.h>
+@@ -403,6 +404,7 @@ static const unsigned long cr4_pinned_mask = X86_CR4_SMEP | X86_CR4_SMAP | X86_C
+ 					     X86_CR4_FSGSBASE | X86_CR4_CET | X86_CR4_FRED;
+ static DEFINE_STATIC_KEY_FALSE_RO(cr_pinning);
+ static unsigned long cr4_pinned_bits __ro_after_init;
++static DEFINE_STATIC_KEY_FALSE_RO(hardware_history_features);
+ 
+ void native_write_cr0(unsigned long val)
+ {
+@@ -481,6 +483,12 @@ void cr4_init(void)
+ 	this_cpu_write(cpu_tlbstate.cr4, cr4);
  }
  
-+static int amd_hfi_pm_resume(struct device *dev)
++static void __init setup_hreset(struct cpuinfo_x86 *c)
 +{
-+	int ret, cpu;
-+
-+	for_each_online_cpu(cpu) {
-+		ret = amd_hfi_set_state(cpu, true);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable workload class config: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
++	if (cpu_feature_enabled(X86_FEATURE_AMD_WORKLOAD_CLASS))
++		static_key_enable_cpuslocked(&hardware_history_features.key);
 +}
 +
-+static int amd_hfi_pm_suspend(struct device *dev)
+ /*
+  * Once CPU feature detection is finished (and boot params have been
+  * parsed), record any of the sensitive CR bits that are set, and
+@@ -1844,6 +1852,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ 	setup_smep(c);
+ 	setup_smap(c);
+ 	setup_umip(c);
++	setup_hreset(c);
+ 
+ 	/* Enable FSGSBASE instructions if available. */
+ 	if (cpu_has(c, X86_FEATURE_FSGSBASE)) {
+@@ -2410,3 +2419,9 @@ void __init arch_cpu_finalize_init(void)
+ 	 */
+ 	mem_encrypt_init();
+ }
++
++__always_inline void reset_hardware_history_hetero(void)
 +{
-+	int ret, cpu;
-+
-+	for_each_online_cpu(cpu) {
-+		ret = amd_hfi_set_state(cpu, false);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to disable workload class config: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
++	if (static_branch_unlikely(&hardware_history_features))
++		wrmsrl(AMD_WORKLOAD_HRST, 0x1);
 +}
+diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
+index 0917c7f25720b..6a3a1339f7a77 100644
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -52,6 +52,7 @@
+ #include <asm/switch_to.h>
+ #include <asm/vm86.h>
+ #include <asm/resctrl.h>
++#include <asm/hreset.h>
+ #include <asm/proto.h>
+ 
+ #include "process.h"
+@@ -213,6 +214,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 	/* Load the Intel cache allocation PQR MSR. */
+ 	resctrl_sched_in(next_p);
+ 
++	reset_hardware_history_hetero();
 +
-+static DEFINE_SIMPLE_DEV_PM_OPS(amd_hfi_pm_ops, amd_hfi_pm_suspend, amd_hfi_pm_resume);
+ 	return prev_p;
+ }
+ 
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 226472332a70d..ea7f765c6262a 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -54,6 +54,7 @@
+ #include <asm/xen/hypervisor.h>
+ #include <asm/vdso.h>
+ #include <asm/resctrl.h>
++#include <asm/hreset.h>
+ #include <asm/unistd.h>
+ #include <asm/fsgsbase.h>
+ #include <asm/fred.h>
+@@ -709,6 +710,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 	/* Load the Intel cache allocation PQR MSR. */
+ 	resctrl_sched_in(next_p);
+ 
++	reset_hardware_history_hetero();
 +
- static const struct acpi_device_id amd_hfi_platform_match[] = {
- 	{ "AMDI0104", 0},
- 	{ }
-@@ -434,6 +466,7 @@ static struct platform_driver amd_hfi_driver = {
- 	.driver = {
- 		.name = AMD_HFI_DRIVER,
- 		.owner = THIS_MODULE,
-+		.pm = &amd_hfi_pm_ops,
- 		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
- 	},
- 	.probe = amd_hfi_probe,
+ 	return prev_p;
+ }
+ 
 -- 
 2.43.0
 
