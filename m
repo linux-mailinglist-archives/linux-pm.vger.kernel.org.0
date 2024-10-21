@@ -1,40 +1,71 @@
-Return-Path: <linux-pm+bounces-16142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 641E69A90A7
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 22:09:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D03229A9156
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 22:37:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20B62284C94
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 20:09:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AA351C21B69
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 20:37:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842201D1506;
-	Mon, 21 Oct 2024 20:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CC61FCC7F;
+	Mon, 21 Oct 2024 20:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CKXNTed6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1B5D192D66
-	for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2024 20:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD751CF7BF
+	for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2024 20:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729541371; cv=none; b=ncItIaNG5VSvly1705u0wfAwe4Uf8JDJS4iFPpj1slIiuaQPyc7YnO7/Dj8J+R+PLVs4+ySH4fuhjQrwLh7GUoYdsg6BmEHCcW5a0NE3DrZ84A5ys058wKUzWvz7lEu1bEW/G0ex6SEeq9/B1bC/jMWquw4svzIR9BKnN9GksbA=
+	t=1729543023; cv=none; b=sU5u0S8K6VQo0gdXLto6WOfhRYm2w6cjtu7pEq3EvwI1uiBl+xMZbXUKfBKzvkK+rxZdkURvnviiQZB5h5kLh3T/vr+4OLC+qtnu97a0/BKieZw/mZRna4kv6cbk28wgTAkK74BmYGgDBXfj8zS2TfTOP/UEIuK4VMF1hzqruw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729541371; c=relaxed/simple;
-	bh=aVSZj8esYT3Zrg3Hwii9fJl1Bn9tt0HZm/EN36wbZmU=;
+	s=arc-20240116; t=1729543023; c=relaxed/simple;
+	bh=3BLj+3yhD748I/r0mF9XZVwihCLj7hfN2EkqM3NrUIQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GlgiBBK2kIUkoAEGcx1eTDAuzA5E8dzappWHnScuq4kGZk0Ya34wVYPWXGHPUOV4K9j2fI/ZHF3r4GTIOI01Qt1HJO3I1h9g2LSN6NzBV8Lk5769MThBnwzcpH/I85fULo2q7lb2fK3oV+pjwAdhltJYtL44HFe48xnj4OvJqOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B47AF497;
-	Mon, 21 Oct 2024 13:09:56 -0700 (PDT)
-Received: from [10.57.65.103] (unknown [10.57.65.103])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35DF13F73B;
-	Mon, 21 Oct 2024 13:09:26 -0700 (PDT)
-Message-ID: <deacf57b-08b3-4b1b-85b2-98be78da8339@arm.com>
-Date: Mon, 21 Oct 2024 21:10:36 +0100
+	 In-Reply-To:Content-Type; b=OAEw7kWlk3Y+xCl5lZJvvExW+j6XNm019O4X+jpvB/iR6aTOkJt8LwYtG+WG07xOSfeHcrnVOug4HTZhFZQgnPIsxc3QQDB/yE5lpWvstuWlqhkLjuZhYioS5GvE3KxQY0dZkkP95YXeg28lctNoiMDj342e8WH2NYB9kl+pU+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CKXNTed6; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-83abcfb9f37so133649139f.1
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2024 13:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1729543020; x=1730147820; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0LDzS8XBxlPJ8LeGX1kjubIGqVbUJ8pCbQpYyZJmaIw=;
+        b=CKXNTed6y37vETdFMkTIROyMUBi5n5WSeDuUG5+4C4mCE1aD4kYhXyoAWFECjb34ES
+         eadfKx8Qq/PgZGjb+dolOPauLfE0xKZcYWlHyd5NwhJdY6r14lqzVVU3N86JM6Nps2u7
+         8DPdbZsjNXuSARgtwssQOEvl/zDLL7GwuMSpc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729543020; x=1730147820;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0LDzS8XBxlPJ8LeGX1kjubIGqVbUJ8pCbQpYyZJmaIw=;
+        b=q9qgjUP6Ws2zuVwRDv52HAcLs1z9+cS/5vSyfi6AZ9k6iZENFWKbuxz07pyC2DVWYw
+         s2PhPK5ujlPE5Zsa8mQ84EGNuT9EZ9Yqn+cPjitBLtWVZlaZWOA0BorSG3+X9lzvWBzH
+         zGVxr95DGdj0Ew7ERWT4ny9uxKTzGd/rX0KiwK1nLULKS1xdHXURATDNqC+xey1hYIfD
+         uGi9h6WvsEZYlrujXrzjC77VnO4MM76f/QrsyqBtFMlSIXhjE9RCEFJwdKzsMSg90XR2
+         1F1yT6K74BF2mcV5KAaRjk9np8iY2CwUpAPjoD4yHxIFZf8bdXCq3ybGMYNlR678MiuD
+         0QJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX7qM3uikAfq16+VlelrJvYDuZRDvFUFFIU54PlUtl4KxF0iWCUOrLoglTyeMDkpC07f44FQ9XmYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YworeyBT4P3N+uhCTOPD58wi8bZZafvvmswJjhcd2gllUy98/AM
+	S4cz3l1e9qz2PiSxGde1aP6B4aYG9svMLBNPgw1USYo/Km+eAcj3+0PCxm3bbf8=
+X-Google-Smtp-Source: AGHT+IEig6+d2k16HjNVgjv3iEenex2U3S+h9GabtGXCrH8EGB9qAuXmoSN7JYXZE23N3jGZCOBnig==
+X-Received: by 2002:a05:6602:6018:b0:82a:3552:6b26 with SMTP id ca18e2360f4ac-83aba66aaa5mr917333239f.15.1729543020429;
+        Mon, 21 Oct 2024 13:37:00 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc2a661aeesm1205668173.179.2024.10.21.13.36.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Oct 2024 13:36:59 -0700 (PDT)
+Message-ID: <d8cfed44-3bc0-4774-b39c-05fa0b82f6d8@linuxfoundation.org>
+Date: Mon, 21 Oct 2024 14:36:58 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,186 +73,102 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/4] tools/thermal/thermal-engine: Take into account
- the thresholds API
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-pm@vger.kernel.org, quic_manafm@quicinc.com, rafael@kernel.org
-References: <20241014094309.1430126-1-daniel.lezcano@linaro.org>
- <20241014094309.1430126-5-daniel.lezcano@linaro.org>
+Subject: Re: [PATCH] implement set_enabled functions on powercap.c
+To: Vishnu Sanal T <t.v.s10123@gmail.com>, linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, trenn@suse.com, shuah@kernel.org,
+ jwyatt@redhat.com, jkacur@redhat.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241019124233.194140-2-t.v.s10123@gmail.com>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20241014094309.1430126-5-daniel.lezcano@linaro.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241019124233.194140-2-t.v.s10123@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 10/14/24 10:43, Daniel Lezcano wrote:
-> Enhance the thermal-engine skeleton with the thresholds added in the
-> kernel and use the API exported by the thermal library.
+On 10/19/24 06:42, Vishnu Sanal T wrote:
+> Implement the functions sysfs_set_enabled, powercap_set_enabled,
+> and powercap_zone_set_enabled on powercap.c.
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Vishnu Sanal T <t.v.s10123@gmail.com>
 > ---
->   tools/thermal/thermal-engine/thermal-engine.c | 105 +++++++++++++++---
->   1 file changed, 92 insertions(+), 13 deletions(-)
+>   tools/power/cpupower/lib/powercap.c | 43 +++++++++++++++++++++++++----
+>   1 file changed, 37 insertions(+), 6 deletions(-)
 > 
-> diff --git a/tools/thermal/thermal-engine/thermal-engine.c b/tools/thermal/thermal-engine/thermal-engine.c
-> index 9b1476a2680f..0764dc754771 100644
-> --- a/tools/thermal/thermal-engine/thermal-engine.c
-> +++ b/tools/thermal/thermal-engine/thermal-engine.c
-> @@ -38,6 +38,14 @@ struct thermal_data {
->   	struct thermal_handler *th;
->   };
->   
-> +static int show_threshold(struct thermal_threshold *th, __maybe_unused void *arg)
-> +{
-> +	INFO("threshold temp=%d, direction=%d\n",
-> +	     th->temperature, th->direction);
-> +
-> +	return 0;
-> +}
-> +
->   static int show_trip(struct thermal_trip *tt, __maybe_unused void *arg)
->   {
->   	INFO("trip id=%d, type=%d, temp=%d, hyst=%d\n",
-> @@ -70,6 +78,8 @@ static int show_tz(struct thermal_zone *tz, __maybe_unused void *arg)
->   
->   	for_each_thermal_trip(tz->trip, show_trip, NULL);
->   
-> +	for_each_thermal_threshold(tz->thresholds, show_threshold, NULL);
-> +
->   	show_temp(tz, arg);
->   
->   	show_governor(tz, arg);
-> @@ -77,6 +87,30 @@ static int show_tz(struct thermal_zone *tz, __maybe_unused void *arg)
->   	return 0;
+> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+> index 94a0c69e55ef..1cf2b0de5536 100644
+> --- a/tools/power/cpupower/lib/powercap.c
+> +++ b/tools/power/cpupower/lib/powercap.c
+> @@ -70,6 +70,29 @@ static int sysfs_get_enabled(char *path, int *mode)
+>   	return ret;
 >   }
 >   
-> +static int set_threshold(struct thermal_zone *tz, __maybe_unused void *arg)
+> +static int sysfs_set_enabled(char *path, int mode)
 > +{
-> +	struct thermal_handler *th = arg;
-> +	int thresholds[] = { 43000, 65000, 49000, 55000, 57000 };
-> +	size_t i;
-
-minor: I would just make it normal 'int'.
-
+> +	int fd;
+> +	char yes_no = (char) (mode + '0');
+> +	int ret = 0;
 > +
-> +	INFO("Setting threshold for thermal zone '%s', id=%d\n", tz->name, tz->id);
-> +
-> +	if (thermal_cmd_threshold_flush(th, tz)) {
-> +		ERROR("Failed to flush all previous thresholds\n");
-> +		return -1;
+> +	fd = open(path, O_RDWR);
+> +	if (fd == -1) {
+> +		ret = -1;
+> +		goto out;
 > +	}
 > +
-> +	for (i = 0; i < sizeof(thresholds) / sizeof(thresholds[0]); i++)
-> +		if (thermal_cmd_threshold_add(th, tz, thresholds[i],
-> +					      THERMAL_THRESHOLD_WAY_UP |
-> +					      THERMAL_THRESHOLD_WAY_DOWN)) {
-> +			ERROR("Failed to set threshold\n");
-> +			return -1;
-> +		}
+> +	if (write(fd, &yes_no, 1) != 1) {
+> +		ret = -1;
+> +		goto out_close;
+> +	}
 > +
-> +	return 0;
+> +out_close:
+> +	close(fd);
+> +out:
+> +	return ret;
 > +}
 > +
->   static int tz_create(const char *name, int tz_id, __maybe_unused void *arg)
+
+Why can't this all be simplified using system("echo 1 filename")
+
+That goes for existing get routines.
+
+>   int powercap_get_enabled(int *mode)
 >   {
->   	INFO("Thermal zone '%s'/%d created\n", name, tz_id);
-> @@ -197,20 +231,62 @@ static int gov_change(int tz_id, const char *name, __maybe_unused void *arg)
->   	return 0;
+>   	char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
+> @@ -77,12 +100,11 @@ int powercap_get_enabled(int *mode)
+>   	return sysfs_get_enabled(path, mode);
 >   }
 >   
-> +static int threshold_add(int tz_id, int temp, int direction, __maybe_unused void *arg)
-> +{
-> +	INFO("Threshold added tz_id=%d: temp=%d, direction=%d\n", tz_id, temp, direction);
+> -/*
+> - * TODO: implement function. Returns dummy 0 for now.
+> - */
+>   int powercap_set_enabled(int mode)
+>   {
+> -	return 0;
+> +	char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
 > +
-> +	return 0;
-> +}
-> +
-> +static int threshold_delete(int tz_id, int temp, int direction, __maybe_unused void *arg)
-> +{
-> +	INFO("Threshold deleted tz_id=%d: temp=%d, direction=%d\n", tz_id, temp, direction);
-> +
-> +	return 0;
-> +}
-> +
-> +static int threshold_flush(int tz_id, __maybe_unused void *arg)
-> +{
-> +	INFO("Thresholds flushed tz_id=%d\n", tz_id);
-> +
-> +	return 0;
-> +}
-> +
-> +static int threshold_up(int tz_id, int temp, int prev_temp, __maybe_unused void *arg)
-> +{
-> +	INFO("Threshold crossed way up tz_id=%d: temp=%d, prev_temp=%d\n",
-> +	     tz_id, temp, prev_temp);
-> +
-> +	return 0;
-> +}
-> +
-> +static int threshold_down(int tz_id, int temp, int prev_temp, __maybe_unused void *arg)
-> +{
-> +	INFO("Threshold crossed way down tz_id=%d: temp=%d, prev_temp=%d\n",
-> +	     tz_id, temp, prev_temp);
-> +
-> +	return 0;
-> +}
-> +
->   static struct thermal_ops ops = {
-> -	.events.tz_create	= tz_create,
-> -	.events.tz_delete	= tz_delete,
-> -	.events.tz_disable	= tz_disable,
-> -	.events.tz_enable	= tz_enable,
-> -	.events.trip_high	= trip_high,
-> -	.events.trip_low	= trip_low,
-> -	.events.trip_add	= trip_add,
-> -	.events.trip_delete	= trip_delete,
-> -	.events.trip_change	= trip_change,
-> -	.events.cdev_add	= cdev_add,
-> -	.events.cdev_delete	= cdev_delete,
-> -	.events.cdev_update	= cdev_update,
-> -	.events.gov_change	= gov_change
-> +	.events.tz_create		= tz_create,
-> +	.events.tz_delete		= tz_delete,
-> +	.events.tz_disable		= tz_disable,
-> +	.events.tz_enable		= tz_enable,
-> +	.events.trip_high		= trip_high,
-> +	.events.trip_low		= trip_low,
-> +	.events.trip_add		= trip_add,
-> +	.events.trip_delete		= trip_delete,
-> +	.events.trip_change		= trip_change,
-> +	.events.cdev_add		= cdev_add,
-> +	.events.cdev_delete		= cdev_delete,
-> +	.events.cdev_update		= cdev_update,
-> +	.events.gov_change		= gov_change,
-> +	.events.threshold_add		= threshold_add,
-> +	.events.threshold_delete	= threshold_delete,
-> +	.events.threshold_flush		= threshold_flush,
-> +	.events.threshold_up		= threshold_up,
-> +	.events.threshold_down		= threshold_down,
->   };
+> +	return sysfs_set_enabled(path, mode);
+>   }
 >   
->   static int thermal_event(__maybe_unused int fd, __maybe_unused void *arg)
-> @@ -280,6 +356,7 @@ enum {
->   	THERMAL_ENGINE_DAEMON_ERROR,
->   	THERMAL_ENGINE_LOG_ERROR,
->   	THERMAL_ENGINE_THERMAL_ERROR,
-> +	THERMAL_ENGINE_THRESHOLD_ERROR,
->   	THERMAL_ENGINE_MAINLOOP_ERROR,
->   };
+>   /*
+> @@ -180,8 +202,17 @@ int powercap_zone_get_enabled(struct powercap_zone *zone, int *mode)
 >   
-> @@ -318,6 +395,8 @@ int main(int argc, char *argv[])
->   		return THERMAL_ENGINE_THERMAL_ERROR;
->   	}
->   
-> +	for_each_thermal_zone(td.tz, set_threshold, td.th);
+>   int powercap_zone_set_enabled(struct powercap_zone *zone, int mode)
+>   {
+> -	/* To be done if needed */
+> -	return 0;
+> +	char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP;
 > +
->   	for_each_thermal_zone(td.tz, show_tz, td.th);
+> +	if ((strlen(PATH_TO_POWERCAP) + strlen(zone->sys_name)) +
+> +	    strlen("/enabled") + 1 >= SYSFS_PATH_MAX)
+> +		return -1;
+> +
+> +	strcat(path, "/");
+> +	strcat(path, zone->sys_name);
+> +	strcat(path, "/enabled");
+> +
+> +	return sysfs_set_enabled(path, mode);
+>   }
 >   
->   	if (mainloop_init()) {
+>   
 
-LGTM,
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+thanks,
+-- Shuah
 
