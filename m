@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-16158-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16159-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 826999A935E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 00:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED4849A9366
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 00:34:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42E89283AF4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 22:32:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5D51284214
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2024 22:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770121E2839;
-	Mon, 21 Oct 2024 22:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 058491E2838;
+	Mon, 21 Oct 2024 22:34:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B2FB80C0C;
-	Mon, 21 Oct 2024 22:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAA23137750;
+	Mon, 21 Oct 2024 22:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729549962; cv=none; b=FzlDCAqYGnwLmfkB/TZP0+RadLOlMXWuRDi09ABXl9bc0tfqD3ZFGJMjvWEBtLmbzDEPTI5fGix/iaVDzm4Hot1Gj3v4AC1NB9s8GBnKPGTKV7+8/6FDi5gzghby/f3LkpImIw7OzcGR3APc4ArmJXsoS+YY9aWpRSCO6qja6WQ=
+	t=1729550076; cv=none; b=XRU5qFnN5ns19gM8wmMukE4F3uerNKOjl56SiBdyqEsZEp4jV2YzEBS9+4im/hoYa8GVPOPJD0CsI4KfQnVqkEcD5K1ewMJf6R5yya0rn9Mqr7gvmxxczLn16kowIYWeN2886xgAGXhWXGbpiusHgsMOHTuOUhzyVYkpNhAHWHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729549962; c=relaxed/simple;
-	bh=m7c4CdhRAcygB80AOkGpbLxqgvTzNErkPOpW0llTSEw=;
+	s=arc-20240116; t=1729550076; c=relaxed/simple;
+	bh=69I2Kj+pqJEyuo97NNCgPGffEiN9AU+KmDUj8eJqI70=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JTEF+/hUoVjRjaT3oO9CDHXzGOe1vqcczdauHeRRq56TT7LXfycCGv7H7GyNCA1ccISdYEPME3bulaK/JwpM+YiZc5B4TIxFjzchbpTOcZrM5tbk98pTdKOnO7LGzjoTAx0dQksrTyI3O4OdMkVdAqoQUXBxCpj/MGAZKYOJjmo=
+	 In-Reply-To:Content-Type; b=QrhpcTgr86FMvKm7n6aPnVlzJE75tYxDEcNNnAY9WB3R/8/CjSDMuq7Y+MFmxycz/fRbmR5opgmvfHopxmAo0uah4mY/jzSyX+H1qlM+P083CdqVjVVUS1oFS1w/N2muGnnytdwNDmpYjgsIOpE0Gn/3zjawjO4gh/tBSBL90lA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19485497;
-	Mon, 21 Oct 2024 15:33:09 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A770497;
+	Mon, 21 Oct 2024 15:35:03 -0700 (PDT)
 Received: from [10.57.65.103] (unknown [10.57.65.103])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C83A3F71E;
-	Mon, 21 Oct 2024 15:32:37 -0700 (PDT)
-Message-ID: <8a8474c0-ea6c-4f8d-bf3a-7ea67fbab6bf@arm.com>
-Date: Mon, 21 Oct 2024 23:33:47 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87D4D3F71E;
+	Mon, 21 Oct 2024 15:34:32 -0700 (PDT)
+Message-ID: <be9ce314-57f1-4964-a1f5-0d8f466cc155@arm.com>
+Date: Mon, 21 Oct 2024 23:35:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,35 +42,35 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 08/12] thermal: core: Consolidate thermal zone locking
- in the exit path
+Subject: Re: [PATCH v2 09/12] thermal: core: Update thermal zones after
+ cooling device binding
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 References: <2215082.irdbgypaU6@rjwysocki.net>
- <1963152.taCxCBeP46@rjwysocki.net>
+ <2226302.Icojqenx9y@rjwysocki.net>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <1963152.taCxCBeP46@rjwysocki.net>
+In-Reply-To: <2226302.Icojqenx9y@rjwysocki.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 10/4/24 20:30, Rafael J. Wysocki wrote:
+On 10/4/24 20:33, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> In analogy with a previous change in the thermal zone initialization
-> path, to avoid acquiring the thermal zone lock and releasing it multiple
-> times back and forth unnecessarily, move all of the code running under
-> thermal_list_lock in thermal_zone_device_unregister() into a new
-> function called thermal_zone_exit() and make the latter acquire the
-> thermal zone lock only once and release it along with thermal_list_lock.
+> If a new cooling device is registered and it is bound to at least one
+> trip point in a given thermal zone, that thermal zone needs to be
+> updated via __thermal_zone_device_update().
 > 
-> For this purpose, provide an "unlocked" variant of
-> thermal_zone_cdev_unbind() to be called by thermal_zone_exit() under the
-> thermal zone lock.
+> Instead of doing this with the help of the need_update atomic field in
+> struct thermal_zone_device, which is not particularly straightforward,
+> make __thermal_zone_cdev_bind() return a bool value indicating whether
+> or not the given thermal zone needs to be updated because a new cooling
+> device has been bound to it and update thermal_zone_cdev_bind() to
+> call __thermal_zone_device_update() when this value is "true".
 > 
 > No intentional functional impact.
 > 
@@ -79,118 +79,83 @@ On 10/4/24 20:30, Rafael J. Wysocki wrote:
 > 
 > This is a new iteration of
 > 
-> https://lore.kernel.org/linux-pm/7729094.EvYhyI6sBW@rjwysocki.net/
+> https://lore.kernel.org/linux-pm/3603909.iIbC2pHGDl@rjwysocki.net/
 > 
-> v1 -> v2: Rebase, use list_del_init() for removing thermal zones from the
->            global list so that the new list_emty() check doesn't blow up.
+> v1 -> v2: Rebase.
 > 
 > ---
->   drivers/thermal/thermal_core.c |   66 ++++++++++++++++++++++++-----------------
->   1 file changed, 39 insertions(+), 27 deletions(-)
+>   drivers/thermal/thermal_core.c |   23 +++++++++++++----------
+>   1 file changed, 13 insertions(+), 10 deletions(-)
 > 
 > Index: linux-pm/drivers/thermal/thermal_core.c
 > ===================================================================
 > --- linux-pm.orig/drivers/thermal/thermal_core.c
 > +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -1266,15 +1266,21 @@ unlock_list:
+> @@ -933,13 +933,14 @@ void print_bind_err_msg(struct thermal_z
+>   		cdev->type, thermal_zone_trip_id(tz, trip), ret);
 >   }
->   EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
 >   
-> -static void thermal_zone_cdev_unbind(struct thermal_zone_device *tz,
-> -				     struct thermal_cooling_device *cdev)
-> +static void __thermal_zone_cdev_unbind(struct thermal_zone_device *tz,
-> +				       struct thermal_cooling_device *cdev)
+> -static void __thermal_zone_cdev_bind(struct thermal_zone_device *tz,
+> +static bool __thermal_zone_cdev_bind(struct thermal_zone_device *tz,
+>   				     struct thermal_cooling_device *cdev)
 >   {
 >   	struct thermal_trip_desc *td;
+> +	bool update_tz = false;
 >   
-> -	mutex_lock(&tz->lock);
-> -
->   	for_each_trip_desc(tz, td)
->   		thermal_unbind_cdev_from_trip(tz, &td->trip, cdev);
-> +}
+>   	if (!tz->ops.should_bind)
+> -		return;
+> +		return false;
+>   
+>   	for_each_trip_desc(tz, td) {
+>   		struct thermal_trip *trip = &td->trip;
+> @@ -954,9 +955,15 @@ static void __thermal_zone_cdev_bind(str
+>   			continue;
+>   
+>   		ret = thermal_bind_cdev_to_trip(tz, trip, cdev, &c);
+> -		if (ret)
+> +		if (ret) {
+>   			print_bind_err_msg(tz, trip, cdev, ret);
+> +			continue;
+> +		}
 > +
-> +static void thermal_zone_cdev_unbind(struct thermal_zone_device *tz,
-> +				     struct thermal_cooling_device *cdev)
-> +{
-> +	mutex_lock(&tz->lock);
+> +		update_tz = true;
+>   	}
 > +
-> +	__thermal_zone_cdev_unbind(tz, cdev);
+> +	return update_tz;
+>   }
+>   
+>   static void thermal_zone_cdev_bind(struct thermal_zone_device *tz,
+> @@ -964,7 +971,8 @@ static void thermal_zone_cdev_bind(struc
+>   {
+>   	mutex_lock(&tz->lock);
+>   
+> -	__thermal_zone_cdev_bind(tz, cdev);
+> +	if (__thermal_zone_cdev_bind(tz, cdev))
+> +		__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
 >   
 >   	mutex_unlock(&tz->lock);
 >   }
-> @@ -1588,43 +1594,49 @@ struct device *thermal_zone_device(struc
->   }
->   EXPORT_SYMBOL_GPL(thermal_zone_device);
->   
-> -/**
-> - * thermal_zone_device_unregister - removes the registered thermal zone device
-> - * @tz: the thermal zone device to remove
-> - */
-> -void thermal_zone_device_unregister(struct thermal_zone_device *tz)
-> +static bool thermal_zone_exit(struct thermal_zone_device *tz)
+> @@ -991,7 +999,7 @@ __thermal_cooling_device_register(struct
+>   				  const struct thermal_cooling_device_ops *ops)
 >   {
 >   	struct thermal_cooling_device *cdev;
 > -	struct thermal_zone_device *pos = NULL;
-> -
-> -	if (!tz)
-> -		return;
-> -
-> -	thermal_debug_tz_remove(tz);
-> +	bool ret = true;
+> +	struct thermal_zone_device *pos;
+>   	unsigned long current_state;
+>   	int id, ret;
 >   
->   	mutex_lock(&thermal_list_lock);
+> @@ -1067,11 +1075,6 @@ __thermal_cooling_device_register(struct
+>   	list_for_each_entry(pos, &thermal_tz_list, node)
+>   		thermal_zone_cdev_bind(pos, cdev);
+>   
 > -	list_for_each_entry(pos, &thermal_tz_list, node)
-> -		if (pos == tz)
-> -			break;
-> -	if (pos != tz) {
-> -		/* thermal zone device not found */
-> -		mutex_unlock(&thermal_list_lock);
-> -		return;
-> +
-> +	if (list_empty(&tz->node)) {
-> +		ret = false;
-> +		goto unlock;
->   	}
->   
->   	mutex_lock(&tz->lock);
->   
->   	tz->state |= TZ_STATE_FLAG_EXIT;
-> -	list_del(&tz->node);
+> -		if (atomic_cmpxchg(&pos->need_update, 1, 0))
+> -			thermal_zone_device_update(pos,
+> -						   THERMAL_EVENT_UNSPECIFIED);
 > -
-> -	mutex_unlock(&tz->lock);
-> +	list_del_init(&tz->node);
->   
-> -	/* Unbind all cdevs associated with 'this' thermal zone */
-> +	/* Unbind all cdevs associated with this thermal zone. */
->   	list_for_each_entry(cdev, &thermal_cdev_list, node)
-> -		thermal_zone_cdev_unbind(tz, cdev);
-> +		__thermal_zone_cdev_unbind(tz, cdev);
-> +
-> +	mutex_unlock(&tz->lock);
->   
-> +unlock:
 >   	mutex_unlock(&thermal_list_lock);
 >   
-> +	return ret;
-> +}
-> +
-> +/**
-> + * thermal_zone_device_unregister - removes the registered thermal zone device
-> + * @tz: the thermal zone device to remove
-> + */
-> +void thermal_zone_device_unregister(struct thermal_zone_device *tz)
-> +{
-> +	if (!tz)
-> +		return;
-> +
-> +	thermal_debug_tz_remove(tz);
-> +
-> +	if (!thermal_zone_exit(tz))
-> +		return;
-> +
->   	cancel_delayed_work_sync(&tz->poll_queue);
->   
->   	thermal_set_governor(tz, NULL);
+>   	return cdev;
 > 
 > 
 > 
