@@ -1,87 +1,80 @@
-Return-Path: <linux-pm+bounces-16218-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16219-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C91479AA1AC
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 14:04:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D2279AA251
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 14:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F5091F22A35
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 12:04:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E8BA281EFD
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 12:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8CF019AD71;
-	Tue, 22 Oct 2024 12:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3694919D88F;
+	Tue, 22 Oct 2024 12:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Dl0lNlbN"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="XzP8g4hS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1ED155352;
-	Tue, 22 Oct 2024 12:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03FF51537D9;
+	Tue, 22 Oct 2024 12:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729598641; cv=none; b=FukqSPlhThVGMSE1awPS25gWtxh2bQYs15BOHJx1i5OmVI3QtYh73/Ylz/MFPzepCfjEZRx0kVDzcpU/pt6//tO9MJxGfOJbEUTJMKrE29p21741G1z85LInibzHUJsL1prVqUC7vgEAIJG4P7Jg+CwgsYz6h34bPbAkqf6W6DU=
+	t=1729600943; cv=none; b=YPd2bMduKA3FtHAuy25dMlzHqTYG35cixJaJCXSdfV0HT5Rd0XvB9Hbwfr6Qtp9pbySwRWKybK36ElHE77Iryj9yvpy46MFQz8n6wCAs191WlNFOGnHsCcwVyVcYwYiDhGZ4qGvLoMDCi5OCBlD9/o1s33BkVYp2G+gnVNNyAU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729598641; c=relaxed/simple;
-	bh=NgCtIzKiGY/nslo9ezbBgMQ1pL7i1/faclhNOFZQpJs=;
+	s=arc-20240116; t=1729600943; c=relaxed/simple;
+	bh=1kQcfUKxnnRlmnXvyy6slBbu3vdl2jGdNZ3GxflNNj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MCP9eu0PFNSJU9Z5s8Ihmmypzr070focgwXLlgHNHkR1i5xLxQ9a3dyTnXDzScr66tMgmkNPFOklPtzvhPp3WMCL9C++2MQOREuhABGgRHnTBkkfK7lcK+WEn8SUKXik8qVypZss/sA6qew50FxNdJwG0ET02R11/j2O33T9bWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Dl0lNlbN; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZlHnCkodf5JVXauATxhUSKQoC/NqyehqMCtQWzn2zsWfkn+J5THcUlgG0boptWm6hu2+t/f1OmtT3PKnKGUu8vhDQE7oBc4y+j5394UyHbA5C+Sl1GV5UCLWUS/uQsdZnkwJP20Rry1+3wqj7Sr769/MsHJBo5t3ZC7GBbBvfYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=XzP8g4hS; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4CA3840E0198;
-	Tue, 22 Oct 2024 12:03:57 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1AC1440E01A5;
+	Tue, 22 Oct 2024 12:42:19 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id cgcp_Bd57fi2; Tue, 22 Oct 2024 12:03:53 +0000 (UTC)
+	with ESMTP id Fi1L2bCWqXrK; Tue, 22 Oct 2024 12:42:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1729598633; bh=aK7P9pIYchVSzDvlVR3vBAJ4PDLSNW38/lQvSJv3ax8=;
+	t=1729600934; bh=uJxSCGPq7YQbdE9Mu+T0q3ngzH3IdmXGlttiNKCmW8M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dl0lNlbN/KcTdK/5Yahtwj9XVdcCPMdx8jaesTsiP0dWeqYRBNtm6YAH2t1MOvrMe
-	 owAcrte1DCYlesPXaJQavnwnyhAIUCIIw6XfpxHKL/5zpqeiq1fWOfb/TruTCcwiEz
-	 J6oFV+17exskkkjoBOmk33ROgrvl8jm+2SvvPlCG+08Az9nEvs4vEf9gkBfbRrV+mo
-	 OJOuoMTd8CaXmL+GLJoHMbQg5efMXg6G5eIAVlxCyzOlszy8yyvTyrpz/Jwzy8nq49
-	 qQiJ3naHQsCbSORUg4B9LO0VNvMdVuP45XMq3t52PTOtjhEbfbMthoabvLeAbXGWZO
-	 /OxYWkvy32wlSxA9glrYF4BS3Sly1eIrpqWCRZbC50NDROPT8HPzkJRRNnLUpQO6qV
-	 gs5LLVOYq3ZYPNs2PphBz5WFeqPRkrI8MSHFiEFmIBLaMI0pO8eObvH6vbmWHTlw9S
-	 ts4xs20xBZKpvt2IuERxy4gFh6k0jqiUZLUKBoIUrpOxzawUXoR3237QihkoHn/rnv
-	 YdsBOZuks/vfkGluZl3uL1e1rHChsB8IcCAJ53QZV8hkNRlw51hHZDP0Ls/OVbXFCj
-	 Vs4KF9hJMdfdgXlxODSj572RhVQVbGxZxGyX44ascwDnjuKvibAIarP7QaSfNwcuOB
-	 T2bzom07+h+/pcRe6yRtijbQ=
+	b=XzP8g4hSMY1EmnKgb9ZZeetJc2ihXoFpzd73W7opMH+3l4zvYJ6I3kGQ++KKmXSeQ
+	 ruT21Kf2LwziCkVW8lB3jdVo9tQueJFHPwMLZdbhWWZCSeSXJRojFMqT71HwJfRrUE
+	 Qb7MdLhzkjPdqh9wnx+3FgTHoNXWYVT8hJDV6pubpyfK2cx7DkEAUIuFjmVtZ1VC9s
+	 UZtlehVA9DXgU5J2i9DfDX8QzDCaGhrEhy33yAts3KvJaHaTw7VjBm8b0So+ostCvm
+	 Hh6HZgOhyza+BJ0/IvpUm23vAQZwt0wZY1/0TPjMg4sgghgaTu2Owi0C9o2rR5KROX
+	 oylOIqozOGtq3CfjUTJAgxS8l9XqAZuugmXnykrh7bMn4C1iDytx6YEoEWFxJ3luTA
+	 vKLPapd7IFxmodLt1IA5gIMYbiXygliKDCH4TthDemIAiyYb5IBz1wp2ZmFZqTg21g
+	 HDSAr7XHL7Foqs3DcxvTZvGgKVx5GNnTOmAkrc/VeEIif0Of1Er3lVHEZbAa9a3rUZ
+	 HM4mABNujdYR1VhAOVs0DOLkJsdb6NKFP1RkEZfYSFP+KDoll/HKRmP5qaxv/D6bUx
+	 yJZkYDN66vjZ1ihKEDTkIzX409qfGp7n+k1tHtFntl//BzUHY7mtti8zq3pcX54uJF
+	 4OKQj91xkXdlDWO0DzGaYM+k=
 Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE5D840E015F;
-	Tue, 22 Oct 2024 12:03:36 +0000 (UTC)
-Date: Tue, 22 Oct 2024 14:03:36 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2D47140E0198;
+	Tue, 22 Oct 2024 12:42:03 +0000 (UTC)
+Date: Tue, 22 Oct 2024 14:42:02 +0200
 From: Borislav Petkov <bp@alien8.de>
 To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Li RongQing <lirongqing@baidu.com>,
-	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	"open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: Re: [PATCH v2 4/5] x86/cpu: Add CPU type to struct cpuinfo_topology
-Message-ID: <20241022120336.GCZxeUmHL5p6chpt0m@fat_crate.local>
-References: <20241022034608.32396-1-mario.limonciello@amd.com>
- <20241022034608.32396-5-mario.limonciello@amd.com>
- <20241022115720.GGZxeTIEqLBQwHjsiE@fat_crate.local>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: Re: [PATCH v3 03/14] x86/cpufeatures: add X86_FEATURE_WORKLOAD_CLASS
+ feature bit
+Message-ID: <20241022124202.GHZxedmqPeFd5F3sL3@fat_crate.local>
+References: <20241015213645.1476-1-mario.limonciello@amd.com>
+ <20241015213645.1476-4-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,41 +83,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241022115720.GGZxeTIEqLBQwHjsiE@fat_crate.local>
+In-Reply-To: <20241015213645.1476-4-mario.limonciello@amd.com>
 
-On Tue, Oct 22, 2024 at 01:57:20PM +0200, Borislav Petkov wrote:
-> diff --git a/arch/x86/kernel/cpu/topology_common.c b/arch/x86/kernel/cpu/topology_common.c
-> index 9a6069e7133c..38220b64c6b3 100644
-> --- a/arch/x86/kernel/cpu/topology_common.c
-> +++ b/arch/x86/kernel/cpu/topology_common.c
-> @@ -27,6 +27,23 @@ void topology_set_dom(struct topo_scan *tscan, enum x86_topology_domains dom,
->  	}
->  }
->  
-> +const char *get_topology_cpu_type_name(struct cpuinfo_x86 *c)
-> +{
-> +	enum x86_topology_cpu_type type;
-> +
-> +	if (c->x86_vendor == X86_VENDOR_INTEL)
-> +		type = get_intel_cpu_type(c);
-> +	if (c->x86_vendor == X86_VENDOR_AMD)
-> +		type = get_amd_cpu_type(c);
-> +
-> +	if (type == TOPO_CPU_TYPE_PERFORMANCE)
-> +		return "performance";
-> +	else if (type == TOPO_CPU_TYPE_EFFICIENCY)
-> +		return "efficiency";
-> +	else
-> +		return "unknown";
-> +}
+On Tue, Oct 15, 2024 at 04:36:34PM -0500, Mario Limonciello wrote:
+> From: Perry Yuan <perry.yuan@amd.com>
+> 
+> Add new feature bit that indicates support for workload based
+> heuristic feedback to OS for scheduling decisions.
+> When the bit set, threads are classified during runtime into
+> enumerated classes. The classes represent thread performance/power
+> characteristics that may benefit from special scheduling behaviors.
+> 
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  arch/x86/include/asm/cpufeatures.h | 1 +
+>  arch/x86/kernel/cpu/scattered.c    | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index cea1ed82aeb4..3e8e67b8ec7a 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -474,6 +474,7 @@
+>  #define X86_FEATURE_CLEAR_BHB_LOOP_ON_VMEXIT (21*32+ 4) /* Clear branch history at vmexit using SW loop */
+>  #define X86_FEATURE_FAST_CPPC		(21*32 + 5) /* AMD Fast CPPC */
+>  #define X86_FEATURE_HETERO_CORE_TOPOLOGY	(21*32 + 6) /* Heterogeneous Core Topology */
+> +#define X86_FEATURE_WORKLOAD_CLASS	(21*32 + 7) /* Workload Classification */
 
-I guess you still need topology_cpu_type() in your next patch but that's easy
-- you simply call it in get_topology_cpu_type_name().
-
-The point being debugfs will dump the name of the core type and not some magic
-number which no one knows.
-
-Thx.
+As already discussed: X86_FEATURE_AMD_WORKLOAD_CLASS
 
 -- 
 Regards/Gruss,
