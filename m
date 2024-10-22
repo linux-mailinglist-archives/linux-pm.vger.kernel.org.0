@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-16234-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16237-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F5379AB25E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 17:45:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0409AB267
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 17:45:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DED81F224F4
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:45:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACDBD284269
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820801A3020;
-	Tue, 22 Oct 2024 15:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD961AD5D8;
+	Tue, 22 Oct 2024 15:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Qsq5E/Yu"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="V0ko+3o+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9669A13957E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4B819DF52;
 	Tue, 22 Oct 2024 15:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729611913; cv=none; b=O7IAHRdTOaEIU+31C6X2IQl12NCtQuJ6ae0BkmBTibmpSpx9eQ4GlXUDC0thfEw/OnnkXF3eZVLRWotPpCfIuB8sA6kU0tHYFf7c15gsK4h3+vIfqdhO+FpXHWgKwvp3Ur8maIa/rMDDIWIaz8MQ/yM5h0UhOZ3frhS6+bOmFLI=
+	t=1729611914; cv=none; b=YMricFRUYoBe2snFDGL9O7xwuAfB4ieTCpY+DuaQZ3veswfdj2oUh3PkwP19qhzZTuolRWJ+Fvs9+BNY932ys91EA84hYLNQcPNinXJqkYhjnBk2OT3uGMsXhT/57jlS0iCXqMVUUKUePwGi4a+0604+GmGNZ/SZb6v91YI60xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729611913; c=relaxed/simple;
-	bh=NJ7R6moR13i/qYgT1UcSIwbcfv9v3Unc4ptYYcOTvR8=;
+	s=arc-20240116; t=1729611914; c=relaxed/simple;
+	bh=WdAfMwo/02oulaifUnF7xk8G7gAfYMpEJETO/isky1k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R4cyxVV1DwSwYjq81hal1Xuo6g3ECs4rFVL+bBx7y9F6LbX/uIfzbK1tRip64Q4tL4qq1f46+GVjWkqTitwVwJDG3v88agxGs4YWGdnV8YoxixdD8f0Ij1dFNkxPpkJphinb2OV+QJMI7nUqOY1/sSEwUoJXN3I2+q/ts6ZOEs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Qsq5E/Yu; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=Orn8mJvklu3pCgMjlDsspEg8J6EDsFNYzCUKRuHT+qL42bSydeDsawOXZ6g2Xd1vc4dQwpXAw38JQox8qrrXvZJgLZpVonx4LmvQu47+23zBBBGiDvxAM44G7CQYtCT7yomHM4NcRFbFvcQAZlrEAmYjQ+jBBH11W5BYE+GecyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=V0ko+3o+; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1729611909;
-	bh=NJ7R6moR13i/qYgT1UcSIwbcfv9v3Unc4ptYYcOTvR8=;
+	bh=WdAfMwo/02oulaifUnF7xk8G7gAfYMpEJETO/isky1k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Qsq5E/YuMW8X8fdJD+9wgJY2Y5OR87uzXyjvH/LWxAC5E8KmChY4OLuJ6qGQtyug4
-	 HJkJiYDiN6ABHqOdk2LdjKbK8/qsqvlJi5N5MEo5QcxQZZocEjo5gjlmIx6E3sW8Uw
-	 jbJ9klthZSo/X9NZ5OwwDCxgyePWx5G/u5TzCqY760MFf19IIClcmE9X5D12h1ZFta
-	 BE/zyApE3vk2ePNPGUxfdaA/ZB+itEo4AmD8TlGM55M4ueErSFz/LYHqg4c/Y/wVwO
-	 IXgS+7sDOi3ttKoFQ01Be35kCJsEvhuo5q5pganGc5Vz4HHPKbPsMV0AO+ZzpkdI0L
-	 trjwufFipLIAg==
+	b=V0ko+3o+VrZizinMoMFxC+tLwwaGgfWnMO0+MB1SWLm2JgEWq1U2rVcmCWHL+hffR
+	 q9lDRJYm6xymckEd1T03tCHoAqdm3EAXle/2h6hB7eA5qLnyoIMTLcr4nTY8IZzJ0S
+	 il3jrsB/4GqfFWVjq3PnacouZwMx0TcaPC74f8w2vlyuT04BU0xWbbqs3AqQb4lnj3
+	 whv/Ue177H9Y4aCvdU+gW6BckqAhB3UXhjXHdqylhBPDYl6Ar6+3SebyUeforY/K8P
+	 8+c71l0+/g49OIfjv2YVQuGn5GQ8VoBEy4xI94vSOcu91l1I1xoaCp+8qmn50OZ8qE
+	 qwo0M+phXHZLg==
 Received: from jupiter.universe (dyndsl-091-248-085-026.ewe-ip-backbone.de [91.248.85.26])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B5D9117E3677;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id B7C4717E367D;
 	Tue, 22 Oct 2024 17:45:09 +0200 (CEST)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 69AF84800F6; Tue, 22 Oct 2024 17:45:09 +0200 (CEST)
+	id 6B89F4800F8; Tue, 22 Oct 2024 17:45:09 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>,
 	linux-pm@vger.kernel.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v3 3/7] pmdomain: rockchip: forward rockchip_do_pmu_set_power_domain errors
-Date: Tue, 22 Oct 2024 17:41:48 +0200
-Message-ID: <20241022154508.63563-4-sebastian.reichel@collabora.com>
+Subject: [PATCH v3 4/7] pmdomain: rockchip: reduce indentation in rockchip_pd_power
+Date: Tue, 22 Oct 2024 17:41:49 +0200
+Message-ID: <20241022154508.63563-5-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241022154508.63563-1-sebastian.reichel@collabora.com>
 References: <20241022154508.63563-1-sebastian.reichel@collabora.com>
@@ -82,90 +82,87 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently rockchip_do_pmu_set_power_domain prints a warning if there
-have been errors turning on the power domain, but it does not return
-any errors and rockchip_pd_power() tries to continue setting up the
-QOS registers. This usually results in accessing unpowered registers,
-which triggers an SError and a full system hang.
+Rework the logic, so that the function exits early when the
+power domain state is already correct to reduce code indentation.
 
-This improves the error handling by forwarding the error to avoid
-kernel panics.
+No functional change intended.
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/pmdomain/rockchip/pm-domains.c | 34 +++++++++++++++++---------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ drivers/pmdomain/rockchip/pm-domains.c | 49 +++++++++++++-------------
+ 1 file changed, 25 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index a161ee13c633..8f440f2883db 100644
+index 8f440f2883db..f4e555dac20a 100644
 --- a/drivers/pmdomain/rockchip/pm-domains.c
 +++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -533,16 +533,17 @@ static int rockchip_pmu_domain_mem_reset(struct rockchip_pm_domain *pd)
- 	return ret;
- }
+@@ -582,39 +582,40 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
  
--static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
--					     bool on)
-+static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
-+					    bool on)
- {
- 	struct rockchip_pmu *pmu = pd->pmu;
- 	struct generic_pm_domain *genpd = &pd->genpd;
- 	u32 pd_pwr_offset = pd->info->pwr_offset;
- 	bool is_on, is_mem_on = false;
-+	int ret;
+ 	guard(mutex)(&pmu->mutex);
  
- 	if (pd->info->pwr_mask == 0)
--		return;
+-	if (rockchip_pmu_domain_is_on(pd) != power_on) {
+-		ret = clk_bulk_enable(pd->num_clks, pd->clks);
+-		if (ret < 0) {
+-			dev_err(pmu->dev, "failed to enable clocks\n");
+-			return ret;
+-		}
++	if (rockchip_pmu_domain_is_on(pd) == power_on)
 +		return 0;
  
- 	if (on && pd->info->mem_status_mask)
- 		is_mem_on = rockchip_pmu_domain_is_mem_on(pd);
-@@ -557,16 +558,21 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 
- 	wmb();
- 
--	if (is_mem_on && rockchip_pmu_domain_mem_reset(pd))
--		return;
-+	if (is_mem_on) {
-+		ret = rockchip_pmu_domain_mem_reset(pd);
-+		if (ret)
-+			return ret;
+-		rockchip_pmu_ungate_clk(pd, true);
++	ret = clk_bulk_enable(pd->num_clks, pd->clks);
++	if (ret < 0) {
++		dev_err(pmu->dev, "failed to enable clocks\n");
++		return ret;
 +	}
  
--	if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
--				      is_on == on, 0, 10000)) {
--		dev_err(pmu->dev,
--			"failed to set domain '%s', val=%d\n",
--			genpd->name, is_on);
--		return;
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
-+					is_on == on, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev, "failed to set domain '%s' %s, val=%d\n",
-+			genpd->name, on ? "on" : "off", is_on);
+-		if (!power_on) {
+-			rockchip_pmu_save_qos(pd);
++	rockchip_pmu_ungate_clk(pd, true);
+ 
+-			/* if powering down, idle request to NIU first */
+-			rockchip_pmu_set_idle_request(pd, true);
+-		}
++	if (!power_on) {
++		rockchip_pmu_save_qos(pd);
+ 
+-		ret = rockchip_do_pmu_set_power_domain(pd, power_on);
+-		if (ret < 0) {
+-			clk_bulk_disable(pd->num_clks, pd->clks);
+-			return ret;
+-		}
++		/* if powering down, idle request to NIU first */
++		rockchip_pmu_set_idle_request(pd, true);
++	}
+ 
+-		if (power_on) {
+-			/* if powering up, leave idle mode */
+-			rockchip_pmu_set_idle_request(pd, false);
++	ret = rockchip_do_pmu_set_power_domain(pd, power_on);
++	if (ret < 0) {
++		clk_bulk_disable(pd->num_clks, pd->clks);
 +		return ret;
++	}
+ 
+-			rockchip_pmu_restore_qos(pd);
+-		}
++	if (power_on) {
++		/* if powering up, leave idle mode */
++		rockchip_pmu_set_idle_request(pd, false);
+ 
+-		rockchip_pmu_ungate_clk(pd, false);
+-		clk_bulk_disable(pd->num_clks, pd->clks);
++		rockchip_pmu_restore_qos(pd);
  	}
+ 
++	rockchip_pmu_ungate_clk(pd, false);
++	clk_bulk_disable(pd->num_clks, pd->clks);
 +
-+	return 0;
+ 	return 0;
  }
  
- static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
-@@ -592,7 +598,11 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
- 			rockchip_pmu_set_idle_request(pd, true);
- 		}
- 
--		rockchip_do_pmu_set_power_domain(pd, power_on);
-+		ret = rockchip_do_pmu_set_power_domain(pd, power_on);
-+		if (ret < 0) {
-+			clk_bulk_disable(pd->num_clks, pd->clks);
-+			return ret;
-+		}
- 
- 		if (power_on) {
- 			/* if powering up, leave idle mode */
 -- 
 2.45.2
 
