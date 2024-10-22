@@ -1,73 +1,65 @@
-Return-Path: <linux-pm+bounces-16248-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16249-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83F2F9AB2D5
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 17:56:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2B2D9AB355
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 18:06:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B0211F24003
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:56:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A5042832E6
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 16:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAF621A2C04;
-	Tue, 22 Oct 2024 15:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8275E1BD039;
+	Tue, 22 Oct 2024 16:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="POSvmcxe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U77OVPOO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A6713957E
-	for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 15:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD416139CEF;
+	Tue, 22 Oct 2024 16:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729612483; cv=none; b=epDCJUDxNN+BHOjoIsrcoyunQMYF92zvKeXSE6FS4d5gg1BSKYinSj3EujvwtoA9eY7uphe1XvheqTafFCWe7E2iZ4hsYjLx9hgzhmipOEx9JjTUMSnvbmzeq4jcOEnx/oTi+06OHx72o9Bhnli+riONY71yTfRaCCzVfS68WA8=
+	t=1729612997; cv=none; b=TWRb76m7vwxxcbQBR0uQnYwLn0zj7qkD/09EknuqsCTpUb2LLATqWor3eDghuFOpghxr93kAOaOPqE42E31JjXwQ36fgkIcCX2Tsu3NCWfwDnnAa/xl9KhIlX9u/8nHJr4BGQoRIntjs/SMLq98i9yXsoQF98CIST1Jf/MxWmho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729612483; c=relaxed/simple;
-	bh=62NNQJJ7A3DiuVr30S0NvM8u/vEh06OgwsxSudEBY+8=;
+	s=arc-20240116; t=1729612997; c=relaxed/simple;
+	bh=ISVdsy4ol+QmH4I1SCgwtlnI5AxGo+ZDt6xAM4TS7po=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lqohwie34wQMpwbnBZLXP7ozYoGL4Plx3tnQ4Mti90nkaS4JLrxOQ5HiqVG3poWwXdQtZ70ZL5botyHA6zSFEd3DXT9E0GQ1F1DVDW1rCXQPyJJvUAtaPeoIDRzRCisDM7NnOKLky+LmOf09PmVmL+ECN62/cXgZpYncqEFIayA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=POSvmcxe; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4314b316495so56464715e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 08:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729612480; x=1730217280; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oOgoGaX/0/14yPta5AUXfcWrIsji8gX2pljYL0Iu//Y=;
-        b=POSvmcxeVLZEQc27hYtnEBa4MbOwE5XEEPVnwbV/y8MURktcUMdvRttheyfnXyyiyO
-         YSRVlcs8smM9V/71zFXcNNbYi+3rtYOP9YhHj0vpIfgshaRMWptnXldZXSZrTIPXX7cA
-         h2m+PIkN7Vkd8ogGQ8HNTqGASBZ4WfGWc3BuECo70DLkWEll2ct/oOc/Na2r3Ts8LvAn
-         JsKJT/5bP5/McQn+w3Va8yfcic/PKgVDMSsOoH5OG+mFAvORh6fipNxZxulqccGRamqZ
-         zChhA/XcCZtTN7ipz1w2q/nKoS/hcw/hPHzTT05DYkE7xtQzDlNIE9zduckikZZdM4ZM
-         Yzlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729612480; x=1730217280;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOgoGaX/0/14yPta5AUXfcWrIsji8gX2pljYL0Iu//Y=;
-        b=P9kahtZ0d7bBRxbW5+uQl6K136EqKoSvh2StDgZpz61IkwOhNkxcigGcCY+Nlnk3hA
-         8PJqIPZCo1GBB2rCSF5Efw1pj1GwouLD6QZWoIwtf/HW8AEEDGRVE3uqICCKznaEUcsa
-         hzRjCESO7e3/NuEya/Dbr2r6d2wE9911AWioWttm9SMLsG1kgasUQwSuc7c15BRwW156
-         NApW6iKlKM8b3DRKJmZamk4inH1qp4mj6z5RhEMAK0bohjv9Ab6Lu10BEMrV7rBjlEev
-         HAW57qMAric15R16SJPtys0XIxxFBvEsiPQ6ZH9ckUrT6cA4pjHDdoxhlQshIiTyrzSS
-         wI0Q==
-X-Gm-Message-State: AOJu0Yyav4SFyCuxPPHWxW1uVGAJKVvAFZpS7lP5cibGmQhLBihmVJpo
-	XPi91AhU2viLFl8Cl8u1rYoDx9SXVr9vbyjuFyyB+XXbrb7V2xcrAW23BI2GBpA=
-X-Google-Smtp-Source: AGHT+IHEyv7b+dIOLK51w4OQoLuXX+Qs1IRZBFRkMgNvWmbOWzQVKoeNoUpUqmE3JBoxdTY2yOULyg==
-X-Received: by 2002:a05:600c:35cd:b0:42c:bae0:f05b with SMTP id 5b1f17b1804b1-4317ca915a7mr28575315e9.1.1729612479923;
-        Tue, 22 Oct 2024 08:54:39 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4316f5c3173sm91199105e9.33.2024.10.22.08.54.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 08:54:39 -0700 (PDT)
-Message-ID: <854974d9-fc56-4a40-977c-9ce90b783338@linaro.org>
-Date: Tue, 22 Oct 2024 17:54:39 +0200
+	 In-Reply-To:Content-Type; b=bTrKq+DPNaSHSC3kWSbk9WU+sqQlH1AFYAGa/W1xxdEggrctMCu25qyW4wrJ0fRvZ7u+ku1RFMG9t9R8gw1CP8ttmlnTwAAHglTHsk2XXk3L2v+o49FnMdNZ7tgw4excBUyGqQXxAULGqvP5xoA3H8xO7Fa7RRRSuFfZ7AuTc2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U77OVPOO; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729612996; x=1761148996;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ISVdsy4ol+QmH4I1SCgwtlnI5AxGo+ZDt6xAM4TS7po=;
+  b=U77OVPOOpzCwOEmtskAM51d8EMhO3S/vHc2fdaiATbAxdAw1pQWMLmpw
+   im25xMScO1x16XCcFl1IDrhcdDThMD7hIU6Oa5yxaNyl46i2KViWt+pdt
+   qQKPCFMKz91RL5YAyWy79PMtI3EFzESKuqtb09EK2MSoIoToQ4Iw23mJe
+   I9E+h4KWoSYCl8xQdzIBgD7LR946QfzLpu6Y8zRQ19dwjInmNyqpIrs8d
+   ox5rdFQtr+BMaFPtKPIA+BPowlR9koa5DvCnADAFE0PX8uUhZjTjYq9Ex
+   mbeF1Fh5sK9NeT0v0IUXH9h1n8I684s70epoeoWkbRrkk8NOW4tj+RRyg
+   Q==;
+X-CSE-ConnectionGUID: ZMiAnSKuShS+1GxDGlXfvw==
+X-CSE-MsgGUID: LISvUtt/SK6PY2t0+WurBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="29271981"
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="29271981"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 09:03:15 -0700
+X-CSE-ConnectionGUID: y5gz1it2S0ySWm4h6zKsRw==
+X-CSE-MsgGUID: 9WhImbTmRcq96Ok9+EWd3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="79859709"
+Received: from ssimmeri-mobl2.amr.corp.intel.com (HELO [10.124.220.121]) ([10.124.220.121])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 09:03:13 -0700
+Message-ID: <4476c7a5-bc48-4686-b815-3fae0838b7f9@intel.com>
+Date: Tue, 22 Oct 2024 09:03:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,191 +67,115 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/5] Add thermal user thresholds support
-To: rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, quic_manafm@quicinc.com, lukasz.luba@arm.com
-References: <20241022155147.463475-1-daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v2 4/5] x86/cpu: Add CPU type to struct cpuinfo_topology
+To: Borislav Petkov <bp@alien8.de>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>, Brijesh Singh <brijesh.singh@amd.com>,
+ Peter Zijlstra <peterz@infradead.org>, Li RongQing <lirongqing@baidu.com>,
+ "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>, "open list:ACPI"
+ <linux-acpi@vger.kernel.org>,
+ "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+References: <20241022034608.32396-1-mario.limonciello@amd.com>
+ <20241022034608.32396-5-mario.limonciello@amd.com>
+ <20241022115720.GGZxeTIEqLBQwHjsiE@fat_crate.local>
+From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20241022155147.463475-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <20241022115720.GGZxeTIEqLBQwHjsiE@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 10/22/24 04:57, Borislav Petkov wrote:
+> +enum x86_topology_cpu_type get_intel_cpu_type(struct cpuinfo_x86 *c)
+> +{
+> +	switch (c->topo.intel_type) {
+> +	case 0x20: return TOPO_CPU_TYPE_EFFICIENCY;
+> +	case 0x40: return TOPO_CPU_TYPE_PERFORMANCE;
+> +	}
+> +	return TOPO_CPU_TYPE_UNKNOWN;
+> +}
 
-Please note, I did not fixed the locking issue assuming it will be fixed 
-when the series is applied as stated in v5.
+This makes me feel a _bit_ uneasy.  0x20 here really does mean "Atom
+microarchitecture" and 0x40 means "Core microarchitecture".
 
-As soon as the series is merged, I will send a couple of changes, one to 
-fix the memory leak and the other one to fix the warning reported by syszbot
+We want to encourage folks to use this new ABI when they want to find
+the fastest core to run on.  But we don't want them to use it to bind to
+a CPU and then deploy Atom-specific optimizations.
 
-Thanks
+We *also* don't want the in-kernel code to do be doing things like:
 
-   -- D.
+	if (get_intel_cpu_type() == TOPO_CPU_TYPE_EFFICIENCY)
+		setup_force_cpu_bug(FOO);
 
-On 22/10/2024 17:51, Daniel Lezcano wrote:
-> The trip points are a firmware description of the temperature limits
-> of a specific thermal zone where we associate an action which is done
-> by the kernel. The time resolution is low.
-> 
-> The userspace has to deal with a more complex thermal management based
-> on heuristics from different information coming from different
-> places. The logic is much more complex but based on a bigger time
-> resolution, usually one second based.
-> 
-> The purpose of the userspace is to monitor the temperatures from
-> different places and take actions. However, it can not be constantly
-> reading the temperature to detect when a temperature threshold has
-> been reached. This is especially bad for mobile or embedded system as
-> that will lead to an unacceptable number of wakeup to check the
-> temperature with nothing to do.
-> 
-> On the other side, the sensors are now most of the time interrupt
-> driven. That means the thermal framework will use the temperature trip
-> points to program the sensor to trigger an interrupt when a
-> temperature limit is crossed.
-> 
-> Unfortunately, the userspace can not benefit this feature and current
-> solutions found here and there, iow out-of-tree, are to add fake trip
-> points in the firmware and enable the writable trip points.
-> 
-> This is bad for different reasons, the trip points are for in-kernel
-> actions, the semantic of their types is used by the thermal framework
-> and by adding trip points in the device tree is a way to overcome the
-> current limitation but tampering with how the thermal framework is
-> supposed to work. The writable trip points is a way to adjust a
-> temperature limit given a specific platform if the firmware is not
-> accurate enough and TBH it is more a debug feature from my POV.
-> 
-> The user thresholds mechanism is a way to have the userspace to tell
-> thermal framework to send a notification when a temperature limit is
-> crossed. There is no id, no hysteresis, just the temperature and the
-> direction of the limit crossing. That means we can be notified when a
-> temperature threshold is crossed the way up only, or the way down only
-> or both ways. That allows to create hysteresis values if it is needed.
-> 
-> Those thresholds are refered as user thresholds in order to do the
-> difference with the trip points which are similar.
-> 
-> An user threshold can be added, deleted or flushed. The latter means
-> all user thresholds belonging to a thermal zone will be deleted.
-> 
-> When one or several user thresholds are crossed, an event is sent to
-> the userspace.
-> 
-> All aforementioned actions and events lead to a notification to the
-> userspace.
-> 
-> Along with the kernel changes, the thermal library has been extended
-> to provide the different API to deal with the new user threshold
-> netlink events and commands.
-> 
-> In addition, the thermal-engine skeleton uses these new API by
-> flushing and adding user thresholds as well as getting the
-> notification about these actions.
-> 
-> Overall the series has been tested with the thermal-engine skeleton
-> and some selftests which are not part of this series.
-> 
-> Changelog:
->    V6:
->    
->      - Added a comment in the parse_threshold_get() function to clarify
->        how the size is computed (Lukasz)
-> 
->      - Changed comparison to check against non zero value in the
->        __thermal_zone_discover() function (Lukasz)
-> 
->    V5:
->      - Added CAP_SYS_ADMIN needed capability when adding, deleting and
->        flushing a threshold (Rafael)
-> 
->      - Remove the pid information to prevent leaking pid inside
->        containers. Also the information is not really needed (Rafael)
-> 
->      - Renamed "THERMAL_GENL_ATTR_THRESHOLD_WAY" to
->        "THERMAL_GENL_ATTR_THRESHOLD_DIRECTION". Did not used '*_DIR' as
->        suggested initially because it can be ambiguous with 'directory'
->        (Rafael)
-> 
->      - Renamed 'last_temp' to 'prev_temp' (Rafael)
-> 
->      - Used CLASS constructor/destructor to get / put the thermal
->        zone's device refcount (Rafael)
-> 
->      - Moved locking inside thermal_thresholds_for_each() (Rafael)
-> 
->      - Reflected the changes above in the thermal library and the
->        thermal engine skeleton
->      
-> 
->    V4:
->      - Fix missing stubs when THERMAL_NETLINK=n (kernel test robot)
-> 
->    V3:
->      - the first patch of the v2 series has been merged
-> 
->      - Modified the description to split the information between the
->        cover letter and the patch 1 description (Rafael)
-> 
->      - Made the thresholds code as part of the core (Rafael)
-> 
->      - Converted the thresholds into a list and directly declared in
->        the thermal zone device structure (Rafael)
-> 
->      - Changed the name of the field in the thermal zone device
->        structure to user_thresholds (Rafael)
-> 
->      - Added #include "thermal_thresholds.h" (Rafael)
-> 
->      - Combined the conditions in the function
->        __thermal_threshold_is_crossed (Rafael)
-> 
->      - Moved the function thermal_thresholds_flush() before
->        thermal_thresholds_exit() (Rafael)
-> 
->      - Change thermal_thresholds_handle() to return void (Rafael)
-> 
->      - Move the list field on top the of the structure threshold and
->        renamed it list_node (Rafael)
-> 
->      - Changed THERMAL_THRESHOLD_* notifications to
->        THERMAL_TZ_THRESHOLD_* (Rafael)
-> 
->    V2:
->      - Compute min and max in thermal_zone_device_update() but keep
->        the loop as it is (Rafael)
-> 
->      - Include slab.h to fix compilation warnings on some architectures
->        with kmalloc and kfree (kernel test robot)
-> 
-> Daniel Lezcano (5):
->    thermal: core: Connect the threshold with the core
->    thermal/netlink: Add the commands and the events for the thresholds
->    tools/lib/thermal: Make more generic the command encoding function
->    tools/lib/thermal: Add the threshold netlink ABI
->    tools/thermal/thermal-engine: Take into account the thresholds API
-> 
->   drivers/thermal/thermal_core.c                |   9 +
->   drivers/thermal/thermal_netlink.c             | 236 +++++++++++++++++-
->   drivers/thermal/thermal_netlink.h             |  34 +++
->   drivers/thermal/thermal_thresholds.c          |  36 +--
->   drivers/thermal/thermal_thresholds.h          |   2 +-
->   include/uapi/linux/thermal.h                  |  27 +-
->   tools/lib/thermal/commands.c                  | 177 ++++++++++++-
->   tools/lib/thermal/events.c                    |  55 +++-
->   tools/lib/thermal/include/thermal.h           |  40 +++
->   tools/lib/thermal/libthermal.map              |   5 +
->   tools/lib/thermal/thermal.c                   |  17 ++
->   tools/thermal/lib/Makefile                    |   2 +-
->   tools/thermal/thermal-engine/thermal-engine.c | 105 +++++++-
->   13 files changed, 681 insertions(+), 64 deletions(-)
-> 
+That would fall over if Intel ever mixed fast and slow core types with
+the same microarchitecture, which is what AMD is doing today.
 
+Having:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+	TOPO_CPU_TYPE_EFFICIENCY, and
+	TOPO_CPU_TYPE_PERFORMANCE
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+is totally fine in generic code.  But we also need to preserve the:
+
+	TOPO_HW_CPU_TYPE_INTEL_ATOM
+	TOPO_HW_CPU_TYPE_INTEL_CORE
+
+values also for use in vendor-specific code.
+
+In the ABI, I think we should probably make this an explicit
+power/performance interface rather than "cpu_type".  As much as I like
+the human readable "performance" and "efficiency", I'm worried it won't
+be flexible enough for future maniacal hardware designers.  To be 100%
+clear, all the hardware designs that I know of would fit in a two-bucket
+("performance" and "efficiency") scheme.  But we've got to decide
+whether to commit to that forever.
 
