@@ -1,95 +1,122 @@
-Return-Path: <linux-pm+bounces-16251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16252-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 348A89AB3CA
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 18:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AA6B9AB40E
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 18:31:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3961284ADC
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 16:24:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05E41283955
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 16:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4831BB6B6;
-	Tue, 22 Oct 2024 16:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71B71BB6B3;
+	Tue, 22 Oct 2024 16:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dXREBZhn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5141A76D1
-	for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 16:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E8D19AA53;
+	Tue, 22 Oct 2024 16:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729614260; cv=none; b=o6r4v69Q6dQ0xSwWI7YEOGJ89KRChz0kUIE8LcMBd/P7T3/bIHk58l33V/+jQYWcOsJj4nLI+qesJb5mXkwzuyBvEeVrGa0VEmk1k8wXdNzkl/XhC/fekZtlTDVQWeSgN2E5w7rivlIaP56CwdCy/6zsMs7d3ndgxwL/PretOKM=
+	t=1729614680; cv=none; b=dzcQBo+NtVD1/pEPOLubAdKZOgs5e0KBqiwM7J08MK1rc++j/6ByMFhd73JkDxzZ8TTGL2Z/vPYeLDP4wXOUIGsGnavJlzNek6YuJxV3pvLke4P+dxJRXof73mjycJPJpwS0eNauouvWaI3cagvtzVAncKWDgnkpA7J6v5dHBZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729614260; c=relaxed/simple;
-	bh=TaaTMM3UxQWbFXrjZD8NbUwl2Jn1hwjRyh9yQQ+Ff4A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=LnHXm78R2FtJGyd/t7KmtQeU5MIp0pMJTEWrXoVyRKavHsFS0XFxVPhI5Yc2uWO+StAVz1j4ZxrcTErxAIwdK6Ir3ukvt1t/AGoVNoinKY6mPdYJadQslDszCCgC0nXyxAq3C533wVXq6LtB2ShJTBsuuRqSPliNwAaOxiZTXh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=baylibre.com; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c803787abso45603225ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 09:24:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729614258; x=1730219058;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TaaTMM3UxQWbFXrjZD8NbUwl2Jn1hwjRyh9yQQ+Ff4A=;
-        b=ETzqa2CO0TQjTQPWkuWvSQAZ88aMbF1ZEN7rVkmunLFfhfuItjsh2SSHCSNcbz/yjB
-         3ny3V8MFD66f9GaN+tINQeLPaSieTObpi1dUwkHBa8gRNSun5IvcQ/3d/svf0G+H+RWb
-         O/fdevSd2Qtf+x5LOmqHhZ24E97jXv/+m6touTxANERRRrhldDsJGzRva7CEFPtLpTky
-         TmH5hVKNmuBeLa/RQ07Qndoek5gxnwVmESHlAv+D6Qjjwg3x6Szi0px+CqI6gydGfQ/o
-         HsylHAlYtbN6cNmLKJB1ug69+3DIJ/bL177mNUwEr5FpL37AM+zp/2WE4LoVSPEai2+X
-         mrhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVkOkPKlbMPURZZBDV5ZQo6YBQxVmvZ+j/tywrlzETxaxF/NxPCz0cKq7Zos0sf2JtgUmIGM4HH4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZwXSTNXjCTMakklo9hiaX3SRd4JrDFMJJUpdgqvEyII7d2IUK
-	oRojmZSb+7DxZd2cGZf8MGCqLDi5SH+A+rgZV2XIRUQiF8JxT1K41dF05LXLTyU=
-X-Google-Smtp-Source: AGHT+IFaD/j1Rlq40Aw5sjAcS1z8YIlzMkor00MFlOjtln9GzriHDQFJiXnHbn4jt+cYqpNSUiqZDQ==
-X-Received: by 2002:a17:902:dacb:b0:20c:7196:a1e9 with SMTP id d9443c01a7336-20e96feb050mr65803955ad.13.1729614257846;
-        Tue, 22 Oct 2024 09:24:17 -0700 (PDT)
-Received: from localhost ([97.126.177.194])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0d9f05sm44498595ad.186.2024.10.22.09.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2024 09:24:17 -0700 (PDT)
-From: Kevin Hilman <khilman@kernel.org>
-To: Thomas Richard <thomas.richard@bootlin.com>, Nishanth Menon <nm@ti.com>,
- Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: tony@atomide.com, u-kumar1@ti.com, gregory.clement@bootlin.com,
- thomas.petazzoni@bootlin.com, theo.lebrun@bootlin.com,
- richard.genoud@bootlin.com, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Thomas Richard
- <thomas.richard@bootlin.com>
-Subject: Re: [PATCH v2] pmdomain: ti-sci: set the GENPD_FLAG_ACTIVE_WAKEUP
- flag for all PM domains
-In-Reply-To: <20241022-8250-omap-no-console-suspend-v2-1-cc3d102b8a1e@bootlin.com>
-References: <20241022-8250-omap-no-console-suspend-v2-1-cc3d102b8a1e@bootlin.com>
-Date: Tue, 22 Oct 2024 09:24:16 -0700
-Message-ID: <7hbjzct8b3.fsf@baylibre.com>
+	s=arc-20240116; t=1729614680; c=relaxed/simple;
+	bh=KVLjpT7ZX9iWAD/24xl4Rm7ljfOUWX5ZNEqXbQPnM3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WlYzZRtSP9FDL0ScAS9yTbnND3vj71lyWk3h9Vld4k5PalFe+fU+xT4ANqNEjr6ygMnXI2/VbM/7NjiLzxh7lisb7p/Fr76NLH3Hcfoo6n1c1WSlOMqUC++2XnaAlI9Zw2YhmnAk3i6AmSqS1er+j0inBrPuuQtgU2DVaUVmd/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dXREBZhn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9B1C4CEC3;
+	Tue, 22 Oct 2024 16:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729614679;
+	bh=KVLjpT7ZX9iWAD/24xl4Rm7ljfOUWX5ZNEqXbQPnM3w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dXREBZhnbOCRyRJEiURpCXE06H6GgDVmaDwtKIv+czCXlz1h/52ulbmftS6fG+Tnx
+	 dCqMNvASD8vVoYHQuGjLuqnhuKgGT8YDa0kOiJrDe35i2qr8Xh7/WrZmIU/bQIj1Ja
+	 u30hBzV0fpl90CzpENJ2z/BI6VyMbl71Yerxkvgzd8zsB2t35BZoH4heOmmCy9BY8Q
+	 0x7oCYfVw9yi5tpbQnalxiSW58VaD+NMdTcur4P28wR9wzlnUBUAaesH5UAqDhbsnn
+	 XyVe6/bHCA3EvoAZYBCp7ayqhIy3gaKahLp8UPxoMAOTZ5y32gz4Kr5ULC1fgxFVw+
+	 XBDrdYm83U25Q==
+Date: Tue, 22 Oct 2024 17:31:10 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	jason-ch chen <Jason-ch.Chen@mediatek.com>,
+	Chen Zhong <chen.zhong@mediatek.com>,
+	Flora Fu <flora.fu@mediatek.com>,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Yassine Oudjana <y.oudjana@protonmail.com>,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 5/6] regulator: Add driver for MediaTek MT6328 PMIC
+ regulators
+Message-ID: <8b4814d7-15da-4c0d-8d6d-0707a8c2eb74@sirena.org.uk>
+References: <20241018081050.23592-1-y.oudjana@protonmail.com>
+ <20241018081050.23592-6-y.oudjana@protonmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="33tXnPvbLYFDgAR7"
+Content-Disposition: inline
+In-Reply-To: <20241018081050.23592-6-y.oudjana@protonmail.com>
+X-Cookie: Surprise due today.  Also the rent.
 
-Thomas Richard <thomas.richard@bootlin.com> writes:
 
-> With this flag, if a device is marked on the wakeup path, the correspondi=
-ng
-> PM domain is kept powered on.
->
-> This commit fixes the no_console_suspend support for some TI platforms
-> (tested on J7200). In case of no_console_suspend the serial core marks the
-> device on the wakeup path, but without this patch the power domain is
-> powered off anyway.
->
-> Suggested-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+--33tXnPvbLYFDgAR7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+On Fri, Oct 18, 2024 at 11:10:47AM +0300, Yassine Oudjana wrote:
+
+> +static int mt6328_ldo_table_set_mode(struct regulator_dev *rdev, unsigned int mode)
+> +{
+> +	int ret, val = 0;
+> +	struct mt6328_regulator_info *info = rdev_get_drvdata(rdev);
+> +
+> +	if (!info->modeset_mask) {
+> +		dev_err(&rdev->dev, "regulator %s doesn't support set_mode\n",
+> +			info->desc.name);
+> +		return -EINVAL;
+> +	}
+
+If the regulator doesn't support setting modes it shouldn't have any
+mode operations, then the core will take care of handling things
+appropriately.
+
+Otherwise this looks good.
+
+--33tXnPvbLYFDgAR7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcX000ACgkQJNaLcl1U
+h9Ce+wf/ZIulqT3K3IhJ+KVWRcq3tjdhPl/Mej1+R59I03LxzaQpb8o43HQxSAxe
+SU0os389dSUkyF+kdhdT9f6YnIbW+vKIYPS38wU/5vfJN83xndKz8fBXDIxypF+W
+p9CnJwD0oQdITaqwTv3R5hfguCOZjh4YZLOgF4lLnhrxE5n3xHTAd3xaDK8gFhDb
+3igU5G1wWXv1t4bo88lF+fVeV/UvAllmm/cMimxvkDXpC+0rVwyVE+TMXZ6+70j0
+HzjxF8MNukQREubLvlekRPkCKzcNJ69HTiMYsDNN8YEf2YNWgbfzTJIap31+vm1U
+wiwCOzsm/3hF/CDv5/gVqprY892Ehw==
+=zs8D
+-----END PGP SIGNATURE-----
+
+--33tXnPvbLYFDgAR7--
 
