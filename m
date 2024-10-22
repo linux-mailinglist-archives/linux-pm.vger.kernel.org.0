@@ -1,163 +1,190 @@
-Return-Path: <linux-pm+bounces-16222-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76C3C9AA2BE
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:05:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A54009AA2ED
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:21:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BB061F2405F
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 13:05:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5B3D1C2234F
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 13:21:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AAA19DF4F;
-	Tue, 22 Oct 2024 13:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8073719DF5F;
+	Tue, 22 Oct 2024 13:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E4agJvba"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oLHyQXEy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E483A19C560;
-	Tue, 22 Oct 2024 13:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769441C27
+	for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 13:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729602334; cv=none; b=rzYhrqCz5FRM6YJy4uOjMqclsct8ZMw+Vn4kjh0/3YnwURiDw3iKablBURkvCDMk5E/rCkGrohIfu6bVUAjRxym9X4nJ5YudqgHeOrKM+So7uRV+WmqnAOyeiyhiGzfN8FMiq1UisYy5k2f7tCxOblLNJV+WP2WsbRcbnfs6NjY=
+	t=1729603300; cv=none; b=uOFJDoF+4bbD9BlF7CpEmeZ0FgLnh+qMQCVblFjuDYGRDxvt683I4Prafz3mT+SczbARuT87pdCDwhfg/9jjPXkQfNH2VGwD/3GTfftP7chvlCq+WYPwVn82Y6p7LP6N7qzg+qV2aaIKX5AXGbkPC1DcAdUR+vMKqoSygPMAnuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729602334; c=relaxed/simple;
-	bh=GYElO7fLQ9SXczKd6rFScTpF4TePCHkBpeClolvf+Xs=;
-	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
-	 MIME-Version:Content-Type; b=WfNUhnC1LX+osCr1uC0dCoYSIUyEMQb0SDPKlS9Ke23RP7GaeeGFhBcrL4Zq7VwmGdgAsMfz37BRgWa1Gx1Fr7pGm0WnSVq4ySXRYhYobVy3E5nwV9nE8SnDO+lgQ+pL+tMSeyRaXI6qxLCLF3W3eiXuXO0rNEgy/Fut901GhNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E4agJvba; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d4ac91d97so5399489f8f.2;
-        Tue, 22 Oct 2024 06:05:32 -0700 (PDT)
+	s=arc-20240116; t=1729603300; c=relaxed/simple;
+	bh=l5ripOHNP9g2QR+4SBCzJLunmINoL4ZUXOuOQewZA8o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A5WKo8pbadYgiKOmUeJD2t7RVGXfkoQ9VSWCJuWkN3ErTYplPU3oLVUAzL8pagnqQkJG7mFSqEw7InKFhusPXJRhYx8tjIENvigK9173laYpLEq6wM25QP+YY4CpVGcCMIuggKecnrLDqe0qgVmkQRNBRICgWLzphkONGMH+EQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oLHyQXEy; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37ed3bd6114so2704585f8f.2
+        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 06:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729602331; x=1730207131; darn=vger.kernel.org;
-        h=mime-version:date:references:organization:in-reply-to:subject:cc:to
-         :from:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CTtGwP6N4/w3oaR99NStC9Ft9FOAVIQw0MsHn1koshE=;
-        b=E4agJvba8ZLSyyCPsWqiEnUCeRlGXYHLt9d3EiKGj0pOtzAehKxUdmZ8nkUApgtmry
-         kv32n+ZnrG4XTh51kKV/Vu26QfmZYcnypj/LsgoHWBJ9zWV2F2mwUP2p2VjmTUgf3H8Y
-         TzSoiGlRTaqKMMh1sseEXTqCwTnNdalR6T8YvGPYZfk2fHyFhqB8FUZP2OS/7sLQbg/9
-         e9uklbvsMBD7/1naAQr9KRDhEj1NBuFucakWrQBGeIm2XCpH/TlMqdVJmxuSOw5Qz7zX
-         UdSN6fu6m2/KYXd3zF9bLrrYir2Sxc1Gvo4D+zyfvIu+RCGRB73lS2oBW5aW6DGyKkdJ
-         T/ZQ==
+        d=linaro.org; s=google; t=1729603297; x=1730208097; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SMu5y2W0aq7zTeZANduollxVJZLzNvVjuzGgrRDXkrg=;
+        b=oLHyQXEybzvWDnPzoblJkTynkkO2wWq5b4Gb72VYZgyw6bStyZpTgPTGvImWOat5l7
+         0VDN0sklcnls1Or4pDlXWvKzeRcz9klHhtE2NnQb2fmuy8MhKjvwRFlyT6RBExMYy0Ut
+         qUqmkdPOnSEPfetqJs7ybJkJXKkSuQKB/e8gPpeh/zTyyjraXNqun0WABJ8LiydlIWLD
+         EhzxbRRPcy6+B2nD4bK2yIuADX4XMTUn7hlaP6SBIw68jKvq2c4afn9XfxGlSsIYsYV5
+         TOwAuNL0dnzvruXCfpFuUMBK/XA/XMbfGXFJDcqZt5Ruy0BINdmWbuLCqfU4OmyLvEkE
+         vH1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729602331; x=1730207131;
-        h=mime-version:date:references:organization:in-reply-to:subject:cc:to
-         :from:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CTtGwP6N4/w3oaR99NStC9Ft9FOAVIQw0MsHn1koshE=;
-        b=sg0jId0qjoE+4HvIxeb+r5YW7pDctNdes6I5Naodus0gTmX40yltNfWQzxoJEa9qkv
-         1GHPreUOqHC7LGTi4m6BmPJquShtN6HkbX6qPpIU+qfjbBVcdo+S3pxE0m94FnN6I4hH
-         BCGIB5Ezpg+H1cKFbZanKuYmvyB0V+CDALHsczSk/SgA18AIKN19bSR/5eLlFA2z3hnX
-         VtiU70qFyp+4LQFoHQ6WnEwIL0dvCYu9+pqQhAHerFSb6Ni+4KyBl8t7FJAS9xqAWsiR
-         ugl6TFly+kuAdCwj1HA6d5us+RL3TglFQAuPjN0iC/KKm7FlMQyRRnYE2pdXU5CHvjcQ
-         eMwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUettmBnsD4lfCqMqi/C2Ahf7HI4dwaudqKRF5kGieaSRCv53S6m+0AU9twRrkCN3zYC8ye7Sw1jxH7CY45@vger.kernel.org, AJvYcCUpdIsRDRxVptaSKfmGGbrCozvZ8ytKVjFhKruzSI6bvJF+cadv4I3HHcyIUu1kMMYOAjxKr7Vj3CZ2XwAF@vger.kernel.org, AJvYcCWz4nv820ITgTEduyJ51u+8kketD/Rfnlb6udDVMGfWQ5IIR7vfRRiNmkErL/bviNblVt6GcwE3dJA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWIs9xvQNFoISC097F9UUHvYTK1ee/wWnYuRCoboY9maVC3bEO
-	0DTer+1noEoIRV6wlDMajslf8hGngj11214zlxuC1LzpR4NhTOT8w635Mg==
-X-Google-Smtp-Source: AGHT+IFMNt1FAG23KL5PRAg+Fcc9lV8eLt2m4nerG4ZP6nNLVnj86k2lC4zHLqPdcrU2IJB8Djtl6A==
-X-Received: by 2002:adf:ffc9:0:b0:37d:3e6d:6a00 with SMTP id ffacd0b85a97d-37eab75555emr13573649f8f.47.1729602330805;
-        Tue, 22 Oct 2024 06:05:30 -0700 (PDT)
-Received: from localhost ([37.72.3.43])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b94346sm6624211f8f.86.2024.10.22.06.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2024 06:05:29 -0700 (PDT)
-Message-ID: <6717a319.df0a0220.9b810.4bc5@mx.google.com>
-X-Google-Original-Message-ID: <87ed48thif.fsf@>
-From: =?utf-8?Q?Miquel_Sabat=C3=A9_Sol=C3=A0?= <mikisabate@gmail.com>
-To: rafael@kernel.org
-Cc: daniel.lezcano@linaro.org,  linux-arm-msm@vger.kernel.org,
-  linux-pm@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuidle: Fix reference count on CPU node
-In-Reply-To: <66fc57ef.050a0220.27e956.af8d@mx.google.com> ("Miquel
- =?utf-8?Q?Sabat=C3=A9=09Sol=C3=A0=22's?= message of "Tue, 01 Oct 2024
- 22:13:33 +0200")
-Organization: Linux Private Site
-References: <20240917211325.639765-1-mikisabate@gmail.com>
-	<66fc57ef.050a0220.27e956.af8d@mx.google.com>
-Date: Tue, 22 Oct 2024 15:05:28 +0200
+        d=1e100.net; s=20230601; t=1729603297; x=1730208097;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMu5y2W0aq7zTeZANduollxVJZLzNvVjuzGgrRDXkrg=;
+        b=ELBE093OAS0z7pZ8RdvLQgiecG6dt8iILAJm4VtZMgpUbA9JTl6XrRZJa7eb7rxC3R
+         ZHa5xTInub2UojHI5s01zgANcatM8sVcJBQfmauAgN5s1FhA6LUFFK0lw8y/z1z7dmCr
+         ue8hivRAeNE2sjc1NT4SfNDng2YUT/kwMmD+HVn9oQWYOuWMIQF/jfLjne3esAlj2OCG
+         SauDYH1w7RxNLNiVCK9RMjFuEdjgTIQmMbF+NVRFDNT+J7TR5EG+J6vXdI8HiDSpx/iC
+         /ByCeU9YRsQ80StDvQ3crXMK78Ux3uDPm+MyyiJ8gDBLfgIfOCw3IAyCp3Ykr1pjfjgy
+         HG3A==
+X-Gm-Message-State: AOJu0YzxZY9oD7TkiPVNS8pLJJnTybrg+1lDXhicGW+Dgu9mt8bm+KW6
+	gTcJtBmW9vtnQFiNBHcyZEDKGywQb/x4rfOD1BSP9TZJq23rz2tnlzYWUlig/vs=
+X-Google-Smtp-Source: AGHT+IH5TL+Yq9mzeqh/9s8h4lzyYSHSrwKMG6/TSoSh/DZ94FYQ0q+Vp8nsrzY1TyezKsrM0n4vHw==
+X-Received: by 2002:adf:f24e:0:b0:37d:373c:ed24 with SMTP id ffacd0b85a97d-37ea2136f4fmr10679791f8f.4.1729603296615;
+        Tue, 22 Oct 2024 06:21:36 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4316f570dd5sm88588425e9.3.2024.10.22.06.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Oct 2024 06:21:36 -0700 (PDT)
+Message-ID: <4fcfd585-7872-4728-978a-33f30bed3a0d@linaro.org>
+Date: Tue, 22 Oct 2024 15:21:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha512; protocol="application/pgp-signature"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/4] tools/lib/thermal: Add the threshold netlink ABI
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, quic_manafm@quicinc.com, rafael@kernel.org
+References: <20241014094309.1430126-1-daniel.lezcano@linaro.org>
+ <20241014094309.1430126-4-daniel.lezcano@linaro.org>
+ <eedddb6e-fe0b-4785-9590-4b607d775769@arm.com>
+ <b648f0b6-2df3-43ca-880e-a5290d0b8381@linaro.org>
+ <e7fcd734-53a2-4650-8657-2eadd58fbf92@arm.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <e7fcd734-53a2-4650-8657-2eadd58fbf92@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+On 22/10/2024 11:50, Lukasz Luba wrote:
+> 
+> 
+> On 10/22/24 08:49, Daniel Lezcano wrote:
+>> On 21/10/2024 22:47, Lukasz Luba wrote:
+>>>
+>>>
+>>> On 10/14/24 10:43, Daniel Lezcano wrote:
+>>>> The thermal framework supports the thresholds and allows the userspace
+>>>> to create, delete, flush, get the list of the thresholds as well as
+>>>> getting the list of the thresholds set for a specific thermal zone.
+>>>>
+>>>> Add the netlink abstraction in the thermal library to take full
+>>>> advantage of thresholds for the userspace program.
+>>>>
+>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>> ---
 
-On dt., d=E2=80=99oct. 01 2024, Miquel Sabat=C3=A9 Sol=C3=A0 wrote:
+[ ... ]
 
-> On dt., de set. 17 2024, Miquel Sabat=C3=A9 Sol=C3=A0 wrote:
->
->> For the qcom-spm driver, an early return was not calling the proper
->> of_node_put call for a previously acquired device node.
+>>>> +    nla_for_each_nested(attr, info- 
+>>>> >attrs[THERMAL_GENL_ATTR_THRESHOLD], rem) {
+>>>> +
+>>>> +        if (nla_type(attr) == THERMAL_GENL_ATTR_THRESHOLD_TEMP) {
+>>>> +
+>>>> +            size++;
+>>>> +
+>>>> +            __tt = realloc(__tt, sizeof(*__tt) * (size + 2));
+>>>> +            if (!__tt)
+>>>> +                return THERMAL_ERROR;
+>>>> +
+>>>> +            __tt[size - 1].temperature = nla_get_u32(attr);
+>>>> +        }
+>>>> +
+>>>> +        if (nla_type(attr) == THERMAL_GENL_ATTR_THRESHOLD_DIRECTION)
+>>>> +            __tt[size - 1].direction = nla_get_u32(attr);
+>>>
+>>> We probably relay on some order here, because the 'size -1' needs to be
+>>> done after first 'size++'.
+>>> If that the case then maybe it's worth a comment. Or if it wasn't
+>>> intended and there are no strong guarantees, then this needs a fix.
 >>
->> Signed-off-by: Miquel Sabat=C3=A9 Sol=C3=A0 <mikisabate@gmail.com>
->> ---
->>  drivers/cpuidle/cpuidle-qcom-spm.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
+>> The size contains the size of the array and we want to access the last 
+>> element, size - 1
 >>
->> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidl=
-e-qcom-spm.c
->> index 1fc9968eae19..d3608f47d02b 100644
->> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
->> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
->> @@ -96,8 +96,10 @@ static int spm_cpuidle_register(struct device *cpuidl=
-e_dev, int cpu)
->>  		return -ENODEV;
->>=20=20
->>  	saw_node =3D of_parse_phandle(cpu_node, "qcom,saw", 0);
->> -	if (!saw_node)
->> +	if (!saw_node) {
->> +		of_node_put(cpu_node);
->>  		return -ENODEV;
->> +	}
->>=20=20
->>  	pdev =3D of_find_device_by_node(saw_node);
->>  	of_node_put(saw_node);
->
-> Gently ping for a fix in the same spirit as [1].
->
-> Could you take a look whenever you have some time?
->
-> Thanks!
-> Miquel
->
-> [1] https://lore.kernel.org/all/20240917134246.584026-1-mikisabate@gmail.=
-com/
+>> I will add this sentence above as a comment if it is ok for you
+> 
+> Yes, please add some comment e.g. that size=0 will be then
+> first modified by the 1st 'if()' so 'size++' will happen
+> and there is no way that the 2nd 'if()' will trigger before that.
+> Those 2 'if()' are kind of independent in the code and it's
+> not obvious from that part of code, why the 2nd 'if()' won't
+> run at the beginning. The dangerous situation would be:
+> '__tt[0 - 1].direction = ' assignment, which is due to
+> 'size=0' init value.
+> 
+>>
+>>>> +    }
+>>>> +
+>>>> +    if (__tt)
+>>>> +        __tt[size].temperature = INT_MAX;
+>>>> +
+>>>> +    tz->thresholds = __tt;
+>>>
+>>> I wonder what would happen to the previous 'tz->thresholds' when
+>>> we just put new one here... I cannot find other place when it's set.
+>>>
+>>> Since we have '*__tt = NULL' then one of the solutions would be
+>>> to simply call:
+>>>      free(tz->thresholds);
+>>>      tz->thresholds = __tt;
+>>>
+>>> Am I missing something, when it might be cleaned in different place?
+>>
+>> The caller is supposed to pass a clean empty structure.
+>>
+>> Usually, this function is to discover the current configuration, so it 
+>> is a one shot call keeping the structure in memory for the libthermal 
+>> lifecycle.
+>>
+>> The events sends updates of the thermal zones. So with the events and 
+>> the initial configuration from the discovery, the userspace is always 
+>> up-to-date with the thermal setup.
+> 
+> So we cannot receive that we have new thresholds?
+> I thought we will get that information, even in runtime, so the old
+> memory should be just freed.
 
-Gently ping. Could someone take a look at this fix?
+Sorry may be I was unclear. I meant we will have the list of thresholds 
+and we will then receive event when they are created, deleted, etc ...
 
-Thanks,
-Miquel
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
------BEGIN PGP SIGNATURE-----
-
-iQJJBAEBCgAzFiEEG6U8esk9yirP39qXlr6Mb9idZWUFAmcXoxgVHG1pa2lzYWJh
-dGVAZ21haWwuY29tAAoJEJa+jG/YnWVl3B8QAKCIccWGVrbRZXgOT2VsW2G6ONcX
-6XUtziowTvDcQJUcdRjkgXBiQHa4UpcZpOTIu7HS5/cYHfSK9U6jylcTafDNVbYr
-Ry0bwgrzRzi7oLPo9cPE0Dp7YouK1dRZ70m9dOQlmaI3P7nIVOY/VxyxhKAn3q96
-cfIAPXJ6nxGHa/AiSHBoCsIumJk5GshJkF4fvfVUWtBLcbtFZIOtiwWKPE7o53e5
-SB4M1/RFd7U7BONpjx/a1sy54LT7tBwe+syb7qhSluNOpQDtd8JFHQu9wUv8aVgQ
-N7MyWbjgHsAm/754PmbG+Tzvjovd1b827NLZPuo9F4Me2noXWF2FsE6rgTbBKCbk
-cs8p1yy61m4JVJjakNC9UkobqXHHrakJ01agClVF8P/AIpGN2S+oueyeKvNa1NiF
-hKKioymcUwvOYl9XHGgM9vtwbkj1EazsANAg4/21hxwDwZ6LZ+mKptVW1NwVfRKb
-hm3dwiI1mStJJv7D92ZHLHZfs6SNZASnSSm4K4MSpeDyVAf5+9np4VDzSQzA79Fm
-vA3GI0yEahyUiD74YG6HCOrAf7uOffWvI7JDwgye6Hoqfi3S+gwOHGwniyr54BoB
-fDNRFi1alOuskUQ9m6F1z71G4IPiEVMOQY4WUFx+FHkyFi24MUiGbdDbrJWKB/Ye
-3h6gl6oKry7NOzNn
-=Vt1S
------END PGP SIGNATURE-----
---=-=-=--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
