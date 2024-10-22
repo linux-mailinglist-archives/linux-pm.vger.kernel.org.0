@@ -1,144 +1,136 @@
-Return-Path: <linux-pm+bounces-16171-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16172-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3AA9A94FD
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 02:33:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F5E9A9510
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 02:45:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C5CF1C2130D
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 00:33:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 372581F23AAF
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 00:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D5E3FE55;
-	Tue, 22 Oct 2024 00:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D066A4A07;
+	Tue, 22 Oct 2024 00:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="fVd6fasF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B86wTg8t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3CD4A35;
-	Tue, 22 Oct 2024 00:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6344E360;
+	Tue, 22 Oct 2024 00:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729557125; cv=none; b=KzPWXQdFzQ912gMn62Fv3fgHkeJqyhgRTvRweizCki6ngUNg7/T0/4UIYR7LuFjjc46GDcjoIZFQPZ+dFFu+XKxxC8efGHbW2dls2Hq8jM4BUONkMp1aO97eEyFWhutT3gOQmHxvxMgxJ7qwZ14KiV+RziIvQTpo6gxGFITy3oM=
+	t=1729557932; cv=none; b=iiB035pKt+6Vc6EyGYFoO+3fCFV1cMEdRT3HgVtJLJVxYfwWPD35UQOpVDqbB/cQn6mQMWmb9E2DeIWLpzkPoaVR+q+5Wa3eTe5wb/1zdfs1AmnL5yDEr2juHqvy/gw8VWq2ZvWWdfI/qfzomETlFVZhXcyjjELB9iU/yDNl/HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729557125; c=relaxed/simple;
-	bh=7e6oi+4Fq3PcPFF3r7xJtORu0Ad5MBHJhdXSLyVy6Yo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kqm6+eBGY4J7PD9FqFf5DnYNLY1scNhg1vZZSB549u/PEr4c0J5rV1AnFw0U3PXMgeccFvOwMp0F3df/XxYZLqC80ef9VhFskFx/GmJrnI/1/uVpzhUXz2cus2Aa1R9pDipJ6pop70retidw6bTaduBSqCLgqmH59YJkZddA11k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=fVd6fasF; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=jnHB6wnemLTKkfvg62yRFpueveUHz35ihltSxHEOOyg=; b=fVd6fasFy6Fza6By
-	alkxdQnEc1NSqn+jhdd0/aY0zhK+sFrCxAin55xwCTAJ1v6JQzgtYvqewAQrmY8ZauaEiLPjQzrj0
-	zn7RRyLZwnBv9WcJd+Xjd8ScXCiyP9PIMZvmpnJCnutCmwQ2va5kr2xknMiwkA/U6kkMvxCi3q5di
-	OZTo1McwkXoFfsstmrHbWiR144PMy/VtX/ZqYcW3q7lv/WLufKkslcDFE3BQnMlJgL/TZ0ULMnrit
-	RnK2g2NMxPuEuEX9+162jtcnf36IgkTM0Fh/49Oh9e3+EpX6pogD0AMHiTuU8Rw/mEFCuB3dcSS0p
-	2hPjzGHOTf9Pvz9oOQ==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1t32oY-00CeTr-19;
-	Tue, 22 Oct 2024 00:31:58 +0000
-From: linux@treblig.org
-To: cw00.choi@samsung.com,
-	myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com,
-	linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] PM / devfreq: Remove unused devfreq_event_reset_event
-Date: Tue, 22 Oct 2024 01:31:57 +0100
-Message-ID: <20241022003157.303127-1-linux@treblig.org>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1729557932; c=relaxed/simple;
+	bh=rkO4HQM7SizrGfprQ3ljcA2cJGSWdKVoqleXtchmey4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sp2E40HyMrppgwQEO485yulKHVyQo5bVf9sjk2BteY68cF7O/KmqCxCvxu/HlXPltcgArUT3/cx7L7DApuH8KIGdKl9cEWBx+qb4+NCi4Qoj5OdK7WpXvDQV50EyvPTNG8lzBAR1W6A+RPGjJi9yY9MS2T//DmxDRFVElfLScCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B86wTg8t; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-718e9c8bd83so4162874b3a.1;
+        Mon, 21 Oct 2024 17:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729557931; x=1730162731; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rkO4HQM7SizrGfprQ3ljcA2cJGSWdKVoqleXtchmey4=;
+        b=B86wTg8ty3WBYLGSfHx4LHwBIUlP/Czjl004eHXuItPJ1ObpMAk9voWFnTUTrIw0bR
+         wFPK8FGtKoN72vQKjTOPYG6yftL8U1+0idZoZnI6CDItH2OE04pCYFJ6YlumRLZjdotX
+         CLZ56ZUVZqQ4J6Stlr71k4d4ol8nW6HLEtVOHNT99xcJLDDlnUNEbR9jCki5WP5F7Ya2
+         y4Mebg9FHV3t2Gb5k1JGCW1OLZBH9z8HqNFi8Q6r3OzjypornliezXD8TS8Ui8V5FGoy
+         483mQFQ+qaEsYv+QoGGzEfC3e/Mhn8io4fzxy8PEa1qwAtAg7XyCeMRqlF/Lz2stnPDU
+         oshw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729557931; x=1730162731;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rkO4HQM7SizrGfprQ3ljcA2cJGSWdKVoqleXtchmey4=;
+        b=L1n8xy12xhkHyBJt8TP0KSNQaUVNHHHZ+9zZAOatzR0WY8SYtoQMSZ4yVDrVMnQqZW
+         P57O+DRxk+Yf+qgdn8uhn8mfJgDPkn1K3t+icEbJn+NGFL5HN53O/HTDVetPAyMgwFda
+         sHoYEuttBfD8pUYISt/9Ir7O9J7vNfRKYLuKiQSaHX1zO6GU6pWNfuJgNC6mvoNPRtCG
+         jwlEBHUeSgZoox1RFaTC3v0KAjW3VazvbY6z1fxjF7MNI49mPtAiSbmd/GxZLwFkvm99
+         fCcirvjdrUIpf9ZFPQxsb5zc2RZHTcaFUvj0jUVvay3mfCEEuo6KxEgpUbLIKhi+zMCR
+         RsrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUH1RT4jjWiQUQogW31Zu+USfcKJHtstOyxzkSx1F42vM4nV9OIgFNAPAV9M0NyVQTw3Jl/q38FOtFEe9/EMoSUBzDtIA==@vger.kernel.org, AJvYcCWNXKUsGwJRREjgtAFdv9cCYBcUEzIFfEZqf7VyEy3d6wck4FoberjtQIYqgLpX+twt+VuS5ZIHMtM=@vger.kernel.org, AJvYcCXTOBRDpbxIRAfJDC8+JMCBoCxQuJ7m4zyLbGkIiO/eGvK490AG/xnEYIViEXg2K3fyfodSy/LIOqM=@vger.kernel.org, AJvYcCXsrPgevuPNqDhhNdFlGticfo4AEr0dHTmQBOuMalyxPd3x/Vc3gvbQE5o63Eaaj10FBQ7GmgDKDmLyfFTQ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2Gn9ZbrFQhY5LALGxitCgcF3ylRJW9nulhPI8IRaZh7YvsSYL
+	HBU2K68grsSqZx0JklpAXbLURZIfuZ8B9uR4RpocuWaurLZ38C2T
+X-Google-Smtp-Source: AGHT+IEaN4XZFPrN3nD/QTLshZZNGUJSk1MAp7HuzF4HK7yRgsWTvFrVsHwAp9zDfAAIOEuKojXEuQ==
+X-Received: by 2002:aa7:8e06:0:b0:71e:674b:474 with SMTP id d2e1a72fcca58-71edc15f84fmr2018208b3a.8.1729557930342;
+        Mon, 21 Oct 2024 17:45:30 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec13d767esm3515322b3a.114.2024.10.21.17.45.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 17:45:29 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 810F8425A747; Tue, 22 Oct 2024 07:45:26 +0700 (WIB)
+Date: Tue, 22 Oct 2024 07:45:26 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc: x86@kernel.org, "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: Re: [PATCH v4 01/13] Documentation: x86: Add AMD Hardware Feedback
+ Interface documentation
+Message-ID: <Zxb1psmK05_xSXYH@archie.me>
+References: <20241021180252.3531-1-mario.limonciello@amd.com>
+ <20241021180252.3531-2-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EiFZ20l18MgsAYaW"
+Content-Disposition: inline
+In-Reply-To: <20241021180252.3531-2-mario.limonciello@amd.com>
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-devfreq_event_reset_event() was added in 2015 by
-commit f262f28c1470 ("PM / devfreq: event: Add devfreq_event class")
+--EiFZ20l18MgsAYaW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-but has remained unused.
+On Mon, Oct 21, 2024 at 01:02:40PM -0500, Mario Limonciello wrote:
+> From: Perry Yuan <Perry.Yuan@amd.com>
+>=20
+> Introduce a new documentation file, `amd_hfi.rst`, which delves into the
+> implementation details of the AMD Hardware Feedback Interface and its
+> associated driver, `amd_hfi`. This documentation describes how the
+> driver provides hint to the OS scheduling which depends on the capability
+> of core performance and efficiency ranking data.
+>=20
+> This documentation describes
+> * The design of the driver
+> * How the driver provides hints to the OS scheduling
+> * How the driver interfaces with the kernel for efficiency ranking data.
 
-Remove it.
+The doc LGTM, thanks!
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- drivers/devfreq/devfreq-event.c | 26 --------------------------
- include/linux/devfreq-event.h   |  6 ------
- 2 files changed, 32 deletions(-)
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-index 3ebac2496679..a60703374006 100644
---- a/drivers/devfreq/devfreq-event.c
-+++ b/drivers/devfreq/devfreq-event.c
-@@ -183,32 +183,6 @@ int devfreq_event_get_event(struct devfreq_event_dev *edev,
- }
- EXPORT_SYMBOL_GPL(devfreq_event_get_event);
- 
--/**
-- * devfreq_event_reset_event() - Reset all opeations of devfreq-event dev.
-- * @edev	: the devfreq-event device
-- *
-- * Note that this function stop all operations of devfreq-event dev and reset
-- * the current event data to make the devfreq-event device into initial state.
-- */
--int devfreq_event_reset_event(struct devfreq_event_dev *edev)
--{
--	int ret = 0;
--
--	if (!edev || !edev->desc)
--		return -EINVAL;
--
--	if (!devfreq_event_is_enabled(edev))
--		return -EPERM;
--
--	mutex_lock(&edev->lock);
--	if (edev->desc->ops && edev->desc->ops->reset)
--		ret = edev->desc->ops->reset(edev);
--	mutex_unlock(&edev->lock);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(devfreq_event_reset_event);
--
- /**
-  * devfreq_event_get_edev_by_phandle() - Get the devfreq-event dev from
-  *					 devicetree.
-diff --git a/include/linux/devfreq-event.h b/include/linux/devfreq-event.h
-index 4a50a5c71a5f..461080280de9 100644
---- a/include/linux/devfreq-event.h
-+++ b/include/linux/devfreq-event.h
-@@ -104,7 +104,6 @@ extern bool devfreq_event_is_enabled(struct devfreq_event_dev *edev);
- extern int devfreq_event_set_event(struct devfreq_event_dev *edev);
- extern int devfreq_event_get_event(struct devfreq_event_dev *edev,
- 				struct devfreq_event_data *edata);
--extern int devfreq_event_reset_event(struct devfreq_event_dev *edev);
- extern struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(
- 				struct device *dev,
- 				const char *phandle_name,
-@@ -149,11 +148,6 @@ static inline int devfreq_event_get_event(struct devfreq_event_dev *edev,
- 	return -EINVAL;
- }
- 
--static inline int devfreq_event_reset_event(struct devfreq_event_dev *edev)
--{
--	return -EINVAL;
--}
--
- static inline struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(
- 					struct device *dev,
- 					const char *phandle_name,
--- 
-2.47.0
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--EiFZ20l18MgsAYaW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZxb1oQAKCRD2uYlJVVFO
+o2W5AP9eArac6T9AE3et/1yG+qIYjyEo74c7IJg5uJzRKTUa6QEAiMnYPsaLTJ1K
+92Vz9xCv2BZme+lqTyZrz1gMUbJXwgM=
+=qVoF
+-----END PGP SIGNATURE-----
+
+--EiFZ20l18MgsAYaW--
 
