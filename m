@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-16238-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16235-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93B7D9AB26B
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 17:45:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EC189AB260
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 17:45:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C311A1C2246E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:45:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C1DF1C21A00
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 15:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083231B5328;
-	Tue, 22 Oct 2024 15:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852021A3BC0;
+	Tue, 22 Oct 2024 15:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NJmsV0IK"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ja9imMJ+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFD619B5B4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9674519ABB7;
 	Tue, 22 Oct 2024 15:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729611914; cv=none; b=DrDfaZ8TJUXFlZHiTCnSF8HSNrbjRZAcrwW1EKVSwns4MR5VC1gS5FPRJsGLkQ/65HGEgCWbKwvu+JlLUS560aUdlyQN7T3I6tztBcvuMko7jzOx6Eo0/UJvSRqtUcvByqvhPGcvW/HVHWMZqFQ9RBae7iMrba6tmNB4aTdWIhk=
+	t=1729611913; cv=none; b=cSZN0XmL7kZFY/0wNR09YG2/8J8S7pJUnzrAmBvGCqe0hgW+zxxY7N3V/iblfGUjVrKNcVYX2V4NKjWem+a4sp5qDzNAhPrrpnrTTnJKOKLc7lzLq5DLs7WoyUMN5nJ1Ijxe+DZzbZ4RndaxyUN13MDNyLtzfWiwam7kP9ufdLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729611914; c=relaxed/simple;
-	bh=O5swrGRgXY7L7+HtzQsEkzO+Z95c/1GCTlkAs6oxEew=;
+	s=arc-20240116; t=1729611913; c=relaxed/simple;
+	bh=fC0pCAo2XvTLTelwyvhpjGUBmtu099+nMxksrhgRHPU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bNFm0tAzWIdQV8c2zA3b5G2JMMA0qp4O7FwiuTq/DeO8hUXVARQk5udkDctb1rESlBrsUv9vKnEiacgAW/HXMEixvnnuqxfGib/YdZbD+lw1/PD+S558Glr8YimuFQ6ymg2DtT98jU9DbT1DnzZO11VTDkXM3+uXHinMOeaEEZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NJmsV0IK; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=VmVxi+qF+lRxoqASz5aKbMLCMymcICDZuEwFBUbjwC/xIFFMRqVyHi/A1jcgpf2p7GYc6OLT3NfwFRVVnGMDSSZdJ0bYsrOh3jaDBqYDjHcUM4PurlcgviHbs+oramgQWOTRjaAAyB8H431RWl72wcGEEoVZ3cPgIV3KqoodB3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ja9imMJ+; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1729611909;
-	bh=O5swrGRgXY7L7+HtzQsEkzO+Z95c/1GCTlkAs6oxEew=;
+	bh=fC0pCAo2XvTLTelwyvhpjGUBmtu099+nMxksrhgRHPU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NJmsV0IKI06XGV5IUdfoca8QXYx9RIflAofFkxHLgL0MhQCw/M2yeVbdog43y4aai
-	 mybhNVd3wW1ERUoehxibW0/mb92THtAxkdySCZritT1Hw0AvHjQy921erX2zGXOSGt
-	 C0uRPr9/Vbx5gmPgeKScQlWKS8lwaGE/+zQ3XPPKF/nZniTXH2oshV67SG3gbPho6/
-	 aSm9NHi6PISyPubRJyIR8tzBpITe8dbJi9W4mdA1VPd/HA+b/G8bj9EkZV0MZzMZxv
-	 qgEQkVvLuFbvAp5FUfPIcN5bcNtekPl8hJzVgGFRHFLmdZk60agoiyZwEAaSby/RvD
-	 27QiM5PFn4tgw==
+	b=Ja9imMJ+elCRsbzxDyBlRoZnwAByzcNQmFMh2KAfgYZ9UGqb8kKDNWEw524a1XtC5
+	 oInk7uRf9N1Iqwh3KwWkLtARtX//M5m64qAbkuzNtcZlrvEervIevbR5AYRsDGxEGX
+	 fV/M6RYNRXDugoGHGMu2mCH7ZYl2/WZwlyyDko2eD8/RalYq5l9nNuYznE9iFPVSLf
+	 AtSmiDSfhJoC3c2uKgb+kpK+Nx8kTqxM9KH61PJ6paom/n7LlMmqWjuqxt/yT+PIiO
+	 dOgpZvyHd/fWWs08mfOb0W35WUlY1TkYtaxN3ee4FtWSh68peq1niQXvZbVGUS7TEu
+	 HMm1raUMUBXIA==
 Received: from jupiter.universe (dyndsl-091-248-085-026.ewe-ip-backbone.de [91.248.85.26])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B6C3D17E367B;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id B3E6217E3664;
 	Tue, 22 Oct 2024 17:45:09 +0200 (CEST)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 661C74800E4; Tue, 22 Oct 2024 17:45:09 +0200 (CEST)
+	id 67A4B4800F4; Tue, 22 Oct 2024 17:45:09 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>,
 	linux-pm@vger.kernel.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v3 1/7] regulator: Add (devm_)of_regulator_get()
-Date: Tue, 22 Oct 2024 17:41:46 +0200
-Message-ID: <20241022154508.63563-2-sebastian.reichel@collabora.com>
+Subject: [PATCH v3 2/7] pmdomain: rockchip: cleanup mutex handling in rockchip_pd_power
+Date: Tue, 22 Oct 2024 17:41:47 +0200
+Message-ID: <20241022154508.63563-3-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241022154508.63563-1-sebastian.reichel@collabora.com>
 References: <20241022154508.63563-1-sebastian.reichel@collabora.com>
@@ -82,100 +82,43 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Rockchip power-domain controller also plans to make use of
-per-domain regulators similar to the MediaTek power-domain controller.
-Since existing DTs are missing the regulator information, the kernel
-should fallback to the automatically created dummy regulator if
-necessary. Thus the version without the _optional suffix is needed.
+Use the cleanup infrastructure to handle the mutex, which
+slightly improve code readability for this function.
 
-The Rockchip driver plans to use the managed version, but to be
-consistent with existing code the unmanaged version is added at the
-same time.
-
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/regulator/devres.c         | 17 +++++++++++++++++
- drivers/regulator/of_regulator.c   | 21 +++++++++++++++++++++
- include/linux/regulator/consumer.h |  6 ++++++
- 3 files changed, 44 insertions(+)
+ drivers/pmdomain/rockchip/pm-domains.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
-index 36164aec30e8..a3a3ccc711fc 100644
---- a/drivers/regulator/devres.c
-+++ b/drivers/regulator/devres.c
-@@ -771,6 +771,23 @@ static struct regulator *_devm_of_regulator_get(struct device *dev, struct devic
- 	return regulator;
+diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+index cb0f93800138..a161ee13c633 100644
+--- a/drivers/pmdomain/rockchip/pm-domains.c
++++ b/drivers/pmdomain/rockchip/pm-domains.c
+@@ -574,13 +574,12 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
+ 	struct rockchip_pmu *pmu = pd->pmu;
+ 	int ret;
+ 
+-	mutex_lock(&pmu->mutex);
++	guard(mutex)(&pmu->mutex);
+ 
+ 	if (rockchip_pmu_domain_is_on(pd) != power_on) {
+ 		ret = clk_bulk_enable(pd->num_clks, pd->clks);
+ 		if (ret < 0) {
+ 			dev_err(pmu->dev, "failed to enable clocks\n");
+-			mutex_unlock(&pmu->mutex);
+ 			return ret;
+ 		}
+ 
+@@ -606,7 +605,6 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
+ 		clk_bulk_disable(pd->num_clks, pd->clks);
+ 	}
+ 
+-	mutex_unlock(&pmu->mutex);
+ 	return 0;
  }
  
-+/**
-+ * devm_of_regulator_get - Resource managed of_regulator_get()
-+ * @dev: device used for dev_printk() messages and resource lifetime management
-+ * @node: device node for regulator "consumer"
-+ * @id:  supply name or regulator ID.
-+ *
-+ * Managed of_regulator_get(). Regulators returned from this
-+ * function are automatically regulator_put() on driver detach. See
-+ * of_regulator_get() for more information.
-+ */
-+struct regulator *devm_of_regulator_get(struct device *dev, struct device_node *node,
-+						 const char *id)
-+{
-+	return _devm_of_regulator_get(dev, node, id, NORMAL_GET);
-+}
-+EXPORT_SYMBOL_GPL(devm_of_regulator_get);
-+
- /**
-  * devm_of_regulator_get_optional - Resource managed of_regulator_get_optional()
-  * @dev: device used for dev_printk() messages and resource lifetime management
-diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
-index 3d85762beda6..31a5bacd99b4 100644
---- a/drivers/regulator/of_regulator.c
-+++ b/drivers/regulator/of_regulator.c
-@@ -682,6 +682,27 @@ struct regulator *_of_regulator_get(struct device *dev, struct device_node *node
- 	return _regulator_get_common(r, dev, id, get_type);
- }
- 
-+/**
-+ * of_regulator_get - get regulator via device tree lookup
-+ * @dev: device used for dev_printk() messages
-+ * @node: device node for regulator "consumer"
-+ * @id: Supply name
-+ *
-+ * Return: pointer to struct regulator corresponding to the regulator producer,
-+ *	   or PTR_ERR() encoded error number.
-+ *
-+ * This is intended for use by consumers that want to get a regulator
-+ * supply directly from a device node. This will _not_ consider supply
-+ * aliases. See regulator_dev_lookup().
-+ */
-+struct regulator *of_regulator_get(struct device *dev,
-+					    struct device_node *node,
-+					    const char *id)
-+{
-+	return _of_regulator_get(dev, node, id, NORMAL_GET);
-+}
-+EXPORT_SYMBOL_GPL(of_regulator_get);
-+
- /**
-  * of_regulator_get_optional - get optional regulator via device tree lookup
-  * @dev: device used for dev_printk() messages
-diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/consumer.h
-index 8c3c372ad735..5903ae7444ae 100644
---- a/include/linux/regulator/consumer.h
-+++ b/include/linux/regulator/consumer.h
-@@ -169,6 +169,12 @@ void regulator_put(struct regulator *regulator);
- void devm_regulator_put(struct regulator *regulator);
- 
- #if IS_ENABLED(CONFIG_OF)
-+struct regulator *__must_check of_regulator_get(struct device *dev,
-+						struct device_node *node,
-+						const char *id);
-+struct regulator *__must_check devm_of_regulator_get(struct device *dev,
-+						     struct device_node *node,
-+						     const char *id);
- struct regulator *__must_check of_regulator_get_optional(struct device *dev,
- 							 struct device_node *node,
- 							 const char *id);
 -- 
 2.45.2
 
