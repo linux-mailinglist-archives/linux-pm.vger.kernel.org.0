@@ -1,131 +1,126 @@
-Return-Path: <linux-pm+bounces-16259-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16260-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3571D9AB76E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 22:08:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A762D9AB793
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 22:24:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27B53B21AAC
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 20:08:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 569E41F21B9F
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 20:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8091C9ED4;
-	Tue, 22 Oct 2024 20:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="HhnNCSDi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87301CB539;
+	Tue, 22 Oct 2024 20:24:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE3E19DF40
-	for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 20:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69E4413E41A
+	for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 20:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729627698; cv=none; b=Xf8RvjTMGAI+flO7Ndk8LRazVvwk61EOh+DTdeSmB1KLZvHsEWjQA7g+kx+0WrlzphZICZXr+gx4YxHZ7sEcXeqG0FzEUpWDeK4u06RrIAUZCBPui23wmAspTE8nYkolW+W7v+AU9jOfhgrCBD2TMuCstdC41GLZ+b7N3R5Pkas=
+	t=1729628688; cv=none; b=GU1XF7W6tCZRsWcOTKFm8fxLSnXCwq7N4aGKtVsFfwVyhhy7UWmC+fQlvFHQORGtKSSivx9e1NWaSWOovLIUDWRIIqFyS8US057so9d4pjFgaHqkyT3+iN41KBreD6jq08HECm9awx8ZggifeWDQC4ixIuI/VQl8xsUAXaHVXic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729627698; c=relaxed/simple;
-	bh=BSsoiP4jGbk9AKDVqVOd33LE4d93RqdQDJSGQp5Kzf8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=kiuU+seJHih561WJFWDBE0npoq2qmEPhXeSf9ovhYVDnGLf1mEhrF/Pr9zcIyAyFtXjkYWUri3EkaKfIbXcV1RtWPD9Uks8bxrEGEsmo/mNwmQChovf8RxwAtTW2NMuaxC6TGhDJvNUjYCZQNeS6RJAJNmIjUEOLzRJP//yr3xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=HhnNCSDi; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-288c7567f5dso2787416fac.1
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2024 13:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729627695; x=1730232495; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RKDnl7wKJvDkeBeWUqma/+8SHGVxxBCShhMLzaahqkY=;
-        b=HhnNCSDiAWagPbY2MKJxWgEuGvXXB8gq4NO5miGmJydS1/DZlUa8BFd6jiVaCP20zc
-         FMd4WaN44GPQsr+3B+kzYhY6LMVJ2AWAsOsnMKJUEVAYqIsgTAvYeiVG9ABrSfqEqwzi
-         9x99ryM7lPHNVEnIv2eoe/sahfhuRbDGx4JBqd69FMBJCjyPTf+hOSCINoXS+1midykl
-         wrwpjki6yBQKtRSB7qaFDQgMH9wn9wgvHjKVl9lbll9nhY+xSF2bAYne7a2GSPte3VUR
-         cIi2aT7P8Q9jhSLodJl5I4UJucM4bAQiIcZDeWFV62GC243Ld7fFDMoFVUIVAiKocK22
-         sMrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729627695; x=1730232495;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RKDnl7wKJvDkeBeWUqma/+8SHGVxxBCShhMLzaahqkY=;
-        b=j5DeSnX3a1tBrFVI+A9LKOsjXP6wYap5HbdSLtFlk64JXJcCbIPCbhR1po1ebsWUb9
-         O6H78bqQZxRzh3xs9tqog9Gn/0WoOkLQm4kiDDshiG2nboKD9LsqNHxtujOcQ8+D/4rY
-         Vs3mYA/ETz/Mt5X0JLdoK4UW2HHFdbgV9wgu+J8fmEH/CrsNbQvECjugmywjiCp2sORh
-         pxtbGIf8Z+Oiau/+oUAfJnzsX4dzViuVK6zbvEy6VbhttRT+CuuojM5OjvAklq+Ug5FA
-         Vb7LjtB0lVqHp4UI/LSu9HJSrqXX5QZd9WCHCe6aJ+nH6HwODCa5b2NfhVJUCh3/3Kx/
-         YqqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXknN1P89OdrKCh55JTZ+jQOIYt+xLNKe4P1yR6QWOhgoT8Z2kprL5oVvQGGzgPMsO2cfq8AwbJrQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU06bN2zHFxexm0NWiCV46cbKD48Q4j+k5VKl+MQiwvnYhVdhL
-	dVKdcQ8ZaOjpF9pGvqNvgYsgPKpcS8SFUgYHuWMUO45sXZB4a9RnxrXed2ctuPQ=
-X-Google-Smtp-Source: AGHT+IGrMpyj2ZITk+VVk3SSfXrARFJXCsgS7Lt+ivjrH7hMCKpqWqljJ8FddgEDhbT/k+C50LCeMA==
-X-Received: by 2002:a05:6870:a346:b0:287:29a0:cfe4 with SMTP id 586e51a60fabf-28ccb5d7929mr521152fac.32.1729627695309;
-        Tue, 22 Oct 2024 13:08:15 -0700 (PDT)
-Received: from xanadu (modemcable179.17-162-184.mc.videotron.ca. [184.162.17.179])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b165a710a7sm315154785a.106.2024.10.22.13.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2024 13:08:14 -0700 (PDT)
-Date: Tue, 22 Oct 2024 16:08:13 -0400 (EDT)
-From: Nicolas Pitre <npitre@baylibre.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-cc: "Rafael J . Wysocki" <rafael@kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-    Matthias Brugger <matthias.bgg@gmail.com>, 
-    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-    linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, kernel-janitors@vger.kernel.org, 
-    linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH][next] thermal/drivers/mediatek/lvts_thermal: make
- read-only arrays static const
-In-Reply-To: <20241022184622.1296044-1-colin.i.king@gmail.com>
-Message-ID: <rq710p19-nq43-p91r-56o4-p75468q5psp4@onlyvoer.pbz>
-References: <20241022184622.1296044-1-colin.i.king@gmail.com>
+	s=arc-20240116; t=1729628688; c=relaxed/simple;
+	bh=Z8qsssNuF7Ilsg8kWPB71TiQztUMHO3IeOV17xKtxm0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ibblGcIaingRVBAp/5x4giztMfFlcveNmJGuzhpEUQVUL03zTjN6I8jiN3sO2zC/WVELmJouMjFrt+beXhSJLpO+fMhqlhEKpquCkPe0Ovpc6Z9UoTt2ayo/YF5f3lZIFKsGQcMs823hm+KZTKwawaHulLd7QmbAe++6h0IdGFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EA10497;
+	Tue, 22 Oct 2024 13:25:15 -0700 (PDT)
+Received: from [10.57.56.252] (unknown [10.57.56.252])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5B0C3F73B;
+	Tue, 22 Oct 2024 13:24:44 -0700 (PDT)
+Message-ID: <cbadcbb6-72b0-4ac1-a3ed-15c935a3772e@arm.com>
+Date: Tue, 22 Oct 2024 21:25:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/5] thermal: core: Connect the threshold with the core
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org, quic_manafm@quicinc.com, rafael@kernel.org
+References: <20241022155147.463475-1-daniel.lezcano@linaro.org>
+ <20241022155147.463475-2-daniel.lezcano@linaro.org>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20241022155147.463475-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 22 Oct 2024, Colin Ian King wrote:
 
-> Don't populate the read-only arrays on the stack at run time, instead
-> make them static const.
+
+On 10/22/24 16:51, Daniel Lezcano wrote:
+> Initialize, de-initialize and handle the threshold in the same place
+> than the trip points.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
-Reviewed-by: Nicolas Pitre <npitre@baylibre.com>
-
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Link: https://patch.msgid.link/20240923100005.2532430-3-daniel.lezcano@linaro.org
+> [ rjw: Subject edit ]
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/thermal/thermal_core.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 1997e91bb3be..ce223bab6b55 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -329,7 +329,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
->  
->  static void lvts_update_irq_mask(struct lvts_ctrl *lvts_ctrl)
->  {
-> -	u32 masks[] = {
-> +	static const u32 masks[] = {
->  		LVTS_MONINT_OFFSET_SENSOR0,
->  		LVTS_MONINT_OFFSET_SENSOR1,
->  		LVTS_MONINT_OFFSET_SENSOR2,
-> @@ -424,7 +424,7 @@ static irqreturn_t lvts_ctrl_irq_handler(struct lvts_ctrl *lvts_ctrl)
->  {
->  	irqreturn_t iret = IRQ_NONE;
->  	u32 value;
-> -	u32 masks[] = {
-> +	static const u32 masks[] = {
->  		LVTS_INT_SENSOR0,
->  		LVTS_INT_SENSOR1,
->  		LVTS_INT_SENSOR2,
-> -- 
-> 2.39.5
-> 
-> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 8f03985f971c..1e87256e86be 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -585,6 +585,8 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+>   			high = td->threshold;
+>   	}
+>   
+> +	thermal_thresholds_handle(tz, &low, &high);
+> +
+>   	thermal_zone_set_trips(tz, low, high);
+>   
+>   	list_sort(NULL, &way_up_list, thermal_trip_notify_cmp);
+> @@ -1491,6 +1493,10 @@ thermal_zone_device_register_with_trips(const char *type,
+>   			goto unregister;
+>   	}
+>   
+> +	result = thermal_thresholds_init(tz);
+> +	if (result)
+> +		goto remove_hwmon;
+> +
+
+AFAICS the function thermal_thresholds_init() cannot fail.
+It always returns 0. So compiler+linker will remove that check anyway. 
+Therefore, I would remove the check in this code.
+Or maybe you have some other plans in near future to that init
+function...
+
+>   	mutex_lock(&thermal_list_lock);
+>   
+>   	mutex_lock(&tz->lock);
+> @@ -1514,6 +1520,8 @@ thermal_zone_device_register_with_trips(const char *type,
+>   
+>   	return tz;
+>   
+> +remove_hwmon:
+> +	thermal_remove_hwmon_sysfs(tz);
+
+So remove this line as well, since it cannot happen.
+Although, it's a minor so up to you.
+
+>   unregister:
+>   	device_del(&tz->device);
+>   release_device:
+> @@ -1601,6 +1609,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+>   
+>   	thermal_set_governor(tz, NULL);
+>   
+> +	thermal_thresholds_exit(tz);
+>   	thermal_remove_hwmon_sysfs(tz);
+>   	ida_free(&thermal_tz_ida, tz->id);
+>   	ida_destroy(&tz->ida);
+
+Other than that, since no functional issues
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
