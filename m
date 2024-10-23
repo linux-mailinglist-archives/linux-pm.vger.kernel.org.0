@@ -1,103 +1,132 @@
-Return-Path: <linux-pm+bounces-16275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16276-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11E4F9AB9AD
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 00:51:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D4DD9ABC87
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 05:59:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4146C1C23BA3
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2024 22:51:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28D52283DC4
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 03:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436171CDFD5;
-	Tue, 22 Oct 2024 22:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72594136347;
+	Wed, 23 Oct 2024 03:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDhCOrFH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8629E1CDFCB;
-	Tue, 22 Oct 2024 22:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D913520323;
+	Wed, 23 Oct 2024 03:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729637471; cv=none; b=lBqddHZLnbPvsiHGAiIaOT3+guwuSpSwwVuZGCTvcm3lkm+7GuyCsaW1YPCDt1fk2/MAqymwegnwG0Nsv2fx9/06Pq6NZl9EIWbaTpu2+uyWWS48dsp6tOHPXHRLYCuyLV8kRDE9c2y4EfAtolKTKByhxZSSACdmLg8ZmcFzlAY=
+	t=1729655951; cv=none; b=TVT5YvRR+Hzm4FHBt67oKRn19yRZf6Vaec0e0+tIerbxe25Czgy46LIyaC84vyMTyYfRx/AEqEWxCM/QSPayBdRRWES+PCxf7WVYOfSm6Z2iTdhwHXQ9SpdUEwzET1/sPsD2KCrTgBM+MHTDtNLCd3xKmAkkVFB2w4vqScuamJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729637471; c=relaxed/simple;
-	bh=phcC3h+yzGKjMLzr4Wapgaq+8TfqvWpOxD6rLamedsA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N9b6bm2Aqjm+kirhLS0eqDm+h/h0fJV6Ip1UZLH+5ZT/5KLoN9n+VNpeN9M1zaM+a38KPEnhDSRyDEnNuBRDvDVBMOdpbnK/Dn8NmDjyN2JKiqxt2+y4s4prGhscMxLmt3NCCH0WizlZ1pgHnjVXxHxtdc/OPRsRITgqxzYYZYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A32E497;
-	Tue, 22 Oct 2024 15:51:38 -0700 (PDT)
-Received: from [10.57.56.252] (unknown [10.57.56.252])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD6373F73B;
-	Tue, 22 Oct 2024 15:51:07 -0700 (PDT)
-Message-ID: <b6b42279-bc08-49aa-ac1e-98fe816bf342@arm.com>
-Date: Tue, 22 Oct 2024 23:52:17 +0100
+	s=arc-20240116; t=1729655951; c=relaxed/simple;
+	bh=g5cqLHIhhziHP8DCtHjYhtoc/ooi/oC22aoIYVVEMTQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lsP0RulvTIyCFye54dk6k0skA9KZ3ydRMtwTf7x9fDR1oZmnaSRabrOZONFDTBUk80n/SeqBAWHHNQq2rWqDgkUPuX0Iu7m7TDNBLZdd5TDAQN64UD067rnnKfQ+3GtA7yqCyNi3+a1ReK8mO9gaD8EgScY2qxh3BoQmMHg1vsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDhCOrFH; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729655950; x=1761191950;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g5cqLHIhhziHP8DCtHjYhtoc/ooi/oC22aoIYVVEMTQ=;
+  b=MDhCOrFHtI+AYrRKTlN3E3iRFLty3mMoBiykeEWSM35GZNylI2EDbn78
+   NDSoad0a0LlJ4fKyqbFKV9R2k1TYiQ8hXyWA6/A0Gt2fQodH1bJzLUdod
+   jRpBkWIJOhUVCGu4alk64zyzgmGsvwdGwHlPkNn6RAaZ/VJh4lr4fsW55
+   /tbgbev9NKAqHozFJvxkhXlzuqLIIp/i6GSIpegfdi7LKeJ4cLOBqLPe1
+   bieZPMGdSc7vv/GBQJyp8ag/IWBplz3p38o3LgsJnGlbuYCn/8YPYL0BZ
+   LCfhhFMg9CfqqcWlV9ux+CsN/jbqv2cz8NdVUQClnYosxdlN1zh8BnPik
+   A==;
+X-CSE-ConnectionGUID: YLn1Tfg4QWy5BuZopfGYUA==
+X-CSE-MsgGUID: sR9ZIYJgTUG3/VmVT/Jwjw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="16845939"
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="16845939"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 20:59:09 -0700
+X-CSE-ConnectionGUID: RB5AmNbMTyept5cv29GXZA==
+X-CSE-MsgGUID: PQHENjMvR9K6VfaBxfz2Gg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="84050895"
+Received: from jwolwowi-mobl.amr.corp.intel.com (HELO desk) ([10.125.147.24])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 20:59:08 -0700
+Date: Tue, 22 Oct 2024 20:58:56 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Dave Hansen <dave.hansen@intel.com>, Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Li RongQing <lirongqing@baidu.com>,
+	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 4/5] x86/cpu: Add CPU type to struct cpuinfo_topology
+Message-ID: <20241023035829.pq6uurkajiv3vpfv@desk>
+References: <20241022034608.32396-1-mario.limonciello@amd.com>
+ <20241022034608.32396-5-mario.limonciello@amd.com>
+ <20241022115720.GGZxeTIEqLBQwHjsiE@fat_crate.local>
+ <4476c7a5-bc48-4686-b815-3fae0838b7f9@intel.com>
+ <13fd2271-f64e-4573-afdb-9881b8c399fe@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 00/10] thermal: core: Use lists of trips for trip
- crossing detection and handling
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <4958885.31r3eYUQgx@rjwysocki.net>
- <CAJZ5v0g_ALycyT7Y2GwebF_ON-EMP_WGoTn4+1V0ZisK1vwROg@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0g_ALycyT7Y2GwebF_ON-EMP_WGoTn4+1V0ZisK1vwROg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13fd2271-f64e-4573-afdb-9881b8c399fe@amd.com>
 
-Hi Rafael,
+On Tue, Oct 22, 2024 at 11:13:00AM -0500, Mario Limonciello wrote:
+> > This makes me feel a _bit_ uneasy.  0x20 here really does mean "Atom
+> > microarchitecture" and 0x40 means "Core microarchitecture".
+> > 
+> > We want to encourage folks to use this new ABI when they want to find
+> > the fastest core to run on.  But we don't want them to use it to bind to
+> > a CPU and then deploy Atom-specific optimizations.
+> > 
+> > We *also* don't want the in-kernel code to do be doing things like:
+> > 
+> > 	if (get_intel_cpu_type() == TOPO_CPU_TYPE_EFFICIENCY)
+> > 		setup_force_cpu_bug(FOO);
+> > 
+> > That would fall over if Intel ever mixed fast and slow core types with
+> > the same microarchitecture, which is what AMD is doing today.
+> > 
+> > Having:
+> > 
+> > 	TOPO_CPU_TYPE_EFFICIENCY, and
+> > 	TOPO_CPU_TYPE_PERFORMANCE
+> > 
+> > is totally fine in generic code.  But we also need to preserve the:
+> > 
+> > 	TOPO_HW_CPU_TYPE_INTEL_ATOM
+> > 	TOPO_HW_CPU_TYPE_INTEL_CORE
+> > 
+> > values also for use in vendor-specific code.
+> 
+> What you're suggesting is to keep an enum in the intel.c code and any code
+> that needs to match atom vs core can directly use
+> 
+> c->topo.intel_type == TOPO_HW_CPU_TYPE_INTEL_ATOM
 
-On 10/21/24 12:16, Rafael J. Wysocki wrote:
-> On Wed, Oct 16, 2024 at 1:37 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->>
->> Hi Everyone,
->>
->> This is a continuation of
->>
->> https://lore.kernel.org/linux-pm/4985597.31r3eYUQgx@rjwysocki.net/
->>
->> derived from patches [3-7/8] in the following patch series:
->>
->> https://lore.kernel.org/linux-pm/4920970.GXAFRqVoOG@rjwysocki.net/
->>
->> but mostly rewritten.
->>
->> It is based on the observation that putting trip points on sorted lists
->> allows to reduce overhead related to the handling of them in some cases.
->> Namely, it avoids the need to walk all trips in a thermal zone every
->> time the zone temperature is updated (including invalid ones) and
->> generally leads to cleaner code.
->>
->> Patches [01-08/10] are preliminary, patch [09/10] makes the key changes,
->> and patch [10/10] is a super-cosmetic cleanup on top of the rest.
->>
->> Please refer to the individual patch changelogs for details.
-> 
-> This material is on the thermal-core-experimental branch in
-> linux-pm.git along with
-> 
-> https://lore.kernel.org/linux-pm/2215082.irdbgypaU6@rjwysocki.net/
-> 
-> and
-> 
-> https://lore.kernel.org/linux-pm/4985597.31r3eYUQgx@rjwysocki.net/
-> 
-> which are also present in the thermal-core-testing branch.
-
-
-If it's not too late, I can review that stuff tomorrow for you.
-
-Regards,
-Lukasz
+To be able to match ATOM and CORE in the affected processor table, the
+enums need to be defined in a way that they can be used in the common code.
+Specially for !CONFIG_CPU_SUP_INTEL case.
 
