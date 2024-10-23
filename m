@@ -1,119 +1,176 @@
-Return-Path: <linux-pm+bounces-16320-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16321-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 118629AD454
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 20:58:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A2DA9AD46B
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 21:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF1B2828DF
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 18:58:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CBF5B21116
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 19:02:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D9DB1D0DE9;
-	Wed, 23 Oct 2024 18:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A201AD3F6;
+	Wed, 23 Oct 2024 19:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i2P9ux1v"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fiTTBrvO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2989883CDA
-	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 18:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F63E14B077
+	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 19:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729709901; cv=none; b=AYZD5/8C+XGtNHO/B/mBM5c/HyfFokYrASOHguF7zzItZnVwEsaaGSlG8mh1uvwIV3ZGI8Sigu6Na0qydh9WzRYA3uihHOf0pucLChEaw/gthxI/Er4hbQLiTIg0KevvofMp5VyXzHxVnqjD4tR9xK1txgv1P8TpuS20+Q/x5z8=
+	t=1729710142; cv=none; b=CE7xIt+IGx7ZJ1PZKLnpx3JeVKrvvwrm4OpgUTNue2XdcxMW5w8UGCvDAJTC9BRGugR9zmhI+dUZEA+thE+a3JN36tTMGiXXXg77tA0mV+0R2pSakwHmw/VG33cPV4xb8yDYbHV8xbq7fMGSMP6eOBcnd6Dg36j7/lIIkpCZdTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729709901; c=relaxed/simple;
-	bh=V0QCXFcnMZdAOdZbqjcNhbz4kbwQ0T4aqZAafjCtJnI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oKvXg6OPucvwwMEcg18MM1BSBGndzrh7o+X/EZavwcD0jlrKUrwzVe7VYM2KIOS6eiDHTDbcHjg64CiNLbtdDEo04h2Mj5w/tiJ+eUdw9y7yD72Cn3KcRWv1LBkKDNETqPWYe5+VgGkhPz8LaRpb/JjaEv7A01/O90qbU27QZYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i2P9ux1v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B160BC4CEE5
-	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 18:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729709900;
-	bh=V0QCXFcnMZdAOdZbqjcNhbz4kbwQ0T4aqZAafjCtJnI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=i2P9ux1v0WU5QDDs5VXl+Ay6VP+PL4oOS+yB+0QtBCsyzKLx34zFqt41aF8Nzwrj2
-	 YPlqgjPRFCA5NveN4SsMtORz+UDsQKwv0tuUvFGbATulokoegxKBu4dEFUNdi/2QsS
-	 nA3zILg5Somfja/rfQw+R5ZN/eUgT8pYhbvpRww1oAqXUB7WgXrZl9eTM4ZHSlR1qF
-	 XJ66kc3+uUHcD9mdxvXXYpSTLYuPDlZwfxAHlo4uA6o2aGV0fBmQyrDWztGj+1ixQF
-	 ldcnjqbqS0+YIf/AoPphMrcORy1OW+HhLLe8MPocEvgTm4rgPo/0Lu4aelO8QEc+Za
-	 IJHvFK7ecGVYQ==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-28896d9d9deso118011fac.2
-        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 11:58:20 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxHZyE2RJs6EFpbSQGsTJAbFTEuyaa1NJc+jogB8ei8p+rmVosM
-	6gsvLL+/DUmSjPTyYiNX2uyBH4YDU9OsdiJYvBYE6yQBijbsr9H+eFFdBSMc7pGGqoGok8Gwzwj
-	wI7ISnku5S7sKj4WcXYkcHaxkvog=
-X-Google-Smtp-Source: AGHT+IGciat9lHqlF2KMeKlhllpbf8ODHX0TxNfcCdc7huv0sYULJ6xAGL0SLlHWdF8Q5FkWMOz8tIN7STaTeVeefPQ=
-X-Received: by 2002:a05:6871:721:b0:288:4823:fe1b with SMTP id
- 586e51a60fabf-28ccb4bbc76mr3764266fac.17.1729709899981; Wed, 23 Oct 2024
- 11:58:19 -0700 (PDT)
+	s=arc-20240116; t=1729710142; c=relaxed/simple;
+	bh=uFtI7F/Qs6GJxEpny9dYB80paYb1IKlSpQXJYGSHSjo=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K6DAgTO/2Ga+UczUqZoabKCJLnTojqjf1aTkb2cc5l4ZqbABakYFSl6hiRkjhDqQEU4vlPdE4T8M08gZ5sTBWcbFVa4iAZZnw+lZ3WWeqbEcDHIRJvcDNgDBZzNcisAV3B+2s2hFg4+6vdMZklFvVcg5czWZSeWhW3cxEAoCjl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fiTTBrvO; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-288661760d3so129709fac.3
+        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 12:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1729710140; x=1730314940; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rdy7AbHrdibZ9InPm8yIrXzTxAu9C/oEPTb0YZD94xo=;
+        b=fiTTBrvOFKQLXkdnI34daEUl4dBjUWiIQI0IEw24xHRw+dys+YwF09EJd7tfYNZHTq
+         Q0/ta/MVOxrPF0H9oSOFNmasm1SbGLANeEsmKqr730raAHe8Y8Uys2GK5V9Q0ogoSG3j
+         oCRmSJw3L3WzVWza2tj/DCdnxaqDoR+pER5N8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729710140; x=1730314940;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rdy7AbHrdibZ9InPm8yIrXzTxAu9C/oEPTb0YZD94xo=;
+        b=PVXfLRK42xoFOK61YKEVuVSTSEyDYmWS9nCUXLHmA3dWjvnuU28ztG2o/Ne3B7BlSk
+         LU95OS5Sv/aVrOkMugWhEHuKODnYiXfb51UjWWVL+7UBWguu9Xbl0+uzLQYcTkxXQIHI
+         xpaTeh97Zl8y4iknmWIDNxCwqFDmQ6C4ecZ0jU9uaYpLkXLekfrin/mZS+NXhBr0QRu/
+         /h1EouxJGHyqfJeFFRW+CSFqoBkYvIkHDDs+/Sv8Ks85r9M3bjqkteVqcVSFW8+tIrKL
+         3UIsMovG1Hi4D0qcu7XI1483akQwM+qvmqc1/XCbPUUg/WFVbr2fpp54a8gxw/PcHaFG
+         +MsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKe4PQvs2/dd3vzaZNejLD/5iIS/ERzSrjRj7deMD+ZvBS3OC2VKC4Am1NG10yE/RF8OtPsD1k1Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS6XmKyeJE6AxLIB9sw2UA+m7BbCKxewuZ4yr8Y8PbxhNYKKbK
+	1gSgZwHHhcO/Q8bBKAFVbznbpQmHKJIEn8gvHmrdwUlXYksLhpUO6Y5oSPxdkAao95D+O8AfCjF
+	VfRSzOTw2phwNnFiuT6TI483FY2y1DuvHYQej
+X-Google-Smtp-Source: AGHT+IFYINQGLEbR2sm7FvSsNQwO1DKseiMVQJ/wPdU7mDzWulIqePkZvyFPajM+sGcM+ZTlwH4bMrwbRtYbYEfMP10=
+X-Received: by 2002:a05:6870:b17:b0:277:ef0f:cde4 with SMTP id
+ 586e51a60fabf-28ccb68e27emr3295811fac.46.1729710140223; Wed, 23 Oct 2024
+ 12:02:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 23 Oct 2024 12:02:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241020153910.324096-2-u.kleine-koenig@baylibre.com>
- <CAJZ5v0jAMr=bmZ5PexVTS0SqrXP4EytZ+RH5X8p1Nep2wMg-kQ@mail.gmail.com> <20241021102207.ujbprtc3gecxlyu3@vireshk-i7>
-In-Reply-To: <20241021102207.ujbprtc3gecxlyu3@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 23 Oct 2024 20:58:08 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gBejHfbOje+yNBf59MNTqfjLWXH5JPU=DbaJ=3KPcQ4w@mail.gmail.com>
-Message-ID: <CAJZ5v0gBejHfbOje+yNBf59MNTqfjLWXH5JPU=DbaJ=3KPcQ4w@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Switch back to struct platform_driver::remove()
-To: Viresh Kumar <viresh.kumar@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: linux-pm@vger.kernel.org
+In-Reply-To: <20241023092251529-0700.eberman@hu-eberman-lv.qualcomm.com>
+References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com>
+ <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
+ <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com> <20241023092251529-0700.eberman@hu-eberman-lv.qualcomm.com>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date: Wed, 23 Oct 2024 12:02:19 -0700
+Message-ID: <CAE-0n50s1gUt7jOWLEjDzi7ABVRLmAr1kG-6V6YjTZnPD2EMQw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/5] firmware: psci: Read and use vendor reset types
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Andy Yan <andy.yan@rock-chips.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Melody Olvera <quic_molvera@quicinc.com>, 
+	Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, linux-pm@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 21, 2024 at 12:22=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
->
-> On 21-10-24, 12:20, Rafael J. Wysocki wrote:
-> > On Sun, Oct 20, 2024 at 5:39=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-> > <u.kleine-koenig@baylibre.com> wrote:
+Quoting Elliot Berman (2024-10-23 09:30:21)
+> On Fri, Oct 18, 2024 at 10:42:46PM -0700, Stephen Boyd wrote:
+> > Quoting Elliot Berman (2024-10-18 12:39:48)
+> > > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > > index 2328ca58bba6..60bc285622ce 100644
+> > > --- a/drivers/firmware/psci/psci.c
+> > > +++ b/drivers/firmware/psci/psci.c
+> > > @@ -305,9 +315,29 @@ static int get_set_conduit_method(const struct device_node *np)
+> > >         return 0;
+> > >  }
 > > >
-> > > After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> > > return void") .remove() is (again) the right callback to implement fo=
-r
-> > > platform drivers.
-> > >
-> > > Convert all platform drivers below drivers/cpufreq to use .remove(),
-> > > with the eventual goal to drop struct platform_driver::remove_new(). =
-As
-> > > .remove() and .remove_new() have the same prototypes, conversion is d=
-one
-> > > by just changing the structure member name in the driver initializer.
-> > >
-> > > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
-> > > ---
-> > > Hello,
-> > >
-> > > given the simplicity of the individual changes I do this all in a sin=
-gle
-> > > patch. I you don't agree, please tell and I will happily split it.
-> > >
-> > > It's based on Friday's next. Feel free to drop changes that result in
-> > > a conflict when you come around to apply this. I'll care for the fall=
-out
-> > > at a later time then. (Having said that, if you use b4 am -3 and git =
-am
-> > > -3, there should be hardly any conflict.)
-> > >
-> > > Note I didn't Cc: all the individual driver maintainers to not trigge=
-r
-> > > sending limits and spam filters.
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> > Viresh,
+> > > +static void psci_vendor_sys_reset2(unsigned long action, void *data)
+> > > +{
+> > > +       const char *cmd = data;
+> > > +       unsigned long ret;
+> > > +       size_t i;
+> > > +
+> > > +       for (i = 0; i < num_psci_reset_params; i++) {
+> > > +               if (!strcmp(psci_reset_params[i].mode, cmd)) {
+> > > +                       ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+> > > +                                            psci_reset_params[i].reset_type,
+> > > +                                            psci_reset_params[i].cookie, 0);
+> > > +                       pr_err("failed to perform reset \"%s\": %ld\n",
+> > > +                               cmd, (long)ret);
 > >
-> > I'll pick this up unless you'd prefer to apply it, so please let me kno=
-w.
+> > Do this intentionally return? Should it be some other function that's
+> > __noreturn instead and a while (1) if the firmware returns back to the
+> > kernel?
+> >
+>
+> Yes, I think it's best to make sure we fall back to the architectural
+> reset (whether it's the SYSTEM_RESET or architectural SYSTEM_RESET2)
+> since device would reboot then.
 
-Applied as 6.13 material, thanks!
+Ok. Please add a comment in the code so we know that it's intentional.
+
+>
+> > > +               }
+> > > +       }
+> > > +}
+> > > +
+> > >  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+> > >                           void *data)
+> > >  {
+> > > +       if (data && num_psci_reset_params)
+> > > +               psci_vendor_sys_reset2(action, data);
+> > > +
+
+I'd add a comment here as well indicating that a fallback is used.
+
+> > >         if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+> > >             psci_system_reset2_supported) {
+> > >                 /*
+> > > @@ -750,6 +780,68 @@ static const struct of_device_id psci_of_match[] __initconst = {
+> > >         {},
+[...]
+> > > +                       continue;
+> > > +
+> > > +               num = of_property_read_variable_u32_array(np, prop->name, magic, 1, 2);
+> >
+> > ARRAY_SIZE(magic)?
+> >
+> > > +               if (num < 0) {
+> >
+> > Should this be less than 1?
+> >
+>
+> of_property_read_variable_u32_array should return -EOVERFLOW (or maybe
+> -ENODATA) if the array is empty. I don't see it's possible for
+> of_property_read_variable_u32_array() to return a non-negative value
+> that's not 1 or 2.
+
+I think you're saying a return value of 0 is impossible? Ok. I was
+mostly looking at the usage of the return value later on in this patch
+and trying to understand why 0 would be allowed as a possible return
+value without looking at the details of
+of_property_read_variable_u32_array(). I guess the 1, 2 are the min/max
+though so it's fine.
 
