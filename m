@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-16288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06C809AC7A9
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 12:21:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C5069AC7B5
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 12:23:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5F88284A8B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 10:21:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B969B22B04
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 10:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9467C19EEA1;
-	Wed, 23 Oct 2024 10:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CCF21A0BD6;
+	Wed, 23 Oct 2024 10:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="w0bGRLMD"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3PAfUNsi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2073.outbound.protection.outlook.com [40.107.96.73])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44FB15F330;
-	Wed, 23 Oct 2024 10:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E2A1A3AB1;
+	Wed, 23 Oct 2024 10:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.81
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729678888; cv=fail; b=P/+M8rVR74Y5LYBhqrzFthxgeDeWYdXE55g4oIQeW6VjZU5GbTEZp3IsWJ3rV+WufV6m/9gQWQOcbzksZnoS3eE6gOgrU6Fn9nprLFoYalJm8WxYzw163/UyT6ht9BCAg4vcy1PVr3IPL9jgZkKStmSZeR6TraEEmc6E41UiqV8=
+	t=1729678950; cv=fail; b=MbLfraB8er7dniWhYOIAUx8Mt51bOafgaECuWIA583vNY5MdbPfYdqneW338pO3Yc7JvP4xp2b4KDnqGU2Ye0Uf2MREGk4FGhRFU2Wllp2Z3TXiVwKM0TfxIfM+w+kWY4FNpLLQ/NrTKW0VP1yfvBqypQmiDV0Xa6r5XS+iGO9M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729678888; c=relaxed/simple;
-	bh=CP5wTFto/456SDSE71NdLU/2JqvLJr08gkTgSh3oTKQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YGiPlhJIbaFXcTmtjpqxvbKxUyeci/kvmAxMIeRWGBz8NpEGBE5mXaF7HHmE6XrBKJ1ypP7glGxIJQ2HrtYP2Dyn8hn6K/X6IA9Yr4S+Zl3uScL92a8HXqJwExI0TEA9VwZQxHsisp34wLIw+qWsAWxWEiGIZP7fmp0uxfdbBRo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=w0bGRLMD; arc=fail smtp.client-ip=40.107.96.73
+	s=arc-20240116; t=1729678950; c=relaxed/simple;
+	bh=YWU43ExnNRRx+O1o/cvLg8ZoE+XGcC9xQ5a6rg1GccY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ijqatCurKsvPv9IO4tQquVuAKu6TWk6Qj3YJ29398fqIR84BHIddziM1Bsthca1xlj7qdkN7pQcfp1eyuXOSDmJXQALCD8Tqj5XLifSbfcxbbL+InWcWWcHnxuHY/PH6iX1UYFo0TE2eMPA7TcRNvLFXntj8Wztd6+fmLn9jUcM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3PAfUNsi; arc=fail smtp.client-ip=40.107.92.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KLYCLTFpIC30ggUlKIHsDw4X//RErtS9s78XpjgTYplES0Y3r/yZkK4m3B0SLrUKFCqSQj1odJ4TkT7qPFNpXjkWNLcndI+Ak1eiZ7EGWLRlGeTJ4Re5UONCnDpritnTlt2m4Mopp+Xu676id8Xi1HFx1Q7p2YoKWgWO/B0R8U5rguczA59nlA+SiVtvsW5WpEhtlBifOvSkGqY4juWo09x/PsTJYhuZ/g7vRj3SUBTPN1yzQ3w2sm3FXT7Q7LmRFKctbyYSGKMviP8NQdLlF9bizJ6z95K31+XKsHhiYgWgOBxRQ8+AaH9LUFjrU/rim+vx8NzAd8Abzr98v4ljog==
+ b=Iyzu6MSnAAPH1pL4l9FOB2qmRLaqAl4wtytrZ8qazEOtV4NXpvTQvb9x0lNYEgeZ8cM/kGQFqy35eJkQGOHmGgrjairVX/osPENTDyk7WFjewggV8ftiiZKnuDTBT8sNFhWJbwQspZGJokxniaHLguFDynSjDNRcwFCxuTlDq9x2OBMIKvxAOGT1ObO1o2KzYbPmbqlBdmVlAJBJL8/PMO4HwzKaEuvLw5ujAj2/H4TW62VAKU0plude1a/f6ia9l0SSHeI898IBIKHBXpvBsQFEaRhjb4ZtGxrhPuQ6FoX6mu4cgn7nq4TseID7W2t7FeWeloWsbnv8Mrv6cjNz6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sYASuStTPqkZgkiL1it4xF0mXL0Pj0Gn+89I3ldsc60=;
- b=xJA5vIgVyBlYcW7K4jPlxIfKJ0r8TDwEu2brc5Ft2ZnPUbuL1/xIGnipxc0MwRf+m3QO3QwGHg8QTGSy4uQqe9UnN1TC0SMDHzZkAsVYldMNeCK+pAffP52iN5U7rIsLKyb7TX+8I0OvVKHONFlQvNXFVDmUaaV134tZEORE9y/TNPK28BoUb0BV7BLkOVEyy6tKowCoSc+Wf+1jrX1iJ2RmtFVlrjLIsMgCiOUc92gwKn0BeWFch+pkjcMHsEDJ/oFBQrqnq1ad5ZlZC2ggoTjpN5jlauEPvDErXiKVvz/Us39H/jhiolYNDSrb9X79MEOtkq1nefJ+oO2b+weJvA==
+ bh=THmELJVVf6pfoHTN7s94g41BqJSIgmFnwGoF19ojb1Q=;
+ b=EglDGN4OXDaQF4Jt5frk7DeWDxlYZ+sRsp77DWdEkAbxv8rYIFHDMkQpcUJqUtgBMoM33BJxwZxPqDhJC2EdaY2ufqM8zKSE4Z/60/4i66kqx0eJAS+STEawxp3nEPuMXtR5qKiHxqy9He3fVbV5STR2lxSkFI2hk+BxuThAUzdxdDK9bEnuCVBOFcql1EqmjjFvduL6X4NyVQ59dzqG69pDe39DL2HYcFCaPmzvTDE3NGfQhATWFp/kEcVsVMB8OhSWQh+B8pIDjPWuHj3H8Aronw9P7z/r6KHYQmrPdHrtj/zIAuyCBZKlOOmyxT7hflrnKnq/9JnZvYoRiCs02g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sYASuStTPqkZgkiL1it4xF0mXL0Pj0Gn+89I3ldsc60=;
- b=w0bGRLMDoctX8eo7eYGGxhIu21Iubn3V9ZesYeoZMkWYoIc5UkGHh1MYGZ/IYHNrJxP3Bx5JRJawwjDMgjIKRpuq/f1M84NSzk2PEIWrsrgfo627Lp8CuwT3ooSXCeOtbhIv/wGLkBF3svdGbFMaW2RnngMuHSFpiqpNadnENMU=
-Received: from SA9PR11CA0028.namprd11.prod.outlook.com (2603:10b6:806:6e::33)
- by DS0PR12MB7772.namprd12.prod.outlook.com (2603:10b6:8:138::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Wed, 23 Oct
- 2024 10:21:24 +0000
-Received: from SA2PEPF0000150B.namprd04.prod.outlook.com
- (2603:10b6:806:6e:cafe::f0) by SA9PR11CA0028.outlook.office365.com
- (2603:10b6:806:6e::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17 via Frontend
- Transport; Wed, 23 Oct 2024 10:21:23 +0000
+ bh=THmELJVVf6pfoHTN7s94g41BqJSIgmFnwGoF19ojb1Q=;
+ b=3PAfUNsiyljq2HHaZrQJMDQcQRL+60iO9qnYFtkocsOp4RhLl/EZfk+KElYDJhNF0KxQTg8IpEE+wBtyEC+dDQ8D9EYG1SmCzCgWdw61ZLJyMQhQH7nocSU3hn+0tDVp/k0OnL/axJ2RMOqqu0ilMnCZUK1/kLItXSW0sivfDUw=
+Received: from SN6PR01CA0034.prod.exchangelabs.com (2603:10b6:805:b6::47) by
+ DM4PR12MB8521.namprd12.prod.outlook.com (2603:10b6:8:17e::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.18; Wed, 23 Oct 2024 10:22:22 +0000
+Received: from SA2PEPF00001504.namprd04.prod.outlook.com
+ (2603:10b6:805:b6:cafe::98) by SN6PR01CA0034.outlook.office365.com
+ (2603:10b6:805:b6::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.29 via Frontend
+ Transport; Wed, 23 Oct 2024 10:22:22 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -62,22 +62,24 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF0000150B.mail.protection.outlook.com (10.167.242.43) with Microsoft
+ SA2PEPF00001504.mail.protection.outlook.com (10.167.242.36) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8093.14 via Frontend Transport; Wed, 23 Oct 2024 10:21:23 +0000
+ 15.20.8093.14 via Frontend Transport; Wed, 23 Oct 2024 10:22:22 +0000
 Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 23 Oct
- 2024 05:21:19 -0500
+ 2024 05:22:18 -0500
 From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 To: <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
 	<perry.yuan@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
 CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Dhananjay
  Ugwekar" <Dhananjay.Ugwekar@amd.com>
-Subject: [PATCH 0/4] cpufreq/amd-pstate:Cleanups
-Date: Wed, 23 Oct 2024 10:21:04 +0000
-Message-ID: <20241023102108.5980-1-Dhananjay.Ugwekar@amd.com>
+Subject: [PATCH 1/4] cpufreq/amd-pstate: Rename functions that enable CPPC
+Date: Wed, 23 Oct 2024 10:21:06 +0000
+Message-ID: <20241023102108.5980-2-Dhananjay.Ugwekar@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241023102108.5980-1-Dhananjay.Ugwekar@amd.com>
+References: <20241023102108.5980-1-Dhananjay.Ugwekar@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,70 +92,167 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF0000150B:EE_|DS0PR12MB7772:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8600f3c-4089-4933-107a-08dcf34c7247
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001504:EE_|DM4PR12MB8521:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d937336-6e25-4b42-0bb5-08dcf34c9513
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?FiOZS44/2pYu1xeJMICpo7JAgu4uUv19po97550AQjajN5O4fz/zmbORBb+C?=
- =?us-ascii?Q?hr5fXlp5zv/bZKp6N+S7UUYwPLmhmApIXque7xX1UAQLbM94RWcOi+w0WcR2?=
- =?us-ascii?Q?iBqyn2d/sGQXe+i/8L9KeQW82Ek8MswuYyR6y7Uv9+uw0ixo4p24Mi9+YEhg?=
- =?us-ascii?Q?PiT1Ix55Mk0lFskS9WKmf62Hco47hXJkOn2BISsr36OzW2g0jyEs6AKg3U16?=
- =?us-ascii?Q?VIEZnttsTZ0lyL1gumsB7vqzmV9vJ5k6vrK5w/gvNGC8CBhD3hyAZgDqMgk3?=
- =?us-ascii?Q?ooLHuj7vzWLdqNRDKwi+iixSHZpx8W7cXhmlcUTZXAAFQ2P438JU5rgsdjFH?=
- =?us-ascii?Q?yC5yUAjADG3OkY7hCs0hTsTz51ZtpSJjG/+Gfm28CbS4KGu48reK+mav1bnW?=
- =?us-ascii?Q?zLCoemH7azqMIbuaFHoZGvN96KazFs81Kji8/WXXBdoW3fFMza3FmwYPTE6w?=
- =?us-ascii?Q?B/KVIovL5x0PvdUt2UyVo0F95wZC6Pk92oMSgLgduUfdgeecqF8J5/3h/HnT?=
- =?us-ascii?Q?vtfBCHz4XcMVOeDHwOtfrwPkB7fWYmOjCL1vqAKlAKNg0jo18LmceaW2CJE3?=
- =?us-ascii?Q?3vWjATnra7Pmk/lmgxi4GILGXb16t+tNnHcznzMwtmybaGRPUWOrpf+ZCcE1?=
- =?us-ascii?Q?MyLZcGGL5twVdIkMY2Z5uAA2MSaHnbmZnyjN8k+3b1Wbh146CpGIRWZsbM+C?=
- =?us-ascii?Q?I+yr7MRcU2R9OkX8XDHxV+t359DTH+YRfhxHU7pv4SSp+SgyizCDzMT3oi6Z?=
- =?us-ascii?Q?BpyetrCZo/9iuj9IIwa6XAA3pb0FQw8pwyMy/l+PVo5+T8vhHcP74YRxzx+o?=
- =?us-ascii?Q?W9Fdbx//cENWdnl/vrHLWbeFu0EzVLbm984V7mTslYu3bKwVj1jR2W6l93Oq?=
- =?us-ascii?Q?S5XzIATq7b5Eb2VuB66blPco/ESxa0QPKQ0fQgeFSHY6LbLDhczW4ZdKv3wB?=
- =?us-ascii?Q?A9rkjwpTwmdKqlHkoe3Vrx2lv/4hILbB5R60T3Ai3shCsXJU8qg4hS5aH8Q1?=
- =?us-ascii?Q?A0aIy7kZVaJCyrnjdCsO1TEwhKHBba2A01CBKHclRlrgxpLUCixIzNC3KvQG?=
- =?us-ascii?Q?BW2Em6p7PVujSVB9fZekpfbvPePhKTvV31WonEncj5yZY/FSk/xPsNLvFP7i?=
- =?us-ascii?Q?3d4hdtGAjihdByIFsHoClMjttHV37h1ciHTo4KHxIAVPj5Z35rF9BbZZIqNH?=
- =?us-ascii?Q?ND6C5OiFx6+xS60npyuNh8XNGdP6vfGVpuQIdc1Bzjpnpsj5qvV6C6w/OUGU?=
- =?us-ascii?Q?T4Zd9hCLgzYvDK73BnKLFK9ig2ktfPQwDmkhVKt0tovsIZlRIXfycrZmIBaX?=
- =?us-ascii?Q?npnTNoOL3Xj9HuqK7ynZUBn9mM7EW9C/tDA/FBgY11XLLMurOMaeFOJahcbc?=
- =?us-ascii?Q?j3/7uQRmt+LxBNxUvcCESM1ILMUQVGtxg6w9N2zuMmwkEMF1+Q=3D=3D?=
+	=?us-ascii?Q?zQLsN0geA+2ZXzq3h21KxEqODazLBarY04NvtTDThDZMnNaKS/KDTjKG0xIN?=
+ =?us-ascii?Q?dJ2+pQIH5SYdRAzUk7xfOFwNwvAjRSFx5IHkCAJ5EYl7+7tjMdDM2joPfOKO?=
+ =?us-ascii?Q?2jsZJGHU/NyrDesPAXos8GxJ3DlmRtUWYp7WTaXhdmlVE9/bDdJh6eT+CuRv?=
+ =?us-ascii?Q?mqljfdMCCZONMOshZm1F7WPYa0HREBEA4ug3M3pItdRLriipaNIi3vpbRSrU?=
+ =?us-ascii?Q?vwvcjE3ObPSgRgXQwgc0DKeTKWHcGv5FQXRT/okruZT10+PvQhH6BWVAKIdB?=
+ =?us-ascii?Q?Bs8Ndmibhtp2QZ/3ZRkvYSYdptuYdYUKkn32TQLifGOj/RJTMDiw4+RYYPGS?=
+ =?us-ascii?Q?x83TgTtRKGUTYbKyfO0qeK8Njf6D2HVqG5P9saIvOQ/3stGRhQgl3uFy6gy2?=
+ =?us-ascii?Q?dE10/F428Vq9KzH/pXXCYmj5yqVCyqqVtUP0748ExJmd5EBFt5yYYjHxY9sC?=
+ =?us-ascii?Q?oNnzVYC4dZTWQG0EDRFJ/Gl6InOcKRoDVtfBYkl88FweEQ7Aa51f0QHfai85?=
+ =?us-ascii?Q?aPr3+7SP8XU3Y4UvIGQ553aR3l4fxCijD6yjjIcszoyufmP17UCt19rfndM9?=
+ =?us-ascii?Q?vEEfIm5QOODTZq6x6v5FTDWLxhMyjYqXHrSmEVfAsKyIVBs+1RZ2WuHE5PuZ?=
+ =?us-ascii?Q?rvFbPZkO2DMX66NrL9YWexr3/P9kIGw8q48pi32N8KyHf0SleBMNWsMDCXYW?=
+ =?us-ascii?Q?CPfll4uSYYuPsUfKqce6grjZypcyu/KkhNNNjE3o1E2OeCXPJestyJoOGSXv?=
+ =?us-ascii?Q?t/Fj5jGcpPwgNmfaHLJ3pepji1WHVr24Xz+N/LyjFfRdU0ui779A+wXDibYS?=
+ =?us-ascii?Q?kAgGLrFVsv9M3D40TN3/KBJQEkokbjfP+B3VBPkbmjX8PLkQP0IGDQQmAknA?=
+ =?us-ascii?Q?3apObKS5QjjpmTmhcrmafqKdCipJM6EZSHWR23ImmhImDm0j8hr9p1hsf7zt?=
+ =?us-ascii?Q?SVmNDwmUWiFhcqPEqPGNP23ZhumejzKQb5VjhHC8ycSwDWxLfYgaLGqYPBEM?=
+ =?us-ascii?Q?ZRGEZ5Hr7oJ6VhvAp7EuKOttkISE6n+oe7z5SI+i2/ySW0to1hcByBJC/4E/?=
+ =?us-ascii?Q?pFooDABRZEgL7Kj0IMPm1aef+UbdqrjyVzFvI6W578ep4HCPk6zpt4wGFLz+?=
+ =?us-ascii?Q?TL3rg04oTUdUbBuxP4UYccj/cbgg5DQZhQ9dXwcz6iSQrlSJT0hNdHKBvrXI?=
+ =?us-ascii?Q?OZrFHNYL9voGAGljOSCqWdE2R9vLJhQF8iX05QO46wg8AIonvygzzt9wJL3b?=
+ =?us-ascii?Q?K+M60dRRD3XXQkFnIM38ggNO9JXDwpB9udyAdVw+mZgI0D+vKcW68KZ4Pjw2?=
+ =?us-ascii?Q?m5a7seRaUwo1TXJOcyki1S592KfuRO4vpZQ4O/hUx5WgUTXVeIA3qIJpGtdF?=
+ =?us-ascii?Q?AFQaSThbMt0aoP8Tu7e9eZOD7Epj3AFZfygoy3zdCqWo2PjkTA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2024 10:21:23.9154
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2024 10:22:22.3103
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8600f3c-4089-4933-107a-08dcf34c7247
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d937336-6e25-4b42-0bb5-08dcf34c9513
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF0000150B.namprd04.prod.outlook.com
+	SA2PEPF00001504.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7772
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8521
 
-Explicitly rename functions that enable CPPC as *_cppc_*. 
+Explicitly rename functions that enable CPPC as *_cppc_*.
 
-Do not clear MSR_AMD_CPPC_ENABLE as it is a set-once register, i.e. it 
-cannot be cleared. 
+Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+---
+ drivers/cpufreq/amd-pstate.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-Propagate the epp value to shared mem in the reenable function.
-
-Replicate the offline flow of MSR based systems in shared mem systems.
-
-Dhananjay Ugwekar (4):
-  cpufreq/amd-pstate: Rename functions that enable CPPC
-  cpufreq/amd-pstate: Do not attempt to clear MSR_AMD_CPPC_ENABLE
-  cpufreq/amd-pstate: Call cppc_set_epp_perf in the reenable function
-  cpufreq/amd-pstate: Align offline flow of shared memory and MSR based
-    systems
-
- drivers/cpufreq/amd-pstate.c | 39 ++++++++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 3c14962adeb2..0b4a4d69c14d 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -306,7 +306,7 @@ static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
+ 	return ret;
+ }
+ 
+-static inline int msr_enable(bool enable)
++static inline int msr_cppc_enable(bool enable)
+ {
+ 	int ret, cpu;
+ 	unsigned long logical_proc_id_mask = 0;
+@@ -332,7 +332,7 @@ static inline int msr_enable(bool enable)
+ 	return 0;
+ }
+ 
+-static int shmem_enable(bool enable)
++static int shmem_cppc_enable(bool enable)
+ {
+ 	int cpu, ret = 0;
+ 	struct cppc_perf_ctrls perf_ctrls;
+@@ -359,11 +359,11 @@ static int shmem_enable(bool enable)
+ 	return ret;
+ }
+ 
+-DEFINE_STATIC_CALL(amd_pstate_enable, msr_enable);
++DEFINE_STATIC_CALL(amd_pstate_cppc_enable, msr_cppc_enable);
+ 
+-static inline int amd_pstate_enable(bool enable)
++static inline int amd_pstate_cppc_enable(bool enable)
+ {
+-	return static_call(amd_pstate_enable)(enable);
++	return static_call(amd_pstate_cppc_enable)(enable);
+ }
+ 
+ static int msr_init_perf(struct amd_cpudata *cpudata)
+@@ -1042,7 +1042,7 @@ static int amd_pstate_cpu_resume(struct cpufreq_policy *policy)
+ {
+ 	int ret;
+ 
+-	ret = amd_pstate_enable(true);
++	ret = amd_pstate_cppc_enable(true);
+ 	if (ret)
+ 		pr_err("failed to enable amd-pstate during resume, return %d\n", ret);
+ 
+@@ -1053,7 +1053,7 @@ static int amd_pstate_cpu_suspend(struct cpufreq_policy *policy)
+ {
+ 	int ret;
+ 
+-	ret = amd_pstate_enable(false);
++	ret = amd_pstate_cppc_enable(false);
+ 	if (ret)
+ 		pr_err("failed to disable amd-pstate during suspend, return %d\n", ret);
+ 
+@@ -1186,7 +1186,7 @@ static ssize_t show_energy_performance_preference(
+ 
+ static void amd_pstate_driver_cleanup(void)
+ {
+-	amd_pstate_enable(false);
++	amd_pstate_cppc_enable(false);
+ 	cppc_state = AMD_PSTATE_DISABLE;
+ 	current_pstate_driver = NULL;
+ }
+@@ -1220,7 +1220,7 @@ static int amd_pstate_register_driver(int mode)
+ 
+ 	cppc_state = mode;
+ 
+-	ret = amd_pstate_enable(true);
++	ret = amd_pstate_cppc_enable(true);
+ 	if (ret) {
+ 		pr_err("failed to enable cppc during amd-pstate driver registration, return %d\n",
+ 		       ret);
+@@ -1599,7 +1599,7 @@ static void amd_pstate_epp_reenable(struct amd_cpudata *cpudata)
+ 	u64 value, max_perf;
+ 	int ret;
+ 
+-	ret = amd_pstate_enable(true);
++	ret = amd_pstate_cppc_enable(true);
+ 	if (ret)
+ 		pr_err("failed to enable amd pstate during resume, return %d\n", ret);
+ 
+@@ -1686,7 +1686,7 @@ static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
+ 	cpudata->suspended = true;
+ 
+ 	/* disable CPPC in lowlevel firmware */
+-	ret = amd_pstate_enable(false);
++	ret = amd_pstate_cppc_enable(false);
+ 	if (ret)
+ 		pr_err("failed to suspend, return %d\n", ret);
+ 
+@@ -1861,7 +1861,7 @@ static int __init amd_pstate_init(void)
+ 			current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+ 	} else {
+ 		pr_debug("AMD CPPC shared memory based functionality is supported\n");
+-		static_call_update(amd_pstate_enable, shmem_enable);
++		static_call_update(amd_pstate_cppc_enable, shmem_cppc_enable);
+ 		static_call_update(amd_pstate_init_perf, shmem_init_perf);
+ 		static_call_update(amd_pstate_update_perf, shmem_update_perf);
+ 	}
+@@ -1886,7 +1886,7 @@ static int __init amd_pstate_init(void)
+ 
+ global_attr_free:
+ 	cpufreq_unregister_driver(current_pstate_driver);
+-	amd_pstate_enable(false);
++	amd_pstate_cppc_enable(false);
+ 	return ret;
+ }
+ device_initcall(amd_pstate_init);
 -- 
 2.34.1
 
