@@ -1,180 +1,224 @@
-Return-Path: <linux-pm+bounces-16332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D6689AD767
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 00:17:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D519AD76C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 00:19:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC1EE1F23433
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 22:17:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B1C6283CF2
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 22:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2EF1E5731;
-	Wed, 23 Oct 2024 22:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48BB1EF0A3;
+	Wed, 23 Oct 2024 22:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kdtS3g4P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWSINJG9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC83114BF87;
-	Wed, 23 Oct 2024 22:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF05313B7BE;
+	Wed, 23 Oct 2024 22:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729721821; cv=none; b=lR3Bu+iudIujFCxdFtjH5+k9l8qFmzXkO/34lha/qnIeN+BUb/gNE9783o5yhNE2KDgDOi2UF9mRU8OvR3Yv3wPz7UdpvINdxD4Wh8JRDrKAdUkq1uFEizrd7+bFb4Dldi7ebsz0SxZ9FLUbHbAUV9LlOQD6SPR64GkMBQtwRYQ=
+	t=1729721946; cv=none; b=uv2SE3k6p6kGAwvO4P4QajjP2wfHLz2SDb9EfnmtRvfQxhRhZ5BXaCc1BZpLqty3fbTHMmAMCxXolGVJKknTa3K8P6iac/9VFpALaOi7dcjGE9hIOen5mmkTq8xI1h+dbXI5xq11LvfRA7Cd2Fg9IbcONz7/GKi/LJq2VXC7X0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729721821; c=relaxed/simple;
-	bh=yYRHXHfS5yJQqCb4HqpzLBcBosjShZJGjPD2W8a7JjI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NUXHN+WYKP0pTJL4SslsZ2TsoIA/7R07jinwZYCvhmOK2bhlDMGXHt9TLvCO87VVhOnl/jpeA175v0N9uMLi603eSan8G20aJdZnf0R4ET8Imtn8gs1e0dfAxFX5GOrJIf1TKEZVdwjY2+KDedYgxW5m02bWM8NdHImRfbSNhTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kdtS3g4P; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49N9p4Wt027446;
-	Wed, 23 Oct 2024 22:16:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=6tVOhdag10+zdto7khR1Tar4
-	uRj8y/h1MvaU2T8DnuQ=; b=kdtS3g4PVRvQqa45IxeqL1K8c19uG7h4qSyPocdF
-	zYHDhqLH1RYzZdufUQT9BZKiGsekheF/p/hBgP6gFJwPsi0Ld9jNoxyATPhFpxIB
-	ixAF4NeCpC20ftLJ8jH0ULdtbsKT7OYHCxemBmCzkHbNuS1fTmuzwsneXVZXDu2F
-	sFwoUNExw21cZB17syFIfVr3jkqa6iDzvSg3AmaGT5DCDYpMp60+PKlC6O1R6M9p
-	vcrQ4G5N701pxAZMtEOYmbacL4lTeP1CYFIv/3CFWCBFHz0WDh8mM24rjQ7jnQ1z
-	OtkCCCckMVK271lUhA5lHrU3NhxyQPZ9AKnsT0CdPCfLaQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em3wkk45-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 22:16:40 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49NMGdUZ003400
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 22:16:39 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 23 Oct 2024 15:16:38 -0700
-Date: Wed, 23 Oct 2024 15:16:38 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Stephen Boyd <swboyd@chromium.org>
-CC: Andy Yan <andy.yan@rock-chips.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi
-	<lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, Olof Johansson
-	<olof@lixom.net>,
-        Rob Herring <robh@kernel.org>, Sebastian Reichel
-	<sre@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon
-	<will@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        "Satya Durga
- Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Melody Olvera
-	<quic_molvera@quicinc.com>,
-        Shivendra Pratap <quic_spratap@quicinc.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v6 3/5] firmware: psci: Read and use vendor reset types
-Message-ID: <20241023151556009-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com>
- <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
- <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com>
- <20241023092251529-0700.eberman@hu-eberman-lv.qualcomm.com>
- <CAE-0n50s1gUt7jOWLEjDzi7ABVRLmAr1kG-6V6YjTZnPD2EMQw@mail.gmail.com>
+	s=arc-20240116; t=1729721946; c=relaxed/simple;
+	bh=I73ivlORiJQNQAjjmtiuUrtSB1iB0qF3Jq3zae69XQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=TefA5REnRNDT2qtrOOfDVzcxITsQAL669QVKW6oBLCYOHfvW81RbK4QRWCT6HkIUwmvasbzqRSeeEspVC1jmpwYitw+/fwLwZ3tjUDlhirMxrkCSPAtGv3W77uXa2uUJg0qnx6IzLrT4nCvcFX3RU7tGon5/Xp6YWcnIP93/tCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWSINJG9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17917C4CECC;
+	Wed, 23 Oct 2024 22:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729721946;
+	bh=I73ivlORiJQNQAjjmtiuUrtSB1iB0qF3Jq3zae69XQQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=AWSINJG9BVL8+198yIJr+h1RVZyNmhXfhauqoN7adhej1AxmIB6WPLj6Gm6Eu5T4w
+	 aw4LziqiTl3zIHZVPtIOzPDUb0SH7npKnjgxmYvmRV5FpX6HXanu20Kf4LxnSFq+p1
+	 GEtzuYLTfzYgnBnR053KVtj3/gliXvNOF4hDaRSjJ+8hMdxwopoQ2uF8s6jLIkfzrR
+	 KpAR2zlGdzhWqhzEivzpaIrQK8NrIReCjCU3ZfotqzReKUuE/AZmlBSJ+kXn704Orh
+	 Wrsv5Qgnw6MdKjeXmRpfuMxQRURyFjkxUycPc15yQR7w7Kqfx4p2OQZ8O9vMssDSVV
+	 hBJDN6ikfVxzg==
+Date: Wed, 23 Oct 2024 17:19:04 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v9 0/9] PCI: Add PCIe bandwidth controller
+Message-ID: <20241023221904.GA941054@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAE-0n50s1gUt7jOWLEjDzi7ABVRLmAr1kG-6V6YjTZnPD2EMQw@mail.gmail.com>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jXbGRyJQK_qVccSCirzdUkNaGANmPeIF
-X-Proofpoint-ORIG-GUID: jXbGRyJQK_qVccSCirzdUkNaGANmPeIF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 malwarescore=0 suspectscore=0
- spamscore=0 mlxscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410230144
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
 
-On Wed, Oct 23, 2024 at 12:02:19PM -0700, Stephen Boyd wrote:
-> Quoting Elliot Berman (2024-10-23 09:30:21)
-> > On Fri, Oct 18, 2024 at 10:42:46PM -0700, Stephen Boyd wrote:
-> > > Quoting Elliot Berman (2024-10-18 12:39:48)
-> > > > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> > > > index 2328ca58bba6..60bc285622ce 100644
-> > > > --- a/drivers/firmware/psci/psci.c
-> > > > +++ b/drivers/firmware/psci/psci.c
-> > > > @@ -305,9 +315,29 @@ static int get_set_conduit_method(const struct device_node *np)
-> > > >         return 0;
-> > > >  }
-> > > >
-> > > > +static void psci_vendor_sys_reset2(unsigned long action, void *data)
-> > > > +{
-> > > > +       const char *cmd = data;
-> > > > +       unsigned long ret;
-> > > > +       size_t i;
-> > > > +
-> > > > +       for (i = 0; i < num_psci_reset_params; i++) {
-> > > > +               if (!strcmp(psci_reset_params[i].mode, cmd)) {
-> > > > +                       ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
-> > > > +                                            psci_reset_params[i].reset_type,
-> > > > +                                            psci_reset_params[i].cookie, 0);
-> > > > +                       pr_err("failed to perform reset \"%s\": %ld\n",
-> > > > +                               cmd, (long)ret);
-> > >
-> > > Do this intentionally return? Should it be some other function that's
-> > > __noreturn instead and a while (1) if the firmware returns back to the
-> > > kernel?
-> > >
-> >
-> > Yes, I think it's best to make sure we fall back to the architectural
-> > reset (whether it's the SYSTEM_RESET or architectural SYSTEM_RESET2)
-> > since device would reboot then.
+On Fri, Oct 18, 2024 at 05:47:46PM +0300, Ilpo Järvinen wrote:
+> Hi all,
 > 
-> Ok. Please add a comment in the code so we know that it's intentional.
+> This series adds PCIe bandwidth controller (bwctrl) and associated PCIe
+> cooling driver to the thermal core side for limiting PCIe Link Speed
+> due to thermal reasons. PCIe bandwidth controller is a PCI express bus
+> port service driver. A cooling device is created for each port the
+> service driver finds to support changing speeds.
 > 
-> >
-> > > > +               }
-> > > > +       }
-> > > > +}
-> > > > +
-> > > >  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
-> > > >                           void *data)
-> > > >  {
-> > > > +       if (data && num_psci_reset_params)
-> > > > +               psci_vendor_sys_reset2(action, data);
-> > > > +
+> This series only adds support for controlling PCIe Link Speed.
+> Controlling PCIe Link Width might also be useful but there is no
+> mechanism for that until PCIe 6.0 (L0p) so Link Width throttling is not
+> added by this series.
 > 
-> I'd add a comment here as well indicating that a fallback is used.
 > 
+> v9:
+> - Split RMW ops doc reformat into own patch before adding LNKCTL2.
+> - Comment reserved 0 LSB even better than it already was.
+> - Consider portdrv future plans:
+> 	- Use devm helpers for mem alloc, IRQ, and mutex init.
+> 	- Don't use get/set_service_data().
+> - Split rwsem into two to avoid recursive locking splat through
+>   pcie_retrain_link().
+> - Small wording improvements to commit messages (from Jonathan)
+> 
+> v8:
+> - Removed CONFIG_PCIE_BWCTRL (use CONFIG_PCIEPORTBUS)
+> - Removed locking wrappers that dealt with the CONFIG variations
+> - Protect macro parameter with parenthesis to be on the safe side
+> 
+> v7:
+> - Rebased on top of Maciej's latest Target Speed quirk patches
+> - Target Speed quirk runs very early, w/o ->subordinate existing yet.
+>   This required adapting logic:
+> 	- Move Supported Link Speeds back to pci_dev
+> 	- Check for ->subordinate == NULL where necessary
+> 	- Cannot always take bwctrl's per port mutex (in pcie_bwctrl_data)
+> - Cleaned up locking in pcie_set_target_speed() using wrappers
+> 	- Allowed removing confusing __pcie_set_target_speed()
+> - Fix building with CONFIG_PCI=n
+> - Correct error check in pcie_lbms_seen()
+> - Don't return error for an empty bus that remains at 2.5GT
+> - Use rwsem to protect ->link_bwctrl setup and bwnotif enable
+> - Clear LBMS in remove_board()
+> - Adding export for pcie_get_supported_speeds() was unnecessary
+> - Call bwctrl's init before hotplug.
+> - Added local variable 'bus' into a few functions
+> 
+> v6:
+> - Removed unnecessary PCI_EXP_LNKCAP_SLS mask from PCIE_LNKCAP_SLS2SPEED()
+> - Split error handling in pcie_bwnotif_irq_thread()
+> - pci_info() -> pci_dbg() on bwctrl probe success path
+> - Handle cooling device pointer -Exx codes in bwctrl probe
+> - Reorder port->link_bwctrl setup / bwnotif enable for symmetry
+> - Handle LBMS count == 0 in PCIe quirk by checking LBMS (avoids a race
+>   between quirk and bwctrl)
+> - Use cleanup.h in PCIe cooling device's register
+> 
+> v5:
+> - Removed patches: LNKCTL2 RMW driver patches went in separately
+> - Refactor pcie_update_link_speed() to read LNKSTA + add __ variant
+>   for hotplug that has LNKSTA value at hand
+> - Make series fully compatible with the Target Speed quirk
+> 	- LBMS counter added, quirk falls back to LBMS bit when bwctrl =n
+> 	- Separate LBMS patch from set target speed patches
+> - Always provide pcie_bwctrl_change_speed() even if bwctrl =n so drivers
+>   don't need to come up their own version (also required by the Target
+>   Speed quirk)
+> - Remove devm_* (based on Lukas' comment on some other service
+>   driver patch)
+> - Convert to use cleanup.h
+> - Renamed functions/struct to have shorter names
+> 
+> v4:
+> - Merge Port's and Endpoint's Supported Link Speeds Vectors into
+>   supported_speeds in the struct pci_bus
+> - Reuse pcie_get_speed_cap()'s code for pcie_get_supported_speeds()
+> - Setup supported_speeds with PCI_EXP_LNKCAP2_SLS_2_5GB when no
+>   Endpoint exists
+> - Squash revert + add bwctrl patches into one
+> - Change to use threaded IRQ + IRQF_ONESHOT
+> - Enable also LABIE / LABS
+> - Convert Link Speed selection to use bit logic instead of loop
+> - Allocate before requesting IRQ during probe
+> - Use devm_*()
+> - Use u8 for speed_conv array instead of u16
+> - Removed READ_ONCE()
+> - Improve changelogs, comments, and Kconfig
+> - Name functions slightly more consistently
+> - Use bullet list for RMW protected registers in docs
+> 
+> v3:
+> - Correct hfi1 shortlog prefix
+> - Improve error prints in hfi1
+> - Add L: linux-pci to the MAINTAINERS entry
+> 
+> v2:
+> - Adds LNKCTL2 to RMW safe list in Documentation/PCI/pciebus-howto.rst
+> - Renamed cooling devices from PCIe_Port_* to PCIe_Port_Link_Speed_* in
+>   order to plan for possibility of adding Link Width cooling devices
+>   later on
+> - Moved struct thermal_cooling_device declaration to the correct patch
+> - Small tweaks to Kconfig texts
+> - Series rebased to resolve conflict (in the selftest list)
+> 
+> Ilpo Järvinen (9):
+>   Documentation PCI: Reformat RMW ops documentation
+>   PCI: Protect Link Control 2 Register with RMW locking
+>   PCI: Store all PCIe Supported Link Speeds
+>   PCI: Refactor pcie_update_link_speed()
+>   PCI/quirks: Abstract LBMS seen check into own function
+>   PCI/bwctrl: Re-add BW notification portdrv as PCIe BW controller
+>   PCI/bwctrl: Add API to set PCIe Link Speed
+>   thermal: Add PCIe cooling driver
+>   selftests/pcie_bwctrl: Create selftests
+> 
+>  Documentation/PCI/pciebus-howto.rst           |  14 +-
+>  MAINTAINERS                                   |   9 +
+>  drivers/pci/hotplug/pciehp_ctrl.c             |   5 +
+>  drivers/pci/hotplug/pciehp_hpc.c              |   2 +-
+>  drivers/pci/pci.c                             |  62 ++-
+>  drivers/pci/pci.h                             |  38 +-
+>  drivers/pci/pcie/Makefile                     |   2 +-
+>  drivers/pci/pcie/bwctrl.c                     | 366 ++++++++++++++++++
+>  drivers/pci/pcie/portdrv.c                    |   9 +-
+>  drivers/pci/pcie/portdrv.h                    |   6 +-
+>  drivers/pci/probe.c                           |  15 +-
+>  drivers/pci/quirks.c                          |  32 +-
+>  drivers/thermal/Kconfig                       |   9 +
+>  drivers/thermal/Makefile                      |   2 +
+>  drivers/thermal/pcie_cooling.c                |  80 ++++
+>  include/linux/pci-bwctrl.h                    |  28 ++
+>  include/linux/pci.h                           |  24 +-
+>  include/uapi/linux/pci_regs.h                 |   1 +
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
+>  .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++
+>  .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++
+>  22 files changed, 843 insertions(+), 53 deletions(-)
+>  create mode 100644 drivers/pci/pcie/bwctrl.c
+>  create mode 100644 drivers/thermal/pcie_cooling.c
+>  create mode 100644 include/linux/pci-bwctrl.h
+>  create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
+>  create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+>  create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
 
-Ack.
-
-Thanks for the feedback!
-
-- Elliot
-
+Applied to pci/bwctrl for v6.13, thanks Ilpo (and Alexandru, for the
+bandwidth notification interrupt support)!
 
