@@ -1,144 +1,130 @@
-Return-Path: <linux-pm+bounces-16284-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16285-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 735059AC6EF
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 11:50:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B24669AC75D
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 12:06:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A24471C24221
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 09:50:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73F56283568
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 10:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C4E19CC27;
-	Wed, 23 Oct 2024 09:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2DC1A0724;
+	Wed, 23 Oct 2024 10:06:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T78yyWDE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zef9Zx+E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4E4152517;
-	Wed, 23 Oct 2024 09:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 967AB19F49F
+	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 10:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729677024; cv=none; b=TB8qNqb0WIEb0wvQGgjM0WDipD/stHIdOqwhJar8UGxna+YhnQTzAt9ZfS3MukmJD0uW1G5ubDy/Va4qTCLYSps17Y8Cr7lRBqQkMb1VEugwh8qr+l+s7h1ikYXixFhPsz9COhZ3XEiFXUHQKudFihHckuRCGqYby9HtG8DYWS8=
+	t=1729677990; cv=none; b=VY0FgWCQLtADhcDw3zRqOQqtX2sGtq45Cta9LbThgxlEvzs+YMZWvdX7PbwwAFJf6bzO20K1dd3dVYq6ZsBqEJJE5yH0sHkQ9hihgphqFUNQZgOdUy/1MzlJPqhrJrM35ecqiomjTzxoXwG2BMFr+u7ezyChj9Q4nq5MdPapbYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729677024; c=relaxed/simple;
-	bh=86bNL0kwdLkucNoLyKL04fg25Q3kvxNWwqSppf0aCfU=;
+	s=arc-20240116; t=1729677990; c=relaxed/simple;
+	bh=a95S/TCmJUb9zAzOT/Z7FGsQTjMV4ZgF2D4dSS7l1HM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Es/k/bDG0lbk+B/Rvuzg7UhRWI0pBtK3hh7a+43LUlRRaocClFK4XiARjteX1Rtdrkdh1sUxw5ESjNkjU99ZZk1LrEMCbC7C07wbongehKjf2qx2843DO+ZF71soxdnQavw4HAUU/bfzWH7wzGy4mCumyhAGQrgOcmromkfpbAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T78yyWDE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A41C4CEEB;
-	Wed, 23 Oct 2024 09:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729677023;
-	bh=86bNL0kwdLkucNoLyKL04fg25Q3kvxNWwqSppf0aCfU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T78yyWDEK7flazfqDgSrCPz8eACxMhdcG1oU7cJ/Aba7u1g09DBGJ2uM8qXhty1PE
-	 VQ+tZkF+X/+wbm8Ak/hGue5icorn+dZJMrG4uhHE/2ZZR1+sJxpVCfTZ20UZXX2IOs
-	 4V4K42RXNpCl99JhXQ5TQbMLbVPPd/H6N8UJhyZyJtzdLUCmTnYlLB5i1bXcaJX/r5
-	 XO0kWURFZNbq1mq4F1lhm9CeRusWZkV+l/g8lUQw8w7qYvO2kFq81J6db/mp7crBfV
-	 v6UxYsOWIiY13h6r0vQrUJwNVFt8gFTyxRhYZ4t+aVjvknsiMbpxtChCk9eUzPIms0
-	 ACGeTc9+TdK+A==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2887326be3dso3074085fac.1;
-        Wed, 23 Oct 2024 02:50:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUrj9CCctzP71U8rDifLdWzt/RMZEybxhsfE9aWbAsgQDiNUp5axJrZz0wPM0FU5fDhrXs6uf88A6A=@vger.kernel.org, AJvYcCVta0CgZY1ZSID8vRDIt6QVhao/fRdHfT68poLaieXAt118F9YzsrK+x8WWx5DF/f6289JF7EOKHlisZOA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyK1pr8Lor4R9wcQWpoi5n5yfR+q9EPaO8Zvj4GR5+I+d8aBnzL
-	d2N29qvZxQIcUFxdH/TCgDe+t77mQSvf7VDjP9/UzCV99kG6NeLiSZxTnWsyVkpea/R/8tIbSlU
-	OTI1WxEhvc6AHmwg76Pv4cJ/CI3Y=
-X-Google-Smtp-Source: AGHT+IHO6k4/ZN5wpABz3fUlREC3wQznWjXLd/VxSX3+3J1qO7cnwpFrOPCG6CNyeJwEUM1dkaG7ZyjO2U63AhHWTOo=
-X-Received: by 2002:a05:6870:a106:b0:277:f5de:210f with SMTP id
- 586e51a60fabf-28ccb486ee1mr2191917fac.19.1729677023233; Wed, 23 Oct 2024
- 02:50:23 -0700 (PDT)
+	 To:Cc:Content-Type; b=dCiqCr5oXWHeTsk+UtHxtB3XJdmUFh5gjIkfbFmTuVpJYj1YyIqBgHjsg4KRIJnLhHEr190GVw4aMthH6hqNhdZwE3WXMMJhdwHU/fAD1kjhLI+ndMGCSXiSamJcxLkRhVcRhb3RVOEVpnOgYCXtdDmPF/DDFKVUqlVf+CnZMxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zef9Zx+E; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e314136467so7054667b3.0
+        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 03:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729677987; x=1730282787; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a95S/TCmJUb9zAzOT/Z7FGsQTjMV4ZgF2D4dSS7l1HM=;
+        b=zef9Zx+EJUg5vR9H9/bgYEaqvY7drLABxWeW5rTOHVsvhb8RnyKzIBFL3+kkHMgmF/
+         2Gs+9vUWmPAs3TWwQFtw7AmD1IWf4f9mwzZGENb/VspLPo/6vcxjE1aLTHIK5qsG/vVQ
+         B7mJZVBSkpqDkUFWPy83mrE0rGHSmAJOKsKuRt5BrTxT2XJs4Tp/cJZnMeFPLlYoJaPu
+         uxm5lahZvUknt8Ng689mtgFUsohbkYN4ZFo5AijgPJQlK4f7m53rR8ndk4f66u5j0VZt
+         CBnUepMiaEU3L6whdD02F98S508+VmPItJ19xXHNM9EZMqfyncUP3UUEmwEGrqyB2aMZ
+         bIIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729677987; x=1730282787;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a95S/TCmJUb9zAzOT/Z7FGsQTjMV4ZgF2D4dSS7l1HM=;
+        b=AWD/Z07ZCYl6Ea0xqq5spRM2XVXhNPNKAbsUbSmWi7mFyZ+A8INX3DECX5zabfyRXv
+         +uVGa5sTtnBfs8GuvyOWw6VDBQeI5hVfz6+GMlWqszhB1zWJLJDthNLNHJjSrMTq7DTq
+         rXhZtSR2tmqxn81xDPEbjo449XUE4aDyg/1roL30esdvcRBVe0HJFlRdHDcgjzMEfESR
+         o4/gzo8oqQSNXOAK7agHeoua+Ho1bsgz3rJQCJsqSlYm4ECVpFvlGTwjKcZyGja6fW9d
+         Wezs7JktOpcBwDh+tiLt2U5NEO0gXeu8JhSUrkzFdUJ+vOiR9i9+d746MvThLl7U+SXh
+         /VzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWc7LI1MHXdcSQ5y0a1iOJsg5hTn4SJuXPUXE8Mx8b7MmDAUQeH3BUon/47GLeasKjCY5pHFPXBUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy21w8g2gie2hrcxjmkHCPUkNdvZclRpj+2yo8SffQR2ctffKQZ
+	6Fbv+IOgNXpjXgSn4OxOHOtmdWPsy9veNU+ZHUtI9o+vGa5QCb8Bt9OZWr9Oi41fXW5lUKWgit4
+	xuPtaPJyf/Aa7uybejYEDYiMEPQIwpeVRM2rRCg==
+X-Google-Smtp-Source: AGHT+IFwOZBv/9xV3wiaI1U67V6VvBJcsk2sGD6YUBFHxuleavk/W9fHcm2zNaYIQVNokSq8zuqqKdyHygLlMwbU20o=
+X-Received: by 2002:a05:690c:fc7:b0:6e2:b262:bebc with SMTP id
+ 00721157ae682-6e7f060d560mr19960777b3.0.1729677987373; Wed, 23 Oct 2024
+ 03:06:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4985597.31r3eYUQgx@rjwysocki.net> <1930069.tdWV9SEqCh@rjwysocki.net>
- <2fc850b3-93af-4d8e-8a64-1c95942e911b@arm.com>
-In-Reply-To: <2fc850b3-93af-4d8e-8a64-1c95942e911b@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 23 Oct 2024 11:50:11 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g7zKWT_DpQ5uO+AeDXEKmJrwVBqcN-4PAJNYBORX+rAQ@mail.gmail.com>
-Message-ID: <CAJZ5v0g7zKWT_DpQ5uO+AeDXEKmJrwVBqcN-4PAJNYBORX+rAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/11] thermal: core: Add and use thermal zone guard
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <20241022154508.63563-1-sebastian.reichel@collabora.com>
+In-Reply-To: <20241022154508.63563-1-sebastian.reichel@collabora.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 23 Oct 2024 12:05:51 +0200
+Message-ID: <CAPDyKFoAv1jeQitHmTMhvwG9vGzN-vLby0fPzkX1E6+-Qe2dog@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] Fix RK3588 GPU domain
+To: Mark Brown <broonie@kernel.org>, Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?UTF-8?Q?Adri=C3=A1n_Mart=C3=ADnez_Larumbe?= <adrian.larumbe@collabora.com>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Chen-Yu Tsai <wens@csie.org>, 
+	devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Lukasz,
-
-On Tue, Oct 22, 2024 at 11:01=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
+On Tue, 22 Oct 2024 at 17:45, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 >
-> Hi Rafael,
+> Hi,
 >
-> On 10/10/24 23:05, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Add and use a guard for thermal zone locking.
-> >
-> > This allows quite a few error code paths to be simplified among
-> > other things and brings in a noticeable code size reduction for
-> > a good measure.
-> >
-> > No intentional functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > This is a new iteration of
-> >
-> > https://lore.kernel.org/linux-pm/3241904.5fSG56mABF@rjwysocki.net/
-> >
-> > that has been combined with
-> >
-> > https://lore.kernel.org/linux-pm/4613601.LvFx2qVVIh@rjwysocki.net/
-> >
-> > and rebased on top of
-> >
-> > https://lore.kernel.org/linux-pm/12549318.O9o76ZdvQC@rjwysocki.net/
-> >
-> > and
-> >
-> > https://lore.kernel.org/linux-pm/2215082.irdbgypaU6@rjwysocki.net/
-> >
-> > ---
-> >   drivers/thermal/thermal_core.c    |   61 +++++++---------------------
-> >   drivers/thermal/thermal_core.h    |    4 +
-> >   drivers/thermal/thermal_debugfs.c |   25 +++++++----
-> >   drivers/thermal/thermal_helpers.c |   17 ++-----
-> >   drivers/thermal/thermal_hwmon.c   |    5 --
-> >   drivers/thermal/thermal_netlink.c |   21 ++-------
-> >   drivers/thermal/thermal_sysfs.c   |   81 ++++++++++++++++------------=
-----------
-> >   drivers/thermal/thermal_trip.c    |    8 ---
-> >   8 files changed, 86 insertions(+), 136 deletions(-)
-> >
+> I got a report, that the Linux kernel crashes on Rock 5B when the panthor
+> driver is loaded late after booting. The crash starts with the following
+> shortened error print:
 >
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'gpu', val=0
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to get ack on domain 'gpu', val=0xa9fff
+> SError Interrupt on CPU4, code 0x00000000be000411 -- SError
 >
-> [snip]
+> This series first does some cleanups in the Rockchip power domain
+> driver and changes the driver, so that it no longer tries to continue
+> when it fails to enable a domain. This gets rid of the SError interrupt
+> and long backtraces. But the kernel still hangs when it fails to enable
+> a power domain. I have not done further analysis to check if that can
+> be avoided.
 >
-> Surprise, how the code can look smaller using that
-> style with 'guard'.
+> Last but not least this provides a fix for the GPU power domain failing
+> to get enabled - after some testing from my side it seems to require the
+> GPU voltage supply to be enabled.
+>
+> This series is now based on the pull request from Mark Brown:
+> https://lore.kernel.org/linux-pm/ZvsVfQ1fuSVZpF6A@finisterre.sirena.org.uk/
+>
+> I added one more patch, which adds devm_of_regulator_get without the
+> _optional suffix, since that is more sensible for the Rockchip usecase.
+> Longer explanation can be seen in patch 6, which adds the handling to
+> the Rockchip driver. My merge suggestion would be that Mark adds the
+> regulator patch on top of the immutable branch and creates a new pull
+> request.
 
-Yes, it gets more concise.
+The merge strategy seems reasonable to me. But I am fine with that
+whatever works for Mark.
 
-Not only that, though.  It is also less error-prone, because you won't
-forget to unlock the lock in an error path and you won't use "lock"
-instead of "unlock" by mistake etc.
+[...]
 
-Moreover, it kind of promotes dividing the code into smaller
-self-contained pieces, which is a plus too IMV.
-
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Thank you!
+Kind regards
+Uffe
 
