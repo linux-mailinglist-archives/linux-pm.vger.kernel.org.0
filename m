@@ -1,116 +1,128 @@
-Return-Path: <linux-pm+bounces-16279-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16280-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D48259ABE72
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 08:11:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22B8A9AC098
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 09:47:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AB4A1F21141
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 06:11:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8238284C7B
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 07:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC8F145B1B;
-	Wed, 23 Oct 2024 06:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF39E154C04;
+	Wed, 23 Oct 2024 07:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICd5Xtf4"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HonOUKVH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1DBEAC5;
-	Wed, 23 Oct 2024 06:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384FB15443C;
+	Wed, 23 Oct 2024 07:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729663892; cv=none; b=L6IZx0e8Fuk3obmSnotuw/hsy+Xqvyl0uD4zljjQoz1cku6BTh83rWoDp6Tom2Ou8DJ2+NM1t8/wM9nV5STCy1KxVZ9N/XAOmKuQ/T11KoKf6AnRi3bk6cvhoBvHvQTh7ELfPxlvWivtFhnW8eGPgWaMGN+ky9WqTaRRyh+Sd7o=
+	t=1729669630; cv=none; b=feB2CY6IqV2tSI4YbAn4A9HHY71NVsD9Xttv+3b46glU9cUTVdYGMCw5WS+ZgCBm57AS7C98IcoCItHM7dwodAh/sq8Lj/Dx+XV9Eno7XuF/0sqsn6CcMM2WpTYyvo/7JgmWoUMELYIxH3yrALa+sGLsIrLiAkQ/LuMKzXYVTnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729663892; c=relaxed/simple;
-	bh=0QCLUlm8v15+aWRNMVm0cX6XDb430gG0r+9EMsreD+U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T+tbeEoSmfJAQU6RVSvdc2LE/Xc9HSEYdtW6UOBnwK4GQx9W4bqt+3UE+7XNu4ns52rPMwzFPFNanZjlgjhy6x5/FgQjN+nAYZnZxs1YWMTxB3/cakvdENKTzsCpJmE+9YXlS2fqzCnVpYrP2A++b3yZrrRNhhq9y2hIvpGs0k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICd5Xtf4; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20cd76c513cso53817835ad.3;
-        Tue, 22 Oct 2024 23:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729663890; x=1730268690; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6EFI9tqsrpEEu6NwL7Z+5Ve3RfER5b3SfcI5LbP/Pg=;
-        b=ICd5Xtf44EEViv7HovcCxpj3eNp8oTWm9qBAJGRAsVaryzeQQojmU8fFA3d+2uKxMa
-         9WMOEH6bmxM9DTk3BTHbqdE2Y2QWjhzOPNVkG9mGMOnRYlORfTnvaA1hUX4KawB3+ZX0
-         xQfNrLzsgi+WB9uh3E06dxLvxu3V7If5N6ZWY64j/vLAp/+3lbz47xJSw9dEbXpFGPTJ
-         aIcPF+023TtPSKyGrSi/nRylXqrCJMJ6/haGYW7b4yBh+HKHc8qCRJygqICwsgR0Whgy
-         Rs/EZfi7z8tmG8QCy+wWZjh/g7TdFPiKjTgIJDrKfXSoLYxdG+Gcf1FBcCtg6z0XWdL3
-         V7MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729663890; x=1730268690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N6EFI9tqsrpEEu6NwL7Z+5Ve3RfER5b3SfcI5LbP/Pg=;
-        b=UKXmdjEb4t2OVzTbta03+xwuRwubz2fS5RBgRCYcQuT5tjwa9B3CgkkchM61s36kQj
-         Lpg2IXY3mx0RfCnbokaEpaY6JJPlg6j37dXjHWZQ7hcWyBjodcWH7wbrOpwI25q0wANl
-         jbF3X3fhshxEQ1SVNGESzYv0pW3whlykRQOUh0Kd7PscpRQ+tsPG8BKFwzRdVKGIzK3f
-         SKCxanleLa47bxR8lwz8dKv5gPN1ILR0Jp9AZqtWNkEJJUVEAGyRr4BxB+RT6huUS95t
-         awW79csgmYR5pza0C5439+nEIM6ZxWbHabvQKOpn8vkvULhsimNqP4E4Z4xpbmyg3YEB
-         yZjg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGpQqXq6323hTkK3PIK4v3vWIq2Ryot8dhhsh0sTl+2kRUZ4apzdEr304u/ThFBa2v5c96dxAJYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7MltAlTz7DvNhG8vcRzWpAIHJqHHWScLWvJ60uZ+qp1zbeOko
-	4pQBxoL+uT8FPXivUkENfcCbAWsV5L8EeBG39NI5E9O8Tsm2KAFt
-X-Google-Smtp-Source: AGHT+IFyEDDoFDa/N0jty/nCuSN2nZiQsDh94bhP1FLD4nrvCSFchFWHIh5DcW4EZTByQDm3/A98Lg==
-X-Received: by 2002:a17:903:40d1:b0:20c:b0c7:92c9 with SMTP id d9443c01a7336-20fa9e5fd6dmr19310735ad.34.1729663889806;
-        Tue, 22 Oct 2024 23:11:29 -0700 (PDT)
-Received: from anishs-Air.attlocal.net ([2600:1700:3bdc:8c10:f4d0:e3e8:aee:c08a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7eee62dcsm50964255ad.27.2024.10.22.23.11.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 22 Oct 2024 23:11:29 -0700 (PDT)
-From: anish kumar <yesanishhere@gmail.com>
-To: sre@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	anish kumar <yesanishhere@gmail.com>
-Subject: [PATCH] power: supply: generic-adc-battery: change my gmail
-Date: Tue, 22 Oct 2024 23:11:26 -0700
-Message-Id: <20241023061126.7896-1-yesanishhere@gmail.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+	s=arc-20240116; t=1729669630; c=relaxed/simple;
+	bh=WxrpTfo0Ro5O/W4tKdv9AC9eL3/cEUxiZpLNJuhbvxg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=VaxbYPai244wKxjLn5f4w9L+iNKjq0nKMgOJLpPsV1voqrZ4hHPLlQWT3mVWuNtAzx5tLyNRbiD6kvcelNf7VjV+vgiGRsf1IRa7l4QejJxIt5JuKOWVrWREr2xRTa9EcqIzrMzpJMd+GQRqT9nnp0pxpMTvCWpBcHQSQejJBPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HonOUKVH; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49MLaO2i028304;
+	Wed, 23 Oct 2024 07:46:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Reaotx7xKtV+T2RZPrLWeCnG+P8PEHmuEC+TJ6peMeI=; b=HonOUKVHf1ueTGUj
+	wc5lsgYBlorSzVqO09XmgIclsjS6ImcLzTjqYH9OecDn0LVkBjsq6G7U0upJkAlB
+	J+2630ktTy7lVBe9d9UHeUpm55ez9cnOOj8R03cYlzEnyqSw1HU8M2KsTkbh2CUT
+	KUeg4yeayVvx4m0S7cLEVlyED1eArY590gTFti46nV6pgj9c0VFmGRw3+Q3Q5S6c
+	0J/tq8CymcU77Jsj9ymYbQC4KnslqyDw8289TrbfJSmKc5ImYBH8nS4muA25cRpo
+	fbm6kZuswRpgXkNvFwkPf9YZZPBXUBygeXimXbGQdw4mx+K3m6Fn6AzTbEWIgV8X
+	5Kvgsg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em41s9k2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 23 Oct 2024 07:46:55 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49N7ksa6015287
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 23 Oct 2024 07:46:54 GMT
+Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 23 Oct
+ 2024 00:46:50 -0700
+Message-ID: <ae5eaef9-301f-7d3f-c973-faa22ae780ee@quicinc.com>
+Date: Wed, 23 Oct 2024 13:16:47 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V3 0/4] firmware: arm_scmi: Misc Fixes
+Content-Language: en-US
+To: Johan Hovold <johan@kernel.org>
+CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
+        <ulf.hansson@linaro.org>, <jassisinghbrar@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <konradybcio@kernel.org>,
+        <linux-pm@vger.kernel.org>, <tstrudel@google.com>, <rafael@kernel.org>
+References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
+ <ZwfsmqInJlqkQD_3@hovoldconsulting.com>
+From: Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <ZwfsmqInJlqkQD_3@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3esxjgNMWNCmetCmF1sPlsELCZAde0PN
+X-Proofpoint-ORIG-GUID: 3esxjgNMWNCmetCmF1sPlsELCZAde0PN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=862 mlxscore=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410230047
 
-change my contact in this driver.
 
-Signed-off-by: anish kumar <yesanishhere@gmail.com>
----
- drivers/power/supply/generic-adc-battery.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-index 7bdc6b263609..d5d215f5ad8b 100644
---- a/drivers/power/supply/generic-adc-battery.c
-+++ b/drivers/power/supply/generic-adc-battery.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * Generic battery driver using IIO
-- * Copyright (C) 2012, Anish Kumar <anish198519851985@gmail.com>
-+ * Copyright (C) 2012, Anish Kumar <yesanishhere@gmail.com>
-  * Copyright (c) 2023, Sebastian Reichel <sre@kernel.org>
-  */
- #include <linux/interrupt.h>
-@@ -295,6 +295,6 @@ static struct platform_driver gab_driver = {
- };
- module_platform_driver(gab_driver);
- 
--MODULE_AUTHOR("anish kumar <anish198519851985@gmail.com>");
-+MODULE_AUTHOR("anish kumar <yesanishhere@gmail.com>");
- MODULE_DESCRIPTION("generic battery driver using IIO");
- MODULE_LICENSE("GPL");
--- 
-2.39.3 (Apple Git-146)
+On 10/10/24 20:32, Johan Hovold wrote:
+> On Mon, Oct 07, 2024 at 11:36:38AM +0530, Sibi Sankar wrote:
+>> The series addresses the kernel warnings reported by Johan at [1] and are
+>> are required to X1E cpufreq device tree changes [2] to land.
+>>
+>> [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+>> [2] - https://lore.kernel.org/lkml/20240612124056.39230-1-quic_sibis@quicinc.com/
+>>
+>> The following warnings remain unadressed:
+>> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+>> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> 
+> Are there any plans for how to address these?
 
+Hey Johan,
+Sorry missed replying to this. The error implies that duplicate
+opps are reported by the SCP firmware and appear once during probe.
+This particular error can be fixed only by a firmware update and you
+should be able to test it out soon on the CRD first.
+
+"FWIW the warnings that we are addressing in this series will also get
+fixed by a firmware update but they still have to land for devices
+already out in the wild."
+
+
+> 
+> Johan
 
