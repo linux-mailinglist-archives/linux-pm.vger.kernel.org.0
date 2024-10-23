@@ -1,143 +1,101 @@
-Return-Path: <linux-pm+bounces-16316-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16317-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6936E9AD3A4
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 20:11:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 607749AD442
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 20:50:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FBE11F236F5
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 18:11:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08EDCB227C6
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 18:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1E61D0797;
-	Wed, 23 Oct 2024 18:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF6E1D1F46;
+	Wed, 23 Oct 2024 18:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YQnPOdG0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQrawWHt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10701CBE9A;
-	Wed, 23 Oct 2024 18:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE95715EFA0
+	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 18:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729707108; cv=none; b=X4EBUlYL5zdczxV58k8stMdTBU3lN2XirWxDO69rZ4GVZudoHD4lLz6Xq18aFz/OzYRk5oqjqimXs3P5PN3GvVP6h+9j+euLnRzKVn9MwbIcq1jniEDrS5Pv3D1kqlVVzIzSBuGf4zwT+DfT3QnPBcl0CF45WuANBsawJPmqiIs=
+	t=1729709427; cv=none; b=GaeDFDFTrpUvjGUOSR3z38fzsAhep69oEUkJbvSJ5qbLzK+rH0sor+7Y8G9X++grIFzdo4olepN+MQoKqQ4y8y/MOn2Yb5rd6qLWEFUN5j6Zyp8rhYHNcqbG3hM7CdTEEGxkKHzF6Ob1474yW3gvnhMXEopEjqgH0sHSSCr4NLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729707108; c=relaxed/simple;
-	bh=lEyxpR8YIKH9jaPfmVdP7LydGJzsOF9o7Wr66VpBAHk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=e4PnsJr5Vi96gOLsNdDAbPNM9V041FZJbRZj9/y23+iu8f7TLHZTp5fnCnaHuOleZrMpfPmyHX73OQgi6vNA0Lqd/hOCcLM2ZayX3Ug9d15DTlnMfsmE0F+eoHiKNNfKF3XyvagHAa1vlAg7gY7ueROKN4JqZCy4Mtar/KjvL2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YQnPOdG0; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49N9cAk0023403;
-	Wed, 23 Oct 2024 18:11:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	nX+3YPAG/+ZoEJ5/n00BQBs8grVcYnUDogB8O6j/a8o=; b=YQnPOdG04ed5PFb0
-	e4bHxWw3Mth3ZQ3Ptcsuz4iDEbpoVyfNvpjBbw/01KFn+0YYhZDqJNs2UnfONdTf
-	ENuKcYv+MV8gVZK+yBkU7dtgNSk+RUylyzCgFJhBiZ8318J4uStR1itHbLj18e7K
-	F9/se/jsIx7gnQSPVpx7W+31JyysHHlulgAYqw9+fAQHpY27Izum5YJaxa2eRfn3
-	LtxGC468T5XC2rVrU4twod0bW5p8FYRf2I1KOHtk2cjTowlQ2YKNoquUZXLLCJ29
-	ioGjgpKAifHyO9bkdppPDWVyoa4XkEU2FnM9yzdhb6V7juGRG+cl3sppFH8tEITG
-	kjSa8A==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em3uk6nm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 18:11:38 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49NIBbcA007794
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 18:11:37 GMT
-Received: from [10.71.108.63] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 23 Oct
- 2024 11:11:37 -0700
-Message-ID: <d0291dbf-f786-4d8e-bd38-4ad0b48d9df5@quicinc.com>
-Date: Wed, 23 Oct 2024 11:11:36 -0700
+	s=arc-20240116; t=1729709427; c=relaxed/simple;
+	bh=EZ36TFWeJgK0ws9qiUQOnHb2LB3oOSjPiPxK6expIR4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gjbrnh5BmBTPyZ8tmLzQr0ljVuC4JH2ed+5Mx4dY9KhFwYm40tMT/pp7L051DtBIOD+qtOfYL2V4MkJJzCfcEnKXYelHmV0XRNIEU2MTBUaFPW6RZlFZBBPtMo90e8GWADWfY9qFhfEwr9Zs9OW1qrpIxtkyCbXSGFDHBYJ4oMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQrawWHt; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-288a90e4190so126482fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 11:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729709425; x=1730314225; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6esCLq/lmrfypTM2amXFxr5M2sMWSlra9KQU1o4cO0Y=;
+        b=DQrawWHttN/lfUTi/5yQC+OaxZBqZMqSXp3B8hqBdOU7S9Zs+aL0KCOnPsdu+NOzck
+         IDCI5gVVuMaijCfAcZVJu2E7evWBrINJtcPledbUgYkmXyeRPF9hWEpssyoUdmAw+WTs
+         QPRG7kpJ2QhAMSvXxOVMMsL529YDefMkiv7GxcwY2FAThBfWTtO/buExiTUrnB2IsCeD
+         heRgTgJkoMnkm5WfzUhB1terZjLfMy473uTYQ1SQNnuTIjGaZyucXG0PCflZZ/Mvk7/b
+         4T2lCGpwUP8NPm60BrQMirM32WdTRt3Kw3YVFLtSrdydk9MN2IycmyphiS7kEVZPhHZ8
+         b6FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729709425; x=1730314225;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6esCLq/lmrfypTM2amXFxr5M2sMWSlra9KQU1o4cO0Y=;
+        b=FwQ4Bl9SnFuvczroyjheXm7oVM3h57h7KVEYfELrE+aMcFa8wmPpUjhgyNod++dCEr
+         eVqnrOWPu6a9vxy6dQIsldKS0H+uh7JrRkZSKghYZ//F2UB48nPoaLKG8CXR5a5nhS8B
+         znBRhRujIT06LKbGwLjI4Bukc1SPzMXQkxGVTQe+MymiBwyxxwHH5ZwDJEdSEycMNFMW
+         IrJg9IME5wOJT+1V+tSg2AS79l0cbJ9n4PV97x09G9OkmKdC0AyhFPigdfPizHu2KGOD
+         EIFp8cNsYW7V4Gn8h0VOEGTYtwh+d4gIrTHF86SnAiGIGhJQFlJBEshrobFpsvJDxj7M
+         loGA==
+X-Gm-Message-State: AOJu0YyTHP+SfobfDd5t5+h5nWL81wgcHCnllRTr0hp/szeQ90YETNP7
+	7SkIAZgBvqVwL90t3uNFQFzfA1x/CLDczy/GvbKYcl2BRgVrVS8UcASuWw==
+X-Google-Smtp-Source: AGHT+IEd5ojgaGW6C4g5KVJfYksWzcHEzqCewzgtwMyXrfPAsPp7MXbkZCuYQxEjj6Ymot6uk8p4Qw==
+X-Received: by 2002:a05:6871:206:b0:260:ebf7:d0e7 with SMTP id 586e51a60fabf-28ccb7f155amr3964405fac.15.1729709424966;
+        Wed, 23 Oct 2024 11:50:24 -0700 (PDT)
+Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7182eb52609sm1860667a34.40.2024.10.23.11.50.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 11:50:24 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: wens@csie.org,
+	sre@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/2] Change axp20x power drivers to use iio scaled
+Date: Wed, 23 Oct 2024 13:47:58 -0500
+Message-ID: <20241023184800.109376-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: power: Add additional RPMh levels
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Tingguo Cheng
-	<quic_tingguoc@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>, Luca Weiss
-	<luca@lucaweiss.eu>,
-        =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        "Neil
- Armstrong" <neil.armstrong@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Jishnu Prakash <quic_jprakash@quicinc.com>,
-        Trilok Soni
-	<quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <20241021230333.2632368-1-quic_molvera@quicinc.com>
- <20241021230333.2632368-3-quic_molvera@quicinc.com>
- <wuq23gxg7xlec4epoztgaycvrezufjthj77iwu7xangf4t22f2@hmj7f7v3kvuv>
-Content-Language: en-US
-From: Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <wuq23gxg7xlec4epoztgaycvrezufjthj77iwu7xangf4t22f2@hmj7f7v3kvuv>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _rFV9wiyoCi5q_WoJOBJuHm-eHbSen5J
-X-Proofpoint-ORIG-GUID: _rFV9wiyoCi5q_WoJOBJuHm-eHbSen5J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 adultscore=0
- suspectscore=0 phishscore=0 clxscore=1011 mlxscore=0 mlxlogscore=880
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410230115
+Content-Transfer-Encoding: 8bit
 
+From: Chris Morgan <macromorgan@hotmail.com>
 
+Simplify the axp20x_battery and axp20x_usb_power to use
+iio_read_channel_processed_scale() instead of reading the channel and
+then applying the scaling factor in an additional step.
 
-On 10/21/2024 11:13 PM, Krzysztof Kozlowski wrote:
-> On Mon, Oct 21, 2024 at 04:03:32PM -0700, Melody Olvera wrote:
->> From: Jishnu Prakash <quic_jprakash@quicinc.com>
->>
->> Add RPMH_REGULATOR_LEVEL_LOW_SVS_D3 and RPMH_REGULATOR_LEVEL_TURBO_L4,
->> used by SM8750.
->>
->> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> This is not an independent patch, but part of SM8750 binding. Squash it.
->
+Chris Morgan (2):
+  power: supply: axp20x_usb_power: Use scaled iio_read_channel
+  power: supply: axp20x_battery: Use scaled iio_read_channel
 
-Ack.
+ drivers/power/supply/axp20x_battery.c   | 33 +++++++++++++------------
+ drivers/power/supply/axp20x_usb_power.c | 33 +++++++++++--------------
+ 2 files changed, 32 insertions(+), 34 deletions(-)
 
->> ---
->>   include/dt-bindings/power/qcom-rpmpd.h | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
->> index 608087fb9a3d..df599bf46220 100644
->> --- a/include/dt-bindings/power/qcom-rpmpd.h
-> Best regards,
-> Krzysztof
->
+-- 
+2.43.0
 
 
