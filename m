@@ -1,182 +1,119 @@
-Return-Path: <linux-pm+bounces-16319-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16320-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 766229AD444
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 20:50:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 118629AD454
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 20:58:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF19B1F22259
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 18:50:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF1B2828DF
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 18:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C7E1D3624;
-	Wed, 23 Oct 2024 18:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D9DB1D0DE9;
+	Wed, 23 Oct 2024 18:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JM4CDIAt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i2P9ux1v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BFB1D1E62
-	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 18:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2989883CDA
+	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 18:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729709428; cv=none; b=jyLy6f/ixQlk0Dy88StobpEIm94uXiezHvfjwz4xDlq7/2AEC32ImWs35UvGcGCHFB6ZWJNwVEZRWg9nKHM6EOW7IuDg3HRBjqmDNCqFsUlUP947qPcFjmfE7HPrgi305sGT36o7ZIVCmzXc3kVVXhMqpOTqNBg61rHWduq1AP0=
+	t=1729709901; cv=none; b=AYZD5/8C+XGtNHO/B/mBM5c/HyfFokYrASOHguF7zzItZnVwEsaaGSlG8mh1uvwIV3ZGI8Sigu6Na0qydh9WzRYA3uihHOf0pucLChEaw/gthxI/Er4hbQLiTIg0KevvofMp5VyXzHxVnqjD4tR9xK1txgv1P8TpuS20+Q/x5z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729709428; c=relaxed/simple;
-	bh=i1opjJ5noztG7W4quqfSUG+1/LQxGlVrZchANNNBAU4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RSHdyTTLWS+eaBkuFy7NmG8ck4++muBPTmwGEtXOEBEvZ0jGdjQQJSsbWL4i0AkG5LSEnxQDE8z/yP+dTxdNmUq4JszwFyngY1CPKfs4CAAtl2If0SNJN8YzIXl9BiRAdCWof9aF7XWgYZGy7MNMB4tPAnKN2vXS0isOK+EoQXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JM4CDIAt; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7180dc76075so73814a34.3
-        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 11:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729709426; x=1730314226; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PzWEx+54nXqRyexqxBK02Ff4DIq6Md1prk1WFWanhYk=;
-        b=JM4CDIAtEBrdB0V6LnOcAPN1u1Ny7xTJxfmIp6blqQIJ+1sUpqAIuMQ2VSMK3Is34W
-         t9opcjP//1AiaQh1LsWHc8Ca+NCCNW7mhUVSrztFXdo4fwrKhWsLWdfpNYnBTrp5EVUK
-         bajUAt+Oa7PQ2u4aK0bVoVJ68wDJuUOGvfIIibRG3tBpjfxQatTcwjwBqnchVTQJ0yev
-         xPNj+pKV4jffOIj8bBDPftcrJQjamtNqq8h6bzBYCaOW58J4GrC8iirEK0FQRTORYwZK
-         S7ECGdQJcKiZR6beYwJvu94yKyttw+dOWJd0IBdGwMUXXdfVUSaRYpkRw/tw6FviAyMa
-         E5tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729709426; x=1730314226;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PzWEx+54nXqRyexqxBK02Ff4DIq6Md1prk1WFWanhYk=;
-        b=PE+7g/IbVKUEkfADcVITfcjxaS55G+JUb6u9haZX61z+0OVUIXC52HKU64iUhU62tG
-         KPVFWONuIK8koxpCqjjestHJI9IUF8a4OmISyFYlw4lbYOejYvXmhJVcLwzRRiY3Rcko
-         VwK/ORBSeFwbEX5rIzknJufdy46Vr0NMumqYNuEWkL035MWgjG+iIWIXzv9Jar9xJtaD
-         G2lEkIv2+yQzVaN/0ZuqzOKNqn2N/NV8IufhLxE2/uwrhjUKROVDxt0Ftswc9rk+XEvP
-         ulTEb7Rqf0RaE0InhApPCT4rvPQWsHgRCSIb0MZXUfJYAo3DRsesrBmwc0/oCc0GCRCf
-         GiZg==
-X-Gm-Message-State: AOJu0YyvS2yoFtdRmzlyg8IZgrC7o/GX9XLbx6/lfhT2Yzxy7qTjlo48
-	psJotBr35izEpHKYZgVXhYYhwiVLshsQQRTkFGIWWsoJ3sarxEf/8UY43w==
-X-Google-Smtp-Source: AGHT+IHWRTElqaKFG/p97TiMXmH37N7VT0S2iCKBdvdFt11k14I2JQfm9J4D2BPKNoxV/zwXOWG3+Q==
-X-Received: by 2002:a05:6830:2691:b0:718:194d:8ab with SMTP id 46e09a7af769-7184b331716mr4380810a34.27.1729709426143;
-        Wed, 23 Oct 2024 11:50:26 -0700 (PDT)
-Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7182eb52609sm1860667a34.40.2024.10.23.11.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 11:50:25 -0700 (PDT)
-From: Chris Morgan <macroalpha82@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: wens@csie.org,
-	sre@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 2/2] power: supply: axp20x_battery: Use scaled iio_read_channel
-Date: Wed, 23 Oct 2024 13:48:00 -0500
-Message-ID: <20241023184800.109376-3-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241023184800.109376-1-macroalpha82@gmail.com>
-References: <20241023184800.109376-1-macroalpha82@gmail.com>
+	s=arc-20240116; t=1729709901; c=relaxed/simple;
+	bh=V0QCXFcnMZdAOdZbqjcNhbz4kbwQ0T4aqZAafjCtJnI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oKvXg6OPucvwwMEcg18MM1BSBGndzrh7o+X/EZavwcD0jlrKUrwzVe7VYM2KIOS6eiDHTDbcHjg64CiNLbtdDEo04h2Mj5w/tiJ+eUdw9y7yD72Cn3KcRWv1LBkKDNETqPWYe5+VgGkhPz8LaRpb/JjaEv7A01/O90qbU27QZYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i2P9ux1v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B160BC4CEE5
+	for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 18:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729709900;
+	bh=V0QCXFcnMZdAOdZbqjcNhbz4kbwQ0T4aqZAafjCtJnI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=i2P9ux1v0WU5QDDs5VXl+Ay6VP+PL4oOS+yB+0QtBCsyzKLx34zFqt41aF8Nzwrj2
+	 YPlqgjPRFCA5NveN4SsMtORz+UDsQKwv0tuUvFGbATulokoegxKBu4dEFUNdi/2QsS
+	 nA3zILg5Somfja/rfQw+R5ZN/eUgT8pYhbvpRww1oAqXUB7WgXrZl9eTM4ZHSlR1qF
+	 XJ66kc3+uUHcD9mdxvXXYpSTLYuPDlZwfxAHlo4uA6o2aGV0fBmQyrDWztGj+1ixQF
+	 ldcnjqbqS0+YIf/AoPphMrcORy1OW+HhLLe8MPocEvgTm4rgPo/0Lu4aelO8QEc+Za
+	 IJHvFK7ecGVYQ==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-28896d9d9deso118011fac.2
+        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2024 11:58:20 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxHZyE2RJs6EFpbSQGsTJAbFTEuyaa1NJc+jogB8ei8p+rmVosM
+	6gsvLL+/DUmSjPTyYiNX2uyBH4YDU9OsdiJYvBYE6yQBijbsr9H+eFFdBSMc7pGGqoGok8Gwzwj
+	wI7ISnku5S7sKj4WcXYkcHaxkvog=
+X-Google-Smtp-Source: AGHT+IGciat9lHqlF2KMeKlhllpbf8ODHX0TxNfcCdc7huv0sYULJ6xAGL0SLlHWdF8Q5FkWMOz8tIN7STaTeVeefPQ=
+X-Received: by 2002:a05:6871:721:b0:288:4823:fe1b with SMTP id
+ 586e51a60fabf-28ccb4bbc76mr3764266fac.17.1729709899981; Wed, 23 Oct 2024
+ 11:58:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241020153910.324096-2-u.kleine-koenig@baylibre.com>
+ <CAJZ5v0jAMr=bmZ5PexVTS0SqrXP4EytZ+RH5X8p1Nep2wMg-kQ@mail.gmail.com> <20241021102207.ujbprtc3gecxlyu3@vireshk-i7>
+In-Reply-To: <20241021102207.ujbprtc3gecxlyu3@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 23 Oct 2024 20:58:08 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gBejHfbOje+yNBf59MNTqfjLWXH5JPU=DbaJ=3KPcQ4w@mail.gmail.com>
+Message-ID: <CAJZ5v0gBejHfbOje+yNBf59MNTqfjLWXH5JPU=DbaJ=3KPcQ4w@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Switch back to struct platform_driver::remove()
+To: Viresh Kumar <viresh.kumar@linaro.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Chris Morgan <macromorgan@hotmail.com>
+On Mon, Oct 21, 2024 at 12:22=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
+>
+> On 21-10-24, 12:20, Rafael J. Wysocki wrote:
+> > On Sun, Oct 20, 2024 at 5:39=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+> > <u.kleine-koenig@baylibre.com> wrote:
+> > >
+> > > After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> > > return void") .remove() is (again) the right callback to implement fo=
+r
+> > > platform drivers.
+> > >
+> > > Convert all platform drivers below drivers/cpufreq to use .remove(),
+> > > with the eventual goal to drop struct platform_driver::remove_new(). =
+As
+> > > .remove() and .remove_new() have the same prototypes, conversion is d=
+one
+> > > by just changing the structure member name in the driver initializer.
+> > >
+> > > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
+> > > ---
+> > > Hello,
+> > >
+> > > given the simplicity of the individual changes I do this all in a sin=
+gle
+> > > patch. I you don't agree, please tell and I will happily split it.
+> > >
+> > > It's based on Friday's next. Feel free to drop changes that result in
+> > > a conflict when you come around to apply this. I'll care for the fall=
+out
+> > > at a later time then. (Having said that, if you use b4 am -3 and git =
+am
+> > > -3, there should be hardly any conflict.)
+> > >
+> > > Note I didn't Cc: all the individual driver maintainers to not trigge=
+r
+> > > sending limits and spam filters.
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>
+> > Viresh,
+> >
+> > I'll pick this up unless you'd prefer to apply it, so please let me kno=
+w.
 
-Change iio_read_channel_processed to iio_read_channel_processed_scale
-where appropriate.
-
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
----
- drivers/power/supply/axp20x_battery.c | 33 ++++++++++++++-------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-index f71cc90fea12..fa27195f074e 100644
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -354,17 +354,18 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
- 		if (ret)
- 			return ret;
- 
-+		/* IIO framework gives mA but Power Supply framework gives uA */
- 		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING) {
--			ret = iio_read_channel_processed(axp20x_batt->batt_chrg_i, &val->intval);
-+			ret = iio_read_channel_processed_scale(axp20x_batt->batt_chrg_i,
-+							       &val->intval, 1000);
- 		} else {
--			ret = iio_read_channel_processed(axp20x_batt->batt_dischrg_i, &val1);
-+			ret = iio_read_channel_processed_scale(axp20x_batt->batt_dischrg_i,
-+							       &val1, 1000);
- 			val->intval = -val1;
- 		}
- 		if (ret)
- 			return ret;
- 
--		/* IIO framework gives mA but Power Supply framework gives uA */
--		val->intval *= 1000;
- 		break;
- 
- 	case POWER_SUPPLY_PROP_CAPACITY:
-@@ -406,13 +407,12 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
- 		break;
- 
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		ret = iio_read_channel_processed(axp20x_batt->batt_v,
--						 &val->intval);
-+		/* IIO framework gives mV but Power Supply framework gives uV */
-+		ret = iio_read_channel_processed_scale(axp20x_batt->batt_v,
-+						 &val->intval, 1000);
- 		if (ret)
- 			return ret;
- 
--		/* IIO framework gives mV but Power Supply framework gives uV */
--		val->intval *= 1000;
- 		break;
- 
- 	default:
-@@ -519,13 +519,15 @@ static int axp717_battery_get_prop(struct power_supply *psy,
- 		 * The offset of this value is currently unknown and is
- 		 * not documented in the datasheet. Based on
- 		 * observation it's assumed to be somewhere around
--		 * 450ma. I will leave the value raw for now.
-+		 * 450ma. I will leave the value raw for now. Note that
-+		 * IIO framework gives mA but Power Supply framework
-+		 * gives uA.
- 		 */
--		ret = iio_read_channel_processed(axp20x_batt->batt_chrg_i, &val->intval);
-+		ret = iio_read_channel_processed_scale(axp20x_batt->batt_chrg_i,
-+						       &val->intval, 1000);
- 		if (ret)
- 			return ret;
--		/* IIO framework gives mA but Power Supply framework gives uA */
--		val->intval *= 1000;
-+
- 		return 0;
- 
- 	case POWER_SUPPLY_PROP_CAPACITY:
-@@ -564,13 +566,12 @@ static int axp717_battery_get_prop(struct power_supply *psy,
- 		return 0;
- 
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		ret = iio_read_channel_processed(axp20x_batt->batt_v,
--						 &val->intval);
-+		/* IIO framework gives mV but Power Supply framework gives uV */
-+		ret = iio_read_channel_processed_scale(axp20x_batt->batt_v,
-+						       &val->intval, 1000);
- 		if (ret)
- 			return ret;
- 
--		/* IIO framework gives mV but Power Supply framework gives uV */
--		val->intval *= 1000;
- 		return 0;
- 
- 	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
--- 
-2.43.0
-
+Applied as 6.13 material, thanks!
 
