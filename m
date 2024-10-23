@@ -1,259 +1,195 @@
-Return-Path: <linux-pm+bounces-16309-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16312-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E09C9AD102
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 18:31:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB959AD314
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 19:45:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49F4128182B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 16:31:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A11D11F22194
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 17:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79991B4F10;
-	Wed, 23 Oct 2024 16:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7B01D07A0;
+	Wed, 23 Oct 2024 17:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VByJhhXc"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="L3QlbsTY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2044.outbound.protection.outlook.com [40.107.212.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A341CB536;
-	Wed, 23 Oct 2024 16:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729701051; cv=none; b=dtmb6faxfS7vs07qoI+7TfdYcQr5Cqek/Xrrb5pgPXHSMIuITLFjMl2bWfIkCZ4GyHsrGcEYZvxQ7EOV1yB2NpO2VMjDZUHPUiscA7enTl9X0piH14ukwPZQe8EiCORVvZKBMyLI/RytdoHuOYq26N9YjTB+rycVlnXyWUtN4+g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729701051; c=relaxed/simple;
-	bh=7Qz6f8NzFdutI7Icr0e57OHrZ5+XkkpJ1/tyME4Z5Ao=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bifJY4sR+4WyhkWiaDCArFDf4kUUi23bO+F+HITlJBLNumE5SLUNKxUqBF+L+giNpkz6I3VJBHtSJpxxxuXS4vl/70vdRw3TBPKa09gz9GNs09f6r+plEHcl4MBPQWTk1liUXNcaiLISpXKc1lrX0TkCkizZD1WIDARJ6GfeDYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VByJhhXc; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49N9HSdU026325;
-	Wed, 23 Oct 2024 16:30:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=FclauO0bzswyc+MAq1B6mcZj
-	gSqLwXz40OeffNV4QSo=; b=VByJhhXcpOkf9T39w00mf0miuEAKw/JHHqer7c1L
-	2N5Jk/WOpsUODU618CYflAq4w00gsqbykXoaRga1sXnGsvbmWCeqT1HUcsNXiDfX
-	QI55AM539K+sDmGX62BCXEUjyndoAh7SkD0wqQyiXZYMQXNZsvs182pt7Tn0SwN2
-	F/7S90tXqtyIab5aY7gsj38fCl/GjUjJGtIgcNzXwAbQEdR415YuI3UPcjR5Et+I
-	way3sS2qxUOUTFz0hO2dj+O5MSI4GF2hqiT2p/dsW+3DB1YPZPvA9zv1z9Rd8U+w
-	U8crKjgM7pjv+75xNAPwwsLM7xw7VVdwlX+yEcIMp0SLeg==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em40aut2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 16:30:23 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49NGUNw8012804
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 16:30:23 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 23 Oct 2024 09:30:22 -0700
-Date: Wed, 23 Oct 2024 09:30:21 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Stephen Boyd <swboyd@chromium.org>
-CC: Andy Yan <andy.yan@rock-chips.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi
-	<lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, Olof Johansson
-	<olof@lixom.net>,
-        Rob Herring <robh@kernel.org>, Sebastian Reichel
-	<sre@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon
-	<will@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        "Satya Durga
- Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Melody Olvera
-	<quic_molvera@quicinc.com>,
-        Shivendra Pratap <quic_spratap@quicinc.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v6 3/5] firmware: psci: Read and use vendor reset types
-Message-ID: <20241023092251529-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com>
- <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
- <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45741D0175;
+	Wed, 23 Oct 2024 17:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729705489; cv=fail; b=OTj3kSPXEOBliROuMQmjvbQ6jTtf/0UDL1vwRUpJXXei0GWNumtzSGWge+U2aVsvnrl++04dEuKZsZpp7UAgds0ntmPxDjG5J0LWHkM/idDMhh7fq7g7g8crhtrIpbzQFGIM08N76nTj/D+cmgBNy4WzVvVvxD5LpANOnA7ypvg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729705489; c=relaxed/simple;
+	bh=iPeED/xiItX0aEfMtqUf9jG7ENSAgp4e1giO+JX6UgQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ccYbNwImilPs/Q/BPjrTcGuufqBeu2r5iPmovbp6MhXvzXMMHrj7ewGjKw9DvldDVUq/EmVO6FtNfKgoCwHnRWoUESdqZRSNCFMvkhi1rcTIkgTQpf4+C1fVaQnPEqEJRGM68V5bP6B1soPu5Lqhida6J1GBIeaIr7EK7vcKVpE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=L3QlbsTY; arc=fail smtp.client-ip=40.107.212.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=H5SUP3bovmyEoyAq51aryx2Y5rz9QVZpB2kcUagdLRj5z0qFDKt/8cHDrJVLje5W8roDLfnVq3vA7qUAZtl2gwKvKTY6YXVZpGWftVTMTEUF/VSgbhlfbf4oFAgdsKtsDusjpiC86R21WG6h4/tcl58+LdpSC62mzcjUwztXVWiDceU+cnlzmGBnZLLREBPHbkWSxB/jpuLdX5gv9zzWXhiVQeOG77fTEaU9VZ0okHjLiFj/29C59XQ5nxVLnX4J27/hnoS9AuBcNClTU6AsubzibYLRSZKAnkyY5uOIO2SJtyxgvjLo0VoAVgr27wwHorPRn4vuh2tBj+8kafclJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eWj318giMEwg6/i+EwTjvVX3/jvcyuA3hPKBLeRWPHs=;
+ b=y/GagYJprKezLM6AQCnlNw2LCDZQ/+o0rurrVfQuS2h6m1g35vxZ1fua9zGbCil6gnORcsM9tko4g2SOV5mqoLFL/yZfsihWftC2ixcZH5p0Eb7HaLs/nVkVGxMg/b2ISrJpSKu0crdGUrdITbvHkbABQIEIhsJh+morCOx2EOc3UqiDy1CofwzqrR+G6GdyViX/PCIQpw9Vh4Bv3/YHp7nYB0qkw/rDEAxvprGC30/qhe/3NE/GszqDbPRlX30ISazWJyJP1NghBhWdJrZ5LwGgo99nipPvu6/uM6EC1g+dQ0OHpfOruncLGSrxRplR0lXiOwIFPkBH56RrI5XhNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eWj318giMEwg6/i+EwTjvVX3/jvcyuA3hPKBLeRWPHs=;
+ b=L3QlbsTYIOuByqqs0DeFgDusGINnZ6Njk/E+rkuzdLzHO2mtTHnre8Nb9J2v2w+jHGJ0rsP/s4U+Vjb2DJ2Gti7D2qcrbyOvOpyUCIHV8uP+OXwTdZgJPe/KyhXOfY/iNlbVas83z7JUnl00vLd1FiHinYaqt4fdkgB6NhECa/s=
+Received: from DS7PR06CA0014.namprd06.prod.outlook.com (2603:10b6:8:2a::11) by
+ IA0PR12MB8748.namprd12.prod.outlook.com (2603:10b6:208:482::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.20; Wed, 23 Oct
+ 2024 17:44:39 +0000
+Received: from CY4PEPF0000E9CE.namprd03.prod.outlook.com
+ (2603:10b6:8:2a:cafe::ba) by DS7PR06CA0014.outlook.office365.com
+ (2603:10b6:8:2a::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.19 via Frontend
+ Transport; Wed, 23 Oct 2024 17:44:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9CE.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8093.14 via Frontend Transport; Wed, 23 Oct 2024 17:44:36 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 23 Oct
+ 2024 12:44:34 -0500
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	"Dave Hansen" <dave.hansen@linux.intel.com>, "maintainer:X86 ARCHITECTURE
+ (32-BIT AND 64-BIT)" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, "Gautham R . Shenoy"
+	<gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>, Brijesh Singh <brijesh.singh@amd.com>, Peter
+ Zijlstra <peterz@infradead.org>, Li RongQing <lirongqing@baidu.com>, "open
+ list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>, "open list:AMD PSTATE DRIVER"
+	<linux-pm@vger.kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH v3 0/5] x86 Heterogeneous design identification
+Date: Wed, 23 Oct 2024 12:43:52 -0500
+Message-ID: <20241023174357.34338-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com>
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: RVMuLpnaxcrO0emm38nvEuLCDeeWvOiG
-X-Proofpoint-GUID: RVMuLpnaxcrO0emm38nvEuLCDeeWvOiG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- impostorscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 clxscore=1015 malwarescore=0 bulkscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410230102
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9CE:EE_|IA0PR12MB8748:EE_
+X-MS-Office365-Filtering-Correlation-Id: 03fa4db0-7da1-48d7-f091-08dcf38a5cf6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|7416014|36860700013|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ZUQAnYyEiCr4EYrfZeI4MhBBplRB+7ebtbcMV2cZ/XywLSaagphTqoRLeUGr?=
+ =?us-ascii?Q?5xGPhgctJwO4vQgu+yvs+nqHwloP7Nvfw3sP5p3Yew/LMm7B51q4bom5c8QG?=
+ =?us-ascii?Q?FQlemSME0nl/n/DesvsB0MZaurawqOt1ePEYgywqqckJuFrz07akfLaKUZz5?=
+ =?us-ascii?Q?ZWHJUAHPSOWR4B7lrt1wkVK8mJK3Wv4OjwaYl8A4iSlykr8UdlRTcNECx21J?=
+ =?us-ascii?Q?rTmNRUpR6eSGEXEyZTyamkO1ORiZb7cltG6aT2X6SsV0Ls13O15onQt+95HA?=
+ =?us-ascii?Q?2X2f3HhzWqC87gvFq6ayobg5hev+vkAX+GUn4Cif8IXG1iG7Fp2NZ/7sO5O9?=
+ =?us-ascii?Q?qPkqxaxw0bPxe/R4Vh/2ElbGNrGfIvVNfA1tse50IpwwJw+P64TF71k365/0?=
+ =?us-ascii?Q?DfX2ZajZA7+cTU+bq6B3ON8mkZYPm3/wrRsTkXpL2T6c91yfwVM6A5zip+0f?=
+ =?us-ascii?Q?C6kbSdtOxuidLGAOKe4HZIrPRZqjg6dXoXbU5UHCkNFS348WtOOjxaCjyHzX?=
+ =?us-ascii?Q?BVbEl4UIEHFHuasnImG9egB48YuWaTR/5tPxhex4vJS4lOtpW2V09ZfGCh7M?=
+ =?us-ascii?Q?HDJ78LAbKPRpw1VPI6t55WZ9aRuK55HflhPr6468zIrPEQFebSLESOwv26pc?=
+ =?us-ascii?Q?IGt3wpJhwgljXn8nd12QRGnrkYaFz79t26fr6GV40NRLzXPHpINzxEVNORT2?=
+ =?us-ascii?Q?cqMqU+B4LV/1gAhCZAGLbYgfqMn3Izlwr//mIsD/BWB3X1NlimOyAvjzWHUD?=
+ =?us-ascii?Q?prJ8eNXhRZliQxAQ2JEltRWLw1vcoPafeCe4Na9ZOxBFKpyg8f4y1V24JUN8?=
+ =?us-ascii?Q?IJY9nC/lUGYrcsk2zR9K2Zak1sjrSg7p00eZX+iWzOer7+dUe1RkmRtIu03l?=
+ =?us-ascii?Q?cWF6umBg18gdV/IZcy37yPROzwNN9HqBbtV1z+I4dd8pInyPf+ToB2EdIikc?=
+ =?us-ascii?Q?1xuOzH9s2rF7XQ707GXFX7m8EbxPxEdVJLBGQEff/jTtYCioLReG71xwmxpI?=
+ =?us-ascii?Q?B96WDluEIx3g7X+uv9s8JaBX24FJllW4L08gwBf+UTkB1bAkc1KfA1QBLlDP?=
+ =?us-ascii?Q?QKQY1rkq2DlkSqFKHHS5RQFl5SoLKPJ4LWyrOoQ4SF05WXqkQvRWpwGX7upz?=
+ =?us-ascii?Q?hneh2gmRuMh+ajMNHvbebqa3KCwk3xGaU1bE3wqrH04KoAS6PTQfCSppdYyR?=
+ =?us-ascii?Q?6vEeBBOayLKbg4OC1Oqh8lLYJt6UVZSk7Mx+z/4ibpbnyEx09OMBJW/453A7?=
+ =?us-ascii?Q?cWKAAw/gJgQCXBNlbQhSC2IjpjJG/vSwok6CM5BCin3K9SNnKO5UfgbsYScO?=
+ =?us-ascii?Q?n44MdZ3l8SNBzU+53Y25Bb3pYmSsXP9N60n3NqdCV+wgwHJel2ghcQDQrUpA?=
+ =?us-ascii?Q?SwXh8eIN7TcKX0wCgXxv+p7Wd2kpAoat9tPKgeRiwEivlvK84xOuJgxtcIK7?=
+ =?us-ascii?Q?v7qblVCpFDo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2024 17:44:36.8771
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03fa4db0-7da1-48d7-f091-08dcf38a5cf6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9CE.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8748
 
-On Fri, Oct 18, 2024 at 10:42:46PM -0700, Stephen Boyd wrote:
-> Quoting Elliot Berman (2024-10-18 12:39:48)
-> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> > index 2328ca58bba6..60bc285622ce 100644
-> > --- a/drivers/firmware/psci/psci.c
-> > +++ b/drivers/firmware/psci/psci.c
-> > @@ -29,6 +29,8 @@
-> >  #include <asm/smp_plat.h>
-> >  #include <asm/suspend.h>
-> >
-> > +#define REBOOT_PREFIX "mode-"
-> 
-> Maybe move this near the function that uses it.
-> 
-> > +
-> >  /*
-> >   * While a 64-bit OS can make calls with SMC32 calling conventions, for some
-> >   * calls it is necessary to use SMC64 to pass or return 64-bit values.
-> > @@ -305,9 +315,29 @@ static int get_set_conduit_method(const struct device_node *np)
-> >         return 0;
-> >  }
-> >
-> > +static void psci_vendor_sys_reset2(unsigned long action, void *data)
-> > +{
-> > +       const char *cmd = data;
-> > +       unsigned long ret;
-> > +       size_t i;
-> > +
-> > +       for (i = 0; i < num_psci_reset_params; i++) {
-> > +               if (!strcmp(psci_reset_params[i].mode, cmd)) {
-> > +                       ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
-> > +                                            psci_reset_params[i].reset_type,
-> > +                                            psci_reset_params[i].cookie, 0);
-> > +                       pr_err("failed to perform reset \"%s\": %ld\n",
-> > +                               cmd, (long)ret);
-> 
-> Do this intentionally return? Should it be some other function that's
-> __noreturn instead and a while (1) if the firmware returns back to the
-> kernel?
-> 
+This series adds topology identification for Intel and AMD processors and
+uses this identification in the AMD CPPC code to identify the boost
+numerator.
 
-Yes, I think it's best to make sure we fall back to the architectural
-reset (whether it's the SYSTEM_RESET or architectural SYSTEM_RESET2)
-since device would reboot then.
+This series was previously submitted as [1], but this was based on some
+patches in linux-pm/linux-next that will be dropped.
 
-> > +               }
-> > +       }
-> > +}
-> > +
-> >  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
-> >                           void *data)
-> >  {
-> > +       if (data && num_psci_reset_params)
-> > +               psci_vendor_sys_reset2(action, data);
-> > +
-> >         if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
-> >             psci_system_reset2_supported) {
-> >                 /*
-> > @@ -750,6 +780,68 @@ static const struct of_device_id psci_of_match[] __initconst = {
-> >         {},
-> >  };
-> >
-> > +static int __init psci_init_system_reset2_modes(void)
-> > +{
-> > +       const size_t len = strlen(REBOOT_PREFIX);
-> > +       struct psci_reset_param *param;
-> > +       struct device_node *psci_np __free(device_node) = NULL;
-> > +       struct device_node *np __free(device_node) = NULL;
-> > +       struct property *prop;
-> > +       size_t count = 0;
-> > +       u32 magic[2];
-> > +       int num;
-> > +
-> > +       if (!psci_system_reset2_supported)
-> > +               return 0;
-> > +
-> > +       psci_np = of_find_matching_node(NULL, psci_of_match);
-> > +       if (!psci_np)
-> > +               return 0;
-> > +
-> > +       np = of_find_node_by_name(psci_np, "reset-types");
-> > +       if (!np)
-> > +               return 0;
-> > +
-> > +       for_each_property_of_node(np, prop) {
-> > +               if (strncmp(prop->name, REBOOT_PREFIX, len))
-> > +                       continue;
-> > +               num = of_property_count_elems_of_size(np, prop->name, sizeof(magic[0]));
-> 
-> Use of_property_count_u32_elems()?
-> 
-> > +               if (num != 1 && num != 2)
-> > +                       continue;
-> > +
-> > +               count++;
-> > +       }
-> > +
-> > +       param = psci_reset_params = kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
-> > +       if (!psci_reset_params)
-> > +               return -ENOMEM;
-> > +
-> > +       for_each_property_of_node(np, prop) {
-> > +               if (strncmp(prop->name, REBOOT_PREFIX, len))
-> > +                       continue;
-> > +
-> > +               param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
-> > +               if (!param->mode)
-> > +                       continue;
-> > +
-> > +               num = of_property_read_variable_u32_array(np, prop->name, magic, 1, 2);
-> 
-> ARRAY_SIZE(magic)?
-> 
-> > +               if (num < 0) {
-> 
-> Should this be less than 1?
-> 
+Instead the series is now based on tip/master.
 
-of_property_read_variable_u32_array should return -EOVERFLOW (or maybe
--ENODATA) if the array is empty. I don't see it's possible for
-of_property_read_variable_u32_array() to return a non-negative value
-that's not 1 or 2.
+This also pulls one patch from Pawan's series [2] and adjusts it for all
+feedback while adding AMD support at the same time.
 
-> > +                       pr_warn("Failed to parse vendor reboot mode %s\n", param->mode);
-> > +                       kfree_const(param->mode);
-> > +                       continue;
-> > +               }
-> > +
-> > +               /* Force reset type to be in vendor space */
-> > +               param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
-> > +               param->cookie = num == 2 ? magic[1] : 0;
-> 
-> ARRAY_SIZE(magic)?
-> 
-> > +               param++;
-> > +               num_psci_reset_params++;
-> > +       }
-> > +
-> > +       return 0;
+[1] https://lore.kernel.org/all/20241021175509.2079-5-mario.limonciello@amd.com/T/
+[2] https://lore.kernel.org/all/20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com/
+
+v2->v3:
+ * Adjustments on Pawan's patch from M/L feedback.
+
+Mario Limonciello (2):
+  x86/cpufeatures: Rename X86_FEATURE_FAST_CPPC to have AMD prefix
+  x86/amd: Use heterogeneous core topology for identifying boost
+    numerator
+
+Pawan Gupta (1):
+  x86/cpu: Add CPU type to struct cpuinfo_topology
+
+Perry Yuan (2):
+  x86/cpufeatures: Add feature bits for AMD heterogeneous processor
+  x86/cpu: Enable SD_ASYM_PACKING for PKG Domain on AMD Processors
+
+ arch/x86/include/asm/cpufeatures.h       |  3 ++-
+ arch/x86/include/asm/intel-family.h      |  6 +++++
+ arch/x86/include/asm/processor.h         | 18 +++++++++++++
+ arch/x86/include/asm/topology.h          |  9 +++++++
+ arch/x86/kernel/acpi/cppc.c              | 23 ++++++++++++++++
+ arch/x86/kernel/cpu/debugfs.c            |  1 +
+ arch/x86/kernel/cpu/scattered.c          |  3 ++-
+ arch/x86/kernel/cpu/topology_amd.c       |  3 +++
+ arch/x86/kernel/cpu/topology_common.c    | 34 ++++++++++++++++++++++++
+ arch/x86/kernel/smpboot.c                |  5 ++--
+ drivers/cpufreq/amd-pstate.c             |  2 +-
+ tools/arch/x86/include/asm/cpufeatures.h |  2 +-
+ 12 files changed, 103 insertions(+), 6 deletions(-)
+
+
+base-commit: 21f0d4005e7eb71b95cf6b55041fd525bdb11c1f
+-- 
+2.43.0
+
 
