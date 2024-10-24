@@ -1,103 +1,111 @@
-Return-Path: <linux-pm+bounces-16391-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16392-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23A879AEA36
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:20:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5AD9AEA5A
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:27:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 553061C22AA6
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:20:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22CCF1F22936
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DA41E32CF;
-	Thu, 24 Oct 2024 15:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B51831EC006;
+	Thu, 24 Oct 2024 15:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="LS/+8UvI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9DY1nOg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9581A1E25FA;
-	Thu, 24 Oct 2024 15:19:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E07F1EABDF;
+	Thu, 24 Oct 2024 15:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729783198; cv=none; b=H4jqICuX1Ko5VUqvNya8KJM/4WNOZwRRr/2ZKycDgl8OfiEQQk04XuKE/P6+pspXOb5unYos2ztj2CnLsG5Ve31hnRyDDjsQHMKmQEnDUnKlXhIEkrlPU5Rbq/r2z79JAP3ZC5SXU8JWPLE6cpHiINYt3lxSfumquBHaJ+m4YFg=
+	t=1729783622; cv=none; b=jqRcweaoH95VHUGtvA9vHneI4J/Qst6Yp7WB5AJSiGPWJaqSFERWr+ljRZADQY3Zb8A165UkeAG7uBZgFhM00f7GtDhB2K1XXa7b+ScT8FLYEBJbToc5hxLOzE0yCsXwY1+b7wuzbZxs/kRIG2V8b4Lokn5vkygfBcrPAdjjJMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729783198; c=relaxed/simple;
-	bh=WiDCNo3oleKefUodyK55wZpKSvxa7PhQmlGgswlx+kM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YqpEIGUXu9hlIDVrrfQeFq00ppQFpsQy0QDjRd5+/skkENhrjNaPhmw15Ej/bq4IgTrsiWpYxzk4wu0jinamGZjesJ7xIo48BID4eMD4kgDpfLE2NVdBEy1KWClJaWwogAaNle3w8qcRyolW3F1DvkVnzlJ0KeGHV7VDVHFvSFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=LS/+8UvI; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1729783175; x=1730387975; i=markus.elfring@web.de;
-	bh=WiDCNo3oleKefUodyK55wZpKSvxa7PhQmlGgswlx+kM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=LS/+8UvIPaoH6PtKtLfOiq2D8es2WK6ZUxCOkX7GXDhsHCK7kSv2hWRG3x3gAbUe
-	 wYEGI/Ar/IZoaeQxsXt9nRWEA2dr0HgEjzZTmFhzFUzCkSesBB2gYp3afM2AE/fRp
-	 qSbe8GuMYY3I6r90czSikecqrWpBUAs2UTrybgMZ24kubU+tp0fBAflB+gsPrmEpn
-	 ZvdHYtIY2Uxd1z2HWV97W+wY8eo4hm8q7a986r5Uzj7sccogE14mpVlpC1MAe5PWi
-	 c+Oyl+Ys44Il7K68HOZs1n+2opafN+YbCU400cfBoadApNcCY0j2Is7b0nmCzF/8o
-	 jJLAsD7O3CdVJ1Vx6g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MGgJM-1t7pO12phC-00212L; Thu, 24
- Oct 2024 17:19:35 +0200
-Message-ID: <d8623fe7-3035-4c61-ab8c-502e3b33ecdc@web.de>
-Date: Thu, 24 Oct 2024 17:19:34 +0200
+	s=arc-20240116; t=1729783622; c=relaxed/simple;
+	bh=jKEd+Eu+KcQ+9lSZmD35vNpxUuBDiaX7uxj1Q002zOE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VbQVoCNwZuHzJtiOITSwiMiQQnXvoZUvrbD9WWZzv+/MxRdAQBSVOg4YPardX6AwCJ8/vnKaL5WKjXeTei0dAAw20jJ9r2g9vV9yiqzNRQXpX592nTdA5OTXuQow2hv8fpuYcBkdI98Hxdp1S8M84uBllTtVDp9Ul3CSenyTO6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9DY1nOg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6FAC4AF0B;
+	Thu, 24 Oct 2024 15:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729783622;
+	bh=jKEd+Eu+KcQ+9lSZmD35vNpxUuBDiaX7uxj1Q002zOE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u9DY1nOgPxITHNnXu/23/mrzfnPaB/hTpWuACBXe/K57recZAd/usN8DIdqduTm/B
+	 ANfcws5y/fz4StIbCcmvII74aRDTPl/F+Z4TuAJMedw5YRPyAQdz4WrQvXEfxhq9mW
+	 Y/ZwhPTHZRP2tbKcn2X9NLLGP1QdUaS0iydjEO+6q1cwQXnh+T/mpAWakacrIwL8Go
+	 whicnFCP9SKRFsVehoyPVy76QAaihU+KWeVfYaRVCYkTd82/zcJ2k/RP3HVMTPBS8H
+	 9sgNB4Leawx0dy8VAZ7l/U7axj56AigWGdyn59W5SZrclJSydhgQL2fz1+JKQRGzYw
+	 m+xQn5jyrueFQ==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-28847f4207dso487282fac.0;
+        Thu, 24 Oct 2024 08:27:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWUOhE7Fgdi1MD+wsKhHJ4jmQYrRuef5ZCT/FjwfM+DtjfQP7FnQUey7g37HhhSpuA2qx7Tev759Zk=@vger.kernel.org, AJvYcCWZ5Tx+t1TsN0+Q7xbSQN7o77Ju8eaKYBcnxR3Km+xAz9cXSbMDgxiEBYgA/b8vZpA/VrIMXSC787JMcSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyh63O/R5vaxrhPklyGtSa5kGcZZWzFJP41vzChO/X5WCR+Gql0
+	D/iPY5YX9rS5Lds2XPL+0xzRskDPnC47igXDCxQXhQth7yvP/w67c5PTYCOlCJk+I4GVUz5kZ43
+	O/7ewscDOLQF03tB2c8VEGxaq0ww=
+X-Google-Smtp-Source: AGHT+IFwbkmVaRt/lULKGCbYY007JDFqVgryvtv6VEWHFJDjLEvtULEyL4BtQsbXvAl8uxKNk4kuNS24WHak9DG8CP4=
+X-Received: by 2002:a05:6870:8a28:b0:287:e3e1:15f2 with SMTP id
+ 586e51a60fabf-28ccb504ab9mr6126096fac.25.1729783621452; Thu, 24 Oct 2024
+ 08:27:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/lib: Fix memory leak on error in
- thermal_genl_auto()
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <20241024105938.1095358-1-daniel.lezcano@linaro.org>
- <45265aca-7371-455f-819f-c4d68cbb089b@web.de>
- <9ba3fa17-57c3-41e9-9e19-33fa105a179e@linaro.org>
- <CAJZ5v0jWGdzakj8ob2otAO6auwGBvVsewujG-d9b1Z5nnO7Vkw@mail.gmail.com>
- <03a4edf1-9562-49fd-81fe-d96f46a41d28@linaro.org>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <03a4edf1-9562-49fd-81fe-d96f46a41d28@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:nVcAesFflG4NJvNEkSGRZu5VdFw4jT5APyQYamb8w9WYOxoRkLZ
- rrGMI9cBhI8dc+Q3uOTTuBoCCA5CEZA9obpefB/GYhJnF7o3OcyFeVhu8Qn4PKUyUzopCfV
- PjnWM3b9cPcQ7JjuqKiaWODkuAmnbIyEjZ9rN2M+jAHsnEuoup1bwT+JQjYvBQcFCm9EopR
- j+LvNdhq9EXCd1xtUNr4w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:xthLxNB80YY=;1Gg5Fhfykm7WG/J4GH/e16YjDT0
- XmVOYwHIpGRezADMd4IN1pq3IFCtlPKJ7ZL+EzcrJcEvKELGbn7jBaH/xoIAfpCvHG3nA0seV
- qxpVCj56ZxWA9fouC+nq+n0MYzCHiBx1XSRzq8VWQzdLGkffxy2JoSaKIofrmrw2LqE13DNkU
- b+dtlzmWt2GAdUs3lrcSQz0p9pdHDRGtUI/eBhVYWNUmh5fv6Ok+AQ/U0mMVMRABLqKKePc7f
- fkF8+SvkIJfX6WAED83zCcbCfZ84aYVFzDZY8eJNMLtbYzHzrNuD2I7nfFb+R08OM3IfIRgiu
- RB2cB4v//C9XTQ8X6FSbNgRqmDU/AtV0h4qKnuyP09hJsp0tyQgMazoDjSbODKjBCz0h6b85Y
- NZls5Ufd9BnwMwi5n8us4BHv5lMCEYhwO9Qc8+wfQbyiNbj4TDcwmfUy4lvJyi6Fmyl1vE9Hd
- RLXjpZ1FpKk5wOgGD6ENwGNDpYakp2FhIFGqtEZ8Fjl59sKk8lbQqF5YjALmin9Wszc0pM5E0
- eOuurf3fqNHq5Va4TTHoxtqXHJQ0PYh6/tT0AzFEPNy88W09W/o7++lduoKsZafgvaIBO3aKH
- k3oer5G3mer3JRnHzqXDphrDDF5mxzCJS4sVbGdTsfXXlfNiwh3k1IWAIWGVinyMHrdMioNnZ
- InmuQtfsfc0fgCa6wnaXhuMYzJ7og2WjMk9U6PoUpTlIRNAimdk6pSKyxBbPJ7uJsyMW0QPMH
- LRuh9m6IQmXq+e5Qcdt34V1w/hUYNUiLmonakAUZj8mwRhKdMbDf5mtzWM0MVEEmhyuq6k909
- B0/kpCRFCf7/8iHWvXlESsYQ==
+References: <20241021121138.422-1-zhengshaobo1@xiaomi.com> <20241024080043.647-1-zhengshaobo1@xiaomi.com>
+In-Reply-To: <20241024080043.647-1-zhengshaobo1@xiaomi.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 24 Oct 2024 17:26:49 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gbpx7+hS=NS2+kNgRaOvADrY_2JsoRSg21tmF4oRnFwg@mail.gmail.com>
+Message-ID: <CAJZ5v0gbpx7+hS=NS2+kNgRaOvADrY_2JsoRSg21tmF4oRnFwg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: gov_power_allocator: Granted power set to max
+ when nobody request power
+To: ZhengShaobo <zhengshaobo1@xiaomi.com>
+Cc: chendejun@xiaomi.com, chuci@xiaomi.com, daniel.lezcano@linaro.org, 
+	dingchongchong@xiaomi.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, lukasz.luba@arm.com, rafael@kernel.org, 
+	rui.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> For correctness, I'll send a V2 with the return fixed
+On Thu, Oct 24, 2024 at 10:01=E2=80=AFAM ZhengShaobo <zhengshaobo1@xiaomi.c=
+om> wrote:
+>
+> On Wed, Oct 23, 2024 at 12:09:44PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Oct 21, 2024 at 2:12=E2=80=AFPM ZhengShaobo <zhengshaobo1@xiaom=
+i.com> wrote:
+> > >
+> > > From: zhengshaobo1 <zhengshaobo1@xiaomi.com>
+> > >
+> > > When total_req_power is 0, divvy_up_power() will set granted_power to=
+ 0,
+> > > and cdev will be limited to the lowest performance. If our polling de=
+lay
+> > > is set to 200ms, it means that cdev cannot perform better within 200m=
+s
+> > > even if cdev has a sudden load. This will affect the performance of c=
+dev
+> > > and is not as expected.
+> > >
+> > > For this reason, if nobody requests power, then set the granted power=
+ to
+> > > the max_power.
+> > >
+> > > Signed-off-by: zhengshaobo1 <zhengshaobo1@xiaomi.com>
+> >
+> > I would have applied this, but your S-o-b above needs to be fixed.
+> > Why don't you use your real name there?
+> >
+> > If it can be changed to "ZhengShaobo <zhengshaobo1@xiaomi.com>",
+> > please let me know, and I will fix it for you when applying the patch.
+> >
+> Yes, it should be "ZhengShaobo <zhengshaobo1@xiaomi.com>".
+> I would really appreciate your help in solving this problem.
 
-Would you become similarly interested to increase the application of
-scope-based resource management also for the affected software component?
-
-Regards,
-Markus
+OK, applied as 6.13 material with the S-o-b tag as per the above, thanks!
 
