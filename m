@@ -1,122 +1,189 @@
-Return-Path: <linux-pm+bounces-16421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F17C49AF324
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 21:58:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E1909AF554
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 00:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 303F41C23E16
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:58:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFFF01F243E6
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 22:24:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEC91AB512;
-	Thu, 24 Oct 2024 19:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF20E218320;
+	Thu, 24 Oct 2024 22:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tPILtAAX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mtBio/n9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61381FF04A
-	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 19:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7406222B66F
+	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 22:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729799878; cv=none; b=IFDOE7XxuGBkE4fz74PMYJUA1pJ/2FVJ1vDwTemK9uGiFD+K9ll2FB7f2+Sjfv7IXo65wxlcESEAAvjtqpiqGz/a89+yL7+La0Pz2eB2iIPDMA4OWCLvq4b1hK3NdiNrdJS5wzLYAGbXUNyknM3yxkFkQmrWDMHIxgb36cAczho=
+	t=1729808672; cv=none; b=pu1ROpB833ZlIDu6nATtxNqxQEyFJUtJuFudd6+Why5z0rCFhIaR8lVnJ8plRNgIbCJZkeTdnQngI8GVPXwTXPNYUFOjzCw0dAbG4Obq6/BfIXIMx0P8U/bQ5u+BQ26QpUD7Ht3zltMvRVhAzGv+u+6xfP6xIxTPMtVdW55sp1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729799878; c=relaxed/simple;
-	bh=bTSZ+AIYW4PtKktAhtWQiw/nwwUpqv9LctwwUYhZcYs=;
+	s=arc-20240116; t=1729808672; c=relaxed/simple;
+	bh=b3Oqdz9XIKXZD2gr94AL8g1IimMVqiVBRgfe0bV1erk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TY4AJDvaQGy9Y2qNBE6kXPSfC1PVZiDmbNO13UKIWEND8II4t49nqwfHEn2vEX/wLcInIDTrdGGVpD5LSHWv76dD3XJnlVBL4D7LiA9Wml4TBfsFdVKnnWzmMd2kruLWi8hEaaSaljx79ZQcV5bTWjj+Y0WUJvaWUFxwfsjpZnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tPILtAAX; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 24 Oct 2024 12:57:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729799868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8BK0ZcosXDoOXzSbDL6svDcVkcl94/C1ybPNkAKv7is=;
-	b=tPILtAAXE+IgUeUPC4X+luEap2SlsyS17q2HLFknCMik+U8I3s2RvzCZUnSAzQqNJDKt9e
-	M/MTZyMVUnCKCJYUBNzj0u5ZsYLzm6ShCLECXJkxN//oG4dDtOWhz5P9RCDzSDwfta6E2h
-	1b0NgK8VyuKZarNkmkLJPSv4ZjfS/hI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Miguel Luis <miguel.luis@oracle.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Francesco Lavra <francescolavra.fl@gmail.com>
-Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
- hibernate
-Message-ID: <ZxqmsiXV6ZYTANKY@linux.dev>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
- <20241019172459.2241939-7-dwmw2@infradead.org>
- <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
- <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
- <ZxprcWDe2AXuLhD_@linux.dev>
- <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Np8ZOXE5CbuUtzkljfrgiLxnWt6Tx00GxZU6qHyrvXRFDJpa500IqfkWshs23hXmDyu7GZzUDZLeqFlW+PMsaCjjp+sc6vJd7GGm85poSN9KWlR5DvXrf+zoke3TjG8KsTiadXW5tLFdgrzxnRCpyplWMnVBmxlp5lUzAsUMW7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mtBio/n9; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539f7606199so1857086e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 15:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729808668; x=1730413468; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oNMGjw++sMHfaJpTwkpeeb5+CZwbF2kDV2e17WrmTm0=;
+        b=mtBio/n9Iy30NY/Vx+xkT+laZSzQFD52QUrDpLiZCNtoIGrAx/eqyIViKrwSVaIie8
+         WCMWQghjE5gXWrhFoWApfpQRNbHMTM3AWj31HKZyDYBTYHFtW6uBDFXEx9vrVLfc8JVH
+         +ZDsxQxbP1UWwBigUGi7QrXPbaBb13dHZJBLYTvPJR9g3fwoiAL29hkONX2uvTH5EV0S
+         UnjoxtlN3XgSI8fq8FSTofI3ddPC07vOpD82y2p/Ww+XEWJYxzKJNOk+pc4EnIcBuKGJ
+         U6lU/OxAvkHJXM9clTrA4axWjsHrCRJJMHuFWsoFFoiK2BkUkIsfuPenlOsryNUweGTd
+         2PZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729808668; x=1730413468;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oNMGjw++sMHfaJpTwkpeeb5+CZwbF2kDV2e17WrmTm0=;
+        b=R3ANZ3u1cpuuctLYwoTUUYTwIiYDhvOzfLPaZjIUx8dkvpYbn4RaFxDLwQeOG+emfA
+         rNAA8NpLuaTYAiTXq1fELdne7g1sxmSeHMQYsn7CeK5T/bjxR9smRz8EkYaMc87JZhQF
+         +ZlXA78xcR32v7LPk6dl+EHbImGWoBLmY4Ii+nAhhvOre9jCq/+LJdY1/55C3+2rj5+y
+         agelCeOfp8AaeKIH7XtLCanGDhH+AAdZ8EkHzXMuoO0GLtMJbIS/5YDW53GZLM1fTBTD
+         8eDvabSeNGl85BgUki4FdjKFoYjUQfuM1o9462+eb+MTfZKuLluH94JYicICxpbfy6zM
+         XLAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWieduFblrWyiK1GRmzab8U3/GNJasY1gGXx93LoeLVL4gAOqau9gGouXunuJdBxjd6d3elbluNqA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEoqHRO+LxZrCjhqqqZh2+6iGb1oLC521lnlaYIUBLNVXUadIq
+	tpa6e9FTAmNF/H/SXw1g6fqwGL1JVV9C9/wtXvnQaR1fRhJscTfne/8CjBlowfU=
+X-Google-Smtp-Source: AGHT+IGMGFhwLsswBUxiX+Gh6Mwmw4Gpv/RT0zNWikzUs+v1WjRd6mzd0pMZGj9Em8bkTL+w/Phbng==
+X-Received: by 2002:a05:6512:6511:b0:539:faef:35ec with SMTP id 2adb3069b0e04-53b1a375c09mr3432667e87.49.1729808668438;
+        Thu, 24 Oct 2024 15:24:28 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a223e5ab6sm1481972e87.13.2024.10.24.15.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 15:24:27 -0700 (PDT)
+Date: Fri, 25 Oct 2024 01:24:25 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: barnabas.czeman@mainlining.org
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
+	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+	Otto =?utf-8?Q?Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: Re: [PATCH RFC 12/14] arm64: dts: qcom: Add initial support for
+ MSM8917
+Message-ID: <h4dy2fesraalsri4gclenp4luwqjoh7iv2xysqnf6uwy3qp5de@x6iqc6pa365i>
+References: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
+ <20241019-msm8917-v1-12-f1f3ca1d88e5@mainlining.org>
+ <2iayllvk5ohrmbhnn7up5gvys2ijzxuyf44c53uwcbsunre6np@ncrimgac2idz>
+ <19884457f1133a20a6ad014a75906e55@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <19884457f1133a20a6ad014a75906e55@mainlining.org>
 
-On Thu, Oct 24, 2024 at 05:56:09PM +0200, David Woodhouse wrote:
-> On 24 October 2024 17:44:49 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
-> >IIUC, you're really wanting to 0x0 because there are hypervisors out
-> >there that violate the final spec and *only* accept this value.
-> >
-> >That's perfectly fine, but it'd help avoid confusion if the supporting
-> >comment was a bit more direct:
-> >
-> >	/*
-> >	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
-> >	 * selecting HIBERNATE_OFF.
-> >	 *
-> >	 * There are hypervisors in the wild that violate the spec and
-> >	 * reject calls that explicitly provide a hibernate type. For
-> >	 * compatibility with these nonstandard implementations, pass 0
-> >	 * as the type.
-> >	 */
-> >	 if (system_entering_hibernation())
-> >		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
-> 
-> By the time this makes it into released versions of the guest Linux kernel, that comment won't be true any more.
+On Mon, Oct 21, 2024 at 11:14:55PM +0200, barnabas.czeman@mainlining.org wrote:
+> On 2024-10-19 15:43, Dmitry Baryshkov wrote:
+> > On Sat, Oct 19, 2024 at 01:50:49PM +0200, Barnabás Czémán wrote:
+> > > From: Otto Pflüger <otto.pflueger@abscue.de>
+> > > 
+> > > Add initial support for MSM8917 SoC.
+> > > 
+> > > Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
+> > > [reword commit, rebase, fix schema errors]
+> > > Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/msm8917-pins.dtsi |  344 ++++++
+> > >  arch/arm64/boot/dts/qcom/msm8917.dtsi      | 1557
+> > > ++++++++++++++++++++++++++++
+> > >  arch/arm64/boot/dts/qcom/pm8916.dtsi       |    9 +-
+> > >  3 files changed, 1909 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/msm8917-pins.dtsi
+> > > b/arch/arm64/boot/dts/qcom/msm8917-pins.dtsi
+> > > new file mode 100644
+> > > index 0000000000000000000000000000000000000000..f283ffd59b8aca8e510ef95d5526af9592a1c036
+> > > --- /dev/null
+> > > +++ b/arch/arm64/boot/dts/qcom/msm8917-pins.dtsi
+> > 
+> > Please merge into msm8917.dtsi (for generic parts) and
+> > msm8917-boatd.dtsi (for board-specific parts).
+> > 
+> > > @@ -0,0 +1,344 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > 
+> > If possible, GPL-2.0 OR MIT, or GPL-2.0 OR BSD-2/3-Clause
+> Unfortunatelly i cannot change the license i do not own the original code.
 
-Then does it even matter? What is the problem you're trying to solve
-with using a particular value for the hibernate type?
+Ack
 
-Either the goal of this is to make the PSCI client code compatible with
-your hypervisor today (and any other implementation based on 'F ALP1') or
-we don't care and go with whatever value we want.
+> > 
+> > > +			tsens_caldata: caldata@d0 {
+> > > +				reg = <0x01d8 0x14>;
+> > > +			};
+> > 
+> > No, individual bit definitions for each of tsens fuse values.
+> > 
+> > > +		};
+> > > +
+> > > +		rpm_msg_ram: sram@60000 {
+> > > +			compatible = "qcom,rpm-msg-ram";
+> > > +			reg = <0x00060000 0x8000>;
+> > > +		};
+> > > +
+> > > +		tsens: thermal-sensor@4a9000 {
+> > > +			compatible = "qcom,msm8917-tsens", "qcom,tsens-v1";
+> > > +			reg = <0x004a9000 0x1000>,
+> > > +			      <0x004a8000 0x1000>;
+> > > +			nvmem-cells = <&tsens_caldata>;
+> > > +			nvmem-cell-names = "calib";
+> > 
+> > And here too, individual bits instead of a single blob.
+> I do not know how to do that i have only find some parts at downstream
+> driver to be able to separate
+> the cells but i do not have every information for it.
 
-Even if the comment eventually becomes stale, there is a ton of value in
-documenting the exact implementation decision being made.
+Well, you don't have to describe every information. I'm simply asking
+you to replace single tsens_caldata entry with per-sensor and per-point
+data, see e.g. msm8976.dtsi and data_8976 / ops_8976.
+
+> > 
+> > > +			#qcom,sensors = <10>;
+> > > +			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
+> > > +			interrupt-names = "uplow";
+> > > +			#thermal-sensor-cells = <1>;
+> > > +		};
+> > > +
+> > > +
+
+[...]
+
+> > > +		gpu: gpu@1c00000 {
+> > > +			compatible = "qcom,adreno-306.32", "qcom,adreno";
+> > 
+> > Is it really .32 ?
+> Yes it is A306A (Adreno 308)
+
+Ack
 
 -- 
-Thanks,
-Oliver
+With best wishes
+Dmitry
 
