@@ -1,168 +1,115 @@
-Return-Path: <linux-pm+bounces-16383-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16384-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 352599AE5E1
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:18:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5250F9AE5E7
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:18:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2678287FBB
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 13:18:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4841B26B93
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 13:18:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3E41DD9D1;
-	Thu, 24 Oct 2024 13:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C271DDA0C;
+	Thu, 24 Oct 2024 13:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uVY4UZVS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpT8pek0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D461D1C4A2F;
-	Thu, 24 Oct 2024 13:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0D91DD88B;
+	Thu, 24 Oct 2024 13:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729775848; cv=none; b=umQf6B6O9kzNnIAdjaP6YP7il6BkAVN2NbyzEHwnhjPGV6JSbgynx4MHssGXmY6jJBgGq43g0/xRclwX5ktFrsYQKR25Wn1gFr/NkS3P6CjlS2tu07wZJ8qipbWa02PtsC7hFwlD991roZkIbMYq7ZQmxTYdnS6cQaQBwmQ91IE=
+	t=1729775909; cv=none; b=UUHxrTAmOfqkrYf28+QeJKXU3pgKyktZ6dgcwIJj4oclZ68MylyynPO0V1Jvs6Legx3RkoA5Vwl7/wHEUgPyD5J2sy95A/KoitDcSEs2UpbQOoh5o34rEqCsFds7V8l6AvwJOz5srVHX81rvReFrSS4HDFljtgwojS+UdxTsePg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729775848; c=relaxed/simple;
-	bh=NdBE6hbozYmVbY0urVOV+8FTTG4tBXfLh/dW3CeVNlM=;
+	s=arc-20240116; t=1729775909; c=relaxed/simple;
+	bh=fUPMtLGUu5qsQ9CvPJPbRbDf4Ywd2f07fy+PXcaOFUk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J82NMPzMWTM2fiF/DGZ81wFDeVWT98nQonxWh6ZkUv6cDHRf3j8WAqP+dIAVSQi9R73it7oM47OCsBkk+g/KrYFiHF6tRj63OKHk9IaNnWUXddl/T3bSmdWU42YhlcDU+91Yfr5rAQQWyt2igfkZt04avEF8M/QwgqYBwqGXg/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uVY4UZVS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DE2C4CEE7;
-	Thu, 24 Oct 2024 13:17:28 +0000 (UTC)
+	 To:Cc:Content-Type; b=X1mqK6qGRdPdiLm7frwgUmkz6oeIndxX4Fz6LdZ8Du6kv3pLGMi9n3Mo/1UpP5xBPa2j7qxbb2BH1jq53SjsbpmsbluklFjoU+hvkQsPJmUcEhIPYFwK0k/Mv495kxYGKCpEQdh9xsC3CKmDtmwWzIWdti/wVjGVTqJqwpCT0Gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpT8pek0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D40C4CEE8;
+	Thu, 24 Oct 2024 13:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729775848;
-	bh=NdBE6hbozYmVbY0urVOV+8FTTG4tBXfLh/dW3CeVNlM=;
+	s=k20201202; t=1729775908;
+	bh=fUPMtLGUu5qsQ9CvPJPbRbDf4Ywd2f07fy+PXcaOFUk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uVY4UZVS/XGjEwVZh0+rWAqiyM0evlWXIvQGxl4+yWkXfh4m5UY97hwbpSvYlago/
-	 naEBoMKd+VukWcMq19HItIkTmyeEZh5hJj+7m54r41zAQLAGtQbt6rZrGdiADbR1Oh
-	 jgfudmd0w10oqm5MVX/PFynKr9GnGsBTFODNhcr/lDNCKi3tgweBv/PTQtx5/A9Qmc
-	 UsY8+9/YTXoESNuUiasX0A8XJo8SGDgmOsLeiiaF9KlnY5aUczpXJ1UFohz/9O8kmw
-	 V9pELv4xG0Y4GHO6CTpQJBai6ebg3tSZa1L69MTAlWObBAgYZxNVS6Y+4X+bZEp+E9
-	 vcfS9XL3yTeVQ==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-288916b7fceso526495fac.3;
-        Thu, 24 Oct 2024 06:17:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWuE948aDqBmRleI0pcV33n+eQeDG8e0QYreg/zsq371hZ882KT7/jzfFI1egfimYhAzOMn0G1XPok=@vger.kernel.org, AJvYcCXjTux9/qpSuhM5cAZ77aPBbM+oGk4YqHwelHi4/MvOLCd50QVlvxY88slPM1g672z/13tGJ3FP9ONPsWg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMhNcvs82QZfXEelv8PERRdRhQjkAPyBrTHA03LDshOiY/FYMR
-	vQKxu39hY6+DfKKk5rfPeZiw0mV0WOEyThXJQRmB6WWlQgZqAV7fnuXVu4kl6LwX6qMSEzekYs4
-	O8scdcOWwhQY3ZLPK+h1Z+1SmI50=
-X-Google-Smtp-Source: AGHT+IHhJzeF2bLORj57fVBTkWmlhQufqtQFQVhAi8eTYv4XypBPGFTLKD5/j4RFxF9MTUvo2oVASn28hPwQJLeCJZc=
-X-Received: by 2002:a05:6871:68c:b0:27b:5890:bd38 with SMTP id
- 586e51a60fabf-28ccb41ea91mr5759461fac.7.1729775847482; Thu, 24 Oct 2024
- 06:17:27 -0700 (PDT)
+	b=rpT8pek0qutK7KGKpdZ49JQUG2hi4UD5nDgICPm/dmLTHOG+cL8FJL+P4Xfv32fGh
+	 XbRZacCxhHu6q19EhTSlM7JHYBYRmHA2hjZuGllaHqZKrdoO/tAVIHwe6AnAXxaUP+
+	 YD2CV9Jf1pAtQwYt3lOjNi+EQQCSTcHGu/cqz1my9G89LJyhPrWVfJcJDs/iDVIOgi
+	 A2U/hmjXzqpkL8tofc8DGOs5/sQUhVLYDzBiASvYsF7kDLXYk+m0jf1qLiNajfK0tY
+	 ZLKOaTysRIQ4ZPwqgkLZB+CXkW4bVYzqgASHmHzJ6+ZIQQI3oUSl5NU+W5VMlTcV5k
+	 nw57M8vJtfIQw==
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3e5ffea2699so917048b6e.1;
+        Thu, 24 Oct 2024 06:18:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUxnGdRmsU9f/dBI0+Yn5zLnRLu8OX31UI4sPXqFRE+hwk7hNYn1FFGoSXIgsbSd+m4QOZaRTS37aRn6X8=@vger.kernel.org, AJvYcCVGaI9bW665gMCEg0Mx2cdyskyYKQMGoIErbdVuvIqurV/uM/BJIorz0KFIrmyLFo8zSxwUxLtXxbI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyL4h38CvcLa7iAb5O75BuidJ2IgSCOP9OyhSs6RYvSE8ognBt1
+	27NBkigwuTnCTyJ+vCu4ogAhekixJvk7QpNn3FZB96pyT9WIU5sNQ/o+BrUjbvZUjzkxtg+4sfw
+	MmnVve8e+T/X28NQo6WImz3AheQ0=
+X-Google-Smtp-Source: AGHT+IGLRzCtSDhNTOWOusH4AqBYnt+g8QFbKTd3yubHvDvJVyXXGjbi9ShRWEWpLZclfZ3Cem/g7ViDIYj0SqVOi1Y=
+X-Received: by 2002:a05:6808:d52:b0:3e6:1f35:62c9 with SMTP id
+ 5614622812f47-3e62c48defcmr1120934b6e.0.1729775908144; Thu, 24 Oct 2024
+ 06:18:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024102303.1086147-1-daniel.lezcano@linaro.org> <8b4659f0-5da7-4847-b5de-fad8ea57e967@linaro.org>
-In-Reply-To: <8b4659f0-5da7-4847-b5de-fad8ea57e967@linaro.org>
+References: <20241024105938.1095358-1-daniel.lezcano@linaro.org>
+ <45265aca-7371-455f-819f-c4d68cbb089b@web.de> <9ba3fa17-57c3-41e9-9e19-33fa105a179e@linaro.org>
+In-Reply-To: <9ba3fa17-57c3-41e9-9e19-33fa105a179e@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 24 Oct 2024 15:17:16 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gF=B7NG0ZVCHr4DfSqYaunDLw1Bcpjqcf1NwLBW_jNEw@mail.gmail.com>
-Message-ID: <CAJZ5v0gF=B7NG0ZVCHr4DfSqYaunDLw1Bcpjqcf1NwLBW_jNEw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/thresholds: Fix thermal lock annotation issue
+Date: Thu, 24 Oct 2024 15:18:16 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jWGdzakj8ob2otAO6auwGBvVsewujG-d9b1Z5nnO7Vkw@mail.gmail.com>
+Message-ID: <CAJZ5v0jWGdzakj8ob2otAO6auwGBvVsewujG-d9b1Z5nnO7Vkw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/lib: Fix memory leak on error in thermal_genl_auto()
 To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	"open list:THERMAL" <linux-pm@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc: Markus Elfring <Markus.Elfring@web.de>, linux-pm@vger.kernel.org, 
+	Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Zhang Rui <rui.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 24, 2024 at 12:36=E2=80=AFPM Daniel Lezcano
+On Thu, Oct 24, 2024 at 2:57=E2=80=AFPM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
+> On 24/10/2024 14:02, Markus Elfring wrote:
+> >> The function thermal_genl_auto() does not free the allocated message
+> >> in the error path. Fix that by putting a out label and jump to it
+> >> which will free the message instead of directly returning an error.
+> >
+> > Would you like to add any tags (like =E2=80=9CFixes=E2=80=9D and =E2=80=
+=9CCc=E2=80=9D) accordingly?
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/process/submitting-patches.rst?h=3Dv6.12-rc4#n145
+> >
+> >
+> > =E2=80=A6
+> >> +++ b/tools/lib/thermal/commands.c
+> >> @@ -375,27 +375,30 @@ static thermal_error_t thermal_genl_auto(struct =
+thermal_handler *th, cmd_cb_t cm
+> >>                                       struct cmd_param *param,
+> >>                                       int cmd, int flags, void *arg)
+> >>   {
+> >> +    thermal_error_t ret =3D THERMAL_ERROR;
+> >>      struct nl_msg *msg;
+> >>      void *hdr;
+> >>
+> >>      msg =3D nlmsg_alloc();
+> >>      if (!msg)
+> >> -            return THERMAL_ERROR;
+> >> +            goto out;
+> > =E2=80=A6
+> >
+> > Is it really reasonable to pass a null pointer (from a failed function =
+call)
+> > to a subsequent nlmsg_free() call?
 >
-> Hi,
->
-> please note this fix has been written on top of the thermal thresholds
-> series, so I don't know how it conflicts if it is applied before
+> You are right, I should return here :S
 
-No worries.
+Do you want to respin it?
 
-Applied (on top of the thresholds series).
-
-> On 24/10/2024 12:23, Daniel Lezcano wrote:
-> > When the thermal zone is unregistered (thermal sensor module being
-> > unloaded), no lock is held when flushing the thresholds. That results
-> > in a WARN when the lockdep validation is set in the kernel config.
-> >
-> > This has been reported by syzbot.
-> >
-> > As the thermal zone is in the process of being destroyed, there is no
-> > need to send a notification about purging the thresholds to the
-> > userspace as this one will receive a thermal zone deletion
-> > notification which imply the deletion of all the associated resources
-> > like the trip points or the user thresholds.
-> >
-> > Split the function thermal_thresholds_flush() into a lockless one
-> > without notification and its call with the lock annotation followed
-> > with the thresholds flushing notification.
-> >
-> > Please note this scenario is unlikely to happen, as the sensor drivers
-> > are usually compiled-in in order to have the thermal framework to be
-> > able to kick in at boot time if needed.
-> >
-> > Link: https://lore.kernel.org/all/67124175.050a0220.10f4f4.0012.GAE@goo=
-gle.com
-> > Reported-by: syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > ---
-> >   drivers/thermal/thermal_thresholds.c | 13 +++++++++----
-> >   1 file changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/thermal/thermal_thresholds.c b/drivers/thermal/the=
-rmal_thresholds.c
-> > index ea4aa5a2e86c..2888eabd3efe 100644
-> > --- a/drivers/thermal/thermal_thresholds.c
-> > +++ b/drivers/thermal/thermal_thresholds.c
-> > @@ -20,17 +20,22 @@ int thermal_thresholds_init(struct thermal_zone_dev=
-ice *tz)
-> >       return 0;
-> >   }
-> >
-> > -void thermal_thresholds_flush(struct thermal_zone_device *tz)
-> > +static void __thermal_thresholds_flush(struct thermal_zone_device *tz)
-> >   {
-> >       struct list_head *thresholds =3D &tz->user_thresholds;
-> >       struct user_threshold *entry, *tmp;
-> >
-> > -     lockdep_assert_held(&tz->lock);
-> > -
-> >       list_for_each_entry_safe(entry, tmp, thresholds, list_node) {
-> >               list_del(&entry->list_node);
-> >               kfree(entry);
-> >       }
-> > +}
-> > +
-> > +void thermal_thresholds_flush(struct thermal_zone_device *tz)
-> > +{
-> > +     lockdep_assert_held(&tz->lock);
-> > +
-> > +     __thermal_thresholds_flush(tz);
-> >
-> >       thermal_notify_threshold_flush(tz);
-> >
-> > @@ -39,7 +44,7 @@ void thermal_thresholds_flush(struct thermal_zone_dev=
-ice *tz)
-> >
-> >   void thermal_thresholds_exit(struct thermal_zone_device *tz)
-> >   {
-> > -     thermal_thresholds_flush(tz);
-> > +     __thermal_thresholds_flush(tz);
-> >   }
-> >
-> >   static int __thermal_thresholds_cmp(void *data,
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+Alternatively, I can fix it up when applying the patch.
 
