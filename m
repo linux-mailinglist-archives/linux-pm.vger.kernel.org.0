@@ -1,158 +1,161 @@
-Return-Path: <linux-pm+bounces-16362-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16361-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BECD99AE26E
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:23:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 612A19AE26C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:23:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CD232844E3
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17BA61F2462C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:23:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B2DB1C07EB;
-	Thu, 24 Oct 2024 10:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D/OVl4hl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C761ABEB1;
+	Thu, 24 Oct 2024 10:23:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95FD1C07DF
-	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 10:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1534A1C233E;
+	Thu, 24 Oct 2024 10:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729765411; cv=none; b=QdBZ2KN3pOLMwQL1F9FfA4OQkEmW9Z/4tiCqKkXzA3EVREidUZ0d2InxwklM4ijKhE+wCK3vuwJ+cSOd4UWd/fj6gycbeO/zKYVC444uLBeJindUBVRRrHs1CzHGOinhqXb3dYdYrOozo3pW/uxgJCVTC/HsecXS3UcjwUu5QXk=
+	t=1729765387; cv=none; b=sBwat65XQwVjTeIfrCovxhvjxaeCIgfgCdlRCUZzTcpZ6VWw3i71dVmywr5Alc8iHXImNQKe7FjunUJv+lyQnI5oWn3zPOkDtoihZcGkoQqfs29R2vncPmn92Zt2+PabdQjZJLwj07KIN8Si/aoHOvo1VNCJJjDC0G/nKBCFja4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729765411; c=relaxed/simple;
-	bh=eXzIVANoSdckZ6/KVBlOoXOvkdYkN+bwsUCbZIcRgns=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UKCe2GTyOfSq5ScTNz4QkyL81ru6F1QfYvn3BXOKkn1eMkN9T15EKiMB2Oy1yf/TySuKK29jVy06nh2I9HCtOvUwrEv/OiBp9RdsipMVRmVCqeacDm88daOvcb6gZTakMUSeIEDzShzag0eVzBHd9WdpDsgUAaUd4FbDe9nI9lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D/OVl4hl; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43167ff0f91so7551925e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 03:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729765407; x=1730370207; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vGfd1JHcREPOU5Z6qqF2PdooBtljEuBL480hQIscwuw=;
-        b=D/OVl4hl66LLD+LI16/Laue7XUgvCXFW1Co3iqu6AoW+jvXfc5z+CoXFCn98i5jCpp
-         f8MzYWwJb7Of+2+INlz8uExV361cnsGS827Bkcfz/SRpfh19FunrAehQrUq5Mz5zRlLv
-         PQbmRamSvsrkqrPb1e2mDqqxlRTgD8XjZYx6la5d1fA1eWuh7jCkPFxBhA+7jrpiL4MO
-         +FIazLh2qCyw7Ku54ccZjxlMhAbAbGYnVyw7fSmseeBRyKLhlzLp1pS3Xia9oenNMnph
-         FDdfzRLvXHndq99UMzV/qTBsr/IbYxxJGXK51jCMTbE3w/fNrrwrPsCzkmvdcXIyjfo+
-         FuCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729765407; x=1730370207;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vGfd1JHcREPOU5Z6qqF2PdooBtljEuBL480hQIscwuw=;
-        b=km4Q3cZnhCrL0Px8dZeNax4Avra4GkbyfzLXn+crXbgrWIvvh+QdPXx5ue8mYzwyCK
-         fe14wAVsRE7EzKHljIuUpaj5IwfF86WGrWh8iHKXOeQanf03ywRKUFKXpH2z0R2eisVl
-         JZL/jiMN7bM06zeXkjB3uj5aY0W/YM2DY3Br32cF/+dHkRvQFjUFn6Diucfp1yMYdEpV
-         i6+ioFWuMqneo5Dtu6hmody0p9pBk5vEzzHER2NfcbJEUi5HCxFI2seplHBqZ0SCIAib
-         3rwtiVwmsxaDqdXb57QXaX4cNRLCEBeoPGqtIbrMwR70SqWg7jtKUQgjyftOf3ieXRAG
-         79sw==
-X-Forwarded-Encrypted: i=1; AJvYcCWD2KTPzzeKcdnn5fJ5xn95KZTyG6n1UAmcDYE5Gp6mVVUGSlORWxUZgaiEK1s7aLWjwdu9lYEWFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwX5LcRtFApPq7Ou/9eFWkA3lHjocgL2HL9B51ADQ6vT6wUxRF3
-	iTHxBzOsJ/D8aHRd3KJ9Mdag7D2RaNbgQuYGb5T4uo5Jl4r8b/3m+K3pIpqjwX0=
-X-Google-Smtp-Source: AGHT+IGwgk1Q6Ug+BVFVnUXFcZ9dVuF5hFZk5XTuZGnRFR7wmgF12+GD4A9jzFwefYAW34tVJukA0A==
-X-Received: by 2002:a05:600c:5490:b0:431:5d14:1cae with SMTP id 5b1f17b1804b1-4318415fee0mr44990735e9.19.1729765406341;
-        Thu, 24 Oct 2024 03:23:26 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43186bfb0f2sm40739335e9.22.2024.10.24.03.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 03:23:25 -0700 (PDT)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: daniel.lezcano@linaro.org,
-	rjw@rjwysocki.net
-Cc: syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org (open list:THERMAL),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal/thresholds: Fix thermal lock annotation issue
-Date: Thu, 24 Oct 2024 12:23:03 +0200
-Message-ID: <20241024102303.1086147-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1729765387; c=relaxed/simple;
+	bh=B+1RfBYiqs79yFlaFW0DvH0tktjVn9e4WTKZNVljEio=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p2+rfRUCEwPBIQS9eiIthZA8TsoUTixM6dZqWjA+IYprIoSLZ9LvP5u1h4i+2F0GhT+p84279Mc7clfxbOyCAOuCSRcJDOmcYX4Q3LTpXoJ5kWAq+DYbqqtqJO8wTDIKB0pv5tI4aIpdaZCIdGXU9YiGFfV2VAmUyGbn8zK8swI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49110339;
+	Thu, 24 Oct 2024 03:23:34 -0700 (PDT)
+Received: from [10.57.55.74] (unknown [10.57.55.74])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98F7E3F71E;
+	Thu, 24 Oct 2024 03:23:03 -0700 (PDT)
+Message-ID: <75ca3ac0-be7c-4be5-be50-11b90b690102@arm.com>
+Date: Thu, 24 Oct 2024 11:24:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 06/10] thermal: core: Move some trip processing to
+ thermal_trip_crossed()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <4958885.31r3eYUQgx@rjwysocki.net>
+ <1982859.PYKUYFuaPT@rjwysocki.net>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <1982859.PYKUYFuaPT@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When the thermal zone is unregistered (thermal sensor module being
-unloaded), no lock is held when flushing the thresholds. That results
-in a WARN when the lockdep validation is set in the kernel config.
 
-This has been reported by syzbot.
 
-As the thermal zone is in the process of being destroyed, there is no
-need to send a notification about purging the thresholds to the
-userspace as this one will receive a thermal zone deletion
-notification which imply the deletion of all the associated resources
-like the trip points or the user thresholds.
+On 10/16/24 12:29, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Notice that some processing related to trip point crossing carried out
+> in handle_thermal_trip() and thermal_zone_set_trip_temp() may as well
+> be done in thermal_trip_crossed(), which allows code duplication to be
+> reduced, so change the code accordingly.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   drivers/thermal/thermal_core.c |   21 ++++++++++-----------
+>   drivers/thermal/thermal_trip.c |   17 ++++++-----------
+>   2 files changed, 16 insertions(+), 22 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -460,11 +460,6 @@ static void handle_thermal_trip(struct t
+>   		if (tz->temperature < trip->temperature - trip->hysteresis) {
+>   			td->notify_temp = trip->temperature - trip->hysteresis;
+>   			move_trip_to_sorted_list(td, way_down_list);
+> -
+> -			if (trip->type == THERMAL_TRIP_PASSIVE) {
+> -				tz->passive--;
+> -				WARN_ON(tz->passive < 0);
+> -			}
+>   		} else {
+>   			td->threshold -= trip->hysteresis;
+>   		}
+> @@ -478,12 +473,6 @@ static void handle_thermal_trip(struct t
+>   		move_trip_to_sorted_list(td, way_up_list);
+>   
+>   		td->threshold -= trip->hysteresis;
+> -
+> -		if (trip->type == THERMAL_TRIP_PASSIVE)
+> -			tz->passive++;
+> -		else if (trip->type == THERMAL_TRIP_CRITICAL ||
+> -			 trip->type == THERMAL_TRIP_HOT)
+> -			handle_critical_trips(tz, trip);
+>   	}
+>   }
+>   
+> @@ -533,9 +522,19 @@ static void thermal_trip_crossed(struct
+>   	const struct thermal_trip *trip = &td->trip;
+>   
+>   	if (crossed_up) {
+> +		if (trip->type == THERMAL_TRIP_PASSIVE)
+> +			tz->passive++;
+> +		else if (trip->type == THERMAL_TRIP_CRITICAL ||
+> +			 trip->type == THERMAL_TRIP_HOT)
+> +			handle_critical_trips(tz, trip);
+> +
+>   		thermal_notify_tz_trip_up(tz, trip);
+>   		thermal_debug_tz_trip_up(tz, trip);
+>   	} else {
+> +		if (trip->type == THERMAL_TRIP_PASSIVE) {
+> +			tz->passive--;
+> +			WARN_ON(tz->passive < 0);
+> +		}
+>   		thermal_notify_tz_trip_down(tz, trip);
+>   		thermal_debug_tz_trip_down(tz, trip);
+>   	}
+> Index: linux-pm/drivers/thermal/thermal_trip.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_trip.c
+> +++ linux-pm/drivers/thermal/thermal_trip.c
+> @@ -108,18 +108,13 @@ void thermal_zone_set_trip_temp(struct t
+>   	if (temp == THERMAL_TEMP_INVALID) {
+>   		struct thermal_trip_desc *td = trip_to_trip_desc(trip);
+>   
+> -		if (tz->temperature >= td->threshold) {
+> -			/*
+> -			 * The trip has been crossed on the way up, so some
+> -			 * adjustments are needed to compensate for the lack
+> -			 * of it going forward.
+> -			 */
+> -			if (trip->type == THERMAL_TRIP_PASSIVE) {
+> -				tz->passive--;
+> -				WARN_ON_ONCE(tz->passive < 0);
+> -			}
+> +		/*
+> +		 * If the trip has been crossed on the way up, some adjustments
+> +		 * are needed to compensate for the lack of it going forward.
+> +		 */
+> +		if (tz->temperature >= td->threshold)
+>   			thermal_zone_trip_down(tz, td);
+> -		}
+> +
+>   		/*
+>   		 * Invalidate the threshold to avoid triggering a spurious
+>   		 * trip crossing notification when the trip becomes valid.
+> 
+> 
+> 
 
-Split the function thermal_thresholds_flush() into a lockless one
-without notification and its call with the lock annotation followed
-with the thresholds flushing notification.
 
-Please note this scenario is unlikely to happen, as the sensor drivers
-are usually compiled-in in order to have the thermal framework to be
-able to kick in at boot time if needed.
-
-Link: https://lore.kernel.org/all/67124175.050a0220.10f4f4.0012.GAE@google.com
-Reported-by: syzbot+f24dd060c1911fe54c85@syzkaller.appspotmail.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_thresholds.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/thermal_thresholds.c b/drivers/thermal/thermal_thresholds.c
-index ea4aa5a2e86c..2888eabd3efe 100644
---- a/drivers/thermal/thermal_thresholds.c
-+++ b/drivers/thermal/thermal_thresholds.c
-@@ -20,17 +20,22 @@ int thermal_thresholds_init(struct thermal_zone_device *tz)
- 	return 0;
- }
- 
--void thermal_thresholds_flush(struct thermal_zone_device *tz)
-+static void __thermal_thresholds_flush(struct thermal_zone_device *tz)
- {
- 	struct list_head *thresholds = &tz->user_thresholds;
- 	struct user_threshold *entry, *tmp;
- 
--	lockdep_assert_held(&tz->lock);
--
- 	list_for_each_entry_safe(entry, tmp, thresholds, list_node) {
- 		list_del(&entry->list_node);
- 		kfree(entry);
- 	}
-+}
-+
-+void thermal_thresholds_flush(struct thermal_zone_device *tz)
-+{
-+	lockdep_assert_held(&tz->lock);
-+
-+	__thermal_thresholds_flush(tz);
- 
- 	thermal_notify_threshold_flush(tz);
- 
-@@ -39,7 +44,7 @@ void thermal_thresholds_flush(struct thermal_zone_device *tz)
- 
- void thermal_thresholds_exit(struct thermal_zone_device *tz)
- {
--	thermal_thresholds_flush(tz);
-+	__thermal_thresholds_flush(tz);
- }
- 
- static int __thermal_thresholds_cmp(void *data,
--- 
-2.43.0
-
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
