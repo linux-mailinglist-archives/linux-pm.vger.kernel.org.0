@@ -1,122 +1,179 @@
-Return-Path: <linux-pm+bounces-16354-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16355-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D0FB9AE208
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:04:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB32E9AE23C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:14:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B7EFB22C6F
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:04:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39F2D1F24B69
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7B11C07F3;
-	Thu, 24 Oct 2024 10:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3EC81C0DE2;
+	Thu, 24 Oct 2024 10:13:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28001C07E8;
-	Thu, 24 Oct 2024 10:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0B71C07FE;
+	Thu, 24 Oct 2024 10:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729764234; cv=none; b=tLH3XPUU+9WWi1QxHtDIo6sjBGjQOHmaDYgDmNNdyz422h7xPUkG7SU5+q3Mfum6tyHd754Jf8r//LbrxPyIhOx2kveujn/olUCFZPr9f1HrrJPzyFJ0D1G3JUa2yhQqyCwIaqatQ4VOQSHeStZftYTyQKm6Z3QRLEEB8hQg3gE=
+	t=1729764829; cv=none; b=MkmDf57w3xdI8xa1knn/ZWbKVzrih9bwrmBSKBckmR7rPXgiq6ppKNRgwTx761T8X2iE6wBQ0HeUMOKSv77NtyjAQ6XzJaCpuEwaZ8uw28oNLuW4veUBZbVW91hzMn/8g1uPV6EzCqlT31iXPph+jqn98wKc4Rms3O8lQ4IaMmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729764234; c=relaxed/simple;
-	bh=Bm0t+UbS6/N6Y1136yIFyLmb5F/KydJo4Y9Kvz6oqyw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MC5fTDTp238X7URgETKFKL1qa84WhGIgL7JE2fCVuFnKEdENSM3s/1nS3sdZvrTi5fdkf40ek/5D0sZVpp0Yze+8mrzFPmXumj+XJD2Zsu352eoOi64BaF6D2VblFAzYstBE7YZqdsBxZbiCGYFNqUpCr699w5AaxbWIDy8SlLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e34339d41bso7535117b3.0;
-        Thu, 24 Oct 2024 03:03:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729764231; x=1730369031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kBNib9fI7OsKe0S0XoMgI5p0KxqmwSJ7TbyOIgCT61I=;
-        b=n+5Q8L8MP1cruHBT8h99oTScSQyNsfw7GVKV5bgN+TI/k6wcsHCkgqG26mEiiJz0xS
-         DtwaTmi3gpjyyv5WRMsxczCkCU90Y3JQrD/0lwfxZ7lFeAq6DaG40iCzqp535xDGS5oK
-         E9+bGIaYid3IKJovZwRAnorzZ+gdfa++SFVbLe9CPa9uCMCH9x9X6JqWHIW9Sc2lXmeR
-         V0rTvOFra9POO87JAQzWL/HnQVBWKTXz86eNNCDyuTR1BnG3e3Pu+UL3mQZxYcM8N5+A
-         f/2z5+p5OANmmfgH2ad8QT3fjUJY7WufMG9rFCUAKpP4u0Huwi2KP4OV8CLxpvUmkl7D
-         wJdA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0BZqbGR1jpZg319I48eJF1iDSQet2KiWdQy9xqG/Kp45ucWO/qQHu6M5OTo10XEXiqv/z5Tk8AeI=@vger.kernel.org, AJvYcCV7whR5rlzAL+0eKIm9PvETEIVd6OSWB6HR8M/rEMw+aqfp0e/71B+8h0hC/bP47XeOSch7Jk+HN0AIRC6z6h8=@vger.kernel.org, AJvYcCW4WnjD5NDPH8XH66B9C0QoSYncVtloAeyFlcxJcpxSr/+M/oIxYljy3IHSah8KJ40x2axyQloWAR4=@vger.kernel.org, AJvYcCWB5B7MDhT8cFpods6F2g5hO/c/1u8DEo3dKE8Oh/E/YeIxQVCKZv+MEdgQ5ghbVCROEKNML61W0M30SY2J/CJmiuc=@vger.kernel.org, AJvYcCWKM64QBXT0FeyNdpiHLeRO9Kajccn65ZfFNMNC8QMMXqqCABj7foXZGIrhYhvovkQCv9rcOzOfwQssYWt1@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeF5emDR7q968TqeBdEQSv2h74DkoMc9pyurs31jmLAESqS4fE
-	O+R1lAnrOL4109kfcrUhxIf6n3/kluLuBnGEpZ03jzLrpXmXzRQ1INamWnhA
-X-Google-Smtp-Source: AGHT+IGhu7YOMVfWbv6QUP3X9d6DUjcNCObmVuumXVoXb/CekxesvT/qehzsFkgjGqdP957Bs8QhbQ==
-X-Received: by 2002:a05:690c:6b09:b0:6e3:31ee:23ab with SMTP id 00721157ae682-6e8581aed96mr15670177b3.25.1729764230767;
-        Thu, 24 Oct 2024 03:03:50 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e5f5ccb641sm19144537b3.83.2024.10.24.03.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 03:03:50 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6e33c65d104so6507987b3.3;
-        Thu, 24 Oct 2024 03:03:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUplpB7SxUzgyiMwgBxEzyZ85tlH4v0YX3lf+8oU4U3zPz+L4r0ykzLhhreppv1LDEf2n0BreJWeudBxXOmvlq2kLY=@vger.kernel.org, AJvYcCVrQLaG4oAAws5a2dYoSRboBn16pObJkWBH1EFd/GJtgZ5Lco/aSwj6y9f6bzm+QmI4vWBn9rPj/BZ/oVHg@vger.kernel.org, AJvYcCW2PNI67yA85CSeKF33/CpTTfrtaziQTzUJMa+cOH1bjj2Qavt/7ZF3A+mp85cqPSsddYZBjb5cl3I=@vger.kernel.org, AJvYcCWy1ttWdU/y3+kbQE9NNKUXRStjeXqPb6pJlsUp4IuTzkhZcafCAgzWHqdxFTlo6aLjKRjLNWQMFfo=@vger.kernel.org, AJvYcCX7dixJdPZrZLkWGTPr3750lhj+1clDP6igiY3qls2QzcauF/n67C7bQW5PU1vdm2ZQKzq6uj9fLwON7JNXBDQ=@vger.kernel.org
-X-Received: by 2002:a05:690c:6610:b0:6b1:2825:a3cd with SMTP id
- 00721157ae682-6e866319e02mr13432837b3.35.1729764230288; Thu, 24 Oct 2024
- 03:03:50 -0700 (PDT)
+	s=arc-20240116; t=1729764829; c=relaxed/simple;
+	bh=yKX+zGcg103/MnGDt0P8L+cG+mLN/s/N4JARKMf5clU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s0Z48942CCjNl4QcOQSYKipkaSUnH8nC3ld738v6ZVjs2onGzHGi7mUjCt5XT+Cn8+gMfxj1/k+eSsxL4FiHNbJ95JPweDB6dUib1q2s6zu/V9IRCRQua2jmLHjEXN74BPfALdUcJP4GfGLl2vZQ5IVkAF/eXUECEp0oAvXH+o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B48D339;
+	Thu, 24 Oct 2024 03:14:15 -0700 (PDT)
+Received: from [10.57.55.74] (unknown [10.57.55.74])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C826F3F71E;
+	Thu, 24 Oct 2024 03:13:44 -0700 (PDT)
+Message-ID: <e5c96b65-8efe-4209-ad32-1d99c7174794@arm.com>
+Date: Thu, 24 Oct 2024 11:14:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com> <20241015164732.4085249-4-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20241015164732.4085249-4-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 24 Oct 2024 12:03:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWCDBrivxN0pzbrH=fiwMWM3sj3BTsgHOjeOAT4dr3DEA@mail.gmail.com>
-Message-ID: <CAMuHMdWCDBrivxN0pzbrH=fiwMWM3sj3BTsgHOjeOAT4dr3DEA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] clk: renesas: r9a08g045: Mark the watchdog and
- always-on PM domains as IRQ safe
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 01/10] thermal: core: Build sorted lists instead of
+ sorting them later
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <4958885.31r3eYUQgx@rjwysocki.net>
+ <4930656.GXAFRqVoOG@rjwysocki.net>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <4930656.GXAFRqVoOG@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 15, 2024 at 6:48=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> If the watchdog is part of a dedicated power domain (as it may be on
-> RZ/G3S) the watchdog PM domain need to be powered on in the watchdog
-> restart handler. Currently, only the clocks are enabled in the watchdog
-> restart handler. To be able to also power on the PM domain we need to
-> call pm_runtime_resume_and_get() on the watchdog restart handler, mark
-> the watchdog device as IRQ safe and register the watchdog PM domain
-> with GENPD_FLAG_IRQ_SAFE.
->
-> Register watchdog PM domain as IRQ safe. Along with it the always-on
-> PM domain (parent of the watchdog domain) was marked as IRQ safe.
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+
+
+On 10/16/24 12:21, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Since it is not expected that multiple trip points will be crossed
+> in one go very often (if this happens, there are too many trip points
+> in the given thermal zone or they are checked too rarely), quite likely
+> it is more efficient to build a sorted list of crossed trip points than
+> to put them on an unsorted list and sort it later.
+> 
+> Moreover, trip points are often sorted in ascending temperature order
+> during thermal zone registration. so building a sorted list out of
+
+nit: small s
+
+> them is quite straightforward and relatively inexpensive.
+> 
+> Accordingly, make handle_thermal_trip() maintain list ordering when
+> adding trip points to the lists and get rid of separate list sorting
+> in __thermal_zone_device_update().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->
-> Changes in v4:
-> - collected tags
+>   drivers/thermal/thermal_core.c |   33 ++++++++++++++++++---------------
+>   1 file changed, 18 insertions(+), 15 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -15,7 +15,6 @@
+>   #include <linux/slab.h>
+>   #include <linux/kdev_t.h>
+>   #include <linux/idr.h>
+> -#include <linux/list_sort.h>
+>   #include <linux/thermal.h>
+>   #include <linux/reboot.h>
+>   #include <linux/string.h>
+> @@ -409,6 +408,21 @@ static void handle_critical_trips(struct
+>   		tz->ops.hot(tz);
+>   }
+>   
+> +static void add_trip_to_sorted_list(struct thermal_trip_desc *td,
+> +				    struct list_head *list)
+> +{
+> +	struct thermal_trip_desc *entry;
+> +
+> +	/* Assume that the new entry is likely to be the last one. */
+> +	list_for_each_entry_reverse(entry, list, notify_list_node) {
+> +		if (entry->notify_temp <= td->notify_temp) {
+> +			list_add(&td->notify_list_node, &entry->notify_list_node);
+> +			return;
+> +		}
+> +	}
+> +	list_add(&td->notify_list_node, list);
+> +}
+> +
+>   static void handle_thermal_trip(struct thermal_zone_device *tz,
+>   				struct thermal_trip_desc *td,
+>   				struct list_head *way_up_list,
+> @@ -438,8 +452,8 @@ static void handle_thermal_trip(struct t
+>   		 * In that case, the trip temperature becomes the new threshold.
+>   		 */
+>   		if (tz->temperature < trip->temperature - trip->hysteresis) {
+> -			list_add(&td->notify_list_node, way_down_list);
+>   			td->notify_temp = trip->temperature - trip->hysteresis;
+> +			add_trip_to_sorted_list(td, way_down_list);
+>   
+>   			if (trip->type == THERMAL_TRIP_PASSIVE) {
+>   				tz->passive--;
+> @@ -454,8 +468,9 @@ static void handle_thermal_trip(struct t
+>   		 * if the zone temperature exceeds the trip one.  The new
+>   		 * threshold is then set to the low temperature of the trip.
+>   		 */
+> -		list_add_tail(&td->notify_list_node, way_up_list);
+>   		td->notify_temp = trip->temperature;
+> +		add_trip_to_sorted_list(td, way_up_list);
+> +
+>   		td->threshold -= trip->hysteresis;
+>   
+>   		if (trip->type == THERMAL_TRIP_PASSIVE)
+> @@ -519,16 +534,6 @@ static void thermal_trip_crossed(struct
+>   	thermal_governor_trip_crossed(governor, tz, trip, crossed_up);
+>   }
+>   
+> -static int thermal_trip_notify_cmp(void *not_used, const struct list_head *a,
+> -				   const struct list_head *b)
+> -{
+> -	struct thermal_trip_desc *tda = container_of(a, struct thermal_trip_desc,
+> -						     notify_list_node);
+> -	struct thermal_trip_desc *tdb = container_of(b, struct thermal_trip_desc,
+> -						     notify_list_node);
+> -	return tda->notify_temp - tdb->notify_temp;
+> -}
+> -
+>   void __thermal_zone_device_update(struct thermal_zone_device *tz,
+>   				  enum thermal_notify_event event)
+>   {
+> @@ -581,11 +586,9 @@ void __thermal_zone_device_update(struct
+>   
+>   	thermal_zone_set_trips(tz, low, high);
+>   
+> -	list_sort(NULL, &way_up_list, thermal_trip_notify_cmp);
+>   	list_for_each_entry(td, &way_up_list, notify_list_node)
+>   		thermal_trip_crossed(tz, &td->trip, governor, true);
+>   
+> -	list_sort(NULL, &way_down_list, thermal_trip_notify_cmp);
+>   	list_for_each_entry_reverse(td, &way_down_list, notify_list_node)
+>   		thermal_trip_crossed(tz, &td->trip, governor, false);
+>   
+> 
+> 
+> 
 
-Thanks, will queue in renesas-clk for v6.13.
+Make sense, LGTM
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
