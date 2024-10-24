@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-16411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F4159AED4E
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:11:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70C479AED4C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:11:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E43171F24A52
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:11:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 367FF285AEE
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7122003A1;
-	Thu, 24 Oct 2024 17:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36E41FF05E;
+	Thu, 24 Oct 2024 17:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="M/0FCt16"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="NepmM36T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4AA1FAEF9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6AA41FAF05;
 	Thu, 24 Oct 2024 17:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729789794; cv=none; b=ZIDVZR22jhc2H7KCUJqY5HgBxdt9W4G8IaaYV+vuVgewdYSkFLQwNOt6+48xGhvOm8iY1oaSfeN9epsZnLIW/RmBdi5P84M6jYgFZkrmdpJ71rSvjQ6AKyEKHWPji+1JvHiICISn6r1amYf39MToCDzVD5/Y3ViM5shr8vS9/UI=
+	t=1729789793; cv=none; b=PvJX9hkuvIOiI/QyXxmyy440RCYtZqR1KkPqLunZG0JDPdlC0rMqwcCT8XtgDsQCwanGRpsZNW9u2mujp4mPOTUAghr+Enw78U3jIoCEzDKaO16QmD/nfKJfiE2NHZnqD8RMs43DKVfl6HMp9JjkSYFgRpCKrZLO0Y1WrOcoZZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729789794; c=relaxed/simple;
-	bh=bHPvxwNam7d5e7DDcVYjGZMshprhb5/GH93Zen2fk8E=;
+	s=arc-20240116; t=1729789793; c=relaxed/simple;
+	bh=E2aCqTy48x9i6+PsxlngJvQsrJiGAg5xpa3iVpu+v2U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dXkez1zVZEFw+vV/DUBn8PO1A7tU4mGryZ1OGXYqNmpnqAYzuuQBZyjcGR3MPTCoLz7jGTQhGxy13DZAvQ9wM48NX/mHsxS0L6wXnJ3kw4G7szOAG8sW5FST9OJFGpc2Zh3SAwSZjiB1zBrV43d52S97lJUuSHPu/zXERjLIVpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=M/0FCt16; arc=none smtp.client-ip=51.222.15.28
+	 MIME-Version; b=FoNH7FHzJIzhRQwnbuUk8UneXlNh0hF/WanJRtDV+f49Bvu6t9PlwvacH0roSvUXB51/zNQ/pQ/JQKx6mFcguYFTMx1FH9Jm5NnaqQ86kxMyK0IDgMpQW+lbzYbV689LXjlWyk5JV482d9Nh+QYfL0szGvMy8wxAQ9Xpip66khc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=NepmM36T; arc=none smtp.client-ip=51.222.15.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
 	s=default; t=1729789787;
-	bh=bHPvxwNam7d5e7DDcVYjGZMshprhb5/GH93Zen2fk8E=;
+	bh=E2aCqTy48x9i6+PsxlngJvQsrJiGAg5xpa3iVpu+v2U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=M/0FCt16IYLO4RCFOninr0W8AfJM7xH0LRnX26BHyHD6Z9K2LjBPjpu7rf9g+aw60
-	 tO20zweubmEKQAFJRexz9386imzHVMLd7xzIKkdXBtiSpJcBAvKvsHL/YzCiKIeLv/
-	 zpqy5p7VHci7nUgddWFYQ6jVDZSXhLAr0HZATdKVw6YZh34CeIf5/EzSsG2teDY+KV
-	 1TwY/LEwTw9nQEmvEOPbJWnbo6e2fPREqRFS7fTRjgcYQSb33m3BOSdXi5tTUlf+ig
-	 3dfQ+cCmqAbEaM1ZE3ZBHRx5MH/vOdETDQWErUy+f9wQ5yJTh2L6PZdtLdMHqYsT7U
-	 L0OOu7T6TI0Og==
+	b=NepmM36TzV2U6xaCSVHRU/CIYMlTPDEr4bPPeSfDbp9dXqcFssTWFuH/ZR96S3kCx
+	 fhbqR7nSuSWJBCZ6p8zjhkTmFFYg4Zk4qVg2laTKyZLqZBExxRRGUgfZyBdnb/1lbZ
+	 GrLQvfSBQCdKRMiBz2LFf5YPpnLRVglnSVo4PApQW1LttSTZCW4gG3hCmDfH3eY4QU
+	 2JKq6gcv8aK2u7TM9Bvu+oyNvnCV38F0XKu+XwzPnCmRyGgmzzwDcY1tc9+G6hsyco
+	 nLgxzq7ngs+mUJQhJHLLiytzjjLabFUFdXlIUVJLS7tVA1gjjpKfnxd3LTxdpY8+Wz
+	 LfS3wWOe/ovHQ==
 X-Virus-Scanned: by epochal.quest
 From: Cody Eksal <masterr3c0rd@epochal.quest>
 To: linux-pm@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: Cody Eksal <masterr3c0rd@epochal.quest>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Kishon Vijay Abraham I <kishon@kernel.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 09/13] arm64: allwinner: a100: Add MMC related nodes
-Date: Thu, 24 Oct 2024 14:05:27 -0300
-Message-ID: <20241024170540.2721307-10-masterr3c0rd@epochal.quest>
+Subject: [PATCH 10/13] arm64: dts: allwinner: a100: perf1: Add eMMC and MMC node
+Date: Thu, 24 Oct 2024 14:05:28 -0300
+Message-ID: <20241024170540.2721307-11-masterr3c0rd@epochal.quest>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
 References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
@@ -89,104 +89,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Yangtao Li <frank@allwinnertech.com>
 
-The A100 has 3 MMC controllers, one of them being especially targeted to
-eMMC. Let's add nodes on dts.
+A100 perf1 hava MicroSD slot and on-board eMMC module, add support for them.
 
 Signed-off-by: Yangtao Li <frank@allwinnertech.com>
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
 ---
- .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ .../allwinner/sun50i-a100-allwinner-perf1.dts    | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-index 0aee1b578661..6dca766ea222 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-@@ -169,12 +169,83 @@ pio: pinctrl@300b000 {
- 			interrupt-controller;
- 			#interrupt-cells = <3>;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+index c6d8264b91b7..29e9d24da8b6 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+@@ -39,6 +39,22 @@ &ehci1 {
+ 	status = "okay";
+ };
  
-+			mmc0_pins: mmc0-pins {
-+				pins = "PF0", "PF1", "PF2", "PF3",
-+				       "PF4", "PF5";
-+				function = "mmc0";
-+				drive-strength = <30>;
-+				bias-pull-up;
-+			};
++&mmc0 {
++	vmmc-supply = <&reg_dcdc1>;
++	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>; /* PF6 */
++	bus-width = <4>;
++	status = "okay";
++};
 +
-+			/omit-if-no-ref/
-+			mmc1_pins: mmc1-pins {
-+				pins = "PG0", "PG1", "PG2", "PG3",
-+				       "PG4", "PG5";
-+				function = "mmc1";
-+				drive-strength = <30>;
-+				bias-pull-up;
-+			};
++&mmc2 {
++	vmmc-supply = <&reg_dcdc1>;
++	vqmmc-supply = <&reg_aldo1>;
++	cap-mmc-hw-reset;
++	non-removable;
++	bus-width = <8>;
++	status = "okay";
++};
 +
-+			mmc2_pins: mmc2-pins {
-+				pins = "PC0", "PC1", "PC5", "PC6",
-+				       "PC8", "PC9", "PC10", "PC11",
-+				       "PC13", "PC14", "PC15", "PC16";
-+				function = "mmc2";
-+				drive-strength = <30>;
-+				bias-pull-up;
-+			};
-+
- 			uart0_pb_pins: uart0-pb-pins {
- 				pins = "PB9", "PB10";
- 				function = "uart0";
- 			};
- 		};
- 
-+		mmc0: mmc@4020000 {
-+			compatible = "allwinner,sun50i-a100-mmc";
-+			reg = <0x04020000 0x1000>;
-+			clocks = <&ccu CLK_BUS_MMC0>, <&ccu CLK_MMC0>;
-+			clock-names = "ahb", "mmc";
-+			resets = <&ccu RST_BUS_MMC0>;
-+			reset-names = "ahb";
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&mmc0_pins>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		mmc1: mmc@4021000 {
-+			compatible = "allwinner,sun50i-a100-mmc";
-+			reg = <0x04021000 0x1000>;
-+			clocks = <&ccu CLK_BUS_MMC1>, <&ccu CLK_MMC1>;
-+			clock-names = "ahb", "mmc";
-+			resets = <&ccu RST_BUS_MMC1>;
-+			reset-names = "ahb";
-+			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&mmc1_pins>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		mmc2: mmc@4022000 {
-+			compatible = "allwinner,sun50i-a100-emmc";
-+			reg = <0x04022000 0x1000>;
-+			clocks = <&ccu CLK_BUS_MMC2>, <&ccu CLK_MMC2>;
-+			clock-names = "ahb", "mmc";
-+			resets = <&ccu RST_BUS_MMC2>;
-+			reset-names = "ahb";
-+			interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&mmc2_pins>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
- 		uart0: serial@5000000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x05000000 0x400>;
+ &ohci0 {
+ 	status = "okay";
+ };
 -- 
 2.47.0
 
