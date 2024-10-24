@@ -1,118 +1,115 @@
-Return-Path: <linux-pm+bounces-16401-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16402-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AE339AEC6F
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 18:43:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B0E39AECB6
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 18:54:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D39002835F9
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 16:43:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCFF91C23011
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 16:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE3D1F819C;
-	Thu, 24 Oct 2024 16:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFFD51F76CE;
+	Thu, 24 Oct 2024 16:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IG7HQTAf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JG7Fb6Zd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A994E1D516F
-	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 16:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53665FEED
+	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 16:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729788220; cv=none; b=uLUpF2jAJd/xMedfVT9oz1Umr5l2K/LxOpzev5O82tVpGhcywt1BFQf8Nqr6YRiyGPnDUih/npF4gIbCsUvdQke9iMOPx8GKIiIFzei+v07xDkvhXYhISWjMMS+6gx8KEnBjMCxZ6p1830OzP3YQ0cSl1Hf8XMOM6YeNJPX2QWE=
+	t=1729788871; cv=none; b=Q3krLLUDjMCbjKn0YId0Pskk1y65RfjJ7TjfGfDFzJuJS/W5qO3qK+92VpTK8NcW0bNwloKfIAkerti5mAnrpRApkQYArmxcYdUGqaJIxUGx20phtktBTASgeAr3Ml5kAOSjptsyXypWNMBoirOXG6vKtWvIMvyw+uWP0AfM0/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729788220; c=relaxed/simple;
-	bh=8F9QFJExKoZV3r+Rq2rjzvex3k1W8OlRSebBJR5UDfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MmwN7KuCuQE7k8KvQKZZf1rB04Wbn5xkBnl2W31PwoUX6qq0ykxqQQ3Q1dG9V1tefp8reT+m2Zm3i8s1cTYoAVcr79vOw8ZZ1iKyYDvcv8deIpaLHazZVbmBGKXUYATlM92CciHiZNTyWxlUcX5u9eBoNO6RZgpHilQPDWxg/Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IG7HQTAf; arc=none smtp.client-ip=209.85.167.46
+	s=arc-20240116; t=1729788871; c=relaxed/simple;
+	bh=aLx7QG6uY3rZrJhStO1VgJs4ypcvdpgfHRjqSN9+C3M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Et6cIMvuURylftn7gC6zEhU+oq/HT2CqpDBmXVH0Wx6o5GDYjZ0s1T5rMlH/9qSaVWYgFUHzHV00XlN6TD0k3j0NQAErWFZfuYUjmVy1ynChTkB88ZVBDF0KvmDaxtdH5FsZXaZFSO4TkcAMpojX8zmVJ3XBQ9Ers5+AdhEGRjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JG7Fb6Zd; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539f4d8ef84so1486680e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 09:43:38 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43155abaf0bso12047505e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 09:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729788217; x=1730393017; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ1SKosq4ME4LnGhVk58FZ+AQNbmaKvUFJtbb88J6AI=;
-        b=IG7HQTAfTmoTqfjD2vc1AzMv32y4BN4wbY8vkY/Fmo36qOp19T5IYYbWbhDuEQO4H+
-         04nGQwD9l9JDApdkYuEoeNUNIoG0fYJXWtu59lU+Nr7EmVu7AryUg5jkNo7kw9oUkTuJ
-         uB5ovI51cBhyjhqeDntb6PtZHZRFdvLe06CJoZmBFf91apwBnSTqxEU79HY+w6gJavyN
-         mCFimj7uSfG3CAYfglkoAptUZmfDUvHNnJFvCy375Pej4TToAg/rBOYilEYte5JWUB+y
-         dqPRrnvk8OLYs1zyImSImvhxH0HX6fR4szDtqwzr7VuyfhrITqYlquR4U9m3klIP+as0
-         iUzg==
+        d=linaro.org; s=google; t=1729788868; x=1730393668; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Eg+iruVMbHZEdj0Scj2SHzkcTg3IW3N7WkF7hnD85K0=;
+        b=JG7Fb6ZdW3t2o0DTq6j5vgS8JeABPw2phTlUzYYJ4Hzfon/OQw8Z8RP/Bnx+5vtC2m
+         ch2eYPJkIpKPdK+ZhYqSfhbUy+c4GFIYs0hge42s2M5CcaNlWw1qY8VUe5Hpb1mPrCpI
+         UecdfTTAeu0KO63gaVUXOm96i8b4hfGyYqGsvMbuscPanghHbbwZYwQwALvZ8jI/k9Ml
+         894e/BnUvjFlF6/zXGI1z9ZBq5skZQfdgMH8Hsxvk1sXUlgF7BCH64bINUwsGAhIj78x
+         MfK7315gR8hAASr4XifElEkjq7PB8edQ7fzyqrPLuXPGtsjLmPEeEZsU5XrMzEnzggeA
+         4q5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729788217; x=1730393017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OJ1SKosq4ME4LnGhVk58FZ+AQNbmaKvUFJtbb88J6AI=;
-        b=sXwscrXGDFM02+U45EpR59XkWbmwKc9acy6AAPm1+yiSe/YjguJZV6mR4T7I4Gaqse
-         59Yzi3nDYtFpA3nL6Fnr/jw4BRcIb5axxsVnNFsIoDdb+S8wUq2DBiYQe/VCpoSRxsZS
-         t35JtXhTJIpvNp/Xn9HGswNeJEPTyNSbFcIBEjSbRccGCUTAvXfC7MnPbX/KiQcmzX+5
-         oFb0Da1GtmwdCPSzBcrUDcFDMQOMK/SnddCSbvjtQ9aWAit9guux2rkGo6SSDAd6C1mv
-         HfvRff/6yFUtnmIQApcwC6pGxE3XojRfRawpWzWUPb5LwAcanukZccmgNwI07zJg8btm
-         IVDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVv93R2hIlBA38G8rBTq1FLSXrut10yWltCJlYZaSfyl+uo46QumnrkBzN1gaTRCSCvdBUpkuVW2g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzjuryc2nKj6b/k4qpyV0CvzJBKnA32sBarLW9TDz4MCZzizjMu
-	67KSEdbhFAJ4PXmODKRVSTqRRkjH3ZTB0zgtfbOw6YPKz0Y7L8Y6xvzmM6EEG2Y3qcaWgFhUkcq
-	m
-X-Google-Smtp-Source: AGHT+IGqxDW1aVzfP3ZwgHH7zEX+7npkKOr1iS17LNwryQzLKB8dUp7DKzbSY+FS9fVaAgULTErNCw==
-X-Received: by 2002:a05:6512:31c8:b0:53a:40e:d53d with SMTP id 2adb3069b0e04-53b1a31dceamr3760576e87.13.1729788216765;
-        Thu, 24 Oct 2024 09:43:36 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a2242fbaesm1391572e87.182.2024.10.24.09.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 09:43:35 -0700 (PDT)
-Date: Thu, 24 Oct 2024 19:43:32 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Johan Hovold <johan+linaro@kernel.org>, 
-	Kalle Valo <kvalo@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Steev Klimaszewski <steev@kali.org>
-Subject: Re: [PATCH v6 5/6] arm64: dts: qcom: sc8280xp-x13s: model the PMU of
- the on-board wcn6855
-Message-ID: <v4qfooxof2zddlpgp5wegqkzqvbickk3ogrlz2ku7s53u3f62c@ylowkeentghm>
-References: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
- <20241018-sc8280xp-pwrseq-v6-5-8da8310d9564@linaro.org>
+        d=1e100.net; s=20230601; t=1729788868; x=1730393668;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eg+iruVMbHZEdj0Scj2SHzkcTg3IW3N7WkF7hnD85K0=;
+        b=bn3dI/oo4tsPERw+3a68+eLvKk4Q2u7U+4ctUSEVEmYukrCdeDUVV7WOyEOHShUrET
+         ES8gH6rI+wGeu6Hstz60v/cU8vHHUCYTkhFZLC7Oh1Fczgl6Ye/THyexTCxz9PfbPJev
+         XaZVDAB0SkxLf2zwVFyhO9P4V+BnpsIFQR2LAmn+wUSBu/EDKFBvIQ3UndMw5rDLf7DA
+         gdCA560hruH8Lq4L9XT6ZS9uqO3+0aotyJMDnnP2GrJcFzsbk5elX/+pOpSaN8N6d1T4
+         A5OQv7Ngk9HkpeowMj+ohvhJckGCk9d+qCUg7VNmpWOPSBPrSib+3WXG1o3YprX1e5DK
+         kRbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXEQ72n9tdQXKC2cSXWQe+bDsI0yFD0nHDwLYDhx8lfVSvd/Bo6pBrmCYhgbffsWVvhIwFZE0hQBw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoMYeBg+0ep85DJyq9KLG1oZD+FmRC5N3ZQZEjt503Mzvvy8iB
+	RwH467t8CY9u732vyZHF+6sYqeCFrSN4/CgvbTndLHvPsnZitVfC1iN+/mqeLag=
+X-Google-Smtp-Source: AGHT+IHRhetOY+GKLKLp0oFrYUIja4ZNjkEHbsFvHWSLLr6AEUKGn86j8jttfbFPxFSow44v5ZAQMg==
+X-Received: by 2002:a05:600c:4fce:b0:431:5533:8f0c with SMTP id 5b1f17b1804b1-4318425fb2bmr62248085e9.29.1729788867920;
+        Thu, 24 Oct 2024 09:54:27 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-37ee0b94363sm11788307f8f.73.2024.10.24.09.54.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2024 09:54:27 -0700 (PDT)
+Message-ID: <6de4bf6c-ed59-4d32-9e26-19309c8ab543@linaro.org>
+Date: Thu, 24 Oct 2024 18:54:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241018-sc8280xp-pwrseq-v6-5-8da8310d9564@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal/lib: Fix memory leak on error in
+ thermal_genl_auto()
+To: Markus Elfring <Markus.Elfring@web.de>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Zhang Rui <rui.zhang@intel.com>
+References: <20241024105938.1095358-1-daniel.lezcano@linaro.org>
+ <45265aca-7371-455f-819f-c4d68cbb089b@web.de>
+ <9ba3fa17-57c3-41e9-9e19-33fa105a179e@linaro.org>
+ <CAJZ5v0jWGdzakj8ob2otAO6auwGBvVsewujG-d9b1Z5nnO7Vkw@mail.gmail.com>
+ <03a4edf1-9562-49fd-81fe-d96f46a41d28@linaro.org>
+ <d8623fe7-3035-4c61-ab8c-502e3b33ecdc@web.de>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <d8623fe7-3035-4c61-ab8c-502e3b33ecdc@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 18, 2024 at 02:49:15PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 24/10/2024 17:19, Markus Elfring wrote:
+>> For correctness, I'll send a V2 with the return fixed
 > 
-> Add a node for the PMU of the WCN6855 and rework the inputs of the wifi
-> and bluetooth nodes to consume the PMU's outputs.
-> 
-> With this we can drop the regulator-always-on properties from vreg_s11b
-> and vreg_s12b as they will now be enabled by the power sequencing
-> driver.
-> 
-> Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     | 103 ++++++++++++++++++---
->  1 file changed, 89 insertions(+), 14 deletions(-)
-> 
+> Would you become similarly interested to increase the application of
+> scope-based resource management also for the affected software component?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Yes, I know it exist but I did not take the time to read the 
+documentation, neither had the reflex to take care of that. Something I 
+have to do :)
+
+It seems like this function is a good candidate :)
 
 -- 
-With best wishes
-Dmitry
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
