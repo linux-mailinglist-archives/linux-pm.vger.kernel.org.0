@@ -1,224 +1,198 @@
-Return-Path: <linux-pm+bounces-16333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D519AD76C
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 00:19:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 164849AD9FE
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 04:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B1C6283CF2
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2024 22:19:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B773B2240C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 02:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48BB1EF0A3;
-	Wed, 23 Oct 2024 22:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWSINJG9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D2D14B07A;
+	Thu, 24 Oct 2024 02:41:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF05313B7BE;
-	Wed, 23 Oct 2024 22:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D69155393;
+	Thu, 24 Oct 2024 02:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729721946; cv=none; b=uv2SE3k6p6kGAwvO4P4QajjP2wfHLz2SDb9EfnmtRvfQxhRhZ5BXaCc1BZpLqty3fbTHMmAMCxXolGVJKknTa3K8P6iac/9VFpALaOi7dcjGE9hIOen5mmkTq8xI1h+dbXI5xq11LvfRA7Cd2Fg9IbcONz7/GKi/LJq2VXC7X0s=
+	t=1729737668; cv=none; b=R6NzAW1m1QAgNFgO3hKX6/ie8eEkpY3ptX/52pvzUWWnYjmSHIMDlPQPRs1gAkqePXSRsSZ+hMp5nbal+7SuoVO7qfYlf2J8oXWBoVsI6hkQ7OOLQ3QXOqGvJKdEvmTWMub91oEHfU/Z85M1esom6NQU0614yVpvyp37x0Qf+8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729721946; c=relaxed/simple;
-	bh=I73ivlORiJQNQAjjmtiuUrtSB1iB0qF3Jq3zae69XQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=TefA5REnRNDT2qtrOOfDVzcxITsQAL669QVKW6oBLCYOHfvW81RbK4QRWCT6HkIUwmvasbzqRSeeEspVC1jmpwYitw+/fwLwZ3tjUDlhirMxrkCSPAtGv3W77uXa2uUJg0qnx6IzLrT4nCvcFX3RU7tGon5/Xp6YWcnIP93/tCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWSINJG9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17917C4CECC;
-	Wed, 23 Oct 2024 22:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729721946;
-	bh=I73ivlORiJQNQAjjmtiuUrtSB1iB0qF3Jq3zae69XQQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=AWSINJG9BVL8+198yIJr+h1RVZyNmhXfhauqoN7adhej1AxmIB6WPLj6Gm6Eu5T4w
-	 aw4LziqiTl3zIHZVPtIOzPDUb0SH7npKnjgxmYvmRV5FpX6HXanu20Kf4LxnSFq+p1
-	 GEtzuYLTfzYgnBnR053KVtj3/gliXvNOF4hDaRSjJ+8hMdxwopoQ2uF8s6jLIkfzrR
-	 KpAR2zlGdzhWqhzEivzpaIrQK8NrIReCjCU3ZfotqzReKUuE/AZmlBSJ+kXn704Orh
-	 Wrsv5Qgnw6MdKjeXmRpfuMxQRURyFjkxUycPc15yQR7w7Kqfx4p2OQZ8O9vMssDSVV
-	 hBJDN6ikfVxzg==
-Date: Wed, 23 Oct 2024 17:19:04 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	s=arc-20240116; t=1729737668; c=relaxed/simple;
+	bh=ym8aAXWzWle8rBcGCn/kYZtEJK/5W23MqG0KAYxeHYE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=B3jmeTJypDu3aqRmTvfIjuw8OL9+37hT53Sy45r4Ck2TTKpvMf2aoK2zUW7LkRsDqI4Y9cwI93smxZ/wb40Cr8M5lm/1Kzs0W2nAhzPLEaDH+oq0ZHjSNAggHivZSNwyf5YjOLckAaM5ngyYX1mKb30k1wHS8lSmshDRYlsij1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 655aaa8e91b111efa216b1d71e6e1362-20241024
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI, GTI_FG_IT
+	GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI
+	AMN_C_BU, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:e1ec8d60-5982-423d-b721-47b44e7ba45d,IP:25,
+	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-9
+X-CID-INFO: VERSION:1.1.38,REQID:e1ec8d60-5982-423d-b721-47b44e7ba45d,IP:25,UR
+	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-9
+X-CID-META: VersionHash:82c5f88,CLOUDID:0770ba406bcedb27ac5401b646740f2c,BulkI
+	D:2410241040578O4XH4Y4,BulkQuantity:0,Recheck:0,SF:24|17|19|43|74|66|841|3
+	8|102,TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
+	TF_CID_SPAM_ULS
+X-UUID: 655aaa8e91b111efa216b1d71e6e1362-20241024
+X-User: duanchenghao@kylinos.cn
+Received: from chenghao.. [(39.156.73.13)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 2121517158; Thu, 24 Oct 2024 10:40:56 +0800
+From: Duan Chenghao <duanchenghao@kylinos.cn>
+To: duanchenghao@kylinos.cn,
+	stern@rowland.harvard.edu
+Cc: saranya.gopal@intel.com,
+	gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v9 0/9] PCI: Add PCIe bandwidth controller
-Message-ID: <20241023221904.GA941054@bhelgaas>
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	niko.mauno@vaisala.com,
+	pavel@ucw.cz,
+	rafael@kernel.org,
+	stanley_chang@realtek.com,
+	tj@kernel.org,
+	xiehongyu1@kylinos.cn,
+	xy521521@gmail.com,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH v4] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
+Date: Thu, 24 Oct 2024 10:40:38 +0800
+Message-Id: <20241024024038.26157-1-duanchenghao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
+References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
 
-On Fri, Oct 18, 2024 at 05:47:46PM +0300, Ilpo Järvinen wrote:
-> Hi all,
-> 
-> This series adds PCIe bandwidth controller (bwctrl) and associated PCIe
-> cooling driver to the thermal core side for limiting PCIe Link Speed
-> due to thermal reasons. PCIe bandwidth controller is a PCI express bus
-> port service driver. A cooling device is created for each port the
-> service driver finds to support changing speeds.
-> 
-> This series only adds support for controlling PCIe Link Speed.
-> Controlling PCIe Link Width might also be useful but there is no
-> mechanism for that until PCIe 6.0 (L0p) so Link Width throttling is not
-> added by this series.
-> 
-> 
-> v9:
-> - Split RMW ops doc reformat into own patch before adding LNKCTL2.
-> - Comment reserved 0 LSB even better than it already was.
-> - Consider portdrv future plans:
-> 	- Use devm helpers for mem alloc, IRQ, and mutex init.
-> 	- Don't use get/set_service_data().
-> - Split rwsem into two to avoid recursive locking splat through
->   pcie_retrain_link().
-> - Small wording improvements to commit messages (from Jonathan)
-> 
-> v8:
-> - Removed CONFIG_PCIE_BWCTRL (use CONFIG_PCIEPORTBUS)
-> - Removed locking wrappers that dealt with the CONFIG variations
-> - Protect macro parameter with parenthesis to be on the safe side
-> 
-> v7:
-> - Rebased on top of Maciej's latest Target Speed quirk patches
-> - Target Speed quirk runs very early, w/o ->subordinate existing yet.
->   This required adapting logic:
-> 	- Move Supported Link Speeds back to pci_dev
-> 	- Check for ->subordinate == NULL where necessary
-> 	- Cannot always take bwctrl's per port mutex (in pcie_bwctrl_data)
-> - Cleaned up locking in pcie_set_target_speed() using wrappers
-> 	- Allowed removing confusing __pcie_set_target_speed()
-> - Fix building with CONFIG_PCI=n
-> - Correct error check in pcie_lbms_seen()
-> - Don't return error for an empty bus that remains at 2.5GT
-> - Use rwsem to protect ->link_bwctrl setup and bwnotif enable
-> - Clear LBMS in remove_board()
-> - Adding export for pcie_get_supported_speeds() was unnecessary
-> - Call bwctrl's init before hotplug.
-> - Added local variable 'bus' into a few functions
-> 
-> v6:
-> - Removed unnecessary PCI_EXP_LNKCAP_SLS mask from PCIE_LNKCAP_SLS2SPEED()
-> - Split error handling in pcie_bwnotif_irq_thread()
-> - pci_info() -> pci_dbg() on bwctrl probe success path
-> - Handle cooling device pointer -Exx codes in bwctrl probe
-> - Reorder port->link_bwctrl setup / bwnotif enable for symmetry
-> - Handle LBMS count == 0 in PCIe quirk by checking LBMS (avoids a race
->   between quirk and bwctrl)
-> - Use cleanup.h in PCIe cooling device's register
-> 
-> v5:
-> - Removed patches: LNKCTL2 RMW driver patches went in separately
-> - Refactor pcie_update_link_speed() to read LNKSTA + add __ variant
->   for hotplug that has LNKSTA value at hand
-> - Make series fully compatible with the Target Speed quirk
-> 	- LBMS counter added, quirk falls back to LBMS bit when bwctrl =n
-> 	- Separate LBMS patch from set target speed patches
-> - Always provide pcie_bwctrl_change_speed() even if bwctrl =n so drivers
->   don't need to come up their own version (also required by the Target
->   Speed quirk)
-> - Remove devm_* (based on Lukas' comment on some other service
->   driver patch)
-> - Convert to use cleanup.h
-> - Renamed functions/struct to have shorter names
-> 
-> v4:
-> - Merge Port's and Endpoint's Supported Link Speeds Vectors into
->   supported_speeds in the struct pci_bus
-> - Reuse pcie_get_speed_cap()'s code for pcie_get_supported_speeds()
-> - Setup supported_speeds with PCI_EXP_LNKCAP2_SLS_2_5GB when no
->   Endpoint exists
-> - Squash revert + add bwctrl patches into one
-> - Change to use threaded IRQ + IRQF_ONESHOT
-> - Enable also LABIE / LABS
-> - Convert Link Speed selection to use bit logic instead of loop
-> - Allocate before requesting IRQ during probe
-> - Use devm_*()
-> - Use u8 for speed_conv array instead of u16
-> - Removed READ_ONCE()
-> - Improve changelogs, comments, and Kconfig
-> - Name functions slightly more consistently
-> - Use bullet list for RMW protected registers in docs
-> 
-> v3:
-> - Correct hfi1 shortlog prefix
-> - Improve error prints in hfi1
-> - Add L: linux-pci to the MAINTAINERS entry
-> 
-> v2:
-> - Adds LNKCTL2 to RMW safe list in Documentation/PCI/pciebus-howto.rst
-> - Renamed cooling devices from PCIe_Port_* to PCIe_Port_Link_Speed_* in
->   order to plan for possibility of adding Link Width cooling devices
->   later on
-> - Moved struct thermal_cooling_device declaration to the correct patch
-> - Small tweaks to Kconfig texts
-> - Series rebased to resolve conflict (in the selftest list)
-> 
-> Ilpo Järvinen (9):
->   Documentation PCI: Reformat RMW ops documentation
->   PCI: Protect Link Control 2 Register with RMW locking
->   PCI: Store all PCIe Supported Link Speeds
->   PCI: Refactor pcie_update_link_speed()
->   PCI/quirks: Abstract LBMS seen check into own function
->   PCI/bwctrl: Re-add BW notification portdrv as PCIe BW controller
->   PCI/bwctrl: Add API to set PCIe Link Speed
->   thermal: Add PCIe cooling driver
->   selftests/pcie_bwctrl: Create selftests
-> 
->  Documentation/PCI/pciebus-howto.rst           |  14 +-
->  MAINTAINERS                                   |   9 +
->  drivers/pci/hotplug/pciehp_ctrl.c             |   5 +
->  drivers/pci/hotplug/pciehp_hpc.c              |   2 +-
->  drivers/pci/pci.c                             |  62 ++-
->  drivers/pci/pci.h                             |  38 +-
->  drivers/pci/pcie/Makefile                     |   2 +-
->  drivers/pci/pcie/bwctrl.c                     | 366 ++++++++++++++++++
->  drivers/pci/pcie/portdrv.c                    |   9 +-
->  drivers/pci/pcie/portdrv.h                    |   6 +-
->  drivers/pci/probe.c                           |  15 +-
->  drivers/pci/quirks.c                          |  32 +-
->  drivers/thermal/Kconfig                       |   9 +
->  drivers/thermal/Makefile                      |   2 +
->  drivers/thermal/pcie_cooling.c                |  80 ++++
->  include/linux/pci-bwctrl.h                    |  28 ++
->  include/linux/pci.h                           |  24 +-
->  include/uapi/linux/pci_regs.h                 |   1 +
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
->  .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++
->  .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++
->  22 files changed, 843 insertions(+), 53 deletions(-)
->  create mode 100644 drivers/pci/pcie/bwctrl.c
->  create mode 100644 drivers/thermal/pcie_cooling.c
->  create mode 100644 include/linux/pci-bwctrl.h
->  create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
->  create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
->  create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+When a device is inserted into the USB port and an S4 wakeup is initiated,
+after the USB-hub initialization is completed, it will automatically enter
+suspend mode. Upon detecting a device on the USB port, it will proceed with
+resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state. During the S4
+wakeup process, peripherals are put into suspend mode, followed by task
+recovery. However, upon detecting that the hcd is in the
+HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status, causing the
+S4 suspend to fail and subsequent task recovery to not proceed.
+-
+[   27.594598][ 1]  PM: pci_pm_freeze(): hcd_pci_suspend+0x0/0x28 returns -16
+[   27.594601][ 1]  PM: dpm_run_callback(): pci_pm_freeze+0x0/0x100 returns -16
+[   27.603420][ 1]  ehci-pci 0000:00:04.1: pci_pm_freeze+0x0/0x100 returned 0 after 3 usecs
+[   27.612233][ 1]  ehci-pci 0000:00:05.1: pci_pm_freeze+0x0/0x100 returned -16 after 17223 usecs
+[   27.810067][ 1]  PM: Device 0000:00:05.1 failed to quiesce async: error -16
+[   27.816988][ 1]  PM: quiesce of devices aborted after 1833.282 msecs
+[   27.823302][ 1]  PM: start quiesce of devices aborted after 1839.975 msecs
+......
+[   31.303172][ 1]  PM: recover of devices complete after 3473.039 msecs
+[   31.309818][ 1]  PM: Failed to load hibernation image, recovering.
+[   31.348188][ 1]  PM: Basic memory bitmaps freed
+[   31.352686][ 1]  OOM killer enabled.
+[   31.356232][ 1]  Restarting tasks ... done.
+[   31.360609][ 1]  PM: resume from hibernation failed (0)
+[   31.365800][ 1]  PM: Hibernation image not present or could not be loaded.
 
-Applied to pci/bwctrl for v6.13, thanks Ilpo (and Alexandru, for the
-bandwidth notification interrupt support)!
+The "do_wakeup" is determined based on whether the controller's
+power/wakeup attribute is set. The current issue necessitates considering
+the type of suspend that is occurring. If the suspend type is either
+PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should be set to
+false.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@intel.com/
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+---
+ drivers/usb/core/hcd-pci.c | 15 +++++++++++++--
+ include/linux/pm.h         |  3 ++-
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index a08f3f228e6d..390b1225f3cc 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -422,7 +422,12 @@ static int suspend_common(struct device *dev, pm_message_t msg)
+ 	bool			do_wakeup;
+ 	int			retval;
+ 
+-	do_wakeup = PMSG_IS_AUTO(msg) ? true : device_may_wakeup(dev);
++	if (PMSG_IS_AUTO(msg))
++		do_wakeup = true;
++	else if (PMSG_NO_WAKEUP(msg))
++		do_wakeup = false;
++	else
++		do_wakeup = device_may_wakeup(dev);
+ 
+ 	/* Root hub suspend should have stopped all downstream traffic,
+ 	 * and all bus master traffic.  And done so for both the interface
+@@ -521,6 +526,11 @@ static int hcd_pci_suspend(struct device *dev)
+ 	return suspend_common(dev, PMSG_SUSPEND);
+ }
+ 
++static int hcd_pci_freeze(struct device *dev)
++{
++	return suspend_common(dev, PMSG_FREEZE);
++}
++
+ static int hcd_pci_suspend_noirq(struct device *dev)
+ {
+ 	struct pci_dev		*pci_dev = to_pci_dev(dev);
+@@ -590,6 +600,7 @@ static int hcd_pci_restore(struct device *dev)
+ #else
+ 
+ #define hcd_pci_suspend		NULL
++#define hcd_pci_freeze			NULL
+ #define hcd_pci_suspend_noirq	NULL
+ #define hcd_pci_poweroff_late	NULL
+ #define hcd_pci_resume_noirq	NULL
+@@ -624,7 +635,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+ 	.suspend_noirq	= hcd_pci_suspend_noirq,
+ 	.resume_noirq	= hcd_pci_resume_noirq,
+ 	.resume		= hcd_pci_resume,
+-	.freeze		= hcd_pci_suspend,
++	.freeze		= hcd_pci_freeze,
+ 	.freeze_noirq	= check_root_hub_suspended,
+ 	.thaw_noirq	= NULL,
+ 	.thaw		= hcd_pci_resume,
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 97b0e23363c8..2a676b2cb699 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -570,7 +570,8 @@ const struct dev_pm_ops name = { \
+ 					{ .event = PM_EVENT_AUTO_RESUME, })
+ 
+ #define PMSG_IS_AUTO(msg)	(((msg).event & PM_EVENT_AUTO) != 0)
+-
++#define PMSG_NO_WAKEUP(msg)	(((msg).event & \
++				(PM_EVENT_FREEZE | PM_EVENT_QUIESCE)) != 0)
+ /*
+  * Device run-time power management status.
+  *
+-- 
+2.34.1
+
 
