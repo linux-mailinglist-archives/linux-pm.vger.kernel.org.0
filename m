@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-16407-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16411-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 019709AED40
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:10:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F4159AED4E
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E1928514C
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:10:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E43171F24A52
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03BB41FC7FD;
-	Thu, 24 Oct 2024 17:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7122003A1;
+	Thu, 24 Oct 2024 17:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="TYpnzYM6"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="M/0FCt16"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14A11FAF00;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4AA1FAEF9;
 	Thu, 24 Oct 2024 17:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729789792; cv=none; b=ACVh3S9bq/IexF61wbrFMXKSObQz8srKflyvmr1ntXtWhwrZ0Zj7kpqMz8dKMQIq8wet7yO+JCl/xd1aDc34vJcuKzZVu+lumr9rS5OyuI0Ri61paeA8W/LwedfjFuUhCORkj5+Y05I7Ljsxhc04WEJT5e9JLynkHjWVIcRlwOw=
+	t=1729789794; cv=none; b=ZIDVZR22jhc2H7KCUJqY5HgBxdt9W4G8IaaYV+vuVgewdYSkFLQwNOt6+48xGhvOm8iY1oaSfeN9epsZnLIW/RmBdi5P84M6jYgFZkrmdpJ71rSvjQ6AKyEKHWPji+1JvHiICISn6r1amYf39MToCDzVD5/Y3ViM5shr8vS9/UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729789792; c=relaxed/simple;
-	bh=uyVlu0mrU5giK8mByMabW5323mqDUvUUrK92udeSLP4=;
+	s=arc-20240116; t=1729789794; c=relaxed/simple;
+	bh=bHPvxwNam7d5e7DDcVYjGZMshprhb5/GH93Zen2fk8E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hMftITYigKtNtORV4P7BUNzP0BOEV7vZc7fBlA6kCmP5vCJR8BDtw7YZwfSdOejuxntKmVeCodX+ZFkeyd5VGwS5DDyINaS7FJrs3jdpPWlHShUPf+MFUQOhnU4X7QxCCPXKR9efBYr0EdGo7Zaqz319TM/XYFyf1AjZSSaYdoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=TYpnzYM6; arc=none smtp.client-ip=51.222.15.28
+	 MIME-Version; b=dXkez1zVZEFw+vV/DUBn8PO1A7tU4mGryZ1OGXYqNmpnqAYzuuQBZyjcGR3MPTCoLz7jGTQhGxy13DZAvQ9wM48NX/mHsxS0L6wXnJ3kw4G7szOAG8sW5FST9OJFGpc2Zh3SAwSZjiB1zBrV43d52S97lJUuSHPu/zXERjLIVpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=M/0FCt16; arc=none smtp.client-ip=51.222.15.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
-	s=default; t=1729789786;
-	bh=uyVlu0mrU5giK8mByMabW5323mqDUvUUrK92udeSLP4=;
+	s=default; t=1729789787;
+	bh=bHPvxwNam7d5e7DDcVYjGZMshprhb5/GH93Zen2fk8E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TYpnzYM6Nsgb3H2I2pZjXhQGGCagJ5EygyfXnDxW07DZFpZ5LGeG1SnU5zczXZKYJ
-	 cWcf6Y/gbU/AIxClBs3VbAgTFlSU4A1kgGqs5u+TYM6wys37/6jqlM3BN6J15h9And
-	 gd4smAwOhFF/WOoRlE55n2N5+1ZxPdsT8aubCNWSCVhQVQ01Uc1L+PfJJKPNS33FYt
-	 tUehpu6PhxJn+IvwNQ8lnJBxFPPmJ4VWQAQ4eepcX0InkXjQ/pjRttcHEoWVr5zrzQ
-	 XjwalF8LXBeF9DFbVl2bX6hlItiZXqLGcN5rKYQIx8u1NNtcqaw/csNHplRheiBlpO
-	 vtWpx5PYQmlSw==
+	b=M/0FCt16IYLO4RCFOninr0W8AfJM7xH0LRnX26BHyHD6Z9K2LjBPjpu7rf9g+aw60
+	 tO20zweubmEKQAFJRexz9386imzHVMLd7xzIKkdXBtiSpJcBAvKvsHL/YzCiKIeLv/
+	 zpqy5p7VHci7nUgddWFYQ6jVDZSXhLAr0HZATdKVw6YZh34CeIf5/EzSsG2teDY+KV
+	 1TwY/LEwTw9nQEmvEOPbJWnbo6e2fPREqRFS7fTRjgcYQSb33m3BOSdXi5tTUlf+ig
+	 3dfQ+cCmqAbEaM1ZE3ZBHRx5MH/vOdETDQWErUy+f9wQ5yJTh2L6PZdtLdMHqYsT7U
+	 L0OOu7T6TI0Og==
 X-Virus-Scanned: by epochal.quest
 From: Cody Eksal <masterr3c0rd@epochal.quest>
 To: linux-pm@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: Cody Eksal <masterr3c0rd@epochal.quest>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Kishon Vijay Abraham I <kishon@kernel.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 08/13] arm64: allwinner: A100: enable EHCI, OHCI and USB PHY nodes in Perf1
-Date: Thu, 24 Oct 2024 14:05:26 -0300
-Message-ID: <20241024170540.2721307-9-masterr3c0rd@epochal.quest>
+Subject: [PATCH 09/13] arm64: allwinner: a100: Add MMC related nodes
+Date: Thu, 24 Oct 2024 14:05:27 -0300
+Message-ID: <20241024170540.2721307-10-masterr3c0rd@epochal.quest>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
 References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
@@ -89,74 +89,104 @@ Content-Transfer-Encoding: 8bit
 
 From: Yangtao Li <frank@allwinnertech.com>
 
-Add USB support on A100 perf1 board, which include two USB2.0 port.
+The A100 has 3 MMC controllers, one of them being especially targeted to
+eMMC. Let's add nodes on dts.
 
 Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
 ---
- .../allwinner/sun50i-a100-allwinner-perf1.dts | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-index f5c5c1464482..c6d8264b91b7 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-@@ -7,6 +7,8 @@
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+index 0aee1b578661..6dca766ea222 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+@@ -169,12 +169,83 @@ pio: pinctrl@300b000 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <3>;
  
- #include "sun50i-a100.dtsi"
++			mmc0_pins: mmc0-pins {
++				pins = "PF0", "PF1", "PF2", "PF3",
++				       "PF4", "PF5";
++				function = "mmc0";
++				drive-strength = <30>;
++				bias-pull-up;
++			};
++
++			/omit-if-no-ref/
++			mmc1_pins: mmc1-pins {
++				pins = "PG0", "PG1", "PG2", "PG3",
++				       "PG4", "PG5";
++				function = "mmc1";
++				drive-strength = <30>;
++				bias-pull-up;
++			};
++
++			mmc2_pins: mmc2-pins {
++				pins = "PC0", "PC1", "PC5", "PC6",
++				       "PC8", "PC9", "PC10", "PC11",
++				       "PC13", "PC14", "PC15", "PC16";
++				function = "mmc2";
++				drive-strength = <30>;
++				bias-pull-up;
++			};
++
+ 			uart0_pb_pins: uart0-pb-pins {
+ 				pins = "PB9", "PB10";
+ 				function = "uart0";
+ 			};
+ 		};
  
-+#include <dt-bindings/gpio/gpio.h>
++		mmc0: mmc@4020000 {
++			compatible = "allwinner,sun50i-a100-mmc";
++			reg = <0x04020000 0x1000>;
++			clocks = <&ccu CLK_BUS_MMC0>, <&ccu CLK_MMC0>;
++			clock-names = "ahb", "mmc";
++			resets = <&ccu RST_BUS_MMC0>;
++			reset-names = "ahb";
++			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&mmc0_pins>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
- /{
- 	model = "Allwinner A100 Perf1";
- 	compatible = "allwinner,a100-perf1", "allwinner,sun50i-a100";
-@@ -18,6 +20,35 @@ aliases {
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
++		mmc1: mmc@4021000 {
++			compatible = "allwinner,sun50i-a100-mmc";
++			reg = <0x04021000 0x1000>;
++			clocks = <&ccu CLK_BUS_MMC1>, <&ccu CLK_MMC1>;
++			clock-names = "ahb", "mmc";
++			resets = <&ccu RST_BUS_MMC1>;
++			reset-names = "ahb";
++			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&mmc1_pins>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+	reg_usb1_vbus: usb1-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb1-vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&pio 7 10 GPIO_ACTIVE_HIGH>; /* PH10 */
-+		enable-active-high;
-+	};
-+};
++		mmc2: mmc@4022000 {
++			compatible = "allwinner,sun50i-a100-emmc";
++			reg = <0x04022000 0x1000>;
++			clocks = <&ccu CLK_BUS_MMC2>, <&ccu CLK_MMC2>;
++			clock-names = "ahb", "mmc";
++			resets = <&ccu RST_BUS_MMC2>;
++			reset-names = "ahb";
++			interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&mmc2_pins>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	status = "okay";
- };
- 
- &pio {
-@@ -178,3 +209,10 @@ &uart0 {
- 	pinctrl-0 = <&uart0_pb_pins>;
- 	status = "okay";
- };
-+
-+&usbphy {
-+	usb0_id_det-gpios = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PH8 */
-+	usb0_vbus-supply = <&reg_drivevbus>;
-+	usb1_vbus-supply = <&reg_usb1_vbus>;
-+	status = "okay";
-+};
+ 		uart0: serial@5000000 {
+ 			compatible = "snps,dw-apb-uart";
+ 			reg = <0x05000000 0x400>;
 -- 
 2.47.0
 
