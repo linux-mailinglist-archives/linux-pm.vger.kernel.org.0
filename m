@@ -1,144 +1,122 @@
-Return-Path: <linux-pm+bounces-16420-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16421-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E7389AF296
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 21:22:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F17C49AF324
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 21:58:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A71C1C247B0
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:22:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 303F41C23E16
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 19:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4EB22B640;
-	Thu, 24 Oct 2024 19:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEC91AB512;
+	Thu, 24 Oct 2024 19:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tPILtAAX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3636822B64A;
-	Thu, 24 Oct 2024 19:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61381FF04A
+	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 19:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729797770; cv=none; b=Hjd9tCMXpcmrTqSF0f1SZyi+Zy//+eRVLpvLjC5FccX8J4+epXFCyUTE2hFsL5vxzl0yPN/tH1hyD0cghbEKXNoYBySP8x7EsK54ysT9AJkcrkLyK3iiS6rgx40aUxba0I8Wnx1LtDMZKWSRtNWmDFGDWvNseSq5fKSp6snnDh0=
+	t=1729799878; cv=none; b=IFDOE7XxuGBkE4fz74PMYJUA1pJ/2FVJ1vDwTemK9uGiFD+K9ll2FB7f2+Sjfv7IXo65wxlcESEAAvjtqpiqGz/a89+yL7+La0Pz2eB2iIPDMA4OWCLvq4b1hK3NdiNrdJS5wzLYAGbXUNyknM3yxkFkQmrWDMHIxgb36cAczho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729797770; c=relaxed/simple;
-	bh=jKh3x40WQHuOT3OY0nTrMeMhafdVjif4nBSUcncQMQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S2KQCI1IE8f0ZATsiugIkyn+yW3LTKlkv2Ip4T9pynDyVJRSra9YTmTKy7lq77Jm/MT7l27BGBnvh0AF5Su+nf5+3tQ73nnovqQu26GHsSSEFnRb/SBsDK5eMtk54lY49kdNBBAC2G+jLLNz1R+FPH//8Q6k4ErU/tTYWIt9Xns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05BC0339;
-	Thu, 24 Oct 2024 12:23:16 -0700 (PDT)
-Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6E593F528;
-	Thu, 24 Oct 2024 12:22:42 -0700 (PDT)
-Date: Thu, 24 Oct 2024 20:22:33 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Vinod Koul <vkoul@kernel.org>, Kishon Vijay
- Abraham I <kishon@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Yangtao
- Li <frank@allwinnertech.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Parthiban <parthiban@linumiz.com>, Linus
- Walleij <linus.walleij@linaro.org>, Thierry Reding <treding@nvidia.com>,
- Maxime Ripard <mripard@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Yangtao Li <tiny.windzz@gmail.com>, Viresh
- Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 06/13] phy: sun4i-usb: add support for A100 USB PHY
-Message-ID: <20241024202216.6cded8c4@minigeek.lan>
-In-Reply-To: <20241024170540.2721307-7-masterr3c0rd@epochal.quest>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-	<20241024170540.2721307-7-masterr3c0rd@epochal.quest>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+	s=arc-20240116; t=1729799878; c=relaxed/simple;
+	bh=bTSZ+AIYW4PtKktAhtWQiw/nwwUpqv9LctwwUYhZcYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TY4AJDvaQGy9Y2qNBE6kXPSfC1PVZiDmbNO13UKIWEND8II4t49nqwfHEn2vEX/wLcInIDTrdGGVpD5LSHWv76dD3XJnlVBL4D7LiA9Wml4TBfsFdVKnnWzmMd2kruLWi8hEaaSaljx79ZQcV5bTWjj+Y0WUJvaWUFxwfsjpZnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tPILtAAX; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 24 Oct 2024 12:57:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729799868;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8BK0ZcosXDoOXzSbDL6svDcVkcl94/C1ybPNkAKv7is=;
+	b=tPILtAAXE+IgUeUPC4X+luEap2SlsyS17q2HLFknCMik+U8I3s2RvzCZUnSAzQqNJDKt9e
+	M/MTZyMVUnCKCJYUBNzj0u5ZsYLzm6ShCLECXJkxN//oG4dDtOWhz5P9RCDzSDwfta6E2h
+	1b0NgK8VyuKZarNkmkLJPSv4ZjfS/hI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Miguel Luis <miguel.luis@oracle.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Francesco Lavra <francescolavra.fl@gmail.com>
+Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
+ hibernate
+Message-ID: <ZxqmsiXV6ZYTANKY@linux.dev>
+References: <20241019172459.2241939-1-dwmw2@infradead.org>
+ <20241019172459.2241939-7-dwmw2@infradead.org>
+ <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
+ <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
+ <ZxprcWDe2AXuLhD_@linux.dev>
+ <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 24 Oct 2024 14:05:24 -0300
-Cody Eksal <masterr3c0rd@epochal.quest> wrote:
-
-Hi,
-
-> From: Yangtao Li <frank@allwinnertech.com>
+On Thu, Oct 24, 2024 at 05:56:09PM +0200, David Woodhouse wrote:
+> On 24 October 2024 17:44:49 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
+> >IIUC, you're really wanting to 0x0 because there are hypervisors out
+> >there that violate the final spec and *only* accept this value.
+> >
+> >That's perfectly fine, but it'd help avoid confusion if the supporting
+> >comment was a bit more direct:
+> >
+> >	/*
+> >	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
+> >	 * selecting HIBERNATE_OFF.
+> >	 *
+> >	 * There are hypervisors in the wild that violate the spec and
+> >	 * reject calls that explicitly provide a hibernate type. For
+> >	 * compatibility with these nonstandard implementations, pass 0
+> >	 * as the type.
+> >	 */
+> >	 if (system_entering_hibernation())
+> >		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
 > 
-> Add support for a100's usb phy, which with 2 PHYs.
-> 
-> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
-> [masterr3c0rd@epochal.quest: modified to use quirk flags]
-> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
-> ---
->  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
-> index b0f19e950601..a3942b2ee90b 100644
-> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> @@ -1006,6 +1006,16 @@ static const struct sun4i_usb_phy_cfg sun50i_a64_cfg = {
->  	.phy0_dual_route = true,
->  };
->  
-> +static const struct sun4i_usb_phy_cfg sun50i_a100_cfg = {
-> +	.num_phys = 2,
-> +	.disc_thresh = 3,
+> By the time this makes it into released versions of the guest Linux kernel, that comment won't be true any more.
 
-This member is never used when .siddq_in_base is true (and yes, this is
-wrong for the H616 too), ...
+Then does it even matter? What is the problem you're trying to solve
+with using a particular value for the hibernate type?
 
-> +	.phyctl_offset = REG_PHYCTL_A33,
-> +	.dedicated_clocks = true,
-> +	.hci_phy_ctl_clear = PHY_CTL_SIDDQ,
-> +	.phy0_dual_route = true,
-> +	.siddq_in_base = true,
+Either the goal of this is to make the PSCI client code compatible with
+your hypervisor today (and any other implementation based on 'F ALP1') or
+we don't care and go with whatever value we want.
 
-... which makes this whole description identical to the D1 version.
-So at the very least we wouldn't this new a100_cfg, but instead just
-point to the existing d1_cfg.
+Even if the comment eventually becomes stale, there is a ton of value in
+documenting the exact implementation decision being made.
 
-> +};
-> +
->  static const struct sun4i_usb_phy_cfg sun50i_h6_cfg = {
->  	.num_phys = 4,
->  	.phyctl_offset = REG_PHYCTL_A33,
-> @@ -1040,6 +1050,7 @@ static const struct of_device_id sun4i_usb_phy_of_match[] = {
->  	{ .compatible = "allwinner,sun20i-d1-usb-phy", .data = &sun20i_d1_cfg },
->  	{ .compatible = "allwinner,sun50i-a64-usb-phy",
->  	  .data = &sun50i_a64_cfg},
-> +	{ .compatible = "allwinner,sun50i-a100-usb-phy", .data = &sun50i_a100_cfg },
-
-And this also brings up the question whether we need a new compatible
-string. As it stands now, we could also use:
-	compatible = "allwinner,sun50i-a100-usb-phy",
-		     "allwinner,sun20i-d1-usb-phy";
-
-and wouldn't need any driver changes at all. Which would have the neat
-side effect to make USB work already with v5.18 kernels.
-
-The only downside is the somewhat weird ordering of the compatible
-strings, with the much newer chip as the fallback.
-
-What do other people think here?
-
-Cheers,
-Andre
-
-
->  	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = &sun50i_h6_cfg },
->  	{ .compatible = "allwinner,sun50i-h616-usb-phy", .data = &sun50i_h616_cfg },
->  	{ .compatible = "allwinner,suniv-f1c100s-usb-phy",
-
+-- 
+Thanks,
+Oliver
 
