@@ -1,140 +1,131 @@
-Return-Path: <linux-pm+bounces-16370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92C439AE330
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 495A79AE337
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 13:01:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C20741C22248
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:59:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78DF11C225D9
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 11:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44D01C7617;
-	Thu, 24 Oct 2024 10:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JFrXN/iQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55F2B1CACD9;
+	Thu, 24 Oct 2024 11:01:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1E31C07F3
-	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 10:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722401C879E
+	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 11:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729767590; cv=none; b=li3DQw/4LI+qVEbzuYtx2mQcwrQri+31LNXpxjxN3dFTDTicCK3NVRqkmaYxfE+vIxkZxPXHyzIDlrL3yunRoP7mWCICxCnImjc31ql6VC+rNx1oONuaXAjIHW/sA9yCvg6NN8eOaAOSv/KcJTG/KHB+n5fqm7MufboykgKZZzY=
+	t=1729767691; cv=none; b=jlPXuJax7Kq3Wsf3V+MwDJYxgDPeK1+lQ2TJce5bJRK+qe2pifAM5Q9QuB+KmbNJr5KLKcrH6INhDN7KZNs/LQgO7Qsw51ipFpXHWjQQa2PSLaeXnAVPdaqf3oIiLyt1wPLKJFP10VU1Zn1WLb4tKAJ1JELuPeR0R27Zq/zrX2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729767590; c=relaxed/simple;
-	bh=trgLPUyj48HjPRHDuMW5LN9aVZFKBkzE2kLtjunueuI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o2H02QBBCobmjIsYoksg6j2SPoLZiRM2UpW3mrEFIvsdoIa4avjrBkkEXLMwT5K4uXozjX/+dtSTVMQ2PLUt3FnzbILqCLOT3C1JsYp/rcNT5xzo6utthJhCm4xKRmG0lTURgP/y1xQ0U7a8MvDefH5CdHdvIjlbvB73W+WOB/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JFrXN/iQ; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-37d47eff9acso511939f8f.3
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 03:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729767587; x=1730372387; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/5g2bXAqewg4xcxfv4LWmI3L8F/eyWEBOYOVe/AyOk=;
-        b=JFrXN/iQgu/71fmQlprTKRG3g3Rd+11gn+ZAOGP5ERPyzigqD50Zd2bml4KB5otfOZ
-         RxxW98LwDb47EWrFqvj8U5oRtU45/SCRa0rkldwexxTGIUM/pZq9TwCBxugDsNCu7ajE
-         NPs7MBh9BZVSyjw/Vcf7EuMQCnjRpDG8ir+Pc86IXAnGiE9Fgu2YhvqqWgBDgGy0J9MO
-         2fT74Q1pq3hIGcIn2Jxr7B+ouTvds/oEwwIK6UljchkosSQDUCak7ELqaPfE6pPe4zG0
-         xqWwuOZ+uIxkLDcmkiT6vIWa+sFRd6vynGdBrkFl79lBNlPL90aBBJpY71KI1rOJJ5qi
-         cqTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729767587; x=1730372387;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z/5g2bXAqewg4xcxfv4LWmI3L8F/eyWEBOYOVe/AyOk=;
-        b=tY0jB6eNI3zHkQqT16zFBRCPAy/YgPCv/hXYdnqES7qBr912pJYj2myIpCZAWAlKog
-         j9kQ/b2RuELkCVG9IYYelr9aI3W++QzKNlkxC2hYwgLuaDNnqxaQZPgiF59XC+ZiV32M
-         wipDQec/dBDpFwiDoiNLPmbYvFA+APIQuUgIwTIvv+X0SwN0p/caPoSLTRfm9FnbqLWx
-         FoLiT+ko/WM7WKg0UUnujbWrC0tXwntKn6m6iZtXrEIC7isIwnyAbk+1+tlx7yWL1DzM
-         3Miv4WzCW7Oc4Md6+QvtTSoFhLsdfQrRMsgoySPn/Sr2joeosg38EQv3FyLVKMN2W2cj
-         Kx6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVe3SYDiNKOnu6K9I31YfpStdKEou6Pr0KH6j/aIgX+PZr7wdX0PCCHL9OrWSZyhEsXLMsgAMNhDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPjetGdFBhN6GZyyZ+mht0uhXs/wWOASFJnI/+TrGLgUtIh85w
-	Qcj1+ZfQPUEM3b+sHTV7pAObqg3xFQt/DsvdFveoFHWJxR+QKTI4veRjNPeeMqQ=
-X-Google-Smtp-Source: AGHT+IHhMpUEAcc2liClS9QNGx/dIO3K3IeEmcd+OIO2wwof3diLI4Oe4uptdXr/v5oOnzsdIhUNGg==
-X-Received: by 2002:a5d:61d2:0:b0:37d:51bc:3229 with SMTP id ffacd0b85a97d-37efcf93111mr4104098f8f.51.1729767586875;
-        Thu, 24 Oct 2024 03:59:46 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a5c529sm10984874f8f.62.2024.10.24.03.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 03:59:46 -0700 (PDT)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: daniel.lezcano@linaro.org,
-	rafael@kernel.org
-Cc: Lukasz Luba <lukasz.luba@arm.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	linux-pm@vger.kernel.org (open list:THERMAL),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal/lib: Fix memory leak on error in thermal_genl_auto()
-Date: Thu, 24 Oct 2024 12:59:38 +0200
-Message-ID: <20241024105938.1095358-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1729767691; c=relaxed/simple;
+	bh=GcsY4DwdXEo2baKa3bEnLz1/qW8Bmj1ZyGI6hMV6xmM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qLFHSbNGfOTJLZVw8JYo39aGWH/G2l0bCA4wTeHWmje8vxTAfa5NYjJDPl+0vlW5nAha2hSwTNWW9Z+5zz5bvu5rT3y985RnJVAQAjdJ58Gva7r9YAG2+xN1H5GDy/2cFYyv8hVhwHOCmaW6/WI0//0OyYrNQm041OsrITQm//E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1t3val-0007iV-Rm; Thu, 24 Oct 2024 13:01:23 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1t3val-000BRi-1m;
+	Thu, 24 Oct 2024 13:01:23 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1t3val-00B9fo-1P;
+	Thu, 24 Oct 2024 13:01:23 +0200
+Date: Thu, 24 Oct 2024 13:01:23 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Michael Trimarchi <michael@amarulasolutions.com>,
+	linux-pm@vger.kernel.org, linux-amarula@amarulasolutions.com,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
+	Shengjiu Wang <shengjiu.wang@nxp.com>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] pmdomain: imx: gpcv2: replace dev_err() with
+ dev_err_probe()
+Message-ID: <20241024110123.wix35njjbh3nx7kn@pengutronix.de>
+References: <20241024103540.3482216-1-dario.binacchi@amarulasolutions.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024103540.3482216-1-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-The function thermal_genl_auto() does not free the allocated message
-in the error path. Fix that by putting a out label and jump to it
-which will free the message instead of directly returning an error.
+Hi Dario,
 
-Reported-by: Lukasz Luba <lukasz.luba@arm.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- tools/lib/thermal/commands.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+thanks for the patch.
 
-diff --git a/tools/lib/thermal/commands.c b/tools/lib/thermal/commands.c
-index bcf0f14d035a..b0d4c8aca21c 100644
---- a/tools/lib/thermal/commands.c
-+++ b/tools/lib/thermal/commands.c
-@@ -375,27 +375,30 @@ static thermal_error_t thermal_genl_auto(struct thermal_handler *th, cmd_cb_t cm
- 					 struct cmd_param *param,
- 					 int cmd, int flags, void *arg)
- {
-+	thermal_error_t ret = THERMAL_ERROR;
- 	struct nl_msg *msg;
- 	void *hdr;
- 
- 	msg = nlmsg_alloc();
- 	if (!msg)
--		return THERMAL_ERROR;
-+		goto out;
- 
- 	hdr = genlmsg_put(msg, NL_AUTO_PORT, NL_AUTO_SEQ, thermal_cmd_ops.o_id,
- 			  0, flags, cmd, THERMAL_GENL_VERSION);
- 	if (!hdr)
--		return THERMAL_ERROR;
-+		goto out;
- 
- 	if (cmd_cb && cmd_cb(msg, param))
--		return THERMAL_ERROR;
-+		goto out;
- 
- 	if (nl_send_msg(th->sk_cmd, th->cb_cmd, msg, genl_handle_msg, arg))
--		return THERMAL_ERROR;
-+		goto out;
- 
-+	ret = THERMAL_SUCCESS;
-+out:
- 	nlmsg_free(msg);
- 
--	return THERMAL_SUCCESS;
-+	return ret;
- }
- 
- thermal_error_t thermal_cmd_get_tz(struct thermal_handler *th, struct thermal_zone **tz)
--- 
-2.43.0
+On 24-10-24, Dario Binacchi wrote:
+> The patch standardizes the probe() code by replacing the two occurrences
+> of dev_err() with dev_err_probe(). Indeed, dev_err_probe() was used in all
+> other error paths of the probe() function.
 
+I assume that this paths aren't using dev_err_probe because these paths
+can't return EPROBE_DEFER and therefore dev_err_probe() would use
+dev_err() anyway.
+
+Regards,
+  Marco
+
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 
+> ---
+> 
+>  drivers/pmdomain/imx/gpcv2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
+> index 963d61c5af6d..6e6ecbf2e152 100644
+> --- a/drivers/pmdomain/imx/gpcv2.c
+> +++ b/drivers/pmdomain/imx/gpcv2.c
+> @@ -1356,7 +1356,7 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+>  
+>  	ret = pm_genpd_init(&domain->genpd, NULL, true);
+>  	if (ret) {
+> -		dev_err(domain->dev, "Failed to init power domain\n");
+> +		dev_err_probe(domain->dev, ret, "Failed to init power domain\n");
+>  		goto out_domain_unmap;
+>  	}
+>  
+> @@ -1367,7 +1367,7 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+>  	ret = of_genpd_add_provider_simple(domain->dev->of_node,
+>  					   &domain->genpd);
+>  	if (ret) {
+> -		dev_err(domain->dev, "Failed to add genpd provider\n");
+> +		dev_err_probe(domain->dev, ret, "Failed to add genpd provider\n");
+>  		goto out_genpd_remove;
+>  	}
+>  
+> -- 
+> 2.43.0
+> 
+> 
+> 
 
