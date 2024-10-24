@@ -1,121 +1,99 @@
-Return-Path: <linux-pm+bounces-16386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1968A9AE6DC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:39:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BFD79AE6FC
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:48:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A5C6B23359
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 13:39:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B45981C21B11
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 13:48:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBA11E0E06;
-	Thu, 24 Oct 2024 13:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91AFF1DDA16;
+	Thu, 24 Oct 2024 13:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hQMbYTxZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C531DF970;
-	Thu, 24 Oct 2024 13:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A803E1BFE00;
+	Thu, 24 Oct 2024 13:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729777127; cv=none; b=AJz+6Cl8yzRXMYfqDM0sTk0OZQIQFLYWSqrWj0BqubnnTmb83+Ie9pMmI/axSHXl3dHPUUZqFgen1xZHTJuec0Hf/JNBXRZBFJuR86CCCd7YT0faJuVf6kPkGRPikT4VC1hBzy6hCdGSYgQVO7Hn7l6Y0Y4Dlv6I/gO9OMercn8=
+	t=1729777732; cv=none; b=kpbcCw028xggy6SV0uDMSSIZbcF+pK4o4JkxLSE21Rm868rAdtr3zepkXQDsKRyhutZ+8vzEeuu9BTlbp/A4ve+jn4S+Y5dVxNe65m/zfLvbdYI+xDUPuXTbQC7uUYWG4F/oxP7gfIcEt1U7otBzUn81ayuwzYFiDsV+UCrp+dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729777127; c=relaxed/simple;
-	bh=PLP3SSlJbV0fpQiLAsOnkvolvtL5D+C1h1JS6kuCogA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EPCLGHz584OaWpSMyfW4PfYBGw18tAzjZHrNWHCxgx7GrfL4l2szIokXytsElESl2LLoR4q+BoUV6lLvibwkfu4nFKwxiOjv2Q7nmgKxyMdm3rrq9Fr/bsZtt5a2SST+4/qjjwPMf6ezri1Wev+W3tQ2FCtn8SxoFV7vSsgmIBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3FA3339;
-	Thu, 24 Oct 2024 06:39:13 -0700 (PDT)
-Received: from [10.57.55.74] (unknown [10.57.55.74])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F04733F71E;
-	Thu, 24 Oct 2024 06:38:42 -0700 (PDT)
-Message-ID: <5e1aef31-4157-4094-a419-27810c172ce6@arm.com>
-Date: Thu, 24 Oct 2024 14:39:53 +0100
+	s=arc-20240116; t=1729777732; c=relaxed/simple;
+	bh=3myP44Gfgp7TWDQVK9qQgIFcWGayxiKS6l53Uoqwyyg=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=Wdqm0RK4aA1E0dlG3l1X5g1cPhMeYm0JHxdIQ171nXviWPe529sE/+IikGmTYHVVQRV4Ghqs12Ab1nQ0UEsxoofpicQs5lez+vnOt9mC5EVea43TmBciI/R0H3kVr5RiTXVA2mCE9oTjxI+nEZX4hDX/IpX3oMzr1loQwkK5TVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hQMbYTxZ; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=3myP44Gfgp7TWDQVK9qQgIFcWGayxiKS6l53Uoqwyyg=; b=hQMbYTxZAJvskYeOC5cLMCanyS
+	3P6RaVvSJPhOA1/TNYfJuxxrMXtg9GO7HWHc+cXqLhRcVvz5QiqgWZyCGsVFtNXE3TAnECjUK0jiA
+	sFZIlbqZQ1uzuasOTU3MjY+tDRyRdC97DlvmZJoC7/w9kzYH/w+LK9FBZ734NEJ6dscM9hxwG4wWz
+	QgyK0Gqm8jJsNlwR/QhlhC6Sp1bPLez8AsjhXSo3ZIM/jLHJ//1XlNRBUwJh4adIMAq7Oe/E6rfy/
+	UD/KLHRJVIKSWThlt/4pLbjGmBzSS/oB3DLbwCiPe7gH3kEiwARIpmE2UW8NdAfMOXIVhcSswP082
+	CcrO0D3Q==;
+Received: from [31.94.13.30] (helo=[127.0.0.1])
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t3yCW-00000008ft3-3b4H;
+	Thu, 24 Oct 2024 13:48:33 +0000
+Date: Thu, 24 Oct 2024 15:48:26 +0200
+From: David Woodhouse <dwmw2@infradead.org>
+To: Miguel Luis <miguel.luis@oracle.com>
+CC: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+ James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Shuah Khan <shuah@kernel.org>,
+ David Woodhouse <dwmw@amazon.co.uk>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+ "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ Francesco Lavra <francescolavra.fl@gmail.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v6_6/6=5D_arm64=3A_Use_SYSTEM=5FOF?=
+ =?US-ASCII?Q?F2_PSCI_call_to_power_off_for_hibernate?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
+References: <20241019172459.2241939-1-dwmw2@infradead.org> <20241019172459.2241939-7-dwmw2@infradead.org> <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
+Message-ID: <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 08/10] thermal: core: Eliminate
- thermal_zone_trip_down()
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <4958885.31r3eYUQgx@rjwysocki.net>
- <1807510.VLH7GnMWUR@rjwysocki.net>
- <d2239ab1-ae95-4b51-9cc5-8aac9eb67970@arm.com>
- <CAJZ5v0j-T_ynbMsMrVndSHwCJP97A1-PX-p-NNskopO=i0xtpw@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0j-T_ynbMsMrVndSHwCJP97A1-PX-p-NNskopO=i0xtpw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
+On 24 October 2024 14:54:41 CEST, Miguel Luis <miguel=2Eluis@oracle=2Ecom> =
+wrote:
+>Perhaps spec=2E F=2Eb=2E could be accommodated by first invoking SYSTEM_O=
+FF2 with
+>PSCI_1_3_OFF_TYPE_HIBERNATE_OFF and checking its return value in case of =
+a
+>fallback to an invocation with 0x0 ?
 
+I wasn't aware there was any point=2E Are there any hypervisors which actu=
+ally implemented it that way? Amazon Linux and Ubuntu guests already just u=
+se zero=2E
 
-On 10/24/24 13:33, Rafael J. Wysocki wrote:
-> On Thu, Oct 24, 2024 at 12:32 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 10/16/24 12:33, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> Since thermal_zone_set_trip_temp() is not located in the same file
->>
->> nit: s/not/now
-> 
-> Thanks, will fix when applying the patch.
-> 
->>> as thermal_trip_crossed(), it can invoke the latter directly without
->>> using the thermal_zone_trip_down() wrapper that has no other users.
->>>
->>> Update thermal_zone_set_trip_temp() accordingly and drop
->>> thermal_zone_trip_down().
->>>
->>> No functional impact.
->>>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>> ---
->>>    drivers/thermal/thermal_core.c |    8 +-------
->>>    drivers/thermal/thermal_core.h |    2 --
->>>    2 files changed, 1 insertion(+), 9 deletions(-)
->>>
->>> Index: linux-pm/drivers/thermal/thermal_core.c
->>> ===================================================================
->>> --- linux-pm.orig/drivers/thermal/thermal_core.c
->>> +++ linux-pm/drivers/thermal/thermal_core.c
->>> @@ -565,7 +565,7 @@ void thermal_zone_set_trip_temp(struct t
->>>                 * are needed to compensate for the lack of it going forward.
->>>                 */
->>>                if (tz->temperature >= td->threshold)
->>> -                     thermal_zone_trip_down(tz, td);
->>> +                     thermal_trip_crossed(tz, td, thermal_get_tz_governor(tz), false);
->>
->> minor thing:
->> won't that be too long line?
-> 
-> It is longer than 80 characters, but this is not a hard boundary - see
-> "2) Breaking long lines and strings" in
-> Documentation/process/coding-style.rst).
-> 
-> Well, you can argue about the "hide information" part, but IMV this
-> line just looks cleaner the way it is than when it would be broken in
-> any way.
-> 
->> IMHO we can add somewhere earlier:
->> struct thermal_governor *gov = thermal_get_tz_governor(tz);
->> and use it here
-> 
-> That would have been harder to follow than the current code IMO.
-
-fair enough
+We could add it later if such a hypervisor (now in violation of F=2Eb) tur=
+ns up, I suppose?
 
