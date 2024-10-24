@@ -1,36 +1,36 @@
-Return-Path: <linux-pm+bounces-16344-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C66BF9ADE5B
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:02:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADC319ADE6C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82325283130
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 08:02:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 303FBB20FC8
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 08:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E1E1741EF;
-	Thu, 24 Oct 2024 08:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB13A189F4B;
+	Thu, 24 Oct 2024 08:05:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.122])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2285258;
-	Thu, 24 Oct 2024 08:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B08516BE01;
+	Thu, 24 Oct 2024 08:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729756917; cv=none; b=cWf48FrzyqjsgCYbuirHU5qA/XsFhzIAVVzvC9VifgS5bgQniodrQlSl+M4QBI/OBwq9kbDVTzmdCDuAffBn6NMl4xQWgIUXcerXnIrNKNgSFwZwJVOuvzoUggdOk8PMzAy5IWuZr4WKN+qND3fILcGBDQ5crrArWMNDBCiyklY=
+	t=1729757145; cv=none; b=KhmMhP8TNdCDVVl6rIHx0/Bx7xEJNQiijK0L6JWLCI4ruF1A+5vbxUlCwbE4z+EYwwr1gdaITGaP88HzlgisrIWPHskS3SY2iViy01CvxxWPwAdqxOIVcB/raTcI+Ukqj319WrviHLikPEZ6v1oQI3X2fY/hactV5N18RtEkk6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729756917; c=relaxed/simple;
+	s=arc-20240116; t=1729757145; c=relaxed/simple;
 	bh=gogD0i7bwHKLV0LMRBH2B2NSjmA6gbgxRSx0dkfFLbY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YApun37kBOS9z1eJ1Ody3zV64rZU5OfgRUjBPzFVQrV4HCH/6rZXZzv+TTEFNf7JcOyruBrvvwgsqooJ7idqpmphZ0GhjtnM8XBgbRftGG/dYdBldAE9vM8hvvF0DzRo4kPgvTWQOdlg/sflk2spz7DLIYgQfMlzagFNitRPL4w=
+	 MIME-Version:Content-Type; b=D5FPn5zEehERyGdmb2kEtthKvnYqN7aqyczQFY8nZx0DGS642wpdonzcEhHr9Jfwbo6y0sot0WrNxAIC3mxPDvw7D2B2G5ue/hlHYY9U0bzN46tszA6ikT43w33XEhFwvPF3qoE1IhqdzsgxwiaF62KUh7Ho4EGGeBTAaBHKy8Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: ZK3QAJymR2aNII5/Rircfg==
-X-CSE-MsgGUID: gG7XiE7ESc6JC6p4ZMuOqA==
+X-CSE-ConnectionGUID: Qa5GtYvOTCKff3z87s9KJQ==
+X-CSE-MsgGUID: oA48d9dMSMKsPclrLT/uUA==
 X-IronPort-AV: E=Sophos;i="6.11,228,1725292800"; 
-   d="scan'208";a="125164653"
+   d="scan'208";a="125165157"
 From: ZhengShaobo <zhengshaobo1@xiaomi.com>
 To: <zhengshaobo1@xiaomi.com>
 CC: <chendejun@xiaomi.com>, <chuci@xiaomi.com>, <daniel.lezcano@linaro.org>,
@@ -38,11 +38,11 @@ CC: <chendejun@xiaomi.com>, <chuci@xiaomi.com>, <daniel.lezcano@linaro.org>,
 	<linux-pm@vger.kernel.org>, <lukasz.luba@arm.com>, <rafael@kernel.org>,
 	<rui.zhang@intel.com>
 Subject: Re: [PATCH] thermal: gov_power_allocator: Granted power set to max when nobody request power
-Date: Thu, 24 Oct 2024 16:00:34 +0800
-Message-ID: <20241024080043.647-1-zhengshaobo1@xiaomi.com>
+Date: Thu, 24 Oct 2024 16:05:35 +0800
+Message-ID: <20241024080536.660-1-zhengshaobo1@xiaomi.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241021121138.422-1-zhengshaobo1@xiaomi.com>
-References: <20241021121138.422-1-zhengshaobo1@xiaomi.com>
+In-Reply-To: <CAJZ5v0g=uyPA1QH-gQbTZBim7EB8Fn+8Q_7Bc+eOmPqGaDQh0A@mail.gmail.com>
+References: <CAJZ5v0g=uyPA1QH-gQbTZBim7EB8Fn+8Q_7Bc+eOmPqGaDQh0A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -51,7 +51,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BJ-MBX17.mioffice.cn (10.237.8.137) To BJ-MBX15.mioffice.cn
+X-ClientProxiedBy: BJ-MBX07.mioffice.cn (10.237.8.127) To BJ-MBX15.mioffice.cn
  (10.237.8.135)
 
 On Wed, Oct 23, 2024 at 12:09:44PM +0200, Rafael J. Wysocki wrote:
