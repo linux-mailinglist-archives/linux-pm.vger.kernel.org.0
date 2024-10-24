@@ -1,114 +1,132 @@
-Return-Path: <linux-pm+bounces-16399-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16400-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F18729AEB06
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:49:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E909AEB2A
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:56:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CD131F21594
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:49:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AD9E1C23FBC
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3250F1EF096;
-	Thu, 24 Oct 2024 15:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF7D1F5825;
+	Thu, 24 Oct 2024 15:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DNnfcoFH"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dV1S5ICZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050121D63F3
-	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 15:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B591E0B6F;
+	Thu, 24 Oct 2024 15:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729784950; cv=none; b=IQr0JpVsNilM285Kn6WH9VZvRZxU5ja3ajb0vvLt4mNdR73WX3XNRHlCIunt8q1rmVcUzhRnmDhU30x1JpITLz3uJVYJq34klZCMy6SX2LqLbSE8AoDAMaTk7HBwAbiGmsyjASAM0mCk1yZcO7dlhlv0A6b6bHRvZsVNICOJGxg=
+	t=1729785389; cv=none; b=i/EhmooQJZHH4zzAGTtTp6iKX5vKzQugoQY5kMt0xO8lfAIsf4GQZA8QtlF+vIXJCINy0JBSvewClHKNjRkc2zucqocAyGJuArpsNEKvF2jeGYuIfk0eGUOWZItqks1Y9m7K5ZkVS0LmI6oWr70QQcaGYVgdv+3opOUPfl5vSR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729784950; c=relaxed/simple;
-	bh=vgVvpewAMbmcyjF0eSzY8JeXopWO++3oaFfos5J5nXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bjBHgn64lhoRlW2sdAm3pnirpk2ugPWWuiNDB8nYe0eD1LZvmi77AGD7cL2+uBkTPcEHcpyFwRwURw7yHS1h9gCS1vZG1Skak+PAOijPE8/2oqduy25W1nhlqXBOQkgOK0Z7hCeUQ4ekHKQnl8asvi/8mgYjZGDajHPQotptkCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DNnfcoFH; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fb584a8f81so10751931fa.3
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 08:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729784946; x=1730389746; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=296p0H1Vg2Rj5TTzmKs46/UNrkxr+6q9tiB7yK0RNAQ=;
-        b=DNnfcoFHkStOj5jz86Mq0r64dpJFlhnWeKgpT1QLdSFTgjls+fX8k/R45RX8C//3Eo
-         gs65eSjzQ+rvtjGgTGhx6NnDxxlz3SxrEvPZytqpPIeYRXtzCR50JAHPSeHFYtxfKQ6v
-         jUHq5B8xooz/UmFJhyM6byRjSQgSuVbSyrjdYN8HVjW/Aaxn+NIrmpYi7DRZOwaQX0b2
-         DHfa42mzq+bxLVZYFuSsW3dWzZP8q9gRb0UriQNZ0cOMw75AN4iz1W1GqN4uP/KGwdcO
-         mEWKG9Gyvd4JgRZPowjVK8ZFGFF6ZieSPY2Vq1gibQXDxmy7T5DbgU+baZ9mIAI9ewfp
-         GtOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729784946; x=1730389746;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=296p0H1Vg2Rj5TTzmKs46/UNrkxr+6q9tiB7yK0RNAQ=;
-        b=lhH2fpGbRw1xABNKX0Kg4MAF+yoDYJveejeGa9gc529Dh++2NJWwlYnIUr1eV6n1M2
-         0efGI64lHiM+AfS6W0vSkL4mf4Ojz8HlU1QR4whVMsQXJ01krYayj02aSoQYImFkUNSe
-         QlMgmEN3n9hEwJUei0NZiZO60Q2ngHyaV1cGe2YKPaAx/lSV3biBW/QT0rDrdq8CmDzK
-         mvchnQO46S8Hzok10XDuiG10OoifSjQThJvcpx9kbMzsf6KTZlpDVUPKa3EP79sCBk0X
-         2ZYCDJ3fjt8/OIsIqzsDj2ZE2FrKg3CtMNpAiOEZvdsi1SwmjINVlkFzD2pgeN/gMIqd
-         4uAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVikWXWB2jw5S/WU6e6KDrYStHN8eWo7nZjpnekiwOvP4tyF67VwvVKZqkLMdnDioapx7F+zG+2vA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMZ36ZsN8dWuPd64pWJIb6zOcAHfH0uo0BQhRwR8Z11TqUyQXB
-	0265uvtwDMsZJqg1XMo2FcSGwz2dmpzgFaFzIjppiU9sql+nKCg/Uj9IdsgEqhM=
-X-Google-Smtp-Source: AGHT+IHdsryVFnNHDvLRD43FvHMGTM2ITuF16eHf56R4P8i8A4ALesN7EP9WtQa5wv2YRSvHbm32qA==
-X-Received: by 2002:a05:6512:6c3:b0:533:46cc:a71e with SMTP id 2adb3069b0e04-53b23e9d2e4mr1860939e87.54.1729784946007;
-        Thu, 24 Oct 2024 08:49:06 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a2243eb09sm1402372e87.245.2024.10.24.08.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 08:49:04 -0700 (PDT)
-Date: Thu, 24 Oct 2024 18:49:03 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Johan Hovold <johan+linaro@kernel.org>, 
-	Kalle Valo <kvalo@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v6 6/6] arm64: dts: qcom: sm8450-hdk: model the PMU of
- the on-board wcn6855
-Message-ID: <c3yzrhf5ev5fvu42mr6qe55odha4v6mjzjauskkq2u4rzqd5qm@o7csb6pdhppo>
-References: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
- <20241018-sc8280xp-pwrseq-v6-6-8da8310d9564@linaro.org>
+	s=arc-20240116; t=1729785389; c=relaxed/simple;
+	bh=IK4bOpKqQ8ZfRYl0RKc3CNMgpunjWfUIWn5lauJpMuI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=bgF+fzfnjYurc8XSI3xLjFWHF425pmGCybla32GKHBXJF3reBB2eUFCli7GzTHbwxpTiahRFHCnuGq2rZmaxlf8YqutVFORSIGhKPA1T+MbZuiAM51+hiuCfZ7gughogYisYi3LazZGn+ith5olQngc2KQ61y53qLjwBgOijqjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dV1S5ICZ; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=dEyOjfWbUxIAyxFc/S0iV8ZJySQkSomEtN2A/QMyFoo=; b=dV1S5ICZvgKROwZdemu1KjNcnX
+	H3PJ1kv870MmHX+cSLKhiO93gvmgpf4iUgPsDWjuXUGE4eLZ+7r9bTGIFOm2yLb5LaKMQGqLh94D0
+	8dhi6cIqeIo+wH6DLEdXQWs/W4/6mn5UAssAb4e+xJOAdyFIB2BqB21YhOcVMaM8UpsU+1Hktjq7Y
+	rs0gdSvdtv+kmvv7Nxg2Pe23YWhAuFy+WkEleVxn7m/9ogbMWEbailZXgQ3yK4MUIP5bR6V/WPdBG
+	6lz9VwVetW/w/vnbm5htiSBLov2HkYsYj/WjIFdhCNc16J7vGKufUwWD+gpgdM938TFmM0NsbzzW/
+	bGhLnwTw==;
+Received: from [31.94.24.214] (helo=[127.0.0.1])
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t40C6-00000008iBu-12hz;
+	Thu, 24 Oct 2024 15:56:14 +0000
+Date: Thu, 24 Oct 2024 17:56:09 +0200
+From: David Woodhouse <dwmw2@infradead.org>
+To: Oliver Upton <oliver.upton@linux.dev>
+CC: Miguel Luis <miguel.luis@oracle.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+ James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Shuah Khan <shuah@kernel.org>,
+ David Woodhouse <dwmw@amazon.co.uk>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+ "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ Francesco Lavra <francescolavra.fl@gmail.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v6_6/6=5D_arm64=3A_Use_SYSTEM=5FOF?=
+ =?US-ASCII?Q?F2_PSCI_call_to_power_off_for_hibernate?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ZxprcWDe2AXuLhD_@linux.dev>
+References: <20241019172459.2241939-1-dwmw2@infradead.org> <20241019172459.2241939-7-dwmw2@infradead.org> <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com> <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org> <ZxprcWDe2AXuLhD_@linux.dev>
+Message-ID: <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241018-sc8280xp-pwrseq-v6-6-8da8310d9564@linaro.org>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On Fri, Oct 18, 2024 at 02:49:16PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add nodes for the WCN6855 PMU, the WLAN and BT modules and relevant
-> regulators and pin functions to fully describe how the wifi is actually
-> wired on this platform.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 157 ++++++++++++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sm8450.dtsi    |   2 +-
->  2 files changed, 158 insertions(+), 1 deletion(-)
-> 
+On 24 October 2024 17:44:49 CEST, Oliver Upton <oliver=2Eupton@linux=2Edev>=
+ wrote:
+>Hi,
+>
+>On Thu, Oct 24, 2024 at 03:48:26PM +0200, David Woodhouse wrote:
+>> On 24 October 2024 14:54:41 CEST, Miguel Luis <miguel=2Eluis@oracle=2Ec=
+om> wrote:
+>> >Perhaps spec=2E F=2Eb=2E could be accommodated by first invoking SYSTE=
+M_OFF2 with
+>> >PSCI_1_3_OFF_TYPE_HIBERNATE_OFF and checking its return value in case =
+of a
+>> >fallback to an invocation with 0x0 ?
+>
+>This already complies with F=2Eb=2E
+>
+>The PSCI implementation is required to accept either 0 or 1 for
+>HIBERNATE_OFF=2E Using 0 seems like a good choice for compatibility since=
+ =2E=2E=2E
+>
+>> I wasn't aware there was any point=2E Are there any hypervisors which a=
+ctually implemented it that way? Amazon Linux and Ubuntu guests already jus=
+t use zero=2E
+>>=20
+>> We could add it later if such a hypervisor (now in violation of F=2Eb) =
+turns up, I suppose?
+>
+>IIUC, you're really wanting to 0x0 because there are hypervisors out
+>there that violate the final spec and *only* accept this value=2E
+>
+>That's perfectly fine, but it'd help avoid confusion if the supporting
+>comment was a bit more direct:
+>
+>	/*
+>	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
+>	 * selecting HIBERNATE_OFF=2E
+>	 *
+>	 * There are hypervisors in the wild that violate the spec and
+>	 * reject calls that explicitly provide a hibernate type=2E For
+>	 * compatibility with these nonstandard implementations, pass 0
+>	 * as the type=2E
+>	 */
+>	 if (system_entering_hibernation())
+>		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+By the time this makes it into released versions of the guest Linux kernel=
+, that comment won't be true any more=2E
 
--- 
-With best wishes
-Dmitry
 
