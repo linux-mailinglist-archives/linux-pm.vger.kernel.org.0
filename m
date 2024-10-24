@@ -1,109 +1,84 @@
-Return-Path: <linux-pm+bounces-16343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16344-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A38C19ADD0C
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 09:06:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C66BF9ADE5B
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 10:02:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EE1B1F22446
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 07:06:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82325283130
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 08:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A984189B86;
-	Thu, 24 Oct 2024 07:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rCEsXGD9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E1E1741EF;
+	Thu, 24 Oct 2024 08:01:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656B86F305;
-	Thu, 24 Oct 2024 07:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.122])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2285258;
+	Thu, 24 Oct 2024 08:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729753568; cv=none; b=WJXWAGASguWghFkCdGndqbcQsCRS7CwdCIv29vPPQ8xm81cJAsF418AAbk5f60B2IOvNLQcD68TR7Gc95/5+cUq4aCBgCg052zAvY8ivnmpNzTeAz0wNMvyOwh7+5gcAxCuoKa9AL6rzqh69eYwltBSIb62QMS24F0Ari/X09Xw=
+	t=1729756917; cv=none; b=cWf48FrzyqjsgCYbuirHU5qA/XsFhzIAVVzvC9VifgS5bgQniodrQlSl+M4QBI/OBwq9kbDVTzmdCDuAffBn6NMl4xQWgIUXcerXnIrNKNgSFwZwJVOuvzoUggdOk8PMzAy5IWuZr4WKN+qND3fILcGBDQ5crrArWMNDBCiyklY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729753568; c=relaxed/simple;
-	bh=+E37BslfPvS9MXGl9D+lxosyZFP7Cshyw4UOpiDHsGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nu6mIUEfnKinw0Xjfa/vfhPnl71KkTl39LoUnX/C7leqzwLInNixj3IKuEKGo953Uyno6SxFGeU0K+gjD2MXqJ+ZWxOmckiDgxpKZlpy+c7Zy0K70HYJejWQgaBpmMBvi2q91F22ayGDoJZfCN0k6p5sOWtkYHEweL/UgAao39Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rCEsXGD9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629BEC4CEC7;
-	Thu, 24 Oct 2024 07:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1729753567;
-	bh=+E37BslfPvS9MXGl9D+lxosyZFP7Cshyw4UOpiDHsGg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rCEsXGD9tqnMJhkIMi3z7ymyo08jfzPxM1pM4+Fo//h08tOxbisKZV29PWeQSbiOh
-	 wCNgaXmMcQ0/GWLyE9taajPn3wxcGnjj2+XzoEty+mrR20gFJ7HTt752h0ytUKpdYp
-	 mGTmYCEaIjc6G2LsLQEBjRT1EpSLvZCudYaoCqYs=
-Date: Thu, 24 Oct 2024 09:05:57 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Duan Chenghao <duanchenghao@kylinos.cn>
-Cc: stern@rowland.harvard.edu, saranya.gopal@intel.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
-	rafael@kernel.org, stanley_chang@realtek.com, tj@kernel.org,
-	xiehongyu1@kylinos.cn, xy521521@gmail.com,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v4] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-Message-ID: <2024102432-conjoined-skylight-33f1@gregkh>
-References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
- <20241024024038.26157-1-duanchenghao@kylinos.cn>
+	s=arc-20240116; t=1729756917; c=relaxed/simple;
+	bh=gogD0i7bwHKLV0LMRBH2B2NSjmA6gbgxRSx0dkfFLbY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YApun37kBOS9z1eJ1Ody3zV64rZU5OfgRUjBPzFVQrV4HCH/6rZXZzv+TTEFNf7JcOyruBrvvwgsqooJ7idqpmphZ0GhjtnM8XBgbRftGG/dYdBldAE9vM8hvvF0DzRo4kPgvTWQOdlg/sflk2spz7DLIYgQfMlzagFNitRPL4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: ZK3QAJymR2aNII5/Rircfg==
+X-CSE-MsgGUID: gG7XiE7ESc6JC6p4ZMuOqA==
+X-IronPort-AV: E=Sophos;i="6.11,228,1725292800"; 
+   d="scan'208";a="125164653"
+From: ZhengShaobo <zhengshaobo1@xiaomi.com>
+To: <zhengshaobo1@xiaomi.com>
+CC: <chendejun@xiaomi.com>, <chuci@xiaomi.com>, <daniel.lezcano@linaro.org>,
+	<dingchongchong@xiaomi.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <lukasz.luba@arm.com>, <rafael@kernel.org>,
+	<rui.zhang@intel.com>
+Subject: Re: [PATCH] thermal: gov_power_allocator: Granted power set to max when nobody request power
+Date: Thu, 24 Oct 2024 16:00:34 +0800
+Message-ID: <20241024080043.647-1-zhengshaobo1@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241021121138.422-1-zhengshaobo1@xiaomi.com>
+References: <20241021121138.422-1-zhengshaobo1@xiaomi.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024024038.26157-1-duanchenghao@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BJ-MBX17.mioffice.cn (10.237.8.137) To BJ-MBX15.mioffice.cn
+ (10.237.8.135)
 
-On Thu, Oct 24, 2024 at 10:40:38AM +0800, Duan Chenghao wrote:
-> When a device is inserted into the USB port and an S4 wakeup is initiated,
-> after the USB-hub initialization is completed, it will automatically enter
-> suspend mode. Upon detecting a device on the USB port, it will proceed with
-> resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state. During the S4
-> wakeup process, peripherals are put into suspend mode, followed by task
-> recovery. However, upon detecting that the hcd is in the
-> HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status, causing the
-> S4 suspend to fail and subsequent task recovery to not proceed.
-> -
-> [   27.594598][ 1]  PM: pci_pm_freeze(): hcd_pci_suspend+0x0/0x28 returns -16
-> [   27.594601][ 1]  PM: dpm_run_callback(): pci_pm_freeze+0x0/0x100 returns -16
-> [   27.603420][ 1]  ehci-pci 0000:00:04.1: pci_pm_freeze+0x0/0x100 returned 0 after 3 usecs
-> [   27.612233][ 1]  ehci-pci 0000:00:05.1: pci_pm_freeze+0x0/0x100 returned -16 after 17223 usecs
-> [   27.810067][ 1]  PM: Device 0000:00:05.1 failed to quiesce async: error -16
-> [   27.816988][ 1]  PM: quiesce of devices aborted after 1833.282 msecs
-> [   27.823302][ 1]  PM: start quiesce of devices aborted after 1839.975 msecs
-> ......
-> [   31.303172][ 1]  PM: recover of devices complete after 3473.039 msecs
-> [   31.309818][ 1]  PM: Failed to load hibernation image, recovering.
-> [   31.348188][ 1]  PM: Basic memory bitmaps freed
-> [   31.352686][ 1]  OOM killer enabled.
-> [   31.356232][ 1]  Restarting tasks ... done.
-> [   31.360609][ 1]  PM: resume from hibernation failed (0)
-> [   31.365800][ 1]  PM: Hibernation image not present or could not be loaded.
-> 
-> The "do_wakeup" is determined based on whether the controller's
-> power/wakeup attribute is set. The current issue necessitates considering
-> the type of suspend that is occurring. If the suspend type is either
-> PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should be set to
-> false.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@intel.com/
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+On Wed, Oct 23, 2024 at 12:09:44PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Oct 21, 2024 at 2:12 PM ZhengShaobo <zhengshaobo1@xiaomi.com> wrote:
+> >
+> > From: zhengshaobo1 <zhengshaobo1@xiaomi.com>
+> >
+> > When total_req_power is 0, divvy_up_power() will set granted_power to 0,
+> > and cdev will be limited to the lowest performance. If our polling delay
+> > is set to 200ms, it means that cdev cannot perform better within 200ms
+> > even if cdev has a sudden load. This will affect the performance of cdev
+> > and is not as expected.
+> >
+> > For this reason, if nobody requests power, then set the granted power to
+> > the max_power.
+> >
+> > Signed-off-by: zhengshaobo1 <zhengshaobo1@xiaomi.com>
+>
+> I would have applied this, but your S-o-b above needs to be fixed.
+> Why don't you use your real name there?
+>
+> If it can be changed to "ZhengShaobo <zhengshaobo1@xiaomi.com>",
+> please let me know, and I will fix it for you when applying the patch.
+>
+Yes, it should be "ZhengShaobo <zhengshaobo1@xiaomi.com>".
+I would really appreciate your help in solving this problem.
 
-What commit id does this fix?
-
-And I missed where Alan provided a signed-off-by, where was that?
-
-thanks,
-
-greg k-h
+Thanks,
+ZhengShaobo
 
