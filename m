@@ -1,125 +1,125 @@
-Return-Path: <linux-pm+bounces-16396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B42119AEACC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:42:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3634D9AEAF8
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 17:45:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7594C283398
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:42:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF2AD280F05
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 15:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CFF1F76D6;
-	Thu, 24 Oct 2024 15:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C121DE4F7;
+	Thu, 24 Oct 2024 15:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="irZuRXDg"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s50vYbHV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25EA1F76BC
-	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 15:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DD21F12EA
+	for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 15:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729784490; cv=none; b=lPi0/d70eb3AgkT95MVHJrfMgWy4mGwVTQWt03PLIk+3xO/PmHBGNbMWThAhK+Z6M0EAS0vHlRsmS7EFVrCNe4h5+wgaDnDPtTO15AEmmxa/uzqbO33e8o7Ivdj+ZI2ZvU+ii1fH55zppLOHe0iy/sjXsOx4CMeqwDmJSIGp9ok=
+	t=1729784706; cv=none; b=VaqsE01zMpZI9uilNbP7URodcmRZ3YlAGWMnt6TAf15Nrf49Y8VCcr7mnhSQYHvXdkZjWOES8gFjJhw3fGaLua+CHEatV5O8sxqFLgYXcVOHMN4sPMAXcMzG5rFrpQ+ve7NanFcUV3wxf+yoTiOVD/eG9A0jZChNqzjFK0hWj30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729784490; c=relaxed/simple;
-	bh=gLW0fh8PPs+BaOn5rkVzGVDEOg0uLVSjRbyJUCDLGBI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DSYcsCPsahm/uRrpHbkilSfwl+lHmO3gzbj6WRIoGVmrKGrXJuu4ERIxEzGMLg+ho8lUj+P+d1Aj+8FC4DI65l1eHhUoWTqmRchOTsrapsXOgEK9S66pmd6SKm5JBg56Q9GuwYKSHcD8BEP7h952iVL2VoDdOQCXzDC/diHza4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=irZuRXDg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729784487;
+	s=arc-20240116; t=1729784706; c=relaxed/simple;
+	bh=6I8qbzz7ximcghGIEO2unZUAhIwsriatLvIqpMrCiVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BwQKVaeJ4/GvSoJMifvkyCG8tVLNVo5rR6PNHcd5DkkkDYMhRaErWXwOs4VZ/1ylWiPC20ZcnLBXDeyFbbnwDd4lEdXxq9A0LxVGl4x7zgIm6T2bx3eqCMCKNvK7Osb7nv76RbwBqLbhhP1VEp3U/h4lMOBr3O7o603VkLMJBaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s50vYbHV; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 24 Oct 2024 08:44:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729784699;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=61B9Jq2TL9i1+pERa497eTJdtZBmCcAzgGgAjZWiZfs=;
-	b=irZuRXDgWACWRCTNXIsFKYyMMCr3EPRKYbhiHL1UW52GoAGZN5MEWelG/v4xAVk+UMtI7g
-	kXx9oTO7GheK/qR/KwBJWglXBOuJelNScLCX9FXUXjEdGqEn1pEmqJptc0I4dFj+SGpZ+g
-	1SF6IUqwKvlGVLfR19taLFonfWkbkow=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-671-_t0g0PPSM1mRCah7stR7qw-1; Thu, 24 Oct 2024 11:41:26 -0400
-X-MC-Unique: _t0g0PPSM1mRCah7stR7qw-1
-Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-84b28b879bfso252499241.3
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2024 08:41:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729784481; x=1730389281;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=61B9Jq2TL9i1+pERa497eTJdtZBmCcAzgGgAjZWiZfs=;
-        b=eqky9eIruyR3oVJd4/ns7Z0zDp1j7qt7oStJPeiKcM5Qa/mzdzj0UKlP26nle+IcmB
-         xf4rOlRYH8kov1vKiXmRg+sPShNeow87RAysH269kU6L4P8GahkkghLkZjT1fKvYQ7qD
-         pBa212hzZF3C25NfP9bP0/T1WEYPqKv6bYeKLL0AEtOLer3ZbMG9H6wmS1HbAWaf8BZ2
-         wU3GmZO/UdF6pyZsFTxp0jOOoQRWMTjjrk5eEMYS8Km1pvv5cSGGaNLM9fZW2hBj7rs7
-         duFekvCZiXx5iWVP59aQNPnhLi95pstUgg4t11NpnyzwpIWB1j0Ud5NmRaY7XTr5Zf+v
-         BJdw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3/JvLk0puLfy8Lj+PDFLhXjQCr6j7huguJQ51Tt5Kknh7DXyfoKmUeSwV9dV5t0KFxL9e4qvwgg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJEFVymEjb/bD6OsspoWPIvjjUP4gvetTgYZZbDlMv7Q5NjXQT
-	8Hi2cr0gwtiMrwlEeRwoS/1wWLSpdhWH7QLvXRkX6P8x5JKqo2ToJEAUvhNhZdattH8K3QwqodG
-	Y6aNmVX3U1iFUlRGj32EFrroQWcggshJTGHVYpaJtXVyApd896rvQCHHT
-X-Received: by 2002:a05:6122:3c52:b0:50d:4257:5bde with SMTP id 71dfb90a1353d-50feafaf2cfmr3108141e0c.5.1729784481027;
-        Thu, 24 Oct 2024 08:41:21 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEOjcqYJKGQfUcpv5jcBoHcpWCXghuty7VZY+BBqG0fKgtkBaCSWPzjKiT1o+ltrBGA2G2CTQ==
-X-Received: by 2002:a05:6122:3c52:b0:50d:4257:5bde with SMTP id 71dfb90a1353d-50feafaf2cfmr3108126e0c.5.1729784480567;
-        Thu, 24 Oct 2024 08:41:20 -0700 (PDT)
-Received: from localhost.localdomain (2603-9001-3d00-5353-0000-0000-0000-14c1.inf6.spectrum.com. [2603:9001:3d00:5353::14c1])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-50e19f5fad0sm1364301e0c.40.2024.10.24.08.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 08:41:19 -0700 (PDT)
-From: Jennifer Berringer <jberring@redhat.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Maxime Ripard <mripard@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Jennifer Berringer <jberring@redhat.com>
-Subject: [PATCH v2 3/3] power: reset: nvmem-reboot-mode: fix write for small cells
-Date: Thu, 24 Oct 2024 11:40:50 -0400
-Message-ID: <20241024154050.3245228-4-jberring@redhat.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241024154050.3245228-1-jberring@redhat.com>
-References: <20241024154050.3245228-1-jberring@redhat.com>
+	bh=Xk+d7Z4LZ/1qTUjGCbC24ANWAiUATci3sfG2VV3bTQI=;
+	b=s50vYbHVxKPriUbyijJqut9CFyImL7JtJpvwDxKnlDeEWu3JMYeEzlCBWWd7ZMruwnOqpB
+	VvDIZ8L5egp9CDD+dEudN1zYCjKmiTOapnHBxzklWRdAQEN0aLLfETohBS6o3AAwYopM35
+	7GdUuWw1gJcZCYJU/S3qn5AlPO0oBdg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Miguel Luis <miguel.luis@oracle.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Francesco Lavra <francescolavra.fl@gmail.com>
+Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
+ hibernate
+Message-ID: <ZxprcWDe2AXuLhD_@linux.dev>
+References: <20241019172459.2241939-1-dwmw2@infradead.org>
+ <20241019172459.2241939-7-dwmw2@infradead.org>
+ <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
+ <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
+X-Migadu-Flow: FLOW_OUT
 
-Some devices, such as Qualcomm sa8775p, have an nvmem reboot mode cell
-that is smaller than 32 bits, which resulted in
-nvmem_reboot_mode_write() failing. Using nvmem_cell_write_variable_u32()
-fixes this by writing only the least-significant byte of the magic value
-when the size specified in device tree is only one byte.
+Hi,
 
-Signed-off-by: Jennifer Berringer <jberring@redhat.com>
----
- drivers/power/reset/nvmem-reboot-mode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Oct 24, 2024 at 03:48:26PM +0200, David Woodhouse wrote:
+> On 24 October 2024 14:54:41 CEST, Miguel Luis <miguel.luis@oracle.com> wrote:
+> >Perhaps spec. F.b. could be accommodated by first invoking SYSTEM_OFF2 with
+> >PSCI_1_3_OFF_TYPE_HIBERNATE_OFF and checking its return value in case of a
+> >fallback to an invocation with 0x0 ?
 
-diff --git a/drivers/power/reset/nvmem-reboot-mode.c b/drivers/power/reset/nvmem-reboot-mode.c
-index 41530b70cfc4..b52eb879d1c1 100644
---- a/drivers/power/reset/nvmem-reboot-mode.c
-+++ b/drivers/power/reset/nvmem-reboot-mode.c
-@@ -24,7 +24,7 @@ static int nvmem_reboot_mode_write(struct reboot_mode_driver *reboot,
- 
- 	nvmem_rbm = container_of(reboot, struct nvmem_reboot_mode, reboot);
- 
--	ret = nvmem_cell_write(nvmem_rbm->cell, &magic, sizeof(magic));
-+	ret = nvmem_cell_write_variable_u32(nvmem_rbm->cell, magic);
- 	if (ret < 0)
- 		dev_err(reboot->dev, "update reboot mode bits failed\n");
- 
+This already complies with F.b.
+
+The PSCI implementation is required to accept either 0 or 1 for
+HIBERNATE_OFF. Using 0 seems like a good choice for compatibility since ...
+
+> I wasn't aware there was any point. Are there any hypervisors which actually implemented it that way? Amazon Linux and Ubuntu guests already just use zero.
+> 
+> We could add it later if such a hypervisor (now in violation of F.b) turns up, I suppose?
+
+IIUC, you're really wanting to 0x0 because there are hypervisors out
+there that violate the final spec and *only* accept this value.
+
+That's perfectly fine, but it'd help avoid confusion if the supporting
+comment was a bit more direct:
+
+	/*
+	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
+	 * selecting HIBERNATE_OFF.
+	 *
+	 * There are hypervisors in the wild that violate the spec and
+	 * reject calls that explicitly provide a hibernate type. For
+	 * compatibility with these nonstandard implementations, pass 0
+	 * as the type.
+	 */
+	 if (system_entering_hibernation())
+		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
+
+Thoughts?
+
 -- 
-2.46.2
-
+Thanks,
+Oliver
 
