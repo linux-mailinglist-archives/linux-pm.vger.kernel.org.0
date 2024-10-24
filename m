@@ -1,179 +1,108 @@
-Return-Path: <linux-pm+bounces-16379-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16380-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D7C39AE4C6
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 14:33:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 027149AE52B
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 14:40:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B02E284147
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:33:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD4D11F22D7E
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2024 12:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED321D173E;
-	Thu, 24 Oct 2024 12:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C349E1D9668;
+	Thu, 24 Oct 2024 12:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FVZzg7aM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pGyz5NUC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A321CACE9;
-	Thu, 24 Oct 2024 12:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F5E1D2207;
+	Thu, 24 Oct 2024 12:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729773226; cv=none; b=OWBuYICnPNeS9YAMOIgwLx2gEuu9uiFp4QTVvR+VXYaNGV9MNdJBhySk96Z1rivM5zMS6VhZNe27xcz9aFEFeRhqSqztRnfQCqxYjEqtLaR1f7sX2nM6HTKOvN4rsiSDI0X+fd3I5VXsRjYwo6XKn29qOSMYyrTVsyZ+m+ealcQ=
+	t=1729773611; cv=none; b=LxddlS+PEhxUZYcrvitRpTaskxCCjBicwtNRQg8/4DfDuYPt8oIi+JY50+e+JZvrU/tap2+dmQ05aGI7EcKkDp1+9y3RJNpOEliARQIfUgScG06ZNNcTBxJjTxU8J8bmvsMbWNTV+v9v+Nh7nY9qQdVLFvPsjcNn02dK0yqpzXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729773226; c=relaxed/simple;
-	bh=dYfmzmSe7qbgKOOt8aNPskAcFR6ELsZbR86hZoSQ1r4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sh6tTRSLWZfrUZ5ap3Sc5K69ysptWF2ipMXKRW2npFgQ6/RdUsAPafEgJghW4Mnp0k4TIWrEgls7RzSpPvX8B7ORiG4JXtQzB69uijD5EiPl4uSaoxMYlOcDlZ0h7RVGnYy50ErecU2ZZJBQesQWRTlkwIiZLNFbm3etvu9pqs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FVZzg7aM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A2DC4CEE3;
-	Thu, 24 Oct 2024 12:33:45 +0000 (UTC)
+	s=arc-20240116; t=1729773611; c=relaxed/simple;
+	bh=YrCb/mhgDJB269wiz1IB8jtnqMuRua4t7v/e15WwlH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=II6SbCpNZBhmajhaxFphwDNIsNz6SHVhjNyUcnypbi0lAGfxU/OfGEb4DtulR8MsOxi7fuzb0ejyQ49kxN+0yr4t1BEj30xOuwjNNAXGdH/NXvCuaFyXyAJG1cVL+nh1eyoxXVR/2u7iyRf7Dy/3WbPEXBS0PZCuCzZgwS+2EQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pGyz5NUC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F49C4CEC7;
+	Thu, 24 Oct 2024 12:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729773225;
-	bh=dYfmzmSe7qbgKOOt8aNPskAcFR6ELsZbR86hZoSQ1r4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FVZzg7aMYr4Zi9mzT7iCQTb8LUmlt/VYSU94NuG6H+XFdK7FAhmz/YPoThmvSp+Xt
-	 F3fEM/lAd4bvCGkPkQk7a9itSusWgqhptlUqZWGO3LYCqfl7LzTVL7hpOAslWpCdF4
-	 NIfuFVET8Yui+YeUKs+grBkMuwru7tEGmlqouLDZ7y8v4hgpbKcjkfaX/JZrFGZQBp
-	 6ssq8CV4e6QgztJ65IvfzUFlT9Ao01+LyU1JzCLPVTvw1Oinm1Ndo0tGHiJgLLBN/v
-	 lJV1NnDQhwiqIiXRHGwaJd73MpF6zqbALEuOYd7kESw3qa7uTRmEIdNyljtALg1VU8
-	 TWpHXXBrHtO9w==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-27ce4f37afeso598459fac.0;
-        Thu, 24 Oct 2024 05:33:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUYQgbvGc6acJ6/rgS0znQV2gp3rgO9pg52OEgTWrgxQ7DwhV4Kggis8fKjVc9wa6UkIGms4WfO81M=@vger.kernel.org, AJvYcCV4j2ofQNdvrRb6fVqH9NBlmxfi5hX2wTYAJQojgP8dZZiGVhOag9hgEWQN25OAM1XIJL6dr/+poduKU2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNIF9qFHbVRb5MRABlzaqQc3J53GBs8jG8ExXBaHc00pX0fAR+
-	BAubsQoo4j7NP4DV3h39uHXQCLdfmzkIl/rEF2AowaWBHDt0vEMLdc9R4q1XelE7oNp8kbni65V
-	oFXYj4hWW7qG6QQGx21zMgJSQ2tQ=
-X-Google-Smtp-Source: AGHT+IG+e4nlGZUQryue2nbs6hhSww387TPz9uwQmdvgn0/4UAIwxNT/0wN7Xh00rcvSFwIpTUvkQMPeQGSZZeiQCPk=
-X-Received: by 2002:a05:6870:b528:b0:270:1dab:64a9 with SMTP id
- 586e51a60fabf-28ccb7ce1efmr6184141fac.14.1729773225082; Thu, 24 Oct 2024
- 05:33:45 -0700 (PDT)
+	s=k20201202; t=1729773611;
+	bh=YrCb/mhgDJB269wiz1IB8jtnqMuRua4t7v/e15WwlH4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pGyz5NUCk+nC2ylIRx+oMRdFs05jcNmisi1bPlD+0Jwst/J0y5lzPH31hVS+SXI5w
+	 99k2CbFOevUjQZS2aI/8M9SEEN0s/RJT//p+s3n7lF/ZSP1Y/hT7B+z8oVuU4ttv+b
+	 UXLc8vH0Jh/Fx1hhzbh07HqZ/iFT88szxfKmskAIrDs7fyRfexSNIh1UpAGE6/BggY
+	 vq1NObvzg2/DBoRrobabsur48c4hPysH900VGjFoqwjuLvzDSvfe1srsJJQ1sgCq4q
+	 zBnZbpwalO8dD/8H0n/gYSCffTy/xbGtwpuIqVd43vwDD9PNwv3kmCd5/B6LxFtdwG
+	 u/4omlQXX9cWA==
+Date: Thu, 24 Oct 2024 13:40:04 +0100
+From: Will Deacon <will@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: =?iso-8859-1?B?QmFybmFi4XMgQ3rpbeFu?= <barnabas.czeman@mainlining.org>,
+	iommu@lists.linux.dev, Zhang Rui <rui.zhang@intel.com>,
+	Lee Jones <lee@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-gpio@vger.kernel.org,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	linux-arm-msm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, linux-pm@vger.kernel.org,
+	Amit Kucheria <amitk@kernel.org>
+Subject: Re: [PATCH RFC 10/14] dt-bindings: iommu: qcom,iommu: Add MSM8917
+ IOMMU to SMMUv1 compatibles
+Message-ID: <20241024124002.GC30704@willie-the-truck>
+References: <20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org>
+ <20241019-msm8917-v1-10-f1f3ca1d88e5@mainlining.org>
+ <172934406753.3231809.282041778335117501.robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4958885.31r3eYUQgx@rjwysocki.net> <1807510.VLH7GnMWUR@rjwysocki.net>
- <d2239ab1-ae95-4b51-9cc5-8aac9eb67970@arm.com>
-In-Reply-To: <d2239ab1-ae95-4b51-9cc5-8aac9eb67970@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 24 Oct 2024 14:33:33 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j-T_ynbMsMrVndSHwCJP97A1-PX-p-NNskopO=i0xtpw@mail.gmail.com>
-Message-ID: <CAJZ5v0j-T_ynbMsMrVndSHwCJP97A1-PX-p-NNskopO=i0xtpw@mail.gmail.com>
-Subject: Re: [PATCH v1 08/10] thermal: core: Eliminate thermal_zone_trip_down()
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <172934406753.3231809.282041778335117501.robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Oct 24, 2024 at 12:32=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
->
->
->
-> On 10/16/24 12:33, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Since thermal_zone_set_trip_temp() is not located in the same file
->
-> nit: s/not/now
-
-Thanks, will fix when applying the patch.
-
-> > as thermal_trip_crossed(), it can invoke the latter directly without
-> > using the thermal_zone_trip_down() wrapper that has no other users.
-> >
-> > Update thermal_zone_set_trip_temp() accordingly and drop
-> > thermal_zone_trip_down().
-> >
-> > No functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sat, Oct 19, 2024 at 08:21:16AM -0500, Rob Herring (Arm) wrote:
+> 
+> On Sat, 19 Oct 2024 13:50:47 +0200, Barnabás Czémán wrote:
+> > Add MSM8917 compatible string with "qcom,msm-iommu-v1" as fallback
+> > for the MSM8917 IOMMU which is compatible with Qualcomm's secure
+> > fw "SMMU v1" implementation.
+> > 
+> > Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 > > ---
-> >   drivers/thermal/thermal_core.c |    8 +-------
-> >   drivers/thermal/thermal_core.h |    2 --
-> >   2 files changed, 1 insertion(+), 9 deletions(-)
-> >
-> > Index: linux-pm/drivers/thermal/thermal_core.c
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > +++ linux-pm/drivers/thermal/thermal_core.c
-> > @@ -565,7 +565,7 @@ void thermal_zone_set_trip_temp(struct t
-> >                * are needed to compensate for the lack of it going forw=
-ard.
-> >                */
-> >               if (tz->temperature >=3D td->threshold)
-> > -                     thermal_zone_trip_down(tz, td);
-> > +                     thermal_trip_crossed(tz, td, thermal_get_tz_gover=
-nor(tz), false);
->
-> minor thing:
-> won't that be too long line?
+> >  Documentation/devicetree/bindings/iommu/qcom,iommu.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> 
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241019-msm8917-v1-10-f1f3ca1d88e5@mainlining.org
 
-It is longer than 80 characters, but this is not a hard boundary - see
-"2) Breaking long lines and strings" in
-Documentation/process/coding-style.rst).
+I don't see any errors in the logs...
 
-Well, you can argue about the "hide information" part, but IMV this
-line just looks cleaner the way it is than when it would be broken in
-any way.
-
-> IMHO we can add somewhere earlier:
-> struct thermal_governor *gov =3D thermal_get_tz_governor(tz);
-> and use it here
-
-That would have been harder to follow than the current code IMO.
-
-> >
-> >               /*
-> >                * Invalidate the threshold to avoid triggering a spuriou=
-s
-> > @@ -699,12 +699,6 @@ void thermal_zone_device_update(struct t
-> >   }
-> >   EXPORT_SYMBOL_GPL(thermal_zone_device_update);
-> >
-> > -void thermal_zone_trip_down(struct thermal_zone_device *tz,
-> > -                         struct thermal_trip_desc *td)
-> > -{
-> > -     thermal_trip_crossed(tz, td, thermal_get_tz_governor(tz), false);
-> > -}
-> > -
-> >   int for_each_thermal_governor(int (*cb)(struct thermal_governor *, vo=
-id *),
-> >                             void *data)
-> >   {
-> > Index: linux-pm/drivers/thermal/thermal_core.h
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > --- linux-pm.orig/drivers/thermal/thermal_core.h
-> > +++ linux-pm/drivers/thermal/thermal_core.h
-> > @@ -273,8 +273,6 @@ void thermal_zone_set_trips(struct therm
-> >   int thermal_zone_trip_id(const struct thermal_zone_device *tz,
-> >                        const struct thermal_trip *trip);
-> >   int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp=
-);
-> > -void thermal_zone_trip_down(struct thermal_zone_device *tz,
-> > -                         struct thermal_trip_desc *td);
-> >   void thermal_zone_set_trip_hyst(struct thermal_zone_device *tz,
-> >                               struct thermal_trip *trip, int hyst);
-> >
-> >
-> >
-> >
->
-> other than that, LGTM
->
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Thank you!
+Will
 
