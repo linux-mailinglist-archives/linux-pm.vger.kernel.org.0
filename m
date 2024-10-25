@@ -1,120 +1,114 @@
-Return-Path: <linux-pm+bounces-16437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F1DD9AFD21
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:50:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 373D39AFD49
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:55:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 112D21F22F83
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:50:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F01C1281959
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4933A1D3593;
-	Fri, 25 Oct 2024 08:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 724241D3181;
+	Fri, 25 Oct 2024 08:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Ijs4zHqN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jnCMYxyj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A191D2B22;
-	Fri, 25 Oct 2024 08:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCDF1D2226;
+	Fri, 25 Oct 2024 08:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729846195; cv=none; b=LH1TvJLQEh4yl4t9fe0FJnKODeiWA3EHnytzTszBtWzmVO/2rzZXAMXzwHeFPvstLSEcewRb8tSs5ZaAClBxOuHAugMw+95vKmttzKkxf/bQPg5eF2L5MvujPTVqvdA3YOS1j+YxD+tEuPKgTogF9HSx7sdFFj3SkjyYkzrJz30=
+	t=1729846529; cv=none; b=me7fXVebQxno2TzSXhtbAo7mwNzkREocROKz3KoWmg790unTTHA9p5Y3zWphHXLi7nDPy5MFxu3IFFAkySaDKDGCd0E+K2bzF4+yxm6bo6Ki1lNEC7uLCvSBP/6lS2eNdZJ5fP9FOvp7w8i/ELE/xGPosE9hCRBY+TdpHSlfKhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729846195; c=relaxed/simple;
-	bh=omXfoihbkyRKq9YwHN4cjSROCIwkALzvsJjGLDTBlgc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZnoaBl4vATr8PzL4lQaHHVDyGZ6mXtTuMCSFld+lAyy1dpkGzQOQpT95VWf/+D0neKmr+NmfKAbGFwldS8uC77r2AIXbQZV4BQAOUO4IwOtgE70mo4NtU5zq8wik8TrKWxRhu0miUOwHsrngtd3aP7SN8nLxekpya4WLbC5rNJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Ijs4zHqN; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=dCTo7/Paqcj1EVHb4+w12POrbZzZC7lWqiLNM5hDYKI=; b=Ijs4zHqNaVR7dlv1gXLpnhp09+
-	b6VLYRy2mZtaoHGHyJZIttynYfdS68bztttwgmOEyOc8O+buh1qm7gjMoXDWEDquIoLTbRukqwN8t
-	eoTZgzpqGSFtGi9Im9UwYsjy2nINm67DRvieKeJRLPAVdBZmIsE2xIW2YfMyhdJmJBbw1dkXlhZ+V
-	YYehv11NjALmjpaUjHDjdG0FLkj3QJ2T8PVcNQbH8O/IAOid88QOR4Mj2/g8qbhI0WMbyIdZuNqlX
-	Ia+mgPcZ91tYQKGC34/cKjZMs5ZmG5xVMdDLf+/nSysStHE4/Xqxn4H5qYIbjzN3aQH98Xxjd3PkY
-	M6ttTubQ==;
-Received: from i53875b34.versanet.de ([83.135.91.52] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1t4G0i-00078T-UX; Fri, 25 Oct 2024 10:49:32 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>,
- Elaine Zhang <zhangqing@rock-chips.com>,
- =?ISO-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com
-Subject:
- Re: [PATCH v3 7/7] arm64: dts: rockchip: Add GPU power domain regulator
- dependency for RK3588
-Date: Fri, 25 Oct 2024 10:49:31 +0200
-Message-ID: <39319975.10thIPus4b@diego>
-In-Reply-To: <20241022154508.63563-8-sebastian.reichel@collabora.com>
-References:
- <20241022154508.63563-1-sebastian.reichel@collabora.com>
- <20241022154508.63563-8-sebastian.reichel@collabora.com>
+	s=arc-20240116; t=1729846529; c=relaxed/simple;
+	bh=4Lxw01RezOYphFXGoawie2dULwLcNzZ84sWvEpBQ/GQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s6Kl7lYuGPhCEqZHCEsiGSW7unBm1PXqJ0EiaVLz+Ax7aNgu4lvPgxWF2oJ1sgjqw0db/EUZ6pQxTjaws8+fIUGs0MPLyONsGtm0XS1iAIHjVTkxMWmB9QdVGhFCyyyIerh5erXbff9vIkdaY9FX89Z5q36wsi8QFqhYdFBD0yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnCMYxyj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CD0C4CEC3;
+	Fri, 25 Oct 2024 08:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729846528;
+	bh=4Lxw01RezOYphFXGoawie2dULwLcNzZ84sWvEpBQ/GQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jnCMYxyjCWs4g24xlPpyGqA+nny7QVptdHr0wP6pXVXfiWcyBa2BGjrB+CUiVql2C
+	 DA9IEdBvgflao/nUJbNIPWXjEU8WxecOJ1hHmNiKbxfcMhV19jYWBoudpra9YG/RNg
+	 SfeYlh1H9sjvet48blrj/VLAXGAa1bkYFgAetIIS75cbx6c0G2hVV7xBomfNKjnXAH
+	 9I/k2KHreokbDnXl23tabpB8eVH+UaXuPwHpJHH9nyxSfvFbJdtyym4IaZjzeBcGwE
+	 5FzuLXjBnfzY/GIs3BAU3Yba+vi2fT/yvS4zV7RyLd1p8s9abXZeBlKnJ8m2G4xrje
+	 2ZnyDDMh93qMg==
+Date: Fri, 25 Oct 2024 09:55:23 +0100
+From: Lee Jones <lee@kernel.org>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v6 7/7] leds: max77705: Add LEDs support
+Message-ID: <20241025085523.GC10824@google.com>
+References: <20241007-starqltechn_integration_upstream-v6-0-0d38b5090c57@gmail.com>
+ <20241007-starqltechn_integration_upstream-v6-7-0d38b5090c57@gmail.com>
+ <20241015143329.GJ8348@google.com>
+ <CABTCjFCtFbFht2ZyBADuxhOfHZqiUmNKnAu4rwAS=kNgdqeS+w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABTCjFCtFbFht2ZyBADuxhOfHZqiUmNKnAu4rwAS=kNgdqeS+w@mail.gmail.com>
 
-Am Dienstag, 22. Oktober 2024, 17:41:52 CEST schrieb Sebastian Reichel:
-> Enabling the GPU power domain requires that the GPU regulator is
-> enabled. The regulator is enabled at boot time, but automatically
-> gets disabled when there are no users.
->=20
-> If the GPU driver is not probed at boot time or rebound while
-> the system is running the system will try to enable the power
-> domain before the regulator is enabled resulting in a failure
-> hanging the whole system. Avoid this by adding an explicit
-> dependency.
->=20
-> Reported-by: Adri=E1n Mart=EDnez Larumbe <adrian.larumbe@collabora.com>
-> Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On Tue, 22 Oct 2024, Dzmitry Sankouski wrote:
 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64=
-/boot/dts/rockchip/rk3588-rock-5b.dts
-> index 8f7a59918db7..717504383d46 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> @@ -465,6 +465,10 @@ &pcie3x4 {
->  	status =3D "okay";
->  };
-> =20
-> +&pd_gpu {
-> +	domain-supply =3D <&vdd_gpu_s0>;
-> +};
-> +
->  &pinctrl {
->  	hdmirx {
->  		hdmirx_hpd: hdmirx-5v-detection {
+> (...)
+> > >  drivers/leds/leds-max77705.c | 157 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >
+> > Lol!  How big is your terminal? :)
+> >
+> 
+> Dunno actually, this was generated by b4
+> 
+> (...)
+> 
+> 
+> > No C++ comments please.
+> >
+> 
+> This conflicts with https://patchwork.kernel.org/comment/25898728/
 
-nit: this seems to have seen some spillover from the not-yet-merged
-hdmi-rx
+a) That's just for the header.
+b) That's a different subsystem and Mark's choice.
 
-Heiko
+> > > +             ret = regmap_update_bits(led->regmap,
+> > > +                                     MAX77705_RGBLED_REG_LEDEN,
+> > > +                                     MAX77705_LED_EN_MASK << led->en_shift, 0);
+> > > +             max77705_rgb_blink(cdev, &blink_default, &blink_default);
+> > > +     } else {
+> > > +             // Set current
+> > > +             ret = regmap_write(led->regmap,
+> > > +                                led->reg_brightness, brightness);
+> >
+> > Line wrap at 100-chars.
+> >
+> 
+> From coding-style.rst:
+> `The preferred limit on the length of a single line is 80 columns.`
+> I only exceed 80 chars, when there's no good wrapping.
 
+a) This is old guidance
+b) A lot of your lines already break the 80-char rule.
 
+-- 
+Lee Jones [李琼斯]
 
