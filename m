@@ -1,243 +1,104 @@
-Return-Path: <linux-pm+bounces-16461-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16462-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC3389B04CB
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:57:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D1B99B04EA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 16:02:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94D4528534F
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:57:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9AC71F244BD
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 14:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E301F755D;
-	Fri, 25 Oct 2024 13:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1715B1487C8;
+	Fri, 25 Oct 2024 14:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ayXK74NW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRBx6Rbx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2043.outbound.protection.outlook.com [40.107.236.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0837370815;
-	Fri, 25 Oct 2024 13:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729864674; cv=fail; b=Rdujw0oNAk3pnNDvEHnxQqfh/usq5yx2kdPemrUAHmCSAtS3GVM2oZMjEwDgYoZJcnZvcJvy1LDtdQMNsimGm7MClfskuOODXfMYoAMzDMI4qQydJEZYkjuGQ8fRDRnnrdIdzVqp/khmz9n4CHkuMzlZ0eQV7Fh/UaJvoMSkHYA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729864674; c=relaxed/simple;
-	bh=D262Vwv71abgTDY61dRhNm+X3RO+XsPUD4RMIY8++Xs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=E4OWAIAmL/KC3bWM94156W2uOlpcF66yEID8xoEhiRmhK/R0k9O1r3un+SIwt0jgfuYfueEmFLordx4zOSUF/Qb2iVCuKyaUMnV3nJBtHxo58fmM/x/IH5OyX8nUrYMP+5ixUTw1TKWW38Hn7AzqMP7A2SL7gMbU0QHifSc9ryc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ayXK74NW; arc=fail smtp.client-ip=40.107.236.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EDh4KRrfAS/B1Y6YZIHzL4zRThgR0DIU0Kqgwp04ySb5QAz33a1M879iuyrmLbW06FtlkLSnpyOOANPTAEavFbrUYUo3idVPp413Ok37jlFCU7ZAZtxxPGrAU6E3C6C39Ne6QR439MSAKbLikxFRGkvTq7poIkY9PU1X/LK6DC2QrSQuMEJoSsAWnXzx40KnSVRxvoeNp5s8uBENMUarS/2ydxZZNXaNexpf5tlfANbMCFRXJnG2tmrUPlgQTS3zle59zhYFcjD7bJ4v1JMqWyzfWAh79Y9ipTLyAwPHuiFn0kMLekQQ2Vzka0IrnjtLCg3eT8ktwgt5W0r54ZZluw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x5LVEQcy6Pci4I7q2nwGo3FrHu769xuq8snEOWStFLo=;
- b=XLTT1nSDogFdKURz70xRx6AkTUCfjTVO98OF3WXgxM2cbcKx4s6LeB65lor0SK0xUBbLjxYvHosgKaDJ80gamyRC5gClv+Zia0/bGY/eF8qDDwIcqwNg7Kjko2w2tlQUAfUV+qxTfoVCW/wkxlRnndlOCu51Mx1Qc9ifyuQ8+JKTh3yXPH8s3pKLQWGZiEIztsUgLRPuUKmKhQdTugQLiWlBQi0Pg0bLEBpghsj0TEIgZbhS6EXlhFUaKQUDHhrXGKfLI+4rxyOKTNiLwOpcV80elrTBldM2YxM7IHOEONHLyRNViICtxCWJDCpWmWdSUSh3p/bj9O28Ru0IRiBscw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x5LVEQcy6Pci4I7q2nwGo3FrHu769xuq8snEOWStFLo=;
- b=ayXK74NWr4kIP7dQOUXUoxNSX7enuZQadySQJGGRGhTkVwOF49PeQXy04OXCCwhF0X3C3fC1hxRDY1ICf+80Ouar0OnsAafwQJfFOVJ12g6ac3vqsxb88uF5YqIvLI5ACklY84vEOYKipcbtC15KSLQ8WFLFXjeQBwZ0+XyipJ8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6095.namprd12.prod.outlook.com (2603:10b6:8:9c::19) by
- CH3PR12MB8533.namprd12.prod.outlook.com (2603:10b6:610:159::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17; Fri, 25 Oct
- 2024 13:57:49 +0000
-Received: from DS7PR12MB6095.namprd12.prod.outlook.com
- ([fe80::c48a:6eaf:96b0:8405]) by DS7PR12MB6095.namprd12.prod.outlook.com
- ([fe80::c48a:6eaf:96b0:8405%6]) with mapi id 15.20.8093.021; Fri, 25 Oct 2024
- 13:57:49 +0000
-Message-ID: <f1f8c20d-ec13-49d3-ac47-a2fcd4433baf@amd.com>
-Date: Fri, 25 Oct 2024 08:57:46 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] x86/amd: Use heterogeneous core topology for
- identifying boost numerator
-To: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, Brijesh Singh <brijesh.singh@amd.com>,
- Peter Zijlstra <peterz@infradead.org>, Li RongQing <lirongqing@baidu.com>,
- "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>, "open list:ACPI"
- <linux-acpi@vger.kernel.org>,
- "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20241023174357.34338-1-mario.limonciello@amd.com>
- <20241023174357.34338-6-mario.limonciello@amd.com>
- <20241025135107.GPZxuiS38_s3KWe8xj@fat_crate.local>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20241025135107.GPZxuiS38_s3KWe8xj@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0154.namprd04.prod.outlook.com
- (2603:10b6:806:125::9) To DS7PR12MB6095.namprd12.prod.outlook.com
- (2603:10b6:8:9c::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC482212168;
+	Fri, 25 Oct 2024 14:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729864932; cv=none; b=SznTjFjikCbOvNGQJe+/08mSBa22HNj6/sY9KMlno9pIHPSftRsu+1k17noc6A4m6NxJ9/kthCo6uQpnMVDi2T28r5CyqEGTJASfiCrxxGkCkmFfMzn7FzkCP5I2CGyZnQKIDhpqUy50zRMDciU6kYh4Cj9hqIPf3lWOfBCmOQ0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729864932; c=relaxed/simple;
+	bh=uOUytvJeyy3SqYRpdRsBWf13Adk6SJC8Eee84d3Etug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fZKjaC9WnWegxuITYYWKQtj+dDiQVT5dL10ZPIj02DM3c8vZ8cEyzeAvfWhRvE/+z7sdrZvW8RBFcm3VbDFUYQtY4RxNbx/YaVfx89o5Hosc0nOQ9gWHAZu1x2uwX0DgKM3TU8nud9TqPjhe5isBgiqSa/2nvnMGiYaEXimehvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SRBx6Rbx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69293C4CEC3;
+	Fri, 25 Oct 2024 14:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729864931;
+	bh=uOUytvJeyy3SqYRpdRsBWf13Adk6SJC8Eee84d3Etug=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SRBx6RbxR5nuw+gDjyclmxQ45SMY1Z/wdsODDoBv6EDDt+cfCE0A8C09z77A44GsG
+	 Fl3YD9mvL1lKw75XRpaHg4GDOFkWuf0rDOOA25f/rDWFltcJup7FlMmxYPb1fe1l36
+	 9pKZsLZAeWLDgbjbtmwylseIT/ExTOBC6HhCqjcHtxPdZtRxeRzK7tIY9veBhxdNrz
+	 J3KfUdiFeCmCbu+Jzx+XX8M5fGkJ/hlWtA7Py7Hv6ozszRWqhEpSBRNSl3ahtscPrX
+	 CUGmopX0JoU2qGKy31gd2JdOD+mQapW8KxNxUfdoP/9XSVC+rwwhSm/v+d0/Oo3SFO
+	 qF2//B8TjtyLw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t4Kta-000000005yi-0WFi;
+	Fri, 25 Oct 2024 16:02:30 +0200
+Date: Fri, 25 Oct 2024 16:02:30 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, ulf.hansson@linaro.org,
+	jassisinghbrar@gmail.com, dmitry.baryshkov@linaro.org,
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	konradybcio@kernel.org, linux-pm@vger.kernel.org,
+	tstrudel@google.com, rafael@kernel.org
+Subject: Re: [PATCH V4 0/4] firmware: arm_scmi: Misc Fixes
+Message-ID: <Zxuk9jlibn8ffEVZ@hovoldconsulting.com>
+References: <20241023102148.1698910-1-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6095:EE_|CH3PR12MB8533:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8ba2f94-5025-46c6-00ac-08dcf4fd02b0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aFBvRkJuOFprM0thM3doQ2V1ekNLaFArZ25FS3JJcDQ2SFBSSkRJVm5nVklK?=
- =?utf-8?B?TFZHbUR5dkVOWGk5TzBpaUpWalNJbnQ0V2QwZnIzM2JJbzVidnFaRitMd1dO?=
- =?utf-8?B?SWcrRHREdHZYRmZMQ2dneWdhTHdyanZIMlVvSkhFdWxRdXBTRkpJdXkyUHFs?=
- =?utf-8?B?ek82UHBlK1lWbXp6ZFNnTU9objVYME05Vnc1emxVZzJHa0lhdHZ0WTdLYlhs?=
- =?utf-8?B?OWhaeFdhZElGRzVoWUZVUk43N1pCR1VzT1hRZ3NyKzJxVkYzVjBoTDVvc0k1?=
- =?utf-8?B?UVlpdVZWWXlPL0NhQ3JyRGRGQmE2U1dUVFNqZ0k5TTBySXVrS0JkaUE1NG9k?=
- =?utf-8?B?bFJXWVIrWkpjSFdMVEpOUE1tQXh0NllZZ1ZqallaM000OTY5ZzRGVHZ6NHAv?=
- =?utf-8?B?MVYzR1ozWDdjWkgyVnErZW83UlBYTjlaajBHR1VpZllBdnl0czNocVJpYndX?=
- =?utf-8?B?NkFsK1FZa0lVcjNCVmZ6SFpIVkN0RE00c01LVEphYS8zZFJDanI5M1pzdk1D?=
- =?utf-8?B?aFM3S09rdnJ2UldVM1Y4MndrRVExWUNib2JLQzNFUkYvMkc0bkNYaGJmMHBz?=
- =?utf-8?B?NStIVXdXQjIxbm0xVkV2bnlvK0poK1psWHd5WHJieDQ5Y0ZuSEN2N3VpOC8y?=
- =?utf-8?B?eFpOaVVpTWw4b0VNMndnTWVHZm9kZ2hqMGoyV1hvOVpramkrNlJiTkQ3dy9S?=
- =?utf-8?B?YlMzcm9wcjh1QUlnc2EweFJ1SHNkWUVZMkVFU3hWNUJUeXlyTG9vTThrS1do?=
- =?utf-8?B?dGtXTGVZck56RFU2VERoL2dhSmhMaWZuaEluWHhLcmJaaXg1U25zaGw4M3Iz?=
- =?utf-8?B?VWhLTzFsNGl4T0wxaFhwVG81OE0yWnN2WVJkOC9QUk9rbnhYTW80MWw3dU9t?=
- =?utf-8?B?T3FJWHVJUGcvaDZEMmZYUnFmbm9hTVI1UmVMWDAwUHN5Q25YWDFPazNaR010?=
- =?utf-8?B?d0V5LzlXdXlQK3BpR0JSYnE4UTVVMG95cTZhNTVHV0g5NFRvdm8rOS83d2t1?=
- =?utf-8?B?MGQ0d29lNkRlQWRWdlNhcTJudDE1UjV4L2oxWVhnVUVlMUh1NUl0YnZkT2k0?=
- =?utf-8?B?SW1kc2ZHbDVWeG9aaGNoMTFtTzRLcXlkU0lURTNGdDVscmUwaDRqWFQ3bDI1?=
- =?utf-8?B?bEx1NkEwN0RESWgrcDYwb2R0N0hCSndTUGgwNXBRaXZqUTJISnZYSW9VMGpI?=
- =?utf-8?B?eElkU0NMSlhwN3RERjViVldwclNHaG9vWDA4MFlZZENtYldwM1hRTmV3azc5?=
- =?utf-8?B?RHl4SlZCUTZnTStMd0hoYnRyZDJzQnRySlB5OXUwb0l4T2cwWC83cytieVlr?=
- =?utf-8?B?TUpkR3BFcjJ5bGEzTjlGdnVVMUJnWG5KL1NYNWlGU3QyS2h3ZFhLR3BrS0NY?=
- =?utf-8?B?TnpvWXhTUXFPMFZ4ZWtOYTBDdS9qZ3N1QTFrOFdYdlQxeXNnd05aZm94UDVM?=
- =?utf-8?B?WWRLVExUcDZVbWt4RFhoK3Fja2p3ZWhBZWlyRVQvQzEydGd5ZjhJeUpZMUg3?=
- =?utf-8?B?b1R1bzRMWFFZU0hJMTdING1mWndlSzdQcERkSVd2NVd1UmNvWm5kdUtKajlJ?=
- =?utf-8?B?LzMvczRQcXZOTTR6ZHJmTUt2NEhReEJyVTJveUttSXFGM2RHRWh2Mk5lTDJ1?=
- =?utf-8?B?WmxVUEhMQjAxTldZcFRNYXo3WVV3YmVwdGM5azc0OXFDcXpDM1IxU3NsMDJN?=
- =?utf-8?B?K2J1K2JnZkg3cStRQjQxNnpLQmRzbVQ1bHp4czY5aEludVUwMThCQ3lCc3JW?=
- =?utf-8?Q?i05lY4kSlOJoxVpsxTW/WCitmCVY6P8OsnhaBJB?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6095.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bVNxOURremhHRW1Fd0ZXa1FqY2xZb0lCblZ3cVh3dG1oL3lIbm9kMWY5Uis5?=
- =?utf-8?B?d01sMWUvS0lUTWpFNVA5dXdyWlNJdzRxV2ljMmNNZldxV1ovcWUwWWQwTXVh?=
- =?utf-8?B?N0syVWxwYksveFdYOU5jbG1INXoxdHVlYkpRRkdWV01zOHJXVVJjNGE0Wmov?=
- =?utf-8?B?Z2duR0FWbUpFSU5oMXBDdUV6ZnN3ak1MRDE0NmNVVG9FRW12VktDWGluOCtR?=
- =?utf-8?B?T0tsVmZjVDRPdXpSQmNFSCtxN1YyMFlpVzJzYmhHV09kMzgyTERaZGVjRFBF?=
- =?utf-8?B?elBGbktmL3Y3cE1aa1IxQ2NKS1pJc05sZnc2SDRNMnB6U0tzZjlmTkxDR3Zx?=
- =?utf-8?B?NnlxVnlzazF4U3R4SHEyaWQvelVOQSt2TmRRb21QNXRNOG5uZlVoc2xkSDBw?=
- =?utf-8?B?bmovaHZ0cGZmVmM0cmxDRjNtT1pIT3orTGxxWkplbWtJbTRoK0J3VTJHNXUy?=
- =?utf-8?B?WFpVVno3dDk4Q0VRQmxFbzBPVFJTQWYwSEFESmdmV1hSSWs0K1dXL2lEc0M3?=
- =?utf-8?B?UWFTT0djVDhlOG1PMWpoVkVUZ2FsNUNiQWU3UGdiU0VMMGNsQ0FkdEprMjNx?=
- =?utf-8?B?UUV4bmFGRmoyMlROaG9nWGNsWENOV3VORFZ3Z3ZaRmc2dEp5T3gxNFdtQlpa?=
- =?utf-8?B?bzlOZXBTNHlQQklkTUNBYUJJYnpNaCtsaHZqNERxWHphdFY0bkRVbUNlc0p1?=
- =?utf-8?B?eTJDRnk0SkVJVjZhMnRzSStXWDh6RkJYbGU0b294V1lQbThGeXExOEtFbWt1?=
- =?utf-8?B?d2J3d0lrdEdvYVVxS3ZXNHpQbUlaaE1jVGt5UFVlb2Jsd0ZNNW1VdEVZcmNE?=
- =?utf-8?B?aFBYZDVIcHpKamllUkxUaTJ4YmN1azR2R2QyZUtuU2pFTExkT1RDTlVmU24v?=
- =?utf-8?B?T3F1c0UyN3J5dnJDQ2I3QjhrVEx2eG9jcW1DNlV3d1NmS0ZRZWprM1Zyb29O?=
- =?utf-8?B?dFFpK3paR0NUdmpsWVh2eDNXcHpXTHpoV0h0Z2VidytxTjU3TTUxRXgrWFpz?=
- =?utf-8?B?eDcrcTQ2LzhTcjNqc0prV2RlT1VOMGFBUGRXTHdXRFZRZy9qU0lPS2h3enBs?=
- =?utf-8?B?S01pTHBHdFpvRXNraWRoZ3ArSFVtNGdaOXg0QWxvSzBWWTJnUzBjYUF5TkFp?=
- =?utf-8?B?TE56TXlWRkQ5dXNWaCtwV0NjRndZNndlMU5UYytzaDBMYzVQWERWbVhQWHNF?=
- =?utf-8?B?enFKYzNJY3Q1MVBWd0xpdHdEdHhNbFhYZ2l1SlRIQnZvUzliSTJubXlzdjJO?=
- =?utf-8?B?RjVHSEJyaUlBQW1YYy9ZckhMWHpvWmk1Z2hBd2l1UFBCTmU1QUdpU2d1dUJC?=
- =?utf-8?B?ZDROekFHUDNHTGNzMEZTMVljaXpMT09hT0ZDRG1lbWFUV1MrOEJHMUFtQjBp?=
- =?utf-8?B?M0x3eG40d1ZwTENQQVZWbnFncHRvdHlOb2hmRzMxMXFiUmROeHZmdmhyL084?=
- =?utf-8?B?aGVOUFJEWXo4aUQxV041OEU0V1Z1eGxhYjlpV3llVEQ5UnVmN1ROZ0d6VnNE?=
- =?utf-8?B?U2hZZFhiRmUyZVdxaUNBZ1BYK0diT2FaWWI5eE40MlRFS0tuY2lweElxeVRO?=
- =?utf-8?B?SnVlTTJHd1ZPeTJjNlFQQURFLzdtcjNLL3FNWmUxNVFQeC9WR1QvTzlycEVn?=
- =?utf-8?B?MnpTekJzenRPL0lRY2w4YUI3QUJ1ZXRqeUxTd3J3NFlQK29qeGcvOUQvQmw3?=
- =?utf-8?B?MEphVDA0dTVtVHk2OWoxSk41MHZRRzFJOUdYQVpiOTlsTHU0RC9uVi9VYTA4?=
- =?utf-8?B?SXArUVNKb3lFWVZLZkIvdEljcjBZclFiblBGWXVVRUhoYnRoL0N1Tmx6dmJt?=
- =?utf-8?B?TnZSYWYxaVlSVW9mV1VLdzBFNFN5enVQSGNCMlJzTEMxS0JIVm9lU1hRMmt3?=
- =?utf-8?B?WGFNWmV2MHg3UmU2MUlPMXYwOFlRTHhKcG9YY0dlR3RGbHZ3bTVxUVRkSnBT?=
- =?utf-8?B?a0dPS3JjcGd4ZHhsdjFjZG1zYjNnREF6TWZNb3lLMzlqcCs1aU1LS1dHeXpV?=
- =?utf-8?B?ZHc5S05CQlpLZHlhNktoekozNkJhRFdXZS9aZ0VZQTg1OTJCUjRGN2RLdkJa?=
- =?utf-8?B?NUM1MU1zMGZQYldlZUdKTldFUGFOZHpzUzFXSXdVREFaZDB6VVQ2b0Y1SVlo?=
- =?utf-8?Q?5R+kbc71Vfl2CO+IoONDw0L4w?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8ba2f94-5025-46c6-00ac-08dcf4fd02b0
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6095.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2024 13:57:49.0554
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FHYneUjV/4931s/rQw6MtYc3MT/kvmXVYLLQj8XhHrNAZ5pqZmAuKCtLw/tewurd3x/bgp53nCmgIFn1ZGn0+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8533
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241023102148.1698910-1-quic_sibis@quicinc.com>
 
-On 10/25/2024 08:51, Borislav Petkov wrote:
-> On Wed, Oct 23, 2024 at 12:43:57PM -0500, Mario Limonciello wrote:
->>   int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator)
->>   {
->> +	enum x86_topology_cpu_type core_type = get_topology_generic_cpu_type(&cpu_data(cpu));
->>   	bool prefcore;
->>   	int ret;
->> +	u32 tmp;
->>   
->>   	ret = amd_detect_prefcore(&prefcore);
->>   	if (ret)
->> @@ -261,6 +263,27 @@ int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator)
->>   			break;
->>   		}
->>   	}
->> +
+On Wed, Oct 23, 2024 at 03:51:44PM +0530, Sibi Sankar wrote:
+> The series addresses the kernel warnings reported by Johan at [1] and are
+> are required to X1E cpufreq device tree changes [2] to land.
 > 
-> What's the difference between this case:
+> [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+> [2] - https://lore.kernel.org/lkml/20240612124056.39230-1-quic_sibis@quicinc.com/
 > 
->> +	/* detect if running on heterogeneous design */
->> +	switch (core_type) {
->> +	case TOPO_CPU_TYPE_UNKNOWN:
-> 	     ^^^^^^^^^^^^^^^^^^^^^^^
+> The following warnings remain unadressed:
+> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
 > 
->> +		break;
->> +	case TOPO_CPU_TYPE_PERFORMANCE:
->> +		/* use the max scale for performance cores */
->> +		*numerator = CPPC_HIGHEST_PERF_PERFORMANCE;
->> +		return 0;
->> +	case TOPO_CPU_TYPE_EFFICIENCY:
->> +		/* use the highest perf value for efficiency cores */
->> +		ret = amd_get_highest_perf(cpu, &tmp);
->> +		if (ret)
->> +			return ret;
->> +		*numerator = tmp;
->> +		return 0;
->> +	default:
+> They indicate that duplicate opps are reported by the SCP firmware and
+> they are seen during probe. They will get addressed by firmware updates. 
 > 
-> ... and this case and why aren't you warning if TOPO_CPU_TYPE_UNKNOWN?
+> Duplicate levels:
+> arm-scmi arm-scmi.0.auto: Level 2976000 Power 218062 Latency 30us Ifreq 2976000 Index 10
+> arm-scmi arm-scmi.0.auto: Level 3206400 Power 264356 Latency 30us Ifreq 3206400 Index 11
+> arm-scmi arm-scmi.0.auto: Level 3417600 Power 314966 Latency 30us Ifreq 3417600 Index 12
+> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> arm-scmi arm-scmi.0.auto: Level 4012800 Power 528848 Latency 30us Ifreq 4012800 Index 15
 > 
-> I think for that you need to check X86_FEATURE_AMD_HETEROGENEOUS_CORES and
-> warn if set but still CPU type unknown or?
+> ^^ exist because SCP reports duplicate values for the highest sustainable
+> freq for perf domains 1 and 2. These are the only freqs that appear as
+> duplicates and will be fixed with a firmware update. FWIW the warnings
+> that we are addressing in this series will also get fixed by a firmware
+> update but they still have to land for devices already out in the wild.
 
-Yeah; you're right.  An earlier version of this behaved differently and 
-I missed updating this switch/case when using Pawan's updated patch.
+Thanks for sorting this out, Sibi!
 
-After we get Intel feedback on the previous patch I'll drop the 
-'default' case in the next version and switch it to this:
+I guess the above description is clear enough too as to why the
+opps_by_lvl warnings should stay (in some form).
 
-case TOPO_CPU_TYPE_UNKNOWN:
-	if (cpu_feature_enabled(X86_FEATURE_AMD_HETEROGENEOUS_CORES))
-		pr_warn("Undefined core type found for cpu %d\n", cpu);
-	break;
-
-> 
->> +		pr_warn("WARNING: Undefined core type %d found\n", core_type);
->> +		break;
->> +	}
-> 
-
+Johan
 
