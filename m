@@ -1,104 +1,146 @@
-Return-Path: <linux-pm+bounces-16456-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16457-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB9E9B047B
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:48:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AE429B0485
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49F761F24092
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:48:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD3D6B22CB6
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A4470804;
-	Fri, 25 Oct 2024 13:48:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB771D6193;
+	Fri, 25 Oct 2024 13:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Wm244Aud"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA02612B64;
-	Fri, 25 Oct 2024 13:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71651632E2;
+	Fri, 25 Oct 2024 13:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729864122; cv=none; b=CfV9cM2DSwPE5qsDwefcJFonwAZ2eVCipmJD+jACrA6vpKk1KSe86tKkqmdzBAirt/Lc3b78umKJJCo7dgzZc8zb4udI9W8a5DeIZ78wCA95XSJaFkz0NB+d2br8xTCoZlHWxcdwmSDTMtHHQNr3A55yhuieeMs2QVt1Io2woA8=
+	t=1729864292; cv=none; b=c4fPMGLOzFi5gOc2/wPjN5DXWRFEQP04tViTj00y449vkGCfG6l+2WX4z27glbeotqcgyk/J+yaAbrPV5bm5cBLYkernWMCFaB2VXzHVATkE0U+7Lc3zs0TjS839rhmuOHP9keWXp7L83EjdMK3ZZhpGQNngcDEWXwYG//nCQlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729864122; c=relaxed/simple;
-	bh=AWWxHlQ7+1+m8GRIlMTOKtAHKxDrjgZ5/Q1TV6hpEKA=;
+	s=arc-20240116; t=1729864292; c=relaxed/simple;
+	bh=/9gpRT1rrvW3/WnQ2D+/OotZc6CUH9P9u7DC+yvQo0A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RJ8hNJBygkeW0sx6zH2I3RbpNdLS5KBj1obwUU4ixeN4zyuEIvLsN9jZ7bvguDpTISZFgqkVntbQNV4ri8V7pR6of2IleK3fP1SrMQTCJQTwWbyGqftIzxHNZn8xsUEXp2CsdIMfBEMukJ/eCAcgx6ZPjZkY1F+6qM8pxTmeQzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8BBD339;
-	Fri, 25 Oct 2024 06:49:08 -0700 (PDT)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3E1D63F71E;
-	Fri, 25 Oct 2024 06:48:37 -0700 (PDT)
-Date: Fri, 25 Oct 2024 14:48:26 +0100
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Cristian Marussi <cristian.marussi@arm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sibi Sankar <quic_sibis@quicinc.com>, sudeep.holla@arm.com,
-	ulf.hansson@linaro.org, jassisinghbrar@gmail.com,
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	konradybcio@kernel.org, linux-pm@vger.kernel.org,
-	tstrudel@google.com, rafael@kernel.org
-Subject: Re: [PATCH V3 0/4] firmware: arm_scmi: Misc Fixes
-Message-ID: <ZxuhqkDoWF8IYQxL@pluto>
-References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
- <ZwfsmqInJlqkQD_3@hovoldconsulting.com>
- <ae5eaef9-301f-7d3f-c973-faa22ae780ee@quicinc.com>
- <ZxkjqEmkBAsC6UkL@hovoldconsulting.com>
- <c8e7420b-a7b4-89cd-1b6e-c1f6693c062d@quicinc.com>
- <ik4dyfbphm7lkeipm2dbr7cmdfxewxd4jtuz2jfnscfwcyo2r4@lrin5hnsqvyd>
- <83b635a7-fc69-7522-d985-810262500cb3@quicinc.com>
- <CAA8EJppx1OmYnfSsMDebRRTbNb3dfAE_MM55T1SpLccP=s_K1A@mail.gmail.com>
- <Zxty8VaMPrU3fJAN@pluto>
- <ZxueBWB9nJ9Mt7bW@hovoldconsulting.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nTXI9+x3g+Tzwfo78ev8X/oNX0IKmVT8CR3z97jQargA8nW20ggDVOuSayUV/AjxSNaL7o9nEFmmiPsLkRbOqys5RllYYojdfAVvhNEYjXbbp8migWQAurW90tqS6Fh/MCN1OVRF0DOWkDedhNL6Qs5fD9142PMAbsAX4xHbyWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Wm244Aud; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6566540E0285;
+	Fri, 25 Oct 2024 13:51:28 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id psED-3lxfWbY; Fri, 25 Oct 2024 13:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729864284; bh=m0hkEZxpeJr7ugV2LE9WQ9YG0cnThgfQkWBRiVT0HMo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wm244Audxi0pyKbQM9vE0pe6KwRVFb93PK0Zg+Fxr1VAf3KSQ8wtBi06quKksUluq
+	 uxRcfYbIJxe00xpsK9IStHxk4IoJUnLCUdkMvZ3EmDLD3soCdwP3ggqMTnXeu+fc6H
+	 9exfXwEIpzOZ2FuyX/QLOZVGAQ8T95lMQeUpxyuaC2OJDB9yNSSREUOz9fkGsFOnxP
+	 v1Tx/mJcktzJq4y0TYMBI3nWT6e3p9+XiVFI5a/gZX3Bsewj0PQshljp1yxdN7xP9G
+	 YQg7GLDwXYZLThYCfXpMWaqMNctPrwIVsYFKuSrrm6pRNF/XcQryLJXveRvabr38JG
+	 YieXVOkuggdCrZZJ6aycV9fILCwLzsfvkOQvr2CVHAyk9BmeE0nOpE5Zl1tRw3q/rW
+	 cWSi7riAOf0WxK4csFkozcblzWp4CAixYHc04aEoQfgA1pWhhyo9R3K02WeYsQbrg9
+	 Gk18qzVWHs/lOtkjnzU49+WUcBbQIJrG5DUIwqlFnZc44TnNuzJWMafPF9ODnPwDDW
+	 Qund2KTfFNDvJKlzO7JJIlSlgdfamjOYgY0UEHpJ+QUGrzP8mqREijha5iTeKLN6T9
+	 r0vLJd2BbrlX/Z5I8AzezUjKPzivCKlmY2ylEzFHXHE1+HPbBjEiLTGGA9xmCT0rgA
+	 O0gpo5AlblMIMalCkfk94944=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4ED2640E0284;
+	Fri, 25 Oct 2024 13:51:08 +0000 (UTC)
+Date: Fri, 25 Oct 2024 15:51:07 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Li RongQing <lirongqing@baidu.com>,
+	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH v3 5/5] x86/amd: Use heterogeneous core topology for
+ identifying boost numerator
+Message-ID: <20241025135107.GPZxuiS38_s3KWe8xj@fat_crate.local>
+References: <20241023174357.34338-1-mario.limonciello@amd.com>
+ <20241023174357.34338-6-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZxueBWB9nJ9Mt7bW@hovoldconsulting.com>
+In-Reply-To: <20241023174357.34338-6-mario.limonciello@amd.com>
 
-On Fri, Oct 25, 2024 at 03:32:53PM +0200, Johan Hovold wrote:
-> On Fri, Oct 25, 2024 at 11:29:05AM +0100, Cristian Marussi wrote:
-> 
-> > > > >>> [    8.098452] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > >>> [    8.109647] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > >>> [    8.128970] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > >>> [    8.142455] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> 
-> > I think dev_info could be an option from the SCMI perspective (as per my
-> > other mail), the important thing in these regards is to NOT go
-> > completely silent against fw anomalies...to avoid the the risk of being
-> > silently ignored .... I'll see what Sudeep thinks about...
-> 
-> I agree.
-> 
-> But could the error handling be improved to look less scary for an end
-> user by saying something about duplicate entries being ignored instead
-> perhaps?
-> 
-> Printing something at info level and with a FW_BUG ("[Firmware Bug]: ")
-> prefix as was done here:
-> 
-> 	https://lore.kernel.org/all/20230414084619.31524-1-johan+linaro@kernel.org/
-> 
-> should make it clear that this is not something for end users to worry
-> (too much) about.
+On Wed, Oct 23, 2024 at 12:43:57PM -0500, Mario Limonciello wrote:
+>  int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator)
+>  {
+> +	enum x86_topology_cpu_type core_type = get_topology_generic_cpu_type(&cpu_data(cpu));
+>  	bool prefcore;
+>  	int ret;
+> +	u32 tmp;
+>  
+>  	ret = amd_detect_prefcore(&prefcore);
+>  	if (ret)
+> @@ -261,6 +263,27 @@ int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator)
+>  			break;
+>  		}
+>  	}
+> +
 
-Sure...and thanks for the suggestion....I will cook something up around
-this....
+What's the difference between this case:
 
-(I am probably too used to try to scary the FW guys that I forgot there
-are also innocent bystanders like final users :P)
+> +	/* detect if running on heterogeneous design */
+> +	switch (core_type) {
+> +	case TOPO_CPU_TYPE_UNKNOWN:
+	     ^^^^^^^^^^^^^^^^^^^^^^^
 
-Thanks,
-Cristian
+> +		break;
+> +	case TOPO_CPU_TYPE_PERFORMANCE:
+> +		/* use the max scale for performance cores */
+> +		*numerator = CPPC_HIGHEST_PERF_PERFORMANCE;
+> +		return 0;
+> +	case TOPO_CPU_TYPE_EFFICIENCY:
+> +		/* use the highest perf value for efficiency cores */
+> +		ret = amd_get_highest_perf(cpu, &tmp);
+> +		if (ret)
+> +			return ret;
+> +		*numerator = tmp;
+> +		return 0;
+> +	default:
+
+... and this case and why aren't you warning if TOPO_CPU_TYPE_UNKNOWN?
+
+I think for that you need to check X86_FEATURE_AMD_HETEROGENEOUS_CORES and
+warn if set but still CPU type unknown or?
+
+> +		pr_warn("WARNING: Undefined core type %d found\n", core_type);
+> +		break;
+> +	}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
