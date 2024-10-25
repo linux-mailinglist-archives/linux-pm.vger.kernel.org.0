@@ -1,130 +1,151 @@
-Return-Path: <linux-pm+bounces-16486-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B125D9B0E0C
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 21:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1609B0FFA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 22:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58B3D1F21A1C
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 19:14:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9304E1F22DA0
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 20:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5BA73C482;
-	Fri, 25 Oct 2024 19:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71970216DE0;
+	Fri, 25 Oct 2024 20:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="F9tl/w43"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wiBV5pfA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE24620C301
-	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 19:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAA52161F8;
+	Fri, 25 Oct 2024 20:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729883676; cv=none; b=KkZO1o/YWHh1sMi45drTkkr6gePDefh/5LBrt16lSmzwbEdmyQbPy1uZoJXcAtiITSMdXS1SIfJzRbGq+tZzw/KW3xDfumg3kvPhOW1E9BSka1bNQunLXsI0Pcl1zyIpaIjdxKUNnkv2eEUNQtGJw3B+Uq28xmAhWqxILNR4JCA=
+	t=1729888837; cv=none; b=XWibrtZhjkpvSfBnwpVW2WUW6OXpE1SU/h/6gicj+1VN1qyGelms6FkHxN5aXaRZ0SD3OS3xAi8acWe2Dt6UKOEkZDAgZ+cOS9qaP02o7q+z03ymrejflN3C1AVmRCAJCMjGTWeEox9JlsNh5ozuCXaIYLFVTq8WCzBZucBmwY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729883676; c=relaxed/simple;
-	bh=3KcR9b3g1326SaHe5G39JjV0bpcPIJvDLsy9axOhRIc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mmEdkdbCwA/Zn5wfZCnoqD1nKGDCH2XCGGJ2WDyvfq76OXpjrBXaxkWXuWeypcRJFZPOmcoqu8WrE5H5quJRaNXcwfexN9oB/O5bu1WAbeHSJbB/DVxnMeCpPTujMwF0gqlxOzJXKsseKGm2UnTno8+4WBO/T1VrUTHJhT2vacw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=F9tl/w43; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49PJEI1A043641;
-	Fri, 25 Oct 2024 14:14:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1729883658;
-	bh=FXZVLDAZH4ZXnSMd3sgMoCVlxPKO8Bbc2V7wbVstwf4=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=F9tl/w43n4bqiIzuRK//iXLYy+HN1nC/wF2s4vslBF9Jau+q5KaeA0qRLmjkZU4qB
-	 Za4APp/byOUAINzRjKhTDThC8zINbxOLbci7Y8XSFQbcDaPzTou/ZGJNC3KhweE+oM
-	 3lso02WwD+vhu3465E4m/sAKvZYy24K1ycX08Klw=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49PJEHNQ044148;
-	Fri, 25 Oct 2024 14:14:18 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 25
- Oct 2024 14:14:17 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 25 Oct 2024 14:14:17 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49PJEGEw082685;
-	Fri, 25 Oct 2024 14:14:17 -0500
-Date: Sat, 26 Oct 2024 00:44:16 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Zhang Zekun <zhangzekun11@huawei.com>
-CC: <nm@ti.com>, <kristo@kernel.org>, <ssantosh@kernel.org>,
-        <ulf.hansson@linaro.org>, <linux-pm@vger.kernel.org>,
-        <chenjun102@huawei.com>
-Subject: Re: [PATCH v3 1/2] pmdomain: ti-sci: Add missing of_node_put() for
- args.np
-Message-ID: <20241025191416.i6afl4ibtiy45s5e@lcpd911>
-References: <20241024030442.119506-1-zhangzekun11@huawei.com>
- <20241024030442.119506-2-zhangzekun11@huawei.com>
+	s=arc-20240116; t=1729888837; c=relaxed/simple;
+	bh=1VR9nQjGldSxwX5w5pEmypJuoDm8azOUI2JHhYVwkjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JPWOZqh9tgGl7VutoMuPg1dvddpl/novXuX+QokO79AzVcghyawWZt2ckhBrSvl3wsOgkz+sVt3WmOEjItCJBBs3DJRBI1U3auyrhCtegTuEVFZpcBFPbY4aJhz0PQVlRBEfMawmubnNAa4m0qisPEo8yyXq1Nm1ePnh3wLa5As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wiBV5pfA; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 25 Oct 2024 13:40:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729888833;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YMAXXsBpu7Ehcn655+wzQ1uMVEuNQVBFhx8QRZMZ0rg=;
+	b=wiBV5pfAS60vsXVuI1GT02TDemB6eoQa7vMvOYPdvau9og9kfHNCrIwzOsxNAEvNzLpZH5
+	nEbImKrpEPXD3n9ZjlOveq+RV/QdwpoLnPdZkIzeOVTkeyM+wnWeOnrb2/cM7PjeccRfV0
+	hCmdOXTju1vks2ugKnuwkE14UmBoEuk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Miguel Luis <miguel.luis@oracle.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Francesco Lavra <francescolavra.fl@gmail.com>
+Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
+ hibernate
+Message-ID: <ZxwCOHd-DbUT8dsT@linux.dev>
+References: <20241019172459.2241939-1-dwmw2@infradead.org>
+ <20241019172459.2241939-7-dwmw2@infradead.org>
+ <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
+ <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
+ <ZxprcWDe2AXuLhD_@linux.dev>
+ <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
+ <ZxqmsiXV6ZYTANKY@linux.dev>
+ <627769A8-AF84-47A1-B4F9-5F44C75A8058@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024030442.119506-2-zhangzekun11@huawei.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+In-Reply-To: <627769A8-AF84-47A1-B4F9-5F44C75A8058@infradead.org>
+X-Migadu-Flow: FLOW_OUT
 
-Hi,
-
-On Oct 24, 2024 at 11:04:41 +0800, Zhang Zekun wrote:
-> of_parse_phandle_with_args() needs to call of_node_put() to decrement
-> the refcount of args.np. So, Add the missing of_node_put() in the loop.
-
-Seems better worded now, thanks.
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
+On Fri, Oct 25, 2024 at 08:13:03AM +0200, David Woodhouse wrote:
+> On 24 October 2024 21:57:38 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
+> >On Thu, Oct 24, 2024 at 05:56:09PM +0200, David Woodhouse wrote:
+> >> On 24 October 2024 17:44:49 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
+> >> >IIUC, you're really wanting to 0x0 because there are hypervisors out
+> >> >there that violate the final spec and *only* accept this value.
+> >> >
+> >> >That's perfectly fine, but it'd help avoid confusion if the supporting
+> >> >comment was a bit more direct:
+> >> >
+> >> >	/*
+> >> >	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
+> >> >	 * selecting HIBERNATE_OFF.
+> >> >	 *
+> >> >	 * There are hypervisors in the wild that violate the spec and
+> >> >	 * reject calls that explicitly provide a hibernate type. For
+> >> >	 * compatibility with these nonstandard implementations, pass 0
+> >> >	 * as the type.
+> >> >	 */
+> >> >	 if (system_entering_hibernation())
+> >> >		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
+> >> 
+> >> By the time this makes it into released versions of the guest Linux kernel, that comment won't be true any more.
+> >
+> >Then does it even matter? What is the problem you're trying to solve
+> >with using a particular value for the hibernate type?
+> >
+> >Either the goal of this is to make the PSCI client code compatible with
+> >your hypervisor today (and any other implementation based on 'F ALP1') or
+> >we don't care and go with whatever value we want.
+> >
+> >Even if the comment eventually becomes stale, there is a ton of value in
+> >documenting the exact implementation decision being made.
+> >
 > 
-> Fixes: efa5c01cd7ee ("soc: ti: ti_sci_pm_domains: switch to use multiple genpds instead of one")
-> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
-> ---
->  drivers/pmdomain/ti/ti_sci_pm_domains.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Eventually it won't matter and we can go with whatever value we want. But yes, the goal is to be compatible with the hypervisor *today* until it catches up the changes to the final versions of the spec. I didn't spend much time overthinking the comment. What was it....
 > 
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index 1510d5ddae3d..0df3eb7ff09a 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -161,6 +161,7 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->  				break;
->  
->  			if (args.args_count >= 1 && args.np == dev->of_node) {
-> +				of_node_put(args.np);
->  				if (args.args[0] > max_id) {
->  					max_id = args.args[0];
->  				} else {
-> @@ -192,7 +193,10 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->  				pm_genpd_init(&pd->pd, NULL, true);
->  
->  				list_add(&pd->node, &pd_provider->pd_list);
-> +			} else {
-> +				of_node_put(args.np);
->  			}
-> +
-
-Avoid irrelevant changes..
-
->  			index++;
->  		}
->  	}
-> -- 
-> 2.17.1
+> 	/*
+> 	 * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
+> 	 * and is supported by hypervisors implementing an earlier version
+> 	 * of the pSCI v1.3 spec.
+> 	 */
 > 
+> That seems to cover it just fine, I think.
+
+No. You're leaving the work for the reader to:
+
+ (1) Figure out what you're talking about
+ (2) Go dig up an "earlier version" of the spec
+ (3) Realise that it means certain hypervisors only take 0x0 as an
+     argument
+
+If you speak *directly* about the problem you're trying to address then
+reviewers are less likely to get hung up on what you're trying to do.
+
+I'm genuinely at a loss for why you would want to present this as an
+"acceptable alterantive" rather than a functional requirement for this
+driver to run on your hypervisor.
 
 -- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+Thanks,
+Oliver
 
