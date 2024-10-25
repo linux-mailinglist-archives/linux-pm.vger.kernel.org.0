@@ -1,63 +1,40 @@
-Return-Path: <linux-pm+bounces-16469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D51909B087B
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:38:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED619B089E
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBB81F24411
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:38:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F0C51C22BB2
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:41:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9D2158A36;
-	Fri, 25 Oct 2024 15:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XzMahmc/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976D61885B7;
+	Fri, 25 Oct 2024 15:40:52 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C13221A4D1;
-	Fri, 25 Oct 2024 15:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A2415A858;
+	Fri, 25 Oct 2024 15:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729870694; cv=none; b=J67Q/D9lzUQvU4qwBWMjlfJp4vdDE9E/FXuxgGRYAqHc7PFUOYoN1yhUKcH5h2rhnR1NbkMwrIqmFkibcVWoV0NAdvG6zmOriQmZ9ELPvtueDs1zu8hJf/OnDcAxu7cSfzC4H8Yus+PCLTKR3UUa4KwwjiUt49RgfFI5Jo9SDXo=
+	t=1729870852; cv=none; b=FvTAUuCyVYeOxT2fgbokrXonL83G9C7LG4ID/FjF7R5kcNaMEH4M7AocAy6qwb9sFd4kDeTv/Nujz3NoEf0hZDlbeBSm4L8Tgc9zkcNae8FfjVaHl7sDgvgLuCoBXtpp05hAPRG3ttSdkds5OdGMN0sHrSo/Zwprf5t7NBEplps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729870694; c=relaxed/simple;
-	bh=nytdE+OMqaf0MoPj32sj8DwLwDlmjXVUXFFT4d6RQbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=s4u5z7KY0NKfMlYeerM8Dpz1kmURZNydnj8bPRk9LAF5Hn/Tjh5xajQs8NCEBRnZ17pe2uPzfn6+lQPcaIw8be/tGa3dnyfy0YmtoEUFkjH4adA9wCGAtBdfckoj/+518VgxoK52BsOYHp9zDIP5k0QAl4m96JKWhLBsIvWOtFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XzMahmc/; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49P9tG1A029632;
-	Fri, 25 Oct 2024 15:38:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	U84hYf+i/sQVc62LD3GlieQxSAgIZVxC07W6ix6zSQ4=; b=XzMahmc/iYB8jFa6
-	qxR3F4TGLh8WDKRzTY2UNNAmm1SIAyh8DK2fUnVrADxLXBTY96TvFphgNqMtDdqr
-	Mvah2hbPT8JlXix6Sm549iAN75xE64SGRuYnmCLra1kREs7InmZtY2qJK2CH4YN7
-	xcjFIlXwXnCx7WgNCB7O0aZy5cPvBbSJRsvaPCVPZKHmlExbdgCLAjwkF2e4mamE
-	cVxAHzInkUR2Dj6zDD+8RdGbGAkkHDYaJB3o6eRXJVJPajfQ5EkEf2uJvLSxyS7g
-	/pEoCFMAQOKhnSvSgSCGSAdfDqmMLOj2QYrgWpwWleyeX6kctkg66SLZbmNFcHFx
-	e2W8FQ==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em3w9prx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 15:38:09 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49PFc8lL014283
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 15:38:08 GMT
-Received: from [10.216.47.209] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 25 Oct
- 2024 08:38:03 -0700
-Message-ID: <6b89de85-58c0-4808-9a33-6ee7dc26611d@quicinc.com>
-Date: Fri, 25 Oct 2024 21:08:00 +0530
+	s=arc-20240116; t=1729870852; c=relaxed/simple;
+	bh=qEVNQFJWLhm7KbaIPFSwZIfcXxwCW6QTwMEqNJ7ho34=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E/IuIsacuLPrCn9jsZhewIAm5NdYr/ov1sDJ+bzX+Szopc7Gex797jqNV3LDuMpQvhccTVMXoyRiFdOZqqorPEBOeHPS9PBCGfp0dT82bdg79bM5OShjo8rEmsfmIvLrQ6heHtJoRwJuZiwzZ/t34cUWwuilwmBBlKZ34KdEPcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26CBF339;
+	Fri, 25 Oct 2024 08:41:18 -0700 (PDT)
+Received: from [10.57.55.217] (unknown [10.57.55.217])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3B7D3F73B;
+	Fri, 25 Oct 2024 08:40:46 -0700 (PDT)
+Message-ID: <b273599f-8653-4e98-ac64-09c91b0a1592@arm.com>
+Date: Fri, 25 Oct 2024 16:41:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,76 +42,74 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] interconnect: qcom: Add EPSS L3 support on SA8775P
-To: Krzysztof Kozlowski <krzk@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sibi Sankar
-	<quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_okukatla@quicinc.com>,
-        <quic_mdtipton@quicinc.com>
-References: <20240904171209.29120-1-quic_rlaggysh@quicinc.com>
- <20240904171209.29120-4-quic_rlaggysh@quicinc.com>
- <c3efb01d-2138-4b79-97a1-653b7bd531d0@kernel.org>
- <bfcc65b2-97a4-4353-a2fd-dce927c53428@quicinc.com>
- <49aa8205-6324-412d-b03d-c2b3f738cc98@kernel.org>
+Subject: Re: [PATCH/RFC 0/2] arm64: dts: renesas: Re-add voltages to OPP
+ tables
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <cover.1728377971.git.geert+renesas@glider.be>
+ <CAMuHMdXsmAqQL+2+D_y+u1z4nn8JO+xF-mq6wWJ0pAH58n5Wiw@mail.gmail.com>
 Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <49aa8205-6324-412d-b03d-c2b3f738cc98@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zBqaFD_DP8udcG2lulO2oi1TXApw3z8v
-X-Proofpoint-GUID: zBqaFD_DP8udcG2lulO2oi1TXApw3z8v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410250121
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAMuHMdXsmAqQL+2+D_y+u1z4nn8JO+xF-mq6wWJ0pAH58n5Wiw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+Hi Geert,
 
-
-On 9/6/2024 10:00 PM, Krzysztof Kozlowski wrote:
-> On 06/09/2024 17:32, Raviteja Laggyshetty wrote:
+On 10/22/24 14:36, Geert Uytterhoeven wrote:
+> On Tue, Oct 8, 2024 at 11:14 AM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
+>> When CONFIG_ENERGY_MODEL=y, an error is printed on RZ/G2E and R-Car E3:
 >>
->> On 9/4/2024 11:52 PM, Krzysztof Kozlowski wrote:
->>> On 04/09/2024 19:12, Raviteja Laggyshetty wrote:
->>>> +
->>>>  static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
->>>>  	.nodes = epss_l3_nodes,
->>>>  	.num_nodes = ARRAY_SIZE(epss_l3_nodes),
->>>> @@ -284,6 +307,10 @@ static const struct of_device_id osm_l3_of_match[] = {
->>>>  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
->>>>  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
->>>>  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
->>>> +	{ .compatible = "qcom,sa8775p-epss-l3-cl0",
->>>> +	  .data = &epss_l3_perf_state },
->>> Don't grow it but express compatibility.
->> ok. Will rename compatible from "qcom,sa8775p-epss-l3-cl0" to "qcom,sa8775p-epss-l3".
+>>      cpu cpu0: EM: invalid perf. state: -22
+>>
+>> This happens because the Operating Points Parameters tables do not list
+>> voltages, as they are all identical.  Previously, it was assumed they
+>> were optional, and unused, when none of the CPU nodes is tied to a
+>> regulator using the "cpu-supply" property.  This assumption turned out
+>> to be incorrect, causing the reported error message.
+>>
+>> This RFC patch series fixes this by adding the missing voltages.
+>>
+>> Note that the Energy Model calculates energy efficiency by dividing the
+>> (estimated) CPU power consumption by CPU core clock frequency.  When all
+>> voltages have the same value, the former is proportional to clock
+>> frequency, and energy efficiency becomes a constant.  Hence all
+>> operating points are considered to have the same efficiency, and the
+>> Energy Model always picks the one with the highest clock rate (see also
+>> [1]).
+>>
+>> Alternatively, the Energy Model could be changed to silently ignore OPP
+>> tables with missing frequencies.  IMHO this is not an unusual case.
+>>
+>> Which approach should be taken?
+>> Thanks for your comments!
 > 
-> This won't solve the problem. You still grow the table, right?
+> Any comments from the Energy Model and PM people?
 
-Falling back to "qcom,epss-l3" won't work because we need to vote into perf state register.
-I am introducing a new fallback compatible "qcom,epss-l3-perf" for perf voting, which can be used for upcoming qcs8300.
+My apologies for delay.
 
-epss_l3_cl0: interconnect@18590000 {
-       compatible = "qcom,sa8775p-epss-l3", "qcom,epss-l3-perf";	   
-};
+So you had issue with bogus Voltage values and removed them.
 
-> 
-> Best regards,
-> Krzysztof
-> 
+There is another way to setup EM properly, via DT:
+"opp-microwatt" [1].
 
+That micro watt value won't confuse other subsystems, like
+your regulator fwk. It will only be used by the EM fwk.
+
+This would be an alternative to your voltage values.
+Sounds better to you?
+
+Do you know from /sys/kernel/debug/energy_model/
+the current power values?
+
+Regards,
+Lukasz
+
+[1] 
+https://www.kernel.org/doc/html/v6.11/power/energy-model.html#registration-of-em-using-dt
 
