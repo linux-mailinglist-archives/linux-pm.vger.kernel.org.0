@@ -1,120 +1,126 @@
-Return-Path: <linux-pm+bounces-16432-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E69D9AFACA
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 09:14:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E15F49AFBC1
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:00:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 822261C21076
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 07:14:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A64022844DB
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 004961B3923;
-	Fri, 25 Oct 2024 07:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E391C07DA;
+	Fri, 25 Oct 2024 08:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="rJIRevGV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6981F1B21A7
-	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 07:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA82F170A1C
+	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 08:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729840491; cv=none; b=E3JkE8NHeaKv7HWDBn7FrBKxzF7ia4QjRrPzUSeN2Wu8VGdfvOCvEeRMAxeTRMMMC/vxJn86rKXROQw0BsTkAhNauSb/nxtGJzTHq4v+c4FYbAdMWcs+NJElFFSXIRTe6DyCu1DmL0496xG2ovJEcHbLBv8yvESqfO0wNCWYvhQ=
+	t=1729843222; cv=none; b=gqw5ztFhx74PgvvG+psII2t/QRRYIKn3ojWlh8V7ccft78ikHqciDopH5N9hMZoUlkwIUGGRYeLPawlAck7q0XRIucQSZHv7rGurA1V8eY0HramO0+/stnaEUr+kGyVXOuY60FsgXApVNXiG7VUdpLC7Feof4tnchNPxX2g6NGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729840491; c=relaxed/simple;
-	bh=7xeouv90RLyjkxhH0VLz2AL8nPxSakjDhzPqw4ONPTI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=axsXdE3EuvauVM5IobTWy4eKXU7ZqruYhH/inRZC/7azGlIbHQdpxMFu/aa7k7XmSjQNaQW4e8HjQI7PwcI6o+7aoWH3Alr/yGquTYTj/IBaPWTLAkXgLHAYARr1X4bhMjLS60zNFx1hbodH8EmF3l9qVhxGBbYUghEOREqxQ9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1t4EWv-0005YF-D5; Fri, 25 Oct 2024 09:14:41 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1t4EWu-000KEa-35;
-	Fri, 25 Oct 2024 09:14:40 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1t4EWu-00Ctrc-2k;
-	Fri, 25 Oct 2024 09:14:40 +0200
-Date: Fri, 25 Oct 2024 09:14:40 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: imx@lists.linux.dev, Ulf Hansson <ulf.hansson@linaro.org>,
-	Michael Trimarchi <michael@amarulasolutions.com>,
-	linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>, linux-kernel@vger.kernel.org,
-	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-	linux-amarula@amarulasolutions.com,
-	Shengjiu Wang <shengjiu.wang@nxp.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] pmdomain: imx: gpcv2: replace dev_err() with
- dev_err_probe()
-Message-ID: <20241025071440.6tivzdzkkqacm27v@pengutronix.de>
-References: <20241024103540.3482216-1-dario.binacchi@amarulasolutions.com>
- <20241024110123.wix35njjbh3nx7kn@pengutronix.de>
- <4vws5lnu4efupunha74pdlgtd754w6n2loymgywrxhwm2rqic2@gz4efozdrpqm>
- <20241024180838.xxhrgmmop75pc7ov@pengutronix.de>
+	s=arc-20240116; t=1729843222; c=relaxed/simple;
+	bh=B/pPKlr0lRVJhgrG29eGgTDXqOAPeaIJatsGuvQ/Ch8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jaebZznhKxJ3aQJTwIrGFVH/QLtVjdfQbNHlRCTd95n0kaSfzxUsVJQJ7NGyIztFBveE12r0A+QGIvTgTkM6S3JUj/r+7Ysr/K3U9VWh0IQppSUcYm4aYqtGFm3camPeF8rETq4dCQbwIPVUvfMmM15Gsr4Si53W1mQ2OcxmvdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=rJIRevGV; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43167ff0f91so17840905e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 01:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729843219; x=1730448019; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yvFcTWY0qWSGbaMXRds52cphNo7N/U6FFOoRM52IPjQ=;
+        b=rJIRevGVVgSQyIQp0G3bQ9bvKqG91fcrfcLTVe/9mLkO2H8JJK6jQT40NXOBax4SpX
+         Y8WyxmWVtHlF2yYn3XuJ+cIyi5Vxog+b7YhWjR5IDeTfZqZ1o0To7+HXpZVWDK7g9T33
+         d/s0B/Sf+P1QTbKcYaYjtY8cDKje8f/n9tJOU0vDMHsZWLYVa1jSmgbSTyd8IgQWIeYT
+         3hqcEdFlSTK/9FTAoCaLmR4TgU0gfXDkAJ3rs7e086uAloVNQQbIT6SmTM9AmpI40UFr
+         QXIx5GUXqS4S4PmOB9tqZ4sHZ/uOd62vONCr5oUotllTxB3M0FMW65e3PwIwuPgD/X2v
+         htbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729843219; x=1730448019;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yvFcTWY0qWSGbaMXRds52cphNo7N/U6FFOoRM52IPjQ=;
+        b=QhDG/6VJTWwR7VG8w7WNZS0DyXjyeLfwZYmf40vaoMCuSjpXSChGvJE0cwnmYpz2fl
+         lEiissIyYma/b07jJqNpx0J4HLZLossMMtr9KPNPUP+DPRLLA3cpi8UONR1mLR/RQ4Hk
+         RyPPQ9eb8UVDET1TQAM3/l0fFXrmw5kRChXRATjQyiohHkqSTvoXLjH/Jz54/hKBoXn7
+         8lGlrdLbv2qIW7j+YVzEW6zPjnNJtpG/RR+iPhbaXxzB6Wjx1FHib5eLpPND2NhfDJW1
+         iK8KFwDLI87BD0QRB2nzU+l8vCGoF/1ob/GBDYWhqblko8p5Whr+DZVFinyzDspwexjU
+         OSAg==
+X-Forwarded-Encrypted: i=1; AJvYcCXI2sxriPkxEFs/xo9CjcZKR6VOr748NfXLhzcyMkJIndWVUY6Pg/GBR8smmWhhXLG0ZhyngE9+8w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmxxFTD2pXjsc2zbnX0d+jEwugyCdvxnaOl56ikqhF9+5Yn8g4
+	wJbHy+38CdFPf2mlkeCmi8AKatNHfELjYWxM4cVeehT63/hTvPk/C70iEStz+mE=
+X-Google-Smtp-Source: AGHT+IFLSkse8IfhVHvgfEgOy5tBpZmoSqAyk/ZSA/CmtZwjlrTEnVPdKx/3WSd47HCYFbcdc5HV3w==
+X-Received: by 2002:a05:600c:1e22:b0:431:53db:3d29 with SMTP id 5b1f17b1804b1-4318415f712mr64765315e9.18.1729843219138;
+        Fri, 25 Oct 2024 01:00:19 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:a207:5d17:c81:613b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4318b570880sm40499215e9.35.2024.10.25.01.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 01:00:18 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Kalle Valo <kvalo@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Steev Klimaszewski <steev@kali.org>
+Subject: Re: (subset) [PATCH v6 0/6] arm64: dts: qcom: enable Bluetooth and WLAN on sc8280xp and sm8450 boards
+Date: Fri, 25 Oct 2024 10:00:16 +0200
+Message-ID: <172984321024.15202.13178717583088352972.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
+References: <20241018-sc8280xp-pwrseq-v6-0-8da8310d9564@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241024180838.xxhrgmmop75pc7ov@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi Dario,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On 24-10-24, Marco Felsch wrote:
-> Hi Uwe,
-> 
-> On 24-10-24, Uwe Kleine-König wrote:
-> > Hallo Marco,
-> > 
-> > On Thu, Oct 24, 2024 at 01:01:23PM +0200, Marco Felsch wrote:
-> > > On 24-10-24, Dario Binacchi wrote:
-> > > > The patch standardizes the probe() code by replacing the two occurrences
-> > > > of dev_err() with dev_err_probe(). Indeed, dev_err_probe() was used in all
-> > > > other error paths of the probe() function.
-> > > 
-> > > I assume that this paths aren't using dev_err_probe because these paths
-> > > can't return EPROBE_DEFER and therefore dev_err_probe() would use
-> > > dev_err() anyway.
-> > 
-> > Note that dev_err_probe() has advantages even if the error code isn't
-> > EPROBE_DEFER. In this case it's mentioning the error code.
-> > 
-> > See also commits
-> > 	7065f92255bb ("driver core: Clarify that dev_err_probe() is OK even w/out -EPROBE_DEFER")
-> > 	532888a59505 ("driver core: Better advertise dev_err_probe()")
-> 
-> thanks for the pointers. With that in mind it make sense to me to
-> convert it. Feel free to add my:
 
-that being said, I would like to ask you if you could addapt the commit
-message, to point out the advantage of using dev_err_probe().
+On Fri, 18 Oct 2024 14:49:10 +0200, Bartosz Golaszewski wrote:
+> This series previously only concerned sc8280xp but while enabling
+> WLAN/BT on sm8450 I noticed some more changes will be required so I
+> folded the latter into this series and updated the sc8280xp CRD and X13
+> patches.
+> 
+> ==
+> 
+> [...]
 
-> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-> 
-> Regards,
->   Marco
-> 
-> 
+Applied, thanks!
+
+[2/6] power: sequencing: qcom-wcn: improve support for wcn6855
+      commit: bd4c8bafcf50b6bd415c8bf04e98ebfba78071f9
+
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
