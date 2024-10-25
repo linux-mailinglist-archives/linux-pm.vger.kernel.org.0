@@ -1,273 +1,328 @@
-Return-Path: <linux-pm+bounces-16448-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16449-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67E3A9B0189
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:44:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE99B9B01E2
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 14:05:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECD811F2282F
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 11:44:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C841B21EEC
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 12:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C61B1D63D9;
-	Fri, 25 Oct 2024 11:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56EE0203706;
+	Fri, 25 Oct 2024 12:05:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="lXYkepuZ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ADpfPwrb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C111E1D5161
-	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 11:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD298202648
+	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 12:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729856680; cv=none; b=IeaA0ngjaWKORtHgikuBL2X4g4qMxtDYDWwfu0RwOnGQLae7TGKrGowfXz9Ynskl0V4YUZVWamJYZk/dzhjpQiDTubzeZkRCASiWuPdmVrUl5QVhkKMaxJ1eDjYShOWu2fC37ovC2kOrxDbBU6l6x3gI212RPUrEJerEDHUUoig=
+	t=1729857921; cv=none; b=SXO40tE2xWiuYEmTeRkkzzZJRaLy4pn1j1xVLKPq8uYDkt+lF6pmh3uR9U606J0Xt2N1+FJnm3i7A1p6k7QfiHphYmMaPugZK9alvtGqyuLgqwgum0te2/ijNi+RPrUXOZnP+FTYMLz7dFgJkKlBbK5YetunJqJsOFX92COCYhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729856680; c=relaxed/simple;
-	bh=VGMJfPfUUPWM0SX3CGHA3IWEU/2a8/EYzY2UrvNZGik=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=Lomtr3YWYEf91HDgOhf8NsaGnfFel+alz9qlJMaKuZFbDk3prPxGuO07Gsgg40MxVXbT693nGv8rzeKn2CWJYta1wRv55+OQIN5FNsJrDG7ssjXj8ZaH57mfEP/d+GE7EwzbnvKpABdqxCYZ0tAwmvcKTaHjw4jhWm3L6Xp49HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=lXYkepuZ; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7ea9739647bso1286207a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 04:44:37 -0700 (PDT)
+	s=arc-20240116; t=1729857921; c=relaxed/simple;
+	bh=+Wfgnk2y+8thlkLyvzLM2U7F941dQQ/SYTkJwIlFwEw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=X9pLkJS9MJK8qdyeZolU1PIPAOSO3/uC6n3dEXqfFlUybHSp+ucioXQ3nIlE3fcYUP593zoYlL1PM1AnE0kC688w5Mrl1CcrZDoRcEdpFPb7C4x22mD+RdEhM7BsVwaFUAsA/bwYQ2u2TIRFIG14uQOd9PpMqjX/Xk+3DE9cmLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ADpfPwrb; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20c767a9c50so16227575ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 05:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1729856677; x=1730461477; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gnz6+1sJHMTJxtKJlgCZPOMNcLMscjgQ7cXOP8DGuAQ=;
-        b=lXYkepuZlcvzmkEBxbX3jPTfoiUMQ4EmCWc7hqm6KdTtq0PSXFV2qydVrlueiehn4j
-         vbkWz1bCM0oYyhNPPhEFdzbFBKX2Iin9pkT7tAhwhdu1GG94HuR0ri5R5Do8pv9rhLu2
-         Bhj6CJdyTJjgze/oxcN7goobPiZnCaJLcd0iGxqAeam/2Raa11LBBcU/fCONxcUlnl96
-         vkkgNyy7D43BMukE0ioKJgmIxc7iznPIEKc4nIKNlHnqjZ6Vd+3kT+0aMXvzxarQ6lr3
-         U75DNquMb4QxY5o2CCSReUBo/QlQAcCgL6/YEkJSCXw5Y/HxDgShZlZHUpcQbbyFvH14
-         fD7Q==
+        d=chromium.org; s=google; t=1729857917; x=1730462717; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e8yKR4BVLvMBogTBQ5uhZAmMCQQBIAWiGqlkb0ku774=;
+        b=ADpfPwrbbdTwE3HT6iLYNnSBpb1kvR7vXdqqR8qquCG5VpKc3O8/PhfF1Mk7qkSfsa
+         Fw+doCeJxo12yf+Br3dLmfNLUVMfR1irkqSrjxjRhB+Rftu9rL/MRrVGsQkJvr5uOVfN
+         R/nx9kDHS+Pvr9n6vGVV72GSpWOnk5YE7/cqs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729856677; x=1730461477;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1729857917; x=1730462717;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Gnz6+1sJHMTJxtKJlgCZPOMNcLMscjgQ7cXOP8DGuAQ=;
-        b=Uk5W43K8sHNDwhXDfjiQN8IcqUH8k40UKOdwN5uPOs/wKEgfMgtffMuDFOK5HR4e2G
-         /crkI3dhXx3/TOeSGg+/T4MruTJ52mRO20SPB861JmYzcDZlITE8Txm8CtylIpEW+BIM
-         +fp1OurWiokW/NAha83Xx/Wz5tOl001GF76sZ7cBK3RHjOWNhDtie/B2kWuFpAKVZpyS
-         42D0+q8q3/edygkN0MwWEfU+UfBznN9q/UgeLmxlKGjXtbJeQE6h+1ppTOLXq6FlTPU9
-         5LNxkxOR9t6BNbw8pxhMk/ElXugpXQkRyOzRwnsyLrrRIMmQoFRFb025u/fZ2zucQ9dQ
-         io2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVIeWYQx5I3KpJFp8sMB0LaHjuai73NjH+lA9zdmbHQP+VBAni6w+AxmG8IYikSipGLeX9rNV5l9A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU8MoNleaSbfnrVTocqe1jbT2F24HAAVAYihRdJMNWTfnpVc4H
-	SYcldWOd4DbSsY7WE63rMQTX8mT0fQi/WCfZFAcLnwpJctlRdPY5/3K+3pFNtE8SpY1EmY4KX0y
-	KCoE=
-X-Google-Smtp-Source: AGHT+IGNh5t48muHKFAvrkXtZV9h8SGMQDMYrVFa51w5swURtl+uDngk6jqT9CS4YH7vVNt6hwVOMg==
-X-Received: by 2002:a17:90a:7081:b0:2e2:d3a0:4716 with SMTP id 98e67ed59e1d1-2e77f4c9ad6mr5582206a91.18.1729856676924;
-        Fri, 25 Oct 2024 04:44:36 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e5a321dsm3235986a91.53.2024.10.25.04.44.36
+        bh=e8yKR4BVLvMBogTBQ5uhZAmMCQQBIAWiGqlkb0ku774=;
+        b=oLS/k+DAIFr93hHNPFDWbHZSNp4RXRmn5IajPjiO3hH/kGlULolOswuVlIcMtwzdhg
+         wDfSVi0g+W7WJQwlnSxHeqTWsz64gSnxvPKRtzxVDgGk/O1XBjlK/uarxO0NW09HxQIS
+         RmAxpAnI3tuVWlhS4NdT7QmvDnC3fZtWn+DdJO6I7lSg10o0DURzv8/a4kIhflotQQh0
+         jDtcQiA/jHKAxNUXECQMbCzMVUE0gxq/aA1EqWTSkly1D1MUpY9cnMljjAcVbO0/c6oX
+         Q2Y3TdDT6MIVsvwLgBntjatxEY3ZSuIWoDC0N78KOJZxWFJvFjQSi2X0zwxCgRXmyDsc
+         5JYA==
+X-Gm-Message-State: AOJu0Yy4ToSPwypZmaUuSR3K9GfLs7800rlqO6hrj8fMkCIHGVcjBv3j
+	O6gVeX/gPzckWFANLbRMVJe+bgoxQKeWaBPEMXfTvlfVIAQkKWuGEZSpoztl/Q==
+X-Google-Smtp-Source: AGHT+IFgd+gptg43VdhIDSdk7mGqoF3jpDKUK7U7sWb9MrqLl4Aed6DcyNuNHfI9LnX+jfuduFQLJA==
+X-Received: by 2002:a17:903:2341:b0:20c:62e1:6361 with SMTP id d9443c01a7336-20fa9e77fd7mr131727475ad.25.1729857916917;
+        Fri, 25 Oct 2024 05:05:16 -0700 (PDT)
+Received: from yuanhsinte.c.googlers.com (176.220.194.35.bc.googleusercontent.com. [35.194.220.176])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc02eb3fsm8309495ad.202.2024.10.25.05.05.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 04:44:36 -0700 (PDT)
-Message-ID: <671b84a4.170a0220.1c613e.d6ac@mx.google.com>
-Date: Fri, 25 Oct 2024 04:44:36 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 25 Oct 2024 05:05:16 -0700 (PDT)
+From: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Date: Fri, 25 Oct 2024 12:05:12 +0000
+Subject: [PATCH v14] thermal/drivers/mediatek/auxadc_thermal: expose all
+ thermal sensors
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.12-rc4-96-gaf7ddcf75140
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 23 warnings (v6.12-rc4-96-gaf7ddcf75140)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241025-auxadc_thermal-v14-1-96ab5b60c02e@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAHeJG2cC/3XP0W7CMAwF0F+p8kxQHKdZyxP/gdCUug6NtLYoh
+ apT1X8nRdMEgz3a1j1XnsXAMfAgdtksIo9hCH2XBjCbTFDjuhPLUKeF0EobVahSuuvkavq8NBx
+ b9yXLihELpqICEil0juzDdBcPxzQ3Ybj08fteMAKs63+tdJcgnUdL9GE8OtxTE/s2XNttH09i9
+ UbQvwYoBa+GToauCkuqNN4b+2xssp8o2PdRUgaRS2/B+Xf1+FCv81cD1xdyjUC5romqP8ayLDc
+ EV8lqdQEAAA==
+X-Change-ID: 20240809-auxadc_thermal-9be338ec8b1c
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ James Lo <james.lo@mediatek.com>, Michael Kao <michael.kao@mediatek.com>, 
+ Hsin-Yi Wang <hsinyi@chromium.org>, Ben Tseng <ben.tseng@mediatek.com>, 
+ Hsin-Te Yuan <yuanhsinte@chromium.org>
+X-Mailer: b4 0.15-dev-7be4f
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.12-rc4-96-g=
-af7ddcf75140)
+From: James Lo <james.lo@mediatek.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-12-rc4-96-gaf7ddcf75140/
+Previously, the driver only supported reading the temperature from all
+sensors and returning the maximum value. This update adds another
+get_temp ops to support reading the temperature from each sensor
+separately.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.12-rc4-96-gaf7ddcf75140
-Git Commit: af7ddcf75140598071f8c4fb5cdbf454a9c128c1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Especially, some thermal zones registered by this patch are needed by
+MT8183 since those thermal zones are necessary for mtk-svs driver.
 
-Warnings Detected:
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+Signed-off-by: James Lo <james.lo@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+---
+Changes in v14:
+- Remove redundant error message.
+- Link to v13: https://lore.kernel.org/r/20241025-auxadc_thermal-v13-1-a5231c52dccb@chromium.org
 
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
+Changes in v13:
+- Make subject and commit message more clear.
+- Make error message more clear.
+- Link to v12: https://lore.kernel.org/r/20241016-auxadc_thermal-v12-1-c0433e9f61af@chromium.org
 
-arm64:
+Changes in v12:
+- Remove unnecessary check and unused variable assignment in mtk_read_sensor_temp.
+- Add more about what this patch achieves in the commit message.
+- Link to v11: https://lore.kernel.org/r/20240809-auxadc_thermal-v11-1-af36cc74f3a3@chromium.org
 
-arm:
+Changes in V11:
+    - Rebase on kernel v6.11-rc2
+    - Use mtk_thermal_temp_is_valid in mtk_read_sensor_temp just like
+      mtk_thermal_bank_temperature
+    - Change the error handling of devm_thermal_of_zone_register return
+      value
+    - link to V10: https://lore.kernel.org/lkml/20220519101044.16765-1-james.lo@mediatek.com/
 
-i386:
+Changes in V10:
+    - Rebase to kernel-v5.18-rc7
+    - Resend
 
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
+Changes in V9:
+    - Rebase to kernel-v5.14-rc1
+    - Bind raw_to_mcelsius_v1 or raw_to_mcelsius_v2 to compatible
+      data of struct mtk_thermal_data
+    - Remove duplicate struct 'mtk_thermal_bank'
+    - Remove unnecessary if condition check
+    - Return error if any thermal zone fail to register
 
-riscv:
+Changes in V8:
+    - Rebase to kernel-v5.13-rc1
+    - Resend
 
-sparc:
-    sparc64_defconfig (gcc-12): 18 warnings
+Changes in v7:
+    - Fix build error in v6.
 
-x86_64:
+Changes in v6:
+    - Rebase to kernel-5.11-rc1.
+    - [1/3]
+        - add interrupts property.
+    - [2/3]
+        - add the Tested-by in the commit message.
+    - [3/3]
+        - use the mt->conf->msr[id] instead of conf->msr[id] in the
+          _get_sensor_temp and mtk_thermal_bank_temperature.
+        - remove the redundant space in _get_sensor_temp and
+          mtk_read_sensor_temp.
+        - change kmalloc to dev_kmalloc in mtk_thermal_probe.
 
+Changes in v5:
+    - Rebase to kernel-5.9-rc1.
+    - Revise the title of cover letter.
+    - Drop "[v4,7/7] thermal: mediatek: use spinlock to protect PTPCORESEL"
+    - [2/2]
+        -  Add the judgement to the version of raw_to_mcelsius.
 
-Warnings summary:
+Changes in v4:
+    - Rebase to kernel-5.6-rc1.
+    - [1/7]
+        - Squash thermal zone settings in the dtsi from [v3,5/8]
+          arm64: dts: mt8183: Increase polling frequency for CPU thermal zone.
+        - Remove the property of interrupts and mediatek,hw-reset-temp.
+    - [2/7]
+        - Correct commit message.
+    - [4/7]
+        - Change the target temperature to the 80C and change the commit message.
+    - [6/7]
+        - Adjust newline alignment.
+        - Fix the judgement on the return value of registering thermal zone.
 
-    2    kernel/fork.c:3075:2: warning: #warning clone3() entry point is mi=
-ssing, please fix [-Wcpp]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    3075 | #warning clone3() entry point is missing, please fix
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
+Changes in v3:
+    - Rebase to kernel-5.5-rc1.
+    - [1/8]
+        - Update sustainable power of cpu, tzts1~5 and tztsABB.
+    - [7/8]
+        - Bypass the failure that non cpu_thermal sensor is not find in thermal-zones
+          in dts, which is normal for mt8173, so prompt a warning here instead of
+          failing.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+    Return -EAGAIN instead of -EACCESS on the first read of sensor that
+        often are bogus values. This can avoid following warning on boot:
 
-Detailed per-defconfig build reports:
+          thermal thermal_zone6: failed to read out thermal zone (-13)
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
+Changes in v2:
+    - [1/8]
+        - Add the sustainable-power,trips,cooling-maps to the tzts1~tztsABB.
+    - [4/8]
+        - Add the min opp of cpu throttle.
+---
 
 ---
-For more info write to <info@kernelci.org>
+ drivers/thermal/mediatek/auxadc_thermal.c | 70 +++++++++++++++++++++++++++----
+ 1 file changed, 62 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index 9ee2e7283435acfcbb1a956303b6122a08affecc..9a9079d559a3abe9e3823f744d4c9a159a8666bd 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -847,7 +847,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ 
+ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+ {
+-	struct mtk_thermal *mt = thermal_zone_device_priv(tz);
++	struct mtk_thermal_bank *bank = thermal_zone_device_priv(tz);
++	struct mtk_thermal *mt = bank->mt;
+ 	int i;
+ 	int tempmax = INT_MIN;
+ 
+@@ -866,10 +867,41 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+ 	return 0;
+ }
+ 
++static int mtk_read_sensor_temp(struct thermal_zone_device *tz, int *temperature)
++{
++	struct mtk_thermal_bank *bank = thermal_zone_device_priv(tz);
++	struct mtk_thermal *mt = bank->mt;
++	const struct mtk_thermal_data *conf = mt->conf;
++	int id = bank->id - 1;
++	int temp = INT_MIN;
++	u32 raw;
++
++	raw = readl(mt->thermal_base + conf->msr[id]);
++
++	temp = mt->raw_to_mcelsius(mt, id, raw);
++
++	/*
++	 * The first read of a sensor often contains very high bogus
++	 * temperature value. Filter these out so that the system does
++	 * not immediately shut down.
++	 */
++
++	if (unlikely(!mtk_thermal_temp_is_valid(temp)))
++		return -EAGAIN;
++
++	*temperature = temp;
++
++	return 0;
++}
++
+ static const struct thermal_zone_device_ops mtk_thermal_ops = {
+ 	.get_temp = mtk_read_temp,
+ };
+ 
++static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
++	.get_temp = mtk_read_sensor_temp,
++};
++
+ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
+ 				  int ctrl_id)
+@@ -1199,6 +1231,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 	u64 auxadc_phys_base, apmixed_phys_base;
+ 	struct thermal_zone_device *tzdev;
+ 	void __iomem *apmixed_base, *auxadc_base;
++	struct mtk_thermal_bank *tz;
+ 
+ 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+ 	if (!mt)
+@@ -1285,14 +1318,35 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
+ 					      auxadc_phys_base, ctrl_id);
+ 
+-	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+-					      &mtk_thermal_ops);
+-	if (IS_ERR(tzdev))
+-		return PTR_ERR(tzdev);
++	for (i = 0; i <= mt->conf->num_sensors; i++) {
++		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
++		if (!tz)
++			return -ENOMEM;
++
++		tz->mt = mt;
++		tz->id = i;
++
++		tzdev = devm_thermal_of_zone_register(&pdev->dev, i,
++						      tz, (i == 0) ?
++						      &mtk_thermal_ops
++						      : &mtk_thermal_sensor_ops);
++
++		if (IS_ERR(tzdev)) {
++			ret = PTR_ERR(tzdev);
++			if (ret == -ENODEV) {
++				dev_warn(&pdev->dev,
++					 "Can't find thermal zone for sensor %d; sensor skipped.\n", i);
++				continue;
++			}
++			return dev_err_probe(&pdev->dev, ret,
++					     "Failed to register thermal zone %d.\n", i);
++		}
+ 
+-	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
+-	if (ret)
+-		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
++		ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
++		if (ret)
++			dev_warn(&pdev->dev,
++				 "Sensor %d: Error in thermal_add_hwmon_sysfs: %d\n", i, ret);
++	}
+ 
+ 	return 0;
+ }
+
+---
+base-commit: b589839414be04b2b37e4bf6f84af576c99faf64
+change-id: 20240809-auxadc_thermal-9be338ec8b1c
+
+Best regards,
+-- 
+Hsin-Te Yuan <yuanhsinte@chromium.org>
+
 
