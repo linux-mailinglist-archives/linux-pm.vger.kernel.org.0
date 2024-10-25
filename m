@@ -1,174 +1,120 @@
-Return-Path: <linux-pm+bounces-16436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16437-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48E0C9AFC89
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:29:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F1DD9AFD21
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:50:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B4951C2125C
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:29:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 112D21F22F83
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFAB61D26E0;
-	Fri, 25 Oct 2024 08:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4933A1D3593;
+	Fri, 25 Oct 2024 08:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Ijs4zHqN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B941D1E79;
-	Fri, 25 Oct 2024 08:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A191D2B22;
+	Fri, 25 Oct 2024 08:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729844932; cv=none; b=UsdSLAEKV0vHP0EMOzsy9jVnRniFB8wtB/oS2GhP4M0H1c54T1TYt+8YzGJpGt9T0FZwNHMKR3jtfEkfqSr0rzBt0B1+0CyWYW2tzn58JSIAjaMaXHvQYTrOWIlppEiFCXv8jmFEfNE0rsA+yMJ+kn4opS0ZHRdpUw32Nl6AHp8=
+	t=1729846195; cv=none; b=LH1TvJLQEh4yl4t9fe0FJnKODeiWA3EHnytzTszBtWzmVO/2rzZXAMXzwHeFPvstLSEcewRb8tSs5ZaAClBxOuHAugMw+95vKmttzKkxf/bQPg5eF2L5MvujPTVqvdA3YOS1j+YxD+tEuPKgTogF9HSx7sdFFj3SkjyYkzrJz30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729844932; c=relaxed/simple;
-	bh=Qh0w84bisMxn6v4DNS3rR1p5e79heOUwAl9dMkiZdTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u/k65oAd/x29k6XEK6fnYNo45jKTtzWOpFyLavFl/wIWC96hkjG2kpV6FcP2FroNQvSiwnvXDJKQ0fLB3FzA3PsrXx2iZAoc0uF9aRkk/Lzt3koAM/VG22zip+hOX89F7r1rypt2SqCVUnkBUX+70/YZYUzgWnh6FbJv7NFf98s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CD8A339;
-	Fri, 25 Oct 2024 01:29:19 -0700 (PDT)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 549333F73B;
-	Fri, 25 Oct 2024 01:28:47 -0700 (PDT)
-Date: Fri, 25 Oct 2024 09:28:38 +0100
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Johan Hovold <johan@kernel.org>, sudeep.holla@arm.com,
-	cristian.marussi@arm.com, ulf.hansson@linaro.org,
-	jassisinghbrar@gmail.com, linux-kernel@vger.kernel.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, konradybcio@kernel.org,
-	linux-pm@vger.kernel.org, tstrudel@google.com, rafael@kernel.org
-Subject: Re: [PATCH V3 0/4] firmware: arm_scmi: Misc Fixes
-Message-ID: <ZxtWtqsP5HdJYp5w@pluto>
-References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
- <ZwfsmqInJlqkQD_3@hovoldconsulting.com>
- <ae5eaef9-301f-7d3f-c973-faa22ae780ee@quicinc.com>
- <ZxkjqEmkBAsC6UkL@hovoldconsulting.com>
- <c8e7420b-a7b4-89cd-1b6e-c1f6693c062d@quicinc.com>
- <ik4dyfbphm7lkeipm2dbr7cmdfxewxd4jtuz2jfnscfwcyo2r4@lrin5hnsqvyd>
- <83b635a7-fc69-7522-d985-810262500cb3@quicinc.com>
+	s=arc-20240116; t=1729846195; c=relaxed/simple;
+	bh=omXfoihbkyRKq9YwHN4cjSROCIwkALzvsJjGLDTBlgc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZnoaBl4vATr8PzL4lQaHHVDyGZ6mXtTuMCSFld+lAyy1dpkGzQOQpT95VWf/+D0neKmr+NmfKAbGFwldS8uC77r2AIXbQZV4BQAOUO4IwOtgE70mo4NtU5zq8wik8TrKWxRhu0miUOwHsrngtd3aP7SN8nLxekpya4WLbC5rNJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Ijs4zHqN; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=dCTo7/Paqcj1EVHb4+w12POrbZzZC7lWqiLNM5hDYKI=; b=Ijs4zHqNaVR7dlv1gXLpnhp09+
+	b6VLYRy2mZtaoHGHyJZIttynYfdS68bztttwgmOEyOc8O+buh1qm7gjMoXDWEDquIoLTbRukqwN8t
+	eoTZgzpqGSFtGi9Im9UwYsjy2nINm67DRvieKeJRLPAVdBZmIsE2xIW2YfMyhdJmJBbw1dkXlhZ+V
+	YYehv11NjALmjpaUjHDjdG0FLkj3QJ2T8PVcNQbH8O/IAOid88QOR4Mj2/g8qbhI0WMbyIdZuNqlX
+	Ia+mgPcZ91tYQKGC34/cKjZMs5ZmG5xVMdDLf+/nSysStHE4/Xqxn4H5qYIbjzN3aQH98Xxjd3PkY
+	M6ttTubQ==;
+Received: from i53875b34.versanet.de ([83.135.91.52] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1t4G0i-00078T-UX; Fri, 25 Oct 2024 10:49:32 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Mark Brown <broonie@kernel.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>,
+ =?ISO-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com
+Subject:
+ Re: [PATCH v3 7/7] arm64: dts: rockchip: Add GPU power domain regulator
+ dependency for RK3588
+Date: Fri, 25 Oct 2024 10:49:31 +0200
+Message-ID: <39319975.10thIPus4b@diego>
+In-Reply-To: <20241022154508.63563-8-sebastian.reichel@collabora.com>
+References:
+ <20241022154508.63563-1-sebastian.reichel@collabora.com>
+ <20241022154508.63563-8-sebastian.reichel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83b635a7-fc69-7522-d985-810262500cb3@quicinc.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-On Fri, Oct 25, 2024 at 12:15:59PM +0530, Sibi Sankar wrote:
-> 
-> 
-> On 10/25/24 11:44, Dmitry Baryshkov wrote:
-> > On Fri, Oct 25, 2024 at 11:38:36AM +0530, Sibi Sankar wrote:
-> > > 
+Am Dienstag, 22. Oktober 2024, 17:41:52 CEST schrieb Sebastian Reichel:
+> Enabling the GPU power domain requires that the GPU regulator is
+> enabled. The regulator is enabled at boot time, but automatically
+> gets disabled when there are no users.
+>=20
+> If the GPU driver is not probed at boot time or rebound while
+> the system is running the system will try to enable the power
+> domain before the regulator is enabled resulting in a failure
+> hanging the whole system. Avoid this by adding an explicit
+> dependency.
+>=20
+> Reported-by: Adri=E1n Mart=EDnez Larumbe <adrian.larumbe@collabora.com>
+> Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Hi,
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64=
+/boot/dts/rockchip/rk3588-rock-5b.dts
+> index 8f7a59918db7..717504383d46 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> @@ -465,6 +465,10 @@ &pcie3x4 {
+>  	status =3D "okay";
+>  };
+> =20
+> +&pd_gpu {
+> +	domain-supply =3D <&vdd_gpu_s0>;
+> +};
+> +
+>  &pinctrl {
+>  	hdmirx {
+>  		hdmirx_hpd: hdmirx-5v-detection {
 
-> > > 
-> > > On 10/23/24 21:56, Johan Hovold wrote:
-> > > > On Wed, Oct 23, 2024 at 01:16:47PM +0530, Sibi Sankar wrote:
-> > > > > On 10/10/24 20:32, Johan Hovold wrote:
-> > > > > > On Mon, Oct 07, 2024 at 11:36:38AM +0530, Sibi Sankar wrote:
-> > > > > > > The series addresses the kernel warnings reported by Johan at [1] and are
-> > > > > > > are required to X1E cpufreq device tree changes [2] to land.
-> > > > > > > 
-> > > > > > > [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
-> > > > > > > [2] - https://lore.kernel.org/lkml/20240612124056.39230-1-quic_sibis@quicinc.com/
-> > > > > > > 
-> > > > > > > The following warnings remain unadressed:
-> > > > > > > arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > > > > arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > > > 
-> > > > > > Are there any plans for how to address these?
-> > > > 
-> > > > > Sorry missed replying to this. The error implies that duplicate
-> > > > > opps are reported by the SCP firmware and appear once during probe.
-> > > > 
-> > > > I only see it at boot, but it shows up four times here with the CRD:
-> > > 
-> > > https://lore.kernel.org/lkml/d54f6851-d479-a136-f747-4c0180904a5e@quicinc.com/
-> > > 
-> > > As explained ^^, we see duplicates for max sustainable performance twice
-> > > for each domain.
-> > 
-> > If existing products were shipped with the firmware that lists single
-> > freq twice, please filter the frequencies like qcom-cpufreq-hw does.
-> 
-> That was a qualcomm specific driver and hence we could do such
-> kind of filtering. This however is the generic scmi perf protocol
-> and it's not something we should ever consider introducing :/
-> 
+nit: this seems to have seen some spillover from the not-yet-merged
+hdmi-rx
 
-+1
+Heiko
 
-In the case of the other warnings, those were similarly related to
-duplicates, but the warns themselves were genereated by the OPP
-subsystem when trying to register a duplicate...it was indeed a bug
-at the SCMI layer to try registering a well-known duplicate with
-the OPP subsytem, so it was fixed in the SCMI stack...avoiding to
-propagate it to the OPP layer...but the duplicate error condition
-indeed still exist (since dependent on what the fw spits out) and they
-are trapped at the SCMI level and those noisy warning are just meant
-to trap this kind of firmware anomalies...
-
-...IOW who would have ever spotted this thing and considered to fix the
-firmware in future releases without the warnings :P ?
-
-> > 
-> > > 
-> > > > 
-> > > > [    8.098452] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > [    8.109647] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > [    8.128970] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > [    8.142455] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > 
-> > > > > This particular error can be fixed only by a firmware update and you
-> > > > > should be able to test it out soon on the CRD first.
-> > > > 
-> > > > Can you explain why this can only be fixed by a firmware update? Why
-> > > > can't we suppress these warnings as well, like we did for the other
-> > > > warnings related to the duplicate entries?
-> > > > 
-> > > > IIUC the firmware is not really broken, but rather describes a feature
-> > > > that Linux does not (yet) support, right?
-> > > 
-> > > We keep saying it's a buggy firmware because the SCP firmware reports
-> > > identical perf and power levels for the additional two opps and the
-> > > kernel has no way of treating it otherwise and we shouldn't suppress
-> > > them. Out of the two duplicate opps reported one is a artifact from how
-> > > Qualcomm usually show a transition to boost frequencies. The second opp
-> > > which you say is a feature should be treated as a boost opp i.e. one
-> > > core can run at max at a lower power when other cores are at idle but
-> > > we can start marking them as such once they start advertising their
-> > > correct power requirements. So I maintain that this is the best we
-> > > can do and need a firmware update for us to address anything more.
-> > 
-> > Will existing shipping products get these firmware updates?
-> 
-> They are sure to trickle out but I guess it's upto the oem
-> to decide if they do want to pick these up like some of the
-> other firmware updates being tested only on CRD. Not sure why
-> warnings duplicates should block cpufreq from landing for x1e
-> but if that's what the community wants I can drop reposting
-> this series!
-
-Not sure indeed which is the problem with such warnings since they are
-just doing their job...in general we tend not to disrupt operation even
-when the firmware is buggy (if possible) BUT we definitely try to be
-noisy about that to have firmware fixed (...not that fw guys seems so
-scared usually about warnings though :P)
-
-Anyway, I'm totally with Sibi here unless there is an impact at the
-functional level...Sudeep may think otherwise of course ...
-
-Thanks
-Cristian
 
 
