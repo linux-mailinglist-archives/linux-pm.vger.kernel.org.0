@@ -1,187 +1,198 @@
-Return-Path: <linux-pm+bounces-16477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16478-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E3659B0A96
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 19:12:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D6209B0AFC
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 19:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E60271F24B59
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:12:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1C0B1C24FDD
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE932003B4;
-	Fri, 25 Oct 2024 17:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACDF20D4F9;
+	Fri, 25 Oct 2024 17:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="oD+FengK"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Bx59WvSH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2058.outbound.protection.outlook.com [40.107.220.58])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2050.outbound.protection.outlook.com [40.107.236.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B191C173D;
-	Fri, 25 Oct 2024 17:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A321FB89E;
+	Fri, 25 Oct 2024 17:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729876325; cv=fail; b=NMOLWrXirR2KU9/LJuCw0E8y57aZzU7hnRo11y/RDRoz4BIQKz/kFEg/Arhx35nnnZ2JSHhWUxk9FkJn7ml/WbwdYz/mkkZVk2z1p4YFqVF4aEw1d1dSnuLz45645OFjuzMyzWLmcDwswuv7MsyvCq1s3dQDRm3r4iwGH36oqZA=
+	t=1729876535; cv=fail; b=dsglHbT6Rn2bvBwbqW6jkECtjmmB1xuaQkjGP9cu6DDp+Jx0hwbjvR/0BBMjWYZXSwDDSRomYuUo3PBpbWt2lVtbppEje0BrL5QdSwoET5uCcfaSy2/FfOrLHLUYNPu4h8jGOTiGwDTZHfoBZKXii2d0aYUDszpUoj64NFtPugQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729876325; c=relaxed/simple;
-	bh=NQ+yEFJhM+ZTPX653596lNPtVUA4KArWkk97B/VjWpw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=XpsfY/izfVYbk9UcwZ1YCSeoAWFQJKLXUOzq8XBjjkN2Ry8sf2JnH3VzuLhFSSqAgTDCBdU5NGvIEt2FUypGfFi5a2qdGmAxaV4t+n0yIlNPb7ycwFuYGxDmOxhXpJkJouajLqFcOLlwMDULP8DGzkipDMRXR7s4703hKURp4Pc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=oD+FengK; arc=fail smtp.client-ip=40.107.220.58
+	s=arc-20240116; t=1729876535; c=relaxed/simple;
+	bh=OD6pHqAMlDJpD8U6NH9qlKBuwIB22hB2aAYJJFsfSik=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Idy0lh9qX5JMl3ZTfXmN1Q4MuC+esjN/aU2ap6tc332NqkYrLrVnXlZPDjqGfv60O2jiTK5A15Up1mhQfowsw8xg/7FbMrJE50oE+JriYIOtSb5XMNlti9Fk7Tl6hD3jyQb6k3Cw+26ijwZdaggyOWb9TRZhl6UHQC2cATuJJh4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Bx59WvSH; arc=fail smtp.client-ip=40.107.236.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=i4Bz+7i3pP9RRmNQNkwHA67l0w5oWbRcQZuKD4QhM4GH/owUZQIaMB+SM9diSu7SxmqEWOhMl3NCPhLCXq3npnxFfCnN8jfNhnQhddA8b/OU8d0r0+7EY9y1x0s+IrvTVcU4pR6WlDcgloQ3IOvqbRhVDejFNFi85nPtgJ4HCpzok5T4HysEHXhy4r1ORg++Wwj/eGv4HwiLh/FbhyBSHLwaOmBbEWZHx0feCoOUuJGusKZ1ahX3ivIlrGpmlURvLdCmVBXI4usEL04LByk231WPh5xijwS93Xjyv8vyQ+TnCtvrp2+FnvuRbxpWFSsqf60z+/pepIBqsD4JVP3QSw==
+ b=wN74DcGVpINnka7BU37osVkE3GlwGXVWVjM5EYPwInAVcEXkNbvBsyVt2qKkqReQlQPUkY8/l6jZJqd/vOR2/aafNbHw/EBCVcxQkyCDa0cAvocb7cJNdzHFsUljtMdBaI50K+lWigTgaA2ZE/vsCDAHmW7N0oZ9ZZ7ZBwUHAJl2wQ/IUIRFhFBghc+nE18jmeC2dqax3I2y1Fj9dMc5NlEZJZ5SYPldNFUzqXK02ieS8jPf6blXzbwILFJcMN29H8P/PDTmyE0U1PF2RwJrvYytXxD1ONHtNLvvfocESy9rnYReoLBcP0Msu4DlGizzgGrdo5cYqRCt5cPznFlr8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YqHBwXAH2y3myo1qCC6yqA7DXoSFbjKmPYh9um57pi4=;
- b=NNLgvitPVzdwYq5meHrmoMZUwpdazHqf+wYW8Hduz/wGTuuh6pLavadS0ZdF6TYGO5eGwxJh0hn8ByB6Ci+sf/OUT6DYcj7rod8sn35vR9SMEtpFzc2k1N2tiRMaHfVSxE3fS6MyadRNMaRoaIhl8TVwr1HBhtFvjTreDTbvOCBzrUjGze4PUoOFLz7GqEFnsu8VRn/mTQHWz+90w8zUY/IlEPoL5aZQ7AMufE1+DQ/x5z0TrExXTv6A6rGZP/TBl8xkuUebiP7YvyxHf9XbK4oy4OnzonpCl4PtfUWvqBfSZ6bw897ZoKr+5veEWWawfDKazGs/z7BJQlR0q9p7oA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=HCrdbNXfdYJ4yCKLanQqQRve/Qr6AHivOLImiw7LaAI=;
+ b=mBtscvLsz/ac7KR/brCR1xNiZT7+fw5KtCjSUtpQ2eQ0ByExbK2gwpQqSGjP2dtNg9asfIu+fuilws1oNIXEVo5WNIEsdgwfJu3nCKgE5KeMmcohpxqwc0wOBo5U4/yl4r6ArSp61QHuR+SYKZ3hnsgysf3W+2GTz/BL7pigofAne5UwxoOQszK2MPja68tv3YavI04wvlK1NfpfF7O7YFXtEwalzy1lzQgpNWieQBx7Q30mo1vijCt2DdSNgksfoqQmuBANjS0C7BDhErO+wKcF2zbVTV7DBMOJw8BZknCIQEztwsStCJJs/v2ZF+kt6NI4vc0LQhPkv1WF9YOfrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YqHBwXAH2y3myo1qCC6yqA7DXoSFbjKmPYh9um57pi4=;
- b=oD+FengKHWBpe1uQ+5o8BN2HLOmMzK456sbLTE0UcqF55WKw/zxcZNz0/jBNuTNMUwsvHsY+evvnTmu8amq2CrKmqFgVvESps/XoqG8fVU8aO5dgkgIYwKItL9hjgAD3yIRkix+Ux+YHWKFuL9fjeRaogP8MUkyBt4Fk8FRd92I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- CH2PR12MB4038.namprd12.prod.outlook.com (2603:10b6:610:7b::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8093.23; Fri, 25 Oct 2024 17:12:00 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8093.018; Fri, 25 Oct 2024
- 17:12:00 +0000
-Date: Fri, 25 Oct 2024 22:41:48 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-Cc: mario.limonciello@amd.com, perry.yuan@amd.com, rafael@kernel.org,
-	viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] cpufreq/amd-pstate: Align offline flow of shared
- memory and MSR based systems
-Message-ID: <ZxvRVGrOIj21+eTa@BLRRASHENOY1.amd.com>
-References: <20241023102108.5980-1-Dhananjay.Ugwekar@amd.com>
- <20241023102108.5980-5-Dhananjay.Ugwekar@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241023102108.5980-5-Dhananjay.Ugwekar@amd.com>
-X-ClientProxiedBy: PN2PR01CA0208.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::16) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+ bh=HCrdbNXfdYJ4yCKLanQqQRve/Qr6AHivOLImiw7LaAI=;
+ b=Bx59WvSHYPzyZAGdork6ohftQX4GGST/2ybPmt9ceWgGvQZ5npq6cE+o45ILJszL2nmYUPW3as2+KIxvENhE7O55Fa8gEEXskvhccZa3flieuxOLZmW4L+RfrZpjdEfo0D2V4BNTSvoxieE3Y98TIhO8hORdYX9hLDmxjrgXf3k=
+Received: from BN8PR04CA0044.namprd04.prod.outlook.com (2603:10b6:408:d4::18)
+ by DS7PR12MB5864.namprd12.prod.outlook.com (2603:10b6:8:7b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.20; Fri, 25 Oct
+ 2024 17:15:28 +0000
+Received: from BL02EPF0001A107.namprd05.prod.outlook.com
+ (2603:10b6:408:d4:cafe::c5) by BN8PR04CA0044.outlook.office365.com
+ (2603:10b6:408:d4::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.20 via Frontend
+ Transport; Fri, 25 Oct 2024 17:15:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A107.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8093.14 via Frontend Transport; Fri, 25 Oct 2024 17:15:27 +0000
+Received: from AUS-P9-MLIMONCI.xilinx.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 25 Oct 2024 12:15:25 -0500
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	"Dave Hansen" <dave.hansen@linux.intel.com>, "maintainer:X86 ARCHITECTURE
+ (32-BIT AND 64-BIT)" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, "Gautham R . Shenoy"
+	<gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>, Brijesh Singh <brijesh.singh@amd.com>, Peter
+ Zijlstra <peterz@infradead.org>, Li RongQing <lirongqing@baidu.com>, "open
+ list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>, "open list:AMD PSTATE DRIVER"
+	<linux-pm@vger.kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH v4 0/5] x86 Heterogeneous design identification
+Date: Fri, 25 Oct 2024 12:14:54 -0500
+Message-ID: <20241025171459.1093-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|CH2PR12MB4038:EE_
-X-MS-Office365-Filtering-Correlation-Id: dab3a253-e328-423b-e245-08dcf5182356
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A107:EE_|DS7PR12MB5864:EE_
+X-MS-Office365-Filtering-Correlation-Id: 771e828c-3ae1-4c0a-1e79-08dcf5189ee3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?rJ2ZDeD8lW+yeJTBTjYg+yd5skxKnTpeqir6SklMlWrkER0BVPxcIrS3AP3s?=
- =?us-ascii?Q?AEIvF/xt/1d85ZdcLuQrwKMWUXPzw1ZaYx4uNUXVFJab8Y49oIlaItWAaRnt?=
- =?us-ascii?Q?6mummG6pgpDM9oCRqfnDY0rClfHlekn6v+FmksAnfA7ETTi/4QnoJt/XkrfN?=
- =?us-ascii?Q?MBCeHj66ZLOp/8uHhHj828oBX4qBruMuemXaG/brLe4uixaLwnvdQJpFBW7J?=
- =?us-ascii?Q?NycF3oVpPVSDhGjt542cpzSQaqBR0ze0UOlO0QIt8AuSaYFKfZxXWZrRItxG?=
- =?us-ascii?Q?RtMVAZb2Uu8XDwQU6e7r/Mt95fdXh7B4dSaVEPYxY/e6woVmUjTvELBY7Et8?=
- =?us-ascii?Q?vqkfaBpmIe/f8NoM5muVlmybGaxIf1YqnMlJJLIm4/nIwochPzV8GSny6+zK?=
- =?us-ascii?Q?3DUhFIZybqdzUafYmcIvztJrLackfKVZZFbdLpC0UvgytRkhUF+vwXLGDkkQ?=
- =?us-ascii?Q?om+BMO3cg5mCYiTlFUnKrTYYI88Z8h8+HkrMaYPc7mn1mIUbpVRh+h4adcSy?=
- =?us-ascii?Q?/Hl5UVvZSHP4cz6MO933BKFm1JbjhuDjd2lfkx8ow2gJSY24OYhAe7YDktky?=
- =?us-ascii?Q?HGRhldB3hsGBLC58RjyFmyVzFy4doD+qthEz4rhuNQqAL92+13DOhtnzZ4p7?=
- =?us-ascii?Q?gKzZVnCLx/QMC6EISfW4og1DWzuS4GsyhYAuq8kLpzFAfIjQBtNPV3xABI5v?=
- =?us-ascii?Q?b9dOuUOPxlkVjrSLhTBXp+hyw7wWilkpT6XDS4KN1VMLw9Nbgyvj2o7SdHWZ?=
- =?us-ascii?Q?pi4ZPECzKxYzjDM7aw7EpoTErNUaVJ9dc77OmYB9RKl+8myWWmz6VyYyTBeI?=
- =?us-ascii?Q?CHPEbpQlqUeWspxurBqdSWqXCBrccG9SxbJMxwmLsez97bFsFZGi+5xxFUa9?=
- =?us-ascii?Q?hTcZ9U/UGZ/08GCyhImiaQXgv5+c5A56NXumY1yJcgdTDJFUqtGogmEXGmW7?=
- =?us-ascii?Q?58eZ86XWNE4+dKWhE8pZpCQpOVOfLVAxZ/KqWmDQRerov5IBblNMif/U37Rm?=
- =?us-ascii?Q?N89deA363ZYCYtEhA/0uic29i8VvIugVVMfzqnZbu41ssyV+II2XygOqFMKY?=
- =?us-ascii?Q?UQAf3SJM18Pw0/OkLDgiPx0TNY+fRQjHe8hwVvEe/uCxQbwUhLOr0hvabxyo?=
- =?us-ascii?Q?O4jimX0lIjLUrO5X+GTw7maVjfb7J3SVwwYXfFLAkl7QJfZOQXIAme2nLBY1?=
- =?us-ascii?Q?WS/XRG1vR7AJaSAGIHYu2YVix/cB4FLYJQ38WNI5ig6X1AkIaSTLjMvg8QoV?=
- =?us-ascii?Q?7oiITeMQqhtuJZ1GZp63Q7GjEbpEV3VYHJoQ2eiVgbbYMbfxuxKhwn8oCcd3?=
- =?us-ascii?Q?W3f4tTpsRIfZjKQXIWcoZCKD?=
+	=?us-ascii?Q?ORpsIkRCYid6qa3bTCwf6H7PUsexHfIGj0fGVId+7W/vph7degN6IZVf5wsc?=
+ =?us-ascii?Q?l8QF7kP66LnQLOCYbv6sgiV0ryRSTB5mHoYgXE8b96WdCLH5Pt3o6Kx3txk8?=
+ =?us-ascii?Q?coKQZadAt09DAtV8LEL7z+llwofB5HBZQgPZheTqJNNwvUp/tOJOSoF36EL/?=
+ =?us-ascii?Q?hUSk67vu7KsdoE4VfW2+t5lbvqF5VwLw/ViLzKst9J272JCSEtw46ab+EwWb?=
+ =?us-ascii?Q?KlbOmA0n39IpxnlZpqhWj5q10BFWMpdOmoG3/3Ayaw4DtPdhoxleZA2K7dPg?=
+ =?us-ascii?Q?RTeMbYkrAxYoxW+wHF2K3RAfMThWwEO9ZdpXxvLzQtf0KbRSKlR0dmtrVXFg?=
+ =?us-ascii?Q?uvYaU1v0wau92VjoX4bJfjo95G3r05t5sOCyuxk+WxqvH2E2cLodhia31U2p?=
+ =?us-ascii?Q?9X7ZsTQ5JBT9sXREbwTHMEgP9hSKJOopzE4knY1/MNKrimwjihEIHNxO6dY2?=
+ =?us-ascii?Q?bex2auvIleg0UA+rz7rtZphSNIy6ue7OVzp5Ks4LwcWm5lrK8+X+EjYBux2O?=
+ =?us-ascii?Q?mQoPcE6VHv2RKIS7zqYi2xAPAjj1VAMWQJ00vi5VatOAojsyylsAxCPvL3lW?=
+ =?us-ascii?Q?t/hopaHgW8k8BDATBERJ7VsouRZID1xSEEs0Xm909Ajva3uzQaFwpE7iLdp9?=
+ =?us-ascii?Q?tBM0WoZ89qbve/eaXYurjFKRpnjS822P+ou7VqtnUuWu+fusbjb2TJxQeFhL?=
+ =?us-ascii?Q?+01Pcdl1MrV4RmkPz2SvIb3vxdqZlr/CH9NHm+DrpYltfslA/EDrMjgjVhlr?=
+ =?us-ascii?Q?ki2t2sUKrbLKwcmbKk2KYQw1HVE60YJXOjKaGpWz0NXmQMCS8N+Mue1O+G7F?=
+ =?us-ascii?Q?kjnnmvcQ30AIVrAc7Eg88QZPoCA5wcpFFceS8fhmeNR64JXoR/3bKbXfjOqb?=
+ =?us-ascii?Q?5nnRiI+l2pP1l4/ptGmXeoQXyBqmCmseaRcf7U0HLNq24ZIXtPTm37K77To0?=
+ =?us-ascii?Q?GrxbwFMkGCkheXRilhovzzUq/O9Fx2Mpscre7lUKwRtpIT4WrdHfd8FcUywG?=
+ =?us-ascii?Q?gfvN1EcFDBBnosCiQkDASPSI3AJk3U536FPaQTOsKs5rMVHxWo2r3IPWL6mM?=
+ =?us-ascii?Q?K75VJ+LZebIqDrazmzDa7oEYRjgmls0v9k8Mnewk/v9kLmLRCpJNuw0c1JY0?=
+ =?us-ascii?Q?tcvC6qWgvunaWGHw3i6nYK/zK0QlpRmGl6f7c9NHuQ0PIQgaS0E1GA44JhCZ?=
+ =?us-ascii?Q?oeMY6v0G2eP1fG5fcxQDCmblLXGSF7/Ogu9zyUs8eHmewA7OuI/2kxcc5b7p?=
+ =?us-ascii?Q?pQIyMdwphh2G/8AkRLnc7U38V9aKL54Ozhj2fIF9BtPSle9281oaVi8yQ3Wp?=
+ =?us-ascii?Q?vLIBuMLwnxqBwmKnjJ0r1/CsTs9OLHmZzkT3P2ws7uMTz1pbbzy2nEn1BhVN?=
+ =?us-ascii?Q?kMOukvBqynVQYYXM9a1h24XmWFYJgvmibrkN1jk8gcic3hG832MIzizh1rUA?=
+ =?us-ascii?Q?dytDfjKve2E=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IYlX7Wjg+3enH+GgG6tFmfN5df6kylTDK6c5AYV8QIaAgJGumGNLtL0P5jOs?=
- =?us-ascii?Q?DDu23hyrCXJ80YgDrOeLLd/Ob604JSVkBtcVIlxLqg5mXAQP/oVl4GsYB1Pc?=
- =?us-ascii?Q?6rRoDKtvKs/atSP0Tm2emJVZW37fKU/8h5flCGdDYcJkEePSNPNNK00jW0E+?=
- =?us-ascii?Q?+VPpaAlPToeuStoWtXG9FJVmkNTeVf67Hgw5a6g+5zFXANjbK7CmjhnHuKSu?=
- =?us-ascii?Q?Pwks22aBi3/9SZQcYn7QmDvwSF8l7FDytTdab5PRCMWYinBT5s6OjltztNRh?=
- =?us-ascii?Q?K/jZF85Tf7x5YGGP3i67fN960hoX8hWZOM4Csm/3JzbsnjXMJXg2tQgRTqJc?=
- =?us-ascii?Q?26vxgx4tKEnZd4619HI81m66BMDVm3HkuCM0HJumomhWQklMC+lHz/WVFPnR?=
- =?us-ascii?Q?pXY+lgk5fLNkEBqjGea3b37UdQigCYOt++YEyPTJMHo08vR0nWzZlj2RJQAw?=
- =?us-ascii?Q?D44Qpq9nbgRKVy5TBPzZIFfWUJeBcN2Cy5hHTPcL8XN+0hNfl4/zMbdFLfCU?=
- =?us-ascii?Q?EIZm0I6ouwYpPb9vlVLK4e4lWSq3YQkeBvaLIrluMBEWh9uBTd07JQ8RzD6V?=
- =?us-ascii?Q?Rbh6N0IK1KPbcu2LSuEheRdfWAQZJyOfUzFmGTXcXXviRXqEVB89qIq9Jd49?=
- =?us-ascii?Q?6E4miHjSbNlE+26Gkv92kgpau3/WsMeMYDvGvVrijX11bIlUtRhW62AGcM82?=
- =?us-ascii?Q?rG7A/Zm9MKZv782XW2lE2McRTI85Whf6AJD2vACv2RRc2R5w65huOtWI5VHA?=
- =?us-ascii?Q?pfNPef6OGR2Y75OoDpNsRT7EIDlJPyc5xufwbLy9MHn9EpbDK2wE1421sD1c?=
- =?us-ascii?Q?l2fL6tFagvOqitjRnPYxhykGBrGA6OpOuMeUJ6BLdshbYgg2CIvaxNPGsDxc?=
- =?us-ascii?Q?YB7+uddN+6Ke33QAJYlMeyY0d6+sOLO9+85Re+Bx71PKENBj+57FlqyR1Fxh?=
- =?us-ascii?Q?/9FpCtl0steXYrZxlHI2dmpRA2wkiZ/4beQb/6oYQNYxl0ndnddk16vP7xhb?=
- =?us-ascii?Q?l8XmdfVBZP/71dELvVp+IIly6aWPHvnxVfUhhmFZNdCD+8kOO3GYA9ea17KL?=
- =?us-ascii?Q?saYVt7jRFBgBJ9D24+HpGQ9eax7FVzQdEcxBJSIYSfEG6/vDu+bq/k1C9Le/?=
- =?us-ascii?Q?0LiNoVO8rjuRyoYBH1MPw6Aic0KYM/jm3DdD7X/8PvvnM6MV4F7FFVuzJWxp?=
- =?us-ascii?Q?XsLr0EK6fmEYCNrHNZPxF48xEAe3Q8EVjkdNrx0BOYiLZHOtGoXaD8PfeO+Q?=
- =?us-ascii?Q?E3cUYpXLxL9cUq9gkMPQceMi+bgGMzm3Z47IAzToPGG65aW+g3td5d2WcNLP?=
- =?us-ascii?Q?t91C3plzfRJ46DfDUPH6PYZnQCARKvAQ6i5zXfs8VA7f7r/+2nQbR5U/vsBy?=
- =?us-ascii?Q?wl7m9pNcrOvX/t8I3P1w0/Y9lgwREsz7cw97MeD4KAFta9NivuScrQ3s7Wk9?=
- =?us-ascii?Q?pYiKi4dMpq7vUnhORxJCqJZmMBJujSTpoFIl7zzI/h/Xo4FqfExMN1ve7xCA?=
- =?us-ascii?Q?nGhsZ9naFxma5X5FqHfXd1p8OVgxvmMqde+hCzd6vNSFqGJ9H1yEKQIVnPdH?=
- =?us-ascii?Q?/Iwx1r5m8tN3cjQPWrAXfEP5Wyk6zRnny5Tmd1ww?=
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dab3a253-e328-423b-e245-08dcf5182356
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2024 17:12:00.3324
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2024 17:15:27.2847
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 771e828c-3ae1-4c0a-1e79-08dcf5189ee3
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: og0uYQH0kGYBc9T96lfyaomlU6TEudy+oeWWPUT1Jw1flgq1nMxHqyAKQYeo6PajByRpLIUdq9EyuayZXYlNcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4038
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A107.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5864
 
-On Wed, Oct 23, 2024 at 10:21:12AM +0000, Dhananjay Ugwekar wrote:
-> Set min_perf to lowest_perf for shared memory systems, similar to the MSR
-> based systems.
-> 
-> Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+This series adds topology identification for Intel and AMD processors and
+uses this identification in the AMD CPPC code to identify the boost
+numerator.
 
-Thanks for fixing this.
+This series was previously submitted as [1], but this was based on some
+patches in linux-pm/linux-next that will be dropped.
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Instead the series is now based on tip/master.
 
---
-Thanks and Regards
-gautham.
+This also pulls one patch from Pawan's series [2] and adjusts it for all
+feedback while adding AMD support at the same time.
 
-> ---
->  drivers/cpufreq/amd-pstate.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index bbeddce90823..206725219d8c 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1658,6 +1658,7 @@ static void amd_pstate_epp_offline(struct cpufreq_policy *policy)
->  		wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, value);
->  	} else {
->  		perf_ctrls.desired_perf = 0;
-> +		perf_ctrls.min_perf = min_perf;
->  		perf_ctrls.max_perf = min_perf;
->  		cppc_set_perf(cpudata->cpu, &perf_ctrls);
->  		perf_ctrls.energy_perf = AMD_CPPC_ENERGY_PERF_PREF(HWP_EPP_BALANCE_POWERSAVE);
-> -- 
-> 2.34.1
-> 
+[1] https://lore.kernel.org/all/20241021175509.2079-5-mario.limonciello@amd.com/T/
+[2] https://lore.kernel.org/all/20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com/
+
+v3->v4:
+ * Fixes from M/L feedback.
+ * Pick up tags
+v2->v3:
+ * Adjustments on Pawan's patch from M/L feedback.
+
+Mario Limonciello (2):
+  x86/cpufeatures: Rename X86_FEATURE_FAST_CPPC to have AMD prefix
+  x86/amd: Use heterogeneous core topology for identifying boost
+    numerator
+
+Pawan Gupta (1):
+  x86/cpu: Add CPU type to struct cpuinfo_topology
+
+Perry Yuan (2):
+  x86/cpufeatures: Add feature bits for AMD heterogeneous processor
+  x86/cpu: Enable SD_ASYM_PACKING for PKG Domain on AMD Processors
+
+ arch/x86/include/asm/cpufeatures.h       |  3 ++-
+ arch/x86/include/asm/intel-family.h      |  6 +++++
+ arch/x86/include/asm/processor.h         | 18 +++++++++++++
+ arch/x86/include/asm/topology.h          |  9 +++++++
+ arch/x86/kernel/acpi/cppc.c              | 23 ++++++++++++++++
+ arch/x86/kernel/cpu/debugfs.c            |  1 +
+ arch/x86/kernel/cpu/scattered.c          |  3 ++-
+ arch/x86/kernel/cpu/topology_amd.c       |  3 +++
+ arch/x86/kernel/cpu/topology_common.c    | 34 ++++++++++++++++++++++++
+ arch/x86/kernel/smpboot.c                |  5 ++--
+ drivers/cpufreq/amd-pstate.c             |  2 +-
+ tools/arch/x86/include/asm/cpufeatures.h |  2 +-
+ 12 files changed, 103 insertions(+), 6 deletions(-)
+
+
+base-commit: 21f0d4005e7eb71b95cf6b55041fd525bdb11c1f
+-- 
+2.43.0
+
 
