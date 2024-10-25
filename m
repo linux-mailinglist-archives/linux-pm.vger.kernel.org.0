@@ -1,92 +1,122 @@
-Return-Path: <linux-pm+bounces-16441-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16440-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49DBA9AFEC0
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 11:47:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27CC79AFE13
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 11:23:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EEE9284758
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 09:47:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 584621C228EF
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 09:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94071D26F9;
-	Fri, 25 Oct 2024 09:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2671D4615;
+	Fri, 25 Oct 2024 09:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="FYFaZyx+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAE712FB1B;
-	Fri, 25 Oct 2024 09:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4251D3181;
+	Fri, 25 Oct 2024 09:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729849621; cv=none; b=uH3lfJDTpZ7nFhjAlHmRLpI58FtdAEkXs9Y2ZHU0oTuQ0zgPRRu/dC7Bd0WGsQ/oFnn3lqdJNRgC/4tuZIk4C+sJTO+wxjrUMBvtou5tvnwIarYQleAmRBk/GwxYupys+9UUmv5DaAHqZh9wwSXeXWH5iLtEd5Z4dIhwzn8JUHc=
+	t=1729847957; cv=none; b=PFCCify80tVElW71HbWC6gSv5yJv/yyqB6n/tbfsBwx5tV5640Lc05atJ+DrMF/S14o7ZQmKnvB4vapFNx27JZ44eW6ua6PqqokrvS1T5B0TL/jUmZg0/nvRzmXfbZiX0n1u5Mz91DStotlzUfpZaY2Cwwv2AzzKWUZtECoqKoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729849621; c=relaxed/simple;
-	bh=y+SBzjIIn19qEmS5GIgWwnWVEOEv+/x85ElFQ3XTVQs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pdFjfjnQw3Y4IXqNimrANyb8wcfojXdM0n4zagNSMr3rKmWT7cCU2RC28SYJETu2fcwMmxYqG2I4OzoXaQv1+CHl1odHv6XpNp7xSU00HlkmoT8dwQTO0i1sDey35ZaOpht20Lh7M/f1Fv+C+VY9O0Zj9LsAXMi3Tz8kz+KN9WQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee7671b690da0d-7ca22;
-	Fri, 25 Oct 2024 17:46:53 +0800 (CST)
-X-RM-TRANSID:2ee7671b690da0d-7ca22
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.97])
-	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee1671b68ff7b3-33043;
-	Fri, 25 Oct 2024 17:46:53 +0800 (CST)
-X-RM-TRANSID:2ee1671b68ff7b3-33043
-From: Ba Jing <bajing@cmss.chinamobile.com>
-To: ssantosh@kernel.org
-Cc: sre@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Ba Jing <bajing@cmss.chinamobile.com>
-Subject: [PATCH] reset: keystone-reset: remove unused macros
-Date: Fri, 25 Oct 2024 17:06:59 +0800
-Message-Id: <20241025090659.33458-1-bajing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1729847957; c=relaxed/simple;
+	bh=jGwRrHVrMrQhrU93MbTVsh1zFw3AeLdhWIEmfA4/8ks=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DfIoYEHoTUODtsqt1NXaIQe9yTd2elnodR0S73qLhPbK1TJlMoLvFyLZLS91O2lVWQTt/hSPO7wdzEgzLgrp5RTnkUvf1vlec/ijQFKluHVE1HolQMh6pho+RIZSWIcT13M1CoVwE9FWoFawWvwGZ0Z2FrxRjsPmVg9NhTc373U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=FYFaZyx+; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=y+jm9ardZfDQqVqtaj+yn7oty3xNlqz/dKihmWT8xaE=; b=FYFaZyx+NfXBTA/kmDH+CvbKAT
+	9G8SxA0/a14dY6GCNROeC8sI5TlH5eC5mp+KdcnxtAPmWtvUYHBrzjGROCSD1SHBUx0sOBLFmadWi
+	8c7Wol6ijbwAKzVqKBS/ma7Wx6Jc0I98kOl8TkWZWMv1/PRL+rBqmuMadgL6UMd5cTsgqfgQlenSG
+	5HlCExAuwXR5muP/9zFcgrrINeut+nWXd53zdJifo9WSmI6CP55o2mUPjo53BHqdOjMPAF0x/v14i
+	LmdSguVRgkKIlEPmwZeG1DcWktKT1MvKyPEOgLCjJK9SOLqDcWDq9KCHFTmSry/n3UJUtaB45sTOq
+	bAC4Ol9A==;
+Received: from i53875b34.versanet.de ([83.135.91.52] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1t4GTJ-0008U9-V4; Fri, 25 Oct 2024 11:19:05 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Mark Brown <broonie@kernel.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>,
+ =?ISO-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com
+Subject: Re: [PATCH v3 0/7] Fix RK3588 GPU domain
+Date: Fri, 25 Oct 2024 11:19:04 +0200
+Message-ID: <16964583.geO5KgaWL5@diego>
+In-Reply-To: <20241022154508.63563-1-sebastian.reichel@collabora.com>
+References: <20241022154508.63563-1-sebastian.reichel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-After reviewing the code, it was found that these macros are never
-referenced in the code. Just remove them.
+Am Dienstag, 22. Oktober 2024, 17:41:45 CEST schrieb Sebastian Reichel:
+> Hi,
+> 
+> I got a report, that the Linux kernel crashes on Rock 5B when the panthor
+> driver is loaded late after booting. The crash starts with the following
+> shortened error print:
+> 
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'gpu', val=0
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to get ack on domain 'gpu', val=0xa9fff
+> SError Interrupt on CPU4, code 0x00000000be000411 -- SError
+> 
+> This series first does some cleanups in the Rockchip power domain
+> driver and changes the driver, so that it no longer tries to continue
+> when it fails to enable a domain. This gets rid of the SError interrupt
+> and long backtraces. But the kernel still hangs when it fails to enable
+> a power domain. I have not done further analysis to check if that can
+> be avoided.
+> 
+> Last but not least this provides a fix for the GPU power domain failing
+> to get enabled - after some testing from my side it seems to require the
+> GPU voltage supply to be enabled.
+> 
+> This series is now based on the pull request from Mark Brown:
+> https://lore.kernel.org/linux-pm/ZvsVfQ1fuSVZpF6A@finisterre.sirena.org.uk/
+> 
+> I added one more patch, which adds devm_of_regulator_get without the
+> _optional suffix, since that is more sensible for the Rockchip usecase.
+> Longer explanation can be seen in patch 6, which adds the handling to
+> the Rockchip driver. My merge suggestion would be that Mark adds the
+> regulator patch on top of the immutable branch and creates a new pull
+> request.
+> 
+> The last patch, which updates the RK3588 board files only covers the
+> boards from 6.12-rc1. Any board missing the update will behave as before,
+> so it is perfectly fine not to update all DT files at once.
 
-Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
----
- drivers/power/reset/keystone-reset.c | 2 --
- 1 file changed, 2 deletions(-)
+My rk3588 jaguar somehow developed some delay when dhcp'ing for its nfs
+root and with that actually started running into that gpu-regulator-issue.
 
-diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/keystone-reset.c
-index dbc4ff61cd74..cfaa54ced0d0 100644
---- a/drivers/power/reset/keystone-reset.c
-+++ b/drivers/power/reset/keystone-reset.c
-@@ -16,7 +16,6 @@
- #include <linux/mfd/syscon.h>
- #include <linux/of.h>
- 
--#define RSTYPE_RG			0x0
- #define RSCTRL_RG			0x4
- #define RSCFG_RG			0x8
- #define RSISO_RG			0xc
-@@ -28,7 +27,6 @@
- #define RSMUX_OMODE_MASK		0xe
- #define RSMUX_OMODE_RESET_ON		0xa
- #define RSMUX_OMODE_RESET_OFF		0x0
--#define RSMUX_LOCK_MASK			0x1
- #define RSMUX_LOCK_SET			0x1
- 
- #define RSCFG_RSTYPE_SOFT		0x300f
--- 
-2.33.0
+With this series applied, that issue goes away:
 
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 
 
 
