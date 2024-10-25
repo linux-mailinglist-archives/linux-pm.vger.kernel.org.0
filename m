@@ -1,115 +1,112 @@
-Return-Path: <linux-pm+bounces-16470-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16471-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED619B089E
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:41:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF0419B08E6
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:51:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F0C51C22BB2
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:41:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BB011C20C63
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976D61885B7;
-	Fri, 25 Oct 2024 15:40:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA1A165F17;
+	Fri, 25 Oct 2024 15:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETOhtiKh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A2415A858;
-	Fri, 25 Oct 2024 15:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E6521A4D1;
+	Fri, 25 Oct 2024 15:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729870852; cv=none; b=FvTAUuCyVYeOxT2fgbokrXonL83G9C7LG4ID/FjF7R5kcNaMEH4M7AocAy6qwb9sFd4kDeTv/Nujz3NoEf0hZDlbeBSm4L8Tgc9zkcNae8FfjVaHl7sDgvgLuCoBXtpp05hAPRG3ttSdkds5OdGMN0sHrSo/Zwprf5t7NBEplps=
+	t=1729871458; cv=none; b=lgR7Mm+WBPiIYsHduOfpTsTPkn0drDWVnReX3OeGAnp+Gg7FKi1lWJUWx5Hkdr2RX6gGbGGP2FZarOFQhDyCZs1SzHc3UV5QiadlYTm/rbwzzxTQf6S7mGz0yjT8JOrD7dgYQfs0ZwpUkTKf1LkggZqzr2sV/1s2Avb2umep6dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729870852; c=relaxed/simple;
-	bh=qEVNQFJWLhm7KbaIPFSwZIfcXxwCW6QTwMEqNJ7ho34=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E/IuIsacuLPrCn9jsZhewIAm5NdYr/ov1sDJ+bzX+Szopc7Gex797jqNV3LDuMpQvhccTVMXoyRiFdOZqqorPEBOeHPS9PBCGfp0dT82bdg79bM5OShjo8rEmsfmIvLrQ6heHtJoRwJuZiwzZ/t34cUWwuilwmBBlKZ34KdEPcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26CBF339;
-	Fri, 25 Oct 2024 08:41:18 -0700 (PDT)
-Received: from [10.57.55.217] (unknown [10.57.55.217])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3B7D3F73B;
-	Fri, 25 Oct 2024 08:40:46 -0700 (PDT)
-Message-ID: <b273599f-8653-4e98-ac64-09c91b0a1592@arm.com>
-Date: Fri, 25 Oct 2024 16:41:57 +0100
+	s=arc-20240116; t=1729871458; c=relaxed/simple;
+	bh=Fi11uiXIQ+iNyojKutyX4w7orO4RUqctsjHq2NJr7EA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=t0O6ys7Q596seaQ1gCNvjTYKj/2sD3JX6qoR0zR96n4YUJ6Xk3q4U4ugPDymfiGwJ2OIvHnlAwStrpof+VidcyS7XJQ/jWuSUPViVVA3wCL4kfUvj8ZSVnfVeW9KH2l6gjEX7UdNvApi3qblZREHlS8/m7z1Rts3UITAmxawE/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETOhtiKh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57698C4CEC3;
+	Fri, 25 Oct 2024 15:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729871458;
+	bh=Fi11uiXIQ+iNyojKutyX4w7orO4RUqctsjHq2NJr7EA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ETOhtiKhJcECkOBWApIkfsGMNyfmZtvZEIWbqjoJdlYPM0/pPrsC0+HHELse7TSK3
+	 laZ8M24MDX5kw7pRkJPI19dy+Emhd24OQTOfHmNhlBuba0/37aWckt7Ioc1a1Ar2Wu
+	 6TmKOrMZF8sDlAnGhCnk7J+HncwJxac2uKaz3J8y5OrRoLM6fK86RduvZ1zMHJrIa7
+	 PhLLiKsOEjXRkR7fxPImTYSTNzT+gbsFDm2xvQI1cOPblV8o9fdN3s7XeOfZ4XBsH2
+	 oEvlRD4Rpntwo1fsELvFhrxbWCWankw7jTGRUATAHtLmLz8TY75NEo0k+p1hVSgcvg
+	 VA+74it8A7VVg==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-28cdd9d8d01so1199528fac.1;
+        Fri, 25 Oct 2024 08:50:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUyWrPGFGu3Mj5XbrUz+CpDijjOj8A9FFIo/Q7Bc3pb7ztnLpP0ip+dmL0VPqYiMnREp5yzFdWHIT5a@vger.kernel.org, AJvYcCV7UkYrT5CvM1QTyAvmRVaPhlwrqLrtwBltfposaqMKUNnkD9vxXHMFGae8HvikXNkKNWqBYvMKD8GKprk4@vger.kernel.org
+X-Gm-Message-State: AOJu0YymLGEJS4ks0C/0F2kbxhDzoprOWbYEXLsAvna3u3hGtV32geM9
+	3pR7XkeC9FYQjgTOI3hebrk0mV7ejBDyEEuVsaobu0bycQYcsY5H0VSJMcAlmKBJQ24VSuaoeoK
+	Fv2x6nAKCUzTcx4w0oeRjKbRvc6M=
+X-Google-Smtp-Source: AGHT+IEexv+1+Np/f2c+G4k45uz21aAEHCVXbLx7OeEwEnn5lsuizjJKo8UnayxciDmSWeDhTX0jplzw4xBYqvqkaE0=
+X-Received: by 2002:a05:6870:c1cf:b0:288:6d23:5f24 with SMTP id
+ 586e51a60fabf-28ccb6ad0cdmr10773896fac.31.1729871457680; Fri, 25 Oct 2024
+ 08:50:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/RFC 0/2] arm64: dts: renesas: Re-add voltages to OPP
- tables
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <cover.1728377971.git.geert+renesas@glider.be>
- <CAMuHMdXsmAqQL+2+D_y+u1z4nn8JO+xF-mq6wWJ0pAH58n5Wiw@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAMuHMdXsmAqQL+2+D_y+u1z4nn8JO+xF-mq6wWJ0pAH58n5Wiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 25 Oct 2024 17:50:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g9kJzKXGjF-q+r8NDTqYoDaa8J1cyOj=TRN-GMMHqiOg@mail.gmail.com>
+Message-ID: <CAJZ5v0g9kJzKXGjF-q+r8NDTqYoDaa8J1cyOj=TRN-GMMHqiOg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.12-rc5
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Geert,
+Hi Linus,
 
-On 10/22/24 14:36, Geert Uytterhoeven wrote:
-> On Tue, Oct 8, 2024 at 11:14 AM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
->> When CONFIG_ENERGY_MODEL=y, an error is printed on RZ/G2E and R-Car E3:
->>
->>      cpu cpu0: EM: invalid perf. state: -22
->>
->> This happens because the Operating Points Parameters tables do not list
->> voltages, as they are all identical.  Previously, it was assumed they
->> were optional, and unused, when none of the CPU nodes is tied to a
->> regulator using the "cpu-supply" property.  This assumption turned out
->> to be incorrect, causing the reported error message.
->>
->> This RFC patch series fixes this by adding the missing voltages.
->>
->> Note that the Energy Model calculates energy efficiency by dividing the
->> (estimated) CPU power consumption by CPU core clock frequency.  When all
->> voltages have the same value, the former is proportional to clock
->> frequency, and energy efficiency becomes a constant.  Hence all
->> operating points are considered to have the same efficiency, and the
->> Energy Model always picks the one with the highest clock rate (see also
->> [1]).
->>
->> Alternatively, the Energy Model could be changed to silently ignore OPP
->> tables with missing frequencies.  IMHO this is not an unusual case.
->>
->> Which approach should be taken?
->> Thanks for your comments!
-> 
-> Any comments from the Energy Model and PM people?
+Please pull from the tag
 
-My apologies for delay.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.12-rc5
 
-So you had issue with bogus Voltage values and removed them.
+with top-most commit 1646a3f2b1bda03a763f7aecf83504144fb8bba9
 
-There is another way to setup EM properly, via DT:
-"opp-microwatt" [1].
+ Merge branch 'pm-powercap'
 
-That micro watt value won't confuse other subsystems, like
-your regulator fwk. It will only be used by the EM fwk.
+on top of commit 42f7652d3eb527d03665b09edac47f85fb600924
 
-This would be an alternative to your voltage values.
-Sounds better to you?
+ Linux 6.12-rc4
 
-Do you know from /sys/kernel/debug/energy_model/
-the current power values?
+to receive power management fixes for 6.12-rc5.
 
-Regards,
-Lukasz
+These update cpufreq documentation to match the code after recent
+changes (Christian Loehle), fix a units conversion issue in the CPPC
+cpufreq driver (liwei), and fix an error check in the dtpm_devfreq
+power capping driver (Yuan Can).
 
-[1] 
-https://www.kernel.org/doc/html/v6.11/power/energy-model.html#registration-of-em-using-dt
+Thanks!
+
+
+---------------
+
+Christian Loehle (1):
+      cpufreq: docs: Reflect latency changes in docs
+
+Yuan Can (1):
+      powercap: dtpm_devfreq: Fix error check against dev_pm_qos_add_request()
+
+liwei (1):
+      cpufreq: CPPC: fix perf_to_khz/khz_to_perf conversion exception
+
+---------------
+
+ Documentation/admin-guide/pm/cpufreq.rst | 20 ++++++++++----------
+ drivers/acpi/cppc_acpi.c                 | 22 +++++++++++++++++-----
+ drivers/powercap/dtpm_devfreq.c          |  2 +-
+ 3 files changed, 28 insertions(+), 16 deletions(-)
 
