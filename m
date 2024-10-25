@@ -1,323 +1,195 @@
-Return-Path: <linux-pm+bounces-16446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6322D9B0090
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 12:53:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977F39B0172
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 847E61C22844
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:53:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EE95B211A1
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 11:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A036C1F6688;
-	Fri, 25 Oct 2024 10:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7901FF04A;
+	Fri, 25 Oct 2024 11:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XnqHj4eb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Qo853Jkt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028351E766B
-	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 10:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210AA1D54C7
+	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 11:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729853578; cv=none; b=PDijwL11NKM/r4MCYah9DvLJn5MRDrVYFEPsRN1VV+pzdGarnz/RaAw15+mtPH4YXpIgFyf1nL/bzHrDhvjPvm4NGMtIeEd2yDcEHShAdyhUH360ertlU/4qE+LawtndiYgCyBqDvbOCBnsBKAm02dbUOmzBt0fdq6zFo2+qj7Q=
+	t=1729856277; cv=none; b=p7PMRQYeOU86tfZL1TIEf1TXcrajCNPXlgVi4clCmm3qRLdBf5FiK03IGPnHIR/qxGbbICvPVDegdjqG/hKtwZAHntK1QdR3+ORaWs3KZ5kOuGaQGC7LH/RufSpI3QWLVqIBpfYb+GuSLVndcnHjhOm0xDmxHsdtMgxMarncJ64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729853578; c=relaxed/simple;
-	bh=DgKF4BjdQJEGFkoe7RckaZnVN6EKH3DF+7wTV4b5as8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=P0ipDC/VvNVEVNBZm13j/PSnl9LcbrrzghIrkBmDjmz3+tctAfKc7Bk1DKOcor7IhTI17A4kJdEzHhMVuqItz+0fsVbmoJLI12HNUC5n10LYaPtG+c/HurWXelPYCM6KA+4ng+mcRQHVa+Oy+Aunx6xpo/qZmASahfvKFO+YbhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XnqHj4eb; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c9978a221so18843175ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 03:52:55 -0700 (PDT)
+	s=arc-20240116; t=1729856277; c=relaxed/simple;
+	bh=JBPlVg6/v6xkLhr502ea/jDXXq8F1N17DPmNfwDEhpo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pPdyBaFaMVzm0lsDzK8LLKeqCA5mJSWE3b6OF4UPl22rMnv8R6W+5Me933zX6/mWhsl0ix9mCb5bgmoEBlC8AQwBlaUy0qA0PTliyGsUUPLOlcIYH/Pe13gZckZ85j6YZa2PVdBxsl7gLcKHJjAjLjvx1huti/gwZ2L447Dsn+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Qo853Jkt; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6e5fadb5e23so17803317b3.3
+        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 04:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729853575; x=1730458375; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GAt6KZ2pcfQy1Q7Rf4LRIXYYKzgia9CxnAXXiCJCkII=;
-        b=XnqHj4ebikHdwsxLNxcjzo6ETdB5Pa8VbcJlPwJSka0+a/ULbNsNSbjBMsuxi5QdBE
-         p8gA+nVRve3Zht0Ms9MOOcumKQtAOx1w1urWpQfsMetkBk2gFWTj7CIojbTpdfYu51sF
-         BH7nC6ebZ8G99VSADLngjjnQCtX78IyrYzOqc=
+        d=linaro.org; s=google; t=1729856274; x=1730461074; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q0pj9tzR92Ou3K3UATrngQxHQphalhdLPCHq3UGtO/E=;
+        b=Qo853Jkth6Akaaga1PorJMmHjiMhl/g6rThlGOLI4mF3mRacS8itmWlCGweX5Uid58
+         4X75YTCyKxcimI2WUdVv+OpeFySkqf2ImkICbFnGA/EbC2B+mPe/OxiEZ+q9sZaEVD5Q
+         4vQCqoRZCtxuiAaiMownF1vbofYJnlNNhkmofQChfLw66+HdEh47MmIObsNUyacNLQPF
+         vOooRV54V3ARgVvjs/ibK48Ag7JWS+uTZv7G2+OapNFZv0RXA41DyLYN+fgjlBzUf3rt
+         izl3+N6PVs/0FQzBMAGB28sl4hiYEQWtEBu7V0Dkbqxtz35Avolpi+yB2gYTa4xDLUn+
+         UAJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729853575; x=1730458375;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1729856274; x=1730461074;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GAt6KZ2pcfQy1Q7Rf4LRIXYYKzgia9CxnAXXiCJCkII=;
-        b=kSHpWjsu0TN6Wv75joBOMTp6Vmt8NEXDHLzzFBrMuDEwP10fJlt96hQW2e1TaP689b
-         XqV/o6PYOmL2fOU747uX1XS+dRAqRIO5QUasiOYkbsF0nYMZWNTpQ9uFvPyWaYj0W0JZ
-         atteRzzmPXk+wb4DJ9LEcV1Az1ly0tH9wuYpgeIxn1pqR0yLTkE7esW7DmxeklcXjQ9G
-         s0ZGjrUSX29xUH92T4xqc58xbxJmwlJG9gd69C5Xzj0zWT4ASc+Z9hzGrW1wBVZfIHxp
-         mMKjqmIh2rV51zBkICIe7yIWly2eLw/wA9NL5MEfIszq3oc6ZtjjlwNrF6+sO3AwSz7y
-         +H/A==
-X-Gm-Message-State: AOJu0Yy0QPNVz+nx/tatpBRJYTiqbXt9MR7BZ/LGJHPNBHAHWN6duPKx
-	rOLPeoCwcLqfH+Fhhgf29HD5Bm86Lq/PsCe7cvgicNtosKyBLuAXJOKYkJ+MsQ==
-X-Google-Smtp-Source: AGHT+IG9X1lMdE2CHaDjkcTeXOKM/Gxm5oeIssvu8bLQJ/WsfELPrdu9PDORMYQ1aCw+SrJH6uZIVw==
-X-Received: by 2002:a17:902:ce04:b0:20b:9f8c:e9d3 with SMTP id d9443c01a7336-20fb9a57581mr69168945ad.55.1729853575328;
-        Fri, 25 Oct 2024 03:52:55 -0700 (PDT)
-Received: from yuanhsinte.c.googlers.com (176.220.194.35.bc.googleusercontent.com. [35.194.220.176])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc02ea58sm7276935ad.196.2024.10.25.03.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 03:52:54 -0700 (PDT)
-From: Hsin-Te Yuan <yuanhsinte@chromium.org>
-Date: Fri, 25 Oct 2024 10:52:50 +0000
-Subject: [PATCH v13] thermal/drivers/mediatek/auxadc_thermal: expose all
- thermal sensors
+        bh=Q0pj9tzR92Ou3K3UATrngQxHQphalhdLPCHq3UGtO/E=;
+        b=vw17Bw6taynbXGa1dHhU/M/mi6G+0KEWtY3l/2/kY8VkPyBSKs4f+MGsNHox3XklH6
+         8rX1DPiUUE5ehWx26y2w0ZCSz2HBdLBlUkygqoUPN8pbun/TP/1NUA5n0Awrl/v+YkKq
+         QkXRZ6nibH1d++L+si5++jQgpKtwu9Vk4vkcMa/7XQFCGqNaHwQWgNjcwU3Pc3wTdZaM
+         9aBRkhOrphoq3RaQxt5lpK/tsoIkm2fYn/ecyh9rsS6T8OCxbl7OyMOqBtG5u4ck+vPG
+         X8Z43E11uAovEVkqGQ3y3873TJ7z5yNE7KrcUCJndxds8sEZKaV0ZYJ1Ts5vJncz7caK
+         ZC3g==
+X-Forwarded-Encrypted: i=1; AJvYcCV4H3KEDlJGI4y/n3vW5oP9DgliB2QQZWiq2es8g8gw19lvuWCo3TrAPIsKuj37EfVCqncGFyJL8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEy8B/39uK6Taf6e0T1UjFQ8xKBLzyhK22TMkwqNh/Ayd2He18
+	Uru5q5ois820bA3FbdoWH9B8jhvJiZ5287OiFRbN9vLQ+o4li9R8O1ockpqxsF+bo6HcDhQajjG
+	/EII+Jlpxj4wKxGsAtlL8/VNhEHhrPoFK929pBQ==
+X-Google-Smtp-Source: AGHT+IFD7BTwdcuI9robY2MpZ2IUhz+lf5Zd1wfHJA/mGIwmXrFvkZLAnH4rQ6mJPWdfJLOdnu4/9FdSj1zt0edPMB0=
+X-Received: by 2002:a05:690c:4b0a:b0:6e7:d974:8d05 with SMTP id
+ 00721157ae682-6e858152039mr66322057b3.4.1729856274035; Fri, 25 Oct 2024
+ 04:37:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241025-auxadc_thermal-v13-1-a5231c52dccb@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAIF4G2cC/3XNTQrCMBAF4KuUrI1kkhAbV95DRNJxYgLWSqqlU
- np30yKCf8v3hvfNwFpKkVq2LgaWqIttbM45gFoUDIM7H4nHQy6YFFKLUljubr074P4aKNXuxG1
- FSpWEZQXI8uiSyMd+Fre7nENsr026zw86gKn+a+U7B+68Mogr7ZVTGwypqeOtXjbpyCavA/kyQ
- Aj4NmQ2ZFUaFFZ7r827sSieUzC/pyi0UmS9Aec/3o/j+ABrmLH2MQEAAA==
-X-Change-ID: 20240809-auxadc_thermal-9be338ec8b1c
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- James Lo <james.lo@mediatek.com>, Michael Kao <michael.kao@mediatek.com>, 
- Hsin-Yi Wang <hsinyi@chromium.org>, Ben Tseng <ben.tseng@mediatek.com>, 
- Hsin-Te Yuan <yuanhsinte@chromium.org>
-X-Mailer: b4 0.15-dev-7be4f
+References: <20241007060642.1978049-1-quic_sibis@quicinc.com>
+ <ZwfsmqInJlqkQD_3@hovoldconsulting.com> <ae5eaef9-301f-7d3f-c973-faa22ae780ee@quicinc.com>
+ <ZxkjqEmkBAsC6UkL@hovoldconsulting.com> <c8e7420b-a7b4-89cd-1b6e-c1f6693c062d@quicinc.com>
+ <ik4dyfbphm7lkeipm2dbr7cmdfxewxd4jtuz2jfnscfwcyo2r4@lrin5hnsqvyd>
+ <83b635a7-fc69-7522-d985-810262500cb3@quicinc.com> <CAA8EJppx1OmYnfSsMDebRRTbNb3dfAE_MM55T1SpLccP=s_K1A@mail.gmail.com>
+ <Zxty8VaMPrU3fJAN@pluto>
+In-Reply-To: <Zxty8VaMPrU3fJAN@pluto>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 25 Oct 2024 14:37:42 +0300
+Message-ID: <CAA8EJpp-2UhcGSZwVmggVcqtM8acrHKX3WijdfiY_bJo2v+LfA@mail.gmail.com>
+Subject: Re: [PATCH V3 0/4] firmware: arm_scmi: Misc Fixes
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>, sudeep.holla@arm.com, 
+	ulf.hansson@linaro.org, jassisinghbrar@gmail.com, 
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	konradybcio@kernel.org, linux-pm@vger.kernel.org, tstrudel@google.com, 
+	rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: James Lo <james.lo@mediatek.com>
+On Fri, 25 Oct 2024 at 13:29, Cristian Marussi <cristian.marussi@arm.com> wrote:
+>
+> On Fri, Oct 25, 2024 at 01:11:37PM +0300, Dmitry Baryshkov wrote:
+> > On Fri, 25 Oct 2024 at 09:46, Sibi Sankar <quic_sibis@quicinc.com> wrote:
+> > >
+> > >
+> > >
+> > > On 10/25/24 11:44, Dmitry Baryshkov wrote:
+> > > > On Fri, Oct 25, 2024 at 11:38:36AM +0530, Sibi Sankar wrote:
+> > > >>
+> > > >>
+> > > >> On 10/23/24 21:56, Johan Hovold wrote:
+> > > >>> On Wed, Oct 23, 2024 at 01:16:47PM +0530, Sibi Sankar wrote:
+> > > >>>> On 10/10/24 20:32, Johan Hovold wrote:
+> > > >>>>> On Mon, Oct 07, 2024 at 11:36:38AM +0530, Sibi Sankar wrote:
+> > > >>>>>> The series addresses the kernel warnings reported by Johan at [1] and are
+> > > >>>>>> are required to X1E cpufreq device tree changes [2] to land.
+> > > >>>>>>
+> > > >>>>>> [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+> > > >>>>>> [2] - https://lore.kernel.org/lkml/20240612124056.39230-1-quic_sibis@quicinc.com/
+> > > >>>>>>
+> > > >>>>>> The following warnings remain unadressed:
+> > > >>>>>> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > >>>>>> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > >>>>>
+> > > >>>>> Are there any plans for how to address these?
+> > > >>>
+> > > >>>> Sorry missed replying to this. The error implies that duplicate
+> > > >>>> opps are reported by the SCP firmware and appear once during probe.
+> > > >>>
+> > > >>> I only see it at boot, but it shows up four times here with the CRD:
+> > > >>
+> > > >> https://lore.kernel.org/lkml/d54f6851-d479-a136-f747-4c0180904a5e@quicinc.com/
+> > > >>
+> > > >> As explained ^^, we see duplicates for max sustainable performance twice
+> > > >> for each domain.
+> > > >
+> > > > If existing products were shipped with the firmware that lists single
+> > > > freq twice, please filter the frequencies like qcom-cpufreq-hw does.
+> > >
+> > > That was a qualcomm specific driver and hence we could do such
+> > > kind of filtering. This however is the generic scmi perf protocol
+> > > and it's not something we should ever consider introducing :/
+> >
+> > This depends on the maintainer's discretion.
+> >
+> > >
+> > > >
+> > > >>
+> > > >>>
+> > > >>> [    8.098452] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > >>> [    8.109647] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > >>> [    8.128970] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > >>> [    8.142455] arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > >>>
+> > > >>>> This particular error can be fixed only by a firmware update and you
+> > > >>>> should be able to test it out soon on the CRD first.
+> > > >>>
+> > > >>> Can you explain why this can only be fixed by a firmware update? Why
+> > > >>> can't we suppress these warnings as well, like we did for the other
+> > > >>> warnings related to the duplicate entries?
+> > > >>>
+> > > >>> IIUC the firmware is not really broken, but rather describes a feature
+> > > >>> that Linux does not (yet) support, right?
+> > > >>
+> > > >> We keep saying it's a buggy firmware because the SCP firmware reports
+> > > >> identical perf and power levels for the additional two opps and the
+> > > >> kernel has no way of treating it otherwise and we shouldn't suppress
+> > > >> them. Out of the two duplicate opps reported one is a artifact from how
+> > > >> Qualcomm usually show a transition to boost frequencies. The second opp
+> > > >> which you say is a feature should be treated as a boost opp i.e. one
+> > > >> core can run at max at a lower power when other cores are at idle but
+> > > >> we can start marking them as such once they start advertising their
+> > > >> correct power requirements. So I maintain that this is the best we
+> > > >> can do and need a firmware update for us to address anything more.
+> > > >
+> > > > Will existing shipping products get these firmware updates?
+> > >
+> > > They are sure to trickle out but I guess it's upto the oem
+> > > to decide if they do want to pick these up like some of the
+> > > other firmware updates being tested only on CRD. Not sure why
+> > > warnings duplicates should block cpufreq from landing for x1e
+> > > but if that's what the community wants I can drop reposting
+> > > this series!
+> >
+> > No, the community definitely wants to have cpufreq for X1E.
+> > But at the same time some reviewers prefer to have a warning-free boot
+> > if those warnings can't be really fixed. I don't have such a strict
+> > position, but I'd prefer to see those messages at dev_info or dev_dbg
+> > level.
+>
+> I think dev_info could be an option from the SCMI perspective (as per my
+> other mail), the important thing in these regards is to NOT go
+> completely silent against fw anomalies...to avoid the the risk of being
+> silently ignored .... I'll see what Sudeep thinks about...
 
-Previously, the driver only supported reading the temperature from all
-sensors and returning the maximum value. This update adds another
-get_temp ops to support reading the temperature from each sensor
-separately.
+Absolutely. SCMI layer knows that such a problem might exist and knows
+how to handle it, so it should bug the user in a polite way.
 
-Especially, some thermal zones registered by this patch are needed by
-MT8183 since those thermal zones are necessary for mtk-svs driver.
-
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-Signed-off-by: James Lo <james.lo@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
----
-Changes in v13:
-- Make subject and commit message more clear.
-- Make error message more clear.
-- Link to v12: https://lore.kernel.org/r/20241016-auxadc_thermal-v12-1-c0433e9f61af@chromium.org
-
-Changes in v12:
-- Remove unnecessary check and unused variable assignment in mtk_read_sensor_temp.
-- Add more about what this patch achieves in the commit message.
-- Link to v11: https://lore.kernel.org/r/20240809-auxadc_thermal-v11-1-af36cc74f3a3@chromium.org
-
-Changes in V11:
-    - Rebase on kernel v6.11-rc2
-    - Use mtk_thermal_temp_is_valid in mtk_read_sensor_temp just like
-      mtk_thermal_bank_temperature
-    - Change the error handling of devm_thermal_of_zone_register return
-      value
-    - link to V10: https://lore.kernel.org/lkml/20220519101044.16765-1-james.lo@mediatek.com/
-
-Changes in V10:
-    - Rebase to kernel-v5.18-rc7
-    - Resend
-
-Changes in V9:
-    - Rebase to kernel-v5.14-rc1
-    - Bind raw_to_mcelsius_v1 or raw_to_mcelsius_v2 to compatible
-      data of struct mtk_thermal_data
-    - Remove duplicate struct 'mtk_thermal_bank'
-    - Remove unnecessary if condition check
-    - Return error if any thermal zone fail to register
-
-Changes in V8:
-    - Rebase to kernel-v5.13-rc1
-    - Resend
-
-Changes in v7:
-    - Fix build error in v6.
-
-Changes in v6:
-    - Rebase to kernel-5.11-rc1.
-    - [1/3]
-        - add interrupts property.
-    - [2/3]
-        - add the Tested-by in the commit message.
-    - [3/3]
-        - use the mt->conf->msr[id] instead of conf->msr[id] in the
-          _get_sensor_temp and mtk_thermal_bank_temperature.
-        - remove the redundant space in _get_sensor_temp and
-          mtk_read_sensor_temp.
-        - change kmalloc to dev_kmalloc in mtk_thermal_probe.
-
-Changes in v5:
-    - Rebase to kernel-5.9-rc1.
-    - Revise the title of cover letter.
-    - Drop "[v4,7/7] thermal: mediatek: use spinlock to protect PTPCORESEL"
-    - [2/2]
-        -  Add the judgement to the version of raw_to_mcelsius.
-
-Changes in v4:
-    - Rebase to kernel-5.6-rc1.
-    - [1/7]
-        - Squash thermal zone settings in the dtsi from [v3,5/8]
-          arm64: dts: mt8183: Increase polling frequency for CPU thermal zone.
-        - Remove the property of interrupts and mediatek,hw-reset-temp.
-    - [2/7]
-        - Correct commit message.
-    - [4/7]
-        - Change the target temperature to the 80C and change the commit message.
-    - [6/7]
-        - Adjust newline alignment.
-        - Fix the judgement on the return value of registering thermal zone.
-
-Changes in v3:
-    - Rebase to kernel-5.5-rc1.
-    - [1/8]
-        - Update sustainable power of cpu, tzts1~5 and tztsABB.
-    - [7/8]
-        - Bypass the failure that non cpu_thermal sensor is not find in thermal-zones
-          in dts, which is normal for mt8173, so prompt a warning here instead of
-          failing.
-
-    Return -EAGAIN instead of -EACCESS on the first read of sensor that
-        often are bogus values. This can avoid following warning on boot:
-
-          thermal thermal_zone6: failed to read out thermal zone (-13)
-
-Changes in v2:
-    - [1/8]
-        - Add the sustainable-power,trips,cooling-maps to the tzts1~tztsABB.
-    - [4/8]
-        - Add the min opp of cpu throttle.
----
-
----
- drivers/thermal/mediatek/auxadc_thermal.c | 70 +++++++++++++++++++++++++++----
- 1 file changed, 62 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index 9ee2e7283435acfcbb1a956303b6122a08affecc..85cd26bfcc111b8a2ddcf76c697ac60b69d16354 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -847,7 +847,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 
- static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
- {
--	struct mtk_thermal *mt = thermal_zone_device_priv(tz);
-+	struct mtk_thermal_bank *bank = thermal_zone_device_priv(tz);
-+	struct mtk_thermal *mt = bank->mt;
- 	int i;
- 	int tempmax = INT_MIN;
- 
-@@ -866,10 +867,41 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
- 	return 0;
- }
- 
-+static int mtk_read_sensor_temp(struct thermal_zone_device *tz, int *temperature)
-+{
-+	struct mtk_thermal_bank *bank = thermal_zone_device_priv(tz);
-+	struct mtk_thermal *mt = bank->mt;
-+	const struct mtk_thermal_data *conf = mt->conf;
-+	int id = bank->id - 1;
-+	int temp = INT_MIN;
-+	u32 raw;
-+
-+	raw = readl(mt->thermal_base + conf->msr[id]);
-+
-+	temp = mt->raw_to_mcelsius(mt, id, raw);
-+
-+	/*
-+	 * The first read of a sensor often contains very high bogus
-+	 * temperature value. Filter these out so that the system does
-+	 * not immediately shut down.
-+	 */
-+
-+	if (unlikely(!mtk_thermal_temp_is_valid(temp)))
-+		return -EAGAIN;
-+
-+	*temperature = temp;
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_device_ops mtk_thermal_ops = {
- 	.get_temp = mtk_read_temp,
- };
- 
-+static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
-+	.get_temp = mtk_read_sensor_temp,
-+};
-+
- static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
- 				  int ctrl_id)
-@@ -1199,6 +1231,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-+	struct mtk_thermal_bank *tz;
- 
- 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
- 	if (!mt)
-@@ -1285,14 +1318,35 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
- 					      auxadc_phys_base, ctrl_id);
- 
--	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
--					      &mtk_thermal_ops);
--	if (IS_ERR(tzdev))
--		return PTR_ERR(tzdev);
-+	for (i = 0; i <= mt->conf->num_sensors; i++) {
-+		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-+		if (!tz)
-+			return -ENOMEM;
-+
-+		tz->mt = mt;
-+		tz->id = i;
-+
-+		tzdev = devm_thermal_of_zone_register(&pdev->dev, i,
-+						      tz, (i == 0) ?
-+						      &mtk_thermal_ops
-+						      : &mtk_thermal_sensor_ops);
-+
-+		if (IS_ERR(tzdev)) {
-+			ret = PTR_ERR(tzdev);
-+			if (ret == -ENODEV) {
-+				dev_warn(&pdev->dev, "Can't find thermal zone for sensor %d; sensor skipped.\n", i);
-+				continue;
-+			}
-+			dev_err(&pdev->dev,
-+				"Error: Failed to register thermal zone %d, ret = %d\n",
-+				i, ret);
-+			return dev_err_probe(&pdev->dev, ret, "Failed to register thermal zone %d.\n", i);
-+		}
- 
--	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
--	if (ret)
--		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
-+		ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
-+		if (ret)
-+			dev_warn(&pdev->dev, "Sensor %d: Error in thermal_add_hwmon_sysfs: %d\n", i, ret);
-+	}
- 
- 	return 0;
- }
-
----
-base-commit: b589839414be04b2b37e4bf6f84af576c99faf64
-change-id: 20240809-auxadc_thermal-9be338ec8b1c
-
-Best regards,
 -- 
-Hsin-Te Yuan <yuanhsinte@chromium.org>
-
+With best wishes
+Dmitry
 
