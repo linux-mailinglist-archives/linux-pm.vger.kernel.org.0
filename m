@@ -1,138 +1,150 @@
-Return-Path: <linux-pm+bounces-16425-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16423-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41BCF9AF737
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 04:06:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD559AF708
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 03:42:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C808F1F22A89
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 02:06:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE5D21C21384
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 01:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59810502BE;
-	Fri, 25 Oct 2024 02:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B908A1531CB;
+	Fri, 25 Oct 2024 01:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b="rjq7AdV5"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="FWskN4Eu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from s1-ba86.socketlabs.email-od.com (s1-ba86.socketlabs.email-od.com [142.0.186.134])
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598944436A
-	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 02:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=142.0.186.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F597C0BE;
+	Fri, 25 Oct 2024 01:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729821990; cv=none; b=rLqDsHPeCcZBROvtvxxnbU6Zeu767yZBwJcS8Mu4CfGIMhUWyf6LyiiYUUJPyrQM0gCgrMklwk0lrPU/dEdgJnMTN052LFJfm25XSSByupfKz/gGPhw/PzXD5E1jj0DCYM/XT41jmWPXQRKhHj2+qpTB1rJh2Xhr7aiS7Ya7raQ=
+	t=1729820453; cv=none; b=fJwaFF6Z1K9dNtxEkhI7PLYbyKvp1BvKyfat8QUT9IdReAdLf4kty0eG8pgUG/B/fRed4W/1v+RMgqcEYzm7XrruKxDmSyKXFYv7o7FW+MsmRyhN9VBx4u33OuD8tkTedF8ntqmJUhPMhPUnPF8cKKoieORcJbZS5jdH3qloQCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729821990; c=relaxed/simple;
-	bh=LunmIuAnPq7QF0SzClujVcqEV/4cCWIZWKfohSopQKI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RZ2BrsXp1NUE+ghsIuWhR4e0AUiTFEczN4Z63Y6qZIIFTXNPMotuM7JTVi8e2n8QudynZ6jsQ5hbSZ62217AnS9PpFvce7cPl1MgjMmrkMFvRhHQJLloNcktCYx2Hh1AcmjKeM9Ag0GHClyDiNZSEbGqqXPktzMK0tj2j221Yz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com; spf=pass smtp.mailfrom=email-od.com; dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b=rjq7AdV5; arc=none smtp.client-ip=142.0.186.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=email-od.com
-DKIM-Signature: v=1; a=rsa-sha256; d=email-od.com;i=@email-od.com;s=dkim;
-	c=relaxed/relaxed; q=dns/txt; t=1729821988; x=1732413988;
-	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:subject:cc:to:from:x-thread-info:subject:to:from:cc:reply-to;
-	bh=sG1Yryr+TvaRXkwfHKmKt1Ybr9AWJCFXmYqCUrNs4rM=;
-	b=rjq7AdV5g9Kkxz0Zh0KflN9HXgqZcw2dZDxaFWVx8Sf6K2AG4b3xKsNg0qRp7keC5yT6vtR6J2QpR23Ds36cSTkB1ZsW76IL29B2a1/CaVoo3LZgAE82JWxEMI3mAez2TEAnWl4E6FvOuCengbjKQO1iOie0B26t89lqTLDnWwc=
-X-Thread-Info: NDUwNC4xMi42OGZkZjAwMDAyZTM2ZTkubGludXgtcG09dmdlci5rZXJuZWwub3Jn
-x-xsSpam: eyJTY29yZSI6MCwiRGV0YWlscyI6bnVsbH0=
-Received: from localhost.localdomain (d4-50-191-215.clv.wideopenwest.com [50.4.215.191])
-	by nalramli.com (Postfix) with ESMTPS id A3AB02CE03FF;
-	Thu, 24 Oct 2024 21:06:00 -0400 (EDT)
-From: "Nabil S. Alramli" <dev@nalramli.com>
-To: stable@vger.kernel.org
-Cc: nalramli@fastly.com,
-	jdamato@fastly.com,
-	khubert@fastly.com,
-	Perry.Yuan@amd.com,
-	li.meng@amd.com,
-	ray.huang@amd.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	linux-pm@vger.kernel.org,
+	s=arc-20240116; t=1729820453; c=relaxed/simple;
+	bh=Nn9+6N/wjtkyrB4OkpKbzfIbJW3ll5RS6cPN6VWxA1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JgxG2E03lCNjyEQ2jYmLzIj4MNlaw815xFfvHekpnU8aF/CgtQCo/E5ILqapMtqgwY0e0NT/qa/2WTLLSZgzHxDh4VqWifw4LAX+xobx8BjbPCrJLI+ycbYdGlags0H1+mLcJkWwGJoVL60mPL/cx+AVuQ8x/7zPrkiMF7SL4qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=FWskN4Eu; arc=none smtp.client-ip=139.138.61.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1729820451; x=1761356451;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Nn9+6N/wjtkyrB4OkpKbzfIbJW3ll5RS6cPN6VWxA1c=;
+  b=FWskN4EussNILevAkIV2cMvtCpYNF88LWWYvoRhAg+RxgvANHgKaBaav
+   52LV+yLw/n+NdDtY2zTaaXVLq54Lp0+DXTd/rn9RG9REFXFBnIKxAUMKn
+   YkntgiUQrRKbbm1AvbKV4N5pmEGNCThZnGsBRTCu9k5qpf/0phIy4piMx
+   7CUv5tMeXS56QswZ6XLquwUuhitITujj8MGonHA5ITjnEhbbrtcFirRhG
+   rRwuYw41bdwS8I0XNbZDZhv1p4qJd7RRwsaeEMS3VOiWhy/50b6WX7JER
+   9it9CfLW3DizCyl3BVcyTFnqp5niZGjSXvDsEF7sE9L4IUu26vLKwMiO9
+   g==;
+X-CSE-ConnectionGUID: 2OAeEKrURpG+kyoAFvaeow==
+X-CSE-MsgGUID: 6YkXRSG5SI6GAKkGzg6T4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="156807501"
+X-IronPort-AV: E=Sophos;i="6.11,230,1725289200"; 
+   d="scan'208";a="156807501"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:39:38 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 26380CA1F0;
+	Fri, 25 Oct 2024 10:39:36 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 66E7CBF3FF;
+	Fri, 25 Oct 2024 10:39:35 +0900 (JST)
+Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 01CA421CB00;
+	Fri, 25 Oct 2024 10:39:35 +0900 (JST)
+Received: from iaas-rdma.. (unknown [10.167.135.44])
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 594E11A01E9;
+	Fri, 25 Oct 2024 09:39:34 +0800 (CST)
+From: Li Zhijian <lizhijian@fujitsu.com>
+To: linux-kselftest@vger.kernel.org
+Cc: shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
-	"Nabil S. Alramli" <dev@nalramli.com>
-Subject: [RFC PATCH 6.1.y 1/1] cpufreq: amd-pstate: Enable CPU boost in passive and guided modes
-Date: Thu, 24 Oct 2024 21:05:27 -0400
-Message-Id: <20241025010527.491605-2-dev@nalramli.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20241025010527.491605-1-dev@nalramli.com>
-References: <Zw8Wn5SPqBfRKUhp@LQ3V64L9R2>
- <20241025010527.491605-1-dev@nalramli.com>
+	Li Zhijian <lizhijian@fujitsu.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH for-next 5/7] selftests/cpufreq: gitignore output files and clean them in make clean
+Date: Fri, 25 Oct 2024 09:40:08 +0800
+Message-ID: <20241025014010.6533-5-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20241025014010.6533-1-lizhijian@fujitsu.com>
+References: <20241025014010.6533-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28752.003
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28752.003
+X-TMASE-Result: 10--5.467200-10.000000
+X-TMASE-MatchedRID: FAP6nufyV76AIpLP/qXbGbnHu4BcYSmtegIHHX2L4YyjEIt+uIPPOOPh
+	s17991vRV89FgO/U4vBeAZpJlX3ct6Mqw1MrQ3Xs0e7jfBjhB8f4qCLIu0mtIL5/tqn0MloN7Pt
+	3qk+AS2v5jQz76et+v8rbguuTTSDuTBhdFGvbKaeqh5pv1eDPz/Wr7HvOSElaPbCkSqodb8QYQb
+	1oGZV/vOLzNWBegCW2wgn7iDBesS0gBwKKRHe+r6JKhpMS1tR9U3ObiTaV1W3AT3bRyqNrcgPMJ
+	BLBlOaSBM5cfL0JmKE=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-The CPU frequency cannot be boosted when using the amd_pstate driver in
-passive or guided mode. This is fixed here.
+After `make run_tests`, the git status complains:
+Untracked files:
+    (use "git add <file>..." to include in what will be committed)
+        cpufreq/cpufreq_selftest.dmesg_cpufreq.txt
+        cpufreq/cpufreq_selftest.dmesg_full.txt
+        cpufreq/cpufreq_selftest.txt
 
-The CPU frequency is dependent on a setting called highest_perf which is
-the multiplier used to compute it. The highest_perf value comes from
-cppc_init_perf when the driver is built-in and from pstate_init_perf when
-it is a loaded module. Both of these calls have the following condition:
-
-	highest_perf =3D amd_get_highest_perf();
-	if (highest_perf > __cppc_highest_perf_)
-		highest_perf =3D __cppc_highest_perf;
-
-Where again __cppc_highest_perf is either the return from
-cppc_get_perf_caps in the built-in case or AMD_CPPC_HIGHEST_PERF in the
-module case. Both of these functions actually return the nominal value,
-Whereas the call to amd_get_highest_perf returns the correct boost value,
-so the condition tests true and highest_perf always ends up being the
-nominal value, therefore never having the ability to boost CPU frequency.
-
-Since amd_get_highest_perf already returns the boost value we should just
-eliminate this check.
-
-Signed-off-by: Nabil S. Alramli <dev@nalramli.com>
-Fixes: bedadcfb011f ("cpufreq: amd-pstate: Fix initial highest_perf value=
-")
-See-also: 1ec40a175a48 ("cpufreq: amd-pstate: Enable amd-pstate preferred=
- core support")
-Cc: Perry.Yuan@amd.com
-Cc: li.meng@amd.com
-Cc: stable@vger.kernel.org # 6.1 - v6.6.50
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
- drivers/cpufreq/amd-pstate.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+Cc: linux-pm@vger.kernel.org
+---
+Hello,
+Cover letter is here.
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 90dcf26f0973..c66086ae624a 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -102,9 +102,7 @@ static int pstate_init_perf(struct amd_cpudata *cpuda=
-ta)
- 	 *
- 	 * CPPC entry doesn't indicate the highest performance in some ASICs.
- 	 */
--	highest_perf =3D amd_get_highest_perf();
--	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
--		highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
-+	highest_perf =3D max(amd_get_highest_perf(), AMD_CPPC_HIGHEST_PERF(cap1=
-));
-=20
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
-=20
-@@ -124,9 +122,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata=
-)
- 	if (ret)
- 		return ret;
-=20
--	highest_perf =3D amd_get_highest_perf();
--	if (highest_perf > cppc_perf.highest_perf)
--		highest_perf =3D cppc_perf.highest_perf;
-+	highest_perf =3D max(amd_get_highest_perf(), cppc_perf.highest_perf);
-=20
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
-=20
---=20
-2.35.1
+This patch set aims to make 'git status' clear after 'make' and 'make
+run_tests' for kselftests.
+---
+V2:
+  split as a separate patch from a small one [0]
+  [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
+---
+ tools/testing/selftests/cpufreq/.gitignore | 1 +
+ tools/testing/selftests/cpufreq/Makefile   | 1 +
+ 2 files changed, 2 insertions(+)
+ create mode 100644 tools/testing/selftests/cpufreq/.gitignore
+
+diff --git a/tools/testing/selftests/cpufreq/.gitignore b/tools/testing/selftests/cpufreq/.gitignore
+new file mode 100644
+index 000000000000..f684d27f5d91
+--- /dev/null
++++ b/tools/testing/selftests/cpufreq/.gitignore
+@@ -0,0 +1 @@
++cpufreq_selftest.*
+diff --git a/tools/testing/selftests/cpufreq/Makefile b/tools/testing/selftests/cpufreq/Makefile
+index c86ca8342222..9b2ccb10b0cf 100644
+--- a/tools/testing/selftests/cpufreq/Makefile
++++ b/tools/testing/selftests/cpufreq/Makefile
+@@ -3,6 +3,7 @@ all:
+ 
+ TEST_PROGS := main.sh
+ TEST_FILES := cpu.sh cpufreq.sh governor.sh module.sh special-tests.sh
++EXTRA_CLEAN := cpufreq_selftest.dmesg_cpufreq.txt cpufreq_selftest.dmesg_full.txt cpufreq_selftest.txt
+ 
+ include ../lib.mk
+ 
+-- 
+2.44.0
 
 
