@@ -1,187 +1,243 @@
-Return-Path: <linux-pm+bounces-16460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A1B9B04B3
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:55:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC3389B04CB
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E481C2851AA
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:55:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94D4528534F
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 13:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190A31FB89C;
-	Fri, 25 Oct 2024 13:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E301F755D;
+	Fri, 25 Oct 2024 13:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="namopyTX"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ayXK74NW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2043.outbound.protection.outlook.com [40.107.236.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45231F7552;
-	Fri, 25 Oct 2024 13:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729864521; cv=none; b=jmiCkb0rfMROkMp0aXaaiv90XNjbPwQBHknJ5n19wQAFYfDwjfo2eKQMpu1CJcekxQcZXo9xgTPMGnjfuOdlAs5VPR4svl0apzECcLabvZtv+yUFcclR306eDlJ1TBvYrVUE8LyQMpp+Tfx3lli3epSm3MrW7en7se9uVJWZMaw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729864521; c=relaxed/simple;
-	bh=sP9ddLOzD4XD7oJ2gtfjgcFVXKonwqzmaiwnFgWwUl0=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=SS3lBhAGQfvU/ifzMxKmQok42jCOy+6ZybIm+2gFaLbqD+NRz9SLJhTIEB5T+yb5CHHYgr8UPfI13H+rWNtdi+tljIcUEAGZ/vV8xB4z15QnKGEPg0ekGaShr7rPSduSsAiwRWtw1XihxhIZj2fg0iErvCsoM5jJfS+c24nRzwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=namopyTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A9F1C4CECD;
-	Fri, 25 Oct 2024 13:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729864520;
-	bh=sP9ddLOzD4XD7oJ2gtfjgcFVXKonwqzmaiwnFgWwUl0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=namopyTXYcR+34VhDW1DJIeNZwRgeHEHzEyji0zywrSQfrpLnmi4N0g858xJziiRR
-	 6zTQo1Ekfw2dF157XXMsOV+u1y7gZY7WSnLI7Uz01DHRdU+wK1aMxF7qSgY6K3Rn5C
-	 5v72aoRCh1oYtyP2potY5imnUGIYgPf5EPQIgbXgRgBcJ8bmRLzW8/52XekJ9R/Ye2
-	 0bDdVeawSgA84pWaZVFz9HmHwVm5u8V+sq4C529Qjq6ANnVGMiu4OYKbUT8r/cPcjw
-	 HDPCCknnrEqiTWcra0NeX7UVlQbC2bSQVsaMPleqhVXO0/ttgsKa/NR6SFue4b7zWA
-	 GOKW2dvPYviLQ==
-Date: Fri, 25 Oct 2024 08:55:19 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0837370815;
+	Fri, 25 Oct 2024 13:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729864674; cv=fail; b=Rdujw0oNAk3pnNDvEHnxQqfh/usq5yx2kdPemrUAHmCSAtS3GVM2oZMjEwDgYoZJcnZvcJvy1LDtdQMNsimGm7MClfskuOODXfMYoAMzDMI4qQydJEZYkjuGQ8fRDRnnrdIdzVqp/khmz9n4CHkuMzlZ0eQV7Fh/UaJvoMSkHYA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729864674; c=relaxed/simple;
+	bh=D262Vwv71abgTDY61dRhNm+X3RO+XsPUD4RMIY8++Xs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=E4OWAIAmL/KC3bWM94156W2uOlpcF66yEID8xoEhiRmhK/R0k9O1r3un+SIwt0jgfuYfueEmFLordx4zOSUF/Qb2iVCuKyaUMnV3nJBtHxo58fmM/x/IH5OyX8nUrYMP+5ixUTw1TKWW38Hn7AzqMP7A2SL7gMbU0QHifSc9ryc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ayXK74NW; arc=fail smtp.client-ip=40.107.236.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EDh4KRrfAS/B1Y6YZIHzL4zRThgR0DIU0Kqgwp04ySb5QAz33a1M879iuyrmLbW06FtlkLSnpyOOANPTAEavFbrUYUo3idVPp413Ok37jlFCU7ZAZtxxPGrAU6E3C6C39Ne6QR439MSAKbLikxFRGkvTq7poIkY9PU1X/LK6DC2QrSQuMEJoSsAWnXzx40KnSVRxvoeNp5s8uBENMUarS/2ydxZZNXaNexpf5tlfANbMCFRXJnG2tmrUPlgQTS3zle59zhYFcjD7bJ4v1JMqWyzfWAh79Y9ipTLyAwPHuiFn0kMLekQQ2Vzka0IrnjtLCg3eT8ktwgt5W0r54ZZluw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x5LVEQcy6Pci4I7q2nwGo3FrHu769xuq8snEOWStFLo=;
+ b=XLTT1nSDogFdKURz70xRx6AkTUCfjTVO98OF3WXgxM2cbcKx4s6LeB65lor0SK0xUBbLjxYvHosgKaDJ80gamyRC5gClv+Zia0/bGY/eF8qDDwIcqwNg7Kjko2w2tlQUAfUV+qxTfoVCW/wkxlRnndlOCu51Mx1Qc9ifyuQ8+JKTh3yXPH8s3pKLQWGZiEIztsUgLRPuUKmKhQdTugQLiWlBQi0Pg0bLEBpghsj0TEIgZbhS6EXlhFUaKQUDHhrXGKfLI+4rxyOKTNiLwOpcV80elrTBldM2YxM7IHOEONHLyRNViICtxCWJDCpWmWdSUSh3p/bj9O28Ru0IRiBscw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x5LVEQcy6Pci4I7q2nwGo3FrHu769xuq8snEOWStFLo=;
+ b=ayXK74NWr4kIP7dQOUXUoxNSX7enuZQadySQJGGRGhTkVwOF49PeQXy04OXCCwhF0X3C3fC1hxRDY1ICf+80Ouar0OnsAafwQJfFOVJ12g6ac3vqsxb88uF5YqIvLI5ACklY84vEOYKipcbtC15KSLQ8WFLFXjeQBwZ0+XyipJ8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6095.namprd12.prod.outlook.com (2603:10b6:8:9c::19) by
+ CH3PR12MB8533.namprd12.prod.outlook.com (2603:10b6:610:159::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17; Fri, 25 Oct
+ 2024 13:57:49 +0000
+Received: from DS7PR12MB6095.namprd12.prod.outlook.com
+ ([fe80::c48a:6eaf:96b0:8405]) by DS7PR12MB6095.namprd12.prod.outlook.com
+ ([fe80::c48a:6eaf:96b0:8405%6]) with mapi id 15.20.8093.021; Fri, 25 Oct 2024
+ 13:57:49 +0000
+Message-ID: <f1f8c20d-ec13-49d3-ac47-a2fcd4433baf@amd.com>
+Date: Fri, 25 Oct 2024 08:57:46 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 5/5] x86/amd: Use heterogeneous core topology for
+ identifying boost numerator
+To: Borislav Petkov <bp@alien8.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>, Brijesh Singh <brijesh.singh@amd.com>,
+ Peter Zijlstra <peterz@infradead.org>, Li RongQing <lirongqing@baidu.com>,
+ "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>, "open list:ACPI"
+ <linux-acpi@vger.kernel.org>,
+ "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+References: <20241023174357.34338-1-mario.limonciello@amd.com>
+ <20241023174357.34338-6-mario.limonciello@amd.com>
+ <20241025135107.GPZxuiS38_s3KWe8xj@fat_crate.local>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20241025135107.GPZxuiS38_s3KWe8xj@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0154.namprd04.prod.outlook.com
+ (2603:10b6:806:125::9) To DS7PR12MB6095.namprd12.prod.outlook.com
+ (2603:10b6:8:9c::19)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: linux-arm-kernel@lists.infradead.org, 
- Yangtao Li <frank@allwinnertech.com>, linux-usb@vger.kernel.org, 
- linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Samuel Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, linux-sunxi@lists.linux.dev, 
- Thierry Reding <treding@nvidia.com>, Viresh Kumar <vireshk@kernel.org>, 
- devicetree@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>, 
- Andre Przywara <andre.przywara@arm.com>, Stephen Boyd <sboyd@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
- Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>
-In-Reply-To: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
-Message-Id: <172986441154.1907923.9460630831085493840.robh@kernel.org>
-Subject: Re: [PATCH 00/13] sunxi: A100/A133 second stage support
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6095:EE_|CH3PR12MB8533:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8ba2f94-5025-46c6-00ac-08dcf4fd02b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aFBvRkJuOFprM0thM3doQ2V1ekNLaFArZ25FS3JJcDQ2SFBSSkRJVm5nVklK?=
+ =?utf-8?B?TFZHbUR5dkVOWGk5TzBpaUpWalNJbnQ0V2QwZnIzM2JJbzVidnFaRitMd1dO?=
+ =?utf-8?B?SWcrRHREdHZYRmZMQ2dneWdhTHdyanZIMlVvSkhFdWxRdXBTRkpJdXkyUHFs?=
+ =?utf-8?B?ek82UHBlK1lWbXp6ZFNnTU9objVYME05Vnc1emxVZzJHa0lhdHZ0WTdLYlhs?=
+ =?utf-8?B?OWhaeFdhZElGRzVoWUZVUk43N1pCR1VzT1hRZ3NyKzJxVkYzVjBoTDVvc0k1?=
+ =?utf-8?B?UVlpdVZWWXlPL0NhQ3JyRGRGQmE2U1dUVFNqZ0k5TTBySXVrS0JkaUE1NG9k?=
+ =?utf-8?B?bFJXWVIrWkpjSFdMVEpOUE1tQXh0NllZZ1ZqallaM000OTY5ZzRGVHZ6NHAv?=
+ =?utf-8?B?MVYzR1ozWDdjWkgyVnErZW83UlBYTjlaajBHR1VpZllBdnl0czNocVJpYndX?=
+ =?utf-8?B?NkFsK1FZa0lVcjNCVmZ6SFpIVkN0RE00c01LVEphYS8zZFJDanI5M1pzdk1D?=
+ =?utf-8?B?aFM3S09rdnJ2UldVM1Y4MndrRVExWUNib2JLQzNFUkYvMkc0bkNYaGJmMHBz?=
+ =?utf-8?B?NStIVXdXQjIxbm0xVkV2bnlvK0poK1psWHd5WHJieDQ5Y0ZuSEN2N3VpOC8y?=
+ =?utf-8?B?eFpOaVVpTWw4b0VNMndnTWVHZm9kZ2hqMGoyV1hvOVpramkrNlJiTkQ3dy9S?=
+ =?utf-8?B?YlMzcm9wcjh1QUlnc2EweFJ1SHNkWUVZMkVFU3hWNUJUeXlyTG9vTThrS1do?=
+ =?utf-8?B?dGtXTGVZck56RFU2VERoL2dhSmhMaWZuaEluWHhLcmJaaXg1U25zaGw4M3Iz?=
+ =?utf-8?B?VWhLTzFsNGl4T0wxaFhwVG81OE0yWnN2WVJkOC9QUk9rbnhYTW80MWw3dU9t?=
+ =?utf-8?B?T3FJWHVJUGcvaDZEMmZYUnFmbm9hTVI1UmVMWDAwUHN5Q25YWDFPazNaR010?=
+ =?utf-8?B?d0V5LzlXdXlQK3BpR0JSYnE4UTVVMG95cTZhNTVHV0g5NFRvdm8rOS83d2t1?=
+ =?utf-8?B?MGQ0d29lNkRlQWRWdlNhcTJudDE1UjV4L2oxWVhnVUVlMUh1NUl0YnZkT2k0?=
+ =?utf-8?B?SW1kc2ZHbDVWeG9aaGNoMTFtTzRLcXlkU0lURTNGdDVscmUwaDRqWFQ3bDI1?=
+ =?utf-8?B?bEx1NkEwN0RESWgrcDYwb2R0N0hCSndTUGgwNXBRaXZqUTJISnZYSW9VMGpI?=
+ =?utf-8?B?eElkU0NMSlhwN3RERjViVldwclNHaG9vWDA4MFlZZENtYldwM1hRTmV3azc5?=
+ =?utf-8?B?RHl4SlZCUTZnTStMd0hoYnRyZDJzQnRySlB5OXUwb0l4T2cwWC83cytieVlr?=
+ =?utf-8?B?TUpkR3BFcjJ5bGEzTjlGdnVVMUJnWG5KL1NYNWlGU3QyS2h3ZFhLR3BrS0NY?=
+ =?utf-8?B?TnpvWXhTUXFPMFZ4ZWtOYTBDdS9qZ3N1QTFrOFdYdlQxeXNnd05aZm94UDVM?=
+ =?utf-8?B?WWRLVExUcDZVbWt4RFhoK3Fja2p3ZWhBZWlyRVQvQzEydGd5ZjhJeUpZMUg3?=
+ =?utf-8?B?b1R1bzRMWFFZU0hJMTdING1mWndlSzdQcERkSVd2NVd1UmNvWm5kdUtKajlJ?=
+ =?utf-8?B?LzMvczRQcXZOTTR6ZHJmTUt2NEhReEJyVTJveUttSXFGM2RHRWh2Mk5lTDJ1?=
+ =?utf-8?B?WmxVUEhMQjAxTldZcFRNYXo3WVV3YmVwdGM5azc0OXFDcXpDM1IxU3NsMDJN?=
+ =?utf-8?B?K2J1K2JnZkg3cStRQjQxNnpLQmRzbVQ1bHp4czY5aEludVUwMThCQ3lCc3JW?=
+ =?utf-8?Q?i05lY4kSlOJoxVpsxTW/WCitmCVY6P8OsnhaBJB?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6095.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bVNxOURremhHRW1Fd0ZXa1FqY2xZb0lCblZ3cVh3dG1oL3lIbm9kMWY5Uis5?=
+ =?utf-8?B?d01sMWUvS0lUTWpFNVA5dXdyWlNJdzRxV2ljMmNNZldxV1ovcWUwWWQwTXVh?=
+ =?utf-8?B?N0syVWxwYksveFdYOU5jbG1INXoxdHVlYkpRRkdWV01zOHJXVVJjNGE0Wmov?=
+ =?utf-8?B?Z2duR0FWbUpFSU5oMXBDdUV6ZnN3ak1MRDE0NmNVVG9FRW12VktDWGluOCtR?=
+ =?utf-8?B?T0tsVmZjVDRPdXpSQmNFSCtxN1YyMFlpVzJzYmhHV09kMzgyTERaZGVjRFBF?=
+ =?utf-8?B?elBGbktmL3Y3cE1aa1IxQ2NKS1pJc05sZnc2SDRNMnB6U0tzZjlmTkxDR3Zx?=
+ =?utf-8?B?NnlxVnlzazF4U3R4SHEyaWQvelVOQSt2TmRRb21QNXRNOG5uZlVoc2xkSDBw?=
+ =?utf-8?B?bmovaHZ0cGZmVmM0cmxDRjNtT1pIT3orTGxxWkplbWtJbTRoK0J3VTJHNXUy?=
+ =?utf-8?B?WFpVVno3dDk4Q0VRQmxFbzBPVFJTQWYwSEFESmdmV1hSSWs0K1dXL2lEc0M3?=
+ =?utf-8?B?UWFTT0djVDhlOG1PMWpoVkVUZ2FsNUNiQWU3UGdiU0VMMGNsQ0FkdEprMjNx?=
+ =?utf-8?B?UUV4bmFGRmoyMlROaG9nWGNsWENOV3VORFZ3Z3ZaRmc2dEp5T3gxNFdtQlpa?=
+ =?utf-8?B?bzlOZXBTNHlQQklkTUNBYUJJYnpNaCtsaHZqNERxWHphdFY0bkRVbUNlc0p1?=
+ =?utf-8?B?eTJDRnk0SkVJVjZhMnRzSStXWDh6RkJYbGU0b294V1lQbThGeXExOEtFbWt1?=
+ =?utf-8?B?d2J3d0lrdEdvYVVxS3ZXNHpQbUlaaE1jVGt5UFVlb2Jsd0ZNNW1VdEVZcmNE?=
+ =?utf-8?B?aFBYZDVIcHpKamllUkxUaTJ4YmN1azR2R2QyZUtuU2pFTExkT1RDTlVmU24v?=
+ =?utf-8?B?T3F1c0UyN3J5dnJDQ2I3QjhrVEx2eG9jcW1DNlV3d1NmS0ZRZWprM1Zyb29O?=
+ =?utf-8?B?dFFpK3paR0NUdmpsWVh2eDNXcHpXTHpoV0h0Z2VidytxTjU3TTUxRXgrWFpz?=
+ =?utf-8?B?eDcrcTQ2LzhTcjNqc0prV2RlT1VOMGFBUGRXTHdXRFZRZy9qU0lPS2h3enBs?=
+ =?utf-8?B?S01pTHBHdFpvRXNraWRoZ3ArSFVtNGdaOXg0QWxvSzBWWTJnUzBjYUF5TkFp?=
+ =?utf-8?B?TE56TXlWRkQ5dXNWaCtwV0NjRndZNndlMU5UYytzaDBMYzVQWERWbVhQWHNF?=
+ =?utf-8?B?enFKYzNJY3Q1MVBWd0xpdHdEdHhNbFhYZ2l1SlRIQnZvUzliSTJubXlzdjJO?=
+ =?utf-8?B?RjVHSEJyaUlBQW1YYy9ZckhMWHpvWmk1Z2hBd2l1UFBCTmU1QUdpU2d1dUJC?=
+ =?utf-8?B?ZDROekFHUDNHTGNzMEZTMVljaXpMT09hT0ZDRG1lbWFUV1MrOEJHMUFtQjBp?=
+ =?utf-8?B?M0x3eG40d1ZwTENQQVZWbnFncHRvdHlOb2hmRzMxMXFiUmROeHZmdmhyL084?=
+ =?utf-8?B?aGVOUFJEWXo4aUQxV041OEU0V1Z1eGxhYjlpV3llVEQ5UnVmN1ROZ0d6VnNE?=
+ =?utf-8?B?U2hZZFhiRmUyZVdxaUNBZ1BYK0diT2FaWWI5eE40MlRFS0tuY2lweElxeVRO?=
+ =?utf-8?B?SnVlTTJHd1ZPeTJjNlFQQURFLzdtcjNLL3FNWmUxNVFQeC9WR1QvTzlycEVn?=
+ =?utf-8?B?MnpTekJzenRPL0lRY2w4YUI3QUJ1ZXRqeUxTd3J3NFlQK29qeGcvOUQvQmw3?=
+ =?utf-8?B?MEphVDA0dTVtVHk2OWoxSk41MHZRRzFJOUdYQVpiOTlsTHU0RC9uVi9VYTA4?=
+ =?utf-8?B?SXArUVNKb3lFWVZLZkIvdEljcjBZclFiblBGWXVVRUhoYnRoL0N1Tmx6dmJt?=
+ =?utf-8?B?TnZSYWYxaVlSVW9mV1VLdzBFNFN5enVQSGNCMlJzTEMxS0JIVm9lU1hRMmt3?=
+ =?utf-8?B?WGFNWmV2MHg3UmU2MUlPMXYwOFlRTHhKcG9YY0dlR3RGbHZ3bTVxUVRkSnBT?=
+ =?utf-8?B?a0dPS3JjcGd4ZHhsdjFjZG1zYjNnREF6TWZNb3lLMzlqcCs1aU1LS1dHeXpV?=
+ =?utf-8?B?ZHc5S05CQlpLZHlhNktoekozNkJhRFdXZS9aZ0VZQTg1OTJCUjRGN2RLdkJa?=
+ =?utf-8?B?NUM1MU1zMGZQYldlZUdKTldFUGFOZHpzUzFXSXdVREFaZDB6VVQ2b0Y1SVlo?=
+ =?utf-8?Q?5R+kbc71Vfl2CO+IoONDw0L4w?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8ba2f94-5025-46c6-00ac-08dcf4fd02b0
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6095.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2024 13:57:49.0554
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FHYneUjV/4931s/rQw6MtYc3MT/kvmXVYLLQj8XhHrNAZ5pqZmAuKCtLw/tewurd3x/bgp53nCmgIFn1ZGn0+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8533
 
+On 10/25/2024 08:51, Borislav Petkov wrote:
+> On Wed, Oct 23, 2024 at 12:43:57PM -0500, Mario Limonciello wrote:
+>>   int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator)
+>>   {
+>> +	enum x86_topology_cpu_type core_type = get_topology_generic_cpu_type(&cpu_data(cpu));
+>>   	bool prefcore;
+>>   	int ret;
+>> +	u32 tmp;
+>>   
+>>   	ret = amd_detect_prefcore(&prefcore);
+>>   	if (ret)
+>> @@ -261,6 +263,27 @@ int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator)
+>>   			break;
+>>   		}
+>>   	}
+>> +
+> 
+> What's the difference between this case:
+> 
+>> +	/* detect if running on heterogeneous design */
+>> +	switch (core_type) {
+>> +	case TOPO_CPU_TYPE_UNKNOWN:
+> 	     ^^^^^^^^^^^^^^^^^^^^^^^
+> 
+>> +		break;
+>> +	case TOPO_CPU_TYPE_PERFORMANCE:
+>> +		/* use the max scale for performance cores */
+>> +		*numerator = CPPC_HIGHEST_PERF_PERFORMANCE;
+>> +		return 0;
+>> +	case TOPO_CPU_TYPE_EFFICIENCY:
+>> +		/* use the highest perf value for efficiency cores */
+>> +		ret = amd_get_highest_perf(cpu, &tmp);
+>> +		if (ret)
+>> +			return ret;
+>> +		*numerator = tmp;
+>> +		return 0;
+>> +	default:
+> 
+> ... and this case and why aren't you warning if TOPO_CPU_TYPE_UNKNOWN?
+> 
+> I think for that you need to check X86_FEATURE_AMD_HETEROGENEOUS_CORES and
+> warn if set but still CPU type unknown or?
 
-On Thu, 24 Oct 2024 14:05:18 -0300, Cody Eksal wrote:
-> Hello! This is my first submission, so please be gentle :)
-> 
-> Back in 2020, two Allwinner employees, Yangtao Li and Shuosheng Huang, each
-> submitted a patch series for the A100 series of SoCs; [1] intended to add
-> support for the watchdog, ARM PMU, DMA, USB, and (e)MMC controller, and [2]
-> implemented DVFS support. Some patches from the first series landed, but
-> the rest were seemingly abandoned.
-> 
-> Although references to the A100 have been removed by Allwinner, it is
-> believed that the A133 and A133 Plus, which are still available, are simply
-> better binned variants of the A100; no other differences have been noted
-> thus far, and the drivers for the A100 work on the A133 without any
-> additional modifications. There has been a resurgence of interest in the
-> A133; patches to allow mainline U-Boot to run on these devices are
-> currently in progress.
-> 
-> I have rebased the patches that failed to land, applying the feedback
-> provided by maintainers at the time. Some DT binding patches were added, as
-> there were a few cases where compatibles were used without being
-> documented. Minor reworks were necessary to apply certain patches, as the
-> drivers they modified have matured over time.
-> 
-> Patches 1 and 2 add PMU and watchdog nodes to the device tree. This is
-> followed by patches 3-8, which implement support for the USB host and OTG
-> peripherals. Patches 9 and 10 add MMC nodes, rounding out what originally
-> made up the first patch series; support for these already exists from
-> earlier patches. Patches 11-13 finish the job of the second original
-> series and this series, implementing OPP and enabling DVFS on these SoCs.
-> 
-> This series is also available on GitHub [3].
-> 
-> A sincere thanks to Andre for encouraging me to submit these patches,
-> Parthiban for testing this tree on his board, and to the linux-sunxi
-> community and its resources for pointing me to these abandoned series in
-> the first place [4].
-> 
-> [1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=380887&archive=both&state=*
-> [2] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=396055&archive=both&state=*
-> [3] https://github.com/BrokenR3C0RD/linux-a100/compare/c2ee9f59..allwinner-a100
-> [4] https://linux-sunxi.org/Linux_mainlining_effort#Work_In_Progress
-> 
-> Cody Eksal (4):
->   dt-bindings: phy: sun50i-a64: add a100 compatible
->   dt-bindings: usb: Add A100 compatible string
->   dt-bindings: usb: sunxi-musb: Add A100 compatible string
->   dt-bindings: opp: h6: Add A100 operating points
-> 
-> Shuosheng Huang (2):
->   cpufreq: sun50i: add a100 cpufreq support
->   arm64: dts: allwinner: a100: Add CPU Operating Performance Points
->     table
-> 
-> Yangtao Li (7):
->   arm64: dts: allwinner: A100: Add PMU mode
->   arm64: dts: allwinner: a100: add watchdog node
->   phy: sun4i-usb: add support for A100 USB PHY
->   arm64: dts: allwinner: a100: add usb related nodes
->   arm64: allwinner: A100: enable EHCI, OHCI and USB PHY nodes in Perf1
->   arm64: allwinner: a100: Add MMC related nodes
->   arm64: dts: allwinner: a100: perf1: Add eMMC and MMC node
-> 
->  .../allwinner,sun50i-h6-operating-points.yaml |   1 +
->  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |   1 +
->  .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
->  .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
->  .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
->  .../allwinner/sun50i-a100-allwinner-perf1.dts |  59 ++++++
->  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    |  90 ++++++++
->  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 193 +++++++++++++++++-
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  28 +++
->  drivers/phy/allwinner/phy-sun4i-usb.c         |  11 +
->  10 files changed, 383 insertions(+), 3 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
-> 
-> 
-> base-commit: c2ee9f594da826bea183ed14f2cc029c719bf4da
-> --
-> 2.47.0
-> 
-> 
-> 
+Yeah; you're right.  An earlier version of this behaved differently and 
+I missed updating this switch/case when using Pawan's updated patch.
 
+After we get Intel feedback on the previous patch I'll drop the 
+'default' case in the next version and switch it to this:
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+case TOPO_CPU_TYPE_UNKNOWN:
+	if (cpu_feature_enabled(X86_FEATURE_AMD_HETEROGENEOUS_CORES))
+		pr_warn("Undefined core type found for cpu %d\n", cpu);
+	break;
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y allwinner/sun50i-a100-allwinner-perf1.dtb' for 20241024170540.2721307-1-masterr3c0rd@epochal.quest:
-
-arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dtb: cpu-opp-table: $nodename:0: 'cpu-opp-table' does not match '^opp-table(-[a-z0-9]+)?$'
-	from schema $id: http://devicetree.org/schemas/opp/allwinner,sun50i-h6-operating-points.yaml#
-arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dtb: cpu-opp-table: 'opp@1080000000', 'opp@1200000000', 'opp@1320000000', 'opp@1464000000', 'opp@408000000', 'opp@600000000', 'opp@816000000' do not match any of the regexes: '^opp-[0-9]+$', 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/allwinner,sun50i-h6-operating-points.yaml#
-
-
-
-
+> 
+>> +		pr_warn("WARNING: Undefined core type %d found\n", core_type);
+>> +		break;
+>> +	}
+> 
 
 
