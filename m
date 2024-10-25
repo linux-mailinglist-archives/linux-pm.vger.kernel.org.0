@@ -1,146 +1,92 @@
-Return-Path: <linux-pm+bounces-16439-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16441-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 508099AFD5B
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:58:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49DBA9AFEC0
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 11:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1544928363B
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:58:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EEE9284758
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 09:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED951D318F;
-	Fri, 25 Oct 2024 08:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbqwVnO+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94071D26F9;
+	Fri, 25 Oct 2024 09:47:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2004171E43;
-	Fri, 25 Oct 2024 08:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAE712FB1B;
+	Fri, 25 Oct 2024 09:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729846678; cv=none; b=awUExLJW/eTNgF3JrDv4tkH8S6pfSUwun2D7JxXFanK1KIp4gx+iaL2hsFyK8sWd32YtY8rwDORJySCLmYh/KmwrvAxCAS1XsbVaKYDoywwPjtW4r0aXXP22rV9r8MOKpT8h5Q7qYG/RmaR71S+3Ny4zo+fQoGHL+jV2MBVAY+4=
+	t=1729849621; cv=none; b=uH3lfJDTpZ7nFhjAlHmRLpI58FtdAEkXs9Y2ZHU0oTuQ0zgPRRu/dC7Bd0WGsQ/oFnn3lqdJNRgC/4tuZIk4C+sJTO+wxjrUMBvtou5tvnwIarYQleAmRBk/GwxYupys+9UUmv5DaAHqZh9wwSXeXWH5iLtEd5Z4dIhwzn8JUHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729846678; c=relaxed/simple;
-	bh=Y/XIwrUUcIZ6gH1/w/6aJvG+nfnvrMmFH2qM6DZcppc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vu7LxhOivDtMBBejHMhsETL5Z7CzJZMYptr4P6BbxLhzozzn566qKE7lBPVwKeBx/dIZv5FJN52MREBblUXF5nfdrCP91eKKlLI8Oz1vu7ARJgs4NeHLl7TBioUgk2n6FCc2NHdE7TY2EPl2a6T1F/0r5k4SOG/K2fUMywmtZ1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbqwVnO+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ABB0C4CEC3;
-	Fri, 25 Oct 2024 08:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729846678;
-	bh=Y/XIwrUUcIZ6gH1/w/6aJvG+nfnvrMmFH2qM6DZcppc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VbqwVnO+5w95yjLROHnMXt4mjq4MFLyNjWvbMq1A2twdVnKld/MjsBXu2cs/EpNza
-	 PCVwtEr8xe0Lq0ODRA2KdhaIpvrPGsmq98mFp100Zl1GszNfdZpF5dR6azKbtejDip
-	 ypuPBCr2ZZNiR1QVsfNhWeJMpKjqY/XND4Ob0nYuI5i+vBelcs4MR8EbP1aEqPNA1i
-	 Lo+UF1QxP6gVnvtYtYa0x4XrLgQSmoJUHVf10miYX/zMbhetjF45BEQBaur61b9jeS
-	 6phfGWae7h1gNP1jvBYsujV4H36d5TbCLF2PFRj7y9jOM75JzFiWkD+wFU53TddlHK
-	 +cHyh8ahR7Y0Q==
-Date: Fri, 25 Oct 2024 09:57:52 +0100
-From: Lee Jones <lee@kernel.org>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v6 3/7] mfd: Add new driver for MAX77705 PMIC
-Message-ID: <20241025085752.GD10824@google.com>
-References: <20241007-starqltechn_integration_upstream-v6-0-0d38b5090c57@gmail.com>
- <20241007-starqltechn_integration_upstream-v6-3-0d38b5090c57@gmail.com>
- <20241015140224.GI8348@google.com>
- <CABTCjFBpdMv6Qi3CLYNukMn+J1FwhbAg0hMy075Dt0H-g_hrUw@mail.gmail.com>
+	s=arc-20240116; t=1729849621; c=relaxed/simple;
+	bh=y+SBzjIIn19qEmS5GIgWwnWVEOEv+/x85ElFQ3XTVQs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pdFjfjnQw3Y4IXqNimrANyb8wcfojXdM0n4zagNSMr3rKmWT7cCU2RC28SYJETu2fcwMmxYqG2I4OzoXaQv1+CHl1odHv6XpNp7xSU00HlkmoT8dwQTO0i1sDey35ZaOpht20Lh7M/f1Fv+C+VY9O0Zj9LsAXMi3Tz8kz+KN9WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee7671b690da0d-7ca22;
+	Fri, 25 Oct 2024 17:46:53 +0800 (CST)
+X-RM-TRANSID:2ee7671b690da0d-7ca22
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.97])
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee1671b68ff7b3-33043;
+	Fri, 25 Oct 2024 17:46:53 +0800 (CST)
+X-RM-TRANSID:2ee1671b68ff7b3-33043
+From: Ba Jing <bajing@cmss.chinamobile.com>
+To: ssantosh@kernel.org
+Cc: sre@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Ba Jing <bajing@cmss.chinamobile.com>
+Subject: [PATCH] reset: keystone-reset: remove unused macros
+Date: Fri, 25 Oct 2024 17:06:59 +0800
+Message-Id: <20241025090659.33458-1-bajing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABTCjFBpdMv6Qi3CLYNukMn+J1FwhbAg0hMy075Dt0H-g_hrUw@mail.gmail.com>
 
-On Mon, 21 Oct 2024, Dzmitry Sankouski wrote:
+After reviewing the code, it was found that these macros are never
+referenced in the code. Just remove them.
 
-> > > diff --git a/drivers/mfd/max77705.c b/drivers/mfd/max77705.c
-> > > new file mode 100644
-> > > index 000000000000..553f20a6cdd5
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/max77705.c
-> > > @@ -0,0 +1,248 @@
-> > > +// SPDX-License-Identifier: GPL-2.0+
-> > > +//
-> > > +// max77705.c - mfd core driver for the MAX77705
-> >
-> (...)
-> > > +// Copyright (C) 2024 Dzmitry Sankouski <dsankouski@gmail.com>
-> >
-> > Only the SPDX in C++ comments please.
-> >
-> This conflicts with https://patchwork.kernel.org/comment/25898728/
+Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
+---
+ drivers/power/reset/keystone-reset.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-a) Mark is only talking about the file header
-
-> > > +
-> (...)
-> 
-> > > +++ b/include/linux/mfd/max77705-private.h
-> > > @@ -0,0 +1,180 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +//
-> > > +// Maxim MAX77705 definitions.
-> > > +//
-> > > +// Copyright (C) 2015 Samsung Electronics, Inc.
-> > > +// Copyright (C) 2024 Dzmitry Sankouski <dsankouski@gmail.com>
-> >
-> > No C++ please.
-> 
-> This conflicts with https://patchwork.kernel.org/comment/25898728/
-
-a) Mark is only talking about the file header
-b) Different subsystem, different rules.
-
-> 
-> >
-> > > +
-> > > +#ifndef __LINUX_MFD_MAX77705_PRIV_H
-> > > +#define __LINUX_MFD_MAX77705_PRIV_H
-> > > +
-> > > +#include <linux/pm.h>
-> > > +
-> > > +#define MAX77705_SRC_IRQ_CHG BIT(0)
-> > > +#define MAX77705_SRC_IRQ_TOP BIT(1)
-> > > +#define MAX77705_SRC_IRQ_FG  BIT(2)
-> > > +#define MAX77705_SRC_IRQ_USBC        BIT(3)
-> > > +#define MAX77705_SRC_IRQ_ALL (MAX77705_SRC_IRQ_CHG | MAX77705_SRC_IRQ_TOP | \
-> > > +                             MAX77705_SRC_IRQ_FG | MAX77705_SRC_IRQ_USBC)
-> > > +
-> > > +// MAX77705_PMIC_REG_PMICREV register
-> >
-> > No C++ please.
-> 
-> This conflicts with https://patchwork.kernel.org/comment/25898728/
-
-a) Mark is only talking about the file header
-b) Different subsystem, different rules.
-
-> 
-> -- 
-> 
-> Best regards,
-> Dzmitry
-> 
-
+diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/keystone-reset.c
+index dbc4ff61cd74..cfaa54ced0d0 100644
+--- a/drivers/power/reset/keystone-reset.c
++++ b/drivers/power/reset/keystone-reset.c
+@@ -16,7 +16,6 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/of.h>
+ 
+-#define RSTYPE_RG			0x0
+ #define RSCTRL_RG			0x4
+ #define RSCFG_RG			0x8
+ #define RSISO_RG			0xc
+@@ -28,7 +27,6 @@
+ #define RSMUX_OMODE_MASK		0xe
+ #define RSMUX_OMODE_RESET_ON		0xa
+ #define RSMUX_OMODE_RESET_OFF		0x0
+-#define RSMUX_LOCK_MASK			0x1
+ #define RSMUX_LOCK_SET			0x1
+ 
+ #define RSCFG_RSTYPE_SOFT		0x300f
 -- 
-Lee Jones [李琼斯]
+2.33.0
+
+
+
 
