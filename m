@@ -1,112 +1,140 @@
-Return-Path: <linux-pm+bounces-16471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF0419B08E6
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 17:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6737D9B0923
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 18:04:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BB011C20C63
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 15:51:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89B6C1C229A6
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 16:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA1A165F17;
-	Fri, 25 Oct 2024 15:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E84787E792;
+	Fri, 25 Oct 2024 16:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETOhtiKh"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="naxm2wnp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E6521A4D1;
-	Fri, 25 Oct 2024 15:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B99185B7B
+	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 16:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729871458; cv=none; b=lgR7Mm+WBPiIYsHduOfpTsTPkn0drDWVnReX3OeGAnp+Gg7FKi1lWJUWx5Hkdr2RX6gGbGGP2FZarOFQhDyCZs1SzHc3UV5QiadlYTm/rbwzzxTQf6S7mGz0yjT8JOrD7dgYQfs0ZwpUkTKf1LkggZqzr2sV/1s2Avb2umep6dU=
+	t=1729872280; cv=none; b=l8tdbq1evYynE4coli1zduAUIHm3cTD4/lim4TMCf8SevF+0mIreuvIOZB/THa2wroupzLHn2QrVm3RRlJ/W7hZz1Vn7DMohGMESJHZKD31vyzTlOPwLCRskG982B94fXHDWvgj1h4jxf6KdRILmKpEkVvYn0B7x2lWhGYzDvjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729871458; c=relaxed/simple;
-	bh=Fi11uiXIQ+iNyojKutyX4w7orO4RUqctsjHq2NJr7EA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=t0O6ys7Q596seaQ1gCNvjTYKj/2sD3JX6qoR0zR96n4YUJ6Xk3q4U4ugPDymfiGwJ2OIvHnlAwStrpof+VidcyS7XJQ/jWuSUPViVVA3wCL4kfUvj8ZSVnfVeW9KH2l6gjEX7UdNvApi3qblZREHlS8/m7z1Rts3UITAmxawE/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETOhtiKh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57698C4CEC3;
-	Fri, 25 Oct 2024 15:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729871458;
-	bh=Fi11uiXIQ+iNyojKutyX4w7orO4RUqctsjHq2NJr7EA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ETOhtiKhJcECkOBWApIkfsGMNyfmZtvZEIWbqjoJdlYPM0/pPrsC0+HHELse7TSK3
-	 laZ8M24MDX5kw7pRkJPI19dy+Emhd24OQTOfHmNhlBuba0/37aWckt7Ioc1a1Ar2Wu
-	 6TmKOrMZF8sDlAnGhCnk7J+HncwJxac2uKaz3J8y5OrRoLM6fK86RduvZ1zMHJrIa7
-	 PhLLiKsOEjXRkR7fxPImTYSTNzT+gbsFDm2xvQI1cOPblV8o9fdN3s7XeOfZ4XBsH2
-	 oEvlRD4Rpntwo1fsELvFhrxbWCWankw7jTGRUATAHtLmLz8TY75NEo0k+p1hVSgcvg
-	 VA+74it8A7VVg==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-28cdd9d8d01so1199528fac.1;
-        Fri, 25 Oct 2024 08:50:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUyWrPGFGu3Mj5XbrUz+CpDijjOj8A9FFIo/Q7Bc3pb7ztnLpP0ip+dmL0VPqYiMnREp5yzFdWHIT5a@vger.kernel.org, AJvYcCV7UkYrT5CvM1QTyAvmRVaPhlwrqLrtwBltfposaqMKUNnkD9vxXHMFGae8HvikXNkKNWqBYvMKD8GKprk4@vger.kernel.org
-X-Gm-Message-State: AOJu0YymLGEJS4ks0C/0F2kbxhDzoprOWbYEXLsAvna3u3hGtV32geM9
-	3pR7XkeC9FYQjgTOI3hebrk0mV7ejBDyEEuVsaobu0bycQYcsY5H0VSJMcAlmKBJQ24VSuaoeoK
-	Fv2x6nAKCUzTcx4w0oeRjKbRvc6M=
-X-Google-Smtp-Source: AGHT+IEexv+1+Np/f2c+G4k45uz21aAEHCVXbLx7OeEwEnn5lsuizjJKo8UnayxciDmSWeDhTX0jplzw4xBYqvqkaE0=
-X-Received: by 2002:a05:6870:c1cf:b0:288:6d23:5f24 with SMTP id
- 586e51a60fabf-28ccb6ad0cdmr10773896fac.31.1729871457680; Fri, 25 Oct 2024
- 08:50:57 -0700 (PDT)
+	s=arc-20240116; t=1729872280; c=relaxed/simple;
+	bh=rv5rJ4jmTrZ27qkbyvCgIO215qm4tAl0JboSDanP3hQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q2SdsZT56dW7Sz40dDvOCAtHt5Q5SW5r6f0NC1T+G93t7K7XbTVujgGVCf0edBlIg9mGuiV1JwJ84wXdwMi0Fy//u+PgryHacL6+842ikddopp9QGLWl78no6CIzySfi02QKW4OtYxNcaxlBQ5B3L/yjo/DIrmN6vKsosqIsI1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=naxm2wnp; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2fb59652cb9so23157241fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 09:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1729872277; x=1730477077; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xCM1ACcR+e8vZp8ZeWNxMr9lABciJDnozk61Zgoap0=;
+        b=naxm2wnpTOjEvHretXyAmPU1/YrO8SA7WfkGp0j0JGmIFso6pdna0poLesiQE9T9Qe
+         FBH2473tdWbDsPPdPOxeGtg2pkggqhFCI8VOQGj/IulcL8wLnW5vRtRoSGhSWxtqA7ot
+         5ZdQ408y21jXB4QAE77AlGZe0nVhM7ruPez+o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729872277; x=1730477077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1xCM1ACcR+e8vZp8ZeWNxMr9lABciJDnozk61Zgoap0=;
+        b=G7PhL2c7OP2URK7VOOg907hGjm522WwhAId4I+l96/5W+71xQQjjF7FwiQsYVPrdbm
+         hsTIPqfdwJNTtve19hmCLUejDcgxmnzPYY+k1eAKoi7cPF5Ozc00AyANEjvJYN6L1Zlp
+         93CWVguD9irsaihlhCBOPhhSYoImZkQjVLbrcHMDOeqW5OimI5oCsQV3FPHNBqrb8LDY
+         7Q8/E2NkKOfq2I+xhWCZrBxT1n8tNleYcdAySNml412AfyKzvZXp49An5MVBMnFdilu0
+         EJkYm5PDYPk/Uxz5FcmvZSTRBnSkxW/vSAh9cbQvNy9ymT6FA/7Ues383+54IgoyrKhg
+         0bYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXwrelDQXtiHPa7HuEAbBJhylShwJGavViAWllhb1YanS7dCJY7+lxjx33oExbqwhw8t+Mhamr4Ow==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJH6wzop65trZC+I7OM23yfM/qf2nXZB7gBQ8tKi8/35jWSNpq
+	C57oUOcdmUcz411F3RqZ6UtmtuDIbXdBNhV0W9r3q/ifjk/JCl4SOChISlF+hnY=
+X-Google-Smtp-Source: AGHT+IE5tAGEzSGr1VKCRE9qh4Kh62Hto2hpFgEH+icsAjjqXGeOuQHrKjPabwauzhg1pQ0otdSs8A==
+X-Received: by 2002:a2e:bc09:0:b0:2f7:6653:8046 with SMTP id 38308e7fff4ca-2fc9d37468fmr61995861fa.25.1729872276573;
+        Fri, 25 Oct 2024 09:04:36 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.43.251])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058bb4348sm1848614f8f.111.2024.10.25.09.04.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 09:04:36 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-amarula@amarulasolutions.com,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Michael Trimarchi <michael@amarulasolutions.com>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Shengjiu Wang <shengjiu.wang@nxp.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2] pmdomain: imx: gpcv2: replace dev_err() with dev_err_probe()
+Date: Fri, 25 Oct 2024 18:03:56 +0200
+Message-ID: <20241025160430.4113467-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 25 Oct 2024 17:50:46 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g9kJzKXGjF-q+r8NDTqYoDaa8J1cyOj=TRN-GMMHqiOg@mail.gmail.com>
-Message-ID: <CAJZ5v0g9kJzKXGjF-q+r8NDTqYoDaa8J1cyOj=TRN-GMMHqiOg@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.12-rc5
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+The patch standardizes the probe() code by replacing the two occurrences
+of dev_err() with dev_err_probe(). Indeed, dev_err_probe() was used in all
+other error paths of the probe() function.
+Note that dev_err_probe() has advantages even if the error code is not
+EPROBE_DEFER, such as the symbolic output of the error code. Therefore,
+it should generally be preferred over dev_err().
 
-Please pull from the tag
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.12-rc5
+---
 
-with top-most commit 1646a3f2b1bda03a763f7aecf83504144fb8bba9
+Changes in v2:
+- Improve the commit message.
+- Add 'Reviewed-by' tag of Marco Felsch.
 
- Merge branch 'pm-powercap'
+ drivers/pmdomain/imx/gpcv2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-on top of commit 42f7652d3eb527d03665b09edac47f85fb600924
+diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
+index 963d61c5af6d..6e6ecbf2e152 100644
+--- a/drivers/pmdomain/imx/gpcv2.c
++++ b/drivers/pmdomain/imx/gpcv2.c
+@@ -1356,7 +1356,7 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+ 
+ 	ret = pm_genpd_init(&domain->genpd, NULL, true);
+ 	if (ret) {
+-		dev_err(domain->dev, "Failed to init power domain\n");
++		dev_err_probe(domain->dev, ret, "Failed to init power domain\n");
+ 		goto out_domain_unmap;
+ 	}
+ 
+@@ -1367,7 +1367,7 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+ 	ret = of_genpd_add_provider_simple(domain->dev->of_node,
+ 					   &domain->genpd);
+ 	if (ret) {
+-		dev_err(domain->dev, "Failed to add genpd provider\n");
++		dev_err_probe(domain->dev, ret, "Failed to add genpd provider\n");
+ 		goto out_genpd_remove;
+ 	}
+ 
+-- 
+2.43.0
 
- Linux 6.12-rc4
-
-to receive power management fixes for 6.12-rc5.
-
-These update cpufreq documentation to match the code after recent
-changes (Christian Loehle), fix a units conversion issue in the CPPC
-cpufreq driver (liwei), and fix an error check in the dtpm_devfreq
-power capping driver (Yuan Can).
-
-Thanks!
-
-
----------------
-
-Christian Loehle (1):
-      cpufreq: docs: Reflect latency changes in docs
-
-Yuan Can (1):
-      powercap: dtpm_devfreq: Fix error check against dev_pm_qos_add_request()
-
-liwei (1):
-      cpufreq: CPPC: fix perf_to_khz/khz_to_perf conversion exception
-
----------------
-
- Documentation/admin-guide/pm/cpufreq.rst | 20 ++++++++++----------
- drivers/acpi/cppc_acpi.c                 | 22 +++++++++++++++++-----
- drivers/powercap/dtpm_devfreq.c          |  2 +-
- 3 files changed, 28 insertions(+), 16 deletions(-)
 
