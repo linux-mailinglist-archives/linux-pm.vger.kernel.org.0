@@ -1,105 +1,193 @@
-Return-Path: <linux-pm+bounces-16434-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16435-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8078A9AFC48
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:13:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 887BA9AFC81
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 10:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373671F242B8
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:13:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAE8D1C206A6
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 08:27:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C2F91C4A12;
-	Fri, 25 Oct 2024 08:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C86801CF7C9;
+	Fri, 25 Oct 2024 08:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=johanneskirchmair.de header.i=@johanneskirchmair.de header.b="dClucyDY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MJ3TQn3o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bulk0.mail-out.lima-city.de (bulk0.mail-out.lima-city.de [91.216.248.212])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2EB1B6D11;
-	Fri, 25 Oct 2024 08:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.248.212
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB130146588;
+	Fri, 25 Oct 2024 08:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729844033; cv=none; b=Y7xBHlYFP1gueqXtiuOCULlU/83dC0fRlCoaYoThaAttgS7xG1Cyqb7STIo2SOZmM8FxrEgr57o9R6FtaVRT5uD7q5Eb70ovBKSt4XLHJm3/Q95mz3NfsfBc95IEu9rUD1SrwaPld7wzTOICKd+wjku6gZWd9lM9CCEcfttBm6Q=
+	t=1729844873; cv=none; b=hdhpN3zOPReAxiQEARLPWUzzPgQ32OsUJTAyRJZAkiNamsnpzFXJA6jFdZFgQsYuZyHBL9j0A9DyE1kZj+maqKbd9DHOiHZUK7L9krVXh5sZbs6WVHM96LIyAP0OIG1lYY72odHLZz/yCyCj/azOM54KGqDhtTNLg+LIbOjdjIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729844033; c=relaxed/simple;
-	bh=P3R6bpWXHVToa3o5mnFLcdTIAER9hOUy5GkSK3oxbIU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y303SUHLGDl0LMARv5ta2JAZlCIA4qjz2B4ce1zhYhqWzaPsNwkP9XcGb4ZUktMz1yqkLmdCdMaqWXT6h9f0kllp1MJOpM3vEpNCjmOQI8P3P696N9Scc0z3wU8zGCx92x7NvdyJSdCWmtoQ9JibmjpOby8E45S7oEG0jP0LFfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=johanneskirchmair.de; spf=none smtp.mailfrom=johanneskirchmair.de; dkim=pass (1024-bit key) header.d=johanneskirchmair.de header.i=@johanneskirchmair.de header.b=dClucyDY; arc=none smtp.client-ip=91.216.248.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=johanneskirchmair.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=johanneskirchmair.de
-From: mailinglist1@johanneskirchmair.de
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=johanneskirchmair.de;
-	s=securedbylima-20161106; t=1729843565;
-	bh=P3R6bpWXHVToa3o5mnFLcdTIAER9hOUy5GkSK3oxbIU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dClucyDY1RF8+yabq5q7fGMmYV0yilRAK4cAeI6j/16NJ/0+n0VCZ1uDg18uP5/DZ
-	 E9YptnsWHT40GY0Oeylm2JwhtJZz8unLpwecO7ppMg+Vw1ND8U0laH6sdlAAhg6YCF
-	 qjnfFRZm8I/4Lph4zPSAPiQDmt+7CQtlyx7q7n5s=
-To: aford173@gmail.com
-Cc: johannes.kirchmair@skidata.com,
-	Laurent.pinchart@ideasonboard.com,
-	airlied@gmail.com,
-	alexander.stein@ew.tq-group.com,
-	andrzej.hajda@intel.com,
-	catalin.marinas@arm.com,
-	conor+dt@kernel.org,
-	daniel@ffwll.ch,
-	devicetree@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	festevam@gmail.com,
-	frieder.schrempf@kontron.de,
-	jernej.skrabec@gmail.com,
-	jonas@kwiboo.se,
-	kernel@pengutronix.de,
-	kishon@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	l.stach@pengutronix.de,
-	linux-arm-kernel@lists.infradead.org,
-	linux-imx@nxp.com,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	maarten.lankhorst@linux.intel.com,
-	marex@denx.de,
-	mripard@kernel.org,
-	neil.armstrong@linaro.org,
-	p.zabel@pengutronix.de,
-	rfoss@kernel.org,
-	robh+dt@kernel.org,
-	s.hauer@pengutronix.de,
-	shawnguo@kernel.org,
-	tzimmermann@suse.de,
-	ulf.hansson@linaro.org,
-	victor.liu@nxp.com,
-	vkoul@kernel.org,
-	will@kernel.org
-Subject: imx8mp: HDMI display blank/black problems
-Date: Fri, 25 Oct 2024 10:05:44 +0200
-Message-Id: <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240203165307.7806-1-aford173@gmail.com>
-References: <20240203165307.7806-1-aford173@gmail.com>
+	s=arc-20240116; t=1729844873; c=relaxed/simple;
+	bh=HEWZoLklbXIu2HmJ9WcEXauoMOq689zCnSqczzPSMfc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mRffspucb8059BFLariwvWloL+MBNaSCv0qGcDc4Y+92Bv0xJHSw1e6S6CUoAiOxHt8Mz3eeR8MMmCttKsYRUNm0mBxPNdsZCIBRKZxq9iKzQTKpt25+uXP2b3Dviwr5zheR9QBFSKrhYJP2z13W+xyDgX0GL58xv9brSqMYPWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MJ3TQn3o; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729844871; x=1761380871;
+  h=date:from:to:cc:subject:message-id;
+  bh=HEWZoLklbXIu2HmJ9WcEXauoMOq689zCnSqczzPSMfc=;
+  b=MJ3TQn3owDB9fQEYohJfxzYC5/7/LZyiiZGJVMdBF4lnLiGizLN95iJ/
+   UQ2reBoUYatVFwL9KwebvSAA+F6FzJ35EHzR1TGHw5ofSurVbAKv+kkqt
+   xiSmbl/MTyr/sP/jAzlu/h9hZwH1ykMl58uySzMiKt1/u/cj/IAzUcKiw
+   qqF9iVM8pSX61Fv4hKF52fNQFG6PBDjT8EA5EFDHqSl3y/aA2URUpcaot
+   R9hAGYi2sKyuad2TmP/LwbEOlS/FoMDKu79350wTFG8hyBxqnVYqZOKVS
+   W50P2yTSl3aGLUJOusKprrOXRM1cT7IATS0sGAwYvIS26aMhzU4uFsshh
+   g==;
+X-CSE-ConnectionGUID: uiruxZ7yRaq9i8qJle8D+A==
+X-CSE-MsgGUID: s7mzCV3ATreFl0tjufJy3A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="33417798"
+X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
+   d="scan'208";a="33417798"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 01:27:51 -0700
+X-CSE-ConnectionGUID: W6dzVM66TAu0x0P4S/Mh8A==
+X-CSE-MsgGUID: xh0he07PR7WK9jLGFPQ8BQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
+   d="scan'208";a="84812248"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 25 Oct 2024 01:27:49 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4Fff-000Xqy-2P;
+	Fri, 25 Oct 2024 08:27:47 +0000
+Date: Fri, 25 Oct 2024 16:27:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:fixes] BUILD SUCCESS
+ 0bb2cdfc8e286443621aa323ac01c9fe1f0069e8
+Message-ID: <202410251626.6nJgSiCW-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hey, 
-We had some problems with the hdmi on the imx8mp and wanted to leave, what we found out about it, somewhere for others to find it.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
+branch HEAD: 0bb2cdfc8e286443621aa323ac01c9fe1f0069e8  Merge branch 'pm-cpufreq-fixes' into fixes
 
-The problem was that our hdmi display sometimes stayed blank after hot plugging and sometimes at startup. On older kernel versions 6.6 we did not have the problem with the not mainlined hdmi patches. 
-We tracked the commit down that introduced the problem for us. It was the following “driver core: Enable fw_devlink=rpm by default”  https://lore.kernel.org/lkml/20231113220948.80089-1-saravanak@google.com/
-So we switched back to FW_DEVLINK_FLAGS_ON via kernel parameter. Don’t really understand what the problem with RPM is.
+elapsed time: 979m
 
-So, this information is just for reference. Maybe someone has an idea what is going on here. And how to fix the problem in a more proper way.
+configs tested: 99
+configs skipped: 2
 
-Best regards Johannes
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                     allnoconfig    gcc-14.1.0
+alpha                    allyesconfig    clang-20
+alpha                       defconfig    gcc-14.1.0
+arc                      allmodconfig    clang-20
+arc                       allnoconfig    gcc-14.1.0
+arc                      allyesconfig    clang-20
+arm                      allmodconfig    clang-20
+arm                       allnoconfig    gcc-14.1.0
+arm                      allyesconfig    clang-20
+arm               aspeed_g5_defconfig    clang-20
+arm                 lpc32xx_defconfig    gcc-14.1.0
+arm                 s3c6400_defconfig    gcc-14.1.0
+arm                   sama5_defconfig    clang-20
+arm                  sp7021_defconfig    gcc-14.1.0
+arm            vt8500_v6_v7_defconfig    gcc-14.1.0
+arm64                    allmodconfig    clang-20
+arm64                     allnoconfig    gcc-14.1.0
+csky                      allnoconfig    gcc-14.1.0
+hexagon                  allmodconfig    clang-20
+hexagon                   allnoconfig    gcc-14.1.0
+hexagon                  allyesconfig    clang-20
+i386                     alldefconfig    gcc-14.1.0
+i386                     allmodconfig    clang-19
+i386                      allnoconfig    clang-19
+i386                     allyesconfig    clang-19
+i386                        defconfig    clang-19
+loongarch                allmodconfig    gcc-14.1.0
+loongarch                 allnoconfig    gcc-14.1.0
+m68k                     allmodconfig    gcc-14.1.0
+m68k                      allnoconfig    gcc-14.1.0
+m68k                     allyesconfig    gcc-14.1.0
+m68k                   sun3_defconfig    clang-20
+microblaze               allmodconfig    gcc-14.1.0
+microblaze                allnoconfig    gcc-14.1.0
+microblaze               allyesconfig    gcc-14.1.0
+mips                      allnoconfig    gcc-14.1.0
+mips                bcm63xx_defconfig    clang-20
+mips                 bigsur_defconfig    clang-20
+mips                    gpr_defconfig    clang-20
+mips                    gpr_defconfig    gcc-14.1.0
+mips                   jazz_defconfig    gcc-14.1.0
+mips                omega2p_defconfig    clang-20
+nios2                     allnoconfig    gcc-14.1.0
+openrisc                  allnoconfig    clang-20
+openrisc                 allyesconfig    gcc-14.1.0
+openrisc                    defconfig    gcc-12
+parisc                   allmodconfig    gcc-14.1.0
+parisc                    allnoconfig    clang-20
+parisc                   allyesconfig    gcc-14.1.0
+parisc                      defconfig    gcc-12
+powerpc            adder875_defconfig    clang-20
+powerpc                  allmodconfig    gcc-14.1.0
+powerpc                   allnoconfig    clang-20
+powerpc                  allyesconfig    gcc-14.1.0
+powerpc            ge_imp3a_defconfig    clang-20
+powerpc         mpc832x_rdb_defconfig    clang-20
+powerpc             sequoia_defconfig    gcc-14.1.0
+powerpc             tqm8560_defconfig    clang-20
+powerpc              tqm8xx_defconfig    gcc-14.1.0
+powerpc                warp_defconfig    gcc-14.1.0
+riscv                    allmodconfig    gcc-14.1.0
+riscv                     allnoconfig    clang-20
+riscv                    allyesconfig    gcc-14.1.0
+riscv                       defconfig    gcc-12
+s390                     allmodconfig    gcc-14.1.0
+s390                      allnoconfig    clang-20
+s390                     allyesconfig    gcc-14.1.0
+s390                        defconfig    gcc-12
+s390               zfcpdump_defconfig    clang-20
+sh                       allmodconfig    gcc-14.1.0
+sh                        allnoconfig    gcc-14.1.0
+sh                       allyesconfig    gcc-14.1.0
+sh                          defconfig    gcc-12
+sh                 ecovec24_defconfig    gcc-14.1.0
+sh                edosk7705_defconfig    gcc-14.1.0
+sh                  kfr2r09_defconfig    gcc-14.1.0
+sh             magicpanelr2_defconfig    gcc-14.1.0
+sh              rts7751r2d1_defconfig    clang-20
+sh                   se7619_defconfig    gcc-14.1.0
+sh                   se7705_defconfig    clang-20
+sh                   se7705_defconfig    gcc-14.1.0
+sh          sh7785lcr_32bit_defconfig    clang-20
+sh                     shx3_defconfig    clang-20
+sparc                    allmodconfig    gcc-14.1.0
+sparc64                     defconfig    gcc-12
+um                       allmodconfig    clang-20
+um                        allnoconfig    clang-20
+um                       allyesconfig    clang-20
+um                          defconfig    gcc-12
+um                     i386_defconfig    gcc-12
+um                   x86_64_defconfig    gcc-12
+x86_64                    allnoconfig    clang-19
+x86_64                   allyesconfig    clang-19
+x86_64                      defconfig    clang-19
+x86_64                          kexec    clang-19
+x86_64                          kexec    gcc-12
+x86_64                       rhel-8.3    gcc-12
+xtensa                    allnoconfig    gcc-14.1.0
+xtensa          cadence_csp_defconfig    clang-20
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
