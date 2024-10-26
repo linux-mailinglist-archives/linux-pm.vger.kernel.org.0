@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-16499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B030E9B181E
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 14:31:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6187E9B1821
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 14:32:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E077F1C228A9
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 12:31:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2022D283767
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 12:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E02A1D7998;
-	Sat, 26 Oct 2024 12:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E9F1D86D6;
+	Sat, 26 Oct 2024 12:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QPVzNWiX"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="h2hUoZzu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A46E1D6DB7;
-	Sat, 26 Oct 2024 12:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEE01D7E37;
+	Sat, 26 Oct 2024 12:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729945886; cv=none; b=Aumay5W+0v/GSM9a+mNcYoDO90LBNy0Ns7s4m/c90XhBeHGwlg4VVdc9SaBddwn14NJRRzBn0TRw9zYhn2nuf6OYZ40Qehm5VWEqo4OtSyi5KHsfYC60zjk698BRfLEZBt4r0dVBld18g2DRxF8S1aUGoZJZAjU/1dKWbqgYHLE=
+	t=1729945889; cv=none; b=XAkBoN5vGv4Wv+H/FiPs0wpCvHKOLEKgpzLn+hKe0slPOef58vj9rI2eNRVD0OF7IeXHNvtzJVOtWPGEMIOTeiVf8FtaJKcd0PM1bFm/jv0Og46LZzerkuhYSqrX8Sf8VjWsd5bGH5RPKMjcXDNdOCTbC6S/jEZw4WQw145Uy5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729945886; c=relaxed/simple;
-	bh=wQxIdkf7vDQudMCZe8uPswW11tw+NIjbaxkaNy6GmLY=;
+	s=arc-20240116; t=1729945889; c=relaxed/simple;
+	bh=ZQ9Ta9PPAsEEDpezSwBKDdbd+Q67eaQLpxdI5YjuGdY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JQA9pc0p4q3uErZgxK+Ov2aQCO0d+0tXwfxq1BY+IC5lwmHTue+Ao0UWuIJQbhoESb/UjPnk/+PUHZDhm30/Ll/DRVbpgtj6jy/ZtoKuTQ6XAvddtID3DpvjOeyh0SUlqxdKGniWKgorxPCzQZ3FNe7gYlddWen+Hy573HZalNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QPVzNWiX; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=BsYHn11XKiklR1jgSyh03cd6PkLN5Br+uWPgxuYgKisYmIHiZB5X8iXDyDw25xp7LZFdGzvtoVAGLpr85JMWgMVs9oGrk9XCsDHesstuE64OURIi6XkDfihV4UC2kZHhKI7bnXEogXSLiQKp8lSW52e0ch29HTaa4k9A0aa8KeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=h2hUoZzu; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49Q4F1pR007614;
-	Sat, 26 Oct 2024 12:31:21 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49Q4F23U028211;
+	Sat, 26 Oct 2024 12:31:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	m3cF1b0P4tdJPK4CV2VpKzUcvJ9bQoHZ2hZW8vFcA60=; b=QPVzNWiXJnWHnUiP
-	hK/3tyZ6dJXuGSBglpJhb2GrotsBNg8sGX89BtfPTRRvv0Rw+8+/0sfLtFZMzPow
-	6SxsdS3n3e/1C57LBkk5OM9Q3HXtLYPged0QUzuVKUAGkWbSqvKocVf9Yt1i0bRI
-	ignX5d+eXPPPLhmWLdY284AkIF08CXi6t4XRZys4Z9J/FRyeiI4oQZZE9f0ZaZLb
-	ix9jgNaeudD2dHh3v/s/5oXRGiLzsuHJLLWey92xGPDLEeNgYf669Hx/9Lkw03/x
-	r4DzV7tALwUK/2IW0wX8/ofxp/ftk8skcZBnjPn3VsqzRcgSP6eHcYDo7W4/Ezdq
-	U24Qpg==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42grgu8wf5-1
+	jLBRpdjm9jDbZP4nrC5bWUvIj2WdCKjxZqPnPt8W2fY=; b=h2hUoZzuZzFF9NCM
+	1GCUiQGgEaV/MGJTFZ4lU+vbTU3LzYT7PAll7K6uQaYhmnGxZqROGqkfbZqXBW5B
+	Rw+rOfpnAy9Ai6H7sNwhlxnDZ8Tlmg1xruGc8wYeCD7d047qNuxkfjE9+tuKyhmW
+	IuVmg3RsNwqenIT3zGSTiWRn337Z8RwvOT64umLZE6PA4sG+aHvJ3ItMWTQa8TNm
+	zNi3+ICB44FULWJ49cS9sEGOH4PFUpKOHdrqHVff7DsRtRLJBNfhuMRNMVlUrZbw
+	JzSBLp0GcIkFBec84EFmZP3nUlPNQwj3hE2TCpzWzeFyK0+46EZ2whIT5pqpB3OC
+	vxTbyg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gqe5ryf6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 26 Oct 2024 12:31:20 +0000 (GMT)
+	Sat, 26 Oct 2024 12:31:24 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49QCVJ8s001340
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49QCVNcv022477
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 26 Oct 2024 12:31:19 GMT
+	Sat, 26 Oct 2024 12:31:23 GMT
 Received: from 55f3af46090c.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Sat, 26 Oct 2024 05:31:16 -0700
+ 15.2.1544.9; Sat, 26 Oct 2024 05:31:19 -0700
 From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -66,9 +66,9 @@ To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
 CC: Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
         <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2 1/3] dt-bindings: interconnect: Add EPSS L3 compatible for SA8775P
-Date: Sat, 26 Oct 2024 12:30:56 +0000
-Message-ID: <20241026123058.28258-2-quic_rlaggysh@quicinc.com>
+Subject: [PATCH V2 2/3] arm64: dts: qcom: sa8775p: add EPSS l3 interconnect provider
+Date: Sat, 26 Oct 2024 12:30:57 +0000
+Message-ID: <20241026123058.28258-3-quic_rlaggysh@quicinc.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20241026123058.28258-1-quic_rlaggysh@quicinc.com>
 References: <20241026123058.28258-1-quic_rlaggysh@quicinc.com>
@@ -84,40 +84,69 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: G-3xmfrRN_efss0g9ToRRiDCz7b_Kn6D
-X-Proofpoint-GUID: G-3xmfrRN_efss0g9ToRRiDCz7b_Kn6D
+X-Proofpoint-GUID: iX9Yzp1gE8MTqExT2pO_mDOap-nsDgzA
+X-Proofpoint-ORIG-GUID: iX9Yzp1gE8MTqExT2pO_mDOap-nsDgzA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- phishscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410260106
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ phishscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=1
+ priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410260106
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
-SA8775P SoCs.
+Add Epoch Subsystem (EPSS) L3 interconnect provider node on SA8775P
+SoCs.
 
 Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 ---
- .../devicetree/bindings/interconnect/qcom,osm-l3.yaml         | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-index 21dae0b92819..042ca44c32ec 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-@@ -34,6 +34,10 @@ properties:
-               - qcom,sm8250-epss-l3
-               - qcom,sm8350-epss-l3
-           - const: qcom,epss-l3
-+      - items:
-+          - enum:
-+              - qcom,sa8775p-epss-l3
-+          - const: qcom,epss-l3-perf
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+index 9f315a51a7c1..dd7207eb3616 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
++++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+@@ -10,6 +10,7 @@
+ #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
+ #include <dt-bindings/clock/qcom,sa8775p-gpucc.h>
+ #include <dt-bindings/dma/qcom-gpi.h>
++#include <dt-bindings/interconnect/qcom,osm-l3.h>
+ #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
+ #include <dt-bindings/mailbox/qcom-ipcc.h>
+ #include <dt-bindings/firmware/qcom,scm.h>
+@@ -4282,6 +4283,15 @@ rpmhpd_opp_turbo_l1: opp-9 {
+ 			};
+ 		};
  
-   reg:
-     maxItems: 1
++		epss_l3_cl0: interconnect@18590000 {
++			compatible = "qcom,sa8775p-epss-l3",
++				     "qcom,epss-l3-perf";
++			reg = <0x0 0x18590000 0x0 0x1000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
++			#interconnect-cells = <1>;
++		};
++
+ 		cpufreq_hw: cpufreq@18591000 {
+ 			compatible = "qcom,sa8775p-cpufreq-epss",
+ 				     "qcom,cpufreq-epss";
+@@ -4295,6 +4305,15 @@ cpufreq_hw: cpufreq@18591000 {
+ 			#freq-domain-cells = <1>;
+ 		};
+ 
++		epss_l3_cl1: interconnect@18592000 {
++			compatible = "qcom,sa8775p-epss-l3",
++				     "qcom,epss-l3-perf";
++			reg = <0x0 0x18592000 0x0 0x1000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
++			#interconnect-cells = <1>;
++		};
++
+ 		remoteproc_gpdsp0: remoteproc@20c00000 {
+ 			compatible = "qcom,sa8775p-gpdsp0-pas";
+ 			reg = <0x0 0x20c00000 0x0 0x10000>;
 -- 
 2.39.2
 
