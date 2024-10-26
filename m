@@ -1,137 +1,214 @@
-Return-Path: <linux-pm+bounces-16489-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16490-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B04FD9B128B
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 00:26:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4DF89B13DF
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 02:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B60591C21AE9
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2024 22:26:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C769F1C20FFB
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 00:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 240E420F3D3;
-	Fri, 25 Oct 2024 22:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W0QcgkVS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF392A94A;
+	Sat, 26 Oct 2024 00:44:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430241C878B
-	for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 22:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415978BEE;
+	Sat, 26 Oct 2024 00:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729895162; cv=none; b=LZZKS8DzRchyGC+IxPjW1YuVCdFLgh+/VRgjtmGlFXM5NJsFopI8jr0PYTIuXUuyJIMMYD/hYHCm3PbeR1hO1le+OdRe/j4xjToZQy4f2g34FGiTSvUqCJGhGFpqulf0uljlSMf6ZkLpPosC/qzjfoRVFSN9lKVgKSOjDoz3FNc=
+	t=1729903499; cv=none; b=TIAW3Ie+7IglHKnxPSgUTndtouoZJePg9mg6e2HsRJZ03xX7M5d2o3ARrOFYXLWCd7RaqDo4U+ARjffXNFz1NLErbkgDY5EBVRuTjA+Uzvq0j7t1fetlS6UyEZgbdnkJLTt/A6JPL3TV0kkRmTwca70EGr3ddLBBERO2z7NW+l0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729895162; c=relaxed/simple;
-	bh=iEHk5Ta4phb4cptYASkNbTGv77etjCbTBmGJXO0C01s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VbgT+KK4dMWVTIu3pyHcZ0iWEhfaA15FgTJu4cqp0ALQvx0kWAdgrIf7Vk7yfZn/u171fpLip+2vm5gaRYW0GffaL9vsGTxQKossFzEhWLKd0WtYerSxT7z3xa5msrNDV8UUz7gNlpWA6bBP5H6gn/nETjSPe8JcW/BTAb+JW8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W0QcgkVS; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7203c431f93so1989567b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2024 15:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729895159; x=1730499959; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lwRrmapI/txMqNn3ixRKI9VZY2NYrfTNrvsL9ny9Phg=;
-        b=W0QcgkVSi8/qpFLW3pZr6Ne4c6tRLW8I2ydGmT0Il26vI7FDRV8VFlpIsSnOyiMu+I
-         zDIsf3YY+wGqWuOZGCXoAYK3keoiLRvR2E3Bnp3Qegw6d6bRNJReEFMFl5sksy9E1VLJ
-         SVfCzFbdejFH1uK0+dBv8FkHKUTt/8an1ZqOwgTr7Abq1LX16mNCAIFA6afT9bVy0f9u
-         W0vj0t/BgB0G3QmFkwFsZTwu8+iyy+7uHdwF4JR2bBe/DRE6bnyFK+c8Uz9lBcINNCpG
-         uzgBf/Doc4NIWxxvUd2RM66ovQC7JHfkxdAU9qHiebx6843Ok7GL2WrMvkMOatsOlRnY
-         lU7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729895159; x=1730499959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lwRrmapI/txMqNn3ixRKI9VZY2NYrfTNrvsL9ny9Phg=;
-        b=haaSoFAfBFo6cbhOZTpdgVXxlI/LBJ3/71bDqo74p4tDwknVKlT/1o9o2ZrS8rYjjG
-         bKZHG3aSRBtIv/P1M9uMDfJFEDjuR5b6XoX4csXAF5FBquFdAf72wEUxNiWNaN/TX4Hg
-         RpSUh1NatYcdUe4VMMWUCcnpdriWH5NnMIg3pz0nhBa8A67EpfSGItaWzMDAqArPLier
-         z1PCwCIie3gXcrLkZZELLgHlXZIDdAtekavJR+WFYbVZQj7z6f/LAi+1gVuCZESYBBhb
-         l6PkugsW1Rl9HOoBx4rSWuBObTGtM7lXDVHBQlcHvwZS7eq8Hc65F3texyM9aVD8Otxm
-         oA3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUIvOMwgymlce7MoL4Umenind2jiHdHP6+m76JEcrhxc5YfPYrPZaHiHXwHcLTLYnpuAuV5izKmfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YynJV8OvqLUSvZnCCjINE8hDVe+JzX/Y0r/tyUGKiiF7m3hn/pM
-	Fp7W6f3/RFkEyA/rUcxAAuN6JQ5iikOGVNZQUurXlqHVh4f+irNlg83gtZx+55BNDdM3CcvNc8h
-	SB0RaPksH24YhPFcZXAx1er0X3dOLY8Db5A0H
-X-Google-Smtp-Source: AGHT+IGX8MDtucdFqCHFcQA61gmD7H5jVN4y1wegzvDHItkpHjN6au3Qg7GBheJFWL49G4c5etcrSDOh0YRCUmkszFU=
-X-Received: by 2002:a05:6a00:3d4f:b0:71e:581f:7d7e with SMTP id
- d2e1a72fcca58-72062fd92c4mr1505841b3a.15.1729895159155; Fri, 25 Oct 2024
- 15:25:59 -0700 (PDT)
+	s=arc-20240116; t=1729903499; c=relaxed/simple;
+	bh=PvsKtMEN26afGMoOiM7mmGVJBslFCCC8LZaXAnbH2JI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S6PXBJtBlhzdUrYtEmM8Mp1F3OXuDpDhvmYwCM/TdPPVyQRvxG74pMf79S7kY8PyStSmxRkE3JedAcO0uwXbJd7OxC0IxS7aEwO4D3QYAakE5yspC/Mjh2ET/KpCmbNfyECflPoNw2CEWD6+9V5/BQ6Wh2g9hB5+AaBjpgvh/pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19F9A339;
+	Fri, 25 Oct 2024 17:45:25 -0700 (PDT)
+Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8BFB3F71E;
+	Fri, 25 Oct 2024 17:44:50 -0700 (PDT)
+Date: Sat, 26 Oct 2024 01:44:44 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Cody Eksal <masterr3c0rd@epochal.quest>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu
+ Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
+ Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, Florian
+ Fainelli <florian.fainelli@broadcom.com>, Vinod Koul <vkoul@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Thierry Reding
+ <treding@nvidia.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Maxime Ripard <mripard@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Yangtao Li <tiny.windzz@gmail.com>, Viresh
+ Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
+ <sboyd@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 07/13] arm64: dts: allwinner: a100: add usb related
+ nodes
+Message-ID: <20241026014444.12c8c99b@minigeek.lan>
+In-Reply-To: <20241024170540.2721307-8-masterr3c0rd@epochal.quest>
+References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+	<20241024170540.2721307-8-masterr3c0rd@epochal.quest>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240919000837.1004642-1-davidai@google.com> <20241001092544.2tlydouyyc7jwuja@vireshk-i7>
-In-Reply-To: <20241001092544.2tlydouyyc7jwuja@vireshk-i7>
-From: Saravana Kannan <saravanak@google.com>
-Date: Fri, 25 Oct 2024 15:25:19 -0700
-Message-ID: <CAGETcx8GomM0znaYKsS412dRvnUQd7_78pKuV82t2b14VBvKVQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/2] Improve VM CPUfreq and task placement behavior
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Quentin Perret <qperret@google.com>, 
-	Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Pavan Kondeti <quic_pkondeti@quicinc.com>, 
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 1, 2024 at 2:25=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> On 18-09-24, 17:08, David Dai wrote:
-> > Hi,
-> >
-> > This patch series is a continuation of the talk Saravana gave at LPC 20=
-22
-> > titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gi=
-st
-> > of the talk is that workloads running in a guest VM get terrible task
-> > placement and CPUfreq behavior when compared to running the same worklo=
-ad
-> > in the host. Effectively, no EAS(Energy Aware Scheduling) for threads
-> > inside VMs. This would make power and performance terrible just by runn=
-ing
-> > the workload in a VM even if we assume there is zero virtualization
-> > overhead.
->
-> > David Dai (2):
-> >   dt-bindings: cpufreq: add virtual cpufreq device
-> >   cpufreq: add virtual-cpufreq driver
-> >
-> >  .../cpufreq/qemu,virtual-cpufreq.yaml         |  48 +++
-> >  drivers/cpufreq/Kconfig                       |  14 +
-> >  drivers/cpufreq/Makefile                      |   1 +
-> >  drivers/cpufreq/virtual-cpufreq.c             | 333 ++++++++++++++++++
-> >  include/linux/arch_topology.h                 |   1 +
-> >  5 files changed, 397 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,virt=
-ual-cpufreq.yaml
-> >  create mode 100644 drivers/cpufreq/virtual-cpufreq.c
->
-> LGTM.
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+On Thu, 24 Oct 2024 14:05:25 -0300
+Cody Eksal <masterr3c0rd@epochal.quest> wrote:
 
-Rafael/Viresh,
+Hi,
 
-Nudge... Any chance this will get pulled into 6.12?
+> From: Yangtao Li <frank@allwinnertech.com>
+> 
+> Allwinner A64 have two HCI USB controllers, a OTG controller and a USB
+> PHY device, let's add nodes on dts.
+> 
+> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+> [masterr3c0rd@epochal.quest: fallback to a33-musb instead of h3-musb]
+> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+> ---
+>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 91 +++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+> index adb11b26045f..0aee1b578661 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+> @@ -302,6 +302,97 @@ ths: thermal-sensor@5070400 {
+>  			#thermal-sensor-cells = <1>;
+>  		};
+>  
+> +		usbphy: phy@5100400 {
+> +			#phy-cells = <1>;
 
-Thanks,
-Saravana
+Please keep the compatible string first, and move #phy-cells to the end.
+
+> +			compatible = "allwinner,sun50i-a100-usb-phy";
+> +			reg = <0x05100400 0x14>,
+> +			      <0x05101800 0x4>,
+> +			      <0x05200800 0x4>;
+
+We need at least 0x24 for the phy_ctrl and 0x14 for the PMUs. But I
+wonder if we should use 0x100 for all of them, like for the D1, as there
+are more registers. The fact that the Linux driver doesn't use more
+shouldn't prevent the DT from describing them.
+
+> +			reg-names = "phy_ctrl",
+> +				    "pmu0",
+> +				    "pmu1";
+> +			clocks = <&ccu CLK_USB_PHY0>,
+> +				 <&ccu CLK_USB_PHY1>;
+> +			clock-names = "usb0_phy",
+> +				      "usb1_phy";
+> +			resets = <&ccu RST_USB_PHY0>,
+> +				 <&ccu RST_USB_PHY1>;
+> +			reset-names = "usb0_reset",
+> +				      "usb1_reset";
+> +			status = "disabled";
+> +		};
+> +
+> +		ehci0: usb@5101000 {
+
+The nodes are ordered by their MMIO base address, so please move them
+around accordingly.
+
+> +			compatible = "allwinner,sun50i-a100-ehci",
+> +				     "generic-ehci";
+> +			reg = <0x05101000 0x100>;
+> +			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_OHCI0>,
+> +				 <&ccu CLK_BUS_EHCI0>,
+> +				 <&ccu CLK_USB_OHCI0>;
+> +			resets = <&ccu RST_BUS_OHCI0>,
+> +				 <&ccu RST_BUS_EHCI0>;
+> +			phys = <&usbphy 0>;
+> +			phy-names = "usb";
+> +			status = "disabled";
+> +		};
+> +
+> +		ohci0: usb@5101400 {
+> +			compatible = "allwinner,sun50i-a100-ohci",
+> +				     "generic-ohci";
+> +			reg = <0x05101400 0x100>;
+> +			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_OHCI0>,
+> +				 <&ccu CLK_USB_OHCI0>;
+> +			resets = <&ccu RST_BUS_OHCI0>;
+> +			phys = <&usbphy 0>;
+> +			phy-names = "usb";
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_otg: usb@5100000 {
+> +			compatible = "allwinner,sun50i-a100-musb",
+> +				     "allwinner,sun8i-a33-musb";
+> +			reg = <0x05100000 0x0400>;
+> +			clocks = <&ccu CLK_BUS_OTG>;
+> +			resets = <&ccu RST_BUS_OTG>;
+> +			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "mc";
+> +			phys = <&usbphy 0>;
+> +			phy-names = "usb";
+> +			extcon = <&usbphy 0>;
+> +			dr_mode = "otg";
+
+dr_mode should be set in the board .dts, so please remove that line
+from here.
+
+For the records: I checked the MMIO base addresses, clock and reset
+names and the IRQs against the manual: they all match.
+
+Cheers,
+Andre
+
+> +			status = "disabled";
+> +		};
+> +
+> +		ehci1: usb@5200000 {
+> +			compatible = "allwinner,sun50i-a100-ehci",
+> +				     "generic-ehci";
+> +			reg = <0x05200000 0x100>;
+> +			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_OHCI1>,
+> +				 <&ccu CLK_BUS_EHCI1>,
+> +				 <&ccu CLK_USB_OHCI1>;
+> +			resets = <&ccu RST_BUS_OHCI1>,
+> +				 <&ccu RST_BUS_EHCI1>;
+> +			phys = <&usbphy 1>;
+> +			phy-names = "usb";
+> +			status = "disabled";
+> +		};
+> +
+> +		ohci1: usb@5200400 {
+> +			compatible = "allwinner,sun50i-a100-ohci",
+> +				     "generic-ohci";
+> +			reg = <0x05200400 0x100>;
+> +			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_OHCI1>,
+> +				 <&ccu CLK_USB_OHCI1>;
+> +			resets = <&ccu RST_BUS_OHCI1>;
+> +			phys = <&usbphy 1>;
+> +			phy-names = "usb";
+> +			status = "disabled";
+> +		};
+> +
+>  		r_ccu: clock@7010000 {
+>  			compatible = "allwinner,sun50i-a100-r-ccu";
+>  			reg = <0x07010000 0x300>;
+
 
