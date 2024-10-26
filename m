@@ -1,306 +1,203 @@
-Return-Path: <linux-pm+bounces-16501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94F849B1826
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 14:32:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D73E39B1872
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 15:18:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B34DD1C22F90
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 12:32:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29789B22FD8
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 13:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CC91D8A1D;
-	Sat, 26 Oct 2024 12:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BB71D47A3;
+	Sat, 26 Oct 2024 13:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Qfv9I1rt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hQ4Ju955"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCEF1D88DB;
-	Sat, 26 Oct 2024 12:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD0A1E50B;
+	Sat, 26 Oct 2024 13:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729945893; cv=none; b=Af6XA/sPKvlTOY5+ZfrGT+OLR2Rm0jTMgNKZV3rJtlTE+gUzUWpX/sSjPHWv7OBzpIUQ6OE3uFaL1jZ/uamt9y+HrAm8igUKiWJgKFYldRQ3mGsrJOH3SeUgAvRrmQ764kpbMfWcm3OtIG3MKedf4QFKcffyVI7pb3dgSs354bA=
+	t=1729948690; cv=none; b=mvMJJUMME5+L7wTKhDdJfWLFavOwIkRGlu+ddmgna/uafdI7c7xWWWfiDqw+xMBZxnOdngi9GEf2Y8T8FaM+o5BN3vHB6OBnqByRhxb0moLorn0cRzcCecL1u5kLIRpNsOJmPsNgvlnB8uTPn5himP8Slm66wUggGeSqNDcnAfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729945893; c=relaxed/simple;
-	bh=SzF4iwg40Yk3LP9tn4obwKJli5odvfXDQ1SY7+sAlso=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iqH1/16dJhGZBBjk4NMVj5fhT8PN6WuFevseswm/ru6peX2U/hGylo6HeWT9IhR8bjShZmmzJUbaByKUPFDbxxAicBFxplhkjkg2ncfZTHmrx/KRfUuW0pg0Wc8oWz0zgcdG7HTRUjpKGyTSDQPPyTpeITQJ8xTasohgjSfxZq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qfv9I1rt; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49QCF2QF025985;
-	Sat, 26 Oct 2024 12:31:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	qVFx/90RmVLOtWhsHKk/Hl9TBJe/P3ThNnyz0IqJgQM=; b=Qfv9I1rt/1HsHJQ1
-	6DyC0GtXhAhbKbhVmi5dhu6C/siVUlkGUopDxxhofhN9e0HOZcv16+5YgpZ+jK3O
-	bteETOenEIstdyZM6caeN6Eg2R2F+t0/dhxedSRYeVfBgANJADkqtSzzfEKAW+OR
-	v3Zu5Ig0HVOUwmal+cAcT1NkRbAfllUjgAsWmDdyCmt4frxqV1TwN5riBdYLlAWf
-	9SZfMSR3/c3oldaLB+rWxFdcs0scaaf7DlL66HWWOrdECyxatLalYr6BnuwWqv5e
-	HNWBmVwmsTibKqUFSAvPq7I6dHMxBM2OYNxQRbcLPPF29NOGys+o9TJwxn8fOWg/
-	QFPj/w==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gqe5ryf9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 26 Oct 2024 12:31:27 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49QCVQQH025370
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 26 Oct 2024 12:31:26 GMT
-Received: from 55f3af46090c.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Sat, 26 Oct 2024 05:31:23 -0700
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>
-CC: Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2 3/3] interconnect: qcom: Add EPSS L3 support on SA8775P
-Date: Sat, 26 Oct 2024 12:30:58 +0000
-Message-ID: <20241026123058.28258-4-quic_rlaggysh@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241026123058.28258-1-quic_rlaggysh@quicinc.com>
-References: <20241026123058.28258-1-quic_rlaggysh@quicinc.com>
+	s=arc-20240116; t=1729948690; c=relaxed/simple;
+	bh=WjWsN0BbqZ+ckDcOfpUetYKweI82x5iGSxAhBNqAuDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K3eQOvX3FKaIXqKrn7BAZOiDoGj2k/97SIATH5qQhrUZ9aiX/uoA3HQTJ9FSBrDVGzLnjvoh8hbj5RZh8HEwBsUhOsK8ac4RsYDkKSRylTufp2QgHbWcSrmwCVovryeLGzG4iA9YkkKpiJIbCriuZcmS6f2woMJz1TOivNn8YqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hQ4Ju955; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729948688; x=1761484688;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WjWsN0BbqZ+ckDcOfpUetYKweI82x5iGSxAhBNqAuDg=;
+  b=hQ4Ju955V7LvNuc206+n31BmpmAZfR+51aqMm1BHK0x6suDBzPd7TDUw
+   3EJhfJ8sth7RybOPsI25hCoSbtEzu7J4jeSyN1xxBsxSCORuqd/fJLjp7
+   X3PYGuLg5iFZWthuLt4lLv18Dh9vjjjLad/6fWBkTmfxES+OKnIyngZRo
+   bYRbtVlhXvun43478BLH85lzMJL4ntBVCY5dngZ+IrIsk3mz/S/QZiWrZ
+   Q5RUwZQZMLWNGb1Jg7a3O6OYNdWh0bOTQEBbXTAW2kIdwwbV4jTNWHozN
+   IY9tTr3ipl8Livm9CTenHvMgUj1VSLbmJ18+QcGeTg0uA+EAgp2a0geD2
+   Q==;
+X-CSE-ConnectionGUID: EFYFuyXTTb6nqnc/hMYATg==
+X-CSE-MsgGUID: RUAGTXXiRo6pY9JkMEn5iA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40150235"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40150235"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 06:18:08 -0700
+X-CSE-ConnectionGUID: /OYILA24ToSvrqTwVHf5Wg==
+X-CSE-MsgGUID: hYG2gfQvT+Sl12TvfHhyzA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,235,1725346800"; 
+   d="scan'208";a="80813600"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Oct 2024 06:18:04 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4gg5-000Zge-2G;
+	Sat, 26 Oct 2024 13:18:01 +0000
+Date: Sat, 26 Oct 2024 21:17:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dzmitry Sankouski <dsankouski@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: Re: [PATCH v7 3/7] mfd: Add new driver for MAX77705 PMIC
+Message-ID: <202410262035.of6zMB8v-lkp@intel.com>
+References: <20241023-starqltechn_integration_upstream-v7-3-9bfaa3f4a1a0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yq5vSPbmG0wTkq7uma7gHXZ_s7H82JBg
-X-Proofpoint-ORIG-GUID: yq5vSPbmG0wTkq7uma7gHXZ_s7H82JBg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- phishscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410260106
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241023-starqltechn_integration_upstream-v7-3-9bfaa3f4a1a0@gmail.com>
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider support on
-SA8775P SoCs.
+Hi Dzmitry,
 
-Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
----
- drivers/interconnect/qcom/osm-l3.c | 86 ++++++++++++++++++++++--------
- 1 file changed, 64 insertions(+), 22 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-index 6a656ed44d49..7937e7c16c71 100644
---- a/drivers/interconnect/qcom/osm-l3.c
-+++ b/drivers/interconnect/qcom/osm-l3.c
-@@ -1,16 +1,19 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-  */
- 
- #include <linux/args.h>
- #include <linux/bitfield.h>
- #include <linux/clk.h>
-+#include <linux/idr.h>
- #include <linux/interconnect-provider.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- 
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
-@@ -34,9 +37,14 @@
- 
- #define OSM_L3_MAX_LINKS		1
- 
-+#define OSM_L3_NODE_ID_START		10000
-+#define OSM_NODE_NAME_SUFFIX_SIZE	10
-+
- #define to_osm_l3_provider(_provider) \
- 	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
- 
-+static DEFINE_IDA(osm_l3_id);
-+
- struct qcom_osm_l3_icc_provider {
- 	void __iomem *base;
- 	unsigned int max_state;
-@@ -55,46 +63,40 @@ struct qcom_osm_l3_icc_provider {
-  */
- struct qcom_osm_l3_node {
- 	const char *name;
--	u16 links[OSM_L3_MAX_LINKS];
-+	const char *links[OSM_L3_MAX_LINKS];
- 	u16 id;
- 	u16 num_links;
- 	u16 buswidth;
- };
- 
- struct qcom_osm_l3_desc {
--	const struct qcom_osm_l3_node * const *nodes;
-+	struct qcom_osm_l3_node * const *nodes;
- 	size_t num_nodes;
- 	unsigned int lut_row_size;
- 	unsigned int reg_freq_lut;
- 	unsigned int reg_perf_state;
- };
- 
--enum {
--	OSM_L3_MASTER_NODE = 10000,
--	OSM_L3_SLAVE_NODE,
--};
--
--#define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
--	static const struct qcom_osm_l3_node _name = {			\
-+#define DEFINE_QNODE(_name, _buswidth, ...)				\
-+	static struct qcom_osm_l3_node _name = {			\
- 		.name = #_name,						\
--		.id = _id,						\
- 		.buswidth = _buswidth,					\
- 		.num_links = COUNT_ARGS(__VA_ARGS__),			\
--		.links = { __VA_ARGS__ },				\
-+		__VA_OPT__(.links = { #__VA_ARGS__ })			\
- 	}
- 
--DEFINE_QNODE(osm_l3_master, OSM_L3_MASTER_NODE, 16, OSM_L3_SLAVE_NODE);
--DEFINE_QNODE(osm_l3_slave, OSM_L3_SLAVE_NODE, 16);
-+DEFINE_QNODE(osm_l3_master, 16, osm_l3_slave);
-+DEFINE_QNODE(osm_l3_slave, 16);
- 
--static const struct qcom_osm_l3_node * const osm_l3_nodes[] = {
-+static struct qcom_osm_l3_node * const osm_l3_nodes[] = {
- 	[MASTER_OSM_L3_APPS] = &osm_l3_master,
- 	[SLAVE_OSM_L3] = &osm_l3_slave,
- };
- 
--DEFINE_QNODE(epss_l3_master, OSM_L3_MASTER_NODE, 32, OSM_L3_SLAVE_NODE);
--DEFINE_QNODE(epss_l3_slave, OSM_L3_SLAVE_NODE, 32);
-+DEFINE_QNODE(epss_l3_master, 32, epss_l3_slave);
-+DEFINE_QNODE(epss_l3_slave, 32);
- 
--static const struct qcom_osm_l3_node * const epss_l3_nodes[] = {
-+static struct qcom_osm_l3_node * const epss_l3_nodes[] = {
- 	[MASTER_EPSS_L3_APPS] = &epss_l3_master,
- 	[SLAVE_EPSS_L3_SHARED] = &epss_l3_slave,
- };
-@@ -123,6 +125,19 @@ static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
- 	.reg_perf_state = EPSS_REG_L3_VOTE,
- };
- 
-+static u16 get_node_id_by_name(const char *node_name,
-+			       const struct qcom_osm_l3_desc *desc)
-+{
-+	struct qcom_osm_l3_node *const *nodes = desc->nodes;
-+	int i;
-+
-+	for (i = 0; i < desc->num_nodes; i++) {
-+		if (!strcmp(nodes[i]->name, node_name))
-+			return nodes[i]->id;
-+	}
-+	return 0;
-+}
-+
- static int qcom_osm_l3_set(struct icc_node *src, struct icc_node *dst)
- {
- 	struct qcom_osm_l3_icc_provider *qp;
-@@ -164,10 +179,11 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 	const struct qcom_osm_l3_desc *desc;
- 	struct icc_onecell_data *data;
- 	struct icc_provider *provider;
--	const struct qcom_osm_l3_node * const *qnodes;
-+	struct qcom_osm_l3_node * const *qnodes;
- 	struct icc_node *node;
- 	size_t num_nodes;
- 	struct clk *clk;
-+	u64 addr;
- 	int ret;
- 
- 	clk = clk_get(&pdev->dev, "xo");
-@@ -188,6 +204,10 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 	if (!qp)
- 		return -ENOMEM;
- 
-+	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
-+	if (ret)
-+		return ret;
-+
- 	qp->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(qp->base))
- 		return PTR_ERR(qp->base);
-@@ -242,8 +262,13 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 
- 	icc_provider_init(provider);
- 
-+	/* Allocate unique id for qnodes */
-+	for (i = 0; i < num_nodes; i++)
-+		qnodes[i]->id = ida_alloc_min(&osm_l3_id, OSM_L3_NODE_ID_START, GFP_KERNEL);
-+
- 	for (i = 0; i < num_nodes; i++) {
--		size_t j;
-+		char *node_name;
-+		size_t j, len;
- 
- 		node = icc_node_create(qnodes[i]->id);
- 		if (IS_ERR(node)) {
-@@ -251,13 +276,29 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 			goto err;
- 		}
- 
--		node->name = qnodes[i]->name;
-+		/* len = strlen(node->name) + @ + 8 (base-address) + NULL */
-+		len = strlen(qnodes[i]->name) + OSM_NODE_NAME_SUFFIX_SIZE;
-+		node_name = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-+		if (!node_name) {
-+			ret = -ENOMEM;
-+			goto err;
-+		}
-+
-+		snprintf(node_name, len, "%s@%08llx", qnodes[i]->name, addr);
-+		node->name = node_name;
-+
- 		/* Cast away const and add it back in qcom_osm_l3_set() */
- 		node->data = (void *)qnodes[i];
- 		icc_node_add(node, provider);
- 
--		for (j = 0; j < qnodes[i]->num_links; j++)
--			icc_link_create(node, qnodes[i]->links[j]);
-+		for (j = 0; j < qnodes[i]->num_links; j++) {
-+			u16 link_node_id = get_node_id_by_name(qnodes[i]->links[j], desc);
-+
-+			if (link_node_id)
-+				icc_link_create(node, link_node_id);
-+			else
-+				goto err;
-+		}
- 
- 		data->nodes[i] = node;
- 	}
-@@ -277,6 +318,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 
- static const struct of_device_id osm_l3_of_match[] = {
- 	{ .compatible = "qcom,epss-l3", .data = &epss_l3_l3_vote },
-+	{ .compatible = "qcom,epss-l3-perf", .data = &epss_l3_perf_state },
- 	{ .compatible = "qcom,osm-l3", .data = &osm_l3 },
- 	{ .compatible = "qcom,sc7180-osm-l3", .data = &osm_l3 },
- 	{ .compatible = "qcom,sc7280-epss-l3", .data = &epss_l3_perf_state },
+[auto build test WARNING on 63b3ff03d91ae8f875fe8747c781a521f78cde17]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/power-supply-add-undervoltage-health-status-property/20241024-034645
+base:   63b3ff03d91ae8f875fe8747c781a521f78cde17
+patch link:    https://lore.kernel.org/r/20241023-starqltechn_integration_upstream-v7-3-9bfaa3f4a1a0%40gmail.com
+patch subject: [PATCH v7 3/7] mfd: Add new driver for MAX77705 PMIC
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20241026/202410262035.of6zMB8v-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410262035.of6zMB8v-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410262035.of6zMB8v-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/mfd/max77705.c: In function 'max77705_i2c_probe':
+>> drivers/mfd/max77705.c:107:12: warning: variable 'pmic_ver' set but not used [-Wunused-but-set-variable]
+     107 |         u8 pmic_ver, pmic_rev;
+         |            ^~~~~~~~
+
+
+vim +/pmic_ver +107 drivers/mfd/max77705.c
+
+    99	
+   100	static int max77705_i2c_probe(struct i2c_client *i2c)
+   101	{
+   102		struct max77693_dev *max77705;
+   103		struct regmap_irq_chip_data *irq_data;
+   104		struct irq_domain *domain;
+   105		int ret;
+   106		unsigned int pmic_rev_value;
+ > 107		u8 pmic_ver, pmic_rev;
+   108	
+   109	
+   110		max77705 = devm_kzalloc(&i2c->dev, sizeof(*max77705), GFP_KERNEL);
+   111		if (!max77705)
+   112			return -ENOMEM;
+   113	
+   114		max77705->i2c = i2c;
+   115		max77705->dev = &i2c->dev;
+   116		max77705->irq = i2c->irq;
+   117		max77705->type = TYPE_MAX77705;
+   118		i2c_set_clientdata(i2c, max77705);
+   119	
+   120		max77705->regmap = devm_regmap_init_i2c(i2c, &max77705_regmap_config);
+   121	
+   122		if (IS_ERR(max77705->regmap))
+   123			return PTR_ERR(max77705->regmap);
+   124	
+   125		if (regmap_read(max77705->regmap, MAX77705_PMIC_REG_PMICREV, &pmic_rev_value) < 0)
+   126			return -ENODEV;
+   127	
+   128		pmic_rev = pmic_rev_value & MAX77705_REVISION_MASK;
+   129		pmic_ver = (pmic_rev_value & MAX77705_VERSION_MASK) >> MAX77705_VERSION_SHIFT;
+   130	
+   131		if (pmic_rev != MAX77705_PASS3) {
+   132			dev_err(max77705->dev, "rev.0x%x is not tested",
+   133				pmic_rev);
+   134			return -ENODEV;
+   135		}
+   136	
+   137		max77705->regmap_leds = devm_regmap_init_i2c(i2c, &max77705_leds_regmap_config);
+   138	
+   139		if (IS_ERR(max77705->regmap_leds))
+   140			return PTR_ERR(max77705->regmap_leds);
+   141	
+   142		ret = devm_regmap_add_irq_chip(max77705->dev, max77705->regmap,
+   143						max77705->irq,
+   144						IRQF_ONESHOT | IRQF_SHARED, 0,
+   145						&max77705_topsys_irq_chip,
+   146						&irq_data);
+   147	
+   148		if (ret)
+   149			dev_err(max77705->dev, "failed to add irq chip: %d\n", ret);
+   150	
+   151		/* Unmask interrupts from all blocks in interrupt source register */
+   152		ret = regmap_update_bits(max77705->regmap,
+   153					 MAX77705_PMIC_REG_INTSRC_MASK,
+   154					 MAX77705_SRC_IRQ_ALL, (unsigned int)~MAX77705_SRC_IRQ_ALL);
+   155	
+   156		if (ret < 0) {
+   157			dev_err(max77705->dev,
+   158				"Could not unmask interrupts in INTSRC: %d\n", ret);
+   159			return ret;
+   160		}
+   161	
+   162		domain = regmap_irq_get_domain(irq_data);
+   163	
+   164		ret = devm_mfd_add_devices(max77705->dev, PLATFORM_DEVID_NONE,
+   165					   max77705_devs, ARRAY_SIZE(max77705_devs),
+   166					   NULL, 0, domain);
+   167	
+   168		if (ret) {
+   169			dev_err(max77705->dev, "Failed to register child devices: %d\n", ret);
+   170			return ret;
+   171		}
+   172	
+   173		device_init_wakeup(max77705->dev, true);
+   174	
+   175		return 0;
+   176	}
+   177	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
