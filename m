@@ -1,139 +1,194 @@
-Return-Path: <linux-pm+bounces-16510-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16511-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1652C9B1B2E
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2024 00:07:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BD9C9B1C21
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2024 05:27:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0854B2820ED
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Oct 2024 22:07:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82F801C20F1F
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2024 04:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10C011D7985;
-	Sat, 26 Oct 2024 22:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31F224B29;
+	Sun, 27 Oct 2024 04:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cWgH5o4q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WfdX3s+3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE9A1D433F
-	for <linux-pm@vger.kernel.org>; Sat, 26 Oct 2024 22:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E70748A;
+	Sun, 27 Oct 2024 04:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729980415; cv=none; b=hz1UVyR5HCYwNZVAJ4c/BCeA0mqjdehUzLuCRnrHqUt2CXJsl2FUTOHFwPu6HeM7epLS9qoBCYTjNXpLI2hPtyxmdoLmmerP9VZt5T1sISicoS/za28lG00T3YS4oRqFwnmFlSvtMzaxcTFZvBM2fItQ3IrZG+Ys342l58pH8Fk=
+	t=1730003239; cv=none; b=IgTbRbwzijJb61ab4BGikrfdfIZfEroLNdes9+uqHRs8yHlWw4DO9+bTETZFAobS8qeRG/3yRfQHrMcLG3L9eSPacSQf178GBzI8C+ZvcR9zgN4yC4B0IaFYs1gv/1GvDbOBWQgqxlibZ87VAKpX01hFv8U4rcEH3cXB7rriG3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729980415; c=relaxed/simple;
-	bh=Qk+Ym3r4idGhAciZpP7bsiKTyVIiplWBdohnK11zScs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uyC8pTDSfdtDRw293qq79MrFUnJVLHJ5HHSf17dShpaw4DI3Or+oEoCdnD77yYJ08U4fiOOC300rQzH+F3myyQ7x2e67couIJewFyn7cF5f5OurzETWpTcrjswkOvusE7fZWotFlrQnxHPXLVXg9WAPkTkzMwOQubzWvqcu5vHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cWgH5o4q; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539f72c913aso3998160e87.1
-        for <linux-pm@vger.kernel.org>; Sat, 26 Oct 2024 15:06:53 -0700 (PDT)
+	s=arc-20240116; t=1730003239; c=relaxed/simple;
+	bh=ErZvRMNFTC1JtfD7DlH7USWk//QvBMg14jI626yimY0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gThQHC1IshJVNMVg/Or1thMunSF/OdHyKpigIfECqTz5RMMVWITw7Nx5cX82FysW+ot+1WfY3zT6NZIV/eM2pHdo97n8w+U+bhcJe8cP8M/q4NPd8DYT71cTP0SHexomMkldiC4wW06Zez7YxRGSI7WG8PqGcko7X9SFJn4Wo/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WfdX3s+3; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-288d74b3a91so1859818fac.0;
+        Sat, 26 Oct 2024 21:27:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729980412; x=1730585212; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tOM+10PF/WmAi5lL2avU0Yl3SxRZGyUCdHnkMKWAqls=;
-        b=cWgH5o4qrWL3p1KrYmMXecOv9I1dICMDk8NWlRAZdCwT9V3deUKT0RbONcOTTeR2Ee
-         KuZqIJvYfuuDeTpnSL/34q0Y+f96Reg6x08c/gbPfo65Rvei1WWk04oVKtRGdNAufbRP
-         S8aq9TfacrNsTi//ENil6pz5FCrS9IRYGHxm/0/tublbMhyTxrLQ3onT6Dg8aUEZJYSz
-         quAb2hdRh9DwXp9cM1CEG4x5pegN9P+7RmB1r8v8gXcr17yB/EPz8DtrAqPHBs31USN+
-         V7RuPiGuStpazvynvTWZqDLhtPryywN0eX40RJONW6jMQjdCMyz+I4wK+J5Fp4YaJqYC
-         5ruQ==
+        d=gmail.com; s=20230601; t=1730003236; x=1730608036; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C3ERsECHBxHLHOagymcD1zigsnGkXaBUgS4zAFSQOKA=;
+        b=WfdX3s+3wbipy+0lXQVjpjgpKgWPMR4M5wuhcal8T1/WcCb+JxLcixc/Ec2eg46SOD
+         NcnVCvL7xNZuzF4XJU5rZuaWJp/INw76D3/p6st/ScM6SEGGr6B0eOtqKGu1kPNJDLxm
+         PGGgDjZHVjVMONELSWpcLKN+3ZmZDeiwaQ0zmh1aypa8VGG7tx8QsJfwTjywErXXitr6
+         iiANh9Zzr8Qpyw1M2rLDI83jduNAbZeNy20SqHP7k2l8duHolg2lOmjUSRU9HiQoxlBv
+         KgtQzJVOd7nFiOO1vncvTT4DcbZYiAczel977PMXXxIKBisG7+OsLm/iW+H37yQd0Fw4
+         SjzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729980412; x=1730585212;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tOM+10PF/WmAi5lL2avU0Yl3SxRZGyUCdHnkMKWAqls=;
-        b=Hmiyb5j3tdgZrGzEAZvrLr2DEq4uI7f+dxMp9fJYnldYhefs6Qx3cDJL8iu6OsgQ/G
-         GM49wEFczes639clZpDwMsZejK4r33zd6PRZI2EVZZ8FMt27tIaMdQzSnqVjGTDrPwJ6
-         uD42pK9apiKA3KtzbwN5y4Jl6xZEwoxz35miTUDx4mhUpDpeAaDxrP4UbrG7R8kfDBZd
-         Hy14u3ajba6R9BUEJ+WpZib6qMeQxhDesrlad6s5w+0rOIwKO+PpLSx6elYxkErP5/Mc
-         Ljwng7DARr95X6uYm6EtfPx+Z+mc+Cn+ex2gAMrc6UjsIwsGHJ/glzXNMBj+eztynEr1
-         J/lg==
-X-Gm-Message-State: AOJu0YwFbeLDmpnokNXFH98AurJbX4Vy1VbqsQ6ZOLSuZyhXb/1O8Wyd
-	eUG89aB9dSITwsq5dc5a9TO5akvRdp3YRS+eAZaV8kRTAZ63iZUaEjwrOCWxXK8=
-X-Google-Smtp-Source: AGHT+IFqXIUCrEouhmNIe2IAeVWXodGBWIcK1wDbnM7SxIbeemoRpF+Rf1EelR/INMrqzQVMhiO6iw==
-X-Received: by 2002:a05:6512:1092:b0:53b:20a1:1c4a with SMTP id 2adb3069b0e04-53b34a19077mr1300774e87.42.1729980411578;
-        Sat, 26 Oct 2024 15:06:51 -0700 (PDT)
-Received: from [127.0.1.1] (2001-14ba-a0c3-3a00-70b-e6fc-b322-6a1b.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:70b:e6fc:b322:6a1b])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e12495fsm609694e87.93.2024.10.26.15.06.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Oct 2024 15:06:50 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 27 Oct 2024 01:06:50 +0300
-Subject: [PATCH] dt-bindings: thermal: qcom-tsens: add SAR2130P compatible
+        d=1e100.net; s=20230601; t=1730003236; x=1730608036;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C3ERsECHBxHLHOagymcD1zigsnGkXaBUgS4zAFSQOKA=;
+        b=Wi2yXftrBYPUarmkPhPt67kqq4K+UN0nWPVeFTKyFcVM+lVz4T82jUMzqPaF6fwg8y
+         f3iuWEZlWyfYKcEJsD3wMRKfXC8f2zJKKNjW9stvLOKWcFOgIm1e5HlrODiHqoKii1DJ
+         omyXWuv0wDcYpADzo0hOicxsPQABfdPoDpcUicJ/snKwHTpBpy6YyJByEI/DZzxfiGbo
+         Ermh+k0CbzV6QqF6mik+99etSU8iqUW1FCFEyXiA/+RV30ER7vnBfkgZbgC1U0/ySHJb
+         ZFVjP3y4HlALEWMYWZjxWyxNprbBqcOJaOYTjvDJRjePP9AYiMm+kEK6GFnhCaCsePaw
+         VgnA==
+X-Forwarded-Encrypted: i=1; AJvYcCWx+q3vtGkKlW8/3QuhBWPg+OJtF8Rh6A8l2lF9eEmngGPog/+is4HkhcUA4CyaNvDFtrfkdjL4MgbfT1U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWk8Zs33Inx34tjLPzUFRcurAiT462RQdeWy1nd07QoU0CO1lv
+	zIYu6Ah7cKJ55dMm4RvEFfPimmDGHiYGDLRhw+NuWPH9P3z43BIh
+X-Google-Smtp-Source: AGHT+IGXRBRB5XvgbPVCdvrKM/2Xm5Yc7Cnlexf8ner2J6xCeCzsnPKJydgFYdf7iYsje5aK7U7n4Q==
+X-Received: by 2002:a05:6871:29a:b0:27c:4f04:a1f1 with SMTP id 586e51a60fabf-29051dc7c23mr3209798fac.32.1730003236452;
+        Sat, 26 Oct 2024 21:27:16 -0700 (PDT)
+Received: from ?IPV6:2607:fb91:1219:44f1:b4e8:dada:a078:b601? ([2607:fb91:1219:44f1:b4e8:dada:a078:b601])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7186189e28esm1005170a34.61.2024.10.26.21.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Oct 2024 21:27:15 -0700 (PDT)
+Message-ID: <5cfc19d6-e171-4049-ad00-5f8474051c9b@gmail.com>
+Date: Sat, 26 Oct 2024 23:27:13 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241027-sar2130p-tsens-v1-1-8dee27fc02ae@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAPlnHWcC/x3MMQqAMAxA0atIZgNtrIheRRyqjZqlSiMiFO9uc
- XzD/xmUk7DCUGVIfIvKEQtsXcGy+7gxSigGMuSsoQ7VJ7KNOfFSjorGzp5DF3pqHZToTLzK8w/
- H6X0/IPzGEmAAAAA=
-X-Change-ID: 20241027-sar2130p-tsens-01baed7d9254
-To: Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1072;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=Qk+Ym3r4idGhAciZpP7bsiKTyVIiplWBdohnK11zScs=;
- b=owEBbQKS/ZANAwAKARTbcu2+gGW4AcsmYgBnHWf6mTz0zWDiICzFH4N0zto4bPF3f6sAzes+J
- XJFAS1sVdKJAjMEAAEKAB0WIQRdB85SOKWMgfgVe+4U23LtvoBluAUCZx1n+gAKCRAU23LtvoBl
- uCH7D/0V+hJBZfrarejumuOfdJDmdZ/BLJzTPTcA/73iOfbTIqt8uDg9Lqdhpkz3E0HhWZG/RAs
- r8lvWB7D10APc1qG6aJymiv6MOmjXQvG9kptkTKaG32pUJPG1MilDrH/SRDOB2ipE8pw+frsi71
- UcmCkQbIJm2uvExu770/sa8BLpubCDgMi4Ftxgo2qMMwV4vSiD2bs1fEjdST5Fdif8kwdB9JmvG
- B/R3aU5R5CSPGmYwVbG7cg9/Q1+8H2/RqDfggD5193HJ+42oYcb7BGhANKQGYS3iHe8QAuHr2Df
- a2VZDartX8mP7IZqtdDuqJ0Ttu/TV5k9DQuIGR+iESiUXuKtbAf3aynwd+BV8gb0zEoIGeYef+S
- WfE/oE3MuqTuxyfDo69JWvz0PW4yYL/xMHNCscBlAG5Jo6mmaqmohyAb8saKcoJEbWfbogvtDQb
- qpfKODaxHBZxux6KeYXuxzKnYqwQObPb+d+n7VUyz4HX6oZNcP7cR6I/GTb4BqLxNg1wEOqRt7H
- VjrtiPTHsp/El3QvupT8R06U4ZMspjLIzecHbfCiMGTs4iXNfHEH8A88RyJQDUi6+b/k8eWJF2+
- ewAtjX5SiPswnaL/ZqK3jZEma+adVGQZd+gtURxLcd759VcNeUkuv1MdXwzL2w3ce7gbNcu0NZY
- n4nolVfjiu93jLA==
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] cpufreq/amd-pstate: Remove the redundant
+ amd_pstate_set_driver() call
+To: Klara Modin <klarasmodin@gmail.com>,
+ Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>, gautham.shenoy@amd.com,
+ mario.limonciello@amd.com, perry.yuan@amd.com, rafael@kernel.org,
+ viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, klara@kasm.eu
+References: <20241017100528.300143-1-Dhananjay.Ugwekar@amd.com>
+ <20241017100528.300143-5-Dhananjay.Ugwekar@amd.com>
+ <cf9c146d-bacf-444e-92e2-15ebf513af96@gmail.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@gmail.com>
+In-Reply-To: <cf9c146d-bacf-444e-92e2-15ebf513af96@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Document compatible for thermal sensors on Qualcomm SAR2130P platform.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index a12fddc8195500a0e7bdd51952a558890b35935c..30430b8ea1e866185107ba017a77bd40de68ef90 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -53,6 +53,7 @@ properties:
-               - qcom,qcm2290-tsens
-               - qcom,sa8255p-tsens
-               - qcom,sa8775p-tsens
-+              - qcom,sar2130p-tsens
-               - qcom,sc7180-tsens
-               - qcom,sc7280-tsens
-               - qcom,sc8180x-tsens
+On 10/26/24 06:58, Klara Modin wrote:
+> Hi,
+> 
+> On 2024-10-17 12:05, Dhananjay Ugwekar wrote:
+>> amd_pstate_set_driver() is called twice, once in amd_pstate_init() and 
+>> once
+>> as part of amd_pstate_register_driver(). Move around code and eliminate
+>> the redundancy.
+>>
+>> Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+>> ---
+>>   drivers/cpufreq/amd-pstate.c | 12 ++++--------
+>>   1 file changed, 4 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+>> index 13ee5cac901d..6f6d961879cc 100644
+>> --- a/drivers/cpufreq/amd-pstate.c
+>> +++ b/drivers/cpufreq/amd-pstate.c
+>> @@ -1848,9 +1848,11 @@ static int __init amd_pstate_init(void)
+>>           return -ENODEV;
+>>       }
+>> -    ret = amd_pstate_set_driver(cppc_state);
+>> -    if (ret)
+>> +    ret = amd_pstate_register_driver(cppc_state);
+>> +    if (ret) {
+>> +        pr_err("failed to register with return %d\n", ret);
+>>           return ret;
+>> +    }
+>>       /* capability check */
+>>       if (cpu_feature_enabled(X86_FEATURE_CPPC)) {
+>> @@ -1870,12 +1872,6 @@ static int __init amd_pstate_init(void)
+>>               return ret;
+>>       }
+>> -    ret = amd_pstate_register_driver(cppc_state);
+>> -    if (ret) {
+>> -        pr_err("failed to register with return %d\n", ret);
+>> -        return ret;
+>> -    }
+>> -
+>>       dev_root = bus_get_dev_root(&cpu_subsys);
+>>       if (dev_root) {
+>>           ret = sysfs_create_group(&dev_root->kobj, 
+>> &amd_pstate_global_attr_group);
+> 
+> 
+> This seems to break boot on my Zen 2 desktop (my Zen 4 laptop is fine, 
+> however). I don't see any messages on the console and nothing shows up 
+> in the pstore either.
+> 
+> I'll attach the kernel log from a normal boot (with the patch reverted) 
+> in case it helps.
+> 
+> Please let me know if there's anything else you need.
+> 
+> Regards,
+> Klara Modin
 
----
-base-commit: a39230ecf6b3057f5897bc4744a790070cfbe7a8
-change-id: 20241027-sar2130p-tsens-01baed7d9254
+Hi,
 
-Best regards,
--- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Thanks for reporting.  I think this might be a regression on shared 
+memory designs specifically because static calls weren't updated yet.
+
+Can you try this below diff?
+
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 206725219d8c9..2f0e29b05963d 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -1857,12 +1857,6 @@ static int __init amd_pstate_init(void)
+                 return -ENODEV;
+         }
+
+-       ret = amd_pstate_register_driver(cppc_state);
+-       if (ret) {
+-               pr_err("failed to register with return %d\n", ret);
+-               return ret;
+-       }
+-
+         /* capability check */
+         if (cpu_feature_enabled(X86_FEATURE_CPPC)) {
+                 pr_debug("AMD CPPC MSR based functionality is 
+supported\n");
+@@ -1881,6 +1875,12 @@ static int __init amd_pstate_init(void)
+                         return ret;
+         }
+
++       ret = amd_pstate_register_driver(cppc_state);
++       if (ret) {
++               pr_err("failed to register with return %d\n", ret);
++               return ret;
++       }
++
+         dev_root = bus_get_dev_root(&cpu_subsys);
+         if (dev_root) {
+                 ret = sysfs_create_group(&dev_root->kobj, 
+&amd_pstate_global_attr_group);
 
 
