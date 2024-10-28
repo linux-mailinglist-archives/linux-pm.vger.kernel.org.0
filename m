@@ -1,91 +1,126 @@
-Return-Path: <linux-pm+bounces-16563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16564-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8A1C9B2D31
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 11:45:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0CF39B2D4B
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 11:50:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D2582818E0
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 10:45:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F07BB1C21389
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 10:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE361D54D1;
-	Mon, 28 Oct 2024 10:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F591D3648;
+	Mon, 28 Oct 2024 10:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VGtDN4rC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BBCC1D460B;
-	Mon, 28 Oct 2024 10:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642111CF2A3;
+	Mon, 28 Oct 2024 10:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730112301; cv=none; b=qv+6zJ565NQj9OYEABn+K6hHWgrOusK1+f1sV+LmyxLX9LOQNnvXbVCYFQlE/4rrHg8sMf2eqjPMfQaX7b4j/r94fT/rzJZ+A3zmnlqYxnj2xrMRHAI+1wgkFxWHmYNcl3Exm8fMfg1F3RHG2JU/NE7g4vPLp1xX7J6BSEQHqiA=
+	t=1730112600; cv=none; b=BMJ44OHbzBy4BmUkYQMn/Uk/Yi7vuXjQ5ere5IFmCZMrjxufiFNHqabZmYb2o4qMGtPROSSzPCSjMFQ4r6XmmnwyKQepN0JFqBmrP7t0Ggp3H4GoDOSDq8tK+foM7mrlg3e8aEPr4Ijo5BFBIrsAtJpGTf2PjZINnS0IHV37ewU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730112301; c=relaxed/simple;
-	bh=nPQSkTwYV8GatkxX8yrqRH94Km4B8yS/qcv7O7i6WnQ=;
+	s=arc-20240116; t=1730112600; c=relaxed/simple;
+	bh=5gcR1znD1cGAtY6UrFbxboTgffk6OVdycQmErW5b3Qg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oa/0oBnZKYnIHkfDPKXEfBTk7dKvyJgOnOjJoyXpdgEKO9n7AmTGb+W5aOAsPeLTz1XMN73NtpStlbwgbMT93O7+6bB3Twk56HxOxXNCgssV3z1M7kGShatEe3sxZNqSE1Ob7ljdXuJEk5SvnmE3XHZhfym99S9ITvM7BeToLcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6DD6497;
-	Mon, 28 Oct 2024 03:45:24 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 862603F73B;
-	Mon, 28 Oct 2024 03:44:52 -0700 (PDT)
-Date: Mon, 28 Oct 2024 10:44:50 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: David Dai <davidai@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Quentin Perret <qperret@google.com>,
-	Masami Hiramatsu <mhiramat@google.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Pavan Kondeti <quic_pkondeti@quicinc.com>,
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
-	kernel-team@android.com, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/2] cpufreq: add virtual-cpufreq driver
-Message-ID: <Zx9rIjen30ArZd6k@bogus>
-References: <20240919000837.1004642-1-davidai@google.com>
- <20240919000837.1004642-3-davidai@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=N3KOWTatGrUSa18MG502us5umDmcQrteZ76yvL8uTBcfUP3lhNno/NFh/wdt1S1OTai0DyHixIc0X/hZaFY1OphklS2XwnAWU1ZZkrkENfSKFzOAo9slCm6LRtol6DxhONRy3QfBj27O33A0XnF48ekBY1yyzOTTgDTFI++vDKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VGtDN4rC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D388C4CEC3;
+	Mon, 28 Oct 2024 10:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730112599;
+	bh=5gcR1znD1cGAtY6UrFbxboTgffk6OVdycQmErW5b3Qg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VGtDN4rCB75s5s0aUagy+xt8qdgqkWDO7bcJSQo6NCniEXIl6De1+xQqmvmZKTMNu
+	 5pVmauCmMVuEgflzUrOepb/hIPUuq75qgoMLTlveFBuqPH96Btsbw0hhIqRvQW0cWi
+	 nkB+O7GV66nyRa7n0kUzql9jEPjVoB/Mk+JL/ToAybXnCb+Tm8TWc4Wmts02N7rcjw
+	 L3ns2Nn+j8o6kto65VgI862il+H/dP24X51QrlRMsGk3LHOLJcWcM7J3VT3M7a+9Ik
+	 bpBkonJL4OdxoMJMg03+WCJfi+QG5W3itXVJomovKxkqYjb+4CV8qhyJXWTjEJl7cX
+	 7AoRu5HYBGSmw==
+Date: Mon, 28 Oct 2024 11:49:57 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com, 
+	Andrey Smirnov <andrew.smirnov@gmail.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Conor Dooley <conor+dt@kernel.org>, David Airlie <airlied@gmail.com>, 
+	Fabio Estevam <festevam@gmail.com>, Inki Dae <inki.dae@samsung.com>, 
+	Jagan Teki <jagan@amarulasolutions.com>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jessica Zhang <quic_jesszhan@quicinc.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lucas Stach <l.stach@pengutronix.de>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Marek Vasut <marex@denx.de>, Michael Trimarchi <michael@amarulasolutions.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Peng Fan <peng.fan@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Rob Herring <robh@kernel.org>, Robert Foss <rfoss@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+	Shengjiu Wang <shengjiu.wang@nxp.com>, Simona Vetter <simona@ffwll.ch>, Stefan Agner <stefan@agner.ch>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH 00/10] Support simple-framebuffer on imx8m
+Message-ID: <20241028-scrupulous-paper-condor-0742fb@houat>
+References: <20241028102559.1451383-1-dario.binacchi@amarulasolutions.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="mpcp65bzqsipkaam"
 Content-Disposition: inline
-In-Reply-To: <20240919000837.1004642-3-davidai@google.com>
+In-Reply-To: <20241028102559.1451383-1-dario.binacchi@amarulasolutions.com>
 
-On Wed, Sep 18, 2024 at 05:08:33PM -0700, David Dai wrote:
-> Introduce a virtualized cpufreq driver for guest kernels to improve
-> performance and power of workloads within VMs.
-> 
-> This driver does two main things:
-> 
-> 1. Sends the frequency of vCPUs as a hint to the host. The host uses the
-> hint to schedule the vCPU threads and decide physical CPU frequency.
-> 
-> 2. If a VM does not support a virtualized FIE(like AMUs), it queries the
-> host CPU frequency by reading a MMIO region of a virtual cpufreq device
-> to update the guest's frequency scaling factor periodically. This enables
-> accurate Per-Entity Load Tracking for tasks running in the guest.
->
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+--mpcp65bzqsipkaam
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [RFC PATCH 00/10] Support simple-framebuffer on imx8m
+MIME-Version: 1.0
 
--- 
-Regards,
-Sudeep
+Hi,
+
+On Mon, Oct 28, 2024 at 11:25:23AM +0100, Dario Binacchi wrote:
+> This series is the Linux counterpart of what was sent to U-Boot [1]
+> for the support of the simple-framebuffer for the BSH SMM S2Pro board.
+
+I'm confused. simple-framebuffer is a mechanism for which the entire
+point is that the kernel doesn't need the driver for.
+
+Why do you need to have patches for bridges and panels for
+simple-framebuffer? They won't be used.
+
+> The need to avoid re-initializing the hardware (power domains,
+> controllers, bridges, display panels) that has already been initialized
+> and kept powered on by the bootloader has required updating more than
+> one YAML file, with the addition of boolean properties to inform the
+> driver that the corresponding hardware has been initialized and left
+> on by the bootloader. All these properties are added on the fly by the
+> bootloader to the various relevant nodes.
+
+So it's not about simple-framebuffer at all, but rather that you don't
+want to re-initialize the hardware that has already been setup?
+
+If so, this isn't how you should do it, but rather:
+https://lore.kernel.org/all/CAKMK7uHtqHy_oz4W7F+hmp9iqp7W5Ra8CxPvJ=9BwmvfU-O0gg@mail.gmail.com/
+
+Maxime
+
+--mpcp65bzqsipkaam
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZx9sUAAKCRAnX84Zoj2+
+dmtQAX9wVFF++uMLanShp1lqMmKbCAPRFsgHbuZ+e7vfogD2WBD/EF768xzbQaKx
+8geIGicBgLRVa5ByCU/nhpBq9G9w4jzWcQ3tuYcJYH2sUP44PdFel9LS9HcmKc2G
+pooK6h9HIg==
+=7XGK
+-----END PGP SIGNATURE-----
+
+--mpcp65bzqsipkaam--
 
