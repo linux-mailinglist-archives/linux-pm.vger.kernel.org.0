@@ -1,60 +1,91 @@
-Return-Path: <linux-pm+bounces-16549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F5F69B22A0
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 03:13:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97B7C9B238F
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 04:39:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E61A71F20C1A
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 02:13:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5E421C20FA2
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 03:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC3E16CD35;
-	Mon, 28 Oct 2024 02:13:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6870B83A18;
+	Mon, 28 Oct 2024 03:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="fu++dFLr"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="XCmbdrT3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E1F433C9;
-	Mon, 28 Oct 2024 02:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704121EA91
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 03:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730081629; cv=none; b=PYhNUuALmpXvYC7OE84729Ctglz2XoF90mdrYjjXvRs62ByJutLXyZpT5aEAnSzyLgkTfAZnUperI+2/CxYjEWRdO38rNM/Q2GWKYG4YiFIKQ+455NGS19ZSGGY35cJU+kmtJffw9DC8cBlEh7+Pa30GJryCuc5848d1paNIXgs=
+	t=1730086778; cv=none; b=maxQD/wQeBKDnBl6kDsYbifnp7QrM6RIo4ZgVJqNIbOX9B1QMW92Z350bVpy8L8G2285UTJkMgbhk1U0GMrkb7vy9+6YFw0ZTfC4aDdRxLNA9wk8BpJ5db6UWUJypok5i+wBB0wc56YP67nBp4WnGWXvjiw0hQ9TmQCHKDT9YiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730081629; c=relaxed/simple;
-	bh=RzryBS3fID5qc7n1ivVr7QqgbBsfgbgzendf2Lx790g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LRvUX0sd4LrnfUjPH9cGhUcZ/QXtr510LCAljyKX1W3s6Gtto19Yt/8o8QM4qjiXIm76poFxHd/j2xDEIEDk4KK2hy7keITb5Zd7qm3njT1XQE4Hqi9FU0+0e5pWSgqwK/tbMOc8SLgDDaZoN6Fa1X1Hm41bRxTq4f6OhYhTMXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=fu++dFLr; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=KSdcimq2trn5l0mRol4HQ+OdRXdKfPtZqrz8Yc0nn9Y=; b=fu++dFLr7BD3+YNq
-	QQMY2RVYqRoD8zMZrX9S/F1WmwJDPGRpjuAD7qfhqxcQCD6OPc27/U8hgpmxL0rAIlhJQ8F9Z9vlG
-	q0bgtNpwx/z+ElH1tqSU6hTvmRVSRU0uYKtE9PP9Z6qeOfJQDHmEzcy2m3SZx4TOXyG++H7utNTGi
-	Nrq3XVFEzDIdQuUGtK5596MKTsSZd0yVtvrA+nP+FGAqVRjVt5DghjAZJz2fzZ8FAcf0PGSE++MaF
-	TbVXqS94ltDjH7rQoq11l+VXtmpJGMoRrb1tNRaSyZ8B46lu5LEJtVFXznvcmWp5lDw/IMnW6QJPc
-	GF80aEgr3eBJF44SSQ==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1t5FGL-00DpzR-0K;
-	Mon, 28 Oct 2024 02:13:45 +0000
-From: linux@treblig.org
-To: myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com,
-	cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] PM / devfreq: Remove unused devm_devfreq_(un)register_notifier
-Date: Mon, 28 Oct 2024 02:13:44 +0000
-Message-ID: <20241028021344.477984-1-linux@treblig.org>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1730086778; c=relaxed/simple;
+	bh=zf03nR63oUi9aIQcnTxeMplp8aLVBVNxqpkRqOwZrzs=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=PLFfwYY9vTNfHx+I/9BgLKbeft/7ucadTfKtriFHBtmokwyt0BlJW0i61qC5GRDzmXmDqAK59wdcdFoX9ifbl1GpbHz0/zUCDx4T3Gqyft7H/oXOSSkjOYd7xwh2vyl3vu/kJR9tl7lZ5lfb87cDk0cy9dmlNGADyBwxxg+Fves=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=XCmbdrT3; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e2ed2230d8so2849746a91.0
+        for <linux-pm@vger.kernel.org>; Sun, 27 Oct 2024 20:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1730086776; x=1730691576; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBmgyqeKJRCn5Gf659C9Da/WJZdShhgowczCYBYs4bI=;
+        b=XCmbdrT3wLxU9xVyb75W5gsAJPMbX4BBAeyqhEwrUslLMEhyJwlkFaBvJqj9q0pmeV
+         am5A38dz082uzyfh0gv2Rpkc9rOXSSRJluk1eDhT6E6AdFldiiEqv9pBGzNarv0lkAzg
+         8bqiKi7/L+v4ABgq132gL40su/f4UiBnheJUHbg34HtTvHptUp9lUG55QKyNQDe6gv3I
+         ydnTJUc7QnMlHP2B3mALlO0wisbDJTDZxUJhUtlhoIhkEyNaGiXUmGH82In9E8Thc6HB
+         E9xvRkZlSdGiOf3LHFA9LQ9Y5KmyPrG7IVt69t8pTG0gZ5qD/duIAU+RELimOr25ceFO
+         Szgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730086776; x=1730691576;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBmgyqeKJRCn5Gf659C9Da/WJZdShhgowczCYBYs4bI=;
+        b=mfbvtw0d3fe7fz4nmO0XSPJ7dUOtAQ2fBp15eKFresgKjgrosHK/aDdu6yjsDzq0Ef
+         wlvZpRgQVwY5mEy/R6NjO3ynscC5uzYYADA+rwzDUCzb0XyAQSfW+P53AuO8LnAB8+1K
+         A2RDKLYOytnUamfu2X+7FOJJLfL7Jh+zBXCgYoEbdvof2zIyyGQayVsNuebMuVyHRhx2
+         DqSuow9V01VNnrjemExvVepYxZZy8G5Gvd6Rg9kxMm9+CCP7d/1sShMhy3RnGUZ7ynKQ
+         1CKO6FcPeqIevIUCyVzf8KaK4gPrt2AiXTmdb3/XWghTMvcyu15NGYHA7Y2/TXMTMlNx
+         ZHFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVxPWNBPdxRDK9cpPG91kYFmb8UJm/hLW4Dauz8aBoN1tYFRJNq9m1yZj0qH9V1Ps6z4tt5aA3UMQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcJ0ykJo6GujBNxoTY5A/mU89N6rPNzlvt9+SmquIuUw79Yz9m
+	yxfXXwhQirEXNW0tyBY6qJH+9LKcxTlE2ReFPbWCrfgqdOqh0Dh9hJ6NpmH/2kc=
+X-Google-Smtp-Source: AGHT+IH453sffjIwvItRxxv3mspXtf+xzFnYsZ51wevVQNfZjTNz0DmZquqPZegSnXNUg/j6R7elmQ==
+X-Received: by 2002:a17:90b:224b:b0:2e2:d7db:41fa with SMTP id 98e67ed59e1d1-2e8f11d1e8emr9087013a91.33.1730086775647;
+        Sun, 27 Oct 2024 20:39:35 -0700 (PDT)
+Received: from hsinchu35-syssw01.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e8e340e544sm5961888a91.0.2024.10.27.20.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Oct 2024 20:39:35 -0700 (PDT)
+From: Nick Hu <nick.hu@sifive.com>
+To: greentime.hu@sifive.com,
+	zong.li@sifive.com,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Sunil V L <sunilvl@ventanamicro.com>,
+	Nick Hu <nick.hu@sifive.com>,
+	linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] Support SSTC while PM operations
+Date: Mon, 28 Oct 2024 11:39:24 +0800
+Message-Id: <20241028033928.223218-1-nick.hu@sifive.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,142 +94,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+When the cpu is going to be hotplug, stop the stimecmp to prevent pending
+interrupt.
+When the cpu is going to be suspended, save the stimecmp before entering
+the suspend state and restore it in the resume path.
 
-devm_devfreq_register_notifier() and devm_devfreq_unregister_notifier()
-have been unused since 2019's
-commit 0ef7c7cce43f ("PM / devfreq: passive: Use non-devm notifiers")
+changes in v3:
+1. Update the commit description
+2. Remove csr_read/write_hi_lo from the previous patch
+Link: https://lore.kernel.org/lkml/20240926065422.226518-1-nick.hu@sifive.com/T/
 
-Remove them, and the helpers they used.
+changes in v2:
+1. Add csr_read/write_hi_lo operations
+2. Apply the suggestion from Anup.
+Link: https://lore.kernel.org/lkml/20240829033904.477200-3-nick.hu@sifive.com/T/#u
 
-Note, devm_devfreq_register_notifier() is still used as an example
-in Documentation/doc-guide/contributing.rst but that's just
-an example of an old doc bug rather than anything about the function
-itself.
+Nick Hu (2):
+  riscv: Add stimecmp save and restore
+  clocksource/drivers/timer-riscv: Stop stimecmp when cpu hotplug
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- drivers/devfreq/devfreq.c | 67 ---------------------------------------
- include/linux/devfreq.h   | 23 --------------
- 2 files changed, 90 deletions(-)
+ arch/riscv/include/asm/suspend.h  |  4 ++++
+ arch/riscv/kernel/suspend.c       | 14 ++++++++++++++
+ drivers/clocksource/timer-riscv.c |  6 ++++++
+ 3 files changed, 24 insertions(+)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 98657d3b9435..6c3b241b4458 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -2224,70 +2224,3 @@ int devfreq_unregister_notifier(struct devfreq *devfreq,
- 	return ret;
- }
- EXPORT_SYMBOL(devfreq_unregister_notifier);
--
--struct devfreq_notifier_devres {
--	struct devfreq *devfreq;
--	struct notifier_block *nb;
--	unsigned int list;
--};
--
--static void devm_devfreq_notifier_release(struct device *dev, void *res)
--{
--	struct devfreq_notifier_devres *this = res;
--
--	devfreq_unregister_notifier(this->devfreq, this->nb, this->list);
--}
--
--/**
-- * devm_devfreq_register_notifier()
-- *	- Resource-managed devfreq_register_notifier()
-- * @dev:	The devfreq user device. (parent of devfreq)
-- * @devfreq:	The devfreq object.
-- * @nb:		The notifier block to be unregistered.
-- * @list:	DEVFREQ_TRANSITION_NOTIFIER.
-- */
--int devm_devfreq_register_notifier(struct device *dev,
--				struct devfreq *devfreq,
--				struct notifier_block *nb,
--				unsigned int list)
--{
--	struct devfreq_notifier_devres *ptr;
--	int ret;
--
--	ptr = devres_alloc(devm_devfreq_notifier_release, sizeof(*ptr),
--				GFP_KERNEL);
--	if (!ptr)
--		return -ENOMEM;
--
--	ret = devfreq_register_notifier(devfreq, nb, list);
--	if (ret) {
--		devres_free(ptr);
--		return ret;
--	}
--
--	ptr->devfreq = devfreq;
--	ptr->nb = nb;
--	ptr->list = list;
--	devres_add(dev, ptr);
--
--	return 0;
--}
--EXPORT_SYMBOL(devm_devfreq_register_notifier);
--
--/**
-- * devm_devfreq_unregister_notifier()
-- *	- Resource-managed devfreq_unregister_notifier()
-- * @dev:	The devfreq user device. (parent of devfreq)
-- * @devfreq:	The devfreq object.
-- * @nb:		The notifier block to be unregistered.
-- * @list:	DEVFREQ_TRANSITION_NOTIFIER.
-- */
--void devm_devfreq_unregister_notifier(struct device *dev,
--				      struct devfreq *devfreq,
--				      struct notifier_block *nb,
--				      unsigned int list)
--{
--	WARN_ON(devres_release(dev, devm_devfreq_notifier_release,
--			       devm_devfreq_dev_match, devfreq));
--}
--EXPORT_SYMBOL(devm_devfreq_unregister_notifier);
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index d312ffbac4dd..ea161657ebc6 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -263,14 +263,6 @@ int devfreq_register_notifier(struct devfreq *devfreq,
- int devfreq_unregister_notifier(struct devfreq *devfreq,
- 				struct notifier_block *nb,
- 				unsigned int list);
--int devm_devfreq_register_notifier(struct device *dev,
--				struct devfreq *devfreq,
--				struct notifier_block *nb,
--				unsigned int list);
--void devm_devfreq_unregister_notifier(struct device *dev,
--				struct devfreq *devfreq,
--				struct notifier_block *nb,
--				unsigned int list);
- struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node);
- struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
- 				const char *phandle_name, int index);
-@@ -420,21 +412,6 @@ static inline int devfreq_unregister_notifier(struct devfreq *devfreq,
- 	return 0;
- }
- 
--static inline int devm_devfreq_register_notifier(struct device *dev,
--					struct devfreq *devfreq,
--					struct notifier_block *nb,
--					unsigned int list)
--{
--	return 0;
--}
--
--static inline void devm_devfreq_unregister_notifier(struct device *dev,
--					struct devfreq *devfreq,
--					struct notifier_block *nb,
--					unsigned int list)
--{
--}
--
- static inline struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)
- {
- 	return ERR_PTR(-ENODEV);
 -- 
-2.47.0
+2.34.1
 
 
