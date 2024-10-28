@@ -1,108 +1,198 @@
-Return-Path: <linux-pm+bounces-16597-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16598-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DEFE9B367D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:31:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79A619B3681
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:32:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EE081C2172C
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:31:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D1B41C21D0E
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9311DED59;
-	Mon, 28 Oct 2024 16:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7681DED6C;
+	Mon, 28 Oct 2024 16:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ll3CCupL"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="W5Ki2/YM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BC1188CCA
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 16:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41B5186616;
+	Mon, 28 Oct 2024 16:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730133086; cv=none; b=WMVuvqzbq9gRbbz3o8NcxC/LleU+FSp8gtm7cBlObYotx3NT1J/HBVaOliCBujhk2GYy23QV1YX6spNHSxSXFz+1AAFLMu0mf8X2oIQmS2MykUVAWupHqaA7/eD4tEqLppDrmzvd7OBXSIF8HWC7dlTpSz3n/wqO39OMyO1Cdy8=
+	t=1730133122; cv=none; b=AC0MiQOPoOedXwb/pZv3yaNxrKGP5i0XRDVudTePj6bZxi1aRbOdqFvor71TcibvT0M0jbUOhUC9QRnIFCJ0dmef+WTSgfz+CcZlwhuPX2pWdJ7SAHNMpApqX3uATq9lqUa/xznbYKq4vJkQwYP7XjPyNXZERzCHmiv2YICMDxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730133086; c=relaxed/simple;
-	bh=Tz7kDWBqLGn3EI7GboyFCyclXYJJe6cDaVmgH6AThtU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U+98/xKpvhqL0YIDbgEXQ8Z509sowfMeEtTpaIVSXpJk/kleXRTbIb4wzzf5EU71+Zv03iYouiXUDW1Q9eeSRxKRUnv9fIUVLwNwoJ8horqAocBiiK40CLZhGuzMLRVimgvzf3YKS/9MR8h8u0QLZC5js6NkKzRAzZlkdFTDmDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ll3CCupL; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d4ba20075so3125153f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 09:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730133083; x=1730737883; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g3SVkuXBfKZlywsVlwzLEUNrxoa2VRV3XvycDM5U1cA=;
-        b=ll3CCupLTXC8Ovh/e3fKsPSxc05J9yvCmHTlCAUIMOsOLrhzL2Yskywihe/GjoGMXp
-         oDldKGMc/+cpIqYKQ7mXxMdOnpFgRsUsoup7SnTjD/E3vm4yFjB/78OZrUAdzIYFyfli
-         5ZZruEeujHpLcZ794hqpP6OpEKUJaysZnoxw07LjjjU1n15Uz3XoLwJ2hawTPSTFYggw
-         rT2UJjlJb44vJDSh75yEbeTMql7oPyFHVisq1gJ1rMdbcr39mHO861xvXOZh8UMbsjUj
-         XPQirf0MAwY8D4RVXymNYhTwGsZKMPoGpEnFLyIoXL2XJ4M0c407dbmZ2MdXLR6kMdUY
-         6afg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730133083; x=1730737883;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3SVkuXBfKZlywsVlwzLEUNrxoa2VRV3XvycDM5U1cA=;
-        b=OLLvW027e2Qk3IwrR2lSI5cEtGy2I7n8fz1w86YyjcHX48HLhAj+SPP1DDu05Ozvfg
-         m4w/vmHXK4sN5H4lBeSqOnFQlr6nr+1auRjZode1ETdT+tNQ+NJPJ/69SySi/0r1FMO9
-         mDCA0c/EC+bOiTGhDhmMNtS30bELsikFSlc0pdY7xawI7Ylv2tph2eLKR7kYl8EDM4/X
-         pThi4xyJae4ZRCmkRrrf9pBmcLh/I0s4q5zqh8djmDB6MtoKcnGDE1rJSdgZWm8+Q3s3
-         tmsJKuJFHEMs/5yGZSUZ3qWmN+GoSNmgT55ufX7Bx5M9yYm7dMk3eMZjhaOvmt1oajqa
-         X5RA==
-X-Gm-Message-State: AOJu0Yw5BK5nB8i5U9K4pCLpUb2n0yN0bI6TfKOwG4EuyRdegQ61mz50
-	+M47gylWRNULVyGD0fQ/xi99d2tmQDTeNG4qQZg2zYhtZP9ejhZAJJlc7VdOOCQ=
-X-Google-Smtp-Source: AGHT+IHUE0fR5YoL/rIP/oL6jvyJFRvDbRSlURM7kaLGL3QFwVi+FhPBNee8pMr2ON/PeXPlAUo5dg==
-X-Received: by 2002:a5d:4d43:0:b0:37d:2d45:b3d4 with SMTP id ffacd0b85a97d-38061222606mr6893628f8f.52.1730133082753;
-        Mon, 28 Oct 2024 09:31:22 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38058b1c65dsm10023109f8f.8.2024.10.28.09.31.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Oct 2024 09:31:22 -0700 (PDT)
-Message-ID: <bb09a51f-dd92-4f03-8523-f39c2b94f686@linaro.org>
-Date: Mon, 28 Oct 2024 17:31:21 +0100
+	s=arc-20240116; t=1730133122; c=relaxed/simple;
+	bh=jbAf3Qjeh2+VzNtT5cDxQjaaHvxoKBVQwoZg6Fi/2qk=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=SLd0/C/lJN+5lsoCsvyKqCUNHArqAUGJ1gAorxCG4UNW3TKftJJnmns/uN/HKYT5/Y1dd0+czHPjkHT//8rBnX2v8DqDmCCswv9+VUboyLA2enqEm0E9VjNKZwa6aGgJez6OhG6U0uwRlvcfVwhrUKbrBIbttI4ZOqZl4ys5W4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=W5Ki2/YM; arc=none smtp.client-ip=51.222.15.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
+	s=default; t=1730133119;
+	bh=jbAf3Qjeh2+VzNtT5cDxQjaaHvxoKBVQwoZg6Fi/2qk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=W5Ki2/YM/RJaBXLb0WwetrVYx8TZ94J/cCHj8BbY3l71bj2hxrEWdrfjDJd9qOV62
+	 DanrZm8ltb+h9YxswXmDiUNXrCPfOP6+rcdi4/i/J1UjqGbaHLgbVbKwgB3jcHbWtC
+	 CzIRjDLQ0xw9MpyBCLL1R2jldjpXZ0Po3Xnp5lMKrowVR9CU/run6txkPGCrJMnJ1t
+	 o6+pKf3EMhT/dTUsMatNhncGK13OpC0JoEIhV00vStt02VPabfY2MpGJ5U9dj/MP2L
+	 4SMAHDcko2GVG2kU5G0PL6ZY/Wnmixx4ugmRkPho+Y0+3SlCo5HOgnV6yKeOtlIICO
+	 WNIrjUtZe+zeA==
+X-Virus-Scanned: by epochal.quest
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: add SAR2130P compatible
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241027-sar2130p-tsens-v1-1-8dee27fc02ae@linaro.org>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20241027-sar2130p-tsens-v1-1-8dee27fc02ae@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Date: Mon, 28 Oct 2024 13:31:58 -0300
+From: Cody Eksal <masterr3c0rd@epochal.quest>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu
+ Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
+ Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, Florian
+ Fainelli <florian.fainelli@broadcom.com>, Vinod Koul <vkoul@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Thierry Reding
+ <treding@nvidia.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Maxime Ripard <mripard@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Yangtao Li <tiny.windzz@gmail.com>, Viresh
+ Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
+ <sboyd@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 07/13] arm64: dts: allwinner: a100: add usb related nodes
+In-Reply-To: <20241026014444.12c8c99b@minigeek.lan>
+References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+ <20241024170540.2721307-8-masterr3c0rd@epochal.quest>
+ <20241026014444.12c8c99b@minigeek.lan>
+Message-ID: <09bc7b6ac779caf7a5e5ebbd7243b165@epochal.quest>
+X-Sender: masterr3c0rd@epochal.quest
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 27/10/2024 00:06, Dmitry Baryshkov wrote:
-> Document compatible for thermal sensors on Qualcomm SAR2130P platform.
+On 2024/10/25 9:44 pm, Andre Przywara wrote:
+> On Thu, 24 Oct 2024 14:05:25 -0300
+> Cody Eksal <masterr3c0rd@epochal.quest> wrote:
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-
-Applied, thanks
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> Hi,
+> 
+>> From: Yangtao Li <frank@allwinnertech.com>
+>> 
+>> Allwinner A64 have two HCI USB controllers, a OTG controller and a USB
+>> PHY device, let's add nodes on dts.
+>> 
+>> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+>> [masterr3c0rd@epochal.quest: fallback to a33-musb instead of h3-musb]
+>> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+>> ---
+>>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 91 
+>> +++++++++++++++++++
+>>  1 file changed, 91 insertions(+)
+>> 
+>> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi 
+>> b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+>> index adb11b26045f..0aee1b578661 100644
+>> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+>> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+>> @@ -302,6 +302,97 @@ ths: thermal-sensor@5070400 {
+>>  			#thermal-sensor-cells = <1>;
+>>  		};
+>> 
+>> +		usbphy: phy@5100400 {
+>> +			#phy-cells = <1>;
+> 
+> Please keep the compatible string first, and move #phy-cells to the 
+> end.
+Will be done in V2
+>> +			compatible = "allwinner,sun50i-a100-usb-phy";
+>> +			reg = <0x05100400 0x14>,
+>> +			      <0x05101800 0x4>,
+>> +			      <0x05200800 0x4>;
+> 
+> We need at least 0x24 for the phy_ctrl and 0x14 for the PMUs. But I
+> wonder if we should use 0x100 for all of them, like for the D1, as 
+> there
+> are more registers. The fact that the Linux driver doesn't use more
+> shouldn't prevent the DT from describing them.
+This as well.
+>> +			reg-names = "phy_ctrl",
+>> +				    "pmu0",
+>> +				    "pmu1";
+>> +			clocks = <&ccu CLK_USB_PHY0>,
+>> +				 <&ccu CLK_USB_PHY1>;
+>> +			clock-names = "usb0_phy",
+>> +				      "usb1_phy";
+>> +			resets = <&ccu RST_USB_PHY0>,
+>> +				 <&ccu RST_USB_PHY1>;
+>> +			reset-names = "usb0_reset",
+>> +				      "usb1_reset";
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		ehci0: usb@5101000 {
+> 
+> The nodes are ordered by their MMIO base address, so please move them
+> around accordingly.
+I double checked; the only note that wasn't in order was MUSB, which 
+fits above the USB PHY in the memory map. I've moved those up.
+>> +			compatible = "allwinner,sun50i-a100-ehci",
+>> +				     "generic-ehci";
+>> +			reg = <0x05101000 0x100>;
+>> +			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&ccu CLK_BUS_OHCI0>,
+>> +				 <&ccu CLK_BUS_EHCI0>,
+>> +				 <&ccu CLK_USB_OHCI0>;
+>> +			resets = <&ccu RST_BUS_OHCI0>,
+>> +				 <&ccu RST_BUS_EHCI0>;
+>> +			phys = <&usbphy 0>;
+>> +			phy-names = "usb";
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		ohci0: usb@5101400 {
+>> +			compatible = "allwinner,sun50i-a100-ohci",
+>> +				     "generic-ohci";
+>> +			reg = <0x05101400 0x100>;
+>> +			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&ccu CLK_BUS_OHCI0>,
+>> +				 <&ccu CLK_USB_OHCI0>;
+>> +			resets = <&ccu RST_BUS_OHCI0>;
+>> +			phys = <&usbphy 0>;
+>> +			phy-names = "usb";
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		usb_otg: usb@5100000 {
+>> +			compatible = "allwinner,sun50i-a100-musb",
+>> +				     "allwinner,sun8i-a33-musb";
+>> +			reg = <0x05100000 0x0400>;
+>> +			clocks = <&ccu CLK_BUS_OTG>;
+>> +			resets = <&ccu RST_BUS_OTG>;
+>> +			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "mc";
+>> +			phys = <&usbphy 0>;
+>> +			phy-names = "usb";
+>> +			extcon = <&usbphy 0>;
+>> +			dr_mode = "otg";
+> 
+> dr_mode should be set in the board .dts, so please remove that line
+> from here.
+Done, and updated the Perf1 DTS to reflect this
+> For the records: I checked the MMIO base addresses, clock and reset
+> names and the IRQs against the manual: they all match.
+Thanks again!
+- Cody
+> Cheers,
+> Andre
+> 
+>> +			status = "disabled";
+>> +		};
+>> +
 
