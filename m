@@ -1,149 +1,273 @@
-Return-Path: <linux-pm+bounces-16574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56B7A9B3112
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 13:52:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4C69B31AB
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 14:29:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B187282854
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 12:52:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2D081C21667
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 13:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8311DA0EB;
-	Mon, 28 Oct 2024 12:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6B61DD0E5;
+	Mon, 28 Oct 2024 13:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QRJt2rVQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBCFB1D63D2;
-	Mon, 28 Oct 2024 12:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174991DC18F
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 13:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730119940; cv=none; b=tGbBxOMZd1z3Ugzh67Eduy2mWzpQoS9QDJR4WZRbiIwXuXVVSVUSr0hcwIEo4Nwi8QWRWBkGwB15qgwKbI7sD5p4Wd3yH/liiJN5qQEyVrp+5cRxZ0qxnJf5zLHL/NS9Dyaq02siOfIwNSgnHhrgE63RTHGn7NRiDEczYEGI92g=
+	t=1730122122; cv=none; b=BAME4oA3cOATCHHTYg5vB70sz+WpQDdrU/0bxztA8/L7/JYXaLQSvIxBoTVNIeUfn/y3937Dp97RXK2KZ5EEgf7Mn+5YSjiRyDq3GgE8PsFRIghxq2G1TYzJeSkSq5/MAWXVrGkmP2v3M4JKEbQugncjGFQLVeLSVRwLtJvaUdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730119940; c=relaxed/simple;
-	bh=TQbqwt1cVE9vG5Fzq9is7SAhGOW1IzC7a8zlKoKCc28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s+s0svlEK5oEYhcs2rFr/uekikOiSmXkT6p/a5jUpcpk3+Wgvs4HxVsM2LrP8x07hqQzawNBTQx7OO8eYv5mosLTHXHGI47781r6fqctydMSp0H6S9HmRtbCLCd/ycqEM7iFKSsvDaF3iPd3vYTRjOIKpefR2ZUBUtN9BH1j084=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02789497;
-	Mon, 28 Oct 2024 05:52:47 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96AD63F66E;
-	Mon, 28 Oct 2024 05:52:14 -0700 (PDT)
-Date: Mon, 28 Oct 2024 12:52:12 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Saravana Kannan <saravanak@google.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	David Dai <davidai@google.com>, Rob Herring <robh@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Quentin Perret <qperret@google.com>,
-	Masami Hiramatsu <mhiramat@google.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Pavan Kondeti <quic_pkondeti@quicinc.com>,
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
-	kernel-team@android.com, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/2] Improve VM CPUfreq and task placement behavior
-Message-ID: <Zx-I_PhsEhnEUfSf@bogus>
-References: <20240919000837.1004642-1-davidai@google.com>
- <20241001092544.2tlydouyyc7jwuja@vireshk-i7>
- <CAGETcx8GomM0znaYKsS412dRvnUQd7_78pKuV82t2b14VBvKVQ@mail.gmail.com>
- <CAJZ5v0iTLX9NAT0PN804QahQ7D=+=D1uJ7PVnZfk5UrpP5uXpg@mail.gmail.com>
- <Zx-Ek7IbpYNDbG9D@bogus>
- <CAJZ5v0iWX6B9hVP4nZKhKJPpO+Fm+ktNHaX1hAhMV_UAPYp33w@mail.gmail.com>
+	s=arc-20240116; t=1730122122; c=relaxed/simple;
+	bh=RBeBzMmvK34PNPhhtb5HQD8f/GMEXSn61Z4rg5hsvc8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iY3AGgZxq/UDzU3TXwocErs2KYds/xGjWAX4pGQTqwPoaHbm7DVgfMsZFqW/Ea0QTL8oU6K/L4+4v8AMPN/EaiMODYq+8cGVkzpJ5Z6SjyVUOrkMpC1ikJrwI0Io/PVSL35rNfjhQD9lD5UqQTiK8ZAM0yi4lTyknhl5vqSX5ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QRJt2rVQ; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e9ba45d67fso33961777b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 06:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730122119; x=1730726919; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ODHQvvFv62Zx/xb7/IaX9zhCggWHAAlTCQGt9XP7bv8=;
+        b=QRJt2rVQ7Zwjm9fdMkbPBExQdC3Y9GGQhzxqtB9ApdEm3U6WS2HiCpxqURX22e3iXT
+         PZR12pMDl2HLzP1c9vNMtzNIgxHy/dQGW/U63pwbBiS55Ao6VqOck3lQHKIF10NEIqgU
+         2328tg12Pi6vL2GB/gS+FA4pOk8+XRXXaPsOx6J32C9uTIPGrUnjwsQtpL40g6oJr3jz
+         OBX2Ppbx2bU1OtLsLkXyMNZTMVDRrTasE3nfCMZWjeVH24T7ujWysUlPnEXG8aTXExFA
+         Y2DwhPEr6EQ2MoVQpBgpj8fun9w6JJs9YQaWqbIMsP6m+Dlux8q+7ZtzfMyHDwC7IGgp
+         GZ0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730122119; x=1730726919;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ODHQvvFv62Zx/xb7/IaX9zhCggWHAAlTCQGt9XP7bv8=;
+        b=QpniEyYDJ8HuHeRNJLwNra/sRCDQkn+dPyx7SD7QKJ18FfeEWM695xEhHjwmjMJVmA
+         doJAeEeiGbNG9x2uQDYMNccng+v5OSPQr7VHjmeY8GTZ3gCb5mImDgNalz3lF3wQ/3gq
+         K5cOE2OU+GhJ6JpWaeC1GH/P/zCn/qcVYFSNrKAOtfJ1jKVpHTKiHYmQZsG9o/ljvahP
+         Hw9G4rjWkvWxMBewhgrzYLh9vuUsvhM3e2j3b4b4LsWK41172I2nNLUP+Euf8a/gtihq
+         MlXE6hiueFRRy4cmNo5GCyCiw+kPMktA01HobYGlnmxumbCabyMTR/xaS81tJjVFF4qO
+         h18Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVV7vYG/6b76bF4PlFNFJXOCtCuErkslUkQMdoWcIu6Ks+FmIcVpWZ+99+/bxoMnvldJNhmiCWw7Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZefTZzuNJXros2YyJiay8CfyG8Wc7I/fPY99pNtd23jR1R8Zq
+	onmxbakzSnz4rpPReMpt3wQlRk17nnYIoV9qzSWwVgqOQ1vzPByu/CfdLgkgiy7FRjjNAezQTKK
+	dg98dU2zZ3Dn4NQRdsDRA621m1jHwXSiex8meJw==
+X-Google-Smtp-Source: AGHT+IFh/cJQhvJy2qy0gX3xlkp0CbLK8TXymrBa9x8XNk/di4wG/TzrWy42DG2ickeR3FscqmzTTLIBVMvxckF62og=
+X-Received: by 2002:a05:690c:ec7:b0:6e2:1527:4447 with SMTP id
+ 00721157ae682-6e9d8994a3amr76420097b3.1.1730122118910; Mon, 28 Oct 2024
+ 06:28:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iWX6B9hVP4nZKhKJPpO+Fm+ktNHaX1hAhMV_UAPYp33w@mail.gmail.com>
+References: <20241023102148.1698910-1-quic_sibis@quicinc.com> <20241023102148.1698910-4-quic_sibis@quicinc.com>
+In-Reply-To: <20241023102148.1698910-4-quic_sibis@quicinc.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 28 Oct 2024 14:28:02 +0100
+Message-ID: <CAPDyKFrVopgySevDVZtkZdHBBxiiVNh73VOXLqaHfXs9MyiZ+w@mail.gmail.com>
+Subject: Re: [PATCH V4 3/4] pmdomain: core: Fix debugfs node creation failure
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, jassisinghbrar@gmail.com, 
+	dmitry.baryshkov@linaro.org, linux-kernel@vger.kernel.org, 
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, johan@kernel.org, konradybcio@kernel.org, 
+	linux-pm@vger.kernel.org, tstrudel@google.com, rafael@kernel.org, 
+	Johan Hovold <johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 28, 2024 at 01:43:38PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Oct 28, 2024 at 1:33 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Mon, Oct 28, 2024 at 12:39:31PM +0100, Rafael J. Wysocki wrote:
-> > > On Sat, Oct 26, 2024 at 12:26 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > On Tue, Oct 1, 2024 at 2:25 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > > >
-> > > > > On 18-09-24, 17:08, David Dai wrote:
-> > > > > > Hi,
-> > > > > >
-> > > > > > This patch series is a continuation of the talk Saravana gave at LPC 2022
-> > > > > > titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gist
-> > > > > > of the talk is that workloads running in a guest VM get terrible task
-> > > > > > placement and CPUfreq behavior when compared to running the same workload
-> > > > > > in the host. Effectively, no EAS(Energy Aware Scheduling) for threads
-> > > > > > inside VMs. This would make power and performance terrible just by running
-> > > > > > the workload in a VM even if we assume there is zero virtualization
-> > > > > > overhead.
-> > > > >
-> > > > > > David Dai (2):
-> > > > > >   dt-bindings: cpufreq: add virtual cpufreq device
-> > > > > >   cpufreq: add virtual-cpufreq driver
-> > > > > >
-> > > > > >  .../cpufreq/qemu,virtual-cpufreq.yaml         |  48 +++
-> > > > > >  drivers/cpufreq/Kconfig                       |  14 +
-> > > > > >  drivers/cpufreq/Makefile                      |   1 +
-> > > > > >  drivers/cpufreq/virtual-cpufreq.c             | 333 ++++++++++++++++++
-> > > > > >  include/linux/arch_topology.h                 |   1 +
-> > > > > >  5 files changed, 397 insertions(+)
-> > > > > >  create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,virtual-cpufreq.yaml
-> > > > > >  create mode 100644 drivers/cpufreq/virtual-cpufreq.c
-> > > > >
-> > > > > LGTM.
-> > > > >
-> > > > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > >
-> > > > Rafael/Viresh,
-> > > >
-> > > > Nudge... Any chance this will get pulled into 6.12?
-> > >
-> > > This is not a fix AFAICS, so 6.12 is out of the question.
-> > >
-> > > As for 6.13, Viresh thinks that this change is a good idea (or he
-> > > wouldn't have ACKed it), so it's up to him.  I'm still not convinced
-> > > that it will work on x86 or anything that doesn't use DT.
-> > >
-> >
-> > +1, I was about to comment on DT bindings patch, but then I assumed it is
-> > accepted to have a device object with similar CID and CRS(for register address)
-> > in ACPI for example.
-> 
-> Well, where would the device ID be defined for this?  The spec or
-> somewhere else?  If the latter, then where again?
+On Wed, 23 Oct 2024 at 12:22, Sibi Sankar <quic_sibis@quicinc.com> wrote:
 >
+> The domain attributes returned by the perf protocol can end up
+> reporting identical names across domains, resulting in debugfs
+> node creation failure. Fix this failure by ensuring that pm domains
+> get a unique name using ida in pm_genpd_init.
+>
+> Logs: [X1E reports 'NCC' for all its scmi perf domains]
+> debugfs: Directory 'NCC' with parent 'pm_genpd' already present!
+> debugfs: Directory 'NCC' with parent 'pm_genpd' already present!
+>
+> Reported-by: Johan Hovold <johan+linaro@kernel.org>
+> Closes: https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+> Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>
+> v3:
+> * Update device names only when a name collision occurs [Dmitry/Ulf]
+> * Drop Johan's T-b from "fix debugfs node creation failure"
+>
+>  drivers/pmdomain/core.c   | 65 ++++++++++++++++++++++++++++++---------
+>  include/linux/pm_domain.h |  1 +
+>  2 files changed, 51 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 76490f0bf1e2..756ed0975788 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -7,6 +7,7 @@
+>  #define pr_fmt(fmt) "PM: " fmt
+>
+>  #include <linux/delay.h>
+> +#include <linux/idr.h>
+>  #include <linux/kernel.h>
+>  #include <linux/io.h>
+>  #include <linux/platform_device.h>
+> @@ -23,6 +24,9 @@
+>  #include <linux/cpu.h>
+>  #include <linux/debugfs.h>
+>
+> +/* Provides a unique ID for each genpd device */
+> +static DEFINE_IDA(genpd_ida);
+> +
+>  #define GENPD_RETRY_MAX_MS     250             /* Approximate */
+>
+>  #define GENPD_DEV_CALLBACK(genpd, type, callback, dev)         \
+> @@ -189,7 +193,7 @@ static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
+>
+>         if (ret)
+>                 dev_warn_once(dev, "PM domain %s will not be powered off\n",
+> -                               genpd->name);
+> +                             dev_name(&genpd->dev));
+>
+>         return ret;
+>  }
+> @@ -274,7 +278,7 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+>         if (!genpd_debugfs_dir)
+>                 return;
+>
+> -       debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
+> +       debugfs_lookup_and_remove(dev_name(&genpd->dev), genpd_debugfs_dir);
+>  }
+>
+>  static void genpd_update_accounting(struct generic_pm_domain *genpd)
+> @@ -731,7 +735,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>         genpd->states[state_idx].power_on_latency_ns = elapsed_ns;
+>         genpd->gd->max_off_time_changed = true;
+>         pr_debug("%s: Power-%s latency exceeded, new value %lld ns\n",
+> -                genpd->name, "on", elapsed_ns);
+> +                dev_name(&genpd->dev), "on", elapsed_ns);
+>
+>  out:
+>         raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
+> @@ -782,7 +786,7 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
+>         genpd->states[state_idx].power_off_latency_ns = elapsed_ns;
+>         genpd->gd->max_off_time_changed = true;
+>         pr_debug("%s: Power-%s latency exceeded, new value %lld ns\n",
+> -                genpd->name, "off", elapsed_ns);
+> +                dev_name(&genpd->dev), "off", elapsed_ns);
+>
+>  out:
+>         raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
+> @@ -1941,7 +1945,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb)
+>
+>         if (ret) {
+>                 dev_warn(dev, "failed to add notifier for PM domain %s\n",
+> -                        genpd->name);
+> +                        dev_name(&genpd->dev));
+>                 return ret;
+>         }
+>
+> @@ -1988,7 +1992,7 @@ int dev_pm_genpd_remove_notifier(struct device *dev)
+>
+>         if (ret) {
+>                 dev_warn(dev, "failed to remove notifier for PM domain %s\n",
+> -                        genpd->name);
+> +                        dev_name(&genpd->dev));
+>                 return ret;
+>         }
+>
+> @@ -2014,7 +2018,7 @@ static int genpd_add_subdomain(struct generic_pm_domain *genpd,
+>          */
+>         if (!genpd_is_irq_safe(genpd) && genpd_is_irq_safe(subdomain)) {
+>                 WARN(1, "Parent %s of subdomain %s must be IRQ safe\n",
+> -                               genpd->name, subdomain->name);
+> +                    dev_name(&genpd->dev), subdomain->name);
+>                 return -EINVAL;
+>         }
+>
+> @@ -2089,7 +2093,7 @@ int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
+>
+>         if (!list_empty(&subdomain->parent_links) || subdomain->device_count) {
+>                 pr_warn("%s: unable to remove subdomain %s\n",
+> -                       genpd->name, subdomain->name);
+> +                       dev_name(&genpd->dev), subdomain->name);
+>                 ret = -EBUSY;
+>                 goto out;
+>         }
+> @@ -2199,6 +2203,23 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
+>         }
+>  }
+>
+> +static bool genpd_name_present(const char *name)
+> +{
+> +       bool ret = false;
+> +       const struct generic_pm_domain *gpd;
+> +
+> +       mutex_lock(&gpd_list_lock);
+> +       list_for_each_entry(gpd, &gpd_list, gpd_list_node) {
+> +               if (!strcmp(dev_name(&gpd->dev), name)) {
+> +                       ret = true;
+> +                       break;
+> +               }
+> +       }
+> +       mutex_unlock(&gpd_list_lock);
+> +
+> +       return ret;
+> +}
+> +
+>  /**
+>   * pm_genpd_init - Initialize a generic I/O PM domain object.
+>   * @genpd: PM domain object to initialize.
+> @@ -2226,6 +2247,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>         genpd->status = is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
+>         genpd->device_count = 0;
+>         genpd->provider = NULL;
+> +       genpd->device_id = -ENXIO;
+>         genpd->has_provider = false;
+>         genpd->accounting_time = ktime_get_mono_fast_ns();
+>         genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
+> @@ -2266,7 +2288,18 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>                 return ret;
+>
+>         device_initialize(&genpd->dev);
+> -       dev_set_name(&genpd->dev, "%s", genpd->name);
+> +
+> +       if (!genpd_name_present(genpd->name)) {
+> +               dev_set_name(&genpd->dev, "%s", genpd->name);
+> +       } else {
+> +               ret = ida_alloc(&genpd_ida, GFP_KERNEL);
+> +               if (ret < 0) {
+> +                       put_device(&genpd->dev);
+> +                       return ret;
+> +               }
+> +               genpd->device_id = ret;
+> +               dev_set_name(&genpd->dev, "%s_%u", genpd->name, genpd->device_id);
+> +       }
 
-Yes, we need to figure those details, but I assumed that is the general
-idea to get it working in ACPI. We can figure out details when we have to
-add it.
+If we can't assume that the genpd->name is unique, I think we need to
+hold the gpd_list_lock over this entire new section, until we have
+added the new genpd in the gpd_list. I am not sure we really want this
+as it could hurt (theoretically at least) boot/probing on systems
+where a lot of genpds are being used.
 
-> > But yes, the patch itself is not adding support for that
-> > yet. If not is not the way, then we need to come up with a way that works
-> > for both ACPI and DT.
-> 
-> The DT use case is there I think and so I don't want to block it just
-> because there is no ACPI counterpart.  It can be added later if the
-> use case is relevant enough.
+That said, I would suggest we go for Dmitry's suggestion to make this
+genpd provider specific. Let's add a new genpd flag that genpd
+providers can set, if they need an ida to be tagged on to their
+device-name. Then we should set that flag for SCMI perf/power domains.
 
-Agreed and that was my thoughts as well.
+[...]
 
---
-Regards,
-Sudeep
+Kind regards
+Uffe
 
