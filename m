@@ -1,115 +1,289 @@
-Return-Path: <linux-pm+bounces-16604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16605-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73AF39B36DE
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:43:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C097D9B36E0
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:43:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A484D1C21C09
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:43:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51E751F21DA3
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:43:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F661DED5B;
-	Mon, 28 Oct 2024 16:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E8A1DEFFC;
+	Mon, 28 Oct 2024 16:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nes21o4g"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="CCktmkk5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C88186E27
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 16:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C41DE3C4;
+	Mon, 28 Oct 2024 16:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730133783; cv=none; b=CuosNIHZU6X+DUBiQDGp6AiSLYkebAk/Ft/GEfSM8QMXpgL68UpkxWYRpSES8kLhSNhxCDNCP+fQUuMKyFmVrV/UzqAnjukP4ZB2ZoHquu713com53RwLidE8jFFKqkqQwOszRzbk5WjRmdQ3bsJU6+YlqefCmFQDPDAUEdyf8Q=
+	t=1730133784; cv=none; b=V1hCeV94W8QAFDnYhsHA40OfbaN4AK/v6xPNCaVqVp2UlH4HhfalmqmSNuboV8LA9H5FskZoyIRb11F52de2d+lQt8Fjzd3VWDpXESidjbrn1aeZXmCX+Gg2nFcXM72RDmWZTASeB8hq8ld/f/jC6gmLV2+33K+KLYVmdoooCnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730133783; c=relaxed/simple;
-	bh=S9uDLqURc4GOloYqd9jMMosEJtFBODWkzZ32p3r1fQA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IIqGYYRoZsTVKhuT1s9jbsc6xaCbUmzM8eZ+B5neGirrfUDs22TkQ7o+ezyfEYIowI+85zvhiA1G6qb9nXPx7Am6WWkwLtFRO9zARTzusjdd/59ogllZldZacSPI4264p6ugUKv/qt9Pf1qiS9j4/3zyTDYnAX7Vcs10YVpXKMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nes21o4g; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4315baa51d8so45682085e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 09:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730133779; x=1730738579; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SIlV2N08KcymoaFKtsfUV9P6s6ll957h+IdgsPENuPQ=;
-        b=nes21o4gJVp0T6rXv1uAG4Tfjsdi1Qmi18lmaAT1wfkRkp0TyRQk47dmKdTdv+aaXz
-         OW/P1KzQ9+wvmtfjTc4MPyRMkVTXFf5C7pkmlPp2Aq13dFzfg8JaUOjJfHk1zTETkPXi
-         Csk2dlBvMz/mnOFzVZYqMObERiTw/JIIp9r/cavPPxlB7Ueon0DsdnRysqccno5/ZgOO
-         imqXcjevCGNQ7EqMSDuAFdoKyxohgGKdVaIJC0ul/goo2XLZZuEnElOgh2nq3yLDpRap
-         OtihGBj4SkKqdKkdLzx0Nly+xpVIiEQzOhjOn9s6Yeg03LfpJDWV5IfeFOueEHtS1wLx
-         S6wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730133779; x=1730738579;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIlV2N08KcymoaFKtsfUV9P6s6ll957h+IdgsPENuPQ=;
-        b=kxLB7w3zJsAG9cGG2aC0/2H64+SvHdnTa+ZBGaIk0f8rlVpnrR6ncKwqXEZ5z8Tsn/
-         F2eCSUKRZkNuQDX1greWSRmzfglu9AkGugc7DvSQ82EG/otZZScumcqOtxapibZ2l6Qy
-         5JwVghEj7mG4gXA0bm1v5x5DsQT4EFh6E/NnQ7bA5J8yXtq62iscsCqOYnaAamkMAJt5
-         9CTl+xBkd3nQXcGitadSZ/RF9m6Eh4YirsWsrQxwVZ4/uV/icPHL+gErtlGLXE8gtUuu
-         LO9N9+d8nR8/nOPA491ne8VedMTnptnPzmBKm1akiotFD/8vZHT2hgpMGzK8aAwfg59A
-         WloA==
-X-Forwarded-Encrypted: i=1; AJvYcCVXZ70t1jcm0Y667/H9XxwSFLDAAGXzgi2KJ4Mkroup05MIpsEye6q9GI2bpDguclePxaYL2bp4gw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9Sam0Kb1tDgvxpoQOaM4JaLNT3hdzEQXhmuEoL2ZGFQqqv8Cx
-	eA6yuqp+sNBrybDDrkeVuwzniuCTQncFoOGI+N04wclr4Iegcl7iBJUAL646HJU=
-X-Google-Smtp-Source: AGHT+IFubNfmbzdMvEDWhZwdQWZg64Ts8Y29+5XLDl8PxLLPf7L/mVmSd01Kf+suARM9Crh/4qXL9A==
-X-Received: by 2002:a05:600c:46c8:b0:431:4f5e:1f61 with SMTP id 5b1f17b1804b1-4319acb01ccmr82163395e9.14.1730133779156;
-        Mon, 28 Oct 2024 09:42:59 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4318b55f719sm144090375e9.15.2024.10.28.09.42.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Oct 2024 09:42:58 -0700 (PDT)
-Message-ID: <72487251-dfcc-4a37-a19c-c4f7f8cb2786@linaro.org>
-Date: Mon, 28 Oct 2024 17:42:57 +0100
+	s=arc-20240116; t=1730133784; c=relaxed/simple;
+	bh=hfxfnDn52geDLFQ8Mw1FoWnOKLtSrLItsMKH3nc3vSM=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=tIBQ3ndfaIYa6z6IMhECzog0llWcVBvGWW04n7dKIXAuIO1PGjvdsJKlmrzT6hXUHnC7shbvITNmUZ57/kt6OFaFFBgSR4iy0s/7MkonzJ+40UAGo+58BtOHk3T7uHN8oznmsLXbVV2bGga6x1xY1bNwufvgVr1ngDah3YrEhqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=CCktmkk5; arc=none smtp.client-ip=51.222.15.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
+	s=default; t=1730133780;
+	bh=hfxfnDn52geDLFQ8Mw1FoWnOKLtSrLItsMKH3nc3vSM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CCktmkk5ETNhFgJVayeiuWBBvWFtz9i2eH85Alx5ONZZGx7Xh9lUvO6YnDWdqVAA4
+	 J6Mhc7juRyZ5fekUyNi+P0zPsmzohLXHJSMMfuDzcwNeaBqSQ0bTFLMWsXLc/gGCEP
+	 wXOwVta/0ETlbhN+6yQaut26MFDKtzmaXIK0bOP3uN/Qa5XhNaS5QyVON5vx0ja0Zj
+	 wJP3uGsZqYa0SSNdFlvzCO4/HCUyhBMR6Dizwx67IhuoYiN4RTsGazv5eQwpy+pH+I
+	 KwpBUonnE9W0iPT1J2Lssw/4S+QWxKI52C+11V02kRmPIubHaYeWZVH81DcEW+5lk4
+	 0GL6aKp3te/xg==
+X-Virus-Scanned: by epochal.quest
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: Switch back to struct platform_driver::remove()
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-pm@vger.kernel.org
-References: <20241019163412.304422-2-u.kleine-koenig@baylibre.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20241019163412.304422-2-u.kleine-koenig@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Date: Mon, 28 Oct 2024 13:42:59 -0300
+From: Cody Eksal <masterr3c0rd@epochal.quest>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu
+ Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
+ Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, Yangtao Li
+ <frank@allwinnertech.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
+ Vinod Koul <vkoul@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Thierry Reding <treding@nvidia.com>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Maxime Ripard <mripard@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Yangtao Li
+ <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+ <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Kishon Vijay Abraham I
+ <kishon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Shuosheng
+ Huang <huangshuosheng@allwinnertech.com>
+Subject: Re: [PATCH 13/13] arm64: dts: allwinner: a100: Add CPU Operating
+ Performance Points table
+In-Reply-To: <20241025132739.3d0f116d@donnerap.manchester.arm.com>
+References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
+ <20241024170540.2721307-14-masterr3c0rd@epochal.quest>
+ <20241025132739.3d0f116d@donnerap.manchester.arm.com>
+Message-ID: <b0fdfffd6b840eeabd2c9ab748915dd8@epochal.quest>
+X-Sender: masterr3c0rd@epochal.quest
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 19/10/2024 18:34, Uwe Kleine-König wrote:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
+On 2024/10/25 9:27 am, Andre Przywara wrote:
+> On Thu, 24 Oct 2024 14:05:31 -0300
+> Cody Eksal <masterr3c0rd@epochal.quest> wrote:
 > 
-> Convert all platform drivers below drivers/thermalto use .remove(), with
-> the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
+>> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+>> 
+>> Add an Operating Performance Points table for the CPU cores to
+>> enable Dynamic Voltage & Frequency Scaling on the A100.
+>> 
+>> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+>> [masterr3c0rd@epochal.quest: fix typos in -cpu-opp, use compatible]
+>> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+>> ---
+>>  .../allwinner/sun50i-a100-allwinner-perf1.dts |  5 ++
+>>  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    | 90 
+>> +++++++++++++++++++
+>>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi |  8 ++
+>>  3 files changed, 103 insertions(+)
+>>  create mode 100644 
+>> arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
+>> 
+>> diff --git 
+>> a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts 
+>> b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+>> index 29e9d24da8b6..99b1b2f7b92a 100644
+>> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+>> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+>> @@ -6,6 +6,7 @@
+>>  /dts-v1/;
+>> 
+>>  #include "sun50i-a100.dtsi"
+>> +#include "sun50i-a100-cpu-opp.dtsi"
+>> 
+>>  #include <dt-bindings/gpio/gpio.h>
+>> 
+>> @@ -67,6 +68,10 @@ &usb_otg {
+>>  	status = "okay";
+>>  };
+>> 
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>  &pio {
+>>  	vcc-pb-supply = <&reg_dcdc1>;
+>>  	vcc-pc-supply = <&reg_eldo1>;
+>> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi 
+>> b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
+>> new file mode 100644
+>> index 000000000000..eeb8d20f3fb4
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
+>> @@ -0,0 +1,90 @@
+>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>> +// Copyright (c) 2020 Yangtao Li <frank@allwinnertech.com>
+>> +// Copyright (c) 2020 ShuoSheng Huang 
+>> <huangshuosheng@allwinnertech.com>
+>> +
+>> +/ {
+>> +	cpu_opp_table: cpu-opp-table {
+>> +		compatible = "allwinner,sun50i-a100-operating-points";
+>> +		nvmem-cells = <&cpu_speed_grade>;
+>> +		opp-shared;
+>> +
+>> +		opp@408000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <408000000>;
+>> +
+>> +			opp-microvolt-speed0 = <900000 900000 1200000>;
+>> +			opp-microvolt-speed1 = <900000 900000 1200000>;
+>> +			opp-microvolt-speed2 = <900000 900000 1200000>;
 > 
-> On the way make a few whitespace changes to make indention consistent.
+> Is there actually an advantage when using the three cells version?
+> I wonder if we should go with just the target voltage (the first cell
+> here), as done for the H616.
+It probably makes sense to follow precedent; I've updated V2 to make 
+these single-cell.
+> Apart from that it looks fine to me.
+I did get a comment from Rob's bot that picked up some issues with the 
+namings of these nodes; I've updated that as well.
+
+Thanks!
+- Cody
+> Cheers,
+> Andre.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-> ---
-
-Applied, thanks
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>> +		};
+>> +
+>> +		opp@600000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <600000000>;
+>> +
+>> +			opp-microvolt-speed0 = <900000 900000 1200000>;
+>> +			opp-microvolt-speed1 = <900000 900000 1200000>;
+>> +			opp-microvolt-speed2 = <900000 900000 1200000>;
+>> +		};
+>> +
+>> +		opp@816000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <816000000>;
+>> +
+>> +			opp-microvolt-speed0 = <940000 940000 1200000>;
+>> +			opp-microvolt-speed1 = <900000 900000 1200000>;
+>> +			opp-microvolt-speed2 = <900000 900000 1200000>;
+>> +		};
+>> +
+>> +		opp@1080000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <1080000000>;
+>> +
+>> +			opp-microvolt-speed0 = <1020000 1020000 1200000>;
+>> +			opp-microvolt-speed1 = <980000 980000 1200000>;
+>> +			opp-microvolt-speed2 = <950000 950000 1200000>;
+>> +		};
+>> +
+>> +		opp@1200000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <1200000000>;
+>> +
+>> +			opp-microvolt-speed0 = <1100000 1100000 1200000>;
+>> +			opp-microvolt-speed1 = <1020000 1020000 1200000>;
+>> +			opp-microvolt-speed2 = <1000000 1000000 1200000>;
+>> +		};
+>> +
+>> +		opp@1320000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <1320000000>;
+>> +
+>> +			opp-microvolt-speed0 = <1160000 1160000 1200000>;
+>> +			opp-microvolt-speed1 = <1060000 1060000 1200000>;
+>> +			opp-microvolt-speed2 = <1030000 1030000 1200000>;
+>> +		};
+>> +
+>> +		opp@1464000000 {
+>> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>> +			opp-hz = /bits/ 64 <1464000000>;
+>> +
+>> +			opp-microvolt-speed0 = <1180000 1180000 1200000>;
+>> +			opp-microvolt-speed1 = <1180000 1180000 1200000>;
+>> +			opp-microvolt-speed2 = <1130000 1130000 1200000>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +&cpu0 {
+>> +	operating-points-v2 = <&cpu_opp_table>;
+>> +};
+>> +
+>> +&cpu1 {
+>> +	operating-points-v2 = <&cpu_opp_table>;
+>> +};
+>> +
+>> +&cpu2 {
+>> +	operating-points-v2 = <&cpu_opp_table>;
+>> +};
+>> +
+>> +&cpu3 {
+>> +	operating-points-v2 = <&cpu_opp_table>;
+>> +};
+>> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi 
+>> b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+>> index 6dca766ea222..747a0292ef98 100644
+>> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+>> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+>> @@ -23,6 +23,7 @@ cpu0: cpu@0 {
+>>  			device_type = "cpu";
+>>  			reg = <0x0>;
+>>  			enable-method = "psci";
+>> +			clocks = <&ccu CLK_CPUX>;
+>>  		};
+>> 
+>>  		cpu1: cpu@1 {
+>> @@ -30,6 +31,7 @@ cpu1: cpu@1 {
+>>  			device_type = "cpu";
+>>  			reg = <0x1>;
+>>  			enable-method = "psci";
+>> +			clocks = <&ccu CLK_CPUX>;
+>>  		};
+>> 
+>>  		cpu2: cpu@2 {
+>> @@ -37,6 +39,7 @@ cpu2: cpu@2 {
+>>  			device_type = "cpu";
+>>  			reg = <0x2>;
+>>  			enable-method = "psci";
+>> +			clocks = <&ccu CLK_CPUX>;
+>>  		};
+>> 
+>>  		cpu3: cpu@3 {
+>> @@ -44,6 +47,7 @@ cpu3: cpu@3 {
+>>  			device_type = "cpu";
+>>  			reg = <0x3>;
+>>  			enable-method = "psci";
+>> +			clocks = <&ccu CLK_CPUX>;
+>>  		};
+>>  	};
+>> 
+>> @@ -142,6 +146,10 @@ efuse@3006000 {
+>>  			ths_calibration: calib@14 {
+>>  				reg = <0x14 8>;
+>>  			};
+>> +
+>> +			cpu_speed_grade: cpu-speed-grade@1c {
+>> +				reg = <0x1c 0x2>;
+>> +			};
+>>  		};
+>> 
+>>  		watchdog@30090a0 {
 
