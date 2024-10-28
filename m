@@ -1,99 +1,142 @@
-Return-Path: <linux-pm+bounces-16558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCA659B2A22
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 09:24:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 223339B2BBD
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 10:45:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82B67282461
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 08:24:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD4E1B22BB5
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 09:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DCE1917C9;
-	Mon, 28 Oct 2024 08:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4568A193060;
+	Mon, 28 Oct 2024 09:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zfe+evnj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA38191473
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 08:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1463F193404
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 09:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730103873; cv=none; b=TmCxFx2Zp8C1zr6OVOVoWgAcbMrhJjvdSK+caYGknu1eDgdOcQgjgyXyB5f8xjlDJTDoh8zwZvRwRZeKouK5JP+MXEdrNCnlUZaSumNw/t3/OgQdw6JI5ayfepXIFNCBU1fhLqj1YrB1OJ2zOI+l/T821fmPiK+Ye+NcT3K5AsY=
+	t=1730108695; cv=none; b=kurIk8SgDw+rupJ1vUdH+8B8+K2B8hYUnl1WJH02hhfybvmnDP7Z16cKVNOykM97CWeY2TsN9PyF7anpiijuXwm5dI54yFY1SRjetMMIhP++KVUTRjzoI07BHa5z8DzA8xMfFAuGFbex9TnbyEMsowHohWzv27o6Y6Y3emNUpn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730103873; c=relaxed/simple;
-	bh=jmC7Pe0GdCl+8d0ZZ5piEpZzEdBQZooAUiwb8lAOGXs=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=lNnRgetOP4pi8Zk5WazdwxGec4t1u4IlIi2vBKfjO41t/aqxRYQPIN7CSSiS44Etdhiv49Qk1k1cdXRd7LZfyStI8VfhcKKOgs1jenHmvE+6ND4433QA5vWWlhlhSx1E4RDJJTW84DXaYAbygK5qlzQI7hoXbOu12ZgTC4hVt+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a3c72d4ac4so38667015ab.3
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 01:24:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730103870; x=1730708670;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+	s=arc-20240116; t=1730108695; c=relaxed/simple;
+	bh=i8WNTcaN5PWAzcehUDptB8suCbaVFwo9puUW+aLUTH8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dfCG7B4FfeJka+o1LednX/xQdFYLeVUauHr5rC04d/SBYChKo6BO/0t2oK4DD/WalBqxFSTkv0Zpaiz/9nq8DcdnDiNIg2z1Bh1agIrZwCZsx3Cuxz2li9Gr7I6t6hpb4Z6BLAKnIAhPD5MWS+FsS4PzcsxQfm/2Z4pRRqkXPJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zfe+evnj; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-431616c23b5so28698295e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 02:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730108691; x=1730713491; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HKk5yPts4IgoLdOJIpP3s6kZUoBQcwND8hldmTU8TgA=;
-        b=HuvXAMs/3zXSKd/jkAm0s90VotWuO/ibNhCS0YcLfEmeggtVtjtVUL86NdzkfjROJt
-         Auh290lNTekMOw/Rw1w8kUKslrNAaQB2nfVDdV+liL+UdHmldmDx6YZFbJuZMxwCEFVF
-         TrqRqeoy8gUjGH3WI8LUpgol6l6RK8P8ok/7kb06CQhkOC67H0YxL1QdXhcE7qW4njmv
-         nBbybPIuzdbtDVnLZeRGJzXDAwc/HBa6n2OagEs+TIfM0iMqYWiP7ZS9mCzMluXcJqeh
-         p/CaQm+lrVNYOajOI8PCGpAWLEm7xpSc70JivDswKN7YkPMSFKHo1jvM3gFRJ/uPJtsK
-         ChJw==
-X-Forwarded-Encrypted: i=1; AJvYcCV++a4EyrJ/aBnq+XtE7XcaKDsV3MlQbMJAQphF5lymLoGaY2tamZ+ZzvyxQ0UlmNq70LOmMQajcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWW1Tb6F0F3hWZ/2llAegn6eEyICiLRDU72/krKoyMEahuKk8M
-	g3jxaUSMD83dhtbKgFZdX9PH0cEmaNp5zM4UW/W0cnGNzF+B9zzrkRqXQ/iGllxwze+Wx2fQgOA
-	jbNBR+ksto9VX53BqiNUqx0aj5WGgpTgWG8GRDD59o0RvmTn8xUV/K50=
-X-Google-Smtp-Source: AGHT+IFJ2lIHo6rEXa8bzLhHTch49rUb7nJG7oBePYxA34HtAIOe3O4gzzh6zlLnjv8fTE9Xt3ciJOvgt0ZzN9DDJmq6dXrxK2+a
+        bh=PYW2nBqpOT7rpdJAt6yBdXzUTt5ThWvwR8AKSh6PMWk=;
+        b=zfe+evnj40bBnwMyBnXsFxPwpa0OWtoI3CI5d1hT9AMT5cR+JFMGuMXD8Occ/WpI+V
+         DJeQpp4O/7vKtdMi85M+H6tWsZImU8vkixKx9TB6rZylEeIa6PY8BG5FDxVZ6W8obDFl
+         rXY5bdSxOh/uXJLKEJvgO0hBOFuiLqo31Mvi4upsicY/KyBRtkA9pXoySb/JDmHO4iZ1
+         8T4fTU8LEXUnJKSi1LXN+ck6HG6MShwQb3Ok+QvLoIWQTiHWLdUEWGreVnt708NWIq44
+         6T61/ZEOvZ1fNSs6QYwGxaZuyk1WEXL46LE+WkJPxzqLLP4AGKOjg1xclkuAXQVhJtvT
+         zMrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730108691; x=1730713491;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYW2nBqpOT7rpdJAt6yBdXzUTt5ThWvwR8AKSh6PMWk=;
+        b=j9CGFqLRkigSA7K68d/HtI/HB7uG96+p9V3jGAHW70fqHVEoqhxXkhM1+C2LScHr2B
+         30HDRAauF17Jp4FuGUex6HWptEuzGfEpS5092ollxCsnOhMIQvKtb0XgeXcK27F71Imu
+         qSmamUuaZliXALAuIHY8NNAYh9srQhwJy8wEtiBtnMWxZxewdU7c6s7Op6PDdcVtPgLx
+         9NHIEaehNPoeNW2i/m8S0GMwaU80nNlnI7bkiYRopMHqPIpovYvoEox97eO7i8rWam3q
+         PcFZd8BIuAA/W+P87gpZlUZSstJR5qZjpntfExdrYMGzsh+B7P1Vj1JJg9GewwCa4O69
+         QTTw==
+X-Forwarded-Encrypted: i=1; AJvYcCXheN6OAZa2ybvZklma1i2JL/LZhRgC9y0ZefJGWzxc0Cw3qq6UcKaUfRDbhX9vKHDTEr5jEXtfaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFIw/9DAiJ/CxnIsPJK9ObjN0ONS95EKpI0z6fEusjmP8kMa5j
+	5fZqN7x701P7tk9qsKO3UzLYAeVmyMi/oRTCqtCj7aEQ9Fqw+jcE+f6yjXYC3sM=
+X-Google-Smtp-Source: AGHT+IEGI3A08qAUBhd5v0Oc5FZbvghNJQAwXWa8dsiUdujloWteFAWUVUDMhuvgj34CSetfJervcg==
+X-Received: by 2002:a05:600c:4e8c:b0:431:7c25:8600 with SMTP id 5b1f17b1804b1-4318b587dd1mr99781975e9.2.1730108691401;
+        Mon, 28 Oct 2024 02:44:51 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38058b70c44sm8958669f8f.80.2024.10.28.02.44.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2024 02:44:51 -0700 (PDT)
+Message-ID: <5f7179ec-e4ce-4644-8a60-ce407a4d2f11@linaro.org>
+Date: Mon, 28 Oct 2024 10:44:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:17c9:b0:3a1:a619:203c with SMTP id
- e9e14a558f8ab-3a4ed301caamr52484355ab.23.1730103870258; Mon, 28 Oct 2024
- 01:24:30 -0700 (PDT)
-Date: Mon, 28 Oct 2024 01:24:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <671f4a3e.050a0220.2b8c0f.0202.GAE@google.com>
-Subject: [syzbot] Monthly pm report (Oct 2024)
-From: syzbot <syzbot+list0ba9bfa5e41159be0b8d@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] clocksource/drivers/timer-riscv: Stop stimecmp
+ when cpu hotplug
+To: Nick Hu <nick.hu@sifive.com>, greentime.hu@sifive.com,
+ zong.li@sifive.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Pavel Machek <pavel@ucw.cz>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Thomas Gleixner <tglx@linutronix.de>, Andrew Jones
+ <ajones@ventanamicro.com>, Conor Dooley <conor.dooley@microchip.com>,
+ Samuel Holland <samuel.holland@sifive.com>,
+ Sunil V L <sunilvl@ventanamicro.com>, linux-pm@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: Anup Patel <anup@brainfault.org>
+References: <20241028033928.223218-1-nick.hu@sifive.com>
+ <20241028033928.223218-3-nick.hu@sifive.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20241028033928.223218-3-nick.hu@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello pm maintainers/developers,
+On 28/10/2024 04:39, Nick Hu wrote:
+> Stop the timer when the cpu is going to be offline otherwise the
+> timer interrupt may be pending while performing power-down.
+> 
+> Suggested-by: Anup Patel <anup@brainfault.org>
+> Link: https://lore.kernel.org/lkml/20240829033904.477200-3-nick.hu@sifive.com/T/#u
+> Signed-off-by: Nick Hu <nick.hu@sifive.com>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> ---
+>   drivers/clocksource/timer-riscv.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> index 48ce50c5f5e6..166dee14e46b 100644
+> --- a/drivers/clocksource/timer-riscv.c
+> +++ b/drivers/clocksource/timer-riscv.c
+> @@ -127,6 +127,12 @@ static int riscv_timer_starting_cpu(unsigned int cpu)
+>   static int riscv_timer_dying_cpu(unsigned int cpu)
+>   {
+>   	disable_percpu_irq(riscv_clock_event_irq);
+> +	/*
+> +	 * Stop the timer when the cpu is going to be offline otherwise
+> +	 * the timer interrupt may be pending while performing power-down.
+> +	 */
+> +	riscv_clock_event_stop();
+> +
+>   	return 0;
+>   }
 
-This is a 31-day syzbot report for the pm subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/pm
+Should it not be the opposite?
 
-During the period, 1 new issues were detected and 0 were fixed.
-In total, 5 issues are still open and 7 have been fixed so far.
+First stop the clock which clears the interrupt and then disable the irq?
 
-Some of the still happening issues:
 
-Ref Crashes Repro Title
-<1> 133     No    INFO: task hung in rpm_resume
-                  https://syzkaller.appspot.com/bug?extid=73932f4591b9b973aa0c
-<2> 49      Yes   WARNING in enable_work
-                  https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
-<3> 2       Yes   possible deadlock in dpm_for_each_dev
-                  https://syzkaller.appspot.com/bug?extid=2a03726f1d4eff48b278
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-You may send multiple commands in a single email message.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
