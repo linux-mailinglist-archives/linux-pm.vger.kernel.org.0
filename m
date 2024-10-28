@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-16601-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BE2B9B369C
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:35:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B3479B36D1
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:40:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 398CD285FB7
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:35:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9284F1F22079
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526501DED7F;
-	Mon, 28 Oct 2024 16:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760181DEFE0;
+	Mon, 28 Oct 2024 16:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="ZgS7BZdH"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="NqgPwI8S"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608AB1DE4D5;
-	Mon, 28 Oct 2024 16:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23DB18B48C;
+	Mon, 28 Oct 2024 16:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730133351; cv=none; b=LULxMDN2iCDOp9kbNA+2JyusnFZOYXRaOOvQ7o9s+BE9vhckrwMiGhGZi+266Dp2qtM4+UUAEHsRWQHjd5/pkGTMUQ9eV14cXgL+hyisswnHM3eOOBYM+iiWo7LaUdVokI3GAx3z9UkwKrigCOAAD/c4F2BZ8vVNsiPwvEZ8s2E=
+	t=1730133625; cv=none; b=UgsW0lfivLKfjlfEORx62N3lCKLheQVIUDXleTFRn9q8bl5vPOxBC61z5cfulaczXQVRYhoIn52XYmOjTS8QycuxSV7qFJ3NzseT6PW+X7ZkEDcznoPdJnYJSx/NCf2e0QvHNFUW+uRspUwYuF4TOiSQK2mHvw6sYAnO+GosuSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730133351; c=relaxed/simple;
-	bh=SgbZ6d/TsfOwGbc31ZKuYuZl628O9USHtGUALdy8B+A=;
+	s=arc-20240116; t=1730133625; c=relaxed/simple;
+	bh=kUEYbE6hXz/vHFt3YZ/89fRX5hOEaE51SuiUkxDzgpU=;
 	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=ij2wFfVjDjTc18Yob7pRoOShiQcvj2CNUyZ2osx2PtarrZX8c3+nYpE5b4cer5ENRZfnUotU/CfpAEiIZbyTvk9W4pXrky8eiiA5H7QTjnh7JgyrWmIGvulyICSqAkmoLL9sHPuR6ZaUgHlJNyaYJtk9stLlu/9BRKCSYeCjT3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=ZgS7BZdH; arc=none smtp.client-ip=51.222.15.28
+	 Message-ID:Content-Type; b=QTgYW5wKbHHQlnwDy5jL7Mmmxk5w5BzkF1BEYF9pOoy4+mjsJBvuVvGvERtawiw2Q0nS6643jRIF1bCQmlUM9mWSvEb49PZXiaha+5Wy1zfSPDtA8X8WtfnkGJYy4bEePmVQdQZgkf1VvOzaaX18EmkSupjxBtnFsf1Wf0TvC6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=NqgPwI8S; arc=none smtp.client-ip=51.222.15.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
-	s=default; t=1730133348;
-	bh=SgbZ6d/TsfOwGbc31ZKuYuZl628O9USHtGUALdy8B+A=;
+	s=default; t=1730133622;
+	bh=kUEYbE6hXz/vHFt3YZ/89fRX5hOEaE51SuiUkxDzgpU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZgS7BZdH9XB4Xl54n/5i1z3TmXuFPGbZT7e1yyh6uidffhW5fJX3UtOgD2UeUYK1h
-	 aPieFahk0TWr7mrR5UR2vvYcP5G9n0GfgeYuBZezw2UKR5niDymDl8Chm2YXq1yxqd
-	 vV4KAWsY0azGRYxHjbp5QIGL1rr6H6czLNQ6yUZmoFu5Ga1u8VcJoyhLXkD0lsoVNi
-	 T2CoAgCcSGveBqJ5QOz7kqvpbcs/+pHyUxwaXhJI4d0jDTHHpou488yykXHXa3FNB2
-	 SauQb81+iQBLuqZg93k1S5j7eQe03frPSqwIwgzzfHf1Vz5qoXIeBK2irb+YrAK9yQ
-	 VpuH4DjlbmtDw==
+	b=NqgPwI8SWqQsmYbYtgFKykLcMxXKveA8fZ0lao9DCK4PCwOKJ2velptL71QECqePl
+	 rnPPrmBq5vhBJHFWAkHjHgOjvV+Tdxx1/frpgF3xxOIdmt48PDbZopZfGmHnMNt1HX
+	 PyBcVA3pwdn+86ChDkVznRmnBTpEK+UDiaL0dhOY6Vro28ihTcoGKewP+FaEUvmZLM
+	 hS78aI46rAJAbpUFz7e2akQkorx6P76z0gbpO3+XhgTkGcCv32gz++bgOL81fGO9yc
+	 0FC2lSTNFAv02g3oeI3Zg0esVml/e/H1bFXi3StthXPWEeeK4s06+vcLvh2FlOdugl
+	 0TAQ5euobPX7w==
 X-Virus-Scanned: by epochal.quest
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -48,63 +48,53 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 28 Oct 2024 13:35:46 -0300
+Date: Mon, 28 Oct 2024 13:40:18 -0300
 From: Cody Eksal <masterr3c0rd@epochal.quest>
-To: wens@csie.org
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Jernej
- Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
- Andre Przywara <andre.przywara@arm.com>, Parthiban <parthiban@linumiz.com>,
- Yangtao Li <frank@allwinnertech.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Vinod Koul <vkoul@kernel.org>, Linus
- Walleij <linus.walleij@linaro.org>, Thierry Reding <treding@nvidia.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Maxime Ripard
- <mripard@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Yangtao Li <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Kishon Vijay
- Abraham I <kishon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 07/13] arm64: dts: allwinner: a100: add usb related nodes
-In-Reply-To: <CAGb2v64tQ_9C3mwJqt-tm-6SV=SHAk75sO5Ho7gT=p=iyRfLcw@mail.gmail.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Samuel Holland <samuel@sholland.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, devicetree@vger.kernel.org, Viresh Kumar
+ <vireshk@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Thierry
+ Reding <treding@nvidia.com>, Nishanth Menon <nm@ti.com>, Chen-Yu Tsai
+ <wens@csie.org>, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Yangtao Li <frank@allwinnertech.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Maxime Ripard <mripard@kernel.org>,
+ Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ linux-pm@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Conor Dooley <conor+dt@kernel.org>, Florian Fainelli
+ <florian.fainelli@broadcom.com>, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, Kishon Vijay Abraham I <kishon@kernel.org>, Andre
+ Przywara <andre.przywara@arm.com>, linux-sunxi@lists.linux.dev, Yangtao Li
+ <tiny.windzz@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Parthiban <parthiban@linumiz.com>
+Subject: Re: [PATCH 03/13] dt-bindings: phy: sun50i-a64: add a100 compatible
+In-Reply-To: <173006348387.87150.15151805812797724971.robh@kernel.org>
 References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
- <20241024170540.2721307-8-masterr3c0rd@epochal.quest>
- <CAGb2v64tQ_9C3mwJqt-tm-6SV=SHAk75sO5Ho7gT=p=iyRfLcw@mail.gmail.com>
-Message-ID: <542c16a63ab228a7ed1cc81fc91b961f@epochal.quest>
+ <20241024170540.2721307-4-masterr3c0rd@epochal.quest>
+ <173006348387.87150.15151805812797724971.robh@kernel.org>
+Message-ID: <242e94322071be17480b001de0d1347b@epochal.quest>
 X-Sender: masterr3c0rd@epochal.quest
-Content-Type: text/plain; charset=UTF-8;
+Content-Type: text/plain; charset=US-ASCII;
  format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 2024/10/25 10:29 pm, Chen-Yu Tsai wrote:
-> On Fri, Oct 25, 2024 at 1:09 AM Cody Eksal <masterr3c0rd@epochal.quest> 
-> wrote:
+On 2024/10/27 6:11 pm, Rob Herring (Arm) wrote:
+> On Thu, 24 Oct 2024 14:05:21 -0300, Cody Eksal wrote:
+>> The USB PHY found in the A100 is similar to that found in the A64,
+>> although it requires some quirks to be enabled. Add a compatible for 
+>> the
+>> A100's variant.
 >> 
->> From: Yangtao Li <frank@allwinnertech.com>
+>> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+>> ---
+>>  .../devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml    | 1 
+>> +
+>>  1 file changed, 1 insertion(+)
 >> 
->> Allwinner A64 have two HCI USB controllers, a OTG controller and a USB
 > 
->             ^^^ Please update this.
-I wasn't sure if I was supposed to update the commit messages; a few 
-others have grammar errors as well. I'll fix those alongside this one in 
-V2.
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
+A quick note that I'm updating this patch in V2 to allow for falling 
+back to the D1 compatible.
 
 Thanks!
 - Cody
->> PHY device, let's add nodes on dts.
->> 
->> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
->> [masterr3c0rd@epochal.quest: fallback to a33-musb instead of h3-musb]
->> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
->> ---
->>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 91 
->> +++++++++++++++++++
->>  1 file changed, 91 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> index adb11b26045f..0aee1b578661 100644
->> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
 
