@@ -1,155 +1,137 @@
-Return-Path: <linux-pm+bounces-16569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FD969B2F55
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 12:53:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C13E9B2FE0
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 13:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48A351F20F30
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 11:53:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB8741F2245A
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 12:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F4D1D5ADE;
-	Mon, 28 Oct 2024 11:53:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB7E1D90D7;
+	Mon, 28 Oct 2024 12:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i3rTyWpk"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="mvapyRVD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-ztdg10011201.me.com (pv50p00im-ztdg10011201.me.com [17.58.6.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAF01D0E38
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 11:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA601D86E8
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 12:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730116422; cv=none; b=egCUgdlvfkOYrcfcl30TnjpvTkvZAFLogPFfbynBpnT/C65ynafp8xlOGnkieQUn9wcSg7gwWVnCZep5YVxWUdRAR40Y4Mr3INiVpd/PwMPYpLph8+2IlYkMb/IEJv91KQnRmzDtxaKkmR9DZOJYtJOJQGR4YhcDpd4ZYy1xhcw=
+	t=1730117512; cv=none; b=dOT4EuR98cvFbKkFKTBhagZgOGRX3sY6cvRQQyng2qwhoTW/bdZ5aH86xYfYDace/b+korp5qZJtEwkeBRlLloe0Rdf6gQSaGnC8QGve0xWzXEE1sR7ffFqqwhxpYYioOZOkSxfS/g6RXzYexi7DBj/1AulUqTpEHFhUWKiwOG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730116422; c=relaxed/simple;
-	bh=6QkgyBDKShlQ0y/cx9QH4amUPnbLqaaOreh4ogVY54Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JCuqgqxh2AGb5hjug7EP/KZLeTY+YBd+ZbMf9VakcP2kXdS5S7qw8qPSRXZ607cAWK6TCQ6YZ6eDAf8jP75VPTeo3Jzd6G3rGjX1NqJjYvDrUdWOXREdCoaZCqTyJPWcdJzBmCUeohKrlBcc1DLHooGpGhIJsgeZR2qs+0ynkXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i3rTyWpk; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so148155e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 04:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730116417; x=1730721217; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s8ohfpnIEvg7feisWnyEQsAMOz4YBMRZ4DT963EvlJY=;
-        b=i3rTyWpk70CIPABaFlYyKNgHbGBH7oZCMF1MT9tY3/9GcRuFks3uXvY60ei17WiDD0
-         VQldY0CHYYyK4RFwFCX93Gxyywx093b7CrL6KjpTPQlweuzN3jDv0kWYpxUn9NAYAZ5A
-         vXQeMHufEkVjXI9pEZ/QGsSK2JAFkp0I1gjqq9Klaw+pqNLAv9piOMNVQhe/R2xMjTCd
-         Vj9Fy3Zn1XowaC/1Y6/ofY7vWwkLPqVujCmI9zR5s4KsUYHQjCWWg6s0TP1MD1eJTmGS
-         ihu5oaYTJbgFhJgLViPU1Fi+a+uF3dB2/40fZ7q6mbOIoJg6ikXBMAvB2ajQqXrjf+i5
-         Arlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730116417; x=1730721217;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s8ohfpnIEvg7feisWnyEQsAMOz4YBMRZ4DT963EvlJY=;
-        b=fqbQ6bu3hC2N8LayBmnVNcB1Mt/+QJ4irOCDKSV1zZQTx4sQwNM0zN8Lc9iMCp+tua
-         hR2NbIg2XavvSRtip/wK7rDynV95ML5yT6GbqEQkXCUiRJmYH6KuPocA+WUH9ES4yG7E
-         Af/BhlnMmDnrLvSZbx15gtWeOqsnzHEVA+CEA2AkJiS38xGunzd7ZLI+4StrAnPDIA6U
-         6HmqU+YuJwDc/WFauho+vCIns1+f5ncKJBLCTYmbWnnlYCsPfrosPaoFvhzVdvLa+QS5
-         9tEzPbcySCxEr3RydBpuUqn2KSmcXbYFGbifoN2VYREAQVQPbCQNRpCEB31xEMFvU45u
-         sXPg==
-X-Forwarded-Encrypted: i=1; AJvYcCXNspqSmgZ/8WsgsIORaXsfZWpHTUT9TPEq3WeihFSNupqzP5+NlWSn27KvlRFjnA+028XpfKZxkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymF+0m8knVG38B55baCB8FG6uACNGmkq6cWPeQlMvntbm2dIxf
-	iCMm/VFor0pYy5IztE9pbPU/clFeI3j6Qu6ix7UznEpKVJ1GFND0EHvB36NZCg==
-X-Google-Smtp-Source: AGHT+IFAG1wQgZSHD4GZ1FDVInCNhg5i9ZX5wl+jOWzRo1tsON7IOnOTabrNuttxFekm1NvUnzUp2w==
-X-Received: by 2002:a05:600c:1e8f:b0:426:66a0:6df6 with SMTP id 5b1f17b1804b1-4319ab034e8mr4472705e9.0.1730116417455;
-        Mon, 28 Oct 2024 04:53:37 -0700 (PDT)
-Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4319359527asm106666165e9.16.2024.10.28.04.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 04:53:36 -0700 (PDT)
-Date: Mon, 28 Oct 2024 11:53:33 +0000
-From: Mostafa Saleh <smostafa@google.com>
-To: Rob Clark <robdclark@gmail.com>
-Cc: iommu@lists.linux.dev, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Rob Clark <robdclark@chromium.org>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <dri-devel@lists.freedesktop.org>,
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <freedreno@lists.freedesktop.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	"moderated list:ARM SMMU DRIVERS" <linux-arm-kernel@lists.infradead.org>,
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <linux-arm-msm@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Sean Paul <sean@poorly.run>, Steven Price <steven.price@arm.com>
-Subject: Re: [PATCH v9 0/4] io-pgtable-arm + drm/msm: Extend iova fault
- debugging
-Message-ID: <Zx97PU7cUEVCnpPl@google.com>
-References: <20240827181717.187245-1-robdclark@gmail.com>
+	s=arc-20240116; t=1730117512; c=relaxed/simple;
+	bh=aqNiouNowU0/nT1bh7e513W9iCoKLbT4s+J+T3hJyBs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=A7GoDv/gSL1OH4I0MTZm5K9Y0RzngSsdDT62nzDLpGw85Nlsi7RiR+JOMrWxnviNCEqqUIgWWnV52zRby1KdMsDS3UAs/hV2cr6JARWI7RuQ3zYWlmLzEw5QYKU5qmaa8rPo0e8zLuhmjr1eQA2A47LZyOG7Hgw2Px8KJexmpxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=mvapyRVD; arc=none smtp.client-ip=17.58.6.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1730117510;
+	bh=0g82I+it26+TLuelS001Lia4SSmrgncY6oesFfGXKuQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To;
+	b=mvapyRVDc86rAgu7e//VBupiPz0scTPM7T6sCzIXIVyKLeBmgyay458r5yUhAkm24
+	 f+h8TzOvQ3xSFz0ROFQtDyVbqNBBH7ztPcR7iSqbQV8/PkuR9sP/SFuSkhCLoEPeFX
+	 ZemRgrtgMHCV+7RtiRLNnMACTeARsynBXhPkC0HpNswU/J9NDGBgZuZkR0a1wVm/G2
+	 RcfDZxj0yOvyPQGSqJIq17rwQmnWOjXnXfaiPXAQRiadBJ0j7J413G4/G0pFsV+wlk
+	 K3KkStN5NstuO4kzphHqIAksDosOn/JmeC+vNGNpOXHJnyo3BPs91Ry68NSRP9xV4C
+	 Bqm8Uy47mzN8Q==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10011201.me.com (Postfix) with ESMTPSA id 3F7D66801FE;
+	Mon, 28 Oct 2024 12:11:45 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Date: Mon, 28 Oct 2024 20:11:11 +0800
+Subject: [PATCH] driver core: Put device attribute @wakeup_last_time_ms and
+ its show() together
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240827181717.187245-1-robdclark@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241028-fix_power_sysfs-v1-1-7b2fbeb14d47@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAF5/H2cC/x2MSQqAMAwAvyI5W9AoiH5FpJSaai4qCbgg/bvB4
+ 8DMvKAkTApD8YLQycr7ZlCXBcQ1bAs5no0BK2yrHhuX+PbHfpF4fTSpo6ZGRGpj6BCsOoRM+Y/
+ jlPMHp94XHWEAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+ Len Brown <len.brown@intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.1
+X-Proofpoint-ORIG-GUID: Y2Lp68-d1v-FrdBTADXErByWHl2nHnZY
+X-Proofpoint-GUID: Y2Lp68-d1v-FrdBTADXErByWHl2nHnZY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-28_04,2024-10-28_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
+ clxscore=1015 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2308100000 definitions=main-2410280098
+X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-Hi Rob,
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-On Tue, Aug 27, 2024 at 11:17:08AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> This series extends io-pgtable-arm with a method to retrieve the page
-> table entries traversed in the process of address translation, and then
-> beefs up drm/msm gpu devcore dump to include this (and additional info)
-> in the devcore dump.
-> 
-> This is a respin of https://patchwork.freedesktop.org/series/94968/
-> (minus a patch that was already merged)
-> 
-> v2: Fix an armv7/32b build error in the last patch
-> v3: Incorperate Will Deacon's suggestion to make the interface
->     callback based.
-> v4: Actually wire up the callback
-> v5: Drop the callback approach
-> v6: Make walk-data struct pgtable specific and rename
->     io_pgtable_walk_data to arm_lpae_io_pgtable_walk_data
-> v7: Re-use the pgtable walker added for arm_lpae_read_and_clear_dirty()
-> v8: Pass pte pointer to callback so it can modify the actual pte
-> v9: Fix selftests_running case
-> 
-> Rob Clark (4):
->   iommu/io-pgtable-arm: Make pgtable walker more generic
->   iommu/io-pgtable-arm: Re-use the pgtable walk for iova_to_phys
->   iommu/io-pgtable-arm: Add way to debug pgtable walk
->   drm/msm: Extend gpu devcore dumps with pgtbl info
+Move location of dpm_sysfs_wakeup_change_owner() a bit to
 
-Do you have plans to post another version of this series, as I am
-working on some patches, that would use some of the common page walk
-logic, so it would be more convenient to have them upstream.
-Otherwise, I can have your series as a dependency.
+- Put device attribute @wakeup_last_time_ms and its show() together.
+- Put two different instances of dpm_sysfs_wakeup_change_owner() together.
 
-Thanks,
-Mostafa
+That will make better code layout.
 
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ drivers/base/power/sysfs.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-> 
->  drivers/gpu/drm/msm/adreno/adreno_gpu.c |  10 ++
->  drivers/gpu/drm/msm/msm_gpu.c           |   9 ++
->  drivers/gpu/drm/msm/msm_gpu.h           |   8 ++
->  drivers/gpu/drm/msm/msm_iommu.c         |  22 ++++
->  drivers/gpu/drm/msm/msm_mmu.h           |   3 +-
->  drivers/iommu/io-pgtable-arm.c          | 149 +++++++++++++++---------
->  include/linux/io-pgtable.h              |  15 +++
->  7 files changed, 160 insertions(+), 56 deletions(-)
-> 
-> -- 
-> 2.46.0
-> 
+diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+index a1474fb67db9..f8163b559bf9 100644
+--- a/drivers/base/power/sysfs.c
++++ b/drivers/base/power/sysfs.c
+@@ -509,14 +509,6 @@ static ssize_t wakeup_last_time_ms_show(struct device *dev,
+ 	return sysfs_emit(buf, "%lld\n", msec);
+ }
+ 
+-static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
+-						kgid_t kgid)
+-{
+-	if (dev->power.wakeup && dev->power.wakeup->dev)
+-		return device_change_owner(dev->power.wakeup->dev, kuid, kgid);
+-	return 0;
+-}
+-
+ static DEVICE_ATTR_RO(wakeup_last_time_ms);
+ 
+ #ifdef CONFIG_PM_AUTOSLEEP
+@@ -541,6 +533,15 @@ static ssize_t wakeup_prevent_sleep_time_ms_show(struct device *dev,
+ 
+ static DEVICE_ATTR_RO(wakeup_prevent_sleep_time_ms);
+ #endif /* CONFIG_PM_AUTOSLEEP */
++
++static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
++						kgid_t kgid)
++{
++	if (dev->power.wakeup && dev->power.wakeup->dev)
++		return device_change_owner(dev->power.wakeup->dev, kuid, kgid);
++	return 0;
++}
++
+ #else /* CONFIG_PM_SLEEP */
+ static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
+ 						kgid_t kgid)
+
+---
+base-commit: 9bd133f05b1dca5ca4399a76d04d0f6f4d454e44
+change-id: 20240923-fix_power_sysfs-e31222e4ca72
+
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
+
 
