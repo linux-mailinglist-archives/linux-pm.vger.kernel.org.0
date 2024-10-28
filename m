@@ -1,289 +1,178 @@
-Return-Path: <linux-pm+bounces-16605-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16606-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C097D9B36E0
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:43:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA3EA9B3782
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 18:19:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51E751F21DA3
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:43:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36C43B23AE1
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 17:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E8A1DEFFC;
-	Mon, 28 Oct 2024 16:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAF41DF245;
+	Mon, 28 Oct 2024 17:19:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="CCktmkk5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qOqeRxnH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C41DE3C4;
-	Mon, 28 Oct 2024 16:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABF81DED57
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 17:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730133784; cv=none; b=V1hCeV94W8QAFDnYhsHA40OfbaN4AK/v6xPNCaVqVp2UlH4HhfalmqmSNuboV8LA9H5FskZoyIRb11F52de2d+lQt8Fjzd3VWDpXESidjbrn1aeZXmCX+Gg2nFcXM72RDmWZTASeB8hq8ld/f/jC6gmLV2+33K+KLYVmdoooCnE=
+	t=1730135957; cv=none; b=d1zGfRY0XMUZo3St77b93Io0Pa1mhlV6eq4T05+t8PdejHzsPqvT90xiHPsVUNT+gOZvmLm9KAugXyMjKm0WKqzbvOCAmpRRaZ1ZbH/vwLqQBSzFf+c2zoTjiyutEX3JRCBjrnr/7/DWTp0KQXU5vN6m1kWngDqfPsVpJgPwSzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730133784; c=relaxed/simple;
-	bh=hfxfnDn52geDLFQ8Mw1FoWnOKLtSrLItsMKH3nc3vSM=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=tIBQ3ndfaIYa6z6IMhECzog0llWcVBvGWW04n7dKIXAuIO1PGjvdsJKlmrzT6hXUHnC7shbvITNmUZ57/kt6OFaFFBgSR4iy0s/7MkonzJ+40UAGo+58BtOHk3T7uHN8oznmsLXbVV2bGga6x1xY1bNwufvgVr1ngDah3YrEhqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=CCktmkk5; arc=none smtp.client-ip=51.222.15.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
-	s=default; t=1730133780;
-	bh=hfxfnDn52geDLFQ8Mw1FoWnOKLtSrLItsMKH3nc3vSM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CCktmkk5ETNhFgJVayeiuWBBvWFtz9i2eH85Alx5ONZZGx7Xh9lUvO6YnDWdqVAA4
-	 J6Mhc7juRyZ5fekUyNi+P0zPsmzohLXHJSMMfuDzcwNeaBqSQ0bTFLMWsXLc/gGCEP
-	 wXOwVta/0ETlbhN+6yQaut26MFDKtzmaXIK0bOP3uN/Qa5XhNaS5QyVON5vx0ja0Zj
-	 wJP3uGsZqYa0SSNdFlvzCO4/HCUyhBMR6Dizwx67IhuoYiN4RTsGazv5eQwpy+pH+I
-	 KwpBUonnE9W0iPT1J2Lssw/4S+QWxKI52C+11V02kRmPIubHaYeWZVH81DcEW+5lk4
-	 0GL6aKp3te/xg==
-X-Virus-Scanned: by epochal.quest
+	s=arc-20240116; t=1730135957; c=relaxed/simple;
+	bh=RK5VA9S32Yz8dl7njZw5jAITmojkn2XFDc8BEOO9Y1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SV9EMzWu5Iq/JwxiWhvo+4uRy1THN8XSJyhytRJA/QdBdJDiGp6eKZTFKz7Qam05sxjBIXNSzCyj+sJ8UFNBns/9meHsrYVIVq7XuYSqfYMKkb82AnLWOCiz+ple2OXpoREvrxCgHFVW7WN4o6rPeZ6ZysUGO3DRg3LiuMX8aZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qOqeRxnH; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4314f38d274so61000405e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 10:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730135954; x=1730740754; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1fkTku/2hlfLuFEUEbfmaTEX5P1Wden2mB6YLijG1sA=;
+        b=qOqeRxnH6NhDCI5FZ/QOqwWf9X5sZnfB22CqhimD8YdSXDJLYCYgxTC1wvkOTghIHq
+         X1/rCpHyeKgBxykBfJ0kTX8E0I+DKuKsXiWvAGysBBwpi2evaXpwFEqrWdaeQ4vKjGhi
+         2CIAWuh9hW1+In+YVZDkf2PkifEMpYyfd50ppjMx8cm+tLHWtDIoU58E1uKjFVpWzUHH
+         GOY3nnbvmzT3NsgZGx55/5TTP00DrNhAZMzlhFUBVEsSBuYpIFsxfMbCrSe6cYKA7VhZ
+         LLYSiPMmKinVI2rFa20QN27z9Y1rCMsE/J16lf7DATVkGA4OCrp1C8KN8EO54iqkLytE
+         vxrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730135954; x=1730740754;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1fkTku/2hlfLuFEUEbfmaTEX5P1Wden2mB6YLijG1sA=;
+        b=sEFv3rlXR65esZAT2R7VdGoDb1QQftArsZSm1iEg9SLdqpWQ1nrF156s2gT9g+dCsj
+         6XF16p87z4ZZMXs9eaik3Ur1G+4fUMa5Lq0a0dNakY8VjJclJ4JMYnwYGBiBrB09iykK
+         iTTNxtiAdHr7hm4IE0Yrpzm6oimxuxONRhzsuKfpwVfDs3sIqkcMQ91y7g5kiE7UbOYO
+         Ms9r8kUUUohL3Zi34k8h4KFjXvLvryBWavB7D7ZhxV+kkzeh86xBgW+W0lVTqN7rfFuJ
+         bOkoDvq7/PPO2vJN81g11iEM8PT5WXTixiVKDuI8xsW1lGzpnq7FIYhpCJr2AC3L8iuZ
+         FRAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWfFmYLwVoENQ8UF2Jh9cGoHSzgTA4B92pYQltnPZ2170Jbgy8ET0/RS6WThRajV6rfW1KFc1FCPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGzh50yYG+TlFuF0eoaxVYIsN34uhK3eNASiQocqUP0y7rPBiT
+	VdAi8zrBOyaDHVTEAhZxBlcLHDgDPh4mh+7hscovufMbuyzc7U5yz6DrwAT40RM=
+X-Google-Smtp-Source: AGHT+IECm76pRbyYpp6SjkcMtCuO1SyMDPfHW0X9U1Tuvf/svqN92ChLfU5gRa1/AIweI4/7e+k+4A==
+X-Received: by 2002:a05:600c:1e03:b0:431:555d:e184 with SMTP id 5b1f17b1804b1-4319ad06917mr98125275e9.25.1730135952130;
+        Mon, 28 Oct 2024 10:19:12 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b1c8a9sm10096153f8f.12.2024.10.28.10.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 10:19:11 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: wenst@chromium.org,
+	rafael@kernel.org
+Cc: Icenowy Zheng <uwu@icenowy.me>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-pm@vger.kernel.org (open list:THERMAL),
+	linux-kernel@vger.kernel.org (open list),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
+	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+Subject: [PATCH] thermal/of: support thermal zones w/o trips subnode
+Date: Mon, 28 Oct 2024 18:19:01 +0100
+Message-ID: <20241028171901.2484882-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241018073139.1268995-1-wenst@chromium.org>
+References: <20241018073139.1268995-1-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 28 Oct 2024 13:42:59 -0300
-From: Cody Eksal <masterr3c0rd@epochal.quest>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu
- Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
- Holland <samuel@sholland.org>, Parthiban <parthiban@linumiz.com>, Yangtao Li
- <frank@allwinnertech.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Vinod Koul <vkoul@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Thierry Reding <treding@nvidia.com>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Maxime Ripard <mripard@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Yangtao Li
- <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
- <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Kishon Vijay Abraham I
- <kishon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Shuosheng
- Huang <huangshuosheng@allwinnertech.com>
-Subject: Re: [PATCH 13/13] arm64: dts: allwinner: a100: Add CPU Operating
- Performance Points table
-In-Reply-To: <20241025132739.3d0f116d@donnerap.manchester.arm.com>
-References: <20241024170540.2721307-1-masterr3c0rd@epochal.quest>
- <20241024170540.2721307-14-masterr3c0rd@epochal.quest>
- <20241025132739.3d0f116d@donnerap.manchester.arm.com>
-Message-ID: <b0fdfffd6b840eeabd2c9ab748915dd8@epochal.quest>
-X-Sender: masterr3c0rd@epochal.quest
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2024/10/25 9:27 am, Andre Przywara wrote:
-> On Thu, 24 Oct 2024 14:05:31 -0300
-> Cody Eksal <masterr3c0rd@epochal.quest> wrote:
-> 
->> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
->> 
->> Add an Operating Performance Points table for the CPU cores to
->> enable Dynamic Voltage & Frequency Scaling on the A100.
->> 
->> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
->> [masterr3c0rd@epochal.quest: fix typos in -cpu-opp, use compatible]
->> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
->> ---
->>  .../allwinner/sun50i-a100-allwinner-perf1.dts |  5 ++
->>  .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    | 90 
->> +++++++++++++++++++
->>  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi |  8 ++
->>  3 files changed, 103 insertions(+)
->>  create mode 100644 
->> arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
->> 
->> diff --git 
->> a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
->> index 29e9d24da8b6..99b1b2f7b92a 100644
->> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
->> @@ -6,6 +6,7 @@
->>  /dts-v1/;
->> 
->>  #include "sun50i-a100.dtsi"
->> +#include "sun50i-a100-cpu-opp.dtsi"
->> 
->>  #include <dt-bindings/gpio/gpio.h>
->> 
->> @@ -67,6 +68,10 @@ &usb_otg {
->>  	status = "okay";
->>  };
->> 
->> +&cpu0 {
->> +	cpu-supply = <&reg_dcdc2>;
->> +};
->> +
->>  &pio {
->>  	vcc-pb-supply = <&reg_dcdc1>;
->>  	vcc-pc-supply = <&reg_eldo1>;
->> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
->> new file mode 100644
->> index 000000000000..eeb8d20f3fb4
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
->> @@ -0,0 +1,90 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +// Copyright (c) 2020 Yangtao Li <frank@allwinnertech.com>
->> +// Copyright (c) 2020 ShuoSheng Huang 
->> <huangshuosheng@allwinnertech.com>
->> +
->> +/ {
->> +	cpu_opp_table: cpu-opp-table {
->> +		compatible = "allwinner,sun50i-a100-operating-points";
->> +		nvmem-cells = <&cpu_speed_grade>;
->> +		opp-shared;
->> +
->> +		opp@408000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <408000000>;
->> +
->> +			opp-microvolt-speed0 = <900000 900000 1200000>;
->> +			opp-microvolt-speed1 = <900000 900000 1200000>;
->> +			opp-microvolt-speed2 = <900000 900000 1200000>;
-> 
-> Is there actually an advantage when using the three cells version?
-> I wonder if we should go with just the target voltage (the first cell
-> here), as done for the H616.
-It probably makes sense to follow precedent; I've updated V2 to make 
-these single-cell.
-> Apart from that it looks fine to me.
-I did get a comment from Rob's bot that picked up some issues with the 
-namings of these nodes; I've updated that as well.
+From: Icenowy Zheng <uwu@icenowy.me>
 
-Thanks!
-- Cody
-> Cheers,
-> Andre.
-> 
->> +		};
->> +
->> +		opp@600000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <600000000>;
->> +
->> +			opp-microvolt-speed0 = <900000 900000 1200000>;
->> +			opp-microvolt-speed1 = <900000 900000 1200000>;
->> +			opp-microvolt-speed2 = <900000 900000 1200000>;
->> +		};
->> +
->> +		opp@816000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <816000000>;
->> +
->> +			opp-microvolt-speed0 = <940000 940000 1200000>;
->> +			opp-microvolt-speed1 = <900000 900000 1200000>;
->> +			opp-microvolt-speed2 = <900000 900000 1200000>;
->> +		};
->> +
->> +		opp@1080000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1080000000>;
->> +
->> +			opp-microvolt-speed0 = <1020000 1020000 1200000>;
->> +			opp-microvolt-speed1 = <980000 980000 1200000>;
->> +			opp-microvolt-speed2 = <950000 950000 1200000>;
->> +		};
->> +
->> +		opp@1200000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1200000000>;
->> +
->> +			opp-microvolt-speed0 = <1100000 1100000 1200000>;
->> +			opp-microvolt-speed1 = <1020000 1020000 1200000>;
->> +			opp-microvolt-speed2 = <1000000 1000000 1200000>;
->> +		};
->> +
->> +		opp@1320000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1320000000>;
->> +
->> +			opp-microvolt-speed0 = <1160000 1160000 1200000>;
->> +			opp-microvolt-speed1 = <1060000 1060000 1200000>;
->> +			opp-microvolt-speed2 = <1030000 1030000 1200000>;
->> +		};
->> +
->> +		opp@1464000000 {
->> +			clock-latency-ns = <244144>; /* 8 32k periods */
->> +			opp-hz = /bits/ 64 <1464000000>;
->> +
->> +			opp-microvolt-speed0 = <1180000 1180000 1200000>;
->> +			opp-microvolt-speed1 = <1180000 1180000 1200000>;
->> +			opp-microvolt-speed2 = <1130000 1130000 1200000>;
->> +		};
->> +	};
->> +};
->> +
->> +&cpu0 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> +
->> +&cpu1 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> +
->> +&cpu2 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> +
->> +&cpu3 {
->> +	operating-points-v2 = <&cpu_opp_table>;
->> +};
->> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi 
->> b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> index 6dca766ea222..747a0292ef98 100644
->> --- a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->> @@ -23,6 +23,7 @@ cpu0: cpu@0 {
->>  			device_type = "cpu";
->>  			reg = <0x0>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->> 
->>  		cpu1: cpu@1 {
->> @@ -30,6 +31,7 @@ cpu1: cpu@1 {
->>  			device_type = "cpu";
->>  			reg = <0x1>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->> 
->>  		cpu2: cpu@2 {
->> @@ -37,6 +39,7 @@ cpu2: cpu@2 {
->>  			device_type = "cpu";
->>  			reg = <0x2>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->> 
->>  		cpu3: cpu@3 {
->> @@ -44,6 +47,7 @@ cpu3: cpu@3 {
->>  			device_type = "cpu";
->>  			reg = <0x3>;
->>  			enable-method = "psci";
->> +			clocks = <&ccu CLK_CPUX>;
->>  		};
->>  	};
->> 
->> @@ -142,6 +146,10 @@ efuse@3006000 {
->>  			ths_calibration: calib@14 {
->>  				reg = <0x14 8>;
->>  			};
->> +
->> +			cpu_speed_grade: cpu-speed-grade@1c {
->> +				reg = <0x1c 0x2>;
->> +			};
->>  		};
->> 
->>  		watchdog@30090a0 {
+Although the current device tree binding of thermal zones require the
+trips subnode, the binding in kernel v5.15 does not require it, and many
+device trees shipped with the kernel, for example,
+allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
+comply to the old binding and contain no trips subnode.
+
+Allow the code to successfully register thermal zones w/o trips subnode
+for DT binding compatibility now.
+
+Furtherly, the inconsistency between DTs and bindings should be resolved
+by either adding empty trips subnode or dropping the trips subnode
+requirement.
+
+Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+[wenst@chromium.org: Reworked logic and kernel log messages]
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+Link: https://lore.kernel.org/r/20241018073139.1268995-1-wenst@chromium.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_of.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index a4caf7899f8e..07e09897165f 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -99,18 +99,15 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
+ 	struct device_node *trips;
+ 	int ret, count;
+ 
++	*ntrips = 0;
++	
+ 	trips = of_get_child_by_name(np, "trips");
+-	if (!trips) {
+-		pr_err("Failed to find 'trips' node\n");
+-		return ERR_PTR(-EINVAL);
+-	}
++	if (!trips)
++		return NULL;
+ 
+ 	count = of_get_child_count(trips);
+-	if (!count) {
+-		pr_err("No trip point defined\n");
+-		ret = -EINVAL;
+-		goto out_of_node_put;
+-	}
++	if (!count)
++		return NULL;
+ 
+ 	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
+ 	if (!tt) {
+@@ -133,7 +130,6 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
+ 
+ out_kfree:
+ 	kfree(tt);
+-	*ntrips = 0;
+ out_of_node_put:
+ 	of_node_put(trips);
+ 
+@@ -401,11 +397,14 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+ 
+ 	trips = thermal_of_trips_init(np, &ntrips);
+ 	if (IS_ERR(trips)) {
+-		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
++		pr_err("Failed to parse trip points for %pOFn id=%d\n", sensor, id);
+ 		ret = PTR_ERR(trips);
+ 		goto out_of_node_put;
+ 	}
+ 
++	if (!trips)
++		pr_info("No trip points found for %pOFn id=%d\n", sensor, id);
++
+ 	ret = thermal_of_monitor_init(np, &delay, &pdelay);
+ 	if (ret) {
+ 		pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
+-- 
+2.43.0
+
 
