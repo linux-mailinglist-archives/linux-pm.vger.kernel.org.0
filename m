@@ -1,153 +1,260 @@
-Return-Path: <linux-pm+bounces-16626-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16627-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D5639B3CC0
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 22:33:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 356999B3CC4
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 22:33:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3523B1F2289F
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 21:33:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E89B6B21C07
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 21:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840A31E1C2E;
-	Mon, 28 Oct 2024 21:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920BF1E00A0;
+	Mon, 28 Oct 2024 21:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="arxxIELD"
+	dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b="RYGTmMxJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from s1-ba86.socketlabs.email-od.com (s1-ba86.socketlabs.email-od.com [142.0.186.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2F61E00A0
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 21:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC8B19005F
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 21:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=142.0.186.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730151206; cv=none; b=fgVXYNna3u2NXefrbET0zAPiopItGA01Q8nvZ6zckKlgrjjr85NU52/lP5sWSnibLmz7yJW0Xe//fOcD3XILgKDJM7iVpZHJpJYUa77895+nqWqcQ23IiGQKQKwIiJ4fVUSEn9dPdSNCOnjEFpSGyG12JvQsOj5ksnZg/sFlP70=
+	t=1730151223; cv=none; b=kayk2wy414D3nZZkr9NXaJB+tgDQ6nVFHxOg7/w1EYJ5B5rI6Ks+xv1jhyMYET3jFGsRzJMlNuJ81NHfH6aKFUPuE5U7yOE/3HC5DfEnNkd+ZGY78B4t69X+EfisR4qZ3Pcb0078DEMk478impHaNEIo1f/CD1VcqwCm5NY5t0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730151206; c=relaxed/simple;
-	bh=mWHqBO7ggUCFVDg3HGgCG/OeU8lRFkRHqMQJvFNQjcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UC66v2xxDfEG+OCW1NZ0rj3sHF2e2+hke/G+LhDWgeZEDTbRdKV3XRYu/LDREoPswmyS6agd9RAY6jZw4/VbUYfNxdcMLmYd/sj2+D7gsiBfyoO6BD2da69OQQuVY+K9pAxXkYqe/e2BxrklZFvGHYhTv0eFcobH41DoJy10ESc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=arxxIELD; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-83b430a4cfdso35791739f.2
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 14:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1730151203; x=1730756003; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HFZKIzMwJccmjbRWz8hr4dF1BDbSPdCqeQ+MDKxNuD8=;
-        b=arxxIELDUmRedJxNm+wSBF8ShnNy6C2RIky9yytjv57uIeyEyIyOuhmOSzbhAJMttf
-         3+DMhk91nM/kB+/OKDhqBZnI6Nr4inDcF7eF5NKJZTh4+vAG2QsKSWaQZKNhPsNwWJSa
-         dUCcef7OZzrZXtVW2QMIFGr3YtAl7RzTQBn98=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730151203; x=1730756003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HFZKIzMwJccmjbRWz8hr4dF1BDbSPdCqeQ+MDKxNuD8=;
-        b=vfc/TuRG/ExIhg+YKGEw8BzGccYjMxkXzTKQHshFWTWqpEizxb9ZpfnBBvgsOsO+OR
-         m4IUO6qYluzxf4YmlFO4oDLpgMWx6F0hOZSEeBum80Ay+vCBUM+zLPE3FMEdvf+TeAAJ
-         7RHdZt1JF6VmpWDNJBhWwU6flP+Y0UWiPYDdSXh/pjtIvWNCzqFaKCb8GiWahpzGk+KG
-         8CVTm1kVx3eJDW2KTCnRtBFo/YPfmBHTpvscZj/9Go0OijPDqswtDGwZKVRQYOWi19WI
-         OyPX6lZ9RUB2gLzPbNAarTjd/YGMv0B1v4rahLZi13ZwD7gEfeYaao/JoSWfIEZBavPE
-         02+w==
-X-Forwarded-Encrypted: i=1; AJvYcCV0izIfsB34wfhHRfs1HbfqcH5vxBZbjuUmyeHWFPCP8P6iTlgjPvw+QpcDLH8sxwP/yoodnqAK8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZDekHBQpChx5gFHybKeiCqZgIwUD+oq4AWIkGmLSbQ96yfRTR
-	LAFHsPVe482aQvN1/oUZfdoSI0o0uNyhKeUBj1JYF8hUhppxDpTaMRFiV9030EIY/xU23K9WmLn
-	jJEK+EXUII0eFM3Mt3GDcSwBmQN6EneKYxkpV
-X-Google-Smtp-Source: AGHT+IFRf7Qdfzoq2U9A+NIDwOGbIKY7nZWXffb09QD8AJkz3xy2j34ROShaH6Jj6HGBK3DfHA78bcGG4mf4sL65r5o=
-X-Received: by 2002:a05:6602:1686:b0:82a:2a67:9429 with SMTP id
- ca18e2360f4ac-83b1c3e7abemr939673139f.5.1730151203568; Mon, 28 Oct 2024
- 14:33:23 -0700 (PDT)
+	s=arc-20240116; t=1730151223; c=relaxed/simple;
+	bh=REJqBIp+u4tgztS67pNZ5sNBdoeBOrImDHIAMRBsbb8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WU81sbbqOYj8Rd6T6oLW95AtTx+A0y8t2stldzhnDaNFCLq+DLlg/lpjlLt+ZyUKMsp5v11OKt8/sLcZi7qIW3n2zlZpe97AYl8UGdlciNmCdkeGZ9ZBBGyJJT5jUd2t3Lc9uY+OFDu1gqnXeVUHTXhO6tCQfaSogT+dqQoivF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com; spf=pass smtp.mailfrom=email-od.com; dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b=RYGTmMxJ; arc=none smtp.client-ip=142.0.186.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=email-od.com
+DKIM-Signature: v=1; a=rsa-sha256; d=email-od.com;i=@email-od.com;s=dkim;
+	c=relaxed/relaxed; q=dns/txt; t=1730151221; x=1732743221;
+	h=content-transfer-encoding:content-type:in-reply-to:from:content-language:references:cc:to:subject:mime-version:date:message-id:x-thread-info:subject:to:from:cc:reply-to;
+	bh=6doGIbPh3Cn0Hzi2wTIVT8G20SoeYWH9IUuwlNVcx4s=;
+	b=RYGTmMxJE3qoYE3Bwspatj1BCe0GGaCH/3YfBfFJQtZHs/0/vDLaIIzTIaVzbJfK7ckaPq1L9J5Lju3nzvSJSP3K1GCHqqZHfzBKLvZ/IrudjbHWWhIjtBMSGIvCYByWP5pFN39f6MerJcl+2WJT+aM2+MrcByLBCOx+tROQjBM=
+X-Thread-Info: NDUwNC4xMi40NzFlYTAwMDBjNjAwMGUubGludXgtcG09dmdlci5rZXJuZWwub3Jn
+x-xsSpam: eyJTY29yZSI6MCwiRGV0YWlscyI6bnVsbH0=
+Received: from [192.168.0.167] (d4-50-191-215.clv.wideopenwest.com [50.4.215.191])
+	by nalramli.com (Postfix) with ESMTPS id 9DD382CE0334;
+	Mon, 28 Oct 2024 17:33:26 -0400 (EDT)
+Message-ID: <894de4c2-ce04-4cc1-97d8-fc7c860e943d@nalramli.com>
+Date: Mon, 28 Oct 2024 17:33:25 -0400
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240827181717.187245-1-robdclark@gmail.com> <Zx97PU7cUEVCnpPl@google.com>
-In-Reply-To: <Zx97PU7cUEVCnpPl@google.com>
-From: Rob Clark <robdclark@chromium.org>
-Date: Mon, 28 Oct 2024 14:33:12 -0700
-Message-ID: <CAJs_Fx6EB=0GMqe4cZVdxptFSV3b63HHybfTOgiYVBudgAafsA@mail.gmail.com>
-Subject: Re: [PATCH v9 0/4] io-pgtable-arm + drm/msm: Extend iova fault debugging
-To: Mostafa Saleh <smostafa@google.com>
-Cc: Rob Clark <robdclark@gmail.com>, iommu@lists.linux.dev, 
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, 
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <dri-devel@lists.freedesktop.org>, 
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <freedreno@lists.freedesktop.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Joao Martins <joao.m.martins@oracle.com>, Kevin Tian <kevin.tian@intel.com>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	"moderated list:ARM SMMU DRIVERS" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <linux-arm-msm@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Sean Paul <sean@poorly.run>, Steven Price <steven.price@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 6.1.y 0/1] cpufreq: amd-pstate: Enable CPU boost in
+ passive and guided modes
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "nalramli@fastly.com" <nalramli@fastly.com>,
+ "jdamato@fastly.com" <jdamato@fastly.com>,
+ "khubert@fastly.com" <khubert@fastly.com>, "Yuan, Perry"
+ <Perry.Yuan@amd.com>, "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+ "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ "Huang, Ray" <Ray.Huang@amd.com>, "rafael@kernel.org" <rafael@kernel.org>,
+ "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <Zw8Wn5SPqBfRKUhp@LQ3V64L9R2>
+ <20241025010527.491605-1-dev@nalramli.com>
+ <CYYPR12MB8655545294DAB1B0D174B2AC9C4F2@CYYPR12MB8655.namprd12.prod.outlook.com>
+ <3a4596ba-1a83-4cd2-ba17-5132861eac00@amd.com>
+Content-Language: en-US
+From: "Nabil S. Alramli" <dev@nalramli.com>
+In-Reply-To: <3a4596ba-1a83-4cd2-ba17-5132861eac00@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 28, 2024 at 4:53=E2=80=AFAM Mostafa Saleh <smostafa@google.com>=
- wrote:
->
-> Hi Rob,
->
-> On Tue, Aug 27, 2024 at 11:17:08AM -0700, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > This series extends io-pgtable-arm with a method to retrieve the page
-> > table entries traversed in the process of address translation, and then
-> > beefs up drm/msm gpu devcore dump to include this (and additional info)
-> > in the devcore dump.
-> >
-> > This is a respin of https://patchwork.freedesktop.org/series/94968/
-> > (minus a patch that was already merged)
-> >
-> > v2: Fix an armv7/32b build error in the last patch
-> > v3: Incorperate Will Deacon's suggestion to make the interface
-> >     callback based.
-> > v4: Actually wire up the callback
-> > v5: Drop the callback approach
-> > v6: Make walk-data struct pgtable specific and rename
-> >     io_pgtable_walk_data to arm_lpae_io_pgtable_walk_data
-> > v7: Re-use the pgtable walker added for arm_lpae_read_and_clear_dirty()
-> > v8: Pass pte pointer to callback so it can modify the actual pte
-> > v9: Fix selftests_running case
-> >
-> > Rob Clark (4):
-> >   iommu/io-pgtable-arm: Make pgtable walker more generic
-> >   iommu/io-pgtable-arm: Re-use the pgtable walk for iova_to_phys
-> >   iommu/io-pgtable-arm: Add way to debug pgtable walk
-> >   drm/msm: Extend gpu devcore dumps with pgtbl info
->
-> Do you have plans to post another version of this series, as I am
-> working on some patches, that would use some of the common page walk
-> logic, so it would be more convenient to have them upstream.
-> Otherwise, I can have your series as a dependency.
+Hi Mario,
 
-Sorry, this had dropped off my radar, I'll post an updated iteration
-in a couple minutes.
+Thank you for taking a look at my patch.
 
-BR,
--R
+What do you think about the following for the commit message in the next
+revision of the PATCH, and omitting the cover letter since most of it is
+incorporated here?
 
-> Thanks,
-> Mostafa
->
->
-> >
-> >  drivers/gpu/drm/msm/adreno/adreno_gpu.c |  10 ++
-> >  drivers/gpu/drm/msm/msm_gpu.c           |   9 ++
-> >  drivers/gpu/drm/msm/msm_gpu.h           |   8 ++
-> >  drivers/gpu/drm/msm/msm_iommu.c         |  22 ++++
-> >  drivers/gpu/drm/msm/msm_mmu.h           |   3 +-
-> >  drivers/iommu/io-pgtable-arm.c          | 149 +++++++++++++++---------
-> >  include/linux/io-pgtable.h              |  15 +++
-> >  7 files changed, 160 insertions(+), 56 deletions(-)
-> >
-> > --
-> > 2.46.0
-> >
+***********************************************************************
+
+cpufreq: amd-pstate: Enable CPU boost in passive and guided modes
+
+The CPU frequency cannot be boosted when using the amd_pstate driver in
+passive or guided mode. This is fixed here.
+
+For example, on a host that has AMD EPYC 7662 64-Core processor without
+this patch running at full CPU load:
+
+$ for i in $(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq); =
+\
+  do ni=3D$(echo "scale=3D1; $i/1000000" | bc -l); echo "$ni GHz"; done |=
+ \
+  sort | uniq -c
+
+    128 2.0 GHz
+
+And with this patch:
+
+$ for i in $(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq); =
+\
+  do ni=3D$(echo "scale=3D1; $i/1000000" | bc -l); echo "$ni GHz"; done |=
+ \
+  sort | uniq -c
+
+    128 3.3 GHz
+
+The CPU frequency is dependent on a setting called highest_perf which is
+the multiplier used to compute it. The highest_perf value comes from
+cppc_init_perf when the driver is built-in and from pstate_init_perf when
+it is a loaded module. Both of these calls have the following condition:
+
+        highest_perf =3D amd_get_highest_perf();
+        if (highest_perf > __cppc_highest_perf_)
+                highest_perf =3D __cppc_highest_perf;
+
+Where again __cppc_highest_perf is either the return from
+cppc_get_perf_caps in the built-in case or AMD_CPPC_HIGHEST_PERF in the
+module case. Both of these functions actually return the nominal value,
+Whereas the call to amd_get_highest_perf returns the correct boost
+value, so the condition tests true and highest_perf always ends up being
+the nominal value, therefore never having the ability to boost CPU
+frequency.
+
+Since amd_get_highest_perf already returns the boost value we should
+just eliminate this check.
+
+The issue was introduced in v6.1 via commit bedadcfb011f ("cpufreq:
+amd-pstate: Fix initial highest_perf value"), and exists in stable kernel=
+s
+
+In v6.6.51, a large change, commit 1ec40a175a48 ("cpufreq: amd-pstate:
+Enable amd-pstate preferred core support"), was introduced which
+significantly refactored the code. This commit cannot be ported back on
+its own, and would require reviewing and cherry picking at least a few
+dozen of commits in cpufreq, amd-pstate, ACPI, CPPC.
+
+This means kernels v6.1 up until v6.6.51 are affected by this
+significant performance issue, and cannot be easily remediated. This
+patch simplifies the fix to a single commit.
+
+***********************************************************************
+
+On 10/28/2024 4:07 PM, Mario Limonciello wrote:
+> On 10/24/2024 22:23, Yuan, Perry wrote:
+>> [AMD Official Use Only - AMD Internal Distribution Only]
+>>
+>>> -----Original Message-----
+>>> From: Nabil S. Alramli <dev@nalramli.com>
+>>> Sent: Friday, October 25, 2024 9:05 AM
+>>> To: stable@vger.kernel.org
+>>> Cc: nalramli@fastly.com; jdamato@fastly.com; khubert@fastly.com;
+>>> Yuan, Perry
+>>> <Perry.Yuan@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; Huang, R=
+ay
+>>> <Ray.Huang@amd.com>; rafael@kernel.org; viresh.kumar@linaro.org; linu=
+x-
+>>> pm@vger.kernel.org; linux-kernel@vger.kernel.org; Nabil S. Alramli
+>>> <dev@nalramli.com>
+>>> Subject: [RFC PATCH 6.1.y 0/1] cpufreq: amd-pstate: Enable CPU boost
+>>> in passive
+>>> and guided modes
+>>>
+>>> Greetings,
+>>>
+>>> This is a RFC for a maintenance patch to an issue in the amd_pstate
+>>> driver where
+>>> CPU frequency cannot be boosted in passive or guided modes. Without
+>>> this patch,
+>>> AMD machines using stable kernels are unable to get their CPU
+>>> frequency boosted,
+>>> which is a significant performance issue.
+>>>
+>>> For example, on a host that has AMD EPYC 7662 64-Core processor
+>>> without this
+>>> patch running at full CPU load:
+>>>
+>>> $ for i in $(cat
+>>> /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq); \
+>>> =C2=A0=C2=A0 do ni=3D$(echo "scale=3D1; $i/1000000" | bc -l); echo "$=
+ni GHz"; done | \
+>>> =C2=A0=C2=A0 sort | uniq -c
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 128 2.0 GHz
+>>>
+>>> And with this patch:
+>>>
+>>> $ for i in $(cat
+>>> /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq); \
+>>> =C2=A0=C2=A0 do ni=3D$(echo "scale=3D1; $i/1000000" | bc -l); echo "$=
+ni GHz"; done | \
+>>> =C2=A0=C2=A0 sort | uniq -c
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 128 3.3 GHz
+>>>
+>>> I am not sure what the correct process is for submitting patches
+>>> which affect only
+>>> stable trees but not the current code base, and do not apply to the
+>>> current tree. As
+>>> such, I am submitting this directly to stable@, but please let me
+>>> know if I should be
+>>> submitting this elsewhere.
+>>>
+>>> The issue was introduced in v6.1 via commit bedadcfb011f ("cpufreq:
+>>> amd-pstate: Fix initial highest_perf value"), and exists in stable
+>>> kernels up until
+>>> v6.6.51.
+>>>
+>>> In v6.6.51, a large change, commit 1ec40a175a48 ("cpufreq: amd-pstate=
+:
+>>> Enable amd-pstate preferred core support"), was introduced which
+>>> significantly
+>>> refactored the code. This commit cannot be ported back on its own,
+>>> and would
+>>> require reviewing and cherry picking at least a few dozen of commits
+>>> in cpufreq,
+>>> amd-pstate, ACPI, CPPC.
+>>>
+>>> This means kernels v6.1 up until v6.6.51 are affected by this
+>>> significant
+>>> performance issue, and cannot be easily remediated.
+>>>
+>>> Thank you for your attention and I look forward to your response in
+>>> regards to what
+>>> the best way to proceed is for getting this important performance fix
+>>> merged.
+>>>
+>>> Best Regards,
+>>>
+>>> Nabil S. Alramli (1):
+>>> =C2=A0=C2=A0 cpufreq: amd-pstate: Enable CPU boost in passive and gui=
+ded modes
+>>>
+>>> =C2=A0 drivers/cpufreq/amd-pstate.c | 8 ++------
+>>> =C2=A0 1 file changed, 2 insertions(+), 6 deletions(-)
+>>>
+>>> --=20
+>>> 2.35.1
+>>
+>> Add Mario and Gautham for any help.
+>>
+>> Perry.
+>>
+>=20
+> If doing a patch that is only for 6.1.y then I think that some more of
+> this information from the cover letter needs to push into the patch its=
+elf.
+>=20
+> But looking over the patch and considering how much we've changed this
+> in the newer kernels I think it is a sensible localized change for 6.1.=
+y.
+>=20
+> As this is fixed in 6.6.51 via a more complete backport patch please
+> only tag 6.1 in your "Cc: stable@vger.kernel.org" from the patch.
+>=20
 
