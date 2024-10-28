@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-16587-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16588-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034C49B3525
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:41:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526269B357A
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 16:56:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33C001C218B8
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 15:41:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F14531F2234F
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2024 15:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A784B1DE4F3;
-	Mon, 28 Oct 2024 15:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138F41DE880;
+	Mon, 28 Oct 2024 15:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7DG4E8u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tdsK3FVI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8361212F585
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 15:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A5F1DE4F6
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 15:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730130067; cv=none; b=B3YweTFeVCG1E6Z66jt1K9SADgbTsh3Vd33FQiphkJztRWEOgYz9L6QYy6Ab5jdyT7joe9v2ijxJMrhnm0uOXs0BOzbyCZidNJfied2QYm/y6+ik7VF2gL64mCoEQtPQ05F+WxsUeEeAo8vk8wzojIrAdoT94alJIGgio/tbsis=
+	t=1730130988; cv=none; b=AsQ3ukXY6/IFGSfGmW5UTuKo8dBeKPB9+iRWrx8JdEpEBdq26wnVmlSlTxoMbRcysB+xwDA+KGb7Ud3aAeuYxj3bYMu70VC5qpiYVB+kUzCMzPVTdq4kZL2Lo1qr2pZC51Ep+hffm+Z6w15oBTgXSHpUMKq0NKhX9XpRF67dZ0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730130067; c=relaxed/simple;
-	bh=AU5qS9birt373A4uPL9+TGQx0rr2nAEBkyZG3JPT0os=;
+	s=arc-20240116; t=1730130988; c=relaxed/simple;
+	bh=dIZ4QdsKhD0jBwN8qawRiIjygad4OYbJYCnVVb7X+GA=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S8yWw3KrTZRCkZKnVYu7CxvJvTxRY0MgXktdtxth9ioL3Zwg+UAMtnElbDR0SWDePtWSk+huGIX5gHJJLQbFmQ3oyYbQpP3ro+XwLyLAZiofYquELr/cJpVod6qzTv5fvRSWrs4wHNJMfFMnXGHopal3tyvro2+jd+lzI4nvBDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7DG4E8u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19C55C4CEE4
-	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 15:41:07 +0000 (UTC)
+	 Content-Type:MIME-Version; b=QsE3NOJCDIJyLg7oI/uUaagZvKi6bQVY2+GwJNMExWsVgPjekZRqA71C3GcgrgyChusjhFhOiCbozrJxhmE9JEk0xyz/7/wUlWNxFWLXx5ztcxhrxO4odPyIAERKn0w6PmcTf6oP4HpbBMkwc62Mg/quQFy9IX52HI92UFlSoYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tdsK3FVI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59EF4C4CEE4
+	for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 15:56:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730130067;
-	bh=AU5qS9birt373A4uPL9+TGQx0rr2nAEBkyZG3JPT0os=;
+	s=k20201202; t=1730130986;
+	bh=dIZ4QdsKhD0jBwN8qawRiIjygad4OYbJYCnVVb7X+GA=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=u7DG4E8ulkuBqYuzl9fOnunRKF0jGYChqgwmHb9MLfWKijD1zJjcjRMac7PrYT8Pf
-	 +SBfGt9Ie9CqzcwJST59eJ7wqZ8QCL9E5IP8uLGW+mM7GzOoo2U0Uo3eRTGUNGAXL/
-	 HOX9j/vbk5FiRRp/HLgi3hWqaYLrSem9Yo5DvvYSfbu4REXM3NLUckcdY9w9gjfvsF
-	 V3RgaTSJv5OlUnqYByTwJf2HykR8+YiKGzUgKqKPaDYMXGBFcFnKFnXgSyVoqlEBw3
-	 WffdVHu/gqAzVGKEjSq68v8/nmd60IpuaIXNIv9NGN7YNeZ8H3Z82INNTVIrEPUW73
-	 LSeMktYcUvzFg==
+	b=tdsK3FVIfDJZPiYebeyXl8ibEM9lgUXTlndRAuDVA0bVx1U0U3/lYhEdX2ETmUGZT
+	 VP7gqu6HnPmfigLmx9+dm3C90gPqFZF2jdroaPZs/A+3EgBOzPr4Ywr+k504/Qx34k
+	 RFQ1SBBk/+vPAU/vnFxjQw9cY+YhuN4Sgi35gVtOwyPy077NKWcSIFCKZ/NC0pifyx
+	 VL9uCgwT/0N3Ct3W8jajw3PD27RX9h6a+/oNiPYXMkhtDK34lTm+pcYIba7ArvH+WZ
+	 5xYTTcatuK7IrQg59d6ierxAxjvVIg4zrkg0jcU9efNoyebrGhx1dh2bML4bypSA1L
+	 ZDzVoFmDoO3UA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 0891CC53BC7; Mon, 28 Oct 2024 15:41:07 +0000 (UTC)
+	id 44DA0C53BBF; Mon, 28 Oct 2024 15:56:26 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 219431] [6.12] amd-pstate / Ryzen 5xxx (Zen 3, Vermeer): Could
  not retrieve highest performance (-19)
-Date: Mon, 28 Oct 2024 15:41:06 +0000
+Date: Mon, 28 Oct 2024 15:56:26 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,14 +56,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Who: oleksandr@natalenko.name
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219431-137361-46DCrSy4TL@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219431-137361-iCF1UvM7xd@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219431-137361@https.bugzilla.kernel.org/>
 References: <bug-219431-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,26 +79,18 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219431
 
---- Comment #5 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-It looks like this message is being emitted specifically from the calls in
-amd_set_max_freq_ratio().
+--- Comment #6 from Oleksandr Natalenko (oleksandr@natalenko.name) ---
+Created attachment 307080
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307080&action=3Dedit
+acpidump, 5950X, ASUS Pro WS X570-ACE
 
-You system is a shared memory design not a MSR design.
-"[  +0.000016] amd_pstate: AMD CPPC shared memory based functionality is
-supported"
+I'm experiencing this issue too. Attaching acpidump output for 5950X and AS=
+US
+Pro WS X570-ACE motherboard with BIOS version 4805.
 
-This looks like the calltrace:
-amd_set_max_freq_ratio
-->amd_get_boost_ratio_numerator
-->->amd_detect_prefcore
-->->->amd_get_highest_perf
-->->->->cppc_get_highest_perf
-->->->->->cppc_get_perf
-
-The first error you see is "No CPC descriptor for CPU:1" which comes from
-cppc_get_perf().
-
-Can you please share your acpidump?  It sure seems like a BIOS bug to me.
+The latest BIOS for my M/B is 4902, but I haven't got a chance to update ju=
+st
+yet.
 
 --=20
 You may reply to this email to add a comment.
