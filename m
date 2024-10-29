@@ -1,152 +1,207 @@
-Return-Path: <linux-pm+bounces-16646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 098569B438A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 08:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 013479B43A3
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 09:01:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6BAE1F22C97
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:52:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79CC21F2362C
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 08:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1330B2022ED;
-	Tue, 29 Oct 2024 07:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="i/1LFc2m"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D8D2038A0;
+	Tue, 29 Oct 2024 08:01:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8FD1CCB33
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 07:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709671DF99F;
+	Tue, 29 Oct 2024 08:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730188364; cv=none; b=Pq+dSib9Ni6DzcgfGGkXtTjzh6BcgX957xSiKUEhHhXm6rDpLKbiXZdAPpclA0nphoaqInstScc+wE1WHxfU/gqfv4HDHIJkltPqefZRKZ/ObyMDgiaVL+DkHB1p29qSNx/0Z/s8z9+dJMrZu9SueluTvox/DA6VY/5MuB/FXj4=
+	t=1730188896; cv=none; b=WZpZstAgSPEggbhDkTCZyqbl5kXiOI3nvrCDs7G0z9M3DunVV9oH9Je9098J9MP5tsPnCdVuzv71Cm/WkazE26Brcd2vu98BEdq4aOPms7oTMK0Zh6mKB37eKlW7rkXpkIY4n2t7oiizhy5zoC531oToXyF/I6nF9/ZTkg7c7uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730188364; c=relaxed/simple;
-	bh=PjkBvTTYwOiWazejEqU9482wFOSVZFs6iPyNkUYLrSA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s7pbRjwDFZnN4e3lob4MTibqe4m+7qE4NSzewmQ51vpXb6gAtGPwnQ0u9SbBnxfEwcRYmnoFhG+4nQqBeDuq8BElyBsO1z1lGauSDu5bUWadnpI9buJJA12hONyXk/e6XF/cl9VsS3gMDI3OfStKHqbMv5nENGvCCsYlw+d80eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=i/1LFc2m; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-28cdd9d8d01so2640389fac.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 00:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1730188361; x=1730793161; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3rbp3tWipnS9n1DED0E9JncApTpU6NEKrzZwh6VcEEY=;
-        b=i/1LFc2msEtxXgPB3Trp9GnXTmgxFP7JOr4XYxHWO4yuOaOkwkddkAqs1CNjjgxnCh
-         NRSXncSUMARypugVO6QJko/YFRCOiAigXDHDmEaOWLB+zVmSkyVQJegcG/ULttWNiufw
-         bDKqGyo358cmXktusfUETCMDe2O8OEjEhojUawFgxI2rziOcIWFFjN2KgLSrpCYz+oC2
-         Wju7m/+NFmg+bjHy0komNFimuHpsmbKgPafdcCL2sOPs5djfArhychICMPYzQwt00xCj
-         kx2ZwxYzZ+wNCjMm8ji/NU05SqyMRukjB4+VbvQy2+SomSYwvUayONTEPBdvnfuzSjvO
-         BQ7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730188361; x=1730793161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3rbp3tWipnS9n1DED0E9JncApTpU6NEKrzZwh6VcEEY=;
-        b=gGavF+/TIQcPaJmOcPfrs9c5uUmXDrqbk+gxWS0wZbEzOTTThyCSHzcj8cdStPlXfU
-         v8GlNBR4N5+RKxWkM7gnkVjKlSlfsH+nmjrYjsqbAuGpBkRnzat/pfJiyjhQwgWIM+ss
-         9dZo20PWv3knGZuiskF51egMhOa3JhJS0e+Pbk2qpmBRG+yiKa7exT/ScbhC/SqRrE98
-         GmwIwZvGJVS2+SDzHkHM27tI6vhynltr1s3DkPt058NnrsXU3M88GjCCnQ+avor6+Mmv
-         18EpvqEKOVPy3d8VQFTyP0tkeT/0KIJeUWKgCn/x4MJczxUgDGIYiCcH0BJ0/0MBEgkH
-         unVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOqNIv/pNVXntenpfehY8q7eQXPADoQ4vPp47lYwV6IhXUHMGJGUvLK1cZ+a3tdGrPcqA00WE4xQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA639oe9u+e5At2oFaeLKL0RqXbSUkPOC8ixKXp6WXOWmCB7tP
-	Tb7qtQ+3tZHyBBIxj6Tgsb8x/wgO0laC74lTxfao0q6EDQOWZ/6Gx0I2WUfoqcamyEn8ySHaYOy
-	APsY3isukFRQDfyf1ZNkJYG+4uoJmy+HXKtIK3g==
-X-Google-Smtp-Source: AGHT+IHcE0Z//RMNpx9Ji2VGSBbKrOfXkqpktFDkWF0oOow3SiBDbyLJpaYAaQNfcMF3HWuiO8z58Zejjdv6FocygCo=
-X-Received: by 2002:a05:6870:82a1:b0:277:cc56:2300 with SMTP id
- 586e51a60fabf-29051b4d708mr9099951fac.12.1730188360819; Tue, 29 Oct 2024
- 00:52:40 -0700 (PDT)
+	s=arc-20240116; t=1730188896; c=relaxed/simple;
+	bh=DWyuuNyI5EivBbhvHm3xZId6MbdsDyCE0SGv5o5janU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=W6e2QL9axG0o3lg7u97YQWCI/867HviVodWfyWrYonl2rwHlF6tgPw8xToVnd9uLhcygUN/gLmblFgmumyRoiFaW7CK0ejwL24ri2Pc7C2S2dxRTlhZhLo01L02ljrYwTzPVfxZzXnTF03rGuMClDHWPotgQ9qvVH56h7whw57A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f7eb435495cb11efa216b1d71e6e1362-20241029
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI
+	GTI_FG_IT, GTI_RG_INFO, GTI_FG_SER, GTI_C_BU, AMN_T1
+	AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:1712e57f-e99b-43d8-8d36-38876f304438,IP:25,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:10
+X-CID-INFO: VERSION:1.1.38,REQID:1712e57f-e99b-43d8-8d36-38876f304438,IP:25,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-META: VersionHash:82c5f88,CLOUDID:8d7803ee997f5958779c7ebadad8ebc0,BulkI
+	D:241024105327XGBM1VDO,BulkQuantity:8,Recheck:0,SF:44|64|66|841|24|17|19|1
+	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:
+	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
+	TF_CID_SPAM_ULS
+X-UUID: f7eb435495cb11efa216b1d71e6e1362-20241029
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 645352901; Tue, 29 Oct 2024 16:01:14 +0800
+Message-ID: <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
+Subject: Re: [PATCH v4] USB: Fix the issue of task recovery failure caused
+ by USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: stern@rowland.harvard.edu, saranya.gopal@intel.com, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
+ rafael@kernel.org,  stanley_chang@realtek.com, tj@kernel.org,
+ xiehongyu1@kylinos.cn,  xy521521@gmail.com, kernel test robot
+ <lkp@intel.com>
+Date: Tue, 29 Oct 2024 16:01:04 +0800
+In-Reply-To: <2024102911-mooned-precise-f526@gregkh>
+References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
+	 <20241024024038.26157-1-duanchenghao@kylinos.cn>
+	 <2024102432-conjoined-skylight-33f1@gregkh>
+	 <8aff9a5acbd21d7bd08b80e02ef2b34f2028cedf.camel@kylinos.cn>
+	 <2024102911-mooned-precise-f526@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028033928.223218-1-nick.hu@sifive.com> <20241028033928.223218-3-nick.hu@sifive.com>
- <5f7179ec-e4ce-4644-8a60-ce407a4d2f11@linaro.org>
-In-Reply-To: <5f7179ec-e4ce-4644-8a60-ce407a4d2f11@linaro.org>
-From: Nick Hu <nick.hu@sifive.com>
-Date: Tue, 29 Oct 2024 15:52:30 +0800
-Message-ID: <CAKddAkBRhtUhue7meUFy2ZDyERpcG4ua=Wyb0q-ZaBzmHZCD0A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] clocksource/drivers/timer-riscv: Stop stimecmp
- when cpu hotplug
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: greentime.hu@sifive.com, zong.li@sifive.com, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andrew Jones <ajones@ventanamicro.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Sunil V L <sunilvl@ventanamicro.com>, 
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+hi greg k-h,
 
-On Mon, Oct 28, 2024 at 5:44=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 28/10/2024 04:39, Nick Hu wrote:
-> > Stop the timer when the cpu is going to be offline otherwise the
-> > timer interrupt may be pending while performing power-down.
-> >
-> > Suggested-by: Anup Patel <anup@brainfault.org>
-> > Link: https://lore.kernel.org/lkml/20240829033904.477200-3-nick.hu@sifi=
-ve.com/T/#u
-> > Signed-off-by: Nick Hu <nick.hu@sifive.com>
-> > Reviewed-by: Anup Patel <anup@brainfault.org>
-> > ---
-> >   drivers/clocksource/timer-riscv.c | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/ti=
-mer-riscv.c
-> > index 48ce50c5f5e6..166dee14e46b 100644
-> > --- a/drivers/clocksource/timer-riscv.c
-> > +++ b/drivers/clocksource/timer-riscv.c
-> > @@ -127,6 +127,12 @@ static int riscv_timer_starting_cpu(unsigned int c=
-pu)
-> >   static int riscv_timer_dying_cpu(unsigned int cpu)
-> >   {
-> >       disable_percpu_irq(riscv_clock_event_irq);
-> > +     /*
-> > +      * Stop the timer when the cpu is going to be offline otherwise
-> > +      * the timer interrupt may be pending while performing power-down=
-.
-> > +      */
-> > +     riscv_clock_event_stop();
-> > +
-> >       return 0;
-> >   }
->
-> Should it not be the opposite?
->
-> First stop the clock which clears the interrupt and then disable the irq?
->
-SIE.STIE =3D 0 ->
-Mtimer interrupt comes -> trap to m-mode -> raise STIP ->
-stop the clock
-Is the above case you are concerned about?
+=E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 04:27 +0100=EF=BC=
+=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
+> On Thu, Oct 24, 2024 at 04:46:48PM +0800, duanchenghao wrote:
+> > hi greg k-h,
+> >=20
+> > =E5=9C=A8 2024-10-24=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 09:05 +0200=EF=
+=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
+> > > On Thu, Oct 24, 2024 at 10:40:38AM +0800, Duan Chenghao wrote:
+> > > > When a device is inserted into the USB port and an S4 wakeup is
+> > > > initiated,
+> > > > after the USB-hub initialization is completed, it will
+> > > > automatically enter
+> > > > suspend mode. Upon detecting a device on the USB port, it will
+> > > > proceed with
+> > > > resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
+> > > > During
+> > > > the S4
+> > > > wakeup process, peripherals are put into suspend mode, followed
+> > > > by
+> > > > task
+> > > > recovery. However, upon detecting that the hcd is in the
+> > > > HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status,
+> > > > causing the
+> > > > S4 suspend to fail and subsequent task recovery to not proceed.
+> > > > -
+> > > > [=C2=A0=C2=A0 27.594598][ 1]=C2=A0 PM: pci_pm_freeze():
+> > > > hcd_pci_suspend+0x0/0x28
+> > > > returns -16
+> > > > [=C2=A0=C2=A0 27.594601][ 1]=C2=A0 PM: dpm_run_callback():
+> > > > pci_pm_freeze+0x0/0x100
+> > > > returns -16
+> > > > [=C2=A0=C2=A0 27.603420][ 1]=C2=A0 ehci-pci 0000:00:04.1:
+> > > > pci_pm_freeze+0x0/0x100
+> > > > returned 0 after 3 usecs
+> > > > [=C2=A0=C2=A0 27.612233][ 1]=C2=A0 ehci-pci 0000:00:05.1:
+> > > > pci_pm_freeze+0x0/0x100
+> > > > returned -16 after 17223 usecs
+> > > > [=C2=A0=C2=A0 27.810067][ 1]=C2=A0 PM: Device 0000:00:05.1 failed t=
+o quiesce
+> > > > async: error -16
+> > > > [=C2=A0=C2=A0 27.816988][ 1]=C2=A0 PM: quiesce of devices aborted a=
+fter
+> > > > 1833.282
+> > > > msecs
+> > > > [=C2=A0=C2=A0 27.823302][ 1]=C2=A0 PM: start quiesce of devices abo=
+rted after
+> > > > 1839.975 msecs
+> > > > ......
+> > > > [=C2=A0=C2=A0 31.303172][ 1]=C2=A0 PM: recover of devices complete =
+after
+> > > > 3473.039
+> > > > msecs
+> > > > [=C2=A0=C2=A0 31.309818][ 1]=C2=A0 PM: Failed to load hibernation i=
+mage,
+> > > > recovering.
+> > > > [=C2=A0=C2=A0 31.348188][ 1]=C2=A0 PM: Basic memory bitmaps freed
+> > > > [=C2=A0=C2=A0 31.352686][ 1]=C2=A0 OOM killer enabled.
+> > > > [=C2=A0=C2=A0 31.356232][ 1]=C2=A0 Restarting tasks ... done.
+> > > > [=C2=A0=C2=A0 31.360609][ 1]=C2=A0 PM: resume from hibernation fail=
+ed (0)
+> > > > [=C2=A0=C2=A0 31.365800][ 1]=C2=A0 PM: Hibernation image not presen=
+t or could
+> > > > not
+> > > > be loaded.
+> > > >=20
+> > > > The "do_wakeup" is determined based on whether the controller's
+> > > > power/wakeup attribute is set. The current issue necessitates
+> > > > considering
+> > > > the type of suspend that is occurring. If the suspend type is
+> > > > either
+> > > > PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should be
+> > > > set
+> > > > to
+> > > > false.
+> > > >=20
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Closes:
+> > > > https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@int=
+el.com/
+> > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > > Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+> > >=20
+> > > What commit id does this fix?
+> >=20
+> > The current patch is not intended to fix an issue with a specific
+> > commit, but rather to address a long-standing problem in the USB
+> > core.
+>=20
+> So should it be backported to older stable kernels?=C2=A0 If so, how far
+> back?
 
->
->
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+yes, It needs to be backported. The stable branches such as 6.6.y,
+6.10.y, and 6.11.y can be considered for the backport.
+
+Should we backport to these versions?
+
+Thanks=20
+
+Duan Chenghao
+>=20
+> > > And I missed where Alan provided a signed-off-by, where was that?
+> >=20
+> > In the following email, Alan proposed using "Signed-off-by" for
+> > signing.
+> > https://lore.kernel.org/all/489805e7-c19c-4b57-9cd7-713e075261cd@rowlan=
+d.harvard.edu/
+>=20
+> Ah, missed that, sorry.
+>=20
+> thanks,
+>=20
+> greg k-h
+
 
