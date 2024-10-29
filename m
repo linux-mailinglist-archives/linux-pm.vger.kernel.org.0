@@ -1,226 +1,163 @@
-Return-Path: <linux-pm+bounces-16682-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16683-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 320869B552A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 22:36:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26F419B552D
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 22:38:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B68391F23C78
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 21:36:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF262286C07
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 21:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F345A205E0B;
-	Tue, 29 Oct 2024 21:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE66C20A5D3;
+	Tue, 29 Oct 2024 21:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fhEKyn3/"
+	dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b="mBok3M+0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from s1-ba86.socketlabs.email-od.com (s1-ba86.socketlabs.email-od.com [142.0.186.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D24B1422AB
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 21:36:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC8A20966A
+	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 21:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=142.0.186.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730237794; cv=none; b=a4YQfvFQWGvMP/XfvodxfDobbTlpL9ZmTuX6ZVSkZS3roq2qMEZ+8wntuuqPjlK8u2Gg9OZjwWVmM4RXnM2wTnGzWyhjR0r6V5AjHO6kemkrZV68Z1J6UK79yJYYpIfmIqcf3AcIrnRmoSgM8FIQ2ldk9fx9fJEN42BZURwhvtY=
+	t=1730237901; cv=none; b=HMwr/Lpbd2tLfOaliADwA+yWNKMFUHs+x1hhtSg1HODeuA/mxDkJFAQZp47wAMac91eZhQuUGEwB58qHx039RTcNbGuZahDzrnOagN4fGhmHHEJ8muqrZai8HOtYzG9Bn3oXs4M6v6LMF4NXGnxon8LEbUHsDR4kAFkjVPfYlcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730237794; c=relaxed/simple;
-	bh=1xgch32nqiqMjdmgHjBnXYxWm1h7BMlZNN5uGA4gUdw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=b+fFSv+IIlgj2vQOVK/o2LHhFulRJE4r1SdeOYhQBYYLOGUodJd7KiPgYKtLSkkKh4oZ3QVJQ2NEYdFJTWUMdaPyIuxTyd8vutk8UXaPf09FUNww0E7U5F+1hZ3ZUUDAeyE7u43Cj+Wli7YPz2geb8zuQMO1Hv8UjmZabOYHYl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fhEKyn3/; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730237793; x=1761773793;
-  h=date:from:to:cc:subject:message-id;
-  bh=1xgch32nqiqMjdmgHjBnXYxWm1h7BMlZNN5uGA4gUdw=;
-  b=fhEKyn3/4fXkqfz769Scpo4XIK7l1H2DE5fjVEx4fBixNa7j7gZC8Sy/
-   jk12OkqCvGxVp608tyPvp5vUbJSJRzRT9REWGFjFQw5bqheqsoqM/yXn1
-   WuNbDp9aeWFYvBbHJdg8dNrTjOB0DKuojsFCYe+i1qUYwdzArmyat5nNl
-   cqdf123xfkhfHq+5wl5c1UNXS8YJ0rtl3EFncrKz0BkGWqNLrV8xnQjKX
-   LpH07TTf3+TCeXDOIbSS3LmGxROhOSGLuO77XbJVhgOeQtyaHdtuZTVW0
-   1KirZAwAhiuP5eW14le490XUQlzL8L5Uik51APcIa8H1w6ZmjHj7pezLZ
-   g==;
-X-CSE-ConnectionGUID: HxqMIrRYQu2Ysq5rglsiOg==
-X-CSE-MsgGUID: iwLPyiFXTOSZJ2Hpdv9VcQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40440838"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40440838"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 14:36:32 -0700
-X-CSE-ConnectionGUID: kg3r01z8QG6D+YJ+ymDGJw==
-X-CSE-MsgGUID: DxTm3lowQaGVJZb7WLCQfw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
-   d="scan'208";a="82915891"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 29 Oct 2024 14:36:31 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5tt6-000eB4-0j;
-	Tue, 29 Oct 2024 21:36:28 +0000
-Date: Wed, 30 Oct 2024 05:35:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- e3cea20c2735c3c7d0373ec201d0bfb584617cf1
-Message-ID: <202410300545.ztd9fro2-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1730237901; c=relaxed/simple;
+	bh=+wJ5KWpgT+2Otb1SXgnm+ECduxv9o6ciNoEgRwIi6/Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=RLL6y0KsS7TYktGlt73rbgBg+bPBuh5fLM8VTZyrMPNiMISSaV7n/liTD3M8c+pr+oo+etvGO4oUNiB+7VvNT9jyBeJ1f4o8Y1JxeCf1ME6NHF3nOYAZmzPVgeJwfGL7yOkVOSNdHRj7mHzvhAVZCsuY/D752OV4dsc+qoSYPko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com; spf=pass smtp.mailfrom=email-od.com; dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b=mBok3M+0; arc=none smtp.client-ip=142.0.186.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=email-od.com
+DKIM-Signature: v=1; a=rsa-sha256; d=email-od.com;i=@email-od.com;s=dkim;
+	c=relaxed/relaxed; q=dns/txt; t=1730237900; x=1732829900;
+	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:subject:cc:to:from:x-thread-info:subject:to:from:cc:reply-to;
+	bh=jizTLtrLMmCt7wE/5ipTFTDD8VO6t5SHcJxMFWKWNrM=;
+	b=mBok3M+0tuseaP12sUcpJV7J+tMIMQqfqv6hhBdRaRbKHOCLvoFNy2kjI2Fs91CwKhwVYFpAY0ZdOxeW0EcjJ+GY7Y8gdJYwFS5WZ4HEHo+mzsqCjZ2OpkdP5k6URJbu2qGhkZoXbL76ankcf9fsyLKM0IN5wz5X8bf0xAPUHsY=
+X-Thread-Info: NDUwNC4xMi4zZmU2ZjAwMDBmMzg1OTYubGludXgtcG09dmdlci5rZXJuZWwub3Jn
+x-xsSpam: eyJTY29yZSI6MCwiRGV0YWlscyI6bnVsbH0=
+Received: from localhost.localdomain (d4-50-191-215.clv.wideopenwest.com [50.4.215.191])
+	by nalramli.com (Postfix) with ESMTPS id CE3152CE04B1;
+	Tue, 29 Oct 2024 17:37:54 -0400 (EDT)
+From: "Nabil S. Alramli" <dev@nalramli.com>
+To: stable@vger.kernel.org
+Cc: nalramli@fastly.com,
+	jdamato@fastly.com,
+	khubert@fastly.com,
+	mario.limonciello@amd.com,
+	Perry.Yuan@amd.com,
+	li.meng@amd.com,
+	ray.huang@amd.com,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Nabil S. Alramli" <dev@nalramli.com>
+Subject: [PATCH 6.1.y v2] cpufreq: amd-pstate: Enable CPU boost in passive and guided modes
+Date: Tue, 29 Oct 2024 17:36:43 -0400
+Message-Id: <20241029213643.2966723-1-dev@nalramli.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <Zw8Wn5SPqBfRKUhp@LQ3V64L9R2>
+References: <Zw8Wn5SPqBfRKUhp@LQ3V64L9R2>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: e3cea20c2735c3c7d0373ec201d0bfb584617cf1  cpufreq/amd-pstate: Move registration after static function call update
+CPU frequency cannot be boosted when using the amd_pstate driver in
+passive or guided mode.
 
-elapsed time: 1473m
+On a host that has an AMD EPYC 7662 processor, while running with
+amd-pstate configured for passive mode on full CPU load, the processor
+only reaches 2.0 GHz. On later kernels the CPU can reach 3.3GHz.
 
-configs tested: 133
-configs skipped: 3
+The CPU frequency is dependent on a setting called highest_perf which is
+the multiplier used to compute it. The highest_perf value comes from
+cppc_init_perf when the driver is built-in and from pstate_init_perf when
+it is a loaded module. Both of these calls have the following condition:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+	highest_perf =3D amd_get_highest_perf();
+	if (highest_perf > __cppc_highest_perf_)
+		highest_perf =3D __cppc_highest_perf;
 
-tested configs:
-alpha                             allnoconfig    gcc-13.3.0
-alpha                            allyesconfig    gcc-13.3.0
-alpha                               defconfig    gcc-13.3.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                          axs101_defconfig    gcc-13.2.0
-arc                                 defconfig    gcc-13.2.0
-arc                   randconfig-001-20241029    gcc-13.2.0
-arc                   randconfig-002-20241029    gcc-13.2.0
-arc                    vdk_hs38_smp_defconfig    gcc-13.2.0
-arm                              allmodconfig    gcc-14.1.0
-arm                               allnoconfig    clang-20
-arm                              allyesconfig    gcc-14.1.0
-arm                         lpc32xx_defconfig    clang-20
-arm                        mvebu_v5_defconfig    gcc-14.1.0
-arm                         nhk8815_defconfig    clang-20
-arm                         orion5x_defconfig    clang-20
-arm                   randconfig-001-20241029    gcc-14.1.0
-arm                   randconfig-002-20241029    gcc-14.1.0
-arm                   randconfig-003-20241029    gcc-14.1.0
-arm                   randconfig-004-20241029    clang-16
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                 randconfig-001-20241029    clang-17
-arm64                 randconfig-002-20241029    clang-20
-arm64                 randconfig-003-20241029    gcc-14.1.0
-arm64                 randconfig-004-20241029    clang-20
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-csky                  randconfig-001-20241029    gcc-14.1.0
-csky                  randconfig-002-20241029    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon                          allyesconfig    clang-20
-hexagon               randconfig-001-20241029    clang-20
-hexagon               randconfig-002-20241029    clang-20
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20241029    clang-19
-i386        buildonly-randconfig-002-20241029    gcc-12
-i386        buildonly-randconfig-003-20241029    clang-19
-i386        buildonly-randconfig-004-20241029    gcc-12
-i386        buildonly-randconfig-005-20241029    clang-19
-i386        buildonly-randconfig-006-20241029    gcc-12
-i386                                defconfig    clang-19
-i386                  randconfig-001-20241029    gcc-12
-i386                  randconfig-002-20241029    gcc-12
-i386                  randconfig-003-20241029    gcc-12
-i386                  randconfig-004-20241029    clang-19
-i386                  randconfig-005-20241029    clang-19
-i386                  randconfig-006-20241029    gcc-12
-i386                  randconfig-011-20241029    gcc-12
-i386                  randconfig-012-20241029    clang-19
-i386                  randconfig-013-20241029    clang-19
-i386                  randconfig-014-20241029    clang-19
-i386                  randconfig-015-20241029    clang-19
-i386                  randconfig-016-20241029    clang-19
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch             randconfig-001-20241029    gcc-14.1.0
-loongarch             randconfig-002-20241029    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                       m5249evb_defconfig    gcc-14.1.0
-m68k                            q40_defconfig    gcc-14.1.0
-m68k                           sun3_defconfig    gcc-14.1.0
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-nios2                             allnoconfig    gcc-14.1.0
-nios2                 randconfig-001-20241029    gcc-14.1.0
-nios2                 randconfig-002-20241029    gcc-14.1.0
-openrisc                          allnoconfig    gcc-14.1.0
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-14.1.0
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    gcc-14.1.0
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-14.1.0
-parisc                randconfig-001-20241029    gcc-14.1.0
-parisc                randconfig-002-20241029    gcc-14.1.0
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    gcc-14.1.0
-powerpc                          allyesconfig    clang-20
-powerpc                      mgcoge_defconfig    clang-20
-powerpc                 mpc8313_rdb_defconfig    gcc-14.1.0
-powerpc               randconfig-001-20241029    gcc-14.1.0
-powerpc               randconfig-002-20241029    clang-20
-powerpc               randconfig-003-20241029    gcc-14.1.0
-powerpc64             randconfig-001-20241029    gcc-14.1.0
-powerpc64             randconfig-002-20241029    gcc-14.1.0
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.1.0
-riscv                            allyesconfig    clang-20
-riscv                               defconfig    clang-20
-s390                             allmodconfig    clang-20
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    clang-20
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-14.1.0
-sh                          rsk7201_defconfig    gcc-14.1.0
-sh                     sh7710voipgw_defconfig    gcc-14.1.0
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-14.1.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-17
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-20
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241029    gcc-12
-x86_64      buildonly-randconfig-002-20241029    gcc-12
-x86_64      buildonly-randconfig-003-20241029    gcc-12
-x86_64      buildonly-randconfig-004-20241029    gcc-12
-x86_64      buildonly-randconfig-005-20241029    clang-19
-x86_64      buildonly-randconfig-006-20241029    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-19
-x86_64                randconfig-001-20241029    gcc-12
-x86_64                randconfig-003-20241029    gcc-12
-x86_64                               rhel-8.3    gcc-12
-xtensa                            allnoconfig    gcc-14.1.0
-xtensa                          iss_defconfig    gcc-14.1.0
-xtensa                         virt_defconfig    gcc-14.1.0
+Where again __cppc_highest_perf is either the return from
+cppc_get_perf_caps in the built-in case or AMD_CPPC_HIGHEST_PERF in the
+module case. Both of these functions actually return the nominal value,
+whereas the call to amd_get_highest_perf returns the correct boost value,
+so the condition tests true and highest_perf always ends up being the
+nominal value, therefore never having the ability to boost CPU frequency.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Since amd_get_highest_perf already returns the boost value, we have
+eliminated this check.
+
+The issue was introduced in v6.1 via commit bedadcfb011f ("cpufreq:
+amd-pstate: Fix initial highest_perf value"), and exists in stable v6.1
+kernels. This has been fixed in v6.6.y and newer but due to refactoring t=
+hat
+change isn't feasible to bring back to v6.1.y. Thus, v6.1 kernels are
+affected by this significant performance issue, and cannot be easily
+remediated.
+
+Signed-off-by: Nabil S. Alramli <dev@nalramli.com>
+Reviewed-by: Joe Damato <jdamato@fastly.com>
+Reviewed-by: Kyle Hubert <khubert@fastly.com>
+Fixes: bedadcfb011f ("cpufreq: amd-pstate: Fix initial highest_perf value=
+")
+See-also: 1ec40a175a48 ("cpufreq: amd-pstate: Enable amd-pstate preferred=
+ core support")
+Cc: mario.limonciello@amd.com
+Cc: Perry.Yuan@amd.com
+Cc: li.meng@amd.com
+Cc: stable@vger.kernel.org # v6.1
+---
+ v2:
+   - Omit cover letter
+   - Converted from RFC to PATCH
+   - Expand commit message based on feedback from Mario Limonciello
+   - Added Reviewed-by tags
+   - No functional/code changes
+
+ rfc:
+ https://lore.kernel.org/lkml/20241025010527.491605-1-dev@nalramli.com/
+---
+ drivers/cpufreq/amd-pstate.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 90dcf26f0973..c66086ae624a 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -102,9 +102,7 @@ static int pstate_init_perf(struct amd_cpudata *cpuda=
+ta)
+ 	 *
+ 	 * CPPC entry doesn't indicate the highest performance in some ASICs.
+ 	 */
+-	highest_perf =3D amd_get_highest_perf();
+-	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
+-		highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
++	highest_perf =3D max(amd_get_highest_perf(), AMD_CPPC_HIGHEST_PERF(cap1=
+));
+=20
+ 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+=20
+@@ -124,9 +122,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata=
+)
+ 	if (ret)
+ 		return ret;
+=20
+-	highest_perf =3D amd_get_highest_perf();
+-	if (highest_perf > cppc_perf.highest_perf)
+-		highest_perf =3D cppc_perf.highest_perf;
++	highest_perf =3D max(amd_get_highest_perf(), cppc_perf.highest_perf);
+=20
+ 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+=20
+--=20
+2.35.1
+
 
