@@ -1,151 +1,111 @@
-Return-Path: <linux-pm+bounces-16675-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16676-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE2339B51D8
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 19:31:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A97709B523C
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 19:57:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FE5D2845B1
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 18:31:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FA6B1F23757
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 18:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D99220696B;
-	Tue, 29 Oct 2024 18:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBE0220513C;
+	Tue, 29 Oct 2024 18:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RT+c0L/9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ht/8h+U7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FDC205ADF;
-	Tue, 29 Oct 2024 18:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A301D201022;
+	Tue, 29 Oct 2024 18:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730226634; cv=none; b=jsTxqSblp3P2vGVTukg9kfkuc2lLCqKGR2zUFLDqbcGb6ZFkfi9lVpA9F7DrT+EmZBiWxzt9nTy5SKw0x3pwRwKlhjn1aMtORD0iLVym81Zjlu+427ut8y5qdRzMTPBw9ITLdfAj6AbmJKpzqTTL34emTXYE7wJ73iBltiivKp8=
+	t=1730228267; cv=none; b=nKutT1Y9Qi5IXa7XK36w1EP7FhXk82/kPme/SQF10Cxibdkx2/hHb7AHmZRAZxga9SZn83NiaaF0p97Z+OmBZ0rg1ngf9jBFy9UiIW9ib/8g/5ygcDTU+StXClMtH1b5YMi6VWzLerlyNItlzt9U/KBlqh73GVdLwMysZXG0a0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730226634; c=relaxed/simple;
-	bh=4ox95nKXSEbucLqpp41mYD9O8DYJglwbBVT/nf4TAps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z7mtsl+jLZXyosc/mchS0jc6Aeku8k0AnW2eMSQS+itJz6QiYktC3ZnbIBlObwISru3zYWNelbo0xVUcTXyukGGobQYZf4elzlBwSW/nxtK68kN+B3a7h0wd8BPamXeZ0kh0FFoW6ivXutniXHW2M8mOYtQV9uoek0TGeN90/dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RT+c0L/9; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730226632; x=1761762632;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4ox95nKXSEbucLqpp41mYD9O8DYJglwbBVT/nf4TAps=;
-  b=RT+c0L/98+ekbY+bijCwql0vFwTx5Q5BL84MM78ZRaKG3brlUx5Ts3T2
-   YdLqijPbZaZa/7uqnk0ofWd2k9V8wH2+cY8WzAh7N73i1CRzrgsj7fNp0
-   i9Mg9VFYb9E/Y9IM/0QgCDwKvDdf6QevNv0TWszX6QMBmHqmFNAYYac0e
-   v2GQJz8xnYecMcfgiwsONNeIB9Ra/zSMLkrL2UZhY6pJ9txZz3aO3s8sq
-   7nLyH4Q9hC0l1oq4tC9mWZSk1q2tc9dFWQZcxL2LiPPdCk12Qv1dXbCsh
-   tcO6DOHiE3WzdOesydwtvcBKA663QKX6sOP/yqvzvWUKDX31SoT+EkrzX
-   g==;
-X-CSE-ConnectionGUID: 1zSFvLTcRu+mNv2WDekngg==
-X-CSE-MsgGUID: TtSCZN62Sdih4wicYDLOgQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29660841"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29660841"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:30:31 -0700
-X-CSE-ConnectionGUID: r28WnsQuR4eT47YGLF0Fuw==
-X-CSE-MsgGUID: d9pY0IawRF+iMbcD7A6TcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="81605272"
-Received: from ccbilbre-mobl3.amr.corp.intel.com (HELO [10.124.223.38]) ([10.124.223.38])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:30:30 -0700
-Message-ID: <e332a243-5a98-49ed-81be-b6db305d5dc5@intel.com>
-Date: Tue, 29 Oct 2024 11:30:30 -0700
+	s=arc-20240116; t=1730228267; c=relaxed/simple;
+	bh=D1tnc82FcEdTMHQqlb9wRa0oMIVi2ZiBsAuNNQ7hehQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C9N8PjUjHzKugVI5zchGSRgHD80HfeFukZSi4iKj4zGipe9d9k9Wd5UttpbS293hprZ9kwJ4Q7AEBvORu5wzOdcKVzHB2ndTCFMY56ulbKKKo+ayTEPJ5jZhShim1qN94ZTOCmrfFT/XCvb1AKhImdAZYBZmwzvKJ0b8goIYfi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ht/8h+U7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EDAC4CEE5;
+	Tue, 29 Oct 2024 18:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730228267;
+	bh=D1tnc82FcEdTMHQqlb9wRa0oMIVi2ZiBsAuNNQ7hehQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ht/8h+U7JIgjTAlkj+TZnVnGjlgdl5AT9osPUYpI5DiZaEvYueHj+g10n/r/Ak/cH
+	 nGXLVvR83MgcXasWOLZO94H9e0l3iHMGoOThgTeRleZsX1Rm7SwrcDeuyllU2u7qrL
+	 etzjOD4vPF25GPugHtn1ie+VkfIOUfD59I9fA5tOULIz5M0ClNmlWFkJbJ7pJ125TR
+	 wlWWsPu5br8jo3lNlyS0hScz+4zIleJ5oalUGi+XgD/Gaz3EKfXwZM0QW1bibjEdFH
+	 g9X+Ufg3g8R4eiiWhqQyeEY03qay0oqLPW4mIKNj/JfP7OF9DzsmNdWGHdvVNwclaJ
+	 ixaez7/4FtHHg==
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7092dd03223so2000243a34.1;
+        Tue, 29 Oct 2024 11:57:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUZ65mBTm1lKS5v+kw0iLuPK4XkZswRIzNRgkUU/zx4KR4b3bi0Hl1/oZc2zvKbAcHb9KoKlKUww78=@vger.kernel.org, AJvYcCV3/MGkXgpW3T2QBit1ooyp+2y75YnPrSjzBV3o9xdUmtSXxRa4FeF6lgsHt/DcN2zTXumjLgjPzhI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5/AYvMV7UU60gykjjsEXbozbGYKnnI6WfPYSJ4xBSzWSlwqYi
+	dEx6uPDdvzwU5guOSBPlDPS1xCy25H4aWw2TD93U1zd9BbMVXDu/i78xS8lrWgmQqEUsIkyzZ3A
+	kHDSeMbDDw7es5SX+T4ZpFePjGY0=
+X-Google-Smtp-Source: AGHT+IE1WNmrSXoffbXTuDxeYOeJnmO3oQDL5oFexHmT4a7own5HBZ7JlmqDIIqTGgg4Q7b5FDnxt/rrmAuYEQVnL0k=
+X-Received: by 2002:a05:6870:1654:b0:286:f24f:c231 with SMTP id
+ 586e51a60fabf-29051c046c4mr12408665fac.25.1730228266464; Tue, 29 Oct 2024
+ 11:57:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] x86/smp: Allow forcing the mwait hint for play
- dead loop
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael.j.wysocki@intel.com, len.brown@intel.com,
- artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
-References: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
- <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com>
-Content-Language: en-US
-From: Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241012004857.218874-1-marex@denx.de> <ZwupHAAwTo5mDyyA@wunner.de>
+ <52b90ab1-2759-45e9-ae86-3d3073a0add0@denx.de> <7ad59d82-8122-438e-9682-791816ab0366@intel.com>
+ <6b47cc49-dd3b-4c4f-827d-f9b3a8719eb9@denx.de>
+In-Reply-To: <6b47cc49-dd3b-4c4f-827d-f9b3a8719eb9@denx.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 29 Oct 2024 19:57:34 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h590S_6xcj_ydF+qrBk+OeF6-5r+YDTXhc1whArT=f+Q@mail.gmail.com>
+Message-ID: <CAJZ5v0h590S_6xcj_ydF+qrBk+OeF6-5r+YDTXhc1whArT=f+Q@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] PCI/PM: Do not RPM suspend devices without drivers
+To: Marek Vasut <marex@denx.de>
+Cc: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>, linux-pci@vger.kernel.org, 
+	Bjorn Helgaas <bhelgaas@google.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Lukas Wunner <lukas@wunner.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/29/24 03:15, Patryk Wlazlyn wrote:
-> +void smp_set_mwait_play_dead_hint(unsigned int hint)
-> +{
-> +	WRITE_ONCE(play_dead_mwait_hint, hint);
-> +}
+On Mon, Oct 28, 2024 at 7:58=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
+>
+> On 10/28/24 6:52 PM, Wysocki, Rafael J wrote:
+> > On 10/26/2024 2:19 AM, Marek Vasut wrote:
+> >> On 10/13/24 1:03 PM, Lukas Wunner wrote:
+> >>> On Sat, Oct 12, 2024 at 02:48:48AM +0200, Marek Vasut wrote:
+> >>>> The pci_host_probe() does reallocate BARs for devices which start up
+> >>>> with
+> >>>> uninitialized BAR addresses set to 0 by calling
+> >>>> pci_bus_assign_resources(),
+> >>>> which updates the device config space content.
+> >>>>
+> >>>> At the same time, pci_pm_runtime_suspend() triggers pci_save_state()
+> >>>> for
+> >>>> all devices which do not have drivers assigned to them to store curr=
+ent
+> >>>> content of their config space registers.
+> >
+> > What exactly do you mean by "at the same time"?
+> I mean these two blocks of code run in parallel and likely race each othe=
+r.
 
-This all feels a bit hacky and unstructured to me.
+Which two blocks of code?
 
-Could we at least set up a few rules here?  Like, say what the hints
-are, what values can they have?  Where do they come from?  Can this get
-called more than once?  Does it _need_ to be set?  What's the behavior
-when it is not set?  Who is responsible for calling this?
+I'm guessing one of them is pci_host_probe() and what's the other?
 
-What good does the smp_ prefix do?  I don't think _callers_ care whether
-this is getting optimized out or not.
+Unbound PCI devices have their PM-runtime usage counters incremented
+at init time; see pci_pm_init().  This can be undone by user space if
+it changes their /sys/devices/.../power/control attributes to "auto",
+but in that case the device will be suspended immediately from
+control_store().
 
-> -	hint = get_deepest_mwait_hint();
-> +	hint = READ_ONCE(play_dead_mwait_hint);
-> +	if (hint == PLAY_DEAD_MWAIT_HINT_UNSET)
-> +		hint = get_deepest_mwait_hint();
-
-This is also rather opaque.
-
-Why are there two hints?  What makes one better than the other one?
+If pci_host_probe() can race against this (and it looks like it can
+from your problem description), it needs to call pm_runtime_get_sync()
+on each PCI device before accessing its registers.
 
