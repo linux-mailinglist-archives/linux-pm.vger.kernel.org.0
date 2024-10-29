@@ -1,93 +1,85 @@
-Return-Path: <linux-pm+bounces-16642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06D409B4298
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:53:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57AE89B42C8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 08:04:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E71CB21EFF
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 06:53:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C9BF28377A
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20AC201262;
-	Tue, 29 Oct 2024 06:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9F320125F;
+	Tue, 29 Oct 2024 07:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TsCVp205"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CctmT9ox"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF14D200CA4
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 06:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F045200BB7
+	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 07:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730184804; cv=none; b=BpJ6fmZqWoA4UTy5v18+sOWLV/wZyOv+qOb0Z+B+WH/dAqwAxizgZtbj0lf1BQxG/UznKnZwqwA4raFTyFTAKiL7Qbmq7rgtnhFLiSFiaWXUXwE7JZu52FmAr0QLYfzJtndCyqy/xkwGvjRiSA2PaG+U+HWvqdU3vY7oFCVig74=
+	t=1730185474; cv=none; b=BAmN51098qJ4x+hNUa3U5CEJxjQj+cQMAswI5kY+dHc3NU/5nEQ+HmDM+eoVzz+OceCufl8Z/GGYs5TtfH7NejTEb7ujt184fjdQYpG9qktPSlJxmWcEvte8OLYx/9SPd8B0tjCmy5VT/rn7VJ53Z1klZxA51+LsK5DjSebqpkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730184804; c=relaxed/simple;
-	bh=VI5gBCWScORZmQ5M5JKICCGe/z8Tu5nvu1z/DGuqTYk=;
+	s=arc-20240116; t=1730185474; c=relaxed/simple;
+	bh=vHsiJAHyiSg5n/Otn3IuIkTF5NDW0RqUReC8IUcUKLg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BMYW8ZH1QJvUAzW7uDobIo0e6DXisIHnulxwq+E4EV9qOwK+IGbO6lu4AfIAo0KUj9gNMysmMU9cpDJ/m9t878UXJbpS09e3etejdkdGW1D+FddK9Ks/PSH0gfGeaBLlVY4/RAQfvuBpN/aYMiBa6HXgfWJ0TDQHmC1420FrIsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TsCVp205; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZeGDr1ki4VNKThlXvKrIy3Xl1LysoBuLu1l1aSvTplAI4qophSB0ARHYLXHUC6i5Hzl3HonrvFv7dW9gAlYVTs1+yAkapkKmWXoLMHUIOTU3y50PW05xkOP8qV36uJqDSlgJa1m5F2EodW9bDvWpnP2udBKiCy7hY/ji7F7Q+gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CctmT9ox; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20c693b68f5so54476365ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 23:53:22 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e2d1858cdfso3614126a91.1
+        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 00:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730184802; x=1730789602; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1730185472; x=1730790272; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gxdqxmWJXdXU8AUeRm4skNzTB6cELoVffMjUmz4VZV4=;
-        b=TsCVp205Z2Rx58O5LNpZUuxsBJqxEYmRVNvrPr05GsIT1URTAfMgYQMYAEKnbzqUGR
-         yajxuID98PopypqyNE4CEFYQD8hTAUi2jV4fay16BNghfISNCYSMVfblB8bDOnrcAKI+
-         nGQ59tbKZbptMj2c6gimilCedT+Cj+tkMpFKZPwwx9+OFdj5IhX1iqyULBaaP09tm0+n
-         MwlMYNWfuGxHxouJHNjdluosOiPy9L8SbbFjV1FnC/bLROYaSZwew/NL3kr6S/7Z8+Qw
-         9xji6NMUiCEcBHTRJaDix1z6b6Oui5lgzyuSZlz0mWLToRDAkCOazRLMb6yl0XIdwN0S
-         R4hg==
+        bh=QfezvlEpUor+6kVtO8K9KtmutpWAUXlWNawX08ky9NY=;
+        b=CctmT9ox2KNXSQy9sdrd7GOY4meqU3jDSvArdEkTMjwFkm9pCKcH/iGlBCOfHUWTs+
+         m9u6APBOOWnZRz336QCuxv8Qk21uhKcETyyi3O+St4qcqkbg46wulT/t775i7UrM3gbe
+         GWTnNCislhV37Yg6oHj+iCWrvzxXAOx3TCawe5zgXtMR3sg6QTaMMDjkRvUzDv/vn8Ap
+         mCqOtlDnaxVhch5sH3dIAiOPsN5A2rz4ToNPhLXweXgqd81hmqXvxy/Gld2Ll24rgVXx
+         HdnXqRPe/kuCm6+MNCHLoH5W/XuUGQo2NrOLGU5gjInXCof1XWJ1FmQ1cVIt1iAjcdXI
+         4X8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730184802; x=1730789602;
+        d=1e100.net; s=20230601; t=1730185472; x=1730790272;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gxdqxmWJXdXU8AUeRm4skNzTB6cELoVffMjUmz4VZV4=;
-        b=P8YomsieoaHAZYzutYEOj5fEYxWAeCgeLXztQEHhcadO+b/6hdzYr9uknuR+dQ5z2G
-         6ysIjZDj/uV3J/m3DUv99JWTgBB090LND9Y66TkTpJrq7O9BumZQaQ45x8yyJifK38Bd
-         PRs8Sc92y1VUAU1OkOyA1iCcJQJW91HBIlXQx1Kc9blg8ci1PxShpAgxo6v63IUb4J+7
-         PezWJ6rWigNitc4SRT2+nIZyn5zA47yY8qSmvgJkTsxNMT6tJ+UZaEivTaydeA+wS7ve
-         g55gUt0cnrtNxQSvARKN1y7j5WOkZzbvKYkW7bxIve33hCDB5F053vjC/yXT5tJQuTCU
-         DVqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ3uYWrUVfmRyAFHeDKuaxbE06Pb6EoUNCckBeQeLL9VQnm2Q1oWmAEROhILXrMy/lqLErspBkHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWdqNTF6yo+w/elMnt+Sq2+2a4g1M9pKGvcctulFH997czcY6W
-	1BaW08qzcBm2xePwqMmTgvvsJOZzPUyEAaHm+i8waF8+mh1Czcv9MJoeBIREWwo=
-X-Google-Smtp-Source: AGHT+IFmnh6BfWm9u00lcdmwhUncv3sqpOQIn0HAENF9MSk8JtP1yLm3zPeUH5AL8E7LPGeuXgJA4A==
-X-Received: by 2002:a05:6a21:3a4a:b0:1d9:1d2d:b656 with SMTP id adf61e73a8af0-1d9a83d9f36mr13743238637.15.1730184801978;
-        Mon, 28 Oct 2024 23:53:21 -0700 (PDT)
+        bh=QfezvlEpUor+6kVtO8K9KtmutpWAUXlWNawX08ky9NY=;
+        b=nrEE4fU8RL9G7fn91PcZVaxYUgIX77jnxTSCMkgDSSFW2ldNu98rcih5pAkbBwbx0G
+         NQp+6Bl6G6SFEET1N0ZeEuI2X5uG9dtHbnVF2cpkQVC+l1Y2wOXS1zpvgp2cd8NmKR+S
+         OK7QTzD3vAYtUgKI0iMZ4wcHCkIyEdxa/8Cuk37FlVz3f0BQMAJKpradNsTQqhWoZVce
+         g+p8BCR1eAwCS25Kwgt6Llhtazz+1LpjbTjFrSmL/NveFhhX8lFVJlE0W7QAQFJvF6UI
+         dejvq7BrvXHeV9g4l47NYstdDu9iJ1tQAS1N0yDm1PE6Tuelt2ryrU7OCLnnwHa/yapS
+         amiA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgcWs8SEf3a0SGslFa49D78Q1Os1ptFth9K5r5AT1XVixsRYXEzZXowo+BvnzOyO5oJ9gSpAvNhA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFmKKyukybzVlak85WZ47nDntamYjcieyqzm106007jPNtVBr/
+	Rn7BFEkfy3ibdq3fC3VrPKE+RocueAO7nyHcqKPEtBx7FM8h7Sm+rP3yjTIoWzY=
+X-Google-Smtp-Source: AGHT+IEAtGrYcgaJcMZnxR7XFpG1XzMaaIW78Qyci9zH3p9A4VM2ySX803U/IA4Vmiqs9wsvnq89/w==
+X-Received: by 2002:a17:90a:9a8c:b0:2c9:9658:d704 with SMTP id 98e67ed59e1d1-2e8f11dcf62mr10274984a91.40.1730185471912;
+        Tue, 29 Oct 2024 00:04:31 -0700 (PDT)
 Received: from localhost ([122.172.85.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057921daasm6909172b3a.37.2024.10.28.23.53.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e48bb69sm10767253a91.1.2024.10.29.00.04.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 23:53:21 -0700 (PDT)
-Date: Tue, 29 Oct 2024 12:23:19 +0530
+        Tue, 29 Oct 2024 00:04:31 -0700 (PDT)
+Date: Tue, 29 Oct 2024 12:34:29 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Beata Michalska <beata.michalska@arm.com>
-Cc: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>,
-	Sumit Gupta <sumitg@nvidia.com>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org,
-	catalin.marinas@arm.com, rafael@kernel.org,
-	yang@os.amperecomputing.com, lihuisong@huawei.com,
-	zhanjie9@hisilicon.com, linux-tegra <linux-tegra@vger.kernel.org>,
-	Bibek Basu <bbasu@nvidia.com>
-Subject: Re: [PATCH v7 3/4] arm64: Provide an AMU-based version of
- arch_freq_avg_get_on_cpu
-Message-ID: <20241029065319.zto3wlvceec3fjym@vireshk-i7>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
+	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
+	zhanjie9@hisilicon.com
+Subject: Re: [PATCH v7 1/4] cpufreq: Introduce an optional cpuinfo_avg_freq
+ sysfs entry
+Message-ID: <20241029070429.m7q5dkumitoyqxq2@vireshk-i7>
 References: <20240913132944.1880703-1-beata.michalska@arm.com>
- <20240913132944.1880703-4-beata.michalska@arm.com>
- <aa254516-968e-4665-bb5b-981c296ffc35@nvidia.com>
- <ZvU4mR_FZa7jXUgk@arm.com>
- <ylcfqw4swz6xjxxfoyljyifs4ibbueywogqxusxfz3a3fgh3du@cfaajchbwgvn>
- <Zv8PKlr_PJgxazro@arm.com>
- <5y3yz2ct2o42c53dc6rwpse3andstjx74lowt2b3hohj4ogbct@nu2szdnxvxid>
- <Zwe1p0La_AFknglf@arm.com>
+ <20240913132944.1880703-2-beata.michalska@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,18 +88,65 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zwe1p0La_AFknglf@arm.com>
+In-Reply-To: <20240913132944.1880703-2-beata.michalska@arm.com>
 
-On 10-10-24, 13:08, Beata Michalska wrote:
-> That is a fair point but I am not entirely convinced using '0' instead makes
-> things any more clearer as this is in no way a valid CPU frequency.
-> As long as we document the expected behaviour keeping the interface well
-> defined,  both options should be fine I guess.
+Apologies for the delay from my side. September was mostly holidays
+for me and then I was stuck with other stuff plus email backlog and
+this series was always a painful point to return to :(
+
+On 13-09-24, 14:29, Beata Michalska wrote:
+> Currently the CPUFreq core exposes two sysfs attributes that can be used
+> to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
+> and scaling_cur_freq. Both provide slightly different view on the
+> subject and they do come with their own drawbacks.
 > 
-> @Viresh: what is your opinion on that one ?
+> cpuinfo_cur_freq provides higher precision though at a cost of being
+> rather expensive. Moreover, the information retrieved via this attribute
+> is somewhat short lived as frequency can change at any point of time
+> making it difficult to reason from.
+> 
+> scaling_cur_freq, on the other hand, tends to be less accurate but then
+> the actual level of precision (and source of information) varies between
+> architectures making it a bit ambiguous.
+> 
+> The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
+> distinct interface, exposing an average frequency of a given CPU(s), as
+> reported by the hardware, over a time frame spanning no more than a few
+> milliseconds. As it requires appropriate hardware support, this
+> interface is optional.
 
-Failing to get frequency for the CPU shouldn't be represented by 0,
-even if it is confusing for the user.
+From what I recall, the plan is to:
+- keep cpuinfo_cur_freq as it is, not expose for x86 and call ->get()
+  for ARM.
+
+- introduce cpuinfo_avg_freq() and make it return frequency from hw
+  counters for both ARM and Intel and others who provide the API.
+
+- update scaling_cur_freq() to only return the requested frequency or
+  error in case of X86 and update documentation to reflect the same.
+  Right now or after some time ? How much time ?
+
+  Rafael ?
+
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 04fc786dd2c0..3493e5a9500d 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -752,6 +752,16 @@ __weak unsigned int arch_freq_get_on_cpu(int cpu)
+>  	return 0;
+>  }
+>  
+> +__weak int arch_freq_avg_get_on_cpu(int cpu)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline bool cpufreq_avg_freq_supported(struct cpufreq_policy *policy)
+> +{
+> +	return arch_freq_avg_get_on_cpu(policy->cpu) >= 0;
+> +}
+
+And why aren't we simply reusing arch_freq_get_on_cpu() here ?
 
 -- 
 viresh
