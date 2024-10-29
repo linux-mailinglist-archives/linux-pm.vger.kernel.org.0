@@ -1,349 +1,272 @@
-Return-Path: <linux-pm+bounces-16658-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16659-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DE309B49BF
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 13:34:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D0969B4AA3
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 14:10:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF7F8B2117E
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 12:34:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FCC71C22501
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 13:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227AD8831;
-	Tue, 29 Oct 2024 12:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C811EB9E6;
+	Tue, 29 Oct 2024 13:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XbJH27XU"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="fuW/wGeX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94C9539A;
-	Tue, 29 Oct 2024 12:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3B01DF243
+	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 13:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730205245; cv=none; b=fDFpE4uspq0O0jWEWJgoJgmCeRDDpmdzDuKRY9ws3SDrEv0vZyetianC/j/A4d009N4naKh5SP4DbNwDZuiRG30s759LyBEos3q63G1PvOpj7NErHqzURh6SFHs+1CVjChyEqou4w7ohkSJGZMgj2XZG2zpfBn9afe1Wc70V3II=
+	t=1730207441; cv=none; b=SUkvmMon1lLzCvCgpJ7iO21RAm0xdQNU60RfAej+7xj58TyNrG4eD4D7YqsPhFfv3CLsRcaqarxXC22ImaBHpb8iQcOlWXkwlxUqzkzR5l9FKhXPAOYuCHOsuoJwTW614f/gEJuBnhAcx8dr3W3UjpjY3cBNo7ph4+vRq2Mwl0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730205245; c=relaxed/simple;
-	bh=LzMDlL9U10o7ECbKJh1q3AeQCHYhZjzNpR8YBjdrmE4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ETJkBAwZWfrciKIzQ6llb6Lt6ogK1aoUN0n26MQiuYPZoCNMbcR57JinYo5TIukZnMY5qqUNxqpjJIXf6FRE1kjKJE4lX7IoqFb3ia/u0yZVe3/xRBZpdUDVSHQgNBFHNdSC8d4dr8VGqgI88BT9lRbPl2pc8Ibw61gavlLIk/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XbJH27XU; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730205242; x=1761741242;
-  h=date:from:to:cc:subject:message-id;
-  bh=LzMDlL9U10o7ECbKJh1q3AeQCHYhZjzNpR8YBjdrmE4=;
-  b=XbJH27XUhQw5HCp7IWTKYSS8ow7xpFuB2K6Jlvf0jdFZ/9DTTkNzCIr+
-   P+//Pd8AxcCEz9EiPtiFMCLBzca7EqfeVjUpMMiLnbpe9yaF434RGI2Ay
-   4aH/OqcNFwsqwYSRJzUlZ+TkgRuGAbHljGzRm/02LnRBCLEfad5pkeMMZ
-   /IzP8JaH+zWIbzs/0WPFqe7VYYNLGXljp0Iw6ftgRW9hl29xzjZzDXtp8
-   MpibUluOWrijcMqgP8GoFjBaC9EbtR/u/ZkDeB9iNQKZPgk4jl3brx/wX
-   +4QWFtbkbjHvExd41K6ikv081m5JVsHye3eqzKRICbeQ3Sa/C7brB08kj
-   A==;
-X-CSE-ConnectionGUID: CLWOUoDiRLmIHYQey22gEQ==
-X-CSE-MsgGUID: oGvKTk6MR2auwWQSV473Aw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="52401152"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="52401152"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 05:34:01 -0700
-X-CSE-ConnectionGUID: W8BxTq+VSZiYoC8/0+5vxg==
-X-CSE-MsgGUID: X7vpIw4sSw+BxGurJCMYgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="112759119"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Oct 2024 05:33:59 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5lQ4-000ddy-2E;
-	Tue, 29 Oct 2024 12:33:56 +0000
-Date: Tue, 29 Oct 2024 20:32:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 60048d341beb5aaeeae5a39fd520bcc6030f80ea
-Message-ID: <202410292050.j7DAsXAm-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1730207441; c=relaxed/simple;
+	bh=1H2ypn8KQc5zfEyiSLGk8NnR0HyWYvjYJDuiMNCDoks=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=V0fshNgB4sG2Us3EqAUFdQePp174S1TEkMgebjyLcMmIHLpnQlljC+dNGSe9TluRhUB5wUxRwQ55yFZTFU3Ls6A2Dk7fSH5JoAp0G1ed2MttnELYkQP4JFZe6yZcr+SVJ2u0ctfVCL0kxRVnlA3V8WVSYlhLV8wWHIKhwJ/V5t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=fuW/wGeX; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71ea2643545so4404902b3a.3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 06:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1730207438; x=1730812238; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FAOKC1WfeF/4wJ2j6CO6lDtQvk+xl7SqmVcVZn1fvZ8=;
+        b=fuW/wGeXtm6DAhDnXXmBwrDp4BXEHtMbsvku4Y1FRc0Xk5c+O1BZVTQ1B5Kk2oW2Mf
+         FFK6p/LMGPFBf3iezPDHu0RgdQ/ZUZ7qK8wpUssiMMluG92BbUAgP/3dulB3TfT+Tuma
+         8M+KX+TImkXY540mS7wgoFm5TFJj+c0+gZYwj2G/rn5pGU+UpL1167/csnyCvpblcGep
+         1fQ9/TJ9P9cZfgXCbjDUKFoxT4yQW5yflcw5jsXn28xolgc92dKG46Nk1AdhzqZBXr+Z
+         mVWPInBU2GiIJsMPRUAUQnZ8SCV2uX3RM8W0seqog7AKnsnPlx24e8QREi0Ok2zpQ4OR
+         wWjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730207438; x=1730812238;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FAOKC1WfeF/4wJ2j6CO6lDtQvk+xl7SqmVcVZn1fvZ8=;
+        b=K8wDNwcT17AnD/Pn42GESRTQirtXPjRwoOlXVQJkE9wrReW9tCGR3qeU7bvWkwKL4Q
+         F8xfwNbGWF070ES4u7hbKAxp2EHqv7TsHNPDriklxCTzuPhS098V3vQDkJ6UA+VVYUDH
+         AwJXDHxaHD5nkoRpr8JcrId9FpLrTyGZvl5ZI0S4ilagjV1H9kYtqhc1lxv/mTSs6Jze
+         PEk/B9mhofhMIYYvKkL97aghfRac+5Zgi5PpljeIInCyb8LzZZziTBMHhqq0N8khO+Qr
+         aANHYkcrOq0cODqEAWlfiCqii78nrYME9w4UEVh+5eZYlKlHECckGyXLAXFhO7SJNuOS
+         Mk/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWqwGECwvgMKXvW/sxenScLBfBmNYdQwhqOCdcvAvdCsdKLqLsnFPr+jLAL+4SCXw+vnlK8ICNNNg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDPVH3zJouyD/qDZr68ScvcIQE6vd8t9OJdjEzrU96dLNUDA3O
+	X+1UFCpV9dtIkfqGjTWn/cfBYu56159wXAr370k+k+VViJchiHcOPZbNwoPYBz4=
+X-Google-Smtp-Source: AGHT+IEexvaLGBfolaXbe8qRm3ngTtdwHJbiu3KGVBLj5BrmMqN/jaY+lOdR84F4eJ8ZUbCxPaNv3A==
+X-Received: by 2002:a05:6a00:1790:b0:71e:4fe4:282a with SMTP id d2e1a72fcca58-72062f81c5bmr18009294b3a.2.1730207438000;
+        Tue, 29 Oct 2024 06:10:38 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057921daasm7521067b3a.37.2024.10.29.06.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 06:10:37 -0700 (PDT)
+Message-ID: <6720decd.050a0220.abd71.b9ac@mx.google.com>
+Date: Tue, 29 Oct 2024 06:10:37 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.12-rc5-69-g3bb5c4d02ae3c
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 23 warnings (v6.12-rc5-69-g3bb5c4d02ae3c)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 60048d341beb5aaeeae5a39fd520bcc6030f80ea  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.12-rc5-69-g=
+3bb5c4d02ae3c)
 
-elapsed time: 1445m
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+12-rc5-69-g3bb5c4d02ae3c/
 
-configs tested: 255
-configs skipped: 11
+Tree: pm
+Branch: testing
+Git Describe: v6.12-rc5-69-g3bb5c4d02ae3c
+Git Commit: 3bb5c4d02ae3c6924a33d69644a84a4fe41d2cc6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Warnings Detected:
 
-tested configs:
-alpha                             allnoconfig    gcc-13.3.0
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                            allyesconfig    gcc-13.3.0
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                              allyesconfig    gcc-13.2.0
-arc                                 defconfig    gcc-14.1.0
-arc                         haps_hs_defconfig    gcc-13.2.0
-arc                         haps_hs_defconfig    gcc-14.1.0
-arc                   randconfig-001-20241029    gcc-13.2.0
-arc                   randconfig-001-20241029    gcc-14.1.0
-arc                   randconfig-002-20241029    gcc-13.2.0
-arc                   randconfig-002-20241029    gcc-14.1.0
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                              allyesconfig    gcc-14.1.0
-arm                         assabet_defconfig    gcc-14.1.0
-arm                                 defconfig    gcc-14.1.0
-arm                          ep93xx_defconfig    clang-20
-arm                            hisi_defconfig    gcc-14.1.0
-arm                   milbeaut_m10v_defconfig    gcc-13.2.0
-arm                        mvebu_v7_defconfig    gcc-13.2.0
-arm                       netwinder_defconfig    gcc-14.1.0
-arm                   randconfig-001-20241029    gcc-14.1.0
-arm                   randconfig-002-20241029    gcc-14.1.0
-arm                   randconfig-003-20241029    gcc-14.1.0
-arm                   randconfig-004-20241029    clang-16
-arm                   randconfig-004-20241029    gcc-14.1.0
-arm                         vf610m4_defconfig    gcc-14.1.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-arm64                 randconfig-001-20241029    clang-17
-arm64                 randconfig-001-20241029    gcc-14.1.0
-arm64                 randconfig-002-20241029    clang-20
-arm64                 randconfig-002-20241029    gcc-14.1.0
-arm64                 randconfig-003-20241029    gcc-14.1.0
-arm64                 randconfig-004-20241029    clang-20
-arm64                 randconfig-004-20241029    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-csky                  randconfig-001-20241029    gcc-14.1.0
-csky                  randconfig-002-20241029    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-hexagon               randconfig-001-20241029    clang-20
-hexagon               randconfig-001-20241029    gcc-14.1.0
-hexagon               randconfig-002-20241029    clang-20
-hexagon               randconfig-002-20241029    gcc-14.1.0
-i386                             allmodconfig    clang-19
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    clang-19
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    clang-19
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20241029    clang-19
-i386        buildonly-randconfig-002-20241029    clang-19
-i386        buildonly-randconfig-002-20241029    gcc-12
-i386        buildonly-randconfig-003-20241029    clang-19
-i386        buildonly-randconfig-004-20241029    clang-19
-i386        buildonly-randconfig-004-20241029    gcc-12
-i386        buildonly-randconfig-005-20241029    clang-19
-i386        buildonly-randconfig-006-20241029    clang-19
-i386        buildonly-randconfig-006-20241029    gcc-12
-i386                                defconfig    clang-19
-i386                  randconfig-001-20241029    clang-19
-i386                  randconfig-001-20241029    gcc-12
-i386                  randconfig-002-20241029    clang-19
-i386                  randconfig-002-20241029    gcc-12
-i386                  randconfig-003-20241029    clang-19
-i386                  randconfig-003-20241029    gcc-12
-i386                  randconfig-004-20241029    clang-19
-i386                  randconfig-005-20241029    clang-19
-i386                  randconfig-006-20241029    clang-19
-i386                  randconfig-006-20241029    gcc-12
-i386                  randconfig-011-20241029    clang-19
-i386                  randconfig-011-20241029    gcc-12
-i386                  randconfig-012-20241029    clang-19
-i386                  randconfig-013-20241029    clang-19
-i386                  randconfig-014-20241029    clang-19
-i386                  randconfig-015-20241029    clang-19
-i386                  randconfig-016-20241029    clang-19
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-loongarch             randconfig-001-20241029    gcc-14.1.0
-loongarch             randconfig-002-20241029    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                                defconfig    gcc-14.1.0
-m68k                       m5249evb_defconfig    clang-20
-m68k                        mvme147_defconfig    gcc-13.2.0
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                           ip32_defconfig    clang-20
-mips                        omega2p_defconfig    gcc-14.1.0
-mips                       rbtx49xx_defconfig    gcc-13.2.0
-nios2                         10m50_defconfig    clang-20
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-nios2                 randconfig-001-20241029    gcc-14.1.0
-nios2                 randconfig-002-20241029    gcc-14.1.0
-openrisc                          allnoconfig    gcc-14.1.0
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-openrisc                  or1klitex_defconfig    gcc-14.1.0
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    gcc-14.1.0
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-parisc                randconfig-001-20241029    gcc-14.1.0
-parisc                randconfig-002-20241029    gcc-14.1.0
-parisc64                            defconfig    gcc-14.1.0
-powerpc                    adder875_defconfig    gcc-14.1.0
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    gcc-14.1.0
-powerpc                          allyesconfig    clang-20
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                 canyonlands_defconfig    clang-20
-powerpc                        cell_defconfig    gcc-14.1.0
-powerpc                        fsp2_defconfig    gcc-13.2.0
-powerpc                       holly_defconfig    clang-20
-powerpc                   motionpro_defconfig    clang-20
-powerpc                     mpc512x_defconfig    clang-20
-powerpc                  mpc866_ads_defconfig    gcc-14.1.0
-powerpc                      pcm030_defconfig    gcc-13.2.0
-powerpc                      pmac32_defconfig    gcc-13.2.0
-powerpc                     ppa8548_defconfig    gcc-13.2.0
-powerpc                       ppc64_defconfig    gcc-14.1.0
-powerpc               randconfig-001-20241029    gcc-14.1.0
-powerpc               randconfig-002-20241029    clang-20
-powerpc               randconfig-002-20241029    gcc-14.1.0
-powerpc               randconfig-003-20241029    gcc-14.1.0
-powerpc                 xes_mpc85xx_defconfig    clang-20
-powerpc64             randconfig-001-20241029    gcc-14.1.0
-powerpc64             randconfig-002-20241029    gcc-14.1.0
-riscv                            allmodconfig    clang-20
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    gcc-14.1.0
-riscv                            allyesconfig    clang-20
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-riscv                    nommu_k210_defconfig    gcc-13.2.0
-riscv                 randconfig-001-20241029    clang-20
-riscv                 randconfig-001-20241029    gcc-14.1.0
-riscv                 randconfig-002-20241029    gcc-14.1.0
-s390                             allmodconfig    clang-20
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-s390                                defconfig    gcc-14.1.0
-s390                  randconfig-001-20241029    gcc-14.1.0
-s390                  randconfig-002-20241029    gcc-14.1.0
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sh                               j2_defconfig    gcc-13.2.0
-sh                    randconfig-001-20241029    gcc-14.1.0
-sh                    randconfig-002-20241029    gcc-14.1.0
-sh                          rsk7203_defconfig    clang-20
-sh                          sdk7780_defconfig    clang-20
-sh                          sdk7780_defconfig    gcc-13.2.0
-sh                           se7712_defconfig    clang-20
-sh                           se7750_defconfig    clang-20
-sh                           se7780_defconfig    gcc-13.2.0
-sh                           sh2007_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20241029    gcc-14.1.0
-sparc64               randconfig-002-20241029    gcc-14.1.0
-um                               alldefconfig    gcc-13.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-17
-um                               allyesconfig    clang-20
-um                               allyesconfig    gcc-12
-um                                  defconfig    gcc-12
-um                             i386_defconfig    clang-20
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20241029    gcc-14.1.0
-um                    randconfig-002-20241029    gcc-12
-um                    randconfig-002-20241029    gcc-14.1.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241029    clang-19
-x86_64      buildonly-randconfig-001-20241029    gcc-12
-x86_64      buildonly-randconfig-002-20241029    clang-19
-x86_64      buildonly-randconfig-002-20241029    gcc-12
-x86_64      buildonly-randconfig-003-20241029    clang-19
-x86_64      buildonly-randconfig-003-20241029    gcc-12
-x86_64      buildonly-randconfig-004-20241029    clang-19
-x86_64      buildonly-randconfig-004-20241029    gcc-12
-x86_64      buildonly-randconfig-005-20241029    clang-19
-x86_64      buildonly-randconfig-006-20241029    clang-19
-x86_64      buildonly-randconfig-006-20241029    gcc-12
-x86_64                              defconfig    clang-19
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-19
-x86_64                                  kexec    gcc-12
-x86_64                randconfig-001-20241029    clang-19
-x86_64                randconfig-001-20241029    gcc-12
-x86_64                randconfig-002-20241029    clang-19
-x86_64                randconfig-003-20241029    clang-19
-x86_64                randconfig-003-20241029    gcc-12
-x86_64                randconfig-004-20241029    clang-19
-x86_64                randconfig-005-20241029    clang-19
-x86_64                randconfig-005-20241029    gcc-12
-x86_64                randconfig-006-20241029    clang-19
-x86_64                randconfig-006-20241029    gcc-12
-x86_64                randconfig-011-20241029    clang-19
-x86_64                randconfig-012-20241029    clang-19
-x86_64                randconfig-013-20241029    clang-19
-x86_64                randconfig-014-20241029    clang-19
-x86_64                randconfig-015-20241029    clang-19
-x86_64                randconfig-015-20241029    gcc-12
-x86_64                randconfig-016-20241029    clang-19
-x86_64                randconfig-016-20241029    gcc-12
-x86_64                randconfig-071-20241029    clang-19
-x86_64                randconfig-071-20241029    gcc-12
-x86_64                randconfig-072-20241029    clang-19
-x86_64                randconfig-072-20241029    gcc-12
-x86_64                randconfig-073-20241029    clang-19
-x86_64                randconfig-073-20241029    gcc-12
-x86_64                randconfig-074-20241029    clang-19
-x86_64                randconfig-075-20241029    clang-19
-x86_64                randconfig-075-20241029    gcc-12
-x86_64                randconfig-076-20241029    clang-19
-x86_64                randconfig-076-20241029    gcc-12
-x86_64                               rhel-8.3    gcc-12
-x86_64                           rhel-8.3-bpf    clang-19
-x86_64                         rhel-8.3-kunit    clang-19
-x86_64                           rhel-8.3-ltp    clang-19
-x86_64                          rhel-8.3-rust    clang-19
-xtensa                            allnoconfig    gcc-14.1.0
-xtensa                  audio_kc705_defconfig    gcc-13.2.0
-xtensa                  audio_kc705_defconfig    gcc-14.1.0
-xtensa                       common_defconfig    clang-20
-xtensa                randconfig-001-20241029    gcc-14.1.0
-xtensa                randconfig-002-20241029    gcc-14.1.0
+arc:
+    haps_hs_smp_defconfig (gcc-12): 2 warnings
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-12): 3 warnings
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-12): 18 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    kernel/fork.c:3075:2: warning: #warning clone3() entry point is mi=
+ssing, please fix [-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    3075 | #warning clone3() entry point is missing, please fix
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
+ missing .note.GNU-stack section implies executable stack
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
+g .note.GNU-stack section implies executable stack
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
