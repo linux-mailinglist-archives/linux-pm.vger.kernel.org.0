@@ -1,169 +1,121 @@
-Return-Path: <linux-pm+bounces-16664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBDD29B4C9F
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 15:52:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2951C9B4DA7
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 16:22:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDCFE1C2224A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 14:52:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA50CB2587F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 15:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C073191F91;
-	Tue, 29 Oct 2024 14:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDCF193416;
+	Tue, 29 Oct 2024 15:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hc9RHHQA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ajC2I0Ul"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271A2191F6D
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 14:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CA8192B73;
+	Tue, 29 Oct 2024 15:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730213460; cv=none; b=gDpuXKndiR3pD7hNvBEvoZDaqTs7N1U6Tcfbw4f0f8xAh8dGAUORNDzD8MCAgEZDd07luxHmY9H+ZkOBr0kyj7D8DFiAcJvZUBihxRLBDDk1IqjbiWmk4qt1aE01emQK2ZSrYq8oMTWN9z6azvekdj/o7VDR3kRe0nHtWbS7/rI=
+	t=1730215352; cv=none; b=baBSYgFbt/BXkxkyGKGAiuT5w3eGtRmcYFlkGkjelf0Bl3WqzyaMQ/4PYAxqqA6gNo5W94TwdTuA0tRBEGdHYMXqxedBh7RepPkyk9fYt4lWOdC34lWpGuPp0Ww/KxgsrLdKc2axx+1cBLESHbcQ7XwYYEJJMMGErKVtImLq6P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730213460; c=relaxed/simple;
-	bh=V+9pAZ1TgZqiU1UnOdv1TPVZzftVCZkFTasinCKkMY8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bs8kXLZqqhs5vcwG2i0MBH7oN3zqyF5dsEE1T+304j3nQw3E8qozVJbr0rqwcfVnjvvZuhU6NcT5Cxm78ll/UBYUoXS7D9X7tQu+Ji1EvsIWXPeh6jnXws+JXTlHgjsJj8JEsvRc7N1HIAriEZ48hwbKDhs4y/To2qCLpF6nTlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hc9RHHQA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07620C4CEE8
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 14:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730213460;
-	bh=V+9pAZ1TgZqiU1UnOdv1TPVZzftVCZkFTasinCKkMY8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Hc9RHHQAAC1xyLlR/OLmDaLQHgmIrIajv3urH2+D6bVyJmANp2GGuKGYAtEczLIq1
-	 mvdUdFE+lkMOjErsbovas3ExMb2W2Y62j6KPdcrQA7B3w7FJzNgEXC34ayP4DwR/SS
-	 SLFu9jq+hjrQa81pZBe8Pb4jQ++q7lqCQVPxIeySXYxxNneSGSUXAocfzJQKNQCHHX
-	 rl5DXWWwlPM39wEGQOKr2ynjxgNQ4V439HoIWj9PxG8kR+HOISPbABG6dujLq0tJLi
-	 K2L3IO/t1aOXcUV35QYWElCmoanSFOGFoyt84gjkK4bQi3uqDT15881KCDob0hruUU
-	 eHGxzh9F5iMTg==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-28cdd9d8d01so2845406fac.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 07:50:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUt3FKavQMg951ZJGqALVBwmDn4sp9xSb1TXsMvAZqSXS0dmpHmb++hQpaOCLSlhSN/ngWcJzd7Gg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7v/FpbNIMIdHixQKmSPqIAOSZFCbR5zv9YnOB8jO5VP7iWeYu
-	PG9N6DUmcb9Bl+LDmjAUkHDDbRjEJ42KYFFxHwM7JVyl87H4VpIOYmkf1fskVHPhCVHWqBgT9TN
-	/tc1ekcXaUyas4aQPPLcv6V8NqrE=
-X-Google-Smtp-Source: AGHT+IFzk+5iknjkPQXGC2Ldd7aUxT/U8a9N4oVLFa9RKRs98Rfy3Xnvu2htDge081jFGWjD//mSk4EyNKdcGJaW0YA=
-X-Received: by 2002:a05:6870:2184:b0:288:4823:fe1b with SMTP id
- 586e51a60fabf-29051b73163mr10494636fac.17.1730213459229; Tue, 29 Oct 2024
- 07:50:59 -0700 (PDT)
+	s=arc-20240116; t=1730215352; c=relaxed/simple;
+	bh=fjjB39Gd7OtzC1AMtJMBwpe/HfzjmD6zgnb9K/eiouQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=K01OaCiGHDhWwloCH/NdCyAhbUM/X0NrL/ifHggVlACyOPdCstqXXlf3Q/TEPN6ggfNmTuNY6DkCcwROAsgDnpDYCyo0BUtWxUQ5gHx5AVU5eVs/n8kCcAK6WFkME46R2pSJaYOaUiU/4ish0Sn2p0/wC2pvG+okoPApulnm24E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ajC2I0Ul; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4315abed18aso53021565e9.2;
+        Tue, 29 Oct 2024 08:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730215349; x=1730820149; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=awcNgOinq9mb8rRdpT9oztyZ0WKNu1hzxPR/YyKgUD0=;
+        b=ajC2I0Ul6Zr5F+8TCm9HeBhycFQd8YCYa3WZL8b2df3tmuQ1GOGaUugN9RN9MUU+GQ
+         z66m1yFlNmodjH2kcX1WZLiE0dLX1vy5saPalwIs9IxJekuohp4nKgtvbfqX2HtXsba/
+         OPUccnnKXS3vW7FTn+gw6f1xb9YiwS1z2dRAhUl/lB0awlQfyVLzZGAehi9n18jhe0G0
+         WiVoV9eN+j9KqMhtolNF61u1vELdrWTqoQ7s7FKm+CL8S8phDfglsKqtOejM3/6tZjJ1
+         3YAZamnnoNhliqXaZ1kq+AFqU+6tv8RzmRsLyRlA4eyBRpxW6oklrgoTyOL1mYh0ENMD
+         L9TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730215349; x=1730820149;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=awcNgOinq9mb8rRdpT9oztyZ0WKNu1hzxPR/YyKgUD0=;
+        b=wUIWFAPut6oGPA0Wj0/WdCXC4tVMeTMFa68OKQhbZOJu/BQw1/Dq0VTsBETRi0j8qR
+         StiOfAoQLcpb7AEvhVXIz52tgqiswyWqFDqFN9TfCE6l0Wp3df9cNtGFWbGHLE9RzT+3
+         Ig/NglOkq1BN3X8g1tzvxwgZKQIPzMx1wdeAIxWU8LUsHE3t1Qz5wyedCCteyB1NMAG3
+         8yDkWi+/Ji4tk4ot41S9p4W1r+8iEeFNIXhchlbWkyJTOH5vvpD/IVxZm4kluS/XGfrg
+         z6Y5PupDwPNqqhaUcRR8lbZE9fdgaIzVKRSGJn15gtYRWOQi4jXfHLqPG34CEoUJiKal
+         zcxg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcWEs2BSy5u1FxcUg2x603HN7oGkiDYiCi+VsSpVKz20aXnQCFzPRR91zZrUbD5rLx04QcND36@vger.kernel.org, AJvYcCXgS4kOD20fmjEwquJ6CZGE2ar6YMv5uoNWjQpkc4U1L5zHSyHOrQQBkkJv+ym+HclM/c88K+GjCg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHXoQP0tJ4FuNMm41ODhiwyGlyZxRQ1+IZ/i2ghkF0h4XvgYiG
+	MkW6XR30OAw8W4x6kkkZT+ugRcrMQtrjx/hXqScz5mmeIJ4Y+XX3
+X-Google-Smtp-Source: AGHT+IE9vFhqscMH2XH7WucYsm+7424jo51krLCV1bd7E3yubxSEK7J2dRuiCubpICZLlhVPhD3R8w==
+X-Received: by 2002:a05:600c:3593:b0:431:4f29:9542 with SMTP id 5b1f17b1804b1-4319ac77f6amr85365695e9.6.1730215348801;
+        Tue, 29 Oct 2024 08:22:28 -0700 (PDT)
+Received: from localhost ([194.120.133.34])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4318b54303fsm177639455e9.7.2024.10.29.08.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 08:22:28 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Markus Mayer <mmayer@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] Revert "cpufreq: brcmstb-avs-cpufreq: Fix initial command check"
+Date: Tue, 29 Oct 2024 15:22:27 +0000
+Message-Id: <20241029152227.3037833-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <7b1d8208-1e00-4ca3-a4f9-7d13c9867447@amd.com>
-In-Reply-To: <7b1d8208-1e00-4ca3-a4f9-7d13c9867447@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 29 Oct 2024 15:50:47 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jkt3SPJAfO5cexMTOvp77auusSC9bohnhiDwiq=e5M7A@mail.gmail.com>
-Message-ID: <CAJZ5v0jkt3SPJAfO5cexMTOvp77auusSC9bohnhiDwiq=e5M7A@mail.gmail.com>
-Subject: Re: New amd-pstate content for 6.13 (10/29/24)
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 29, 2024 at 3:03=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Hi,
->
-> Here is the updated PR based off the linux-pm/cpufreq branch.
->
-> The following changes since commit a9dedaa07b5e6034dbdd482c23aa3936958292=
-ac:
->
->    cpufreq: Switch back to struct platform_driver::remove() (2024-10-28
-> 12:24:39 +0100)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> tags/amd-pstate-v6.13-2024-10-29
->
->
->
->                                                                  for you
-> to fetch changes up to ff2653ded4d99b709f62f35656d976c47a7aa476:
->
->    cpufreq/amd-pstate: Move registration after static function call
-> update (2024-10-29 08:50:39 -0500)
->
-> ----------------------------------------------------------------
-> Update the amd-pstate driver to set the initial scaling frequency policy
-> lower bound to be lowest non-linear frequency. This will have a slight
-> power consumption impact but should lead to increased efficiency.
->
-> Also amd-pstate is enabled by default on servers starting with newer
-> AMD Epyc processors.
->
-> Align more codepaths between shared memory and MSR designs.
->
-> Add various code cleanups to rename functions and remove redundant calls.
->
->
->
->
-> ----------------------------------------------------------------
-> Dhananjay Ugwekar (11):
->        cpufreq/amd-pstate: Rename MSR and shared memory specific function=
-s
->        cpufreq/amd-pstate: Remove the redundant verify() function
->        cpufreq/amd-pstate: Set the initial min_freq to lowest_nonlinear_f=
-req
->        cpufreq/amd-pstate: Call amd_pstate_register() in amd_pstate_init(=
-)
->        cpufreq/amd-pstate: Call amd_pstate_set_driver() in
-> amd_pstate_register_driver()
->        cpufreq/amd-pstate: Remove the switch case in amd_pstate_init()
->        cpufreq/amd-pstate: Remove the redundant amd_pstate_set_driver() c=
-all
->        cpufreq/amd-pstate: Rename functions that enable CPPC
->        cpufreq/amd-pstate: Do not attempt to clear MSR_AMD_CPPC_ENABLE
->        cpufreq/amd-pstate: Call cppc_set_epp_perf in the reenable functio=
-n
->        cpufreq/amd-pstate: Align offline flow of shared memory and MSR
-> based systems
->
-> Gautham R. Shenoy (1):
->        amd-pstate: Set min_perf to nominal_perf for active mode
-> performance gov
->
-> Mario Limonciello (7):
->        cpufreq/amd-pstate: Fix non kerneldoc comment
->        cpufreq/amd-pstate: Don't update CPPC request in
-> amd_pstate_cpu_boost_update()
->        cpufreq/amd-pstate: Use amd_pstate_update_min_max_limit() for EPP
-> limits
->        cpufreq/amd-pstate: Drop needless EPP initialization
->        cpufreq/amd-pstate-ut: Add fix for min freq unit test
->        cpufreq/amd-pstate: Push adjust_perf vfunc init into cpu_init
->        cpufreq/amd-pstate: Move registration after static function call
-> update
->
-> Swapnil Sapkal (1):
->        amd-pstate: Switch to amd-pstate by default on some Server platfor=
-ms
->
->   drivers/cpufreq/amd-pstate-ut.c |   6 +++---
->   drivers/cpufreq/amd-pstate.c    | 229
-> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++------------------------------------------------------=
----------------------------------------------------------------------------=
-------
->   2 files changed, 97 insertions(+), 138 deletions(-)
+Currently the condition ((rc != -ENOTSUPP) || (rc != -EINVAL)) is always
+true because rc cannot be equal to two different values at the same time,
+so it must be not equal to at least one of them. Fix the original commit
+that introduced the issue.
 
-Pulled and added to the linux-next branch in linux-pm.git.
+This reverts commit 22a26cc6a51ef73dcfeb64c50513903f6b2d53d8.
 
-I will merge it into the 'cpufreq' branch when it spends some time in
-linux-next.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/cpufreq/brcmstb-avs-cpufreq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
+diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+index 5d03a295a085..2fd0f6be6fa3 100644
+--- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
++++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+@@ -474,8 +474,8 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
+ 	rc = brcm_avs_get_pmap(priv, NULL);
+ 	magic = readl(priv->base + AVS_MBOX_MAGIC);
+ 
+-	return (magic == AVS_FIRMWARE_MAGIC) && ((rc != -ENOTSUPP) ||
+-		(rc != -EINVAL));
++	return (magic == AVS_FIRMWARE_MAGIC) && (rc != -ENOTSUPP) &&
++		(rc != -EINVAL);
+ }
+ 
+ static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
+-- 
+2.39.5
+
 
