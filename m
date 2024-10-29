@@ -1,83 +1,94 @@
-Return-Path: <linux-pm+bounces-16639-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16640-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1313B9B4267
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:30:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FCD29B4274
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:36:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B856C1F231F7
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 06:30:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DF161F22B83
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 06:36:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4B431E0B93;
-	Tue, 29 Oct 2024 06:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8E920125B;
+	Tue, 29 Oct 2024 06:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zX5UrGRR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GIBWk9s8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E4C1DD54E
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 06:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E811E200CBC
+	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 06:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730183424; cv=none; b=cYc70RDvGQJE9M5mvLFdgJfeQ3M0kFflWVhepFm9tfGrV2nOADYGlChTxfDgmvGY71wasYp7RlA44mP81NWxsTCI9I3w1yD9g9OKw+QnKvGr5UBOHGDNSZlsgRwyYYMX1FgOdRMG6dpP4gpQWxclQqtdABKqRmo6uW7QjAnedUs=
+	t=1730183792; cv=none; b=cFWeUVGNSVdAJI+x5eLcwraN373jURHyBPQHc2UOmFisorKAznHthzw2tT+gobHZDYtq3XReaCTPQrY04pAHVQSKl6J5Rb0S+nhMFYvAHYNLu1xd95WaDwIRUXupuBK/EPGG8FSnl9XQzQ7T6BvHJQvdyRtEI4fxZKx9J2oitlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730183424; c=relaxed/simple;
-	bh=Du71veUrxgOiVmEv1nD5pxPo8ygHHxZEw5FXplwz4R0=;
+	s=arc-20240116; t=1730183792; c=relaxed/simple;
+	bh=lrobQYm06kSMi9bBZlt4TteJuGSfxroyROvsf+/tPoc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f6QuJXmeRdbp5P0v84tlOxcOmvZ0KLtV0dZfyi0Rwnbdbgpf87mORtVXTlg1DJz7A8r7mfKDOzfANZ+UXV7H0X7+uWSe3PWZGRndLUxXPbiw4SQLzjOLpBJIh4JoNGPwj0XgjU5EDch7Ydscvpe6pzQYgYt38dJAk+VrneM0jLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zX5UrGRR; arc=none smtp.client-ip=209.85.216.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=o1S+QFBCifcgzYyJVraxLpXjX4RBmI1Jyzr70rC/yXWbq1QvgevtoJo4Gyaj0hmOvRJGKKnX1+S4fh/7zZ26zRbBzMrpBvOU5XR7BwFVDvUWerGH8MfMixq+BMFl4KKUJcHWN/IB3jtrgifSHRAEdkuGi8xq5PIMv3L9eLoXxaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GIBWk9s8; arc=none smtp.client-ip=209.85.160.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2e56df894d4so4052334a91.3
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 23:30:22 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-277e6002b7dso1824367fac.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 23:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730183422; x=1730788222; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1730183789; x=1730788589; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=plGGeRa87dy8Uzv4SLW4IpzuHAuOumcDdkr887+CHXY=;
-        b=zX5UrGRRho167yhKmEH+2ns4CDt+6I0cJYlMFEJtS10cEVzAjDs8fhTYfZVEL1A9rT
-         EyiWbEwX21BhKcz9zWRaVC/RW+hhhEj00JGjAOiDxzNBh6VefmW5bUeZw+NqhH74YMmq
-         1bNK+tHsy3QqiCPn6mHywZEYAo50L1rJoYeUT6pXvzHf5ubKWAuVB96+CSRrc/cFKzQX
-         d/ngs0iu6F67fe09QEWT6NIwDBremIiVY+oVfUvr73OutasBbFrqtfy01+6IwM49UOJ7
-         r5XuOolbmQPxScJYf+VTmlS8fE13vy+KnhhOP+R5wNPmZ7Wc0iHPV4USX29KxGP7Op4c
-         IzHw==
+        bh=4QD5OKsQgrGnNIeqy7aCbkomCeG9kMbtwvROJk9froc=;
+        b=GIBWk9s8/GqhjtVMALwYnSc2+wGcIwGZpEXJyttA63oQ7MadlQ0OYTN9kQ4hSn2RdH
+         4AsuGHdVuGk+0M7qfxg8Vj0tHXUzhJlc+XlSMeS5xlsgjPC3m474LVPxCz3bNLsJIi4g
+         IlB7EDgN3MBckDoCt4rWZgAloXQh5cG1fZ1VwZWEC/DpNswFsY9TY52GyxkZy5lMMwJu
+         QJVaRMXtHMQNKin8OaV2zyKGu4HlpyNrht2SzS5z4lH6+b26TtLwEizDRNe3A/WTusIm
+         /pjJglErxf4jSNQf3W14Z62Y3PH2SR97nFDF5dPeDKfLCbEEixHJXD9BBTxjoC3vKci6
+         /XdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730183422; x=1730788222;
+        d=1e100.net; s=20230601; t=1730183789; x=1730788589;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=plGGeRa87dy8Uzv4SLW4IpzuHAuOumcDdkr887+CHXY=;
-        b=DZl6BMouq4Nww931ZOPgGbZhDU0gbtOL+W1+tANgOUJu7jgvmF9XWoOn/Ed0BzDjT1
-         epP4MvTHe+7DauVBhzakZ1Ykmid6HNQPCGC5mbzKvloij8q5XZhlltHHj4TqtCnAwYUy
-         P8k8I0RSjFz1TX9RD4x3QZB3N+OnGbTrOdd6Olg3LwWooDvxg2ZC2F3MBiRXqC34jOq+
-         Pmm+q/H2CsC7E1nSz0Fmzr4SiaKhmda44Ll7A0Zmwlpph/3A9ehYCZP91pGCdQOz03GM
-         COtGPrzk4lpW89oFQUCQVHOh2VnkbipCKIKBxQ+Cx9aP+3Sr4oSmwu5Zn+RlMhPZDt8I
-         +7uw==
-X-Forwarded-Encrypted: i=1; AJvYcCWlqZzpKi0sGuZRE/WNnHU/shBpYGxfbXhK6gL1/HPXMuhAvb7qDGwzsIyxcxO2y6jpfZ6HdwT2UA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywokf4aYTaOfeXEG+ju2g0Im9jt8zMy/psIyqBDTMdYFmSg19SK
-	yG2jsm/rjBeWq9/1UTWoWxJDzEvLIfjf8cdvCT5/edEPR6bJoWa8ylqq9EytHG0=
-X-Google-Smtp-Source: AGHT+IG6D07O8QX3Gia7cLoA/VBJO5TyyJ1Z9ZnthsBJrTHkMfDbAg3VVhuvyAIp1++8uBrWJizw9w==
-X-Received: by 2002:a17:90b:4c8d:b0:2e2:c40c:6e8a with SMTP id 98e67ed59e1d1-2e8f11abed7mr12293880a91.26.1730183422056;
-        Mon, 28 Oct 2024 23:30:22 -0700 (PDT)
+        bh=4QD5OKsQgrGnNIeqy7aCbkomCeG9kMbtwvROJk9froc=;
+        b=t0/cqkeuFMij9ecJ2uNoFBgorMXwCq2nFqAuHM23E1473kg7WD+gufUuCKtysi28di
+         mOYQGOXRhAnN8TKctTnf+6LYL7uFAmH2ZgykQJhUj0/WHFf6whdW2slLuuSddl0qNg18
+         QmPpYH9furA0Horj+GFA4UkT6RfIR7ouiZKEmP8Qmf4a9oEBe1gxQWp4/7x8n1ZcxiQa
+         ZG/piprxFcJu0E7e7cxNslgbmQvUoyLlTPrzdaP2auwrujggLa6Qk90ZFUhJee8s2lp0
+         Hny8xhoMla7dP9tI19W9y0LTo5NbXHcKIbpCsQNmh6geC2mqnjkerJao3to17yl2AKx1
+         nB0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUgF/o86ROut6LsTKVVZw91PHGyE8KzBhTHt4WcM657oiHQTCurZY+zwtj2Ca/f50jVEctFjWk0Dw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2kdpln3+DNocZBCpQgQk+ZwWOKE8hTuei/qwy95DtooPGrAvA
+	iCBdRiYxoASUbLb0XgAKqg5c0wvToHGtYBoiBezM9+zxzNRVU9uS/heRe0GKO00=
+X-Google-Smtp-Source: AGHT+IGrN/qZGm0mfTAWzCEsbfgNwzNhmA7amrnO1thp9dgYmf70eS9KgTP2FWcmMvJClPtnmU/B8Q==
+X-Received: by 2002:a05:6870:d8d1:b0:27b:b2e0:6a5 with SMTP id 586e51a60fabf-29051af085amr9777384fac.3.1730183788869;
+        Mon, 28 Oct 2024 23:36:28 -0700 (PDT)
 Received: from localhost ([122.172.85.97])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e8e3572efbsm8623748a91.22.2024.10.28.23.30.21
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057931942sm6858961b3a.65.2024.10.28.23.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 23:30:21 -0700 (PDT)
-Date: Tue, 29 Oct 2024 12:00:19 +0530
+        Mon, 28 Oct 2024 23:36:28 -0700 (PDT)
+Date: Tue, 29 Oct 2024 12:06:26 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc: Markus Mayer <mmayer@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-pm@vger.kernel.org
-Subject: Re: cpufreq: brcmstb-avs-cpufreq: issue with error number check
- that's always true
-Message-ID: <20241029063019.funs4mtwe4y6fru3@vireshk-i7>
-References: <6f78a1ba-23a7-4676-b9be-06d632bbf3ea@gmail.com>
+To: David Dai <davidai@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/2] Improve VM CPUfreq and task placement behavior
+Message-ID: <20241029063626.haz6b77vbw6pp756@vireshk-i7>
+References: <20240919000837.1004642-1-davidai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,32 +97,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6f78a1ba-23a7-4676-b9be-06d632bbf3ea@gmail.com>
+In-Reply-To: <20240919000837.1004642-1-davidai@google.com>
 
-On 21-10-24, 23:30, Colin King (gmail) wrote:
-> This was introduced with commit:
-> 
-> commit 22a26cc6a51ef73dcfeb64c50513903f6b2d53d8
-> Author: Florian Fainelli <f.fainelli@gmail.com>
-> Date:   Wed May 22 11:45:46 2019 -0700
-> 
->     cpufreq: brcmstb-avs-cpufreq: Fix initial command check
-> 
->     There is a logical error in brcm_avs_is_firmware_loaded() whereby if the
->     firmware returns -EINVAL, we will be reporting this as an error. The
->     comment is correct, the code was not.
-> 
-> 
-> ..the commit message seems to rely on the logic expressed in the comment,
-> but I think the "or" used in the comment is not equivalent to the English
-> grammatical use of "or". I suspect the commit is incorrect and needs
-> reverting/fixing.
+On 18-09-24, 17:08, David Dai wrote:
+> v6 -> v7:
+> -Updated .exit and .remove function type from int to void to match
+>  required types
+> -Added Reviewed-by tag from Rob on dt-bindings patch
+> -Dropped "depends on OF" as the driver doesn't depend on it
 
-Yeah, perhaps the existing code was doing the right thing and this
-patch was never required.
+> David Dai (2):
+>   dt-bindings: cpufreq: add virtual cpufreq device
+>   cpufreq: add virtual-cpufreq driver
+> 
+>  .../cpufreq/qemu,virtual-cpufreq.yaml         |  48 +++
+>  drivers/cpufreq/Kconfig                       |  14 +
+>  drivers/cpufreq/Makefile                      |   1 +
+>  drivers/cpufreq/virtual-cpufreq.c             | 333 ++++++++++++++++++
+>  include/linux/arch_topology.h                 |   1 +
+>  5 files changed, 397 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,virtual-cpufreq.yaml
+>  create mode 100644 drivers/cpufreq/virtual-cpufreq.c
 
-Can you send a revert for this since we haven't heard from Markus or
-Florian.
+Applied for v6.13. Thanks.
 
 -- 
 viresh
