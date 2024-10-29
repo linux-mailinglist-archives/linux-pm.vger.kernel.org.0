@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-16655-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16656-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E9C69B4680
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 11:16:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B712A9B4683
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 11:16:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 359D91C226EB
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 10:16:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75B7228445D
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 10:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A9F20494B;
-	Tue, 29 Oct 2024 10:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F1D204F74;
+	Tue, 29 Oct 2024 10:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eJR3kn8u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jaQ7G7hl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2483F204F74;
-	Tue, 29 Oct 2024 10:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D91204F8C;
+	Tue, 29 Oct 2024 10:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730196942; cv=none; b=b+VCONxr3YIlhdSCGo0DvaFOcQvIBUsHm4dN2V9+owLc/+dyN/Ud3IAnX6RVLNQudUgN1jtDu4Lesk78sXEKr5UJofq/MFXMgTh0J8gFwPYbr10byjF2LQyUlZFGdoQrxqwu1zdIPKEpuboEF7bs8PdG1K5SdhIgnBHfsuahMG8=
+	t=1730196945; cv=none; b=hR4Q87yybbWPKjFEMPtSk+COEM+6PT+sYYNRXjVTsKhJCM95Q5bMNvZh6Ec1z/WMYtL5NfFfpvx+bDYyE5DeF4wwvGm01IS2h5E5RWBu82bHBMjnMK4w8J8g6irz8dGh40CiAtTD2I998tSYmTK4tk2Gf3Xtt2r1dyffMVwsCUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730196942; c=relaxed/simple;
-	bh=AmdziJTruptBgthbP1kO8JhRYQ48WuaGHdC/UKqmZi0=;
+	s=arc-20240116; t=1730196945; c=relaxed/simple;
+	bh=dmw0Ev6NtbB/FrIq42ORgnyR9QmIFlVVce4TvduxG+g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ofvy51qS/iLGbvar5BL1w23wAbFPNgHFPEj6Bu8EuouaiN9OWY4Z+G0flTJ6d1r77ye+kaEuCVGymlptcKxQqZF/FSrQ5ytxFugVmRwSl1S+7tXzMdFsyECmZxyXEf6RkdfYzWZuHHJe9oEKriMQH5cSo4AJlC0hWSBANYYu63M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eJR3kn8u; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=GrANWmSfTPj0dlzVxyxOETfSnBHFXjYnhQU3nlKt5XYZGBCjU3LchF/L2rw3Cq14fYAKe7ScG6YdUBqAHlEIl7uYS6tApgrKR4/mUIBgGjHUlHui2WLyLSTVRzRc/nSKm7hVnnCjklx5n3Uzs+8UF5tPKe4ob5nmrnSK9k87J7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jaQ7G7hl; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730196940; x=1761732940;
+  t=1730196943; x=1761732943;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AmdziJTruptBgthbP1kO8JhRYQ48WuaGHdC/UKqmZi0=;
-  b=eJR3kn8uKo6dmy0RPH3jLVKp7t45w6K/+Fb3BNDU9qTwCs35mIR/fKwB
-   ZWqIdTBc5PwPZcDPVlXdhEWHQpU7cvLaOP+n5HGzlYnDXbZidsLN8suNw
-   Kqwwaz0ifDzDEP/HJExSF9jsqSjuBuV9Nb6noR0Ue7ouOytjMwiBUsZzn
-   yyIsPREdYW4vdQPH49U23AXTpJ3hKwwUmQheLC8hbFzTreAq0x4tulr29
-   BjbYYb23yecPuGP01xfQK5r8AcgJrcClgmN2TIV13dx6sv7OLBBjX2YQJ
-   IeSxsDTKuXLA/Z96VELJiMgVOOuZzt+kP8s+xSuktPghjLljK17DYJtUL
-   A==;
-X-CSE-ConnectionGUID: YpmHnXnsQYe3v7h5fu0QoA==
-X-CSE-MsgGUID: 6WPcbuYBTWSNMnI+wfHiog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="33624102"
+  bh=dmw0Ev6NtbB/FrIq42ORgnyR9QmIFlVVce4TvduxG+g=;
+  b=jaQ7G7hlBjZTZPpKhAsp0w5A4iQLm0MJO1KbJDuuXUv+wvldcAYzPhTG
+   ndiFVKh2TFRybnYweBP1tHqe26ktutAOeFtgOn7k4rDKbGXI3yAYdryAy
+   SkPff8xkyTmtFTYTyiBYVUeISnAa6NLY2j1OgT6KYajt89UM74NvlVeV5
+   rfBIBKDsjpDmm5ohdc/x1GGeE5kYENaH9sE8pQnEFMcrpeauhcW3xS3kf
+   bW2NTVmRe1hfeLCSSHzNwJ0fOGTtWTESp957EQd6uKIWmjNJ/qfvvqOpi
+   2CMMtSO9Xp67mkGLAw27Kxz/ozuHZ93WgBqnMslIxCHBYOZWO7RtriaSQ
+   Q==;
+X-CSE-ConnectionGUID: 6K+agIx4S6uMQXChcrX39g==
+X-CSE-MsgGUID: ffQ/TM6tQuSDpIVFBK5ldA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="33624108"
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="33624102"
+   d="scan'208";a="33624108"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:15:40 -0700
-X-CSE-ConnectionGUID: KUavw6ZoQpaqvZZTYbUi+g==
-X-CSE-MsgGUID: Ep3C9lTdTtGbQ3gfNSXziQ==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:15:43 -0700
+X-CSE-ConnectionGUID: CEPBl2zgSeWoyY9s+cA2+Q==
+X-CSE-MsgGUID: XlYl3EZjTuG6WOSaeZHizA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="119375287"
+   d="scan'208";a="119375299"
 Received: from bergbenj-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.244.58])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:15:36 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:15:40 -0700
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc: linux-kernel@vger.kernel.org,
 	artem.bityutskiy@linux.intel.com,
 	dave.hansen@linux.intel.com,
 	patryk.wlazlyn@linux.intel.com
-Subject: [PATCH v2 2/3] x86/smp: Allow forcing the mwait hint for play dead loop
-Date: Tue, 29 Oct 2024 11:15:06 +0100
-Message-ID: <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com>
+Subject: [PATCH v2 3/3] intel_idle: Identify the deepest cstate for SRF
+Date: Tue, 29 Oct 2024 11:15:07 +0100
+Message-ID: <20241029101507.7188-4-patryk.wlazlyn@linux.intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
 References: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
@@ -81,88 +81,82 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The current implementation for looking up the mwait hint for the deepest
-cstate depends on them to be continuous in range [0, NUM_SUBSTATES-1].
-While that is correct on most Intel x86 platforms, it is not
-architectural and may not result in reaching the most optimized idle
-state on some of them.
-
-For example Intel's Sierra Forest report two C6 substates in cpuid leaf 5:
-    C6S  (hint 0x22)
-    C6SP (hint 0x23)
-
-Hints 0x20 and 0x21 are skipped entirely, causing the current
-implementation to compute the wrong hint, when looking for the deepest
-cstate for offlined CPU to enter. As a result, package with an offlined
-CPU can never reach PC6.
-
-Allow the idle driver to communicate the deepest idle cstate to the x86
-offline code.
+On Sierra Forest the mwait hints for subsequent idle states are not
+continuous, resulting in play_dead() code not computing the most
+optimized idle state when CPU is put offline. This in turn prevents from
+entering PC6 state when any of the CPUs in the package is offline.
+Force the known, best mwait hint for the deepest cstate.
 
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 ---
- arch/x86/include/asm/smp.h |  3 +++
- arch/x86/kernel/smpboot.c  | 12 +++++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ drivers/idle/intel_idle.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index ca073f40698f..2cb083a84225 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -114,6 +114,7 @@ void wbinvd_on_cpu(int cpu);
- int wbinvd_on_all_cpus(void);
- 
- void smp_kick_mwait_play_dead(void);
-+void smp_set_mwait_play_dead_hint(unsigned int hint);
- 
- void native_smp_send_reschedule(int cpu);
- void native_send_call_func_ipi(const struct cpumask *mask);
-@@ -164,6 +165,8 @@ static inline struct cpumask *cpu_llc_shared_mask(int cpu)
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 9aab7abc2ae9..d0b4b231d9ad 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -48,6 +48,7 @@
+ #include <trace/events/power.h>
+ #include <linux/sched.h>
+ #include <linux/sched/smt.h>
++#include <linux/smp.h>
+ #include <linux/notifier.h>
+ #include <linux/cpu.h>
+ #include <linux/moduleparam.h>
+@@ -1645,6 +1646,7 @@ static bool __init intel_idle_acpi_cst_extract(void)
+ static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
  {
- 	return (struct cpumask *)cpumask_of(0);
- }
-+
-+static inline void smp_set_mwait_play_dead_hint(unsigned int hint) { }
- #endif /* CONFIG_SMP */
+ 	int cstate, limit = min_t(int, CPUIDLE_STATE_MAX, acpi_state_table.count);
++	unsigned int mwait_hint_deepest = 0;
  
- #ifdef CONFIG_DEBUG_NMI_SELFTEST
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 683898e3b20e..08f7b43f3fc3 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -127,6 +127,9 @@ int __read_mostly __max_smt_threads = 1;
- /* Flag to indicate if a complete sched domain rebuild is required */
- bool x86_topology_update;
+ 	/*
+ 	 * If limit > 0, intel_idle_cst_usable() has returned 'true', so all of
+@@ -1678,6 +1680,7 @@ static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
+ 			state->target_residency *= 3;
  
-+#define PLAY_DEAD_MWAIT_HINT_UNSET 0U
-+static unsigned int __read_mostly play_dead_mwait_hint;
+ 		state->flags = MWAIT2flg(cx->address);
++		mwait_hint_deepest = cx->address;
+ 		if (cx->type > ACPI_STATE_C2)
+ 			state->flags |= CPUIDLE_FLAG_TLB_FLUSHED;
+ 
+@@ -1690,6 +1693,9 @@ static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
+ 		state->enter = intel_idle;
+ 		state->enter_s2idle = intel_idle_s2idle;
+ 	}
 +
- int arch_update_cpu_topology(void)
- {
- 	int retval = x86_topology_update;
-@@ -1270,6 +1273,11 @@ void play_dead_common(void)
- 	local_irq_disable();
++	if (mwait_hint_deepest)
++		smp_set_mwait_play_dead_hint(mwait_hint_deepest);
  }
  
-+void smp_set_mwait_play_dead_hint(unsigned int hint)
-+{
-+	WRITE_ONCE(play_dead_mwait_hint, hint);
-+}
-+
- /* Computes mwait hint for the deepest mwait hint based on cpuid leaf 0x5 */
- static inline unsigned int get_deepest_mwait_hint(void)
+ static bool __init intel_idle_off_by_default(u32 mwait_hint)
+@@ -1988,6 +1994,7 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+ 
+ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
  {
-@@ -1322,7 +1330,9 @@ static inline void mwait_play_dead(void)
- 	if (__this_cpu_read(cpu_info.cpuid_level) < CPUID_MWAIT_LEAF)
- 		return;
++	unsigned int mwait_hint_deepest = 0;
+ 	int cstate;
  
--	hint = get_deepest_mwait_hint();
-+	hint = READ_ONCE(play_dead_mwait_hint);
-+	if (hint == PLAY_DEAD_MWAIT_HINT_UNSET)
-+		hint = get_deepest_mwait_hint();
+ 	switch (boot_cpu_data.x86_vfm) {
+@@ -2037,6 +2044,8 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 		if (!intel_idle_verify_cstate(mwait_hint))
+ 			continue;
  
- 	/* Set up state for the kexec() hack below */
- 	md->status = CPUDEAD_MWAIT_WAIT;
++		mwait_hint_deepest = mwait_hint;
++
+ 		/* Structure copy. */
+ 		drv->states[drv->state_count] = cpuidle_state_table[cstate];
+ 		state = &drv->states[drv->state_count];
+@@ -2060,6 +2069,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 		wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
+ 		wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
+ 	}
++
++	if (mwait_hint_deepest)
++		smp_set_mwait_play_dead_hint(mwait_hint_deepest);
+ }
+ 
+ /**
 -- 
 2.47.0
 
