@@ -1,121 +1,103 @@
-Return-Path: <linux-pm+bounces-16665-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16666-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2951C9B4DA7
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 16:22:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DC729B4DCC
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 16:24:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA50CB2587F
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 15:22:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63154285211
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 15:24:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDCF193416;
-	Tue, 29 Oct 2024 15:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D996192D84;
+	Tue, 29 Oct 2024 15:24:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ajC2I0Ul"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E31i4+n2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CA8192B73;
-	Tue, 29 Oct 2024 15:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9ECC21348;
+	Tue, 29 Oct 2024 15:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730215352; cv=none; b=baBSYgFbt/BXkxkyGKGAiuT5w3eGtRmcYFlkGkjelf0Bl3WqzyaMQ/4PYAxqqA6gNo5W94TwdTuA0tRBEGdHYMXqxedBh7RepPkyk9fYt4lWOdC34lWpGuPp0Ww/KxgsrLdKc2axx+1cBLESHbcQ7XwYYEJJMMGErKVtImLq6P4=
+	t=1730215448; cv=none; b=t7br68SlobF9P3m+v6DoW5SKdF9fqBSr5bqv1ZLvYmUYfjZaENqVWNhEbCCfLCxDJcnA7wEhKHfy3Y9zdTuZTOA1SS8eYtQD7eHwHqrF3B989FaVkbud4bQOC/0+oEL5w9s5Sc0jE96Egxr6tBzrxjAk88/UK9NhROvkInWFUHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730215352; c=relaxed/simple;
-	bh=fjjB39Gd7OtzC1AMtJMBwpe/HfzjmD6zgnb9K/eiouQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=K01OaCiGHDhWwloCH/NdCyAhbUM/X0NrL/ifHggVlACyOPdCstqXXlf3Q/TEPN6ggfNmTuNY6DkCcwROAsgDnpDYCyo0BUtWxUQ5gHx5AVU5eVs/n8kCcAK6WFkME46R2pSJaYOaUiU/4ish0Sn2p0/wC2pvG+okoPApulnm24E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ajC2I0Ul; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4315abed18aso53021565e9.2;
-        Tue, 29 Oct 2024 08:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730215349; x=1730820149; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=awcNgOinq9mb8rRdpT9oztyZ0WKNu1hzxPR/YyKgUD0=;
-        b=ajC2I0Ul6Zr5F+8TCm9HeBhycFQd8YCYa3WZL8b2df3tmuQ1GOGaUugN9RN9MUU+GQ
-         z66m1yFlNmodjH2kcX1WZLiE0dLX1vy5saPalwIs9IxJekuohp4nKgtvbfqX2HtXsba/
-         OPUccnnKXS3vW7FTn+gw6f1xb9YiwS1z2dRAhUl/lB0awlQfyVLzZGAehi9n18jhe0G0
-         WiVoV9eN+j9KqMhtolNF61u1vELdrWTqoQ7s7FKm+CL8S8phDfglsKqtOejM3/6tZjJ1
-         3YAZamnnoNhliqXaZ1kq+AFqU+6tv8RzmRsLyRlA4eyBRpxW6oklrgoTyOL1mYh0ENMD
-         L9TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730215349; x=1730820149;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=awcNgOinq9mb8rRdpT9oztyZ0WKNu1hzxPR/YyKgUD0=;
-        b=wUIWFAPut6oGPA0Wj0/WdCXC4tVMeTMFa68OKQhbZOJu/BQw1/Dq0VTsBETRi0j8qR
-         StiOfAoQLcpb7AEvhVXIz52tgqiswyWqFDqFN9TfCE6l0Wp3df9cNtGFWbGHLE9RzT+3
-         Ig/NglOkq1BN3X8g1tzvxwgZKQIPzMx1wdeAIxWU8LUsHE3t1Qz5wyedCCteyB1NMAG3
-         8yDkWi+/Ji4tk4ot41S9p4W1r+8iEeFNIXhchlbWkyJTOH5vvpD/IVxZm4kluS/XGfrg
-         z6Y5PupDwPNqqhaUcRR8lbZE9fdgaIzVKRSGJn15gtYRWOQi4jXfHLqPG34CEoUJiKal
-         zcxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcWEs2BSy5u1FxcUg2x603HN7oGkiDYiCi+VsSpVKz20aXnQCFzPRR91zZrUbD5rLx04QcND36@vger.kernel.org, AJvYcCXgS4kOD20fmjEwquJ6CZGE2ar6YMv5uoNWjQpkc4U1L5zHSyHOrQQBkkJv+ym+HclM/c88K+GjCg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHXoQP0tJ4FuNMm41ODhiwyGlyZxRQ1+IZ/i2ghkF0h4XvgYiG
-	MkW6XR30OAw8W4x6kkkZT+ugRcrMQtrjx/hXqScz5mmeIJ4Y+XX3
-X-Google-Smtp-Source: AGHT+IE9vFhqscMH2XH7WucYsm+7424jo51krLCV1bd7E3yubxSEK7J2dRuiCubpICZLlhVPhD3R8w==
-X-Received: by 2002:a05:600c:3593:b0:431:4f29:9542 with SMTP id 5b1f17b1804b1-4319ac77f6amr85365695e9.6.1730215348801;
-        Tue, 29 Oct 2024 08:22:28 -0700 (PDT)
-Received: from localhost ([194.120.133.34])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4318b54303fsm177639455e9.7.2024.10.29.08.22.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2024 08:22:28 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Markus Mayer <mmayer@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] Revert "cpufreq: brcmstb-avs-cpufreq: Fix initial command check"
-Date: Tue, 29 Oct 2024 15:22:27 +0000
-Message-Id: <20241029152227.3037833-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1730215448; c=relaxed/simple;
+	bh=OnfPNjPFcprKl1sN97TkhOv/xNK+Q/zpiKD+oNhDMSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=duKdzRHkQpDVn8lqn6eHzuJlyjC4MZA7N5h7aiRMCl5cQzP1S5yZu/L8BS90/jxeUokGwGA283y8ckgjyavLC8gV09znVolKW9SyV2Osbwc1bwRMiCXEWJR1Kl64RSMozI9zxgY+BlQeifA6jAp50sDpKTOP8A2yCC+pRl1JAPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E31i4+n2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C660FC4CECD;
+	Tue, 29 Oct 2024 15:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730215448;
+	bh=OnfPNjPFcprKl1sN97TkhOv/xNK+Q/zpiKD+oNhDMSk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E31i4+n2VfP73VqUtiK+gGGwGyJPG/gqLdz1F/Xn8gtzgIte2GFbSrzS2tWamSxWl
+	 9Zw0YDHmBYpciQUj3b95NnqAHMns0WZL/efHJoyMUe+TT5Av6j75+LIOn2d10jG2Sa
+	 Y/wGc+s3uqYoxSChwozTI4vlkJhehj9XoxmAnsXi9m/WRyrUAexAyJpLI7kZGMq9cI
+	 Jv7t9zvjRKrRJHu6S4D0XxbuREDxDww2gja2p+62K9u14TvqnkkJV5ZTCLzYcENc29
+	 ekLAvwOCsdlxLy8apvJqWVnUINaro65w+MkYq8mkZm8f4/4hV8Vcja9W6w98QyEBGi
+	 YG75XcuK7bCvw==
+Date: Tue, 29 Oct 2024 10:24:02 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Herve Codina <herve.codina@bootlin.com>, 
+	Qiang Zhao <qiang.zhao@nxp.com>, Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>, 
+	Huisong Li <lihuisong@huawei.com>, Linus Walleij <linusw@kernel.org>, 
+	Imre Kaloz <kaloz@openwrt.org>, Karol Gugala <kgugala@antmicro.com>, 
+	Mateusz Holenko <mholenko@antmicro.com>, Gabriel Somlo <gsomlo@gmail.com>, 
+	Yinbo Zhu <zhuyinbo@loongson.cn>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Daire McNamara <daire.mcnamara@microchip.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Nishanth Menon <nm@ti.com>, 
+	Santosh Shilimkar <ssantosh@kernel.org>, Michal Simek <michal.simek@amd.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+	Mark Brown <broonie@kernel.org>, David Wu <david.wu@rock-chips.com>, 
+	Jianqun Xu <jay.xu@rock-chips.com>, Jay Buddhabhatti <jay.buddhabhatti@amd.com>, 
+	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>, Izhar Ameer Shaikh <izhar.ameer.shaikh@amd.com>, 
+	Naman Trivedi Manojbhai <naman.trivedimanojbhai@amd.com>, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, linux-mediatek@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH] soc: Switch back to struct platform_driver::remove()
+Message-ID: <7iufjf4cnoofq63vtzrnlxneyjhmuhuaq2tqflzw6nc6xpixiu@dnyh4etii2vz>
+References: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
 
-Currently the condition ((rc != -ENOTSUPP) || (rc != -EINVAL)) is always
-true because rc cannot be equal to two different values at the same time,
-so it must be not equal to at least one of them. Fix the original commit
-that introduced the issue.
+On Tue, Oct 29, 2024 at 08:48:58AM GMT, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
+> 
+> Convert all platform drivers below drivers/soc to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
+> 
+> On the way do a few whitespace changes to make indention consistent.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 
-This reverts commit 22a26cc6a51ef73dcfeb64c50513903f6b2d53d8.
+Acked-by: Bjorn Andersson <andersson@kernel.org> # qcom parts
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/cpufreq/brcmstb-avs-cpufreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-index 5d03a295a085..2fd0f6be6fa3 100644
---- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-+++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-@@ -474,8 +474,8 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
- 	rc = brcm_avs_get_pmap(priv, NULL);
- 	magic = readl(priv->base + AVS_MBOX_MAGIC);
- 
--	return (magic == AVS_FIRMWARE_MAGIC) && ((rc != -ENOTSUPP) ||
--		(rc != -EINVAL));
-+	return (magic == AVS_FIRMWARE_MAGIC) && (rc != -ENOTSUPP) &&
-+		(rc != -EINVAL);
- }
- 
- static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
--- 
-2.39.5
-
+Regards,
+Bjorn
 
