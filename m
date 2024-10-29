@@ -1,273 +1,152 @@
-Return-Path: <linux-pm+bounces-16669-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16670-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10EF79B4F07
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 17:14:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE1EB9B4FE8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 17:56:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B42B1F23FCA
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 16:14:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EA09283158
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 16:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4771196455;
-	Tue, 29 Oct 2024 16:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D368B19995A;
+	Tue, 29 Oct 2024 16:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="fk57pSEN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJhSGp6O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5805B194AD1
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 16:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4065C96;
+	Tue, 29 Oct 2024 16:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730218459; cv=none; b=lrxelrM1eITSulA6Yc+8SjWt2iTYlGcKqrmWNh4UI2v6BlrhXXKsnTXl4u4THUPXbx5Q0Av3GQhui7Ac5G2gX9ONhMG1XFhCrSDV3ewWS1B85cw4juuUXHRljCVGP0fqb792QkbdzD8Cp5iIOzx6chSO6K/HgjC6V+WyeyOfknc=
+	t=1730221014; cv=none; b=lAJ9mUyzGyTpkUYDy5PMSqmdVnkjlUHkcZUaK7xTaH+afCFKZtwvkTffK+l6YHMokwJlVI40rmMOZKE0H0/QMWcz5zKgckEm3cTvW4dbuAGRWS+O0+ftDkXFuU6BZQ7z0l4VvPcqnsfO720wtDBCGuobzfxt8eGn/vXeSoIJcwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730218459; c=relaxed/simple;
-	bh=0L3docCnDuLsAdKJ8dEDXzSfqrsZBJk5JzF8lOJHQM8=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=Qfy9MvQjjmnLvY95uXuJjNGeOfz4gdqFTtb+pWPQbruwKwebgfl6U72XNXvQKtaBBmSA7/AVMKO2pmYwL4MpePN3tfS1fQgkqzja6t9a4sMxKJJdBfn6w+sQ/yYTtzvuB084Kwnvdo35RHDWRUZqlCwqYp2mwW+HfE8d5iuOwQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=fk57pSEN; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7ea6a4f287bso3662968a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 09:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1730218456; x=1730823256; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UAst1WV5SzZRcTXSQrK5SJVCNaO8MftXt7l7tDYTPQ0=;
-        b=fk57pSEN/2XtnXY8YG3qiteiABI7F620Oi5sJECBaKLSzoiXrSXHSTkqPAJIDjAF1W
-         CuGm1siaZLWrBIN7mOK7DAZfZnKHzJdlVFYeuMuwjWC6n511Vm55k1DxHPR3eZWxyTwR
-         jzJzkB1XzAywWO3v4ztQ7WBjGh3flJZIVbnkewE6unQVEZC5EqIaKCziS9vrwlgjFEZ6
-         g7TSrxizP3xZSYvWtkk2L7gJHp5SkTqPpzGKPe+MHkSLQDeBJazYRwDMDFEhKtzbn/8d
-         DHe3i8evPt8OprHAFDML4jVrGHH+ElfA7s3LiI8NFsFQBp+Z+Ab46LBPni7y9gBvRGpT
-         2Uig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730218456; x=1730823256;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UAst1WV5SzZRcTXSQrK5SJVCNaO8MftXt7l7tDYTPQ0=;
-        b=AsKyJdvcKEyG21L2jH18U6WVDgW6BTjatgxIAQPQO8oPOowVG7UqUEWM7f4LeCgsOS
-         PDDrcVky+B2Vr9MF2nMT9Pp8YAuYcJvCvTAfYHK7TT3CT5aoPHVcPp4Pweh0eTGb9zcO
-         8wF1s3YNLkXJ5HSNIT6r4M6uni8XWoNrwxxe9cgshK8fheN5F9gzKs5lGzC691dm+eks
-         qznjxknjQKmDVtBvKGKbDoq2Ht6k2/0yM1ZYSD2VnX6C08YTGw1MhxlY92RxS/HP1GJB
-         uRb8bSdqo3IZPxxDcUSRP9p8KXMKMz1wxcN8+x8L9RNuhcqH+or5TaS1t0eIciJXylrm
-         m++A==
-X-Forwarded-Encrypted: i=1; AJvYcCWTzXpFTM68NaaT+naiKoR4zCokchgYTNBQEpL4iD3By+oAy40BldiVqA/BBQoFWcXXRvAqm20Ceg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdZf88ydIW4AnBwgP32mYEvThxwuWAze+ksEqHfQMwaE3MOZI2
-	7ZxUIf9BhZ2SMgZc/LGDoIvHdNYmG2a435bUMcU3n8t66AOZqUAVuYegZti6cnljWPNXBTSGjpz
-	y
-X-Google-Smtp-Source: AGHT+IEPrOi6O8/bS/SNrdfMO7WTtdfMibq1p2PfRSYtOpYxJO8oaayjEKJsjDfDIFR0HFSZXtz5Bg==
-X-Received: by 2002:a05:6a21:1190:b0:1d8:a854:1b8c with SMTP id adf61e73a8af0-1d9a851ed02mr17094980637.43.1730218456464;
-        Tue, 29 Oct 2024 09:14:16 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a1f18esm7966786b3a.146.2024.10.29.09.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2024 09:14:16 -0700 (PDT)
-Message-ID: <672109d8.050a0220.1e02cf.ff2c@mx.google.com>
-Date: Tue, 29 Oct 2024 09:14:16 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1730221014; c=relaxed/simple;
+	bh=etdtSKZzHyNHp2dO9HMm30+8IeYkXPUjGAvw/wRkyuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qu9QEaSjxnbtJ6BQXjAlO8NFzZ7pY5H2GrNUPkBb7uJ9RXsgHJBTAudPyCc4zQjVWKRC7hvpChl34mHF+lNT7sVyKu0bGPpAJhtGhZ/G5UD4RPW5mj7RUT52kpMqTs+AB5jDKJzoVY+qyrl7J2Rf2RdIR0QWPpO8DuOA8+yBjG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NJhSGp6O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4AFC4CECD;
+	Tue, 29 Oct 2024 16:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730221014;
+	bh=etdtSKZzHyNHp2dO9HMm30+8IeYkXPUjGAvw/wRkyuE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NJhSGp6O7NdIB8kC89Q1E4JBrRfJq2l5i11zAz7HzFJt95y81sCoQxNguD0andvq3
+	 FPGZROrSwW9kvDTNl7wx2yQKmxcuZAeBDj6lRq1b9zY3xDSuKkp/f9Al+biAFm69Zs
+	 gD48Y8C96esL7dg+H5GLS6ah7YW8SkZWumYep4mWFM2lMuLA1pLpzCs/YkZjBe139b
+	 IKAJ3iu1r4ZwqQ1PPa463dKHE2bj0b15TVrU8n9fnEoq2jZ9b9jQbVzUbpAMZ5iRGQ
+	 1y7qmjLa8FXwTcUwj5iCLGDVKQfxhrA8LmkthYML35Y1rp8dRyp5wqeYxp3rzOOam6
+	 HZ90KUy3CG3nQ==
+Received: by pali.im (Postfix)
+	id 83DB8820; Tue, 29 Oct 2024 17:56:46 +0100 (CET)
+Date: Tue, 29 Oct 2024 17:56:46 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Jerry Lv <Jerry.Lv@axis.com>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel@axis.com
+Subject: Re: [PATCH] power: supply: bq27xxx_battery: Retrieve again when busy
+Message-ID: <20241029165646.x5wqy5bo5cjv2q4e@pali>
+References: <20241029-foo-fix-v1-1-1dbfed72d023@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.12-rc5-91-ge81e2742abb62
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 23 warnings (v6.12-rc5-91-ge81e2742abb62)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241029-foo-fix-v1-1-1dbfed72d023@axis.com>
+User-Agent: NeoMutt/20180716
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.12-rc5-91-g=
-e81e2742abb62)
+On Tuesday 29 October 2024 11:35:00 Jerry Lv wrote:
+> Multiple applications may access the battery gauge at the same time, so
+> the gauge may be busy and EBUSY will be returned. The driver will set a
+> flag to record the EBUSY state, and this flag will be kept until the next
+> periodic update. When this flag is set, bq27xxx_battery_get_property()
+> will just return ENODEV until the flag is updated.
+> 
+> Even if the gauge was busy during the last accessing attempt, returning
+> ENODEV is not ideal, and can cause confusion in the applications layer.
+> 
+> Instead, retry accessing the gauge to update the flag is as expected, for
+> the gauge typically recovers from busy state within a few milliseconds.
+> If still failed to access the gauge, the real error code would be returned
+> instead of ENODEV (as suggested by Pali Rohár).
+> 
+> Signed-off-by: Jerry Lv <Jerry.Lv@axis.com>
+> ---
+> When the battery gauge is busy, retry to access 10 miliseconds later,
+> retry up to 3 times. When failed to access the gauge, return the real
+> error code.
+> 
+> Differences related to previous versions:
+> v2 (as suggested by Pali Rohár):
+> - retry up to 3 times when gauge is busy.
+> - return the real error code when fail to access the device.
+> 
+> v1:
+> - initial version for review.
+> ---
+>  drivers/power/supply/bq27xxx_battery.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+> index 750fda543308..9c40bbc292c1 100644
+> --- a/drivers/power/supply/bq27xxx_battery.c
+> +++ b/drivers/power/supply/bq27xxx_battery.c
+> @@ -1871,11 +1871,19 @@ static int bq27xxx_battery_current_and_status(
+>  
+>  static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
+>  {
+> +#define MAX_RETRY 3
+> +	int retry = 0, sleep = 10;
+>  	union power_supply_propval status = di->last_status;
+>  	struct bq27xxx_reg_cache cache = {0, };
+>  	bool has_singe_flag = di->opts & BQ27XXX_O_ZERO;
+>  
+> -	cache.flags = bq27xxx_read(di, BQ27XXX_REG_FLAGS, has_singe_flag);
+> +	do {
+> +		cache.flags = bq27xxx_read(di, BQ27XXX_REG_FLAGS, has_singe_flag);
+> +		if (cache.flags == -EBUSY && retry < MAX_RETRY) {
+> +			retry++;
+> +			BQ27XXX_MSLEEP(sleep);		/* sleep 10 miliseconds when busy */
+> +		}
+> +	} while (cache.flags == -EBUSY && retry < MAX_RETRY);
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-12-rc5-91-ge81e2742abb62/
+Hello, this is for sure nice improvement.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.12-rc5-91-ge81e2742abb62
-Git Commit: e81e2742abb62a3ff21a9d281e26225f79699381
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Anyway, I think that I mentioned it in previous email, this problem
+which you describe does not affect only bq27xxx_battery_update_unlocked()
+but also any other function which calls bq27xxx_read().
 
-Warnings Detected:
+What about rather moving this -EBUSY retry logic into the bq27xxx_read()
+function itself? Or even better, directly inside bq27xxx_battery_i2c_read()
+function? This would fix this problem on all places.
 
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-12): 18 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    kernel/fork.c:3075:2: warning: #warning clone3() entry point is mi=
-ssing, please fix [-Wcpp]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    3075 | #warning clone3() entry point is missing, please fix
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+>  	if ((cache.flags & 0xff) == 0xff)
+>  		cache.flags = -1; /* read error */
+>  	if (cache.flags >= 0) {
+> @@ -2030,7 +2038,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+>  	mutex_unlock(&di->lock);
+>  
+>  	if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
+> -		return -ENODEV;
+> +		return di->cache.flags;
+>  
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_STATUS:
+> 
+> ---
+> base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+> change-id: 20241008-foo-fix-b2244cbe6dce
+> 
+> Best regards,
+> -- 
+> Jerry Lv <Jerry.Lv@axis.com>
+> 
 
