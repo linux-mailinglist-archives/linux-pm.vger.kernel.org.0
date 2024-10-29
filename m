@@ -1,163 +1,164 @@
-Return-Path: <linux-pm+bounces-16656-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16657-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B712A9B4683
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 11:16:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 509469B4858
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 12:32:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75B7228445D
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 10:16:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 823DF1C2111E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 11:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F1D204F74;
-	Tue, 29 Oct 2024 10:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC370205155;
+	Tue, 29 Oct 2024 11:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jaQ7G7hl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FdtekhKL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D91204F8C;
-	Tue, 29 Oct 2024 10:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB75204F9E;
+	Tue, 29 Oct 2024 11:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730196945; cv=none; b=hR4Q87yybbWPKjFEMPtSk+COEM+6PT+sYYNRXjVTsKhJCM95Q5bMNvZh6Ec1z/WMYtL5NfFfpvx+bDYyE5DeF4wwvGm01IS2h5E5RWBu82bHBMjnMK4w8J8g6irz8dGh40CiAtTD2I998tSYmTK4tk2Gf3Xtt2r1dyffMVwsCUE=
+	t=1730201485; cv=none; b=oUuYJmg0e4X4aPOlPoltNBjnncGgs4nfsuXEIoq5cjINlQxYZdQqTY2vpBmTIcB5TrhVnmEPwcg6NVBZ/pztLmnj4iK7F6guLeNGQhthNo//VfH16pONjOMB7nMSASSaEpch+AtcrdIOMUq6GK2Tgu13Ju6mB+SoG2QTrrvwX4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730196945; c=relaxed/simple;
-	bh=dmw0Ev6NtbB/FrIq42ORgnyR9QmIFlVVce4TvduxG+g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GrANWmSfTPj0dlzVxyxOETfSnBHFXjYnhQU3nlKt5XYZGBCjU3LchF/L2rw3Cq14fYAKe7ScG6YdUBqAHlEIl7uYS6tApgrKR4/mUIBgGjHUlHui2WLyLSTVRzRc/nSKm7hVnnCjklx5n3Uzs+8UF5tPKe4ob5nmrnSK9k87J7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jaQ7G7hl; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730196943; x=1761732943;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dmw0Ev6NtbB/FrIq42ORgnyR9QmIFlVVce4TvduxG+g=;
-  b=jaQ7G7hlBjZTZPpKhAsp0w5A4iQLm0MJO1KbJDuuXUv+wvldcAYzPhTG
-   ndiFVKh2TFRybnYweBP1tHqe26ktutAOeFtgOn7k4rDKbGXI3yAYdryAy
-   SkPff8xkyTmtFTYTyiBYVUeISnAa6NLY2j1OgT6KYajt89UM74NvlVeV5
-   rfBIBKDsjpDmm5ohdc/x1GGeE5kYENaH9sE8pQnEFMcrpeauhcW3xS3kf
-   bW2NTVmRe1hfeLCSSHzNwJ0fOGTtWTESp957EQd6uKIWmjNJ/qfvvqOpi
-   2CMMtSO9Xp67mkGLAw27Kxz/ozuHZ93WgBqnMslIxCHBYOZWO7RtriaSQ
-   Q==;
-X-CSE-ConnectionGUID: 6K+agIx4S6uMQXChcrX39g==
-X-CSE-MsgGUID: ffQ/TM6tQuSDpIVFBK5ldA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="33624108"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="33624108"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:15:43 -0700
-X-CSE-ConnectionGUID: CEPBl2zgSeWoyY9s+cA2+Q==
-X-CSE-MsgGUID: XlYl3EZjTuG6WOSaeZHizA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="119375299"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.244.58])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:15:40 -0700
-From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-To: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rafael.j.wysocki@intel.com,
-	len.brown@intel.com,
-	artem.bityutskiy@linux.intel.com,
-	dave.hansen@linux.intel.com,
-	patryk.wlazlyn@linux.intel.com
-Subject: [PATCH v2 3/3] intel_idle: Identify the deepest cstate for SRF
-Date: Tue, 29 Oct 2024 11:15:07 +0100
-Message-ID: <20241029101507.7188-4-patryk.wlazlyn@linux.intel.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
-References: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
+	s=arc-20240116; t=1730201485; c=relaxed/simple;
+	bh=b3iDHqbap1LmKFhPTuu1Qqk4svOtioflicE0/GgpTbA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o9iJDaiVoDokt7Vb6ErywK8xy9DQ2+JrWWjnuJIKGd7xHgcK6V1I8eKf6UisMW0NyDBoILLdo6PrMVxio5+5xrWWZo3tmiKZG584ixc3JMWAhJsQxc1Q9T8pUWlnsBv8b1cll/jkpiiB/PMjskOMeZbvySL/YomRWX9/M9O9o8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FdtekhKL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B37C4CEEA;
+	Tue, 29 Oct 2024 11:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730201484;
+	bh=b3iDHqbap1LmKFhPTuu1Qqk4svOtioflicE0/GgpTbA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FdtekhKLhC3d/47DQcpqir6P9jrHeh/KQ3dbRMElLhUWBbCPiD/wxpAj6swRfKlcv
+	 l9y/mwOJ5uivr4TmsTKzbyOOz2zaC76a2fNCHcxdG0YV0vacvF4rQ4BbN80Ecf+CNc
+	 cAezVQPUku0aL6ZYvrHAksowSYgq2HszMc80q/rxdUdHBA5zHC2gvQy4qc5gvApgV4
+	 v05AE1JGw7pQE7KYADRciW6kB1I+IiFmKim8zeHXAUjPSkAn0QXEFHJjlZPQRMXmhq
+	 gZV8fcIXD3EMTR1ulwX6Gfp2ENkLhpapFwHK+Ug9chxCxWpA5bc2kmvZAJa+sWXMXS
+	 3hkh0rhoZSv3g==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-288fa5ce8f0so2571372fac.3;
+        Tue, 29 Oct 2024 04:31:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUqBcN3XPan4564gS4yEwelbT4dRG7B5Gyuw+4SliuZGd4pFnm8IBa88uAGv+JdPDgu7bxHsfpSljWfajY=@vger.kernel.org, AJvYcCWlSow1qvEdw+pKp3Fs4++ZOIymCKb8UOrFAtwZuHcNgY8HaPpneE0XP1JZrxZ4pSml4DBCdfOl20s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYKKJWdqov2Md2QBTZ6aZmSPvje16jRjiun7NL5tMMLVrRZTAu
+	mLjCH0g/c6xRH8fQLM5cye5+uq7KzQN2wEqJwOAoxNy8dxSQlWAz7zkCI7s4DSxYl4qVI11SDdm
+	ur/OXsHJ3Vh8kOh5z1abniNqBGbk=
+X-Google-Smtp-Source: AGHT+IEkBtXhRClA2cm6t78kcyGJpyo2fCtEeh/HZcjhxwG2r5DEwf1//i8B3FFywZwUiFp2Jvl4f95iRwVJ4NKyimU=
+X-Received: by 2002:a05:6870:82a5:b0:288:59d3:2a03 with SMTP id
+ 586e51a60fabf-29051dd1728mr9737620fac.39.1730201484141; Tue, 29 Oct 2024
+ 04:31:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240913132944.1880703-1-beata.michalska@arm.com>
+ <20240913132944.1880703-2-beata.michalska@arm.com> <20241029070429.m7q5dkumitoyqxq2@vireshk-i7>
+In-Reply-To: <20241029070429.m7q5dkumitoyqxq2@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 29 Oct 2024 12:31:11 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i2KUPXfeAKhkimetOMpx+5opgt26URJF8cstnZsaeZwA@mail.gmail.com>
+Message-ID: <CAJZ5v0i2KUPXfeAKhkimetOMpx+5opgt26URJF8cstnZsaeZwA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] cpufreq: Introduce an optional cpuinfo_avg_freq
+ sysfs entry
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org, 
+	catalin.marinas@arm.com, rafael@kernel.org, sumitg@nvidia.com, 
+	yang@os.amperecomputing.com, vanshikonda@os.amperecomputing.com, 
+	lihuisong@huawei.com, zhanjie9@hisilicon.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sierra Forest the mwait hints for subsequent idle states are not
-continuous, resulting in play_dead() code not computing the most
-optimized idle state when CPU is put offline. This in turn prevents from
-entering PC6 state when any of the CPUs in the package is offline.
-Force the known, best mwait hint for the deepest cstate.
+On Tue, Oct 29, 2024 at 8:04=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Apologies for the delay from my side. September was mostly holidays
+> for me and then I was stuck with other stuff plus email backlog and
+> this series was always a painful point to return to :(
+>
+> On 13-09-24, 14:29, Beata Michalska wrote:
+> > Currently the CPUFreq core exposes two sysfs attributes that can be use=
+d
+> > to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
+> > and scaling_cur_freq. Both provide slightly different view on the
+> > subject and they do come with their own drawbacks.
+> >
+> > cpuinfo_cur_freq provides higher precision though at a cost of being
+> > rather expensive. Moreover, the information retrieved via this attribut=
+e
+> > is somewhat short lived as frequency can change at any point of time
+> > making it difficult to reason from.
+> >
+> > scaling_cur_freq, on the other hand, tends to be less accurate but then
+> > the actual level of precision (and source of information) varies betwee=
+n
+> > architectures making it a bit ambiguous.
+> >
+> > The new attribute, cpuinfo_avg_freq, is intended to provide more stable=
+,
+> > distinct interface, exposing an average frequency of a given CPU(s), as
+> > reported by the hardware, over a time frame spanning no more than a few
+> > milliseconds. As it requires appropriate hardware support, this
+> > interface is optional.
+>
+> From what I recall, the plan is to:
+> - keep cpuinfo_cur_freq as it is, not expose for x86 and call ->get()
+>   for ARM.
 
-Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
----
- drivers/idle/intel_idle.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Yes.
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 9aab7abc2ae9..d0b4b231d9ad 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -48,6 +48,7 @@
- #include <trace/events/power.h>
- #include <linux/sched.h>
- #include <linux/sched/smt.h>
-+#include <linux/smp.h>
- #include <linux/notifier.h>
- #include <linux/cpu.h>
- #include <linux/moduleparam.h>
-@@ -1645,6 +1646,7 @@ static bool __init intel_idle_acpi_cst_extract(void)
- static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
- {
- 	int cstate, limit = min_t(int, CPUIDLE_STATE_MAX, acpi_state_table.count);
-+	unsigned int mwait_hint_deepest = 0;
- 
- 	/*
- 	 * If limit > 0, intel_idle_cst_usable() has returned 'true', so all of
-@@ -1678,6 +1680,7 @@ static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
- 			state->target_residency *= 3;
- 
- 		state->flags = MWAIT2flg(cx->address);
-+		mwait_hint_deepest = cx->address;
- 		if (cx->type > ACPI_STATE_C2)
- 			state->flags |= CPUIDLE_FLAG_TLB_FLUSHED;
- 
-@@ -1690,6 +1693,9 @@ static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
- 		state->enter = intel_idle;
- 		state->enter_s2idle = intel_idle_s2idle;
- 	}
-+
-+	if (mwait_hint_deepest)
-+		smp_set_mwait_play_dead_hint(mwait_hint_deepest);
- }
- 
- static bool __init intel_idle_off_by_default(u32 mwait_hint)
-@@ -1988,6 +1994,7 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
- 
- static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- {
-+	unsigned int mwait_hint_deepest = 0;
- 	int cstate;
- 
- 	switch (boot_cpu_data.x86_vfm) {
-@@ -2037,6 +2044,8 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 		if (!intel_idle_verify_cstate(mwait_hint))
- 			continue;
- 
-+		mwait_hint_deepest = mwait_hint;
-+
- 		/* Structure copy. */
- 		drv->states[drv->state_count] = cpuidle_state_table[cstate];
- 		state = &drv->states[drv->state_count];
-@@ -2060,6 +2069,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 		wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
- 		wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
- 	}
-+
-+	if (mwait_hint_deepest)
-+		smp_set_mwait_play_dead_hint(mwait_hint_deepest);
- }
- 
- /**
--- 
-2.47.0
+> - introduce cpuinfo_avg_freq() and make it return frequency from hw
+>   counters for both ARM and Intel and others who provide the API.
 
+Yes.
+
+> - update scaling_cur_freq() to only return the requested frequency or
+>   error in case of X86
+
+Yes.
+
+Preferably, -ENOTSUPP for "setpolicy" drivers without the .get() callback.
+
+>   and update documentation to reflect the same.
+>   Right now or after some time ? How much time ?
+
+After some time, I think at least two cycles, so people have the time
+to switch over, but much more may be necessary if someone is stuck
+with RHEL or similar user space.
+
+Anyway, x86 will be the only one affected and there may be a Kconfig
+option even to allow it to be changed at the kernel build time.
+
+The documentation for cpuinfo_avg_freq() needs to be added along with it.
+
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 04fc786dd2c0..3493e5a9500d 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -752,6 +752,16 @@ __weak unsigned int arch_freq_get_on_cpu(int cpu)
+> >       return 0;
+> >  }
+> >
+> > +__weak int arch_freq_avg_get_on_cpu(int cpu)
+> > +{
+> > +     return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static inline bool cpufreq_avg_freq_supported(struct cpufreq_policy *p=
+olicy)
+> > +{
+> > +     return arch_freq_avg_get_on_cpu(policy->cpu) >=3D 0;
+> > +}
+>
+> And why aren't we simply reusing arch_freq_get_on_cpu() here ?
+>
+> --
+> viresh
 
