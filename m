@@ -1,94 +1,84 @@
-Return-Path: <linux-pm+bounces-16640-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16641-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCD29B4274
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:36:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5FF09B4279
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 07:40:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DF161F22B83
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 06:36:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2C8A1C218E7
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 06:40:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8E920125B;
-	Tue, 29 Oct 2024 06:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD53D20125C;
+	Tue, 29 Oct 2024 06:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GIBWk9s8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="faX/GEw1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E811E200CBC
-	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 06:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77A9201254
+	for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2024 06:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730183792; cv=none; b=cFWeUVGNSVdAJI+x5eLcwraN373jURHyBPQHc2UOmFisorKAznHthzw2tT+gobHZDYtq3XReaCTPQrY04pAHVQSKl6J5Rb0S+nhMFYvAHYNLu1xd95WaDwIRUXupuBK/EPGG8FSnl9XQzQ7T6BvHJQvdyRtEI4fxZKx9J2oitlk=
+	t=1730184002; cv=none; b=Ar3g3kZYSAlIVwEtUbi2A2c/OZyQBEiTu7gXcY7LMjFZ5wxxl1ivrzV1TIjhIh/S7vsRbqwruM29eSZeYSsZut/6f99onj4soJX1AivibGGHsug0YfJJJQt1Gbf6r9PrSzi2x7bMzfRr3zRtB5Mg5HptMZAR96KVNaX8hIu0lbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730183792; c=relaxed/simple;
-	bh=lrobQYm06kSMi9bBZlt4TteJuGSfxroyROvsf+/tPoc=;
+	s=arc-20240116; t=1730184002; c=relaxed/simple;
+	bh=H58uJcpRDNvTax+VL+0+fCFLwZ31eZ9H75SsdG6oUmM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o1S+QFBCifcgzYyJVraxLpXjX4RBmI1Jyzr70rC/yXWbq1QvgevtoJo4Gyaj0hmOvRJGKKnX1+S4fh/7zZ26zRbBzMrpBvOU5XR7BwFVDvUWerGH8MfMixq+BMFl4KKUJcHWN/IB3jtrgifSHRAEdkuGi8xq5PIMv3L9eLoXxaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GIBWk9s8; arc=none smtp.client-ip=209.85.160.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=pax7w6qa/FEsMvLDNX4MzP3wdbmmgO9wza0p8tBJSCIhduzyE6rH9XW/i44ANy5zfes6SoCvE4DD/J1t8BE0V6b7MLBXoJ/2Xzv27B2RgA0wdkdcDT28RHleU59K3p9V4DeYdZ80WJ9llZ6udQ5egHtYk0V1sFu7dBIJ2jsN12w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=faX/GEw1; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-277e6002b7dso1824367fac.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 23:36:29 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c70abba48so40116605ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2024 23:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730183789; x=1730788589; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1730184000; x=1730788800; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4QD5OKsQgrGnNIeqy7aCbkomCeG9kMbtwvROJk9froc=;
-        b=GIBWk9s8/GqhjtVMALwYnSc2+wGcIwGZpEXJyttA63oQ7MadlQ0OYTN9kQ4hSn2RdH
-         4AsuGHdVuGk+0M7qfxg8Vj0tHXUzhJlc+XlSMeS5xlsgjPC3m474LVPxCz3bNLsJIi4g
-         IlB7EDgN3MBckDoCt4rWZgAloXQh5cG1fZ1VwZWEC/DpNswFsY9TY52GyxkZy5lMMwJu
-         QJVaRMXtHMQNKin8OaV2zyKGu4HlpyNrht2SzS5z4lH6+b26TtLwEizDRNe3A/WTusIm
-         /pjJglErxf4jSNQf3W14Z62Y3PH2SR97nFDF5dPeDKfLCbEEixHJXD9BBTxjoC3vKci6
-         /XdA==
+        bh=SmrD8WpF/OdMMrOZMzCUFVQhEI48ibTQY3atQcEu4nM=;
+        b=faX/GEw1CkTrGuA1atfeUO4bC2e6YNdTUbeYFgX5adAKHofUoHzocz0HGqw1UvrPfB
+         v3jz42lb2BJ2BUHyLVCHJI/I/zIDNzkyJ9SGPHwbDijTKwFhhTlpnYwh6e+5djHQzcmg
+         9LAM+Rx82aEOFenuFe6MGKcJDuC59d9WH31O4GspuXz1RtnFijXmtQ8hqYsdzxa3rCW/
+         CTPzozQk2Fp/GyZPq6ixLlvs4DgJ5brMadrNBjtmcaQCmSOiyl+0Hi7FvnBi2b2VwlrY
+         xVeeiH6whM8dDOq+xu9IBwBQ9h8ojwW0YmN+kkvx3iujLVEODrq/kNpFXSZdCliBrniI
+         qfKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730183789; x=1730788589;
+        d=1e100.net; s=20230601; t=1730184000; x=1730788800;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4QD5OKsQgrGnNIeqy7aCbkomCeG9kMbtwvROJk9froc=;
-        b=t0/cqkeuFMij9ecJ2uNoFBgorMXwCq2nFqAuHM23E1473kg7WD+gufUuCKtysi28di
-         mOYQGOXRhAnN8TKctTnf+6LYL7uFAmH2ZgykQJhUj0/WHFf6whdW2slLuuSddl0qNg18
-         QmPpYH9furA0Horj+GFA4UkT6RfIR7ouiZKEmP8Qmf4a9oEBe1gxQWp4/7x8n1ZcxiQa
-         ZG/piprxFcJu0E7e7cxNslgbmQvUoyLlTPrzdaP2auwrujggLa6Qk90ZFUhJee8s2lp0
-         Hny8xhoMla7dP9tI19W9y0LTo5NbXHcKIbpCsQNmh6geC2mqnjkerJao3to17yl2AKx1
-         nB0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUgF/o86ROut6LsTKVVZw91PHGyE8KzBhTHt4WcM657oiHQTCurZY+zwtj2Ca/f50jVEctFjWk0Dw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2kdpln3+DNocZBCpQgQk+ZwWOKE8hTuei/qwy95DtooPGrAvA
-	iCBdRiYxoASUbLb0XgAKqg5c0wvToHGtYBoiBezM9+zxzNRVU9uS/heRe0GKO00=
-X-Google-Smtp-Source: AGHT+IGrN/qZGm0mfTAWzCEsbfgNwzNhmA7amrnO1thp9dgYmf70eS9KgTP2FWcmMvJClPtnmU/B8Q==
-X-Received: by 2002:a05:6870:d8d1:b0:27b:b2e0:6a5 with SMTP id 586e51a60fabf-29051af085amr9777384fac.3.1730183788869;
-        Mon, 28 Oct 2024 23:36:28 -0700 (PDT)
+        bh=SmrD8WpF/OdMMrOZMzCUFVQhEI48ibTQY3atQcEu4nM=;
+        b=k3W6PqJxKa+PFpCC6QuXFqwuR8Z62uhTTTaAhckoEZq6CD2gFZiSr1p7IhSFhNFYYN
+         j5SRyISLaUYZuHbQkmJvFYL5w4BHzVRLsLO7weYFqSH0GAO2WKQTkL4jPG5m4FLpe1yP
+         28F71cuhJEU7UgB9zDlwh3LlYy9hlThNFYXOm7UsKBwPCvBzD/Kx92fj+T2PeaZfltsd
+         OEjuEgfURrgjFvURGfd1bR15yCldEsKTyyQ3xhzpoGPFeoNylc7u5TN/Ixj0vWk7OuJW
+         Gje7PC37wflXCq5/zT5auPmi0w35LzE8olK9TvI1w6SAwTbLMfnWX6fsWQchTKDySEhX
+         7ebg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzGtDyxQxIue98lkwlses4OEm9W6xgcsuE87AmHHgo70GBc75UejvGh8SZ45eA86qB1/JpysxK3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqacNJ8DkrWDfxHxlPGXWNtmhen58AV+x/tThN+2MOPYROlHdx
+	LJu64sI3un/GVdzPfsqqDcFlOuVglV7KLV6Kev5RBcsoGltm+ueUOol9Q2rWG50=
+X-Google-Smtp-Source: AGHT+IHvk9izIj+ZzjpdpqRGra6iF3H8KqUafcsWoWKS9IkQRHB1fwTjnsmShJ064C6yw8jOpQQVmA==
+X-Received: by 2002:a17:903:244d:b0:20c:5d05:69b4 with SMTP id d9443c01a7336-210c6c06351mr149504975ad.26.1730184000220;
+        Mon, 28 Oct 2024 23:40:00 -0700 (PDT)
 Received: from localhost ([122.172.85.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057931942sm6858961b3a.65.2024.10.28.23.36.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc066488sm59857175ad.277.2024.10.28.23.39.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 23:36:28 -0700 (PDT)
-Date: Tue, 29 Oct 2024 12:06:26 +0530
+        Mon, 28 Oct 2024 23:39:59 -0700 (PDT)
+Date: Tue, 29 Oct 2024 12:09:57 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: David Dai <davidai@google.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Quentin Perret <qperret@google.com>,
-	Masami Hiramatsu <mhiramat@google.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Pavan Kondeti <quic_pkondeti@quicinc.com>,
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
-	kernel-team@android.com, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/2] Improve VM CPUfreq and task placement behavior
-Message-ID: <20241029063626.haz6b77vbw6pp756@vireshk-i7>
-References: <20240919000837.1004642-1-davidai@google.com>
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SAR2130P
+ compatible
+Message-ID: <20241029063957.dszyl27kh52te73f@vireshk-i7>
+References: <20241018-sar2130p-cpufreq-v1-1-822e00b9a663@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -97,29 +87,17 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240919000837.1004642-1-davidai@google.com>
+In-Reply-To: <20241018-sar2130p-cpufreq-v1-1-822e00b9a663@linaro.org>
 
-On 18-09-24, 17:08, David Dai wrote:
-> v6 -> v7:
-> -Updated .exit and .remove function type from int to void to match
->  required types
-> -Added Reviewed-by tag from Rob on dt-bindings patch
-> -Dropped "depends on OF" as the driver doesn't depend on it
-
-> David Dai (2):
->   dt-bindings: cpufreq: add virtual cpufreq device
->   cpufreq: add virtual-cpufreq driver
+On 18-10-24, 19:41, Dmitry Baryshkov wrote:
+> Document compatible for cpufreq hardware on Qualcomm SAR2130P platform.
 > 
->  .../cpufreq/qemu,virtual-cpufreq.yaml         |  48 +++
->  drivers/cpufreq/Kconfig                       |  14 +
->  drivers/cpufreq/Makefile                      |   1 +
->  drivers/cpufreq/virtual-cpufreq.c             | 333 ++++++++++++++++++
->  include/linux/arch_topology.h                 |   1 +
->  5 files changed, 397 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,virtual-cpufreq.yaml
->  create mode 100644 drivers/cpufreq/virtual-cpufreq.c
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied for v6.13. Thanks.
+Applied. Thanks.
 
 -- 
 viresh
