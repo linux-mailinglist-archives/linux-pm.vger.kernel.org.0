@@ -1,277 +1,151 @@
-Return-Path: <linux-pm+bounces-16674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16675-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE9E19B51C9
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 19:29:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE2339B51D8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 19:31:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DD761F241FB
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 18:29:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FE5D2845B1
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2024 18:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F189A1FF5F0;
-	Tue, 29 Oct 2024 18:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D99220696B;
+	Tue, 29 Oct 2024 18:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V11dBlZG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RT+c0L/9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C729017DE36;
-	Tue, 29 Oct 2024 18:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FDC205ADF;
+	Tue, 29 Oct 2024 18:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730226583; cv=none; b=BQjXEAd5lc3/7C6R69DT+BJHQ5EQO+vGz9gp8yl1vUx8OkZs/RQsKnKfvSFZh2AiO0t1agq+ZDU6vmQaiJi6z+pY6QDkN41kaYxtswUVBg+m+8N/sB+BQed2z9IbhMi4Tj7lZIyqBi2zo4BqoaNXXzhYpNRFgyYZvEoPIXc41hg=
+	t=1730226634; cv=none; b=jsTxqSblp3P2vGVTukg9kfkuc2lLCqKGR2zUFLDqbcGb6ZFkfi9lVpA9F7DrT+EmZBiWxzt9nTy5SKw0x3pwRwKlhjn1aMtORD0iLVym81Zjlu+427ut8y5qdRzMTPBw9ITLdfAj6AbmJKpzqTTL34emTXYE7wJ73iBltiivKp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730226583; c=relaxed/simple;
-	bh=D8zGes9wsVozeVbV7+Smh+u7DzqpwqL3DIZ6uBBtNwE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LnY2674B+0JsJriD3if6JmuhRcbgA0JbzFjICO1u1yUMPEmIZG0D+GtXCFZILddaE/5RVb5FcRhVpLcVdAY06BZlBvkznPGIXIyJKR2LXTuYXTIjr+opObDEeVuw6l2CUjXqEjchu6QvbLB+S1loXwCQCN9Kho+M86ZpyAFawwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V11dBlZG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D3EC4CEE4;
-	Tue, 29 Oct 2024 18:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730226583;
-	bh=D8zGes9wsVozeVbV7+Smh+u7DzqpwqL3DIZ6uBBtNwE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=V11dBlZGmRMv+YTXBU0NmxiabjnjyWqShBF3WG6kUCwR++tbaC8+mUUM1xlYUAfP2
-	 +m6l6k9UGN6U3dsvvyxzKBIIoJIC2HPq8poNFqni1khbibTMcBTokCod46/Sm6jJFi
-	 dRSzqNWdkhrzATiTSh8+qtYQY3qwnOUYSJdbCBXkXUPI/i6pj32pwH9ec9bi8MI9d6
-	 PJmnQoxWeDGybKOfwyPHXnEgofwk1oJnJq29gj3dTDGlFLwiVv+kjA/sgZjKiy4UUV
-	 H2Bfs5olNuD31txXCb1PVltd0RjjQLhxoN8mmfXRNcKdhJbnmEiN7HDdet7ZkoQjY8
-	 d1aVfDb7DfnQw==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-27d0e994ae3so2533579fac.3;
-        Tue, 29 Oct 2024 11:29:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUjym61i00xJ5BHF3OWQCpZzHveSoLg5qHIzOvp3WUDAIMFAFzg2yJnFMHjOioLwrxHtOhW1damdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHXpSrep0VDzsxfxw81yIpwoli3wPY9dDKROchBmFL6pz4/3Mm
-	q9aJz6NjdqZ7lGTit5aXPM33yiRed78n2FwuEd3peeIzBoXE9SS0Kzy0gBeHNQsXIrbUD7SK0Ik
-	nlwSoIEhKnTsGgaZwuLJZwfM1CoQ=
-X-Google-Smtp-Source: AGHT+IH9tadkQr/ESOI4GuXv2RDI/r2CgLzlI346wL/gRg/H6cTv9b3gSXpTrv9gAW4DFm3Mnd+hRP+bkAxszfyN/jc=
-X-Received: by 2002:a05:6870:b01f:b0:270:4219:68fe with SMTP id
- 586e51a60fabf-29051b02ea3mr11763099fac.1.1730226582847; Tue, 29 Oct 2024
- 11:29:42 -0700 (PDT)
+	s=arc-20240116; t=1730226634; c=relaxed/simple;
+	bh=4ox95nKXSEbucLqpp41mYD9O8DYJglwbBVT/nf4TAps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z7mtsl+jLZXyosc/mchS0jc6Aeku8k0AnW2eMSQS+itJz6QiYktC3ZnbIBlObwISru3zYWNelbo0xVUcTXyukGGobQYZf4elzlBwSW/nxtK68kN+B3a7h0wd8BPamXeZ0kh0FFoW6ivXutniXHW2M8mOYtQV9uoek0TGeN90/dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RT+c0L/9; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730226632; x=1761762632;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4ox95nKXSEbucLqpp41mYD9O8DYJglwbBVT/nf4TAps=;
+  b=RT+c0L/98+ekbY+bijCwql0vFwTx5Q5BL84MM78ZRaKG3brlUx5Ts3T2
+   YdLqijPbZaZa/7uqnk0ofWd2k9V8wH2+cY8WzAh7N73i1CRzrgsj7fNp0
+   i9Mg9VFYb9E/Y9IM/0QgCDwKvDdf6QevNv0TWszX6QMBmHqmFNAYYac0e
+   v2GQJz8xnYecMcfgiwsONNeIB9Ra/zSMLkrL2UZhY6pJ9txZz3aO3s8sq
+   7nLyH4Q9hC0l1oq4tC9mWZSk1q2tc9dFWQZcxL2LiPPdCk12Qv1dXbCsh
+   tcO6DOHiE3WzdOesydwtvcBKA663QKX6sOP/yqvzvWUKDX31SoT+EkrzX
+   g==;
+X-CSE-ConnectionGUID: 1zSFvLTcRu+mNv2WDekngg==
+X-CSE-MsgGUID: TtSCZN62Sdih4wicYDLOgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29660841"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29660841"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:30:31 -0700
+X-CSE-ConnectionGUID: r28WnsQuR4eT47YGLF0Fuw==
+X-CSE-MsgGUID: d9pY0IawRF+iMbcD7A6TcQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="81605272"
+Received: from ccbilbre-mobl3.amr.corp.intel.com (HELO [10.124.223.38]) ([10.124.223.38])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:30:30 -0700
+Message-ID: <e332a243-5a98-49ed-81be-b6db305d5dc5@intel.com>
+Date: Tue, 29 Oct 2024 11:30:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029094452.495439-1-lukasz.luba@arm.com> <20241029094452.495439-2-lukasz.luba@arm.com>
-In-Reply-To: <20241029094452.495439-2-lukasz.luba@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 29 Oct 2024 19:29:31 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gzQhw3wkRVFTEx-y4pawknJqC2JPrN6_dqd77vTVuSOw@mail.gmail.com>
-Message-ID: <CAJZ5v0gzQhw3wkRVFTEx-y4pawknJqC2JPrN6_dqd77vTVuSOw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] PM: EM: Add min/max available performance state limits
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dietmar.eggemann@arm.com, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] x86/smp: Allow forcing the mwait hint for play
+ dead loop
+To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael.j.wysocki@intel.com, len.brown@intel.com,
+ artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
+References: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
+ <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com>
+Content-Language: en-US
+From: Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 29, 2024 at 10:43=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
->
-> On some devices there are HW dependencies for shared frequency and voltag=
-e
-> between devices. It will impact Energy Aware Scheduler (EAS) decision,
-> where CPUs share the voltage & frequency domain with other CPUs or device=
-s
-> e.g.
-> - Mid CPUs + Big CPU
-> - Little CPU + L3 cache in DSU
-> - some other device + Little CPUs
->
-> Detailed explanation of one example:
-> When the L3 cache frequency is increased, the affected Little CPUs might
-> run at higher voltage and frequency. That higher voltage causes higher CP=
-U
-> power and thus more energy is used for running the tasks. This is
-> important for background running tasks, which try to run on energy
-> efficient CPUs.
->
-> Therefore, add performance state limits which are applied for the device
-> (in this case CPU). This is important on SoCs with HW dependencies
-> mentioned above so that the Energy Aware Scheduler (EAS) does not use
-> performance states outside the valid min-max range for energy calculation=
-.
->
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/linux/energy_model.h | 24 ++++++++++++++---
->  kernel/power/energy_model.c  | 52 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 72 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 1ff52020cf757..e83bf230e18d1 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -55,6 +55,8 @@ struct em_perf_table {
->   * struct em_perf_domain - Performance domain
->   * @em_table:          Pointer to the runtime modifiable em_perf_table
->   * @nr_perf_states:    Number of performance states
-> + * @min_ps:            Minimum allowed Performance State index
-> + * @max_ps:            Maximum allowed Performance State index
->   * @flags:             See "em_perf_domain flags"
->   * @cpus:              Cpumask covering the CPUs of the domain. It's her=
-e
->   *                     for performance reasons to avoid potential cache
-> @@ -70,6 +72,8 @@ struct em_perf_table {
->  struct em_perf_domain {
->         struct em_perf_table __rcu *em_table;
->         int nr_perf_states;
-> +       int min_ps;
-> +       int max_ps;
->         unsigned long flags;
->         unsigned long cpus[];
->  };
-> @@ -173,6 +177,8 @@ void em_table_free(struct em_perf_table __rcu *table)=
-;
->  int em_dev_compute_costs(struct device *dev, struct em_perf_state *table=
-,
->                          int nr_states);
->  int em_dev_update_chip_binning(struct device *dev);
-> +int em_update_performance_limits(struct em_perf_domain *pd,
-> +               unsigned long freq_min_khz, unsigned long freq_max_khz);
->
->  /**
->   * em_pd_get_efficient_state() - Get an efficient performance state from=
- the EM
-> @@ -180,6 +186,8 @@ int em_dev_update_chip_binning(struct device *dev);
->   * @nr_perf_states:    Number of performance states
->   * @max_util:          Max utilization to map with the EM
->   * @pd_flags:          Performance Domain flags
-> + * @min_ps:            Minimum allowed Performance State index
-> + * @max_ps:            Maximum allowed Performance State index
->   *
->   * It is called from the scheduler code quite frequently and as a conseq=
-uence
->   * doesn't implement any check.
-> @@ -189,12 +197,13 @@ int em_dev_update_chip_binning(struct device *dev);
->   */
->  static inline int
->  em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_state=
-s,
-> -                         unsigned long max_util, unsigned long pd_flags)
-> +                         unsigned long max_util, unsigned long pd_flags,
-> +                         int min_ps, int max_ps)
->  {
->         struct em_perf_state *ps;
->         int i;
->
-> -       for (i =3D 0; i < nr_perf_states; i++) {
-> +       for (i =3D min_ps; i <=3D max_ps; i++) {
->                 ps =3D &table[i];
->                 if (ps->performance >=3D max_util) {
->                         if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES=
- &&
-> @@ -204,7 +213,7 @@ em_pd_get_efficient_state(struct em_perf_state *table=
-, int nr_perf_states,
->                 }
->         }
->
-> -       return nr_perf_states - 1;
-> +       return max_ps;
->  }
->
->  /**
-> @@ -254,7 +263,8 @@ static inline unsigned long em_cpu_energy(struct em_p=
-erf_domain *pd,
->          */
->         em_table =3D rcu_dereference(pd->em_table);
->         i =3D em_pd_get_efficient_state(em_table->state, pd->nr_perf_stat=
-es,
-> -                                     max_util, pd->flags);
-> +                                     max_util, pd->flags, pd->min_ps,
-> +                                     pd->max_ps);
->         ps =3D &em_table->state[i];
->
->         /*
-> @@ -391,6 +401,12 @@ static inline int em_dev_update_chip_binning(struct =
-device *dev)
->  {
->         return -EINVAL;
->  }
-> +static inline
-> +int em_update_performance_limits(struct em_perf_domain *pd,
-> +               unsigned long freq_min_khz, unsigned long freq_max_khz)
+On 10/29/24 03:15, Patryk Wlazlyn wrote:
+> +void smp_set_mwait_play_dead_hint(unsigned int hint)
 > +{
-> +       return -EINVAL;
+> +	WRITE_ONCE(play_dead_mwait_hint, hint);
 > +}
->  #endif
->
->  #endif
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 927cc55ba0b3d..436c2b8fdf9eb 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -628,6 +628,8 @@ int em_dev_register_perf_domain(struct device *dev, u=
-nsigned int nr_states,
->                 goto unlock;
->
->         dev->em_pd->flags |=3D flags;
-> +       dev->em_pd->min_ps =3D 0;
-> +       dev->em_pd->max_ps =3D nr_states - 1;
->
->         em_cpufreq_update_efficiencies(dev, dev->em_pd->em_table->state);
->
-> @@ -856,3 +858,53 @@ int em_dev_update_chip_binning(struct device *dev)
->         return em_recalc_and_update(dev, pd, em_table);
->  }
->  EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
-> +
-> +
-> +/**
-> + * em_update_performance_limits() - Update Energy Model with performance
-> + *                             limits information.
-> + * @pd                 : Performance Domain with EM that has to be updat=
-ed.
-> + * @freq_min_khz       : New minimum allowed frequency for this device.
-> + * @freq_max_khz       : New maximum allowed frequency for this device.
-> + *
-> + * This function allows to update the EM with information about availabl=
-e
-> + * performance levels. It takes the minimum and maximum frequency in kHz
-> + * and does internal translation to performance levels.
-> + * Returns 0 on success or -EINVAL when failed.
-> + */
-> +int em_update_performance_limits(struct em_perf_domain *pd,
-> +               unsigned long freq_min_khz, unsigned long freq_max_khz)
-> +{
-> +       struct em_perf_state *table;
-> +       int min_ps =3D -1;
-> +       int max_ps =3D -1;
-> +       int i;
-> +
-> +       if (!pd)
-> +               return -EINVAL;
-> +
-> +       rcu_read_lock();
-> +       table =3D em_perf_state_from_pd(pd);
-> +
-> +       for (i =3D 0; i < pd->nr_perf_states; i++) {
-> +               if (freq_min_khz =3D=3D table[i].frequency)
-> +                       min_ps =3D i;
-> +               if (freq_max_khz =3D=3D table[i].frequency)
-> +                       max_ps =3D i;
-> +       }
-> +       rcu_read_unlock();
-> +
-> +       /* Only update when both are found and sane */
-> +       if (min_ps < 0 || max_ps < 0 || max_ps < min_ps)
-> +               return -EINVAL;
-> +
-> +
-> +       /* Guard simultaneous updates and make them atomic */
-> +       mutex_lock(&em_pd_mutex);
-> +       pd->min_ps =3D min_ps;
-> +       pd->max_ps =3D max_ps;
-> +       mutex_unlock(&em_pd_mutex);
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(em_update_performance_limits);
 
-It would be good to have at least one caller of this function in the tree.
+This all feels a bit hacky and unstructured to me.
+
+Could we at least set up a few rules here?  Like, say what the hints
+are, what values can they have?  Where do they come from?  Can this get
+called more than once?  Does it _need_ to be set?  What's the behavior
+when it is not set?  Who is responsible for calling this?
+
+What good does the smp_ prefix do?  I don't think _callers_ care whether
+this is getting optimized out or not.
+
+> -	hint = get_deepest_mwait_hint();
+> +	hint = READ_ONCE(play_dead_mwait_hint);
+> +	if (hint == PLAY_DEAD_MWAIT_HINT_UNSET)
+> +		hint = get_deepest_mwait_hint();
+
+This is also rather opaque.
+
+Why are there two hints?  What makes one better than the other one?
 
