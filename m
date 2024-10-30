@@ -1,157 +1,296 @@
-Return-Path: <linux-pm+bounces-16723-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16724-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A73BD9B623B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 12:49:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71B329B635C
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 13:51:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52D371F21E1E
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 11:49:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 954421C20CCC
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 12:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4A81E571F;
-	Wed, 30 Oct 2024 11:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 005A51E8851;
+	Wed, 30 Oct 2024 12:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hptq/L4l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 275581DC759;
-	Wed, 30 Oct 2024 11:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7921E47AC;
+	Wed, 30 Oct 2024 12:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730288989; cv=none; b=I0b7zDnbYAOXn1pl9rBwtKbWi8Ib0QHRK11Aq6ZevsEr0eCOrRTEp1M89VeIlpE834bKRXLv05IbbBRdqwCLH5fNDeJUytllEQDw9ezCoEDhwcJ/1HYXog7HPVt1phG8+OZGfV5i8Q2Znt9gFrtFJ05aa3MdtI7eZqQKXYVdms4=
+	t=1730292669; cv=none; b=qmMC6Mo8HWQOs538aCZsXJxlest6S5sLxGQLty8hB3dhTdBVTD7WXUO9CfvQRJOarvhtlAgBw006/C+nk53ItbybXq8ZsQrnibzew1g06+EoGF30sK6/fzkyCgyXjicTG1hHOknEbjEOXBOj4UobLOW55MWjCoR20eDAGQHd990=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730288989; c=relaxed/simple;
-	bh=UwzFLOS1OD/Sl8K2cn4QESITJVZRa2vCSspDyTtIels=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VOMwidWKSroS4Gbloq2uXKHPRnbtTO/Kajl9znJGqyjOH3s2cz40IixLjRxrZctaGHIC6xyd/uItASfR3QmfoY8mDwxv1tq8cy1D3hBWp5imIsLPZVkIk7t9Om4hdCw0HcrE6MAH4glwnG4GUVVYYe7aFQ3MaMRNVesik+0p7R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E6D8113E;
-	Wed, 30 Oct 2024 04:50:14 -0700 (PDT)
-Received: from [10.57.58.72] (unknown [10.57.58.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A55503F73B;
-	Wed, 30 Oct 2024 04:49:43 -0700 (PDT)
-Message-ID: <96e694e3-2a65-4f39-ad35-3d1e1459102f@arm.com>
-Date: Wed, 30 Oct 2024 11:50:57 +0000
+	s=arc-20240116; t=1730292669; c=relaxed/simple;
+	bh=t0izBSuJJDUdOBaC7dWb05wbehQm0Y3vnx74I97Rtok=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=UcJdsS9ru8UctS9V59aK4a/IIZcsR74m3Ihjtq+NtC1BMoTnOmbfk5VfB1GCw9fn/uLlSqkU9eRIq1YgsflPhUuyUt+DwxC4pGT7oyYmb2vRR20i28D7cLUdn0YaPHr7m1i5FusGvCNAWp0I6ZcxNBr/THW9xVCQ+CLTLThUrYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hptq/L4l; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49UBDT9L008803;
+	Wed, 30 Oct 2024 12:50:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	LxOfEoxJrpdJfWhALuCidnuHpCbc4UMX4i9V24oLUBI=; b=hptq/L4lQ4yD3X0f
+	fjnbcamXtEISJU2eQX6JofH3dbOw59mYGwVslMzQfu34CDWQsT4o6WD8RKSsGhJq
+	4+/0M1sDVlFlwyZU67jTjeV1zBo2kCxN5cMiEhTpQcwCHiCHkOmoDUWH3k7Hy9XK
+	w/ft9GJCiuC5gN5TQhhHkpwvF3H2caLBoBtZf3HzIrqfPagK/1OEplG2CUGtITBz
+	HTDnYmZQ2EUQJuvvd4I6owK2TgCPDnhngpMyXkVEFhmu+uxof4xM//MkH4+lfYwi
+	TZmxHG19bqaBTF4O8+jDa4/6E/uMtEE9ZtelbNw5Y2wxbhBJ0saeoAmiIaU0xXwq
+	WcORWA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42jxa8bu6h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Oct 2024 12:50:54 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49UCorHS005813
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Oct 2024 12:50:53 GMT
+Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 30 Oct
+ 2024 05:50:46 -0700
+Message-ID: <58932d61-0aab-7738-97a1-2eda3bcda0ec@quicinc.com>
+Date: Wed, 30 Oct 2024 18:20:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] PM: EM: Add min/max available performance state
- limits
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- dietmar.eggemann@arm.com
-References: <20241029094452.495439-1-lukasz.luba@arm.com>
- <20241029094452.495439-2-lukasz.luba@arm.com>
- <CAJZ5v0jOYw6md9tnb1d=pQ_u06=rSiZ6FAEk1iaN47TO0w+XZQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V4 3/4] pmdomain: core: Fix debugfs node creation failure
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jOYw6md9tnb1d=pQ_u06=rSiZ6FAEk1iaN47TO0w+XZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Ulf Hansson <ulf.hansson@linaro.org>
+CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
+        <jassisinghbrar@gmail.com>, <dmitry.baryshkov@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <johan@kernel.org>,
+        <konradybcio@kernel.org>, <linux-pm@vger.kernel.org>,
+        <tstrudel@google.com>, <rafael@kernel.org>,
+        Johan Hovold
+	<johan+linaro@kernel.org>
+References: <20241023102148.1698910-1-quic_sibis@quicinc.com>
+ <20241023102148.1698910-4-quic_sibis@quicinc.com>
+ <CAPDyKFrVopgySevDVZtkZdHBBxiiVNh73VOXLqaHfXs9MyiZ+w@mail.gmail.com>
+From: Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <CAPDyKFrVopgySevDVZtkZdHBBxiiVNh73VOXLqaHfXs9MyiZ+w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VvKhigREobC6oWICJY78p9ho5q6T5YYT
+X-Proofpoint-ORIG-GUID: VvKhigREobC6oWICJY78p9ho5q6T5YYT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410300101
 
 
 
-On 10/30/24 11:40, Rafael J. Wysocki wrote:
-> On Tue, Oct 29, 2024 at 10:43 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On 10/28/24 18:58, Ulf Hansson wrote:
+> On Wed, 23 Oct 2024 at 12:22, Sibi Sankar <quic_sibis@quicinc.com> wrote:
 >>
->> On some devices there are HW dependencies for shared frequency and voltage
->> between devices. It will impact Energy Aware Scheduler (EAS) decision,
->> where CPUs share the voltage & frequency domain with other CPUs or devices
->> e.g.
->> - Mid CPUs + Big CPU
->> - Little CPU + L3 cache in DSU
->> - some other device + Little CPUs
+>> The domain attributes returned by the perf protocol can end up
+>> reporting identical names across domains, resulting in debugfs
+>> node creation failure. Fix this failure by ensuring that pm domains
+>> get a unique name using ida in pm_genpd_init.
 >>
->> Detailed explanation of one example:
->> When the L3 cache frequency is increased, the affected Little CPUs might
->> run at higher voltage and frequency. That higher voltage causes higher CPU
->> power and thus more energy is used for running the tasks. This is
->> important for background running tasks, which try to run on energy
->> efficient CPUs.
+>> Logs: [X1E reports 'NCC' for all its scmi perf domains]
+>> debugfs: Directory 'NCC' with parent 'pm_genpd' already present!
+>> debugfs: Directory 'NCC' with parent 'pm_genpd' already present!
 >>
->> Therefore, add performance state limits which are applied for the device
->> (in this case CPU). This is important on SoCs with HW dependencies
->> mentioned above so that the Energy Aware Scheduler (EAS) does not use
->> performance states outside the valid min-max range for energy calculation.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> Reported-by: Johan Hovold <johan+linaro@kernel.org>
+>> Closes: https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+>> Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+>> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 >> ---
->>   include/linux/energy_model.h | 24 ++++++++++++++---
->>   kernel/power/energy_model.c  | 52 ++++++++++++++++++++++++++++++++++++
->>   2 files changed, 72 insertions(+), 4 deletions(-)
 >>
->> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->> index 1ff52020cf757..e83bf230e18d1 100644
->> --- a/include/linux/energy_model.h
->> +++ b/include/linux/energy_model.h
->> @@ -55,6 +55,8 @@ struct em_perf_table {
->>    * struct em_perf_domain - Performance domain
->>    * @em_table:          Pointer to the runtime modifiable em_perf_table
->>    * @nr_perf_states:    Number of performance states
->> + * @min_ps:            Minimum allowed Performance State index
->> + * @max_ps:            Maximum allowed Performance State index
-> 
-> Any problem with renaming these to min_perf_state and max_perf_state
-> respectively?
-
-OK, I will change those names.
-
-> 
-> That would improve the code clarity quite a bit IMV.
-> 
-
-[snip]
-
->>   static inline int
->>   em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
->> -                         unsigned long max_util, unsigned long pd_flags)
->> +                         unsigned long max_util, unsigned long pd_flags,
->> +                         int min_ps, int max_ps)
->>   {
->>          struct em_perf_state *ps;
->>          int i;
+>> v3:
+>> * Update device names only when a name collision occurs [Dmitry/Ulf]
+>> * Drop Johan's T-b from "fix debugfs node creation failure"
 >>
->> -       for (i = 0; i < nr_perf_states; i++) {
->> +       for (i = min_ps; i <= max_ps; i++) {
->>                  ps = &table[i];
->>                  if (ps->performance >= max_util) {
->>                          if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
->> @@ -204,7 +213,7 @@ em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
->>                  }
->>          }
+>>   drivers/pmdomain/core.c   | 65 ++++++++++++++++++++++++++++++---------
+>>   include/linux/pm_domain.h |  1 +
+>>   2 files changed, 51 insertions(+), 15 deletions(-)
 >>
->> -       return nr_perf_states - 1;
->> +       return max_ps;
+>> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+>> index 76490f0bf1e2..756ed0975788 100644
+>> --- a/drivers/pmdomain/core.c
+>> +++ b/drivers/pmdomain/core.c
+>> @@ -7,6 +7,7 @@
+>>   #define pr_fmt(fmt) "PM: " fmt
+>>
+>>   #include <linux/delay.h>
+>> +#include <linux/idr.h>
+>>   #include <linux/kernel.h>
+>>   #include <linux/io.h>
+>>   #include <linux/platform_device.h>
+>> @@ -23,6 +24,9 @@
+>>   #include <linux/cpu.h>
+>>   #include <linux/debugfs.h>
+>>
+>> +/* Provides a unique ID for each genpd device */
+>> +static DEFINE_IDA(genpd_ida);
+>> +
+>>   #define GENPD_RETRY_MAX_MS     250             /* Approximate */
+>>
+>>   #define GENPD_DEV_CALLBACK(genpd, type, callback, dev)         \
+>> @@ -189,7 +193,7 @@ static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
+>>
+>>          if (ret)
+>>                  dev_warn_once(dev, "PM domain %s will not be powered off\n",
+>> -                               genpd->name);
+>> +                             dev_name(&genpd->dev));
+>>
+>>          return ret;
+>>   }
+>> @@ -274,7 +278,7 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+>>          if (!genpd_debugfs_dir)
+>>                  return;
+>>
+>> -       debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
+>> +       debugfs_lookup_and_remove(dev_name(&genpd->dev), genpd_debugfs_dir);
 >>   }
 >>
->>   /**
->> @@ -254,7 +263,8 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>>   static void genpd_update_accounting(struct generic_pm_domain *genpd)
+>> @@ -731,7 +735,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>>          genpd->states[state_idx].power_on_latency_ns = elapsed_ns;
+>>          genpd->gd->max_off_time_changed = true;
+>>          pr_debug("%s: Power-%s latency exceeded, new value %lld ns\n",
+>> -                genpd->name, "on", elapsed_ns);
+>> +                dev_name(&genpd->dev), "on", elapsed_ns);
+>>
+>>   out:
+>>          raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
+>> @@ -782,7 +786,7 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
+>>          genpd->states[state_idx].power_off_latency_ns = elapsed_ns;
+>>          genpd->gd->max_off_time_changed = true;
+>>          pr_debug("%s: Power-%s latency exceeded, new value %lld ns\n",
+>> -                genpd->name, "off", elapsed_ns);
+>> +                dev_name(&genpd->dev), "off", elapsed_ns);
+>>
+>>   out:
+>>          raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
+>> @@ -1941,7 +1945,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb)
+>>
+>>          if (ret) {
+>>                  dev_warn(dev, "failed to add notifier for PM domain %s\n",
+>> -                        genpd->name);
+>> +                        dev_name(&genpd->dev));
+>>                  return ret;
+>>          }
+>>
+>> @@ -1988,7 +1992,7 @@ int dev_pm_genpd_remove_notifier(struct device *dev)
+>>
+>>          if (ret) {
+>>                  dev_warn(dev, "failed to remove notifier for PM domain %s\n",
+>> -                        genpd->name);
+>> +                        dev_name(&genpd->dev));
+>>                  return ret;
+>>          }
+>>
+>> @@ -2014,7 +2018,7 @@ static int genpd_add_subdomain(struct generic_pm_domain *genpd,
 >>           */
->>          em_table = rcu_dereference(pd->em_table);
->>          i = em_pd_get_efficient_state(em_table->state, pd->nr_perf_states,
->> -                                     max_util, pd->flags);
->> +                                     max_util, pd->flags, pd->min_ps,
->> +                                     pd->max_ps);
+>>          if (!genpd_is_irq_safe(genpd) && genpd_is_irq_safe(subdomain)) {
+>>                  WARN(1, "Parent %s of subdomain %s must be IRQ safe\n",
+>> -                               genpd->name, subdomain->name);
+>> +                    dev_name(&genpd->dev), subdomain->name);
+>>                  return -EINVAL;
+>>          }
+>>
+>> @@ -2089,7 +2093,7 @@ int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
+>>
+>>          if (!list_empty(&subdomain->parent_links) || subdomain->device_count) {
+>>                  pr_warn("%s: unable to remove subdomain %s\n",
+>> -                       genpd->name, subdomain->name);
+>> +                       dev_name(&genpd->dev), subdomain->name);
+>>                  ret = -EBUSY;
+>>                  goto out;
+>>          }
+>> @@ -2199,6 +2203,23 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
+>>          }
+>>   }
+>>
+>> +static bool genpd_name_present(const char *name)
+>> +{
+>> +       bool ret = false;
+>> +       const struct generic_pm_domain *gpd;
+>> +
+>> +       mutex_lock(&gpd_list_lock);
+>> +       list_for_each_entry(gpd, &gpd_list, gpd_list_node) {
+>> +               if (!strcmp(dev_name(&gpd->dev), name)) {
+>> +                       ret = true;
+>> +                       break;
+>> +               }
+>> +       }
+>> +       mutex_unlock(&gpd_list_lock);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>>   /**
+>>    * pm_genpd_init - Initialize a generic I/O PM domain object.
+>>    * @genpd: PM domain object to initialize.
+>> @@ -2226,6 +2247,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>>          genpd->status = is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
+>>          genpd->device_count = 0;
+>>          genpd->provider = NULL;
+>> +       genpd->device_id = -ENXIO;
+>>          genpd->has_provider = false;
+>>          genpd->accounting_time = ktime_get_mono_fast_ns();
+>>          genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
+>> @@ -2266,7 +2288,18 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>>                  return ret;
+>>
+>>          device_initialize(&genpd->dev);
+>> -       dev_set_name(&genpd->dev, "%s", genpd->name);
+>> +
+>> +       if (!genpd_name_present(genpd->name)) {
+>> +               dev_set_name(&genpd->dev, "%s", genpd->name);
+>> +       } else {
+>> +               ret = ida_alloc(&genpd_ida, GFP_KERNEL);
+>> +               if (ret < 0) {
+>> +                       put_device(&genpd->dev);
+>> +                       return ret;
+>> +               }
+>> +               genpd->device_id = ret;
+>> +               dev_set_name(&genpd->dev, "%s_%u", genpd->name, genpd->device_id);
+>> +       }
 > 
-> Couldn't em_pd_get_efficient_state() just take pd as an argument and
-> dereference it by itself?
+> If we can't assume that the genpd->name is unique, I think we need to
+> hold the gpd_list_lock over this entire new section, until we have
+> added the new genpd in the gpd_list. I am not sure we really want this
+> as it could hurt (theoretically at least) boot/probing on systems
+> where a lot of genpds are being used.
 > 
-> The code would be much easier to follow then.
+> That said, I would suggest we go for Dmitry's suggestion to make this
+> genpd provider specific. Let's add a new genpd flag that genpd
+> providers can set, if they need an ida to be tagged on to their
+> device-name. Then we should set that flag for SCMI perf/power domains.
 
-That's possible. I will keep the em_table rcu_dereference as is, so
-only the rest of arguments with 'pd->' will be taken inside
-em_pd_get_efficient_state().
+lol, will do ^^ in the next re-spin.
 
-So the call would look like:
-em_pd_get_efficient_state(em_table->state, pd, max_util);
+-Sibi
 
-
-Thanks for the review. I will send a v3.
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
 
