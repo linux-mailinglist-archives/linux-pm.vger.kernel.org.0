@@ -1,162 +1,179 @@
-Return-Path: <linux-pm+bounces-16752-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16753-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD689B6B00
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 18:28:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D4749B6B21
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 18:36:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AACC41C20D1B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 17:28:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5114F1C21878
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 17:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB7B1BD9DE;
-	Wed, 30 Oct 2024 17:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HIzn2okU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCE42144C8;
+	Wed, 30 Oct 2024 17:35:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE201BD9CB;
-	Wed, 30 Oct 2024 17:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112E2199FB1;
+	Wed, 30 Oct 2024 17:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730309306; cv=none; b=ZkVqbjY+g9lwzoPSpD5zX9I+TzvuW8L+t0aTjTcxJid2VwQIqbMVUJDxAr8Ktg7QyMM2A19R5P84hJQcjNpOGPYk/ZrZaXRW+CLW9Xmm3ihgu5xHZNYENkfgXzFypRI3ngc4zNr/KmjiArO+gBVr95nLM+hxIIsuHeQ+G6vHt/I=
+	t=1730309754; cv=none; b=lsxoQjomCx8B08uLYlbyOjrCS2kEfEHvZVd19SwBmDzbqjWFTSqXZQR5/MmLVK/hnVVI9xVyx8kqhufbskm4dBPAZlceW/+4BuhFLZYZyVRnoydeypV3MYD3WXEF1qHmDZNQgeWe2Xd0gO02IFPZtIqYOT+ofW9G93efxqEKi10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730309306; c=relaxed/simple;
-	bh=I+pOOGHMZI2SP6OFUnOB4ImhG03P+O3foWEohCD03YA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y0Ob+bj4r66vxUFgsszBy7xtopFjq22ZXSVqBBjK09VYQBLlsMF0bR5Zc3HwFQob4tMhdANKN1Kd0InTYalvWLZ+/JnUCsuJXdQUSLCadR9geSkYtNgQQ3Cf4scKJIaVz+AShmS4O4vFqSnVBDbnQ9oefZaAwDyxUuWJNJvNJNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HIzn2okU; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-720b173a9ebso54451b3a.0;
-        Wed, 30 Oct 2024 10:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730309304; x=1730914104; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MnkN8ptr3KGmpx2Uv+pp+uUkuHBCH11BckHc8GqWeDg=;
-        b=HIzn2okUNsJGA1yDQ62T5nhFz8JXJli5zSBbK/vxVBdYceEHL0ZPEVYhuVu29XSpi8
-         4pr4XBLwTdD72d4oYy1rXrRJkfjeHZl5p0IQjXVTOdvP95Yl9XD5Wz82FLUEjVMpGqwD
-         vl7IavGpluS/8tAu7s028/NKeLJRiJniS8VRYDQPMCKYUQadhl6/Lr+bsbg+Ywfkq0R/
-         MYExAnJv4ytgAK7gVKAZq/aNP5rArJEK0AR2ff04yWhuysCGLqiaal14jDcaekrAktNb
-         UgQfjUiKcEW0AfgrANK5ZRSSsQtKWF5NqSzlu35yozYtRAeETfcUHa8HG0d8DK3ZTC7o
-         2iTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730309304; x=1730914104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MnkN8ptr3KGmpx2Uv+pp+uUkuHBCH11BckHc8GqWeDg=;
-        b=ERz/FPS/zkKswIz7WzXMP9Whfc4c68PBlhQ9FgjdjPWPID9IycRCLt3OdCzUg3sCML
-         1RfceAMw6eZeaESDYtiL0GDvRVx7uATUlrZ9lgpeKz8eOoYUls+wQWS4DxaEDhuOzq3g
-         AmGq0rS8N7+6RqGWIOt8xyHtMvwNyIyuzFWjGZXb70nM1k/icDClHlgJyWbfjKp9/Jc9
-         n3MaG6q5af9XCsbrhDiOTjidYio27yCQTYIDVKORbdpcT+SL9z5MvmIIO8I5zNHAXNkZ
-         1CoHNYDiaPiWAMkq7g/eZItIHN/2Dx5ALByeLzFEbtSHOGByOCcFfXisuC2zYVeV4vIs
-         lLQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUt+WbiBbEJSzutStsa7f5kUYbvyPd+5h4aMJT6gxu4YF5SkhL4VGlgOBnAjtavC2Qzryz6Aj0iJWHD@vger.kernel.org, AJvYcCW37a84R/O+kc7JORiR92oG+B2Oo3qu48yRbN5t4knCbuOzzqIiAfVzKNBOdcZdlmzX0HlCuvOjPN+a0S/1@vger.kernel.org, AJvYcCXNZS0Pntqsqw/1Z0JiLH8nDErRXkleKyZj6MvC4KXAzV9ks5AWq/C8m94gYYlIbqiLBsaoMLy99Gw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBM/PKxtxjHDWGfE8wltK6QaWMibQWXGzIVDQcItpAykeDSRzE
-	FKQ0SYK32D47zMPg4AVioqSbrWuJKrbOsIw61jJSwjiKfEKsZOixzucvr8+C7Utmj60CqcDN7Li
-	df6gCBhuVOo62QugBgd25ZUZ9LlbtjQ==
-X-Google-Smtp-Source: AGHT+IHW4Ei/MHebO474qYJ4FnNy3KOOcESKnX+HK1imXciZaQOAIYn479DmypH3MHAeRnnMNdgGnRLoV9bhVu1WXCI=
-X-Received: by 2002:a05:6a00:3c96:b0:71d:f4ef:6b3a with SMTP id
- d2e1a72fcca58-720b9db22bfmr624360b3a.21.1730309303938; Wed, 30 Oct 2024
- 10:28:23 -0700 (PDT)
+	s=arc-20240116; t=1730309754; c=relaxed/simple;
+	bh=BSasaU0mrz2wv1Rydn4ifPh2TNdENmALykPY4CNm9YU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UOd/m2qH7cljB5sEs334KoaWWCFBx8zunNv4rRs6RJqoH5Wzpqf0kUyhJ9pvwEEfbv8yExqrNg78QgEjjeSvPMMGPmxfwDmyIL+Lv/y7Isw0PH6yYUZodVh/qwZX6LEikTxTfkpjxFdwfcW2pUk+bwnZjsGHq4thG/jBVqpBg9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XdvPw5nbcz6K5VP;
+	Thu, 31 Oct 2024 01:34:28 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7DEBC1401F3;
+	Thu, 31 Oct 2024 01:35:47 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 30 Oct
+ 2024 18:35:46 +0100
+Date: Wed, 30 Oct 2024 17:35:45 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+CC: Matteo Martelli <matteomartelli3@gmail.com>, Jonathan Cameron
+	<jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+	<Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>,
+	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul
+ Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>,
+	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
+ producer to fix race
+Message-ID: <20241030173545.00000374@Huawei.com>
+In-Reply-To: <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
+	<20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
+	<ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240203165307.7806-1-aford173@gmail.com> <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
- <6d039ecf-0e48-415a-afd8-6bfce60081ae@kontron.de>
-In-Reply-To: <6d039ecf-0e48-415a-afd8-6bfce60081ae@kontron.de>
-From: Adam Ford <aford173@gmail.com>
-Date: Wed, 30 Oct 2024 12:28:12 -0500
-Message-ID: <CAHCN7xKevGWipBSch6gKVeJRT9Zb8QTchhxg3c=96XhnAvnjZw@mail.gmail.com>
-Subject: Re: imx8mp: HDMI display blank/black problems
-To: Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc: mailinglist1@johanneskirchmair.de, johannes.kirchmair@skidata.com, 
-	Laurent.pinchart@ideasonboard.com, airlied@gmail.com, 
-	alexander.stein@ew.tq-group.com, andrzej.hajda@intel.com, 
-	catalin.marinas@arm.com, conor+dt@kernel.org, daniel@ffwll.ch, 
-	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	festevam@gmail.com, jernej.skrabec@gmail.com, jonas@kwiboo.se, 
-	kernel@pengutronix.de, kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	l.stach@pengutronix.de, linux-arm-kernel@lists.infradead.org, 
-	linux-imx@nxp.com, linux-kernel@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	maarten.lankhorst@linux.intel.com, marex@denx.de, mripard@kernel.org, 
-	neil.armstrong@linaro.org, p.zabel@pengutronix.de, rfoss@kernel.org, 
-	robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org, 
-	tzimmermann@suse.de, ulf.hansson@linaro.org, victor.liu@nxp.com, 
-	vkoul@kernel.org, will@kernel.org, Saravana Kannan <saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, Oct 30, 2024 at 4:01=E2=80=AFAM Frieder Schrempf
-<frieder.schrempf@kontron.de> wrote:
->
-> Hi Johannes,
->
-> On 25.10.24 10:05 AM, mailinglist1@johanneskirchmair.de wrote:
-> > [Sie erhalten nicht h=C3=A4ufig E-Mails von mailinglist1@johanneskirchm=
-air.de. Weitere Informationen, warum dies wichtig ist, finden Sie unter htt=
-ps://aka.ms/LearnAboutSenderIdentification ]
-> >
-> > Hey,
-> > We had some problems with the hdmi on the imx8mp and wanted to leave, w=
-hat we found out about it, somewhere for others to find it.
-> >
-> > The problem was that our hdmi display sometimes stayed blank after hot =
-plugging and sometimes at startup. On older kernel versions 6.6 we did not =
-have the problem with the not mainlined hdmi patches.
-> > We tracked the commit down that introduced the problem for us. It was t=
-he following =E2=80=9Cdriver core: Enable fw_devlink=3Drpm by default=E2=80=
-=9D  https://lore.kernel.org/lkml/20231113220948.80089-1-saravanak@google.c=
-om/
-> > So we switched back to FW_DEVLINK_FLAGS_ON via kernel parameter. Don=E2=
-=80=99t really understand what the problem with RPM is.
-> >
-> > So, this information is just for reference. Maybe someone has an idea w=
-hat is going on here. And how to fix the problem in a more proper way.
->
-> Thanks for investigating and sharing your results!
->
-> I'm seeing the same symptoms and previously found out that this is
-> related to LCDIF underrun errors. See [1] for more information.
->
-> Adam has also started this thread: [2].
->
-> Anyway, knowing that this is related to fw_devlink=3Drpm is really
-> helpful. I just tried with fw_devlink=3Don and wasn't able to see any
-> issues anymore. So this confirms your findings.
+On Wed, 30 Oct 2024 16:47:50 +0200
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-I was off in the weeds thinking there was something wrong in timing
-and/or a race condition around the PLL or something.  This is good
-news.
-Please forgive my ignorance, what does fw_devlink do?  Is there
-something we can do in the driver itself to force its behavior?
+> On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:
+> > Consumers need to call the producer's read_avail_release_resource()
+> > callback after reading producer's available info. To avoid a race
+> > condition with the producer unregistration, change inkern
+> > iio_channel_read_avail() so that it copies the available info from the
+> > producer and immediately calls its release callback with info_exists
+> > locked.
+> > 
+> > Also, modify the users of iio_read_avail_channel_raw() and
+> > iio_read_avail_channel_attribute() to free the copied available buffers
+> > after calling these functions. To let users free the copied buffer with
+> > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
+> > consumer helper that is equivalent to iio_read_avail_channel_attribute()
+> > but stores the available values in the returned variable.  
+> 
+> ...
+> 
+> > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
+> > +					    struct iio_chan_spec const *chan,
+> > +					    const int *vals, long mask)
+> > +{
+> > +	kfree(vals);
+> > +}
+> > +
+> >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> >  			      struct iio_chan_spec const *chan,
+> >  			      int val, int val2, long mask)
+> > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> >  static const struct iio_info dpot_dac_info = {
+> >  	.read_raw = dpot_dac_read_raw,
+> >  	.read_avail = dpot_dac_read_avail,
+> > +	.read_avail_release_resource = dpot_dac_read_avail_release_res,
+> >  	.write_raw = dpot_dac_write_raw,
+> >  };  
+> 
+> I have a problem with this approach. The issue is that we allocate
+> memory in one place and must clear it in another. This is not well
+> designed thingy in my opinion.
 
-adam
->
-> I hope that some of the driver framework and runtime PM experts can help
-> to find out what is actually wrong and how the correct fix might look lik=
-e.
->
-> I'm also CC-ing Saravana who authored the change from fw_devlink=3Don to
-> fw_devlink=3Drpm to see if they have anything to add.
->
-> Thanks
-> Frieder
->
-> [1]
-> https://patchwork.kernel.org/project/linux-phy/cover/20240904233100.11461=
-1-1-aford173@gmail.com/#26014057
-> [2]
-> https://lore.kernel.org/imx/8cfd3052-c85a-4235-b9b8-6d2929e9e455@kontron.=
-de/T/
+It is a tricky corner and we've not yet come up with a better
+solution :(  I think one of the earlier versions did just always copy
+and the reviews suggested that was painful given we are fixing a tiny
+percentage of devices.  Hence we ended up with what is effectively
+an optional copy if the provider knows the data is volatile.
+
+So there are two 'potential' copies here and we need to be careful
+to separate them for purposes of discussion.
+A) Copy in provider if it has volatile available data.  In that
+   case the copy is done in a call to it via read_avail, and release
+   via a call to read_avail_release_resource().  So to my mind locally
+   the same as any acquire / release pair.
+B) Copy in the core for the case where we need the lifetime to persist.
+   That is a effectively a kmemdup() call so we could call back to the
+   core to release it but it would just be a kfree() wrapper.
+ 
+(A) Only occurs in a tiny subset of drivers, most use non volatile data
+    for read avail (constant, or constant after probe).
+(B) Only occurs for consumer drivers that directly use the avail data.
+    There are very few of those and no other sane way of solving this
+    because we can't hold a lock into the provider for an unknown
+    (long) time.
+
+
+> I was thinking a bit of the solution and
+> at least these two comes to my mind:
+> 
+> 1) having a special callback for .read_avail_with_copy (choose better
+> name) that will dump the data to the intermediate buffer and clean it
+> after all;
+
+So we have that allocate the data in the provider and hand it to the
+consumer which then frees it with kfree() in all cases?
+
+Note that's what we do for the inkern interfaces (the ones consumer
+drivers have to use), just in the core not the providers because that
+corner is hard to close any other way. In this rare case we end up
+potentially copying twice.
+
+For the special cases where the buffer isn't passed on beyond
+functions that are part of the IIO core, we avoid the need for that
+(potentially second, probably only) copy because we can always
+ensure the release call is made.  Note this is the common case
+by far. It's the pretty printing done by the core to present this
+data to sysfs etc, or to find out the max value for some consumer
+that doesn't need the whole set.
+
+> 
+> 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.
+
+The special handling that will need seems likely to be no more
+obvious than the handling we have here.  I'm not really
+sure how it would work.
+
+> 
+> In any case it looks fragile and not scalable. I propose to drop this
+> and think again.
+> 
+> Yes, yes, I'm fully aware about the problem you are trying to solve and
+> agree on the report, I think this solution is not good enough.
+
+I'll back this out of my tree for now so the discussion can carry on.
+
+Jonathan
+
 
