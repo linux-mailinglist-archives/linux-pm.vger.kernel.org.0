@@ -1,148 +1,124 @@
-Return-Path: <linux-pm+bounces-16743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B71EC9B68B4
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 16:59:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95A859B6903
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 17:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E919E1C21A26
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 15:59:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32FFF1F21B33
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 16:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3AA52141C7;
-	Wed, 30 Oct 2024 15:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DC52141B5;
+	Wed, 30 Oct 2024 16:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zVA+0vdy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wgzIJJBm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739A4214409
-	for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 15:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5041F4703
+	for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 16:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730303950; cv=none; b=TRH2gl6I/1vWnIY+JeB8Q//ssjBSUyE4nntA59GIH+agvUROoDj2z+d9NLtqj5sHBnAm/T4n2nGOTdHNtYudzWk+Yz769viNvoPqToUhSqg5E1xynAM+tYuumwEtYVT/Q31LrIF3BL3zVVgf/2RD0n1MK6eXXNAzigdYB3t8Zqc=
+	t=1730305219; cv=none; b=RBAetsM/vIB7Hd+d2mGw9bP2kuOGqa8s6iQ2jzuTfGnbziVpHYPs6pmBVFjr67Jf/collfCphDKWFx8LBnOEPA0CNN/qBE/c9lYs56LeRCFneCCE3wQ6M/b2wenwp79y+0/jEiAs8QRBaPfLkqvehjSrDVHDpeYD1iB8pRZ4aYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730303950; c=relaxed/simple;
-	bh=HIxxikhzDMWtdyaOhUJ5dv/cxvC7QWX8RE3H4C7G+k8=;
+	s=arc-20240116; t=1730305219; c=relaxed/simple;
+	bh=ZoeeM23AhOsJoaMIxiszSC2XcIlVdHVidjykxIDzU+g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YKz5xr4ibQYYvIXZnYye1WTGchj8qs2d1ZW6PaEvnKghishytve4ou9c7YvnEuGRvDohFTtXQ8ClMVEU6NK5bgYGiyjDfT9XEKC1hFRRG3mOO+V9Pq/+BMy430tJujvxhAZTwB64npt5Fqwm8FyfP7GzBxOJioMy7LbhKVhXRcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zVA+0vdy; arc=none smtp.client-ip=209.85.210.52
+	 To:Cc:Content-Type; b=QpopAdIbsllP24S0Fh7wxe6ymXLmQM9gOSI9+LlLvWFVizpVKy72E6df9z/au6Sz52VDHqBs7UqWSW8ZFFgetgbn3i7CmrM6ch8cnrpHXyfKOu5GYjlVDBoduU8yuFeW+MP6a1UitxNWkD6k/ifygLxByUTK/X1Wa6wjtTRTdXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wgzIJJBm; arc=none smtp.client-ip=209.85.219.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7187e0041d5so1624692a34.2
-        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 08:59:08 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e30d821c3e0so903822276.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 09:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730303947; x=1730908747; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1730305216; x=1730910016; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eh9Rgk7ggpbAIfmbuIxK8vjEN7ZF46nd11xU/V0drIE=;
-        b=zVA+0vdytRlKrska7A+SDkT2kbnrGW7gdQpMYMJADtDg60Ekuw0P/HgXJ/3oPuIr24
-         MbcHmRAmW1Daxuy2jlrdrLn/rptAWW3oWsTOkjhPwGY8Vxc/xX5VoK1iAFNYiXkJ4NDW
-         KzIZC9HRfACMKbTKxXxj8SYrU9Bqlsn07+7739Eq26XWqBkiU+rxxQXsOIiT4JJ9YSdB
-         8iwuU94xJxB9vhEO36aSNjLOD0fswwb00KcIDknS0Wg30cZHljwK4Rd4UU/CNK6dIBYp
-         78aXaYGdb1agOORp7KmgccgSuZJE9lz4ltj4UThgFWET2j2VFrscVxJeRNJBvPNOr7LV
-         XBew==
+        bh=ZoeeM23AhOsJoaMIxiszSC2XcIlVdHVidjykxIDzU+g=;
+        b=wgzIJJBmetnUTiaEpB0vGoDtoba6KdUiLsHJNufG8BHenu+SWD2JrRPU4vHJj5A2xP
+         tccLoWLfpZ2iN2iU2Ba3xtdQekKhANuufNPYmie/fpKAMw925gg6mro0MMJWd+d6t6Zm
+         BC3asm2oM0ZATcGplLYSvBxhMq7ClV9tXBKSQRvWsC2IMyhEWRfqHq4b9OFWJDGEyVub
+         3xONaS3lffnQPnZFKvVUGxrWcunCoRnn0wylhMOb0e4ZbXk3a20bjboiG/P8Of36yk/q
+         tMbqcp0vxS9UMI+dOV8INjE7bYoXOsvjf4faP3LCl3n4K6mP5lo96L31GgIptqPlPx5w
+         MUDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730303947; x=1730908747;
+        d=1e100.net; s=20230601; t=1730305216; x=1730910016;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eh9Rgk7ggpbAIfmbuIxK8vjEN7ZF46nd11xU/V0drIE=;
-        b=eKXW9EF8eEKgh2m02tBCW4eCT4t8tadFPpMszb/tVy9iCW8z4ejSE8SSv8mDatZB7R
-         6rXAlO3DXlP6KUOanNPLkZd5abij7kd+elV6q/7eZRc4UKXmvORje4bBIWjYEJCr/V7K
-         Wc8QyWsHSK8rmaSAmcN3dUL9ICmpUW6yxZkLiZ52aOiJ6fgVjVFmEFVXdNhH1+oF3HgC
-         9bTKg3RqAD197Lk6XsGFiYkZMIL6DhLEYwQfz0P6hbhwov940dSLTQFOl4hbRhAhTPVa
-         CiwXQhWuO/HdpvbdTydJ57IkqJL/tAlpR7fbON9LLEs4/6Tj/Yr+6EcTGtG6GDDK2Dd3
-         qldw==
-X-Gm-Message-State: AOJu0YyFMXTLTkRlVOH8WOyg47JUDBATuiGQIsd7hu0VL//Gm16IUZEx
-	qubfKJV/upFAwTxZ53mWcnn6vyoSs5/iIGfHqeisTgJpeOp5oeX5oqz/dPJZcIL+tgecaVfESaY
-	LL8l9jyuirnsvcusTZ9hG5MGAZtokss3ZZDiOAw==
-X-Google-Smtp-Source: AGHT+IGcvdh6hUVAY/ghEqHaTdX2aYhEr0HkUHbGO2MLJDsO31xGVP61B+nN11Z8X8ZW3LGsIq5cI9Ila4LMFwxgeNo=
-X-Received: by 2002:a05:6830:912:b0:718:1109:9626 with SMTP id
- 46e09a7af769-7189b4cb6dcmr122701a34.6.1730303947477; Wed, 30 Oct 2024
- 08:59:07 -0700 (PDT)
+        bh=ZoeeM23AhOsJoaMIxiszSC2XcIlVdHVidjykxIDzU+g=;
+        b=lvOtiS7VpOuNYMvbm6uQRjsBTQkqvodQa+O7PlW4JDLw10LREiy71NUjHL9KEIbpSy
+         41PMmBFEJP/tPie0eKHOa90yg2wb4sKZBLnoM17FyPFYAl0ecegbYqV8N8dRUfRdYMcC
+         YoTmeuyKX0Tbd0N54lhtAy2FuConkowh067ObAYwDig9aNVQ40jSkibDiVrt3zwv6maX
+         PauHlvbXzZjan7cSTZpMV9gpbuWh47lpuqgG2Z9fAj+4n3Kyp+3NTE82KjDZVhU5hsIy
+         n9h9CTHZqhJKGsMOem7OfrswJsAe9EJqN7eBcyDnXXtiMSVu2inzuYxkfrdQhbC9ZpSY
+         CsKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUh+hD2V+/YQwpkpi20Nv9OeBy9olAKW687o66nhAUrnksPwqkSvzroe6BNOdel8US8WYG47fH9jw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbgOzhwmFs0wcgdZA+gdMZdXx77QsnOYgWI6GMxPF/JP3Tk/qv
+	SO4e3XZnk5RNJypjhYH29ZokjMssxi2erVhQmLmdMKZBJCA50Xsl+DT0NYcYkgxWIZ9B6XxHe/d
+	COUr4cTbi4wmsgWc5o2IxoUujaqqREugBMf33bQ==
+X-Google-Smtp-Source: AGHT+IEAL+ig1I6YxHPWKDxM+c+9tJ2nZijR/HzL7xEopbO7n014y/uWJwP5fAjn2UqJzH/+xfmkQd4UvLAFkD0MR6U=
+X-Received: by 2002:a05:690c:60c1:b0:6e3:36cc:eb74 with SMTP id
+ 00721157ae682-6e9d8afa635mr194581497b3.32.1730305216352; Wed, 30 Oct 2024
+ 09:20:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906-lpm-v6-10-constraints-pmdomain-v4-0-4055557fafbc@baylibre.com>
- <173029317079.2440963.17313738472826934777.b4-ty@ti.com>
-In-Reply-To: <173029317079.2440963.17313738472826934777.b4-ty@ti.com>
+References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
+In-Reply-To: <20241030125512.2884761-1-quic_sibis@quicinc.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 30 Oct 2024 16:58:31 +0100
-Message-ID: <CAPDyKFptHq6xkKSAmeHsEuhBoEhzvudcMf2+nG08MFPwnMi+ew@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] pmdomain: ti_sci: collect and send low-power mode constraints
-To: Nishanth Menon <nm@ti.com>
-Cc: linux-pm@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>, 
-	Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, 
-	Sebin Francis <sebin.francis@ti.com>, Markus Schneider-Pargmann <msp@baylibre.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date: Wed, 30 Oct 2024 17:19:39 +0100
+Message-ID: <CAPDyKFoY8CnxF7JXzkT9_WXyM-TJhW4kmTw=H8NEzch32N1_7Q@mail.gmail.com>
+Subject: Re: [PATCH V5 0/6] firmware: arm_scmi: Misc Fixes
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, johan@kernel.org, 
+	jassisinghbrar@gmail.com, dmitry.baryshkov@linaro.org, 
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	konradybcio@kernel.org, linux-pm@vger.kernel.org, tstrudel@google.com, 
+	rafael@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 30 Oct 2024 at 14:01, Nishanth Menon <nm@ti.com> wrote:
+On Wed, 30 Oct 2024 at 13:55, Sibi Sankar <quic_sibis@quicinc.com> wrote:
 >
-> Hi Kevin Hilman,
+> The series addresses the kernel warnings reported by Johan at [1] and are
+> are required to X1E cpufreq device tree changes to land.
 >
-> On Fri, 06 Sep 2024 09:14:48 -0700, Kevin Hilman wrote:
-> > The latest (10.x) version of the firmware for the PM co-processor (aka
-> > device manager, or DM) adds support for a "managed" mode, where the DM
-> > firmware will select the specific low power state which is entered
-> > when Linux requests a system-wide suspend.
-> >
-> > In this mode, the DM will always attempt the deepest low-power state
-> > available for the SoC.
-> >
-> > [...]
+> [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
 >
-> I have applied the following to branch ti-drivers-soc-next on [1].
-> Thank you!
+> Duplicate levels:
+> arm-scmi arm-scmi.0.auto: Level 2976000 Power 218062 Latency 30us Ifreq 2976000 Index 10
+> arm-scmi arm-scmi.0.auto: Level 3206400 Power 264356 Latency 30us Ifreq 3206400 Index 11
+> arm-scmi arm-scmi.0.auto: Level 3417600 Power 314966 Latency 30us Ifreq 3417600 Index 12
+> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> arm-scmi arm-scmi.0.auto: Level 4012800 Power 528848 Latency 30us Ifreq 4012800 Index 15
 >
-> Ulf, based on your ack[2], I have assumed that you want me to pick
-> this series up. Let me know if that is not the case and I can drop the
-> series.
+> ^^ exist because SCP reports duplicate values for the highest sustainable
+> freq for perf domains 1 and 2. These are the only freqs that appear as
+> duplicates and will be fixed with a firmware update. FWIW the warnings
+> that we are addressing in this series will also get fixed by a firmware
+> update but they still have to land for devices already out in the wild.
+>
+> V4:
+> * Rework debugfs node creation patch [Ulf/Dmitry]
+> * Reduce report level to dev_info and tag it with FW_BUG [Johan/Dmitry]
+> * Add cc stable and err logs to patch 1 commit message [Johan]
 
-Well, that was a while ago. The reason was because there was a
-dependency to another series [2], when this was posted.
+Patch4 and patch5 applied for fixes to my pmdomain tree - and by
+adding a stable tag to them, thanks!
 
-If that's not the case anymore, I think it's better to funnel this via
-my pmdomain tree. Please let me know how to proceed.
+Potentially I could help to take the other patches too, to keep things
+together, but in that case I need confirmation that's okay to do so.
+
+[...]
 
 Kind regards
 Uffe
-
->
-> [1/3] pmdomain: ti_sci: add per-device latency constraint management
->       commit: 7c2c8d2651b5ffaffb2d5f723bd5b0493bd66f36
-> [2/3] pmdomain: ti_sci: add wakeup constraint management
->       commit: 5a2d997b1bf8b05379309270063d7b9bd3767dd2
-> [3/3] pmdomain: ti_sci: handle wake IRQs for IO daisy chain wakeups
->       commit: e8f35dc8de8c3216d28dab51b962bb31f20934c8
->
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent up the chain during
-> the next merge window (or sooner if it is a relevant bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
->
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
->
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
->
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
-> [2] https://lore.kernel.org/all/CAPDyKFr9isnz66B+n5y3=QO-ndB05JKZN3kgXO+kXBn7ofcwMw@mail.gmail.com/
-> --
-> Regards,
-> Nishanth Menon
-> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
->
 
