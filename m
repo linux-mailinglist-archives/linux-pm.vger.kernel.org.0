@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-16727-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16728-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA3FD9B637B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 13:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BAC929B637F
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 13:57:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 353321F22197
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 12:56:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E3921F224AC
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 12:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E0821EC016;
-	Wed, 30 Oct 2024 12:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B0A1EF0BE;
+	Wed, 30 Oct 2024 12:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Bg20VppE"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nj4XWcwH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7A81EBA19;
-	Wed, 30 Oct 2024 12:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601981EF936;
+	Wed, 30 Oct 2024 12:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292951; cv=none; b=RLlREs6wTdo0wUIaIaU49SvhZ2Nf91nCa3yJgS7XIvj6g6gsFLFJ+eGqUbn3O8v26VYYiXBgwGZ+WXDN7TqAQ4BpSd1oz9h0jLroZjRorotiTAW119qY18IaiBFzk2VHnYO/wNOkZZ0ZJv/X17LuTj0QkZzSrRl4SN5s/s7eWhM=
+	t=1730292957; cv=none; b=LocD5uam9k24yZNp0Rlq0F3rd4i6FE7QcUvOnDRBEf9jXl8YRjdQ8iLYt5Wv7tjsCePsRQUSYNwzCkzeNto+CxlQZEhCNzH2PeAkaM4CViVcMfAzeh9S3cHmyXk3Kp2geURuc8IgJCoh6V4kys6z8ixJwroszp08CgyHoaSdkzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292951; c=relaxed/simple;
-	bh=Q/IauaK/WG//j5kMAuS6rPBwXVVNP4nOebEiBM53LEA=;
+	s=arc-20240116; t=1730292957; c=relaxed/simple;
+	bh=XYAN12nlFaI3UNRe0CFzg4pxnAKOGScleRB5KexJd2E=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tUNMob6Hee5YRDsUQ97YJGiCgay6zHOhQ2/Ij0vrVDQdQ6OckF1bClLNkLJDKac5uhgQt7JwgPBfAHe2cL9M2fb0Dp8Fr3+rlqJcpTs0zrp27YM0e2EFezANEKqKaya2Q7zFZGQjnzA64WUEBxgOynLqSFQG6dmf1MYQmWIJXYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Bg20VppE; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=cYnNS+9JX/FsidlXdpsYNG4Iek2hseY9SyRgBC1qpb1o4qqx/srSu1yohR3TYrUsPgeKP9cGjjYEn7o+4pVy/Bx69XTVXOBJR2BMHOTQNsDCsNg9f1ykVpfe9hZLSvQaYBQgSTyrL6Je0ZRLJ67uhGVptFMNl6lcjxuRI1Rc3EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nj4XWcwH; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49U9RSic025437;
-	Wed, 30 Oct 2024 12:55:38 GMT
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49U9x3s6000705;
+	Wed, 30 Oct 2024 12:55:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	AmMdiBqGxXHJ2RtZV+VXQAhbRxOF+HcER2r7krMw7hE=; b=Bg20VppER9MpLKPy
-	sNqI2u/68saKtjAAFu5ewmNqGPmmQxOMjOeeEeK5+iVzc9Uw2uL4/ZIhOcdeYqP4
-	eMUerclZMX9I1xKqahqckYGf0RE2C68vgDiDddyb/z/CKpVUoZ89rrfzBWD5V8fN
-	BpaEie+NQ+JULMZSi/bbSxrlsyrIehVQLlBIlPluNaX3B+0NmF7Zpb5vwh6Ixeg8
-	YWaWZjxtfZDYc7fu8bx+ws7RWkAvzQEK+cGiJ+J43oybtt1QUrse1s4QQVFcTkQV
-	8rHhe+fOofHmKS6a6hfee24qumLepjf/vXw5o1IfuXBC6JL65SJ/VLiiUYF0+EGu
-	J3hxCQ==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gsq8m0ky-1
+	Cq6J9C5Gasf4X5brWYjA6NSd8m9FjxEIcJtzv2DJjIE=; b=nj4XWcwH7tp/hoin
+	pDUTUjfGW0PNBUFz4++PTxcG5GDM+GuUWI5pcvOb5eB9Zz87/IlXMyHqv69y2kCW
+	hgPydeWUNoT2hH60LdBl4QentMAEHnsjc49AR2UnpH2mmXzFbOMsWuOJDm6BQXVB
+	8z3CAcIIrRXpUFqd3BHPoXGxLV8NMBCRWfCSrlXJ+GOK+1lFXovtlnPmL/0SpCxt
+	tVYZPRf0SMduXpyely6/VIWOayvGxVQ7HyBWGmPonmMRpWVpUMzchmkyDAyOBdPV
+	ghpqbW/6ukwxtmEWUmAJXlFRHrTqdfJ34sEdYO+dH4n70DfnEKWMeYOavrjTgPPY
+	Qr7NQQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42grt73xsq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Oct 2024 12:55:38 +0000 (GMT)
+	Wed, 30 Oct 2024 12:55:43 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49UCtbOG026971
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49UCtg3f005780
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Oct 2024 12:55:37 GMT
+	Wed, 30 Oct 2024 12:55:42 GMT
 Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 30 Oct 2024 05:55:31 -0700
+ 15.2.1544.9; Wed, 30 Oct 2024 05:55:37 -0700
 From: Sibi Sankar <quic_sibis@quicinc.com>
 To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <johan@kernel.org>,
         <ulf.hansson@linaro.org>, <jassisinghbrar@gmail.com>,
@@ -64,11 +64,11 @@ CC: <linux-kernel@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-arm-msm@vger.kernel.org>, <quic_sibis@quicinc.com>,
         <konradybcio@kernel.org>, <linux-pm@vger.kernel.org>,
-        <tstrudel@google.com>, <rafael@kernel.org>, <stable@vger.kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH V5 1/6] firmware: arm_scmi: Ensure that the message-id supports fastchannel
-Date: Wed, 30 Oct 2024 18:25:07 +0530
-Message-ID: <20241030125512.2884761-2-quic_sibis@quicinc.com>
+        <tstrudel@google.com>, <rafael@kernel.org>,
+        "Johan Hovold" <johan+linaro@kernel.org>
+Subject: [PATCH V5 2/6] firmware: arm_scmi: Skip opp duplicates
+Date: Wed, 30 Oct 2024 18:25:08 +0530
+Message-ID: <20241030125512.2884761-3-quic_sibis@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241030125512.2884761-1-quic_sibis@quicinc.com>
 References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
@@ -84,160 +84,129 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 46bhYeiN227ZEQEpeNnU8Ayc2iXoGhzA
-X-Proofpoint-ORIG-GUID: 46bhYeiN227ZEQEpeNnU8Ayc2iXoGhzA
+X-Proofpoint-ORIG-GUID: DVQDiWghawQyBmNpLnzbIXqGcqhNo7n0
+X-Proofpoint-GUID: DVQDiWghawQyBmNpLnzbIXqGcqhNo7n0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- adultscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1011 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410300101
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ adultscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410300099
 
-Currently the perf and powercap protocol relies on the protocol domain
-attributes, which just ensures that one fastchannel per domain, before
-instantiating fastchannels for all possible message-ids. Fix this by
-ensuring that each message-id supports fastchannel before initialization.
+From: Cristian Marussi <cristian.marussi@arm.com>
 
-Logs:
-scmi: Failed to get FC for protocol 13 [MSG_ID:6 / RES_ID:0] - ret:-95. Using regular messaging.
-scmi: Failed to get FC for protocol 13 [MSG_ID:6 / RES_ID:1] - ret:-95. Using regular messaging.
-scmi: Failed to get FC for protocol 13 [MSG_ID:6 / RES_ID:2] - ret:-95. Using regular messaging.
+Buggy firmware can reply with duplicated PERF opps descriptors.
 
-CC: stable@vger.kernel.org
+Ensure that the bad duplicates reported by the platform firmware doesn't
+get added to the opp-tables.
+
 Reported-by: Johan Hovold <johan+linaro@kernel.org>
 Closes: https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
-Fixes: 6f9ea4dabd2d ("firmware: arm_scmi: Generalize the fast channel support")
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 Tested-by: Johan Hovold <johan+linaro@kernel.org>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
+ drivers/firmware/arm_scmi/perf.c | 40 ++++++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 10 deletions(-)
 
-v4:
-* Add cc stable and err logs to patch 1 commit message [Johan]
-
- drivers/firmware/arm_scmi/driver.c    | 72 +++++++++++++++------------
- drivers/firmware/arm_scmi/protocols.h |  2 +
- 2 files changed, 41 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 1f53ca1f87e3..55e496e78403 100644
---- a/drivers/firmware/arm_scmi/driver.c
-+++ b/drivers/firmware/arm_scmi/driver.c
-@@ -1698,6 +1698,39 @@ static int scmi_common_get_max_msg_size(const struct scmi_protocol_handle *ph)
- 	return info->desc->max_msg_size;
+diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+index 2d77b5f40ca7..32f9a9acd3e9 100644
+--- a/drivers/firmware/arm_scmi/perf.c
++++ b/drivers/firmware/arm_scmi/perf.c
+@@ -373,7 +373,7 @@ static int iter_perf_levels_update_state(struct scmi_iterator_state *st,
+ 	return 0;
  }
  
-+/**
-+ * scmi_protocol_msg_check  - Check protocol message attributes
-+ *
-+ * @ph: A reference to the protocol handle.
-+ * @message_id: The ID of the message to check.
-+ * @attributes: A parameter to optionally return the retrieved message
-+ *		attributes, in case of Success.
-+ *
-+ * An helper to check protocol message attributes for a specific protocol
-+ * and message pair.
-+ *
-+ * Return: 0 on SUCCESS
-+ */
-+static int scmi_protocol_msg_check(const struct scmi_protocol_handle *ph,
-+				   u32 message_id, u32 *attributes)
-+{
-+	int ret;
-+	struct scmi_xfer *t;
-+
-+	ret = xfer_get_init(ph, PROTOCOL_MESSAGE_ATTRIBUTES,
-+			    sizeof(__le32), 0, &t);
-+	if (ret)
-+		return ret;
-+
-+	put_unaligned_le32(message_id, t->tx.buf);
-+	ret = do_xfer(ph, t);
-+	if (!ret && attributes)
-+		*attributes = get_unaligned_le32(t->rx.buf);
-+	xfer_put(ph, t);
-+
-+	return ret;
-+}
-+
- /**
-  * struct scmi_iterator  - Iterator descriptor
-  * @msg: A reference to the message TX buffer; filled by @prepare_message with
-@@ -1839,6 +1872,7 @@ scmi_common_fastchannel_init(const struct scmi_protocol_handle *ph,
- 	int ret;
- 	u32 flags;
- 	u64 phys_addr;
-+	u32 attributes;
- 	u8 size;
- 	void __iomem *addr;
- 	struct scmi_xfer *t;
-@@ -1847,6 +1881,11 @@ scmi_common_fastchannel_init(const struct scmi_protocol_handle *ph,
- 	struct scmi_msg_resp_desc_fc *resp;
- 	const struct scmi_protocol_instance *pi = ph_to_pi(ph);
+-static inline void
++static inline int
+ process_response_opp(struct device *dev, struct perf_dom_info *dom,
+ 		     struct scmi_opp *opp, unsigned int loop_idx,
+ 		     const struct scmi_msg_resp_perf_describe_levels *r)
+@@ -386,12 +386,16 @@ process_response_opp(struct device *dev, struct perf_dom_info *dom,
+ 		le16_to_cpu(r->opp[loop_idx].transition_latency_us);
  
-+	/* Check if the MSG_ID supports fastchannel */
-+	ret = scmi_protocol_msg_check(ph, message_id, &attributes);
-+	if (!ret && !MSG_SUPPORTS_FASTCHANNEL(attributes))
-+		return;
-+
- 	if (!p_addr) {
- 		ret = -EINVAL;
- 		goto err_out;
-@@ -1974,39 +2013,6 @@ static void scmi_common_fastchannel_db_ring(struct scmi_fc_db_info *db)
- #endif
- }
- 
--/**
-- * scmi_protocol_msg_check  - Check protocol message attributes
-- *
-- * @ph: A reference to the protocol handle.
-- * @message_id: The ID of the message to check.
-- * @attributes: A parameter to optionally return the retrieved message
-- *		attributes, in case of Success.
-- *
-- * An helper to check protocol message attributes for a specific protocol
-- * and message pair.
-- *
-- * Return: 0 on SUCCESS
-- */
--static int scmi_protocol_msg_check(const struct scmi_protocol_handle *ph,
--				   u32 message_id, u32 *attributes)
--{
--	int ret;
--	struct scmi_xfer *t;
--
--	ret = xfer_get_init(ph, PROTOCOL_MESSAGE_ATTRIBUTES,
--			    sizeof(__le32), 0, &t);
+ 	ret = xa_insert(&dom->opps_by_lvl, opp->perf, opp, GFP_KERNEL);
 -	if (ret)
--		return ret;
--
--	put_unaligned_le32(message_id, t->tx.buf);
--	ret = do_xfer(ph, t);
--	if (!ret && attributes)
--		*attributes = get_unaligned_le32(t->rx.buf);
--	xfer_put(ph, t);
--
--	return ret;
--}
--
- static const struct scmi_proto_helpers_ops helpers_ops = {
- 	.extended_name_get = scmi_common_extended_name_get,
- 	.get_max_msg_size = scmi_common_get_max_msg_size,
-diff --git a/drivers/firmware/arm_scmi/protocols.h b/drivers/firmware/arm_scmi/protocols.h
-index aaee57cdcd55..d62c4469d1fd 100644
---- a/drivers/firmware/arm_scmi/protocols.h
-+++ b/drivers/firmware/arm_scmi/protocols.h
-@@ -31,6 +31,8 @@
- 
- #define SCMI_PROTOCOL_VENDOR_BASE	0x80
- 
-+#define MSG_SUPPORTS_FASTCHANNEL(x)	((x) & BIT(0))
++	if (ret) {
+ 		dev_warn(dev, "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
+ 			 opp->perf, dom->info.name, ret);
++		return ret;
++	}
 +
- enum scmi_common_cmd {
- 	PROTOCOL_VERSION = 0x0,
- 	PROTOCOL_ATTRIBUTES = 0x1,
++	return 0;
+ }
+ 
+-static inline void
++static inline int
+ process_response_opp_v4(struct device *dev, struct perf_dom_info *dom,
+ 			struct scmi_opp *opp, unsigned int loop_idx,
+ 			const struct scmi_msg_resp_perf_describe_levels_v4 *r)
+@@ -404,9 +408,11 @@ process_response_opp_v4(struct device *dev, struct perf_dom_info *dom,
+ 		le16_to_cpu(r->opp[loop_idx].transition_latency_us);
+ 
+ 	ret = xa_insert(&dom->opps_by_lvl, opp->perf, opp, GFP_KERNEL);
+-	if (ret)
++	if (ret) {
+ 		dev_warn(dev, "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
+ 			 opp->perf, dom->info.name, ret);
++		return ret;
++	}
+ 
+ 	/* Note that PERF v4 reports always five 32-bit words */
+ 	opp->indicative_freq = le32_to_cpu(r->opp[loop_idx].indicative_freq);
+@@ -415,13 +421,21 @@ process_response_opp_v4(struct device *dev, struct perf_dom_info *dom,
+ 
+ 		ret = xa_insert(&dom->opps_by_idx, opp->level_index, opp,
+ 				GFP_KERNEL);
+-		if (ret)
++		if (ret) {
+ 			dev_warn(dev,
+ 				 "Failed to add opps_by_idx at %d for %s - ret:%d\n",
+ 				 opp->level_index, dom->info.name, ret);
+ 
++			/* Cleanup by_lvl too */
++			xa_erase(&dom->opps_by_lvl, opp->perf);
++
++			return ret;
++		}
++
+ 		hash_add(dom->opps_by_freq, &opp->hash, opp->indicative_freq);
+ 	}
++
++	return 0;
+ }
+ 
+ static int
+@@ -429,16 +443,22 @@ iter_perf_levels_process_response(const struct scmi_protocol_handle *ph,
+ 				  const void *response,
+ 				  struct scmi_iterator_state *st, void *priv)
+ {
++	int ret;
+ 	struct scmi_opp *opp;
+ 	struct scmi_perf_ipriv *p = priv;
+ 
+-	opp = &p->perf_dom->opp[st->desc_index + st->loop_idx];
++	opp = &p->perf_dom->opp[p->perf_dom->opp_count];
+ 	if (PROTOCOL_REV_MAJOR(p->version) <= 0x3)
+-		process_response_opp(ph->dev, p->perf_dom, opp, st->loop_idx,
+-				     response);
++		ret = process_response_opp(ph->dev, p->perf_dom, opp,
++					   st->loop_idx, response);
+ 	else
+-		process_response_opp_v4(ph->dev, p->perf_dom, opp, st->loop_idx,
+-					response);
++		ret = process_response_opp_v4(ph->dev, p->perf_dom, opp,
++					      st->loop_idx, response);
++
++	/* Skip BAD duplicates received from firmware */
++	if (ret)
++		return ret == -EBUSY ? 0 : ret;
++
+ 	p->perf_dom->opp_count++;
+ 
+ 	dev_dbg(ph->dev, "Level %d Power %d Latency %dus Ifreq %d Index %d\n",
 -- 
 2.34.1
 
