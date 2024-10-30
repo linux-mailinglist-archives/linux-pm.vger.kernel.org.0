@@ -1,77 +1,91 @@
-Return-Path: <linux-pm+bounces-16753-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16754-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D4749B6B21
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 18:36:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7873F9B6C05
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 19:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5114F1C21878
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 17:36:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C6E01C23D5B
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 18:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCE42144C8;
-	Wed, 30 Oct 2024 17:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242961C9EBB;
+	Wed, 30 Oct 2024 18:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTIS6BbG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112E2199FB1;
-	Wed, 30 Oct 2024 17:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB161C6882;
+	Wed, 30 Oct 2024 18:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730309754; cv=none; b=lsxoQjomCx8B08uLYlbyOjrCS2kEfEHvZVd19SwBmDzbqjWFTSqXZQR5/MmLVK/hnVVI9xVyx8kqhufbskm4dBPAZlceW/+4BuhFLZYZyVRnoydeypV3MYD3WXEF1qHmDZNQgeWe2Xd0gO02IFPZtIqYOT+ofW9G93efxqEKi10=
+	t=1730312610; cv=none; b=XjcQBUFLcKxlqsWukqyuipQIY+q2alcx/Tgh92cJ11Yrti+EiMtLci4RPHTzqLWjjE2BqQ2YCD3N56YPxGO/1W1GpHD+jBx0asBUmeIH1gkUNaCyBEKmKeykJr3L05c/IF0IRq/p5r46gL9s3oLtRN52M6aaHrdaumRIJAWeUuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730309754; c=relaxed/simple;
-	bh=BSasaU0mrz2wv1Rydn4ifPh2TNdENmALykPY4CNm9YU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UOd/m2qH7cljB5sEs334KoaWWCFBx8zunNv4rRs6RJqoH5Wzpqf0kUyhJ9pvwEEfbv8yExqrNg78QgEjjeSvPMMGPmxfwDmyIL+Lv/y7Isw0PH6yYUZodVh/qwZX6LEikTxTfkpjxFdwfcW2pUk+bwnZjsGHq4thG/jBVqpBg9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XdvPw5nbcz6K5VP;
-	Thu, 31 Oct 2024 01:34:28 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7DEBC1401F3;
-	Thu, 31 Oct 2024 01:35:47 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 30 Oct
- 2024 18:35:46 +0100
-Date: Wed, 30 Oct 2024 17:35:45 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-CC: Matteo Martelli <matteomartelli3@gmail.com>, Jonathan Cameron
-	<jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
-	<Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>,
-	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul
- Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>,
-	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
- producer to fix race
-Message-ID: <20241030173545.00000374@Huawei.com>
-In-Reply-To: <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
-References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
-	<20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
-	<ZyJHFp6vbQ7deLFs@black.fi.intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1730312610; c=relaxed/simple;
+	bh=UpafUuBFTrMsWIBnqEUYBI1K0lVwV0sEiSv0e+WT6GM=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=A+5D/GxDXX7riAg7ytQVQ1YjWlF7XUc1c+OceWUF1OJRwwSonJff1s0CeoDYAJTsN/iK0lwU49+FfGILfo8hTwA+/awTejuXdZLTVXB2SHaOlOIijDCFOTxrtW3oAMTtwIqBkcYZYP+Kg8P3GFzRUCsXu1d3dCeWBgpZpBhzfro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTIS6BbG; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-431548bd1b4so900555e9.3;
+        Wed, 30 Oct 2024 11:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730312606; x=1730917406; darn=vger.kernel.org;
+        h=user-agent:message-id:date:to:cc:from:subject:references
+         :in-reply-to:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4TADLeOOFvbCsr2nx+51bEXXXPmsK4FMPMLQQn8enb8=;
+        b=LTIS6BbGq6vlZKneYw87YxleuhKA+asRnQOmqkSQrrgDy3G0Tusw/D6YvGw1K29yui
+         aTbNnZpAiTxkRrioGWUh3ZyuSkMd0W6INZBNzbJL/OlQc92tLNcTZauNaBM3kI4ABc2s
+         dUPMflg+f+cnuuekNaUFHfABjIfMNrpi8/IwYka6hCGbGD8Sx6S4os69M6dUu4QFiI7M
+         R2cS/smFRkN9s0KLxI3/Tm1ajZQX+D0D3kNJJds0cQEtsNpVIWaSTfJvdBmKo0Dr+fQw
+         fDYfWDcAtEPgjiiW1dho4WKQ0EOuw0xsZUDCny2KCsB9BOKk+Xxj1vhdoV2ApjFOlOu7
+         thbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730312606; x=1730917406;
+        h=user-agent:message-id:date:to:cc:from:subject:references
+         :in-reply-to:content-transfer-encoding:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TADLeOOFvbCsr2nx+51bEXXXPmsK4FMPMLQQn8enb8=;
+        b=fLgCZGQ+nYXIhjAjB31I8fKVU6VzLIQkJUTqBNo2jVg+pWM2AiroxA4x8HVPsqzJO+
+         bIrIrh0koc80Qy4QKpNllHTwkf+3uPHI0g8JRWEViP5ttVsxBA+aj9YgmjRxAwdeCU6Q
+         emAqVA07nBvKoq7BdETIONxBKUyeCCZ2mTc7Zl4ZAP+oqeb74l/SjZHn88IjsM6m3uBK
+         v70jOEWePT7OENfvzw52V5A/OSqV3/skULvYnhxmgmQKGkUSa9KuVrMEsVkNHNmAGBtc
+         nN/a3W2u16fLiM9bKRd3346gxrneO8czE8ZUiVzm8KIDI1EF8e5twbuyYVb2hCUkXoW+
+         gqfA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+pBKtkyUY+mUwAttGJ8CFtlALhngmHqYaDiLGaYFJLwb2NHKuiXnrX9X7bdLoQH9cCw9XwUHN7VA=@vger.kernel.org, AJvYcCVFY6yksRvOybCGGwV3pw5PEDPuetFWyp/VP/rCogHfK8dz/gHxPjcLOctXbO4WJFh3BS0i3Y0djEMxrBqd@vger.kernel.org, AJvYcCVlvfUcKinrHMjkDqmN33qbS7Qqte5N8f6AMhFxZ/DPdA5jHXY7xKkK14h5c/H3rupkBXV8GreG13ADeA==@vger.kernel.org, AJvYcCXRX8d7/NDNsu0db/ZCdjzsQPwuQ2ShHrduZEJUGayJYsV9Zy2BK8qSmMDbmptcpr2JMF0lgOVn1sk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaYQ30/APYZCrnzEZr1ovj7JPla+cNCM+E8jP9qhPTtzmt+TnC
+	EeYHMc79QnI/TSNNCGeyy3VMRbFIkIVOCFXAV6uHSh8JQcZoC06j
+X-Google-Smtp-Source: AGHT+IFa/usD7ZeOcHhDzlKCYij3gJcMtoMlBhi8yutM+nCN14bgxOw7OaYkPYBKbl0kidfI8s9Rig==
+X-Received: by 2002:a05:600c:3c8c:b0:431:251a:9dc9 with SMTP id 5b1f17b1804b1-4319ad166femr143396085e9.25.1730312605816;
+        Wed, 30 Oct 2024 11:23:25 -0700 (PDT)
+Received: from localhost (host-82-56-18-47.retail.telecomitalia.it. [82.56.18.47])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431bd97d84bsm28748925e9.30.2024.10.30.11.23.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 11:23:25 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com> <20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com> <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from producer to fix race
+From: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Date: Wed, 30 Oct 2024 19:23:21 +0100
+Message-ID: <173031260171.39393.109639772708550094@njaxe.localdomain>
+User-Agent: alot/0.11
 
-On Wed, 30 Oct 2024 16:47:50 +0200
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
-
+Quoting Andy Shevchenko (2024-10-30 15:47:50)
 > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:
 > > Consumers need to call the producer's read_avail_release_resource()
 > > callback after reading producer's available info. To avoid a race
@@ -79,101 +93,90 @@ Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 > > iio_channel_read_avail() so that it copies the available info from the
 > > producer and immediately calls its release callback with info_exists
 > > locked.
-> > 
+> >=20
 > > Also, modify the users of iio_read_avail_channel_raw() and
 > > iio_read_avail_channel_attribute() to free the copied available buffers
 > > after calling these functions. To let users free the copied buffer with
 > > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
 > > consumer helper that is equivalent to iio_read_avail_channel_attribute()
-> > but stores the available values in the returned variable.  
-> 
+> > but stores the available values in the returned variable.
+>=20
 > ...
-> 
+>=20
 > > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
-> > +					    struct iio_chan_spec const *chan,
-> > +					    const int *vals, long mask)
+> > +                                         struct iio_chan_spec const *c=
+han,
+> > +                                         const int *vals, long mask)
 > > +{
-> > +	kfree(vals);
+> > +     kfree(vals);
 > > +}
 > > +
 > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
-> >  			      struct iio_chan_spec const *chan,
-> >  			      int val, int val2, long mask)
-> > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
-> >  static const struct iio_info dpot_dac_info = {
-> >  	.read_raw = dpot_dac_read_raw,
-> >  	.read_avail = dpot_dac_read_avail,
-> > +	.read_avail_release_resource = dpot_dac_read_avail_release_res,
-> >  	.write_raw = dpot_dac_write_raw,
-> >  };  
-> 
+> >                             struct iio_chan_spec const *chan,
+> >                             int val, int val2, long mask)
+> > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio=
+_dev,
+> >  static const struct iio_info dpot_dac_info =3D {
+> >       .read_raw =3D dpot_dac_read_raw,
+> >       .read_avail =3D dpot_dac_read_avail,
+> > +     .read_avail_release_resource =3D dpot_dac_read_avail_release_res,
+> >       .write_raw =3D dpot_dac_write_raw,
+> >  };
+>=20
 > I have a problem with this approach. The issue is that we allocate
 > memory in one place and must clear it in another. This is not well
-> designed thingy in my opinion.
-
-It is a tricky corner and we've not yet come up with a better
-solution :(  I think one of the earlier versions did just always copy
-and the reviews suggested that was painful given we are fixing a tiny
-percentage of devices.  Hence we ended up with what is effectively
-an optional copy if the provider knows the data is volatile.
-
-So there are two 'potential' copies here and we need to be careful
-to separate them for purposes of discussion.
-A) Copy in provider if it has volatile available data.  In that
-   case the copy is done in a call to it via read_avail, and release
-   via a call to read_avail_release_resource().  So to my mind locally
-   the same as any acquire / release pair.
-B) Copy in the core for the case where we need the lifetime to persist.
-   That is a effectively a kmemdup() call so we could call back to the
-   core to release it but it would just be a kfree() wrapper.
- 
-(A) Only occurs in a tiny subset of drivers, most use non volatile data
-    for read avail (constant, or constant after probe).
-(B) Only occurs for consumer drivers that directly use the avail data.
-    There are very few of those and no other sane way of solving this
-    because we can't hold a lock into the provider for an unknown
-    (long) time.
-
-
-> I was thinking a bit of the solution and
+> designed thingy in my opinion. I was thinking a bit of the solution and
 > at least these two comes to my mind:
-> 
+>=20
 > 1) having a special callback for .read_avail_with_copy (choose better
 > name) that will dump the data to the intermediate buffer and clean it
 > after all;
-
-So we have that allocate the data in the provider and hand it to the
-consumer which then frees it with kfree() in all cases?
-
-Note that's what we do for the inkern interfaces (the ones consumer
-drivers have to use), just in the core not the providers because that
-corner is hard to close any other way. In this rare case we end up
-potentially copying twice.
-
-For the special cases where the buffer isn't passed on beyond
-functions that are part of the IIO core, we avoid the need for that
-(potentially second, probably only) copy because we can always
-ensure the release call is made.  Note this is the common case
-by far. It's the pretty printing done by the core to present this
-data to sysfs etc, or to find out the max value for some consumer
-that doesn't need the whole set.
-
-> 
+>=20
 > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.
 
-The special handling that will need seems likely to be no more
-obvious than the handling we have here.  I'm not really
-sure how it would work.
+Could you elaborate more about these potential solutions? Maybe with some
+usage examples?
 
-> 
+If I get it correctly, in both cases you are suggesting to pass ownership
+of the vals buffer to the caller, iio_read_channel_info_avail() in this
+case, so that it would take care of freeing the buffer after calling
+iio_format_after_*(). We considered this approach during an initial
+discussion with Jonathan (see read_avail_ext() in [1]), where he suggested
+to let the driver keep the release control through a callback for two
+reasons:
+
+1) Apparently it's a bad pattern to pass the buffer ownership to the core,
+   maybe Jonathan can elaborate why? The risk I can think of is that the dr=
+iver
+   could still keep the buffer copy in its private data after giving it awa=
+y,
+   resulting in fact in a double ownership. However I think it would be cle=
+ar
+   enough in this case that the copy should be handled by the caller, or ma=
+ybe
+   not?
+
+2) Some driver might want to avoid allocating a new copy of a big table if
+   the race does not occur (e.g. with additional checks on buffer access
+   code) and thus wouldn't call a free() in the release callback.
+
+>=20
 > In any case it looks fragile and not scalable. I propose to drop this
 > and think again.
-> 
+
+I see your concerns, I am open to reconsider this in case we come up with
+better solution after addressing the points above.
+
 > Yes, yes, I'm fully aware about the problem you are trying to solve and
 > agree on the report, I think this solution is not good enough.
+>=20
+> --=20
+> With Best Regards,
+> Andy Shevchenko
+>=20
 
-I'll back this out of my tree for now so the discussion can carry on.
+[1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic23-huawei/
 
-Jonathan
-
+Best regards,
+Matteo Martelli
 
