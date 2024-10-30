@@ -1,222 +1,118 @@
-Return-Path: <linux-pm+bounces-16710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16711-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDEAC9B5E60
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 10:01:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B4039B5E76
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 10:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F14A91C20E47
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 09:01:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2ADD28448B
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 09:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EF71E22EE;
-	Wed, 30 Oct 2024 09:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957481E1C1C;
+	Wed, 30 Oct 2024 09:09:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b="SKvlRAGJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R9c+h65K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2112.outbound.protection.outlook.com [40.107.22.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A671E2017;
-	Wed, 30 Oct 2024 09:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730278894; cv=fail; b=rV1aWtHaA8NGwN5wgYhRUJnRhQ4Lv9QnRDEfKRaqhBss18R/7hguFLCc7bVL1HAS9NNWSiXzGyrAsm+mHe1p/N903+Ryuz/cryfS0zoFO9qowKgDboE6eKzOghiAot340P48lKKBnDu6OYl1qfGQp8LdCQfjEmjT2yJEtE9vu2M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730278894; c=relaxed/simple;
-	bh=ego2/HJ6V85B7/EUvXO7O+B2iRREuE6nMpZA/GJcWJ8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YKKIrfbs5ZwyRkh/1KfHRt3cddiLX+z68I+92Q6Oc4aISIi51Jtxukjzy0dd5c2EiVEQhuMDsGSZWXdCMXZuKxta+fyV31xQ0YSzW8BxEUK4ojfTi44/gr4l5I0LLtyLlq4DCgIRIhJZ+V3W+TTbf2oqkZTjIrjCrO6ycU7mqsk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de; spf=pass smtp.mailfrom=kontron.de; dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b=SKvlRAGJ; arc=fail smtp.client-ip=40.107.22.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kontron.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CJhpQE5ITtJm8EkQcAz6tPVvyg9HcPYafcvoNWVb6HoT+DSRdtTpLHZtcjlr+8wZsCZjjDN/F5OQ82vHvXX3ZaEzRGxK4aCMG8YNWuUdvnNNxLjZ1y9gmWo4Y+OOBuXyJvGsSuqUEHTHBHJnu2rMgK+6R87ZTnFkHpmFbdwdIKpQSm1SMoAXwPIvNum1Uc9ujysBoOXNrHztb9mTtxW5RerSLO/Pk07l+zeJwX3/iTvDxFy9qR7RMFALd2/5XHS6FsvEY7F67nPd89Cib7NNIhYphAaQH4QGyB8shCbBxZDmGPtEecz5CaXTLwdjFaUF9uln9vdxmwQnyf+W4TZTJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pwcCvq+S43YBIJqgdnluBIAC9E3eUJMtuYC0vOKJwbY=;
- b=jF9F8ly+i0pLNXYkjERM8aSkC1mTT1rP3GdGo5EAgxaz4j+yhAjwoiUMwfi66iuObf7qwAiPHMjh5Gx9xIKD0BZarNdpoxXgIkMUyOac/bHztDp5J4K54gKsKGHnRwkAOcO6eZY0yiKrH0Nc9skl0seoL0tMfFl6Ab5RUGeMgZol8hwBMzWGiTEkXDw+aNZgfGpCWbEg/fBvRyts3NGqAYDAImpzzXpgDmWszTzMHrsbscnRGdX/2AY58uYQ2bTRrEx74irxGi/sXID5KAITD8LsUL5KQXzttAiQx4EytcNkPvEg61cxcVNXpEigju8VUIFRRKm98/qsT/usCp2JSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pwcCvq+S43YBIJqgdnluBIAC9E3eUJMtuYC0vOKJwbY=;
- b=SKvlRAGJGZce/6qJgA1ygRCtZbrXMpgDGy9EXOj0Mk7pT6SpC52aLoRklSIr5ChTxuKF6N21Ofw4fud2tclZxFBjh2X+/dQFg/03PxAZZqwFAHMu9ntfQ/sVfCO0a0tS8ifVQR2KkDpfNXZTsP/msKQqJXuaEo0kaz75J61aXH8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by AS8PR10MB7475.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ae::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Wed, 30 Oct
- 2024 09:01:27 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b854:7611:1533:2a19]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b854:7611:1533:2a19%4]) with mapi id 15.20.8114.007; Wed, 30 Oct 2024
- 09:01:26 +0000
-Message-ID: <6d039ecf-0e48-415a-afd8-6bfce60081ae@kontron.de>
-Date: Wed, 30 Oct 2024 10:01:24 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: imx8mp: HDMI display blank/black problems
-To: mailinglist1@johanneskirchmair.de, aford173@gmail.com
-Cc: johannes.kirchmair@skidata.com, Laurent.pinchart@ideasonboard.com,
- airlied@gmail.com, alexander.stein@ew.tq-group.com, andrzej.hajda@intel.com,
- catalin.marinas@arm.com, conor+dt@kernel.org, daniel@ffwll.ch,
- devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
- festevam@gmail.com, jernej.skrabec@gmail.com, jonas@kwiboo.se,
- kernel@pengutronix.de, kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- l.stach@pengutronix.de, linux-arm-kernel@lists.infradead.org,
- linux-imx@nxp.com, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- maarten.lankhorst@linux.intel.com, marex@denx.de, mripard@kernel.org,
- neil.armstrong@linaro.org, p.zabel@pengutronix.de, rfoss@kernel.org,
- robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org,
- tzimmermann@suse.de, ulf.hansson@linaro.org, victor.liu@nxp.com,
- vkoul@kernel.org, will@kernel.org, Saravana Kannan <saravanak@google.com>
-References: <20240203165307.7806-1-aford173@gmail.com>
- <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
-Content-Language: en-US, de-DE
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0222.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:e4::8) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFD31E1A37
+	for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 09:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730279343; cv=none; b=WctdqF1I0Om1mcw7XPmBgurHxtCZV8tK2AwbvCKisqvoaxkos7yJ1pF6adBpqAYQt6xXNIzKP0pM202Zn/hLd8z573KEGyVVe4isylKeGA4gpFPFeQZ1LCb+/eYvXO0tucEPfyeBoG/OSAjKWLyIn6Qfxjn9QiMaIzx7wUMTxVM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730279343; c=relaxed/simple;
+	bh=d3Q+Yytwfe4ckVzNFhYv5nqhXE0KaEIAWOYK18fEHsg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tUgBVIqqWKxB02E8bj73qtT6R1Pflp+QODbUJMYhlShJDMjWnOpsA3Kv7mDkqa7xmaRFd/zo2HPtJPMIFUkuICMJ7HyioWPfKRaY0MC5KBS5d/oNSCEfxon66TK0ENuoD8fgYyDNE7xDlQgc10f7YYz78rjGO5zM2PGEehTgCjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R9c+h65K; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7ea6a4f287bso4185357a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 02:09:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730279341; x=1730884141; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/PW7dWJigQBbEpDGe2vAuK8PqZgGZIhZvDH6evlQM/o=;
+        b=R9c+h65KmyeLejilQiW4PYGRz7Vd6UcKvgbp1pSkAOHmTwQsm/bRkS3xFitiobMzPn
+         X8/bynSfOkTaxcIT0c/YxtG8QypqOmBnmji2ISg+cMN5ZQj199f8ZxZUpDFkCOg9C6sk
+         u8noe6ckfchWmCLXeytMxLC82M2Gbpoc8oQWRkmOyT1f5/ii3YoUGfwUiG/aJ1qIiu3A
+         ZrA8md00hy6KSaQSRyHe64MuFxNw0DofITlj0P1rt50y0lKH18h8oVbQQobg+Z8wYFwT
+         JiBa6FEgbUqQmjAhk+zWjpTICRHGQIzBokGWBrZVUBkj7+iWAZrDaq125In4etWI8OY9
+         89Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730279341; x=1730884141;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/PW7dWJigQBbEpDGe2vAuK8PqZgGZIhZvDH6evlQM/o=;
+        b=UTd8YWD4+3dlPRroJ5mxM7E55uB6HpgnZG4hH4XxEjrN4AcA1UHTF2jvYGCG0dWix6
+         LEQD+MXw/SHDvkw1N4NHjUNgugcLNdfcUvc6HqU7YkOSKUq+9LtnE0a72uVEDRgg3Uyr
+         v2Auk1pqyAcNvFenYQ00F6sBn6g1NoZ8kV1fvvHNC2V4WhV1PTTk7Rq9U9zE1+0KdNIA
+         9evLiKibAsG9ej2HZYB5XKhlWW7SyWcuUEkj5VjpJ7kaU4YGqf7FirFWT5yrnsPdBNDh
+         5tRTZAbCvNooATnXaznGyPUwqChBpYC6yT4RUHSfA+n8MtWLK1hQVUjEOoWju2sl+ib3
+         YjFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVvhtNn83jobhGbzV0jxRRHeul3QNBPDYQxIUMYn7Uncgs/SQA36EOB8Z+rhIda00kPutRejIvahw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxuv1OTOhm5Ies9mOeppBX9QoR1hkbemAzGSN162p6mk8Zwq1w2
+	9JloVPf+6B0MQM8yKa1Ig3ekncHCHoK7elbC+/7pg1YH9OpYH9YcbloHUsF/gQg=
+X-Google-Smtp-Source: AGHT+IE/UTz5fNaLTsQYnxAU24zjHRKEz6dWEitgwhKr6IH5FPDOdIQ5v2Yn/2Hrhm8Qg250XXdSJg==
+X-Received: by 2002:a05:6a21:4d8b:b0:1d9:1f2f:fbdb with SMTP id adf61e73a8af0-1d9a83ffa57mr20414711637.25.1730279340928;
+        Wed, 30 Oct 2024 02:09:00 -0700 (PDT)
+Received: from localhost ([122.172.85.97])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7205791e97bsm8755658b3a.34.2024.10.30.02.08.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 02:09:00 -0700 (PDT)
+Date: Wed, 30 Oct 2024 14:38:57 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: rafael@kernel.org, Pierre.Gondois@arm.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: CPPC: Fix possible null-ptr-deref for
+ cppc_get_cpu_cost()
+Message-ID: <20241030090857.xbnpfnpi4hp4emkk@vireshk-i7>
+References: <20241030082449.2629861-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|AS8PR10MB7475:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05d9c429-2e83-4871-7da8-08dcf8c16f9b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dVdVTDlhVXR4UnpNS3hYOXJDODJNUExsRnFqcXlOdk1VOERWRWNqaWQyVW1F?=
- =?utf-8?B?eCtjV2RHNm5UakdkSnRaUGJBcnlzVGdCTnlyb0RjTkp1SHRHQkIrMFNlL1lx?=
- =?utf-8?B?SzUxblQ1d0hHSXdYaHRwMkMwMUNXUkViV29mTFJQWlV3Zm02U0VQWTZDeUsv?=
- =?utf-8?B?Tm9BS2s0M2xXMUxaQWRtZXcwd3ZGOGVrQm1BTFdRbEhjQ1pEY3M5WTdyUWgx?=
- =?utf-8?B?ZVBjVG1xRXBkZjRGenVITlg0UllhV0o0TEFNcUowZDRSSmhmN2FIZVJtdW16?=
- =?utf-8?B?YzA1TUprVU8wL2tIRjZSMDlCYmhJZnc1MkdFOFR6QlQwWWxTWjVJQ1RlVWlW?=
- =?utf-8?B?UEZ3RE9UdmtLMXlOUU9vcVBKSjFvRU1jNVA1ZXJEcVJ2dzdHRW9MMGEvTUtP?=
- =?utf-8?B?dXc4ZXpXaUtQUmovckVhMjAwd0toR3FFUnFla3dpMFdCNzV6QnNMb3JTUVEx?=
- =?utf-8?B?aGlnWlYxdXdoV2ZHQ1Rka2M5NW5HYi8wSXM1ekg1a0Q0Ri9lNklnYXFmaTFN?=
- =?utf-8?B?RlQyV3l5RVNyOWw1VHhUWUFKRGRnOXIzd0R5SURhY2lMTFB5OHo4RFMzYXZS?=
- =?utf-8?B?MFBiRU1SSU1WZU5xSFRsa3dTcGJCRGNzRG12OTI0MUJzRkdZMmNuTlZtekli?=
- =?utf-8?B?UUR1SnF3YTJLeG5TN3YwNFlid0tBdHpncXNtZWc2aWlmK3hrZ2I4SnBHV1oz?=
- =?utf-8?B?aDlmZ1hGUytqdi80LzdqeTFqUDJNVy81QUM0cGQzMnlsdllpRHAvYmFFVzVy?=
- =?utf-8?B?Mnp0L2ZBWmFjSDB0Q1hpVEdobHY2TmVpcDN6cERIblJCK0tLU1NlbDdadlB5?=
- =?utf-8?B?V2FhZ3JzTlZEQzlhMDY3SXFnYzFrQ2U5dG5FcmlOMDVEZWtBblVUZXR5Rkhn?=
- =?utf-8?B?dUJHNFVvQUs4Y2NEcWNBVFZicVVmaXI3djZRUU8vSlRTSFU3enJDRTI5VXJ3?=
- =?utf-8?B?Umc4S3BpVE9PcW9vQ0hkMEVEV2o1MllYZHkrR2FWM0d4L2NtL0xzKzdjM05o?=
- =?utf-8?B?UG1xcCtnemtBRW84K0xza0ZZQ3lKM0RZRDU2MHZtZVk1UkdoSW1OT1Z1SFQ1?=
- =?utf-8?B?VG04RW5DeVRFbTd2WktjV3ZtcmJFTEM1Y0MwNzRmVDRTNzZ0L2ZjSnQxT0VB?=
- =?utf-8?B?b1pRMEpCUjB4WlpKTCtDeEZTWW9NbHdQTUh1M2NjdkZoRytCMEFjSjR4TGps?=
- =?utf-8?B?QmVPOHdkc3AxLzNYOEl0djZWeVhNM1JqMDBOUUxHS29lWUdBczQ3ZlRTbTFX?=
- =?utf-8?B?SkphV1h0VU5LQklLTFAvWjQxaGx3MlA4ckw2OHRzOFdmWmdWaEM0ek5wMlBE?=
- =?utf-8?B?TmxHM3ZZWUtTOVMveCtCZEZnWmdDSzU2MGlKZVZhaWs5TG03cHFHczdLakUv?=
- =?utf-8?B?NkNLYWhYU1puaTJIQ25QcTMwLzVhWEJNZXR5aEZtVXZWR3VxVk8zNHgyOWJB?=
- =?utf-8?B?VkJ2MWFubVU4RFVUeXZaejNvdEJkTmZyVDRLdGp4ZEpqNGdQNkRWaWl0d0Zn?=
- =?utf-8?B?WStjcDV4V2RlRG5LN0lhZFJGUFA5bjZBYXUvU3dBN213WU05R1dQUnByMS8r?=
- =?utf-8?B?ellCRUJoZ1M5RHNsL1R3RGZVakxuaVJ6T29vbklrYXF0bUVBbnVldVArMk8x?=
- =?utf-8?B?U3grQm1PTGIzZVhpaGpINVl4dlVHaGVzNE4vUE1peUlpUUZUTW8xZDN4RDFR?=
- =?utf-8?Q?zzbVtcfuuATlsohRxhck?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?KzFZRDYxYmpNdm95bmJtZHFkNmR2Q216c01wem41bDA3OTVBWHBUQ2FaTXMy?=
- =?utf-8?B?VDlRMEdJTHZHYnh1ZWFYV0M2dU93Y2cycmVGQzd3VnJIQndpZWhmcXZuU0hR?=
- =?utf-8?B?Nmt0QmdPVXdjWjY0aUMvcEcvYU5PaGR2dCtCUWd6eDg3UlYwYXlzZ3h5VkFl?=
- =?utf-8?B?cWg4eGY5ODJPRDRqdHpqKzBJbUQrVzdONmtYY3MzZ1p4UXFMZFFRaHkwY2kz?=
- =?utf-8?B?RjlGc0dsZTlHdFBmMjNuYVpyRkh0dVBxR3BNb3Zha25yR215dUN1cDkzYUtn?=
- =?utf-8?B?bC96MDVHZnBrbktRbWY1WXFMK1VITmFRS3J4Q2xSSi93WFpGeVZTenVSQ1Vt?=
- =?utf-8?B?emJoQWZ0cERpdXhPaU5WQzVRNHJuNkVnR3VwaVViOU13WC82ODJMaHc4bkZS?=
- =?utf-8?B?clBHWmlpNy91bElKNkxzeTNibEpqMkJNWndQU0NhelRmdmVJQzkrcUFqdFdW?=
- =?utf-8?B?OEp3dTVodHVLR3FaYzV2bFIyRktjRmE0clhQclV6NlpjYytyMFNYNi8wRDYr?=
- =?utf-8?B?VUV2bmYyODVUWW5oeHVmUWNpWUppc3hESStoUG85NmhKYUw5ME9Iei9CSUR4?=
- =?utf-8?B?RXdHZjlPdHBiaTFJOGp0eUJoN2wwTU14bTBTOWYxYm84UXlrYmxBakRJR3Zz?=
- =?utf-8?B?OVJ5d3FxRlZrTmUzWEJUeXlQRHh4ZTM1bCtsa2V4ZnloR0l6MEdwL1pWTnYz?=
- =?utf-8?B?UWNIeXArdXdQelBuSEM5NmFoaW10bVExWWpoZ2QzSmtCTU50THhPaGx4b1Az?=
- =?utf-8?B?KzB3MGlEK2lIaEFTS1ovTjhCNU5XWDRtNUdXNC92d3ZmYlNITVNWMmVBNmRi?=
- =?utf-8?B?eEJiWkFRUHA2Vml3bWE1VkNGUFpOZlpRa0hlNW5MSEVNclo1b2hTNGorUGIw?=
- =?utf-8?B?L0Ivbm9oYUNYNUFqMVJSZVhzVS90RThYd2s0elRVcWhGRk82OGU3QUdZQVAv?=
- =?utf-8?B?KzFoTzlFa05aVkpiUG40Nm8xTERWelR2MzMrN25BcGY2N1NQLzJ1ZmI2VUYw?=
- =?utf-8?B?ZXNiUEIxbWoweUp2V1MybFIxSHYrSHdDaFVaYlBDUjNvQmptMXRIVkdzRmV3?=
- =?utf-8?B?V3NnQmVwR0VCMUVmOEpXSk0wb1pNSHRQbkN2K05iMmtqZ0R3MG1mbGZFbXBk?=
- =?utf-8?B?QnZtRW90WThCZ2NqMmE2MTMvLzVPZUZCb1pSSkxYbHJvQjBoVmZ2dUwrUndL?=
- =?utf-8?B?d2FJRUtLWDBtREVDK05Bdzh5SUUzdnV5L21JRWxvSGJlR3Rud2htdmVKOWhT?=
- =?utf-8?B?TTNZOWFCdURJOE9Fa3ZacVYvYWQvVFlMb0JVMlJHb3NTTG92bVhGN3JNcHVC?=
- =?utf-8?B?a2wxUDF1Q1czQW52SGlaZkJJMjhwRSt1UEFWTHpIUVlVb3lhbmZNWDFFUHpP?=
- =?utf-8?B?WFJUODZyTkpKbmxKakZrYXhuYUU4U3dFL0JtOFhNWWtJREw5R2FJNkg0LzF4?=
- =?utf-8?B?YXg0N1N4MTRLZmc2dFY2U2RXdmV2UjlJWlVZY29IeVp5RFNVWjNrQVQvWnNP?=
- =?utf-8?B?RjVid2pMNHpkYzFDSUw5OTJwcG9Eb3p0Yi9nbTU3WURSdFZWbzR4WjVmbW1u?=
- =?utf-8?B?T2N6UTFURXI2cEM2SHZjMzJ4dklFNXBKTHkvbGkvYmNMdWxrb2puYkEzemNR?=
- =?utf-8?B?M2k5SFp2MlQvblVYNXdFTEFEalA4eGtSK2ViUDZQNHJCQi9uWDRuUVJhT2s3?=
- =?utf-8?B?bkxuS1U1ZFJMSmI0S0VmN09yN2pSUmU3d2FrRkNGcUZFTzJtOWhlYTg3NlRD?=
- =?utf-8?B?TFlVSXBoU1Z0bUgvam4wcTdHS3dUMTB4OVJsWWhjeVROZTR4L211Tmp3T3hT?=
- =?utf-8?B?bXdZR0JPT25rS2hLTlRwV2I3LzIxY0JobHBwcVVHOFNlVGREdGMyTFV4M0dT?=
- =?utf-8?B?VGhmRGZXRzZ5MVIxUEp6eUtreGNvWElqbnQxUlQzRWsvaWozWnZTSzZCbWNL?=
- =?utf-8?B?Mzl3RTA0UlNXWVNqamk5R1dPNDFCU2szRzBwNnpKMlk5aElXeEFBTEtjeHZu?=
- =?utf-8?B?U1FoNmVpRW9PWVppSkFMendFaVJxaEt5Ri9UVVdORUZIVUNKK2JScGs3WWdh?=
- =?utf-8?B?U1c3bGd5TkdDTkxiQytPZWZyTTM2N2pBMGVreDlJejJzemdvZlJmOGM3a2dV?=
- =?utf-8?B?TUdQdTlWNm9mTWpHbnJ6MDN1ZGxYUWxhNkNhWHZsN00yZ3g4MS9ZSzN0c0gr?=
- =?utf-8?B?amc9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05d9c429-2e83-4871-7da8-08dcf8c16f9b
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 09:01:26.6521
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GpvenMy/dLQOI8ijDo59915Y5BcScOKFvb9t+DXsBqaC9PHqg7uFL6acbTzuU4ziSOpXc5HOe8w9Qv6cEcAynOQq8Nzymi8SvF3IJyL0MWE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7475
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241030082449.2629861-1-ruanjinjie@huawei.com>
 
-Hi Johannes,
-
-On 25.10.24 10:05 AM, mailinglist1@johanneskirchmair.de wrote:
-> [Sie erhalten nicht häufig E-Mails von mailinglist1@johanneskirchmair.de. Weitere Informationen, warum dies wichtig ist, finden Sie unter https://aka.ms/LearnAboutSenderIdentification ]
+On 30-10-24, 16:24, Jinjie Ruan wrote:
+> cpufreq_cpu_get_raw() may return NULL if the cpu is not in
+> policy->cpus cpu mask and it will cause null pointer dereference,
+> so check NULL for cppc_get_cpu_cost().
 > 
-> Hey,
-> We had some problems with the hdmi on the imx8mp and wanted to leave, what we found out about it, somewhere for others to find it.
+> Fixes: 740fcdc2c20e ("cpufreq: CPPC: Register EM based on efficiency class information")
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> The problem was that our hdmi display sometimes stayed blank after hot plugging and sometimes at startup. On older kernel versions 6.6 we did not have the problem with the not mainlined hdmi patches.
-> We tracked the commit down that introduced the problem for us. It was the following “driver core: Enable fw_devlink=rpm by default”  https://lore.kernel.org/lkml/20231113220948.80089-1-saravanak@google.com/
-> So we switched back to FW_DEVLINK_FLAGS_ON via kernel parameter. Don’t really understand what the problem with RPM is.
-> 
-> So, this information is just for reference. Maybe someone has an idea what is going on here. And how to fix the problem in a more proper way.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 2b8708475ac7..67fa97bbeae7 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -487,6 +487,9 @@ static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
+>  	int step;
+>  
+>  	policy = cpufreq_cpu_get_raw(cpu_dev->id);
+> +	if (!policy)
+> +		return 0;
+> +
+>  	cpu_data = policy->driver_data;
+>  	perf_caps = &cpu_data->perf_caps;
+>  	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
 
-Thanks for investigating and sharing your results!
+Applied. Thanks.
 
-I'm seeing the same symptoms and previously found out that this is
-related to LCDIF underrun errors. See [1] for more information.
-
-Adam has also started this thread: [2].
-
-Anyway, knowing that this is related to fw_devlink=rpm is really
-helpful. I just tried with fw_devlink=on and wasn't able to see any
-issues anymore. So this confirms your findings.
-
-I hope that some of the driver framework and runtime PM experts can help
-to find out what is actually wrong and how the correct fix might look like.
-
-I'm also CC-ing Saravana who authored the change from fw_devlink=on to
-fw_devlink=rpm to see if they have anything to add.
-
-Thanks
-Frieder
-
-[1]
-https://patchwork.kernel.org/project/linux-phy/cover/20240904233100.114611-1-aford173@gmail.com/#26014057
-[2]
-https://lore.kernel.org/imx/8cfd3052-c85a-4235-b9b8-6d2929e9e455@kontron.de/T/
+-- 
+viresh
 
