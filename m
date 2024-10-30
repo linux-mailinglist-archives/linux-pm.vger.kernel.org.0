@@ -1,275 +1,222 @@
-Return-Path: <linux-pm+bounces-16709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FE779B5E2F
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 09:47:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDEAC9B5E60
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 10:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C133FB21551
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 08:47:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F14A91C20E47
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 09:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB331E201F;
-	Wed, 30 Oct 2024 08:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EF71E22EE;
+	Wed, 30 Oct 2024 09:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b="SKvlRAGJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D021E1C2F;
-	Wed, 30 Oct 2024 08:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730278036; cv=none; b=qrrITHrNvWV1pPLrFZ7iXLFQNuahhuzhZbuI6clcujhsMlTDVxfhNDfHh/0Jf/VosyWk8pMhgjGkhrLhwd5zdymK7fjplfk0bMo0cdEwm4TFQcvk6dEG35TRDA474sSdrIidanwP+BUge5tlC75FX72o1ib38q7TdvYMRFWDafM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730278036; c=relaxed/simple;
-	bh=gVwbPlbjyyBA2CmeQ+z1taKLf91Lfta1ZkwNhDZ47jw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=riMkzHn33OFdfCt/NYKrdG9BI5YN4wOq7YmVvpCpjR+HGOEHAc7zmQ62wlHB0WfnIhzmSnOEg/FdBjBcaFMDo72tMxSjhiWzvWtI4k90X74ELKur/oS04YlON0aD3z5oJUnz3e3dZcUU6Rvv14oRDpXWcOOJar4wOF/mjgNG0VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACDAB169E;
-	Wed, 30 Oct 2024 01:47:42 -0700 (PDT)
-Received: from [10.57.58.72] (unknown [10.57.58.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 184483F73B;
-	Wed, 30 Oct 2024 01:47:11 -0700 (PDT)
-Message-ID: <6cdb2f8b-62e0-455c-a3a5-ed5359a2e941@arm.com>
-Date: Wed, 30 Oct 2024 08:48:25 +0000
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2112.outbound.protection.outlook.com [40.107.22.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A671E2017;
+	Wed, 30 Oct 2024 09:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730278894; cv=fail; b=rV1aWtHaA8NGwN5wgYhRUJnRhQ4Lv9QnRDEfKRaqhBss18R/7hguFLCc7bVL1HAS9NNWSiXzGyrAsm+mHe1p/N903+Ryuz/cryfS0zoFO9qowKgDboE6eKzOghiAot340P48lKKBnDu6OYl1qfGQp8LdCQfjEmjT2yJEtE9vu2M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730278894; c=relaxed/simple;
+	bh=ego2/HJ6V85B7/EUvXO7O+B2iRREuE6nMpZA/GJcWJ8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=YKKIrfbs5ZwyRkh/1KfHRt3cddiLX+z68I+92Q6Oc4aISIi51Jtxukjzy0dd5c2EiVEQhuMDsGSZWXdCMXZuKxta+fyV31xQ0YSzW8BxEUK4ojfTi44/gr4l5I0LLtyLlq4DCgIRIhJZ+V3W+TTbf2oqkZTjIrjCrO6ycU7mqsk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de; spf=pass smtp.mailfrom=kontron.de; dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b=SKvlRAGJ; arc=fail smtp.client-ip=40.107.22.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kontron.de
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CJhpQE5ITtJm8EkQcAz6tPVvyg9HcPYafcvoNWVb6HoT+DSRdtTpLHZtcjlr+8wZsCZjjDN/F5OQ82vHvXX3ZaEzRGxK4aCMG8YNWuUdvnNNxLjZ1y9gmWo4Y+OOBuXyJvGsSuqUEHTHBHJnu2rMgK+6R87ZTnFkHpmFbdwdIKpQSm1SMoAXwPIvNum1Uc9ujysBoOXNrHztb9mTtxW5RerSLO/Pk07l+zeJwX3/iTvDxFy9qR7RMFALd2/5XHS6FsvEY7F67nPd89Cib7NNIhYphAaQH4QGyB8shCbBxZDmGPtEecz5CaXTLwdjFaUF9uln9vdxmwQnyf+W4TZTJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pwcCvq+S43YBIJqgdnluBIAC9E3eUJMtuYC0vOKJwbY=;
+ b=jF9F8ly+i0pLNXYkjERM8aSkC1mTT1rP3GdGo5EAgxaz4j+yhAjwoiUMwfi66iuObf7qwAiPHMjh5Gx9xIKD0BZarNdpoxXgIkMUyOac/bHztDp5J4K54gKsKGHnRwkAOcO6eZY0yiKrH0Nc9skl0seoL0tMfFl6Ab5RUGeMgZol8hwBMzWGiTEkXDw+aNZgfGpCWbEg/fBvRyts3NGqAYDAImpzzXpgDmWszTzMHrsbscnRGdX/2AY58uYQ2bTRrEx74irxGi/sXID5KAITD8LsUL5KQXzttAiQx4EytcNkPvEg61cxcVNXpEigju8VUIFRRKm98/qsT/usCp2JSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pwcCvq+S43YBIJqgdnluBIAC9E3eUJMtuYC0vOKJwbY=;
+ b=SKvlRAGJGZce/6qJgA1ygRCtZbrXMpgDGy9EXOj0Mk7pT6SpC52aLoRklSIr5ChTxuKF6N21Ofw4fud2tclZxFBjh2X+/dQFg/03PxAZZqwFAHMu9ntfQ/sVfCO0a0tS8ifVQR2KkDpfNXZTsP/msKQqJXuaEo0kaz75J61aXH8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by AS8PR10MB7475.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ae::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Wed, 30 Oct
+ 2024 09:01:27 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b854:7611:1533:2a19]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b854:7611:1533:2a19%4]) with mapi id 15.20.8114.007; Wed, 30 Oct 2024
+ 09:01:26 +0000
+Message-ID: <6d039ecf-0e48-415a-afd8-6bfce60081ae@kontron.de>
+Date: Wed, 30 Oct 2024 10:01:24 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: imx8mp: HDMI display blank/black problems
+To: mailinglist1@johanneskirchmair.de, aford173@gmail.com
+Cc: johannes.kirchmair@skidata.com, Laurent.pinchart@ideasonboard.com,
+ airlied@gmail.com, alexander.stein@ew.tq-group.com, andrzej.hajda@intel.com,
+ catalin.marinas@arm.com, conor+dt@kernel.org, daniel@ffwll.ch,
+ devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ festevam@gmail.com, jernej.skrabec@gmail.com, jonas@kwiboo.se,
+ kernel@pengutronix.de, kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ l.stach@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+ linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ maarten.lankhorst@linux.intel.com, marex@denx.de, mripard@kernel.org,
+ neil.armstrong@linaro.org, p.zabel@pengutronix.de, rfoss@kernel.org,
+ robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org,
+ tzimmermann@suse.de, ulf.hansson@linaro.org, victor.liu@nxp.com,
+ vkoul@kernel.org, will@kernel.org, Saravana Kannan <saravanak@google.com>
+References: <20240203165307.7806-1-aford173@gmail.com>
+ <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
+Content-Language: en-US, de-DE
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0222.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e4::8) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] PM: EM: Add min/max available performance state
- limits
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- dietmar.eggemann@arm.com
-References: <20241029094452.495439-1-lukasz.luba@arm.com>
- <20241029094452.495439-2-lukasz.luba@arm.com>
- <CAJZ5v0gzQhw3wkRVFTEx-y4pawknJqC2JPrN6_dqd77vTVuSOw@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0gzQhw3wkRVFTEx-y4pawknJqC2JPrN6_dqd77vTVuSOw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|AS8PR10MB7475:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05d9c429-2e83-4871-7da8-08dcf8c16f9b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dVdVTDlhVXR4UnpNS3hYOXJDODJNUExsRnFqcXlOdk1VOERWRWNqaWQyVW1F?=
+ =?utf-8?B?eCtjV2RHNm5UakdkSnRaUGJBcnlzVGdCTnlyb0RjTkp1SHRHQkIrMFNlL1lx?=
+ =?utf-8?B?SzUxblQ1d0hHSXdYaHRwMkMwMUNXUkViV29mTFJQWlV3Zm02U0VQWTZDeUsv?=
+ =?utf-8?B?Tm9BS2s0M2xXMUxaQWRtZXcwd3ZGOGVrQm1BTFdRbEhjQ1pEY3M5WTdyUWgx?=
+ =?utf-8?B?ZVBjVG1xRXBkZjRGenVITlg0UllhV0o0TEFNcUowZDRSSmhmN2FIZVJtdW16?=
+ =?utf-8?B?YzA1TUprVU8wL2tIRjZSMDlCYmhJZnc1MkdFOFR6QlQwWWxTWjVJQ1RlVWlW?=
+ =?utf-8?B?UEZ3RE9UdmtLMXlOUU9vcVBKSjFvRU1jNVA1ZXJEcVJ2dzdHRW9MMGEvTUtP?=
+ =?utf-8?B?dXc4ZXpXaUtQUmovckVhMjAwd0toR3FFUnFla3dpMFdCNzV6QnNMb3JTUVEx?=
+ =?utf-8?B?aGlnWlYxdXdoV2ZHQ1Rka2M5NW5HYi8wSXM1ekg1a0Q0Ri9lNklnYXFmaTFN?=
+ =?utf-8?B?RlQyV3l5RVNyOWw1VHhUWUFKRGRnOXIzd0R5SURhY2lMTFB5OHo4RFMzYXZS?=
+ =?utf-8?B?MFBiRU1SSU1WZU5xSFRsa3dTcGJCRGNzRG12OTI0MUJzRkdZMmNuTlZtekli?=
+ =?utf-8?B?UUR1SnF3YTJLeG5TN3YwNFlid0tBdHpncXNtZWc2aWlmK3hrZ2I4SnBHV1oz?=
+ =?utf-8?B?aDlmZ1hGUytqdi80LzdqeTFqUDJNVy81QUM0cGQzMnlsdllpRHAvYmFFVzVy?=
+ =?utf-8?B?Mnp0L2ZBWmFjSDB0Q1hpVEdobHY2TmVpcDN6cERIblJCK0tLU1NlbDdadlB5?=
+ =?utf-8?B?V2FhZ3JzTlZEQzlhMDY3SXFnYzFrQ2U5dG5FcmlOMDVEZWtBblVUZXR5Rkhn?=
+ =?utf-8?B?dUJHNFVvQUs4Y2NEcWNBVFZicVVmaXI3djZRUU8vSlRTSFU3enJDRTI5VXJ3?=
+ =?utf-8?B?Umc4S3BpVE9PcW9vQ0hkMEVEV2o1MllYZHkrR2FWM0d4L2NtL0xzKzdjM05o?=
+ =?utf-8?B?UG1xcCtnemtBRW84K0xza0ZZQ3lKM0RZRDU2MHZtZVk1UkdoSW1OT1Z1SFQ1?=
+ =?utf-8?B?VG04RW5DeVRFbTd2WktjV3ZtcmJFTEM1Y0MwNzRmVDRTNzZ0L2ZjSnQxT0VB?=
+ =?utf-8?B?b1pRMEpCUjB4WlpKTCtDeEZTWW9NbHdQTUh1M2NjdkZoRytCMEFjSjR4TGps?=
+ =?utf-8?B?QmVPOHdkc3AxLzNYOEl0djZWeVhNM1JqMDBOUUxHS29lWUdBczQ3ZlRTbTFX?=
+ =?utf-8?B?SkphV1h0VU5LQklLTFAvWjQxaGx3MlA4ckw2OHRzOFdmWmdWaEM0ek5wMlBE?=
+ =?utf-8?B?TmxHM3ZZWUtTOVMveCtCZEZnWmdDSzU2MGlKZVZhaWs5TG03cHFHczdLakUv?=
+ =?utf-8?B?NkNLYWhYU1puaTJIQ25QcTMwLzVhWEJNZXR5aEZtVXZWR3VxVk8zNHgyOWJB?=
+ =?utf-8?B?VkJ2MWFubVU4RFVUeXZaejNvdEJkTmZyVDRLdGp4ZEpqNGdQNkRWaWl0d0Zn?=
+ =?utf-8?B?WStjcDV4V2RlRG5LN0lhZFJGUFA5bjZBYXUvU3dBN213WU05R1dQUnByMS8r?=
+ =?utf-8?B?ellCRUJoZ1M5RHNsL1R3RGZVakxuaVJ6T29vbklrYXF0bUVBbnVldVArMk8x?=
+ =?utf-8?B?U3grQm1PTGIzZVhpaGpINVl4dlVHaGVzNE4vUE1peUlpUUZUTW8xZDN4RDFR?=
+ =?utf-8?Q?zzbVtcfuuATlsohRxhck?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?KzFZRDYxYmpNdm95bmJtZHFkNmR2Q216c01wem41bDA3OTVBWHBUQ2FaTXMy?=
+ =?utf-8?B?VDlRMEdJTHZHYnh1ZWFYV0M2dU93Y2cycmVGQzd3VnJIQndpZWhmcXZuU0hR?=
+ =?utf-8?B?Nmt0QmdPVXdjWjY0aUMvcEcvYU5PaGR2dCtCUWd6eDg3UlYwYXlzZ3h5VkFl?=
+ =?utf-8?B?cWg4eGY5ODJPRDRqdHpqKzBJbUQrVzdONmtYY3MzZ1p4UXFMZFFRaHkwY2kz?=
+ =?utf-8?B?RjlGc0dsZTlHdFBmMjNuYVpyRkh0dVBxR3BNb3Zha25yR215dUN1cDkzYUtn?=
+ =?utf-8?B?bC96MDVHZnBrbktRbWY1WXFMK1VITmFRS3J4Q2xSSi93WFpGeVZTenVSQ1Vt?=
+ =?utf-8?B?emJoQWZ0cERpdXhPaU5WQzVRNHJuNkVnR3VwaVViOU13WC82ODJMaHc4bkZS?=
+ =?utf-8?B?clBHWmlpNy91bElKNkxzeTNibEpqMkJNWndQU0NhelRmdmVJQzkrcUFqdFdW?=
+ =?utf-8?B?OEp3dTVodHVLR3FaYzV2bFIyRktjRmE0clhQclV6NlpjYytyMFNYNi8wRDYr?=
+ =?utf-8?B?VUV2bmYyODVUWW5oeHVmUWNpWUppc3hESStoUG85NmhKYUw5ME9Iei9CSUR4?=
+ =?utf-8?B?RXdHZjlPdHBiaTFJOGp0eUJoN2wwTU14bTBTOWYxYm84UXlrYmxBakRJR3Zz?=
+ =?utf-8?B?OVJ5d3FxRlZrTmUzWEJUeXlQRHh4ZTM1bCtsa2V4ZnloR0l6MEdwL1pWTnYz?=
+ =?utf-8?B?UWNIeXArdXdQelBuSEM5NmFoaW10bVExWWpoZ2QzSmtCTU50THhPaGx4b1Az?=
+ =?utf-8?B?KzB3MGlEK2lIaEFTS1ovTjhCNU5XWDRtNUdXNC92d3ZmYlNITVNWMmVBNmRi?=
+ =?utf-8?B?eEJiWkFRUHA2Vml3bWE1VkNGUFpOZlpRa0hlNW5MSEVNclo1b2hTNGorUGIw?=
+ =?utf-8?B?L0Ivbm9oYUNYNUFqMVJSZVhzVS90RThYd2s0elRVcWhGRk82OGU3QUdZQVAv?=
+ =?utf-8?B?KzFoTzlFa05aVkpiUG40Nm8xTERWelR2MzMrN25BcGY2N1NQLzJ1ZmI2VUYw?=
+ =?utf-8?B?ZXNiUEIxbWoweUp2V1MybFIxSHYrSHdDaFVaYlBDUjNvQmptMXRIVkdzRmV3?=
+ =?utf-8?B?V3NnQmVwR0VCMUVmOEpXSk0wb1pNSHRQbkN2K05iMmtqZ0R3MG1mbGZFbXBk?=
+ =?utf-8?B?QnZtRW90WThCZ2NqMmE2MTMvLzVPZUZCb1pSSkxYbHJvQjBoVmZ2dUwrUndL?=
+ =?utf-8?B?d2FJRUtLWDBtREVDK05Bdzh5SUUzdnV5L21JRWxvSGJlR3Rud2htdmVKOWhT?=
+ =?utf-8?B?TTNZOWFCdURJOE9Fa3ZacVYvYWQvVFlMb0JVMlJHb3NTTG92bVhGN3JNcHVC?=
+ =?utf-8?B?a2wxUDF1Q1czQW52SGlaZkJJMjhwRSt1UEFWTHpIUVlVb3lhbmZNWDFFUHpP?=
+ =?utf-8?B?WFJUODZyTkpKbmxKakZrYXhuYUU4U3dFL0JtOFhNWWtJREw5R2FJNkg0LzF4?=
+ =?utf-8?B?YXg0N1N4MTRLZmc2dFY2U2RXdmV2UjlJWlVZY29IeVp5RFNVWjNrQVQvWnNP?=
+ =?utf-8?B?RjVid2pMNHpkYzFDSUw5OTJwcG9Eb3p0Yi9nbTU3WURSdFZWbzR4WjVmbW1u?=
+ =?utf-8?B?T2N6UTFURXI2cEM2SHZjMzJ4dklFNXBKTHkvbGkvYmNMdWxrb2puYkEzemNR?=
+ =?utf-8?B?M2k5SFp2MlQvblVYNXdFTEFEalA4eGtSK2ViUDZQNHJCQi9uWDRuUVJhT2s3?=
+ =?utf-8?B?bkxuS1U1ZFJMSmI0S0VmN09yN2pSUmU3d2FrRkNGcUZFTzJtOWhlYTg3NlRD?=
+ =?utf-8?B?TFlVSXBoU1Z0bUgvam4wcTdHS3dUMTB4OVJsWWhjeVROZTR4L211Tmp3T3hT?=
+ =?utf-8?B?bXdZR0JPT25rS2hLTlRwV2I3LzIxY0JobHBwcVVHOFNlVGREdGMyTFV4M0dT?=
+ =?utf-8?B?VGhmRGZXRzZ5MVIxUEp6eUtreGNvWElqbnQxUlQzRWsvaWozWnZTSzZCbWNL?=
+ =?utf-8?B?Mzl3RTA0UlNXWVNqamk5R1dPNDFCU2szRzBwNnpKMlk5aElXeEFBTEtjeHZu?=
+ =?utf-8?B?U1FoNmVpRW9PWVppSkFMendFaVJxaEt5Ri9UVVdORUZIVUNKK2JScGs3WWdh?=
+ =?utf-8?B?U1c3bGd5TkdDTkxiQytPZWZyTTM2N2pBMGVreDlJejJzemdvZlJmOGM3a2dV?=
+ =?utf-8?B?TUdQdTlWNm9mTWpHbnJ6MDN1ZGxYUWxhNkNhWHZsN00yZ3g4MS9ZSzN0c0gr?=
+ =?utf-8?B?amc9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05d9c429-2e83-4871-7da8-08dcf8c16f9b
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 09:01:26.6521
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GpvenMy/dLQOI8ijDo59915Y5BcScOKFvb9t+DXsBqaC9PHqg7uFL6acbTzuU4ziSOpXc5HOe8w9Qv6cEcAynOQq8Nzymi8SvF3IJyL0MWE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7475
 
-Hi Rafael,
+Hi Johannes,
 
-On 10/29/24 18:29, Rafael J. Wysocki wrote:
-> On Tue, Oct 29, 2024 at 10:43 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> On some devices there are HW dependencies for shared frequency and voltage
->> between devices. It will impact Energy Aware Scheduler (EAS) decision,
->> where CPUs share the voltage & frequency domain with other CPUs or devices
->> e.g.
->> - Mid CPUs + Big CPU
->> - Little CPU + L3 cache in DSU
->> - some other device + Little CPUs
->>
->> Detailed explanation of one example:
->> When the L3 cache frequency is increased, the affected Little CPUs might
->> run at higher voltage and frequency. That higher voltage causes higher CPU
->> power and thus more energy is used for running the tasks. This is
->> important for background running tasks, which try to run on energy
->> efficient CPUs.
->>
->> Therefore, add performance state limits which are applied for the device
->> (in this case CPU). This is important on SoCs with HW dependencies
->> mentioned above so that the Energy Aware Scheduler (EAS) does not use
->> performance states outside the valid min-max range for energy calculation.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   include/linux/energy_model.h | 24 ++++++++++++++---
->>   kernel/power/energy_model.c  | 52 ++++++++++++++++++++++++++++++++++++
->>   2 files changed, 72 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->> index 1ff52020cf757..e83bf230e18d1 100644
->> --- a/include/linux/energy_model.h
->> +++ b/include/linux/energy_model.h
->> @@ -55,6 +55,8 @@ struct em_perf_table {
->>    * struct em_perf_domain - Performance domain
->>    * @em_table:          Pointer to the runtime modifiable em_perf_table
->>    * @nr_perf_states:    Number of performance states
->> + * @min_ps:            Minimum allowed Performance State index
->> + * @max_ps:            Maximum allowed Performance State index
->>    * @flags:             See "em_perf_domain flags"
->>    * @cpus:              Cpumask covering the CPUs of the domain. It's here
->>    *                     for performance reasons to avoid potential cache
->> @@ -70,6 +72,8 @@ struct em_perf_table {
->>   struct em_perf_domain {
->>          struct em_perf_table __rcu *em_table;
->>          int nr_perf_states;
->> +       int min_ps;
->> +       int max_ps;
->>          unsigned long flags;
->>          unsigned long cpus[];
->>   };
->> @@ -173,6 +177,8 @@ void em_table_free(struct em_perf_table __rcu *table);
->>   int em_dev_compute_costs(struct device *dev, struct em_perf_state *table,
->>                           int nr_states);
->>   int em_dev_update_chip_binning(struct device *dev);
->> +int em_update_performance_limits(struct em_perf_domain *pd,
->> +               unsigned long freq_min_khz, unsigned long freq_max_khz);
->>
->>   /**
->>    * em_pd_get_efficient_state() - Get an efficient performance state from the EM
->> @@ -180,6 +186,8 @@ int em_dev_update_chip_binning(struct device *dev);
->>    * @nr_perf_states:    Number of performance states
->>    * @max_util:          Max utilization to map with the EM
->>    * @pd_flags:          Performance Domain flags
->> + * @min_ps:            Minimum allowed Performance State index
->> + * @max_ps:            Maximum allowed Performance State index
->>    *
->>    * It is called from the scheduler code quite frequently and as a consequence
->>    * doesn't implement any check.
->> @@ -189,12 +197,13 @@ int em_dev_update_chip_binning(struct device *dev);
->>    */
->>   static inline int
->>   em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
->> -                         unsigned long max_util, unsigned long pd_flags)
->> +                         unsigned long max_util, unsigned long pd_flags,
->> +                         int min_ps, int max_ps)
->>   {
->>          struct em_perf_state *ps;
->>          int i;
->>
->> -       for (i = 0; i < nr_perf_states; i++) {
->> +       for (i = min_ps; i <= max_ps; i++) {
->>                  ps = &table[i];
->>                  if (ps->performance >= max_util) {
->>                          if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
->> @@ -204,7 +213,7 @@ em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
->>                  }
->>          }
->>
->> -       return nr_perf_states - 1;
->> +       return max_ps;
->>   }
->>
->>   /**
->> @@ -254,7 +263,8 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->>           */
->>          em_table = rcu_dereference(pd->em_table);
->>          i = em_pd_get_efficient_state(em_table->state, pd->nr_perf_states,
->> -                                     max_util, pd->flags);
->> +                                     max_util, pd->flags, pd->min_ps,
->> +                                     pd->max_ps);
->>          ps = &em_table->state[i];
->>
->>          /*
->> @@ -391,6 +401,12 @@ static inline int em_dev_update_chip_binning(struct device *dev)
->>   {
->>          return -EINVAL;
->>   }
->> +static inline
->> +int em_update_performance_limits(struct em_perf_domain *pd,
->> +               unsigned long freq_min_khz, unsigned long freq_max_khz)
->> +{
->> +       return -EINVAL;
->> +}
->>   #endif
->>
->>   #endif
->> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->> index 927cc55ba0b3d..436c2b8fdf9eb 100644
->> --- a/kernel/power/energy_model.c
->> +++ b/kernel/power/energy_model.c
->> @@ -628,6 +628,8 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->>                  goto unlock;
->>
->>          dev->em_pd->flags |= flags;
->> +       dev->em_pd->min_ps = 0;
->> +       dev->em_pd->max_ps = nr_states - 1;
->>
->>          em_cpufreq_update_efficiencies(dev, dev->em_pd->em_table->state);
->>
->> @@ -856,3 +858,53 @@ int em_dev_update_chip_binning(struct device *dev)
->>          return em_recalc_and_update(dev, pd, em_table);
->>   }
->>   EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
->> +
->> +
->> +/**
->> + * em_update_performance_limits() - Update Energy Model with performance
->> + *                             limits information.
->> + * @pd                 : Performance Domain with EM that has to be updated.
->> + * @freq_min_khz       : New minimum allowed frequency for this device.
->> + * @freq_max_khz       : New maximum allowed frequency for this device.
->> + *
->> + * This function allows to update the EM with information about available
->> + * performance levels. It takes the minimum and maximum frequency in kHz
->> + * and does internal translation to performance levels.
->> + * Returns 0 on success or -EINVAL when failed.
->> + */
->> +int em_update_performance_limits(struct em_perf_domain *pd,
->> +               unsigned long freq_min_khz, unsigned long freq_max_khz)
->> +{
->> +       struct em_perf_state *table;
->> +       int min_ps = -1;
->> +       int max_ps = -1;
->> +       int i;
->> +
->> +       if (!pd)
->> +               return -EINVAL;
->> +
->> +       rcu_read_lock();
->> +       table = em_perf_state_from_pd(pd);
->> +
->> +       for (i = 0; i < pd->nr_perf_states; i++) {
->> +               if (freq_min_khz == table[i].frequency)
->> +                       min_ps = i;
->> +               if (freq_max_khz == table[i].frequency)
->> +                       max_ps = i;
->> +       }
->> +       rcu_read_unlock();
->> +
->> +       /* Only update when both are found and sane */
->> +       if (min_ps < 0 || max_ps < 0 || max_ps < min_ps)
->> +               return -EINVAL;
->> +
->> +
->> +       /* Guard simultaneous updates and make them atomic */
->> +       mutex_lock(&em_pd_mutex);
->> +       pd->min_ps = min_ps;
->> +       pd->max_ps = max_ps;
->> +       mutex_unlock(&em_pd_mutex);
->> +
->> +       return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(em_update_performance_limits);
+On 25.10.24 10:05 AM, mailinglist1@johanneskirchmair.de wrote:
+> [Sie erhalten nicht häufig E-Mails von mailinglist1@johanneskirchmair.de. Weitere Informationen, warum dies wichtig ist, finden Sie unter https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> It would be good to have at least one caller of this function in the tree.
+> Hey,
+> We had some problems with the hdmi on the imx8mp and wanted to leave, what we found out about it, somewhere for others to find it.
+> 
+> The problem was that our hdmi display sometimes stayed blank after hot plugging and sometimes at startup. On older kernel versions 6.6 we did not have the problem with the not mainlined hdmi patches.
+> We tracked the commit down that introduced the problem for us. It was the following “driver core: Enable fw_devlink=rpm by default”  https://lore.kernel.org/lkml/20231113220948.80089-1-saravanak@google.com/
+> So we switched back to FW_DEVLINK_FLAGS_ON via kernel parameter. Don’t really understand what the problem with RPM is.
+> 
+> So, this information is just for reference. Maybe someone has an idea what is going on here. And how to fix the problem in a more proper way.
 
-Yes, I know, but we had delays with the SCMI cpufreq to get the
-notifications support, which are sent from FW...
+Thanks for investigating and sharing your results!
 
-The patch using this API was part of v1 but with assumption that
-those SCMI notifications are merged.
+I'm seeing the same symptoms and previously found out that this is
+related to LCDIF underrun errors. See [1] for more information.
 
-The patch v1 for the SCMI cpufreq driver [1].
+Adam has also started this thread: [2].
 
-In that v1 cover letter I mentioned that the 2nd patch depends
-on notifications [2].
+Anyway, knowing that this is related to fw_devlink=rpm is really
+helpful. I just tried with fw_devlink=on and wasn't able to see any
+issues anymore. So this confirms your findings.
 
-I will have to work with Cristian on that notification in SCMI
-then this API will be used. I can see that it stuck for a while
-in v5. Let me sort that out (probably not in this merge window
-though).
+I hope that some of the driver framework and runtime PM experts can help
+to find out what is actually wrong and how the correct fix might look like.
 
-Can we do it this way?
+I'm also CC-ing Saravana who authored the change from fw_devlink=on to
+fw_devlink=rpm to see if they have anything to add.
 
-Regards,
-Lukasz
+Thanks
+Frieder
 
-[1] 
-https://lore.kernel.org/lkml/20240403162315.1458337-3-lukasz.luba@arm.com/
-[2] 
-https://lore.kernel.org/lkml/20240403162315.1458337-1-lukasz.luba@arm.com/
-[3] 
-https://lore.kernel.org/lkml/20240603192654.2167620-1-quic_sibis@quicinc.com/
+[1]
+https://patchwork.kernel.org/project/linux-phy/cover/20240904233100.114611-1-aford173@gmail.com/#26014057
+[2]
+https://lore.kernel.org/imx/8cfd3052-c85a-4235-b9b8-6d2929e9e455@kontron.de/T/
 
