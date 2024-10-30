@@ -1,133 +1,169 @@
-Return-Path: <linux-pm+bounces-16721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16722-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB1829B621A
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 12:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE7CC9B6222
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 12:43:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F33451C21048
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 11:42:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1CB91C21E19
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 11:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1121E492D;
-	Wed, 30 Oct 2024 11:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC751E5734;
+	Wed, 30 Oct 2024 11:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qdDaOPNZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A45EYlJc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6564A4D8A7;
-	Wed, 30 Oct 2024 11:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DEC1E5722
+	for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 11:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730288523; cv=none; b=dWDuliECC++zRmTX6FtSosGoq3c3Thy15wc058AwOrakP9JcclSHJQs3Tua22Lj1sJb8mZUwIt7v/4XdzxEmnhbLWgsJ+Lwp1Jx9ATqzk+e39C4TZ+wZwl4HeB3w2mataA1l+zmPyWNi6+1uZmfLd+VKCCylNLYTrqg8ZlG2oIA=
+	t=1730288618; cv=none; b=PrVYoS6HnuhqYRb9sKAMjC5A1+FvKLLaBBXF0SQWsEidEqjFIdxL5hpskcH9T5QmFdI6R7+Ms/GuQLTVIpAYqfUjv4wuHdsRdkUerKNcJ8PENYWfvQlE3SUTUFNWjdq917huVCOlGt425cVj6NyoSCRcIjlatBB1Ez4d4u0GEaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730288523; c=relaxed/simple;
-	bh=xwsodNNyzccNHvyN4DfKOWmKciqvHSE71GVyI3SMnZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sX0/E2JFIbYKMzlFVQ3JIc5qQKgePq0mAs/GDDiFtv88jHRfbC7qggyPnF5ex9OB/Bax1PjIeVLZXyg3lZrsyC1+yuIupFqrk32c1HuQOi0xibExXjCT7S3WbphTzCJny3FSPeVW3uW8bNDgSxnaZUnbbnTMXYel3hWdruO0onM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qdDaOPNZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00AAAC4CEE7;
-	Wed, 30 Oct 2024 11:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730288523;
-	bh=xwsodNNyzccNHvyN4DfKOWmKciqvHSE71GVyI3SMnZ0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qdDaOPNZsfp0NAtoLLsoe5N3FvDDLg804p1buEdX3ski6+hSN0DL4eKR7gfaDBhG5
-	 OKSrGwb+WlwQwap4ZD905nA1pHs6rGhZ4/cOI/qVhwM/rpfQ0QcitBeussC17d09Ql
-	 0OBNaePrVWlFs4MxFUN4ItjEvpNQVrtIENtNAO2O/m6MKQovBT5KkS3hKZfjgX26th
-	 caCrLvlDzkjdYUCN1zgdm52mKCU5NMNC9XLXSUirsIk6bOys6k7furPLtx0sZUpVSE
-	 VMj4JHqqMkvZyZQvBBJ7txlBdtxm9EoXSedLz2V0RO4fZbwr6/7IUlLmA85lCx19Rn
-	 NOVIpJ7Z94JFQ==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3e612437c09so3666188b6e.2;
-        Wed, 30 Oct 2024 04:42:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX3cWMd/XMO4T/i7re8K+wL1x/1mnrtq1hDWVsGLjM6MvmKWFqbt9GUilygKmyPL6E5P3qbgvgcgco=@vger.kernel.org, AJvYcCXYKB7FfZYcurclsLWRjtRm6WiCflJTqrEp7EZG5W387ezy8pF4grH7Ghtz6TfCgGZNVP8O1SG4ZspOWWY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOYMfIZo2bZu86X5lbQauPBuP2A6ypMXBgB6DrpjGRdIjB6mvC
-	Ze26MkKCm/rh6tzLD0vV3vhKUcyrWModdk/0B8ayYcApFsB6tGAH6MszirTjnI5pZIMU/yQW5E0
-	nfrRbS0PrUIsH1w6CD7LGEanHSWY=
-X-Google-Smtp-Source: AGHT+IEwIlIm0LrPgt5yUX6dwtpk99g/r5eoxCASrQq1SNV6REFOO2P4Qkz356D+1j1gKmY1M+PImmaeP5blMD3z5TU=
-X-Received: by 2002:a05:6870:1491:b0:288:8cee:44dd with SMTP id
- 586e51a60fabf-294647210abmr3263824fac.19.1730288522292; Wed, 30 Oct 2024
- 04:42:02 -0700 (PDT)
+	s=arc-20240116; t=1730288618; c=relaxed/simple;
+	bh=awtTvZ6vGGiqZV76rgTqJGMGn1AnY6x/PGmQuLA8i2o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jldbuX5BEIoAiqUvQpIew0RsCHcEtWEI8fHhkAJ2m1H8GpEy8k/fBlk+HkXvoxyZXwoM0oBoeQAE+t0mBpg6pjx8zk+JLb6MfKGUhXi9kzTQLmae3FNu/fIgfYlSACpmbu7gO0QtUbxsC0+9/K3ayAlyDPnXpp8ij650HQH7RTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A45EYlJc; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37d4821e6b4so4351237f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2024 04:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730288614; x=1730893414; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=US0yqIHM+wRkkYQYKiUsTGgnwwJfvhEFr231dY8Uk74=;
+        b=A45EYlJcZDrX8Telrln+ka5q9jPr/EAtr5/Vxql18ae4sdWhqeyphBetxyOOoE+NEI
+         7yogELnSlzJLhejRhozWQGg7//2UMW1yWy41GAprw/aAE5VKkNRxobEv+CmGv4g6ttBQ
+         v5Sa4h+rafnmsYyp/ZqUxYnsrUOPOH8ph6eginF3KXrQJ+1a3KCkNZ5iOjHjvuTT+ZNb
+         Z3jeM1G9enrL1EYS7BAsY4Msv3WearrO3VszGLeo10d+FzNuLXBArbfeTp2O3FKW8i2C
+         SAmbnD2w7eBzx0J9/0CV2Y+5XFyRTPAl6GyWHGGeQvAUvBq3OrNEwfkat5Xk7cIacLgG
+         l/Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730288614; x=1730893414;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=US0yqIHM+wRkkYQYKiUsTGgnwwJfvhEFr231dY8Uk74=;
+        b=lSOEjmQsVMI6WN9FHMOJyMjfhtjcFcwj/llEtWPfqiHGpd/qrujJWIYc9RjTmYKiRX
+         cTwfFitNrwmlOVm53hcYsPa1c8LNQUlqJLpaiuKOTBfYRfuyIFd8xIBMybexX+q8OGir
+         pvcNnI9Iyiqx/0cGlpFiffaJSyaQVOM+Eo5DIVlrxscnTobzi05tj5mZV9apvHXhECiN
+         UOTwBZXZ6sRgEQVicsZwfAwKW4o6zO5bGNNg1ZgjELThunBH0KmdRWtP2JzbdzanFL2H
+         Mq+qSgzyoqjOxJqQQ4nHmazXaBSDFYvqF9vl8nKDrshIuOSEL+JiLgKpE85ZlUnkhXlh
+         TePA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfEEMFOThE8vgnEP0x4svq+OgFKfEURIZWTBxSmL6aeX15Gz5gchp7LJ5VGr5bv81XrF1zjrKMmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYMBXx4cHtwX6xRO8ZVRM58OF/5lSRNASf6jBb8tkz0yqHSylV
+	5s58rHmhZQkpXwlnZjS2NvpilYMpkD9Wlvlu7WhSW0Vq+/ueC9NGfQH9LrpXwn8=
+X-Google-Smtp-Source: AGHT+IGIhLE24+WH0MJH0WafO8vc5VrsGWBcKbyDZeZys1Kqo9nQUthgjWXQYsw3R2227quKB8H4Eg==
+X-Received: by 2002:adf:ff86:0:b0:37d:4818:f8b1 with SMTP id ffacd0b85a97d-380611e493bmr10119383f8f.39.1730288614175;
+        Wed, 30 Oct 2024 04:43:34 -0700 (PDT)
+Received: from [192.168.68.111] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38058b70d50sm15216661f8f.76.2024.10.30.04.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Oct 2024 04:43:33 -0700 (PDT)
+Message-ID: <a75f6b72-ea52-46a4-8790-13a4084d53b9@linaro.org>
+Date: Wed, 30 Oct 2024 11:43:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029094452.495439-1-lukasz.luba@arm.com> <20241029094452.495439-2-lukasz.luba@arm.com>
- <CAJZ5v0gzQhw3wkRVFTEx-y4pawknJqC2JPrN6_dqd77vTVuSOw@mail.gmail.com>
- <6cdb2f8b-62e0-455c-a3a5-ed5359a2e941@arm.com> <61afac10-b434-4e39-8c49-c220add4bd8e@arm.com>
- <CAJZ5v0jk+0vfn88+gaunezgtb6TLVagqav=9sM-D169Q69MF5w@mail.gmail.com> <6847bb0d-805f-4bf6-bb22-635d5f8e9d6b@arm.com>
-In-Reply-To: <6847bb0d-805f-4bf6-bb22-635d5f8e9d6b@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 30 Oct 2024 12:41:49 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j4D2E+qWrhT7bn1PznW8vvjXDRPqpR+qjr2xDHvpHwbA@mail.gmail.com>
-Message-ID: <CAJZ5v0j4D2E+qWrhT7bn1PznW8vvjXDRPqpR+qjr2xDHvpHwbA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] PM: EM: Add min/max available performance state limits
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, dietmar.eggemann@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] nvmem: core: improve range check for
+ nvmem_cell_write()
+To: Jennifer Berringer <jberring@redhat.com>,
+ Sebastian Reichel <sre@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Maxime Ripard <mripard@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20241024154050.3245228-1-jberring@redhat.com>
+ <20241024154050.3245228-2-jberring@redhat.com>
+ <5b6901d9-f404-43b9-87eb-577124efa3f3@linaro.org>
+ <b22ce4a7-8480-4d4a-b2c3-0d70c3e05c00@redhat.com>
+Content-Language: en-US
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <b22ce4a7-8480-4d4a-b2c3-0d70c3e05c00@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 30, 2024 at 12:33=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
->
->
->
-> On 10/30/24 11:23, Rafael J. Wysocki wrote:
-> > On Wed, Oct 30, 2024 at 11:00=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.c=
-om> wrote:
-> >>
-> >> On 10/30/24 08:48, Lukasz Luba wrote:
-> >>> Hi Rafael,
-> >>>
-> >>> On 10/29/24 18:29, Rafael J. Wysocki wrote:
-> >>>> On Tue, Oct 29, 2024 at 10:43=E2=80=AFAM Lukasz Luba <lukasz.luba@ar=
-m.com> wrote:
-> >>>>>
-> >>
-> >> [snip]
-> >>
-> >>>>> +EXPORT_SYMBOL_GPL(em_update_performance_limits);
-> >>>>
-> >>>> It would be good to have at least one caller of this function in the
-> >>>> tree.
-> >>>
-> >>> Yes, I know, but we had delays with the SCMI cpufreq to get the
-> >>> notifications support, which are sent from FW...
-> >>>
-> >>> The patch using this API was part of v1 but with assumption that
-> >>> those SCMI notifications are merged.
-> >>>
-> >>> The patch v1 for the SCMI cpufreq driver [1].
-> >>>
-> >>> In that v1 cover letter I mentioned that the 2nd patch depends
-> >>> on notifications [2].
-> >>>
-> >>> I will have to work with Cristian on that notification in SCMI
-> >>> then this API will be used. I can see that it stuck for a while
-> >>> in v5. Let me sort that out (probably not in this merge window
-> >>> though).
-> >>
-> >> Just to link the effort which has been started into that direction:
-> >>
-> >> https://lore.kernel.org/lkml/ab36709d-a181-4621-a8e5-0ef38b80186b@arm.=
-com/
-> >
-> > OK, then this can be queued up as a prerequisite for the upcoming chang=
-es.
-> >
-> > I would, however, mention that in the patch changelog and add a Link:
-> > tag pointing to the above.
-> >
->
-> Thank you Rafael!
 
-Well, there are a few comments to address first.
 
-Please see the reply to the patch I've just sent.
+On 29/10/2024 21:31, Jennifer Berringer wrote:
+> On 10/29/24 13:55, Srinivas Kandagatla wrote:
+>> if (!nvmem || nvmem->read_only || len != cell->bytes)
+>>      return -EINVAL;
+>>
+>> Does this work?
+>>
+>> --srini
+> 
+> I decided against this because it seems potentially useful to allow len to be less than cell->bytes when bit_offset is nonzero. I assumed that was the purpose of the original "cell->bit_offset == 0".
+> 
+I don't think we support this case.
+
+The reason why this check was initially added is,
+
+If we have bit_offset as non zero or nbits set, cell->bytes is can be 
+different to the actual space that is available in the cell, Ex: 2 bits 
+with offset of 7 might end up taking 2 bytes. So the existing check is 
+correct as it is and valid for cases where the bit_offset is 0.
+
+In this particular case the right solution to the issue is to add more 
+sanity checks in case bit_offset is non zero.
+
+
+This change should help, can you pl  try it.
+
+---------------------------->cut<-----------------------------
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 90c46f6e465d..e6d91a9a9dc5 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1780,6 +1780,9 @@ static int __nvmem_cell_entry_write(struct 
+nvmem_cell_entry *cell, void *buf, si
+                 return -EINVAL;
+
+         if (cell->bit_offset || cell->nbits) {
++               if (BITS_TO_BYTES(cell->nbits) != len)
++                       return -EINVAL;
++
+                 buf = nvmem_cell_prepare_write_buffer(cell, buf, len);
+                 if (IS_ERR(buf))
+                         return PTR_ERR(buf);
+---------------------------->cut<-----------------------------
+
+thanks,
+srini
+
+
+
+> For example, if a cell entry has the following field values
+>      { .bit_offset = 4, .nbits = 8, .bytes = 2, ...}
+> then it would make sense to call nvmem_cell_write() with len=1 in order to write 8 bits. To allow that, I used "len > cell->bytes" instead of "!=" later in this function:
+> 
+>>> @@ -1780,9 +1779,13 @@ static int __nvmem_cell_entry_write(struct nvmem_cell_entry *cell, void *buf, si
+>>>            return -EINVAL;
+>>>          if (cell->bit_offset || cell->nbits) {
+>>> +        if (len > cell->bytes)
+>>> +            return -EINVAL;
+>>>            buf = nvmem_cell_prepare_write_buffer(cell, buf, len);
+>>>            if (IS_ERR(buf))
+>>>                return PTR_ERR(buf);
+>>> +    } else if (len != cell->bytes) {
+>>> +        return -EINVAL;
+>>>        }
+> 
+> If you disagree with my reasoning then yes, your suggestion works and I can use that instead of what I wrote. None of the current in-tree callers of this function rely on that possibility I described.
+> 
+> Thank you for the feedback.
+> 
+> -Jennifer
+> 
 
