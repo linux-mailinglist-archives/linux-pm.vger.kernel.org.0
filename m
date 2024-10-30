@@ -1,94 +1,188 @@
-Return-Path: <linux-pm+bounces-16765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAB39B6D72
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 21:15:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 046569B6D7C
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 21:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59CD71F21186
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 20:15:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9553282AA3
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 20:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E541D1519;
-	Wed, 30 Oct 2024 20:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4D51D1519;
+	Wed, 30 Oct 2024 20:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="elEe2qxl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ca+W3XUD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA6E1D14FB;
-	Wed, 30 Oct 2024 20:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012A61BD9D4;
+	Wed, 30 Oct 2024 20:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730319287; cv=none; b=B1x09+3rII6DopXlIMf7cwongSHpXwOtbmPJzsmvIzv9wW/RgV7VOAk2aekWRgurgVF1ZCaUvz7qje4VMSQzdX+zUvbgB/UTbfUJ+z/xy4XYsr7NpVmOtrnKYmTXx0YnMAFjaR8GOKyVE++J3+paPD8jNrXwxXsYLShpoNdFN5M=
+	t=1730319630; cv=none; b=g3n5ujLuVf2geIVC9Vrk4VS1ArNPRd4WxT6+Ww02rVjOKUDLu/QaXhDcJ6ypL09AU0AToEVPB2OHpBhAlOk/Uam9spB6Ua4MfJfc8NF0L3aphvRPdpbvjXaSIYlwHPTmszPxiuZDANk0X+THB41ryxs29rSAjG1JHG5W8NA4MN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730319287; c=relaxed/simple;
-	bh=6kxVpaFI1ZML7mVp1gWGnEfSVv3OB1JV0EJOz3Ivvj4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sT+2lFAPqDQW3WmTW+vvTrB8ZeIGt7XiETczZpf/n+TZeSm3W5NWuWmL7/hI7GGrYb9LLhRwDFeiYeofRGGSpu/BEq45ytPXs2MHHI8u0McagxFv9QCi/ZhSmgtcOkaoL8Jf3lx94Bb60SOBsh9ObeGXlHICp9v1cxQjGTmtXkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=elEe2qxl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6EB9C4CECE;
-	Wed, 30 Oct 2024 20:14:46 +0000 (UTC)
+	s=arc-20240116; t=1730319630; c=relaxed/simple;
+	bh=Fe0AGIhC3Q9D5yXjlxtSyBat7s/WsQfnTkImMDN2xO8=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=icZRDFELTqaGfVivRi+eWn3OGJmGuhG4ipCAUx780h4mHHDDR3Ug68fB2YTSokhor3O0wNaIcvPEqybQwGKTMS9I7nfF/zLmz1JA7JrlavDFEoqykGd/midAvGzrS/dkyJGp3MnoUqeoiu7XdQhdESCNLF/o5OaaEGP7TgURqQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ca+W3XUD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44EDCC4CECE;
+	Wed, 30 Oct 2024 20:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730319286;
-	bh=6kxVpaFI1ZML7mVp1gWGnEfSVv3OB1JV0EJOz3Ivvj4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=elEe2qxlq/tq9yHVtICkU2lMPx3AKZPDGcaCzpQ7lbK6uJS68eiXV0qTOTtlnarL5
-	 erP7oaQQoLK19f37F2TbQwPB43Iw1jVfTTNm1QoRsl5EOymgCzXRkps3lxNZz8iwtQ
-	 rsHQLKTYxtVnWNhZZ/YLpnKqEUXB2CJKtctZyBYskdN7ImSTwixNIS57Yze+7Jfi2J
-	 EtEDgwjN4PaO20L6rqo2d6Nq3QyrXHZDtf1iEIywuhn9WNcHdNmJmGXnTT0+GspXR9
-	 VCvy/y5sZWLILWrBYvblwk031i4Gq/bV/R8agNZUCsjHRAbqPnSpxKN8WcaFXzIHSg
-	 TJlA8ICMqNfJA==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-71808b6246bso103843a34.2;
-        Wed, 30 Oct 2024 13:14:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV4S/1OJVexEGXd/xbz5OanmSoW83c9m4yN7TQ1elaO49KSSIhPxeoLcSexCJxif47Idda5B7gcnH2HTnE=@vger.kernel.org, AJvYcCXv+MkL1uHABnCjWkY45HqHyvZnUpF9Pr0fxRUJpjVPUoB0/pAR8mfNIfMCCzI/GsdZ+pikhz2lvlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyzvabN2VqPpn4Vx+5wrNvWej+leH5rUGMsFxDmg3FOtZAznBP
-	FBVkhOhYuyHVslhcQ4i2VKBAFFZzgYDpbrjROt8zZOWOOu/iVNfO3JeiDSWmQqR4+7R2eWM+rTt
-	2o+JKxFz22EGUA7oZl57eLF8R8fU=
-X-Google-Smtp-Source: AGHT+IFegsDhcZQhn1bpNLDBz9XYx6v4gPhpqyRTrfwgyFhSpal8guopX09XxBD0DtFK+0WxmcPqfziQ5bFgfMx/ui0=
-X-Received: by 2002:a05:6870:b50e:b0:25e:24a0:4c96 with SMTP id
- 586e51a60fabf-29051b73021mr15841177fac.11.1730319286119; Wed, 30 Oct 2024
- 13:14:46 -0700 (PDT)
+	s=k20201202; t=1730319629;
+	bh=Fe0AGIhC3Q9D5yXjlxtSyBat7s/WsQfnTkImMDN2xO8=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=ca+W3XUDX6ixNlBx1mLT0Ay2zs+9nycgfAJLrwV+LLhEYCu4jsn00cZAWeZRmfNC9
+	 HnNkXhboJryCzaJ/DrWYaLpYQtUN/S1D4v7eyF7VI/neG1UWCvONafxKImHQ2F0hA9
+	 1hVwZkojCPpAs5lsbP0TA9Sf7NFqw9jqK+f5Hg3Oi1tQ/MfJCJBRsj8mpu/JqLbNAT
+	 4lu05ILX2UHeQ8HSep7U8rN/MOn60G12jSM+RbNdH6Mkh0H7dnC58zt3HO+sxh5nIZ
+	 0PUqCmXe9aXBKp7WBBnc8343say3VQJcgOFpvly9x6Q2jISSufzlCFR+wtrAqbZPvq
+	 WIHMP6uQKcRYA==
+Date: Wed, 30 Oct 2024 15:20:27 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
- <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com> <e332a243-5a98-49ed-81be-b6db305d5dc5@intel.com>
- <35946efe3b8b8b686ba4ea0ed5c9f15c50ca6ef8.camel@linux.intel.com>
- <000fd68e-2b24-4eb3-b2d7-e4856b403212@intel.com> <CAJZ5v0j+Qc+5PtPdsDy5B0iAGWOxYbKdUOkVmL_jPNVO8fNK=g@mail.gmail.com>
- <b01cc6de-8440-477a-9844-d921da9dceb7@intel.com>
-In-Reply-To: <b01cc6de-8440-477a-9844-d921da9dceb7@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 30 Oct 2024 21:14:34 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gD+QjuW6iiJS7M0H_BAdXH7tnDGa+hp5BnvSNF+Cb0aQ@mail.gmail.com>
-Message-ID: <CAJZ5v0gD+QjuW6iiJS7M0H_BAdXH7tnDGa+hp5BnvSNF+Cb0aQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] x86/smp: Allow forcing the mwait hint for play
- dead loop
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
-	Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	rafael.j.wysocki@intel.com, len.brown@intel.com, dave.hansen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Jishnu Prakash <quic_jprakash@quicinc.com>
+Cc: quic_skakitap@quicinc.com, daniel.lezcano@linaro.org, 
+ andersson@kernel.org, lee@kernel.org, cros-qcom-dts-watchers@chromium.org, 
+ linux-kernel@vger.kernel.org, lars@metafoo.de, robh+dt@kernel.org, 
+ quic_subbaram@quicinc.com, rafael@kernel.org, quic_kamalw@quicinc.com, 
+ agross@kernel.org, amitk@kernel.org, linux-pm@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, dmitry.baryshkov@linaro.org, 
+ quic_amelende@quicinc.com, neil.armstrong@linaro.org, conor+dt@kernel.org, 
+ linux-iio@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+ quic_collinsd@quicinc.com, konrad.dybcio@linaro.org, jic23@kernel.org, 
+ devicetree@vger.kernel.org, lukasz.luba@arm.com, rui.zhang@intel.com, 
+ sboyd@kernel.org
+In-Reply-To: <20241030185854.4015348-2-quic_jprakash@quicinc.com>
+References: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
+ <20241030185854.4015348-2-quic_jprakash@quicinc.com>
+Message-Id: <173031962644.1844672.11198879616520852521.robh@kernel.org>
+Subject: Re: [PATCH V4 1/4] dt-bindings: iio/adc: Move QCOM ADC bindings to
+ iio/adc folder
 
-On Wed, Oct 30, 2024 at 9:11=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
->
-> On 10/30/24 12:53, Rafael J. Wysocki wrote:
-> > clearly referred to as a kexec() hack, which cannot be done in
-> > cpuidle_play_dead() because the cpuidle driver doesn't know how to get
-> > to md->control.
->
-> What if we have an mwait_play_dead() _helper_?  It takes the hint as an
-> argument and retains all the kexec hacks.  All the cpuidle driver has to
-> do is call the helper with the hint that the cpuidle driver determines.
 
-The same idea has occurred to me in the meantime, so yes, I think that
-it would work.
+On Thu, 31 Oct 2024 00:28:51 +0530, Jishnu Prakash wrote:
+> There are several files containing QCOM ADC macros for channel names
+> right now in the include/dt-bindings/iio folder. Since all of these
+> are specifically for adc, move the files to the
+> include/dt-bindings/iio/adc folder.
+> 
+> Also update all affected devicetree and driver files to fix compilation
+> errors seen with this move and update documentation files to fix
+> dtbinding check errors for the same.
+> 
+> Acked-by: Lee Jones <lee@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+> ---
+> Changes since v3:
+> - Updated files affected by adc file path change in /arch/arm, which
+>   were missed earlier. Updated some more new devicetree files requiring
+>   this change in /arch/arm64.
+> 
+> Changes since v2:
+> - Updated some more new devicetree files requiring this change.
+> 
+>  .../devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml       | 8 ++++----
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 2 +-
+>  .../devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml  | 2 +-
+>  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml    | 6 +++---
+>  arch/arm/boot/dts/qcom/pm8226.dtsi                        | 2 +-
+>  arch/arm/boot/dts/qcom/pm8941.dtsi                        | 2 +-
+>  arch/arm/boot/dts/qcom/pma8084.dtsi                       | 2 +-
+>  arch/arm/boot/dts/qcom/pmx55.dtsi                         | 2 +-
+>  arch/arm64/boot/dts/qcom/pm4125.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm6125.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm6150.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm6150l.dtsi                     | 2 +-
+>  arch/arm64/boot/dts/qcom/pm660.dtsi                       | 2 +-
+>  arch/arm64/boot/dts/qcom/pm660l.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm7250b.dtsi                     | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8150.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8150b.dtsi                     | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8150l.dtsi                     | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8916.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8950.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8953.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8994.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pm8998.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pmi632.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/pmi8950.dtsi                     | 2 +-
+>  arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi                 | 2 +-
+>  arch/arm64/boot/dts/qcom/pmp8074.dtsi                     | 2 +-
+>  arch/arm64/boot/dts/qcom/pms405.dtsi                      | 2 +-
+>  arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts        | 4 ++--
+>  arch/arm64/boot/dts/qcom/qcm6490-shift-otter.dts          | 4 ++--
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts                   | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi                  | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi                | 4 ++--
+>  arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi               | 2 +-
+>  .../arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 2 +-
+>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi              | 6 +++---
+>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts         | 2 +-
+>  arch/arm64/boot/dts/qcom/sm7325-nothing-spacewar.dts      | 6 +++---
+>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts                   | 8 ++++----
+>  drivers/iio/adc/qcom-spmi-adc5.c                          | 2 +-
+>  drivers/iio/adc/qcom-spmi-vadc.c                          | 2 +-
+>  include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm7325.h | 2 +-
+>  include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h | 2 +-
+>  .../dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h    | 2 +-
+>  .../dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h    | 2 +-
+>  .../dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h    | 2 +-
+>  .../dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h    | 2 +-
+>  .../dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h    | 2 +-
+>  include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h        | 0
+>  49 files changed, 63 insertions(+), 63 deletions(-)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm7325.h (98%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h (98%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h (99%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h (97%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h (95%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h (95%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h (93%)
+>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (100%)
+> 
+
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+In file included from Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dts:80:
+./scripts/dtc/include-prefixes/dt-bindings/iio/adc/qcom,spmi-adc7-pmk8350.h:13:10: fatal error: dt-bindings/iio/adc/qcom,spmi-vadc.h: No such file or directory
+   13 | #include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [scripts/Makefile.dtbs:129: Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1442: dt_binding_check] Error 2
+make: *** [Makefile:224: __sub-make] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241030185854.4015348-2-quic_jprakash@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
