@@ -1,187 +1,151 @@
-Return-Path: <linux-pm+bounces-16779-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71C0D9B7019
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 23:55:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 661609B71E0
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36B3B282387
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2024 22:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 768571C235A0
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A821E04AE;
-	Wed, 30 Oct 2024 22:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C591823AC;
+	Thu, 31 Oct 2024 01:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ML/yTSS2"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="qwu/xyiT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AEA1CF5E0;
-	Wed, 30 Oct 2024 22:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89C02F855;
+	Thu, 31 Oct 2024 01:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730328917; cv=none; b=G7lnIz97c0EV8Au12LdLmB/BeCdjAHid0psSSphYGWxRQNBLTcEK/nxigIS4Obh7WsnIFLUo1lvO6uLSeerwVPsYhmOfsCNtS23Bc1QO9Hg0fWjjhP3hyrGyUK0lMOnpCFfZx+B8w35RCBRCKyTfV5US+yxvLeb7EZgtgLqEatE=
+	t=1730338187; cv=none; b=e0GuR2bxPocFKi9/IXt79lz537bnSw35PKQXH4WT1GRMMBXChh37mAaqiXqvFktQ14oROye8rmW7vaXvQ6owb6YOdhLUML4nN+qQpVpYFmC7QgaNMUQYFXCg0228z7/n7DGeXw1cOi/uF3/7xBczH27+RuE70TleoWcE4T9oKDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730328917; c=relaxed/simple;
-	bh=ApKRKkEuiqj4Fr3LVlwiC2tBnFMiDyBorKsWI/gS4rw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ci5J3ClxwWq4iG4+NYNjZKQOiyANUgAtio3VIdNkPik//fuHC1Rpo1B8UpCzFPgDuhEVgHe6/EttZ8w/8nA3xInkGGDq3zmfqi3iEckqmrF0ivj/yesU05K/s37yANS0hyTndj/8/F9AOwRTjP8ZYoJCF+bQkZg7r8vGw9Q2Heg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ML/yTSS2; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730328915; x=1761864915;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ApKRKkEuiqj4Fr3LVlwiC2tBnFMiDyBorKsWI/gS4rw=;
-  b=ML/yTSS2n/6pWZvg36ktzMYFXpoVTWpWv4318hV5h1hD2wJezhoCCH4e
-   hiEgdQTKaW0eMUrfla496uMGYhsJhtTbIt6Lu5L1Bv9nKw7sqL6v13D/V
-   ovOC2NBdTgVX1uHzO2hsi9e0oGixmrz03y1MPKw6dycLZdXNzZ5cI7W8o
-   MEB3Uu+VZh8cVG61QLjT6pf/sRQhBYIAVlv1fEZ0JwXmv3lUagURo2NbA
-   64KvTzpoVL8xTE624RbjB0evPfEXQvXe1iBcZgGZZFbao4KN9VTTgE26x
-   kSnjOrN2aNMKzevxg2cdMXo/x/saECSYhdEu6KD1d89gdNRjlKWm2Q7Ln
-   g==;
-X-CSE-ConnectionGUID: 1k4R44jsR+OGmKXHh+Muyg==
-X-CSE-MsgGUID: ROp9ZDaXRMyH7phQNZDxnQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30208303"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30208303"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 15:55:14 -0700
-X-CSE-ConnectionGUID: k1WnlkV2T/e9lIC3edTOIQ==
-X-CSE-MsgGUID: XAAYTiaARbGSFmfCUN61hQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,246,1725346800"; 
-   d="scan'208";a="105777001"
-Received: from bjrankin-mobl3.amr.corp.intel.com (HELO [10.124.223.155]) ([10.124.223.155])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 15:55:13 -0700
-Message-ID: <63f7dbbc-831f-4c16-9f11-5cf2c36996d0@intel.com>
-Date: Wed, 30 Oct 2024 15:55:12 -0700
+	s=arc-20240116; t=1730338187; c=relaxed/simple;
+	bh=7dZsRjpgvzq99Vps+KUUhV2OvVoGHjcdAvRBEnYJXzY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=meLMLBEboq1XkJ4LjaQlZmrvV/WRR5GmtaRn2WU9B4IYgFwIf6ee50xfCIelTdnv9bxgrIyWfZ2wpMjiqlDQQEI1yOBcgIj86aLy1nT/Ovjo4fZ5QPnw1P/r0Rw4osx0nTQ2CBWq9TgmxaAZCDkbwppgh8kgJyUfsYFJqAsLwCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=qwu/xyiT; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+Received: from [192.168.0.162] (BC24936A.dsl.pool.telekom.hu [188.36.147.106])
+	by mail.mainlining.org (Postfix) with ESMTPSA id EACCEE45AB;
+	Thu, 31 Oct 2024 01:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
+	s=psm; t=1730337586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AkP+23CR80b6ke8LAz2t64yf9SpQeLZtdkWj6Uov1LA=;
+	b=qwu/xyiTEmQ9n3KZMkdcThGxtDFFh72Sd1GRz0N88ogDbTRLabHaHE5tO+jrFBC+DcYEbl
+	tIYwUwdTmgJRiJZ/c8f88cGLoagu2C+9bnt6RLZ/BL7+JG1SgR2UTMY1CZd9TuxqBEUIQ6
+	hBbfuqksyrIBBlJW+NkGmFlvzQNucrlE1ti4UAHrbAHA4AIjc0ScMfwQ7eB7taySGPl0Cn
+	m9MxVB6iKApz5e+SXaQPTZ/fsOqj7mqPbItAjJNsm/J62rs23gpacOWBKVAFkNJVXJKs6z
+	wNSv3AH54SDD7qC3/Cx3S1askxV4nCY5Li6xrZ5CvIXeX09s6vOw0IIj97o8gQ==
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v2 00/15] Add MSM8917/PM8937/Redmi 5A
+Date: Thu, 31 Oct 2024 02:19:41 +0100
+Message-Id: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] x86/smp: Allow forcing the mwait hint for play
- dead loop
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael.j.wysocki@intel.com, len.brown@intel.com,
- artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
-References: <20241029101507.7188-1-patryk.wlazlyn@linux.intel.com>
- <20241029101507.7188-3-patryk.wlazlyn@linux.intel.com>
- <e332a243-5a98-49ed-81be-b6db305d5dc5@intel.com>
- <0a767d20-624d-494e-96b9-5e2a379550fc@linux.intel.com>
-Content-Language: en-US
-From: Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <0a767d20-624d-494e-96b9-5e2a379550fc@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAC3bImcC/2XMSwrDIBSF4a2EO67FaxJiOso+SgbiKxeqKVqkJ
+ bj32kw7/A+H74BsE9kMt+6AZAtl2mMLcelAbyp6y8i0BsHFgBxnFnKQM04MJ90b7tygRgHt/Uz
+ W0fuU7mvrjfJrT58TLvhb/42CjDOHrtcKjZR2XIKi+KBI0V/35GGttX4BfzZofKMAAAA=
+X-Change-ID: 20241019-msm8917-17c3d0ff4a52
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Dang Huynh <danct12@riseup.net>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=2793;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=7dZsRjpgvzq99Vps+KUUhV2OvVoGHjcdAvRBEnYJXzY=;
+ b=9V77oYZF4/Yq2CmGGYxDC4tV2KWT0Qjwd8/v7772iNZBLftlgJaU3Ou++pPOO03sCx3VQRTUk
+ UoyDmDj6YOKDO/g6oLATh1XgTg2pHFqZXIWb3gs15cNuvqrJm63cvfM
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-On 10/30/24 06:33, Patryk Wlazlyn wrote:
->>> +void smp_set_mwait_play_dead_hint(unsigned int hint)
->>> +{
->>> +    WRITE_ONCE(play_dead_mwait_hint, hint);
->>> +}
->>
->> This all feels a bit hacky and unstructured to me.
->>
->> Could we at least set up a few rules here?  Like, say what the hints
->> are, what values can they have?  Where do they come from?  Can this get
->> called more than once?  Does it _need_ to be set?  What's the behavior
->> when it is not set?  Who is responsible for calling this?
-> 
-> The other idea is to first check if currently loaded idle driver provides
-> enter_dead() callback first and leave the current, deepest mwait hint
-> computation code as a fallback.
-> 
-> Does that sound less hacky?
+This patch series add support for MSM8917 soc with PM8937 and
+Xiaomi Redmi 5A (riva).
 
-Yes.
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v2:
+- Add msm8937 tsens support.
+- Fix issues addressed by reviews.
+- Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
 
-> Unfortunately, it comes with a little problem. In case of kexec, we need to
-> have a way to exit from the mwait loop and enter hlt to prevent offlined CPU
-> from crashing when the old memory is being overwritten.
+---
+Barnabás Czémán (12):
+      dt-bindings: pinctrl: qcom,pmic-gpio: add PM8937
+      pinctrl: qcom-pmic-gpio: add support for PM8937
+      dt-bindings: pinctrl: qcom,pmic-mpp: Document PM8937 compatible
+      pinctrl: qcom: spmi-mpp: Add PM8937 compatible
+      dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl bindings
+      dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8917
+      dt-bindings: thermal: tsens: Add MSM8937 compatible
+      thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
+      dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU to SMMUv1 compatibles
+      dt-bindings: nvmem: Add compatible for MS8917
+      dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
+      arm64: dts: qcom: Add Xiaomi Redmi 5A
 
-Why is this a problem?  Like I mentioning to Rafael, just *call*
-mwait_play_dead() from the idle driver.
+Dang Huynh (1):
+      arm64: dts: qcom: Add PM8937 PMIC
 
-mwait_play_dead() could probably also use some refactoring because it
-has 3 pieces:
+Otto Pflüger (2):
+      pinctrl: qcom: Add MSM8917 tlmm pinctrl driver
+      arm64: dts: qcom: Add initial support for MSM8917
 
-	1. Should the code run at all or defer to another play dead
-	   implementation?
-	2. Calculating the hint (obviously not needed in your new case)
-	3. Actually running mwait (including the kexec hack)
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
+ .../devicetree/bindings/iommu/qcom,iommu.yaml      |    1 +
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml         |    1 +
+ .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
+ .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     |  155 ++
+ .../bindings/pinctrl/qcom,pmic-gpio.yaml           |    3 +
+ .../devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml |    2 +
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  293 +++
+ arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1999 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8937.dtsi               |  216 +++
+ drivers/pinctrl/qcom/Kconfig.msm                   |    6 +
+ drivers/pinctrl/qcom/Makefile                      |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm8917.c             | 1620 ++++++++++++++++
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c           |    2 +
+ drivers/pinctrl/qcom/pinctrl-spmi-mpp.c            |    1 +
+ drivers/thermal/qcom/tsens-v1.c                    |   13 +
+ drivers/thermal/qcom/tsens.c                       |    3 +
+ drivers/thermal/qcom/tsens.h                       |    2 +-
+ 20 files changed, 4327 insertions(+), 1 deletion(-)
+---
+base-commit: f2493655d2d3d5c6958ed996b043c821c23ae8d3
+change-id: 20241019-msm8917-17c3d0ff4a52
 
-The "should the code run?" bit is superfluous but harmless if called
-from the idle driver.  Ditto on the hint calculation, but you already
-factored it out.  That leaves the "actually run mwait" bit which you
-100% need.
+Best regards,
+-- 
+Barnabás Czémán <barnabas.czeman@mainlining.org>
 
-> I think, we can solve it by bringing the CPU back online before we proceed
-> with kexec, but I would appreciate some feedback from someone who is more
-> familiar with kexec, before merging that.
-> 
-> We may also signal that by touching the resched flag on which enter_dead()
-> code will monitor in case of mwait and enter hlt right after, but that's a
-> bit hackier IMO.
-
-That route is also fine with me, but I'm not sure it's necessary.
-
->> What good does the smp_ prefix do?  I don't think _callers_ care whether
->> this is getting optimized out or not.
-> 
-> The prefix makes it a little bit cleaner by not exporting new global symbol
-> with "set_mwait_play_dead_hint" name.
-
-I'm not following.
 
