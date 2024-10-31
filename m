@@ -1,79 +1,61 @@
-Return-Path: <linux-pm+bounces-16801-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16802-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E9D9B750C
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 08:07:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0B7F9B7577
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 08:36:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB706B24D2D
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 07:07:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 947DF282B8F
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 07:36:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26081487D1;
-	Thu, 31 Oct 2024 07:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72ACD149C7B;
+	Thu, 31 Oct 2024 07:36:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAGeQ4hS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ahwbu6H5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE391487E5;
-	Thu, 31 Oct 2024 07:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20864149C54;
+	Thu, 31 Oct 2024 07:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730358454; cv=none; b=QndNXy0835HtE0vyJkT1d65GpIV0omkakUEv/8nt/C+eLVxs3IDSwCTpad8gpuFHv52pNfdjdtefktiHXD2vZoIqRWz8fEzkcOSJ0pth1Hzktzba4Q+fzLK6CZ/8dqG5Yk56e0RhqMFmpwOrpQWBXdxqXn5KMxjuExpzps5AuYo=
+	t=1730360207; cv=none; b=dEAYdqcqW61SiV8Cp6csR4fFdiR7Gr2Xym77MSerUY1O3clL0/c17Dtv1CX2nHFh7UX8GrjbLXGlWu7U9hRJH5bPpKUURPFe8i5iEBgkTKOvW0Ofdw9vOgTykE/YQBYxCUDTgSo8cHof/VLwP7ULzpiEPj5qE3uIgd4iNLqJMMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730358454; c=relaxed/simple;
-	bh=cVb6lHhTocSAbTwN2Yn8J5X2Ab/FN0hVW8k6lizXiZw=;
+	s=arc-20240116; t=1730360207; c=relaxed/simple;
+	bh=Q1aV6rGqCQlq2aELxThGs+q8I/yjm7V3satrDVXpHi0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jOyT4IxDsuVMag5dl5RkYn0Lmebnj9UU9D9AV1NnMj5/5KKzDIoMtKOA0B8YM9jrVyfQCSO9aE/BOsH6QugXy/58e11ObXmJygPkX9aR/GO35TsVhMbmD+OKS8qNYSWfNlk2kxFzx2QEUwrIK8EXXbDgKzC1A3TYWT1BRKhe2W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAGeQ4hS; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730358453; x=1761894453;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=cVb6lHhTocSAbTwN2Yn8J5X2Ab/FN0hVW8k6lizXiZw=;
-  b=DAGeQ4hS3IzK5LhsyJ5p0LrzZM78++sm329sj2jcixc0+q4M+vcqj+2y
-   6l44B4K7IBBvedErB2Vr7aCMS+cHVjbmi8s7qi7fieBIv/lKXTGKkF+ts
-   SK7DjyzoDxMQDvR0FI77Adv/0+9gkThckkelU7/UFSLs7MmAMN9CF4ovM
-   WxQkyJ9rJS1hij5SSohLEO+QSq6iaI6XPWG5dvAcAADjVD5NYBarzCNu5
-   neK9u9IMB7gMFmAoWyN0PTx6YvUJ0KYwCylQhy+pivE7Q9AIIHGBTOcS5
-   H5HxChSoNtpK8uPbNcw41iYAVaAzissfOAEGkWQaALuR92BkbcO2mmqYl
-   A==;
-X-CSE-ConnectionGUID: 3PeBe0UKTYasQOoAtwtUAQ==
-X-CSE-MsgGUID: llpYUJQsSi6pSIUkfpQ+ZA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="47558492"
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="47558492"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 00:07:32 -0700
-X-CSE-ConnectionGUID: CbGEroigStKku2couUKRjA==
-X-CSE-MsgGUID: TAJg7JVvRcKGaMI/L3UUwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="82194911"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 00:07:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t6PHD-00000009KN3-3pNm;
-	Thu, 31 Oct 2024 09:07:27 +0200
-Date: Thu, 31 Oct 2024 09:07:27 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, loongarch@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	WANG Xuerui <kernel@xen0n.name>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 1/1] cpufreq: loongson: Check for error code from
- devm_mutex_init() call
-Message-ID: <ZyMsr0JrXne-h4r8@smile.fi.intel.com>
-References: <20241030162930.2111255-1-andriy.shevchenko@linux.intel.com>
- <CAAhV-H6bOZLur8Eq2CyFaeQp7R1LwiRqf0ODqnftg6+zAbDoYg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BXcwJKC+t816Q+ZxReX7HnusTreKXyoCdkee3wVIlcKm2mcez02rhKhGa5Bpe5S3zBivbFevl8CUPeJQfovl4b3xFLl7w08nitLi9ggk0YdQieSYdaCpA4G7dmJL6mmU5F2p6lpVqymka1img1/jY5kQlL0jPFP0jQZSNbGRmSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ahwbu6H5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D789EC4CEC3;
+	Thu, 31 Oct 2024 07:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730360206;
+	bh=Q1aV6rGqCQlq2aELxThGs+q8I/yjm7V3satrDVXpHi0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ahwbu6H5HG9lVu/5J77HI7tAOJuawifD1MFA/FuGxixJWdC+IRfrWJZl9Cop3NInD
+	 diUILWcIGV0F/JEejh/7cyibK7MBCjEJiHBeKqm5sE5qvb+uoXv8oiAti3YowG/TCA
+	 1FVdGDI3eJczqHNO6DeBd4lNTR7dLAMqwZb+6ISwmKAuefrq8yfbod3Mr3B8/KVizy
+	 QjZlCcjP9vzRJMn5Tc1JF8sqRWFjZXToego7Np9jlF8dw9CGvkdMt4llSA2d62Y6FO
+	 0yBpy5iHb/7AAStQ984O/fU8jGOvvMEJ/PViIutiM+Ei6Q/BtOknEHYbEzry9pH0Na
+	 aEBc7HQO5HMjw==
+Date: Thu, 31 Oct 2024 08:36:43 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Jishnu Prakash <quic_jprakash@quicinc.com>
+Cc: jic23@kernel.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org, 
+	dmitry.baryshkov@linaro.org, konrad.dybcio@linaro.org, daniel.lezcano@linaro.org, 
+	sboyd@kernel.org, quic_subbaram@quicinc.com, quic_collinsd@quicinc.com, 
+	quic_amelende@quicinc.com, quic_kamalw@quicinc.com, amitk@kernel.org, lee@kernel.org, 
+	rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de, 
+	quic_skakitap@quicinc.com, neil.armstrong@linaro.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
+Subject: Re: [PATCH V4 0/4] Add support for QCOM SPMI PMIC5 Gen3 ADC
+Message-ID: <f2c2zxxmsk74rbgbhus7nyrxppwdeq2esgifigt7c326zzlmla@6vdb2rmbjptl>
+References: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,45 +64,40 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H6bOZLur8Eq2CyFaeQp7R1LwiRqf0ODqnftg6+zAbDoYg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
 
-On Thu, Oct 31, 2024 at 09:29:52AM +0800, Huacai Chen wrote:
-> On Thu, Oct 31, 2024 at 12:29 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+On Thu, Oct 31, 2024 at 12:28:50AM +0530, Jishnu Prakash wrote:
+> PMIC5 Gen3 has a similar ADC architecture to that on PMIC5 Gen2,
+> with all SW communication to ADC going through PMK8550 which
+> communicates with other PMICs through PBS. The major difference is
+> that the register interface used here is that of an SDAM present on
+> PMK8550, rather than a dedicated ADC peripheral. There may be more than one
+> SDAM used for ADC5 Gen3. Each ADC SDAM has eight channels, each of which may
+> be used for either immediate reads (same functionality as previous PMIC5 and
+> PMIC5 Gen2 ADC peripherals) or recurring measurements (same as PMIC5 and PMIC5
+> Gen2 ADC_TM functionality). In this case, we have VADC and ADC_TM functionality
+> combined into the same driver.
+> 
+> Patch 1 is a cleanup, to move the QCOM ADC dt-bindings files from
+> dt-bindings/iio to dt-bindings/iio/adc folder, as they are
+> specifically for ADC devices. It also fixes all compilation errors
+> with this change in driver and devicetree files and similar errors
+> in documentation for dtbinding check.
+> 
+> Patch 2 adds bindings for ADC5 Gen3 peripheral.
+> 
+> Patch 3 adds the main driver for ADC5 Gen3.
+> 
+> Patch 4 adds the auxiliary thermal driver which supports the ADC_TM
+> functionality of ADC5 Gen3.
+> 
+> Changes since v3:
+> - Updated files affected by adc file path change in /arch/arm folder,
+>   which were missed earlier.
 
-...
+I don't think this was tested afterwards...
 
-> > -       for (i = 0; i < MAX_PACKAGES; i++)
-> > -               devm_mutex_init(&pdev->dev, &cpufreq_mutex[i]);
-> > +       for (i = 0; i < MAX_PACKAGES; i++) {
-> > +               ret = devm_mutex_init(&pdev->dev, &cpufreq_mutex[i]);
-> > +               if (ret)
-> Good catch, but I think "if (ret < 0)" is better? Sometimes a positive
-> return value is legal, even if not in this case.
-
-I disagree on this.
-
-During a tons of reviews I have done in the past this kind of check is
-impediment and always rises the Q "why?" It means that the author hasn't
-fully thought through the code and most likely done something is a cargo cult.
-On top of that, if the callee is changed at some point to actually return
-a positive code(s), the caller most likely has to be at least aware of that
-change. The proposed modification makes this silently compile and hides
-possible important details from the caller(s).
-
-> And it is better to use loongson3 rather than loongson because there
->  is another loongson2 driver.
-
-Thanks, I will change that in v2 (I believe you are talking about Subject?).
-
-> > +                       return ret;
-> > +       }
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Krzysztof
 
 
