@@ -1,55 +1,54 @@
-Return-Path: <linux-pm+bounces-16786-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16785-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D36219B71AF
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:20:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D35D09B71A9
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:20:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 119601C20E1F
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:20:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89FDA1F20ECB
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:20:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72F912BF25;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65E31126C1D;
 	Thu, 31 Oct 2024 01:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="su6hr/kG"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="nrECsXAt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66D26F066;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFC656458;
 	Thu, 31 Oct 2024 01:19:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730337602; cv=none; b=kBRf01u/U6GdczujuyhLbd4X4LIvwUlqA3Orna4n1gBZFkUI6BG3zplPcltWgMPDpjxQrLfF6hv8tJglwdtdTUy6RACNgsX0ScLw1c9NhOTtAGZ7sxijNPEMdHiS3miqc7dqLvkTTEbCLfSai1FKP2q2YMeliN7vWDMyWW4wMtg=
+	t=1730337602; cv=none; b=hc83VqB8RFVos1xscq+9kMIKHkTaXI7wsKuuR6+28/cVpMYedeLjmNFECWGH7WECfHSmCoV3A7bhLPHXPkdo4TgUlJ41GZn2GiQ2TIh2vgMj6yZuN1UAYawZB48RkWydfTKwflvzGPyvZqx2xlI6kLAJnPqATeGZFUI+dbq3q3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1730337602; c=relaxed/simple;
-	bh=+auV2xbHnH8Ew5XeZexktMLe4HULByqQHcRGhcce8AI=;
+	bh=6kyI8Tcl7R9HDBFx1gkFswYsDmaf4ylpJeZ5Zg10oiQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=txcyItztX8KSAKvDvw7sAEGMfV8Aml/hgDr/b6FWkozWsRptGVyoYJDtfLI+aD9P+eHkXKs/u6eiSHTZA/ueEoMhibEX5w4bgrGe+nZCKCpphQACy0RuAG5Arwl2grMwEQae8OoSkfCYIukmYyNbcVnPyyQT/Jg2S/n3TdzR6fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=su6hr/kG; arc=none smtp.client-ip=5.75.144.95
+	 In-Reply-To:To:Cc; b=YYuHMHPsTl/sWspbF40LOxCONJDamW3id/5CCbE3Hjk9myGxSpm7sPlEvgycRkn5zcW0Aivduk0vzx2yneo1CODXneUbzBGEu5L2/WPQjUAfRwPfZj+cDBMbUwJf4aGx8pf4UbecnzlZggW5M+oV0CVzdtmEBR+qPqjF0FaqP7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=nrECsXAt; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.0.162] (BC24936A.dsl.pool.telekom.hu [188.36.147.106])
-	by mail.mainlining.org (Postfix) with ESMTPSA id D401CE45BE;
-	Thu, 31 Oct 2024 01:19:55 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id 7F188E45BF;
+	Thu, 31 Oct 2024 01:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1730337596;
+	s=psm; t=1730337597;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wSjtl8egN/7amHQK4rd+lA7Mo+LBp5UxTJkQiEalxxA=;
-	b=su6hr/kGUUxmz+I9XCScilK8EvHkXkK4nH0K5mJWBjQw0El7mxP2etcCuOiOVcTtOuAwtE
-	67roShL+UY8HBWbSaXIfQfWRHljDJBNrGbPlynPlGVp3/b3UlnXjYWR+Kh6+7/j/zNMMdg
-	km+dQ5d84MaAVaXn+DAGw0iRtODVvc85TxhaOGoZTBoCL9EYD/82RGoY96VEOTxaw/RRWo
-	ilSkl+p0UVKQOWbyENnDitsFF4e+ZsjA+IHyAAspogks2ckrWvwT9+8vwYKfim8c/a1tPz
-	OlJWivqoF/t3qnPIrOVMxWeWlMXX64mK9DGR22YMd1T2m8jgUkcDFszuRT6Qmw==
+	bh=5alMJRql3gqrqTNkSA2fg70oYcbid9R/aDxsT0IGwds=;
+	b=nrECsXAtbyfVSkkii37/sJdOT8EbW6c242L4bmbmwxv4oSCOtS97jDQXKXKmF0lb/rY09d
+	ZmOOSm4roWUAlrrJM5nw+1yX6tWAT992lH8nUIFUToMzZzl0hy7c5jnxcwGbe0XpTUKfKh
+	VjneS144EG4mE+QKsqRvuhVajch4aroebX3D7i5RwxSbXqsT0dMa1eAP2z9isJJP8LGoZx
+	uIYtD3t+i2V5ephksIoH3dkQMPHnC0B4GV7Z1DlZlNiKO5lmw2+ecnFZ8gT2GTHaUF88zu
+	g4UaNcsxzqzbpHNB9zyXwlaBuLHvpqPO4Fq7JaLrC565DmixYL0L0hdFfTZt0w==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Thu, 31 Oct 2024 02:19:52 +0100
-Subject: [PATCH v2 11/15] dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU
- to SMMUv1 compatibles
+Date: Thu, 31 Oct 2024 02:19:53 +0100
+Subject: [PATCH v2 12/15] dt-bindings: nvmem: Add compatible for MS8917
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,7 +57,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241031-msm8917-v2-11-8a075faa89b1@mainlining.org>
+Message-Id: <20241031-msm8917-v2-12-8a075faa89b1@mainlining.org>
 References: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 In-Reply-To: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -77,35 +76,33 @@ Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
  =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=939;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=859;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=+auV2xbHnH8Ew5XeZexktMLe4HULByqQHcRGhcce8AI=;
- b=8inYbgSn8grWR0K/GfRPG9fnSC7k057pACS12fCl5gZqEHZN3MAYBjF5tp4ZD43tLfJPOg+/E
- Xh473sTPqtlArBkRv5YyuomamCAeFdRKztrCUt5dBWPYVsEQknOzxYl
+ bh=6kyI8Tcl7R9HDBFx1gkFswYsDmaf4ylpJeZ5Zg10oiQ=;
+ b=t6kfBYGBDd0KBUqz123Slr/0cNyh8wGzq316sjn6vFxwMfvJKd9co4BZWB0mfYPNalaRJ/mD2
+ b5LtXLWBMliA2+xqrduRmtWHSy3w0/sKpmssvf5XClpGHkkJRM8ad7x
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-Add MSM8917 compatible string with "qcom,msm-iommu-v1" as fallback
-for the MSM8917 IOMMU which is compatible with Qualcomm's secure
-fw "SMMU v1" implementation.
+Document the QFPROM block found on MSM8917.
 
 Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
- Documentation/devicetree/bindings/iommu/qcom,iommu.yaml | 1 +
+ Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml b/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
-index f8cebc9e8cd9d46b449cd297153dbebe5c84bf3f..5ae9a628261fd251c1e991a70662c6d37ef2c4e3 100644
---- a/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
-@@ -21,6 +21,7 @@ properties:
-       - items:
-           - enum:
-               - qcom,msm8916-iommu
-+              - qcom,msm8917-iommu
-               - qcom,msm8953-iommu
-           - const: qcom,msm-iommu-v1
-       - items:
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+index 80845c722ae46611c722effeaaf014a0caf76e4a..4d81f98ed37a3a12f01d444dbfa77badcc09c22d 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+@@ -26,6 +26,7 @@ properties:
+           - qcom,ipq9574-qfprom
+           - qcom,msm8226-qfprom
+           - qcom,msm8916-qfprom
++          - qcom,msm8917-qfprom
+           - qcom,msm8974-qfprom
+           - qcom,msm8976-qfprom
+           - qcom,msm8996-qfprom
 
 -- 
 2.47.0
