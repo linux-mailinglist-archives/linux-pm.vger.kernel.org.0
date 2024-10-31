@@ -1,159 +1,260 @@
-Return-Path: <linux-pm+bounces-16821-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16822-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69C319B7997
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 12:21:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422159B79A6
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 12:26:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 157091F23303
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 11:21:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00778285A65
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 11:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F2019ABB7;
-	Thu, 31 Oct 2024 11:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E5E919ABBB;
+	Thu, 31 Oct 2024 11:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gd42HFmq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fd/IPDcH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F02119B595;
-	Thu, 31 Oct 2024 11:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A3719ABD1;
+	Thu, 31 Oct 2024 11:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730373664; cv=none; b=nIRZAxyg39vlu84pA6zd81zZmcVC4+evwA5Jyyi+R9C2FO9ogszBXNT3ZAwr7vZolBMpJbI97e+Y6aWrcVAF1HnSsxhByDHWCSheAplDse3iW7XrfPoFjvPVNEawOhpF0LhgITlfZXbiFDlZKnKh4XZ/Z6o8pjww5lKY4x/ipxg=
+	t=1730373990; cv=none; b=cIG/30W/ryNE+r2YRNAtQr1vdg6H7Reo/NZzXMvL47zFUs9hSRnUoRbnIa7DeBDvTJ7X+se9Ea0M5IthsVXH5acThH1jQllFz+4AyikFxhuejaLipQzxrM1DsrIlKvlMNfHK0ZS+qzxoh8XJoc+QCv0aYL4yH6a2j5Vn/0GKpFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730373664; c=relaxed/simple;
-	bh=1JstP6bvNNsf3LRWG4yTTVkzl1OAIWojm11gpkcMya0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cwIwo0x6pe8qbFWE/yf9IOdDq6IjQ0pDeVHqnzesml4iUnM6mwwtVg4s0qzHTgQL+2YAxxvrLmBzshef9iYfLwNjhB/akZHGQj1e5U0poi0EYMI3DWv3yROkPW4VnzxrQpfNtxhqn+YvcTNd52HIayl3DoYLqyAn6dkkz3GC6qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gd42HFmq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FA39C4E672;
-	Thu, 31 Oct 2024 11:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730373664;
-	bh=1JstP6bvNNsf3LRWG4yTTVkzl1OAIWojm11gpkcMya0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Gd42HFmqqUQLIphzHQ056DClzOQBkKInXIBJnt2vhYrEU65olAjaBlOIitVd2f4rK
-	 vU0gFSaIepRvnyczjQvsg1x6siOlfVf1Qo1fiZOeaB1gCs7o35hNpETvuBbhxbpFTn
-	 QM3qrR1OL+5QcfGMQhI/UtttL8mZb4tG+8J9tt0wlVwznop0umwwtBBhHGL/es8tBW
-	 UC5yxzKgsSRJMkB6Y+qQpw28vTPI9mJNJVWHKr85yo9H5OlH8N+Q/Np2N383ZCauW8
-	 vSwEaOXOSBbdItxB+XdCq6DsQ6MihTj1llMb64HJ2a8TUEOfUqwUP6atS4FVY5D/Vd
-	 PPyX7BKbXJi/Q==
-Message-ID: <7208f3a0-d62a-43b3-923f-c9e5080b97a5@kernel.org>
-Date: Thu, 31 Oct 2024 12:20:57 +0100
+	s=arc-20240116; t=1730373990; c=relaxed/simple;
+	bh=hzudRnhY5g6fYzOL8bxyYrlk3c3jll8mroM69zcnwN8=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=V8MvxKM1NGYoRA4t7blljconWWajBnZfLMKwkRKxCz/q9I0u4tVnbWlW5wqJByVJK3RcSHfHoOxpchKj7yna2oMOzHYP44dmVwL32X8XErJLxRBk1NC9OAdzzPfpWw8tNcN4eNwE45qsK26Xq1Z/xYxOySANse575fnvDSib5X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fd/IPDcH; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5c9150f9ed4so1154602a12.0;
+        Thu, 31 Oct 2024 04:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730373987; x=1730978787; darn=vger.kernel.org;
+        h=user-agent:message-id:date:to:cc:from:subject:references
+         :in-reply-to:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=du8RsPSSmfKdksX84UQ+FWRuhhilBEXtJldK005aAhw=;
+        b=fd/IPDcH6PUzEI5G13DQe1XGk/9ZQKbc7FF9+RFZrAktrag4Ds0BqMnOXaFxoheKsu
+         aq11VBVFEyPZLh5Lje/ljryOjTNpCz3T0lIWQZobOM2WBxg2PQEwCttkhLCOcBlRrozY
+         +vuq4VfZnhquDxRJHYFwivTmTEeDvwmoG5YIhL9MIQEKtPrwFdjullCF9ylM4Pliir9k
+         ysR+l+mJ32mqO0wlu31Itvwnv71vuyfDXujKtAvJgXHowWp9u8Q2dgXlHFlj3yBbr1Tp
+         ICSLaeQ2q09D1DvOLah7On4y954kZymoX2ShY0+IEjHBZRq8e9MKvE8o8YXHAtchu/5o
+         /gkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730373987; x=1730978787;
+        h=user-agent:message-id:date:to:cc:from:subject:references
+         :in-reply-to:content-transfer-encoding:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=du8RsPSSmfKdksX84UQ+FWRuhhilBEXtJldK005aAhw=;
+        b=HVtWZfCjaAge98DqdlLbqUzYP2AnQ/bG14T1rmpoUQ90q+Cc/tiLMMubg0/cKN0VPv
+         H7nZTCkcOldUPgTtC3OxvFv00Zq3yERxR00x/b9Ur1f/ixDJxJBfbBSYHL//6i7W9fQA
+         04sqGsKxu8+3ut6PI3cdyb5mnHlNlnQQlq/7NIe95F2ta3aVUpnaTvl8TZzy/mvEKUcd
+         dJjZUjZvW/yun5Pi4xw7gXSu64e+Avqwfgg1pBl4kTK9mWJkCRafybl+SaU1ga2qbS+Q
+         HY7iaTMxIbmKmNCy+YgStL/Be644drf/eFhxsLmW5vGDDlbS0jmKIzN2p5vAumNhLgch
+         +spg==
+X-Forwarded-Encrypted: i=1; AJvYcCVhhbDZycL6lpY08TA6Wca07lwEMMIshav8CklVedQmJbGnVdIhdUrMrYbyzqmA9z6ElsDRgy5eET9ahA==@vger.kernel.org, AJvYcCX+DolMKuR1vC4RQJ8dKEtJ78HT7GL57DK7SCqnODQX0H6pw66DlI63g0IyLmepWMzpBH1LTgMUIZtEIeKa@vger.kernel.org, AJvYcCX0ZEFzukkeQBI2O7x3p2+OdWM3+Gp2aJCaunlWCHTBpvcB0qI7EP9FstFAXsqZ1SdtyKJD4gBDrUM=@vger.kernel.org, AJvYcCXhjIsjjDHm3+E/+bFwRE/fa6ud9ys9vEfNK60j1O1o0uRPIS98jo+olr+AkJ3jS+JvE+ZPdHgNToo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtSzRJ+hi5RcvzhvDkWOrLT4oY9aePzidZ3WTGscJc27ptO3WV
+	blDOT+2kvvpmRQIbIYSpMPsuUZ81suvIr65IfpReQ7IfPmlRtEkS
+X-Google-Smtp-Source: AGHT+IGPM1ys92XJWy55iaMc+mkkiiSwTT3VmXdYtDiJ0hU+Inj8aTV0aI+/6k+hyeDL2q/6nruBXQ==
+X-Received: by 2002:a05:6402:3481:b0:5c9:2a5a:5f0e with SMTP id 4fb4d7f45d1cf-5cbbf94abacmr14848930a12.28.1730373986367;
+        Thu, 31 Oct 2024 04:26:26 -0700 (PDT)
+Received: from localhost (host-82-56-18-47.retail.telecomitalia.it. [82.56.18.47])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ceac5cb8fbsm476840a12.0.2024.10.31.04.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2024 04:26:25 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] cpuidle: riscv-sbi: use cleanup attribute for np in
- for_each_possible_cpu
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Anup Patel <anup@brainfault.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Atish Patra <atishp@rivosinc.com>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>, linux-pm@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20241030-cpuidle-riscv-sbi-cleanup-v1-0-5e08a22c9409@gmail.com>
- <20241030-cpuidle-riscv-sbi-cleanup-v1-2-5e08a22c9409@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241030-cpuidle-riscv-sbi-cleanup-v1-2-5e08a22c9409@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241030203050.5cdf3450@jic23-huawei>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com> <20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com> <ZyJHFp6vbQ7deLFs@black.fi.intel.com> <173031260171.39393.109639772708550094@njaxe.localdomain> <20241030203050.5cdf3450@jic23-huawei>
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from producer to fix race
+From: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+To: Jonathan Cameron <jic23@kernel.org>
+Date: Thu, 31 Oct 2024 12:26:24 +0100
+Message-ID: <173037398492.12348.265826723028347056@njaxe.localdomain>
+User-Agent: alot/0.11
 
-On 30/10/2024 07:44, Javier Carrasco wrote:
-> Simplify the code and make it more robust against new execution paths in
-> the loop by means of the cleanup attribute.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> index 2b3aec09b895..3a78d6b7598b 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -504,23 +504,21 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
->  	int cpu, ret;
->  	struct cpuidle_driver *drv;
->  	struct cpuidle_device *dev;
-> -	struct device_node *np, *pds_node;
-> +	struct device_node *pds_node;
->  
->  	/* Detect OSI support based on CPU DT nodes */
->  	sbi_cpuidle_use_osi = true;
->  	for_each_possible_cpu(cpu) {
-> -		np = of_cpu_device_node_get(cpu);
-> +		struct device_node *np __free(device_node) =
-> +			of_cpu_device_node_get(cpu);
->  		if (np &&
->  		    of_property_present(np, "power-domains") &&
->  		    of_property_present(np, "power-domain-names")) {
-> -			of_node_put(np);
+Quoting Jonathan Cameron (2024-10-30 21:30:50)
+> On Wed, 30 Oct 2024 19:23:21 +0100
+> Matteo Martelli <matteomartelli3@gmail.com> wrote:
+>=20
+> > Quoting Andy Shevchenko (2024-10-30 15:47:50)
+> > > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote: =20
+> > > > Consumers need to call the producer's read_avail_release_resource()
+> > > > callback after reading producer's available info. To avoid a race
+> > > > condition with the producer unregistration, change inkern
+> > > > iio_channel_read_avail() so that it copies the available info from =
+the
+> > > > producer and immediately calls its release callback with info_exists
+> > > > locked.
+> > > >=20
+> > > > Also, modify the users of iio_read_avail_channel_raw() and
+> > > > iio_read_avail_channel_attribute() to free the copied available buf=
+fers
+> > > > after calling these functions. To let users free the copied buffer =
+with
+> > > > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
+> > > > consumer helper that is equivalent to iio_read_avail_channel_attrib=
+ute()
+> > > > but stores the available values in the returned variable. =20
+> > >=20
+> > > ...
+> > >  =20
+> > > > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_=
+dev,
+> > > > +                                         struct iio_chan_spec cons=
+t *chan,
+> > > > +                                         const int *vals, long mas=
+k)
+> > > > +{
+> > > > +     kfree(vals);
+> > > > +}
+> > > > +
+> > > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> > > >                             struct iio_chan_spec const *chan,
+> > > >                             int val, int val2, long mask)
+> > > > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *i=
+ndio_dev,
+> > > >  static const struct iio_info dpot_dac_info =3D {
+> > > >       .read_raw =3D dpot_dac_read_raw,
+> > > >       .read_avail =3D dpot_dac_read_avail,
+> > > > +     .read_avail_release_resource =3D dpot_dac_read_avail_release_=
+res,
+> > > >       .write_raw =3D dpot_dac_write_raw,
+> > > >  }; =20
+> > >=20
+> > > I have a problem with this approach. The issue is that we allocate
+> > > memory in one place and must clear it in another. This is not well
+> > > designed thingy in my opinion. I was thinking a bit of the solution a=
+nd
+> > > at least these two comes to my mind:
+> > >=20
+> > > 1) having a special callback for .read_avail_with_copy (choose better
+> > > name) that will dump the data to the intermediate buffer and clean it
+> > > after all;
+> > >=20
+> > > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC. =20
+> >=20
+> > Could you elaborate more about these potential solutions? Maybe with so=
+me
+> > usage examples?
+> >=20
+> > If I get it correctly, in both cases you are suggesting to pass ownersh=
+ip
+> > of the vals buffer to the caller, iio_read_channel_info_avail() in this
+> > case, so that it would take care of freeing the buffer after calling
+> > iio_format_after_*(). We considered this approach during an initial
+> > discussion with Jonathan (see read_avail_ext() in [1]), where he sugges=
+ted
+> > to let the driver keep the release control through a callback for two
+> > reasons:
+> >=20
+> > 1) Apparently it's a bad pattern to pass the buffer ownership to the co=
+re,
+> >    maybe Jonathan can elaborate why? The risk I can think of is that th=
+e driver
+> >    could still keep the buffer copy in its private data after giving it=
+ away,
+> >    resulting in fact in a double ownership. However I think it would be=
+ clear
+> >    enough in this case that the copy should be handled by the caller, o=
+r maybe
+> >    not?
+> Mostly the lack of desire to have to copy for the 95% of cases where it's
+> not needed and that it prevents any optimization like you mention.
 
-You just added this. Don't add code which is immediately removed. It's a
-noop or wrong code.
+I think the suggestion here is to add an additional .read_avail_with_copy()
+without replacing the original .read_avail(), so all the current drivers th=
+at
+use a constant avail list would not be affected. And I think this was the s=
+ame
+idea for the additional read_avail_ext() or the additional argument for the
+read_avail() we were considering in [1]. So I would think that
+iio_read_channel_info_avail() would do something like the following:
 
-If you want to backport something: send a backport. We work here on
-mainline and in mainline this is one logical change: fixing issue.
-Whether you fix issue with of_node_put or cleanup or by removing this
-code entirely, it does not matter. All of these are fixing the same, one
-issue. This is inflating mainline history with unnecessary commits.
+    if (indio_dev->info->read_avail_with_copy)
+        indio_dev->info->read_avail_with_copy(vals);
+    else
+        indio_dev->info->read_avail(vals);
 
+    ...
+    iio_format_avail_list(vals);
+    ...
 
+    if (indio_dev->info->read_avail_with_copy)
+        kfree(vals);
+
+And the drivers would choose whether to define the read_avail or the
+read_avail_with_copy.
+
+What I was referring to is that, back then, you mentioned you would have
+preferred to avoid passing ownership of the buffer around:
+
+> That's a corner case we should think about closing. Would require an indi=
+cator
+> to read_avail that the buffer it has been passed is a snapshot that it sh=
+ould
+> free on completion of the string building.  I don't like passing ownership
+> of data around like that, but it is fiddly to do anything else given
+> any simple double buffering is subject to race conditions.
+
+I guess there is some other reason other than avoiding the copy when not
+necessary, since by introducing an additional function or argument or return
+type, most of the unnecessary copies would already be avoided right?
+
+Anyway any of this solutions would still prevent the potential optimization=
+s of
+point 2). It's worth mentioning that those kind of optimizations are curren=
+tly
+not adopted by any driver.
+
+>=20
+> Jonathan
+> >=20
+> > 2) Some driver might want to avoid allocating a new copy of a big table=
+ if
+> >    the race does not occur (e.g. with additional checks on buffer access
+> >    code) and thus wouldn't call a free() in the release callback.
+> >=20
+> > >=20
+> > > In any case it looks fragile and not scalable. I propose to drop this
+> > > and think again. =20
+> >=20
+> > I see your concerns, I am open to reconsider this in case we come up wi=
+th
+> > better solution after addressing the points above.
+> >=20
+> > > Yes, yes, I'm fully aware about the problem you are trying to solve a=
+nd
+> > > agree on the report, I think this solution is not good enough.
+> > >=20
+> > > --=20
+> > > With Best Regards,
+> > > Andy Shevchenko
+> > >  =20
+> >=20
+> > [1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic23-hu=
+awei/
+> >=20
+> > Best regards,
+> > Matteo Martelli
+>=20
+
+I hope I've brought a little more clarity to the discussion by providing so=
+me
+history instead of making it more confusing.
 
 Best regards,
-Krzysztof
-
+Matteo Martelli
 
