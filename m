@@ -1,220 +1,329 @@
-Return-Path: <linux-pm+bounces-16848-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16849-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 285869B8219
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 19:01:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E98E9B8240
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 19:08:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 859FAB22832
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 18:01:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 976681F23492
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 18:08:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D4319F13B;
-	Thu, 31 Oct 2024 18:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509D61C6F56;
+	Thu, 31 Oct 2024 18:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kT+grvxV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NlFkgtPT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C16ECF;
-	Thu, 31 Oct 2024 18:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A9E1CCECE;
+	Thu, 31 Oct 2024 18:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730397688; cv=none; b=AriLTTEMcWOYKjAc30wiPW8tKFgyl4Q5sw6hvWVcHO7KnOz/ahnAaNR7h/nG6FjLNuv8nz2/lNYLXFCUlUMmCeJhEs/4TDQp4qlv3wkfNyfrvsMNevb9BXvPdjsG6wes2lzeOFX5EIK09d57TGXXMXG1LGUezMQZEtKw1Veks9s=
+	t=1730397998; cv=none; b=Zqug/QnKUT9/lmnmmaJWBck+tu13C2nK/VsaAxzbdm/1ux+JH3Sfnxwnm2ZhakSmhvrT9cEcV9kAEtR1Taxd9JxjLCkokXBkPZ6hyPCh6b8rTmitv7nNKB+rIX7L0EEEtFwNsj2GBxCw2dCbrq2hTsxqC/xQuOJusqvhzzAqB0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730397688; c=relaxed/simple;
-	bh=9t5fTfp/R9ZA2okp7DGqxNoTJ8U06v8BtQwbekJ8OLY=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QVue+23sKnnCfw0gFa41TDbQvwrYIKQId631rvDeJ/SKpoqL8N/OC4pJobkVkX2dW/shFHZhqJSUiBf+FQxI/FRjaHDOmZOvcedBLWff9GOB2VmJUW2RxmCBkgrlcrXNtKsBvl9/U9NqA3UZ2Cv6ngmOMJvbe9IRuxFJCDsKBvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kT+grvxV; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:To:From:Subject:Message-ID:Sender:Reply-To:Cc:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9t5fTfp/R9ZA2okp7DGqxNoTJ8U06v8BtQwbekJ8OLY=; b=kT+grvxVFgFvvoXbjzAKvWofT0
-	4wMuhu15Vi31Nt+15gf5iXVg61bJ/tMrTOPwO+ihA+DWIEQIbSoOluMOAA4eLkv8I4cMP2xVf9HRQ
-	m5xnRDSHFK1UrioyE/EcPr26Qa4qRhSYF1whXjCXcVOOii1M7zj8YcOxk3mqDMgdg1nKlqtYKKf/d
-	X/IusVEvYA66aEaVYmeVL9l4G4btKPAg3oerpLxlV7kDffcCwiQWIbsjQFrcK08P927W4aNsWC/x4
-	Uucwmo6oJpxsnScuJySi49n6pfye1w+B3ArIIMfJg9B5/k/CH5j+LiDfaexVvVubA1ujHKT+J6A7v
-	Mpnp3Cww==;
-Received: from [2605:ed00:430b:e0:59ee:279e:5c98:9214] (helo=syn-2605-ed00-430b-00e0-59ee-279e-5c98-9214.inf6.spectrum.com)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t6ZU1-0000000EzRm-1jDz;
-	Thu, 31 Oct 2024 18:01:22 +0000
-Message-ID: <85e4cb39459c883c1075c90e1f53c63129256e21.camel@infradead.org>
-Subject: Re: (subset) [PATCH v6 0/6] Add PSCI v1.3 SYSTEM_OFF2 support for
- hibernation
-From: David Woodhouse <dwmw2@infradead.org>
-To: Oliver Upton <oliver.upton@linux.dev>, 
- linux-arm-kernel@lists.infradead.org, Catalin Marinas
- <catalin.marinas@arm.com>,  Pavel Machek <pavel@ucw.cz>, Paolo Bonzini
- <pbonzini@redhat.com>, Will Deacon <will@kernel.org>,  Len Brown
- <len.brown@intel.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org,  kvmarm@lists.linux.dev, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Francesco
- Lavra <francescolavra.fl@gmail.com>,  linux-pm@vger.kernel.org, Jonathan
- Corbet <corbet@lwn.net>, kvm@vger.kernel.org,  "Rafael J. Wysocki"
- <rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, 
- linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>, Marc
- Zyngier <maz@kernel.org>, linux-doc@vger.kernel.org, Zenghui Yu
- <yuzenghui@huawei.com>,  Suzuki K Poulose <suzuki.poulose@arm.com>
-Date: Thu, 31 Oct 2024 13:01:17 -0500
-In-Reply-To: <173039739006.2928363.16193131105108954688.b4-ty@linux.dev>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
-	 <173039739006.2928363.16193131105108954688.b4-ty@linux.dev>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-6gI9KPsLUV2sE/qVjwYs"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1730397998; c=relaxed/simple;
+	bh=wxOVPQhRYb1iDlKXA4T7AwTmfbZcpiZz8ZtU2fyP62E=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=C+EUvUA0RNiDt/XheDu8cvWP/qCOMlRkA8JYYloeMFcs61XxPBIZo2Ul/jQqIAdjgNmsfBeuPb8gt8cTK1j+Yqh0ltHwT/IEbsCGnVHXjXlXnn8TBBVZWZqG7yXOnfjwCUKzpa6fWY7+s4fyZT7YrmJgfEpC/KjMzlKuBG5AQvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NlFkgtPT; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4314f38d274so13121355e9.1;
+        Thu, 31 Oct 2024 11:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730397994; x=1731002794; darn=vger.kernel.org;
+        h=user-agent:message-id:date:to:cc:from:subject:references
+         :in-reply-to:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C3lnnC+pFR+QFMKreyZ9bKF9fzIqUa9dKroNneh+ewM=;
+        b=NlFkgtPTY0LIpWBwIA702wiNJCIXfUZU/3GzkbMxtYnR/DmaHW1o+6OEsKZURle303
+         R3g+4R2kzzLA7mVPYcFoi+gY/GVwsTQsz3as/ms2J/8FIRwErsX0qBn3Gxvm3w8CbdcN
+         jd2Y2iyMP7X5xLF++roRc2wT34vBgzQf2kgiVbeIH+bivKuSV7gGdAuGKIB2d/nDZgfo
+         +gn+dhQIbPLBf5FWglz96VTwThfTmmNsfs7heMlpFMZv84+geS7z/tFrhE0tDgOcfYpE
+         lw8yEGB4KYQAzi/Liqy/RAXMYOf6p2kFFROM9EiOf0OCOUV7NN9FOaezpcuVwc2Yhzi8
+         0IRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730397994; x=1731002794;
+        h=user-agent:message-id:date:to:cc:from:subject:references
+         :in-reply-to:content-transfer-encoding:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C3lnnC+pFR+QFMKreyZ9bKF9fzIqUa9dKroNneh+ewM=;
+        b=H9e7yiZagxUuAm+gyc3t2u8M1reHAEgmnTrfOrcAFlNCXDomFme12B7oEx0mKPlVGA
+         6RlXqrpYSk2fbF0ZKzRyyykXd881lbWDdntHgxec2ZszkY/WC9lZNya+91dHtOubNxq6
+         uVJaSdP1VfhiYwTc6sPQynhEpCakiqG6jYscElwrfiHpJgSQrTJhYwdFisCQH1glQu0V
+         Qcf+72mSWsW/oBDffEdpvYne0VMgH6FOLFb6wZXtLucsY5AnxisqkwYWH14kM13OWJxl
+         5kKf0+24faigJMpZxg4MRDeFlEbfz/2Ku0CWAHfzIHnG+bPivON1mOz1cf37clxyA9mq
+         rxew==
+X-Forwarded-Encrypted: i=1; AJvYcCUBpDTPzgoYcs/F6ig2Tt2mtJ/agMFerZM1YoIgddzUZrRcmVokvQKzeOp3Sqfl5V2c2boR/XkQgB9whQMC@vger.kernel.org, AJvYcCVJmuPJNmgzLZgkKqnoHNuZi8q0l6RAeShVIRfNA+paZZLp6wKCA7bOBivOtvFrV5hLp8M6aAxkQhjrIw==@vger.kernel.org, AJvYcCW3magkIYWIh6rGbP9iRgWKjkSq1xAILuZEA7jrK4nBFR0GaDqfPfDmvLVO2GBQaNTGp+xDVv1X41w=@vger.kernel.org, AJvYcCX2WWuwUowIE38Io7gojpdcnQrfMsBpwz2Zxm0zaVN/cIMO0GL7yJDljrdO3FdQpAWhqDH1G29QX4Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg88LMME5p2m5X7iYpzSrRj4XSW1z5GT+Q0wt5Gy3IacGoZReA
+	41edPfcBTvkGVIWSFM+/rEZL7GLRh8d8KUiTZI9oACiVvJ7HCZxo
+X-Google-Smtp-Source: AGHT+IHF4dqb16+F0GrJw71R8xWPsQC/3CP23zmShE4vP2rt3Ldmjh5Y2W2r8AEs7luO7M/dal47cw==
+X-Received: by 2002:a05:600c:3d8a:b0:42b:ac3d:3abc with SMTP id 5b1f17b1804b1-4328327e0bemr7717045e9.24.1730397993475;
+        Thu, 31 Oct 2024 11:06:33 -0700 (PDT)
+Received: from localhost (host-82-56-18-47.retail.telecomitalia.it. [82.56.18.47])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10b7c38sm2812874f8f.24.2024.10.31.11.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2024 11:06:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-
-
---=-6gI9KPsLUV2sE/qVjwYs
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241031143129.0000014e@Huawei.com>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com> <20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com> <ZyJHFp6vbQ7deLFs@black.fi.intel.com> <173031260171.39393.109639772708550094@njaxe.localdomain> <20241030203050.5cdf3450@jic23-huawei> <173037398492.12348.265826723028347056@njaxe.localdomain> <20241031143129.0000014e@Huawei.com>
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from producer to fix race
+From: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andriy.shevchenko@intel.com>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Date: Thu, 31 Oct 2024 19:06:32 +0100
+Message-ID: <173039799203.1353.4404042832923090619@njaxe.localdomain>
+User-Agent: alot/0.11
 
-On Thu, 2024-10-31 at 17:56 +0000, Oliver Upton wrote:
-> On Sat, 19 Oct 2024 18:15:41 +0100, David Woodhouse wrote:
-> > The PSCI v1.3 spec (https://developer.arm.com/documentation/den0022)
-> > adds support for a SYSTEM_OFF2 function enabling a HIBERNATE_OFF state
-> > which is analogous to ACPI S4. This will allow hosting environments to
-> > determine that a guest is hibernated rather than just powered off, and
-> > ensure that they preserve the virtual environment appropriately to
-> > allow the guest to resume safely (or bump the hardware_signature in the
-> > FACS to trigger a clean reboot instead).
+Quoting Jonathan Cameron (2024-10-31 15:31:29)
+> On Thu, 31 Oct 2024 12:26:24 +0100
+> Matteo Martelli <matteomartelli3@gmail.com> wrote:
+>=20
+> > Quoting Jonathan Cameron (2024-10-30 21:30:50)
+> > > On Wed, 30 Oct 2024 19:23:21 +0100
+> > > Matteo Martelli <matteomartelli3@gmail.com> wrote:
+> > >  =20
+> > > > Quoting Andy Shevchenko (2024-10-30 15:47:50) =20
+> > > > > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote: =
+  =20
+> > > > > > Consumers need to call the producer's read_avail_release_resour=
+ce()
+> > > > > > callback after reading producer's available info. To avoid a ra=
+ce
+> > > > > > condition with the producer unregistration, change inkern
+> > > > > > iio_channel_read_avail() so that it copies the available info f=
+rom the
+> > > > > > producer and immediately calls its release callback with info_e=
+xists
+> > > > > > locked.
+> > > > > >=20
+> > > > > > Also, modify the users of iio_read_avail_channel_raw() and
+> > > > > > iio_read_avail_channel_attribute() to free the copied available=
+ buffers
+> > > > > > after calling these functions. To let users free the copied buf=
+fer with
+> > > > > > a cleanup pattern, also add a iio_read_avail_channel_attr_retva=
+ls()
+> > > > > > consumer helper that is equivalent to iio_read_avail_channel_at=
+tribute()
+> > > > > > but stores the available values in the returned variable.   =20
+> > > > >=20
+> > > > > ...
+> > > > >    =20
+> > > > > > +static void dpot_dac_read_avail_release_res(struct iio_dev *in=
+dio_dev,
+> > > > > > +                                         struct iio_chan_spec =
+const *chan,
+> > > > > > +                                         const int *vals, long=
+ mask)
+> > > > > > +{
+> > > > > > +     kfree(vals);
+> > > > > > +}
+> > > > > > +
+> > > > > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> > > > > >                             struct iio_chan_spec const *chan,
+> > > > > >                             int val, int val2, long mask)
+> > > > > > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_de=
+v *indio_dev,
+> > > > > >  static const struct iio_info dpot_dac_info =3D {
+> > > > > >       .read_raw =3D dpot_dac_read_raw,
+> > > > > >       .read_avail =3D dpot_dac_read_avail,
+> > > > > > +     .read_avail_release_resource =3D dpot_dac_read_avail_rele=
+ase_res,
+> > > > > >       .write_raw =3D dpot_dac_write_raw,
+> > > > > >  };   =20
+> > > > >=20
+> > > > > I have a problem with this approach. The issue is that we allocate
+> > > > > memory in one place and must clear it in another. This is not well
+> > > > > designed thingy in my opinion. I was thinking a bit of the soluti=
+on and
+> > > > > at least these two comes to my mind:
+> > > > >=20
+> > > > > 1) having a special callback for .read_avail_with_copy (choose be=
+tter
+> > > > > name) that will dump the data to the intermediate buffer and clea=
+n it
+> > > > > after all;
+> > > > >=20
+> > > > > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC=
+.   =20
+> > > >=20
+> > > > Could you elaborate more about these potential solutions? Maybe wit=
+h some
+> > > > usage examples?
+> > > >=20
+> > > > If I get it correctly, in both cases you are suggesting to pass own=
+ership
+> > > > of the vals buffer to the caller, iio_read_channel_info_avail() in =
+this
+> > > > case, so that it would take care of freeing the buffer after calling
+> > > > iio_format_after_*(). We considered this approach during an initial
+> > > > discussion with Jonathan (see read_avail_ext() in [1]), where he su=
+ggested
+> > > > to let the driver keep the release control through a callback for t=
+wo
+> > > > reasons:
+> > > >=20
+> > > > 1) Apparently it's a bad pattern to pass the buffer ownership to th=
+e core,
+> > > >    maybe Jonathan can elaborate why? The risk I can think of is tha=
+t the driver
+> > > >    could still keep the buffer copy in its private data after givin=
+g it away,
+> > > >    resulting in fact in a double ownership. However I think it woul=
+d be clear
+> > > >    enough in this case that the copy should be handled by the calle=
+r, or maybe
+> > > >    not? =20
+> > > Mostly the lack of desire to have to copy for the 95% of cases where =
+it's
+> > > not needed and that it prevents any optimization like you mention. =20
 > >=20
-> > [...]
+> > I think the suggestion here is to add an additional .read_avail_with_co=
+py()
+> > without replacing the original .read_avail(), so all the current driver=
+s that
+> > use a constant avail list would not be affected. And I think this was t=
+he same
+> > idea for the additional read_avail_ext() or the additional argument for=
+ the
+> > read_avail() we were considering in [1]. So I would think that
+> > iio_read_channel_info_avail() would do something like the following:
+> >=20
+> >     if (indio_dev->info->read_avail_with_copy)
+> >         indio_dev->info->read_avail_with_copy(vals);
+> >     else
+> >         indio_dev->info->read_avail(vals);
+> >=20
+> >     ...
+> >     iio_format_avail_list(vals);
+> >     ...
+> >=20
+> >     if (indio_dev->info->read_avail_with_copy)
+> >         kfree(vals);
 >=20
-> Thanks Catalin for the ack, as promised:
+> Ok, sure that would work, but...
 >=20
-> Applied to kvmarm/next, thanks!
+> I don't really see this as being much less fragile than
+> the existing solution + in cases that we do have where
+> only some available are not const we will have to copy them
+> all.
 >=20
-> [6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 https://git.kernel.org/kvmarm/kvmarm/c/3e2=
-51afaec9a
+> If anything it's more complex than making it a driver problem
+> to provide the release call however it wants to do it.
+> =20
+>=20
+> >=20
+> > And the drivers would choose whether to define the read_avail or the
+> > read_avail_with_copy.
+> >=20
+> > What I was referring to is that, back then, you mentioned you would have
+> > preferred to avoid passing ownership of the buffer around:
+> >=20
+> > > That's a corner case we should think about closing. Would require an =
+indicator
+> > > to read_avail that the buffer it has been passed is a snapshot that i=
+t should
+> > > free on completion of the string building.  I don't like passing owne=
+rship
+> > > of data around like that, but it is fiddly to do anything else given
+> > > any simple double buffering is subject to race conditions. =20
+> >=20
+> > I guess there is some other reason other than avoiding the copy when not
+> > necessary, since by introducing an additional function or argument or r=
+eturn
+> > type, most of the unnecessary copies would already be avoided right?
+>=20
+> It's not a strong reason beyond limiting scope of clever design +
+> the key bit my mind is that the above is not substantially simpler and
+> reduces our flexibility.
+>=20
+> >=20
+> > Anyway any of this solutions would still prevent the potential optimiza=
+tions of
+> > point 2). It's worth mentioning that those kind of optimizations are cu=
+rrently
+> > not adopted by any driver.
+>=20
+> That one indeed not, but mixing dynamic and non dynamic is something
+> you do in your pac1921 patch.
 
-Thank you.
+Good point! I didn't think about it, or more likely I forgot, that with an
+additional read_avail_with_copy() used as in the example you cannot mix dyn=
+amic
+and non dynamic available lists, thus those drivers that need at least one
+dynamic available list would always copy all of them as they need to rely to
+the read_avail_with_copy(). I guess this could be worked around with an
+additional return argument for the read_avail() or an additional type like =
+the
+IIO_AVAIL_LIST_ALLOC suggested by Andy to signal the caller it needs to free
+the list after use. However, I think they would introduce a more invasive
+change in the current API compared to an additional optional callback, so I
+agree that the current release callback is still a better option.
 
---=-6gI9KPsLUV2sE/qVjwYs
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQxMDMxMTgwMTE3WjAvBgkqhkiG9w0BCQQxIgQgYLfybi6x
-Np71PM63rFGt1l4vqksdAg4H77Xw1mciGIMwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBiM9gUSxyrF6VSRgWM587M7rJO4VNwXVs8
-5t87Aop3SUKqtktQJzoHlrPW7Alo5FMv9TnbznH/9G2fAKD6fc7AZ5po9z7nKbfuGaw2uxdx2psm
-6xhzqAv2h2TVp/1qlip0molXdOcR/RVbXvsrJ/RhElHg5rAcHVv6xsX9OLulyaEzBTwviNBuerzj
-8/yAMXDVNu3rvVwhzTbHJZBxO1k9tV4pG8ntphuzNZkXKWDZZafyRAP5r9PCWbGd2ulaTw8KMtQD
-+jhjavfclg+uAaWrWO4gLn+1iA1i7p7+xLHDxCRohxYmVNSO1ekUEuG6zsLvIn5LNPRmEXxG1PqT
-qf1GzaSLNCxvTgaMU2WDW+oaU3YvalVwP1gdAQNd/sv/J93Is/jmrwmbv2uqJ0A6Pt3A6KYzPt0G
-TjkwzGhyM4m3qPR2u/0YbwtNt3fJne0sSogVR7oyDtFOPcmExr+fsg/5Mmix/lgw126ME3hZs7b+
-hbC+eCilycVZVZSPhaL2HQ83FjJqURyTyXBJK+IIrVv8z9ggUMw7qVaZFyTJbug9NAnWRorQgof0
-q1sx6kwU2zV6MrB9kqLcbkE3Kbiok9K01E/jEQMJFykMGDCGLca/cEiDseLGMbEpvPExdv57vGcr
-oBpzG1Gi6uoKk1Fb5xx+M79xnFJ1OWVg+Hn/ALdXPwAAAAAAAA==
-
-
---=-6gI9KPsLUV2sE/qVjwYs--
+>=20
+> Jonathan
+>=20
+>=20
+> >=20
+> > >=20
+> > > Jonathan =20
+> > > >=20
+> > > > 2) Some driver might want to avoid allocating a new copy of a big t=
+able if
+> > > >    the race does not occur (e.g. with additional checks on buffer a=
+ccess
+> > > >    code) and thus wouldn't call a free() in the release callback.
+> > > >  =20
+> > > > >=20
+> > > > > In any case it looks fragile and not scalable. I propose to drop =
+this
+> > > > > and think again.   =20
+> > > >=20
+> > > > I see your concerns, I am open to reconsider this in case we come u=
+p with
+> > > > better solution after addressing the points above.
+> > > >  =20
+> > > > > Yes, yes, I'm fully aware about the problem you are trying to sol=
+ve and
+> > > > > agree on the report, I think this solution is not good enough.
+> > > > >=20
+> > > > > --=20
+> > > > > With Best Regards,
+> > > > > Andy Shevchenko
+> > > > >    =20
+> > > >=20
+> > > > [1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic2=
+3-huawei/
+> > > >=20
+> > > > Best regards,
+> > > > Matteo Martelli =20
+> > >  =20
+> >=20
+> > I hope I've brought a little more clarity to the discussion by providin=
+g some
+> > history instead of making it more confusing.
+>=20
+> Sure, the code example in particular is useful.
+>=20
+> Jonathan
+>=20
+> >=20
+> > Best regards,
+> > Matteo Martelli
+> >=20
+> >=20
+>=20
+Best regards,
+Matteo Martelli
 
