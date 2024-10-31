@@ -1,175 +1,153 @@
-Return-Path: <linux-pm+bounces-16826-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16827-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2E809B7A67
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 13:19:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B7279B7A6C
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 13:21:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E2891F242AF
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 12:19:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B032285964
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 12:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B156A19ADA4;
-	Thu, 31 Oct 2024 12:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DB319C563;
+	Thu, 31 Oct 2024 12:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqR9rz9o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5747019AD87;
-	Thu, 31 Oct 2024 12:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFDE14E2C0;
+	Thu, 31 Oct 2024 12:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730377152; cv=none; b=ieDGuRo66i5weuCpf4DdnyhmVvroGk5uNlE19AhzlrjkyAHlzx1wgt1Wh7w3mjGTu8ETCZuex0vP8LzwNLf0tTGmInWSktGaU5T1OQVBDiTRZmWEsKqOw+Zz7n0mG3txdwPfOxjhWE5J5isqZ3m10lUtmVJql+YXyo7Ipw+nmlI=
+	t=1730377287; cv=none; b=Jgi2C+x7T6Cd01HTsBGWR21XAtWWka9jCg+4T5Cg2Zn3FY4FDgkwoMp4sYHSDvITkwa/Uaqo8VOxFecKhCZrcoSZ2YS9mmCogI9iSV+lsVLNl0n/8yqyFPpkNngpWdVAlWIi1Nn/xLG7BXRJvxlRDXuynmxequbVHnorESiK7o4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730377152; c=relaxed/simple;
-	bh=HrQ03QoMggzR6XFbL9inUYz7m7h6EhF8j5YRIsrO/ss=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YxOsjliGobt0D6XQbGWxB7hsVYqySobp8XfkE6uydAsrIUsAlbkvKPIoBcOBG263QtsSjpHBn9rBkv+9WkctyTcVEb9YXQAfWSUr2LOleF6kH+n820cLdH8/u4MRlYMgn/+/1i4+Uh+61iutnnQhXEHEfj4mv9KCkCHnkOXNyHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 865261063;
-	Thu, 31 Oct 2024 05:19:38 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70F783F66E;
-	Thu, 31 Oct 2024 05:19:05 -0700 (PDT)
-Date: Thu, 31 Oct 2024 12:18:55 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
- <viresh.kumar@linaro.org>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai
- <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
- <samuel@sholland.org>, Conor Dooley <conor+dt@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Kishon Vijay Abraham I
- <kishon@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Maxime
- Ripard <mripard@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Nishanth Menon <nm@ti.com>, Rob Herring <robh@kernel.org>, Stephen Boyd
- <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>, Viresh Kumar
- <vireshk@kernel.org>, Parthiban <parthiban@linumiz.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 12/13] cpufreq: sun50i: add a100 cpufreq support
-Message-ID: <20241031121855.179b44a0@donnerap.manchester.arm.com>
-In-Reply-To: <20241031070232.1793078-13-masterr3c0rd@epochal.quest>
-References: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
-	<20241031070232.1793078-13-masterr3c0rd@epochal.quest>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1730377287; c=relaxed/simple;
+	bh=z7qRdrc/aNJJoVPFpdm9WaJa+syCyVzHfCsRPb9pirs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rQDvWox77sYLsId9buMqS4tE3Aj8mObJDYQLHsCn6K/XoU+hqEReB20nzBxPkZfjQ3yq1ZExRgEivI34YmgOlT449UT1StSUI1Wc35WRgl9xKOS77zLQMZM+uIAV3+T2jVGnXKcwllHRAJ0L+/BqE3k41aOEWt7utmw4uUJA3dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mqR9rz9o; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4316f3d3c21so6842165e9.3;
+        Thu, 31 Oct 2024 05:21:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730377283; x=1730982083; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tifA01aEwpCB7k+rl2olkAmgjeZifjZgKwXOFawd/9Q=;
+        b=mqR9rz9o/bjjAzc6PINtEcvflhJVJ1qvAx0NEmEWS6bqNmzx5Jtxv6a4UBRSsT9CuR
+         QElwqmkA/2/YUfCj1UrTxtR3U42e3lIXh44O5POdDEJuWsbFsYbx4i0HfMf63kicpShN
+         iwcR5Vj5+fT3zbFwr/UBPjsJ2rh6AvrxKrYebOkEX0x+cEiMgHx6X+Ac7bKaC82K3eIN
+         XjyDKMzJbWbuAfdAQC9honNUpWnl2KcJA2q84ja6cFApgNxLqePDOupaa1C8R7qqBN7K
+         TJRYY/HxNjnBy8tlPfZugwkX7jiHrTjwaDFrWqt8h6XDVNz2ztBSVqKPsX7EdAh/5m9N
+         qUMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730377283; x=1730982083;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tifA01aEwpCB7k+rl2olkAmgjeZifjZgKwXOFawd/9Q=;
+        b=Z4J8ZeKSMVW0vIXZHHAxRVS8mxu4ajCfNvCbDCxiGDseDELsLC94lru0MTiQpda3Ko
+         l+gpW9p3BHK4oum5KvExqd57Y/A64+Rsevvg065+5bsKn1JAhPjwesOoTm6OCD548yMK
+         M6cn4sm18/yyppZD86MhDGBbEAu4/tZ5T91DHkvwPciPZ4FKATWLEdEMtMbnwSEgEpta
+         5N/y7DqRCkqL1S6ai0HYhFe1ywnE15oJXgvGg1X1Uj5Gi7YxONxEv/lCljkMrAh2fsOL
+         Z8i9LsjADHIlCOh59lRLELiu78b9LzSb+AbO6DT9w6J+MXCM9+vuLYv4kxz6iWnPggER
+         SwDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJr2CMSjUo4q/rYS2CtA8mpnartdZfAUoSBfazRLP6SDr0gyfV6wk8U/c4zF2HRfjLl5F/hFQ4bc6mw3w=@vger.kernel.org, AJvYcCVXEm0uAJYhyuZuizb+GEZ/Z3RZM22KK99lOIx4YvU1kkNzu5f2IoB/P8mwc5Fq2nds3kJsFXcGfsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM0XnHUYGNwt3rJ0NocLkAHU5jtE1UIoaonYyHmETU2npJf66d
+	WdgphugAF/nJsmo/X/93cRONDIuppmuM8IK5Lh8zjnTFmDvHIVqsJVpmoj01
+X-Google-Smtp-Source: AGHT+IHBp1TxQM76X7gohSGb17rZI4WDJf50xd41RLJtG/+yD5bf+XGvKdhWF0CXlWSUO85e3Qvd4A==
+X-Received: by 2002:a05:600c:19d3:b0:431:5044:e388 with SMTP id 5b1f17b1804b1-431bb9d0aeamr60992515e9.22.1730377283328;
+        Thu, 31 Oct 2024 05:21:23 -0700 (PDT)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-d7b9-afdb-c541-d023.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:d7b9:afdb:c541:d023])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10b7e1bsm1975728f8f.1.2024.10.31.05.21.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2024 05:21:22 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Thu, 31 Oct 2024 13:21:17 +0100
+Subject: [PATCH v2] cpuidle: riscv-sbi: fix device node release in early
+ exit of for_each_possible_cpu
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20241031-cpuidle-riscv-sbi-cleanup-v2-1-aae62d383118@gmail.com>
+X-B4-Tracking: v=1; b=H4sIADx2I2cC/32Nyw6CMBBFf4XM2jFtQWJd8R+GRRlGmIRXWmk0h
+ H+3Etcuz0nuuRsE9sIBbtkGnqMEmacE5pQB9W7qGKVNDEaZQitjkZZV2oHRS6CIoRGkgd20Lsi
+ 2yamxJeuyhbRfPD/kdbTvdeJewnP27+Mq6q/9VXP1pxo1KrywujpjyBbKVt3oZDjTPEK97/sH7
+ jkudcIAAAA=
+To: Anup Patel <anup@brainfault.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Atish Patra <atishp@rivosinc.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>, linux-pm@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730377282; l=1974;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=z7qRdrc/aNJJoVPFpdm9WaJa+syCyVzHfCsRPb9pirs=;
+ b=CB9ImtE+5I0MlaIX2MMtoX1tMIgGy+QmeqoCgGwhOl6uPJ//3TZYqNIhCtenKmP9r5lbBf99l
+ Wiw5cWse1/6ApwFEAY3rtmazsgzl3CVlgSV3VpPNZdA+lgRrQprlUkw
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On Thu, 31 Oct 2024 04:02:25 -0300
-Cody Eksal <masterr3c0rd@epochal.quest> wrote:
+The 'np' device_node is initialized via of_cpu_device_node_get(), which
+requires explicit calls to of_node_put() when it is no longer required
+to avoid leaking the resource.
 
-> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> 
-> Let's add cpufreq nvmem based for allwinner a100 soc. It's similar to h6,
-> let us use efuse_xlate to extract the differentiated part.
-> 
-> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> [masterr3c0rd@epochal.quest: add A100 to opp_match_list]
-> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+Instead of adding the missing calls to of_node_put() in all execution
+paths, use the cleanup attribute for 'np' by means of the __free()
+macro, which automatically calls of_node_put() when the variable goes
+out of scope. Given that 'np' is only used within the
+for_each_possible_cpu(), reduce its scope to release the nood after
+every iteration of the loop.
 
-Looks good to me, and seems to work on my Teclast P80 tablet, so:
+Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v2:
+- Squash patches for mainline solution without intermediate steps.
+- Link to v1: https://lore.kernel.org/r/20241030-cpuidle-riscv-sbi-cleanup-v1-0-5e08a22c9409@gmail.com
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Tested-by: Andre Przywara <andre.przywara@arm.com>
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index 14462c092039..3a78d6b7598b 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -504,12 +504,13 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ 	int cpu, ret;
+ 	struct cpuidle_driver *drv;
+ 	struct cpuidle_device *dev;
+-	struct device_node *np, *pds_node;
++	struct device_node *pds_node;
+ 
+ 	/* Detect OSI support based on CPU DT nodes */
+ 	sbi_cpuidle_use_osi = true;
+ 	for_each_possible_cpu(cpu) {
+-		np = of_cpu_device_node_get(cpu);
++		struct device_node *np __free(device_node) =
++			of_cpu_device_node_get(cpu);
+ 		if (np &&
+ 		    of_property_present(np, "power-domains") &&
+ 		    of_property_present(np, "power-domain-names")) {
 
-Thanks,
-Andre
+---
+base-commit: 6fb2fa9805c501d9ade047fc511961f3273cdcb5
+change-id: 20241029-cpuidle-riscv-sbi-cleanup-e9b3cb96e16d
 
-> ---
-> Changes in V2:
->  - Add the A100 to the cpufreq-dt-platdev blacklist.
-> 
->  drivers/cpufreq/cpufreq-dt-platdev.c   |  1 +
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 28 ++++++++++++++++++++++++++
->  2 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 18942bfe9c95..2a3e8bd317c9 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -103,6 +103,7 @@ static const struct of_device_id allowlist[] __initconst = {
->   * platforms using "operating-points-v2" property.
->   */
->  static const struct of_device_id blocklist[] __initconst = {
-> +	{ .compatible = "allwinner,sun50i-a100" },
->  	{ .compatible = "allwinner,sun50i-h6", },
->  	{ .compatible = "allwinner,sun50i-h616", },
->  	{ .compatible = "allwinner,sun50i-h618", },
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 293921acec93..3a29c026d364 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -22,6 +22,9 @@
->  #define NVMEM_MASK	0x7
->  #define NVMEM_SHIFT	5
->  
-> +#define SUN50I_A100_NVMEM_MASK	0xf
-> +#define SUN50I_A100_NVMEM_SHIFT	12
-> +
->  static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
->  
->  struct sunxi_cpufreq_data {
-> @@ -45,6 +48,23 @@ static u32 sun50i_h6_efuse_xlate(u32 speedbin)
->  		return 0;
->  }
->  
-> +static u32 sun50i_a100_efuse_xlate(u32 speedbin)
-> +{
-> +	u32 efuse_value;
-> +
-> +	efuse_value = (speedbin >> SUN50I_A100_NVMEM_SHIFT) &
-> +		      SUN50I_A100_NVMEM_MASK;
-> +
-> +	switch (efuse_value) {
-> +	case 0b100:
-> +		return 2;
-> +	case 0b010:
-> +		return 1;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
->  static int get_soc_id_revision(void)
->  {
->  #ifdef CONFIG_HAVE_ARM_SMCCC_DISCOVERY
-> @@ -108,6 +128,10 @@ static struct sunxi_cpufreq_data sun50i_h6_cpufreq_data = {
->  	.efuse_xlate = sun50i_h6_efuse_xlate,
->  };
->  
-> +static struct sunxi_cpufreq_data sun50i_a100_cpufreq_data = {
-> +	.efuse_xlate = sun50i_a100_efuse_xlate,
-> +};
-> +
->  static struct sunxi_cpufreq_data sun50i_h616_cpufreq_data = {
->  	.efuse_xlate = sun50i_h616_efuse_xlate,
->  };
-> @@ -116,6 +140,9 @@ static const struct of_device_id cpu_opp_match_list[] = {
->  	{ .compatible = "allwinner,sun50i-h6-operating-points",
->  	  .data = &sun50i_h6_cpufreq_data,
->  	},
-> +	{ .compatible = "allwinner,sun50i-a100-operating-points",
-> +	  .data = &sun50i_a100_cpufreq_data,
-> +	},
->  	{ .compatible = "allwinner,sun50i-h616-operating-points",
->  	  .data = &sun50i_h616_cpufreq_data,
->  	},
-> @@ -291,6 +318,7 @@ static struct platform_driver sun50i_cpufreq_driver = {
->  
->  static const struct of_device_id sun50i_cpufreq_match_list[] = {
->  	{ .compatible = "allwinner,sun50i-h6" },
-> +	{ .compatible = "allwinner,sun50i-a100" },
->  	{ .compatible = "allwinner,sun50i-h616" },
->  	{ .compatible = "allwinner,sun50i-h618" },
->  	{ .compatible = "allwinner,sun50i-h700" },
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 
