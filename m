@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-16781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23A099B7196
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:20:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD6139B71A3
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52E7F1C20CCC
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:20:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ABCD1C20E03
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7335B216;
-	Thu, 31 Oct 2024 01:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5684E84A32;
+	Thu, 31 Oct 2024 01:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="tP3Btnzz"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="njj8ReVv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA8D45025;
-	Thu, 31 Oct 2024 01:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C477749641;
+	Thu, 31 Oct 2024 01:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730337599; cv=none; b=fGFLZKQHp9bejnK6fTY0+XUvjzT/2U3Kwce9uSpzNH0t9gOkIaoNcQKL8UyTGt04WFXPNNnph7o6Msd851Dnud96B0DplA6/TSKRijNwSarQUiqljeZvsQWtegE7stI7wcpztIt8OcspiGjzdLfWAUym8A7X//Ld6QqTRvx2N6Y=
+	t=1730337601; cv=none; b=smaAXsaU3q1k0S7gfTIPLMFrQ5E8tCnUubz8eqtIGxPXHUS3ipAND57NbsYMUvwzkKLUYbSN91JLqoBJkpKkiytq2bbLLeALZD2DyWeK9ym8QK6SkF9JBmyi5s0a35fXvSMxlxhF/BBw72Wew3RkvrhvQEgU0vHWGrZlkE0h5ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730337599; c=relaxed/simple;
-	bh=u8x5Y76BpR7GHm0tcI8s42oOSgTRRalW68806GGcELk=;
+	s=arc-20240116; t=1730337601; c=relaxed/simple;
+	bh=AczDvjjtQvU0Ios2VDrVwCdMZ4DLpXoYa3jXJ5Y4jEo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eiw0ffp3zICMvP05Jg8kj5Q8IYDXndrdD1YZLoVewsd4QNy+Qki0q3VPSqOEp91Bk8iTBx+fRJTZGBVb00z3gNFPS2t40Ctr+1ZhGxpa93qEvm2DvPNJNdOYAUMgP6cGdx533YX4UDK8wpgiVjJ3U/oxDcoPaE+b3rnwVaMGE8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=tP3Btnzz; arc=none smtp.client-ip=5.75.144.95
+	 In-Reply-To:To:Cc; b=V5TtfygiJFGZrcL6dXSZ0Gxoqf8A4ERS3wp7ANPiyCq3otNFTPjqsX4u4eFQnaFzEsD3UWvDOtazyyuvdVkVkxV36CWMVHGKDcRxRggAqUtQ3/twcC/pkOGxYOCwfU/sQVq6RpL5WdcDS4ZHRe7KGp4x5PK0hbZwoaXmE8UTbdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=njj8ReVv; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.0.162] (BC24936A.dsl.pool.telekom.hu [188.36.147.106])
-	by mail.mainlining.org (Postfix) with ESMTPSA id C6CD0E45BB;
-	Thu, 31 Oct 2024 01:19:53 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id 73FBCE45BC;
+	Thu, 31 Oct 2024 01:19:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1730337594;
+	s=psm; t=1730337595;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=V3+UAizzWXsZekrxnLJdeu9Ruj4MIRyoNFA7cvKypSE=;
-	b=tP3BtnzzC9Mfh2V16mIM1Hq0he/IX9oJsVuOmodUGu0Dv1xqtaTmaVs5DxX7N6BkNMt/Fb
-	sVf8GW2DFexx6sc1Z7hdGbHwLYswleCiFYwgvalGgLe12KQrlhL/Tu7Y3uT3HkMKVWrOOQ
-	7TjdgNedRrnOKwD5TKfG0JP+QIP+w5icYe124VeT1qBKTQKVGIjpg0X9gs05A2G/hrBPcU
-	98xMJfNhIfsxizr5uYiIgbVcp2rkoyYaNW3dJrvbCGZy7ZtW6HZUBOswZ4opPMCjmskjY1
-	kGkki/ciNygx243fBQjR4RW3CeZP0tEYngyW2hI/nz+k2IMXfmX+Qr6mlLOIRg==
+	bh=5hw/rJtw/czkq6uxJajEJe89LGTzzvGdMuCvlculAbg=;
+	b=njj8ReVvcmX8MHZVqUFcQBllJokOH8ORxqJ4FX713pl5y4OjzYq+aAlaRmVfTKNaweHwEE
+	sxYvsaYCC9revnsod6mjvugsBeW56b5JfJd9sy+QlCklwNns6akx9qngVbYFlR26tMWZ2b
+	xJoytvrMbCmgukdK6EfeS/rCC3vWMbXTc/GyxQUC19BXGd7zBPwrR+pK2OinhzqBGB7V8z
+	GQ1TWMdABk+exk5BejODRlJK/vNs6tT9VMhVUe+q0tOlJSV916soFKEUudk3H01EiPQIUS
+	Yh6gVsZNhB4cDDoyJrcBWoyhzqszgnuFxS4K0RDq08rfLjCC5tHfW08AXiTyGA==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Thu, 31 Oct 2024 02:19:49 +0100
-Subject: [PATCH v2 08/15] dt-bindings: mfd: qcom,tcsr: Add compatible for
- MSM8917
+Date: Thu, 31 Oct 2024 02:19:50 +0100
+Subject: [PATCH v2 09/15] dt-bindings: thermal: tsens: Add MSM8937
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241031-msm8917-v2-8-8a075faa89b1@mainlining.org>
+Message-Id: <20241031-msm8917-v2-9-8a075faa89b1@mainlining.org>
 References: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 In-Reply-To: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -77,33 +77,33 @@ Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
  =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=824;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=871;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=u8x5Y76BpR7GHm0tcI8s42oOSgTRRalW68806GGcELk=;
- b=gINZoCfqfZp5PM7/4qbzSfGBnY3IwkUsYtHb8srP+C3EDjiKgFLukTjaPqLbhxyvpQFQcXqJ4
- skN9Ev+EQxyAQyVFTYBTObf2AkPH20zey5MOE8Z6w3PTXsy1TVGhK3t
+ bh=AczDvjjtQvU0Ios2VDrVwCdMZ4DLpXoYa3jXJ5Y4jEo=;
+ b=3KNb+uCutuy54IL6MoKA7VsvpXLJGE+znYofbvCHBmlQejZc6t7g2ExjTpOmISWLzxb1ncWk3
+ bf9FqT3Jl/vAZOXTVt0dw4VCQD9l0Nu1WrDe561aw9V11I0C7peLegJ
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-Document the qcom,msm8917-tcsr compatible.
+Document the compatible string for tsens v1.4 block found in MSM8937.
 
 Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
- Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index c4fcf501f502724b5ca36bc4a26f77a00104ac48..79add913e35c848363941a8634a361c45d296392 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -50,6 +50,7 @@ properties:
-           - qcom,tcsr-msm8226
-           - qcom,tcsr-msm8660
-           - qcom,tcsr-msm8916
-+          - qcom,tcsr-msm8917
-           - qcom,tcsr-msm8953
-           - qcom,tcsr-msm8960
-           - qcom,tcsr-msm8974
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index a12fddc8195500a0e7bdd51952a558890b35935c..f51656b672030b12ea0405fd392af11056093be7 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -39,6 +39,7 @@ properties:
+       - description: v1 of TSENS
+         items:
+           - enum:
++              - qcom,msm8937-tsens
+               - qcom,msm8956-tsens
+               - qcom,msm8976-tsens
+               - qcom,qcs404-tsens
 
 -- 
 2.47.0
