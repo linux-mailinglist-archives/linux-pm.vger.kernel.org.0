@@ -1,171 +1,133 @@
-Return-Path: <linux-pm+bounces-16813-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16814-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC4F99B77ED
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 10:51:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABD2A9B7871
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 11:12:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9521B28709C
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 09:51:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2827DB24A1D
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 10:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C6C198E92;
-	Thu, 31 Oct 2024 09:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867DE197A9A;
+	Thu, 31 Oct 2024 10:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TWYWDuyk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uLsI4n1a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0632A198E70;
-	Thu, 31 Oct 2024 09:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CA612B169
+	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 10:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730368251; cv=none; b=pZvhKUIdX00JElAZBKRz01VgfpNhiftJenuuZ4yGCI05H62tim9Cknw7Y05b2T4Ok8cbd2CrCUzinwjL6yekVfdTc9vPCohNLxJklHFjCOqiO3YnUmYUtKzhO6vwOxe+G4/jIxPIPBZrN3n8R8XDQSO+ohxFbLPYv+mlkzqyKew=
+	t=1730369552; cv=none; b=a7nlbBYGm3Y9yusSsM4AHxagn5xHZhY9Qyf8L7o4qAMUbimRkc7GsA8O/MrPOTaD3bHRjEtuczpkU2QxvNXV12EOjaInbljTJV8m+ZMb13Sd+WiYSptZQswVHvxDb2MIn7lcT+sh126ON8PFh0FJm9L4sor4QIBfXBK55m1zhTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730368251; c=relaxed/simple;
-	bh=Vjh+3r/T5wXwLUhjDZ9Z5nnKZ/Su77T2fS+C3WYnF70=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VAEGbRVSkehGEOdNuG1grWgQ+PTNZb04NQRjlPXTkDMVwHBFkGie7NK230SJGWlMVIiny/QceJfNb88C0N0FppI9gwcJRMvWQ8WZL1Wd//W0rLqao0Nw3oYxudYzvfJxKXhQgHOKxcodkCfzNobN2I2Y4loMvdotqXGBPjnwUJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TWYWDuyk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543DBC4CEC3;
-	Thu, 31 Oct 2024 09:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730368250;
-	bh=Vjh+3r/T5wXwLUhjDZ9Z5nnKZ/Su77T2fS+C3WYnF70=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TWYWDuyk4z6lBKH9oDOionHLuqSbNreW5L9Fn8Q7kjcgu9rF2TdYi5Xe/4VrF+Aok
-	 8vwR9CUvm+x3i13zuMNlyaGeSMM6ZUQ6KZebggcTpH6oGAIsEFQJJF812JnOqP9Nq5
-	 S+U+LUuEQzkE6oMlrB9tXxPMO1jyXKb1Cn6/d7E6D1XQXv8ip6GgkZdEM9iMOvRXFC
-	 w88D6YLXcFd/5LMuJGzdxFGOPzD84TS6lgtRrz5CxxNyODY9+vzPTvj27l7rMILcn9
-	 RPOzcwOjrplsorMIQ9dtztEM/QjQu0qxE8Nmta23LMMrOX9PftCMRWuFrztfwDcaem
-	 OkDFfhZSzq+gA==
-Message-ID: <24e81091-e0f9-40c7-b781-10354b4a3ea2@kernel.org>
-Date: Thu, 31 Oct 2024 10:50:41 +0100
+	s=arc-20240116; t=1730369552; c=relaxed/simple;
+	bh=T35wMVs1MNW3myHz/mrvwXNZ7HSH/Zu34Y04Hh5lKAk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cvld9pFqXM2vd00izBFfLvlotyaZY4GVqvO7mMbMT1/P3Xy9EyTjGwN7sFQ6kYfatAUHcvUkFCC4Cp0P7klmI7ulk0MgjEDNO9Y2SBJNYbFuke/wSBkmfHJOTh4SrYu33gwZaZfZMNCWrOxP19mZf4BsRxa74JFmbYfYNzRBT9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uLsI4n1a; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6ea0b25695dso5824497b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 03:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730369549; x=1730974349; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T35wMVs1MNW3myHz/mrvwXNZ7HSH/Zu34Y04Hh5lKAk=;
+        b=uLsI4n1a5fllndcUeZW6rxJGQcwDJIbID5YPjcLyH+X5hKDiGu513j/2dCm9N/407S
+         SpwA/vN/p33kpGh6Cpq5eXZWWxs8oPId0614pz57/JZNJsLaqsNcgSY57Ta/RbcBQXne
+         vhlrz9K48Z5aoX7yn3P922/7504Yn9Taqe6OFJXeNG18S5M8GCPaKCHg3LwI0YtcdF/f
+         g4EXn89mka2dSyHzKimCtycGldyhYyTx4ddCpdNMffXk7S0eVvj4/BbaKj/Q7xVMaE65
+         CTLxZ8KSQynJdV/Zzcqfoftf42cVxlZJPEUca7u8AhzkEkHQwvy5Ac9rzhRlC6S21QMj
+         12Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730369549; x=1730974349;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T35wMVs1MNW3myHz/mrvwXNZ7HSH/Zu34Y04Hh5lKAk=;
+        b=HdyYoTMw9YeeIxr4iOmNrSMvEBh1jo51rb1QhKqcICcKYKYzzW92wJwJz7YrX8Djcx
+         xNOOoV2ofTTP8tYyuOJKW8pWH3gTCo7ttm6clgaBL0hPsPsZ1BZaxb4Nr4hGO0md3vJW
+         AnFSjyMo3KiVXNW2LGgKhoX4vf5SEtB1BMe5owZO2iqGO8IEweD/GwV2rXWnvAOdnice
+         UweBIVoKofdMEKIEVKFNNL+oMf/Zofu3ZcRQm+Z36ieBgFxSZk8BFLc57+ixPJKCrz90
+         hUqcfYirylwb6mMAo0927WOxANjdfkXDcRLAXce2a5fV/sJHYZYqjdRXN3qKsMO250kf
+         Egrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUuA6b4WXWJbmgIXqCW07OblBm9AUVk7bc0IJbpkgrtaYjhw9a4sg+ayLVnrH0tNeVdp0j0mLU5nA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyR8h/NL3IC+DxHNKhwR08rBY6LQOZvE27dKtA5y0oLe6XcGo6e
+	GaUhsiDo69B1O2nOg4hXxhGtB5a4gKod1KPSENY6o33sabhKXCxr5qK4A6pZjh5kE/4VKShKZMQ
+	wN7dDgnLkHg5CN9PB/ddA+ucMldlJBHvN+thITA==
+X-Google-Smtp-Source: AGHT+IFa7GpMRcZBsCmM7CXrwXH4F/9S0bZVX2rOTwZ8gwWPISz40Itv+XpN30B/P4QqbSfNO35YnVdPLxOpi1AIrVk=
+X-Received: by 2002:a05:690c:ecf:b0:6db:9b55:80df with SMTP id
+ 00721157ae682-6e9d8acaffcmr188192657b3.33.1730369549381; Thu, 31 Oct 2024
+ 03:12:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: mfd: sprd,sc2731: convert to YAML
-To: Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <ZyExK01iprBHhGm6@standask-GA-A55M-S2HP>
- <ki4wvjslncrngwpz7qukknzgdsjkxvrhitem7i5lof6ggyhu4e@tviovrd2wi77>
- <ZyHjW86v9Y59-TJQ@standask-GA-A55M-S2HP>
- <7db6431e-1892-463e-9c74-cd466ae3ca32@kernel.org>
- <ZyHq4FJ0ubQVGREo@standask-GA-A55M-S2HP>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ZyHq4FJ0ubQVGREo@standask-GA-A55M-S2HP>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240906-lpm-v6-10-constraints-pmdomain-v4-0-4055557fafbc@baylibre.com>
+ <173029317079.2440963.17313738472826934777.b4-ty@ti.com> <CAPDyKFptHq6xkKSAmeHsEuhBoEhzvudcMf2+nG08MFPwnMi+ew@mail.gmail.com>
+ <7hv7x9qsvt.fsf@baylibre.com>
+In-Reply-To: <7hv7x9qsvt.fsf@baylibre.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 31 Oct 2024 11:11:52 +0100
+Message-ID: <CAPDyKFpdgg+kM_Ot5GPTpMUtjmBF-pUhCeRpVb=j852_7qm=3A@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] pmdomain: ti_sci: collect and send low-power mode constraints
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: Nishanth Menon <nm@ti.com>, linux-pm@vger.kernel.org, Vibhore Vardhan <vibhore@ti.com>, 
+	Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
+	Markus Schneider-Pargmann <msp@baylibre.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 30/10/2024 09:14, Stanislav Jakubek wrote:
-> On Wed, Oct 30, 2024 at 08:48:25AM +0100, Krzysztof Kozlowski wrote:
->> On 30/10/2024 08:42, Stanislav Jakubek wrote:
->>>>
->>>>> +
->>>>> +  '#address-cells':
->>>>> +    const: 1
->>>>> +
->>>>> +  '#interrupt-cells':
->>>>> +    const: 1
->>>>> +
->>>>> +  '#size-cells':
->>>>> +    const: 0
->>>>> +
->>>>> +  regulators:
->>>>> +    type: object
->>>>> +    $ref: /schemas/regulator/sprd,sc2731-regulator.yaml#
->>>>> +
->>>>> +patternProperties:
->>>>> +  "^adc@[0-9a-f]+$":
->>>>> +    type: object
->>>>> +    $ref: /schemas/iio/adc/sprd,sc2720-adc.yaml#
->>>>> +
->>>>> +  "^charger@[0-9a-f]+$":
->>>>> +    type: object
->>>>> +    $ref: /schemas/power/supply/sc2731-charger.yaml#
->>>>> +
->>>>> +  "^efuse@[0-9a-f]+$":
->>>>> +    type: object
->>>>> +    $ref: /schemas/nvmem/sprd,sc2731-efuse.yaml#
->>>>
->>>> I don't think this was merged. You still have dependency.
->>>
->>> This is in next-20241029, which this patch is based on.
->>
->> Try what I wrote below and see if this works...
-> 
-> I assume you meant the MFD maintainers' tree here.
-> Yes, that tree doesn't have the nvmem patch this depends on.
-> 
-> Would the approach with listing the compatibles and additionalProperties:
-> true be considered a temporary workaround?
+On Wed, 30 Oct 2024 at 20:43, Kevin Hilman <khilman@baylibre.com> wrote:
+>
+> Ulf Hansson <ulf.hansson@linaro.org> writes:
+>
+> > On Wed, 30 Oct 2024 at 14:01, Nishanth Menon <nm@ti.com> wrote:
+> >>
+> >> Hi Kevin Hilman,
+> >>
+> >> On Fri, 06 Sep 2024 09:14:48 -0700, Kevin Hilman wrote:
+> >> > The latest (10.x) version of the firmware for the PM co-processor (aka
+> >> > device manager, or DM) adds support for a "managed" mode, where the DM
+> >> > firmware will select the specific low power state which is entered
+> >> > when Linux requests a system-wide suspend.
+> >> >
+> >> > In this mode, the DM will always attempt the deepest low-power state
+> >> > available for the SoC.
+> >> >
+> >> > [...]
+> >>
+> >> I have applied the following to branch ti-drivers-soc-next on [1].
+> >> Thank you!
+> >>
+> >> Ulf, based on your ack[2], I have assumed that you want me to pick
+> >> this series up. Let me know if that is not the case and I can drop the
+> >> series.
+> >
+> > Well, that was a while ago. The reason was because there was a
+> > dependency to another series [2], when this was posted.
+> >
+> > If that's not the case anymore, I think it's better to funnel this via
+> > my pmdomain tree. Please let me know how to proceed.
+>
+> The build-time dependency on [2] still exists, and since that was just
+> queued up by Nishanth, I think this series should (still) go along with
+> it to keep things simple.
+>
+> Kevin
 
-Not really, it's a correct approach. The node will be validated anyway
-by efuse/child schema.
+Right, that makes perfect sense to me too. If we discover conflicts,
+let's deal with them then.
 
-Best regards,
-Krzysztof
+[...]
 
+Kind regards
+Uffe
 
