@@ -1,123 +1,93 @@
-Return-Path: <linux-pm+bounces-16796-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16797-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C0A49B71F0
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:31:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E8E9B7371
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 05:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3D4B2852DC
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:31:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E39811F2470A
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 04:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990347E59A;
-	Thu, 31 Oct 2024 01:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XaFxrc0h"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C83126BF2;
+	Thu, 31 Oct 2024 04:06:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7A45FB9C;
-	Thu, 31 Oct 2024 01:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25EA11BC20;
+	Thu, 31 Oct 2024 04:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730338206; cv=none; b=ZdXWlnaxBxu7I+NCapHWtiug34IksjC297AKO11rtcz9hqFj2x0QxdwKw+Gz91lobqJK6rSQjpCqPWc5a0LnKshJr5tNnqPwEVQx8/AwUfD+IFNX1jkTwzp2eQq3qR2bxNSVr2H8wPSmusxIfCaBLJ9ZzAQ/CMUsarUxJyQGgPo=
+	t=1730347592; cv=none; b=Eys6Q6GklT+kY4/J+XpsoWx5yjc6yeycV31RIZJxUKpxMRC5W2UMsPLr9bjjxm03mGpWR7mnTlmzecVVVdFdk28FYS1/4nTkKa91fo0rLweKq3MAfkwblDkKiwUkjlt8SMZh4YMS7ef9Zy928UXZpBddlJ1LezkK7TsV162lNQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730338206; c=relaxed/simple;
-	bh=F3CW6MgCDGBSbZPQG4EYQBGr36Y639uygD33OcwKI7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o1h9yj1DRu5munrQksMsq41CGFkMmYYL9ule+gfRz+rU/ITxjojgBdThkdvfepNCIHyC3IH8slZQLbzZ/heY5VznRbWMRiLLJOId57d0vVY0dyYIi47CPCpixI5Gngw0+ZnBBufEitMnnQZj9g8YelUe0DtjAaM1uUo4SV4/igs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XaFxrc0h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11CA7C4CED2;
-	Thu, 31 Oct 2024 01:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730338206;
-	bh=F3CW6MgCDGBSbZPQG4EYQBGr36Y639uygD33OcwKI7w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XaFxrc0hQxfxAaTDwz22wAC7xgyqcXbewHasugJkhScj0LGN6soj3hIn70HVRoToJ
-	 qR0QJnEjIrlhxUTLJycz6po6DXlLs45ALEfjd0yR+IqoD3KWnexKLR+KfKp2E300G1
-	 TczsFcNwBr124tUPxwwYsuyUQH6T1P8v8I2ZcEOh0Q4Cxy8klpl2QbKDcQcVDMzY1V
-	 /d3/zNYrtYcWlSyGP2YjuTtXB2uFPy54vZJpm7eK4cXwhAEIbm+8BmSyPAf7Cfa92s
-	 ujlUa/iXD81Lya0g5DmeRQr4CvvHqDOeqUwuY5ESmNExPD5efiRw44C+HmOmyBBQlY
-	 JSnbJyxxg9qpQ==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539f58c68c5so763339e87.3;
-        Wed, 30 Oct 2024 18:30:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUvuocDyyeidIJ6PBFegZ1ttv7jiB+Ns197sq9gtFtZTTdDRbPTcbznDFEw07dmD9ybDb2/+IUBQ+ZO3F8=@vger.kernel.org, AJvYcCWkm4rSmNTTljFTcCc+pc05kIvNPg3FYwJ0zlGeAVnsY37pnjdugqDstGWRWJeymCXbOLUsAnR6uQc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznqG15rJSP+TP5OEp/HjYWpo+PGOYmJM9xNYlE6pZ3JVFMfz4p
-	npS5ntKe/Dow+CEvimXebwuUnx1P/dLk2TSKx/KFLqhUUg31if7YFZnT8Wb0oGnUyVQ6jHTf+QQ
-	fr7+Gg9blesar1DQKtWTwLUK2czE=
-X-Google-Smtp-Source: AGHT+IES1QEWCyXEfu2GgQIWkNKG5wwIdsKbTeplBpmPclxpxRZ8rjzg8Uh1GIdkLH+yO4jm648v1k5qv5FFrNoYWQg=
-X-Received: by 2002:a05:6512:3b97:b0:533:71f:3a3d with SMTP id
- 2adb3069b0e04-53b348da746mr13964158e87.24.1730338204411; Wed, 30 Oct 2024
- 18:30:04 -0700 (PDT)
+	s=arc-20240116; t=1730347592; c=relaxed/simple;
+	bh=8o0wTajvqrceEEN1/lA+Tv1Td9XaWmKPnsf2QQimHKg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nWRIL9F514eN0bUWr5bwhLpOFPMbe2VaYCvyDfkX0D24kmHZ48c4b6WS1zKYNx4OV30KB8unyQjF+KlqeLMvsHFU30u/Db5TEJ7NvkhSekzwh/NFzsA4d8oZd1NKoYCE8dZaS4iUTpU5lA16PDwjaCd0QIXK0n0mv2nGIvOmP3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: 5JNKYTz+RBS8Iv7eOVhPJg==
+X-CSE-MsgGUID: /tW1S95tRrW/EKJJuUfyNg==
+X-IronPort-AV: E=Sophos;i="6.11,246,1725292800"; 
+   d="scan'208";a="100008817"
+From: ZhengShaobo <zhengshaobo1@xiaomi.com>
+To: <rafael@kernel.org>
+CC: <chendejun@xiaomi.com>, <chuci@xiaomi.com>, <daniel.lezcano@linaro.org>,
+	<dingchongchong@xiaomi.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <lukasz.luba@arm.com>, <rui.zhang@intel.com>,
+	<zhengshaobo1@xiaomi.com>
+Subject: Re: [PATCH] thermal: gov_power_allocator: Granted power set to max when nobody request power
+Date: Thu, 31 Oct 2024 12:06:23 +0800
+Message-ID: <20241031040626.631-1-zhengshaobo1@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAJZ5v0gbpx7+hS=NS2+kNgRaOvADrY_2JsoRSg21tmF4oRnFwg@mail.gmail.com>
+References: <CAJZ5v0gbpx7+hS=NS2+kNgRaOvADrY_2JsoRSg21tmF4oRnFwg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030162930.2111255-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20241030162930.2111255-1-andriy.shevchenko@linux.intel.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 31 Oct 2024 09:29:52 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6bOZLur8Eq2CyFaeQp7R1LwiRqf0ODqnftg6+zAbDoYg@mail.gmail.com>
-Message-ID: <CAAhV-H6bOZLur8Eq2CyFaeQp7R1LwiRqf0ODqnftg6+zAbDoYg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] cpufreq: loongson: Check for error code from
- devm_mutex_init() call
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, loongarch@lists.linux.dev, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	WANG Xuerui <kernel@xen0n.name>, "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BJ-MBX07.mioffice.cn (10.237.8.127) To BJ-MBX15.mioffice.cn
+ (10.237.8.135)
 
-Hi, Andy,
+On Thu, Oct 24, 2024 at 05:26:49PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Oct 24, 2024 at 10:01 AM ZhengShaobo <zhengshaobo1@xiaomi.com> wrote:
+> >
+> > On Wed, Oct 23, 2024 at 12:09:44PM +0200, Rafael J. Wysocki wrote:
+> > > On Mon, Oct 21, 2024 at 2:12 PM ZhengShaobo <zhengshaobo1@xiaomi.com> wrote:
+> > > >
+> > > > From: zhengshaobo1 <zhengshaobo1@xiaomi.com>
+> > > >
+> > > > When total_req_power is 0, divvy_up_power() will set granted_power to 0,
+> > > > and cdev will be limited to the lowest performance. If our polling delay
+> > > > is set to 200ms, it means that cdev cannot perform better within 200ms
+> > > > even if cdev has a sudden load. This will affect the performance of cdev
+> > > > and is not as expected.
+> > > >
+> > > > For this reason, if nobody requests power, then set the granted power to
+> > > > the max_power.
+> > > >
+> > > > Signed-off-by: zhengshaobo1 <zhengshaobo1@xiaomi.com>
+> > >
+> > > I would have applied this, but your S-o-b above needs to be fixed.
+> > > Why don't you use your real name there?
+> > >
+> > > If it can be changed to "ZhengShaobo <zhengshaobo1@xiaomi.com>",
+> > > please let me know, and I will fix it for you when applying the patch.
+> > >
+> > Yes, it should be "ZhengShaobo <zhengshaobo1@xiaomi.com>".
+> > I would really appreciate your help in solving this problem.
+>
+> OK, applied as 6.13 material with the S-o-b tag as per the above, thanks!
 
-On Thu, Oct 31, 2024 at 12:29=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Even if it's not critical, the avoidance of checking the error code
-> from devm_mutex_init() call today diminishes the point of using devm
-> variant of it. Tomorrow it may even leak something. Add the missed
-> check.
->
-> Fixes: ccf51454145b ("cpufreq: Add Loongson-3 CPUFreq driver support")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/cpufreq/loongson3_cpufreq.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loongs=
-on3_cpufreq.c
-> index 61ebebf69455..bd34bf0fafa5 100644
-> --- a/drivers/cpufreq/loongson3_cpufreq.c
-> +++ b/drivers/cpufreq/loongson3_cpufreq.c
-> @@ -346,8 +346,11 @@ static int loongson3_cpufreq_probe(struct platform_d=
-evice *pdev)
->  {
->         int i, ret;
->
-> -       for (i =3D 0; i < MAX_PACKAGES; i++)
-> -               devm_mutex_init(&pdev->dev, &cpufreq_mutex[i]);
-> +       for (i =3D 0; i < MAX_PACKAGES; i++) {
-> +               ret =3D devm_mutex_init(&pdev->dev, &cpufreq_mutex[i]);
-> +               if (ret)
-Good catch, but I think "if (ret < 0)" is better? Sometimes a positive
-return value is legal, even if not in this case.
+I would like to backport the patch to android15-6.6, but this needs to be merged
+into the maintainer tree. I am wondering when this patch will be merged into your
+maintainer tree, and I hope you can let me know.
 
-And it is better to use loongson3 rather than loongson because there
-is another loongson2 driver.
-
-Huacai
-
-> +                       return ret;
-> +       }
->
->         ret =3D do_service_request(0, 0, CMD_GET_VERSION, 0, 0);
->         if (ret <=3D 0)
-> --
-> 2.43.0.rc1.1336.g36b5255a03ac
->
->
+Thanks,
+ZhengShaobo
 
