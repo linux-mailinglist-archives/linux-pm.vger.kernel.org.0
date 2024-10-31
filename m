@@ -1,144 +1,127 @@
-Return-Path: <linux-pm+bounces-16850-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BD4F9B82F0
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 19:57:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1CF9B840C
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 21:04:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29EEA2837D6
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 18:57:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB3351F237C0
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 20:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C651CB32D;
-	Thu, 31 Oct 2024 18:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512871CF294;
+	Thu, 31 Oct 2024 20:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hIylKOPj"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="rCGZ/gDy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5694B14264A
-	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 18:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA891CB51F
+	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 20:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730401025; cv=none; b=eNnqJ752SkHdbweb3d/kdkvKJB0/VltVSFE8OTWe97g6pPNJ1gBtO02pDrpJUqyn9XRew2PSM77US4be02+WzAw2lQaYREcDejc6Mpm4uWSVXhDPHYrB/FBY/d2pM8Chab3XPxaHDgE68w6koBLaLAbIvsR8W6W2IlwR3dEGmPA=
+	t=1730405048; cv=none; b=cbCUmR0RAmJsXWksbh6GnryAL207Zvu/XK2qrgK6x9BfZHer5lAvjhrFPj0a1k9oiEojy8JTo1+k2dRUVhtwYbXBE8uDcXX1OeMQs7SGKlq4rAJ1+fL8E7pdMb4eKpacHdRYR7VQKpDZHEykeasmBxkxboZktu4GsWorxlzZBqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730401025; c=relaxed/simple;
-	bh=xMu6QWNdKFvJUqlA5KkzFsPtFC7j7Kqh7tHTVasaSCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fgAk4dwrIAurugknzZYic/nlEeAGae0FgtpiEOJUqJaHfya1oBzeLQEBMPUjsxMUVrMG1mtRpxWLaAI4kt5rjNCgwhHZUn4rTjlEbZvERf0stZ4K1urdTAEBlPSVzHK2KbZw6Km35X5lSpIHGRU44aDK4uQHWuiWUHHE7RqvIFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hIylKOPj; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-539f4d8ef66so1692016e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 11:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730401020; x=1731005820; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pJND4kIqSn03jp/YKXMT+NaJTpO4BmVDS9cnPvfoOGE=;
-        b=hIylKOPjMMUBFiOJSj8y783Yg2DPFvs5g76aS3jivSGlZwOm0dND5rCzH9Aruwcjj+
-         D1C8gNq3igs6zdSPzqWyhMKcbKbKSmy97+6jWM3uRpIegomTE6MZ4cwU8vmMtwLMNOi9
-         8aYBWX2OKQd73gNkOJvyEDD167aXn4xdvEQH1yVoDFUeNisRJJ7sRNIR/dEYty0ou5VR
-         E2Q8OM22peXdCmtFNNXSD1ejr1W/6aeP8dSKvUMgBcfIt94Rmavnz9+tDrPvUtiPCUxE
-         93VaVqA8c0a+1ndHebgW1aq2HeUwrnnxn1IRKpWFXCctQ1y1PxAn/iiHvopFrc+z/OLF
-         1Q6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730401020; x=1731005820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pJND4kIqSn03jp/YKXMT+NaJTpO4BmVDS9cnPvfoOGE=;
-        b=UGeOFun6JCxNrOep2NDSU/OFTDkuvk+1LCCpyNa70oiA43mEcYjz7bGt0MCbAlDcWI
-         UQIqsfvPb9AnyCpoQrcayce1QsieparLszEH1IvnLqNSlmICXhyV0uL1U3XFFTQFXsY3
-         nt2nGi+ISzg9CA1Sx8kQlEs1Pk4GtYeQcwsB9zFWN5SHiW3etdw7qYrvVkxgWsDi8Ibh
-         aW3Rslv8vfYLX0vNoWn+TOpP2Z1VwUZFCLQZcDc4r4RJYyOITgzLtdUKSkNg3BPhQJ+q
-         nRuHki5Znwy+mnGH/r3dbZ5ypeyKYEljF9lByq1VKUVcN6+HV8MeA+O78Jngv+IEz5Zi
-         bl3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUblZAI7yCAEmkfv1ZIiG7LlCoiXLYnCjt0hMgATZ+6PLoJNjhIVSRuizluAAIF6WeJlIPWXxpxrQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZhoKLJzYzTMuKoMnpYu8I2tJeReUcl31sZBn6zpGr2+073g1Z
-	GoV9JYqFk8wzobTWtp0T3SRStfnZCvzS3TCQVkkugi8JB74Yzjv8o8S/cO0gxjI=
-X-Google-Smtp-Source: AGHT+IHqyWCnz9PxeWHFvHwzUWmLNPQbCOVNeC8Xy/vaiXFFXbcvmZZ7cUBpzlpnQcRKUtVF/gMlcg==
-X-Received: by 2002:a05:6512:304e:b0:53b:1f90:576f with SMTP id 2adb3069b0e04-53b348fadbdmr11024344e87.22.1730401020413;
-        Thu, 31 Oct 2024 11:57:00 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bc96141sm298657e87.62.2024.10.31.11.56.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 11:56:58 -0700 (PDT)
-Date: Thu, 31 Oct 2024 20:56:55 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Odelu Kukatla <quic_okukatla@quicinc.com>, Mike Tipton <quic_mdtipton@quicinc.com>
-Subject: Re: [PATCH V2 1/3] dt-bindings: interconnect: Add EPSS L3 compatible
- for SA8775P
-Message-ID: <vljb7wwqaaqgdcm6whf5ymhnh4jbtswyibto4qpqmbgwvshudy@unh3jhbyeac6>
-References: <20241026123058.28258-1-quic_rlaggysh@quicinc.com>
- <20241026123058.28258-2-quic_rlaggysh@quicinc.com>
- <7k2vnjop6xyshquqlbe22gm7o5empeluvsohfmq5ulnaas3keb@yzomhzi4w7vf>
- <2ac4604c-a765-48b1-84b2-8979f18c29a7@quicinc.com>
+	s=arc-20240116; t=1730405048; c=relaxed/simple;
+	bh=DeB184f4TFb79JnTdhyFsFvAi0f64OZa5QexDRja9ug=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gbj0tDY92wvv0rz4GHM0VBKvXFpeBH7OFQJ5u6gjJS8rxd6bZ6kpoh5PjRSrO9pykkZapMZEWjH+HzQeLjRWuEaUmFc+GvwBcdM87M05JWdGtGak2Z3vOogYPtV96zFEjOKArClUlCDSJGRprX5Yenw6Mmr6QWwgneDZS2uVgCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=rCGZ/gDy; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 26D5D2C012B;
+	Fri,  1 Nov 2024 09:03:53 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1730405033;
+	bh=Y2rVrxEzenf5xW4+rr7fG8RlWJBZNxoLoDtBnZKILFw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rCGZ/gDyeyHK0KGrod56Bhs/2FYIqUPQ0umGZEihgzt64oVlDbZlXBv0AsUKNRVqa
+	 3fmsfqJ5zclDE1krPa1rnacRhbqhiru1wF/93OOiBaHk6iQu8+bh7lxjgQTfUkmgFI
+	 vwr3U2WN3bK0S2CoVqVPN2rN1We2nPaeHGmlCWxhVp5IYfMnw3C46r7yr462Jn3Gvl
+	 XvvMcnJVis8GfPhSVwRTWEppDCTyGIEqbYftfoyjx+7GSoR2ksSFnnjXumqe12bK1L
+	 FoUV9BOj4ZzVR/f678Al7pOazMFcuitMAK8T9/ykDlfbSzBGFq1HnJvnVdWCkSjTd9
+	 ZyY1+sRqiOH/Q==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6723e2a80000>; Fri, 01 Nov 2024 09:03:52 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id D308B13EE32;
+	Fri,  1 Nov 2024 09:03:52 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id CB832280964; Fri,  1 Nov 2024 09:03:52 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	lee@kernel.org,
+	sre@kernel.org,
+	tsbogend@alpha.franken.de
+Cc: linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v8 0/7] RTL9300 support for reboot and i2c
+Date: Fri,  1 Nov 2024 09:03:43 +1300
+Message-ID: <20241031200350.274945-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2ac4604c-a765-48b1-84b2-8979f18c29a7@quicinc.com>
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=6723e2a8 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=VlfZXiiP6vEA:10 a=Ecff0wTpLh6po_UDYMwA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Wed, Oct 30, 2024 at 12:23:57PM +0530, Raviteja Laggyshetty wrote:
-> 
-> 
-> On 10/26/2024 8:15 PM, Dmitry Baryshkov wrote:
-> > On Sat, Oct 26, 2024 at 12:30:56PM +0000, Raviteja Laggyshetty wrote:
-> >> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
-> >> SA8775P SoCs.
-> >>
-> >> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> >> ---
-> >>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml         | 4 ++++
-> >>  1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> >> index 21dae0b92819..042ca44c32ec 100644
-> >> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> >> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> >> @@ -34,6 +34,10 @@ properties:
-> >>                - qcom,sm8250-epss-l3
-> >>                - qcom,sm8350-epss-l3
-> >>            - const: qcom,epss-l3
-> >> +      - items:
-> >> +          - enum:
-> >> +              - qcom,sa8775p-epss-l3
-> >> +          - const: qcom,epss-l3-perf
-> > 
-> > Why is it -perf? What's so different about it?
-> 
-> The EPSS instance in SA8775P uses PERF_STATE register instead of REG_L3_VOTE to scale L3 clocks.
-> So adding new generic compatible "qcom,epss-l3-perf" for PERF_STATE register based l3 scaling.
+The first two patches have already been applied by Sebastian (thanks),
+they're just included for context. At Lee's request I've split the
+binding patch so the mfd change can go via a different tree to the i2c
+one. As the mfd binding has a $ref to the i2c binding I've put the i2c
+patch first. They should apply cleanly but various automated checkers
+might complain until they land in the same tree. The mips dts and i2c
+driver itself haven't changed since v6 of this series.
 
-Neither sm8250 nor sc7280 use this compatible, while they also use
-PERF_STATE register.
+--
+2.46.1
 
-> 
-> 
-> > 
-> >>  
-> >>    reg:
-> >>      maxItems: 1
-> >> -- 
-> >> 2.39.2
-> >>
-> > 
-> 
+Chris Packham (7):
+  dt-bindings: reset: syscon-reboot: Add reg property
+  power: reset: syscon-reboot: Accept reg property
+  dt-bindings: i2c: Add Realtek RTL I2C Controller
+  dt-bindings: mfd: Add Realtek RTL9300 switch peripherals
+  mips: dts: realtek: Add syscon-reboot node
+  mips: dts: realtek: Add I2C controllers
+  i2c: Add driver for the RTL9300 I2C controller
 
--- 
-With best wishes
-Dmitry
+ .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  69 +++
+ .../bindings/mfd/realtek,rtl9301-switch.yaml  | 114 +++++
+ .../bindings/power/reset/syscon-reboot.yaml   |  11 +-
+ MAINTAINERS                                   |   7 +
+ .../cameo-rtl9302c-2x-rtl8224-2xge.dts        |   2 +-
+ arch/mips/boot/dts/realtek/rtl9302c.dtsi      |  15 +
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  29 ++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-rtl9300.c              | 425 ++++++++++++++++++
+ drivers/power/reset/syscon-reboot.c           |   3 +-
+ 11 files changed, 683 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9301=
+-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/realtek,rtl9301=
+-switch.yaml
+ create mode 100644 arch/mips/boot/dts/realtek/rtl9302c.dtsi
+ create mode 100644 drivers/i2c/busses/i2c-rtl9300.c
+
+--=20
+2.47.0
+
 
