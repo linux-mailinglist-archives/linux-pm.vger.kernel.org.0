@@ -1,223 +1,254 @@
-Return-Path: <linux-pm+bounces-16833-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16834-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF5649B7CA7
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 15:20:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 506DD9B7CE2
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 15:31:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40BB0B21FC1
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 14:20:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D62921F214C5
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 14:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3D919EED6;
-	Thu, 31 Oct 2024 14:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="MElCisaX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3ED919DF99;
+	Thu, 31 Oct 2024 14:31:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A0619924F
-	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 14:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830E1126C00;
+	Thu, 31 Oct 2024 14:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730384417; cv=none; b=mqZJg9fNJ0ZxEvTayxfVytS7ubtoKU4ByRF8ceaNZtg3Rqk/zbzI0o79Yi/N6025itcC9zVIWfc19V5HtQGwn9Kmoqxd+jk3v3JPo3s1ZcvU/IiY5d7Vja10S4wON8QhRdzVI4z8stNHYWyM2JtNNi/JhM7fS5VjCwggiZjU5zc=
+	t=1730385099; cv=none; b=hzOsXfY4O6+OwwV9NaJ2ihnbq06nYD/KVOttiB2ASBGNsN2+5OG39sOsEpfcCLy5ToLyi2FE4mJLhCaC5IOXgkkY/eWyyn9d8CEQFZAS2ziK/FwxKsSL+809tR3SESqpple+NKyCxZWVh5amyO4b9yOLMjriN5QquZXb73eWcdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730384417; c=relaxed/simple;
-	bh=l2hyfqAJXg9tKTsASSLgWaBLbApxQC/IUedeczyE7dA=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nBycODHRLApXQTI7CMiJj4jdCKTMqZs53xMsXw/QVy22ZotBmM0YRHjrzrHdCKLKi7h1bASMWQ7SxhPte8PEmyVK4KWi96O7yyQD9wThoYK6Ji3GPjIhTMlV3bxoxuzr0zFJxGvvQBDTeqRkd4x/f13yqSG9SX3Pnptd2nvLj0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=MElCisaX; arc=none smtp.client-ip=35.89.44.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
-Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
-	by cmsmtp with ESMTPS
-	id 6BmWt6owSqvuo6W1xtSEp1; Thu, 31 Oct 2024 14:20:09 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-	by cmsmtp with ESMTPS
-	id 6W1vt3Fjw65gF6W1wtL63x; Thu, 31 Oct 2024 14:20:09 +0000
-X-Authority-Analysis: v=2.4 cv=Z58nH2RA c=1 sm=1 tr=0 ts=67239219
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=-pn6D5nKLtMA:10 a=6Ujbnq6iAAAA:8
- a=vU9dKmh3AAAA:8 a=UQ0gWoj1K6JKIvSkpFIA:9 a=QEXdDO2ut3YA:10
- a=-sNzveBoo8RYOSiOai2t:22 a=rsP06fVo5MYu2ilr0aT5:22 a=ZCPYImcxYIQFgLOT52_G:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:To:Subject:Cc:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+jxM7lRle7VcSb1cHFDpbe2ijsT2r/j9mqp7JE6/0QY=; b=MElCisaXm1Z0+gopzkxIofO/XC
-	+bkgABtUvhl7xIE1PLBpyq9jFI7iHPGc6lOLzoTPbeRP4d6rtjGAq1K0QB83bWCnZR/sInsKWQnl4
-	ip/MD9ihA/DsKWRDpRSau8c3zk5rcrL4ZIVZBDAPWdXPfkf5CLNimFRm80eEOEyoPbto/+ZDoOp5t
-	OO5nny7KBgSUcN526T+uBC716GoaxD0A+Gv0RJdwTKaEq5N800HkDG/rpNqez1wRabx+h3MX+MeAp
-	QGDtNqgxeyeKKUXiiBuh+89gz2WYaPxPACvKWio8Wx+H1AoG45aWwWzCRNN7kcakWMWSk7zFfrAuK
-	io09hJAg==;
-Received: from [122.165.245.213] (port=32784 helo=[192.168.1.5])
-	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <parthiban@linumiz.com>)
-	id 1t6W1o-003EHK-1D;
-	Thu, 31 Oct 2024 19:50:00 +0530
-Message-ID: <4c2afef1-dd0d-48e8-a9bc-650edf44b399@linumiz.com>
-Date: Thu, 31 Oct 2024 19:49:55 +0530
+	s=arc-20240116; t=1730385099; c=relaxed/simple;
+	bh=PuDbDPSsaYw6fzKpOB6WGo3iQDhxrpPMSFphqPAYYpo=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EN28I5JAEc6VDfn4PEbOzatLq94W/w6VmutorAxlxxp9PC5ywPodkbXL7ZdUHH747jHCVCo85UAHGn8QWGlw7kx6Y6txra/pOOYgSCoYOIJdzDcgLFCxEWfcAR/vL0wliXEEsDAqmZlcFV1vJV59hm+cGAJ+/5ds78hAV8H6QU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XfRBl4Tjhz6GDmf;
+	Thu, 31 Oct 2024 22:26:39 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 20CAB140136;
+	Thu, 31 Oct 2024 22:31:32 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 31 Oct
+ 2024 15:31:31 +0100
+Date: Thu, 31 Oct 2024 14:31:29 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Matteo Martelli <matteomartelli3@gmail.com>
+CC: Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko
+	<andriy.shevchenko@intel.com>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
+	<alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin
+	<peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
+	<sre@kernel.org>, <linux-iio@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
+ producer to fix race
+Message-ID: <20241031143129.0000014e@Huawei.com>
+In-Reply-To: <173037398492.12348.265826723028347056@njaxe.localdomain>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
+	<20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
+	<ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+	<173031260171.39393.109639772708550094@njaxe.localdomain>
+	<20241030203050.5cdf3450@jic23-huawei>
+	<173037398492.12348.265826723028347056@njaxe.localdomain>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: parthiban@linumiz.com, Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Maxime Ripard
- <mripard@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Nishanth Menon <nm@ti.com>, Rob Herring <robh@kernel.org>,
- Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Viresh Kumar <vireshk@kernel.org>, Andre Przywara <andre.przywara@arm.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 12/13] cpufreq: sun50i: add a100 cpufreq support
-To: Cody Eksal <masterr3c0rd@epochal.quest>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Yangtao Li <tiny.windzz@gmail.com>,
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>
-References: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
- <20241031070232.1793078-13-masterr3c0rd@epochal.quest>
-Content-Language: en-US
-From: Parthiban <parthiban@linumiz.com>
-Organization: Linumiz
-In-Reply-To: <20241031070232.1793078-13-masterr3c0rd@epochal.quest>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1t6W1o-003EHK-1D
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.5]) [122.165.245.213]:32784
-X-Source-Auth: parthiban@linumiz.com
-X-Email-Count: 27
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKwFH8CMDW52ai9okL0kbUE0w18A7YYFBB2B9ZHAGYEC84y0wvNqE+cTunQeBpXrg6LusVkTpUAYCfVtvxW30S50R7E55TaDKgjFzzWzKLBatSwEPu/v
- t9Hn197uNNPHY8v8HH0DMe4BI1alJZLCiIZ2Mn8hX6Qktx69K3A6/POIaMRY8b2e0C45hwzuEn6SH0UOF1t6aXRmnfLBwAnoOD4=
+X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On 10/31/24 12:32 PM, Cody Eksal wrote:
-> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+On Thu, 31 Oct 2024 12:26:24 +0100
+Matteo Martelli <matteomartelli3@gmail.com> wrote:
+
+> Quoting Jonathan Cameron (2024-10-30 21:30:50)
+> > On Wed, 30 Oct 2024 19:23:21 +0100
+> > Matteo Martelli <matteomartelli3@gmail.com> wrote:
+> >   
+> > > Quoting Andy Shevchenko (2024-10-30 15:47:50)  
+> > > > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:    
+> > > > > Consumers need to call the producer's read_avail_release_resource()
+> > > > > callback after reading producer's available info. To avoid a race
+> > > > > condition with the producer unregistration, change inkern
+> > > > > iio_channel_read_avail() so that it copies the available info from the
+> > > > > producer and immediately calls its release callback with info_exists
+> > > > > locked.
+> > > > > 
+> > > > > Also, modify the users of iio_read_avail_channel_raw() and
+> > > > > iio_read_avail_channel_attribute() to free the copied available buffers
+> > > > > after calling these functions. To let users free the copied buffer with
+> > > > > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
+> > > > > consumer helper that is equivalent to iio_read_avail_channel_attribute()
+> > > > > but stores the available values in the returned variable.    
+> > > > 
+> > > > ...
+> > > >     
+> > > > > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
+> > > > > +                                         struct iio_chan_spec const *chan,
+> > > > > +                                         const int *vals, long mask)
+> > > > > +{
+> > > > > +     kfree(vals);
+> > > > > +}
+> > > > > +
+> > > > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> > > > >                             struct iio_chan_spec const *chan,
+> > > > >                             int val, int val2, long mask)
+> > > > > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> > > > >  static const struct iio_info dpot_dac_info = {
+> > > > >       .read_raw = dpot_dac_read_raw,
+> > > > >       .read_avail = dpot_dac_read_avail,
+> > > > > +     .read_avail_release_resource = dpot_dac_read_avail_release_res,
+> > > > >       .write_raw = dpot_dac_write_raw,
+> > > > >  };    
+> > > > 
+> > > > I have a problem with this approach. The issue is that we allocate
+> > > > memory in one place and must clear it in another. This is not well
+> > > > designed thingy in my opinion. I was thinking a bit of the solution and
+> > > > at least these two comes to my mind:
+> > > > 
+> > > > 1) having a special callback for .read_avail_with_copy (choose better
+> > > > name) that will dump the data to the intermediate buffer and clean it
+> > > > after all;
+> > > > 
+> > > > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.    
+> > > 
+> > > Could you elaborate more about these potential solutions? Maybe with some
+> > > usage examples?
+> > > 
+> > > If I get it correctly, in both cases you are suggesting to pass ownership
+> > > of the vals buffer to the caller, iio_read_channel_info_avail() in this
+> > > case, so that it would take care of freeing the buffer after calling
+> > > iio_format_after_*(). We considered this approach during an initial
+> > > discussion with Jonathan (see read_avail_ext() in [1]), where he suggested
+> > > to let the driver keep the release control through a callback for two
+> > > reasons:
+> > > 
+> > > 1) Apparently it's a bad pattern to pass the buffer ownership to the core,
+> > >    maybe Jonathan can elaborate why? The risk I can think of is that the driver
+> > >    could still keep the buffer copy in its private data after giving it away,
+> > >    resulting in fact in a double ownership. However I think it would be clear
+> > >    enough in this case that the copy should be handled by the caller, or maybe
+> > >    not?  
+> > Mostly the lack of desire to have to copy for the 95% of cases where it's
+> > not needed and that it prevents any optimization like you mention.  
 > 
-> Let's add cpufreq nvmem based for allwinner a100 soc. It's similar to h6,
-> let us use efuse_xlate to extract the differentiated part.
+> I think the suggestion here is to add an additional .read_avail_with_copy()
+> without replacing the original .read_avail(), so all the current drivers that
+> use a constant avail list would not be affected. And I think this was the same
+> idea for the additional read_avail_ext() or the additional argument for the
+> read_avail() we were considering in [1]. So I would think that
+> iio_read_channel_info_avail() would do something like the following:
 > 
-> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> [masterr3c0rd@epochal.quest: add A100 to opp_match_list]
-> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
-
-Although I couldn't get the secondary CPU's running because of missing BL31 support,
-it works fine in CPU0.
-
-Tested-by: Parthiban Nallathambi <parthiban@linumiz.com>
-
-Thanks,
-Parthiban
-
-> ---
-> Changes in V2:
->  - Add the A100 to the cpufreq-dt-platdev blacklist.
+>     if (indio_dev->info->read_avail_with_copy)
+>         indio_dev->info->read_avail_with_copy(vals);
+>     else
+>         indio_dev->info->read_avail(vals);
 > 
->  drivers/cpufreq/cpufreq-dt-platdev.c   |  1 +
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 28 ++++++++++++++++++++++++++
->  2 files changed, 29 insertions(+)
+>     ...
+>     iio_format_avail_list(vals);
+>     ...
 > 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 18942bfe9c95..2a3e8bd317c9 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -103,6 +103,7 @@ static const struct of_device_id allowlist[] __initconst = {
->   * platforms using "operating-points-v2" property.
->   */
->  static const struct of_device_id blocklist[] __initconst = {
-> +	{ .compatible = "allwinner,sun50i-a100" },
->  	{ .compatible = "allwinner,sun50i-h6", },
->  	{ .compatible = "allwinner,sun50i-h616", },
->  	{ .compatible = "allwinner,sun50i-h618", },
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 293921acec93..3a29c026d364 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -22,6 +22,9 @@
->  #define NVMEM_MASK	0x7
->  #define NVMEM_SHIFT	5
->  
-> +#define SUN50I_A100_NVMEM_MASK	0xf
-> +#define SUN50I_A100_NVMEM_SHIFT	12
-> +
->  static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
->  
->  struct sunxi_cpufreq_data {
-> @@ -45,6 +48,23 @@ static u32 sun50i_h6_efuse_xlate(u32 speedbin)
->  		return 0;
->  }
->  
-> +static u32 sun50i_a100_efuse_xlate(u32 speedbin)
-> +{
-> +	u32 efuse_value;
-> +
-> +	efuse_value = (speedbin >> SUN50I_A100_NVMEM_SHIFT) &
-> +		      SUN50I_A100_NVMEM_MASK;
-> +
-> +	switch (efuse_value) {
-> +	case 0b100:
-> +		return 2;
-> +	case 0b010:
-> +		return 1;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
->  static int get_soc_id_revision(void)
->  {
->  #ifdef CONFIG_HAVE_ARM_SMCCC_DISCOVERY
-> @@ -108,6 +128,10 @@ static struct sunxi_cpufreq_data sun50i_h6_cpufreq_data = {
->  	.efuse_xlate = sun50i_h6_efuse_xlate,
->  };
->  
-> +static struct sunxi_cpufreq_data sun50i_a100_cpufreq_data = {
-> +	.efuse_xlate = sun50i_a100_efuse_xlate,
-> +};
-> +
->  static struct sunxi_cpufreq_data sun50i_h616_cpufreq_data = {
->  	.efuse_xlate = sun50i_h616_efuse_xlate,
->  };
-> @@ -116,6 +140,9 @@ static const struct of_device_id cpu_opp_match_list[] = {
->  	{ .compatible = "allwinner,sun50i-h6-operating-points",
->  	  .data = &sun50i_h6_cpufreq_data,
->  	},
-> +	{ .compatible = "allwinner,sun50i-a100-operating-points",
-> +	  .data = &sun50i_a100_cpufreq_data,
-> +	},
->  	{ .compatible = "allwinner,sun50i-h616-operating-points",
->  	  .data = &sun50i_h616_cpufreq_data,
->  	},
-> @@ -291,6 +318,7 @@ static struct platform_driver sun50i_cpufreq_driver = {
->  
->  static const struct of_device_id sun50i_cpufreq_match_list[] = {
->  	{ .compatible = "allwinner,sun50i-h6" },
-> +	{ .compatible = "allwinner,sun50i-a100" },
->  	{ .compatible = "allwinner,sun50i-h616" },
->  	{ .compatible = "allwinner,sun50i-h618" },
->  	{ .compatible = "allwinner,sun50i-h700" },
+>     if (indio_dev->info->read_avail_with_copy)
+>         kfree(vals);
+
+Ok, sure that would work, but...
+
+I don't really see this as being much less fragile than
+the existing solution + in cases that we do have where
+only some available are not const we will have to copy them
+all.
+
+If anything it's more complex than making it a driver problem
+to provide the release call however it wants to do it.
+ 
+
+> 
+> And the drivers would choose whether to define the read_avail or the
+> read_avail_with_copy.
+> 
+> What I was referring to is that, back then, you mentioned you would have
+> preferred to avoid passing ownership of the buffer around:
+> 
+> > That's a corner case we should think about closing. Would require an indicator
+> > to read_avail that the buffer it has been passed is a snapshot that it should
+> > free on completion of the string building.  I don't like passing ownership
+> > of data around like that, but it is fiddly to do anything else given
+> > any simple double buffering is subject to race conditions.  
+> 
+> I guess there is some other reason other than avoiding the copy when not
+> necessary, since by introducing an additional function or argument or return
+> type, most of the unnecessary copies would already be avoided right?
+
+It's not a strong reason beyond limiting scope of clever design +
+the key bit my mind is that the above is not substantially simpler and
+reduces our flexibility.
+
+> 
+> Anyway any of this solutions would still prevent the potential optimizations of
+> point 2). It's worth mentioning that those kind of optimizations are currently
+> not adopted by any driver.
+
+That one indeed not, but mixing dynamic and non dynamic is something
+you do in your pac1921 patch.
+
+Jonathan
+
+
+> 
+> > 
+> > Jonathan  
+> > > 
+> > > 2) Some driver might want to avoid allocating a new copy of a big table if
+> > >    the race does not occur (e.g. with additional checks on buffer access
+> > >    code) and thus wouldn't call a free() in the release callback.
+> > >   
+> > > > 
+> > > > In any case it looks fragile and not scalable. I propose to drop this
+> > > > and think again.    
+> > > 
+> > > I see your concerns, I am open to reconsider this in case we come up with
+> > > better solution after addressing the points above.
+> > >   
+> > > > Yes, yes, I'm fully aware about the problem you are trying to solve and
+> > > > agree on the report, I think this solution is not good enough.
+> > > > 
+> > > > -- 
+> > > > With Best Regards,
+> > > > Andy Shevchenko
+> > > >     
+> > > 
+> > > [1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic23-huawei/
+> > > 
+> > > Best regards,
+> > > Matteo Martelli  
+> >   
+> 
+> I hope I've brought a little more clarity to the discussion by providing some
+> history instead of making it more confusing.
+
+Sure, the code example in particular is useful.
+
+Jonathan
+
+> 
+> Best regards,
+> Matteo Martelli
+> 
+> 
 
 
