@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-16782-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16780-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 721989B719C
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:20:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3A769B7192
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 02:20:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FA98282836
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:20:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 640312827A8
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 01:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32AD8120D;
-	Thu, 31 Oct 2024 01:20:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C534D5A79B;
+	Thu, 31 Oct 2024 01:19:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="r4fjWmwC"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="KLtygRBv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49CB3FB8B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4989D2FB;
 	Thu, 31 Oct 2024 01:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730337600; cv=none; b=Tz3woMI2o4UXbiNPrdZMwdUMFms41vBgB+E3u5jUPAeFfUjlTkdx8p6cCUk7gSDaqUORWiNVojwACx4Q9fDmJyusG/P7Xu608IpK86gQu0E1c9/eSTsVFYSMP8csFgI2ibraHvWKvXmMO0hVyjafTOj9Bp+ralN8BYPXlfpRe08=
+	t=1730337599; cv=none; b=NgAZSumKWS6k/MfLpsfjfEksp1fKgHMOuz7BAQr1KfgkYt9GxDuF2EVaN2Ep49s8Tbv2taDrFYFnD/vLzEjaiQMJ4zzFx/iikPP//pJUahpwzxRDpB9HE1Rtuwmiz71KoxW7jmAet38jRjkQdBpcWsxWY22ZOQsNp7FQKndiCkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730337600; c=relaxed/simple;
-	bh=pGdE3JbMnx8RRxsOjP5sqLKvgYxJu9uHccWmmEz1BBY=;
+	s=arc-20240116; t=1730337599; c=relaxed/simple;
+	bh=nKRAjGHplcBjSY8FGUHOTB8ghGJrx7beTyIEn7gCe/4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nZ0kTYid3XdZ15q3j/CScor2E+RsvBN0+b7Oy4Lpz2uA/2xUv1iSOHl2OX7y6NqmQTj2RkMzeK2/DOvrfDvcUEfUBaUUYEhYSzB1gPL8OFK3cOFlkvpJZgZ95fLefo4CVZ92+DvmkkGjVlzaR1hqlVAe6caQd3YyxJ2bTQuJSe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=r4fjWmwC; arc=none smtp.client-ip=5.75.144.95
+	 In-Reply-To:To:Cc; b=QwcVbi23+yLEpAfzua6YZQMf4+XpyU+hHVWkP7ez8IAvLSPA9nBD8mWDkVRYomcOTx/Wj2qxVsNxZyGZ4pWgG1cQmlWGVnz/z3nDXgGCgaJtYZTq2SLvtI55s/HaHvhZvaoVk1HM8Tijm+Rc/wJnyS5MYX7iJyiolKWzSS9WaSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=KLtygRBv; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.0.162] (BC24936A.dsl.pool.telekom.hu [188.36.147.106])
-	by mail.mainlining.org (Postfix) with ESMTPSA id DF2A0E45B8;
-	Thu, 31 Oct 2024 01:19:50 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id B37A7E45B9;
+	Thu, 31 Oct 2024 01:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1730337591;
+	s=psm; t=1730337592;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WQ9PPHmGUCj1OfdVnwY9QeNORTy83vI8ai4ibJSzc/c=;
-	b=r4fjWmwCDRDG8Y2Vr+8Fb4qXVm3F41MY2J3NKglKtv0Bqy4K6ej8IhKfy0003phcHecT5R
-	9eUTLVQ2LQc/nWR4QzENy0GmhV+6qKvv3dilPbuurg1ikV0odc0SB7QLhqAQuK7ojyxdw6
-	MBx2x2NHPE/1Qk5ElR2BDA3t2w6xKg3rPsYbaZBzb6k3pC/JG3xiEyj6EojZQ06qiL1+jZ
-	dF6B0+t7GqoS50HjK8cU5ki+RWEqSHGX6SrNi/dEnwSoH/P3o207Qvg25hVevUDQY/f3rv
-	IYtUrte7CCrDLYbmoLf/T0pAm77aqfBSrnWvlS4y0OrfxXwR8sRmCY2h1+dP+A==
+	bh=Olj9iYH7LcbphKshwr7qao2rM+CM/q0woKUYsmasCt4=;
+	b=KLtygRBvjM7NBuo9STN5vtaNcZ/6Pial8vWOAg072OGAnmcNY4XGnfYGKfnT8QTlHl+F5x
+	Sfuvj07EncyGTOJ+lNTOTsrD9bWdUmPlz+/zL9ZlKD9LHW7xzsfZCR6CHOiEzcCvvvq/uZ
+	3KdktVsmd5do3YQyzV3YzLh4pH4VOcMS+7LNHN/X+jGB4hgzAAPLoNSKedTB3e8Y3gYilC
+	RlGvVSOvGrhz/lyQmOT+AFY6FW0L7yi9FtFx+DNMl6fpAHpM58w0csU4IYeOsSmyk5iO62
+	p8VQ46/vMRXALaZXr1HL1EYyvyVmmVhH4iB8SuJklkeFKi4cGPvmCs5iLLiQ2w==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Thu, 31 Oct 2024 02:19:46 +0100
-Subject: [PATCH v2 05/15] arm64: dts: qcom: Add PM8937 PMIC
+Date: Thu, 31 Oct 2024 02:19:47 +0100
+Subject: [PATCH v2 06/15] dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
+ bindings
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +58,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241031-msm8917-v2-5-8a075faa89b1@mainlining.org>
+Message-Id: <20241031-msm8917-v2-6-8a075faa89b1@mainlining.org>
 References: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 In-Reply-To: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -74,254 +75,185 @@ To: Bjorn Andersson <andersson@kernel.org>,
 Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
- Dang Huynh <danct12@riseup.net>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=5605;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730337585; l=6514;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=lHNnzvmjpc3j5FxTFCw87+ln8lcsQMaGeUUUPNMlpb0=;
- b=un0beJI89T6BZs1o4JTeol1auc3jcjYNVtpZz1vot8c+ikqGpGIx9+kL6xGnAQZ2gbp2DU7aY
- O/S/GsgdYZDAq2A3VHcHx8GC/OTOkbEYjjlNZkXzb4fIyDIopAjAFAB
+ bh=nKRAjGHplcBjSY8FGUHOTB8ghGJrx7beTyIEn7gCe/4=;
+ b=x6HM8gqhgAjcaSrJLj/q14WVqE+C+/rziHJV7GCZhFXu4Vz3M2xze2opQDIDsMrSwL4amUG+Q
+ aKIa7jNAkoyBPJ9/FGZ0Fnh9a3th+tKkojFKhmwGWMxSElmBfpq71KK
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-From: Dang Huynh <danct12@riseup.net>
+Add device tree bindings documentation for Qualcomm MSM8917
+pinctrl driver.
 
-The PM8937 features integrated peripherals like ADC, GPIO controller,
-MPPs, PON keys and others.
-
-Add the device tree so that any boards with this PMIC can use it.
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Dang Huynh <danct12@riseup.net>
 Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
- arch/arm64/boot/dts/qcom/pm8937.dtsi | 216 +++++++++++++++++++++++++++++++++++
- 1 file changed, 216 insertions(+)
+ .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     | 155 +++++++++++++++++++++
+ 1 file changed, 155 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8937.dtsi b/arch/arm64/boot/dts/qcom/pm8937.dtsi
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8917-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8917-pinctrl.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..34e2b4cd0d5f4f92c16bb20f53e4520544a644bc
+index 0000000000000000000000000000000000000000..41349ce9898aaaf68a10f30ffe611dcedc1e9311
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pm8937.dtsi
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2023, Dang Huynh <danct12@riseup.net>
-+ */
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8917-pinctrl.yaml
+@@ -0,0 +1,155 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,msm8917-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include <dt-bindings/iio/qcom,spmi-vadc.h>
-+#include <dt-bindings/input/linux-event-codes.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-mpp.h>
-+#include <dt-bindings/spmi/spmi.h>
++title: Qualcomm MSM8917 TLMM pin controller
 +
-+/ {
-+	thermal-zones {
-+		pm8937-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8937_temp>;
++maintainers:
++  - Barnabas Czeman <barnabas.czeman@mainlining.org>
 +
-+			trips {
-+				trip0 {
-+					temperature = <105000>;
-+					hysteresis = <0>;
-+					type = "passive";
-+				};
++description:
++  Top Level Mode Multiplexer pin controller in Qualcomm MSM8917 SoC.
 +
-+				trip1 {
-+					temperature = <125000>;
-+					hysteresis = <0>;
-+					type = "hot";
-+				};
++properties:
++  compatible:
++    const: qcom,msm8917-pinctrl
 +
-+				trip2 {
-+					temperature = <145000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+};
++  reg:
++    maxItems: 1
 +
-+&spmi_bus {
-+	pmic@0 {
-+		compatible = "qcom,pm8937", "qcom,spmi-pmic";
-+		reg = <0x0 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++  interrupts:
++    maxItems: 1
 +
-+		pon@800 {
-+			compatible = "qcom,pm8916-pon";
-+			reg = <0x800>;
-+			mode-bootloader = <0x2>;
-+			mode-recovery = <0x1>;
++  gpio-reserved-ranges: true
 +
-+			pm8937_pwrkey: pwrkey {
-+				compatible = "qcom,pm8941-pwrkey";
-+				interrupts = <0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
-+				debounce = <15625>;
-+				bias-pull-up;
-+				linux,code = <KEY_POWER>;
-+			};
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-msm8917-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-msm8917-tlmm-state"
++        additionalProperties: false
 +
-+			pm8937_resin: resin {
-+				compatible = "qcom,pm8941-resin";
-+				interrupts = <0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
-+				debounce = <15625>;
-+				bias-pull-up;
-+				status = "disabled";
-+			};
-+		};
++$defs:
++  qcom-msm8917-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
++    unevaluatedProperties: false
 +
-+		pm8937_gpios: gpio@c000 {
-+			compatible = "qcom,pm8937-gpio", "qcom,spmi-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			gpio-ranges = <&pm8937_gpios 0 0 8>;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-3][0-9]|14[01])$"
++            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
++                      sdc2_cmd, sdc2_data, qdsd_clk, qdsd_cmd, qdsd_data0,
++                      qdsd_data1, qdsd_data2, qdsd_data3 ]
++        minItems: 1
++        maxItems: 16
 +
-+		pm8937_mpps: mpps@a000 {
-+			compatible = "qcom,pm8937-mpp", "qcom,spmi-mpp";
-+			reg = <0xa000>;
-+			gpio-controller;
-+			gpio-ranges = <&pm8937_mpps 0 0 4>;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
 +
-+		pm8937_temp: temp-alarm@2400 {
-+			compatible = "qcom,spmi-temp-alarm";
-+			reg = <0x2400>;
-+			interrupts = <0 0x24 0 IRQ_TYPE_EDGE_RISING>;
-+			io-channels = <&pm8937_vadc VADC_DIE_TEMP>;
-+			io-channel-names = "thermal";
-+			#thermal-sensor-cells = <0>;
-+		};
++        enum: [ accel_int, adsp_ext, alsp_int, atest_bbrx0, atest_bbrx1,
++                atest_char, atest_char0, atest_char1, atest_char2,
++                atest_char3, atest_combodac_to_gpio_native,
++                atest_gpsadc_dtest0_native, atest_gpsadc_dtest1_native,
++                atest_tsens, atest_wlan0, atest_wlan1, audio_ref,
++                audio_reset, bimc_dte0, bimc_dte1, blsp6_spi, blsp8_spi,
++                blsp_i2c1, blsp_i2c2, blsp_i2c3, blsp_i2c4, blsp_i2c5,
++                blsp_i2c6, blsp_i2c7, blsp_i2c8, blsp_spi1, blsp_spi2,
++                blsp_spi3, blsp_spi4, blsp_spi5, blsp_spi6, blsp_spi7,
++                blsp_spi8, blsp_uart1, blsp_uart2, blsp_uart3, blsp_uart4,
++                blsp_uart5, blsp_uart6, blsp_uart7, blsp_uart8, cam0_ldo,
++                cam1_rst, cam1_standby, cam2_rst, cam2_standby, cam_mclk,
++                cci_async, cci_i2c, cci_timer0, cci_timer1, cdc_pdm0,
++                codec_int1, codec_int2, codec_mad, coex_uart, cri_trng,
++                cri_trng0, cri_trng1, dbg_out, dmic0_clk, dmic0_data,
++                ebi_cdc, ebi_ch0, ext_lpass, forced_usb, fp_gpio, fp_int,
++                gcc_gp1_clk_a, gcc_gp1_clk_b, gcc_gp2_clk_a, gcc_gp2_clk_b,
++                gcc_gp3_clk_a, gcc_gp3_clk_b, gcc_plltest, gcc_tlmm, gpio,
++                gsm0_tx, key_focus, key_snapshot, key_volp, ldo_en,
++                ldo_update, lpass_slimbus, lpass_slimbus0, lpass_slimbus1,
++                m_voc, mag_int, mdp_vsync, mipi_dsi0, modem_tsync, nav_pps,
++                nav_pps_in_a, nav_pps_in_b, nav_tsync, nfc_pwr, ov_ldo,
++                pa_indicator, pbs0, pbs1, pbs2, pri_mi2s, pri_mi2s_mclk_a,
++                pri_mi2s_mclk_b, pri_mi2s_ws, prng_rosc,
++                pwr_crypto_enabled_a, pwr_crypto_enabled_b,
++                pwr_modem_enabled_a, pwr_modem_enabled_b, pwr_nav_enabled_a,
++                pwr_nav_enabled_b, qdss_cti_trig_in_a0, qdss_cti_trig_in_a1,
++                qdss_cti_trig_in_b0, qdss_cti_trig_in_b1,
++                qdss_cti_trig_out_a0, qdss_cti_trig_out_a1,
++                qdss_cti_trig_out_b0, qdss_cti_trig_out_b1, qdss_traceclk_a,
++                qdss_traceclk_b, qdss_tracectl_a, qdss_tracectl_b,
++                qdss_tracedata_a, qdss_tracedata_b, sd_write, sdcard_det,
++                sec_mi2s, sec_mi2s_mclk_a, sec_mi2s_mclk_b, sensor_rst,
++                smb_int, ssbi_wtr1, ts_resout, ts_sample, uim1_clk,
++                uim1_data, uim1_present, uim1_reset, uim2_clk, uim2_data,
++                uim2_present, uim2_reset, uim_batt, us_emitter, us_euro,
++                wcss_bt, wcss_fm, wcss_wlan, wcss_wlan0, wcss_wlan1,
++                wcss_wlan2, webcam_rst, webcam_standby, wsa_io, wsa_irq ]
 +
-+		pm8937_vadc: adc@3100 {
-+			compatible = "qcom,spmi-vadc";
-+			reg = <0x3100>;
-+			interrupts = <0 0x31 0 IRQ_TYPE_EDGE_RISING>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#io-channel-cells = <1>;
++    required:
++      - pins
 +
-+			channel@5 {
-+				reg = <VADC_VCOIN>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "vcoin";
-+			};
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
 +
-+			channel@7 {
-+				reg = <VADC_VSYS>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "vph_pwr";
-+			};
++required:
++  - compatible
++  - reg
 +
-+			channel@8 {
-+				reg = <VADC_DIE_TEMP>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "die_temp";
-+			};
++unevaluatedProperties: false
 +
-+			channel@9 {
-+				reg = <VADC_REF_625MV>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_625mv";
-+			};
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+			channel@a {
-+				reg = <VADC_REF_1250MV>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_1250mv";
-+			};
++    tlmm: pinctrl@1000000 {
++        compatible = "qcom,msm8917-pinctrl";
++        reg = <0x01000000 0x300000>;
++        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++        gpio-controller;
++        gpio-ranges = <&tlmm 0 0 134>;
++        #gpio-cells = <2>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
 +
-+			channel@c {
-+				reg = <VADC_SPARE1>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_buf_625mv";
-+			};
++        blsp1-uart2-sleep-state {
++            pins = "gpio4", "gpio5";
++            function = "gpio";
 +
-+			channel@e {
-+				reg = <VADC_GND_REF>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_gnd";
-+			};
++            drive-strength = <2>;
++            bias-pull-down;
++        };
 +
-+			channel@f {
-+				reg = <VADC_VDD_VADC>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_vdd";
-+			};
++        spi1-default-state {
++            spi-pins {
++                pins = "gpio0", "gpio1", "gpio3";
++                function = "blsp_spi1";
 +
-+			channel@11 {
-+				reg = <VADC_P_MUX2_1_1>;
-+				qcom,pre-scaling = <1 1>;
-+				qcom,ratiometric;
-+				qcom,hw-settle-time = <200>;
-+				label = "pa_therm1";
-+			};
++                drive-strength = <12>;
++                bias-disable;
++            };
 +
-+			channel@13 {
-+				reg = <VADC_P_MUX4_1_1>;
-+				qcom,pre-scaling = <1 1>;
-+				qcom,ratiometric;
-+				qcom,hw-settle-time = <200>;
-+				label = "case_therm";
-+			};
++            cs-pins {
++                pins = "gpio2";
++                function = "gpio";
 +
-+			channel@32 {
-+				reg = <VADC_LR_MUX3_XO_THERM>;
-+				qcom,pre-scaling = <1 1>;
-+				qcom,ratiometric;
-+				qcom,hw-settle-time = <200>;
-+				label = "xo_therm";
-+			};
-+
-+			channel@36 {
-+				reg = <VADC_LR_MUX7_HW_ID>;
-+				qcom,pre-scaling = <1 1>;
-+				qcom,ratiometric;
-+				qcom,hw-settle-time = <200>;
-+				label = "pa_therm0";
-+			};
-+
-+			channel@3c {
-+				reg = <VADC_LR_MUX3_BUF_XO_THERM>;
-+				qcom,pre-scaling = <1 1>;
-+				qcom,ratiometric;
-+				qcom,hw-settle-time = <200>;
-+				label = "xo_therm_buf";
-+			};
-+		};
-+
-+		rtc@6000 {
-+			compatible = "qcom,pm8941-rtc";
-+			reg = <0x6000>, <0x6100>;
-+			reg-names = "rtc", "alarm";
-+			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
-+		};
-+	};
-+
-+	pmic@1 {
-+		compatible = "qcom,pm8937", "qcom,spmi-pmic";
-+		reg = <0x1 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8937_spmi_regulators: regulators {
-+			compatible = "qcom,pm8937-regulators";
-+		};
-+	};
-+};
++                drive-strength = <16>;
++                bias-disable;
++                output-high;
++            };
++        };
++    };
 
 -- 
 2.47.0
