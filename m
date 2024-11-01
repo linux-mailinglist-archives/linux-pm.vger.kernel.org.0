@@ -1,153 +1,217 @@
-Return-Path: <linux-pm+bounces-16883-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023C19B9487
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 16:37:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 313739B954D
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 17:27:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 460ABB215C0
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 15:37:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B65F11F2182E
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 16:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517AF1C9DF0;
-	Fri,  1 Nov 2024 15:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73A961CB336;
+	Fri,  1 Nov 2024 16:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="KgHoo3oE"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KkkA25H/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5103F1C7265
-	for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2024 15:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384BE1A2C06;
+	Fri,  1 Nov 2024 16:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730475411; cv=none; b=LxPkbtjaVId552BfJFKRk3R7R5+eZmx895pWWjTgyuMySSoWDnTJo30ZKIucVIET552198v6rQ4tGde/lAN6tVCpKuazqtvgzcHTFwYBfh6ZXJxAbg4yu4D3/6lMm9nTQJW5fr3PqxsmUqvc4WGtHJFi0xw9JgCJmY/nfuGExm0=
+	t=1730478336; cv=none; b=lQwmHVpGulIshBIg195UmtioEQz2TI1wV1XPnukB7nMW1i8PgjuaTJ/CQNJ1XeoCa31cZxk7DPG5ZxaAL2nAXZzZ01xAE4Yh1JJNjLk1HAgFnwc4Tqt4WrwefN4MF2rh692KIztvRe9MsRnMofEWg+aStk/SdOnVWbMTihAc6ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730475411; c=relaxed/simple;
-	bh=xhPvgmqbX1LH74jmdbMgtdutexJPgNxRb87XIYrFvw0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uIyzn5cPOqfXw4rcRQbx4RMhKNDP3fNWDML/Nl1q9u9d/PBOHCfv2fYg7rhkX0+f7zzuiI/yivmgunGQtWZ8F+cI62oV4/UiIZt/3mKa4L/WbmAIW0Wool19cmMdERJor4paUCj+dQzIoIaGI2CNLTpb0nBLWPsktXsPJVGr3ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=KgHoo3oE; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20cceb8d8b4so13678215ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2024 08:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730475408; x=1731080208; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ke4bvOR1ARJKXE6dRhRI5chunW+2b5MmRjCBBzyOcvk=;
-        b=KgHoo3oEKNkEZOVE0YYoB7nkNvsNCgGr3UDU6nYrhwxDU80qS+vVpCIrueW1xmvRrb
-         Awc/oRlAtRSfaDaza2BMhAXtRMAuXfXBKqs0Uhd0i8QpVyYhEfi3QI8smTRWnpUiWNRi
-         pF7vGyDZcyMnVXKfqpquu4Y+z+1zUCL9yp56H5fkF1ChvS7QsrryUpWrkH9XE9F5YPzJ
-         ZVB+WWsvVGNa39RmFHwebbbHPei246fymVxd/O1qIiyFjzs4woxuAijDf/9Iat9U136/
-         +X4ohdHRqZnLpa3fX+Il0BtBcFYJYwGrooslYEWezgcJFkbNjIeUP6XwGtxgSWgAwA9y
-         XMmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730475408; x=1731080208;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ke4bvOR1ARJKXE6dRhRI5chunW+2b5MmRjCBBzyOcvk=;
-        b=DLbpCjV1PuKP37AEPSxjz9XTL7A1+LhHFAGSjobo81gId5DzJQZKsvl4T8ofo/qobP
-         8luMF5j8eiHieee2sWEChs51J/Mv2AY9+gW81W1VyiS7ksr0mqmSGDg6+37Gv3GWfPTj
-         bbMyLurFFJE1+jA510jCPVAsiG7ckB5jvPgNP6V4GryeGwFK7sbAT7DI6KDr0smxY+tW
-         NWdCrIEZ/Gg+RNii7OsIZguym7F0fKppk/joJPfRfZVmkjM4UyM8yoJ/rVIaWdKV7VqK
-         LPkDmbAt0vVJuAO9RU985t/GS4auUGIXiv/tM2NnjcPAJmb+1VXJBmBS8lirmucRRLxY
-         0mFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxH9wGR2zE3dfWYsvMf9+8pxsksaKr0JKcWVPkzc/Qvx+MZ9PhqwX9leP3XWQS5LWyyPir6R0bUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrdhcyVhDg3N1BWDTTl/9dNInn7Ta/SpIT3goHRdR4DK85b9Rh
-	Hvgye55dzBxALRUG9MrSdNr2mgleSU+SPF/y9h7SaXA2HbpC23rvHkmF0OWc5TM6k0Ol7W15azt
-	evrOnDg==
-X-Google-Smtp-Source: AGHT+IG/l+yDbRhZEjiD8rTuwk+Sm1zndokY3M0MeOuQu/ZKMTOJSdasBgYBgyc864NCeM2KcYX6rw==
-X-Received: by 2002:a17:902:d481:b0:20c:b3ea:9006 with SMTP id d9443c01a7336-2111938d4f1mr60409805ad.6.1730475408251;
-        Fri, 01 Nov 2024 08:36:48 -0700 (PDT)
-Received: from localhost ([97.126.177.194])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057c1117sm22363545ad.224.2024.11.01.08.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 08:36:47 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-Date: Fri, 01 Nov 2024 08:36:22 -0700
-Subject: [PATCH v5 3/3] pmdomain: ti_sci: handle wake IRQs for IO daisy
- chain wakeups
+	s=arc-20240116; t=1730478336; c=relaxed/simple;
+	bh=eiFJJz3NFpwQ5pgZCqJOggjzQkyn2X13e8Jm3oofInQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pbgLNG2pgRheJ4Ba9MnZbydeaAh29JlCoiOdi4m1FZR3kAwINmQC/QZgj6IBwg1PUvp/XHJNcFPLeqz6j3KfR0URBNoubxAGMWWYc2HVicmlmoHjpkFxRmF0gJgIe69iOQMm0Ir7OJokgExsuc7Y06JH19i8qnygzb+MyalQ6iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KkkA25H/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A1CZRRg002303;
+	Fri, 1 Nov 2024 16:25:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4QWx/7MUGYS6k2cD1W8BMEcfbzad37g6V5wvlkxyisc=; b=KkkA25H/GpanQOaE
+	7XRfHjuafIqbuwXCM4S9peLl/e1VFXiUiOzzi7W7KL+35MX1I89QbTLlImMuue8o
+	GFyWcAklb6+A47uJltZfahxQT0DOFL5JDLF3dp1esuAITbZUz8hJRILjDuYayJ2A
+	RUYHwcuIpSPoj1WVPiP1k8gUKEVojAiRMaDhZWcbanD7KwjyPemxCzDfcD5ZdNJc
+	P91yVG3E8JBLV6A7qePwfNUfzUjYUvv2Ut/q0t5AT+qn9bRNrt5E5WLyAAsrFwUW
+	RN/hzoAv3jrGgtjLshybBAH+S5CSNvnOWnfOF0YG15nHL9EPFigKGQUkyfB6uP8g
+	T/w+GA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42kmn5fwjw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Nov 2024 16:25:22 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A1GPLBZ011343
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 1 Nov 2024 16:25:21 GMT
+Received: from [10.206.104.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 1 Nov 2024
+ 09:25:05 -0700
+Message-ID: <c5e868e1-2dae-466c-a6fc-ef0f247fa0ce@quicinc.com>
+Date: Fri, 1 Nov 2024 21:54:56 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] dt-bindings: opp: Add v2-qcom-adreno vendor
+ bindings
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Krzysztof Kozlowski <krzk@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
+        "Abhinav
+ Kumar" <quic_abhinavk@quicinc.com>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+	<nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20241021-gpu-acd-v2-0-9c25a62803bc@quicinc.com>
+ <20241021-gpu-acd-v2-2-9c25a62803bc@quicinc.com>
+ <mz4zpcr4tqh2w7vt75f4ofxjzfve54ozzgpdbi2jjzk5pdxbk7@t36tlt3mmprt>
+ <d858dadb-4098-4c9f-b4f0-393dc988db5f@quicinc.com>
+ <4426b4kybtac6rc4twa5pgm3hvlegofemvqjcrvh6ni7f5z2h6@5dnlv3hgywh5>
+Content-Language: en-US
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <4426b4kybtac6rc4twa5pgm3hvlegofemvqjcrvh6ni7f5z2h6@5dnlv3hgywh5>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241101-lpm-v6-10-constraints-pmdomain-v5-3-3011aa04622f@baylibre.com>
-References: <20241101-lpm-v6-10-constraints-pmdomain-v5-0-3011aa04622f@baylibre.com>
-In-Reply-To: <20241101-lpm-v6-10-constraints-pmdomain-v5-0-3011aa04622f@baylibre.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
-Cc: Nishanth Menon <nm@ti.com>, Dhruva Gole <d-gole@ti.com>, 
- Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
- Markus Schneider-Pargmann <msp@baylibre.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.15-dev-cb14d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1635; i=khilman@baylibre.com;
- h=from:subject:message-id; bh=xhPvgmqbX1LH74jmdbMgtdutexJPgNxRb87XIYrFvw0=;
- b=owEBbQKS/ZANAwAIAVk3GJrT+8ZlAcsmYgBnJPWMXtH5x8ZpT2datlNjpCsnJlX4SCLuKATpJ
- 3kgHjSOs9eJAjMEAAEIAB0WIQR7h0YOFpJ/qfW/8QxZNxia0/vGZQUCZyT1jAAKCRBZNxia0/vG
- ZUyPD/0SCDrZfCLPdsvedTVTqaRMR5mj5eDMnG6FkO1ciyUAcuO+putYwuhHhwRO1Aqs3/ZKdLf
- i6PBtuQOIC+eZO9emjOp8dYnBbxSLcuKLTRB0cZm+6oCb+eoMsjwaZjI35cD9VY49nZcU97x0kr
- +Go35m4aHJL/Hg9jhx1oJvth37B4kbl6SFJCtHNlGw3mnGBY25kU40H0bABOURDMeFYbpEXjc5Y
- kjMDsGE1H+r+s64wERgBNlE/cSYeNiLzNW5wNi+TQq49Ny6zMFxRk7j/8TvPee0rbR8HrUmzbgx
- 8MVDt73UR+rLmWMPf+ysyvXfKlNv96D1tlzv85OlERbFBGekt4tUD23FwZ4W+5vYJ4+S0myyVFu
- 6nbpBt2cBAMRLlMSohljYIKqiM9N62G+OLAlUvuEKSnKlZnFUkREq3d/RlO/7IPuw0m4DJqzCIT
- 1ci7p8KFmFnse9mlljjaHIVe9BK98xiVJkXR6CUyzDDhtDu5AtU/pMGyx4USAoTxarSI8b/LxMz
- PAMxc0Hlq+dPh6QbV8ryKUcnp3IbP/S56sCnr20ONCuHpLMgYn4az8Yh3WXmMoB+MDEocJgV+J/
- JGLpJsTXbuHFsJC3gvV0g9gYmj2LiG+JOqwSwH1W4kLK811GMRoOJlOzz5HhkK3tKsNLStHsJyN
- 82/t/LK+VRSl6ng==
-X-Developer-Key: i=khilman@baylibre.com; a=openpgp;
- fpr=7B87460E16927FA9F5BFF10C5937189AD3FBC665
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TGlv0mkW86Mz3fw9HgDqilPDJ4q9NQOF
+X-Proofpoint-GUID: TGlv0mkW86Mz3fw9HgDqilPDJ4q9NQOF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411010119
 
-When a device supports IO daisy-chain wakeups, it uses a dedicated
-wake IRQ.  Devices with IO daisy-chain wakeups enabled should not set
-wakeup constraints since these can happen even from deep power states,
-so should not prevent the DM from picking deep power states.
+On 10/25/2024 11:58 AM, Dmitry Baryshkov wrote:
+> On Thu, Oct 24, 2024 at 12:56:58AM +0530, Akhil P Oommen wrote:
+>> On 10/22/2024 11:19 AM, Krzysztof Kozlowski wrote:
+>>> On Mon, Oct 21, 2024 at 05:23:43PM +0530, Akhil P Oommen wrote:
+>>>> Add a new schema which extends opp-v2 to support a new vendor specific
+>>>> property required for Adreno GPUs found in Qualcomm's SoCs. The new
+>>>> property called "qcom,opp-acd-level" carries a u32 value recommended
+>>>> for each opp needs to be shared to GMU during runtime.
+>>>>
+>>>> Cc: Rob Clark <robdclark@gmail.com>
+>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>>> ---
+>>>>  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 96 ++++++++++++++++++++++
+>>>>  1 file changed, 96 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..6d50c0405ef8
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+>>>> @@ -0,0 +1,96 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Qualcomm Adreno compatible OPP supply
+>>>> +
+>>>> +description:
+>>>> +  Adreno GPUs present in Qualcomm's Snapdragon chipsets uses an OPP specific
+>>>> +  ACD related information tailored for the specific chipset. This binding
+>>>> +  provides the information needed to describe such a hardware value.
+>>>> +
+>>>> +maintainers:
+>>>> +  - Rob Clark <robdclark@gmail.com>
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: opp-v2-base.yaml#
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    items:
+>>>> +      - const: operating-points-v2-adreno
+>>>> +      - const: operating-points-v2
+>>>> +
+>>>> +patternProperties:
+>>>> +  '^opp-?[0-9]+$':
+>>>
+>>> '-' should not be optional. opp1 is not expected name.
+>>
+>> Agree. Will change this to '^opp-[0-9]+$'
+>>
+>>>
+>>>> +    type: object
+>>>> +    additionalProperties: false
+>>>> +
+>>>> +    properties:
+>>>> +      opp-hz: true
+>>>> +
+>>>> +      opp-level: true
+>>>> +
+>>>> +      opp-peak-kBps: true
+>>>> +
+>>>> +      opp-supported-hw: true
+>>>> +
+>>>> +      qcom,opp-acd-level:
+>>>> +        description: |
+>>>> +          A positive value representing the ACD (Adaptive Clock Distribution,
+>>>> +          a fancy name for clk throttling during voltage droop) level associated
+>>>> +          with this OPP node. This value is shared to a co-processor inside GPU
+>>>> +          (called Graphics Management Unit a.k.a GMU) during wake up. It may not
+>>>> +          be present for some OPPs and GMU will disable ACD while transitioning
+>>>> +          to that OPP. This value encodes a voltage threshold and few other knobs
+>>>> +          which are identified by characterization of the SoC. So, it doesn't have
+>>>> +          any unit.
+>>>
+>>> Thanks for explanation and other updates. I am still not happy with this
+>>> property. I do not see reason why DT should encode magic values in a
+>>> quite generic piece of code. This creates poor ABI, difficult to
+>>> maintain or understand.
+>>>
+>>
+>> Configuring GPU ACD block with its respective value is a requirement for each OPP.
+>> So OPP node seems like the natural place for this data.
+>>
+>> If it helps to resolve your concerns, I can elaborate the documentation with
+>> details on the GMU HFI interface where this value should be passed on to the
+>> hardware. Also replace "few other knobs" with "Delay cycles & Calibration margin"
+>> in the above doc.
+> 
+> Usually the preference for DT is to specify data in a sensible way
+> rather than just the values being programmed to the register. Is it
+> possible to implement this approach for ACD values?
 
-Wake IRQs are set with dev_pm_set_wake_irq() or
-dev_pm_set_dedicated_wake_irq().  The latter is used by the serial
-driver used on K3 platforms (drivers/tty/serial/8250/8250_omap.c)
-when the interrupts-extended property is used to describe the
-dedicated wakeup interrupt.
+I am still checking about this. Will get back.
 
-Detect these wake IRQs in the suspend path, and if set, skip sending
-constraint.
+-Akhil
 
-Tested-by: Dhruva Gole <d-gole@ti.com>
-Signed-off-by: Kevin Hilman <khilman@baylibre.com>
----
- drivers/pmdomain/ti/ti_sci_pm_domains.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-index ff529fa2d6135cc2fb32ae8a3ca26ac055f66cf5..8c46ca428f60b3d42a5a43488538f16b7ffaa3ac 100644
---- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-+++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-@@ -82,6 +82,15 @@ static inline void ti_sci_pd_set_wkup_constraint(struct device *dev)
- 	int ret;
- 
- 	if (device_may_wakeup(dev)) {
-+		/*
-+		 * If device can wakeup using IO daisy chain wakeups,
-+		 * we do not want to set a constraint.
-+		 */
-+		if (dev->power.wakeirq) {
-+			dev_dbg(dev, "%s: has wake IRQ, not setting constraints\n", __func__);
-+			return;
-+		}
-+
- 		ret = ti_sci->ops.pm_ops.set_device_constraint(ti_sci, pd->idx,
- 							       TISCI_MSG_CONSTRAINT_SET);
- 		if (!ret)
-
--- 
-2.46.2
+> 
+>>  
+>>>
+> 
 
 
