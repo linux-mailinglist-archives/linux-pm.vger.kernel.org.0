@@ -1,103 +1,158 @@
-Return-Path: <linux-pm+bounces-16886-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16887-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19D379B97A6
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 19:35:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B1A39B980D
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 20:05:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 898CEB226B0
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 18:35:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF1C91C214C3
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 19:05:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A391CDFC0;
-	Fri,  1 Nov 2024 18:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6FB1CEE80;
+	Fri,  1 Nov 2024 19:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qp5N510p"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="UguSqV4x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82FB1AB523;
-	Fri,  1 Nov 2024 18:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730486125; cv=none; b=jl0sUpmPVKLOS3kXN+2GV94TXCJI+eyI8Sl9AL0CJ/yR6PxHNalBEjKGAc8dElaHoXqOuhN6YakaWwy81L6BjJmo/K94mkPDM3C1xRN9qe8etQP2IvyGWxe0k9wNh+o26yvcYl4iS165q9mqFaj/XjN3P9XhsQSVka/M2UIeqTU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730486125; c=relaxed/simple;
-	bh=Y3saQugEtHxlZ99FsJFD/ZNel2QdI2zPllmiplYSsFo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=E5O0jNOlKS06oifrC4iEADc6NPsyFja4hHK6g7TYSXDYpS4kBKEQQXpDTTjKR6J+g8QQqppSW6vAmTOBTidSXrenaHGSuEbOWbUVP9x2FFxci7tujJBVsSd0t/Tb0+61GDvFthvOfvgg+to9q+0qsn6cNU/D+m9o4yJ+xoKUItM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qp5N510p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340BCC4CECD;
-	Fri,  1 Nov 2024 18:35:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730486125;
-	bh=Y3saQugEtHxlZ99FsJFD/ZNel2QdI2zPllmiplYSsFo=;
-	h=From:Date:Subject:To:Cc:From;
-	b=qp5N510psK6rElKAQmr3AEvb9hZIjtIDVBcrxIjdZA6CsEKSdxQ7znGIHu9ATdJP7
-	 E1kSgZUTNkl9tXg09kv5eXw92xWR66EVMP+TPR7yC/tW0KC5CkR4NdqqUmLVY8TdDj
-	 dv7ODBhioKNnl5BQZqksoB87C7A3I7E7k0G2kFO71TQkXwxdS3+0jiyd2RIFTLSf4c
-	 JegP2z9sMdzbIfWxO5USCPn5qMwTYeH9J78SHZ+vVLUDplGsSSHJTkkRjeadoC0Odl
-	 3WLdNZhhkbUuK9d2YDEolk2kkFh2/oCQ32APQZ7zJJVwKSuxGC4ePZLZ/GgOHtKNJu
-	 OFsqF4VwyMYtA==
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3e5f86e59f1so1172510b6e.1;
-        Fri, 01 Nov 2024 11:35:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV1wCSYOVADj+PPemIvA+o8E10DBbXXqbmy5grOmuYQ31pMhW8xWBICZn/rcPDzKGhuRLQlC2fIM4o=@vger.kernel.org, AJvYcCXcapRcvqM4J+7F00Il3d5UIBpOpALLr+lfjCdoQZNAqAqU3GK/Mu/7wXLBqZI0A6iD7u9QzVYC9A5TRDE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd2etSJzkPKS6Rq8xlqWz2pNNS9/Kf+qj0Ov32YPE00OZ8fEhd
-	r26eWv6eZF65G2pdqa9cto9374pc0xepVo7oVwlBmannwGLNgRUUdJIBIWr+ft/Xy9V2IqUYWQ/
-	wXz2lJO8KyOhAGcqKSKxxVHc68No=
-X-Google-Smtp-Source: AGHT+IE3LWKfl/jtwEs/EJ7UTCMroim2eqpdpHD56WFCA0NjSRrpWdvV85kXGB1yYsyOuuobCJ2vKqGgGtvjGOGtOLA=
-X-Received: by 2002:a05:6870:d24b:b0:288:666b:9c5e with SMTP id
- 586e51a60fabf-2948449c37cmr7826160fac.17.1730486124473; Fri, 01 Nov 2024
- 11:35:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800A41A0B16;
+	Fri,  1 Nov 2024 19:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730487926; cv=pass; b=NKVOsPQ4Y3EgPPLC0aggl2XRt/nOQfAEosdF+SpprnPu/yXUiUKiN6Ehe1Lxl0hHBIWRQNoRqXsi4YlVACE8TIWRWUjCsaUjVVSuitaDiMvN+gHBUxTa+4+H8P4dOzkKUvUfltFQrxIRWSeJ9tB4ApXu16gcmJKGYPeUnm5+eNE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730487926; c=relaxed/simple;
+	bh=pzoJ5fr6Q5GERZ5oaDzhX4m2iyhXQfzYDnP4gVMdNVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CMjxizkx47oPCTlO4Ug9BgLK1ln56p5u8Ngw3cHtHtHOy2bGZwuTKun1KnUhcMN4iEKrA6ie9EnZencA/S4lMoeMn2nA84tvi7Sq42xCQP+4X0vz4FP4EJGbjSnxF3VtIulPSXnWMddG6+UcdtCIcCGvf0fhH3icFPubgot3SXQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=UguSqV4x; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1730487900; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=d20C6Y3wyw3/8SaY0GwAVhYMHvrXivxlNZuO18r6gr/ZegIhYAyXtqss75WvJKUS8a5SJLObM6nnjF2q5gkeWsHV/t31Fcm0F65WyZu21L8VzwbbO4JOSumNpLMhOXY6ObLqOpY5RSJGRz1C6NJHOPA1dZPeLoWMaREJbvfFMtU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1730487900; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=pzoJ5fr6Q5GERZ5oaDzhX4m2iyhXQfzYDnP4gVMdNVU=; 
+	b=Z0mYTzCYL6nKjVntpGOnNrUTIO23JKlDrF1q5/elaQklnmk2gJGug/vSKnHj4I9ZkDH8hfLz/JWSEKapbDlpDKh53/3PzZyIR+mFE+ej5KCzfQt610MOVme1V3NS0oWC6dsY9WRLSYKwxcdIzKmMTi8xVwH0FUf3CPTdZhezmko=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1730487900;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=pzoJ5fr6Q5GERZ5oaDzhX4m2iyhXQfzYDnP4gVMdNVU=;
+	b=UguSqV4x+9hrg/V3cytNm2dwqbndRkJLTRaQ/SEMM8w/qbHiDqVOOaaEd4cUiArS
+	2hTuGpx67ztYGzAKJA/k1bEpjVPsva2c8iA27GvPDxqxl/3XIyKcgSfuHURJB7cOZtH
+	wUGVT0mzS+UcebYPEUCU8e9EBh+RfB4RSGr/gD4Q=
+Received: by mx.zohomail.com with SMTPS id 1730487897758168.1618463566807;
+	Fri, 1 Nov 2024 12:04:57 -0700 (PDT)
+Received: by mercury (Postfix, from userid 1000)
+	id 18AEF10604B0; Fri, 01 Nov 2024 20:04:53 +0100 (CET)
+Date: Fri, 1 Nov 2024 20:04:52 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Chen-Yu Tsai <wens@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?utf-8?B?QWRyacOhbiBNYXJ0w61uZXo=?= Larumbe <adrian.larumbe@collabora.com>, Boris Brezillon <boris.brezillon@collabora.com>, 
+	devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v3 0/7] Fix RK3588 GPU domain
+Message-ID: <27yrptpmhdbugmrgxaxllnbllv3adu3tzgl7e26b3flsvhlf3g@nfqn2fvmktmc>
+References: <20241022154508.63563-1-sebastian.reichel@collabora.com>
+ <CAPDyKFoAv1jeQitHmTMhvwG9vGzN-vLby0fPzkX1E6+-Qe2dog@mail.gmail.com>
+ <CAPDyKFp=sRLVBhW2aK87pYHVGi_6gNw=e3j3AGMnEWP2SVYFpw@mail.gmail.com>
+ <9b4c9b61-a2be-465e-a4d9-034951fc862f@sirena.org.uk>
+ <CAGb2v65ahUB_Q+HPFV6B-UqWCbCNLdGz58BGo9iHRhVyf1ruZA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 1 Nov 2024 19:35:10 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jFxoRAoUkEGmUCg3-H4qhhNd1g4-w05bPnpgJndfDDWA@mail.gmail.com>
-Message-ID: <CAJZ5v0jFxoRAoUkEGmUCg3-H4qhhNd1g4-w05bPnpgJndfDDWA@mail.gmail.com>
-Subject: [GIT PULL] ACPI fix for v6.12-rc6
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.12-rc6
-
-with top-most commit 1c10941e34c5fdc0357e46a25bd130d9cf40b925
-
- ACPI: CPPC: Make rmw_lock a raw_spin_lock
-
-on top of commit 81983758430957d9a5cb3333fe324fd70cf63e7e
-
- Linux 6.12-rc5
-
-to receive an ACPI fix for 6.12-rc6.
-
-This makes the ACPI CPPC library use a raw spinlock for operations
-carried out in scheduler context via the schedutil governor and the
-ACPI CPPC cpufreq driver (Pierre Gondois).
-
-Thanks!
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sd4kvys2evpxroym"
+Content-Disposition: inline
+In-Reply-To: <CAGb2v65ahUB_Q+HPFV6B-UqWCbCNLdGz58BGo9iHRhVyf1ruZA@mail.gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/230.343.48
+X-ZohoMailClient: External
 
 
----------------
+--sd4kvys2evpxroym
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 0/7] Fix RK3588 GPU domain
+MIME-Version: 1.0
 
-Pierre Gondois (1):
-      ACPI: CPPC: Make rmw_lock a raw_spin_lock
+Hi,
 
----------------
+On Fri, Nov 01, 2024 at 10:41:14PM +0800, Chen-Yu Tsai wrote:
+> On Fri, Nov 1, 2024 at 10:36=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+> > On Fri, Nov 01, 2024 at 12:56:16PM +0100, Ulf Hansson wrote:
+> > > On Wed, 23 Oct 2024 at 12:05, Ulf Hansson <ulf.hansson@linaro.org> wr=
+ote:
+> >
+> > > > The merge strategy seems reasonable to me. But I am fine with that
+> > > > whatever works for Mark.
+> >
+> > > Mark, any update on this?
+> >
+> > > If easier, you could also just ack the regulator patch (patch1), and
+> > > can just take it all via my tree.
+> >
+> > I'm still deciding what I think about the regulator patch, I can see why
+> > it's wanted in this situation but it's also an invitation to misuse by
+> > drivers just blindly requesting all supplies and not caring if things
+> > work.
+>=20
+> I suppose an alternative is to flag which power domains actually need
+> a regulator supply. The MediaTek power domain driver does this.
 
- drivers/acpi/cppc_acpi.c | 9 +++++----
- include/acpi/cppc_acpi.h | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+If you look at patch 6/7, which actually makes use of devm_of_regulator_get=
+()
+you will notice that I did actually flag which power domains have/need a
+regulator.
+
+> There's still the issue of backwards compatibility with older device
+> trees that are missing said supply though.
+
+Exactly :)
+
+As far as I can see the same misuse potential also exists for the
+plain devm_regulator_get() version.
+
+Greetings,
+
+-- Sebastian
+
+--sd4kvys2evpxroym
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmclJk4ACgkQ2O7X88g7
++poVOg/+PaFjJt/IbSqoFt+2B0uc3fK8C3HKt56Y2kbeE0svwnnG8rBkWqbNGP/x
+699N+JDv8ZOozhjWXknZBfsGLJUOSvvE1b88xb5WWsZ0FXnQ+uqaOdBu2Ph5iWL2
+efopHne/lUiElpPwuHPrGyibqdclrjuF4REkt9IfIG9wCuXwTbmrtXSGV0B1A6El
+JF36I3Gb0i1UwsaIdFKm5MgnLeycFyHMnBYNSeQ5ODnK3UXCRySfQa/CJHU0uAKx
+hrlQ4S9cP0ndBZTkd9fXAXCVftPfZx/k8ov6eBUtHIk9E0ADCePmQMtjPBvHU33S
+KJzVyjsCSR5hOP1TEcD8+3b3T9qOxJAuvJXvycotVFyueWO+RHfJvY46Aye865O7
+l6009bUVHnEpod1uRb8GSufiMt38yu5tCyM2fckpCL624YwC/pLEEWqqyJP9Mw4E
+oqgpexhSAVHZxI3RnuWxmesclM4xA/cI/wl8PQsNZ7fArS0RWlHCYn4lvlz4i886
+TSUvys5m4QxVx8rlADvDS6z1HQd2xXtsjq2aYwwxkqxhK/aK/kef2vIEy1zq02TK
+aFs+AtwO1jNofEYAQBRsTTlmz7yES7YJ6wA6ClyjKHme1DhHe6JvjX4lrdAsen9x
+Tu9hfY0Gi8fg/k3O2NB/g9L1QyeSosgA2xfc3a1f17mtYX/ZGqA=
+=IDSJ
+-----END PGP SIGNATURE-----
+
+--sd4kvys2evpxroym--
 
