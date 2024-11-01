@@ -1,173 +1,189 @@
-Return-Path: <linux-pm+bounces-16859-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16860-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7100C9B8450
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 21:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F509B882B
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 02:05:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30A02281F63
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2024 20:26:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3149128153E
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 01:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976F41CC147;
-	Thu, 31 Oct 2024 20:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BDB4E1CA;
+	Fri,  1 Nov 2024 01:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lHez54Mu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V4z4qmDO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E331C9EC7
-	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 20:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF24347B4
+	for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2024 01:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730406365; cv=none; b=RbqNZ5VLM/zfPrRHMnrwnhfgB3hqMrA61Gn1qvPlNLB8/G9fkXgLMYqsamzLK/GsvNifIfio+17cZCVzIuvHCjI/0wgRL28PR/s25HH5n8QYQltLbTYwgmMuTh7m/Ism67vYftUmQ6S7f1ggaCgK3OJfEnVx1HeMuHJkogMsycg=
+	t=1730423093; cv=none; b=t6VapYpVLY4p2vXYKM2mEdih5Qjfnaf4v0hUmLhb6/nKy7GhWTsvTExb3YmbNVUQicM1q3TR3USKkDY00DwiOKWDfTT3mGva5PoJgMkOu1fKC3ExBgcalf0qs7Buz1CrEEyVWSCLISSVTOseSlZ1OUXZwNmPvZH1sxD2IwtQa8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730406365; c=relaxed/simple;
-	bh=VnQY7chdabpp2UuXBku1gHWVi4hfJe2jZk0NeS2f6Gw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FQo4quKHDkZ3vCqnVbOz2zr/YZQ4uiMwOuymjxYAOacdbnnQwCnoDDf7CYyt88gABiSoK1B2aqdlsS+Y9HvhQdr9FjVFGnj1km3oYZz3cj+0/OLKe1k6GTtupkecs4Xfnt8fNvJG0dcvAJOPTgVUDF0fxeJOFDJXLv6p52V7tC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lHez54Mu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49VBrWSS005798
-	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 20:26:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HsntP3C2GJI1EZuB1B2CgIDf2X97b82f6C7hdl6Yr+k=; b=lHez54Mut6sd5vtH
-	CBW8vYha99KN3hnlEpIWc4HUR5xPQ4GVNGu31M/KGKZm58W78S4ZrGr6Wj5o6b00
-	bbKs7z+aGZzFv2PU/SEwiY0l83Zrfuwlajy7EbkBRsLMOzp8hUtckuCUhVrTXwIg
-	x+s0bC7Uz35HQ/slLhFZN2B5QMM52GxEO7XTYGBCDEdMKrCI/P3SaFysIlp4eH2x
-	DFOhkmiuJ/NIiGJkd23sLlcj2WBVaCPOaSEfGuic8f+KgIwBrr019ODm32QtF4Mm
-	O714+OKbejPUR29BpFe2YIZfpSjo6CapEaNkPUPGkH+IK+XUntgBAyEnoFzsHGRn
-	SkMSGw==
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42m1xcaswj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 20:26:02 +0000 (GMT)
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-5ec0bc202d8so116112eaf.0
-        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 13:26:02 -0700 (PDT)
+	s=arc-20240116; t=1730423093; c=relaxed/simple;
+	bh=b000gK2eeyGVybAeUtdp3ol8MSJmrwkUM8+QObbFxsk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DUF8dbvdZoyGm8AKo6eAJlKb/s71zfyvPUgm/0c0xB0lq2s1EsuPFbobzF/JfqK8HuOKYuaDJQeMR2UIeZN9JQP+EU+/2ss5ae+5m4BzVSGv+Xrq+gcm+xKNUHcbWHtcRttqCj6jaIyGqLTgIaZbYvrzNhHivdjnNzv5T5iW4Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V4z4qmDO; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53b34ed38easo1434846e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 18:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730423085; x=1731027885; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FqUKffGBxGjGIy1gxbpRHdCLpRulUNePaLzIj22S1/0=;
+        b=V4z4qmDO0mw9Hk6qZunKeHmqcWcTUfx9yGlKSPJuVC6dUMBk3maDgn35fBF94qnviy
+         US07KCHafewOMewIkCUwvRqJuW129AugJ9AaBWza+aIvlZVP302ic/iGv6YOOxtGh4Sa
+         xvrhpiAqyR1/yVuKZCBJajU1xmPfK3igsuCeBU+6m4X+kiQRufLaVQ+yJLy7MMSF3v6u
+         yG59nWvXWZmAj9nFIda59AS49ijO5DrlN03+zCp1rfufvbdz0mSAqLD4Ypmv4mhqOBKE
+         JvtWBwXhtNPPbCCDTNsGfNTdP7kpYs6CX01mEfFA3+nE7GEGPwZStKm5NxdrpLf2yN+9
+         +g7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730406362; x=1731011162;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HsntP3C2GJI1EZuB1B2CgIDf2X97b82f6C7hdl6Yr+k=;
-        b=p1I4mPNh4r/8KorDfeItzYkdWw5qvBUZid/3RQSQt1ppqPnmqjeNHKu54LFbc24DwQ
-         UR0K1xduqgucd79Fzr/Gs3RHM/BTRPNDSryLVjaVtCTWPV8NHMjnezMO78DwWm4+WDNh
-         Y/SV9Xr+shPik+pXbQhq1hBaiV3VpV0VPlPQe/IyNDZUm9yC+/rZPdxb+5bwALqviNCH
-         TwPZH9tsv2pEKVaLzqCnyMspC5MPZC59qJinRhcXMCNl2Ty7jhOwAwZNuqJ+9sNKo6PR
-         nSoW4lV5wF7saaNAopt8eMKREdhA5Cr5NQJI5rKO/veRZ3aeovYfxuwRr0pbsB52OZog
-         n+xA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdiR7znj23faovSotb1kQ0bXsmWvD62AtSWcj30hv7RUy4PbJHPffR09TRcaKvc0aOHL0aV3IJSg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUjNHtSSgXpwbhY1+/BHjRkh9TFrLjtVKDtn3/FXMeC1cANOsg
-	yAmWHmDxFHkXLl1YTu2J5Zdf0WI3VHFNko+lmieYmmGghRkbAviP1G/oBEqXkdIlMiutAFmfo28
-	gu4HJUzcskWwdVCytu2SI7EuChypaTQBh7RFmrtxQLf21smUqJbcjmLmfvg==
-X-Received: by 2002:a05:6871:593:b0:269:1020:a8a0 with SMTP id 586e51a60fabf-29051b4d694mr5456349fac.4.1730406361938;
-        Thu, 31 Oct 2024 13:26:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGWoGAeaCy5azeIH/5FqRyk7J5FBFP8MQZw2ucFj8VqfTTkWtFqd9+U9IWzWpD4RmcROOR3qQ==
-X-Received: by 2002:a05:6871:593:b0:269:1020:a8a0 with SMTP id 586e51a60fabf-29051b4d694mr5456324fac.4.1730406361650;
-        Thu, 31 Oct 2024 13:26:01 -0700 (PDT)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e565f9b63sm100100266b.110.2024.10.31.13.25.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Oct 2024 13:26:01 -0700 (PDT)
-Message-ID: <796b470f-7646-41d8-817e-03d93a90a1fa@oss.qualcomm.com>
-Date: Thu, 31 Oct 2024 21:25:58 +0100
+        d=1e100.net; s=20230601; t=1730423085; x=1731027885;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FqUKffGBxGjGIy1gxbpRHdCLpRulUNePaLzIj22S1/0=;
+        b=QSY5JDYoX55VmeBvIpqtVvvWowG1/td6+o6g6r55IAo2snyZLQUlghr9+SxIBez9pN
+         3x82cd+Umoz91oFBGSjQ2ev6mlmJU/ialJybJ/DgpXvOjwGrNRQz940AEOjCAczgDht4
+         KMVX2gQBhHzrIDdCYS5Ev0ghO+y3Cnpa3mq7qoLomTWRZ6W3FE/WKxM+RvCC9hS4TQTo
+         MmJLShtwj+VT8g6hyJ1FbQRsDxtt1cuYVzCZw1EPeuLnKDb3icycFm/th3UnZFCbd5sA
+         MxwwfcF+Fg5LsSH3K/BJS8lh3cNEswuSdlyW36+VLsH6QTyfM8gsc2+p6cKhfLw+uyVv
+         Rkzw==
+X-Forwarded-Encrypted: i=1; AJvYcCWCDkYRjGj6HggAAMqiK1gg2jAnlEljYuXSc759Tth92ue9qSqbnkxSXPrzFzdh8rKLUhbJ4TMxiQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHpXR50JlV1GUSCt55ZrQ1W5uKWjQ9NLiV2lKfj+ZNRXQJ/fT4
+	EQel4qEdE0DbfFtQ9o5kk0uUKJN0CbFOvc/iXxWSsfyBOCRqlP3WAAWBa2Tl7TK2KMn9of/Zisr
+	j
+X-Google-Smtp-Source: AGHT+IFxKPkvoKcfI/+ZFD75cw7Ke/QIfWvEUTopSMRY+wGIMnAaGHV4oXlMPkMPyBM0NA8JoShqsA==
+X-Received: by 2002:a05:6512:b84:b0:536:55a9:caf0 with SMTP id 2adb3069b0e04-53b347231b4mr11193807e87.0.1730423084837;
+        Thu, 31 Oct 2024 18:04:44 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.90])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bde0ce9sm376165e87.268.2024.10.31.18.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2024 18:04:43 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 01 Nov 2024 03:04:42 +0200
+Subject: [PATCH RESEND] thermal/drivers/qcom/lmh: remove false lockdep
+ backtrace
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/15] arm64: dts: qcom: Add Xiaomi Redmi 5A
-To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux.dev
-References: <20241031-msm8917-v2-0-8a075faa89b1@mainlining.org>
- <20241031-msm8917-v2-15-8a075faa89b1@mainlining.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241031-msm8917-v2-15-8a075faa89b1@mainlining.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: CRPabdeO1XvluCnYjt0r4ocYCAyheYVb
-X-Proofpoint-ORIG-GUID: CRPabdeO1XvluCnYjt0r4ocYCAyheYVb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 suspectscore=0 phishscore=0 mlxlogscore=713 clxscore=1015
- priorityscore=1501 adultscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410310155
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241101-lmh-lockdep-v1-1-96fd53cc241c@linaro.org>
+To: Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: Thara Gopinath <thara.gopinath@linaro.org>, linux-pm@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2638;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=b000gK2eeyGVybAeUtdp3ol8MSJmrwkUM8+QObbFxsk=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBnJCkr21SOVaVEBe03u7HvWqvzrgdKJekHTS+c5
+ nL1aUunbmqJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZyQpKwAKCRCLPIo+Aiko
+ 1dPnCACzq4nh7dVe9+PjvKpVpZhQn/7UQSBhgo5mEnx48N7AxGKGmxQ7iOFhwKa+53+XJTo9Dxc
+ +6qhzL5rNr1td7T7F0+pkeeRY8Aq9Fpizt50vq/dm1RU591XPnwNeJHyZe11mDeRTP4doc+md/B
+ D6qHrA9BbmGCTN0HwNklDldFgBIwp8kzDEbUUxVBM7zNxCa5p6nTozrRAJbSB6WP5FVyk7mz0bZ
+ wm0KzA/t+4RJbWo291z/hz4DLjtcyP/9kzpZ6iuTm4awcAlPA5rDW8N/lxOaDd7wj8bGTBS/Ig8
+ gL4+Ir7vpyoZGtf9Wua+FSOBNyK8k8oD+PNF+YLYPb9c29/s
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-On 31.10.2024 2:19 AM, Barnabás Czémán wrote:
-> Add initial support for Xiaomi Redmi 5A (riva).
-> 
-> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
-> ---
+Annotate LMH IRQs with lockdep classes so that the lockdep doesn't
+report possible recursive locking issue between LMH and GIC interrupts.
 
-[...]
+For the reference:
 
-> +	reserved-memory {
-> +		/delete-node/ reserved@85b00000;
+       CPU0
+       ----
+  lock(&irq_desc_lock_class);
+  lock(&irq_desc_lock_class);
 
-Deleting nodes is preferred via a &label (like in sm8550-samsung-q5q.dts)
+ *** DEADLOCK ***
 
-> +		qseecom_mem: reserved@84a00000 {
-> +			reg = <0x0 0x84a00000 0x0 0x1900000>;
-> +			no-map;
-> +		};
-> +
-> +		framebuffer_mem: memory@90001000 {
-> +			reg = <0x0 0x90001000 0x0 (720 * 1280 * 3)>;
-> +			no-map;
-> +		};
-> +	};
-> +};
-> +
-> +&blsp_i2c3 {
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		compatible = "edt,edt-ft5306";
-> +		reg = <0x38>;
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <65 0x2008>;
+Call trace:
+ dump_backtrace+0x98/0xf0
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x90/0xd0
+ dump_stack+0x18/0x24
+ print_deadlock_bug+0x258/0x348
+ __lock_acquire+0x1078/0x1f44
+ lock_acquire+0x1fc/0x32c
+ _raw_spin_lock_irqsave+0x60/0x88
+ __irq_get_desc_lock+0x58/0x98
+ enable_irq+0x38/0xa0
+ lmh_enable_interrupt+0x2c/0x38
+ irq_enable+0x40/0x8c
+ __irq_startup+0x78/0xa4
+ irq_startup+0x78/0x168
+ __enable_irq+0x70/0x7c
+ enable_irq+0x4c/0xa0
+ qcom_cpufreq_ready+0x20/0x2c
+ cpufreq_online+0x2a8/0x988
+ cpufreq_add_dev+0x80/0x98
+ subsys_interface_register+0x104/0x134
+ cpufreq_register_driver+0x150/0x234
+ qcom_cpufreq_hw_driver_probe+0x2a8/0x388
+ platform_probe+0x68/0xc0
+ really_probe+0xbc/0x298
+ __driver_probe_device+0x78/0x12c
+ driver_probe_device+0x3c/0x160
+ __device_attach_driver+0xb8/0x138
+ bus_for_each_drv+0x84/0xe0
+ __device_attach+0x9c/0x188
+ device_initial_probe+0x14/0x20
+ bus_probe_device+0xac/0xb0
+ deferred_probe_work_func+0x8c/0xc8
+ process_one_work+0x20c/0x62c
+ worker_thread+0x1bc/0x36c
+ kthread+0x120/0x124
+ ret_from_fork+0x10/0x20
 
-interrupts-extended = <&tlmm 65 IRQ_TYPE_LEVEL_LOW>;
+Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/thermal/qcom/lmh.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-[...]
+diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+index 5225b3621a56c4a11f0ae56af1060d6d1460ef02..d2d49264cf83a4c4646202044700a7a8bf3c0b95 100644
+--- a/drivers/thermal/qcom/lmh.c
++++ b/drivers/thermal/qcom/lmh.c
+@@ -73,7 +73,14 @@ static struct irq_chip lmh_irq_chip = {
+ static int lmh_irq_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+ {
+ 	struct lmh_hw_data *lmh_data = d->host_data;
++	static struct lock_class_key lmh_lock_key;
++	static struct lock_class_key lmh_request_key;
+ 
++	/*
++	 * This lock class tells lockdep that GPIO irqs are in a different
++	 * category than their parents, so it won't report false recursion.
++	 */
++	irq_set_lockdep_class(irq, &lmh_lock_key, &lmh_request_key);
+ 	irq_set_chip_and_handler(irq, &lmh_irq_chip, handle_simple_irq);
+ 	irq_set_chip_data(irq, lmh_data);
+ 
 
-> +&sdhc_1 {
-> +	vmmc-supply = <&pm8937_l8>;
-> +	vqmmc-supply = <&pm8937_l5>;
-> +	status = "okay";
+---
+base-commit: 797012914d2d031430268fe512af0ccd7d8e46ef
+change-id: 20240721-lmh-lockdep-88de09e77089
 
-A newline before 'status' would be welcome
+Best regards,
+-- 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Looks nice otherwise!
-
-Konrad
 
