@@ -1,131 +1,110 @@
-Return-Path: <linux-pm+bounces-16870-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16871-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D85A79B90CE
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 12:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 318AB9B92D4
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 15:09:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D83228245A
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 11:57:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E623528264C
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 14:09:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB0319D8A8;
-	Fri,  1 Nov 2024 11:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAD81A0BCA;
+	Fri,  1 Nov 2024 14:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W+wvP0iR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oVhaYgZs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C01A19C551
-	for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2024 11:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DEC15855D;
+	Fri,  1 Nov 2024 14:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730462235; cv=none; b=F0t7WQ3aiM59fYEt5+Feo14GMYcRi3UBdhCBEeAKQCw+oaPRLP780pW+9xM8XZpvlvAgW7mPaOo82AAL/A48W9eWqSyvSkGGv/WQDHi48L4QXImXjIqTv7UK/Me8Gtx1XDx715jdVLQ4VFpG92U/DwWsmsHHJNQTa1Eiogqdipc=
+	t=1730470146; cv=none; b=S5jiU8O7Drz1G0KHC4QwTNDfRTwyFoBQW6Y0RCE3wcbrLuX7M9EfaxPqvW86R80l3ukpN67ev6rVoyYDisL7a/sHpW2bGJypkLUW1V69Le6B/EMNMOqVuS+7Rb5HOVYwG12uoWQ1QzLxjD28fwr/8gi1tiqmHNNRVr5o0fWt+ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730462235; c=relaxed/simple;
-	bh=jcU/orumlgsJbKSrF/Nm/W+DgTU2zdH6jx1nkml6CZE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X6Qrnx96Gaxsv5FPJl0Bu0mVM8oQ3RuGsXjahbGozj7+7lu7LoeeBS/M2+cErqtdRn/zCycTWo0ReYMmZSuqTZ8Fg1b628xMB+fEg12JONlaIp/6PPtIiBsig965MqkvL2gZdNT9StDd8XD2jz5DLMN5/00YWfxPGowgVHT9wtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W+wvP0iR; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6e35bf59cf6so28042627b3.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2024 04:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730462232; x=1731067032; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AyPmo8da7gVQeFsoekZ63qpPCKXE92H2RSDUtfff7nM=;
-        b=W+wvP0iRisWC95frYnQDDKVpK1IMLAGryk7hBidywJfu6dWqh0qTrBWd/1yDWwbLqk
-         FMTluEtPIuhOm/59QHNsaZToDcamu4m26DFzmgbWTer720MD65X5T1zwxtbiP9BqV+9d
-         GAEcBXjl30mKOP3rKVyBaKqAqCbx1YDxyRGpB3Ax0pFpHpqVqDKXsDiQ3ZAy7ProAkRP
-         hTNML4k1KyrvhmaBOWB6Frp+Jg2PTzmApvRlJlJVIHxJemh0zvtjyWGGR7f5eHzEg3yi
-         w7iiJE6JIOLTRKgQvHUbEBlW82eYtoHWD0Hv3Yu2xsmvn3cY1qiwjXo0S+G6Rb+QcSEH
-         L3yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730462232; x=1731067032;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AyPmo8da7gVQeFsoekZ63qpPCKXE92H2RSDUtfff7nM=;
-        b=Q/l42SUrhgptKdHVIVCQ4n9U03uNdDUsbxRZV8kV2noz6TrFmehxeozbAbLWmBYgX3
-         VqxHNNW2Y2FzqKRYDCqx8pIlvilyifK+gdlwHsHspPxw84F+xVw6HXzQmWei2WHh0Byw
-         1u67II9j0GsyMjgkAgzET4xHY2O2D4O5g2+bV1d1k4zTn9g9oyNwAqjm5xXFkjqa2+v+
-         faP+RqYQepiSulabS542dmzIRxzUJLEZOydDCjFjeGc/FrP4s5wEFe4Ewj9nbCsnpBI0
-         1Akvo43Kdue/MqmLXD7x0RuBIWPeNATaIsR096IQ5u6zdX8oYnmF99j6Hd/eWtSv3cve
-         uIiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUkhBqHXr/hGMs0uqJCe0JMjEibcxDnG2+I7IA8Jh6+Zj2HcGDhN6iY/JkFCSh1YfvltX5/+5F/VQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuQbqHYzU0YEka+28d8G+T5W1n7DbzzTgSSVeSqm0e94u9PCb1
-	dM0JPRZW63zIu3THxxj9aabg2iA8Nr7BCMUnD/y0FPBXkWLZ7HSP4RjnaGvtJbk86MIJkpvTdtn
-	BBRHZJRYZ8m+KiPOTskCTfhQAjudsSlNT1RlWZw==
-X-Google-Smtp-Source: AGHT+IGjFViHhhsIEjWSeBRVVF02vu14Au/x1uufAjiQ0eyy+Lk2WKoLfjrFanaJSgIrSL/w8V1/5Fi83AtDrIju8t8=
-X-Received: by 2002:a05:690c:d18:b0:6db:d02f:b2c4 with SMTP id
- 00721157ae682-6ea64308628mr27197277b3.7.1730462231906; Fri, 01 Nov 2024
- 04:57:11 -0700 (PDT)
+	s=arc-20240116; t=1730470146; c=relaxed/simple;
+	bh=V1lHT+M0hVf8y3QEJQ9Y5vnOyPZcmjeWG3D2SQpniHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S5U4DkXYtTmDuSid46YBhEn5qnRgTAL5RZWa8OPmFO2Nq6gjq/pfAH2bgKWkht1Jj/M+VATtFIrU3/TYCxByiCwn9R4TTnb0y1a/eTd4mZ+j5YWS/ldtjHDpUWKJNQjn91/QXpmAPoVjDveRjrqmpRjrCtZpqvC0kdSTqewMQpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oVhaYgZs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E050DC4CECD;
+	Fri,  1 Nov 2024 14:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730470146;
+	bh=V1lHT+M0hVf8y3QEJQ9Y5vnOyPZcmjeWG3D2SQpniHI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oVhaYgZse3lMJvuJEkmIOrlzosfBzD3lhMSHwGYeeZFK4qL9cuJ7bAxDJIV38WzpX
+	 ml0u+DWHbWIML5Qs5h7G7clpJQN4xzOBOF//wa3XwUiM6G6d7pPzhKzL608g8+n9DW
+	 vhrw84lpWizMsRMQkdw8w7iPjpe/2eFSxpU/N4empIL6yVXUhDh3H+KCgbabmQeigB
+	 G7TmWJWrqT3hbGy4QoVAT02nf95JHTmGbsxRWomK8DuWVRvM1/2jkwMVCYwcF6J3G4
+	 i8ad4X6AUL2iEiMG9cNfF+4qD2wD/boI0rJzM1eQvtsl22qYHbbkyv92ilMF5IaI16
+	 pgEYnAflSDjDw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t6sKm-000000005cY-06Fr;
+	Fri, 01 Nov 2024 15:09:04 +0100
+Date: Fri, 1 Nov 2024 15:09:04 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, ulf.hansson@linaro.org,
+	jassisinghbrar@gmail.com, dmitry.baryshkov@linaro.org,
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	konradybcio@kernel.org, linux-pm@vger.kernel.org,
+	tstrudel@google.com, rafael@kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH V5 3/6] firmware: arm_scmi: Report duplicate opps as
+ firmware bugs
+Message-ID: <ZyThAFbOHKaBIgLg@hovoldconsulting.com>
+References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
+ <20241030125512.2884761-4-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241101101252.1448466-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20241101101252.1448466-1-peng.fan@oss.nxp.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 1 Nov 2024 12:56:36 +0100
-Message-ID: <CAPDyKFqmeCCkv5Yr0K9P9eToYTYsQmQUYmbbJvoOJ0O5t5tsjQ@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: imx93-blk-ctrl: correct remove path
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	"open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>, 
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241030125512.2884761-4-quic_sibis@quicinc.com>
 
-On Fri, 1 Nov 2024 at 11:02, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> The check condition should be 'i < bc->onecell_data.num_domains', not
-> 'bc->onecell_data.num_domains' which will make the look never finish
-> and cause kernel panic.
->
-> Also disable runtime to address
-> "imx93-blk-ctrl 4ac10000.system-controller: Unbalanced pm_runtime_enable!"
->
-> Fixes: e9aa77d413c9 ("soc: imx: add i.MX93 media blk ctrl driver")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-
-Applied for fixes and by adding a stable tag, thanks!
-
-Kind regards
-Uffe
-
-
+On Wed, Oct 30, 2024 at 06:25:09PM +0530, Sibi Sankar wrote:
+> Duplicate opps reported by buggy SCP firmware currently show up
+> as warnings even though the only functional impact is that the
+> level/index remain inaccessible. Make it less scary for the end
+> user by using dev_info instead, along with FW_BUG tag.
+> 
+> Suggested-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 > ---
->  drivers/pmdomain/imx/imx93-blk-ctrl.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx/imx93-blk-ctrl.c
-> index 904ffa55b8f4..b10348ac10f0 100644
-> --- a/drivers/pmdomain/imx/imx93-blk-ctrl.c
-> +++ b/drivers/pmdomain/imx/imx93-blk-ctrl.c
-> @@ -313,7 +313,9 @@ static void imx93_blk_ctrl_remove(struct platform_device *pdev)
->
->         of_genpd_del_provider(pdev->dev.of_node);
->
-> -       for (i = 0; bc->onecell_data.num_domains; i++) {
-> +       pm_runtime_disable(&pdev->dev);
-> +
-> +       for (i = 0; i < bc->onecell_data.num_domains; i++) {
->                 struct imx93_blk_ctrl_domain *domain = &bc->domains[i];
->
->                 pm_genpd_remove(&domain->genpd);
-> --
-> 2.37.1
->
+>  drivers/firmware/arm_scmi/perf.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+> index 32f9a9acd3e9..c7e5a34b254b 100644
+> --- a/drivers/firmware/arm_scmi/perf.c
+> +++ b/drivers/firmware/arm_scmi/perf.c
+> @@ -387,7 +387,7 @@ process_response_opp(struct device *dev, struct perf_dom_info *dom,
+>  
+>  	ret = xa_insert(&dom->opps_by_lvl, opp->perf, opp, GFP_KERNEL);
+>  	if (ret) {
+> -		dev_warn(dev, "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
+> +		dev_info(dev, FW_BUG "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
+>  			 opp->perf, dom->info.name, ret);
+
+I was hoping you could make the error message a bit more informative as
+well, for example, by saying that a duplicate opp level was ignored:
+
+	arm-scmi arm-scmi.0.auto: [Firmware Bug]: Ignoring duplicate OPP 3417600 for NCC
+
+or similar (e.g. as the current message looks like an error, with errno
+and all, that indeed warrants warning level).
+
+Perhaps with such a message you could even keep the warning level to
+make it stand out more (if that's desirable) without the risk of scaring
+users.
+
+Johan
 
