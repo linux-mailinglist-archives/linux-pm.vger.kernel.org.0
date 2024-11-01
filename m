@@ -1,189 +1,240 @@
-Return-Path: <linux-pm+bounces-16860-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16861-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F509B882B
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 02:05:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 489F19B8890
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 02:35:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3149128153E
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 01:05:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C010C1F2255C
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2024 01:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BDB4E1CA;
-	Fri,  1 Nov 2024 01:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCCE55C29;
+	Fri,  1 Nov 2024 01:35:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V4z4qmDO"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kas7r+OI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF24347B4
-	for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2024 01:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820031EF1D;
+	Fri,  1 Nov 2024 01:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730423093; cv=none; b=t6VapYpVLY4p2vXYKM2mEdih5Qjfnaf4v0hUmLhb6/nKy7GhWTsvTExb3YmbNVUQicM1q3TR3USKkDY00DwiOKWDfTT3mGva5PoJgMkOu1fKC3ExBgcalf0qs7Buz1CrEEyVWSCLISSVTOseSlZ1OUXZwNmPvZH1sxD2IwtQa8A=
+	t=1730424925; cv=none; b=LhvHcGLgBEEF8m43bccRTefLFUpCJECtMWI7ntDavfBAn2LKV/3qr094nFyRyhWkrQos5hCaTUglmKMFo3iUMDmJZ027m5h7Nnlwvxw1KfUmu1jgAwuYrIxSOaD4I+BgGIzxvwL1qA7cOeUiz/Z7xalYOwBtWYK6QXrBGPQhF4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730423093; c=relaxed/simple;
-	bh=b000gK2eeyGVybAeUtdp3ol8MSJmrwkUM8+QObbFxsk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DUF8dbvdZoyGm8AKo6eAJlKb/s71zfyvPUgm/0c0xB0lq2s1EsuPFbobzF/JfqK8HuOKYuaDJQeMR2UIeZN9JQP+EU+/2ss5ae+5m4BzVSGv+Xrq+gcm+xKNUHcbWHtcRttqCj6jaIyGqLTgIaZbYvrzNhHivdjnNzv5T5iW4Vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V4z4qmDO; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53b34ed38easo1434846e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2024 18:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730423085; x=1731027885; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FqUKffGBxGjGIy1gxbpRHdCLpRulUNePaLzIj22S1/0=;
-        b=V4z4qmDO0mw9Hk6qZunKeHmqcWcTUfx9yGlKSPJuVC6dUMBk3maDgn35fBF94qnviy
-         US07KCHafewOMewIkCUwvRqJuW129AugJ9AaBWza+aIvlZVP302ic/iGv6YOOxtGh4Sa
-         xvrhpiAqyR1/yVuKZCBJajU1xmPfK3igsuCeBU+6m4X+kiQRufLaVQ+yJLy7MMSF3v6u
-         yG59nWvXWZmAj9nFIda59AS49ijO5DrlN03+zCp1rfufvbdz0mSAqLD4Ypmv4mhqOBKE
-         JvtWBwXhtNPPbCCDTNsGfNTdP7kpYs6CX01mEfFA3+nE7GEGPwZStKm5NxdrpLf2yN+9
-         +g7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730423085; x=1731027885;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FqUKffGBxGjGIy1gxbpRHdCLpRulUNePaLzIj22S1/0=;
-        b=QSY5JDYoX55VmeBvIpqtVvvWowG1/td6+o6g6r55IAo2snyZLQUlghr9+SxIBez9pN
-         3x82cd+Umoz91oFBGSjQ2ev6mlmJU/ialJybJ/DgpXvOjwGrNRQz940AEOjCAczgDht4
-         KMVX2gQBhHzrIDdCYS5Ev0ghO+y3Cnpa3mq7qoLomTWRZ6W3FE/WKxM+RvCC9hS4TQTo
-         MmJLShtwj+VT8g6hyJ1FbQRsDxtt1cuYVzCZw1EPeuLnKDb3icycFm/th3UnZFCbd5sA
-         MxwwfcF+Fg5LsSH3K/BJS8lh3cNEswuSdlyW36+VLsH6QTyfM8gsc2+p6cKhfLw+uyVv
-         Rkzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCDkYRjGj6HggAAMqiK1gg2jAnlEljYuXSc759Tth92ue9qSqbnkxSXPrzFzdh8rKLUhbJ4TMxiQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHpXR50JlV1GUSCt55ZrQ1W5uKWjQ9NLiV2lKfj+ZNRXQJ/fT4
-	EQel4qEdE0DbfFtQ9o5kk0uUKJN0CbFOvc/iXxWSsfyBOCRqlP3WAAWBa2Tl7TK2KMn9of/Zisr
-	j
-X-Google-Smtp-Source: AGHT+IFxKPkvoKcfI/+ZFD75cw7Ke/QIfWvEUTopSMRY+wGIMnAaGHV4oXlMPkMPyBM0NA8JoShqsA==
-X-Received: by 2002:a05:6512:b84:b0:536:55a9:caf0 with SMTP id 2adb3069b0e04-53b347231b4mr11193807e87.0.1730423084837;
-        Thu, 31 Oct 2024 18:04:44 -0700 (PDT)
-Received: from umbar.lan ([192.130.178.90])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bde0ce9sm376165e87.268.2024.10.31.18.04.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 18:04:43 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 01 Nov 2024 03:04:42 +0200
-Subject: [PATCH RESEND] thermal/drivers/qcom/lmh: remove false lockdep
- backtrace
+	s=arc-20240116; t=1730424925; c=relaxed/simple;
+	bh=CHQYwTaOoB5G1FjEGqeMsZNtf+ecf+kThedH0H2MY50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Obx4bXU3GnlwnMuT4G/mwFg7CG0URlfem6B1ImT8kcLH0n6EG6Ae3Lsnvsf9zgJdMWwmw8kxNLcx+xUi8lW0yFgTO6T/FiCjWT40l6q4jyxi3hrmBlmw68v7B1YRs1i527yplW3RMY6z58OvpAmcdboWoH5BHXEAe0FWYPnNaI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kas7r+OI; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49VMxlUe012383;
+	Fri, 1 Nov 2024 01:34:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	R790T1EHXVODECLYBvEJ72O5oSHDdrKj+hvqIaPzC/4=; b=kas7r+OIftD3Fbkz
+	N9PijBOLN6EhdBgJrt4OuEbBAlhFsEQ0QDpjW/jDa/8y9iVYT/s5pToAyLvzaYfW
+	RFeqLt6sz4TcbOqgJuPIg8TVzbqp9FD3aX1RCkrWpNyRTQgOft0/XPlYNbnjwxol
+	t5ATfqy8cAaPRKzIqu0rOWqw4Y813rp6Nr/3elnWLSjj2euE82vuhi2IUrdoJccu
+	N9D/G7lPC2M7f2KsHnG8HnijrjZEWz6P8jOoE72htrpocatHUQRDaHTTnhE6Rydk
+	02isenHI3Oii3HAyrFKL6Z+MsSGRhBy6LI+snXK3gmd/6txnYjHsiy3/nGwgbxw0
+	IQXPlA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42m65pakec-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Nov 2024 01:34:55 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A11Ysvk018649
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 1 Nov 2024 01:34:54 GMT
+Received: from [10.216.14.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 31 Oct
+ 2024 18:34:50 -0700
+Message-ID: <4f21ad43-294b-5ec0-4e92-c21d6b3cbe9a@quicinc.com>
+Date: Fri, 1 Nov 2024 07:04:46 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v6 2/2] PCI: Enable runtime pm of the host bridge
+Content-Language: en-US
+To: Bjorn Helgaas <helgaas@kernel.org>
+CC: Kevin Xie <kevin.xie@starfivetech.com>,
+        Lorenzo Pieralisi
+	<lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?=
+	<kw@linux.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "Rob Herring" <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        <Markus.Elfring@web.de>, <quic_mrana@quicinc.com>, <rafael@kernel.org>,
+        <m.szyprowski@samsung.com>, <linux-pm@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20241029153546.GA1156846@bhelgaas>
+From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20241029153546.GA1156846@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241101-lmh-lockdep-v1-1-96fd53cc241c@linaro.org>
-To: Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: Thara Gopinath <thara.gopinath@linaro.org>, linux-pm@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2638;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=b000gK2eeyGVybAeUtdp3ol8MSJmrwkUM8+QObbFxsk=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBnJCkr21SOVaVEBe03u7HvWqvzrgdKJekHTS+c5
- nL1aUunbmqJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZyQpKwAKCRCLPIo+Aiko
- 1dPnCACzq4nh7dVe9+PjvKpVpZhQn/7UQSBhgo5mEnx48N7AxGKGmxQ7iOFhwKa+53+XJTo9Dxc
- +6qhzL5rNr1td7T7F0+pkeeRY8Aq9Fpizt50vq/dm1RU591XPnwNeJHyZe11mDeRTP4doc+md/B
- D6qHrA9BbmGCTN0HwNklDldFgBIwp8kzDEbUUxVBM7zNxCa5p6nTozrRAJbSB6WP5FVyk7mz0bZ
- wm0KzA/t+4RJbWo291z/hz4DLjtcyP/9kzpZ6iuTm4awcAlPA5rDW8N/lxOaDd7wj8bGTBS/Ig8
- gL4+Ir7vpyoZGtf9Wua+FSOBNyK8k8oD+PNF+YLYPb9c29/s
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: spCg1FgvsLDzBvppsEly_fmvrt02yMC8
+X-Proofpoint-GUID: spCg1FgvsLDzBvppsEly_fmvrt02yMC8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ phishscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411010009
 
-Annotate LMH IRQs with lockdep classes so that the lockdep doesn't
-report possible recursive locking issue between LMH and GIC interrupts.
 
-For the reference:
 
-       CPU0
-       ----
-  lock(&irq_desc_lock_class);
-  lock(&irq_desc_lock_class);
+On 10/29/2024 9:05 PM, Bjorn Helgaas wrote:
+> On Thu, Oct 17, 2024 at 09:05:51PM +0530, Krishna chaitanya chundru wrote:
+>> The Controller driver is the parent device of the PCIe host bridge,
+>> PCI-PCI bridge and PCIe endpoint as shown below.
+>>
+>>          PCIe controller(Top level parent & parent of host bridge)
+>>                          |
+>>                          v
+>>          PCIe Host bridge(Parent of PCI-PCI bridge)
+>>                          |
+>>                          v
+>>          PCI-PCI bridge(Parent of endpoint driver)
+>>                          |
+>>                          v
+>>                  PCIe endpoint driver
+>>
+>> Now, when the controller device goes to runtime suspend, PM framework
+>> will check the runtime PM state of the child device (host bridge) and
+>> will find it to be disabled. So it will allow the parent (controller
+>> device) to go to runtime suspend. Only if the child device's state was
+>> 'active' it will prevent the parent to get suspended.
+>>
+>> It is a property of the runtime PM framework that it can only
+>> follow continuous dependency chains.  That is, if there is a device
+>> with runtime PM disabled in a dependency chain, runtime PM cannot be
+>> enabled for devices below it and above it in that chain both at the
+>> same time.
+>>
+>> Since runtime PM is disabled for host bridge, the state of the child
+>> devices under the host bridge is not taken into account by PM framework
+>> for the top level parent, PCIe controller. So PM framework, allows
+>> the controller driver to enter runtime PM irrespective of the state
+>> of the devices under the host bridge. And this causes the topology
+>> breakage and also possible PM issues like controller driver goes to
+>> runtime suspend while endpoint driver is doing some transfers.
+>>
+>> Because of the above, in order to enable runtime PM for a PCIe
+>> controller device, one needs to ensure that runtime PM is enabled for
+>> all devices in every dependency chain between it and any PCIe endpoint
+>> (as runtime PM is enabled for PCIe endpoints).
+>>
+>> This means that runtime PM needs to be enabled for the host bridge
+>> device, which is present in all of these dependency chains.
+> 
+> Earlier I asked about how we can verify that no other drivers need a
+> change like the starfive one:
+> https://lore.kernel.org/r/20241012140852.GA603197@bhelgaas
+>
+Hi Bjorn,
 
- *** DEADLOCK ***
+I added those details in cover letter as you suggested to add them in
+cover letter.
+"PM framework expectes parent runtime pm enabled before enabling runtime
+pm of the child. As PCIe starfive device is enabling runtime pm after
+the pci_host_probe which enables runtime pm of the child device i.e for
+the bridge device a warning is shown saying "pcie-starfive 940000000.pcie:
+Enabling runtime PM for inactive device with active children" and also
+shows possible circular locking dependency detected message.
 
-Call trace:
- dump_backtrace+0x98/0xf0
- show_stack+0x18/0x24
- dump_stack_lvl+0x90/0xd0
- dump_stack+0x18/0x24
- print_deadlock_bug+0x258/0x348
- __lock_acquire+0x1078/0x1f44
- lock_acquire+0x1fc/0x32c
- _raw_spin_lock_irqsave+0x60/0x88
- __irq_get_desc_lock+0x58/0x98
- enable_irq+0x38/0xa0
- lmh_enable_interrupt+0x2c/0x38
- irq_enable+0x40/0x8c
- __irq_startup+0x78/0xa4
- irq_startup+0x78/0x168
- __enable_irq+0x70/0x7c
- enable_irq+0x4c/0xa0
- qcom_cpufreq_ready+0x20/0x2c
- cpufreq_online+0x2a8/0x988
- cpufreq_add_dev+0x80/0x98
- subsys_interface_register+0x104/0x134
- cpufreq_register_driver+0x150/0x234
- qcom_cpufreq_hw_driver_probe+0x2a8/0x388
- platform_probe+0x68/0xc0
- really_probe+0xbc/0x298
- __driver_probe_device+0x78/0x12c
- driver_probe_device+0x3c/0x160
- __device_attach_driver+0xb8/0x138
- bus_for_each_drv+0x84/0xe0
- __device_attach+0x9c/0x188
- device_initial_probe+0x14/0x20
- bus_probe_device+0xac/0xb0
- deferred_probe_work_func+0x8c/0xc8
- process_one_work+0x20c/0x62c
- worker_thread+0x1bc/0x36c
- kthread+0x120/0x124
- ret_from_fork+0x10/0x20
+As it is must to enable parent device's runtime PM before enabling child's
+runtime pm as the pcie-starfive device runtime pm is enabled after child
+runtime starfive device is seeing the warning.
 
-Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/thermal/qcom/lmh.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+In the first patch fix the pcie-starfive driver by enabling runtime
+pm before calling pci_host_probe().
 
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index 5225b3621a56c4a11f0ae56af1060d6d1460ef02..d2d49264cf83a4c4646202044700a7a8bf3c0b95 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -73,7 +73,14 @@ static struct irq_chip lmh_irq_chip = {
- static int lmh_irq_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
- {
- 	struct lmh_hw_data *lmh_data = d->host_data;
-+	static struct lock_class_key lmh_lock_key;
-+	static struct lock_class_key lmh_request_key;
- 
-+	/*
-+	 * This lock class tells lockdep that GPIO irqs are in a different
-+	 * category than their parents, so it won't report false recursion.
-+	 */
-+	irq_set_lockdep_class(irq, &lmh_lock_key, &lmh_request_key);
- 	irq_set_chip_and_handler(irq, &lmh_irq_chip, handle_simple_irq);
- 	irq_set_chip_data(irq, lmh_data);
- 
+All other PCIe controller drivers are enabling runtime pm before
+calling pci_host_probe() which is as expected so don't require any
+fix like pcie-starfive driver."
 
----
-base-commit: 797012914d2d031430268fe512af0ccd7d8e46ef
-change-id: 20240721-lmh-lockdep-88de09e77089
+> I guess this sentence is basically how we verify all drivers are safe
+> with this change?
+> 
+> Since this patch adds devm_pm_runtime_enable() in pci_host_probe(),
+> can we expand this along the lines of this so it's more specific about
+> what we need to verify?
+> 
+>    Every host bridge driver must call pm_runtime_enable() before
+>    runtime PM is enabled by pci_host_probe().
+> 
+> Please correct me if that's not the right requirement.> 
+yes this is correct requirement only. Do you want us to add this for
+this patch .
 
-Best regards,
--- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+- Krishna Chaitanya.
+>> After this change, the host bridge device will be runtime-suspended
+>> by the runtime PM framework automatically after suspending its last
+>> child and it will be runtime-resumed automatically before resuming its
+>> first child which will allow the runtime PM framework to track
+>> dependencies between the host bridge device and all of its
+>> descendants.
+>>
+>> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>> Changes in v6:
+>> - no change
+>> Changes in v5:
+>> - call pm_runtime_no_callbacks() as suggested by Rafael.
+>> - include the commit texts as suggested by Rafael.
+>> - Link to v4: https://lore.kernel.org/linux-pci/20240708-runtime_pm-v4-1-c02a3663243b@quicinc.com/
+>> Changes in v4:
+>> - Changed pm_runtime_enable() to devm_pm_runtime_enable() (suggested by mayank)
+>> - Link to v3: https://lore.kernel.org/lkml/20240609-runtime_pm-v3-1-3d0460b49d60@quicinc.com/
+>> Changes in v3:
+>> - Moved the runtime API call's from the dwc driver to PCI framework
+>>    as it is applicable for all (suggested by mani)
+>> - Updated the commit message.
+>> - Link to v2: https://lore.kernel.org/all/20240305-runtime_pm_enable-v2-1-a849b74091d1@quicinc.com
+>> Changes in v2:
+>> - Updated commit message as suggested by mani.
+>> - Link to v1: https://lore.kernel.org/r/20240219-runtime_pm_enable-v1-1-d39660310504@quicinc.com
+>> ---
+>>   drivers/pci/probe.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+>> index 4f68414c3086..8409e1dde0d1 100644
+>> --- a/drivers/pci/probe.c
+>> +++ b/drivers/pci/probe.c
+>> @@ -3106,6 +3106,11 @@ int pci_host_probe(struct pci_host_bridge *bridge)
+>>   		pcie_bus_configure_settings(child);
+>>   
+>>   	pci_bus_add_devices(bus);
+>> +
+>> +	pm_runtime_set_active(&bridge->dev);
+>> +	pm_runtime_no_callbacks(&bridge->dev);
+>> +	devm_pm_runtime_enable(&bridge->dev);
+>> +
+>>   	return 0;
+>>   }
+>>   EXPORT_SYMBOL_GPL(pci_host_probe);
+>>
+>> -- 
+>> 2.34.1
+>>
 
