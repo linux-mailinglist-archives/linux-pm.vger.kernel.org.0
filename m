@@ -1,221 +1,221 @@
-Return-Path: <linux-pm+bounces-16904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16905-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3DB29BA58D
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 14:09:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E88B9BA655
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 16:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E18451C208D3
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 13:09:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 316C3281574
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 15:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C9616E895;
-	Sun,  3 Nov 2024 13:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B376E184522;
+	Sun,  3 Nov 2024 15:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="luModrrd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KmuEO33r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27F823774;
-	Sun,  3 Nov 2024 13:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06A617CA1F
+	for <linux-pm@vger.kernel.org>; Sun,  3 Nov 2024 15:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730639364; cv=none; b=UhMd1xh7NQD9vcgH3yMDb11wf02GVbdISaxWp/d68Gi0B+X0YB7kVZi2nTGXML8082y1NCRG5buUjQAq7brwd4YLw3PNgaTlURh07g0Rortenwte2+5H9z3jaI4yvmhDYOodJO2NzI0AKkiwFy0SOPohn9FB7jpyvgv/+mRdON8=
+	t=1730646784; cv=none; b=aNYc+qhePFbjKdLa8VrmxuQQZvQdJ0Ra+qetoA7+08brzsD36yz0zQurlgckX+v63XjOBwG4Mrn6BkxgJdZtdNPxtwsdhG/SC8BAe4Uq8MQ6xQS8Bh1uTcgTRLuO+VsuPIcBqgCZz6shk3k3C2Bt+3BlBy+QQX0zFDbpfgKOKQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730639364; c=relaxed/simple;
-	bh=guXELeytpG22NADybLXxugiStFOd+DdhkkVWeTpYpvM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EiwtcaNoNqmxMoFJskMf0DwQwq+5qK9GXPI0ZNFA+zE628nAYbGBqymYciNmhnmIVe/CU7RXlaOsPeqQRFNwUU2N7XLuZNwq7VQyfQg52MIEA1lz3Nz+yOsL3XgL2xmzsLEmUnfojX3OWaUriOo7PUINhfXnHQCJL1xpxbgOWws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=luModrrd; arc=none smtp.client-ip=80.12.242.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id 7aLrtuVZGGfMn7aLrt2ZJd; Sun, 03 Nov 2024 14:09:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1730639353;
-	bh=pHCYMRyEhUD58GA3IYCTR1CfQUuJWA0GVifKU3o2xlA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=luModrrdwcGEIRjb4I/DgierMEI21v2l9+D4OLiHpFiQ/o5mxJZNY5ktBocmR2DxI
-	 HF53OlIc+M5352fldvfSHl04LKpI7WpYAq1qQ3HyETKnHfTj1fVvqR/44FRTvnhC43
-	 /cXUW4MEuF4/lUqHIs4npnWFJJGMHOg9/5EMw+orXtbbLHi0nA1dw+Uisv/OWT7KUS
-	 h6S4slSIV1G/0gMAl6/vfcyw4Kv1Y7uVupPr6ADHCcGP0mni5PY6Gxy+vZnp+pe8Mi
-	 4k5nr7vZgwmq+mt3mMSVwCq4OCbW7aMxNzW7PTqOksalYlmKCyhgChkKdMTiTgqi9o
-	 KB2RORauQAwyA==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Sun, 03 Nov 2024 14:09:13 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <96938e54-70cf-4e81-9072-8af48883a769@wanadoo.fr>
-Date: Sun, 3 Nov 2024 14:09:05 +0100
+	s=arc-20240116; t=1730646784; c=relaxed/simple;
+	bh=wYAoJRD7v8jrHJmEguNTQmd3c50c8FjNbmBzvtkQOFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BgqJFxv2nWrsDTRqYdDLp0nV5mRTbCj9o+MnT9l/e2Ev+o5w0RK1MiLM20YnvkgHkEYOzTY3fWm7+zDft6MbbvzRVyOb7RaSbQYEU7US4TmB7RKQ+h1GZnj4b34O6CwHP1H66Zp8bhZGTIi+qly25mgEfgIO9weFvMJN1Te1KPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KmuEO33r; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2e2e87153a3so2352435a91.3
+        for <linux-pm@vger.kernel.org>; Sun, 03 Nov 2024 07:13:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730646782; x=1731251582; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eHQktcKdIhna5z27pQ3PuyXhlPaLntIaSmvbBw7PwoE=;
+        b=KmuEO33ruVGkb98SLj0/8QwsYF8UCpg2ZnuF8gixbV9yOGxOOAjaWkD11fs+B88fyg
+         gIkYtCcdVWgHBSTRvjc3fpdZH/586CRwDV1T8/9k8b1qwsYOGCuNg/jMFDFQri9+02pe
+         4Epb/FJEt3LITMpeVtCDIjKLTnX49poPfTRBIoB4TWZHgrXhadgjIBt3XgAzWTY5n6AM
+         vvaWCcBJATS9yXY087GCjCXzIBvxv8P+CZXCijntxBx808anG7vefZqtPKU8pDNkZ3zN
+         l5igR3zKEynRk1jUongAU31yy01QveR8D4zf+f4j7yBFP7f0vn8JSxIj+dHg3BbmWnSd
+         Eocw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730646782; x=1731251582;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eHQktcKdIhna5z27pQ3PuyXhlPaLntIaSmvbBw7PwoE=;
+        b=N8U9rJxyvUY8mgEN3DLLjtLUl4NfbNZJo3EeUJY2gAtkqsCyH3g2kgts8giWfaumgD
+         XyGVgwCP6MAF+f4a5oWEnjOML69C5GF+IfPDNwn3wBQkhnPoFBQS8v1Q6/OpW6EN3+wF
+         e6egL1UwMgQ6p7nViuEr9xkel/gbCCsu69brjHsLRNTz9W7vrO/yvB0ctmCDp5rYlyX5
+         zo5cKWUtpqmg8p9n4gypI7D7po/nsqEdNfHPqnv+aDtBgxZbFOOI+jqcwYFhiAkxa3WT
+         kkZEv9HE7M5BdUD3NY4Ijd/eNc0wFINECIgq23ADDmRAx6qcj+kk56XusUqDS79h0Nvm
+         gXZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLhpO+bMl+DiDyCgIg8IVNoLIOqt++dkIWzodUFpL9hdA9D8HgYK16hj30BfH70kJ8aCcBmNUohw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzTYO9xlF7ZoJ3b5IAys4pSaF1qyOkET6sLUqtuqE8tdMoKxU8
+	9g05rT39U9kJ3FRkHXy5+RjChGpqWznsAI3Y3T7t/cI0Rn/9eBqKmYTycc1ZgEy8BsMkwNQtJnQ
+	4jAjQ7Mv9MBCv/7Gm8Y5XQ+qLjGJoCUt4EnR5zw==
+X-Google-Smtp-Source: AGHT+IHRIh1ITCIAJ4M7w1UM8me5MLqRixS/tsHhgXfawiZDUkumg9GSz+T7fPFwKnIa+4k1jBzouIXTP6K8KhWz3Do=
+X-Received: by 2002:a17:90b:4a86:b0:2e1:ce7b:6069 with SMTP id
+ 98e67ed59e1d1-2e94c529acamr15224146a91.33.1730646782163; Sun, 03 Nov 2024
+ 07:13:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] scsi: ufs: rockchip: initial support for UFS
-To: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Heiko Stuebner <heiko@sntech.de>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
- Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
- <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20241031132745.3765612-1-quic_sibis@quicinc.com> <20241031132745.3765612-3-quic_sibis@quicinc.com>
+In-Reply-To: <20241031132745.3765612-3-quic_sibis@quicinc.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Sun, 3 Nov 2024 16:12:50 +0100
+Message-ID: <CAKfTPtDNBPC8QQzFBNDKNW_sJfkoShSsxo7iMC8Wga+wixyHzA@mail.gmail.com>
+Subject: Re: [PATCH V7 2/2] cpufreq: scmi: Register for limit change notifications
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org, 
+	viresh.kumar@linaro.org, morten.rasmussen@arm.com, dietmar.eggemann@arm.com, 
+	lukasz.luba@arm.com, pierre.gondois@arm.com, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com, 
+	linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Le 08/10/2024 à 08:15, Shawn Lin a écrit :
-> RK3576 SoC contains a UFS controller, add initial support fot it.
-
-s/fot/for/
-
-> The features are:
-> (1) support UFS 2.0 features
-> (2) High speed up to HS-G3
-> (3) 2RX-2TX lanes
-> (4) auto H8 entry and exit
-> 
-> Software limitation:
-> (1) HCE procedure: enbale controller->enbale intr->dme_reset->dme_enable
-
-s/enbale/enable/ 	x 2
-
-> (2) disable unipro timeout values before power mode change
-> 
-> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
-> 
-
-No need for an extra empty line
-
+On Thu, 31 Oct 2024 at 14:28, Sibi Sankar <quic_sibis@quicinc.com> wrote:
+>
+> Register for limit change notifications if supported and use the throttled
+> frequency from the notification to apply HW pressure.
+>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> Tested-by: Mike Tipton <quic_mdtipton@quicinc.com>
+> Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
-
-...
-
-> +static int ufs_rockchip_common_init(struct ufs_hba *hba)
+>
+> v7:
+> * Add a new request instead of reusing the max_freq_req [Vincent]
+> * Use the non-devm versions of register/unregister of event notifier
+>   since we have to remove them when the cpus get removed anyway.
+> * Add new patch to fix cleanup path on boost enablement failure.
+>
+>  drivers/cpufreq/scmi-cpufreq.c | 51 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index 07d6f9a9b7c8..ff13f7d4b2c9 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/export.h>
+>  #include <linux/module.h>
+>  #include <linux/pm_opp.h>
+> +#include <linux/pm_qos.h>
+>  #include <linux/slab.h>
+>  #include <linux/scmi_protocol.h>
+>  #include <linux/types.h>
+> @@ -25,7 +26,10 @@ struct scmi_data {
+>         int domain_id;
+>         int nr_opp;
+>         struct device *cpu_dev;
+> +       struct cpufreq_policy *policy;
+>         cpumask_var_t opp_shared_cpus;
+> +       struct notifier_block limit_notify_nb;
+> +       struct freq_qos_request limits_freq_req;
+>  };
+>
+>  static struct scmi_protocol_handle *ph;
+> @@ -174,6 +178,25 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
+>         NULL,
+>  };
+>
+> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
 > +{
-> +	struct device *dev = hba->dev;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct ufs_rockchip_host *host;
-> +	int err;
+> +       struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
+> +       struct scmi_perf_limits_report *limit_notify = data;
+> +       struct cpufreq_policy *policy = priv->policy;
+> +       unsigned int limit_freq_khz;
+> +       int ret;
 > +
-> +	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
-> +	if (!host)
-> +		return -ENOMEM;
+> +       limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
 > +
-> +	/* system control register for hci */
-> +	host->ufs_sys_ctrl = devm_platform_ioremap_resource_byname(pdev, "hci_grf");
-> +	if (IS_ERR(host->ufs_sys_ctrl))
-> +		return dev_err_probe(dev, PTR_ERR(host->ufs_sys_ctrl),
-> +					"cannot ioremap for hci system control register\n");
-> +
-> +	/* system control register for mphy */
-> +	host->ufs_phy_ctrl = devm_platform_ioremap_resource_byname(pdev, "mphy_grf");
-> +	if (IS_ERR(host->ufs_phy_ctrl))
-> +		return dev_err_probe(dev, PTR_ERR(host->ufs_phy_ctrl),
-> +				"cannot ioremap for mphy system control register\n");
-> +
-> +	/* mphy base register */
-> +	host->mphy_base = devm_platform_ioremap_resource_byname(pdev, "mphy");
-> +	if (IS_ERR(host->mphy_base))
-> +		return dev_err_probe(dev, PTR_ERR(host->mphy_base),
-> +				"cannot ioremap for mphy base register\n");
-> +
-> +	host->rst = devm_reset_control_array_get_exclusive(dev);
-> +	if (IS_ERR(host->rst))
-> +		return dev_err_probe(dev, PTR_ERR(host->rst),
-> +				"failed to get reset control\n");
-> +
-> +	reset_control_assert(host->rst);
-> +	usleep_range(1, 2);
-> +	reset_control_deassert(host->rst);
-> +
-> +	host->ref_out_clk = devm_clk_get_enabled(dev, "ref_out");
-> +	if (IS_ERR(host->ref_out_clk))
-> +		return dev_err_probe(dev, PTR_ERR(host->ref_out_clk),
-> +				"ref_out unavailable\n");
-> +
-> +	host->rst_gpio = devm_gpiod_get(&pdev->dev, "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(host->rst_gpio))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(host->rst_gpio),
-> +				"invalid reset-gpios property in node\n");
-> +
-> +	host->clks[0].id = "core";
-> +	host->clks[1].id = "pclk";
-> +	host->clks[2].id = "pclk_mphy";
-> +	err = devm_clk_bulk_get_optional(dev, UFS_MAX_CLKS, host->clks);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "failed to get clocks\n");
-> +
-> +	err = clk_bulk_prepare_enable(UFS_MAX_CLKS, host->clks);
+> +       policy->max = clamp(limit_freq_khz, policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
 
-This has to be undone somewhere, likely at the end of ufs_rockchip_remove().
+I don't think that the above is needed or correct, the cpufreq qos
+notifier will take care of updating policy->max with handle_update()
 
-> +	if (err)
-> +		return dev_err_probe(dev, err, "failed to enable clocks\n");
 > +
-> +	host->hba = hba;
+> +       ret = freq_qos_update_request(&priv->limits_freq_req, policy->max);
+> +       if (ret < 0)
+> +               pr_warn("failed to update freq constraint: %d\n", ret);
 > +
-> +	ufshcd_set_variant(hba, host);
-> +
-> +	return 0;
+> +       return NOTIFY_OK;
 > +}
-
-...
-
-> +static const struct ufs_hba_variant_ops ufs_hba_rk3576_vops = {
-> +	.name = "rk3576",
-> +	.init = ufs_rockchip_rk3576_init,
-> +	.device_reset = ufs_rockchip_device_reset,
-> +	.hce_enable_notify = ufs_rockchip_hce_enable_notify,
-> +	.phy_initialization = ufs_rockchip_rk3576_phy_init,
-> +};
 > +
-> +static const struct of_device_id ufs_rockchip_of_match[] = {
-> +	{ .compatible = "rockchip,rk3576-ufshc", .data = &ufs_hba_rk3576_vops},
-
-Missing space before ending }
-
-> +	{},
-
-No need for an extra , here.
-
-> +};
-> +MODULE_DEVICE_TABLE(of, ufs_rockchip_of_match);
-
-...
-
-> +static void ufs_rockchip_remove(struct platform_device *pdev)
-> +{
-> +	struct ufs_hba *hba = platform_get_drvdata(pdev);
-> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+>  static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  {
+>         int ret, nr_opp, domain;
+> @@ -181,6 +204,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>         struct device *cpu_dev;
+>         struct scmi_data *priv;
+>         struct cpufreq_frequency_table *freq_table;
+> +       struct scmi_device *sdev = cpufreq_get_driver_data();
+>
+>         cpu_dev = get_cpu_device(policy->cpu);
+>         if (!cpu_dev) {
+> @@ -294,6 +318,25 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>                 }
+>         }
+>
+> +       ret = freq_qos_add_request(&policy->constraints, &priv->limits_freq_req, FREQ_QOS_MAX,
+> +                                  FREQ_QOS_MAX_DEFAULT_VALUE);
+> +       if (ret < 0) {
+> +               dev_err(cpu_dev, "failed to add qos limits request: %d\n", ret);
+> +               goto out_free_table;
+> +       }
 > +
-> +	pm_runtime_forbid(&pdev->dev);
-> +	pm_runtime_get_noresume(&pdev->dev);
-> +	ufshcd_remove(hba);
-> +	ufshcd_dealloc_host(hba);
-> +	clk_disable_unprepare(host->ref_out_clk);
-
-No need for clk_disable_unprepare(), ref_out_clk comes from 
-devm_clk_get_enabled(), so the framework will already call 
-clk_disable_unprepare().
-
-> +}
-
-...
-
-CJ
+> +       priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
+> +       ret = sdev->handle->notify_ops->event_notifier_register(sdev->handle, SCMI_PROTOCOL_PERF,
+> +                                                       SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+> +                                                       &priv->domain_id,
+> +                                                       &priv->limit_notify_nb);
+> +       if (ret)
+> +               dev_warn(&sdev->dev,
+> +                        "failed to register for limits change notifier for domain %d\n",
+> +                        priv->domain_id);
+> +
+> +       priv->policy = policy;
+> +
+>         return 0;
+>
+>  out_free_table:
+> @@ -313,7 +356,13 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  static void scmi_cpufreq_exit(struct cpufreq_policy *policy)
+>  {
+>         struct scmi_data *priv = policy->driver_data;
+> +       struct scmi_device *sdev = cpufreq_get_driver_data();
+>
+> +       sdev->handle->notify_ops->event_notifier_unregister(sdev->handle, SCMI_PROTOCOL_PERF,
+> +                                                           SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+> +                                                           &priv->domain_id,
+> +                                                           &priv->limit_notify_nb);
+> +       freq_qos_remove_request(&priv->limits_freq_req);
+>         dev_pm_opp_free_cpufreq_table(priv->cpu_dev, &policy->freq_table);
+>         dev_pm_opp_remove_all_dynamic(priv->cpu_dev);
+>         free_cpumask_var(priv->opp_shared_cpus);
+> @@ -372,6 +421,8 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>         if (!handle)
+>                 return -ENODEV;
+>
+> +       scmi_cpufreq_driver.driver_data = sdev;
+> +
+>         perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
+>         if (IS_ERR(perf_ops))
+>                 return PTR_ERR(perf_ops);
+> --
+> 2.34.1
+>
 
