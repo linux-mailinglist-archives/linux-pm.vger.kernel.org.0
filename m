@@ -1,136 +1,104 @@
-Return-Path: <linux-pm+bounces-16906-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16907-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 631419BA6A4
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 17:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B27C19BA82C
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 22:03:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F07F1F21739
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 16:27:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AFCA1F214E7
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 21:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83D77187879;
-	Sun,  3 Nov 2024 16:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE7015C14B;
+	Sun,  3 Nov 2024 21:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HqZcvEmw"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="iYja/L+Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6943617C234;
-	Sun,  3 Nov 2024 16:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D6F155392;
+	Sun,  3 Nov 2024 21:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730651257; cv=none; b=kDUabD47rSLfeuudE/0UlqC/CduHwMEo7CwmhFWREoDHmBgtn3EiZlaXEKb/TrYCPLXZxSidkkfw1Ao2bH7aUrM0sCOfO9KDaOXcq0hauV29tIGRCItKwwmwfkabYzeY5sCL/BR5hrCdo8vPbLOm8j7m3Dgw5kqtbExx55soehA=
+	t=1730667788; cv=none; b=nY6Vfj7nwZAQAeA5S7IVb8iN56Zc0a1vMWFWBJ5UXqs3rMfeEcFWfH7i6mdG3fRDSJFbXK1UGU90RI3WxaTbxnxxUYaepLj7rbAp6+1b4gL0bidqAYcuqZDHqVPdJO8ROlBjP4VjX2mlq2wqj/FcyE2yf0EwxqZpivg2mjuISqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730651257; c=relaxed/simple;
-	bh=GFbGjoWnh5QiJUZnY79oXxX4ZJdes3mjS6mT2FxB164=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HukwwVlUF18UJ7ltia8PmvCFHe/IU82+1vQt4DxAGbg6DibHbPc1qbh1EPfiH8ohZwOgpYUumuNjgw9Tv6anWnYDjzYMdg6Bf6xPOgCWDSgpfErhRd9qB+o+kDWdLc6EIG/aN/sjJKdGpo02KgsjMfOxga99d5yUU/6eXhp+1gI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HqZcvEmw; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730651256; x=1762187256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GFbGjoWnh5QiJUZnY79oXxX4ZJdes3mjS6mT2FxB164=;
-  b=HqZcvEmwzTcXFGGiSaZRSDRucHGxik82MAQTgVq1vE3TiIt99rHdfBbK
-   +fIWrbNbG85K2fZiQqOSv7BTadYHcNlWjA8omvOEy3NNinVPErYckAtHr
-   kLEFq5SZTdseoONjjNWnDudCO1ABsoS2FwkzPgd3shvN7hrjYTBhDrZwa
-   fNNtgbD+t8v4lnzoz/1j4WgJlX2mE2P26TsVAejjJQWMQhH85OOOVWbhZ
-   zS4z/DUaS0OTlbTvYvHzHxahkWBHyGgoQL2zbeTh7TLfseaFpZVGHP+KE
-   MxMSjPxz+BVifsKzyZ92dh2SOlgtICPmwV0ycwl8DFRxQlbEu68XMBroi
-   g==;
-X-CSE-ConnectionGUID: TOw3NpEoQCWHDsrqUeQaAQ==
-X-CSE-MsgGUID: orvPr2KgRbGhTdE7cktLwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="55749539"
-X-IronPort-AV: E=Sophos;i="6.11,255,1725346800"; 
-   d="scan'208";a="55749539"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 08:27:35 -0800
-X-CSE-ConnectionGUID: FFKZBkeIRp66xBgCDD4U9w==
-X-CSE-MsgGUID: cZe+WybvQaSTXaQBallnqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,255,1725346800"; 
-   d="scan'208";a="83111146"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Nov 2024 08:27:32 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t7dRq-000k4F-28;
-	Sun, 03 Nov 2024 16:27:30 +0000
-Date: Mon, 4 Nov 2024 00:27:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vishnu Sanal T <t.v.s10123@gmail.com>, linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, trenn@suse.com, shuah@kernel.org,
-	jwyatt@redhat.com, jkacur@redhat.com, linux-kernel@vger.kernel.org,
-	Vishnu Sanal T <t.v.s10123@gmail.com>
-Subject: Re: [PATCH v2] implement set_enabled functions on powercap.c
-Message-ID: <202411040029.mXFFVJ8w-lkp@intel.com>
-References: <20241030152706.179779-2-t.v.s10123@gmail.com>
+	s=arc-20240116; t=1730667788; c=relaxed/simple;
+	bh=RN0M6qzQAq5/lg/qY5cha5a7Da3fSLtOhF4obNnPasQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UGJGApGZuyB+o8Ko28Z76Im1cne7WTH7PJ6cwW4yNtfG05nwvzIyTJbSWfQH5obed/PkMfDa39mDScF53BlisheD+9slQXJ3CwF6xUQEZTTjZ+TvIzulszAT5zkkturtJ6ra//6cOmBGfbG9dfQQbqF5DSEtYbbAdROUBJJ1ivw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=iYja/L+Y; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=OYn3TGqzIwKjwq71n9v00fPB4midY8IRa1hhwIt0HAQ=; b=iYja/L+YF5xKYwAezfF52lm16t
+	1UmgMAw3GuWQWjQN7rWlpEoKsx9SDqeuUzX+rKm1t4Sjp07LBw8FqUIlPe1NUXwmMPhHPRun6m4UY
+	uI78iYbYjaAUoSB+LJITCwIvs1Am2T0ykUbEGO9LfC0xY8af9/4d85jp1fOIKnwczXgm12UwBv0/X
+	OvNB8CSM73QFsWgSPwDUII6USixtDOv+NKLC3Ojl+nU1aUckZPphurLRg8EUEq6w4T8WSMnaoGoZN
+	aBZTqCkTA7h8t8r1ParwFiSrJDnmv5YTQKqG1OAUSTBg9i+ztG3EtSTWXLSXDkhqs49SULYt0RlCI
+	IX+3L0jg==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	zhipeng.wang_1@nxp.com,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org
+Cc: Andreas Kemnade <andreas@kemnade.info>,
+	stable@vger.kernel.org
+Subject: [PATCH] cpufreq: fix using cpufreq-dt as module
+Date: Sun,  3 Nov 2024 22:02:51 +0100
+Message-Id: <20241103210251.762050-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241030152706.179779-2-t.v.s10123@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Vishnu,
+E.g. omap2plus_defconfig compiles cpufreq-dt as module. As there is no
+module alias nor a module_init(), cpufreq-dt-platdev will not be used and
+therefore on several omap platforms there is no cpufreq.
 
-kernel test robot noticed the following build warnings:
+Enforce builtin compile of cpufreq-dt-platdev to make it effective.
 
-[auto build test WARNING on amd-pstate/linux-next]
-[also build test WARNING on amd-pstate/bleeding-edge linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: 3b062a086984 ("cpufreq: dt-platdev: Support building as module")
+Cc: stable@vger.kernel.org
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ drivers/cpufreq/Kconfig              | 2 +-
+ drivers/cpufreq/cpufreq-dt-platdev.c | 2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishnu-Sanal-T/implement-set_enabled-functions-on-powercap-c/20241030-233021
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20241030152706.179779-2-t.v.s10123%40gmail.com
-patch subject: [PATCH v2] implement set_enabled functions on powercap.c
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411040029.mXFFVJ8w-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411040029.mXFFVJ8w-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   lib/powercap.c: In function 'powercap_set_enabled':
->> lib/powercap.c:79:40: warning: '%s' directive writing up to 254 bytes into a region of size 253 [-Wformat-overflow=]
-      79 |         sprintf(command, "echo -n %c > %s", yes_no, path);
-         |                                        ^~
-   ......
-      95 |         return sysfs_set_enabled(path, mode);
-         |                                  ~~~~   
-   In function 'sysfs_set_enabled',
-       inlined from 'powercap_set_enabled' at lib/powercap.c:95:9:
-   lib/powercap.c:79:9: note: 'sprintf' output between 13 and 267 bytes into a destination of size 265
-      79 |         sprintf(command, "echo -n %c > %s", yes_no, path);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/powercap.c: In function 'powercap_zone_set_enabled':
->> lib/powercap.c:79:40: warning: '%s' directive writing up to 254 bytes into a region of size 253 [-Wformat-overflow=]
-      79 |         sprintf(command, "echo -n %c > %s", yes_no, path);
-         |                                        ^~
-   ......
-     203 |         return sysfs_set_enabled(path, mode);
-         |                                  ~~~~   
-   In function 'sysfs_set_enabled',
-       inlined from 'powercap_zone_set_enabled' at lib/powercap.c:203:9:
-   lib/powercap.c:79:9: note: 'sprintf' output between 13 and 267 bytes into a destination of size 265
-      79 |         sprintf(command, "echo -n %c > %s", yes_no, path);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+index 2561b215432a8..4547adf5d2a7d 100644
+--- a/drivers/cpufreq/Kconfig
++++ b/drivers/cpufreq/Kconfig
+@@ -218,7 +218,7 @@ config CPUFREQ_DT
+ 	  If in doubt, say N.
+ 
+ config CPUFREQ_DT_PLATDEV
+-	tristate "Generic DT based cpufreq platdev driver"
++	bool "Generic DT based cpufreq platdev driver"
+ 	depends on OF
+ 	help
+ 	  This adds a generic DT based cpufreq platdev driver for frequency
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 18942bfe9c95f..78ad3221fe077 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -234,5 +234,3 @@ static int __init cpufreq_dt_platdev_init(void)
+ 			       sizeof(struct cpufreq_dt_platform_data)));
+ }
+ core_initcall(cpufreq_dt_platdev_init);
+-MODULE_DESCRIPTION("Generic DT based cpufreq platdev driver");
+-MODULE_LICENSE("GPL");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
 
