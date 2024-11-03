@@ -1,230 +1,241 @@
-Return-Path: <linux-pm+bounces-16902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B259BA245
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Nov 2024 20:56:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060899BA55B
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 13:02:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AEE21C21B90
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Nov 2024 19:56:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57E86B218B3
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 12:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C85BF1AB6F7;
-	Sat,  2 Nov 2024 19:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51CA17624D;
+	Sun,  3 Nov 2024 12:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nr/ZSEYn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hJVBPcwC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B96A14F12F;
-	Sat,  2 Nov 2024 19:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B21156C40
+	for <linux-pm@vger.kernel.org>; Sun,  3 Nov 2024 12:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730577358; cv=none; b=e8bAm1irQxI1KkO1GhtMt/yUUnDxj+tBUFXYWPbK8sNHjYSTldXFGoh/iPazCFdzNrHhveAJ5+rWqxC6Z3qbomvkG1SfMfFmKKj+FW96764EK90hpvetihfSXy2IN/oo0ex3RLxP3ttI1mAFMR01blRBs2oNCJSbj0A5vgxqguc=
+	t=1730635352; cv=none; b=R94qLkaLl9OFahAbuMzrfG1qLnwGTC7BZtieWETaPRJfHumyyMPSvCClklfTNYdMzyxQT1l21Qb6BZ2IvkgZr5u5Jg7Tp0kw+yUwH+/oSFCZdkyqraFBIYLWuKhpqIo0zGgPsHthXgD0bLiheFvP8x4jsZy5tUt2KEUyCBhCnVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730577358; c=relaxed/simple;
-	bh=g36kdeuRYZI5ierO4LxZY9yHnOtnQ6TIOAVdj/Y/oLs=;
+	s=arc-20240116; t=1730635352; c=relaxed/simple;
+	bh=EkfjY6qc7ZZqItUKau0nuoSNvJIwoZnbsM2jci2CLJo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i2ef/9slWq0PgKVusvXoeUI3N8+F/pKN4k4f05ZSzT7Lb2FB7MqlIVvdN+nUsxYfRMFsYHI+PqKJwrzWE5bOJjaMQWn2E2t3yNtNzbKv/lLkVkWj/mCUbc5NIwOhPca4lCY5viCq2VKex0KPPv+tsYogvClMdHXNlBJ+/CbtLLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nr/ZSEYn; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730577356; x=1762113356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=g36kdeuRYZI5ierO4LxZY9yHnOtnQ6TIOAVdj/Y/oLs=;
-  b=Nr/ZSEYndI9ktyN1PT5mfkJms1IS9ucFLqn6VmfA0Ws8hKElHHIz6flE
-   kALKrXdiGTsfw/XnMAwrwGrrDLBAS10F/fl8vL8U6FwU3tym+HsQkaC4d
-   IxWpX371vI0akWF7Kt5L/6K5a/MdKjywNLKMbEi3EQnX51pVfGcodIXsX
-   aD8O767BJ4j/HzoDjQVy6q0CSATh2k4kzGQ9xULpqOTnzgHlFhk1SAHlZ
-   XuYtW+Vd21Z1+ZSQgO9oUL/FFcsw1wCVo3mZjGXTcMTkIXK9swktK1OQt
-   8p7ZLWPH0qDJQZXTdlLvF/4fHGf30LoJHH+93UVYVt9ikAbOmkMw2Rebt
-   w==;
-X-CSE-ConnectionGUID: QEBY7QQjS9G2IXq2gq4B/A==
-X-CSE-MsgGUID: 6e78hUw2TceHejVqmtGryw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30270382"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30270382"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 12:55:55 -0700
-X-CSE-ConnectionGUID: DEM1bP8vQuCq66BSj637Tw==
-X-CSE-MsgGUID: 8fsNL1ZsSEG7Z1R9sShxcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="88024912"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 02 Nov 2024 12:55:52 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t7KDt-000jI9-0Z;
-	Sat, 02 Nov 2024 19:55:49 +0000
-Date: Sun, 3 Nov 2024 03:55:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-leds@vger.kernel.org,
-	Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: Re: [PATCH v8 3/7] mfd: Add new driver for MAX77705 PMIC
-Message-ID: <202411030141.DTmej8oX-lkp@intel.com>
-References: <20241031-starqltechn_integration_upstream-v8-3-2fa666c2330e@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=UepmhdsvlVamPMQ8aFUQ+r01v1VHv5p3ADbino5knkiHXRwTKu9s0bwMmlNn4QbO6KX6Np+IYUldWaTIV7SMl/YRjP/lpfilk13P0aq86dBlVih2NrsmWUFF33GA3aducOc40iaJc2O3Nhe475DK4nMxLkyILdWjECHYwNk8Ku4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hJVBPcwC; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-720d01caa66so1699257b3a.2
+        for <linux-pm@vger.kernel.org>; Sun, 03 Nov 2024 04:02:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730635350; x=1731240150; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FUkXMfCkR70Uh4iKdLC2cSNlr1iFRoDLX5iaBLAzooI=;
+        b=hJVBPcwCsw9LtJIDvKkvMshxn8/MJmw86JwpnKPSUfM/9it8j1U/IrfUjfVylwpqk8
+         xAUzTaT22wSdlTyqF87Lm3+eB2KkLp1j8Is3eSCN5PiIEJtI80cIAlf+mCgupZMkVSsK
+         8Hoiuq0OsbWyl5R0MtNf/w9GB++4FcP9ZX3b4Sqs5goxJk4rvyGfzheNXAc3aAYopmAe
+         RxkL3WhDU/u0M0EXCNwtXPGJk4Nj5f0wftuYcDIxEcJVNPMlCLuAbkOHZIhv6XxBLzOe
+         HjW1XUniGkBOHl1xGOSPmHywNh69vXjcrVbWN9g3Yc3ytCxEpgyXJQRkWjJksqTG6TQI
+         K50g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730635350; x=1731240150;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FUkXMfCkR70Uh4iKdLC2cSNlr1iFRoDLX5iaBLAzooI=;
+        b=PqRk4mEY/mdllg+UCMdl7oi6ySMVWB7HIoGTLn2CLTs8NKSHyiAtFgLXyjdtO0/FXH
+         gD9SG/pTxzQN9HKUeMLC+FA0UuVJi5nGz/Q+TiH2S9FHXEA8jYTtwVE3q3z3ARfw5P+y
+         nSW9GpOlEMwmP/WE6nzlwSu/BkEiTTAgraNBPL19e43891EWdOzxKxtmP1R5Q4xLaZL3
+         oZ9ilVxWiiUkKRBJ3t7VCWzyfG5zwWRkSkg3i1G8CoUiqH+MgOg/2t2f8D2A7b1a12CH
+         Pu/C20g1cao8egImiJmTHC9o+EnnmUN0oe4d6abaap3NjWcZUYPCOiZQSO0Nxt7iGeO9
+         6SVw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5dFWa/GPfAFyQJnuuNHKZYtEBJyFl169K9kzfOG209IzxZ5570v9U/9lqfdx/HseiMNfz3/eZ6w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzC5vRSoSdmPb5mKMu+RxSd5SqYlPwA0gFIgYyBjKq22O7HMR/S
+	MUZpjsQ7iHbW7ziDqxaAWyBfyaIcr1puiunr0cJaBwKRW3JIk/agwK6RxBQXuQ==
+X-Google-Smtp-Source: AGHT+IG67vE3Hy81Qa1sXK1wXZ0XGN5eh5NVCE1J0d5f1x/U0tyMLbeT3PWIyJgXlJE+GgOJ+sNXFQ==
+X-Received: by 2002:a05:6a21:920b:b0:1d9:6ea3:9741 with SMTP id adf61e73a8af0-1db91d440eemr17725699637.4.1730635349968;
+        Sun, 03 Nov 2024 04:02:29 -0800 (PST)
+Received: from thinkpad ([220.158.156.209])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee459f8ee9sm5215196a12.72.2024.11.03.04.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Nov 2024 04:02:29 -0800 (PST)
+Date: Sun, 3 Nov 2024 17:32:23 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Shawn Lin <shawn.lin@rock-chips.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] scsi: ufs: rockchip: initial support for UFS
+Message-ID: <20241103120223.abkwgej4svas4epr@thinkpad>
+References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
+ <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
+ <CAPDyKForpLcmkqruuTfD6kkJhp_4CKFABWRxFVYNskGL1tjO=w@mail.gmail.com>
+ <3969bae0-eeb8-447a-86a5-dfdac0b136cd@rock-chips.com>
+ <CAPDyKFo=GcHG2sGQBrXJ7VWyp59QOmbLCAvHQ3krUympEkid_A@mail.gmail.com>
+ <98e0062c-aeb1-4bea-aa2b-4a99115c9da4@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241031-starqltechn_integration_upstream-v8-3-2fa666c2330e@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <98e0062c-aeb1-4bea-aa2b-4a99115c9da4@rock-chips.com>
 
-Hi Dzmitry,
+On Fri, Oct 18, 2024 at 05:20:08PM +0800, Shawn Lin wrote:
+> Hi Ulf,
+> 
+> 在 2024/10/18 17:07, Ulf Hansson 写道:
+> > On Thu, 10 Oct 2024 at 03:21, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+> > > 
+> > > Hi Ulf
+> > > 
+> > > 在 2024/10/9 21:15, Ulf Hansson 写道:
+> > > > [...]
+> > > > 
+> > > > > +
+> > > > > +static int ufs_rockchip_runtime_suspend(struct device *dev)
+> > > > > +{
+> > > > > +       struct ufs_hba *hba = dev_get_drvdata(dev);
+> > > > > +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > > > > +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+> > > > 
+> > > > pd_to_genpd() isn't safe to use like this. It's solely to be used by
+> > > > genpd provider drivers.
+> > > > 
+> > > > > +
+> > > > > +       clk_disable_unprepare(host->ref_out_clk);
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Shouldn't power down if rpm_lvl is less than level 5.
+> > > > 
+> > > > Can you elaborate on why we must not power-off the power-domain when
+> > > > level is less than 5?
+> > > > 
+> > > 
+> > > Because ufshcd driver assume the controller is active and the link is on
+> > > if level is less than 5. So the default resume policy will not try to
+> > > recover the registers until the first error happened. Otherwise if the
+> > > level is >=5, it assumes the controller is off and the link is down,
+> > > then it will restore the registers and link.
+> > > 
+> > > And the level is changeable via sysfs.
+> > 
+> > Okay, thanks for clarifying.
+> > 
+> > > 
+> > > > What happens if we power-off anyway when the level is less than 5?
+> > > > 
+> > > > > +        * This flag will be passed down to platform power-domain driver
+> > > > > +        * which has the final decision.
+> > > > > +        */
+> > > > > +       if (hba->rpm_lvl < UFS_PM_LVL_5)
+> > > > > +               genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
+> > > > > +       else
+> > > > > +               genpd->flags &= ~GENPD_FLAG_RPM_ALWAYS_ON;
+> > > > 
+> > > > The genpd->flags is not supposed to be changed like this - and
+> > > > especially not from a genpd consumer driver.
+> > > > 
+> > > > I am trying to understand a bit more of the use case here. Let's see
+> > > > if that helps me to potentially suggest an alternative approach.
+> > > > 
+> > > 
+> > > I was not familiar with the genpd part, so I haven't come up with
+> > > another solution. It would be great if you can guide me to the right
+> > > way.
+> > 
+> > I have been playing with the existing infrastructure we have at hand
+> > to support this, but I need a few more days to be able to propose
+> > something for you.
+> > 
+> 
+> Much appreciate.
+> 
+> > > 
+> > > > > +
+> > > > > +       return ufshcd_runtime_suspend(dev);
+> > > > > +}
+> > > > > +
+> > > > > +static int ufs_rockchip_runtime_resume(struct device *dev)
+> > > > > +{
+> > > > > +       struct ufs_hba *hba = dev_get_drvdata(dev);
+> > > > > +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > > > > +       int err;
+> > > > > +
+> > > > > +       err = clk_prepare_enable(host->ref_out_clk);
+> > > > > +       if (err) {
+> > > > > +               dev_err(hba->dev, "failed to enable ref out clock %d\n", err);
+> > > > > +               return err;
+> > > > > +       }
+> > > > > +
+> > > > > +       reset_control_assert(host->rst);
+> > > > > +       usleep_range(1, 2);
+> > > > > +       reset_control_deassert(host->rst);
+> > > > > +
+> > > > > +       return ufshcd_runtime_resume(dev);
+> > > > > +}
+> > > > > +
+> > > > > +static int ufs_rockchip_system_suspend(struct device *dev)
+> > > > > +{
+> > > > > +       struct ufs_hba *hba = dev_get_drvdata(dev);
+> > > > > +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > > > > +
+> > > > > +       /* Pass down desired spm_lvl to Firmware */
+> > > > > +       arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
+> > > > > +                       host->pd_id, hba->spm_lvl < 5 ? 1 : 0, 0, 0, 0, 0, NULL);
+> > > > 
+> > > > Can you please elaborate on what goes on here? Is this turning off the
+> > > > power-domain that the dev is attached to - or what is actually
+> > > > happening?
+> > > > 
+> > > 
+> > > This smc call is trying to ask firmware not to turn off the power-domian
+> > > that the UFS is attached to and also not to turn off the power of UFS
+> > > conntroller.
+> > 
+> > Okay, thanks for clarifying!
+> > 
+> > A follow up question, don't you need to make a corresponding smc call
+> > to inform the FW that it's okay to turn off the power-domain at some
+> > point?
+> > 
+> 
+> Yes. Each time entering sleep, we teach FW if it need to turn off or keep
+> power-domain, for instance "hba->spm_lvl < 5 ? 1 : 0" , 0 means
+> off and 1 means on.
+> 
 
-kernel test robot noticed the following build warnings:
+We had a requirement to notify the genpd provider from consumer to not turn off
+the power domain during system suspend. So Ulf came up with an API for
+consumers, device_set_wakeup_path() setting the 'dev->power.wakeup_path' which
+will be honored by the genpd core. Will that work for you?
 
-[auto build test WARNING on 86e3904dcdc7e70e3257fc1de294a1b75f3d8d04]
+PS: The API naming suggests that the device will be used in wakeup path, which
+may not be true here but the end result will be the same.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/power-supply-add-undervoltage-health-status-property/20241031-053513
-base:   86e3904dcdc7e70e3257fc1de294a1b75f3d8d04
-patch link:    https://lore.kernel.org/r/20241031-starqltechn_integration_upstream-v8-3-2fa666c2330e%40gmail.com
-patch subject: [PATCH v8 3/7] mfd: Add new driver for MAX77705 PMIC
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241103/202411030141.DTmej8oX-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241103/202411030141.DTmej8oX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411030141.DTmej8oX-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/mfd/max77705.c:8:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mfd/max77705.c:129:6: warning: variable 'pmic_rev' is uninitialized when used here [-Wuninitialized]
-     129 |         if (pmic_rev != MAX77705_PASS3) {
-         |             ^~~~~~~~
-   drivers/mfd/max77705.c:108:13: note: initialize the variable 'pmic_rev' to silence this warning
-     108 |         u8 pmic_rev;
-         |                    ^
-         |                     = '\0'
-   5 warnings generated.
-
-
-vim +/pmic_rev +129 drivers/mfd/max77705.c
-
-   100	
-   101	static int max77705_i2c_probe(struct i2c_client *i2c)
-   102	{
-   103		struct max77693_dev *max77705;
-   104		struct regmap_irq_chip_data *irq_data;
-   105		struct irq_domain *domain;
-   106		int ret;
-   107		unsigned int pmic_rev_value;
-   108		u8 pmic_rev;
-   109	
-   110	
-   111		max77705 = devm_kzalloc(&i2c->dev, sizeof(*max77705), GFP_KERNEL);
-   112		if (!max77705)
-   113			return -ENOMEM;
-   114	
-   115		max77705->i2c = i2c;
-   116		max77705->dev = &i2c->dev;
-   117		max77705->irq = i2c->irq;
-   118		max77705->type = TYPE_MAX77705;
-   119		i2c_set_clientdata(i2c, max77705);
-   120	
-   121		max77705->regmap = devm_regmap_init_i2c(i2c, &max77705_regmap_config);
-   122	
-   123		if (IS_ERR(max77705->regmap))
-   124			return PTR_ERR(max77705->regmap);
-   125	
-   126		if (regmap_read(max77705->regmap, MAX77705_PMIC_REG_PMICREV, &pmic_rev_value) < 0)
-   127			return -ENODEV;
-   128	
- > 129		if (pmic_rev != MAX77705_PASS3) {
-   130			dev_err(max77705->dev, "rev.0x%x is not tested",
-   131				pmic_rev);
-   132			return -ENODEV;
-   133		}
-   134	
-   135		max77705->regmap_leds = devm_regmap_init_i2c(i2c, &max77705_leds_regmap_config);
-   136	
-   137		if (IS_ERR(max77705->regmap_leds))
-   138			return PTR_ERR(max77705->regmap_leds);
-   139	
-   140		ret = devm_regmap_add_irq_chip(max77705->dev, max77705->regmap,
-   141						max77705->irq,
-   142						IRQF_ONESHOT | IRQF_SHARED, 0,
-   143						&max77705_topsys_irq_chip,
-   144						&irq_data);
-   145	
-   146		if (ret)
-   147			dev_err(max77705->dev, "failed to add irq chip: %d\n", ret);
-   148	
-   149		/* Unmask interrupts from all blocks in interrupt source register */
-   150		ret = regmap_update_bits(max77705->regmap,
-   151					 MAX77705_PMIC_REG_INTSRC_MASK,
-   152					 MAX77705_SRC_IRQ_ALL, (unsigned int)~MAX77705_SRC_IRQ_ALL);
-   153	
-   154		if (ret < 0) {
-   155			dev_err(max77705->dev,
-   156				"Could not unmask interrupts in INTSRC: %d\n", ret);
-   157			return ret;
-   158		}
-   159	
-   160		domain = regmap_irq_get_domain(irq_data);
-   161	
-   162		ret = devm_mfd_add_devices(max77705->dev, PLATFORM_DEVID_NONE,
-   163					   max77705_devs, ARRAY_SIZE(max77705_devs),
-   164					   NULL, 0, domain);
-   165	
-   166		if (ret) {
-   167			dev_err(max77705->dev, "Failed to register child devices: %d\n", ret);
-   168			return ret;
-   169		}
-   170	
-   171		device_init_wakeup(max77705->dev, true);
-   172	
-   173		return 0;
-   174	}
-   175	
+- Mani
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+மணிவண்ணன் சதாசிவம்
 
