@@ -1,315 +1,239 @@
-Return-Path: <linux-pm+bounces-16998-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16999-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D68029BBD5D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 19:37:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14FA69BBDA4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 20:05:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AB04282617
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 18:37:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99F661F21413
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 19:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F8C1C4A2F;
-	Mon,  4 Nov 2024 18:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97C71CB9F4;
+	Mon,  4 Nov 2024 19:05:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Hb9sr08Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cn3r/FMl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2056.outbound.protection.outlook.com [40.107.220.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511931CF8B
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 18:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730745458; cv=fail; b=B8vDwzxSiPABbFPxc4DG3+vszGcPCTlEil3sonxWhE95IInUs1yqze/+hBWIirYF4OlWTtscLCxbscKmR9fpmq1G15DIfI2P6+r2u7RR1YRXkI5FUcvQJZVwmN8NCSZUpAgid33NzsUtSVCiRwNxn/RMUUYMYfaWIrry0OyUBFo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730745458; c=relaxed/simple;
-	bh=cRwLgjb0J5GX6mo/Fbq3qcs/b9FiqIe+X4I8OluQqHc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=pspDUW+4g92k+oEbJQn86RLi6WoNG50hB02Dct8Sb6InPSKfIzJ20PL91DCa5J8T5+46s+zxyEicVDHVQt4V56PCT5NgI7jvERzGAY4A+76+hkuSD1y0TCMep2QtEfkzgu7db7PWfnig1hx1eBJ5JhYOnYliv6o68mrBoD+4smA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Hb9sr08Y; arc=fail smtp.client-ip=40.107.220.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rpUj+ZSMBt6LMcgynKocF8N6JnMitlddzmV6pkQdDxY1Y5ZLBcvSoe2dLBRCKQ5idqOwlOPMCLaxxakk01keCAI788+bULMXQnav/2ycvgkHe2LyCrsEr226FbJW3aBIIJ2e1nPiD4a1gP3dvq66UnJ22wzURGuEVX7oOqzKDBsSyQNX0OiRTB9i1yM5N8l+jExnu381D8uIKX0T1djlwtgG9g+RhSkPCqGwNeGKnkfOQKt/Eomk7VNBLAm63iCkRWLWzo3wb8YzQHtvCwGnkb/GLolXUWfimj/8Ossdj92opARiqWP/J3b/zYXnUK5gPAEfuduKETge0DjCBVZPzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yGciJT/CzuiYLz8RI26a5WdFMWyIITMNzlUmSXbFjbg=;
- b=GgKOGZCBeGgDiVro/nOABMQKycmFwPF1T/ifRSYEiolf8KwpYwr96fFC7iJ2WTZFwyQa0D+dhcg53Mduzc5tBpTe2N7WDSB6n8k8OkN2DMCQUclH2NmUkuzw/BjOLcCSgwZOOqZ5qjmEU9JMv79c9z4j92PJna4lh/tgFIHPxT/1EM5q5PJSvOpujLMNXTQReUunleFIg5M1csT9qaLKXgbLxzK7hEhom52jSanDbdnGYYGbAtiHXb28SztYi4cnbWSeqNcXaSbGgCkv1Ey9+1swtrYwhkF9zgC51YMV72WXUPV6gRxPrfJ9CTvAd8SIajIOqwCWJypV/evTGeTQlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yGciJT/CzuiYLz8RI26a5WdFMWyIITMNzlUmSXbFjbg=;
- b=Hb9sr08Yk2VF9d18hK5pFMHSXmq0mEmiKgw09005Rk5xKSgHMXxwoF3J4I3g74cQrrCmACBmECT8rebS5HTeWmNilOw/wJMvBdoLlbItWT6SUrjXoHoI2bimfhU6IrM7WfXMrontphsExml6dvESA6GqjiT1NhAwZuxYPHyMRh0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ1PR12MB6076.namprd12.prod.outlook.com (2603:10b6:a03:45d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Mon, 4 Nov
- 2024 18:37:32 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8114.028; Mon, 4 Nov 2024
- 18:37:32 +0000
-Message-ID: <3816d092-2799-4056-9815-421a614c9228@amd.com>
-Date: Mon, 4 Nov 2024 12:37:30 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: pm/testing build: 8 builds: 1 failed, 7 passed, 1 error, 24
- warnings (v6.12-rc6-98-g57d5fb99dade)
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- "kernelci.org bot" <bot@kernelci.org>
-Cc: linux-pm@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-References: <67290cbd.630a0220.3b06d1.05d1@mx.google.com>
- <CAJZ5v0j0+2iWE1Xu7egnymi8Njuav+miMOdeKkxHF5TPvYm+Wg@mail.gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <CAJZ5v0j0+2iWE1Xu7egnymi8Njuav+miMOdeKkxHF5TPvYm+Wg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN4PR0501CA0111.namprd05.prod.outlook.com
- (2603:10b6:803:42::28) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EAA1C4A03;
+	Mon,  4 Nov 2024 19:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730747148; cv=none; b=Ci5jz64OyyYe7P76oRlor4fhEjKlW9z5IpHkNfkaTntk3S+ChSYG/L55Gf6v8We9WTZK2FulR2GG/9gYf9m+wO13pRDQ1J2rGW7TPjv3WJ9lOT5WazvqzD2YtpUyDnA1QB4gwbOcE2t3aiEJhYg4QUtEuxdTnP9H0iqxGZYHb6A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730747148; c=relaxed/simple;
+	bh=rdh9R1V4RPjx3dKyhSI+3FBX4va4hMS0m5So6O7EdSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WmtWGY2QWsHJMBDpDps7xoj07zhRWQv75O3Vt0D0fKmSfvoKHYdDSLiWVOmURo7yxQlvRQN3gen5HgepjhRzLKGeJsDUOQ9ItX2YqUU8vb9jCR67VQmdtFlV9K0WGByHHYM+nZyVDjV6wfXRze0fsQeEG9e+/vnrVR9uN3eqIpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cn3r/FMl; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730747147; x=1762283147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rdh9R1V4RPjx3dKyhSI+3FBX4va4hMS0m5So6O7EdSA=;
+  b=cn3r/FMlTToCq7INNaYT2ZyNziRu92Icq0ekTZ/TE+k+CZhqXJrHiBlO
+   NtGFxi4XNLI3pGuA/fXMpCuEfLTBsKv+Flpl1aRafuGo17y61uXO1eNt+
+   FPxrCROkS+Mj/jkzDYLdEuUtEvwGPbKUPxrvIk39UZ8jZTGsRnKrH2oBj
+   4rEGoQC537su4wv9j2bTYltyppIoS05aHZNFsuWPJIyMzxZ/9etzW7x4f
+   soH2jNPIW8ngDuDIbhSgn+06HPxv2/fRnQ6wZMfMgcrgLAqLpfRYf5W2N
+   jIITYYnAAXhcPFomEF9eF5VgOwvt+RkYL82y7zXjwIChDt4LKzUvo+EW/
+   g==;
+X-CSE-ConnectionGUID: Z1aMS19FRe2xxtTP2H4FEg==
+X-CSE-MsgGUID: VvrWIC5ASpSiyltCKs26Kw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="30574853"
+X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
+   d="scan'208";a="30574853"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 11:05:37 -0800
+X-CSE-ConnectionGUID: YZjB/43eRpKobbtUg0ngLg==
+X-CSE-MsgGUID: vHLulKSHRHeKCIpcf9p65A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
+   d="scan'208";a="83421430"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 04 Nov 2024 11:05:31 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t82OH-000l9n-0g;
+	Mon, 04 Nov 2024 19:05:29 +0000
+Date: Tue, 5 Nov 2024 03:04:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 4/7] pmdomain: core: Introduce
+ dev_pm_genpd_rpm_always_on()
+Message-ID: <202411050203.kPDzy0bS-lkp@intel.com>
+References: <1730705521-23081-5-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ1PR12MB6076:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f6e014d-f017-4ccb-f903-08dcfcffbe9d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?d1hiRG9kdVlnejh2T3p0eVo2U1FSN0h4QWNlWmNkWDJnaS8vTVFybFRFdFNJ?=
- =?utf-8?B?azYyTWJHMHArM3NyWGJGa3BwNmI0OEhnZTJWSTlXOXRrVUt2eGRIc1RRYVlC?=
- =?utf-8?B?UWVkdFk5T0djU0FMMlpjUWZKNmtZWHJZQ0dRdmo0bmIwNWxMYk5PMmdPRWVB?=
- =?utf-8?B?WGhPeXhoWU9JbW5pM2sxMmttcnhWbTZFbm5PaWQrWmptclM4bXRkcUZOc2d5?=
- =?utf-8?B?N2Q4eDVUd1Ftc0Q4SGRLbkR2cFVhaEhsNjJIdDNYQ1BvQVRNd2piclJEUnpU?=
- =?utf-8?B?aTVaSllFQTlkV3B5U1BnckFUdHhLTFU4VU9SckVXNjRIVlR5OE0xY1BkTWpj?=
- =?utf-8?B?ZlNXSlpvT2FuMjlyNmFUODNaTzBTY2hYYnBkVlFncEhlZmhGaHd4SUl2QVB1?=
- =?utf-8?B?YWhLeFNDTVh0THE3NUd6UldQa28zR3Ruc2ZZRkdURUIraEZWSm1RQlFyOGhD?=
- =?utf-8?B?RFZHNjdicHZWWXJCMUd4VDRsaTRYZmpwT0d6d2o0SnhHdE1yMkJpVHZwbnNi?=
- =?utf-8?B?YkNhcFRqdmJYc0E2WXd5dU5JRU9sVWJVYkxlWVVFYkx2NVRHVlFaeXc4d2xj?=
- =?utf-8?B?emRwdmNBQ2FHYll0cG9KV0ZBcTY4UC9YQkxPeVc3VlNRUEYvQ0lXbUlwc0Q4?=
- =?utf-8?B?WkQ3RHJRYjNHbE1UUzhyQ0NjNzFXV2xPYjZaSEpLWmtmalJLQVRwQ2JwQStT?=
- =?utf-8?B?djNqVWRUOUEwNjNVcWVqcDJqT0xlb0xzRjFxNm1hVDRRMlUyOG1SNWlZUjF0?=
- =?utf-8?B?Q21TSndaUDFEaUUveHg5S25xYitmQ1YrOUl1UEZoQ3pGNXR0aThOTEF1RmJO?=
- =?utf-8?B?YnZYOHIrd2hzQ2MzQ011Ty9TbVFVdUg1U2pNQ3NnNmsxNlU5WXRZN1E2cEZY?=
- =?utf-8?B?WEE2NEpBeTNteFozL1liV0NqeGI0eUE5TGRtVlByMERVTDVLbHJRaHN2VXI1?=
- =?utf-8?B?cXpCVGNTMXNQSExJVWZiek90cE1xOWUra3VkM1VycmdDY3pJcURaWkRMeDB3?=
- =?utf-8?B?aDJTVnZ2ZkdTZkpEK0oxUFRyZ3BqN0pZajNXb0thNUg3dGo0SVhrOS9WSjJW?=
- =?utf-8?B?b0pCMjd1SWdkTkIwYWs3QllWbG9yM2JJMDJudmNNc0N6VnNkYWtpLzFiTko3?=
- =?utf-8?B?L0FNT0p2dTZzNExXWEs3ZnVKV0xEOUpMb2NDZUwyb3Zxd0UwNjVHZmY0MDBa?=
- =?utf-8?B?SkM5Z2FoQU5QNnhkNDM4OU5hL2d3M1JkZGtvR0oveVE3WmJENnR2c1BPZXdG?=
- =?utf-8?B?eTRiS3ZVZmNBTnFSNUpwRE0yNmk3NE1JR2tLRk9iUS9Ra2FleWVtWEs2bVcw?=
- =?utf-8?B?QkNlQ2Z4TjE3VUY0dmsxVGcyQTNZSWNrSkxBVkJOMWR6b3lFOEQ4TitlZmlY?=
- =?utf-8?B?R0QzVysrRkYxUWNQVjc3OWNqdU82MWFVMEcwSGxLNUNpVlgraHlUYmliS2RR?=
- =?utf-8?B?cE1wZU5pY28vUHB5WUFCYkhUbEU0K1JlQ2tDVlVWVFRQelh3OUdhMk9hbGNI?=
- =?utf-8?B?TkpSZUxNbk8rNENVZ0JxNS8zWDFJWkFGQXlEbTM1Ni9iVGNMRUo3bTJIK0My?=
- =?utf-8?B?RTMwVUJrNFlEU1Bvd2I4NE1VRjQyYlAzdDlXSTVCOVFIejJNdWVrK2ZNcXd6?=
- =?utf-8?B?eXNMTEg5Sk5pdDVxZEk5WSszWTREdkhkWWNVYjQ2eFAxQ1Q2elFBdU9YeWM4?=
- =?utf-8?Q?U3NChQHyaziAhlHa5gzU?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SHNxQVVhcGhBdTNtZ0NGUzJzb3lMVXpNbzVZWVgrSUFmNEg1cW1RelNqVjN4?=
- =?utf-8?B?TGxrbXVSOURDRTRudUt5elB1UG1yTWlqdDhEUTl5dnpMRVkyVmxrRzhMMmh0?=
- =?utf-8?B?M2NlMzBEZVZXd2NTYXZMWlZrVGJiUUh5M2VIa01hV08yOFVhWmRleFB0WHMw?=
- =?utf-8?B?RHExMDVJM2hzdHlQUEVHS0hMVjRtYk4yZ3RJeStBMEdKR0ljNThBYnVPRUll?=
- =?utf-8?B?UkltZUp1b1VIcDdLMERncE0rUWJLRkdzaGRrTGMzSUVlaWl3b1NucTBaRHBw?=
- =?utf-8?B?R1hYUDZYVDFwZGpRU05reG5mRlpzdFQyUVREenVoZzFqaXNSSjIvQTc2SUsx?=
- =?utf-8?B?UFBoVDY2dkswbVV3RCtyY3Z0aUlHejE3Rm91TkhnWTMyWU5YRDN6WHdCNlRL?=
- =?utf-8?B?eU1lNXI3dk8yZ2lka1ErNVY5TkpTby9EUjlyNFBDMDd1R0Ntdkd6cEs1TENK?=
- =?utf-8?B?M2lKdDh6ejFkcXBsWWNwcFJHMkNSckhBY2RSeDh6aFB3QUsybVFzanNkRjZH?=
- =?utf-8?B?RFRWVktNb1M2SkYzTWVoaHZ1dHc5dGhhSzI5QVQ0cUk3MmNmSi81bFcxRExz?=
- =?utf-8?B?TS9QaG53RlNNdVJBaDl5alRnTzR4eVR3bzdmYW92dkd3dThzb3ZYV3lOOGNk?=
- =?utf-8?B?Y3VGU3B1Y3NvUlhNOGd1TzhIdnpvSE5tV0wyQVdWL3lFbDB6c1dSc3hxQ1N2?=
- =?utf-8?B?TFRvTkhJNlFaTTBSUlpVZFhwSmt2RjNUeTZNbFBEK1Z4dnJoY2hkUVV2SSs1?=
- =?utf-8?B?VUhqR1kwNFppVHcybHpsSDlOSllhdmEvSDhDTFRrc0F6WExPOVEyTEVhcmZK?=
- =?utf-8?B?SVpIMlZmejcyMjcvQm1QVW9pUUFJdjU2Ujd0U0lVa0JuaW5QRVZRMmxaa3hT?=
- =?utf-8?B?ZWFObmtWNUpraWI4Rm80WHAyUlJXSG8zMDZEd2JKVUN5a0dNSWkrQnBHQ3Ay?=
- =?utf-8?B?NnJBbStOUTBLUEp4SVp2RGJOTXRUbnIzMjVBWC9KMXBoaG9WcXJJL05HMTNv?=
- =?utf-8?B?OEdadEhVNHJqdTRJV3d2VnduT0VyS25tRDRYWmRwcXo3RE5IYUcxZDJ3Qndv?=
- =?utf-8?B?TVo0MXM4N25HS0lDdzVyS2NZQWZCMUora0ZzSHBxQmNja1NENHpXSnordkRL?=
- =?utf-8?B?aVRYMDkyUVZyb1ZWTWFFVlYzZlBaS1VzZmFqQTNmNW95dzhXakgvWExPTm0z?=
- =?utf-8?B?R1JDSTd2Ukt5TzNXY2tKY1NJVkhrbThiZDN6dzhmRng2MlNjQ1NFeGtFd1kx?=
- =?utf-8?B?NlNyQ1pka1VqcVo0V205b1lwdCtwMVJTakJhM0hOblR5cUtUM1lnTmlhYUI1?=
- =?utf-8?B?Zmh3V2Qvc1crcEpyWnJZcVVqQnhmWWVsTkkxY1pEbUFKbjlFRFJDZEZsdGV3?=
- =?utf-8?B?OCtMc3pPYktMbDFCaGVGSFZScHdWdENucVVHbTNOcnhJeFJLenpzOU4vRG8v?=
- =?utf-8?B?NkdsRDF5ZXNhNjc5WWlFM1ZhKzlxZXByVmx5WG92RFNLZU9QMTlsc3VhRnhI?=
- =?utf-8?B?NURacFdXNUs5RDFCalltcFhFOGxHYVJsTWxjcXY5cVBycXhoR3B1cVlSSTln?=
- =?utf-8?B?cjl0dVM2S1hoWkhXc3lrekVGcFdQM2p1MUttQVV5UFhqOVZSZG5xcndLUG9q?=
- =?utf-8?B?ZFh3aWgxRUdJSVFwVENwRkd3cndvVVdKWW9GSW82eGNBbGZJeGtVR2xSZUNL?=
- =?utf-8?B?M1R0a2RyRXpLOWdvV1NCcGJwYzNmbE1WeDlnSURCcG9NY0l5VEVEbTdkalM4?=
- =?utf-8?B?NHRaL0FRWnZXWEtraUprY1REMkF6S1MrT0JyK0gyVGhVQU5EQ1ZMMEpsU2J1?=
- =?utf-8?B?MjZocG1MemRuUnlDZ1Y2ODM3ZXR4WFdGMVdlZkEwWUN4RUh6NExGZWo5ZDd1?=
- =?utf-8?B?bXliOVl6OVVwUWY5VHRWR0dReklpMGQzRVRkeFVyL3l5QkFyQXFLT3VhaEtP?=
- =?utf-8?B?VGJJME53VU1kTlZsNjYyMkJJWndQSEdhTXVYVkUwM1NqbkhTdUFFR0lTSXFs?=
- =?utf-8?B?azNrNS8vdjUyWFF2OHJoeGlkUmRpTGI4Q0FrK3VxYmJ3bTZ6SjB0d2JPRHF5?=
- =?utf-8?B?YjJjSVppai93N29sdFhvZE00VGtrRE1ZUDd1V01qZUdKMlE2NllxQVBHVnFN?=
- =?utf-8?Q?r6l6ECUXp/ucDa4yORjjA0/UB?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f6e014d-f017-4ccb-f903-08dcfcffbe9d
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2024 18:37:32.6282
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EY0LaYaNmsj4rXIf2N5mDzfdyn60jiaA4YMFfZy4cH9+DSm4LH2Eh99B2Il5n0fIdvckeASaJ6IG4aKjA1EFyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6076
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1730705521-23081-5-git-send-email-shawn.lin@rock-chips.com>
 
-On 11/4/2024 12:35, Rafael J. Wysocki wrote:
-> On Mon, Nov 4, 2024 at 7:04 PM kernelci.org bot <bot@kernelci.org> wrote:
->>
->> pm/testing build: 8 builds: 1 failed, 7 passed, 1 error, 24 warnings (v6.12-rc6-98-g57d5fb99dade)
->>
->> Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.12-rc6-98-g57d5fb99dade/
->>
->> Tree: pm
->> Branch: testing
->> Git Describe: v6.12-rc6-98-g57d5fb99dade
->> Git Commit: 57d5fb99dadef3680372de9e1d3972dffb1ec800
->> Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
->> Built: 8 unique architectures
->>
->> Build Failure Detected:
->>
->> riscv:
->>      defconfig: (gcc-12) FAIL
->>
->> Errors and Warnings Detected:
->>
->> arc:
->>      haps_hs_smp_defconfig (gcc-12): 2 warnings
->>
->> arm64:
->>
->> arm:
->>
->> i386:
->>
->> mips:
->>      32r2el_defconfig (gcc-12): 3 warnings
->>
->> riscv:
->>      defconfig (gcc-12): 1 error, 1 warning
->>
->> sparc:
->>      sparc64_defconfig (gcc-12): 18 warnings
->>
->> x86_64:
->>
->> Errors summary:
->>
->>      1    drivers/acpi/processor_driver.c:273:9: error: implicit declaration of function ‘arch_init_invariance_cppc’ [-Werror=implicit-function-declaration]
-> 
-> Mario, I think that this is for you to take care of.
-> 
-> I'll drop the CPPC invariance init from linux-next now and please
-> submit a v3 with this fixed (and the comment we've discussed
-> elsewhere).
+Hi Shawn,
 
-Ack.  Will take care of it, thanks.
+kernel test robot noticed the following build warnings:
 
-> 
->> Warnings summary:
->>
->>      2    kernel/fork.c:3077:2: warning: #warning clone3() entry point is missing, please fix [-Wcpp]
->>      2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
->>      2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>      2    3077 | #warning clone3() entry point is missing, please fix
->>      1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: missing .note.GNU-stack section implies executable stack
->>      1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .note.GNU-stack section implies executable stack
->>      1    cc1: some warnings being treated as errors
->>      1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous prototype for ‘__vdso_gettimeofday_stick’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous prototype for ‘__vdso_gettimeofday’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous prototype for ‘__vdso_clock_gettime_stick’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous prototype for ‘__vdso_clock_gettime’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype for ‘__vdso_gettimeofday_stick’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype for ‘__vdso_gettimeofday’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype for ‘__vdso_clock_gettime_stick’ [-Wmissing-prototypes]
->>      1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype for ‘__vdso_clock_gettime’ [-Wmissing-prototypes]
->>      1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' found, but node is not an interrupt provider
->>      1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is not an interrupt provider
->>      1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
->>      1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt provider
->>      1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
->>
->> ================================================================================
->>
->> Detailed per-defconfig build reports:
->>
->> --------------------------------------------------------------------------------
->> 32r2el_defconfig (mips, gcc-12) — PASS, 0 errors, 3 warnings, 0 section mismatches
->>
->> Warnings:
->>      arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is not an interrupt provider
->>      arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' found, but node is not an interrupt provider
->>      arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
->>
->> --------------------------------------------------------------------------------
->> defconfig (riscv, gcc-12) — FAIL, 1 error, 1 warning, 0 section mismatches
->>
->> Errors:
->>      drivers/acpi/processor_driver.c:273:9: error: implicit declaration of function ‘arch_init_invariance_cppc’ [-Werror=implicit-function-declaration]
->>
->> Warnings:
->>      cc1: some warnings being treated as errors
->>
->> --------------------------------------------------------------------------------
->> defconfig (arm64, gcc-12) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> haps_hs_smp_defconfig (arc, gcc-12) — PASS, 0 errors, 2 warnings, 0 section mismatches
->>
->> Warnings:
->>      arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt provider
->>      arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
->>
->> --------------------------------------------------------------------------------
->> i386_defconfig (i386, gcc-12) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> multi_v7_defconfig (arm, gcc-12) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> --------------------------------------------------------------------------------
->> sparc64_defconfig (sparc, gcc-12) — PASS, 0 errors, 18 warnings, 0 section mismatches
->>
->> Warnings:
->>      <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>      arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype for ‘__vdso_clock_gettime’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype for ‘__vdso_clock_gettime_stick’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype for ‘__vdso_gettimeofday’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype for ‘__vdso_gettimeofday_stick’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous prototype for ‘__vdso_clock_gettime’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous prototype for ‘__vdso_clock_gettime_stick’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous prototype for ‘__vdso_gettimeofday’ [-Wmissing-prototypes]
->>      arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous prototype for ‘__vdso_gettimeofday_stick’ [-Wmissing-prototypes]
->>      sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .note.GNU-stack section implies executable stack
->>      sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: missing .note.GNU-stack section implies executable stack
->>      kernel/fork.c:3077:2: warning: #warning clone3() entry point is missing, please fix [-Wcpp]
->>      3077 | #warning clone3() entry point is missing, please fix
->>      kernel/fork.c:3077:2: warning: #warning clone3() entry point is missing, please fix [-Wcpp]
->>      3077 | #warning clone3() entry point is missing, please fix
->>      WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
->>      <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>      WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
->>
->> --------------------------------------------------------------------------------
->> x86_64_defconfig (x86_64, gcc-12) — PASS, 0 errors, 0 warnings, 0 section mismatches
->>
->> ---
->> For more info write to <info@kernelci.org>
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on robh/for-next linus/master v6.12-rc6]
+[cannot apply to mkp-scsi/for-next next-20241104]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/dt-bindings-ufs-Document-Rockchip-UFS-host-controller/20241104-191810
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/1730705521-23081-5-git-send-email-shawn.lin%40rock-chips.com
+patch subject: [PATCH v4 4/7] pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+config: x86_64-buildonly-randconfig-003-20241104 (https://download.01.org/0day-ci/archive/20241105/202411050203.kPDzy0bS-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411050203.kPDzy0bS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411050203.kPDzy0bS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/pmdomain/core.c: In function 'genpd_power_off':
+>> drivers/pmdomain/core.c:893:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+     893 |                 if (!pm_runtime_suspended(pdd->dev) ||
+         |                 ^~
+   drivers/pmdomain/core.c:898:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+     898 |                         if (to_gpd_data(pdd)->rpm_always_on)
+         |                         ^~
+
+
+vim +/if +893 drivers/pmdomain/core.c
+
+29e47e2173349e drivers/base/power/domain.c Ulf Hansson     2015-09-02  837  
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  838  /**
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  839   * genpd_power_off - Remove power from a given PM domain.
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  840   * @genpd: PM domain to power down.
+3c64649d1cf9f3 drivers/base/power/domain.c Ulf Hansson     2017-02-17  841   * @one_dev_on: If invoked from genpd's ->runtime_suspend|resume() callback, the
+3c64649d1cf9f3 drivers/base/power/domain.c Ulf Hansson     2017-02-17  842   * RPM status of the releated device is in an intermediate state, not yet turned
+3c64649d1cf9f3 drivers/base/power/domain.c Ulf Hansson     2017-02-17  843   * into RPM_SUSPENDED. This means genpd_power_off() must allow one device to not
+3c64649d1cf9f3 drivers/base/power/domain.c Ulf Hansson     2017-02-17  844   * be RPM_SUSPENDED, while it tries to power off the PM domain.
+763663c9715f5f drivers/base/power/domain.c Yang Yingliang  2021-05-12  845   * @depth: nesting count for lockdep.
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  846   *
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  847   * If all of the @genpd's devices have been suspended and all of its subdomains
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  848   * have been powered down, remove power from @genpd.
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  849   */
+2da835452a0875 drivers/base/power/domain.c Ulf Hansson     2017-02-17  850  static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+2da835452a0875 drivers/base/power/domain.c Ulf Hansson     2017-02-17  851  			   unsigned int depth)
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  852  {
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  853  	struct pm_domain_data *pdd;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  854  	struct gpd_link *link;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  855  	unsigned int not_suspended = 0;
+f63816e43d9044 drivers/base/power/domain.c Ulf Hansson     2020-09-24  856  	int ret;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  857  
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  858  	/*
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  859  	 * Do not try to power off the domain in the following situations:
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  860  	 * (1) The domain is already in the "power off" state.
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  861  	 * (2) System suspend is in progress.
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  862  	 */
+41e2c8e0060db2 drivers/base/power/domain.c Ulf Hansson     2017-03-20  863  	if (!genpd_status_on(genpd) || genpd->prepared_count > 0)
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  864  		return 0;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  865  
+ffaa42e8a40b7f drivers/base/power/domain.c Ulf Hansson     2017-03-20  866  	/*
+ffaa42e8a40b7f drivers/base/power/domain.c Ulf Hansson     2017-03-20  867  	 * Abort power off for the PM domain in the following situations:
+ffaa42e8a40b7f drivers/base/power/domain.c Ulf Hansson     2017-03-20  868  	 * (1) The domain is configured as always on.
+ffaa42e8a40b7f drivers/base/power/domain.c Ulf Hansson     2017-03-20  869  	 * (2) When the domain has a subdomain being powered on.
+ffaa42e8a40b7f drivers/base/power/domain.c Ulf Hansson     2017-03-20  870  	 */
+ed61e18a4b4e44 drivers/base/power/domain.c Leonard Crestez 2019-04-30  871  	if (genpd_is_always_on(genpd) ||
+ed61e18a4b4e44 drivers/base/power/domain.c Leonard Crestez 2019-04-30  872  			genpd_is_rpm_always_on(genpd) ||
+ed61e18a4b4e44 drivers/base/power/domain.c Leonard Crestez 2019-04-30  873  			atomic_read(&genpd->sd_count) > 0)
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  874  		return -EBUSY;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  875  
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  876  	/*
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  877  	 * The children must be in their deepest (powered-off) states to allow
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  878  	 * the parent to be powered off. Note that, there's no need for
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  879  	 * additional locking, as powering on a child, requires the parent's
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  880  	 * lock to be acquired first.
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  881  	 */
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  882  	list_for_each_entry(link, &genpd->parent_links, parent_node) {
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  883  		struct generic_pm_domain *child = link->child;
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  884  		if (child->state_idx < child->state_count - 1)
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  885  			return -EBUSY;
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  886  	}
+e7d90cfac5510f drivers/base/power/domain.c Ulf Hansson     2022-02-17  887  
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  888  	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  889  		/*
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  890  		 * Do not allow PM domain to be powered off, when an IRQ safe
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  891  		 * device is part of a non-IRQ safe domain.
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  892  		 */
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17 @893  		if (!pm_runtime_suspended(pdd->dev) ||
+7a02444b8fc25a drivers/base/power/domain.c Ulf Hansson     2022-05-11  894  			irq_safe_dev_in_sleep_domain(pdd->dev, genpd))
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  895  			not_suspended++;
+f0f6da10152fb8 drivers/pmdomain/core.c     Ulf Hansson     2024-11-04  896  
+f0f6da10152fb8 drivers/pmdomain/core.c     Ulf Hansson     2024-11-04  897  			/* The device may need its PM domain to stay powered on. */
+f0f6da10152fb8 drivers/pmdomain/core.c     Ulf Hansson     2024-11-04  898  			if (to_gpd_data(pdd)->rpm_always_on)
+f0f6da10152fb8 drivers/pmdomain/core.c     Ulf Hansson     2024-11-04  899  				return -EBUSY;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  900  	}
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  901  
+3c64649d1cf9f3 drivers/base/power/domain.c Ulf Hansson     2017-02-17  902  	if (not_suspended > 1 || (not_suspended == 1 && !one_dev_on))
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  903  		return -EBUSY;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  904  
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  905  	if (genpd->gov && genpd->gov->power_down_ok) {
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  906  		if (!genpd->gov->power_down_ok(&genpd->domain))
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  907  			return -EAGAIN;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  908  	}
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  909  
+2c9b7f8772033c drivers/base/power/domain.c Ulf Hansson     2018-10-03  910  	/* Default to shallowest state. */
+2c9b7f8772033c drivers/base/power/domain.c Ulf Hansson     2018-10-03  911  	if (!genpd->gov)
+2c9b7f8772033c drivers/base/power/domain.c Ulf Hansson     2018-10-03  912  		genpd->state_idx = 0;
+2c9b7f8772033c drivers/base/power/domain.c Ulf Hansson     2018-10-03  913  
+f63816e43d9044 drivers/base/power/domain.c Ulf Hansson     2020-09-24  914  	/* Don't power off, if a child domain is waiting to power on. */
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  915  	if (atomic_read(&genpd->sd_count) > 0)
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  916  		return -EBUSY;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  917  
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  918  	ret = _genpd_power_off(genpd, true);
+c6a113b52302ad drivers/base/power/domain.c Lina Iyer       2020-10-15  919  	if (ret) {
+c6a113b52302ad drivers/base/power/domain.c Lina Iyer       2020-10-15  920  		genpd->states[genpd->state_idx].rejected++;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  921  		return ret;
+c6a113b52302ad drivers/base/power/domain.c Lina Iyer       2020-10-15  922  	}
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  923  
+49f618e1b669ef drivers/base/power/domain.c Ulf Hansson     2020-09-24  924  	genpd->status = GENPD_STATE_OFF;
+afece3ab9a3640 drivers/base/power/domain.c Thara Gopinath  2017-07-14  925  	genpd_update_accounting(genpd);
+c6a113b52302ad drivers/base/power/domain.c Lina Iyer       2020-10-15  926  	genpd->states[genpd->state_idx].usage++;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  927  
+8d87ae48ced2df drivers/base/power/domain.c Kees Cook       2020-07-08  928  	list_for_each_entry(link, &genpd->child_links, child_node) {
+8d87ae48ced2df drivers/base/power/domain.c Kees Cook       2020-07-08  929  		genpd_sd_counter_dec(link->parent);
+8d87ae48ced2df drivers/base/power/domain.c Kees Cook       2020-07-08  930  		genpd_lock_nested(link->parent, depth + 1);
+8d87ae48ced2df drivers/base/power/domain.c Kees Cook       2020-07-08  931  		genpd_power_off(link->parent, false, depth + 1);
+8d87ae48ced2df drivers/base/power/domain.c Kees Cook       2020-07-08  932  		genpd_unlock(link->parent);
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  933  	}
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  934  
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  935  	return 0;
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  936  }
+1f8728b7adc4c2 drivers/base/power/domain.c Ulf Hansson     2017-02-17  937  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
