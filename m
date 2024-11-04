@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-16993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F769BBCAA
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 18:57:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0647B9BBCA3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 18:57:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADC0C1C21704
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 17:57:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA7942816C8
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 17:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFEA1D270D;
-	Mon,  4 Nov 2024 17:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F2EC1D1F70;
+	Mon,  4 Nov 2024 17:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="C3m9dWgJ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rSo48iHW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2084.outbound.protection.outlook.com [40.107.236.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02AD1D1E8E;
-	Mon,  4 Nov 2024 17:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FFD1D173E;
+	Mon,  4 Nov 2024 17:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.84
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730742897; cv=fail; b=E7vEPb/1aIbZ2DZxwQYPrgANT8uhY1bIKEEU2HkHkwFiiu87Gluf4u8h+i/6iPGtF66I+ql8AWC0R6FbKT4Aj4tkdkP6OKXK5zqioQUYnA6LfFRmYsCLeB5H2d2URTWnLgBIzOrBLAvLGJNOf/BB/MXcJp6T07Pnp77yGLmcTww=
+	t=1730742896; cv=fail; b=FlTgwzzirFk3/1v1E2Enoz96c6yaSWbkK7HXXyapgD7RhTwl/8ZFJ7SSaNom/FNvknd9ina5c9cujme+sYCM0Q2BabmUmXJJGwGgsyo6PCxqbwbr3h5aRN8vCbxZSuj6aRDbn4dYOb3p6z9/2LQ7grW6crNvi2WhvUeNND6YXqY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730742897; c=relaxed/simple;
-	bh=10H316tACHv9yeq3U6t3bQxdz2Rbs/5sYYPeNWMmITY=;
+	s=arc-20240116; t=1730742896; c=relaxed/simple;
+	bh=HUwctRrds1tf6FMB+v0b8kBmsw1qxyTR1Ve3yh0HTaE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p6fZ7LjXmqgMkQUW+r2ksGsrmL1YMnWgu9UAu09rvZuZGZPvzs2Bh8bX/5ogP/w0WS1BB/phzjWE3oRKAtgTFUVtzHpufsnDYgvCXbdGxRuAg6i1c3hrRYHAVY5heMDjQjOjShijdjZcjvEoszcDSQBS8eOoAgBF9qWsPtIuuPI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=C3m9dWgJ; arc=fail smtp.client-ip=40.107.244.69
+	 MIME-Version:Content-Type; b=PwaafgCqSEJ+Iog/YSJT/HNodvB8ileDVAG4+K4rj/x1sbxmWhQMDdlU+VibIFUVBrUfRr+IHb61Or+rhURy0hxzevfa135McoIiFRyCM2x97tSDT+1/iYw4umJBLEVlgIiTR6NBT58Mksb1+lsgJik5ZaC02MaALbXmhYSdhOI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rSo48iHW; arc=fail smtp.client-ip=40.107.236.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gFhN57YT3dSSjgbL46CGXmrVXeteetPYHA4wfLdiQIbEYEdFFyVS3xfViOl+1dE6TsqL2jt4RZZ0SKXR1bXIvbdp2XYgWt0yWVn53ds4bAlgX9+xBnjdLkhi80MWL4AK/EGpJsVKzKMn/FZm+5rq2V2vd18X9a5MBvv9Aud3aslKvnhO5enOKlvOJZbkG+5NGzcWIIHyvMer6EWUl3mQf/5I0ev4jOqmjQHTh5EKcDNVquWHwnJzNOilIlAWZGk1wrIEdpFOLm0hUOxA0WDaamyQ/5KG3IibBQ8PF7dThFYbKHp0GzDqHJiXo/yvQDeoS1sCJTzKgAQZ7b2dp6TcTA==
+ b=CUjEVJo4VbZGHoMqGCNAVfHSt0uGBYTTB0tPJmUDWw1ybu53HoCPQicxQUCuGYjaiHbq8jZ7VdxSmU2c1IcYeGt9jIYFt4Sx9Q19FuZ5k+fFZnv1uT1b2GTkIu2RCPnZhY9BAn8eXCiM1uk+v9vMQcTS1C3NZHocgi6dZ6Oakx0PmUA79zYv6+/C8fURZ+kIkfm2FrZjuzQ5jD/5mMSzvq5NrH8a2hRfp2Dp++n955pRN8fkk3KjzTNMRjK1tXzy4+y2auUKMbfkrIms7+b92nI3urV/HdQNScNvB/xCGCQWFplGRN5oj+trayzPkEuuTtA9SQAl+pXUrg6Qt5zC8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=esECsZTZzmpe+mXpfNUyZtWMv9UTjO2lrfk4s3FUxX0=;
- b=bpBEr6Rm5NyNUb1YySxKnv6o92+hN054Te32dhiUhdp/Rwo/NzXtRXvil2jyEy4k7QlfxnmKlYxn8cIK6erjIWsn6go8rg9Xja1FeQcQOVKhPIwqtxbxZNlX0IXkNVPleyqN4MFxgSvrihg89X7YM5DLqnuJOZm5+fSvTdboaVPtKvSIPSf49tvTd//Kv9+o6QgH+d5a3oIjIeF7qHRejll3+y8p5RuAqLs4f/YBKjPTAotttRHKtdg/wqiiywPAdGYasXP6AIsP08IbqYiTgeJXotZzhiMmgRnHacyh7u9D7r5LiAPCvzZ5ra5qEeBt8Ouh5WGz1rG4LqgXgCmr9g==
+ bh=FdX9qPVfi9PzCLqtqgVMNGtMH6DibVFFwW20tp2VzLY=;
+ b=vX57CBTrQWSEEnwlSJmTP5XjrEiz+zoI+VFKuUBL4qPquLCn5JPbqoPUEDT1In6TwivAtVJLNl3omBacaRyh8USdB6OJxJCSU1UzMzVGgUk081hR70wwddUBGjweAyjQLWEe3s9C7KlozJ3KMWQ6ulT1CFnkpZLlcKDNfUsqMNpvmPIibuhPYSlSnFD1AVDn5zP0Cdr8UZMxFAqfYPpyO5Cl42VEzUwuaaEXwYCTB0VX29UjmbB1OjX5cFiXTzNoWUsBWYM+2CJxNZZ5/mXnKW+mTftUmli3ARrgA1meX0Q66aCH7NaI1Q+AW2L8ms0M2KO63ZUKFCM5Pe+8WAc9+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=esECsZTZzmpe+mXpfNUyZtWMv9UTjO2lrfk4s3FUxX0=;
- b=C3m9dWgJ03ae8PS3abz8tTY3Uff1yZVWV1NAyKzhx3MwFG9UnnCKibcRCnZGcQq3KpQeEF1fbPMgC7S30Dw1qfnDdpPeKx4646YVscwo/LQENAFxWA+heQ0E1q3kGuUMk5De7xQLtk7v28vyr+SO4UTGTYtdAWpqA2ppH47brNk=
-Received: from BY3PR03CA0025.namprd03.prod.outlook.com (2603:10b6:a03:39a::30)
- by BY5PR12MB4212.namprd12.prod.outlook.com (2603:10b6:a03:202::8) with
+ bh=FdX9qPVfi9PzCLqtqgVMNGtMH6DibVFFwW20tp2VzLY=;
+ b=rSo48iHWlqXD/2oR1Wz9/oyVukg/wzQKX6KY0dBZpI+EJ6gwe5erIUQ1A/aMsLtq/mEjWOl5Yh613jSmhHjwJAxDtsitKCmSJoQt2hS5USDT+OAzR2SftWhl01h+BPVhfKUDJWjZspcKZZo3/btv8VwEWWV6Lu6ZSvI9eBTjrx4=
+Received: from BY3PR03CA0005.namprd03.prod.outlook.com (2603:10b6:a03:39a::10)
+ by PH7PR12MB7968.namprd12.prod.outlook.com (2603:10b6:510:272::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Mon, 4 Nov
- 2024 17:54:49 +0000
+ 2024 17:54:50 +0000
 Received: from SJ1PEPF00002312.namprd03.prod.outlook.com
- (2603:10b6:a03:39a:cafe::d9) by BY3PR03CA0025.outlook.office365.com
- (2603:10b6:a03:39a::30) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:a03:39a:cafe::f4) by BY3PR03CA0005.outlook.office365.com
+ (2603:10b6:a03:39a::10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30 via Frontend
- Transport; Mon, 4 Nov 2024 17:54:49 +0000
+ Transport; Mon, 4 Nov 2024 17:54:50 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,7 +65,7 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SJ1PEPF00002312.mail.protection.outlook.com (10.167.242.166) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8137.17 via Frontend Transport; Mon, 4 Nov 2024 17:54:49 +0000
+ 15.20.8137.17 via Frontend Transport; Mon, 4 Nov 2024 17:54:50 +0000
 Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 4 Nov
@@ -78,9 +78,9 @@ CC: <x86@kernel.org>, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, "Mario
 	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
 	<linux-pm@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>, "Shyam
  Sundar S K" <Shyam-sundar.S-k@amd.com>
-Subject: [PATCH v6 10/12] cpufreq/amd-pstate: Disable preferred cores on designs with workload classification
-Date: Mon, 4 Nov 2024 11:54:05 -0600
-Message-ID: <20241104175407.19546-11-mario.limonciello@amd.com>
+Subject: [PATCH v6 11/12] platform/x86/amd: hfi: Set ITMT priority from ranking data
+Date: Mon, 4 Nov 2024 11:54:06 -0600
+Message-ID: <20241104175407.19546-12-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241104175407.19546-1-mario.limonciello@amd.com>
 References: <20241104175407.19546-1-mario.limonciello@amd.com>
@@ -96,81 +96,107 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002312:EE_|BY5PR12MB4212:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f5d05bb-9fd4-4c00-f70a-08dcfcf9c71a
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002312:EE_|PH7PR12MB7968:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8de2f22-52ee-4bb2-0746-08dcfcf9c76c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014;
+	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?I9B2Wt5CceGHO6bv4gYlinzOyPNGRQRH2+k2RacPrT53AlWyKRw2LvsXXzvL?=
- =?us-ascii?Q?wRNlvi0lv/83TqubP/2YSAb1ed3ftqhoShaqXl2RdMZuqVnxaZ5ByjqKgckk?=
- =?us-ascii?Q?KFkpTRRZ2bKMywalftQXUjUcdd7sag+qBUaPFZj4Hy9FYKuOAsqWMCaQ3gOO?=
- =?us-ascii?Q?VIKjbO/434NQcpXbSx3zr1jq3iYwv8Li2HGQJtZ1dsM2t3YCLgMNCwFC/RbS?=
- =?us-ascii?Q?CkBmN28le3KKie1C6u3oKG+ktmLD/oddBUz3GxDt3tNB8gm96IsHGWOz0GFC?=
- =?us-ascii?Q?hBl2DOkEjm9DjixieBPZGAtBh70vGwfh68N2MGfcRlSIrcSADqmdwOMrjsrM?=
- =?us-ascii?Q?ZjTBnH/jFPCD4CcOfWuyfNgYRg74+svxVyT1nmYqAYNEeT77aGJdgZO831/m?=
- =?us-ascii?Q?sYkdGtnGOiFYvg/hd3O36K8KNCRmQb8AXLHvk3EvusvpndokCpsPolER1HKe?=
- =?us-ascii?Q?t4Z1Wk2Atq6YSDmecLNayquIM06VHoHd8SX5p0TLw8J5dSl+ZiYIYDjQcrYi?=
- =?us-ascii?Q?0XCUcs+m26V4SVzvR2jM8mYbcgMYI8hQVmwJY8sjI6HLPd4fHc5/QXt6sfNj?=
- =?us-ascii?Q?f05Lt10mUsvtW8LedM5avQyM8xz6t4cDDYWJvAoUVwx3dvQbZVAdjfTdqVNj?=
- =?us-ascii?Q?CQPdp+ZBotbJEUOk72uA67802xRlqjl68pnWsLUBbrZcPWRbkPoa11ghq4QN?=
- =?us-ascii?Q?lDKsZXggTPzjXL3uDSKKjth1xOOOMuUePXtLFyE7zFD7f1bGsNCz5sV42vnh?=
- =?us-ascii?Q?DMFspXO85T2829Gd3xyt1MgZd7zIYFvNxMg0WKOKVRCKhtEPtb893hude7Sz?=
- =?us-ascii?Q?ln1jchsAbKiIGsojGYN+1AMIKUKH/GoSyhG/+1V3Qp5yvnCPt+pG8nC8P/pu?=
- =?us-ascii?Q?ASvimMg2xTQoIUcVXNszYawSK37jngQm6nW+Z6KQqwcPAvi6gxPsxM9JPT6n?=
- =?us-ascii?Q?m7ws9dsy8DWxCHNUo424sbCk+2mYMQrg1HIJ91r+wn9EOfr7rYqIkzIG0GCf?=
- =?us-ascii?Q?SILBpguXCwIOF1UHRUR8xJ/Q1SpngEx+4tJqTDZ5iXuQLT0vKKyDC+dM9vDy?=
- =?us-ascii?Q?FHApMxFFpWq2Ki7WiMpFC+cNq8wRQMjOX88dlrzTZg5k7vEkeh+SOxppM2Ae?=
- =?us-ascii?Q?YHBNvcphP/f5eCB4xhy2Zo0tWPI0MhraIDwn7JlZ1WfuAL2apcsvGg7eCve+?=
- =?us-ascii?Q?aoDFMC6y8EBOkpcWfmT4oJaJvam+vq7coAoA/PkBtkukpdY9Izx96PqfEZDl?=
- =?us-ascii?Q?mjdbezX/Pqbira+BUr5FXDU5G7EKXhZxs+kgDExx4NQSYc4FBFdNp40I+kO1?=
- =?us-ascii?Q?vtKHN2qv6mG25kPHL8mnNjgsqJvKR2Qi6TQIw95uml6oupvCB/PKUXxSC34n?=
- =?us-ascii?Q?0j1WAGcWYdYHOe2gWkbdwJlchuzb/G386SUN1mXk0D2tqaHkiA=3D=3D?=
+	=?us-ascii?Q?suZauJVZ+FPD8E7xPCi6xsfJ6j7Sk0pX085AHT9S+mj8r6yRefVilVncmqlo?=
+ =?us-ascii?Q?xP1foIdDEVShk0UhmC4lpbTgjAnY8TvUsMT80IyNJzipod8rLzgNhXQ4ZnOn?=
+ =?us-ascii?Q?K198ts21bx65JyzxCnqQLp1ynI6cCtKushufisR5SkN6LxGfkIBeha3xUL/U?=
+ =?us-ascii?Q?7bMqgNp2UiUYpBh5vw/E7k7I4WYdMLTI0uTO9GcVbPTcDVk/YV607CBsguUT?=
+ =?us-ascii?Q?Pg30P2DDWnER2HPyd4A1IL+PSL0YE8VUMy372P0JidXM5oddxYPaioxKGnso?=
+ =?us-ascii?Q?8BmkjFLLXmDcO8jGNcpqUykYq9+ikaPyFrMe6Ms7tVXVY1EG0Q2+LY9vkuoj?=
+ =?us-ascii?Q?dFGHsLrp+Lq1LecSmCuzYnx5O+aeB/AGreGv7YbZv4YinsV5TAM2hZ239YAL?=
+ =?us-ascii?Q?guJdYfxBsoICiUZrrxwOTstb+HjBKk0sSln2cYBOVbqtSy83qe5ocRGvTjnU?=
+ =?us-ascii?Q?AHnyclrSyoovlMTeMV1/r98TXuAO/2DYKKAlkZfiiS4C9AnTVfKvhogrIc7s?=
+ =?us-ascii?Q?R3BsHYLSpzaTfr7ax3nkfJrkfriwILxKCKQPQTunTgt/4YaJkZgVoy90zXWb?=
+ =?us-ascii?Q?Gl/TkRM+tn6UNscTQNDuEX+9dMs375SnxA44wuFO70q4lIWYJ7oICeBABHtj?=
+ =?us-ascii?Q?gvpfJtLPXDKkdh7NIkQXSK/J8fbrrIHtBhaXE3PX+93mrpvYcmrmPTuTnqib?=
+ =?us-ascii?Q?c/34F3bD9jbiREXd2x/62MTq5aRJpdyke1gXee6avqBYCAPrLry0vgwH3NkN?=
+ =?us-ascii?Q?tB2cpbb8SdkEMhOy+ZsTNXUVkKeDWUDP2keB8n5eTnYW4TK1NGSdu15bPKxk?=
+ =?us-ascii?Q?j6M2fVouLVw6gvJmRYU5Sz8jIlk14Ixx3IT0fIcUwr8Yt8dlA0a+3PSFQ0zP?=
+ =?us-ascii?Q?2V4Zel3BjZHxFxL3Jx1y/gMU9CsbX39PNRnh2S4ksk5+mCdIIKcbRiY48RRO?=
+ =?us-ascii?Q?HLLtu2n3oByBU1Hw6+18pl1gw6TYvTBHFosBy8+kZbcMMWqhEOMOCbUPjx1v?=
+ =?us-ascii?Q?o8bLaJIrh51I1DNZ4nJjQia4dPimNgA2TM+v63BpQoUrGYUugUd7/TlhS4ab?=
+ =?us-ascii?Q?CtixvmhSRtMK3VYY3rYjIuG32ln/vFcrTItFpGKnZzvu6jmQQe/4nXCuS4QR?=
+ =?us-ascii?Q?y5crcklXRvHPUZvCEan31u/z/MdsF9WoDUPL+zCSSkpZlx/UoGPch2YPEZoF?=
+ =?us-ascii?Q?W3DH/uzt0cBD3U8TAwwkFO6umaeJwYIg/+ODLxe+1+pPzCu8n4i9d8tAFYXp?=
+ =?us-ascii?Q?46Vf8lRnCARr9ZDuvNq0MegH4LRS62+v1VlB5qWtE1qmjBigQyCLV/3iWE3j?=
+ =?us-ascii?Q?x6ehZ20p5qEdaL1N1nfPCkJCwH6wtPZn/3yjOoMxWnxmxd/2WTmRkLGloI0j?=
+ =?us-ascii?Q?uB1b1mfX/71FMfTsw3osTR6Cjv52ST5W8+pqmVn+QKKyRbVwKg=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2024 17:54:49.5694
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2024 17:54:50.1007
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f5d05bb-9fd4-4c00-f70a-08dcfcf9c71a
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8de2f22-52ee-4bb2-0746-08dcfcf9c76c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ1PEPF00002312.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4212
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7968
 
-On designs that have workload classification, it's preferred that
-the amd-hfi driver is used to provide hints to the scheduler of
-which cores to use instead of the amd-pstate driver.
+The static ranking data that is read at module load should be used
+to set up the priorities for the cores relative to the performance
+values.
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Reviewed-by: Perry Yuan <perry.yuan@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v6:
- * Use cpu_feature_enabled
----
- drivers/cpufreq/amd-pstate.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/platform/x86/amd/hfi/Kconfig |  1 +
+ drivers/platform/x86/amd/hfi/hfi.c   | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 32ddbf37a9f0a..84840666f1d3e 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -780,6 +780,12 @@ static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata)
- 	/* user disabled or not detected */
- 	if (!amd_pstate_prefcore)
- 		return;
-+	/* should use amd-hfi instead */
-+	if (cpu_feature_enabled(X86_FEATURE_AMD_WORKLOAD_CLASS) &&
-+	    IS_ENABLED(CONFIG_AMD_HFI)) {
-+		amd_pstate_prefcore = false;
-+		return;
-+	}
+diff --git a/drivers/platform/x86/amd/hfi/Kconfig b/drivers/platform/x86/amd/hfi/Kconfig
+index 79e3b0073275c..5b7c2865f4aa9 100644
+--- a/drivers/platform/x86/amd/hfi/Kconfig
++++ b/drivers/platform/x86/amd/hfi/Kconfig
+@@ -7,6 +7,7 @@ config AMD_HFI
+ 	bool "AMD Hetero Core Hardware Feedback Driver"
+ 	depends on ACPI
+ 	depends on CPU_SUP_AMD
++	depends on SCHED_MC_PRIO
+ 	help
+ 	 Select this option to enable the AMD Heterogeneous Core Hardware Feedback Interface. If
+ 	 selected, hardware provides runtime thread classification guidance to the operating system
+diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
+index cef6aa84bd85e..09905a354efdd 100644
+--- a/drivers/platform/x86/amd/hfi/hfi.c
++++ b/drivers/platform/x86/amd/hfi/hfi.c
+@@ -115,6 +115,12 @@ static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index =
  
- 	cpudata->hw_prefcore = true;
+ static DEFINE_MUTEX(hfi_cpuinfo_lock);
+ 
++static void amd_hfi_sched_itmt_work(struct work_struct *work)
++{
++	sched_set_itmt_support();
++}
++static DECLARE_WORK(sched_amd_hfi_itmt_work, amd_hfi_sched_itmt_work);
++
+ static int find_cpu_index_by_apicid(unsigned int target_apicid)
+ {
+ 	int cpu_index;
+@@ -234,6 +240,8 @@ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
+ 		WRITE_ONCE(hfi_cpuinfo->ipcc_scores[i],
+ 			   hfi_cpuinfo->amd_hfi_classes[i].perf);
+ 
++	sched_set_itmt_core_prio(hfi_cpuinfo->ipcc_scores[0], cpu);
++
+ 	return 0;
+ }
+ 
+@@ -453,6 +461,8 @@ static int amd_hfi_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	schedule_work(&sched_amd_hfi_itmt_work);
++
+ 	return 0;
+ }
  
 -- 
 2.43.0
