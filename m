@@ -1,301 +1,164 @@
-Return-Path: <linux-pm+bounces-16912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3601E9BAC5D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 07:10:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC1F69BACA4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 07:38:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A5D31C20380
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 06:10:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 472171F221FA
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 06:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89AE18C012;
-	Mon,  4 Nov 2024 06:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D22A18CC10;
+	Mon,  4 Nov 2024 06:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QPHDYCKd"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="nZcjlJE2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30226FC5;
-	Mon,  4 Nov 2024 06:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E025C1741E0;
+	Mon,  4 Nov 2024 06:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730700609; cv=none; b=d+ZoVGGJ7zvUXcm2T4ubDQx6oUnEoSnUXiwVc3ArY6aKCHjqofz39CwItR0lMs0yp5yvIL3Z+NXJNmaCC4EmGtdG/k6ief+cBoxRnZQoeLLJaDnNdhNqPjxoDF94NN9Dit85hYkQBHhjBN4m8ukxWV6fV65ykLHMQ16RUhkM9w8=
+	t=1730702327; cv=none; b=A5iFKE2vGHb4Uf9LOyvd+whrdNf7ZoJBHjkE/IZ1Kw8+0J3r1AMXlRAXGxOKDtvNU3iO1GODkb3lRrgXrel3qOCCOX0T9RU4Nxrp7WEwNK0fK/c6PykYms/MlU0oK5dgAJ6c+SuIy/ko7ow7CyrK0BM9vL3nSxT2Gz2TufUqm/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730700609; c=relaxed/simple;
-	bh=O31O2O5Ml9DeUY+KrstEERdkkjDklegiNijd/LOR5Sk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=FOaTIZUIvAdMr1SyPrHJqraC2KflIZYMXq3d7yTRxhcT4HvjkcTQ9NIm+QWCok7+iuOqdPC14hU/Xbvt8zyCkVuWVVrQkWmCmo9BkqrXuBRr4lwTzqwlggwBcpKoHIgGWIeBDifxuEmD22vww/u56cVbWZD0ptbbeUbMZQCTCCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QPHDYCKd; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A3Nmqms007472;
-	Mon, 4 Nov 2024 06:09:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	sUEJwqIyHQe/eNtDprQ+WF121QuOoETVna1GcAuX+eU=; b=QPHDYCKdJt828Z+2
-	kki706orZdDmVzjxCgD+UX6rQrITSLRwubhqaQQtofr6erCJLyy46i6gFotg9HPw
-	kmdY8zWoge0/VXse2lS3rYvgXR6mfHX16fK7Qs6OWkjldkG5HWOgVev9Hr6O/8VM
-	wK21UMeaaVCeWHe6VgMqIZu9d4JWdR9kdjT/pvqpV9weY9JhRprx57j3cv1XCGrR
-	kWg8uS3iXY7MObt5sMoVLFE20XIE4+qd/El3aqaEexMDzywBmVCj1U2VAzAM/CL+
-	sXJSYkwrP/Zb9t7sVw+J+ZnTyK+PaC5FLSlg5aD63YTaBWEs9n2pekgA9CXDXtdk
-	2YYJOg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd2s37s8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 06:09:40 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A469cK2007605
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 4 Nov 2024 06:09:39 GMT
-Received: from [10.216.5.99] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 3 Nov 2024
- 22:09:34 -0800
-Message-ID: <629873af-74f1-0c31-5239-b2703fe6405a@quicinc.com>
-Date: Mon, 4 Nov 2024 11:39:31 +0530
+	s=arc-20240116; t=1730702327; c=relaxed/simple;
+	bh=Fdh28i9yaL2QRgsXLb9NyUvhop4Ep0eQkAUyT/RTIUs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ivZGoP5dGiwlN30v5tfHinTnKtjV6kmGjet56gonrHbyxMS3uMe3BmnBepKbS+8p4CC6cvZSX9xPMgrgQgnSu/49031K4ulyEYTFbxaAr/PVAElV+4smBtAJKobwoK03frTuvnWlKREf2LY77VjXPwqLuqn2XB1bUxlEANwD8os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=nZcjlJE2; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4A46cLcE057212;
+	Mon, 4 Nov 2024 00:38:21 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1730702301;
+	bh=nGVz5KejI+6GMQUMN3KYKvT7myfaxUoc/i4p+RM9ypI=;
+	h=From:To:CC:Subject:Date;
+	b=nZcjlJE2WqciqJjHksmXiRxrbAMM7mRxyb86cqdanUPb1aT7ZE/R5fKJIl9zGhLbW
+	 8CXjSqZ4Eqyl/SkNeQ+PwdByUbZh/aFUQWP9eLvJ92m+CC71y/RxQy/UMjv+L+9esq
+	 jXV38vPcsrCmy5QnwoILsLkvyIXroRVyQpHYplNk=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A46cL9m106737;
+	Mon, 4 Nov 2024 00:38:21 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 4
+ Nov 2024 00:38:21 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 4 Nov 2024 00:38:21 -0600
+Received: from lcpd911.dhcp.ti.com (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A46cHVi123048;
+	Mon, 4 Nov 2024 00:38:18 -0600
+From: Dhruva Gole <d-gole@ti.com>
+To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Dhruva Gole <d-gole@ti.com>, Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Bryan Brattlof <bb@ti.com>,
+        Wadim Egorov
+	<w.egorov@phytec.de>
+Subject: [PATCH V3] arm64: dts: ti: k3-am62: use opp_efuse_table for opp-table syscon
+Date: Mon, 4 Nov 2024 12:07:08 +0530
+Message-ID: <20241104063707.3604302-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v6 2/2] PCI: Enable runtime pm of the host bridge
-To: Bjorn Helgaas <helgaas@kernel.org>
-CC: Kevin Xie <kevin.xie@starfivetech.com>,
-        Lorenzo Pieralisi
-	<lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?=
-	<kw@linux.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "Rob Herring" <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        <Markus.Elfring@web.de>, <quic_mrana@quicinc.com>, <rafael@kernel.org>,
-        <m.szyprowski@samsung.com>, <linux-pm@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20241101222019.GA1318435@bhelgaas>
-Content-Language: en-US
-From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20241101222019.GA1318435@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: x91juxvf9rHHA_HdXc-ZrGVh5K_kJ7O2
-X-Proofpoint-GUID: x91juxvf9rHHA_HdXc-ZrGVh5K_kJ7O2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 mlxscore=0 malwarescore=0
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2411040053
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
+Add another entry in the wkup_conf for the syscon node, and then use
+that for the syscon in opp-table.
 
+Marking entire wkup_conf as "syscon", "simple-mfd" is wrong and needs to
+be addressed similar to how other child-nodes in wkup_conf are implemented
+in the same file.
 
-On 11/2/2024 3:50 AM, Bjorn Helgaas wrote:
-> On Fri, Nov 01, 2024 at 07:04:46AM +0530, Krishna Chaitanya Chundru wrote:
->> On 10/29/2024 9:05 PM, Bjorn Helgaas wrote:
->>> On Thu, Oct 17, 2024 at 09:05:51PM +0530, Krishna chaitanya chundru wrote:
->>>> The Controller driver is the parent device of the PCIe host bridge,
->>>> PCI-PCI bridge and PCIe endpoint as shown below.
->>>>
->>>>           PCIe controller(Top level parent & parent of host bridge)
->>>>                           |
->>>>                           v
->>>>           PCIe Host bridge(Parent of PCI-PCI bridge)
->>>>                           |
->>>>                           v
->>>>           PCI-PCI bridge(Parent of endpoint driver)
->>>>                           |
->>>>                           v
->>>>                   PCIe endpoint driver
->>>>
->>>> Now, when the controller device goes to runtime suspend, PM framework
->>>> will check the runtime PM state of the child device (host bridge) and
->>>> will find it to be disabled. So it will allow the parent (controller
->>>> device) to go to runtime suspend. Only if the child device's state was
->>>> 'active' it will prevent the parent to get suspended.
->>>>
->>>> It is a property of the runtime PM framework that it can only
->>>> follow continuous dependency chains.  That is, if there is a device
->>>> with runtime PM disabled in a dependency chain, runtime PM cannot be
->>>> enabled for devices below it and above it in that chain both at the
->>>> same time.
->>>>
->>>> Since runtime PM is disabled for host bridge, the state of the child
->>>> devices under the host bridge is not taken into account by PM framework
->>>> for the top level parent, PCIe controller. So PM framework, allows
->>>> the controller driver to enter runtime PM irrespective of the state
->>>> of the devices under the host bridge. And this causes the topology
->>>> breakage and also possible PM issues like controller driver goes to
->>>> runtime suspend while endpoint driver is doing some transfers.
->>>>
->>>> Because of the above, in order to enable runtime PM for a PCIe
->>>> controller device, one needs to ensure that runtime PM is enabled for
->>>> all devices in every dependency chain between it and any PCIe endpoint
->>>> (as runtime PM is enabled for PCIe endpoints).
->>>>
->>>> This means that runtime PM needs to be enabled for the host bridge
->>>> device, which is present in all of these dependency chains.
->>>
->>> Earlier I asked about how we can verify that no other drivers need a
->>> change like the starfive one:
->>> https://lore.kernel.org/r/20241012140852.GA603197@bhelgaas
->>
->> I added those details in cover letter as you suggested to add them in
->> cover letter.
-> 
-> Indeed I did suggest it for the cover letter, sorry for my confusion
-> at not finding it in the commit log.
-> 
-> I actually think we need something in the patch commit log itself,
-> since the cover letter doesn't make it into git.
-> 
-> And probably a comment in the code as well, since this seems to change
-> the requirements on the callers of pci_host_probe().
-> 
-ack
->> "PM framework expectes parent runtime pm enabled before enabling runtime
->> pm of the child. As PCIe starfive device is enabling runtime pm after
->> the pci_host_probe which enables runtime pm of the child device i.e for
->> the bridge device a warning is shown saying "pcie-starfive 940000000.pcie:
->> Enabling runtime PM for inactive device with active children" and also
->> shows possible circular locking dependency detected message.
->>
->> As it is must to enable parent device's runtime PM before enabling child's
->> runtime pm as the pcie-starfive device runtime pm is enabled after child
->> runtime starfive device is seeing the warning.
->>
->> In the first patch fix the pcie-starfive driver by enabling runtime
->> pm before calling pci_host_probe().
->>
->> All other PCIe controller drivers are enabling runtime pm before
->> calling pci_host_probe() which is as expected so don't require any
->> fix like pcie-starfive driver."
-> 
-> I'm sure that you looked at the following paths through
-> pci_host_common_probe(), which as far as I can tell, do not call
-> pm_runtime_enable() before pci_host_probe():
-> 
->    apple_pcie_probe
->      pci_host_common_probe
->        pci_host_probe
-> 
->    mc_host_probe
->      pci_host_common_probe
->        pci_host_probe
-> 
-> And the following use pci_host_common_probe() directly as their
-> .probe() method:
-> 
->    gen_pci_driver in pci-host-common.c
->    thunder_ecam_driver in pci-thunder-ecam.c
->    thunder_pem_driver in pci-thunder-pem.c
->    hisi_pcie_almost_ecam_driver in dwc/pcie-hisi.c
->    
-> Are all these safe as well?  These all end up in pci_host_probe()
-> without having done anything to enable runtime PM on the
-> PCIe controller platform_device.
-> 
-these drivers are not calling runtime_pm_enable in their drivers and
-due to that it will not have any impact on these drivers.
-> Looking at your diagram above, IIUC this patch enables runtime PM for
-> the PCIe host bridge, and the requirement is that runtime PM is
-> already enabled for the PCIe controller above it?
-> 
-> Is it always *possible* for that PCIe controller to enable runtime PM?
-> Might there exist PCIe controllers that cannot enable runtime PM
-> because they lack something in hardware or in the driver?
-> 
-> Maybe this patch should only enable runtime PM for the host bridge if
-> the controller already has runtime PM enabled?
-> 
-irrespective of the controller runtime pm, we can enable host bridge
-runtime pm. if the controller driver want to enable runtime pm they
-need to make sure runtime pm is enabled before we enable the runtime
-of the host bridge, otherwise it will not have any impact as they are
-not even registering with runtime pm here.
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
 
->>> I guess this sentence is basically how we verify all drivers are safe
->>> with this change?
->>>
->>> Since this patch adds devm_pm_runtime_enable() in pci_host_probe(),
->>> can we expand this along the lines of this so it's more specific about
->>> what we need to verify?
->>>
->>>     Every host bridge driver must call pm_runtime_enable() before
->>>     runtime PM is enabled by pci_host_probe().
->>>
->>> Please correct me if that's not the right requirement.>
->>
->> yes this is correct requirement only. Do you want us to add this for
->> this patch .
-> 
-> I would like to have a one-sentence statement of what the callers need
-> to do, including the actual function names.  Otherwise it's a pretty
-> big burden on reviewers to verify things.
-> 
-ack, once above discussions gets concluded I will send a new patch
-series with these details.
+Since the driver fixes for ti-cpufreq.c have made it in -next [1],
+The DT fixes for SK-AM62x can be supported with support for legacy
+style DT as well. This has been tested on SK-AM62x [2]
 
-- Krishna chaitanya
->>>> After this change, the host bridge device will be runtime-suspended
->>>> by the runtime PM framework automatically after suspending its last
->>>> child and it will be runtime-resumed automatically before resuming its
->>>> first child which will allow the runtime PM framework to track
->>>> dependencies between the host bridge device and all of its
->>>> descendants.
->>>>
->>>> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
->>>> ---
->>>> Changes in v6:
->>>> - no change
->>>> Changes in v5:
->>>> - call pm_runtime_no_callbacks() as suggested by Rafael.
->>>> - include the commit texts as suggested by Rafael.
->>>> - Link to v4: https://lore.kernel.org/linux-pci/20240708-runtime_pm-v4-1-c02a3663243b@quicinc.com/
->>>> Changes in v4:
->>>> - Changed pm_runtime_enable() to devm_pm_runtime_enable() (suggested by mayank)
->>>> - Link to v3: https://lore.kernel.org/lkml/20240609-runtime_pm-v3-1-3d0460b49d60@quicinc.com/
->>>> Changes in v3:
->>>> - Moved the runtime API call's from the dwc driver to PCI framework
->>>>     as it is applicable for all (suggested by mani)
->>>> - Updated the commit message.
->>>> - Link to v2: https://lore.kernel.org/all/20240305-runtime_pm_enable-v2-1-a849b74091d1@quicinc.com
->>>> Changes in v2:
->>>> - Updated commit message as suggested by mani.
->>>> - Link to v1: https://lore.kernel.org/r/20240219-runtime_pm_enable-v1-1-d39660310504@quicinc.com
->>>> ---
->>>>    drivers/pci/probe.c | 5 +++++
->>>>    1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
->>>> index 4f68414c3086..8409e1dde0d1 100644
->>>> --- a/drivers/pci/probe.c
->>>> +++ b/drivers/pci/probe.c
->>>> @@ -3106,6 +3106,11 @@ int pci_host_probe(struct pci_host_bridge *bridge)
->>>>    		pcie_bus_configure_settings(child);
->>>>    	pci_bus_add_devices(bus);
->>>> +
->>>> +	pm_runtime_set_active(&bridge->dev);
->>>> +	pm_runtime_no_callbacks(&bridge->dev);
->>>> +	devm_pm_runtime_enable(&bridge->dev);
->>>> +
->>>>    	return 0;
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(pci_host_probe);
->>>>
->>>> -- 
->>>> 2.34.1
->>>>
+[2] https://gist.github.com/DhruvaG2000/40b80cc04a9ac90c86445d6e67ece4cb
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/cpufreq/ti-cpufreq.c?id=1724ae88efcbcd0daeb203ffeb4a2c0e59f2ddf7
+
+Changelog:
+v3:
+- Update syscon@43000000 to say bus@...
+- Validated that these changes don't break U-Boot:
+https://gist.github.com/DhruvaG2000/2833b895dc79d5ce16265ecf15310add
+- Link to v2:
+https://lore.kernel.org/all/20241030044553.3225383-1-d-gole@ti.com/
+
+v2:
+- Deleted PATCH to Make the AM625 efuse_offset 0, because with [1] we no
+  longer break backward compatibility and hence need to preserve the old
+  offset.
+- Link to v1:
+  https://lore.kernel.org/linux-arm-kernel/20240902093222.2828345-3-d-gole@ti.com/
+
+---
+
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 9 +++++++--
+ arch/arm64/boot/dts/ti/k3-am625.dtsi       | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+index e0afafd532a5..9b8a1f85aa15 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+@@ -8,9 +8,9 @@
+ #include <dt-bindings/bus/ti-sysc.h>
+ 
+ &cbass_wakeup {
+-	wkup_conf: syscon@43000000 {
++	wkup_conf: bus@43000000 {
+ 		bootph-all;
+-		compatible = "syscon", "simple-mfd";
++		compatible = "simple-bus";
+ 		reg = <0x00 0x43000000 0x00 0x20000>;
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+@@ -22,6 +22,11 @@ chipid: chipid@14 {
+ 			reg = <0x14 0x4>;
+ 		};
+ 
++		opp_efuse_table: syscon@18 {
++			compatible = "ti,am62-opp-efuse-table", "syscon";
++			reg = <0x18 0x4>;
++		};
++
+ 		cpsw_mac_syscon: ethernet-mac-syscon@200 {
+ 			compatible = "ti,am62p-cpsw-mac-efuse", "syscon";
+ 			reg = <0x200 0x8>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am625.dtsi b/arch/arm64/boot/dts/ti/k3-am625.dtsi
+index c3d1db47dc9f..c249883a8a8d 100644
+--- a/arch/arm64/boot/dts/ti/k3-am625.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am625.dtsi
+@@ -108,7 +108,7 @@ cpu3: cpu@3 {
+ 	a53_opp_table: opp-table {
+ 		compatible = "operating-points-v2-ti-cpu";
+ 		opp-shared;
+-		syscon = <&wkup_conf>;
++		syscon = <&opp_efuse_table>;
+ 
+ 		opp-200000000 {
+ 			opp-hz = /bits/ 64 <200000000>;
+
+base-commit: dec9255a128e19c5fcc3bdb18175d78094cc624d
+-- 
+2.34.1
+
 
