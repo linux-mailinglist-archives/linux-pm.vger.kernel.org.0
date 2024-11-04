@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-16945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A9929BB4F6
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:46:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E051A9BB4FC
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC59D280F4D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 12:46:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68EC8B256BC
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 12:46:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C5431B85E2;
-	Mon,  4 Nov 2024 12:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B571C07E6;
+	Mon,  4 Nov 2024 12:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dqP+J86r"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DxkG2iQG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1059A1632C0;
-	Mon,  4 Nov 2024 12:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6021BA89B;
+	Mon,  4 Nov 2024 12:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730724314; cv=none; b=rpYVzXXySpu+bApx4BPqwyblKWXtYSW+bFaFF1awpyZM7YCoFBbpcJBcMxsPngHGJJkUm6AMhtPpzq8b7AplVhEv2qmOAo3GvU4zeKUvwk6k04PxvvusmyNU/Ia7+KjXnjE5BVHSNHtfjVVWHYtkyyRxQYnXEBkJXpo0YScIa+4=
+	t=1730724317; cv=none; b=rghjELRX1xCB50Ooqkx6qlAgMprMSDdffM5JUe2MT7Y6C78WIX65+g4jGJqwIR5qOCk5K3RC0kzGimXrYGLhMs1XkBfmbZw6wWCfdCn98lvSlby9ctL5YeSufsFp6WxuLIUs/NRAKNa0fM9DdRSBY5R5Rb/hEmnfHn2W04FIl54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730724314; c=relaxed/simple;
-	bh=pjvH9VijHcYq7JbMATDSD45EqXoep6i40aFZ3zUslYM=;
+	s=arc-20240116; t=1730724317; c=relaxed/simple;
+	bh=C/2zqgpBHAfBiPtoQq+E+yTexLhSRmy5YPwsZcI12Z0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iLhODwU+MojY3nCHio7KCweM3mapMAx1zulEHWwgNOM3yMYedbTOyhF9deFCLJk4VZ99xjGvFN+chnsrckR2qllbhiQDnxubtGRMcaXfT49Icj+HXs/lZ6AsfEuHbxN8hwyPkcwKWtuuwR0CS26lE1Le9N0sYCfYuZiT15McGaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dqP+J86r; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=BSD83JPuLbgBS0OLOqDcxmprFLeR6rSGiqfK+7+Scpjuuv9uG1oMzRShZpvBGIYcAJcH/QmLooRNKaOCyMoKi+GN7Y+NxSjavd0hvX3t7CG5p5KAJa+xfaA25s21ebjrE3DVC4v3ZRNsmgoHYSOIMMW2XZighj21MqX+l/fupUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DxkG2iQG; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4BuFnI020683;
-	Mon, 4 Nov 2024 12:45:02 GMT
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Bj2vO004306;
+	Mon, 4 Nov 2024 12:45:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ofntPASB1WXkjQfzFi93kATJnAvCwncwYT2qGPYkYUI=; b=dqP+J86r8gnmveWh
-	NBVDqI94HXVAmHrheiS0cT+6tLC19NvHj0+vAsele20ELtW3SzZnKnv/+bmO9vxr
-	0+wDjW/zr75Z3bRwS5KBz40wRYcBAfb6EuivyX8uP8worQOIWErJFEipG/4UMten
-	J36goN8kFnmyy8wsBG0dykZ6p0baQ2uV3Qp3b6k/MRLGq1YknTI4f3NzqXCV+IeQ
-	N/gHIPENcczFretPoo1qhZquMpnFmsSYHKP3LsW0Ze0oqio3gf8T+vt9Oj2lfhYq
-	DURZAlQSa2LednrNv+YKT96PraUDPBxUmpyXhaomDjb6vFtuXy3MHI+v8t9eMGRg
-	h95hcw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd2849cj-1
+	PsF/rRSI4RCRfrcvf5dwv8I7vz1Li7kozZXZLoEVvxs=; b=DxkG2iQGLoeBB1ls
+	UPIxHAAdutWd0Wfm+3xj5tavElgPku3njDQgB9Q4SRQAraEkX98CJalhvGpWbKvP
+	dpEwDtvx/QXSFZPMZscXsIqD625nKtGFnOQ836DZqkJW5Dp1wcmNwOX8je/xXeS+
+	H0nk+DuuFLtLvnDmVb7HWjewCOgZdOQeMY/J2JFr5/ujs+dnLyFTHSC/CB5m7Ud0
+	5npSXjHS45eZULIYpk3dKGf10dk7rTbc99gfKPoxzXKYbbQeXYGiZl3Per2Ycpgd
+	Sd78kVH3+LG4qDa4MIn9eam3DuV3GMYvmt+eYIyr3C/dsl3HFBWiOMb+bU3z4/0R
+	jzVlwA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd2s48hs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 12:45:02 +0000 (GMT)
+	Mon, 04 Nov 2024 12:45:07 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A4Cj1DS014961
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A4Cj6oc010190
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 4 Nov 2024 12:45:01 GMT
+	Mon, 4 Nov 2024 12:45:06 GMT
 Received: from hu-mmanikan-blr.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 4 Nov 2024 04:44:56 -0800
+ 15.2.1544.9; Mon, 4 Nov 2024 04:45:01 -0800
 From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 To: <srinivas.kandagatla@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
         <conor+dt@kernel.org>, <amitk@kernel.org>, <thara.gopinath@gmail.com>,
@@ -65,9 +65,9 @@ To: <srinivas.kandagatla@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-pm@vger.kernel.org>
 CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
-Subject: [PATCH v6 4/7] arm64: dts: qcom: ipq5332: Add tsens node
-Date: Mon, 4 Nov 2024 18:14:10 +0530
-Message-ID: <20241104124413.2012794-5-quic_mmanikan@quicinc.com>
+Subject: [PATCH v6 5/7] arm64: dts: qcom: ipq5332: Add thermal zone nodes
+Date: Mon, 4 Nov 2024 18:14:11 +0530
+Message-ID: <20241104124413.2012794-6-quic_mmanikan@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241104124413.2012794-1-quic_mmanikan@quicinc.com>
 References: <20241104124413.2012794-1-quic_mmanikan@quicinc.com>
@@ -83,115 +83,119 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: UISgOxtiewSA6diSTnoEAP9czchF3c3P
-X-Proofpoint-GUID: UISgOxtiewSA6diSTnoEAP9czchF3c3P
+X-Proofpoint-ORIG-GUID: 9KYBPSTzcLMge2wEbVAE57pupYZQXNNk
+X-Proofpoint-GUID: 9KYBPSTzcLMge2wEbVAE57pupYZQXNNk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=832
- clxscore=1015 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040111
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2411040111
 
 From: Praveenkumar I <quic_ipkumar@quicinc.com>
 
-IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
-node with nvmem cells for calibration data.
+This patch adds thermal zone nodes for sensors present in
+IPQ5332.
 
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 ---
 Changes in V6:
 	- No change
 
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 +++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi | 78 +++++++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index d3c3e215a15c..94dca05fdc2a 100644
+index 94dca05fdc2a..72d724d67587 100644
 --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
 +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -177,6 +177,46 @@ cpu_speed_bin: cpu-speed-bin@1d {
- 				reg = <0x1d 0x2>;
- 				bits = <7 2>;
- 			};
+@@ -554,4 +554,82 @@ timer {
+ 			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+ 			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+ 	};
 +
-+			s11: s11@3a5 {
-+				reg = <0x3a5 0x1>;
-+				bits = <4 4>;
-+			};
++	thermal-zones {
++		rfa-0-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&tsens 11>;
 +
-+			s12: s12@3a6 {
-+				reg = <0x3a6 0x1>;
-+				bits = <0 4>;
++			trips {
++				rfa-0-critical {
++					temperature = <125000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
 +			};
-+
-+			s13: s13@3a6 {
-+				reg = <0x3a6 0x1>;
-+				bits = <4 4>;
-+			};
-+
-+			s14: s14@3ad {
-+				reg = <0x3ad 0x2>;
-+				bits = <7 4>;
-+			};
-+
-+			s15: s15@3ae {
-+				reg = <0x3ae 0x1>;
-+				bits = <3 4>;
-+			};
-+
-+			tsens_mode: mode@3e1 {
-+				reg = <0x3e1 0x1>;
-+				bits = <0 3>;
-+			};
-+
-+			tsens_base0: base0@3e1 {
-+				reg = <0x3e1 0x2>;
-+				bits = <3 10>;
-+			};
-+
-+			tsens_base1: base1@3e2 {
-+				reg = <0x3e2 0x2>;
-+				bits = <5 10>;
-+			};
- 		};
- 
- 		rng: rng@e3000 {
-@@ -186,6 +226,32 @@ rng: rng@e3000 {
- 			clock-names = "core";
- 		};
- 
-+		tsens: thermal-sensor@4a9000 {
-+			compatible = "qcom,ipq5332-tsens";
-+			reg = <0x4a9000 0x1000>,
-+			      <0x4a8000 0x1000>;
-+			nvmem-cells = <&tsens_mode>,
-+				      <&tsens_base0>,
-+				      <&tsens_base1>,
-+				      <&s11>,
-+				      <&s12>,
-+				      <&s13>,
-+				      <&s14>,
-+				      <&s15>;
-+			nvmem-cell-names = "mode",
-+					   "base0",
-+					   "base1",
-+					   "s11",
-+					   "s12",
-+					   "s13",
-+					   "s14",
-+					   "s15";
-+			interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "combined";
-+			#qcom,sensors = <5>;
-+			#thermal-sensor-cells = <1>;
 +		};
 +
- 		tlmm: pinctrl@1000000 {
- 			compatible = "qcom,ipq5332-tlmm";
- 			reg = <0x01000000 0x300000>;
++		rfa-1-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&tsens 12>;
++
++			trips {
++				rfa-1-critical {
++					temperature = <125000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++
++		misc-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&tsens 13>;
++
++			trips {
++				misc-critical {
++					temperature = <125000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++
++		cpu-top-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&tsens 14>;
++
++			trips {
++				cpu-top-critical {
++					temperature = <115000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++
++				cpu-passive {
++					temperature = <105000>;
++					hysteresis = <1000>;
++					type = "passive";
++				};
++			};
++		};
++
++		top-glue-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&tsens 15>;
++
++			trips {
++				top-glue-critical {
++					temperature = <125000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++	};
+ };
 -- 
 2.34.1
 
