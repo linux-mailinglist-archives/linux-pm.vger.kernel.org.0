@@ -1,264 +1,192 @@
-Return-Path: <linux-pm+bounces-16932-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6B2A9BB045
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 10:52:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 115009BB0E4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 11:22:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF313B23CCE
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 09:52:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5AEE2815C4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 10:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC4E1AF0B3;
-	Mon,  4 Nov 2024 09:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFB51B0F03;
+	Mon,  4 Nov 2024 10:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R0nlh7Jq"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RDWvKhHz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E0E1AD3E5
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 09:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8C018C020;
+	Mon,  4 Nov 2024 10:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730713943; cv=none; b=U/PQysc72eHjxGgG2avbjQ/AwDoNjWPtEjmUDBkTZGsL62UAtuNa1IFejrq60KWXxRg6L/KyRYhWwJPoULjxSj4TxTMCZKt2Gz3I1xXfy4uJjpGjzMW3OJvb2FM1WUIpXNOTbeFEUM7SaOyFXBFUg+ZF9bOSekGY7P8x8+y2dbc=
+	t=1730715739; cv=none; b=LliKT2JKw6mPNsmvVVMQubj460c2SXC5/iKCYzdSLVP3uIDnD20r+h3P7msaL+OmB/UcWbVWkSNoULMTpAtcrsWcha+wWRhpf62XyB3kJ9OoY14W0izLrXWyJeBrPShDDumlSmAUXqQz6T0dK/HYBdYcnZhy0AxpZtd8au95S+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730713943; c=relaxed/simple;
-	bh=htvv2ldxMzj1c0babXojfnz7M65rvSO62jWp9rRBuLE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UyzSvD/eGVqnndxBnNbDzWYIRaTEstTMrGohsG4rWbsi7t2e5+H322aN/u+w6nXBPINqMN+M2e2f9Alv2xAPDOCr7MEuN/dcXgIitvh/QdS5XuJnPu1TxMH++62Uj9YwhH5Y3MdYc9m+Bx9IQ4Zs0mPzOPel1eLnOypxx8XtZcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R0nlh7Jq; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e390d9ad1dso32185547b3.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 01:52:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730713941; x=1731318741; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybC/g10HAfyDHcrJc6E2zJthZS9rSbdAKDgt4jSd7Jg=;
-        b=R0nlh7JqQBSsbgUD9In+kgpwzEZ9Hs3v4dTkQjnhLHBxkbXCT8OdoSQ+M2iipfrxCs
-         kPKcD/ZFQOKef04LPIozz6Kh8N2O1e6yfgw1xK3q2jrzThuNyq3LCg/SKVPLOFMeb9Gm
-         yIWorjmo2Lylf84fSKeFPW8+wSCZP1pPsNPUmy5ufj+qbW67NvboK3v+6hGuTC/jGSUL
-         I6ckGS4g75M6Yq4MvHYR2TW4mMsgZur2ki2yeKbX6TNzxd9H8Do4wgQi4AVkKzu17ebT
-         HEWbhFYsQwNiJaYdROw0fJYElXK+l7AQJSSOTd8ryhPfFbMaot6GdnxeP1DdIXucdxLV
-         F7iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730713941; x=1731318741;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ybC/g10HAfyDHcrJc6E2zJthZS9rSbdAKDgt4jSd7Jg=;
-        b=uMDX+12v7iyri6I/1W/l2ElbL8d0W+qc3KLkQX+0dkmdw5lNc5/XCTl6t1iDA7jO3u
-         uag2rNZqNdy5eMFDFph+eJ4XpTf8qcVs3uBRKNFc3+DVIZcVeSxq0Av91BcOr0YzX1Oo
-         7lbkH6GrFpXcy/KYl7Rb3lDrm9rlEQIjmh+9PpFFiaZn4Yd/d57BiWNHUGU784iHv+WQ
-         MrXr+BH8RFMNSbeSUCCZWSuGXILHn6DFDrXjhXG+zZ6MPSx2qbWyWxy5ywsudnxEILUV
-         4TbKriyKhAZKHMOwNAKCt+3EZwyxh5wrkiwljbZK9ZBknpBXIA+rfcYkzmThbP5LnoXt
-         m4pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTcH8BtS2UDlvyqSQfeQGFuHYl4zkvMFKjFiHGH+012MLIYT/pySuxbzZcDndgs+vdUrGCG23jDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzob3gipR9N7r1TGFItQ9ee1CrfnAFwuPJKkMWVQAImzHM/lq3Y
-	/RQj7KBpVTgRlxfUWKThfk1Srj4Hb4eXptgwFwqnMuigs2LO0Z36dvqeD0H6cuCoKM6n1aRW39W
-	ZMuhhtp8m7YPABRIHu6H7v3NPwSfG4qpSonc+7A==
-X-Google-Smtp-Source: AGHT+IHSdMtnJp6l1SJWZqQt26XqnUQYugn+OdEkAPVBspbyRD2J5UPJxL4Tzt211JmThaoRmsKPftiBRc61oMrL7aQ=
-X-Received: by 2002:a0d:e341:0:b0:6ea:6e90:7e3e with SMTP id
- 00721157ae682-6ea6e9085cemr56164317b3.14.1730713940978; Mon, 04 Nov 2024
- 01:52:20 -0800 (PST)
+	s=arc-20240116; t=1730715739; c=relaxed/simple;
+	bh=kh5QtwjbRWBwwF0Hou4I7K9sJhsih+FO7clvh+maj8Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Ab2uNGEJIe88DXklutj2zD7bKwhj9+q51Tm+FfagAMjGlw7K0zWktcX7LA02iJWFoHmQVecLOTOSHHZPjyXJJG/8dRhUQ6yT9ddwt013Z4ofgLLtqPVP/U+1Yi5MffLQmbqGI4rHBsEMRn1fGOu5jy3MSXrT9wHqMixTod9Obqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RDWvKhHz; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A3Mo2Uu031707;
+	Mon, 4 Nov 2024 10:21:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	0Nn0WorU6l2jJYLx45HO5FWgM6QDg3c9c5+U561I2mE=; b=RDWvKhHzcdxfC29i
+	u7+n1kB9lTQb9a3ubtALdFWRuNooLB6iEUyG+/ypJTobXgxaZ0Ix4bF6ZdFKByg8
+	0JrgxdWg8MJ7vePfg4XCYeDT6eKWURruL86VUA4mCklIikZGXldvbx6ZN/C9pj5o
+	6Sg1eqzTalNGfikgXXRKlbmYUAQQEHzK5Sls9TwpWlNba4HRN3kl/5dsZ80ur1Na
+	6D+38TPhKCu7NDv3ogFUu/WJ9MkKAVzQwdMn779iWcL7MwXf7M6+F7bOdh9FdKB8
+	Fu3WZjEG+Xh1iumKW3Ldfs6xVg222LKzHH75BbaxPKBthKKkOmAxFTxydRL4lrci
+	9B3v+g==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd1fkudw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Nov 2024 10:21:54 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A4ALro9001503
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 4 Nov 2024 10:21:53 GMT
+Received: from [10.217.217.28] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 4 Nov 2024
+ 02:21:45 -0800
+Message-ID: <16aaae04-4fe8-4227-9374-0919960a4ca2@quicinc.com>
+Date: Mon, 4 Nov 2024 15:51:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
- <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
- <CAPDyKForpLcmkqruuTfD6kkJhp_4CKFABWRxFVYNskGL1tjO=w@mail.gmail.com>
- <3969bae0-eeb8-447a-86a5-dfdac0b136cd@rock-chips.com> <CAPDyKFo=GcHG2sGQBrXJ7VWyp59QOmbLCAvHQ3krUympEkid_A@mail.gmail.com>
- <98e0062c-aeb1-4bea-aa2b-4a99115c9da4@rock-chips.com> <20241103120223.abkwgej4svas4epr@thinkpad>
- <6f3f2d17-4ca2-44ad-b8df-72986d4b3174@rock-chips.com>
-In-Reply-To: <6f3f2d17-4ca2-44ad-b8df-72986d4b3174@rock-chips.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 4 Nov 2024 10:51:45 +0100
-Message-ID: <CAPDyKFqMuFMf0+2+mPZaGGtBRfavg0LTkhbrCeqh7kHeqq-yZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] scsi: ufs: rockchip: initial support for UFS
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
-	Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, 
-	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V4 1/4] dt-bindings: iio/adc: Move QCOM ADC bindings to
+ iio/adc folder
+To: "Rob Herring (Arm)" <robh@kernel.org>
+CC: <quic_skakitap@quicinc.com>, <daniel.lezcano@linaro.org>,
+        <andersson@kernel.org>, <lee@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>, <linux-kernel@vger.kernel.org>,
+        <lars@metafoo.de>, <robh+dt@kernel.org>, <quic_subbaram@quicinc.com>,
+        <rafael@kernel.org>, <quic_kamalw@quicinc.com>, <agross@kernel.org>,
+        <amitk@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <quic_amelende@quicinc.com>, <neil.armstrong@linaro.org>,
+        <conor+dt@kernel.org>, <linux-iio@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <quic_collinsd@quicinc.com>,
+        <konrad.dybcio@linaro.org>, <jic23@kernel.org>,
+        <devicetree@vger.kernel.org>, <lukasz.luba@arm.com>,
+        <rui.zhang@intel.com>, <sboyd@kernel.org>
+References: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
+ <20241030185854.4015348-2-quic_jprakash@quicinc.com>
+ <173031962644.1844672.11198879616520852521.robh@kernel.org>
+Content-Language: en-US
+From: Jishnu Prakash <quic_jprakash@quicinc.com>
+In-Reply-To: <173031962644.1844672.11198879616520852521.robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nwFSCJpt7OlT4ZFwLopJb1OaMawAdfgn
+X-Proofpoint-ORIG-GUID: nwFSCJpt7OlT4ZFwLopJb1OaMawAdfgn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411040092
 
-On Mon, 4 Nov 2024 at 07:38, Shawn Lin <shawn.lin@rock-chips.com> wrote:
->
-> =E5=9C=A8 2024/11/3 20:02, Manivannan Sadhasivam =E5=86=99=E9=81=93:
-> > On Fri, Oct 18, 2024 at 05:20:08PM +0800, Shawn Lin wrote:
-> >> Hi Ulf,
-> >>
-> >> =E5=9C=A8 2024/10/18 17:07, Ulf Hansson =E5=86=99=E9=81=93:
-> >>> On Thu, 10 Oct 2024 at 03:21, Shawn Lin <shawn.lin@rock-chips.com> wr=
-ote:
-> >>>>
-> >>>> Hi Ulf
-> >>>>
-> >>>> =E5=9C=A8 2024/10/9 21:15, Ulf Hansson =E5=86=99=E9=81=93:
-> >>>>> [...]
-> >>>>>
-> >>>>>> +
-> >>>>>> +static int ufs_rockchip_runtime_suspend(struct device *dev)
-> >>>>>> +{
-> >>>>>> +       struct ufs_hba *hba =3D dev_get_drvdata(dev);
-> >>>>>> +       struct ufs_rockchip_host *host =3D ufshcd_get_variant(hba)=
-;
-> >>>>>> +       struct generic_pm_domain *genpd =3D pd_to_genpd(dev->pm_do=
-main);
-> >>>>>
-> >>>>> pd_to_genpd() isn't safe to use like this. It's solely to be used b=
-y
-> >>>>> genpd provider drivers.
-> >>>>>
-> >>>>>> +
-> >>>>>> +       clk_disable_unprepare(host->ref_out_clk);
-> >>>>>> +
-> >>>>>> +       /*
-> >>>>>> +        * Shouldn't power down if rpm_lvl is less than level 5.
-> >>>>>
-> >>>>> Can you elaborate on why we must not power-off the power-domain whe=
-n
-> >>>>> level is less than 5?
-> >>>>>
-> >>>>
-> >>>> Because ufshcd driver assume the controller is active and the link i=
-s on
-> >>>> if level is less than 5. So the default resume policy will not try t=
-o
-> >>>> recover the registers until the first error happened. Otherwise if t=
-he
-> >>>> level is >=3D5, it assumes the controller is off and the link is dow=
-n,
-> >>>> then it will restore the registers and link.
-> >>>>
-> >>>> And the level is changeable via sysfs.
-> >>>
-> >>> Okay, thanks for clarifying.
-> >>>
-> >>>>
-> >>>>> What happens if we power-off anyway when the level is less than 5?
-> >>>>>
-> >>>>>> +        * This flag will be passed down to platform power-domain =
-driver
-> >>>>>> +        * which has the final decision.
-> >>>>>> +        */
-> >>>>>> +       if (hba->rpm_lvl < UFS_PM_LVL_5)
-> >>>>>> +               genpd->flags |=3D GENPD_FLAG_RPM_ALWAYS_ON;
-> >>>>>> +       else
-> >>>>>> +               genpd->flags &=3D ~GENPD_FLAG_RPM_ALWAYS_ON;
-> >>>>>
-> >>>>> The genpd->flags is not supposed to be changed like this - and
-> >>>>> especially not from a genpd consumer driver.
-> >>>>>
-> >>>>> I am trying to understand a bit more of the use case here. Let's se=
-e
-> >>>>> if that helps me to potentially suggest an alternative approach.
-> >>>>>
-> >>>>
-> >>>> I was not familiar with the genpd part, so I haven't come up with
-> >>>> another solution. It would be great if you can guide me to the right
-> >>>> way.
-> >>>
-> >>> I have been playing with the existing infrastructure we have at hand
-> >>> to support this, but I need a few more days to be able to propose
-> >>> something for you.
-> >>>
-> >>
-> >> Much appreciate.
-> >>
-> >>>>
-> >>>>>> +
-> >>>>>> +       return ufshcd_runtime_suspend(dev);
-> >>>>>> +}
-> >>>>>> +
-> >>>>>> +static int ufs_rockchip_runtime_resume(struct device *dev)
-> >>>>>> +{
-> >>>>>> +       struct ufs_hba *hba =3D dev_get_drvdata(dev);
-> >>>>>> +       struct ufs_rockchip_host *host =3D ufshcd_get_variant(hba)=
-;
-> >>>>>> +       int err;
-> >>>>>> +
-> >>>>>> +       err =3D clk_prepare_enable(host->ref_out_clk);
-> >>>>>> +       if (err) {
-> >>>>>> +               dev_err(hba->dev, "failed to enable ref out clock =
-%d\n", err);
-> >>>>>> +               return err;
-> >>>>>> +       }
-> >>>>>> +
-> >>>>>> +       reset_control_assert(host->rst);
-> >>>>>> +       usleep_range(1, 2);
-> >>>>>> +       reset_control_deassert(host->rst);
-> >>>>>> +
-> >>>>>> +       return ufshcd_runtime_resume(dev);
-> >>>>>> +}
-> >>>>>> +
-> >>>>>> +static int ufs_rockchip_system_suspend(struct device *dev)
-> >>>>>> +{
-> >>>>>> +       struct ufs_hba *hba =3D dev_get_drvdata(dev);
-> >>>>>> +       struct ufs_rockchip_host *host =3D ufshcd_get_variant(hba)=
-;
-> >>>>>> +
-> >>>>>> +       /* Pass down desired spm_lvl to Firmware */
-> >>>>>> +       arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD=
-_CONFIG,
-> >>>>>> +                       host->pd_id, hba->spm_lvl < 5 ? 1 : 0, 0, =
-0, 0, 0, NULL);
-> >>>>>
-> >>>>> Can you please elaborate on what goes on here? Is this turning off =
-the
-> >>>>> power-domain that the dev is attached to - or what is actually
-> >>>>> happening?
-> >>>>>
-> >>>>
-> >>>> This smc call is trying to ask firmware not to turn off the power-do=
-mian
-> >>>> that the UFS is attached to and also not to turn off the power of UF=
-S
-> >>>> conntroller.
-> >>>
-> >>> Okay, thanks for clarifying!
-> >>>
-> >>> A follow up question, don't you need to make a corresponding smc call
-> >>> to inform the FW that it's okay to turn off the power-domain at some
-> >>> point?
-> >>>
-> >>
-> >> Yes. Each time entering sleep, we teach FW if it need to turn off or k=
-eep
-> >> power-domain, for instance "hba->spm_lvl < 5 ? 1 : 0" , 0 means
-> >> off and 1 means on.
-> >>
-> >
-> > We had a requirement to notify the genpd provider from consumer to not =
-turn off
-> > the power domain during system suspend. So Ulf came up with an API for
-> > consumers, device_set_wakeup_path() setting the 'dev->power.wakeup_path=
-' which
-> > will be honored by the genpd core. Will that work for you?
->
-> Yes, that works. And we may need a symmetrical call, for instance,
-> device_clr_wakeup_path() to allow genpd provider to turn off the power
-> domain as well.
+Hi Rob,
 
-The PM core clears the flag in device_prepare(). The flag is typically
-supposed to be set from a ->suspend() callback, so there should be no
-need for an additional function that clears the flag, I think.
+On 10/31/2024 1:50 AM, Rob Herring (Arm) wrote:
+> 
+> On Thu, 31 Oct 2024 00:28:51 +0530, Jishnu Prakash wrote:
+>> There are several files containing QCOM ADC macros for channel names
+>> right now in the include/dt-bindings/iio folder. Since all of these
+>> are specifically for adc, move the files to the
+>> include/dt-bindings/iio/adc folder.
+>>
+>> Also update all affected devicetree and driver files to fix compilation
+>> errors seen with this move and update documentation files to fix
+>> dtbinding check errors for the same.
+>>
+>> Acked-by: Lee Jones <lee@kernel.org>
+>> Acked-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+>> ---
+>> Changes since v3:
+>> - Updated files affected by adc file path change in /arch/arm, which
+>>   were missed earlier. Updated some more new devicetree files requiring
+>>   this change in /arch/arm64.
+>>
 
-[...]
 
-Kind regards
-Uffe
+>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h (93%)
+>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (100%)
+>>
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> In file included from Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dts:80:
+> ./scripts/dtc/include-prefixes/dt-bindings/iio/adc/qcom,spmi-adc7-pmk8350.h:13:10: fatal error: dt-bindings/iio/adc/qcom,spmi-vadc.h: No such file or directory
+>    13 | #include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I think there must be some mistake here because my patch does add the file include/dt-bindings/iio/adc/qcom,spmi-vadc.h, through a rename. This is seen at the very end of my patch:
+
+> diff --git a/include/dt-bindings/iio/qcom,spmi-vadc.h b/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
+> similarity index 100%
+> rename from include/dt-bindings/iio/qcom,spmi-vadc.h
+> rename to include/dt-bindings/iio/adc/qcom,spmi-vadc.h
+
+This patch moves our ADC-related header files from 'include/dt-bindings/iio/' folder to 'include/dt-bindings/iio/adc' folder
+and fixes this path change in all affected files in the same patch....I think this should be expected to pass compilation.
+
+Is it possible something went wrong from your end in this case? I see that both the files mentioned in the above error, qcom,spmi-adc7-pmk8350.h and qcom,spmi-vadc.h
+are moved from 'include/dt-bindings/iio/' folder to 'include/dt-bindings/iio/adc' folder in my patch, could the tool be confused due to qcom,spmi-adc7-pmk8350.h
+containing the updated path of qcom,spmi-vadc.h?
+
+
+> compilation terminated.
+> make[2]: *** [scripts/Makefile.dtbs:129: Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.example.dtb] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1442: dt_binding_check] Error 2
+> make: *** [Makefile:224: __sub-make] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241030185854.4015348-2-quic_jprakash@quicinc.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+
+I have also followed the above instructions to update dt-schema and run 'make dt_binding_check' again and I did not see the above error.
+I'm also not getting any errors when building with this patch applied.
+
+Thanks,
+Jishnu
+
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
+
 
