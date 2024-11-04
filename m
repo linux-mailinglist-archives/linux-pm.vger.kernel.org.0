@@ -1,104 +1,152 @@
-Return-Path: <linux-pm+bounces-16907-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B27C19BA82C
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 22:03:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BE2E9BAAD7
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 03:34:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AFCA1F214E7
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2024 21:03:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE4121C208D8
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 02:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE7015C14B;
-	Sun,  3 Nov 2024 21:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="iYja/L+Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0374C6C;
+	Mon,  4 Nov 2024 02:34:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D6F155392;
-	Sun,  3 Nov 2024 21:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A456023A0
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 02:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730667788; cv=none; b=nY6Vfj7nwZAQAeA5S7IVb8iN56Zc0a1vMWFWBJ5UXqs3rMfeEcFWfH7i6mdG3fRDSJFbXK1UGU90RI3WxaTbxnxxUYaepLj7rbAp6+1b4gL0bidqAYcuqZDHqVPdJO8ROlBjP4VjX2mlq2wqj/FcyE2yf0EwxqZpivg2mjuISqo=
+	t=1730687667; cv=none; b=EIDD0maMkpKMFILmSX8hzbvxprc4mPT3shaOKxC1vCL10EJiLD343hO6ssaMVsTzHujNOAH9OJJLjXc09IyGfHaJIGT9P3exKmlPvk37ziHE52eIpfp03QYl73VVN3ynRw+e7kyj7sGZ0KCfIcUe6Pv91oRZ6jYpO4gC0uLeyHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730667788; c=relaxed/simple;
-	bh=RN0M6qzQAq5/lg/qY5cha5a7Da3fSLtOhF4obNnPasQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UGJGApGZuyB+o8Ko28Z76Im1cne7WTH7PJ6cwW4yNtfG05nwvzIyTJbSWfQH5obed/PkMfDa39mDScF53BlisheD+9slQXJ3CwF6xUQEZTTjZ+TvIzulszAT5zkkturtJ6ra//6cOmBGfbG9dfQQbqF5DSEtYbbAdROUBJJ1ivw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=iYja/L+Y; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=OYn3TGqzIwKjwq71n9v00fPB4midY8IRa1hhwIt0HAQ=; b=iYja/L+YF5xKYwAezfF52lm16t
-	1UmgMAw3GuWQWjQN7rWlpEoKsx9SDqeuUzX+rKm1t4Sjp07LBw8FqUIlPe1NUXwmMPhHPRun6m4UY
-	uI78iYbYjaAUoSB+LJITCwIvs1Am2T0ykUbEGO9LfC0xY8af9/4d85jp1fOIKnwczXgm12UwBv0/X
-	OvNB8CSM73QFsWgSPwDUII6USixtDOv+NKLC3Ojl+nU1aUckZPphurLRg8EUEq6w4T8WSMnaoGoZN
-	aBZTqCkTA7h8t8r1ParwFiSrJDnmv5YTQKqG1OAUSTBg9i+ztG3EtSTWXLSXDkhqs49SULYt0RlCI
-	IX+3L0jg==;
-From: Andreas Kemnade <andreas@kemnade.info>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	zhipeng.wang_1@nxp.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org
-Cc: Andreas Kemnade <andreas@kemnade.info>,
-	stable@vger.kernel.org
-Subject: [PATCH] cpufreq: fix using cpufreq-dt as module
-Date: Sun,  3 Nov 2024 22:02:51 +0100
-Message-Id: <20241103210251.762050-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1730687667; c=relaxed/simple;
+	bh=Vy6TLOi8JE6wVp7QGr2RnEgtAZQzdEwEpT64bZKuBXU=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=hag4b0BgbospRlzXWmRvUJ4HrgG0+wxqwUKAtqzKn7I3H3DwKQcoVvcI2p1AYYnCKRdwk2vnB1ENUrCmckJs5gmo8nE6X2ZQjmePCPdBEOcnvli+VnUbjVHNsJ7wAc29dKeVFwh9FPTLkFz759/iJKMolhBtdXIDPHW3GCkgYLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 47f289069a5511efa216b1d71e6e1362-20241104
+X-CTIC-Tags:
+	HR_CC_AS_FROM, HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
+	HR_FROM_NAME, HR_LANG, HR_MAILER_MTBG, HR_SJ_DIGIT_LEN, HR_SJ_LANG
+	HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN
+	HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED
+	DN_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF
+	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
+	AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:96652826-a7f3-4020-8a64-3a0682c47b30,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-INFO: VERSION:1.1.38,REQID:96652826-a7f3-4020-8a64-3a0682c47b30,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:-5
+X-CID-META: VersionHash:82c5f88,CLOUDID:f9da35fe8a411108359acc1070510247,BulkI
+	D:241104100443PCDAETJ1,BulkQuantity:1,Recheck:0,SF:66|841|38|17|19|102,TC:
+	nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,C
+	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-UUID: 47f289069a5511efa216b1d71e6e1362-20241104
+X-User: lijun01@kylinos.cn
+Received: from [172.30.70.202] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <lijun01@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 46773673; Mon, 04 Nov 2024 10:34:14 +0800
+Message-ID: <33254b4a-eaca-293d-041d-4dff1812c281@kylinos.cn>
+Date: Mon, 4 Nov 2024 10:34:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+ linux-pm@vger.kernel.org
+Cc: lijun01@kylinos.cn
+From: lijun <lijun01@kylinos.cn>
+Subject: 0001-power-add-PM_SUSPEND_MAX-in-pm_suspend_target_state.patch
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-E.g. omap2plus_defconfig compiles cpufreq-dt as module. As there is no
-module alias nor a module_init(), cpufreq-dt-platdev will not be used and
-therefore on several omap platforms there is no cpufreq.
+ From 8196688c40b7ab55418588a29258fc8fb84905a8 Mon Sep 17 00:00:00 2001
+From: Li Jun <lijun01@kylinos.cn>
+Date: Fri, 1 Nov 2024 16:31:33 +0800
+Subject: [PATCH] power: add PM_SUSPEND_MAX in pm_suspend_target_state
 
-Enforce builtin compile of cpufreq-dt-platdev to make it effective.
+The system is switching to  disk sleep, when executing
+to freeze_processes(),one of processes may be get the
+system state, but the correct state  must after
+suspend_devices_and_enter(state) ,so push this patch.
 
-Fixes: 3b062a086984 ("cpufreq: dt-platdev: Support building as module")
-Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+Signed-off-by: Li Jun <lijun01@kylinos.cn>
 ---
- drivers/cpufreq/Kconfig              | 2 +-
- drivers/cpufreq/cpufreq-dt-platdev.c | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+  kernel/power/hibernate.c | 3 +++
+  kernel/power/suspend.c   | 4 +++-
+  2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 2561b215432a8..4547adf5d2a7d 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -218,7 +218,7 @@ config CPUFREQ_DT
- 	  If in doubt, say N.
- 
- config CPUFREQ_DT_PLATDEV
--	tristate "Generic DT based cpufreq platdev driver"
-+	bool "Generic DT based cpufreq platdev driver"
- 	depends on OF
- 	help
- 	  This adds a generic DT based cpufreq platdev driver for frequency
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 18942bfe9c95f..78ad3221fe077 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -234,5 +234,3 @@ static int __init cpufreq_dt_platdev_init(void)
- 			       sizeof(struct cpufreq_dt_platform_data)));
- }
- core_initcall(cpufreq_dt_platdev_init);
--MODULE_DESCRIPTION("Generic DT based cpufreq platdev driver");
--MODULE_LICENSE("GPL");
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 1f87aa01ba44..c7c0e7c51985 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -766,6 +766,8 @@ int hibernate(void)
+      }
+
+      pr_info("hibernation entry\n");
++    pm_suspend_target_state = PM_SUSPEND_MAX;
++
+      pm_prepare_console();
+      error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, 
+PM_POST_HIBERNATION);
+      if (error)
+@@ -846,6 +848,7 @@ int hibernate(void)
+      hibernate_release();
+   Unlock:
+      unlock_system_sleep(sleep_flags);
++    pm_suspend_target_state = PM_SUSPEND_ON;
+      pr_info("hibernation exit\n");
+
+      return error;
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 09f8397bae15..e965d29800d4 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -493,7 +493,6 @@ int suspend_devices_and_enter(suspend_state_t state)
+      if (!sleep_state_supported(state))
+          return -ENOSYS;
+
+-    pm_suspend_target_state = state;
+
+      if (state == PM_SUSPEND_TO_IDLE)
+          pm_set_suspend_no_platform();
+@@ -584,6 +583,8 @@ static int enter_state(suspend_state_t state)
+      }
+
+      pm_pr_dbg("Preparing system for sleep (%s)\n", 
+mem_sleep_labels[state]);
++    pm_suspend_target_state = state;
++
+      pm_suspend_clear_flags();
+      error = suspend_prepare(state);
+      if (error)
+@@ -603,6 +604,7 @@ static int enter_state(suspend_state_t state)
+      pm_pr_dbg("Finishing wakeup.\n");
+      suspend_finish();
+   Unlock:
++    pm_suspend_target_state = PM_SUSPEND_ON;
+      mutex_unlock(&system_transition_mutex);
+      return error;
+  }
 -- 
-2.39.2
+2.34.1
 
 
