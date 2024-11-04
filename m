@@ -1,147 +1,143 @@
-Return-Path: <linux-pm+bounces-16980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6E859BBC32
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 18:42:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB14F9BBB3C
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 18:13:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AC08282221
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 17:42:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 520F5B223D3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 17:13:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B621C5793;
-	Mon,  4 Nov 2024 17:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="VjZ9GAWh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8288E1C4A01;
+	Mon,  4 Nov 2024 17:13:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m10165.netease.com (mail-m10165.netease.com [154.81.10.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161451C3022
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 17:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=154.81.10.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7751C3054
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 17:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730742151; cv=none; b=nKietcn7ntYdqiJ0sEXUkYJdopGKfWnBOuhNKCKLwanxewkUr/D2wD1Pk+ZcmXJzvbaj6aQoWwhYBMobPr3twSUJ1mvvlSwMaN2BZKRspj0wFdzB0Kja8UPIrV0rq+GnXvC+Bn8rKsEJdzTvkddABYrrBvffvjmBeCh7lqyFCP8=
+	t=1730740415; cv=none; b=QfE9KI6GQlT2MlBJAQIQGnxSsWRhztIDOzubAFH3ZfqcsMVzIMhot3ePrVXGMwHVeSqUPhiJ1/tSkBIAeITIflFSJz0BjwAKRWwpb/1k0f+pHVX+w3qKt+FLcKaPH+9of70hY9Aj8enuz5ENrux0Vk62m2/InV+9rudH8LgMrqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730742151; c=relaxed/simple;
-	bh=6o8KrqWNAQQuemevdB/TGbEXni51XVXB7kOgpglPJHI=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=is4JSJP1rXjNQfhOTa22/Q43kpI9WunzmAVqIoMDbRJIViphHCLkE3GsBYPrbqLg0YziEYvSF5cdKIFOkN69qhLzLAg+hqukEguRTXX9ZXLQahnK8v+clDBlpIkRGQ/jxrJS7T+Rpa968ZwINbm/sZmho9vgdRWXOTGYKV3xe8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=VjZ9GAWh; arc=none smtp.client-ip=154.81.10.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1b5d8947;
-	Mon, 4 Nov 2024 15:32:23 +0800 (GMT+08:00)
-From: Shawn Lin <shawn.lin@rock-chips.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>,
-	Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [PATCH v4 0/7] Initial support for RK3576 UFS controller
-Date: Mon,  4 Nov 2024 15:31:54 +0800
-Message-Id: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
-X-Mailer: git-send-email 2.7.4
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9OSFZJQx8eS01NT09LQh9WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a92f616d1f809cckunm1b5d8947
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nhg6HBw*HjIoHjpKHitWCA4B
-	TywaCTlVSlVKTEhLTEtOTk9OSk5MVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlMSE43Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=VjZ9GAWhsJB+tA1g7U+LD0tEazG8JjVGeiRVc8krb7V0MtOZG9q9wqb5hOJWXWgUdR2criLYmbViMkh4iMJGs0XUJoXGffJtoEgEhzZIMB5aXknBCn+QqjVMmUWnNffdwlrpZcHmSxa2PZK48ohpurz3P46PWOSl67XwGh2nNYI=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=4QVkJH8tpr3nsaz5ziKzyPBT7b6uUdsNiuHpGkBl6UU=;
-	h=date:mime-version:subject:message-id:from;
+	s=arc-20240116; t=1730740415; c=relaxed/simple;
+	bh=G8Ku4+gnMNQxGjwnwfpFle0PN06wg5ZR1TJLyaP3EEw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Jy6dSGXe9ezM6bX9p7jc3Ew9Z08ZPHyhdCnj1OXeh5lEMBQMnHpKA51WtiSnEdYHRHvSOo1eS5SB0bdy3Vhlo2R5c453kfeLrV4wRf2olRgWgYHAvrUWU9AqhceQeCEaXRU/Uo2UWg43z+lAU6vjGVLUiyurkZtrbkQNtmNPI6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a4f2698c76so48222755ab.2
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 09:13:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730740413; x=1731345213;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oz2AZID5JvkC+uYPtICCB0YgXhCUefbGhxCMrWVQg6A=;
+        b=ThdaFvVEQRogbanOIulgIydLkF5X4ju9OBAMnX6wXPnk7xUoyzkvTpeHuDXo4K1V9O
+         bNx5WZa9KPHTEhdyKcuiGDneuQ4L9mFeVsnnwBjFUfbMRD4mRzqeJsfaK2R2qiTJ7UWY
+         rFltui9YXClbNahnbwQRXaAqwrCbdcMTdHB+Zlk1wdGghly1kkE5iSGzmLxk40h5+SSH
+         78NLNHvCrCgr+6KJ+wSBtayz+7spL7Qbq4r+mjo9nLEQyZGq/xR2O9FOaOrUJJO8GheF
+         smfcBPk283HR6RcFBJ65ThRQm1y1m0/ts1GGjJ2LGqstnjmuMFCK/2YfoBmYSeXrgbXp
+         8rHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXQwkmKDTY6+sNvWKybpbGmwZKuCMkkLSQJyCcDCsmsJZyq4H8nfSwB0kZ2uGfMZ8x0UdVbDBt9ew==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4e7ykNBOmezzyH18CvUSdQcyKoRd59MEwQTkZvfEc8EobSy66
+	Vx6+27J5GLL01em/jFhIxQ4YU7J7zcFmtwALhEACGEQphZFZ/+Y6Mkcvhm6mhC/YTivEAADI0KR
+	WKeDaP02j64fidY2cYCwcndcKa0cFSJ9O1wOtZxMQzKxv8PP+31eBCvQ=
+X-Google-Smtp-Source: AGHT+IHt35m5zRDXKTreY+nYM02FF50L60osu4Bux0ACgDHGdDRStRM5pw1ygZ9Kf9LLM+bBDLsEsV0uL3pwsUiOANcX9Z9ViHdz
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:20cd:b0:3a0:8c5f:90c0 with SMTP id
+ e9e14a558f8ab-3a6b02cf8edmr134955305ab.10.1730740412962; Mon, 04 Nov 2024
+ 09:13:32 -0800 (PST)
+Date: Mon, 04 Nov 2024 09:13:32 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <672900bc.050a0220.701a.000e.GAE@google.com>
+Subject: [syzbot] [pm?] INFO: trying to register non-static key in
+ netdev_unregister_kobject (2)
+From: syzbot <syzbot+70bd31b69512b90375b6@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, len.brown@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	netdev@vger.kernel.org, pavel@ucw.cz, rafael@kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-This patchset adds initial UFS controller support for RK3576 SoC.
-Patch 1 adds new quirk and patch 2 is the dt-bindings. Patch 3-6 deal
-with rpm and spm support in advanced suggested by Ulf. Final patch 5 is
-the driver added.
+Hello,
 
-Changes in v4:
-- properly describe reset-gpios
-- deal with power domain of rpm and spm suggested by Ulf
-- Fix typo and disable clks in ufs_rockchip_remove
-- remove clk_disable_unprepare(host->ref_out_clk) from
-  ufs_rockchip_remove
+syzbot found the following issue on:
 
-Changes in v3:
-- rename the file to rockchip,rk3576-ufshc.yaml
-- add description for reset-gpios
-- use rockchip,rk3576-ufshc as compatible
-- reword Kconfig description
-- elaborate more about controller in commit msg
-- use rockchip,rk3576-ufshc for compatible
-- remove useless header file
-- remove inline for ufshcd_is_device_present
-- use usleep_range instead
-- remove initialization, reverse Xmas order
-- remove useless varibles
-- check vops for null
-- other small fixes for err path
-- remove pm_runtime_set_active
-- fix the active and inactive reset-gpios logic
-- fix rpm_lvl and spm_lvl to 5 and move to end of probe path
-- remove unnecessary system PM callbacks
-- use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
-  of UFSHCI_QUIRK_BROKEN_HCE
+HEAD commit:    157a4881225b Merge branch 'add-ethernet-dts-schema-for-qcs..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=108ca630580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9a3b9ec43446307a
+dashboard link: https://syzkaller.appspot.com/bug?extid=70bd31b69512b90375b6
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-Changes in v2:
-- rename the file
-- add reset-gpios
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Shawn Lin (6):
-  scsi: ufs: core: Add UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE
-  dt-bindings: ufs: Document Rockchip UFS host controller
-  soc: rockchip: add header for suspend mode SIP interface
-  pmdomain: rockchip: Add smc call to inform firmware
-  PM: wakeup: Add device_clr_wakeup_path()
-  scsi: ufs: rockchip: initial support for UFS
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b088f73cb031/disk-157a4881.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/dadddc2fd943/vmlinux-157a4881.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/941f3e9fcf4e/bzImage-157a4881.xz
 
-Ulf Hansson (1):
-  pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+70bd31b69512b90375b6@syzkaller.appspotmail.com
 
- .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 +++++++
- drivers/pmdomain/core.c                            |  34 +++
- drivers/pmdomain/rockchip/pm-domains.c             |   7 +
- drivers/ufs/core/ufshcd.c                          |  17 ++
- drivers/ufs/host/Kconfig                           |  12 +
- drivers/ufs/host/Makefile                          |   1 +
- drivers/ufs/host/ufs-rockchip.c                    | 340 +++++++++++++++++++++
- drivers/ufs/host/ufs-rockchip.h                    |  51 ++++
- include/linux/pm_domain.h                          |   7 +
- include/linux/pm_wakeup.h                          |   7 +
- include/soc/rockchip/rockchip_sip.h                |   3 +
- include/ufs/ufshcd.h                               |   6 +
- 12 files changed, 590 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
- create mode 100644 drivers/ufs/host/ufs-rockchip.c
- create mode 100644 drivers/ufs/host/ufs-rockchip.h
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 UID: 0 PID: 15994 Comm: kbnepd bnep0 Not tainted 6.12.0-rc4-syzkaller-01012-g157a4881225b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
+ assign_lock_key+0x241/0x280 kernel/locking/lockdep.c:981
+ register_lock_class+0x1cf/0x980 kernel/locking/lockdep.c:1295
+ __lock_acquire+0xf0/0x2050 kernel/locking/lockdep.c:5077
+ lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5825
+ __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
+ _raw_spin_lock_irq+0xd3/0x120 kernel/locking/spinlock.c:170
+ spin_lock_irq include/linux/spinlock.h:376 [inline]
+ pm_runtime_set_memalloc_noio+0x13d/0x260 drivers/base/power/runtime.c:228
+ netdev_unregister_kobject+0x178/0x250 net/core/net-sysfs.c:2109
+ unregister_netdevice_many_notify+0x1859/0x1da0 net/core/dev.c:11513
+ unregister_netdevice_many net/core/dev.c:11541 [inline]
+ unregister_netdevice_queue+0x303/0x370 net/core/dev.c:11413
+ unregister_netdevice include/linux/netdevice.h:3175 [inline]
+ unregister_netdev+0x1c/0x30 net/core/dev.c:11559
+ bnep_session+0x2e0e/0x3000 net/bluetooth/bnep/core.c:525
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
--- 
-2.7.4
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
