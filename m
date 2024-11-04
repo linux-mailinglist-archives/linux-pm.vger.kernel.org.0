@@ -1,151 +1,159 @@
-Return-Path: <linux-pm+bounces-16957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16956-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D19D99BB6B6
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:51:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 271499BB6AD
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:51:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DB481C22FEB
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:51:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C820A1F22220
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAE62AE90;
-	Mon,  4 Nov 2024 13:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BD614A91;
+	Mon,  4 Nov 2024 13:51:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QeFRtVxW"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SItzWc9U"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C8F487BF;
-	Mon,  4 Nov 2024 13:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2C08BEE
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 13:51:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728305; cv=none; b=rBpx/PsLQCWpAoxLUW+pkOJV4ZYs/EuMfv/nT4RkX+Derv8MmkkhCbr1lSMHe3gUbkKnN3rQMlpWyPWD3VoY4YrbYiilUdNfLFssS0t70w69gbcx8TSTebKdpZjjNg6GnjPwj4T8DSjNDU4XPmXcqd2+qBHJjG69UuBFemKZv44=
+	t=1730728285; cv=none; b=Pu18DKe/GrkS5N4i3s+J9MMzVuraT0Y7viceJ+7Um/X3DBkzpMBZm9o4H4rIVeQ3ddqkSOS9f5XaqIeOlujszEwkDpPlLIgg35q2G+uTF9xwOWvkaC6wUvJH/T9XfUx+I52wRku6Smj8GHCZh33fUdofTwuOfXz7bH2SNvdhIvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728305; c=relaxed/simple;
-	bh=/quXELEhoBPOJKcJckFERwjPKghl9G9GL5qzUYqocss=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=lDfc9r5VYsHWwoCxVUeUXe2RIjc+WPyn8ass9OAD6AjlVnY29EsIAr/QBdzzPY/NdZg7o2wbEqM5eGuHgUrCGJbfx/BX5ePlqfhpaI009KQ0csBBh/e1HYcNbfhRXdfp0bspa/PTUVpIG3fp+VdsisayLiIlwp5JJqsxaSq2sW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QeFRtVxW; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Bj2Xf004768;
-	Mon, 4 Nov 2024 13:51:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	s=arc-20240116; t=1730728285; c=relaxed/simple;
+	bh=yHsIXd5nkO+LMf5xN/UBFpUESu98mQJHpMkCwWTphDI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=THD/KWvNI0y8/7L30si8TmKcgne6MoUc73R6Itm6jJc8Zzod7dQtHnLZ7RfsRXdvQ5YUxo/Md3qdbNuQ4RRam8TMRzvS6m/hGLIgQt68jiJUBYf/81kdiI0j5vE5av6GODNO8UnkrWzR4UrbLJPN9FtfoCX7t0sn6VwrfhqhKtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SItzWc9U; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4BjXUx013477
+	for <linux-pm@vger.kernel.org>; Mon, 4 Nov 2024 13:51:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	9MrI4+M+kKHAd3Sup0mRHUENnMs265A92SHE5aq5rS4=; b=QeFRtVxWbA5wlaYD
-	Mi5icSlVBSOTUTsvC4YJneW1skCW7Uu5SZDqCPHrpwBnrd3dwL7puGo2UNp7IygD
-	kDmKSx/3jqgvi+pcfaUN6uTkhA2yy4V0Gf/jAgiingblje8qhXgXRDq409ALKWrl
-	zvBBDC3W2iBBgkokSumcythPDOyiLoMJxJZlX5MfTjvfO63lvwzpz08QfgtCSPjl
-	d3c/ZcMGfPTelCcGBZd8MjVizsUGEOgrTqqA2WPcwLouuimlyzYUmcTYXyYX3t93
-	ssV8bPpuK3mPwGX0Rq9S9zAn3jLCMqshSVXafVXZwcd/7smzI9ksjusXAUo+v8ln
-	Jm5JbQ==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd284ejh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 13:51:31 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A4DpUI4025073
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 4 Nov 2024 13:51:30 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 4 Nov 2024
- 05:51:22 -0800
-Message-ID: <e173058b-57e7-7fd0-dab7-7398bf9d66ec@quicinc.com>
-Date: Mon, 4 Nov 2024 19:20:01 +0530
+	Q+7hgCYK899f0FJbEY/vMXn0wJqm6OxSk7/yIGdwDuI=; b=SItzWc9U8yLNkDxI
+	41AHDteGPUMg5kJiTHxOiwF52+0ODUyOkQD1EY3zzchBjfTNvm3HlF2sv9wwLks5
+	xpz0TQ7MCPzm7igp+R4EMwQH6OTgXlyOKlnRenO2NbpGZjWAxTtCNGmbBURZfUXI
+	W4AjIwPhLD+nZ7ioIO6DcwEMYBsYwxxVTURjICL9SHvilaEUrAzvnTi5yG58hI91
+	Pdijc6SOJCoAZorwEyaODy+j1K+oZy1NlZNkwQoqdxl3xXypsQ6M3BrCpLEd9MSc
+	k07aJyd+3x+KEvva60hsW8f5sJhcZlXPpac8aJox5Ob28w8IZ2r6Gep9h8ZuwBlz
+	e2JCJw==
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd4ume0n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 13:51:22 +0000 (GMT)
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7180db3ca26so416904a34.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 05:51:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730728271; x=1731333071;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+7hgCYK899f0FJbEY/vMXn0wJqm6OxSk7/yIGdwDuI=;
+        b=kVWp8xxB7it0iqWVgoIhEtaLwRqDqzVyGaMxa1fgX6lmvm0hQ8d79Hbwn3x/dMeyKE
+         pDzTqWDrpiyqW73GX0ilKaBoOYtT400TfA0YqgzQJPKX/KUxKeIwHrHIhbFj71ysvBsc
+         A8Tm0G+ofCVvnK4tP7hMoYQ3ziJ//vhZ5Pfe04+0saSejzUZ9Otz7hEoc5xnZdrbHTO7
+         yfHWRB//O6YihBNiRoDtC8ARCkw3mz+9ht1vps+48rjr5wf3VLlSZzDgMtzKWvpFvH3h
+         AtxbF526bm4uiM0R8dJIyAKhZGHWUSUPfRSLGmxZS8u9TgnHfCTTK+mS3BMR0J2YDYVL
+         ZuZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGylu61hY6IJEsP2DCTeqvIu2fbwZo0PmIqSLNhnlxapzAZEaEG9h4PWV3jP6+Ntb99CTb8LnPpg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVPA96PBSEi0B/yOQBOP4KsGr81Wd4bLIAQw7L+L2CfeLam1ze
+	6t6DpEZSGVAzp8Lz6S6dfi+IRqhDn8qxlyluuPBcGs4Z5d3Dv7ajz4FZnBDfxaTJTfbgzuHk80f
+	tdMVTyJ6cJBLaeX/XPlCb20bIPWbtDSTgywn7DCMNBL80IZrI93OGPizFSg==
+X-Received: by 2002:a05:6808:2111:b0:3e6:49e0:f16b with SMTP id 5614622812f47-3e649e0fb7bmr6547838b6e.1.1730728271366;
+        Mon, 04 Nov 2024 05:51:11 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE4cnc3xqY8a6NcTMGPZ60dRJUOHzCgUzfXFzm9uWLTFW4bfNOfHKp4a3z7OM+82mgUNhac/Q==
+X-Received: by 2002:a05:6808:2111:b0:3e6:49e0:f16b with SMTP id 5614622812f47-3e649e0fb7bmr6547824b6e.1.1730728270940;
+        Mon, 04 Nov 2024 05:51:10 -0800 (PST)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e564941f7sm554474766b.20.2024.11.04.05.51.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 05:51:09 -0800 (PST)
+Message-ID: <91ea0f03-9bbe-491d-9056-ebd9fdc73bfa@oss.qualcomm.com>
+Date: Mon, 4 Nov 2024 14:51:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V5 3/6] firmware: arm_scmi: Report duplicate opps as
- firmware bugs
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 7/7] arm64: dts: qcom: ipq5424: Add thermal zone nodes
+To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        srinivas.kandagatla@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        lukasz.luba@arm.com, andersson@kernel.org, konradybcio@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
+References: <20241104124413.2012794-1-quic_mmanikan@quicinc.com>
+ <20241104124413.2012794-8-quic_mmanikan@quicinc.com>
 Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
-        <ulf.hansson@linaro.org>, <jassisinghbrar@gmail.com>,
-        <dmitry.baryshkov@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <konradybcio@kernel.org>,
-        <linux-pm@vger.kernel.org>, <tstrudel@google.com>, <rafael@kernel.org>,
-        Johan
- Hovold <johan+linaro@kernel.org>
-References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
- <20241030125512.2884761-4-quic_sibis@quicinc.com>
- <ZyThAFbOHKaBIgLg@hovoldconsulting.com>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <ZyThAFbOHKaBIgLg@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241104124413.2012794-8-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: N9dkp-hFPldnpkGgKZ0fDSY64p2Ut9pZ
-X-Proofpoint-GUID: N9dkp-hFPldnpkGgKZ0fDSY64p2Ut9pZ
+X-Proofpoint-GUID: MPX1LHyXrpgtstu1OUVDjDS3x-p7V4i4
+X-Proofpoint-ORIG-GUID: MPX1LHyXrpgtstu1OUVDjDS3x-p7V4i4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- clxscore=1015 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=767 impostorscore=0 suspectscore=0 spamscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2409260000 definitions=main-2411040121
 
-
-
-On 11/1/24 19:39, Johan Hovold wrote:
-> On Wed, Oct 30, 2024 at 06:25:09PM +0530, Sibi Sankar wrote:
->> Duplicate opps reported by buggy SCP firmware currently show up
->> as warnings even though the only functional impact is that the
->> level/index remain inaccessible. Make it less scary for the end
->> user by using dev_info instead, along with FW_BUG tag.
->>
->> Suggested-by: Johan Hovold <johan+linaro@kernel.org>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
->>   drivers/firmware/arm_scmi/perf.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
->> index 32f9a9acd3e9..c7e5a34b254b 100644
->> --- a/drivers/firmware/arm_scmi/perf.c
->> +++ b/drivers/firmware/arm_scmi/perf.c
->> @@ -387,7 +387,7 @@ process_response_opp(struct device *dev, struct perf_dom_info *dom,
->>   
->>   	ret = xa_insert(&dom->opps_by_lvl, opp->perf, opp, GFP_KERNEL);
->>   	if (ret) {
->> -		dev_warn(dev, "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
->> +		dev_info(dev, FW_BUG "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
->>   			 opp->perf, dom->info.name, ret);
+On 4.11.2024 1:44 PM, Manikanta Mylavarapu wrote:
+> Add thermal zone nodes for sensors present in IPQ5424.
 > 
-> I was hoping you could make the error message a bit more informative as
-> well, for example, by saying that a duplicate opp level was ignored:
-> 
-> 	arm-scmi arm-scmi.0.auto: [Firmware Bug]: Ignoring duplicate OPP 3417600 for NCC
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+[...]
 
-I did think about doing something similar but xa_insert can fail
-with both -EXIST (duplicate) and -ENOMEM, so the we can't really
-use term duplicate when insert fails. I can add the perf level
-though to the message though.
+> +
+> +		cpu3-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 13>;
+> +
+> +			trips {
+> +				cpu-critical {
+> +					temperature = <120000>;
+> +					hysteresis = <9000>;
+> +					type = "critical";
+> +				};
+> +
+> +				cpu-passive {
+> +					temperature = <110000>;
+> +					hysteresis = <9000>;
+> +					type = "passive";
 
--Sibi
+You have a passive trip point without passive polling
 
-> 
-> or similar (e.g. as the current message looks like an error, with errno
-> and all, that indeed warrants warning level).
-> 
-> Perhaps with such a message you could even keep the warning level to
-> make it stand out more (if that's desirable) without the risk of scaring
-> users.
-> 
-> Johan
+> +				};
+> +			};
+> +		};
+> +
+> +		wcss-tile2-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+
+These are the defaults
+
+> +			thermal-sensors = <&tsens 9>;
+> +
+> +			trips {
+> +				wcss_tile2-critical {
+
+Node names must not contain underscores
+
+Konrad
 
