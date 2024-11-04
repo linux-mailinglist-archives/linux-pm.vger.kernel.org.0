@@ -1,112 +1,147 @@
-Return-Path: <linux-pm+bounces-16977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 687119BBA4C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 17:24:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6E859BBC32
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 18:42:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25D7028563D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 16:24:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AC08282221
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 17:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1DF1C1AB1;
-	Mon,  4 Nov 2024 16:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B621C5793;
+	Mon,  4 Nov 2024 17:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldVCwoVJ"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="VjZ9GAWh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m10165.netease.com (mail-m10165.netease.com [154.81.10.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E3F4A08;
-	Mon,  4 Nov 2024 16:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161451C3022
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 17:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=154.81.10.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730737491; cv=none; b=t6xN1qcUNtb/ck/7Q6BQuwb/RdmSrZYJpC3X+1WOv+5WiKE5YhG4AdsZQpXKsD0AUjjg0JeiV0Gg2fXYe4+woYyTvYrH8djp8l05+xfIwKv5KelwT0gW4jxnMN2Kg5FizgEWTJR9keTKrYQmlX5krESwzDVBG8NpI3zMb6N69cg=
+	t=1730742151; cv=none; b=nKietcn7ntYdqiJ0sEXUkYJdopGKfWnBOuhNKCKLwanxewkUr/D2wD1Pk+ZcmXJzvbaj6aQoWwhYBMobPr3twSUJ1mvvlSwMaN2BZKRspj0wFdzB0Kja8UPIrV0rq+GnXvC+Bn8rKsEJdzTvkddABYrrBvffvjmBeCh7lqyFCP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730737491; c=relaxed/simple;
-	bh=xrziI1tIaUXMk8y9dkumNzCWo0adPVQBkgRWv0bOv/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GQ85aG+NCv61ViDnr2Z/217GXbJ+JFmhPLIzw9s47+ebkegylDB6LOK8bp8pGC/a+uPmKKevlowFTjFAzcspW7ioojKI+c5kuNz0ePIU/6kAmDXYCQoP5jRZ9dP+q0JjEbrYXVWRASMfIntUYs527l6jAtsPd9iWeCuFCtVb8lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldVCwoVJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BD3C4CECE;
-	Mon,  4 Nov 2024 16:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730737491;
-	bh=xrziI1tIaUXMk8y9dkumNzCWo0adPVQBkgRWv0bOv/c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ldVCwoVJN/qV4tYPeponloeViUeJtatA8XLMiBxMPNzIx9JnBnq4SP7CRgJxD/2Tc
-	 h0/BFcKu4weg8f0ZZzK1+TpyeHbXdL/1XLs09FyrzyU/UVpzPYNe58F4+dBLz2zNza
-	 lZ30SAjR4S49p53lzPOk5m32e32MkuzTFOA82LEUj6a/ILg8cw339PAiCRvvhFkkB1
-	 c2dhqtDcGhCxcHnlOQ7z02Zxl2mjD0TFKlmqBJyZW4Vge6FWFbVwe4N4BG3V7hqv0K
-	 hVcdnAFUXtf6+zVQl+YR+tU4bReETfy4j7SVfzEdMcpNa/q+XSWXVLyvWr7PgxP8My
-	 21rJFQG/DISEA==
-Date: Mon, 4 Nov 2024 10:24:49 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, linux-leds@vger.kernel.org,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>, linux-pm@vger.kernel.org,
-	Lars-Peter Clausen <lars@metafoo.de>, linux-kernel@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-	Baolin Wang <baolin.wang@linux.alibaba.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: sprd,sc2731: convert to YAML
-Message-ID: <173073748767.396036.1315745377945875916.robh@kernel.org>
-References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
+	s=arc-20240116; t=1730742151; c=relaxed/simple;
+	bh=6o8KrqWNAQQuemevdB/TGbEXni51XVXB7kOgpglPJHI=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=is4JSJP1rXjNQfhOTa22/Q43kpI9WunzmAVqIoMDbRJIViphHCLkE3GsBYPrbqLg0YziEYvSF5cdKIFOkN69qhLzLAg+hqukEguRTXX9ZXLQahnK8v+clDBlpIkRGQ/jxrJS7T+Rpa968ZwINbm/sZmho9vgdRWXOTGYKV3xe8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=VjZ9GAWh; arc=none smtp.client-ip=154.81.10.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1b5d8947;
+	Mon, 4 Nov 2024 15:32:23 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v4 0/7] Initial support for RK3576 UFS controller
+Date: Mon,  4 Nov 2024 15:31:54 +0800
+Message-Id: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9OSFZJQx8eS01NT09LQh9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a92f616d1f809cckunm1b5d8947
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nhg6HBw*HjIoHjpKHitWCA4B
+	TywaCTlVSlVKTEhLTEtOTk9OSk5MVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlMSE43Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=VjZ9GAWhsJB+tA1g7U+LD0tEazG8JjVGeiRVc8krb7V0MtOZG9q9wqb5hOJWXWgUdR2criLYmbViMkh4iMJGs0XUJoXGffJtoEgEhzZIMB5aXknBCn+QqjVMmUWnNffdwlrpZcHmSxa2PZK48ohpurz3P46PWOSl67XwGh2nNYI=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=4QVkJH8tpr3nsaz5ziKzyPBT7b6uUdsNiuHpGkBl6UU=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
 
+This patchset adds initial UFS controller support for RK3576 SoC.
+Patch 1 adds new quirk and patch 2 is the dt-bindings. Patch 3-6 deal
+with rpm and spm support in advanced suggested by Ulf. Final patch 5 is
+the driver added.
 
-On Mon, 04 Nov 2024 09:48:21 +0100, Stanislav Jakubek wrote:
-> Convert the Spreadtrum SC27xx PMIC bindings to DT schema. Adjust the
-> filename to match the compatible of the only in-tree user, SC2731.
-> Change #interrupt-cells value to 1, as according to [1] that is the
-> correct value.
-> Move partial examples of child nodes in the child node schemas to this new
-> MFD schema to have one complete example.
-> 
-> [1] https://lore.kernel.org/lkml/b6a32917d1e231277d240a4084bebb6ad91247e3.1550060544.git.baolin.wang@linaro.org/
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> ---
-> Changes in V3:
-> - remove $ref to nvmem/sc2731-efuse and list the compatibles with
->   additionalProperties: true (Krzysztof)
-> 
-> Changes in V2:
-> - rebase on next-20241029
-> - drop partial examples in child node schemas, move them here (Rob)
-> 
-> Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A55M-S2HP/
-> Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A55M-S2HP/
-> 
->  .../bindings/iio/adc/sprd,sc2720-adc.yaml     |  17 --
->  .../bindings/leds/sprd,sc2731-bltc.yaml       |  31 ---
->  .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 252 ++++++++++++++++++
->  .../bindings/mfd/sprd,sc27xx-pmic.txt         |  40 ---
->  .../bindings/power/supply/sc2731-charger.yaml |  21 +-
->  .../bindings/power/supply/sc27xx-fg.yaml      |  38 +--
->  .../regulator/sprd,sc2731-regulator.yaml      |  21 --
->  .../bindings/rtc/sprd,sc2731-rtc.yaml         |  16 --
->  8 files changed, 254 insertions(+), 182 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/sprd,sc27xx-pmic.txt
-> 
+Changes in v4:
+- properly describe reset-gpios
+- deal with power domain of rpm and spm suggested by Ulf
+- Fix typo and disable clks in ufs_rockchip_remove
+- remove clk_disable_unprepare(host->ref_out_clk) from
+  ufs_rockchip_remove
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Changes in v3:
+- rename the file to rockchip,rk3576-ufshc.yaml
+- add description for reset-gpios
+- use rockchip,rk3576-ufshc as compatible
+- reword Kconfig description
+- elaborate more about controller in commit msg
+- use rockchip,rk3576-ufshc for compatible
+- remove useless header file
+- remove inline for ufshcd_is_device_present
+- use usleep_range instead
+- remove initialization, reverse Xmas order
+- remove useless varibles
+- check vops for null
+- other small fixes for err path
+- remove pm_runtime_set_active
+- fix the active and inactive reset-gpios logic
+- fix rpm_lvl and spm_lvl to 5 and move to end of probe path
+- remove unnecessary system PM callbacks
+- use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
+  of UFSHCI_QUIRK_BROKEN_HCE
+
+Changes in v2:
+- rename the file
+- add reset-gpios
+
+Shawn Lin (6):
+  scsi: ufs: core: Add UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE
+  dt-bindings: ufs: Document Rockchip UFS host controller
+  soc: rockchip: add header for suspend mode SIP interface
+  pmdomain: rockchip: Add smc call to inform firmware
+  PM: wakeup: Add device_clr_wakeup_path()
+  scsi: ufs: rockchip: initial support for UFS
+
+Ulf Hansson (1):
+  pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+
+ .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 +++++++
+ drivers/pmdomain/core.c                            |  34 +++
+ drivers/pmdomain/rockchip/pm-domains.c             |   7 +
+ drivers/ufs/core/ufshcd.c                          |  17 ++
+ drivers/ufs/host/Kconfig                           |  12 +
+ drivers/ufs/host/Makefile                          |   1 +
+ drivers/ufs/host/ufs-rockchip.c                    | 340 +++++++++++++++++++++
+ drivers/ufs/host/ufs-rockchip.h                    |  51 ++++
+ include/linux/pm_domain.h                          |   7 +
+ include/linux/pm_wakeup.h                          |   7 +
+ include/soc/rockchip/rockchip_sip.h                |   3 +
+ include/ufs/ufshcd.h                               |   6 +
+ 12 files changed, 590 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+ create mode 100644 drivers/ufs/host/ufs-rockchip.c
+ create mode 100644 drivers/ufs/host/ufs-rockchip.h
+
+-- 
+2.7.4
 
 
