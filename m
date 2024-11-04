@@ -1,105 +1,170 @@
-Return-Path: <linux-pm+bounces-16962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 976EE9BB735
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:09:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 846269BB75F
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:18:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B15C28510E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:09:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7A691C235BB
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:18:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D6D13B29B;
-	Mon,  4 Nov 2024 14:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0A71494B1;
+	Mon,  4 Nov 2024 14:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6IxGyA5"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZFl3mqvP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416DF7083E;
-	Mon,  4 Nov 2024 14:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8171442F2
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 14:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730729355; cv=none; b=V4xSF6QS3Rqhm2w83GGcQtaavYtLxZlcfRMNqfq8CMxPvgX1Rnd6nqCQ0pWEA8QeS5JjaQpTCpJx/FoYK4qoYbHuPdCQ5ZsfLsjuqI3YB2t/PfWj5m+k5eNwhE/6pHAirDjOAsgZGgxOYQlmdRJcXaD50+DoGD7fWCLWwwcTXqU=
+	t=1730729893; cv=none; b=Q9dYiZAZaSVH8VULbTrr6RutWBQESxFV+SlYwW6rm3Qv4VTk+VAg9IKwbbWXKm/0HqEVw6nSLFcGMQkbbvwCggBerMx7ySRagQDEplimy4tDAAvm0nwogpFcyroZL2f32qutFK6l7zB0q6yO+ID+drlNgW13ESGsfXh2c55F2T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730729355; c=relaxed/simple;
-	bh=65OFDvUsjvE7rt/DlU7JuIUhbpB5mDQ8n6OdH0qeDdg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iuKMaIym4FdyrNYenUux+5MKBYEzHIbx/jPD54Jr+gK05fUltxZ2BlqLfgxX4e5ebJ7lHvBRFbsv5YdLEH6F/f4c+riAJ1QbtQ44G9KtEBMbFq0+hiGuAykvGaIur1nOB3XsvQEjuLj2TzjnlxAUdul0OLnS3FGFiApWlp5l0gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6IxGyA5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BC2C4CED1;
-	Mon,  4 Nov 2024 14:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730729354;
-	bh=65OFDvUsjvE7rt/DlU7JuIUhbpB5mDQ8n6OdH0qeDdg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K6IxGyA5/Q/v4wvgVx/3Dw5iJbz7au6BOTy3Lu+rzx2ltxMP6fU65t2dyxmWM2z5l
-	 GWd3spdQxqRpZ4D1FJgkdK4MqdY/Ev4CRNKhaegnblnbgZdrp2V8EdzDysSWNXbuwL
-	 f/JIx0La64PUWPZgjHArkAm7GN3cBnOu81QIXNUJEF7BWzQs9a6Z4h4ZZTfzVQ6qk3
-	 N/NhzyE6jPvs2rbK/cH618vIkEwWYDHnGJh66ZnnBK2yg9+mjEF8+Ymp7eDrXxz3O/
-	 2D0R/QoX0e6PptFFVAIsj0sG4cENQlcg1O4irSGrfgr041SyD0v18GvTlEwznGeaFj
-	 bpHX3ZeBYtUqg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1t7xlY-000000007gd-0i2h;
-	Mon, 04 Nov 2024 15:09:12 +0100
-Date: Mon, 4 Nov 2024 15:09:12 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, ulf.hansson@linaro.org,
-	jassisinghbrar@gmail.com, dmitry.baryshkov@linaro.org,
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	konradybcio@kernel.org, linux-pm@vger.kernel.org,
-	tstrudel@google.com, rafael@kernel.org,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH V5 3/6] firmware: arm_scmi: Report duplicate opps as
- firmware bugs
-Message-ID: <ZyjViCVtPwe-tmMq@hovoldconsulting.com>
-References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
- <20241030125512.2884761-4-quic_sibis@quicinc.com>
- <ZyThAFbOHKaBIgLg@hovoldconsulting.com>
- <e173058b-57e7-7fd0-dab7-7398bf9d66ec@quicinc.com>
+	s=arc-20240116; t=1730729893; c=relaxed/simple;
+	bh=Teyavt3wsHUxjvyFAZiKpPT387B+tlsdvE9LyLGy+W0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kqzmCUJuHDUZrmPmGfF0RvMkdPfunrHyoSg8Bg/LYpQYDb9I4SAfIWsnI4nqWQctEtGHXY+yeZIaCqVcp0YiZEVqvw/FOc1w8g1o70tIZlM/IcqJGLrHIHiYhGNZajBh3mTsA/08eEqRHeigzNn9FkZTfh8xw3jQGGy4qfaZQX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZFl3mqvP; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Bu4F1031836
+	for <linux-pm@vger.kernel.org>; Mon, 4 Nov 2024 14:18:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	u1v/WVvHGAo0bVyM2Taoht+/F9lPQwBWyf6U4K1s2Xk=; b=ZFl3mqvPbcrqu5Fm
+	/tdQBLyc1RjQhobSxIgv3AoflRkDcnVMqMoINj4uQJrMxqktvTB6rn27n9CmqOur
+	Czq75fWmigZZLMbsJ3t53Gt3ZlRiL4Oif9NVq9/u6JkNSNGmiNGPPnnGG0k9LB3L
+	aGAlhLDddL7oTD+Wd3bunyRsHIPHHWHYvqvo4O143vt5SH/0Zt1aaDCu3Rp+Xvgn
+	/vCyTIy46BxEQR+9JKGPTpu7VgLGNVhjhD4A++Ad3Qv8iQ4d55wwJvkZeaRBNg/j
+	85kvTB7L9V3m5tKT7c0vJWwULTmzd5GWtwwZnvcq1U17sJpeNR3iBxRltqp/3bLo
+	nn1YmA==
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd5cmf0w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 14:18:10 +0000 (GMT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a6baffc7f9so1847905ab.1
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 06:18:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730729889; x=1731334689;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u1v/WVvHGAo0bVyM2Taoht+/F9lPQwBWyf6U4K1s2Xk=;
+        b=gdezlO/Dk36e0suQoJx+9zZlTxElymg1+7L8PXpZp5ez6dnMoVDh27dOJRdnix9MB1
+         hdqN0XNi7+JrhavyJC2B5uG0/oVF26Pj/tHxMp2zcrHaPAt1g/wz2J+6rRR/xWdwRatU
+         DgAE4AX5/7HbNjicILGUM1kKP3EFMVPL6ZfpU3GHYaI6rfYxhWUCjYLOWNCGrHGVameo
+         yCRT8+xeGDX0MRlzFECMbDZervus0ze8T9uecSglhNSV3f2pi9sjyIxLkqs8Ym7Y2J/t
+         uup01XvGooet7uipXyU5IZffhOOQzYyJM785SMKiI2Ak+/lRRoQUc6xyFTif6bk6/5UX
+         QoIA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3xIPGflv7qBStRDuTUprWyWXYhLozH+KLYL3qaUwA8YaZMPcrSUvzKPlXTsfGRZl5WHF8qHTklA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx874olx3//nC9ydPUDegSgiXMkZAW/7jYj05w5q/9Aj0t76eWN
+	K7jlL8R9LYW1GdzmKeGGCurwOWPNGwstoviKOaKkyUPeQvEzztdNAa6fyNSFGePCDfbKQ8a3duR
+	V/e3C8FaGfC85kqJfioSM0KYeiX8WBVJsXfRbIrYH9H8wtk86n+xxjcfjIA==
+X-Received: by 2002:a92:c561:0:b0:3a3:af94:4610 with SMTP id e9e14a558f8ab-3a4ed314920mr76085945ab.7.1730729889308;
+        Mon, 04 Nov 2024 06:18:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFCE3MSfa+IhWcVZ63OZ1NsqKoHNMmvePwJ57m9ObdgTyluZNlPMfMOzkM+3rGnAfblsK0Ltg==
+X-Received: by 2002:a92:c561:0:b0:3a3:af94:4610 with SMTP id e9e14a558f8ab-3a4ed314920mr76085745ab.7.1730729888716;
+        Mon, 04 Nov 2024 06:18:08 -0800 (PST)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e566442easm555348766b.166.2024.11.04.06.18.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 06:18:07 -0800 (PST)
+Message-ID: <e1871824-78c8-436f-a41c-16ac1614004a@oss.qualcomm.com>
+Date: Mon, 4 Nov 2024 15:18:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e173058b-57e7-7fd0-dab7-7398bf9d66ec@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 1/3] drm/msm/adreno: Add support for ACD
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
+ <20241012-gpu-acd-v1-1-1e5e91aa95b6@quicinc.com>
+ <1543ae2a-76ff-4b36-adae-37076e48b7f8@oss.qualcomm.com>
+ <20241021220914.vrxiyeoxjyxweovu@hu-akhilpo-hyd.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241021220914.vrxiyeoxjyxweovu@hu-akhilpo-hyd.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: gEqnsce4E56qx8OM3BN5dbZggKExU79G
+X-Proofpoint-GUID: gEqnsce4E56qx8OM3BN5dbZggKExU79G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 clxscore=1015 phishscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411040124
 
-On Mon, Nov 04, 2024 at 07:20:01PM +0530, Sibi Sankar wrote:
-> On 11/1/24 19:39, Johan Hovold wrote:
-> > On Wed, Oct 30, 2024 at 06:25:09PM +0530, Sibi Sankar wrote:
-
-> >> @@ -387,7 +387,7 @@ process_response_opp(struct device *dev, struct perf_dom_info *dom,
-> >>   
-> >>   	ret = xa_insert(&dom->opps_by_lvl, opp->perf, opp, GFP_KERNEL);
-> >>   	if (ret) {
-> >> -		dev_warn(dev, "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
-> >> +		dev_info(dev, FW_BUG "Failed to add opps_by_lvl at %d for %s - ret:%d\n",
-> >>   			 opp->perf, dom->info.name, ret);
-> > 
-> > I was hoping you could make the error message a bit more informative as
-> > well, for example, by saying that a duplicate opp level was ignored:
-> > 
-> > 	arm-scmi arm-scmi.0.auto: [Firmware Bug]: Ignoring duplicate OPP 3417600 for NCC
+On 22.10.2024 12:09 AM, Akhil P Oommen wrote:
+> On Mon, Oct 21, 2024 at 11:38:41AM +0200, Konrad Dybcio wrote:
+>> On 11.10.2024 10:29 PM, Akhil P Oommen wrote:
+>>> ACD a.k.a Adaptive Clock Distribution is a feature which helps to reduce
+>>> the power consumption. In some chipsets, it is also a requirement to
+>>> support higher GPU frequencies. This patch adds support for GPU ACD by
+>>> sending necessary data to GMU and AOSS. The feature support for the
+>>> chipset is detected based on devicetree data.
+>>>
+>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>> ---
+>>
+>> [...]
+>>
+>>> +
+>>> +	/* Initialize qmp node to talk to AOSS */
+>>> +	gmu->qmp = qmp_get(gmu->dev);
+>>> +	if (IS_ERR(gmu->qmp)) {
+>>> +		cmd->enable_by_level = 0;
+>>> +		return dev_err_probe(gmu->dev, PTR_ERR(gmu->qmp), "Failed to initialize qmp\n");
+>>> +	}
+>>
+>> I'm still in favor of keeping qmp_get where it currently is, so that
+>> probe can fail/defer faster
 > 
-> I did think about doing something similar but xa_insert can fail
-> with both -EXIST (duplicate) and -ENOMEM, so the we can't really
-> use term duplicate when insert fails. I can add the perf level
-> though to the message though.
+> Sorry, I somehow missed this email from you until now.
+> 
+> If it fails, then it probably doesn't matter if it is a bit late. But for defer, isn't there
+> some optimizations to track the dependency from devicetree data? I am
+> not entirely sure!
 
-We generally don't log errors for memory allocation failures (e.g. as
-that would already have been taken care of by the allocators, if that is
-the source of the -ENOMEM).
+There's devlink for clocks/supplies etc, it doesn't apply universally
+for all phandle references IIUC.
 
-But either way you should be able to check the errno to determine if
-this is due to a duplicate entry or not.
+> 
+> Since qmp node is related to ACD, I felt it is better to:
+>   1. Keep all acd probe related code in a single place.
+>   2. Be more opportunistic in skipping qmp_get() wherever possible.
+> 
+> But if you still have strong opinion on this, I can move it back in the
+> next revision (v3).
 
-Johan
+I suppose the answer is yes, I have a strong opinion :D
+
+Konrad
 
