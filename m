@@ -1,256 +1,147 @@
-Return-Path: <linux-pm+bounces-16964-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16965-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334159BB897
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 16:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E0B79BB8A4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 16:11:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 563EF1C22BEF
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:08:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F31E1C233FC
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:11:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79E41BFE10;
-	Mon,  4 Nov 2024 15:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9911BC073;
+	Mon,  4 Nov 2024 15:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kBrrHCBc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxceTN5N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E5C1BF81B
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 15:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3407D4A08;
+	Mon,  4 Nov 2024 15:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730732896; cv=none; b=ehVv1RJGXO7ac7Vs8qT2t288Mch25GhMT25kNwEEdGV7KeWdXdD1/nynaoK9lpUbrtJ7aaQxCOn80S4YL+O5iH5rFmZfU1FTNTGiT9cEML3XHI2GVxcMJ6l7bVPI6A49AxlKBMS0uHVdv+okc6ZsCCy3TFmRkPs4ZLHI3UJxIYU=
+	t=1730733096; cv=none; b=KEnJpt3f8QHCEV6AttZFYTsAr5voZ5++aWHrEtSmxGw468dfa8lIjKXpr2XlL4zKWZZMVW07fJTtCETZJ4elgnhQTINg+a7OVgdlBF9XB9/zg9onRGhZKyhzGWYhuQF2DfkWMaYINi+o1yyj5SfFZl82Gw6dSg7Th6tn6sipj8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730732896; c=relaxed/simple;
-	bh=hI1wQ/fZNIAIQ/ZGwRLRxWBlSdPDkqRQnUGOX3vJ9To=;
+	s=arc-20240116; t=1730733096; c=relaxed/simple;
+	bh=kTcIvo7yioetmpNQbu0IC5h4s6IrPCBWdMVl5D73t7g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LPZ7u11gaPQBxEvxguoPmiSywgzvJnDxssHYtFCMtRkBVxdrYXk9yNa1RZpDZE5/+KRDko33EhBdVJSQEFXqRdpScbVEetYpei9udL3nZvA8nsLnNYArDXQIkCDHQ2HLug0BBCy7WoyshFL4/nMZ1Drnt/bIQNpjII0MsDz7KjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kBrrHCBc; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20cbcd71012so50193025ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 07:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730732894; x=1731337694; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fTaUplHrH7M+dnB2sEL6yj29zt9plqFajNCOZAfkhqU=;
-        b=kBrrHCBc8gUd+/hPU4mIMEi8/pxZn5tr1cR8J+h0ZBGbuI5tmjOUQ4zz/Wn3yNsDQ5
-         e2w7QYWd8Oen8cr3ZKbS95DeNGEKbYQKKj6jsiPawuW/4IZzxrz0qrUbdJI6HfjgBnQJ
-         jny4vL2Fo3Q1UflB2RidWdST/PlWSv7E7LnCuELjwgwYShlKyUDFsggP9Nhunn65GDD1
-         /37zwh0FZ4g9VpXwLcCQf+h3uF2vHcbPfxLEEnROa2w6tXtYd5IY1Uz70uV8xRpUmbtv
-         9y0oMFrx2ex23lT16/xykJ2AdJaRlQycw0KKuqd9Mg7/FdXsRCbRBAuCIT/4ZN6bWugz
-         IjuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730732894; x=1731337694;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fTaUplHrH7M+dnB2sEL6yj29zt9plqFajNCOZAfkhqU=;
-        b=soR3p8llSyzBcNwz9ENRIwapyUdYqfW6aPsMN7hMQSr54DPUANTfE7Vyp2O9r1qKKZ
-         k/TwMFJoeVGdMcZyJFeddIbEcFfYW3rdiIgTZTIxyX7kxVUaqIR4NKrfR7jyqTMtmG3a
-         uVGJ9G9Hhe/F1lc9MtRLHa6+kqDIdFt8YNAkz7OGVLBvozABq1cR30PI/FLijdgETDOl
-         DTls0XV3fFVrZ4Dkz+xpbgTAgId6AQyUV2MQ/ueqp4BWUdlcMr6GfDL2qG+knYCw1SHq
-         v+Xb8R7d2JoEWyQkKcM9osuQ4/kpkHaz5XTPYm+ZoT+FyxH1CXYFf56Z1yOLYIdlPRmb
-         MMJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV45ScryUTuzrjCH1k4LF2+JneYCW+k62lHE52z1lFZ44FO5y6k1EdCT6O/5EICgx1bn2TD96XFVQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi2+1Q/Co8R/F6fOQTI6L0GVGbae/ZkJ8G+2oTcAG9CwKVmN/U
-	2kRkwPGU2dqeN86/BLWPILJucM35HnxBEBcn5mVz2/ZLCgtoREe3WTZCmHMVPA==
-X-Google-Smtp-Source: AGHT+IHOenWnujTBSBIpKLJWamkVwB46u9SIX/kMarM+ODiUVeqEfeHc6c4RexMW87XtzdjqQNduWA==
-X-Received: by 2002:a17:902:eccd:b0:20b:59be:77b with SMTP id d9443c01a7336-2111aec8329mr165149345ad.6.1730732893820;
-        Mon, 04 Nov 2024 07:08:13 -0800 (PST)
-Received: from thinkpad ([2409:40f4:3049:1cc7:217b:63a:40ce:2e01])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a6815sm62677185ad.135.2024.11.04.07.08.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 07:08:13 -0800 (PST)
-Date: Mon, 4 Nov 2024 20:38:05 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] scsi: ufs: rockchip: initial support for UFS
-Message-ID: <20241104150805.q7g3bfvbsdx3b6u4@thinkpad>
-References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
- <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
- <CAPDyKForpLcmkqruuTfD6kkJhp_4CKFABWRxFVYNskGL1tjO=w@mail.gmail.com>
- <3969bae0-eeb8-447a-86a5-dfdac0b136cd@rock-chips.com>
- <CAPDyKFo=GcHG2sGQBrXJ7VWyp59QOmbLCAvHQ3krUympEkid_A@mail.gmail.com>
- <98e0062c-aeb1-4bea-aa2b-4a99115c9da4@rock-chips.com>
- <20241103120223.abkwgej4svas4epr@thinkpad>
- <6f3f2d17-4ca2-44ad-b8df-72986d4b3174@rock-chips.com>
- <CAPDyKFqMuFMf0+2+mPZaGGtBRfavg0LTkhbrCeqh7kHeqq-yZQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s/4MfXs2h+9gsFfPmilwtAYpQkgUwk6S05C5oHqmpFIz0Z9ZYutPwMQ+02wIfwFjKa/SJePEV8nX4ww7DplNcppNQMooYqFZBBLZJrISpYPeYMGfTWodu6hbYc9zeoLV6UvkhQrCFz9FLv94WDE4yj9jV1tO49q6IgZ/Fc1KT4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxceTN5N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3BEC4CECE;
+	Mon,  4 Nov 2024 15:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730733095;
+	bh=kTcIvo7yioetmpNQbu0IC5h4s6IrPCBWdMVl5D73t7g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lxceTN5NoMnOb7R/VPtFgRQBTl8fQIQGc+4Gk8OT4K//G+8yFdf1m763nh4hbSYjQ
+	 Q8L0dM+aIbjCHQBdLLToU6JHIkL0xE1N1MhABdTFa4no5VZJo28LxZQQBoWB/t2irM
+	 h5+K4mIJXpoBeCpFomfpoaJA0yVQ95MKtcPaM1xFuLRiXCcZpu4o9nJ6qlaqTN5121
+	 YfE8P7UqD3VEHAvSGFS2dsG4TFkL6XuDxtv562XTMv3j6/0Cdx0wFHXFycCvk81Ndz
+	 w+K2Nd4Qks64XUx2V2qChbExvIWBEDSFoFlvjbEWoQUHMeDg67rC+qPPhYHGReiBK2
+	 bN5bKB2JDwa6w==
+Date: Mon, 4 Nov 2024 16:11:23 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: David Woodhouse <dwmw2@infradead.org>, sami.mujawar@arm.com,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Francesco Lavra <francescolavra.fl@gmail.com>,
+	Miguel Luis <miguel.luis@oracle.com>
+Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
+ hibernate
+Message-ID: <ZyjkGwkrQ+R+fI8m@lpieralisi>
+References: <20241019172459.2241939-1-dwmw2@infradead.org>
+ <20241019172459.2241939-7-dwmw2@infradead.org>
+ <ZyPEn4qhaYyYqrzk@lpieralisi>
+ <ZyUUh6KawapLkj0z@lpieralisi>
+ <CAMj1kXFma8-GqKuOs5-UAQY9asbq2p9EubSjjbywaURa4T4WnA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPDyKFqMuFMf0+2+mPZaGGtBRfavg0LTkhbrCeqh7kHeqq-yZQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXFma8-GqKuOs5-UAQY9asbq2p9EubSjjbywaURa4T4WnA@mail.gmail.com>
 
-On Mon, Nov 04, 2024 at 10:51:45AM +0100, Ulf Hansson wrote:
-> On Mon, 4 Nov 2024 at 07:38, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+On Mon, Nov 04, 2024 at 02:54:12PM +0100, Ard Biesheuvel wrote:
+> On Fri, 1 Nov 2024 at 18:49, Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
 > >
-> > 在 2024/11/3 20:02, Manivannan Sadhasivam 写道:
-> > > On Fri, Oct 18, 2024 at 05:20:08PM +0800, Shawn Lin wrote:
-> > >> Hi Ulf,
-> > >>
-> > >> 在 2024/10/18 17:07, Ulf Hansson 写道:
-> > >>> On Thu, 10 Oct 2024 at 03:21, Shawn Lin <shawn.lin@rock-chips.com> wrote:
-> > >>>>
-> > >>>> Hi Ulf
-> > >>>>
-> > >>>> 在 2024/10/9 21:15, Ulf Hansson 写道:
-> > >>>>> [...]
-> > >>>>>
-> > >>>>>> +
-> > >>>>>> +static int ufs_rockchip_runtime_suspend(struct device *dev)
-> > >>>>>> +{
-> > >>>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
-> > >>>>>> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
-> > >>>>>> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-> > >>>>>
-> > >>>>> pd_to_genpd() isn't safe to use like this. It's solely to be used by
-> > >>>>> genpd provider drivers.
-> > >>>>>
-> > >>>>>> +
-> > >>>>>> +       clk_disable_unprepare(host->ref_out_clk);
-> > >>>>>> +
-> > >>>>>> +       /*
-> > >>>>>> +        * Shouldn't power down if rpm_lvl is less than level 5.
-> > >>>>>
-> > >>>>> Can you elaborate on why we must not power-off the power-domain when
-> > >>>>> level is less than 5?
-> > >>>>>
-> > >>>>
-> > >>>> Because ufshcd driver assume the controller is active and the link is on
-> > >>>> if level is less than 5. So the default resume policy will not try to
-> > >>>> recover the registers until the first error happened. Otherwise if the
-> > >>>> level is >=5, it assumes the controller is off and the link is down,
-> > >>>> then it will restore the registers and link.
-> > >>>>
-> > >>>> And the level is changeable via sysfs.
-> > >>>
-> > >>> Okay, thanks for clarifying.
-> > >>>
-> > >>>>
-> > >>>>> What happens if we power-off anyway when the level is less than 5?
-> > >>>>>
-> > >>>>>> +        * This flag will be passed down to platform power-domain driver
-> > >>>>>> +        * which has the final decision.
-> > >>>>>> +        */
-> > >>>>>> +       if (hba->rpm_lvl < UFS_PM_LVL_5)
-> > >>>>>> +               genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-> > >>>>>> +       else
-> > >>>>>> +               genpd->flags &= ~GENPD_FLAG_RPM_ALWAYS_ON;
-> > >>>>>
-> > >>>>> The genpd->flags is not supposed to be changed like this - and
-> > >>>>> especially not from a genpd consumer driver.
-> > >>>>>
-> > >>>>> I am trying to understand a bit more of the use case here. Let's see
-> > >>>>> if that helps me to potentially suggest an alternative approach.
-> > >>>>>
-> > >>>>
-> > >>>> I was not familiar with the genpd part, so I haven't come up with
-> > >>>> another solution. It would be great if you can guide me to the right
-> > >>>> way.
-> > >>>
-> > >>> I have been playing with the existing infrastructure we have at hand
-> > >>> to support this, but I need a few more days to be able to propose
-> > >>> something for you.
-> > >>>
-> > >>
-> > >> Much appreciate.
-> > >>
-> > >>>>
-> > >>>>>> +
-> > >>>>>> +       return ufshcd_runtime_suspend(dev);
-> > >>>>>> +}
-> > >>>>>> +
-> > >>>>>> +static int ufs_rockchip_runtime_resume(struct device *dev)
-> > >>>>>> +{
-> > >>>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
-> > >>>>>> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
-> > >>>>>> +       int err;
-> > >>>>>> +
-> > >>>>>> +       err = clk_prepare_enable(host->ref_out_clk);
-> > >>>>>> +       if (err) {
-> > >>>>>> +               dev_err(hba->dev, "failed to enable ref out clock %d\n", err);
-> > >>>>>> +               return err;
-> > >>>>>> +       }
-> > >>>>>> +
-> > >>>>>> +       reset_control_assert(host->rst);
-> > >>>>>> +       usleep_range(1, 2);
-> > >>>>>> +       reset_control_deassert(host->rst);
-> > >>>>>> +
-> > >>>>>> +       return ufshcd_runtime_resume(dev);
-> > >>>>>> +}
-> > >>>>>> +
-> > >>>>>> +static int ufs_rockchip_system_suspend(struct device *dev)
-> > >>>>>> +{
-> > >>>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
-> > >>>>>> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
-> > >>>>>> +
-> > >>>>>> +       /* Pass down desired spm_lvl to Firmware */
-> > >>>>>> +       arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
-> > >>>>>> +                       host->pd_id, hba->spm_lvl < 5 ? 1 : 0, 0, 0, 0, 0, NULL);
-> > >>>>>
-> > >>>>> Can you please elaborate on what goes on here? Is this turning off the
-> > >>>>> power-domain that the dev is attached to - or what is actually
-> > >>>>> happening?
-> > >>>>>
-> > >>>>
-> > >>>> This smc call is trying to ask firmware not to turn off the power-domian
-> > >>>> that the UFS is attached to and also not to turn off the power of UFS
-> > >>>> conntroller.
-> > >>>
-> > >>> Okay, thanks for clarifying!
-> > >>>
-> > >>> A follow up question, don't you need to make a corresponding smc call
-> > >>> to inform the FW that it's okay to turn off the power-domain at some
-> > >>> point?
-> > >>>
-> > >>
-> > >> Yes. Each time entering sleep, we teach FW if it need to turn off or keep
-> > >> power-domain, for instance "hba->spm_lvl < 5 ? 1 : 0" , 0 means
-> > >> off and 1 means on.
-> > >>
+> > [+Ard, Sami, for EFI]
+> >
+> > On Thu, Oct 31, 2024 at 06:55:43PM +0100, Lorenzo Pieralisi wrote:
+> > > On Sat, Oct 19, 2024 at 06:15:47PM +0100, David Woodhouse wrote:
 > > >
-> > > We had a requirement to notify the genpd provider from consumer to not turn off
-> > > the power domain during system suspend. So Ulf came up with an API for
-> > > consumers, device_set_wakeup_path() setting the 'dev->power.wakeup_path' which
-> > > will be honored by the genpd core. Will that work for you?
+> > > [...]
+> > >
+> > > > +#ifdef CONFIG_HIBERNATION
+> > > > +static int psci_sys_hibernate(struct sys_off_data *data)
+> > > > +{
+> > > > +   /*
+> > > > +    * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
+> > > > +    * and is supported by hypervisors implementing an earlier version
+> > > > +    * of the pSCI v1.3 spec.
+> > > > +    */
+> > >
+> > > It is obvious but with this patch applied a host kernel would start executing
+> > > SYSTEM_OFF2 too if supported in firmware to hibernate, it is not a hypervisor
+> > > only code path.
+> > >
+> > > Related to that: is it now always safe to override
+> > >
+> > > commit 60c0d45a7f7a ("efi/arm64: use UEFI for system reset and poweroff")
+> > >
+> > > for hibernation ? It is not very clear to me why overriding PSCI for
+> > > poweroff was the right thing to do - tried to follow that patch history but
+> > > the question remains (it is related to UpdateCapsule() but I don't know
+> > > how that applies to the hibernation use case).
 > >
-> > Yes, that works. And we may need a symmetrical call, for instance,
-> > device_clr_wakeup_path() to allow genpd provider to turn off the power
-> > domain as well.
+> > RFC: It is unclear to me what happens in current mainline if we try to
+> > hibernate with EFI runtime services enabled and a capsule update pending (we
+> > issue EFI ResetSystem(EFI_RESET_SHUTDOWN,..) which might not be compatible
+> > with the reset required by the pending capsule update request) what happens
+> > in this case I don't know but at least the choice is all contained in
+> > EFI firmware.
+> >
+> > Then if in the same scenario now we are switching to PSCI SYSTEM_OFF2 for the
+> > hibernate reset I suspect that what happens to the in-flight capsule
+> > update requests strictly depends on what "reset" PSCI SYSTEM_OFF2 will
+> > end up doing ?
+> >
+> > I think this is just a corner case and it is unlikely it has been ever
+> > tested (is it even possible ? Looking at EFI folks) - it would be good
+> > to clarify it at least to make sure we understand this code path.
+> >
 > 
-> The PM core clears the flag in device_prepare(). The flag is typically
-> supposed to be set from a ->suspend() callback, so there should be no
-> need for an additional function that clears the flag, I think.
+> I'm not aware of any OS that actually uses capsule update at runtime
+> (both Windows and Linux queue up the capsule and call the
+> UpdateCapsule() runtime service at boot time after a reboot).
 > 
+> So it is unlikely that this would break anything, and I'd actually be
+> inclined to disable capsule update at runtime altogether.
+> 
+> I will also note that hibernation with EFI is flaky in general, given
+> that EFI memory regions may move around
 
-Yeah, that's my understanding as well though I didn't look into PM core deeply.
+Thank you for chiming in, I think we are OK (I don't think this patch
+will create more issues than the ones that are already there for hibernate
+anyway) - the reasoning behind the change is in the commit logs.
 
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+Lorenzo
 
