@@ -1,170 +1,256 @@
-Return-Path: <linux-pm+bounces-16963-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16964-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 846269BB75F
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 334159BB897
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 16:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7A691C235BB
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:18:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 563EF1C22BEF
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0A71494B1;
-	Mon,  4 Nov 2024 14:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79E41BFE10;
+	Mon,  4 Nov 2024 15:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZFl3mqvP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kBrrHCBc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8171442F2
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 14:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E5C1BF81B
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 15:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730729893; cv=none; b=Q9dYiZAZaSVH8VULbTrr6RutWBQESxFV+SlYwW6rm3Qv4VTk+VAg9IKwbbWXKm/0HqEVw6nSLFcGMQkbbvwCggBerMx7ySRagQDEplimy4tDAAvm0nwogpFcyroZL2f32qutFK6l7zB0q6yO+ID+drlNgW13ESGsfXh2c55F2T8=
+	t=1730732896; cv=none; b=ehVv1RJGXO7ac7Vs8qT2t288Mch25GhMT25kNwEEdGV7KeWdXdD1/nynaoK9lpUbrtJ7aaQxCOn80S4YL+O5iH5rFmZfU1FTNTGiT9cEML3XHI2GVxcMJ6l7bVPI6A49AxlKBMS0uHVdv+okc6ZsCCy3TFmRkPs4ZLHI3UJxIYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730729893; c=relaxed/simple;
-	bh=Teyavt3wsHUxjvyFAZiKpPT387B+tlsdvE9LyLGy+W0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kqzmCUJuHDUZrmPmGfF0RvMkdPfunrHyoSg8Bg/LYpQYDb9I4SAfIWsnI4nqWQctEtGHXY+yeZIaCqVcp0YiZEVqvw/FOc1w8g1o70tIZlM/IcqJGLrHIHiYhGNZajBh3mTsA/08eEqRHeigzNn9FkZTfh8xw3jQGGy4qfaZQX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZFl3mqvP; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Bu4F1031836
-	for <linux-pm@vger.kernel.org>; Mon, 4 Nov 2024 14:18:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	u1v/WVvHGAo0bVyM2Taoht+/F9lPQwBWyf6U4K1s2Xk=; b=ZFl3mqvPbcrqu5Fm
-	/tdQBLyc1RjQhobSxIgv3AoflRkDcnVMqMoINj4uQJrMxqktvTB6rn27n9CmqOur
-	Czq75fWmigZZLMbsJ3t53Gt3ZlRiL4Oif9NVq9/u6JkNSNGmiNGPPnnGG0k9LB3L
-	aGAlhLDddL7oTD+Wd3bunyRsHIPHHWHYvqvo4O143vt5SH/0Zt1aaDCu3Rp+Xvgn
-	/vCyTIy46BxEQR+9JKGPTpu7VgLGNVhjhD4A++Ad3Qv8iQ4d55wwJvkZeaRBNg/j
-	85kvTB7L9V3m5tKT7c0vJWwULTmzd5GWtwwZnvcq1U17sJpeNR3iBxRltqp/3bLo
-	nn1YmA==
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd5cmf0w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 14:18:10 +0000 (GMT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a6baffc7f9so1847905ab.1
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 06:18:10 -0800 (PST)
+	s=arc-20240116; t=1730732896; c=relaxed/simple;
+	bh=hI1wQ/fZNIAIQ/ZGwRLRxWBlSdPDkqRQnUGOX3vJ9To=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LPZ7u11gaPQBxEvxguoPmiSywgzvJnDxssHYtFCMtRkBVxdrYXk9yNa1RZpDZE5/+KRDko33EhBdVJSQEFXqRdpScbVEetYpei9udL3nZvA8nsLnNYArDXQIkCDHQ2HLug0BBCy7WoyshFL4/nMZ1Drnt/bIQNpjII0MsDz7KjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kBrrHCBc; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20cbcd71012so50193025ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 07:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730732894; x=1731337694; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fTaUplHrH7M+dnB2sEL6yj29zt9plqFajNCOZAfkhqU=;
+        b=kBrrHCBc8gUd+/hPU4mIMEi8/pxZn5tr1cR8J+h0ZBGbuI5tmjOUQ4zz/Wn3yNsDQ5
+         e2w7QYWd8Oen8cr3ZKbS95DeNGEKbYQKKj6jsiPawuW/4IZzxrz0qrUbdJI6HfjgBnQJ
+         jny4vL2Fo3Q1UflB2RidWdST/PlWSv7E7LnCuELjwgwYShlKyUDFsggP9Nhunn65GDD1
+         /37zwh0FZ4g9VpXwLcCQf+h3uF2vHcbPfxLEEnROa2w6tXtYd5IY1Uz70uV8xRpUmbtv
+         9y0oMFrx2ex23lT16/xykJ2AdJaRlQycw0KKuqd9Mg7/FdXsRCbRBAuCIT/4ZN6bWugz
+         IjuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730729889; x=1731334689;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1730732894; x=1731337694;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u1v/WVvHGAo0bVyM2Taoht+/F9lPQwBWyf6U4K1s2Xk=;
-        b=gdezlO/Dk36e0suQoJx+9zZlTxElymg1+7L8PXpZp5ez6dnMoVDh27dOJRdnix9MB1
-         hdqN0XNi7+JrhavyJC2B5uG0/oVF26Pj/tHxMp2zcrHaPAt1g/wz2J+6rRR/xWdwRatU
-         DgAE4AX5/7HbNjicILGUM1kKP3EFMVPL6ZfpU3GHYaI6rfYxhWUCjYLOWNCGrHGVameo
-         yCRT8+xeGDX0MRlzFECMbDZervus0ze8T9uecSglhNSV3f2pi9sjyIxLkqs8Ym7Y2J/t
-         uup01XvGooet7uipXyU5IZffhOOQzYyJM785SMKiI2Ak+/lRRoQUc6xyFTif6bk6/5UX
-         QoIA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3xIPGflv7qBStRDuTUprWyWXYhLozH+KLYL3qaUwA8YaZMPcrSUvzKPlXTsfGRZl5WHF8qHTklA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx874olx3//nC9ydPUDegSgiXMkZAW/7jYj05w5q/9Aj0t76eWN
-	K7jlL8R9LYW1GdzmKeGGCurwOWPNGwstoviKOaKkyUPeQvEzztdNAa6fyNSFGePCDfbKQ8a3duR
-	V/e3C8FaGfC85kqJfioSM0KYeiX8WBVJsXfRbIrYH9H8wtk86n+xxjcfjIA==
-X-Received: by 2002:a92:c561:0:b0:3a3:af94:4610 with SMTP id e9e14a558f8ab-3a4ed314920mr76085945ab.7.1730729889308;
-        Mon, 04 Nov 2024 06:18:09 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFCE3MSfa+IhWcVZ63OZ1NsqKoHNMmvePwJ57m9ObdgTyluZNlPMfMOzkM+3rGnAfblsK0Ltg==
-X-Received: by 2002:a92:c561:0:b0:3a3:af94:4610 with SMTP id e9e14a558f8ab-3a4ed314920mr76085745ab.7.1730729888716;
-        Mon, 04 Nov 2024 06:18:08 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e566442easm555348766b.166.2024.11.04.06.18.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 06:18:07 -0800 (PST)
-Message-ID: <e1871824-78c8-436f-a41c-16ac1614004a@oss.qualcomm.com>
-Date: Mon, 4 Nov 2024 15:18:03 +0100
+        bh=fTaUplHrH7M+dnB2sEL6yj29zt9plqFajNCOZAfkhqU=;
+        b=soR3p8llSyzBcNwz9ENRIwapyUdYqfW6aPsMN7hMQSr54DPUANTfE7Vyp2O9r1qKKZ
+         k/TwMFJoeVGdMcZyJFeddIbEcFfYW3rdiIgTZTIxyX7kxVUaqIR4NKrfR7jyqTMtmG3a
+         uVGJ9G9Hhe/F1lc9MtRLHa6+kqDIdFt8YNAkz7OGVLBvozABq1cR30PI/FLijdgETDOl
+         DTls0XV3fFVrZ4Dkz+xpbgTAgId6AQyUV2MQ/ueqp4BWUdlcMr6GfDL2qG+knYCw1SHq
+         v+Xb8R7d2JoEWyQkKcM9osuQ4/kpkHaz5XTPYm+ZoT+FyxH1CXYFf56Z1yOLYIdlPRmb
+         MMJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV45ScryUTuzrjCH1k4LF2+JneYCW+k62lHE52z1lFZ44FO5y6k1EdCT6O/5EICgx1bn2TD96XFVQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi2+1Q/Co8R/F6fOQTI6L0GVGbae/ZkJ8G+2oTcAG9CwKVmN/U
+	2kRkwPGU2dqeN86/BLWPILJucM35HnxBEBcn5mVz2/ZLCgtoREe3WTZCmHMVPA==
+X-Google-Smtp-Source: AGHT+IHOenWnujTBSBIpKLJWamkVwB46u9SIX/kMarM+ODiUVeqEfeHc6c4RexMW87XtzdjqQNduWA==
+X-Received: by 2002:a17:902:eccd:b0:20b:59be:77b with SMTP id d9443c01a7336-2111aec8329mr165149345ad.6.1730732893820;
+        Mon, 04 Nov 2024 07:08:13 -0800 (PST)
+Received: from thinkpad ([2409:40f4:3049:1cc7:217b:63a:40ce:2e01])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a6815sm62677185ad.135.2024.11.04.07.08.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 07:08:13 -0800 (PST)
+Date: Mon, 4 Nov 2024 20:38:05 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] scsi: ufs: rockchip: initial support for UFS
+Message-ID: <20241104150805.q7g3bfvbsdx3b6u4@thinkpad>
+References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
+ <1728368130-37213-6-git-send-email-shawn.lin@rock-chips.com>
+ <CAPDyKForpLcmkqruuTfD6kkJhp_4CKFABWRxFVYNskGL1tjO=w@mail.gmail.com>
+ <3969bae0-eeb8-447a-86a5-dfdac0b136cd@rock-chips.com>
+ <CAPDyKFo=GcHG2sGQBrXJ7VWyp59QOmbLCAvHQ3krUympEkid_A@mail.gmail.com>
+ <98e0062c-aeb1-4bea-aa2b-4a99115c9da4@rock-chips.com>
+ <20241103120223.abkwgej4svas4epr@thinkpad>
+ <6f3f2d17-4ca2-44ad-b8df-72986d4b3174@rock-chips.com>
+ <CAPDyKFqMuFMf0+2+mPZaGGtBRfavg0LTkhbrCeqh7kHeqq-yZQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/3] drm/msm/adreno: Add support for ACD
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
- <20241012-gpu-acd-v1-1-1e5e91aa95b6@quicinc.com>
- <1543ae2a-76ff-4b36-adae-37076e48b7f8@oss.qualcomm.com>
- <20241021220914.vrxiyeoxjyxweovu@hu-akhilpo-hyd.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241021220914.vrxiyeoxjyxweovu@hu-akhilpo-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: gEqnsce4E56qx8OM3BN5dbZggKExU79G
-X-Proofpoint-GUID: gEqnsce4E56qx8OM3BN5dbZggKExU79G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 adultscore=0 clxscore=1015 phishscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040124
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPDyKFqMuFMf0+2+mPZaGGtBRfavg0LTkhbrCeqh7kHeqq-yZQ@mail.gmail.com>
 
-On 22.10.2024 12:09 AM, Akhil P Oommen wrote:
-> On Mon, Oct 21, 2024 at 11:38:41AM +0200, Konrad Dybcio wrote:
->> On 11.10.2024 10:29 PM, Akhil P Oommen wrote:
->>> ACD a.k.a Adaptive Clock Distribution is a feature which helps to reduce
->>> the power consumption. In some chipsets, it is also a requirement to
->>> support higher GPU frequencies. This patch adds support for GPU ACD by
->>> sending necessary data to GMU and AOSS. The feature support for the
->>> chipset is detected based on devicetree data.
->>>
->>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->>> ---
->>
->> [...]
->>
->>> +
->>> +	/* Initialize qmp node to talk to AOSS */
->>> +	gmu->qmp = qmp_get(gmu->dev);
->>> +	if (IS_ERR(gmu->qmp)) {
->>> +		cmd->enable_by_level = 0;
->>> +		return dev_err_probe(gmu->dev, PTR_ERR(gmu->qmp), "Failed to initialize qmp\n");
->>> +	}
->>
->> I'm still in favor of keeping qmp_get where it currently is, so that
->> probe can fail/defer faster
+On Mon, Nov 04, 2024 at 10:51:45AM +0100, Ulf Hansson wrote:
+> On Mon, 4 Nov 2024 at 07:38, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+> >
+> > 在 2024/11/3 20:02, Manivannan Sadhasivam 写道:
+> > > On Fri, Oct 18, 2024 at 05:20:08PM +0800, Shawn Lin wrote:
+> > >> Hi Ulf,
+> > >>
+> > >> 在 2024/10/18 17:07, Ulf Hansson 写道:
+> > >>> On Thu, 10 Oct 2024 at 03:21, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+> > >>>>
+> > >>>> Hi Ulf
+> > >>>>
+> > >>>> 在 2024/10/9 21:15, Ulf Hansson 写道:
+> > >>>>> [...]
+> > >>>>>
+> > >>>>>> +
+> > >>>>>> +static int ufs_rockchip_runtime_suspend(struct device *dev)
+> > >>>>>> +{
+> > >>>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
+> > >>>>>> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > >>>>>> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+> > >>>>>
+> > >>>>> pd_to_genpd() isn't safe to use like this. It's solely to be used by
+> > >>>>> genpd provider drivers.
+> > >>>>>
+> > >>>>>> +
+> > >>>>>> +       clk_disable_unprepare(host->ref_out_clk);
+> > >>>>>> +
+> > >>>>>> +       /*
+> > >>>>>> +        * Shouldn't power down if rpm_lvl is less than level 5.
+> > >>>>>
+> > >>>>> Can you elaborate on why we must not power-off the power-domain when
+> > >>>>> level is less than 5?
+> > >>>>>
+> > >>>>
+> > >>>> Because ufshcd driver assume the controller is active and the link is on
+> > >>>> if level is less than 5. So the default resume policy will not try to
+> > >>>> recover the registers until the first error happened. Otherwise if the
+> > >>>> level is >=5, it assumes the controller is off and the link is down,
+> > >>>> then it will restore the registers and link.
+> > >>>>
+> > >>>> And the level is changeable via sysfs.
+> > >>>
+> > >>> Okay, thanks for clarifying.
+> > >>>
+> > >>>>
+> > >>>>> What happens if we power-off anyway when the level is less than 5?
+> > >>>>>
+> > >>>>>> +        * This flag will be passed down to platform power-domain driver
+> > >>>>>> +        * which has the final decision.
+> > >>>>>> +        */
+> > >>>>>> +       if (hba->rpm_lvl < UFS_PM_LVL_5)
+> > >>>>>> +               genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
+> > >>>>>> +       else
+> > >>>>>> +               genpd->flags &= ~GENPD_FLAG_RPM_ALWAYS_ON;
+> > >>>>>
+> > >>>>> The genpd->flags is not supposed to be changed like this - and
+> > >>>>> especially not from a genpd consumer driver.
+> > >>>>>
+> > >>>>> I am trying to understand a bit more of the use case here. Let's see
+> > >>>>> if that helps me to potentially suggest an alternative approach.
+> > >>>>>
+> > >>>>
+> > >>>> I was not familiar with the genpd part, so I haven't come up with
+> > >>>> another solution. It would be great if you can guide me to the right
+> > >>>> way.
+> > >>>
+> > >>> I have been playing with the existing infrastructure we have at hand
+> > >>> to support this, but I need a few more days to be able to propose
+> > >>> something for you.
+> > >>>
+> > >>
+> > >> Much appreciate.
+> > >>
+> > >>>>
+> > >>>>>> +
+> > >>>>>> +       return ufshcd_runtime_suspend(dev);
+> > >>>>>> +}
+> > >>>>>> +
+> > >>>>>> +static int ufs_rockchip_runtime_resume(struct device *dev)
+> > >>>>>> +{
+> > >>>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
+> > >>>>>> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > >>>>>> +       int err;
+> > >>>>>> +
+> > >>>>>> +       err = clk_prepare_enable(host->ref_out_clk);
+> > >>>>>> +       if (err) {
+> > >>>>>> +               dev_err(hba->dev, "failed to enable ref out clock %d\n", err);
+> > >>>>>> +               return err;
+> > >>>>>> +       }
+> > >>>>>> +
+> > >>>>>> +       reset_control_assert(host->rst);
+> > >>>>>> +       usleep_range(1, 2);
+> > >>>>>> +       reset_control_deassert(host->rst);
+> > >>>>>> +
+> > >>>>>> +       return ufshcd_runtime_resume(dev);
+> > >>>>>> +}
+> > >>>>>> +
+> > >>>>>> +static int ufs_rockchip_system_suspend(struct device *dev)
+> > >>>>>> +{
+> > >>>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
+> > >>>>>> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > >>>>>> +
+> > >>>>>> +       /* Pass down desired spm_lvl to Firmware */
+> > >>>>>> +       arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
+> > >>>>>> +                       host->pd_id, hba->spm_lvl < 5 ? 1 : 0, 0, 0, 0, 0, NULL);
+> > >>>>>
+> > >>>>> Can you please elaborate on what goes on here? Is this turning off the
+> > >>>>> power-domain that the dev is attached to - or what is actually
+> > >>>>> happening?
+> > >>>>>
+> > >>>>
+> > >>>> This smc call is trying to ask firmware not to turn off the power-domian
+> > >>>> that the UFS is attached to and also not to turn off the power of UFS
+> > >>>> conntroller.
+> > >>>
+> > >>> Okay, thanks for clarifying!
+> > >>>
+> > >>> A follow up question, don't you need to make a corresponding smc call
+> > >>> to inform the FW that it's okay to turn off the power-domain at some
+> > >>> point?
+> > >>>
+> > >>
+> > >> Yes. Each time entering sleep, we teach FW if it need to turn off or keep
+> > >> power-domain, for instance "hba->spm_lvl < 5 ? 1 : 0" , 0 means
+> > >> off and 1 means on.
+> > >>
+> > >
+> > > We had a requirement to notify the genpd provider from consumer to not turn off
+> > > the power domain during system suspend. So Ulf came up with an API for
+> > > consumers, device_set_wakeup_path() setting the 'dev->power.wakeup_path' which
+> > > will be honored by the genpd core. Will that work for you?
+> >
+> > Yes, that works. And we may need a symmetrical call, for instance,
+> > device_clr_wakeup_path() to allow genpd provider to turn off the power
+> > domain as well.
 > 
-> Sorry, I somehow missed this email from you until now.
+> The PM core clears the flag in device_prepare(). The flag is typically
+> supposed to be set from a ->suspend() callback, so there should be no
+> need for an additional function that clears the flag, I think.
 > 
-> If it fails, then it probably doesn't matter if it is a bit late. But for defer, isn't there
-> some optimizations to track the dependency from devicetree data? I am
-> not entirely sure!
 
-There's devlink for clocks/supplies etc, it doesn't apply universally
-for all phandle references IIUC.
+Yeah, that's my understanding as well though I didn't look into PM core deeply.
 
-> 
-> Since qmp node is related to ACD, I felt it is better to:
->   1. Keep all acd probe related code in a single place.
->   2. Be more opportunistic in skipping qmp_get() wherever possible.
-> 
-> But if you still have strong opinion on this, I can move it back in the
-> next revision (v3).
+- Mani
 
-I suppose the answer is yes, I have a strong opinion :D
-
-Konrad
+-- 
+மணிவண்ணன் சதாசிவம்
 
