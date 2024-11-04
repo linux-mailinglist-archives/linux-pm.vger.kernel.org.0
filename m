@@ -1,152 +1,112 @@
-Return-Path: <linux-pm+bounces-16915-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16916-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A09A9BACB2
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 07:43:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 505199BAD2A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 08:33:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B53B61F21DA5
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 06:43:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 696841C20DF3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 07:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C2A18C340;
-	Mon,  4 Nov 2024 06:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF6618D633;
+	Mon,  4 Nov 2024 07:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="BDoi8/1o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mail-m6092.netease.com (mail-m6092.netease.com [210.79.60.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3669D38F97
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 06:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA63193408;
+	Mon,  4 Nov 2024 07:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.79.60.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730702584; cv=none; b=Swp/uBXVNrCh5rhFPd/JZcKD78nntWjCyAg5gV4YJuoIFfXYUUvGan+ry83VaA3qvxwGFrd8hVFSNPT0xLU7XgJKUNxLxblKCqqstI3JWAjmKYXl69aosxuwk/3JxCjKo04vp7T0/EPQ5ndnm+zwXJoVdiJIZfM8aC2sszPCEjE=
+	t=1730705600; cv=none; b=bMFr33BpthvyXES1YCnaRYnE7bc1eAgg0CKSgbYpmL+tTmJlXrmEmzCRmu64Y00aSdlkxlyX3ImjlY0a9Sf1jYPAq3T00jKZI9sH9ZYBEQ3Z+PLSeBCX4iueJZutW6SH5bvvVYJ4o09DjB2DFggIoj1LU1aeZmnNOpgBzJS5IGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730702584; c=relaxed/simple;
-	bh=XvTQwqrx+XVF/k/xYZjfu8eHuMxUuwWQ+gHmOCQjiMw=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Z31fAZVZ2sj1oKNlUnobOphZq4BRQ2YM/E4JdQqlQQTg2PS244jx9OiumMp2zmJwJrSvnXcb2BzX70cgdMGqWRMMK4HW+Pv0817ApFt+JpoIufCRMWLQwVe3oFBf4a5HXvdADrlGDUXn1WOktROYhjUrJueX6vnALCyYf8PNRwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 0480b10c9a7811efa216b1d71e6e1362-20241104
-X-CTIC-Tags:
-	HR_CC_AS_FROM, HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_LANG, HR_MAILER_MTBG, HR_SJ_LANG, HR_SJ_LEN
-	HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS
-	HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED
-	DN_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
-	AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:ed02c983-8e34-4d76-aa66-28b04f8cc692,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-INFO: VERSION:1.1.38,REQID:ed02c983-8e34-4d76-aa66-28b04f8cc692,IP:0,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:-5
-X-CID-META: VersionHash:82c5f88,CLOUDID:9b4f1dbc7da7118a639aa05c172ae057,BulkI
-	D:24110118023733XZGNBA,BulkQuantity:1,Recheck:0,SF:19|66|841|38|17|102,TC:
-	nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,C
-	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-UUID: 0480b10c9a7811efa216b1d71e6e1362-20241104
-X-User: lijun01@kylinos.cn
-Received: from [172.30.70.202] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <lijun01@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 241826530; Mon, 04 Nov 2024 14:42:53 +0800
-Message-ID: <1276a683-0c83-3ac2-f63c-f62da25863ac@kylinos.cn>
-Date: Mon, 4 Nov 2024 14:42:48 +0800
+	s=arc-20240116; t=1730705600; c=relaxed/simple;
+	bh=HcAtJ+KdWFjukkplQq/eUQ5X4sEL5W385xYCnFj8q2s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=mythPPaZljFllmsQXilVcOvxz1chdDx0/UVF7buO8ChbcNjFDwuFQTRG8Tr+N7TgL1UtOstGgCq+NtO7iqz1OqxX0UI8Fwrc71+AZTVQrl24rWNoiVKXr9Korc+fWlH+Z09OxED6xKzSr5WKkROVDXojNBg2MZqq22wf6nYrybc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=BDoi8/1o; arc=none smtp.client-ip=210.79.60.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1b5f85e2;
+	Mon, 4 Nov 2024 15:33:04 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v4 3/7] soc: rockchip: add header for suspend mode SIP interface
+Date: Mon,  4 Nov 2024 15:31:57 +0800
+Message-Id: <1730705521-23081-4-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGk8eGFZIHU5PQ08YSBlMHR5WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a92f61772c109cckunm1b5f85e2
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MiI6HDo6DjIvGjoqDjVKDy8D
+	IzkwCg1VSlVKTEhLTEtOTkNNT0NMVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUJOTzcG
+DKIM-Signature:a=rsa-sha256;
+	b=BDoi8/1o0y4qs1XCUwE1wY8O5Dwy5r8bBTrIJIljgXxpTVkvNOJH/smvoGA+cNjncWRMVQ+cdMOGGwv9YjDfL1I3aAPKzaWB4g2Z9NBlGbdaKX3oCHM5zgKGEy36ss1KQuARxkl0I89/cpCOzfu0PbCIRGn8ITAh+Advkikp1O8=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=Ty6mGnWBoIaPt2RyCxg02+KQlGxmCwE6/d4KhDj58FM=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
- linux-pm@vger.kernel.org
-Cc: lijun01@kylinos.cn
-From: lijun <lijun01@kylinos.cn>
-Subject: [PATCH] power: add PM_SUSPEND_MAX in pm_suspend_target_state
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
- From 8196688c40b7ab55418588a29258fc8fb84905a8 Mon Sep 17 00:00:00 2001
-From: Li Jun <lijun01@kylinos.cn>
-Date: Fri, 1 Nov 2024 16:31:33 +0800
-Subject: [PATCH] power: add PM_SUSPEND_MAX in pm_suspend_target_state
+Add ROCKCHIP_SIP_SUSPEND_MODE to pass down parameters to Trusted Firmware
+in order to decide suspend mode. Currently only add ROCKCHIP_SLEEP_PD_CONFIG
+which teaches firmware to power down controllers or not.
 
-The system is switching to  disk sleep, when executing
-to freeze_processes(),one of processes may be get the
-system state, but the correct state  must after
-suspend_devices_and_enter(state) ,so push this patch.
-
-Signed-off-by: Li Jun <lijun01@kylinos.cn>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
 ---
-  kernel/power/hibernate.c | 3 +++
-  kernel/power/suspend.c   | 4 +++-
-  2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 1f87aa01ba44..c7c0e7c51985 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -766,6 +766,8 @@ int hibernate(void)
-      }
+Changes in v4: None
+Changes in v3: None
+Changes in v2: None
 
-      pr_info("hibernation entry\n");
-+    pm_suspend_target_state = PM_SUSPEND_MAX;
+ include/soc/rockchip/rockchip_sip.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/soc/rockchip/rockchip_sip.h b/include/soc/rockchip/rockchip_sip.h
+index c46a9ae..501ad1f 100644
+--- a/include/soc/rockchip/rockchip_sip.h
++++ b/include/soc/rockchip/rockchip_sip.h
+@@ -6,6 +6,9 @@
+ #ifndef __SOC_ROCKCHIP_SIP_H
+ #define __SOC_ROCKCHIP_SIP_H
+ 
++#define ROCKCHIP_SIP_SUSPEND_MODE		0x82000003
++#define ROCKCHIP_SLEEP_PD_CONFIG		0xff
 +
-      pm_prepare_console();
-      error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, 
-PM_POST_HIBERNATION);
-      if (error)
-@@ -846,6 +848,7 @@ int hibernate(void)
-      hibernate_release();
-   Unlock:
-      unlock_system_sleep(sleep_flags);
-+    pm_suspend_target_state = PM_SUSPEND_ON;
-      pr_info("hibernation exit\n");
-
-      return error;
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 09f8397bae15..e965d29800d4 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -493,7 +493,6 @@ int suspend_devices_and_enter(suspend_state_t state)
-      if (!sleep_state_supported(state))
-          return -ENOSYS;
-
--    pm_suspend_target_state = state;
-
-      if (state == PM_SUSPEND_TO_IDLE)
-          pm_set_suspend_no_platform();
-@@ -584,6 +583,8 @@ static int enter_state(suspend_state_t state)
-      }
-
-      pm_pr_dbg("Preparing system for sleep (%s)\n", 
-mem_sleep_labels[state]);
-+    pm_suspend_target_state = state;
-+
-      pm_suspend_clear_flags();
-      error = suspend_prepare(state);
-      if (error)
-@@ -603,6 +604,7 @@ static int enter_state(suspend_state_t state)
-      pm_pr_dbg("Finishing wakeup.\n");
-      suspend_finish();
-   Unlock:
-+    pm_suspend_target_state = PM_SUSPEND_ON;
-      mutex_unlock(&system_transition_mutex);
-      return error;
-  }
+ #define ROCKCHIP_SIP_DRAM_FREQ			0x82000008
+ #define ROCKCHIP_SIP_CONFIG_DRAM_INIT		0x00
+ #define ROCKCHIP_SIP_CONFIG_DRAM_SET_RATE	0x01
 -- 
-2.34.1
+2.7.4
 
 
