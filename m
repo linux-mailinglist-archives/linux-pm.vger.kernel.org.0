@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-16951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16952-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AC2D9BB550
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:04:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D007D9BB556
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:04:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB2721F219E2
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:04:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 935C9282EB7
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C04851B81DC;
-	Mon,  4 Nov 2024 13:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC3B1B85D2;
+	Mon,  4 Nov 2024 13:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmFT/Mej"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gWLnauoj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161E11B6CFB;
-	Mon,  4 Nov 2024 13:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113C31B6CFB;
+	Mon,  4 Nov 2024 13:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730725443; cv=none; b=F2mZblqn9SLBiE9DXGvWykK69MxEyIx6S1GPEAwGd56KE45wzG4mGwF4wrNX46y5ZoKlvJf065uOQJMiKg13b7WoOsv+xL8O+aHVznIrDLkeOYo+NtuDGdZEUl4+odt07g1Lt2fdtMTDDaLEr0prG4BdIsDxXIIT1uLcQuOVMaE=
+	t=1730725472; cv=none; b=IQ3j+tT6C+Qo6AUsw2eKrxDSpIFPXvNwFeeXSokljh2jG/nPZJDRTW4x/XiAbXE1JJnNt9nk+GYRK6Uy0nRAueppPnvJwC3TDH99lzStrlWjhWWvdoFekx0HdL+1V2pqeK/0kcv3q/mPi32YUZwekQ0WOsX+Mi8JX1n9QnkufYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730725443; c=relaxed/simple;
-	bh=cIi7IdtDKRTqlb0gwRNppufCAevmGQsObSSOfUk50NQ=;
+	s=arc-20240116; t=1730725472; c=relaxed/simple;
+	bh=EnvJIgbrMjwMBPDF+0kk8UDfBVexM71BFeuD0mBFBzM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rxv78/A6k/oSzqyOg84zUzQkgVNpWe2XEvvkiPzXnOIlujLyANs9o91tIzGGX7Z6j/CTDjk7Uil5nu7Bh58H61HdWCGXRmNv5HfTw8a5tekJZphwMnpvJcTeLcl+yRLYLF6/LUDHLzb/JrgiwMpAoR0lCBj8tEep6+1Uwd+Q8hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmFT/Mej; arc=none smtp.client-ip=209.85.208.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=NNiZ+LtaFIT3WDk03udw/51knCAn0KID+qA+GkL8X6Rq0IB6VXf7YwPGK9hmm3RKjpnmHHzVKYVgw33bmhscfxLyNXn2+DIVTIBmS/fk4dF5+jtp8+Trff2TnMqrftN+6JHijuX60Ap2CPyAM0gP/FyKspRce2RFdGXsIstgo30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gWLnauoj; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c94a7239cfso2461038a12.3;
-        Mon, 04 Nov 2024 05:04:01 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9a6b4ca29bso537243866b.3;
+        Mon, 04 Nov 2024 05:04:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730725440; x=1731330240; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730725469; x=1731330269; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/xNr5bjUuKv+gLsZZo/UhY9wFOFlYAZuNJjx9SZxPu4=;
-        b=cmFT/MejzrYZP2vcckvgiGH9CV+wZmLQ/9KW+Aeru8qet+sb+gE/+SqYluuHOrHk2n
-         LydFBRzEt1Q4HJzeytZVfn06aFXApxQqwGBi1miO+5dFdjMCLKVmxHtiZXNNJffwAFDL
-         QfH1JAcp+/NvrguwaMQcbT5uTYwJMSHw2svrkvFq75Ktbc2+Jm+VbcpkR7kUmKIdmHfP
-         8dy/B7JjrzqmwDOfRjvE2I+serHVXQz0TAG5dYV65anHt5oT8E5vivNxI98jVaGE9Hq9
-         wkl+HCTxKwzVMyiMw2yKXI4hhrbgQsRLXHatET9l8yeempNEVk6583eHVsazeuUKrA5v
-         vwNQ==
+        bh=POZxJKBo9A+l/bBN4assLUemMcT00Dlq2lvLnr0+PpY=;
+        b=gWLnauojvkBJa5ENBhbTLl41NErmyUwhpdqvlP+QGaJbUxX7FPRqQ82lDnMGtUV6nK
+         Zltye3DunOELdV1ExwN6zmPLAiGvai4SnV2shsKh6w68Lp9cpzPb9hTt0s0v4pcjXlCs
+         KW/e0h2a5o2B0nQRxdB4lvnavfisrMLwFcROVPJIBOILYdvYZmGfF7VKnXSy2Xqvx8OL
+         Z5tF/MqO9LT5koU4pKx+EBoHns+UpYmTfnj+e+bL6i4BMa4YvYproUirzQweXXSqy2wc
+         qDskhKuvdb78fm789zS0pF+ipI0zA2MXhuupbhWlWPF72QSqLZAlZG+2VK+O/qVfLB3r
+         Tj5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730725440; x=1731330240;
+        d=1e100.net; s=20230601; t=1730725469; x=1731330269;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/xNr5bjUuKv+gLsZZo/UhY9wFOFlYAZuNJjx9SZxPu4=;
-        b=dQFAuHVzEoMWTxuHkYICuf1WR8vpr/YMMXS1rw2BrAqeOmgqb1FrhFeFr5mo+/Mh/z
-         Qvh9KP6tLrLmYHp0NJ+07T0OkJcJtu3DYpRi3KUyOwdJE/gZFp8fptKmK7OU4/AnZq5A
-         x5PIOKJm6asmTColDv/GXpP8L8sE4nam/St0VWiLGAGU2tMl50oe2bIr6NFMSRwoTvNp
-         iDDm5Bq2dBxGvFDt/Ta8Pvo/yVUdCN8baEABdHdhCi6ooZo8YO7XYjprhjJx07mDzH52
-         XUgnGs7Mr8YL+RNDBmoc572/smplUeawY98G06JNaFIaJ0txG5sCN+V22NMvSjtb1JcM
-         Izfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUcci88SnkNvGpvPM6mpFCOPMiC+ac+IFDDQbk4GtDKV3eAMWoumOGkNd4Jk7vWJURY+cQgGSIIP+//mN+M@vger.kernel.org, AJvYcCW2/Am3maQjQ3scvkJyc+eWYJ4Zml+n+t1X008/EUScw8gK5HGez4Q88ufoQKAMX3AvYaN0coCJhzTy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7tbtJRPWYDZEjQtbV+Xg0tA1Mq9rqysqfP+gjd1Z0VSHdvEvp
-	ItCyZUNP5iBYuM3gOD5x1CsO89F2w7qIts+xvT+io9TFMbFh2K0B
-X-Google-Smtp-Source: AGHT+IH+wCyNdmki4RIpXvzd9Ia6UtzVSVtMSHIR9aHs0OsKUZqe6byELdEnFU9k8F0hkMXzw2+gXg==
-X-Received: by 2002:a05:6402:26c8:b0:5cb:b616:5ed4 with SMTP id 4fb4d7f45d1cf-5ceb923ef3dmr16473289a12.5.1730725440211;
-        Mon, 04 Nov 2024 05:04:00 -0800 (PST)
+        bh=POZxJKBo9A+l/bBN4assLUemMcT00Dlq2lvLnr0+PpY=;
+        b=IcZViZHOLoG+jIlCz6VWd5Z2MPmwFrH8VRlyPQv/F3/Q4NGEcZ06DLZzhsAmhFj9Tm
+         3Jpj1zzduwjNyEe0A87jN+SCKqPlV6wMq+qh8UzsRPVW5QHhEQuJ1EDvvfTpRliwyKlK
+         yueWbSS3Sa7MtrIOs8YLlvHKCv2xqFxpGd1daaGj/xCinjhbFogrVH5qTN08DFVBgQxV
+         AoeSRQ4ziWIahQsaCUpRJ555KA5kzCHwPj4bKYS9FHZKz4oBMP3/xRZ/YQqMFUiNUlsj
+         6/BXVhKA0CAadNhQQRdd9OU7ltJc6fwRqntUa5PUj2YULuzr8bEvskAMhOTCKaYCvRTH
+         fCrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSqzktFwIt+PLl7C/Ins1mndUEl+SeZMKt4I69XIrt2t5aq8RvZ23RecdK2Mp+mNw4URsGIbh2Y0SE16S5@vger.kernel.org, AJvYcCUiP346Uv7VGav6n1TLfimbe4aTc9hAzMnr8ibEngOn7oXhA2g0ySoCaUf1Xw7Zfwn+9WPpn3+3Af+H@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjUhrya1opovs15R0PiG/16Z3qKhrk1Va47V8Ye4jzChPUDtsZ
+	01DrGXA5kBXX7Bo/xZLznJQGYJwstAXHmBCwidcJJ6wOGxDmfjBF
+X-Google-Smtp-Source: AGHT+IH0wK3KKymt+GJn5Qaz1847qgcdfS+1VGhJ6bZwNBSYDLK4FH5wRl0QQimVTAB92pob+YcmhQ==
+X-Received: by 2002:a17:907:3e06:b0:a9a:80bd:2920 with SMTP id a640c23a62f3a-a9e50b9e39dmr1445068266b.53.1730725469092;
+        Mon, 04 Nov 2024 05:04:29 -0800 (PST)
 Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ceac74d485sm4168069a12.19.2024.11.04.05.03.59
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e565e08b7sm550089266b.133.2024.11.04.05.04.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 05:03:59 -0800 (PST)
-Date: Mon, 4 Nov 2024 14:03:58 +0100
+        Mon, 04 Nov 2024 05:04:28 -0800 (PST)
+Date: Mon, 4 Nov 2024 14:04:27 +0100
 From: Stanislav Jakubek <stano.jakubek@gmail.com>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -76,9 +76,8 @@ To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
 	Chunyan Zhang <zhang.lyra@gmail.com>
 Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] dt-bindings: power: supply: sc27xx-fg: document
- deprecated bat-detect-gpio
-Message-ID: <f334c973dd4e6390a0cd51dbde358277a07604d7.1730720720.git.stano.jakubek@gmail.com>
+Subject: [PATCH v2 2/3] power: supply: sc27xx: Fix battery detect GPIO probe
+Message-ID: <ca28b2f2037929c0011fc5c779c332c1d1ad5308.1730720720.git.stano.jakubek@gmail.com>
 References: <cover.1730720720.git.stano.jakubek@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -90,35 +89,40 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1730720720.git.stano.jakubek@gmail.com>
 
-While the bindings have always used the correct 'battery-detect-gpios'
-property, the DTS and the Linux driver have been using the incorrect
-'bat-detect-gpio' property. Document this property and mark it
-as deprecated.
+The DT bindings specify the property as 'battery-detect-gpios', add
+handling for it. Keep fallback to the deprecated 'bat-detect-gpio' property
+to keep compatibility with older DTS.
 
 Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 ---
 Changes in V2:
 - new patch
 
- .../devicetree/bindings/power/supply/sc27xx-fg.yaml          | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/power/supply/sc27xx_fuel_gauge.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml b/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
-index 9108a2841caf..b10f155afe68 100644
---- a/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
-@@ -27,6 +27,11 @@ properties:
-   battery-detect-gpios:
-     maxItems: 1
+diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/supply/sc27xx_fuel_gauge.c
+index 426d423b935b..f36edc2ba708 100644
+--- a/drivers/power/supply/sc27xx_fuel_gauge.c
++++ b/drivers/power/supply/sc27xx_fuel_gauge.c
+@@ -1183,10 +1183,14 @@ static int sc27xx_fgu_probe(struct platform_device *pdev)
+ 		return PTR_ERR(data->charge_chan);
+ 	}
  
-+  bat-detect-gpio:
-+    maxItems: 1
-+    deprecated: true
-+    description: use battery-detect-gpios instead
-+
-   interrupts:
-     maxItems: 1
+-	data->gpiod = devm_gpiod_get(dev, "bat-detect", GPIOD_IN);
++	data->gpiod = devm_gpiod_get(dev, "battery-detect", GPIOD_IN);
+ 	if (IS_ERR(data->gpiod)) {
+-		dev_err(dev, "failed to get battery detection GPIO\n");
+-		return PTR_ERR(data->gpiod);
++		data->gpiod = devm_gpiod_get(dev, "bat-detect", GPIOD_IN);
++		if (IS_ERR(data->gpiod)) {
++			dev_err(dev, "failed to get battery detection GPIO\n");
++			return PTR_ERR(data->gpiod);
++		}
++		dev_warn(dev, "bat-detect is deprecated, please use battery-detect\n");
+ 	}
  
+ 	ret = gpiod_get_value_cansleep(data->gpiod);
 -- 
 2.43.0
 
