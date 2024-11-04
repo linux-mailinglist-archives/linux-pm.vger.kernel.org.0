@@ -1,125 +1,238 @@
-Return-Path: <linux-pm+bounces-16970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FA9C9BB8EB
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 16:25:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C69119BB945
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 16:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29935281E33
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:25:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE4261C21810
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 15:45:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B235C1C3306;
-	Mon,  4 Nov 2024 15:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D411C07E7;
+	Mon,  4 Nov 2024 15:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GiJNeKvU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N+zZ1j05"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40C41C07FB
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 15:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB991B6D14
+	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 15:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730733871; cv=none; b=kljKSfH8lRkUwAd5GkoN8gkY1Aq8YFw+yt9CHHMXu+sDefhQu0H7nV9fParXXBHD5Jbt1erY6aZ7d7o6SHerjVZpWSE3X4VCU73rtxzY7T1JCVS/LlfXARgA7ATIx3aNf0jxTnt8wsctAe3Jf7pZF31aUOYnkTA0DINfbinnbbw=
+	t=1730735103; cv=none; b=l8HX8a5Ch+uzG2fFWVIBgAxmQO5HfOh8dF/ID9ov3KcJpFaq8YyaQcovu7RdhOtE4e9i8qcOGf1Pl1d4KmxDPCdkjAXBiC8CJlPJSM0Y8nlof7cVTedI8bMap0Sz2LFKdzL8Y2Zox1mc+nFRp3yR257DFLyK1KgAWkeylBX+/jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730733871; c=relaxed/simple;
-	bh=gLW0fh8PPs+BaOn5rkVzGVDEOg0uLVSjRbyJUCDLGBI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oQlAFv80FOEC8/fDp8Kb2kLsU/s4Jp4o4UKz/GGdXdixrTKw66WUTR41MT0cQ1OTvT3pFHboMXqPz0Uqa+WIDW3br/xNoS1U2p5oSsfUsu1uFazx07u3C4XQI2mFsmZ1P4JUZpKWfowd4WD7VtfxIFinw5kjdL6AL6SY0NkP/Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GiJNeKvU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730733868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=61B9Jq2TL9i1+pERa497eTJdtZBmCcAzgGgAjZWiZfs=;
-	b=GiJNeKvUi75jzFA+suZqnCqTcDEWhQOQ81TXplqqCMNvTl646pgt369ORIl8bLiFeceXGc
-	cvPZ3e6qdPf9hhoRz2D7TMFHiLQxr0ObFyvF3ah1o/l76rcLmabkyVPS+eBb+7CX5ECedD
-	gnh3itAiVl17JR1ykQOu9McdlUGE/7M=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-414-swv6YNAXOFOfTffsYX58Ow-1; Mon, 04 Nov 2024 10:24:27 -0500
-X-MC-Unique: swv6YNAXOFOfTffsYX58Ow-1
-Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-5eb9c053637so3339891eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 07:24:27 -0800 (PST)
+	s=arc-20240116; t=1730735103; c=relaxed/simple;
+	bh=ZImVIlkdahA1BEn/O7w5yhYnv0OQtgKBmXJEhQFwCgs=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=oEPMvVSAShM9YX0oNkXUunBUHSfiXF2CnBO3CuvAVquJcc2ZnspmHTWqSE/SivuXxHCAmbK5rUtiJt/5P6Uk9atf5l3Py/L/hLsBo1BjLZimsUSaOZkL0R5cWjEqfCfvn1Mq+5L7DJ549TMku/cYOlkHLwyuxet8EK2Py8sQo78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N+zZ1j05; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43168d9c6c9so35897535e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 07:45:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730735100; x=1731339900; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ftipUFfbQyrbYTtkBKFzCTCmVmhbNpyQ5+49w8VdR7M=;
+        b=N+zZ1j05mJfgzs4ALMsQePW6aocYibv0ErBsoDiWek4tBlkLK/JNV8Utb09bRzsLiF
+         O9hF7javQEluU5lfujBeSKe9USF2kV416Avgz/gfEg9d2o654oel0SPy8z9+AyJCAmWK
+         pAMr8kjEBO0KFY8/vUtMlRnQvQupOabHfWCMjug5gplvyA8gC6VYx1FU/pnAgjRwlr5l
+         5DO6aYClpqYqJ4dctJYXXDfutw8DWs4E1wc87qRXkYaVsJzaplFjaV5XCquEYw9lU2Vv
+         TAe3S9u4/v6owi1zvkvRZLni1rh0WPpJRZGr9OW0tbidO949+3PatTlTlq3zY9kZrFKD
+         JMOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730733867; x=1731338667;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=61B9Jq2TL9i1+pERa497eTJdtZBmCcAzgGgAjZWiZfs=;
-        b=pZu7Rv6CUk6QP1xEa5vbG5gElxeYJNz2XMmllpLv4AZhx7Er4n8KZkIse3REP86Axf
-         O9QFel43JGEforFIqBDg/zHGHKI8juAbbxpyJrF/kyaNIRIxPDSbOH7UYEHB8bnQQXs1
-         GpmrLe/F9N9uQv2Ep9A1OMyG59C6r0BA4hZnHafIzp4MFe3b3Dv5zzdWb5D71nfRaE4c
-         2nABFotlOO13jOKGPEjHZaMOL0CaWHX87JGHRyrH47WrM3iftOq/0sqJZ76iORPB68cs
-         747R3M03CPQ5tAzhEmczZU3glrVwoRj/1JjSkZH9A1ulnAyFklVIjk3MF3s4SjRnXejT
-         7ETg==
-X-Forwarded-Encrypted: i=1; AJvYcCXv4/pxIJodaynB1Gj6KJV6L271Zc3xPZy0Upkjz/cI5lQKaEhkav9d2W8zWZN9UxvY6iBBbcC4mQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbg5Q8IcTqGcx6nRFvYzG1FIMiYYf0ssiMOx6ETAcKvryXGFPq
-	Ivw0mNFCTWZl9Z8BYcKVPL2pXynw4YMhyXSOtIXqexgmm8paJtbGCQz0WGxJ56J4W8gnaqpwuF9
-	VsCj/uN0V9BjPgOkKru6wRRQXXHB5VWjTvr/TvSnN5B8AvCS6A/HYQhgW
-X-Received: by 2002:a05:6870:e0ca:b0:278:c6bf:fd34 with SMTP id 586e51a60fabf-29051bdaef8mr27449244fac.27.1730733866955;
-        Mon, 04 Nov 2024 07:24:26 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGdz+LHCvEJnf6MEsvrtoajBkoyl90rdROWBh+jGnf8JMCALx0RuCy2tX6Sdh/r1DLTo3sGoQ==
-X-Received: by 2002:a05:6870:e0ca:b0:278:c6bf:fd34 with SMTP id 586e51a60fabf-29051bdaef8mr27449221fac.27.1730733866650;
-        Mon, 04 Nov 2024 07:24:26 -0800 (PST)
-Received: from rhdev.redhat.com (2603-9001-3d00-5353-0000-0000-0000-14c1.inf6.spectrum.com. [2603:9001:3d00:5353::14c1])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7189cc59b45sm1980847a34.6.2024.11.04.07.24.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 07:24:25 -0800 (PST)
-From: Jennifer Berringer <jberring@redhat.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Maxime Ripard <mripard@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Jennifer Berringer <jberring@redhat.com>
-Subject: [PATCH v3 3/3] power: reset: nvmem-reboot-mode: fix write for small cells
-Date: Mon,  4 Nov 2024 10:23:12 -0500
-Message-ID: <20241104152312.3813601-4-jberring@redhat.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241104152312.3813601-1-jberring@redhat.com>
-References: <20241104152312.3813601-1-jberring@redhat.com>
+        d=1e100.net; s=20230601; t=1730735100; x=1731339900;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ftipUFfbQyrbYTtkBKFzCTCmVmhbNpyQ5+49w8VdR7M=;
+        b=DFjCioSD0MAbkkaDtPn8Q+3b6tot6RQciNaRvevpilzV3gmG21/x1O5tWaBNZLYSxq
+         +yQZu+6QrzrDHFhNo5wNr1PfN5Imf5XOujL7Ej2mhqIf4agDnMreImHMp5R/dOxKWHWJ
+         1bhgMfxtXFs5ighNAaS+guUIjoy4UAIV31zsRKWQsUReusp/2dqLiopFpNr5I3J2UhOM
+         nqfDiNuGOszCwZ0po1B5OKzhpqrrq1p3aBoxQz5p9WgiLNjGiqXEZ/sg5Lnd/ISC62vN
+         EVXAdhxU6QgewfO11QLpHCNNPU8cKplHPOd68N3dVrzQBbIAVg3euIAGGBahn04yXaLq
+         Chhg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQvtt8LXNxrSszATrzXVICvThmmrevrJ8QHZgZYRbOhXFnfWpd9oC1KxQyk9JT2TKwDMjf92W6IQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ9opSRZtSdq5AByEJkOFcwOVClvcquziK86ghizUGf4kJwOeo
+	3Sny1euKCkQh83MJlH2KHr/5KH1vvGfE5akBlTJ7fZrKAiWkUgU+/3GGZmsCRng=
+X-Google-Smtp-Source: AGHT+IEt227mWEkJ2KUldJ6cNcu5CXzPjyiwcrBv4UbMZfjjnIxrvAGFeU/8XnhL8EXXaevw1ExOPw==
+X-Received: by 2002:a05:600c:3c8c:b0:431:4fa0:2e0b with SMTP id 5b1f17b1804b1-4319ad146b1mr263095595e9.28.1730735100145;
+        Mon, 04 Nov 2024 07:45:00 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5b00:c640:4c96:8a97? ([2a01:e0a:982:cbb0:5b00:c640:4c96:8a97])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4327d6852c3sm157054515e9.38.2024.11.04.07.44.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 07:44:59 -0800 (PST)
+Message-ID: <4aeec9f1-720b-400c-9582-d02847db2ac7@linaro.org>
+Date: Mon, 4 Nov 2024 16:44:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH RFC 1/3] drm/msm/adreno: Add support for ACD
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>, Rob Clark
+ <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
+ <20241012-gpu-acd-v1-1-1e5e91aa95b6@quicinc.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20241012-gpu-acd-v1-1-1e5e91aa95b6@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Some devices, such as Qualcomm sa8775p, have an nvmem reboot mode cell
-that is smaller than 32 bits, which resulted in
-nvmem_reboot_mode_write() failing. Using nvmem_cell_write_variable_u32()
-fixes this by writing only the least-significant byte of the magic value
-when the size specified in device tree is only one byte.
+On 11/10/2024 22:29, Akhil P Oommen wrote:
+> ACD a.k.a Adaptive Clock Distribution is a feature which helps to reduce
+> the power consumption. In some chipsets, it is also a requirement to
+> support higher GPU frequencies. This patch adds support for GPU ACD by
+> sending necessary data to GMU and AOSS. The feature support for the
+> chipset is detected based on devicetree data.
+> 
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 81 ++++++++++++++++++++++++++++-------
+>   drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
+>   drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 36 ++++++++++++++++
+>   drivers/gpu/drm/msm/adreno/a6xx_hfi.h | 21 +++++++++
+>   4 files changed, 124 insertions(+), 15 deletions(-)
+> 
 
-Signed-off-by: Jennifer Berringer <jberring@redhat.com>
----
- drivers/power/reset/nvmem-reboot-mode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<snip>
 
-diff --git a/drivers/power/reset/nvmem-reboot-mode.c b/drivers/power/reset/nvmem-reboot-mode.c
-index 41530b70cfc4..b52eb879d1c1 100644
---- a/drivers/power/reset/nvmem-reboot-mode.c
-+++ b/drivers/power/reset/nvmem-reboot-mode.c
-@@ -24,7 +24,7 @@ static int nvmem_reboot_mode_write(struct reboot_mode_driver *reboot,
- 
- 	nvmem_rbm = container_of(reboot, struct nvmem_reboot_mode, reboot);
- 
--	ret = nvmem_cell_write(nvmem_rbm->cell, &magic, sizeof(magic));
-+	ret = nvmem_cell_write_variable_u32(nvmem_rbm->cell, magic);
- 	if (ret < 0)
- 		dev_err(reboot->dev, "update reboot mode bits failed\n");
- 
--- 
-2.46.2
+> +
+> +static int a6xx_hfi_enable_acd(struct a6xx_gmu *gmu)
+> +{
+> +	struct a6xx_hfi_acd_table *acd_table = &gmu->acd_table;
+> +	struct a6xx_hfi_msg_feature_ctrl msg = {
+> +		.feature = HFI_FEATURE_ACD,
+> +		.enable = 1,
+> +		.data = 0,
+> +	};
+> +	int ret;
+> +
+> +	if (!acd_table->enable_by_level)
+> +		return 0;
+> +
+> +	/* Enable ACD feature at GMU */
+> +	ret = a6xx_hfi_send_msg(gmu, HFI_H2F_FEATURE_CTRL, &msg, sizeof(msg), NULL, 0);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(gmu->dev, "Unable to enable ACD (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Send ACD table to GMU */
+> +	ret = a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &msg, sizeof(msg), NULL, 0);
 
+This looks wrong, in this exact code, you never use the acd_table... perhaps it should be acd_table here
+
+> +	if (ret) {
+> +		DRM_DEV_ERROR(gmu->dev, "Unable to ACD table (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int a6xx_hfi_send_test(struct a6xx_gmu *gmu)
+>   {
+>   	struct a6xx_hfi_msg_test msg = { 0 };
+> @@ -756,6 +788,10 @@ int a6xx_hfi_start(struct a6xx_gmu *gmu, int boot_state)
+>   	if (ret)
+>   		return ret;
+>   
+> +	ret = a6xx_hfi_enable_acd(gmu);
+> +	if (ret)
+> +		return ret;
+> +
+>   	ret = a6xx_hfi_send_core_fw_start(gmu);
+>   	if (ret)
+>   		return ret;
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+> index 528110169398..51864c8ad0e6 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+> @@ -151,12 +151,33 @@ struct a6xx_hfi_msg_test {
+>   	u32 header;
+>   };
+>   
+> +#define HFI_H2F_MSG_ACD 7
+> +#define MAX_ACD_STRIDE 2
+> +
+> +struct a6xx_hfi_acd_table {
+> +	u32 header;
+> +	u32 version;
+> +	u32 enable_by_level;
+> +	u32 stride;
+> +	u32 num_levels;
+> +	u32 data[16 * MAX_ACD_STRIDE];
+> +};
+> +
+>   #define HFI_H2F_MSG_START 10
+>   
+>   struct a6xx_hfi_msg_start {
+>   	u32 header;
+>   };
+>   
+> +#define HFI_H2F_FEATURE_CTRL 11
+> +
+> +struct a6xx_hfi_msg_feature_ctrl {
+> +	u32 header;
+> +	u32 feature;
+> +	u32 enable;
+> +	u32 data;
+> +};
+> +
+>   #define HFI_H2F_MSG_CORE_FW_START 14
+>   
+>   struct a6xx_hfi_msg_core_fw_start {
+> 
+
+Thanks,
+Neil
 
