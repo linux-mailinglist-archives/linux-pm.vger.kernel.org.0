@@ -1,170 +1,101 @@
-Return-Path: <linux-pm+bounces-17002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2D59BBDCD
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 20:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1F269BBDD2
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 20:14:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C4C5B22964
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 19:11:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B59B1B21C06
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 19:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF741C9DDF;
-	Mon,  4 Nov 2024 19:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0160F1CC177;
+	Mon,  4 Nov 2024 19:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PMURk49B"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="v73xZXuw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C534518C926
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 19:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F4A18C926;
+	Mon,  4 Nov 2024 19:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730747505; cv=none; b=RsLxtb1IXMdI87KbL125o6mEHpk2o4bSstr7afqai1E1GUSpeBJ8mHqXgFk2bpdY/LG8VZVeB28X1ACS9NOx8XaWdktF2wVb/zF7iyI1fEJdfUYSRnnYy8d37lff/oEqAMgnh7/+ZJMs24l7H6D2rjijhmpoYwciDeSR3gNzY34=
+	t=1730747671; cv=none; b=YcFKPp5mkBy0xcQ3raiZT0/2LVxllOXxjCT9TRST4h6KWyGlyNGj0w0Z5w4fWqGEu9xkDV35F48xvmw20grOMHjRT5VF0PjXdFHCZ1wZpo531z7oI01jUCZCKQ/hlTUM/tCb3MKTaGGARiFoN8ydjZiw9uR5kda6NF5B4nNTyjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730747505; c=relaxed/simple;
-	bh=GJMwmxY2QJv3siC9S1gXVcVWNI70z53QIzBszD+pYjU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=D4VlPhik3UYso0zEJud0yx/MDSiqQYXRJ1c/oL/Fl4+dInFZr/caPeTU//gwecSrc9yabEHNc4ztjqAtn77WmHYwWsMG9uyFywbfstkS32kN115MRHn7/v4HBiNK8UZwwxdh2T5RfsVjfZP80VT+uujX2b6Z5ONctPYFC6hsDDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=PMURk49B; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-720be27db74so3023309b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 11:11:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730747503; x=1731352303; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yD3GH1J0iNlguoAQJzDGR4fLjLQcEa8IFkCoKmA2t3Y=;
-        b=PMURk49BuYQpejfrv268waENxhAtbYopLJ7tO13QHhpSQtA5bFSe6IPd1iEKkjgTMC
-         Cu7Y16Z+L4Y6dTLQl/QanTka/LntIMgSzwBS1sxwzhLr7OCEU+9CQH7s5QDhe6hfPT6L
-         5XqfmuS4RgIvV29AXWWvU1VXMlTEtYDo1p/gx61xHN63MieZ1X9Kr0xkPvtNblfQJxdf
-         +v64OZQooNY+V1PsFUsBC2aeoaqvs01VJ6FiuOtkvat5VQ7wCkwHe+awjZuG7MREwiQW
-         OMcYEfjTd04dtGMFub3x3CUv1GcMa2I7xUONWE69Gsfy8E6TvgbrVWVLmo653U3vWysa
-         Fynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730747503; x=1731352303;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yD3GH1J0iNlguoAQJzDGR4fLjLQcEa8IFkCoKmA2t3Y=;
-        b=logy9ZO/Y6XzD8zZWRRpjo3waRMYPZ6I7Z1XGh/qcTtvX51siqBX9EmWSyytcbrsPM
-         MDbx/PQ+Ie7bBRrz3Ctcph7YlUChdNxzkfodRyCBFWfzprIoqy5DS9vdN4MoxW3ZNWhu
-         CN3UdDjIKNpujDVgyCV1J7iHDAqzZ7bnzsZfumz8Pzmta8DOZMqL3qnVfLmQO4WUrFYW
-         Zg7A0YEsocD68dnRvuHjGKGvQEFzkZ6FJWpwxtbWApAgoQQ+8ViH7ly1pxmI2qvHqOZ1
-         T71FGrvxLl2waYvvcK8CYenSU8gEmDpSe0m7qaVmdSUBK2zda7V3hzEFFxwce6rOOa09
-         JCfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUB8lBdDDN42jX0ZvPMH7zrLJ6MtPDvD5juQ5/kYdO5zxidJbCthof/rTyb7F+dx+tazhD8NAqSmw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8lCeFfWusZ27CdvKkralLIRpx6O7qBQJEwcqFLcD5aQB0SRTs
-	dYNtqAufKxg6/8b9KhB12mtdFIazJvw73e+KYywhqW+pSeYzxIAKsiA6DM7BBw4=
-X-Google-Smtp-Source: AGHT+IGqCQyEM930jC+c3qeymfKxAzWzWDIDt/8CIo9XGMeeXcHgVl+iFmqzHFj25u//wA35k/KmZQ==
-X-Received: by 2002:a05:6a00:2150:b0:71e:4fb7:3a87 with SMTP id d2e1a72fcca58-720c983b763mr18191351b3a.13.1730747502942;
-        Mon, 04 Nov 2024 11:11:42 -0800 (PST)
-Received: from localhost ([97.126.177.194])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc20e4c2sm8131771b3a.91.2024.11.04.11.11.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 11:11:42 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Nishanth Menon <nm@ti.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, Vibhore
- Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur
- <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, Markus
- Schneider-Pargmann <msp@baylibre.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] pmdomain: ti_sci: collect and send low-power
- mode constraints
-In-Reply-To: <20241101203248.oxddn7yea3us5nth@tables>
-References: <20240906-lpm-v6-10-constraints-pmdomain-v4-0-4055557fafbc@baylibre.com>
- <173029317079.2440963.17313738472826934777.b4-ty@ti.com>
- <CAPDyKFptHq6xkKSAmeHsEuhBoEhzvudcMf2+nG08MFPwnMi+ew@mail.gmail.com>
- <7hv7x9qsvt.fsf@baylibre.com>
- <CAPDyKFpdgg+kM_Ot5GPTpMUtjmBF-pUhCeRpVb=j852_7qm=3A@mail.gmail.com>
- <20241101144445.56ejnuoxshqwns37@boots> <7hwmhnnf0f.fsf@baylibre.com>
- <20241101203248.oxddn7yea3us5nth@tables>
-Date: Mon, 04 Nov 2024 11:11:42 -0800
-Message-ID: <7h34k6olu9.fsf@baylibre.com>
+	s=arc-20240116; t=1730747671; c=relaxed/simple;
+	bh=o4Q21EUOtQ5gP8TVU/SzyX8KbHV1rScUhI+UDQ2yHfc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MyFbNLI1CCZSRKTz2USS98tZP4rO4qUnPmHFwS1ZGp9+G/Pre40ho3KcMe6E1tOPH1CVlUQs62CQnyg5VuBf7Ft2hjmFjMh/b+yb/6tCsQ6zJAGTWixDcwedNgKVwi4JO662Us2bKF+erQBV0fllFayinmTbP5H00FIAiK61JE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=v73xZXuw; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=PljaPNPt6R2nYVku9vBFHgDoW/TWpHwXI6NoLjiVHnU=; b=v73xZXuwTsYAUpHnxPLfsov4D0
+	1OOd+L5YITYru9ut7DOvY9bNkEc2XKaSf730FSo76TcYGoTYxqFv1T5YFDB1kcL3H0UF2ELxgIwzv
+	fnXHRRoq7N5FvXRLQMQLF8YAEH+Zgd/vw/GSi3qALx+dLNqUWFiLtODMcq/vBL/RrItgZPQG3oPfe
+	nCTzMv4VJxUAmstFs6PFFgy2nsEZmKHIWqfrpa/qXakPaGxCWBrlXtWAR0nG4QYnza+Mbq/7wEXM0
+	8AZtOpmiiVrV0mnVj0YGmfalBdDjKNRUqQsN825VsP9zLVZiijB5DFoTaH+FP+6DpS8mzPP0Pknyd
+	RpYRZI/g==;
+Date: Mon, 4 Nov 2024 20:14:24 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Kevin Hilman <khilman@kernel.org>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, zhipeng.wang_1@nxp.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-omap@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: fix using cpufreq-dt as module
+Message-ID: <20241104201424.2a42efdd@akair>
+In-Reply-To: <7httcmonip.fsf@baylibre.com>
+References: <20241103210251.762050-1-andreas@kemnade.info>
+	<7httcmonip.fsf@baylibre.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Nishanth Menon <nm@ti.com> writes:
+Am Mon, 04 Nov 2024 10:35:26 -0800
+schrieb Kevin Hilman <khilman@kernel.org>:
 
-> On 08:35-20241101, Kevin Hilman wrote:
->> Nishanth Menon <nm@ti.com> writes:
->> 
->> > On 11:11-20241031, Ulf Hansson wrote:
->> >> On Wed, 30 Oct 2024 at 20:43, Kevin Hilman <khilman@baylibre.com> wrote:
->> >> >
->> >> > Ulf Hansson <ulf.hansson@linaro.org> writes:
->> >> >
->> >> > > On Wed, 30 Oct 2024 at 14:01, Nishanth Menon <nm@ti.com> wrote:
->> >> > >>
->> >> > >> Hi Kevin Hilman,
->> >> > >>
->> >> > >> On Fri, 06 Sep 2024 09:14:48 -0700, Kevin Hilman wrote:
->> >> > >> > The latest (10.x) version of the firmware for the PM co-processor (aka
->> >> > >> > device manager, or DM) adds support for a "managed" mode, where the DM
->> >> > >> > firmware will select the specific low power state which is entered
->> >> > >> > when Linux requests a system-wide suspend.
->> >> > >> >
->> >> > >> > In this mode, the DM will always attempt the deepest low-power state
->> >> > >> > available for the SoC.
->> >> > >> >
->> >> > >> > [...]
->> >> > >>
->> >> > >> I have applied the following to branch ti-drivers-soc-next on [1].
->> >> > >> Thank you!
->> >> > >>
->> >> > >> Ulf, based on your ack[2], I have assumed that you want me to pick
->> >> > >> this series up. Let me know if that is not the case and I can drop the
->> >> > >> series.
->> >> > >
->> >> > > Well, that was a while ago. The reason was because there was a
->> >> > > dependency to another series [2], when this was posted.
->> >> > >
->> >> > > If that's not the case anymore, I think it's better to funnel this via
->> >> > > my pmdomain tree. Please let me know how to proceed.
->> >> >
->> >> > The build-time dependency on [2] still exists, and since that was just
->> >> > queued up by Nishanth, I think this series should (still) go along with
->> >> > it to keep things simple.
->> >> >
->> >> > Kevin
->> >> 
->> >> Right, that makes perfect sense to me too. If we discover conflicts,
->> >> let's deal with them then.
->> >
->> >
->> > oops.. I missed this response. OK, I will let things be.
->> >
->> 
->> Oops, 0day bot found a build error in linux-next when CONFIG_PM_SLEEP is
->> not defined[1].  Need to respin to fix this.
->> 
->> v5 coming right up....
->> 
->> Kevin
->> 
->> [1] https://lore.kernel.org/all/CA+G9fYtioQ22nVr9m22+qyMqUNRsGdA=cFw_j1OUv=x8Pcs-bw@mail.gmail.com/
->
-> Kevin,
->
-> Unfortunately, I have chosen to drop the series. We are too late in
-> the window to take the updated series and wait for new regression
-> reports. On the flip side, this will clean up the flow for Ulf to take
-> your V5 since the dependent series should ideally hit rc1 by then.
->
-> Thanks for addressing the report fast.
+> Andreas Kemnade <andreas@kemnade.info> writes:
+> 
+> > E.g. omap2plus_defconfig compiles cpufreq-dt as module. As there is
+> > no module alias nor a module_init(), cpufreq-dt-platdev will not be
+> > used and therefore on several omap platforms there is no cpufreq.
+> >
+> > Enforce builtin compile of cpufreq-dt-platdev to make it effective.
+> >
+> > Fixes: 3b062a086984 ("cpufreq: dt-platdev: Support building as
+> > module") Cc: stable@vger.kernel.org
+> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>  
+> 
+> I'd much rather see this fixed to work as a module.  You already
+> hinted at the right way to do that, so please do that instead.
+> 
+no clear idea how. What aliases should I add? The cpufreq-dt-platdev is
+not a real driver, so I could not create mod_devicetable aliases to
+match a given device. It constructs a device under certain conditions
+depending on the board compatible, so no simple list of compatibles, it
+contains allow and blocklists.
 
-OK, thanks Nishanth,
+cpufreq-dt then binds to that device and that one can be built as a
+module (which then made cpufreq-dt-platdev also a module, causing the
+trouble). I do not see any benefit from having cpufreq-dt-platdev as a
+module. ti-cpufreq has a similar role and is also just builtin.
+It does itself no real work but provides a device cpufreq-dt then binds
+to.
 
-I'll work this series through Ulf's pmdomain tree for the next merge
-window.
+Handling module removal would probably need to be added and tested. I
+feel not comfortable having such as a regression fix and for stable.
 
-Kevin
+Regards,
+Andreas
 
