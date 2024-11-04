@@ -1,159 +1,140 @@
-Return-Path: <linux-pm+bounces-16956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-16958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 271499BB6AD
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:51:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D0569BB6D3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 14:54:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C820A1F22220
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:51:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1925EB236C4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 13:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BD614A91;
-	Mon,  4 Nov 2024 13:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49BDB1531D8;
+	Mon,  4 Nov 2024 13:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SItzWc9U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5BDM4Xi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2C08BEE
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 13:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112FF13635C;
+	Mon,  4 Nov 2024 13:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728285; cv=none; b=Pu18DKe/GrkS5N4i3s+J9MMzVuraT0Y7viceJ+7Um/X3DBkzpMBZm9o4H4rIVeQ3ddqkSOS9f5XaqIeOlujszEwkDpPlLIgg35q2G+uTF9xwOWvkaC6wUvJH/T9XfUx+I52wRku6Smj8GHCZh33fUdofTwuOfXz7bH2SNvdhIvA=
+	t=1730728467; cv=none; b=RNJGeo+48g5MNp+O+7VYMciM2OchzA1kck9ahzcEo2ZUsLg59vnFuJj/7u+90/FRmgCcAyJrH4SIkSzQTwKZ8wQ/HTQyM3tuZBil+vu5EOzUXION6SOj4QBXEn9pddc5vARB6xO7POJWwlZlkcB4Dmm1UWDNwWglUD0IwTBio0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728285; c=relaxed/simple;
-	bh=yHsIXd5nkO+LMf5xN/UBFpUESu98mQJHpMkCwWTphDI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=THD/KWvNI0y8/7L30si8TmKcgne6MoUc73R6Itm6jJc8Zzod7dQtHnLZ7RfsRXdvQ5YUxo/Md3qdbNuQ4RRam8TMRzvS6m/hGLIgQt68jiJUBYf/81kdiI0j5vE5av6GODNO8UnkrWzR4UrbLJPN9FtfoCX7t0sn6VwrfhqhKtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SItzWc9U; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4BjXUx013477
-	for <linux-pm@vger.kernel.org>; Mon, 4 Nov 2024 13:51:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Q+7hgCYK899f0FJbEY/vMXn0wJqm6OxSk7/yIGdwDuI=; b=SItzWc9U8yLNkDxI
-	41AHDteGPUMg5kJiTHxOiwF52+0ODUyOkQD1EY3zzchBjfTNvm3HlF2sv9wwLks5
-	xpz0TQ7MCPzm7igp+R4EMwQH6OTgXlyOKlnRenO2NbpGZjWAxTtCNGmbBURZfUXI
-	W4AjIwPhLD+nZ7ioIO6DcwEMYBsYwxxVTURjICL9SHvilaEUrAzvnTi5yG58hI91
-	Pdijc6SOJCoAZorwEyaODy+j1K+oZy1NlZNkwQoqdxl3xXypsQ6M3BrCpLEd9MSc
-	k07aJyd+3x+KEvva60hsW8f5sJhcZlXPpac8aJox5Ob28w8IZ2r6Gep9h8ZuwBlz
-	e2JCJw==
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42nd4ume0n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 13:51:22 +0000 (GMT)
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7180db3ca26so416904a34.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2024 05:51:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730728271; x=1731333071;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+7hgCYK899f0FJbEY/vMXn0wJqm6OxSk7/yIGdwDuI=;
-        b=kVWp8xxB7it0iqWVgoIhEtaLwRqDqzVyGaMxa1fgX6lmvm0hQ8d79Hbwn3x/dMeyKE
-         pDzTqWDrpiyqW73GX0ilKaBoOYtT400TfA0YqgzQJPKX/KUxKeIwHrHIhbFj71ysvBsc
-         A8Tm0G+ofCVvnK4tP7hMoYQ3ziJ//vhZ5Pfe04+0saSejzUZ9Otz7hEoc5xnZdrbHTO7
-         yfHWRB//O6YihBNiRoDtC8ARCkw3mz+9ht1vps+48rjr5wf3VLlSZzDgMtzKWvpFvH3h
-         AtxbF526bm4uiM0R8dJIyAKhZGHWUSUPfRSLGmxZS8u9TgnHfCTTK+mS3BMR0J2YDYVL
-         ZuZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGylu61hY6IJEsP2DCTeqvIu2fbwZo0PmIqSLNhnlxapzAZEaEG9h4PWV3jP6+Ntb99CTb8LnPpg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVPA96PBSEi0B/yOQBOP4KsGr81Wd4bLIAQw7L+L2CfeLam1ze
-	6t6DpEZSGVAzp8Lz6S6dfi+IRqhDn8qxlyluuPBcGs4Z5d3Dv7ajz4FZnBDfxaTJTfbgzuHk80f
-	tdMVTyJ6cJBLaeX/XPlCb20bIPWbtDSTgywn7DCMNBL80IZrI93OGPizFSg==
-X-Received: by 2002:a05:6808:2111:b0:3e6:49e0:f16b with SMTP id 5614622812f47-3e649e0fb7bmr6547838b6e.1.1730728271366;
-        Mon, 04 Nov 2024 05:51:11 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE4cnc3xqY8a6NcTMGPZ60dRJUOHzCgUzfXFzm9uWLTFW4bfNOfHKp4a3z7OM+82mgUNhac/Q==
-X-Received: by 2002:a05:6808:2111:b0:3e6:49e0:f16b with SMTP id 5614622812f47-3e649e0fb7bmr6547824b6e.1.1730728270940;
-        Mon, 04 Nov 2024 05:51:10 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e564941f7sm554474766b.20.2024.11.04.05.51.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 05:51:09 -0800 (PST)
-Message-ID: <91ea0f03-9bbe-491d-9056-ebd9fdc73bfa@oss.qualcomm.com>
-Date: Mon, 4 Nov 2024 14:51:06 +0100
+	s=arc-20240116; t=1730728467; c=relaxed/simple;
+	bh=sZurbIwzYuS4yLWi6DkfdRraXzSZGcCRAs9+v0qzfrE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KBFyaQzISKaXg6IFeptik/cdyjeCyIz5nhhSJvfdjS9XGDBk+t8ChaCOghTizF7L9Cym88DCrnSIMrMfPyod7IiNLwSotgK6KAgnffQNZ9AUSmmP75LJRWXF02qXUdBD7uTmqIQNDQJrux2+EY/ROLtFxkqKyFJPg23rUGFQNLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5BDM4Xi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25CFC4CEDB;
+	Mon,  4 Nov 2024 13:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730728466;
+	bh=sZurbIwzYuS4yLWi6DkfdRraXzSZGcCRAs9+v0qzfrE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Q5BDM4Xi1gOJwvFZTupaLks/gQGYzcECQMKtb1FIfjgKOhTka1GRmJOghSmpApkE0
+	 EFJJrzoY8sI0C2SiN/3TkUZEwWSa0zsJ/fStV4D4BHtp3C+ua1QWa03YjFdQm1W6pr
+	 sjaxAwpqEhYb6xm8YBtIDy/P08x3jYzLbYAV/182HZcvh+G4JXSawt5TIBJpUi3Pdh
+	 ILgi2kqTxQzGA3eqx1VLHy5LdFwJXCOtZX3+cRs4c1/RFB1uaMzobP+6RKn46xIVgC
+	 MmQk1THwQSl8VvLYoEqqbzVyLlX+CYxykHAKFYnqghs7LsRhHe61DGjbbTejdNUJBJ
+	 nQSsKoC141iaw==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fb4af0b6beso62217391fa.3;
+        Mon, 04 Nov 2024 05:54:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUqYSm1bl0Q3ryqkoMTfTIaCt8iajfUFoh4jaMtCj4DRYzg4CRB91Xrp3OvLDSQt2vwNDWVcuUBTBzgIj+0/Jnv@vger.kernel.org, AJvYcCUtyJ7f5RshiMba/X7XAFDVIkwAMymFgOdyYMo7rUzxlQW0fT+v0wFEG/ZicUDgtfZBOqr/DmPTApnk@vger.kernel.org, AJvYcCVZaij/4smfQa7FJyzJsrvEIc+HYmBuVmeUbkvgemM5ZH1+EeFS4Rh8aQtYX5b35nIK80Q=@vger.kernel.org, AJvYcCVbZkHH4xFp69CFqbGyUfCVYY+OnzQTkE7KgCJV8aFB5H1Mjq6BuoUeyQidx2hZNOW4OaBMpjcY5ic=@vger.kernel.org, AJvYcCX9PC+RbPqg7F0I+qEGKmxQd0Fi/0GsuD0s//sjHw4nAnoueb91aBGnnk4NGqegOD4eEG1N3BPd6MnTX0qo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6gX2BAMt6dFDy3Iccq22rCOgojJDLyFpVXULmqebOUnTw15Wq
+	83GG3Vup7v87Az+nHpNr3KyguRENdF3OE3Q+SjLP4ajJHLgLA8nb+ZHJ0zX/7oEttPlBm7SgurA
+	SbIFafLxpGzYOhV3S7gLQeb99Ycw=
+X-Google-Smtp-Source: AGHT+IEDPSajd0Ijul/NTdTCOsnUC5WH3yaxWxO7av85XXQJwq7H6ghrIewBObwz96ILox5H6B1VjAJt6rSncXXA+ys=
+X-Received: by 2002:a05:651c:506:b0:2fc:9869:2e0b with SMTP id
+ 38308e7fff4ca-2fedb7c7dc2mr79712841fa.20.1730728464965; Mon, 04 Nov 2024
+ 05:54:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 7/7] arm64: dts: qcom: ipq5424: Add thermal zone nodes
-To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        srinivas.kandagatla@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, andersson@kernel.org, konradybcio@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20241104124413.2012794-1-quic_mmanikan@quicinc.com>
- <20241104124413.2012794-8-quic_mmanikan@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241104124413.2012794-8-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: MPX1LHyXrpgtstu1OUVDjDS3x-p7V4i4
-X-Proofpoint-ORIG-GUID: MPX1LHyXrpgtstu1OUVDjDS3x-p7V4i4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=767 impostorscore=0 suspectscore=0 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040121
+References: <20241019172459.2241939-1-dwmw2@infradead.org> <20241019172459.2241939-7-dwmw2@infradead.org>
+ <ZyPEn4qhaYyYqrzk@lpieralisi> <ZyUUh6KawapLkj0z@lpieralisi>
+In-Reply-To: <ZyUUh6KawapLkj0z@lpieralisi>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 4 Nov 2024 14:54:12 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFma8-GqKuOs5-UAQY9asbq2p9EubSjjbywaURa4T4WnA@mail.gmail.com>
+Message-ID: <CAMj1kXFma8-GqKuOs5-UAQY9asbq2p9EubSjjbywaURa4T4WnA@mail.gmail.com>
+Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
+To: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: David Woodhouse <dwmw2@infradead.org>, sami.mujawar@arm.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	Len Brown <len.brown@intel.com>, Shuah Khan <shuah@kernel.org>, 
+	David Woodhouse <dwmw@amazon.co.uk>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, 
+	Francesco Lavra <francescolavra.fl@gmail.com>, Miguel Luis <miguel.luis@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 4.11.2024 1:44 PM, Manikanta Mylavarapu wrote:
-> Add thermal zone nodes for sensors present in IPQ5424.
-> 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
-[...]
+On Fri, 1 Nov 2024 at 18:49, Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
+>
+> [+Ard, Sami, for EFI]
+>
+> On Thu, Oct 31, 2024 at 06:55:43PM +0100, Lorenzo Pieralisi wrote:
+> > On Sat, Oct 19, 2024 at 06:15:47PM +0100, David Woodhouse wrote:
+> >
+> > [...]
+> >
+> > > +#ifdef CONFIG_HIBERNATION
+> > > +static int psci_sys_hibernate(struct sys_off_data *data)
+> > > +{
+> > > +   /*
+> > > +    * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
+> > > +    * and is supported by hypervisors implementing an earlier version
+> > > +    * of the pSCI v1.3 spec.
+> > > +    */
+> >
+> > It is obvious but with this patch applied a host kernel would start executing
+> > SYSTEM_OFF2 too if supported in firmware to hibernate, it is not a hypervisor
+> > only code path.
+> >
+> > Related to that: is it now always safe to override
+> >
+> > commit 60c0d45a7f7a ("efi/arm64: use UEFI for system reset and poweroff")
+> >
+> > for hibernation ? It is not very clear to me why overriding PSCI for
+> > poweroff was the right thing to do - tried to follow that patch history but
+> > the question remains (it is related to UpdateCapsule() but I don't know
+> > how that applies to the hibernation use case).
+>
+> RFC: It is unclear to me what happens in current mainline if we try to
+> hibernate with EFI runtime services enabled and a capsule update pending (we
+> issue EFI ResetSystem(EFI_RESET_SHUTDOWN,..) which might not be compatible
+> with the reset required by the pending capsule update request) what happens
+> in this case I don't know but at least the choice is all contained in
+> EFI firmware.
+>
+> Then if in the same scenario now we are switching to PSCI SYSTEM_OFF2 for the
+> hibernate reset I suspect that what happens to the in-flight capsule
+> update requests strictly depends on what "reset" PSCI SYSTEM_OFF2 will
+> end up doing ?
+>
+> I think this is just a corner case and it is unlikely it has been ever
+> tested (is it even possible ? Looking at EFI folks) - it would be good
+> to clarify it at least to make sure we understand this code path.
+>
 
-> +
-> +		cpu3-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 13>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <120000>;
-> +					hysteresis = <9000>;
-> +					type = "critical";
-> +				};
-> +
-> +				cpu-passive {
-> +					temperature = <110000>;
-> +					hysteresis = <9000>;
-> +					type = "passive";
+I'm not aware of any OS that actually uses capsule update at runtime
+(both Windows and Linux queue up the capsule and call the
+UpdateCapsule() runtime service at boot time after a reboot).
 
-You have a passive trip point without passive polling
+So it is unlikely that this would break anything, and I'd actually be
+inclined to disable capsule update at runtime altogether.
 
-> +				};
-> +			};
-> +		};
-> +
-> +		wcss-tile2-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-
-These are the defaults
-
-> +			thermal-sensors = <&tsens 9>;
-> +
-> +			trips {
-> +				wcss_tile2-critical {
-
-Node names must not contain underscores
-
-Konrad
+I will also note that hibernation with EFI is flaky in general, given
+that EFI memory regions may move around
 
