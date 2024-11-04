@@ -1,386 +1,283 @@
-Return-Path: <linux-pm+bounces-17010-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17011-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 789409BBED6
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 21:36:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E49009BC083
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 23:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B2BE1C21F57
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 20:36:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 988EE282B71
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2024 22:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA98D1F5851;
-	Mon,  4 Nov 2024 20:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63D41AAE27;
+	Mon,  4 Nov 2024 22:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bJf5rJYt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bmpJGA6X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE2B1F5847
-	for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2024 20:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9987D158522;
+	Mon,  4 Nov 2024 22:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730752566; cv=none; b=YM0vu4mpLW51oZB5CuFb4w5rvJY7IUwgU/RjxpeLoHiS4jP/UCV+lEW6RrRkOWhD+ET9ptWJVkiA3WsRe0+/jeaPwDG575pcy5V4ZP5kJu5bunp/JH1VJfFVCKDXDlszIKLXAN75k/iDKFVMs+Eyv2782XzmZFSRsdkYtG+7cxo=
+	t=1730757754; cv=none; b=T5oCnMCSJUXHc8/UaTHPgEkSApcQLIhJoaI1xmThDMsMmw7xjpBU32Jlf3ULP9oVKsxf9KgK2bmAfLb+V/qPh309jG9BD3R8qA5R60F3Y2oNWquQgSMWjPGqnDpePb/iKITapoyGKo+5TClxgcS1PJbeYF0RBCXgstEIKz/9Rwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730752566; c=relaxed/simple;
-	bh=/0cPqiCpFuaNgNsl2UTf4KRjxyQT96G84MVwhoOAHsI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U0oKiq7uNHm29n4TENbR2v3+KeaUv4gjRrTjVCcbmso0T0YkL1HhG/48XHUDfpkFMOnvhfdHrwrC7gGoHFbyWraDTNWvVOAQRodeA/qfvgR0vTNUJFY4dxU1otUSKaccCDQb5n7Hzm7svcakAW03RYeeSrARx0C51pbQPdrVfEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bJf5rJYt; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730752563;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xH0t4+nyF9Q5FXWl2SqVt5nxvgzaXqU0aJjMD6PecgM=;
-	b=bJf5rJYtBymG1iwvgMY4iNqSZqf8N37+wC81cVoNQ3RUKXYJPmrTYSdDf8iP/gKI0ebYmT
-	AnyqaBIaZO9Y7Tn+gzQECBHtFWirWiU6iQFeFADAm7JvH8IRz5OPN+IX2j+00TvwL3s2Bp
-	Ke/RDVbn3Z7Hvg0gS/7rdC2hznTLxfs=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-494-0EfoMvDrMIG_zFkINwoD3Q-1; Mon,
- 04 Nov 2024 15:36:02 -0500
-X-MC-Unique: 0EfoMvDrMIG_zFkINwoD3Q-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D2DCC1956096;
-	Mon,  4 Nov 2024 20:36:00 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.64])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 125731956046;
-	Mon,  4 Nov 2024 20:35:58 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	platform-driver-x86@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 2/2] platform/x86: x86-android-tablets: Add Vexia EDU ATLA 10 EC battery driver
-Date: Mon,  4 Nov 2024 21:35:55 +0100
-Message-ID: <20241104203555.61104-2-hdegoede@redhat.com>
-In-Reply-To: <20241104203555.61104-1-hdegoede@redhat.com>
-References: <20241104203555.61104-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1730757754; c=relaxed/simple;
+	bh=7QIifIssVUmVPesl7ylU2g2JqAzCifBzBoPBx2zV8n8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Iofc5KD1sCF2fN7ICkEJE/WP6gFm4SL3m3V8rq4czZEsuSeg+ZtD7csURTTL4rVzvSf9G5rbvXMbkVAfdMCoLMDaTjPxJdYFHWcGzODgh3Quae4fjFqhzvOKY+8AqvsTmf3ChB6Itb9+UaPxAAw9wz+hRjrAl1VGn+ejeGvEYD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bmpJGA6X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12BECC4CECE;
+	Mon,  4 Nov 2024 22:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730757754;
+	bh=7QIifIssVUmVPesl7ylU2g2JqAzCifBzBoPBx2zV8n8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bmpJGA6XY4d+1a042eUWC/fe9vHMkD8M506B00CQVFijTXVx9A+mM2dywCp6t5Yk0
+	 jHiKm62uOyNv7PKVyJ1Hb3WPKMmguLAjECO+sUeRYmhNAFMD/YRnAtQDXE8jBDALqP
+	 ZvJcoV4w/Hn+Ws8RVShiymDbTd1+Dhcscr68yoqMC3g+y7ipFv/ulcOPm+K7N1ljFj
+	 0YYiugARaLfJ52qKDrGbJWx8fQwu4zpXHygxLq8ETNEo+n9p7H6djjibNCv15+LtZS
+	 LpbA026wK9pBwXGCSgmoynGGUck89Rp951kjI8HXypHZ1vnfbEG8G9ZXAX8dRoy1Vu
+	 3Y9n4ekf7jcdw==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5ebc0dbc566so2377763eaf.3;
+        Mon, 04 Nov 2024 14:02:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUXgowsM+P87OLQtfz2NXFtCq+MCYmv/hSkm7bCnwcxOj8bFyYnMFEHRwUMbMeP51HF7Ehw3iheCg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7lkHErNAksyiBgYmTnHDBm/q5Z+DLvGb9vRV/veWin9pdew4n
+	76DuEdMhfxd8JB++WUWo6sqSuukpOwUnzJChfJobmlxjK2HGxUE/bP5ltUJ4oWzxvkFEVenflxi
+	UfM0q6vD19UtfLpltKa2ttjwbxAI=
+X-Google-Smtp-Source: AGHT+IF7OgK5DkrXYX6V8ZPi7SK75DYbhSrAGlARSEhx+S1zP/RJOCbCTW7jpP8xvwV3uCs0xPmMgiwe55OmjZ0z68M=
+X-Received: by 2002:a05:6820:f05:b0:5ee:a5b:d172 with SMTP id
+ 006d021491bc7-5ee0a5bd5bdmr4172827eaf.5.1730757753286; Mon, 04 Nov 2024
+ 14:02:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20241030164126.1263793-1-lukasz.luba@arm.com> <20241030164126.1263793-2-lukasz.luba@arm.com>
+In-Reply-To: <20241030164126.1263793-2-lukasz.luba@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 4 Nov 2024 23:02:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iRQ4fZ0xOeLkwvg80nuB7cAM02mj1resEBVvAqr3PQ-Q@mail.gmail.com>
+Message-ID: <CAJZ5v0iRQ4fZ0xOeLkwvg80nuB7cAM02mj1resEBVvAqr3PQ-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] PM: EM: Add min/max available performance state limits
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	dietmar.eggemann@arm.com, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Vexia EDU ATLA 10 tablet has an embedded controller instead of
-giving the os direct access to the charger + fuel-gauge ICs as is normal
-on tablets designed for Android.
+On Wed, Oct 30, 2024 at 5:40=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+> On some devices there are HW dependencies for shared frequency and voltag=
+e
+> between devices. It will impact Energy Aware Scheduler (EAS) decision,
+> where CPUs share the voltage & frequency domain with other CPUs or device=
+s
+> e.g.
+> - Mid CPUs + Big CPU
+> - Little CPU + L3 cache in DSU
+> - some other device + Little CPUs
+>
+> Detailed explanation of one example:
+> When the L3 cache frequency is increased, the affected Little CPUs might
+> run at higher voltage and frequency. That higher voltage causes higher CP=
+U
+> power and thus more energy is used for running the tasks. This is
+> important for background running tasks, which try to run on energy
+> efficient CPUs.
+>
+> Therefore, add performance state limits which are applied for the device
+> (in this case CPU). This is important on SoCs with HW dependencies
+> mentioned above so that the Energy Aware Scheduler (EAS) does not use
+> performance states outside the valid min-max range for energy calculation=
+.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/linux/energy_model.h | 29 ++++++++++++++------
+>  kernel/power/energy_model.c  | 52 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 73 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 1ff52020cf757..752e0b2975820 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -55,6 +55,8 @@ struct em_perf_table {
+>   * struct em_perf_domain - Performance domain
+>   * @em_table:          Pointer to the runtime modifiable em_perf_table
+>   * @nr_perf_states:    Number of performance states
+> + * @min_perf_state:    Minimum allowed Performance State index
+> + * @max_perf_state:    Maximum allowed Performance State index
+>   * @flags:             See "em_perf_domain flags"
+>   * @cpus:              Cpumask covering the CPUs of the domain. It's her=
+e
+>   *                     for performance reasons to avoid potential cache
+> @@ -70,6 +72,8 @@ struct em_perf_table {
+>  struct em_perf_domain {
+>         struct em_perf_table __rcu *em_table;
+>         int nr_perf_states;
+> +       int min_perf_state;
+> +       int max_perf_state;
+>         unsigned long flags;
+>         unsigned long cpus[];
+>  };
+> @@ -173,13 +177,14 @@ void em_table_free(struct em_perf_table __rcu *tabl=
+e);
+>  int em_dev_compute_costs(struct device *dev, struct em_perf_state *table=
+,
+>                          int nr_states);
+>  int em_dev_update_chip_binning(struct device *dev);
+> +int em_update_performance_limits(struct em_perf_domain *pd,
+> +               unsigned long freq_min_khz, unsigned long freq_max_khz);
+>
+>  /**
+>   * em_pd_get_efficient_state() - Get an efficient performance state from=
+ the EM
+>   * @table:             List of performance states, in ascending order
+> - * @nr_perf_states:    Number of performance states
+> + * @pd:                        performance domain for which this must be=
+ done
+>   * @max_util:          Max utilization to map with the EM
+> - * @pd_flags:          Performance Domain flags
+>   *
+>   * It is called from the scheduler code quite frequently and as a conseq=
+uence
+>   * doesn't implement any check.
+> @@ -188,13 +193,16 @@ int em_dev_update_chip_binning(struct device *dev);
+>   * requirement.
+>   */
+>  static inline int
+> -em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_state=
+s,
+> -                         unsigned long max_util, unsigned long pd_flags)
+> +em_pd_get_efficient_state(struct em_perf_state *table,
+> +                         struct em_perf_domain *pd, unsigned long max_ut=
+il)
+>  {
+> +       unsigned long pd_flags =3D pd->flags;
+> +       int min_ps =3D pd->min_perf_state;
+> +       int max_ps =3D pd->max_perf_state;
+>         struct em_perf_state *ps;
+>         int i;
+>
+> -       for (i =3D 0; i < nr_perf_states; i++) {
+> +       for (i =3D min_ps; i <=3D max_ps; i++) {
+>                 ps =3D &table[i];
+>                 if (ps->performance >=3D max_util) {
+>                         if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES=
+ &&
+> @@ -204,7 +212,7 @@ em_pd_get_efficient_state(struct em_perf_state *table=
+, int nr_perf_states,
+>                 }
+>         }
+>
+> -       return nr_perf_states - 1;
+> +       return max_ps;
+>  }
+>
+>  /**
+> @@ -253,8 +261,7 @@ static inline unsigned long em_cpu_energy(struct em_p=
+erf_domain *pd,
+>          * requested performance.
+>          */
+>         em_table =3D rcu_dereference(pd->em_table);
+> -       i =3D em_pd_get_efficient_state(em_table->state, pd->nr_perf_stat=
+es,
+> -                                     max_util, pd->flags);
+> +       i =3D em_pd_get_efficient_state(em_table->state, pd, max_util);
+>         ps =3D &em_table->state[i];
+>
+>         /*
+> @@ -391,6 +398,12 @@ static inline int em_dev_update_chip_binning(struct =
+device *dev)
+>  {
+>         return -EINVAL;
+>  }
+> +static inline
+> +int em_update_performance_limits(struct em_perf_domain *pd,
+> +               unsigned long freq_min_khz, unsigned long freq_max_khz)
+> +{
+> +       return -EINVAL;
+> +}
+>  #endif
+>
+>  #endif
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 927cc55ba0b3d..d07faf42eace6 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -628,6 +628,8 @@ int em_dev_register_perf_domain(struct device *dev, u=
+nsigned int nr_states,
+>                 goto unlock;
+>
+>         dev->em_pd->flags |=3D flags;
+> +       dev->em_pd->min_perf_state =3D 0;
+> +       dev->em_pd->max_perf_state =3D nr_states - 1;
+>
+>         em_cpufreq_update_efficiencies(dev, dev->em_pd->em_table->state);
+>
+> @@ -856,3 +858,53 @@ int em_dev_update_chip_binning(struct device *dev)
+>         return em_recalc_and_update(dev, pd, em_table);
+>  }
+>  EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
+> +
+> +
+> +/**
+> + * em_update_performance_limits() - Update Energy Model with performance
+> + *                             limits information.
+> + * @pd                 : Performance Domain with EM that has to be updat=
+ed.
+> + * @freq_min_khz       : New minimum allowed frequency for this device.
+> + * @freq_max_khz       : New maximum allowed frequency for this device.
+> + *
+> + * This function allows to update the EM with information about availabl=
+e
+> + * performance levels. It takes the minimum and maximum frequency in kHz
+> + * and does internal translation to performance levels.
+> + * Returns 0 on success or -EINVAL when failed.
+> + */
+> +int em_update_performance_limits(struct em_perf_domain *pd,
+> +               unsigned long freq_min_khz, unsigned long freq_max_khz)
+> +{
+> +       struct em_perf_state *table;
+> +       int min_ps =3D -1;
+> +       int max_ps =3D -1;
+> +       int i;
+> +
+> +       if (!pd)
+> +               return -EINVAL;
+> +
+> +       rcu_read_lock();
+> +       table =3D em_perf_state_from_pd(pd);
+> +
+> +       for (i =3D 0; i < pd->nr_perf_states; i++) {
+> +               if (freq_min_khz =3D=3D table[i].frequency)
+> +                       min_ps =3D i;
+> +               if (freq_max_khz =3D=3D table[i].frequency)
+> +                       max_ps =3D i;
+> +       }
+> +       rcu_read_unlock();
+> +
+> +       /* Only update when both are found and sane */
+> +       if (min_ps < 0 || max_ps < 0 || max_ps < min_ps)
+> +               return -EINVAL;
+> +
+> +
+> +       /* Guard simultaneous updates and make them atomic */
+> +       mutex_lock(&em_pd_mutex);
+> +       pd->min_perf_state =3D min_ps;
+> +       pd->max_perf_state =3D max_ps;
+> +       mutex_unlock(&em_pd_mutex);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(em_update_performance_limits);
+> --
 
-There is ACPI Battery device in the DSDT using the EC which should work
-expect that it expects the I2C controller to be enumerated as an ACPI
-device and the tablet's BIOS enumerates all LPSS devices as PCI devices
-(and changing the LPSS BIOS settings from PCI -> ACPI does not work).
-
-Add a power_supply class driver for the Atla 10 EC to expert battery info
-to userspace. This is made part of the x86-android-tablets directory and
-Kconfig option because the i2c_client it binds to is instantiated by
-the x86-android-tablets kmod.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- .../platform/x86/x86-android-tablets/Makefile |   1 +
- .../x86/x86-android-tablets/vexia_atla10_ec.c | 264 ++++++++++++++++++
- 2 files changed, 265 insertions(+)
- create mode 100644 drivers/platform/x86/x86-android-tablets/vexia_atla10_ec.c
-
-diff --git a/drivers/platform/x86/x86-android-tablets/Makefile b/drivers/platform/x86/x86-android-tablets/Makefile
-index 41ece5a37137..bc505ffcd2bf 100644
---- a/drivers/platform/x86/x86-android-tablets/Makefile
-+++ b/drivers/platform/x86/x86-android-tablets/Makefile
-@@ -4,6 +4,7 @@
- #
- 
- obj-$(CONFIG_X86_ANDROID_TABLETS) += x86-android-tablets.o
-+obj-$(CONFIG_X86_ANDROID_TABLETS) += vexia_atla10_ec.o
- 
- x86-android-tablets-y := core.o dmi.o shared-psy-info.o \
- 			 asus.o lenovo.o other.o
-diff --git a/drivers/platform/x86/x86-android-tablets/vexia_atla10_ec.c b/drivers/platform/x86/x86-android-tablets/vexia_atla10_ec.c
-new file mode 100644
-index 000000000000..c5e6656d24fc
---- /dev/null
-+++ b/drivers/platform/x86/x86-android-tablets/vexia_atla10_ec.c
-@@ -0,0 +1,264 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * power_supply class (battery) driver for the I2C attached embedded controller
-+ * found on Vexia EDU ATLA 10 (9V version) tablets.
-+ *
-+ * This is based on the ACPI Battery device in the DSDT which should work
-+ * expect that it expects the I2C controller to be enumerated as an ACPI
-+ * device and the tablet's BIOS enumerates all LPSS devices as PCI devices
-+ * (and changing the LPSS BIOS settings from PCI -> ACPI does not work).
-+ *
-+ * Copyright (c) 2024 Hans de Goede <hansg@kernel.org>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/devm-helpers.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/power_supply.h>
-+#include <linux/types.h>
-+#include <linux/workqueue.h>
-+
-+#include <asm/byteorder.h>
-+
-+/* State field uses ACPI Battery spec status bits */
-+#define ACPI_BATTERY_STATE_DISCHARGING		BIT(0)
-+#define ACPI_BATTERY_STATE_CHARGING		BIT(1)
-+
-+#define ATLA10_EC_BATTERY_STATE_COMMAND		0x87
-+#define ATLA10_EC_BATTERY_INFO_COMMAND		0x88
-+
-+/* From broken ACPI battery device in DSDT */
-+#define ATLA10_EC_VOLTAGE_MIN_DESIGN		3750000
-+
-+struct atla10_ec_battery_state {
-+	u8 len;				/* Struct length excluding the len field, always 12 */
-+	u8 status;			/* Using ACPI Battery spec status bits */
-+	u8 capacity;			/* Percent */
-+	__le16 charge_now;		/* mAh */
-+	__le16 voltage_now;		/* mV */
-+	__le16 current_now;		/* mA */
-+	__le16 charge_full;		/* mAh */
-+	__le16 temp;			/* centi degrees celcius */
-+} __packed;
-+
-+struct atla10_ec_battery_info {
-+	u8 len;				/* Struct length excluding the len field, always 6 */
-+	__le16 charge_full_design;	/* mAh */
-+	__le16 voltage_now;		/* mV, should be design voltage, but is not ? */
-+	__le16 charge_full_design2;	/* mAh */
-+} __packed;
-+
-+struct atla10_ec_data {
-+	struct i2c_client *client;
-+	struct power_supply *psy;
-+	struct delayed_work work;
-+	struct mutex update_lock;
-+	struct atla10_ec_battery_info info;
-+	struct atla10_ec_battery_state state;
-+	bool valid;			/* true if state is valid */
-+	unsigned long last_update;	/* In jiffies */
-+};
-+
-+static int atla10_ec_cmd(struct atla10_ec_data *data, u8 cmd, u8 len, u8 *values)
-+{
-+	struct device *dev = &data->client->dev;
-+	int ret;
-+
-+	ret = i2c_smbus_read_i2c_block_data(data->client, cmd, len, values);
-+	if (ret != len) {
-+		dev_err(dev, "I2C command 0x%02x error: %d\n", cmd, ret);
-+		return -EIO;
-+	}
-+
-+	if (values[0] != (len - 1)) {
-+		dev_err(dev, "I2C command 0x%02x header length mismatch expected %u got %u\n",
-+			cmd, len - 1, values[0]);
-+		return -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int atla10_ec_update(struct atla10_ec_data *data)
-+{
-+	int ret;
-+
-+	/* Cache data for 5 seconds */
-+	if (data->valid && time_before(jiffies, data->last_update + 5 * HZ))
-+		return 0;
-+
-+	ret = atla10_ec_cmd(data, ATLA10_EC_BATTERY_STATE_COMMAND,
-+			    sizeof(data->state), (u8 *)&data->state);
-+	if (ret)
-+		return ret;
-+
-+	data->last_update = jiffies;
-+	data->valid = true;
-+	return 0;
-+}
-+
-+static int atla10_ec_psy_get_property(struct power_supply *psy,
-+				      enum power_supply_property psp,
-+				      union power_supply_propval *val)
-+{
-+	struct atla10_ec_data *data = power_supply_get_drvdata(psy);
-+	int charge_now, charge_full, ret;
-+
-+	guard(mutex)(&data->update_lock);
-+
-+	ret = atla10_ec_update(data);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		if (data->state.status & ACPI_BATTERY_STATE_DISCHARGING)
-+			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+		else if (data->state.status & ACPI_BATTERY_STATE_CHARGING)
-+			val->intval = POWER_SUPPLY_STATUS_CHARGING;
-+		else if (data->state.capacity == 100)
-+			val->intval = POWER_SUPPLY_STATUS_FULL;
-+		else
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+		break;
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		val->intval = data->state.capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		/*
-+		 * The EC has a bug where it reports charge-full-design as
-+		 * charge-now when the battery is full. Clamp charge-now to
-+		 * charge-full to workaround this.
-+		 */
-+		charge_now = le16_to_cpu(data->state.charge_now);
-+		charge_full = le16_to_cpu(data->state.charge_full);
-+		val->intval = min(charge_now, charge_full) * 1000;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval = le16_to_cpu(data->state.voltage_now) * 1000;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		val->intval = le16_to_cpu(data->state.current_now) * 1000;
-+		/*
-+		 * Documentation/ABI/testing/sysfs-class-power specifies
-+		 * negative current for discharing.
-+		 */
-+		if (data->state.status & ACPI_BATTERY_STATE_DISCHARGING)
-+			val->intval = -val->intval;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_FULL:
-+		val->intval = le16_to_cpu(data->state.charge_full) * 1000;
-+		break;
-+	case POWER_SUPPLY_PROP_TEMP:
-+		val->intval = le16_to_cpu(data->state.temp) / 10;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-+		val->intval = le16_to_cpu(data->info.charge_full_design) * 1000;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-+		val->intval = ATLA10_EC_VOLTAGE_MIN_DESIGN;
-+		break;
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = 1;
-+		break;
-+	case POWER_SUPPLY_PROP_TECHNOLOGY:
-+		val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static void atla10_ec_external_power_changed_work(struct work_struct *work)
-+{
-+	struct atla10_ec_data *data = container_of(work, struct atla10_ec_data, work.work);
-+
-+	dev_dbg(&data->client->dev, "External power changed\n");
-+	data->valid = false;
-+	power_supply_changed(data->psy);
-+}
-+
-+static void atla10_ec_external_power_changed(struct power_supply *psy)
-+{
-+	struct atla10_ec_data *data = power_supply_get_drvdata(psy);
-+
-+	/* After charger plug in/out wait 0.5s for things to stabilize */
-+	mod_delayed_work(system_wq, &data->work, HZ / 2);
-+}
-+
-+static const enum power_supply_property atla10_ec_psy_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+};
-+
-+static const struct power_supply_desc atla10_ec_psy_desc = {
-+	.name = "atla10_ec_battery",
-+	.type = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties = atla10_ec_psy_props,
-+	.num_properties = ARRAY_SIZE(atla10_ec_psy_props),
-+	.get_property = atla10_ec_psy_get_property,
-+	.external_power_changed = atla10_ec_external_power_changed,
-+};
-+
-+static int atla10_ec_probe(struct i2c_client *client)
-+{
-+	struct power_supply_config psy_cfg = { };
-+	struct device *dev = &client->dev;
-+	struct atla10_ec_data *data;
-+	int ret;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	psy_cfg.drv_data = data;
-+	data->client = client;
-+
-+	ret = devm_mutex_init(dev, &data->update_lock);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_delayed_work_autocancel(dev, &data->work,
-+					   atla10_ec_external_power_changed_work);
-+	if (ret)
-+		return ret;
-+
-+	ret = atla10_ec_cmd(data, ATLA10_EC_BATTERY_INFO_COMMAND,
-+			    sizeof(data->info), (u8 *)&data->info);
-+	if (ret)
-+		return ret;
-+
-+	data->psy = devm_power_supply_register(dev, &atla10_ec_psy_desc, &psy_cfg);
-+	return PTR_ERR_OR_ZERO(data->psy);
-+}
-+
-+static const struct i2c_device_id atla10_ec_id_table[] = {
-+	{ "vexia_atla10_ec" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, atla10_ec_id_table);
-+
-+static struct i2c_driver atla10_ec_driver = {
-+	.driver = {
-+		.name = "vexia_atla10_ec",
-+	},
-+	.probe = atla10_ec_probe,
-+	.id_table = atla10_ec_id_table,
-+};
-+module_i2c_driver(atla10_ec_driver);
-+
-+MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
-+MODULE_DESCRIPTION("Battery driver for Vexia EDU ATLA 10 tablet EC");
-+MODULE_LICENSE("GPL");
--- 
-2.47.0
-
+Applied as 6.13 material, thanks!
 
