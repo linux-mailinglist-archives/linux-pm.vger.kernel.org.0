@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-17015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB929BC838
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 09:43:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D54C79BC844
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 09:45:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 218D51F24941
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 08:43:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95AE2283839
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 08:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860221CEAAA;
-	Tue,  5 Nov 2024 08:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03691CFEC2;
+	Tue,  5 Nov 2024 08:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDkhomjQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7aOWr+L"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F001188587;
-	Tue,  5 Nov 2024 08:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15851CEEB9;
+	Tue,  5 Nov 2024 08:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730796203; cv=none; b=QGouR8/MGQH6XEeZff/zy0trZLguTBAYOuf0QF9Dl6/0AQRK5xxoL9xypzFaRypJEy3D9paTJFmZOjmfdGyc3sjOkEGxLMe8x2jpS5bF3g74Y0QHMn0Q+JuaRFr7hGX+ZiCsfCOD1pvpHni07yA2FP0QqiStEmjbIKelqt6AevE=
+	t=1730796307; cv=none; b=dIhjxze2eA9WXWEBJIBtur9vYm2ARL9WHO4Ip5fE7lHfdFmeytFDFc4ZVdY9lwfIq5jssNjPsvza2hMMoTv2mLDd+vdVLZoVbfSctQ9e5AxBSJMnvhXth3zkV687kKcZWXT6eUbJHGFJ5cny1w7IeRBQQ0/U3l3PMI4XMqUsWoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730796203; c=relaxed/simple;
-	bh=gyfZE/1KNcSq7DWlF+mJasS+2BK+x9eS4IU5T7OAb/w=;
+	s=arc-20240116; t=1730796307; c=relaxed/simple;
+	bh=nBMLl/XA/qJ8pnqaOhyCBG2cviGgA9KlIF+RG6N9b/4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FCHp3rgPAUZwb5E6KF0y91RoaCjlRF1U5hXWh9G8VaRCICCKjLefqWwUz7vdqlxQzF7/dDyOaT6T0mPasF/Rwc0hXe10MISK+9EymNH2JKZwIBBB5zkTWToGcIENiCoC3OaT0kiGC+SPNgMuZu9QFc7Ijwv3DB5aicGQ3bIPDYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDkhomjQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD61C4CED0;
-	Tue,  5 Nov 2024 08:43:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=g6hLH9FavqCnXJb3/RR/PRT87OjGQ+RomKJELfSjyLvCttcUAH0DHIIEpYwgo1LXcyXwoyuGVz+qKHh1+i+nAJTFSyQ5Q1dNA/0OLLONlpEu2QsxsSYI4jv/ZfvQS2iFc73BlntkBrzwGRwCPx6R3LSZoAHP6JnBu7JYltEyjyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7aOWr+L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D32C4CECF;
+	Tue,  5 Nov 2024 08:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730796202;
-	bh=gyfZE/1KNcSq7DWlF+mJasS+2BK+x9eS4IU5T7OAb/w=;
+	s=k20201202; t=1730796307;
+	bh=nBMLl/XA/qJ8pnqaOhyCBG2cviGgA9KlIF+RG6N9b/4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nDkhomjQ7IqI+H3IzfCax9QW2cDgkGqDIsxbVX1+Na3laqDxk3xPu0gMTH080X7tJ
-	 NeTRUD0IlW9P8m8MGmAb71qJ0r1J90ym0vK/ws+8ZMu55O6Pj4OECRDPL/zuAJi5a7
-	 xNpEC9G3RdYC5xh0/TTqDicURHj+RW+ZmjdY3tPwKELxxrHIBGl+Ji1Z17CUyJBWtD
-	 K4s8XsYH63sWpiNo+CJ6m5mPDoZYLLekQj04JDuCNVWZrl9tidbempRL0+FyfRXC/3
-	 g/8cSnAW4Y7e5Py/kqRNFyd7LZOuaFNUllg4Ee0RxhtlKLrttjV/COOjqN+IVmHwns
-	 KUDnO7lBdCQRg==
-Date: Tue, 5 Nov 2024 09:43:19 +0100
+	b=i7aOWr+L7zoCBNUuB99rz3M1KB6mhzNOBfjw6o4WZoMor1gl5pZaUFwlLZXyz/tIz
+	 QNSCCKu1jLLqx8q7Hn4wk6soAakrfjYc3yZ+VeNmj/acrcuRJGyMfQWVPiFXG0W0OZ
+	 EuxbiGoDGbX/9oo1lJgwCZgn2zJ0Bm6e077MGgHvUscvWpqn9mviX0XkBfFew8hxPT
+	 B1UH9vst0VEsABLmO8RCkNDxp42j1dFnoWKwWhjcj7WWwmEL8g89Inkn1jb+H5Ilir
+	 kgWee/RofkHnsqx+2sQDfmX2JnXM2bE/2/QY+1jWJJRb+Ofmnff6GOdEj2zCSJlOjH
+	 PhmfZfVkDPcDA==
+Date: Tue, 5 Nov 2024 09:45:03 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 Cc: srinivas.kandagatla@linaro.org, robh@kernel.org, krzk+dt@kernel.org, 
@@ -50,10 +50,11 @@ Cc: srinivas.kandagatla@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
 	konradybcio@kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, quic_srichara@quicinc.com, 
 	quic_varada@quicinc.com
-Subject: Re: [PATCH v6 2/7] dt-bindings: nvmem: Add compatible for IPQ5424
-Message-ID: <lvl6fcivxivil52d5epwtgip3hwz6tbhl3venitndbolx6urbg@hogoiuvlj7ec>
+Subject: Re: [PATCH v6 1/7] dt-bindings: thermal: tsens: Add ipq5332, ipq5424
+ compatible
+Message-ID: <mi2sts34gdjpvimf2q3yoxh32wggwckjjfqwzaaj2umhibfpox@t754qqkzvb4v>
 References: <20241104124413.2012794-1-quic_mmanikan@quicinc.com>
- <20241104124413.2012794-3-quic_mmanikan@quicinc.com>
+ <20241104124413.2012794-2-quic_mmanikan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,17 +63,27 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241104124413.2012794-3-quic_mmanikan@quicinc.com>
+In-Reply-To: <20241104124413.2012794-2-quic_mmanikan@quicinc.com>
 
-On Mon, Nov 04, 2024 at 06:14:08PM +0530, Manikanta Mylavarapu wrote:
-> Document the QFPROM block found on IPQ5424
+On Mon, Nov 04, 2024 at 06:14:07PM +0530, Manikanta Mylavarapu wrote:
+> From: Praveenkumar I <quic_ipkumar@quicinc.com>
 > 
+> The IPQ5332 and IPQ5424 use TSENS v2.3.3 IP with combined interrupt.
+> RPM is not available in these SoCs, hence adding new compatible
+> to have the sensor enablement and calibration function. Also add
+> nvmem-cell-names.
+> 
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 > Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Changes in V6:
+> 	- Remove the R-b tag because support for IPQ5424 has been added
+> 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I wish we rather finish with this patchset and add ipq5424 later, so we
+won't have to re-review.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
