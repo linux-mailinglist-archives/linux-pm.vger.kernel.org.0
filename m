@@ -1,224 +1,104 @@
-Return-Path: <linux-pm+bounces-17024-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17025-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C3429BCB71
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 12:17:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A0C09BD48D
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 19:31:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27197281135
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 11:17:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE47B1F233DC
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 18:31:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCDB1D27A9;
-	Tue,  5 Nov 2024 11:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495061D8A1D;
+	Tue,  5 Nov 2024 18:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewkQDjaX"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="U/Ku9Mrx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806A216D30B;
-	Tue,  5 Nov 2024 11:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FB616631C;
+	Tue,  5 Nov 2024 18:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730805448; cv=none; b=LnnAXxHOd0mH3gPiOK76TA63hR6APyxuFsRWT326D9YDNGJrkdKkJ0EKZfLAOAYzgZBXNWIWPZB2yurX8PnNtgy1BCX54SCbik0IXySHjEDWDZQHdjX985U2+ficwA2XRsNq9t/MHNOOYoVqCjxGQhrHaB2RByRUZC3WDMCzVf8=
+	t=1730831478; cv=none; b=tGe7NDD3LfpGB777beXfhPErRlfLl2FnoqwXXdn6uknklag56XTK5YpwZaJg0B4FB02B06eakosqzyIiQprqRfPKueOpAqdV2rP59y8Xv4ZJzPuRl2TS2TWl5tIV8REV2XIRDkT6rLdMgGlGH88aNRV7eft5XPUWWXnCWtgXQC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730805448; c=relaxed/simple;
-	bh=8w8ENZi65e5Jims1cAXBTRCqVHai8ejEf1Iz+le6GX0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bY3tlgyl9he7BS4jZrDO8SKZO3lw0F+iUWcHLVVNGeFp+Us6QJdH9yw/r4Z1HLN9zu4furPTwt5Uxhc+yVUot28P/kQkCPsQ8FvNWtgutciBDKLngX80HpBJVVcAUvz5uq8zLyLpIyFFCjL3GXAsy61WGr9MU6HRyCKsg/oWoGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ewkQDjaX; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730805446; x=1762341446;
-  h=date:from:to:cc:subject:message-id;
-  bh=8w8ENZi65e5Jims1cAXBTRCqVHai8ejEf1Iz+le6GX0=;
-  b=ewkQDjaX7TdxNdGBKQ8SCkssC9hhDaCYlIRIhMVCeuMvg6JF0lw7Y50h
-   T209GQrOcj+W68l/gTVvg8JGcBGO0sosr0kz1+pokpuHMSkwLhom9Mxqe
-   EpUWGG2cqQ2SiCr5VkY06rCCktNyo4h+ResdFVUL1PuWGIaIvursC88Aa
-   vEszyM7tywK2ltUIhSl33ev2eLMyjH7z5UT+eUTvixWkdr6YYVeNix5og
-   14H7jrUd8Vyb9O92jrOMte4wVgNRwQUFoTF74mWLeVHFfMjh/NHnWE79W
-   vK7UngIfAhjy5fMNPbjtIQu3Y6QiiV2wt4cXdy6ubqQ1P2sSQSBZJ8LzU
-   w==;
-X-CSE-ConnectionGUID: IUe057ofQpCMG+jgyb/9bw==
-X-CSE-MsgGUID: v+GE28uqThO13zqDy1P6zg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="48053952"
-X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
-   d="scan'208";a="48053952"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 03:17:26 -0800
-X-CSE-ConnectionGUID: h7JFAP+DRqCAFYXE8AP+gw==
-X-CSE-MsgGUID: fGqEHdQCQUKbuOTcd58kbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
-   d="scan'208";a="88779444"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 05 Nov 2024 03:17:25 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8HYn-000lxn-2g;
-	Tue, 05 Nov 2024 11:17:21 +0000
-Date: Tue, 05 Nov 2024 19:17:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 4fc6cbf1ea427b5d146847e1cc957a16691765db
-Message-ID: <202411051901.7Q3sqsKs-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1730831478; c=relaxed/simple;
+	bh=PyKcGEXb1boVL67P/iqRrnkjibAaY0whRvJpd8Laamw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mMhQhE+kQI60PK4qv5QOEZjJjWWQtWGjIfLAtFWyeY+pqMu0Pc47PuBa/FI98Daxquoworryx4YqFKvFvXdFmSNwMCMGTdxICFjlPq45P55O5q0SH+W5F8RSMfOMYsZXME1TPD35UcRL5f/Zm+bYXUfHqn1wXdib822SWo7nZc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=U/Ku9Mrx; arc=none smtp.client-ip=207.171.190.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1730831477; x=1762367477;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PyKcGEXb1boVL67P/iqRrnkjibAaY0whRvJpd8Laamw=;
+  b=U/Ku9MrxEVI8G8WlBgdcSeKYey5kEhIrygThLlgFib1MhEWbQ96D48OL
+   PcccGRVuf6+FV1jkmAsAT8ojjSRwoSdQ4QcmFqN8OFWUMXbt2jF9MOkuy
+   AFicb5c4kWAf/Jl3SlczgQ8t8joUOiVNgiCHalJikKXgRM7E0h+kCFF/L
+   c=;
+X-IronPort-AV: E=Sophos;i="6.11,260,1725321600"; 
+   d="scan'208";a="382672584"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 18:31:16 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [10.0.38.20:19380]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.3.16:2525] with esmtp (Farcaster)
+ id 88fb91fb-2fb9-4573-83ff-78e8c1de0dfe; Tue, 5 Nov 2024 18:31:15 +0000 (UTC)
+X-Farcaster-Flow-ID: 88fb91fb-2fb9-4573-83ff-78e8c1de0dfe
+Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Tue, 5 Nov 2024 18:31:15 +0000
+Received: from u34cccd802f2d52.amazon.com (10.106.239.17) by
+ EX19D001UWA003.ant.amazon.com (10.13.138.211) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
+ Tue, 5 Nov 2024 18:31:09 +0000
+From: Haris Okanovic <harisokn@amazon.com>
+To: <ankur.a.arora@oracle.com>, <catalin.marinas@arm.com>
+CC: <linux-pm@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<will@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<pbonzini@redhat.com>, <wanpengli@tencent.com>, <vkuznets@redhat.com>,
+	<rafael@kernel.org>, <daniel.lezcano@linaro.org>, <peterz@infradead.org>,
+	<arnd@arndb.de>, <lenb@kernel.org>, <mark.rutland@arm.com>,
+	<harisokn@amazon.com>, <mtosatti@redhat.com>, <sudeep.holla@arm.com>,
+	<cl@gentwo.org>, <misono.tomohiro@fujitsu.com>, <maobibo@loongson.cn>,
+	<joao.m.martins@oracle.com>, <boris.ostrovsky@oracle.com>,
+	<konrad.wilk@oracle.com>
+Subject: Re: [PATCH v8 00/11] Enable haltpoll on arm64
+Date: Tue, 5 Nov 2024 12:30:36 -0600
+Message-ID: <20241105183041.1531976-1-harisokn@amazon.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D033UWA004.ant.amazon.com (10.13.139.85) To
+ EX19D001UWA003.ant.amazon.com (10.13.138.211)
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 4fc6cbf1ea427b5d146847e1cc957a16691765db  Merge branch 'pm-em' into bleeding-edge
+Hi Ankur, Catalin,
 
-elapsed time: 731m
+How about the following series based on a refactor of arm64's delay()?
+Does it address your earlier concerns?
 
-configs tested: 130
-configs skipped: 6
+delay() already implements wfet() and falls back to wfe() w/ evstream
+or a cpu_relax loop. I refactored it to poll an address, and wrapped in
+a new platform-agnostic smp_vcond_load_relaxed() macro. More details in
+the following commit log.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Regards,
+Haris Okanovic
+AWS Graviton Software
 
-tested configs:
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                                 defconfig    gcc-14.1.0
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                       aspeed_g5_defconfig    clang-20
-arm                                 defconfig    gcc-14.1.0
-arm                      footbridge_defconfig    gcc-14.1.0
-arm                           imxrt_defconfig    clang-20
-arm                           imxrt_defconfig    gcc-14.1.0
-arm                            mps2_defconfig    clang-20
-arm                           sama7_defconfig    clang-20
-arm                        shmobile_defconfig    gcc-14.1.0
-arm                         wpcm450_defconfig    gcc-14.1.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-i386                             allmodconfig    clang-19
-i386                              allnoconfig    clang-19
-i386                             allyesconfig    clang-19
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                                defconfig    gcc-14.1.0
-m68k                          hp300_defconfig    clang-20
-m68k                          sun3x_defconfig    gcc-14.1.0
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                          ath79_defconfig    gcc-14.1.0
-mips                  cavium_octeon_defconfig    clang-20
-mips                           ip27_defconfig    gcc-14.1.0
-mips                           jazz_defconfig    clang-20
-mips                     loongson1b_defconfig    gcc-14.1.0
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-parisc64                         alldefconfig    clang-20
-parisc64                            defconfig    gcc-14.1.0
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                 canyonlands_defconfig    clang-20
-powerpc                        cell_defconfig    clang-20
-powerpc                    ge_imp3a_defconfig    gcc-14.1.0
-powerpc                     ksi8560_defconfig    clang-20
-powerpc                      mgcoge_defconfig    gcc-14.1.0
-powerpc                  storcenter_defconfig    gcc-14.1.0
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sh                             espt_defconfig    gcc-14.1.0
-sh                           se7206_defconfig    clang-20
-sh                           se7712_defconfig    gcc-14.1.0
-sh                           se7722_defconfig    clang-20
-sh                           se7722_defconfig    gcc-14.1.0
-sh                   sh7724_generic_defconfig    clang-20
-sh                              ul2_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                             i386_defconfig    gcc-14.1.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241105    gcc-12
-x86_64      buildonly-randconfig-002-20241105    gcc-12
-x86_64      buildonly-randconfig-003-20241105    gcc-12
-x86_64      buildonly-randconfig-004-20241105    gcc-12
-x86_64      buildonly-randconfig-005-20241105    gcc-12
-x86_64      buildonly-randconfig-006-20241105    gcc-12
-x86_64                              defconfig    clang-19
-x86_64                                  kexec    clang-19
-x86_64                                  kexec    gcc-12
-x86_64                randconfig-001-20241105    gcc-12
-x86_64                randconfig-002-20241105    gcc-12
-x86_64                randconfig-003-20241105    gcc-12
-x86_64                randconfig-004-20241105    gcc-12
-x86_64                randconfig-005-20241105    gcc-12
-x86_64                randconfig-006-20241105    gcc-12
-x86_64                randconfig-011-20241105    gcc-12
-x86_64                randconfig-012-20241105    gcc-12
-x86_64                randconfig-013-20241105    gcc-12
-x86_64                randconfig-014-20241105    gcc-12
-x86_64                randconfig-015-20241105    gcc-12
-x86_64                randconfig-016-20241105    gcc-12
-x86_64                randconfig-071-20241105    gcc-12
-x86_64                randconfig-072-20241105    gcc-12
-x86_64                randconfig-073-20241105    gcc-12
-x86_64                randconfig-074-20241105    gcc-12
-x86_64                randconfig-075-20241105    gcc-12
-x86_64                randconfig-076-20241105    gcc-12
-x86_64                               rhel-8.3    gcc-12
-xtensa                            allnoconfig    gcc-14.1.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
