@@ -1,83 +1,80 @@
-Return-Path: <linux-pm+bounces-17035-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17036-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69F979BD615
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 20:46:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DDA99BD754
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 21:59:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F1DD283B6C
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 19:46:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA6151F23FCD
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 20:59:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B6E215C4D;
-	Tue,  5 Nov 2024 19:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6DA215C65;
+	Tue,  5 Nov 2024 20:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="QExaPV0B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnDoBpq4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CD6215C45;
-	Tue,  5 Nov 2024 19:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0343D81;
+	Tue,  5 Nov 2024 20:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730835948; cv=none; b=PBTF2MBvxp+v5jGomQO6ppXatnDVyziCDFe+lztKvL2h+NBw/OZqTAQXEAgAgW+rC6QmBymnqVP+Bik/Gpg25edL+UKxdDiH8NsPxV0WaZJ/edTMrPypixp8SFLFyfiq/YbPEDaCe4amWT1dwk8cEQQ+zwCkwQYe5sXx0f6/Dsk=
+	t=1730840354; cv=none; b=d4N2oNXGZdaAjb2NFJmyOk7qyDnOlxTU6+3o0zoH3OM2IZMcQeXSRkVoYijtWXsfcakdYJfufY6dGtDz74gPVsacnnABPfbBn/WAvEkymTNNCAzAeSqbG7nce2WUgaoeAYOi1YIpwc1MVnC0CGV6wJZdAeyFnlHSak8qv1bk0Ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730835948; c=relaxed/simple;
-	bh=1U3UU0vNK2UHqlFnB6QG7+izsLRF9HGSgXpwKtSG3OA=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=mB2N5YZzWCp4kq1FczQGb43EEig5yByPbUcqBVsYi7QtnZMj0JBJWltDDLgrWRIEQ0ruCp/7VNHnpJdo1Nbsl5MOma1F2x2zJoWqc9pVXnnoPJ2wL3EgP/zCbDOmOjM5qyypSxm6iKfurwyUQeS5aGKl60QoH2r2onEmBYai354=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=QExaPV0B; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1730835946;
-	bh=1U3UU0vNK2UHqlFnB6QG7+izsLRF9HGSgXpwKtSG3OA=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=QExaPV0B5/PcD8M4wyyQL8ZSAkH2WoSHEwCG2/0klxJX0iv+ArrkvEkLOPp396e/D
-	 m+gORqTG38L7ug2odYbT12ywp5Bz8o6bUuXdhAV/j1t2PNijJsfQnzDYDzWpbTdZ4F
-	 4VogdWAIEQvMGxg8QW/d2ljyUEjWDBYg1KS7t/00=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 7C1A34027E; Tue,  5 Nov 2024 11:45:46 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 7A4F24026F;
-	Tue,  5 Nov 2024 11:45:46 -0800 (PST)
-Date: Tue, 5 Nov 2024 11:45:46 -0800 (PST)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Haris Okanovic <harisokn@amazon.com>
-cc: ankur.a.arora@oracle.com, catalin.marinas@arm.com, 
-    linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-    will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com, 
-    rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org, 
-    arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, mtosatti@redhat.com, 
-    sudeep.holla@arm.com, misono.tomohiro@fujitsu.com, maobibo@loongson.cn, 
-    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
-    konrad.wilk@oracle.com
-Subject: Re: [PATCH 5/5] cpuidle: implement poll_idle() using
- smp_vcond_load_relaxed()
-In-Reply-To: <20241105183041.1531976-6-harisokn@amazon.com>
-Message-ID: <aeac3141-c480-52f9-610e-d9d222f3ecad@gentwo.org>
-References: <20240925232425.2763385-1-ankur.a.arora@oracle.com> <20241105183041.1531976-1-harisokn@amazon.com> <20241105183041.1531976-6-harisokn@amazon.com>
+	s=arc-20240116; t=1730840354; c=relaxed/simple;
+	bh=wKG3avL2XUqfTwMknTG9oga5XoqgsW5W8Lo93vVs5o8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PfSWOusLfLKdz9+YdY2nI43M7IjdSyqJ0BooadfYpeCy37NKO2PRZQLedczlsUA/qfWoym3EkI+fU8GaeCH5V205Uiq6iro8Dg7v2i677u8uHO96gVpQflIZIEM+oEq09ADIbmATRJzbDf/fwQCxWIhBPOzwO/BUXzuctCdpGp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnDoBpq4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7710C4CECF;
+	Tue,  5 Nov 2024 20:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730840353;
+	bh=wKG3avL2XUqfTwMknTG9oga5XoqgsW5W8Lo93vVs5o8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VnDoBpq4LMvPHS6At1a2p3Gej664XFyTfpBRkgEB1bo7jnuyYSdCXgS/0M1YinQTd
+	 GpQFlXvGDRpF1aaCwFC9AODdBiX1YgTEULN/MlFy2ff4FvYuLq0yCpR4tp7ARzysYX
+	 7U3vka+0DBdfQNTQLyn77iVFZ5L3ufvYQr0EoV1MSeYlHfnpHEvk/HZYIlNONlgfCZ
+	 wDR8MvRMtOgoOijI8WT0PNfOwnImTRz1uI9H17DRj93mMUNirDRcLJyhfTrZX/QuDo
+	 CBBZdu0WYbN0ciOqs0tup/7u3xS2J2Wxvk3mLP3mKJS+CSyPuAsGld/b3WtwxVhGC0
+	 A6uQF4kyYRb2Q==
+Date: Tue, 5 Nov 2024 21:59:08 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v8 3/7] dt-bindings: i2c: Add Realtek RTL I2C Controller
+Message-ID: <sb3wucuqqyzuaebynxce7btsc2sn2j4i7tpx2ukxtx3bbf6frb@ta6oj35z3w3m>
+References: <20241031200350.274945-1-chris.packham@alliedtelesis.co.nz>
+ <20241031200350.274945-4-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241031200350.274945-4-chris.packham@alliedtelesis.co.nz>
 
-On Tue, 5 Nov 2024, Haris Okanovic wrote:
+Hi Chris,
 
->  {
-> -	u64 time_start;
-> -
-> -	time_start = local_clock_noinstr();
-> +	unsigned long flags;
+On Fri, Nov 01, 2024 at 09:03:46AM +1300, Chris Packham wrote:
+> Add dt-schema for the I2C controller on the RTL9300 Ethernet switch
+> with integrated SoC.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Lets keep recording that start value here. Otherwise the timeout could me
-later than expected.
+Agree with Krzysztof's comment in Patch 1. Please don't send
+merged patches.
+
+Now this 3/7 patch is also merged to i2c/i2c-host.
+
+Andi
 
