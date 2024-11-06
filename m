@@ -1,233 +1,231 @@
-Return-Path: <linux-pm+bounces-17042-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17043-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332A89BDB33
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 02:29:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED5069BDB63
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 02:45:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6292DB21BF2
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 01:29:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98B3B284826
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 01:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076DC188CAD;
-	Wed,  6 Nov 2024 01:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28B0157E9F;
+	Wed,  6 Nov 2024 01:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JuOMeicq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83FC10E5;
-	Wed,  6 Nov 2024 01:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128F733F3;
+	Wed,  6 Nov 2024 01:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730856579; cv=none; b=EHL9ZwAtMdgEoN8Dtah2SGpKaajQie5eAi1Yie7PB1mFDIhRRXsZGZdbmap4P3D+p+shsyW9g5n3S1Qw1xx8SrZtPzswFPaO0J0O45QpW8GDi+P5GBppBgd3CSqXnYwq20X905lwB58tfkEahlyH3L8wwDy5zpF/q/RCtcD6Xck=
+	t=1730857549; cv=none; b=NXF6BQaIW7OoI7RuZGftFxynVmqV6n11BSDZTr4apaIyBlXxmcAKYUNOO4fPmFRXZI/6EXhn2tx1WftM5b4IzL7c7ZlHX1YG3j4NUIO+Hb++J21ta28+4oKMQMJKmjpAfNRKfitH0YdoK3WhqQF0ItZJj+Q3CJiBOy9ZsyosXzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730856579; c=relaxed/simple;
-	bh=sEHlccvVIDnUA+pWV3Zdm/HwlJWyCMeUl+3zhMfrAPk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XHYDTkeB8agPRjDM9iK6dYhxw5xskiOSoZ/Ua/7eiNNbH7+FDLATzf2o4oE8LzuIQEtSabS6SkPKjLS+mK5Ua/MYOkWr8c0jJHKprJoSr6gShAcjRPdroeUWndYAuhNYzjF/hnvC97qpgg2GCYrlzYe2GXJ8Ql/XM87HpN+r2CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 8e2598c09bde11efa216b1d71e6e1362-20241106
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
-	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NAME, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED
-	DN_TRUSTED, SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_C_CI, GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1
-	AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:33516c21-8de6-47ef-8293-dc6222754ca8,IP:15,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-5
-X-CID-INFO: VERSION:1.1.38,REQID:33516c21-8de6-47ef-8293-dc6222754ca8,IP:15,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-5
-X-CID-META: VersionHash:82c5f88,CLOUDID:da3027b8c79bdb720694bd44dcd65b71,BulkI
-	D:241024105327XGBM1VDO,BulkQuantity:10,Recheck:0,SF:44|64|66|841|38|24|17|
-	19|102,TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,
-	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_OBB,TF_CID_SPAM_ULS,
-	TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
-X-UUID: 8e2598c09bde11efa216b1d71e6e1362-20241106
-X-User: duanchenghao@kylinos.cn
-Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2086433120; Wed, 06 Nov 2024 09:29:24 +0800
-Message-ID: <2239f30a31d48b326c1b11a2f551439652781419.camel@kylinos.cn>
-Subject: Re: [PATCH v4] USB: Fix the issue of task recovery failure caused
- by USB status when S4 wakes up
-From: duanchenghao <duanchenghao@kylinos.cn>
-To: Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu
-Cc: stern@rowland.harvard.edu, saranya.gopal@intel.com, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
- rafael@kernel.org,  stanley_chang@realtek.com, tj@kernel.org,
- xiehongyu1@kylinos.cn,  xy521521@gmail.com, kernel test robot
- <lkp@intel.com>
-Date: Wed, 06 Nov 2024 09:29:15 +0800
-In-Reply-To: <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
-References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
-	 <20241024024038.26157-1-duanchenghao@kylinos.cn>
-	 <2024102432-conjoined-skylight-33f1@gregkh>
-	 <8aff9a5acbd21d7bd08b80e02ef2b34f2028cedf.camel@kylinos.cn>
-	 <2024102911-mooned-precise-f526@gregkh>
-	 <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1730857549; c=relaxed/simple;
+	bh=7KPkQH9Kl2MyqR+ranMRwoJmktaWsZKAeGEDxtAWyu0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=TGa5hl8mFWcvSFstjedy3jETUCQbP4l/wac1pcpV4FprlL+HktmO05HJpt2XStefSUWIL96KDvDWn8VsPGap7xSAte8t+/IT8iMpp9gh5e9YRJCGhAqRCGOf+wAMEP45aZnpB3ggOVzxmecMU793ta98n+E+jF4AuCzkR/4fFVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JuOMeicq; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A5KIMJG004966;
+	Wed, 6 Nov 2024 01:44:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Z5Jv3Ed7XXZHWZLDW8oApx97KGEiepVHnuihRZtI6kc=; b=JuOMeicqNpZNNLSM
+	OwHF7tOGhhAwjHpPAZoHNm0IxF/4bzXD/afmF+nlPSD/E8vPG301kkhygiE3KonO
+	Qc5TyF76Lj+EopSwZxDv2uy3th4kiWSFai2BsYuY49if8wYGX1JYCOLJqclBNq6m
+	yJEi0YW76p/qHDDKukczulbOC8Lg/Qs+2jo1lsbk3JjlXq7b1Mf6tmZCaVS+leZ/
+	lijzurCdo4NKH0r9X12rUKgZ6zp+94bCVMyPmFI2HkEXbdGUuKpVZjrRXGRz2h0C
+	K4A921tIlp9MvUuvtPINsHOC1GSnVyyU9614RwxfKQovlKCWmXlmzsuDjewJfDPq
+	qo7cww==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42ndc71hyv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 Nov 2024 01:44:38 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A61ibAW017863
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 6 Nov 2024 01:44:37 GMT
+Received: from [10.216.20.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 5 Nov 2024
+ 17:44:30 -0800
+Message-ID: <43404449-1830-4651-a85a-54404b1d35bc@quicinc.com>
+Date: Wed, 6 Nov 2024 07:14:27 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 1/3] drm/msm/adreno: Add support for ACD
+To: <neil.armstrong@linaro.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul
+	<sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
+        Abhinav Kumar
+	<quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie
+	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Viresh Kumar
+	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
+ <20241012-gpu-acd-v1-1-1e5e91aa95b6@quicinc.com>
+ <4aeec9f1-720b-400c-9582-d02847db2ac7@linaro.org>
+Content-Language: en-US
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <4aeec9f1-720b-400c-9582-d02847db2ac7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Na1zWvxix9JPntdFw7-EW3kC17gUUl4y
+X-Proofpoint-GUID: Na1zWvxix9JPntdFw7-EW3kC17gUUl4y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 clxscore=1015 mlxscore=0
+ phishscore=0 impostorscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411060012
 
-Hi Greg k-h & Alan,
+On 11/4/2024 9:14 PM, neil.armstrong@linaro.org wrote:
+> On 11/10/2024 22:29, Akhil P Oommen wrote:
+>> ACD a.k.a Adaptive Clock Distribution is a feature which helps to reduce
+>> the power consumption. In some chipsets, it is also a requirement to
+>> support higher GPU frequencies. This patch adds support for GPU ACD by
+>> sending necessary data to GMU and AOSS. The feature support for the
+>> chipset is detected based on devicetree data.
+>>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 81 +++++++++++++++++++++++++
+>> +++-------
+>>   drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
+>>   drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 36 ++++++++++++++++
+>>   drivers/gpu/drm/msm/adreno/a6xx_hfi.h | 21 +++++++++
+>>   4 files changed, 124 insertions(+), 15 deletions(-)
+>>
+> 
+> <snip>
+> 
+>> +
+>> +static int a6xx_hfi_enable_acd(struct a6xx_gmu *gmu)
+>> +{
+>> +    struct a6xx_hfi_acd_table *acd_table = &gmu->acd_table;
+>> +    struct a6xx_hfi_msg_feature_ctrl msg = {
+>> +        .feature = HFI_FEATURE_ACD,
+>> +        .enable = 1,
+>> +        .data = 0,
+>> +    };
+>> +    int ret;
+>> +
+>> +    if (!acd_table->enable_by_level)
+>> +        return 0;
+>> +
+>> +    /* Enable ACD feature at GMU */
+>> +    ret = a6xx_hfi_send_msg(gmu, HFI_H2F_FEATURE_CTRL, &msg,
+>> sizeof(msg), NULL, 0);
+>> +    if (ret) {
+>> +        DRM_DEV_ERROR(gmu->dev, "Unable to enable ACD (%d)\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    /* Send ACD table to GMU */
+>> +    ret = a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &msg, sizeof(msg),
+>> NULL, 0);
+> 
+> This looks wrong, in this exact code, you never use the acd_table...
+> perhaps it should be acd_table here
 
-Excuse me, both of you. I've noticed that you haven't replied to the
-emails for quite some time, which prompted me to send this one. I'd
-like to inquire if the proposal in the current email is feasible and if
-it can be integrated into the community.
+Whoops! Weirdly gmu didn't explode when I tested.
 
-Thanks,
+Thanks for your keen eye.
 
-Duan Chenghao
+-Akhil.
 
-=E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 16:01 +0800=EF=BC=
-=8Cduanchenghao=E5=86=99=E9=81=93=EF=BC=9A
-> hi greg k-h,
->=20
-> =E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 04:27 +0100=EF=
-=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> > On Thu, Oct 24, 2024 at 04:46:48PM +0800, duanchenghao wrote:
-> > > hi greg k-h,
-> > >=20
-> > > =E5=9C=A8 2024-10-24=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 09:05 +0200=
-=EF=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> > > > On Thu, Oct 24, 2024 at 10:40:38AM +0800, Duan Chenghao wrote:
-> > > > > When a device is inserted into the USB port and an S4 wakeup
-> > > > > is
-> > > > > initiated,
-> > > > > after the USB-hub initialization is completed, it will
-> > > > > automatically enter
-> > > > > suspend mode. Upon detecting a device on the USB port, it
-> > > > > will
-> > > > > proceed with
-> > > > > resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
-> > > > > During
-> > > > > the S4
-> > > > > wakeup process, peripherals are put into suspend mode,
-> > > > > followed
-> > > > > by
-> > > > > task
-> > > > > recovery. However, upon detecting that the hcd is in the
-> > > > > HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY
-> > > > > status,
-> > > > > causing the
-> > > > > S4 suspend to fail and subsequent task recovery to not
-> > > > > proceed.
-> > > > > -
-> > > > > [=C2=A0=C2=A0 27.594598][ 1]=C2=A0 PM: pci_pm_freeze():
-> > > > > hcd_pci_suspend+0x0/0x28
-> > > > > returns -16
-> > > > > [=C2=A0=C2=A0 27.594601][ 1]=C2=A0 PM: dpm_run_callback():
-> > > > > pci_pm_freeze+0x0/0x100
-> > > > > returns -16
-> > > > > [=C2=A0=C2=A0 27.603420][ 1]=C2=A0 ehci-pci 0000:00:04.1:
-> > > > > pci_pm_freeze+0x0/0x100
-> > > > > returned 0 after 3 usecs
-> > > > > [=C2=A0=C2=A0 27.612233][ 1]=C2=A0 ehci-pci 0000:00:05.1:
-> > > > > pci_pm_freeze+0x0/0x100
-> > > > > returned -16 after 17223 usecs
-> > > > > [=C2=A0=C2=A0 27.810067][ 1]=C2=A0 PM: Device 0000:00:05.1 failed=
- to quiesce
-> > > > > async: error -16
-> > > > > [=C2=A0=C2=A0 27.816988][ 1]=C2=A0 PM: quiesce of devices aborted=
- after
-> > > > > 1833.282
-> > > > > msecs
-> > > > > [=C2=A0=C2=A0 27.823302][ 1]=C2=A0 PM: start quiesce of devices a=
-borted
-> > > > > after
-> > > > > 1839.975 msecs
-> > > > > ......
-> > > > > [=C2=A0=C2=A0 31.303172][ 1]=C2=A0 PM: recover of devices complet=
-e after
-> > > > > 3473.039
-> > > > > msecs
-> > > > > [=C2=A0=C2=A0 31.309818][ 1]=C2=A0 PM: Failed to load hibernation=
- image,
-> > > > > recovering.
-> > > > > [=C2=A0=C2=A0 31.348188][ 1]=C2=A0 PM: Basic memory bitmaps freed
-> > > > > [=C2=A0=C2=A0 31.352686][ 1]=C2=A0 OOM killer enabled.
-> > > > > [=C2=A0=C2=A0 31.356232][ 1]=C2=A0 Restarting tasks ... done.
-> > > > > [=C2=A0=C2=A0 31.360609][ 1]=C2=A0 PM: resume from hibernation fa=
-iled (0)
-> > > > > [=C2=A0=C2=A0 31.365800][ 1]=C2=A0 PM: Hibernation image not pres=
-ent or
-> > > > > could
-> > > > > not
-> > > > > be loaded.
-> > > > >=20
-> > > > > The "do_wakeup" is determined based on whether the
-> > > > > controller's
-> > > > > power/wakeup attribute is set. The current issue necessitates
-> > > > > considering
-> > > > > the type of suspend that is occurring. If the suspend type is
-> > > > > either
-> > > > > PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should
-> > > > > be
-> > > > > set
-> > > > > to
-> > > > > false.
-> > > > >=20
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > Closes:
-> > > > > https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@i=
-ntel.com/
-> > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > > > Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
-> > > >=20
-> > > > What commit id does this fix?
-> > >=20
-> > > The current patch is not intended to fix an issue with a specific
-> > > commit, but rather to address a long-standing problem in the USB
-> > > core.
-> >=20
-> > So should it be backported to older stable kernels?=C2=A0 If so, how fa=
-r
-> > back?
->=20
-> yes, It needs to be backported. The stable branches such as 6.6.y,
-> 6.10.y, and 6.11.y can be considered for the backport.
->=20
-> Should we backport to these versions?
->=20
-> Thanks=20
->=20
-> Duan Chenghao
-> >=20
-> > > > And I missed where Alan provided a signed-off-by, where was
-> > > > that?
-> > >=20
-> > > In the following email, Alan proposed using "Signed-off-by" for
-> > > signing.
-> > > https://lore.kernel.org/all/489805e7-c19c-4b57-9cd7-713e075261cd@rowl=
-and.harvard.edu/
-> >=20
-> > Ah, missed that, sorry.
-> >=20
-> > thanks,
-> >=20
-> > greg k-h
->=20
+> 
+>> +    if (ret) {
+>> +        DRM_DEV_ERROR(gmu->dev, "Unable to ACD table (%d)\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static int a6xx_hfi_send_test(struct a6xx_gmu *gmu)
+>>   {
+>>       struct a6xx_hfi_msg_test msg = { 0 };
+>> @@ -756,6 +788,10 @@ int a6xx_hfi_start(struct a6xx_gmu *gmu, int
+>> boot_state)
+>>       if (ret)
+>>           return ret;
+>>   +    ret = a6xx_hfi_enable_acd(gmu);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>>       ret = a6xx_hfi_send_core_fw_start(gmu);
+>>       if (ret)
+>>           return ret;
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h b/drivers/gpu/drm/
+>> msm/adreno/a6xx_hfi.h
+>> index 528110169398..51864c8ad0e6 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+>> @@ -151,12 +151,33 @@ struct a6xx_hfi_msg_test {
+>>       u32 header;
+>>   };
+>>   +#define HFI_H2F_MSG_ACD 7
+>> +#define MAX_ACD_STRIDE 2
+>> +
+>> +struct a6xx_hfi_acd_table {
+>> +    u32 header;
+>> +    u32 version;
+>> +    u32 enable_by_level;
+>> +    u32 stride;
+>> +    u32 num_levels;
+>> +    u32 data[16 * MAX_ACD_STRIDE];
+>> +};
+>> +
+>>   #define HFI_H2F_MSG_START 10
+>>     struct a6xx_hfi_msg_start {
+>>       u32 header;
+>>   };
+>>   +#define HFI_H2F_FEATURE_CTRL 11
+>> +
+>> +struct a6xx_hfi_msg_feature_ctrl {
+>> +    u32 header;
+>> +    u32 feature;
+>> +    u32 enable;
+>> +    u32 data;
+>> +};
+>> +
+>>   #define HFI_H2F_MSG_CORE_FW_START 14
+>>     struct a6xx_hfi_msg_core_fw_start {
+>>
+> 
+> Thanks,
+> Neil
 
 
