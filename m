@@ -1,177 +1,109 @@
-Return-Path: <linux-pm+bounces-17065-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17066-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB829BE51C
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 12:02:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A9299BE539
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 12:08:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D0F42835CC
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 11:02:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B11C31F21F83
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 11:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8611B1DE2DF;
-	Wed,  6 Nov 2024 11:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XYIQcpUq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7FC1DE3D5;
+	Wed,  6 Nov 2024 11:08:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53E81DB377;
-	Wed,  6 Nov 2024 11:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A31E18C00E;
+	Wed,  6 Nov 2024 11:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730890931; cv=none; b=Vj4QDcAIV2qbVZ9rLs9KnmsrVTAqRfZLFDaRcz+zZsg9zax7LJaMmtwhFAOhfRswS/jxaY9t5xg8RaCnrBjAKlafRxjA4I1llW5EiMJjnvk4BNHirk/DI/7IHKIecEsyAVsF0+571Pz4Y9lye1LiNbuhnbWNFb93z1bnNiUfBDw=
+	t=1730891303; cv=none; b=OdF3O9Apx8RWcCUf5Wpksj2FOJw9q7VszwjcYgyC3ixA065qiJVmAgiCHVcp0RSFrxLnE7L6QCkVBw9OPiFx3CxtuKFC6LqmeS3FA0WrzsDCXzr8nhPAbs/JbLevvx6M33O49e/ZTrRHRt694dY8+Wr4WUnn/LgZkwW/Gev8Tc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730890931; c=relaxed/simple;
-	bh=1dTRn6G3+FsVzkxhN1/j7Oz/OfNqXXZqYece5eehNKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=rVMFBBiV3GY6kYtWBqBxqWxPeVFCWogUUoTKXKh2GcOYDqdF/NdDxEN0f7igWVrM/bkVS/57CDd3Qc59uNwycIfFB7kUjHZHi/MK8I9YUdsw7IjTzge+CkK6tuzjvPv7DybsrA3Qw8LrzNavcIhXioLbAJkAL7RkG9RyE2OV654=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XYIQcpUq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A66cCrv028341;
-	Wed, 6 Nov 2024 11:02:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ZjS0l83UJc0bSCWh5cI259hHg/JCYwNlqHSFdWT8+Kw=; b=XYIQcpUqAirPL+lC
-	5RRDVa8ZH192RiCm2j/HEIf6LfvXiBfQLQLt1BlJvxE4VNbZaZWt+UcYSzhaLwDw
-	yJAnOZ/r2iat3FogF6fZrUTkVNxSFrXQEL7TbdZ0BKv74jU32pV/rNpr+QEM6amY
-	aXnki9zetgRKVOLJg8fCRtJmP8mtG8A3A8Qlxt1rFLTazKArTZ2V7xnC1YOMab5C
-	WKIo4OhNIEv2gdWfYEvvmTgUIYRHpCRJTAbDMGnKHu4CCvXz280h8JxWU3fXPZNL
-	FH/sJmIEq1dEH50rboPgrv7QRRvSGsf0py3GoeTmVshDdH/cmdnbjvrbUg0B/6CW
-	gHrjHw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42r3c18p2y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Nov 2024 11:02:05 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A6B248i009079
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 6 Nov 2024 11:02:04 GMT
-Received: from [10.218.15.248] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 6 Nov 2024
- 03:01:59 -0800
-Message-ID: <78442ba8-b6c9-45be-afbc-09456cec5a28@quicinc.com>
-Date: Wed, 6 Nov 2024 16:31:57 +0530
+	s=arc-20240116; t=1730891303; c=relaxed/simple;
+	bh=O4y3JTBicmTSlJdnHiQSpamitaviXOau9AsHU/b8xpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LhazJ5YkaL0w2ubW2NZPdZsUlWqdhTgbwivX34im1sFIVlVJvCQxQnCjUNYH2x744wvGiKPUOovTEkY6cMHaWa5RpKi0qwD+dV9AlS6dmtT+jYcA8eSyGcimdNX+/6VnSX/o+1iEc3U5TaYnRoKqY3afETdzKV78WJZHQggu9ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 147B3C4CECD;
+	Wed,  6 Nov 2024 11:08:17 +0000 (UTC)
+Date: Wed, 6 Nov 2024 11:08:15 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Haris Okanovic <harisokn@amazon.com>
+Cc: ankur.a.arora@oracle.com, linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org,
+	arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
+	mtosatti@redhat.com, sudeep.holla@arm.com, cl@gentwo.org,
+	misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+	konrad.wilk@oracle.com
+Subject: Re: [PATCH 1/5] asm-generic: add smp_vcond_load_relaxed()
+Message-ID: <ZytOH2oigoC-qVLK@arm.com>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
+ <20241105183041.1531976-1-harisokn@amazon.com>
+ <20241105183041.1531976-2-harisokn@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/3] dt-bindings: interconnect: Add EPSS L3 compatible
- for SA8775P
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Odelu Kukatla
-	<quic_okukatla@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20241026123058.28258-1-quic_rlaggysh@quicinc.com>
- <20241026123058.28258-2-quic_rlaggysh@quicinc.com>
- <7k2vnjop6xyshquqlbe22gm7o5empeluvsohfmq5ulnaas3keb@yzomhzi4w7vf>
- <2ac4604c-a765-48b1-84b2-8979f18c29a7@quicinc.com>
- <vljb7wwqaaqgdcm6whf5ymhnh4jbtswyibto4qpqmbgwvshudy@unh3jhbyeac6>
- <00c9feac-722a-481a-9c57-36463fe0b3ff@quicinc.com>
- <925202f0-7fd1-4422-88fb-138c9027ac2c@oss.qualcomm.com>
- <CAA8EJpqM0vQZR5yEbGeBBPbog4KoEiTp1kWRwrjuwO4wo_umaw@mail.gmail.com>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <CAA8EJpqM0vQZR5yEbGeBBPbog4KoEiTp1kWRwrjuwO4wo_umaw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xSnczSEthktzFdMKL2ZXPLJSMzcwFPzD
-X-Proofpoint-ORIG-GUID: xSnczSEthktzFdMKL2ZXPLJSMzcwFPzD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015
- spamscore=0 phishscore=0 priorityscore=1501 adultscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411060090
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241105183041.1531976-2-harisokn@amazon.com>
 
+On Tue, Nov 05, 2024 at 12:30:37PM -0600, Haris Okanovic wrote:
+> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> index d4f581c1e21d..112027eabbfc 100644
+> --- a/include/asm-generic/barrier.h
+> +++ b/include/asm-generic/barrier.h
+> @@ -256,6 +256,31 @@ do {									\
+>  })
+>  #endif
+>  
+> +/**
+> + * smp_vcond_load_relaxed() - (Spin) wait until an expected value at address
+> + * with no ordering guarantees. Spins until `(*addr & mask) == val` or
+> + * `nsecs` elapse, and returns the last observed `*addr` value.
+> + *
+> + * @nsecs: timeout in nanoseconds
 
+FWIW, I don't mind the relative timeout, it makes the API easier to use.
+Yes, it may take longer in absolute time if the thread is scheduled out
+before local_clock_noinstr() is read but the same can happen in the
+caller anyway. It's similar to udelay(), it can take longer if the
+thread is scheduled out.
 
-On 11/4/2024 4:08 PM, Dmitry Baryshkov wrote:
-> On Mon, 4 Nov 2024 at 09:35, Konrad Dybcio
-> <konrad.dybcio@oss.qualcomm.com> wrote:
->>
->> On 4.11.2024 7:40 AM, Raviteja Laggyshetty wrote:
->>>
->>>
->>> On 11/1/2024 12:26 AM, Dmitry Baryshkov wrote:
->>>> On Wed, Oct 30, 2024 at 12:23:57PM +0530, Raviteja Laggyshetty wrote:
->>>>>
->>>>>
->>>>> On 10/26/2024 8:15 PM, Dmitry Baryshkov wrote:
->>>>>> On Sat, Oct 26, 2024 at 12:30:56PM +0000, Raviteja Laggyshetty wrote:
->>>>>>> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
->>>>>>> SA8775P SoCs.
->>>>>>>
->>>>>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>>>>>> ---
->>>>>>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml         | 4 ++++
->>>>>>>  1 file changed, 4 insertions(+)
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>>>> index 21dae0b92819..042ca44c32ec 100644
->>>>>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>>>> @@ -34,6 +34,10 @@ properties:
->>>>>>>                - qcom,sm8250-epss-l3
->>>>>>>                - qcom,sm8350-epss-l3
->>>>>>>            - const: qcom,epss-l3
->>>>>>> +      - items:
->>>>>>> +          - enum:
->>>>>>> +              - qcom,sa8775p-epss-l3
->>>>>>> +          - const: qcom,epss-l3-perf
->>>>>>
->>>>>> Why is it -perf? What's so different about it?
->>>>>
->>>>> The EPSS instance in SA8775P uses PERF_STATE register instead of REG_L3_VOTE to scale L3 clocks.
->>>>> So adding new generic compatible "qcom,epss-l3-perf" for PERF_STATE register based l3 scaling.
->>>>
->>>> Neither sm8250 nor sc7280 use this compatible, while they also use
->>>> PERF_STATE register.
->>>>
->>> That is correct, both sm8250 and sc7280 use perf state register.
->>> The intention for adding "qcom,epss-l3-perf" generic compatible is to use it for the chipsets which use perf state register for l3 scaling.
->>> Using generic compatible avoids the need for adding chipset specific compatible in match table.
->>
->> That is exactly what bindings guidelines forbid.
->>
->> You need a SoC-specific compatible so that you can address platform-
->> specific quirks that may arise in the future while keeping backwards
->> compatibility with older device trees
-> 
-> The proposed bindings have SoC-specific compat. If that's not against
-> the current rules, I'd prefer to have qcom,epss-l3-perf to be added to
-> sc7280 and sm8250 too.
-> 
-> 
-Existing compatibles for sc7280 and sm8250 do not break the backward compatibility.
-I will take up the update of generic compatibles for these two SoCs as separate patch series.
+> + * @addr: pointer to an integer
+> + * @mask: a bit mask applied to read values
+> + * @val: Expected value with mask
+> + */
+> +#ifndef smp_vcond_load_relaxed
+> +#define smp_vcond_load_relaxed(nsecs, addr, mask, val) ({	\
+> +	const u64 __start = local_clock_noinstr();		\
+> +	u64 __nsecs = (nsecs);					\
+> +	typeof(addr) __addr = (addr);				\
+> +	typeof(*__addr) __mask = (mask);			\
+> +	typeof(*__addr) __val = (val);				\
+> +	typeof(*__addr) __cur;					\
+> +	smp_cond_load_relaxed(__addr, (				\
+> +		(VAL & __mask) == __val ||			\
+> +		local_clock_noinstr() - __start > __nsecs	\
+> +	));							\
+> +})
 
+The generic implementation has the same problem as Ankur's current
+series. smp_cond_load_relaxed() can't wait on anything other than the
+variable at __addr. If it goes into a WFE, there's nothing executed to
+read the timer and check for progress. Any generic implementation of
+such function would have to use cpu_relax() and polling.
 
-
+-- 
+Catalin
 
