@@ -1,190 +1,89 @@
-Return-Path: <linux-pm+bounces-17039-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44DB19BD89C
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 23:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28DDA9BDAD2
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 02:02:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67D261C224A2
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2024 22:27:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A5E41C22EBF
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2024 01:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1566C216452;
-	Tue,  5 Nov 2024 22:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="VElI0Yor"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F3717E015;
+	Wed,  6 Nov 2024 01:01:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74609433B5
-	for <linux-pm@vger.kernel.org>; Tue,  5 Nov 2024 22:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4673C17F4F2;
+	Wed,  6 Nov 2024 01:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730845634; cv=none; b=iuN2qhrLWPXy1/GzsCzA8mTpy8z00HrvFFM0hj3ZAXIUGMO/xKbw08cLsVji8d2Yur05JeiGEh/JoX+lVAAnM4D5BHOqfXfNzUCNb6NpcYgujNlZ1rHN3KQ5SS57W2VWXhDo9aPVStn5JwNBmhGWKIYC+liL3cfilPoF1kS2t6Q=
+	t=1730854901; cv=none; b=e8h+NZsovPYtsclINBkpuA3zVWaVD+IcGvz2ebXeuYpDVp0tdDhnQdy6JoraZ5eljTuU4YcV5Ybli2GhkTvkQlHIfZJ/rQibScn/E0dSG+SydK+GoOTTU5uXnIYvbTM2DLVx22XxQvrbkW9zVHWbl4j0eKqW3a2/gh8lOCPz1ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730845634; c=relaxed/simple;
-	bh=F6WCB3ktHHg+ij4FHJhdtfQMaZPpNGQxSLIHDywd7Uo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qup427wucdAa5+RF+Mx0Zyy3MKLzZbeB6roifLeVhiyKTVFJkv1GNjwV+0Mwa7jm8XBD2tABi4gh/8hKTkRXJ6K012Vdob2A58vPBzofue62URyiqMn5IhWE5lnm3WxGeiiI1dcdsf+mp987C3r7NwjKWmoFI2GuLMMIhSeB0p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=VElI0Yor; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2E3E92C0272;
-	Wed,  6 Nov 2024 11:27:08 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1730845628;
-	bh=JY02SUnt6htoA49OFlo1YnKt7Mb4X+QH3DcUwcE5qIE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VElI0Yor/guJRRzsi3xED56igPWeJMeq9aCKOlRicOKFZIScBm8m19gFHJxw1LQzI
-	 MQuRLruOkJCyqyzp564r7+C+k7oExnGerikLawWTDwZ4MjO6mb0MUDXMsvvZOXsUQ+
-	 l+OVmfkJxdkd9ab13gIGa5rbO8E9xl/kH4xNKoLPiz06xsDWnQIGnFzdaH1MD/MSCq
-	 WqrV0ilVg1JABpf57hIiyAesON7u3EjBkpeCz1wlg4Fg0m8ryo7ZFwbCKPergqQFxn
-	 kIzOAX4bw7CnvJ6FJbLeCDxKUrDZh6LhfEleZIea3TpORllq3dIu4dqQjZBoIyMfX0
-	 WeWnl6InC4CAQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B672a9bbc0000>; Wed, 06 Nov 2024 11:27:08 +1300
-Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 0197B13ECC4;
-	Wed,  6 Nov 2024 11:27:08 +1300 (NZDT)
-Message-ID: <5b915330-ef77-418d-82b1-9d751f1c157e@alliedtelesis.co.nz>
-Date: Wed, 6 Nov 2024 11:27:07 +1300
+	s=arc-20240116; t=1730854901; c=relaxed/simple;
+	bh=1t9TMw2SgXI7sUlPyzY+L1hKWpWbHsOM8itTqn1tf8s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CxOCQLLZumn7qruFvpymYJTdA3DApGueqPIiP0WcxUwQC6bebjWxX7RC/0SiScJHnCywmuxKVuLlz3qUs3zFnxwfRfqKk53z9RBlVbNZTdXog3ezC2g4Yp0pedY87wcZoHAtflqejVO1XetphuyRHue0T/Arh3LQz1vHKyT7+qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Xjn013rd9zfdcs;
+	Wed,  6 Nov 2024 08:58:57 +0800 (CST)
+Received: from kwepemg200008.china.huawei.com (unknown [7.202.181.35])
+	by mail.maildlp.com (Postfix) with ESMTPS id 385DE18007C;
+	Wed,  6 Nov 2024 09:01:34 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemg200008.china.huawei.com
+ (7.202.181.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 6 Nov
+ 2024 09:01:33 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <ruanjinjie@huawei.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <qperret@google.com>
+Subject: [PATCH -next] cpufreq: CPPC: Fix wrong return value in cppc_get_cpu_power()
+Date: Wed, 6 Nov 2024 09:01:11 +0800
+Message-ID: <20241106010111.2404387-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v8 7/7] i2c: Add driver for the RTL9300 I2C controller
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, lee@kernel.org,
- sre@kernel.org, tsbogend@alpha.franken.de, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20241031200350.274945-1-chris.packham@alliedtelesis.co.nz>
- <20241031200350.274945-8-chris.packham@alliedtelesis.co.nz>
- <x2ptxjqmcui6uh6qhjur5bymb6cjgikekt7bo2bnyoqbble4kh@zanxmiq3sau6>
-Content-Language: en-US
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <x2ptxjqmcui6uh6qhjur5bymb6cjgikekt7bo2bnyoqbble4kh@zanxmiq3sau6>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=672a9bbc a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=62ntRvTiAAAA:8 a=jdP34snFAAAA:8 a=VwQbUJbxAAAA:8 a=NGLwXv0Z13XHn4elL4kA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=jlphF6vWLdwq7oh3TaWq:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemg200008.china.huawei.com (7.202.181.35)
 
+cppc_get_cpu_power() return 0 if the policy is NULL. Then in
+em_create_perf_table(), the later zero check for power is not valid
+as power is uninitialized. As Quentin pointed out, kernel energy model
+core check the return value of active_power() first, so if the callback
+failed it should tell the core. So return -EINVAL to fix it.
 
-On 6/11/24 10:10, Andi Shyti wrote:
-> Hi Chris,
->
-> On Fri, Nov 01, 2024 at 09:03:50AM +1300, Chris Packham wrote:
->> Add support for the I2C controller on the RTL9300 SoC. There are two I2C
->> controllers in the RTL9300 that are part of the Ethernet switch register
->> block. Each of these controllers owns a SCL pin (GPIO8 for the fiorst
->> I2C controller, GPIO17 for the second). There are 8 possible SDA pins
->> (GPIO9-16) that can be assigned to either I2C controller. This
->> relationship is represented in the device tree with a child node for
->> each SDA line in use.
->>
->> This is based on the openwrt implementation[1] but has been
->> significantly modified
->>
->> [1] - https://scanmail.trustwave.com/?c=20988&d=2Imq58SgjkO2w5EzbSeL1kys6iYwJJIG5Ij2dyaU8A&u=https%3a%2f%2fgit%2eopenwrt%2eorg%2f%3fp%3dopenwrt%2fopenwrt%2egit%3ba%3dblob%3bf%3dtarget%2flinux%2frealtek%2ffiles-5%2e15%2fdrivers%2fi2c%2fbusses%2fi2c-rtl9300%2ec
->>
->> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Looks good. As a self reminder:
->
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
->
-> Some comments below, though.
->
-> ...
->
->> +#define RTL9300_I2C_MST_CTRL1			0x0
->> +#define  RTL9300_I2C_MST_CTRL1_MEM_ADDR_OFS	8
->> +#define  RTL9300_I2C_MST_CTRL1_MEM_ADDR_MASK	GENMASK(31, 8)
->> +#define  RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_OFS	4
->> +#define  RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_MASK	GENMASK(6, 4)
->> +#define  RTL9300_I2C_MST_CTRL1_GPIO_SCL_SEL	BIT(3)
->> +#define  RTL9300_I2C_MST_CTRL1_RWOP		BIT(2)
->> +#define  RTL9300_I2C_MST_CTRL1_I2C_FAIL		BIT(1)
->> +#define  RTL9300_I2C_MST_CTRL1_I2C_TRIG		BIT(0)
->> +#define RTL9300_I2C_MST_CTRL2			0x4
->> +#define  RTL9300_I2C_MST_CTRL2_RD_MODE		BIT(15)
->> +#define  RTL9300_I2C_MST_CTRL2_DEV_ADDR_OFS	8
->> +#define  RTL9300_I2C_MST_CTRL2_DEV_ADDR_MASK	GENMASK(14, 8)
->> +#define  RTL9300_I2C_MST_CTRL2_DATA_WIDTH_OFS	4
->> +#define  RTL9300_I2C_MST_CTRL2_DATA_WIDTH_MASK	GENMASK(7, 4)
->> +#define  RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_OFS	2
->> +#define  RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_MASK	GENMASK(3, 2)
->> +#define  RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS	0
->> +#define  RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK	GENMASK(1, 0)
->> +#define RTL9300_I2C_MST_DATA_WORD0		0x8
->> +#define RTL9300_I2C_MST_DATA_WORD1		0xc
->> +#define RTL9300_I2C_MST_DATA_WORD2		0x10
->> +#define RTL9300_I2C_MST_DATA_WORD3		0x14
-> Not everything here is perfectly aligned, but I'm not going to
-> be too picky.
->
-> ...
+Fixes: a78e72075642 ("cpufreq: CPPC: Fix possible null-ptr-deref for cpufreq_cpu_get_raw()")
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+Suggested-by: Quentin Perret <qperret@google.com>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Since I'm making other changes I'll tidy up the alignment.
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index cdc569cf7743..bd8f75accfa0 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -405,7 +405,7 @@ static int cppc_get_cpu_power(struct device *cpu_dev,
+ 
+ 	policy = cpufreq_cpu_get_raw(cpu_dev->id);
+ 	if (!policy)
+-		return 0;
++		return -EINVAL;
+ 
+ 	cpu_data = policy->driver_data;
+ 	perf_caps = &cpu_data->perf_caps;
+-- 
+2.34.1
 
->> +static int rtl9300_i2c_execute_xfer(struct rtl9300_i2c *i2c, char read_write,
->> +				int size, union i2c_smbus_data *data, int len)
-> You could align this a little better.
-
-Ack.
-
->> +{
->> +	u32 val, mask;
->> +	int ret;
-> ...
->
->> +static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned short flags,
->> +				  char read_write, u8 command, int size,
->> +				  union i2c_smbus_data *data)
->> +{
->> +	struct rtl9300_i2c_chan *chan = i2c_get_adapdata(adap);
->> +	struct rtl9300_i2c *i2c = chan->i2c;
->> +	int len = 0, ret;
-> ...
->
->> +	ret = rtl9300_i2c_execute_xfer(i2c, read_write, size, data, len);
-> do we want to bail out if len is '0'?
->
-> ...
-
-I think it'll be OK. In the write case the len should be set via 
-data->block[0]. I the read case we will pass len=0 which will cause 
-rtl9300_i2c_execute_xfer() to grab all 16 bytes from the i2c controller 
-registers but for the read block data the i2c device should provide the 
-correct number bytes in byte 0.
-
->> +static int rtl9300_i2c_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct rtl9300_i2c_chan *chan;
->> +	struct rtl9300_i2c *i2c;
->> +	struct i2c_adapter *adap;
-> "chan" and "adap" can be declared inside
-> the device_for_each_child_node()
-Ack.
->> +	u32 clock_freq, sda_pin;
->> +	int ret, i = 0;
->> +	struct fwnode_handle *child;
-> ...
->
->> +	device_for_each_child_node(dev, child) {
->> +		chan = &i2c->chans[i];
->> +		adap = &chan->adap;
->> +
-> Thanks,
-> Andi
 
