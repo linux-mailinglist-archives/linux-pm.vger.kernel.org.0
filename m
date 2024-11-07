@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-17161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3B89C1299
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 00:39:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2D4C9C12A0
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 00:39:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B5681C22112
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 23:39:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52E49B21F8B
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 23:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECDC121A4CD;
-	Thu,  7 Nov 2024 23:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40FC721A6F6;
+	Thu,  7 Nov 2024 23:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HxBtEeUZ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cwx4+ttz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303291F4269;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0331F4FA9;
 	Thu,  7 Nov 2024 23:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731022739; cv=none; b=SnD2z+tdB4jwaix+GSERwQR0xL2N1VEpmMZ7BPIDLp+Gf3X3JBe7m4LN1ly2Ore9FSHgkmm7abTuCCL5ERYW3ZLouXHjYcazJKPL90cAQ3tXmr7cjUnTEG+1kHlgaADAvsbDLVuLQY+9vGdp8RncyxB3PtKN9m0md3zVikSMSsY=
+	t=1731022740; cv=none; b=iCY7AUOpkDJDae5FXLEsNlxuCWQKNZUviR/PN+UXCL7jY2cerCau823zjBvu1/W+6gxk5e2dFHA71p/97Tc0KQseuBsv4d1Jw4/DQrRRRf84X8h7alaKrpze+PKhhjf18iUVzKC37/lwqUioYvr9PWyFTZZXYgQ+iU5IBgF3GgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731022739; c=relaxed/simple;
-	bh=7EO0qLNxt6YhqxBz0rV9UYU/huKFfEEAsG2HrEJFCWI=;
+	s=arc-20240116; t=1731022740; c=relaxed/simple;
+	bh=CRl4sp5W1H5HCBEEE9ZitP6r+tmfklHAzHiiBvISpBs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=dRX9Z7Uwayv/k3UPsBzWn+HpOXBb9TxVfTMifwDTYM2bJ1pJ+TPoj9payxidvQB6dP0X8Mvpe7k7PAX7Za2DZHpNHIu9o9QErFKuOvFn2mDDGRdRCBa5/qomVot4o2R9CJPkDIDtbFYZRA052kQR/PV6J8JL828hGjYUDbWRk0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HxBtEeUZ; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:CC; b=XQqa+mlWZ2UZnn1doniMm3mTSSUtB9n3H5nyxEF9LniDbK0UJ++Asp0CnSrRFCYzfixlllN+AwcnUGtsmji8wuwWgVisp3CO2f4Rr7hnZyIBVsrbjQHtFD3gncWbWsrlVoUVTowev/Zwe7OtKbetPjUhavMxiWR17260pNIXqIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cwx4+ttz; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7MaxlT021233;
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7MbQFj021503;
 	Thu, 7 Nov 2024 23:38:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	XbNsxJCIYTQRHc/L8A5AxsoN1XJdMZhzG+/ZhH275aY=; b=HxBtEeUZhNflcKsC
-	5pqilBj79WMKJFGl5CYpFmz5MZobS2dV9jrTU+Av3ftRVGHFfggNRHKzAcSqPSxg
-	FeWsUO9BiIbSRZQhyku2arkc0L4X4SPZfGgJtIfNv6i6jb7oNJlHq2npVkELKgv9
-	yhwiPilkJCIsFYz6AJIZ0Vue644gRchYLjPonqk8fyOe/KBxEU3f+KK4A+93qdp7
-	qT5aVUMgb7kh4/F2AuFpMyX+e2RQX3IxKjwSkrKvnipaI619UqnydjK5L7BH2W7n
-	3u2SaLfG/YNudrLtPxqIa9M515OATuEwsLnaCWz/Ye800o+3nSNRiZLBMRwHxMBe
-	1uUDaA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42s6gh83ug-1
+	A6mw8karyIFLki/rxMpwPqRRLujrN+gCUVJx1EPH0tU=; b=cwx4+ttz+yPACV1l
+	RQlMFM45fSxJ/PISEGP8UzYpebM+uMuj/WdM3kzVM9ZiP33b7YkVd0ZmT/up93rR
+	v3i41uweA3i6JDeu8iALlg4STV1iTb4SgRiq5TBPsgwPCfC+cnhu6QoIi0WR/tb+
+	vGePsO1fZ2SXyyUpGYLpg7Qg+Jo9xkmv4MBRtz8trH9xi5qjC+J9yuuUTxaIYKyU
+	hoWXCLCNWOOCywBpQbC6XDTt+5uNGrCynKv/XXW13ENfJB7hOn9QIy5fA9BMGooV
+	Zi07Rsm3DL0PdaZf+a1tiMQo0MXCBXsNJFgG6CdFb9bQgCWbK36JRMOYpJ8QJ4IZ
+	L/XoUg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42s6gh83uh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Nov 2024 23:38:38 +0000 (GMT)
+	Thu, 07 Nov 2024 23:38:39 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A7NccUJ027982
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A7NccPJ025300
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 7 Nov 2024 23:38:38 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 7 Nov 2024 15:38:37 -0800
+ 15.2.1544.9; Thu, 7 Nov 2024 15:38:38 -0800
 From: Elliot Berman <quic_eberman@quicinc.com>
-Date: Thu, 7 Nov 2024 15:38:28 -0800
-Subject: [PATCH v8 4/6] arm64: dts: qcom: qcm6490-idp: Add PSCI
+Date: Thu, 7 Nov 2024 15:38:29 -0800
+Subject: [PATCH v8 5/6] arm64: dts: qcom: qcs6490-rb3gen2: Add PSCI
  SYSTEM_RESET2 types
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241107-arm-psci-system_reset2-vendor-reboots-v8-4-e8715fa65cb5@quicinc.com>
+Message-ID: <20241107-arm-psci-system_reset2-vendor-reboots-v8-5-e8715fa65cb5@quicinc.com>
 References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
 In-Reply-To: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
 To: Bjorn Andersson <andersson@kernel.org>,
@@ -110,37 +110,33 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xf1J7enr0aBTbmSxNv1sUC3Em7y46Jhv
-X-Proofpoint-GUID: xf1J7enr0aBTbmSxNv1sUC3Em7y46Jhv
+X-Proofpoint-ORIG-GUID: c9X-a9BpD_uP9I0gjRSqqGhLZtqKDIyF
+X-Proofpoint-GUID: c9X-a9BpD_uP9I0gjRSqqGhLZtqKDIyF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
  malwarescore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 phishscore=0
- mlxscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=828
+ mlxscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=806
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
  definitions=main-2411070184
 
-qcm6490-idp firmware supports vendor-defined SYSTEM_RESET2 types.
+qcs6490-rb3gen2 firmware supports vendor-defined SYSTEM_RESET2 types.
 Describe the reset types: "bootloader" will cause device to reboot and
 stop in the bootloader's fastboot mode. "edl" will cause device to
 reboot into "emergency download mode", which permits loading images via
 the Firehose protocol.
 
-Co-developed-by: Shivendra Pratap <quic_spratap@quicinc.com>
-Signed-off-by: Shivendra Pratap <quic_spratap@quicinc.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/qcm6490-idp.dts | 7 +++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 2 +-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/qcm6490-idp.dts b/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
-index a0668f767e4bf9c8a749adf180dc65f785eb389e..9c141244a7b23cff4c1e85b952c28208b2ad40b7 100644
---- a/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
-@@ -617,6 +617,13 @@ &pon_resin {
+diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+index 0d45662b8028bff475024cff37c33e01d2ee251b..67d453c5b089aadb7b6f965e6ff7a29290963079 100644
+--- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
++++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+@@ -688,6 +688,13 @@ &pmk8350_rtc {
  	status = "okay";
  };
  
@@ -154,19 +150,6 @@ index a0668f767e4bf9c8a749adf180dc65f785eb389e..9c141244a7b23cff4c1e85b952c28208
  &qupv3_id_0 {
  	status = "okay";
  };
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 3d8410683402fd4c03c5c2951721938fff20fc77..5360d0e51a65874be86c0a6ad7bed612bcb44e81 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -850,7 +850,7 @@ pmu {
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
- 	};
- 
--	psci {
-+	psci: psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
- 
 
 -- 
 2.34.1
