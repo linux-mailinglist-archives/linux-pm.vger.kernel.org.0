@@ -1,76 +1,74 @@
-Return-Path: <linux-pm+bounces-17098-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17099-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B40819C009D
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 09:56:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D4F9C01AF
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 11:00:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D78331C21ABD
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 08:56:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A0AF1C219EC
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 10:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF221DE8A0;
-	Thu,  7 Nov 2024 08:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A4E1EABB4;
+	Thu,  7 Nov 2024 10:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vvuvDYwR"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="YHkQTghs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143D01DD556
-	for <linux-pm@vger.kernel.org>; Thu,  7 Nov 2024 08:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD231E9094
+	for <linux-pm@vger.kernel.org>; Thu,  7 Nov 2024 10:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730969761; cv=none; b=XLD2esNfxu9xE1hrcTiYQvvGPsyeVKOvnfPzyE6krRz4xIYJxC0K+lnRuqDaFflRs3RVWW1ACTbQZIGbtp4QUUwY35BYtw1QuIjXJItFGOgZIpEoySJx4XpxIQqd79DKX4sfAc3yT1QATKyNWOoiq7lPNPXK9oXxB3ZNs5qyN5M=
+	t=1730973613; cv=none; b=h6jdzOPyoysZDhzGasC6i50WMqbqRMdzic1G2oHrChnfQwap6L2jufULOwxWHTtL1REdkGHHflgXFNzvXF6zRy7/7FFfXocGz13mldYZv7LB2UzyYg21KZL8jQYDGSMiADKhee9E2WjOZMRocT9n+ioGB3bSrf0IPIZfPHqNUIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730969761; c=relaxed/simple;
-	bh=oUKXS1Trx2oLd1tIewxL57LIdNPU6w5il/qAiXfM5dQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=U46/+qXKvPCL9ooxQR/ew7vKDMBadeqsSsDTFURc7nPeWgFi+U9nfYQHvWhsjeLMmxOyv3ktpL+QBp7tSrz9Z9YdTGhnBFZMsUuWFTyilJX7Jpn1csyoi2e5qX2l0Rn9z0SIluBaRWePyW2xelhAXbb2tBWNy+maUGJC1BpOFqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vvuvDYwR; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539e6c754bdso528002e87.2
-        for <linux-pm@vger.kernel.org>; Thu, 07 Nov 2024 00:55:58 -0800 (PST)
+	s=arc-20240116; t=1730973613; c=relaxed/simple;
+	bh=TRanJs9ePaxX/riCnO0so01k5BCuXb4pkZrMsFxRULg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XXNSL/y7DZMyOLnoar6fVScEwFlfLsh4FeftdsfxYDHh6VZRhhRpkIKyzBzhnOhl/Pi/datAY2uPFymW7Up6GNheA6jw5+Q6BG5DoJeuHZgQ2qoStrxaYIWWZb++XcpFJKwwZiV6gET/rWGKfiDQCPHCGojzly/+bKB7SNzdulA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=YHkQTghs; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-37d473c4bb6so624774f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 07 Nov 2024 02:00:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730969757; x=1731574557; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=22XbHSdxTpfYFI6FS3XwYfdVJJn+nc1ZTuC9aza1c+M=;
-        b=vvuvDYwRUC1QcTXDMu76yTY8bE1U2mxXjUaGFQ4GYKhfBHlgr27MPTEwQbfnUYtw4t
-         rNpx55QL83knreDxCVJE/xf2fuiSmvWL922L2AFsl896bjCj8P+twKaXky9uh5gVZmon
-         9enIIBVuHWdjylgRs0IqSSOrD3zChoSGxjXhwYDblwtMdHdvPUxd4r/zILV1RV8wSTJp
-         y66IGTm8FfgknX3QTm4DS4UpDEpdB48fwbT64oBTlF4tDiMJeAj06tW2VjEkt18auEz9
-         Hv6nqIIN3u/S3K+1alQBLQGbgdVxd4Fj28Ljcqxi2qdnJpcGGK0N3F8T+e5wXC3+pQrp
-         iBtw==
+        d=tuxon.dev; s=google; t=1730973609; x=1731578409; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R02EDs+did3sWf/l/M/xZDeb+Ibpap6rP6djlTEoJvs=;
+        b=YHkQTghsBm8V784J7+Uy1a9e45npNlPTkNMHwKGvvccALUdtY7Y3DSgvLv6t2CoSR9
+         iDGQfJSo2WZQKzkCvec5xreljkCLVEiPkDsnoEP1cKWVrI3cWzIxkLtLSdgk7W4hMjb7
+         IHvXrPpdAGAWAg7dPI+TwdQcUS3trnVTbCARUyqv1KRGEniQnES5K5Xjo368fGR7V5X4
+         8d3KqDTQVT2kVteDXmwsmP4h2cl2BusSTE2ulxbkq/84qVBqaFpNc0kJ5Z064/n+0mLW
+         aaPiS+lYG1kk9yMak5DbiVrHlbIFM2nvmAOJi8lEhQH6bkNWeYgnISB6KgZ2kde9SCtE
+         +aUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730969757; x=1731574557;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=22XbHSdxTpfYFI6FS3XwYfdVJJn+nc1ZTuC9aza1c+M=;
-        b=E1O9E7XXKL8a1j5tJdA1+tyMhjaUVreFd2Du7MSRbhpwN4dls7rTNNFrYe56K+uMm8
-         1lwpYgjKnDesVTxQ0umZ14dS7+U2+8k0Q/LBT6vvqaXc/USCozZCKVJIrZ51ytTXARGq
-         g8CY03eZtZGZq/zFX9nM6addVoWWq2cpN4HwY64lGwjKkICiqmszN+HokmMJmdh3xNlT
-         hkq9gABsHLipzD60gN0eDWjqoCzP0Ij3kOCbNXLgE1P9e+QNhmTCo10PyRXBJ7FSi2va
-         axjuRh2YMyAD73oM8ERfXDQKhSpebQv+X67SKr9S4+yjeSV4P17BA4YPonbIE3OkklyY
-         oy/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUxSACzFCge9Y/+1McHjpUkvl8aVUXgpZ7hIYN43XdSW/SZqVq1ADpT3ac1hKEbD+QAYCJS51aOxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvulJrgstOKT5u4LYjihk6RIDvIwJGVXI0osL3zQLQnWOlaQtV
-	xia8c417VF3sDMyvJ8RWOad6YQS47CeNJUSn1bQR2KVz+Wp/UEfg7rt3XYiaiT8=
-X-Google-Smtp-Source: AGHT+IHLCitCgygItsIvrBIVb0mwAMkG7nEKi2gvAEQviQ2+FqlmxeJnYgE7zjwr6oiTTX/4e230MQ==
-X-Received: by 2002:a05:6512:3c97:b0:539:e12c:bba7 with SMTP id 2adb3069b0e04-53d8405ca28mr171761e87.12.1730969756964;
-        Thu, 07 Nov 2024 00:55:56 -0800 (PST)
-Received: from [172.16.23.252] ([154.14.63.34])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05c2161sm15522375e9.31.2024.11.07.00.55.53
+        d=1e100.net; s=20230601; t=1730973609; x=1731578409;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R02EDs+did3sWf/l/M/xZDeb+Ibpap6rP6djlTEoJvs=;
+        b=hoSx8bYPsCUeT3xjuhVBFGf5/zjZjkSyoW0toxkZQ7BPV7f40bnSj8Z+9hrjB40pKR
+         OaG/bZQukJBwpNcRY+yhXHNas0JHAW5Ly1zcaM+y81JD+4PYPFzH4F//fQWLIHkCuPAU
+         pVEfcMn8O0ZPUnmiiMiGeV7TWUaVlklkYQM8PvfjxcKziKc4ijaMyfGk1Ej9hidlQ7ca
+         flJEb7WBRzx6xEhCE6w+v/OwbvrIamqOZ164aVyTG3tFQYc0anLU9fsi/0IAOICXVRQW
+         Oo4eSkJU+/7vI5OGRPWE/vDw5K/YvmZaWCyFoOvQvGctXO0JkdVoJryuhACiQETax9uj
+         9IgA==
+X-Forwarded-Encrypted: i=1; AJvYcCXHVbHYa4oiB8R/yikELhgAeb3sUhwJVS+uqu+66cEJfYwiMb38waO71kmkVVsEoEsofH+KSNtpdA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsUcTYBE/pSJcdF7WwCuOm82iuGuuWfHf0UTKKFZP4OiEhZYFM
+	UAGmhwiqZjV1TerHYbT341bGdoFit+9oHjTLD5FvYdy9BZibNzh5i9ZZJi8nQeg=
+X-Google-Smtp-Source: AGHT+IEffb2xJDgmV6dLSuFyO1fmxJvqSnlcu1KUumgCd4EHyMTsYXx5V2d5rZ79w6rYl9OZ0LDdOw==
+X-Received: by 2002:a5d:47ac:0:b0:37d:48f2:e749 with SMTP id ffacd0b85a97d-381c7a4636cmr23082414f8f.10.1730973608986;
+        Thu, 07 Nov 2024 02:00:08 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.28])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05e5871sm17547405e9.37.2024.11.07.02.00.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Nov 2024 00:55:56 -0800 (PST)
-Message-ID: <56a976d6-7dd6-4001-b6a8-268ed7d787d2@linaro.org>
-Date: Thu, 7 Nov 2024 09:55:53 +0100
+        Thu, 07 Nov 2024 02:00:07 -0800 (PST)
+Message-ID: <91916297-8156-44d9-b56f-9a67e651a9a4@tuxon.dev>
+Date: Thu, 7 Nov 2024 12:00:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,205 +76,214 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC 1/3] drm/msm/adreno: Add support for ACD
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>, Rob Clark
- <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com>
- <20241012-gpu-acd-v1-1-1e5e91aa95b6@quicinc.com>
- <4aeec9f1-720b-400c-9582-d02847db2ac7@linaro.org>
- <43404449-1830-4651-a85a-54404b1d35bc@quicinc.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <43404449-1830-4651-a85a-54404b1d35bc@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+Content-Language: en-US
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: "vkoul@kernel.org" <vkoul@kernel.org>,
+ "kishon@kernel.org" <kishon@kernel.org>, "robh@kernel.org"
+ <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <35dc7414-f5bd-4ed4-bfa1-f723f4f0078c@tuxon.dev>
+ <TY3PR01MB11346A4814F83FE296A1DED8886922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <TY3PR01MB1134648BF51F1B52BFE34DD6D86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <fbfa9179-2f52-429f-8b69-f7f4064e796b@tuxon.dev>
+ <TYCPR01MB11332EF1A8D064C491D8F261286932@TYCPR01MB11332.jpnprd01.prod.outlook.com>
+ <f7c57e76-b890-491f-880d-62d060b7b31e@tuxon.dev>
+ <TYCPR01MB11332BE2EDB318950B9C7B54C86932@TYCPR01MB11332.jpnprd01.prod.outlook.com>
+ <TY3PR01MB113469FC8A9F49D9B1FA432FD86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <0b73544b-0253-43b9-b631-6578b48eaca8@tuxon.dev>
+ <TY3PR01MB1134689573A785E91A9041E1886932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <5bcdc677-e61e-4312-a19b-57b4600685d3@tuxon.dev>
+ <TY3PR01MB1134690F9D37E3BB4814D864386932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <d64243fe-48ea-4cb5-b6d6-e9f820e1b8a3@tuxon.dev>
+In-Reply-To: <d64243fe-48ea-4cb5-b6d6-e9f820e1b8a3@tuxon.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 06/11/2024 02:44, Akhil P Oommen wrote:
-> On 11/4/2024 9:14 PM, neil.armstrong@linaro.org wrote:
->> On 11/10/2024 22:29, Akhil P Oommen wrote:
->>> ACD a.k.a Adaptive Clock Distribution is a feature which helps to reduce
->>> the power consumption. In some chipsets, it is also a requirement to
->>> support higher GPU frequencies. This patch adds support for GPU ACD by
->>> sending necessary data to GMU and AOSS. The feature support for the
->>> chipset is detected based on devicetree data.
+Hi, all,
+
+On 03.09.2024 17:48, claudiu beznea wrote:
+> 
+> 
+> On 03.09.2024 16:45, Biju Das wrote:
+>> Hi Claudiu,
+>>
+>>> -----Original Message-----
+>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>> Sent: Tuesday, September 3, 2024 1:57 PM
+>>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
 >>>
->>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->>> ---
->>>    drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 81 +++++++++++++++++++++++++
->>> +++-------
->>>    drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
->>>    drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 36 ++++++++++++++++
->>>    drivers/gpu/drm/msm/adreno/a6xx_hfi.h | 21 +++++++++
->>>    4 files changed, 124 insertions(+), 15 deletions(-)
 >>>
->>
->> <snip>
->>
->>> +
->>> +static int a6xx_hfi_enable_acd(struct a6xx_gmu *gmu)
->>> +{
->>> +    struct a6xx_hfi_acd_table *acd_table = &gmu->acd_table;
->>> +    struct a6xx_hfi_msg_feature_ctrl msg = {
->>> +        .feature = HFI_FEATURE_ACD,
->>> +        .enable = 1,
->>> +        .data = 0,
->>> +    };
->>> +    int ret;
->>> +
->>> +    if (!acd_table->enable_by_level)
->>> +        return 0;
->>> +
->>> +    /* Enable ACD feature at GMU */
->>> +    ret = a6xx_hfi_send_msg(gmu, HFI_H2F_FEATURE_CTRL, &msg,
->>> sizeof(msg), NULL, 0);
->>> +    if (ret) {
->>> +        DRM_DEV_ERROR(gmu->dev, "Unable to enable ACD (%d)\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    /* Send ACD table to GMU */
->>> +    ret = a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &msg, sizeof(msg),
->>> NULL, 0);
->>
->> This looks wrong, in this exact code, you never use the acd_table...
->> perhaps it should be acd_table here
-> 
-> Whoops! Weirdly gmu didn't explode when I tested.
-> 
-> Thanks for your keen eye.
-
-You're welcome !
-
-I've been trying to enable this on SM8650, but HFI_H2F_MSG_ACD fails.
-
-My changes:
-================><================================
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
-index 7c96d6f8aaa9..bd9d586f245e 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
-@@ -682,7 +682,7 @@ static int a6xx_hfi_enable_acd(struct a6xx_gmu *gmu)
-         }
-
-         /* Send ACD table to GMU */
--       ret = a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &acd_table, sizeof(*acd_table), NULL, 0);
-+       ret = a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &acd_table, sizeof(struct a6xx_hfi_acd_table), NULL, 0);
-         if (ret) {
-                 DRM_DEV_ERROR(gmu->dev, "Unable to send ACD table (%d)\n", ret);
-                 return ret;
-================><================================
-
-with the appropriate qcom,opp-acd-level in DT taken from downstream, I get:
-[    6.946184] platform 3d6a000.gmu: [drm:a6xx_hfi_send_msg.constprop.0 [msm]] *ERROR* Message (null) id 4 timed out waiting for response
-[    6.958697] platform 3d6a000.gmu: [drm:a6xx_hfi_start [msm]] *ERROR* Unable to send ACD table (-110)
-
-is there something missing ?
-
-Neil
-
-> 
-> -Akhil.
-> 
->>
->>> +    if (ret) {
->>> +        DRM_DEV_ERROR(gmu->dev, "Unable to ACD table (%d)\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>>    static int a6xx_hfi_send_test(struct a6xx_gmu *gmu)
->>>    {
->>>        struct a6xx_hfi_msg_test msg = { 0 };
->>> @@ -756,6 +788,10 @@ int a6xx_hfi_start(struct a6xx_gmu *gmu, int
->>> boot_state)
->>>        if (ret)
->>>            return ret;
->>>    +    ret = a6xx_hfi_enable_acd(gmu);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>        ret = a6xx_hfi_send_core_fw_start(gmu);
->>>        if (ret)
->>>            return ret;
->>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h b/drivers/gpu/drm/
->>> msm/adreno/a6xx_hfi.h
->>> index 528110169398..51864c8ad0e6 100644
->>> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
->>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
->>> @@ -151,12 +151,33 @@ struct a6xx_hfi_msg_test {
->>>        u32 header;
->>>    };
->>>    +#define HFI_H2F_MSG_ACD 7
->>> +#define MAX_ACD_STRIDE 2
->>> +
->>> +struct a6xx_hfi_acd_table {
->>> +    u32 header;
->>> +    u32 version;
->>> +    u32 enable_by_level;
->>> +    u32 stride;
->>> +    u32 num_levels;
->>> +    u32 data[16 * MAX_ACD_STRIDE];
->>> +};
->>> +
->>>    #define HFI_H2F_MSG_START 10
->>>      struct a6xx_hfi_msg_start {
->>>        u32 header;
->>>    };
->>>    +#define HFI_H2F_FEATURE_CTRL 11
->>> +
->>> +struct a6xx_hfi_msg_feature_ctrl {
->>> +    u32 header;
->>> +    u32 feature;
->>> +    u32 enable;
->>> +    u32 data;
->>> +};
->>> +
->>>    #define HFI_H2F_MSG_CORE_FW_START 14
->>>      struct a6xx_hfi_msg_core_fw_start {
 >>>
+>>> On 03.09.2024 15:37, Biju Das wrote:
+>>>>
+>>>>
+>>>>> -----Original Message-----
+>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>> Sent: Tuesday, September 3, 2024 1:26 PM
+>>>>> To: Biju Das <biju.das.jz@bp.renesas.com>; Ulf Hansson
+>>>>> <ulf.hansson@linaro.org>
+>>>>> Cc: vkoul@kernel.org; kishon@kernel.org; robh@kernel.org;
+>>>>> krzk+dt@kernel.org; conor+dt@kernel.org; p.zabel@pengutronix.de;
+>>>>> geert+renesas@glider.be; magnus.damm@gmail.com;
+>>>>> gregkh@linuxfoundation.org; mturquette@baylibre.com;
+>>>>> sboyd@kernel.org; Yoshihiro Shimoda
+>>>>> <yoshihiro.shimoda.uh@renesas.com>;
+>>>>> linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
+>>>>> linux-kernel@vger.kernel.org; linux- renesas-soc@vger.kernel.org;
+>>>>> linux-usb@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>>>>> linux- clk@vger.kernel.org; linux-pm@vger.kernel.org; Claudiu Beznea
+>>>>> <claudiu.beznea.uj@bp.renesas.com>
+>>>>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas
+>>>>> RZ/G3S SoC
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 03.09.2024 15:00, Biju Das wrote:
+>>>>>>
+>>>>>>
+>>>>>>> -----Original Message-----
+>>>>>>> From: Biju Das <biju.das.jz@bp.renesas.com>
+>>>>>>> Sent: Tuesday, September 3, 2024 12:07 PM
+>>>>>>> To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>; Ulf Hansson
+>>>>>>> <ulf.hansson@linaro.org>
+>>>>>>> Cc: vkoul@kernel.org; kishon@kernel.org; robh@kernel.org;
+>>>>>>> krzk+dt@kernel.org; conor+dt@kernel.org; p.zabel@pengutronix.de;
+>>>>>>> geert+renesas@glider.be; magnus.damm@gmail.com;
+>>>>>>> gregkh@linuxfoundation.org; mturquette@baylibre.com;
+>>>>>>> sboyd@kernel.org; Yoshihiro Shimoda
+>>>>>>> <yoshihiro.shimoda.uh@renesas.com>;
+>>>>>>> linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
+>>>>>>> linux-kernel@vger.kernel.org; linux- renesas-soc@vger.kernel.org;
+>>>>>>> linux-usb@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>>>>>>> linux- clk@vger.kernel.org; linux-pm@vger.kernel.org; Claudiu
+>>>>>>> Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>>> Subject: RE: [PATCH 00/16] Add initial USB support for the Renesas
+>>>>>>> RZ/G3S SoC
+>>>>>>>
+>>>>>>> Hi Claudiu,
+>>>>>>>
+>>>>>>>> -----Original Message-----
+>>>>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>>>>> Sent: Tuesday, September 3, 2024 12:00 PM
+>>>>>>>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas
+>>>>>>>> RZ/G3S SoC
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 03.09.2024 13:31, Biju Das wrote:
+>>>>>>>>>>> During boot clr USB PWR READY signal in TF-A.
+>>>>>>>>>>> STR case, suspend set USB PWR READY signal in TF-A.
+>>>>>>>>>>> STR case, resume clr USB PWR READY signal in TF-A.
+>>>>>>>>>> As I said previously, it can be done in different ways. My point
+>>>>>>>>>> was to let Linux set what it needs for all it's devices to work.
+>>>>>>>>>> I think the way to go forward is a
+>>>>>>>> maintainer decision.
+>>>>>>>>>
+>>>>>>>>> I agree, there can be n number of solution for a problem.
+>>>>>>>>>
+>>>>>>>>> Since you modelled system state signal (USB PWRRDY) as reset
+>>>>>>>>> control signal, it is reset/DT maintainer's decision to say the
+>>>>>>>>> final word whether this signal fits in reset
+>>>>>>>> system framework or not?
+>>>>>>>>
+>>>>>>>> I was thinking:
+>>>>>>>> 1/ Geert would be the best to say if he considers it OK to handle this
+>>>>>>>>    in Linux
+>>>>>>>
+>>>>>>> I agree Geert is the right person for taking SYSTEM decisions,
+>>>>>>> since the signal is used only during state transitions (Table
+>>>>>>> 41.6.4 AWO to ALL_ON and 41.6.3 ALL_ON to AWO)
+>>>>>>
+>>>>>> One more info, as per [1], this USB PWRRDY signal setting to be before Linux kernel boots.
+>>>>>
+>>>>> The "controlled by" column mentions CA-55 on PWRRDY signal control
+>>>>> line and it is b/w steps "DDR exits from retention mode" and  "clock
+>>>>> start settings for system bus and peripheral modules". AFAICT, after DDR exists retention mode
+>>> Linux is ready to run.
+>>>>
+>>>> DDR retention exit happens in TF-A and it jumps into reset code where it executes BL2 in TF_A. Bl2
+>>> checks for warm or cold reset.
+>>>> If it is warm reset, it sets required minimal clocks/resets and pass
+>>>> the control to linux by calling the SMC callback handler. Which in turn calls resume(step 11-->14)
+>>> path.
+>>>
+>>> Is this from HW manual or some specific documentation? I'm referring at "resume" == "steps 11-->14"
+>>>
+>>>>
+>>>> Step 8, Cortex-A55 Exit from DDR retention mode (when using) Setting
+>>>> for exiting form DDR retention mode Step 9, Cortex-A55 USB PHY PWRRDY
+>>>> signal control (if use USB) SYS_USB_PWRRDY Step 10, Cortex-A55 PCIe
+>>>> RST_RSM_B signal control (if use PCIe) SYS_PCIE_RST_RSM_B
+>>>
+>>> Note *if use*: how does the TF-A know if USB/PCIe is used by Linux? The documentation mention to set
+>>> it *if use*. Same note is on ALL_ON to VBATT transition documentation (namely "if using USB", "if
+>>> using PCIe"). If TF-A will do this it should set this signals unconditionally. It will not be
+>>> something wrong though. We don't know at the moment what this involves in terms of power consumption,
+>>> if it means something...
 >>
->> Thanks,
->> Neil
+>> IIUC,
+>> The only information we have is,
+>>
+>> "SYS_USB_PWRRDY and SYS_PCIE_RST_RSM_B are used when transition from ALL_ON to AWO (or from AWO to ALL_ON).
+>> "When turning off USB PHY and PCIe PHY, if they are not controlled, PHY may break"
+>>
+>> ALL_ON to AWO_MODE state transition: 
+>> USB/PCIe are part of PD_ISOVCC power domain and before turning PD_ISOVCC to off,
+>> we need to set USBPWRRDY signal.
+>>
+>> AWO_MODE to ALL_ON state transition:
+>>
+>> Turn on PD_ISOVCC first, then clr USBPWRRDY signal for USB usage in linux.
+>>
+>> Maybe we need to ask hw team, exact usage of USBPWRRDY signal other than state transition.
 > 
+> As you may already know, this is open for quite some time and is ongoing.
 
+I got more clarification about the USB PWRRDY signal from the HW team.
+
+The conclusion is that the USB PWRRDY is a signal controlled by SYSC
+controller that goes to the USB PHY and it tells the USB PHY if the power
+supply is ready or not.
+
+In the diagram at [1] the PWRRDY signal need to be asserted/de-asserted
+before/after G6, G7, G8, G9, G10 signals.
+
+Philipp,
+
+Can you please confirm that you don't want this signal to be implemented as
+a reset signal to know clearly your input on it? I would like to start
+looking for another approach in that case.
+
+Thank you,
+Claudiu Beznea
+
+[1] https://pasteboard.co/0a1zYBFZXZVb.png
+
+> 
+>>
+>> Cheers,
+>> Biju
+>>
+>>
 
