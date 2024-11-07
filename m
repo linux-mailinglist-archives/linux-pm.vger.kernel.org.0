@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-17132-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17127-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AABB9C0C38
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 18:04:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A7D29C0C20
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 18:03:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AC5A1C22574
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 17:04:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C90B41C2245F
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2024 17:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA1D217914;
-	Thu,  7 Nov 2024 17:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006A9216E19;
+	Thu,  7 Nov 2024 17:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="fr4rBFPJ"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="VD0iOsfC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29936217329;
-	Thu,  7 Nov 2024 17:03:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4247321315B;
+	Thu,  7 Nov 2024 17:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730998985; cv=none; b=VPADbFJLND/7Oiij6mSI++PqGrFQWjbUhvlOJYkLqekw5joHe64rWUG/2n5x3iX0qX4Kn7P1/SiQJYq2ZEtUwkuC/pPxxIg9STAk4R4M8liQN0Hr5NvvO4ABi3vdrCXoXV0xizhh3StuObrlPBFdbKMwxquT0uW8AZc5i1TUfy8=
+	t=1730998981; cv=none; b=MPy9HeVkgSefNB8TfFUFvgglslzgZS5/dEo/bb28Yvo/mlJ0u1lDqGJNbUWHVvI0yuDWxltyNFXi4BfO/CmBIF6Ui7Pp9NR7X1s9LTsBJ4IPaDdk6BlL2mrzvlDcUFh/NN0nfpHsZwJVMhJppXkwkdSZKVHn2V2K/61PM1nFooc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730998985; c=relaxed/simple;
-	bh=A0fmQDK8m7oxJnEMI+GXPI0MVrZif3Z38lQBRjITpDA=;
+	s=arc-20240116; t=1730998981; c=relaxed/simple;
+	bh=ZUgeto9/E87fDiZJrXBC+X56+By41ZSfPN7XvT0Ux6Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WfyC+geR28BCYxfDQcx3MTAmPrZVz5QayagSrFPRNUbYgBexqzHWQQq24wS73Q7U1Zjb/85LXO51SUeGw0b3VM970yQlsspojRf9DY2UDbBSgTJiyH86Kp+OkedbqdVd5Jc9PlEYg1Bu7L4wFbVww9YbsGRBqd/sOvAoi7dc3sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=fr4rBFPJ; arc=none smtp.client-ip=5.75.144.95
+	 In-Reply-To:To:Cc; b=RN8oyfZ7h8Z5EG7wURW9qHq7KQwUoGflnydl1V5ZhtAnfLlAdnqhTqnVESGI2JHrkMq9b936ndjW5blaO9UDpCRNYxvjpPHxM6e0/+/jB0QzI7ZmXM2lcu3KFu5mTRr8zjEpDvzZRSY1fEB/feg7oxoUV94A3byP+1VDiES4Tfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=VD0iOsfC; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.118.162] (254C2715.nat.pool.telekom.hu [37.76.39.21])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 5A980E45C6;
-	Thu,  7 Nov 2024 17:02:55 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id DBFEEE45C7;
+	Thu,  7 Nov 2024 17:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1730998976;
+	s=psm; t=1730998977;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Ze6/FwJGlwoZIH5QX0UZSFz6K9jP+T7IzTY3dKemhXQ=;
-	b=fr4rBFPJyaJ39C6eKeHzqJYWQZcg1QcvIwIIJ+xPoRLXwsPk4wqbq6uYBZnadM50yyzvSA
-	PebDREFNaKPp/T7Fw0aQBqJin30nnE2lwcNF58eA4ICXk0/Vsp95cNolPRPTTveLO3foZm
-	oKgprRA1xqjhQ8amfrXZkEc7L7r8jYM8oMC0e1NRGIPVC/s8GiJzIYiTohpH0473pF0SYm
-	6m8mn7P20jD4nny4dnjcPK9spuU6X0ZGfMx9ufht/i3v07F1VjSbYMZibg1mEhrmBkEjBG
-	dz3XFVoIsdKwcqY9lyJ9EzrGh4RnbHJdzIH/uwTtzuaCbUEcdKqv2s3ibjn9Xg==
+	bh=UZFwbFxl+fO/yfXuNk3d5tUxPWCdUEMpagrp1Rl+Vgc=;
+	b=VD0iOsfCy8Wuc3BP5weRCHJFY6ApGhkVDRfufi0V/mSPibkk//2bpdg/nz9Isxuew4uMvs
+	Dhw6aLuACFw8WjeRThxVcCWjpk+43CgNbQ3ri4A7W2m+AkGKlpsVJMuNpf2EWa3NaMUaWh
+	7U9byhps8r/uP1NLk+LA2Qkp35FxVMi08rHmUkDdeLWiPik+CQP4yc5Uzu1LgvmqKHKAzh
+	lQLA6iJsVTFjg/Y4YF9qlatE5qw5CsQMEUWakjYm4kLSCk5WS9+eUSusVb/jw5HBGcWB7a
+	ZLogLf+8lJn6JbMFXNsZ+szXIZzPpbJJTl84S1u6JPihvam7w2q7WvDaa0HL1g==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Thu, 07 Nov 2024 18:02:44 +0100
-Subject: [PATCH v3 03/14] dt-bindings: pinctrl: qcom,pmic-mpp: Add PM8937
+Date: Thu, 07 Nov 2024 18:02:45 +0100
+Subject: [PATCH v3 04/14] pinctrl: qcom: spmi-mpp: Add PM8937 compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241107-msm8917-v3-3-6ddc5acd978b@mainlining.org>
+Message-Id: <20241107-msm8917-v3-4-6ddc5acd978b@mainlining.org>
 References: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
 In-Reply-To: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -75,44 +75,37 @@ Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
  =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730998970; l=1273;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730998970; l=1084;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=A0fmQDK8m7oxJnEMI+GXPI0MVrZif3Z38lQBRjITpDA=;
- b=hhnjY8odk06rK1S61Z5megT38z31/ktCL9JcthBjdVSCIwiwWoJN6K/+R59Z5o8wOslRgsYp6
- se+VChFqUY2AOV4i+2DeRZrIqjV3o85b0lr7jln2J63M5LLJxAHATNz
+ bh=ZUgeto9/E87fDiZJrXBC+X56+By41ZSfPN7XvT0Ux6Y=;
+ b=2VfRXLWfHUaF4RbGeGO0kiQ1+sIuXxrW8PbGA4tatq9Kkngy+a4GSFT+Yl0BB40+DEIczuT+y
+ Hb7k0AKJ2JeCnmlYeXOKE6ZlXphGQ5PeNPdnPINkPSZ2XnfOdvyOf7X
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-Document the Device Tree binding for PM8937 MPPs.
+The PM8937 provides 4 MPPs.
+Add a compatible to support them.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
- Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pinctrl/qcom/pinctrl-spmi-mpp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-index 43146709e2044d9dead08a6786b98672ef766629..9364ae05f3e68f3a2f4dd78ba3c0f94b3ccc3c51 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-@@ -22,6 +22,7 @@ properties:
-               - qcom,pm8226-mpp
-               - qcom,pm8841-mpp
-               - qcom,pm8916-mpp
-+              - qcom,pm8937-mpp
-               - qcom,pm8941-mpp
-               - qcom,pm8950-mpp
-               - qcom,pmi8950-mpp
-@@ -92,6 +93,7 @@ $defs:
-           this subnode.  Valid pins are
-                  - mpp1-mpp4 for pm8841
-                  - mpp1-mpp4 for pm8916
-+                 - mpp1-mpp4 for pm8937
-                  - mpp1-mpp8 for pm8941
-                  - mpp1-mpp4 for pm8950
-                  - mpp1-mpp4 for pmi8950
+diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c b/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
+index b5b3ac82f030b55f9e199bb4265c770cfde4a81a..84de584cf7ebbd35dd3e7aa89d4b971645b02f82 100644
+--- a/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
++++ b/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
+@@ -983,6 +983,7 @@ static const struct of_device_id pmic_mpp_of_match[] = {
+ 	{ .compatible = "qcom,pm8226-mpp", .data = (void *) 8 },
+ 	{ .compatible = "qcom,pm8841-mpp", .data = (void *) 4 },
+ 	{ .compatible = "qcom,pm8916-mpp", .data = (void *) 4 },
++	{ .compatible = "qcom,pm8937-mpp", .data = (void *) 4 },
+ 	{ .compatible = "qcom,pm8941-mpp", .data = (void *) 8 },
+ 	{ .compatible = "qcom,pm8950-mpp", .data = (void *) 4 },
+ 	{ .compatible = "qcom,pmi8950-mpp", .data = (void *) 4 },
 
 -- 
 2.47.0
