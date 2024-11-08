@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-17241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6373E9C2817
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 00:25:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96BEA9C281A
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 00:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E47F1C21AA7
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 23:25:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08107B22DCF
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 23:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7C320DD6F;
-	Fri,  8 Nov 2024 23:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BCB1F26DB;
+	Fri,  8 Nov 2024 23:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N+t+3pUp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bOgP/m1e"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB7020DD5E
-	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 23:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB6B1F26C3
+	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 23:25:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731108299; cv=none; b=M+yyqHFPURu6odjO+xhcjfs0MRBHCR1vj2EEoJxKCi7A7PPVBxpLpkWn3DE8atZQAOLEbqas1WVjSo96mEXIspeKnJQuGBsipuJPeLhNA5mdeJAJBH/Re+2Xp/6soAuPkFALm4ViZPk6QuaC2CZfxD2jGtvdGkGz4bXVeUPA3zc=
+	t=1731108302; cv=none; b=Zp87BVoiiGlRS9SxqPUfu67rQ4qD5vatAtaJZPsByvqz7wqsuLoyveN/Mv8hM+3RTX6ZVe8cxOkPoPU2S0H+cFLVjb8PkIlrZTWRFfiKMogJT0HiEesan+wB0COTyfvnkqJhUpzdc03Nk/the626Z+owMyPSSc3Hgscp27LdcIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731108299; c=relaxed/simple;
-	bh=7sy/VaHTU5YgO2h3pbjmNQ1wxdJGh6fDZPTC8PaEdgs=;
+	s=arc-20240116; t=1731108302; c=relaxed/simple;
+	bh=e9WXSKvrriRBu+n6tYpg7XdcsFeNBIs+URhwEsmQTuY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gv1FshbtoFSHkhf26H9OzzdJe0OWLbUNpLLOIdMZOBtUxTXnuZ1mtWkUuqwCPOsk1+c1hBb+NjMhCzfhFL0Z+6E0LM7zCzDELRbqYhZy+QntAdyIyRYwyL9dzp4wR3gvodJKXbl2+e2liK9juea9klxG3nF6LdPPenPKj7bQjjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N+t+3pUp; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=Qrx3PCyG5Kk4j2Ks4fRFHaxL+qT6rQ9x/qyinYlGHZmar7yxPnFl3tdYpcrmLz5hsNHoc0qMqX7qGUHZtRoj/sqsd3m7ARdUmPV6l0f92gToc0p3lf5Iz3+7RBZSKWu+Un+RQCCmpIui63Dc7tMgtqocrmQ3MWiBnSE7ec8qbVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bOgP/m1e; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731108296;
+	s=mimecast20190719; t=1731108300;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NOHzmuZWEEkg9ixZXicPkdjJ6PNpOxqjjt5Nt/hrTs4=;
-	b=N+t+3pUp40kouKB4FQE5/PoYStKaORBQIFU5hovayzGau0rjKPLxftmi+ToS0J88zSt4me
-	4owscFrPS+vSmL+ijLeD4qpjNYRj91RYoMSLNjRXHyng5KTp+BZ7ZM5ytJnEtbQAtLgMfm
-	jivDq93nUxZtFYGIWKjWOdAo43Zxoyg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=w6NelIKRrccaaskR88NhvpEIqQCtsdbNTXGd5vNul4Y=;
+	b=bOgP/m1eKMARVSE6BnpaTE161UTpDKTCVqOrrw+gHm+A3buWLv4UuNGQmwbIUO2K3aCXVU
+	GmaolhCgY/qI95/y8CrsSrd/ltClytLotFPmrqTbU+b7ihA2xSWWmiwwgJPmeQQijto8+b
+	BeA45qeexiGTdbLhIPC3z7ZIZtLLvm0=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-219-B_pxqft5PTGpR4Pj7GoX3Q-1; Fri,
- 08 Nov 2024 18:24:54 -0500
-X-MC-Unique: B_pxqft5PTGpR4Pj7GoX3Q-1
-X-Mimecast-MFC-AGG-ID: B_pxqft5PTGpR4Pj7GoX3Q
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-647-uQOjuS5rO-6nqVcHVUPE3Q-1; Fri,
+ 08 Nov 2024 18:24:57 -0500
+X-MC-Unique: uQOjuS5rO-6nqVcHVUPE3Q-1
+X-Mimecast-MFC-AGG-ID: uQOjuS5rO-6nqVcHVUPE3Q
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DBC3719560A3;
-	Fri,  8 Nov 2024 23:24:52 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7B13A1953945;
+	Fri,  8 Nov 2024 23:24:55 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.67])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D7A6A300019E;
-	Fri,  8 Nov 2024 23:24:49 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4A7D9300019F;
+	Fri,  8 Nov 2024 23:24:53 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Andy Shevchenko <andy@kernel.org>,
@@ -66,9 +66,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	Jelle van der Waa <jelle@vdwaa.nl>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v2 3/4] power: supply: bq24190_charger: Add support for "charge_types" property
-Date: Sat,  9 Nov 2024 00:24:37 +0100
-Message-ID: <20241108232438.269156-4-hdegoede@redhat.com>
+Subject: [PATCH v2 4/4] platform/x86: dell-laptop: Use power_supply_charge_types_show/_parse() helpers
+Date: Sat,  9 Nov 2024 00:24:38 +0100
+Message-ID: <20241108232438.269156-5-hdegoede@redhat.com>
 In-Reply-To: <20241108232438.269156-1-hdegoede@redhat.com>
 References: <20241108232438.269156-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -80,65 +80,120 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-The bq24190 power_supply class device has a writeable "charge_type"
-property, add support for the new "charge_types" property. Reading this
-returns a list of supported charge-types with the currently active type
-surrounded by square brackets, allowing userspace to find out which
-enum power_supply_charge_type values are supported.
+Make battery_modes a map between tokens and enum power_supply_charge_type
+values instead of between tokens and strings and use the new
+power_supply_charge_types_show/_parse() helpers for show()/store()
+to ensure that things are handled in the same way as in other drivers.
 
-This has been tested on a GPD win gaming-handheld.
+This also changes battery_supported_modes to be a bitmap of charge-types
+(enum power_supply_charge_type values) rather then a bitmap of indices
+into battery_modes[].
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/power/supply/bq24190_charger.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/platform/x86/dell/dell-laptop.c | 54 ++++++++++++-------------
+ 1 file changed, 25 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index 2b393eb5c282..0101aaca1a97 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -1313,6 +1313,7 @@ static int bq24190_charger_get_property(struct power_supply *psy,
+diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
+index 5671bd0deee7..9a4cfcb8bbe0 100644
+--- a/drivers/platform/x86/dell/dell-laptop.c
++++ b/drivers/platform/x86/dell/dell-laptop.c
+@@ -103,15 +103,15 @@ static bool mute_led_registered;
  
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
- 		ret = bq24190_charger_get_charge_type(bdi, val);
- 		break;
- 	case POWER_SUPPLY_PROP_HEALTH:
-@@ -1393,6 +1394,7 @@ static int bq24190_charger_set_property(struct power_supply *psy,
- 		ret = bq24190_charger_set_temp_alert_max(bdi, val);
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
- 		ret = bq24190_charger_set_charge_type(bdi, val);
- 		break;
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-@@ -1421,6 +1423,7 @@ static int bq24190_charger_property_is_writeable(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_ONLINE:
- 	case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-@@ -1469,6 +1472,7 @@ static void bq24190_charger_external_power_changed(struct power_supply *psy)
- 
- static enum power_supply_property bq24190_charger_properties[] = {
- 	POWER_SUPPLY_PROP_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_CHARGE_TYPES,
- 	POWER_SUPPLY_PROP_HEALTH,
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_STATUS,
-@@ -1498,6 +1502,9 @@ static const struct power_supply_desc bq24190_charger_desc = {
- 	.set_property		= bq24190_charger_set_property,
- 	.property_is_writeable	= bq24190_charger_property_is_writeable,
- 	.external_power_changed	= bq24190_charger_external_power_changed,
-+	.charge_types		= BIT(POWER_SUPPLY_CHARGE_TYPE_NONE)    |
-+				  BIT(POWER_SUPPLY_CHARGE_TYPE_TRICKLE) |
-+				  BIT(POWER_SUPPLY_CHARGE_TYPE_FAST),
+ struct battery_mode_info {
+ 	int token;
+-	const char *label;
++	enum power_supply_charge_type charge_type;
  };
  
- /* Battery power supply property routines */
+ static const struct battery_mode_info battery_modes[] = {
+-	{ BAT_PRI_AC_MODE_TOKEN,   "Trickle" },
+-	{ BAT_EXPRESS_MODE_TOKEN,  "Fast" },
+-	{ BAT_STANDARD_MODE_TOKEN, "Standard" },
+-	{ BAT_ADAPTIVE_MODE_TOKEN, "Adaptive" },
+-	{ BAT_CUSTOM_MODE_TOKEN,   "Custom" },
++	{ BAT_PRI_AC_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_TRICKLE },
++	{ BAT_EXPRESS_MODE_TOKEN,  POWER_SUPPLY_CHARGE_TYPE_FAST },
++	{ BAT_STANDARD_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_STANDARD },
++	{ BAT_ADAPTIVE_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE },
++	{ BAT_CUSTOM_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_CUSTOM },
+ };
+ static u32 battery_supported_modes;
+ 
+@@ -2261,46 +2261,42 @@ static ssize_t charge_types_show(struct device *dev,
+ 		struct device_attribute *attr,
+ 		char *buf)
+ {
+-	ssize_t count = 0;
++	enum power_supply_charge_type charge_type;
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
+-		bool active;
++		charge_type = battery_modes[i].charge_type;
+ 
+-		if (!(battery_supported_modes & BIT(i)))
++		if (!(battery_supported_modes & BIT(charge_type)))
+ 			continue;
+ 
+-		active = dell_battery_mode_is_active(battery_modes[i].token);
+-		count += sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
+-				battery_modes[i].label);
++		if (!dell_battery_mode_is_active(battery_modes[i].token))
++			continue;
++
++		return power_supply_charge_types_show(dev, battery_supported_modes,
++						      charge_type, buf);
+ 	}
+ 
+-	/* convert the last space to a newline */
+-	if (count > 0)
+-		count--;
+-	count += sysfs_emit_at(buf, count, "\n");
+-
+-	return count;
++	/* No active mode found */
++	return -EIO;
+ }
+ 
+ static ssize_t charge_types_store(struct device *dev,
+ 		struct device_attribute *attr,
+ 		const char *buf, size_t size)
+ {
+-	bool matched = false;
+-	int err, i;
++	int charge_type, err, i;
++
++	charge_type = power_supply_charge_types_parse(battery_supported_modes, buf);
++	if (charge_type < 0)
++		return charge_type;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
+-		if (!(battery_supported_modes & BIT(i)))
+-			continue;
+-
+-		if (sysfs_streq(battery_modes[i].label, buf)) {
+-			matched = true;
++		if (battery_modes[i].charge_type == charge_type)
+ 			break;
+-		}
+ 	}
+-	if (!matched)
+-		return -EINVAL;
++	if (i == ARRAY_SIZE(battery_modes))
++		return -EIO;
+ 
+ 	err = dell_battery_set_mode(battery_modes[i].token);
+ 	if (err)
+@@ -2430,7 +2426,7 @@ static u32 __init battery_get_supported_modes(void)
+ 
+ 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
+ 		if (dell_smbios_find_token(battery_modes[i].token))
+-			modes |= BIT(i);
++			modes |= BIT(battery_modes[i].charge_type);
+ 	}
+ 
+ 	return modes;
 -- 
 2.47.0
 
