@@ -1,134 +1,146 @@
-Return-Path: <linux-pm+bounces-17196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3F2F9C1B04
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 11:47:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA02B9C1B78
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 11:55:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B60062830FE
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 10:47:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A001D2845C2
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 10:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E5D1E1C10;
-	Fri,  8 Nov 2024 10:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71CA51F7073;
+	Fri,  8 Nov 2024 10:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="WKaBprb3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtGpet/S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FA647F69;
-	Fri,  8 Nov 2024 10:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3D31F669D;
+	Fri,  8 Nov 2024 10:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731062864; cv=none; b=AYpPKs12vwP5DfyiREemzWgNrhieKgPm//JfCNrzIXUGbFQz54p1T+qVPASPODBRPnzGu+bXhoOMpf/KHgXkrcYMljqaz5x8rZEcUA7vniWJuyuaAeQhuk7v9MrwXeDV9g9M7qP+1jRldFwLbwiOwb3btRXZVDhAOL5sE5+rkDc=
+	t=1731063061; cv=none; b=g2MDVvlcOOOpa1khsLH6XAZVt8kOLE9thRr3TFtqvWno+Ry+GpdSJZiM0LDfxzQKGwp+ZrO9DODSlxBceYN0axl6Gk6kCbheCUkRMmbK9op+lPalA6d15STBevj5R25RIpIRfmy9MrExcCQNdw22/6igxk8jutIQCrZiXQ5xuOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731062864; c=relaxed/simple;
-	bh=vh1KEgwm8HS0FCaXG6dtHY0XbtYs85ctulsV8TBcLJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PECecm4yFpKGZiDYieFXrZYCxyKcHnh9o5LNkcDWpH9GMIIJnQG7RourmXhKlNbmX1i63UXThRY8H5AZQLu9VXzh2lZ9D3fzMN7e43tjEKplkmjD5aN084JR9V3JCszvd49BoDqP/UjQwfJfa1wVy7fxCu9fCSjip3FkBmCbcIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=WKaBprb3; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1173)
-	id 800FF2130822; Fri,  8 Nov 2024 02:47:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 800FF2130822
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1731062861;
-	bh=rfmN39pQc5CWywNmtu+c00IPmRXCRUoGSDJrpxGFf88=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WKaBprb30Giu3MFacVCVRoL3qBrewwIVdoRvPR6GXH/Dagz8ngoYYRvAkfZeU7gh+
-	 sNf/bt/pLrX/E//vTqICMDdeVPIE/eOiCtOKrHqPT/kHtswQ/6w/nK9appmCCW88D0
-	 IaZiXBfsYb8l7fRrjwI7NS2VM9/sVAi1ie/hMTPo=
-Date: Fri, 8 Nov 2024 02:47:41 -0800
-From: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	jikos@kernel.org, bentiss@kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ernis@microsoft.com, rafael@kernel.org, pavel@ucw.cz,
-	lenb@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/3] Revert "Input: hyperv-keyboard - register as a
- wakeup source"
-Message-ID: <20241108104741.GA14651@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1726176470-13133-1-git-send-email-ernis@linux.microsoft.com>
- <1726176470-13133-3-git-send-email-ernis@linux.microsoft.com>
- <ZvIx85NmYB/HzKtI@csail.mit.edu>
- <Zv-j0qtWXsDz4Hah@google.com>
- <20241017134438.GA14386@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	s=arc-20240116; t=1731063061; c=relaxed/simple;
+	bh=dk1mu5lTqhAoWaUh/fvmV70El26cHpvXmwS6kDk07AQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kgoHBVfNgVhAkBHNsp1nfzAwsy7RM1iHsLSVamvjj68+bmh4Hr2O1Nd6+NF7/tftFC41md0vocKtp7Qei1FjQ8RjO5kxHgXTnBzB5QZGmiAvHtxY8CsYmqJIPRNBSu/0B+0WBqICkZXaFrTJY/D/nI4u1akoMl+C6FA1gT09iAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtGpet/S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1600C4CED2;
+	Fri,  8 Nov 2024 10:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731063059;
+	bh=dk1mu5lTqhAoWaUh/fvmV70El26cHpvXmwS6kDk07AQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KtGpet/SFgaXzrIBIP4cB2KDeG3SXOcEEkf6H5HkrK/cyY7Drw51ToCAmBwpUX7Gp
+	 9VY1ztHsK6rUEBUHuZimo26lPWBv+i0XNdOxFCKpXJHacu4dXkNvjYx6zAuisLXKi1
+	 FX/3v9/Z5KLV7vbmkmVM0FISHrinSqZSFRd4w6IPbYKx7s27sPFOvN1zQgHSwzIuCW
+	 Ewlh+lS3Ro7BBPvl42UZiUefkqg5qoIDnJdL4bLXWn/cicLtZOrqkRF/CkfCQ7QUKc
+	 jhRx4K1An3Ws18+qK4umaPSLAZKc54oROYsTCA4EZ5Gt8PRq1foCzMXA8b6+T8x33k
+	 w+hmdDJnFmANw==
+Message-ID: <12ac2212-e176-4d39-85fe-c7afa16dc822@kernel.org>
+Date: Fri, 8 Nov 2024 11:50:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017134438.GA14386@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] memory: Switch back to struct platform_driver::remove()
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Markus Mayer <mmayer@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Santosh Shilimkar <ssantosh@kernel.org>, Paul Cercueil
+ <paul@crapouillou.net>, Yong Wu <yong.wu@mediatek.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Konrad Dybcio <konradybcio@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-omap@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-tegra@vger.kernel.org
+References: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 17, 2024 at 06:44:38AM -0700, Erni Sri Satya Vennela wrote:
-> On Fri, Oct 04, 2024 at 01:14:10AM -0700, Dmitry Torokhov wrote:
-> > On Tue, Sep 24, 2024 at 03:28:51AM +0000, Srivatsa S. Bhat wrote:
-> > > [+linux-pm, Rafael, Len, Pavel]
-> > > 
-> > > On Thu, Sep 12, 2024 at 02:27:49PM -0700, Erni Sri Satya Vennela wrote:
-> > > > This reverts commit 62238f3aadc9bc56da70100e19ec61b9f8d72a5f.
-> > > > 
-> > > > Remove keyboard as wakeup source since Suspend-to-Idle feature
-> > > > is disabled.
-> > > > 
-> > > > Signed-off-by: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-> > > > ---
-> > > >  drivers/input/serio/hyperv-keyboard.c | 12 ------------
-> > > >  1 file changed, 12 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/input/serio/hyperv-keyboard.c b/drivers/input/serio/hyperv-keyboard.c
-> > > > index 31d9dacd2fd1..b42c546636bf 100644
-> > > > --- a/drivers/input/serio/hyperv-keyboard.c
-> > > > +++ b/drivers/input/serio/hyperv-keyboard.c
-> > > > @@ -162,15 +162,6 @@ static void hv_kbd_on_receive(struct hv_device *hv_dev,
-> > > >  			serio_interrupt(kbd_dev->hv_serio, scan_code, 0);
-> > > >  		}
-> > > >  		spin_unlock_irqrestore(&kbd_dev->lock, flags);
-> > > > -
-> > > > -		/*
-> > > > -		 * Only trigger a wakeup on key down, otherwise
-> > > > -		 * "echo freeze > /sys/power/state" can't really enter the
-> > > > -		 * state because the Enter-UP can trigger a wakeup at once.
-> > > > -		 */
-> > > > -		if (!(info & IS_BREAK))
-> > > > -			pm_wakeup_hard_event(&hv_dev->device);
-> > > > -
-> > > >  		break;
-> > > >  
-> > > >  	default:
-> > > > @@ -356,9 +347,6 @@ static int hv_kbd_probe(struct hv_device *hv_dev,
-> > > >  		goto err_close_vmbus;
-> > > >  
-> > > >  	serio_register_port(kbd_dev->hv_serio);
-> > > > -
-> > > > -	device_init_wakeup(&hv_dev->device, true);
-> > 
-> > If you do not want the keyboard to be a wakeup source by default maybe
-> > change this to:
-> > 
-> > 	device_set_wakeup_capable(&hv_dev->device, true);
-> > 
-> > and leave the rest of the driver alone?
-> > 
-> > Same for the HID change.
-> > 
-> > Thanks.
-> >
-> device_set_wakeup_capable() sets the @dev's power.can_wakeup flag and
-> adds wakeup-related attributes in sysfs.
+On 07/11/2024 15:57, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
 > 
-> Could you please help me understand why explicitly calling this function 
-> can be helpful in our use case?
+> Convert all platform drivers below drivers/memory to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
 > 
-> > -- 
-> > Dmitry
-Just following up on this patch. Could you please help me understand the
-reason for the change?
+> A few white space changes are included to make indention consistent.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+
+Thank you for the patch.
+It is too late in the cycle for me to pick it up. I will take it after
+the merge window.
+
+Best regards,
+Krzysztof
+
 
