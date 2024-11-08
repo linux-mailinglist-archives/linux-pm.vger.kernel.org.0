@@ -1,144 +1,116 @@
-Return-Path: <linux-pm+bounces-17232-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17233-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 015C59C26C8
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 21:45:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2B59C275C
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 23:13:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25ACA1C24088
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 20:45:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2A861F216C1
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 22:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9567820B806;
-	Fri,  8 Nov 2024 20:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0AF51F26F7;
+	Fri,  8 Nov 2024 22:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oUv6GFYh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ywgbcuzp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A671A1F26F4
-	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 20:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D81C1AA1FD;
+	Fri,  8 Nov 2024 22:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731098580; cv=none; b=EjkbJxPSB7WeZHYiVBgkqCixozibgKNrMln2zmBAiLsCBLYVnOstCXtX+QRmKiAmGN6mTddRnLtShGfzJ5Seb/iXtTZdJzyL4tERCKeckYjRTQxY6jQESfsh9dNtN2SF5QwHS69muWgqTZNtdEAJAZhyo1cuOKLS4IYpjMoS9Lg=
+	t=1731104005; cv=none; b=I7cMkP1wM8HVtCkTF0L00XJAwYSbYim7atK1FCfQMTwzE5wUtUr8x6z4lNPV5/36fu6YoNTIJ1xIJSzPQXPvWNQNrLkSlQWSMwAHbUryYwVDv6mqFS2FCK7NYPFbHrimCPaLNm7/bYVh8abuGgHgL54JJJFEJ/h2jQQ/Bo7VfRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731098580; c=relaxed/simple;
-	bh=NIGh/xa8vBmbgPLyU70Etun5Uy7YLNS7WA7j/MRtOkI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d6iQw2z1UWpiiTGsHLfpiMK4eAp43G7XAu1uVbTYHRjVFNwT6kY7Zoz0xpo0B3sbyzgRHg6HAxALCNLmHqr9Di0vqUbyFhtcC71F00V3FnVLS4kjfEvF91REWHJRaGlLmwN7lyYHm6T0JC+7nTYYmW8TUHS4A216N3uPHYSpvpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oUv6GFYh; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8FEYfB014252
-	for <linux-pm@vger.kernel.org>; Fri, 8 Nov 2024 20:42:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	VdJcdmEbuUjsz9W6dsG6F13BKeiSPurxezaypVBjUh4=; b=oUv6GFYhboRpAupQ
-	o1N+ky3RuUB/q4tQBmntvG7rlQ6rqEY2Eu/Ko74+7HK2GiTBtw0kVLWKBjJ6ebWq
-	YJNQHRJqix2lHQIVGHJGzpufDoF7K/dUKHh/EchecdGktjhKxHR201/WTbKPzLLN
-	rn02LMen3StTASNEaRib647Bb/a+/OGLegr7GLchz3m01Zh3+hrIUj+rlaLAyEvu
-	jCrDzXshGSdb5+5hFqBikgNaxfVVVFuoFgg2KVjxHi8z1CjSyh43hFcJZgvCcpVS
-	yaW3Qn/WANnfHbK12SMzMA9bTQWbRrhhLwqxLQge2gQXwQXV17cIm75u0LVyPtVp
-	rxnKKw==
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42s6gd2jym-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 20:42:56 +0000 (GMT)
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6d37d9868b8so6034136d6.1
-        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 12:42:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731098576; x=1731703376;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VdJcdmEbuUjsz9W6dsG6F13BKeiSPurxezaypVBjUh4=;
-        b=tVDzMV2qxFP97E38Eomfi3nPoTfx47kfwUo3JAsqXjzA7Tf2DlPeRv26GG9RVIsd9C
-         d9hF8V7G7B7xTjfqrhQL89m3AmQP6TlXyT69QLqP36qj12qaxMX9m2FRf4jMYJvIEU6e
-         zvet93MMyM+CfiUHYTIa9KnZnxmF/BLtcNwchgXOlPb0gyfx18AVWaD45j0pxFy3TWax
-         Zl1W9VKaCE8luhdbHEsYCYTuiQC2M5ZFwl8MFKCuFZk4lo1fX49Y1LqpGedZDtUzdrre
-         5dJC+sMq/M0cYdxq/2rtK65+nqOan/b99IuH0uYTpcIz6DdoH40z3kYNBv4rVlfRvyUu
-         KX2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWO6Eu1YnykfUnUhRThhteqfy3gUsHYGXpgjpw3+hjO9JKBW+r42ZgBvacYrTU6dzdM2zlm4kuvqw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YydwdeGUjB9QrrTgC1x6cU8ZhXmlYs6d2cvVKEbSOeL/Pc7eyKR
-	RckwcS88Nm0Grg01dXJeWuhnepwAZSmx8pSNhsuWg2bgn1R9BXx+PkfjondbADWUTJlfCW5x/s1
-	1aZ11FSVqSrBdJl5dCN61GFB8yeWiLdN1m/ReRbFHdS8vSBeqdYCmJr5gGQ==
-X-Received: by 2002:a05:620a:2a07:b0:7b1:4920:8006 with SMTP id af79cd13be357-7b331e4cf7emr229938085a.11.1731098575753;
-        Fri, 08 Nov 2024 12:42:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF2rPJ8TWctxcZMgE4zJgB8rPLFwzZPX76YJC1zO5aP6gngaNdRzDusbilO7NPwDQ+LrWVpzQ==
-X-Received: by 2002:a05:620a:2a07:b0:7b1:4920:8006 with SMTP id af79cd13be357-7b331e4cf7emr229936885a.11.1731098575404;
-        Fri, 08 Nov 2024 12:42:55 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03c7ce0asm2314144a12.85.2024.11.08.12.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2024 12:42:54 -0800 (PST)
-Message-ID: <cf054b7e-3ab3-4b33-a165-49287cac6515@oss.qualcomm.com>
-Date: Fri, 8 Nov 2024 21:42:50 +0100
+	s=arc-20240116; t=1731104005; c=relaxed/simple;
+	bh=g7alIN34O1EB60J+Qde0BhS8SjttSFElP0RMIcUQMfo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D/9pkKrHnntPsupQHqJ7KQm5OpTYEsEt9gUx9sp45H+bveR78VNw0jR88t8KmywEsdPbnp7XYFFr9vsA66/vtu61OGLGi++BqlxEtiCkwnbemMFc4fEbVJFhx8Ekbz3OrZ0cSnCwc9Vcicl0A/M+8tRXFvtEQnDA9WbpX4fsJ1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ywgbcuzp; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731104004; x=1762640004;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g7alIN34O1EB60J+Qde0BhS8SjttSFElP0RMIcUQMfo=;
+  b=YwgbcuzphhR4GPJmz63htgWhoOVl1Mz9HLPSkRdwmJSdzeSo7nhcnErG
+   2ZUUIbxqycCwPaoFP3BJYFyICpciNfMQ9Qng5srZdAWhDbUJKoCDJ+WYa
+   GeUFP2LRsCiBxIaIUyJPDK35jrUua8AppyUKUO9EXQLSwU8NbZ6TLV0qi
+   yTXurNQxKsC/2P5xAFHEsMDM5k1i59JH1lrn5zwjiqlWm/OlPPUIcqln6
+   UEP11oUjbYDtkU5qAMQ4m7Hbsx4foTR+mY8H9U0dD+LcfogKG7yg5enlG
+   dCG0F5nDLb9IlwSEUO+8LSB9zkBbF/GJ1qOpfkXO5JKuck1gufhkYGYaQ
+   g==;
+X-CSE-ConnectionGUID: rYkuAmp1Thu1114VsQ2clg==
+X-CSE-MsgGUID: UVoQlzxFRr2JtDUBdaJ7Vg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30858892"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30858892"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 14:13:23 -0800
+X-CSE-ConnectionGUID: tVXXtb8TSp6pvCm7Uhdchg==
+X-CSE-MsgGUID: lej9TPAxS22XbyNCUzUJVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="85376965"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 08 Nov 2024 14:13:20 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9XEE-000rpu-2J;
+	Fri, 08 Nov 2024 22:13:18 +0000
+Date: Sat, 9 Nov 2024 06:12:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+	len.brown@intel.com, artem.bityutskiy@linux.intel.com,
+	dave.hansen@linux.intel.com, patryk.wlazlyn@linux.intel.com
+Subject: Re: [PATCH v3 3/3] intel_idle: Provide enter_dead() handler for SRF
+Message-ID: <202411090651.FNnbtLe2-lkp@intel.com>
+References: <20241108122909.763663-4-patryk.wlazlyn@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 6/6] arm64: dts: qcom: sa8775p-ride: Add PSCI
- SYSTEM_RESET2 types
-To: Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org,
-        Krzysztof Kozlowski
- <krzk+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Shivendra Pratap <quic_spratap@quicinc.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
- <20241107-arm-psci-system_reset2-vendor-reboots-v8-6-e8715fa65cb5@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241107-arm-psci-system_reset2-vendor-reboots-v8-6-e8715fa65cb5@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: wK2ElJ-2-_PWKNi4ouLLj9DGLq5HGU3L
-X-Proofpoint-ORIG-GUID: wK2ElJ-2-_PWKNi4ouLLj9DGLq5HGU3L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- mlxscore=0 priorityscore=1501 clxscore=1015 spamscore=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=959 suspectscore=0 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2411080170
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108122909.763663-4-patryk.wlazlyn@linux.intel.com>
 
-On 8.11.2024 12:38 AM, Elliot Berman wrote:
-> sa8775p-ride firmware supports vendor-defined SYSTEM_RESET2 types.
-> Describe the reset types: "bootloader" will cause device to reboot and
-> stop in the bootloader's fastboot mode. "edl" will cause device to
-> reboot into "emergency download mode", which permits loading images via
-> the Firehose protocol.
-> 
-> Co-developed-by: Shivendra Pratap <quic_spratap@quicinc.com>
-> Signed-off-by: Shivendra Pratap <quic_spratap@quicinc.com>
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
+Hi Patryk,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+kernel test robot noticed the following build warnings:
 
-Konrad
+[auto build test WARNING on acpi/next]
+[also build test WARNING on tip/master tip/x86/core linus/master v6.12-rc6 next-20241108]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Patryk-Wlazlyn/x86-smp-Allow-calling-mwait_play_dead-with-arbitrary-hint/20241108-203137
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git next
+patch link:    https://lore.kernel.org/r/20241108122909.763663-4-patryk.wlazlyn%40linux.intel.com
+patch subject: [PATCH v3 3/3] intel_idle: Provide enter_dead() handler for SRF
+config: x86_64-randconfig-161-20241109 (https://download.01.org/0day-ci/archive/20241109/202411090651.FNnbtLe2-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090651.FNnbtLe2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411090651.FNnbtLe2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: intel_idle_enter_dead+0x9: call to cpuidle_get_cpu_driver() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
