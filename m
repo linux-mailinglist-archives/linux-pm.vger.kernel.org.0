@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-17213-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17214-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6929C21C3
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 17:14:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E7189C21F7
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 17:22:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A2E3B24B30
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 16:14:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF9B61C20815
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 16:22:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34271922EE;
-	Fri,  8 Nov 2024 16:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCA81922F8;
+	Fri,  8 Nov 2024 16:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RVyrzGRz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H+5hJ0KK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4811BD9E2;
-	Fri,  8 Nov 2024 16:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25A31917F4;
+	Fri,  8 Nov 2024 16:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731082464; cv=none; b=YHm9mekWenoE4Il/gKcHTB3VBF2uDw65Rf/2SArh6mogwhMPaFBL2h8jURiWb/FHGVGKMOcd4bXm/UC2fjLGXZ6cNmhiW4wQlq35u6plu5DIll91y3oYrH98/lP/l5yJrEANB65g+g4H+P1LJy7upDaSMCULaaTk9BDOK6/mLyU=
+	t=1731082889; cv=none; b=SI7BtwOOekGKTISkdQQJlh2HnKKAwPxmjCUJJXiTuDFvmedG8l88kuGTbWBRLhh2UsgEQ/dzo97kK6fBH2dOc4y//BQcg8qp+SOQaB/jm1iV02UJmkhCQ1CfeYv7P5+HAEjbnXzTNgkE3MCH60iGPtn4ApiumHI9JiKbCg1kerk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731082464; c=relaxed/simple;
-	bh=43Ia+a7MU+429mSA3hhjnIzSQdrT7VEYniLDvOPEEvQ=;
+	s=arc-20240116; t=1731082889; c=relaxed/simple;
+	bh=SIFUI2KPYBeRlWqno9FC1kLW+WIHiqFVJ6q4hBonfvs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=esoPGeJwZXtmjxcXX0m0HNzMKLe4BT+XtePF5x8bo/3rMIE/4MVeDcFR381k4XyIAREfRfw1Pm5VN+wW9lzX56NYt/e4auczcCJyhEbt09rTaQTm9BcysMAhPpZhTbO4Zi2MCaIP/XMgdCQyJeV3QXQF31XiTn2DyaubIQTpopg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RVyrzGRz; arc=none smtp.client-ip=192.198.163.18
+	 In-Reply-To:Content-Type; b=sTuQKXMRz4KL348t8fogXQ+WkSXYnKx59gJGucbOkEG6PCAEIB2Dr7hLN+VzXClsiyIt5/Kfjue2KEOgtZF0pbCb1Y7X4IlV/DrIu07BkF/pb3We0kUD0nm6JrYWm49PnmHJemBLbCchZ8wUADCFQ7zZbtApTHCWqJKAW+/HP7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H+5hJ0KK; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731082463; x=1762618463;
+  t=1731082887; x=1762618887;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=43Ia+a7MU+429mSA3hhjnIzSQdrT7VEYniLDvOPEEvQ=;
-  b=RVyrzGRzsWHg0ZZ7q2qc7TEcqGcVOYdSr3G658vSzS2P6i3WcRaJb/Ai
-   2OyeQp1iq2Ri65t2P/x76KfZD3v+L1yoeB5aXaJvgLD5f0ys1pb7YkqFq
-   T6y9p/l/HZfhf+7A1fMJEgiGtB+sbAVDWeMxZ4yKWhgJS9e/dS26yVgfY
-   h3O/eEG3u93MaXNaRAX5/UvuJ8zxpkonDlHkm8BUOAfoDRjGiUsFj6zaQ
-   sP87yn1CqLKcb4fR4cArdeCMsE+aZ0VyutZkvKQqlq42C+NuVsi/TY2zb
-   8J1gVF0mKqjcC53OhL8nNEpHzU2T0w0RRh11XXefUthRKGuQxLVodo6cz
+  bh=SIFUI2KPYBeRlWqno9FC1kLW+WIHiqFVJ6q4hBonfvs=;
+  b=H+5hJ0KKWmYuW6t6wUD7LIDSuRAgc4DU1/HnnN9jDC/rdjdzMvCRGIH1
+   8FZ3QMvuVibDGXWoq6ppmCGicCas0FNSLNT3IuIlB1pwy8zFJX6OWn6AC
+   0jIovrVuafEXGIf919gEFmoqjxfZNFpuqSeLExf51nsBV6nn5bhCP6sDs
+   AAWHaS2spDh6Xat2+ZaKPTkysmY8ylQOhzJO78ezEhajlfc7ZxX5+Fgqb
+   xwK8Y6vqWkR7F6i75yOuLmS0Mr7HbL5klE2YJ9eYC/5F6q03PtAeu/I+7
+   wg5P3Hb/00M3kaq/y7iRPOjWkyJOqRZoHENtn7ghp4fe44LYTbdaORc4l
    A==;
-X-CSE-ConnectionGUID: fNR10v0gTNyblG/E44cq6w==
-X-CSE-MsgGUID: dctZwBp/QsqS3uiE1+Qaqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="30386537"
+X-CSE-ConnectionGUID: 7gz1xMR4QPapvoDG9cuJCA==
+X-CSE-MsgGUID: wyZzz6b0TM62KfjWv764zQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="30370459"
 X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="30386537"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 08:14:23 -0800
-X-CSE-ConnectionGUID: Bjo465FrTj2bdIWxPHQZ6g==
-X-CSE-MsgGUID: Km6xKbgaRyi0l8MfaeqCiA==
+   d="scan'208";a="30370459"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 08:21:25 -0800
+X-CSE-ConnectionGUID: QlA99iofTtewEy5KcFmZVg==
+X-CSE-MsgGUID: Z+tzhDwYSo+qdURlrNj8Yw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="85773591"
+   d="scan'208";a="116492488"
 Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.124.223.66]) ([10.124.223.66])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 08:14:22 -0800
-Message-ID: <394fa854-41a9-4ad1-880b-629108d52b41@intel.com>
-Date: Fri, 8 Nov 2024 08:14:21 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 08:21:24 -0800
+Message-ID: <b6ab357c-1562-4035-ad3a-2159d2c8c1fa@intel.com>
+Date: Fri, 8 Nov 2024 08:21:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,16 +67,15 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] x86/smp native_play_dead: Prefer
- cpuidle_play_dead() over mwait_play_dead()
+Subject: Re: [PATCH v3 3/3] intel_idle: Provide enter_dead() handler for SRF
 To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  rafael.j.wysocki@intel.com, len.brown@intel.com,
  artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
 References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
- <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
+ <20241108122909.763663-4-patryk.wlazlyn@linux.intel.com>
 Content-Language: en-US
+From: Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
  oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
@@ -120,55 +119,94 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com>
+In-Reply-To: <20241108122909.763663-4-patryk.wlazlyn@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/8/24 04:29, Patryk Wlazlyn wrote:
-> The generic implementation, based on cpuid leaf 0x5, for looking up the
-> mwait hint for the deepest cstate, depends on them to be continuous in
-> range [0, NUM_SUBSTATES-1]. While that is correct on most Intel x86
-> platforms, it is not architectural and may not result in reaching the
-> most optimized idle state on some of them.
+> Intel's Sierra Forest report two C6 substates in cpuid leaf 5:
+>     C6S  (hint 0x22)
+>     C6SP (hint 0x23)
 > 
-> Prefer cpuidle_play_dead() over the generic mwait_play_dead() loop and
-> fallback to the later in case of missing enter_dead() handler.
+> Hints 0x20 and 0x21 are skipped entirely, causing the generic
+> implementation in mwait_play_dead() to compute the wrong hint, when
+> looking for the deepest cstate. As a result, package with an offlined
+> CPU can never reach PC6.
 
-I don't think the bug has anything to do with this patch, really.
-There's no need to rehash it here.
+This series has said multiple times how the old algorithm is wrong.  But
+it never actually _fixed_ the bad algorithm, only worked around it.
 
-The issue here is that the only way to call mwait today is via
-mwait_play_dead() directly, using its internally-calculated hint.
+Does mwait_play_dead() itself need to get fixed?
 
-What you want is for a cpuidle-driver-calculated hint to be used.  So,
-you're using the new hint function via the cpuidle driver.  But you just
-need the cpuidle driver to be called first, not the old
-mwait_play_dead()-calculated hint.  The new code will still do mwait,
-just via a different path and with a different hint.
+> Define the enter_dead() handler for SRF.
 
-The thing this doesn't mention is what the impact on everyone else is.
-I _think_ the ACPI cpuidle driver is the only worry.  Today, if there's
-a system that supports mwait and ACPI cpuidle, it'll use mwait.  After
-this patch, it'll use ACPI cpuidle.
+This effectively gets the mwait hints from ______ instead of using the
+calculation in mwait_play_dead().
 
-The changelog doesn't mention that behavior change or why that's OK.
-Also, looking at this:
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 9aab7abc2ae9..bd67959e5e8b 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -56,6 +56,7 @@
+>  #include <asm/mwait.h>
+>  #include <asm/spec-ctrl.h>
+>  #include <asm/fpu/api.h>
+> +#include <asm/smp.h>
+>  
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>  
+> @@ -221,6 +222,17 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+>  	return 0;
+>  }
+>  
+> +static __cpuidle int intel_idle_enter_dead(struct cpuidle_device *dev,
+> +					   int index)
+> +{
+> +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
+> +	struct cpuidle_state *state = &drv->states[index];
+> +	unsigned long eax = flg2MWAIT(state->flags);
+> +
+> +	/* Retruns only in case of an error. */
 
-> -	mwait_play_dead();
->  	if (cpuidle_play_dead())
-> -		hlt_play_dead();
-> +		mwait_play_dead();
-> +	hlt_play_dead();
+		^ returns?
 
-None of those return on success, right?
+> +	return mwait_play_dead_with_hint(eax);
+> +}
+> +
+>  /*
+>   * States are indexed by the cstate number,
+>   * which is also the index into the MWAIT hint array.
+> @@ -1303,6 +1315,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
+>  		.exit_latency = 1,
+>  		.target_residency = 1,
+>  		.enter = &intel_idle,
+> +		.enter_dead = &intel_idle_enter_dead,
+>  		.enter_s2idle = intel_idle_s2idle, },
+>  	{
+>  		.name = "C1E",
+> @@ -1311,6 +1324,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
+>  		.exit_latency = 2,
+>  		.target_residency = 10,
+>  		.enter = &intel_idle,
+> +		.enter_dead = &intel_idle_enter_dead,
+>  		.enter_s2idle = intel_idle_s2idle, },
+>  	{
+>  		.name = "C6S",
+> @@ -1319,6 +1333,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
+>  		.exit_latency = 270,
+>  		.target_residency = 700,
+>  		.enter = &intel_idle,
+> +		.enter_dead = &intel_idle_enter_dead,
+>  		.enter_s2idle = intel_idle_s2idle, },
+>  	{
+>  		.name = "C6SP",
+> @@ -1327,6 +1342,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
+>  		.exit_latency = 310,
+>  		.target_residency = 900,
+>  		.enter = &intel_idle,
+> +		.enter_dead = &intel_idle_enter_dead,
+>  		.enter_s2idle = intel_idle_s2idle, },
+>  	{
+>  		.enter = NULL }
 
-Is there any reason this couldn't just be:
-
-	/* The first successful play_dead() will not return: */
-	cpuidle_play_dead();
-	mwait_play_dead();
-	hlt_play_dead();
-
-That has the added bonus of not needing to return anything from
-mwait_play_dead() and the resulting churn from the last patch.
 
