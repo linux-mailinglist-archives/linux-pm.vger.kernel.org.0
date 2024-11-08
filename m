@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-17178-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17179-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 092909C16AA
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 07:58:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56ED39C16AC
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 07:58:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2344E1C2309C
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 06:58:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FC0A1F242A4
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 06:58:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D481D0DC0;
-	Fri,  8 Nov 2024 06:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902081D0E25;
+	Fri,  8 Nov 2024 06:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="DSetdHpX"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="GzqVrhrS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m6093.netease.com (mail-m6093.netease.com [210.79.60.93])
+Received: from ec2-44-216-146-168.compute-1.amazonaws.com (ec2-44-216-146-168.compute-1.amazonaws.com [44.216.146.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88D21D0E30;
-	Fri,  8 Nov 2024 06:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.79.60.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127721D0DC7;
+	Fri,  8 Nov 2024 06:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.216.146.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731049081; cv=none; b=eGpO4EKwxy1YeJ1nhXjOt8WjAmMjUqYGOYSdls3pImVzm73EcHtmYqiPp6Y0zTu/a4WLiYn8gt252JsGJOtiVZLC9wdelfPW3gh5smvvF8vTbCpLDlrG9u/osB/7Up70sk+LYqPIAOD7Gy4YpD3v2CRHATXF+/PZvrjRcI9s8QE=
+	t=1731049094; cv=none; b=XCXCNYWPcoyquok9wl7h5OBxaJNawF7vkKYNZLoB7Fh3OwCCEwzvh9/rBfhs02BddSGYV9CFuK1s5eGX5L5LRLA1nTXFk/BuE/capVqqokRE7dbTfxEU3QaqVTTSW799XjgW4bEnYXp8bLRal7Wnk9rfuYX4ANBgsB0cXxjRses=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731049081; c=relaxed/simple;
-	bh=UcJC9L9802eGFZM5sKRgW3Du9kKWPCcH1zwqSk3Tl2E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=rbFlmG29wgO+A0QfHCUpdcLKDv/gvebj9AezKUVnu+Xg+m8xPvJZqVKNfVagRB203kCnrhqZXvThTvJ0Bf0h9PoDbt0d5obOko2N1OBGro4I6UO8ymC07dzt3sH+G8+lT9jmMLWUUiz36robMxATvVYKKCcmwo3o1uI5BU7FY3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=DSetdHpX; arc=none smtp.client-ip=210.79.60.93
+	s=arc-20240116; t=1731049094; c=relaxed/simple;
+	bh=16F52qozRA5Om2mVI2Cu8/oXiuSk+3JvsgSJAfwHlFg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ILkR+mckmCQTiOTyD2a1BZup1/5BJG2gRIbTHVTH8L1f+vxLNT6wkcejoWuJHU+Yn/7Z7TWcWlnA+PCl4V2iPssUTMdeJzLUHw0mv1XQ2WYsWP0NPQ4Pw211WQMosL5a9KCn83ER7E1ml7BS6YzAbNgO8FFkbEaw8NusOVSo5+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=GzqVrhrS; arc=none smtp.client-ip=44.216.146.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 22d55c8d;
-	Fri, 8 Nov 2024 14:57:47 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 22d55ccc;
+	Fri, 8 Nov 2024 14:57:59 +0800 (GMT+08:00)
 From: Shawn Lin <shawn.lin@rock-chips.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -53,24 +53,24 @@ Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	devicetree@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [PATCH v5 4/7] pmdomain: rockchip: Add smc call to inform firmware
-Date: Fri,  8 Nov 2024 14:56:23 +0800
-Message-Id: <1731048987-229149-5-git-send-email-shawn.lin@rock-chips.com>
+Subject: [PATCH v5 5/7] scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
+Date: Fri,  8 Nov 2024 14:56:24 +0800
+Message-Id: <1731048987-229149-6-git-send-email-shawn.lin@rock-chips.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1731048987-229149-1-git-send-email-shawn.lin@rock-chips.com>
 References: <1731048987-229149-1-git-send-email-shawn.lin@rock-chips.com>
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0JCHlZPTUNCTUkaSUtMQxlWFRQJFh
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR1CTVYfT0IaTR0ZTUlNGk5WFRQJFh
 	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
 	NVSktLVUpCS0tZBg++
-X-HM-Tid: 0a930a90928209cckunm22d55c8d
+X-HM-Tid: 0a930a90c14509cckunm22d55ccc
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PSo6HBw4MzIjNCoPUSpCKwhD
-	Ci0wCQtVSlVKTEhKS09CS01DTUJKVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpDSk03Bg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OSo6IRw4MzIZCioqUSgrK00x
+	F0kwCxlVSlVKTEhKS09CS0NLTEhDVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlKS0s3Bg++
 DKIM-Signature:a=rsa-sha256;
-	b=DSetdHpXNXDwak1GGqzp4RY5M6CqTgfsKoF9DlaDV4FxCJqDmR2qyDXKTRun4/bxHzCENUzzqK+fXjcCie4MTCGJG+DqEbJ3wF0TtJux01lW3e/GJoEkD/kgoIy1QtTaF1WSgLCRDC4CcOxUDPzxE9QLq+4mo/4ZmO/WhdobHH4=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=2NyPYvYg2Dghh9vSnqVVMEZ1p9KuX17hf7zqDWcgQNg=;
+	b=GzqVrhrSU2Utj463fLTSS5yGJ+BtHdmPP1B1Ztdljdbf8Gnld1Aa5v1w/WtpiAUth/SlzoguaumLd0G59zigKXTVgyrITO9zbF/KKAtMVUxKNKXWel34MBXwND2vffI3QqRleeHxuV4jwfF4wsuHySsyDqhY6LOng5aZ99uxEb4=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=pMAlr3pzhcf2KZDKp9eFnavRLAmIbHd/sKcZqBP9xAk=;
 	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -78,62 +78,72 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-Inform firmware to keep the power domain on or off.
+These two APIs will be used by host driver if they need a different
+HCE process.
 
-Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
 ---
 
-Changes in v5:
-- fix a compile warning
-
+Changes in v5: None
 Changes in v4: None
 Changes in v3: None
 Changes in v2: None
 
- drivers/pmdomain/rockchip/pm-domains.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/ufs/core/ufshcd.c | 6 ++++--
+ include/ufs/ufshcd.h      | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index cb0f938..49842f1 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2015 ROCKCHIP, Co. Ltd.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 24a32e2..9d1d56d 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -4039,7 +4039,7 @@ static int ufshcd_dme_link_startup(struct ufs_hba *hba)
+  *
+  * Return: 0 on success, non-zero value on failure.
   */
+-static int ufshcd_dme_reset(struct ufs_hba *hba)
++int ufshcd_dme_reset(struct ufs_hba *hba)
+ {
+ 	struct uic_command uic_cmd = {
+ 		.command = UIC_CMD_DME_RESET,
+@@ -4053,6 +4053,7 @@ static int ufshcd_dme_reset(struct ufs_hba *hba)
  
-+#include <linux/arm-smccc.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/err.h>
-@@ -20,6 +21,7 @@
- #include <linux/regmap.h>
- #include <linux/mfd/syscon.h>
- #include <soc/rockchip/pm_domains.h>
-+#include <soc/rockchip/rockchip_sip.h>
- #include <dt-bindings/power/px30-power.h>
- #include <dt-bindings/power/rockchip,rv1126-power.h>
- #include <dt-bindings/power/rk3036-power.h>
-@@ -540,6 +542,7 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 	struct generic_pm_domain *genpd = &pd->genpd;
- 	u32 pd_pwr_offset = pd->info->pwr_offset;
- 	bool is_on, is_mem_on = false;
-+	struct arm_smccc_res res;
- 
- 	if (pd->info->pwr_mask == 0)
- 		return;
-@@ -567,6 +570,11 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 			genpd->name, is_on);
- 		return;
- 	}
-+
-+	/* Inform firmware to keep this pd on or off */
-+	arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
-+			pmu->info->pwr_offset + pd_pwr_offset,
-+			pd->info->pwr_mask, on, 0, 0, 0, &res);
+ 	return ret;
  }
++EXPORT_SYMBOL_GPL(ufshcd_dme_reset);
  
- static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
+ int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
+ 			       int agreed_gear,
+@@ -4078,7 +4079,7 @@ EXPORT_SYMBOL_GPL(ufshcd_dme_configure_adapt);
+  *
+  * Return: 0 on success, non-zero value on failure.
+  */
+-static int ufshcd_dme_enable(struct ufs_hba *hba)
++int ufshcd_dme_enable(struct ufs_hba *hba)
+ {
+ 	struct uic_command uic_cmd = {
+ 		.command = UIC_CMD_DME_ENABLE,
+@@ -4092,6 +4093,7 @@ static int ufshcd_dme_enable(struct ufs_hba *hba)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_dme_enable);
+ 
+ static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba)
+ {
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 3f68ae3e4..b9733dc 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1360,6 +1360,8 @@ extern int ufshcd_system_thaw(struct device *dev);
+ extern int ufshcd_system_restore(struct device *dev);
+ #endif
+ 
++extern int ufshcd_dme_reset(struct ufs_hba *hba);
++extern int ufshcd_dme_enable(struct ufs_hba *hba);
+ extern int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
+ 				      int agreed_gear,
+ 				      int adapt_val);
 -- 
 2.7.4
 
