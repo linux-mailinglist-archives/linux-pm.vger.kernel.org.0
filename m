@@ -1,155 +1,111 @@
-Return-Path: <linux-pm+bounces-17190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D049C17CD
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 09:22:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E38F29C18B0
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 10:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3326BB2453D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 08:22:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AE871F24697
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 09:03:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCFC1E1034;
-	Fri,  8 Nov 2024 08:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8781E0DCF;
+	Fri,  8 Nov 2024 09:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WqZ47e3J"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SVT1cdzd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA59E1E0E11
-	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 08:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9224F1E0B70
+	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 09:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731054082; cv=none; b=FaBQkW3VRPi9o0B4kqzTq+fjDOdiX1Lq1q/mfS0dpXjSok+86LN/mUcwbqMAbphr58aAlqlwF2d6de4VeI9ATN2trEH+iSz9woIOpQXsuLSUTGGK9bLbs6HEHytNBHsufmlw7t8s8RF/BmnEbjqWb7bXpb6WmHbbPdasTq+1Lps=
+	t=1731056595; cv=none; b=buLkI4THcu58gLCW6B35dr7xdtuoXb6XWAbF7VRtJxShSqaEAvlO6wa3avCK6QTlpDkQ3qKvPM0axN8UQ5tXpSb5dPvz0gntGyAmsqfUh/x2r/7986/thmuJ3ESBo9P7e96C30VxgTaqd36lM4oKZ+MMakw8KUPrB56H21rOhPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731054082; c=relaxed/simple;
-	bh=eWjhfFl0lxuSZTAzDN6LrwZdoPNmukVNi4I1AQ4yInM=;
+	s=arc-20240116; t=1731056595; c=relaxed/simple;
+	bh=mM1q+PpNsdlYYSy0+MS7uMGw3FOxO3A/2cgbrpd+lLQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nw1UGdSiwttWPgRjNNsqvdVCo1Mtzp95hFtUDXKIYjc/r70EVmnYjfofbGu8g8ltrBCp0TTaYT61FbT/ZqLBoZ1zxFxX53WM5lu7ht0XCwv3zdTCVz1VP1yu0f/BBvnqHnw30/eeXcWFtLfQMJJ1/I3kBHsvrkQrP4ofhLoIA/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WqZ47e3J; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539e63c8678so2008847e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 00:21:20 -0800 (PST)
+	 To:Cc:Content-Type; b=WX8mCeiFBGFy9SerpfSjd3r7IP9bxEhLvxQSCqJDghPtzWZQEEdjwKIUhBxrOkBegooy5WduWBjy6hQyHz6LZZBxGeotDXi85Nyzk8xRbcvBzvJA9nKYBpDdTeuOgFDj/z3WFVDMPfN6gh1U9X4dzOoMOBD+5rKN5IM4szRHRHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SVT1cdzd; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539e690479cso1801871e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 01:03:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1731054079; x=1731658879; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1731056592; x=1731661392; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j4o7fhe2V5dd+UE3dA/uAT0KHoDiGtLUhf89NGPnqv0=;
-        b=WqZ47e3JDJW0cVbUiikMLQJF947kEb9C96g9AMeL08ZaL5TXYfRJud4fKZWxYDu2Dx
-         3HVpRvYhUgGw07OX30bSleJWjtWuj+MoaeaO4sxZ3PSfwEo6Ibb+C67wqN1WkNgt2ko8
-         tCeKqFk0JkCxaCrpTihYNPkZwoJS4hUK06A7w=
+        bh=mM1q+PpNsdlYYSy0+MS7uMGw3FOxO3A/2cgbrpd+lLQ=;
+        b=SVT1cdzdHhk8J4vvzGfl0QSWqf9+mWHG3SdlfAcDe9PjrxutdF5yiF8H95Z1PFjvVR
+         GTmsbsD0XnFwCGEKTzto5xvS2OxItki3d1o1cm8eUr+gZLdGA+sAFnuHWk3w8sbcNC+3
+         b9wLr0OBz1fgjWSD53mNY6LbkFSyahQAcf4Z4qO63FdHY+L+7DHZMtDLrMbnQ+94DPGK
+         CAQYHFb5eiloltk+gXe+2L3cxVcYB1LOHMX2k3f+acxunE1gpqKlW7is/68uX04CrIFU
+         fWwYS5kjAFp6Ts3Q1F+ya1tUp4jTozE573WTZiPx1j/fvRj2+FnTUFy5htVNjJjBSVrq
+         Y+1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731054079; x=1731658879;
+        d=1e100.net; s=20230601; t=1731056592; x=1731661392;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j4o7fhe2V5dd+UE3dA/uAT0KHoDiGtLUhf89NGPnqv0=;
-        b=rnZEMy49ikoEs85Jn+5+MGhoDgZ3Tqcc6P6mXOgeyL+8olnjuM5607hGUpFs4AgNiT
-         +HBowOK/xgn89X/Rux2m95+Uv63OWEBtgmgnUKbWXpBq1gz+T5vk7+20Vh4xPRQfnIOH
-         /mKiTv6cho8Ct5bLakLL8T8fhP2h5jXdDqY1eMSTVIDkIX9PTk67XIaTRSMDsivQQtO4
-         kmLy5C3zO1IWj2GzcvKppSkn4JkJ28bdmnpbFz6jkRmWXbUPgh01eGIQ0z1W+UmAFMHv
-         246sz21zcu7GV8dBJBCQJcKmpPexvXQ+akoqrQiQpGMwqbaBwOBgApKsZgr2UxRuW1c/
-         9+eQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVsSJhGeqKjMcOqYEuEH9Ucz16yszHbbK6tpVtZjEati0TftywAVCmlsGHKEsQRPF4F0ztPxyOnDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM4fOHI6WuOUO2JBwfLeuCbzgPVlOC4R2FbKURN7sOsJ3BJsEW
-	KGaPqL4l8NGZxS94wTo2T+6gyAM84Pdp7RLMyt6Kh4+4bcZthvoZEcNuVLXPWvUNU/WzpT5y+X6
-	cmDBr18La5g3dF1r+f4RMs/fcjyG4V4wP/kjL
-X-Google-Smtp-Source: AGHT+IE2S4gjvQOpSK8kJaaKxLV5rdskh4etefXYjl17eLQ1scFoBJFDNNCqeEcFChM7or3BIVTeHmM7tSYZlf0ID34=
-X-Received: by 2002:a05:6512:ac3:b0:539:e513:1f66 with SMTP id
- 2adb3069b0e04-53d862fe1cfmr903159e87.37.1731054078864; Fri, 08 Nov 2024
- 00:21:18 -0800 (PST)
+        bh=mM1q+PpNsdlYYSy0+MS7uMGw3FOxO3A/2cgbrpd+lLQ=;
+        b=iSt7TkW9/6y4emKdj55tRIOFCcWaKfALTmgOba7q8O2+vBX9MIx0uDXyqcJpX6ilOG
+         otPrjhPi69Ys+uFJDZDYXQMVC0jom8VQx9r9hhgAN4PChpexwEHx26w9whuwCGh42z2k
+         /y31K5BeaPk+SsMog3+L0l+g0IbgICpvNdAjBIPnqPwIqCR07g/2QgPwrkOaL6wMMdV3
+         uOfMmgyr+4G8RBbW7G1zdehhNDPSAQvdFp5ekTFgc7Q8hPdgbCtAhPnDpJiwYxjTVz53
+         lRifDuZ0ezOlCI47//IG+A+IRovYU+6ANHhakpJmoNL7bQCOazTE76y5H/vHpdRffXOJ
+         lrbA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAI+e1RpgHKAuhDIhVAifoSPSmtDpAUPm6S6vISlruhwKMFiK5Fx2A0OqEtR+hzVPaa0Ep8aB2xQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJS1DLSrhTRpQAshN5EDAkW3QUz2oBMg7ocuDgswHwedWREtA7
+	Gk9MBSYTKyFAg9sMsEZRJC5blnz12BGr5d7mjfbeV3rAZgIHfRcoaDyZB545QMhxf3UYtdtOqCr
+	BRehKzIId/mEIp9zLHwa8dzZq1F18kIopl8fMZA==
+X-Google-Smtp-Source: AGHT+IE8znKU2mORtpqCkmsGs3P+cyt3qFPqf5rFKSs3v09PAE6qN06MrjzRnmT+Va62FCJoM1OHaIoEnk1727lsx7Y=
+X-Received: by 2002:a05:651c:554:b0:2fb:4ca9:8f4 with SMTP id
+ 38308e7fff4ca-2ff20209f08mr9538661fa.23.1731056591608; Fri, 08 Nov 2024
+ 01:03:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241108-lvts-v1-1-eee339c6ca20@chromium.org>
-In-Reply-To: <20241108-lvts-v1-1-eee339c6ca20@chromium.org>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Fri, 8 Nov 2024 16:21:07 +0800
-Message-ID: <CAGXv+5EOcg0pQxj=iOn_ff8-t6pyGKwemA9mdn=VCpxg6Uzt+g@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Switch to IMMEDIATE_MODE
-To: Hsin-Te Yuan <yuanhsinte@chromium.org>, 
-	=?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+References: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
+In-Reply-To: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 8 Nov 2024 10:03:00 +0100
+Message-ID: <CACRpkdamugexe6y24Tk2fDYPP_t7QLynibdGQrUMFMwF4y90cw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] Add MSM8917/PM8937/Redmi 5A
+To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
 	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, linux-arm-msm@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Dang Huynh <danct12@riseup.net>, 
+	=?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 8, 2024 at 2:51=E2=80=AFPM Hsin-Te Yuan <yuanhsinte@chromium.or=
-g> wrote:
->
-> Currently, MT8192 cannot suspend with FILTERED_MODE. Switch to
-> IMMEDIATE_MODE will fix this.
->
+On Thu, Nov 7, 2024 at 6:02=E2=80=AFPM Barnab=C3=A1s Cz=C3=A9m=C3=A1n
+<barnabas.czeman@mainlining.org> wrote:
 
-Probably should have a Fixes tag.
+> This patch series add support for MSM8917 soc with PM8937 and
+> Xiaomi Redmi 5A (riva).
+>
+> Signed-off-by: Barnab=C3=A1s Cz=C3=A9m=C3=A1n <barnabas.czeman@mainlining=
+.org>
 
-Also, Nicolas previously reported that the threshold interrupts don't
-work with the immediate mode [1], which is why filtered mode was used
-in the final version.
+I merged patch 1-4 from the v2 series, don't think the have any differences
+in v3.
 
-
-ChenYu
-
-[1] https://lore.kernel.org/linux-mediatek/37680c5e-e61c-410b-b48d-82991420=
-0e4a@notapiano/
-
-> Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
-> ---
->  drivers/thermal/mediatek/lvts_thermal.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
-diatek/lvts_thermal.c
-> index 1997e91bb3be94a3059db619238aa5787edc7675..daad52f14fc03d0c4131f2ffd=
-f3eb6b49a4a43d0 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -1541,7 +1541,6 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
-data_ctrl[] =3D {
->                 },
->                 VALID_SENSOR_MAP(1, 1, 0, 0),
->                 .offset =3D 0x0,
-> -               .mode =3D LVTS_MSR_FILTERED_MODE,
->         },
->         {
->                 .lvts_sensor =3D {
-> @@ -1552,7 +1551,6 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
-data_ctrl[] =3D {
->                 },
->                 VALID_SENSOR_MAP(1, 1, 0, 0),
->                 .offset =3D 0x100,
-> -               .mode =3D LVTS_MSR_FILTERED_MODE,
->         },
->         {
->                 .lvts_sensor =3D {
-> @@ -1567,7 +1565,6 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
-data_ctrl[] =3D {
->                 },
->                 VALID_SENSOR_MAP(1, 1, 1, 1),
->                 .offset =3D 0x200,
-> -               .mode =3D LVTS_MSR_FILTERED_MODE,
->         }
->  };
->
->
-> ---
-> base-commit: 906bd684e4b1e517dd424a354744c5b0aebef8af
-> change-id: 20241108-lvts-f7beb36efc59
->
-> Best regards,
-> --
-> Hsin-Te Yuan <yuanhsinte@chromium.org>
->
->
+Yours,
+Linus Walleij
 
