@@ -1,105 +1,123 @@
-Return-Path: <linux-pm+bounces-17201-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17202-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5375D9C1CDD
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 13:24:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46AE99C1CF8
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 13:29:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2155B284E53
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 12:24:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 792531C221D1
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 12:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2880E1E7C03;
-	Fri,  8 Nov 2024 12:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76AE31E7C17;
+	Fri,  8 Nov 2024 12:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZI2Pr8n3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VvvJLRt0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC511E47CE;
-	Fri,  8 Nov 2024 12:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1567C1E631B;
+	Fri,  8 Nov 2024 12:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731068655; cv=none; b=J1X3AEoyfdV66oCCe2HAUiEYCq0k7/fra2IKOG81dnurLuFE8m35lFJU0/hI2zhd7CauuRatXdXa5q/fEQ/nl7HhA7ClgS2D3+QPJMDA8+3MZopiLYmnMIfbtya4SgRkkoMw7lLK8jlETfzgD7p4Os4kUQzDodVprnuNX3wRC78=
+	t=1731068968; cv=none; b=e/Y4IGKMmoYqyPu9jEt4/+mxNZJhpHSAzVuZE8TlhsZw1MgBfy/DR+gLDbbjGM5RG+t0cl/6guAh74gYpV331k8SPA/nKtZM/T/JhFKcr8bNJ75qc9XDvF4hT2wUk9hdGpkXRY+I0dKp+1O9vfp4LnuyGk8g9POE/QQML7JncBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731068655; c=relaxed/simple;
-	bh=ysuLhuMYEEC7oX4y0iwjBEgPL1C/5lpgDLTDYdB0KFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W07JqtE7jol6PHptWAQmdrferfjMTiOA7UtB5P18R42c2KurGwr+I9c0lHYfkiMDcQ+bJ8ugVrTxmjzdT3GG9AhrB7SaFTXhDxADJ0p9gZS/Iae9qZROVRZAFEUws8QLMXgPcxmYdLhIjW5imvW/XBUlQ08poC8aOTPV84QKDQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZI2Pr8n3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A0EC4CECD;
-	Fri,  8 Nov 2024 12:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731068654;
-	bh=ysuLhuMYEEC7oX4y0iwjBEgPL1C/5lpgDLTDYdB0KFs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZI2Pr8n3D33cVl/heubKCb1AtALRbMn0WDX2jXxKZvqNOBSAr3+XQKZPF9yNCFWrZ
-	 Wf1wLykw0HBLbfov4EzKLHUQhk4XEdKt02QUbFNxvCbA+mZvTFybivzwlPM668X4PU
-	 1bd9DSyVEYXsTHUazZinuQ3i5j7DXLfR3H/3GC5f14Fu02esA6XLSJhCH5aAS5h/Vr
-	 NUXSBwWbCjBob32hiPpy3Nb/j627PV1BP/U4adaBUaTdKHHR7FVCdEUmg4DqihjvRn
-	 ntTXDLYVW5mQOddiSLgh3hIOUlcJI36fwRfzNOUXOj/HepNR2VEByg33eFfiOmtc8r
-	 2/wyK8i0RTl1g==
-Date: Fri, 8 Nov 2024 13:24:09 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: =?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
-	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev
-Subject: Re: [PATCH v3 06/14] dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
-Message-ID: <ufamoryw2k3oquvusqzs2e7ixu6iptfbpmdevqthbps5w7szw3@6c7enohqv537>
-References: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
- <20241107-msm8917-v3-6-6ddc5acd978b@mainlining.org>
+	s=arc-20240116; t=1731068968; c=relaxed/simple;
+	bh=Ptq1/Or31/2/hXiMkSLK127y6Z9IZ9cpgbVlnI5kYd8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eI4YTpEfI10ub7KmzFSVLFc5XIFPrl04dLsFsgwnDEVCtueK1aXBdhoWxYif/viXpwFT/n3btYMuUeWnK7xMhEVzIDU4b5f14sYBqlCddXdQ2gVuB6VYsKze1fvinyPqXGsVxtgXNkb4vYbq569pfh+RJ0gg6xK2LaEYm8ENXOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VvvJLRt0; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731068967; x=1762604967;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ptq1/Or31/2/hXiMkSLK127y6Z9IZ9cpgbVlnI5kYd8=;
+  b=VvvJLRt0njKIpRRYU3rvdsHiLdPojc32LR9XlOMQ9gYCK3i9s64NFg94
+   km7VEalSfAR2LWpUfLcYftuNvrY6mmp5Y+v2DrWEpdpePStD/FrSw+iMV
+   eo057TE2ZjA3t3xerr/wIaN0nMGjhb1C/zrrf9ON+gJ4UFxLSVEB4bZHl
+   VI6uO+JiB86Tf33CDdWQdF8hR0QEuv6enFaTMMTxUUPGLKFMf/y4eZ0JS
+   ovd/aqXACPjUcHR2Nb84gd44ZSlM4GMn6mYQ3ZLbBYVVJKRCirvDW94HI
+   dkNjbS6/Ao+HmtpKZ228N/Rx4Eldmma5br4Vx9/JW4Kt4R2ATDM7KDX3g
+   Q==;
+X-CSE-ConnectionGUID: DcC/AIQuQKmbg+rA9EIG6A==
+X-CSE-MsgGUID: 80nDfHnpThehmkrSlK226A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53510342"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="53510342"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:29:26 -0800
+X-CSE-ConnectionGUID: HQ7xgfSIQLeq7++bfzcrmQ==
+X-CSE-MsgGUID: VMXkSuMUQtq4xCaUxLnEGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
+   d="scan'208";a="85920976"
+Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.89])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:29:24 -0800
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rafael.j.wysocki@intel.com,
+	len.brown@intel.com,
+	artem.bityutskiy@linux.intel.com,
+	dave.hansen@linux.intel.com,
+	patryk.wlazlyn@linux.intel.com
+Subject: [PATCH v3 0/3] SRF: Fix offline CPU preventing pc6 entry
+Date: Fri,  8 Nov 2024 13:29:06 +0100
+Message-ID: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20241107-msm8917-v3-6-6ddc5acd978b@mainlining.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 07, 2024 at 06:02:47PM +0100, Barnab=C3=A1s Cz=C3=A9m=C3=A1n wr=
-ote:
-> +$defs:
-> +  qcom-msm8917-tlmm-state:
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configu=
-ration.
-> +      Client device subnodes use below standard properties.
-> +    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this
-> +          subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-3][0-3])$"
+Applied suggestions from Dave and Rafael.
 
-That's not a good pattern, unless really gpio129 is not existing?
+Because we now call a smp function, we have to have ifdefs for
+CONFIG_SMP or rely on mwait_play_dead_with_hint to return immediatelly
+with an error on non-smp builds. I decided to do the later, but maybe we
+should return -ENODEV (or other error constant) instead of 1. I am open
+for suggestions.
 
-> +            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
-> +                      sdc2_cmd, sdc2_data, qdsd_clk, qdsd_cmd, qdsd_data=
-0,
-> +                      qdsd_data1, qdsd_data2, qdsd_data3 ]
-> +        minItems: 1
-> +        maxItems: 16
+Removing the existing "kexec hack" by bringing all offlined CPUs back
+online before proceeding with the kexec would make it even simpler, but
+I am not sure we can do that. It looks kind of obvious to me, but for
+some reason the hack exist.
 
-Best regards,
-Krzysztof
+Changes since v2:
+  The whole approach changed, but there main things are below.
+
+  * Split mwait_play_dead (old code) into two parts:
+    1. Computing mwait hint based on cpuid leaf 0x5
+    2. Entering while(1) mwait loop with "kexec hack" handling
+
+  * Prefer cpuidle_play_dead over mwait_play_dead by reordering calls in
+    native_play_dead.
+
+  * Add implementation for enter_dead() handler in intel_idle that calls
+    executes old mwait_play_dead code, but with the mwait hint from the
+    cpuidle state table.
+
+
+Patryk Wlazlyn (3):
+  x86/smp: Allow calling mwait_play_dead with arbitrary hint
+  x86/smp native_play_dead: Prefer cpuidle_play_dead() over
+    mwait_play_dead()
+  intel_idle: Provide enter_dead() handler for SRF
+
+ arch/x86/include/asm/smp.h |  6 ++++++
+ arch/x86/kernel/smpboot.c  | 29 ++++++++++++++++++++---------
+ drivers/idle/intel_idle.c  | 16 ++++++++++++++++
+ 3 files changed, 42 insertions(+), 9 deletions(-)
+
+-- 
+2.47.0
 
 
