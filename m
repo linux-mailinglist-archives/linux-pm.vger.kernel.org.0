@@ -1,127 +1,142 @@
-Return-Path: <linux-pm+bounces-17230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17231-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B7B19C260A
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 21:03:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53EA19C26C2
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 21:45:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C43331C21997
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 20:03:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EB81B23A1D
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 20:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9031AA1DB;
-	Fri,  8 Nov 2024 20:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02001F26EA;
+	Fri,  8 Nov 2024 20:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PEmaQGka"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="msVIlfGJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0771A17A5BE;
-	Fri,  8 Nov 2024 20:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2A51F26CE
+	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 20:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731096208; cv=none; b=MNn/zHXMyqa+qkYw1vPQ+ZPrvfkTLeXw79xuGbdszNPDidw2WsW1s7bqD+T3/1VybCZWc54t6JUCNK3wjdXZvpixTej/VQEI/51gviNyfd35kup1fLQBiOG9O1HTLtVfydFdtVQamb09b9wLzmozYQkI/lxuOTe24AOKiIXJ6Bo=
+	t=1731098560; cv=none; b=G/yDle/oaENdPXBEmMkzDruy3EfekqOA/T7ipW2nGjvqH31Hlcc+TM/ndWl0euaERp8KlEEIHclHWZcuq7LNLp8Kw/X/17MdWwvkK7SaUbSe1yXE6+0FoTRBSiP3Cm1ABPaxP960We558rO/18MzF6zC8Jll2uROQmi0KNE+x2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731096208; c=relaxed/simple;
-	bh=39ZXVOkYUevo40/LbyNDLW7yUbY/BTJ3rbRlDOBCdyI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=mwTN430Z6djB0A5RMa89lFFje89ZAjWxdpfmYR8i/fdJplJrwf+o6wD1gQNpd2X66H7SBvw9/z4rlqq7zRqooF07YLw4bGpjT599uuIZ+SggHfv3AlvgPuOC8ChUjSbhEmlwEuwWPVEAZgPo/kMklH0X730woEBPlmufe3JZxak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PEmaQGka; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0DDC4CED2;
-	Fri,  8 Nov 2024 20:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731096207;
-	bh=39ZXVOkYUevo40/LbyNDLW7yUbY/BTJ3rbRlDOBCdyI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=PEmaQGka79zde/MQNV5L60eQF2TU9ZQ1TgxTn1gfnLnvr/ylZBlrjX2mzCeYyU5WY
-	 NgVREdqCGUG4fyy1OscilHoZ2iIq3rphz1RiMiIz0gDDeo+2leWVpBO8Ea7mvxMdHw
-	 xr98COjNBkyaF+JQX2bx4eskHMPTH7QkqZ8476ABrTDPbeCEsTkVoD362QhumT+8kv
-	 QYmDmY1DyIrRpAhftJcDZW3pewDPG1mngnggL2IsWrhrogxfna9BEKQawwqMTLDWyQ
-	 nac9EOtmyYsCfXlKoeWhkRuN2waU7i/JUazwrA8WpOE7G4xUSV49uGNrrUrh/Q/AFp
-	 lw0YuOY9TFuzw==
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e2a97c2681so2030811a91.2;
-        Fri, 08 Nov 2024 12:03:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVgmjgqY3b6M/Jd12Gi9gu6tPfLantjKeP1pL+sK5KS3pAVHIlHXyxoH3me7EDv0yilQP9i4vTa5whSUps=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6WZtaCgSItySnF72kSzph9E5+h1juW64zzQIENxhgFKhrnTqC
-	lUUlKA66zTMIIB7OuNvbKzF0lU8AhmXROiptfrdkJbL0tYpH0cZframF3KbePLFLrVoweldLu4L
-	0e4vMmvB7XFZb9AYyEXrV5RNOuyg=
-X-Google-Smtp-Source: AGHT+IEEG+im2jr+Mad2TCq7MjI1r5xHSj/ADqT6wgUc9AwhyF2DpzJAPt0CknrZonhFZvLqHOS2SLUu+70VyKg9fFQ=
-X-Received: by 2002:a17:90b:288e:b0:2d8:e524:797b with SMTP id
- 98e67ed59e1d1-2e9b16aaf31mr6327832a91.18.1731096207453; Fri, 08 Nov 2024
- 12:03:27 -0800 (PST)
+	s=arc-20240116; t=1731098560; c=relaxed/simple;
+	bh=1pGppec8DWHYLSw8JbIxLQYVhHnp1a3bUK1q0iqJ0Ow=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CJI11qG22kqBpSNozucYcICtPOs0MSLHS6QyHwceLDNcZOdnfN9Cz7mp2JywXCyc4jL24QTgzh35EHxmxo+XUgn/2TDkQ/FC0oU0xjGselomdx/dEvvJ6yGUHewWr5ZNXYGEIEPe74Nn36gIrIerJhtl7nRWoZ3Yaeph/nTiBrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=msVIlfGJ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8E8thM028587
+	for <linux-pm@vger.kernel.org>; Fri, 8 Nov 2024 20:42:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Cs4riM3bHa8k5Bz+RTTdkcSvQ4WfTHc0avDjKefuDVE=; b=msVIlfGJmYYq4RsO
+	Bts3cVJc41YLj/q+wQ4jlIlKXERWkayuE7XW7C2biT6xHcTD49tB5Qm0VvgNppsN
+	6kAcfPGUPNydfjEiUVNOi98Zg6LNLNE3K0CN8hLinDzZ2d56mQLAzcgo2FqfZafO
+	S7GU6Fo0sOUT1+QMt2gSZL3VvkrM1BrVen0dUHceH/UXTYbAjuIT85DWn+4a6+35
+	0Yk6bxhuSU7wBD5GZ/mCmiF6cACO3TjAsPTH9tnxyAV9wdtytEymrwm+otESx4aj
+	tM5uWjSLnGLdRZmlVLD58i0Z/GLnUi/Tx3MOAk7AQ5WMj9gunM/H1Xzfbfp7zzqx
+	J5y1HA==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42s6gdak8m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 20:42:37 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6cbe993f230so7533826d6.3
+        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 12:42:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731098557; x=1731703357;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cs4riM3bHa8k5Bz+RTTdkcSvQ4WfTHc0avDjKefuDVE=;
+        b=Fx9DKLqI1LnLNzsvIgprSv/yOtudoFS4vboijH1t4IfNvnSaHS3RYllVuKQCrk2HIP
+         caW41vxdaXwxkYfHVuDENWEJr2zWPrWgR4gg4TX8lAFXUG7T1USYr45xGWRuok5jxLQ1
+         G/Pc13xHf196fuuXSomWCX1zWer2613fV7tok4/B0cR3lI4XzIfNu7EHKfafCX9ImUxR
+         SdQzWdlGf5TO6gAHBc2vueAoJhI3qftWUHrTaq9vs9hCaL60uSf7RloK80hCbUXFEPDB
+         LeheFDrfG1Enf7cERn7CYjUybGrTiyJLsFSJ/Cwi3Q+HFWr+ceXl8NoACZuxdpK2H3CP
+         MXNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWu2Nea4PSBCJRFtneYopIREWDJKTLj/bIwBXweqOfm7HldkYSTYpOk7du8zsb6YadZd5qAr2v8YQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuwoWlfAjjcMRzJT3asUl4SyRZLwjAHoqR39Jsg2Wp01eOFRGi
+	41Y9oytgycaRsKclkxAQWfHxMbrLeRvz34NF2up2J0yVR+3geeYs/OEiZhKHWSVRzWLDTzrBElG
+	vyyMUZVoki4dYEkneL9SJ0W+DDD0gbzs3jBVcAhROmii/ALxeotLlvhF23g==
+X-Received: by 2002:a05:620a:2995:b0:7b1:aeb3:8cc8 with SMTP id af79cd13be357-7b331d473f2mr259703985a.0.1731098556954;
+        Fri, 08 Nov 2024 12:42:36 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHmGYROupge46jG1nBI6/BcoZ4PyhzcR055xXlljdy1aNTPHHNIcEdgg6Cg0UU3ilkctF1xDw==
+X-Received: by 2002:a05:620a:2995:b0:7b1:aeb3:8cc8 with SMTP id af79cd13be357-7b331d473f2mr259703185a.0.1731098556608;
+        Fri, 08 Nov 2024 12:42:36 -0800 (PST)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0dc56f1sm275188566b.92.2024.11.08.12.42.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Nov 2024 12:42:36 -0800 (PST)
+Message-ID: <1c5b3bc1-0e35-45a7-9895-27e3b4982426@oss.qualcomm.com>
+Date: Fri, 8 Nov 2024 21:42:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 8 Nov 2024 21:03:15 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h1JmxJSeR6sOAfMhmdPLVzHx+wV4dE_HyhoqfLs9Zmvw@mail.gmail.com>
-Message-ID: <CAJZ5v0h1JmxJSeR6sOAfMhmdPLVzHx+wV4dE_HyhoqfLs9Zmvw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.12-rc7
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 5/6] arm64: dts: qcom: qcs6490-rb3gen2: Add PSCI
+ SYSTEM_RESET2 types
+To: Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org,
+        Krzysztof Kozlowski
+ <krzk+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
+ <20241107-arm-psci-system_reset2-vendor-reboots-v8-5-e8715fa65cb5@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241107-arm-psci-system_reset2-vendor-reboots-v8-5-e8715fa65cb5@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 6d9rMv-y1TxRmXUpqvCXVqmscZgiiqRL
+X-Proofpoint-ORIG-GUID: 6d9rMv-y1TxRmXUpqvCXVqmscZgiiqRL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxlogscore=892 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411080170
 
-Hi Linus,
+On 8.11.2024 12:38 AM, Elliot Berman wrote:
+> qcs6490-rb3gen2 firmware supports vendor-defined SYSTEM_RESET2 types.
+> Describe the reset types: "bootloader" will cause device to reboot and
+> stop in the bootloader's fastboot mode. "edl" will cause device to
+> reboot into "emergency download mode", which permits loading images via
+> the Firehose protocol.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
 
-Please pull from the tag
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.12-rc7
-
-with top-most commit 5469a8deac05391781bcd27e7c40f2c35121ca09
-
- Merge tag 'thermal-v6.12-rc7' of
-ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
-
-on top of commit 59b723cd2adbac2a34fc8e12c74ae26ae45bf230
-
- Linux 6.12-rc6
-
-to receive thermal control fixes for 6.12-rc7.
-
-These fix one issue in the qcom lmh thermal driver, a DT handling
-issue in the thermal core and two issues in the userspace thermal
-library:
-
- - Allow tripless thermal zones defined in a DT to be registered in
-   accordance with the thermal DT bindings (Icenowy Zheng).
-
- - Annotate LMH IRQs with lockdep classes to prevent lockdep from
-   reporting a possible recursive locking issue that cannot really
-   occur (Dmitry Baryshkov).
-
- - Improve the thermal library "make clean" to remove a leftover
-   symbolic link created during compilation and fix the sampling
-   handler invocation in that library to pass the correct pointer
-   to it (Emil Dahl Juhl, zhang jiao).
-
-Thanks!
-
-
----------------
-
-Dmitry Baryshkov (1):
-      thermal/drivers/qcom/lmh: Remove false lockdep backtrace
-
-Emil Dahl Juhl (1):
-      tools/lib/thermal: Fix sampling handler context ptr
-
-Icenowy Zheng (1):
-      thermal/of: support thermal zones w/o trips subnode
-
-zhang jiao (1):
-      tools/lib/thermal: Remove the thermal.h soft link when doing make clean
-
----------------
-
- drivers/thermal/qcom/lmh.c   |  7 +++++++
- drivers/thermal/thermal_of.c | 21 ++++++++++-----------
- tools/lib/thermal/Makefile   |  4 +++-
- tools/lib/thermal/sampling.c |  2 ++
- 4 files changed, 22 insertions(+), 12 deletions(-)
+Konrad
 
