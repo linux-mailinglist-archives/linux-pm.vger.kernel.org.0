@@ -1,78 +1,81 @@
-Return-Path: <linux-pm+bounces-17205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14AE49C1CFE
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 13:30:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E1299C1E8F
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 14:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7313AB243D4
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 12:30:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F15552823BF
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 13:52:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54AC1EABB1;
-	Fri,  8 Nov 2024 12:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4851EBA19;
+	Fri,  8 Nov 2024 13:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="As/Zb1/X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NOlavDiE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3554F1E909E;
-	Fri,  8 Nov 2024 12:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097721E47A2;
+	Fri,  8 Nov 2024 13:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731068978; cv=none; b=rYpTXbWZlDtOE8bWSfBGBP/bZFDMnffl4jBiGwCaKD17h/dq8sR9hNqQPdBPTjCq/U8I5D0a4IbHeF8g/btUb4PT6y7oFWgMrOA/7hTIntXxk/C0MllsAaAql+7JRFgHMdHpN7TAcUwmhQDvis5rP+M0/vveF5v571Y4GpPJChc=
+	t=1731073954; cv=none; b=YdEbrIP/bNJ9ZBiZVfoRgvcISCtteT1LvCPAZy5z4hbCAGCPNYhyNaLsnCNzCGTlt6Y2iHAtR0TsvNQn509oFqD7V05gV8BYvYJQXgkm4SyrNNi5WaH8Yx3W37wCmDLN0BESa/C1rjey1+w/8wXz5YS9V+6eWgUwUKY44NadjN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731068978; c=relaxed/simple;
-	bh=L38I2+o6gnX1T6/er6wZJJ8AUf3mBfnVxYyqd8usKPE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X7MYCsffFcq7lRC2NbeV4nIf6SQpOTwTuJeY4SHxETWaseo3ApHqUdYhbf3TNT9Ui12VphuxANhrHpMC7tgqAWCFdGpJcqDlmX24jyfBQZxyu4KQsJSRY8CApUXeeRIzkAxQnMUkrHVN2fHI29wjN+cGVaEokB8AGaxnYgJrLT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=As/Zb1/X; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731068977; x=1762604977;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=L38I2+o6gnX1T6/er6wZJJ8AUf3mBfnVxYyqd8usKPE=;
-  b=As/Zb1/X2yKAS5VadxYiKL6frvhKt5bbcldA6GGT1n9zKb/bmUL41J1g
-   fH8dQdZqXP5D22BR5BIDuloOtL/eufTh3vDINvcGy7aFxc11FNtfwV3c3
-   lwvFpRnupMiz/7LbXRGAUfDM/Rqmv33JkWSmIATIghk6Cer8xWZEd6Eph
-   tZ+u9SS+CJviQdh6tx6GC1eBO/1tgfWlOchrJcZaeDSEjBA4nAec0Y2u0
-   QvBKrg8cJ56rljomDS1GEoOf6xUqn+dc8jC/LseCI6IbTwz8eA8p1ZyQ6
-   fVWfFRl+rFXBHZtG+TiYBDi96mQhmqJVcLcWFA3cqffyfLbePKZaXTeTo
-   w==;
-X-CSE-ConnectionGUID: h9aHjMmIT2mZykpqGV1lbQ==
-X-CSE-MsgGUID: gegJLLa5QzaYaUdznr6D+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53510370"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="53510370"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:29:37 -0800
-X-CSE-ConnectionGUID: YczP97SkQNOo7VhFmMiK4g==
-X-CSE-MsgGUID: ilEkI6JxR/+gbnobEl4f6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="85921168"
-Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.89])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:29:34 -0800
-From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-To: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rafael.j.wysocki@intel.com,
-	len.brown@intel.com,
-	artem.bityutskiy@linux.intel.com,
-	dave.hansen@linux.intel.com,
-	patryk.wlazlyn@linux.intel.com
-Subject: [PATCH v3 3/3] intel_idle: Provide enter_dead() handler for SRF
-Date: Fri,  8 Nov 2024 13:29:09 +0100
-Message-ID: <20241108122909.763663-4-patryk.wlazlyn@linux.intel.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
-References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
+	s=arc-20240116; t=1731073954; c=relaxed/simple;
+	bh=49/Yb17bhSU/BLaaeQ4NgwEPpxak24lXwHVGcSiayTo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P1nDDElyMHTNjEM2aCDTzgT5tNA3xESeL0IOelkhts2vK7FzIeB0CwBn3X81+5QuKSI697icRe28F4RPZTxo+ztSreMdFr3HeSjC6WzrzETnXHkI9avsAQ4lPzTsPoSX4gqhesLMC9wJgcXYtJ4yiekq2aqI76Auf14RKLevPrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NOlavDiE; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7b161fa1c7bso118906285a.0;
+        Fri, 08 Nov 2024 05:52:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731073952; x=1731678752; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CNf/dIX9kLrToT9htir6KdNK1oLlzjAbFVTYrQ6ilJE=;
+        b=NOlavDiE6ySHHoO5s6xWq5Ftk+vytajLvsjajQgns2ixAvyLyK+zMp7KTrUoZ3Yjjj
+         Do3S13SeBu0afmQnBBZiYvfN7pa0VMm4iGnSeyFM4Nf4YOnKHtcefNKw8KOjttePBqS0
+         uYU3/mwwsIEhNMsJjQHeu4IpaMO4RubfJ1ImSpIeoBlzgwjWFRCLJgz5Wfo4hs3KP7hN
+         1u6wh+e/EzgP3L8LCjRwuOQRv9sMUCrsBXVN7TElK6DqCm2VwbiY9R+S7PIrdGohLlge
+         aTFrRUqTnV3evTkshnIielKvRjVOOpYN8RWM27ZFiawQH8tjBtyb0Mp67oSTy7KmOg9/
+         6AhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731073952; x=1731678752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CNf/dIX9kLrToT9htir6KdNK1oLlzjAbFVTYrQ6ilJE=;
+        b=KjnVG4/N2NDPekizgWKGEfmdN0IHZLpfeU65tQ5sbUlNoti8/leFDSTNjRX2WJvbwK
+         Bq6IhpiwuBA8/vr3D0InsVmOKQ3yGOSUAuQOZpQok+Q+QFpcRlrla8FDEgWS9pt2LUp4
+         nnVLew1p+Es6ZPZgZvYNSR+6OryZKeLyJHTpKdbwoKzyQ49ewvPDzdaobf5Hwzapg8Qe
+         YeJYHNVSXHIlmg0V0PrJD5AvFvZc3IHLnY/0xryjfO8Toz/hE3E35Ho2LVxCLPFHBTUH
+         hqiYjHj0xIr0IMesJO5Jm5Qh6pCZEUZUHIJEYyAzpOHjl2nrIbr1g0YBWzJXpZ1zwE19
+         IrUA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/PlSaUdilOp95Q7KQk6YwQ0oorliRWIflyd34PyxSuNeYmg6eidnWzBG9KFgKywflSXpHXPcBZiKFJrg=@vger.kernel.org, AJvYcCWcUTeOOT5iwpudPmsp8zcX2zXe3Lk4kmgQjU5fGEJX0PR86mdXnY98HXhqEhnTvZmSd6k/NoEpciM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+TLktJtbwRshoQLZbYGoKHl7yHysOORRjd0RhlDq6pnRDCN/C
+	Ipi8HmtT672DhxHSnFp7VhQpcUkDwD4lXMx0L8Y2l+xM7+/UqzTM
+X-Google-Smtp-Source: AGHT+IF4JWJnMZ1yff0EFZJQWmW79x4urgAYvVHlweq13RS5RYAPNV2TSk/uVQCsr6A6HIbx3VJuCA==
+X-Received: by 2002:a05:620a:2407:b0:7a9:b8d1:a1d with SMTP id af79cd13be357-7b331f1e4fdmr313695685a.38.1731073951884;
+        Fri, 08 Nov 2024 05:52:31 -0800 (PST)
+Received: from lenb-Thinkpad-T16-Gen-3.mynetworksettings.com ([2600:1006:a022:33ba:65ef:6111:c43:42a7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b32ac54e5fsm160431285a.49.2024.11.08.05.52.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2024 05:52:31 -0800 (PST)
+Sender: Len Brown <lenb417@gmail.com>
+From: Len Brown <lenb@kernel.org>
+To: peterz@infradead.org,
+	x86@kernel.org
+Cc: rafael@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCh 0/2] Add Intel Lunarlake to X86_BUG_MONITOR
+Date: Fri,  8 Nov 2024 08:49:29 -0500
+Message-ID: <20241108135206.435793-1-lenb@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,85 +84,15 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Intel's Sierra Forest report two C6 substates in cpuid leaf 5:
-    C6S  (hint 0x22)
-    C6SP (hint 0x23)
+Early adopters of Intel Lunar Lake systems have noticed
+unacceptable GUI delays.  This patch addresses those systems.
 
-Hints 0x20 and 0x21 are skipped entirely, causing the generic
-implementation in mwait_play_dead() to compute the wrong hint, when
-looking for the deepest cstate. As a result, package with an offlined
-CPU can never reach PC6.
+[PATCH] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
 
-Define the enter_dead() handler for SRF.
+	Upstream patch, also applies to 6.11
 
-Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
----
- drivers/idle/intel_idle.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+[PATCH backport to 6.10] x86/cpu: Add INTEL_FAM6_LUNARLAKE_M to X86_BUG_MONITOR
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 9aab7abc2ae9..bd67959e5e8b 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -56,6 +56,7 @@
- #include <asm/mwait.h>
- #include <asm/spec-ctrl.h>
- #include <asm/fpu/api.h>
-+#include <asm/smp.h>
- 
- #define INTEL_IDLE_VERSION "0.5.1"
- 
-@@ -221,6 +222,17 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 	return 0;
- }
- 
-+static __cpuidle int intel_idle_enter_dead(struct cpuidle_device *dev,
-+					   int index)
-+{
-+	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-+	struct cpuidle_state *state = &drv->states[index];
-+	unsigned long eax = flg2MWAIT(state->flags);
-+
-+	/* Retruns only in case of an error. */
-+	return mwait_play_dead_with_hint(eax);
-+}
-+
- /*
-  * States are indexed by the cstate number,
-  * which is also the index into the MWAIT hint array.
-@@ -1303,6 +1315,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 1,
- 		.target_residency = 1,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.name = "C1E",
-@@ -1311,6 +1324,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 2,
- 		.target_residency = 10,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.name = "C6S",
-@@ -1319,6 +1333,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 270,
- 		.target_residency = 700,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.name = "C6SP",
-@@ -1327,6 +1342,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 310,
- 		.target_residency = 900,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.enter = NULL }
--- 
-2.47.0
+	Backport to 6.10 for old model number scheme
 
 
