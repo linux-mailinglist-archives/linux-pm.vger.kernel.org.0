@@ -1,130 +1,211 @@
-Return-Path: <linux-pm+bounces-17215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA9329C21FC
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 17:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 371989C225C
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 17:47:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E6BC1F22A41
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 16:22:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA1C51F248C5
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 16:47:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A64A519994F;
-	Fri,  8 Nov 2024 16:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040D81C3F28;
+	Fri,  8 Nov 2024 16:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fECEV4Pb"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="L+uvjbMu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040841993B7;
-	Fri,  8 Nov 2024 16:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D65E1974FA;
+	Fri,  8 Nov 2024 16:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731082938; cv=none; b=QH5/bK2/y+Bu9TnMrefSfnBiYaBZELv4Gr2Yxfvtcl1lU8/0abjo533QVw4umUZW6L24t97pMkDT4wTNjKle9JuK4Prj45Pf/YSTZjuyZMNLkvMI3t7yHhVcacKj+2HKPUuxPseiqrgG3jOmMtedEs/rVLzwjUOMIZU/eVbqcdw=
+	t=1731084395; cv=none; b=kgViCzX/CvAys0mentgFMng3e60+2GuTqb9ZS3YZm9ix5STC/UVvhWt1M1FrKTCWJ0+NXrGF1X7eIg6ZbtHW0X8h5wUXkEnsQAl60jb29xUvk7QpDLYmNkqA0nOKnaAuOLDkbJyr2vmW/80bKk7KOBF6gUkyLUe67l0JAq65l7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731082938; c=relaxed/simple;
-	bh=MvN04QM9skDe5fLRe4zUoBz6kMsWxDmnbsXGz359yRU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nSreRi3DUbwFdGkzk3o8SBRJ7V2Me/J1XxK4H6klpziZR5Vj8npWdXWvd6Lo70DaHz4ZoyvHMSi60DhGz6nFK1cahzJsKuUsm3TgoFDzTAW0kwx2Qx9seqwfoxUMuIDIJE7ZE+mvl7lyY53MG1Rr4YuS+x9sf1wdmeCX3I0btIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fECEV4Pb; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731082937; x=1762618937;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MvN04QM9skDe5fLRe4zUoBz6kMsWxDmnbsXGz359yRU=;
-  b=fECEV4PbydJYIjsjpCe0/W7eCBR4OhLItHknk5YUOUAnysPH/LeWPCh1
-   vc7og9Lxy4IyLbS21Pon0cLhsPbEyFICoWclH49aIjY9WZU6/wdE457Fi
-   Q4C1n2d6zh75DVUrdyuRcHzwXkcapHsCQGs1uvTCuIgS3Y8xBH2LiqOvd
-   rU4sTp7IEvF1qny59UrFqlmRTVrI+VgKnq04vdTO2WCE8bwpgM5nUSUBj
-   KOYYbNpHJMeMAvztKqh/IDjVKzYVdm1ZKuSH8PaSg3cUOzdZ5PikwVCWR
-   hxJlAaZZaXxSCDp3xMA8IqI38JdQV0ZdIRddsd4NFiFe3dOCwQay9OWDE
-   Q==;
-X-CSE-ConnectionGUID: Bqe/9HIuRG6iKOtB7M3PPg==
-X-CSE-MsgGUID: O2VEJNtQQeGGcFWAqWL6MQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="30370521"
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="30370521"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 08:22:09 -0800
-X-CSE-ConnectionGUID: 4T8HmKCiS3C27KH2kLY9iA==
-X-CSE-MsgGUID: Bd5G0RdaSxGfVViTmuwFHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="116492760"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.124.223.66]) ([10.124.223.66])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 08:22:09 -0800
-Message-ID: <548b2012-925a-4b06-9970-f10a59fbbba1@intel.com>
-Date: Fri, 8 Nov 2024 08:22:08 -0800
+	s=arc-20240116; t=1731084395; c=relaxed/simple;
+	bh=TULGYlML1sIhPReD5NLf2WnpNAK3uqkDVsOXeFWx3Gw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b1Ih4zFNYiY/NVC+u1ajGeV+Ag+kalY3kp60VPubUQ7vrCm6e5BmHtqE4pWWPjdzNxAsyDUxJKkZ1hbfd/EKnTyAAt1ssT9mFMxz3k044BZ6yqyowK9qkP/bFkcpyMgEeMi3djYD1H7MJ3S1WjUqVKHRihBYfAB+ODE3qViivjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=L+uvjbMu reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 816be685936a7f17; Fri, 8 Nov 2024 17:46:26 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 03B14834811;
+	Fri,  8 Nov 2024 17:46:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1731084386;
+	bh=TULGYlML1sIhPReD5NLf2WnpNAK3uqkDVsOXeFWx3Gw=;
+	h=From:Subject:Date;
+	b=L+uvjbMuK9pjUTo6SZn+P63DXXYsKpy5vMm98PaeSakg5NcIXCXdV9/Dz7Fapg+7b
+	 DdpGN0lubgwWrmn5VIq9sItWsVRHNFvPqE6Neq0wtrA/409/U5D+/cBTrAq40xxhG0
+	 mDCAsfXnLcpaDtiNNjSmLBh6u6ECh14P6sY5RPNmo8DirrNrV1JQl4nLAn0wUc87NJ
+	 qzVAayKKryPDRNi8880vXD58UbrE1Dk9zbz9CNn/sWc5Z8tpvSiH1SyZJktw9daz7B
+	 sqReUkXvtODBrQ8xz42OzKgMVHg2ySmeDw0gqxbEK9GkXIai2lyVgS5cyU2ucmWpiH
+	 +bp1hA6SHxUoA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Len Brown <len.brown@intel.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject:
+ [RFC][PATCH v0.1 1/6] PM: EM: Move perf rebuilding function from schedutil to
+ EM
+Date: Fri, 08 Nov 2024 17:36:29 +0100
+Message-ID: <3263759.5fSG56mABF@rjwysocki.net>
+In-Reply-To: <3607404.iIbC2pHGDl@rjwysocki.net>
+References: <3607404.iIbC2pHGDl@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] SRF: Fix offline CPU preventing pc6 entry
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael.j.wysocki@intel.com, len.brown@intel.com,
- artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
-References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrtdeigdeklecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthg
+X-DCC--Metrics: v370.home.net.pl 0; Body=10 Fuz1=10 Fuz2=10
 
-On 11/8/24 04:29, Patryk Wlazlyn wrote:
-> Applied suggestions from Dave and Rafael.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The basic approach here is looking pretty sound, so thanks for that
-Patryk.  I mostly have mechanical nits left.
+The sugov_eas_rebuild_sd() function defined in the schedutil cpufreq
+governor implements generic functionality that may be useful in other
+places.  In particular, going forward it will be used in the intel_pstate
+driver.
+
+For this reason, move it from schedutil to the energy model code and
+rename it to em_rebuild_perf_domains().
+
+This also involves getting rid of some #ifdeffery in schedutil which
+is a plus.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/linux/energy_model.h     |    2 ++
+ kernel/power/energy_model.c      |   17 +++++++++++++++++
+ kernel/sched/cpufreq_schedutil.c |   33 ++++++---------------------------
+ 3 files changed, 25 insertions(+), 27 deletions(-)
+
+Index: linux-pm/kernel/power/energy_model.c
+===================================================================
+--- linux-pm.orig/kernel/power/energy_model.c
++++ linux-pm/kernel/power/energy_model.c
+@@ -908,3 +908,20 @@ int em_update_performance_limits(struct
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(em_update_performance_limits);
++
++static void rebuild_sd_workfn(struct work_struct *work)
++{
++	rebuild_sched_domains_energy();
++}
++
++static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
++
++void em_rebuild_perf_domains(void)
++{
++	/*
++	 * When called from the cpufreq_register_driver() path, the
++	 * cpu_hotplug_lock is already held, so use a work item to
++	 * avoid nested locking in rebuild_sched_domains().
++	 */
++	schedule_work(&rebuild_sd_work);
++}
+Index: linux-pm/kernel/sched/cpufreq_schedutil.c
+===================================================================
+--- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
++++ linux-pm/kernel/sched/cpufreq_schedutil.c
+@@ -604,31 +604,6 @@ static const struct kobj_type sugov_tuna
+ 
+ /********************** cpufreq governor interface *********************/
+ 
+-#ifdef CONFIG_ENERGY_MODEL
+-static void rebuild_sd_workfn(struct work_struct *work)
+-{
+-	rebuild_sched_domains_energy();
+-}
+-
+-static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
+-
+-/*
+- * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
+- * on governor changes to make sure the scheduler knows about it.
+- */
+-static void sugov_eas_rebuild_sd(void)
+-{
+-	/*
+-	 * When called from the cpufreq_register_driver() path, the
+-	 * cpu_hotplug_lock is already held, so use a work item to
+-	 * avoid nested locking in rebuild_sched_domains().
+-	 */
+-	schedule_work(&rebuild_sd_work);
+-}
+-#else
+-static inline void sugov_eas_rebuild_sd(void) { };
+-#endif
+-
+ struct cpufreq_governor schedutil_gov;
+ 
+ static struct sugov_policy *sugov_policy_alloc(struct cpufreq_policy *policy)
+@@ -783,7 +758,11 @@ static int sugov_init(struct cpufreq_pol
+ 	if (ret)
+ 		goto fail;
+ 
+-	sugov_eas_rebuild_sd();
++	/*
++	 * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
++	 * on governor changes to make sure the scheduler knows about it.
++	 */
++	em_rebuild_perf_domains();
+ 
+ out:
+ 	mutex_unlock(&global_tunables_lock);
+@@ -827,7 +806,7 @@ static void sugov_exit(struct cpufreq_po
+ 	sugov_policy_free(sg_policy);
+ 	cpufreq_disable_fast_switch(policy);
+ 
+-	sugov_eas_rebuild_sd();
++	em_rebuild_perf_domains();
+ }
+ 
+ static int sugov_start(struct cpufreq_policy *policy)
+Index: linux-pm/include/linux/energy_model.h
+===================================================================
+--- linux-pm.orig/include/linux/energy_model.h
++++ linux-pm/include/linux/energy_model.h
+@@ -179,6 +179,7 @@ int em_dev_compute_costs(struct device *
+ int em_dev_update_chip_binning(struct device *dev);
+ int em_update_performance_limits(struct em_perf_domain *pd,
+ 		unsigned long freq_min_khz, unsigned long freq_max_khz);
++void em_rebuild_perf_domains(void);
+ 
+ /**
+  * em_pd_get_efficient_state() - Get an efficient performance state from the EM
+@@ -404,6 +405,7 @@ int em_update_performance_limits(struct
+ {
+ 	return -EINVAL;
+ }
++static inline void em_rebuild_perf_domains(void) {}
+ #endif
+ 
+ #endif
+
+
+
 
