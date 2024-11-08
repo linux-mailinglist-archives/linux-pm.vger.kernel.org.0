@@ -1,127 +1,105 @@
-Return-Path: <linux-pm+bounces-17200-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17201-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C42E9C1CAD
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 13:09:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5375D9C1CDD
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 13:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E71B1C22F23
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 12:09:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2155B284E53
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 12:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A041E572F;
-	Fri,  8 Nov 2024 12:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2880E1E7C03;
+	Fri,  8 Nov 2024 12:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NEWRkHD3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZI2Pr8n3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6EB1E47CE;
-	Fri,  8 Nov 2024 12:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC511E47CE;
+	Fri,  8 Nov 2024 12:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731067758; cv=none; b=r9l0FC9yd5Y8kfT1IT9DhLS5VcojjuwcwTq3dtBCRQq598HWLaOZNcjNF9XOtS8JWZZyaavHq5CUqLs2UWlRkNFzUkHQuos/2SPiXxeHhDPgJHg0DvDpd+eoTFRTl27+So4PklVsRxh+wVWcsls/HeovsvaWKeQzjlmHvHn12Pk=
+	t=1731068655; cv=none; b=J1X3AEoyfdV66oCCe2HAUiEYCq0k7/fra2IKOG81dnurLuFE8m35lFJU0/hI2zhd7CauuRatXdXa5q/fEQ/nl7HhA7ClgS2D3+QPJMDA8+3MZopiLYmnMIfbtya4SgRkkoMw7lLK8jlETfzgD7p4Os4kUQzDodVprnuNX3wRC78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731067758; c=relaxed/simple;
-	bh=ip2W+uSWSs4HJ0Umwf51InDV1CWXoXICkPZL470Ag7U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jPrfcwiaxV8vcBi0p22euE9iIj0L8zbda56CUiQRFy5M1sx61ff+RD6YpJlLApcGlXBqDUwpQ0ncaynYHaFWruk4oQN7T9uKe93TP4K+b7I9HQgN/SSS04Nux/Ughb/GbNBiPBWPFIIly1KK1HSdwPKfNReKVxcya+Wj6hfC6Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NEWRkHD3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2933C4CED4;
-	Fri,  8 Nov 2024 12:09:17 +0000 (UTC)
+	s=arc-20240116; t=1731068655; c=relaxed/simple;
+	bh=ysuLhuMYEEC7oX4y0iwjBEgPL1C/5lpgDLTDYdB0KFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W07JqtE7jol6PHptWAQmdrferfjMTiOA7UtB5P18R42c2KurGwr+I9c0lHYfkiMDcQ+bJ8ugVrTxmjzdT3GG9AhrB7SaFTXhDxADJ0p9gZS/Iae9qZROVRZAFEUws8QLMXgPcxmYdLhIjW5imvW/XBUlQ08poC8aOTPV84QKDQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZI2Pr8n3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A0EC4CECD;
+	Fri,  8 Nov 2024 12:24:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731067757;
-	bh=ip2W+uSWSs4HJ0Umwf51InDV1CWXoXICkPZL470Ag7U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NEWRkHD32gZixICbkYYys60GMY7MVh8plRXb6awULMsovwf/85qGVuF7i7EHA3H1t
-	 G/FXGknPRSxdOEbehz3BDJfApZYLZt4EbVdJ273XqjxdTh6mmsauynKjGmj+zWwePB
-	 tmRggUtu6TbLE/ivrJsarxa2MEqzIXjzA6z/IzsXlIOoc8i/lvF92wAoGwC+T7vbJn
-	 h8r+Uyy/frOIHtJcl97plymUnMsWxlXVXhE8I6i5YtvLoWyFJzxawr52V0mEvyysrg
-	 bSEBQ0uz57/my+Uwv6Pvf7tazlFcipyBdSc0SSiWzZLx/vXdpxv1vr0YAvFcxi4wTe
-	 SkhGZF/IkhIiQ==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-28896d9d9deso1032519fac.2;
-        Fri, 08 Nov 2024 04:09:17 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXeyk+UCqi4Q880LCJYa27zXh9n47jbuef+TCHdvnnuMf0OgpZnas6AUTkNypqgRBvQNBIjRpnCsBk=@vger.kernel.org, AJvYcCXsl+cE9C+H36IpQT3AnzS7iUT8VsZyuL2/rr50H3/fD59fx/jDVQDDm8YQI3zDH7qnEhuLCMLj+oGbuHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeQSLpBdNuU2V8pYBoS8XgVAxfv9kB+ggOv8cSsuqVTQ9ODw2B
-	PWwbyEPf0BkKgUgraBSWp/OaZWZVsP471klK8oMs+0OlHqRJU6otO3ubDSwRC1BTN1j2FGxLnwy
-	IfVazqPQwF6Orpkz10ZPPepouNtI=
-X-Google-Smtp-Source: AGHT+IF1/C5xlG7mIlZDVHks8V3bCbIdBNfrptAsUbwtk/KWGJ3JrSVwnwRAT0tFD+opYQnEMeyVSjO8Y/ckH0QWgtY=
-X-Received: by 2002:a05:6870:e38c:b0:277:f5d8:b77b with SMTP id
- 586e51a60fabf-295602a56e3mr2797000fac.32.1731067757095; Fri, 08 Nov 2024
- 04:09:17 -0800 (PST)
+	s=k20201202; t=1731068654;
+	bh=ysuLhuMYEEC7oX4y0iwjBEgPL1C/5lpgDLTDYdB0KFs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZI2Pr8n3D33cVl/heubKCb1AtALRbMn0WDX2jXxKZvqNOBSAr3+XQKZPF9yNCFWrZ
+	 Wf1wLykw0HBLbfov4EzKLHUQhk4XEdKt02QUbFNxvCbA+mZvTFybivzwlPM668X4PU
+	 1bd9DSyVEYXsTHUazZinuQ3i5j7DXLfR3H/3GC5f14Fu02esA6XLSJhCH5aAS5h/Vr
+	 NUXSBwWbCjBob32hiPpy3Nb/j627PV1BP/U4adaBUaTdKHHR7FVCdEUmg4DqihjvRn
+	 ntTXDLYVW5mQOddiSLgh3hIOUlcJI36fwRfzNOUXOj/HepNR2VEByg33eFfiOmtc8r
+	 2/wyK8i0RTl1g==
+Date: Fri, 8 Nov 2024 13:24:09 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: =?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
+	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev
+Subject: Re: [PATCH v3 06/14] dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
+Message-ID: <ufamoryw2k3oquvusqzs2e7ixu6iptfbpmdevqthbps5w7szw3@6c7enohqv537>
+References: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
+ <20241107-msm8917-v3-6-6ddc5acd978b@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241108044700.37633-1-zhangjiao2@cmss.chinamobile.com>
-In-Reply-To: <20241108044700.37633-1-zhangjiao2@cmss.chinamobile.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 8 Nov 2024 13:09:05 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gHGrRn0cLvsSTaX=tX8mVhxudoJ4aSh5jWNxh171oKgg@mail.gmail.com>
-Message-ID: <CAJZ5v0gHGrRn0cLvsSTaX=tX8mVhxudoJ4aSh5jWNxh171oKgg@mail.gmail.com>
-Subject: Re: [PATCH] tools/thermal: Fix common realloc mistake
-To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241107-msm8917-v3-6-6ddc5acd978b@mainlining.org>
 
-On Fri, Nov 8, 2024 at 7:39=E2=80=AFAM zhangjiao2
-<zhangjiao2@cmss.chinamobile.com> wrote:
->
-> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
->
-> Do not set thermometer->tz NULL when realloc failed.
+On Thu, Nov 07, 2024 at 06:02:47PM +0100, Barnab=C3=A1s Cz=C3=A9m=C3=A1n wr=
+ote:
+> +$defs:
+> +  qcom-msm8917-tlmm-state:
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configu=
+ration.
+> +      Client device subnodes use below standard properties.
+> +    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
+> +    unevaluatedProperties: false
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          List of gpio pins affected by the properties specified in this
+> +          subnode.
+> +        items:
+> +          oneOf:
+> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-3][0-3])$"
 
-Presumably, this fixes a problem.
+That's not a good pattern, unless really gpio129 is not existing?
 
-What problem does it fix?
+> +            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
+> +                      sdc2_cmd, sdc2_data, qdsd_clk, qdsd_cmd, qdsd_data=
+0,
+> +                      qdsd_data1, qdsd_data2, qdsd_data3 ]
+> +        minItems: 1
+> +        maxItems: 16
 
-> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
-> ---
->  tools/thermal/thermometer/thermometer.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/thermal/thermometer/thermometer.c b/tools/thermal/ther=
-mometer/thermometer.c
-> index 1a87a0a77f9f..e08291a97fd8 100644
-> --- a/tools/thermal/thermometer/thermometer.c
-> +++ b/tools/thermal/thermometer/thermometer.c
-> @@ -259,6 +259,7 @@ static int thermometer_add_tz(const char *path, const=
- char *name, int polling,
->  {
->         int fd;
->         char tz_path[PATH_MAX];
-> +       void *tmp;
->
->         sprintf(tz_path, CLASS_THERMAL"/%s/temp", path);
->
-> @@ -268,12 +269,13 @@ static int thermometer_add_tz(const char *path, con=
-st char *name, int polling,
->                 return -1;
->         }
->
-> -       thermometer->tz =3D realloc(thermometer->tz,
-> +       tmp =3D realloc(thermometer->tz,
->                                   sizeof(*thermometer->tz) * (thermometer=
-->nr_tz + 1));
-> -       if (!thermometer->tz) {
-> +       if (!tmp) {
->                 ERROR("Failed to allocate thermometer->tz\n");
->                 return -1;
->         }
-> +       thermometer->tz =3D tmp;
->
->         thermometer->tz[thermometer->nr_tz].fd_temp =3D fd;
->         thermometer->tz[thermometer->nr_tz].name =3D strdup(name);
-> --
-> 2.33.0
->
->
->
->
+Best regards,
+Krzysztof
+
 
