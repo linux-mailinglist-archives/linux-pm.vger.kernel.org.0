@@ -1,80 +1,98 @@
-Return-Path: <linux-pm+bounces-17226-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17227-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F62B9C253D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 20:00:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5B399C25B1
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 20:41:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18A80284572
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 19:00:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D00A1F21560
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 19:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F8F1AA1DB;
-	Fri,  8 Nov 2024 19:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8471AA1E4;
+	Fri,  8 Nov 2024 19:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qd2lWuSK"
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="eFof62/o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26281AA1CB;
-	Fri,  8 Nov 2024 19:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DD517A5BE;
+	Fri,  8 Nov 2024 19:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731092416; cv=none; b=Q0VnmnxakRVPt13T0vMQyk6Tpv068pWEmP5O9b9DTi6invza/LkXw5RliektykykFnnb2/gMd+5iodSB4pDLhzA5kXCbaCJoMv9WcXsJAhUMQoWT0zELI7p7vrSpP8qopyf6OZ0hJzPezSi+CabCX9saPjyU/20cTVfK0tUfr18=
+	t=1731094871; cv=none; b=i9wPpjIVB550ua6+92nuTXF7+dRKN1kpM/RJFysMz5tbR6FewF+KvgfQOzTVnx5MelSiaUNuTMGGsiKS23gli+OsYivLYQWJ2geZ2lxz8DsqdIyD2ehUKjonSUd2RWOTzdNF3IS91QInzAypY2RdJTT0aBw6rwQ+lnLN5e1YAsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731092416; c=relaxed/simple;
-	bh=OtggIF0KRqr7r/wH0OZd5RllsjUVk+wOmDWHHI2hwOY=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=BZcYv6oemnEzXv227FHWV0wVtu+S+7EnUx/8EGbHt17eQchrSbZNGLwK9wIKkSvgKgeDVhEBroiHzSvBETjtM1HWrpENSkyrspVZj9eJASEDkjxnOwbt9IV+0M7q6ifVg9cDFcPQmz/gCb6nP7vVhA72vywF2qCVcD30dYqJ2H0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qd2lWuSK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D09C4CED7;
-	Fri,  8 Nov 2024 19:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731092415;
-	bh=OtggIF0KRqr7r/wH0OZd5RllsjUVk+wOmDWHHI2hwOY=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=Qd2lWuSKjB662/4MHlN9ZzDVESuRWPC1tDEoQioaBActtNgImJm1mx6R2aN3ZVkSQ
-	 wZrsteEOBTYmayH4SCClPM6S8ZUqnuDZqK/L45klMUFvwqoFNoM59rpYTb3zwmLmS0
-	 S5k3S/Kd34sPZ/GNjJbWpePCLosGWBzYuZ+pq92JZ19NWCGLbusae2RsEL0b/w+yQE
-	 LKuAgQGeE1fIoFrCLBWrALq/q+NK6wpM7zRUp69OBCpFrOAIU77rs159lndC3/GXp4
-	 IKc7T7mRGZA3sKofR4Ib1tDg8qZoY2jMwd1Rfu9chaykv8CuGf3LkqBiHuqZFAh+yG
-	 aKeIat7LwXw1A==
-Message-ID: <e6637dcc85ca23efaf72af906f364328.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1731094871; c=relaxed/simple;
+	bh=KhWTv6Xz+p6/uRt5a0JjkR7Y5OsaggoRDeYnfKiG8p8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=UqNav30XEILnAyhWhhefAWxsGw+Pn8aHwJziVyCnY7XIL3pe4vMNVA0T0EClNM/XV/BF6TE6bTQKWaJB0o9jebMPUkZs/nPVLTVJVhl5KXThiStLq1kKQ40pOUivlCvxQDGha6/Zgpe873G472Y2WXiwbNm3u4MPLYyr4cuEd6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=eFof62/o; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1731094868;
+	bh=KhWTv6Xz+p6/uRt5a0JjkR7Y5OsaggoRDeYnfKiG8p8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=eFof62/o+3Ah7YL4swFSXp9NNbyWhpE/jpxAp1V0hqddWcsJbT70qSYUBEJ9Cc6Nq
+	 i1Ht5pUIVwOv7ozD3OuoIfG8ndi7iDXyHZeqyBUFw9vDsX5T9JYdLuGNuomxOnNfZp
+	 lPZXw/EGjMFvq/nlF4MyDGcxz4ho4GZfDRp3RCKo=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id C978D40681; Fri,  8 Nov 2024 11:41:08 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id C7119401C7;
+	Fri,  8 Nov 2024 11:41:08 -0800 (PST)
+Date: Fri, 8 Nov 2024 11:41:08 -0800 (PST)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
+    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+    linux-arch@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org, 
+    tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+    pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org, 
+    daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de, 
+    lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com, 
+    mtosatti@redhat.com, sudeep.holla@arm.com, maz@kernel.org, 
+    misono.tomohiro@fujitsu.com, maobibo@loongson.cn, zhenglifeng1@huawei.com, 
+    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
+    konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/15] asm-generic: add barrier
+ smp_cond_load_relaxed_timeout()
+In-Reply-To: <87v7wy2mbi.fsf@oracle.com>
+Message-ID: <88b3b176-97c7-201e-0f89-c77f1802ffd9@gentwo.org>
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com> <20241107190818.522639-2-ankur.a.arora@oracle.com> <9cecd8a5-82e5-69ef-502b-45219a45006b@gentwo.org> <87v7wy2mbi.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7b57ccc2-7060-4adf-b896-8992ec05125c@linaro.org>
-References: <20241028163403.522001-1-eugen.hristev@linaro.org> <bb5d855954d5ff8694a3978a9f87a9d2.sboyd@kernel.org> <6f14d8d7-7b9a-49e3-8aa8-5c99571a7104@linaro.org> <b587012e868f8936463c46915b8588c3.sboyd@kernel.org> <7b57ccc2-7060-4adf-b896-8992ec05125c@linaro.org>
-Subject: Re: [PATCH v2] soc: qcom: Rework BCM_TCS_CMD macro
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: andersson@kernel.org, konradybcio@kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, djakov@kernel.org, mturquette@baylibre.com, evgreen@chromium.org
-To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org
-Date: Fri, 08 Nov 2024 11:00:13 -0800
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=US-ASCII
 
-Quoting Eugen Hristev (2024-10-30 01:28:14)
-> On 10/30/24 02:40, Stephen Boyd wrote:
-> >=20
-> > If the rpmh-rsc code didn't use writel() or readl() I'd believe that the
-> > data member is simply a u32 container. But those writel() and readl()
-> > functions are doing a byte swap, which seems to imply that the data
-> > member is a native CPU endian u32 that needs to be converted to
-> > little-endian. Sounds like BCM_TCS_CMD() should just pack things into a
-> > u32 and we can simply remove the cpu_to_l32() stuff in the macro?
->=20
-> This review [1] from Evan Green on the original patch submission=20
-> requested the use of cpu_to_le32
->=20
-> So that's how it ended up there.
->=20
+On Thu, 7 Nov 2024, Ankur Arora wrote:
 
-Thanks. I still don't see why this can't just be treated as a u32 and
-then we have writel() take care of it for us.
+> > Calling the clock retrieval function repeatedly should be fine and is
+> > typically done in user space as well as in kernel space for functions that
+> > need to wait short time periods.
+>
+> The problem is that you might have multiple CPUs polling in idle
+> for prolonged periods of time. And, so you want to minimize
+> your power/thermal envelope.
+
+On ARM that maps to YIELD which does not do anything for the power
+envelope AFAICT. It switches to the other hyperthread.
+
+> For instance see commit 4dc2375c1a4e "cpuidle: poll_state: Avoid
+> invoking local_clock() too often" which originally added a similar
+> rate limit to poll_idle() where they saw exactly that issue.
+
+Looping w/o calling local_clock may increase the wait period etc.
+
+For power saving most arches have special instructions like ARMS
+WFE/WFET. These are then causing more accurate wait times than the looping
+thing?
+
+
 
