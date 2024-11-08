@@ -1,287 +1,157 @@
-Return-Path: <linux-pm+bounces-17216-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 109839C2253
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 17:46:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97B7A9C2291
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 17:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30F2F1C22947
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 16:46:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 267F81F23371
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2024 16:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85AF2198E85;
-	Fri,  8 Nov 2024 16:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99EF8199230;
+	Fri,  8 Nov 2024 16:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="GFi6Drdo"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bMKljHRs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A604513B29F;
-	Fri,  8 Nov 2024 16:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B411E883E
+	for <linux-pm@vger.kernel.org>; Fri,  8 Nov 2024 16:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731084394; cv=none; b=D7gtQ5AtqNKJZWuRP6cIX4n5U4VWAPFDSLdWfikN1kxNvcLRw22i7nkLebNfoyD8uVKNyJntkwRIXnw0kp/rFFDq8+QHO+G863x8bTzzClE3eTFaot/LVmCPJxV0K5Mt8QQMYIMTzG/X30LKz0n0kd0qc9zqCBQKZiHzNNKOZXQ=
+	t=1731085088; cv=none; b=HQCIewJkcO8nmXSJQlDRxbqFGkDzpRsEPUe4a0BGG6l6eXNPeZUq8z6MFDrzb2EGezX0xj9pnZM9xfsztED2msL/rltDNtwgA/pbhdmnLdRbI0Vuj/6TFgBDslyKpuOZX+/gnXcARDscxAGHEfcFv1obeZj/g3TisHSwgQ8akE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731084394; c=relaxed/simple;
-	bh=j7p+8eYkmatrxwpdXfGxJJavtt0xbw5+drzotrnuAXQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hkPiD5tpLeyOCBwKELmB9JDScYTBn0zwLi2HKitinZXQ8zIHN4aDptm8hKPkxMOCapIgq2iUDsAHbGNfyVWNId/HUwpGNomp4yp2Pu5kxK9y9SwvWNhcqGhv2WyrIjN1yg/EFRX33E5T0tmrNsqUEEPmTrdoR1YMUoeTj6kz2jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=GFi6Drdo reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id eab63553db22e5e7; Fri, 8 Nov 2024 17:46:23 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 4598E8384AE;
-	Fri,  8 Nov 2024 17:46:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1731084383;
-	bh=j7p+8eYkmatrxwpdXfGxJJavtt0xbw5+drzotrnuAXQ=;
-	h=From:Subject:Date;
-	b=GFi6DrdoBt35wiSU0ClHNrocWF1/GSQ2cq9ryJyd/CvrpestHEWl2RWvxGOwZBece
-	 G82x7T8kq6lirpymncOvhZ6AtbTnoPf77xGK6TZAqs63sdbsgv9NOMTyRMw5IEeC1A
-	 alMWbBN3O1wE8G+VMAIyngo6Ouj0NOMKpw8AiR2NjrB4Q6sAwaR0MJqcz9TPsl2l4g
-	 AWskBB2rw8M4EkZt3eI7shcaaVzoun+WJwjh3YaCC6B8lJHMGMNdipB+t2+wOsPscV
-	 xX3pQwxL/nmAPoMmO37Zc6AJuvxNf44uQiG3ERed6XvlzKDv/FslYsDnke9b9Wxbnd
-	 a18eqWAHXI+4A==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <len.brown@intel.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Morten Rasmussen <morten.rasmussen@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject:
- [RFC][PATCH v0.1 6/6] cpufreq: intel_pstate: Add basic EAS support on hybrid
- platforms
-Date: Fri, 08 Nov 2024 17:46:13 +0100
-Message-ID: <115421572.nniJfEyVGO@rjwysocki.net>
-In-Reply-To: <3607404.iIbC2pHGDl@rjwysocki.net>
-References: <3607404.iIbC2pHGDl@rjwysocki.net>
+	s=arc-20240116; t=1731085088; c=relaxed/simple;
+	bh=rR6oxh4TsPeJEFTyjlpe/mmrrtWMwgdViIyTgLo9Ezs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ksbv89Fdogp0C+6hfffN0q9OfJrUWqizCADn3OjBcA82m/fpfm7CXhh7c4FnvgbfRuwFFYqKHaXLC7i8yFy9vMBTO321juJ1WvKVV787kPWK1Kmb5RfYj3C/lhThB/i5uFCM2wuzQPAU6jrrkCssLkuNbMbrUQvDP2nDEuJuM2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bMKljHRs; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8FsPqB026486
+	for <linux-pm@vger.kernel.org>; Fri, 8 Nov 2024 16:58:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	HWI14o00dzdsEyLD1xZkH5uhQvD1CWU2kS6AnH4E94s=; b=bMKljHRsJuTHnWCe
+	/bvKdX1jaZ07Q5YIJUalHojqML7Bb6NmjDMkjBUtGFrre2svtF+xCVlPYxRaA/Bc
+	p+IMbbgQuU4fCJMUmb7Ae3L15fzuZdzqwjxdpegfJUYgQf+3VJUy0b0wk7Gpzww2
+	3sAGb29W5aipYDq4yLHQPuK9Pk4uNye4hKfiVUZmzhKowrnNfzVEhIrOC5NHbXUG
+	625z+7D2ygNWTnHlaugTQqjKz8IMnOvztAxf8R6wtlqquEwtSTLEorqZM3GvlrVZ
+	9YVajFEv4emHvvakQ3KRoNPK8IEscmrssetDw20OoIOA7zQeJANwaYHb8VPnhlLU
+	Jx9RHQ==
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42s6gea58x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 16:58:04 +0000 (GMT)
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-84fe094f03fso85634241.1
+        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2024 08:58:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731085084; x=1731689884;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HWI14o00dzdsEyLD1xZkH5uhQvD1CWU2kS6AnH4E94s=;
+        b=gZdpHxuYQZ8nQGKlTSaowoJXByuCP3UuCJQF8nvSuHFcJwxqvRxL4ZvBP+hOGPioTN
+         CMuZ8aFyOA99zBFnhHS0hLsywsjqOYfNU7ITLDb3Oj4N9CWDHUno2ps/KbSBXrWcD/he
+         hk7CzDgPgbb/yvlAAyvGQzRHeWvDLnmWamboRRxaDmxo4ximkX4vXK5CqoVXckPCIMOJ
+         92HnCsKFKz69E5yD2dGMpD2nyF4EvTPy2USudPCSnR+QEgB3RLUDCl4c8UQ8oDHWpUzm
+         RTqxoYWZpUYQSzqgzRI4HOJuGAIr29puPUxKW+NIVKYw2kr+sgDn350kJcHO5xrwdna8
+         Y19A==
+X-Forwarded-Encrypted: i=1; AJvYcCUp8HoFIK22uF72XhNGIgB3dYR7NVYfSLQ7rBx4cpDHnxCdJSheC0/l7rq+GiSOP5ryyvuQsQPeQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMkWPU2GtX/SsEYj0Glonw1TJZJ8sQ/uf8u6XG2hTu68a9/lbd
+	1q7WJtGVdfClRj+3mqnUAS1mek8jbSo6RkJjKP47Q6MlHpydfJqkTM0Euv0ZNXCtRc7xK0MUP//
+	v6cqBtXY3TpfT7xdwEhqK3rif5eWW2qz3m7wIDyq24wvqD88oTi8bkYIHdQ==
+X-Received: by 2002:a05:6102:3311:b0:4a4:8268:9a65 with SMTP id ada2fe7eead31-4aae138b9cbmr1471550137.3.1731085083638;
+        Fri, 08 Nov 2024 08:58:03 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFY/osSz3UlDBbQ0ox84O5Rchw1d3JTWrCxq8eAaHipugtEjyXcxITf9weaSejsQ7bLHn/nnw==
+X-Received: by 2002:a05:6102:3311:b0:4a4:8268:9a65 with SMTP id ada2fe7eead31-4aae138b9cbmr1471530137.3.1731085083296;
+        Fri, 08 Nov 2024 08:58:03 -0800 (PST)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a184dasm254433666b.30.2024.11.08.08.58.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Nov 2024 08:58:02 -0800 (PST)
+Message-ID: <3bc06d82-7443-4c89-947b-8931cabd787f@oss.qualcomm.com>
+Date: Fri, 8 Nov 2024 17:57:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrtdeigdeklecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthg
-X-DCC--Metrics: v370.home.net.pl 0; Body=10 Fuz1=10 Fuz2=10
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 09/14] thermal/drivers/qcom/tsens-v1: Add support for
+ MSM8937 tsens
+To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Lee Jones <lee@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org>
+ <20241107-msm8917-v3-9-6ddc5acd978b@mainlining.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241107-msm8917-v3-9-6ddc5acd978b@mainlining.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: t7_UtM3dQsrlCeVindGMxDImn8t5EulA
+X-Proofpoint-ORIG-GUID: t7_UtM3dQsrlCeVindGMxDImn8t5EulA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411080141
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 7.11.2024 6:02 PM, Barnabás Czémán wrote:
+> Add support for tsens v1.4 block what can be found in
+> MSM8937 and MSM8917.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> ---
+>  drivers/thermal/qcom/tsens-v1.c | 13 +++++++++++++
+>  drivers/thermal/qcom/tsens.c    |  3 +++
+>  drivers/thermal/qcom/tsens.h    |  2 +-
+>  3 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index dc1c4ae2d8b01b42a0edbb7f12a5780b25d0c8ac..50787cf68bfae48da6061d8e75956308f41053be 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -162,6 +162,19 @@ struct tsens_plat_data data_tsens_v1 = {
+>  	.fields	= tsens_v1_regfields,
+>  };
+>  
+> +static const struct tsens_ops ops_8937 = {
+> +	.init		= init_common,
+> +	.calibrate	= tsens_calibrate_common,
+> +	.get_temp	= get_temp_tsens_valid,
+> +};
 
-Modify intel_pstate to register stub EM perf domains for CPUs on
-hybrid platforms via em_dev_register_perf_domain() and to use
-em_dev_expand_perf_domain() introduced previously for adding new
-CPUs to existing EM perf domains when those CPUs become online for
-the first time after driver initialization.
+Rename ops_8976 to ops_common and reuse it
 
-This change is targeting platforms (for example, Lunar Lake) where
-"small" CPUs (E-cores) are always more energy-efficient than the "big"
-or "performance" CPUs (P-cores) when run at the same HWP performance
-level, so it is sufficient to tell the EAS that E-cores are always
-preferred (so long as there is enough spare capacity on one of them
-to run the given task).
-
-Accordingly, the perf domains are registered per CPU type (that is,
-all P-cores belong to one perf domain and all E-cores belong to another
-perf domain) and they are registered only if asymmetric CPU capacity is
-enabled.  Each perf domain has a one-element states table and that
-element only contains the relative cost value (the other fields in
-it are not initialized, so they are all equal to zero), and the cost
-value for the E-core perf domain is lower.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |  110 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 104 insertions(+), 6 deletions(-)
-
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -8,6 +8,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/energy_model.h>
- #include <linux/kernel.h>
- #include <linux/kernel_stat.h>
- #include <linux/module.h>
-@@ -938,6 +939,12 @@ static struct freq_attr *hwp_cpufreq_att
- 	NULL,
- };
- 
-+enum hybrid_cpu_type {
-+	HYBRID_PCORE = 0,
-+	HYBRID_ECORE,
-+	HYBRID_NR_TYPES
-+};
-+
- static struct cpudata *hybrid_max_perf_cpu __read_mostly;
- /*
-  * Protects hybrid_max_perf_cpu, the capacity_perf fields in struct cpudata,
-@@ -945,6 +952,86 @@ static struct cpudata *hybrid_max_perf_c
-  */
- static DEFINE_MUTEX(hybrid_capacity_lock);
- 
-+#ifdef CONFIG_ENERGY_MODEL
-+struct hybrid_em_perf_domain {
-+	cpumask_t cpumask;
-+	struct device *dev;
-+	struct em_data_callback cb;
-+};
-+
-+static int hybrid_pcore_cost(struct device *dev, unsigned long freq,
-+			     unsigned long *cost)
-+{
-+	/*
-+	 * The number used here needs to be higher than the analogous
-+	 * one in hybrid_ecore_cost() below.  The units and the actual
-+	 * values don't matter.
-+	 */
-+	*cost = 2;
-+	return 0;
-+}
-+
-+static int hybrid_ecore_cost(struct device *dev, unsigned long freq,
-+			     unsigned long *cost)
-+{
-+	*cost = 1;
-+	return 0;
-+}
-+
-+static struct hybrid_em_perf_domain perf_domains[HYBRID_NR_TYPES] = {
-+	[HYBRID_PCORE] = { .cb.get_cost = hybrid_pcore_cost, },
-+	[HYBRID_ECORE] = { .cb.get_cost = hybrid_ecore_cost, }
-+};
-+
-+static bool hybrid_register_perf_domain(struct hybrid_em_perf_domain *pd)
-+{
-+	/*
-+	 * Registering EM perf domains without asymmetric CPU capacity
-+	 * support enabled is wasteful, so don't do that.
-+	 */
-+	if (!hybrid_max_perf_cpu)
-+		return false;
-+
-+	pd->dev = get_cpu_device(cpumask_first(&pd->cpumask));
-+	if (!pd->dev)
-+		return false;
-+
-+	if (em_dev_register_perf_domain(pd->dev, 1, &pd->cb, &pd->cpumask, false)) {
-+		pd->dev = NULL;
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static void hybrid_register_all_perf_domains(void)
-+{
-+	enum hybrid_cpu_type type;
-+
-+	for (type = HYBRID_PCORE; type < HYBRID_NR_TYPES; type++)
-+		hybrid_register_perf_domain(&perf_domains[type]);
-+}
-+
-+static void hybrid_add_to_perf_domain(int cpu, enum hybrid_cpu_type type)
-+{
-+	struct hybrid_em_perf_domain *pd = &perf_domains[type];
-+
-+	guard(mutex)(&hybrid_capacity_lock);
-+
-+	if (cpumask_test_cpu(cpu, &pd->cpumask))
-+		return;
-+
-+	cpumask_set_cpu(cpu, &pd->cpumask);
-+	if (pd->dev)
-+		em_dev_expand_perf_domain(pd->dev, cpu);
-+	else if (hybrid_register_perf_domain(pd))
-+		em_rebuild_perf_domains();
-+}
-+#else /* CONFIG_ENERGY_MODEL */
-+static inline void hybrid_register_all_perf_domains(void) {}
-+static inline void hybrid_add_to_perf_domain(int cpu, enum hybrid_cpu_type type) {}
-+#endif /* !CONFIG_ENERGY_MODEL */
-+
- static void hybrid_set_cpu_capacity(struct cpudata *cpu)
- {
- 	arch_set_cpu_capacity(cpu->cpu, cpu->capacity_perf,
-@@ -1034,11 +1121,14 @@ static void __hybrid_refresh_cpu_capacit
- 	hybrid_update_cpu_capacity_scaling();
- }
- 
--static void hybrid_refresh_cpu_capacity_scaling(void)
-+static void hybrid_refresh_cpu_capacity_scaling(bool register_perf_domains)
- {
- 	guard(mutex)(&hybrid_capacity_lock);
- 
- 	__hybrid_refresh_cpu_capacity_scaling();
-+
-+	if (register_perf_domains)
-+		hybrid_register_all_perf_domains();
- }
- 
- static void hybrid_init_cpu_capacity_scaling(bool refresh)
-@@ -1049,7 +1139,7 @@ static void hybrid_init_cpu_capacity_sca
- 	 * operation mode.
- 	 */
- 	if (refresh) {
--		hybrid_refresh_cpu_capacity_scaling();
-+		hybrid_refresh_cpu_capacity_scaling(false);
- 		return;
- 	}
- 
-@@ -1059,10 +1149,14 @@ static void hybrid_init_cpu_capacity_sca
- 	 * do not do that when SMT is in use.
- 	 */
- 	if (hwp_is_hybrid && !sched_smt_active() && arch_enable_hybrid_capacity_scale()) {
--		hybrid_refresh_cpu_capacity_scaling();
-+		/*
-+		 * Perf domains are not registered before setting hybrid_max_perf_cpu,
-+		 * so register them all after setting up CPU capacity scaling.
-+		 */
-+		hybrid_refresh_cpu_capacity_scaling(true);
- 		/*
- 		 * Disabling ITMT causes sched domains to be rebuilt to disable asym
--		 * packing and enable asym capacity.
-+		 * packing and enable asym capacity and EAS.
- 		 */
- 		sched_clear_itmt_support();
- 	}
-@@ -2215,12 +2309,16 @@ static int hwp_get_cpu_scaling(int cpu)
- 
- 	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
- 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
--	if (cpu_type == 0x40)
-+	if (cpu_type == 0x40) {
-+		hybrid_add_to_perf_domain(cpu, HYBRID_PCORE);
- 		return hybrid_scaling_factor;
-+	}
- 
- 	/* Use default core scaling for E-cores */
--	if (cpu_type == 0x20)
-+	if (cpu_type == 0x20) {
-+		hybrid_add_to_perf_domain(cpu, HYBRID_ECORE);
- 		return core_get_scaling();
-+	}
- 
- 	/*
- 	 * If reached here, this system is either non-hybrid (like Tiger
-
-
+Konrad
 
 
