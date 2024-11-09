@@ -1,137 +1,118 @@
-Return-Path: <linux-pm+bounces-17246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D32079C29D5
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 05:30:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F02DB9C2B77
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 10:49:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C07A11C21574
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 04:30:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55281B21615
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 09:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322FB22315;
-	Sat,  9 Nov 2024 04:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxM9qTZt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BC9146599;
+	Sat,  9 Nov 2024 09:49:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AED6A55;
-	Sat,  9 Nov 2024 04:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2ECE13D600
+	for <linux-pm@vger.kernel.org>; Sat,  9 Nov 2024 09:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731126643; cv=none; b=bZVEYseoPnHcXh1qXEoOVlXH1oul8fD909iTYz6+fP9cPUriASqc4mlTBJ4y0zwb9r0dS9uBcLqfeNUGDKmVcejnWlUMMJUgx3C9Nf3uKdZ209eGLCwzlEyB6KpemXMV+KzwjCJRjGEV5tcZxB31wgffya6SvoOruZu34E+5Nd4=
+	t=1731145750; cv=none; b=RBVm1/ttGsgOkHoO8KDgTbzKSg+b90JwS9VEox0z21fkQk9GjpEvZmlmpQvB6F4r8WdGtURL2XAX8cVCmFvLNe7FJWhLtvuFumbdfzs2O0OUElpZD9frT0NQXYlpLmGH2yU6APWqmpRA1Kn2SqMdm0JHUmT3Vpg+IEV/BPYMZ9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731126643; c=relaxed/simple;
-	bh=v3S0Uxy9aWLosqVI3AjsbrwXTYklXNQMqgB5SgHpcqk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MdUwTRKDxH5rGaY9GO+PVfHMImTw4TFrWCj1KkvfOjhwP4eUaAVfyg1Cvc9y86QnHAQqG7h8dY/zvO0FuMPHDop44GWVTqecu9BEh8YkIIgFFRjsPE1LcRLSn4nEjzeAiiucfKiZsaZpnubdOfJ+8KpYzsGbkIHwiRwm9GET7Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxM9qTZt; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a9a4031f69fso461324966b.0;
-        Fri, 08 Nov 2024 20:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731126640; x=1731731440; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rZThpHkzgLYu6UIAvqwDOVBtO2NGvUEElTIpv4BKZkk=;
-        b=kxM9qTZtB7bAII+9me5xhRJ7sH/K629lZt3GGKGftxuJBBUbFOHhmW4PyVtXd+FsEA
-         ZxF+xAF77bm6KmLOKUsmyACX66wzSwfAve1RKDT5C+tFEucIz4Uj69zceIUA9GVf4+Bq
-         mQfYICNjZW4ktP90G+i5mywwTc144AhoUnkYXSXBdIJyOV7eK6DidI30k3W5JIhW1C4h
-         RL6/o7jbRR2zClfSYrERaB1LyJDVouj8VQvVegHCDhaAjUbAxKQyabJeN0Te2Rl12mZp
-         s51jiP3qmp3ihjGImtcU4DYKc1OZ5ysS2yEnEzf+b4iRj0XRRHBm9BJxpnVI1t/wrxki
-         POhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731126640; x=1731731440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rZThpHkzgLYu6UIAvqwDOVBtO2NGvUEElTIpv4BKZkk=;
-        b=uHxbgsqzwxwcVgl9pbExby37JnTJkPnq3DFWEjQc1Btjz94HqzqRwkK55iSi+QFHXp
-         v8avkpvL5MXkPAOgKRf9kUP4LCunOWElxK1VBuESaqXMs7VgDOhnDif/zBP77kduWRl6
-         ix9B09pUlZNoFaDWE1r42ifomVhVxA5Bsq3d7AhJOw9KOB646OUfHWr2to1agJc+fZMn
-         di75/Lvr99WqN3kgapjVptj7QPPDGXYXlKCu1cPX+jLlGYaXoZniiGQ/HUHwhfWaiyCJ
-         uTDTBhPUPbA18/Qs2IBhhWCKFxj6Ki7TIET5g+PHHG0PiedZ54seordOV17FEcnDhMD0
-         +VHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWkWlv+kSIWJFBfFiN0lmps6OFC9uSGxAYYi1QOOeAdBh/g0JXS+OhzqkfEqpLKU6n9/dXTks36fw==@vger.kernel.org, AJvYcCXse3a09KjqCuQTNTjyAw36LCFaTKl52RIi4zUT7ZdyVwKRJpN1aR/DWeos9qPzY1uaEXI8cLaDdPp2rP7j4uRhcDjQtg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvRK66jfgfZuZi6rKfLYAwgc23CQv1xkrSTULog9TDRHejlDby
-	KP8lCgtLNNiyfzxqDb4+9DGQQI+7ZXRfmFIHY7h6UIDqwJzbdLL8mhyzMKIW9fp/DBHrnDEr7Cj
-	MuCUnFj4T6vickAK5EjSr1rGIQ68=
-X-Google-Smtp-Source: AGHT+IFBOrzz/VTmw6H7sHjCz1RInm66IQCmEPK5PJRwrVDONRMaVjJ24+kj7QbmRMyEEIhAyBIhJmXctJ2hORgD4OA=
-X-Received: by 2002:a17:907:2d88:b0:a9a:c651:e7d9 with SMTP id
- a640c23a62f3a-a9ef00190edmr469756966b.46.1731126638196; Fri, 08 Nov 2024
- 20:30:38 -0800 (PST)
+	s=arc-20240116; t=1731145750; c=relaxed/simple;
+	bh=envogq3++8LebNDrbmjeOhu6ssKCirUoCREvmKhTbuU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=nKp8MuN2XpN9f9HmkN8wMs8r36S+0UL7t0hEaEi1787x7zEIr0CJnVUH0s8+9svNSkGcWqMp04U9YSi+tGQpJo+0vcRi2BlCNFO6VwdSFUFDO32XcNzA2CwPY215n0++clspksZNIB1oSc3mOIzbMATiKs7Uji/209NjysGcM14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-94-S7JoMMDMMHS9cQ8RB_P-nQ-1; Sat, 09 Nov 2024 09:49:05 +0000
+X-MC-Unique: S7JoMMDMMHS9cQ8RB_P-nQ-1
+X-Mimecast-MFC-AGG-ID: S7JoMMDMMHS9cQ8RB_P-nQ
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 9 Nov
+ 2024 09:49:04 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 9 Nov 2024 09:49:04 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Haris Okanovic' <harisokn@amazon.com>, "ankur.a.arora@oracle.com"
+	<ankur.a.arora@oracle.com>, "catalin.marinas@arm.com"
+	<catalin.marinas@arm.com>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "will@kernel.org" <will@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
+	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "wanpengli@tencent.com" <wanpengli@tencent.com>,
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "rafael@kernel.org"
+	<rafael@kernel.org>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "arnd@arndb.de"
+	<arnd@arndb.de>, "lenb@kernel.org" <lenb@kernel.org>, "mark.rutland@arm.com"
+	<mark.rutland@arm.com>, "mtosatti@redhat.com" <mtosatti@redhat.com>,
+	"sudeep.holla@arm.com" <sudeep.holla@arm.com>, "cl@gentwo.org"
+	<cl@gentwo.org>, "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>,
+	"maobibo@loongson.cn" <maobibo@loongson.cn>, "joao.m.martins@oracle.com"
+	<joao.m.martins@oracle.com>, "boris.ostrovsky@oracle.com"
+	<boris.ostrovsky@oracle.com>, "konrad.wilk@oracle.com"
+	<konrad.wilk@oracle.com>
+Subject: RE: [PATCH 2/5] arm64: add __READ_ONCE_EX()
+Thread-Topic: [PATCH 2/5] arm64: add __READ_ONCE_EX()
+Thread-Index: AQHbL7EN8akEXkbcIke1iZkICXXDerKutxnw
+Date: Sat, 9 Nov 2024 09:49:03 +0000
+Message-ID: <c2bee816a4a44d55951ca839fea0a6dd@AcuMS.aculab.com>
+References: <20240925232425.2763385-1-ankur.a.arora@oracle.com>
+ <20241105183041.1531976-1-harisokn@amazon.com>
+ <20241105183041.1531976-3-harisokn@amazon.com>
+In-Reply-To: <20241105183041.1531976-3-harisokn@amazon.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241108232438.269156-1-hdegoede@redhat.com> <20241108232438.269156-2-hdegoede@redhat.com>
-In-Reply-To: <20241108232438.269156-2-hdegoede@redhat.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sat, 9 Nov 2024 06:30:02 +0200
-Message-ID: <CAHp75VfxCEk1OhQZX8SEk8Enyf6mz1Tt0qxsTX9Xfouw8WOL-g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] power: supply: power_supply_show_enum_with_available():
- Replace spaces with '_'
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Sebastian Reichel <sre@kernel.org>, platform-driver-x86@vger.kernel.org, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Jelle van der Waa <jelle@vdwaa.nl>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: PISkY7OL53eDegaeOjlNTK3UeKYybk1ypNhmKsgaWnc_1731145744
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 9, 2024 at 1:24=E2=80=AFAM Hans de Goede <hdegoede@redhat.com> =
-wrote:
->
-> Some enum style power-supply properties have text-values / labels for som=
-e
-> of the enum values containing a space, e.g. "Long Life" for
-> POWER_SUPPLY_CHARGE_TYPE_LONGLIFE.
->
-> Make power_supply_show_enum_with_available() replace these spaces with
-> '_' when showing the available text-values. After this the output for
-> a battery which supports "Long Life" will be e.g.:
->
-> Fast [Standard] Long_Life
->
-> or:
->
-> Fast Standard [Long_Life]
->
-> Modify power_supply_store_property() to accept both the original text-val=
-ue
-> with space and the alternative value with the spaces replaced by '_'.
-> This allows users to write the value with '_' after seeing this on readin=
-g
-> the property.
-
+From: Haris Okanovic
+> Sent: 05 November 2024 18:31
+>=20
+> Perform an exclusive load, which atomically loads a word and arms the
+> exclusive monitor to enable wfet()/wfe() accelerated polling.
+>=20
 ...
+> +=09atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);\
 
-> +static void power_supply_escape_spaces(const char *str, char *buf, size_=
-t bufsize)
-> +{
-> +       strscpy(buf, str, bufsize);
-> +       strreplace(buf, ' ', '_');
-> +}
+That doesn't do what you want it to do.
+(It is wrong in READ_ONCE() as well.)
 
-The bufsize in all cases here is sizeof(buf), making the above to be a
-macro we may switch to 2-argument strscpy(). FTR, it embeds the check
-that buf is an array.
+?: is treated like an arithmetic operator and the result will get
+promoted to 'int'.
+Moving the first cast outside the ?: probably works:
+=09(typeof(*__x))(atomic ? __u.__val : (*(volatile typeof(__x))__x));
 
-...
+   David
 
-> +       char escaped_label[32];
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-Even more, the but size seems also the same, can we have buf defined
-inside the above?
-
---=20
-With Best Regards,
-Andy Shevchenko
 
