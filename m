@@ -1,74 +1,76 @@
-Return-Path: <linux-pm+bounces-17264-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17265-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516729C2D39
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 13:44:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B49219C2D3E
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 13:45:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BEEE1C20D7C
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 12:44:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58E20B21740
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 12:45:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81471186E2E;
-	Sat,  9 Nov 2024 12:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8361953B9;
+	Sat,  9 Nov 2024 12:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WDu38UYm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mE7NFZv6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B836C145B03;
-	Sat,  9 Nov 2024 12:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42968194125;
+	Sat,  9 Nov 2024 12:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731156284; cv=none; b=Gg3aZSXOgBPFRhHfYP/pB+2G465t0O2FDnprsBascgAaUh+l6DDVyVqHXgXF5mZsFkfkvOr4qsPZrt+qryDdGjUxtHP5ieueDeAQ/UzE4fP7dagqEjYeLPWzv3a2O48hAGH2CBdXU1BtBb8n5D6XwhuSata9i0rAKKzS1BILeYg=
+	t=1731156286; cv=none; b=p9SXxHx8uIbdS8QmHq6vXyUU4ksj4juNI2GxFIGCWES94sgABF7JpduUnp95YNy8oQc5xLyNfanliMCZjPnzk67m/27Dz/UNFfg1B5p9oHHFLxQ2TjjExoHuFv7zGZ9BkY51/1vvDgWKvVXdc/P73D8Eggd2rw+zYNCWoVNaR08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731156284; c=relaxed/simple;
-	bh=AViyC/+sdOhddIa9xjAO4k6SS339kVhh4BSc9RyXqEo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MGKtUjIQe545oe68W7L8ee5qtyyat6sD5M/9kHu2cm1U/9ycTu/h36AfEtWU56UbRmfCKgQtKPbTAekuaAQk8Le4u7jFa0I5RvfgjsesSIEXjHG8AyAvVs6MyyQuYD7tIev3viKjCb7limONfWO7ZqWjKwqcJBe/LbiRjd71ANc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WDu38UYm; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1731156286; c=relaxed/simple;
+	bh=XDi/izkEsxpjIBfFcCl4FataBQfKvJR8pQmYDtefj8s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=tX3ZMB657C73xoWMnxKDgSR+tCZCR+qvAaQ6SY4madGxnN3sdJjtAF7c/ZT9q+opYBmZiO1kgJSbG6rKSiNDYoFrhJeTTmqrno5X68YGkO8cApqY6FEj+uRuJ9U2ljbMOFcXfvG1nMnDDUboSgZ8i6wPS69SGifWyH/OJCBw2Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mE7NFZv6; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5cecbddb574so3730697a12.1;
-        Sat, 09 Nov 2024 04:44:42 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5ceccffadfdso4080285a12.2;
+        Sat, 09 Nov 2024 04:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731156281; x=1731761081; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZnvmniB3LeK8KeMuMSmkjZysB0f8NngS3V/dJUbHuv8=;
-        b=WDu38UYmC0NRAKFTptp7zOBMsyA5ayJJgUL43UQiOJnt8r5HAQike/778DduoI7J7d
-         dtTlmHpi5pOeesFocKIPlLairuTSeqsdTlHyU26ACZiWRQfGFINiDJvCXdzsanSE3MiF
-         KACvDERJy6wqabjvleI2c52a5v/K6vYUYSzoLPsuwsOzOviOkgoeK47HN28Jiv14bVsM
-         eGzP3iiGyLU/6M/5MnEN4KyfQDCwPljCr1sl5qn575cWeUIWxgbtBxqAbye6iVn3Nma/
-         /J0VDr8VTS0Ko6RdsuStXW5D5rstuRXj++/h/hzsuxMiJJi0WCQdJueoQ7zmCcXhR7wa
-         +DLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731156281; x=1731761081;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1731156283; x=1731761083; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZnvmniB3LeK8KeMuMSmkjZysB0f8NngS3V/dJUbHuv8=;
-        b=IfB4q+Tkb8LtcJMPgAL8T/6qA3ar0ch+HigzKMEwvOwUY22FEkRWZDb8YVqkiGNsIq
-         hqcHJaV1/MejI5G/P0Yv3xyYTRrp50rQ7EnhN7teoS/0DvJQYu6ji7LhHqlqet9G1hH9
-         4yG5fwaQt3WoDSd5AiWI92uIaiAm76THZ3awvt1QBnh7HJcEkdIqoRQkba9kYwZcv6X9
-         XLSP8qY1OUP424K3KrNQ4ANhnmjOvBkQ/+uePuGlAAxxA8BVrPKt2FrnHVRgB3aWZmFS
-         aIYP0I3Ebc+YFooiwxlAozn0GhyBtob8mC0WQLgbXLyY8pl0le0jtu62rK9e6Rd4wa3l
-         maag==
-X-Forwarded-Encrypted: i=1; AJvYcCUntGCwCq8a1j/G+QqwSi14nFt8APFcChCqH+YZZktnSRO4OtypeWlqnXL340NjuYE0ZNoFL0SiVxv3UhuW8OhLs3I=@vger.kernel.org, AJvYcCVTqs8ipIgNicwTBwfe+Pd26ADpN9iFfAx/StxVau00xbucuyMRcRJSB1zS1Mxun6zl0H6YcoLB1E69HFwq@vger.kernel.org, AJvYcCVgGyIqwnfXF2OpjboVH4kEQN6Yl0/QjRbP40TTOSce/HJO0uLeP31dATaRCg76rsLd6h4HJF3BXLqk@vger.kernel.org, AJvYcCWp4cuLDiUIsdWJ9/DX1zhOqFjmXSghaPUh+BMwpW1XaNR/hUW0nlwUhslkbQTUF6Die4xpjcu9sX+8gzi4Pw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3uxc3oKbNfNUJQQphVCESjEDUu4YoePuZT2RVHZY0Ia1QDsly
-	u+RHmhsjQFBJRProPGmeZA5yZgOC904SvkW7ycGvptq25/GHH+b2qNsCv+HR
-X-Google-Smtp-Source: AGHT+IEIGCuxXrmbH3JmjmIhypDxiqT7VZZMvZ/3txPu0Ud1UAxyBs1Rg9CLp2YCTFkbDWAYDWeRnw==
-X-Received: by 2002:a05:6402:40ce:b0:5cf:1122:88bc with SMTP id 4fb4d7f45d1cf-5cf11228de0mr4137881a12.20.1731156280475;
-        Sat, 09 Nov 2024 04:44:40 -0800 (PST)
+        bh=yMBRjHQI74d5Z99eEqTTVCC+GvOlvQ6t8L8FeqMEQRI=;
+        b=mE7NFZv6bZWgNBpVidSiJZN4lPK4DPHbEHHjFmZUF20LptVARrZGmbT8yr34/ro5+Q
+         pGIEiqe8H4aXNOYAAM8OBYyQZe66Vkc+76Wp+AJzx9nlz6d/xWqYtypvVa8NYrWv8A/u
+         hQ3CMO/7eXINQyZWsSoO53B4nA7xGHWUPsRjo/98g3CNV5nCRFcYJPK1m7YVpDv8k2Zo
+         wvskD7xOyAkRBZXEyEvCsgras5ViReRcKuijIsvzS9YdK6l73lwdX3RRR8pZxB6owTY9
+         TMfy/OAztZ0Nq7oe1mRB8cSIMIoFiVBf2vBtGX5ZCoBAuZn0kHqbBFD8hh7cWCgyljJz
+         ly3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731156283; x=1731761083;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yMBRjHQI74d5Z99eEqTTVCC+GvOlvQ6t8L8FeqMEQRI=;
+        b=wU1hhR7098tYo2azudaCoP+o4FeoB33osMyjRjEqyDLuf/x/70cmAU7jUYy/flk3hW
+         Pn01a0j0813lf6v4CYwWSSTcxXe8d0jeHJjtbkuVCeRntky52T5SbOgoseSf4ZRvnEzu
+         6HjwOZt5JqnF6I94uEJx8hVyOs39APm8avCJtacnRMbDW/TgbDeWOnFmuPVP01pbVsy5
+         DseAW4QR+/1uMq7hOpY0FYywfvlly8Suz8DZBgFWan37eBId1yQSltquvBa7lZtGdBE6
+         vGdMfFMDRAxTpE6GkhxeIBnQWaok1sHC+dB9P+4lsmKCRsxgX16HRluKKIpqcfFlF7HK
+         Tgqw==
+X-Forwarded-Encrypted: i=1; AJvYcCVY5BeYabCH8eANls7y7v5ICVR3Lv9RZoKaQHYvTn8D4ltyWJ3O5jxExpcvbt471N/b6xUYa7erznJ2Oyse8E0kkLU=@vger.kernel.org, AJvYcCW+1jpcW00089KmBDznb5b53E9Z+6NAV2gAG/Pcl18oHOYpJLovFKqMZWuu2y9jin2jo9UUiJaRnshIUmjK@vger.kernel.org, AJvYcCXB7vwEnvGef9D6VV608ViPBl7QTQFR1aoNHgTlnkRdWPCTpNCSbWBNxu8ck3uYwl/VGg6scU2ZsCSy@vger.kernel.org, AJvYcCXkmzSSVbQzjrY3flTnl9BlEUoKF4zYIg4Dp1LWu3w/G7PNUcJd/HSUWBKL6OSKaDjD5wOZdTC3aICW6/Td3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQrDRmnvveGLDayHFiiDtNkwS2pHHTAVu8Jw1MkioSOzrI2JgY
+	GxY5K9aHoJHQB5GChmWideXILDGWn+x1Pb002F93NTCQEZP1R15DkhVCV+bf
+X-Google-Smtp-Source: AGHT+IGHmXkaxvNLQkweBLdDmIhicVaPliDsIzJWNuOAzUgBi/pEgCPcvtCC2kM/nBeKCrbNxy/bFw==
+X-Received: by 2002:a05:6402:4405:b0:5ca:da2:b2ca with SMTP id 4fb4d7f45d1cf-5cf0a32477cmr4494536a12.19.1731156283115;
+        Sat, 09 Nov 2024 04:44:43 -0800 (PST)
 Received: from [127.0.1.1] (leased-line-46-53-189-50.telecom.by. [46.53.189.50])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03b5d793sm2940166a12.17.2024.11.09.04.44.37
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03b5d793sm2940166a12.17.2024.11.09.04.44.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2024 04:44:39 -0800 (PST)
+        Sat, 09 Nov 2024 04:44:42 -0800 (PST)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: [PATCH 0/4] power: supply: max17042: cleanup and more features
-Date: Sat, 09 Nov 2024 15:44:32 +0300
-Message-Id: <20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com>
+Date: Sat, 09 Nov 2024 15:44:33 +0300
+Subject: [PATCH 1/4] dt-bindings: power: supply: max17042: add share-irq
+ node
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,9 +79,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADBZL2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDQwML3SQT3dzECkNzAxMjXUtjA7O0ZHPTxLTEVCWgjoKi1LTMCrBp0bG
- 1tQDfK1uyXQAAAA==
+Message-Id: <20241109-b4-max17042-v1-1-9e2b07e54e76@gmail.com>
+References: <20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com>
+In-Reply-To: <20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com>
 To: Hans de Goede <hdegoede@redhat.com>, 
  Krzysztof Kozlowski <krzk@kernel.org>, 
  Marek Szyprowski <m.szyprowski@samsung.com>, 
@@ -96,48 +98,46 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
  linux-arm-msm@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731156277; l=1826;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1731156277; l=1112;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=AViyC/+sdOhddIa9xjAO4k6SS339kVhh4BSc9RyXqEo=;
- b=90pggLnOjDwy8XmUHTXmK3BpQlR4sHc6LVU9DiIpq7VL088R8yBC5A5aftKbu82FSxx1GYGTA
- X/vuKAzVUFHAIDmfWW6YeaEl/dP8pdBpT3O5BkRrjvSkaf7a3lu1vLO
+ bh=XDi/izkEsxpjIBfFcCl4FataBQfKvJR8pQmYDtefj8s=;
+ b=S2oWIinV5ResTYdNod6KQGakhY3n2n115RbBezpr5fVJmGmnKyaCmXd8jZrZ+MQSaky4qbucC
+ JOnSGVPtY/GD5N10XFrNG4mOf2wnORx+aMouPtcZM9TebziThuOZ1ge
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Maxim max17042 driver cleanup, and shared-irq feature.
-
-Fuelgauge blocks often are incorporated in bigger chip,
-which may use only 1 line for interrupts. Shared-irq
-handles that case by requesting irq as shared.
+If specified, driver should request irq as shared.
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
-Dzmitry Sankouski (4):
-      dt-bindings: power: supply: max17042: add share-irq node
-      power: supply: max17042: implement dts shared-irq
-      power: supply: max17042: use microvolts for voltage comparison
-      power: supply: max17042: rename maxim,rsns-microohm property
+ Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml | 13 +++++++++----
- arch/arm/boot/dts/samsung/exynos4210-i9100.dts                     |  2 +-
- arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi                     |  2 +-
- arch/arm/boot/dts/samsung/exynos4412-midas.dtsi                    |  2 +-
- arch/arm/boot/dts/samsung/exynos4412-p4note.dtsi                   |  4 ++--
- arch/arm64/boot/dts/freescale/imx8mq-librem5-r4.dts                |  2 +-
- arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi                  |  4 ++--
- arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dts               |  6 +++---
- arch/arm64/boot/dts/qcom/msm8916-motorola-osprey.dts               |  6 +++---
- arch/arm64/boot/dts/qcom/msm8916-motorola-surnia.dts               |  6 +++---
- arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi           |  4 ++--
- drivers/power/supply/max17042_battery.c                            |  9 +++------
- include/linux/power/max17042_battery.h                             |  1 +
- 13 files changed, 32 insertions(+), 29 deletions(-)
----
-base-commit: 929beafbe7acce3267c06115e13e03ff6e50548a
-change-id: 20241108-b4-max17042-9306fc75afae
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+index 085e2504d0dc..e98ffdad1ec3 100644
+--- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+@@ -59,6 +59,11 @@ properties:
+       Voltage threshold to report battery as over voltage (in mV).
+       Default is not to report over-voltage events.
+ 
++  shared-irq:
++    description: |
++      Request interrupt as shared.
++      Set in case of other devices using same interrupt pin.
++
+   power-supplies: true
+ 
+ required:
+@@ -79,5 +84,6 @@ examples:
+         maxim,rsns-microohm = <10000>;
+         maxim,over-heat-temp = <600>;
+         maxim,over-volt = <4300>;
++        shared-irq;
+       };
+     };
 
-Best regards,
 -- 
-Dzmitry Sankouski <dsankouski@gmail.com>
+2.39.2
 
 
