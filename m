@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-17271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 921A09C2DAA
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 14:49:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BE39C2DBA
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 15:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5FF41C20FA1
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 13:49:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA8091F21BD6
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2024 14:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F91B194ADB;
-	Sat,  9 Nov 2024 13:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21BFB1946CC;
+	Sat,  9 Nov 2024 14:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DMVJR3Lg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlyXi6pk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087D314E2CC;
-	Sat,  9 Nov 2024 13:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FFEC8FF;
+	Sat,  9 Nov 2024 14:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731160191; cv=none; b=eNYYliPHHnwgtv5dwmjsv+r5xbV6Ptp+2s+1Y8slG4i2AGgD5PtpJM22Xz/drpjJdnEU++bAaqnhTPwJnFNC1xOQF9iq/HxT3sKK/P5FrJUgaK/QKmRX3jh/Lv7uU0WVQJgW+pISEge1YC9tkivPRgsyhBzxZBtBLD8Gq2Z3A7M=
+	t=1731162067; cv=none; b=fxZsKuq5/BlVh/ePbbiQQwNr8SHKwMDGjqnGmlTmLfiCcRgp7O7x3iLWlpy6IcXRNMLzq5UL4Ojkb4wRz+nruP1RxjCAHsGaiJmdbHUjfylvOqsGd8LRBWpkV0rtQuiWKgLL7Z/ObB4gb8CKWNKJ+dvLZX+CGDjpa9zUuTbAexs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731160191; c=relaxed/simple;
-	bh=l2kZzBU+RbJCGfr2ZBjsdIYubJlXs2k+Us4wAMzQFds=;
+	s=arc-20240116; t=1731162067; c=relaxed/simple;
+	bh=29ebZSgGQAXMCN05ieHggt4yO6nnlrHI5VPqh6adRtM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pkT9ZSts8W4nW14jJmkJkJ5ZrfgEvhUCv88V0J83fmsp5HRcOyi6iyyryZ87G5E0K3MclAg6eMbwUqpYVQJn4EXxX9AYY9rdyF4pb4JmMh/HUKUwJZnuM/zdjSDNsIrT3LLYu5SmUF5zfFMl9e04Q/DaJeeG+EDTGrUjMZYRnAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DMVJR3Lg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD889C4CECE;
-	Sat,  9 Nov 2024 13:49:44 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jV0iMlkC0HYQ/OQGncnpCHJf/fDbC/7E12OOnr4MgEESuav9qpIEzvR40NCr9Wg8Gc8aOh+a2LIQ3b/qK7Qx5t/N5XkutB/7YtoM9/j6jghNhyPbQTRtoCEVdN3zf8uP7Sl+Ukj90eQJURWdAqJAozgthnmfUlgFAV+wyCxROYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlyXi6pk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D05C4CECE;
+	Sat,  9 Nov 2024 14:20:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731160190;
-	bh=l2kZzBU+RbJCGfr2ZBjsdIYubJlXs2k+Us4wAMzQFds=;
+	s=k20201202; t=1731162066;
+	bh=29ebZSgGQAXMCN05ieHggt4yO6nnlrHI5VPqh6adRtM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DMVJR3LgD4463EmBdX4rzOW7zClm1dB8YxOUOvsM9sqRV06ra9roZvqGhbD8eOXKd
-	 tskYnvV5Jbc+CQmBYKGgK87WZC8DIX5TNqtRMkYhq0Hr89dECdLtdHR7LmQEFVXVol
-	 aYxN7CxOEfLOtgt5zWJhSAFYarR36yppH6h1FjZBXJYgD1VTcAHwP9McaCDYhVVxRt
-	 sj7k3u3vn/X1TT7N5+g89Gpl48GIB+Ly3VBorsQKaq6yvcQ3DRIe4QoFMkhHkgOJov
-	 wJxFMBvZtPC896m1p+mSuWNkVTbgUP2ardm7tfVWIJ4r6a1LmX30WDIqmP8GLb/E+T
-	 Egkd0kDXzoJow==
-Message-ID: <2c706292-e4cd-4eeb-be5d-9f9b9f67e025@kernel.org>
-Date: Sat, 9 Nov 2024 14:49:42 +0100
+	b=UlyXi6pktj9tANpn3QQ4G5imtEj9FWnuL1EeYMIPRIZf8xsdtLYBPJsuIj0KuqYAw
+	 7JrVAN86d0SBP1dBdlhlGql5tUamqjHpdJ7aSEh3Hlw/ULtoINNLkO50pvtQZGTI+L
+	 qCfEtmEFZw3SvDDnnASe5JqYZd6HFBm+84A7DC8UxG8Yu0e0aqFFEQdeifGqFQR3K2
+	 P1B3OXVMeBZ++0H7jN7N1o7sII75FwMchvMvAgt8/V8HErEpjE6FkSU9RlXcLqOChp
+	 VKFM9ectd1qhXIfKDcbkU6anl45zhYtYJbdoA1/P11F+rNRQxRr1fq0R48frodvqVE
+	 754/awgUJKaiw==
+Message-ID: <d14ab872-c66b-496b-8769-7a6df30c8253@kernel.org>
+Date: Sat, 9 Nov 2024 15:20:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,25 +50,23 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: power: supply: max17042: add share-irq
- node
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
- Hans de Goede <hdegoede@redhat.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-msm@vger.kernel.org
-References: <20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com>
- <20241109-b4-max17042-v1-1-9e2b07e54e76@gmail.com>
+Subject: Re: [PATCH v4 02/10] dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
+To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev
+References: <20241109-msm8917-v4-0-8be9904792ab@mainlining.org>
+ <20241109-msm8917-v4-2-8be9904792ab@mainlining.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,34 +112,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241109-b4-max17042-v1-1-9e2b07e54e76@gmail.com>
+In-Reply-To: <20241109-msm8917-v4-2-8be9904792ab@mainlining.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 09/11/2024 13:44, Dzmitry Sankouski wrote:
-> If specified, driver should request irq as shared.
+On 09/11/2024 13:08, Barnabás Czémán wrote:
+> Add device tree bindings documentation for Qualcomm MSM8917
+> pinctrl driver.
 > 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 > ---
->  Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> index 085e2504d0dc..e98ffdad1ec3 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> @@ -59,6 +59,11 @@ properties:
->        Voltage threshold to report battery as over voltage (in mV).
->        Default is not to report over-voltage events.
->  
-> +  shared-irq:
-> +    description: |
-> +      Request interrupt as shared.
-> +      Set in case of other devices using same interrupt pin.
 
-Why you cannot request shared interrupt always? It's not the property of
-this device to know whether its interrupt is shared or not. What if we
-add overlay sharing the interrupt? Nope, that's just describing OS behavior.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 Best regards,
 Krzysztof
