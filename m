@@ -1,65 +1,69 @@
-Return-Path: <linux-pm+bounces-17350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C96DD9C48C4
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 23:06:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2B399C48C6
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 23:07:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA458B236A2
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:03:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63B3628908D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:07:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65CF51BC9E2;
-	Mon, 11 Nov 2024 22:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1C33166F32;
+	Mon, 11 Nov 2024 22:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="riL9iqbt"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="imyVC+Kf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E07166F32;
-	Mon, 11 Nov 2024 22:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731362631; cv=none; b=nuvl9GdgcUwFWpmhNx03Pe7huDjVXcWQ+mEadDldu+wrBas6Ja3uyRtK6USAhCjv0mN+Io30S4/tPeiUo9mwJqmYbdROWbPqRzgr8jWb90eU1So5hhjqMt9rgtNSwIgWC+bKafxDQTYDn61vS980gfV1HQvPylOiqpGnWukNEmE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731362631; c=relaxed/simple;
-	bh=/Wy4YidZGwjesqXErLGt7skkvYZCZ+x2ehWCREUyIAY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C087F477;
+	Mon, 11 Nov 2024 22:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731362845; cv=pass; b=gyqeH6OANHtJf38w02A4cTaAbYGrdOX8LSkkRA71aOdFmv8T79OIRhCVdOsYJXjepUje08BvE16bsh5IjSk826CkTWZQ4HYxWmn+eyW5ShYnAena1jEWJ8/KNmazjIs0i11ypI9bEActhlXNbkJxzEJZmkao3m6AVfWo2gWIOYE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731362845; c=relaxed/simple;
+	bh=e9q42B/7N4WlAuyztwSZ9VdcviFPUtwEoO/lcrc5lyY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vlf1oPqPj4ayOqph+idd/nrLdtnSQIKG+l2ixLAG5ueXClcPTfta5iFNL0QosrqJhLnRv0wDGwt+r8ETvX6CR0eUcAxrtGF0n1LJdc+mxjANW+cX9+v0pBbYxoVN/O5mPUF4aCLOGb1CaQUxb064inPmXQ77bUDZfz7NLy5P9+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=riL9iqbt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FEA7C4CECF;
-	Mon, 11 Nov 2024 22:03:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731362630;
-	bh=/Wy4YidZGwjesqXErLGt7skkvYZCZ+x2ehWCREUyIAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=riL9iqbtW8IvnGCiJcjj8/1C0+k8mlR5QhUe7LCulJ8Wci1nKMZ/7LhHpQVIv+r4H
-	 yK3uHTC5eVHOOWnPisZ7/3xGcgF/xLm6/p/jMyug+taDYW3gBtdDkqrx/NXBTAZRgg
-	 bKdK05okjMACDBhAR5qDNfRg1IQOQQhEpa3mJrxvouAE57sy8X0t7ULAvDlG+fskju
-	 4y/iF3hrrfydQEuNGxZqWAwVdbN87xTmnJEgVctVLNACYRVsoh/0cxUfiz/CjfRn5+
-	 sGmFN+bhQHyZ2AUS0U+1FhtRTRyZMjp00fXkRmctGU3BOzkTN9nqye1ti0sN+hBomr
-	 kCMfF6tpbeQbw==
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oonfllfl0UiIfc0TxyALGr8kq0tKY/0mb6jq2XrvDj1gcvVh1LkDBKsA/uZvsCfBFSNDcPukdsMe4afJQfZzwuQ2n8Eyi/NBU0IS8LfwSHWBJfMoZRFrGRB6tKGRETqrXCLPf+eG606HEzYCvtTIetKmyiHkUv2b3SYwfvO5frE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=imyVC+Kf; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1731362836; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=hFZehPDvm58jjuS1AU8JWoBz5FxXrL7A69N7520+tRBgFYZQZvNyLq8EyHrTiCIY/WWK0gXaoFuJSRkIny0P2c09FPbg5r2LFmhX+C5A8eZeU1Kvzk2woCOJrnvsNU04dR3LM5wlbfpvE3r09/u7GgHb3YhpwGjy47LSWrGUv1E=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1731362836; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=hzLbd03HG2BFfh20ycJHkdjB0SaLheHeQWEBrY8n7kg=; 
+	b=LXZwlHJnsW9gfYOHYqF1+Ms4L3z5Rbx8LS4L6OMoK1rnolGQbzk+eshrLm/RdT4HdnDkmx201kZWry69R14y7qWEfkE5gqz7PrX+htjjveuan0OhaRvh+13ahjnwl5ToMC7SGD+kObQY2qYUQleQTP6Nt2wGYrpHRW4kX6lTPSk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1731362836;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=hzLbd03HG2BFfh20ycJHkdjB0SaLheHeQWEBrY8n7kg=;
+	b=imyVC+KfjdILBJVY8chRNSocuiTVSVO5MBuYVzCgmQB77YoDlEc034A4uMGRSb/I
+	CXDVS9H9Qw4+Ah7jXaE9gJUdMVThuszFZ5X2HRLJ9sRxZQvoblxmVvojgBYHppEDKaM
+	mOVc7XPUsFhFMaqDdIH5Z62IhQMTMuhmtRgYeJeI=
+Received: by mx.zohomail.com with SMTPS id 1731362835355973.3650981655287;
+	Mon, 11 Nov 2024 14:07:15 -0800 (PST)
 Received: by mercury (Postfix, from userid 1000)
-	id 2F65B1060457; Mon, 11 Nov 2024 23:03:48 +0100 (CET)
-Date: Mon, 11 Nov 2024 23:03:48 +0100
-From: Sebastian Reichel <sre@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Stanislav Jakubek <stano.jakubek@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
-	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
-	Pavel Machek <pavel@ucw.cz>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, devicetree@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: sprd,sc2731: convert to YAML
-Message-ID: <26gfhjt2sslcqqe7s7zgrxmyz2jbxiwcxjzhyw7zdfp655lcc5@phreemx4obs4>
-References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
- <20241106090422.GK1807686@google.com>
+	id E804A1060457; Mon, 11 Nov 2024 23:07:11 +0100 (CET)
+Date: Mon, 11 Nov 2024 23:07:11 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Jennifer Berringer <jberring@redhat.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Maxime Ripard <mripard@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] power: reset: nvmem-reboot-mode: fix write for
+ small cells
+Message-ID: <x2iuidzuodgo35iy5rvtmowz3o4s6nurrpunyhvvqniujmgpg5@hwrup7rr5pmc>
+References: <20241104152312.3813601-1-jberring@redhat.com>
+ <20241104152312.3813601-4-jberring@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,82 +71,80 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rl5it4vjkjpkjjip"
+	protocol="application/pgp-signature"; boundary="2uq3qzykfhdkdn5j"
 Content-Disposition: inline
-In-Reply-To: <20241106090422.GK1807686@google.com>
+In-Reply-To: <20241104152312.3813601-4-jberring@redhat.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/231.261.35
+X-ZohoMailClient: External
 
 
---rl5it4vjkjpkjjip
+--2uq3qzykfhdkdn5j
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: sprd,sc2731: convert to YAML
+Subject: Re: [PATCH v3 3/3] power: reset: nvmem-reboot-mode: fix write for
+ small cells
 MIME-Version: 1.0
 
-Hi Lee,
+Hi,
 
-On Wed, Nov 06, 2024 at 09:04:22AM +0000, Lee Jones wrote:
-> On Mon, 04 Nov 2024, Stanislav Jakubek wrote:
-> > Convert the Spreadtrum SC27xx PMIC bindings to DT schema. Adjust the
-> > filename to match the compatible of the only in-tree user, SC2731.
-> > Change #interrupt-cells value to 1, as according to [1] that is the
-> > correct value.
-> > Move partial examples of child nodes in the child node schemas to this =
-new
-> > MFD schema to have one complete example.
-> >=20
-> > [1] https://lore.kernel.org/lkml/b6a32917d1e231277d240a4084bebb6ad91247=
-e3.1550060544.git.baolin.wang@linaro.org/
-> >=20
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > Changes in V3:
-> > - remove $ref to nvmem/sc2731-efuse and list the compatibles with
-> >   additionalProperties: true (Krzysztof)
-> >=20
-> > Changes in V2:
-> > - rebase on next-20241029
-> > - drop partial examples in child node schemas, move them here (Rob)
-> >=20
-> > Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A=
-55M-S2HP/
-> > Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A=
-55M-S2HP/
-> >=20
-> >  .../bindings/iio/adc/sprd,sc2720-adc.yaml     |  17 --
-> >  .../bindings/leds/sprd,sc2731-bltc.yaml       |  31 ---
-> >  .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 252 ++++++++++++++++++
-> >  .../bindings/mfd/sprd,sc27xx-pmic.txt         |  40 ---
-> >  .../bindings/power/supply/sc2731-charger.yaml |  21 +-
-> >  .../bindings/power/supply/sc27xx-fg.yaml      |  38 +--
-> >  .../regulator/sprd,sc2731-regulator.yaml      |  21 --
-> >  .../bindings/rtc/sprd,sc2731-rtc.yaml         |  16 --
+On Mon, Nov 04, 2024 at 10:23:12AM -0500, Jennifer Berringer wrote:
+> Some devices, such as Qualcomm sa8775p, have an nvmem reboot mode cell
+> that is smaller than 32 bits, which resulted in
+> nvmem_reboot_mode_write() failing. Using nvmem_cell_write_variable_u32()
+> fixes this by writing only the least-significant byte of the magic value
+> when the size specified in device tree is only one byte.
 >=20
-> Is everyone happy with me merging this through MFD?
+> Signed-off-by: Jennifer Berringer <jberring@redhat.com>
+> ---
 
-Sorry for the delay - fine with me for the power-supply bits.
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
---rl5it4vjkjpkjjip
+>  drivers/power/reset/nvmem-reboot-mode.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/reset/nvmem-reboot-mode.c b/drivers/power/rese=
+t/nvmem-reboot-mode.c
+> index 41530b70cfc4..b52eb879d1c1 100644
+> --- a/drivers/power/reset/nvmem-reboot-mode.c
+> +++ b/drivers/power/reset/nvmem-reboot-mode.c
+> @@ -24,7 +24,7 @@ static int nvmem_reboot_mode_write(struct reboot_mode_d=
+river *reboot,
+> =20
+>  	nvmem_rbm =3D container_of(reboot, struct nvmem_reboot_mode, reboot);
+> =20
+> -	ret =3D nvmem_cell_write(nvmem_rbm->cell, &magic, sizeof(magic));
+> +	ret =3D nvmem_cell_write_variable_u32(nvmem_rbm->cell, magic);
+>  	if (ret < 0)
+>  		dev_err(reboot->dev, "update reboot mode bits failed\n");
+> =20
+> --=20
+> 2.46.2
+>=20
+>=20
+
+--2uq3qzykfhdkdn5j
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmcyfzoACgkQ2O7X88g7
-+pozVBAAip8XTgv2F10yeVBSrdoO1rENCjCRjWNlqiSjb+c7zd/kLyFMZeOJnDXY
-BLwDzwFjc4x2pc4K+YA0Li+x8b0iwQPWcWdpMzcprGCJ41RXbVVKcLu3SxEFwwiu
-5BY6n85NGhpvDavuScUKXP/Nf8sCUj3mngHSaLTJGB8o1CyAZZh0LCZ47gpMV9pM
-7NBC6ooIz8dQfvRSExhoP1Is2HYEmReqbXfan52159l94VEBmSMs2DrVnIA+uQ1K
-9zGiJ3O1PSiVPgh+BVoADP0N/xtSDDVI0ecmR/jq55IWWirHUwi5fvgVgAU0Zt7x
-K9318gHatFmwmeq3o6Z9tY5wMew2ZvN02QBKoMJLUmtPap/y4y1j9koiFDz6ucl2
-OjpwldiXCYwA68emp/c0d9MXkcHCsb1E4QGvs0HUpPP94vgbIxKEYfDeJLbsgG7Y
-W51ywYONmsh3g/Ggafeg81yGKecffzULW6xZUEMRyHUniBtukixNc7AeH+tHkt86
-PtRRuKUN9rvBWeydjJW7s8n+XlMFz+7ytDp4iPanWd56y0tByJq9LyHihTXfqDSa
-HT+o1eNyjZDyleD6kFXa1GXLjdjRuX1B3cuUDGyjiBo1k2Z1M9s9IuX15TPMj+p8
-jmeLYR0oBM9FMoOYwXXw2cJqJjMe8giswbPv0pfohNvVANRMpCg=
-=HeH9
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmcygA8ACgkQ2O7X88g7
++pp0tw//SayViUspcDf8LsO+rs4zeH5MyQ//lWRTjD+nPERPrniUJC6RxRRAoNx6
+QqQ2rCvAdB/P+tPfF3LKimtJnmko5zgUQ1Avg8EFzABoL5sgkDdz6V71mRar5bJA
+ojBRsys49TGdUG5GmRMUAmRPMh+pq/rxyfF2HbiMMe//TjVIVW45VHji1mNhJPYf
+aLvswDLJpjCuEG/sjWmp0hv5juZwry7ea3OS/wsdBVqi5XrtdclkNSUgKC/Qa0yi
+wLWxqHZEOifYTp+Kp6PZtV21QcGQ+wUPP0IDKK0gOOLpWE8V6arTvpwBRZZxDHDF
+3GqtRefrsKTKiL+4/1i1/4DuuJdsylPWmdl5uxAluCIn9BHHGFSsy5BdR1dfwpcr
+aA5EcuYJg/yDY8xhSdEeU3A1Jcp/kAO/+BjoTq/kXPneAk+8hcAVM3uptkwNoEn1
+KS7aiZ4wULK4jIRdTV5Xpm4s60uXhwc6Uhc+eHiwLTPndh6kSt2bkb/v2XKrXA6O
+6G/YGsmrKiYaJ0Np9yKa2BPjjOIbXgDERNYfsyHh5HkmpVcuh2X1XBIXkup4G5/n
+H6JtoOQqM3PYPewf6frAsqKvcVoVea6e3hWZWJsvPw1gOMWH6R59Fr1WXruV2sDP
+e6EcUmwz//7EJvX35mEQm7Zi/Ivf25KgNTUEOavN+gvRLms98Wk=
+=rvxO
 -----END PGP SIGNATURE-----
 
---rl5it4vjkjpkjjip--
+--2uq3qzykfhdkdn5j--
 
