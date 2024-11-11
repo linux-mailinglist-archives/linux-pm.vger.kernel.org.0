@@ -1,202 +1,102 @@
-Return-Path: <linux-pm+bounces-17328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FCA39C401C
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 15:01:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B32D9C40DD
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 15:27:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 437701C21A0C
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:01:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D63BF1F22BCF
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48A2919CC21;
-	Mon, 11 Nov 2024 14:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F631A00D1;
+	Mon, 11 Nov 2024 14:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AArd3umb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sbqA4CXw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3CB175D2D;
-	Mon, 11 Nov 2024 14:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720115A85A;
+	Mon, 11 Nov 2024 14:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731333633; cv=none; b=R4uYc5Yp4xFk1i1S4mzW5LUBePazWCVO7fzUHwKhiCaJnJfP6pj9DjLeTu2XeLGk1EIJ1QOp2cuELQ/oH4p+wbmxizQUbuAnPc/VpsR9+aq6mKPTlqAOCSACgpUmY8oPaxNYv22U86dGMSC8Ok5tT2pmW/aNfygLYQbNAmDbq4w=
+	t=1731335260; cv=none; b=SqEIT18XpIXjG8qj7CBSGnliq569DC9sPWL3+WTF7K5H1zOJEtRxuPhZVpnFXFtpLKWGLIbmDXBVvZivCyAQ/mjUKM8NQVvNd/wDS+1F/POYTNm4GmkFV7jHCmxVmcDm8Txoh5xK6z2y/w4ic6eRVWKA/xEkBMsPGfuZ20hsRlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731333633; c=relaxed/simple;
-	bh=havDAwwZnsaDJUHiZzpDxi6xtnUHdjDI3CWlxBEw9tc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rLwmU8Ev4cikfV5ClwlvFB5Q2W9j72CfOBfUm1/5TOz+V3TkTkQUUeUJZ8gmZq/BLEGRt2DqtkYEpdCIkqHn7KJSGvgrnga4vscawdJk4O0QzF4z1UASCJtHf+iG9sRK1jk+rnLawOvs6YsGVXr2ht0rNFQ1Hv8VYRduqv9fmFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AArd3umb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5D1C4CED7;
-	Mon, 11 Nov 2024 14:00:32 +0000 (UTC)
+	s=arc-20240116; t=1731335260; c=relaxed/simple;
+	bh=0HBp91eFMMg3rKBeBDysVTX9mLxQIHz9phYBimdndCc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gH1DexspTWD5QXeNS80pGiITm/KnxOapgBRm+tHi90V+kAqYdI2Q4bS9pyJHI5IkGUbQUEyUY8/SHvtAXeVdSi4DueU2qyaBhkEL0rM4tOdQXsO7FIgQ83/EHF6a6eqdXLAMOZKi/hfzM710k/DJYyih9VPGgye3N+d/cz/B1hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sbqA4CXw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C70BCC4CECF;
+	Mon, 11 Nov 2024 14:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731333632;
-	bh=havDAwwZnsaDJUHiZzpDxi6xtnUHdjDI3CWlxBEw9tc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AArd3umbyEhZ8aiIpMlm5BRsB/sXNSdH0C4PVkhqEJGdnpNghcon2GpNkzvDxkWda
-	 MaVAjYW+ABdi49li0vj010hags9QBeYG4NyRDHifw9t8rvsxIF0WonBM4m1e12NXWo
-	 t5/FIwA0E133uGK/ld4eMn9qM3RKz0kgaYQkbSvfXzwwrOgr+JwOQXebIdbBHWvR1U
-	 TmTp2pP69cucUh8BiTDwhJqtFsN3sI5q8Fi7c0DTo2KxTng8iw2fFhBtBJt+8dnLcF
-	 n2hV9IgT0tmqkUF/yejUwYJl8/57chVyBeX0QT0Mmx/SgTv3N0tWv730eafZggAnt9
-	 KpFgrr4a2weVQ==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2951f3af3ceso2285868fac.1;
-        Mon, 11 Nov 2024 06:00:32 -0800 (PST)
-X-Gm-Message-State: AOJu0Yz274/k579AMZoso4pfa6fKjuWkkH7UJuASUVO1S5vJs1R+hfMM
-	O6D1acQf8bSWqQm22c+sQCE4GScFvclm/Xv6f7xEqZYDkCTl/eV4pydMZhVUA1Cb0AM0pFOqYNn
-	C/tpb9aPQNGCKxg2gGSYaq/yBX1w=
-X-Google-Smtp-Source: AGHT+IFz22lySJ6ocLBAqfwkBTQKXZOe9dmkm0mAC3GP3+bZGBxlJvhcwPvCAYFao8GJNtLy7Pz8XYhrig9WB9tpW5I=
-X-Received: by 2002:a05:6870:332a:b0:277:ca2f:905 with SMTP id
- 586e51a60fabf-295602a659dmr10696305fac.29.1731333632018; Mon, 11 Nov 2024
- 06:00:32 -0800 (PST)
+	s=k20201202; t=1731335259;
+	bh=0HBp91eFMMg3rKBeBDysVTX9mLxQIHz9phYBimdndCc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sbqA4CXwcNwBw8gvLUFLeNBaL48iTGzehpPg5Yhv0GwvduUO+nKVZahYoI2wdEQwi
+	 4BNpw+B4xRdHlzD8ZyUoZWhF5lpd4KL6Favdt3REZqqZPEs1OiVJEOyZi0zSAtx6Cs
+	 x98lCeuqTAtNNPvzPEejZyU7/45eOlFzcPYAGfmBltgfjVMo53DDBzpnarihw20/GQ
+	 Qx//WwmaP/HOa/mfOyQ8KAIi4S8s4d9/0eHgLGOyZngJWGH7ScMg5NMrS3NVTOY8kK
+	 r1Q0pjJW9N/UYlHS5ULw6XjL59ERlJ3eskvHZN2pzq/AD9x/6G5ScRAspOKKfeKuFJ
+	 I1AzT8XdOb8vg==
+Message-ID: <0c2f2274-4487-4d7e-a558-cb9608f59118@kernel.org>
+Date: Mon, 11 Nov 2024 16:27:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12554508.O9o76ZdvQC@rjwysocki.net>
-In-Reply-To: <12554508.O9o76ZdvQC@rjwysocki.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Nov 2024 15:00:17 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h-6V7PSd4Zv6dhvBXLf97USJj2sO_qwJHwG+sJq3muXg@mail.gmail.com>
-Message-ID: <CAJZ5v0h-6V7PSd4Zv6dhvBXLf97USJj2sO_qwJHwG+sJq3muXg@mail.gmail.com>
-Subject: Re: [PATCH v1] cpufreq: intel_pstate: Rearrange locking in hybrid_init_cpu_capacity_scaling()
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	"Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>, 
-	"Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>, "Nikula, Jani" <jani.nikula@intel.com>, 
-	"Saarinen, Jani" <jani.saarinen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] memory: Switch back to struct platform_driver::remove()
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Markus Mayer <mmayer@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Santosh Shilimkar <ssantosh@kernel.org>, Paul Cercueil
+ <paul@crapouillou.net>, Yong Wu <yong.wu@mediatek.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Tony Lindgren <tony@atomide.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Konrad Dybcio <konradybcio@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-omap@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-tegra@vger.kernel.org
+References: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 7, 2024 at 1:36=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.net=
-> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Notice that hybrid_init_cpu_capacity_scaling() only needs to hold
-> hybrid_capacity_lock around __hybrid_init_cpu_capacity_scaling()
-> calls, so introduce a "locked" wrapper around the latter and call
-> it from the former.  This allows to drop a local variable and a
-> label that are not needed any more.
->
-> Also, rename __hybrid_init_cpu_capacity_scaling() to
-> __hybrid_refresh_cpu_capacity_scaling() for consistency.
->
-> No intentional functional impact.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This turns out to be fixing a locking issue in commit 929ebc93ccaa
-("cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid
-systems") which is related to this report:
 
-https://lore.kernel.org/linux-pm/SJ1PR11MB6129EDBF22F8A90FC3A3EDC8B9582@SJ1=
-PR11MB6129.namprd11.prod.outlook.com/
+On 07/11/2024 16:57, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
+> 
+> Convert all platform drivers below drivers/memory to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
+> 
+> A few white space changes are included to make indention consistent.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 
-so I'll need to update the changelog, but the patch itself need not be chan=
-ged.
+for drivers/memory/omap-gpmc.c 
 
-> ---
->
-> This is on top of
->
-> https://lore.kernel.org/linux-pm/12555220.O9o76ZdvQC@rjwysocki.net/
->
-> ---
->  drivers/cpufreq/intel_pstate.c |   35 ++++++++++++++++------------------=
--
->  1 file changed, 16 insertions(+), 19 deletions(-)
->
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -1028,26 +1028,29 @@ static void hybrid_update_cpu_capacity_s
->         }
->  }
->
-> -static void __hybrid_init_cpu_capacity_scaling(void)
-> +static void __hybrid_refresh_cpu_capacity_scaling(void)
->  {
->         hybrid_max_perf_cpu =3D NULL;
->         hybrid_update_cpu_capacity_scaling();
->  }
->
-> -static void hybrid_init_cpu_capacity_scaling(bool refresh)
-> +static void hybrid_refresh_cpu_capacity_scaling(void)
->  {
-> -       bool disable_itmt =3D false;
-> +       guard(mutex)(&hybrid_capacity_lock);
->
-> -       mutex_lock(&hybrid_capacity_lock);
-> +       __hybrid_refresh_cpu_capacity_scaling();
-> +}
->
-> +static void hybrid_init_cpu_capacity_scaling(bool refresh)
-> +{
->         /*
->          * If hybrid_max_perf_cpu is set at this point, the hybrid CPU ca=
-pacity
->          * scaling has been enabled already and the driver is just changi=
-ng the
->          * operation mode.
->          */
->         if (refresh) {
-> -               __hybrid_init_cpu_capacity_scaling();
-> -               goto unlock;
-> +               hybrid_refresh_cpu_capacity_scaling();
-> +               return;
->         }
->
->         /*
-> @@ -1056,19 +1059,13 @@ static void hybrid_init_cpu_capacity_sca
->          * do not do that when SMT is in use.
->          */
->         if (hwp_is_hybrid && !sched_smt_active() && arch_enable_hybrid_ca=
-pacity_scale()) {
-> -               __hybrid_init_cpu_capacity_scaling();
-> -               disable_itmt =3D true;
-> -       }
-> -
-> -unlock:
-> -       mutex_unlock(&hybrid_capacity_lock);
-> -
-> -       /*
-> -        * Disabling ITMT causes sched domains to be rebuilt to disable a=
-sym
-> -        * packing and enable asym capacity.
-> -        */
-> -       if (disable_itmt)
-> +               hybrid_refresh_cpu_capacity_scaling();
-> +               /*
-> +                * Disabling ITMT causes sched domains to be rebuilt to d=
-isable asym
-> +                * packing and enable asym capacity.
-> +                */
->                 sched_clear_itmt_support();
-> +       }
->  }
->
->  static bool hybrid_clear_max_perf_cpu(void)
-> @@ -1404,7 +1401,7 @@ static void intel_pstate_update_limits_f
->         mutex_lock(&hybrid_capacity_lock);
->
->         if (hybrid_max_perf_cpu)
-> -               __hybrid_init_cpu_capacity_scaling();
-> +               __hybrid_refresh_cpu_capacity_scaling();
->
->         mutex_unlock(&hybrid_capacity_lock);
->  }
->
->
->
->
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
