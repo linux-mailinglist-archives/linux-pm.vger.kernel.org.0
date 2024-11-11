@@ -1,64 +1,62 @@
-Return-Path: <linux-pm+bounces-17303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17305-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 476E29C3923
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 08:48:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19A209C3925
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 08:48:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E55A61F21D62
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 07:48:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C26C1C21519
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 07:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B5D158A1F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A0715B14B;
 	Mon, 11 Nov 2024 07:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="hTmxkere"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="LtLskC1Q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09F01552E7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08E5B67F;
 	Mon, 11 Nov 2024 07:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731311279; cv=none; b=jVJft9hUmC72ybk8044GcGI/ucmp0YDETSby6NxZ0F4bgihJEELT3jqpcsrNCowi1eE15iVSamlOioZM89QzP7Td6/CR3aTg8o30+ZnUH6Rryre0gtSLuJtXO579mftDDGclUrTZfhN9urfx8TsOBvLQRmMvAGYG9CZo6lZy+uA=
+	t=1731311279; cv=none; b=kwruPiZFx4skHd0LmRyBoggm+dwfD9cz5PjAnH5NvXUg+qzen0gHZ3yYfukWMNdILyy47UMCwZrdGI6tG+To67M3L0uZW9QpDLv1i6JPRjbmi474FVsLErzhVet9jXl2bNAgqOkFKPU1PxfBzavaUBKjBCGH9I7qg19qJP1UHTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731311279; c=relaxed/simple;
-	bh=sK0kWk+8VYxo38aU63eiYOmeLS96q4K2u2uUzpGH55g=;
+	bh=7O6l3W8jdtTHFsZPhIqdpPWwmQl3mjScIw0wphIRdpQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pyu/QvZ0lKhJlKFjKyVNoJqz4F0e73uGXECO1ASABRyMmX+ZCeuWSVgfXKFVk+zC05Rkml36YvWWwcXcW2RPF00iaErka9xtcsUviylbxDh4UY7O8r37VOraifef9cfktXzF1c30QFHzidXdUDUaCo1kU7Oaht5ACSpDZ/JEs2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=hTmxkere; arc=none smtp.client-ip=193.68.50.107
+	 MIME-Version:Content-Type; b=TvenMbiKrUmUkG6TU9B7JgjcMj6MyVgKK4hAfmTvN+OLJSyJG+oy7OTC49jTaAEQunJZpXhKZmHpTuO+Vd7YcAwCCT2fW9y5D8jtOkdJQ9Lz/zTozhp4rlg5pwGfP/v3P92Rw/9OvHuCJkU7dGlh5+e2DKO1s7M5jRU4hXHv1u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=LtLskC1Q; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id BA192A0331;
-	Mon, 11 Nov 2024 08:47:47 +0100 (CET)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id AA7A3A03A7;
+	Mon, 11 Nov 2024 08:47:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=270OS3AUGIEnFR7GA4rh
-	i6oZuXf4WByJ/XiZ6z+upJg=; b=hTmxkerenaYvai+eNShRpNfr9sLGUF/Rhxyw
-	SeJj8GiuK0I8IGosy9PrtF2Jwjkh5yf59cfFyjeRGQzipmRMmw5KEnuYOZ0gk+cx
-	Tyr6ifJnIAxh8FAxuQs6fM2h/plo4hbA2ZeLJbHiak5bG96O3QUS1n6/SoaS9ew9
-	fBHKozMt+ge9JlhvoBhO8FbNAie8IY7avfIosVF2URm7V48e+BdUgnTYReVTz5ik
-	nGw/s7lXXC9i5C0TunydNUTPFjwhfKbuxRjtmNBjESfxicMDmRql8ogGwP5xhsBR
-	WqbHes8GEYKb0zuWZI1thd5LglRQl/ozF5XmbKzvjDctEsCzzdnqd5nhBM/2W48Y
-	orTxJZvnZER6Ej+avlOA7Bkr7Jv8ZVeXoVwEN4KWzinGGmUBgU2UM7UHJIwqxB9N
-	bXifjkReTzLapXVSudMPcs8H8k5H4Hwg3c+V4zKZL4I2mlHSM6BizNygvJHSzYGi
-	bl3/WF1zVnLaLR8wWHWaH9ZgNbN9RjkyWsabbcLfuDxo9+d7K77VLMaw30cQPgBN
-	KEfRTvAefAETbymgIAKrAYf+sFLUbM7REQWhs28ZvE92t7B759TarlMHV5a/AktA
-	hBH05J1XLumIluavQU7GeHTLDvxXYhNdjwqoHkUv9HNiuWK/5ySb8KbV+wL59pAc
-	+5i/Y7Q=
+	:reply-to:subject:subject:to:to; s=mail; bh=4KBnznNW4mW6T1wsXkeA
+	urj0zCpvuCLbvvtqL+9elhw=; b=LtLskC1QbGzjLUC0bsrVKJYe/I0+g2rZ1IGi
+	x5IFpOvcbB7tp7K7uGEBJlpoH5LZKU/aAx7i1J9oDEx/vcS9Cut+CnBDUUv7guvl
+	hCUXeBYh4AhGePNWQ7L9uOsVOwNIV4l+NB9R/M8+6izE8h1G1qLNBVWPZ6ARTF7d
+	r85xsdI8jiRnN1/UykWtONcxCyO5DBCXOGzmVNNrVeVrtvy88WAlhb45C6CAOT/o
+	HiMiQLP8u2zz5X+Wn+z52mcccwISDe+KDkVCmKoJH+qBltdmzPFGVniCiRObEMRO
+	3MZ7ZSkarwjGBWNaiCz5QVQ1pmBMU3KcjJeG73w3m2REhnzPwb+TW8z/AZW1SiM9
+	lew4vcV4JRh/GkjSfpdaRhA6xEEpJ5L/+NCYCl38EHFAovtujCQGFBz/7t7mBlYE
+	dH2D37ffTCAMuWGpOtQRwnVqC9/zg8MuY99CZaVdGFjwusfJu4yPf2EGdOV3Kglg
+	BI9LmNdUFjvJCNS3njm4fRoTrNoQtFPusxqrUvgpy6U/fKwCpcoxkhz9788er3Kc
+	CH6EdEQQV1UgHbPa2KVZuMIRSzD6Qxv+HcgvPzZAIMKcLgLbHzjgRbEB0+YMuHWW
+	MeHBzWZPVM+OPBS6PuYfvwOBovvi+W3+t75gw1JRwKcJNSyh7+kAyizMGvkpqcpZ
+	oLMUwdQ=
 From: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>
-To: Samuel Holland <samuel@sholland.org>, Sebastian Reichel
-	<sebastian.reichel@collabora.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>,
-	Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH v4 2/7] power: ip5xxx_power: Fix return value on ADC read errors
-Date: Mon, 11 Nov 2024 08:47:15 +0100
-Message-ID: <20241111074720.1727163-2-csokas.bence@prolan.hu>
+To: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Samuel
+ Holland" <samuel@sholland.org>, Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH v4 3/7] power: ip5xxx_power: Allow for more parameters to be configured
+Date: Mon, 11 Nov 2024 08:47:16 +0100
+Message-ID: <20241111074720.1727163-3-csokas.bence@prolan.hu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241111074720.1727163-1-csokas.bence@prolan.hu>
 References: <20241111074720.1727163-1-csokas.bence@prolan.hu>
@@ -70,53 +68,127 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1731311267;VERSION=7980;MC=57183446;ID=287556;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1731311267;VERSION=7980;MC=599170532;ID=287557;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
 X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
 X-EsetId: 37303A2980D9485561716B
 
-If ADC read returns an error, the return value was silently ignored,
-execution continued and an uninitialized value and a return code of 0
-was passed back to userspace. The only exception was
-POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT, which bailed out correctly.
-Fix returns for the other cases as well.
-
-Fixes: 75853406fa27 ("power: supply: Add a driver for Injoinic power bank ICs")
+Other parts such as IP5306 may support other battery voltages and
+have different constants for input voltage regulation. Allow these
+to be passed from `struct ip5xxx_regfield_config`.
 
 Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
 ---
- drivers/power/supply/ip5xxx_power.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/power/supply/ip5xxx_power.c | 40 ++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
-index 2d4435881a9e..41d91504eb32 100644
+index 41d91504eb32..a55441f87cc1 100644
 --- a/drivers/power/supply/ip5xxx_power.c
 +++ b/drivers/power/supply/ip5xxx_power.c
-@@ -395,18 +395,24 @@ static int ip5xxx_battery_get_property(struct power_supply *psy,
+@@ -96,6 +96,18 @@ struct ip5xxx {
+ 			struct regmap_field *present;
+ 		} wled;
+ 	} regs;
++
++	/* Maximum supported battery voltage (via regs.battery.type) */
++	int vbat_max;
++	/* Scaling constants for regs.boost.undervolt_limit */
++	struct {
++		int setpoint;
++		int microvolts_per_bit;
++	} boost_undervolt;
++	/* Scaling constants for regs.charger.const_curr_sel */
++	struct {
++		int setpoint;
++	} const_curr;
+ };
  
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
- 		ret = ip5xxx_battery_read_adc(ip5xxx, &ip5xxx->regs.battery.adc.volt, &raw);
-+		if (ret)
-+			return ret;
+ /* Register fields layout. Unsupported registers marked as { .lsb = 1 } */
+@@ -133,6 +145,12 @@ struct ip5xxx_regfield_config {
+ 	const struct reg_field wled_enable;
+ 	const struct reg_field wled_detect_en;
+ 	const struct reg_field wled_present;
++
++	int vbat_max;
++	int boost_undervolt_setpoint;
++	int boost_undervolt_uv_per_bit;
++	int const_curr_setpoint;
++	u8  chg_end_inverted;
+ };
  
- 		val->intval = 2600000 + DIV_ROUND_CLOSEST(raw * 26855, 100);
+ /*
+@@ -328,6 +346,9 @@ static int ip5xxx_battery_get_voltage_max(struct ip5xxx *ip5xxx, int *val)
+ 	if (ret)
+ 		return ret;
+ 
++	if (*val > ip5xxx->vbat_max)
++		return -EINVAL;
++
+ 	/*
+ 	 * It is not clear what this will return if
+ 	 * IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN is not set...
+@@ -422,7 +443,7 @@ static int ip5xxx_battery_get_property(struct power_supply *psy,
+ 		if (ret)
+ 			return ret;
+ 
+-		val->intval = 100000 * rval;
++		val->intval = ip5xxx->const_curr.setpoint + 100000 * rval;
  		return 0;
  
- 	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
- 		ret = ip5xxx_battery_read_adc(ip5xxx, &ip5xxx->regs.battery.adc.open_volt, &raw);
-+		if (ret)
-+			return ret;
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+@@ -515,7 +536,7 @@ static int ip5xxx_battery_set_property(struct power_supply *psy,
+ 		return ip5xxx_battery_set_voltage_max(ip5xxx, val->intval);
  
- 		val->intval = 2600000 + DIV_ROUND_CLOSEST(raw * 26855, 100);
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+-		rval = val->intval / 100000;
++		rval = (val->intval - ip5xxx->const_curr.setpoint) / 100000;
+ 		return ip5xxx_write(ip5xxx, ip5xxx->regs.charger.const_curr_sel, rval);
+ 
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+@@ -581,7 +602,8 @@ static int ip5xxx_boost_get_property(struct power_supply *psy,
+ 		if (ret)
+ 			return ret;
+ 
+-		val->intval = 4530000 + 100000 * rval;
++		val->intval = ip5xxx->boost_undervolt.setpoint +
++			      ip5xxx->boost_undervolt.microvolts_per_bit * rval;
  		return 0;
  
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		ret = ip5xxx_battery_read_adc(ip5xxx, &ip5xxx->regs.battery.adc.curr, &raw);
-+		if (ret)
-+			return ret;
+ 	default:
+@@ -606,7 +628,8 @@ static int ip5xxx_boost_set_property(struct power_supply *psy,
+ 		return ip5xxx_write(ip5xxx, ip5xxx->regs.boost.enable, !!val->intval);
  
- 		val->intval = DIV_ROUND_CLOSEST(raw * 149197, 200);
- 		return 0;
+ 	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+-		rval = (val->intval - 4530000) / 100000;
++		rval = (val->intval - ip5xxx->boost_undervolt.setpoint) /
++			ip5xxx->boost_undervolt.microvolts_per_bit;
+ 		return ip5xxx_write(ip5xxx, ip5xxx->regs.boost.undervolt_limit, rval);
+ 
+ 	default:
+@@ -670,6 +693,10 @@ static struct ip5xxx_regfield_config ip51xx_fields = {
+ 	.wled_enable = REG_FIELD(0x01, 3, 3),
+ 	.wled_detect_en = REG_FIELD(0x01, 4, 4),
+ 	.wled_present = REG_FIELD(0x72, 7, 7),
++
++	.vbat_max = 4350000,
++	.boost_undervolt_setpoint = 4530000,
++	.boost_undervolt_uv_per_bit = 100000,
+ };
+ 
+ #define ip5xxx_setup_reg(_field, _reg) \
+@@ -718,6 +745,11 @@ static void ip5xxx_setup_regs(struct device *dev, struct ip5xxx *ip5xxx,
+ 	ip5xxx_setup_reg(wled_enable, wled.enable);
+ 	ip5xxx_setup_reg(wled_detect_en, wled.detect_en);
+ 	ip5xxx_setup_reg(wled_present, wled.present);
++
++	ip5xxx->vbat_max = cfg->vbat_max;
++	ip5xxx->boost_undervolt.setpoint = cfg->boost_undervolt_setpoint;
++	ip5xxx->boost_undervolt.microvolts_per_bit = cfg->boost_undervolt_uv_per_bit;
++	ip5xxx->const_curr.setpoint = cfg->const_curr_setpoint;
+ }
+ 
+ static int ip5xxx_power_probe(struct i2c_client *client)
 -- 
 2.34.1
 
