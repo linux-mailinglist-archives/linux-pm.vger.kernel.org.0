@@ -1,98 +1,110 @@
-Return-Path: <linux-pm+bounces-17333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C91BA9C4288
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 17:23:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06EDB9C42CC
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 17:41:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8209A1F25165
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 16:23:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2F9C1F2169A
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 16:41:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BF5E1A071C;
-	Mon, 11 Nov 2024 16:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 376381A2C29;
+	Mon, 11 Nov 2024 16:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ffZqlbSr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMt+8H06"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A91A19D093;
-	Mon, 11 Nov 2024 16:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1EF1A0B13;
+	Mon, 11 Nov 2024 16:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731342202; cv=none; b=QhHYRHyZZZ5UqeeIOF6bROZRt2rtRnfSgkINrzg06t1sMUVeFmt97fbTfeUQULSJvvBPRdLbf6fLe8y4N93L1RxB45bADXUELe8q6EzW1J3aeIda+/PN1Q5Hw5yE8al5UmSc1o/tJihxcIuKTlv6o8hOyflgOk+COc8ELrObMmU=
+	t=1731343232; cv=none; b=MRqnJ6XiKjKtY9nNarI6/k3HODRTYtZXvsGLClIm/QbauV7UXvRsAvRURi8c96ldRJTTWPK486C5vFnRPb0/kjTJ/x40mVEiV5rkIKgBB42YHgaKAjQMpQglIPcrUHk5HZK8N7PPJmwUJqUo9EVWtUVPH38fgO1zR5pgJvqDZQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731342202; c=relaxed/simple;
-	bh=mOsEI5TgGsY/iTmPy8plG4NjX8Giqup3gPPNIlVfrWU=;
+	s=arc-20240116; t=1731343232; c=relaxed/simple;
+	bh=4+LfvrNrOJzDJzYO94ZEFGs1qWzyzDFuwT9KH8sin3s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HENvG+y2crFVqrvBZXdyXC9jxoFNsfa79xX7NdlVAQIl4F/3bmkFMW2AIpXJlnRFRCTazayl4PmcBXun8JNTRsFAzBqzwZ2xcHQ5ywhsY6HlBcIJ88ee7XAs73UKB5tZnsn60KBzZsaSK3cadlF6TXspVlD5EwAn29tEfYDdfJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ffZqlbSr; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=qYKvXZTHxl7ZZR+yc9qocIeS0oa6t4JePHHwhcsDG4U=; b=ffZqlbSr8U/pTWAqDGgXuWMmuz
-	lKWd5R6KeNETzpevPZ7BvugxL69EjhiRfdlaDNQT/LR9f0fKAIcVWITf3UbCPd+GRW6O4UxeHP2n7
-	NfGmfMGWZowq5Fft8SO08ICSlYy88L5bnG9q9lXAmBfx16iJxkKVdZVG3xj/+PKLPtsID/iF5A4Tp
-	PijwcvPX++BPV7nbLjGmaDgmz8IC/q5wi6SqyA9UG5JXZ5p/vhopc8e0aKh7jN8KBzuHwYlhr450m
-	DRFBvSlxM7g13DJZNNEtWiCW+Zv32AtIFGy5240XhkPslyInQCh9TqvhGGBVIpA7CnPE/SBg7DL3v
-	ZBnkoeQA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tAXC9-0000000CsBb-2L4c;
-	Mon, 11 Nov 2024 16:23:17 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id DAB6D300472; Mon, 11 Nov 2024 17:23:16 +0100 (CET)
-Date: Mon, 11 Nov 2024 17:23:16 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Len Brown <lenb@kernel.org>
-Cc: x86@kernel.org, rafael@kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
-Message-ID: <20241111162316.GH22801@noisy.programming.kicks-ass.net>
-References: <20241108135206.435793-1-lenb@kernel.org>
- <20241108135206.435793-3-lenb@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lt7jsKWyzx2mKtW1CCvnRGjdrL4afPW1s5Sil2PlXpDa8kOzDwAEBp2JVYh6DyiO5CeKO/BkbE5cXgjfU0shxHwOsIkF0xDo/0seQSvPje+LRx2LRWgkU+fLVv+mHpgoNuvk+8gj9+/G6c9q3uT8ogFM0xJkS/Att5h9SucVYf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMt+8H06; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A88BC4CECF;
+	Mon, 11 Nov 2024 16:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731343231;
+	bh=4+LfvrNrOJzDJzYO94ZEFGs1qWzyzDFuwT9KH8sin3s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SMt+8H06+j+UMFnKWqdWYpA/uT0dG5C32IVkPJFy1ekeDpFk/xR3CP19Bas/1t/HQ
+	 HIGWbBx78ZPGrWAA1EMeBKidsMpzoBFLN4Xvj4evuMC2bwtwpvyv2McSfZyxFS7eq+
+	 vlSAD0fCzCgCbZHDUFrPMoNRCFi/VRY+YgVU5QpcdDRbe8+cBz0kDx/2Yl1czjc0xO
+	 SuBfQMWBaqi2nLzFN4i9aiBK0r3cdDSLyj8lv2mpkur8WkwW3u/WWdZCjsFKRS84Y/
+	 Q2JOn4aJALdnlrPXu8mnW5P5sNdg+zkwiIAFs9g8LbOO48J+I35rggVV3eQdHJ4iTW
+	 0cyGV/M5pj5LA==
+Date: Mon, 11 Nov 2024 16:40:24 +0000
+From: Lee Jones <lee@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Stanislav Jakubek <stano.jakubek@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: sprd,sc2731: reference
+ sprd,sc2731-efuse bindings
+Message-ID: <20241111164024.GC8552@google.com>
+References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
+ <cd8cc95b59c31418b174bba521dd2599a7929fda.1730709384.git.stano.jakubek@gmail.com>
+ <20241106090509.GL1807686@google.com>
+ <20241107155806.GA2774753-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241108135206.435793-3-lenb@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241107155806.GA2774753-robh@kernel.org>
 
-On Fri, Nov 08, 2024 at 08:49:31AM -0500, Len Brown wrote:
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 766f092dab80..910cb2d72c13 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1377,6 +1377,9 @@ void smp_kick_mwait_play_dead(void)
->  		for (i = 0; READ_ONCE(md->status) != newstate && i < 1000; i++) {
->  			/* Bring it out of mwait */
->  			WRITE_ONCE(md->control, newstate);
-> +			/* If MONITOR unreliable, send IPI */
-> +			if (boot_cpu_has_bug(X86_BUG_MONITOR))
-> +				__apic_send_IPI(cpu, RESCHEDULE_VECTOR);
->  			udelay(5);
->  		}
+On Thu, 07 Nov 2024, Rob Herring wrote:
 
-Going over that code again, mwait_play_dead() is doing __mwait(.exc=0)
-with IRQs disabled.
+> On Wed, Nov 06, 2024 at 09:05:09AM +0000, Lee Jones wrote:
+> > On Mon, 04 Nov 2024, Stanislav Jakubek wrote:
+> > 
+> > > Directly reference the sc2731-efuse bindings to simplify the schema.
+> > > Remove the duplicate example from the efuse bindings.
+> > > 
+> > > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> > > ---
+> > > Changes in V3:
+> > > - new patch due to a missing dependency in the MFD tree 
+> > > 
+> > > Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A55M-S2HP/
+> > > Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A55M-S2HP/
+> > > 
+> > >  .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 10 +------
+> > >  .../bindings/nvmem/sprd,sc2731-efuse.yaml     | 29 -------------------
+> > 
+> > Srini, you happy for this to go in via MFD?
+> 
+> Can you? AIUI, you don't have nvmem/sprd,sc2731-efuse.yaml in your tree.
+> 
+> So take patch 1 now and this one will have to go next cycle.
 
-So that IPI you're trying to send there won't do no nothing :-/
+Works for me.
 
-Now that comment there says MCE/NMI/SMI are still open (non-maskable
-etc.) so perhaps prod it on the NMI vector?
-
-This does seem to suggest the above code path wasn't actually tested.
-Perhaps mark your local machine with BUG_MONITOR, remove the md->control
-WRITE_ONCE() and try kexec to test it?
-
-Thomas, any other thoughts?
+-- 
+Lee Jones [李琼斯]
 
