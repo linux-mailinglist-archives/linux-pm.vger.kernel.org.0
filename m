@@ -1,95 +1,83 @@
-Return-Path: <linux-pm+bounces-17295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 014F09C375A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 05:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11DA19C3770
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 05:15:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 339861C2160E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 04:13:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 437F61C2091E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 04:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3035F155327;
-	Mon, 11 Nov 2024 04:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC09126C05;
+	Mon, 11 Nov 2024 04:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Qru5J9pK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rDObEpn1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC9414A4D6
-	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 04:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ECE4595B
+	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 04:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731298398; cv=none; b=Bbkx9pAKdlgIN5GCJCXBbC5RTdkeKq8drZNzYRgIJTiG7XtSHSNi5hoW2j6Ipu+3Z7wwWOSnPdsDokGXGnoUltFuA9MQQsWim/zSx6dZ5xktO3mUGvHqB6FAfXd9hOgAcLh2pdXQyJPjDYNyXyq3P8OXz+7vpZExsSj5oMDs0uY=
+	t=1731298546; cv=none; b=SkL9B36MZpn9Hm0tNpoGoP4SI4ffxddZVzbPbi2QBP6eEfimh4plJ7xmNCTY0mE8eecikQWWCVRPqW0NTbrtdETaKRU9GI+nC2rj5Iv+2+RtRkG/MQAicX9d6hNnWDN3KHxruHYJGd9UGxlOz6A9M5XbW4QCyu0VDkQfgiE9ad4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731298398; c=relaxed/simple;
-	bh=5Vg5LKlFHRSRZSf6nL2juDCBh/tRwylEiwuI7e/LabQ=;
+	s=arc-20240116; t=1731298546; c=relaxed/simple;
+	bh=fle9jir2XkQTPkMIv93KMYsqrh4kDkUf/SHSJR5R1Tw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l4F/lO91v+I9nlHmB6myfmoMBzc5RyjPqGJM3Pfpa7ifA095y3a0l14OLzLkBsKPAvkUqhb9wEPgcMry1b/IQceG4tGn5qyrc/fUtJRMhc2xj/aVfys6FR3SphykTKIK6V0Nj+OYFiqZy0ZcDAj7gPQ3xCK7n6M9ivESDiigcqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Qru5J9pK; arc=none smtp.client-ip=209.85.166.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=lRofgCHCTNmnoVYsFpYi4KUOO7Q90yoFWSQnKy3pDv4Ug8wrDM52P07VXdRcK+j4SorxtGefXpfk+doX/eI8J+wnBP4XFRlXXg3JHgdO8Ck9GL6YPTtq0FvKhVxepmpSFcrdDtqbbOBq7wVOuC+7dv3hTxYbuGiMqvrQyVOYa1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rDObEpn1; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3a6bd37f424so16385435ab.2
-        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2024 20:13:15 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c8c50fdd9so34470885ad.0
+        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2024 20:15:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731298395; x=1731903195; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1731298544; x=1731903344; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8MtdHLQlnE39Q/Ipi2Y33s1bnwJbhLgXZcQQfcZ9Dc=;
-        b=Qru5J9pKyXW06MPmDCFJu9THA5wtj/brAUILsEQiMs1FmM827/Tt9ckbKzxIuLCA7T
-         205WGTp2euxXlRBC26oPV8a/PbGw6jZOifG6MYaGjJH8dZ2ZpFgQHn8R0/5pMtgB7WhL
-         xCDfej5cUfxsVNmX4PWq0LdQTQEcW2dY2ZOced00eZaZdpum5gUF+LQY3j8Ve6NIwSil
-         yLKapG3dN/1kSQ8n6vGpe9Z0cGUtJT7OiDNZ4PwYFA505Z9Ts4jHDTKJgj9clokDJw2/
-         GG1ID8qyQhbEBso+xUOCzJHZxTzc5USEAEfwFY7sZQVEd/lLCI1RX1TZerVRmLmrygRe
-         sIfg==
+        bh=knhfiz6v1X/Y5Phw5qTTBL8KQ/Mw5RIdq1X0vCWMUt0=;
+        b=rDObEpn1doCrwYhHHvVPh7h2PsZ6zj7LQtC/G6vOMVUlfRWIBt+lIGlYeg7a2yTwIq
+         0roUjwZ27fDcH+hDGpLfMsgQC8gmUPQ1JZkEljwzCnkhM+6o5wIkvUWb/CN9sUEaPd/U
+         Cc97JuCkjS9GGuItyjYwg/cLx5k1EowGLGj8SrMzEu/RvupYzPCOJI+OESyeuRN4qFwQ
+         Fdg9tbAFM0aiTfIPjPoxvZnEMBUw2kkj+LTqpABohaZTg2WsXqyNt1QWgj9ACepHvqFL
+         fOZUscFTkQIOQPl5ToVl/OCwpfLCqxCS2X0MI3VV1Wcm0at+lcTGPM5ZEeNLYvuebla0
+         H0UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731298395; x=1731903195;
+        d=1e100.net; s=20230601; t=1731298544; x=1731903344;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q8MtdHLQlnE39Q/Ipi2Y33s1bnwJbhLgXZcQQfcZ9Dc=;
-        b=VzW0KdoL+MJIeDpczvV37NNNHWXYW4jfUEEidntd4u0ulj4mK2ZjKo/AQSkZchv/MP
-         x+DlZcaIyc9m5z+98T0fxSWHT7DSL1YTbDcIJlcluF7oWagapTG7s9Hnc8lOk3dyYLBK
-         FrtwFjsCWrERD7pFr3k8bAwIVl6Ghzuczxo9TbgMWGyh1GO8dbV9/hdLbExskgeejOU4
-         QPgNy5EZY5f+0ItZoVchL8x0uTbzNmP4wn6amlCXmgSaCzgVZScSXfljLSC2s/sBt5QJ
-         xuXIjvpCQ0M3lFFOMYBAWELIosqzU1o6aMzQMCPilGWdBT4lEfElD67XK1IGyJ0LVh/u
-         fpmw==
-X-Forwarded-Encrypted: i=1; AJvYcCWI7jTQ/mUBMFbKr2Xk0Kw7nE1z5olksmKoFIOrvnHLnXLYkNgcde3zJTQZ7X/rbXBIM1jnB1DEjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJF8uVqE7r0CQ4xmFRj27unO6HwK1Hii0OtiwkPembiUlXxT+a
-	Vdjn5EycjUHGVY0lE9PdoAMxpc44w5AgJensQ3t+DSfa+QtGqAQ0/c1Ecu5w29U=
-X-Google-Smtp-Source: AGHT+IE8pyAAVUtA2paQ66tQO5vUZ71OyT+KLnUQAUEAU5tTlgSVZPHhBhmkiVG+VvVFIMNzcTXwGw==
-X-Received: by 2002:a05:6e02:18c7:b0:3a0:9952:5fcb with SMTP id e9e14a558f8ab-3a6f1a2e2b3mr121627285ab.17.1731298394659;
-        Sun, 10 Nov 2024 20:13:14 -0800 (PST)
+        bh=knhfiz6v1X/Y5Phw5qTTBL8KQ/Mw5RIdq1X0vCWMUt0=;
+        b=QzZ+K4ZUhCOndijYR+nx38jhBGRN/VeySvNQr6xK63lsKJ4Y8iecCn8vl+kwHTDXSA
+         NgVh2zcBhaosOVXsB0n2sP3UhMGe0cGx+0XAlREKPlaHOQbatac4ZHih4cKZLxhRvCjI
+         wK673IsIVYi4tuM8ReWjmCwHIraSlDvSRzMFLKzkjLHI5x2sakJSvfQ/GT3+dVYH2+3G
+         nQxle7dL377jep6eYBXO4V030UheoZNPIYAlnxeG4+4uQqF1P6QNqS2S3eaF7qwi3PjI
+         zi10FkrCuHaLy4y3Wgm0cuQedESvwzbbChIEYThOyU3Xk5H6S0uHBguPRGPQtVU7eJ3w
+         C5Og==
+X-Forwarded-Encrypted: i=1; AJvYcCXHrW+mBRoyUtY2aVWGmGwymfhBqp4thd935a4gd/4cJ8AV7EgsHiOxrexzE7KKXCN7EUJrRHsOjQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywx1ICflfRQo6rJifaUZEcq6YmXnoi4j7sFzkmVqFxxvrfOKz/p
+	b2jFENd1tcwwIR3e14H6dUxplabuUSX+1N4NZ3Zdq1042yvv/MWIEvAK4yGs66U=
+X-Google-Smtp-Source: AGHT+IHxCb9wscTjmGmnrU/ke01iamppePTNlMCSebsPTr/XCYGY/bNBzPupEwPaf2R5gdgxQNJBBw==
+X-Received: by 2002:a17:902:d486:b0:211:74be:c09b with SMTP id d9443c01a7336-211821ae0e7mr198879005ad.12.1731298544156;
+        Sun, 10 Nov 2024 20:15:44 -0800 (PST)
 Received: from localhost ([122.172.86.146])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f5e9c61sm7533387a12.49.2024.11.10.20.13.13
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9a5fd1a9fsm7577101a91.37.2024.11.10.20.15.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Nov 2024 20:13:14 -0800 (PST)
-Date: Mon, 11 Nov 2024 09:43:11 +0530
+        Sun, 10 Nov 2024 20:15:42 -0800 (PST)
+Date: Mon, 11 Nov 2024 09:45:40 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Cody Eksal <masterr3c0rd@epochal.quest>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Nishanth Menon <nm@ti.com>, Rob Herring <robh@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Parthiban <parthiban@linumiz.com>,
-	Andre Przywara <andre.przywara@arm.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 12/13] cpufreq: sun50i: add a100 cpufreq support
-Message-ID: <20241111041311.hleaz5fgipsyxigm@vireshk-i7>
-References: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
- <20241031070232.1793078-13-masterr3c0rd@epochal.quest>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: rafael@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, hector.yuan@mediatek.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 RESEND] cpufreq: mediatek-hw: Fix wrong return value
+ in mtk_cpufreq_get_cpu_power()
+Message-ID: <20241111041540.7pfksjopw7qfupsx@vireshk-i7>
+References: <20241107113841.989475-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -98,22 +86,32 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241031070232.1793078-13-masterr3c0rd@epochal.quest>
+In-Reply-To: <20241107113841.989475-1-ruanjinjie@huawei.com>
 
-On 31-10-24, 04:02, Cody Eksal wrote:
-> From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+On 07-11-24, 19:38, Jinjie Ruan wrote:
+> mtk_cpufreq_get_cpu_power() return 0 if the policy is NULL. Then in
+> em_create_perf_table(), the later zero check for power is not invalid
+> as power is uninitialized. As Lukasz suggested, it must return -EINVAL when
+> the 'policy' is not found. So return -EINVAL to fix it.
 > 
-> Let's add cpufreq nvmem based for allwinner a100 soc. It's similar to h6,
-> let us use efuse_xlate to extract the differentiated part.
-> 
-> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> [masterr3c0rd@epochal.quest: add A100 to opp_match_list]
-> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+> Cc: stable@vger.kernel.org
+> Fixes: 4855e26bcf4d ("cpufreq: mediatek-hw: Add support for CPUFREQ HW")
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 > ---
-> Changes in V2:
->  - Add the A100 to the cpufreq-dt-platdev blacklist.
+> v2 -> v2 RESEND:
+> - Update the commit subject and Cc Viresh.
+> - Add Reviewed-by.
+> v2:
+> - Fix the driver instead of em_create_perf_table() as suggested.
+> - Update the commit message.
+> - Add Suggested-by.
+> ---
+>  drivers/cpufreq/mediatek-cpufreq-hw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Can this be applied to the cpufreq tree separately ?
+Applied. Thanks.
 
 -- 
 viresh
