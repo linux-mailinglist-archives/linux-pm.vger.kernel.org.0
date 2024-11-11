@@ -1,129 +1,120 @@
-Return-Path: <linux-pm+bounces-17320-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17321-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 042689C3DCB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 12:54:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A9239C3E8A
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 13:37:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35FAE1C20CBC
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 11:54:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C62111F224B7
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 12:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201E418E02D;
-	Mon, 11 Nov 2024 11:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD1119D067;
+	Mon, 11 Nov 2024 12:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jMOJoCm2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D30E176FA2;
-	Mon, 11 Nov 2024 11:54:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECD814F9E2;
+	Mon, 11 Nov 2024 12:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731326084; cv=none; b=tEtLuqVYugxFVijXoPSSlBPQTNR4IwSqKY2WIrCN8gSHmm1mtCc+NCjlhWJ7J4CJEhd5cBhrihv65LqlWCa+SwHVK8tgxumu4U7l2BdaZJ1wbBWR/Qx6JUdwbbXqsST7K/+1WDt6BXodbc1dGmj3fy71d3FFK9TSY1KA/8I7w38=
+	t=1731328653; cv=none; b=n9FwHEjTI6Bqhm/lIuuD944wJ42KgZ1AKd/XRoXkIJEf8Q3VbEc8p/GRIz1o8kfjVg5jmsgPuZBRZDWERcdZ/6U6ukzBvj3XgwUn60KEP7HMbFeFIQqurRt0ci4e/TuHV5jbdFjYBgDZ7D2ULj8Sv4e35cWuUYcS04kYvOMuJGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731326084; c=relaxed/simple;
-	bh=756LK5sllhm9bRq/weTu1UQc4I2fsrG+N166MJqHLJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LjWpcpGD7Ob7R2KsyDMC/qiNdYeEt65EJtP7MhAvtwolqa8on8shj36vvIyARoFX+2yDfFx2HqTy+h1QMWry8qOLL1ZGUXgizDZ+sx5SlJnGbd53spCDKoWXkVZ/1CdDegWqgCZhhC0RnkWLeaCKyNt4v3sISYxl8OVSEWYnZWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03F7C11FB;
-	Mon, 11 Nov 2024 03:55:10 -0800 (PST)
-Received: from [10.1.36.17] (e127648.arm.com [10.1.36.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB8C03F6A8;
-	Mon, 11 Nov 2024 03:54:37 -0800 (PST)
-Message-ID: <64a63f1c-088d-43dc-85c3-cecf8b59764f@arm.com>
-Date: Mon, 11 Nov 2024 11:54:35 +0000
+	s=arc-20240116; t=1731328653; c=relaxed/simple;
+	bh=k1WV2pAD/8xmmFjcMJoAZqWMi8wAr3HzjyLMBii/Jo8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WTvykZZb3s6x/cLvTLzB5XQKY/uvGm6IdwXEHsDfXceYTiUA+9bhDo69qvgjvsD1c0FMI4MsRcAjf4PEClGhGnwVTjLtxVdn0LvCuhPY0UyVOoFDkM705zmPlz8dn6NdWXKFgh7+zjiInWXczos5ol8rdB0gK9SkZjZX2HSwwpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jMOJoCm2; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4ABCbHoM043260;
+	Mon, 11 Nov 2024 06:37:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1731328637;
+	bh=60UcITJlpU2R+Ybt6O7o94y6gwkZ59cqwJcbrJQ7AmE=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=jMOJoCm20vIRQZejgBmb680tW36MSbmMSI0AVm5x1g12jgyyntAz9kOD7oO1K60kh
+	 W16waXS8lVnikAJTKoWQ4IJbx1TbWEI5qEnCc/PZp3kLZG8Kk+tToni/T1wa6gIYzp
+	 SBM+dM74ppd1JZUPhx2xjBv/Eta5h8qVwjdUWnpw=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4ABCbHlr110654
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 11 Nov 2024 06:37:17 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 11
+ Nov 2024 06:37:17 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 11 Nov 2024 06:37:17 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4ABCbHY5078651;
+	Mon, 11 Nov 2024 06:37:17 -0600
+Date: Mon, 11 Nov 2024 06:37:17 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Arnd Bergmann <arnd@kernel.org>
+CC: Ulf Hansson <ulf.hansson@linaro.org>, Vibhore Vardhan <vibhore@ti.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Markus Schneider-Pargmann
+	<msp@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] pmdomain: ti_sci: add CONFIG_PM_SLEEP dependency
+Message-ID: <20241111123717.yqnjp4voohi4bhbu@accurate>
+References: <20241111104605.3964041-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v0.1 5/6] sched/topology: Allow .setpolicy() cpufreq
- drivers to enable EAS
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <len.brown@intel.com>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-References: <3607404.iIbC2pHGDl@rjwysocki.net>
- <1889415.atdPhlSkOF@rjwysocki.net>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <1889415.atdPhlSkOF@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241111104605.3964041-1-arnd@kernel.org>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 11/8/24 16:41, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 11:46-20241111, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Some cpufreq drivers, like intel_pstate, have built-in governors that
-> are used instead of regular cpufreq governors, schedutil in particular,
-> but they can work with EAS just fine, so allow EAS to be used with
-> those drivers.
+> Without CONFIG_PM_SLEEP, the pm_generic_suspend() function cannot be called
+> since it is defined to NULL:
 > 
-> Also update the debug message printed when the cpufreq governor in
-> use is not schedutil and the related comment, to better match the
-> code after the change.
+> In file included from include/uapi/linux/posix_types.h:5,
+> 		...
+>                  from drivers/pmdomain/ti/ti_sci_pm_domains.c:10:
+> drivers/pmdomain/ti/ti_sci_pm_domains.c: In function 'ti_sci_pd_suspend':
+> include/linux/stddef.h:9:14: error: called object is not a function or function pointer
+>     9 | #define NULL ((void *)0)
+>       |              ^
+> include/linux/pm.h:875:41: note: in expansion of macro 'NULL'
+>   875 | #define pm_generic_suspend              NULL
+>       |                                         ^~~~
+> drivers/pmdomain/ti/ti_sci_pm_domains.c:134:15: note: in expansion of macro 'pm_generic_suspend'
+>   134 |         ret = pm_generic_suspend(dev);
+>       |               ^~~~~~~~~~~~~~~~~~
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> I'm not sure how much value there is in refusing to enable EAS without
-> schedutil in general.  For instance, if there are no crossover points
-> between the cost curves for different perf domains, EAS may as well be
-> used with the performance and powersave governors AFAICS.
- 
-Agreed, but having no cross-over points or no DVFS at all should be the
-only instances, right?
-For plain (non-intel_pstate) powersave and performance we could replace
-sugov_effective_cpu_perf()
-that determines the OPP of the perf-domain by the OPP they will be
-choosing, but for the rest?
-Also there is the entire uclamp thing, not sure what the best
-solution is there.
-Will intel_pstate just always ignore it? Might be better then to
-depend on !intel_pstate?
+> Fixes: 7c2c8d2651b5 ("pmdomain: ti_sci: add per-device latency constraint management")
 
-> ---
->  kernel/sched/topology.c |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> Index: linux-pm/kernel/sched/topology.c
-> ===================================================================
-> --- linux-pm.orig/kernel/sched/topology.c
-> +++ linux-pm/kernel/sched/topology.c
-> @@ -251,7 +251,7 @@ static bool sched_is_eas_possible(const
->  		return false;
->  	}
->  
-> -	/* Do not attempt EAS if schedutil is not being used. */
-> +	/* Do not attempt EAS with a cpufreq governor other than schedutil. */
->  	for_each_cpu(i, cpu_mask) {
->  		policy = cpufreq_cpu_get(i);
->  		if (!policy) {
-> @@ -263,9 +263,9 @@ static bool sched_is_eas_possible(const
->  		}
->  		gov = policy->governor;
->  		cpufreq_cpu_put(policy);
-> -		if (gov != &schedutil_gov) {
-> +		if (gov && gov != &schedutil_gov) {
->  			if (sched_debug()) {
-> -				pr_info("rd %*pbl: Checking EAS, schedutil is mandatory\n",
-> +				pr_info("rd %*pbl: Checking EAS, cpufreq governor is not schedutil\n",
->  					cpumask_pr_args(cpu_mask));
->  			}
->  			return false;
-> 
-> 
-> 
-> 
+Arnd, thanks, but the breakage never made it to the pull request.
 
+lkft caught it[1] and I had dropped the series from my queue[2].
+Kevin reposted a v5 of the series with the fixups[3] - hopefully with
+the dependencies merged, we should see that go via Ulf's tree for the
+next window.
+
+[1] https://lore.kernel.org/all/CA+G9fYtioQ22nVr9m22+qyMqUNRsGdA=cFw_j1OUv=x8Pcs-bw@mail.gmail.com/
+[2] https://lore.kernel.org/all/7h34k6olu9.fsf@baylibre.com/
+[3] https://lore.kernel.org/linux-pm/20241101-lpm-v6-10-constraints-pmdomain-v5-0-3011aa04622f@baylibre.com/
+
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
