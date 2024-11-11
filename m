@@ -1,115 +1,103 @@
-Return-Path: <linux-pm+bounces-17338-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919729C46BE
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 21:26:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDEBC9C46D1
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 21:30:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4990F1F2791A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 20:26:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 830402835FA
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 20:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA151BDA97;
-	Mon, 11 Nov 2024 20:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E562159209;
+	Mon, 11 Nov 2024 20:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XO27st+G";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QYsTkWdL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gI8/4gq6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0021AB6CD;
-	Mon, 11 Nov 2024 20:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610691B95B;
+	Mon, 11 Nov 2024 20:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731356474; cv=none; b=YUPew8ncG+o4DqRwiWFlvQBIdJ3Qtk4rzGodZmg8vQfbX/aysrv7Nzqxo2XMXjtNQCypwIad45LUPy+YcoA8fEgtbfm852AUWA+t5qCjnTHlOw2NQvzJl7LruUr3TGUNUTUB3kYHzRIboc7Sf/yqaoamBGaoK/n1wUz4XAudVH0=
+	t=1731357025; cv=none; b=aK14I5FXthCIEGj5G1KP+hjeQRbHlg3ttr6y6YiPrmZ4rXj5YHW73KxJ8HKDP2N5pisxbMOEpIbQsPzEH+Zf8IKwwjSI/3VHSIEAQZufhpYJJIPrpiNDdDgejpmg5ETb4dH4DUuah3AXHoWEG8iZFgSEMT4eTICe7G9Kkk6vYh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731356474; c=relaxed/simple;
-	bh=ojQykrLwa+tKVHzD0LKClI4RYtpcQsk2fkaiV9hWwpU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EzNGbYKrEA92zEzxNdzXYaq6/jYq4GimwOG4rr4pi8VXX1LdlESEr8O0VkJOHG28rtdhTx0g8xpf3tU07tL8eXZ31Dzo1R0AzdsctiPqMFIVQTwdt2lALHoHM9yAGLMXuliXUjAkJT3zdDrmkyZwtMNQi6tkpzqQezzpgKNdhEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XO27st+G; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QYsTkWdL; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1731356470;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6hSl5IUzYiQFRrGtMgdO4k5sLda41cEm5CkQfrFqzmg=;
-	b=XO27st+GHxZL95ZbvppHkQaXDaJcUHok9iYlRsmI35VBlEa0A2e9T+Bg6PuYqpL25nG7a1
-	tuZ+iCcfaeLakCH3Zs64Ayj7B+9285nVSJFDTw80ocGV7EIH8W/Q4vuNVWZo8iVwjnjRV9
-	h+LYslP0m7iCGEnMGcLXf4gDP6ppy3sVVrQnLIyQiqg8zyMUD6mzBrq9bIadLGrE2DFudf
-	WKLPZSxdEs34o2OZHyJ5U3MptPi3QG3T+cuQcjuEmt7Fexj85BnEl2undFq0eXa/kNf8qA
-	qpxLiESJ6IVxLGHpcOfoGOsL+rAV165AyEjlGAyoTqJvH6FEKyxxXM2m8aCGbQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1731356470;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6hSl5IUzYiQFRrGtMgdO4k5sLda41cEm5CkQfrFqzmg=;
-	b=QYsTkWdLTzQnfzA4P0VAiCNBJsx//D6VySQ3xBlhN0TSRc6RKxay3wX046CGMfOKMr4akp
-	bpAnO0aTER4xLRDw==
-To: Len Brown <lenb@kernel.org>, peterz@infradead.org, x86@kernel.org
-Cc: rafael@kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
- stable@vger.kernel.org
-Subject: Re: [PATCH] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
-In-Reply-To: <20241108135206.435793-3-lenb@kernel.org>
-References: <20241108135206.435793-1-lenb@kernel.org>
- <20241108135206.435793-3-lenb@kernel.org>
-Date: Mon, 11 Nov 2024 21:20:32 +0100
-Message-ID: <87msi5o73j.ffs@tglx>
+	s=arc-20240116; t=1731357025; c=relaxed/simple;
+	bh=eFV6Mn9rlXPZKNihJg/acSCpZerYn1vyH7FUQTaubZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=bkwVeRwR+RxAOIL/H48aiTpI9JqAuwxpZwhF1hFN1JFyG4GEwHjoYf+8+NLl8+VvG2jz+UM25VvwRqZzVaq2YfkFlJVIJFZlPY663KOYZkvisrp7ONF0dSawDXA5TPryPq2xX1iyJdMPFCxzYmbMhtgu9s9GgmWsdVCnkPlJgHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gI8/4gq6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84F6C4CECF;
+	Mon, 11 Nov 2024 20:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731357025;
+	bh=eFV6Mn9rlXPZKNihJg/acSCpZerYn1vyH7FUQTaubZ0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=gI8/4gq6Yr6ar+OCNS6VAjGcLnm81nZyKzFPy6mZJ3dUSsi0ZKKaf+3ZDY1W+AQjf
+	 hbmpDvXRA0qa+AjNngfU01CZsUXiiS8blrpbqOW7Hksjgp1BQpdiP/EYkvT1TEQTcD
+	 RLWPjpVMt5mlyBpxrg/r2Ii+vdPgkIrURTp0LasCIUteCWvEpHhn2zEzH1wIOzF5Wu
+	 FW8TrRMeXVFPC/wPCMweLozeYcBbNhzV/2gr8viGSpFhuegah57nYZo1QJNpcDPp5D
+	 wc7OM+pI2/hgbCZW7R+h4P+V3G/xGC+oCHMPcxB1dZrrG7h9O97SQm+0N0EmCh4Vkt
+	 gzLxBTZt4F5QA==
+Date: Mon, 11 Nov 2024 14:30:23 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v9 3/9] PCI: Store all PCIe Supported Link Speeds
+Message-ID: <20241111203023.GA1816689@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZzIFV8UNYSvgZtQM@wunner.de>
 
-On Fri, Nov 08 2024 at 08:49, Len Brown wrote:
-> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> index e7656cbef68d..aa63f5f780a0 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -586,7 +586,8 @@ static void init_intel(struct cpuinfo_x86 *c)
->  	     c->x86_vfm == INTEL_WESTMERE_EX))
->  		set_cpu_bug(c, X86_BUG_CLFLUSH_MONITOR);
->  
-> -	if (boot_cpu_has(X86_FEATURE_MWAIT) && c->x86_vfm == INTEL_ATOM_GOLDMONT)
-> +	if (boot_cpu_has(X86_FEATURE_MWAIT) &&
-> +			(c->x86_vfm == INTEL_ATOM_GOLDMONT || c->x86_vfm == INTEL_LUNARLAKE_M))
+On Mon, Nov 11, 2024 at 02:23:35PM +0100, Lukas Wunner wrote:
+> On Fri, Oct 18, 2024 at 05:47:49PM +0300, Ilpo Järvinen wrote:
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index be5ed534c39c..a02b77fe7865 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -303,6 +303,7 @@ enum pci_bus_speed {
+> >  	PCI_SPEED_UNKNOWN		= 0xff,
+> >  };
+> >  
+> > +u8 pcie_get_supported_speeds(struct pci_dev *dev);
+> >  enum pci_bus_speed pcie_get_speed_cap(struct pci_dev *dev);
+> >  enum pcie_link_width pcie_get_width_cap(struct pci_dev *dev);
+> 
+> I realize this is now already queued as commit 73ee11953294 on pci/bwctrl,
+> nevertheless one belated comment:
+> 
+> Since there are no callers of pcie_get_supported_speeds() outside the
+> PCI core, the above declaration should probably rather live in
+> drivers/pci/pci.h.
 
-This indentation is bogus.
+I moved them, thanks!
 
->  		set_cpu_bug(c, X86_BUG_MONITOR);
+I noticed duplicate declarations for pcie_get_speed_cap() and
+pcie_get_width_cap(), so I'll add a patch to drop them from
+drivers/pci/pci.h.
 
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 766f092dab80..910cb2d72c13 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1377,6 +1377,9 @@ void smp_kick_mwait_play_dead(void)
->  		for (i = 0; READ_ONCE(md->status) != newstate && i < 1000; i++) {
->  			/* Bring it out of mwait */
->  			WRITE_ONCE(md->control, newstate);
-> +			/* If MONITOR unreliable, send IPI */
-> +			if (boot_cpu_has_bug(X86_BUG_MONITOR))
-> +				__apic_send_IPI(cpu, RESCHEDULE_VECTOR);
-
-How is this supposed to work?
-
-The local APIC of the offline CPU is shut down and only responds to
-INIT, NMI, SMI, and SIPI.
-
-Even if the APIC would react to the IPI, then the offline CPU would not
-notice as is has interrupts disabled when it reaches mwait_play_dead().
-
-Seriously?
-
-Thanks,
-
-        tglx
+Bjorn
 
