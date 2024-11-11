@@ -1,83 +1,87 @@
-Return-Path: <linux-pm+bounces-17330-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17331-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30EBE9C410E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 15:35:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29FD79C4140
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 15:51:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA2AE1F23AE7
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:35:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7884DB22233
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A4D919D060;
-	Mon, 11 Nov 2024 14:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08AD178368;
+	Mon, 11 Nov 2024 14:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YGuuhp2e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OcnVb/7K"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE4B155A34;
-	Mon, 11 Nov 2024 14:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0F71E481
+	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 14:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731335747; cv=none; b=Oh/DOZDehXzY5DGaIYG0DLSuvfTmU8wd3wvZvhFQvnBk/6e3UGgcafrcWi6lK7uH0EwXtt6NRNATbfjTCi/RjR/m4qRTsHOs7/wNmz9RnKBg/+bc3laDrIdhjxlvI6qo1ZbxHiLZpBND0v7W0t2B0h9v1nAriEbcXRSfrSYPS5s=
+	t=1731336680; cv=none; b=ayzzVf/d28RgPSIqHRENpI7qFeswQHmqukSRp3UwJJIpba1kKJrhAZiFtSkUlEQF1goRkP1XerJNNqvTiLeKMA+aZ/bUMBgXPf+bcS3WxtVEFEpHHZk89WkuDFXwnd233L2ZmhFukFRU3xEfjUT0B9ZxERzvsH8HALs857ze4gI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731335747; c=relaxed/simple;
-	bh=FbpQDgrATLQrby7+vyaOzgg3QuyaUVc+zF0xtLbYzvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YZw0kG4rFQNQU6gSfikFrcsJ6bw0lwXDk3HE5m8qLzdBGqmYyeh/mMVFt6es525I0n2KbU2N/KvmYo6oPeUED/PqRIrkPoy5jgnj18Af5hgd0E+rho8uMSLAYOiSvDzPhP97sqDs1kBpKUbaP00wG2oh/gkeuFh2yNVYRkNtbWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YGuuhp2e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23374C4CECF;
-	Mon, 11 Nov 2024 14:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731335746;
-	bh=FbpQDgrATLQrby7+vyaOzgg3QuyaUVc+zF0xtLbYzvc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YGuuhp2eKe5RhGikIH11KvGiSWpo7Zwn64x/EbyDwDGcBJSIs/Xl6qOQCSUDGx7ba
-	 sHn16LZSB9dlPKtPrYGXEuvumvUi5BBRQkTy0YRHaNePyZ7XmXObyjh0DoUbaf5kYj
-	 +K/Kp3jOPTsIePXJnRHBa278dQsQlI+IncpEvWso=
-Date: Mon, 11 Nov 2024 15:35:04 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Georgi Djakov <djakov@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] interconnect changes for 6.13
-Message-ID: <2024111100-lustiness-managing-f937@gregkh>
-References: <20241111134304.1019885-1-djakov@kernel.org>
+	s=arc-20240116; t=1731336680; c=relaxed/simple;
+	bh=NYWZ69wuRjyloQdx+RP1ZIBWbJpdqHOYwdwGHpP3M2c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Scfn9v0ARlcF7K1GdBVJPT7OqgX4n1vR9u+oay+V7MhVVJ95nhbbzYjD54e2CD5tL1/M3aPMHnDASRyOnMwg/RzyrkmPJlyTabVN+Ge66ZoS9/2mM5AskIw17f80pMvU6iDFrccwoFYHAqtdbBszEp1xnEFt8Z2s4bCTxS6v3+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OcnVb/7K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E7DC4CED6
+	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 14:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731336679;
+	bh=NYWZ69wuRjyloQdx+RP1ZIBWbJpdqHOYwdwGHpP3M2c=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OcnVb/7KoOFdnyzFvDVnGQxv/mkN3lHzBPdlBR3V03h9gvFSfmZiyi+W+e8tKbA1+
+	 A1P1iZubY4C0+djh3BiTeS5ssjZ9AjG0mSDQmGF1EVLUIuf9qIMBwbgHYD8NWEsPUv
+	 qmUuMvUQzLxTocrzbt4InrIltsp7JTkOgL3gEUu61L+8pMscNjcBB71rUrOu0awgk0
+	 jkGu0VwwIIkkRqMdxWr12dFReyNq/CdYgDUgZrUpRbjKXTFBRALRl+lv2IU4uX7hJA
+	 68dIwP8VdK5QSboM+RXK8vUCOM3HOZcd4JN36VeJ5S+czzPo7mD00rGAi0HesigP6K
+	 cVO688T59mbkg==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2958f5387d2so799759fac.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 06:51:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU1WfBMYn0oiQ8wHr26cfrBCeoc2Tezz8NTtkRPNBoDIpgXs5f9GqAHkF7ON3PQxajseO99d/thxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjitrmULhk6ktvEtDy37tIJssZ70eD7w0WjajP2pgu0RpYHqqK
+	SkegQLr3VT5NqQ/doKFEvKeluP1vQ0Dqwyuhbewnn5vOvcbXOxsYnaBu2JpCe++JFcnMlE7XlB/
+	qm5AYqeeWUPqBRlS9vcQqpcFmXzs=
+X-Google-Smtp-Source: AGHT+IHhbJVfYvILGDI8thpKoPiB8H4EOhq5XKofAug5RnXENbIgCn9Hy1yLLVFJ0UuajzmsIyFNEfxAwqUH1zAnu1k=
+X-Received: by 2002:a05:6870:e99f:b0:277:f301:40d5 with SMTP id
+ 586e51a60fabf-295602f1396mr9971087fac.31.1731336678601; Mon, 11 Nov 2024
+ 06:51:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241111134304.1019885-1-djakov@kernel.org>
+References: <20241107115608.52233-1-artem.bityutskiy@linux.intel.com> <fc4039a725b77374f36d6934f944db40f643e303.camel@gmail.com>
+In-Reply-To: <fc4039a725b77374f36d6934f944db40f643e303.camel@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 11 Nov 2024 15:51:04 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h=VuVLwbo0jVdPcyDZR92Q=02LdnDvtaVM5oK_2A7iSg@mail.gmail.com>
+Message-ID: <CAJZ5v0h=VuVLwbo0jVdPcyDZR92Q=02LdnDvtaVM5oK_2A7iSg@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: add Granite Rapids Xeon D support
+To: dedekind1@gmail.com
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 11, 2024 at 03:43:04PM +0200, Georgi Djakov wrote:
-> Hello Greg,
-> 
-> This is the pull request with interconnect changes for the v6.13-rc1 merge
-> window. It contains new drivers and clean-ups. As always, the summary is
-> in the signed tag.
-> 
-> All patches have been in linux-next for at least a week. There are no
-> reported issues. Please pull into char-misc-next when possible.
-> 
-> Thanks,
-> Georgi
-> 
-> 
-> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-> 
->   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.13-rc1
+On Thu, Nov 7, 2024 at 12:59=E2=80=AFPM Artem Bityutskiy <dedekind1@gmail.c=
+om> wrote:
+>
+> On Thu, 2024-11-07 at 13:56 +0200, Artem Bityutskiy wrote:
+> > Add Granite Rapids Xeon C C-states support: C1, C1E, C6, and C6P.
 
-Pulled and pushed out, thanks.
+Applied as 6.13 material.
 
-greg k-h
+> Oh, just noticed a typo - should be Granite Rapids Xeon D, sorry. Rafael,=
+ if you
+> pick this patch, please amend the commit message.
+
+Done, thanks!
+
+> Alternatively, I can send an adjusted version. Thanks!
 
