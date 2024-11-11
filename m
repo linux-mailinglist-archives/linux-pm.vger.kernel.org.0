@@ -1,210 +1,177 @@
-Return-Path: <linux-pm+bounces-17326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A0D9C3FD5
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:50:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A9F9C3FFC
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:55:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F01AF1F21081
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 13:50:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1A8128607F
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 13:55:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235C919DF61;
-	Mon, 11 Nov 2024 13:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114A119E804;
+	Mon, 11 Nov 2024 13:54:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzDA4JSh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMeHDRPw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08C319D891;
-	Mon, 11 Nov 2024 13:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF1B19E7F3;
+	Mon, 11 Nov 2024 13:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731333046; cv=none; b=exhpGBatjqoaZ/DMqQ3PjDN4zH6snpgbDRtoIU9cnubHPRybaa7Km377ccxwjxC4OjFfPIld5ubpPC493mTkysfC8e724nkKiHk6U25X9GORXEX8zBA4Mg2uaLKQPGTwjjhL8wcZF1Ksk3yE7HUP9x8fIPif5170FWyaY1dXD/M=
+	t=1731333299; cv=none; b=NIZQTJSgjTnY6Tbv2XNqqGNpk6bqcA5/lgcAjPtzBYGogXorGpbaA43xcmQeZj/NYKRaCRE9EBAy8yfKBhiKTO5CkmU1yeKA9l/NdhNEZx3cRbLSIujKyuTvsa+zAVgwan2RhCrPYidhkSYljUACxh660CCXv/XOWZ8giQJ+iSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731333046; c=relaxed/simple;
-	bh=igSTgu76GFYvFftAE7voDBY7egITEGWmPnHa+OO6rVo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=qk45XcHKtRYKtaSEbuHg3ZZm8FtriCGK3An8XH+xuUUqxDj5WAWLIEwg0HflrtGm/vmBM7YG+FmZgY5+PM7ceh2IjIjUHYpli51wFVV6cJH7BteLHDjVBpiBLpBVuwIP193a8oqZMVaQ/m4uyXULIdk5QpR0I3qD7BFf7UqlB0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzDA4JSh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74020C4CECF;
-	Mon, 11 Nov 2024 13:50:44 +0000 (UTC)
+	s=arc-20240116; t=1731333299; c=relaxed/simple;
+	bh=Rjs1jrNMYmsLc1015VUvOXMFguCnVmldjZ3ChN/Xhk4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rNpZBgclwRFEJ/x7ogMxOLvLMSsbjqDdLR3UphRemM1C9V2JjqX9I/5SOUicoAzr4C4GRSlsX2ixbTutIk8Mhl9Zy/d/Lje/ixcHhhTIfnAPVaPynTQnHHDuLRRAw3OWYS28F0STlba05zHTXHJk6zF5Hc4sDWWqlV8ypGyCGcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMeHDRPw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674DCC4CED6;
+	Mon, 11 Nov 2024 13:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731333045;
-	bh=igSTgu76GFYvFftAE7voDBY7egITEGWmPnHa+OO6rVo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EzDA4JSh/YifYwWY1CqgOYZBp2vzv2LuRfLWXxS3RwGj+B7df3/ttMi6DmNkjrBvi
-	 CfHNkbpywglc8uzZ1X+s63h8m6IHgbicUg5UMMUHRaFipYOZiNvOApZMMGZCFaWi2R
-	 ZcLw9X+ctwf1+vCbdYgWmbxj7knLPk2QUio+ECFgqLLvpX9U3eF4J9C+1LazP9efq5
-	 G1fiPHruFy8wlOBC56WQxd3Zkz+jEN/b/Mq7rRYTF76O67VFhBdav6qBOdrjVnDsCZ
-	 VFphSYmhiz3ZcMNyzqvkI0dzBm89niJpepNd0C8fCRIz1hK1L0XvpdYGRMTvpEG8Ee
-	 YQkEJNj2VK+SA==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.13
-Date: Mon, 11 Nov 2024 15:43:04 +0200
-Message-Id: <20241111134304.1019885-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=k20201202; t=1731333298;
+	bh=Rjs1jrNMYmsLc1015VUvOXMFguCnVmldjZ3ChN/Xhk4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OMeHDRPwTo7a/NAgf/rNxNEb/9JmWkN0ZJPZWsq8oeWjE0JW85PLqcPVNU4xhC7Ww
+	 sorpqyRlasDKxSUvlofXkO+FIjFtPmQEalPiFsSO/qQxfY5ZPkoSjUFaMWdQa6uFt6
+	 UHwC2mtUS7DqH0qbZuy0YmRQZtRud5cZK1Fw1zSA6eZHwRn9YeUoH0LCNSZrJk5Xpw
+	 IY4NS1d39qX0XIJDQI7KFbsQ6F5xBiHXBnyMMAEQD64HHNZchMhPa5acHPR4OjXHtc
+	 50rDZzVWhl5UAKLK35i02DAg4WIOZwKsRmlu8qJm68IIMMPXz8koiTeI468IFk8sz7
+	 Ijg+MwiRo+fQQ==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-288d4da7221so2437836fac.1;
+        Mon, 11 Nov 2024 05:54:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUJKGCjFl+8NcWXKi5z8D89AuLodW44pqhnOu2PbzPvLri1Sf7PtIyJIPA7gORLJlwKLmOYJ4+r8b8=@vger.kernel.org, AJvYcCW+/IG8EnrwCwQM1C4CVH8Pyr8BzR7b4YmjaUvrhtCPV4l1aGVGvNpsfuuf3UkvDcNX/4K6aqTNS/ycJwk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzdl0llbabmOcNInCta+7wF8t2g6IHVhC2Y4Hw8WKsALGZk2ldm
+	B/m7XapSXxgdEz2I9v/5tNNvD4EsQDALwalfCvrXSP2jgsKOsdGX68dFL9u42fzRUuPiIM68qG2
+	jFuldkbctKfMqQZ/ONebZnYGoPTs=
+X-Google-Smtp-Source: AGHT+IFR+kLg1jK/nBNUD03fNNcBn24h36a1Kg6p1I0dLiKQdViNNgeVyLEdCLKYmkYhyu7OU3yzUKvA0rmDdZ6IKVI=
+X-Received: by 2002:a05:6870:3312:b0:277:ecd2:7b7 with SMTP id
+ 586e51a60fabf-2955ffe9868mr10202835fac.7.1731333297633; Mon, 11 Nov 2024
+ 05:54:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <3607404.iIbC2pHGDl@rjwysocki.net> <1889415.atdPhlSkOF@rjwysocki.net>
+ <64a63f1c-088d-43dc-85c3-cecf8b59764f@arm.com>
+In-Reply-To: <64a63f1c-088d-43dc-85c3-cecf8b59764f@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 11 Nov 2024 14:54:43 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hrj0jQ9mi20XRK3bTfaMDgUS3HyGnk=2x0UfF26jN1pQ@mail.gmail.com>
+Message-ID: <CAJZ5v0hrj0jQ9mi20XRK3bTfaMDgUS3HyGnk=2x0UfF26jN1pQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH v0.1 5/6] sched/topology: Allow .setpolicy() cpufreq
+ drivers to enable EAS
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <len.brown@intel.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Greg,
+On Mon, Nov 11, 2024 at 12:54=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 11/8/24 16:41, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Some cpufreq drivers, like intel_pstate, have built-in governors that
+> > are used instead of regular cpufreq governors, schedutil in particular,
+> > but they can work with EAS just fine, so allow EAS to be used with
+> > those drivers.
+> >
+> > Also update the debug message printed when the cpufreq governor in
+> > use is not schedutil and the related comment, to better match the
+> > code after the change.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > I'm not sure how much value there is in refusing to enable EAS without
+> > schedutil in general.  For instance, if there are no crossover points
+> > between the cost curves for different perf domains, EAS may as well be
+> > used with the performance and powersave governors AFAICS.
+>
+> Agreed, but having no cross-over points or no DVFS at all should be the
+> only instances, right?
 
-This is the pull request with interconnect changes for the v6.13-rc1 merge
-window. It contains new drivers and clean-ups. As always, the summary is
-in the signed tag.
+Not really.  This is the most obvious case, but there are other less
+obvious ones.
 
-All patches have been in linux-next for at least a week. There are no
-reported issues. Please pull into char-misc-next when possible.
+Say there are two cross-over points: The  "performance" and
+"powersave" governors should still be fine with EAS in that case.
 
-Thanks,
-Georgi
+Or what if somebody has a governor in user space that generally
+behaves like schedutil?
 
+Or what about ondemand?  Is it alway completely broken with EAS?
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+> For plain (non-intel_pstate) powersave and performance we could replace
+> sugov_effective_cpu_perf()
+> that determines the OPP of the perf-domain by the OPP they will be
+> choosing, but for the rest?
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+I generally think that depending on schedutil for EAS is a mistake.
 
-are available in the Git repository at:
+I would just print a warning that results may be suboptimal or
+generally not as expected if the cpufreq governor is not schedutil
+instead of preventing EAS from running at all.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.13-rc1
+> Also there is the entire uclamp thing, not sure what the best
+> solution is there.
+> Will intel_pstate just always ignore it? Might be better then to
+> depend on !intel_pstate?
 
-for you to fetch changes up to b1fd28da86aae5d622ea95711cee8ede39f70369:
+Well, it can be made dependent on policy->policy =3D=3D
+CPUFREQ_POLICY_POWERSAVE if gov is NULL or similar, but honestly why
+bother?
 
-  Merge branch 'icc-sar2130p' into icc-next (2024-11-05 01:32:05 +0200)
-
-----------------------------------------------------------------
-interconnect changes for 6.13
-
-This pull request contains the interconnect changes for the 6.13-rc1 merge
-window. It contains new drivers and clean-ups with the following highlights:
-
-Core changes:
-- Remove a useless kfree_const() usage
-- Switch back to struct platform_driver::remove()
-- Use of_property_present() for non-boolean properties
-
-Driver changes:
-- New driver for QCS615 platforms
-- New driver for SAR2130P platforms
-- New driver for QCS8300 platforms
-- Probe defer incase of missing QoS clock dependency in rpmh driver
-- Rename qos_clks_required flag to qos_requires_clocks in rpmh driver
-- Constify pointers to qcom_icc_node in msm8937 driver
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      interconnect: Remove a useless kfree_const() usage
-
-Dmitry Baryshkov (2):
-      dt-bindings: interconnect: qcom: document SAR2130P NoC
-      interconnect: qcom: add support for SAR2130P
-
-Georgi Djakov (3):
-      Merge branch 'icc-qcs8300' into icc-next
-      Merge branch 'icc-qcs615' into icc-next
-      Merge branch 'icc-sar2130p' into icc-next
-
-Jingyi Wang (1):
-      dt-bindings: interconnect: qcom-bwmon: Document QCS8300 bwmon compatibles
-
-Krzysztof Kozlowski (1):
-      interconnect: qcom: msm8937: constify pointer to qcom_icc_node
-
-Raviteja Laggyshetty (6):
-      interconnect: qcom: icc-rpmh: probe defer incase of missing QoS clock dependency
-      interconnect: qcom: icc-rpmh: rename qos_clks_required flag
-      dt-bindings: interconnect: document the RPMh Network-On-Chip interconnect in QCS8300 SoC
-      dt-bindings: interconnect: document the RPMh Network-On-Chip interconnect in QCS615 SoC
-      interconnect: qcom: add QCS615 interconnect provider driver
-      interconnect: qcom: add QCS8300 interconnect provider driver
-
-Rob Herring (Arm) (1):
-      interconnect: Use of_property_present() for non-boolean properties
-
-Uwe Kleine-König (1):
-      interconnect: Switch back to struct platform_driver::remove()
-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   |    2 +
- .../devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml     |   73 +
- .../devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml    |   72 +
- .../devicetree/bindings/interconnect/qcom,sar2130p-rpmh.yaml   |  117 +
- drivers/interconnect/core.c                                    |    4 +-
- drivers/interconnect/imx/imx8mm.c                              |    2 +-
- drivers/interconnect/imx/imx8mn.c                              |    2 +-
- drivers/interconnect/imx/imx8mp.c                              |    2 +-
- drivers/interconnect/imx/imx8mq.c                              |    2 +-
- drivers/interconnect/mediatek/mt8183.c                         |    2 +-
- drivers/interconnect/mediatek/mt8195.c                         |    2 +-
- drivers/interconnect/qcom/Kconfig                              |   29 +
- drivers/interconnect/qcom/Makefile                             |    6 +
- drivers/interconnect/qcom/icc-rpmh.c                           |    5 +-
- drivers/interconnect/qcom/icc-rpmh.h                           |    2 +-
- drivers/interconnect/qcom/msm8909.c                            |    2 +-
- drivers/interconnect/qcom/msm8916.c                            |    2 +-
- drivers/interconnect/qcom/msm8937.c                            |   10 +-
- drivers/interconnect/qcom/msm8939.c                            |    2 +-
- drivers/interconnect/qcom/msm8953.c                            |    2 +-
- drivers/interconnect/qcom/msm8974.c                            |    2 +-
- drivers/interconnect/qcom/msm8976.c                            |    2 +-
- drivers/interconnect/qcom/msm8996.c                            |    2 +-
- drivers/interconnect/qcom/osm-l3.c                             |    2 +-
- drivers/interconnect/qcom/qcm2290.c                            |    2 +-
- drivers/interconnect/qcom/qcs404.c                             |    2 +-
- drivers/interconnect/qcom/qcs615.c                             | 1563 ++++++
- drivers/interconnect/qcom/qcs615.h                             |  128 +
- drivers/interconnect/qcom/qcs8300.c                            | 2088 ++++++++
- drivers/interconnect/qcom/qcs8300.h                            |  177 +
- drivers/interconnect/qcom/qdu1000.c                            |    2 +-
- drivers/interconnect/qcom/sa8775p.c                            |    2 +-
- drivers/interconnect/qcom/sar2130p.c                           | 1930 +++++++
- drivers/interconnect/qcom/sc7180.c                             |    2 +-
- drivers/interconnect/qcom/sc7280.c                             |    6 +-
- drivers/interconnect/qcom/sc8180x.c                            |    2 +-
- drivers/interconnect/qcom/sc8280xp.c                           |    2 +-
- drivers/interconnect/qcom/sdm660.c                             |    2 +-
- drivers/interconnect/qcom/sdm670.c                             |    2 +-
- drivers/interconnect/qcom/sdm845.c                             |    2 +-
- drivers/interconnect/qcom/sdx55.c                              |    2 +-
- drivers/interconnect/qcom/sdx65.c                              |    2 +-
- drivers/interconnect/qcom/sdx75.c                              |    2 +-
- drivers/interconnect/qcom/sm6115.c                             |    2 +-
- drivers/interconnect/qcom/sm6350.c                             |    2 +-
- drivers/interconnect/qcom/sm7150.c                             |    2 +-
- drivers/interconnect/qcom/sm8150.c                             |    2 +-
- drivers/interconnect/qcom/sm8250.c                             |    2 +-
- drivers/interconnect/qcom/sm8350.c                             |    2 +-
- drivers/interconnect/qcom/sm8450.c                             |    2 +-
- drivers/interconnect/qcom/sm8550.c                             |    2 +-
- drivers/interconnect/qcom/sm8650.c                             |    2 +-
- drivers/interconnect/qcom/smd-rpm.c                            |    2 +-
- drivers/interconnect/qcom/x1e80100.c                           |    2 +-
- drivers/interconnect/samsung/exynos.c                          |    2 +-
- include/dt-bindings/interconnect/qcom,qcs615-rpmh.h            |  136 +
- include/dt-bindings/interconnect/qcom,qcs8300-rpmh.h           |  189 +
- include/dt-bindings/interconnect/qcom,sar2130p-rpmh.h          |  137 +
- 58 files changed, 6701 insertions(+), 51 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sar2130p-rpmh.yaml
- create mode 100644 drivers/interconnect/qcom/qcs615.c
- create mode 100644 drivers/interconnect/qcom/qcs615.h
- create mode 100644 drivers/interconnect/qcom/qcs8300.c
- create mode 100644 drivers/interconnect/qcom/qcs8300.h
- create mode 100644 drivers/interconnect/qcom/sar2130p.c
- create mode 100644 include/dt-bindings/interconnect/qcom,qcs615-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,qcs8300-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sar2130p-rpmh.h
+> > ---
+> >  kernel/sched/topology.c |    6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > Index: linux-pm/kernel/sched/topology.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/kernel/sched/topology.c
+> > +++ linux-pm/kernel/sched/topology.c
+> > @@ -251,7 +251,7 @@ static bool sched_is_eas_possible(const
+> >               return false;
+> >       }
+> >
+> > -     /* Do not attempt EAS if schedutil is not being used. */
+> > +     /* Do not attempt EAS with a cpufreq governor other than scheduti=
+l. */
+> >       for_each_cpu(i, cpu_mask) {
+> >               policy =3D cpufreq_cpu_get(i);
+> >               if (!policy) {
+> > @@ -263,9 +263,9 @@ static bool sched_is_eas_possible(const
+> >               }
+> >               gov =3D policy->governor;
+> >               cpufreq_cpu_put(policy);
+> > -             if (gov !=3D &schedutil_gov) {
+> > +             if (gov && gov !=3D &schedutil_gov) {
+> >                       if (sched_debug()) {
+> > -                             pr_info("rd %*pbl: Checking EAS, scheduti=
+l is mandatory\n",
+> > +                             pr_info("rd %*pbl: Checking EAS, cpufreq =
+governor is not schedutil\n",
+> >                                       cpumask_pr_args(cpu_mask));
+> >                       }
+> >                       return false;
+> >
+> >
+> >
+> >
+>
+>
 
