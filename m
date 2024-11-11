@@ -1,63 +1,43 @@
-Return-Path: <linux-pm+bounces-17357-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C469C48EA
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 23:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 21C9F9C48E0
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 23:14:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C5B0284E09
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:15:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51B9284E5E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2714D1C6F6C;
-	Mon, 11 Nov 2024 22:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66131BFDEC;
+	Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EDF1C68BE;
-	Mon, 11 Nov 2024 22:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4101BCA1C
+	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731363219; cv=none; b=TXIf3fZqLDYOovA+v5RTylKAqOT5TxlPvKmLljbUGlw6F2mTmiPzitnygmGJhjBr0qYCUFj0PzVNIKHwdoFnTXylKZOGx5gB5G03yz3H0d+OsJuHcjmJrB4zWSpVd6m0AODTcoej9BJz+XVT22hjuE0npeccwR0eoGNcFdqDEkU=
+	t=1731363216; cv=none; b=bStiV1wXJXqSaSgvs25zESyM6EiyKu+i3F49Lc6ZEhVxaqovwhJM1Ss5dZ4dH1Y70xq92ozU/5KALrlEsSlggQ6VS3Zuxd6JsHFt3yxj8eq60RX+mILN/wiOapgtOBPYNhMIVQG+qCbitApbqBr3abTDh3h+9pf6MZTJ9jyw+KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731363219; c=relaxed/simple;
-	bh=97nWfcAIU0VqIBIdgOWurwIr1Yk+zNUVdbmATKkNE0o=;
+	s=arc-20240116; t=1731363216; c=relaxed/simple;
+	bh=Eo/cQQe68FccgQImMskizb5nVyG4dXJqkudmaGxi4A4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=T9txYL4O+6zY7cP/dDDknDslSCI8FGatgyuZvPo2/JGcmWUqYwLMxy4EQB0jbcHiTjbzosYZ3aUmtWv8p0buyRzNhokUqCZPyX5wv26S5p47bENkGYryCvuxINNVnjqtpBT9px9tP7ne3hkPKl9XLvmFpyAtXx5CYX1T6j2hX0Q=
+	 MIME-Version:Content-Type; b=Q0QGxjs+p5JjbDYlsOAKTBroy2+pljOc+0B5NVA+C87nWd2WUm9Uiq5F6nrJxv7IttD5Q0AUR2nVfZk85/lrUHEa+AFV420Ns1Vy6Hpu6GsiOwpNFWe2X4YD2wVm8Vi9wnQzWcsVmOfslOfIU18wqvpG/yUKmdUCmipDpnxe07Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AC0C4CED8;
-	Mon, 11 Nov 2024 22:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A268C4CED5;
+	Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 5E20810604CF; Mon, 11 Nov 2024 23:13:34 +0100 (CET)
+	id 41B9D1060457; Mon, 11 Nov 2024 23:13:34 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
- Andy Yan <andy.yan@rock-chips.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- cros-qcom-dts-watchers@chromium.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Elliot Berman <quic_eberman@quicinc.com>
-Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, 
- Melody Olvera <quic_molvera@quicinc.com>, 
- Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org
-In-Reply-To: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
-References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
-Subject: Re: (subset) [PATCH v8 0/6] Implement vendor resets for PSCI
- SYSTEM_RESET2
-Message-Id: <173136321437.772650.9632330958815794111.b4-ty@collabora.com>
+To: linux-pm@vger.kernel.org, Ed Robbins <edd.robbins@googlemail.com>
+Cc: sre@kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <IOFJLS.120OJ5KJG9R72@googlemail.com>
+References: <IOFJLS.120OJ5KJG9R72@googlemail.com>
+Subject: Re: [PATCH] pmu_battery: Set power supply type to BATTERY
+Message-Id: <173136321424.772650.12097145596022478925.b4-ty@collabora.com>
 Date: Mon, 11 Nov 2024 23:13:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -70,24 +50,17 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Thu, 07 Nov 2024 15:38:24 -0800, Elliot Berman wrote:
-> The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
-> reset types which could be mapped to the reboot argument.
+On Fri, 18 Oct 2024 07:07:30 +0100, Ed Robbins wrote:
+> If the power supply type is not set it defaults to "Unknown" and upower
+> does not recognise it. In turn battery monitor applications do not see a
+> battery. Setting to POWER_SUPPLY_TYPE_BATTERY fixes this.
 > 
-> Setting up reboot on Qualcomm devices can be inconsistent from chipset
-> to chipset. Generally, there is a PMIC register that gets written to
-> decide the reboot type. There is also sometimes a cookie that can be
-> written to indicate that the bootloader should behave differently than a
-> regular boot. These knobs evolve over product generations and require
-> more drivers. Qualcomm firmwares are beginning to expose vendor
-> SYSTEM_RESET2 types to simplify driver requirements from Linux.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/6] dt-bindings: power: reset: Convert mode-.* properties to array
-      commit: 05d9044177c3e910921522e0209640d3b825a6ae
+[1/1] pmu_battery: Set power supply type to BATTERY
+      commit: 3287673c1d26f94845ef958090c583c46054b70d
 
 Best regards,
 -- 
