@@ -1,43 +1,43 @@
-Return-Path: <linux-pm+bounces-17352-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21C9F9C48E0
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 23:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16FCA9C48E2
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 23:14:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51B9284E5E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:14:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF688284EB5
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66131BFDEC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC4411C1741;
 	Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4101BCA1C
-	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3B71BCA1B;
+	Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731363216; cv=none; b=bStiV1wXJXqSaSgvs25zESyM6EiyKu+i3F49Lc6ZEhVxaqovwhJM1Ss5dZ4dH1Y70xq92ozU/5KALrlEsSlggQ6VS3Zuxd6JsHFt3yxj8eq60RX+mILN/wiOapgtOBPYNhMIVQG+qCbitApbqBr3abTDh3h+9pf6MZTJ9jyw+KM=
+	t=1731363216; cv=none; b=L4zTfCe8iUTMC+Z234KiF/BHsMIPctx+ChYlZtx0gWOcn7HtT8RSF1VxiOIJjkGapM+rp2QAVMQSi/idwGebxjqRCycPwYRG9sDmzyDDamlW0+K+o7K31P/oqfXpNRUfoUT5jsRZQeEh6kn7foor6CEcfeA8VXL9CzX5i4w8Edk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731363216; c=relaxed/simple;
-	bh=Eo/cQQe68FccgQImMskizb5nVyG4dXJqkudmaGxi4A4=;
+	bh=G0IP/1mBHjwgIHglhgzCLdLRgrcOSY4gpelWcv3ZPrg=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Q0QGxjs+p5JjbDYlsOAKTBroy2+pljOc+0B5NVA+C87nWd2WUm9Uiq5F6nrJxv7IttD5Q0AUR2nVfZk85/lrUHEa+AFV420Ns1Vy6Hpu6GsiOwpNFWe2X4YD2wVm8Vi9wnQzWcsVmOfslOfIU18wqvpG/yUKmdUCmipDpnxe07Q=
+	 MIME-Version:Content-Type; b=laSzghZFNeoGrlslRiB2dZ9ZuoleqLaAApscEyfwpyT36t1VpIq+EwQkOubdgM5Ou+AFjkVTAQxs0YfgomGRy8Ed1p59KU9K1FI5It8vBgbMra+e/zzqFHXf4pJSzp20XJIqhSGls91ykySb0Lc5Bx/ItivcHtj2lYWppI5h/kw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A268C4CED5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F4FC4CECF;
 	Mon, 11 Nov 2024 22:13:36 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 41B9D1060457; Mon, 11 Nov 2024 23:13:34 +0100 (CET)
+	id 44C0E10604B0; Mon, 11 Nov 2024 23:13:34 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: linux-pm@vger.kernel.org, Ed Robbins <edd.robbins@googlemail.com>
-Cc: sre@kernel.org, linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <IOFJLS.120OJ5KJG9R72@googlemail.com>
-References: <IOFJLS.120OJ5KJG9R72@googlemail.com>
-Subject: Re: [PATCH] pmu_battery: Set power supply type to BATTERY
-Message-Id: <173136321424.772650.12097145596022478925.b4-ty@collabora.com>
+To: sre@kernel.org, anish kumar <yesanishhere@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+In-Reply-To: <20241023061126.7896-1-yesanishhere@gmail.com>
+References: <20241023061126.7896-1-yesanishhere@gmail.com>
+Subject: Re: [PATCH] power: supply: generic-adc-battery: change my gmail
+Message-Id: <173136321427.772650.10722733892870416418.b4-ty@collabora.com>
 Date: Mon, 11 Nov 2024 23:13:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -50,17 +50,15 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Fri, 18 Oct 2024 07:07:30 +0100, Ed Robbins wrote:
-> If the power supply type is not set it defaults to "Unknown" and upower
-> does not recognise it. In turn battery monitor applications do not see a
-> battery. Setting to POWER_SUPPLY_TYPE_BATTERY fixes this.
+On Tue, 22 Oct 2024 23:11:26 -0700, anish kumar wrote:
+> change my contact in this driver.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] pmu_battery: Set power supply type to BATTERY
-      commit: 3287673c1d26f94845ef958090c583c46054b70d
+[1/1] power: supply: generic-adc-battery: change my gmail
+      commit: c0f3a0124d3f1dfed700d2871f9d37f418999af2
 
 Best regards,
 -- 
