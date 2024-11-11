@@ -1,102 +1,83 @@
-Return-Path: <linux-pm+bounces-17329-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17330-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B32D9C40DD
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 15:27:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30EBE9C410E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 15:35:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D63BF1F22BCF
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:27:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA2AE1F23AE7
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 14:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F631A00D1;
-	Mon, 11 Nov 2024 14:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A4D919D060;
+	Mon, 11 Nov 2024 14:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sbqA4CXw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YGuuhp2e"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720115A85A;
-	Mon, 11 Nov 2024 14:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE4B155A34;
+	Mon, 11 Nov 2024 14:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731335260; cv=none; b=SqEIT18XpIXjG8qj7CBSGnliq569DC9sPWL3+WTF7K5H1zOJEtRxuPhZVpnFXFtpLKWGLIbmDXBVvZivCyAQ/mjUKM8NQVvNd/wDS+1F/POYTNm4GmkFV7jHCmxVmcDm8Txoh5xK6z2y/w4ic6eRVWKA/xEkBMsPGfuZ20hsRlY=
+	t=1731335747; cv=none; b=Oh/DOZDehXzY5DGaIYG0DLSuvfTmU8wd3wvZvhFQvnBk/6e3UGgcafrcWi6lK7uH0EwXtt6NRNATbfjTCi/RjR/m4qRTsHOs7/wNmz9RnKBg/+bc3laDrIdhjxlvI6qo1ZbxHiLZpBND0v7W0t2B0h9v1nAriEbcXRSfrSYPS5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731335260; c=relaxed/simple;
-	bh=0HBp91eFMMg3rKBeBDysVTX9mLxQIHz9phYBimdndCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gH1DexspTWD5QXeNS80pGiITm/KnxOapgBRm+tHi90V+kAqYdI2Q4bS9pyJHI5IkGUbQUEyUY8/SHvtAXeVdSi4DueU2qyaBhkEL0rM4tOdQXsO7FIgQ83/EHF6a6eqdXLAMOZKi/hfzM710k/DJYyih9VPGgye3N+d/cz/B1hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sbqA4CXw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C70BCC4CECF;
-	Mon, 11 Nov 2024 14:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731335259;
-	bh=0HBp91eFMMg3rKBeBDysVTX9mLxQIHz9phYBimdndCc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sbqA4CXwcNwBw8gvLUFLeNBaL48iTGzehpPg5Yhv0GwvduUO+nKVZahYoI2wdEQwi
-	 4BNpw+B4xRdHlzD8ZyUoZWhF5lpd4KL6Favdt3REZqqZPEs1OiVJEOyZi0zSAtx6Cs
-	 x98lCeuqTAtNNPvzPEejZyU7/45eOlFzcPYAGfmBltgfjVMo53DDBzpnarihw20/GQ
-	 Qx//WwmaP/HOa/mfOyQ8KAIi4S8s4d9/0eHgLGOyZngJWGH7ScMg5NMrS3NVTOY8kK
-	 r1Q0pjJW9N/UYlHS5ULw6XjL59ERlJ3eskvHZN2pzq/AD9x/6G5ScRAspOKKfeKuFJ
-	 I1AzT8XdOb8vg==
-Message-ID: <0c2f2274-4487-4d7e-a558-cb9608f59118@kernel.org>
-Date: Mon, 11 Nov 2024 16:27:30 +0200
+	s=arc-20240116; t=1731335747; c=relaxed/simple;
+	bh=FbpQDgrATLQrby7+vyaOzgg3QuyaUVc+zF0xtLbYzvc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YZw0kG4rFQNQU6gSfikFrcsJ6bw0lwXDk3HE5m8qLzdBGqmYyeh/mMVFt6es525I0n2KbU2N/KvmYo6oPeUED/PqRIrkPoy5jgnj18Af5hgd0E+rho8uMSLAYOiSvDzPhP97sqDs1kBpKUbaP00wG2oh/gkeuFh2yNVYRkNtbWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YGuuhp2e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23374C4CECF;
+	Mon, 11 Nov 2024 14:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731335746;
+	bh=FbpQDgrATLQrby7+vyaOzgg3QuyaUVc+zF0xtLbYzvc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YGuuhp2eKe5RhGikIH11KvGiSWpo7Zwn64x/EbyDwDGcBJSIs/Xl6qOQCSUDGx7ba
+	 sHn16LZSB9dlPKtPrYGXEuvumvUi5BBRQkTy0YRHaNePyZ7XmXObyjh0DoUbaf5kYj
+	 +K/Kp3jOPTsIePXJnRHBa278dQsQlI+IncpEvWso=
+Date: Mon, 11 Nov 2024 15:35:04 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Georgi Djakov <djakov@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] interconnect changes for 6.13
+Message-ID: <2024111100-lustiness-managing-f937@gregkh>
+References: <20241111134304.1019885-1-djakov@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] memory: Switch back to struct platform_driver::remove()
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Markus Mayer <mmayer@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Santosh Shilimkar <ssantosh@kernel.org>, Paul Cercueil
- <paul@crapouillou.net>, Yong Wu <yong.wu@mediatek.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Tony Lindgren <tony@atomide.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Konrad Dybcio <konradybcio@kernel.org>, Georgi Djakov <djakov@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-omap@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-tegra@vger.kernel.org
-References: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241111134304.1019885-1-djakov@kernel.org>
 
-
-
-On 07/11/2024 16:57, Uwe Kleine-König wrote:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
+On Mon, Nov 11, 2024 at 03:43:04PM +0200, Georgi Djakov wrote:
+> Hello Greg,
 > 
-> Convert all platform drivers below drivers/memory to use .remove(), with
-> the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
+> This is the pull request with interconnect changes for the v6.13-rc1 merge
+> window. It contains new drivers and clean-ups. As always, the summary is
+> in the signed tag.
 > 
-> A few white space changes are included to make indention consistent.
+> All patches have been in linux-next for at least a week. There are no
+> reported issues. Please pull into char-misc-next when possible.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> Thanks,
+> Georgi
+> 
+> 
+> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+> 
+>   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.13-rc1
 
-for drivers/memory/omap-gpmc.c 
+Pulled and pushed out, thanks.
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+greg k-h
 
