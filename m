@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-17343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EE609C4846
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:40:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72FD99C4893
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 22:55:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 116922816CB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 21:40:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 433D6B2FC0F
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 21:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1641BD032;
-	Mon, 11 Nov 2024 21:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9001C3318;
+	Mon, 11 Nov 2024 21:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="BlrR/K1X"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="q1RVt5c5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607F21B86CF;
-	Mon, 11 Nov 2024 21:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB8B1BF328;
+	Mon, 11 Nov 2024 21:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731361213; cv=none; b=nJZVA8gzNLX68GZwozKA5uIlIsRHpGNXz2nlj8nrcyyYuMOoqWq3VBBZShjru7J2axmqgG4qsqlScV88F8oGQcYk60C+PHnVx0IfrStjpVTZ/ajxP4aL/1uG1M79oRCB3R9hGvDzeuFSmPRgCinFAO0x+ZqSCQ507+thEciz+pE=
+	t=1731361216; cv=none; b=j1Vf3C29ph2GNMOrFrJoY6OBwb142fRP7hY8AMMBEHS5dj8jWNbQg9luBAk3Lorvdi9moqPZru1dJBkEpPcyn/7fjSgMeGvHOisNp2mJqUCmvajtMangj5zLrAUSvtHze9TVWLBUzRlPsW7eZS6j6XeVutbZn0AEWuW7Yj7G/hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731361213; c=relaxed/simple;
-	bh=WoMvZJIJux5dqs2E/f2Vyc4MaZs8AL36MsJXVYFWisU=;
+	s=arc-20240116; t=1731361216; c=relaxed/simple;
+	bh=IK/x/Cq7ZA9U8RzTSdkN5gmLpQF3F49M1qwA6I2D3Ao=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qNk5Buo/CyXeMEfEfgdOanqYCiKumfGThO3cLg/ZmHxcQPMF9cZXs7qrnNAAWFcvnPGJkqOG0pQyXeIxjh3IYWME4Ct8FHfgg05J5OpbSkQaBRHY+9WbjK33G6iibOr2TVXKxq374isPhVyRUNn30wiDOB/D8GMzlQXllsnYPjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=BlrR/K1X; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=iAZU9uhVuIAa/i0BQ+x44fBUeyIBk2B7wwHxp5tE1CenjL4gayV3pqzfZl7DLTyp/+N3QMfPclrdlDVfhLer1N2ZJy8vj5ZbJbsi4KCtubDXQ5QfJkuVtHaDN6d2LoKrBgYMroOTqFWL7bx3C3yiMk7zfu8QqB2xLVaBZqgjF1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=q1RVt5c5; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1731361208;
-	bh=WoMvZJIJux5dqs2E/f2Vyc4MaZs8AL36MsJXVYFWisU=;
+	s=mail; t=1731361209;
+	bh=IK/x/Cq7ZA9U8RzTSdkN5gmLpQF3F49M1qwA6I2D3Ao=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BlrR/K1Xb342Rc1PaIFOcYjyHUUH9PebcSHGGMq0Q3IpyurqrbuGWupI1pT77VYfj
-	 eFAtu0BBC5dvKre88yc5JWNkbRIHbtTjhl4E+eUN/1Q1fA6bIAAPLn3I5A+AODMYBv
-	 6HEA8VvPNalEHzPeZMtAZDqG/uRGTxsKq9kRMcFQ=
+	b=q1RVt5c52o+1gNm1mnjwFrNl0iRlPy2NF6nGGOy7dth6Z5BkAm1JaxDgI3etvoA/H
+	 yScw65Ec9aLPGAaAPRZeRedU0U1YHxYguipFFnqRh+d+xEh7V3Sa3DT5pbj11BW3iv
+	 wvLx81i66POc6qLjqvQND97dPWrhVPEMqMvcxTOs=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 11 Nov 2024 22:40:06 +0100
-Subject: [PATCH v4 4/9] power: supply: hwmon: prepare for power supply
+Date: Mon, 11 Nov 2024 22:40:07 +0100
+Subject: [PATCH v4 5/9] power: supply: sysfs: prepare for power supply
  extensions
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241111-power-supply-extensions-v4-4-7240144daa8e@weissschuh.net>
+Message-Id: <20241111-power-supply-extensions-v4-5-7240144daa8e@weissschuh.net>
 References: <20241111-power-supply-extensions-v4-0-7240144daa8e@weissschuh.net>
 In-Reply-To: <20241111-power-supply-extensions-v4-0-7240144daa8e@weissschuh.net>
 To: Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>, 
@@ -62,11 +62,11 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
  Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731361208; l=3062;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1731361208; l=1743;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=WoMvZJIJux5dqs2E/f2Vyc4MaZs8AL36MsJXVYFWisU=;
- b=iNSCnaLWGctCjtcixkDpwdJqHaTwvZ7xtoRnT9tiLCkUOR+W545SWEoR/Ces3ouT04VWVjvl7
- g2uEwoAhVRVBNcZq4ano1pNMpoKwlaIhnoWh+5ZVOmmmOpzOxespcNw
+ bh=IK/x/Cq7ZA9U8RzTSdkN5gmLpQF3F49M1qwA6I2D3Ao=;
+ b=OVmbweWyERIkD+3u/cQSsHiAvOSooJ6WsxKcE4WPWREU6O2jUviYpNAQsPOSciqiGJBS2HYWv
+ ap6u6k8NtIwDEyFGLSmcgp6qAZ2iCL6hvv/fBayMuPV4A6LCxlfqFwL
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
@@ -79,80 +79,45 @@ Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/power/supply/power_supply_hwmon.c | 50 +++++++++++++++----------------
- 1 file changed, 24 insertions(+), 26 deletions(-)
+ drivers/power/supply/power_supply_sysfs.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 01be04903d7d2465ae2acb9eeb0b55a87868bb87..95245e6a6baa3e85ae8551e71f4f7905639a3325 100644
---- a/drivers/power/supply/power_supply_hwmon.c
-+++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -349,9 +349,28 @@ static const struct hwmon_chip_info power_supply_hwmon_chip_info = {
- 	.info = power_supply_hwmon_info,
- };
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index a7351b9c8fe34a464a4e69b1a1a4a4179c1a4b4f..bfe48fe01a8d03828c2e539e1e6e5e9fc5c60167 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -378,7 +378,6 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+ 	struct device *dev = kobj_to_dev(kobj);
+ 	struct power_supply *psy = dev_get_drvdata(dev);
+ 	umode_t mode = S_IRUSR | S_IRGRP | S_IROTH;
+-	int i;
  
-+static const enum power_supply_property power_supply_hwmon_props[] = {
-+	POWER_SUPPLY_PROP_CURRENT_AVG,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_POWER_AVG,
-+	POWER_SUPPLY_PROP_POWER_NOW,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_TEMP_MAX,
-+	POWER_SUPPLY_PROP_TEMP_MIN,
-+	POWER_SUPPLY_PROP_TEMP_ALERT_MIN,
-+	POWER_SUPPLY_PROP_TEMP_ALERT_MAX,
-+	POWER_SUPPLY_PROP_TEMP_AMBIENT,
-+	POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN,
-+	POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX,
-+	POWER_SUPPLY_PROP_VOLTAGE_AVG,
-+	POWER_SUPPLY_PROP_VOLTAGE_MIN,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+};
-+
- int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- {
--	const struct power_supply_desc *desc = psy->desc;
- 	struct power_supply_hwmon *psyhw;
- 	struct device *dev = &psy->dev;
- 	struct device *hwmon;
-@@ -377,32 +396,11 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 		goto error;
- 	}
+ 	if (!power_supply_attrs[attrno].prop_name)
+ 		return 0;
+@@ -386,19 +385,11 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+ 	if (attrno == POWER_SUPPLY_PROP_TYPE)
+ 		return mode;
  
--	for (i = 0; i < desc->num_properties; i++) {
--		const enum power_supply_property prop = desc->properties[i];
+-	for (i = 0; i < psy->desc->num_properties; i++) {
+-		int property = psy->desc->properties[i];
 -
--		switch (prop) {
--		case POWER_SUPPLY_PROP_CURRENT_AVG:
--		case POWER_SUPPLY_PROP_CURRENT_MAX:
--		case POWER_SUPPLY_PROP_CURRENT_NOW:
--		case POWER_SUPPLY_PROP_POWER_AVG:
--		case POWER_SUPPLY_PROP_POWER_NOW:
--		case POWER_SUPPLY_PROP_TEMP:
--		case POWER_SUPPLY_PROP_TEMP_MAX:
--		case POWER_SUPPLY_PROP_TEMP_MIN:
--		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
--		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
--		case POWER_SUPPLY_PROP_TEMP_AMBIENT:
--		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
--		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
--		case POWER_SUPPLY_PROP_VOLTAGE_AVG:
--		case POWER_SUPPLY_PROP_VOLTAGE_MIN:
--		case POWER_SUPPLY_PROP_VOLTAGE_MAX:
--		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+	for (i = 0; i < ARRAY_SIZE(power_supply_hwmon_props); i++) {
-+		const enum power_supply_property prop = power_supply_hwmon_props[i];
-+
-+		if (power_supply_has_property(psy, prop))
- 			set_bit(prop, psyhw->props);
--			break;
--		default:
--			break;
+-		if (property == attrno) {
+-			if (power_supply_property_is_writeable(psy, property) > 0)
+-				mode |= S_IWUSR;
+-
+-			return mode;
 -		}
- 	}
+-	}
+-
+-	if (power_supply_battery_info_has_prop(psy->battery_info, attrno))
++	if (power_supply_has_property(psy, attrno)) {
++		if (power_supply_property_is_writeable(psy, attrno) > 0)
++			mode |= S_IWUSR;
+ 		return mode;
++	}
  
- 	name = psy->desc->name;
+ 	return 0;
+ }
 
 -- 
 2.47.0
