@@ -1,83 +1,80 @@
-Return-Path: <linux-pm+bounces-17296-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17297-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11DA19C3770
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 05:15:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 050A19C3772
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 05:16:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 437F61C2091E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 04:15:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEF5F1F2202E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2024 04:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC09126C05;
-	Mon, 11 Nov 2024 04:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EDC314658F;
+	Mon, 11 Nov 2024 04:15:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rDObEpn1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Du5Beo5u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ECE4595B
-	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 04:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8866D3E47B
+	for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 04:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731298546; cv=none; b=SkL9B36MZpn9Hm0tNpoGoP4SI4ffxddZVzbPbi2QBP6eEfimh4plJ7xmNCTY0mE8eecikQWWCVRPqW0NTbrtdETaKRU9GI+nC2rj5Iv+2+RtRkG/MQAicX9d6hNnWDN3KHxruHYJGd9UGxlOz6A9M5XbW4QCyu0VDkQfgiE9ad4=
+	t=1731298555; cv=none; b=aHhk+4pDqN4HXWKujAiR9MQdLg2a/1PyWG2VfGzR/e39/sBBIUsT/7WqoosnZziO2Z6gTgxEkTUiCA9M+QI4DramvZslOHVhDb8+2SrN9unaqtjmH2lKzizOre8pC2oitqtHN2WHdqttAThhamoi52rSq+aW9aYbygv0bFWjX/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731298546; c=relaxed/simple;
-	bh=fle9jir2XkQTPkMIv93KMYsqrh4kDkUf/SHSJR5R1Tw=;
+	s=arc-20240116; t=1731298555; c=relaxed/simple;
+	bh=WbiDftJx9bFeENC4V0ZAOBz1aUB5u4vwB8PEVM89C9s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lRofgCHCTNmnoVYsFpYi4KUOO7Q90yoFWSQnKy3pDv4Ug8wrDM52P07VXdRcK+j4SorxtGefXpfk+doX/eI8J+wnBP4XFRlXXg3JHgdO8Ck9GL6YPTtq0FvKhVxepmpSFcrdDtqbbOBq7wVOuC+7dv3hTxYbuGiMqvrQyVOYa1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rDObEpn1; arc=none smtp.client-ip=209.85.214.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=WljdM1K4Xna1r1z/WC0c2DenTfl0lSRDaC+Mk8+gpd5KgEN3o7d6ktrQ6E9sLk8sPAJrtlXpvLKS+6SkvMqFPtuEGAr2JjbquE0k9FrnS1OXaQP7GE+9DoHTcI47DLCk8hAmiu3miX808PimdWjgwdrndOP1EmOlbd3XzM2t1gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Du5Beo5u; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c8c50fdd9so34470885ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2024 20:15:44 -0800 (PST)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-720aa3dbda5so2879667b3a.1
+        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2024 20:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731298544; x=1731903344; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1731298554; x=1731903354; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=knhfiz6v1X/Y5Phw5qTTBL8KQ/Mw5RIdq1X0vCWMUt0=;
-        b=rDObEpn1doCrwYhHHvVPh7h2PsZ6zj7LQtC/G6vOMVUlfRWIBt+lIGlYeg7a2yTwIq
-         0roUjwZ27fDcH+hDGpLfMsgQC8gmUPQ1JZkEljwzCnkhM+6o5wIkvUWb/CN9sUEaPd/U
-         Cc97JuCkjS9GGuItyjYwg/cLx5k1EowGLGj8SrMzEu/RvupYzPCOJI+OESyeuRN4qFwQ
-         Fdg9tbAFM0aiTfIPjPoxvZnEMBUw2kkj+LTqpABohaZTg2WsXqyNt1QWgj9ACepHvqFL
-         fOZUscFTkQIOQPl5ToVl/OCwpfLCqxCS2X0MI3VV1Wcm0at+lcTGPM5ZEeNLYvuebla0
-         H0UQ==
+        bh=JQqiIEOanUS0Bcohraclo/HNFDw3Nm/rKQFhvAnqajw=;
+        b=Du5Beo5uzuebhKxRIGNNtQ9NmfM6ko/RKAuYvb5mru5l50hRMUU5bWKprHFv0DBCAZ
+         kGTtZ1jFbhHwooAeFeEWUZcqVFCaOq+spnkEPhmSrczoV3Gkn7+qQUbZ7vdo6/C5PPZi
+         ELfEneTRwpWYsKkT5HsStSHeGrUdgBoGMn5KUnQRvjUatc7A1ypN2MnmY24U+Esr9KMK
+         a0oHQyJsW33zcUeHSSnKv8BW0kgNzhm+KVskebjVUrwCIxNv38XeS+YigoUKSVMX+pbw
+         O4pRI9SJvURwZQLcmNXSNiJWWtLraaah9zVmfFC9cn3Ehe1w73ssmhLjHo/l1Sjk6S3E
+         XXmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731298544; x=1731903344;
+        d=1e100.net; s=20230601; t=1731298554; x=1731903354;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=knhfiz6v1X/Y5Phw5qTTBL8KQ/Mw5RIdq1X0vCWMUt0=;
-        b=QzZ+K4ZUhCOndijYR+nx38jhBGRN/VeySvNQr6xK63lsKJ4Y8iecCn8vl+kwHTDXSA
-         NgVh2zcBhaosOVXsB0n2sP3UhMGe0cGx+0XAlREKPlaHOQbatac4ZHih4cKZLxhRvCjI
-         wK673IsIVYi4tuM8ReWjmCwHIraSlDvSRzMFLKzkjLHI5x2sakJSvfQ/GT3+dVYH2+3G
-         nQxle7dL377jep6eYBXO4V030UheoZNPIYAlnxeG4+4uQqF1P6QNqS2S3eaF7qwi3PjI
-         zi10FkrCuHaLy4y3Wgm0cuQedESvwzbbChIEYThOyU3Xk5H6S0uHBguPRGPQtVU7eJ3w
-         C5Og==
-X-Forwarded-Encrypted: i=1; AJvYcCXHrW+mBRoyUtY2aVWGmGwymfhBqp4thd935a4gd/4cJ8AV7EgsHiOxrexzE7KKXCN7EUJrRHsOjQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywx1ICflfRQo6rJifaUZEcq6YmXnoi4j7sFzkmVqFxxvrfOKz/p
-	b2jFENd1tcwwIR3e14H6dUxplabuUSX+1N4NZ3Zdq1042yvv/MWIEvAK4yGs66U=
-X-Google-Smtp-Source: AGHT+IHxCb9wscTjmGmnrU/ke01iamppePTNlMCSebsPTr/XCYGY/bNBzPupEwPaf2R5gdgxQNJBBw==
-X-Received: by 2002:a17:902:d486:b0:211:74be:c09b with SMTP id d9443c01a7336-211821ae0e7mr198879005ad.12.1731298544156;
-        Sun, 10 Nov 2024 20:15:44 -0800 (PST)
+        bh=JQqiIEOanUS0Bcohraclo/HNFDw3Nm/rKQFhvAnqajw=;
+        b=SBydJWq56CAHF5QLZoy3iXwwmiG42BeitgcltFy8g1VCIH2jJHWIZ9YUFHnWPYuJLs
+         7bwMCnNnhLvzdtbQmv3HuWnjHaCSXkpoDC4NcBKgVYWHR4Z1nI1bLTsQsbl3qqV+N6u3
+         PhCymeCRAFhnlXJAFC9l4RFtcAlODISxfdbBSaWChC5ANk4eB5vZgSUYlwQssZSfFndP
+         pIPArlVMgXrKCJwIlBWjhSAnRmhaAQtoacKcXSrZ1NfAGXTBqoSlKHtjMDvUXemfS9WF
+         wyg0059KgVtQQ2f1u22dG67dtA0MKCzsvBTh/sGcNWBqXrVy0FrW/Ma7G4ssRQt5eZBr
+         RKQw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6eayG/5o4pIrh2i/etTSFjdzDKz8psmEYLmuBe5UkTJIzfRfXw6r8H0dmvJO07YzfRXy4KTsAdQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1cem0O9QrL3ZTnJiVXW7GOySWO4fKz8VbPLa34n3iHd3sQUZP
+	pTYrKF50eqgXXCxeqTuewDzA367PxxLNu5FXwhZiDsqTbRSMXqVHW5MhQrR/Jio=
+X-Google-Smtp-Source: AGHT+IHaye9+95br80ilXq0UAgW/RS8BZnKVf9PjOkM2+kqV/D26Esutj25h9AnyilfmJ1f6bOMOnQ==
+X-Received: by 2002:a05:6a20:d80d:b0:1db:ddde:33e2 with SMTP id adf61e73a8af0-1dc22b508a4mr15709373637.29.1731298553884;
+        Sun, 10 Nov 2024 20:15:53 -0800 (PST)
 Received: from localhost ([122.172.86.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9a5fd1a9fsm7577101a91.37.2024.11.10.20.15.41
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a56048sm7974865b3a.174.2024.11.10.20.15.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Nov 2024 20:15:42 -0800 (PST)
-Date: Mon, 11 Nov 2024 09:45:40 +0530
+        Sun, 10 Nov 2024 20:15:53 -0800 (PST)
+Date: Mon, 11 Nov 2024 09:45:51 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: rafael@kernel.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, hector.yuan@mediatek.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 RESEND] cpufreq: mediatek-hw: Fix wrong return value
- in mtk_cpufreq_get_cpu_power()
-Message-ID: <20241111041540.7pfksjopw7qfupsx@vireshk-i7>
-References: <20241107113841.989475-1-ruanjinjie@huawei.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, qperret@google.com
+Subject: Re: [PATCH -next] cpufreq: CPPC: Fix wrong return value in
+ cppc_get_cpu_power()
+Message-ID: <20241111041551.lfgduu4m7ddckn2x@vireshk-i7>
+References: <20241106010111.2404387-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,30 +83,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241107113841.989475-1-ruanjinjie@huawei.com>
+In-Reply-To: <20241106010111.2404387-1-ruanjinjie@huawei.com>
 
-On 07-11-24, 19:38, Jinjie Ruan wrote:
-> mtk_cpufreq_get_cpu_power() return 0 if the policy is NULL. Then in
-> em_create_perf_table(), the later zero check for power is not invalid
-> as power is uninitialized. As Lukasz suggested, it must return -EINVAL when
-> the 'policy' is not found. So return -EINVAL to fix it.
+On 06-11-24, 09:01, Jinjie Ruan wrote:
+> cppc_get_cpu_power() return 0 if the policy is NULL. Then in
+> em_create_perf_table(), the later zero check for power is not valid
+> as power is uninitialized. As Quentin pointed out, kernel energy model
+> core check the return value of active_power() first, so if the callback
+> failed it should tell the core. So return -EINVAL to fix it.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 4855e26bcf4d ("cpufreq: mediatek-hw: Add support for CPUFREQ HW")
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+> Fixes: a78e72075642 ("cpufreq: CPPC: Fix possible null-ptr-deref for cpufreq_cpu_get_raw()")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> Suggested-by: Quentin Perret <qperret@google.com>
 > ---
-> v2 -> v2 RESEND:
-> - Update the commit subject and Cc Viresh.
-> - Add Reviewed-by.
-> v2:
-> - Fix the driver instead of em_create_perf_table() as suggested.
-> - Update the commit message.
-> - Add Suggested-by.
-> ---
->  drivers/cpufreq/mediatek-cpufreq-hw.c | 2 +-
+>  drivers/cpufreq/cppc_cpufreq.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index cdc569cf7743..bd8f75accfa0 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -405,7 +405,7 @@ static int cppc_get_cpu_power(struct device *cpu_dev,
+>  
+>  	policy = cpufreq_cpu_get_raw(cpu_dev->id);
+>  	if (!policy)
+> -		return 0;
+> +		return -EINVAL;
+>  
+>  	cpu_data = policy->driver_data;
+>  	perf_caps = &cpu_data->perf_caps;
 
 Applied. Thanks.
 
