@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-17375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A5459C4E2A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 06:23:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F9A9C4E1F
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 06:22:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDEC22859AE
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 05:23:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C0691F23A0B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 05:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F3C20ADF5;
-	Tue, 12 Nov 2024 05:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA9320A5CC;
+	Tue, 12 Nov 2024 05:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="b2Ub0Gix";
-	dkim=pass (2048-bit key) header.d=pobox.com header.i=@pobox.com header.b="QrZyyn/s";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Tmq4MrcL"
+	dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="jYatm4tJ";
+	dkim=pass (2048-bit key) header.d=pobox.com header.i=@pobox.com header.b="Ihlurd1z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ntcc2Tke"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139F520720F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13999204932;
 	Tue, 12 Nov 2024 05:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731388939; cv=none; b=mwJuoZv56zC1DO9usQt317R0O0MFMKAtD8ZlaiwdC+I7vDAWgaO5xD49Vfa7xRqDoH0rFXcofCfWcb2OnpgzwjpMUj/B21d2CXNjkX9jxjOIha7LdcG3GcB8hnaGM9+lkyyZ6pBb1qpY0Srl5qKIygjG2N092NIyLE4nJAXzY/M=
+	t=1731388938; cv=none; b=dpmkhgXl09gA+8v7HZRMpL4Zo3Kmpb/dGkcQds7W5p0HXzSrLSqIV2keL0fzyyUk5PsDyPrXT0Jk3vlLSieWcQNec8PTWKV9OzW0EShJGE41VJ0RHEBP5GyKHvdr9ggmfOg9ySGLXKWa8UnlnGujoom+L7ebL+dRQwVBSi40KL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731388939; c=relaxed/simple;
-	bh=8xwilQFGOCfXbB+ZJp+tGPxGwe3Aq/z9dFzjyvqsuZU=;
+	s=arc-20240116; t=1731388938; c=relaxed/simple;
+	bh=zni73RqvremBaxqTSqo+uI0FtebRS0qFn43PsYFOywA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MOqVQk4cazSC65UVjkOve0460QZdtrw7h8iBlrGY8+/kUlEbpx9CbEGsze/2uJI/UAqedTaeiozGVCAGMUnM0j1Ls1v/d78NRjmuf2lUIzgsc9i/3iPMDG4bs2ATtuQytFNP44LwEvN3JBDVs9eWtgRGVz5CqjwiBljFg8qT/9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=b2Ub0Gix; dkim=pass (2048-bit key) header.d=pobox.com header.i=@pobox.com header.b=QrZyyn/s; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Tmq4MrcL; arc=none smtp.client-ip=103.168.172.146
+	 MIME-Version; b=KkT8GT/RI8JN/ZOHFLdb2YX/Fl/afuoyVCIpyJFEOm63j4o4qo4xifwG3z/joRZAXm4Iy60WnBb5GStZdtN9mEOuQOPwaYyZlk5gpdGrkrSkUzagHgLUYRMNPTbjGJ7hfPndbsprw0nc/9ZreJbKdwMXDnHOs3JaXr1M3ZfdSHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=jYatm4tJ; dkim=pass (2048-bit key) header.d=pobox.com header.i=@pobox.com header.b=Ihlurd1z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ntcc2Tke; arc=none smtp.client-ip=103.168.172.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfout.phl.internal (Postfix) with ESMTP id 185A113800AB;
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 3CB5E1380171;
 	Tue, 12 Nov 2024 00:22:15 -0500 (EST)
-Received: from phl-frontend-02 ([10.202.2.161])
-  by phl-compute-03.internal (MEProxy); Tue, 12 Nov 2024 00:22:15 -0500
+Received: from phl-frontend-01 ([10.202.2.160])
+  by phl-compute-01.internal (MEProxy); Tue, 12 Nov 2024 00:22:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
 	cc:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to; s=2016-12.pbsmtp; t=1731388935;
-	 x=1731475335; bh=Nq/6/CpfdvFHxWlMyGuOOsUGAG0x/aWCQ1FsqavQtag=; b=
-	b2Ub0GixUiKwPuZ7/wiIbHZA9KFM9ovk3JvBNwwfoGaSBvnP1u6EvYJTgWPNDhlM
-	ZwSOgebG0AaFjSZMgiJzpuPR88wdq1t4bxvKJPW478/VmYBqa6vQ/N4E3T0CLtXw
-	lzdKFXQ+xHIGkQT0tp2C0kDPikyED6X9G1q+H35XVIM=
+	 x=1731475335; bh=5bdj/n2LgxLKoSXpmbjX7w9HpSLYegxH5T6o6/+YLS4=; b=
+	jYatm4tJFXRKm7NQ8XYg2KX0WHovLYH0dUK9B1MYh4UMuZc7QetfVrW1VMzX/c4L
+	xK2+kCKgriOtR4B/LdRxzV46koiaEUk0oAudOcmLX+g1rhoTAwI2XsbUUEOmvR5V
+	Ln8DpIn4c8FWmvyK5bmLxcak+WObR2zi1cFXKdxjDbs=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pobox.com; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to; s=fm2; t=1731388935; x=
-	1731475335; bh=Nq/6/CpfdvFHxWlMyGuOOsUGAG0x/aWCQ1FsqavQtag=; b=Q
-	rZyyn/sYsLDHeMObQHre8KQqKi7dIoa2X8OKkWeMG7jFbiT9EZvv4H3pbmYSfc+m
-	y1PrfnpeE3xb5f4wcgQuPTtJzs+zg6KWAF79iWVZH62nor2YfW6uUEm3cs9ncoG6
-	eXrSbYcSILbRoVLS4DFkN2d/TIeyVWo1YHo1a/guMtDJ5QfjCM5cR4qyw5X7JW2S
-	rmlH7TVqsY1lHEFFPQjhrTOW1TsBhq5QbAeDGNnjchf57bIOdWgzOljQ2Ddq9rVB
-	JOR3fhINmFwsyCO6WTpypZOMJ6uKFMZaUqDOur3RtxgsfR9L43vlavlAN/o6zFWQ
-	eJRqC0ivzt6FpfAAXmg1g==
+	1731475335; bh=5bdj/n2LgxLKoSXpmbjX7w9HpSLYegxH5T6o6/+YLS4=; b=I
+	hlurd1z1Sd2ci34BmfzTXcoQ/Is08G1unGuXoEmyREBNmgqiGPinELUWuqKsFpL4
+	4B3dXnkhDdrdAyvepACJVP1hMPbw39nno52z7+3reN0IcqeyM4XJSnE5CUG9fCD7
+	cFUlD8DkGk0CtDZmk8IkllwAPDFbCtjcaeIpnXzqm/x2U9bEt6Eh9OPwTSu6LG9M
+	ISPiXpbn47r2momwV/TkJz+RC4bqyijlH9trQ7Y+iP7ZPITJ0uoEvai2+vCdzj6f
+	14XZIqHbUJrfuOgkSvMtp3iYcTAsyN3GyaW3/C7PWX/7Sq+YTFrSlb8kjRQpcPnL
+	FOVeGdkCN3KKC44lMpMcw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1731388935; x=1731475335; bh=N
-	q/6/CpfdvFHxWlMyGuOOsUGAG0x/aWCQ1FsqavQtag=; b=Tmq4MrcLscEkBmac1
-	MWosvcbvpDyrcO7Aoz71MPLfUrMqmKWWspkg08d1x5x2TOYBZCFe8NLsF3OPPN+r
-	92C3dOCYFsAjyHSZ/+ydxNQOgDrgVfGSvUgHUTwlQVR324lg9N4Y6q1Zbx3It2KS
-	v795n5P0L9bPXYLxlis+bpT5Q6wHrb2amxvTfsc3hPYiD5EMyVsgyNlTaUWOoaC4
-	y2qw3+l6+bk+PjDwUqYeIKXDMMW5w4KHNj5LS1pu4XbKeBJlGWjAC4t9Uh8UQSG8
-	E5kVe2wJ8J08jwPliADl98KBbCMRwZ4oqrldiav1Ksic2YxbeTJFvetfP9zMZ7QW
-	gJqvQ==
-X-ME-Sender: <xms:BuYyZzNJ6e-Pei75mY8KB20kfneTD5kcG_2mAV4aZkA79HtAZCDp6g>
-    <xme:BuYyZ98YErsVxwa3a72MkfyxxMS1pkAluWz3nFKPdATDtHMm1Hu5va2MaoNaUo571
-    GTlO2jTqSsJGdqWyjw>
-X-ME-Received: <xmr:BuYyZyRJATBvWu4RLHcCCFcHe88scJl5RVdSP9NKMZ0Y-rfcoQRwK5FqUKCQWArBSIozzfmj4rH4tSk4G0r2C5hiBpuWQRQ1geCdEBbWxx-09jR5AA>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1731388935; x=1731475335; bh=5
+	bdj/n2LgxLKoSXpmbjX7w9HpSLYegxH5T6o6/+YLS4=; b=ntcc2TkeDYUK6tgEf
+	YYUrMidO7bng67ULq+kMCjMT7f5peMKz/HNy4QQF4jJlwYhz+kqi4jLin+M3n8jl
+	47vfMBjOwl9uwXB8FDKHi4BreoLeyt9wkkgLlDUO+dkN18QeMpOloyFSAGKvn1KD
+	KUT7tioNiMTN7nHE+GqG8FGFxSFz7fmbtsixyyC0MFoV5r77FA/wXkAMrXTuVEpC
+	z63Wu1zl+e/DhMszVclkEIeswHXVXRiiUF8pWfSkrWMizulwFkP5nlWrretiMm7R
+	oM4sOOc+aFkpQfGx5nD+5OrH/u5R4uJ9AuIIHIY+vJJ5PwtiSeq9FL1PNr/Pk3OO
+	3RQ9w==
+X-ME-Sender: <xms:BuYyZ0MPM7hJT8rNj_sCGzeDpz1acZR4IxBLyiLmqu-ekkJ9prxgDA>
+    <xme:BuYyZ6_NLcFRoq8YxQ0OJAiKsQWys06YWKd9mJ-W3BESr-RYoILIEKQiuRd_3V8jI
+    GZ5d874uotFODT3XJA>
+X-ME-Received: <xmr:BuYyZ7QlAL54e_b-ZYZxPlNs2hBYAUdnsBIHuhUa08y9k41NYxcVFRpwqJe-Y3VTIxwpGORAIjoYlejq8TF1f9NnrsaDvyPI2S4ff0_M40w2d9Nemw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefgdekvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
     tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
@@ -90,16 +90,16 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefgdekvdcutefuodetggdote
     hopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
     pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
     hopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:BuYyZ3voVYKdV8Zv----873fx8QXorOIRyvKjdFUXhw2fkhPQm0eZg>
-    <xmx:BuYyZ7dCGuVnJNBEZaa0MQpES1UQGhbRIjSomy4QDWuqdf-qMuSdyA>
-    <xmx:BuYyZz1uudd1BvaQqt-0MXAIBmAzjXKWlN_Uj_ISm99SsE7ii3xdqw>
-    <xmx:BuYyZ39P2GvwXnQWGCWL5ogXoN2w4zxNsFxB-qqhmwFcfza7rFNVAw>
-    <xmx:B-YyZ_4dclgNqVYDVRD7bGaXcrK1GzJwkd0hoDCIlOyDIW5fqwNBhSf1>
+X-ME-Proxy: <xmx:BuYyZ8sxwyYSMm_zme-jCVZKlaTVBvZSsoVExB7Q5vOb83ZELOr-aA>
+    <xmx:BuYyZ8dZQA0xStF6_56cA4Kln8cFJ5mG6sL2h7KfGtRidJxMQt04fw>
+    <xmx:BuYyZw2gaUuRXSlJbVNcO5dV95DJ9RLExFTSwyIGsB7nN35zgfyk9A>
+    <xmx:BuYyZw9lXkaYUyuJDuqRCc5B89HxTgyQnrvGZUIkzfR9geq_Mo5FCQ>
+    <xmx:B-YyZ05bBCseepkVvlkSdcdy8JCcGR24tWdyng2Y3gK1tYoVEZJlymID>
 Feedback-ID: i58514971:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
  12 Nov 2024 00:22:14 -0500 (EST)
 Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id 17908ECB800;
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 32494ECB802;
 	Tue, 12 Nov 2024 00:22:14 -0500 (EST)
 From: Nicolas Pitre <nico@fluxnic.net>
 To: Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -110,9 +110,9 @@ To: Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc: linux-kernel@vger.kernel.org,
 	Nicolas Pitre <npitre@baylibre.com>,
 	Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH 3/5] thermal: aggregation support
-Date: Tue, 12 Nov 2024 00:19:40 -0500
-Message-ID: <20241112052211.3087348-4-nico@fluxnic.net>
+Subject: [PATCH 4/5] thermal: automatic aggregation support
+Date: Tue, 12 Nov 2024 00:19:41 -0500
+Message-ID: <20241112052211.3087348-5-nico@fluxnic.net>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241112052211.3087348-1-nico@fluxnic.net>
 References: <20241112052211.3087348-1-nico@fluxnic.net>
@@ -126,527 +126,237 @@ Content-Transfer-Encoding: 8bit
 
 From: Nicolas Pitre <npitre@baylibre.com>
 
-This provides support for the creation of virtual thermal zone devices
-that serve as aggregation point for other devices. Individual primary
-thermal devices remain accessible in sysfs but all cooling device bindings
-are moved over to the thermal aggregator whose temperature is the weighted
-average of its primary devices. Trip points are inherited from the
-aggregator but only the aggregator will bind to cooling devices.
-
-Although cooling devices are bound to the aggregator, critical trip
-points remain individually accessible, and more importantly triggerable
-for each primary device.
-
-Full visibility of primary devices is preserved via the sysfs interface.
-Some sysfs symbolic links are created to represent the hierarchical
-relationship between the aggregator and its primary devices.
-
-When this is enabled, the aggregation is applied to all entries found in
-the device tree's "thermal-sensors" list when it contains more than one
-entry. For example, let's consider:
-
-```
-        thermal_zones: thermal-zones {
-                cpu0-thermal {
-                        thermal-sensors = <&sensor_mcu 0>;
-                };
-
-                cpu1-thermal {
-                        thermal-sensors = <&sensor_mcu 1>;
-                };
-        };
-```
-
-The above won't provide any aggregation. However:
-
-```
-        thermal_zones: thermal-zones {
-                cluster0-thermal {
-                        thermal-sensors = <&sensor_mcu 0>,
-                                          <&sensor_mcu 1>;
-                        coefficients = <6 4>;
-                };
-        };
-```
-
-The above will create the "cluster0-thermal" aggregator that combines
-the "sensor_mcu(0)" and "sensor_mcu(1)" primary zones whose thermal
-measurement contributions are 60% and 40% respectively.
-
-In sysfs we have:
-```
-$ cd /sys/class/thermal
-$ ls -l thermal_zone*/aggregator
-lrwxrwxrwx 1 root root ... thermal_zone5/aggregator -> ../thermal_zone4
-lrwxrwxrwx 1 root root ... thermal_zone6/aggregator -> ../thermal_zone4
-$ ls ls -l thermal_zone*/primary_zone*
-lrwxrwxrwx 1 root root ... thermal_zone4/primary_zone_0 -> ../thermal_zone5
-lrwxrwxrwx 1 root root ... thermal_zone4/primary_zone_1 -> ../thermal_zone6
-$ cat thermal_zone4/type
-cluster0-thermal
-$ cat thermal_zone*/primary_zone*/type
-sensor_mcu(0)
-sensor_mcu(1)
-```
-
-Future work may allow the addition and removal of primary thermal zones
-to an aggregadirectly tor within sysfs for added flexibility.
+Automatically apply thermal aggregation of multiple related thermal zones
+into a single one. Here "related" means such zones must have the same trip
+points and cooling devices bound to them. This is an alternative to the
+device tree's "thermal-sensors" list for testing purpose without actually
+modifying the DTB.
 
 Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 ---
- drivers/thermal/Kconfig        |  15 ++
- drivers/thermal/thermal_core.c | 416 +++++++++++++++++++++++++++++++++
- drivers/thermal/thermal_core.h |  14 ++
- drivers/thermal/thermal_of.c   |  23 +-
- 4 files changed, 467 insertions(+), 1 deletion(-)
+ drivers/thermal/Kconfig        |  12 ++
+ drivers/thermal/thermal_core.c | 227 +++++++++++++++++++++++++++++++++
+ 2 files changed, 239 insertions(+)
 
 diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 61e7ae524b..111f07b52a 100644
+index 111f07b52a..1b2f319838 100644
 --- a/drivers/thermal/Kconfig
 +++ b/drivers/thermal/Kconfig
-@@ -220,6 +220,21 @@ config DEVFREQ_THERMAL
+@@ -235,6 +235,18 @@ config THERMAL_AGGREGATION
+ 	  found in the device tree's "thermal-sensors" list when it contains
+ 	  more than one entry.
  
- 	  If you want this support, you should say Y here.
- 
-+config THERMAL_AGGREGATION
-+	bool "Thermal zone aggregation support"
-+	depends on THERMAL_OF
++config THERMAL_AGGREGATION_AUTO
++	bool "Automatic Thermal Aggregation support"
++	depends on THERMAL_AGGREGATION
 +	help
-+	  This provides support for the creation of virtual thermal zone
-+	  devices that serve as aggregation point for other devices.
-+	  Individual primary thermal devices remain accessible in sysfs
-+	  but all cooling device bindings are moved over to the thermal
-+	  aggregator whose temperature is the weighted average of its
-+	  primary devices.
-+
-+	  When this is enabled, the aggregation is applied to all entries
-+	  found in the device tree's "thermal-sensors" list when it contains
-+	  more than one entry.
++	  Automatically apply thermal aggregation of multiple related thermal
++	  zones into a single one. Here "related" means such zones must have
++	  the same trip points and cooling devices bound to them. This is an
++	  alternative to the device tree's "thermal-sensors" list for testing
++	  purpose without actually modifying the DTB. It is highly recommended
++	  that the device tree method be used in preference to this for actual
++	  system deployment.
 +
  config THERMAL_EMULATION
  	bool "Thermal emulation mode support"
  	help
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 8f03985f97..73a1b30081 100644
+index 73a1b30081..934d248aa9 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -748,6 +748,13 @@ struct thermal_zone_device *thermal_zone_get_by_id(int id)
-  *				     binding, and unbinding.
-  */
+@@ -755,6 +755,16 @@ static inline void thermal_remove_tz_from_aggregator(struct thermal_zone_device
+ {}
+ #endif /* CONFIG_THERMAL_AGGREGATION */
  
-+#ifdef CONFIG_THERMAL_AGGREGATION
-+static void thermal_remove_tz_from_aggregator(struct thermal_zone_device *tz);
++#ifdef CONFIG_THERMAL_AGGREGATION_AUTO
++static void thermal_check_zone_for_aggregation(struct thermal_zone_device *target_tz);
++static void thermal_check_cdev_for_aggregation(struct thermal_cooling_device *new_cdev);
 +#else
-+static inline void thermal_remove_tz_from_aggregator(struct thermal_zone_device *tz)
++static inline void thermal_check_zone_for_aggregation(struct thermal_zone_device *target_tz)
 +{}
-+#endif /* CONFIG_THERMAL_AGGREGATION */
++static inline void thermal_check_cdev_for_aggregation(struct thermal_cooling_device *new_cdev)
++{}
++#endif /* CONFIG_THERMAL_AGGREGATION_AUTO */
 +
  /**
   * thermal_bind_cdev_to_trip - bind a cooling device to a thermal zone
   * @tz:		pointer to struct thermal_zone_device
-@@ -1577,6 +1584,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+@@ -1073,6 +1083,8 @@ __thermal_cooling_device_register(struct device_node *np,
  
- 	thermal_debug_tz_remove(tz);
+ 	mutex_unlock(&thermal_list_lock);
  
-+	thermal_remove_tz_from_aggregator(tz);
++	thermal_check_cdev_for_aggregation(cdev);
 +
- 	mutex_lock(&thermal_list_lock);
- 	list_for_each_entry(pos, &thermal_tz_list, node)
- 		if (pos == tz)
-@@ -1654,6 +1663,413 @@ struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name)
+ 	return cdev;
+ 
+ out_cooling_dev:
+@@ -1515,6 +1527,8 @@ thermal_zone_device_register_with_trips(const char *type,
+ 	if (atomic_cmpxchg(&tz->need_update, 1, 0))
+ 		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 
++	thermal_check_zone_for_aggregation(tz);
++
+ 	thermal_notify_tz_create(tz);
+ 
+ 	thermal_debug_tz_add(tz);
+@@ -2068,6 +2082,219 @@ void thermal_zone_device_aggregate(struct thermal_zone_device *tz,
+ 	mutex_unlock(&thermal_list_lock);
  }
- EXPORT_SYMBOL_GPL(thermal_zone_get_zone_by_name);
  
-+#ifdef CONFIG_THERMAL_AGGREGATION
++#ifdef CONFIG_THERMAL_AGGREGATION_AUTO
 +
-+static LIST_HEAD(thermal_aggregator_list);
-+
-+struct thermal_zone_aggregator {
-+	struct thermal_zone_device *tz;
-+	struct list_head primary_tz_list;
-+	struct mutex lock;
-+	struct ida ida;
-+	struct list_head node;
-+};
-+
-+static bool is_aggregated(struct thermal_zone_device *tz)
++static bool is_aggregator(struct thermal_zone_device *tz)
 +{
-+	return tz->aggregator != NULL;
++	return !strcmp(tz->type, "aggregator");
 +}
-+
-+/*
-+ * Get weighted average temperature for all aggregated zones.
-+ *
-+ * A "max temp" variant could also be provided but the end result on the
-+ * cooling device would be the same as if no aggregation was done in the
-+ * first place.
-+ */
-+static int thermal_aggr_get_average_temp(struct thermal_zone_device *aggr_tz,
-+				     int *aggr_temp)
-+{
-+	struct thermal_zone_aggregator *aggr = aggr_tz->devdata;
-+	struct thermal_zone_device *tz;
-+	int temp, weight;
-+	s64 temp_sum = 0;
-+	u32 weight_sum = 0;
-+	int ret = -ENODATA;
-+
-+	mutex_lock(&aggr->lock);
-+	list_for_each_entry(tz, &aggr->primary_tz_list, aggregated_node) {
-+		mutex_lock(&tz->lock);
-+		if (tz->suspended || tz->mode != THERMAL_DEVICE_ENABLED) {
-+			mutex_unlock(&tz->lock);
-+			continue;
-+		}
-+		ret = __thermal_zone_get_temp(tz, &temp);
-+		if (ret) {
-+			mutex_unlock(&tz->lock);
-+			break;
-+		}
-+		if (temp <= THERMAL_TEMP_INVALID) {
-+			/*
-+			 * Invalid temp values are ignored, unless all
-+			 * primary zones are invalid in which case it is
-+			 * passed up to accommodate the special case in
-+			 * __thermal_zone_device_update().
-+			 */
-+			*aggr_temp = temp;
-+		} else {
-+			weight = tz->tzp->slope;
-+			temp_sum += (s64)temp * weight;
-+			weight_sum += weight;
-+		}
-+		mutex_unlock(&tz->lock);
-+	}
-+	mutex_unlock(&aggr->lock);
-+
-+	if (weight_sum)
-+		*aggr_temp = div_s64(temp_sum, weight_sum);
-+
-+	return ret;
-+}
-+
-+static int thermal_aggr_set_trips(struct thermal_zone_device *aggr_tz,
-+				  int low, int high)
-+{
-+	struct thermal_zone_aggregator *aggr = aggr_tz->devdata;
-+	struct thermal_zone_device *tz;
-+
-+	mutex_lock(&aggr->lock);
-+	list_for_each_entry(tz, &aggr->primary_tz_list, aggregated_node) {
-+		mutex_lock(&tz->lock);
-+		if (!tz->suspended && tz->mode == THERMAL_DEVICE_ENABLED)
-+			thermal_zone_set_trips(tz, low, high);
-+		mutex_unlock(&tz->lock);
-+	}
-+	mutex_unlock(&aggr->lock);
-+
-+	return 0;
-+}
-+
-+static int thermal_aggr_change_mode(struct thermal_zone_device *aggr_tz,
-+				    enum thermal_device_mode mode)
-+{
-+	struct thermal_zone_aggregator *aggr = aggr_tz->devdata;
-+	struct thermal_zone_device *tz;
-+	int ret, err = 0;
-+
-+	mutex_lock(&aggr->lock);
-+	list_for_each_entry(tz, &aggr->primary_tz_list, aggregated_node) {
-+		ret = thermal_zone_device_set_mode(tz, mode);
-+		if (ret)
-+			err = ret;
-+		/* cycle through all tz's even if there are errors */
-+	}
-+	mutex_unlock(&aggr->lock);
-+
-+	return err;
-+}
-+
-+static const struct thermal_zone_device_ops thermal_aggr_tz_ops = {
-+	.get_temp	= thermal_aggr_get_average_temp,
-+	.set_trips	= thermal_aggr_set_trips,
-+	.change_mode	= thermal_aggr_change_mode,
-+};
 +
 +/**
-+ * create_thermal_aggregator - create a tz to be used as an aggregator
++ * thermal_trip_related - determine if two trips are equivalent
 + *
-+ * @ref_tz: the tz from which parameters such as trip values are copied
-+ * @name: name to identify this aggregator
++ * @tt1, @tt2: thermal trip specs to compare
 + *
-+ * This creates a virtual thermal zone to be used as an aggregator for
-+ * other zones called "primary" zones. Those primary zones must be added to
-+ * the created aggregator with add_tz_to_aggregator().
++ * Determine if given trips may be candidates for aggregation.
 + *
-+ * Return: a pointer to the created struct thermal_zone_device or an ERR_PTR
-+ * value in case of errors.
++ * Return: true if related for aggregation, false otherwise
++ */
++static bool thermal_trip_related(struct thermal_trip *tt1,
++				 struct thermal_trip *tt2)
++{
++	return tt1->temperature == tt2->temperature &&
++	       tt1->hysteresis == tt2->hysteresis &&
++	       tt1->type == tt2->type &&
++	       tt1->flags == tt2->flags;
++}
++
++static struct thermal_cooling_device *
++trip_to_cdev(struct thermal_zone_device *tz, int trip_idx)
++{
++	struct thermal_instance *ti;
++
++	list_for_each_entry(ti, &tz->thermal_instances, tz_node)
++		if (trip_to_trip_desc(ti->trip) == &tz->trips[trip_idx])
++			return ti->cdev;
++
++	return NULL;
++}
++
++/**
++ * thermal_zone_related - determine if two tz's are candidates for aggregation
++ *
++ * @tz1, @tz2: thermal zones to compare
++ *
++ * Return: true if related for aggregation, false otherwise
++ */
++static bool thermal_zone_related(struct thermal_zone_device *tz1,
++				 struct thermal_zone_device *tz2)
++{
++	/* a tz can't aggregate with itself */
++	if (tz1 == tz2)
++		return false;
++
++	/* no relation possible if ops.should_bind is unset */
++	if (!tz1->ops.should_bind || !tz2->ops.should_bind)
++		return false;
++
++	/* a tz always relates to its aggregator */
++	if (tz1->aggregator == tz2 || tz2->aggregator == tz1)
++		return true;
++
++	/* related tz's must have the same number of trip points */
++	if (tz1->num_trips != tz2->num_trips)
++		return false;
++
++	/* tz's with no cdev bindings are not (yet) considered */
++	if (list_empty(&tz1->thermal_instances) ||
++	    list_empty(&tz2->thermal_instances))
++		return false;
++
++	for (int i = 0; i < tz1->num_trips; i++) {
++		/* all trips must be related */
++		if (!thermal_trip_related(&tz1->trips[i].trip, &tz2->trips[i].trip))
++			return false;
++		/* cdevs for given trips must be the same */
++		if (trip_to_cdev(tz1, i) != trip_to_cdev(tz2, i))
++			return false;
++	}
++
++	return true;
++}
++
++/**
++ * find_related_tz - look for a tz aggregation candidate
++ *
++ * @target_tz: tz to compare against
++ *
++ * Return: candidate tz for aggregation, or NULL if none
 + */
 +static struct thermal_zone_device *
-+create_thermal_aggregator(struct thermal_zone_device *ref_tz, const char *name)
++find_related_tz(struct thermal_zone_device *target_tz)
++{
++	struct thermal_zone_device *tz;
++
++	list_for_each_entry(tz, &thermal_tz_list, node) {
++		if (is_aggregated(tz))
++			continue;
++		if (is_aggregator(tz))
++			continue;
++		if (!thermal_zone_related(tz, target_tz))
++			continue;
++		return tz;
++	}
++
++	return NULL;
++}
++
++/**
++ * thermal_check_zone_for_aggregation - consider tz for aggregation
++ *
++ * @target_tz: tz to compare against
++ *
++ * Adds the provided tz to a compatible aggregator. If none found, look for
++ * the possibility to create a new aggregator if another compatible tz exists.
++ * This is called, notably, when a new tz is registered and potentially bound
++ * to existing cdevs.
++ */
++static void thermal_check_zone_for_aggregation(struct thermal_zone_device *target_tz)
 +{
 +	struct thermal_zone_aggregator *aggr;
-+	struct thermal_zone_device *aggr_tz;
-+	struct thermal_trip *trips;
-+	int ntrips = ref_tz->num_trips;
-+	int ret;
++	struct thermal_zone_device *aggr_tz, *tz;
 +
-+	trips = kcalloc(ntrips, sizeof(*trips),  GFP_KERNEL);
-+	if (!trips)
-+		return ERR_PTR(-ENOMEM);
-+	for (int i = 0; i < ntrips; i++)
-+		trips[i] = ref_tz->trips[i].trip;
-+
-+	aggr = kzalloc(sizeof(*aggr), GFP_KERNEL);
-+	if (!aggr) {
-+		ret = -ENOMEM;
-+		goto err_free_trips;
-+	}
-+	mutex_init(&aggr->lock);
-+	INIT_LIST_HEAD(&aggr->primary_tz_list);
-+	ida_init(&aggr->ida);
-+
-+	aggr_tz = thermal_zone_device_register_with_trips(name, trips, ntrips,
-+							  aggr,
-+							  &thermal_aggr_tz_ops,
-+							  ref_tz->tzp, 0, 0);
-+	if (IS_ERR(aggr_tz)) {
-+		ret = PTR_ERR(aggr_tz);
-+		pr_err("Failed to register thermal aggregator zone: %d\n", ret);
-+		goto err_free_aggr;
-+	}
-+	aggr_tz->polling_delay_jiffies = ref_tz->polling_delay_jiffies;
-+	aggr_tz->passive_delay_jiffies = ref_tz->passive_delay_jiffies;
-+	aggr_tz->ops.should_bind = ref_tz->ops.should_bind;
-+	aggr->tz = aggr_tz;
-+	kfree(trips);
-+
-+	ret = thermal_zone_device_enable(aggr_tz);
-+	if (ret) {
-+		pr_err("Failed to enable thermal aggregator zone: %d\n", ret);
-+		goto err_unregister_tz;
-+	}
-+
-+	mutex_lock(&thermal_list_lock);
-+	list_add_tail(&aggr->node, &thermal_aggregator_list);
-+	mutex_unlock(&thermal_list_lock);
-+
-+	return aggr_tz;
-+
-+err_unregister_tz:
-+	thermal_zone_device_unregister(aggr_tz);
-+err_free_aggr:
-+	ida_destroy(&aggr->ida);
-+	kfree(aggr);
-+err_free_trips:
-+	kfree(trips);
-+	return ERR_PTR(ret);
-+}
-+
-+/**
-+ * add_tz_to_aggregator() - add a primary zone to an aggregator
-+ *
-+ * @aggr_tz: the aggregator tz to use, as returned by create_thermal_aggregator()
-+ * @tz: a primary tz to be added
-+ *
-+ * This enrolls a primary tz with an aggregator tz. Thermal instances
-+ * (bindings) from the primary tz are moved to the aggregator. It is assumed
-+ * that all primary tz's added to a given aggregator have the same set of
-+ * trip points. This can be called with an already enrolled tz in which case
-+ * only new thermal instances from the primary, if any, will be moved over
-+ * to the aggregator. Duplicate thermal instances are simply dropped.
-+ *
-+ * An "aggregator" symlink is created within the primary tz's sysfs directory
-+ * to the aggregator tz directory. And a list of "primary_zone_<n>" symlinks
-+ * in the aggregator's directory point back to all primary tz's it owns.
-+ */
-+static void add_tz_to_aggregator(struct thermal_zone_device *aggr_tz,
-+				 struct thermal_zone_device *tz)
-+{
-+	struct thermal_zone_aggregator *aggr = aggr_tz->devdata;
-+	struct thermal_instance *ti, *next;
-+	int ret;
-+
-+	mutex_lock(&aggr->lock);
-+	mutex_lock(&aggr_tz->lock);
-+	mutex_lock(&tz->lock);
-+
-+	/* duplicate thermal instances onto the aggregator */
-+	list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
-+		int i = thermal_zone_trip_id(tz, ti->trip);
-+		struct thermal_trip *aggr_trip = &aggr_tz->trips[i].trip;
-+		struct thermal_cooling_device *cdev = ti->cdev;
-+		struct cooling_spec c = {
-+			.upper = ti->upper_no_limit ?  THERMAL_NO_LIMIT : ti->upper,
-+			.lower = ti->lower,
-+			.weight = ti->weight,
-+		};
-+		ret = thermal_bind_cdev_to_trip(aggr_tz, aggr_trip, cdev, &c);
-+		if (ret == -EEXIST)
-+			ret = 0;
-+		if (ret) {
-+			print_bind_err_msg(aggr_tz, aggr_trip, cdev, ret);
-+			goto out;
-+		}
-+	}
-+
-+	/* remove thermal instances from the primary tz */
-+	list_for_each_entry_safe(ti, next, &tz->thermal_instances, tz_node) {
-+		thermal_unbind_cdev_from_trip(tz, ti->trip, ti->cdev);
-+	}
-+
-+	if (!tz->aggregator) {
-+		list_add_tail(&tz->aggregated_node, &aggr->primary_tz_list);
-+		tz->aggregator = aggr_tz;
-+
-+		/* add a link from the primary tz to its aggregator */
-+		ret = sysfs_create_link(&tz->device.kobj,
-+					&aggr_tz->device.kobj,
-+					"aggregator");
-+		if (ret)
-+			dev_err(&tz->device, "linking to aggregator failed: %d\n", ret);
-+
-+		/* add a link from the aggregator to this primary tz */
-+		tz->aggregated_id = ret = ida_alloc(&aggr->ida, GFP_KERNEL);
-+		if (ret >= 0) {
-+			char name[sizeof("primary_zone_000")];
-+
-+			snprintf(name, sizeof(name), "primary_zone_%d", ret);
-+			ret = sysfs_create_link(&aggr_tz->device.kobj,
-+						&tz->device.kobj,
-+						name);
-+			if (ret) {
-+				ida_free(&aggr->ida, tz->aggregated_id);
-+				tz->aggregated_id = -1;
-+			}
-+		}
-+		if (ret)
-+			dev_err(&aggr_tz->device, "linking to primary failed: %d\n", ret);
-+	}
-+
-+out:
-+	mutex_unlock(&tz->lock);
-+	mutex_unlock(&aggr_tz->lock);
-+	mutex_unlock(&aggr->lock);
-+}
-+
-+/**
-+ * free_thermal_aggregator_unlock - unregister and free an aggregator tz
-+ *
-+ * @aggr_tz: the aggregator to free, as returned by create_thermal_aggregator()
-+ *
-+ * This unregisters the tz used as an aggregator and frees its associated
-+ * memory. This is called by thermal_remove_tz_from_aggregator() when the
-+ * last primary tz is removed from the aggregator, or if the aggregator was
-+ * created and is no longer needed before any primary tz's have been added
-+ * to it.
-+ *
-+ * Note: To avoid race issues, this is expected to be called with
-+ * thermal_list_lock held, but it will be released before returning.
-+ */
-+static void free_thermal_aggregator_unlock(struct thermal_zone_device *aggr_tz)
-+{
-+	struct thermal_zone_aggregator *aggr = aggr_tz->devdata;
-+
-+	lockdep_assert_held(&thermal_list_lock);
-+	BUG_ON(!list_empty(&aggr->primary_tz_list));
-+
-+	list_del(&aggr->node);
-+	mutex_unlock(&thermal_list_lock);
-+
-+	thermal_zone_device_disable(aggr_tz);
-+	thermal_zone_device_unregister(aggr_tz);
-+	ida_destroy(&aggr->ida);
-+	kfree(aggr);
-+}
-+
-+/**
-+ * thermal_remove_tz_from_aggregator - remove a primary tz from an aggregator
-+ *
-+ * @tz: the thermal zone to remove from its aggregator
-+ *
-+ * This retires a primary tz from its aggregator. If not aggregated, this
-+ * is a no-op. Thermal instance bindings are re-established with the primary
-+ * tz.
-+ *
-+ * If given tz was the last one owned by the aggregator, then the aggregator
-+ * is destroyed.
-+ */
-+static void thermal_remove_tz_from_aggregator(struct thermal_zone_device *tz)
-+{
-+	struct thermal_zone_device *aggr_tz = tz->aggregator;
-+	struct thermal_zone_aggregator *aggr = aggr_tz->devdata;
-+	struct thermal_cooling_device *cdev;
-+
-+	if (!is_aggregated(tz))
++	if (is_aggregator(target_tz))
 +		return;
 +
 +	mutex_lock(&thermal_list_lock);
-+
-+	/* Bind cooling devices back to this zone */
-+	tz->ops.should_bind = aggr_tz->ops.should_bind;
-+	list_for_each_entry(cdev, &thermal_cdev_list, node)
-+		thermal_zone_cdev_bind(tz, cdev);
-+
-+	mutex_lock(&aggr->lock);
-+	list_del(&tz->aggregated_node);
-+	tz->aggregator = NULL;
-+	sysfs_remove_link(&tz->device.kobj, "aggregator");
-+	if (tz->aggregated_id >= 0) {
-+		char name[sizeof("primary_zone_000")];
-+
-+		snprintf(name, sizeof(name), "primary_zone_%d", tz->aggregated_id);
-+		sysfs_remove_link(&aggr_tz->device.kobj, name);
-+		ida_free(&aggr->ida, tz->aggregated_id);
-+	}
-+	mutex_unlock(&aggr->lock);
-+
-+	if (list_empty(&aggr->primary_tz_list)) {
-+		/* no more tz tied to this aggregator */
-+		free_thermal_aggregator_unlock(aggr_tz);
-+	} else {
++	if (!thermal_zone_is_present(target_tz)) {
 +		mutex_unlock(&thermal_list_lock);
++		return;
 +	}
-+}
 +
-+/**
-+ * thermal_zone_device_aggregate - aggregate provided thermal zone device
-+ *
-+ * @tz: the thermal zone to aggregate
-+ * @name: the aggregator's name to use
-+ *
-+ * This adds the provided thermal zone device to the thermal aggregator
-+ * identified by @name. If no such aggregator exists it is created.
-+ *
-+ * In case of any error, the provided thermal zone will remain freestanding
-+ * on its own and an error message will be logged. There is no point returning
-+ * an error as it would be unwise for the caller to revert registration of
-+ * this tz anyway (a suboptimal thermal configuration is better than no
-+ * configuration).
-+ */
-+void thermal_zone_device_aggregate(struct thermal_zone_device *tz,
-+				   const char *name)
-+{
-+	struct thermal_zone_aggregator *aggr;
-+	struct thermal_zone_device *aggr_tz;
-+
-+	/* look for an existing aggregator */
-+	mutex_lock(&thermal_list_lock);
++	/* see if existing aggregators can appropriate this zone  */
 +	list_for_each_entry(aggr, &thermal_aggregator_list, node) {
 +		aggr_tz = aggr->tz;
-+		if (strcmp(aggr_tz->type, name) != 0)
++		if (!thermal_zone_related(aggr_tz, target_tz))
 +			continue;
-+		if (aggr_tz->ops.should_bind != tz->ops.should_bind) {
-+			pr_err("%s: same name but ops.should_bind differs\n",
-+			       __func__);
-+			goto out;
-+		}
-+		goto add;
++		pr_debug("aggr %s(%d) and zone %s(%d) are related\n",
++			 aggr_tz->type, aggr_tz->id, target_tz->type, target_tz->id);
++		add_tz_to_aggregator(aggr_tz, target_tz);
++		mutex_unlock(&thermal_list_lock);
++		return;
 +	}
-+	mutex_unlock(&thermal_list_lock);
 +
-+	/* no aggregator with specified name exists, create one */
-+	aggr_tz = create_thermal_aggregator(tz, name);
++	/* see if non-aggregated zones can be aggregated */
++	tz = find_related_tz(target_tz);
++	if (!tz) {
++		mutex_unlock(&thermal_list_lock);
++		return;
++	}
++
++	pr_debug("zones %s(%d) and %s(%d) are related\n",
++		 tz->type, tz->id, target_tz->type, target_tz->id);
++
++	mutex_unlock(&thermal_list_lock);
++	aggr_tz = create_thermal_aggregator(target_tz, "aggregator");
 +	if (IS_ERR(aggr_tz)) {
 +		pr_err("unable to create thermal aggregator (%ld)\n",
 +		       PTR_ERR(aggr_tz));
@@ -654,90 +364,62 @@ index 8f03985f97..73a1b30081 100644
 +	}
 +
 +	mutex_lock(&thermal_list_lock);
-+add:
-+	add_tz_to_aggregator(aggr_tz, tz);
-+	if (is_aggregated(tz))
-+		tz->ops.should_bind = NULL;
-+out:
++
++	/* the lock was momentarily dropped so need to revalide everything */
++	if (thermal_zone_is_present(target_tz)) {
++		tz = find_related_tz(target_tz);
++		if (tz) {
++			add_tz_to_aggregator(aggr_tz, target_tz);
++			add_tz_to_aggregator(aggr_tz, tz);
++			mutex_unlock(&thermal_list_lock);
++			return;
++		}
++	}
++
++	/* our match disappeared in the mean time */
++	free_thermal_aggregator_unlock(aggr_tz);
++}
++
++/**
++ * thermal_check_cdev_for_aggregation - consider aggregation after new cdev registration
++ *
++ * @new_cdev: cdev for which new thermal bindings might create aggregation candidates
++ *
++ * Consider tz's having thermal instance bindings with this new cdev as
++ * candidates for aggregation. This is called when a new cdev is registered
++ * and potentially bound to existing tz's.
++ */
++static void thermal_check_cdev_for_aggregation(struct thermal_cooling_device *new_cdev)
++{
++	struct thermal_zone_device *tz, *last_tz = NULL;
++	struct thermal_instance *ti;
++
++start_over:
++	mutex_lock(&thermal_list_lock);
++
++	list_for_each_entry(tz, &thermal_tz_list, node) {
++		if (tz == last_tz)
++			continue;
++		if (is_aggregator(tz))
++			continue;
++		list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
++			if (ti->cdev == new_cdev) {
++				last_tz = tz;
++				mutex_unlock(&thermal_list_lock);
++				thermal_check_zone_for_aggregation(tz);
++				/* because the lock was dropped ... */
++				goto start_over;
++			}
++		}
++	}
++
 +	mutex_unlock(&thermal_list_lock);
 +}
 +
-+#endif /* CONFIG_THERMAL_AGGREGATION */
-+
++#endif /* CONFIG_THERMAL_AGGREGATION_AUTO */
+ #endif /* CONFIG_THERMAL_AGGREGATION */
+ 
  static void thermal_zone_device_resume(struct work_struct *work)
- {
- 	struct thermal_zone_device *tz;
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index a64d39b1c8..ff5aa20e82 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -136,6 +136,11 @@ struct thermal_zone_device {
- 	enum thermal_notify_event notify_event;
- 	bool suspended;
- 	bool resuming;
-+#ifdef CONFIG_THERMAL_AGGREGATION
-+	struct thermal_zone_device *aggregator;
-+	struct list_head aggregated_node;
-+	int aggregated_id;
-+#endif
- #ifdef CONFIG_THERMAL_DEBUGFS
- 	struct thermal_debugfs *debugfs;
- #endif
-@@ -287,4 +292,13 @@ thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 				    unsigned long new_state) {}
- #endif /* CONFIG_THERMAL_STATISTICS */
- 
-+#ifdef CONFIG_THERMAL_AGGREGATION
-+void thermal_zone_device_aggregate(struct thermal_zone_device *tz,
-+				   const char *aggr_name);
-+#else
-+static inline void
-+thermal_zone_device_aggregate(struct thermal_zone_device *tz, const char *aggr_name)
-+{}
-+#endif /* CONFIG_THERMAL_AGGREGATION */
-+
- #endif /* __THERMAL_CORE_H__ */
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index b8ddd41247..1761a60db5 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -451,7 +451,25 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		if (!of_ops.critical && !strcasecmp(action, "reboot"))
- 			of_ops.critical = thermal_zone_device_critical_reboot;
- 
--	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-+	/*
-+	 * The device tree node name is used with single-sensor entries.
-+	 * When multiple-sensor entries are aggregated, the node name is used
-+	 * for the aggregator and primary sensors use their compatible alias
-+	 * name with the id value.
-+	 */
-+	bool multi = (index != -1);
-+	char namebuf[THERMAL_NAME_LENGTH];
-+	const char *tz_name = namebuf;
-+
-+	if (!multi)
-+		tz_name = np->name;
-+	else if (of_alias_from_compatible(sensor, namebuf, sizeof(namebuf)) == 0)
-+		snprintf(namebuf + strlen(namebuf), sizeof(namebuf) - strlen(namebuf),
-+			 "(%d)", id);
-+	else
-+		snprintf(namebuf, sizeof(namebuf), "%s(%d)", sensor->name, id);
-+
-+	tz = thermal_zone_device_register_with_trips(tz_name, trips, ntrips,
- 						     data, &of_ops, &tzp,
- 						     pdelay, delay);
- 	if (IS_ERR(tz)) {
-@@ -460,6 +478,9 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		goto out_kfree_trips;
- 	}
- 
-+	if (multi)
-+		thermal_zone_device_aggregate(tz, np->name);
-+
- 	of_node_put(np);
- 	kfree(trips);
- 
 -- 
 2.47.0
 
