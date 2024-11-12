@@ -1,114 +1,94 @@
-Return-Path: <linux-pm+bounces-17409-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F69E9C5A68
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:33:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CB869C5A3E
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:26:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8D76B3F2F1
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 12:49:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A961DB29490
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 13:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC65B70811;
-	Tue, 12 Nov 2024 12:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9282513F435;
+	Tue, 12 Nov 2024 13:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TAZ04Y7y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVv56g7X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBA657CBE;
-	Tue, 12 Nov 2024 12:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C35D139D1B;
+	Tue, 12 Nov 2024 13:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731415660; cv=none; b=lvOTSFzCv7cvrmLjpuobaFAjn9RXlD7qmOTA+alHS/MngY9MSvPv90hoKB33Zrie9HvBWwLuWli2jB47PIJA514lo5C3yKq4M5Q/XJ2XLYLy8QwR1WWbadaR97x+ekIXjf2qpYNxPwFI/ZJ7pozPqT8PtvNAezCLJ6aWaPZEDso=
+	t=1731417293; cv=none; b=CfqRfzyjPDGsRWEtgu/Cyv1XaBxVzbdYtXu56ezK3gum9fslTojI8fOUH/XGcmqI4IA5t0vZI10wyF/ZPWhhr9fkwh7SsCtMPWNxnh5oFkPZKR4MOgsqMOfDlWMRhYCwdW3ouCUU+8hixAvzYAc/i+imzIzaMWJK2m2c2JNxijA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731415660; c=relaxed/simple;
-	bh=nE2fw62JHHUbcGQ+Vfxe3F1Und3a6DrOnoDJmNZMKN0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qfEcTBcPBEz+T3p5fw8uQ02YbrQOheWhiRet8bzkvqm0uBYNalSrnqTYzqoMd3U7jSvNDzrMf1JVJs0OJOH+CJmHEEvof9pS+zFsJatR9c7QXgSGcMTbpj1SFw9iz8ZMILeq617w0MxCIEUMn8SDtjTgdOEsvPT7FQd3oZqjr80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TAZ04Y7y; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731415659; x=1762951659;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=nE2fw62JHHUbcGQ+Vfxe3F1Und3a6DrOnoDJmNZMKN0=;
-  b=TAZ04Y7y852Z2fI3HQtOFFqVWCZ7mlNCBzDdk33xE7NV+6Zk3cEylyfu
-   UWGXJ9seGZtdAtmHldpvnadALHWR2TtIM8V5fdEjSNTh8gpsk4r8WJvto
-   AleQ4ezVZ0uxxpYDKt7reXrWmzf7q151M7lwL2R5OhXWqEEdJJFdbHW/3
-   IYJRy1b6SlnaRqDQSISvLonTITaz4yx2FwE5odRInZLFIdyiGPJiGB2vH
-   GFBMBrpGXj/z8yQ5fdCkUOFEiwmU5v3knQBw4Qy3Rb5a45VdGMqZj07yR
-   t1CGu0/sMJKM5a8NtGSK+irqaBb0EsxPsOmLl9FK1vFCaLJfL2en4gvF4
-   g==;
-X-CSE-ConnectionGUID: vz41s1ZdSxmybNApL+Nmtg==
-X-CSE-MsgGUID: kfUsodqGTD+CkZ7FITsvFQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="35032534"
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="35032534"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 04:44:55 -0800
-X-CSE-ConnectionGUID: RbUKDArJRICOj4ph/sDz/Q==
-X-CSE-MsgGUID: qbVOZSI4RX6hRAbxs2KkYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="87353736"
-Received: from linux.intel.com ([10.54.29.200])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 04:44:54 -0800
-Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
-	by linux.intel.com (Postfix) with ESMTP id 1D51620B5703;
-	Tue, 12 Nov 2024 04:44:50 -0800 (PST)
-Message-ID: <0ecea0e5be59e63b7827f4db368f2aa3322fb71d.camel@linux.intel.com>
-Subject: Re: [PATCH v3 2/3] x86/smp native_play_dead: Prefer
- cpuidle_play_dead() over mwait_play_dead()
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki"
-	 <rafael@kernel.org>
-Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- rafael.j.wysocki@intel.com, len.brown@intel.com, dave.hansen@linux.intel.com
-Date: Tue, 12 Nov 2024 14:44:49 +0200
-In-Reply-To: <20241112121843.GF6497@noisy.programming.kicks-ass.net>
-References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
-	 <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com>
-	 <20241112114743.GQ22801@noisy.programming.kicks-ass.net>
-	 <CAJZ5v0ivAk1xrcJgiJnDWnL3GdijSdsuV4K_4ORjnsjPUVAEnA@mail.gmail.com>
-	 <20241112121843.GF6497@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1731417293; c=relaxed/simple;
+	bh=nyu8BMpf26D3mqaRkVc1Sh9txs54CQBP5PZ1fXVVTls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X5frDCsgyqOHA53ByrfEnn1ylzt8Ir6igNoo4SH4sw6vCDPWlS6NC8Qjxvda4myJaEKKlkAhj7wrgI5NQgCKt28/BamSpOd9TAsO1T6q8P0ue8v/ez+uVVaqx9uoeiEQgk163wwakjmLD+1uz9hWyCSFgqhvO2T2G1fpWHfaI3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVv56g7X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC43FC4CED0;
+	Tue, 12 Nov 2024 13:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731417292;
+	bh=nyu8BMpf26D3mqaRkVc1Sh9txs54CQBP5PZ1fXVVTls=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aVv56g7XuUsOZ1+3NnQ+oexMrLHy7mt/van6tnoi+hbJAvoKNL+PMJgkFtYhFZ2A3
+	 eJ/2e6pgMEZxcBlHbMsuZxa7A1rlLMi8QesSD7ItCgZKHfCtCUdgEMAC3qV7yFbpsh
+	 nHyqeeThNteNiGgR5CAs+TGabZCnF1P/K0fW/q7tUG96sHLetvPL1E8Yrs9WLRwcIP
+	 NR1zqN18vPetYYfFh/R8rW8JlQ4jfNdbZATZtm81QgOeAnGj51qyM6/3ka2RUiVwM5
+	 tIVZCBFEmlvbGAC30qcQDj6PT3dwUU0bvFJ3YOxZAQ4OclBEbZuBkSH9/xNP1JLiKz
+	 W4QGS+gHhc7Cg==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2958f5387d2so1413793fac.0;
+        Tue, 12 Nov 2024 05:14:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU0xZnV/Y8kx/QBhk6kk1djRatsIEqa766a1t0EZ9LeR/S5F37LfTSqDiQvTb3lsh9oKHSLRmk5@vger.kernel.org, AJvYcCVSUohICfLj3uJR9iR9bEyvtuZ4/z7fvDmQvGSmEtFWTO5RMGKZ/ocy4IMkdfKp1ZvGTs4Q5s3U/Ew=@vger.kernel.org, AJvYcCW3+H4+5HOQ6AuSyc9Mu1Y7rdGnVM0QiZIBR0pME+9Ed/M3RiG7ovFZxYAKLsprSg9ZxschBM29w6OjJXc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzb+5ipcSsk0a8enFh5/ai0F7dALbn/ZiWNHSTa8mvOvxMSi1iG
+	THO4MMc1hvKlbrYCD47LDAZLzQAPUUDlgYKzzSX//whuq+6mHwkaQ0a6qepYowvaR4VIYpG78iE
+	uSg4QkDKjHxqZCtmvlGZIqzmnqHM=
+X-Google-Smtp-Source: AGHT+IEJlPzZiJFPnpnX8MDh8gPilRfMRuKZ/XOfHoP8jAgDN1Ww8K/tEYHPEQNo37em/hS7PQ5r0s5UlxBgpOg+GIs=
+X-Received: by 2002:a05:6870:9114:b0:277:e6bc:330c with SMTP id
+ 586e51a60fabf-295602d2f90mr13603737fac.29.1731417292240; Tue, 12 Nov 2024
+ 05:14:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241111162316.GH22801@noisy.programming.kicks-ass.net>
+ <20241112053722.356303-1-lenb@kernel.org> <351549432f8d766842dec74ccab443077ea0af91.1731389117.git.len.brown@intel.com>
+ <CAJZ5v0j1gvwoYS-YaOQWh0bQ3x5=54npiYj8erq68dM92+ad-g@mail.gmail.com> <CAJvTdKnRpDQKUVNJ4Gp7r+WaHo0y-Wume3ay7toHU+Xz0gv2Zw@mail.gmail.com>
+In-Reply-To: <CAJvTdKnRpDQKUVNJ4Gp7r+WaHo0y-Wume3ay7toHU+Xz0gv2Zw@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 12 Nov 2024 14:14:40 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g74GWomsfV9ko5pVrwx+x6smU7u7oHV=ZYDLTKYxMWsw@mail.gmail.com>
+Message-ID: <CAJZ5v0g74GWomsfV9ko5pVrwx+x6smU7u7oHV=ZYDLTKYxMWsw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
+To: Len Brown <lenb@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, peterz@infradead.org, tglx@linutronix.de, 
+	x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Len Brown <len.brown@intel.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-11-12 at 13:18 +0100, Peter Zijlstra wrote:
-> But on Intel we really don't want HLT, and had that MWAIT, but that has
-> real problems with KEXEC. And I don't think we can rely on INTEL_IDLE=3Dy=
-.
+On Tue, Nov 12, 2024 at 2:12=E2=80=AFPM Len Brown <lenb@kernel.org> wrote:
+>
+> On Tue, Nov 12, 2024 at 6:44=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+>
+> > > -       if (boot_cpu_has(X86_FEATURE_MWAIT) && c->x86_vfm =3D=3D INTE=
+L_ATOM_GOLDMONT)
+> > > +       if (boot_cpu_has(X86_FEATURE_MWAIT) &&
+> > > +           (c->x86_vfm =3D=3D INTEL_ATOM_GOLDMONT
+> > > +            || c->x86_vfm =3D=3D INTEL_LUNARLAKE_M))
+> >
+> > I would put the || at the end of the previous line, that is
+>
+>
+> It isn't my personal preference for human readability either,
+> but this is what scripts/Lindent does...
 
-If INTEL_IDLE is not set, then we'll just use existing mwait creation algor=
-ithm
-in 'mwait_play_dead()', which works too, just not ideal.
-
-
-> Anyway, ideally x86 would grow a new instruction to offline a CPU, both
-> MWAIT and HLT have problems vs non-maskable interrupts.
-... snip ...
-> But as said, we need a new instruction.
-
-FYI, I already started discussing a special "gimme the deepest C-state" mwa=
-it
-hint - just a constant like 0xFF. CPUID leaf 5 has many reserved bits, one =
-could
-be used for enumeration of this feature.
-
-But this is just a quick idea so far, and informal discussions so far.
-
-Artem.
+Well, it doesn't match the coding style of the first line ...
 
