@@ -1,233 +1,130 @@
-Return-Path: <linux-pm+bounces-17424-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17425-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08179C5B85
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:12:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1C649C5BB9
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:22:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0736282388
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:12:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6B5287310
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C08200BA2;
-	Tue, 12 Nov 2024 15:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F1C2003C6;
+	Tue, 12 Nov 2024 15:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zotxy6K0"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="tX3qfyS9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-ztdg10011201.me.com (pv50p00im-ztdg10011201.me.com [17.58.6.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2285E200B80
-	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 15:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863F02003CB
+	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 15:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731424156; cv=none; b=X5jY4/cohb0AINbK5TV2zbL1S/AI+dnZJcSxcUZDngfTape4vyZ9pQuyfmHKxv9bmpuv58d71bQ92IvO2Rd2t4oKMKZcxkAy5pAExUgsOSGE5ezOW3/sefiRSMeqWwZNJwpqwlJtEdLiGsSPGFJZ7Te6tX978eKMJxm2jXtU2Fc=
+	t=1731424937; cv=none; b=RMwHLX5QLdcHkqgQD0Pu+fz8gCrxAjoO2R4TaXoZhRw6G0161GR4haoSJTsGDZusM1ljC4vtaxwuLpfYz+H20N2i2SoRtXrcQb0MIh/+68JtPUGy5FzdGFA1RRl8I2MMD4JDAKeQBVvx4vJKBi2bf9vBTjvNIgMBWPIlDaarJoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731424156; c=relaxed/simple;
-	bh=Yae/ZjXnszptIo2maTzMX7IonhdZHY8qYoZEO0bvb9Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=REUEa1C1IYRMctA7u5MT9ISTYjY1Tp8m4o1r+wQMyurscEFWQie5to4PI0y5L+5QY1WuMyFAiBxk44oyoDUoj1ICWDmFbXpfgkTIfr6rE7g1KctjjwptLPe+gmEALUDlDvHp/xz4ExZJLWOymCJWajSErdCO6mojTNCJqmZT/LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zotxy6K0; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ff3232ee75so24088941fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 07:09:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731424152; x=1732028952; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kkBUPNbMV6MFN98HPxYcgn3PAbnpKABvT452YVQrYcY=;
-        b=zotxy6K0N+L9HKHOv56SOnamXLYa91Pwn8UPK874PTkP6ApcNAHPVPB6aUPM3DHIb3
-         ih2sdK0fucGEDd6pYHtTMlhnhn9xPea6iIixGoWSNFZ47mM2prBOnsgAbseEhnUFLNnI
-         g2wa2nhLWzq3rJcEUr740BzFFCODeyQ0pZTNeT1GFwMml2jHuXgnMGrQe9AvI0qqMecz
-         cYBCM/OhfiyFtCvE1CbF4FCVu+zlZknUBPk2QXeCrSEGI/Ubc8JXisEcXAEGFpbQQtnX
-         fERBcscZ00S5c9H5noVb2Lnea4L36bhi9U/JXU9kiCRwiRwVioWSeu0zYqJaNK7qqCHm
-         nHjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731424152; x=1732028952;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kkBUPNbMV6MFN98HPxYcgn3PAbnpKABvT452YVQrYcY=;
-        b=ET6BGj7DhN5Z0jgyv6+62r7QA2SWw4mYGWbgpDte2kH4SW4N0+UEZ4RD04RT4PjNT9
-         VDZ3eGA/7B5GQXytGilB0aO0kiwPjJqcVxEc+g+PGnZjd7UmJoyuQK0xvHsoRGSuyxfT
-         pCYW9Ib8QTRNSeMJ5R6q/5wONpyAEdsnlRBu6tyI/r5JS+sXe+EsMhsJPb5fiyOwsFnQ
-         +g5nQIbUFFyzKXqyZuE9KEWB4jzbYHTw01gu+X9m0K6uzshmwYwHMG01SksOdLYiWF1f
-         2DJ12IDPUT4hLKxLj2zEwWeD7Aesg5TqBtVN/3S7phV87qlUqvaZZMdwmk8YE5ATGrV0
-         XMuw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxQXy/4PNvgQSf1B9SopOC5Sfpl8FQoXFIUImOrpgRqrZTqTR8WEEI+UdCr00ek9iNbDQQSPNpRA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK8fteuT45lkQ9bvyzX8Lez3XxDaWQFQe/t06re10tMf67DsR9
-	4pthRwiRSapzuVEo7oNsZxXye5DR5L8hiw/QfGt5WYj4Nlerfg2E2/sNnB40DRGwole8q4OU3CT
-	W7BnTE3l9PtDRTpBUoyo5sVEEeSPUAO0kWv8kXw==
-X-Google-Smtp-Source: AGHT+IHTB+grajHe7E97x8MV2YTQN5hBgnGWn0IHcuQOPbvDYqMQzYaTKUG23YmQOHodHydT3IBLTdqixufjVmyRrvI=
-X-Received: by 2002:a05:651c:1589:b0:2fb:587d:2ee with SMTP id
- 38308e7fff4ca-2ff201620b4mr85511191fa.12.1731424151990; Tue, 12 Nov 2024
- 07:09:11 -0800 (PST)
+	s=arc-20240116; t=1731424937; c=relaxed/simple;
+	bh=DjwzB9wR3hCHJ/jmCvydX7qHDWYSNTkF/cIgh1KFGqM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lKUUke9DmokW2FuWxtpFHvQ1eTScEtSty8LCHesLogHNLCehMNwwXkj76C//2gURHwOxKIDyf54pYYuGUb6iVeL5h4m8qUYwnLZ9yBY9pIS0zX/cb9ad7DHZ+5olz2ai5fL+ORr6vAjLcqhiVo+hdx82g9+wO38nF0GDe++W5dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=tX3qfyS9; arc=none smtp.client-ip=17.58.6.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1731424936;
+	bh=Zay688FL54iPGlwqJao+cjW8sbujCzTCJ0i2J2TYacc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:
+	 x-icloud-hme;
+	b=tX3qfyS90RxkCulXGU6UCVR8SJFbz8VMalN2Is4tgl9y+B/7hDXRSYLIOYnGmcFHG
+	 K/bDLn9bQBkEegj98H6qcJlIHfyLH2mM8/r/JokGKwypViCO2plFThvDqGkrKU5Pnj
+	 /eyZ0AZAIeN50ys4R0qC6e5rF4aeLXmeNgFdRfSZXyqREZmxG9TVqJmu9156dTmhnr
+	 vw2hhlXx0LEMCkWl/BnORx4SsZq8xU/3y1evJ9aPShLoZXz4qOAaUoGWTf7dIlAtQc
+	 thhW0GWOYDbEQ+/HidcnK2n3yo6PFcn171xlbcgujR/MWdTjPy/AT1b0zD4Illx+p/
+	 YEJojQMlB5bsg==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10011201.me.com (Postfix) with ESMTPSA id 67843680367;
+	Tue, 12 Nov 2024 15:22:08 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Date: Tue, 12 Nov 2024 23:21:45 +0800
+Subject: [PATCH v2] PM: domains: Fix return value of API
+ dev_pm_get_subsys_data()
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241101024421.26679-1-quic_msana@quicinc.com> <1e47ee3e-7439-4dc4-aef6-0ad2f82ee341@intel.com>
-In-Reply-To: <1e47ee3e-7439-4dc4-aef6-0ad2f82ee341@intel.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 12 Nov 2024 16:08:35 +0100
-Message-ID: <CAPDyKFrku7pEPz0xNbtJetK1XhUmhgsN9Sx9Ea8=tNNhTkxa7w@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhc: Add PM QoS support for mmc driver
-To: Madhusudhan Sana <quic_msana@quicinc.com>, Adrian Hunter <adrian.hunter@intel.com>
-Cc: quic_cang@quicinc.com, quic_nguyenb@quicinc.com, quic_bhaskarv@quicinc.com, 
-	quic_mapa@quicinc.com, quic_narepall@quicinc.com, quic_nitirawa@quicinc.com, 
-	quic_rampraka@quicinc.com, quic_sachgupt@quicinc.com, 
-	quic_sartgarg@quicinc.com, Linux PM list <linux-pm@vger.kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241112-fix_dev_pm_get_subsys_data-v2-1-3774257ede73@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAIhyM2cC/42NTQqDMBBGr1KybspkUCpd9R5FgklGnYU/zWioi
+ Hdv6gm6fI+P9+1KKDKJelx2FSmx8DRmwOtF+b4ZO9IcMisELAwY0C1/bKBk58F2tFhZnWxiQ7M
+ 0Got75RwCtIFUDsyR8vqMv+rMPcsyxe38SuZn/8omo41GLIGqFqA07vle2fPob34aVH0cxxfJE
+ CzJxgAAAA==
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+ Len Brown <len.brown@intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.1
+X-Proofpoint-ORIG-GUID: 28ktdltU_XQhkPVWQvv7A6hFiEgDzoPM
+X-Proofpoint-GUID: 28ktdltU_XQhkPVWQvv7A6hFiEgDzoPM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-12_05,2024-11-12_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
+ clxscore=1015 suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2411120123
+X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-On Fri, 8 Nov 2024 at 15:43, Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 1/11/24 04:44, Madhusudhan Sana wrote:
-> > Register mmc driver to CPU latency PM QoS framework to improve
-> > mmc device io performance.
->
-> Not sure host controller drivers should really be manipulating
-> cpu_latency_qos in order to squeeze a bit more I/O performance.
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-I fully agree, this type of boosting doesn't belong in a low level
-storage driver, as it is simply not capable of understanding the
-use-case. Note that the cpu_latency_qos can also be managed from
-user-space.
+dev_pm_get_subsys_data() has below 2 issues under condition
+(@dev->power.subsys_data != NULL):
 
-Moreover, I guess there are use cases where it would make sense to
-have some in-kernel governor to boost too for some conditions. But as
-far as I can tell, we don't have a common way to do this, but rather
-platform specific hacks via devfreq drivers for example.
+- it will do unnecessary kzalloc() and kfree().
+- it will return -ENOMEM if the kzalloc() fails, that is wrong
+  it should return 0 since the kzalloc() is not needed.
 
-Kind regards
-Uffe
+Fix by not doing kzalloc() and returning 0 for the condition.
 
->
-> >
-> > Signed-off-by: Madhusudhan Sana <quic_msana@quicinc.com>
-> > ---
-> >  drivers/mmc/host/sdhci.c | 47 ++++++++++++++++++++++++++++++++++++++++
-> >  drivers/mmc/host/sdhci.h |  4 ++++
-> >  2 files changed, 51 insertions(+)
-> >
-> > diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> > index f4a7733a8ad2..ffcc9544a3df 100644
-> > --- a/drivers/mmc/host/sdhci.c
-> > +++ b/drivers/mmc/host/sdhci.c
-> > @@ -359,6 +359,46 @@ static void sdhci_config_dma(struct sdhci_host *host)
-> >       sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
-> >  }
-> >
-> > +/*
-> > + * sdhci_pm_qos_init - initialize PM QoS request
-> > + */
-> > +void sdhci_pm_qos_init(struct sdhci_host *host)
-> > +{
-> > +     if (host->pm_qos_enable)
-> > +             return;
-> > +
-> > +     cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
-> > +
-> > +     if (cpu_latency_qos_request_active(&host->pm_qos_req))
-> > +             host->pm_qos_enable = true;
-> > +}
-> > +
-> > +/*
-> > + * sdhci_pm_qos_exit - remove request from PM QoS
-> > + */
-> > +void sdhci_pm_qos_exit(struct sdhci_host *host)
-> > +{
-> > +     if (!host->pm_qos_enable)
-> > +             return;
-> > +
-> > +     cpu_latency_qos_remove_request(&host->pm_qos_req);
-> > +     host->pm_qos_enable = false;
-> > +}
-> > +
-> > +/*
-> > + * sdhci_pm_qos_update - update PM QoS request
-> > + * @on - True, vote for perf PM QoS mode
-> > + *     - False, vote for power save mode.
-> > + */
-> > +static void sdhci_pm_qos_update(struct sdhci_host *host, bool on)
-> > +{
-> > +     if (!host->pm_qos_enable)
-> > +             return;
-> > +
-> > +     cpu_latency_qos_update_request(&host->pm_qos_req, on ?
-> > +                                             0 : PM_QOS_DEFAULT_VALUE);
-> > +}
-> > +
-> >  static void sdhci_init(struct sdhci_host *host, int soft)
-> >  {
-> >       struct mmc_host *mmc = host->mmc;
-> > @@ -384,6 +424,9 @@ static void sdhci_init(struct sdhci_host *host, int soft)
-> >               host->reinit_uhs = true;
-> >               mmc->ops->set_ios(mmc, &mmc->ios);
-> >       }
-> > +
-> > +     sdhci_pm_qos_init(host);
-> > +     sdhci_pm_qos_update(host, true);
-> >  }
-> >
-> >  static void sdhci_reinit(struct sdhci_host *host)
-> > @@ -2072,6 +2115,7 @@ void sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
-> >
-> >       clk = sdhci_calc_clk(host, clock, &host->mmc->actual_clock);
-> >       sdhci_enable_clk(host, clk);
-> > +     sdhci_pm_qos_update(host, true);
-> >  }
-> >  EXPORT_SYMBOL_GPL(sdhci_set_clock);
-> >
-> > @@ -3811,6 +3855,7 @@ int sdhci_suspend_host(struct sdhci_host *host)
-> >               sdhci_writel(host, 0, SDHCI_SIGNAL_ENABLE);
-> >               free_irq(host->irq, host);
-> >       }
-> > +     sdhci_pm_qos_update(host, false);
-> >
-> >       return 0;
-> >  }
-> > @@ -3873,6 +3918,7 @@ int sdhci_runtime_suspend_host(struct sdhci_host *host)
-> >       spin_lock_irqsave(&host->lock, flags);
-> >       host->runtime_suspended = true;
-> >       spin_unlock_irqrestore(&host->lock, flags);
-> > +     sdhci_pm_qos_update(host, false);
-> >
-> >       return 0;
-> >  }
-> > @@ -4987,6 +5033,7 @@ void sdhci_remove_host(struct sdhci_host *host, int dead)
-> >       if (host->use_external_dma)
-> >               sdhci_external_dma_release(host);
-> >
-> > +     sdhci_pm_qos_exit(host);
-> >       host->adma_table = NULL;
-> >       host->align_buffer = NULL;
-> >  }
-> > diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> > index cd0e35a80542..685036ed888b 100644
-> > --- a/drivers/mmc/host/sdhci.h
-> > +++ b/drivers/mmc/host/sdhci.h
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/io.h>
-> >  #include <linux/leds.h>
-> >  #include <linux/interrupt.h>
-> > +#include <linux/devfreq.h>
-> >
-> >  #include <linux/mmc/host.h>
-> >
-> > @@ -675,6 +676,9 @@ struct sdhci_host {
-> >
-> >       u64                     data_timeout;
-> >
-> > +     struct pm_qos_request pm_qos_req;       /* PM QoS request handle */
-> > +     bool pm_qos_enable;                     /* flag to check PM QoS is enable */
-> > +
-> >       unsigned long private[] ____cacheline_aligned;
-> >  };
-> >
->
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+Changes in v2:
+- Remove both stable and fix tag
+- Correct commit message
+- Link to v1: https://lore.kernel.org/r/20241010-fix_dev_pm_get_subsys_data-v1-1-2250e8f0051b@quicinc.com
+---
+ drivers/base/power/common.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
+index cca2fd0a1aed..a3cec013092c 100644
+--- a/drivers/base/power/common.c
++++ b/drivers/base/power/common.c
+@@ -26,6 +26,14 @@ int dev_pm_get_subsys_data(struct device *dev)
+ {
+ 	struct pm_subsys_data *psd;
+ 
++	spin_lock_irq(&dev->power.lock);
++	if (dev->power.subsys_data) {
++		dev->power.subsys_data->refcount++;
++		spin_unlock_irq(&dev->power.lock);
++		return 0;
++	}
++	spin_unlock_irq(&dev->power.lock);
++
+ 	psd = kzalloc(sizeof(*psd), GFP_KERNEL);
+ 	if (!psd)
+ 		return -ENOMEM;
+
+---
+base-commit: 9bd133f05b1dca5ca4399a76d04d0f6f4d454e44
+change-id: 20241010-fix_dev_pm_get_subsys_data-2478bb200fde
+
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
+
 
