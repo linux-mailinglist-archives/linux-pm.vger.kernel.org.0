@@ -1,225 +1,229 @@
-Return-Path: <linux-pm+bounces-17367-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17366-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2154D9C4C58
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 03:16:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FAD49C4C3B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 03:10:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBC43287D1B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 02:15:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00022B22052
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 02:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DEC208984;
-	Tue, 12 Nov 2024 02:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F75204017;
+	Tue, 12 Nov 2024 02:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bZtLlYKI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233C6208971;
-	Tue, 12 Nov 2024 02:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DD3BE6C;
+	Tue, 12 Nov 2024 02:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731377678; cv=none; b=S5Rm4TpauD12zl0IdiGKZaGoCAmMM8CBZ6D7Ha7SQmuW9N84GXT1KZvhUQzzmDV2hfmJqHwyow0crxqTqLn6lmG3sN2ejcTDf+mWF8qS5clZYbEmdZeT3acva6FVqPguQ6dopDcrND+ajZbhYta+h1wsWjfAui93wjZyaYC7eHo=
+	t=1731377188; cv=none; b=q/aloF+NCTK3l/2oO99SFIv7ftNhREqSffrjEMTOT1gZgi4bkGvGQu5f5P5N6jODbKdN4xtNDA+0Cq4gMMp7vTQRocnsGiBXPf2TQl4DGKvVTpdkLK/RzsQcCEUVev1ofDGDlB+iz5VDE9M3zBbY8Lg0M1UqfSnMAy8edubl4iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731377678; c=relaxed/simple;
-	bh=IDtzZOHG5JBqnfrcxS2T7mLOiushLLE+N5GaCFCFo+U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HK/GABVFU6AUfhVOJY4bEIv5bRQiJ7HlXZrF6tWE9mTKLXrP9Q8fxKW0MhYQg4uI0ecZ5jwWyMOcGM8p/cRoIwVZzXgy1NvQ3UrpV73ymJQbnmbL7MobroiB2t5vwjMVwA216qUrEoU8FstggUTVi1tukf2HqHSvnu6jQxqJltI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XnVLN1DNwz1jxtv;
-	Tue, 12 Nov 2024 10:12:44 +0800 (CST)
-Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 45DB7180042;
-	Tue, 12 Nov 2024 10:14:32 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+	s=arc-20240116; t=1731377188; c=relaxed/simple;
+	bh=le60pk5t+ql1d86bbmJN4sCll8pchLZj4uleZWk86Aw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DvxO38kb6dwhY3a8jBwW2lk+xVqT6dYFw6GYqhgmwEDyDA8icVcT+PhRftuUtVIB0V05LJofaKAN+VoJRM6kUHJ6UGUxoyIy86XqrOVlCWWJxo5OA2QhCoKlCo0wF24+NkUybaZLKwC3OnZBhHWA0pFgj3djTPpIYl3tZBeS3Jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bZtLlYKI; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABCqp6X018012;
+	Tue, 12 Nov 2024 02:05:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=5qaLcLQeV1PB7ymPPGtVOm0b
+	VLvm/RinEOKBQ/M+eNA=; b=bZtLlYKISIvK1G4XdFhDYMb22nBFQHqoQe/aWTNJ
+	qmNEokJJqJr16VKxDDJP/7SwTaW2E5wt4iSlLhl362bYJxbA83Y9tnVjQrUfz+fF
+	hpHYttmb7WeleAfDMlFkAxcImXYzYl+mJ9AqIuJ1oGx1eg2YSpfxYgo/cCxOMiet
+	JPquyCNX3EtEetfOFU9mGpIuyuFv8vv5uqnlVEQCj/IYBdh60+ff35DMKrj5MrJE
+	8ymOkQcaQtA4OXViWLfU1F3DmybV9UdGfm3J/5qE6sDlSS3HaQIq6TwKFx26v1MR
+	LlgZm/dsNmwei/jS3MtG8qOtfhBIf+Wa7p/jiRuKQPwvPg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42syax5ugu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 02:05:51 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AC25oQ2019406
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 02:05:50 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 12 Nov 2024 10:14:32 +0800
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 12 Nov 2024 10:14:31 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<rafael@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <rui.zhang@intel.com>,
-	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>
-Subject: [PATCH] ACPI: thermal: Support for linking devices associated with the thermal zone
-Date: Tue, 12 Nov 2024 10:03:27 +0800
-Message-ID: <20241112020327.17781-1-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
+ 15.2.1544.9; Mon, 11 Nov 2024 18:05:49 -0800
+Date: Mon, 11 Nov 2024 18:05:49 -0800
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel
+	<sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan
+	<andy.yan@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Mark
+ Rutland" <mark.rutland@arm.com>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, "Olof
+ Johansson" <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will
+ Deacon" <will@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+CC: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        Stephen Boyd <swboyd@chromium.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v8 0/6] Implement vendor resets for PSCI SYSTEM_RESET2
+Message-ID: <20241111151958898-0800.eberman@hu-eberman-lv.qualcomm.com>
+References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QeGcJ48pikCpZg6Q21XjJza7qu7Q5-Np
+X-Proofpoint-GUID: QeGcJ48pikCpZg6Q21XjJza7qu7Q5-Np
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ lowpriorityscore=0 priorityscore=1501 clxscore=1015 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411120015
 
-As ACPI spec said, '_TZD' evaluates to a package of device names.
-Each name corresponds to a device in the ACPI namespace that is
-associated with the thermal zone. The temperature reported by the
-thermal zone is roughly correspondent to that of each of the devices.
+Hi Lorenzo,
 
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/acpi/thermal.c | 114 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 113 insertions(+), 1 deletion(-)
+I haven't seen response on our question about how reboot_mode enum and
+reboot command string are supposed to interact. Let's make a call
+ourselves and merge?
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 78db38c7076e..398195a5d42f 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -119,6 +119,9 @@ struct acpi_thermal {
- 	struct work_struct thermal_check_work;
- 	struct mutex thermal_check_lock;
- 	refcount_t thermal_check_count;
-+	int num_domain_devices;
-+	struct acpi_device **domain_devices;
-+	struct kobject *holders_dir;
- };
- 
- /* --------------------------------------------------------------------------
-@@ -589,6 +592,103 @@ static const struct thermal_zone_device_ops acpi_thermal_zone_ops = {
- 	.critical = acpi_thermal_zone_device_critical,
- };
- 
-+static void acpi_thermal_remove_domain_devices(struct acpi_thermal *tz)
-+{
-+	int i;
-+
-+	if (!tz->num_domain_devices)
-+		return;
-+
-+	for (i = 0; i < tz->num_domain_devices; i++) {
-+		struct acpi_device *obj = tz->domain_devices[i];
-+
-+		if (!obj)
-+			continue;
-+
-+		sysfs_remove_link(tz->holders_dir,
-+				  kobject_name(&obj->dev.kobj));
-+		acpi_dev_put(obj);
-+	}
-+
-+	kfree(tz->domain_devices);
-+	kobject_put(tz->holders_dir);
-+	tz->num_domain_devices = 0;
-+}
-+
-+static int acpi_thermal_read_domain_devices(struct acpi_thermal *tz)
-+{
-+	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-+	union acpi_object *pss;
-+	acpi_status status;
-+	int ret = 0;
-+	int i;
-+
-+	status = acpi_evaluate_object(tz->device->handle, "_TZD", NULL,
-+				      &buffer);
-+	if (ACPI_FAILURE(status)) {
-+		acpi_evaluation_failure_warn(tz->device->handle, "_TZD",
-+					     status);
-+		return -ENODEV;
-+	}
-+
-+	pss = buffer.pointer;
-+	if (!pss ||
-+	    pss->type != ACPI_TYPE_PACKAGE) {
-+		dev_err(&tz->device->dev, "Thermal zone invalid _TZD data\n");
-+		ret = -EFAULT;
-+		goto end;
-+	}
-+
-+	if (!pss->package.count)
-+		goto end;
-+
-+	tz->domain_devices = kcalloc(pss->package.count,
-+				     sizeof(struct acpi_device *), GFP_KERNEL);
-+	if (!tz->domain_devices) {
-+		ret = -ENOMEM;
-+		goto end;
-+	}
-+
-+	tz->holders_dir = kobject_create_and_add("measures",
-+						 &tz->device->dev.kobj);
-+	if (!tz->holders_dir) {
-+		ret = -ENOMEM;
-+		goto exit_free;
-+	}
-+
-+	tz->num_domain_devices = pss->package.count;
-+	for (i = 0; i < pss->package.count; i++) {
-+		struct acpi_device *obj;
-+		union acpi_object *element = &pss->package.elements[i];
-+
-+		/* Refuse non-references */
-+		if (element->type != ACPI_TYPE_LOCAL_REFERENCE)
-+			continue;
-+
-+		/* Create a symlink to domain objects */
-+		obj = acpi_get_acpi_dev(element->reference.handle);
-+		tz->domain_devices[i] = obj;
-+		if (!obj)
-+			continue;
-+
-+		ret = sysfs_create_link(tz->holders_dir, &obj->dev.kobj,
-+					kobject_name(&obj->dev.kobj));
-+		if (ret) {
-+			acpi_dev_put(obj);
-+			tz->domain_devices[i] = NULL;
-+		}
-+	}
-+
-+	ret = 0;
-+	goto end;
-+
-+exit_free:
-+	kfree(tz->domain_devices);
-+end:
-+	kfree(buffer.pointer);
-+	return ret;
-+}
-+
- static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
- {
- 	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-@@ -602,8 +702,19 @@ static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
- 	ret = sysfs_create_link(&tzdev->kobj,
- 				   &tz->device->dev.kobj, "device");
- 	if (ret)
--		sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-+		goto remove_thermal_zone;
- 
-+	/* _TZD method is optional. */
-+	ret = acpi_thermal_read_domain_devices(tz);
-+	if (ret != -ENODEV)
-+		goto remove_device;
-+
-+	return 0;
-+
-+remove_device:
-+	sysfs_remove_link(&tz->device->dev.kobj, "device");
-+remove_thermal_zone:
-+	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
- 	return ret;
- }
- 
-@@ -611,6 +722,7 @@ static void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
- {
- 	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
- 
-+	acpi_thermal_remove_domain_devices(tz);
- 	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
- 	sysfs_remove_link(&tzdev->kobj, "device");
- }
--- 
-2.22.0
+Thanks,
+Elliot
 
+On Thu, Nov 07, 2024 at 03:38:24PM -0800, Elliot Berman wrote:
+> The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+> reset types which could be mapped to the reboot argument.
+> 
+> Setting up reboot on Qualcomm devices can be inconsistent from chipset
+> to chipset. Generally, there is a PMIC register that gets written to
+> decide the reboot type. There is also sometimes a cookie that can be
+> written to indicate that the bootloader should behave differently than a
+> regular boot. These knobs evolve over product generations and require 
+> more drivers. Qualcomm firmwares are beginning to expose vendor
+> SYSTEM_RESET2 types to simplify driver requirements from Linux.
+> 
+> Add support in PSCI to statically wire reboot mode commands from
+> userspace to a vendor reset and cookie value using the device tree. The
+> DT bindings are similar to reboot mode framework except that 2
+> integers are accepted (the type and cookie). Also, reboot mode framework
+> is intended to program the cookies, but not actually reboot the host.
+> PSCI SYSTEM_RESET2 does both. I've not added support for reading ACPI
+> tables since I don't have any device which provides them + firmware that
+> supports vendor SYSTEM_RESET2 types.
+> 
+> Lorenzo and I are also looking for some feedback on whether it is safe
+> to perform a vendor SYSTEM_RESET2 irrespective of the enum reboot_mode:
+> 
+> https://lore.kernel.org/all/Zw5ffeYW5uRpsaG3@lpieralisi/
+> 
+> Previous discussions around SYSTEM_RESET2:
+> - https://lore.kernel.org/lkml/20230724223057.1208122-2-quic_eberman@quicinc.com/T/
+> - https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> 
+> Changes in v8:
+> - Code style nits from Stephen
+> - Add rb3gen2
+> - Link to v7: https://lore.kernel.org/r/20241028-arm-psci-system_reset2-vendor-reboots-v7-0-a4c40b0ebc54@quicinc.com
+> 
+> Changes in v7:
+> - Code style nits from Stephen
+> - Dropped unnecessary hunk from the sa8775p-ride patch
+> - Link to v6: https://lore.kernel.org/r/20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com
+> 
+> Changes in v6:
+> - Rebase to v6.11 and fix trivial conflicts in qcm6490-idp
+> - Add sa8775p-ride support (same as qcm6490-idp)
+> - Link to v5: https://lore.kernel.org/r/20240617-arm-psci-system_reset2-vendor-reboots-v5-0-086950f650c8@quicinc.com
+> 
+> Changes in v5:
+> - Drop the nested "items" in prep for future dtschema tools
+> - Link to v4: https://lore.kernel.org/r/20240611-arm-psci-system_reset2-vendor-reboots-v4-0-98f55aa74ae8@quicinc.com
+> 
+> Changes in v4:
+> - Change mode- properties from uint32-matrix to uint32-array
+> - Restructure the reset-types node so only the restriction is in the
+>   if/then schemas and not the entire definition
+> - Link to v3: https://lore.kernel.org/r/20240515-arm-psci-system_reset2-vendor-reboots-v3-0-16dd4f9c0ab4@quicinc.com
+> 
+> Changes in v3:
+> - Limit outer number of items to 1 for mode-* properties
+> - Move the reboot-mode for psci under a subnode "reset-types"
+> - Fix the DT node in qcm6490-idp so it doesn't overwrite the one from
+>   sc7820.dtsi
+> - Link to v2: https://lore.kernel.org/r/20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com
+> 
+> Changes in v2:
+> - Fixes to schema as suggested by Rob and Krzysztof
+> - Add qcm6490 idp as first Qualcomm device to support
+> - Link to v1: https://lore.kernel.org/r/20231117-arm-psci-system_reset2-vendor-reboots-v1-0-03c4612153e2@quicinc.com
+> 
+> Changes in v1:
+> - Reference reboot-mode bindings as suggeted by Rob.
+> - Link to RFC: https://lore.kernel.org/r/20231030-arm-psci-system_reset2-vendor-reboots-v1-0-dcdd63352ad1@quicinc.com
+> 
+> ---
+> Elliot Berman (6):
+>       dt-bindings: power: reset: Convert mode-.* properties to array
+>       dt-bindings: arm: Document reboot mode magic
+>       firmware: psci: Read and use vendor reset types
+>       arm64: dts: qcom: qcm6490-idp: Add PSCI SYSTEM_RESET2 types
+>       arm64: dts: qcom: qcs6490-rb3gen2: Add PSCI SYSTEM_RESET2 types
+>       arm64: dts: qcom: sa8775p-ride: Add PSCI SYSTEM_RESET2 types
+> 
+>  Documentation/devicetree/bindings/arm/psci.yaml    |  43 +++++++++
+>  .../bindings/power/reset/nvmem-reboot-mode.yaml    |   4 +
+>  .../devicetree/bindings/power/reset/qcom,pon.yaml  |   7 ++
+>  .../bindings/power/reset/reboot-mode.yaml          |   4 +-
+>  .../bindings/power/reset/syscon-reboot-mode.yaml   |   4 +
+>  arch/arm64/boot/dts/qcom/qcm6490-idp.dts           |   7 ++
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts       |   7 ++
+>  arch/arm64/boot/dts/qcom/sa8775p-ride.dtsi         |   7 ++
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi              |   2 +-
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi               |   2 +-
+>  drivers/firmware/psci/psci.c                       | 104 +++++++++++++++++++++
+>  11 files changed, 187 insertions(+), 4 deletions(-)
+> ---
+> base-commit: 98f7e32f20d28ec452afb208f9cffc08448a2652
+> change-id: 20231016-arm-psci-system_reset2-vendor-reboots-cc3ad456c070
+> 
+> Best regards,
+> -- 
+> Elliot Berman <quic_eberman@quicinc.com>
+> 
 
