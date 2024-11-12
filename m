@@ -1,121 +1,159 @@
-Return-Path: <linux-pm+bounces-17420-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17421-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC2C19C5B30
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:02:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA009C5B3A
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:03:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDE2E281418
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:02:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E99E1F23534
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE7E2022C2;
-	Tue, 12 Nov 2024 14:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACDD81FF7A8;
+	Tue, 12 Nov 2024 15:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="Xu+Rt82N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZzPj0Lo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from ms11p00im-qufo17281601.me.com (ms11p00im-qufo17281601.me.com [17.58.38.53])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EB820127D
-	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 14:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.38.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B301FF056;
+	Tue, 12 Nov 2024 15:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731423518; cv=none; b=gvZoJHOXEpIcr/ji626OOAoZqXu4iU0IVX3wT90fcK4YaTiED4GLNCO7tYFzTU5dvjqpY2XjLwQVwb9hUEJdokHXUa+fUxZdaHRaWsblw5Rx9ejzg5ccM5hIvT584PbO93psSkFb90tEWCKxzeC1JM71cZSo9H3nXWoy6HQRGUA=
+	t=1731423633; cv=none; b=lFngVt+MhRMDMV6wnqCN39+Ci/DndWyUd6HusTqcD9oGch0VAAJ9rSPikOqHvL81qh7KOqYisHsINq05jnR+iVYY4lk6NZIM6G+99XLMPS9WRcipX2WuarNajYkqTLLXqu/iQydTw6QAJdA0dNqyH6DK4rtAp0mq9mQcKeTQA94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731423518; c=relaxed/simple;
-	bh=yRmtPN0TFHkU99Flp+fEchW2OsR8PBdDUPKHR2odiLQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M3kSKcILlj2QU9dV7intxJH2cLn9Y5oy6GPV4+XbiU43QGTsHPyYZzrizJQZzdMaT4MuEux8a+L9VEAkUaKp7M1fQdseeXAOlxKW7O1oK94F0/1y7Ri1pe042yQ8lfB2xjEashwSUhIO97e5yAhKazauIEd4zY+DVwhp0nix2ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=Xu+Rt82N; arc=none smtp.client-ip=17.58.38.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1731423516;
-	bh=Eh44U3KL7qWcwQYFzXUwloAPncqESfrGkSg2LByutzI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
-	 x-icloud-hme;
-	b=Xu+Rt82NWGawAyXcrKqEmFdwZC5k+gTO5JOqa3bSrzaWqn1fFShXHLV9r6lg/9Yk2
-	 sT8svgev72ExV2fA/yzfehaNCzBJep1PkNN/M11mcVqFhNkx7cVxMhC6rVIV8FX+Q/
-	 KFMAyG+5dBouzUKoqcuKluy2wEAzynME2DsUpf0fNPj3ywBtxnpA0cJJrV/clGbUew
-	 uBLz5DFK/MdgYFRDmQCtSsridVTsz6g4T64oc7lgPIewyCNVHi2CG39q9UIEyS7w4H
-	 kxsGMUGacUM0O7tEwDQJVaZzRWVp3XdjlIcS7FZK00NSJvxCGkOplreNIF82YIvKy/
-	 kZBsCu+QqaEuw==
-Received: from [192.168.1.26] (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
-	by ms11p00im-qufo17281601.me.com (Postfix) with ESMTPSA id DD7FFAA00C9;
-	Tue, 12 Nov 2024 14:58:32 +0000 (UTC)
-Message-ID: <2682bae5-9ae6-4781-8d57-47587084a58f@icloud.com>
-Date: Tue, 12 Nov 2024 22:58:29 +0800
+	s=arc-20240116; t=1731423633; c=relaxed/simple;
+	bh=p116ZlWcJSC5OBPJgPS9UqyA/VfRXQ1FZ2hqv5Zijjg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AgwmS5oCxuDTQf6/eFCbi5O7Xm7xVmJkR9jM84OYBLAwPgVJ7sfpbgNJ8ov6sHCBrxjOxmJKwoXqpTJt/xFkxQouogpM0gIi7IDNev8cv8I/1l82P2QMWx+MnFgV1iqAj9fmvwknrRFefxUUCRdSAKGT4qUlP9Q/r1Uw8dlNLmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZzPj0Lo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5FFC4CED0;
+	Tue, 12 Nov 2024 15:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731423633;
+	bh=p116ZlWcJSC5OBPJgPS9UqyA/VfRXQ1FZ2hqv5Zijjg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UZzPj0LosGFBGATy/AEsLHE97zJ+8eMiIhBd0apa3Nk0BNbSPO5OTDjHz/k8Ri0fw
+	 iCcEwPxjmHeD5ZgfCW2zHPZhSYEyCx3cUQovJfLElNSgV1xUZxEzTvsDMjqwAewCy9
+	 18MpzjmY7A5V0DtOWML20xHDH9va2GLbnH+kHM5N6t2MyS+mgjx07/HzSMz4AV+3dB
+	 XF71WkLvnm5qHwSAuKBXV1yyg6DfVAN+ak54MnbPOCVWOEyWCSm3ujBTFZ3rJsNVcV
+	 be8vyjiVRQfJDzVnRxbhVgYLuPgHP3GW8jdr/d7J78eeDJal8nvkObdM+gcFkvyYPd
+	 7HAPHKbWR/xPw==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-29538198f2fso2851645fac.1;
+        Tue, 12 Nov 2024 07:00:32 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU0EL4C+NQnxjV74LrWoBaCbp6zth8Rihdhm10RL5HEcM1NGOV/uaUULfoGS9igmLQRbHLGr09DHfw=@vger.kernel.org, AJvYcCVjbSMdg0J70dmIoVTggYNgW4cfN0/bddGDThJ4O4bk3ErhC+MAt8AFv05yV5RQ2QEvZvpIHnnwtOIMyBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYXD7nZ29CesasctRSUVZwm5doPWiVPaiNG+UBKecATvfFyX6W
+	+7lKHVq8VrMmmYjBssMrXHzggjHBelUkagXDOozscDj5MhHlN5I2TNgkkJWlmX5xE7cpF+Y1UoN
+	BNbGKEotpWTHOgRWALYvZFp8S1S0=
+X-Google-Smtp-Source: AGHT+IFI9GNg7IPdb2tePq/0unuINTg3s7VcqoQ9tRcOl9CoW/yGaLJ9bgvFxb+V6AJAIqz7HyZNKKpxsm54qwn9ze4=
+X-Received: by 2002:a05:6870:46a3:b0:26f:f1ea:6a71 with SMTP id
+ 586e51a60fabf-295600992d4mr13179732fac.7.1731423632299; Tue, 12 Nov 2024
+ 07:00:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] PM: domains: Fix return value of API
- dev_pm_get_subsys_data()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>,
- stable@vger.kernel.org
-References: <20241028-fix_dev_pm_get_subsys_data-v1-1-20385f4b1e17@quicinc.com>
- <2024111257-collide-finalist-7a0c@gregkh>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <2024111257-collide-finalist-7a0c@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 0ab2Ysty0ejJwHjOS-IKdzmmv4mTLVK4
-X-Proofpoint-ORIG-GUID: 0ab2Ysty0ejJwHjOS-IKdzmmv4mTLVK4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-12_05,2024-11-12_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxscore=0 clxscore=1015 spamscore=0 mlxlogscore=905 phishscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2411120120
+References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
+ <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com> <20241112114743.GQ22801@noisy.programming.kicks-ass.net>
+ <CAJZ5v0hJ8NoFgjtnYce99+qjCZc3_ihBojyK1gRrcyU5Fp6inw@mail.gmail.com> <20241112145618.GR22801@noisy.programming.kicks-ass.net>
+In-Reply-To: <20241112145618.GR22801@noisy.programming.kicks-ass.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 12 Nov 2024 16:00:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ihEvOuUWoN++5qYx=KqrRnm4np7_j6hDd=aFnHkkFYZg@mail.gmail.com>
+Message-ID: <CAJZ5v0ihEvOuUWoN++5qYx=KqrRnm4np7_j6hDd=aFnHkkFYZg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] x86/smp native_play_dead: Prefer
+ cpuidle_play_dead() over mwait_play_dead()
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	rafael.j.wysocki@intel.com, len.brown@intel.com, 
+	artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com, 
+	gautham.shenoy@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024/11/12 19:46, Greg Kroah-Hartman wrote:
-> On Mon, Oct 28, 2024 at 08:31:11PM +0800, Zijun Hu wrote:
->> From: Zijun Hu <quic_zijuhu@quicinc.com>
->>
->> dev_pm_get_subsys_data() has below 2 issues under condition
->> (@dev->power.subsys_data != NULL):
->>
->> - it will do unnecessary kzalloc() and kfree().
-> 
-> But that's ok, everything still works, right?
+On Tue, Nov 12, 2024 at 3:56=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Tue, Nov 12, 2024 at 02:23:14PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Nov 12, 2024 at 12:47=E2=80=AFPM Peter Zijlstra <peterz@infrade=
+ad.org> wrote:
+> > >
+> > > On Fri, Nov 08, 2024 at 01:29:08PM +0100, Patryk Wlazlyn wrote:
+> > > > The generic implementation, based on cpuid leaf 0x5, for looking up=
+ the
+> > > > mwait hint for the deepest cstate, depends on them to be continuous=
+ in
+> > > > range [0, NUM_SUBSTATES-1]. While that is correct on most Intel x86
+> > > > platforms, it is not architectural and may not result in reaching t=
+he
+> > > > most optimized idle state on some of them.
+> > > >
+> > > > Prefer cpuidle_play_dead() over the generic mwait_play_dead() loop =
+and
+> > > > fallback to the later in case of missing enter_dead() handler.
+> > > >
+> > > > Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+> > > > ---
+> > > >  arch/x86/kernel/smpboot.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> > > > index 44c40781bad6..721bb931181c 100644
+> > > > --- a/arch/x86/kernel/smpboot.c
+> > > > +++ b/arch/x86/kernel/smpboot.c
+> > > > @@ -1416,9 +1416,9 @@ void native_play_dead(void)
+> > > >       play_dead_common();
+> > > >       tboot_shutdown(TB_SHUTDOWN_WFS);
+> > > >
+> > > > -     mwait_play_dead();
+> > > >       if (cpuidle_play_dead())
+> > > > -             hlt_play_dead();
+> > > > +             mwait_play_dead();
+> > > > +     hlt_play_dead();
+> > > >  }
+> > >
+> > > Yeah, I don't think so. we don't want to accidentally hit
+> > > acpi_idle_play_dead().
+> >
+> > Having inspected the code once again, I'm not sure what your concern is=
+.
+> >
+> > :enter.dead() is set to acpi_idle_play_dead() for all states in ACPI
+> > idle - see acpi_processor_setup_cstates() and the role of the type
+> > check is to filter out bogus table entries (the "type" must be 1, 2,
+> > or 3 as per the spec).
+> >
+> > Then cpuidle_play_dead() calls drv->states[i].enter_dead() for the
+> > deepest state where it is set and if this is FFH,
+> > acpi_idle_play_dead() will return an error.  So after the change, the
+> > code above will fall back to mwait_play_dead() then.
+> >
+> > Or am I missing anything?
+>
+> So it relies on there being a C2/C3 state enumerated and that being FFh.
+> Otherwise it will find a 'working' state and we're up a creek.
+>
+> Typically I expect C2/C3 FFh states will be there on Intel stuff, but it
+> seems awefully random to rely on this hole. AMD might unwittinly change
+> the ACPI driver (they're the main user) and then we'd be up a creek.
+>
+> Robustly we'd teach the ACPI driver about FFh and set enter_dead on
+> every state -- but we'd have to double check that with AMD.
+>
+> At the same time, intel_idle should then also set enter_dead on all
+> states.
+>
+> And then the mwait case is only ever reached if CPUIDLE=3Dn.
 
-yes.
+So that's why I would prefer intel_idle, if configured, to give
+mwait_play_dead() a hint on the MWAIT hint to use.  Otherwise the
+latter would just fall back to the current method.
 
-> 
->> - it will return -ENOMEM if the kzalloc() fails, that is wrong
->>   since the kzalloc() is not needed.
-> 
-> But it's ok to return the proper error if the system is that broken.
-
-IMO, the API should return 0 (success) instead of -ENOMEM since it does
-not need to do kzalloc().
-
-Different return value should impact caller's logic.
-
-> 
->>
->> Fixed by not doing kzalloc() and returning 0 for the condition.
->>
->> Fixes: ef27bed1870d ("PM: Reference counting of power.subsys_data")
->> Cc: stable@vger.kernel.org
-> 
-> Why is this relevant for stable kernels?
-
-you can remove both Fix and stable tag directly if you like this change.(^^)
-
-> 
-> thanks,
-> 
-> greg k-h
-
+This would not be bullet-proof, but it would take the opportunity to
+work better if it could.
 
