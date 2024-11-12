@@ -1,148 +1,366 @@
-Return-Path: <linux-pm+bounces-17451-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17452-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 578619C60BF
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 19:48:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60C559C60C5
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 19:49:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDB931F2375D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 18:48:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5B8E1F236EA
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 18:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC5221790E;
-	Tue, 12 Nov 2024 18:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A0C21790F;
+	Tue, 12 Nov 2024 18:49:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dZk0boJd"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Xjko5r3q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EBB21621F
-	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 18:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE8B201249;
+	Tue, 12 Nov 2024 18:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731437318; cv=none; b=E5mgUWoPdujZ+tEc6yas6ZcrjoANbW9Rk5DMR8YK1Qz4gXMEs5r10yjovr72Cx4Y3urrbLMWDu7OrMlQ3mjG611b1eUZl5cTxjR0AYfg3lWoYcCThC/j9u0weNio6MAa8nP+M5XgUVzmGT9QeWrgKq7RldJrpYapztR97XJ5GeY=
+	t=1731437366; cv=none; b=MyLgRzVxciSs0aybpwwuB5wamMlGhuJo3QpdjYvFXiqUskg9qL4WBd99edSPn79Ruoxiy5Mk6SAt4ZqXERwX+vdlF2360XOBBvEb0B2jccgP1Qn8+GvjMpvgB4BwrV76wX3RXPkPjTIISTJfjBfRFakBu5yt39bokNhtbVKMu8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731437318; c=relaxed/simple;
-	bh=nZFqPwj9BUmaePBPVbuDjEfu7haZCtJGCGtPxjBdfVE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r5RoiQH+BdV4WN3OV1JrQpqPLxdkwdBetDeKHSsFimBddLm5J0ZecM9YWxITOC/J0RfJ/ptOEF5c7gr9V36lY3pRIz1RWO5TyvFOxppwwD0nZpgTsFonhktV0cq+okE4ZqFGl7W8Hn5+r9f9kK4dUAYmEJd/lE5+1jVPlKiY94A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dZk0boJd; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ea7c26e195so62124737b3.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 10:48:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731437316; x=1732042116; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLfb7kUGJLjR3dpRxNjHUX8zNIZ2DpFKhaioXvi+P10=;
-        b=dZk0boJdnyXKMW4zV7hFcJB3rYCnur/aSB+WvOdAIOXAgKwaezat708kClyF6v0/1J
-         hNg4tTzzmnShjLUqy5dRpPcgbWGPGR4DD9uvchoCTFEtQ+sjj9VPn4fPQyI3Z2hUYn0s
-         fEztvP7tLnzjrdHHylW7+60UnFnldvrilgY9qZmJqFmLqQEvdgtYATsfdhrXI27t4TXA
-         7QhkLQN6UkpTv2F1iMuVMnmRUaXNjtS8GJMK/XsP8c03nxOIeuRwU7Z2BzkNh/Yf9taO
-         VcU44HrehPYN8ahpPqZuykNP0k2vsWaM0znj6e38wac1DF3Ujr5VhX7BaBk+3EiiMnmv
-         nAMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731437316; x=1732042116;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vLfb7kUGJLjR3dpRxNjHUX8zNIZ2DpFKhaioXvi+P10=;
-        b=bu2iDpiLPEZjOLWRz8lnopeOQP5C8g6LaU5bqHmDwcJheD0lXBKmAqyShwcCaHnKJ2
-         7srf9Jo6Ive5Q/021v/E6okFgh3ncPKlfsdk0vr/+26NxuoyOOr0ILI6+9pUzwfVc098
-         7JdXo0aaInReQ5D/+PKwyIYUiRUFicydzBMLJuRXeJmi8ldsa9X0Xeffkd8T7deGv4k1
-         kRojESp2bjm9qFNjUmxsZEbVwITxdx54O9c/Xpij0m2eIG68A9F+aDwhdDJi51GcKKUx
-         FonEseqHwki36zuwHSmQ2yHiXbmXe0xAYrCSGqryFpBJZYBuQhYo1GlUdGRae78timdo
-         7pJw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6TvZI8Jd8p/HCDgxS+15J5ZdQwbKeOwlKCRor8+et2dyRr6iW2rz3hdkaF4o2z7FM2n/bVt4+2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqYF011qu44b2qbdYBjsClaIELXEOXC20C23drlwly1NRU3tNo
-	mvZeaaPLaR7CLw+m2+xzJq218eDHMfStWehzrC82wcs4RIpN2MCRtIYgfvJBvipcKXxkP/YiX8G
-	oT6KZRRXAbCfWpF3Bupt8nMjPHvQ0SBgbegtvBQ==
-X-Google-Smtp-Source: AGHT+IHU1F4In8hSy3BHO7PzehPnwak0Jka/B7VCySs0mHPl9uCBdzOrrdhGUm0wtjc2hrnl2RWBoqNBIdeikfPQLfY=
-X-Received: by 2002:a05:690c:6d10:b0:6be:54e1:f1f3 with SMTP id
- 00721157ae682-6ecb30a5145mr1527607b3.0.1731437315975; Tue, 12 Nov 2024
- 10:48:35 -0800 (PST)
+	s=arc-20240116; t=1731437366; c=relaxed/simple;
+	bh=mEQre+K2Jof7YSqhQzQZt0O46vsmuqIaW/XRDC6I1RI=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=ZJwBo43LSSxepKeAKQE/kEh3RUha+AiwZXfiQ4yq++fMedGyBpD+9PG2wijofFZT9AiQOSRGE9qq63j1wMPnz4hYRSkyeBQSzEyusnhfJVeP919xXpi4/q82EW6rfVB07qwjGNOHUVQs9KCBED8lZJj3TMHk9/citJRMsw6w86o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Xjko5r3q; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+Received: from localhost (docker-mailserver-web-1.docker-mailserver_default [172.22.0.5])
+	by mail.mainlining.org (Postfix) with ESMTPSA id C9B58E45C8;
+	Tue, 12 Nov 2024 18:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
+	s=psm; t=1731437358;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x6fl+REPDaaxq1ljcrPGFk2JX/FX55Eh3bhEKDJ2hSM=;
+	b=Xjko5r3qntRxx+TWuY4S1pEkPQY8AzTMwxgfvNlOdKOx8ytnfgPttkCerD2I4mffnep577
+	anjd/MEqSlHSbb4oWVn79l6XbDIpVm9HqQ7l5jeIcFKecUeA1nW5jJHYSKkrktFXVR8+fT
+	23XEA02Ghw1quLUKJThVWxDplLXg+/72tli9RYBZXQJ4iGP+U68oWerJFZ0qghGwIhQN42
+	5FpGGdXLYFKjmNRQOp6aRnVsd6xhRKy7tUx9xFWoNrbD21aMY8wWx3kdLMTBYvi80YH5og
+	nlQw1BdDe4endHz/dYuDeHJIE96ToH3Z9sbO12YzJGiQFwAoJvYCbI1W+ih6LQ==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
- <CAPDyKFoY8CnxF7JXzkT9_WXyM-TJhW4kmTw=H8NEzch32N1_7Q@mail.gmail.com>
- <ZyJeuVIbWkohymW5@pluto> <20241106071215.jhnzcn4vkdfr3peg@bogus>
- <CAPDyKFr-pmXEhgUgCapzQX3Hn_UAM632TaG8SdkQXaCn5-y42g@mail.gmail.com> <ZzOOPJ_gI9TGadzV@hovoldconsulting.com>
-In-Reply-To: <ZzOOPJ_gI9TGadzV@hovoldconsulting.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 12 Nov 2024 19:48:00 +0100
-Message-ID: <CAPDyKFqnnw1A+R_wohpV7orKV4oGJNyxD+QL667iWq9d_odmfw@mail.gmail.com>
-Subject: Re: [PATCH V5 0/6] firmware: arm_scmi: Misc Fixes
-To: Johan Hovold <johan@kernel.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Sibi Sankar <quic_sibis@quicinc.com>, 
-	Cristian Marussi <cristian.marussi@arm.com>, jassisinghbrar@gmail.com, 
-	dmitry.baryshkov@linaro.org, linux-kernel@vger.kernel.org, 
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, konradybcio@kernel.org, 
-	linux-pm@vger.kernel.org, tstrudel@google.com, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Date: Tue, 12 Nov 2024 19:49:18 +0100
+From: barnabas.czeman@mainlining.org
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
+ <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Linus Walleij
+ <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, Thara Gopinath
+ <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz
+ Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon
+ <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Srinivas Kandagatla
+ <srinivas.kandagatla@linaro.org>, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: Re: [PATCH v5 08/10] arm64: dts: qcom: Add initial support for
+ MSM8917
+In-Reply-To: <ZzOQEgLLhkH-IymV@linaro.org>
+References: <20241112-msm8917-v5-0-3ca34d33191b@mainlining.org>
+ <20241112-msm8917-v5-8-3ca34d33191b@mainlining.org>
+ <ZzOQEgLLhkH-IymV@linaro.org>
+Message-ID: <0dae1cea420bd335be591e4b1be3d07c@mainlining.org>
+X-Sender: barnabas.czeman@mainlining.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, 12 Nov 2024 at 18:20, Johan Hovold <johan@kernel.org> wrote:
->
-> On Tue, Nov 12, 2024 at 04:56:26PM +0100, Ulf Hansson wrote:
-> > On Wed, 6 Nov 2024 at 08:12, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > On Wed, Oct 30, 2024 at 04:28:41PM +0000, Cristian Marussi wrote:
-> > > > On Wed, Oct 30, 2024 at 05:19:39PM +0100, Ulf Hansson wrote:
-> > > > > On Wed, 30 Oct 2024 at 13:55, Sibi Sankar <quic_sibis@quicinc.com> wrote:
-> > > > > >
-> > > > > > The series addresses the kernel warnings reported by Johan at [1] and are
-> > > > > > are required to X1E cpufreq device tree changes to land.
-> > > > > >
-> > > > > > [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
-> > > > > >
-> > > > > > Duplicate levels:
-> > > > > > arm-scmi arm-scmi.0.auto: Level 2976000 Power 218062 Latency 30us Ifreq 2976000 Index 10
-> > > > > > arm-scmi arm-scmi.0.auto: Level 3206400 Power 264356 Latency 30us Ifreq 3206400 Index 11
-> > > > > > arm-scmi arm-scmi.0.auto: Level 3417600 Power 314966 Latency 30us Ifreq 3417600 Index 12
-> > > > > > arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > > > arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
-> > > > > > arm-scmi arm-scmi.0.auto: Level 4012800 Power 528848 Latency 30us Ifreq 4012800 Index 15
-> > > > > >
-> > > > > > ^^ exist because SCP reports duplicate values for the highest sustainable
-> > > > > > freq for perf domains 1 and 2. These are the only freqs that appear as
-> > > > > > duplicates and will be fixed with a firmware update. FWIW the warnings
-> > > > > > that we are addressing in this series will also get fixed by a firmware
-> > > > > > update but they still have to land for devices already out in the wild.
-> > > > > >
-> > > > > > V4:
-> > > > > > * Rework debugfs node creation patch [Ulf/Dmitry]
-> > > > > > * Reduce report level to dev_info and tag it with FW_BUG [Johan/Dmitry]
-> > > > > > * Add cc stable and err logs to patch 1 commit message [Johan]
->
-> > Sorry for the delay. I have picked up the remaining patches from this
-> > series. All applied for fixes and by adding stable tags to them,
-> > thanks!
->
-> As I reported here:
->
->         https://lore.kernel.org/lkml/ZyTQ9QD1tEkhQ9eu@hovoldconsulting.com/
->
-> I'm seeing a hard reset on the x1e80100 CRD and Lenovo ThinkPad T14s
-> when accessing the cpufreq sysfs attributes.
->
-> Sibi tracked it down to the first patch in this series ("firmware:
-> arm_scmi: Ensure that the message-id supports fastchannel") and
-> reverting that one indeed fixes the reset.
->
-> Unfortunately this was only discussed on IRC and was never reported in
-> this thread.
->
-> Ulf, could you please drop the first patch again until we've figured out
-> how best to handle this?
-
-Done, thanks!
-
-Kind regards
-Uffe
+On 2024-11-12 18:27, Stephan Gerhold wrote:
+> On Tue, Nov 12, 2024 at 04:49:38PM +0100, Barnabás Czémán wrote:
+>> From: Otto Pflüger <otto.pflueger@abscue.de>
+>> 
+>> Add initial support for MSM8917 SoC.
+>> 
+>> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
+>> [reword commit, rebase, fix schema errors]
+>> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/msm8917.dtsi | 1974 
+>> +++++++++++++++++++++++++++++++++
+>>  1 file changed, 1974 insertions(+)
+>> 
+>> diff --git a/arch/arm64/boot/dts/qcom/msm8917.dtsi 
+>> b/arch/arm64/boot/dts/qcom/msm8917.dtsi
+>> new file mode 100644
+>> index 
+>> 0000000000000000000000000000000000000000..cf0a0eec1141e11faca0ee9705d6348ab32a0f50
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/msm8917.dtsi
+>> @@ -0,0 +1,1974 @@
+>> [...]
+>> +		domain-idle-states {
+>> +			cluster_sleep_0: cluster-sleep-0 {
+>> +				compatible = "domain-idle-state";
+>> +				arm,psci-suspend-param = <0x41000023>;
+>> +				entry-latency-us = <700>;
+>> +				exit-latency-us = <650>;
+>> +				min-residency-us = <1972>;
+>> +			};
+>> +
+>> +			cluster_sleep_1: cluster-sleep-1 {
+>> +				compatible = "domain-idle-state";
+>> +				arm,psci-suspend-param = <0x41000043>;
+>> +				entry-latency-us = <240>;
+>> +				exit-latency-us = <280>;
+>> +				min-residency-us = <806>;
+>> +			};
+> 
+> I think my comment here is still open:
+> 
+> This is strange, the deeper sleep state has lower timings than the
+> previous one?
+I was reordering based on Konrad comments when i have renamed the nodes 
+maybe it is not correct then.
+I am searching for how to validate these levels, i have find these
+https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.10.6.2.c26-01500-89xx.0/arch/arm64/boot/dts/qcom/msm8917-pm.dtsi#L45-91
+Do you know where can i find psci-suspend-param-s? Should I also add wfi 
+level?
+> 
+>> +
+>> +			cluster_sleep_2: cluster-sleep-2 {
+>> +				compatible = "domain-idle-state";
+>> +				arm,psci-suspend-param = <0x41000053>;
+>> +				entry-latency-us = <700>;
+>> +				exit-latency-us = <1000>;
+>> +				min-residency-us = <6500>;
+>> +			};
+>> +		};
+>> +
+>> [...]
+>> +		restart@4ab000 {
+>> +			compatible = "qcom,pshold";
+>> +			reg = <0x004ab000 0x4>;
+>> +		};
+> 
+> This one too:
+> 
+> You have PSCI for shutting down, do you actually need this?
+> 
+>> +
+>> +		tlmm: pinctrl@1000000 {
+>> +			compatible = "qcom,msm8917-pinctrl";
+>> +			reg = <0x01000000 0x300000>;
+>> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>> +			gpio-controller;
+>> +			gpio-ranges = <&tlmm 0 0 134>;
+>> +			#gpio-cells = <2>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +
+>> [...]
+>> +			sdc1_clk_on: sdc1-clk-on-state {
+>> +				pins = "sdc1_clk";
+>> +				bias-disable;
+>> +				drive-strength = <16>;
+>> +			};
+>> +
+>> +			sdc1_clk_off: sdc1-clk-off-state {
+>> +				pins = "sdc1_clk";
+>> +				bias-disable;
+>> +				drive-strength = <2>;
+>> +			};
+>> +
+>> +			sdc1_cmd_on: sdc1-cmd-on-state {
+>> +				pins = "sdc1_cmd";
+>> +				bias-disable;
+>> +				drive-strength = <10>;
+>> +			};
+>> +
+>> +			sdc1_cmd_off: sdc1-cmd-off-state {
+>> +				pins = "sdc1_cmd";
+>> +				bias-disable;
+>> +				drive-strength = <2>;
+>> +			};
+>> +
+>> +			sdc1_data_on: sdc1-data-on-state {
+>> +				pins = "sdc1_data";
+>> +				bias-pull-up;
+>> +				drive-strength = <10>;
+>> +			};
+>> +
+>> +			sdc1_data_off: sdc1-data-off-state {
+>> +				pins = "sdc1_data";
+>> +				bias-pull-up;
+>> +				drive-strength = <2>;
+>> +			};
+>> +
+>> +			sdc1_rclk_on: sdc1-rclk-on-state {
+>> +				pins = "sdc1_rclk";
+>> +				bias-pull-down;
+>> +			};
+>> +
+>> +			sdc1_rclk_off: sdc1-rclk-off-state {
+>> +				pins = "sdc1_rclk";
+>> +				bias-pull-down;
+>> +			};
+>> +
+>> +			sdc2_clk_on: sdc2-clk-on-state {
+>> +				pins = "sdc2_clk";
+>> +				drive-strength = <16>;
+>> +				bias-disable;
+>> +			};
+>> +
+>> +			sdc2_clk_off: sdc2-clk-off-state {
+>> +				pins = "sdc2_clk";
+>> +				bias-disable;
+>> +				drive-strength = <2>;
+>> +			};
+>> +
+>> +			sdc2_cmd_on: sdc2-cmd-on-state {
+>> +				pins = "sdc2_cmd";
+>> +				bias-pull-up;
+>> +				drive-strength = <10>;
+>> +			};
+>> +
+>> +			sdc2_cmd_off: sdc2-cmd-off-state {
+>> +				pins = "sdc2_cmd";
+>> +				bias-pull-up;
+>> +				drive-strength = <2>;
+>> +			};
+> 
+> These are not referenced anywhere? Not here in the sdhc_X nodes, and
+> also not in your msm8917-xiaomi-riva.dts. Would also recommend
+> consolidating these to a single node like in msm8916.dtsi, see commit
+> c943e4c58b2f ("arm64: dts: qcom: msm8916/39: Consolidate SDC pinctrl").
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c943e4c58b2ffb0dcd497f8b12f284f5e8fc477e
+> 
+>> +
+>> +			sdc2_cd_on: cd-on-state {
+>> +				pins = "gpio67";
+>> +				function = "gpio";
+>> +				drive-strength = <2>;
+>> +				bias-pull-up;
+>> +			};
+>> +
+>> +			sdc2_cd_off: cd-off-state {
+>> +				pins = "gpio67";
+>> +				function = "gpio";
+>> +				drive-strength = <2>;
+>> +				bias-disable;
+>> +			};
+> 
+> It does not make sense to have different on/off states for the card
+> detect (CD) pin of the SD card. It needs to work even when the SD card
+> is suspended so we can detect insertions/removals. Also should be 
+> placed
+> in the board-specific DT part.
+> 
+> See commit dfbda20dabaa ("arm64: dts: qcom: msm8916/39: Fix SD card
+> detect pinctrl").
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dfbda20dabaa1f284abd550035db5887384c8e4c
+> 
+> 
+>> +
+>> +			sdc2_data_on: sdc2-data-on-state {
+>> +				pins = "sdc2_data";
+>> +				bias-pull-up;
+>> +				drive-strength = <10>;
+>> +			};
+>> +
+>> +			sdc2_data_off: sdc2-data-off-state {
+>> +				pins = "sdc2_data";
+>> +				bias-pull-up;
+>> +				drive-strength = <2>;
+>> +			};
+>> +
+>> [...]
+>> +		blsp1_i2c4: i2c@78b8000 {
+>> +			compatible = "qcom,i2c-qup-v2.2.1";
+>> +			reg = <0x078b8000 0x500>;
+>> +			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
+>> +				 <&gcc GCC_BLSP1_AHB_CLK>;
+>> +			clock-names = "core", "iface";
+>> +			dmas = <&blsp1_dma 10>, <&blsp1_dma 11>;
+>> +			dma-names = "tx", "rx";
+>> +			pinctrl-0 = <&blsp1_i2c4_default>;
+>> +			pinctrl-1 = <&blsp1_i2c4_sleep>;
+>> +			pinctrl-names = "default", "sleep";
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		blsp2_i2c5: i2c@7af5000 {
+> 
+> This is actually blsp2_i2c1 if you look at the clock name below:
+> 
+>> +			compatible = "qcom,i2c-qup-v2.2.1";
+>> +			reg = <0x07af5000 0x600>;
+>> +			interrupts = <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&gcc GCC_BLSP2_QUP1_I2C_APPS_CLK>,
+> 
+> here ^
+> 
+> But I realize now that the pinctrl functions are consecutively numbered
+> without the BLSP number. Sorry for the confusion.
+> 
+> Basically:
+>   - blsp1_i2c2 == blsp_i2c2
+>   - blsp2_i2c1 == blsp_i2c5
+> 
+> Looking at some other examples upstream I guess you can choose between
+> one of the following options:
+> 
+>  1. msm8974/msm8976/msm8996/msm8998: Use &blspX_i2cY labels for the 
+> i2c@
+>     node and pinctrl and only have the slightly confusing pinctrl
+>     function. E.g. this in msm8976.dtsi:
+> 
+> 			/* 4 (not 6!) interfaces per QUP, BLSP2 indexes are numbered (n)+4 
+> */
+> 			blsp2_i2c2_default: blsp2-i2c2-default-state {
+> 				pins = "gpio22", "gpio23";
+> 				function = "blsp_i2c6";
+> 				drive-strength = <2>;
+> 				bias-disable;
+> 			};
+> 
+>     Note how blsp2_i2c2 == blsp_i2c6.
+> 
+>  2. msm8994: Use &blspX_i2cY labels for the i2c@ node, but keep pinctrl
+>     named &i2cN_default. E.g. this in msm8994.dtsi:
+> 
+> 		blsp2_i2c1: i2c@f9963000 {
+> 			/* ... */
+> 			pinctrl-names = "default", "sleep";
+> 			pinctrl-0 = <&i2c7_default>;
+> 			pinctrl-1 = <&i2c7_sleep>;
+> 			/* ... */
+> 		};
+> 
+>     Note how blsp2_i2c1 == i2c7_default here.
+> 
+>  3. msm8953: Use &i2c_N labels everywhere like on downstream. E.g. this
+>     in msm8953.dtsi. This is pretty much what you had originally:
+> 
+> 		i2c_5: i2c@7af5000 {
+> 			/* ... */
+> 			pinctrl-names = "default", "sleep";
+> 			pinctrl-0 = <&i2c_5_default>;
+> 			pinctrl-1 = <&i2c_5_sleep>;
+> 			/* ... */
+> 		};
+> 
+> All of these are fine for me. Feel free to pick the one you prefer. But
+> let's not introduce a new confusing variant of this. :-)
+> 
+> Thanks,
+> Stephan
 
