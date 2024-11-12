@@ -1,361 +1,200 @@
-Return-Path: <linux-pm+bounces-17449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17453-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 733D29C6187
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 20:33:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DAC09C61A8
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 20:40:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AA12B881C5
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 17:39:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0EB2B87CC1
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 18:49:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E0A212F05;
-	Tue, 12 Nov 2024 17:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D6821790E;
+	Tue, 12 Nov 2024 18:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="uZsD40JD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C04m1N82"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2459209664;
-	Tue, 12 Nov 2024 17:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E205D201249
+	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 18:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731432789; cv=none; b=kePQbzVA4LyM5hXCQjzkCcvl44nx6eYIpti7R3pYBNBY1o9x7MrolwDzOGTp0ciVmQhgBymPRWvX1sWqS2reeOjmZFpNxb4osCr/qs85wCAw5MTmv1K578XJLyKeTJAqp886XADr7+6OcorxK4+B7rliOnoPKqX+fdvH6pUV7Q8=
+	t=1731437378; cv=none; b=lz6Hjx4aPrEGC7AlckOMuhH7CCWxpIlkucsWarkt1/VHDrik9w1luOIiFiz3qX4JdEYapuwQtkyXwYRNEiuuQ7oU09VFDY6WIO6jsh5ibjpwgGhgzxw7TJSSPPWs6o1CIlubgZic8MkpIwk7pjOwFw9kYGX+TWDKiPa3X2UJHmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731432789; c=relaxed/simple;
-	bh=ZMippwGJIxIyDlx7CchqU2+81i9sMtpxdtNshqEH+FA=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=rvoTc8Hk+ZpX0s5a78myB8hmVwbPiG9buPqbvvyWvZmwpe6H8HRg4lLx3qZh+aT9PKeyvtxkUQEmsyArYZAneJ6uygbd5DqTzTUKv+R4awR9hlQpPuqS2sPRvL1p6X4vL8eWv+gNcL/Aoar8zPuO6t0fCGqSyEfWwJ9ZhK1+7+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=uZsD40JD; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from localhost (docker-mailserver-web-1.docker-mailserver_default [172.22.0.5])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 460B6E45C8;
-	Tue, 12 Nov 2024 17:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1731432784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z2MTZMjG68b3T6cJYBnCLBnnuL4jBK+EhuaLspP8FtU=;
-	b=uZsD40JDUj+xKRaOPkpL6nf3J8klFmsRTOn6vreQuN1wSp87ovX6mpEFCQOBx58K8QYta7
-	VzVeaQ4h8EQJbmNZQR+3u28BgKJQqiIQ0wd/2yJ5UmCqdzO49ZieHlQVATtN9X/viRhm5C
-	AUV+br4PKChFi23R1r9xuXklYwx3712wZPJxv46CzHpYZklv7+Oe2u+rTRzoIQ//eVZ0Lv
-	cEqWoiXSf3J2nKS3tXALl0/PqfhhoPBizRmQRGV2ZBEXo3Ih9UrwyCPjV+BH13swivY/EO
-	WX28pBohIXGSjWiBqxQgD7VOTo/Kymv3m11hIsYqhRGe8YX1N9lteGUehAvx8g==
+	s=arc-20240116; t=1731437378; c=relaxed/simple;
+	bh=z7JRsFYW7tQ+7WpP2jcM/rU5Vh+/Y7+nyM7hGoMWZdk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EEgqUFDvMdonyB0ytMsRGhMzXppxVzklXyeszY20Yb5LkhQRXN8RUiHuKVzS0g8pyFan3dZrlmU/uEIgFszL3opKI1cN2FfnW5uqig8Lb/GAJsGBX3lpQXcuDUOZQAE6qGIHdBheHicsq7q5/ozQSnK7P22K5O2VGGF8E6Rigb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C04m1N82; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C382C4CED8
+	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 18:49:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731437377;
+	bh=z7JRsFYW7tQ+7WpP2jcM/rU5Vh+/Y7+nyM7hGoMWZdk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=C04m1N82urfHHGsE5P2Z5RCyyX9BdaAiT0lf/J5oo27rpOvFv1P4UKj9Fr7V+MQg7
+	 HJMTf7vrdeeivh19qK1daR4QXEzdjlTE2w2Y6Y/LgDgOe76gseFkD11mX6h6jx6hMF
+	 jplx8Z/uTH7OulJ81h0B8dqmHy71NnsMQ3X9+DM6G4tKAbZTHqAl99/7EGCJZMJq11
+	 pC5zV68DIADuErGF938dkaSV+9BKyw9BxRXnTGZRLkq0gcSr8sig2mmRTw6lcuQgUv
+	 FvwSYRScEGt3YE9pGOi3xo2IWlAXOEPzx65g9AsfpqBge4JrwilhrYHF7WMFnTXU0g
+	 bYlsovWjdNJBg==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-295cee3a962so668709fac.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 10:49:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVD/P+sV6OFGmc7Gg9RhxM/eKwtANyk7bmbujtjoX5hVm3m57RsBbu0UaR1yF/b86DGKGx+COKjhA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwptXsBRaia5c5Xpern4SQujwKgqIjrDH4YMZnY4h2byvGXgPwc
+	B8yFqpfnW/8o1SmqJeO1CHrnlX2z5kduXuHZO5qqRxMi5gu5oy5CWH7V9GIb6mm4pK1LnDKV46e
+	WvFF53fu35gdsxHfTjyA3GmwZjR0=
+X-Google-Smtp-Source: AGHT+IFafCq/g6DWRhs/OJAND6AzIx5MGT/f2LUw81/pk2iR8GD5R/rjZ1vfWfWzDIyxmqTIF2r5lbhbgEyoWKGdCek=
+X-Received: by 2002:a05:6870:3b15:b0:270:184b:ccd9 with SMTP id
+ 586e51a60fabf-29560309629mr14733495fac.39.1731437376745; Tue, 12 Nov 2024
+ 10:49:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 12 Nov 2024 18:33:04 +0100
-From: barnabas.czeman@mainlining.org
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
- <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, Thara Gopinath
- <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz
- Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon
- <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Srinivas Kandagatla
- <srinivas.kandagatla@linaro.org>, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Subject: Re: [PATCH v5 08/10] arm64: dts: qcom: Add initial support for
- MSM8917
-In-Reply-To: <ZzOQEgLLhkH-IymV@linaro.org>
-References: <20241112-msm8917-v5-0-3ca34d33191b@mainlining.org>
- <20241112-msm8917-v5-8-3ca34d33191b@mainlining.org>
- <ZzOQEgLLhkH-IymV@linaro.org>
-Message-ID: <8d4cddf01b29cbd4b86c13081bb1ce0d@mainlining.org>
-X-Sender: barnabas.czeman@mainlining.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+References: <SJ1PR11MB6129EDBF22F8A90FC3A3EDC8B9582@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <CAJZ5v0gpg7sd3Qx25WFSbGxFN6-nptxK+QtkHZMMtXW-dnaozg@mail.gmail.com> <SJ1PR11MB6129A1C31D55C9ACE64D49F2B9592@SJ1PR11MB6129.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB6129A1C31D55C9ACE64D49F2B9592@SJ1PR11MB6129.namprd11.prod.outlook.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 12 Nov 2024 19:49:25 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0irM=4FCnqNLwzb75Dco143M_Tg7MFg+cUJiuXJpo1fDQ@mail.gmail.com>
+Message-ID: <CAJZ5v0irM=4FCnqNLwzb75Dco143M_Tg7MFg+cUJiuXJpo1fDQ@mail.gmail.com>
+Subject: Re: Regression on linux-next (next-20241106)
+To: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>, "Saarinen, Jani" <jani.saarinen@intel.com>, 
+	"Nikula, Jani" <jani.nikula@intel.com>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>, 
+	"ricardo.neri-calderon@linux.intel.com" <ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-11-12 18:27, Stephan Gerhold wrote:
-> On Tue, Nov 12, 2024 at 04:49:38PM +0100, Barnabás Czémán wrote:
->> From: Otto Pflüger <otto.pflueger@abscue.de>
->> 
->> Add initial support for MSM8917 SoC.
->> 
->> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
->> [reword commit, rebase, fix schema errors]
->> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
->> ---
->>  arch/arm64/boot/dts/qcom/msm8917.dtsi | 1974 
->> +++++++++++++++++++++++++++++++++
->>  1 file changed, 1974 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/qcom/msm8917.dtsi 
->> b/arch/arm64/boot/dts/qcom/msm8917.dtsi
->> new file mode 100644
->> index 
->> 0000000000000000000000000000000000000000..cf0a0eec1141e11faca0ee9705d6348ab32a0f50
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/msm8917.dtsi
->> @@ -0,0 +1,1974 @@
->> [...]
->> +		domain-idle-states {
->> +			cluster_sleep_0: cluster-sleep-0 {
->> +				compatible = "domain-idle-state";
->> +				arm,psci-suspend-param = <0x41000023>;
->> +				entry-latency-us = <700>;
->> +				exit-latency-us = <650>;
->> +				min-residency-us = <1972>;
->> +			};
->> +
->> +			cluster_sleep_1: cluster-sleep-1 {
->> +				compatible = "domain-idle-state";
->> +				arm,psci-suspend-param = <0x41000043>;
->> +				entry-latency-us = <240>;
->> +				exit-latency-us = <280>;
->> +				min-residency-us = <806>;
->> +			};
-> 
-> I think my comment here is still open:
-> 
-> This is strange, the deeper sleep state has lower timings than the
-> previous one?
-> 
->> +
->> +			cluster_sleep_2: cluster-sleep-2 {
->> +				compatible = "domain-idle-state";
->> +				arm,psci-suspend-param = <0x41000053>;
->> +				entry-latency-us = <700>;
->> +				exit-latency-us = <1000>;
->> +				min-residency-us = <6500>;
->> +			};
->> +		};
->> +
->> [...]
->> +		restart@4ab000 {
->> +			compatible = "qcom,pshold";
->> +			reg = <0x004ab000 0x4>;
->> +		};
-> 
-> This one too:
-> 
-> You have PSCI for shutting down, do you actually need this?
-Yes, power off is not working without this.
-> 
->> +
->> +		tlmm: pinctrl@1000000 {
->> +			compatible = "qcom,msm8917-pinctrl";
->> +			reg = <0x01000000 0x300000>;
->> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->> +			gpio-controller;
->> +			gpio-ranges = <&tlmm 0 0 134>;
->> +			#gpio-cells = <2>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +
->> [...]
->> +			sdc1_clk_on: sdc1-clk-on-state {
->> +				pins = "sdc1_clk";
->> +				bias-disable;
->> +				drive-strength = <16>;
->> +			};
->> +
->> +			sdc1_clk_off: sdc1-clk-off-state {
->> +				pins = "sdc1_clk";
->> +				bias-disable;
->> +				drive-strength = <2>;
->> +			};
->> +
->> +			sdc1_cmd_on: sdc1-cmd-on-state {
->> +				pins = "sdc1_cmd";
->> +				bias-disable;
->> +				drive-strength = <10>;
->> +			};
->> +
->> +			sdc1_cmd_off: sdc1-cmd-off-state {
->> +				pins = "sdc1_cmd";
->> +				bias-disable;
->> +				drive-strength = <2>;
->> +			};
->> +
->> +			sdc1_data_on: sdc1-data-on-state {
->> +				pins = "sdc1_data";
->> +				bias-pull-up;
->> +				drive-strength = <10>;
->> +			};
->> +
->> +			sdc1_data_off: sdc1-data-off-state {
->> +				pins = "sdc1_data";
->> +				bias-pull-up;
->> +				drive-strength = <2>;
->> +			};
->> +
->> +			sdc1_rclk_on: sdc1-rclk-on-state {
->> +				pins = "sdc1_rclk";
->> +				bias-pull-down;
->> +			};
->> +
->> +			sdc1_rclk_off: sdc1-rclk-off-state {
->> +				pins = "sdc1_rclk";
->> +				bias-pull-down;
->> +			};
->> +
->> +			sdc2_clk_on: sdc2-clk-on-state {
->> +				pins = "sdc2_clk";
->> +				drive-strength = <16>;
->> +				bias-disable;
->> +			};
->> +
->> +			sdc2_clk_off: sdc2-clk-off-state {
->> +				pins = "sdc2_clk";
->> +				bias-disable;
->> +				drive-strength = <2>;
->> +			};
->> +
->> +			sdc2_cmd_on: sdc2-cmd-on-state {
->> +				pins = "sdc2_cmd";
->> +				bias-pull-up;
->> +				drive-strength = <10>;
->> +			};
->> +
->> +			sdc2_cmd_off: sdc2-cmd-off-state {
->> +				pins = "sdc2_cmd";
->> +				bias-pull-up;
->> +				drive-strength = <2>;
->> +			};
-> 
-> These are not referenced anywhere? Not here in the sdhc_X nodes, and
-> also not in your msm8917-xiaomi-riva.dts. Would also recommend
-> consolidating these to a single node like in msm8916.dtsi, see commit
-> c943e4c58b2f ("arm64: dts: qcom: msm8916/39: Consolidate SDC pinctrl").
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c943e4c58b2ffb0dcd497f8b12f284f5e8fc477e
-> 
->> +
->> +			sdc2_cd_on: cd-on-state {
->> +				pins = "gpio67";
->> +				function = "gpio";
->> +				drive-strength = <2>;
->> +				bias-pull-up;
->> +			};
->> +
->> +			sdc2_cd_off: cd-off-state {
->> +				pins = "gpio67";
->> +				function = "gpio";
->> +				drive-strength = <2>;
->> +				bias-disable;
->> +			};
-> 
-> It does not make sense to have different on/off states for the card
-> detect (CD) pin of the SD card. It needs to work even when the SD card
-> is suspended so we can detect insertions/removals. Also should be 
-> placed
-> in the board-specific DT part.
-> 
-> See commit dfbda20dabaa ("arm64: dts: qcom: msm8916/39: Fix SD card
-> detect pinctrl").
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dfbda20dabaa1f284abd550035db5887384c8e4c
-> 
-> 
->> +
->> +			sdc2_data_on: sdc2-data-on-state {
->> +				pins = "sdc2_data";
->> +				bias-pull-up;
->> +				drive-strength = <10>;
->> +			};
->> +
->> +			sdc2_data_off: sdc2-data-off-state {
->> +				pins = "sdc2_data";
->> +				bias-pull-up;
->> +				drive-strength = <2>;
->> +			};
->> +
->> [...]
->> +		blsp1_i2c4: i2c@78b8000 {
->> +			compatible = "qcom,i2c-qup-v2.2.1";
->> +			reg = <0x078b8000 0x500>;
->> +			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
->> +				 <&gcc GCC_BLSP1_AHB_CLK>;
->> +			clock-names = "core", "iface";
->> +			dmas = <&blsp1_dma 10>, <&blsp1_dma 11>;
->> +			dma-names = "tx", "rx";
->> +			pinctrl-0 = <&blsp1_i2c4_default>;
->> +			pinctrl-1 = <&blsp1_i2c4_sleep>;
->> +			pinctrl-names = "default", "sleep";
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +			status = "disabled";
->> +		};
->> +
->> +		blsp2_i2c5: i2c@7af5000 {
-> 
-> This is actually blsp2_i2c1 if you look at the clock name below:
-> 
->> +			compatible = "qcom,i2c-qup-v2.2.1";
->> +			reg = <0x07af5000 0x600>;
->> +			interrupts = <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&gcc GCC_BLSP2_QUP1_I2C_APPS_CLK>,
-> 
-> here ^
-> 
-> But I realize now that the pinctrl functions are consecutively numbered
-> without the BLSP number. Sorry for the confusion.
-> 
-> Basically:
->   - blsp1_i2c2 == blsp_i2c2
->   - blsp2_i2c1 == blsp_i2c5
-> 
-> Looking at some other examples upstream I guess you can choose between
-> one of the following options:
-> 
->  1. msm8974/msm8976/msm8996/msm8998: Use &blspX_i2cY labels for the 
-> i2c@
->     node and pinctrl and only have the slightly confusing pinctrl
->     function. E.g. this in msm8976.dtsi:
-> 
-> 			/* 4 (not 6!) interfaces per QUP, BLSP2 indexes are numbered (n)+4 
-> */
-> 			blsp2_i2c2_default: blsp2-i2c2-default-state {
-> 				pins = "gpio22", "gpio23";
-> 				function = "blsp_i2c6";
-> 				drive-strength = <2>;
-> 				bias-disable;
-> 			};
-> 
->     Note how blsp2_i2c2 == blsp_i2c6.
-> 
->  2. msm8994: Use &blspX_i2cY labels for the i2c@ node, but keep pinctrl
->     named &i2cN_default. E.g. this in msm8994.dtsi:
-> 
-> 		blsp2_i2c1: i2c@f9963000 {
-> 			/* ... */
-> 			pinctrl-names = "default", "sleep";
-> 			pinctrl-0 = <&i2c7_default>;
-> 			pinctrl-1 = <&i2c7_sleep>;
-> 			/* ... */
-> 		};
-> 
->     Note how blsp2_i2c1 == i2c7_default here.
-> 
->  3. msm8953: Use &i2c_N labels everywhere like on downstream. E.g. this
->     in msm8953.dtsi. This is pretty much what you had originally:
-> 
-> 		i2c_5: i2c@7af5000 {
-> 			/* ... */
-> 			pinctrl-names = "default", "sleep";
-> 			pinctrl-0 = <&i2c_5_default>;
-> 			pinctrl-1 = <&i2c_5_sleep>;
-> 			/* ... */
-> 		};
-> 
-> All of these are fine for me. Feel free to pick the one you prefer. But
-> let's not introduce a new confusing variant of this. :-)
-> 
-> Thanks,
-> Stephan
+On Tue, Nov 12, 2024 at 6:14=E2=80=AFPM Borah, Chaitanya Kumar
+<chaitanya.kumar.borah@intel.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Monday, November 11, 2024 6:58 PM
+> > To: Borah, Chaitanya Kumar <chaitanya.kumar.borah@intel.com>
+> > Cc: Wysocki, Rafael J <rafael.j.wysocki@intel.com>; intel-
+> > gfx@lists.freedesktop.org; Kurmi, Suresh Kumar
+> > <suresh.kumar.kurmi@intel.com>; Saarinen, Jani <jani.saarinen@intel.com=
+>;
+> > Nikula, Jani <jani.nikula@intel.com>; linux-pm@vger.kernel.org;
+> > srinivas.pandruvada@linux.intel.com; ricardo.neri-calderon@linux.intel.=
+com
+> > Subject: Re: Regression on linux-next (next-20241106)
+> >
+> > Hi Chaitanya,
+> >
+> > On Mon, Nov 11, 2024 at 6:41=E2=80=AFAM Borah, Chaitanya Kumar
+> > <chaitanya.kumar.borah@intel.com> wrote:
+> > >
+> > > Hello Rafael,
+> > >
+> > > Hope you are doing well. I am Chaitanya from the linux graphics team =
+in
+> > Intel.
+> > >
+> > > This mail is regarding a regression we are seeing in our CI runs[1] o=
+n linux-
+> > next repository.
+> > >
+> > > Since the version next-20241106 [2], we are seeing the following
+> > > regression
+> > >
+> > > `````````````````````````````````````````````````````````````````````=
+````````````
+> > > <4>[    7.246473] WARNING: possible circular locking dependency detec=
+ted
+> > > <4>[    7.246476] 6.12.0-rc6-next-20241106-next-20241106-g5b913f5d7d7=
+f+
+> > #1 Not tainted
+> > > <4>[    7.246479] ---------------------------------------------------=
+---
+> > > <4>[    7.246481] swapper/0/1 is trying to acquire lock:
+> > > <4>[    7.246483] ffffffff8264aef0 (cpu_hotplug_lock){++++}-{0:0}, at=
+:
+> > static_key_enable+0xd/0x20
+> > > <4>[    7.246493]
+> > >                   but task is already holding lock:
+> > > <4>[    7.246495] ffffffff82832068 (hybrid_capacity_lock){+.+.}-{4:4}=
+, at:
+> > intel_pstate_register_driver+0xd3/0x1c0
+> > > `````````````````````````````````````````````````````````````````````=
+`
+> > > ```````````
+> > > Details log can be found in [3].
+> >
+> > Thanks for the report!
+> >
+> > > After bisecting the tree, the following patch [4] seems to be the fir=
+st "bad"
+> > > commit
+> > >
+> > > `````````````````````````````````````````````````````````````````````=
+`
+> > > ```````````````````````````````````
+> > > commit 92447aa5f6e7fbad9427a3fd1bb9e0679c403206
+> > > Author: Rafael J. Wysocki mailto:rafael.j.wysocki@intel.com
+> > > Date:   Mon Nov 4 19:53:53 2024 +0100
+> > >
+> > >     cpufreq: intel_pstate: Update asym capacity for CPUs that were
+> > > offline initially
+> > > `````````````````````````````````````````````````````````````````````=
+`
+> > > ```````````````````````````````````
+> > >
+> > > We also verified that if we revert the patch the issue is not seen.
+> > >
+> > > Could you please check why the patch causes this regression and provi=
+de a
+> > fix if necessary?
+> > >
+> > > [1] https://intel-gfx-ci.01.org/tree/linux-next/combined-alt.html?
+> > > [2]
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/c=
+o
+> > > mmit/?h=3Dnext-20241106 [3]
+> > > https://intel-gfx-ci.01.org/tree/linux-next/next-20241106/bat-arls-1/=
+b
+> > > oot0.txt [4]
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/c=
+o
+> > > mmit/?h=3Dnext-
+> > 20241106&id=3D92447aa5f6e7fbad9427a3fd1bb9e0679c403206
+> >
+> > The problem is that cpus_read_lock() should not be called under
+> > hybrid_capacity_lock because the latter is acquired in CPU online/offli=
+ne
+> > paths and this is exposed by the above commit, but if I'm not mistaken,=
+ the
+> > issue is there regardless of it.
+> >
+> > A good news is that is should be addressed by a patch that has been pos=
+ted
+> > already:
+> >
+> > https://lore.kernel.org/linux-pm/12554508.O9o76ZdvQC@rjwysocki.net/
+> >
+> > so please let me know if it makes the splat go away.
+> >
+> > Even if its changelog says that it has no functional impact, this is no=
+t really the
+> > case.
+> >
+> > Thanks!
+>
+> Thank you Rafael for the patch, we can confirm that it helps.
+
+Thanks for checking and letting me know, much appreciated!
 
