@@ -1,133 +1,156 @@
-Return-Path: <linux-pm+bounces-17436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17439-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18A549C5C6B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:53:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1ECD9C5C91
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2025283F3F
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:53:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78BF51F2376B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E83320607A;
-	Tue, 12 Nov 2024 15:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5362F2040AF;
+	Tue, 12 Nov 2024 15:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="dzHZbHYp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TWVGjLo4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AAD205E1F;
-	Tue, 12 Nov 2024 15:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929602040AE
+	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 15:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731426597; cv=none; b=oyReoVS8eKVnpxA3r5ttUQ5+xahoAcMQQ7ZFROxK5cNkFkBhFVdwABIIPOM0zQQyVo5pxbDJsZd1RGY3dyVyaBGENQIVDfD5ii2H3AApmdQZFct4PTzPDxeC+07GGoG+iDgLd/KDOutK5IwBp8QcPhENngO5qI9fTbJMSoXmGvk=
+	t=1731427025; cv=none; b=CeFwqfQ/GIB8DLPfO1t3UTLxKGD8gqkFOIwQ6ChInT/0SFZmEkbD4dJqDEAa8w18QVXvr0KMitNOESc24YIugXpNtNexFT0uA/mZi2eCI1lKpq82lYvmFcjdwln/yVv9IV/mhDMtwAZz4zNnjsyAAgnDeoxZqX20VINM7JJ4u9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731426597; c=relaxed/simple;
-	bh=xiFBtHsOaU6w5QYdlsV5ffTJLBo8Uh6SeJeMP9eWLsQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J0KlKRjMdPjgrB03CF0VnWvX+2FP3IyqT2uGhcMZsRKnMhG51iqg6oqs4pADlAg6TvykzhYJoi4NHFltRBdtAjJPrObZOo4e/nPHTSkN0nbTw3wMHrtEYz2o8+5/QUzq+zHIdRKqIvT6C7NP2nQoWC7/hSiY7ZaGHjzK299Lr6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=dzHZbHYp; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [192.168.93.162] (254C22F6.nat.pool.telekom.hu [37.76.34.246])
-	by mail.mainlining.org (Postfix) with ESMTPSA id B6E1CE45CE;
-	Tue, 12 Nov 2024 15:49:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1731426593;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lpHmUFBIqJF78XKlVouHZG9P31kndu81nFICPCCAgP0=;
-	b=dzHZbHYp03e6f02pDnmw0rmPcdCSJAzTnJGC7oTJDeIF871N4V/dPqcEgOif+zWdtCCbts
-	XiZLxirWjjJ0G/Kp/023CvoLLcpDXd5QlDc4N6d+PCpe0vfr8OdyE6Osi5Bvr4X/HQQvCU
-	tMGeHaLU5E2/d5FZ9eP1tKcCPxJ5xN/jKpgyjZSEuPo/DI44YrKtGT7tl4+SjUQBbqC1vL
-	4xoZHIRAYSkmGZZ0OicKor51r4ZszY1FKc8JJn0Ocgo7N0trqtzGmM13GmXPSO2hOLU78a
-	hpLwpy8lt1RFGMbEwfJ2FhF4eAWbdhK/lbLLFXCGTxdNbbmpl+qkd36PBlY43A==
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Tue, 12 Nov 2024 16:49:39 +0100
-Subject: [PATCH v5 09/10] dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
+	s=arc-20240116; t=1731427025; c=relaxed/simple;
+	bh=VAA1g9rl5BaF/kPLFoBaEIyM0NZnhRw8AObDrZkEUk8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mVQOkkcEs0v1agwWKtLD6M7t2TBwcr3A3ogiiq96jXcSLKYAgLAHTu0hvOfsa1h+o7aad4jzbiIyWrv0eKjXsoOTGYcZTGm6RCs50nBVQu54NJwzYWxF1WrwI938QPnET3YAATb2ERL1nU2KIOuW0yY4aDFmCjVsKf02XKZ3Q6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TWVGjLo4; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e290222fdd0so5828363276.2
+        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 07:57:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731427022; x=1732031822; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LvLeNnoi9Q/2tIEpsYYZ7QLjjHPm2C2yqmvXawnq7e4=;
+        b=TWVGjLo437KtZ1N0ot1zyu62Sx8PpjHsiGo+8LrlwBzdvuaPjwkwn55aFkeTNWfMdo
+         nbyfMEGrnsX60ddYxvqJKEppHssAh2UGoGgxUd1P3YE3qHgwTidc58bZi1BRaUb4RS9h
+         WAWsZ/58I8+wM9xhwpVg+aCbyDBUylz+tr4MUugA4sIo/XwMlGH8t5aw6y8V3gY8AubF
+         F3wZ7eeV+TUcVP+uJ8fP7eWBxXXoCTmVn0dDfnJUd+bqPnWAohQxwJVXw+r7kbY+Occ3
+         ngNlmMr+dZa/foW8TqfyH6w9PFpGrOapgn/mMOtv9zTvLdR2y3OncvXOyr+zF4OQyfVw
+         eO5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731427022; x=1732031822;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LvLeNnoi9Q/2tIEpsYYZ7QLjjHPm2C2yqmvXawnq7e4=;
+        b=WLiYFgzuRIzSvTh5GSqwL0xjcFn+vqfMqXfT3wx89XUQDV9cS3KFTdh+NXyjbmKy4z
+         tGXBQxxhVsFNPDbx8+3FnJaD1cdCqPoOK0XDPkIu0Ws9Mp6pzBVsfxbPfX0QNqbrhUzk
+         Qpg2qW45Skxh6kogW38aWhLp20JjaX2G2dh4ch60o95QD6OH16ds8oNCK/0wKg5+AgYg
+         819nvLpJpGcT1vETkjuJE9sLPa2ZRuZEccJEaBA1CLpeMHlmWrIQpluQv6eQ+NiJwtvm
+         6eX1bnpXyLxaDZYqq4u+/hjNjSkVCW0OFHgWWlYcSfYUgMO71oWiH8GHZqJKKDfDmAjq
+         yRhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQZt2+lJiLu7y1pxKKLrVxvp1CmOO2km3GuYzJcDPRQAUNUMfaEppyAanE43GlRlwrD46bR5QCAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAFKURg3STU3cZqcibEjJhR6u+M916pwHh26M4WF1UFyOVNIDB
+	Rj2DJfiRPtJ9cvQEteyd4rbIAWKbDeamkYG2CP0/zNpv3cXhQ44EOA+JXMc/vf9GHBxJ4x2FxwR
+	RcGa1/feHajb2+NXbSnyK0eBFeWKySXOTDiz6iQ==
+X-Google-Smtp-Source: AGHT+IH5CCJQlrbtWhzwNwEuVmBy3c+bpgonBaiqCiIcyBRut8a95C/Hq3VyL3SXBBf4iw9gPiN+f3nxmL1sUxWUun4=
+X-Received: by 2002:a05:690c:c96:b0:6ea:85ee:b5d4 with SMTP id
+ 00721157ae682-6eaddd86d12mr164461237b3.6.1731427022576; Tue, 12 Nov 2024
+ 07:57:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241112-msm8917-v5-9-3ca34d33191b@mainlining.org>
-References: <20241112-msm8917-v5-0-3ca34d33191b@mainlining.org>
-In-Reply-To: <20241112-msm8917-v5-0-3ca34d33191b@mainlining.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731426576; l=1345;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=xiFBtHsOaU6w5QYdlsV5ffTJLBo8Uh6SeJeMP9eWLsQ=;
- b=RYljx6pxXxV2WuNVYY2rutXIpdWZzzx6msDzKVVd1DYkdQILIy/ROX7g0XSdaNsGmMDu1KkKy
- l1UAnGaEb2nBMcRk3ArcwYfhC6x5BRBLonUAvCAq+Lvnts7oM7Lk/by
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+References: <20241030125512.2884761-1-quic_sibis@quicinc.com>
+ <CAPDyKFoY8CnxF7JXzkT9_WXyM-TJhW4kmTw=H8NEzch32N1_7Q@mail.gmail.com>
+ <ZyJeuVIbWkohymW5@pluto> <20241106071215.jhnzcn4vkdfr3peg@bogus>
+In-Reply-To: <20241106071215.jhnzcn4vkdfr3peg@bogus>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 12 Nov 2024 16:56:26 +0100
+Message-ID: <CAPDyKFr-pmXEhgUgCapzQX3Hn_UAM632TaG8SdkQXaCn5-y42g@mail.gmail.com>
+Subject: Re: [PATCH V5 0/6] firmware: arm_scmi: Misc Fixes
+To: Sudeep Holla <sudeep.holla@arm.com>, Sibi Sankar <quic_sibis@quicinc.com>
+Cc: Cristian Marussi <cristian.marussi@arm.com>, johan@kernel.org, jassisinghbrar@gmail.com, 
+	dmitry.baryshkov@linaro.org, linux-kernel@vger.kernel.org, 
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, konradybcio@kernel.org, 
+	linux-pm@vger.kernel.org, tstrudel@google.com, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Document Xiaomi Remi 5A (riva).
-Add qcom,msm8917 for msm-id, board-id allow-list.
+On Wed, 6 Nov 2024 at 08:12, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Oct 30, 2024 at 04:28:41PM +0000, Cristian Marussi wrote:
+> > On Wed, Oct 30, 2024 at 05:19:39PM +0100, Ulf Hansson wrote:
+> > > On Wed, 30 Oct 2024 at 13:55, Sibi Sankar <quic_sibis@quicinc.com> wrote:
+> > > >
+> > > > The series addresses the kernel warnings reported by Johan at [1] and are
+> > > > are required to X1E cpufreq device tree changes to land.
+> > > >
+> > > > [1] - https://lore.kernel.org/lkml/ZoQjAWse2YxwyRJv@hovoldconsulting.com/
+> > > >
+> > > > Duplicate levels:
+> > > > arm-scmi arm-scmi.0.auto: Level 2976000 Power 218062 Latency 30us Ifreq 2976000 Index 10
+> > > > arm-scmi arm-scmi.0.auto: Level 3206400 Power 264356 Latency 30us Ifreq 3206400 Index 11
+> > > > arm-scmi arm-scmi.0.auto: Level 3417600 Power 314966 Latency 30us Ifreq 3417600 Index 12
+> > > > arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > > arm-scmi arm-scmi.0.auto: Failed to add opps_by_lvl at 3417600 for NCC - ret:-16
+> > > > arm-scmi arm-scmi.0.auto: Level 4012800 Power 528848 Latency 30us Ifreq 4012800 Index 15
+> > > >
+> > > > ^^ exist because SCP reports duplicate values for the highest sustainable
+> > > > freq for perf domains 1 and 2. These are the only freqs that appear as
+> > > > duplicates and will be fixed with a firmware update. FWIW the warnings
+> > > > that we are addressing in this series will also get fixed by a firmware
+> > > > update but they still have to land for devices already out in the wild.
+> > > >
+> > > > V4:
+> > > > * Rework debugfs node creation patch [Ulf/Dmitry]
+> > > > * Reduce report level to dev_info and tag it with FW_BUG [Johan/Dmitry]
+> > > > * Add cc stable and err logs to patch 1 commit message [Johan]
+> > >
+> > > Patch4 and patch5 applied for fixes to my pmdomain tree - and by
+> > > adding a stable tag to them, thanks!
+> > >
+> > > Potentially I could help to take the other patches too, to keep things
+> > > together, but in that case I need confirmation that's okay to do so.
+> >
+> > SCMI patches in these series are all reviewed (all but one even by Sudeep)
+> > so it is really up to Sudeep preference...(who is travelling now so it could
+> > take a bit to reply)
+>
+> I have added my reviewed by now.
+>
+> > ...moreover I am not sure if the SCMI patches in this
+> > series could end up with wome trivial conflicts against the scmi patches
+> > already queued at
+> >
+> >       sudeep/for-next/scmi/updates
+> >
+> > (at least the perf related ones 2 and 3 probably not)
+> >
+>
+> I did a quick check and no conflicts were observed. Let me know if you need
+> a branch with first 3 patches, but I need to do that today or after Sunday
+> as I will away from my computer for few more days again from tomorrow.
+>
+> Let me know ASAP.
+>
+> --
+> Regards,
+> Sudeep
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
- Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+Sorry for the delay. I have picked up the remaining patches from this
+series. All applied for fixes and by adding stable tags to them,
+thanks!
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 7c8c3a97506aa13a843d5e3408b247eae928a55c..0b4a8c8cdbf7d0b4191b1acdd10b9b83f2b09542 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -32,6 +32,7 @@ description: |
-         mdm9615
-         msm8226
-         msm8916
-+        msm8917
-         msm8939
-         msm8953
-         msm8956
-@@ -252,6 +253,11 @@ properties:
-               - yiming,uz801-v3
-           - const: qcom,msm8916
- 
-+      - items:
-+          - enum:
-+              - xiaomi,riva
-+          - const: qcom,msm8917
-+
-       - items:
-           - enum:
-               - motorola,potter
-@@ -1177,6 +1183,7 @@ allOf:
-               - qcom,apq8026
-               - qcom,apq8094
-               - qcom,apq8096
-+              - qcom,msm8917
-               - qcom,msm8939
-               - qcom,msm8953
-               - qcom,msm8956
-
--- 
-2.47.0
-
+Kind regards
+Uffe
 
