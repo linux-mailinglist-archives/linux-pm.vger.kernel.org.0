@@ -1,105 +1,225 @@
-Return-Path: <linux-pm+bounces-17365-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17367-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D7109C4B81
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 02:07:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2154D9C4C58
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 03:16:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60478B22409
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 01:07:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBC43287D1B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 02:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600B21F754C;
-	Tue, 12 Nov 2024 01:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NQrgGs8c";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wZsYcMRK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DEC208984;
+	Tue, 12 Nov 2024 02:14:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49CC5234;
-	Tue, 12 Nov 2024 01:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233C6208971;
+	Tue, 12 Nov 2024 02:14:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731373665; cv=none; b=bS/c3qRLfKRdd85I8rZu+eWwhyTooD8pRwd26PNRHBmRWYL7QyWa2EZDxEBEFRWgAA9YuSJqp1CKJtpPVbTv11ce98j1OWjo8H7Auv0qgdafDdilSgmdzkRwUL1cflBd1K62Wovk2++/Qr8o0wLWNEcwFm4ESVjzSNG83KVr24A=
+	t=1731377678; cv=none; b=S5Rm4TpauD12zl0IdiGKZaGoCAmMM8CBZ6D7Ha7SQmuW9N84GXT1KZvhUQzzmDV2hfmJqHwyow0crxqTqLn6lmG3sN2ejcTDf+mWF8qS5clZYbEmdZeT3acva6FVqPguQ6dopDcrND+ajZbhYta+h1wsWjfAui93wjZyaYC7eHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731373665; c=relaxed/simple;
-	bh=NiT2v4KtxIZJPnmu+e9fr80tgReDlEnejBG+0hbQIRQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VtHT3RHe0xcu8ZV87sOVmXfuP6CZ/PR0ylvsYotlJZ+Vseyph/nKIeK0Wk8C0ffhYesJyWvdrp/Kx1CmXmyVpeMvNxdrBmsJzO3QOS4A4n+mKH8xgrRb/PImwyLUPmJYKNNceQHWYl/lqdAXcPaE3xhy2cHXUPxFK1O907sQIYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NQrgGs8c; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wZsYcMRK; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1731373661;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d5s/m46v24gtVwgvBpriXEpuPGkdMoQKTK4XbSOPcW0=;
-	b=NQrgGs8cbfXP1icrl/Q/tDfZ4FitRa0D40dfkQS46xkpmA8JpxTbKqFUOGxJve0B7CtTaX
-	uMw9rqrv/A3NdUJm9eTMXMaaXRXiO9BDhJbXshSIwSACg5IMFyTqV7yAEKRtv1HJ7EoIS7
-	Sa3vfadfL+Wn4OoYxYkDcfrkIssTyoNO5RwqHMordzHU+HAwHwwenle38s8iWW69PZdKM/
-	pw2Mn52nyRFZTMr58zGCMzi4dg6/v1tRWQtLh4Sqnr56FugYEMXBohLxB9KFAxb8fu37h+
-	/qKEgIH9SjHXWdRssjqsI11zXH40i1Xclbma7ckvqcb9pBwL+CUtZhx7D6RleA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1731373661;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d5s/m46v24gtVwgvBpriXEpuPGkdMoQKTK4XbSOPcW0=;
-	b=wZsYcMRKaH6IYWLT6361xLxBJTLTZi6Yd3Jr63R1BT0K+f10LZUOCMik2bAsGOl5jkpse4
-	amiJtHAq0cX7ZnDw==
-To: Len Brown <lenb@kernel.org>, peterz@infradead.org, x86@kernel.org
-Cc: rafael@kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
- stable@vger.kernel.org
-Subject: Re: [PATCH backport to 6.10] x86/cpu: Add INTEL_FAM6_LUNARLAKE_M to
- X86_BUG_MONITOR
-In-Reply-To: <20241108135206.435793-2-lenb@kernel.org>
-References: <20241108135206.435793-1-lenb@kernel.org>
- <20241108135206.435793-2-lenb@kernel.org>
-Date: Tue, 12 Nov 2024 02:07:27 +0100
-Message-ID: <87h68dnttc.ffs@tglx>
+	s=arc-20240116; t=1731377678; c=relaxed/simple;
+	bh=IDtzZOHG5JBqnfrcxS2T7mLOiushLLE+N5GaCFCFo+U=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HK/GABVFU6AUfhVOJY4bEIv5bRQiJ7HlXZrF6tWE9mTKLXrP9Q8fxKW0MhYQg4uI0ecZ5jwWyMOcGM8p/cRoIwVZzXgy1NvQ3UrpV73ymJQbnmbL7MobroiB2t5vwjMVwA216qUrEoU8FstggUTVi1tukf2HqHSvnu6jQxqJltI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XnVLN1DNwz1jxtv;
+	Tue, 12 Nov 2024 10:12:44 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 45DB7180042;
+	Tue, 12 Nov 2024 10:14:32 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 12 Nov 2024 10:14:32 +0800
+Received: from localhost.localdomain (10.28.79.22) by
+ kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 12 Nov 2024 10:14:31 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<rafael@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <rui.zhang@intel.com>,
+	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>
+Subject: [PATCH] ACPI: thermal: Support for linking devices associated with the thermal zone
+Date: Tue, 12 Nov 2024 10:03:27 +0800
+Message-ID: <20241112020327.17781-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.22.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-On Fri, Nov 08 2024 at 08:49, Len Brown wrote:
-> From: Len Brown <len.brown@intel.com>
->
-> Under some conditions, MONITOR wakeups on Lunar Lake processors
-> can be lost, resulting in significant user-visible delays.
->
-> Add LunarLake to X86_BUG_MONITOR so that wake_up_idle_cpu()
-> always sends an IPI, avoiding this potential delay.
-> Update the X86_BUG_MONITOR workaround to handle
-> the new smp_kick_mwait_play_dead() path.
->
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219364
->
-> Cc: stable@vger.kernel.org # 6.10
-> Signed-off-by: Len Brown <len.brown@intel.com>
-> ---
-> This is a backport of the upstream patch to Linux-6.10 and earlier
+As ACPI spec said, '_TZD' evaluates to a package of device names.
+Each name corresponds to a device in the ACPI namespace that is
+associated with the thermal zone. The temperature reported by the
+thermal zone is roughly correspondent to that of each of the devices.
 
-You either fail to understand or intentionally ignore the process for
-stable backports, which is in place since more than a decade.
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ drivers/acpi/thermal.c | 114 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 113 insertions(+), 1 deletion(-)
 
-Documentation/process/* has plenty of information how that works and
-you're around long enough to know that already.
+diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+index 78db38c7076e..398195a5d42f 100644
+--- a/drivers/acpi/thermal.c
++++ b/drivers/acpi/thermal.c
+@@ -119,6 +119,9 @@ struct acpi_thermal {
+ 	struct work_struct thermal_check_work;
+ 	struct mutex thermal_check_lock;
+ 	refcount_t thermal_check_count;
++	int num_domain_devices;
++	struct acpi_device **domain_devices;
++	struct kobject *holders_dir;
+ };
+ 
+ /* --------------------------------------------------------------------------
+@@ -589,6 +592,103 @@ static const struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+ 	.critical = acpi_thermal_zone_device_critical,
+ };
+ 
++static void acpi_thermal_remove_domain_devices(struct acpi_thermal *tz)
++{
++	int i;
++
++	if (!tz->num_domain_devices)
++		return;
++
++	for (i = 0; i < tz->num_domain_devices; i++) {
++		struct acpi_device *obj = tz->domain_devices[i];
++
++		if (!obj)
++			continue;
++
++		sysfs_remove_link(tz->holders_dir,
++				  kobject_name(&obj->dev.kobj));
++		acpi_dev_put(obj);
++	}
++
++	kfree(tz->domain_devices);
++	kobject_put(tz->holders_dir);
++	tz->num_domain_devices = 0;
++}
++
++static int acpi_thermal_read_domain_devices(struct acpi_thermal *tz)
++{
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *pss;
++	acpi_status status;
++	int ret = 0;
++	int i;
++
++	status = acpi_evaluate_object(tz->device->handle, "_TZD", NULL,
++				      &buffer);
++	if (ACPI_FAILURE(status)) {
++		acpi_evaluation_failure_warn(tz->device->handle, "_TZD",
++					     status);
++		return -ENODEV;
++	}
++
++	pss = buffer.pointer;
++	if (!pss ||
++	    pss->type != ACPI_TYPE_PACKAGE) {
++		dev_err(&tz->device->dev, "Thermal zone invalid _TZD data\n");
++		ret = -EFAULT;
++		goto end;
++	}
++
++	if (!pss->package.count)
++		goto end;
++
++	tz->domain_devices = kcalloc(pss->package.count,
++				     sizeof(struct acpi_device *), GFP_KERNEL);
++	if (!tz->domain_devices) {
++		ret = -ENOMEM;
++		goto end;
++	}
++
++	tz->holders_dir = kobject_create_and_add("measures",
++						 &tz->device->dev.kobj);
++	if (!tz->holders_dir) {
++		ret = -ENOMEM;
++		goto exit_free;
++	}
++
++	tz->num_domain_devices = pss->package.count;
++	for (i = 0; i < pss->package.count; i++) {
++		struct acpi_device *obj;
++		union acpi_object *element = &pss->package.elements[i];
++
++		/* Refuse non-references */
++		if (element->type != ACPI_TYPE_LOCAL_REFERENCE)
++			continue;
++
++		/* Create a symlink to domain objects */
++		obj = acpi_get_acpi_dev(element->reference.handle);
++		tz->domain_devices[i] = obj;
++		if (!obj)
++			continue;
++
++		ret = sysfs_create_link(tz->holders_dir, &obj->dev.kobj,
++					kobject_name(&obj->dev.kobj));
++		if (ret) {
++			acpi_dev_put(obj);
++			tz->domain_devices[i] = NULL;
++		}
++	}
++
++	ret = 0;
++	goto end;
++
++exit_free:
++	kfree(tz->domain_devices);
++end:
++	kfree(buffer.pointer);
++	return ret;
++}
++
+ static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
+ {
+ 	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
+@@ -602,8 +702,19 @@ static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
+ 	ret = sysfs_create_link(&tzdev->kobj,
+ 				   &tz->device->dev.kobj, "device");
+ 	if (ret)
+-		sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
++		goto remove_thermal_zone;
+ 
++	/* _TZD method is optional. */
++	ret = acpi_thermal_read_domain_devices(tz);
++	if (ret != -ENODEV)
++		goto remove_device;
++
++	return 0;
++
++remove_device:
++	sysfs_remove_link(&tz->device->dev.kobj, "device");
++remove_thermal_zone:
++	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+ 	return ret;
+ }
+ 
+@@ -611,6 +722,7 @@ static void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
+ {
+ 	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
+ 
++	acpi_thermal_remove_domain_devices(tz);
+ 	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+ 	sysfs_remove_link(&tzdev->kobj, "device");
+ }
+-- 
+2.22.0
 
-I don't care about you wasting your time, but I very much care about you
-wasting my time to deal with pointless emails. I get plenty enough of
-them every day.
-
-Thanks,
-
-        tglx
 
