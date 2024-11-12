@@ -1,129 +1,132 @@
-Return-Path: <linux-pm+bounces-17377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17378-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 406D99C4E50
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 06:37:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 536329C4EE1
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 07:44:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC8501F25690
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 05:37:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18783289FA3
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 06:44:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E019A209F59;
-	Tue, 12 Nov 2024 05:37:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D52209F38;
+	Tue, 12 Nov 2024 06:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UEIbpSoY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NSlZdqE7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572DC17333A;
-	Tue, 12 Nov 2024 05:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03F3205E37
+	for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 06:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731389854; cv=none; b=eek/O2dt81P9f/38Er19btDRltI4Rba5kqqIej5fYopunT/89cUqCSxR2hvoH4V78VZ0pkJedULRuLuWeH4vbBbH4ahAxFcFJZFvaEE2P1Rt4zVEFnP/XHx18/l4aH1S3EHi0CcrBLdhnV4/UPFBYjEOVj33pWl92XAU1853KbA=
+	t=1731393845; cv=none; b=JKGEHwIcZ7SIDNZRGBBNj9fzVVWJaiBtPZDCi/7lDdmjR0HHb3qwnySuLVzwalzjg4bsYycofl8fobNYGsUO8heBb/ccnteCyrNxS9xCsQHDfJ4gOGU4+HZD24DynDT4kgWYgApVR53F8wdBjY7HGyn/FIHb6Nt9EDbkDSJq61E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731389854; c=relaxed/simple;
-	bh=ysM6JFLp6aMpvJFUum99tSB8lJ7jeaOVFgHxE2jX/QU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O0AFaj4n8K202oPyWaTouxaTQ6P1saXsupL0F3aH2TlP+OnkM07aRZUo0hwHjegYg9Tjboa73YRwZ3MjtSndFL57hRXpm5D0FFuVF5pbCtZ+gJRKEYJXXtcBFsOwVNzhdOYluSSc8Oypw+2dHaYslbFabxNb2luwicH53rfGOdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UEIbpSoY; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6ea07d119b7so41694987b3.0;
-        Mon, 11 Nov 2024 21:37:33 -0800 (PST)
+	s=arc-20240116; t=1731393845; c=relaxed/simple;
+	bh=FY6WFOJXqCfbzedEEbqnXaBCPjvQ/+RzjiOySYoM/Lk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l1rZm7nWOEueC/hNfiKHM8jFTSJeCSkr9IAmme5AaDHPwfo58DaZVYErY47xyGVljWYhgjLSloqL1YzsEnZoJLiiSkLSgCZJid3zkG2C1seFAlTHLD9q1fAdGlibkCAdfYJ29s0eFnO6bp1hANr8wzPAvoSq4wbdw7XapiT5sFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NSlZdqE7; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e5a62031aso4120934b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2024 22:44:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731389852; x=1731994652; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x9+yYob8QqpR929dgX2vkQRsU1UK4Vypk1h9CkIzhzk=;
-        b=UEIbpSoYlKnJX9/MEC/s544rBdwnAMp84ENFwQB5aSLfKUA86ZObJiIzwGR54lavEo
-         qoQ26dLlfztzo+CTgjxJt0oziGHNpPLJpyQBuwrUBme1gzRQxizvi9QBuMk7Qo961gXY
-         +0mHwHIVKkn00/el4+Asf9DeZvMYkiG49iI743qnDtMqktCCJgVOa1rq3CNqbi2vlEdu
-         ICWSjtM5KZxsTEKPQ56txzvJLttcqbTgAohDSRpTQ+fIs8rvU+mBnbEUL6WuG8SWGDTa
-         Buikl0G/14c/uMiystJtVBfot0uPZcrZ1tsrLiWXd++hiDunB7ZpXb10/+QTRkcbL0wy
-         sFOw==
+        d=linaro.org; s=google; t=1731393843; x=1731998643; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JPlc0iWn23rPv1Yelqqb+UADsrKyk5eLdXjS43qvnhE=;
+        b=NSlZdqE7owQlczD41Q00zD6PwMCU+CZ5tWA8IoplXkNgDsmgv3AW7bgXJDhHzPM5iL
+         PgcmtnDRzO+ZrC9uR2jV2BdXJ8KfKkFwAbe+LJkQ5XSPOIG+yX4ACoDproJ/wFr9HDr5
+         ez0EQDg0Tjr9g4TBL0yonNTBUjTygatx0/aeEWtSVsS8VGXrzJy/53XSwUJ2LQespSy4
+         gDyaffp15tE5lgjwbpJIPnUAY/aBRRwI9VduLsCOQMt1vM+/giSWUCn3V2BQzp5b/wRv
+         /+0MPIr3yfsvXSEGAFONLMKEPgBS9woB76ZK35rbfvth1z8qYFN65FTH0QmavhYs3Qm2
+         Uevg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731389852; x=1731994652;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x9+yYob8QqpR929dgX2vkQRsU1UK4Vypk1h9CkIzhzk=;
-        b=oyUztK8E5UU49ju3yDPdAzJlH66Ah++MljwtqBcpw0wRngorH6nMMx24O4wmwFtAI2
-         Y1TTR5cavHHxF5obVF7QQzNnRuakA2AJKwdrUJwZ4fq+kdfvXMlbF3D9Rsn3x7IyFgT0
-         6PP+9ZMYR2kNoMG5r2HP7l4CIBsA+iGT7Kk6iS6ymovW3yai8SKt8qkBdcOcuOxye8pR
-         lMsrCOnNmgLxozJYhhbrL+jH3+7DuG/ajRjIOverheK068QrN4Qw7qUOahhW33SFPos8
-         ovdqUToH5FvdRFMPtADkn7P9SFfBpRUc1enzlK+fZRK7bbZhEA+Bb211BZbxejzJ14Cp
-         8v2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUKC7M72r87sMp1h/lzkhrCd7D5pdEeFuQf3F8nmkmDYCluGIDpnv9vhjUQcRPomyDCtVSeky/o@vger.kernel.org, AJvYcCWplSrzOD+bArHYVnz7z9q7x8TkTmF0o8dJKjzxQg60RoBzdOS8QQR47fKVLw49rPfDLBMN0Lnz1Nh6yf0=@vger.kernel.org, AJvYcCXE/ajLqyeA51OkpZMgZmSEr9tzbAny9/dcKr7+jM11PTo5FbG2C6w4oAKKKpVtl7ns+geBdBnkD9w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlFIcokIyfTRDuwCG8FzzJ1paxu5mm75BQBfV9MnR5f8zRYTDN
-	U01IuHahrkZbuC0zzE2QPR9GPY7g8xoNXXmfljFwoocZYWfb2kP1jgD0BQ==
-X-Google-Smtp-Source: AGHT+IFLEOjAvCtW17xbP1211witMMxzUtg/hnRRA6ebo2VqbzVaJc3+0z043qXyndCZ+lDVUetY6w==
-X-Received: by 2002:a05:690c:6890:b0:6db:de99:28ae with SMTP id 00721157ae682-6eca466791fmr14989897b3.17.1731389852227;
-        Mon, 11 Nov 2024 21:37:32 -0800 (PST)
-Received: from lenb-Thinkpad-T16-Gen-3.mynetworksettings.com ([2600:1006:a022:33ba:a725:c031:83c7:29cf])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6eaceb7b3d5sm23846457b3.119.2024.11.11.21.37.30
+        d=1e100.net; s=20230601; t=1731393843; x=1731998643;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPlc0iWn23rPv1Yelqqb+UADsrKyk5eLdXjS43qvnhE=;
+        b=MmR9+4hWnx9NvM4QF0RtbYAIOh6F7bteJkMaJrOY9HVBU2RzKSGZTioUpfBTyNP1yD
+         i/7J89U4TKDX5KRA0o75pI95S3hIKlqcToJMiApSz3PNvbwEDuLMQzw63CVINSk9LCL/
+         Drf7HVqf59tg7lEI6hewfbb+IzZ7ln6m5sd/oxINqz+l83yt/FV3aDA0MBx26H4vlvne
+         J4CLykL6z1OeYwNYbGz9A3VVRMDl4GzXxn9ZOS8mQKjIflqgl7733pg6jMcOywurc+sK
+         jwsoGJY8+eWUnnQa3OhIBI+kyVXsaqz7OYsw/DExG1DvEQi9OpKqcS6RaBPC/vOb4G2E
+         W/mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5dui/BvDHTiIjN2U8GRIkFL8Sn2Xng5vDFJFKisT52tmSzVCbVPj2PCTtQ8/Dw/pc9xTapvsdVw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywjcli8SPCh8vige2LJDmySViA9yXFjkogb9loOUhVwc2FcYLep
+	JG+nxqYX85uwt2a71IENSxBvYIj0MvyaEHQicnS7NdD1nNHQfPj12pHA0mYb/A==
+X-Google-Smtp-Source: AGHT+IFK7EbTW8j6RbaesACTxS+4wyWWBFBogZmLwWGxzhBM+sg2NEDsPKsDx80UIoPC1dThJW6KHg==
+X-Received: by 2002:a05:6a20:2d1f:b0:1db:e90a:6b24 with SMTP id adf61e73a8af0-1dc22985104mr21818819637.25.1731393843104;
+        Mon, 11 Nov 2024 22:44:03 -0800 (PST)
+Received: from thinkpad ([117.213.103.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7240799bb78sm10282483b3a.95.2024.11.11.22.43.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 21:37:31 -0800 (PST)
-Sender: Len Brown <lenb417@gmail.com>
-From: Len Brown <lenb@kernel.org>
-To: peterz@infradead.org,
-	tglx@linutronix.de,
-	x86@kernel.org
-Cc: rafael@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Len Brown <len.brown@intel.com>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/1] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
-Date: Tue, 12 Nov 2024 00:28:26 -0500
-Message-ID: <351549432f8d766842dec74ccab443077ea0af91.1731389117.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241112053722.356303-1-lenb@kernel.org>
-References: <20241111162316.GH22801@noisy.programming.kicks-ass.net>
- <20241112053722.356303-1-lenb@kernel.org>
+        Mon, 11 Nov 2024 22:44:02 -0800 (PST)
+Date: Tue, 12 Nov 2024 12:13:54 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Shawn Lin <shawn.lin@rock-chips.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] scsi: ufs: rockchip: initial support for UFS
+Message-ID: <20241112064354.g634ca5w2gagfyko@thinkpad>
+References: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+ <1730705521-23081-8-git-send-email-shawn.lin@rock-chips.com>
+ <20241109121249.vncqbacvpnpf6d34@thinkpad>
+ <13ad21bb-9f5a-4a4b-8b65-55243f6fe817@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <13ad21bb-9f5a-4a4b-8b65-55243f6fe817@rock-chips.com>
 
-From: Len Brown <len.brown@intel.com>
+On Mon, Nov 11, 2024 at 09:10:39AM +0800, Shawn Lin wrote:
 
-Under some conditions, MONITOR wakeups on Lunar Lake processors
-can be lost, resulting in significant user-visible delays.
+[...]
 
-Add LunarLake to X86_BUG_MONITOR so that wake_up_idle_cpu()
-always sends an IPI, avoiding this potential delay.
+> > > +static void ufs_rockchip_remove(struct platform_device *pdev)
+> > > +{
+> > > +	struct ufs_hba *hba = platform_get_drvdata(pdev);
+> > > +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> > > +
+> > > +	pm_runtime_forbid(&pdev->dev);
+> > > +	pm_runtime_get_noresume(&pdev->dev);
+> > 
+> > Why do you need these? You are not incrementing the refcount in probe() and
+> > there is no auto PM involved.
+> 
+> Oh, it was a leftover from former version I haven't noticed. Will
+> remove.
+> 
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219364
+I've sent a series [1] that addresses the runtime PM issues. Could you please
+give it a try and give your tested-by maybe?
 
-Cc: stable@vger.kernel.org # 6.11
-Signed-off-by: Len Brown <len.brown@intel.com>
----
- arch/x86/kernel/cpu/intel.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+- Mani
 
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index e7656cbef68d..284cd561499c 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -586,7 +586,9 @@ static void init_intel(struct cpuinfo_x86 *c)
- 	     c->x86_vfm == INTEL_WESTMERE_EX))
- 		set_cpu_bug(c, X86_BUG_CLFLUSH_MONITOR);
- 
--	if (boot_cpu_has(X86_FEATURE_MWAIT) && c->x86_vfm == INTEL_ATOM_GOLDMONT)
-+	if (boot_cpu_has(X86_FEATURE_MWAIT) &&
-+	    (c->x86_vfm == INTEL_ATOM_GOLDMONT
-+	     || c->x86_vfm == INTEL_LUNARLAKE_M))
- 		set_cpu_bug(c, X86_BUG_MONITOR);
- 
- #ifdef CONFIG_X86_64
+[1] https://lore.kernel.org/linux-scsi/20241111-ufs_bug_fix-v1-0-45ad8b62f02e@linaro.org/
+
 -- 
-2.43.0
-
+மணிவண்ணன் சதாசிவம்
 
