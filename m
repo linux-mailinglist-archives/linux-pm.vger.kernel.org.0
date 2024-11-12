@@ -1,159 +1,124 @@
-Return-Path: <linux-pm+bounces-17421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AA009C5B3A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:03:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 652BD9C5B4E
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 16:06:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E99E1F23534
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:03:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24B0C282129
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2024 15:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACDD81FF7A8;
-	Tue, 12 Nov 2024 15:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3B42036F0;
+	Tue, 12 Nov 2024 15:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZzPj0Lo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VcBA/9/Z"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B301FF056;
-	Tue, 12 Nov 2024 15:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C017D2022CF;
+	Tue, 12 Nov 2024 15:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731423633; cv=none; b=lFngVt+MhRMDMV6wnqCN39+Ci/DndWyUd6HusTqcD9oGch0VAAJ9rSPikOqHvL81qh7KOqYisHsINq05jnR+iVYY4lk6NZIM6G+99XLMPS9WRcipX2WuarNajYkqTLLXqu/iQydTw6QAJdA0dNqyH6DK4rtAp0mq9mQcKeTQA94=
+	t=1731423757; cv=none; b=I/rDtiz4JzirVxG4x6VfHLGDbIXyBsh+bJuHLfq8d57vJIpKRHatuT6IMpYWEhpQ48lEzO44pxlSeyx1GWyXKwlnqnIExmzFgmztUuo55Dic8MvRbCXacv5GcL0ITUqbB3H0G22Iv0k7k60EJhm/YKhPYS4pKy+2TVe/MdXCDg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731423633; c=relaxed/simple;
-	bh=p116ZlWcJSC5OBPJgPS9UqyA/VfRXQ1FZ2hqv5Zijjg=;
+	s=arc-20240116; t=1731423757; c=relaxed/simple;
+	bh=Lth/cTu415pGV1tveL1POnX0SqNeYIVlgE4dGG9C+Xk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AgwmS5oCxuDTQf6/eFCbi5O7Xm7xVmJkR9jM84OYBLAwPgVJ7sfpbgNJ8ov6sHCBrxjOxmJKwoXqpTJt/xFkxQouogpM0gIi7IDNev8cv8I/1l82P2QMWx+MnFgV1iqAj9fmvwknrRFefxUUCRdSAKGT4qUlP9Q/r1Uw8dlNLmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZzPj0Lo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5FFC4CED0;
-	Tue, 12 Nov 2024 15:00:33 +0000 (UTC)
+	 To:Cc:Content-Type; b=NJQKht+52QZ0zglHeqJspVf/9HvOL2l00j5hoyThz8RoPjFfOSXHZxdzJAC9ehFJdSPL1GvSW8KfC4PzHZGCALcUj5msmgvmxSQTH7twE2bc5ohShfMb3DIHuaZ86xA+D/Ywv56SBmFch21HemTvFFPiW2HuxZjT8niyO7xkvB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VcBA/9/Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47848C4CED0;
+	Tue, 12 Nov 2024 15:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731423633;
-	bh=p116ZlWcJSC5OBPJgPS9UqyA/VfRXQ1FZ2hqv5Zijjg=;
+	s=k20201202; t=1731423757;
+	bh=Lth/cTu415pGV1tveL1POnX0SqNeYIVlgE4dGG9C+Xk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UZzPj0LosGFBGATy/AEsLHE97zJ+8eMiIhBd0apa3Nk0BNbSPO5OTDjHz/k8Ri0fw
-	 iCcEwPxjmHeD5ZgfCW2zHPZhSYEyCx3cUQovJfLElNSgV1xUZxEzTvsDMjqwAewCy9
-	 18MpzjmY7A5V0DtOWML20xHDH9va2GLbnH+kHM5N6t2MyS+mgjx07/HzSMz4AV+3dB
-	 XF71WkLvnm5qHwSAuKBXV1yyg6DfVAN+ak54MnbPOCVWOEyWCSm3ujBTFZ3rJsNVcV
-	 be8vyjiVRQfJDzVnRxbhVgYLuPgHP3GW8jdr/d7J78eeDJal8nvkObdM+gcFkvyYPd
-	 7HAPHKbWR/xPw==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-29538198f2fso2851645fac.1;
-        Tue, 12 Nov 2024 07:00:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU0EL4C+NQnxjV74LrWoBaCbp6zth8Rihdhm10RL5HEcM1NGOV/uaUULfoGS9igmLQRbHLGr09DHfw=@vger.kernel.org, AJvYcCVjbSMdg0J70dmIoVTggYNgW4cfN0/bddGDThJ4O4bk3ErhC+MAt8AFv05yV5RQ2QEvZvpIHnnwtOIMyBY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYXD7nZ29CesasctRSUVZwm5doPWiVPaiNG+UBKecATvfFyX6W
-	+7lKHVq8VrMmmYjBssMrXHzggjHBelUkagXDOozscDj5MhHlN5I2TNgkkJWlmX5xE7cpF+Y1UoN
-	BNbGKEotpWTHOgRWALYvZFp8S1S0=
-X-Google-Smtp-Source: AGHT+IFI9GNg7IPdb2tePq/0unuINTg3s7VcqoQ9tRcOl9CoW/yGaLJ9bgvFxb+V6AJAIqz7HyZNKKpxsm54qwn9ze4=
-X-Received: by 2002:a05:6870:46a3:b0:26f:f1ea:6a71 with SMTP id
- 586e51a60fabf-295600992d4mr13179732fac.7.1731423632299; Tue, 12 Nov 2024
- 07:00:32 -0800 (PST)
+	b=VcBA/9/ZqfcGz9Ge8aq4Bd/tYrjbF+wn+r6SeUOWV9EDPFzGUbtCfztfOSZ1KMR00
+	 9wkPBdseEZiZDwtXKXCgLznBA96dFragazszzIBI+xbRq7HO0l3xw2pzKbgi5oUt1S
+	 6g7eLI6N5+R2xgmG6b7b+CxQ/lASya6kzI5HdFf3upwlpbYmCmGNhJegzfR0foD/y3
+	 bUOgb45b6iKqd5cbuKd9uEVUX77UnJr2ycVtNYB3kcp8l80ndw2tZ2NbvL7oXBr8vz
+	 YL/VGS7gJolG6HWrtck6+xClW6lKZh9zwCa8LaxvfxYZdkHIXyWbWvU7/7iYQ05ww7
+	 dIGX84Z5wcQ7A==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-288916b7fceso2870314fac.3;
+        Tue, 12 Nov 2024 07:02:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW7EdTfsVYgc4rtPFVnZhAhEMFj9Cw7K3k2LrCDx8UEPnkOSwmzoISaSGCAs8SQ1bqRo5bBWTuDugk=@vger.kernel.org, AJvYcCXgPY0fKK3rwX329yIMZmcOFS3S8e5GhXQ5vt9mibo76YZojpqevhpCeYLydsi338XGporjofq9NgACvmc=@vger.kernel.org, AJvYcCXqZCf2h8fUGFNZmaJIAiU35xjXW0VjZFgDTdNMtSUIck3RyRjJfCBzHwi6UX2qRx0gHVzH5MYv@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOZbQfvU20iaSm9sr96uRmY69pJmDh/b+JkCl1jxOUF803ZPq3
+	lvYbprExBZJRiYZ4wFN1lLBog1l720s5kHN9Ed+08RosMjC8h6FgwnaOx5FUw7C7SSGqtjkp+2g
+	hAxgLRvuIZicEexrVgwELGCTuRPA=
+X-Google-Smtp-Source: AGHT+IHpU8jj1gpJ3DpcjYHyo31Jfoe6bE1bjo7IXcIK5UkPqz+c4dbdqI8jvCFUwQQTlYVcet9pjMtpHQ29sT1Lf8c=
+X-Received: by 2002:a05:6871:3a0e:b0:277:f14c:844b with SMTP id
+ 586e51a60fabf-2956032f0c4mr14089377fac.37.1731423756617; Tue, 12 Nov 2024
+ 07:02:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
- <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com> <20241112114743.GQ22801@noisy.programming.kicks-ass.net>
- <CAJZ5v0hJ8NoFgjtnYce99+qjCZc3_ihBojyK1gRrcyU5Fp6inw@mail.gmail.com> <20241112145618.GR22801@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241112145618.GR22801@noisy.programming.kicks-ass.net>
+References: <20241111162316.GH22801@noisy.programming.kicks-ass.net>
+ <20241112053722.356303-1-lenb@kernel.org> <351549432f8d766842dec74ccab443077ea0af91.1731389117.git.len.brown@intel.com>
+ <CAJZ5v0j1gvwoYS-YaOQWh0bQ3x5=54npiYj8erq68dM92+ad-g@mail.gmail.com>
+ <CAJvTdKnRpDQKUVNJ4Gp7r+WaHo0y-Wume3ay7toHU+Xz0gv2Zw@mail.gmail.com>
+ <CAJZ5v0g74GWomsfV9ko5pVrwx+x6smU7u7oHV=ZYDLTKYxMWsw@mail.gmail.com> <CAJvTdK=SnRqwjR5fUatP0CzaXD_CpZ-1cc+2yX0D8_XM_3oJUw@mail.gmail.com>
+In-Reply-To: <CAJvTdK=SnRqwjR5fUatP0CzaXD_CpZ-1cc+2yX0D8_XM_3oJUw@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Nov 2024 16:00:21 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ihEvOuUWoN++5qYx=KqrRnm4np7_j6hDd=aFnHkkFYZg@mail.gmail.com>
-Message-ID: <CAJZ5v0ihEvOuUWoN++5qYx=KqrRnm4np7_j6hDd=aFnHkkFYZg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] x86/smp native_play_dead: Prefer
- cpuidle_play_dead() over mwait_play_dead()
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	rafael.j.wysocki@intel.com, len.brown@intel.com, 
-	artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com, 
-	gautham.shenoy@amd.com
+Date: Tue, 12 Nov 2024 16:02:25 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hm8LenFyQBrORmreGWh+4dWoJeCLRngJOZSq3UVhnNOQ@mail.gmail.com>
+Message-ID: <CAJZ5v0hm8LenFyQBrORmreGWh+4dWoJeCLRngJOZSq3UVhnNOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
+To: Len Brown <lenb@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, peterz@infradead.org, tglx@linutronix.de, 
+	x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Len Brown <len.brown@intel.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 12, 2024 at 3:56=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
+On Tue, Nov 12, 2024 at 3:02=E2=80=AFPM Len Brown <lenb@kernel.org> wrote:
 >
-> On Tue, Nov 12, 2024 at 02:23:14PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Nov 12, 2024 at 12:47=E2=80=AFPM Peter Zijlstra <peterz@infrade=
-ad.org> wrote:
+> On Tue, Nov 12, 2024 at 8:14=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >
+> > On Tue, Nov 12, 2024 at 2:12=E2=80=AFPM Len Brown <lenb@kernel.org> wro=
+te:
 > > >
-> > > On Fri, Nov 08, 2024 at 01:29:08PM +0100, Patryk Wlazlyn wrote:
-> > > > The generic implementation, based on cpuid leaf 0x5, for looking up=
- the
-> > > > mwait hint for the deepest cstate, depends on them to be continuous=
- in
-> > > > range [0, NUM_SUBSTATES-1]. While that is correct on most Intel x86
-> > > > platforms, it is not architectural and may not result in reaching t=
-he
-> > > > most optimized idle state on some of them.
-> > > >
-> > > > Prefer cpuidle_play_dead() over the generic mwait_play_dead() loop =
-and
-> > > > fallback to the later in case of missing enter_dead() handler.
-> > > >
-> > > > Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-> > > > ---
-> > > >  arch/x86/kernel/smpboot.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> > > > index 44c40781bad6..721bb931181c 100644
-> > > > --- a/arch/x86/kernel/smpboot.c
-> > > > +++ b/arch/x86/kernel/smpboot.c
-> > > > @@ -1416,9 +1416,9 @@ void native_play_dead(void)
-> > > >       play_dead_common();
-> > > >       tboot_shutdown(TB_SHUTDOWN_WFS);
-> > > >
-> > > > -     mwait_play_dead();
-> > > >       if (cpuidle_play_dead())
-> > > > -             hlt_play_dead();
-> > > > +             mwait_play_dead();
-> > > > +     hlt_play_dead();
-> > > >  }
+> > > On Tue, Nov 12, 2024 at 6:44=E2=80=AFAM Rafael J. Wysocki <rafael@ker=
+nel.org> wrote:
 > > >
-> > > Yeah, I don't think so. we don't want to accidentally hit
-> > > acpi_idle_play_dead().
+> > > > > -       if (boot_cpu_has(X86_FEATURE_MWAIT) && c->x86_vfm =3D=3D =
+INTEL_ATOM_GOLDMONT)
+> > > > > +       if (boot_cpu_has(X86_FEATURE_MWAIT) &&
+> > > > > +           (c->x86_vfm =3D=3D INTEL_ATOM_GOLDMONT
+> > > > > +            || c->x86_vfm =3D=3D INTEL_LUNARLAKE_M))
+> > > >
+> > > > I would put the || at the end of the previous line, that is
+> > >
+> > >
+> > > It isn't my personal preference for human readability either,
+> > > but this is what scripts/Lindent does...
 > >
-> > Having inspected the code once again, I'm not sure what your concern is=
-.
-> >
-> > :enter.dead() is set to acpi_idle_play_dead() for all states in ACPI
-> > idle - see acpi_processor_setup_cstates() and the role of the type
-> > check is to filter out bogus table entries (the "type" must be 1, 2,
-> > or 3 as per the spec).
-> >
-> > Then cpuidle_play_dead() calls drv->states[i].enter_dead() for the
-> > deepest state where it is set and if this is FFH,
-> > acpi_idle_play_dead() will return an error.  So after the change, the
-> > code above will fall back to mwait_play_dead() then.
-> >
-> > Or am I missing anything?
+> > Well, it doesn't match the coding style of the first line ...
 >
-> So it relies on there being a C2/C3 state enumerated and that being FFh.
-> Otherwise it will find a 'working' state and we're up a creek.
+> Fair observation.
 >
-> Typically I expect C2/C3 FFh states will be there on Intel stuff, but it
-> seems awefully random to rely on this hole. AMD might unwittinly change
-> the ACPI driver (they're the main user) and then we'd be up a creek.
+> I'll bite.
 >
-> Robustly we'd teach the ACPI driver about FFh and set enter_dead on
-> every state -- but we'd have to double check that with AMD.
+> If you took the existing intel.c and added it as a patch to the kernel,
+> the resulting checkpatch would have 6 errors and 33 warnings.
 >
-> At the same time, intel_idle should then also set enter_dead on all
-> states.
+> If you ran Lindent on the existing intel.c, the resulting diff would be
+> 408 lines --  1 file changed, 232 insertions(+), 176 deletions(-)
 >
-> And then the mwait case is only ever reached if CPUIDLE=3Dn.
+> This for a file that is only 1300 lines long.
+>
+> If whitespace nirvana is the goal, tools are the answer, not the valuable
+> cycles of human reviewers.
 
-So that's why I would prefer intel_idle, if configured, to give
-mwait_play_dead() a hint on the MWAIT hint to use.  Otherwise the
-latter would just fall back to the current method.
+Well, the advice always given is to follow the coding style of the
+given fine in the first place.
 
-This would not be bullet-proof, but it would take the opportunity to
-work better if it could.
+checkpatch reflects the preferences of its author is this particular
+respect and maintainers' preferences tend to differ from one to
+another.
 
