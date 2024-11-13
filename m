@@ -1,151 +1,256 @@
-Return-Path: <linux-pm+bounces-17516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50DDB9C7B49
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 19:35:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A04F09C7B5A
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 19:39:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0298E1F23A07
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 18:35:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60E0A2817E0
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 18:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6BE15ADA4;
-	Wed, 13 Nov 2024 18:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40B1B20125C;
+	Wed, 13 Nov 2024 18:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XaE8uu4D"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="beBquw/T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7881FAC53
-	for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2024 18:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7076E13B298
+	for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2024 18:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731522949; cv=none; b=tRNjQtTu9QCsHRK90i1jKwt2Mj7ywo/r1W8MInu5hDF4MYuhBwrI1U7lIzI5N40x50ULQdRIoN/xhZfs6tv8OrQbPs2jHVPOTVrv8k3pqsQVvN+aZOpkl6kHja9GCGviof9GeHHO3JK5FW8/eEmWfFUB53GWZyOneeqfm5jtNjk=
+	t=1731523158; cv=none; b=aJwYXpnPkOVD7kbmRXVbt3BOpXhcoaofiU+LRuCqQ5KnUuvDUnUGuR5AmGuabY9k/9V9uf6G1m2oN5eR1Ra3DYPTCXcLW7TOwtZUgoAUAG8Yz61AlsZrU3vHEOk/Z5027AG2GdBe/HbOYjh1YqqSZRR/MfDkpDvcM8ab203JYAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731522949; c=relaxed/simple;
-	bh=2ieX/nf5103zj+IxTmmYyPq/rZR5A9Dpq/DDcyvJPc4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=niwu4aYYdU8/RtqQciHZH4TJK06BslnnvjWKIlmZLHlE84Hbkf2aJ7LW58qX4CE1UvBHCeImFrvSx9Mvglg5wICD3KQNosMz3FVvadGOwNCaIDEZP+hGYgfapbnT+OqZ3Mba9hkYQjztQEBLtZ7PJjAjvgzPccMzZ5DHFZECbLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XaE8uu4D; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6cc1b20ce54so49539286d6.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2024 10:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731522946; x=1732127746; darn=vger.kernel.org;
-        h=content-transfer-encoding:organization:reply-to:mime-version
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tFfHfLPOeTgGZOrSgEI1FNXgVOvvg8WE6m0X/mw8zps=;
-        b=XaE8uu4DwFsr0Zjd3ahLIba1YBg8I2BhRFciJZsh4ttblYlThdoK/DuiHyOuCVnd9D
-         bd+fVRlb7zYB6gKemTGPIHKBDp+3jzg0oyyE9zDJV05cRpa6HP+QYRFJ47hxc/We5VJz
-         lpValy/ftOpmgnKlxFIh4gEgWghyOo8Cn87k+ojkBd0N1IOIW0ZI22VBKh23J3fbswFm
-         JuW5URuxcJa/zuvKUQuGIP27bBjRU9bd7C0rsrG2dVLra97wrpC3X8QAOZ9V43qhy8ys
-         TShBZCaxu4dOD1BwH0+oyZpmRZ51eR5HYW31AAlcUPksFpJ4bqZ1fieqbg9j5r19wYTH
-         e4qg==
+	s=arc-20240116; t=1731523158; c=relaxed/simple;
+	bh=jjuVdWU7zSVeYxbOflUlo5CQAJpwgAMude4YJp+CV+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fNrmLKyYRXLhOus5Xn3g5RFQl/td2oBOGHFdStKZc5mFdSgOrVSP/rL9b2/UZc8jgRNF86aso91c7JC/cywz25lAtBKU1mZYyI+I6O3nuYbPW2GpvITwnZZz6cUhxsjvU86l+nbZzBipRp9oge1lilYc1IQ/sad27nIfUOopogY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=beBquw/T; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1731523154;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mcbkjwECU8Y7+6lafe9yZ7pyaau+st73Hne50Zv2aPo=;
+	b=beBquw/TyDUyaihWyBlE4QrbF+8hL+YCUtsnGXky+Xft3cB0BfyTClXeUf7aLo+YjjFCHN
+	91dRWBN//0iHUvTMoFBf1Shg6nqwy9NjSEZVv9+OeHUsxQT+6k6YgXttvqUW6bMqKcvKat
+	zZA2UrM69oHHfMZ9iEUmUFZzy5zYF6w=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-VAuD4J9BPx2LcQEy3FROig-1; Wed, 13 Nov 2024 13:39:13 -0500
+X-MC-Unique: VAuD4J9BPx2LcQEy3FROig-1
+X-Mimecast-MFC-AGG-ID: VAuD4J9BPx2LcQEy3FROig
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a9e0574854dso257138566b.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2024 10:39:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731522946; x=1732127746;
-        h=content-transfer-encoding:organization:reply-to:mime-version
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tFfHfLPOeTgGZOrSgEI1FNXgVOvvg8WE6m0X/mw8zps=;
-        b=Ud/td55m3RE6PH7D7C+O0GNZU5YGJp9OMUqG5nF0fCjsWVev0lSB1qHoxS8SpE6yR4
-         F1VBxUhRSk7FiEZuEU0fuHhDzoLFG66u7WcTeCH7uO8K6LrxF35vEZVOhUrlKyzpRKA0
-         XZ2vI069dEe+cTmcpMtFbvjYPAKwtYzLXasCTUNMZVx1uBcu698Jtanxe3vJZrCzhhaq
-         epgYtm6yNrUWVGi4W3apdoWaU2h6r+LAXsXEgdR6xrThoLoY3FbWE6B4MWcx2uxrYxe8
-         MwpMgv4/GIKWo0oQipcvjMS+f8FUUzcy4tTRqnuD7GNnH6mnJONN947sBnXeBOOajQYs
-         nHpg==
-X-Gm-Message-State: AOJu0YyvsUOEanPGXoRTsUG+MhEw+XWDW5xvptgaMldn73hyw5hGoihe
-	NE2cEsAenQSvI318jqHHrdLqW0KK25nCXmaFwEnKFhycl39kpbHgD6tW+w==
-X-Google-Smtp-Source: AGHT+IGQFlqMXOZ4PMWWCKXZND5Fk9YOFog1kwTincfvgADakYxvGNiYPe2jRyptv+fMOXaSreqtZg==
-X-Received: by 2002:a05:6214:310e:b0:6d1:85a7:3cc0 with SMTP id 6a1803df08f44-6d39e112815mr309429166d6.12.1731522946296;
-        Wed, 13 Nov 2024 10:35:46 -0800 (PST)
-Received: from lenb-Thinkpad-T16-Gen-3.mynetworksettings.com ([2600:1006:a022:33ba:f867:9203:71bc:12b5])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3961df8edsm87888126d6.8.2024.11.13.10.35.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 10:35:45 -0800 (PST)
-Sender: Len Brown <lenb417@gmail.com>
-From: Len Brown <lenb@kernel.org>
-To: rafael@kernel.org
-Cc: linux-pm@vger.kernel.org
-Subject: [RFC/RFT PATCH] PM: sleep: Ignore device driver suspend() callback return values
-Date: Wed, 13 Nov 2024 13:35:35 -0500
-Message-ID: <7e3092234617e8479d3020e5fed7ff47ac750014.1731522552.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1731523152; x=1732127952;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcbkjwECU8Y7+6lafe9yZ7pyaau+st73Hne50Zv2aPo=;
+        b=PwgHchJ8JOqPFf+8Cc9y60lYTlMpovM+vzE2xVNuEs1sTFJ9CgzN7YHjlPQnhw35H1
+         RHl7TBC+WeNO64wHC03KOo/bP2894ruOEZleHzNEHOZsPo8iyRlYg8EeXAbRQpph3th6
+         dmRCYuAL+UPjjzW9bm0tYBUqX86WdwZTl1B8ok3rEjV14wewocIwSc4j6OHCcZ7421/9
+         hZ51xKN434A9nQyJcLlbq79k7uBj0II4glm9bW1tUAqZude0Idv4kiaWcv6l5Tjb3zz+
+         A+TOM0OKnaqoVqnTKzRIqjHd/OU53XSgKvUJSoQKw7eIZgh5zsPfPxkI9aSrd1eXRSYW
+         ciFg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqcyfLe7O9mKjDtyu18aF+16mYSuGmbnrDxmxijUsnEtzpcpSURohBrnwJdd3703LeSYDK8WUbww==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4zUyrKAO7eNaCE7DRA0Qt1JXSSEXGogjTWj0/d1lRh6tq8LNC
+	f6ypiZkKZJD093+rfim0emJunwlsZnI9mVpEkm16T/+2zfj15aaks7z8iV66jJPz05nQKSrkVOW
+	ErEXNCZlFlfAOBkZ4K00Jn2u4Idi3+vgNzwX2Do9SsElRAl/VMA837Le4Qocg8ziI
+X-Received: by 2002:a17:907:3e8e:b0:a99:f6ee:1ee3 with SMTP id a640c23a62f3a-aa1f8106245mr365405966b.43.1731523151662;
+        Wed, 13 Nov 2024 10:39:11 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEUVqwY6xWiWiUm7kVlrB9M1MSKlS/Lxxyf3kAHg+T0yi0Jz5WlRcSbeJOz0PbOdM7PimsReQ==
+X-Received: by 2002:a17:907:3e8e:b0:a99:f6ee:1ee3 with SMTP id a640c23a62f3a-aa1f8106245mr365404466b.43.1731523151268;
+        Wed, 13 Nov 2024 10:39:11 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a17684sm905969266b.34.2024.11.13.10.39.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Nov 2024 10:39:10 -0800 (PST)
+Message-ID: <8d666b0a-a33e-4ee2-9f7f-fbb0a5ffc365@redhat.com>
+Date: Wed, 13 Nov 2024 19:39:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] platform/x86: x86-android-tablets: Add Vexia EDU ATLA
+ 10 EC battery driver
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20241104203555.61104-1-hdegoede@redhat.com>
+ <20241104203555.61104-2-hdegoede@redhat.com>
+ <CAHp75Vdkwg4pUs=k-GNv9wxuecVpMromh_F49bbfhYL7sxjwDg@mail.gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75Vdkwg4pUs=k-GNv9wxuecVpMromh_F49bbfhYL7sxjwDg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Len Brown <len.brown@intel.com>
+Hi Andy,
 
-Drivers commonly return non-zero values from their suspend()
-callbacks due to transient errors, not realizing that doing so
-aborts system-wide suspend.
+On 5-Nov-24 11:39 AM, Andy Shevchenko wrote:
+> On Mon, Nov 4, 2024 at 10:36 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> The Vexia EDU ATLA 10 tablet has an embedded controller instead of
+>> giving the os direct access to the charger + fuel-gauge ICs as is normal
+>> on tablets designed for Android.
+>>
+>> There is ACPI Battery device in the DSDT using the EC which should work
+>> expect that it expects the I2C controller to be enumerated as an ACPI
+> 
+> expect --> except
+> 
+>> device and the tablet's BIOS enumerates all LPSS devices as PCI devices
+>> (and changing the LPSS BIOS settings from PCI -> ACPI does not work).
+>>
+>> Add a power_supply class driver for the Atla 10 EC to expert battery info
+>> to userspace. This is made part of the x86-android-tablets directory and
+>> Kconfig option because the i2c_client it binds to is instantiated by
+>> the x86-android-tablets kmod.
+> 
+> Reviewed-by: Andy Shevchenko <andy@kernel.org>
 
-Ignore those return values.
+Thank you for the reviews for both patches. I'll try to prepare a v2
+series addressing the small remarks you had tomorrow.
 
-Both before and after this patch, the correct method for a
-device driver to abort system-wide suspend is to invoke
-pm_system_wakeup() during the suspend flow.
+Regards,
 
-Legacy behaviour can be restored by adding this line to your .config:
-CONFIG_PM_SLEEP_LEGACY_CALLBACK_ABORT=y
+Hans
 
-Signed-off-by: Len Brown <len.brown@intel.com>
----
- drivers/base/power/main.c |  4 ++++
- kernel/power/Kconfig      | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 4a67e83300e1..56b7c9c752b4 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1678,7 +1678,11 @@ static int device_suspend(struct device *dev, pm_message_t state, bool async)
- 		callback = pm_op(dev->driver->pm, state);
- 	}
- 
-+#if CONFIG_PM_SLEEP_LEGACY_CALLBACK_ABORT
- 	error = dpm_run_callback(callback, dev, state, info);
-+#else
-+	dpm_run_callback(callback, dev, state, info);
-+#endif
- 
-  End:
- 	if (!error) {
-diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index afce8130d8b9..51b5d6c9bf1a 100644
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -141,6 +141,20 @@ config PM_SLEEP
- 	depends on SUSPEND || HIBERNATE_CALLBACKS
- 	select PM
- 
-+config PM_SLEEP_LEGACY_CALLBACK_ABORT
-+	def_bool n
-+	depends on PM_SLEEP
-+	help
-+	This option enables the legacy API for device .suspend() callbacks.
-+	That API empowered any driver to abort system-wide suspend
-+	by returning any non-zero value from its .suspend() callback.
-+	In practice, these aborts are almost always spurious and unwanted.
-+
-+	Disabling this option (default) ignores .suspend() callback return values.
-+
-+	In both cases, any driver can abort system wide suspend by invoking
-+	pm_system_wakeup() during the suspend flow.
-+
- config PM_SLEEP_SMP
- 	def_bool y
- 	depends on SMP
--- 
-2.43.0
+
+
+> 
+> ...
+> 
+>>  obj-$(CONFIG_X86_ANDROID_TABLETS) += x86-android-tablets.o
+>> +obj-$(CONFIG_X86_ANDROID_TABLETS) += vexia_atla10_ec.o
+> 
+> This splits the original (compound) object lines, please move it
+> either before (and this seems even better with ordering by name in
+> mind) or after this block.
+>>
+> 
+> Actually this blank line gives the false impression that the
+> originally two lines are not related. I would drop this blank line as
+> well.
+> 
+>>  x86-android-tablets-y := core.o dmi.o shared-psy-info.o \
+>>                          asus.o lenovo.o other.o
+> 
+> ...
+> 
+>> +#include <linux/bits.h>
+>> +#include <linux/devm-helpers.h>
+> 
+> + err.h
+> 
+>> +#include <linux/i2c.h>
+>> +#include <linux/module.h>
+>> +#include <linux/power_supply.h>
+>> +#include <linux/types.h>
+>> +#include <linux/workqueue.h>
+>> +
+>> +#include <asm/byteorder.h>
+> 
+> ...
+> 
+>> +/* From broken ACPI battery device in DSDT */
+>> +#define ATLA10_EC_VOLTAGE_MIN_DESIGN           3750000
+> 
+> _uV ?
+> 
+> ...
+> 
+>> +struct atla10_ec_battery_state {
+>> +       u8 len;                         /* Struct length excluding the len field, always 12 */
+>> +       u8 status;                      /* Using ACPI Battery spec status bits */
+>> +       u8 capacity;                    /* Percent */
+>> +       __le16 charge_now;              /* mAh */
+>> +       __le16 voltage_now;             /* mV */
+>> +       __le16 current_now;             /* mA */
+>> +       __le16 charge_full;             /* mAh */
+>> +       __le16 temp;                    /* centi degrees celcius */
+> 
+> Celsius / celsius
+> 
+>> +} __packed;
+>> +
+>> +struct atla10_ec_battery_info {
+>> +       u8 len;                         /* Struct length excluding the len field, always 6 */
+>> +       __le16 charge_full_design;      /* mAh */
+>> +       __le16 voltage_now;             /* mV, should be design voltage, but is not ? */
+>> +       __le16 charge_full_design2;     /* mAh */
+>> +} __packed;
+> 
+> Instead I would add the respective units to the variable names:
+> _mAh
+> _mV
+> ...etc.
+> 
+> (* yes, with the capital letters to follow the proper spelling)
+> 
+> ...
+> 
+>> +static int atla10_ec_cmd(struct atla10_ec_data *data, u8 cmd, u8 len, u8 *values)
+>> +{
+>> +       struct device *dev = &data->client->dev;
+>> +       int ret;
+>> +
+>> +       ret = i2c_smbus_read_i2c_block_data(data->client, cmd, len, values);
+>> +       if (ret != len) {
+>> +               dev_err(dev, "I2C command 0x%02x error: %d\n", cmd, ret);
+>> +               return -EIO;
+>> +       }
+> 
+>> +       if (values[0] != (len - 1)) {
+> 
+> Hmm... AFAIU this is part of SMBus protocol. Why do we need to care
+> about this? Or is this an additional header on top of that?
+> 
+>> +               dev_err(dev, "I2C command 0x%02x header length mismatch expected %u got %u\n",
+>> +                       cmd, len - 1, values[0]);
+>> +               return -EIO;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+> 
+> ...
+> 
+>> +               val->intval = min(charge_now, charge_full) * 1000;
+> 
+> MILLI (here and below)?
+> 
+>> +               break;
+>> +       case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+>> +               val->intval = le16_to_cpu(data->state.voltage_now) * 1000;
+>> +               break;
+>> +       case POWER_SUPPLY_PROP_CURRENT_NOW:
+>> +               val->intval = le16_to_cpu(data->state.current_now) * 1000;
+>> +               /*
+>> +                * Documentation/ABI/testing/sysfs-class-power specifies
+>> +                * negative current for discharing.
+> 
+> discharging
+> 
+>> +                */
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
+> 
 
 
