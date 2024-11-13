@@ -1,127 +1,141 @@
-Return-Path: <linux-pm+bounces-17466-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 568919C6713
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 03:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB4C9C683B
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 05:51:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DF6B281FAF
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 02:07:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BA7E2851BC
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 04:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DA7F70812;
-	Wed, 13 Nov 2024 02:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4702C15A858;
+	Wed, 13 Nov 2024 04:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DHS637jb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PGfu7bkX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2641C2FB;
-	Wed, 13 Nov 2024 02:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068BE17C
+	for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2024 04:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731463654; cv=none; b=Nj0ABbiAaKt7/gBVCZJVdQT/BAZ077lLAHEsmwWozDZXzgg7CkvHVDBTJFFsOBGs0+FvD0bGDwHeUKELzJWGwHX8/+swuTzzNsz3ZF1s5/t3NzxobRORf+sliV+di7r6MNmfogJ57S4SNcmZa9nbzSS+LY1JRLz3yIdPRcwJm/A=
+	t=1731473490; cv=none; b=cJr6VTvUxqMXkYimTqATCmPRlPjjDwXEoXVnoor6s8bC4jdmDrZtEYpItPBzzBqYBxkWEHTf3Y2W+Za00AGMXviw96VjGP+AWdwH2qjd+vp4qFS94gdtFZwDFZPcPwmB9Y1uTkrjClrEBETKCocpXFCvVyxBUWqWZx/HzYiguEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731463654; c=relaxed/simple;
-	bh=fBIDU+D9Nxyj4+oC2LH8Lvc0U3Wc+c5p99wk9ExNJ7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a4EN0y4bdMr7vV6Qf9MxJTA0mtRKNZs3VeqoRyL2TG3M04gI3UxJTa/8OXbysc9s54ST3UASH7UhparmSrRzTj+KrDTvOc1/GaGV9tw65uc0nHoAABlO/bLbHhoB0ZfAD3g+Ta283V5SJ8dpQ7ChkckqaNh2yzr2TThoU+nH6MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DHS637jb; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6cbe68f787dso41181946d6.2;
-        Tue, 12 Nov 2024 18:07:32 -0800 (PST)
+	s=arc-20240116; t=1731473490; c=relaxed/simple;
+	bh=l0c4oi/lRVU0xacNIBmUnJ8MqVpO06c6BsKZLfNXWao=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AliUnOfdnw8pS7dVqo/R9XVq385HyHSeu6emeCnxjzAZBAA3RoRYBZJG1n0kDJYC+wkGZQiuHSDVo7UFruX6RKBhURGt7ZuY98JToRFQKSy0ORuf3qR4ZNY0H2GpPkNrU8/w/C/Rd/zdbac5YIXI39wUJaaJyFArpMssSGczXko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PGfu7bkX; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c9404c0d50so7668565a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 20:51:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731463652; x=1732068452; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=WYP6Z7D+0l/1IgcWk70OwbLKb3OwbsoyZjfuToeA0wI=;
-        b=DHS637jb9mkFEpImsh3JDuRTnmgcsSA/Ks30CAXXz8TUKVuaLuSxkYK/z8BncT+nkX
-         rm/LLHP1QoMY8yLgasq6DOmxZOC9UBWlWOeUttK+OrpVJTH3jE5e/+yd/YbZo4BZcdfH
-         jEUhMZyqB9LEyGZh/dhQ8QhUScpj97inOVOjDZEsGrp5/2mpZeeoRfJuOZnR0ziDMUsO
-         tHOlK07zmpWVOaVnWwlQp3UkhK0pn8P2y1wpzqap1asyQSWt37P8+kJqKdo3KIIyCGyA
-         Zn0Y/QcIcM1HIoItjJ15+jr1iqfQv/P96x7X46xvGy8akW3fVt/p8tsqOzxsGAKKAF2Y
-         LYFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731463652; x=1732068452;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1731473486; x=1732078286; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WYP6Z7D+0l/1IgcWk70OwbLKb3OwbsoyZjfuToeA0wI=;
-        b=n6vd0CbioTYelKKWOpTw9nYSDgyQffHxkSRk2DKS9FtVqfy2/vezJhYE+30EtrM6yS
-         xi/AEBUooVWp6xsb8Psc2fjkYQtJ2NHf7gIVS3JDx94Ju4tnQRdd2xzJnBBJ3ouiKDAm
-         cZl2TN7mreIkYxYTspKqr/g5P21ZthJUIcBR1i4cQ0NMkFX6zSQKsdjHL6MsigNZMgVM
-         h2eXPT7Ji/WVc641FjjDCdbxSI3nyvZen4oGWJSxdf4ULsQl1NHhlKQNPyDXKbAlDYLc
-         SXNUMJ8tFaVu7Pvhp5wfJbCddVW/RhvJuAsVJ0sdmayNhHLF3bDWWHn8kfNo+rMbRUon
-         Ujpg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2bFqqYaJh/VBaPd7IQhr4YkRmnlFcD8POKBqPqPqROEMw9wVuZrJYtfqsBBWfcOSz2c6zUfYBndVjxcs=@vger.kernel.org, AJvYcCVR1orHEMtigur0CN3Lv4OcePwDMiCuC7tg43WbB0vyj4we43CF2151QMzgIi4bYx6eRq6/NP3U@vger.kernel.org, AJvYcCWc/eoAOB3fc+zBZK4FKAurgVFDfh7IXU5rOM7uce2OY29xme5WkKNwsMRYoLAEULMIXEGViAEs9o4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMjZi05HXv4zNjUwqOLbbcNMNG8gaiLdcOTeet1M9wwMjVn8SQ
-	F7N7azRk6Dql3yk4l/DM4jvdu6RkDh9+8T4Blx+Knm1p7LZ1kyxN
-X-Google-Smtp-Source: AGHT+IEpA4+yIXpM0Wyn3hUH9jkbdaPc1sjc6OvA/euzql3H6Je2Ifa7mqh0EOe7fu+kXMtkUehaQw==
-X-Received: by 2002:a05:6214:5706:b0:6ce:2357:8a2e with SMTP id 6a1803df08f44-6d3dd06beeamr19108226d6.37.1731463651904;
-        Tue, 12 Nov 2024 18:07:31 -0800 (PST)
-Received: from lenb-Thinkpad-T16-Gen-3.mynetworksettings.com ([2600:1006:a022:33ba:88a7:81d8:bd03:622c])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3a6b3250bsm58594056d6.96.2024.11.12.18.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 18:07:31 -0800 (PST)
-Sender: Len Brown <lenb417@gmail.com>
-From: Len Brown <lenb@kernel.org>
-To: peterz@infradead.org,
-	tglx@linutronix.de,
-	x86@kernel.org
-Cc: rafael@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Len Brown <len.brown@intel.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v3] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
-Date: Tue, 12 Nov 2024 21:07:00 -0500
-Message-ID: <a4aa8842a3c3bfdb7fe9807710eef159cbf0e705.1731463305.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.43.0
+        bh=UpLXALlzKEchFhHx055mxHWuvzO7Fxzz+fkVfPWjj3A=;
+        b=PGfu7bkXeWaIMV60tbxMOvwEAUB2V78xNw9kRILVc5yDJ24G4Ojtykvk1B3R1c5e5R
+         JBvj8KOn3nJ0C7QKggGHkoAJbqfUVHORkM3CZ0iXYhZEX0AIhExU80EjCLH0J0xn+beC
+         mAG/NJCsQJzychAonFf3hq2fluTWQ5PO0fr2TS3rO5yMXz5SVY9GPPoJiD4rAiPsQ96N
+         Fa1U3DBEyXqo9Za96VOyWPzYiEtHb75q8MDHq8ynmlB54NNLCND8hNYyMq3NfIEQEvUX
+         ejfasMLCr4ZFsy7T5ia2q3g3h35ULUueYPfwuG21h7pQLRAHOPMpTTnK0LzmU3phrfb9
+         MUjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731473486; x=1732078286;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UpLXALlzKEchFhHx055mxHWuvzO7Fxzz+fkVfPWjj3A=;
+        b=gOl3euo+hK6vKGU7TOK7uXIMFqAiltbR3GDwEvr42xOljeOtw0nnQ02g2laY9ZQPJr
+         dcn9do5RWNgXNcxYkepwtNwA5wmslVdMAWZI7yo5Q9fvyAXUfEso2IjDdmmI/cLYT69+
+         CSC/qW+sjfyxKtUrbK+eLVQJhwDUYYz3hiTlFLIPWCh1guJZR5wt92tfQWuP7WwpemJz
+         zPx/SGrCEStHzQ6VfazGtkANNC8PZLhS6JhN/z2c7nxWI788qx2I+D/00HvurE5htxuM
+         WYsejtaMBTuAFS3ijgPsurnr7ln29JtKBuFJQcuHfiOxGBvJ5jCd7DUns2RdgxDYpOyP
+         DfsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUmSFynqvxKL0mw+Zi4u3AuhX0XDuL2dyKxmgjUxA0pB+Bv0FQO7/qUP0E7Ki8l8BRgFTJRKIK/1w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoaNXtVFHHQ6Sdxq8zC7kf9xF3Bnoec+RcPCg8RzQzzEq+PJ9O
+	9C6Czt+8dSxJ1ohVkXSXRKv1nOti+jmvAaUQEYQj5+dCgLmC1QpgpeusdpZH3JVwvyXHjlI4sTb
+	qlwvVgjruHvYSj4HEaqixvKv9CQwmuNC00x0=
+X-Google-Smtp-Source: AGHT+IEuMJK/b6RMPc2Z5S8NSxqpfpKwrEjaoecAxmYJnqCdahkftPa9sU7FbYEMc13TpQneZMMHWPiTo/Zlopl5vkM=
+X-Received: by 2002:a17:906:6a20:b0:a99:529d:81ae with SMTP id
+ a640c23a62f3a-a9ef00239c8mr1839737466b.55.1731473486274; Tue, 12 Nov 2024
+ 20:51:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240820163512.1096301-1-qyousef@layalina.io> <20240820163512.1096301-6-qyousef@layalina.io>
+In-Reply-To: <20240820163512.1096301-6-qyousef@layalina.io>
+From: John Stultz <jstultz@google.com>
+Date: Tue, 12 Nov 2024 20:51:15 -0800
+Message-ID: <CANDhNCrU3uuA137Udvh+RfC9ELhc7scjR=Oacosbyw+b68AR3Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 05/16] sched: cpufreq: Remove magic 1.25 headroom from sugov_apply_dvfs_headroom()
+To: Qais Yousef <qyousef@layalina.io>
+Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Len Brown <len.brown@intel.com>
+On Tue, Aug 20, 2024 at 9:35=E2=80=AFAM Qais Yousef <qyousef@layalina.io> w=
+rote:
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_sche=
+dutil.c
+> index 575df3599813..303b0ab227e7 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -187,13 +187,28 @@ static unsigned int get_next_freq(struct sugov_poli=
+cy *sg_policy,
+>   * to run at adequate performance point.
+>   *
+>   * This function provides enough headroom to provide adequate performanc=
+e
+> - * assuming the CPU continues to be busy.
+> + * assuming the CPU continues to be busy. This headroom is based on the
+> + * dvfs_update_delay of the cpufreq governor or min(curr.se.slice, TICK_=
+US),
+> + * whichever is higher.
+>   *
+> - * At the moment it is a constant multiplication with 1.25.
+> + * XXX: Should we provide headroom when the util is decaying?
+>   */
+> -static inline unsigned long sugov_apply_dvfs_headroom(unsigned long util=
+)
+> +static inline unsigned long sugov_apply_dvfs_headroom(unsigned long util=
+,  int cpu)
+>  {
+> -       return util + (util >> 2);
+> +       struct rq *rq =3D cpu_rq(cpu);
+> +       u64 delay;
+> +
+> +       /*
+> +        * What is the possible worst case scenario for updating util_avg=
+, ctx
+> +        * switch or TICK?
+> +        */
+> +       if (rq->cfs.h_nr_running > 1)
+> +               delay =3D min(rq->curr->se.slice/1000, TICK_USEC);
 
-Under some conditions, MONITOR wakeups on Lunar Lake processors
-can be lost, resulting in significant user-visible delays.
+Nit: this fails to build on 32bit due to the u64 division.
 
-Add LunarLake to X86_BUG_MONITOR so that wake_up_idle_cpu()
-always sends an IPI, avoiding this potential delay.
+Need something like:
+       if (rq->cfs.h_nr_running > 1) {
+               u64 slice =3D rq->curr->se.slice;
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219364
+               do_div(slice, 1000);
+               delay =3D min(slice, TICK_USEC);
+       } else
+...
 
-Cc: stable@vger.kernel.org # 6.11
-Signed-off-by: Len Brown <len.brown@intel.com>
----
-v3 syntax tweak
-v2 leave smp_kick_mwait_play_dead() alone
-
- arch/x86/kernel/cpu/intel.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index e7656cbef68d..4b5f3d052151 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -586,7 +586,9 @@ static void init_intel(struct cpuinfo_x86 *c)
- 	     c->x86_vfm == INTEL_WESTMERE_EX))
- 		set_cpu_bug(c, X86_BUG_CLFLUSH_MONITOR);
- 
--	if (boot_cpu_has(X86_FEATURE_MWAIT) && c->x86_vfm == INTEL_ATOM_GOLDMONT)
-+	if (boot_cpu_has(X86_FEATURE_MWAIT) &&
-+	    (c->x86_vfm == INTEL_ATOM_GOLDMONT ||
-+	     c->x86_vfm == INTEL_LUNARLAKE_M))
- 		set_cpu_bug(c, X86_BUG_MONITOR);
- 
- #ifdef CONFIG_X86_64
--- 
-2.43.0
-
+thanks
+-john
 
