@@ -1,115 +1,150 @@
-Return-Path: <linux-pm+bounces-17468-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17469-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F24689C6843
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 05:57:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB2B89C68AA
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 06:24:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A1321F23599
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 04:57:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45713B23018
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2024 05:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6F916D9AA;
-	Wed, 13 Nov 2024 04:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1B27081F;
+	Wed, 13 Nov 2024 05:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mt6kv7jj"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="g5V9JwD8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E482B17C
-	for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2024 04:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054B0433CE;
+	Wed, 13 Nov 2024 05:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731473839; cv=none; b=TDQzUb4BPWJsBU2r/14tt0Y3rBGKjNvj21IeCxQxC8W45YDAsev/bdmP/FF1ySxKOFHCZdfYQ4sJGYfDDwp8cV7+ZuAhT1602ihwrzlIyeql8bsefGsDBq6KTMwfm8fLjdE70d62XkKDgmC/nJATxg0vJ5X/klZ/hYxHbExijws=
+	t=1731475490; cv=none; b=ipTs7qMxOAENCWjDM9qHJ5sjhkPxRDKI3xTDYTtT8elGGR4TSfwRYtc1C/XNXNJDM7wVTFNpVZZgIK4R81vwlaM8ufAJ2UNFSMO1NaWC2vSMTHX+Sm0E+I2LA7XaoctT979YoZeSyMmr1eWiogYzQoK+1Gx1u1h3lS8cs1OYfsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731473839; c=relaxed/simple;
-	bh=JifAmFemsyo63HkMfEhYvgvO7zx15msgyEKEspgf5ac=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tNqjL5GmraiRJLOw1CQVm/K3P0FscCYnozl8Mj8/JQEraNdmch0BX3oAMTW/3uGsSKFynCXiEBvKXaYlKEBZv2BgcsIYwtZRgsMY1kZQi6QHKgAsDFO6f5MWSI51cI/N/8/1OzCMWh1amt9t1CbNhdXSWMA6xY0g+U1CL9n6RtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mt6kv7jj; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a99e3b3a411so62403166b.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2024 20:57:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731473836; x=1732078636; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l9cizkMlnSkQJTSX5VRA9hTdazGF3kyGBdVj0AKFLU8=;
-        b=Mt6kv7jjLbYjI3rHkUkw8LEoox/JLN1xrk+EJZ6oviRgpuLK6i+PLdcpvgmzYqIV9C
-         tq01HwAvMkSrU5WtszkW3xo4S62sb0J5ViTS7/B8qpVro3frcNDpz+M8c1pYIuuzXf2A
-         6qi4yx5s0KjvPWboZZSLvSl8tlo4kYFBqTpfIYyzqpftb4wskZ2Rn0/sySJo8socDEop
-         oRJDuCxEB81gR4ErPGmCrN++Dc33rkkaV5iz4C6VVRhVR/usslpjMdd2n2Uwlq/Z/LT7
-         OsgzMoi/pTQuf7ttAW46oa4MjU+8n1Ycv+J/HE+EpNI0Q5eAzLw4dzQmKHrz4xBDrnoi
-         QWrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731473836; x=1732078636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l9cizkMlnSkQJTSX5VRA9hTdazGF3kyGBdVj0AKFLU8=;
-        b=XbUL3oz6nxzYTRxHnt3DRNKteDIcjQNPi/xTR4uLzpFITFBa542lYdig12tdwcbAaG
-         3N1AtS3IApEjU0AEAReAVfoyjvZO4CveRHuokeonNnw3T1wjkwDcPviMBcM5QT7+Bvq8
-         I6l0o/yX6GuKvMRK7/oVTlJmW1iNFG3QsilLx6hIhYd6IatoG8fFQOijKBZ1tVn1lUb0
-         NyhBDWvc3POU3AB9BWj56j91GQWwSRzuSqz6lqm8O4GIFIl1QX5xkyfqpSX+5NCFSCj+
-         f0oTG5RYEMGRFIUlk7lQPKajQNMQjRBKfDcJww3NDTCcY3/8do3LR75GiYNQ23Hv62zD
-         MHew==
-X-Forwarded-Encrypted: i=1; AJvYcCUC8n55nJ6hLvBe/zUlUPed5NpKsxIyeEdIRwirMI0NzOZyv6b/c2hmZVfHhgJSKl7AaOP+//kcnA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdB12EB4gCG+EXXIFXFiXZvX84xbV+iTKAKfzc0573lYtIg9iu
-	8AzwTo7h6k7CKrlsbxiSrMnnU9EgLAm4nAnpd5DkdHpQqM3Pz9f5iClN1J5Kfn3IybaqtK9tY//
-	f6glxSWqChsU54J1wb43lpqxYlTEtSxc3LFg=
-X-Google-Smtp-Source: AGHT+IE7VofiUrMaYJb+VVrnAJg28tRtxoTO4tZdwZpaWQULQuwbzbECXxJFTdkr9f4TkI2uEdj23gE4GdqDWbxYsbk=
-X-Received: by 2002:a17:907:97c5:b0:a9e:670f:9485 with SMTP id
- a640c23a62f3a-a9eeffe72afmr1580317666b.30.1731473836251; Tue, 12 Nov 2024
- 20:57:16 -0800 (PST)
+	s=arc-20240116; t=1731475490; c=relaxed/simple;
+	bh=++ZK1eWng+G0uvdmReXJNucOazbByuLdx468VaDOnLM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DyMlAxjp8f4O8XCuFzsAU70KnoztEsI31iCERzdPrNGDD/qDGBJwHlUZhRJT3Ds4NnF7ZcI9jtzolq87rK2iudkzRDmZ8dOunag96dwrcefDz7QKglMy3OIWaDveevtMmgoxMq1CkvYfCFlqvbzKTOFrSUvxhaeQLIF4mF2E804=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=g5V9JwD8; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ACMRURk020707;
+	Wed, 13 Nov 2024 05:24:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	1mCmIuShdr4V8oXy7/eDo7kQN6piT7CsL1EVsN5eeuA=; b=g5V9JwD8aRu5Clvl
+	rSpIReO7pnL9hqmHNuVM458XmJfnIpBA3JtvuOHTRrCKBAMGNhWevAvWQzd7fEot
+	oUWRWfyR9ymrIk/cqsiu25wuea1GOkPkTAPy2qFIWgKpqigxv3nkn/QJhO4EYoPP
+	Y8ihqrA3byUvsutb5oJeRPVaNkjCaVXmQvfNBGCVuiiFKTCZ4Wcs0pY1C4ze2doy
+	Swpg0wunjxFG1dFhfymEeLln5ZIzBbQCqRGw5iZeuTT1TIPUA04caU8dq42tHhHd
+	QoNenNCig8Zaju03fWBfl8ufGuKkpMLupLsQRFWG1+mb3HwUr9sGG3HBO4bcYDFy
+	aHLyDg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42va079w4c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 Nov 2024 05:24:34 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AD5OXZC023102
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 Nov 2024 05:24:33 GMT
+Received: from [10.216.46.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 12 Nov
+ 2024 21:24:29 -0800
+Message-ID: <e84026cf-7b5b-a49b-6f82-f3af7c67f3ef@quicinc.com>
+Date: Wed, 13 Nov 2024 10:54:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240820163512.1096301-1-qyousef@layalina.io> <20240820163512.1096301-10-qyousef@layalina.io>
-In-Reply-To: <20240820163512.1096301-10-qyousef@layalina.io>
-From: John Stultz <jstultz@google.com>
-Date: Tue, 12 Nov 2024 20:57:05 -0800
-Message-ID: <CANDhNCre2=8aHCgy9DNHkXix2Leu3MSDD7HRJp9wbrHBm+kNGg@mail.gmail.com>
-Subject: Re: [RFC PATCH 09/16] sched/fair: util_est: Take into account
- periodic tasks
-To: Qais Yousef <qyousef@layalina.io>
-Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
+Content-Language: en-US
+To: Markus Elfring <Markus.Elfring@web.de>, <linux-pci@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Xie
+	<kevin.xie@starfivetech.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?=
+	<kw@linux.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Manivannan
+ Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>
+CC: LKML <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski
+	<m.szyprowski@samsung.com>,
+        Mayank Rana <quic_mrana@quicinc.com>,
+        "Rafael J.
+ Wysocki" <rafael@kernel.org>
+References: <20241111-runtime_pm-v7-0-9c164eefcd87@quicinc.com>
+ <20241111-runtime_pm-v7-2-9c164eefcd87@quicinc.com>
+ <4de3c1d4-2488-40bf-8089-9e2246dbf28c@web.de>
+From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <4de3c1d4-2488-40bf-8089-9e2246dbf28c@web.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lKkPckjgLSZvVyQGp6N6L6nm0V2BT8HM
+X-Proofpoint-ORIG-GUID: lKkPckjgLSZvVyQGp6N6L6nm0V2BT8HM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxlogscore=936 clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411130046
 
-On Tue, Aug 20, 2024 at 9:36=E2=80=AFAM Qais Yousef <qyousef@layalina.io> w=
-rote:
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index a6421e4032c0..0c10e2afb52d 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4899,9 +4904,12 @@ static inline void util_est_update(struct cfs_rq *=
-cfs_rq,
->          * quickly to settle down to our new util_avg.
->          */
->         if (!task_sleep) {
-> -               ewma &=3D ~UTIL_AVG_UNCHANGED;
-> -               ewma =3D approximate_util_avg(ewma, p->se.delta_exec / 10=
-00);
-> -               goto done;
-> +               if (task_util(p) > task_util_dequeued(p)) {
-> +                       ewma &=3D ~UTIL_AVG_UNCHANGED;
-> +                       ewma =3D approximate_util_avg(ewma, p->se.delta_e=
-xec / 1000);
 
-Same 32bit build issue due to 64bit division here. Need to rework w/ do_div=
-().
 
-thanks
--john
+On 11/11/2024 10:16 PM, Markus Elfring wrote:
+> …
+>> PM framework expectes parent runtime pm enabled before enabling runtime
+> 
+>                 expects?                PM?
+> 
+> 
+>> pm of the child. …
+> 
+>    PM?
+> 
+> 
+>> drivers, before calling pci_host_probe() as pm frameworks expects if the
+> 
+>                                                PM framework?
+> 
+> 
+>> parent device supports runtime pm then it needs to enabled before child
+> 
+>                                   PM?
+> 
+> 
+>> runtime pm.
+> 
+>            PM?
+> 
+> 
+> Can any tags (like “Fixes” and “Cc”) become helpful for the proposed change?
+Bjorn,  This problem was present from starting on wards not sure what is 
+the fix tag we need to use here, is it fine if we use fix tag as below.
+as at this function only we are trying add the fix.
+
+Fixes: 49b8e3f3ed1d4 ("PCI: Add generic function to probe PCI host 
+controllers")
+
+- Krishna Chaitanya.
+> 
+> Regards,
+> Markus
 
