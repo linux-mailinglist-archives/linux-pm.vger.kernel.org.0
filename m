@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-17581-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17582-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42A7D9C9502
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:09:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A2B69C9504
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:10:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B06BEB24E44
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:09:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A67C285A82
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A42A1B0F1E;
-	Thu, 14 Nov 2024 22:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2EC41B0F16;
+	Thu, 14 Nov 2024 22:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uKmQs4r2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HN+/RPI5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0381B0F17
-	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C301B1D65
+	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731622175; cv=none; b=usi4R8vFln4gFyy6ZsvTBJalcmtXWEFF+FUokDTuCGOlTS6b8OleyptwMIt9sCK5ifihEmm6ouWgCAfsYRzZQegJpKXzmEmTAD6VLeOhXhxBxStlBnjsKyyrJRXfp1jpdVL6f2GbWLrPSjfFR0lVmrNOU+k56znFQLGxhUHl1yI=
+	t=1731622179; cv=none; b=kEWaAp08NXcf/W4RsbcLE+L+h51ikXHvftXaaNmtWjEIiRieIzTdKgoYlC0jUPbDmuLdtTwM35NaSpBCRTirDe91Mlh+sckFi3JY6eLMSw7lQ/kgrhBRncg23sYlKtGUvGmJjmrs3zDtAkqc3JVnGoTinR7mVUlaCX1G4Y3zsxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731622175; c=relaxed/simple;
-	bh=FXF39w61mNxxA37BRFFzg13pzMbcauk0JxD5udDvbNs=;
+	s=arc-20240116; t=1731622179; c=relaxed/simple;
+	bh=jYgI6Lv2TaRKTGXABWBeP3aEG3bkPZXhlUi0HpUIshM=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Cc:Content-Type; b=sDBhuS2nZoGahDhL5MSGHSzsz8XMDx2bUcjhhPp4a9hoRhBSPTkuUUTFdhlq27kKJIxdY0E3K+zp00gysxjGIWUE2bOiSuXUdGuonJgtGaDMjM6gDjjnNh9tcmpBl4p/S3luDBgfNoPXtHz88Kf4J4ooTt3j1BwnxD9N07CXKaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uKmQs4r2; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=mHNjXxtGHeiX5YK7BI6nricGnbdCBXThXhhUBGWveWcCJAUji0/VXN9i9f0NH13OraMwtySl/LYZ/Xa6Zd0B8NNE/tkfEe2MJfn5Cp/lO09phjsIe0oCkAR8cR11yZmGBr/BKc+m3COVO2vNrbIUPf30JSlSZQeeFNNojskiAKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HN+/RPI5; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ea8901dff1so21939977b3.1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:09:33 -0800 (PST)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6ee484ec18aso16195587b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:09:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731622172; x=1732226972; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731622177; x=1732226977; darn=vger.kernel.org;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ltTqN1vUYgDIEjeUsRotinFDZNC54N+YNek7x4otQhk=;
-        b=uKmQs4r2sfC3N2Mm7T2NPt45wuhEGXkAJMkPw7WbYrUDhKq7XytcCvX+dG6PAm3ARv
-         BUqfTU4MmipuMSBC4cGnYPJ3lUaoz/MQcrUeRGdogxjxPkZnoH1ywkUHPK8NjHxHLaKS
-         hqURQBeQoCRKxMEEJ+edmHiMsuPMqrTuPyKLAloP1l2aEySylV6qBYlAeMXqrSM+DYAL
-         8pBVh6acwfE2t+muBWyg+gwXSWeBm70ZksAY280ICgADkfwJfl4HVQ3PCeOb2o6UmgoI
-         jcI0WmpsXMCs8Ka5vw50qV5ZKceb9h/j2GmBxm0SDIP+lENi4951lz9pazRNBHSxqs9d
-         1s3g==
+        bh=YK+OszyPJF9IsNwlHAXzh79EKRYRWDFx/RXocPFNckQ=;
+        b=HN+/RPI5j3Ms+AoeGWTa0rVHwY6bHu35YMjC6nH4jYHXT11TSW8HgRkygYIahltTtY
+         6FlotNcu0MO6fn7+18gO2We1bs761O+yd6nFy45B3DMlPEzsFo6IqottKYtvJHI7h2gi
+         fci6zyubwoKHS1sjwM22ywHGJvgVMaJEDCbaNmb31Sye5VAVAB5aKM3EEohm6VcFcTGz
+         TkFpC56qf21Hfip3LvkaS543VK/G30zzjN+BIJbRBP46QK8RO4L5hLiG0mOCzTqCmy1n
+         YmDsKlLc1FRUJRya7mkbTCQ6KEcmkQrN//6msGz/qiWwf+nXmCA40V+zdyRlS4C7Zd1z
+         BAMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731622172; x=1732226972;
+        d=1e100.net; s=20230601; t=1731622177; x=1732226977;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ltTqN1vUYgDIEjeUsRotinFDZNC54N+YNek7x4otQhk=;
-        b=QkpVFajJWhwPA1CUz8QtLzkvyXdu2YLMIrlJmdMLn2QVQoF5k6FP6XWsfUUKvTrCto
-         ApAF+S+/NulRc6J/E8mRcLI/hcW1sX2rZJoQjY+Ish6ueRMt9ywQhP6pRQ777vrPHh8x
-         oujNonai45P9lPMhsF0WT3lzpSd1lCJOHiVmF6Lb9ve6vlY8zzCpCE4zmNa9s0jE3gzv
-         7B38IugBbYVBwI4tMlb6sn/XVXZh3++ogUeaIOrVAgF1D3wkr+s1XFA2xjwfMMChqNkh
-         N9laS0Ohy3ibRSW5zu5tBzv2E9GC1AW1FzJBs9LWXgzH9aMwDpbnKcT2DbAJhOPBcmmX
-         oZiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOPvjLVPcur9PED571T7oZI8i8kx+fmEgCugdmoeIpfCuG9B76l4GxHqrs1PZ0HDJOX5bURAyHMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5Rq6Nk6QuKKiDYDxq3SwFydrN/Xfqxk7yjgkuOZEVpLAZbL1I
-	COm6ho0+hJW8wQ2TbjgUan7oFYLZWDBKQDvwnWRIAdt+KBjNhqrmXF4+BZFjqicCranFP4Q4c+a
-	N1L9JEvDrfUHLEw==
-X-Google-Smtp-Source: AGHT+IGJ/4jVZ1/xg/LGCl3APYeAMNbxGDbBEvRotblohLu+ttsAW0UM3N5LDvfVv2yeayzGHKI14yjv6HYVEP4=
+        bh=YK+OszyPJF9IsNwlHAXzh79EKRYRWDFx/RXocPFNckQ=;
+        b=g9g3ebR7Oq4qjhsBZMqCDhiqzOvDZVdRkNjf9XWSY2VIdKbz/s/iDmqF12fkWfGL6c
+         sAHsTyxrmuWP55mgrRRU7tbjdXsmKj1odzVG0ugVHxWrhBaqcUeZecWLWPox2hrWM0z5
+         CB1czH3G8F1i4OXtBEWW2FPoFOQiBf9ihch+D1fchXlL6jGV4Lv0IRGdkn31LNtUY+xl
+         l/5BGTC3NvNEl9ha1qpA57C6pbYdF6XgMvdtcAaCKmw8SCvnM6fjlEFKuUFYaws+YVxH
+         z8Kg6iHGJ9JR4vigGGOD4VL98mbdmLy/PsDfJw5BgoDDob18ORng2LOyMJHwr4tDnR93
+         G6CA==
+X-Forwarded-Encrypted: i=1; AJvYcCXPBvrYH+GDrtw3bdDvDNu1SjqBveDtTb6dKEkqkHS5teFHpkHly8ncGLoXj7DJeIc3n1JH12gQgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym2hxmV8j2qjKJGa8KakFTAy/fCzPTCs92w5RbMFSwuoT+3hbC
+	WjP5gPY4GaaKE3ApSYfXzrkMu85SfddhW/RkLJnMhfOlw87ud4Q6Qb8sLUf39yD3UvPACgfkKJR
+	7VkvNsa4Ua6pYeQ==
+X-Google-Smtp-Source: AGHT+IH5IPLhIyXGelZjgJIpI/dK6jQIqzw4zXbJcpm2KbdtZor186y0i6MHOA+ceIHOi+9vCMk9NuyHBVYsZQ4=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:3e23:8355:c37:686e])
- (user=saravanak job=sendgmr) by 2002:a05:690c:6806:b0:6ea:8dad:c3b1 with SMTP
- id 00721157ae682-6ee55c9b324mr496857b3.3.1731622172602; Thu, 14 Nov 2024
- 14:09:32 -0800 (PST)
-Date: Thu, 14 Nov 2024 14:09:15 -0800
+ (user=saravanak job=sendgmr) by 2002:a81:ad0a:0:b0:6e3:d670:f603 with SMTP id
+ 00721157ae682-6ee55c2f44fmr218917b3.3.1731622176991; Thu, 14 Nov 2024
+ 14:09:36 -0800 (PST)
+Date: Thu, 14 Nov 2024 14:09:16 -0800
 In-Reply-To: <20241114220921.2529905-1-saravanak@google.com>
-Message-Id: <20241114220921.2529905-2-saravanak@google.com>
+Message-Id: <20241114220921.2529905-3-saravanak@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,7 +75,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241114220921.2529905-1-saravanak@google.com>
 X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Subject: [PATCH v1 1/5] PM: sleep: Fix runtime PM issue in dpm_resume()
+Subject: [PATCH v1 2/5] PM: sleep: Remove unnecessary mutex lock when waiting
+ on parent
 From: Saravana Kannan <saravanak@google.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -89,40 +90,42 @@ Cc: Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert@linux-m68k
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Some devices might have their is_suspended flag set to false. In these
-cases, dpm_resume() should skip doing anything for those devices.
-However, runtime PM enable and a few others steps are done before
-checking for this flag. Fix it so that we do things in the right order.
+Locking is not needed to do get_device(dev->parent). We either get a NULL
+(if the parent was cleared) or the actual parent. Also, when a device is
+deleted (device_del()) and removed from the dpm_list, its completion
+variable is also complete_all()-ed. So, we don't have to worry about
+waiting indefinitely on a deleted parent device.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/base/power/main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/base/power/main.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 4a67e83300e1..86e51b9fefab 100644
+index 86e51b9fefab..9b9b6088e56a 100644
 --- a/drivers/base/power/main.c
 +++ b/drivers/base/power/main.c
-@@ -913,6 +913,9 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
- 	if (dev->power.syscore)
- 		goto Complete;
- 
-+	if (!dev->power.is_suspended)
-+		goto Unlock;
-+
- 	if (dev->power.direct_complete) {
- 		/* Match the pm_runtime_disable() in __device_suspend(). */
- 		pm_runtime_enable(dev);
-@@ -931,9 +934,6 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
+@@ -284,18 +284,9 @@ static bool dpm_wait_for_superior(struct device *dev, bool async)
+ 	 * counting the parent once more unless the device has been deleted
+ 	 * already (in which case return right away).
  	 */
- 	dev->power.is_prepared = false;
- 
--	if (!dev->power.is_suspended)
--		goto Unlock;
+-	mutex_lock(&dpm_list_mtx);
 -
- 	if (dev->pm_domain) {
- 		info = "power domain ";
- 		callback = pm_op(&dev->pm_domain->ops, state);
+-	if (!device_pm_initialized(dev)) {
+-		mutex_unlock(&dpm_list_mtx);
+-		return false;
+-	}
+-
+ 	parent = get_device(dev->parent);
+-
+-	mutex_unlock(&dpm_list_mtx);
+-
+-	dpm_wait(parent, async);
++	if (device_pm_initialized(dev))
++		dpm_wait(parent, async);
+ 	put_device(parent);
+ 
+ 	dpm_wait_for_suppliers(dev, async);
 -- 
 2.47.0.338.g60cca15819-goog
 
