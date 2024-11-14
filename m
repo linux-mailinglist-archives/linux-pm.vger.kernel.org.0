@@ -1,78 +1,81 @@
-Return-Path: <linux-pm+bounces-17580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17581-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB7F9C9500
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:09:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A7D9C9502
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:09:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E87FD1F24321
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:09:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B06BEB24E44
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87321AF0A6;
-	Thu, 14 Nov 2024 22:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A42A1B0F1E;
+	Thu, 14 Nov 2024 22:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ncWveWLR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uKmQs4r2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200F71A3AA9
-	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0381B0F17
+	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731622170; cv=none; b=CBf0zbAqeA9v0jYkvA2BQEygf4EUcO8rorJenkaCnBcnwG/IjYNlmOjD1Zl6cTvR9t9vCJpQALK+ylCDV7Oh4nLrmcA1NES0+xYbjXUWYVmuOUtQIx4p54ozIvuGFcbb57XKRTfjgIcZqF0MzQT7iHamIWZVtj0VNdXouZ4qSVY=
+	t=1731622175; cv=none; b=usi4R8vFln4gFyy6ZsvTBJalcmtXWEFF+FUokDTuCGOlTS6b8OleyptwMIt9sCK5ifihEmm6ouWgCAfsYRzZQegJpKXzmEmTAD6VLeOhXhxBxStlBnjsKyyrJRXfp1jpdVL6f2GbWLrPSjfFR0lVmrNOU+k56znFQLGxhUHl1yI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731622170; c=relaxed/simple;
-	bh=8Li9dbipRi67x9ritkmAGyqaBXSPwodVtwEZtflJOfE=;
-	h=Date:Message-Id:Mime-Version:Subject:From:To:Cc:Content-Type; b=u0F+dIJWr82QsNhPRSB1pZEA57WYZKH84mO3zkDAe4PJfAcm1ZXea+xUOGPjI/8t7Rm2Ge8nksblQ/+Wmyzh39nGIUFE3Pg7fInJmoJNQm4QyLPw/57IxyKqzicR9kDovQGcG1laeRhwxse6EiasfL4jqHlc92s3eUQRTMudfEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ncWveWLR; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1731622175; c=relaxed/simple;
+	bh=FXF39w61mNxxA37BRFFzg13pzMbcauk0JxD5udDvbNs=;
+	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
+	 To:Cc:Content-Type; b=sDBhuS2nZoGahDhL5MSGHSzsz8XMDx2bUcjhhPp4a9hoRhBSPTkuUUTFdhlq27kKJIxdY0E3K+zp00gysxjGIWUE2bOiSuXUdGuonJgtGaDMjM6gDjjnNh9tcmpBl4p/S3luDBgfNoPXtHz88Kf4J4ooTt3j1BwnxD9N07CXKaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uKmQs4r2; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e381f195051so1070410276.3
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:09:28 -0800 (PST)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ea8901dff1so21939977b3.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731622168; x=1732226968; darn=vger.kernel.org;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ago2o3UQiq/UvHQifwpLEeZFy32WS/EGuJY0sQIwcHg=;
-        b=ncWveWLR98i++CRR53kSnsEcd3VtJyJYJ+cAji8LLjvac2x5VC1Qf9nDbqzMBFhJ5G
-         YLU0Qlw7TQhp3I4XtKIFNedqm2bDdeHCA2Y2BXduOtubfqgmDXZHshFmCB1/V443aPqG
-         8JV99PrwGeQ+7Xf4RGTI7lP1UZe9eGsG9Y20DK6ruj2MMLKltxadX8/Mly2zYgD9J7Rb
-         LOKhOhW0V5pD2fz2XO6njA+GIJFhrLC/uZWV/+EC1wyigoKb9DL67MxWyH8aFlj3FLE2
-         6FehysuajvVcSB4POxGR1AoQPx8SlFN0j+DoZjjPcB0HEn3LPI364y1s944o1bU3S9Qb
-         Nx+g==
+        d=google.com; s=20230601; t=1731622172; x=1732226972; darn=vger.kernel.org;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ltTqN1vUYgDIEjeUsRotinFDZNC54N+YNek7x4otQhk=;
+        b=uKmQs4r2sfC3N2Mm7T2NPt45wuhEGXkAJMkPw7WbYrUDhKq7XytcCvX+dG6PAm3ARv
+         BUqfTU4MmipuMSBC4cGnYPJ3lUaoz/MQcrUeRGdogxjxPkZnoH1ywkUHPK8NjHxHLaKS
+         hqURQBeQoCRKxMEEJ+edmHiMsuPMqrTuPyKLAloP1l2aEySylV6qBYlAeMXqrSM+DYAL
+         8pBVh6acwfE2t+muBWyg+gwXSWeBm70ZksAY280ICgADkfwJfl4HVQ3PCeOb2o6UmgoI
+         jcI0WmpsXMCs8Ka5vw50qV5ZKceb9h/j2GmBxm0SDIP+lENi4951lz9pazRNBHSxqs9d
+         1s3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731622168; x=1732226968;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ago2o3UQiq/UvHQifwpLEeZFy32WS/EGuJY0sQIwcHg=;
-        b=Rzhg8tvgp7yR9lsfHvMKQ/Y3Ah8gxMxGQH+LjfTKq0bRhufkmQ9fNn/XYyH47qCUZV
-         IpBY/5NOz89LVaO5scVg9TKERZbcT6uN1ugZfB7smvFvdpQCcFeGSjTnKdt8GOmBtV1e
-         h0AJOolfpyexIhyqQDRJxGhND08F7iejvnVQmTQMmK6Fyfbj7dxKmzmiqKcRmjh0gKxg
-         sxd93NmSk/r4PCXaOCx/q9Y5i4gAm4rzKVWmBXLc9T3SCvvgXgQTJ7S1OBzzDGh7t7Mh
-         daqVlgWt3ubFSDbspj/M0VAcosqgEd9VLrbH0w+YZRzosDYBJXYCiht3AkQnG11olTEz
-         FvDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUxTjTg//fInkJDLq8eovzRFYbosDJCqG3OP/0vn9jRWrj45hx9TF+Aw1gQ3hWGO8N4fyuTVbRMhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWmYK/gwhRS+dYdvQW3+B3wRb+C/KurJNhhsnLcfg+GZkUijkQ
-	PGGiVdavsMxwFunNBOYTDgeTqu8lBFaRJw5LDuUibjXOVA4B0AoO1m22wdukHUvukBIpVCLXDTo
-	Jh4dHO2Ybnxc99g==
-X-Google-Smtp-Source: AGHT+IFypZ2XxBScnr7OMU5NLNzJY9RRvPDtshjbm5xyicXj2hqd620PfBLUoZhie2hT/UzPPn8nIzUu60z3CnQ=
+        d=1e100.net; s=20230601; t=1731622172; x=1732226972;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ltTqN1vUYgDIEjeUsRotinFDZNC54N+YNek7x4otQhk=;
+        b=QkpVFajJWhwPA1CUz8QtLzkvyXdu2YLMIrlJmdMLn2QVQoF5k6FP6XWsfUUKvTrCto
+         ApAF+S+/NulRc6J/E8mRcLI/hcW1sX2rZJoQjY+Ish6ueRMt9ywQhP6pRQ777vrPHh8x
+         oujNonai45P9lPMhsF0WT3lzpSd1lCJOHiVmF6Lb9ve6vlY8zzCpCE4zmNa9s0jE3gzv
+         7B38IugBbYVBwI4tMlb6sn/XVXZh3++ogUeaIOrVAgF1D3wkr+s1XFA2xjwfMMChqNkh
+         N9laS0Ohy3ibRSW5zu5tBzv2E9GC1AW1FzJBs9LWXgzH9aMwDpbnKcT2DbAJhOPBcmmX
+         oZiw==
+X-Forwarded-Encrypted: i=1; AJvYcCUOPvjLVPcur9PED571T7oZI8i8kx+fmEgCugdmoeIpfCuG9B76l4GxHqrs1PZ0HDJOX5bURAyHMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5Rq6Nk6QuKKiDYDxq3SwFydrN/Xfqxk7yjgkuOZEVpLAZbL1I
+	COm6ho0+hJW8wQ2TbjgUan7oFYLZWDBKQDvwnWRIAdt+KBjNhqrmXF4+BZFjqicCranFP4Q4c+a
+	N1L9JEvDrfUHLEw==
+X-Google-Smtp-Source: AGHT+IGJ/4jVZ1/xg/LGCl3APYeAMNbxGDbBEvRotblohLu+ttsAW0UM3N5LDvfVv2yeayzGHKI14yjv6HYVEP4=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:3e23:8355:c37:686e])
- (user=saravanak job=sendgmr) by 2002:a25:b19d:0:b0:e28:f35b:c719 with SMTP id
- 3f1490d57ef6-e382638d1e0mr10195276.6.1731622168088; Thu, 14 Nov 2024 14:09:28
- -0800 (PST)
-Date: Thu, 14 Nov 2024 14:09:14 -0800
-Message-Id: <20241114220921.2529905-1-saravanak@google.com>
+ (user=saravanak job=sendgmr) by 2002:a05:690c:6806:b0:6ea:8dad:c3b1 with SMTP
+ id 00721157ae682-6ee55c9b324mr496857b3.3.1731622172602; Thu, 14 Nov 2024
+ 14:09:32 -0800 (PST)
+Date: Thu, 14 Nov 2024 14:09:15 -0800
+In-Reply-To: <20241114220921.2529905-1-saravanak@google.com>
+Message-Id: <20241114220921.2529905-2-saravanak@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20241114220921.2529905-1-saravanak@google.com>
 X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Subject: [PATCH v1 0/5] Optimize async device suspend/resume
+Subject: [PATCH v1 1/5] PM: sleep: Fix runtime PM issue in dpm_resume()
 From: Saravana Kannan <saravanak@google.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -86,59 +89,40 @@ Cc: Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert@linux-m68k
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-A lot of the details are in patch 4/5 and 5/5. The summary is that
-there's a lot of overhead and wasted work in how async device
-suspend/resume is handled today. I talked about this and otther
-suspend/resume issues at LPC 2024[1].
+Some devices might have their is_suspended flag set to false. In these
+cases, dpm_resume() should skip doing anything for those devices.
+However, runtime PM enable and a few others steps are done before
+checking for this flag. Fix it so that we do things in the right order.
 
-You can remove a lot of the overhead by doing a breadth first queuing of
-async suspend/resumes. That's what this patch series does. I also
-noticed that during resume, because of EAS, we don't use the bigger CPUs
-as quickly. This was leading to a lot of scheduling latency and
-preemption of runnable threads and increasing the resume latency. So, we
-also disable EAS for that tiny period of resume where we know there'll
-be a lot of parallelism.
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ drivers/base/power/main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On a Pixel 6, averaging over 100 suspend/resume cycles, this patch
-series yields significant improvements:
-+---------------------------+-----------+----------------+------------+-------+
-| Phase			    | Old full sync | Old full async | New full async |
-|			    |		    | 		     | + EAS disabled |
-+---------------------------+-----------+----------------+------------+-------+
-| Total dpm_suspend*() time |        107 ms |          72 ms |          62 ms |
-+---------------------------+-----------+----------------+------------+-------+
-| Total dpm_resume*() time  |         75 ms |          90 ms |          61 ms |
-+---------------------------+-----------+----------------+------------+-------+
-| Sum			    |        182 ms |         162 ms |         123 ms |
-+---------------------------+-----------+----------------+------------+-------+
-
-There might be room for some more optimizations in the future, but I'm
-keep this patch series simple enough so that it's easier to review and
-check that it's not breaking anything. If this series lands and is
-stable and no bug reports for a few months, I can work on optimizing
-this a bit further.
-
-Thanks,
-Saravana
-P.S: Cc-ing some usual suspects you might be interested in testing this
-out.
-
-[1] - https://lpc.events/event/18/contributions/1845/
-
-Saravana Kannan (5):
-  PM: sleep: Fix runtime PM issue in dpm_resume()
-  PM: sleep: Remove unnecessary mutex lock when waiting on parent
-  PM: sleep: Add helper functions to loop through superior/subordinate
-    devs
-  PM: sleep: Do breadth first suspend/resume for async suspend/resume
-  PM: sleep: Spread out async kworker threads during dpm_resume*()
-    phases
-
- drivers/base/power/main.c | 325 +++++++++++++++++++++++++++++---------
- kernel/power/suspend.c    |  16 ++
- kernel/sched/topology.c   |  13 ++
- 3 files changed, 276 insertions(+), 78 deletions(-)
-
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 4a67e83300e1..86e51b9fefab 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -913,6 +913,9 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
+ 	if (dev->power.syscore)
+ 		goto Complete;
+ 
++	if (!dev->power.is_suspended)
++		goto Unlock;
++
+ 	if (dev->power.direct_complete) {
+ 		/* Match the pm_runtime_disable() in __device_suspend(). */
+ 		pm_runtime_enable(dev);
+@@ -931,9 +934,6 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
+ 	 */
+ 	dev->power.is_prepared = false;
+ 
+-	if (!dev->power.is_suspended)
+-		goto Unlock;
+-
+ 	if (dev->pm_domain) {
+ 		info = "power domain ";
+ 		callback = pm_op(&dev->pm_domain->ops, state);
 -- 
 2.47.0.338.g60cca15819-goog
 
