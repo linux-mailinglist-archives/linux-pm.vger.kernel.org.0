@@ -1,61 +1,62 @@
-Return-Path: <linux-pm+bounces-17570-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A529C90C0
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 18:24:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9E49C90E2
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 18:36:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C1071F23B69
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:24:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D573280EA5
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:36:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A6D189F39;
-	Thu, 14 Nov 2024 17:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC4318BC21;
+	Thu, 14 Nov 2024 17:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="iGZf7D0K"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="X6mrRpuL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2060.outbound.protection.outlook.com [40.107.102.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6442B188735;
-	Thu, 14 Nov 2024 17:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5AF2AE8E;
+	Thu, 14 Nov 2024 17:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731605069; cv=fail; b=Zc8WsLtF7kj8Q49M7bv0cyrUoTPFMj1D3YDMQK6tAIPy8zSt5ZYobrpgx9xlMEmXtH/PvJiGPz96HB01Ze60X0LP+bsYaP8wtWPA/iGt9scp7Hl1dxNfhdzhFjgoGCQwfEpzHTQta1HG2SNSHUqBaYt4sNL3hbQKM6RQ9J16sUM=
+	t=1731605813; cv=fail; b=eHbd6PP2S/BfPEwVWlfsSn4xxgtHz1LIKiu5VTHEkgqh1z/4q36kzyg8OZwGQM78NSIj+YjzfMBNHv812pdZWHjppYGeLX2O9qSMuIS7P0Kdg0989osjhxuwyJo3MGg8pMijm/WbP7B3I0TmNbrL7PFStOsPXQcxNcEEIDd+MUk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731605069; c=relaxed/simple;
-	bh=N/F1eQ2mS8oBjjuNA6/HUzb0l8BhKM5tw/K4Uea/NIc=;
+	s=arc-20240116; t=1731605813; c=relaxed/simple;
+	bh=1C3orRMGSwzTwowtmfkFdCFC99G+zpsTLr/Av5CdiJI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=cYrTNEK4DXDiOlFjyp+3bwR6yFjbKwuF0hmvkdcInLd4fxzKiDK2AX/KaOj8qVG4l+zWYX6xGzRImoMr7bNS1JRDZlSMLJHDa5KZH+nqfrDoyTYuGDR4BgE9SuGRPIQ56yTUMKkHR9FBT5IH+tfVSdiJnp2g+HmSyybA1HZB6n0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=iGZf7D0K; arc=fail smtp.client-ip=40.107.220.51
+	 Content-Disposition:In-Reply-To:MIME-Version; b=fYxmrNWfVlPP7fz4UMZ05yPnNFfP6/gYCEeG+LOE46SJo987NCx+a2A4wILHr16jJe+sT7YeQl4kH/KG4BHTb2664OrHWrjjyY0b96zUDoNv+Wk1iLyYTptZtcWQTgyQV9ZsiNKYlw5XVdQy/U8TBBSLwWPHLsfOg1hrVRHZjRw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=X6mrRpuL; arc=fail smtp.client-ip=40.107.102.60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=D4FrFW7r0dNa6a++Ofz3izxRr7qitY1kER3aXBRqv5rTNboJnkTyLNOjZZ8ZJGW9/tv9Av+0Hi0Pr4sYkxtVT8x0XbpAPE5ZHqWGMfP3p/ZC3sbdMylCEKtxHBFJgPqwhJUglc+8XvpXa1ztyPU9JCYuQeRQytyE4XCB7CbmMcoP5bKJZsLUNSf0vtjZZsf8vbShVFpJyVo2PNpJ4dVnGDUWRbHLXnjC8X8FDu0a2L9ZZG+Y832V+wPv4EztYobSW/S/s7cUdhTyTCqhxgki4MHVqlCJ5DvSBgiq/5Zc82tRh2j87zNHtwMUk+C5TSkiKo4KVpsujxw0RU3WGIB0mA==
+ b=zLFw/VxiNN6E8KKeqFXCLnTm3Gvl3b4RvbT0uaIO9k3YOVkN7qfbPNb5VkBD3nsdf6u+M63yP1njl4NjiMKaALJ1/6EYrESRpXP5MKAE183+f6/2HLJApPH1BQV96XchMman4QpUGXyhlKcpaWvvSOHpbUe2/v2JBn1xFFBOMIX4Xk00v1ABggkS7twrimJQQ54NUhj9Zb7IwEvXsJatRh9lFPK2qRDRl+tMGfwTU5i2syUWAgYmkWDZLeQ+Lzfh4kImiPWce0+UvteXDGlGdhK8C1SiJQLczjbQ1JdGN5CldL8hhTZm1xSSaeWtPDhpFPuqNrGLxP7wZTEE3qrQbQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j7hyiWSoQ69FcQvgpMFaxRFsaTS9A62QW7Xe+6RXrU4=;
- b=teiKFJmeg1tYUAwfYUx9TEobhnD10pu57HvUpSEQ3WAXFIiQvxaZQ35PrdlTL312Mb+bqrH1dxO8SPBZaxN+wqjWIcXgelZOyd/K1Asf8DgrJp41H64npOgX23izZjh3vISh/fjoRrOOf4vXPwEa1S+yFf8AGKQ6X9EP3RHHEUSIpOQsq0hImMRmGtHQ5+ZGv9a679IU4hPoT42jggFk5hjIlYX3H/mxWIZINjTxNRlpmge1awz171m4ZCctigBHkjO/HU+swkvIx84y8ITIm4SZOKSKkV9jEtyHpBRewrylEo29ygbA+2tjJhLMtdCXU/Ke4nq3w/vP9Rgfw7Prnw==
+ bh=NFaZwlXMm154RyzvoO9SPFgT+R+gc8riXsKJwfhE8n4=;
+ b=DgOO+Nm/SwevfGaGxbcUoDREy0lU/4wcp1y8zir7F79XXHBPewCBfjudcuis6TZEhLhTX4HC14yYT/+F99Ro5Q6CXh3166eiyMqO8hwc8Z7q6iYbqjvPJj1LPvHLSYGvk+mLVhH3w4L9DKeRbACIQxXVGg68rE5hoGKDIm5Wg+n6V5lJPIXYoOscvUbHRFgYOA3CIloKkW3yt2ag1Cwuv6Vh5HBhzAQ7qPic5bFR9L/AcVEmHKxrbWFpTu5DltBSFgEVqULVTukXaUiICKzkcg+KhKipSWzjYYznpGb4J8u+iu1fHY7JJffa3k2BLBFhiJKSoWLBewzOAnSWB+V1Ag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j7hyiWSoQ69FcQvgpMFaxRFsaTS9A62QW7Xe+6RXrU4=;
- b=iGZf7D0KwNGjBj3o+WAEetDl78gKd0DEF0QCxXfdT/u+k0EcjFNP+8bV/cdptAj4yfyO61GQwA/PY7jiJNHvlB53/LjW6OfodT2nDpqvO+REeNbt1aKATS42fmPW3srq3TSUmKprLYVVui8S1Y2PfoghHb/VBNEzwVrNCmciX8g=
+ bh=NFaZwlXMm154RyzvoO9SPFgT+R+gc8riXsKJwfhE8n4=;
+ b=X6mrRpuLd9lU0Nho5+/EMTZ+/hzTHebW8IhcOe36xhooztiiMduzACrVuO+EA4fxnNnKl0/OvuzOweSDEmmw6zClqsIsnAz5dvuDhweU+kERZldNfIVbqcFCCXuKaqPRJ6rRGJNOigo6REGqkTr3EegkzDY81YjNmJ3e6iXM/44=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- DS7PR12MB6216.namprd12.prod.outlook.com (2603:10b6:8:94::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8158.17; Thu, 14 Nov 2024 17:24:24 +0000
+ SJ2PR12MB7943.namprd12.prod.outlook.com (2603:10b6:a03:4c8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Thu, 14 Nov
+ 2024 17:36:48 +0000
 Received: from DS7PR12MB8252.namprd12.prod.outlook.com
  ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
  ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8158.013; Thu, 14 Nov 2024
- 17:24:24 +0000
-Date: Thu, 14 Nov 2024 22:54:15 +0530
+ 17:36:48 +0000
+Date: Thu, 14 Nov 2024 23:06:36 +0530
 From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -66,19 +67,19 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Mario Limonciello <mario.limonciello@amd.com>
 Subject: Re: [PATCH v3 2/3] x86/smp native_play_dead: Prefer
  cpuidle_play_dead() over mwait_play_dead()
-Message-ID: <ZzYyPzT4AwSkbRpH@BLRRASHENOY1.amd.com>
+Message-ID: <ZzY1JJequFwJr/of@BLRRASHENOY1.amd.com>
 References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
  <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com>
  <20241112114743.GQ22801@noisy.programming.kicks-ass.net>
  <CAJZ5v0hJ8NoFgjtnYce99+qjCZc3_ihBojyK1gRrcyU5Fp6inw@mail.gmail.com>
  <20241112145618.GR22801@noisy.programming.kicks-ass.net>
  <ZzSQcq5JxGgKVh5Z@BLRRASHENOY1.amd.com>
- <20241114115831.GQ6497@noisy.programming.kicks-ass.net>
+ <20241113162222.GA24625@noisy.programming.kicks-ass.net>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241114115831.GQ6497@noisy.programming.kicks-ass.net>
-X-ClientProxiedBy: PNYP287CA0014.INDP287.PROD.OUTLOOK.COM
- (2603:1096:c01:23d::18) To DS7PR12MB8252.namprd12.prod.outlook.com
+In-Reply-To: <20241113162222.GA24625@noisy.programming.kicks-ass.net>
+X-ClientProxiedBy: PN3PR01CA0126.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:96::16) To DS7PR12MB8252.namprd12.prod.outlook.com
  (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -87,101 +88,111 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|DS7PR12MB6216:EE_
-X-MS-Office365-Filtering-Correlation-Id: ecdc120e-0ebf-46cf-e05e-08dd04d12f1f
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SJ2PR12MB7943:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08409df9-b317-4f28-195b-08dd04d2ea3f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?lSd3HXYte9S6fnqWpOlHiuFdoDMFo/61obXRb1dE46f0ZhA2JVdIvJ8uEqn9?=
- =?us-ascii?Q?1A70VoZIAroem1C6PavkKlQ0SnTROoxdhgc6/2tdZkVr4iA6+96P8jmDwXn9?=
- =?us-ascii?Q?BlIy8rOB8IbyAfEVpuf8nwvkBZd6NigK6ImpcypPoRUuK9CL/ZYpHasQcPSf?=
- =?us-ascii?Q?h49OxgBIqdctppK6PdQ9mPcpx31IEy2Q3NtCdLl5RF2v6Wf7SJ3QOJMNSeaJ?=
- =?us-ascii?Q?PmIhpuzk3L8m9TeuT4KREoXyy32UXTskswj0SDTX5vHyEcQ9BY5XNuNEmNq5?=
- =?us-ascii?Q?OC6kFfBgvZ4RX1oNK0Gt48Johi1kYwd1pGNdfQa+Y0RrtiOJDMXe5XksnzXd?=
- =?us-ascii?Q?kHpvahTnkkNjlOFcY3n5C3blgYDglaw3m2sdBwMg7aLV5NH4Bc0KowRIh0wG?=
- =?us-ascii?Q?WIqTy/TuCESxnhXH3IBaBgQrV9uUQELMxw6D6mredka5bgapxxsOBtUgfzSj?=
- =?us-ascii?Q?oT09D73wNSjZqCoPcPVrE4d3SFkLRFlXXdWYOenXO4W8mLFrWSIVChZAqZTD?=
- =?us-ascii?Q?u2inNv5n4tFpMAydMyECo+Kp6XS/Q+J9N2qV3TN7n+puz1JmYs0y5C1Exyha?=
- =?us-ascii?Q?1hkv5AtU5lNl2duBgFBMNirNuLHyXZ7delMVzOo8dr3T1IkWGRoTp8clW+qh?=
- =?us-ascii?Q?HA9ezMITuuefNbeAJV4Rl6WzeDU6vjCvlJ7XZESpmn6SqOuObggFNAUT0hr7?=
- =?us-ascii?Q?DCprGtERaPgpv9qvuUMCnxY4p+ugXMydVGjPAQ+HbOXJx+D3vP2ZWCP7K8A+?=
- =?us-ascii?Q?Fz0wARxbbF1O7L5sNPpANfKxeHQlm6i4iSsQPy4/OICuxo0st/8by2WtDz0H?=
- =?us-ascii?Q?aZRXqeOaPqCB8tTzCIhrZoxzJajByn04UaqMR/zYeQYdMKKT7I1KZ0R8mv4E?=
- =?us-ascii?Q?MGz8izUxqIzH6Kdktc7dtDr/g5j10uKEPujaFWhP0xC3imrKRSYyPQzkrump?=
- =?us-ascii?Q?94aDP8BQaRnXPNCRKIUe9hgSWj+/IL6iABgddRYb3OsabnuR/CwIXcsxO+Uc?=
- =?us-ascii?Q?VLFKtf1LQXng+dV5xNTAEJH34q7Dp3mb7sbHxXogdCCyJyczSmxCklDA7pT0?=
- =?us-ascii?Q?OjYQ7AKPJpQcoGWOTijiwjIJJbh8GenP41VACJVWNscGkbEsoUBRot9ARz0o?=
- =?us-ascii?Q?uGU4a5sfwfr7YawxligHjuF9PhuQqVlymaCWP7UX2k2NByjNg/rmUJaYvHVB?=
- =?us-ascii?Q?deujGmkIw8jfiluq4+HK8wgAUamL+LOi97bB3TnzQ9YAJR6dAg2MV6KAMyw5?=
- =?us-ascii?Q?b/w7W3v7Pxa26J3xllrk+XbjKl7fHxIKV0wt1NZnUY5ofwUbiYVQOB1ctVd0?=
- =?us-ascii?Q?FkplAx4qZCH+kmkkyjIv7nxD?=
+	=?us-ascii?Q?bJgRM1NElmb/EZrzXVDx1AVWLk3lErlTqt74RJc+xUCk786PMCaDH9RZ099F?=
+ =?us-ascii?Q?5b5WXXdzJtsj7E0U5s7bW0gQQJTy8ClZjXKzPNKa2/0zfQUN+e+VjAlfvKRY?=
+ =?us-ascii?Q?4bEsy7IU/pX8d23mVxSdxBmNO2dNVhVobHHvrmduuMphVQldr/9mQ/Cxwo3L?=
+ =?us-ascii?Q?s/0qN9gK0laRFKnUqHWyzJ9R3PVQnmbMrrSApxtK8aBPSbv5qH9w51rzZH96?=
+ =?us-ascii?Q?5PTGxFr1+Ki+OS2K6TPU9bmBnnDOePIqtVI9sksFFTw+cgGnwmWjLRXwelN5?=
+ =?us-ascii?Q?UKXBplPb/AstWyU1xQRHFHuEsMvJw4VV6v6kGp752i4OjME3oxuzQH0Pv7K6?=
+ =?us-ascii?Q?899jw6LCZDx1n3/0bFSI0OAS5cVHYTj++Zw2kMi2QMhUJyu2Bjy6Rnnp5ooo?=
+ =?us-ascii?Q?W9O81KCv525R983w9vlMrs5BLHzsEbc4yh37qByWSB3Da8PBHuCRptrFZM9H?=
+ =?us-ascii?Q?g7zGPuA0Yqwe6443of+jtwLO4OjksIX98mkFxp4ZXpmF/fQtAyQG35FO5sZl?=
+ =?us-ascii?Q?cdT90g3EMAu3hqBbjSH1KAIUgpKO3JY1ThIhtvohdxD3NGC1QIuqbyphC85m?=
+ =?us-ascii?Q?kaCjS0VVdTN4d06giR4+QXMskHA0jJPC1kLMRJhkMrDu1d0ena0bIFz26qzA?=
+ =?us-ascii?Q?DSrOmCOBrD0GUcSp3Qcnil22qwydMxgGABin6UqMsqUCE6/TpSw6SXyGdjbS?=
+ =?us-ascii?Q?bRTHGf9Dj+T/c+ZbEEBCtnOSiTRroA8ljdpn2OtA3GjuN/Fpx9fapPkAbwx+?=
+ =?us-ascii?Q?ushoeaulkuv2HdR7rgSwerVQzcy4PzOoNCnvGoVQfY/fvVWh5WXvZJH8Ew1g?=
+ =?us-ascii?Q?0hVdLju5mlxt3XPitLnzgOaeRKQyErM1urmRmZEKLSjgBffxJJ+w7K+oXsVM?=
+ =?us-ascii?Q?zhWCGUlDMXRAYVQg9ucZ6c5CkBio41F1STTqT2JHX0JusDXz8Xe2KLLi1jE6?=
+ =?us-ascii?Q?xtcZwyIpwQqXd7ldjwZ0QRfp09N+2QFQ2lLj+X8CIUpEEbg70IfXRxS8bFWg?=
+ =?us-ascii?Q?5NVBgknCj1JYqCrTQe3RPVR29UhoXscmvr+5izAOzmzb4bk/OmbsmsRPK09C?=
+ =?us-ascii?Q?jZrQU8KFQqL9fKvTKlbOSZ1ylEw8tnPSfq+eSFr9WD+evRpUr52VTd5YGSWM?=
+ =?us-ascii?Q?igqVBAGm0V3q787RdkWjIVcdrl7oaYVfRW1cMcTatw1+9fsb/9RhteRst9h0?=
+ =?us-ascii?Q?/cvn739BsO596fc/VbZ6V9EornyHVkAyFndWB/EAU7gvU1GZlzadOQAl2maS?=
+ =?us-ascii?Q?YuOOjT+ZDGU6v1wAL8rqdnyNp5rvtdGxtS6PEkXU6XFxOV4gp5d/0NcRVQtl?=
+ =?us-ascii?Q?hEQdr7P9/57tadNnfIw+Rs2k?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1d4sPOYv+jC6yOOCt9aq4oFdZlzZ7vSRMjS7k7Ky8V88E5ayuJsfWo+fWJqc?=
- =?us-ascii?Q?vcGdG4SKSOGL300mfwJcqp77EHWwZTlyXNiSKYKgozitUfjhPM4yFwsUgsH/?=
- =?us-ascii?Q?o/WI1jLnyoIJxQ42/Do2/TELu3aO9CpwXJ3fyKrw6+vJsQtMKk+owHSb56EN?=
- =?us-ascii?Q?086zuyvtn+D6RKd3M/8eO5TEMilRwUymc496sEjMDmsjiy7SiY+lblBaIEHU?=
- =?us-ascii?Q?72cMo7fvDicI3At9k3j2A3p7a2dbh9eu8vvgAMvIFcb7tRgd31p3g9Ur786d?=
- =?us-ascii?Q?ttpRRzlzYWaD9HsHfehb3dTWYFUESazjGZ07wvCBzT711F2f41O5tZzfDds0?=
- =?us-ascii?Q?UDWSxW3Uv44G2QHw7Fdk5ztIkkUpcO77y95aHcal9y7nB5woZQdq471I6bkJ?=
- =?us-ascii?Q?Nvqn3zzolkLebrdnm4zSJvYNFIRmQPFd5m3SkJ5L2P7T/lFrRt139F2+Tba1?=
- =?us-ascii?Q?gvfY5T52MaQ3g4oN9gdK1n4jSjZzT1o/zhZGfC7CQVN9ZBM8DUODBgqCohhA?=
- =?us-ascii?Q?LrAqWkxm6Uq12J3/8JfSyjCn3ty254N9JHkr3Mb4fCnknCBUXgMjeI5hidA7?=
- =?us-ascii?Q?0WIPjjTHhYwQl6dUehmiMhsbe8823pJxKMUh/HN9dO1TJw4Z6Meo6mZa4D7a?=
- =?us-ascii?Q?5vBhmh1WcQClO47KKocqaGf2g4lDmVKtrsEESXyPtu1v6E6WKT/RFyujXQ1j?=
- =?us-ascii?Q?AcokhvOXEJWpOyChsVc1v5h1D1Goud6G6MwQ+EOzzNDXyCbaZlS22ozrjg3R?=
- =?us-ascii?Q?ayqDZWPrrVRahsYdw/aKHh7Q5lxTOdUV8jQpDSlAXvuui7CaERheneom47Na?=
- =?us-ascii?Q?HfQtmtecMvRNaupk+5OF9NImMSOdWq62JEwfdL+BhE0aGBLYajw/gHJIA7zt?=
- =?us-ascii?Q?f0KrgP0ktIQTRsHZiWZIrh2SUC2fdeyskzEKiSgDu933dd5LzTkL/TiK2KZx?=
- =?us-ascii?Q?8tNBAK/ptloC/0uFUl2Zf1mCXb8Nrap5N9+anby97uF0N0BAlECO9k+t1xjj?=
- =?us-ascii?Q?udivcsLsnmWLyd59HoWXHMI+K4VwBfzB2Gw1dax2lfozBzBsLeb+3H28SCdo?=
- =?us-ascii?Q?ktn0HS4CL1j8zNYjjhTVHrLJBo7ue1Tmub55EFprbhrneEhA+uVBtEao+Jxa?=
- =?us-ascii?Q?8jhbFXmXj1XA/3KcBb6Bq4CTOpbweH89TxLNG8XTmbtfGV1+aEuhV3CyvI68?=
- =?us-ascii?Q?KhYczkP5L+znoeA4Mll7xiube5R2XR7cH79qTYBYM9izlYDnItTxAjLq1nVp?=
- =?us-ascii?Q?cfndqcjGUoC+bNUVxY503b7VKzOdCEsgHtRkPXtC5lA2NZ4TR8zrDZBv12Fz?=
- =?us-ascii?Q?CHlMglybNmmaEURCB7Fvlw+ZM74jcRlv4+Bpq07I8hcJ0zjvgpYXosrMQ/sH?=
- =?us-ascii?Q?scn41+H/nUcaMFPTs9/OuUPaHovtRbFc9smddSBcPEZI+wTfnE/FRbveFDJz?=
- =?us-ascii?Q?dYIuLj6HJuN5UtIEd8rK8AzNL19fmf/sRVXk/APi2DTinwnJMPY62C6T7y1r?=
- =?us-ascii?Q?NOQDdTnN0HGV8+k5KyUPBQBsBfRk4vfa7oH7Az95ksWZQLED+2T060FqYuWe?=
- =?us-ascii?Q?744BDAI7/yQBFx6ORIg4Be5d8RicyK/+NvVtU58T?=
+	=?us-ascii?Q?PZHs+JPeNihkFGZKRvisY5rhKhRHQdWrU50F+RvZVDI6SR5G9WSVGXksDuMZ?=
+ =?us-ascii?Q?7nLxuEsSrbmI72qUD/JiAo7+Run3zH3cOnjNjdVD8cdD1jHsGVAYP3/4Mh+M?=
+ =?us-ascii?Q?lHYBtH0vQAM359rJ9cnXoA2oTOKC1zifwysdF0rVt+0O8KKjEqirtEZ1HHa+?=
+ =?us-ascii?Q?8bLBlcERbkMo8HOnB+AecBOFySIOVjZDcSTtrjHktI2Ikf+qb9/VbLrkOGva?=
+ =?us-ascii?Q?O9URvFD3kcKnPmoaX1CpTprl5L2Fh4hmFPTGHvqONxEUN1DOWqvlGX8Ft0Gd?=
+ =?us-ascii?Q?YzOefGQDb/b/cvPI+B6pO31y9MajzoPcqjjyR9rpwk6yMDbkd4dXh7b/mqc0?=
+ =?us-ascii?Q?x80Utnvtdz2VA6VTPZG2uxDiOSh9HW+lDHNPr5HXuK95U4hhDftvMls7f4jv?=
+ =?us-ascii?Q?cnQdLSBHQ/ZUb/Werr0pnSd4fX9cT+3XNY+1ecGuf3zlCQ3w1OAYOK9j0nGm?=
+ =?us-ascii?Q?7jUIBt7mNVHvD/q9k+gV124QaEe84Lzzi9AABfA/LPVU+uaTGoukFSB26SM6?=
+ =?us-ascii?Q?p/o8By8lvUXb8QINJokhGVJtH+FNOw7vKnI2l1rjom0FuMCzDoM/4VmtiXOC?=
+ =?us-ascii?Q?SKa0VXhnDzu9+figRU8JW9iZzxo2zah750hf0Uvgqbc3DROMK4D4IIhwTQOS?=
+ =?us-ascii?Q?yYjhxCNgSNeJdrlHGU53botIlsBBH7ssR3Z1FphBH3o8fbyEKKB8zF5T1B3y?=
+ =?us-ascii?Q?ifXxh+6WS5hC6yXvbAVSQk6NTL1U6npolzQo4VqkDQk5hR4FEGUBiacFa+qN?=
+ =?us-ascii?Q?vE58gVgt9fGFxfKGeuAriJ8tPRJBbzQKV/8LpYIhhzzMBBF9EHc9Tte2069Y?=
+ =?us-ascii?Q?eleEcpr4wGs4tJlWv1CoMyJtKQ/h4e1TTvQjkpZ5KLVsjuw2yQSR7lSZpVgz?=
+ =?us-ascii?Q?JLvLTLCV1W0VGwA6lMkSTFyeHzMkKFjqfdm6siId3OzXrBp2OFeEc8Opq8IE?=
+ =?us-ascii?Q?6unwagYxf+w3AADgNgbm1hsyRpC7NardZcfKK2Hrj01bzbTDmd3S9k2L6UoZ?=
+ =?us-ascii?Q?AjJSQa2+OaQE9xO5vgsWZlYC/U6qn5ocbq2EaOjcBRZd46JpBtrjjFst1apL?=
+ =?us-ascii?Q?ivj9WeAg1UcmcAdpR5crNTqUyOERopDNkVbkNFtYa9rrKgX/vmv79bo3C5RG?=
+ =?us-ascii?Q?uNJUtrPgGPcIy4tlyYKrIRFixoDspSkbgRrpqf/gceHZZhkDvhGaJKlpv/24?=
+ =?us-ascii?Q?gdSCkj30tYZVhRZ8NBJFIYIYzLQe2k6zkuFlh3V6LTsF73/QjCd+w19nLwyx?=
+ =?us-ascii?Q?r/9rc8lttTInGRdFNydKd5iMTSXKK5PqO49Fg31hg9irEZavuqzwzHstMr9J?=
+ =?us-ascii?Q?FT/7FRrlM5/nHqiHtdEPAnSPhClC6wP4bNQ71c8CmoJz8aIo1xM7Rbwu+SK9?=
+ =?us-ascii?Q?X7UdeyZ05WQngsGi+Gb7QDaoHlSGY5uj7ps5wR9vrmXdYZpE6j8LSxjZFMTE?=
+ =?us-ascii?Q?XBpaZXP0Dij2cZkum4rNwtzXHs1mBte7V+8IXQm3EGGUx39It0tDtGHWHtpa?=
+ =?us-ascii?Q?fR4k960E8RieGOf5OOD4y1i5jFWJLXFQe2dl2/q0irURYFUuBOBO/5URG0IC?=
+ =?us-ascii?Q?uqKaXi3uJtFYmZvjxBvwiQuCOPHbMv0dGp0M2ak/?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecdc120e-0ebf-46cf-e05e-08dd04d12f1f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08409df9-b317-4f28-195b-08dd04d2ea3f
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 17:24:24.6962
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 17:36:48.0002
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2tVFIxhzQVv7/epXxLqgCjNaFuD8uFz84dYBsQbw2Lk+PQOyN2Tn+Y1ll08g4KI97Q9POmiaiQMU8HgR1nzdCQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6216
+X-MS-Exchange-CrossTenant-UserPrincipalName: q6gq6VA+D8zYYVnPCOtiQHZ/Rzg+wNBDbgedAtBHwxtOCZSwlnD6Tump35wKODp1kh0QvCKjYUXr3sYJmBaR0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7943
 
-Hello Peter,
-
-On Thu, Nov 14, 2024 at 12:58:31PM +0100, Peter Zijlstra wrote:
+On Wed, Nov 13, 2024 at 05:22:22PM +0100, Peter Zijlstra wrote:
 > On Wed, Nov 13, 2024 at 05:11:38PM +0530, Gautham R. Shenoy wrote:
 > 
-> > AMD platforms won't be using FFH based states for offlined CPUs. We
-> > prefer IO based states when available, and HLT otherwise.
+> > How about something like this (completely untested)
 > > 
-> > > 
-> > > Robustly we'd teach the ACPI driver about FFh and set enter_dead on
-> > > every state -- but we'd have to double check that with AMD.
+> > ---------------------x8----------------------------------------------------
 > > 
-> > Works for us as long as those FFh states aren't used for play_dead on
-> > AMD platforms.
+> > diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> > index f3ffd0a3a012..bd611771fa6c 100644
+> > --- a/arch/x86/kernel/acpi/cstate.c
+> > +++ b/arch/x86/kernel/acpi/cstate.c
+> > @@ -215,6 +215,24 @@ void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cx)
+> >  }
+> >  EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_enter);
+> >  
+> > +static int acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
+> > +{
+> > +       unsigned int cpu = smp_processor_id();
+> > +       struct cstate_entry *percpu_entry;
+> > +
+> > +       /*
+> > +        * This is ugly. But AMD processors don't prefer MWAIT based
+> > +        * C-states when processors are offlined.
+> > +        */
+> > +       if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+> > +           boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+> > +               return -ENODEV;
 > 
-> AFAIU AMD doesn't want to use MWAIT -- ever, not only for offline.
-> Confirm?
-> 
+> Are there AMD systems with FFh idle states at all?
 
-AMD wants to use MWAIT for cpuidle and it does use MWAIT based C1
-state on both client and server parts.
+Yes. On AMD systems, the ACPI C1 state is an FFh idle state. An
+example from my server box.
 
-Eg: On my server box
 
 $ cpupower idle-info  | grep "FFH" -B1 -A3
 C1:
@@ -190,18 +201,179 @@ Latency: 1
 Usage: 6591
 Duration: 1482606
 
-> But if it were to use MWAIT for regular idle, then surely it's OK for
-> offline too, right?
+> 
+> Also, I don't think this works right, the loop in cpuidle_play_dead()
+> will terminate on this, and not try a shallower state which might have
+> IO/HLT on.
 
-I tried this out today and there is no functional issue.
+Ah yes. You are right. I didn't observe that cpuidle_play_dead() calls
+"return idle_state.enter_state". I suppose the solution would be to
+not populate .enter_dead callback for FFH based C-States on AMD/Hygon
+Platforms.
 
-However, I would like to run some experiments on whether HLT provides
-better power savings than MWAIT C1 with CPUs offlined. I will get back
-with this information tomorrow.
+How about something like the following? I have tested this on AMD
+servers by disabling the IO based C2 state, and I could observe that
+the offlined CPUs entered HLT bypassing the MWAIT based C1. When IO
+based C2 state is enabled, offlined CPUs enter the C2 state as before.
+If Global C-States are disabled, then, offlined CPUs enter HLT.
+
+This is on top of Patrick's series.
+
+I have defined X86_FEATURE_NO_MWAIT_OFFLINE as suggested by Dave to
+prevent MWAIT based C-states being used for CPU Offline on AMD and
+Hygon.
+
+---------------------x8----------------------------------------------------
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Date: Thu, 14 Nov 2024 14:48:17 +0530
+Subject: [PATCH] acpi_idle: Teach acpi_idle_play_dead about FFH states
+
+Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+---
+ arch/x86/include/asm/cpufeatures.h |  1 +
+ arch/x86/kernel/acpi/cstate.c      | 14 ++++++++++++++
+ arch/x86/kernel/smpboot.c          |  6 +++---
+ drivers/acpi/processor_idle.c      | 24 ++++++++++++++++++++++--
+ include/acpi/processor.h           |  6 ++++++
+ 5 files changed, 46 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 05e985ce9880..ceb002406d0c 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -236,6 +236,7 @@
+ #define X86_FEATURE_PVUNLOCK		( 8*32+20) /* PV unlock function */
+ #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* PV vcpu_is_preempted function */
+ #define X86_FEATURE_TDX_GUEST		( 8*32+22) /* "tdx_guest" Intel Trust Domain Extensions Guest */
++#define X86_FEATURE_NO_MWAIT_OFFLINE    ( 8*32+23) /* Don't use MWAIT states for offlined CPUs*/
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (EBX), word 9 */
+ #define X86_FEATURE_FSGSBASE		( 9*32+ 0) /* "fsgsbase" RDFSBASE, WRFSBASE, RDGSBASE, WRGSBASE instructions*/
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index f3ffd0a3a012..a5255a603745 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -215,6 +215,16 @@ void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cx)
+ }
+ EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_enter);
+ 
++void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
++{
++	unsigned int cpu = smp_processor_id();
++	struct cstate_entry *percpu_entry;
++
++	percpu_entry = per_cpu_ptr(cpu_cstate_entry, cpu);
++	mwait_play_dead_with_hint(percpu_entry->states[cx->index].eax);
++}
++EXPORT_SYMBOL_GPL(acpi_processor_ffh_play_dead);
++
+ static int __init ffh_cstate_init(void)
+ {
+ 	struct cpuinfo_x86 *c = &boot_cpu_data;
+@@ -224,6 +234,10 @@ static int __init ffh_cstate_init(void)
+ 	    c->x86_vendor != X86_VENDOR_HYGON)
+ 		return -1;
+ 
++	if (c->x86_vendor == X86_VENDOR_AMD ||
++	    c->x86_vendor == X86_VENDOR_HYGON)
++		set_cpu_cap(c, X86_FEATURE_NO_MWAIT_OFFLINE);
++
+ 	cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+ 	return 0;
+ }
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 106f26e976b8..b5939bf96be6 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1285,9 +1285,9 @@ static inline int mwait_play_dead(void)
+ 	unsigned int highest_subcstate = 0;
+ 	int i;
+ 
+-	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+-	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+-		return 1;
++	if (boot_cpu_has(X86_FEATURE_NO_MWAIT_OFFLINE))
++		return -ENODEV;
++
+ 	if (!this_cpu_has(X86_FEATURE_MWAIT))
+ 		return 1;
+ 	if (!this_cpu_has(X86_FEATURE_CLFLUSH))
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index 831fa4a12159..1e2259b4395b 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -590,6 +590,8 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
+ 			raw_safe_halt();
+ 		else if (cx->entry_method == ACPI_CSTATE_SYSTEMIO) {
+ 			io_idle(cx->address);
++		} else if (cx->entry_method == ACPI_CSTATE_FFH) {
++			acpi_processor_ffh_play_dead(cx);
+ 		} else
+ 			return -ENODEV;
+ 	}
+@@ -772,6 +774,25 @@ static int acpi_processor_setup_cpuidle_cx(struct acpi_processor *pr,
+ 	return 0;
+ }
+ 
++static inline bool valid_acpi_idle_type(struct acpi_processor_cx *cx)
++{
++	if (cx->type == ACPI_STATE_C1 ||
++	    cx->type == ACPI_STATE_C2 ||
++	    cx->type == ACPI_STATE_C3)
++		return true;
++
++	return false;
++}
++
++static inline bool acpi_idle_can_play_dead(struct acpi_processor_cx *cx)
++{
++	if (cx->entry_method == ACPI_CSTATE_FFH &&
++	    boot_cpu_has(X86_FEATURE_NO_MWAIT_OFFLINE))
++		return false;
++
++	return true;
++}
++
+ static int acpi_processor_setup_cstates(struct acpi_processor *pr)
+ {
+ 	int i, count;
+@@ -803,8 +824,7 @@ static int acpi_processor_setup_cstates(struct acpi_processor *pr)
+ 		state->enter = acpi_idle_enter;
+ 
+ 		state->flags = 0;
+-		if (cx->type == ACPI_STATE_C1 || cx->type == ACPI_STATE_C2 ||
+-		    cx->type == ACPI_STATE_C3) {
++		if (valid_acpi_idle_type(cx) && acpi_idle_can_play_dead(cx)) {
+ 			state->enter_dead = acpi_idle_play_dead;
+ 			if (cx->type != ACPI_STATE_C3)
+ 				drv->safe_state_index = count;
+diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+index e6f6074eadbf..349fe47a579e 100644
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -280,6 +280,7 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
+ 				    struct acpi_processor_cx *cx,
+ 				    struct acpi_power_register *reg);
+ void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cstate);
++void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cstate);
+ #else
+ static inline void acpi_processor_power_init_bm_check(struct
+ 						      acpi_processor_flags
+@@ -300,6 +301,11 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
+ {
+ 	return;
+ }
++
++static inline void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cstate)
++{
++	return;
++}
+ #endif
+ 
+ static inline int call_on_cpu(int cpu, long (*fn)(void *), void *arg,
+
 
 --
 Thanks and Regards
 gautham.
-
-
 
