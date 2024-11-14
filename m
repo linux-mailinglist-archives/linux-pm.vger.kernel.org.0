@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-17540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17539-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 939809C8481
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 09:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92DBF9C8480
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 09:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AFAD285266
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 08:03:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6616285236
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 08:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A856C1F6690;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9BE1F667F;
 	Thu, 14 Nov 2024 08:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mpr56vOJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBdXfmzZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B9C1E8857
-	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 08:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C226C1F5852
+	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 08:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731571411; cv=none; b=ROjoAld1o/LAvwzl6cnIoClQ/fAgmHY4L2wXMK2tbizI4F1jIbQR8ev//Wgg8P57lG0Y3jzIE2S6wZNmzgRBVQwW40VJefwSBKCfXQUeNwIkqcm43IUowU3wNVVF9SRUoxSa+zY/wfacJo0JSduD6BH5zTBZSMOnGUrd4cB6ZCM=
+	t=1731571411; cv=none; b=bjoiebsCs6oRq5hDga44SrCG/YFJMNLYYHGdMiqkyy+d92ZbPPNFiJ4TyTM/JYBU53vw+7sxHrV/uxt8zIvwAeeD3i+I8JaA3GYBykBS7OBLK+5HWrH9wY5vdMB3DI8x5+uU8YHMgm74LWPokNxvuc60zfFcYQnrHaZyjxcxY10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731571411; c=relaxed/simple;
-	bh=Irfwz6f+CCffVc4a2X3/8hjZ28G+Gyv2lmT80b3w2wY=;
+	bh=ZReP/VscnZ7hXhimMmbrzdZBToZXEG6J0V5UJDgz+9U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EPWY0srfhJbDvJmIwe+eP7A9vm2ZD7DvjFTrByfk0PXJJJw1R7zpdVNYu91FgwiAtS02LWprTZ4ADYXmNOIED5bXR9XOiN0stz2FdSHGvt5EFB3K0/dCPwX5HIDgr5aHK5XOf1a87EW/YrLpGAuXeauDRnscaSeRRgs8dWobpkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mpr56vOJ; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=TYENgit3cj88qP+vH4Y987SrhLSPcZH2bv1VRlALQooro+QDN6CJW6Aqo+h1Z3zt0kisN1HHZAbkPc09nhHkSQPEYDHEv+cfrIHIE/aezBez7bk0JMtzS0OWDTWfLp0R7qPFm6dVx3kYaIWHmTfvZhg/nb2wIc+K3altPaGj6IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBdXfmzZ; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,35 +36,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1731571410; x=1763107410;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Irfwz6f+CCffVc4a2X3/8hjZ28G+Gyv2lmT80b3w2wY=;
-  b=Mpr56vOJhRIoyY6xXbApaqmLYrMuKC7kDZT6NLD3Bki8Rv4jDJwrpITU
-   ljAJKr37oO3IyXxl957wJlf9znISHHvNRWmLwHjXws9C+7h5nKzCmRRyD
-   rSg7w/U8kjz31gsGc9DTryID4kZYE+LuQBlMKtT1IIbAr6dGjMp7uxg82
-   Shkfts9CQcMeOlJuV8lm1hZsVbvKy06RPy5xpr9T/JjC9VwwL0UR04MiC
-   nlOxp+TjgtHbBYpM2a8ylDVEWOndjeQhwqyK/J+I+e65q4emOnUfbHc5Y
-   3VuJvz3BGW1DpTBS4R6g0KlunEr4wbkcy0pRlhqw3c3OqNG7XdV+J9mtH
+  bh=ZReP/VscnZ7hXhimMmbrzdZBToZXEG6J0V5UJDgz+9U=;
+  b=QBdXfmzZ8aokmZPP4Z7Nga/5SEIKAYwq4ES3bKVRh68EDWbA+zFtTafz
+   XD+WxUYii2SnughEfw8ywtK6h11cKLwgiDjMr4fSRVPare6jK04+gIAu1
+   ydRLCkLq5gPPhaDIyuObZvVieOIzd6flfOmeipPa0CMfg3NI+r6ghmjO3
+   jjTQGhGc1RsoYZYsd6+ri31Gsr+VNMw6r9lhqJR9xt67J01RJPAjElAXR
+   JufOrBiXyez18RpLLMnflC6JAuu5A+u3HW0AQJINLpLB+Gwz1peRqY+VY
+   VqRsV3DzINtW85tNn08aIbU35P04PRyFBvdQf1pOBfuZy/VzZE1bbSV8h
    Q==;
-X-CSE-ConnectionGUID: TUU9aEM1QhKiZke7PjdqwQ==
-X-CSE-MsgGUID: mCOnnN/+QH2vHqzdF1bxlg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="31600433"
+X-CSE-ConnectionGUID: lQcRYG2DTpSQlqw0enh0MA==
+X-CSE-MsgGUID: Km4NJ8V3R0GbFIWry4pf4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="31600434"
 X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="31600433"
+   d="scan'208";a="31600434"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 00:03:16 -0800
-X-CSE-ConnectionGUID: 7/gel0/GT5GC+XtbEcU/2w==
-X-CSE-MsgGUID: k9A9jbp/R82MAmgSJf+4Ag==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 00:03:17 -0800
+X-CSE-ConnectionGUID: Z7GPxwtJQjyUabARrN/BRA==
+X-CSE-MsgGUID: i68jMhuGQm+/wQ96255XfQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="125627444"
+   d="scan'208";a="125627449"
 Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa001.jf.intel.com with ESMTP; 14 Nov 2024 00:03:14 -0800
+  by orviesa001.jf.intel.com with ESMTP; 14 Nov 2024 00:03:15 -0800
 From: Zhang Rui <rui.zhang@intel.com>
 To: rafael.j.wysocki@intel.com,
 	len.brown@intel.com
 Cc: linux-pm@vger.kernel.org
-Subject: [PATCH 01/10] tools/power turbostat: Remove PC7/PC9 support on MTL
-Date: Thu, 14 Nov 2024 15:59:37 +0800
-Message-ID: <20241114075946.118577-2-rui.zhang@intel.com>
+Subject: [PATCH 02/10] tools/power turbostat: Add back PC8 support on Arrowlake
+Date: Thu, 14 Nov 2024 15:59:38 +0800
+Message-ID: <20241114075946.118577-3-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241114075946.118577-1-rui.zhang@intel.com>
 References: <20241114075946.118577-1-rui.zhang@intel.com>
@@ -76,30 +76,32 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Similar to ADL/RPL, MTL support CC1/CC6/CC7/PC2/PC3/PC6/PC8/CP10.
+Similar to ADL/RPL/MTL, ARL supports CC1/CC6/CC7/PC2/PC3/PC6/PC8/PC10.
 
-Remove PC7/PC9 support on MTL.
+Add back PC8 support on Arrowlake.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 089220aaa5c9..bf1b5fe1f00d 100644
+index bf1b5fe1f00d..b35f63c2b206 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1003,8 +1003,8 @@ static const struct platform_data turbostat_pdata[] = {
- 	{ INTEL_RAPTORLAKE, &adl_features },
- 	{ INTEL_RAPTORLAKE_P, &adl_features },
+@@ -1005,9 +1005,9 @@ static const struct platform_data turbostat_pdata[] = {
  	{ INTEL_RAPTORLAKE_S, &adl_features },
--	{ INTEL_METEORLAKE, &cnl_features },
--	{ INTEL_METEORLAKE_L, &cnl_features },
-+	{ INTEL_METEORLAKE, &adl_features },
-+	{ INTEL_METEORLAKE_L, &adl_features },
- 	{ INTEL_ARROWLAKE_H, &arl_features },
- 	{ INTEL_ARROWLAKE_U, &arl_features },
- 	{ INTEL_ARROWLAKE, &arl_features },
+ 	{ INTEL_METEORLAKE, &adl_features },
+ 	{ INTEL_METEORLAKE_L, &adl_features },
+-	{ INTEL_ARROWLAKE_H, &arl_features },
+-	{ INTEL_ARROWLAKE_U, &arl_features },
+-	{ INTEL_ARROWLAKE, &arl_features },
++	{ INTEL_ARROWLAKE_H, &adl_features },
++	{ INTEL_ARROWLAKE_U, &adl_features },
++	{ INTEL_ARROWLAKE, &adl_features },
+ 	{ INTEL_LUNARLAKE_M, &arl_features },
+ 	{ INTEL_ATOM_SILVERMONT, &slv_features },
+ 	{ INTEL_ATOM_SILVERMONT_D, &slvd_features },
 -- 
 2.43.0
 
