@@ -1,193 +1,228 @@
-Return-Path: <linux-pm+bounces-17585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEFC39C950D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:11:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 239129C9521
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:24:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 646A81F212C4
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:11:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82D33B2305E
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A905F1B3949;
-	Thu, 14 Nov 2024 22:09:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3811B0F06;
+	Thu, 14 Nov 2024 22:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sv9YPr3n"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rY/ATRYw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8E61B3930
-	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0BA1AF0BD
+	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731622192; cv=none; b=X0KtjMRpcbIvJDei4zZz4b3d551UAy3wm/U+v9id2Z/bX5CPFB9zsrqN8rUXbm+lWLHi0D5+FGeve4ENOjEV6tjJtNbe7aqQ8M+0CChvaaHa24C8o6x80wOdCjnW516pTZT5ZXI6tHUltqXoiYjPUbUZ96O5QDBknsYan5cf42s=
+	t=1731623087; cv=none; b=fvgK+Qfj7M4Cdw51hIOA09C9/ga435JdWuYt/gVPjyOiUEePZDUAOAHfvCah+mIeDvDVlhHc8OnPk1K3LgMEdxkXcPBmqfam8TXl3S7fx7xLq/0fe3qnUSNd2Oryb7eVcDGR4tXDKMTAIhvh4822vpUUbype3XUMbdSLEh/vwQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731622192; c=relaxed/simple;
-	bh=erE7x5UyBXgceNKubyiTOJ7BXeO3c7MeYHV9axV0DZw=;
-	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Cc:Content-Type; b=FmKV2MtpKj35g0ByIannH1TUrQOKDOWOMXt0gdvb58VrrzL0sOT2FMDvlzyf8lnGgC973WGNZ0dIqJd8CgvQX3xEGOwpZZHrcctFfJr99WE68Unm9xU3N/t67m0pPi47udsp9wKMV2nvixL4+UH8kphSBI2itKsDeGlKSz7rBQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Sv9YPr3n; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e381d10dd2aso1327793276.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:09:50 -0800 (PST)
+	s=arc-20240116; t=1731623087; c=relaxed/simple;
+	bh=m5M/qvwkZABSZEa9g4iUO/LAzfV6JOoQRU3uwmnmdXI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uNY4CK8zFTSZjCrKZd1xqa1Sf+3yZGgP//8rd17JLjW3z2yj0G/b9IqJ54V1QOMC0lW8IsF41gFnwNWRoLw7T3EDHDXfgc/NqYhF02+0bi62pweOyp23w63mc1p9eVz9cpmNt1SA6gFZB0JqZ6kdAPmlnJy/ZhMGHLTR9+1GJJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rY/ATRYw; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6ea7c9227bfso13726337b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:24:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731622190; x=1732226990; darn=vger.kernel.org;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ix2aZjNEV5v90Kyb9lVYbv1gl/XRVKcqFa1DVAk8aZ0=;
-        b=Sv9YPr3nuqoK8Mxj0uLy67ZQrYPVOEVW2/3nXGcHvyTg1E/5s3tSEuPMSbT2CEOTc9
-         esgkJJ7B31K4XcSsZbYDDYrXjz5AJbY3qhwIkoPl4aokj3mJLOw5sCfxw7sWLRjj0MKF
-         JbDSbQOZLJSJPmQS4X5F9XCg6/ISxwv0Cn0kZ+HPKxl8gzE/GkqZl1btVVQDwbRoB3Gq
-         XLfqXKFyk8eg7681tdMDpQbA2E+5L+R+1S2V0me/3DH1mQ6nukegp8uXWKMwiHFZRY8K
-         HmgDOHYLvg8ufhQJKQla302wM8T4M2rfqKFczo1+N9wVXrUO1t67KhqJu3OGeee5vJtJ
-         kGYQ==
+        d=linaro.org; s=google; t=1731623084; x=1732227884; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fz1cryoPNcmIIhBTuToySSNUuCG3KvwOQc0AQslJ9bk=;
+        b=rY/ATRYw7hhf7JMQOQOJ2XfFzl1VJ6CIkneuwRwu2rVTZcufOvzth5GX5Kb796BlB3
+         Z2cT5skxtUAI99ZpGoFVMKKAV1Ekxub2ajtONJXTgGZY4xwv2CF56mRt66TWFGi9HCrk
+         fGMNsOUzHsQl+dgBPvuGG0bQwGijcHbm2WS+srBzqSHpPp7OaxorgEskvWFBKzJR6C9i
+         O6fFu8w+IHZI/cdLSnONgqASQWQ2ILRuFSZOvcBVsCExjxR0IffQUYyCR34VZwLNjppt
+         BL8kRj8ieRTDj1EVJGP8BbYY0rVow65fPDxzqjgXHoLA75sNJ94ZvIfRrJUJ8xvTMmk4
+         fkOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731622190; x=1732226990;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ix2aZjNEV5v90Kyb9lVYbv1gl/XRVKcqFa1DVAk8aZ0=;
-        b=V8btdyMXpJ656RdZiRt8Ng2wkZdVNfAsWLIGCmkMpqgrlaAUTMwxOL5dbN7RuZF5Qq
-         zfPtwWRhXnPtoBGbxWH+TxVnL8jMAAuC6DB02jaH5PUlN2DzfEDKRzW8KfHbHQApaaF4
-         jxJDXqdZVbTm/SubnoukbEupIGdYka3lx/Kcbgsc6ygig7pmgGSFtRvkMQaCG5L4zUyC
-         MPnxOowaovMngA42wE9De11FgD+bOSpCcJbbHoLNr5Z/pWx9+iItJtJAWz8vOWjBJqmj
-         St15puK3FytphHXd49K+fe0MsVz7ELVYPcaq/nZwKUh/nm38Hdo6mDZC4hRptzqmDD/h
-         sf4g==
-X-Forwarded-Encrypted: i=1; AJvYcCVFgCnPIE9+lmQC/PKRggEhxfzMox0rNgLKrJFsskBtlGYuY0ahk8jCqD8Igm4rWSctAO+FDSssxQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDOsirr8E2VfIGC+mloqmXU9Y8vbv5EPO+M+6JuaAVK7QKl94a
-	me0gIjmkA+DK3cvbbIhHJRNoVuGaVcx3GrE+E5NqDiXtprYMzlftLO9PMN6TrYFuZzdfyxQb4rz
-	bt/wCAK2judqm/g==
-X-Google-Smtp-Source: AGHT+IF8VfOz6LQsMr/CGI8GCQ4S/zLj7Vdday2+nUG/rZc9SbBgXM0Sf7829fpe/0ZP6BT+O+UG5Ot4zG8sR2g=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:3e23:8355:c37:686e])
- (user=saravanak job=sendgmr) by 2002:a25:ce05:0:b0:e38:25b5:e33 with SMTP id
- 3f1490d57ef6-e38263d5d0dmr314276.7.1731622190059; Thu, 14 Nov 2024 14:09:50
- -0800 (PST)
-Date: Thu, 14 Nov 2024 14:09:19 -0800
-In-Reply-To: <20241114220921.2529905-1-saravanak@google.com>
-Message-Id: <20241114220921.2529905-6-saravanak@google.com>
+        d=1e100.net; s=20230601; t=1731623084; x=1732227884;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fz1cryoPNcmIIhBTuToySSNUuCG3KvwOQc0AQslJ9bk=;
+        b=f81B9Sn6gNeZLU/kFhwMAOUXvF8LJin183zMikf3vD4r29Qemz4MFPhwGbCh0KWzIB
+         pI0peFUN5zFFeEL82kCDnpDLwJ6lfu8jx7GyCDg9aIRo+xyhGJJzPrN8hvhjPBpYFiqW
+         OvP96+M2x97egTwVa/7lTC7g7+g7rtzKOyVFwvSjRL6NfrC00rV0z6pe4zW504quSn/J
+         vifSgdu1EGohJKilarU7DYDxrDVsmKHg0diH0plzSYYysoWYCqCBJugtzoPn2TiCr2tq
+         /HoS1Q2wcO4yBJSLF3pm7yqOVRm3SQ9EcccvUCf4M60WxzA/p7O7lKwBQF05ZZx5dvln
+         KKvg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+zQLF+K4dKLl8gLW8Z1v+O8LLc1EVYUpCbToAHZRawnWZ+ElYjEHo3JEWJAOrsCM+o0GzTnHy2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUmkH8oACyMMa/BWEi8ZnXSUYqeLn3Eban04A8C931Le2ejvDg
+	/0C/dsYN3gEovpxvBik0GL0QBK5Mofeclvz+0rgwZQExT/NaeBk2eF4H5/UjmJsKaceb+6FJCsU
+	jHa62OFCIpbpvGkgAIcLxhKg87t8+bS6N+QV1yQ==
+X-Google-Smtp-Source: AGHT+IFrzmp0d+SxhQuy9csj+6FAqaRg2lAarl1XN3L0geodgrc2R/eWwEK9i0dJjAuD8YAqO7lGoVt6qLOTED2p30M=
+X-Received: by 2002:a05:690c:ed4:b0:6e3:b8f:59d1 with SMTP id
+ 00721157ae682-6ee55cd17dfmr9350597b3.31.1731623083931; Thu, 14 Nov 2024
+ 14:24:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241114220921.2529905-1-saravanak@google.com>
-X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Subject: [PATCH v1 5/5] PM: sleep: Spread out async kworker threads during
- dpm_resume*() phases
-From: Saravana Kannan <saravanak@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>
-Cc: Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Marek Vasut <marex@denx.de>, Bird@google.com, Tim <Tim.Bird@sony.com>, 
-	kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+References: <20241021-gpu-acd-v2-0-9c25a62803bc@quicinc.com>
+ <20241021-gpu-acd-v2-2-9c25a62803bc@quicinc.com> <mz4zpcr4tqh2w7vt75f4ofxjzfve54ozzgpdbi2jjzk5pdxbk7@t36tlt3mmprt>
+ <d858dadb-4098-4c9f-b4f0-393dc988db5f@quicinc.com> <4426b4kybtac6rc4twa5pgm3hvlegofemvqjcrvh6ni7f5z2h6@5dnlv3hgywh5>
+ <c5e868e1-2dae-466c-a6fc-ef0f247fa0ce@quicinc.com> <278e62e1-02a4-4e33-8592-fb4fafcedf7e@quicinc.com>
+In-Reply-To: <278e62e1-02a4-4e33-8592-fb4fafcedf7e@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 15 Nov 2024 00:24:34 +0200
+Message-ID: <CAA8EJprgshjbNqNErOb06jqV__LmbWvocsK5eD8PQqL+FaLb1g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: opp: Add v2-qcom-adreno vendor bindings
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-As of today, the scheduler doesn't spread out all the kworker threads
-across all the available CPUs during suspend/resume. This causes
-significant resume latency during the dpm_resume*() phases.
+Hello Akhil,
 
-System resume latency is a very user-visible event. Reducing the
-latency is more important than trying to be energy aware during that
-period.
+On Thu, 14 Nov 2024 at 20:50, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> On 11/1/2024 9:54 PM, Akhil P Oommen wrote:
+> > On 10/25/2024 11:58 AM, Dmitry Baryshkov wrote:
+> >> On Thu, Oct 24, 2024 at 12:56:58AM +0530, Akhil P Oommen wrote:
+> >>> On 10/22/2024 11:19 AM, Krzysztof Kozlowski wrote:
+> >>>> On Mon, Oct 21, 2024 at 05:23:43PM +0530, Akhil P Oommen wrote:
+> >>>>> Add a new schema which extends opp-v2 to support a new vendor specific
+> >>>>> property required for Adreno GPUs found in Qualcomm's SoCs. The new
+> >>>>> property called "qcom,opp-acd-level" carries a u32 value recommended
+> >>>>> for each opp needs to be shared to GMU during runtime.
+> >>>>>
+> >>>>> Cc: Rob Clark <robdclark@gmail.com>
+> >>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> >>>>> ---
+> >>>>>  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 96 ++++++++++++++++++++++
+> >>>>>  1 file changed, 96 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..6d50c0405ef8
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+> >>>>> @@ -0,0 +1,96 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
+> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>> +
+> >>>>> +title: Qualcomm Adreno compatible OPP supply
+> >>>>> +
+> >>>>> +description:
+> >>>>> +  Adreno GPUs present in Qualcomm's Snapdragon chipsets uses an OPP specific
+> >>>>> +  ACD related information tailored for the specific chipset. This binding
+> >>>>> +  provides the information needed to describe such a hardware value.
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - Rob Clark <robdclark@gmail.com>
+> >>>>> +
+> >>>>> +allOf:
+> >>>>> +  - $ref: opp-v2-base.yaml#
+> >>>>> +
+> >>>>> +properties:
+> >>>>> +  compatible:
+> >>>>> +    items:
+> >>>>> +      - const: operating-points-v2-adreno
+> >>>>> +      - const: operating-points-v2
+> >>>>> +
+> >>>>> +patternProperties:
+> >>>>> +  '^opp-?[0-9]+$':
+> >>>>
+> >>>> '-' should not be optional. opp1 is not expected name.
+> >>>
+> >>> Agree. Will change this to '^opp-[0-9]+$'
+> >>>
+> >>>>
+> >>>>> +    type: object
+> >>>>> +    additionalProperties: false
+> >>>>> +
+> >>>>> +    properties:
+> >>>>> +      opp-hz: true
+> >>>>> +
+> >>>>> +      opp-level: true
+> >>>>> +
+> >>>>> +      opp-peak-kBps: true
+> >>>>> +
+> >>>>> +      opp-supported-hw: true
+> >>>>> +
+> >>>>> +      qcom,opp-acd-level:
+> >>>>> +        description: |
+> >>>>> +          A positive value representing the ACD (Adaptive Clock Distribution,
+> >>>>> +          a fancy name for clk throttling during voltage droop) level associated
+> >>>>> +          with this OPP node. This value is shared to a co-processor inside GPU
+> >>>>> +          (called Graphics Management Unit a.k.a GMU) during wake up. It may not
+> >>>>> +          be present for some OPPs and GMU will disable ACD while transitioning
+> >>>>> +          to that OPP. This value encodes a voltage threshold and few other knobs
+> >>>>> +          which are identified by characterization of the SoC. So, it doesn't have
+> >>>>> +          any unit.
+> >>>>
+> >>>> Thanks for explanation and other updates. I am still not happy with this
+> >>>> property. I do not see reason why DT should encode magic values in a
+> >>>> quite generic piece of code. This creates poor ABI, difficult to
+> >>>> maintain or understand.
+> >>>>
+> >>>
+> >>> Configuring GPU ACD block with its respective value is a requirement for each OPP.
+> >>> So OPP node seems like the natural place for this data.
+> >>>
+> >>> If it helps to resolve your concerns, I can elaborate the documentation with
+> >>> details on the GMU HFI interface where this value should be passed on to the
+> >>> hardware. Also replace "few other knobs" with "Delay cycles & Calibration margin"
+> >>> in the above doc.
+> >>
+> >> Usually the preference for DT is to specify data in a sensible way
+> >> rather than just the values being programmed to the register. Is it
+> >> possible to implement this approach for ACD values?
+>
+> Krzysztof/Dmitry,
+>
+> BIT(0)-BIT(15) are static configurations which doesn't change between
+> OPPs. We can move it to driver.
+>
+> BIT(16)-BIT(31) indicates a threshold margin which triggers ACD. We can
+> keep this in the devicetree. And the driver can construct the final
+> value from both data and send it to GMU.
+>
+> If this is acceptable, I will send the v3 revision.
 
-Since there are no userspace processes running during this time and
-this is a very short time window, we can simply disable EAS during
-resume so that the parallel resume of the devices is spread across all
-the CPUs.
+Can the upper bitfield have a sensible representation in DT (like uV
+or something similar)?
 
-On a Pixel 6, averaging over 100 suspend/resume cycles, the new logic
-plus disabling EAS for resume yields significant improvements:
-+---------------------------+-----------+------------+------------------+
-| Phase			    | Old full sync | New full async | % change |
-|			    |		    | + EAS disabled |		|
-+---------------------------+-----------+------------+------------------+
-| Total dpm_suspend*() time |        107 ms |          62 ms |     -42% |
-+---------------------------+-----------+------------+------------------+
-| Total dpm_resume*() time  |         75 ms |          61 ms |     -19% |
-+---------------------------+-----------+------------+------------------+
-| Sum			    |        182 ms |         123 ms |     -32% |
-+---------------------------+-----------+------------+------------------+
+>
+> -Akhil.
+>
+> >
+> > I am still checking about this. Will get back.
+> >
+> > -Akhil
+> >
+> >>
+> >>>
+> >>>>
+> >>
+> >
+>
 
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
- kernel/power/suspend.c  | 16 ++++++++++++++++
- kernel/sched/topology.c | 13 +++++++++++++
- 2 files changed, 29 insertions(+)
 
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 09f8397bae15..7304dc39958f 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -393,6 +393,12 @@ void __weak arch_suspend_enable_irqs(void)
- 	local_irq_enable();
- }
- 
-+/*
-+ * Intentionally not part of a header file to avoid risk of abuse by other
-+ * drivers.
-+ */
-+void sched_set_energy_aware(unsigned int enable);
-+
- /**
-  * suspend_enter - Make the system enter the given sleep state.
-  * @state: System sleep state to enter.
-@@ -468,6 +474,15 @@ static int suspend_enter(suspend_state_t state, bool *wakeup)
- 
-  Platform_wake:
- 	platform_resume_noirq(state);
-+	/*
-+	 * We do this only for resume instead of suspend and resume for these
-+	 * reasons:
-+	 * - Performance is more important than power for resume.
-+	 * - Power spent entering suspend is more important for suspend. Also,
-+	 *   stangely, disabling EAS was making suspent a few milliseconds
-+	 *   slower in my testing.
-+	 */
-+	sched_set_energy_aware(0);
- 	dpm_resume_noirq(PMSG_RESUME);
- 
-  Platform_early_resume:
-@@ -520,6 +535,7 @@ int suspend_devices_and_enter(suspend_state_t state)
-  Resume_devices:
- 	suspend_test_start();
- 	dpm_resume_end(PMSG_RESUME);
-+	sched_set_energy_aware(1);
- 	suspend_test_finish("resume devices");
- 	trace_suspend_resume(TPS("resume_console"), state, true);
- 	resume_console();
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 9748a4c8d668..c069c0b17cbf 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -284,6 +284,19 @@ void rebuild_sched_domains_energy(void)
- 	mutex_unlock(&sched_energy_mutex);
- }
- 
-+void sched_set_energy_aware(unsigned int enable)
-+{
-+	int state;
-+
-+	if (!sched_is_eas_possible(cpu_active_mask))
-+		return;
-+
-+	sysctl_sched_energy_aware = enable;
-+	state = static_branch_unlikely(&sched_energy_present);
-+	if (state != sysctl_sched_energy_aware)
-+		rebuild_sched_domains_energy();
-+}
-+
- #ifdef CONFIG_PROC_SYSCTL
- static int sched_energy_aware_handler(const struct ctl_table *table, int write,
- 		void *buffer, size_t *lenp, loff_t *ppos)
 -- 
-2.47.0.338.g60cca15819-goog
-
+With best wishes
+Dmitry
 
