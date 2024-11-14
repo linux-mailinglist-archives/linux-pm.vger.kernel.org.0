@@ -1,155 +1,135 @@
-Return-Path: <linux-pm+bounces-17565-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB2919C8A08
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 13:33:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D88AB9C8FB5
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:28:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 802CB1F23550
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 12:33:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F2FA1F2184F
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 16:28:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9B91FA247;
-	Thu, 14 Nov 2024 12:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE856198E9B;
+	Thu, 14 Nov 2024 16:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NGeURtVd"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="lDxfjffK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108D11F9A8D;
-	Thu, 14 Nov 2024 12:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC7E1990CE;
+	Thu, 14 Nov 2024 16:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731587591; cv=none; b=Pnlu7Y+Bf3YKNl1BzlU+rIsby4EY9NQ76gureV/xARo9VFIMFnO9f0T4xYW+XV0n8m8XULKpLaj0tQ3W4y/z4S1atK08sfr/Cv2ojW49KWF+L03SQfhOqtayji9rNHL0gy7dbBEaJy+B1ZCUJowHeKpT3KuZooqyJ81nxaqymIA=
+	t=1731601520; cv=none; b=OHyaIXy/Ac6NtMMfUl5iWd1qfVSPH/xRuQwRRl++9XPqETPSlkFz/7MIdtmcRD0en240mDYwOsECB8RujY3j1XoTxlALe1z5+JIhyaw+VptTqO+lqhXThyW2fODYHvbl61Xdf9lc9r+40/6U0tq7xLli6TJtqF7j1kF3Y8UcyaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731587591; c=relaxed/simple;
-	bh=3kQXH45Idd5+JbJ5Ak0RLE0/ggWU/RBEVLi1j3lyd1Y=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ldD8ff4CdP2YFP/KAKs3PpW2+ihxV4/dwWtIrH6dQw7NarfTCPD7o6XWA04zQQYuspJ+UT+Fi5aFHXdRhgC9CGvyC7XOOFbtV6IAG0c/+tNeK/2zQFNuMv73k52hDmzC/Lq2bwkMg3QR9lX85VBNnJ61gHgXYrxIZwIP2kVfies=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NGeURtVd; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731587590; x=1763123590;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=3kQXH45Idd5+JbJ5Ak0RLE0/ggWU/RBEVLi1j3lyd1Y=;
-  b=NGeURtVdfcDQWCMh6ffMTeqv/BZIUJDfkAvOh+aKurh+kKcvvfo5faBE
-   SXQR+DG2s+218RCHKKig3vO+v9rh0HzSI7do6FDRpkEDQ38fRgnpKCJtx
-   mudFdPiTDx0qa+iYjP+XlYf3zqDOE+8/g7tFwfa9dsdvcVImKQxi2Z/HJ
-   4IjlEliCq0yYGW296vQcFyW3Ob/6DME8aUzaEVsi3U7yMg8HXrt6pIMIz
-   oBG2TOkuIN2tidS//wqSIuKJtBUtS6hpteRLC7E3NoPpcqs8nG33IvWdj
-   BQMJ9doJZWVUqFXPfon1c+AIEdmErfaUrHeT/+eQ7Cqev6BuH+/Rb/d7m
-   A==;
-X-CSE-ConnectionGUID: sv4qmrZ0Siu7lvU4apokRQ==
-X-CSE-MsgGUID: h/KeglIvQIK+kMxbNh+UCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="42149100"
-X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
-   d="scan'208";a="42149100"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 04:33:07 -0800
-X-CSE-ConnectionGUID: u6Su2D4VTTSwaRflvzFO/Q==
-X-CSE-MsgGUID: RxPJOsDQS0yrxIdVh89iTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
-   d="scan'208";a="92999718"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.54])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 04:32:59 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 14 Nov 2024 14:32:56 +0200 (EET)
-To: Bjorn Helgaas <helgaas@kernel.org>
-cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, 
-    Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, 
-    Rob Herring <robh@kernel.org>, 
-    =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>, 
-    "Maciej W . Rozycki" <macro@orcam.me.uk>, 
-    Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-    Lukas Wunner <lukas@wunner.de>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
-    Krishna chaitanya chundru <quic_krichai@quicinc.com>, 
-    Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-    "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-    Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, 
-    LKML <linux-kernel@vger.kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-    Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-    Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-    Amit Pundir <amit.pundir@linaro.org>, 
-    Neil Armstrong <neil.armstrong@linaro.org>, 
-    Caleb Connolly <caleb.connolly@linaro.org>
-Subject: Re: [PATCH v9 0/9] PCI: Add PCIe bandwidth controller
-In-Reply-To: <20241113214850.GA1912974@bhelgaas>
-Message-ID: <a5d7afb0-be64-78fd-24fa-b374647c1d8c@linux.intel.com>
-References: <20241113214850.GA1912974@bhelgaas>
+	s=arc-20240116; t=1731601520; c=relaxed/simple;
+	bh=HIhFtVC67XZTLBR55y/ol83UpV/3VL2tA6VCAsKRWgk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GNXPZIIOnRvQFio5Ry1RU523Nsss2r7ZtUCPGx00d8q1x3U6xszDQiy5+2ZlhH69uqqOV98kD76cC9CykkAfx2U03Dt/yWWHhxI/ggstT8SdlScXca6ZVY1MWWvWsrvNdwsmh4K52SK8Scytco41TXxsk5eyL3ZnzoP/25sIIfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=lDxfjffK reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 0351580d4d3771fb; Thu, 14 Nov 2024 17:25:10 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 20180665CF6;
+	Thu, 14 Nov 2024 17:25:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1731601510;
+	bh=HIhFtVC67XZTLBR55y/ol83UpV/3VL2tA6VCAsKRWgk=;
+	h=From:Subject:Date;
+	b=lDxfjffKTX3F0iZ1GW80YF8W1HwRKAEQ3EGziBA2fdMBw+Y5+8c5AKHd0Pm0wvwhD
+	 KtZPUi1ZpkI4QPoPNNZ6At5E4OuVCYU2xRKOJhZu3sqKVK3dtywH7kqrOXuXpNPBvw
+	 NIdhr11CuorfiKFaUY0CdOUZDREkvb+FgKN1B7rFRA2Vc2IB2fPnkVglCgbLAOF1lC
+	 S6m07EcHTgUlY5dLDe7/pX2xvUVKWgxjc5MEfX+ZoWF7l5VbVtLp7BydRdtkNza5I7
+	 V4gERccc7+mua9yMJ9Ri/XmFLR7Onr+r/AdzarqU+I/eyxhS6MPGTKr1EeHuqCKzqC
+	 cQFGm/4Bbm31A==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Dan Carpenter <dan.carpenter@linaro.org>
+Subject:
+ [PATCH v1] thermal: testing: Initialize some variables annoteded with _free()
+Date: Thu, 14 Nov 2024 17:25:09 +0100
+Message-ID: <12576267.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-533261549-1731581789=:939"
-Content-ID: <ddf631d2-2345-0064-55e1-b6856dcd4a0a@linux.intel.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrvddvgdekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepuggrnhdrtggrrhhpvghnthgvrheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 0; Body=5 Fuz1=5 Fuz2=5
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---8323328-533261549-1731581789=:939
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <24c044f9-6a09-1f98-9c0b-5ebe7e7d745b@linux.intel.com>
+Variables annotated with __free() need to be initialized if the function
+can return before they get updated for the first time or the attempt to
+free the memory pointed to by them upon function return may crash the
+kernel.
 
-On Wed, 13 Nov 2024, Bjorn Helgaas wrote:
+Fix this issue in some places in the thermal testing code.
 
-> [+cc Bart, Amit, Neil, Caleb]
->=20
-> On Wed, Oct 23, 2024 at 05:19:04PM -0500, Bjorn Helgaas wrote:
-> > On Fri, Oct 18, 2024 at 05:47:46PM +0300, Ilpo J=E4rvinen wrote:
-> > > This series adds PCIe bandwidth controller (bwctrl) and associated PC=
-Ie
-> > > cooling driver to the thermal core side for limiting PCIe Link Speed
-> > > due to thermal reasons. PCIe bandwidth controller is a PCI express bu=
-s
-> > > port service driver. A cooling device is created for each port the
-> > > service driver finds to support changing speeds.
->=20
-> > >  drivers/pci/pcie/bwctrl.c                     | 366 ++++++++++++++++=
-++
-> > >  include/linux/pci-bwctrl.h                    |  28 ++
-> > >  tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
-> > >  .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++
-> > >  .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++
->=20
-> > Applied to pci/bwctrl for v6.13, thanks Ilpo (and Alexandru, for the
-> > bandwidth notification interrupt support)!
->=20
-> How attached are we to "bwctrl" and "pwrctl" as the names?
->
-> I just noticed that we have "ctrl" for bandwidth control but "ctl" for
-> power control, which is slightly annoying to keep straight.
->=20
-> "ctrl" is more common in the tree:
->=20
->   $ find -name \*ctrl\*[ch] | wc -l
->   691
->   $ find -name \*ctl\*[ch] | wc -l
->   291
->=20
-> so I would prefer that, although "pwrctl" is already in the tree (as
-> of v6.11), so it would be more disruptive to change it than to rename
-> "bwctrl".
+Fixes: f6a034f2df42 ("thermal: Introduce a debugfs-based testing facility")
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/testing/zone.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I personally don't mind what the name is.
+Index: linux-pm/drivers/thermal/testing/zone.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/testing/zone.c
++++ linux-pm/drivers/thermal/testing/zone.c
+@@ -185,7 +185,7 @@ static void tt_add_tz_work_fn(struct wor
+ int tt_add_tz(void)
+ {
+ 	struct tt_thermal_zone *tt_zone __free(kfree);
+-	struct tt_work *tt_work __free(kfree);
++	struct tt_work *tt_work __free(kfree) = NULL;
+ 	int ret;
+ 
+ 	tt_zone = kzalloc(sizeof(*tt_zone), GFP_KERNEL);
+@@ -237,7 +237,7 @@ static void tt_zone_unregister_tz(struct
+ 
+ int tt_del_tz(const char *arg)
+ {
+-	struct tt_work *tt_work __free(kfree);
++	struct tt_work *tt_work __free(kfree) = NULL;
+ 	struct tt_thermal_zone *tt_zone, *aux;
+ 	int ret;
+ 	int id;
+@@ -331,8 +331,8 @@ static void tt_zone_add_trip_work_fn(str
+ int tt_zone_add_trip(const char *arg)
+ {
+ 	struct tt_thermal_zone *tt_zone __free(put_tt_zone) = NULL;
++	struct tt_trip *tt_trip __free(kfree) = NULL;
+ 	struct tt_work *tt_work __free(kfree);
+-	struct tt_trip *tt_trip __free(kfree);
+ 	int id;
+ 
+ 	tt_work = kzalloc(sizeof(*tt_work), GFP_KERNEL);
+@@ -387,7 +387,7 @@ static struct thermal_zone_device_ops tt
+ 
+ static int tt_zone_register_tz(struct tt_thermal_zone *tt_zone)
+ {
+-	struct thermal_trip *trips __free(kfree);
++	struct thermal_trip *trips __free(kfree) = NULL;
+ 	struct thermal_zone_device *tz;
+ 	struct tt_trip *tt_trip;
+ 	int i;
 
-However, what I've noted is that visually those two are so similar that my=
-=20
-brains will mix them on a glance anyway. Maybe the length difference would=
-=20
-help on that confusion too, remains to be seen.
 
---=20
- i.
---8323328-533261549-1731581789=:939--
+
 
