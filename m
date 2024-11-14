@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-17545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB5D9C8486
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B2849C8485
 	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 09:03:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06361285324
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 08:03:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79EE428521D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 08:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E201F7085;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15811F6695;
 	Thu, 14 Nov 2024 08:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d5URKj2x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kfhImkHv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1BC1F7068
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251431F7077
 	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 08:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731571414; cv=none; b=eVMndhQFYLjDoCZVk+ZXmC0ag4M1mYqxZ+tsGq79kRAOntsAWvGU6pktUlriqd3Bl11RpchBxXxPEnJXjDNgGcQeIFHRyoVqykiS0XCWvhvTWvxVSFpkEKAjm3NxHuiJiyLHzJR/tqay5b4CBysunB7Jx2eOcVDS8wXXIsX1j4Q=
+	t=1731571414; cv=none; b=B/6iX0hs21fcjkVQt75bOWLvff5pW2TzEIvVVk2K9AQs4fgfnXGXK8XLNArj8py14tU8hPrddH+IXjpXzLimQ6Z5QvTxV0erT5PUE9bKm4LbSI4Lxw5ulcIIWAPtMCP4iKNXcxGVjVJ5sUbbu5gRShb4fSJn2ALqr7PnhyLcpS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731571414; c=relaxed/simple;
-	bh=sgXWBLYxlK/aUQLaAro1Z7uGRzkbkMQ1MuooJ69i9wo=;
+	bh=RvzuHv9H5LZC77DRGmwAzhDp31sHdWHn1NJLjqs7cU4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CW/QQ/B7Jp4egRobZuX3/z1RzI1oxE5GU3gyW+MSrSVRfGeJxkeZQBAQ2il3llShFiz2IP7tthBFCZPkeVhFc5Sji2TkNnhKojZWZzLOQlUVjhYiueo7HZwQzapRLalqRJyaZYWeGZgQb7Tdv79XVBZXUX4GTCT9Wli643ZfzLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d5URKj2x; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=Hz9zsbKBrdGHKmz1bopco1B9/AW4r2yDyxbX501XOLdUFWsKQfQFvO3XBF60sNHvgwWzyvfuQh3eHf72ARUSE4byfGsUs/0OZYTChavioisQlmk15WGLIJYdnh63rjN52USjV4EeYL3jZhiMxvIt/rCgPzk8FRDCj6kTe4kWfaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kfhImkHv; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,35 +36,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1731571413; x=1763107413;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sgXWBLYxlK/aUQLaAro1Z7uGRzkbkMQ1MuooJ69i9wo=;
-  b=d5URKj2xBb08dIUCrDRdcntM+7kfig26aFJSqle8uqcFC4jJ8MzK+OLi
-   ND8uM3i2TpBNFqwIQL8/0tzj3wGiVVMl1xbc4koHL+6sJ792/qwCtG6NC
-   kdRUmhGOo72XgICt1x4g5LVzN2WlSuI7+BiNmh4wtFeAxifvg0H9fCubl
-   U2uBNFTgAtn6xZv0UgF0xb9o/FDB0MdRQF9fRbiq5mO8wn1W50uRdMdBM
-   4S+BuRFlDbkOag6Kcjo180X6y8Od7quoLzupzGpUydoQYOfZhQx7vlW46
-   xi9kYWQkQxVIZlvBZ+828MneHS6f68BGma86KKqzB3fHZV1cNjJSqY0Gu
-   w==;
-X-CSE-ConnectionGUID: aOR86Z/iTg+40d2JscoD6w==
-X-CSE-MsgGUID: eAjzahQmQQ6M1Z9O9q5pPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="31600455"
+  bh=RvzuHv9H5LZC77DRGmwAzhDp31sHdWHn1NJLjqs7cU4=;
+  b=kfhImkHvI60gLtADOPmm4+4UNC5pxy2ZJQ2Ox3fST3g+tsxkJCWJN7C8
+   HWyD9Fr3S1cahEh88uwvbTbW/gnEu55ARWzubUtv3B1ae2gbcN/IY5t/U
+   aq434fQpO2VBchKiIcVn8BM65YEndI6l6J1wCJPlgIBlIIMfMsBsktqCr
+   AQtPKFGne4/xk6wh+yKLuPqbiIvw2TLbCIkBj6pfqBP9cMMAmBTFmAGCF
+   +U9rUmBznKeCL+983FiqF3Tyl0YlyJ0YZCIiHrFvF1iDUSqXC4SK4cJLX
+   PGR9KAbvYbd2+20NJth9iMZiix0JvvhuyKK7dwQTZr6KAyovV52q3Z3EF
+   A==;
+X-CSE-ConnectionGUID: 4n8PddRpQmiDKI5S0O9QHA==
+X-CSE-MsgGUID: C/3A8OIJQmiI4QqO8GaRow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="31600457"
 X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="31600455"
+   d="scan'208";a="31600457"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 00:03:26 -0800
-X-CSE-ConnectionGUID: IGdR2/HSSEKRCXDE0OQWHw==
-X-CSE-MsgGUID: pCmZpyuhSTSyLKd4MN6G4A==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 00:03:27 -0800
+X-CSE-ConnectionGUID: VPiQPKHUQV28fci/ZyD8nQ==
+X-CSE-MsgGUID: nm0rYe0sTSGbxjcxuaJRIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="125627499"
+   d="scan'208";a="125627505"
 Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa001.jf.intel.com with ESMTP; 14 Nov 2024 00:03:24 -0800
+  by orviesa001.jf.intel.com with ESMTP; 14 Nov 2024 00:03:26 -0800
 From: Zhang Rui <rui.zhang@intel.com>
 To: rafael.j.wysocki@intel.com,
 	len.brown@intel.com
 Cc: linux-pm@vger.kernel.org
-Subject: [PATCH 09/10] tools/power turbostat: Cache graphics sysfs file descriptors during probe
-Date: Thu, 14 Nov 2024 15:59:45 +0800
-Message-ID: <20241114075946.118577-10-rui.zhang@intel.com>
+Subject: [PATCH 10/10] tools/power turbostat: Add support for /sys/class/drm/card1
+Date: Thu, 14 Nov 2024 15:59:46 +0800
+Message-ID: <20241114075946.118577-11-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241114075946.118577-1-rui.zhang@intel.com>
 References: <20241114075946.118577-1-rui.zhang@intel.com>
@@ -76,171 +76,83 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Snapshots of the graphics sysfs knobs are taken based on file
-descriptors. To optimize this process, open the files and cache the file
-descriptors during the graphics probe phase. As a result, the previously
-cached pathnames become redundant and are removed.
+On some machines, the graphics device is enumerated as
+/sys/class/drm/card1 instead of /sys/class/drm/card0. The current
+implementation does not handle this scenario, resulting in the loss of
+graphics C6 residency and frequency information.
 
-This change aims to streamline the code without altering its functionality.
-
-No functional change intended.
+Add support for /sys/class/drm/card1, ensuring that turbostat can
+retrieve and display the graphics columns for these platforms.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 82 +++++++++++----------------
- 1 file changed, 32 insertions(+), 50 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 38 ++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 9 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index aa0dab13d346..52b6ffc41bdf 100644
+index 52b6ffc41bdf..43ca50107e1a 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -370,7 +370,6 @@ enum gfx_sysfs_idx {
- };
- 
- struct gfx_sysfs_info {
--	const char *path;
- 	FILE *fp;
- 	unsigned int val;
- 	unsigned long long val_ull;
-@@ -5733,10 +5732,7 @@ int snapshot_graphics(int idx)
- {
- 	int retval;
- 
--	if (gfx_info[idx].fp == NULL)
--		gfx_info[idx].fp = fopen_or_die(gfx_info[idx].path, "r");
--	else
--		rewind(gfx_info[idx].fp);
-+	rewind(gfx_info[idx].fp);
- 
- 	switch (idx) {
- 	case GFX_rc6:
-@@ -6441,6 +6437,12 @@ static void probe_intel_uncore_frequency(void)
- 		probe_intel_uncore_frequency_legacy();
+@@ -6443,8 +6443,14 @@ static void set_graphics_fp(char *path, int idx)
+ 		gfx_info[idx].fp = fopen_or_die(path, "r");
  }
  
-+static void set_graphics_fp(char *path, int idx)
-+{
-+	if (!access(path, R_OK))
-+		gfx_info[idx].fp = fopen_or_die(path, "r");
-+}
++/* Enlarge this if there are /sys/class/drm/card2 ... */
++#define GFX_MAX_CARDS	2
 +
  static void probe_graphics(void)
  {
++	char path[PATH_MAX];
++	int i;
++
  	/* Xe graphics sysfs knobs */
-@@ -6448,7 +6450,6 @@ static void probe_graphics(void)
+ 	if (!access("/sys/class/drm/card0/device/tile0/gt0/gtidle/idle_residency_ms", R_OK)) {
  		FILE *fp;
- 		char buf[8];
- 		bool gt0_is_gt;
--		int idx;
+@@ -6485,22 +6491,36 @@ static void probe_graphics(void)
  
- 		fp = fopen("/sys/class/drm/card0/device/tile0/gt0/gtidle/name", "r");
- 		if (!fp)
-@@ -6467,28 +6468,17 @@ static void probe_graphics(void)
- 		else
- 			goto next;
- 
--		idx = gt0_is_gt ? GFX_rc6 : SAM_mc6;
--		gfx_info[idx].path = "/sys/class/drm/card0/device/tile0/gt0/gtidle/idle_residency_ms";
-+		set_graphics_fp("/sys/class/drm/card0/device/tile0/gt0/gtidle/idle_residency_ms", gt0_is_gt ? GFX_rc6 : SAM_mc6);
- 
--		idx = gt0_is_gt ? GFX_MHz : SAM_MHz;
--		if (!access("/sys/class/drm/card0/device/tile0/gt0/freq0/cur_freq", R_OK))
--			gfx_info[idx].path = "/sys/class/drm/card0/device/tile0/gt0/freq0/cur_freq";
-+		set_graphics_fp("/sys/class/drm/card0/device/tile0/gt0/freq0/cur_freq", gt0_is_gt ? GFX_MHz : SAM_MHz);
- 
--		idx = gt0_is_gt ? GFX_ACTMHz : SAM_ACTMHz;
--		if (!access("/sys/class/drm/card0/device/tile0/gt0/freq0/act_freq", R_OK))
--			gfx_info[idx].path = "/sys/class/drm/card0/device/tile0/gt0/freq0/act_freq";
-+		set_graphics_fp("/sys/class/drm/card0/device/tile0/gt0/freq0/act_freq", gt0_is_gt ? GFX_ACTMHz : SAM_ACTMHz);
- 
--		idx = gt0_is_gt ? SAM_mc6 : GFX_rc6;
--		if (!access("/sys/class/drm/card0/device/tile0/gt1/gtidle/idle_residency_ms", R_OK))
--			gfx_info[idx].path = "/sys/class/drm/card0/device/tile0/gt1/gtidle/idle_residency_ms";
-+		set_graphics_fp("/sys/class/drm/card0/device/tile0/gt1/gtidle/idle_residency_ms", gt0_is_gt ? SAM_mc6 : GFX_rc6);
- 
--		idx = gt0_is_gt ? SAM_MHz : GFX_MHz;
--		if (!access("/sys/class/drm/card0/device/tile0/gt1/freq0/cur_freq", R_OK))
--			gfx_info[idx].path = "/sys/class/drm/card0/device/tile0/gt1/freq0/cur_freq";
-+		set_graphics_fp("/sys/class/drm/card0/device/tile0/gt1/freq0/cur_freq", gt0_is_gt ? SAM_MHz : GFX_MHz);
- 
--		idx = gt0_is_gt ? SAM_ACTMHz : GFX_ACTMHz;
--		if (!access("/sys/class/drm/card0/device/tile0/gt1/freq0/act_freq", R_OK))
--			gfx_info[idx].path = "/sys/class/drm/card0/device/tile0/gt1/freq0/act_freq";
-+		set_graphics_fp("/sys/class/drm/card0/device/tile0/gt1/freq0/act_freq", gt0_is_gt ? SAM_ACTMHz : GFX_ACTMHz);
- 
- 		goto end;
- 	}
-@@ -6496,52 +6486,44 @@ static void probe_graphics(void)
  next:
  	/* New i915 graphics sysfs knobs */
- 	if (!access("/sys/class/drm/card0/gt/gt0/rc6_residency_ms", R_OK)) {
--		gfx_info[GFX_rc6].path = "/sys/class/drm/card0/gt/gt0/rc6_residency_ms";
-+		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rc6_residency_ms", GFX_rc6);
+-	if (!access("/sys/class/drm/card0/gt/gt0/rc6_residency_ms", R_OK)) {
+-		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rc6_residency_ms", GFX_rc6);
++	for (i = 0; i < GFX_MAX_CARDS; i++) {
++		snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rc6_residency_ms", i);
++		if (!access(path, R_OK))
++			break;
++	}
  
--		if (!access("/sys/class/drm/card0/gt/gt0/rps_cur_freq_mhz", R_OK))
--			gfx_info[GFX_MHz].path = "/sys/class/drm/card0/gt/gt0/rps_cur_freq_mhz";
-+		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rps_cur_freq_mhz", GFX_MHz);
+-		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rps_cur_freq_mhz", GFX_MHz);
++	if (i == GFX_MAX_CARDS)
++		goto legacy_i915;
  
--		if (!access("/sys/class/drm/card0/gt/gt0/rps_act_freq_mhz", R_OK))
--			gfx_info[GFX_ACTMHz].path = "/sys/class/drm/card0/gt/gt0/rps_act_freq_mhz";
-+		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rps_act_freq_mhz", GFX_ACTMHz);
+-		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rps_act_freq_mhz", GFX_ACTMHz);
++	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rc6_residency_ms", i);
++	set_graphics_fp(path, GFX_rc6);
  
--		if (!access("/sys/class/drm/card0/gt/gt1/rc6_residency_ms", R_OK))
--			gfx_info[SAM_mc6].path = "/sys/class/drm/card0/gt/gt1/rc6_residency_ms";
-+		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rc6_residency_ms", SAM_mc6);
+-		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rc6_residency_ms", SAM_mc6);
++	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rps_cur_freq_mhz", i);
++	set_graphics_fp(path, GFX_MHz);
  
--		if (!access("/sys/class/drm/card0/gt/gt1/rps_cur_freq_mhz", R_OK))
--			gfx_info[SAM_MHz].path = "/sys/class/drm/card0/gt/gt1/rps_cur_freq_mhz";
-+		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rps_cur_freq_mhz", SAM_MHz);
+-		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rps_cur_freq_mhz", SAM_MHz);
++	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rps_act_freq_mhz", i);
++	set_graphics_fp(path, GFX_ACTMHz);
  
--		if (!access("/sys/class/drm/card0/gt/gt1/rps_act_freq_mhz", R_OK))
--			gfx_info[SAM_ACTMHz].path = "/sys/class/drm/card0/gt/gt1/rps_act_freq_mhz";
-+		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rps_act_freq_mhz", SAM_ACTMHz);
+-		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rps_act_freq_mhz", SAM_ACTMHz);
++	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt1/rc6_residency_ms", i);
++	set_graphics_fp(path, SAM_mc6);
  
- 		goto end;
- 	}
+-		goto end;
+-	}
++	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt1/rps_cur_freq_mhz", i);
++	set_graphics_fp(path, SAM_MHz);
++
++	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt1/rps_act_freq_mhz", i);
++	set_graphics_fp(path, SAM_ACTMHz);
++
++	goto end;
  
++legacy_i915:
  	/* Fall back to traditional i915 graphics sysfs knobs */
--	if (!access("/sys/class/drm/card0/power/rc6_residency_ms", R_OK))
--		gfx_info[GFX_rc6].path = "/sys/class/drm/card0/power/rc6_residency_ms";
-+	set_graphics_fp("/sys/class/drm/card0/power/rc6_residency_ms", GFX_rc6);
- 
--	if (!access("/sys/class/drm/card0/gt_cur_freq_mhz", R_OK))
--		gfx_info[GFX_MHz].path = "/sys/class/drm/card0/gt_cur_freq_mhz";
--	else if (!access("/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz", R_OK))
--		gfx_info[GFX_MHz].path = "/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz";
-+	set_graphics_fp("/sys/class/drm/card0/gt_cur_freq_mhz", GFX_MHz);
-+	if (!gfx_info[GFX_MHz].fp)
-+		set_graphics_fp("/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz", GFX_MHz);
- 
--	if (!access("/sys/class/drm/card0/gt_act_freq_mhz", R_OK))
--		gfx_info[GFX_ACTMHz].path = "/sys/class/drm/card0/gt_act_freq_mhz";
--	else if (!access("/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz", R_OK))
--		gfx_info[GFX_ACTMHz].path = "/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz";
-+	set_graphics_fp("/sys/class/drm/card0/gt_act_freq_mhz", GFX_ACTMHz);
-+	if (!gfx_info[GFX_ACTMHz].fp)
-+		set_graphics_fp("/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz", GFX_ACTMHz);
- 
- end:
--	if (gfx_info[GFX_rc6].path)
-+	if (gfx_info[GFX_rc6].fp)
- 		BIC_PRESENT(BIC_GFX_rc6);
--	if (gfx_info[GFX_MHz].path)
-+	if (gfx_info[GFX_MHz].fp)
- 		BIC_PRESENT(BIC_GFXMHz);
--	if (gfx_info[GFX_ACTMHz].path)
-+	if (gfx_info[GFX_ACTMHz].fp)
- 		BIC_PRESENT(BIC_GFXACTMHz);
--	if (gfx_info[SAM_mc6].path)
-+	if (gfx_info[SAM_mc6].fp)
- 		BIC_PRESENT(BIC_SAM_mc6);
--	if (gfx_info[SAM_MHz].path)
-+	if (gfx_info[SAM_MHz].fp)
- 		BIC_PRESENT(BIC_SAMMHz);
--	if (gfx_info[SAM_ACTMHz].path)
-+	if (gfx_info[SAM_ACTMHz].fp)
- 		BIC_PRESENT(BIC_SAMACTMHz);
- }
+ 	set_graphics_fp("/sys/class/drm/card0/power/rc6_residency_ms", GFX_rc6);
  
 -- 
 2.43.0
