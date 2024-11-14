@@ -1,118 +1,115 @@
-Return-Path: <linux-pm+bounces-17571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17573-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C2C69C9197
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 19:22:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D87479C9111
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 18:46:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37AF7B28888
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:36:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FFC81F22187
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:46:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB28189F3C;
-	Thu, 14 Nov 2024 17:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC4718A6BA;
+	Thu, 14 Nov 2024 17:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="PvUs/B8V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E0B17557C;
-	Thu, 14 Nov 2024 17:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6DE17F505;
+	Thu, 14 Nov 2024 17:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731605781; cv=none; b=HIOjHLwjN15Y9L9cyNK8BGuaVqaYMkv63DwS/b7Xemdr305nsC9XXX8oOT8UWgM4zY0378IvnJFFWsyd/uKYSI2Ry8VRiM6DOEVIl7JWTMpD+KIxW311vI5wAYqs37r7U1MRlNvQN8Jfgmj/mhluNdazQJI/4GB4elQSFOwLZTI=
+	t=1731606386; cv=none; b=rD99V6h7TITY2eA5QRSvGvijcZ+QkSip039HbX2lZJq3KAOobZVXYaqGD6exOZswnfQEzujYYE4uTffgQsHRvV9PEdo5l17xPH3fJvg5jy24aqzyRBoH2nURGU4f+wJP13W3kkY0KvH7EDqfHnRDTdpVQ30/tHLWBGmigF7Sj9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731605781; c=relaxed/simple;
-	bh=lmsX52l/1IXL6pVGf4OXq5b7cQpR1LL56F3YaTmwRUg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LX2oqUQn3O/TZcRzSxCieA9h8lrUnZTPYdrKAFpfUCav8Ttq337gOLI65fmnhjASDIsm2VFOJubpC0kZOjtwzaA1gXECBrC5TmByetyPCQKkcFB5WoddyUkfRxEOYhTilGuAWaPCyuUNMEPCirJP5WvrWgDSMayjrNpvY1zpcdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20c9978a221so10667245ad.1;
-        Thu, 14 Nov 2024 09:36:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731605779; x=1732210579;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1kROUsWvWvV36Fo4a1GNoVZXpL3CbrLmIcvXu4sqcNw=;
-        b=f6Iy0GbWUcZsSv8uxxU/Iov/VYAbSulK5eRvEMme4bj4pI+BBLnM/TXr2sM4FL+dqT
-         ky9Ow7YVSpaDMMNa40qqXmeRmPooMGB9upCBfQxFXx6tsb+Z49xWe3NMs3xbu2N9cuxG
-         yAB7uwujmGwnXfFsQkafpM9imohJRPgi0ZXXypisW08ozErfDqHoCWg0vbQk7ALx6lBh
-         pncHQ32J7ZUUeJRezUT7gtc2SFz0BU/Q9YAjBbiQyE6sYpsqZrjbjOCya77FF9BPcy/G
-         nnAr94V8ZFte+1WuDqJxhiozuik90NHRLdghRpSFsn92ghvHfs+27+ie5rxY/oaO46PP
-         z6AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjQL/QmekrwMb9oS2VQPHsaItsw5H97xIODd54AII60IgXWSwXSJ1ECNPsk8T2bU4lGX8CXxebzfg=@vger.kernel.org, AJvYcCXZ0uAVZ4LJwVKl2VOImsIH3d6OjgB8f5iP+0zyoj93/d8/UVh1RRQmXViQKEvuhrrn3OfMDyDyW5p5@vger.kernel.org, AJvYcCXoT69FnSQ9hSeDTqGW2XGCCt8d8k7vqSly6ifQiGjOcDgurWw9ccSgAsI8oaNcClpgxm4iHqivlrqT3wI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxiw5qVfKRgo4YtLPyCcFyGpoZ6MBNswuwXQHBJQDh3ETrQrtBi
-	nnS7n8XJGQI/Ro2Hwfq6c6LPEkQODpUIr/9brSs0cLDzNcpLClTW
-X-Google-Smtp-Source: AGHT+IGjSKX8cn5jJR3CqDGzczAzuH5z+anCuroYAbhOAQpGkEuGTNFls7mnC61Ygcn+ZFL/FmnIvw==
-X-Received: by 2002:a17:902:f541:b0:20c:d072:c899 with SMTP id d9443c01a7336-21183cea4b2mr341784765ad.24.1731605779115;
-        Thu, 14 Nov 2024 09:36:19 -0800 (PST)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211c7d1ac30sm13218615ad.213.2024.11.14.09.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 09:36:18 -0800 (PST)
-Date: Fri, 15 Nov 2024 02:36:17 +0900
-From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Amit Pundir <amit.pundir@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Caleb Connolly <caleb.connolly@linaro.org>
-Subject: Re: [PATCH v9 0/9] PCI: Add PCIe bandwidth controller
-Message-ID: <20241114173617.GC1489806@rocinante>
-References: <20241023221904.GA941054@bhelgaas>
- <20241113214850.GA1912974@bhelgaas>
+	s=arc-20240116; t=1731606386; c=relaxed/simple;
+	bh=Y5+ODZLSVNT2u3UvSdd3lyMAo2vfTcuSQ7RKhFiXcDA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pj1U9LsqfvE/k4Ai3YRbdg43I08meFkVjdXg8tDe2PjYylx1lUVQyNd9qC+iCGck0r/xjsjxS/RY2XZ808iN7X9vjjtb4TI/yf1XcySkERhmrtwX68y2R000lX07Q0ehAS1Dwm5jZvxdBi2sxEs4ILWx8xPiPu0zb0zsk6LuYR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=PvUs/B8V reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 4946fef8b595fdd4; Thu, 14 Nov 2024 18:46:21 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DBFCC665CF6;
+	Thu, 14 Nov 2024 18:46:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1731606381;
+	bh=Y5+ODZLSVNT2u3UvSdd3lyMAo2vfTcuSQ7RKhFiXcDA=;
+	h=From:Subject:Date;
+	b=PvUs/B8VR66kqq9A3i6o3aKUhdfZsSszLum6AP2tkkNXpY8mW5s8cnMEkeqJMJWtq
+	 VUrFVaXfI1v+YNyTE+xQsFHSGP+PMjZtu/VLa4XImkc2HDqwFx0elep9RAZmlNZCvl
+	 isWCgyLmB/diUzS6gYYEmdYxqLuhIAj0gi3GwZlN/ygDns2BS5Vc7N/G2t0Lu43aFX
+	 qe+6vQ/pLmy55MytK8ZQiZk8XuEeLNFnzrKFOlKmp/+V2Dmi6ffu6jEjvxUPOaRuDG
+	 7k52ArXjY+DGCjRYKyAY04Hxy78TTeI7Ji2gknx23yY6kGWO2a6AMZnxEY97BgIpU6
+	 au8lBrrcLMtrA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, x86 Maintainers <x86@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Subject:
+ [PATCH v1] cpuidle: Do not return from cpuidle_play_dead() on callback
+ failures
+Date: Thu, 14 Nov 2024 18:46:20 +0100
+Message-ID: <4992010.31r3eYUQgx@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241113214850.GA1912974@bhelgaas>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrvddvgddutdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehprghtrhihkhdrfihlrgiilhihnheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthh
+X-DCC--Metrics: v370.home.net.pl 0; Body=8 Fuz1=8 Fuz2=8
 
-Hello,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[...]
-> How attached are we to "bwctrl" and "pwrctl" as the names?
-> 
-> I just noticed that we have "ctrl" for bandwidth control but "ctl" for
-> power control, which is slightly annoying to keep straight.
-> 
-> "ctrl" is more common in the tree:
-> 
->   $ find -name \*ctrl\*[ch] | wc -l
->   691
->   $ find -name \*ctl\*[ch] | wc -l
->   291
-> 
-> so I would prefer that, although "pwrctl" is already in the tree (as
-> of v6.11), so it would be more disruptive to change it than to rename
-> "bwctrl".
+If the :enter_dead() idle state callback fails for a certain state,
+there may be still a shallower state for which it will work.
 
-If I may, I would also lean towards the "pwrctrl" name.  The "ctl" suffix
-makes me think of a command-line utility, a CLI, so to speak, where such
-suffix is commonly used e.g., sysctl, etcdctl, kubectl; also, all the
-systemd binaries, etc.
+Because the only caller of cpuidle_play_dead(), native_play_dead(),
+falls back to hlt_play_dead() if it returns an error, it should
+better try all of the idle states for which :enter_dead() is present
+before failing, so change it accordingly.
 
-	Krzysztof
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpuidle/cpuidle.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+Index: linux-pm/drivers/cpuidle/cpuidle.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/cpuidle.c
++++ linux-pm/drivers/cpuidle/cpuidle.c
+@@ -70,9 +70,10 @@ int cpuidle_play_dead(void)
+ 		return -ENODEV;
+ 
+ 	/* Find lowest-power state that supports long-term idle */
+-	for (i = drv->state_count - 1; i >= 0; i--)
+-		if (drv->states[i].enter_dead)
+-			return drv->states[i].enter_dead(dev, i);
++	for (i = drv->state_count - 1; i >= 0; i--) {
++		if (drv->states[i].enter_dead && !drv->states[i].enter_dead(dev, i))
++			return 0;
++	}
+ 
+ 	return -ENODEV;
+ }
+
+
+
 
