@@ -1,160 +1,159 @@
-Return-Path: <linux-pm+bounces-17544-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2849C8485
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 09:03:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526CB9C8472
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 09:01:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79EE428521D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 08:03:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B939DB25F09
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 08:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15811F6695;
-	Thu, 14 Nov 2024 08:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6B01F6691;
+	Thu, 14 Nov 2024 08:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kfhImkHv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o2Mmyh8v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251431F7077
-	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 08:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926F61F584D
+	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 08:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731571414; cv=none; b=B/6iX0hs21fcjkVQt75bOWLvff5pW2TzEIvVVk2K9AQs4fgfnXGXK8XLNArj8py14tU8hPrddH+IXjpXzLimQ6Z5QvTxV0erT5PUE9bKm4LbSI4Lxw5ulcIIWAPtMCP4iKNXcxGVjVJ5sUbbu5gRShb4fSJn2ALqr7PnhyLcpS8=
+	t=1731571261; cv=none; b=vGETEdbhipXTMa+DIFBgU08eEtscBNrT4oTThBvR2kNA68nNs0LQo5ckTinVsPSpzrupIe/UA6qQoE/C9w7+sqmgLwpOu4zGa4w4LLsJbC37pKQ8rIao5WW5LlYPUhRlNz5FLTQGv13Cr91HwUNlgwqwG0b+WSGTurECGxFEaLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731571414; c=relaxed/simple;
-	bh=RvzuHv9H5LZC77DRGmwAzhDp31sHdWHn1NJLjqs7cU4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hz9zsbKBrdGHKmz1bopco1B9/AW4r2yDyxbX501XOLdUFWsKQfQFvO3XBF60sNHvgwWzyvfuQh3eHf72ARUSE4byfGsUs/0OZYTChavioisQlmk15WGLIJYdnh63rjN52USjV4EeYL3jZhiMxvIt/rCgPzk8FRDCj6kTe4kWfaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kfhImkHv; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731571413; x=1763107413;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RvzuHv9H5LZC77DRGmwAzhDp31sHdWHn1NJLjqs7cU4=;
-  b=kfhImkHvI60gLtADOPmm4+4UNC5pxy2ZJQ2Ox3fST3g+tsxkJCWJN7C8
-   HWyD9Fr3S1cahEh88uwvbTbW/gnEu55ARWzubUtv3B1ae2gbcN/IY5t/U
-   aq434fQpO2VBchKiIcVn8BM65YEndI6l6J1wCJPlgIBlIIMfMsBsktqCr
-   AQtPKFGne4/xk6wh+yKLuPqbiIvw2TLbCIkBj6pfqBP9cMMAmBTFmAGCF
-   +U9rUmBznKeCL+983FiqF3Tyl0YlyJ0YZCIiHrFvF1iDUSqXC4SK4cJLX
-   PGR9KAbvYbd2+20NJth9iMZiix0JvvhuyKK7dwQTZr6KAyovV52q3Z3EF
-   A==;
-X-CSE-ConnectionGUID: 4n8PddRpQmiDKI5S0O9QHA==
-X-CSE-MsgGUID: C/3A8OIJQmiI4QqO8GaRow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="31600457"
-X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="31600457"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 00:03:27 -0800
-X-CSE-ConnectionGUID: VPiQPKHUQV28fci/ZyD8nQ==
-X-CSE-MsgGUID: nm0rYe0sTSGbxjcxuaJRIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="125627505"
-Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa001.jf.intel.com with ESMTP; 14 Nov 2024 00:03:26 -0800
-From: Zhang Rui <rui.zhang@intel.com>
-To: rafael.j.wysocki@intel.com,
-	len.brown@intel.com
-Cc: linux-pm@vger.kernel.org
-Subject: [PATCH 10/10] tools/power turbostat: Add support for /sys/class/drm/card1
-Date: Thu, 14 Nov 2024 15:59:46 +0800
-Message-ID: <20241114075946.118577-11-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241114075946.118577-1-rui.zhang@intel.com>
-References: <20241114075946.118577-1-rui.zhang@intel.com>
+	s=arc-20240116; t=1731571261; c=relaxed/simple;
+	bh=wOCWjPgHPHxlrLgnxw+VusgzvGF9XhbpJDgq//4tRjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=goM5L1wgKZZzikI0ZMAyxdNzU9krhOPzRY/xrf5KMBWntV7ADjFsVuU3jMkQ/ZgWp0Nueo3IyuKa3DQNYnrcigwWIiDKUUCeW1+XIzSDUof3C1FNE3vKY2axGZZS5AvVJC9kAbhZU/d8bsMeDpsxYtgbq8WUdsCBp62Aa00l08o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=o2Mmyh8v; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-37d5aedd177so213543f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 00:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731571258; x=1732176058; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pmP4R+KTmabCCg4llADCF0oCU+tvvoVH1i02bViR8w0=;
+        b=o2Mmyh8vFK1GVoLfz/wlS/zxojNrKNkVIR37FOtgdRKL/Dd1lHBgZ20Y79jGB47CBu
+         zwG3o0FH/2P5I5/AgwgE/SmvBtL5Dw5vSw1e2KLekXA2zS8URyOd/vPtO7//lDIW/5/+
+         jQgD+IIsfRUswDvDA1BtCtRugxLqh2BdVJ+t4vc5OUSRweexJNHTW64/pr1v+05ewSUk
+         HDpH0PPLOOfYAeDsnKANExDRqieWFDQ567AFwykP1cLFJtGTQ2FXmtn4CmDDzotmOIVj
+         mLyVUu3nlDp9aAeVgLde9UmLZ0oWO4dTNAbh1P0PmhL+o5ki4zdlhV/0U3MWGZ/z+k3l
+         orzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731571258; x=1732176058;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pmP4R+KTmabCCg4llADCF0oCU+tvvoVH1i02bViR8w0=;
+        b=kcXtTQHMT91uTC2Q7kohgyU2RfLD9mNPbaKIe/bcDxmRJRscZ3OHaWlSSPCjR7orTy
+         s4fyVuLuAa8umttVBw9gESnlXrvgoGlpkBZH8VQOsEhgfoBaoMmeJAT5NmhtsWAysEX4
+         ARFxupBuwcTI0KTT8MfTftFjIVoFbHtJSkAP430U+aSDdqQR+sfepuQtXLwQqSLgrWxW
+         JUdHCCaLs1iJKjR8Z6rvIU3xFpjjYS1O0CB7OQIFNqYCvqadRRwFbi4P5GkP1zjPH/BI
+         5NeEENb1A+D1noXXoS4cdmhgTQdaVzgWHVTomBoyMMyX2fA4tLrL0iNYKuKy0tyJH2VX
+         rTbA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCfnfw73QWXRHTeGA+sx80jQxasZSu84s485fw505WokJVTaLeD+mSx8kwEFOuV2bzPSgiguSZsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhAMGoLFgySRcLsrxFjIaxCne49ACvKahwxj/b6m0qxmh2IBny
+	R82Vdf2VQ8lb+AF7NT2dQrovYzg6MHelVdiXzvJXSD8kvrEAhkr9WUYwVMLsQ44=
+X-Google-Smtp-Source: AGHT+IG31WYQ/X+72unRx69C1P/9iMZOs5trq1EXzJAGNdrj+lIds7pAsY6/bw5o7AELpMO6q2+fpA==
+X-Received: by 2002:a5d:47ac:0:b0:37d:5282:1339 with SMTP id ffacd0b85a97d-3820df6136cmr4676316f8f.22.1731571257780;
+        Thu, 14 Nov 2024 00:00:57 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821adae022sm748412f8f.44.2024.11.14.00.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 00:00:57 -0800 (PST)
+Date: Thu, 14 Nov 2024 11:00:53 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 447/448] drivers/thermal/testing/zone.c:333
+ tt_zone_add_trip() error: uninitialized symbol 'tt_zone'.
+Message-ID: <d8da45d7-0a98-41c9-a9a8-49043caaa7af@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On some machines, the graphics device is enumerated as
-/sys/class/drm/card1 instead of /sys/class/drm/card0. The current
-implementation does not handle this scenario, resulting in the loss of
-graphics C6 residency and frequency information.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   d1bf954af846f66ac2ea07b2457b4a089a009c08
+commit: 498ea32432db6f2a0bce88fd521e529a58a370c4 [447/448] thermal: testing: Use DEFINE_FREE() and __free() to simplify code
+config: x86_64-randconfig-161-20241113 (https://download.01.org/0day-ci/archive/20241114/202411140825.w4TfKdbS-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
 
-Add support for /sys/class/drm/card1, ensuring that turbostat can
-retrieve and display the graphics columns for these platforms.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202411140825.w4TfKdbS-lkp@intel.com/
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 38 ++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 9 deletions(-)
+New smatch warnings:
+drivers/thermal/testing/zone.c:333 tt_zone_add_trip() error: uninitialized symbol 'tt_zone'.
+drivers/thermal/testing/zone.c:333 tt_zone_add_trip() error: uninitialized symbol 'tt_zone'.
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 52b6ffc41bdf..43ca50107e1a 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -6443,8 +6443,14 @@ static void set_graphics_fp(char *path, int idx)
- 		gfx_info[idx].fp = fopen_or_die(path, "r");
- }
- 
-+/* Enlarge this if there are /sys/class/drm/card2 ... */
-+#define GFX_MAX_CARDS	2
-+
- static void probe_graphics(void)
- {
-+	char path[PATH_MAX];
-+	int i;
-+
- 	/* Xe graphics sysfs knobs */
- 	if (!access("/sys/class/drm/card0/device/tile0/gt0/gtidle/idle_residency_ms", R_OK)) {
- 		FILE *fp;
-@@ -6485,22 +6491,36 @@ static void probe_graphics(void)
- 
- next:
- 	/* New i915 graphics sysfs knobs */
--	if (!access("/sys/class/drm/card0/gt/gt0/rc6_residency_ms", R_OK)) {
--		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rc6_residency_ms", GFX_rc6);
-+	for (i = 0; i < GFX_MAX_CARDS; i++) {
-+		snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rc6_residency_ms", i);
-+		if (!access(path, R_OK))
-+			break;
-+	}
- 
--		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rps_cur_freq_mhz", GFX_MHz);
-+	if (i == GFX_MAX_CARDS)
-+		goto legacy_i915;
- 
--		set_graphics_fp("/sys/class/drm/card0/gt/gt0/rps_act_freq_mhz", GFX_ACTMHz);
-+	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rc6_residency_ms", i);
-+	set_graphics_fp(path, GFX_rc6);
- 
--		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rc6_residency_ms", SAM_mc6);
-+	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rps_cur_freq_mhz", i);
-+	set_graphics_fp(path, GFX_MHz);
- 
--		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rps_cur_freq_mhz", SAM_MHz);
-+	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt0/rps_act_freq_mhz", i);
-+	set_graphics_fp(path, GFX_ACTMHz);
- 
--		set_graphics_fp("/sys/class/drm/card0/gt/gt1/rps_act_freq_mhz", SAM_ACTMHz);
-+	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt1/rc6_residency_ms", i);
-+	set_graphics_fp(path, SAM_mc6);
- 
--		goto end;
--	}
-+	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt1/rps_cur_freq_mhz", i);
-+	set_graphics_fp(path, SAM_MHz);
-+
-+	snprintf(path, PATH_MAX, "/sys/class/drm/card%d/gt/gt1/rps_act_freq_mhz", i);
-+	set_graphics_fp(path, SAM_ACTMHz);
-+
-+	goto end;
- 
-+legacy_i915:
- 	/* Fall back to traditional i915 graphics sysfs knobs */
- 	set_graphics_fp("/sys/class/drm/card0/power/rc6_residency_ms", GFX_rc6);
- 
+Old smatch warnings:
+drivers/thermal/testing/zone.c:188 tt_add_tz() error: uninitialized symbol 'tt_work'.
+drivers/thermal/testing/zone.c:240 tt_del_tz() error: uninitialized symbol 'tt_work'.
+drivers/thermal/testing/zone.c:335 tt_zone_add_trip() error: uninitialized symbol 'tt_trip'.
+drivers/thermal/testing/zone.c:390 tt_zone_register_tz() error: uninitialized symbol 'trips'.
+
+vim +/tt_zone +333 drivers/thermal/testing/zone.c
+
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  331  int tt_zone_add_trip(const char *arg)
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  332  {
+498ea32432db6f Rafael J. Wysocki 2024-11-10 @333  	struct tt_thermal_zone *tt_zone __free(put_tt_zone);
+
+These __free() pointers need to be initialized to NULL otherwise it leads to an
+uninitialized variable when we return before they're assigned.
+
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  334  	struct tt_work *tt_work __free(kfree);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  335  	struct tt_trip *tt_trip __free(kfree);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  336  	int id;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  337  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  338  	tt_work = kzalloc(sizeof(*tt_work), GFP_KERNEL);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  339  	if (!tt_work)
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  340  		return -ENOMEM;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  341  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  342  	tt_trip = kzalloc(sizeof(*tt_trip), GFP_KERNEL);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  343  	if (!tt_trip)
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  344  		return -ENOMEM;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  345  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  346  	tt_zone = tt_get_tt_zone(arg);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  347  	if (IS_ERR(tt_zone))
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  348  		return PTR_ERR(tt_zone);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  349  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  350  	id = ida_alloc(&tt_zone->ida, GFP_KERNEL);
+498ea32432db6f Rafael J. Wysocki 2024-11-10  351  	if (id < 0)
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  352  		return id;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  353  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  354  	tt_trip->trip.type = THERMAL_TRIP_ACTIVE;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  355  	tt_trip->trip.temperature = THERMAL_TEMP_INVALID;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  356  	tt_trip->trip.flags = THERMAL_TRIP_FLAG_RW;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  357  	tt_trip->id = id;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  358  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  359  	guard(tt_zone)(tt_zone);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  360  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  361  	list_add_tail(&tt_trip->list_node, &tt_zone->trips);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  362  	tt_zone->num_trips++;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  363  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  364  	INIT_WORK(&tt_work->work, tt_zone_add_trip_work_fn);
+498ea32432db6f Rafael J. Wysocki 2024-11-10  365  	tt_work->tt_zone = no_free_ptr(tt_zone);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  366  	tt_work->tt_trip = no_free_ptr(tt_trip);
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  367  	schedule_work(&(no_free_ptr(tt_work)->work));
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  368  
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  369  	return 0;
+f6a034f2df426e Rafael J. Wysocki 2024-08-22  370  }
+
 -- 
-2.43.0
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
