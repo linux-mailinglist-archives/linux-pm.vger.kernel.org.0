@@ -1,69 +1,72 @@
-Return-Path: <linux-pm+bounces-17578-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17579-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 119459C9414
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:20:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7740F9C9419
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:20:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC82AB2678F
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 21:20:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF6E41F22A75
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 21:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7EB1AC429;
-	Thu, 14 Nov 2024 21:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77F251AF0BE;
+	Thu, 14 Nov 2024 21:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hpAIzehH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m91SM3oC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE98F2905;
-	Thu, 14 Nov 2024 21:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22CD189F2A;
+	Thu, 14 Nov 2024 21:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731619240; cv=none; b=gUWGUobELylzmQpx69UNH4kiptaOggRKOy4Quw1vlkog/Ql+myqwkOlXqt8KOYj9Pw5+CUoNWQJ9kosdJ0N6JOypR6Fi7zWJuUIF80wPYkEdypm/HQMMpjyOYPczongy4wHkHD9A/PLJQ5B7dYxeoWfVpz6E2BNugUrCffOcGIk=
+	t=1731619242; cv=none; b=FTbRZp2BtpMqqrZlh31sjxcP08KSo4fDv0BvFzgwfUT9F+j8yVSQoIQY0F4wJfvps8wzUaWPiG9jRlGL5RCODnWGBCRKYbsnJ51aETAk9UIlxwcHLzvKZmZoMtCcDd5jP+d23a+6M4dspXXV/8B37/ByChVwrqJoy8BHiVzEHE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731619240; c=relaxed/simple;
-	bh=RSdMFumWyD7Mx4sKNxKfjNlsDJaTB6uemxsTmcKyHuo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ghySWJn6g7I75EWeqHSpvTqBMZkXUV0kTDYiRqLu/gUBBFeZ4aT8mkkJdGOAwlveGkXZ30qVpc7bzWeG4sQoa2xEB+lDSkqmQ8wdJm3Pq7US/X7s5tqbkQdXaapA6OBoza00LeDq7Ty3VunlWAqsQIDp47tytikj4d4k4fY7sVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hpAIzehH; arc=none smtp.client-ip=209.85.221.47
+	s=arc-20240116; t=1731619242; c=relaxed/simple;
+	bh=/6DSelV/AB3QQhY9y9qfiNx065Bt+R1OZ9yYLoLk6Fo=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rTw98gU2BYPYyQ68PuhtieKGTzYB7AtmJMedAvINVpP0oG1/vGSAyVNhX3aP0ZMI0InwJaFwkCEMzB6FylevcgH7o1OaP1n77OJ4WmwG16xk/OIfPNjS0Gb5XheRwY9MBGqlQLjWa/JyEkVW09enqoym3k7uclHNpI3X/JXVHO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m91SM3oC; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-381ee2e10dfso658308f8f.0;
-        Thu, 14 Nov 2024 13:20:38 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3821e0b2262so545317f8f.1;
+        Thu, 14 Nov 2024 13:20:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731619237; x=1732224037; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NRHQQGm7cGssgdoLEtNCNKA/IiRlPKI/cHGPt5rH+50=;
-        b=hpAIzehHe08InXCJTRTgNBnKU4Keet11Szsh3esc09GtTZ/96qOtzTrOBqAPNKiPsP
-         UdDaoCW1XhgBPWsgPgsdowMWmSktaI6Wfcs5Ej2ug983u7SI1FkGZLsGZIM9XvOgQLQP
-         58+1awpY4Gs40Gv2m99rbKryM6euMMeYgdawc+yRa0IEAMbzHdoJobuA6PBqZCsrnT9Z
-         aUuuU6qU1KiR1ZLyvIA11rUWar6/81AzlNaeqWkBbWRLrTTYrujsOdGnAVuRsqJIVr/7
-         /EtfdyRES+OQ6HjHgk5oZq6+Fdy+twmur8rZbwhX8uNBD8rT1AI/jkBCdXBaUmhFKtdU
-         Xfhw==
+        d=gmail.com; s=20230601; t=1731619238; x=1732224038; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YHZ1fCaWqYnjnPGBIL46f5AcFF91GEBbzSr/Ts8DW6s=;
+        b=m91SM3oC+W3QxZsr8AIUvwqrwF2j23NzyMMtUTXwsxWPHo7NpUVTLFL7hoWbrHqYJH
+         bwCrllNWASetzCJXF6b4JdcGNF6Y/s/nUBD56iaC7sa9RD4DtMnzcozd7KiFI3Q0JW8g
+         LtA0XCgqlC2kqcMlZTWEXLFRJVJ9NNeIpoAtLhRRfBIUL6JfO0v49/kQ5Qhhnca5dUOL
+         iMZS4DFDgWyyxeMsADJVQreLrXkjDkznluRmeAfE4UXM3fhSc+SH/Tq3+EBs/r5QQLWz
+         Yz4qGlNuxrwTlk7TMeTemuF+8pp3fq1IGqIJl7/NZqbmZCIfJObnuanIthd6++V+S9Gd
+         Ly1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731619237; x=1732224037;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NRHQQGm7cGssgdoLEtNCNKA/IiRlPKI/cHGPt5rH+50=;
-        b=F1WnY8sqFpYXSZd/unrqTy5c9cTwBTHTeXdiv89NiLNPQhJk1U/Z7lFv6+hXVM2QKQ
-         PsnrqZQ6gIB2N9M52oCRudXnqx9ZlbiArbsad61o3Qw2cq+pXpJ6wsiQ1/hJA0EJDdpi
-         YjqP8mCP/WvygXTTsDSOcLiMTWy67hwRkVvs86P/UY9SK+iWnMsMpe/VbXFK9JNmB3qS
-         1iQQbK2Vir3QgWl8+W+GkpB1d7NZyVDJnAZ9v2xixOWLihEFOJmYxp1ZovwpTk+sZXvN
-         +Mf9hOKq2FywpoFPb1oWlvXBNh0u8PcxN0vttRoJTLLHd1ibEWTn6QqlApEwrO1Qs7mY
-         F1sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbLII+tm1tqRW3wfUhAW7k1W6o/dJKLHZETjFJNIxR9cWirr0Y68Ewty45QKHQ/xe1+qjoDMnA4HIa+jj4@vger.kernel.org, AJvYcCUtMfklG4XIzMYZTrriumwJxLYm65qeobeBmPESPQDol3EXF/aylUSzBUdKciVjaYa4vfk7kyVe2Bg=@vger.kernel.org, AJvYcCWy2ibXLmS9kY1uMPzvgpwq62fa+HInftYnQV3izOU/tM7OiI9SQuvjv9bNOetDPUiwjxbjrVtbcs5f@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu4fKFoPxiNKCLQaM1Y09l4U8y1NnFXrS9pmTDltzZzemYLezi
-	Be2l3iTzDRSlCS8M0/29UtYuIV2gazShhi36sN0eRloPk+GC9qPO
-X-Google-Smtp-Source: AGHT+IH4eNfTBo347F2reziJ9J68i6vmkQGmWtEeQ0AaQ1477/sBXTHrQDRhtpu9S3WNFlj2rpIXiA==
-X-Received: by 2002:a5d:6da8:0:b0:382:2553:dbc9 with SMTP id ffacd0b85a97d-38225a85e45mr159707f8f.32.1731619236812;
-        Thu, 14 Nov 2024 13:20:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1731619238; x=1732224038;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YHZ1fCaWqYnjnPGBIL46f5AcFF91GEBbzSr/Ts8DW6s=;
+        b=ZmExR65zXWGwGuW0g5MJKZJUXTWK3K/10ZxEp+JkoKXPkwgFrdoNKkTB1WRJqPnv5Z
+         AeNSitsbG6yXxxClA9rXyZ6AhJWhdJUg+xwNn57Mwm+mdwkl3RVvx/xs9nMB51a225lO
+         2+qMi5IZo5IsBSv2vgJpay5Uk5Y/VoyvL6e5CDigdUnMWLeuOCV0lhA3FqC+P7fInRmJ
+         djuZ2g1OCioOwRCFwpH3tG6TP9xo7bc73hnYjGtcrF0FK4z5bJLBSqj+YY9iHy3ODZw+
+         Sk7Rh9D2LxaXLu3rIahFw/tj2BTXjozPJgi92bXI4H/JjSAjCJzBUzIkuv+T5jPZ45+D
+         95wA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBqyRoyoXEa/ztg+P4Pu4rnHWV2Q+5RI7CuD+nkOZezbtWKCnbo/bQT2HqngqiK60YOoeUpDrMJ7EP@vger.kernel.org, AJvYcCVUn3ofuohK69NH8voO1qsUBgUsMDDTpGKu3St5ok1poQMtNVeh2QuqhQQJ2MbLT6IpY0JZ2uIpqFY=@vger.kernel.org, AJvYcCWT6Xcdou9eT9NCMew3YxBeuDk0//aVmGbILz3T3VQ8KeozTGSgvQQ2xJ/Xt7xH0f6YErLKVeBugAuK6wEj@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywmd/GNVzwoyN5UKlixZLunB+bEwwrdVFAG3RWpDmYIofwaXDGu
+	cYQaD2Mg2uDJkMRXBMQFJfUUOL0tnWM+syfU94MIA4GMuTdn0Mkg
+X-Google-Smtp-Source: AGHT+IHCvJpwFkH/4uw6za4UkEQJVB+C4nFW12j41TdeW141cuhwveu9c2gK8eJBT2FMPh4Ljhd1gg==
+X-Received: by 2002:a05:6000:a11:b0:37c:d53a:6132 with SMTP id ffacd0b85a97d-38225a8589cmr225817f8f.31.1731619237934;
+        Thu, 14 Nov 2024 13:20:37 -0800 (PST)
 Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3821adad97csm2462236f8f.35.2024.11.14.13.20.35
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3821adad97csm2462236f8f.35.2024.11.14.13.20.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 13:20:36 -0800 (PST)
+        Thu, 14 Nov 2024 13:20:37 -0800 (PST)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -77,87 +80,567 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	upstream@airoha.com
-Subject: [PATCH v4 1/2] dt-bindings: thermal: Add support for Airoha EN7581 thermal sensor
-Date: Thu, 14 Nov 2024 22:19:18 +0100
-Message-ID: <20241114211958.32137-1-ansuelsmth@gmail.com>
+Subject: [PATCH v4 2/2] thermal: Add support for Airoha EN7581 thermal sensor
+Date: Thu, 14 Nov 2024 22:19:19 +0100
+Message-ID: <20241114211958.32137-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241114211958.32137-1-ansuelsmth@gmail.com>
+References: <20241114211958.32137-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for Airoha EN7581 thermal sensor and monitor. This is a
-simple sensor for the CPU or SoC Package that provide thermal sensor and
-trip point for hot low and critical condition to fire interrupt and
-react on the abnormal state.
+Add support for Airoha EN7581 thermal sensor. This provide support for
+reading the CPU or SoC Package sensor and to setup trip points for hot
+and critical condition. An interrupt is fired to react on this and
+doesn't require passive poll to read the temperature.
+
+The thermal regs provide a way to read the ADC value from an external
+register placed in the Chip SCU regs. Monitor will read this value and
+fire an interrupt if the trip condition configured is reached.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 ---
+Changes v4:
+- Handle offset and slope in priv driver
+Changes v3:
+- Handle thermal_zone_device moved in different header
+- Enable interrupt after thermal register
+- Use new way to provide slope and offset
 Changes v2:
-- Add Reviewed-by tag
+- Add missing Makefile and Kconfig entry (somehow not included in v1)
+- Sort include header
+- Add missing bitfield.h
 
- .../thermal/airoha,en7581-thermal.yaml        | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+ drivers/thermal/Kconfig          |   9 +
+ drivers/thermal/Makefile         |   1 +
+ drivers/thermal/airoha_thermal.c | 480 +++++++++++++++++++++++++++++++
+ 3 files changed, 490 insertions(+)
+ create mode 100644 drivers/thermal/airoha_thermal.c
 
-diff --git a/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index d3f9686e26e7..801c4c2f8f70 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -327,6 +327,15 @@ config QORIQ_THERMAL
+ 	  cpufreq is used as the cooling device to throttle CPUs when the
+ 	  passive trip is crossed.
+ 
++config AIROHA_THERMAL
++	tristate "Airoha thermal sensor driver"
++	depends on ARCH_AIROHA || COMPILE_TEST
++	depends on MFD_SYSCON
++	depends on OF
++	help
++	  Enable this to plug the Airoha thermal sensor driver into the Linux
++	  thermal framework.
++
+ config SPEAR_THERMAL
+ 	tristate "SPEAr thermal sensor driver"
+ 	depends on PLAT_SPEAR || COMPILE_TEST
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 9abf43a74f2b..d7718978db24 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -38,6 +38,7 @@ obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o k3_j72xx_bandgap.o
+ # platform thermal drivers
+ obj-y				+= broadcom/
+ obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
++obj-$(CONFIG_AIROHA_THERMAL)	+= airoha_thermal.o
+ obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
+ obj-$(CONFIG_SUN8I_THERMAL)     += sun8i_thermal.o
+ obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
+diff --git a/drivers/thermal/airoha_thermal.c b/drivers/thermal/airoha_thermal.c
 new file mode 100644
-index 000000000000..ca0242ef0378
+index 000000000000..f802c40b3a5f
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/airoha,en7581-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/thermal/airoha_thermal.c
+@@ -0,0 +1,480 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +
-+title: Airoha EN7581 Thermal Sensor and Monitor
++#include <linux/module.h>
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/mfd/syscon.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/thermal.h>
 +
-+maintainers:
-+  - Christian Marangi <ansuelsmth@gmail.com>
++/* SCU regs */
++#define EN7581_PLLRG_PROTECT			0x268
++#define EN7581_PWD_TADC				0x2ec
++#define   EN7581_MUX_TADC			GENMASK(3, 1)
++#define EN7581_DOUT_TADC			0x2f8
++#define   EN7581_DOUT_TADC_MASK			GENMASK(15, 0)
 +
-+properties:
-+  compatible:
-+    const: airoha,en7581-thermal
++/* PTP_THERMAL regs */
++#define EN7581_TEMPMONCTL0			0x800
++#define   EN7581_SENSE3_EN			BIT(3)
++#define   EN7581_SENSE2_EN			BIT(2)
++#define   EN7581_SENSE1_EN			BIT(1)
++#define   EN7581_SENSE0_EN			BIT(0)
++#define EN7581_TEMPMONCTL1			0x804
++/* period unit calculated in BUS clock * 256 scaling-up */
++#define   EN7581_PERIOD_UNIT			GENMASK(9, 0)
++#define EN7581_TEMPMONCTL2			0x808
++#define   EN7581_FILT_INTERVAL			GENMASK(25, 16)
++#define   EN7581_SEN_INTERVAL			GENMASK(9, 0)
++#define EN7581_TEMPMONINT			0x80C
++#define   EN7581_STAGE3_INT_EN			BIT(31)
++#define   EN7581_STAGE2_INT_EN			BIT(30)
++#define   EN7581_STAGE1_INT_EN			BIT(29)
++#define   EN7581_FILTER_INT_EN_3		BIT(28)
++#define   EN7581_IMMD_INT_EN3			BIT(27)
++#define   EN7581_NOHOTINTEN3			BIT(26)
++#define   EN7581_HOFSINTEN3			BIT(25)
++#define   EN7581_LOFSINTEN3			BIT(24)
++#define   EN7581_HINTEN3			BIT(23)
++#define   EN7581_CINTEN3			BIT(22)
++#define   EN7581_FILTER_INT_EN_2		BIT(21)
++#define   EN7581_FILTER_INT_EN_1		BIT(20)
++#define   EN7581_FILTER_INT_EN_0		BIT(19)
++#define   EN7581_IMMD_INT_EN2			BIT(18)
++#define   EN7581_IMMD_INT_EN1			BIT(17)
++#define   EN7581_IMMD_INT_EN0			BIT(16)
++#define   EN7581_TIME_OUT_INT_EN		BIT(15)
++#define   EN7581_NOHOTINTEN2			BIT(14)
++#define   EN7581_HOFSINTEN2			BIT(13)
++#define   EN7581_LOFSINTEN2			BIT(12)
++#define   EN7581_HINTEN2			BIT(11)
++#define   EN7581_CINTEN2			BIT(10)
++#define   EN7581_NOHOTINTEN1			BIT(9)
++#define   EN7581_HOFSINTEN1			BIT(8)
++#define   EN7581_LOFSINTEN1			BIT(7)
++#define   EN7581_HINTEN1			BIT(6)
++#define   EN7581_CINTEN1			BIT(5)
++#define   EN7581_NOHOTINTEN0			BIT(4)
++/* Similar to COLD and HOT also these seems to be swapped in documentation */
++#define   EN7581_LOFSINTEN0			BIT(3) /* In documentation: BIT(2) */
++#define   EN7581_HOFSINTEN0			BIT(2) /* In documentation: BIT(3) */
++/* It seems documentation have these swapped as the HW
++ * - Fire BIT(1) when lower than EN7581_COLD_THRE
++ * - Fire BIT(0) and BIT(5) when higher than EN7581_HOT2NORMAL_THRE or
++ *     EN7581_HOT_THRE
++ */
++#define   EN7581_CINTEN0			BIT(1) /* In documentation: BIT(0) */
++#define   EN7581_HINTEN0			BIT(0) /* In documentation: BIT(1) */
++#define EN7581_TEMPMONINTSTS			0x810
++#define   EN7581_STAGE3_INT_STAT		BIT(31)
++#define   EN7581_STAGE2_INT_STAT		BIT(30)
++#define   EN7581_STAGE1_INT_STAT		BIT(29)
++#define   EN7581_FILTER_INT_STAT_3		BIT(28)
++#define   EN7581_IMMD_INT_STS3			BIT(27)
++#define   EN7581_NOHOTINTSTS3			BIT(26)
++#define   EN7581_HOFSINTSTS3			BIT(25)
++#define   EN7581_LOFSINTSTS3			BIT(24)
++#define   EN7581_HINTSTS3			BIT(23)
++#define   EN7581_CINTSTS3			BIT(22)
++#define   EN7581_FILTER_INT_STAT_2		BIT(21)
++#define   EN7581_FILTER_INT_STAT_1		BIT(20)
++#define   EN7581_FILTER_INT_STAT_0		BIT(19)
++#define   EN7581_IMMD_INT_STS2			BIT(18)
++#define   EN7581_IMMD_INT_STS1			BIT(17)
++#define   EN7581_IMMD_INT_STS0			BIT(16)
++#define   EN7581_TIME_OUT_INT_STAT		BIT(15)
++#define   EN7581_NOHOTINTSTS2			BIT(14)
++#define   EN7581_HOFSINTSTS2			BIT(13)
++#define   EN7581_LOFSINTSTS2			BIT(12)
++#define   EN7581_HINTSTS2			BIT(11)
++#define   EN7581_CINTSTS2			BIT(10)
++#define   EN7581_NOHOTINTSTS1			BIT(9)
++#define   EN7581_HOFSINTSTS1			BIT(8)
++#define   EN7581_LOFSINTSTS1			BIT(7)
++#define   EN7581_HINTSTS1			BIT(6)
++#define   EN7581_CINTSTS1			BIT(5)
++#define   EN7581_NOHOTINTSTS0			BIT(4)
++/* Similar to COLD and HOT also these seems to be swapped in documentation */
++#define   EN7581_LOFSINTSTS0			BIT(3) /* In documentation: BIT(2) */
++#define   EN7581_HOFSINTSTS0			BIT(2) /* In documentation: BIT(3) */
++/* It seems documentation have these swapped as the HW
++ * - Fire BIT(1) when lower than EN7581_COLD_THRE
++ * - Fire BIT(0) and BIT(5) when higher than EN7581_HOT2NORMAL_THRE or
++ *     EN7581_HOT_THRE
++ *
++ * To clear things, we swap the define but we keep them documented here.
++ */
++#define   EN7581_CINTSTS0			BIT(1) /* In documentation: BIT(0) */
++#define   EN7581_HINTSTS0			BIT(0) /* In documentation: BIT(1)*/
++/* Monitor will take the bigger threshold between HOT2NORMAL and HOT
++ * and will fire both HOT2NORMAL and HOT interrupt when higher than the 2
++ *
++ * It has also been observed that not setting HOT2NORMAL makes the monitor
++ * treat COLD threshold as HOT2NORMAL.
++ */
++#define EN7581_TEMPH2NTHRE			0x824
++/* It seems HOT2NORMAL is actually NORMAL2HOT */
++#define   EN7581_HOT2NORMAL_THRE		GENMASK(11, 0)
++#define EN7581_TEMPHTHRE			0x828
++#define   EN7581_HOT_THRE			GENMASK(11, 0)
++/* Monitor will use this as HOT2NORMAL (fire interrupt when lower than...)*/
++#define EN7581_TEMPCTHRE			0x82c
++#define   EN7581_COLD_THRE			GENMASK(11, 0)
++/* Also LOW and HIGH offset register are swapped */
++#define EN7581_TEMPOFFSETL			0x830 /* In documentation: 0x834 */
++#define   EN7581_LOW_OFFSET			GENMASK(11, 0)
++#define EN7581_TEMPOFFSETH			0x834 /* In documentation: 0x830 */
++#define   EN7581_HIGH_OFFSET			GENMASK(11, 0)
++#define EN7581_TEMPMSRCTL0			0x838
++#define   EN7581_MSRCTL3			GENMASK(11, 9)
++#define   EN7581_MSRCTL2			GENMASK(8, 6)
++#define   EN7581_MSRCTL1			GENMASK(5, 3)
++#define   EN7581_MSRCTL0			GENMASK(2, 0)
++#define EN7581_TEMPADCVALIDADDR			0x878
++#define   EN7581_ADC_VALID_ADDR			GENMASK(31, 0)
++#define EN7581_TEMPADCVOLTADDR			0x87c
++#define   EN7581_ADC_VOLT_ADDR			GENMASK(31, 0)
++#define EN7581_TEMPRDCTRL			0x880
++/*
++ * NOTICE: AHB have this set to 0 by default. Means that
++ * the same addr is used for ADC volt and valid reading.
++ * In such case, VALID ADDR is used and volt addr is ignored.
++ */
++#define   EN7581_RD_CTRL_DIFF			BIT(0)
++#define EN7581_TEMPADCVALIDMASK			0x884
++#define   EN7581_ADV_RD_VALID_POLARITY		BIT(5)
++#define   EN7581_ADV_RD_VALID_POS		GENMASK(4, 0)
++#define EN7581_TEMPADCVOLTAGESHIFT		0x888
++#define   EN7581_ADC_VOLTAGE_SHIFT		GENMASK(4, 0)
++/*
++ * Same values for each CTL.
++ * Can operate in:
++ * - 1 sample
++ * - 2 sample and make average of them
++ * - 4,6,10,16 sample, drop max and min and make avgerage of them
++ */
++#define   EN7581_MSRCTL_1SAMPLE			0x0
++#define   EN7581_MSRCTL_AVG2SAMPLE		0x1
++#define   EN7581_MSRCTL_4SAMPLE_MAX_MIX_AVG2	0x2
++#define   EN7581_MSRCTL_6SAMPLE_MAX_MIX_AVG4	0x3
++#define   EN7581_MSRCTL_10SAMPLE_MAX_MIX_AVG8	0x4
++#define   EN7581_MSRCTL_18SAMPLE_MAX_MIX_AVG16	0x5
++#define EN7581_TEMPAHBPOLL			0x840
++#define   EN7581_ADC_POLL_INTVL			GENMASK(31, 0)
++/* PTPSPARE0,2 reg are used to store efuse info for calibrated temp offset */
++#define EN7581_EFUSE_TEMP_OFFSET_REG		0xf20 /* PTPSPARE0 */
++#define   EN7581_EFUSE_TEMP_OFFSET		GENMASK(31, 16)
++#define EN7581_PTPSPARE1			0xf24 /* PTPSPARE1 */
++#define EN7581_EFUSE_TEMP_CPU_SENSOR_REG	0xf28 /* PTPSPARE2 */
 +
-+  reg:
-+    maxItems: 1
++#define EN7581_SLOPE_X100_DIO_DEFAULT		5645
++#define EN7581_SLOPE_X100_DIO_AVS		5645
 +
-+  interrupts:
-+    maxItems: 1
++#define EN7581_INIT_TEMP_CPK_X10		300
++#define EN7581_INIT_TEMP_FTK_X10		620
++#define EN7581_INIT_TEMP_NONK_X10		550
 +
-+  airoha,chip-scu:
-+    description: phandle to the chip SCU syscon
-+    $ref: /schemas/types.yaml#/definitions/phandle
++#define EN7581_SCU_THERMAL_PROTECT_KEY		0x12
++#define EN7581_SCU_THERMAL_MUX_DIODE1		0x7
 +
-+  '#thermal-sensor-cells':
-+    const: 0
++/* Convert temp to raw value as read from ADC	((((temp / 100) - init) * slope) / 1000) + offset */
++#define TEMP_TO_RAW(priv, temp)			((((((temp) / 100) - (priv)->init_temp) * \
++						  (priv)->default_slope) / 1000) + \
++						 (priv)->default_offset)
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - airoha,chip-scu
++/* Convert raw to temp				((((temp - offset) * 1000) / slope + init) * 100) */
++#define RAW_TO_TEMP(priv, raw)			(((((raw) - (priv)->default_offset) * 1000) / \
++						  (priv)->default_slope + \
++						  (priv)->init_temp) * 100)
 +
-+additionalProperties: false
++struct airoha_thermal_priv {
++	void __iomem *base;
++	struct regmap *chip_scu;
++	struct resource scu_adc_res;
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
++	struct thermal_zone_device *tz;
++	int init_temp;
++	int default_slope;
++	int default_offset;
++};
 +
-+    thermal-sensor@1efbd800 {
-+        compatible = "airoha,en7581-thermal";
-+        reg = <0x1efbd000 0xd5c>;
-+        interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
-+        airoha,chip-scu = <&chip_scu>;
++static int airoha_get_thermal_ADC(struct airoha_thermal_priv *priv)
++{
++	u32 val;
 +
-+        #thermal-sensor-cells = <0>;
-+    };
++	regmap_read(priv->chip_scu, EN7581_DOUT_TADC, &val);
++	return FIELD_GET(EN7581_DOUT_TADC_MASK, val);
++}
++
++static void airoha_init_thermal_ADC_mode(struct airoha_thermal_priv *priv)
++{
++	u32 adc_mux, pllrg;
++
++	/* Save PLLRG current value */
++	regmap_read(priv->chip_scu, EN7581_PLLRG_PROTECT, &pllrg);
++
++	/* Give access to thermal regs */
++	regmap_write(priv->chip_scu, EN7581_PLLRG_PROTECT, EN7581_SCU_THERMAL_PROTECT_KEY);
++	adc_mux = FIELD_PREP(EN7581_MUX_TADC, EN7581_SCU_THERMAL_MUX_DIODE1);
++	regmap_write(priv->chip_scu, EN7581_PWD_TADC, adc_mux);
++
++	/* Restore PLLRG value on exit */
++	regmap_write(priv->chip_scu, EN7581_PLLRG_PROTECT, pllrg);
++}
++
++static int airoha_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
++{
++	struct airoha_thermal_priv *priv = thermal_zone_device_priv(tz);
++	int min, max, avg_temp, temp_adc;
++	int i;
++
++	/* Get the starting temp */
++	temp_adc = airoha_get_thermal_ADC(priv);
++	min = temp_adc;
++	max = temp_adc;
++	avg_temp = temp_adc;
++
++	/* Make 5 more measurement and average the temp ADC difference */
++	for (i = 0; i < 5; i++) {
++		temp_adc = airoha_get_thermal_ADC(priv);
++		avg_temp += temp_adc;
++		if (temp_adc > max)
++			max = temp_adc;
++		if (temp_adc < min)
++			min = temp_adc;
++	}
++	avg_temp = avg_temp - max - min;
++	avg_temp /= 4;
++
++	*temp = RAW_TO_TEMP(priv, avg_temp);
++	return 0;
++}
++
++static int airoha_thermal_set_trips(struct thermal_zone_device *tz, int low,
++				    int high)
++{
++	struct airoha_thermal_priv *priv = thermal_zone_device_priv(tz);
++
++	if (high != INT_MAX) {
++		/* Validate high and clamp them a sane value */
++		if (high > RAW_TO_TEMP(priv, FIELD_MAX(EN7581_DOUT_TADC_MASK)))
++			high = 110000;
++
++		/* We offset the high temp of 1°C to trigger correct event */
++		writel(TEMP_TO_RAW(priv, high) >> 4,
++		       priv->base + EN7581_TEMPOFFSETH);
++	}
++
++	if (low != -INT_MAX) {
++		/* Validate low and clamp them to a sane value */
++		if (low < RAW_TO_TEMP(priv, 0))
++			low = -33000;
++
++		/* We offset the low temp of 1°C to trigger correct event */
++		writel(TEMP_TO_RAW(priv, low) >> 4,
++		       priv->base + EN7581_TEMPOFFSETL);
++	}
++
++	/* Enable sensor 0 monitor */
++	writel(EN7581_SENSE0_EN, priv->base + EN7581_TEMPMONCTL0);
++
++	return 0;
++}
++
++static const struct thermal_zone_device_ops thdev_ops = {
++	.get_temp = airoha_thermal_get_temp,
++	.set_trips = airoha_thermal_set_trips,
++};
++
++static irqreturn_t airoha_thermal_irq(int irq, void *data)
++{
++	struct airoha_thermal_priv *priv = data;
++	enum thermal_notify_event event;
++	u32 status;
++
++	status = readl(priv->base + EN7581_TEMPMONINTSTS);
++	switch (status & (EN7581_HOFSINTSTS0 | EN7581_LOFSINTSTS0)) {
++	case EN7581_HOFSINTSTS0:
++		event = THERMAL_TRIP_VIOLATED;
++		break;
++	case EN7581_LOFSINTSTS0:
++		event = THERMAL_EVENT_UNSPECIFIED;
++		break;
++	default:
++		goto exit;
++	}
++
++	thermal_zone_device_update(priv->tz, event);
++
++exit:
++	/* reset interrupt */
++	writel(status, priv->base + EN7581_TEMPMONINTSTS);
++
++	return IRQ_HANDLED;
++}
++
++static void airoha_thermal_setup_adc_val(struct device *dev,
++					 struct airoha_thermal_priv *priv)
++{
++	u32 efuse_calib_info, cpu_sensor;
++
++	/* Setup thermal sensor to ADC mode and setup the mux to DIODE1 */
++	airoha_init_thermal_ADC_mode(priv);
++	/* sleep 10 ms for ADC to enable */
++	usleep_range(10 * USEC_PER_MSEC, 11 * USEC_PER_MSEC);
++
++	efuse_calib_info = readl(priv->base + EN7581_EFUSE_TEMP_OFFSET_REG);
++	if (efuse_calib_info) {
++		priv->default_offset = FIELD_GET(EN7581_EFUSE_TEMP_OFFSET, efuse_calib_info);
++		/* Different slope are applied if the sensor is used for CPU or for package */
++		cpu_sensor = readl(priv->base + EN7581_EFUSE_TEMP_CPU_SENSOR_REG);
++		if (cpu_sensor) {
++			priv->default_slope = EN7581_SLOPE_X100_DIO_DEFAULT;
++			priv->init_temp = EN7581_INIT_TEMP_FTK_X10;
++		} else {
++			priv->default_slope = EN7581_SLOPE_X100_DIO_AVS;
++			priv->init_temp = EN7581_INIT_TEMP_CPK_X10;
++		}
++	} else {
++		priv->default_offset = airoha_get_thermal_ADC(priv);
++		priv->default_slope = EN7581_SLOPE_X100_DIO_DEFAULT;
++		priv->init_temp = EN7581_INIT_TEMP_NONK_X10;
++		dev_info(dev, "missing thermal calibrarion EFUSE, using non calibrated value\n");
++	}
++}
++
++static void airoha_thermal_setup_monitor(struct airoha_thermal_priv *priv)
++{
++	/* Set measure mode */
++	writel(FIELD_PREP(EN7581_MSRCTL0, EN7581_MSRCTL_6SAMPLE_MAX_MIX_AVG4),
++	       priv->base + EN7581_TEMPMSRCTL0);
++
++	/*
++	 * Configure ADC valid reading addr
++	 * The AHB temp monitor system doesn't have direct access to the
++	 * thermal sensor. It does instead work by providing all kind of
++	 * address to configure how to access and setup an ADC for the
++	 * sensor. EN7581 supports only one sensor hence the
++	 * implementation is greatly simplified but the AHB supports
++	 * up to 4 different sensor from the same ADC that can be
++	 * switched by tuning the ADC mux or wiriting address.
++	 *
++	 * We set valid instead of volt as we don't enable valid/volt
++	 * split reading and AHB read valid addr in such case.
++	 */
++	writel(priv->scu_adc_res.start + EN7581_DOUT_TADC,
++	       priv->base + EN7581_TEMPADCVALIDADDR);
++
++	/*
++	 * Configure valid bit on a fake value of bit 16. The ADC outputs
++	 * max of 2 bytes for voltage.
++	 */
++	writel(FIELD_PREP(EN7581_ADV_RD_VALID_POS, 16),
++	       priv->base + EN7581_TEMPADCVALIDMASK);
++
++	/*
++	 * AHB supports max 12 bytes for ADC voltage. Shift the read
++	 * value 4 bit to the right. Precision lost by this is minimal
++	 * in the order of half a °C and is acceptable in the context
++	 * of triggering interrupt in critical condition.
++	 */
++	writel(FIELD_PREP(EN7581_ADC_VOLTAGE_SHIFT, 4),
++	       priv->base + EN7581_TEMPADCVOLTAGESHIFT);
++
++	/* BUS clock is 300MHz counting unit is 3 * 68.64 * 256 = 52.715us */
++	writel(FIELD_PREP(EN7581_PERIOD_UNIT, 3),
++	       priv->base + EN7581_TEMPMONCTL1);
++
++	/*
++	 * filt interval is 1 * 52.715us = 52.715us,
++	 * sen interval is 379 * 52.715us = 19.97ms
++	 */
++	writel(FIELD_PREP(EN7581_FILT_INTERVAL, 1) |
++	       FIELD_PREP(EN7581_FILT_INTERVAL, 379),
++	       priv->base + EN7581_TEMPMONCTL2);
++
++	/* AHB poll is set to 146 * 68.64 = 10.02us */
++	writel(FIELD_PREP(EN7581_ADC_POLL_INTVL, 146),
++	       priv->base + EN7581_TEMPAHBPOLL);
++}
++
++static int airoha_thermal_probe(struct platform_device *pdev)
++{
++	struct airoha_thermal_priv *priv;
++	struct device_node *chip_scu_np;
++	struct device *dev = &pdev->dev;
++	int irq, ret;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(priv->base))
++		return PTR_ERR(priv->base);
++
++	chip_scu_np = of_parse_phandle(dev->of_node, "airoha,chip-scu", 0);
++	if (!chip_scu_np)
++		return -EINVAL;
++
++	priv->chip_scu = syscon_node_to_regmap(chip_scu_np);
++	if (IS_ERR(priv->chip_scu))
++		return PTR_ERR(priv->chip_scu);
++
++	of_address_to_resource(chip_scu_np, 0, &priv->scu_adc_res);
++	of_node_put(chip_scu_np);
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++					airoha_thermal_irq, IRQF_ONESHOT,
++					pdev->name, (void *)priv);
++	if (ret) {
++		dev_err(dev, "Can't get interrupt working.\n");
++		return ret;
++	}
++
++	airoha_thermal_setup_monitor(priv);
++	airoha_thermal_setup_adc_val(dev, priv);
++
++	/* register of thermal sensor and get info from DT */
++	priv->tz = devm_thermal_of_zone_register(dev, 0, priv, &thdev_ops);
++	if (IS_ERR(priv->tz)) {
++		dev_err(dev, "register thermal zone sensor failed\n");
++		return PTR_ERR(priv->tz);
++	}
++
++	platform_set_drvdata(pdev, priv);
++
++	/* Enable LOW and HIGH interrupt */
++	writel(EN7581_HOFSINTEN0 | EN7581_LOFSINTEN0,
++	       priv->base + EN7581_TEMPMONINT);
++
++	return 0;
++}
++
++static const struct of_device_id airoha_thermal_match[] = {
++	{ .compatible = "airoha,en7581-thermal" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, airoha_thermal_match);
++
++static struct platform_driver airoha_thermal_driver = {
++	.driver = {
++		.name = "airoha-thermal",
++		.of_match_table = airoha_thermal_match,
++	},
++	.probe = airoha_thermal_probe,
++};
++
++module_platform_driver(airoha_thermal_driver);
++
++MODULE_AUTHOR("Christian Marangi <ansuelsmth@gmail.com>");
++MODULE_DESCRIPTION("Airoha thermal driver");
++MODULE_LICENSE("GPL");
 -- 
 2.45.2
 
