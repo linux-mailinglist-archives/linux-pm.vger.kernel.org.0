@@ -1,122 +1,94 @@
-Return-Path: <linux-pm+bounces-17560-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17561-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 082609C8953
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 12:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B73159C8964
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 13:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB983B24696
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 11:53:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B74FB22D1D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 11:58:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA97E1F942D;
-	Thu, 14 Nov 2024 11:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5623B1F9416;
+	Thu, 14 Nov 2024 11:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="enNXKEXn"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mtOgP2S0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE9618C02F;
-	Thu, 14 Nov 2024 11:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63951F8931;
+	Thu, 14 Nov 2024 11:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731585203; cv=none; b=ivX5TPQCvlKZ6VelZrioYfixjEu4154lKUSyOQKP6iTHi803AqqwXSWspnASEFtAKk5sSYf2xbpwBmGWmf/ghYl0skl/fVUdEtIsPMLvzgRFbRK/XtbdAM+FR8yN5N8KdDNJQcUK9c6h2IVh4z9mRWP2E3tngbVp/i3pmVHSfmM=
+	t=1731585519; cv=none; b=fmEDIlrxDne4CzDPPWldAjpOUs2jotmRgpUUAFFLG6Ptp4zpHpVi3M6PeldsGENQZWvdMS3HGqiR3aN6T8w7+RF6Uf3KmKqvrSH/LBayUfyfiVvtTkvMCfIZV4YUHUF3RdazPhHAQ0LK1rVxUZPBTzkzANFBm8F5Bl+cqKzsg/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731585203; c=relaxed/simple;
-	bh=qWwLPG9pXebEcq9tL/Q4X0ev8VL4ucNNaG+Wtthac/E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G/TOVEQ0Bo8iBkI1voUGGUV1eNspOtehFPBDNfxrwcj47gQGmzGFs4irhr6q5MHcHxFWJF1a4MathuHZ8xMeFlIOhkyJxvM4lyJRuxyT8w+OXkhdm9E1gfskVfbrbDh8CtJP2o94VwqRgIssz9bkeDEdmIU8u7yMh6PfvW65284=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=enNXKEXn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F88C4CECF;
-	Thu, 14 Nov 2024 11:53:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731585203;
-	bh=qWwLPG9pXebEcq9tL/Q4X0ev8VL4ucNNaG+Wtthac/E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=enNXKEXnshCqWXN0Xla+Sw+GL5l1yHlsoeH+hvs4L+LexbsGwD/6/W/4h8sMV/Fxb
-	 RS2doPmpwErU4a13fzxt/vAwm7W9VZbiqu7M16y0ibqxBVBRoV69PGJk9INQdsi9YE
-	 J8MGHRoX6qyJnTmeiZ/Tz5ppsANEvwzrBitaPZEcbayY2/h22HVJDLuWxp8BbMvVEV
-	 wN5qKM3IWKB3KsLO+OZhYj735+6K56ogzI0eGvTkGOtdYz5hdI22IzHZc3RcpYDiE+
-	 b/m1QVBHeHLuuRgTDbkNv4tArdfatrfXQ6TBbQoUPMnMozXFtRc5WA1Ndi4d/g4GCN
-	 MghhfQcKgsFbg==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3e60825aa26so274355b6e.1;
-        Thu, 14 Nov 2024 03:53:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUUQPlyal33YMATM3Wqw4a7W36cdSOe38iYN9u3GlWQD2cvJ/VscSHKqI5iI8RwxHUWGT38zQW90ulr@vger.kernel.org, AJvYcCVKsgy+YQ1qOIKPNZR/fq+BjLfD6kaYoI8NlteF2+195hayWptsUBiroPO2TKY+SqpLF7QzdyS6DCk=@vger.kernel.org, AJvYcCVXYO6reFihL0FT0mq4Oj2/3o0hCuxKTq7QTWWfK9b2WL0maq6jqnXUI/k/LwomusKIpOJwTM1A787bneAX@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8eo0Pt5KXCIz0dh/vI8K4MiL/yWlQ1iefKtC0ko+ETpvhaMoB
-	PKXpTPRi+Fg7NVFvwk/1U7+jCnRDKEi8HLHIuOuNevnFEcccY0h1JGQh9e6G7q7ANnjIIZYooAY
-	rG9dmw1RCPd+Bd+uf+8D0aIxGHnU=
-X-Google-Smtp-Source: AGHT+IFOKemSYfIbHZMXT8axUFu7GFjMcBgeKWROVECStLV3WuW+o26FNb92jmlQlKV53KLkdGaiK4uK9urnmYdkdls=
-X-Received: by 2002:a05:6870:2045:b0:287:7695:6a87 with SMTP id
- 586e51a60fabf-296102eb51dmr1939674fac.10.1731585202370; Thu, 14 Nov 2024
- 03:53:22 -0800 (PST)
+	s=arc-20240116; t=1731585519; c=relaxed/simple;
+	bh=opbrCb2+/EFIFD1/+ST5yY9PAJrHhAjniteJAzszCS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjMyoFtPXEqFfClYMyJhlo+GQL3SRMNv/TYFD49LXfWxmhVSAurOu7Jx7ZbC//QlBBocOOv1O+Pfq7sFRenSnBg79zfZ05WfFX5kAVQxTbqhwvu4VLAHEYsoix1iwPcYVbyh7v+SudqIucmSWcowLN+PVJ+PEqeFONDaAqY7mGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mtOgP2S0; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=4kaHGJ5S7sZTzNrqIdngW3WAgdJKt+QVgXkqBlwP7j8=; b=mtOgP2S0lpX130zqNUPnPIrcfo
+	nFA7r6l3WhBBD2baemhkaUw7KwGsQYTqG1UvmelOqtsZFQC48GUZSDpZk332CdzkTUsRV/2taUZRN
+	dadoU/gfs1DPBeaK6T8klVovyRJtTYQtQFKBI9EyXlzcnlI9Gs53jcYBORV8l4BQhI9DSQbKvqIZc
+	ewgW4q+Y0jlTykLi1foUHeSjIxrukVnmv8hqcUdp5bpoL15r5KG8GcPo7vTBIIx3RLIUiuq3ejgdA
+	7hTYOncthUisi+4LUDiuW2KLWLa0BEgYO7aufCnadHxTz/ie4KjGcpL7kq3DB0+Cw86jAO+lhmwDF
+	ZK6EzoyQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tBYUa-00000000gVY-1c7W;
+	Thu, 14 Nov 2024 11:58:32 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 08B30300472; Thu, 14 Nov 2024 12:58:32 +0100 (CET)
+Date: Thu, 14 Nov 2024 12:58:31 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	rafael.j.wysocki@intel.com, len.brown@intel.com,
+	artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH v3 2/3] x86/smp native_play_dead: Prefer
+ cpuidle_play_dead() over mwait_play_dead()
+Message-ID: <20241114115831.GQ6497@noisy.programming.kicks-ass.net>
+References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
+ <20241108122909.763663-3-patryk.wlazlyn@linux.intel.com>
+ <20241112114743.GQ22801@noisy.programming.kicks-ass.net>
+ <CAJZ5v0hJ8NoFgjtnYce99+qjCZc3_ihBojyK1gRrcyU5Fp6inw@mail.gmail.com>
+ <20241112145618.GR22801@noisy.programming.kicks-ass.net>
+ <ZzSQcq5JxGgKVh5Z@BLRRASHENOY1.amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241113085634.7657-1-lihuisong@huawei.com> <CAJZ5v0jTMg=Wipt2VPU1DDnnO7Rh5pu0VYvUjHRW5Nada--O8A@mail.gmail.com>
- <52539572-6128-8c87-84e6-3f539d887b34@huawei.com>
-In-Reply-To: <52539572-6128-8c87-84e6-3f539d887b34@huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Nov 2024 12:53:11 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0heL_wa=bimMDijn-x6G0SxsMf=yGhKZAe282P5+h2O3w@mail.gmail.com>
-Message-ID: <CAJZ5v0heL_wa=bimMDijn-x6G0SxsMf=yGhKZAe282P5+h2O3w@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: thermal: Support for linking devices associated
- with the thermal zone
-To: "lihuisong (C)" <lihuisong@huawei.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rui.zhang@intel.com, liuyonglong@huawei.com, 
-	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZzSQcq5JxGgKVh5Z@BLRRASHENOY1.amd.com>
 
-Hi,
+On Wed, Nov 13, 2024 at 05:11:38PM +0530, Gautham R. Shenoy wrote:
 
-On Thu, Nov 14, 2024 at 9:37=E2=80=AFAM lihuisong (C) <lihuisong@huawei.com=
-> wrote:
->
-> Hi Rafael,
->
-> =E5=9C=A8 2024/11/13 17:26, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> > On Wed, Nov 13, 2024 at 10:07=E2=80=AFAM Huisong Li <lihuisong@huawei.c=
-om> wrote:
-> >> There are many 'cdevX' files which link cooling devices under
-> >> '/sys/class/thermal/thermal_zoneX/'. These devices contain active cool=
-ing
-> >> devices and passive cooling devices. And user cann't directly know whi=
-ch
-> >> devices temperature is represented by the thermal zone.
-> >>
-> >> However, ACPI spec provides a '_TZD' object which evaluates to a packa=
-ge
-> >> of device names. Each name corresponds to a device in the ACPI namespa=
-ce
-> >> that is associated with the thermal zone. The temperature reported by =
-the
-> >> thermal zone is roughly correspondent to that of each of the devices.
-> >>
-> >> User can get all devices a thermal zone measured by the 'measures'
-> >> directory under the thermal zone device.
-> > Well, that's kind of clear, but what exactly is the use case?  Why
-> > does the user need to know that?
-> IMO, this makes thermal zone information more friendly.
-> For instance, user can directly know the temperature of CPUs or other
-> devices is roughly represented by which thermal zone.
-> This may offer the convenience for further usersapce application.
->
-> BTW, the '_TZD' method is similar to the '_PMD' in acpi power meter.
-> Since ACPI spec provides them, they should also have a role in their
-> existence.
+> AMD platforms won't be using FFH based states for offlined CPUs. We
+> prefer IO based states when available, and HLT otherwise.
+> 
+> > 
+> > Robustly we'd teach the ACPI driver about FFh and set enter_dead on
+> > every state -- but we'd have to double check that with AMD.
+> 
+> Works for us as long as those FFh states aren't used for play_dead on
+> AMD platforms.
 
-So there is no specific use case, but it is possible that somebody may
-want to use this information, IIUC.
+AFAIU AMD doesn't want to use MWAIT -- ever, not only for offline.
+Confirm?
 
-Well, let's defer making kernel changes until there is a user
-wanting/needing this information.  Then we'll decide how to expose it.
-
-For one, I'm not convinced that exposing it under the ACPI
-representation of a thermal zone is going to be really useful.
+But if it were to use MWAIT for regular idle, then surely it's OK for
+offline too, right?
 
