@@ -1,104 +1,99 @@
-Return-Path: <linux-pm+bounces-17568-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17569-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EF549C9096
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 18:15:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D45589C90B4
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 18:22:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21D5EB38C2E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:14:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97DCE285396
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 17:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF3C188587;
-	Thu, 14 Nov 2024 17:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZ3SCvGM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EDF2185B78;
+	Thu, 14 Nov 2024 17:22:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DA117BED0;
-	Thu, 14 Nov 2024 17:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08F4189F2A;
+	Thu, 14 Nov 2024 17:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731604434; cv=none; b=X48To96Yy6lDOGX7jyAcLZ1XSYbCkO9chPA4xIUiZJtggPeDDaUAulihNh0uHSvZbh2J+8gNDgzdlWlUdbsVxuIBFmUFkrnQHbq6ZYIQZWGB2NmrhdM/wbaR7ChNqtwATf6Y0q+uVW3cYOiWdRf99uuHymSiIH3RRWBHi7hjVtk=
+	t=1731604938; cv=none; b=JkFtFEyXqmvDaE+nh2iMYNzvqCklauyjQ7t1q8nSJItUCJyvOtly7TtS7WVQ8wALEKsAXE9/bE/e+01QS4HVcwmZZwIvQ8SRd8MIjV3ozim/jK538pd2ElrQWO7r0n06SCYGNdjAyJ1QERepQQZiixHXETLp4MuqZuJ8SCDNRiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731604434; c=relaxed/simple;
-	bh=/LZlSOccn1m3pAZvKwPhMaD9G7pEsN/iu8vODiTHqP4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Otu4u/31M0Sdv5peXQiIqlhb3YcAgRsnrhjwI08Hu7VQs7dy7qODAQk0mBNokPIYouPyqeNRzrYHIz4WPK8oFG4gw5R+srBUen/l3Jq/Cxf4g46qIWkG5atXI0hbxtUD179mJNvSEbD9jbqwa7P/yhY5T7zLRgq2zpGloC6tqT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FZ3SCvGM; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731604433; x=1763140433;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/LZlSOccn1m3pAZvKwPhMaD9G7pEsN/iu8vODiTHqP4=;
-  b=FZ3SCvGMd36qfsNCvrnaxNVtPGDN4xg4chzfZifyzC4jdU5hD3R18HVn
-   6g/a6/veeVeBmt2B8pHJxCvnVTeKJFbGb8jkceIrX97+41b5qboAo8zrh
-   ArNoYeg/CkCydSZ3G5rI60GdacGL5Z4KU9CPLWMYzIL/AEdHGi7XvNGSE
-   5l/KEZVLeqkxOCFbkIJrRRausaccBx5zes2fL0R656AUxFR6wkwO7dbMX
-   SjddpYV9Obxnz37k9daTL8id+zoiknr5sTQWAByOKWwiP3mC8obCMwQBU
-   D/ycK1HGGs4Cegn8S+NJ5Zqx2g2epczIK4YsMmeNR4qm3HQGRbeZ5peF+
-   w==;
-X-CSE-ConnectionGUID: yFRr4VvbTvqYPd4lbMOHxg==
-X-CSE-MsgGUID: 2NKYg+JzR7yCjm/ssEBWnQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11256"; a="31471533"
-X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
-   d="scan'208";a="31471533"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 09:13:53 -0800
-X-CSE-ConnectionGUID: 0uX9F+DhS52CIvl7k1yOwg==
-X-CSE-MsgGUID: EunNGp7GSvOC1rF2/IZ2og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
-   d="scan'208";a="111581703"
-Received: from johunt-mobl9.ger.corp.intel.com (HELO [10.245.244.40]) ([10.245.244.40])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 09:13:49 -0800
-Message-ID: <15d18759-68eb-4683-9255-715545505ed6@linux.intel.com>
-Date: Thu, 14 Nov 2024 18:13:39 +0100
+	s=arc-20240116; t=1731604938; c=relaxed/simple;
+	bh=t9ajE/VeX04xVGpQR7Zfzq53U0A1RsxE/6M4zIt9zZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/TYcmU03YyeJ0q8i2KYBbdbsgLOUZQhL5FD+LewcNBWZmjLQSrXdUNvwrPKo6VXtQMAmcpqNR19e6+9HAnrd2ZMudfBNSX72sD9Ahc7/ivSRYl8a1h27ZmmwB1WY3bKNqKBZX3gg91uXFQ57C40t4HZkx7XTF7WTDFzDubEado=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD68F1474;
+	Thu, 14 Nov 2024 09:22:44 -0800 (PST)
+Received: from arm.com (RQ4T19M611.cambridge.arm.com [10.1.37.73])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBA8D3F6A8;
+	Thu, 14 Nov 2024 09:22:09 -0800 (PST)
+Date: Thu, 14 Nov 2024 17:22:07 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+	lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+	mtosatti@redhat.com, sudeep.holla@arm.com, maz@kernel.org,
+	misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	zhenglifeng1@huawei.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/15] asm-generic: add barrier
+ smp_cond_load_relaxed_timeout()
+Message-ID: <ZzYxv2RfDwegDMEf@arm.com>
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+ <20241107190818.522639-2-ankur.a.arora@oracle.com>
+ <9cecd8a5-82e5-69ef-502b-45219a45006b@gentwo.org>
+ <87v7wy2mbi.fsf@oracle.com>
+ <88b3b176-97c7-201e-0f89-c77f1802ffd9@gentwo.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] SRF: Fix offline CPU preventing pc6 entry
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael.j.wysocki@intel.com, len.brown@intel.com,
- artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com,
- Peter Zijlstra <peterz@infradead.org>
-References: <20241108122909.763663-1-patryk.wlazlyn@linux.intel.com>
- <20241112114543.GP22801@noisy.programming.kicks-ass.net>
- <1ee47890-7f19-4c21-9d0d-94834d716159@linux.intel.com> <87o72klylj.ffs@tglx>
-Content-Language: en-US
-From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-In-Reply-To: <87o72klylj.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88b3b176-97c7-201e-0f89-c77f1802ffd9@gentwo.org>
 
-> That's not really working:
->
->   1) Regular kexec offlines them again.
+On Fri, Nov 08, 2024 at 11:41:08AM -0800, Christoph Lameter (Ampere) wrote:
+> On Thu, 7 Nov 2024, Ankur Arora wrote:
+> > > Calling the clock retrieval function repeatedly should be fine and is
+> > > typically done in user space as well as in kernel space for functions that
+> > > need to wait short time periods.
+> >
+> > The problem is that you might have multiple CPUs polling in idle
+> > for prolonged periods of time. And, so you want to minimize
+> > your power/thermal envelope.
+> 
+> On ARM that maps to YIELD which does not do anything for the power
+> envelope AFAICT. It switches to the other hyperthread.
 
-But then, they execute hlt loop in the reboot vector right?
-I think that's fine. We just don't want to be woken up from the mwait
-when the RIP points to garbage.
+The issue is not necessarily arm64 but poll_idle() on other
+architectures like x86 where, at the end of this series, they still call
+cpu_relax() in a loop and check local_clock() every 200 times or so
+iterations. So I wouldn't want to revert the improvement in 4dc2375c1a4e
+("cpuidle: poll_state: Avoid invoking local_clock() too often").
 
->   2) Kexec in panic can't do any of that.
+I agree that the 200 iterations here it's pretty random and it was
+something made up for poll_idle() specifically and it could increase the
+wait period in other situations (or other architectures).
 
-Does it make sense to change the kexec, so that every CPU is forced
-into the reboot vector, which I believe happens for online CPUs?
-We don't have to online them all the way. Maybe minimal bringup just
-to be able to send them the IPI?
+OTOH, I'm not sure we want to make this API too complex if the only
+user for a while would be poll_idle(). We could add a comment that the
+timeout granularity can be pretty coarse and architecture dependent (200
+cpu_relax() calls in one deployment, 100us on arm64 with WFE).
 
-As a side note, It's not that important for this patchset. I think I
-can make it work without simplifying the existing hack, but crossed my
-mind at some point that maybe we could do that.
-
+-- 
+Catalin
 
