@@ -1,144 +1,146 @@
-Return-Path: <linux-pm+bounces-17639-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17641-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0C969CF1EA
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:43:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97E619CF1FD
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:47:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A670E1F224A9
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:43:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D11A295763
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D8991E0B8A;
-	Fri, 15 Nov 2024 16:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1441E22FC;
+	Fri, 15 Nov 2024 16:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hzX50RV9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hagLj4hw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3291D54E2;
-	Fri, 15 Nov 2024 16:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9711D5145
+	for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 16:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731688839; cv=none; b=BOGfuNcZK9P0eVsX2wXvyt9psaGF3wjjbHg1ZmhdD7eo8gs8PnpN7nsNXsIyg9wLQMdx+I1OkRL+04s4mT4FTEUb7J3sSfU3t4LTSPfcoN2dF0R+zps9db68VeUGS2vRaOWCLtY/0CAb6r1ZiTrH594hD2VcyxKN7i4i8Dbh/YE=
+	t=1731689081; cv=none; b=DpDByoYdNq+SUjx0zY19U0pkKANekSlt97xKMomrenuUCaaHyBKrhu8/KpfNUlmkE4vD3CQgyC0v7yztUtQ/lGv3QVlJiITwWX72l7G6AcyJ2BAh/auPzSnUaCWdEtfjkNiupL0hfYxMrW87io6t3sZjHJMe4+A7fLHyqAHHxBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731688839; c=relaxed/simple;
-	bh=1e2MdMIpanCLg0wxHT99JjjTP4bqY2r+O1WXkWJfGM0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lWRy8hRwq8dxPVpnbtGo+oOpTxbIoxCB1+iktLmR//dQ+zAz4+Jnn1qMpOKBjMmD4sG/m4S/L5yyfSYz9C1Dkqza3L7gd/2uFpl5r9Wtqhz01KBk2wTYxdBCBY+19nhD0VviOWtF4gJNNFvU210y3LPyfLvukbYUORnsjDSYAOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hzX50RV9; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1731688833;
-	bh=1e2MdMIpanCLg0wxHT99JjjTP4bqY2r+O1WXkWJfGM0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hzX50RV9Mlyu+kL5m3zfsA+HW9SwxNkHzt942adCrq1GQYiniiTHeQ6U22aNyI1eS
-	 orzGNGHslb5B4CuJHaFE0pp4s9BJEG11q/hxYOljB3/ZtnNoSqbU75nB7KztIjRxtd
-	 RNza95arS4Y6CbcwqdoOVTFUN2IEdTzTSsSbFVnA=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Fri, 15 Nov 2024 17:40:22 +0100
-Subject: [PATCH v2 2/2] hwmon: (core) Avoid ifdef CONFIG_THERMAL in C
- source file
+	s=arc-20240116; t=1731689081; c=relaxed/simple;
+	bh=w1FTAecBOFTmyqoMAH2DfbSi1/WWutIqszTuyzR8ob0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nFdfLQ7od2W/oDpL7Q46ihg46K18X8wPFL7bCi6UpN6d8FhRuNxi0s0b9blkBgwRC6EoaYLqDdunepkYQ8ORglGG6tHd3vu8tFbbq8yqv4OiJkybc3xoNgA8i+Xuz4mCE9vvcpsVHQpBXJcQLzqSdyZhmkpnKS11IDOF6nM3Kv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hagLj4hw; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2fb559b0b00so17591851fa.0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 08:44:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731689078; x=1732293878; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tvSbr212wnBXWgkPqBMZFxm+xf5y5TiTLHopInfDcas=;
+        b=hagLj4hwjBJ6cOEPXcyzU57D7AXQkt4DTrdYQQn7J7uLCTgQWPCebeRWZ7eAdOuk1V
+         YqmBCj7e72NzazEGrmhIulvdZjuqZmCE9MUNv4knJp/1r3/gyu7EW2OWg9Fs9Q15DvAB
+         WLqYBLJgt2C1LsR5+pkkbEM4SbKREWKbXyhvjuUoYn4KycSQj9izrseEHoy1OWlZdwO8
+         sNCj4qsxz2QfIUBJMJCoydyo/ZHd3cllhElRTpdx+Z3e4sSpY3OAN0KBKCCFYexo2kpn
+         siQj6wGdeuXq5YPih8ctDScLwZz1HMt9FFF/te0pjPj5gIceh7/51a4LnYZN764pPLnF
+         dfyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731689078; x=1732293878;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tvSbr212wnBXWgkPqBMZFxm+xf5y5TiTLHopInfDcas=;
+        b=uvRmtELy1QTWNpzlqP7NO5hoI8YoPO+EE1wsMyCWb5hmrYOgSalqwbw0enj1A1OI65
+         754JacDOH5qqN0+JVYKPbD74YDWV8LkXiNlYPB/IeAYq8XPb3v3jLjAFjtw+SpsQar0J
+         FA1gHmztAzf+iAT8K5sOWouTqD3aiBBuxZTMZvpmcqXNLyMBJbIrDOriqNmuzasG/Ey1
+         XA0iElnjR3aRaiQ1/TRXgbBeyON6QtmGDKqaYP/3Y77N0C1ZruOBAzGYg2XqYiIqpfYx
+         A/btG4Tr+A/zJRFuH96U54W821XKPSmapOiDupRKTTHBuT7hrgPTQqJT6H5G0Pb4pQVr
+         XZKg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7q/gf8sGTSU/VX+FHLZUtTCJjDAWxa0BrD9myF1RQBTp/slMKUPaci8jjrJdiP9aBtj7t+PLY/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6CmfMMXoicwU0P0TKQTdZguOeUKQGCqaCepiHTjSa0nIulGHO
+	NbPk4tPgf9qzQfc9PtQgAIY/Fjvsjn+SYCCbtV1/GTzZ1M+B23Ro/Tdbiothwdk=
+X-Google-Smtp-Source: AGHT+IFgzXgQ4IjxGhewB1vh2xQBTf7ORjLEOV0LXbis36gnE75+Wti65ULJO+Xnk5bUahD0MBiHug==
+X-Received: by 2002:a2e:b8cf:0:b0:2fb:34dc:7beb with SMTP id 38308e7fff4ca-2ff6067407bmr19160471fa.12.1731689078308;
+        Fri, 15 Nov 2024 08:44:38 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff5988f321sm6038021fa.95.2024.11.15.08.44.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2024 08:44:37 -0800 (PST)
+Date: Fri, 15 Nov 2024 18:44:34 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Jishnu Prakash <quic_jprakash@quicinc.com>
+Cc: jic23@kernel.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, daniel.lezcano@linaro.org, sboyd@kernel.org, 
+	quic_subbaram@quicinc.com, quic_collinsd@quicinc.com, quic_amelende@quicinc.com, 
+	quic_kamalw@quicinc.com, amitk@kernel.org, lee@kernel.org, rafael@kernel.org, 
+	rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de, quic_skakitap@quicinc.com, 
+	neil.armstrong@linaro.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	cros-qcom-dts-watchers@chromium.org
+Subject: Re: [PATCH V4 2/4] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+Message-ID: <i7opxhkgukcshdcc7j6ai6jt62egag3jgfiqsghakjhgt2ikg6@eap7l64amcci>
+References: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
+ <20241030185854.4015348-3-quic_jprakash@quicinc.com>
+ <ag3wqsjdec7ujcba2jpvhzgcbbc5vnyjyes5ljyyf5b4edw7j3@rj23a25wvoyd>
+ <ee8f0b70-77a2-4a5e-85c8-715fd02d4437@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241115-hwmon-thermal-v2-2-c96f0c0984b2@weissschuh.net>
-References: <20241115-hwmon-thermal-v2-0-c96f0c0984b2@weissschuh.net>
-In-Reply-To: <20241115-hwmon-thermal-v2-0-c96f0c0984b2@weissschuh.net>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731688832; l=2244;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=1e2MdMIpanCLg0wxHT99JjjTP4bqY2r+O1WXkWJfGM0=;
- b=CudI3w6szC9y5R/Bn6Zz1jMnejHVaSy3O0VTsdGs4nmc6S7eTJoeJcDpVv6I/RgdmVad9LzLt
- QxZseQvTvZTAchZ6+bRkeB4UmEh9+DEFn65zAGLjmK6LTU5nBmd04Ho
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee8f0b70-77a2-4a5e-85c8-715fd02d4437@quicinc.com>
 
-Using an #ifdef in a C source files to have different definitions
-of the same symbol makes the code harder to read and understand.
-Furthermore it makes it harder to test compilation of the different
-branches.
+On Wed, Nov 13, 2024 at 07:36:13PM +0530, Jishnu Prakash wrote:
+> Hi Dmitry,
+> 
+> On 10/31/2024 11:27 PM, Dmitry Baryshkov wrote:
+> > On Thu, Oct 31, 2024 at 12:28:52AM +0530, Jishnu Prakash wrote:
+> >> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
+> >> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
+> >>
+> >> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
+> >> going through PBS(Programmable Boot Sequence) firmware through a single
+> >> register interface. This interface is implemented on an SDAM (Shared
+> >> Direct Access Memory) peripheral on the master PMIC PMK8550 rather
+> >> than a dedicated ADC peripheral.
+> >>
+> >> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
+> >> channels and virtual channels (combination of ADC channel number and
+> >> PMIC SID number) per PMIC, to be used by clients of this device.
+> >>
+> >> Co-developed-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> >> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> >> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+> >> ---
+> >> Changes since v3:
+> >> - Added ADC5 Gen3 documentation changes in existing qcom,spmi-vadc.yaml file
+> >>   instead of adding separate file and updated top-level constraints in documentation
+> >>   file based on discussion with reviewers.
+> > 
+> > I think it has been better, when it was a separate file. Krzysztof asked
+> > for rationale, not for merging it back. Two different things.
+> 
+> Actually I made that change in a separate file due to a misunderstanding at that time - 
+> I thought a separate file was the only way to accommodate a change in the top-level 'reg' and 'interrupts'
+> constraints, but I realized later that they could be updated.
+> 
+> From our side, we would prefer to add ADC5 Gen3 documentation in the same file, as it is
+> mostly the same functionality which reuses all the existing properties present in this file.
 
-Replace the ifdeffery with IS_ENABLED() which is just a normal
-conditional.
-The resulting binary is still the same as before as the compiler
-optimizes away all the unused code and definitions.
+Export the existing properties and reuse them in the new file. Gen3 (in
+my opinion) changed the hardware too much. Having all the differences
+via conditionals bloats the schema and makes it significantly unreadable
+in my opinion.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/hwmon/hwmon.c | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 9c35c4d0369d7aad7ea61ccd25f4f63fc98b9e02..86fb674c85d3f54d475be014c3fd3dd74c815c57 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -147,11 +147,6 @@ static DEFINE_IDA(hwmon_ida);
- 
- /* Thermal zone handling */
- 
--/*
-- * The complex conditional is necessary to avoid a cyclic dependency
-- * between hwmon and thermal_sys modules.
-- */
--#ifdef CONFIG_THERMAL_OF
- static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	struct hwmon_thermal_data *tdata = thermal_zone_device_priv(tz);
-@@ -257,6 +252,9 @@ static int hwmon_thermal_register_sensors(struct device *dev)
- 	void *drvdata = dev_get_drvdata(dev);
- 	int i;
- 
-+	if (!IS_ENABLED(CONFIG_THERMAL_OF))
-+		return 0;
-+
- 	for (i = 1; info[i]; i++) {
- 		int j;
- 
-@@ -285,6 +283,9 @@ static void hwmon_thermal_notify(struct device *dev, int index)
- 	struct hwmon_device *hwdev = to_hwmon_device(dev);
- 	struct hwmon_thermal_data *tzdata;
- 
-+	if (!IS_ENABLED(CONFIG_THERMAL_OF))
-+		return;
-+
- 	list_for_each_entry(tzdata, &hwdev->tzdata, node) {
- 		if (tzdata->index == index) {
- 			thermal_zone_device_update(tzdata->tzd,
-@@ -293,16 +294,6 @@ static void hwmon_thermal_notify(struct device *dev, int index)
- 	}
- }
- 
--#else
--static int hwmon_thermal_register_sensors(struct device *dev)
--{
--	return 0;
--}
--
--static void hwmon_thermal_notify(struct device *dev, int index) { }
--
--#endif /* IS_REACHABLE(CONFIG_THERMAL) && ... */
--
- static int hwmon_attr_base(enum hwmon_sensor_types type)
- {
- 	if (type == hwmon_in || type == hwmon_intrusion)
+But please refer to DT maintainers (Rob/Krzysztof/Conor) for the final
+opinion.
 
 -- 
-2.47.0
-
+With best wishes
+Dmitry
 
