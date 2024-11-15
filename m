@@ -1,179 +1,240 @@
-Return-Path: <linux-pm+bounces-17634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FED49CF174
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 719089CF115
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:08:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9B02B2B3F0
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:29:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A703AB2DEE7
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF2D1D5CEE;
-	Fri, 15 Nov 2024 15:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB3871D54E3;
+	Fri, 15 Nov 2024 15:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tIW9LHDA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="llCfQuEo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90A01D54E3
-	for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 15:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C381D5173
+	for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 15:30:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731684515; cv=none; b=sHa22ygX0XA5f9aMkwZxmW4dFtRHYwBv8w0KIAWIiX6N3Su+22Bt6yWPwbArVX/M5lGbDa1/BJ39b7xqYp8Q3DhkKK7jApQgx4kWRzBg4KJumcDJyKlVzZq7uEk2fu4ty6z4/c5SVotV9p36t2Uf4CLksKKJ4ivZXvnxl6w7fuk=
+	t=1731684615; cv=none; b=LduTsP88y/TIvOVjDsnlqhLTobPdwBr8Ud+zHRk/Bqy+wfTcWc11h+Ot11ir7cSY/DzLMksdkOV0HEtbCir+rzb9/kHsyQv7pqQLKCpOf7XU4Q7DB0IWT+eE86x1SdUlg8x+MlIGUAUL/Sgq5pXlBLibVJLTs71SlM/LmCjR2E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731684515; c=relaxed/simple;
-	bh=zurmVu6jD5Ns3rQKh121ALIw2zxYEWs6An8fSAI+csc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=BLbWCw0tz0vTYCA/V5FDOKw5LpLUUJihV3cJwM0hRLIEC7Y6vLjIdaXsi86xOzeFzatmaJ7bvqU4IikfIA8zI0JaEab7CfzJfQ+dJ+Fi18Gjwk2H9Fc6wshWXKrIfpeCp0gbcMnkr0bmFhrQZKHCW4xHRa0JZEyxQEuelmhUX1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tIW9LHDA; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1731684615; c=relaxed/simple;
+	bh=BTJWNGbpl5KvD6H+VDgOWo2Yq5EF8KYra7F4VvHtP7M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FC2+O1iHPo08eJQyW3ddHxVz+FFS30CGWObK0hDiPV9r2pYQglt2uMcPSzuTzks6bdKMX9r4zPI3xrCv07I3LKwUUVSMf5cmCKUGfivh94wxPeFaTjqNVLYUJ65X3RJzFbuV/7Kh5h5AASWEkLM0z4H562cvpOycANprqviTcPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=llCfQuEo; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37d462c91a9so1317403f8f.2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 07:28:32 -0800 (PST)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ea08667b23so1566042a91.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 07:30:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731684511; x=1732289311; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w9xxBkuOGfjMnpE8th+U2edWWxzoieKyXlSmx0+ZyMI=;
-        b=tIW9LHDA3km7dMRb8E9x+Gi5KBztd9UejIb6fH6mvQ7Pvkt/qSQLUdj011VqXPJFxX
-         S1Bipu0lsDNT4SEG+bEhWSqMD5SW8WafmdbLVWZLdmVd+odkqDA/HWemFyKr0Z2vPu5d
-         SjHnb5tptwaa0z7s0bmALRibjkBLn0ds3acv1mmcxDrlAuFtW//lGsNcoxvcC7aOPFBT
-         mF2r41wiT9Kn/jhUws0o09fMMt5yiUWo8ckc5EB7lnHA1sM857eC9580NrIKX5pGJIsJ
-         uv+TLzUfBQ0y/1XFQuTqMS18AFV511ULPJddnmDAPsMasSrn0OCOyjTJUuKxotOcHhrW
-         ggSA==
+        d=linaro.org; s=google; t=1731684613; x=1732289413; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SmJxOZsK/WTy1TwXxhvCivxQcUc93pFDymw3BaVCfLw=;
+        b=llCfQuEoChGIMnRdPKBRn4pxI/jgngEe9olxAAFvIQZA92bWVh4FoMMKYOT96qVAkm
+         CYsGYfqMdy2mRb72p4rM3uDj4ZNNTtBNrZzY8LD7wVzrrrENq8+0ywUP5U7Hlqg5sXo6
+         PkrLnkYwDw8I04yq3/m7KLTBmLijwM2fwzrFwtk0GM5ynlWi6otmUTzZvC5R5U5nQ+/z
+         VE1kETpE3VWjf8A2GUDQDAH8lSRxCq7Ww6PjRpF9OYBjfVM532wIbq32x7T3bsBlFOBI
+         dfJc8jMYXfVv5DxoWHp9EznIt4gD66ZWAWV5IJdYiFmKSA5WOuWLHQMoYunPhxFj6RDl
+         swuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731684511; x=1732289311;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w9xxBkuOGfjMnpE8th+U2edWWxzoieKyXlSmx0+ZyMI=;
-        b=h60UDom5977Ts0Sa+VaGKYM0o3MQYcy070eNasbVpA++C3evSZC3eeH+LEtY+pdc18
-         OnHJqSPBsqF20jmibayWbgPZOQZMbUduSjyCRS3C6eTBft4GD2GDhXTqb1wiCA5mZe4Q
-         k/+hZEglQnUMSEK6XsWWiibqre/VuV/rKW9Zp7qJgBUPstZjFtUBK9m6e/Zja17HgaKp
-         DqmKJIyqzvsqda/1elNVqOURf77UOJrkDYvBbXbZCc9Lyo7l8RHpjHjK15AVHMvaHIPG
-         tx0MHTQ6eFjQYzai8/49jBOWsFHhssi6x4XrYJivhNfL1Z1LIIFI4LrPP6+/0V39tuOe
-         Cfyw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+jiGmpTrGgrM7HcvZzPrZheU8ER+m8U3J61CZd++tsr+O9QGCj+LFNdRcrWHrYGZ9N7lIOS0WzQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSHwhItGkyOOiIKfL+Pxkmz/2MkyyHssv5KCgPjawveLNeELrw
-	TZEA8jJBApdqfse9c60hYckTkEHKqlyQTDBldikvn6Xeunabx0zDK40tMb7X2Kk=
-X-Google-Smtp-Source: AGHT+IFE1m0PhvEE6X08D1MwP6KX2yhrXvWSidacGzSURnRLln0zDAOvKce6/l9aWa2qCaOvjt8d2w==
-X-Received: by 2002:a5d:6dab:0:b0:37e:d965:4e04 with SMTP id ffacd0b85a97d-38225a8ab23mr3000039f8f.36.1731684510986;
-        Fri, 15 Nov 2024 07:28:30 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8512:42be:302f:f436? ([2a01:e0a:982:cbb0:8512:42be:302f:f436])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3822f6afc20sm576134f8f.81.2024.11.15.07.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 07:28:30 -0800 (PST)
-Message-ID: <73fd6d04-e965-4524-8d63-5e2c67677f52@linaro.org>
-Date: Fri, 15 Nov 2024 16:28:29 +0100
+        d=1e100.net; s=20230601; t=1731684613; x=1732289413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SmJxOZsK/WTy1TwXxhvCivxQcUc93pFDymw3BaVCfLw=;
+        b=Jj2r9EmVYi45/eWuMTuhmW2G8ilQhEDi9gG0lIm97Z9ZMZp0K6IYTynNBhZZkgY17x
+         0GKgYm3XokacJ5dtbPd/rn9czN71/xTE/gG92+BJyVnwvwYJVeC3hW8VBTdPMBI5n6OJ
+         MdkPYv9hhFgvv2QJohKtl0vZHVNX2y8Toi+ptw+zvJpHv8qHDAVmM7Zv5LbBx2aVdKoT
+         JsajgR0cAhnBQpW83n4Z1bQiCMGntgHtiKkQ+cfus/76Kd8pM88ixT28O4UGxPH34nWT
+         +SGFDrAVx3RP0gcsksKQnyyrZlZI3FzfzoEgEEK3y9RB0bFjn5pnJV1pfY47etQtWTUX
+         mVhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1AebyzP0VG2NcYWX55NrIoS3ucrrIF+kCoG6bwWfDtb6iIXPcSkgANGFaqqdw/pvaqc1EW/naZg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWakuJM+uaim9Vm1oWbPJFoyG9E7/cEG9SxcZcFgrxOgVZEom1
+	EjtEoNPZqQsuSjLhJlFXN1lQzSrujqDork5eMw4GsHsmQSdk/dSsFe9qPrFdyHhoWokW3/io2wU
+	pq7C3uyaretITg0Qh6tF/iv64OmZn0N27KiYq4w==
+X-Google-Smtp-Source: AGHT+IG+PpsGMG3D9PHGUTyU+b4ehE7tPO3iApsCyt2WZs25ja3VpgyyqO4OP9BJpQwEMK+Fcj307W6uEdNaV+/TXgM=
+X-Received: by 2002:a17:90b:4c52:b0:2e2:cef9:4d98 with SMTP id
+ 98e67ed59e1d1-2ea155a23bcmr3340237a91.25.1731684612942; Fri, 15 Nov 2024
+ 07:30:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC 2/8] drm/msm: adreno: add GMU_BW_VOTE quirk
-To: Rob Clark <robdclark@gmail.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Akhil P Oommen <quic_akhilpo@quicinc.com>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Connor Abbott <cwabbott0@gmail.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-References: <20241113-topic-sm8x50-gpu-bw-vote-v1-0-3b8d39737a9b@linaro.org>
- <20241113-topic-sm8x50-gpu-bw-vote-v1-2-3b8d39737a9b@linaro.org>
- <sgz4h6rlmekiwypaisjbnej326wv4vaqt3mgspp4fs4tg3mdfx@cwmdqcu6gwbf>
- <63a2b391-8b71-41cb-bed2-3bc7fd2154ab@linaro.org>
- <CAA8EJpoFm8EjfBq70RTPtwR7Y7Rm24kHO20NukGiLGRYD0p9Tg@mail.gmail.com>
- <CAF6AEGty1fcA13rDOOJQbhT4o=CTtBYtGFspowZbxD1c-VE9Bw@mail.gmail.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <CAF6AEGty1fcA13rDOOJQbhT4o=CTtBYtGFspowZbxD1c-VE9Bw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20241114220921.2529905-1-saravanak@google.com>
+ <20241114220921.2529905-6-saravanak@google.com> <CAGETcx8xni1vyoNts=C=dgEaMcfhsfo0B5Ef02jD3in0QqCB1w@mail.gmail.com>
+In-Reply-To: <CAGETcx8xni1vyoNts=C=dgEaMcfhsfo0B5Ef02jD3in0QqCB1w@mail.gmail.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Fri, 15 Nov 2024 16:30:01 +0100
+Message-ID: <CAKfTPtBZVKXoJPz0w2-WxOddfq5k+mNCB3H_Kay6Y9OgB9Y-GQ@mail.gmail.com>
+Subject: Re: [PATCH v1 5/5] PM: sleep: Spread out async kworker threads during
+ dpm_resume*() phases
+To: Saravana Kannan <saravanak@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Marek Vasut <marex@denx.de>, 
+	Bird@google.com, Tim <Tim.Bird@sony.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 15/11/2024 16:10, Rob Clark wrote:
-> On Fri, Nov 15, 2024 at 6:18 AM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> On Fri, 15 Nov 2024 at 11:21, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->>>
->>> On 15/11/2024 08:07, Dmitry Baryshkov wrote:
->>>> On Wed, Nov 13, 2024 at 04:48:28PM +0100, Neil Armstrong wrote:
->>>>> The Adreno GMU Management Unit (GNU) can also scale the DDR Bandwidth
->>>>> along the Frequency and Power Domain level, but by default we leave the
->>>>> OPP core vote for the interconnect ddr path.
->>>>>
->>>>> While scaling via the interconnect path was sufficient, newer GPUs
->>>>> like the A750 requires specific vote paremeters and bandwidth to
->>>>> achieve full functionality.
->>>>>
->>>>> Add a new Quirk enabling DDR Bandwidth vote via GMU.
->>>>
->>>> Please describe, why this is defined as a quirk rather than a proper
->>>> platform-level property. From my experience with 6xx and 7xx, all the
->>>> platforms need to send some kind of BW data to the GMU.
->>>
->>> Well APRIV, CACHED_COHERENT & PREEMPTION are HW features, why this can't be part of this ?
->>>
->>> Perhaps the "quirks" bitfield should be features instead ?
->>
->> Sounds like that.
-> 
-> But LMLOADKILL_DISABLE and TWO_PASS_USE_WFI are quirks.. so it is kind
-> of a mix of quirks and features.  So meh
+On Fri, 15 Nov 2024 at 06:25, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Thu, Nov 14, 2024 at 2:09=E2=80=AFPM Saravana Kannan <saravanak@google=
+.com> wrote:
+> >
+> > As of today, the scheduler doesn't spread out all the kworker threads
+> > across all the available CPUs during suspend/resume. This causes
+> > significant resume latency during the dpm_resume*() phases.
+> >
+> > System resume latency is a very user-visible event. Reducing the
+> > latency is more important than trying to be energy aware during that
+> > period.
+> >
+> > Since there are no userspace processes running during this time and
+> > this is a very short time window, we can simply disable EAS during
+> > resume so that the parallel resume of the devices is spread across all
+> > the CPUs.
+> >
+> > On a Pixel 6, averaging over 100 suspend/resume cycles, the new logic
+> > plus disabling EAS for resume yields significant improvements:
+> > +---------------------------+-----------+------------+-----------------=
+-+
+> > | Phase                     | Old full sync | New full async | % change=
+ |
+> > |                           |               | + EAS disabled |         =
+ |
+> > +---------------------------+-----------+------------+-----------------=
+-+
+> > | Total dpm_suspend*() time |        107 ms |          62 ms |     -42%=
+ |
+> > +---------------------------+-----------+------------+-----------------=
+-+
+> > | Total dpm_resume*() time  |         75 ms |          61 ms |     -19%=
+ |
+> > +---------------------------+-----------+------------+-----------------=
+-+
+> > | Sum                       |        182 ms |         123 ms |     -32%=
+ |
+> > +---------------------------+-----------+------------+-----------------=
+-+
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >  kernel/power/suspend.c  | 16 ++++++++++++++++
+> >  kernel/sched/topology.c | 13 +++++++++++++
+> >  2 files changed, 29 insertions(+)
+> >
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index 09f8397bae15..7304dc39958f 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -393,6 +393,12 @@ void __weak arch_suspend_enable_irqs(void)
+> >         local_irq_enable();
+> >  }
+> >
+> > +/*
+> > + * Intentionally not part of a header file to avoid risk of abuse by o=
+ther
+> > + * drivers.
+> > + */
+> > +void sched_set_energy_aware(unsigned int enable);
 
-Well I can do a split and move the features into a clean .features bitfield, would it be ok ?
+extern void sched_set_energy_aware(unsigned int enable);
 
-Neil
+clear the warning
 
-> 
-> BR,
-> -R
-> 
->>
->> --
->> With best wishes
->> Dmitry
-
+> > +
+> >  /**
+> >   * suspend_enter - Make the system enter the given sleep state.
+> >   * @state: System sleep state to enter.
+> > @@ -468,6 +474,15 @@ static int suspend_enter(suspend_state_t state, bo=
+ol *wakeup)
+> >
+> >   Platform_wake:
+> >         platform_resume_noirq(state);
+> > +       /*
+> > +        * We do this only for resume instead of suspend and resume for=
+ these
+> > +        * reasons:
+> > +        * - Performance is more important than power for resume.
+> > +        * - Power spent entering suspend is more important for suspend=
+. Also,
+> > +        *   stangely, disabling EAS was making suspent a few milliseco=
+nds
+> > +        *   slower in my testing.
+> > +        */
+> > +       sched_set_energy_aware(0);
+> >         dpm_resume_noirq(PMSG_RESUME);
+> >
+> >   Platform_early_resume:
+> > @@ -520,6 +535,7 @@ int suspend_devices_and_enter(suspend_state_t state=
+)
+> >   Resume_devices:
+> >         suspend_test_start();
+> >         dpm_resume_end(PMSG_RESUME);
+> > +       sched_set_energy_aware(1);
+> >         suspend_test_finish("resume devices");
+> >         trace_suspend_resume(TPS("resume_console"), state, true);
+> >         resume_console();
+> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> > index 9748a4c8d668..c069c0b17cbf 100644
+> > --- a/kernel/sched/topology.c
+> > +++ b/kernel/sched/topology.c
+> > @@ -284,6 +284,19 @@ void rebuild_sched_domains_energy(void)
+> >         mutex_unlock(&sched_energy_mutex);
+> >  }
+> >
+> > +void sched_set_energy_aware(unsigned int enable)
+>
+>   CC      kernel/sched/build_utility.o
+> In file included from kernel/sched/build_utility.c:88:
+> kernel/sched/topology.c:287:6: warning: no previous prototype for
+> =E2=80=98sched_set_energy_aware=E2=80=99 [-Wmissing-prototypes]
+>   287 | void sched_set_energy_aware(unsigned int enable)
+>       |      ^~~~~~~~~~~~~~~~~~~~~~
+>
+> Peter/Vincent,
+>
+> I noticed that I'm getting a warning for this line. But I'm not sure
+> what to do about it. I intentionally didn't put this in a header file
+> because I'm guessing we don't want to make this available to
+> drivers/frameworks in general.
+>
+> Let me know how you want me to handle this.
+>
+> -Saravana
+>
+> > +{
+> > +       int state;
+> > +
+> > +       if (!sched_is_eas_possible(cpu_active_mask))
+> > +               return;
+> > +
+> > +       sysctl_sched_energy_aware =3D enable;
+> > +       state =3D static_branch_unlikely(&sched_energy_present);
+> > +       if (state !=3D sysctl_sched_energy_aware)
+> > +               rebuild_sched_domains_energy();
+> > +}
+> > +
+> >  #ifdef CONFIG_PROC_SYSCTL
+> >  static int sched_energy_aware_handler(const struct ctl_table *table, i=
+nt write,
+> >                 void *buffer, size_t *lenp, loff_t *ppos)
+> > --
+> > 2.47.0.338.g60cca15819-goog
+> >
 
