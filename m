@@ -1,146 +1,162 @@
-Return-Path: <linux-pm+bounces-17641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17642-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97E619CF1FD
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:47:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E6679CF280
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 18:13:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D11A295763
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2DF21F21CB3
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1441E22FC;
-	Fri, 15 Nov 2024 16:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C86F1D5AC0;
+	Fri, 15 Nov 2024 17:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hagLj4hw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CNR2SleJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9711D5145
-	for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 16:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1931D5173;
+	Fri, 15 Nov 2024 17:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731689081; cv=none; b=DpDByoYdNq+SUjx0zY19U0pkKANekSlt97xKMomrenuUCaaHyBKrhu8/KpfNUlmkE4vD3CQgyC0v7yztUtQ/lGv3QVlJiITwWX72l7G6AcyJ2BAh/auPzSnUaCWdEtfjkNiupL0hfYxMrW87io6t3sZjHJMe4+A7fLHyqAHHxBg=
+	t=1731690792; cv=none; b=pPL14LVvKenRHa2pYeZFAO9etAUC7KhuHQoHJROhRXikzKo4WwFXIXnxp5F7Mv0aq4CdOtsjBjLzmRu59GCqwbXtW1RGzUYYhPQHP9kpw/qlGSzbcjcP1/O2pA370axNA6M9HURKhyzF2AhoUjh0QSEOOzlM0q1kqIeC/P0r6gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731689081; c=relaxed/simple;
-	bh=w1FTAecBOFTmyqoMAH2DfbSi1/WWutIqszTuyzR8ob0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nFdfLQ7od2W/oDpL7Q46ihg46K18X8wPFL7bCi6UpN6d8FhRuNxi0s0b9blkBgwRC6EoaYLqDdunepkYQ8ORglGG6tHd3vu8tFbbq8yqv4OiJkybc3xoNgA8i+Xuz4mCE9vvcpsVHQpBXJcQLzqSdyZhmkpnKS11IDOF6nM3Kv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hagLj4hw; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2fb559b0b00so17591851fa.0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 08:44:39 -0800 (PST)
+	s=arc-20240116; t=1731690792; c=relaxed/simple;
+	bh=sEzTkK8tBzDoNCkPrYPhapI5bIdjA/ehHbsZ9yd/nPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JlKCb3Ey81TnswZs6thWbPwIwJKxhDX226aVR3JnKfjg6wW7DlDmAtZXvXnnC7YTW1m1662kvZGK/z455gb05ZpTd1OaRLm/2MxAfSDvaXrBKQpSyOr2eTrkobj1YPwalLXxpkb8d8k+x/gS71QS/xf1KvvNs1f11ugNv2W/0TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CNR2SleJ; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7ed9c16f687so677181a12.0;
+        Fri, 15 Nov 2024 09:13:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731689078; x=1732293878; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tvSbr212wnBXWgkPqBMZFxm+xf5y5TiTLHopInfDcas=;
-        b=hagLj4hwjBJ6cOEPXcyzU57D7AXQkt4DTrdYQQn7J7uLCTgQWPCebeRWZ7eAdOuk1V
-         YqmBCj7e72NzazEGrmhIulvdZjuqZmCE9MUNv4knJp/1r3/gyu7EW2OWg9Fs9Q15DvAB
-         WLqYBLJgt2C1LsR5+pkkbEM4SbKREWKbXyhvjuUoYn4KycSQj9izrseEHoy1OWlZdwO8
-         sNCj4qsxz2QfIUBJMJCoydyo/ZHd3cllhElRTpdx+Z3e4sSpY3OAN0KBKCCFYexo2kpn
-         siQj6wGdeuXq5YPih8ctDScLwZz1HMt9FFF/te0pjPj5gIceh7/51a4LnYZN764pPLnF
-         dfyw==
+        d=gmail.com; s=20230601; t=1731690790; x=1732295590; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=gY4NhCLwqH9wEkLSR5pI2JhRlkkr03HGnCBjgVFYm8g=;
+        b=CNR2SleJDkjfbg9OSSKSb+AWc2mAgB4SUZ6IiZyahF8kALBfYCwW9hsqZjDjxRJzKo
+         Kn9QQbl+rAWz+XpHBfIq2xeX5U3Wz40r2y9ZKGGSTQpX+le+g2Y96Noq/s08H6/AZ45t
+         GIbJwYzRJjjVpGHyIJCEDVlgcGbyb81l6KduORgoEkrelb0cLxMIy3amYIDhr2hJwhh2
+         2dUjyYukx2965Z+SeFct86z97ncpxm4U5OOmxaEJV9bjuKNMQciyRkXfvEpp36XLWIp2
+         3xnCuRpAse+RNpZm73CksnxmxPbXjKSPwJmcdcVKjlCNtpXucQ6asX+nUWjGKJMRRHgK
+         LSMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731689078; x=1732293878;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1731690790; x=1732295590;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tvSbr212wnBXWgkPqBMZFxm+xf5y5TiTLHopInfDcas=;
-        b=uvRmtELy1QTWNpzlqP7NO5hoI8YoPO+EE1wsMyCWb5hmrYOgSalqwbw0enj1A1OI65
-         754JacDOH5qqN0+JVYKPbD74YDWV8LkXiNlYPB/IeAYq8XPb3v3jLjAFjtw+SpsQar0J
-         FA1gHmztAzf+iAT8K5sOWouTqD3aiBBuxZTMZvpmcqXNLyMBJbIrDOriqNmuzasG/Ey1
-         XA0iElnjR3aRaiQ1/TRXgbBeyON6QtmGDKqaYP/3Y77N0C1ZruOBAzGYg2XqYiIqpfYx
-         A/btG4Tr+A/zJRFuH96U54W821XKPSmapOiDupRKTTHBuT7hrgPTQqJT6H5G0Pb4pQVr
-         XZKg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7q/gf8sGTSU/VX+FHLZUtTCJjDAWxa0BrD9myF1RQBTp/slMKUPaci8jjrJdiP9aBtj7t+PLY/w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6CmfMMXoicwU0P0TKQTdZguOeUKQGCqaCepiHTjSa0nIulGHO
-	NbPk4tPgf9qzQfc9PtQgAIY/Fjvsjn+SYCCbtV1/GTzZ1M+B23Ro/Tdbiothwdk=
-X-Google-Smtp-Source: AGHT+IFgzXgQ4IjxGhewB1vh2xQBTf7ORjLEOV0LXbis36gnE75+Wti65ULJO+Xnk5bUahD0MBiHug==
-X-Received: by 2002:a2e:b8cf:0:b0:2fb:34dc:7beb with SMTP id 38308e7fff4ca-2ff6067407bmr19160471fa.12.1731689078308;
-        Fri, 15 Nov 2024 08:44:38 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff5988f321sm6038021fa.95.2024.11.15.08.44.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2024 08:44:37 -0800 (PST)
-Date: Fri, 15 Nov 2024 18:44:34 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Jishnu Prakash <quic_jprakash@quicinc.com>
-Cc: jic23@kernel.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org, 
-	konrad.dybcio@linaro.org, daniel.lezcano@linaro.org, sboyd@kernel.org, 
-	quic_subbaram@quicinc.com, quic_collinsd@quicinc.com, quic_amelende@quicinc.com, 
-	quic_kamalw@quicinc.com, amitk@kernel.org, lee@kernel.org, rafael@kernel.org, 
-	rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de, quic_skakitap@quicinc.com, 
-	neil.armstrong@linaro.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	cros-qcom-dts-watchers@chromium.org
-Subject: Re: [PATCH V4 2/4] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
-Message-ID: <i7opxhkgukcshdcc7j6ai6jt62egag3jgfiqsghakjhgt2ikg6@eap7l64amcci>
-References: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
- <20241030185854.4015348-3-quic_jprakash@quicinc.com>
- <ag3wqsjdec7ujcba2jpvhzgcbbc5vnyjyes5ljyyf5b4edw7j3@rj23a25wvoyd>
- <ee8f0b70-77a2-4a5e-85c8-715fd02d4437@quicinc.com>
+        bh=gY4NhCLwqH9wEkLSR5pI2JhRlkkr03HGnCBjgVFYm8g=;
+        b=w4yFAVulK/J5SG2kPMFf7DSnuNXojLRyXLmoK2YKjro12LjlNBsdTsZx7PLypigaia
+         S/cmmly/uxrNBLtD+/X2j1eQsUyfoqMOSlhoBfGLx6hMaVBWoBawOIbkYwpITP2gg0eV
+         YcFsXGHpg537DLGlVDaNSCoBUIZNUe4R46cQaTv2S/9g5YDegJU51u6nTdTq6ZqOxBLE
+         OgEx9p8U/RxB8BIPXTcLSpS/ZkSYRskOw9jyTu7mzGo1oIl5XUBhEwKip2zR6PfmWXRC
+         WH5WPEYdLAPqTQw0DicSvrrDt9bLyvfdvPnyacEjc0dF6dNvVM351SzI0MKlFQMvc7+T
+         PWeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSIrDR4b0T/dPEY9ez9zPkih4JncxgeMl4wPSEBL6cj2Wh1E3vz0AZfsN9Gaf0wtJupiaPTqiziHuzzRI=@vger.kernel.org, AJvYcCXydZSjAbTxig2V/0IBjfLSa7O3CcnBewUH2SUrkXPZr7yNUMbJqpnLiULO9IzuJR7IIIZfbxiJRC4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjFBCSBLMlfl27kWyPTwbLX23hkG7P/AWoUQZlx1BtXDC1xULv
+	kDTm3r5EykZ9DmlWt/gDeMbyWlFMZ5t0nt7qS/3GpFhK+xQjcMOo
+X-Google-Smtp-Source: AGHT+IEwWlGvMiN732+gdweh0l1KzLxnmkdC+Wti88J9SuConhBHXmVR/KjB9bkEzgCXnyEBhqqXcA==
+X-Received: by 2002:a17:90b:314b:b0:2e2:cfef:86 with SMTP id 98e67ed59e1d1-2ea154cd93dmr3859721a91.4.1731690789908;
+        Fri, 15 Nov 2024 09:13:09 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea024b82aasm3136043a91.33.2024.11.15.09.13.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Nov 2024 09:13:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <16ff1f86-8de2-4522-8f9a-51f5110bb365@roeck-us.net>
+Date: Fri, 15 Nov 2024 09:13:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee8f0b70-77a2-4a5e-85c8-715fd02d4437@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] hwmon: (core) Avoid ifdef CONFIG_THERMAL in C
+ source file
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Jean Delvare <jdelvare@suse.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20241115-hwmon-thermal-v2-0-c96f0c0984b2@weissschuh.net>
+ <20241115-hwmon-thermal-v2-2-c96f0c0984b2@weissschuh.net>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241115-hwmon-thermal-v2-2-c96f0c0984b2@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 13, 2024 at 07:36:13PM +0530, Jishnu Prakash wrote:
-> Hi Dmitry,
+On 11/15/24 08:40, Thomas Weißschuh wrote:
+> Using an #ifdef in a C source files to have different definitions
+> of the same symbol makes the code harder to read and understand.
+> Furthermore it makes it harder to test compilation of the different
+> branches.
 > 
-> On 10/31/2024 11:27 PM, Dmitry Baryshkov wrote:
-> > On Thu, Oct 31, 2024 at 12:28:52AM +0530, Jishnu Prakash wrote:
-> >> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
-> >> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
-> >>
-> >> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
-> >> going through PBS(Programmable Boot Sequence) firmware through a single
-> >> register interface. This interface is implemented on an SDAM (Shared
-> >> Direct Access Memory) peripheral on the master PMIC PMK8550 rather
-> >> than a dedicated ADC peripheral.
-> >>
-> >> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
-> >> channels and virtual channels (combination of ADC channel number and
-> >> PMIC SID number) per PMIC, to be used by clients of this device.
-> >>
-> >> Co-developed-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> >> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> >> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-> >> ---
-> >> Changes since v3:
-> >> - Added ADC5 Gen3 documentation changes in existing qcom,spmi-vadc.yaml file
-> >>   instead of adding separate file and updated top-level constraints in documentation
-> >>   file based on discussion with reviewers.
-> > 
-> > I think it has been better, when it was a separate file. Krzysztof asked
-> > for rationale, not for merging it back. Two different things.
+> Replace the ifdeffery with IS_ENABLED() which is just a normal
+> conditional.
+> The resulting binary is still the same as before as the compiler
+> optimizes away all the unused code and definitions.
 > 
-> Actually I made that change in a separate file due to a misunderstanding at that time - 
-> I thought a separate file was the only way to accommodate a change in the top-level 'reg' and 'interrupts'
-> constraints, but I realized later that they could be updated.
-> 
-> From our side, we would prefer to add ADC5 Gen3 documentation in the same file, as it is
-> mostly the same functionality which reuses all the existing properties present in this file.
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-Export the existing properties and reuse them in the new file. Gen3 (in
-my opinion) changed the hardware too much. Having all the differences
-via conditionals bloats the schema and makes it significantly unreadable
-in my opinion.
+For my reference:
 
-But please refer to DT maintainers (Rob/Krzysztof/Conor) for the final
-opinion.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
--- 
-With best wishes
-Dmitry
+Pending acceptance of the first patch in the series.
+
+Thanks,
+Guenter
+
 
