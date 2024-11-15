@@ -1,228 +1,241 @@
-Return-Path: <linux-pm+bounces-17586-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17587-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 239129C9521
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 23:24:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA89D9CCCD2
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 01:29:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82D33B2305E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2024 22:24:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C2E52840D2
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 00:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3811B0F06;
-	Thu, 14 Nov 2024 22:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 395B11E517;
+	Fri, 15 Nov 2024 00:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rY/ATRYw"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ymt7mxsu";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="xUD6v1vZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0BA1AF0BD
-	for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 22:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731623087; cv=none; b=fvgK+Qfj7M4Cdw51hIOA09C9/ga435JdWuYt/gVPjyOiUEePZDUAOAHfvCah+mIeDvDVlhHc8OnPk1K3LgMEdxkXcPBmqfam8TXl3S7fx7xLq/0fe3qnUSNd2Oryb7eVcDGR4tXDKMTAIhvh4822vpUUbype3XUMbdSLEh/vwQQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731623087; c=relaxed/simple;
-	bh=m5M/qvwkZABSZEa9g4iUO/LAzfV6JOoQRU3uwmnmdXI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uNY4CK8zFTSZjCrKZd1xqa1Sf+3yZGgP//8rd17JLjW3z2yj0G/b9IqJ54V1QOMC0lW8IsF41gFnwNWRoLw7T3EDHDXfgc/NqYhF02+0bi62pweOyp23w63mc1p9eVz9cpmNt1SA6gFZB0JqZ6kdAPmlnJy/ZhMGHLTR9+1GJJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rY/ATRYw; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6ea7c9227bfso13726337b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2024 14:24:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CDA524C;
+	Fri, 15 Nov 2024 00:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731630556; cv=fail; b=cOyOyhM1EWbe9BbpMfgWIWjzlH6zsi9wDR+eXJubd37abTXTNOERPk+E2JtH+21eqYG2fsXRLSiTeUJcSDlfAqsokPCoNAnwZ7UGrtigEubnYBxXNdgUCJkJfo7eNFCyX9lVjZLwjPqoiYdkdQEufLMHC7l6rdvClys2kjTEu4U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731630556; c=relaxed/simple;
+	bh=H7PBpajoypsK2DMXLUw1Eao3lK2IEZhcUaezR+b+D+k=;
+	h=References:From:To:Cc:Subject:In-reply-to:Message-ID:Date:
+	 Content-Type:MIME-Version; b=Xi1v0meZqNSMfcTLUHf1c5PeyAof9xL0NS4xymtjq7UvPENHTPsI51qMJaBCv9pWBUI4wFWoShWshP2CsJKoBngiUHtDTMFTgh5YyY/U0mOhzE6F1lDhQxlFsZKugp9+YVRjCqDyt/+dYPxlStOXslpoa1c3PDf6JdLVizZfl7c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ymt7mxsu; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=xUD6v1vZ; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AEMBVwT001958;
+	Fri, 15 Nov 2024 00:28:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=H7PBpajoypsK2DMXLU
+	w1Eao3lK2IEZhcUaezR+b+D+k=; b=Ymt7mxsuEb7sc/NGvebf96kA1eNr7GAZTG
+	v0FbRdlQLeuaExnDgMDBWMrkOpLvRmIBEZDKlbUtcsLzEVgM/249UMJjmPAl1OhH
+	87ntzSesg0nqeN9W5L4iIVT1sSFa5nK+oV0f5UG2DgUfeN5HaBBuP0fPKdP7LeBH
+	AbhEVp+22Xo/sZz7G+cZsahoLkqKOKFxJohJR2ocNoO88EgXnheAFpxVeO9BZDaC
+	8U3m9q/xbL9twXtz9QcY8mLRaVyntW4A2CswPZwpeL5yZVLg7P/9Lq+BQnO2WUJK
+	QNFSkH8qwrBMeA5MYWA5xxBsghYcDsoEjN0uJDkUt0nrX09i78Gg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0k2aee5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 15 Nov 2024 00:28:19 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4AEMMaV3035876;
+	Fri, 15 Nov 2024 00:28:18 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2046.outbound.protection.outlook.com [104.47.73.46])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42sx6bjhr0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 15 Nov 2024 00:28:18 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Sr5vuMQ5nqhwlSI6zC8295WjkYVRNiBh5guawC4+dnHha3Pb/LMxrM3nBXh+1tN3HirzQe+49hue6hD0Rs0pF6ieqarPWRdy08Awf/STqNM4wU0mJx0uwxyUgyfwBy80TwDSAzSxlAO5aQGC9OkFJhAb+Sssm6XMXIEXjI5pHPVK3rC7pPGcaPYqyPu8+E7OKs6+kSYGxTF65YMhG0tvxCnzLSUniusNnaEQNE8xRoZeSIVz9KfxWItXCdq+Rfo0wSIFAyWJl7ItvaqkBAAK+NIIgIpJdB15IBCngM5WanH2dKoEstayVzOcWp+vDc4F5bIJdDiS2Z40vhG67AumdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H7PBpajoypsK2DMXLUw1Eao3lK2IEZhcUaezR+b+D+k=;
+ b=smffqGUpFim0TWNnQ4LsDKGjlgAHzQM5qym5tmqnwfp8XCS7ez7r7r3grbUPyEZeP1+DkciYaZL9RnCbtu18vQziuNjmBX68XgwbfdVGB6X6iK2phpuWvo6x49UZ197uhKnNwadixjPwPn6GNn09pjYsDxJ/21E0xaHk3HGp7UZPHvQw7vbIygylj+Snd1GfrXb6i7iHT3r86HerLB/El3xgsTk+DFYs7xNsz+4GYR4wOoUfUzeYkgbHjYDDooL7Zgc+FSMEVnCjRTO9fxlpGp059599csDMtiDt3YKXGCI02OeBqTJ5seyGapE4Mi3pF9qRlVIXBfuMElYnO8Qd3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731623084; x=1732227884; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fz1cryoPNcmIIhBTuToySSNUuCG3KvwOQc0AQslJ9bk=;
-        b=rY/ATRYw7hhf7JMQOQOJ2XfFzl1VJ6CIkneuwRwu2rVTZcufOvzth5GX5Kb796BlB3
-         Z2cT5skxtUAI99ZpGoFVMKKAV1Ekxub2ajtONJXTgGZY4xwv2CF56mRt66TWFGi9HCrk
-         fGMNsOUzHsQl+dgBPvuGG0bQwGijcHbm2WS+srBzqSHpPp7OaxorgEskvWFBKzJR6C9i
-         O6fFu8w+IHZI/cdLSnONgqASQWQ2ILRuFSZOvcBVsCExjxR0IffQUYyCR34VZwLNjppt
-         BL8kRj8ieRTDj1EVJGP8BbYY0rVow65fPDxzqjgXHoLA75sNJ94ZvIfRrJUJ8xvTMmk4
-         fkOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731623084; x=1732227884;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fz1cryoPNcmIIhBTuToySSNUuCG3KvwOQc0AQslJ9bk=;
-        b=f81B9Sn6gNeZLU/kFhwMAOUXvF8LJin183zMikf3vD4r29Qemz4MFPhwGbCh0KWzIB
-         pI0peFUN5zFFeEL82kCDnpDLwJ6lfu8jx7GyCDg9aIRo+xyhGJJzPrN8hvhjPBpYFiqW
-         OvP96+M2x97egTwVa/7lTC7g7+g7rtzKOyVFwvSjRL6NfrC00rV0z6pe4zW504quSn/J
-         vifSgdu1EGohJKilarU7DYDxrDVsmKHg0diH0plzSYYysoWYCqCBJugtzoPn2TiCr2tq
-         /HoS1Q2wcO4yBJSLF3pm7yqOVRm3SQ9EcccvUCf4M60WxzA/p7O7lKwBQF05ZZx5dvln
-         KKvg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+zQLF+K4dKLl8gLW8Z1v+O8LLc1EVYUpCbToAHZRawnWZ+ElYjEHo3JEWJAOrsCM+o0GzTnHy2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUmkH8oACyMMa/BWEi8ZnXSUYqeLn3Eban04A8C931Le2ejvDg
-	/0C/dsYN3gEovpxvBik0GL0QBK5Mofeclvz+0rgwZQExT/NaeBk2eF4H5/UjmJsKaceb+6FJCsU
-	jHa62OFCIpbpvGkgAIcLxhKg87t8+bS6N+QV1yQ==
-X-Google-Smtp-Source: AGHT+IFrzmp0d+SxhQuy9csj+6FAqaRg2lAarl1XN3L0geodgrc2R/eWwEK9i0dJjAuD8YAqO7lGoVt6qLOTED2p30M=
-X-Received: by 2002:a05:690c:ed4:b0:6e3:b8f:59d1 with SMTP id
- 00721157ae682-6ee55cd17dfmr9350597b3.31.1731623083931; Thu, 14 Nov 2024
- 14:24:43 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H7PBpajoypsK2DMXLUw1Eao3lK2IEZhcUaezR+b+D+k=;
+ b=xUD6v1vZB/rLUvv5YRTS+hu5+LnA8eZCDQ+DC4LtV60B0zcf9nNQY40qkiR7BJa0PuGeg8BFkIYYu74oU+Y0q3FyPczuxyXPvB67Vz4HL5CgHMlmWIPG58LyRdwngFSGRFWWETitFnWVEAYBss1/6CcWLdSXouCcAVNcZk4yUMQ=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by DM4PR10MB6254.namprd10.prod.outlook.com (2603:10b6:8:8f::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8158.17; Fri, 15 Nov 2024 00:28:15 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e%5]) with mapi id 15.20.8158.013; Fri, 15 Nov 2024
+ 00:28:15 +0000
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+ <20241107190818.522639-2-ankur.a.arora@oracle.com>
+ <9cecd8a5-82e5-69ef-502b-45219a45006b@gentwo.org>
+ <87v7wy2mbi.fsf@oracle.com>
+ <88b3b176-97c7-201e-0f89-c77f1802ffd9@gentwo.org>
+ <ZzYxv2RfDwegDMEf@arm.com>
+User-agent: mu4e 1.4.10; emacs 27.2
+From: Ankur Arora <ankur.a.arora@oracle.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+        Ankur Arora
+ <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+        lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+        mtosatti@redhat.com, sudeep.holla@arm.com, maz@kernel.org,
+        misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+        zhenglifeng1@huawei.com, joao.m.martins@oracle.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/15] asm-generic: add barrier
+ smp_cond_load_relaxed_timeout()
+In-reply-to: <ZzYxv2RfDwegDMEf@arm.com>
+Message-ID: <87bjyhpcgz.fsf@oracle.com>
+Date: Thu, 14 Nov 2024 16:28:12 -0800
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0198.namprd03.prod.outlook.com
+ (2603:10b6:303:b8::23) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241021-gpu-acd-v2-0-9c25a62803bc@quicinc.com>
- <20241021-gpu-acd-v2-2-9c25a62803bc@quicinc.com> <mz4zpcr4tqh2w7vt75f4ofxjzfve54ozzgpdbi2jjzk5pdxbk7@t36tlt3mmprt>
- <d858dadb-4098-4c9f-b4f0-393dc988db5f@quicinc.com> <4426b4kybtac6rc4twa5pgm3hvlegofemvqjcrvh6ni7f5z2h6@5dnlv3hgywh5>
- <c5e868e1-2dae-466c-a6fc-ef0f247fa0ce@quicinc.com> <278e62e1-02a4-4e33-8592-fb4fafcedf7e@quicinc.com>
-In-Reply-To: <278e62e1-02a4-4e33-8592-fb4fafcedf7e@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 15 Nov 2024 00:24:34 +0200
-Message-ID: <CAA8EJprgshjbNqNErOb06jqV__LmbWvocsK5eD8PQqL+FaLb1g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: opp: Add v2-qcom-adreno vendor bindings
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-
-Hello Akhil,
-
-On Thu, 14 Nov 2024 at 20:50, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->
-> On 11/1/2024 9:54 PM, Akhil P Oommen wrote:
-> > On 10/25/2024 11:58 AM, Dmitry Baryshkov wrote:
-> >> On Thu, Oct 24, 2024 at 12:56:58AM +0530, Akhil P Oommen wrote:
-> >>> On 10/22/2024 11:19 AM, Krzysztof Kozlowski wrote:
-> >>>> On Mon, Oct 21, 2024 at 05:23:43PM +0530, Akhil P Oommen wrote:
-> >>>>> Add a new schema which extends opp-v2 to support a new vendor specific
-> >>>>> property required for Adreno GPUs found in Qualcomm's SoCs. The new
-> >>>>> property called "qcom,opp-acd-level" carries a u32 value recommended
-> >>>>> for each opp needs to be shared to GMU during runtime.
-> >>>>>
-> >>>>> Cc: Rob Clark <robdclark@gmail.com>
-> >>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> >>>>> ---
-> >>>>>  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 96 ++++++++++++++++++++++
-> >>>>>  1 file changed, 96 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..6d50c0405ef8
-> >>>>> --- /dev/null
-> >>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> >>>>> @@ -0,0 +1,96 @@
-> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>>>> +%YAML 1.2
-> >>>>> +---
-> >>>>> +$id: http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
-> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>>> +
-> >>>>> +title: Qualcomm Adreno compatible OPP supply
-> >>>>> +
-> >>>>> +description:
-> >>>>> +  Adreno GPUs present in Qualcomm's Snapdragon chipsets uses an OPP specific
-> >>>>> +  ACD related information tailored for the specific chipset. This binding
-> >>>>> +  provides the information needed to describe such a hardware value.
-> >>>>> +
-> >>>>> +maintainers:
-> >>>>> +  - Rob Clark <robdclark@gmail.com>
-> >>>>> +
-> >>>>> +allOf:
-> >>>>> +  - $ref: opp-v2-base.yaml#
-> >>>>> +
-> >>>>> +properties:
-> >>>>> +  compatible:
-> >>>>> +    items:
-> >>>>> +      - const: operating-points-v2-adreno
-> >>>>> +      - const: operating-points-v2
-> >>>>> +
-> >>>>> +patternProperties:
-> >>>>> +  '^opp-?[0-9]+$':
-> >>>>
-> >>>> '-' should not be optional. opp1 is not expected name.
-> >>>
-> >>> Agree. Will change this to '^opp-[0-9]+$'
-> >>>
-> >>>>
-> >>>>> +    type: object
-> >>>>> +    additionalProperties: false
-> >>>>> +
-> >>>>> +    properties:
-> >>>>> +      opp-hz: true
-> >>>>> +
-> >>>>> +      opp-level: true
-> >>>>> +
-> >>>>> +      opp-peak-kBps: true
-> >>>>> +
-> >>>>> +      opp-supported-hw: true
-> >>>>> +
-> >>>>> +      qcom,opp-acd-level:
-> >>>>> +        description: |
-> >>>>> +          A positive value representing the ACD (Adaptive Clock Distribution,
-> >>>>> +          a fancy name for clk throttling during voltage droop) level associated
-> >>>>> +          with this OPP node. This value is shared to a co-processor inside GPU
-> >>>>> +          (called Graphics Management Unit a.k.a GMU) during wake up. It may not
-> >>>>> +          be present for some OPPs and GMU will disable ACD while transitioning
-> >>>>> +          to that OPP. This value encodes a voltage threshold and few other knobs
-> >>>>> +          which are identified by characterization of the SoC. So, it doesn't have
-> >>>>> +          any unit.
-> >>>>
-> >>>> Thanks for explanation and other updates. I am still not happy with this
-> >>>> property. I do not see reason why DT should encode magic values in a
-> >>>> quite generic piece of code. This creates poor ABI, difficult to
-> >>>> maintain or understand.
-> >>>>
-> >>>
-> >>> Configuring GPU ACD block with its respective value is a requirement for each OPP.
-> >>> So OPP node seems like the natural place for this data.
-> >>>
-> >>> If it helps to resolve your concerns, I can elaborate the documentation with
-> >>> details on the GMU HFI interface where this value should be passed on to the
-> >>> hardware. Also replace "few other knobs" with "Delay cycles & Calibration margin"
-> >>> in the above doc.
-> >>
-> >> Usually the preference for DT is to specify data in a sensible way
-> >> rather than just the values being programmed to the register. Is it
-> >> possible to implement this approach for ACD values?
->
-> Krzysztof/Dmitry,
->
-> BIT(0)-BIT(15) are static configurations which doesn't change between
-> OPPs. We can move it to driver.
->
-> BIT(16)-BIT(31) indicates a threshold margin which triggers ACD. We can
-> keep this in the devicetree. And the driver can construct the final
-> value from both data and send it to GMU.
->
-> If this is acceptable, I will send the v3 revision.
-
-Can the upper bitfield have a sensible representation in DT (like uV
-or something similar)?
-
->
-> -Akhil.
->
-> >
-> > I am still checking about this. Will get back.
-> >
-> > -Akhil
-> >
-> >>
-> >>>
-> >>>>
-> >>
-> >
->
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|DM4PR10MB6254:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46f75d19-53da-4fd2-6f42-08dd050c649c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?H7KZJ08Gli8Gzc+4SqrYZcKMhZgn2+zu4N+HjUqhMjR1mIfuvHuJd63sXj3m?=
+ =?us-ascii?Q?UJtQ7CDhMFbg3tgUwXYpa7+yxQp1WLwM0DrE+uVVIc6sV3bycIFCq4+r64t3?=
+ =?us-ascii?Q?Mvr2XzX8+tQ+Np6l11fefLdf3mekJHu8oy1CikhAe3WebKiiFI5nTbaBNFes?=
+ =?us-ascii?Q?O3bpWKie/jSeUfgw/x3SGwERmvuwIyS8UZMCHRSxPd5amOp4FQNf61cK6YpW?=
+ =?us-ascii?Q?jXwze9AlnRozi2EQDxQ4PVMm7n6csI/ji1Qzr89drBjx2zhN7E3w1r5poItR?=
+ =?us-ascii?Q?wvciG3WyTqg8okn2XWe6IpVMfPj0P4lTtTaTPW7yXKwzqDaM15bgbrpMCZGC?=
+ =?us-ascii?Q?/yhuS2UELXfATkf30VyZKNoQLThKLEMOHqrfjl1ZKvC0/RxjxHan5M0aF+r3?=
+ =?us-ascii?Q?ZJrMFzEcIbjiQcvNw8C2kqe2+p38+YK3fE60XoggUFeU6D3KlZ/cIcj2OpYS?=
+ =?us-ascii?Q?zm3d/sgGH/MMp9liIBRn/jkfvQC63i7eDhjIE+RwEx7GPfikYBC567HGGsFk?=
+ =?us-ascii?Q?dxkby2r0XhNc7GaErxFCXbE3Srogo2XIZu50oPjH5XSBo+lTh4zRYQvcR4Mx?=
+ =?us-ascii?Q?Q3jxDc5ZgDhkMOd85mz5vsiO5WKZGr/zgJ4hFGutzNeFwX87Kmze7Nhnp6Cf?=
+ =?us-ascii?Q?Cyj+o8CpT1VplJwYVh5aRplIYeS9S2fy14azGwDDFKmoa/C+oyIyE6uMmkaf?=
+ =?us-ascii?Q?22t+inxCgjnRPCyobaAkFv9wrfOLobmvxZZ8NUetRB8ejYi4m25ew2pvIUyW?=
+ =?us-ascii?Q?7F0bP0COGGU4Nlx0umuedLBmhsGOkE1DI6/oJusYp1qgfETX5TfNk8uJXerG?=
+ =?us-ascii?Q?ljIqwvv8ZNxYb/YtS+Kwb6IptMMxSAnYVuE+za588EZ1KXzs1Wpm7z0fJdkq?=
+ =?us-ascii?Q?fsu1AernzZvtxUj5u4jw8GKYRVpVCNECgY3JkJ7nnG2XwK03BghvcTynG+HB?=
+ =?us-ascii?Q?pY5wggUoaGfO27C0z8pCHSPiB8+AdHM25VpkhOf23xPr8+wLzlm5ZWos9/vK?=
+ =?us-ascii?Q?bNDa95HiZKAJscyG7AiuOOku7Xpf8Jso7M0qpb2PD5mdTv1DBN3huu7PBQrQ?=
+ =?us-ascii?Q?Jpu5aP/V3oDKzyiNiGoSh37ZkX3MdkYo0pFyjOme84tpnj/jg9rCEygdnAIO?=
+ =?us-ascii?Q?iy80+TeexRuO0BDbPl140h+dR/XiWdozRbHOPYPZ8PAVHNwSfCqK+ItTCJ4x?=
+ =?us-ascii?Q?yz7PeEf/qbcY1IsMRwqi+KCsDmYrK4u56XKwqbxvCTdbUAvm6CFnU5Kstuf8?=
+ =?us-ascii?Q?cXqp3f7dSCozLR9VlWyGDuH+n2dp4jv0JZgoGN/kYlRTx8k1lIjDFHYWnoq2?=
+ =?us-ascii?Q?ySlpyOyGKxgPE94UpfHODJPF?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?tsba99cKjHQnqiFwDvGQKDx3jPczrqrBaLX68IoJriETOp+KNCuP+xepl1g2?=
+ =?us-ascii?Q?7H8e7qv87nXs0VFgqe9HAEnAVKGxNqNv1ztokQdhpTFd9x/2itukLqf23yCA?=
+ =?us-ascii?Q?5+WWx8KzCge3qzJ3pGtqooCwJ34AiDcPuAWY2Nt/tlC6ySfdV9+GMREkKcse?=
+ =?us-ascii?Q?X5MY07/aJC588Ji9xLmdwBsCKJT9+ArTcvozS/VY6v/5LR7sgC/HPC6hRi2k?=
+ =?us-ascii?Q?7atic5NvbMCl52VTmVjmpBiEdcGe2bcV3lbvSFDa3op5TzKzdCXMK7fWE3kv?=
+ =?us-ascii?Q?dqUgO61QgB7/8sg+HTuiTz6l7rvpg7xk+P0hBwfaW5LRzrT3VZTqahtwQJn7?=
+ =?us-ascii?Q?kP4wCFgiNf3rhPNfKDiTiJW9G3Uv7N37OAVJKZAj6ZMIfN3Q0Seww8jKVB+5?=
+ =?us-ascii?Q?8ohBxR+vByEclyCI7t83RM5ftKL0KTHwoFxbkYZ18uzDshJmOpOotA7UKI0r?=
+ =?us-ascii?Q?ZryZZS7dPVCR8plPZchhr9ZR2fgMbzI79Vd2IW4E7luux0wQXKH0XyT4ctbW?=
+ =?us-ascii?Q?MjhSpZjiJwDWp16rQvW+/UriQ/5NiWkI7ZUvlkg/XmKafW2DKSRUkHOBQfY+?=
+ =?us-ascii?Q?fZk46t6m0g95uDPWARcnaK3bVbeZjvwIS5AMh6dVGDyjqrb5cZiJwnxwFRGV?=
+ =?us-ascii?Q?C8T4fjnqTlKmFR3g0Ux/pspAy10Sf49Xr9CBc7WAcU5d+m7bkGO7Y5ZWgWBz?=
+ =?us-ascii?Q?LDpKAQr6Y42CIoSuimBvmSNQPR//fe876ShrRtxEQFFSFMVb//qAuw53U+GO?=
+ =?us-ascii?Q?kSlrlJPVtRhLZev43gjMSSxebsxwzCXzZj5XOS+XMv3aKYYhBLgrmGOVKUte?=
+ =?us-ascii?Q?omhv2JfJR6QCHj0x6JDnhwfNVHUDefAhujz+jc8N46M3gqRJnDH3udshTWeG?=
+ =?us-ascii?Q?KVmTgd9TsF0SNMUD+0n+hEmO0yzEQRq02iBJubwfRKRj1kuFsWQDXGLtpPfV?=
+ =?us-ascii?Q?tFm7z/jCyqYOmh3R3Zkyjjme3D0t6oUpFABWUnPdxYlLV7CuYW93KTUMg+hP?=
+ =?us-ascii?Q?juM0SUb6llGXoM5PP1r6sqq4sR8xomlGIhC3QtMY/duAQzH8IV1Qmg/ZlIXm?=
+ =?us-ascii?Q?vvdX7ysGodELtJ9JaBSGboSnVALAYx9qrrsIH+dvj2Vz5FIxhhZaSzuzLH64?=
+ =?us-ascii?Q?N/rTg7xig9Qs4yjdwESJUpOeTUuQ38zvvGuUtBTm2btI+8Lu7Sxz9OBrQZjr?=
+ =?us-ascii?Q?bWtg2y/Z8ByU9PMTC8YHVIgq7nJmFZUmVh6Zn6F32pdHg2LCqjFsZaOPRdCN?=
+ =?us-ascii?Q?vnTcueyapcKRCgDTK1VWwd00J20v9hJU7IDR2wC+F/l1CybJTl5KYnjiJAMJ?=
+ =?us-ascii?Q?PgRoqo01AfhXUgp9qUusmiY2f/FMrt752i78AUhLUsRCen/Z0sQWph/Tnoyp?=
+ =?us-ascii?Q?bp7ULnxrwrKUJ/dyN3g4XjtozQSeqjqqmgeDVXLFDa+i1HS8kSxCoNlwaiLz?=
+ =?us-ascii?Q?gQT4PtvFmMZyeZL8GanM7sdeUvI85znzPgVmfSd/VZCc68idScb3WX9GETqa?=
+ =?us-ascii?Q?f5KTitCFfy369fVnDriIcGQjHfhX7n29c5yITGVUytCLt7h9t7XbdnzqJhdK?=
+ =?us-ascii?Q?bRv4rIA/wJH+D2bKjbMqShu9r8xQGLLsEi3qzoxe?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	d2fXifMXK9Yi4qyFqVf0BbNZb/EsdKTPBTgyN0nPWF2Y4CE7T2qE+OP8kS8Tm6as986yyQ9XscCC08g7ZMPjjRPGDajqpCQ53rnsA9/KRxgKziIohU4him9DOC9i7W8j5fg6n/xwjA7WHEThMocA4T8UyRYIzY6ShVIAtGqxMqs4kx+55UgnE4bQNva/kGARt51MjONKCPCJP56iS5GdI1lm3O8YE1YO9VUTeUh2K3OLUAnq6BQVXCpzONJakAC03bPSSeuEEFzTFsJgFIhDuaufwa+Nk3mZg0lx/KL9Vdy2dsfYaaKgCfkGEB3TzlIafwrWn0Aq3VIuk3aYkvvgpALPEjWEEw2xjELwMtNiI5obwVE3e8X0FX6KqIoHljH9SgV6E27+ENHhZLi7XczZXJnGbzBmcPcWlJc9VlfDirh3JUuFtpklS0iHP7c61fwbOBjICgG4aaUhlEyltuMPg5xcQ/+Q84wzLdmywq86Gvfl/HzC8zhPSbxQ5R7bgtmHLPzHLoUgSLXDLD/PjiO743I8lfWEZHPnh6XL0TymJLnOnz41gnP7EwLbWhs6Q9TAfHMrFlqA9iCtNK+36CvMEIZSXtYtNS5nZNngR8EpOqE=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46f75d19-53da-4fd2-6f42-08dd050c649c
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2024 00:28:14.9765
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xRadW7rRTKKB6qJdJS92Nmq74XDVatEb4bhgdhafbFCcfN91pfMTeuqWjF9eJefiLM75Kcevkbxd2EJrx8eS2+1Y+mpoWTW9e0dvob+Oeig=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6254
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-14_05,2024-11-14_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2411150002
+X-Proofpoint-ORIG-GUID: 6Ly4F6r34L_hLCmKaNVkDiNmgKq4balV
+X-Proofpoint-GUID: 6Ly4F6r34L_hLCmKaNVkDiNmgKq4balV
 
 
--- 
-With best wishes
-Dmitry
+Catalin Marinas <catalin.marinas@arm.com> writes:
+
+> On Fri, Nov 08, 2024 at 11:41:08AM -0800, Christoph Lameter (Ampere) wrote:
+>> On Thu, 7 Nov 2024, Ankur Arora wrote:
+>> > > Calling the clock retrieval function repeatedly should be fine and is
+>> > > typically done in user space as well as in kernel space for functions that
+>> > > need to wait short time periods.
+>> >
+>> > The problem is that you might have multiple CPUs polling in idle
+>> > for prolonged periods of time. And, so you want to minimize
+>> > your power/thermal envelope.
+>>
+>> On ARM that maps to YIELD which does not do anything for the power
+>> envelope AFAICT. It switches to the other hyperthread.
+>
+> The issue is not necessarily arm64 but poll_idle() on other
+> architectures like x86 where, at the end of this series, they still call
+> cpu_relax() in a loop and check local_clock() every 200 times or so
+> iterations. So I wouldn't want to revert the improvement in 4dc2375c1a4e
+> ("cpuidle: poll_state: Avoid invoking local_clock() too often").
+>
+> I agree that the 200 iterations here it's pretty random and it was
+> something made up for poll_idle() specifically and it could increase the
+> wait period in other situations (or other architectures).
+>
+> OTOH, I'm not sure we want to make this API too complex if the only
+> user for a while would be poll_idle(). We could add a comment that the
+> timeout granularity can be pretty coarse and architecture dependent (200
+> cpu_relax() calls in one deployment, 100us on arm64 with WFE).
+
+Yeah, agreed. Not worth over engineering this interface at least not
+until there are other users. For now I'll just add a comment mentioning
+that the time-check is only coarse grained and architecture dependent.
+
+--
+ankur
 
