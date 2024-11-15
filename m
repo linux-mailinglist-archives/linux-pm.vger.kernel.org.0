@@ -1,295 +1,469 @@
-Return-Path: <linux-pm+bounces-17627-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17628-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 757549CE965
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:07:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B969CE5FE
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:58:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6D53B30003
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 14:25:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65A93B285F3
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 14:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC121CDFC2;
-	Fri, 15 Nov 2024 14:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B6BE1D416B;
+	Fri, 15 Nov 2024 14:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WgLrvYlV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TugT5qs/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49E61B218E;
-	Fri, 15 Nov 2024 14:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20BB1CFEDB
+	for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 14:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731680713; cv=none; b=O0x6SB4X1ScPuKKHEzSrGR48P1KTp9Bb1l2yJE6v8T92MppWOiJIM8SSdCySXhA/vImy60MOWNb7Q1+ww7kH1NAgZdls7APN+PzWpdER1RiB5eRebZ7UDKMffJKkjJIv52oJlTFkGdNcq6fo0/DhGmGGvwvNYBp6PD4ce7Nd0y4=
+	t=1731681262; cv=none; b=EDA52l0bDbYRxqjelKYhnR6NHiCX1tMmf28VJNlZ1IRpDfCzcqURafSlIRj4IoUlw/5y5PsgRt8N/HEMuMhoANUNUpXX0XgAPGbGLVK/qfDed5fjjMDlRp7yfQhWSVWkhCZNWJ9m5rTAks0yj1e1paXzWrX2Eng9Wi5yVWCmRbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731680713; c=relaxed/simple;
-	bh=i0J9YgKrlwFGfJuGRYdXWxMQtfccCScGcb3RUoJTSr8=;
-	h=Date:Message-ID:From:Subject:To:Cc:In-Reply-To:References; b=Yt0JPXNB99ECKc/5kx7U1kx8MbsA5RKeXrvCS4SIpK0Eam6bebs4jpCyZhNWQ6paWfdxA1b3/1tkRv8GlSMF9c2N2h4Teqrs+UGBgm84CyG1jKPRgUMtWoHcgr0ypj7tsyPG3kRrVUJ7dKomdPAh13Nm/iqPEXrCuFwFy/nOJ4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WgLrvYlV; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4315f24a6bbso14790885e9.1;
-        Fri, 15 Nov 2024 06:25:10 -0800 (PST)
+	s=arc-20240116; t=1731681262; c=relaxed/simple;
+	bh=prAZ9gsnRM0zsVQaQrXujtr2yhmvOZm3gPPJ44CMzk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m5VKRI75N5/yN1HMtIQ8zkkCv6st5g4RyTjJEALxanAJs4GUtf3Sbf4rldjaBYUuf1LSty3MAWmpP3cUGgDxI73jDhgx5MrJaATwLU/D51laEDLZvdytsPdnn3TjdCc9nLEv+0Kt7a+KLG7stmYdXi9zTaFCuLD9OUG68/i3cYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TugT5qs/; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539f6e1f756so1883229e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 06:34:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731680709; x=1732285509; darn=vger.kernel.org;
-        h=references:in-reply-to:cc:to:subject:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=huYdQY6mriqKFmtZHIEpj3W9QBUQ/Y1F8VwJADSGD04=;
-        b=WgLrvYlVB5Qgyw0Ly3d8HYkiNOGJ3MkqJcrMiOu2RofFIX8SIzcXlhhRlcUyOHqxde
-         wwZ8o3tWv69m0nqxSnfsMcy1LIxELvMrXR9vbe9Dra9H4TlOR77WAieINjJSvr/+EZmy
-         1e7f3oPOVh2rE7raShCMGVUDJpy2w5ikAGgxj5jvb4UyR7oqXco65EV53MaB+ej8k/OK
-         OfeLomCDmfmAmIRb/AbcQfuncG7yi5bBrAze7mRUHp/bhn1CmBtQz5RkPv6sq7qT9HgT
-         iWKEkSvdWynVl7ny4JThLRDtWmFtZJga/7ftOTeJozMYLh+4hxmCs0Wg+VFjLy8wK/J4
-         px3Q==
+        d=linaro.org; s=google; t=1731681257; x=1732286057; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4RZ74q0neI7Vkz4Jr5WGrbm+vl0Y0XUqqa25XmXEiU=;
+        b=TugT5qs/RfzQD0quLcT8IzvV4N585D/QLZsvWKyrCXQtUZMgFcaOGgzudCQ5vcDXUl
+         bW+NM8GUuQSG++GYLRE32ytJIoJTymfEvTbZc6pq09ClqJqXv0sySCF8p1WVoYWzjH0i
+         ILHSEAKMvawVLLuCECfJ2TYjhT6a/8eVnUrcGc3LZXVHujKxiNm5CjY+Oi9n5uVCLlyh
+         TDSO1sC2OVe2zq1EZN1Ajqrz3DP8OcDB1klg7a0glJbr5brOiZtx3WWEvS+86FBh0bhG
+         5zWPpALgKd8WFz/qR4M5sVM7wARpNOe9qR8aml2YKpszvU28CToCB+D0p6osHEx6QVZk
+         fT9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731680709; x=1732285509;
-        h=references:in-reply-to:cc:to:subject:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=huYdQY6mriqKFmtZHIEpj3W9QBUQ/Y1F8VwJADSGD04=;
-        b=m6fOx5BG5izAujCpFxTZDZizDJfyPEilcLAad4otLmsf0l0ynNVGrEMbhnec5dWPpk
-         g2lDYD7osuXnXsFzH+MKbtswu8J2vpiRGavDkgUCdDo+TrE+WHTGtYKDSfVf0v4ZbqHl
-         6ImsCjPBjG1I9nuJ4xGIZ/MwSPcXeqamiQUwfKDcaK+3eUO8+W8lzO1Dcuil2AbfspnZ
-         /ouRiWWm8anuW5JkFXUNiDTECVALGCSCDXQI2K+hHnsNjimNkzWKpgE/KQhrnR8vcOQV
-         r95vjMmpcf9H7CjhjXAQot9uxtHZO1xyncBC4QhQCpO46OReEq4ky7wnZOjEi2pki8Xq
-         xRRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUI4VB6Ie2sVQ1r3tOcjFFl38ltxs9Gz9x5uf3EDvUrVVutsMVfYM/MY+GCsf9AXgShMPy72ad997E=@vger.kernel.org, AJvYcCUPDNKxc29d5pePq7Vx1ZzwsRH36wbEXjFVxl3nIJf71jE8MgYtMzyFKfzIqBIR6PCg5kmYASNokg8=@vger.kernel.org, AJvYcCXhXhZGln/oc7wwHGRqdYCDSFJ3YmECNf/M5Q7wpeZyWi+ekkWqcetaZ3vRigSKWvZ/N6hcVsnPfi+A6H45@vger.kernel.org, AJvYcCXlawIDMtGtRlBQNvpyqiptg/I/s5OFWEULqdD01pRomqbnPJeJ+pZm9Bp/aH1jUnnkjHUmEH3flHnIew==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaX0dADFLH+AkfEanbLn+rcli5MIO5fbOxqAircisImSkHnCjs
-	7EkAnIJxFrR5qefXQPYINz+JZ4XNMC+FbtcYOBj4mTwxqHpqU5+q
-X-Google-Smtp-Source: AGHT+IFeR2Eue7s/9O+/fjwsUcRKHzKZtQ/Ca+D3UCUrEfMOuXVULfMsSamBMgupClYDWWXIic4iKw==
-X-Received: by 2002:a05:600c:1c97:b0:431:50fa:89c4 with SMTP id 5b1f17b1804b1-432df71c02fmr26239725e9.3.1731680708463;
-        Fri, 15 Nov 2024 06:25:08 -0800 (PST)
-Received: from localhost (host-82-56-18-47.retail.telecomitalia.it. [82.56.18.47])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dac0aca0sm54961665e9.29.2024.11.15.06.25.07
+        d=1e100.net; s=20230601; t=1731681257; x=1732286057;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4RZ74q0neI7Vkz4Jr5WGrbm+vl0Y0XUqqa25XmXEiU=;
+        b=opK99wNZMmCVFwn/5ptsLfKFsKXyq0T8EPsVuEb08H0BZCXtLNalmNoVJI6xI4H0mE
+         y7c6PtFEqw0dlKK+gT9TGPxK9zJ/kE32mfkvxF/llyfuNm2jiw2wOVMYZzJ87F0n9QsG
+         YgOmRtCclZxGSQ7Gyr5k0iC6+66G3GYFaIr4nWYHyYiwveSuRhRG5Z7PvoQoVkqJq3gz
+         qYHuuSIspWo7mXjoSP+n7BagXYFWK6Qs5retuFVX3BPWXm0KcUVGWqS0jJl5DdAII4v+
+         Qp11DqV66aZ9juGNOcBbHbeo1jdMy+o+9t4ZsSje7RmSrIVi7ToVy1Wc/klV2pmiooSj
+         u19Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQZYH9TUGF+FeWh6Y4/QyJNVWdHMDNjxVxEIpR0vXeXTwgz4l8NzorTol6Wx4cQZX107ztT42AFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUtOxUHGezBsZ36L7vSdoX2FWestTBGicindlVt0lZ4rgkKLYb
+	ZewHgD3J0JAjrYmb6KJrCRkgYtZXgnc5LM0xGVM5a1Nz5afnN+uogYV021eG9q8=
+X-Google-Smtp-Source: AGHT+IEbVST8IM23PNJS7uUCJYisSMIz1nwNUdSbgRhx3Ri6cOC5P3WcVxp2LruftCueQAiIwrth7A==
+X-Received: by 2002:a05:6512:2823:b0:539:fb49:c47a with SMTP id 2adb3069b0e04-53dab290683mr1441951e87.4.1731681256980;
+        Fri, 15 Nov 2024 06:34:16 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53da6548ae5sm581242e87.265.2024.11.15.06.34.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2024 06:25:07 -0800 (PST)
-Date: Fri, 15 Nov 2024 15:25:06 +0100
-Message-ID: <b56ba6a0db195ad44158509f3adb157b@gmail.com>
-From: Matteo Martelli <matteomartelli3@gmail.com>
-Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
- producer to fix race
-To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko
-	<andriy.shevchenko@intel.com>, Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
-	<alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin
-	<peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
-	<sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
-In-Reply-To: <173039799203.1353.4404042832923090619@njaxe.localdomain>
-References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
-	<20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
-	<ZyJHFp6vbQ7deLFs@black.fi.intel.com>
-	<173031260171.39393.109639772708550094@njaxe.localdomain>
-	<20241030203050.5cdf3450@jic23-huawei>
-	<173037398492.12348.265826723028347056@njaxe.localdomain>
-	<20241031143129.0000014e@Huawei.com>
-	<173039799203.1353.4404042832923090619@njaxe.localdomain>
+        Fri, 15 Nov 2024 06:34:15 -0800 (PST)
+Date: Fri, 15 Nov 2024 16:34:13 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Akhil P Oommen <quic_akhilpo@quicinc.com>, 
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Bjorn Andersson <andersson@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Connor Abbott <cwabbott0@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RFC 3/8] drm/msm: adreno: add plumbing to generate
+ bandwidth vote table for GMU
+Message-ID: <mfft7llbxbmm73hmkamsjhj4eymmr6wx2diigzjh7cyuvt4bor@yh5smvxwt73x>
+References: <20241113-topic-sm8x50-gpu-bw-vote-v1-0-3b8d39737a9b@linaro.org>
+ <20241113-topic-sm8x50-gpu-bw-vote-v1-3-3b8d39737a9b@linaro.org>
+ <p4x7rodp2qpwfb3hljtbi36mxjdrt5jr3xhad4rebsldlfxart@cz23of57gvrd>
+ <dffb787f-7167-4027-a58d-34bba5f838ab@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dffb787f-7167-4027-a58d-34bba5f838ab@linaro.org>
 
-On Thu, 31 Oct 2024 19:06:32 +0100, Matteo Martelli <matteomartelli3@gmail.com> wrote:
-> Quoting Jonathan Cameron (2024-10-31 15:31:29)
-> > On Thu, 31 Oct 2024 12:26:24 +0100
-> > Matteo Martelli <matteomartelli3@gmail.com> wrote:
+On Fri, Nov 15, 2024 at 10:09:44AM +0100, Neil Armstrong wrote:
+> On 15/11/2024 08:20, Dmitry Baryshkov wrote:
+> > On Wed, Nov 13, 2024 at 04:48:29PM +0100, Neil Armstrong wrote:
+> > > The Adreno GMU Management Unit (GMU) can also scale DDR Bandwidth along
+> > > the Frequency and Power Domain level, but by default we leave the
+> > > OPP core scale the interconnect ddr path.
+> > > 
+> > > In order to get the vote values to be used by the GPU Management
+> > > Unit (GMU), we need to parse all the possible OPP Bandwidths and
+> > > create a vote value to be send to the appropriate Bus Control
+> > > Modules (BCMs) declared in the GPU info struct.
+> > > 
+> > > The vote array will be used to dynamically generate the GMU bw_table
+> > > sent during the GMU power-up.
+> > > 
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > ---
+> > >   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 163 ++++++++++++++++++++++++++++++++++
+> > >   drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  12 +++
+> > >   drivers/gpu/drm/msm/adreno/a6xx_gpu.h |   1 +
+> > >   3 files changed, 176 insertions(+)
+> > > 
+> > > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> > > index 14db7376c712d19446b38152e480bd5a1e0a5198..504a7c5d5a9df4c787951f2ae3a69d566d205ad5 100644
+> > > --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> > > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> > > @@ -9,6 +9,7 @@
+> > >   #include <linux/pm_domain.h>
+> > >   #include <linux/pm_opp.h>
+> > >   #include <soc/qcom/cmd-db.h>
+> > > +#include <soc/qcom/tcs.h>
+> > >   #include <drm/drm_gem.h>
+> > >   #include "a6xx_gpu.h"
+> > > @@ -1287,6 +1288,119 @@ static int a6xx_gmu_memory_probe(struct a6xx_gmu *gmu)
+> > >   	return 0;
+> > >   }
+> > > +struct a6xx_bcm_data {
+> > > +	u32 buswidth;
+> > > +	unsigned int unit;
+> > > +	unsigned int width;
 > > 
-> > > Quoting Jonathan Cameron (2024-10-30 21:30:50)
-> > > > On Wed, 30 Oct 2024 19:23:21 +0100
-> > > > Matteo Martelli <matteomartelli3@gmail.com> wrote:
-> > > >   
-> > > > > Quoting Andy Shevchenko (2024-10-30 15:47:50)  
-> > > > > > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:    
-> > > > > > > Consumers need to call the producer's read_avail_release_resource()
-> > > > > > > callback after reading producer's available info. To avoid a race
-> > > > > > > condition with the producer unregistration, change inkern
-> > > > > > > iio_channel_read_avail() so that it copies the available info from the
-> > > > > > > producer and immediately calls its release callback with info_exists
-> > > > > > > locked.
-> > > > > > > 
-> > > > > > > Also, modify the users of iio_read_avail_channel_raw() and
-> > > > > > > iio_read_avail_channel_attribute() to free the copied available buffers
-> > > > > > > after calling these functions. To let users free the copied buffer with
-> > > > > > > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
-> > > > > > > consumer helper that is equivalent to iio_read_avail_channel_attribute()
-> > > > > > > but stores the available values in the returned variable.    
-> > > > > > 
-> > > > > > ...
-> > > > > >     
-> > > > > > > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
-> > > > > > > +                                         struct iio_chan_spec const *chan,
-> > > > > > > +                                         const int *vals, long mask)
-> > > > > > > +{
-> > > > > > > +     kfree(vals);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
-> > > > > > >                             struct iio_chan_spec const *chan,
-> > > > > > >                             int val, int val2, long mask)
-> > > > > > > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
-> > > > > > >  static const struct iio_info dpot_dac_info = {
-> > > > > > >       .read_raw = dpot_dac_read_raw,
-> > > > > > >       .read_avail = dpot_dac_read_avail,
-> > > > > > > +     .read_avail_release_resource = dpot_dac_read_avail_release_res,
-> > > > > > >       .write_raw = dpot_dac_write_raw,
-> > > > > > >  };    
-> > > > > > 
-> > > > > > I have a problem with this approach. The issue is that we allocate
-> > > > > > memory in one place and must clear it in another. This is not well
-> > > > > > designed thingy in my opinion. I was thinking a bit of the solution and
-> > > > > > at least these two comes to my mind:
-> > > > > > 
-> > > > > > 1) having a special callback for .read_avail_with_copy (choose better
-> > > > > > name) that will dump the data to the intermediate buffer and clean it
-> > > > > > after all;
-> > > > > > 
-> > > > > > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.    
-> > > > > 
-> > > > > Could you elaborate more about these potential solutions? Maybe with some
-> > > > > usage examples?
-> > > > > 
-> > > > > If I get it correctly, in both cases you are suggesting to pass ownership
-> > > > > of the vals buffer to the caller, iio_read_channel_info_avail() in this
-> > > > > case, so that it would take care of freeing the buffer after calling
-> > > > > iio_format_after_*(). We considered this approach during an initial
-> > > > > discussion with Jonathan (see read_avail_ext() in [1]), where he suggested
-> > > > > to let the driver keep the release control through a callback for two
-> > > > > reasons:
-> > > > > 
-> > > > > 1) Apparently it's a bad pattern to pass the buffer ownership to the core,
-> > > > >    maybe Jonathan can elaborate why? The risk I can think of is that the driver
-> > > > >    could still keep the buffer copy in its private data after giving it away,
-> > > > >    resulting in fact in a double ownership. However I think it would be clear
-> > > > >    enough in this case that the copy should be handled by the caller, or maybe
-> > > > >    not?  
-> > > > Mostly the lack of desire to have to copy for the 95% of cases where it's
-> > > > not needed and that it prevents any optimization like you mention.  
-> > > 
-> > > I think the suggestion here is to add an additional .read_avail_with_copy()
-> > > without replacing the original .read_avail(), so all the current drivers that
-> > > use a constant avail list would not be affected. And I think this was the same
-> > > idea for the additional read_avail_ext() or the additional argument for the
-> > > read_avail() we were considering in [1]. So I would think that
-> > > iio_read_channel_info_avail() would do something like the following:
-> > > 
-> > >     if (indio_dev->info->read_avail_with_copy)
-> > >         indio_dev->info->read_avail_with_copy(vals);
-> > >     else
-> > >         indio_dev->info->read_avail(vals);
-> > > 
-> > >     ...
-> > >     iio_format_avail_list(vals);
-> > >     ...
-> > > 
-> > >     if (indio_dev->info->read_avail_with_copy)
-> > >         kfree(vals);
+> > In bits?
 > > 
-> > Ok, sure that would work, but...
+> > > +	unsigned int vcd;
 > > 
-> > I don't really see this as being much less fragile than
-> > the existing solution + in cases that we do have where
-> > only some available are not const we will have to copy them
-> > all.
-> > 
-> > If anything it's more complex than making it a driver problem
-> > to provide the release call however it wants to do it.
-> >  
-> > 
-> > > 
-> > > And the drivers would choose whether to define the read_avail or the
-> > > read_avail_with_copy.
-> > > 
-> > > What I was referring to is that, back then, you mentioned you would have
-> > > preferred to avoid passing ownership of the buffer around:
-> > > 
-> > > > That's a corner case we should think about closing. Would require an indicator
-> > > > to read_avail that the buffer it has been passed is a snapshot that it should
-> > > > free on completion of the string building.  I don't like passing ownership
-> > > > of data around like that, but it is fiddly to do anything else given
-> > > > any simple double buffering is subject to race conditions.  
-> > > 
-> > > I guess there is some other reason other than avoiding the copy when not
-> > > necessary, since by introducing an additional function or argument or return
-> > > type, most of the unnecessary copies would already be avoided right?
-> > 
-> > It's not a strong reason beyond limiting scope of clever design +
-> > the key bit my mind is that the above is not substantially simpler and
-> > reduces our flexibility.
-> > 
-> > > 
-> > > Anyway any of this solutions would still prevent the potential optimizations of
-> > > point 2). It's worth mentioning that those kind of optimizations are currently
-> > > not adopted by any driver.
-> > 
-> > That one indeed not, but mixing dynamic and non dynamic is something
-> > you do in your pac1921 patch.
+> > What is this?
 > 
-> Good point! I didn't think about it, or more likely I forgot, that with an
-> additional read_avail_with_copy() used as in the example you cannot mix dynamic
-> and non dynamic available lists, thus those drivers that need at least one
-> dynamic available list would always copy all of them as they need to rely to
-> the read_avail_with_copy(). I guess this could be worked around with an
-> additional return argument for the read_avail() or an additional type like the
-> IIO_AVAIL_LIST_ALLOC suggested by Andy to signal the caller it needs to free
-> the list after use. However, I think they would introduce a more invasive
-> change in the current API compared to an additional optional callback, so I
-> agree that the current release callback is still a better option.
+> I'll also copy the icc-rpmh.h doc associated with those fields
+
+Yes, please please provide some kerneldoc for the srtuct.
+
 > 
 > > 
-> > Jonathan
+> > > +	bool fixed;
 > > 
+> > What does it mean?
+> 
+> I took it from downstream, but it's the same as qcom_icc_bcm enable_mask instead here the mask depends on the platform and OPP, this is why I specified it in perfmode.
+> 
 > > 
-> > > 
-> > > > 
-> > > > Jonathan  
-> > > > > 
-> > > > > 2) Some driver might want to avoid allocating a new copy of a big table if
-> > > > >    the race does not occur (e.g. with additional checks on buffer access
-> > > > >    code) and thus wouldn't call a free() in the release callback.
-> > > > >   
-> > > > > > 
-> > > > > > In any case it looks fragile and not scalable. I propose to drop this
-> > > > > > and think again.    
-> > > > > 
-> > > > > I see your concerns, I am open to reconsider this in case we come up with
-> > > > > better solution after addressing the points above.
-> > > > >   
-> > > > > > Yes, yes, I'm fully aware about the problem you are trying to solve and
-> > > > > > agree on the report, I think this solution is not good enough.
-> > > > > > 
-> > > > > > -- 
-> > > > > > With Best Regards,
-> > > > > > Andy Shevchenko
-> > > > > >     
-> > > > > 
-> > > > > [1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic23-huawei/
-> > > > > 
-> > > > > Best regards,
-> > > > > Matteo Martelli  
-> > > >   
-> > > 
-> > > I hope I've brought a little more clarity to the discussion by providing some
-> > > history instead of making it more confusing.
+> > > +	unsigned int perfmode;
+> > > +	unsigned int perfmode_bw;
+> > > +};
+> > > +
+> > > +struct bcm_db {
+> > > +	__le32 unit;
+> > > +	__le16 width;
+> > > +	u8 vcd;
+> > > +	u8 reserved;
+> > > +};
+> > > +
+> > > +static int a6xx_gmu_rpmh_get_bcm_data(const struct a6xx_bcm *bcm,
+> > > +				      struct a6xx_bcm_data *bcm_data)
 > > 
-> > Sure, the code example in particular is useful.
-> > 
-> > Jonathan
-> > 
-> > > 
-> > > Best regards,
-> > > Matteo Martelli
-> > > 
-> > > 
-> > 
-> Best regards,
-> Matteo Martelli
+> > Is there a reason to copy CMD DB and BCM data to the interim
+> > representation instead of using those directly?
+> 
+> I guess I can keep bcm_db & a6xx_bcm as-is and do the _to_cpu() in-place.
 
-Just a friendly reminder this has been sitting for a while, any news or
-additional considerations?
+I think that makes sense.
 
-Best regards,
-Matteo Martelli
+> 
+> > 
+> > > +{
+> > > +	const struct bcm_db *data;
+> > > +	size_t count;
+> > > +
+> > > +	data = cmd_db_read_aux_data(bcm->name, &count);
+> > > +	if (IS_ERR(data))
+> > > +		return PTR_ERR(data);
+> > > +
+> > > +	if (!count)
+> > > +		return -EINVAL;
+> > > +
+> > > +	bcm_data->unit = le32_to_cpu(data->unit);
+> > > +	bcm_data->width = le16_to_cpu(data->width);
+> > > +	bcm_data->vcd = data->vcd;
+> > > +	bcm_data->fixed = bcm->fixed;
+> > > +	bcm_data->perfmode = bcm->perfmode;
+> > > +	bcm_data->perfmode_bw = bcm->perfmode_bw;
+> > > +	bcm_data->buswidth = bcm->buswidth;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void a6xx_gmu_rpmh_calc_bw_vote(struct a6xx_bcm_data *bcms,
+> > > +				       int count, u32 bw, u32 *data)
+> > > +{
+> > > +	int i;
+> > > +
+> > > +	for (i = 0; i < count; i++) {
+> > > +		bool valid = true;
+> > > +		bool commit = false;
+> > > +		u64 peak, y;
+> > > +
+> > > +		if (i == count - 1 || bcms[i].vcd != bcms[i + 1].vcd)
+> > > +			commit = true;
+> > > +
+> > > +		if (bcms[i].fixed) {
+> > > +			if (!bw)
+> > > +				data[i] = BCM_TCS_CMD(commit, false, 0x0, 0x0);
+> > > +			else
+> > > +				data[i] = BCM_TCS_CMD(commit, true, 0x0,
+> > > +					bw >= bcms[i].perfmode_bw ?
+> > > +						bcms[i].perfmode : 0x0);
+> > > +			continue;
+> > > +		}
+> > > +
+> > > +		/* Multiple the bandwidth by the width of the connection */
+> > 
+> > ... and divide by the bus width. However it's not clear why you are
+> > multiplying bandwidth (bits or bytes per second) with the width
+> > (probably also bits?). Or is it not a width but the number of paths
+> > between units?
+> 
+> So this is basically the same as in bcm_agregate:
+> https://elixir.bootlin.com/linux/v6.12-rc6/source/drivers/interconnect/qcom/bcm-voter.c#L91
+> 
+> Just done slightly differently since we don't aggregate stuff but we want
+> to set the bandwidth directly here from the GMU.
+
+I see. And width comes from the CMD DB too.
+
+> 
+> > 
+> > > +		peak = (u64)bw * bcms[i].width;
+> > > +		do_div(peak, bcms[i].buswidth);
+> > > +
+> > > +		/* Input bandwidth value is in KBps */
+> > 
+> > Input or OPP / Interconnect?
+> 
+> I don't see the point, it's the input of the function which directly comes from OPP which is in KBps
+
+I meant is it about the calculated 'peak' value? Also it might be worth
+adding something mult_frac_ull, using do_div() instead of usual
+division.
+
+
+> > > +		y = peak * 1000ULL;
+> > > +		do_div(y, bcms[i].unit);
+> > > +
+> > > +		/*
+> > > +		 * If a bandwidth value was specified but the calculation ends
+> > > +		 * rounding down to zero, set a minimum level
+> > > +		 */
+> > > +		if (bw && y == 0)
+> > > +			y = 1;
+> > 
+> > Is it a real usecase or just a safety net? If the bandwidth ends up
+> > being very low, maybe we should warn the users about it?
+> 
+> Probably a safety net, perhaps we could warn instead
+> 
+> > 
+> > > +
+> > > +		y = min_t(u64, y, BCM_TCS_CMD_VOTE_MASK);
+> > > +		if (!y)
+> > > +			valid = false;
+> > 
+> > This can probably be coupled with the previous condition.
+> 
+> Yeah I should probably refactor it and just avoid doing the
+> calculation if bw == 0.
+> 
+> > 
+> > > +
+> > > +		data[i] = BCM_TCS_CMD(commit, valid, y, y);
+> > > +	}
+> > > +}
+> > > +
+> > > +static int a6xx_gmu_rpmh_bw_votes_init(const struct a6xx_info *info, struct a6xx_gmu *gmu)
+> > > +{
+> > > +	struct a6xx_bcm_data bcms[3];
+> > > +	unsigned int bcm_count = 0;
+> > > +	int ret, index;
+> > > +
+> > > +	/* Retrieve BCM data from cmd-db and merge with a6xx_info bcm table */
+> > > +	for (index = 0; index < 3; index++) {
+> > 
+> > Magic number 3.
+> > 
+> > > +		if (!info->bcm[index].name)
+> > > +			continue;
+> > > +
+> > > +		ret = a6xx_gmu_rpmh_get_bcm_data(&info->bcm[index], &bcms[index]);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +
+> > > +		++bcm_count;
+> > > +	}
+> > > +
+> > > +	/* Generate BCM votes values for each bandwidth & bcm */
+> > > +	for (index = 0; index < gmu->nr_gpu_bws; index++)
+> > > +		a6xx_gmu_rpmh_calc_bw_vote(bcms, bcm_count, gmu->gpu_bw_table[index],
+> > > +					   gmu->gpu_bw_votes[index]);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >   /* Return the 'arc-level' for the given frequency */
+> > >   static unsigned int a6xx_gmu_get_arc_level(struct device *dev,
+> > >   					   unsigned long freq)
+> > > @@ -1390,12 +1504,15 @@ static int a6xx_gmu_rpmh_arc_votes_init(struct device *dev, u32 *votes,
+> > >    * The GMU votes with the RPMh for itself and on behalf of the GPU but we need
+> > >    * to construct the list of votes on the CPU and send it over. Query the RPMh
+> > >    * voltage levels and build the votes
+> > > + * The GMU can also vote for DDR interconnects, use the OPP bandwidth entries
+> > > + * and BCM parameters to build the votes.
+> > >    */
+> > >   static int a6xx_gmu_rpmh_votes_init(struct a6xx_gmu *gmu)
+> > >   {
+> > >   	struct a6xx_gpu *a6xx_gpu = container_of(gmu, struct a6xx_gpu, gmu);
+> > >   	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+> > > +	const struct a6xx_info *info = adreno_gpu->info->a6xx;
+> > >   	struct msm_gpu *gpu = &adreno_gpu->base;
+> > >   	int ret;
+> > > @@ -1407,6 +1524,10 @@ static int a6xx_gmu_rpmh_votes_init(struct a6xx_gmu *gmu)
+> > >   	ret |= a6xx_gmu_rpmh_arc_votes_init(gmu->dev, gmu->cx_arc_votes,
+> > >   		gmu->gmu_freqs, gmu->nr_gmu_freqs, "cx.lvl");
+> > > +	/* Build the interconnect votes */
+> > > +	if (adreno_gpu->info->quirks & ADRENO_QUIRK_GMU_BW_VOTE)
+> > > +		ret |= a6xx_gmu_rpmh_bw_votes_init(info, gmu);
+> > > +
+> > >   	return ret;
+> > >   }
+> > > @@ -1442,6 +1563,38 @@ static int a6xx_gmu_build_freq_table(struct device *dev, unsigned long *freqs,
+> > >   	return index;
+> > >   }
+> > > +static int a6xx_gmu_build_bw_table(struct device *dev, unsigned long *bandwidths,
+> > > +		u32 size)
+> > > +{
+> > > +	int count = dev_pm_opp_get_opp_count(dev);
+> > > +	struct dev_pm_opp *opp;
+> > > +	int i, index = 0;
+> > > +	unsigned int bandwidth = 1;
+> > > +
+> > > +	/*
+> > > +	 * The OPP table doesn't contain the "off" bandwidth level so we need to
+> > > +	 * add 1 to the table size to account for it
+> > > +	 */
+> > > +
+> > > +	if (WARN(count + 1 > size,
+> > > +		"The GMU bandwidth table is being truncated\n"))
+> > > +		count = size - 1;
+> > > +
+> > > +	/* Set the "off" bandwidth */
+> > > +	bandwidths[index++] = 0;
+> > > +
+> > > +	for (i = 0; i < count; i++) {
+> > > +		opp = dev_pm_opp_find_bw_ceil(dev, &bandwidth, 0);
+> > > +		if (IS_ERR(opp))
+> > > +			break;
+> > > +
+> > > +		dev_pm_opp_put(opp);
+> > > +		bandwidths[index++] = bandwidth++;
+> > > +	}
+> > > +
+> > > +	return index;
+> > > +}
+> > > +
+> > >   static int a6xx_gmu_pwrlevels_probe(struct a6xx_gmu *gmu)
+> > >   {
+> > >   	struct a6xx_gpu *a6xx_gpu = container_of(gmu, struct a6xx_gpu, gmu);
+> > > @@ -1472,6 +1625,16 @@ static int a6xx_gmu_pwrlevels_probe(struct a6xx_gmu *gmu)
+> > >   	gmu->current_perf_index = gmu->nr_gpu_freqs - 1;
+> > > +	/*
+> > > +	 * The GMU also handles GPU Interconnect Votes so build a list
+> > > +	 * of DDR bandwidths from the GPU OPP table
+> > > +	 */
+> > > +	if (adreno_gpu->info->quirks & ADRENO_QUIRK_GMU_BW_VOTE)
+> > > +		gmu->nr_gpu_bws = a6xx_gmu_build_bw_table(&gpu->pdev->dev,
+> > > +			gmu->gpu_bw_table, ARRAY_SIZE(gmu->gpu_bw_table));
+> > > +
+> > > +	gmu->current_perf_index = gmu->nr_gpu_freqs - 1;
+> > > +
+> > >   	/* Build the list of RPMh votes that we'll send to the GMU */
+> > >   	return a6xx_gmu_rpmh_votes_init(gmu);
+> > >   }
+> > > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> > > index b4a79f88ccf45cfe651c86d2a9da39541c5772b3..95c632d8987a517f067c48c61c6c06b9a4f61fc0 100644
+> > > --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> > > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> > > @@ -19,6 +19,14 @@ struct a6xx_gmu_bo {
+> > >   	u64 iova;
+> > >   };
+> > > +struct a6xx_bcm {
+> > > +	char *name;
+> > > +	unsigned int buswidth;
+> > > +	bool fixed;
+> > > +	unsigned int perfmode;
+> > > +	unsigned int perfmode_bw;
+> > > +};
+> > > +
+> > >   /*
+> > >    * These define the different GMU wake up options - these define how both the
+> > >    * CPU and the GMU bring up the hardware
+> > > @@ -82,6 +90,10 @@ struct a6xx_gmu {
+> > >   	unsigned long gpu_freqs[16];
+> > >   	u32 gx_arc_votes[16];
+> > > +	int nr_gpu_bws;
+> > > +	unsigned long gpu_bw_table[16];
+> > > +	u32 gpu_bw_votes[16][3];
+> > 
+> > Is it is the same magic 16 as we have few lines above or is this 16 a
+> > different magic 16? And also 3 is a pure dark secret.
+> 
+> It's the same magic 16, since we use the same OPPs, the 3 is the actual number of BCMs we currently use, I wonder sure define should go, including the magic 16.
+
+I think those defines can go to a6xx_gmu.h.
+Also if the 16 is the same, should we define something like
+
+  struct a6xx_gmu_freq_something {
+  };
+
+...
+
+   struct a6xx_gmu {
+       struct a6xx_gmu_freq_something bw_data[16];
+   };
+
+Seeing repetitive field size always makes me think about such a change.
+
+> 
+> > 
+> > > +
+> > >   	int nr_gmu_freqs;
+> > >   	unsigned long gmu_freqs[4];
+> > >   	u32 cx_arc_votes[4];
+> > > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+> > > index 4aceffb6aae89c781facc2a6e4a82b20b341b6cb..d779d700120cbd974ee87a67214739b1d85156e2 100644
+> > > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+> > > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+> > > @@ -44,6 +44,7 @@ struct a6xx_info {
+> > >   	u32 gmu_chipid;
+> > >   	u32 gmu_cgc_mode;
+> > >   	u32 prim_fifo_threshold;
+> > > +	const struct a6xx_bcm bcm[3];
+> > >   };
+> > >   struct a6xx_gpu {
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> 
+
+-- 
+With best wishes
+Dmitry
 
