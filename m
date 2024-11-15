@@ -1,95 +1,92 @@
-Return-Path: <linux-pm+bounces-17644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7F7A9CF2E6
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 18:28:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41289CF361
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 18:55:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7046B1F23622
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:28:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 554BFB2D3E1
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 17:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6293E1D5CEE;
-	Fri, 15 Nov 2024 17:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615C41D63D1;
+	Fri, 15 Nov 2024 17:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NYa1aWWC"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TtoQcWPj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369FE84D02;
-	Fri, 15 Nov 2024 17:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8721D618E;
+	Fri, 15 Nov 2024 17:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731691715; cv=none; b=pHBMphV7i+oMe379lq7SknmqdUS7rfWcTkhHoETdyD2Z/1tY3GlyiPV66zKFDNRKRF2+rPpr9tWH6otd7TfWIGIy3gb/MNezNLRFkRR0oWERd9Gmbod85LvElA9CjqqqaPovw9XIOVLfWPhwvxpdQEqsXZSrkQgshL/0ZJYX158=
+	t=1731692429; cv=none; b=MyD0OJFs6g/ZdWouhWhvt4Jwp0G3SlrtXXBL5BPAecYdVf1l379x5gbMoHOo9g0hZ+MsJpc8Qf0J+ZO17qXY+8SaKjotguwOR2t5e9u9VyeYlLnH4iL2Q+VpbccMPMzlszdXQ2AwmVMi7Cp8BoAuOFXkNjk60Mgbk7sQOnAB+6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731691715; c=relaxed/simple;
-	bh=KyYJ/FcwK4MFIP4OtoiBgZVuLgsPGiS1DsVgNoTACfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=FHeX0B3J+EZhrnn8+BIii47wlihKJMEs5LTZbMpFpeyatgiXTXDb9kmSBQglvpu2RMEPvJOpsVPjaaMuklLz8hepGxSSfeS45MKEA31oIESdyLwDI1a4p9+edxYqGiHfcsjaYipoahsmtGENfWNhKc90OphZWI7QXAm59fEB6dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NYa1aWWC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83753C4CECF;
-	Fri, 15 Nov 2024 17:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731691714;
-	bh=KyYJ/FcwK4MFIP4OtoiBgZVuLgsPGiS1DsVgNoTACfg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=NYa1aWWCYVM2EsvgIx8yuxDRJQJ9z3zIGsINPCDgJuV0a9gaJ7SP3az/6EgsDoc1Z
-	 C0OPffYgopFoAdsHSzNH4z2sT6dzvqzLawbUykuWSNpSgzh96Vvz1UzdHoLm3ns6Rh
-	 CFmkG/X297Kd4jYQXewx7eeqE/47n39CySs9d2vETfFtrDyxsA22vevdRUsPAbkb3t
-	 s+Ml4jPlw/KMPmecVQiBAr4CYGRYbrWHYWBPsS5eAKkZMaAq0r1IxqI5I8eM6nzw8p
-	 USm90huFNDI0pKDyok2Z67iXvUXm+mybskj98B9PtdGqhyMHw0L0tEtU/+51Fogev6
-	 v4tLZ1UYgiukg==
-Date: Fri, 15 Nov 2024 11:28:32 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v9 8/9] thermal: Add PCIe cooling driver
-Message-ID: <20241115172832.GA2044695@bhelgaas>
+	s=arc-20240116; t=1731692429; c=relaxed/simple;
+	bh=jyGslCeJMEijYiyK/PiuOjC3tz2yhl7wgmdDQ0Z8Sqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pi5KjoCQD5ZuK+TXsKhTAcSaH7nsthiUMTh0YGoVxUkmIn1TIXcCxOvkhh8xPZS4QkM4iYMWZUo8sL3AKrLMAC6oTSt6dxL7WWTAYU4VjPWA3P6Y3y9SzcuEXDV5wF35TtKF76FsUI6smxHMm0kNIJBB+TKkhYNKUq70Shu5ts0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TtoQcWPj; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=CiYwYKsf5w5oGguPyRwzQ8MrK9UWm5u9QpL29PprmTc=; b=TtoQcWPjDsX6nCVOcNSAzn9e8q
+	Uym0Clk6j0cjRjXN6yHba3kuxJwtpMTfPjixy9bXN3aBy/KIaxOlH7rVfZZGg3bhUK3KZD5Iwe5pG
+	BTF9K4oswl6X7TMrpOMLTiiKaVwefAdGKKc4azUaFZKrqSdogXssQ8LHSlRuwnrm7H8bF9tvK4gCq
+	gDW9dLEuIYcvPkiXluO/BPfySLXHD/swKhengxky3gSBb+K0WLObkxAhh2KLdGsW5CjBxvmh1ilrP
+	6W+ZrcrNjJzIq/ijuSnJQLOgiEkU50sjv0Ixi+cqfahHH638PxosSu8TKZ5ocBUtDtwQs2dDB77LD
+	zVpglhRg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tC0Iw-00000000J5a-39d0;
+	Fri, 15 Nov 2024 17:40:23 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5AEFE30066A; Fri, 15 Nov 2024 18:40:22 +0100 (CET)
+Date: Fri, 15 Nov 2024 18:40:22 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	x86 Maintainers <x86@kernel.org>,
+	Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v1] cpuidle: Do not return from cpuidle_play_dead() on
+ callback failures
+Message-ID: <20241115174022.GF22801@noisy.programming.kicks-ass.net>
+References: <4992010.31r3eYUQgx@rjwysocki.net>
+ <20241115101427.GA22801@noisy.programming.kicks-ass.net>
+ <CAJZ5v0gfSpzjD1PDhMOmqV_wcnCtr=m12noAqVpQkDsjetu+Ug@mail.gmail.com>
+ <20241115125523.GD22801@noisy.programming.kicks-ass.net>
+ <CAJZ5v0jkPb-sgrMfk+KN19+R+ezucssHKUzfJZ74Qw1Ned6gaw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZzRm1SJTwEMRsAr8@wunner.de>
+In-Reply-To: <CAJZ5v0jkPb-sgrMfk+KN19+R+ezucssHKUzfJZ74Qw1Ned6gaw@mail.gmail.com>
 
-On Wed, Nov 13, 2024 at 09:44:05AM +0100, Lukas Wunner wrote:
-> On Fri, Oct 18, 2024 at 05:47:54PM +0300, Ilpo Järvinen wrote:
-> >  static void pcie_bwnotif_remove(struct pcie_device *srv)
-> >  {
-> > +	struct pcie_bwctrl_data *data = srv->port->link_bwctrl;
-> > +
-> > +	if (data->cdev)
-> > +		pcie_cooling_device_unregister(data->cdev);
-> > +
+On Fri, Nov 15, 2024 at 02:25:23PM +0100, Rafael J. Wysocki wrote:
+> > I mean, something like:
+> >
+> >         if (drv->states[i].enter_dead && !drv->states[i].enter_dead(dev, i))
+> >                 panic("Dead CPU walking...");
+> >
+> > is 'fun' but not very useful.
 > 
-> Just noting a minor nit here in what is now commit 7206400cda87
-> on pci/bwctrl:  The NULL pointer check for data->cdev seems
-> redundant as pcie_cooling_device_unregister() just calls
-> thermal_cooling_device_unregister(), which in turn contains
-> this at the top:
-> 
-> 	if (!cdev)
-> 		return;
+> The panic would be hard to debug if it ever triggers I'm afraid and
+> there is the fallback to HLT in the caller.
 
-Thanks, I dropped this NULL pointer check locally.
+I was being facetious, removing the return value and simply calling them
+all in reverse order is fine.
 
