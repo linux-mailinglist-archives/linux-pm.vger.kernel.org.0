@@ -1,207 +1,189 @@
-Return-Path: <linux-pm+bounces-17632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17633-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BCB19CF0BA
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:53:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A29699CEFD1
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:28:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C3C0B39F5D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:14:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6423328AA51
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66CDC1D5AC0;
-	Fri, 15 Nov 2024 15:13:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD5F1D47C7;
+	Fri, 15 Nov 2024 15:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2OuknJs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PHQxPfOg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCF51D5AAE;
-	Fri, 15 Nov 2024 15:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699A41CEAD1
+	for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 15:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731683590; cv=none; b=VaAVSBfssyajUPLPHdc3pA34C4ebIIPlUPp5F7sEoYIwGVtLMPHIt5nPmHX7VcjO2nRzUC+d9N6F6jYbx3z8v+bKJ/25qoZQnYL27nc8b09nbf/WvC4MfTQvDvlkijmuxqoSpq6NZox3ALyea4EW7216XJ2sIPAhYA5t9aQxu2k=
+	t=1731684471; cv=none; b=KCzxKTACcUHr4Rr+bUXGIe4K/Qmro6eRdKiHVOJw3ReA8ArzqhR7QDQr12rd8GeMZ68mv0i5RQoP0Mnp905mf/VWBosNx1ZK2CID+79hOau1p+4J3rC7sgbCpMTmPSwK0nsUmPUaNYBCczuel0mvZXx/7W+B/HnXLK1uE+Z+tvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731683590; c=relaxed/simple;
-	bh=klAyE4yJ7Pn0JVsn2LEXwcXJbbb9kRKwa/irKLMf2T4=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=Qwqk4NfIK64+HAregbVHSzbJbjOkrXNQYffuR03R7VpFWbUGpUFb48wxHythcf2C9EyShCsGiE9Jajp9+3hFkl7QuNJyvrqZsk6z72/fRPoaXovaGJuH+yHwIDOYJxcYkXKQ1RsEJjuGTuV4Nql1twuRIbsrwuuznHEU8TDh4B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2OuknJs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 711A0C4CECF;
-	Fri, 15 Nov 2024 15:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731683589;
-	bh=klAyE4yJ7Pn0JVsn2LEXwcXJbbb9kRKwa/irKLMf2T4=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Y2OuknJsoQAQB5m7vthDedO97fOYrfqPfuhYnNLlKVzFW7tZk9IRd+A1mUc7AYKSJ
-	 PbyyduVPzN2oe+HqLk4I4d6Oe5V/AHzXht4DMRL0s99krwOsFnG7buZMdrloTcpeWj
-	 2P1u2t7iCC6o3us+6BQars4uiZo1ddxYYDq6KLslps0O26EgkkLwJ1PFNnUSLuHdT1
-	 H7jtP/DfTPZv0p+TEgJ/LISYJwjFrpD1TSPmFSu42OgVifnAhOGTlDIl9iqB4rqvgI
-	 taQSFHcUReld+K139G1fP8NQ/wovMoB1ZOLFOgXoSlRPM1xcGOjD7TnJrJrKu1vny9
-	 sOG8lk1AC/+Hw==
-Date: Fri, 15 Nov 2024 09:13:07 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1731684471; c=relaxed/simple;
+	bh=bVXjOnsWx/iYY5FZ/kXZfHu8Jl/8iTaixZb5j49sBB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AZn4pC8dXDUYiQ8ghhJ8y+zItqHv6X3E22FWdhMluGLJTaSozMoSXgbeEpxNWvHZLC7BUCIfvyCkBoHFi7nWjxyliOZpSw++c0f/7ixOnY9i9AO4MHvIoKf/B5R/5DIan+xVaBIpt7MGmeLDwAifkp2E1ACbBey+2FvJZOCS1uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PHQxPfOg; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb4fa17044so21033531fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2024 07:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731684467; x=1732289267; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PMXuggpYjesVA4FmUllH/mkqHpozoEMNcx85tFh/IDc=;
+        b=PHQxPfOgCu3d/K2wupcKv9NYWljNv//C5GXZw7WrG7VyZBKWnxpBUEWo55schv/EEE
+         DaCsv81Xkk/i1ACbTyZTE3XdZZU9uQhHFpLqS3Im6bNp2I51qq17ISDMFkl9xlWIKUc5
+         amB8noXqdIKtUaoW8O7C/TkWp6X/G/0n4wNFcSEWhavRu4fJtxak4jAsEVgsq7Yw3jPG
+         7Q3C4CmvzkmWkB5Ek1IKy81wPgBroQAwG3BUM3XasCCWHtgdQjgFnaCGzhMKBPp/0klw
+         VW+T/XDS822rrWwJ2ot6FuDTmY7IO655cOwH5v2HuKbkBfDMvU1cc2v2n8kg/IWDfrgx
+         ALCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731684467; x=1732289267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PMXuggpYjesVA4FmUllH/mkqHpozoEMNcx85tFh/IDc=;
+        b=I78wxXnmlqiakdLyMytV65N+09bcXUPZLtdcR/jGJZOnl+jusqMJpiEA3rx6sOyubB
+         e+RhWrcc/8C9Tl29A8tczAAJ+yOTXQYcJ0XKeXcCv3uFUkZrP1XKhje3GSy5sPk3Limp
+         LpY6UB1fr7TmE9Im0IF/qAQW0lLBpBTzqG5I0w98t4/sx7DuyiMB4/FbUS+Vw6CWsvkr
+         utxhdK4JyzjcnSfk/9vXCdTSVy4A2cbD5lyAXVnup07qFrEK5qVql/Am39ZtcyPSzjYl
+         WyVbL2dF8Zl6cMw+/bMdOudgn9/CTDhqrR9mXaJGNBmGCdMBcnagKShN8QAAxj0fkQVB
+         yDlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXLnqzgQZW8tAjDsQNoKA+7UHUTXgAjHIHStAmuRt2UPcoHNoPIRBK3g7xNkHoGowIlFhmmCFhHdw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3SX22vWmpgAdNZuBdFG+D04X4jN+uD//cDbBEcwbh9TTetgr7
+	YVG+vkTFUG2ugbymfCqeOej2iyrRvgeXvV1Az6I6fW0afBV64kJCMX28u5xUc9M=
+X-Google-Smtp-Source: AGHT+IHdzjVyEhzeFfshpDNdqomTi8OW4O+yNGDbt9rQbjkJS5VK0ycCp1yfl5ev+Ig7t+lEe2ruWQ==
+X-Received: by 2002:a05:651c:2122:b0:2fb:5035:7e4 with SMTP id 38308e7fff4ca-2ff60621cf1mr17333551fa.5.1731684466569;
+        Fri, 15 Nov 2024 07:27:46 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff59763d43sm5824821fa.9.2024.11.15.07.27.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2024 07:27:45 -0800 (PST)
+Date: Fri, 15 Nov 2024 17:27:42 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Melody Olvera <quic_molvera@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Adam Skladowski <a39.skl@gmail.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Sibi Sankar <quic_sibis@quicinc.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Vladimir Lypak <vladimir.lypak@gmail.com>, Danila Tikhonov <danila@jiaxyga.com>, 
+	Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Rajendra Nayak <quic_rjendra@quicinc.com>, Mike Tipton <quic_mdtipton@quicinc.com>, 
+	Abel Vesa <abel.vesa@linaro.org>, Trilok Soni <quic_tsoni@quicinc.com>, 
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add interconnect provider
+ driver for SM8750
+Message-ID: <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
+References: <20241112003017.2805670-1-quic_molvera@quicinc.com>
+ <20241112003017.2805670-3-quic_molvera@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: iommu@lists.linux.dev, Zhang Rui <rui.zhang@intel.com>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, Will Deacon <will@kernel.org>, 
- linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, devicetree@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>, 
- Joerg Roedel <joro@8bytes.org>, Conor Dooley <conor+dt@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Bjorn Andersson <andersson@kernel.org>, Dang Huynh <danct12@riseup.net>, 
- linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, 
- linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-In-Reply-To: <20241113-msm8917-v6-0-c348fb599fef@mainlining.org>
-References: <20241113-msm8917-v6-0-c348fb599fef@mainlining.org>
-Message-Id: <173168321268.2749739.14402170098343790318.robh@kernel.org>
-Subject: Re: [PATCH v6 00/10] Add MSM8917/PM8937/Redmi 5A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241112003017.2805670-3-quic_molvera@quicinc.com>
 
-
-On Wed, 13 Nov 2024 16:11:41 +0100, Barnabás Czémán wrote:
-> This patch series add support for MSM8917 soc with PM8937 and
-> Xiaomi Redmi 5A (riva).
+On Mon, Nov 11, 2024 at 04:30:17PM -0800, Melody Olvera wrote:
+> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > 
-> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> Introduce SM8750 interconnect provider driver using the interconnect
+> framework.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
-> Changes in v6:
-> - msm8917:
->   - Consolidate SDC pins, remove sdc2-cd-on/off pins.
->   - Remove cluster-sleep-0 and cluster-sleep-1
->   and rename cluster-sleep-2 to cluster-sleep-0.
->   - Fix spi, i2c and related pinctrl namings.
-> - msm8917-xiaomi-riva: follow i2c name changes.
-> - Link to v5: https://lore.kernel.org/r/20241112-msm8917-v5-0-3ca34d33191b@mainlining.org
+>  drivers/interconnect/qcom/Kconfig  |    9 +
+>  drivers/interconnect/qcom/Makefile |    2 +
+>  drivers/interconnect/qcom/sm8750.c | 1585 ++++++++++++++++++++++++++++
+>  drivers/interconnect/qcom/sm8750.h |  132 +++
+>  4 files changed, 1728 insertions(+)
+>  create mode 100644 drivers/interconnect/qcom/sm8750.c
+>  create mode 100644 drivers/interconnect/qcom/sm8750.h
 > 
-> Changes in v5:
-> - msm8917:
->   - Remove aliases.
->   - Rename spi, i2c labels and pins.
->   - Remove clock-frequency from timers
->   - Remove unused mpss_mem region.
->   - Use mboxes where it can be used, only smd-edge uses qcom,ipc.
-> - msm8917-xiaomi-riva: Follow i2c label changes.
-> - Link to v4: https://lore.kernel.org/r/20241109-msm8917-v4-0-8be9904792ab@mainlining.org
-> 
-> Changes in v4:
-> - msm8917 pinctrl: Fix gpio regexp in the schema.
-> - msm8937 tsens: Rename ops_msm8976 to ops_common and use it for msm8937.
-> - msm8917: fix address padding, naming and ordering, remove polling-delays.
-> - Remove applied patches from the series.
-> - Link to v3: https://lore.kernel.org/r/20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org
-> 
-> Changes in v3:
-> - msm8917-xiaomi-riva: Fix issues addressed by Konrad.
-> - msm8917: Fix node addresses, orders of some properties.
-> - pm8937: simplify vadc channels.
-> - msm8917 pinctrl: Fix schema issues addressed by Krzysztof.
-> - Remove applied tcsr patch from this series.
-> - Reword some commit title.
-> - Link to v2: https://lore.kernel.org/r/20241031-msm8917-v2-0-8a075faa89b1@mainlining.org
-> 
-> Changes in v2:
-> - Add msm8937 tsens support.
-> - Fix issues addressed by reviews.
-> - Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
-> 
-> ---
-> Barnabás Czémán (7):
->       dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
->       dt-bindings: thermal: tsens: Add MSM8937
->       thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
->       dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU to SMMUv1 compatibles
->       dt-bindings: nvmem: Add compatible for MS8917
->       dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
->       arm64: dts: qcom: Add Xiaomi Redmi 5A
-> 
-> Dang Huynh (1):
->       arm64: dts: qcom: Add PM8937 PMIC
-> 
-> Otto Pflüger (2):
->       pinctrl: qcom: Add MSM8917 tlmm pinctrl driver
->       arm64: dts: qcom: Add initial support for MSM8917
-> 
->  Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
->  .../devicetree/bindings/iommu/qcom,iommu.yaml      |    1 +
->  .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
->  .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     |  160 ++
->  .../devicetree/bindings/thermal/qcom-tsens.yaml    |    1 +
->  arch/arm64/boot/dts/qcom/Makefile                  |    1 +
->  arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  297 +++
->  arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1946 ++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/pm8937.dtsi               |  152 ++
->  drivers/pinctrl/qcom/Kconfig.msm                   |    6 +
->  drivers/pinctrl/qcom/Makefile                      |    1 +
->  drivers/pinctrl/qcom/pinctrl-msm8917.c             | 1620 ++++++++++++++++
->  drivers/thermal/qcom/tsens-v1.c                    |   21 +-
->  drivers/thermal/qcom/tsens.c                       |    3 +
->  drivers/thermal/qcom/tsens.h                       |    2 +-
->  15 files changed, 4211 insertions(+), 8 deletions(-)
-> ---
-> base-commit: 6d59cab07b8d74d0f0422b750038123334f6ecc2
-> change-id: 20241019-msm8917-17c3d0ff4a52
-> 
-> Best regards,
-> --
-> Barnabás Czémán <barnabas.czeman@mainlining.org>
-> 
-> 
+> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+> index 362fb9b0a198..1219f4f23d40 100644
+> --- a/drivers/interconnect/qcom/Kconfig
+> +++ b/drivers/interconnect/qcom/Kconfig
+> @@ -337,6 +337,15 @@ config INTERCONNECT_QCOM_SM8650
+>  	  This is a driver for the Qualcomm Network-on-Chip on SM8650-based
+>  	  platforms.
+>  
+> +config INTERCONNECT_QCOM_SM8750
+> +	tristate "Qualcomm SM8750 interconnect driver"
+> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+> +	select INTERCONNECT_QCOM_RPMH
+> +	select INTERCONNECT_QCOM_BCM_VOTER
+> +	help
+> +	  This is a driver for the Qualcomm Network-on-Chip on SM8750-based
+> +	  platforms.
+> +
+>  config INTERCONNECT_QCOM_X1E80100
+>  	tristate "Qualcomm X1E80100 interconnect driver"
+>  	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+> index 9997728c02bf..7887b1e8d69b 100644
+> --- a/drivers/interconnect/qcom/Makefile
+> +++ b/drivers/interconnect/qcom/Makefile
+> @@ -40,6 +40,7 @@ qnoc-sm8350-objs			:= sm8350.o
+>  qnoc-sm8450-objs			:= sm8450.o
+>  qnoc-sm8550-objs			:= sm8550.o
+>  qnoc-sm8650-objs			:= sm8650.o
+> +qnoc-sm8750-objs			:= sm8750.o
+>  qnoc-x1e80100-objs			:= x1e80100.o
+>  icc-smd-rpm-objs			:= smd-rpm.o icc-rpm.o icc-rpm-clocks.o
+>  
+> @@ -80,5 +81,6 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8550) += qnoc-sm8550.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8650) += qnoc-sm8650.o
+> +obj-$(CONFIG_INTERCONNECT_QCOM_SM8750) += qnoc-sm8750.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_X1E80100) += qnoc-x1e80100.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
+> diff --git a/drivers/interconnect/qcom/sm8750.c b/drivers/interconnect/qcom/sm8750.c
+> new file mode 100644
+> index 000000000000..bc72954d54ff
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/sm8750.c
+> @@ -0,0 +1,1585 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+> + *
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/interconnect.h>
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
+> +
+> +#include "bcm-voter.h"
+> +#include "icc-rpmh.h"
+> +#include "sm8750.h"
+
+Nit: please merge sm8750.h here, there is no need to have a separate
+header, there are no other users.
+
+Also, is there QoS support? I see no qcom_icc_qosbox entries.
+
+Other than that:
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y qcom/msm8917-xiaomi-riva.dtb' for 20241113-msm8917-v6-0-c348fb599fef@mainlining.org:
-
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: /soc@0/syscon@1937000: failed to match any schema with compatible: ['qcom,tcsr-msm8917', 'syscon']
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: pmic@0: gpio@c000:compatible:0: 'qcom,pm8937-gpio' is not one of ['qcom,pm2250-gpio', 'qcom,pm660-gpio', 'qcom,pm660l-gpio', 'qcom,pm6125-gpio', 'qcom,pm6150-gpio', 'qcom,pm6150l-gpio', 'qcom,pm6350-gpio', 'qcom,pm6450-gpio', 'qcom,pm7250b-gpio', 'qcom,pm7325-gpio', 'qcom,pm7550ba-gpio', 'qcom,pm8005-gpio', 'qcom,pm8018-gpio', 'qcom,pm8019-gpio', 'qcom,pm8038-gpio', 'qcom,pm8058-gpio', 'qcom,pm8150-gpio', 'qcom,pm8150b-gpio', 'qcom,pm8150l-gpio', 'qcom,pm8226-gpio', 'qcom,pm8350-gpio', 'qcom,pm8350b-gpio', 'qcom,pm8350c-gpio', 'qcom,pm8450-gpio', 'qcom,pm8550-gpio', 'qcom,pm8550b-gpio', 'qcom,pm8550ve-gpio', 'qcom,pm8550vs-gpio', 'qcom,pm8916-gpio', 'qcom,pm8917-gpio', 'qcom,pm8921-gpio', 'qcom,pm8941-gpio', 'qcom,pm8950-gpio', 'qcom,pm8953-gpio', 'qcom,pm8994-gpio', 'qcom,pm8998-gpio', 'qcom,pma8084-gpio', 'qcom,pmc8180-gpio', 'qcom,pmc8180c-gpio', 'qcom,pmc8380-gpio', 'qcom,pmd8028-gpio', 'qcom,pmi632-gpio', 'qcom,pmi8950-gpio', 'qc
- om,pmi8994-gpio', 'qcom,pmi8998-gpio', 'qcom,pmih0108-gpio', 'qcom,pmk8350-gpio', 'qcom,pmk8550-gpio', 'qcom,pmm8155au-gpio', 'qcom,pmm8654au-gpio', 'qcom,pmp8074-gpio', 'qcom,pmr735a-gpio', 'qcom,pmr735b-gpio', 'qcom,pmr735d-gpio', 'qcom,pms405-gpio', 'qcom,pmx55-gpio', 'qcom,pmx65-gpio', 'qcom,pmx75-gpio', 'qcom,pmxr2230-gpio']
-	from schema $id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: pmic@0: mpps@a000:compatible: 'oneOf' conditional failed, one must be fixed:
-	'qcom,pm8937-mpp' is not one of ['qcom,pm8019-mpp', 'qcom,pm8226-mpp', 'qcom,pm8841-mpp', 'qcom,pm8916-mpp', 'qcom,pm8941-mpp', 'qcom,pm8950-mpp', 'qcom,pmi8950-mpp', 'qcom,pm8994-mpp', 'qcom,pma8084-mpp', 'qcom,pmi8994-mpp']
-	'qcom,pm8937-mpp' is not one of ['qcom,pm8018-mpp', 'qcom,pm8038-mpp', 'qcom,pm8058-mpp', 'qcom,pm8821-mpp', 'qcom,pm8901-mpp', 'qcom,pm8917-mpp', 'qcom,pm8921-mpp']
-	'qcom,ssbi-mpp' was expected
-	from schema $id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: gpio@c000: compatible:0: 'qcom,pm8937-gpio' is not one of ['qcom,pm2250-gpio', 'qcom,pm660-gpio', 'qcom,pm660l-gpio', 'qcom,pm6125-gpio', 'qcom,pm6150-gpio', 'qcom,pm6150l-gpio', 'qcom,pm6350-gpio', 'qcom,pm6450-gpio', 'qcom,pm7250b-gpio', 'qcom,pm7325-gpio', 'qcom,pm7550ba-gpio', 'qcom,pm8005-gpio', 'qcom,pm8018-gpio', 'qcom,pm8019-gpio', 'qcom,pm8038-gpio', 'qcom,pm8058-gpio', 'qcom,pm8150-gpio', 'qcom,pm8150b-gpio', 'qcom,pm8150l-gpio', 'qcom,pm8226-gpio', 'qcom,pm8350-gpio', 'qcom,pm8350b-gpio', 'qcom,pm8350c-gpio', 'qcom,pm8450-gpio', 'qcom,pm8550-gpio', 'qcom,pm8550b-gpio', 'qcom,pm8550ve-gpio', 'qcom,pm8550vs-gpio', 'qcom,pm8916-gpio', 'qcom,pm8917-gpio', 'qcom,pm8921-gpio', 'qcom,pm8941-gpio', 'qcom,pm8950-gpio', 'qcom,pm8953-gpio', 'qcom,pm8994-gpio', 'qcom,pm8998-gpio', 'qcom,pma8084-gpio', 'qcom,pmc8180-gpio', 'qcom,pmc8180c-gpio', 'qcom,pmc8380-gpio', 'qcom,pmd8028-gpio', 'qcom,pmi632-gpio', 'qcom,pmi8950-gpio', 'qcom,pmi8
- 994-gpio', 'qcom,pmi8998-gpio', 'qcom,pmih0108-gpio', 'qcom,pmk8350-gpio', 'qcom,pmk8550-gpio', 'qcom,pmm8155au-gpio', 'qcom,pmm8654au-gpio', 'qcom,pmp8074-gpio', 'qcom,pmr735a-gpio', 'qcom,pmr735b-gpio', 'qcom,pmr735d-gpio', 'qcom,pms405-gpio', 'qcom,pmx55-gpio', 'qcom,pmx65-gpio', 'qcom,pmx75-gpio', 'qcom,pmxr2230-gpio']
-	from schema $id: http://devicetree.org/schemas/pinctrl/qcom,pmic-gpio.yaml#
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: /soc@0/spmi@200f000/pmic@0/gpio@c000: failed to match any schema with compatible: ['qcom,pm8937-gpio', 'qcom,spmi-gpio']
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: mpps@a000: compatible: 'oneOf' conditional failed, one must be fixed:
-	'qcom,pm8937-mpp' is not one of ['qcom,pm8019-mpp', 'qcom,pm8226-mpp', 'qcom,pm8841-mpp', 'qcom,pm8916-mpp', 'qcom,pm8941-mpp', 'qcom,pm8950-mpp', 'qcom,pmi8950-mpp', 'qcom,pm8994-mpp', 'qcom,pma8084-mpp', 'qcom,pmi8994-mpp']
-	'qcom,pm8937-mpp' is not one of ['qcom,pm8018-mpp', 'qcom,pm8038-mpp', 'qcom,pm8058-mpp', 'qcom,pm8821-mpp', 'qcom,pm8901-mpp', 'qcom,pm8917-mpp', 'qcom,pm8921-mpp']
-	'qcom,ssbi-mpp' was expected
-	from schema $id: http://devicetree.org/schemas/pinctrl/qcom,pmic-mpp.yaml#
-arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: /soc@0/spmi@200f000/pmic@0/mpps@a000: failed to match any schema with compatible: ['qcom,pm8937-mpp', 'qcom,spmi-mpp']
-
-
-
-
-
+-- 
+With best wishes
+Dmitry
 
