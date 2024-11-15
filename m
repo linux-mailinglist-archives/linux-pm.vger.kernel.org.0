@@ -1,139 +1,207 @@
-Return-Path: <linux-pm+bounces-17631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B41759CEABC
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:10:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BCB19CF0BA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 16:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A64D283F53
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:10:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C3C0B39F5D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2024 15:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437A31D45EF;
-	Fri, 15 Nov 2024 15:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66CDC1D5AC0;
+	Fri, 15 Nov 2024 15:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJTkSus5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2OuknJs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2FC1CD210;
-	Fri, 15 Nov 2024 15:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCF51D5AAE;
+	Fri, 15 Nov 2024 15:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731683428; cv=none; b=LCSWqz3Xpwto9H29XGT66ZEgoBmUXPWU1ew241hsjEFMl0JXA0O4wLR5JO0WtuQwOTwHYvZsOm5IJoO87Re3OV9TTMBk8xdgSRBECpKeeXkSjvW4cqyHSLECE70BD00fKa7D2BqWovPgzSU52IBC6VSgAVZE5wyJplc+7K1iciw=
+	t=1731683590; cv=none; b=VaAVSBfssyajUPLPHdc3pA34C4ebIIPlUPp5F7sEoYIwGVtLMPHIt5nPmHX7VcjO2nRzUC+d9N6F6jYbx3z8v+bKJ/25qoZQnYL27nc8b09nbf/WvC4MfTQvDvlkijmuxqoSpq6NZox3ALyea4EW7216XJ2sIPAhYA5t9aQxu2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731683428; c=relaxed/simple;
-	bh=XuYVDKWxJgRzbEDpq2EnHT3AN84MFrPjCNvbUOa8htY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HaHr8kwnUThZ0Qorrg5z3qgt2RH6snjXgveXZAdFcFKGrNei3s2EkFPb1qW0NPVUqhjQVkzAfEGbi1RAaPlXw0mvqL5cskIgGXHPRPQwDh17IgE7VFERBik4KIne/C9psvKbv2DQCyp/+Vyz0wjgSwTbETvl2duCB0iSSAMo0mQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJTkSus5; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-539e63c8678so2027130e87.0;
-        Fri, 15 Nov 2024 07:10:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731683425; x=1732288225; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aUVjcB0sOga4/HfM/3eh0FFL6nDbEVfse0QAH2YWS2s=;
-        b=OJTkSus59njDKR0WGrJY54DVwkuxG16kjZy8w0+uQLTLTjK6BYJO2/nu1VEG/mOHNT
-         abuggyp3k51q9J1Eb5s623nmB2p9+x2jwfRuyREm0HK9u3MneIHCq4Ja9XoSIVBiuKJs
-         ayhtn8km47j1AQotTmZtaI4lE/hB8E8OPi7namtEoqAsjsRij4+MaOkwwNQtFo0y2sNE
-         6Xh1Tir1mk0dTykw6qRhg3euqw1gH0m3Btbs8dgVXsXZUPNEcN6VQ4Q+k5q2j0ygFQW9
-         xw2lHcvA9lSCetOI8kJ1gfWFOeQVGonUX8osrTv2IEVeBOBG6Tb/M8VYr4Xu3jRuGZeS
-         mv5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731683425; x=1732288225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aUVjcB0sOga4/HfM/3eh0FFL6nDbEVfse0QAH2YWS2s=;
-        b=R+XFMtF9DHhM2pRWXrWg7vi7+Sf5nlHiNeNQ4RWHQ8urycwpb2dVn6H6KKcWxhJnVB
-         txx4r1q5oMdPQzbYVFXTZ1mcGnQoYAcV+y9pHg9DRUqfahMnGouefK+SlAlUT78vmN1L
-         6tiyvbeUIF1ECGPznQ5X/EB9FK2ipXq6fk+EpTVAwscdxhbQusla26yl06tQbPJi6l+q
-         g5d8fHnuuGR97n2QQdQmMH+ZaP+uMfXQcJLU+ua3bzYVW43lbY/EOBJ59eGDA55b+nR5
-         g0t1pA3fHhHO+h6aZCnd281WVIbTRS4urwGvlwHPs7pdkYfDdQVdUTcwJEoqhCyD7Tva
-         RT/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVyCP6JPuRx7lAtLFuBzIhayGBAm2lan8apwcAtpTs6OjDOG8Mq0J/bK9GdMl+WeJLatOp2Ng2UdvZNSDtp1w==@vger.kernel.org, AJvYcCWFgGY9WxZ7Gc1SL3OypQ+8rDjX+yPUcimAXS9Bj0R6qyg647GwXAjma33uwdIAwF1iGEeUzDmTaOzVPviz@vger.kernel.org, AJvYcCWojxc/3yslg3sqfGj5f1w9uLI2bq6UyCx47Il/xFMIn1GJh2E1VU7WmTYZuiaJud5cYXbYD3kdySY=@vger.kernel.org, AJvYcCXmGWkpnM/WwNcVoQS3wYUC9iW7S6+BcQjtPIy3DG0j0VuJaZuuSy32twxfSiYcnV5jl9ahfVhpgBrF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3XgkrOe8rvSsqrHbh8se0eTvLwlAOmAtTAlrEL1k9yUZKlyaF
-	XUu/CEZtvKeq4KW1163QBf9qVCnIZQNjmlv/vjcrw3JH+9jL0mobhD8Nyo1Uh+vE3FV7LmiWYjk
-	wBnW97INVfdnvFMzBM/4epfuduEM=
-X-Google-Smtp-Source: AGHT+IFSKvpcyw2QBM31REHWotzjXsDEflFMRHu0OtabMrDtzWscE1nvK6FbR8cj0/dESTLG8Of/bCGbaYf8tMdXAx8=
-X-Received: by 2002:a05:6512:1190:b0:53d:a024:ddb2 with SMTP id
- 2adb3069b0e04-53dab2a076amr1380484e87.24.1731683424294; Fri, 15 Nov 2024
- 07:10:24 -0800 (PST)
+	s=arc-20240116; t=1731683590; c=relaxed/simple;
+	bh=klAyE4yJ7Pn0JVsn2LEXwcXJbbb9kRKwa/irKLMf2T4=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=Qwqk4NfIK64+HAregbVHSzbJbjOkrXNQYffuR03R7VpFWbUGpUFb48wxHythcf2C9EyShCsGiE9Jajp9+3hFkl7QuNJyvrqZsk6z72/fRPoaXovaGJuH+yHwIDOYJxcYkXKQ1RsEJjuGTuV4Nql1twuRIbsrwuuznHEU8TDh4B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2OuknJs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 711A0C4CECF;
+	Fri, 15 Nov 2024 15:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731683589;
+	bh=klAyE4yJ7Pn0JVsn2LEXwcXJbbb9kRKwa/irKLMf2T4=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=Y2OuknJsoQAQB5m7vthDedO97fOYrfqPfuhYnNLlKVzFW7tZk9IRd+A1mUc7AYKSJ
+	 PbyyduVPzN2oe+HqLk4I4d6Oe5V/AHzXht4DMRL0s99krwOsFnG7buZMdrloTcpeWj
+	 2P1u2t7iCC6o3us+6BQars4uiZo1ddxYYDq6KLslps0O26EgkkLwJ1PFNnUSLuHdT1
+	 H7jtP/DfTPZv0p+TEgJ/LISYJwjFrpD1TSPmFSu42OgVifnAhOGTlDIl9iqB4rqvgI
+	 taQSFHcUReld+K139G1fP8NQ/wovMoB1ZOLFOgXoSlRPM1xcGOjD7TnJrJrKu1vny9
+	 sOG8lk1AC/+Hw==
+Date: Fri, 15 Nov 2024 09:13:07 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241113-topic-sm8x50-gpu-bw-vote-v1-0-3b8d39737a9b@linaro.org>
- <20241113-topic-sm8x50-gpu-bw-vote-v1-2-3b8d39737a9b@linaro.org>
- <sgz4h6rlmekiwypaisjbnej326wv4vaqt3mgspp4fs4tg3mdfx@cwmdqcu6gwbf>
- <63a2b391-8b71-41cb-bed2-3bc7fd2154ab@linaro.org> <CAA8EJpoFm8EjfBq70RTPtwR7Y7Rm24kHO20NukGiLGRYD0p9Tg@mail.gmail.com>
-In-Reply-To: <CAA8EJpoFm8EjfBq70RTPtwR7Y7Rm24kHO20NukGiLGRYD0p9Tg@mail.gmail.com>
-From: Rob Clark <robdclark@gmail.com>
-Date: Fri, 15 Nov 2024 07:10:09 -0800
-Message-ID: <CAF6AEGty1fcA13rDOOJQbhT4o=CTtBYtGFspowZbxD1c-VE9Bw@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/8] drm/msm: adreno: add GMU_BW_VOTE quirk
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: neil.armstrong@linaro.org, Akhil P Oommen <quic_akhilpo@quicinc.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Sean Paul <sean@poorly.run>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Connor Abbott <cwabbott0@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: iommu@lists.linux.dev, Zhang Rui <rui.zhang@intel.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, Will Deacon <will@kernel.org>, 
+ linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, devicetree@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>, 
+ Joerg Roedel <joro@8bytes.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Robin Murphy <robin.murphy@arm.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Bjorn Andersson <andersson@kernel.org>, Dang Huynh <danct12@riseup.net>, 
+ linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, 
+ linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+In-Reply-To: <20241113-msm8917-v6-0-c348fb599fef@mainlining.org>
+References: <20241113-msm8917-v6-0-c348fb599fef@mainlining.org>
+Message-Id: <173168321268.2749739.14402170098343790318.robh@kernel.org>
+Subject: Re: [PATCH v6 00/10] Add MSM8917/PM8937/Redmi 5A
 
-On Fri, Nov 15, 2024 at 6:18=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Fri, 15 Nov 2024 at 11:21, Neil Armstrong <neil.armstrong@linaro.org> =
-wrote:
-> >
-> > On 15/11/2024 08:07, Dmitry Baryshkov wrote:
-> > > On Wed, Nov 13, 2024 at 04:48:28PM +0100, Neil Armstrong wrote:
-> > >> The Adreno GMU Management Unit (GNU) can also scale the DDR Bandwidt=
-h
-> > >> along the Frequency and Power Domain level, but by default we leave =
-the
-> > >> OPP core vote for the interconnect ddr path.
-> > >>
-> > >> While scaling via the interconnect path was sufficient, newer GPUs
-> > >> like the A750 requires specific vote paremeters and bandwidth to
-> > >> achieve full functionality.
-> > >>
-> > >> Add a new Quirk enabling DDR Bandwidth vote via GMU.
-> > >
-> > > Please describe, why this is defined as a quirk rather than a proper
-> > > platform-level property. From my experience with 6xx and 7xx, all the
-> > > platforms need to send some kind of BW data to the GMU.
-> >
-> > Well APRIV, CACHED_COHERENT & PREEMPTION are HW features, why this can'=
-t be part of this ?
-> >
-> > Perhaps the "quirks" bitfield should be features instead ?
->
-> Sounds like that.
 
-But LMLOADKILL_DISABLE and TWO_PASS_USE_WFI are quirks.. so it is kind
-of a mix of quirks and features.  So meh
-
-BR,
--R
-
->
+On Wed, 13 Nov 2024 16:11:41 +0100, Barnabás Czémán wrote:
+> This patch series add support for MSM8917 soc with PM8937 and
+> Xiaomi Redmi 5A (riva).
+> 
+> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> ---
+> Changes in v6:
+> - msm8917:
+>   - Consolidate SDC pins, remove sdc2-cd-on/off pins.
+>   - Remove cluster-sleep-0 and cluster-sleep-1
+>   and rename cluster-sleep-2 to cluster-sleep-0.
+>   - Fix spi, i2c and related pinctrl namings.
+> - msm8917-xiaomi-riva: follow i2c name changes.
+> - Link to v5: https://lore.kernel.org/r/20241112-msm8917-v5-0-3ca34d33191b@mainlining.org
+> 
+> Changes in v5:
+> - msm8917:
+>   - Remove aliases.
+>   - Rename spi, i2c labels and pins.
+>   - Remove clock-frequency from timers
+>   - Remove unused mpss_mem region.
+>   - Use mboxes where it can be used, only smd-edge uses qcom,ipc.
+> - msm8917-xiaomi-riva: Follow i2c label changes.
+> - Link to v4: https://lore.kernel.org/r/20241109-msm8917-v4-0-8be9904792ab@mainlining.org
+> 
+> Changes in v4:
+> - msm8917 pinctrl: Fix gpio regexp in the schema.
+> - msm8937 tsens: Rename ops_msm8976 to ops_common and use it for msm8937.
+> - msm8917: fix address padding, naming and ordering, remove polling-delays.
+> - Remove applied patches from the series.
+> - Link to v3: https://lore.kernel.org/r/20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org
+> 
+> Changes in v3:
+> - msm8917-xiaomi-riva: Fix issues addressed by Konrad.
+> - msm8917: Fix node addresses, orders of some properties.
+> - pm8937: simplify vadc channels.
+> - msm8917 pinctrl: Fix schema issues addressed by Krzysztof.
+> - Remove applied tcsr patch from this series.
+> - Reword some commit title.
+> - Link to v2: https://lore.kernel.org/r/20241031-msm8917-v2-0-8a075faa89b1@mainlining.org
+> 
+> Changes in v2:
+> - Add msm8937 tsens support.
+> - Fix issues addressed by reviews.
+> - Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
+> 
+> ---
+> Barnabás Czémán (7):
+>       dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
+>       dt-bindings: thermal: tsens: Add MSM8937
+>       thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
+>       dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU to SMMUv1 compatibles
+>       dt-bindings: nvmem: Add compatible for MS8917
+>       dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
+>       arm64: dts: qcom: Add Xiaomi Redmi 5A
+> 
+> Dang Huynh (1):
+>       arm64: dts: qcom: Add PM8937 PMIC
+> 
+> Otto Pflüger (2):
+>       pinctrl: qcom: Add MSM8917 tlmm pinctrl driver
+>       arm64: dts: qcom: Add initial support for MSM8917
+> 
+>  Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
+>  .../devicetree/bindings/iommu/qcom,iommu.yaml      |    1 +
+>  .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
+>  .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     |  160 ++
+>  .../devicetree/bindings/thermal/qcom-tsens.yaml    |    1 +
+>  arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+>  arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  297 +++
+>  arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1946 ++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/pm8937.dtsi               |  152 ++
+>  drivers/pinctrl/qcom/Kconfig.msm                   |    6 +
+>  drivers/pinctrl/qcom/Makefile                      |    1 +
+>  drivers/pinctrl/qcom/pinctrl-msm8917.c             | 1620 ++++++++++++++++
+>  drivers/thermal/qcom/tsens-v1.c                    |   21 +-
+>  drivers/thermal/qcom/tsens.c                       |    3 +
+>  drivers/thermal/qcom/tsens.h                       |    2 +-
+>  15 files changed, 4211 insertions(+), 8 deletions(-)
+> ---
+> base-commit: 6d59cab07b8d74d0f0422b750038123334f6ecc2
+> change-id: 20241019-msm8917-17c3d0ff4a52
+> 
+> Best regards,
 > --
-> With best wishes
-> Dmitry
+> Barnabás Czémán <barnabas.czeman@mainlining.org>
+> 
+> 
+
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y qcom/msm8917-xiaomi-riva.dtb' for 20241113-msm8917-v6-0-c348fb599fef@mainlining.org:
+
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: /soc@0/syscon@1937000: failed to match any schema with compatible: ['qcom,tcsr-msm8917', 'syscon']
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: pmic@0: gpio@c000:compatible:0: 'qcom,pm8937-gpio' is not one of ['qcom,pm2250-gpio', 'qcom,pm660-gpio', 'qcom,pm660l-gpio', 'qcom,pm6125-gpio', 'qcom,pm6150-gpio', 'qcom,pm6150l-gpio', 'qcom,pm6350-gpio', 'qcom,pm6450-gpio', 'qcom,pm7250b-gpio', 'qcom,pm7325-gpio', 'qcom,pm7550ba-gpio', 'qcom,pm8005-gpio', 'qcom,pm8018-gpio', 'qcom,pm8019-gpio', 'qcom,pm8038-gpio', 'qcom,pm8058-gpio', 'qcom,pm8150-gpio', 'qcom,pm8150b-gpio', 'qcom,pm8150l-gpio', 'qcom,pm8226-gpio', 'qcom,pm8350-gpio', 'qcom,pm8350b-gpio', 'qcom,pm8350c-gpio', 'qcom,pm8450-gpio', 'qcom,pm8550-gpio', 'qcom,pm8550b-gpio', 'qcom,pm8550ve-gpio', 'qcom,pm8550vs-gpio', 'qcom,pm8916-gpio', 'qcom,pm8917-gpio', 'qcom,pm8921-gpio', 'qcom,pm8941-gpio', 'qcom,pm8950-gpio', 'qcom,pm8953-gpio', 'qcom,pm8994-gpio', 'qcom,pm8998-gpio', 'qcom,pma8084-gpio', 'qcom,pmc8180-gpio', 'qcom,pmc8180c-gpio', 'qcom,pmc8380-gpio', 'qcom,pmd8028-gpio', 'qcom,pmi632-gpio', 'qcom,pmi8950-gpio', 'qc
+ om,pmi8994-gpio', 'qcom,pmi8998-gpio', 'qcom,pmih0108-gpio', 'qcom,pmk8350-gpio', 'qcom,pmk8550-gpio', 'qcom,pmm8155au-gpio', 'qcom,pmm8654au-gpio', 'qcom,pmp8074-gpio', 'qcom,pmr735a-gpio', 'qcom,pmr735b-gpio', 'qcom,pmr735d-gpio', 'qcom,pms405-gpio', 'qcom,pmx55-gpio', 'qcom,pmx65-gpio', 'qcom,pmx75-gpio', 'qcom,pmxr2230-gpio']
+	from schema $id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: pmic@0: mpps@a000:compatible: 'oneOf' conditional failed, one must be fixed:
+	'qcom,pm8937-mpp' is not one of ['qcom,pm8019-mpp', 'qcom,pm8226-mpp', 'qcom,pm8841-mpp', 'qcom,pm8916-mpp', 'qcom,pm8941-mpp', 'qcom,pm8950-mpp', 'qcom,pmi8950-mpp', 'qcom,pm8994-mpp', 'qcom,pma8084-mpp', 'qcom,pmi8994-mpp']
+	'qcom,pm8937-mpp' is not one of ['qcom,pm8018-mpp', 'qcom,pm8038-mpp', 'qcom,pm8058-mpp', 'qcom,pm8821-mpp', 'qcom,pm8901-mpp', 'qcom,pm8917-mpp', 'qcom,pm8921-mpp']
+	'qcom,ssbi-mpp' was expected
+	from schema $id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: gpio@c000: compatible:0: 'qcom,pm8937-gpio' is not one of ['qcom,pm2250-gpio', 'qcom,pm660-gpio', 'qcom,pm660l-gpio', 'qcom,pm6125-gpio', 'qcom,pm6150-gpio', 'qcom,pm6150l-gpio', 'qcom,pm6350-gpio', 'qcom,pm6450-gpio', 'qcom,pm7250b-gpio', 'qcom,pm7325-gpio', 'qcom,pm7550ba-gpio', 'qcom,pm8005-gpio', 'qcom,pm8018-gpio', 'qcom,pm8019-gpio', 'qcom,pm8038-gpio', 'qcom,pm8058-gpio', 'qcom,pm8150-gpio', 'qcom,pm8150b-gpio', 'qcom,pm8150l-gpio', 'qcom,pm8226-gpio', 'qcom,pm8350-gpio', 'qcom,pm8350b-gpio', 'qcom,pm8350c-gpio', 'qcom,pm8450-gpio', 'qcom,pm8550-gpio', 'qcom,pm8550b-gpio', 'qcom,pm8550ve-gpio', 'qcom,pm8550vs-gpio', 'qcom,pm8916-gpio', 'qcom,pm8917-gpio', 'qcom,pm8921-gpio', 'qcom,pm8941-gpio', 'qcom,pm8950-gpio', 'qcom,pm8953-gpio', 'qcom,pm8994-gpio', 'qcom,pm8998-gpio', 'qcom,pma8084-gpio', 'qcom,pmc8180-gpio', 'qcom,pmc8180c-gpio', 'qcom,pmc8380-gpio', 'qcom,pmd8028-gpio', 'qcom,pmi632-gpio', 'qcom,pmi8950-gpio', 'qcom,pmi8
+ 994-gpio', 'qcom,pmi8998-gpio', 'qcom,pmih0108-gpio', 'qcom,pmk8350-gpio', 'qcom,pmk8550-gpio', 'qcom,pmm8155au-gpio', 'qcom,pmm8654au-gpio', 'qcom,pmp8074-gpio', 'qcom,pmr735a-gpio', 'qcom,pmr735b-gpio', 'qcom,pmr735d-gpio', 'qcom,pms405-gpio', 'qcom,pmx55-gpio', 'qcom,pmx65-gpio', 'qcom,pmx75-gpio', 'qcom,pmxr2230-gpio']
+	from schema $id: http://devicetree.org/schemas/pinctrl/qcom,pmic-gpio.yaml#
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: /soc@0/spmi@200f000/pmic@0/gpio@c000: failed to match any schema with compatible: ['qcom,pm8937-gpio', 'qcom,spmi-gpio']
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: mpps@a000: compatible: 'oneOf' conditional failed, one must be fixed:
+	'qcom,pm8937-mpp' is not one of ['qcom,pm8019-mpp', 'qcom,pm8226-mpp', 'qcom,pm8841-mpp', 'qcom,pm8916-mpp', 'qcom,pm8941-mpp', 'qcom,pm8950-mpp', 'qcom,pmi8950-mpp', 'qcom,pm8994-mpp', 'qcom,pma8084-mpp', 'qcom,pmi8994-mpp']
+	'qcom,pm8937-mpp' is not one of ['qcom,pm8018-mpp', 'qcom,pm8038-mpp', 'qcom,pm8058-mpp', 'qcom,pm8821-mpp', 'qcom,pm8901-mpp', 'qcom,pm8917-mpp', 'qcom,pm8921-mpp']
+	'qcom,ssbi-mpp' was expected
+	from schema $id: http://devicetree.org/schemas/pinctrl/qcom,pmic-mpp.yaml#
+arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dtb: /soc@0/spmi@200f000/pmic@0/mpps@a000: failed to match any schema with compatible: ['qcom,pm8937-mpp', 'qcom,spmi-mpp']
+
+
+
+
+
 
