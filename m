@@ -1,49 +1,50 @@
-Return-Path: <linux-pm+bounces-17665-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17666-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9861E9CFE8E
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2024 12:31:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 111B09CFE92
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2024 12:31:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D34DB26B69
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2024 11:31:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FFC0B286E0
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2024 11:31:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90CC7190674;
-	Sat, 16 Nov 2024 11:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B7619A2A3;
+	Sat, 16 Nov 2024 11:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bnGEno9U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwpfYpLP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BDF722338;
-	Sat, 16 Nov 2024 11:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC4D22338;
+	Sat, 16 Nov 2024 11:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731756683; cv=none; b=G291b/RIldyOtN5u8H/yaO8O6bCyg6FfNBgbkpx4yTnIyhT382YfXseCdhlDDc+Tcil2Pf0+2p9yzQqKyt7ATJzp8+zytNmLtvdcTIWgvX6ZL5OX6gKLccCP3yStRFhB/wLjATH5PbJfmal1X3dcypB7i4E5h4cGZ/rs/dQP2BQ=
+	t=1731756687; cv=none; b=K+nI/P60PU5OLogQsjbbkBmNTiQsBX9UdU+C8UydZrY0uqrGC1m34wTuT4yHFT+rC4jeiDg+wQ0zNuM5v0dXJEuL1L4c1cdf1Wj0KOV6tS8m1E+xcHUr8HlGW1f9T5Lo0TLFRgimfn6U6VE1jVPPNrZngVNyJ6faZtDApedX5iE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731756683; c=relaxed/simple;
-	bh=cj87K21fiofZv5vzKeP0rOuBx822aemdxsrd4srrtaU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SVtzuu3JbLyehynGYkbw3ETyEvq8IExLx49nplNE7TNe5zqDgSC+YuxGbZXoZsGNhUIpsp2eGoh17VnYtoUIeowgUgQCfSeubU9L0LbS9j4U5NxpKc2Z64VnhuUfthPd7ROpRb4DyFnFNPNb0JFCfUsA7q23sEf1mZekaAhegTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bnGEno9U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FD7C4CEC3;
-	Sat, 16 Nov 2024 11:31:18 +0000 (UTC)
+	s=arc-20240116; t=1731756687; c=relaxed/simple;
+	bh=8GcodKB88++Kr94XKflhS+lzQOpD3Fcjty+zEZyc4Eo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=eLBfp9A+o6/7Rvu9jxbd5ktIqUfOW4D+G337dSeXGj2XuRGbu0vZSlYj01yPULqRzc3mMyFHfVrtr9sug7WXqTpUZIl9GKMP23kC4J9tRJCn1OhBxFMcLgsiJPjeoiYY5AuvsB8VG5kKyn0xqNcPGt+FQts3Bq/94Ij7BF4HsgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TwpfYpLP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D97FC4CED9;
+	Sat, 16 Nov 2024 11:31:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731756682;
-	bh=cj87K21fiofZv5vzKeP0rOuBx822aemdxsrd4srrtaU=;
-	h=From:Subject:Date:To:Cc:From;
-	b=bnGEno9UlChK/cjIKJhDHBGZR9beusm+X1/Rj4zSqTJDM50i9PEfM4HgaqJYOjGcT
-	 ANYUctiMydk2swyerWuCzVr3wSmQ2uNnFO6mCcNHSOdMD/31dVuniGMDk3nERgvOgz
-	 lwz3DGkmQ9lbI1jKbtSo4bqSdOR46RlWVUmFv58LCbktU/RIz3bOLmuBL96dGzhlSV
-	 HGdXbBp+4hxGUIpLtPoYJvUG2oscKCfjZRBTWtOXpua97Vn4+VDM2QoH5m6aU4otoF
-	 JaSjnOh9TcPa2z9PPlaUKHJzeU/0NreTY0hK2+lxj/RuGocSN5Bcoyd8kyO6Mv8sE/
-	 JAbvsPV5lNPUg==
+	s=k20201202; t=1731756686;
+	bh=8GcodKB88++Kr94XKflhS+lzQOpD3Fcjty+zEZyc4Eo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=TwpfYpLPVwpaWuK3bVCmluDriUaKrl/PoYVN3Z1GojGjQ+Skhbov71Rg5/x5xeGXa
+	 A1LMyFpgIIDsjX7VefIAVnMs0S952zOo4+En+8xkR5Luqj9iM/ZKNm2Ag7UhcCn81u
+	 +1m2P7wGBwdrlTEkuUYxnuLMRyZ8yQsqO3z+3fUrh7zDVYYeJSoFysXPRpyFzi6Avc
+	 gstE9rJf2X3Rove02k2vBZb/N7BvTP2cHdXV7zdXcHOTNzw8O9rsk/AIO77q9F5FeX
+	 7MHDnZs+GJ/+cKhLwvuPSgnRR0Q9wVAsEZ6MwywlLna2sEds4rfRFAt2r3Wht9hWyU
+	 ObGqT0U0PaZcQ==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH 0/2] Fix SC8180X cpufreq dt-bindings error
-Date: Sat, 16 Nov 2024 12:31:16 +0100
-Message-Id: <20241116-topic-sc8180x_cpufreq_bindings-v1-0-e7db627da99c@oss.qualcomm.com>
+Date: Sat, 16 Nov 2024 12:31:17 +0100
+Subject: [PATCH 1/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SC8180X
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,10 +53,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAISCOGcC/x3NQQqDMBBA0avIrA1kgqahVykimkzsbGKaaUWQ3
- N3Q5dv8f4FQYRJ4dhcUOlh4Tw3Yd+DfS9pIcWgGo82AiFZ998xeiXfo9Dn7/IuFPvPKKXDaRDk
- bx9U+0GqzQIvkQpHP/+A11XoDPyb/jnAAAAA=
-X-Change-ID: 20241116-topic-sc8180x_cpufreq_bindings-86f5b671602a
+Message-Id: <20241116-topic-sc8180x_cpufreq_bindings-v1-1-e7db627da99c@oss.qualcomm.com>
+References: <20241116-topic-sc8180x_cpufreq_bindings-v1-0-e7db627da99c@oss.qualcomm.com>
+In-Reply-To: <20241116-topic-sc8180x_cpufreq_bindings-v1-0-e7db627da99c@oss.qualcomm.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
  Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -68,36 +68,46 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731756678; l=814;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1731756678; l=1298;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=cj87K21fiofZv5vzKeP0rOuBx822aemdxsrd4srrtaU=;
- b=lvnZGuVjrdgCr4nYrC4JSHAQhDKU35nLWlNDxPvkNRGwEtkBwS997Ptzy+25xXmSSml2VDDow
- q/Au2QOziSgBqr34uGFhOsS2nH/eOk4vnkjMfRb/+C4hNRNKz/CZD9E
+ bh=UJAqeQny8c13BwkHDfrGF6OfhjTo040lRi9YpokJKFM=;
+ b=XerdUPOqLSqZuuadnP6PRbh1qP09duhQj5siAAIIyGF/K/6ARqS/KN1uTThsq4LmlYmv+T7SP
+ ZHHiZRjXOmaBMxjtc9Kz8txngF3+NkhrME+6zJmJdbO8D40stjGc4L6
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Add the bindings and dt bits to fix:
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-cpufreq@18323000: compatible: 'oneOf' conditional failed, one must be fixed:
-        ['qcom,cpufreq-hw'] is too short
-
-No functional changes.
+Add a SoC-specific compatible for SC8180X. It has 2 domains and uses
+the older, non-EPSS hardware.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
-Konrad Dybcio (2):
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Add SC8180X compatible
-      arm64: dts: qcom: sc8180x: Add a SoC-specific compatible to cpufreq-hw
-
  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 2 ++
- arch/arm64/boot/dts/qcom/sc8180x.dtsi                          | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
----
-base-commit: 744cf71b8bdfcdd77aaf58395e068b7457634b2c
-change-id: 20241116-topic-sc8180x_cpufreq_bindings-86f5b671602a
+ 1 file changed, 2 insertions(+)
 
-Best regards,
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+index 729f68c1f81d32e54e170879c4f7dd91c0d7c80a..e937eb7355e7fb74c0aeafb4cb9f5ed80d96e6c3 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+@@ -23,6 +23,7 @@ properties:
+           - enum:
+               - qcom,qcm2290-cpufreq-hw
+               - qcom,sc7180-cpufreq-hw
++              - qcom,sc8180x-cpufreq-hw
+               - qcom,sdm670-cpufreq-hw
+               - qcom,sdm845-cpufreq-hw
+               - qcom,sm6115-cpufreq-hw
+@@ -135,6 +136,7 @@ allOf:
+               - qcom,qdu1000-cpufreq-epss
+               - qcom,sa8255p-cpufreq-epss
+               - qcom,sc7180-cpufreq-hw
++              - qcom,sc8180x-cpufreq-hw
+               - qcom,sc8280xp-cpufreq-epss
+               - qcom,sdm670-cpufreq-hw
+               - qcom,sdm845-cpufreq-hw
+
 -- 
-Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+2.47.0
 
 
