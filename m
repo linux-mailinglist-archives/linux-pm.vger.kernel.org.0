@@ -1,147 +1,188 @@
-Return-Path: <linux-pm+bounces-17682-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17683-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A77ED9D0419
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Nov 2024 14:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC23B9D0539
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Nov 2024 19:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B4EC283CD5
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Nov 2024 13:34:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D8E9281C35
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Nov 2024 18:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912AB1714DF;
-	Sun, 17 Nov 2024 13:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65E381DB372;
+	Sun, 17 Nov 2024 18:44:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oIw/hJFZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="edEoZQt2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93F51803A;
-	Sun, 17 Nov 2024 13:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5481DB344
+	for <linux-pm@vger.kernel.org>; Sun, 17 Nov 2024 18:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731850484; cv=none; b=L0NI6HXMt3KUwLTrq9DiptM4XnuCwI9Sr0GqsjAjVgLIcJ193D0IufP7CyLqvCUyXo3VsAwh9w36Emcd3KVbY+meuJZbX/7Oeei4tVSHAo6K6ralZ2R7a7arxidZM9EPfcDlvYs6tzwDkiTal1QxerYYLK/IEKxKjQwCU8RDvo4=
+	t=1731869063; cv=none; b=gW73nxiU8DOP4L+rEY6N8dOjvN9YKo9Q4XtH2hPKw9dWcDJ+DGwTC7rGNkw+VAVYa4puOkwbRWm6npIZSTXQH3Amw+eXWLUUGPjGHZTwU74LYk7WWmuc2jn23ZiWAmWJ2eTseQB6ijfGLew2rm36oVfREcz3pFDxFzTcNI0SRjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731850484; c=relaxed/simple;
-	bh=B187G/gUaksl/fOU+jVWa2TR01jUHxL+V+NIxnNek3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZQZS5GPaxmEEMCk9Q1WtJHWBbnLjYN9YGou7W3QqqkfJ/VUveWT/bl2E+AWXmYJzodzrQfYUjn+rMVbV+lMfMwk+9gqWPXU3f4wRRVZSnEgRPQdcd0U4ek2Yw2kcV9NSOrzQW7F6l9NJqbeLz4mP5G/7hTtfj2j/ztQ6XrHzMY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oIw/hJFZ; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731850482; x=1763386482;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B187G/gUaksl/fOU+jVWa2TR01jUHxL+V+NIxnNek3s=;
-  b=oIw/hJFZZcHSpN82A2O+NP4nWGYIlwLWI/3U13+ARkDGbtALN1lja3kT
-   YtbobYTQKiotE9bIwPAJnnoihqrWbMqkxaToYIAA9TruMuWlJ20rttr7h
-   cJW7Ut53BwXT0m9dAd+yvyhl9FBJIagiF0B28CHhrbgxuB0JKVL0zjQ2s
-   unfYRStl3fuU8glAL3y/4j4Ynwp4O4+9qvxyT5feXaAnnO25esd6r86+l
-   2pxm8hW3BHlLxwXs+G2yhoykLwONTtdIAcLaOem/F0T/Hfwu8ROlh829w
-   oMqxx9W5NJ0c16dYYN+gmCWY98KgWVB1LMSQ9pF29jusY/OLZWd+QFyDC
-   A==;
-X-CSE-ConnectionGUID: O5qPOUJxTmi88OrjDlKZKA==
-X-CSE-MsgGUID: CyaFUraMTQKnSDDHPThU5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="31904892"
-X-IronPort-AV: E=Sophos;i="6.12,162,1728975600"; 
-   d="scan'208";a="31904892"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2024 05:34:41 -0800
-X-CSE-ConnectionGUID: gMfRsQC1RHerc2kLqKrJSg==
-X-CSE-MsgGUID: KFqujJ72QvqC2dpOS9fN2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,162,1728975600"; 
-   d="scan'208";a="93447773"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 17 Nov 2024 05:34:36 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCfQA-0001m5-1n;
-	Sun, 17 Nov 2024 13:34:34 +0000
-Date: Sun, 17 Nov 2024 21:34:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Saravana Kannan <saravanak@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>
-Cc: oe-kbuild-all@lists.linux.dev, Saravana Kannan <saravanak@google.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Marek Vasut <marex@denx.de>, Bird@google.com,
-	Tim <Tim.Bird@sony.com>, kernel-team@android.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 5/5] PM: sleep: Spread out async kworker threads
- during dpm_resume*() phases
-Message-ID: <202411172344.QqFap290-lkp@intel.com>
-References: <20241114220921.2529905-6-saravanak@google.com>
+	s=arc-20240116; t=1731869063; c=relaxed/simple;
+	bh=BRVnz4//YdXvz1FMKrURytumMDf92OlVDuTwtndmp1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qzRkOI8gB7ZM3yGk8C5360aPRebJGQEzItalTtz+JY5PDYZxn2LeMzvzkIj8t5MdWYQ8HUD74vtr54Q/w6E+FLFAWV+qsXY9JeOik42ril/XEj1AZwn/j6gSdjQHgxd0qclgY+wLKe5UY/vm/oEmzZI/w7nrr/3526XJJjwHbKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=edEoZQt2; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3822b77da55so1097222f8f.1
+        for <linux-pm@vger.kernel.org>; Sun, 17 Nov 2024 10:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731869060; x=1732473860; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWkh7WZG7vwBsGnxbhTtR+8ik+TAgauZ51w8oqK1WyQ=;
+        b=edEoZQt26f5BxB30gaQq7huHihGGgPtKaRxJ7WI+MmxNh5jyyx06GM9POk9TL0L5aR
+         sdUBRqpiiS+gaVr6qKVRc24JME7YWPT9yBd6fD+Z2r530Jzqffv+E1lNQQZtF5Vg+vwI
+         dI8apdMJQOyV24U/XpVjpvY2UY3Zmx0Rg4/g26kL1tat+wrVb5LA3gh7ezAC8Bojlh0w
+         bZ5OzzrGyJNAeQ13hLM1H8YVwqtPdRVX7jQvDff4jsmA+x/F2K7MSlq91qrqMZ8UBq+3
+         XBJfAPtB3cho9WSJ/JMauOdacse4eIzNZNu4pzKXXDjBTzBfGuaJXkN5qoUexKGl11xB
+         blKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731869060; x=1732473860;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eWkh7WZG7vwBsGnxbhTtR+8ik+TAgauZ51w8oqK1WyQ=;
+        b=drVgPZZPu/QzLpAhQ3tZsswEPkktWd7EtnsCKM88G68dYYOVFn6byvAKTvRm5DHtrz
+         +qlJm5fwJ1HDf1nfOvJv5RnGvpjWjcxJemM5RWin0MTGL/TVzwYkIW6fWfSWQ9vK1HPM
+         nJRGjxxrUMiZJoUpJJUObYSsAuPFu0BkeUTNPojhPOpcOUN3nEfJb7Whyk1mWkiVNke6
+         WwdALDmaYkezHc4yjMjCeErce67XdWHReNGBK8uLckip4Ij3mJOwRMOEU3lt1+ILNhNV
+         y4AYiwe6isX3W+97tpdBomXhQ81bNa3VNaLekrFkZdOj8LjmYZJwq4nnSBz/IbRvonU7
+         L8kA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWTXQdj55atZXnU3ti3AN9tvdsD5L1w2SbH1U9/MlVFWYM495vHOcPC9HlQ+OhH/wd6AZahsGiQQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbmhKXdZ6B1uAxIofQXZZ/j9H2v/iMHfudtKLgurkFzp429pCN
+	MdAJU9sK9Uo0JxFqsOoPjtUbwcnNW0UEulzkrl8YXp4Ya1GYHP37fGLDcG3ErUc=
+X-Google-Smtp-Source: AGHT+IGkeQweqYBW/8Hnl0hUU1V1jJ5EB7kiHg+dpWYM1ZyWbyKk+uGQSNgMw4bo7IDu+9OSpPIMdA==
+X-Received: by 2002:a05:6000:1a8e:b0:382:3c7b:9bd with SMTP id ffacd0b85a97d-3823c7b0b66mr3233529f8f.30.1731869059589;
+        Sun, 17 Nov 2024 10:44:19 -0800 (PST)
+Received: from eugen-station.. ([82.76.24.202])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38244220183sm1863714f8f.99.2024.11.17.10.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Nov 2024 10:44:19 -0800 (PST)
+From: Eugen Hristev <eugen.hristev@linaro.org>
+To: linux-arm-msm@vger.kernel.org
+Cc: linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	konradybcio@kernel.org,
+	sboyd@kernel.org,
+	andersson@kernel.org,
+	evgreen@chromium.org,
+	Eugen Hristev <eugen.hristev@linaro.org>
+Subject: [PATCH v3] soc: qcom: Rework BCM_TCS_CMD macro
+Date: Sun, 17 Nov 2024 20:43:52 +0200
+Message-ID: <20241117184352.187184-1-eugen.hristev@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241114220921.2529905-6-saravanak@google.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Saravana,
+Reworked BCM_TCS_CMD macro in order to fix warnings from sparse:
 
-kernel test robot noticed the following build warnings:
+drivers/clk/qcom/clk-rpmh.c:270:28: warning: restricted __le32 degrades to integer
+drivers/clk/qcom/clk-rpmh.c:270:28: warning: restricted __le32 degrades to integer
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge tip/sched/core amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v6.12-rc7 next-20241115]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+While at it, used le32_encode_bits which made the code easier to
+follow and removed unnecessary shift definitions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Saravana-Kannan/PM-sleep-Fix-runtime-PM-issue-in-dpm_resume/20241115-183855
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20241114220921.2529905-6-saravanak%40google.com
-patch subject: [PATCH v1 5/5] PM: sleep: Spread out async kworker threads during dpm_resume*() phases
-config: arm-randconfig-003-20241117 (https://download.01.org/0day-ci/archive/20241117/202411172344.QqFap290-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411172344.QqFap290-lkp@intel.com/reproduce)
+Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
+---
+Changes in v3:
+- align the macro lines better
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411172344.QqFap290-lkp@intel.com/
+Changes in v2:
+- use le32_encode_bits instead of u32_encode_bits with a cpu_to_le32 on
+the fields; this however ment we need to force cast the le32 to the
+u32 container.
 
-All warnings (new ones prefixed by >>):
+ drivers/clk/qcom/clk-rpmh.c           |  2 +-
+ drivers/interconnect/qcom/bcm-voter.c |  2 +-
+ include/soc/qcom/tcs.h                | 26 ++++++++++++--------------
+ 3 files changed, 14 insertions(+), 16 deletions(-)
 
-   In file included from kernel/sched/build_utility.c:88:
->> kernel/sched/topology.c:287:6: warning: no previous prototype for 'sched_set_energy_aware' [-Wmissing-prototypes]
-     287 | void sched_set_energy_aware(unsigned int enable)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/sched_set_energy_aware +287 kernel/sched/topology.c
-
-   286	
- > 287	void sched_set_energy_aware(unsigned int enable)
-   288	{
-   289		int state;
-   290	
-   291		if (!sched_is_eas_possible(cpu_active_mask))
-   292			return;
-   293	
-   294		sysctl_sched_energy_aware = enable;
-   295		state = static_branch_unlikely(&sched_energy_present);
-   296		if (state != sysctl_sched_energy_aware)
-   297			rebuild_sched_domains_energy();
-   298	}
-   299	
-
+diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+index 4acde937114a..4929893b09c2 100644
+--- a/drivers/clk/qcom/clk-rpmh.c
++++ b/drivers/clk/qcom/clk-rpmh.c
+@@ -267,7 +267,7 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
+ 
+ 	if (c->last_sent_aggr_state != cmd_state) {
+ 		cmd.addr = c->res_addr;
+-		cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
++		cmd.data = (__force u32)BCM_TCS_CMD(1, enable, 0, cmd_state);
+ 
+ 		/*
+ 		 * Send only an active only state request. RPMh continues to
+diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
+index a2d437a05a11..ce9091cf122b 100644
+--- a/drivers/interconnect/qcom/bcm-voter.c
++++ b/drivers/interconnect/qcom/bcm-voter.c
+@@ -144,7 +144,7 @@ static inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
+ 		vote_y = BCM_TCS_CMD_VOTE_MASK;
+ 
+ 	cmd->addr = addr;
+-	cmd->data = BCM_TCS_CMD(commit, valid, vote_x, vote_y);
++	cmd->data = (__force u32)BCM_TCS_CMD(commit, valid, vote_x, vote_y);
+ 
+ 	/*
+ 	 * Set the wait for completion flag on command that need to be completed
+diff --git a/include/soc/qcom/tcs.h b/include/soc/qcom/tcs.h
+index 3acca067c72b..d0dfcaa07337 100644
+--- a/include/soc/qcom/tcs.h
++++ b/include/soc/qcom/tcs.h
+@@ -6,6 +6,9 @@
+ #ifndef __SOC_QCOM_TCS_H__
+ #define __SOC_QCOM_TCS_H__
+ 
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++
+ #define MAX_RPMH_PAYLOAD	16
+ 
+ /**
+@@ -60,22 +63,17 @@ struct tcs_request {
+ 	struct tcs_cmd *cmds;
+ };
+ 
+-#define BCM_TCS_CMD_COMMIT_SHFT		30
+-#define BCM_TCS_CMD_COMMIT_MASK		0x40000000
+-#define BCM_TCS_CMD_VALID_SHFT		29
+-#define BCM_TCS_CMD_VALID_MASK		0x20000000
+-#define BCM_TCS_CMD_VOTE_X_SHFT		14
+-#define BCM_TCS_CMD_VOTE_MASK		0x3fff
+-#define BCM_TCS_CMD_VOTE_Y_SHFT		0
+-#define BCM_TCS_CMD_VOTE_Y_MASK		0xfffc000
++#define BCM_TCS_CMD_COMMIT_MASK		BIT(30)
++#define BCM_TCS_CMD_VALID_MASK		BIT(29)
++#define BCM_TCS_CMD_VOTE_MASK		GENMASK(13, 0)
++#define BCM_TCS_CMD_VOTE_Y_MASK		GENMASK(13, 0)
++#define BCM_TCS_CMD_VOTE_X_MASK		GENMASK(27, 14)
+ 
+ /* Construct a Bus Clock Manager (BCM) specific TCS command */
+ #define BCM_TCS_CMD(commit, valid, vote_x, vote_y)		\
+-	(((commit) << BCM_TCS_CMD_COMMIT_SHFT) |		\
+-	((valid) << BCM_TCS_CMD_VALID_SHFT) |			\
+-	((cpu_to_le32(vote_x) &					\
+-	BCM_TCS_CMD_VOTE_MASK) << BCM_TCS_CMD_VOTE_X_SHFT) |	\
+-	((cpu_to_le32(vote_y) &					\
+-	BCM_TCS_CMD_VOTE_MASK) << BCM_TCS_CMD_VOTE_Y_SHFT))
++	(le32_encode_bits(commit, BCM_TCS_CMD_COMMIT_MASK) |	\
++	le32_encode_bits(valid, BCM_TCS_CMD_VALID_MASK) |	\
++	le32_encode_bits(vote_x, BCM_TCS_CMD_VOTE_X_MASK) |	\
++	le32_encode_bits(vote_y, BCM_TCS_CMD_VOTE_Y_MASK))
+ 
+ #endif /* __SOC_QCOM_TCS_H__ */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
