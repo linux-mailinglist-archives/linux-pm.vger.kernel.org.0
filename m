@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-17686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17687-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D74B59D0868
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 05:30:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 967EB9D0871
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 05:37:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 975B6281971
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 04:30:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80C36281B4D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 04:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D2C126BFA;
-	Mon, 18 Nov 2024 04:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2156A8D2;
+	Mon, 18 Nov 2024 04:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XsQ2xvOo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tVIzdsof"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D645613BAC3
-	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 04:30:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3BF10E0
+	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 04:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731904206; cv=none; b=MV60dpulGvpC13AJHKyiP+cKcIz4Qg3tQEYHZfoP0wTqOQX86gPd0Xj0FysD9MZz55QCASDFMCkH0PNvL0m4vDL3+uH9xe755ubqjbDdLXGeMzM0ihKK2UTzsozOTMfMngvjMaHGdKTf8XSSEVY5NbcXtcczEuYpgTQrIk0AQCI=
+	t=1731904633; cv=none; b=I8/v7ji5o3h+VpbNL0kevJyD+yKQzLKKiB9+SgGZvDUDt34JkUShoXDAWnJ2ZwEip51KZK0rdyPj1mes4/iBXZ/fPbwW1aEddYX10CTevJIhe/B5dg/L++tD7yOCchWZTg0Oq8qQ55fMc7aHZTU4i0ra3Vh2qUE0tr9qgMRTntU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731904206; c=relaxed/simple;
-	bh=aE4WWrLFENlkR0SMobOBdT0yUGHtgnFBlyKq98aR/RU=;
+	s=arc-20240116; t=1731904633; c=relaxed/simple;
+	bh=ipWzMcYsmExmp6Cb24PX2a7/swbbvnvtHsLC4tJRCs8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XrhKIiFeUbfyg0KCXGzerpEcO5agGMRo3Wpajpov3X1nd/8wocv3Z8OQNu+CVTuAI9ZEcIeXxcoN0leLcYDV3Yi2lxhoEQCsRoi+Nq/PKOo4KIU9ZVY/OZqTYiualOH+FTzL8tAnudSzwW/2Vz4q2X5LkeIMnko36TMMfA7QoeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XsQ2xvOo; arc=none smtp.client-ip=209.85.214.171
+	 Content-Disposition; b=YllU8gMFr80m2/pQb1VzAIYtyU11XouqKhpDMxGZfMvbDpkpOKvWnLT1pFyXW13Dqyn1oT3IuRjXvR6AnPzG3Rz7D8CgDsTTTHKnd9IHMRcmgmZJeTQ1FLprGNMihnP6CMF+gGXNZ4im8Fzlk1c9CJo8r20TajDIlKnrcvOFF0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tVIzdsof; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21207f0d949so9523225ad.2
-        for <linux-pm@vger.kernel.org>; Sun, 17 Nov 2024 20:30:04 -0800 (PST)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ea39f39666so889696a91.2
+        for <linux-pm@vger.kernel.org>; Sun, 17 Nov 2024 20:37:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731904204; x=1732509004; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1731904631; x=1732509431; darn=vger.kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=j2w3LLkwNjpeyMYTc7ukGPMU63vuGa03EzO1ZL3vnUg=;
-        b=XsQ2xvOoxW13otLxPLG3y928z/+ayV28xllpaf1NsiAAY3K3m3lkf32UqRqZvd/00j
-         mKjZ26nC3PB7ZINieoUmkBQwzxorNZP1l5p4KWCDyGrjDOtH9nc9lvzZsxY+7qfKFfLG
-         2/4JNSrvfna7Q4tCo9S+FXWxukBoBltfihG/vWGMZRepyYLAGQaRAp4HOiXEy+vU+547
-         qmWLUf75atRbfGHJOZhudm8nUWHICV8eSz+4kzHJ57EwO8ctwwNGgUEYBZXGnALWWeiN
-         7tlDekkYRfVVYPglchX4gc7yjP1h/qyrh3/GubdKnYS3y6oKLFa46wyWcUYNVph//dPm
-         vNgQ==
+        bh=TiZd0icOdBMLtEBzPPLyeh7ODHRIiPKLv7k0pCov9Gc=;
+        b=tVIzdsofJ7sYT/m3zsrIZrusI5a86CUf9R6Xq1DDNx5dpbrmhA2OM+3d4vWHVxhhtK
+         g91n3hvlHglCw1ZNWxRIK/PL6w/CuHkyhsn6lM+Z+GS0/fNNegUqo1co2gyoCn4W5M2C
+         NnEAD7luz6kj0PfUJGj0xjng24TUHN7Hnn8y2La09k3jE0Spf3E5vKieyGRTAhdHM/cG
+         dUpCsZ79/IecF+a/Vkn5MPo8B9o6OJdet8Qv8qNBo0wprgDbwY7iXRdwV4NAWuq/sO1H
+         rULE40mwehaObcY+oYCDeSoHj8V8FZqH1UNgVgrAA8Coon6tsrTGVF33xumjkRyCUQxx
+         59QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731904204; x=1732509004;
+        d=1e100.net; s=20230601; t=1731904631; x=1732509431;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j2w3LLkwNjpeyMYTc7ukGPMU63vuGa03EzO1ZL3vnUg=;
-        b=JE+e3izXKThKXDFr7C/7d2c/DAQ0Yb3y6mlUvp5t+FrayCpe5iM/LNx5sYZFk8zLac
-         qKI8Ro+7RxXMXYeSp3Ii/teGcjdX1KY3s4ToyggIWv3s6jQQ0HxRxPL7F7hmwgpSqaDA
-         Bwr0NOwPojJ3P6VdVV3YVLI/cTh5kRu8F5H1vdC92NZkl93jweJUam71AthgWl9rcLc0
-         WwX2UdB+JPJYDkMMlJ+lzxRJwfRqdtoeGlw7/UlJK4oKeiPgO/VgSRcbzxKcUyFh1IVw
-         JRWnJha+/q8xbsqMRR/x11/8+kMGXmVoieo2FyiQan7uZkMhjKqRJwGOEB0KbC7yDk+u
-         0pjw==
-X-Gm-Message-State: AOJu0YxD9gOpmYqMh4vaws2MFAEN/v0a9dcmZ3rHQW7cBjVnaxYL7qHF
-	QgpwSt4cBZy59QSEqFshtdllg4+iAsjoUsAeBrp4VB12UdzqHSrxb02aGcECxrU=
-X-Google-Smtp-Source: AGHT+IG1owe55RlrTYb0sE9t1SVV27PFTJFDRVzhFJRPUdrzSSishd25nF/O8faxAdpoGPijBqpQCw==
-X-Received: by 2002:a17:902:f611:b0:20b:bd8d:427c with SMTP id d9443c01a7336-211d0d8ad0dmr151114655ad.23.1731904203989;
-        Sun, 17 Nov 2024 20:30:03 -0800 (PST)
+        bh=TiZd0icOdBMLtEBzPPLyeh7ODHRIiPKLv7k0pCov9Gc=;
+        b=bznky2OEZM+ozThYUF5es5/ow8tmzqKrgCeWZY8L0FsWz1uO0tMet7xtmcFUBv5zCa
+         dAGby6nqgyURjS6GgMduXqZoUBQLE7NSGGsOMH7txYUq0MFeNfzov36acd45IXhNZF7+
+         KwAF107U3tPno9NeTtMJXehSW55uDIL+Jf0VLGL/aXbOxRqJpx4nQ6Y+cH+VXznRqgyK
+         MMbyM6Vl4DmXCXZVUdUg7y1rtziVi5Iaw1EqE1f/ZT3QjIIQJPAf8bQG2UwcobH8kwsl
+         yGRmpjMB9AIL1gfRX5o/gHpnRZJfRRxcjbpifNmR3aoLXw1TqhfYt3Tqw7BzKKFjbblD
+         z+ag==
+X-Gm-Message-State: AOJu0YzraEcZwLP7TP9/3ZWBXBb5Xji+szYIbFr0SSe3dAHdtXN/pK6E
+	pamP+8sO2IsqYREuO+UbGkRd/0a/SHw52QmioUuSYfjYgsnD3nN40n7k2nDNQV8=
+X-Google-Smtp-Source: AGHT+IHOgsZfia14NTfAzjo0NSG1Z5Jj4e6vzMMpHmqPTgsj1zZIHtV9Rl1rb8HVGAPsM7GrDSlV0Q==
+X-Received: by 2002:a17:90b:35ca:b0:2ea:5083:6b6f with SMTP id 98e67ed59e1d1-2ea50836cc4mr5302540a91.22.1731904631451;
+        Sun, 17 Nov 2024 20:37:11 -0800 (PST)
 Received: from localhost ([122.172.86.146])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0f4677dsm48089835ad.197.2024.11.17.20.30.03
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea06f1b1aasm6448293a91.17.2024.11.17.20.37.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Nov 2024 20:30:03 -0800 (PST)
-Date: Mon, 18 Nov 2024 10:00:01 +0530
+        Sun, 17 Nov 2024 20:37:10 -0800 (PST)
+Date: Mon, 18 Nov 2024 10:07:07 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 6.13
-Message-ID: <20241118043001.ahyxauzetqrfufzq@vireshk-i7>
+Subject: [GIT PULL] OPP updates for 6.13
+Message-ID: <20241118043707.zxyo5wl765dxypkm@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,91 +87,29 @@ The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.13
 
-for you to fetch changes up to 5df30684415d5a902f23862ab5bbed2a2df7fbf1:
+for you to fetch changes up to 53205a7903666d35709954d9fb7370a8150d5e0e:
 
-  arm64: dts: qcom: sc8180x: Add a SoC-specific compatible to cpufreq-hw (2024-11-18 09:55:39 +0530)
-
-----------------------------------------------------------------
-ARM cpufreq updates for 6.13
-
-- Add virtual cpufreq driver for guest kernels (David Dai).
-
-- Minor cleanup to various cpufreq drivers (Andy Shevchenko, Dhruva
-  Gole, Jie Zhan, Jinjie Ruan, Shuosheng Huang, Sibi Sankar, and Yuan
-  Can).
-
-- Revert "cpufreq: brcmstb-avs-cpufreq: Fix initial command check"
-  (Colin Ian King).
-
-- Improve DT bindings for qcom-hw driver (Dmitry Baryshkov, Konrad
-  Dybcio, and Nikunj Kela).
+  dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supported-hw (2024-10-01 14:57:08 +0530)
 
 ----------------------------------------------------------------
-Andy Shevchenko (1):
-      cpufreq: loongson3: Check for error code from devm_mutex_init() call
+OPP Updates for 6.13
 
-Colin Ian King (1):
-      Revert "cpufreq: brcmstb-avs-cpufreq: Fix initial command check"
+- Describe opp-supported-hw property for ti-cpu (Dhruva Gole).
 
-David Dai (2):
-      dt-bindings: cpufreq: add virtual cpufreq device
-      cpufreq: add virtual-cpufreq driver
+- Remove unused declarations in header file (Zhang Zekun).
 
-Dhruva Gole (2):
-      cpufreq: ti-cpufreq: Allow backward compatibility for efuse syscon
-      cpufreq: ti-cpufreq: Remove revision offsets in AM62 family
+----------------------------------------------------------------
+Dhruva Gole (1):
+      dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supported-hw
 
-Dmitry Baryshkov (1):
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Add SAR2130P compatible
+Zhang Zekun (1):
+      OPP: Remove unused declarations in header file
 
-Jie Zhan (2):
-      cppc_cpufreq: Use desired perf if feedback ctrs are 0 or unchanged
-      cppc_cpufreq: Remove HiSilicon CPPC workaround
-
-Jinjie Ruan (5):
-      cpufreq: CPPC: Fix possible null-ptr-deref for cpufreq_cpu_get_raw()
-      cpufreq: CPPC: Fix possible null-ptr-deref for cppc_get_cpu_cost()
-      cpufreq: CPPC: Fix wrong return value in cppc_get_cpu_cost()
-      cpufreq: CPPC: Fix wrong return value in cppc_get_cpu_power()
-      cpufreq: mediatek-hw: Fix wrong return value in mtk_cpufreq_get_cpu_power()
-
-Konrad Dybcio (2):
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Add SC8180X compatible
-      arm64: dts: qcom: sc8180x: Add a SoC-specific compatible to cpufreq-hw
-
-Nikunj Kela (1):
-      dt-bindings: cpufreq: qcom-hw: document support for SA8255p
-
-Shuosheng Huang (1):
-      cpufreq: sun50i: add a100 cpufreq support
-
-Sibi Sankar (1):
-      cpufreq: scmi: Fix cleanup path when boost enablement fails
-
-Yuan Can (1):
-      cpufreq: loongson2: Unregister platform_driver on failure
-
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml      |   6 +++
- Documentation/devicetree/bindings/cpufreq/qemu,virtual-cpufreq.yaml |  48 +++++++++++++++++
- arch/arm64/boot/dts/qcom/sc8180x.dtsi                               |   2 +-
- drivers/cpufreq/Kconfig                                             |  14 +++++
- drivers/cpufreq/Makefile                                            |   1 +
- drivers/cpufreq/brcmstb-avs-cpufreq.c                               |   4 +-
- drivers/cpufreq/cppc_cpufreq.c                                      | 136 ++++++++++++++++++-----------------------------
- drivers/cpufreq/cpufreq-dt-platdev.c                                |   1 +
- drivers/cpufreq/loongson2_cpufreq.c                                 |   4 +-
- drivers/cpufreq/loongson3_cpufreq.c                                 |   7 ++-
- drivers/cpufreq/mediatek-cpufreq-hw.c                               |   2 +-
- drivers/cpufreq/scmi-cpufreq.c                                      |   4 +-
- drivers/cpufreq/sun50i-cpufreq-nvmem.c                              |  28 ++++++++++
- drivers/cpufreq/ti-cpufreq.c                                        |  10 ++--
- drivers/cpufreq/virtual-cpufreq.c                                   | 333 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/arch_topology.h                                       |   1 +
- 16 files changed, 507 insertions(+), 94 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,virtual-cpufreq.yaml
- create mode 100644 drivers/cpufreq/virtual-cpufreq.c
+ Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml | 20 +++++++++++++++++++-
+ drivers/opp/opp.h                                                     |  2 --
+ 2 files changed, 19 insertions(+), 3 deletions(-)
 
 -- 
 viresh
