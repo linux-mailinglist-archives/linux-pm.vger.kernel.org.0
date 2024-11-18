@@ -1,267 +1,342 @@
-Return-Path: <linux-pm+bounces-17716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17717-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19BA9D1083
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 13:23:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C8639D108B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 13:27:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6287128367B
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 12:23:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 178241F2293C
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 12:27:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC0E1990AD;
-	Mon, 18 Nov 2024 12:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CED5199253;
+	Mon, 18 Nov 2024 12:26:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyzfDgIK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZuXVAwQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D48313A86A;
-	Mon, 18 Nov 2024 12:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9ED19412E;
+	Mon, 18 Nov 2024 12:26:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731932589; cv=none; b=mIY9kDhKDagd4n71f4n84cL5otHMa1saP7s65U3MpNkgzBUK9hLt7V7CZ9U/lrQnOjBg62cjAalFBzg8WTMjcRorNAS/qlTcFF2tYIGoFUUYgw3mnMwv2G7PPs9h/JInIUgrmoShrB/LDehp/L6eJb6NK8RFQvNfOnIbEE7+Gh8=
+	t=1731932818; cv=none; b=Pbcz7WjDQTf/GiSknidhxUi1kKFA44hnsKNfCL1j3Ooddm/n9dyFxYjhiDcaWY3kVF7hh6wbKu4PH3+VtBNkJcJ3dC53P+83np9VcrjXYKVB/OVmiDqtnDdzV6ADe02kPRZFrc9N4owSNeSyB5MtCMpHpjgmTrXDRFMUrv8FnyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731932589; c=relaxed/simple;
-	bh=2AM0Pwmwt4xkz3qrnCVJ5OXl0vU5NLafA/qx+ImQPdU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AbZH+YnStGIRHNAmqgmiKXuix58x2ukbdDpqhEvm5v8iAGJCuGdwo8yp5j/nGCgL+1Ih67fVC9IVST1rojC//XY2hczxGsMKkD1l/Hf6n0DXynjaKggIMCh1XQQ2Xs4Zw+yFqD7853DiqJn58KFxx/WeMO1vVp3gCqBV4aqj1GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fyzfDgIK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11090C4AF0B;
-	Mon, 18 Nov 2024 12:23:08 +0000 (UTC)
+	s=arc-20240116; t=1731932818; c=relaxed/simple;
+	bh=deJLPut/y9S0tvtjlmx4U4lz54CsfgJKTfqC8VQH+BM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnRKGiLvDinioykbsuXUBkivs8Uc48HGQPOCiioohl64Dkty4YUo791WuryM1xqHnEaRSVlDYU/TIFKPiCtt1NWGlOMNLwSR2g4m96jc1uDZUiLM9lcMNfSI6zCifvRgx3fVNTpbwMKi42baivf9pEYFK6OKvP1cx9LtoELXv6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZuXVAwQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9290EC4CECC;
+	Mon, 18 Nov 2024 12:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731932589;
-	bh=2AM0Pwmwt4xkz3qrnCVJ5OXl0vU5NLafA/qx+ImQPdU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fyzfDgIKbjhvK+J+kVEJSPZPE0hTWltrT03qI4bnCVnWPDenC+7Nunr35bkEGVsCB
-	 XvHeW7XJFTq3u3u6+6r71B4P+vl2rCAmj+lLlOMWbv8fY5aY0nIRsgvopa7+zzKARj
-	 /q6L9ecPR3JOgARmt+tCWPvTNxitsdrC07nAgcLukV9XTLegfu3H8cDRXTwsKMGVe4
-	 GjqK+MgSuDp4omfnrvuReV9G7xdLN1IDms1prLWMm6Jo4ph2M/5Edg9zOicq5OajAj
-	 jdyyiRsLnbjf7EsMrvR3X8BFeoFGVbu2XxPtI4AFkdGsyRWLuR6E2upFqgSGdHiEhF
-	 s4n6jM/yt5oUw==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2969ae2c99fso216444fac.3;
-        Mon, 18 Nov 2024 04:23:08 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUYafyW9fbPZ4irqytMjFHHOdw6VCIy8v2Ie+51BnhPopAzu6SoHhQ0/HpA3PgFBNr/WBcZn7cUwBNL10K9@vger.kernel.org, AJvYcCUqz9WGzokAKiflhIP8ePSOfUcTqxzh6IlAJFy94nYtH/lKFb4MkJYJ5EjKAFuR+bjR1i/+MQeQaLZy@vger.kernel.org, AJvYcCWZMpobhqWPrLIasDt8/Cmuw2wBtO91C/w6QaKUD91KYaqttiZfAQZNXBOVv8U/SPp6FPWEpKQ4JKg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdgHNizxTq/4HaximmlMHVeHjUYaVoUUFCt4VQX5OO0kWs9tOc
-	nKbjHym2bXh6nPWxK7PivDmWCx77A0g7xN0Lb0ra/rN2jThLILllZPMaAaWRNUgI+syn9h0j3dc
-	fgo7m/OtxIH9WoSmvx6lubaIRu0k=
-X-Google-Smtp-Source: AGHT+IF/kfIq3zkqlYI9Cw77TUT1DImRv+8xOHZpIef+c8mocXmFTT+UBO4/hpLxZTh0FGQVU+a0XOy6UKwWQL8uMXs=
-X-Received: by 2002:a05:6871:c68c:b0:296:53e0:1e5 with SMTP id
- 586e51a60fabf-29653e0729emr3949044fac.37.1731932588242; Mon, 18 Nov 2024
- 04:23:08 -0800 (PST)
+	s=k20201202; t=1731932818;
+	bh=deJLPut/y9S0tvtjlmx4U4lz54CsfgJKTfqC8VQH+BM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JZuXVAwQEwzKxFtrf5q9FIeMsCIsYM0eS1m9RyPqwqhQmM3jDzbbEiS6RZsa1Sjah
+	 lUqZcI9k0BLRWyruMxRvrfA+cijJuHBmuzI5xY3OCdDwGF0o2E7/Em7v2gAtbUryxK
+	 TSvg68J4OQJ218rf9UQ0RVLDTmBzVpvOJLj/wjaah6l5lG0Mf7nunyHXgRb++LfQr3
+	 hHQkS66be/NlrBZRxKKdOZasv/rsASuegBhc3C+E4YwCZUMvftv9lHY3YSw8I8tkRT
+	 poqNrlN8qwk5cifllyFQ4+77d0vrh6QbodtTQY9cALlgZfZcoBj3H4hP2SPCgPwKSa
+	 P+BSz1thqgnxA==
+Date: Mon, 18 Nov 2024 13:26:48 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Shivendra Pratap <quic_spratap@quicinc.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v8 3/6] firmware: psci: Read and use vendor reset types
+Message-ID: <ZzsyiC/dwv8dgySN@lpieralisi>
+References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
+ <20241107-arm-psci-system_reset2-vendor-reboots-v8-3-e8715fa65cb5@quicinc.com>
+ <ZzdR1HuTpnU1OL/i@lpieralisi>
+ <20241115103434410-0800.eberman@hu-eberman-lv.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
- <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
- <60f8eac0-9144-486b-983f-4ed09101cf0a@redhat.com> <CAJZ5v0g7rpdUjrS969stJiqqtO5zG+FTr4TOxg+SYN2dPC_9jA@mail.gmail.com>
- <95f1b1f6-af16-415c-acd0-8eb1ab49746a@redhat.com>
-In-Reply-To: <95f1b1f6-af16-415c-acd0-8eb1ab49746a@redhat.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Nov 2024 13:22:57 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jr-o8h_tVcTQ_SkiWhKn2eCj5pH=fReWoK8aPPb5Ziag@mail.gmail.com>
-Message-ID: <CAJZ5v0jr-o8h_tVcTQ_SkiWhKn2eCj5pH=fReWoK8aPPb5Ziag@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in acpi_os_sleep().
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, anna-maria@linutronix.de, 
-	tglx@linutronix.de, peterz@infradead.org, frederic@kernel.org, corbet@lwn.net, 
-	akpm@linux-foundation.org, linux-acpi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>, 
-	Todd Brandt <todd.e.brandt@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241115103434410-0800.eberman@hu-eberman-lv.qualcomm.com>
 
-Hi Hans,
+On Fri, Nov 15, 2024 at 11:08:13AM -0800, Elliot Berman wrote:
+> On Fri, Nov 15, 2024 at 02:51:16PM +0100, Lorenzo Pieralisi wrote:
+> > On Thu, Nov 07, 2024 at 03:38:27PM -0800, Elliot Berman wrote:
+> > > SoC vendors have different types of resets and are controlled through
+> > > various registers. For instance, Qualcomm chipsets can reboot to a
+> > > "download mode" that allows a RAM dump to be collected. Another example
+> > > is they also support writing a cookie that can be read by bootloader
+> > > during next boot. PSCI offers a mechanism, SYSTEM_RESET2, for these
+> > > vendor reset types to be implemented without requiring drivers for every
+> > > register/cookie.
+> > > 
+> > > Add support in PSCI to statically map reboot mode commands from
+> > > userspace to a vendor reset and cookie value using the device tree.
+> > > 
+> > > A separate initcall is needed to parse the devicetree, instead of using
+> > > psci_dt_init because mm isn't sufficiently set up to allocate memory.
+> > 
+> > Nit: information below this point is more a cover letter than for the
+> > commit log.
+> > 
+> > > Reboot mode framework is close but doesn't quite fit with the
+> > > design and requirements for PSCI SYSTEM_RESET2. Some of these issues can
+> > > be solved but doesn't seem reasonable in sum:
+> > >  1. reboot mode registers against the reboot_notifier_list, which is too
+> > >     early to call SYSTEM_RESET2. PSCI would need to remember the reset
+> > >     type from the reboot-mode framework callback and use it
+> > >     psci_sys_reset.
+> > >  2. reboot mode assumes only one cookie/parameter is described in the
+> > >     device tree. SYSTEM_RESET2 uses 2: one for the type and one for
+> > >     cookie.
+> > >  3. psci cpuidle driver already registers a driver against the
+> > >     arm,psci-1.0 compatible. Refactoring would be needed to have both a
+> > >     cpuidle and reboot-mode driver.
+> > > 
+> > > Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > ---
+> > >  drivers/firmware/psci/psci.c | 104 +++++++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 104 insertions(+)
+> > > 
+> > > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > > index 2328ca58bba61fdb677ac20a1a7447882cd0cf22..e60e3f8749c5a6732c51d23a2c1f453361132d9a 100644
+> > > --- a/drivers/firmware/psci/psci.c
+> > > +++ b/drivers/firmware/psci/psci.c
+> > > @@ -79,6 +79,14 @@ struct psci_0_1_function_ids get_psci_0_1_function_ids(void)
+> > >  static u32 psci_cpu_suspend_feature;
+> > >  static bool psci_system_reset2_supported;
+> > >  
+> > > +struct psci_reset_param {
+> > > +	const char *mode;
+> > > +	u32 reset_type;
+> > > +	u32 cookie;
+> > > +};
+> > > +static struct psci_reset_param *psci_reset_params __ro_after_init;
+> > > +static size_t num_psci_reset_params __ro_after_init;
+> > > +
+> > >  static inline bool psci_has_ext_power_state(void)
+> > >  {
+> > >  	return psci_cpu_suspend_feature &
+> > > @@ -305,9 +313,38 @@ static int get_set_conduit_method(const struct device_node *np)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static void psci_vendor_system_reset2(const char *cmd)
+> > > +{
+> > > +	unsigned long ret;
+> > > +	size_t i;
+> > > +
+> > > +	for (i = 0; i < num_psci_reset_params; i++) {
+> > > +		if (!strcmp(psci_reset_params[i].mode, cmd)) {
+> > > +			ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+> > > +					     psci_reset_params[i].reset_type,
+> > > +					     psci_reset_params[i].cookie, 0);
+> > > +			/*
+> > > +			 * if vendor reset fails, log it and fall back to
+> > > +			 * architecture reset types
+> > > +			 */
+> > > +			pr_err("failed to perform reset \"%s\": %ld\n", cmd,
+> > > +			       (long)ret);
+> > > +			return;
+> > > +		}
+> > > +	}
+> > > +}
+> > > +
+> > >  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+> > >  			  void *data)
+> > >  {
+> > > +	/*
+> > > +	 * try to do the vendor system_reset2
+> > > +	 * If the reset fails or there wasn't a match on the command,
+> > > +	 * fall back to architectural resets
+> > > +	 */
+> > > +	if (data && num_psci_reset_params)
+> > > +		psci_vendor_system_reset2(data);
+> > > +
+> > >  	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+> > >  	    psci_system_reset2_supported) {
+> > 
+> > This is a mess. To issue architectural warm reset we check reboot_mode,
+> > for vendor resets we ignore it - there is no rationale, that's the point
+> > I am making.
+> 
+> If I expand the comment to:
+> 
+> 
+>  * try todo the vendor system_reset2
+>  * If the reset fails or there wasn't a match on the command,
+>  * fall back to architectural resets.
+>  * Ignore reboot_mode enum to behave like setting a cookie, which don't
+>  * care about the reboot_mode.
 
-On Mon, Nov 18, 2024 at 1:10=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
- wrote:
->
-> Hi Rafael,
->
-> On 18-Nov-24 1:02 PM, Rafael J. Wysocki wrote:
-> > Hi Hans,
-> >
-> > On Mon, Nov 18, 2024 at 12:38=E2=80=AFPM Hans de Goede <hdegoede@redhat=
-.com> wrote:
-> >>
-> >> Hi Rafael, Len,
-> >>
-> >> On 18-Nov-24 12:03 PM, Rafael J. Wysocki wrote:
-> >>> On Sat, Nov 16, 2024 at 12:11=E2=80=AFAM Len Brown <lenb@kernel.org> =
-wrote:
-> >>>>
-> >>>> From: Len Brown <len.brown@intel.com>
-> >>>>
-> >>>> Replace msleep() with usleep_range() in acpi_os_sleep().
-> >>>>
-> >>>> This has a significant user-visible performance benefit
-> >>>> on some ACPI flows on some systems.  eg. Kernel resume
-> >>>> time of a Dell XPS-13-9300 drops from 1943ms to 1127ms (42%).
-> >>>
-> >>> Sure.
-> >>>
-> >>> And the argument seems to be that it is better to always use more
-> >>> resources in a given path (ACPI sleep in this particular case) than t=
-o
-> >>> be somewhat inaccurate which is visible in some cases.
-> >>>
-> >>> This would mean that hrtimers should always be used everywhere, but t=
-hey aren't.
-> >>>
-> >>> While I have nothing against addressing the short sleeps issue where
-> >>> the msleep() inaccuracy is too large, I don't see why this requires
-> >>> using a hrtimer with no slack in all cases.
-> >>>
-> >>> The argument seems to be that the short sleeps case is hard to
-> >>> distinguish from the other cases, but I'm not sure about this.
-> >>>
-> >>> Also, something like this might work, but for some reason you don't
-> >>> want to do it:
-> >>>
-> >>> if (ms >=3D 12 * MSEC_PER_SEC / HZ) {
-> >>>         msleep(ms);
-> >>> } else {
-> >>>        u64 us =3D ms * USEC_PER_MSEC;
-> >>>
-> >>>       usleep_range(us, us / 8);
-> >
-> > Should be
-> >
-> >       usleep_range(us, us + us / 8);
-> >
-> > (I notoriously confuse this API).
->
-> I see.
->
-> >>> }
-> >>
-> >> FWIW I was thinking the same thing, that it would be good to still
-> >> use msleep when the sleep is > (MSEC_PER_SEC / HZ), not sure
-> >> why you added the 12 there ? Surely something like a sleep longer
-> >> then 3 timerticks (I know we have NOHZ but still) would already be
-> >> long enough to not worry about msleep slack ?
-> >
-> > The typical msleep() overhead in 6.12 appears to be 1.5 jiffy which is
-> > 1.5 * MSEC_PER_SEC / HZ and I want the usleep() delta to be less than
-> > this, so
-> >
-> > delta =3D ms / 8 <=3D 1.5 * MSEC_PER_SEC / HZ
->
-> Ok, that makes sense. But this probably requires a comment explaining
-> this so that when someone looks at this in the future they understand
-> where the 12 comes from.
+/*
+ * Check if the system supports vendor resets and issue
+ * SYSTEM_RESET2 if the reboot command matches a vendor reset.
+ * Ignore reboot_mode and execute SYSTEM_RESET2 with type and
+ * cookie as defined by the firmware bindings.
+ *
+ * If the reset fails or there is not a match for the command
+ * fall back to architectural resets; reset type detection in
+ * this case will be done using reboot_mode.
+ */
 
-Sure.
+?
 
-> Where as the / 8 is just a choice right? I think it is decent choice,
-> but still this is just a value you picked which should work nicely,
-> right ?
+> Help to address this concern?
 
-Right.
+Not entirely, sorry, I will get back to this.
 
-I chose a power of 2 close to 10%.
+> > Also see my question on the other thread re: user space and reset
+> > "modes".
+> > 
+> > I appreciate we are not making progress but I don't want to pick up
+> > the pieces later after merging this code - it is unclear to me what's
+> > the best path forward - I would like to understand how other
+> > platforms/arches behave in this respect.
+> > 
+> 
+> I went through the couple hundred drivers which register reboot and
+> restart handlers. The majority don't care about reboot command nor
+> reboot_mode enum. The few that do:
+> 
+> Two drivers which I could find which care about the reboot command don't
+> look at the reboot_mode argument.
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/firmware/efi/efibc.c?h=v6.11#n35
+> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/power/reset/reboot-mode.c?h=v6.11#n42
+> 
+> One driver looks at the reboot command overrides the reboot_mode
+> argument:
+> 
+> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/watchdog/pnx4008_wdt.c?h=v6.11#n125
 
-> >> OTOH it is not like we will hit these ACPI acpi_os_sleep()
-> >> calls multiple times per second all the time. On a normal idle
-> >> system I expect there to not be that many calls (could still
-> >> be a few from ACPI managed devices going into + out of
-> >> runtime-pm regularly). And if don't hit acpi_os_sleep() calls
-> >> multiple times per second then the chances of time coalescing
-> >> are not that big anyways.
-> >>
-> >> Still I think that finding something middle ground between always
-> >> sleeping the exact min time and the old msleep() call, as Rafael
-> >> is proposing, would be good IMHO.
-> >
-> > Thanks for the feedback!
->
-> You're welcome.
->
-> Len any chance you can give Rafael's proposal a test run on the
-> same Dell XPS 13 9300 and see what this means for the resume time ?
->
-> If this gets close enough to your patch I think we should go with
-> what Rafael is proposing.
+Thanks for doing that, that helps.
 
-Thanks!
+> I wasn't able to find any platform/arches which check the reboot_mode
+> before reading the reboot command.
+> 
+> > >  		/*
+> > > @@ -750,6 +787,73 @@ static const struct of_device_id psci_of_match[] __initconst = {
+> > >  	{},
+> > >  };
+> > >  
+> > > +#define REBOOT_PREFIX "mode-"
+> > > +
+> > > +static int __init psci_init_system_reset2_modes(void)
+> > > +{
+> > > +	const size_t len = strlen(REBOOT_PREFIX);
+> > > +	struct psci_reset_param *param;
+> > > +	struct device_node *psci_np __free(device_node) = NULL;
+> > > +	struct device_node *np __free(device_node) = NULL;
+> > > +	struct property *prop;
+> > > +	size_t count = 0;
+> > > +	u32 magic[2];
+> > > +	int num;
+> > > +
+> > > +	if (!psci_system_reset2_supported)
+> > > +		return 0;
+> > > +
+> > > +	psci_np = of_find_matching_node(NULL, psci_of_match);
+> > > +	if (!psci_np)
+> > > +		return 0;
+> > > +
+> > > +	np = of_find_node_by_name(psci_np, "reset-types");
+> > > +	if (!np)
+> > > +		return 0;
+> > > +
+> > > +	for_each_property_of_node(np, prop) {
+> > > +		if (strncmp(prop->name, REBOOT_PREFIX, len))
+> > > +			continue;
+> > > +		num = of_property_count_u32_elems(np, prop->name);
+> > > +		if (num != 1 && num != 2)
+> > > +			continue;
+> > > +
+> > > +		count++;
+> > > +	}
+> > > +
+> > > +	param = psci_reset_params =
+> > > +		kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
+> > > +	if (!psci_reset_params)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	for_each_property_of_node(np, prop) {
+> > > +		if (strncmp(prop->name, REBOOT_PREFIX, len))
+> > > +			continue;
+> > > +
+> > > +		param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+> > 
+> > FWIW - I think you need to keep the logic in the previous loop into account
+> > because that's what is used to allocate param, it is not a given that
+> > param is valid at this stage if I am not mistaken - the previous loop
+> > checked:
+> > 
+> > 	num = of_property_count_u32_elems(np, prop->name);
+> > 	if (num != 1 && num != 2)
+> > 		continue;
+> 
+> of_property_read_variable_u32_array() performs effectively the same
+> check.  It returns -EOVERFLOW if it couldn't find enough (== 0) or too
+> many values (>2). I currently have the added bonus of complaining in
+> dmesg about the bad reboot mode property, instead of silently ignoring.
 
+Right but we are dereferencing param (param->mode) before carrying out that
+check.
 
-> >>>> usleep_range(min, min) is used because there is scant
-> >>>> opportunity for timer coalescing during ACPI flows
-> >>>> related to system suspend, resume (or initialization).
-> >>>>
-> >>>> ie. During these flows usleep_range(min, max) is observed to
-> >>>> be effectvely be the same as usleep_range(max, max).
-> >>>>
-> >>>> Similarly, msleep() for long sleeps is not considered because
-> >>>> these flows almost never have opportunities to coalesce
-> >>>> with other activity on jiffie boundaries, leaving no
-> >>>> measurably benefit to rounding up to jiffie boundaries.
-> >>>>
-> >>>> Background:
-> >>>>
-> >>>> acpi_os_sleep() supports the ACPI AML Sleep(msec) operator,
-> >>>> and it must not return before the requested number of msec.
-> >>>>
-> >>>> Until Linux-3.13, this contract was sometimes violated by using
-> >>>> schedule_timeout_interruptible(j), which could return early.
-> >>>>
-> >>>> Since Linux-3.13, acpi_os_sleep() uses msleep(),
-> >>>> which doesn't return early, but is still subject
-> >>>> to long delays due to the low resolution of the jiffie clock.
-> >>>>
-> >>>> Linux-6.12 removed a stray jiffie from msleep: commit 4381b895f544
-> >>>> ("timers: Remove historical extra jiffie for timeout in msleep()")
-> >>>> The 4ms savings is material for some durations,
-> >>>> but msleep is still generally too course. eg msleep(5)
-> >>>> on a 250HZ system still takes 11.9ms.
-> >>>>
-> >>>> System resume performance of a Dell XPS 13 9300:
-> >>>>
-> >>>> Linux-6.11:
-> >>>> msleep HZ 250   2460 ms
-> >>>>
-> >>>> Linux-6.12:
-> >>>> msleep HZ 250   1943 ms
-> >>>> msleep HZ 1000  1233 ms
-> >>>> usleep HZ 250   1127 ms
-> >>>> usleep HZ 1000  1130 ms
-> >>>>
-> >>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D216263
-> >>>> Signed-off-by: Len Brown <len.brown@intel.com>
-> >>>> Suggested-by: Arjan van de Ven <arjan@linux.intel.com>
-> >>>> Tested-by: Todd Brandt <todd.e.brandt@intel.com>
-> >>>> ---
-> >>>>  drivers/acpi/osl.c | 4 +++-
-> >>>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
-> >>>> index 70af3fbbebe5..daf87e33b8ea 100644
-> >>>> --- a/drivers/acpi/osl.c
-> >>>> +++ b/drivers/acpi/osl.c
-> >>>> @@ -607,7 +607,9 @@ acpi_status acpi_os_remove_interrupt_handler(u32=
- gsi, acpi_osd_handler handler)
-> >>>>
-> >>>>  void acpi_os_sleep(u64 ms)
-> >>>>  {
-> >>>> -       msleep(ms);
-> >>>> +       u64 us =3D ms * USEC_PER_MSEC;
-> >>>> +
-> >>>> +       usleep_range(us, us);
-> >>>>  }
-> >>>>
-> >>>>  void acpi_os_stall(u32 us)
-> >>>> --
-> >>>> 2.43.0
-> >>>>
-> >>>
-> >>
-> >
->
+Thanks,
+Lorenzo
+
+> 
+> - Elliot
+> 
+> > > +		if (!param->mode)
+> > > +			continue;
+> > > +
+> > > +		num = of_property_read_variable_u32_array(np, prop->name, magic,
+> > > +							  1, ARRAY_SIZE(magic));
+> > > +		if (num < 0) {
+> > > +			pr_warn("Failed to parse vendor reboot mode %s\n",
+> > > +				param->mode);
+> > > +			kfree_const(param->mode);
+> > > +			continue;
+> > > +		}
+> > > +
+> > > +		/* Force reset type to be in vendor space */
+> > > +		param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
+> > > +		param->cookie = num > 1 ? magic[1] : 0;
+> > > +		param++;
+> > > +		num_psci_reset_params++;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +arch_initcall(psci_init_system_reset2_modes);
+> > > +
+> > >  int __init psci_dt_init(void)
+> > >  {
+> > >  	struct device_node *np;
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
 
