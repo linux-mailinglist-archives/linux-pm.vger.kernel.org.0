@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-17702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17703-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE8789D0E6A
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:24:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 301319D0F00
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:54:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 449411F21DCA
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:24:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F138BB25627
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A2E194C76;
-	Mon, 18 Nov 2024 10:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5D819538D;
+	Mon, 18 Nov 2024 10:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sejU/WKd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t16F74SE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77B7194AD8;
-	Mon, 18 Nov 2024 10:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147AA194094;
+	Mon, 18 Nov 2024 10:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731925341; cv=none; b=nCWLRcngXZaKDC6Yy53yJQc3h+nAI2u4e5v95YaSbglJzc3F4DDnBtpAKp0CgCShU1QQV9fth+zoXyMdpZVR1jnXErtwO4LZ4wVkjZ9ZoESEik6552H3oEQjuT45LKtF7oYNUR0CnPTG+N/h1i+tLHOo20N339UIb0IIG5l05cQ=
+	t=1731925442; cv=none; b=Jh/UWhMWa1c1eIIwPmtOPlnoXR7uAdsntrbMDuuFM/siwNF8P5kdopUc+Kq6F+Wi8fK3U08IOWE4CpoGsoNBpoloVZaV9qIHR7FQ9/1sMflyc1FKL9n8KRy4SGk0ifecbvW6Jfsb/il3mKXAAAb9wrjoM6C1ZFN0+rIlfWr9x4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731925341; c=relaxed/simple;
-	bh=F6LJAvT4xb9vEZMGIAEyCuPJQXJmFDXic1ZVvGyAo7Q=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ltyrpxJnF2aPXJzEJkmfq5ugkn8JOa1lVoT8vHZ4CsthXqjq+QL4sVM7ETOgxJwXZDqDH/9Bl94cyb8qgmzvVnpRVs/T4hL1THq2ZRMPONw5fZKVlBkaUY1eEDA+H04zr9xLuCJv6g2GyjiMMaz67qItCcQEWP0kbbz2I4hb1So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sejU/WKd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D466C4CED0;
-	Mon, 18 Nov 2024 10:22:20 +0000 (UTC)
+	s=arc-20240116; t=1731925442; c=relaxed/simple;
+	bh=xvLvWV9VR+bB9tOaGuSAYrJs8CvxungYCsVwLkjIixQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=cti0T+Q69I/x6l3QsEgc258rjLuQHTj5J7RgWirQDZtNoiyCmXyIFR8vFtTffeClgRi7YuZ3SwZ/KJfZ7omDHx+00ibXWXAcne86J0Doowkj9UO6U2oNlUSErUSAxOeno/kZONALxiZ6VV9/Ocw3N16ref25rGoT8nMzyVQ+ko8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t16F74SE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F73C4CED6;
+	Mon, 18 Nov 2024 10:24:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731925340;
-	bh=F6LJAvT4xb9vEZMGIAEyCuPJQXJmFDXic1ZVvGyAo7Q=;
+	s=k20201202; t=1731925441;
+	bh=xvLvWV9VR+bB9tOaGuSAYrJs8CvxungYCsVwLkjIixQ=;
 	h=From:Date:Subject:To:Cc:From;
-	b=sejU/WKd0mxfrHAtuHfxqiqX5wmCYPApAgzQ9+EaHK7VsmZDatYuXfe+zXZdtoFX6
-	 Lp2j+DgTpiqrvbupjVpYBZpUjTyfLrJ/1Qu8rm2rAi3eEoP342wbCfdgcAk9J5k/8K
-	 a4shxJQaSgjGftq+QawQgtV0gmMBU2zJtwb+rPns5Sn3OJr9071GS+CoGmTHhLESFU
-	 2KEnJcF+439v2O3hsYuP4asfy7ZvJAlhWK3oxk6tJtuIjGaVrrzQ8xGFEfCai/+LJ2
-	 IF5I+ObTf8PyOhH1tfA8Vd4N10SxnN9y9e3WXKRr2cPrxWkiLeS3HmlRPMiNgSzM6A
-	 pzXCIGNopNm0w==
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3e5f533e1c2so2121317b6e.3;
-        Mon, 18 Nov 2024 02:22:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVssu6FGHGK/z0htBHWcjVLhvXRZojNPgpzCeXt43eNLSAJ3jULEcJOezjmjiSFdAUTtyzTp3QLhGlgOZ3v@vger.kernel.org, AJvYcCVswRYpr+qV94r4LBjp8m/U6LN0x8wC28ZLfxiOudLgBisoyhYk9GhP6E3cNHoLYzBbj6rwN8MBjy/k@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCOyx1GdaoQEgb83RaTaYintN2acVeNfk+xRngMi3s/o3B96hj
-	QvDevWYdIevEn9ZS3DZ0oZ/GhFRoKWGrdSELXHQSHlH31gslhApUZic0JDPXWEm7ZSraK0VPvom
-	iHvh4vbCNO0N6Z036TgSTE1yrDLU=
-X-Google-Smtp-Source: AGHT+IGB0Q0xAufUUKH2H2oxeIC4U8QUE3WwW3fMFplzOdxQPzRm0oQ4NCT/hLkMR8nuu1Cyc7StjC87/kVZOJDldVs=
-X-Received: by 2002:a05:6808:1250:b0:3e5:d093:d6e with SMTP id
- 5614622812f47-3e7bc85054bmr12253112b6e.31.1731925339441; Mon, 18 Nov 2024
- 02:22:19 -0800 (PST)
+	b=t16F74SEiS+YtnpMZG9rsStMfkAQvg6HldPN309NF/RKAd0EZLyXNS8KIrGUnvsNC
+	 iEkWNMoKDPKtayL3lT6KmFSCwHFm4wU3SedoreiZmaUby7n72n+cIZZvcuTXbfGx2D
+	 svv1s6lwS00Yt5yMwXG+2NIDRkf4cB1uxFFZ6NAZsOvlHcI6Zphc5ifCYTMGBwgA1X
+	 ceNMqYidyujtLt3SBs+Bh0gmPeyRemINgIVPDaTho4TL1t8B0CuLEuL0SIexWmx78k
+	 9tK0fxqjMwBe7BsKVABoS822bfjdQLkAQ330TzLwJfNgoHoDXzZtUFm55C4PkzD42u
+	 Ljr5ImdZiAGDw==
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3e5fbc40239so592850b6e.3;
+        Mon, 18 Nov 2024 02:24:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWKEjZF15OLnjnZ/G7oo7cdVxsi6Nx1F+a/2m4ZEkq0oxGDn+YonQ+jM7QjMQsFywMtgnNJ9GzMVL35jbI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzB0UfPsq0wTZAesMTXMBAMa+BnWIWeWdOhm6ueWAGE2bL2Ril8
+	enG5EVJmhGx91J/hrUsdqVhpj5H5XaP3X/ehWBXCawYTh0T3p10+QFituyuDZSDTLSFuP9xtsNR
+	P7Uv4CiHQwJqVdPykUOnvkC9LHSY=
+X-Google-Smtp-Source: AGHT+IGYzZ1dH3I36kCmcAWaqnUeqvjV6qRjt/bk8fVXlZLykBAk5pVknV3FCF9Hs2dZGBu3X8rLRGiCD2s2+EEpZOA=
+X-Received: by 2002:a05:6808:3094:b0:3e6:5f1d:411a with SMTP id
+ 5614622812f47-3e7bc865a3bmr11863527b6e.31.1731925441222; Mon, 18 Nov 2024
+ 02:24:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,243 +57,141 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Nov 2024 11:22:04 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i90sb6CC=obDdmji-WeJnkwSp4Agd3UhGhuo+TVm4uXg@mail.gmail.com>
-Message-ID: <CAJZ5v0i90sb6CC=obDdmji-WeJnkwSp4Agd3UhGhuo+TVm4uXg@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v6.13-rc1
+Date: Mon, 18 Nov 2024 11:23:46 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0imu3DZbUb6P=UGP5G9ffxS6MbnRb-2zx7pXNTrxS1Z1A@mail.gmail.com>
+Message-ID: <CAJZ5v0imu3DZbUb6P=UGP5G9ffxS6MbnRb-2zx7pXNTrxS1Z1A@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.13-rc1
 To: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
 Hi Linus,
 
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.13-rc1
+ thermal-6.13-rc1
 
-with top-most commit c6e2a4c9eed5249c4158bc621882d44e94af3371
+with top-most commit 0104dcdaad3a7afd141e79a5fb817a92ada910ac
 
- Merge branch 'pm-tools'
+ thermal: testing: Initialize some variables annoteded with _free()
 
-on top of commit 1a1030d10a6335bb5e6cdb24fc9388d3d9bcc1ac
+on top of commit 5469a8deac05391781bcd27e7c40f2c35121ca09
 
- cpufreq: intel_pstate: Rearrange locking in hybrid_init_cpu_capacity_scali=
-ng()
+ Merge tag 'thermal-v6.12-rc7' of
+ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
 
-to receive power management updates for 6.13-rc1.
+to receive thermal control updates for 6.13-rc1.
 
-The amd-pstate cpufreq driver gets the majority of changes this time.
-They are mostly fixes and cleanups, but one of them causes it to become
-the default cpufreq driver on some AMD server platforms.
-
-Apart from that, the menu cpuidle governor is modified to not use iowait
-any more, the intel_idle gets a custom C-states table for Granite Rapids
-Xeon D, and the intel_pstate driver will use a more aggressive Balance-
-performance default EPP value on Granite Rapids now.
-
-There are also some fixes, cleanups and tooling updates.
+These are thermal core changes, including the addition of support for
+temperature thresholds that can be set from user space, fixes related
+to thermal zone initialization, suspend/resume and exit, locking rework
+and rearrangement of the code handling thermal zone temperature updates.
 
 Specifics:
 
- - Update the amd-pstate driver to set the initial scaling frequency
-   policy lower bound to be the lowest non-linear frequency (Dhananjay
-   Ugwekar).
+ - Add support for thermal thresholds that can be added and removed from
+   user space via netlink along with a related library update (Daniel
+   Lezcano).
 
- - Enable amd-pstate by default on servers starting with newer AMD Epyc
-   processors (Swapnil Sapkal).
+ - Fix thermal zone initialization, suspend/resume and exit
+   synchronization issues (Rafael Wysocki).
 
- - Align more codepaths between shared memory and MSR designs in
-   amd-pstate (Dhananjay Ugwekar).
+ - Rearrange locking in the thermal core to use guards (Rafael Wysocki).
 
- - Clean up amd-pstate code to rename functions and remove redundant
-   calls (Dhananjay Ugwekar, Mario Limonciello).
+ - Make the code handling thermal zone temperature updates use sorted
+   lists of trip points to reduce the number of trip points table walks
+   in the thermal core (Rafael Wysocki).
 
- - Do other assorted fixes and cleanups in amd-pstate (Dhananjay Ugwekar
-   and Mario Limonciello).
+ - Fix and clean up the thermal testing facility code (Rafael Wysocki).
 
- - Change the Balance-performance EPP value for Granite Rapids in the
-   intel_pstate driver to a more performance-biased one (Srinivas
-   Pandruvada).
-
- - Simplify MSR read on the boot CPU in the ACPI cpufreq driver (Chang
-   S. Bae).
-
- - Ensure sugov_eas_rebuild_sd() is always called when sugov_init()
-   succeeds to always enforce sched domains rebuild in case EAS needs
-   to be enabled (Christian Loehle).
-
- - Switch cpufreq back to platform_driver::remove() (Uwe Kleine-K=C3=B6nig)=
-.
-
- - Use proper frequency unit names in cpufreq (Marcin Juszkiewicz).
-
- - Add a built-in idle states table for Granite Rapids Xeon D to the
-   intel_idle driver (Artem Bityutskiy).
-
- - Fix some typos in comments in the cpuidle core and drivers (Shen
-   Lichuan).
-
- - Remove iowait influence from the menu cpuidle governor (Christian
-   Loehle).
-
- - Add min/max available performance state limits to the Energy Model
-   management code (Lukasz Luba).
-
- - Update pm-graph to v5.13 (Todd Brandt).
-
- - Add documentation for some recently introduced cpupower utility
-   options (Tor Vic).
-
- - Make cpupower inform users where cpufreq-bench.conf should be located
-   when opening it fails (Peng Fan).
-
- - Allow overriding cross-compiling env params in cpupower (Peng Fan).
-
- - Add compile_commands.json to .gitignore in cpupower (John B. Wyatt
-   IV).
-
- - Improve disable c_state block in cpupower bindings and add a test to
-   confirm that CPU state is disabled to it (John B. Wyatt IV).
-
- - Add Chinese Simplified translation to cpupower (Kieran Moy).
-
- - Add checks for xgettext and msgfmt to cpupower (Siddharth Menon).
+ - Fix a Power Allocator thermal governor issue (ZhengShaobo).
 
 Thanks!
 
 
 ---------------
 
-Artem Bityutskiy (1):
-      intel_idle: add Granite Rapids Xeon D support
+Daniel Lezcano (8):
+      thermal: core: Add user thresholds support
+      thermal: core: Connect the threshold with the core
+      thermal: netlink: Add the commands and the events for the thresholds
+      tools/lib/thermal: Make more generic the command encoding function
+      tools/lib/thermal: Add the threshold netlink ABI
+      tools/thermal/thermal-engine: Take into account the thresholds API
+      thermal: thresholds: Fix thermal lock annotation issue
+      thermal/lib: Fix memory leak on error in thermal_genl_auto()
 
-Chang S. Bae (1):
-      cpufreq: ACPI: Simplify MSR read on the boot CPU
+Rafael J. Wysocki (36):
+      thermal: core: Initialize thermal zones before registering them
+      thermal: core: Rearrange PM notification code
+      thermal: core: Represent suspend-related thermal zone flags as bits
+      thermal: core: Mark thermal zones as initializing to start with
+      thermal: core: Fix race between zone registration and system suspend
+      thermal: core: Consolidate thermal zone locking during initialization
+      thermal: core: Mark thermal zones as exiting before unregistration
+      thermal: core: Consolidate thermal zone locking in the exit path
+      thermal: core: Update thermal zones after cooling device binding
+      thermal: core: Drop need_update field from struct thermal_zone_device
+      thermal: core: Move lists of thermal instances to trip descriptors
+      thermal: core: Pass trip descriptors to trip bind/unbind functions
+      thermal: core: Add and use thermal zone guard
+      thermal: core: Add and use a reverse thermal zone guard
+      thermal: core: Separate code running under thermal_list_lock
+      thermal: core: Manage thermal_list_lock using a mutex guard
+      thermal: core: Call thermal_governor_update_tz() outside of cdev lock
+      thermal: core: Introduce thermal_instance_add()
+      thermal: core: Introduce thermal_instance_delete()
+      thermal: core: Introduce thermal_cdev_update_nocheck()
+      thermal: core: Add and use cooling device guard
+      thermal: core: Separate thermal zone governor initialization
+      thermal: core: Manage thermal_governor_lock using a mutex guard
+      thermal: core: Build sorted lists instead of sorting them later
+      thermal: core: Rename trip list node in struct thermal_trip_desc
+      thermal: core: Prepare for moving trips between sorted lists
+      thermal: core: Rearrange __thermal_zone_device_update()
+      thermal: core: Pass trip descriptor to thermal_trip_crossed()
+      thermal: core: Move some trip processing to thermal_trip_crossed()
+      thermal: core: Relocate functions that update trip points
+      thermal: core: Eliminate thermal_zone_trip_down()
+      thermal: core: Use trip lists for trip crossing detection
+      thermal: core: Relocate thermal zone initialization routine
+      thermal: testing: Simplify tt_get_tt_zone()
+      thermal: testing: Use DEFINE_FREE() and __free() to simplify code
+      thermal: testing: Initialize some variables annoteded with _free()
 
-Christian Loehle (2):
-      cpuidle: menu: Remove iowait influence
-      sched/cpufreq: Ensure sd is rebuilt for EAS check
-
-Dhananjay Ugwekar (11):
-      cpufreq/amd-pstate: Rename MSR and shared memory specific functions
-      cpufreq/amd-pstate: Remove the redundant verify() function
-      cpufreq/amd-pstate: Set the initial min_freq to lowest_nonlinear_freq
-      cpufreq/amd-pstate: Call amd_pstate_register() in amd_pstate_init()
-      cpufreq/amd-pstate: Call amd_pstate_set_driver() in
-amd_pstate_register_driver()
-      cpufreq/amd-pstate: Remove the switch case in amd_pstate_init()
-      cpufreq/amd-pstate: Remove the redundant amd_pstate_set_driver() call
-      cpufreq/amd-pstate: Rename functions that enable CPPC
-      cpufreq/amd-pstate: Do not attempt to clear MSR_AMD_CPPC_ENABLE
-      cpufreq/amd-pstate: Call cppc_set_epp_perf in the reenable function
-      cpufreq/amd-pstate: Align offline flow of shared memory and MSR
-based systems
-
-Gautham R. Shenoy (1):
-      amd-pstate: Set min_perf to nominal_perf for active mode performance =
-gov
-
-John B. Wyatt IV (3):
-      pm: cpupower: gitignore: Add compile_commands.json
-      pm: cpupower: bindings: Improve disable c_state block
-      pm: cpupower: bindings: Add test to confirm cpu state is disabled
-
-Kieran Moy (1):
-      cpupower: Add Chinese Simplified translation
-
-Lukasz Luba (1):
-      PM: EM: Add min/max available performance state limits
-
-Marcin Juszkiewicz (1):
-      cpufreq: use proper units for frequency
-
-Mario Limonciello (7):
-      cpufreq/amd-pstate: Fix non kerneldoc comment
-      cpufreq/amd-pstate: Don't update CPPC request in
-amd_pstate_cpu_boost_update()
-      cpufreq/amd-pstate: Use amd_pstate_update_min_max_limit() for EPP lim=
-its
-      cpufreq/amd-pstate: Drop needless EPP initialization
-      cpufreq/amd-pstate-ut: Add fix for min freq unit test
-      cpufreq/amd-pstate: Push adjust_perf vfunc init into cpu_init
-      cpufreq/amd-pstate: Move registration after static function call upda=
-te
-
-Peng Fan (2):
-      pm: cpupower: bench: print config file path when open
-cpufreq-bench.conf fails
-      pm: cpupower: Makefile: Allow overriding cross-compiling env params
-
-Shen Lichuan (1):
-      cpuidle: Correct some typos in comments
-
-Siddharth Menon (1):
-      cpupower: add checks for xgettext and msgfmt
-
-Srinivas Pandruvada (1):
-      cpufreq: intel_pstate: Update Balance-performance EPP for Granite Rap=
-ids
-
-Swapnil Sapkal (1):
-      amd-pstate: Switch to amd-pstate by default on some Server platforms
-
-Todd Brandt (1):
-      pm-graph v5.13
-
-Tor Vic (1):
-      tools/power/cpupower: Add documentation for some recently
-introduced options
-
-Uwe Kleine-K=C3=B6nig (1):
-      cpufreq: Switch back to struct platform_driver::remove()
+ZhengShaobo (1):
+      thermal: gov_power_allocator: Granted power set to max when
+nobody request power
 
 ---------------
 
- drivers/cpufreq/acpi-cpufreq.c                     |   9 +-
- drivers/cpufreq/amd-pstate-ut.c                    |   6 +-
- drivers/cpufreq/amd-pstate.c                       | 229 ++---
- drivers/cpufreq/brcmstb-avs-cpufreq.c              |   2 +-
- drivers/cpufreq/cpufreq-dt.c                       |   2 +-
- drivers/cpufreq/cpufreq.c                          |   2 +-
- drivers/cpufreq/davinci-cpufreq.c                  |   2 +-
- drivers/cpufreq/imx-cpufreq-dt.c                   |   2 +-
- drivers/cpufreq/imx6q-cpufreq.c                    |   2 +-
- drivers/cpufreq/intel_pstate.c                     |   2 +
- drivers/cpufreq/kirkwood-cpufreq.c                 |   2 +-
- drivers/cpufreq/loongson3_cpufreq.c                |   2 +-
- drivers/cpufreq/mediatek-cpufreq-hw.c              |   2 +-
- drivers/cpufreq/omap-cpufreq.c                     |   2 +-
- drivers/cpufreq/pcc-cpufreq.c                      |   2 +-
- drivers/cpufreq/qcom-cpufreq-hw.c                  |   2 +-
- drivers/cpufreq/qcom-cpufreq-nvmem.c               |   2 +-
- drivers/cpufreq/qoriq-cpufreq.c                    |   2 +-
- drivers/cpufreq/raspberrypi-cpufreq.c              |   2 +-
- drivers/cpufreq/scpi-cpufreq.c                     |   2 +-
- drivers/cpufreq/sun50i-cpufreq-nvmem.c             |   2 +-
- drivers/cpufreq/tegra186-cpufreq.c                 |   2 +-
- drivers/cpufreq/tegra194-cpufreq.c                 |   2 +-
- drivers/cpufreq/vexpress-spc-cpufreq.c             |   2 +-
- drivers/cpuidle/cpuidle-arm.c                      |   2 +-
- drivers/cpuidle/cpuidle-qcom-spm.c                 |   2 +-
- drivers/cpuidle/cpuidle.c                          |   2 +-
- drivers/cpuidle/driver.c                           |   4 +-
- drivers/cpuidle/governors/menu.c                   |  76 +-
- drivers/idle/intel_idle.c                          |  48 ++
- include/linux/energy_model.h                       |  29 +-
- kernel/power/energy_model.c                        |  52 ++
- kernel/sched/cpufreq_schedutil.c                   |   3 +-
- tools/power/cpupower/.gitignore                    |   3 +
- tools/power/cpupower/Makefile                      |  26 +-
- tools/power/cpupower/bench/parse.c                 |   5 +-
- .../bindings/python/test_raw_pylibcpupower.py      |  28 +-
- tools/power/cpupower/man/cpupower-set.1            |  38 +-
- tools/power/cpupower/po/zh_CN.po                   | 942 +++++++++++++++++=
-++++
- tools/power/pm-graph/sleepgraph.8                  |   3 +
- tools/power/pm-graph/sleepgraph.py                 |  59 +-
- 41 files changed, 1330 insertions(+), 278 deletions(-)
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/gov_bang_bang.c               |  15 +-
+ drivers/thermal/gov_fair_share.c              |  20 +-
+ drivers/thermal/gov_power_allocator.c         |  86 +--
+ drivers/thermal/gov_step_wise.c               |  22 +-
+ drivers/thermal/testing/zone.c                |  41 +-
+ drivers/thermal/thermal_core.c                | 883 +++++++++++++++-----------
+ drivers/thermal/thermal_core.h                |  41 +-
+ drivers/thermal/thermal_debugfs.c             |  50 +-
+ drivers/thermal/thermal_helpers.c             |  46 +-
+ drivers/thermal/thermal_hwmon.c               |   5 +-
+ drivers/thermal/thermal_netlink.c             | 253 +++++++-
+ drivers/thermal/thermal_netlink.h             |  34 +
+ drivers/thermal/thermal_sysfs.c               | 132 ++--
+ drivers/thermal/thermal_thresholds.c          | 240 +++++++
+ drivers/thermal/thermal_thresholds.h          |  19 +
+ drivers/thermal/thermal_trip.c                |  48 +-
+ include/linux/thermal.h                       |   6 +
+ include/uapi/linux/thermal.h                  |  29 +-
+ tools/lib/thermal/commands.c                  | 188 +++++-
+ tools/lib/thermal/events.c                    |  55 +-
+ tools/lib/thermal/include/thermal.h           |  40 ++
+ tools/lib/thermal/libthermal.map              |   5 +
+ tools/lib/thermal/thermal.c                   |  17 +
+ tools/thermal/lib/Makefile                    |   2 +-
+ tools/thermal/thermal-engine/thermal-engine.c | 105 ++-
+ 26 files changed, 1650 insertions(+), 733 deletions(-)
 
