@@ -1,115 +1,113 @@
-Return-Path: <linux-pm+bounces-17684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F02399D0794
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 02:30:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 000FA9D0864
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 05:29:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84165B214C3
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 01:30:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F566B20F61
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 04:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FBE1BC3F;
-	Mon, 18 Nov 2024 01:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D2113957E;
+	Mon, 18 Nov 2024 04:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B4/KSTPC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013F817BA3;
-	Mon, 18 Nov 2024 01:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE61225760
+	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 04:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731893394; cv=none; b=HHa2K9b/w2C0cp2I3ut7kcDjlhK/aiVc5dQgJE8qQb0N0sX+YdizfriwjL1XWYE+w+lrtrLt7WiixtlfS2SjvkopoxPSyAa9pxbJ99f5lD2P2Enwmrtk+XaYtdh5qjrPOe5T7UCp7GXzg0HEs4xKK9VF8C/C8vAuW7eucJWAmt8=
+	t=1731904164; cv=none; b=JkZ9QIz9xRQbvGV6EADVRVV8aSPAflUDRLTFQR1fi5gWH5dj3fzwNbDpyTCAXwqOvezsg++hx1X9/vCdxpwSiXXkSdwBD31w30NRAztTqEAf8DBmbJ7+x0C9RqjBIQGQlfgq5Avdsvm0PUNa0Ls9lcUYpbK7YbNpx0rA+MLQcF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731893394; c=relaxed/simple;
-	bh=lM9XoLTlH4w7aBEstkNtGMfmVvVr+vxFBznR54ornks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BJtIqxzeVeUxaeTZ1EZ6jKFh78/8POUOzD5um2mkc90WKMMJE/cbI+hqUPfKsVFv/pm7Q0hnV/Fl6RmjonGY093jbFRG0UtYkq8Lr/UPXi2ADmA02la7fjcvF1yXO5Cm/igWCdsWVeRt8F0Xr02yPtlZ0CmmzU4HdNPJ5YBMg1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Xs93019Fwz10Rt3;
-	Mon, 18 Nov 2024 09:27:08 +0800 (CST)
-Received: from dggemv704-chm.china.huawei.com (unknown [10.3.19.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 93C8F1403A0;
-	Mon, 18 Nov 2024 09:29:43 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 18 Nov 2024 09:29:43 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 18 Nov
- 2024 09:29:42 +0800
-Message-ID: <ee3f6294-dc62-11d2-9467-53fd9241a922@huawei.com>
-Date: Mon, 18 Nov 2024 09:29:42 +0800
+	s=arc-20240116; t=1731904164; c=relaxed/simple;
+	bh=c2FNU8VAqZPHoHfsNxtkxDSwUZw0mk7UWoaRmwhIM8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VYFaTYlBA9p1nJghVRwb7Wqp8WOwPvuS1qRMztO/FLsTXHqAyEBcVm7obtPzfsnpePNvXuAu4m5AoOfbPXmtoTyaPkaLtrvznyPYpDeMpdjl5qsImZvhXO7hCfFgK8ej+md5fJ4YORLOe2cpgBVH6FMcXZyzwDDxxPZAQZUYq60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B4/KSTPC; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7f809332ffcso2504197a12.0
+        for <linux-pm@vger.kernel.org>; Sun, 17 Nov 2024 20:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731904162; x=1732508962; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRkzvR9JmsuEZqEzWfsXbEtv0Qql+USooOaHLs0v1jE=;
+        b=B4/KSTPCoshvGy7HGueX5eUHsNduJli91Wg+XW6TeBtPz9u9s0CPr2RnkA+9nJ5Kbh
+         vXF5pdaT4LcQrl5CyOLfRdnHwPfVe0SU4qE/lG+FKnCE5fUjH1MYjdX/Teab3z5ttW2V
+         Ek14xJdvbrn2Sm8gVSudv2ds8lJ0cswybPtNNTAQhvcd7wEBCMsvsESv32kkBxXRM1DY
+         /CGEVS7nswWVFexy56CNXFjgGLY2fEHDcDMr7W90kn33hYWG3UtEvoYugjbxDbhY54WE
+         u+xxCe9qOm0WAW30HnHbJ8I7cgoPfpKg28em+s9yxjPpwW1Sc8Uw4Q5HBW6yrEMOaoJN
+         W6qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731904162; x=1732508962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aRkzvR9JmsuEZqEzWfsXbEtv0Qql+USooOaHLs0v1jE=;
+        b=MvN3gTR4RxMI3BELzPemuTjKIFcm/Wj+IjKsyI0Y68v3hcc8FLoPcpA4IWMzgWD6sO
+         uMoKRkKYOSbDNLD56cCmLPNSdOmF1d6d2yNj0pqoFnfDNnVC75EscOY/EU5O+AcTzQP7
+         HD9oewbQ85QpNvO5DdV563WsGs+CgzqT/7gl1h4SeeCLSXzlQlWVZ5nX7Phaa2TJ0u5n
+         TFeaQk3ROmvqylqnyqDwc4Gda/AUHnW/6INV0BjGXm2Zav6IOVFp9BZjYkbdPuM0A7A5
+         jYk1g669E13IFiEHtJptRjob6l1zPE3QDjalMHH+7cWGSwUh8yyKwOPUKvGla5e1CeRm
+         TUOA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8WJ+M4wrOTLUY1Gg20iKtKi23HgddHWShVNobQjWcbooT1qyJ0G8dV6YZGtCKQZqVN051p8MjzA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKeBDwdqqiMH2bZfFtotNGiezF5lXv/GyxDye5p1RTDSajlNau
+	bhh67rMy36HW4KLnz64QOsjoCdtUcPdHyWh9dIaGCd6NgIRchLcW8kuiKgwAhJs=
+X-Google-Smtp-Source: AGHT+IHXV546gfhTrcSiQ/5TtpVxbP+9uPHavmMf9YaowqUBMk7FcaExC7jCPXHHNGj4K/9+30ugTQ==
+X-Received: by 2002:a05:6a20:7292:b0:1d7:e76:6040 with SMTP id adf61e73a8af0-1dc805101d9mr26904641637.4.1731904162120;
+        Sun, 17 Nov 2024 20:29:22 -0800 (PST)
+Received: from localhost ([122.172.86.146])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f8c1c16d0esm5016479a12.6.2024.11.17.20.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Nov 2024 20:29:21 -0800 (PST)
+Date: Mon, 18 Nov 2024 09:59:19 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH 0/2] Fix SC8180X cpufreq dt-bindings error
+Message-ID: <20241118042919.cakfxwr6xkszxir2@vireshk-i7>
+References: <20241116-topic-sc8180x_cpufreq_bindings-v1-0-e7db627da99c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2] ACPI: thermal: Support for linking devices associated
- with the thermal zone
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <rui.zhang@intel.com>,
-	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>
-References: <20241113085634.7657-1-lihuisong@huawei.com>
- <CAJZ5v0jTMg=Wipt2VPU1DDnnO7Rh5pu0VYvUjHRW5Nada--O8A@mail.gmail.com>
- <52539572-6128-8c87-84e6-3f539d887b34@huawei.com>
- <CAJZ5v0heL_wa=bimMDijn-x6G0SxsMf=yGhKZAe282P5+h2O3w@mail.gmail.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <CAJZ5v0heL_wa=bimMDijn-x6G0SxsMf=yGhKZAe282P5+h2O3w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241116-topic-sc8180x_cpufreq_bindings-v1-0-e7db627da99c@oss.qualcomm.com>
 
+On 16-11-24, 12:31, Konrad Dybcio wrote:
+> Add the bindings and dt bits to fix:
+> 
+> cpufreq@18323000: compatible: 'oneOf' conditional failed, one must be fixed:
+>         ['qcom,cpufreq-hw'] is too short
+> 
+> No functional changes.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+> Konrad Dybcio (2):
+>       dt-bindings: cpufreq: cpufreq-qcom-hw: Add SC8180X compatible
+>       arm64: dts: qcom: sc8180x: Add a SoC-specific compatible to cpufreq-hw
 
-在 2024/11/14 19:53, Rafael J. Wysocki 写道:
-> Hi,
->
-> On Thu, Nov 14, 2024 at 9:37 AM lihuisong (C) <lihuisong@huawei.com> wrote:
->> Hi Rafael,
->>
->> 在 2024/11/13 17:26, Rafael J. Wysocki 写道:
->>> On Wed, Nov 13, 2024 at 10:07 AM Huisong Li <lihuisong@huawei.com> wrote:
->>>> There are many 'cdevX' files which link cooling devices under
->>>> '/sys/class/thermal/thermal_zoneX/'. These devices contain active cooling
->>>> devices and passive cooling devices. And user cann't directly know which
->>>> devices temperature is represented by the thermal zone.
->>>>
->>>> However, ACPI spec provides a '_TZD' object which evaluates to a package
->>>> of device names. Each name corresponds to a device in the ACPI namespace
->>>> that is associated with the thermal zone. The temperature reported by the
->>>> thermal zone is roughly correspondent to that of each of the devices.
->>>>
->>>> User can get all devices a thermal zone measured by the 'measures'
->>>> directory under the thermal zone device.
->>> Well, that's kind of clear, but what exactly is the use case?  Why
->>> does the user need to know that?
->> IMO, this makes thermal zone information more friendly.
->> For instance, user can directly know the temperature of CPUs or other
->> devices is roughly represented by which thermal zone.
->> This may offer the convenience for further usersapce application.
->>
->> BTW, the '_TZD' method is similar to the '_PMD' in acpi power meter.
->> Since ACPI spec provides them, they should also have a role in their
->> existence.
-> So there is no specific use case, but it is possible that somebody may
-> want to use this information, IIUC.
->
-> Well, let's defer making kernel changes until there is a user
-> wanting/needing this information.  Then we'll decide how to expose it.
->
-> For one, I'm not convinced that exposing it under the ACPI
-> representation of a thermal zone is going to be really useful.
-All right. Thanks for your review.
->
-> .
+Applied. Thanks.
+
+-- 
+viresh
 
