@@ -1,297 +1,247 @@
-Return-Path: <linux-pm+bounces-17700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CF109D0E90
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:31:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E269D0E64
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CCE0B22C05
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:23:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25F28282826
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0356419340E;
-	Mon, 18 Nov 2024 10:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5EFD194158;
+	Mon, 18 Nov 2024 10:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ECwF1rnq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YDu4++ko"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1A83D551;
-	Mon, 18 Nov 2024 10:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF21D19415D
+	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 10:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731925316; cv=none; b=H3LyvdibkCjnMDn5EV8P7+uVAW0EXBONGd19GGBRwj+sDB757Rk2Y7smTR3A++GT6s2pGghklthMubEgXMfW6JWfbu1STK2IS2NCShW+shvLkstS2FqoZ9JzFRpBpuGt6yhcyLLMGZ5T9tIICH97NANCd5sGfpmUPUDHgpFg8YU=
+	t=1731925320; cv=none; b=GssTgjAx/HyHumyGG78DFH2q50fzi/jowHdR6nGLJJnUCVgAfEsqjwELWGwRKFNCWJSHnzZ8yB+RNg9YnBJUEEoszrjnJUm6bCTAuds5uXPBVPbwaUFoHLa88rxNbM8QWNRuQZeuxPpTxGOMbmwmv4bYkY8bIROCN7CyYSKhX1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731925316; c=relaxed/simple;
-	bh=EqLRLcPw+hpXYUlLvw3BsBBJsOhP3Yw6p6RDJlVDOBM=;
+	s=arc-20240116; t=1731925320; c=relaxed/simple;
+	bh=Db4cp2BS1tOGXH1Epn3W22qyrM5yGAT815UoctHNo+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UPI66iCkfLFGTk5sn2Ofjr7vVs8Fd/xUy0sh7U9ApE7YXmqrEZp+o84VlU+K6UBgn/WdKvbmXrnIgtM1xBV/23ZuKzlFE9b8VHDuc/TjSUde/bQsWmNdmhmXXG89ie7pXLjIKsWr+9haWN1KCQCIj6WRM0OSY+uQ/jC4GefplVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ECwF1rnq; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731925315; x=1763461315;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EqLRLcPw+hpXYUlLvw3BsBBJsOhP3Yw6p6RDJlVDOBM=;
-  b=ECwF1rnqeaxksKVfP6jmB3urJ3xqBbdM6V4N8dwToMEJjgyErxXh+yKO
-   SbW+DbAkE5DRQyrYToHphLJRdQj2io9qe0uoVAnuyxDr9nWrcLQd/iNIm
-   dDPhOxFY1hOQr4L3D4dnJxjuk5MO3J5rbhe+76kJuy10t8TSX56X+wELo
-   KslPK5mNOe4BsxNC4HC/D+9OmB4t4qt0kaLPR5DM+iuJQYq8EVGN2tcUh
-   s3z6lzZLMnzQS5US0czKdPggjYwLKiRSM69Z0Re84lD6b2RJeP9QzHM3+
-   RgQS44djK1+GNCZX1E+mtsqW+djzohSLSUEcyml6sMHg6lQICE86QT0qt
-   Q==;
-X-CSE-ConnectionGUID: 2vFN5feWRzm5lRhHl+o1Xg==
-X-CSE-MsgGUID: v2PGeeFsQGWwZey5quQRZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="42391473"
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="42391473"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 02:21:54 -0800
-X-CSE-ConnectionGUID: CBZQnqNESDuCOWFsbupJSg==
-X-CSE-MsgGUID: NnRZu1XWQYmxs2RFnSJFew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="94275234"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 02:21:49 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1tCyt7-0000000Fy3E-08C0;
-	Mon, 18 Nov 2024 12:21:45 +0200
-Date: Mon, 18 Nov 2024 12:21:44 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Matteo Martelli <matteomartelli3@gmail.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Alisa-Dariana Roman <alisa.roman@analog.com>,
-	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Sebastian Reichel <sre@kernel.org>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
- producer to fix race
-Message-ID: <ZzsVOGvzgNTvuEtD@smile.fi.intel.com>
-References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
- <20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
- <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
- <173031260171.39393.109639772708550094@njaxe.localdomain>
- <20241030203050.5cdf3450@jic23-huawei>
- <173037398492.12348.265826723028347056@njaxe.localdomain>
- <20241031143129.0000014e@Huawei.com>
- <173039799203.1353.4404042832923090619@njaxe.localdomain>
- <b56ba6a0db195ad44158509f3adb157b@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sd23jjMy84tipPpkilPfUhKFApLPrmJm0ZRbqmIFYE6dCy3nFyeMpvqVdZ3tzK655qpcP6EdB3iYwi90R+9hG9q61mwxhgVNYCIy6QZKeu07WXN99Ccky0s0xPwe0XlmCLa5KU3OICh1PCU0w9Oyhtqf24AM6/zHxSQEIrSRp18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YDu4++ko; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38232c6311fso1341257f8f.3
+        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 02:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731925317; x=1732530117; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=phSqjmldBPWXRgFeffd/JWcPCOA4hJo3BiIhOYwH3MA=;
+        b=YDu4++koJxtr+FzoXRequiUYoGo53OpWgZJqWqBeGre2QOgLudGKs8vCGZd3+wo4uK
+         ecfpKtI8e9PyKRns3Sgef+U5OzMMF3OfOPq66U4+t375VPK1K+BG79LJFYj6kGbmckVt
+         YvDB2KbVitfwAh7aBAbqDjh+jhLCe5U5v+mm1M7vVwjqx7A3XVqcuCo0ZJ7vZKd/3pjN
+         yvIpDMXqTub8C76HxQ7wCMHyvsTjY7SCY9S1h4P+YcFS8kPLFNDnm+Gep2n+LQfA2dws
+         U92HLOJeUVlk6cW1PYcbFWM7DC8zjTw4IWK4Q9TwKdmHzzIwIaBeHKOhq6Fqe+PmDsM0
+         BcTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731925317; x=1732530117;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=phSqjmldBPWXRgFeffd/JWcPCOA4hJo3BiIhOYwH3MA=;
+        b=tognJzI/TCpk1bB0pP+1YtWZtKWLCAdb8AKdLeYG+VwLgCaTcqEzWYcQlCFGISt1lj
+         TsDLFLjMl963zesDtCtt/5jp++hVJgNLIzCJQ7oClvIHwyi+I80VVZd+iEANGln8dvXW
+         X/tvQi3N0eKDIfRe+4PViKHHLLJGQBM12xwZ8FPYMShO4jZC9vLw8iR/IbX6P+A57E2L
+         +VVmh19PzeLXhcGZeZnjRKbqTAuohYu1vXLay2wA3l1vYMa8tXuwn39hHt5nefd16Hd0
+         Vex41sMH+06ZI5nXcm1K0FHsKSDq9tc9Vpi4DhcanxzcuHVkZVIkArY9pxJ/drdV4pop
+         4+LA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhjzJYcptpL8TodYWh1wNSuxUgWHXdJ+G9VRwZbhqYct7VmuWVuJ8a1Q5UuaQfkYuCyUtJWN9Ufw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywgmq+ZJc79yWI+YlflhODoFe3kVQ3Dwt2BTJ8r2OyNAQq29DXK
+	VC1uC5oZ1Dt5XSyJ0oPGAGd42xVFxzUNqQilzkV+DxuIu05DEBeywgmRg18a5iA=
+X-Google-Smtp-Source: AGHT+IEFeF0+Sdkb6b315Q3y1qMmmjCmnoawHXKh9ZeoveK/uoXwKwzlP7db+07+TyaV3vMlKWXWlQ==
+X-Received: by 2002:a05:6000:1f88:b0:37c:d276:f04 with SMTP id ffacd0b85a97d-38225a915fbmr8111178f8f.45.1731925317212;
+        Mon, 18 Nov 2024 02:21:57 -0800 (PST)
+Received: from linaro.org ([2a02:2454:ff21:ef80:8453:3d1e:f32c:d913])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382485e2a89sm2301322f8f.17.2024.11.18.02.21.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2024 02:21:56 -0800 (PST)
+Date: Mon, 18 Nov 2024 11:21:45 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: =?iso-8859-1?B?QmFybmFi4XMgQ3rpbeFu?= <barnabas.czeman@mainlining.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev
+Subject: Re: [PATCH v6 10/10] arm64: dts: qcom: Add Xiaomi Redmi 5A
+Message-ID: <ZzsVOV8GjCVtCi5Q@linaro.org>
+References: <20241113-msm8917-v6-0-c348fb599fef@mainlining.org>
+ <20241113-msm8917-v6-10-c348fb599fef@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <b56ba6a0db195ad44158509f3adb157b@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241113-msm8917-v6-10-c348fb599fef@mainlining.org>
 
-On Fri, Nov 15, 2024 at 03:25:06PM +0100, Matteo Martelli wrote:
-> On Thu, 31 Oct 2024 19:06:32 +0100, Matteo Martelli <matteomartelli3@gmail.com> wrote:
-> > Quoting Jonathan Cameron (2024-10-31 15:31:29)
-> > > On Thu, 31 Oct 2024 12:26:24 +0100
-> > > Matteo Martelli <matteomartelli3@gmail.com> wrote:
-> > > > Quoting Jonathan Cameron (2024-10-30 21:30:50)
-> > > > > On Wed, 30 Oct 2024 19:23:21 +0100
-> > > > > Matteo Martelli <matteomartelli3@gmail.com> wrote:
-> > > > > > Quoting Andy Shevchenko (2024-10-30 15:47:50)  
-> > > > > > > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:    
-
-> > > > > > > > Consumers need to call the producer's read_avail_release_resource()
-> > > > > > > > callback after reading producer's available info. To avoid a race
-> > > > > > > > condition with the producer unregistration, change inkern
-> > > > > > > > iio_channel_read_avail() so that it copies the available info from the
-> > > > > > > > producer and immediately calls its release callback with info_exists
-> > > > > > > > locked.
-> > > > > > > > 
-> > > > > > > > Also, modify the users of iio_read_avail_channel_raw() and
-> > > > > > > > iio_read_avail_channel_attribute() to free the copied available buffers
-> > > > > > > > after calling these functions. To let users free the copied buffer with
-> > > > > > > > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
-> > > > > > > > consumer helper that is equivalent to iio_read_avail_channel_attribute()
-> > > > > > > > but stores the available values in the returned variable.    
-
-...
-
-> > > > > > > > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
-> > > > > > > > +                                         struct iio_chan_spec const *chan,
-> > > > > > > > +                                         const int *vals, long mask)
-> > > > > > > > +{
-> > > > > > > > +     kfree(vals);
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
-> > > > > > > >                             struct iio_chan_spec const *chan,
-> > > > > > > >                             int val, int val2, long mask)
-> > > > > > > > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
-> > > > > > > >  static const struct iio_info dpot_dac_info = {
-> > > > > > > >       .read_raw = dpot_dac_read_raw,
-> > > > > > > >       .read_avail = dpot_dac_read_avail,
-> > > > > > > > +     .read_avail_release_resource = dpot_dac_read_avail_release_res,
-> > > > > > > >       .write_raw = dpot_dac_write_raw,
-> > > > > > > >  };    
-> > > > > > > 
-> > > > > > > I have a problem with this approach. The issue is that we allocate
-> > > > > > > memory in one place and must clear it in another. This is not well
-> > > > > > > designed thingy in my opinion. I was thinking a bit of the solution and
-> > > > > > > at least these two comes to my mind:
-> > > > > > > 
-> > > > > > > 1) having a special callback for .read_avail_with_copy (choose better
-> > > > > > > name) that will dump the data to the intermediate buffer and clean it
-> > > > > > > after all;
-> > > > > > > 
-> > > > > > > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.    
-> > > > > > 
-> > > > > > Could you elaborate more about these potential solutions? Maybe with some
-> > > > > > usage examples?
-> > > > > > 
-> > > > > > If I get it correctly, in both cases you are suggesting to pass ownership
-> > > > > > of the vals buffer to the caller, iio_read_channel_info_avail() in this
-> > > > > > case, so that it would take care of freeing the buffer after calling
-> > > > > > iio_format_after_*(). We considered this approach during an initial
-> > > > > > discussion with Jonathan (see read_avail_ext() in [1]), where he suggested
-> > > > > > to let the driver keep the release control through a callback for two
-> > > > > > reasons:
-> > > > > > 
-> > > > > > 1) Apparently it's a bad pattern to pass the buffer ownership to the core,
-> > > > > >    maybe Jonathan can elaborate why? The risk I can think of is that the driver
-> > > > > >    could still keep the buffer copy in its private data after giving it away,
-> > > > > >    resulting in fact in a double ownership. However I think it would be clear
-> > > > > >    enough in this case that the copy should be handled by the caller, or maybe
-> > > > > >    not?  
-> > > > > Mostly the lack of desire to have to copy for the 95% of cases where it's
-> > > > > not needed and that it prevents any optimization like you mention.  
-> > > > 
-> > > > I think the suggestion here is to add an additional .read_avail_with_copy()
-> > > > without replacing the original .read_avail(), so all the current drivers that
-> > > > use a constant avail list would not be affected.
-
-Yes.
-
-> > > > And I think this was the same
-> > > > idea for the additional read_avail_ext() or the additional argument for the
-> > > > read_avail() we were considering in [1]. So I would think that
-> > > > iio_read_channel_info_avail() would do something like the following:
-> > > > 
-> > > >     if (indio_dev->info->read_avail_with_copy)
-> > > >         indio_dev->info->read_avail_with_copy(vals);
-> > > >     else
-> > > >         indio_dev->info->read_avail(vals);
-> > > > 
-> > > >     ...
-> > > >     iio_format_avail_list(vals);
-> > > >     ...
-> > > > 
-> > > >     if (indio_dev->info->read_avail_with_copy)
-> > > >         kfree(vals);
-
-Right. At least that's what I see can be done with the existing users.
-
-> > > Ok, sure that would work, but...
-> > > 
-> > > I don't really see this as being much less fragile than
-> > > the existing solution + in cases that we do have where
-> > > only some available are not const we will have to copy them
-> > > all.
-> > > 
-> > > If anything it's more complex than making it a driver problem
-> > > to provide the release call however it wants to do it.
-
-...but make a driver to allocate what's needed as well then.
-
-> > > > And the drivers would choose whether to define the read_avail or the
-> > > > read_avail_with_copy.
-
-Either way drivers should know what to do with a data supplied to read_aval().
-In one case we assume the [simple] workflow in the core, in the other we all
-rely on the driver. Current approach makes a mix of these two. And that's what
-I don't like.
-
-> > > > What I was referring to is that, back then, you mentioned you would have
-> > > > preferred to avoid passing ownership of the buffer around:
-> > > > 
-> > > > > That's a corner case we should think about closing. Would require an indicator
-> > > > > to read_avail that the buffer it has been passed is a snapshot that it should
-> > > > > free on completion of the string building.  I don't like passing ownership
-> > > > > of data around like that, but it is fiddly to do anything else given
-> > > > > any simple double buffering is subject to race conditions.  
-> > > > 
-> > > > I guess there is some other reason other than avoiding the copy when not
-> > > > necessary, since by introducing an additional function or argument or return
-> > > > type, most of the unnecessary copies would already be avoided right?
-> > > 
-> > > It's not a strong reason beyond limiting scope of clever design +
-> > > the key bit my mind is that the above is not substantially simpler and
-> > > reduces our flexibility.
-> > > 
-> > > > Anyway any of this solutions would still prevent the potential optimizations of
-> > > > point 2). It's worth mentioning that those kind of optimizations are currently
-> > > > not adopted by any driver.
-> > > 
-> > > That one indeed not, but mixing dynamic and non dynamic is something
-> > > you do in your pac1921 patch.
-> > 
-> > Good point! I didn't think about it, or more likely I forgot, that with an
-> > additional read_avail_with_copy() used as in the example you cannot mix dynamic
-> > and non dynamic available lists, thus those drivers that need at least one
-> > dynamic available list would always copy all of them as they need to rely to
-> > the read_avail_with_copy(). I guess this could be worked around with an
-> > additional return argument for the read_avail() or an additional type like the
-> > IIO_AVAIL_LIST_ALLOC suggested by Andy to signal the caller it needs to free
-> > the list after use. However, I think they would introduce a more invasive
-> > change in the current API compared to an additional optional callback,
-
-It even sounds originally that it should be more invasive, so I don't think it's
-a problem here.
-
-> > so I agree that the current release callback is still a better option.
-
-I disagree on this as I pointed above why.
-
-> > > > > > 2) Some driver might want to avoid allocating a new copy of a big table if
-> > > > > >    the race does not occur (e.g. with additional checks on buffer access
-> > > > > >    code) and thus wouldn't call a free() in the release callback.
-> > > > > >   
-> > > > > > > In any case it looks fragile and not scalable. I propose to drop this
-> > > > > > > and think again.    
-> > > > > > 
-> > > > > > I see your concerns, I am open to reconsider this in case we come up with
-> > > > > > better solution after addressing the points above.
-> > > > > >   
-> > > > > > > Yes, yes, I'm fully aware about the problem you are trying to solve and
-> > > > > > > agree on the report, I think this solution is not good enough.
-> > > > > > 
-> > > > > > [1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic23-huawei/
-> > > > 
-> > > > I hope I've brought a little more clarity to the discussion by providing some
-> > > > history instead of making it more confusing.
-> > > 
-> > > Sure, the code example in particular is useful.
+On Wed, Nov 13, 2024 at 04:11:51PM +0100, Barnabás Czémán wrote:
+> Add initial support for Xiaomi Redmi 5A (riva).
 > 
-> Just a friendly reminder this has been sitting for a while, any news or
-> additional considerations?
+> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile                |   1 +
+>  arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts | 297 +++++++++++++++++++++++
+>  2 files changed, 298 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 9bb8b191aeb517e8f1e3a11bca98a3d0c39c5398..7562406843cfd82397c4844d14a22e8bcf4bba74 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -62,6 +62,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86518.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86528.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..81bb76f1773252be2f60777acf93d51d01981f86
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
+> @@ -0,0 +1,297 @@
+> [...]
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		key-volup {
+> +			label = "Volume Up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
 
-Moving the allocation control to the drivers will satisfy me as well, however
-it makes even more duplication of the code, but at least it will be cleaner
-design-wise in my opinion.
+It's good practice to
 
-In any case the last word is on Jonathan.
+> +			debounce-interval = <15>;
+> +		};
+> +	};
+> [...]
+> +&blsp1_i2c3 {
+> +	status = "okay";
+> +
+> +	touchscreen@38 {
+> +		compatible = "edt,edt-ft5306";
+> +		reg = <0x38>;
+> +		interrupts-extended = <&tlmm 65 IRQ_TYPE_LEVEL_LOW>;
 
--- 
-With Best Regards,
-Andy Shevchenko
+add pinctrl
+
+> +		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
+
+for all
+
+> +		vcc-supply = <&pm8937_l10>;
+> +		iovcc-supply = <&pm8937_l5>;
+> +
+> +		touchscreen-size-x = <720>;
+> +		touchscreen-size-y = <1280>;
+> +	};
+> +};
+> +
+> +&blsp2_i2c1 {
+> +	status = "okay";
+> +
+> +	bq27426@55 {
+> +		compatible = "ti,bq27426";
+> +		reg = <0x55>;
+> +		monitored-battery = <&battery>;
+> +	};
+> +
+> +	bq25601@6b{
+> +		compatible = "ti,bq25601";
+> +		reg = <0x6b>;
+> +		monitored-battery = <&battery>;
+> +
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = <61 IRQ_TYPE_EDGE_FALLING>;
+
+GPIOs/pins
+
+> +
+> +		input-voltage-limit-microvolt = <4400000>;
+> +		input-current-limit-microamp = <1000000>;
+> +	};
+> +};
+> [...]
+
+> +&sdhc_2 {
+> +	cd-gpios = <&tlmm 67 GPIO_ACTIVE_LOW>;
+
+that you use. :-)
+
+Usually it can be something simple like function=gpio, bias-disable,
+drive-strength = <2>, etc, plenty of examples exist upstream. Check
+downstream or schematics (if you have them). Ideally you would check
+what the peripheral requires.
+
+E.g. for SD card the GPIO usually has external pull-up, so bias-pull-up
+would be redundant and one can just use bias-disable:
+
+	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
+	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
+	pinctrl-names = "default", "sleep";
+
+&tlmm {
+	sdc2_cd_default: sdc2-cd-default-state {
+		pins = "gpio67";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-disable;
+	};
+};
 
 
+> +	vmmc-supply = <&pm8937_l11>;
+> +	vqmmc-supply = <&pm8937_l12>;
+> +
+> +	status = "okay";
+> +};
+> +
+> [...]
+> +&rpm_requests {
+> +	regulators-0 {
+> +		compatible = "qcom,rpm-pm8937-regulators";
+> +
+> [...]
+> +		pm8937_l11: l11 {
+> +			regulator-min-microvolt = <2950000>;
+> +			regulator-max-microvolt = <2950000>;
+> +		};
+
+You usually need/want regulator-allow-set-load and regulator-system-load
+for the SD card regulator to avoid issues with certain SD
+cards/operations, see
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=af61bef513ba179559e56908b8c465e587bc3890
+
+Thanks,
+Stephan
 
