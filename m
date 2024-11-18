@@ -1,344 +1,297 @@
-Return-Path: <linux-pm+bounces-17699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17700-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E02B29D0DDC
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:10:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CF109D0E90
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:31:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0E6E283035
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:10:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CCE0B22C05
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B72194C8D;
-	Mon, 18 Nov 2024 10:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0356419340E;
+	Mon, 18 Nov 2024 10:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmOcnvvF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ECwF1rnq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079731946B8;
-	Mon, 18 Nov 2024 10:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1A83D551;
+	Mon, 18 Nov 2024 10:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731924607; cv=none; b=DxrKXrmBGIprxnEOlsjXAgxp52uAh+KnYxrYNCPV54NGiRQmobCpzx9clrEQ/QzkZ1aNqHWqx8myrgJMlp2o7bw/IadTBkA922Rm4CnYvqtf38h/SXEYgINSGnR4/RHepNDPwX3fRrg9qJICOncrwl6mh8GurrdUUNcP1f+CS4I=
+	t=1731925316; cv=none; b=H3LyvdibkCjnMDn5EV8P7+uVAW0EXBONGd19GGBRwj+sDB757Rk2Y7smTR3A++GT6s2pGghklthMubEgXMfW6JWfbu1STK2IS2NCShW+shvLkstS2FqoZ9JzFRpBpuGt6yhcyLLMGZ5T9tIICH97NANCd5sGfpmUPUDHgpFg8YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731924607; c=relaxed/simple;
-	bh=08avkvJXc6YpLMi35Ewq9sInOmvPK/XUfpBoJCW4Zgo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o1t2G5JZOM4fVj5HspTiom3GmFQrXj7ncRv0EEZyvIBp3L7mF0cHpqBTEnIA6Eu9/LbrTMynWTg/sXIcBJ+AWScoA1cypVPijE8AvcJKoCJR5eG2PTXvI0rWnHBN8dR3wf1VeQSLNUPj49KpEgC/fvlTPsE0HvQVBCfItzPsHok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmOcnvvF; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb4af0b6beso20999761fa.3;
-        Mon, 18 Nov 2024 02:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731924603; x=1732529403; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fOyYhW/88qHGGmM9QOYNQJqLo1yTsoyhwIyniU1DSY=;
-        b=cmOcnvvFay3INRxclkkyVeCeevPXKk3aHnqR8HmOP55pB4/FpZg/2IFlkzGy8KiGvp
-         j/H7ZA/j8Mvk/i9F4JJzA0Pr9SyflC6MX+/2c6L+a1tz3TurxmoJ35IBOm7xwgODK4n4
-         k7FSOpAPnGmTWAS8RP9HsRgBNo32UWfNOCOw9razWYCvPuZgqiZet5eUmn+IPZm8wvhR
-         LWZGX8OCLpKfaPXFv4gcG403GPA51WjtaPeH1rOsRP3wPZRqAganDGYlT0zqPWhAC4Qd
-         kysK2Ik5lDvGtbsfJs033WgbQSLtzIdmSgXqgWK3i/zVKW8M7UM2Z8YPLvVlUw0EYJaZ
-         RXCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731924603; x=1732529403;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9fOyYhW/88qHGGmM9QOYNQJqLo1yTsoyhwIyniU1DSY=;
-        b=WeXfCbpPlyfSgKYKo7pOXB+epSRTOSvHUh77u4M3F5ACHVHUTodn/wYnZw+HMNbho/
-         aLV/86FhzwSMF/Jgo3UBYJikUzuFxnkT5/AXv2D1VSYv4kALhhlShVeMKM6c3CzCmnk2
-         W9h+QUtSJaGmPJb4H41oF0oo3M4LPKnw1igoO4bY4hc3aYYLyY+NiwbhRQMQSxVGxtHb
-         UsPWqovgsARETiMg4WGmnKSVOEZT9HjFYieBUgR9MhsF2Sd1WPxwQ8SYljnC6cX+9/Rz
-         aBLqE1phvOZ/GmznV4vXFrFQ6S3GlHu8WRadvQ20rkq7HjRtqiP4lYNw4aYkkAe1LMkg
-         5nFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSEmMiKwLXHXSs5BI/h2KzcQNbPu8TM+um6x38JT0fHlrAex6RwgntTq71vwHcdoVffi1Dx8LqtpqDpdgbEA==@vger.kernel.org, AJvYcCVJl3LFInkI96IS+DeO+wdjj5kw3sk4urGBfRyV+VvXYZQQhD8kYhVkI6+UJx2HI3c/UYv8Ax0zJmMPecz/0jfNrpE=@vger.kernel.org, AJvYcCXL3DOUbHHm9vfYiJ1QX14N+rhZPp4jguIP/L2CsOdVLgAkbHUnQe2UoqpCqr4hjXY3fD1r9YbwFCB7@vger.kernel.org, AJvYcCXMg1bj7VOyftlLJhS0oXSc4I6lUQDARFrhTWbyktuv3c5R463jSxc/nxIUIxxW7prOZ7H0Y4bDgVVevf7Q@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgBrM6fo6Eu9tWer+566EJVS1GSyuDWPh8HRIvpksqga9BAzzZ
-	H5qRgPGnrymP/0REose5jsOb8yVBAB0AQzCWyJeUFG/TRbwJsuV1
-X-Google-Smtp-Source: AGHT+IEsM+bEYVWPcdxMX4ty+jlvxNzXr16PKephGvFY1LmTwDkGEiU9Vu06vwaLgV1jjEKcvAJWkw==
-X-Received: by 2002:a05:6512:2391:b0:53d:a6c8:fb95 with SMTP id 2adb3069b0e04-53dab29efffmr5766910e87.19.1731924602776;
-        Mon, 18 Nov 2024 02:10:02 -0800 (PST)
-Received: from [127.0.1.1] ([46.53.242.72])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aa20e046932sm518546366b.170.2024.11.18.02.10.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 02:10:02 -0800 (PST)
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Mon, 18 Nov 2024 13:09:54 +0300
-Subject: [PATCH v3 2/2] power: supply: max17042: add platform driver
- variant
+	s=arc-20240116; t=1731925316; c=relaxed/simple;
+	bh=EqLRLcPw+hpXYUlLvw3BsBBJsOhP3Yw6p6RDJlVDOBM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UPI66iCkfLFGTk5sn2Ofjr7vVs8Fd/xUy0sh7U9ApE7YXmqrEZp+o84VlU+K6UBgn/WdKvbmXrnIgtM1xBV/23ZuKzlFE9b8VHDuc/TjSUde/bQsWmNdmhmXXG89ie7pXLjIKsWr+9haWN1KCQCIj6WRM0OSY+uQ/jC4GefplVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ECwF1rnq; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731925315; x=1763461315;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EqLRLcPw+hpXYUlLvw3BsBBJsOhP3Yw6p6RDJlVDOBM=;
+  b=ECwF1rnqeaxksKVfP6jmB3urJ3xqBbdM6V4N8dwToMEJjgyErxXh+yKO
+   SbW+DbAkE5DRQyrYToHphLJRdQj2io9qe0uoVAnuyxDr9nWrcLQd/iNIm
+   dDPhOxFY1hOQr4L3D4dnJxjuk5MO3J5rbhe+76kJuy10t8TSX56X+wELo
+   KslPK5mNOe4BsxNC4HC/D+9OmB4t4qt0kaLPR5DM+iuJQYq8EVGN2tcUh
+   s3z6lzZLMnzQS5US0czKdPggjYwLKiRSM69Z0Re84lD6b2RJeP9QzHM3+
+   RgQS44djK1+GNCZX1E+mtsqW+djzohSLSUEcyml6sMHg6lQICE86QT0qt
+   Q==;
+X-CSE-ConnectionGUID: 2vFN5feWRzm5lRhHl+o1Xg==
+X-CSE-MsgGUID: v2PGeeFsQGWwZey5quQRZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="42391473"
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="42391473"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 02:21:54 -0800
+X-CSE-ConnectionGUID: CBZQnqNESDuCOWFsbupJSg==
+X-CSE-MsgGUID: NnRZu1XWQYmxs2RFnSJFew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="94275234"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 02:21:49 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1tCyt7-0000000Fy3E-08C0;
+	Mon, 18 Nov 2024 12:21:45 +0200
+Date: Mon, 18 Nov 2024 12:21:44 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Alisa-Dariana Roman <alisa.roman@analog.com>,
+	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Sebastian Reichel <sre@kernel.org>, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
+ producer to fix race
+Message-ID: <ZzsVOGvzgNTvuEtD@smile.fi.intel.com>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
+ <20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
+ <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+ <173031260171.39393.109639772708550094@njaxe.localdomain>
+ <20241030203050.5cdf3450@jic23-huawei>
+ <173037398492.12348.265826723028347056@njaxe.localdomain>
+ <20241031143129.0000014e@Huawei.com>
+ <173039799203.1353.4404042832923090619@njaxe.localdomain>
+ <b56ba6a0db195ad44158509f3adb157b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241118-b4-max17042-v3-2-9bcaeda42a06@gmail.com>
-References: <20241118-b4-max17042-v3-0-9bcaeda42a06@gmail.com>
-In-Reply-To: <20241118-b4-max17042-v3-0-9bcaeda42a06@gmail.com>
-To: Hans de Goede <hdegoede@redhat.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
- Purism Kernel Team <kernel@puri.sm>, Sebastian Reichel <sre@kernel.org>, 
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-msm@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731924598; l=7718;
- i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=08avkvJXc6YpLMi35Ewq9sInOmvPK/XUfpBoJCW4Zgo=;
- b=Tb5f0aAMBx2MGt3QTrkgclj08UpXH0InARdTWId9PBKICIi4GRNuva4CIHo0xUUNPX4OG64yq
- tgZv4Ji6Oe6DCAShAYu8XgKwIixcAaIg1oTLpWOdRFCFDU6SObAAzr3
-X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
- pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b56ba6a0db195ad44158509f3adb157b@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Maxim PMICs may include fuel gauge with additional features, which is
-out of single Linux power supply driver scope.
+On Fri, Nov 15, 2024 at 03:25:06PM +0100, Matteo Martelli wrote:
+> On Thu, 31 Oct 2024 19:06:32 +0100, Matteo Martelli <matteomartelli3@gmail.com> wrote:
+> > Quoting Jonathan Cameron (2024-10-31 15:31:29)
+> > > On Thu, 31 Oct 2024 12:26:24 +0100
+> > > Matteo Martelli <matteomartelli3@gmail.com> wrote:
+> > > > Quoting Jonathan Cameron (2024-10-30 21:30:50)
+> > > > > On Wed, 30 Oct 2024 19:23:21 +0100
+> > > > > Matteo Martelli <matteomartelli3@gmail.com> wrote:
+> > > > > > Quoting Andy Shevchenko (2024-10-30 15:47:50)  
+> > > > > > > On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:    
 
-For example, in max77705 PMIC fuelgauge has additional registers,
-like IIN_REG, VSYS_REG, ISYS_REG. Those needed to measure PMIC input
-current, system voltage and current respectively. Those measurements
-cannot be bound to any of fuelgauge properties.
+> > > > > > > > Consumers need to call the producer's read_avail_release_resource()
+> > > > > > > > callback after reading producer's available info. To avoid a race
+> > > > > > > > condition with the producer unregistration, change inkern
+> > > > > > > > iio_channel_read_avail() so that it copies the available info from the
+> > > > > > > > producer and immediately calls its release callback with info_exists
+> > > > > > > > locked.
+> > > > > > > > 
+> > > > > > > > Also, modify the users of iio_read_avail_channel_raw() and
+> > > > > > > > iio_read_avail_channel_attribute() to free the copied available buffers
+> > > > > > > > after calling these functions. To let users free the copied buffer with
+> > > > > > > > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
+> > > > > > > > consumer helper that is equivalent to iio_read_avail_channel_attribute()
+> > > > > > > > but stores the available values in the returned variable.    
 
-The solution here add and option to use max17042 driver as a MFD
-sub device, thus allowing any additional functionality be implemented as
-another sub device. This will help to reduce code duplication in MFD
-fuel gauge drivers.
+...
 
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
----
-Changes in v3:
-- pass dev pointer in max17042_probe
-- remove prints
----
- drivers/power/supply/max17042_battery.c | 114 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------
- 1 file changed, 90 insertions(+), 24 deletions(-)
+> > > > > > > > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
+> > > > > > > > +                                         struct iio_chan_spec const *chan,
+> > > > > > > > +                                         const int *vals, long mask)
+> > > > > > > > +{
+> > > > > > > > +     kfree(vals);
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> > > > > > > >                             struct iio_chan_spec const *chan,
+> > > > > > > >                             int val, int val2, long mask)
+> > > > > > > > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> > > > > > > >  static const struct iio_info dpot_dac_info = {
+> > > > > > > >       .read_raw = dpot_dac_read_raw,
+> > > > > > > >       .read_avail = dpot_dac_read_avail,
+> > > > > > > > +     .read_avail_release_resource = dpot_dac_read_avail_release_res,
+> > > > > > > >       .write_raw = dpot_dac_write_raw,
+> > > > > > > >  };    
+> > > > > > > 
+> > > > > > > I have a problem with this approach. The issue is that we allocate
+> > > > > > > memory in one place and must clear it in another. This is not well
+> > > > > > > designed thingy in my opinion. I was thinking a bit of the solution and
+> > > > > > > at least these two comes to my mind:
+> > > > > > > 
+> > > > > > > 1) having a special callback for .read_avail_with_copy (choose better
+> > > > > > > name) that will dump the data to the intermediate buffer and clean it
+> > > > > > > after all;
+> > > > > > > 
+> > > > > > > 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.    
+> > > > > > 
+> > > > > > Could you elaborate more about these potential solutions? Maybe with some
+> > > > > > usage examples?
+> > > > > > 
+> > > > > > If I get it correctly, in both cases you are suggesting to pass ownership
+> > > > > > of the vals buffer to the caller, iio_read_channel_info_avail() in this
+> > > > > > case, so that it would take care of freeing the buffer after calling
+> > > > > > iio_format_after_*(). We considered this approach during an initial
+> > > > > > discussion with Jonathan (see read_avail_ext() in [1]), where he suggested
+> > > > > > to let the driver keep the release control through a callback for two
+> > > > > > reasons:
+> > > > > > 
+> > > > > > 1) Apparently it's a bad pattern to pass the buffer ownership to the core,
+> > > > > >    maybe Jonathan can elaborate why? The risk I can think of is that the driver
+> > > > > >    could still keep the buffer copy in its private data after giving it away,
+> > > > > >    resulting in fact in a double ownership. However I think it would be clear
+> > > > > >    enough in this case that the copy should be handled by the caller, or maybe
+> > > > > >    not?  
+> > > > > Mostly the lack of desire to have to copy for the 95% of cases where it's
+> > > > > not needed and that it prevents any optimization like you mention.  
+> > > > 
+> > > > I think the suggestion here is to add an additional .read_avail_with_copy()
+> > > > without replacing the original .read_avail(), so all the current drivers that
+> > > > use a constant avail list would not be affected.
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 99bf6915aa23..d11bf37aaae2 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -16,6 +16,7 @@
- #include <linux/i2c.h>
- #include <linux/delay.h>
- #include <linux/interrupt.h>
-+#include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/mod_devicetable.h>
- #include <linux/power_supply.h>
-@@ -1029,14 +1030,12 @@ static const struct power_supply_desc max17042_no_current_sense_psy_desc = {
- 	.num_properties	= ARRAY_SIZE(max17042_battery_props) - 2,
- };
- 
--static int max17042_probe(struct i2c_client *client)
-+static int max17042_probe(struct i2c_client *client, struct device *dev,
-+			  enum max170xx_chip_type chip_type)
- {
--	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct i2c_adapter *adapter = client->adapter;
- 	const struct power_supply_desc *max17042_desc = &max17042_psy_desc;
- 	struct power_supply_config psy_cfg = {};
--	const struct acpi_device_id *acpi_id = NULL;
--	struct device *dev = &client->dev;
- 	struct max17042_chip *chip;
- 	int ret;
- 	int i;
-@@ -1045,33 +1044,24 @@ static int max17042_probe(struct i2c_client *client)
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA))
- 		return -EIO;
- 
--	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-+	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
- 	if (!chip)
- 		return -ENOMEM;
- 
- 	chip->client = client;
--	if (id) {
--		chip->chip_type = id->driver_data;
--	} else {
--		acpi_id = acpi_match_device(dev->driver->acpi_match_table, dev);
--		if (!acpi_id)
--			return -ENODEV;
--
--		chip->chip_type = acpi_id->driver_data;
--	}
- 	chip->regmap = devm_regmap_init_i2c(client, &max17042_regmap_config);
- 	if (IS_ERR(chip->regmap)) {
--		dev_err(&client->dev, "Failed to initialize regmap\n");
-+		dev_err(dev, "Failed to initialize regmap\n");
- 		return -EINVAL;
- 	}
- 
- 	chip->pdata = max17042_get_pdata(chip);
- 	if (!chip->pdata) {
--		dev_err(&client->dev, "no platform data provided\n");
-+		dev_err(dev, "no platform data provided\n");
- 		return -EINVAL;
- 	}
- 
--	i2c_set_clientdata(client, chip);
-+	dev_set_drvdata(dev, chip);
- 	psy_cfg.drv_data = chip;
- 	psy_cfg.of_node = dev->of_node;
- 
-@@ -1095,17 +1085,17 @@ static int max17042_probe(struct i2c_client *client)
- 		regmap_write(chip->regmap, MAX17042_LearnCFG, 0x0007);
- 	}
- 
--	chip->battery = devm_power_supply_register(&client->dev, max17042_desc,
-+	chip->battery = devm_power_supply_register(dev, max17042_desc,
- 						   &psy_cfg);
- 	if (IS_ERR(chip->battery)) {
--		dev_err(&client->dev, "failed: power supply register\n");
-+		dev_err(dev, "failed: power supply register\n");
- 		return PTR_ERR(chip->battery);
- 	}
- 
- 	if (client->irq) {
- 		unsigned int flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_PROBE_SHARED;
- 
--		ret = devm_request_threaded_irq(&client->dev, client->irq,
-+		ret = devm_request_threaded_irq(dev, client->irq,
- 						NULL,
- 						max17042_thread_handler, flags,
- 						chip->battery->desc->name,
-@@ -1118,7 +1108,7 @@ static int max17042_probe(struct i2c_client *client)
- 		} else {
- 			client->irq = 0;
- 			if (ret != -EBUSY)
--				dev_err(&client->dev, "Failed to get IRQ\n");
-+				dev_err(dev, "Failed to get IRQ\n");
- 		}
- 	}
- 	/* Not able to update the charge threshold when exceeded? -> disable */
-@@ -1127,7 +1117,7 @@ static int max17042_probe(struct i2c_client *client)
- 
- 	regmap_read(chip->regmap, MAX17042_STATUS, &val);
- 	if (val & STATUS_POR_BIT) {
--		ret = devm_work_autocancel(&client->dev, &chip->work,
-+		ret = devm_work_autocancel(dev, &chip->work,
- 					   max17042_init_worker);
- 		if (ret)
- 			return ret;
-@@ -1139,6 +1129,38 @@ static int max17042_probe(struct i2c_client *client)
- 	return 0;
- }
- 
-+static int max17042_i2c_probe(struct i2c_client *client)
-+{
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
-+	const struct acpi_device_id *acpi_id = NULL;
-+	struct device *dev = &client->dev;
-+	enum max170xx_chip_type chip_type;
-+
-+	if (id) {
-+		chip_type = id->driver_data;
-+	} else {
-+		acpi_id = acpi_match_device(dev->driver->acpi_match_table, dev);
-+		if (!acpi_id)
-+			return -ENODEV;
-+
-+		chip_type = acpi_id->driver_data;
-+	}
-+
-+	return max17042_probe(client, dev, chip_type);
-+}
-+
-+static int max17042_platform_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct i2c_client *i2c = dev_get_platdata(dev);
-+	const struct platform_device_id *id = platform_get_device_id(pdev);
-+
-+	if (!i2c)
-+		return -EINVAL;
-+
-+	return max17042_probe(i2c, dev, id->driver_data);
-+}
-+
- #ifdef CONFIG_PM_SLEEP
- static int max17042_suspend(struct device *dev)
- {
-@@ -1204,6 +1226,16 @@ static const struct i2c_device_id max17042_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, max17042_id);
- 
-+static const struct platform_device_id max17042_platform_id[] = {
-+	{ "max17042", MAXIM_DEVICE_TYPE_MAX17042 },
-+	{ "max17047", MAXIM_DEVICE_TYPE_MAX17047 },
-+	{ "max17050", MAXIM_DEVICE_TYPE_MAX17050 },
-+	{ "max17055", MAXIM_DEVICE_TYPE_MAX17055 },
-+	{ "max77849-battery", MAXIM_DEVICE_TYPE_MAX17047 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(platform, max17042_platform_id);
-+
- static struct i2c_driver max17042_i2c_driver = {
- 	.driver	= {
- 		.name	= "max17042",
-@@ -1211,10 +1243,44 @@ static struct i2c_driver max17042_i2c_driver = {
- 		.of_match_table = of_match_ptr(max17042_dt_match),
- 		.pm	= &max17042_pm_ops,
- 	},
--	.probe		= max17042_probe,
-+	.probe		= max17042_i2c_probe,
- 	.id_table	= max17042_id,
- };
--module_i2c_driver(max17042_i2c_driver);
-+
-+static struct platform_driver max17042_platform_driver = {
-+	.driver	= {
-+		.name	= "max17042",
-+		.acpi_match_table = ACPI_PTR(max17042_acpi_match),
-+		.of_match_table = of_match_ptr(max17042_dt_match),
-+		.pm	= &max17042_pm_ops,
-+	},
-+	.probe		= max17042_platform_probe,
-+	.id_table	= max17042_platform_id,
-+};
-+
-+static int __init __driver_max17042_platform_init(void)
-+{
-+	int ret = 0;
-+
-+	ret = platform_driver_register(&max17042_platform_driver);
-+
-+	if (ret) {
-+		platform_driver_unregister(&max17042_platform_driver);
-+		return ret;
-+	}
-+
-+	ret = i2c_add_driver(&max17042_i2c_driver);
-+
-+	return ret;
-+}
-+module_init(__driver_max17042_platform_init);
-+
-+static void __exit __driver_max17042_platform_exit(void)
-+{
-+	i2c_del_driver(&max17042_i2c_driver);
-+	platform_driver_unregister(&max17042_platform_driver);
-+}
-+module_exit(__driver_max17042_platform_exit);
- 
- MODULE_AUTHOR("MyungJoo Ham <myungjoo.ham@samsung.com>");
- MODULE_DESCRIPTION("MAX17042 Fuel Gauge");
+Yes.
+
+> > > > And I think this was the same
+> > > > idea for the additional read_avail_ext() or the additional argument for the
+> > > > read_avail() we were considering in [1]. So I would think that
+> > > > iio_read_channel_info_avail() would do something like the following:
+> > > > 
+> > > >     if (indio_dev->info->read_avail_with_copy)
+> > > >         indio_dev->info->read_avail_with_copy(vals);
+> > > >     else
+> > > >         indio_dev->info->read_avail(vals);
+> > > > 
+> > > >     ...
+> > > >     iio_format_avail_list(vals);
+> > > >     ...
+> > > > 
+> > > >     if (indio_dev->info->read_avail_with_copy)
+> > > >         kfree(vals);
+
+Right. At least that's what I see can be done with the existing users.
+
+> > > Ok, sure that would work, but...
+> > > 
+> > > I don't really see this as being much less fragile than
+> > > the existing solution + in cases that we do have where
+> > > only some available are not const we will have to copy them
+> > > all.
+> > > 
+> > > If anything it's more complex than making it a driver problem
+> > > to provide the release call however it wants to do it.
+
+...but make a driver to allocate what's needed as well then.
+
+> > > > And the drivers would choose whether to define the read_avail or the
+> > > > read_avail_with_copy.
+
+Either way drivers should know what to do with a data supplied to read_aval().
+In one case we assume the [simple] workflow in the core, in the other we all
+rely on the driver. Current approach makes a mix of these two. And that's what
+I don't like.
+
+> > > > What I was referring to is that, back then, you mentioned you would have
+> > > > preferred to avoid passing ownership of the buffer around:
+> > > > 
+> > > > > That's a corner case we should think about closing. Would require an indicator
+> > > > > to read_avail that the buffer it has been passed is a snapshot that it should
+> > > > > free on completion of the string building.  I don't like passing ownership
+> > > > > of data around like that, but it is fiddly to do anything else given
+> > > > > any simple double buffering is subject to race conditions.  
+> > > > 
+> > > > I guess there is some other reason other than avoiding the copy when not
+> > > > necessary, since by introducing an additional function or argument or return
+> > > > type, most of the unnecessary copies would already be avoided right?
+> > > 
+> > > It's not a strong reason beyond limiting scope of clever design +
+> > > the key bit my mind is that the above is not substantially simpler and
+> > > reduces our flexibility.
+> > > 
+> > > > Anyway any of this solutions would still prevent the potential optimizations of
+> > > > point 2). It's worth mentioning that those kind of optimizations are currently
+> > > > not adopted by any driver.
+> > > 
+> > > That one indeed not, but mixing dynamic and non dynamic is something
+> > > you do in your pac1921 patch.
+> > 
+> > Good point! I didn't think about it, or more likely I forgot, that with an
+> > additional read_avail_with_copy() used as in the example you cannot mix dynamic
+> > and non dynamic available lists, thus those drivers that need at least one
+> > dynamic available list would always copy all of them as they need to rely to
+> > the read_avail_with_copy(). I guess this could be worked around with an
+> > additional return argument for the read_avail() or an additional type like the
+> > IIO_AVAIL_LIST_ALLOC suggested by Andy to signal the caller it needs to free
+> > the list after use. However, I think they would introduce a more invasive
+> > change in the current API compared to an additional optional callback,
+
+It even sounds originally that it should be more invasive, so I don't think it's
+a problem here.
+
+> > so I agree that the current release callback is still a better option.
+
+I disagree on this as I pointed above why.
+
+> > > > > > 2) Some driver might want to avoid allocating a new copy of a big table if
+> > > > > >    the race does not occur (e.g. with additional checks on buffer access
+> > > > > >    code) and thus wouldn't call a free() in the release callback.
+> > > > > >   
+> > > > > > > In any case it looks fragile and not scalable. I propose to drop this
+> > > > > > > and think again.    
+> > > > > > 
+> > > > > > I see your concerns, I am open to reconsider this in case we come up with
+> > > > > > better solution after addressing the points above.
+> > > > > >   
+> > > > > > > Yes, yes, I'm fully aware about the problem you are trying to solve and
+> > > > > > > agree on the report, I think this solution is not good enough.
+> > > > > > 
+> > > > > > [1]: https://lore.kernel.org/linux-iio/20240729211100.0d602d6e@jic23-huawei/
+> > > > 
+> > > > I hope I've brought a little more clarity to the discussion by providing some
+> > > > history instead of making it more confusing.
+> > > 
+> > > Sure, the code example in particular is useful.
+> 
+> Just a friendly reminder this has been sitting for a while, any news or
+> additional considerations?
+
+Moving the allocation control to the drivers will satisfy me as well, however
+it makes even more duplication of the code, but at least it will be cleaner
+design-wise in my opinion.
+
+In any case the last word is on Jonathan.
 
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
 
