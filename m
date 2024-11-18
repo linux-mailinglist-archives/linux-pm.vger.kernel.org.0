@@ -1,217 +1,247 @@
-Return-Path: <linux-pm+bounces-17733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBA499D1786
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 19:02:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 448B99D18E7
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 20:30:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5C221F22719
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 18:02:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96341B20C6B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 19:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D7A1DD866;
-	Mon, 18 Nov 2024 18:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0B8153BF0;
+	Mon, 18 Nov 2024 19:30:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IDBK+xLv"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eQLxlO6h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFBB1DC054;
-	Mon, 18 Nov 2024 18:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8774317BBF;
+	Mon, 18 Nov 2024 19:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731952942; cv=none; b=VxyKDzAuKDAgLAZ4quh4/3phR6nTCeuS6GkN3ffO5Kv6CBUosgt9UmkTKF8Dj/xXzNgN/esYSUpUkgtI30TEORFREvj1xYwOhLkS/5eFpuaZV5qicMytFUs/hBaOQcxuGqIvskj3gNZ2gnMLpRtWacpq55m7bBpXuUpBb/0U2Lo=
+	t=1731958223; cv=none; b=svcPZthNysXEmFTdjNsis3gvI2dI6o3BUIrGbqRAJx4auq8JavHCGJ3EDL4JI+NPem+nyoYvl2GybQ2LEaTHECRFra9YbnjEBUhxeM2oNUtIFuOlSnHiuX5w45DJ8udYRWt6imBm3J/kQpZPRIBu8fxxE8vS4vR0SKb9hsh3RLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731952942; c=relaxed/simple;
-	bh=IaeKpdec/3PSsBxKIbML0Pa+p5E4+JiLIUphOSQ2TiE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=VT8MXPuek3BV3r7wN/RDjclUYTo2XGTMZBq3f7/IVSMa6fXZNPI4r030Mz2Pue1/erdFcS9AezHNL6IIe36AIdOcC0gtM2h5CqJvNHwfPXCpcJhI9cAwKZdndo+OK3Pw8sbFhMROrnMFNSC8RNaxV/SJ9vr+R38sh6t1FvCXEBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IDBK+xLv; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1731958223; c=relaxed/simple;
+	bh=9pb/UfvTZ5ffQXilPmxRhQXCj6SzJeUV/mNoDJqfciM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PKRmwTUHw3BsRTnEwJGuYAuZtDkLNICQUv/jy7GOa1HvZxxcaG1eaHrMmHKNFYDQnVUssOETUwaC6oOc6WH00NtUdWTtdkTpqgY1CLSUhBuTn/bBAlAZwE9dGcTqgdBlP4I3//UwC8AtsgLiuHEP+ic1wlVUthAJXS2rKbMgRBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eQLxlO6h; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIGGeCG022370;
-	Mon, 18 Nov 2024 18:02:09 GMT
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIGLnb7011441;
+	Mon, 18 Nov 2024 19:30:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	G+5aI+CNTCLzdOV3Q6IscoEfQzbT9AxQXMivnhOM6ZE=; b=IDBK+xLvU+ewI1Z8
-	Nu4MDQ1YseLudMbYbVywbrD6ZOfdgy8H7gkB9cOXfodmFDzCTnAI6ZfJ0M9IgeHx
-	XxZopQT1rilm0rmLzEn+LFsRPXnrrtNYo0F0+kNPa58ncabfwWccUQFsf6lNI69d
-	NRl0h/tjjWGhMPMfc1F1eBYASayFkQghcUJIM4BdZ+hw2ar4vDPp2M4tzjpF6X8u
-	AkGvyLuvr+4Ze4DNwpgv8cK476sCLKwZnZgaW2So4YeNd9HUnoGJZ/dBSjGj0OA/
-	JR4tCVBEGm7a+fPcLyh7LTDsQrGKVqTCPsCe+70Kundg8993chR1L12NmEFbyAcz
-	gCZ/GQ==
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=Ch9g1xvXWHfnC8QbBYmpT0Nb
+	kpyf73TTNFt0J/RmQMM=; b=eQLxlO6hymPS3O3mNb2kcthKG2rd9unt4wgpewwm
+	Sts+wtgmsWvmn4gqRz/+DcEgyVuykl+x/lFmkDyPPZesKpO6hoDH0M5eaRH82fJ0
+	fNxKVbCntCwj7Ssn+mp732IIIctuwtqOlJQb7M88MhhkAGqvPWljNWoFPLyJMikE
+	uKdWMS8NuPiGFaZKbZ6qZsKZZaka755cp0jI4zHsGEkNDVeNQEfmoSpgAbwbD8Vb
+	OokGecy8Yiu7VUV8FMuMJtLaptZpK51uzD9oHoeBFCPl0RpNaa/NuFPtvUB4FmIv
+	SwI66cbv08iKiyXR5dODOMLdJFo/dehxc4mHOt6JzWzIvQ==
 Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y607yj-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43091m8dq1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 18:02:09 +0000 (GMT)
+	Mon, 18 Nov 2024 19:30:00 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AII28UY012604
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AIJTxC6011016
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 18:02:08 GMT
-Received: from [10.71.108.63] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 18 Nov
- 2024 10:01:05 -0800
-Message-ID: <0ca812e7-bf5b-463a-83dc-9195aee14589@quicinc.com>
-Date: Mon, 18 Nov 2024 10:01:05 -0800
+	Mon, 18 Nov 2024 19:29:59 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 18 Nov 2024 11:27:53 -0800
+Date: Mon, 18 Nov 2024 11:27:53 -0800
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Lorenzo Pieralisi <lpieralisi@kernel.org>
+CC: Stephen Boyd <swboyd@chromium.org>, Andy Yan <andy.yan@rock-chips.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh@kernel.org>, "Sebastian
+ Reichel" <sre@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon
+	<will@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        "Satya Durga
+ Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v6 3/5] firmware: psci: Read and use vendor reset types
+Message-ID: <20241118104725157-0800.eberman@hu-eberman-lv.qualcomm.com>
+References: <20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com>
+ <20241018-arm-psci-system_reset2-vendor-reboots-v6-3-50cbe88b0a24@quicinc.com>
+ <CAE-0n515sUkmTWptgY8pOaMDBPfDp5pZBy9Nby+4cMdMAnAZfA@mail.gmail.com>
+ <20241023092251529-0700.eberman@hu-eberman-lv.qualcomm.com>
+ <ZzdOOP0KuMMdo64W@lpieralisi>
+ <20241115101401666-0800.eberman@hu-eberman-lv.qualcomm.com>
+ <ZztZq1ksXCkyLOvj@lpieralisi>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add interconnect provider
- driver for SM8750
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
-	<u.kleine-koenig@baylibre.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Danila Tikhonov <danila@jiaxyga.com>,
-        Raviteja Laggyshetty
-	<quic_rlaggysh@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Mike Tipton
-	<quic_mdtipton@quicinc.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Trilok Soni
-	<quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20241112003017.2805670-1-quic_molvera@quicinc.com>
- <20241112003017.2805670-3-quic_molvera@quicinc.com>
- <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
-Content-Language: en-US
-From: Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZztZq1ksXCkyLOvj@lpieralisi>
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6o3wh5KPYkW3hpmr5NLmsZVm6OVLYW1c
-X-Proofpoint-ORIG-GUID: 6o3wh5KPYkW3hpmr5NLmsZVm6OVLYW1c
+X-Proofpoint-ORIG-GUID: XItZRysGkyZ-UJyI7NkUjXCXCsSwFEnA
+X-Proofpoint-GUID: XItZRysGkyZ-UJyI7NkUjXCXCsSwFEnA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 malwarescore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411180149
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411180160
 
+On Mon, Nov 18, 2024 at 04:13:47PM +0100, Lorenzo Pieralisi wrote:
+> On Fri, Nov 15, 2024 at 11:08:22AM -0800, Elliot Berman wrote:
+> > On Fri, Nov 15, 2024 at 02:35:52PM +0100, Lorenzo Pieralisi wrote:
+> > > On Wed, Oct 23, 2024 at 09:30:21AM -0700, Elliot Berman wrote:
+> > > > On Fri, Oct 18, 2024 at 10:42:46PM -0700, Stephen Boyd wrote:
+> > > > > Quoting Elliot Berman (2024-10-18 12:39:48)
+> > > > > > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > > > > > index 2328ca58bba6..60bc285622ce 100644
+> > > > > > --- a/drivers/firmware/psci/psci.c
+> > > > > > +++ b/drivers/firmware/psci/psci.c
+> > > > > > @@ -29,6 +29,8 @@
+> > > > > >  #include <asm/smp_plat.h>
+> > > > > >  #include <asm/suspend.h>
+> > > > > >
+> > > > > > +#define REBOOT_PREFIX "mode-"
+> > > > > 
+> > > > > Maybe move this near the function that uses it.
+> > > > > 
+> > > > > > +
+> > > > > >  /*
+> > > > > >   * While a 64-bit OS can make calls with SMC32 calling conventions, for some
+> > > > > >   * calls it is necessary to use SMC64 to pass or return 64-bit values.
+> > > > > > @@ -305,9 +315,29 @@ static int get_set_conduit_method(const struct device_node *np)
+> > > > > >         return 0;
+> > > > > >  }
+> > > > > >
+> > > > > > +static void psci_vendor_sys_reset2(unsigned long action, void *data)
+> > > > > > +{
+> > > > > > +       const char *cmd = data;
+> > > > > > +       unsigned long ret;
+> > > > > > +       size_t i;
+> > > > > > +
+> > > > > > +       for (i = 0; i < num_psci_reset_params; i++) {
+> > > > > > +               if (!strcmp(psci_reset_params[i].mode, cmd)) {
+> > > > > > +                       ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+> > > > > > +                                            psci_reset_params[i].reset_type,
+> > > > > > +                                            psci_reset_params[i].cookie, 0);
+> > > > > > +                       pr_err("failed to perform reset \"%s\": %ld\n",
+> > > > > > +                               cmd, (long)ret);
+> > > > > 
+> > > > > Do this intentionally return? Should it be some other function that's
+> > > > > __noreturn instead and a while (1) if the firmware returns back to the
+> > > > > kernel?
+> > > > > 
+> > > > 
+> > > > Yes, I think it's best to make sure we fall back to the architectural
+> > > > reset (whether it's the SYSTEM_RESET or architectural SYSTEM_RESET2)
+> > > > since device would reboot then.
+> > > 
+> > > Well, that's one of the doubts I have about enabling this code. From
+> > > userspace we are requesting a reboot (I don't even think that user
+> > > space knows which reboot modes are actually implemented (?)) and we may
+> > > end up issuing one with completely different semantics ?
+> > 
+> > You're right here, userspace issue a "reboot bootloader" and if kernel
+> > doesn't have the support to set up the right cookie, the device would do
+> > a normal reboot and not stop at the bootloader. This problem exists
+> > today and I think whether this is an issue to solve is out of scope here.
+> 
+> That's true. It is the same issue we have with reboot_mode anyway.
+> 
+> Is it a fair statement to say that currently when we request a reboot,
+> the reboot mode is the one set through /sys/kernel/reboot/mode ?
+> 
+> Does user space use that file today ?
+> 
+> I guess userspace does not take specific actions according to the
+> reset it thinks it issues - it is a question.
+> 
 
+Yes, user space can write to that file. User space has to configure both
+the mode and command to get the desired reboot configuration. I view the
+vendor reset types as replacing "both", in the sense userspace may not
+need to configure the reboot mode anymore. If "reboot bootloader" or
+"reboot edl" requires a warm reset, the firmware knows that's how the
+PMIC needs to be configured. I don't currently see any need for Linux to
+be aware that a particular vendor reset type is "like a soft" or "like a
+warm" or "like a cold" reset.
 
-On 11/15/2024 7:27 AM, Dmitry Baryshkov wrote:
-> On Mon, Nov 11, 2024 at 04:30:17PM -0800, Melody Olvera wrote:
->> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>
->> Introduce SM8750 interconnect provider driver using the interconnect
->> framework.
->>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>   drivers/interconnect/qcom/Kconfig  |    9 +
->>   drivers/interconnect/qcom/Makefile |    2 +
->>   drivers/interconnect/qcom/sm8750.c | 1585 ++++++++++++++++++++++++++++
->>   drivers/interconnect/qcom/sm8750.h |  132 +++
->>   4 files changed, 1728 insertions(+)
->>   create mode 100644 drivers/interconnect/qcom/sm8750.c
->>   create mode 100644 drivers/interconnect/qcom/sm8750.h
->>
->> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
->> index 362fb9b0a198..1219f4f23d40 100644
->> --- a/drivers/interconnect/qcom/Kconfig
->> +++ b/drivers/interconnect/qcom/Kconfig
->> @@ -337,6 +337,15 @@ config INTERCONNECT_QCOM_SM8650
->>   	  This is a driver for the Qualcomm Network-on-Chip on SM8650-based
->>   	  platforms.
->>   
->> +config INTERCONNECT_QCOM_SM8750
->> +	tristate "Qualcomm SM8750 interconnect driver"
->> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
->> +	select INTERCONNECT_QCOM_RPMH
->> +	select INTERCONNECT_QCOM_BCM_VOTER
->> +	help
->> +	  This is a driver for the Qualcomm Network-on-Chip on SM8750-based
->> +	  platforms.
->> +
->>   config INTERCONNECT_QCOM_X1E80100
->>   	tristate "Qualcomm X1E80100 interconnect driver"
->>   	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
->> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
->> index 9997728c02bf..7887b1e8d69b 100644
->> --- a/drivers/interconnect/qcom/Makefile
->> +++ b/drivers/interconnect/qcom/Makefile
->> @@ -40,6 +40,7 @@ qnoc-sm8350-objs			:= sm8350.o
->>   qnoc-sm8450-objs			:= sm8450.o
->>   qnoc-sm8550-objs			:= sm8550.o
->>   qnoc-sm8650-objs			:= sm8650.o
->> +qnoc-sm8750-objs			:= sm8750.o
->>   qnoc-x1e80100-objs			:= x1e80100.o
->>   icc-smd-rpm-objs			:= smd-rpm.o icc-rpm.o icc-rpm-clocks.o
->>   
->> @@ -80,5 +81,6 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
->>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
->>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8550) += qnoc-sm8550.o
->>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8650) += qnoc-sm8650.o
->> +obj-$(CONFIG_INTERCONNECT_QCOM_SM8750) += qnoc-sm8750.o
->>   obj-$(CONFIG_INTERCONNECT_QCOM_X1E80100) += qnoc-x1e80100.o
->>   obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
->> diff --git a/drivers/interconnect/qcom/sm8750.c b/drivers/interconnect/qcom/sm8750.c
->> new file mode 100644
->> index 000000000000..bc72954d54ff
->> --- /dev/null
->> +++ b/drivers/interconnect/qcom/sm8750.c
->> @@ -0,0 +1,1585 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
->> + *
->> + */
->> +
->> +#include <linux/device.h>
->> +#include <linux/interconnect.h>
->> +#include <linux/interconnect-provider.h>
->> +#include <linux/module.h>
->> +#include <linux/of_platform.h>
->> +#include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
->> +
->> +#include "bcm-voter.h"
->> +#include "icc-rpmh.h"
->> +#include "sm8750.h"
-> Nit: please merge sm8750.h here, there is no need to have a separate
-> header, there are no other users.
+> > > Are these "reset types" exported to user space ?
+> > > 
+> > 
+> > No mechanism exists to do that. We could do something specific for PSCI
+> > or do something generic for everybody. I don't think something specific
+> > for PSCI is the right approach because it's a general problem. I don't
+> > think there's enough interest to change reboot command plumbing to
+> > advertise valid reset types to userspace.
+> 
+> That's for sure. I suppose the most important bit is making sure that
+> all resets comply with the kernel semantics expected from a *reset*;
+> I appreciate that's a vague statement (and I have no idea how to enforce
+> it) but that's the gist of this discussion.
+> 
+> Another thing I am worried about is device drivers restart handlers
+> (ie having to parse a command that might be platform specific in a
+> generic driver to grok what reset was actually issued and what action
+> should be taken).
 
-Ack.
+Right, I got your point! I haven't seen any drivers that care about it,
+besides the ones that actually do the resetting.
 
->
-> Also, is there QoS support? I see no qcom_icc_qosbox entries.
+I'm okay to say that all vendor SYSTEM_RESET2 need to be treated like a
+REBOOT_COLD, but we might run into issue in future where we might want
+some vendor SYSTEM_RESET2 to act be closer to some other mode. I suppose
+then a device-specific driver is needed there.
 
-Unsure; will let Raviteja comment.
+In the hypothetical situation where we need reboot_mode to be a specific
+value for a vendor SYSTEM_RESET2, I like my current approach.  Userspace
+already needs to align the mode and command without the kernel enforcing
+it, so it's possible we could still use the generic PSCI driver without
+needing to write a device-specific driver to issue the vendor
+SYSTEM_RESET2. If we hard-code that vendor SYSTEM_RESET2 must be like a
+cold reset, then we definitely need a device-specific driver if we'd
+rather it be like a warm or soft mode.
 
-Thanks,
-Melody
->
-> Other than that:
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
->
+> I admit it is a tough nut to crack this one - apologies for the time
+> it is taking to reach an agreement.
+> 
 
+This is a weird one :) It seems simple at first but it flexes the design
+of reboot mode and command. I appreciate the time you've taken to look
+at this!
+
+- Elliot
 
