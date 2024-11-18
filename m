@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-17703-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17704-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 301319D0F00
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6994F9D0EB7
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:38:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F138BB25627
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:25:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4655FB2FB03
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5D819538D;
-	Mon, 18 Nov 2024 10:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C02119750B;
+	Mon, 18 Nov 2024 10:25:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t16F74SE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tPBtFW6R"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147AA194094;
-	Mon, 18 Nov 2024 10:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31936192D97;
+	Mon, 18 Nov 2024 10:25:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731925442; cv=none; b=Jh/UWhMWa1c1eIIwPmtOPlnoXR7uAdsntrbMDuuFM/siwNF8P5kdopUc+Kq6F+Wi8fK3U08IOWE4CpoGsoNBpoloVZaV9qIHR7FQ9/1sMflyc1FKL9n8KRy4SGk0ifecbvW6Jfsb/il3mKXAAAb9wrjoM6C1ZFN0+rIlfWr9x4I=
+	t=1731925543; cv=none; b=l4Oa5iRzkRzQjhQyEBbAUaZFJ1vGLjaVB04pz3xzQVER3QFGJn47EboB91pxVF3lvkFx9WejdL20vYNAVqamvBUFrgtwDUygx3K+9hRBKP3KgrWhk27MpPJfaPjVSZ2YldMB7IHBIXJFKHeL3plNqfCRWcjs9aN22TYigkVsGTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731925442; c=relaxed/simple;
-	bh=xvLvWV9VR+bB9tOaGuSAYrJs8CvxungYCsVwLkjIixQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=cti0T+Q69I/x6l3QsEgc258rjLuQHTj5J7RgWirQDZtNoiyCmXyIFR8vFtTffeClgRi7YuZ3SwZ/KJfZ7omDHx+00ibXWXAcne86J0Doowkj9UO6U2oNlUSErUSAxOeno/kZONALxiZ6VV9/Ocw3N16ref25rGoT8nMzyVQ+ko8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t16F74SE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F73C4CED6;
-	Mon, 18 Nov 2024 10:24:01 +0000 (UTC)
+	s=arc-20240116; t=1731925543; c=relaxed/simple;
+	bh=QDfRNQIvlwjaYeOF45h2WoWUC3qqv0lyACNzU1NOqV0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Top0ZN4fBg90oWpCnOoF8Xk3RticGou6EoTBj2o/gtPKuneGmul6YbkF+6ED07QPYN/8qGF9aRTZjyvG86N1vyC+WlcsqwdIYcpiEBm1XQovOCuaCeXWJvmLAkCHU6p/iTvezqRngxaAqnw++C2XKG0bURLNvdaRBAyyien4P8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tPBtFW6R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A69C4CECC;
+	Mon, 18 Nov 2024 10:25:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731925441;
-	bh=xvLvWV9VR+bB9tOaGuSAYrJs8CvxungYCsVwLkjIixQ=;
+	s=k20201202; t=1731925542;
+	bh=QDfRNQIvlwjaYeOF45h2WoWUC3qqv0lyACNzU1NOqV0=;
 	h=From:Date:Subject:To:Cc:From;
-	b=t16F74SEiS+YtnpMZG9rsStMfkAQvg6HldPN309NF/RKAd0EZLyXNS8KIrGUnvsNC
-	 iEkWNMoKDPKtayL3lT6KmFSCwHFm4wU3SedoreiZmaUby7n72n+cIZZvcuTXbfGx2D
-	 svv1s6lwS00Yt5yMwXG+2NIDRkf4cB1uxFFZ6NAZsOvlHcI6Zphc5ifCYTMGBwgA1X
-	 ceNMqYidyujtLt3SBs+Bh0gmPeyRemINgIVPDaTho4TL1t8B0CuLEuL0SIexWmx78k
-	 9tK0fxqjMwBe7BsKVABoS822bfjdQLkAQ330TzLwJfNgoHoDXzZtUFm55C4PkzD42u
-	 Ljr5ImdZiAGDw==
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3e5fbc40239so592850b6e.3;
-        Mon, 18 Nov 2024 02:24:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWKEjZF15OLnjnZ/G7oo7cdVxsi6Nx1F+a/2m4ZEkq0oxGDn+YonQ+jM7QjMQsFywMtgnNJ9GzMVL35jbI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzB0UfPsq0wTZAesMTXMBAMa+BnWIWeWdOhm6ueWAGE2bL2Ril8
-	enG5EVJmhGx91J/hrUsdqVhpj5H5XaP3X/ehWBXCawYTh0T3p10+QFituyuDZSDTLSFuP9xtsNR
-	P7Uv4CiHQwJqVdPykUOnvkC9LHSY=
-X-Google-Smtp-Source: AGHT+IGYzZ1dH3I36kCmcAWaqnUeqvjV6qRjt/bk8fVXlZLykBAk5pVknV3FCF9Hs2dZGBu3X8rLRGiCD2s2+EEpZOA=
-X-Received: by 2002:a05:6808:3094:b0:3e6:5f1d:411a with SMTP id
- 5614622812f47-3e7bc865a3bmr11863527b6e.31.1731925441222; Mon, 18 Nov 2024
- 02:24:01 -0800 (PST)
+	b=tPBtFW6RMCDlkA2XB4wsLOKFhltfSM3YW2okBzn8/th6iPKO7Lt9Tw5IcGJ1eRL8P
+	 doBQBHyIQ6X2VSqojTmu7eOlv6r3B0hceEUZmcuSlC3WNDrLG3lL9gwcqIVJW3a2mg
+	 BgM9NubA5/UXRe+7MK6Ob/y6/3fBcnmgfJuON8893wqP8uIx1fY8E4S0a1YfC/qjMw
+	 sUI5vqymkSJJ/OM/EGlE8HYgooyjQnf2yxWYRS04oPnjltFc2gOy/C695q8PkkGgzd
+	 8I8ufSPtWcXZvzkdxhYTNuNaZ1s2FpPbKyu68gpmS3WKog9UiPCTM2zIE3bZIWgaOL
+	 783GYx6DLKoqg==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-296252514c2so2487451fac.3;
+        Mon, 18 Nov 2024 02:25:42 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU27llnrhDpr2/UUWZ6KP62H5iBp08jq5JWOOSawpeP3MqLbZotdfG5/M75559EhUSiDBdSvsIy62Y=@vger.kernel.org, AJvYcCXSWrRrjCrbx3VCoVvTUbFXcc853djOf++rEzUbxKCDUiCzFzy1qLKMTLYD7sNeKn5vuYkQjFKUOy54MsM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzqq+pA5siQLikgqukp1RsWA0CPImrGVVJf/UcOhzLoYKdD8Fr3
+	AVlwQ6rpOWnHMtxFiG7Qi9EJtDwPWLnuX6jJoWqamPcKd+atZAnTQhOJ73oYuV8t3w9SYOlivvg
+	xXm9KuHv1TOwd7H7uxwebRtLY87s=
+X-Google-Smtp-Source: AGHT+IEgLgtg76At0fKYYK+vm+PcqDQMbKbm/vKpGXtbtfAiFEb4iBbnJlK+TR0rslax9lHvmUe+g71XIrpsHR0VagA=
+X-Received: by 2002:a05:6870:7904:b0:294:8f41:88c8 with SMTP id
+ 586e51a60fabf-2962dde4e56mr9865603fac.21.1731925542028; Mon, 18 Nov 2024
+ 02:25:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,141 +57,157 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Nov 2024 11:23:46 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0imu3DZbUb6P=UGP5G9ffxS6MbnRb-2zx7pXNTrxS1Z1A@mail.gmail.com>
-Message-ID: <CAJZ5v0imu3DZbUb6P=UGP5G9ffxS6MbnRb-2zx7pXNTrxS1Z1A@mail.gmail.com>
-Subject: [GIT PULL] Thermal control updates for v6.13-rc1
+Date: Mon, 18 Nov 2024 11:25:27 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hey+FYr5KAbs=Eg_6u9Hp=gqH99G8nCwfr_ibRgkkiQw@mail.gmail.com>
+Message-ID: <CAJZ5v0hey+FYr5KAbs=Eg_6u9Hp=gqH99G8nCwfr_ibRgkkiQw@mail.gmail.com>
+Subject: [GIT PULL] ACPI updates for v6.13-rc1
 To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
 Hi Linus,
 
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.13-rc1
+ acpi-6.13-rc1
 
-with top-most commit 0104dcdaad3a7afd141e79a5fb817a92ada910ac
+with top-most commit d47a60e487fbb65bbbca3d99e59009f0a4acf34d
 
- thermal: testing: Initialize some variables annoteded with _free()
+ Merge branch 'acpi-misc'
 
-on top of commit 5469a8deac05391781bcd27e7c40f2c35121ca09
+on top of commit 2d5404caa8c7bb5c4e0435f94b28834ae5456623
 
- Merge tag 'thermal-v6.12-rc7' of
-ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
+ Linux 6.12-rc7
 
-to receive thermal control updates for 6.13-rc1.
+to receive ACPI updates for 6.13-rc1.
 
-These are thermal core changes, including the addition of support for
-temperature thresholds that can be set from user space, fixes related
-to thermal zone initialization, suspend/resume and exit, locking rework
-and rearrangement of the code handling thermal zone temperature updates.
+These include a couple of fixes, a new ACPI backlight quirk for Apple
+MacbookPro11,2 and Air7,2 and a bunch of cleanups:
 
-Specifics:
+ - Fix _CPC register setting issue for registers located in memory in
+   the ACPI CPPC library code (Lifeng Zheng).
 
- - Add support for thermal thresholds that can be added and removed from
-   user space via netlink along with a related library update (Daniel
-   Lezcano).
+ - Use DEFINE_SIMPLE_DEV_PM_OPS in the ACPI battery driver, make it use
+   devm_ for initializing mutexes and allocating driver data, and make
+   it check the register_pm_notifier() return value (Thomas Wei=C3=9Fschuh,
+   Andy Shevchenko).
 
- - Fix thermal zone initialization, suspend/resume and exit
-   synchronization issues (Rafael Wysocki).
+ - Make the ACPI EC driver support compile-time conditional and allow
+   ACPI to be built without CONFIG_HAS_IOPORT (Arnd Bergmann).
 
- - Rearrange locking in the thermal core to use guards (Rafael Wysocki).
+ - Remove a redundant error check from the pfr_telemetry driver (Colin
+   Ian King).
 
- - Make the code handling thermal zone temperature updates use sorted
-   lists of trip points to reduce the number of trip points table walks
-   in the thermal core (Rafael Wysocki).
+ - Rearrange the processor_perflib code in the ACPI processor driver
+   to avoid compiling x86-specific code on other architectures (Arnd
+   Bergmann).
 
- - Fix and clean up the thermal testing facility code (Rafael Wysocki).
+ - Add adev NULL check to acpi_quirk_skip_serdev_enumeration() and
+   make UART skip quirks work on PCI UARTs without an UID (Hans de
+   Goede).
 
- - Fix a Power Allocator thermal governor issue (ZhengShaobo).
+ - Force native backlight handling Apple MacbookPro11,2 and Air7,2 in
+   the ACPI video driver (Jonathan Denose).
+
+ - Switch several ACPI platform drivers back to using struct
+   platform_driver::remove() (Uwe Kleine-K=C3=B6nig).
+
+ - Replace strcpy() with strscpy() in multiple places in the ACPI
+   subsystem (Muhammad Qasim Abdul Majeed, Abdul Rahim).
 
 Thanks!
 
 
 ---------------
 
-Daniel Lezcano (8):
-      thermal: core: Add user thresholds support
-      thermal: core: Connect the threshold with the core
-      thermal: netlink: Add the commands and the events for the thresholds
-      tools/lib/thermal: Make more generic the command encoding function
-      tools/lib/thermal: Add the threshold netlink ABI
-      tools/thermal/thermal-engine: Take into account the thresholds API
-      thermal: thresholds: Fix thermal lock annotation issue
-      thermal/lib: Fix memory leak on error in thermal_genl_auto()
+Abdul Rahim (1):
+      ACPI: thermal: Use strscpy() instead of strcpy()
 
-Rafael J. Wysocki (36):
-      thermal: core: Initialize thermal zones before registering them
-      thermal: core: Rearrange PM notification code
-      thermal: core: Represent suspend-related thermal zone flags as bits
-      thermal: core: Mark thermal zones as initializing to start with
-      thermal: core: Fix race between zone registration and system suspend
-      thermal: core: Consolidate thermal zone locking during initialization
-      thermal: core: Mark thermal zones as exiting before unregistration
-      thermal: core: Consolidate thermal zone locking in the exit path
-      thermal: core: Update thermal zones after cooling device binding
-      thermal: core: Drop need_update field from struct thermal_zone_device
-      thermal: core: Move lists of thermal instances to trip descriptors
-      thermal: core: Pass trip descriptors to trip bind/unbind functions
-      thermal: core: Add and use thermal zone guard
-      thermal: core: Add and use a reverse thermal zone guard
-      thermal: core: Separate code running under thermal_list_lock
-      thermal: core: Manage thermal_list_lock using a mutex guard
-      thermal: core: Call thermal_governor_update_tz() outside of cdev lock
-      thermal: core: Introduce thermal_instance_add()
-      thermal: core: Introduce thermal_instance_delete()
-      thermal: core: Introduce thermal_cdev_update_nocheck()
-      thermal: core: Add and use cooling device guard
-      thermal: core: Separate thermal zone governor initialization
-      thermal: core: Manage thermal_governor_lock using a mutex guard
-      thermal: core: Build sorted lists instead of sorting them later
-      thermal: core: Rename trip list node in struct thermal_trip_desc
-      thermal: core: Prepare for moving trips between sorted lists
-      thermal: core: Rearrange __thermal_zone_device_update()
-      thermal: core: Pass trip descriptor to thermal_trip_crossed()
-      thermal: core: Move some trip processing to thermal_trip_crossed()
-      thermal: core: Relocate functions that update trip points
-      thermal: core: Eliminate thermal_zone_trip_down()
-      thermal: core: Use trip lists for trip crossing detection
-      thermal: core: Relocate thermal zone initialization routine
-      thermal: testing: Simplify tt_get_tt_zone()
-      thermal: testing: Use DEFINE_FREE() and __free() to simplify code
-      thermal: testing: Initialize some variables annoteded with _free()
+Andy Shevchenko (1):
+      ACPI: battery: Check for error code from devm_mutex_init() call
 
-ZhengShaobo (1):
-      thermal: gov_power_allocator: Granted power set to max when
-nobody request power
+Arnd Bergmann (3):
+      ACPI: EC: make EC support compile-time conditional
+      ACPI: processor_perflib: extend X86 dependency
+      ACPI: allow building without CONFIG_HAS_IOPORT
+
+Colin Ian King (1):
+      ACPI: pfr_telemetry: remove redundant error check on ret
+
+Hans de Goede (2):
+      ACPI: x86: Make UART skip quirks work on PCI UARTs without an UID
+      ACPI: x86: Add adev NULL check to acpi_quirk_skip_serdev_enumeration(=
+)
+
+Jonathan Denose (1):
+      ACPI: video: force native for Apple MacbookPro11,2 and Air7,2
+
+Lifeng Zheng (1):
+      ACPI: CPPC: Fix _CPC register setting issue
+
+Muhammad Qasim Abdul Majeed (9):
+      ACPI: APD: Use strscpy() instead of strcpy()
+      ACPI: EC: Use strscpy() instead of strcpy()
+      ACPI: event: Use strscpy() instead of strcpy()
+      ACPI: pci_link: Use strscpy() instead of strcpy()
+      ACPI: pci_root: Use strscpy() instead of strcpy()
+      ACPI: power: Use strscpy() instead of strcpy()
+      ACPI: SBS: Use strscpy() instead of strcpy()
+      ACPI: SBSHC: Use strscpy() instead of strcpy()
+      ACPI: scan: Use strscpy() instead of strcpy()
+
+Thomas Wei=C3=9Fschuh (4):
+      ACPI: battery: check result of register_pm_notifier()
+      ACPI: battery: allocate driver data through devm_ APIs
+      ACPI: battery: initialize mutexes through devm_ APIs
+      ACPI: battery: use DEFINE_SIMPLE_DEV_PM_OPS
+
+Uwe Kleine-K=C3=B6nig (1):
+      ACPI: Switch back to struct platform_driver::remove()
 
 ---------------
 
- drivers/thermal/Makefile                      |   1 +
- drivers/thermal/gov_bang_bang.c               |  15 +-
- drivers/thermal/gov_fair_share.c              |  20 +-
- drivers/thermal/gov_power_allocator.c         |  86 +--
- drivers/thermal/gov_step_wise.c               |  22 +-
- drivers/thermal/testing/zone.c                |  41 +-
- drivers/thermal/thermal_core.c                | 883 +++++++++++++++-----------
- drivers/thermal/thermal_core.h                |  41 +-
- drivers/thermal/thermal_debugfs.c             |  50 +-
- drivers/thermal/thermal_helpers.c             |  46 +-
- drivers/thermal/thermal_hwmon.c               |   5 +-
- drivers/thermal/thermal_netlink.c             | 253 +++++++-
- drivers/thermal/thermal_netlink.h             |  34 +
- drivers/thermal/thermal_sysfs.c               | 132 ++--
- drivers/thermal/thermal_thresholds.c          | 240 +++++++
- drivers/thermal/thermal_thresholds.h          |  19 +
- drivers/thermal/thermal_trip.c                |  48 +-
- include/linux/thermal.h                       |   6 +
- include/uapi/linux/thermal.h                  |  29 +-
- tools/lib/thermal/commands.c                  | 188 +++++-
- tools/lib/thermal/events.c                    |  55 +-
- tools/lib/thermal/include/thermal.h           |  40 ++
- tools/lib/thermal/libthermal.map              |   5 +
- tools/lib/thermal/thermal.c                   |  17 +
- tools/thermal/lib/Makefile                    |   2 +-
- tools/thermal/thermal-engine/thermal-engine.c | 105 ++-
- 26 files changed, 1650 insertions(+), 733 deletions(-)
+ drivers/acpi/Kconfig               | 11 ++++++++-
+ drivers/acpi/Makefile              |  2 +-
+ drivers/acpi/ac.c                  |  2 +-
+ drivers/acpi/acpi_apd.c            |  2 +-
+ drivers/acpi/acpi_pad.c            |  2 +-
+ drivers/acpi/acpi_tad.c            |  2 +-
+ drivers/acpi/apei/einj-core.c      |  2 +-
+ drivers/acpi/apei/ghes.c           |  2 +-
+ drivers/acpi/arm64/agdi.c          |  2 +-
+ drivers/acpi/battery.c             | 31 +++++++++++-------------
+ drivers/acpi/cppc_acpi.c           |  7 +++---
+ drivers/acpi/dptf/dptf_pch_fivr.c  |  2 +-
+ drivers/acpi/dptf/dptf_power.c     |  2 +-
+ drivers/acpi/ec.c                  |  4 ++--
+ drivers/acpi/event.c               |  4 ++--
+ drivers/acpi/evged.c               |  2 +-
+ drivers/acpi/fan_core.c            |  2 +-
+ drivers/acpi/internal.h            | 25 +++++++++++++++++++
+ drivers/acpi/osl.c                 | 12 ++++++++++
+ drivers/acpi/pci_link.c            |  4 ++--
+ drivers/acpi/pci_root.c            |  4 ++--
+ drivers/acpi/pfr_telemetry.c       |  5 +---
+ drivers/acpi/pfr_update.c          |  2 +-
+ drivers/acpi/power.c               |  4 ++--
+ drivers/acpi/processor_perflib.c   | 13 ++++------
+ drivers/acpi/sbs.c                 |  4 ++--
+ drivers/acpi/sbshc.c               | 13 +++-------
+ drivers/acpi/scan.c                | 14 +++++------
+ drivers/acpi/thermal.c             |  6 ++---
+ drivers/acpi/video_detect.c        | 16 +++++++++++++
+ drivers/acpi/x86/utils.c           | 49 +++++++++++++++++++++++++++++++---=
+----
+ drivers/char/Kconfig               |  1 +
+ drivers/hwmon/Kconfig              |  3 ++-
+ drivers/platform/x86/Kconfig       | 22 +++++++++--------
+ drivers/platform/x86/dell/Kconfig  |  1 +
+ drivers/platform/x86/hp/Kconfig    |  1 +
+ drivers/platform/x86/intel/Kconfig |  2 +-
+ include/linux/acpi.h               |  8 +++++--
+ 38 files changed, 189 insertions(+), 101 deletions(-)
 
