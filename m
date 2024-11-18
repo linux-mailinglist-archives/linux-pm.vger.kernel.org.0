@@ -1,247 +1,299 @@
-Return-Path: <linux-pm+bounces-17701-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17702-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E269D0E64
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:24:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8789D0E6A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:24:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25F28282826
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:24:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 449411F21DCA
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:24:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5EFD194158;
-	Mon, 18 Nov 2024 10:22:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A2E194C76;
+	Mon, 18 Nov 2024 10:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YDu4++ko"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sejU/WKd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF21D19415D
-	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 10:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77B7194AD8;
+	Mon, 18 Nov 2024 10:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731925320; cv=none; b=GssTgjAx/HyHumyGG78DFH2q50fzi/jowHdR6nGLJJnUCVgAfEsqjwELWGwRKFNCWJSHnzZ8yB+RNg9YnBJUEEoszrjnJUm6bCTAuds5uXPBVPbwaUFoHLa88rxNbM8QWNRuQZeuxPpTxGOMbmwmv4bYkY8bIROCN7CyYSKhX1g=
+	t=1731925341; cv=none; b=nCWLRcngXZaKDC6Yy53yJQc3h+nAI2u4e5v95YaSbglJzc3F4DDnBtpAKp0CgCShU1QQV9fth+zoXyMdpZVR1jnXErtwO4LZ4wVkjZ9ZoESEik6552H3oEQjuT45LKtF7oYNUR0CnPTG+N/h1i+tLHOo20N339UIb0IIG5l05cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731925320; c=relaxed/simple;
-	bh=Db4cp2BS1tOGXH1Epn3W22qyrM5yGAT815UoctHNo+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sd23jjMy84tipPpkilPfUhKFApLPrmJm0ZRbqmIFYE6dCy3nFyeMpvqVdZ3tzK655qpcP6EdB3iYwi90R+9hG9q61mwxhgVNYCIy6QZKeu07WXN99Ccky0s0xPwe0XlmCLa5KU3OICh1PCU0w9Oyhtqf24AM6/zHxSQEIrSRp18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YDu4++ko; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38232c6311fso1341257f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 02:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731925317; x=1732530117; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=phSqjmldBPWXRgFeffd/JWcPCOA4hJo3BiIhOYwH3MA=;
-        b=YDu4++koJxtr+FzoXRequiUYoGo53OpWgZJqWqBeGre2QOgLudGKs8vCGZd3+wo4uK
-         ecfpKtI8e9PyKRns3Sgef+U5OzMMF3OfOPq66U4+t375VPK1K+BG79LJFYj6kGbmckVt
-         YvDB2KbVitfwAh7aBAbqDjh+jhLCe5U5v+mm1M7vVwjqx7A3XVqcuCo0ZJ7vZKd/3pjN
-         yvIpDMXqTub8C76HxQ7wCMHyvsTjY7SCY9S1h4P+YcFS8kPLFNDnm+Gep2n+LQfA2dws
-         U92HLOJeUVlk6cW1PYcbFWM7DC8zjTw4IWK4Q9TwKdmHzzIwIaBeHKOhq6Fqe+PmDsM0
-         BcTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731925317; x=1732530117;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=phSqjmldBPWXRgFeffd/JWcPCOA4hJo3BiIhOYwH3MA=;
-        b=tognJzI/TCpk1bB0pP+1YtWZtKWLCAdb8AKdLeYG+VwLgCaTcqEzWYcQlCFGISt1lj
-         TsDLFLjMl963zesDtCtt/5jp++hVJgNLIzCJQ7oClvIHwyi+I80VVZd+iEANGln8dvXW
-         X/tvQi3N0eKDIfRe+4PViKHHLLJGQBM12xwZ8FPYMShO4jZC9vLw8iR/IbX6P+A57E2L
-         +VVmh19PzeLXhcGZeZnjRKbqTAuohYu1vXLay2wA3l1vYMa8tXuwn39hHt5nefd16Hd0
-         Vex41sMH+06ZI5nXcm1K0FHsKSDq9tc9Vpi4DhcanxzcuHVkZVIkArY9pxJ/drdV4pop
-         4+LA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhjzJYcptpL8TodYWh1wNSuxUgWHXdJ+G9VRwZbhqYct7VmuWVuJ8a1Q5UuaQfkYuCyUtJWN9Ufw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywgmq+ZJc79yWI+YlflhODoFe3kVQ3Dwt2BTJ8r2OyNAQq29DXK
-	VC1uC5oZ1Dt5XSyJ0oPGAGd42xVFxzUNqQilzkV+DxuIu05DEBeywgmRg18a5iA=
-X-Google-Smtp-Source: AGHT+IEFeF0+Sdkb6b315Q3y1qMmmjCmnoawHXKh9ZeoveK/uoXwKwzlP7db+07+TyaV3vMlKWXWlQ==
-X-Received: by 2002:a05:6000:1f88:b0:37c:d276:f04 with SMTP id ffacd0b85a97d-38225a915fbmr8111178f8f.45.1731925317212;
-        Mon, 18 Nov 2024 02:21:57 -0800 (PST)
-Received: from linaro.org ([2a02:2454:ff21:ef80:8453:3d1e:f32c:d913])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382485e2a89sm2301322f8f.17.2024.11.18.02.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 02:21:56 -0800 (PST)
-Date: Mon, 18 Nov 2024 11:21:45 +0100
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: =?iso-8859-1?B?QmFybmFi4XMgQ3rpbeFu?= <barnabas.czeman@mainlining.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev
-Subject: Re: [PATCH v6 10/10] arm64: dts: qcom: Add Xiaomi Redmi 5A
-Message-ID: <ZzsVOV8GjCVtCi5Q@linaro.org>
-References: <20241113-msm8917-v6-0-c348fb599fef@mainlining.org>
- <20241113-msm8917-v6-10-c348fb599fef@mainlining.org>
+	s=arc-20240116; t=1731925341; c=relaxed/simple;
+	bh=F6LJAvT4xb9vEZMGIAEyCuPJQXJmFDXic1ZVvGyAo7Q=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ltyrpxJnF2aPXJzEJkmfq5ugkn8JOa1lVoT8vHZ4CsthXqjq+QL4sVM7ETOgxJwXZDqDH/9Bl94cyb8qgmzvVnpRVs/T4hL1THq2ZRMPONw5fZKVlBkaUY1eEDA+H04zr9xLuCJv6g2GyjiMMaz67qItCcQEWP0kbbz2I4hb1So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sejU/WKd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D466C4CED0;
+	Mon, 18 Nov 2024 10:22:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731925340;
+	bh=F6LJAvT4xb9vEZMGIAEyCuPJQXJmFDXic1ZVvGyAo7Q=;
+	h=From:Date:Subject:To:Cc:From;
+	b=sejU/WKd0mxfrHAtuHfxqiqX5wmCYPApAgzQ9+EaHK7VsmZDatYuXfe+zXZdtoFX6
+	 Lp2j+DgTpiqrvbupjVpYBZpUjTyfLrJ/1Qu8rm2rAi3eEoP342wbCfdgcAk9J5k/8K
+	 a4shxJQaSgjGftq+QawQgtV0gmMBU2zJtwb+rPns5Sn3OJr9071GS+CoGmTHhLESFU
+	 2KEnJcF+439v2O3hsYuP4asfy7ZvJAlhWK3oxk6tJtuIjGaVrrzQ8xGFEfCai/+LJ2
+	 IF5I+ObTf8PyOhH1tfA8Vd4N10SxnN9y9e3WXKRr2cPrxWkiLeS3HmlRPMiNgSzM6A
+	 pzXCIGNopNm0w==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3e5f533e1c2so2121317b6e.3;
+        Mon, 18 Nov 2024 02:22:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVssu6FGHGK/z0htBHWcjVLhvXRZojNPgpzCeXt43eNLSAJ3jULEcJOezjmjiSFdAUTtyzTp3QLhGlgOZ3v@vger.kernel.org, AJvYcCVswRYpr+qV94r4LBjp8m/U6LN0x8wC28ZLfxiOudLgBisoyhYk9GhP6E3cNHoLYzBbj6rwN8MBjy/k@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCOyx1GdaoQEgb83RaTaYintN2acVeNfk+xRngMi3s/o3B96hj
+	QvDevWYdIevEn9ZS3DZ0oZ/GhFRoKWGrdSELXHQSHlH31gslhApUZic0JDPXWEm7ZSraK0VPvom
+	iHvh4vbCNO0N6Z036TgSTE1yrDLU=
+X-Google-Smtp-Source: AGHT+IGB0Q0xAufUUKH2H2oxeIC4U8QUE3WwW3fMFplzOdxQPzRm0oQ4NCT/hLkMR8nuu1Cyc7StjC87/kVZOJDldVs=
+X-Received: by 2002:a05:6808:1250:b0:3e5:d093:d6e with SMTP id
+ 5614622812f47-3e7bc85054bmr12253112b6e.31.1731925339441; Mon, 18 Nov 2024
+ 02:22:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241113-msm8917-v6-10-c348fb599fef@mainlining.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 18 Nov 2024 11:22:04 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i90sb6CC=obDdmji-WeJnkwSp4Agd3UhGhuo+TVm4uXg@mail.gmail.com>
+Message-ID: <CAJZ5v0i90sb6CC=obDdmji-WeJnkwSp4Agd3UhGhuo+TVm4uXg@mail.gmail.com>
+Subject: [GIT PULL] Power management updates for v6.13-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 13, 2024 at 04:11:51PM +0100, Barnabás Czémán wrote:
-> Add initial support for Xiaomi Redmi 5A (riva).
-> 
-> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile                |   1 +
->  arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts | 297 +++++++++++++++++++++++
->  2 files changed, 298 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 9bb8b191aeb517e8f1e3a11bca98a3d0c39c5398..7562406843cfd82397c4844d14a22e8bcf4bba74 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -62,6 +62,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86518.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86528.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..81bb76f1773252be2f60777acf93d51d01981f86
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
-> @@ -0,0 +1,297 @@
-> [...]
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		key-volup {
-> +			label = "Volume Up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
+Hi Linus,
 
-It's good practice to
+Please pull from the tag
 
-> +			debounce-interval = <15>;
-> +		};
-> +	};
-> [...]
-> +&blsp1_i2c3 {
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		compatible = "edt,edt-ft5306";
-> +		reg = <0x38>;
-> +		interrupts-extended = <&tlmm 65 IRQ_TYPE_LEVEL_LOW>;
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.13-rc1
 
-add pinctrl
+with top-most commit c6e2a4c9eed5249c4158bc621882d44e94af3371
 
-> +		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
+ Merge branch 'pm-tools'
 
-for all
+on top of commit 1a1030d10a6335bb5e6cdb24fc9388d3d9bcc1ac
 
-> +		vcc-supply = <&pm8937_l10>;
-> +		iovcc-supply = <&pm8937_l5>;
-> +
-> +		touchscreen-size-x = <720>;
-> +		touchscreen-size-y = <1280>;
-> +	};
-> +};
-> +
-> +&blsp2_i2c1 {
-> +	status = "okay";
-> +
-> +	bq27426@55 {
-> +		compatible = "ti,bq27426";
-> +		reg = <0x55>;
-> +		monitored-battery = <&battery>;
-> +	};
-> +
-> +	bq25601@6b{
-> +		compatible = "ti,bq25601";
-> +		reg = <0x6b>;
-> +		monitored-battery = <&battery>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <61 IRQ_TYPE_EDGE_FALLING>;
+ cpufreq: intel_pstate: Rearrange locking in hybrid_init_cpu_capacity_scali=
+ng()
 
-GPIOs/pins
+to receive power management updates for 6.13-rc1.
 
-> +
-> +		input-voltage-limit-microvolt = <4400000>;
-> +		input-current-limit-microamp = <1000000>;
-> +	};
-> +};
-> [...]
+The amd-pstate cpufreq driver gets the majority of changes this time.
+They are mostly fixes and cleanups, but one of them causes it to become
+the default cpufreq driver on some AMD server platforms.
 
-> +&sdhc_2 {
-> +	cd-gpios = <&tlmm 67 GPIO_ACTIVE_LOW>;
+Apart from that, the menu cpuidle governor is modified to not use iowait
+any more, the intel_idle gets a custom C-states table for Granite Rapids
+Xeon D, and the intel_pstate driver will use a more aggressive Balance-
+performance default EPP value on Granite Rapids now.
 
-that you use. :-)
+There are also some fixes, cleanups and tooling updates.
 
-Usually it can be something simple like function=gpio, bias-disable,
-drive-strength = <2>, etc, plenty of examples exist upstream. Check
-downstream or schematics (if you have them). Ideally you would check
-what the peripheral requires.
+Specifics:
 
-E.g. for SD card the GPIO usually has external pull-up, so bias-pull-up
-would be redundant and one can just use bias-disable:
+ - Update the amd-pstate driver to set the initial scaling frequency
+   policy lower bound to be the lowest non-linear frequency (Dhananjay
+   Ugwekar).
 
-	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
-	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
-	pinctrl-names = "default", "sleep";
+ - Enable amd-pstate by default on servers starting with newer AMD Epyc
+   processors (Swapnil Sapkal).
 
-&tlmm {
-	sdc2_cd_default: sdc2-cd-default-state {
-		pins = "gpio67";
-		function = "gpio";
-		drive-strength = <2>;
-		bias-disable;
-	};
-};
+ - Align more codepaths between shared memory and MSR designs in
+   amd-pstate (Dhananjay Ugwekar).
+
+ - Clean up amd-pstate code to rename functions and remove redundant
+   calls (Dhananjay Ugwekar, Mario Limonciello).
+
+ - Do other assorted fixes and cleanups in amd-pstate (Dhananjay Ugwekar
+   and Mario Limonciello).
+
+ - Change the Balance-performance EPP value for Granite Rapids in the
+   intel_pstate driver to a more performance-biased one (Srinivas
+   Pandruvada).
+
+ - Simplify MSR read on the boot CPU in the ACPI cpufreq driver (Chang
+   S. Bae).
+
+ - Ensure sugov_eas_rebuild_sd() is always called when sugov_init()
+   succeeds to always enforce sched domains rebuild in case EAS needs
+   to be enabled (Christian Loehle).
+
+ - Switch cpufreq back to platform_driver::remove() (Uwe Kleine-K=C3=B6nig)=
+.
+
+ - Use proper frequency unit names in cpufreq (Marcin Juszkiewicz).
+
+ - Add a built-in idle states table for Granite Rapids Xeon D to the
+   intel_idle driver (Artem Bityutskiy).
+
+ - Fix some typos in comments in the cpuidle core and drivers (Shen
+   Lichuan).
+
+ - Remove iowait influence from the menu cpuidle governor (Christian
+   Loehle).
+
+ - Add min/max available performance state limits to the Energy Model
+   management code (Lukasz Luba).
+
+ - Update pm-graph to v5.13 (Todd Brandt).
+
+ - Add documentation for some recently introduced cpupower utility
+   options (Tor Vic).
+
+ - Make cpupower inform users where cpufreq-bench.conf should be located
+   when opening it fails (Peng Fan).
+
+ - Allow overriding cross-compiling env params in cpupower (Peng Fan).
+
+ - Add compile_commands.json to .gitignore in cpupower (John B. Wyatt
+   IV).
+
+ - Improve disable c_state block in cpupower bindings and add a test to
+   confirm that CPU state is disabled to it (John B. Wyatt IV).
+
+ - Add Chinese Simplified translation to cpupower (Kieran Moy).
+
+ - Add checks for xgettext and msgfmt to cpupower (Siddharth Menon).
+
+Thanks!
 
 
-> +	vmmc-supply = <&pm8937_l11>;
-> +	vqmmc-supply = <&pm8937_l12>;
-> +
-> +	status = "okay";
-> +};
-> +
-> [...]
-> +&rpm_requests {
-> +	regulators-0 {
-> +		compatible = "qcom,rpm-pm8937-regulators";
-> +
-> [...]
-> +		pm8937_l11: l11 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
+---------------
 
-You usually need/want regulator-allow-set-load and regulator-system-load
-for the SD card regulator to avoid issues with certain SD
-cards/operations, see
+Artem Bityutskiy (1):
+      intel_idle: add Granite Rapids Xeon D support
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=af61bef513ba179559e56908b8c465e587bc3890
+Chang S. Bae (1):
+      cpufreq: ACPI: Simplify MSR read on the boot CPU
 
-Thanks,
-Stephan
+Christian Loehle (2):
+      cpuidle: menu: Remove iowait influence
+      sched/cpufreq: Ensure sd is rebuilt for EAS check
+
+Dhananjay Ugwekar (11):
+      cpufreq/amd-pstate: Rename MSR and shared memory specific functions
+      cpufreq/amd-pstate: Remove the redundant verify() function
+      cpufreq/amd-pstate: Set the initial min_freq to lowest_nonlinear_freq
+      cpufreq/amd-pstate: Call amd_pstate_register() in amd_pstate_init()
+      cpufreq/amd-pstate: Call amd_pstate_set_driver() in
+amd_pstate_register_driver()
+      cpufreq/amd-pstate: Remove the switch case in amd_pstate_init()
+      cpufreq/amd-pstate: Remove the redundant amd_pstate_set_driver() call
+      cpufreq/amd-pstate: Rename functions that enable CPPC
+      cpufreq/amd-pstate: Do not attempt to clear MSR_AMD_CPPC_ENABLE
+      cpufreq/amd-pstate: Call cppc_set_epp_perf in the reenable function
+      cpufreq/amd-pstate: Align offline flow of shared memory and MSR
+based systems
+
+Gautham R. Shenoy (1):
+      amd-pstate: Set min_perf to nominal_perf for active mode performance =
+gov
+
+John B. Wyatt IV (3):
+      pm: cpupower: gitignore: Add compile_commands.json
+      pm: cpupower: bindings: Improve disable c_state block
+      pm: cpupower: bindings: Add test to confirm cpu state is disabled
+
+Kieran Moy (1):
+      cpupower: Add Chinese Simplified translation
+
+Lukasz Luba (1):
+      PM: EM: Add min/max available performance state limits
+
+Marcin Juszkiewicz (1):
+      cpufreq: use proper units for frequency
+
+Mario Limonciello (7):
+      cpufreq/amd-pstate: Fix non kerneldoc comment
+      cpufreq/amd-pstate: Don't update CPPC request in
+amd_pstate_cpu_boost_update()
+      cpufreq/amd-pstate: Use amd_pstate_update_min_max_limit() for EPP lim=
+its
+      cpufreq/amd-pstate: Drop needless EPP initialization
+      cpufreq/amd-pstate-ut: Add fix for min freq unit test
+      cpufreq/amd-pstate: Push adjust_perf vfunc init into cpu_init
+      cpufreq/amd-pstate: Move registration after static function call upda=
+te
+
+Peng Fan (2):
+      pm: cpupower: bench: print config file path when open
+cpufreq-bench.conf fails
+      pm: cpupower: Makefile: Allow overriding cross-compiling env params
+
+Shen Lichuan (1):
+      cpuidle: Correct some typos in comments
+
+Siddharth Menon (1):
+      cpupower: add checks for xgettext and msgfmt
+
+Srinivas Pandruvada (1):
+      cpufreq: intel_pstate: Update Balance-performance EPP for Granite Rap=
+ids
+
+Swapnil Sapkal (1):
+      amd-pstate: Switch to amd-pstate by default on some Server platforms
+
+Todd Brandt (1):
+      pm-graph v5.13
+
+Tor Vic (1):
+      tools/power/cpupower: Add documentation for some recently
+introduced options
+
+Uwe Kleine-K=C3=B6nig (1):
+      cpufreq: Switch back to struct platform_driver::remove()
+
+---------------
+
+ drivers/cpufreq/acpi-cpufreq.c                     |   9 +-
+ drivers/cpufreq/amd-pstate-ut.c                    |   6 +-
+ drivers/cpufreq/amd-pstate.c                       | 229 ++---
+ drivers/cpufreq/brcmstb-avs-cpufreq.c              |   2 +-
+ drivers/cpufreq/cpufreq-dt.c                       |   2 +-
+ drivers/cpufreq/cpufreq.c                          |   2 +-
+ drivers/cpufreq/davinci-cpufreq.c                  |   2 +-
+ drivers/cpufreq/imx-cpufreq-dt.c                   |   2 +-
+ drivers/cpufreq/imx6q-cpufreq.c                    |   2 +-
+ drivers/cpufreq/intel_pstate.c                     |   2 +
+ drivers/cpufreq/kirkwood-cpufreq.c                 |   2 +-
+ drivers/cpufreq/loongson3_cpufreq.c                |   2 +-
+ drivers/cpufreq/mediatek-cpufreq-hw.c              |   2 +-
+ drivers/cpufreq/omap-cpufreq.c                     |   2 +-
+ drivers/cpufreq/pcc-cpufreq.c                      |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c                  |   2 +-
+ drivers/cpufreq/qcom-cpufreq-nvmem.c               |   2 +-
+ drivers/cpufreq/qoriq-cpufreq.c                    |   2 +-
+ drivers/cpufreq/raspberrypi-cpufreq.c              |   2 +-
+ drivers/cpufreq/scpi-cpufreq.c                     |   2 +-
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c             |   2 +-
+ drivers/cpufreq/tegra186-cpufreq.c                 |   2 +-
+ drivers/cpufreq/tegra194-cpufreq.c                 |   2 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c             |   2 +-
+ drivers/cpuidle/cpuidle-arm.c                      |   2 +-
+ drivers/cpuidle/cpuidle-qcom-spm.c                 |   2 +-
+ drivers/cpuidle/cpuidle.c                          |   2 +-
+ drivers/cpuidle/driver.c                           |   4 +-
+ drivers/cpuidle/governors/menu.c                   |  76 +-
+ drivers/idle/intel_idle.c                          |  48 ++
+ include/linux/energy_model.h                       |  29 +-
+ kernel/power/energy_model.c                        |  52 ++
+ kernel/sched/cpufreq_schedutil.c                   |   3 +-
+ tools/power/cpupower/.gitignore                    |   3 +
+ tools/power/cpupower/Makefile                      |  26 +-
+ tools/power/cpupower/bench/parse.c                 |   5 +-
+ .../bindings/python/test_raw_pylibcpupower.py      |  28 +-
+ tools/power/cpupower/man/cpupower-set.1            |  38 +-
+ tools/power/cpupower/po/zh_CN.po                   | 942 +++++++++++++++++=
+++++
+ tools/power/pm-graph/sleepgraph.8                  |   3 +
+ tools/power/pm-graph/sleepgraph.py                 |  59 +-
+ 41 files changed, 1330 insertions(+), 278 deletions(-)
 
