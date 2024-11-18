@@ -1,400 +1,182 @@
-Return-Path: <linux-pm+bounces-17708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C7DD9D0F27
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 12:03:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C5399D0F2A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 12:03:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95A2D1F22183
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:03:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B83B28481C
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77E7C19644B;
-	Mon, 18 Nov 2024 11:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A31196C6C;
+	Mon, 18 Nov 2024 11:03:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GucvHOxr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MS4XRzB0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2896194C8D
-	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 11:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A56194A5A;
+	Mon, 18 Nov 2024 11:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731927811; cv=none; b=Dq+OsGUYxNFKXB4ZkUFijLIGCJFJjrZStM4rh6M6SVXXccnFg2wiDOih5wGU3xGL+fyI4/fhIw6L5KYqcP4sLg1o9A6Q5qgFdtiS1yDGW/kjtClZwjerXq08MCixEsHCLtVVg6MDyiOuGiDn80fCZn9Zbphk3mp0mZ41wAvd12k=
+	t=1731927824; cv=none; b=pPHDYoH5SXhraoPTX12dKUTDVTpDniOk8HNsWgXKZz/q9tsIsVJNOj6pKi8epfTKsXJIi7m6yxl7VKPisvB2nQ9+sx4sSH7sdk2gKuYl66TGMUaDbZ+aKu5MSWHT32sEm7daIa1lspoFaKrtUsIPM5H/oafPVcDSJUiKSaXiXv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731927811; c=relaxed/simple;
-	bh=sTWHw+APVrMMSJpBKXYcLEozbM8o88Mak8YJJs642u4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y5QmOHGUV2wk7PngeKv5w5MrOC7qMdnlsIURx1zsTqJP4ZgpiBxcCs1Bv7oeIDiZCKFeQws1lFjjL5S+Lxj+YA1Ftyk7AiyOIDtklq0Qxofo9KGanJWcKALWvzqlkElQr/1AucDpNP1uzp5tIy9Xh8VB0H0FOxe4qaB17cVvvaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GucvHOxr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731927807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fFu/OAvTmsREW3ildiFBX75cwQiDefrF6674U37Lx1Y=;
-	b=GucvHOxrYmVutOCwjbScNXi38K9/V+nbvuMhn0i7WO4MOynsNeH44cvCKvV/aZ072AXXuD
-	F/o0LjYKcMexmJTwBDt8OmROBRNSzs1S0om3fP7VxwsTXB+0n5jrJyINg8XFSBvHx+CH0q
-	zIs9rHNf+mN3qotNdohHAtvx3ghxL6s=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-677-rJrv_Nd9O9yU6vo9tfyeDw-1; Mon, 18 Nov 2024 06:03:26 -0500
-X-MC-Unique: rJrv_Nd9O9yU6vo9tfyeDw-1
-X-Mimecast-MFC-AGG-ID: rJrv_Nd9O9yU6vo9tfyeDw
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a9a01cba9f7so179410266b.3
-        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 03:03:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731927805; x=1732532605;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFu/OAvTmsREW3ildiFBX75cwQiDefrF6674U37Lx1Y=;
-        b=HuHjYcefjshRpKbDrNATshB7Lsk6DO4zuhODNxKTU5POLequQPdqt6853Qpgk3+GRc
-         EETEUA2N+ocSVhs7b5Y8ePDIeevIGkd7ZYkOtUyJIZc77ohljahvcWiQ3Av3DWqeciOv
-         oIP9RlylY+K55TzoOHzabgtK94sy/4RaDOjG4SCDr/hwDFf76ChF3QgIHpHqIHJWeaYf
-         vU9r8YMxaYx4JihJEewESM3mMrLHIH3kqfQkndJ4RoIkPX/eclDByLQKxXUhWg3tNWWH
-         eCohnFIU+qBTxAC/97flwddMWTQ+Goum8bnKSCqz+85zhB/RLsf/h/MD8DuznMGbOrOe
-         Ch3g==
-X-Gm-Message-State: AOJu0YyNyM8hbpcUWg/NqQwhODPkXOzI+vDVYWbzvUqiRK45ESHfEpDW
-	6QtVL+H/9fWgAOMkA/dl5BFWovouFCnQdAaCfhgR0Lg52jY35g2+EHcRPdQkSSe+mXNMkH+ShT0
-	epagD45z40fCQJT8ruOoUyhCugEyN4It02V1XsgIyw6Ocw23JoU9aSajm
-X-Received: by 2002:a17:907:60cb:b0:a99:4f40:3e82 with SMTP id a640c23a62f3a-aa4833f46famr1234286766b.7.1731927805041;
-        Mon, 18 Nov 2024 03:03:25 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGgE5lFUGeJWNc5aF38BP5qToKS4LCc2lzaIKk6WaXRxGUC+tJxJL16EB5HAdoRxTV53XMQZA==
-X-Received: by 2002:a17:907:60cb:b0:a99:4f40:3e82 with SMTP id a640c23a62f3a-aa4833f46famr1234282866b.7.1731927804585;
-        Mon, 18 Nov 2024 03:03:24 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df501f9sm526378166b.46.2024.11.18.03.03.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Nov 2024 03:03:24 -0800 (PST)
-Message-ID: <b05db127-b80e-401a-b93b-dec1907902ba@redhat.com>
-Date: Mon, 18 Nov 2024 12:03:23 +0100
+	s=arc-20240116; t=1731927824; c=relaxed/simple;
+	bh=AOEBOSkZRti3bK8rQa/5CfKZopdyDgU2tBjztmiX0ks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HXO8K49Zzpd4SeTrcp6WP+9GoghLgBCPgFKNq/qn1bfPGb/J5id2uYXo1kjBuykMe9+RDpdbvpeDWZ7O9eZhcyPnJmyZRvX8k8oK1QnB/uqz7bJqhlcO6s7XhDDvIm5czFbfDGCNlvBt/+tYYVOBTyGuutO1apcn5utO7+KIXgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MS4XRzB0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32A3C4CED9;
+	Mon, 18 Nov 2024 11:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731927823;
+	bh=AOEBOSkZRti3bK8rQa/5CfKZopdyDgU2tBjztmiX0ks=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MS4XRzB0auiYkwS4Ba17T2nI3g6H62F8KCrCwnJJxMVfDGVlFad/i5aBx3Jdqtjgh
+	 d5Jt537gxAoGGZ35oymAMpazp/hYfrEWhm5E6jVmz9dzLsMk7ZYOVHCVgRWlszeipt
+	 trDteD+2RNEsrTy5Wu4tSjnKKqQU21UFKMF5etunuwlGxZU1dAe1JVrMIwUh/pyId7
+	 XSzJWfaEnXWoh2FEEC/N0WYKZzPfa4pDz+Lda7XZyLksIzj+8f3DF/KbMFd/lmg4wd
+	 y9PnTyp4oa5yLsUME8w4WyxNQpdEK7s7WE2c/Ha9Yo+P5VEv7p8iRvOICYyz4J96Ea
+	 ZcQjMmD1oUVfw==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2958ddf99a7so3687930fac.2;
+        Mon, 18 Nov 2024 03:03:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVMuCUgW4x3nnZXJLrhmnL+G7WbRff1UFyf32LgpfAV5dRAxeNYwMEpixQHl7rs4qAiLdS8ZnTuGu8=@vger.kernel.org, AJvYcCVeK4ZAg4skU2DpkzInGLFHAAULJjE9ruDVO9lguQXlSJ+a+yNZWUr4phSBoXR66iIvr/1+hDsAdU8FIGBT@vger.kernel.org, AJvYcCWAKQrnnIzTA/pyugbNyKEV1/Jw14k93KIp/BAkxh/gL3cT8Q6z4O6ut9WPedZ0PEbMuECOqSFgWMHE@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw53hBEMCuhTDFERPByRvXQD1xzm/VDuM8f3eHbaQsNqg/fDTQo
+	34AxuWZtUMzW5La6sgMKBqYVkTFpp8gRljOKyK0z5OplCV5gpioAJeg9swtf8Bg0+52cyEOS+0Q
+	WHYCBfm1Tj6vXwExdiNmh1L8m+6U=
+X-Google-Smtp-Source: AGHT+IG6CtV/1ZJaq2aGg/BqFu90ot62tko56Hij+PNazXnlfm090dz2SI4Uih6KXYZYUAKK9CkdNax5HxUvJze7qH8=
+X-Received: by 2002:a05:6870:828a:b0:287:a973:2c66 with SMTP id
+ 586e51a60fabf-2962dfeea85mr9037037fac.28.1731927822928; Mon, 18 Nov 2024
+ 03:03:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] power: supply: max17042: add platform driver
- variant
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-msm@vger.kernel.org
-References: <20241118-b4-max17042-v3-0-9bcaeda42a06@gmail.com>
- <20241118-b4-max17042-v3-2-9bcaeda42a06@gmail.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241118-b4-max17042-v3-2-9bcaeda42a06@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+In-Reply-To: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 18 Nov 2024 12:03:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+Message-ID: <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in acpi_os_sleep().
+To: Len Brown <lenb@kernel.org>
+Cc: rafael@kernel.org, anna-maria@linutronix.de, tglx@linutronix.de, 
+	peterz@infradead.org, frederic@kernel.org, corbet@lwn.net, 
+	akpm@linux-foundation.org, linux-acpi@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>, 
+	Todd Brandt <todd.e.brandt@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dzmitry,
+On Sat, Nov 16, 2024 at 12:11=E2=80=AFAM Len Brown <lenb@kernel.org> wrote:
+>
+> From: Len Brown <len.brown@intel.com>
+>
+> Replace msleep() with usleep_range() in acpi_os_sleep().
+>
+> This has a significant user-visible performance benefit
+> on some ACPI flows on some systems.  eg. Kernel resume
+> time of a Dell XPS-13-9300 drops from 1943ms to 1127ms (42%).
 
-On 18-Nov-24 11:09 AM, Dzmitry Sankouski wrote:
-> Maxim PMICs may include fuel gauge with additional features, which is
-> out of single Linux power supply driver scope.
-> 
-> For example, in max77705 PMIC fuelgauge has additional registers,
-> like IIN_REG, VSYS_REG, ISYS_REG. Those needed to measure PMIC input
-> current, system voltage and current respectively. Those measurements
-> cannot be bound to any of fuelgauge properties.
-> 
-> The solution here add and option to use max17042 driver as a MFD
-> sub device, thus allowing any additional functionality be implemented as
-> another sub device. This will help to reduce code duplication in MFD
-> fuel gauge drivers.
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
-> Changes in v3:
-> - pass dev pointer in max17042_probe
-> - remove prints
-> ---
->  drivers/power/supply/max17042_battery.c | 114 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------
->  1 file changed, 90 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index 99bf6915aa23..d11bf37aaae2 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -16,6 +16,7 @@
->  #include <linux/i2c.h>
->  #include <linux/delay.h>
->  #include <linux/interrupt.h>
-> +#include <linux/platform_device.h>
->  #include <linux/pm.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/power_supply.h>
-> @@ -1029,14 +1030,12 @@ static const struct power_supply_desc max17042_no_current_sense_psy_desc = {
->  	.num_properties	= ARRAY_SIZE(max17042_battery_props) - 2,
->  };
->  
-> -static int max17042_probe(struct i2c_client *client)
-> +static int max17042_probe(struct i2c_client *client, struct device *dev,
-> +			  enum max170xx_chip_type chip_type)
->  {
-> -	const struct i2c_device_id *id = i2c_client_get_device_id(client);
->  	struct i2c_adapter *adapter = client->adapter;
->  	const struct power_supply_desc *max17042_desc = &max17042_psy_desc;
->  	struct power_supply_config psy_cfg = {};
-> -	const struct acpi_device_id *acpi_id = NULL;
-> -	struct device *dev = &client->dev;
->  	struct max17042_chip *chip;
->  	int ret;
->  	int i;
-> @@ -1045,33 +1044,24 @@ static int max17042_probe(struct i2c_client *client)
->  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA))
->  		return -EIO;
->  
-> -	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-> +	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
->  	if (!chip)
->  		return -ENOMEM;
->  
->  	chip->client = client;
-> -	if (id) {
-> -		chip->chip_type = id->driver_data;
-> -	} else {
-> -		acpi_id = acpi_match_device(dev->driver->acpi_match_table, dev);
-> -		if (!acpi_id)
-> -			return -ENODEV;
-> -
-> -		chip->chip_type = acpi_id->driver_data;
-> -	}
+Sure.
 
-I would expect you to now add a:
+And the argument seems to be that it is better to always use more
+resources in a given path (ACPI sleep in this particular case) than to
+be somewhat inaccurate which is visible in some cases.
 
-	chip->chip_type = chip_type;
+This would mean that hrtimers should always be used everywhere, but they ar=
+en't.
 
-line here storing the chip_type probe() function argument, but
-that appears to be missing always leaving chip_type at 0.
+While I have nothing against addressing the short sleeps issue where
+the msleep() inaccuracy is too large, I don't see why this requires
+using a hrtimer with no slack in all cases.
 
->  	chip->regmap = devm_regmap_init_i2c(client, &max17042_regmap_config);
->  	if (IS_ERR(chip->regmap)) {
-> -		dev_err(&client->dev, "Failed to initialize regmap\n");
-> +		dev_err(dev, "Failed to initialize regmap\n");
->  		return -EINVAL;
->  	}
->  
->  	chip->pdata = max17042_get_pdata(chip);
->  	if (!chip->pdata) {
-> -		dev_err(&client->dev, "no platform data provided\n");
-> +		dev_err(dev, "no platform data provided\n");
->  		return -EINVAL;
->  	}
->  
-> -	i2c_set_clientdata(client, chip);
-> +	dev_set_drvdata(dev, chip);
->  	psy_cfg.drv_data = chip;
->  	psy_cfg.of_node = dev->of_node;
->  
-> @@ -1095,17 +1085,17 @@ static int max17042_probe(struct i2c_client *client)
->  		regmap_write(chip->regmap, MAX17042_LearnCFG, 0x0007);
->  	}
->  
-> -	chip->battery = devm_power_supply_register(&client->dev, max17042_desc,
-> +	chip->battery = devm_power_supply_register(dev, max17042_desc,
->  						   &psy_cfg);
->  	if (IS_ERR(chip->battery)) {
-> -		dev_err(&client->dev, "failed: power supply register\n");
-> +		dev_err(dev, "failed: power supply register\n");
->  		return PTR_ERR(chip->battery);
->  	}
->  
->  	if (client->irq) {
->  		unsigned int flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_PROBE_SHARED;
->  
-> -		ret = devm_request_threaded_irq(&client->dev, client->irq,
-> +		ret = devm_request_threaded_irq(dev, client->irq,
->  						NULL,
->  						max17042_thread_handler, flags,
->  						chip->battery->desc->name,
-> @@ -1118,7 +1108,7 @@ static int max17042_probe(struct i2c_client *client)
->  		} else {
->  			client->irq = 0;
->  			if (ret != -EBUSY)
-> -				dev_err(&client->dev, "Failed to get IRQ\n");
-> +				dev_err(dev, "Failed to get IRQ\n");
->  		}
->  	}
->  	/* Not able to update the charge threshold when exceeded? -> disable */
-> @@ -1127,7 +1117,7 @@ static int max17042_probe(struct i2c_client *client)
->  
->  	regmap_read(chip->regmap, MAX17042_STATUS, &val);
->  	if (val & STATUS_POR_BIT) {
-> -		ret = devm_work_autocancel(&client->dev, &chip->work,
-> +		ret = devm_work_autocancel(dev, &chip->work,
->  					   max17042_init_worker);
->  		if (ret)
->  			return ret;
-> @@ -1139,6 +1129,38 @@ static int max17042_probe(struct i2c_client *client)
->  	return 0;
->  }
->  
-> +static int max17042_i2c_probe(struct i2c_client *client)
-> +{
-> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
-> +	const struct acpi_device_id *acpi_id = NULL;
-> +	struct device *dev = &client->dev;
-> +	enum max170xx_chip_type chip_type;
-> +
-> +	if (id) {
-> +		chip_type = id->driver_data;
-> +	} else {
-> +		acpi_id = acpi_match_device(dev->driver->acpi_match_table, dev);
-> +		if (!acpi_id)
-> +			return -ENODEV;
-> +
-> +		chip_type = acpi_id->driver_data;
-> +	}
-> +
-> +	return max17042_probe(client, dev, chip_type);
-> +}
-> +
-> +static int max17042_platform_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct i2c_client *i2c = dev_get_platdata(dev);
-> +	const struct platform_device_id *id = platform_get_device_id(pdev);
-> +
-> +	if (!i2c)
-> +		return -EINVAL;
-> +
-> +	return max17042_probe(i2c, dev, id->driver_data);
-> +}
-> +
->  #ifdef CONFIG_PM_SLEEP
->  static int max17042_suspend(struct device *dev)
->  {
-> @@ -1204,6 +1226,16 @@ static const struct i2c_device_id max17042_id[] = {
->  };
->  MODULE_DEVICE_TABLE(i2c, max17042_id);
->  
-> +static const struct platform_device_id max17042_platform_id[] = {
-> +	{ "max17042", MAXIM_DEVICE_TYPE_MAX17042 },
-> +	{ "max17047", MAXIM_DEVICE_TYPE_MAX17047 },
-> +	{ "max17050", MAXIM_DEVICE_TYPE_MAX17050 },
-> +	{ "max17055", MAXIM_DEVICE_TYPE_MAX17055 },
-> +	{ "max77849-battery", MAXIM_DEVICE_TYPE_MAX17047 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(platform, max17042_platform_id);
-> +
->  static struct i2c_driver max17042_i2c_driver = {
->  	.driver	= {
->  		.name	= "max17042",
-> @@ -1211,10 +1243,44 @@ static struct i2c_driver max17042_i2c_driver = {
->  		.of_match_table = of_match_ptr(max17042_dt_match),
->  		.pm	= &max17042_pm_ops,
->  	},
-> -	.probe		= max17042_probe,
-> +	.probe		= max17042_i2c_probe,
->  	.id_table	= max17042_id,
->  };
-> -module_i2c_driver(max17042_i2c_driver);
-> +
-> +static struct platform_driver max17042_platform_driver = {
-> +	.driver	= {
-> +		.name	= "max17042",
-> +		.acpi_match_table = ACPI_PTR(max17042_acpi_match),
-> +		.of_match_table = of_match_ptr(max17042_dt_match),
-> +		.pm	= &max17042_pm_ops,
-> +	},
-> +	.probe		= max17042_platform_probe,
-> +	.id_table	= max17042_platform_id,
-> +};
-> +
-> +static int __init __driver_max17042_platform_init(void)
+The argument seems to be that the short sleeps case is hard to
+distinguish from the other cases, but I'm not sure about this.
 
-I would name this just max17042_init() no reason to prefix with __
-and using platform in the name is weird since it registers both
-the i2c and platform drivers.
+Also, something like this might work, but for some reason you don't
+want to do it:
 
-> +{
-> +	int ret = 0;
+if (ms >=3D 12 * MSEC_PER_SEC / HZ) {
+        msleep(ms);
+} else {
+       u64 us =3D ms * USEC_PER_MSEC;
 
-No need to initialize ret to 0, since you immediately assign
-a value to it after declaring it.
-
-> +	ret = platform_driver_register(&max17042_platform_driver);
-
-missing if (ret) return ret.
-
-> +	if (ret) {
-> +		platform_driver_unregister(&max17042_platform_driver);
-> +		return ret;
-> +	}
-> +
-> +	ret = i2c_add_driver(&max17042_i2c_driver);
-
-This needs to be above if (ret) which unregisters the platform_driver
-again.
-
-> +
-> +	return ret;
-
-and this should be return 0;
-
-> +}
-> +module_init(__driver_max17042_platform_init);
-
-Basically the whole function should look like this:
-
-static int __init max17042_init(void)
-{
-	int ret;
-
-	ret = platform_driver_register(&max17042_platform_driver);
-	if (ret)
-		return ret;
-
-	ret = i2c_add_driver(&max17042_i2c_driver);
-	if (ret) {
-		platform_driver_unregister(&max17042_platform_driver);
-		return ret;
-	}
-
-	return 0;
+      usleep_range(us, us / 8);
 }
-module_init(max17042_init);
 
-
+> usleep_range(min, min) is used because there is scant
+> opportunity for timer coalescing during ACPI flows
+> related to system suspend, resume (or initialization).
+>
+> ie. During these flows usleep_range(min, max) is observed to
+> be effectvely be the same as usleep_range(max, max).
+>
+> Similarly, msleep() for long sleeps is not considered because
+> these flows almost never have opportunities to coalesce
+> with other activity on jiffie boundaries, leaving no
+> measurably benefit to rounding up to jiffie boundaries.
+>
+> Background:
+>
+> acpi_os_sleep() supports the ACPI AML Sleep(msec) operator,
+> and it must not return before the requested number of msec.
+>
+> Until Linux-3.13, this contract was sometimes violated by using
+> schedule_timeout_interruptible(j), which could return early.
+>
+> Since Linux-3.13, acpi_os_sleep() uses msleep(),
+> which doesn't return early, but is still subject
+> to long delays due to the low resolution of the jiffie clock.
+>
+> Linux-6.12 removed a stray jiffie from msleep: commit 4381b895f544
+> ("timers: Remove historical extra jiffie for timeout in msleep()")
+> The 4ms savings is material for some durations,
+> but msleep is still generally too course. eg msleep(5)
+> on a 250HZ system still takes 11.9ms.
+>
+> System resume performance of a Dell XPS 13 9300:
+>
+> Linux-6.11:
+> msleep HZ 250   2460 ms
+>
+> Linux-6.12:
+> msleep HZ 250   1943 ms
+> msleep HZ 1000  1233 ms
+> usleep HZ 250   1127 ms
+> usleep HZ 1000  1130 ms
+>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D216263
+> Signed-off-by: Len Brown <len.brown@intel.com>
+> Suggested-by: Arjan van de Ven <arjan@linux.intel.com>
+> Tested-by: Todd Brandt <todd.e.brandt@intel.com>
+> ---
+>  drivers/acpi/osl.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+> index 70af3fbbebe5..daf87e33b8ea 100644
+> --- a/drivers/acpi/osl.c
+> +++ b/drivers/acpi/osl.c
+> @@ -607,7 +607,9 @@ acpi_status acpi_os_remove_interrupt_handler(u32 gsi,=
+ acpi_osd_handler handler)
+>
+>  void acpi_os_sleep(u64 ms)
+>  {
+> -       msleep(ms);
+> +       u64 us =3D ms * USEC_PER_MSEC;
 > +
-> +static void __exit __driver_max17042_platform_exit(void)
-
-Please name this one just max17042_exit()
-
-> +{
-> +	i2c_del_driver(&max17042_i2c_driver);
-> +	platform_driver_unregister(&max17042_platform_driver);
-> +}
-> +module_exit(__driver_max17042_platform_exit);
->  
->  MODULE_AUTHOR("MyungJoo Ham <myungjoo.ham@samsung.com>");
->  MODULE_DESCRIPTION("MAX17042 Fuel Gauge");
-> 
-
-Regards,
-
-Hans
-
+> +       usleep_range(us, us);
+>  }
+>
+>  void acpi_os_stall(u32 us)
+> --
+> 2.43.0
+>
 
