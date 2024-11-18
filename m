@@ -1,145 +1,166 @@
-Return-Path: <linux-pm+bounces-17689-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17691-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA8809D0964
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 07:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1200E9D0A33
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 08:29:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57F6F1F212CF
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 06:16:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 936021F21E5B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 07:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C4A2148318;
-	Mon, 18 Nov 2024 06:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77E414D2B7;
+	Mon, 18 Nov 2024 07:29:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="gvwt19Ie"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="f3oZ9P4T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56E680BFF;
-	Mon, 18 Nov 2024 06:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D402814BFA2
+	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 07:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731910568; cv=none; b=S1wpn/ETvpHFQM3J9zhpPGQMi7Z6zt86lJBTVgNSwCIR6ORpSspJ/0DWWDfX5PLsMwkrniZIo0MKCZKl1jBCPARhMNWHMiecKPi71CLxCEswtbtgOd4NMGTLsX749SgQ2AFi85yD79CSFLr3qI9/Kss/9f+3vzg5ky6EFygS7Ko=
+	t=1731914988; cv=none; b=sCOMAFZ7Pa9T6WtVGiGafU1uBsrE4PXhMxxFnO9cNAO2WPAyfJDvuuzOjcRcWdMaZvn14iX6R/lMUmHzsMw+Pm7R2o2DT2SBbOismjCDEKyB0XWEMfTE7fpZjyZq9lK5dZlbJmMC6R7ZEj1Igy5HvfGphVF0LeXFd5WfOv5B83Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731910568; c=relaxed/simple;
-	bh=XQgvZFznm/KTm80suFUAjYCJpg8vLqeuB0js8ihQD+w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pyEG12Y2RVEcMOVmQqRNCvhwmFNtf/bBUYszZjZc/kMGQQJmTSrtlSmFyj2m/V0uBBiF13CIScVbmyC6Ais2ICLmBVXS26Y3GJjG3CLJaBKFhlIrg5yMCsTbPwxppI6rkXgVW76q/9uLokyYKhlbDoDWU4EPg4cvqXPDpl3TCO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=gvwt19Ie; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1731910561;
-	bh=XQgvZFznm/KTm80suFUAjYCJpg8vLqeuB0js8ihQD+w=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=gvwt19Iel5AVInp6oXH5A1Cbzqlqs/6PDKtFpkkHaawZQ76C7Nk+o4TWPz5JQziyf
-	 Rhwm1WDvNdDuCcJKBpowoDZm/apEj6WTenoiUIkU8y6nTqzYOykzZLkP4Rkhg2SCoa
-	 4Ko9Ie+xuSCCrc976ThnU50SfbjIBxEPbI9KbsrU=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 18 Nov 2024 07:15:59 +0100
-Subject: [PATCH v3 2/2] hwmon: (core) Avoid ifdef CONFIG_THERMAL in C
- source file
+	s=arc-20240116; t=1731914988; c=relaxed/simple;
+	bh=H9LQQX3+errApdP89llWL2h0g9xMJY3eOit1C3k3VPc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JGzeL/RlkGFrNDgZ2tnaKNRPvZTT49gFEy+8eWAjCAVPQtO29nib9fHrI/7FMxCPmMVrg7E8EOJqsOxBFm2KCMoL9+b/p4Yop6voApG8FTzUieSNukOsPiCj6rzKrfKs+gNrAcC/+YOrdJSTsmyg1iZcYBxo7TK+JFIMY3HTFOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=f3oZ9P4T; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=hpvNWCyCojrkvY
+	du6o2rWrPDcX4yyavTS3Qt2myCoUo=; b=f3oZ9P4TdOlRmdKNkheJwEcz4/4MKC
+	E+us1Y0Z5G/c0MS+Bz6Y92iZAVSu6gh8I2EHNZnsE4vvnM1IEBU4jw0BJ7jBK/23
+	ZOZQ4RJ2AcAdG3Fo/aXZB9caknqWoqjSSmuy/JraNtaDb8tIiDJKRDaiRhkY0XkA
+	7uTdsdNMuXZYeAsP3CdBbf4AhdYfGmUY5qgfm3fYIZ2/IzEDR4qK0/w+urqiJ5wP
+	VkQidxTC4V72CV9fMrJrQhUtcLb2vyrTsDKAGJ7/HUe7z6Sm4E5RVmqvrVAL3k93
+	lE86wQvmOS98Rttic76V8vKZ0HEY2F4KmUzwsfyyatEqffHmbpqiBuog==
+Received: (qmail 112200 invoked from network); 18 Nov 2024 08:29:34 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Nov 2024 08:29:34 +0100
+X-UD-Smtp-Session: l3s3148p1@ykLZ4ConvNUujntT
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-kernel@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	coresight@lists.linaro.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-input@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-media@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-sunxi@lists.linux.dev,
+	linux-usb@vger.kernel.org,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	platform-driver-x86@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Sean Young <sean@mess.org>,
+	Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	x86@kernel.org
+Subject: [PATCH 00/15] treewide: don't include 'pm_wakeup.h' directly
+Date: Mon, 18 Nov 2024 08:28:59 +0100
+Message-Id: <20241118072917.3853-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241118-hwmon-thermal-v3-2-9c17973e7342@weissschuh.net>
-References: <20241118-hwmon-thermal-v3-0-9c17973e7342@weissschuh.net>
-In-Reply-To: <20241118-hwmon-thermal-v3-0-9c17973e7342@weissschuh.net>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731910561; l=2293;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=XQgvZFznm/KTm80suFUAjYCJpg8vLqeuB0js8ihQD+w=;
- b=WEIs60uRkDtK8HMWMK5J2YA8reycwreYFxJTMjU5qXgPwOujG0KcQfIUaSPKnVj69BdehRPWa
- +e2AJ6tqDpRB4R6XrF9oM92haadQmnuBy957+ActuAPb7GiEM9lJWU4
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Using an #ifdef in a C source files to have different definitions
-of the same symbol makes the code harder to read and understand.
-Furthermore it makes it harder to test compilation of the different
-branches.
+While working on the wakeup functionality of a RTC driver, I noticed
+that we have a few occasions where 'pm_wakeup.h' gets included directly
+despite the comment that it shouldn't be done. It doesn't build-break
+because these files also include 'device.h' either directly or via some
+indirection, mostly 'platform_device.h'. Still, respect the requirement
+that 'pm_wakeup.h' shall only be included in 'device.h' and not
+directly.
 
-Replace the ifdeffery with IS_ENABLED() which is just a normal
-conditional.
-The resulting binary is still the same as before as the compiler
-optimizes away all the unused code and definitions.
+Based on 6.12-rc7. Build-bot is happy and there are no dependencies. I
+suggest that each patch goes in via the relevant subsystem tree.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/hwmon.c | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
+Thanks and happy hacking,
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 9c35c4d0369d7aad7ea61ccd25f4f63fc98b9e02..86fb674c85d3f54d475be014c3fd3dd74c815c57 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -147,11 +147,6 @@ static DEFINE_IDA(hwmon_ida);
- 
- /* Thermal zone handling */
- 
--/*
-- * The complex conditional is necessary to avoid a cyclic dependency
-- * between hwmon and thermal_sys modules.
-- */
--#ifdef CONFIG_THERMAL_OF
- static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	struct hwmon_thermal_data *tdata = thermal_zone_device_priv(tz);
-@@ -257,6 +252,9 @@ static int hwmon_thermal_register_sensors(struct device *dev)
- 	void *drvdata = dev_get_drvdata(dev);
- 	int i;
- 
-+	if (!IS_ENABLED(CONFIG_THERMAL_OF))
-+		return 0;
-+
- 	for (i = 1; info[i]; i++) {
- 		int j;
- 
-@@ -285,6 +283,9 @@ static void hwmon_thermal_notify(struct device *dev, int index)
- 	struct hwmon_device *hwdev = to_hwmon_device(dev);
- 	struct hwmon_thermal_data *tzdata;
- 
-+	if (!IS_ENABLED(CONFIG_THERMAL_OF))
-+		return;
-+
- 	list_for_each_entry(tzdata, &hwdev->tzdata, node) {
- 		if (tzdata->index == index) {
- 			thermal_zone_device_update(tzdata->tzd,
-@@ -293,16 +294,6 @@ static void hwmon_thermal_notify(struct device *dev, int index)
- 	}
- }
- 
--#else
--static int hwmon_thermal_register_sensors(struct device *dev)
--{
--	return 0;
--}
--
--static void hwmon_thermal_notify(struct device *dev, int index) { }
--
--#endif /* IS_REACHABLE(CONFIG_THERMAL) && ... */
--
- static int hwmon_attr_base(enum hwmon_sensor_types type)
- {
- 	if (type == hwmon_in || type == hwmon_intrusion)
+   Wolfram
+
+
+Wolfram Sang (15):
+  x86/platform/olpc-xo1-sci: don't include 'pm_wakeup.h' directly
+  drivers core: don't include 'pm_wakeup.h' directly
+  HID: google: don't include 'pm_wakeup.h' directly
+  coresight: etm4x: don't include 'pm_wakeup.h' directly
+  Input: spear-keyboard - don't include 'pm_wakeup.h' directly
+  Input: sun4i-lradc-keys - don't include 'pm_wakeup.h' directly
+  media: mceusb: don't include 'pm_wakeup.h' directly
+  mmc: core: don't include 'pm_wakeup.h' directly
+  net: phy: broadcom: don't include 'pm_wakeup.h' directly
+  net: wwan: t7xx: don't include 'pm_wakeup.h' directly
+  PCI: don't include 'pm_wakeup.h' directly
+  platform/x86: quickstart: don't include 'pm_wakeup.h' directly
+  rtc: brcmstb-waketimer: don't include 'pm_wakeup.h' directly
+  usb: typec: tcpci_mt6370: don't include 'pm_wakeup.h' directly
+  PM / Sleep: don't include 'pm_wakeup.h' directly
+
+ arch/x86/platform/olpc/olpc-xo1-sci.c              | 1 -
+ drivers/base/power/sysfs.c                         | 1 -
+ drivers/hid/hid-google-hammer.c                    | 1 -
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 1 -
+ drivers/input/keyboard/spear-keyboard.c            | 1 -
+ drivers/input/keyboard/sun4i-lradc-keys.c          | 1 -
+ drivers/media/rc/mceusb.c                          | 1 -
+ drivers/mmc/core/core.c                            | 1 -
+ drivers/mmc/core/host.c                            | 1 -
+ drivers/net/phy/broadcom.c                         | 2 +-
+ drivers/net/wwan/t7xx/t7xx_pci.c                   | 1 -
+ drivers/pci/pci.c                                  | 1 -
+ drivers/platform/x86/quickstart.c                  | 1 -
+ drivers/rtc/rtc-brcmstb-waketimer.c                | 1 -
+ drivers/usb/typec/tcpm/tcpci_mt6370.c              | 1 -
+ kernel/power/autosleep.c                           | 1 -
+ 16 files changed, 1 insertion(+), 16 deletions(-)
 
 -- 
-2.47.0
+2.39.2
 
 
