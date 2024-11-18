@@ -1,253 +1,217 @@
-Return-Path: <linux-pm+bounces-17732-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17733-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 458739D16EF
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 18:19:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBA499D1786
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 19:02:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA5881F22C51
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 17:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5C221F22719
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 18:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4EE1C07D5;
-	Mon, 18 Nov 2024 17:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D7A1DD866;
+	Mon, 18 Nov 2024 18:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EqUNbNj1"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IDBK+xLv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE971BDA8C
-	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 17:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFBB1DC054;
+	Mon, 18 Nov 2024 18:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731950346; cv=none; b=WQ8EqkuB4zXpE7DrohE4+D5Lf0uz/wnCfFFAgaLXVBacqR60eSTiq5IxJoI/CNS4O05GmEdnjVVlVOXlAxhnirVTFbPfSb6tIVtBXTrNGb0JuojRDx/CVoY3vZBOjLkqf6WHILNoe0LkfSk31MQ0ygAoQNTLcIDgKV3oPvMY8jg=
+	t=1731952942; cv=none; b=VxyKDzAuKDAgLAZ4quh4/3phR6nTCeuS6GkN3ffO5Kv6CBUosgt9UmkTKF8Dj/xXzNgN/esYSUpUkgtI30TEORFREvj1xYwOhLkS/5eFpuaZV5qicMytFUs/hBaOQcxuGqIvskj3gNZ2gnMLpRtWacpq55m7bBpXuUpBb/0U2Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731950346; c=relaxed/simple;
-	bh=+AkeSd488IHXaNmvrfNRaTaOf+29cgnUQfLt5ryWYEc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E/MVBAuIYSv1oLAaDFQLH9o+UDntebF1cirpeciLR4XcasakQstdPXClscfibYJ0pSz6dcGrgXBsJYbQUzqUGBEwyZGS7V0ShyUsrOA2ydS8HbHtKN/m0mzADTjBCG4gzG0fbhvFjqsJasa1Z9j6Yjgky4CrRPix42w8/WJDfBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EqUNbNj1; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb587d0436so19290001fa.2
-        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 09:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731950342; x=1732555142; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NuNH0nDXMSVd1ccWJD9FBlP/snQ56+VRExml0DwRZXE=;
-        b=EqUNbNj1z/nwEat/Qj5iT7Vl7jMMKhLpW3DYWhRCzc/FpgTJzMLElgQRnRwN7b3Yeb
-         mjZ+rvdCT2j0nDAvxUJJBfC8oNZRidOhVi3IrTAICxCk7Bhd1rMqPUKTG7r8knqMV4P7
-         BT9SESb9vkzrR64QpUWrgz4eaQICKzETTaW9Kbha7BG4DZb89CBxSQhum9OCM80bScAQ
-         r8pwOFofPXuHkZQ8xAeqRCS0TyAOza47gacwd79q/SLijIn0hjXmO68C86oIzOI200JM
-         H/m/J1lXhWs7XXcS6C5IwJn5iNswdtK2GexXklxYE4bReQCr4T4cU1AppFbwHXfdY4zp
-         596g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731950342; x=1732555142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NuNH0nDXMSVd1ccWJD9FBlP/snQ56+VRExml0DwRZXE=;
-        b=v8l9tUSfYryqw28t6JPNGGGAqBFJ0KTQ8SiLSqxqq/EfDtauVcqllZ+uiVYMwC7baR
-         wf7/qfI//tGIyygZYPjQhKooNPO9cWds5+g1azkz71QvQPDMzYD8Uk/oCatWs79UAZyx
-         vqYsleRKEnmAjeyZThgryac5RLzYdvdXAcnoh8taLoPGBrUkpvrZabAparYTH7+Jg4BA
-         Fj6btHC8YNIT94ET0Bvc/aNa+ZAPA6wpbbAwTm1kOkNUARQUbKsyvMVXxVPaW4q2CIc1
-         czGvLOI4E76OWqiwbtBV3EEPq93ncDa3/ZhWLGPewSo8JrDmQNokP528ookbsb72P7uw
-         yzPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZxhmpypnAjJig7mHL1DOjPMeFDHCuBhT7iNQ0HKuDyKOQWjaCGWlxMK3u7TdNEx+51d4krmmYRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzACQ7BahMVfevn1POA3N6S2BHKdECHdS1+dHLatBfPBtZq8fy7
-	T16u0bR08ayfysctSbojq5cX59DyyoB+NaHRTRlADd4Y7ARkYn41Tq2QPggJ/4zdlsi877pyCzt
-	wZwjYbPSc7MBZ8lTATb6W8f/ejpvkrIfS2B3r
-X-Google-Smtp-Source: AGHT+IGaVPtjxg0lZYHH7EjyYhWGOPdUdEx0tpeIxRt4+xqS5fBLmpT3skueq7C79i8nPh+VD6qJMRwCLj/TFa72kuU=
-X-Received: by 2002:a2e:be12:0:b0:2fb:5da7:47a7 with SMTP id
- 38308e7fff4ca-2ff6074b31bmr62802331fa.25.1731950342158; Mon, 18 Nov 2024
- 09:19:02 -0800 (PST)
+	s=arc-20240116; t=1731952942; c=relaxed/simple;
+	bh=IaeKpdec/3PSsBxKIbML0Pa+p5E4+JiLIUphOSQ2TiE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=VT8MXPuek3BV3r7wN/RDjclUYTo2XGTMZBq3f7/IVSMa6fXZNPI4r030Mz2Pue1/erdFcS9AezHNL6IIe36AIdOcC0gtM2h5CqJvNHwfPXCpcJhI9cAwKZdndo+OK3Pw8sbFhMROrnMFNSC8RNaxV/SJ9vr+R38sh6t1FvCXEBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IDBK+xLv; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIGGeCG022370;
+	Mon, 18 Nov 2024 18:02:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	G+5aI+CNTCLzdOV3Q6IscoEfQzbT9AxQXMivnhOM6ZE=; b=IDBK+xLvU+ewI1Z8
+	Nu4MDQ1YseLudMbYbVywbrD6ZOfdgy8H7gkB9cOXfodmFDzCTnAI6ZfJ0M9IgeHx
+	XxZopQT1rilm0rmLzEn+LFsRPXnrrtNYo0F0+kNPa58ncabfwWccUQFsf6lNI69d
+	NRl0h/tjjWGhMPMfc1F1eBYASayFkQghcUJIM4BdZ+hw2ar4vDPp2M4tzjpF6X8u
+	AkGvyLuvr+4Ze4DNwpgv8cK476sCLKwZnZgaW2So4YeNd9HUnoGJZ/dBSjGj0OA/
+	JR4tCVBEGm7a+fPcLyh7LTDsQrGKVqTCPsCe+70Kundg8993chR1L12NmEFbyAcz
+	gCZ/GQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y607yj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Nov 2024 18:02:09 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AII28UY012604
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Nov 2024 18:02:08 GMT
+Received: from [10.71.108.63] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 18 Nov
+ 2024 10:01:05 -0800
+Message-ID: <0ca812e7-bf5b-463a-83dc-9195aee14589@quicinc.com>
+Date: Mon, 18 Nov 2024 10:01:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241114220921.2529905-1-saravanak@google.com>
- <20241114220921.2529905-6-saravanak@google.com> <2df83343-2198-4193-8452-f6a27585b999@arm.com>
-In-Reply-To: <2df83343-2198-4193-8452-f6a27585b999@arm.com>
-From: Saravana Kannan <saravanak@google.com>
-Date: Mon, 18 Nov 2024 09:18:25 -0800
-Message-ID: <CAGETcx_cQVr=n+TZtA39Eswi_-o-ohKtB-is78d0yzO0a1SQfw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] PM: sleep: Spread out async kworker threads during
- dpm_resume*() phases
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Marek Vasut <marex@denx.de>, 
-	Bird@google.com, Tim <Tim.Bird@sony.com>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add interconnect provider
+ driver for SM8750
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+	<u.kleine-koenig@baylibre.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Danila Tikhonov <danila@jiaxyga.com>,
+        Raviteja Laggyshetty
+	<quic_rlaggysh@quicinc.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Mike Tipton
+	<quic_mdtipton@quicinc.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20241112003017.2805670-1-quic_molvera@quicinc.com>
+ <20241112003017.2805670-3-quic_molvera@quicinc.com>
+ <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
+Content-Language: en-US
+From: Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 6o3wh5KPYkW3hpmr5NLmsZVm6OVLYW1c
+X-Proofpoint-ORIG-GUID: 6o3wh5KPYkW3hpmr5NLmsZVm6OVLYW1c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411180149
 
-On Mon, Nov 18, 2024 at 1:52=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 11/14/24 22:09, Saravana Kannan wrote:
-> > As of today, the scheduler doesn't spread out all the kworker threads
-> > across all the available CPUs during suspend/resume. This causes
-> > significant resume latency during the dpm_resume*() phases.
-> >
-> > System resume latency is a very user-visible event. Reducing the
-> > latency is more important than trying to be energy aware during that
-> > period.
-> >
-> > Since there are no userspace processes running during this time and
-> > this is a very short time window, we can simply disable EAS during
-> > resume so that the parallel resume of the devices is spread across all
-> > the CPUs.
-> >
-> > On a Pixel 6, averaging over 100 suspend/resume cycles, the new logic
-> > plus disabling EAS for resume yields significant improvements:
-> > +---------------------------+-----------+------------+-----------------=
--+
-> > | Phase                           | Old full sync | New full async | % =
-change |
-> > |                         |               | + EAS disabled |          |
-> > +---------------------------+-----------+------------+-----------------=
--+
-> > | Total dpm_suspend*() time |        107 ms |          62 ms |     -42%=
- |
-> > +---------------------------+-----------+------------+-----------------=
--+
-> > | Total dpm_resume*() time  |         75 ms |          61 ms |     -19%=
- |
-> > +---------------------------+-----------+------------+-----------------=
--+
-> > | Sum                     |        182 ms |         123 ms |     -32% |
-> > +---------------------------+-----------+------------+-----------------=
--+
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >  kernel/power/suspend.c  | 16 ++++++++++++++++
-> >  kernel/sched/topology.c | 13 +++++++++++++
-> >  2 files changed, 29 insertions(+)
-> >
-> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> > index 09f8397bae15..7304dc39958f 100644
-> > --- a/kernel/power/suspend.c
-> > +++ b/kernel/power/suspend.c
-> > @@ -393,6 +393,12 @@ void __weak arch_suspend_enable_irqs(void)
-> >       local_irq_enable();
-> >  }
-> >
-> > +/*
-> > + * Intentionally not part of a header file to avoid risk of abuse by o=
-ther
-> > + * drivers.
-> > + */
-> > +void sched_set_energy_aware(unsigned int enable);
-> > +
-> >  /**
-> >   * suspend_enter - Make the system enter the given sleep state.
-> >   * @state: System sleep state to enter.
-> > @@ -468,6 +474,15 @@ static int suspend_enter(suspend_state_t state, bo=
-ol *wakeup)
-> >
-> >   Platform_wake:
-> >       platform_resume_noirq(state);
-> > +     /*
-> > +      * We do this only for resume instead of suspend and resume for t=
-hese
-> > +      * reasons:
-> > +      * - Performance is more important than power for resume.
-> > +      * - Power spent entering suspend is more important for suspend. =
-Also,
-> > +      *   stangely, disabling EAS was making suspent a few millisecond=
-s
-> > +      *   slower in my testing.
->
-> s/stangely/strangely
-> s/suspent/suspend
 
-Will fix it in the next version.
 
-> I'd also be curious why that is. Disabling EAS shouldn't be that expensiv=
-e.
-> What if you just hack the static branch switch (without the sd rebuild)?
+On 11/15/2024 7:27 AM, Dmitry Baryshkov wrote:
+> On Mon, Nov 11, 2024 at 04:30:17PM -0800, Melody Olvera wrote:
+>> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>>
+>> Introduce SM8750 interconnect provider driver using the interconnect
+>> framework.
+>>
+>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>   drivers/interconnect/qcom/Kconfig  |    9 +
+>>   drivers/interconnect/qcom/Makefile |    2 +
+>>   drivers/interconnect/qcom/sm8750.c | 1585 ++++++++++++++++++++++++++++
+>>   drivers/interconnect/qcom/sm8750.h |  132 +++
+>>   4 files changed, 1728 insertions(+)
+>>   create mode 100644 drivers/interconnect/qcom/sm8750.c
+>>   create mode 100644 drivers/interconnect/qcom/sm8750.h
+>>
+>> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+>> index 362fb9b0a198..1219f4f23d40 100644
+>> --- a/drivers/interconnect/qcom/Kconfig
+>> +++ b/drivers/interconnect/qcom/Kconfig
+>> @@ -337,6 +337,15 @@ config INTERCONNECT_QCOM_SM8650
+>>   	  This is a driver for the Qualcomm Network-on-Chip on SM8650-based
+>>   	  platforms.
+>>   
+>> +config INTERCONNECT_QCOM_SM8750
+>> +	tristate "Qualcomm SM8750 interconnect driver"
+>> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>> +	select INTERCONNECT_QCOM_RPMH
+>> +	select INTERCONNECT_QCOM_BCM_VOTER
+>> +	help
+>> +	  This is a driver for the Qualcomm Network-on-Chip on SM8750-based
+>> +	  platforms.
+>> +
+>>   config INTERCONNECT_QCOM_X1E80100
+>>   	tristate "Qualcomm X1E80100 interconnect driver"
+>>   	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+>> index 9997728c02bf..7887b1e8d69b 100644
+>> --- a/drivers/interconnect/qcom/Makefile
+>> +++ b/drivers/interconnect/qcom/Makefile
+>> @@ -40,6 +40,7 @@ qnoc-sm8350-objs			:= sm8350.o
+>>   qnoc-sm8450-objs			:= sm8450.o
+>>   qnoc-sm8550-objs			:= sm8550.o
+>>   qnoc-sm8650-objs			:= sm8650.o
+>> +qnoc-sm8750-objs			:= sm8750.o
+>>   qnoc-x1e80100-objs			:= x1e80100.o
+>>   icc-smd-rpm-objs			:= smd-rpm.o icc-rpm.o icc-rpm-clocks.o
+>>   
+>> @@ -80,5 +81,6 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
+>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
+>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8550) += qnoc-sm8550.o
+>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8650) += qnoc-sm8650.o
+>> +obj-$(CONFIG_INTERCONNECT_QCOM_SM8750) += qnoc-sm8750.o
+>>   obj-$(CONFIG_INTERCONNECT_QCOM_X1E80100) += qnoc-x1e80100.o
+>>   obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
+>> diff --git a/drivers/interconnect/qcom/sm8750.c b/drivers/interconnect/qcom/sm8750.c
+>> new file mode 100644
+>> index 000000000000..bc72954d54ff
+>> --- /dev/null
+>> +++ b/drivers/interconnect/qcom/sm8750.c
+>> @@ -0,0 +1,1585 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+>> + *
+>> + */
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/interconnect.h>
+>> +#include <linux/interconnect-provider.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_platform.h>
+>> +#include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
+>> +
+>> +#include "bcm-voter.h"
+>> +#include "icc-rpmh.h"
+>> +#include "sm8750.h"
+> Nit: please merge sm8750.h here, there is no need to have a separate
+> header, there are no other users.
 
-I don't think the enabling/disabling is the expensive part. Because I
-do it around dpm_resume*() and it helps performance. I tried to see if
-I could spot a reason, looking at the trace. But nothing stood out.
-
-My educated guess is that when going into suspend, the "thundering
-herd" happens early (all the leaf nodes suspend first) and then peters
-out. Whereas, during resume it's a slow ramp up until the "thundering
-herd" happens at the end (all the leaf nodes resume last).  Spreading
-out the threads immediately (no EAS) probably has a different impact
-on these two styles of thundering herds.
-
->
-> > +      */
-> > +     sched_set_energy_aware(0);
-> >       dpm_resume_noirq(PMSG_RESUME);
-> >
-> >   Platform_early_resume:
-> > @@ -520,6 +535,7 @@ int suspend_devices_and_enter(suspend_state_t state=
-)
-> >   Resume_devices:
-> >       suspend_test_start();
-> >       dpm_resume_end(PMSG_RESUME);
-> > +     sched_set_energy_aware(1);
-> >       suspend_test_finish("resume devices");
-> >       trace_suspend_resume(TPS("resume_console"), state, true);
-> >       resume_console();
-> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > index 9748a4c8d668..c069c0b17cbf 100644
-> > --- a/kernel/sched/topology.c
-> > +++ b/kernel/sched/topology.c
-> > @@ -284,6 +284,19 @@ void rebuild_sched_domains_energy(void)
-> >       mutex_unlock(&sched_energy_mutex);
-> >  }
-> >
-> > +void sched_set_energy_aware(unsigned int enable)
->
-> bool enable?
-
-Will do.
+Ack.
 
 >
-> > +{
-> > +     int state;
-> > +
-> > +     if (!sched_is_eas_possible(cpu_active_mask))
-> > +             return;
-> > +
-> > +     sysctl_sched_energy_aware =3D enable;
-> > +     state =3D static_branch_unlikely(&sched_energy_present);
-> > +     if (state !=3D sysctl_sched_energy_aware)
-> > +             rebuild_sched_domains_energy();
-> > +}
-> > +
->
-> This definitely shouldn't just overwrite
-> sysctl_sched_energy_aware, otherwise you enable EAS
-> for users that explicitly disabled it.
+> Also, is there QoS support? I see no qcom_icc_qosbox entries.
 
-Good point. Will fix it in the next version.
+Unsure; will let Raviteja comment.
 
-Thanks for the review!
+Thanks,
+Melody
+>
+> Other than that:
+>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>
+>
 
--Saravana
-
->
-> If it ever comes to other users wanting this we might
-> need a eas_pause counter so this can be nested, but
-> let's just hope that's never needed.
->
-> Regards,
-> Christian
->
 
