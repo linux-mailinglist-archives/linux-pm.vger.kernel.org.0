@@ -1,63 +1,65 @@
-Return-Path: <linux-pm+bounces-17722-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17723-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B136D9D12BF
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 15:15:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4F79D1343
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 15:39:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E54AB25AC9
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 14:10:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94A4228345C
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 14:39:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4118F19C54B;
-	Mon, 18 Nov 2024 14:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34CC1A9B3C;
+	Mon, 18 Nov 2024 14:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="soRGtwuz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b9mLaTzW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C673199EA3;
-	Mon, 18 Nov 2024 14:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328101991A5;
+	Mon, 18 Nov 2024 14:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731939041; cv=none; b=pS2HRPavUjx3Cj9UzF9rqQsLLYPY17PhrPO/zUMabT7RD8d7UVyD8FyINndHxEhrj9FBJsMywxnXag0cfsme27H9YQVM0jzPVnY2GsIlSULN43BiyTMwaX3Eg7vxrhsZpCZxGE12M9I8N9HLNL37aBiKdssSNhV0Q4XQji0FsYI=
+	t=1731940521; cv=none; b=jXqAGCaLvX8niN25y9sDBgHXlPVFbqUCOOYtMfavxoYk19mvUGR9jyeTNUH8xCbqT3Pda2RAP625AIttD1xj5Vwa/uz97FlKGFPsFmNYw6swgnVrPX0FwU9u7ySoprHLdKrb8J10xeT9Qe4XB7ihHurh5oDqP6C5PqKnNMMvCZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731939041; c=relaxed/simple;
-	bh=0Q6u77/K9IG15gtclWAI+ZLC9LtGOWEKCbPazn2zJnY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EDHHHdgrrgi6FJqSwt1KXGh5kJrdttmfSRmamDfKlFY8Ejk9pXByPfQhfb/nsU2hWFFGiYc+FlJ6M8UuQ0u4Hdjfs8zrAlIcdoW32dNwJO8wM03o76cDfzHIW6nSi36Plj543JaWwqTfRZexh7EROv+/rCvgPQmbr/ETmYLWU6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=soRGtwuz; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4AIEAXHj089864;
-	Mon, 18 Nov 2024 08:10:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1731939033;
-	bh=QFK0OM/sCAFXaeImzaglxs60EU3ux0k1A9nAOnj1OQo=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=soRGtwuzpwNy+CQXc1fCE34h0o+X8Gia5N8kAxxw2JNkhVTo/URKMXCy+MsRYC+71
-	 1oMwLPDM6zAv9kL/xkcMhLewG/k0pMU3LDZdNQ9eWarlELV5+2PolPohhCsJFqoFMM
-	 9naSOAhLlT2Fe8T2T2cCpjLOPZL+awXpbAmxULLo=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4AIEAXst082700
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 18 Nov 2024 08:10:33 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 18
- Nov 2024 08:10:33 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 18 Nov 2024 08:10:33 -0600
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4AIEAWc9026878;
-	Mon, 18 Nov 2024 08:10:32 -0600
-Message-ID: <801c3154-07a8-40ff-af68-b5dac8c83e9a@ti.com>
-Date: Mon, 18 Nov 2024 08:10:32 -0600
+	s=arc-20240116; t=1731940521; c=relaxed/simple;
+	bh=c8a+EImhGlsWDHwDN19J6QvrBe0SXGlxQbSqYKwdzdE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=swh1MK00UIflW31B4lJv9PUmVKO2zRxRzpGPKP/KcjXHqq0Zj6+n8TQP3q/sxq0/W3CVTVYFjOiK2/ufTLkm22u8r4++Pcjj6BXuxsksbfUdpDnHMPvzDaDDVH40BshlXvrDKbFk23zPisal2A999W1AlScnlAYYrRpEV3lrSSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b9mLaTzW; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731940520; x=1763476520;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c8a+EImhGlsWDHwDN19J6QvrBe0SXGlxQbSqYKwdzdE=;
+  b=b9mLaTzWaAQJwzLDU/JL2petQCjyu4SWs/w/baMrMHxNoh3gBepWQXRp
+   9+gtS8mX9T6zVJZ5g/GmuMbKYJ8n01gJHBZfVZmgi9crYd00lnhQZCtUx
+   8Lq5Sf3WBWGjLKbTqbm2+0a7UPiaQjGU970jEFWODsJzXKxQ2PzEzRno6
+   +EuupMNj0Douj/nQCjNllxEPgc+lPKZxo4Scusg0Uwqr/7OZndlHhG1xa
+   gPpwtX5xQsAQOzx+tiIwTvvhBJa9tI5BYrRQt8aXaCCLNTChA1KIe7nAI
+   VGhynl88fD4Q8LsOJiYskxihgXgu+b99zY8xdss6FgK3UPH+cFPDuvTrF
+   A==;
+X-CSE-ConnectionGUID: BV0LLOU+SOGNT5bFFuRjwg==
+X-CSE-MsgGUID: NPIO2tIfSLiFvYfWNJrjDw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11260"; a="31824991"
+X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
+   d="scan'208";a="31824991"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 06:35:19 -0800
+X-CSE-ConnectionGUID: dAbOixpGSTClvAWHjuW4gg==
+X-CSE-MsgGUID: 661glKQvSUmZnsGFwwCrAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
+   d="scan'208";a="126780482"
+Received: from rwthomp1-mobl.amr.corp.intel.com (HELO [10.125.50.190]) ([10.125.50.190])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 06:35:19 -0800
+Message-ID: <90818e23-0bdb-40ad-b2f9-5117c7d8045e@linux.intel.com>
+Date: Mon, 18 Nov 2024 06:35:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,47 +67,32 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] power: reset: as3722-poweroff: Remove unnecessary
- return in as3722_poweroff_probe
-To: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-        Sebastian Reichel
-	<sre@kernel.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20241117053443.1148902-1-iwamatsu@nigauri.org>
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in
+ acpi_os_sleep().
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
+Cc: anna-maria@linutronix.de, tglx@linutronix.de, peterz@infradead.org,
+ frederic@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
+ Todd Brandt <todd.e.brandt@intel.com>
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+ <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
 Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20241117053443.1148902-1-iwamatsu@nigauri.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 11/16/24 11:34 PM, Nobuhiro Iwamatsu wrote:
-> The return is executed on the devm_register_sys_off_handler() line in
-> as3722_poweroff_probe, so the last return line is unnecessary. Remove it.
+> And the argument seems to be that it is better to always use more
+> resources in a given path (ACPI sleep in this particular case) than to
+> be somewhat inaccurate which is visible in some cases.
 > 
-> Fixes: 348fde771ce7 ("power: reset: as3722-poweroff: Use devm_register_sys_off_handler(POWER_OFF)")
-> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-> ---
+> This would mean that hrtimers should always be used everywhere, but they aren't.
 
-Acked-by: Andrew Davis <afd@ti.com>
+more or less rule of thumb is that regular timers are optimized for not firing case
+(e.g. timeouts that get deleted when the actual event happens) while hrtimers
+are optimized for the case where the timer is expected to fire.
 
->   v2: Set correct mail address for Sebastian Reichel.
-> 
->   drivers/power/reset/as3722-poweroff.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/power/reset/as3722-poweroff.c b/drivers/power/reset/as3722-poweroff.c
-> index bb26fa6fa67ca7..8075382cbc3625 100644
-> --- a/drivers/power/reset/as3722-poweroff.c
-> +++ b/drivers/power/reset/as3722-poweroff.c
-> @@ -57,8 +57,6 @@ static int as3722_poweroff_probe(struct platform_device *pdev)
->   					     SYS_OFF_PRIO_DEFAULT,
->   					     as3722_pm_power_off,
->   					     as3722_poweroff);
-> -
-> -	return 0;
->   }
->   
->   static struct platform_driver as3722_poweroff_driver = {
+(I'm with you on the slack argument, some amount of slack, even if it is only a usec or two,
+is very helpful)
 
