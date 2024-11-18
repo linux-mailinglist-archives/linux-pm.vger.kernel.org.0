@@ -1,63 +1,73 @@
-Return-Path: <linux-pm+bounces-17710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17711-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F0919D0F38
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 12:07:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B7F89D0F4A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 12:11:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BFCA1F2252F
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:07:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D5DA28151B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D591194C7A;
-	Mon, 18 Nov 2024 11:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE54194C8D;
+	Mon, 18 Nov 2024 11:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YiI2qtdB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Lqyd2Vvo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F166C3BBF2;
-	Mon, 18 Nov 2024 11:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35ACA143C69
+	for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 11:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731928044; cv=none; b=X9gjei2R2aqlkJlNw+W6F26aOEvohwYzhAEq8/E4THGq/dn38hK9A446T07TrAUG8/nI9/KCdA7GZA9sJUiH0wa9PuKhlN2I2uHaN3voknjDjDFccUVzrnjyvKpyOi8BDk0oNMr+CUPwAhTx2ITVbZPRPHnuzN+taa8DoLxrCiE=
+	t=1731928299; cv=none; b=aW81E5A3uODbaP31clNy7J4AbwhqzF5tVuRuBUqlrAzY6wh05g07MdxUZqIcGp1Km2+GwuuSyFuQfDLcGkmJW4vZ3olxcfAcBDYDS86YvUtqlPL+Le25npmtQdDItblSmTcJfza1J62TkMaRxFElXqBND+q4FIJWkvMpfoA2F74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731928044; c=relaxed/simple;
-	bh=23QyvkzDL9YlSpvXTlcrd7cFt30wzl3tPcIobl+J6ag=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=LmzcLhWlWzwKy9nD5lrgzEec1BxaCcDRNmdlnzrMQiWFnd33/E7E23wfkwxQu9JCOk1Ufv3AzUl2zZjoCrjfSWKXGnHec06aq0Bxr8KIsNma6Qm8PAmug5qP7HA0cXcBt8nKm7JbpALcmTQWySKXoMuIiKduu7S8K9JFKxSyBS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YiI2qtdB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AI5RdSY001092;
-	Mon, 18 Nov 2024 11:07:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	43q9oucTOu/jPRWVJ4UemBYMItswkfaX94LjYJ9vTPM=; b=YiI2qtdBmb6jfeUF
-	7TUntECEFLQ85UiyryFpdgkjE2EQ9i27910lI2zLcfaW3iKiN62iY7jeQvoc/Nd8
-	63rHYcqun9kjiIeqUiAtr87QBpZlJ0zbxtO+O+j1+CM3UJ3doyRzFLfn9uiloYmh
-	0ydUT9LMd2QpTbiiepzeF3AmNxYc/nW2WTjIF6q3gJestQ5k/2IUlYUrXOc9V13b
-	+xQC6nhBEwgMHmHxCs3SDFRpcFwWxWPnOH2rtS52qNXZG+BeHNR3XUP4vVuUGv/T
-	kiMZGj64ktrlie/kfPLBkAlbKJiigms2mqxIVFvfziLOEcdENpCGULOTG0oCkNXI
-	wIV2uQ==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42ycufa9mv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 11:07:17 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AIB7GOQ029920
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 11:07:16 GMT
-Received: from [10.218.15.248] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 18 Nov
- 2024 03:07:11 -0800
-Message-ID: <386f0f4a-b17e-4f0b-90ef-0a960f23b1e4@quicinc.com>
-Date: Mon, 18 Nov 2024 16:37:07 +0530
+	s=arc-20240116; t=1731928299; c=relaxed/simple;
+	bh=UE7HM8qIw6m5M7kf0fE1t9IbYSyWnI3F510f3fD7WTI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=OitZA1wLfFS07wmW6wOOwoiP5wlLRyDdGccud9BXZpLjOSUJ5HSlHo2iQ8LuK4x3ow7bZ2cEMV/HJv50bOidQn/Bc+C6vIjfwSlv6XcTBFjob+nOiN5Mg+jbP8ebNCVNvGQRgocqc60ZeuMvJx1yRHE6PK/iRGOW58hCW8gOgPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Lqyd2Vvo; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43152b79d25so24007835e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2024 03:11:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731928295; x=1732533095; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wb1ggr4en4o2/qwiv+JpxUX3YYBI7nDJJo3cF/GVKKA=;
+        b=Lqyd2VvoypjEfzC7VS7WtQYj06miOwKA2/eu4DYwFd59W3W3l5w16EtIMNZ82Tvf5a
+         ac4eMTdl2w6Gz/GN2RBlI+cQ7kIOV+zYdbQ40ttJXnnh5E3uH+CsHhk8CEIDQoSbR3+p
+         12nzlHkiZFU8rN7OJalF3z4ZUwV3HL2fC68oCgxK75U1m6IVXdObYrrGxpJ1WEBSD71t
+         qtQvpEqVAR4FhHxO/3SJgrceae8FStn7sqhk2mtiXF5xB4cNrTVGQTFr8rRottPTwydd
+         PQABy8RoocW+sCrAngFdwt/FFK2sc0/o+s3Ey+FB2bwd/xPVVmbYvKs9iIQwvEsIUo3A
+         KvNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731928295; x=1732533095;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Wb1ggr4en4o2/qwiv+JpxUX3YYBI7nDJJo3cF/GVKKA=;
+        b=Pp6w4+rTusU8C18jWta3hXg/54jxBIFRQOIOoCWINGNdmel3wKAiLa1dwooOvyxehl
+         QjezKelsHfVX+x2cqP5kQ1BrDx8WJsKsPs/InHlEYCqi/Hl4fcJjkGEbhVzriI/zgqoI
+         uR8ckKxQC8pe0KK7eauNjTSGcyNyRCBTAKaSXvVnZpmWefPU0fh7cOiFYUkyasyFV2jo
+         n7gdZejVugU7Z4BoCRIo2CwCOXyX1HMM9ZYHdgMsCUMztEryLkcKkmyF+8HGHW8yG5Qj
+         2Nmq67nh3EpLjlNcnqJxYGzwojVhGa4O0u9hqnEplKBfa1v3J9BkpNzYDdtY5AjHYJqO
+         6kcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEcQm1RjyiW2B93zJuEp6ML6yZJgciPeOfrGCLoeBOJTlqqaliwWHmQufzB20XlghcmJ/LcE/RFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7pJhWqG7verVk26WxOT925TMEPHrBNwaoPwaHupFM+EnELvsg
+	2XP93SwQH/6slwtPxYERGgGGwFF4ClR6N08M0cf7dee4GLNqdmC5zwPezEg5o54=
+X-Google-Smtp-Source: AGHT+IG1Xz2IhZe7QHWMg6pxCixum8asKHby6Xpi95TCslF4vCE1Y0sqRtObq96ny+tDG1a1hJ3GxA==
+X-Received: by 2002:a05:600c:4eca:b0:42c:b037:5f9d with SMTP id 5b1f17b1804b1-432df71e782mr113443855e9.3.1731928295580;
+        Mon, 18 Nov 2024 03:11:35 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-432da24459bsm158707025e9.6.2024.11.18.03.11.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Nov 2024 03:11:34 -0800 (PST)
+Message-ID: <2e8771be-3a0d-43d4-8787-41bc69d5287d@linaro.org>
+Date: Mon, 18 Nov 2024 12:11:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,73 +75,115 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V4 1/3] dt-bindings: interconnect: Add EPSS L3 compatible
- for SA8775P
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Odelu Kukatla
-	<quic_okukatla@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20241112075826.28296-1-quic_rlaggysh@quicinc.com>
- <20241112075826.28296-2-quic_rlaggysh@quicinc.com>
- <tv7gsceomtdjcymma5ximownsxleg2ujuxcwjgkzj5zhmlscr7@wnyx3bfi2cpo>
 Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <tv7gsceomtdjcymma5ximownsxleg2ujuxcwjgkzj5zhmlscr7@wnyx3bfi2cpo>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PqHpfkL2JIzPyYmidHAZqME6-UvA2m08
-X-Proofpoint-GUID: PqHpfkL2JIzPyYmidHAZqME6-UvA2m08
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 phishscore=0 spamscore=0 impostorscore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411180092
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Colin Ian King <colin.i.king@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+ zhangjiao2 <zhangjiao2@cmss.chinamobile.com>,
+ Rex Nie <rex.nie@jaguarmicro.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux PM mailing list <linux-pm@vger.kernel.org>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal drivers for v6.13-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+Hi Rafael,
 
+please consider the following changes since commit 
+c285b11e289dbe8973735ab8dc84210bde417673:
 
-On 11/12/2024 7:20 PM, Dmitry Baryshkov wrote:
-> On Tue, Nov 12, 2024 at 07:58:24AM +0000, Raviteja Laggyshetty wrote:
->> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
->> SA8775P SoCs.
->>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->> index 21dae0b92819..94f7f283787a 100644
->> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->> @@ -33,6 +33,7 @@ properties:
->>                - qcom,sm6375-cpucp-l3
->>                - qcom,sm8250-epss-l3
->>                - qcom,sm8350-epss-l3
->> +              - qcom,sa8775p-epss-l3
->>            - const: qcom,epss-l3
-> 
-> No, sa8775p isn't compatible with qcom,epss-l3. I asked you to split the
-> driver patch, not to change the compatibles.
-> 
-> 
-Got it, I will split the driver code changes into two patches. 
-First patch will contain the SoC-specific compatible change and multi device support. 
-Second patch will contain the generic compatible addition to of_match table.
+   Merge back thermal control material for 6.13 (2024-11-11 15:20:44 +0100)
+
+are available in the Git repository at:
+
+  
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.13-rc1
+
+for you to fetch changes up to d303e3dd8d4648f2a1bb19944d4fb1c4a5030354:
+
+   tools/thermal: Fix common realloc mistake (2024-11-15 14:29:03 +0100)
+
+----------------------------------------------------------------
+- Add the SAR2130P compatible in the DT bindings for the QCom Tsens
+   driver (Dmitry Baryshkov)
+
+- Add the static annotation to the arrays describing the platform
+   sensors on the LVTS Mediatek driver (Colin Ian King)
+
+- Switch back to the struct platform_driver::remove() from the
+   previous callbacks prototype rework (Uwe Kleine-König)
+
+- Add the MSM8937 compatible in the DT bindings and its support in the
+   QCom Tsens driver (Barnabás Czémán)
+
+- Remove a pointless sign test on an unsigned value in
+   k3_bgp_read_temp() function on the k3_j72xx_bandgap driver (Rex Nie)
+
+- Fix a pointer reference lost when the call to realloc() fails in the
+   thermal library (Zhang Jiao)
+
+----------------------------------------------------------------
+Barnabás Czémán (2):
+       dt-bindings: thermal: tsens: Add MSM8937
+       thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
+
+Colin Ian King (1):
+       thermal/drivers/mediatek/lvts_thermal: Make read-only arrays 
+static const
+
+Dmitry Baryshkov (1):
+       dt-bindings: thermal: qcom-tsens: Add SAR2130P compatible
+
+Rex Nie (1):
+       thermal/drivers/k3_j72xx_bandgap: Simplify code in k3_bgp_read_temp()
+
+Uwe Kleine-König (1):
+       thermal: Switch back to struct platform_driver::remove()
+
+zhang jiao (1):
+       tools/thermal: Fix common realloc mistake
+
+  .../devicetree/bindings/thermal/qcom-tsens.yaml     |  2 ++
+  drivers/thermal/amlogic_thermal.c                   |  2 +-
+  drivers/thermal/armada_thermal.c                    |  2 +-
+  drivers/thermal/broadcom/bcm2835_thermal.c          |  2 +-
+  drivers/thermal/broadcom/ns-thermal.c               |  2 +-
+  drivers/thermal/da9062-thermal.c                    |  6 +++---
+  drivers/thermal/dove_thermal.c                      |  2 +-
+  drivers/thermal/hisi_thermal.c                      |  4 ++--
+  drivers/thermal/imx8mm_thermal.c                    |  2 +-
+  drivers/thermal/imx_thermal.c                       |  2 +-
+  .../thermal/intel/int340x_thermal/int3400_thermal.c |  2 +-
+  .../thermal/intel/int340x_thermal/int3401_thermal.c |  2 +-
+  .../thermal/intel/int340x_thermal/int3402_thermal.c |  2 +-
+  .../thermal/intel/int340x_thermal/int3403_thermal.c |  2 +-
+  .../thermal/intel/int340x_thermal/int3406_thermal.c |  2 +-
+  drivers/thermal/k3_bandgap.c                        |  2 +-
+  drivers/thermal/k3_j72xx_bandgap.c                  |  4 ++--
+  drivers/thermal/kirkwood_thermal.c                  |  2 +-
+  drivers/thermal/mediatek/lvts_thermal.c             |  6 +++---
+  drivers/thermal/qcom/tsens-v1.c                     | 21 
+++++++++++++++-------
+  drivers/thermal/qcom/tsens.c                        |  5 ++++-
+  drivers/thermal/qcom/tsens.h                        |  2 +-
+  drivers/thermal/renesas/rcar_gen3_thermal.c         |  2 +-
+  drivers/thermal/renesas/rcar_thermal.c              |  2 +-
+  drivers/thermal/renesas/rzg2l_thermal.c             |  2 +-
+  drivers/thermal/rockchip_thermal.c                  |  2 +-
+  drivers/thermal/samsung/exynos_tmu.c                |  2 +-
+  drivers/thermal/spear_thermal.c                     |  2 +-
+  drivers/thermal/sprd_thermal.c                      |  2 +-
+  drivers/thermal/st/st_thermal_memmap.c              |  2 +-
+  drivers/thermal/st/stm_thermal.c                    |  2 +-
+  drivers/thermal/tegra/soctherm.c                    |  2 +-
+  drivers/thermal/tegra/tegra-bpmp-thermal.c          |  2 +-
+  drivers/thermal/ti-soc-thermal/ti-bandgap.c         |  2 +-
+  drivers/thermal/uniphier_thermal.c                  |  2 +-
+  tools/thermal/thermometer/thermometer.c             |  7 ++++---
+  36 files changed, 62 insertions(+), 49 deletions(-)
 
 
