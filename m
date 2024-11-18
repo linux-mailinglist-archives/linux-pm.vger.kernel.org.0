@@ -1,213 +1,138 @@
-Return-Path: <linux-pm+bounces-17704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6994F9D0EB7
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:38:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24BA29D0E89
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 11:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4655FB2FB03
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:26:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD7D828122F
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2024 10:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C02119750B;
-	Mon, 18 Nov 2024 10:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tPBtFW6R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC2C192D80;
+	Mon, 18 Nov 2024 10:30:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31936192D97;
-	Mon, 18 Nov 2024 10:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628BC1DFFB;
+	Mon, 18 Nov 2024 10:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731925543; cv=none; b=l4Oa5iRzkRzQjhQyEBbAUaZFJ1vGLjaVB04pz3xzQVER3QFGJn47EboB91pxVF3lvkFx9WejdL20vYNAVqamvBUFrgtwDUygx3K+9hRBKP3KgrWhk27MpPJfaPjVSZ2YldMB7IHBIXJFKHeL3plNqfCRWcjs9aN22TYigkVsGTI=
+	t=1731925833; cv=none; b=MhgA67JIBTe5rJaMzrzfNkdpIKzX8dhv3fnBfyVzE5ZVB9N+ai8s3Z+kFgfOCLx2/i6c3cj/mI32AiJ0c39a7jiaN6XgKqQoXWXd+aQ8vqPBYEBbWRxsL5iCL3bF06XunBNBTMjEun0isVBXFkXRvDA6etsSL011ds+w0TOkcP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731925543; c=relaxed/simple;
-	bh=QDfRNQIvlwjaYeOF45h2WoWUC3qqv0lyACNzU1NOqV0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Top0ZN4fBg90oWpCnOoF8Xk3RticGou6EoTBj2o/gtPKuneGmul6YbkF+6ED07QPYN/8qGF9aRTZjyvG86N1vyC+WlcsqwdIYcpiEBm1XQovOCuaCeXWJvmLAkCHU6p/iTvezqRngxaAqnw++C2XKG0bURLNvdaRBAyyien4P8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tPBtFW6R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A69C4CECC;
-	Mon, 18 Nov 2024 10:25:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731925542;
-	bh=QDfRNQIvlwjaYeOF45h2WoWUC3qqv0lyACNzU1NOqV0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=tPBtFW6RMCDlkA2XB4wsLOKFhltfSM3YW2okBzn8/th6iPKO7Lt9Tw5IcGJ1eRL8P
-	 doBQBHyIQ6X2VSqojTmu7eOlv6r3B0hceEUZmcuSlC3WNDrLG3lL9gwcqIVJW3a2mg
-	 BgM9NubA5/UXRe+7MK6Ob/y6/3fBcnmgfJuON8893wqP8uIx1fY8E4S0a1YfC/qjMw
-	 sUI5vqymkSJJ/OM/EGlE8HYgooyjQnf2yxWYRS04oPnjltFc2gOy/C695q8PkkGgzd
-	 8I8ufSPtWcXZvzkdxhYTNuNaZ1s2FpPbKyu68gpmS3WKog9UiPCTM2zIE3bZIWgaOL
-	 783GYx6DLKoqg==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-296252514c2so2487451fac.3;
-        Mon, 18 Nov 2024 02:25:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU27llnrhDpr2/UUWZ6KP62H5iBp08jq5JWOOSawpeP3MqLbZotdfG5/M75559EhUSiDBdSvsIy62Y=@vger.kernel.org, AJvYcCXSWrRrjCrbx3VCoVvTUbFXcc853djOf++rEzUbxKCDUiCzFzy1qLKMTLYD7sNeKn5vuYkQjFKUOy54MsM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzqq+pA5siQLikgqukp1RsWA0CPImrGVVJf/UcOhzLoYKdD8Fr3
-	AVlwQ6rpOWnHMtxFiG7Qi9EJtDwPWLnuX6jJoWqamPcKd+atZAnTQhOJ73oYuV8t3w9SYOlivvg
-	xXm9KuHv1TOwd7H7uxwebRtLY87s=
-X-Google-Smtp-Source: AGHT+IEgLgtg76At0fKYYK+vm+PcqDQMbKbm/vKpGXtbtfAiFEb4iBbnJlK+TR0rslax9lHvmUe+g71XIrpsHR0VagA=
-X-Received: by 2002:a05:6870:7904:b0:294:8f41:88c8 with SMTP id
- 586e51a60fabf-2962dde4e56mr9865603fac.21.1731925542028; Mon, 18 Nov 2024
- 02:25:42 -0800 (PST)
+	s=arc-20240116; t=1731925833; c=relaxed/simple;
+	bh=/nQX0U9Y6cHJk2ozwZYj0FtT6pGTQgAAwM8lBV3pp2U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YIO8Fd3UmHIYo5R6AXBbzE57HTXl23rhApI18l72uUI8GRIApM7OPOSAsQVOmATzfWWsGOQ8qP2jYW4DnMtyAF7AJG/t9oF10wIH1/4H1VWw5bLxpg8mp8KKaas23A+FnniS4P4zXaZow6mVBy1zVzPYOX2hxXrFHGAeYvtHGHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6e9ba45d67fso38018087b3.1;
+        Mon, 18 Nov 2024 02:30:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731925830; x=1732530630;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xQbnQSmYTs8lTs9KsyqJRXL7FDdkfo0nlRN8P6xRSI8=;
+        b=XRneBmQkSQjcmO3d2CH2bIyjmIsFCWjzR72IY351uIObHuthGaaBteKTyIerqdBlqE
+         ExY4eOT02JKEqkAor+Q/2i1v5kKDk6XItAGJZzYp6SYA3gKzFiWe4mQSdZ56WmAiNC0l
+         R9hJNY7gPwKXlmWh1ksrLzW7F+PzJW4PQf0nw4jLM0/ylvwR348IO7eeDuBI5dW3SFni
+         20QgLFGd77cdXkXU1HusRuqGpLkuSYOvLS2RkjUUjQ5kn0up9VuutnjyqNyAyNsn6FYy
+         zqKOcyu4iLI1hKPJsu4hOA2S0A9t8ROSsEKmqhLdZ+jf2ggCup8RXkNdTHsFI2mpWqiD
+         K5mg==
+X-Forwarded-Encrypted: i=1; AJvYcCU4QrnkcsRPw43nZ+tYvc6NkiddROechgT96151f4bZt5ikjkk6kT7e1kZwt2CwACCJtCoQg4uLz0Rz2Z4wWjrIdBE=@vger.kernel.org, AJvYcCUl6XcUd21etFxTyl9461wLVOVq5N7qwylZ5iPowWvpukFtnySDaUgkhQmnMAiA5jpdE1dwoHLqJA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhDsnS33nOGqMQvbAYkybq0fV4/VElroSvtKKwmZvBt7OfyrUE
+	STO7Vje80s+9MeskvTHmH+BtCIBegjHmiMkebk4OTziD5Rt08+DDx0NVeENp
+X-Google-Smtp-Source: AGHT+IGivuflQWcwvBIOIuQnjLHh7J7FpMYIRoJsRREHfWCY7MYQk09UJm6fS5PRi4TbT0SPZpr0yQ==
+X-Received: by 2002:a05:690c:a9a:b0:6db:c847:c8c5 with SMTP id 00721157ae682-6ee55c073edmr103178937b3.16.1731925829790;
+        Mon, 18 Nov 2024 02:30:29 -0800 (PST)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee7127854esm11570097b3.26.2024.11.18.02.30.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Nov 2024 02:30:29 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6ea7c9226bbso39647147b3.3;
+        Mon, 18 Nov 2024 02:30:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUuS5fM0lG71nZ+lVVouPcNbAtXjQD4LrrE9Ev/jo+MjVgfqZRAHNmSm75+eCRLwRjTPjI2C0n0G82s/ePq5WmONaM=@vger.kernel.org, AJvYcCWUraLPmae7lLS+5Aq2rosulBW6f6ep8WqZfDEfprNshQrX//UX2W7M/7zRxQbnmlNEgc7LRyMg6Q==@vger.kernel.org
+X-Received: by 2002:a05:690c:6012:b0:6e5:a4d6:e544 with SMTP id
+ 00721157ae682-6ee55c3e51dmr124949047b3.24.1731925829027; Mon, 18 Nov 2024
+ 02:30:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Nov 2024 11:25:27 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hey+FYr5KAbs=Eg_6u9Hp=gqH99G8nCwfr_ibRgkkiQw@mail.gmail.com>
-Message-ID: <CAJZ5v0hey+FYr5KAbs=Eg_6u9Hp=gqH99G8nCwfr_ibRgkkiQw@mail.gmail.com>
-Subject: [GIT PULL] ACPI updates for v6.13-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20241116172934.1829676-1-niklas.soderlund+renesas@ragnatech.se> <20241116172934.1829676-2-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20241116172934.1829676-2-niklas.soderlund+renesas@ragnatech.se>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 18 Nov 2024 11:30:17 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXvvD9+2=GvH+AtZUvKx2dhMEtR3e5oXQBF8FgBOVL7eQ@mail.gmail.com>
+Message-ID: <CAMuHMdXvvD9+2=GvH+AtZUvKx2dhMEtR3e5oXQBF8FgBOVL7eQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: rcar_gen3: Use lowercase hex constants
+To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi Niklas,
 
-Please pull from the tag
+On Sat, Nov 16, 2024 at 6:30=E2=80=AFPM Niklas S=C3=B6derlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> The style of the driver is to use lowercase hex constants, correct the
+> few outlines.
+>
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.13-rc1
+Thanks for your patch!
 
-with top-most commit d47a60e487fbb65bbbca3d99e59009f0a4acf34d
+> --- a/drivers/thermal/renesas/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
+> @@ -57,11 +57,11 @@
+>  /* THSCP bits */
+>  #define THSCP_COR_PARA_VLD     (BIT(15) | BIT(14))
+>
+> -#define CTEMP_MASK     0xFFF
+> +#define CTEMP_MASK     0xfff
+>
+>  #define MCELSIUS(temp) ((temp) * 1000)
+> -#define GEN3_FUSE_MASK 0xFFF
+> -#define GEN4_FUSE_MASK 0xFFF
+> +#define GEN3_FUSE_MASK 0xfff
+> +#define GEN4_FUSE_MASK 0xfff
+>
+>  #define TSC_MAX_NUM    5
 
- Merge branch 'acpi-misc'
+LGTM, but you missed a few:
 
-on top of commit 2d5404caa8c7bb5c4e0435f94b28834ae5456623
+$ git grep "\<0x.*[A-Z]" -- drivers/thermal/renesas/rcar_gen3_thermal.c
+drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN3_IRQCTL
+         0x0C
+drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN3_IRQTEMP3   0x1=
+C
+drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN4_THSFMON15  0x1=
+BC
+drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN4_THSFMON16  0x1=
+C0
+drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN4_THSFMON17  0x1=
+C4
 
- Linux 6.12-rc7
+Gr{oetje,eeting}s,
 
-to receive ACPI updates for 6.13-rc1.
+                        Geert
 
-These include a couple of fixes, a new ACPI backlight quirk for Apple
-MacbookPro11,2 and Air7,2 and a bunch of cleanups:
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
- - Fix _CPC register setting issue for registers located in memory in
-   the ACPI CPPC library code (Lifeng Zheng).
-
- - Use DEFINE_SIMPLE_DEV_PM_OPS in the ACPI battery driver, make it use
-   devm_ for initializing mutexes and allocating driver data, and make
-   it check the register_pm_notifier() return value (Thomas Wei=C3=9Fschuh,
-   Andy Shevchenko).
-
- - Make the ACPI EC driver support compile-time conditional and allow
-   ACPI to be built without CONFIG_HAS_IOPORT (Arnd Bergmann).
-
- - Remove a redundant error check from the pfr_telemetry driver (Colin
-   Ian King).
-
- - Rearrange the processor_perflib code in the ACPI processor driver
-   to avoid compiling x86-specific code on other architectures (Arnd
-   Bergmann).
-
- - Add adev NULL check to acpi_quirk_skip_serdev_enumeration() and
-   make UART skip quirks work on PCI UARTs without an UID (Hans de
-   Goede).
-
- - Force native backlight handling Apple MacbookPro11,2 and Air7,2 in
-   the ACPI video driver (Jonathan Denose).
-
- - Switch several ACPI platform drivers back to using struct
-   platform_driver::remove() (Uwe Kleine-K=C3=B6nig).
-
- - Replace strcpy() with strscpy() in multiple places in the ACPI
-   subsystem (Muhammad Qasim Abdul Majeed, Abdul Rahim).
-
-Thanks!
-
-
----------------
-
-Abdul Rahim (1):
-      ACPI: thermal: Use strscpy() instead of strcpy()
-
-Andy Shevchenko (1):
-      ACPI: battery: Check for error code from devm_mutex_init() call
-
-Arnd Bergmann (3):
-      ACPI: EC: make EC support compile-time conditional
-      ACPI: processor_perflib: extend X86 dependency
-      ACPI: allow building without CONFIG_HAS_IOPORT
-
-Colin Ian King (1):
-      ACPI: pfr_telemetry: remove redundant error check on ret
-
-Hans de Goede (2):
-      ACPI: x86: Make UART skip quirks work on PCI UARTs without an UID
-      ACPI: x86: Add adev NULL check to acpi_quirk_skip_serdev_enumeration(=
-)
-
-Jonathan Denose (1):
-      ACPI: video: force native for Apple MacbookPro11,2 and Air7,2
-
-Lifeng Zheng (1):
-      ACPI: CPPC: Fix _CPC register setting issue
-
-Muhammad Qasim Abdul Majeed (9):
-      ACPI: APD: Use strscpy() instead of strcpy()
-      ACPI: EC: Use strscpy() instead of strcpy()
-      ACPI: event: Use strscpy() instead of strcpy()
-      ACPI: pci_link: Use strscpy() instead of strcpy()
-      ACPI: pci_root: Use strscpy() instead of strcpy()
-      ACPI: power: Use strscpy() instead of strcpy()
-      ACPI: SBS: Use strscpy() instead of strcpy()
-      ACPI: SBSHC: Use strscpy() instead of strcpy()
-      ACPI: scan: Use strscpy() instead of strcpy()
-
-Thomas Wei=C3=9Fschuh (4):
-      ACPI: battery: check result of register_pm_notifier()
-      ACPI: battery: allocate driver data through devm_ APIs
-      ACPI: battery: initialize mutexes through devm_ APIs
-      ACPI: battery: use DEFINE_SIMPLE_DEV_PM_OPS
-
-Uwe Kleine-K=C3=B6nig (1):
-      ACPI: Switch back to struct platform_driver::remove()
-
----------------
-
- drivers/acpi/Kconfig               | 11 ++++++++-
- drivers/acpi/Makefile              |  2 +-
- drivers/acpi/ac.c                  |  2 +-
- drivers/acpi/acpi_apd.c            |  2 +-
- drivers/acpi/acpi_pad.c            |  2 +-
- drivers/acpi/acpi_tad.c            |  2 +-
- drivers/acpi/apei/einj-core.c      |  2 +-
- drivers/acpi/apei/ghes.c           |  2 +-
- drivers/acpi/arm64/agdi.c          |  2 +-
- drivers/acpi/battery.c             | 31 +++++++++++-------------
- drivers/acpi/cppc_acpi.c           |  7 +++---
- drivers/acpi/dptf/dptf_pch_fivr.c  |  2 +-
- drivers/acpi/dptf/dptf_power.c     |  2 +-
- drivers/acpi/ec.c                  |  4 ++--
- drivers/acpi/event.c               |  4 ++--
- drivers/acpi/evged.c               |  2 +-
- drivers/acpi/fan_core.c            |  2 +-
- drivers/acpi/internal.h            | 25 +++++++++++++++++++
- drivers/acpi/osl.c                 | 12 ++++++++++
- drivers/acpi/pci_link.c            |  4 ++--
- drivers/acpi/pci_root.c            |  4 ++--
- drivers/acpi/pfr_telemetry.c       |  5 +---
- drivers/acpi/pfr_update.c          |  2 +-
- drivers/acpi/power.c               |  4 ++--
- drivers/acpi/processor_perflib.c   | 13 ++++------
- drivers/acpi/sbs.c                 |  4 ++--
- drivers/acpi/sbshc.c               | 13 +++-------
- drivers/acpi/scan.c                | 14 +++++------
- drivers/acpi/thermal.c             |  6 ++---
- drivers/acpi/video_detect.c        | 16 +++++++++++++
- drivers/acpi/x86/utils.c           | 49 +++++++++++++++++++++++++++++++---=
-----
- drivers/char/Kconfig               |  1 +
- drivers/hwmon/Kconfig              |  3 ++-
- drivers/platform/x86/Kconfig       | 22 +++++++++--------
- drivers/platform/x86/dell/Kconfig  |  1 +
- drivers/platform/x86/hp/Kconfig    |  1 +
- drivers/platform/x86/intel/Kconfig |  2 +-
- include/linux/acpi.h               |  8 +++++--
- 38 files changed, 189 insertions(+), 101 deletions(-)
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
