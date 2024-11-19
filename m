@@ -1,196 +1,224 @@
-Return-Path: <linux-pm+bounces-17757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7219D274C
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 14:51:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8C149D27C7
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 15:13:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E3922849BF
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 13:51:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD5F6B28E13
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 14:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E3F1CCEFA;
-	Tue, 19 Nov 2024 13:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037481CCB5F;
+	Tue, 19 Nov 2024 14:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LyfJGjIv"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="YHIFpR9+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF1C1CCED8;
-	Tue, 19 Nov 2024 13:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732024275; cv=none; b=ldSLJnf0oUfKG6awv1438hkKHIIfgpYdD7pKkdwARV/bgp/o0SmPVJVYDLzY9q3wtsuObUUa56PFB7WioGc/WCM3iPe0xYOTQJbvJYvjqfQQWSk7s3ctpzqy6jjEEJywY5HmfqGaqRRm13U4lxz2zg2bVROuzp743jXRiJhoHx0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732024275; c=relaxed/simple;
-	bh=8QwOJl5WHjGaRTgE0rhL9lEjUcRF9+/nMUyV9CahWu4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YKZlLQBees715H27X75l0RwvF6TOUHXPfj/ptcrjkpYzQaGebVPYs9H8flo1G4X70vYXPMDulK7ONzl9UmkGSMjyeftwr1vlE2cRfZaH5lqVlkzCYOYZh/VjIGR5ny5vY1uzsJPe7QHk0mOiqtMLifYIeTE7GgvyisOqNQsaRD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LyfJGjIv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C506EC4CED0;
-	Tue, 19 Nov 2024 13:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732024274;
-	bh=8QwOJl5WHjGaRTgE0rhL9lEjUcRF9+/nMUyV9CahWu4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LyfJGjIv/JYQVgEV31q9fQ4P0HnyzlCopF49Xzucqtw0EZWe29uUY3EV9T4bmHuJH
-	 0Fsp7fVcTSSjGQoNfuniES8i3RrbNE/apklZ08YYDcADFJ1TG1ja+bypqk4ip3QPNJ
-	 PChML/nGDtwSmRf0v2YLv4L4O+gFdEe2mUQDnougAsLNwC8NobqghOeMzZ3Fd3rK8D
-	 HlJld93J9H/J1+SfUeRf1H2hcvLYLY/ly3qHFLYyfeN1OLlhhWauL9iKDcToCQBlEv
-	 eRjMB0/SkXzf/xn8qT39FIkCWCf6pWIemCyIzPeW/1FIX3cIwnS1Ph8QLs0111srWb
-	 l9e1nWTXVvMKw==
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7edb6879196so648360a12.3;
-        Tue, 19 Nov 2024 05:51:14 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVDlKoJ3StdHHD9TQcqRcTc6/dz4PvyyXVX5cB6yOr3O8PjM5fjQIwQ/jMfwiyM1NSEzuGjkLyyhQZQDeQ=@vger.kernel.org, AJvYcCWQfEPOzsKMkyYZuwWf/Gd+g20HWa8q0jwIf3bjBRjhfF/cX1i9ESxy/0Ms8J4lW8ox4dJnp8WTxM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGZQpRZbODAt9Xu5lJ+SxPZZqCGTWQLmrb8fMB0iA91JxKYmj8
-	1Xa3xq8XdXUkYyIdzQG0JhN8bHHdc350eLL60a0h3wvOdil5fsPb18tb1TqF9qj051bwnCL2qyl
-	u2eh7JZYgZj8GjneUCW4ka9GZRN8=
-X-Google-Smtp-Source: AGHT+IHUMtYxBvfLYQItKbePQ/umS4Ht1ykT0e7FqIyLa2HT/3A/UOJsKW51yQEGE2SNdY2TpLy4hlZZYrtL+TDRNPc=
-X-Received: by 2002:a05:6a20:7fa6:b0:1db:ecb5:221f with SMTP id
- adf61e73a8af0-1dc90afc47amr24006837637.4.1732024274323; Tue, 19 Nov 2024
- 05:51:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2901CC166;
+	Tue, 19 Nov 2024 14:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732025092; cv=fail; b=aTMsOtRfyJQSksuaY4yR8hPymnsE8DfR+pR26Rl8AvInls5MOJiB7URETT2avs9v0/e2Ec7YUWzm1IVzxJrulJk0pttiHbTEOeIc1/JENdnnitZreCF1HWgV3rVjWurQN1209WXj75n72WCKJowzKzKCypLIuGprzhPPknpCGDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732025092; c=relaxed/simple;
+	bh=CrE+A8E53QIPhiE4hVdmxRNMqg6iIhdcBDfDtXTPncY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Sj3BmLLuOEicV84wCjv29CXWBNAaH/7uK7Z69ERAwLTNBe3NxhFORFvOb+qeyBvgd6aReTcz3OHDYpume8LUWFLStRdVoa0MpA29ul8pGP3CXyklxxDSF6xVVZUkNPJ9Ar07+Tl0+b5RnU9VNVGPa8JWxbAbbyvQUD02PuulJsE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=YHIFpR9+; arc=fail smtp.client-ip=40.107.243.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hdDR0XJgNTDoSbQagxptyyyu8PREDcb0s1HKWXK7G2BkvMbTx8f7tnW5nr8YugvvFHXdTjkcoKbRZ4sVo8PNDR9AiuNg/xBVpNAsYfsV/WCWWeeUzPjojqYTb5A5qmkGnQIgSA2YFrOIt3mcr3gjYgpj1YI26QRl5QuopXKkz9wdwGr6sR8uCBXpySQzV15S0+CH29ZJ2Zn34MlfLJJd/hAqjH4Da03UrGkcZi0nA1rI3bE0gGRe8wcyJOIFrn1lFv+VKbGeAWudJz3OdmMAnjV24D85lXAODhwVDWi4XYKjlhFQ6aFwlrqs6tlaUnyLpQI2cn0sZlJTwqDGhUkz4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eD3ZZuyNwKfDzEHtDGVS1eYfT0KP8gUhILt8GJIGe28=;
+ b=sOHwcfXBUuAAWDWUrE3d0dDdqvFe2kB+x4zS8KC0VqJCj4BlxVZnpNiPBHlDrZimt2fJCHE4hpbZa6URa3VtAuEVTZKhEGrzTKLxakfVfrCnbkLWxMQm5MdiITxUmdPjGj2EPeSsAAPj2Xg/ul2rfm1aqM+3mmaBE+DX2pHTwNGCZT3bAArTDYQ9IV67L3kcV7gRryI/2djnH7zEvzhSbRqS5/ON4X5F++JBOsbgQpnrGurNMFIiK/2pi2X02QtKuwxGXpEKfohuG96TU9jaNrACJfgnZ4aQrMgwQ0rR73Y7ySdvWZ7tNNdqHQeaekK4cxv1fa0Kw/jN7zhixk5QKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eD3ZZuyNwKfDzEHtDGVS1eYfT0KP8gUhILt8GJIGe28=;
+ b=YHIFpR9+A3JEMKPpu1uvfzswhEFowWbi9+wrsHqxmgqFvjHIjFMmgV1fgb96PQ0xjTR5PbIOWz1f9Gax34NfBSi/FG6n0aDIGGHtS/MBrAb7WKtV2Pf7b61UqZ2wttuC1dUn9K3lYtJDSVBLekajpwoAzxsuJo/oUr2wjtji4wg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ CH3PR12MB9431.namprd12.prod.outlook.com (2603:10b6:610:1c1::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8158.23; Tue, 19 Nov 2024 14:04:48 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8158.019; Tue, 19 Nov 2024
+ 14:04:48 +0000
+Date: Tue, 19 Nov 2024 19:34:40 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	x86 Maintainers <x86@kernel.org>,
+	Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] cpuidle: Do not return from cpuidle_play_dead()
+ on callback failures
+Message-ID: <Zzya+PIRDlKrd9Ed@BLRRASHENOY1.amd.com>
+References: <13636465.uLZWGnKmhe@rjwysocki.net>
+ <3318440.aeNJFYEL58@rjwysocki.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3318440.aeNJFYEL58@rjwysocki.net>
+X-ClientProxiedBy: PN2PR01CA0248.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:21a::19) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3607404.iIbC2pHGDl@rjwysocki.net> <2017201.usQuhbGJ8B@rjwysocki.net>
- <173507d9-ec20-431d-a444-0531fd346c03@arm.com>
-In-Reply-To: <173507d9-ec20-431d-a444-0531fd346c03@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Nov 2024 14:51:00 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iv05RxVQ4n3+RPOGp3PyFzWgz60+hEP4rd8cAU0aGiqw@mail.gmail.com>
-Message-ID: <CAJZ5v0iv05RxVQ4n3+RPOGp3PyFzWgz60+hEP4rd8cAU0aGiqw@mail.gmail.com>
-Subject: Re: [RFC][PATCH v0.1 3/6] PM: EM: Add special case to em_dev_register_perf_domain()
-To: Hongyan Xia <hongyan.xia2@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <len.brown@intel.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|CH3PR12MB9431:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0480a08c-26df-4427-014d-08dd08a320e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?lbcH+DZsZsVsYeE5I+HuijbCewtKM0KcKMz3K6x5LaHFJM1bRg05ay02Wzqw?=
+ =?us-ascii?Q?l53M0sjjeIAj8DSYnRJiUZntbJ+xwl82lWazKnAFaLa1Cr1xXJHX2mmCq+0+?=
+ =?us-ascii?Q?r50m6fePk+tXPb6grGLanK8EUz8+YuIlJoPvpZoiaYKOJKYcyS97QzssLwM3?=
+ =?us-ascii?Q?piXOiELCk+TUnlfjaw2wyqRXxd5Bnryz/DU9wBDfZDH3s04t9unrUhvofzaL?=
+ =?us-ascii?Q?UV6ETPYw7d1Rub6NP62DuY6WrWTgPiTjEN64X01EOQYr06nAnkCPIUsZBrbV?=
+ =?us-ascii?Q?gi+r41ud0cwPLrU94dYcxkGpsIfKMpgeDpvAUDcEEJ74PXSbjJc49U8pdma7?=
+ =?us-ascii?Q?PeeM/vnlwFMcI4AFtgq6AmynqQs7V3PdDLzmH3iQgGnmRVQ9Fzw+l/LtDHnl?=
+ =?us-ascii?Q?ZV9rO5FD56fFhPJNDbCDepnYXBbnION7hr9nvQgHRoH3j6dqqo7G7xgL/DYp?=
+ =?us-ascii?Q?rSS1kYPJc2gwPCzsdq+aE7kuJRY03wxNlt4ZyIFz/PA9nw62BXz62e9MLl03?=
+ =?us-ascii?Q?dK8+U8BZlE4pNapBobgcASMNLwLzq+FsPUamnVdzY6sQoDddBGdem9yfGEyb?=
+ =?us-ascii?Q?UXRCswYX6LQN2Q9InoXUEivO4peOi2lqbZ33/wI5hBqhCxyKJzRAasx+9cDi?=
+ =?us-ascii?Q?Om6MGXB4K8f4RcqhmQYHXZmHg+jVNSLUTDzv4igGmSCr4hId7e2ndXartBNl?=
+ =?us-ascii?Q?btVZp4dK736/5vHHbk2+dmTi8tegipuCCOn3oW62q1XWnDEn2V6TWk/g6nhs?=
+ =?us-ascii?Q?9j4O5dLmRJTAw3UkQjrCxGgoe9egrsD8g/V0Q18Juq73+WoIGSU63NtmpERK?=
+ =?us-ascii?Q?khnZ8w8a03iSTVQS9b0ZMD2plS4mLnmCRrk94dMK+eVlDKY/5Ut0UmzQMipz?=
+ =?us-ascii?Q?/kyO0DXcah9/oQftk60u+Q097WZB9A87dD6NyiBag7VLHeU+dMctxs6XdazJ?=
+ =?us-ascii?Q?/1uaKKQYNV18VaihTGF8ip4iSE6jbMZFoQSJh+uEngyLHaKLfRQ+BZMhdy0Z?=
+ =?us-ascii?Q?Ihh34lG9WPq5BisQBZPp54i6M375BCGAPVrqxcA6y0modRIbnAnOSmzkM+wH?=
+ =?us-ascii?Q?GX3kiQEGxIyT9VM99sptXX60F72fQQPCBeoMzdbmKI6Bgp+UoNg8pAjWUUyi?=
+ =?us-ascii?Q?J/S4aBSBdQvr4k7RtXYVWbbjvSNgq1wEoLMO8Rtj/3TpaMQEqCERUnZf1kHe?=
+ =?us-ascii?Q?8vxXY0uzwAmQRAwCAnsQo+QSvFvlD+E15EenTivQIVQl0UGIJtmuPXB2yiwu?=
+ =?us-ascii?Q?CJiINuc+NuYm8BB+stCi?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?3Nx2/a3yPlN8o5u475UbuWpF680LvwUNRr+lDd9gqz2cifYe2JzsRpP6YTCW?=
+ =?us-ascii?Q?ZStPEfsI23Udyg8+uFCIWLwWefrrmEPf9hiKeQ5I/6D/NkkqW15AVQ7wEem4?=
+ =?us-ascii?Q?rPn18kVedV3yB37BCZSffBNjykNqXU+TD3G5smBqrOHky64tWCnbUY8h09QH?=
+ =?us-ascii?Q?3yLyNdFYnd4mc6ap0BhopycPcMBHWmYmx93yMqp/PU8t/oetTYJj5WM6ruaU?=
+ =?us-ascii?Q?tYiKKbn8Vcdu/t3duN6GlwcQIqUCf1Mi1Eu35u8s3AtH2YP0hk9h5p0+mk8k?=
+ =?us-ascii?Q?NwRhgeVRSZcAgg08QT9qQPBYlf2WrtH8RU0u6/1aT/xvP60wGX8wyDJJmXAF?=
+ =?us-ascii?Q?a2GTdc13OxXWhYciddrullfcUUhHx0PdMmGzneeS6ByYCPPL0j+6b5LU1LuB?=
+ =?us-ascii?Q?exAMz5Bl0YMtDtWFE5iImxf95jejiX/duXIPodhN7Eou1LNjz3JIuZrkNQ5J?=
+ =?us-ascii?Q?Q7J3po3ZtjZt9slDSSjuYgBXyvg+wUxsiwOyUCHqZQzeeSHjOhhBxBV1aHhB?=
+ =?us-ascii?Q?v/4AVi0NLRhKjNaBfWQodSpwLvjJZz1LqH3AncopCvzk1ZvRF81ywqLhUa+c?=
+ =?us-ascii?Q?aKwQGZiJNHV1zuZJo0xz91Dpg9htSJ0yNN/I5T7541pVaVYXdrLxMXkuyeMl?=
+ =?us-ascii?Q?UZxvz6euVvljjy2yCRHRG7mxmdM8z+GVhYmmsSzuEcbL4pWn42z/GL6cP8AH?=
+ =?us-ascii?Q?bhnqzhGTARQwewrS5AHQdokkS/yPhK/7tFVBptBfntymLHbRGQPj5t3unqWg?=
+ =?us-ascii?Q?zr2nmm63ruioi3YafzPd3wCVESGV1AbRrmdmdQFzvOH1TUtzQJsXvlNs+4CU?=
+ =?us-ascii?Q?fBzbAR8jaPu04IgweFGTIFe7lyH1iEod35II6RFX1XF12n89j/gKU7p4PI4Q?=
+ =?us-ascii?Q?NQt7DesiNKvarH/PqFtlUCmFegcM0gA71xViVutZJrzRsztWpzf4V5H61d5I?=
+ =?us-ascii?Q?PEN0PYcuqecHmzhL89QjxvJC1vR+qqL9x8Ll93QiLo5ZUvKjemZE8Wxk0STu?=
+ =?us-ascii?Q?UwKPbiElkvvYX8uD3z2JpGrLMVgTL4hvjwca/YKXekte29n0IjeDM2TRBPWN?=
+ =?us-ascii?Q?EMI81BuFRbKd/I1syx8YMG4HCYSekPh6J/UnSf9kWFdOZNtKosPW5dU6ndQN?=
+ =?us-ascii?Q?f+5N9qGCq7bptfj0f5mJ6l1eN4hn50Ct/qwmE4ZIpPQjzRqjUm9PROLwZnQy?=
+ =?us-ascii?Q?bG8Lw1EipphDpaOWip/o3mLSynQkQBdeOT6zn7ZRdW/vTcfYN80NcERQhdOm?=
+ =?us-ascii?Q?5+WsYtC4qQbPv0UyKQDqaeuhw5jNkN58JGOqdOcQVQ3YgjmF6ikDg4iD1x39?=
+ =?us-ascii?Q?7WTPxqCjhFsFrZsqFUiApZWgOa058X7gCIwDuFSr/r2i/+pvsE+5wzfUUShx?=
+ =?us-ascii?Q?bln4Ua6wY43E4uEC3j4m9ywNUrkdDesQI5B9APyXgTSBW1+S9pfFOuyLyMV4?=
+ =?us-ascii?Q?zQAb8I8A/NsSFLwYETK2fLfetbUkCMmmba9iWhqE3ekl/YndqmbJYwCNaSJj?=
+ =?us-ascii?Q?lJdhAXL1aYgYPcxPRPLzLI3Yp/mFzVCdyRF6r2uwCqTklmK77sMPBjL1xnDv?=
+ =?us-ascii?Q?8w6YGlQrUY0pRG7ma5e1ZuBHU6/IfjVUpA5DypXG?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0480a08c-26df-4427-014d-08dd08a320e9
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2024 14:04:48.6926
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LvV/t+Wxd+6YOMrsHXQSIUe8hxA0CLd6QSWrfncF1ruJLPr6p8Y6ph14ikWpb9pkCJqLuMckeE8d+MDtzug6fw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9431
 
-On Mon, Nov 18, 2024 at 4:25=E2=80=AFPM Hongyan Xia <hongyan.xia2@arm.com> =
-wrote:
->
-> On 08/11/2024 16:38, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Allow em_dev_register_perf_domain() to register a cost-only stub
-> > perf domain with one-element states table if the .active_power()
-> > callback is not provided.
-> >
-> > Subsequently, this will be used by the intel_pstate driver to register
-> > stub perf domains for CPUs on hybrid systems.
-> >
-> > No intentional functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >   kernel/power/energy_model.c |   26 +++++++++++++++++++++++---
-> >   1 file changed, 23 insertions(+), 3 deletions(-)
-> >
-> > Index: linux-pm/kernel/power/energy_model.c
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > --- linux-pm.orig/kernel/power/energy_model.c
-> > +++ linux-pm/kernel/power/energy_model.c
-> > @@ -426,9 +426,11 @@ static int em_create_pd(struct device *d
-> >       if (!em_table)
-> >               goto free_pd;
-> >
-> > -     ret =3D em_create_perf_table(dev, pd, em_table->state, cb, flags)=
-;
-> > -     if (ret)
-> > -             goto free_pd_table;
-> > +     if (cb->active_power) {
-> > +             ret =3D em_create_perf_table(dev, pd, em_table->state, cb=
-, flags);
-> > +             if (ret)
-> > +                     goto free_pd_table;
-> > +     }
-> >
-> >       ret =3D em_compute_costs(dev, em_table->state, cb, nr_states, fla=
-gs);
-> >       if (ret)
-> > @@ -561,11 +563,20 @@ int em_dev_register_perf_domain(struct d
-> >   {
-> >       unsigned long cap, prev_cap =3D 0;
-> >       unsigned long flags =3D 0;
-> > +     bool stub_pd =3D false;
-> >       int cpu, ret;
-> >
-> >       if (!dev || !nr_states || !cb)
-> >               return -EINVAL;
-> >
-> > +     if (!cb->active_power) {
-> > +             if (!cb->get_cost || nr_states > 1 || microwatts)
-> > +                     return -EINVAL;
-> > +
-> > +             /* Special case: a stub perf domain. */
-> > +             stub_pd =3D true;
-> > +     }
-> > +
->
-> I wonder if the only purpose of stub_pd is to just skip the capacity
-> check below, which doesn't look very nice.
+Hello Rafael,
 
-It is.
+On Fri, Nov 15, 2024 at 09:58:31PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> If the :enter_dead() idle state callback fails for a certain state,
+> there may be still a shallower state for which it will work.
+> 
+> Because the only caller of cpuidle_play_dead(), native_play_dead(),
+> falls back to hlt_play_dead() if it returns an error, it should
+> better try all of the idle states for which :enter_dead() is present
+> before failing, so change it accordingly.
+> 
+> Also notice that the :enter_dead() state callback is not expected
+> to return on success (the CPU should be "dead" then), so make
+> cpuidle_play_dead() ignore its return value.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com> # 6.12-rc7
 
-I guess I could just skip it if nr_states =3D=3D 1 because that case means
-the same cost for all frequency values.
+Thanks for fixing this.
 
->
-> I may be echoing Dietmar's comments here. What's the problem of just
-> having 3 domains?
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
-The energy-efficiency of a CPU is not strictly related to its capacity.
-
-It's about the cases when there are some special CPUs that can
-turbo-up higher, but there's no other difference between them and the
-other CPUs in the domain.
-
-> Or, could you just specify the same capacities so that the same-capacity
-> check won't fail, but just to use hardware load or CPU pressure to model
-> the slight difference in real capacities? This way you'd re-use a lot of
-> existing infrastructure.
-
-That would have been confusing though, so thanks, but no thanks.
-
-> >       /*
-> >        * Use a mutex to serialize the registration of performance domai=
-ns and
-> >        * let the driver-defined callback functions sleep.
-> > @@ -590,6 +601,15 @@ int em_dev_register_perf_domain(struct d
-> >                               ret =3D -EEXIST;
-> >                               goto unlock;
-> >                       }
-> > +
-> > +                     /*
-> > +                      * The capacity need not be the same for all CPUs=
- in a
-> > +                      * stub perf domain, so long as the average cost =
-of
-> > +                      * running on each of them is approximately the s=
-ame.
-> > +                      */
-> > +                     if (stub_pd)
-> > +                             continue;
-> > +
-> >                       /*
-> >                        * All CPUs of a domain must have the same
-> >                        * micro-architecture since they all share the sa=
-me
-> >
-> >
-> >
->
->
+--
+Thanks and Regards
+gautham.
+> ---
+> 
+> v1 -> v2:
+>    * Make cpuidle_play_dead() never return 0.
+>    * Add tags from Mario (I have added them because the change of the patch
+>      should not make a practical difference, but if you want them to be
+>      dropped, please let me know).
+> 
+> ---
+>  drivers/cpuidle/cpuidle.c |   10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> Index: linux-pm/drivers/cpuidle/cpuidle.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpuidle/cpuidle.c
+> +++ linux-pm/drivers/cpuidle/cpuidle.c
+> @@ -69,11 +69,15 @@ int cpuidle_play_dead(void)
+>  	if (!drv)
+>  		return -ENODEV;
+>  
+> -	/* Find lowest-power state that supports long-term idle */
+> -	for (i = drv->state_count - 1; i >= 0; i--)
+> +	for (i = drv->state_count - 1; i >= 0; i--) {
+>  		if (drv->states[i].enter_dead)
+> -			return drv->states[i].enter_dead(dev, i);
+> +			drv->states[i].enter_dead(dev, i);
+> +	}
+>  
+> +	/*
+> +	 * If :enter_dead() is successful, it will never return, so reaching
+> +	 * here means that all of them failed above or were not present.
+> +	 */
+>  	return -ENODEV;
+>  }
+>  
+> 
+> 
+> 
 
