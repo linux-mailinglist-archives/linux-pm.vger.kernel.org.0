@@ -1,118 +1,163 @@
-Return-Path: <linux-pm+bounces-17794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6149D2FCA
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 21:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01C279D3018
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 22:41:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD730B29F7E
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 20:51:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D37AB22DAC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 21:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BDC1D2F76;
-	Tue, 19 Nov 2024 20:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516A01D14F3;
+	Tue, 19 Nov 2024 21:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pb2nWuuF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K1qSdKMS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E0E1D07BB
-	for <linux-pm@vger.kernel.org>; Tue, 19 Nov 2024 20:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CFD1547FF
+	for <linux-pm@vger.kernel.org>; Tue, 19 Nov 2024 21:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732049505; cv=none; b=CfM+tqyhC39mde0nkpK1TjKqM80zVY0a+JlBS2ZpkMQ4G0lhFZK2zYMbPnCZ+Io4OkGanFZgP7JtpNZIOz7rwQTRB9sjI/2rz88wrmZRq76L/QZ3fBQBcCBJ0IL+HilgFJ9yvEMzW9mJhexJba240nYO1b/wNDPTghKaHT5/T04=
+	t=1732052451; cv=none; b=tRmLLN7MXc02LYBhNKwBZ7F1w9mm5CHLbTgt/MYGLT3XNxvhrfCtbw8UjIqYxxrILoRSGAm3m2NKpYtH4TWkwKcXZd2AqpgUPMVh2c6s8FI19XaVL6kZYoRNpsh4oscOsxL087kISpz8Fa/crWdkU245jV5poyRkFkLb0HkHUBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732049505; c=relaxed/simple;
-	bh=C6XsjefZdNL6JJVaSVGoEaTMXQEAzg1RvI4sNIKFS00=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rj+vp1Hh041ougAQmZenqw7h1f3jBO2RHgbaiRfLWuQLhGq03vwpcmm6c8s3EUuJVQUh0iuSRP2Y5dQ/e77OZBJzGYVhiUkaHANTJKDRs71cD4SdJUTQxtmnyivylJidUXEGmTqOZpTVWAxnEWC9LWksmCEKT7s2O2bvujo0TQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pb2nWuuF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49358C4CECF
-	for <linux-pm@vger.kernel.org>; Tue, 19 Nov 2024 20:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732049505;
-	bh=C6XsjefZdNL6JJVaSVGoEaTMXQEAzg1RvI4sNIKFS00=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Pb2nWuuFT7/rwo5oGd8qqH7KEGjfI61RhMnpZ3KPx8d3quIJ9R4MqteFG6jHmYSnm
-	 4GvVTYvLoDKKYWRtLAY7kN+LolkGVFUGJX0eeR7wdCF7BL0k4dNmHDfn2RYKOCJ7sv
-	 wWASeN5VF7iK86rOhNWyhamWe/PHMc7IpAIcydKa0yxp3wqUM1W6jfHFsrsGuhmffB
-	 EcwYXO2ufGBS3PHZr+FKmIkw3lGXujwWCNbOMOZdNZ4EgxOaOBB1qQ4AyV3IsJrVhC
-	 oNcDs9l0d+U+4w3hxyk61yNAe6M7CDQ8B+m/bwZ27XoU68+2TMGIfvIpT6fsQKr7E9
-	 Rt200S1N+l7xw==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-29687cd1924so1392644fac.2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Nov 2024 12:51:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW33IXT6GWgmRTcvuiJUMSW9Uq2c7WF7crWquIw9JRWo0SEdRi8vbnOz1yLqho2qatyQFmuA9jIGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBlqNBn5efhYB6a7wi5c906x0EQeKgBlsI5Z+KRohtGCKv3+JW
-	ecsiKo6k0g7ggiH3FZnCZ+udgaMp0Bp+JW4r7RDRbdPx/CC96ZeyYuhyZ1nrnaWJnl7+FxX4mgY
-	usUL6/mhZECGvotCNNF19DDMmF/Q=
-X-Google-Smtp-Source: AGHT+IGegsDElfmNAxS8EhKXyE2rVKMTYVllW8Wc1N2wBiyxdkCDQ46UPCiQKsM+MpnpsxrAC5nulwCCQjUfGndG08k=
-X-Received: by 2002:a05:6871:5285:b0:296:8309:6a50 with SMTP id
- 586e51a60fabf-296d9f144efmr319797fac.41.1732049504638; Tue, 19 Nov 2024
- 12:51:44 -0800 (PST)
+	s=arc-20240116; t=1732052451; c=relaxed/simple;
+	bh=HE3n513xHhZThcE6jVMoZF6XwhCQEWW5VGxysIXxWto=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aBykJUDc/Re5d6smfDZiz1abFKo03Ux8XvAzO7bsOQqJmun3wPMIxiH1A11cVA9kBNcOfjDM+H5pk8aHBuu8ReHd6xEoPktZt+v6LNyzAq4ZNJIa6deVJfo0bjq0Shy89eGZWWblAI/9GxYZ4nWIDm/6DosOsBU7mYZQdHguFmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K1qSdKMS; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-432d9bb168cso1212265e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Nov 2024 13:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732052448; x=1732657248; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lkxeQUfNljLvLRiRZhalC+n4lyNit8qK2o0nRa/RK2k=;
+        b=K1qSdKMSFk3EJ+/mZ8UxMxt7TvsHiFvKVN5P+h1MNR2YD8wt8k0pcRSXQv/dfx57Km
+         Au7ku0/giiqrvxDnldqLQvSpKT7TCcyMnLMPXr8BwAq4Vt+btFg5Kv7ebShQNgaGb1My
+         7XaJgv3xAQLKAFi9/TzP6aUSALygr5ka8lByTcOV0qURAQ90gVu8aOG6x72tNWrOnrEz
+         3/CBq6TvDLjd2E42V8eyxqDwaOYEPg8i3GKUg/PfdH8OXY60EpKU7Om1KviLT1DA342B
+         xFpRzdkzvC1yPZYXtOjdZNegamh8rEUfzvEpE7qZiPBfAdu6ckYHi0rOJv4O0QGWLHpx
+         iPpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732052448; x=1732657248;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkxeQUfNljLvLRiRZhalC+n4lyNit8qK2o0nRa/RK2k=;
+        b=eHun0sYWweiDI4nTKioKC/tTAEvIyGusEzD5R3k4hK11MqXbAwO5yw1KT8CA05jONP
+         gcG5ek06aLPx3SdLP4QJxRyLXYrI7luxyqFjST9Q6K2o3hz3xHOpVE67+wCqxm9QQcLE
+         Wp2ctf7ztSydtRRz7BqI6XKfXqa8dNlDElult1CcDeYqJfef/zGinaLg4aEQGb0Yzuga
+         1QLSoP/KWEGNI6zPdltC/6ythzrnPrfG4mHCX4XAypQ1vjVhMwbf6773wY6Iz4oHN0Yv
+         fTqp33kNRBojbXLqeVat3qWTPWPF+sgknob1y6ATZoKnEAispumN/HF5/llBYmVgnsb4
+         CB7w==
+X-Forwarded-Encrypted: i=1; AJvYcCVi4Q/UDCKnk1iXIXtKLrppEGUiBSyU4YLYTBFN0UUSkUKBGdUYiknCoOUXv63Hpt0U7uBPP6rTdQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvorMWD6spDoy0d6a/BIMJjuToZw6hIoxxPKh7V+KLqfCFsMUg
+	pp5niRz51w0Tlw/QXac0Dcsi2z7prh6KcmmIRgHWg3HpCnVQhfdsrCGT8G4LkFI=
+X-Google-Smtp-Source: AGHT+IG6bv5/VShXyjrdqEjy+T/UO+kLOX7JIB5cP3VCGPfmzISuivqKLJjNxAIIX4ocGdqh24oTtw==
+X-Received: by 2002:a5d:5f91:0:b0:37d:47eb:b586 with SMTP id ffacd0b85a97d-3824cb30e45mr4340383f8f.4.1732052447252;
+        Tue, 19 Nov 2024 13:40:47 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-382549055f2sm366236f8f.16.2024.11.19.13.40.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Nov 2024 13:40:46 -0800 (PST)
+Message-ID: <cfca677b-bc74-49bb-a031-6f52629edd2b@linaro.org>
+Date: Tue, 19 Nov 2024 22:40:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241118043707.zxyo5wl765dxypkm@vireshk-i7>
-In-Reply-To: <20241118043707.zxyo5wl765dxypkm@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Nov 2024 21:51:33 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hBMdTHcPBYqo0_ffQcy6Zkusu3g7WPoDNNgJBz1w0PHw@mail.gmail.com>
-Message-ID: <CAJZ5v0hBMdTHcPBYqo0_ffQcy6Zkusu3g7WPoDNNgJBz1w0PHw@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 6.13
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14] thermal/drivers/mediatek/auxadc_thermal: expose all
+ thermal sensors
+To: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ James Lo <james.lo@mediatek.com>, Michael Kao <michael.kao@mediatek.com>,
+ Hsin-Yi Wang <hsinyi@chromium.org>, Ben Tseng <ben.tseng@mediatek.com>
+References: <20241025-auxadc_thermal-v14-1-96ab5b60c02e@chromium.org>
+ <5dd2d2a3-6eff-45fb-8af8-593945235dd3@linaro.org>
+ <CAHc4DNKSsrdSjqunhk+oyWw_+oKY9BgzPcqag5QrmLJqjVsE1Q@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAHc4DNKSsrdSjqunhk+oyWw_+oKY9BgzPcqag5QrmLJqjVsE1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Viresh,
+On 19/11/2024 08:38, Hsin-Te Yuan wrote:
+> On Fri, Nov 15, 2024 at 12:48 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi,
+>>
+>> On 25/10/2024 14:05, Hsin-Te Yuan wrote:
+>>> From: James Lo <james.lo@mediatek.com>
+>>>
+>>> Previously, the driver only supported reading the temperature from all
+>>> sensors and returning the maximum value. This update adds another
+>>> get_temp ops to support reading the temperature from each sensor
+>>> separately.
+>>>
+>>> Especially, some thermal zones registered by this patch are needed by
+>>> MT8183 since those thermal zones are necessary for mtk-svs driver.
+>>
+>> The DT for the mt8183 describes the sensor id = 0 as the CPU. On this,
+>> there is a cooling device with trip points.
+>>
+>> The driver registers the id=0 as an aggregator for the sensors which
+>> overloads the CPU thermal zone above.
+>>
+>> Why do you need to aggregate all the sensors to retrieve the max value ?
+>>
+>> They are all contributing differently to the heat and they should be
+>> tied with their proper cooling device.
+>>
+>> I don't think the thermal configuration is correct and I suggest to fix
+>> this aggregator by removing it.
+>>
+>>
+>>
+>   As far as I know the thermal design of Mediatek's board is based on
+> the highest temperature of the whole board. Also, removing the
+> aggregator will break all the boards using this driver.
 
-On Mon, Nov 18, 2024 at 5:37=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758e=
-dc:
->
->   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-u=
-pdates-6.13
->
-> for you to fetch changes up to 53205a7903666d35709954d9fb7370a8150d5e0e:
->
->   dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supported-hw=
- (2024-10-01 14:57:08 +0530)
->
-> ----------------------------------------------------------------
-> OPP Updates for 6.13
->
-> - Describe opp-supported-hw property for ti-cpu (Dhruva Gole).
->
-> - Remove unused declarations in header file (Zhang Zekun).
->
-> ----------------------------------------------------------------
-> Dhruva Gole (1):
->       dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supporte=
-d-hw
->
-> Zhang Zekun (1):
->       OPP: Remove unused declarations in header file
->
->  Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml | =
-20 +++++++++++++++++++-
->  drivers/opp/opp.h                                                     | =
- 2 --
->  2 files changed, 19 insertions(+), 3 deletions(-)
->
-> --
+AFAICT, it is not a thermal design but a thermal configuration.
 
-Pulled and added to linux-pm.git/linux-next, thanks!
+What is the rational of using power numbers related to the CPU but 
+aggregate all temperatures as an input to the governor ?
+
+And for example, the mt8173 has 4 banks and 4 sensors per banks, so 16 
+sensors. And they are all grouped together under the thermal zone 
+"cpu-thermal" with the cpu cooling device.
+
+So if the GPU is getting hot, we cool down the CPU ?
+
+
+> By the way, I heard that baylibre is working on multi-sensor
+> aggregation support, which can be the alternative solution for the
+> aggregator in this driver, but that should be another story and is
+> unrelated to this patch.
+
+Right.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
