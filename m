@@ -1,142 +1,153 @@
-Return-Path: <linux-pm+bounces-17747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17748-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80AC69D2217
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 10:04:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D25A9D22A9
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 10:45:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E1082842A4
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 09:04:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A727B23AF1
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 09:45:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB58199240;
-	Tue, 19 Nov 2024 09:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54311C07D2;
+	Tue, 19 Nov 2024 09:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eGWFi6go"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NyyWrcBQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE69E19AD87;
-	Tue, 19 Nov 2024 09:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271991AA1F1;
+	Tue, 19 Nov 2024 09:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732007072; cv=none; b=Kg5TRgxiM6DWdEZpAOJV/O7UnTYJaztktBwHx7/JMvbfRkez+X3YDOFMWhLMw/XysvKsaS2wEegbXy2qJFw25qDGzct+pfxPIP1joTldqLHGVAN8Q8zMUK38FLXSynyCGiLGsX/pi/KKUbrB6OStdhixsJhMrILN2yUlU/ui2Yc=
+	t=1732009525; cv=none; b=IelscBOTt5qU5TejtU3NvZYJLxe/vxVUtQ+nVqZKHORSIQPEUD0dXSHWKfvnQ7MJ87k4MBnTqfBTlahXAHm+g8Dm3vP/21Jj40IZvQykA5XYcMnS/P6VzheG3oGxNr28lmXpwrYBq1T+EANRQ7yOdcF764pVu8ixfZI40ScUVuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732007072; c=relaxed/simple;
-	bh=SSFrsugzHrwV7I8EAYW4jQnuw3s/TZvSVJYaUz2JnhE=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cnGncvsMkmyA1SwdqPsQ+uAdegOWlcrF2vRMHuiApCIytqg/T2REn0bGiA1sCsu0FUd4djujhO1wxN00HiIn6bV3mEjmMgKNkZlGlP4mR5H0wJSzmY1EQQ1+VNLKZcKwEwmfZYuLcIrXVLoMrKCVuurtvJf6fibcgwPLt5P18SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eGWFi6go; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43167ff0f91so35987985e9.1;
-        Tue, 19 Nov 2024 01:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732007069; x=1732611869; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BNqf9m6iqTU7RuKTbFV0njVYNBBhWO2mYJKSI9yTu68=;
-        b=eGWFi6goqLEU7ofNeYRlB+gyee2UvX4RddqQ3vtTH4ifG2HjB/PUIW4ROUDX0yniQ5
-         5qrYRseQnXnV+3Sf3iQeqcRzLaBeskEoAH3/m8fGgmY1urK+5Djp4bArRByHOxQzmzZD
-         qnO9Mlro8VU7JUDLzczkv3iLlaNk/q/c4G3Y8Qeehm+ifLPF8XQ85nM6wYV1Vskfevei
-         Q0rLpQifdTlbbKtDdbKvN2xibsV83RTe75vVBrbG6ZNYDpRU70gW9lC54YCLgsCwiRBH
-         D7CSUoCXO+fumk4jesOmfhxceIG8rK5aJ8NSiJEtCMHtqnRpGm/8DMt2G5nPRZIlfuTZ
-         PQsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732007069; x=1732611869;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BNqf9m6iqTU7RuKTbFV0njVYNBBhWO2mYJKSI9yTu68=;
-        b=h+YxGnzeIcIHSc2F2eOP7MT4oC9BeytX9h4h/vef/QKcx8rrr4CnsCMzbU+J3ZsZBd
-         utn7p/PYTY587jrsKEkxXVCSwYXHssWv0/yOBdy9maH2WvdrYhoTgvi1pSSFDcqT7uVt
-         UzP0AoHH//4idY5ZMdqSJPy5HAeJw85oK23fQLjJpl1viMexQkFq4v1eww6V+bpT+SZq
-         RLdlSZRTLaym38e3PIuzPVE6POOWApwcqvRzsvKDtzOES7BXWRgsOOPX094J3bTVD6S5
-         RptJv5p3doqccuxPbC8LF76sJIJCETbndrjMdYvwAvbw6jbZzaYghKROUvXzREhqNQlt
-         OZiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVakHkrJC0cXCmahOECCenvXV/15A24W2AXQ+6EmF6OFCvj6Ib/TV5VoTeo6Zo2XKoMlepertm7gCY=@vger.kernel.org, AJvYcCXZZFpARrENnD6vl2+h5g+MozL+ZdDfiGP4mIMWV+twuP//FeE2R+OZfzwyT7yksHNVXLE/snmW9Jd0xJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd78SRNzj7WRKIyghcu8u+skpOCFE111fBqxtjuHZZv2AE09YG
-	QYDhedxNotdYhakvx8bONFAnvFyLDmm/DcYu0G5qZI23UKzK0grQdUiO+w==
-X-Google-Smtp-Source: AGHT+IEilfb4AZZybJ9Noir1r3u+ZGxvNHb3ufYX5oH5CgGVuT4yj85PejmJghrCqMUc3uKY2ukdtw==
-X-Received: by 2002:a5d:64cc:0:b0:382:30a5:c377 with SMTP id ffacd0b85a97d-38230a5c594mr8290338f8f.32.1732007068905;
-        Tue, 19 Nov 2024 01:04:28 -0800 (PST)
-Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38242eef982sm7148949f8f.8.2024.11.19.01.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Nov 2024 01:04:28 -0800 (PST)
-Message-ID: <673c549c.5d0a0220.3a3476.517a@mx.google.com>
-X-Google-Original-Message-ID: <ZzxUm5megd6nRXU1@Ansuel-XPS.>
-Date: Tue, 19 Nov 2024 10:04:27 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-	upstream@airoha.com
-Subject: Re: [PATCH v2] cpufreq: airoha: Add EN7581 Cpufreq SMC driver
-References: <20241017190809.16942-1-ansuelsmth@gmail.com>
- <20241119072054.64hi347qmv7ng3un@vireshk-i7>
+	s=arc-20240116; t=1732009525; c=relaxed/simple;
+	bh=mqRSo9ZYtz2Pe4lS7zNebUzrbnUS4ToI/wxFCrMO72U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=esnw0kKh1+N/ozIK+CeK2ct/v114IX6Wc4YwjWSvTspgYCJF66ckM/j/LaFCRDA5Fzxx31GYL019Rde/K1bEa7XtOJhtaRngf9MFgvsR4OwF5LciFpTws7XqpUjHqGCzw/3VltIcnTp2k4wGYAj6qX6tx+TDPrIaBSUCxBxj55A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NyyWrcBQ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJ7sRr7005820;
+	Tue, 19 Nov 2024 09:45:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	XDThhEf0IvxVtaogdH7h9rVMuYKUTVOqZs5YIXqM7gc=; b=NyyWrcBQa3q6RIts
+	bFRXJWthwmbjxhDF9uF86upie60iJYNi2C0VaHcCBfwWYHCn4nOUuA/1DQd6jgil
+	jR2XDwc48oqzuU1dudLRx9HGmvIN5H+Xz/FOvcvQamysCGaCucBve9cGa2gce8v5
+	o5L54eooaSJ4+/+zYfkEyXH3ZaSwBSWp52Y2wZHaXtHrhqI56F0mIJBJ5eLhNY/M
+	d/6zU2zxwQYqXcWGULw+p5RC5gBKLNmEKJTR6s/dwk/gcl/8N7//ucRApdUXil3c
+	5T1kURw7kVOF6jVcuGHU9KFslHPJa51zd3FaHLZfBYdWYQjpZ5Z6BC3jXw2dkaJx
+	oHgc2g==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y9242b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 09:45:19 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AJ9jJso004704
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 09:45:19 GMT
+Received: from [10.218.15.248] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 19 Nov
+ 2024 01:45:15 -0800
+Message-ID: <1bc7627a-f1d7-4fee-b016-5b9cc407f170@quicinc.com>
+Date: Tue, 19 Nov 2024 15:15:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241119072054.64hi347qmv7ng3un@vireshk-i7>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V4 1/3] dt-bindings: interconnect: Add EPSS L3 compatible
+ for SA8775P
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Odelu Kukatla
+	<quic_okukatla@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+References: <20241112075826.28296-1-quic_rlaggysh@quicinc.com>
+ <20241112075826.28296-2-quic_rlaggysh@quicinc.com>
+ <tv7gsceomtdjcymma5ximownsxleg2ujuxcwjgkzj5zhmlscr7@wnyx3bfi2cpo>
+ <386f0f4a-b17e-4f0b-90ef-0a960f23b1e4@quicinc.com>
+ <CAA8EJprotUaKk+H6C+QK8VN4uNWhUrTaoTq7sj+X0x+oJr2qZw@mail.gmail.com>
+Content-Language: en-US
+From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+In-Reply-To: <CAA8EJprotUaKk+H6C+QK8VN4uNWhUrTaoTq7sj+X0x+oJr2qZw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -0ERlGcY3A4o1tnN77RllrjvJR_hqZB6
+X-Proofpoint-ORIG-GUID: -0ERlGcY3A4o1tnN77RllrjvJR_hqZB6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411190069
 
-On Tue, Nov 19, 2024 at 12:50:54PM +0530, Viresh Kumar wrote:
-> On 17-10-24, 21:07, Christian Marangi wrote:
-> > Add simple Cpufreq driver for Airoha EN7581 SoC that control CPU
-> > frequency scaling with SMC APIs.
-> > 
-> > All CPU share the same frequency and can't be controlled independently.
-> > Current shared CPU frequency is returned by the related SMC command.
-> > 
-> > Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
-> > driver is needed with OPP v2 nodes declared in DTS.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> > Changes v2:
-> > - Fix kernel bot error with missing slab.h and bitfield.h header
-> > - Limit COMPILE_TEST to ARM64 due to smcc 1.2
+
+
+On 11/18/2024 4:42 PM, Dmitry Baryshkov wrote:
+> On Mon, 18 Nov 2024 at 13:07, Raviteja Laggyshetty
+> <quic_rlaggysh@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 11/12/2024 7:20 PM, Dmitry Baryshkov wrote:
+>>> On Tue, Nov 12, 2024 at 07:58:24AM +0000, Raviteja Laggyshetty wrote:
+>>>> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
+>>>> SA8775P SoCs.
+>>>>
+>>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>>>> index 21dae0b92819..94f7f283787a 100644
+>>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>>>> @@ -33,6 +33,7 @@ properties:
+>>>>                - qcom,sm6375-cpucp-l3
+>>>>                - qcom,sm8250-epss-l3
+>>>>                - qcom,sm8350-epss-l3
+>>>> +              - qcom,sa8775p-epss-l3
+>>>>            - const: qcom,epss-l3
+>>>
+>>> No, sa8775p isn't compatible with qcom,epss-l3. I asked you to split the
+>>> driver patch, not to change the compatibles.
+>>>
+>>>
+>> Got it, I will split the driver code changes into two patches.
+>> First patch will contain the SoC-specific compatible change and multi device support.
 > 
-> Hi,
+> no ands, just multidev.
+
+ok, Will split multidev support as one patch. Generic and SoC-specific compatibles addition as second patch.
 > 
-> Sorry for delay at my side to review this driver.
+>> Second patch will contain the generic compatible addition to of_match table.
+>>
 > 
-> Now that I looked at it, I don't see a lot of special stuff happening in the
-> driver. There are many other platforms with similar situation. What we have done
-> for all them, which rely on OPPs coming from DT, is to add a clk for the CPUs
-> and do all this magically smcc stuff from clk_get_rate() and clk_set_rate().
-> Once that is done, you should be able to reuse the cpufreq-dt driver as is.
 > 
-> So a CPU clk is the only missing thing in your case I guess.
->
 
-Hi Viresh,
-
-thanks a lot for the follow-up. I will see what I can do, 2 main problem
-I see is that, contrary to other driver, for this Airoha SoC, there are
-no parents or no clock to enable... It's really just entirely handled by
-ATF and smccc call.
-
-And also the SMCCC requires an index and not the clock itself. This was
-handy for a cpufreq driver as it passed the OPP index, problematic for a
-clock driver as set_rate pass the clock. So I guess I will have to
-define the OPP phandle also in the clock node struct. (and map it?)
-
-The main problem in doing that is the performance hit on having to cycle
-every time the OPPs to find the correct index...
-
-(yes they really implemented this thing with the ATF specifically with
-the cpufreq scenario in mind)
-
-Wonder if you have any hint on any of this.
-
--- 
-	Ansuel
 
