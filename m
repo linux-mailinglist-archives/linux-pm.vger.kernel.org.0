@@ -1,104 +1,196 @@
-Return-Path: <linux-pm+bounces-17756-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17757-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D760F9D2746
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 14:50:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D7219D274C
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 14:51:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868AB1F235C9
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 13:50:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E3922849BF
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 13:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3931CCEC6;
-	Tue, 19 Nov 2024 13:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E3F1CCEFA;
+	Tue, 19 Nov 2024 13:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kE39tds1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LyfJGjIv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B71017E0;
-	Tue, 19 Nov 2024 13:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF1C1CCED8;
+	Tue, 19 Nov 2024 13:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732024242; cv=none; b=ndltA5R4Fk9tKe5OcxshdB2vi4fgfmO59AcemBFu/h0DWI1FC4rPc3qw2B9D99AEPLXBovvZKFDSRWCet2pXJidxGLPISy99WR7NRpjBt2uPtYDGW1Ow4h9MBEYEpKpbSwGBCqN/k9f6eCiPmDKU6WbIRcd/qjYWm9vu+rLspeM=
+	t=1732024275; cv=none; b=ldSLJnf0oUfKG6awv1438hkKHIIfgpYdD7pKkdwARV/bgp/o0SmPVJVYDLzY9q3wtsuObUUa56PFB7WioGc/WCM3iPe0xYOTQJbvJYvjqfQQWSk7s3ctpzqy6jjEEJywY5HmfqGaqRRm13U4lxz2zg2bVROuzp743jXRiJhoHx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732024242; c=relaxed/simple;
-	bh=9Vr1MPxwkShYTEnVAMXZxxEd2d9QIO9yEbNZWlH0Ynk=;
+	s=arc-20240116; t=1732024275; c=relaxed/simple;
+	bh=8QwOJl5WHjGaRTgE0rhL9lEjUcRF9+/nMUyV9CahWu4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Remthl3lBdUU5c7CmZPZX50PpRAcYt9ZmKGr53zUBDIl/74OqtkMItllYuKEm12yNzirHc3q7+z71+iaPHcscKb/Y5LcaUrdbeiTJErI8w8HaLlue6qN2UnOO5vnHxjtgDXV5ATuJGzUSBk5mPu2iMHUG06zHr6cPU2s34VZEFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kE39tds1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93334C4CED2;
-	Tue, 19 Nov 2024 13:50:40 +0000 (UTC)
+	 To:Cc:Content-Type; b=YKZlLQBees715H27X75l0RwvF6TOUHXPfj/ptcrjkpYzQaGebVPYs9H8flo1G4X70vYXPMDulK7ONzl9UmkGSMjyeftwr1vlE2cRfZaH5lqVlkzCYOYZh/VjIGR5ny5vY1uzsJPe7QHk0mOiqtMLifYIeTE7GgvyisOqNQsaRD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LyfJGjIv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C506EC4CED0;
+	Tue, 19 Nov 2024 13:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732024240;
-	bh=9Vr1MPxwkShYTEnVAMXZxxEd2d9QIO9yEbNZWlH0Ynk=;
+	s=k20201202; t=1732024274;
+	bh=8QwOJl5WHjGaRTgE0rhL9lEjUcRF9+/nMUyV9CahWu4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kE39tds10t/0a1ApkP9EnGqw5CPnz15f1GVrfjpz2MxjDIEzJc4SaEJg2wEf70N6i
-	 +THtoxb9YzAip4Lwe1MDsS24nxrH4c30Q/yoe0Vc4Tl05U2RIG08oap3Y70XjgGoc/
-	 NVUlzuJLlZ0+umamW3ymW1I8UwmB54gXjrLsVtBwEnxyPu0kBNlhsRwtb9kDVq2YAr
-	 P3BkLbpC0PnQACUJu4+K7lQd9DvBkBbBlczqaUDLMOnkSFetgOlhgR3Fe09Gv/5Wsn
-	 IGrGtJ9ODQbo+s45rQaT1024Mypt3tPqMORQbbMgNhybGDV278s0C45G8z6zE4teti
-	 2ut1umgy/O+ng==
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso939494276.1;
-        Tue, 19 Nov 2024 05:50:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUha+ZiANsdXC/NsziR5JeIK1gTbU3p5DwSGny0Dih3QH/KO3BfXEZJyc2DOchailAkVgewq+mk71g=@vger.kernel.org, AJvYcCUplPcY/bqcwcZi184SW+R7yDhjJ1murJiWZK/9/QP16AtxQC6vifJaPn+aLNXe1x22l8GO1lvZjFNPRlM=@vger.kernel.org, AJvYcCWNdoKcUdeWr0l4HIJbCoVt1HHv1krD1S2XPHXDWqL4hiDwwtCWLgfJyMdCYp7eKYS1B2SmPgfSn4QvYeRw@vger.kernel.org, AJvYcCX13qLkEemWhwa5urLE7joe0qVCk1wqNxYQnMkrndrKYkEalG8goqF/853l6TuAeYz7YFKGj+PVcFH+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8cIL6itAhPdZ3D3PPg9L/q/kUTnJMPzSBnpjZakp4CDM/VCkL
-	79RrKptoP5bEzgAqpck6iqGA0dASblNgOTMtdQghT3s1zWFm9Wq8+/hmP67KX/Ggqmxqsgj/I89
-	j/3JNEzM3bJfF64bN4DGkzxgI8g==
-X-Google-Smtp-Source: AGHT+IFrbVWEjcnnhPqVNNfoXdE4uWtL2uLFR/SuylPMYdOzh/UX0ZGOOJf3vv2vFR4zxFt6d8SFt3K6oxKtqNeW4hQ=
-X-Received: by 2002:a05:690c:60c5:b0:6e2:1527:446b with SMTP id
- 00721157ae682-6ee55bba6ecmr186681327b3.3.1732024239764; Tue, 19 Nov 2024
- 05:50:39 -0800 (PST)
+	b=LyfJGjIv/JYQVgEV31q9fQ4P0HnyzlCopF49Xzucqtw0EZWe29uUY3EV9T4bmHuJH
+	 0Fsp7fVcTSSjGQoNfuniES8i3RrbNE/apklZ08YYDcADFJ1TG1ja+bypqk4ip3QPNJ
+	 PChML/nGDtwSmRf0v2YLv4L4O+gFdEe2mUQDnougAsLNwC8NobqghOeMzZ3Fd3rK8D
+	 HlJld93J9H/J1+SfUeRf1H2hcvLYLY/ly3qHFLYyfeN1OLlhhWauL9iKDcToCQBlEv
+	 eRjMB0/SkXzf/xn8qT39FIkCWCf6pWIemCyIzPeW/1FIX3cIwnS1Ph8QLs0111srWb
+	 l9e1nWTXVvMKw==
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7edb6879196so648360a12.3;
+        Tue, 19 Nov 2024 05:51:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVDlKoJ3StdHHD9TQcqRcTc6/dz4PvyyXVX5cB6yOr3O8PjM5fjQIwQ/jMfwiyM1NSEzuGjkLyyhQZQDeQ=@vger.kernel.org, AJvYcCWQfEPOzsKMkyYZuwWf/Gd+g20HWa8q0jwIf3bjBRjhfF/cX1i9ESxy/0Ms8J4lW8ox4dJnp8WTxM8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGZQpRZbODAt9Xu5lJ+SxPZZqCGTWQLmrb8fMB0iA91JxKYmj8
+	1Xa3xq8XdXUkYyIdzQG0JhN8bHHdc350eLL60a0h3wvOdil5fsPb18tb1TqF9qj051bwnCL2qyl
+	u2eh7JZYgZj8GjneUCW4ka9GZRN8=
+X-Google-Smtp-Source: AGHT+IHUMtYxBvfLYQItKbePQ/umS4Ht1ykT0e7FqIyLa2HT/3A/UOJsKW51yQEGE2SNdY2TpLy4hlZZYrtL+TDRNPc=
+X-Received: by 2002:a05:6a20:7fa6:b0:1db:ecb5:221f with SMTP id
+ adf61e73a8af0-1dc90afc47amr24006837637.4.1732024274323; Tue, 19 Nov 2024
+ 05:51:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241018081050.23592-1-y.oudjana@protonmail.com>
- <20241018081050.23592-3-y.oudjana@protonmail.com> <20241031161906.GL10824@google.com>
-In-Reply-To: <20241031161906.GL10824@google.com>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 19 Nov 2024 07:50:28 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq++_R3ZVrtrXYXbqODuHteJb4akq2NxMoyjO2wRvKYKdA@mail.gmail.com>
-Message-ID: <CAL_Jsq++_R3ZVrtrXYXbqODuHteJb4akq2NxMoyjO2wRvKYKdA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] dt-bindings: mfd: mediatek: mt6397: Add bindings for MT6328
-To: Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	jason-ch chen <Jason-ch.Chen@mediatek.com>, Chen Zhong <chen.zhong@mediatek.com>, 
-	Flora Fu <flora.fu@mediatek.com>, Alexandre Mergnat <amergnat@baylibre.com>, 
-	Yassine Oudjana <y.oudjana@protonmail.com>, linux-input@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org
+References: <3607404.iIbC2pHGDl@rjwysocki.net> <2017201.usQuhbGJ8B@rjwysocki.net>
+ <173507d9-ec20-431d-a444-0531fd346c03@arm.com>
+In-Reply-To: <173507d9-ec20-431d-a444-0531fd346c03@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 19 Nov 2024 14:51:00 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iv05RxVQ4n3+RPOGp3PyFzWgz60+hEP4rd8cAU0aGiqw@mail.gmail.com>
+Message-ID: <CAJZ5v0iv05RxVQ4n3+RPOGp3PyFzWgz60+hEP4rd8cAU0aGiqw@mail.gmail.com>
+Subject: Re: [RFC][PATCH v0.1 3/6] PM: EM: Add special case to em_dev_register_perf_domain()
+To: Hongyan Xia <hongyan.xia2@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <len.brown@intel.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 31, 2024 at 11:19=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
+On Mon, Nov 18, 2024 at 4:25=E2=80=AFPM Hongyan Xia <hongyan.xia2@arm.com> =
+wrote:
 >
-> On Fri, 18 Oct 2024, Yassine Oudjana wrote:
->
-> > From: Yassine Oudjana <y.oudjana@protonmail.com>
+> On 08/11/2024 16:38, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Add compatible strings for the MT6328 PMIC.
+> > Allow em_dev_register_perf_domain() to register a cost-only stub
+> > perf domain with one-element states table if the .active_power()
+> > callback is not provided.
 > >
-> > Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> > Subsequently, this will be used by the intel_pstate driver to register
+> > stub perf domains for CPUs on hybrid systems.
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > ---
-> >  Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml | 1 +
-> >  Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml      | 2 ++
+> >   kernel/power/energy_model.c |   26 +++++++++++++++++++++++---
+> >   1 file changed, 23 insertions(+), 3 deletions(-)
+> >
+> > Index: linux-pm/kernel/power/energy_model.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/kernel/power/energy_model.c
+> > +++ linux-pm/kernel/power/energy_model.c
+> > @@ -426,9 +426,11 @@ static int em_create_pd(struct device *d
+> >       if (!em_table)
+> >               goto free_pd;
+> >
+> > -     ret =3D em_create_perf_table(dev, pd, em_table->state, cb, flags)=
+;
+> > -     if (ret)
+> > -             goto free_pd_table;
+> > +     if (cb->active_power) {
+> > +             ret =3D em_create_perf_table(dev, pd, em_table->state, cb=
+, flags);
+> > +             if (ret)
+> > +                     goto free_pd_table;
+> > +     }
+> >
+> >       ret =3D em_compute_costs(dev, em_table->state, cb, nr_states, fla=
+gs);
+> >       if (ret)
+> > @@ -561,11 +563,20 @@ int em_dev_register_perf_domain(struct d
+> >   {
+> >       unsigned long cap, prev_cap =3D 0;
+> >       unsigned long flags =3D 0;
+> > +     bool stub_pd =3D false;
+> >       int cpu, ret;
+> >
+> >       if (!dev || !nr_states || !cb)
+> >               return -EINVAL;
+> >
+> > +     if (!cb->active_power) {
+> > +             if (!cb->get_cost || nr_states > 1 || microwatts)
+> > +                     return -EINVAL;
+> > +
+> > +             /* Special case: a stub perf domain. */
+> > +             stub_pd =3D true;
+> > +     }
+> > +
 >
-> Doesn't seem to apply cleanly.
+> I wonder if the only purpose of stub_pd is to just skip the capacity
+> check below, which doesn't look very nice.
+
+It is.
+
+I guess I could just skip it if nr_states =3D=3D 1 because that case means
+the same cost for all frequency values.
+
 >
-> Please rebase and resubmit.
+> I may be echoing Dietmar's comments here. What's the problem of just
+> having 3 domains?
 
-mediatek,mt6328 is now flagged as undocumented. Please resend this.
+The energy-efficiency of a CPU is not strictly related to its capacity.
 
-Rob
+It's about the cases when there are some special CPUs that can
+turbo-up higher, but there's no other difference between them and the
+other CPUs in the domain.
+
+> Or, could you just specify the same capacities so that the same-capacity
+> check won't fail, but just to use hardware load or CPU pressure to model
+> the slight difference in real capacities? This way you'd re-use a lot of
+> existing infrastructure.
+
+That would have been confusing though, so thanks, but no thanks.
+
+> >       /*
+> >        * Use a mutex to serialize the registration of performance domai=
+ns and
+> >        * let the driver-defined callback functions sleep.
+> > @@ -590,6 +601,15 @@ int em_dev_register_perf_domain(struct d
+> >                               ret =3D -EEXIST;
+> >                               goto unlock;
+> >                       }
+> > +
+> > +                     /*
+> > +                      * The capacity need not be the same for all CPUs=
+ in a
+> > +                      * stub perf domain, so long as the average cost =
+of
+> > +                      * running on each of them is approximately the s=
+ame.
+> > +                      */
+> > +                     if (stub_pd)
+> > +                             continue;
+> > +
+> >                       /*
+> >                        * All CPUs of a domain must have the same
+> >                        * micro-architecture since they all share the sa=
+me
+> >
+> >
+> >
+>
+>
 
