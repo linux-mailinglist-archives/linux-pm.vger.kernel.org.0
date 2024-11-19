@@ -1,246 +1,116 @@
-Return-Path: <linux-pm+bounces-17759-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17760-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F1879D2855
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 15:38:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4603E9D296E
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 16:18:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07DFB1F212F4
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 14:38:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB137B325F7
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 15:11:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0971CCEE1;
-	Tue, 19 Nov 2024 14:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9241D1CF5E3;
+	Tue, 19 Nov 2024 15:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rJcW35qn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d8vjuEEG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A161C68BE;
-	Tue, 19 Nov 2024 14:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97251CDFC9;
+	Tue, 19 Nov 2024 15:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732027099; cv=none; b=uAXJqtjWklgnc6z5pUa8jizCJBz8TqdzPtnOBbblB7IfzZfFyK8GEOZ/o5HrHpXzABP5ngsdzylK74APVGVrV1jNwHNDZRXF1zcOVhup2GpHedjqA+EmrU3VtVlbArhpybolO5CPUkvI8Tns4tcpSZfcbgAfeMgt+cnegqD02hI=
+	t=1732028934; cv=none; b=PVYqxQomsv4RLHnTLwcB4ux+Oqt+qJv75RPjAHDVsLOQPpoX+auKh3js01ny4i0qx8kFURyrOHVztvHbencV6q5Y1KngIpwG3eXSJjBcvQjspXAsEyflyIn2pjcW80enmUtMutaCksV7WEy8tDgqIUHyiUCCib4L1fgoFdneW+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732027099; c=relaxed/simple;
-	bh=UgP2Qbq3vzgva8CKJIilHv2/vAnSPGgikaGsIi+XM8c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S+LlsiAPM1rIC3eLHwCQWU+9tzVN1g1tYrkM/gUDq8QvgSaPvt9MR7KgyJIWXZdMl/PC6dBQaGFqmVh+Yf+NKdnuQDjuyr9cWxCQxFDy0zPMxOxK2dvTHXKSBHaGDfdxMxQeGJ9Oi3n/WduKV7qWB0b2E5JBYXxISW9S9hs8Q0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rJcW35qn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84252C4CED9;
-	Tue, 19 Nov 2024 14:38:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732027098;
-	bh=UgP2Qbq3vzgva8CKJIilHv2/vAnSPGgikaGsIi+XM8c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rJcW35qnXx+lpTwsIqSUAuBmB+12lJ157xbgMnBzSBiyRndhGAH3U6dcdItZrAN4z
-	 JKTKBdEjG4ACmPqEpfkMPQ1zx2wHAFZJlCAonFsBq+qW/+Ln1upTrvaSvzZF03FGM9
-	 +wQ9t9w7lsEuzANhdhaoMz6Dei67E1Vpj6XoQYFtZ/WU9Mdw4LgKuev1jfvs2ZUA58
-	 h+9A4L1wJugnTn130/v87Ve2qzGMFy7yZ+BVcQvxmRGp0yEJgms7Amnfz9WDW+jb0I
-	 5/t1knRHdKsGVgAWV7cGXRpYoDJWILbVJzPwALNkkU7KQkbUdSiGs1Rkl9Gq44N19F
-	 i0yxnjqnJqYCQ==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2964645d2b7so643485fac.2;
-        Tue, 19 Nov 2024 06:38:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWC19ShvJpbI5ZSE0VvamuLt1jafGRu//vQHKjIDvua5I5o/bR6ggBqSLXgpZzS/WOkxZcXNclTd5IXZH4=@vger.kernel.org, AJvYcCXG0JgiMla4BQO0iSK8vnt8tBQsCNQ1TwXc2RZcRytsNRjqPIhw1XxY7UTmESoGojtmEPxim6o1tSM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfbxeKk4Zl54U2R9sVPdg9BDhJXCj1NpLM9fxg66e1ELnSK4qJ
-	NUmg0S6+u7WaMOaSSwdGXZtoCPZx4+ACY4v3Uus1qQdAj2EBi0z8+roQORP6dH6LDYydgrkforA
-	zlN7xVdbUGitepf9QoOq5OKdbxKc=
-X-Google-Smtp-Source: AGHT+IF5JVYrYmiksujeJZf6YT+vo8cO0b+QRTahJ0pl7ikmHOJ+nDJWsgJ/ggDHw+/gtrIIpea175NUh1n9WHkiSkI=
-X-Received: by 2002:a05:6871:3a2b:b0:27c:475c:ab2c with SMTP id
- 586e51a60fabf-2962e1140afmr13363617fac.43.1732027097711; Tue, 19 Nov 2024
- 06:38:17 -0800 (PST)
+	s=arc-20240116; t=1732028934; c=relaxed/simple;
+	bh=6B9Y5YBIqcbrEZKrGl78kfe61LRlH2akECpY+g52GqM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AGgLKaT0iI8+/9Fcsbu8tdRWG5UWvlFzn4xDPujTahT2Usi/2RtUfcDPyTWTSwpiY6SzUp7u7mwODJf+rx3psHnz5uheU1ci1UWS55iOwsorzaZUG/BKAu8fTrJv2AHfNI762tKAA28OMOJ3/7327v2xJe17vmz6Nsk8urxi/mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d8vjuEEG; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732028933; x=1763564933;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6B9Y5YBIqcbrEZKrGl78kfe61LRlH2akECpY+g52GqM=;
+  b=d8vjuEEGgxdEH5Y7yWRInpK8Je518IrSdzletGJUER+2U/ZLnyvw4q5X
+   6HvDqdlSt4sgQaCIlJS3nsGAvzxYroAlFU8SK5lkfGD26RzQEYw5JNpOk
+   s/olF1FtERCmUvzUjQXWnnM8du5s6ez7+n0BotoxLEST12JH8ZvqgoVLm
+   GcA4Fqydw9DMGYhDoOFWYSsqL6l729Kvj4OXPMpbJht+QSBSJqNWl/YEJ
+   WfUY2AExrnvWhx87W4QKUzJbkt0Z3QOB+Ct8xp1T02qNbW27RllXs+d4f
+   08POsOCKxHXmiDCgmqmKackEv0DWR6p/wGYnQ2VRwf7BfvZD7qYK5Jk9z
+   Q==;
+X-CSE-ConnectionGUID: OJwDUytQQWaQsuvQSOxP1w==
+X-CSE-MsgGUID: eVh9dsYRSHSCfOPy8IcpzA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="34896535"
+X-IronPort-AV: E=Sophos;i="6.12,166,1728975600"; 
+   d="scan'208";a="34896535"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2024 07:08:52 -0800
+X-CSE-ConnectionGUID: SUf8VSU7RZ6VmpjD2h62ug==
+X-CSE-MsgGUID: YmzwbAuUQPK+7eN8aJSKpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,166,1728975600"; 
+   d="scan'208";a="112881344"
+Received: from dmusso-mobl1.amr.corp.intel.com (HELO [10.125.178.57]) ([10.125.178.57])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2024 07:08:51 -0800
+Message-ID: <0147ea1a-3595-47ae-a9d5-5625b267b7a8@linux.intel.com>
+Date: Tue, 19 Nov 2024 07:08:46 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3607404.iIbC2pHGDl@rjwysocki.net> <115421572.nniJfEyVGO@rjwysocki.net>
- <c4631fdd-0b01-4bda-9e9f-6ac974e27b68@arm.com>
-In-Reply-To: <c4631fdd-0b01-4bda-9e9f-6ac974e27b68@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Nov 2024 15:38:06 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jZf=FaLAPtZB1O_g+P=rH7Lu5kGPdn2K6pk3vXLLJbLg@mail.gmail.com>
-Message-ID: <CAJZ5v0jZf=FaLAPtZB1O_g+P=rH7Lu5kGPdn2K6pk3vXLLJbLg@mail.gmail.com>
-Subject: Re: [RFC][PATCH v0.1 6/6] cpufreq: intel_pstate: Add basic EAS
- support on hybrid platforms
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <len.brown@intel.com>, 
-	Morten Rasmussen <morten.rasmussen@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in
+ acpi_os_sleep().
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, anna-maria@linutronix.de,
+ tglx@linutronix.de, peterz@infradead.org, frederic@kernel.org,
+ corbet@lwn.net, akpm@linux-foundation.org, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Len Brown <len.brown@intel.com>, Todd Brandt <todd.e.brandt@intel.com>
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+ <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+ <90818e23-0bdb-40ad-b2f9-5117c7d8045e@linux.intel.com>
+ <CAJZ5v0gxNEQx5Q+KXs-AMn=bt7GD=jU-TseMHUc5mHp0tKSBtA@mail.gmail.com>
+Content-Language: en-US
+From: Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <CAJZ5v0gxNEQx5Q+KXs-AMn=bt7GD=jU-TseMHUc5mHp0tKSBtA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-First off, thanks for all  the feedback!
+On 11/19/2024 5:42 AM, Rafael J. Wysocki wrote:
+> On Mon, Nov 18, 2024 at 3:35 PM Arjan van de Ven <arjan@linux.intel.com> wrote:
+>>
+>>> And the argument seems to be that it is better to always use more
+>>> resources in a given path (ACPI sleep in this particular case) than to
+>>> be somewhat inaccurate which is visible in some cases.
+>>>
+>>> This would mean that hrtimers should always be used everywhere, but they aren't.
+>>
+>> more or less rule of thumb is that regular timers are optimized for not firing case
+>> (e.g. timeouts that get deleted when the actual event happens) while hrtimers
+>> are optimized for the case where the timer is expected to fire.
+> 
+> I've heard that, which makes me wonder why msleep() is still there.
+> 
+> One thing that's rarely mentioned is that programming a timer in HW
+> actually takes time, so if it is done too often, it hurts performance
+> through latency (even if this is the TSC deadline timer).
 
-On Tue, Nov 12, 2024 at 9:21=E2=80=AFAM Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
->
-> On 08/11/2024 17:46, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Modify intel_pstate to register stub EM perf domains for CPUs on
-> > hybrid platforms via em_dev_register_perf_domain() and to use
-> > em_dev_expand_perf_domain() introduced previously for adding new
-> > CPUs to existing EM perf domains when those CPUs become online for
-> > the first time after driver initialization.
-> >
-> > This change is targeting platforms (for example, Lunar Lake) where
-> > "small" CPUs (E-cores) are always more energy-efficient than the "big"
-> > or "performance" CPUs (P-cores) when run at the same HWP performance
-> > level, so it is sufficient to tell the EAS that E-cores are always
-> > preferred (so long as there is enough spare capacity on one of them
-> > to run the given task).
->
-> By treating all big CPUs (ignoring the different itmt prio values
-> between them) we would have a system in which PD's are not in sync with
-> the asym_cap_list* or the CPU capacities of individual CPUs and sched
-> groups within the sched domain. Not sure if we want to go this way?
+yup and this is why you want to group events together "somewhat", and which is why
+we have slack, to allow that to happen
 
-I guess you want the biggest tasks to be scheduled at the most-capable CPUs=
-.
+> 
+>> (I'm with you on the slack argument, some amount of slack, even if it is only a usec or two,
+>> is very helpful)
+> 
+> Thanks!
 
-That's fair, and it may even improve single-threaded performance in
-some cases I suppose, but then the cost for the "favored cores" PD
-would be the same as for the "other P-cores" PD because there is no
-difference between them other than the top-most turbo bin, so we'd
-compare PDs with the same cost and that wouldn't be super-useful.
-
-> * used by misfit handling - 22d5607400c6 ("sched/fair: Check if a task
-> has a fitting CPU when updating misfit")
->
-> > Accordingly, the perf domains are registered per CPU type (that is,
-> > all P-cores belong to one perf domain and all E-cores belong to another
-> > perf domain) and they are registered only if asymmetric CPU capacity is
-> > enabled.  Each perf domain has a one-element states table and that
-> > element only contains the relative cost value (the other fields in
-> > it are not initialized, so they are all equal to zero), and the cost
-> > value for the E-core perf domain is lower.
->
-> [...]
->
-> > +static int hybrid_pcore_cost(struct device *dev, unsigned long freq,
-> > +                          unsigned long *cost)
-> > +{
-> > +     /*
-> > +      * The number used here needs to be higher than the analogous
-> > +      * one in hybrid_ecore_cost() below.  The units and the actual
-> > +      * values don't matter.
-> > +      */
-> > +     *cost =3D 2;
-> > +     return 0;
->
-> So you're not tying this to HFI energy scores?
-
-Not at this time.
-
-> > +}
-> > +
-> > +static int hybrid_ecore_cost(struct device *dev, unsigned long freq,
-> > +                          unsigned long *cost)
-> > +{
-> > +     *cost =3D 1;
-> > +     return 0;
-> > +}
-> > +
-> > +static struct hybrid_em_perf_domain perf_domains[HYBRID_NR_TYPES] =3D =
-{
-> > +     [HYBRID_PCORE] =3D { .cb.get_cost =3D hybrid_pcore_cost, },
-> > +     [HYBRID_ECORE] =3D { .cb.get_cost =3D hybrid_ecore_cost, }
-> > +};
-> > +
-> > +static bool hybrid_register_perf_domain(struct hybrid_em_perf_domain *=
-pd)
-> > +{
-> > +     /*
-> > +      * Registering EM perf domains without asymmetric CPU capacity
-> > +      * support enabled is wasteful, so don't do that.
-> > +      */
-> > +     if (!hybrid_max_perf_cpu)
-> > +             return false;
-> > +
-> > +     pd->dev =3D get_cpu_device(cpumask_first(&pd->cpumask));
-> > +     if (!pd->dev)
-> > +             return false;
-> > +
-> > +     if (em_dev_register_perf_domain(pd->dev, 1, &pd->cb, &pd->cpumask=
-, false)) {
-> > +             pd->dev =3D NULL;
-> > +             return false;
-> > +     }
-> > +
-> > +     return true;
-> > +}
->
-> What are the issues in case you would use the existing ways (non-stub)
-> to setup the EM?
->
-> static int intel_pstate_get_cpu_cost()
->
-> static void intel_pstate_register_em(struct cpufreq_policy *policy)
->
->   struct em_data_callback em_cb =3D EM_ADV_DATA_CB(NULL,
->                                               intel_pstate_get_cpu_cost)
->
->   em_dev_register_perf_domain(get_cpu_device(policy->cpu), 1,
->                               &em_cb, policy->related_cpus, 1);
->                                       ^^^^^^^^^^^^^^^^^^^^*
-
-I'm not sure what you are asking about here, but I'll try to answer.
-
-No, I don't want to register a PD per policy with one CPU in it
-because that would mean useless comparing PDs with the same cost and
-CPU capacity.
-
-> static void intel_pstate_set_register_em_fct(void)
->
->   default_driver->register_em =3D intel_pstate_register_em
-
-No, I don't want to register PDs through cpufreq because it is too
-early (and see above).
-
-> static int __init intel_pstate_init(void)
->
->   ...
->   intel_pstate_set_register_em_fct()
->   ...
->
-> I guess one issue is the per-CPU policy as an argument to
-> em_dev_register_perf_domain() (*) ?
-
-Yes.
-
-> > +static void hybrid_register_all_perf_domains(void)
-> > +{
-> > +     enum hybrid_cpu_type type;
-> > +
-> > +     for (type =3D HYBRID_PCORE; type < HYBRID_NR_TYPES; type++)
-> > +             hybrid_register_perf_domain(&perf_domains[type]);
-> > +}
-> > +
-> > +static void hybrid_add_to_perf_domain(int cpu, enum hybrid_cpu_type ty=
-pe)
-> > +{
-> > +     struct hybrid_em_perf_domain *pd =3D &perf_domains[type];
-> > +
-> > +     guard(mutex)(&hybrid_capacity_lock);
-> > +
-> > +     if (cpumask_test_cpu(cpu, &pd->cpumask))
-> > +             return;
-> > +
-> > +     cpumask_set_cpu(cpu, &pd->cpumask);
-> > +     if (pd->dev)
-> > +             em_dev_expand_perf_domain(pd->dev, cpu);
-> > +     else if (hybrid_register_perf_domain(pd))
-> > +             em_rebuild_perf_domains();
->
-> I assume that the 'if' and the 'else if' condition here are only taken
-> when the CPU is brought online after boot?
-
-Yes.
 
