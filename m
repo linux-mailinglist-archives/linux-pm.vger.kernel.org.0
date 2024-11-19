@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-17785-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2462B9D2D98
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 19:09:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43C6F9D2D99
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 19:10:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFF6C283A09
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 18:09:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1B2C1F26779
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 18:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA381D4171;
-	Tue, 19 Nov 2024 18:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0051D54C1;
+	Tue, 19 Nov 2024 18:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="npSrPOzq"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="kiFJMUjs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AE01D318C;
-	Tue, 19 Nov 2024 18:08:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A210F1D3586;
+	Tue, 19 Nov 2024 18:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732039737; cv=none; b=oLonevMDAuuh8k4tQm4cDbhF0o6xfoMJTuSSMPYj2p/BYoSkcVaZCTd33VHaT3qybIwYwRSezdtDQLcBBXef8Lk1hctnUzqutQ/qh5rPmz8ii/D/FiLU8e3ZwUPEwO7mJLOHSfyZhmOh/xryJysOiHVaIq2KPRXrMe9UjCyPcJI=
+	t=1732039738; cv=none; b=VZk1gSwlBN3IjuKYTaLGzQ4dFH+WVwCMMH6/Le5yYlB9/zA8t14j0VcG/yhmxpMOy/iAGA7nlgf+riPRZXsEfbqpfVimYoUWS8rjCcB/RcT7Vve4piV/xhwkmykGIbBu0ESbHkfWblqn2Zz3JMEOmaXVeS9z9V7jERrz4/vJoTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732039737; c=relaxed/simple;
-	bh=eMAY9QhoCFacnRzY7PiNH5gsiAT0uv911oYuwR4P1RU=;
+	s=arc-20240116; t=1732039738; c=relaxed/simple;
+	bh=FRxou4ogBasR2CbqYSAi7TTdRHL6MFzbg3a6NsqD/kA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gI9t9eTmbb96bneCmBMcMnl+OeUUKoFLJkr06ohlxG/+TeYxF3NG1J9CPYRTuPxDveOagyy20wLTQHtPPT3+VVjCAGmxbgParhsSv/HGFvypwo4riAKhcQ/n0wzSdrIhRHQOsQdBbFdXIm44wRgHtZWC914cmFecjzMfnbd09So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=npSrPOzq; arc=none smtp.client-ip=193.68.50.107
+	 MIME-Version:Content-Type; b=P97sZ6qBoTmeRZAun1VjIheI0TXwH1yp5giYe0kPIfDBMD2EXZox9i7HetjZGe4fz/kkWa7ebIHugTdTB4pDy3zRsZuUTO6eBANDJqNh3U3NUtd99d3vMT4sfQCFm2lVL43TDn++1qVSd88ablxwD46p+X+5BRi93lexW6AwGaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=kiFJMUjs; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 770BFA0827;
-	Tue, 19 Nov 2024 19:08:45 +0100 (CET)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 0E3EEA09FA;
+	Tue, 19 Nov 2024 19:08:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=fhXAKRdatN6V2ILwE66c
-	PMcL/ll6oIIe5UPNDIhx0wY=; b=npSrPOzqCfoUityWkEm66SbTnrtwKnwsHe5W
-	49gEdtOSEbysqg10UbzpdRN4SqzrPcP69TId0T8jENmvGW2TATzZalEne+bMfR8x
-	Eczn9kcOrO6wZ5Yl+JUjwqPpRS/giuw57X85lyF3ss7+/PrgcMAdCYK6TjT9Wi/I
-	x9R1k2IuYRN69bk6HD5oRiJThrffSEpH9td9so5Mgd09V7iuSAypOPQ/1vR61xN9
-	pNOs5SmvDmMXX2/1P6cRRtyPHP6v9NiYiZQXTwCmFFmRJByDW1us6K+NzTwwEa0P
-	82QRYL3SRTFVgJUUQJuHdhN+y7oe5sc90y1pZN86Xtr+m+f7yIU+lRx+UNi+1IOm
-	pkMaWtpb8Dz+egavoant6M2MSJwQ7ZDMZT6U3NTlNndtoLeQgUeGeJ1Ded1PnN8O
-	HTYMwokFI18hB7kUIzaneCHIjJ3AMKhFLtnepiJvEibA2hBiEVkNXmf0EMylxZvJ
-	okSzrVCTM95RwmsaY2C3IS4HpgEby5Iz5JT2TCmf5KzEux2CbnKh5toSbRVPpM9D
-	OLcGw1TNJbcRdc8rzgg9x67MyYh+G8gagfEgl4aS1s6FAB7XXgQy8+6PKyaoDdSm
-	IKs+XlXN2StiWnUSAdDVwin5zGpRIgsAcUZ/dsLTIvlSFCzOIke6qvs2vuAqQcl8
-	f0kI398=
+	:reply-to:subject:subject:to:to; s=mail; bh=sDyqACO40CQYV6Wt5JDK
+	GnAAVIir2WsWp+4/gPHIazg=; b=kiFJMUjs6FHicofeKn5EA32DoZcOUTW4XQ1T
+	ga6uEw3H9t3dy4LhD/98tJ6gxxCxxLDzwW0srqscK2pFNyohu27hXrIwnMH22g3i
+	nnnfRSbkZIdWZTPZo5+L+Jp0qyCHQJR4M8sdJEv5V0PKm24jDd2IOKmSH2q8TWF6
+	UuVSGtkoM/v2L7xVT35tcUiOg9rHYzQdKr80edLVFor0RHLfMwfCKhXt+uWI/ji1
+	L+rMetLI/bPwYqJhkGDUNOdQ+8+XybM5vxYRzMiALbS+KxUEYPKaPKQfAVDunuUT
+	bvdQbqVaqnTETAio7/y9UShbuyuFPnErs2hWArXADgfSDCj3JhNdCMhuBpQBREoo
+	tNe2wuc7SsD01JU67y+616Af+KbqnfVanT+OLGd1HDstteWAHQpLtOCHQd2+CT8f
+	p8RBfcIIX+tXr3sNdDZ/meyqaMUIbjrZJLmk7xQ4bPqmjosQCFobI7wFYtWTGdir
+	gze9133jdK70QBzN3l5RWGmPKeIAJ8wdfsBRYetdWQVq0iDN66IwBnZlRvuUHExl
+	YsHsTWMNGP3SwqbM2fAw4E4oLq2Yg8g2O/BdERenHTYar//dxm3zwOqczb1jKZoj
+	GxNPdRCv+uGZUKdeA9xMfAqg+XJYADAKw2VxazdVgip6zV2LMZwyyRmG3kSUoZe4
+	IZI/YMs=
 From: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>
 To: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Samuel
  Holland" <samuel@sholland.org>, Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH v5 6/8] power: ip5xxx_power: Fall back to Charge End bit if status register is absent
-Date: Tue, 19 Nov 2024 19:07:38 +0100
-Message-ID: <20241119180741.2237692-6-csokas.bence@prolan.hu>
+Subject: [PATCH v5 8/8] power: ip5xxx_power: Add support for IP5306
+Date: Tue, 19 Nov 2024 19:07:40 +0100
+Message-ID: <20241119180741.2237692-8-csokas.bence@prolan.hu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241119180741.2237692-1-csokas.bence@prolan.hu>
 References: <20241119180741.2237692-1-csokas.bence@prolan.hu>
@@ -68,48 +68,80 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1732039724;VERSION=7980;MC=966728988;ID=46211;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1732039726;VERSION=7980;MC=583164542;ID=46213;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
 X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
 X-EsetId: 37303A29ACD9485560766B
 
-On parts where there is no status register, check the Charge End
-bit to set charging/not charging status. Fullness, trickle charge
-status, discharging etc. cannot be determined from just this bit.
+Add ip5xxx_regfield_config for IP5306
 
 Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
 ---
-
-Notes:
-    New in v5
-
- drivers/power/supply/ip5xxx_power.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/power/supply/ip5xxx_power.c | 44 +++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
 diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
-index f47198731a0c..46b84fb696d7 100644
+index 46b84fb696d7..46f8eb7100c1 100644
 --- a/drivers/power/supply/ip5xxx_power.c
 +++ b/drivers/power/supply/ip5xxx_power.c
-@@ -271,6 +271,19 @@ static int ip5xxx_battery_get_status(struct ip5xxx *ip5xxx, int *val)
- 	unsigned int rval;
- 	int ret;
+@@ -729,6 +729,49 @@ static struct ip5xxx_regfield_config ip51xx_fields = {
+ 	.boost_undervolt_uv_per_bit = 100000,
+ };
  
-+	if (!ip5xxx->regs.charger.status) {
-+		// Fall-back to Charging Ended bit
-+		ret = ip5xxx_read(ip5xxx, ip5xxx->regs.charger.chg_end, &rval);
-+		if (ret)
-+			return ret;
++static struct ip5xxx_regfield_config ip5306_fields = {
++	.charger_enable = REG_FIELD(0x00, 4, 4),
++	.charger_const_volt_sel = REG_FIELD(0x22, 0, 1),
++	.charger_const_curr_sel = REG_FIELD(0x24, 0, 4),
++	.charger_status = REG_FIELD_UNSUPPORTED, // other bits...
++	.charger_chg_end = REG_FIELD(0x71, 3, 3),
++	.charger_timeout = REG_FIELD_UNSUPPORTED,
++	.charger_vin_overvolt = REG_FIELD_UNSUPPORTED,
++	.boost_enable = REG_FIELD(0x00, 5, 5),
++	.boost_llshdn_enable = REG_FIELD_UNSUPPORTED,
++	.boost_llshdn_i_limit = REG_FIELD_UNSUPPORTED,
++	.boost_load_powerup_en = REG_FIELD(0x00, 2, 2),
++	.boost_vin_pullout_en = REG_FIELD(0x01, 2, 2),
++	.boost_undervolt_limit = REG_FIELD(0x21, 2, 4),
++	.boost_light_load_status = REG_FIELD(0x72, 2, 2),
++	.battery_ntc_dis = REG_FIELD_UNSUPPORTED,
++	.battery_type = REG_FIELD(0x22, 2, 3),
++	.battery_vset_en = REG_FIELD_UNSUPPORTED,
++	.battery_adc_volt_low = REG_FIELD_UNSUPPORTED,
++	.battery_adc_volt_high = REG_FIELD_UNSUPPORTED,
++	.battery_adc_curr_low = REG_FIELD_UNSUPPORTED,
++	.battery_adc_curr_high = REG_FIELD_UNSUPPORTED,
++	.battery_adc_ovolt_low = REG_FIELD_UNSUPPORTED,
++	.battery_adc_ovolt_high = REG_FIELD_UNSUPPORTED,
++	.btn_shdn_enable = REG_FIELD(0x00, 0, 0),
++	.btn_wled_mode = REG_FIELD(0x01, 6, 6),
++	.btn_shdn_mode = REG_FIELD(0x01, 7, 7),
++	.btn_long_press_time = REG_FIELD(0x02, 4, 4), // +1s
++	.btn_pressed = REG_FIELD_UNSUPPORTED,
++	// TODO double press
++	.btn_long_pressed = REG_FIELD(0x77, 1, 1),
++	.btn_short_pressed = REG_FIELD(0x77, 0, 0),
++	.wled_enable = REG_FIELD_UNSUPPORTED,
++	.wled_detect_en = REG_FIELD_UNSUPPORTED,
++	.wled_present = REG_FIELD_UNSUPPORTED,
 +
-+		if (rval == ip5xxx->chg_end_inverted)
-+			*val = POWER_SUPPLY_STATUS_CHARGING;
-+		else
-+			*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+		return 0;
-+	}
++	.vbat_max = 4400000,
++	.boost_undervolt_setpoint = 4450000,
++	.boost_undervolt_uv_per_bit = 50000,
++	.const_curr_setpoint = 50000,
++	.chg_end_inverted = 1,
++};
 +
- 	ret = ip5xxx_read(ip5xxx, ip5xxx->regs.charger.status, &rval);
- 	if (ret)
- 		return ret;
+ #define ip5xxx_setup_reg(_field, _reg) \
+ 			do { \
+ 				if (likely(cfg->_field.lsb <= cfg->_field.msb)) { \
+@@ -824,6 +867,7 @@ static const struct of_device_id ip5xxx_power_of_match[] = {
+ 	{ .compatible = "injoinic,ip5109", .data = &ip51xx_fields },
+ 	{ .compatible = "injoinic,ip5207", .data = &ip51xx_fields },
+ 	{ .compatible = "injoinic,ip5209", .data = &ip51xx_fields },
++	{ .compatible = "injoinic,ip5306", .data = &ip5306_fields },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, ip5xxx_power_of_match);
 -- 
 2.34.1
 
