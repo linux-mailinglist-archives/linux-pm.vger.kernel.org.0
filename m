@@ -1,173 +1,182 @@
-Return-Path: <linux-pm+bounces-17791-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17792-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2DEF9D2F76
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 21:31:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA35C9D2FC2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 21:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 710CA1F23A7B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 20:31:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B0F1B23188
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 20:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE881D5CCD;
-	Tue, 19 Nov 2024 20:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B2FE1D12FE;
+	Tue, 19 Nov 2024 20:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="YGlaPcf7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aSDRFLvY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOPodTh3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1EA1D359E;
-	Tue, 19 Nov 2024 20:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344E2149C7A;
+	Tue, 19 Nov 2024 20:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732048256; cv=none; b=eorwivCbnlfLVTY49H5EenLgURISZjXgbke5Qu6BzQhvLMg0kuJlWIH2zorzemSbJ2R21rD4hLIXoDOyha+kPU8fUAR2j8J+4dH9yC07gTq1g+PFyTvST9KHYO+oEeeBcfm7k9VCA/qZTNx5p/LVEApyNxn4sU4abSB+OUuOAtc=
+	t=1732049424; cv=none; b=poaZ4WR6PId1X4Wm3rRtGvNoy/+43vBL4pm8JJymVAK2wcWm1BCYFw5txUxIWFLCSxuXt7URvLPmoUZkmY4fh3mZdoaJzIL0RrJXEAw4f3YsMJ8g/6sogTJE5MQeknGKEqJYgygwmr+9RdylVIC1wVaCNSt6b7FfMSvggY6CGcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732048256; c=relaxed/simple;
-	bh=56ArrsIDQV4Mcl9L7IRi7dVYZAeRnuAyV4eq90yHuNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gcaeOQAkR/ztqlrz6IEuqTKhXcHsPuSGHju15tFexhaj+FF3dPoZwRTtgqHqdsAHSQZ3ZXZNFermyDTlwgKDlSwznC06J02zET0IKRWNIREtGoIETdDKo5GKWNzwLYhZM8ZqukjkzEwDHGSKS6SG+iudvV7aj7/Evhak2u7DQSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=YGlaPcf7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aSDRFLvY; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfout.phl.internal (Postfix) with ESMTP id DF390138075F;
-	Tue, 19 Nov 2024 15:30:51 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Tue, 19 Nov 2024 15:30:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1732048251;
-	 x=1732134651; bh=7+eJYpd6GRbgJjpSCYGLsGStpmlpnCcU8XzwnJegeJM=; b=
-	YGlaPcf7aEARn0feYng7f0geZm+xcu28wAVVZ3NIZeFt+Nmwi7d8b6HXA9wYBUQy
-	Xg9UZuLS1QtRGFuHMQbm6VQCATOH0FvuXOiBEb1o3cDmxOn8cArnSu+TMa7V/Y7Q
-	pgEoBo2uozsswGVHrx0i0+/EvNrX6Aq3O5ZZY8mhieW1iFFWrU/PQMDp6DpxWfv0
-	kzgC8Upjn+vCHdxULJqgktngqUFnMVd6r8PTrJAG8zDUaI09vPQm1nU1+TSZVTmd
-	HsDMXtwxZprYIQN0PgiX8aZQkSZjjb9hW4O4bErOr57/KDZrJz+MlLxOF6s8BG7y
-	SgFUu3xe0BKnCuGdQ0KrXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1732048251; x=
-	1732134651; bh=7+eJYpd6GRbgJjpSCYGLsGStpmlpnCcU8XzwnJegeJM=; b=a
-	SDRFLvYvTtgTORgtQgKdM4xqxUm9Zr3ehppm8ljJLviEqKWRfJT4lTyMOvmFW8Aa
-	ttpjZamyFyh2flnJnkSKp/stBoBqoKkhFMLp7AvppAtNiV0xuw3wxPz+gwt4hPCi
-	lH9H3pisADc1RFMWE+IfK9vWR4jsfEf7I8ymiW5Rg54StnzUN2i0/ww3I+t0FDZ2
-	3/PtfStL/U0aTbRUevfBm+TfmMBaVfiXjV4U9X42Ct8Mcza2rIrVp6Vwhgj9BySE
-	tAG6M4XA/5b3Un13nA+K7TxvaNcoGKGm46ROQ4Ng7VFSZB303FN3M4gDoDhCupF5
-	WBhp8xXDYhsFIXgfi7SMQ==
-X-ME-Sender: <xms:e_U8Z2_LHy6tvzx0UonpTcBOcFJ-SHxkDHmoNO9xuYwvmVWBjeyUZg>
-    <xme:e_U8Z2t0mUgPk-Xo8HKRK-PFJTgQP1eZ5oyMLPiGjRwLG8cAUzEICcuEEwOrRvu5Y
-    Ft6Hv2ZUsKlQeEv3mg>
-X-ME-Received: <xmr:e_U8Z8AL89uVDKL8sxnoIerQq8uKKR-bdVIu6hOqJSGF_W-000uoIXjC2BWXL0WSZ8kAkxAmC0raRRc07p6I3L6rbOabxOcKJw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfedvgddufeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdej
-    necuhfhrohhmpefpihhklhgrshcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhoug
-    gvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrght
-    thgvrhhnpeefhfellefhffejgfefudfggeejlefhveehieekhfeulefgtdefueehffdtvd
-    elieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehn
-    ihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrsh
-    gvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehg
-    vggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehrrghfrggvlheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhn
-    rghrohdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpd
-    hrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehl
-    ihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:e_U8Z-fs7Zw1PJveQCyFjc9-Bg2dXNkpoql3H_0gIRBT7EnlNimtBQ>
-    <xmx:e_U8Z7MsXYcNBg9sYZ6REXv_cjJ1eC_llibEA31Q1npVapVRCGR8DA>
-    <xmx:e_U8Z4l2v0g4tyWbaUaKFhNrba-I3TJ59dcScZSed52CRJY0JQIzrQ>
-    <xmx:e_U8Z9sf7oRdr9Uz_xVJz0Svuim-0QHoFuXfUZk11E3IqkbvS93Jmw>
-    <xmx:e_U8Z2fvxHTrgOmLfAePS0-czLd8eAQpkOuJvqelBkHDrVwwk2ML65-7>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Nov 2024 15:30:51 -0500 (EST)
-Date: Tue, 19 Nov 2024 21:30:49 +0100
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: rcar_gen3: Use lowercase hex constants
-Message-ID: <20241119203049.GN5315@ragnatech.se>
-References: <20241116172934.1829676-1-niklas.soderlund+renesas@ragnatech.se>
- <20241116172934.1829676-2-niklas.soderlund+renesas@ragnatech.se>
- <CAMuHMdXvvD9+2=GvH+AtZUvKx2dhMEtR3e5oXQBF8FgBOVL7eQ@mail.gmail.com>
+	s=arc-20240116; t=1732049424; c=relaxed/simple;
+	bh=YC7FPxvqloNvgTHSRWA6CecG4gh3mAbn1f5UfQvl2QI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gVZ8spGFSzYsOOTuRLP5m+DUifb/xwkfi17NIv5TvEe3QZ1jv65PVa4z59jUPSLD/XhqTkOeAtt5ksiWwhhr/m3bWVKu//1Vmi8+ewcPhAdE/HSSVkhljPcxzXHf0cptsFXKCwRzxP+K8Gfa99hBX58CPi6C+C8S4W8pge7wEPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOPodTh3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A26C4CED6;
+	Tue, 19 Nov 2024 20:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732049423;
+	bh=YC7FPxvqloNvgTHSRWA6CecG4gh3mAbn1f5UfQvl2QI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JOPodTh3d3nZTZW88H8EUnKZCV2D1lfVYRPJjzKNgMPR6cL46qoLPNMTDK3YiRi/Y
+	 /kj5ocjLqDc1MWQZmgpT84vFdCqxFeQ1d71X5f7RcpD+HHGoSKnxgHHvMbgP0fmUoi
+	 AYFkYEBj/i03JTIGLtQBDViJ2xIKmVtaUtZy00qb3g/7jCXYQm2An1F6+ONVm+r98F
+	 4hRATlZfQWpwIebpR7Q1tN/GGXUW+Osk4LVMY6vgUK9STcigh53txpECoAq1TtG2IN
+	 /97FMzkTBnVczvnjKbym2/U1Ve4+UcW35CgpnqZkt/tPFWSOoI9Iav8wBpJs+Vb8x/
+	 gyMqGHCuIwREg==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2689e7a941fso2652413fac.3;
+        Tue, 19 Nov 2024 12:50:23 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWrWQWHBOkdIHs4C43j/VZT1ZZQrzR4w5qE5Du4fJ+rzZ3x8F2brsdTyKp6aOyVPIEbjpvfHq18+so=@vger.kernel.org, AJvYcCXX1h282y0kLoWM5i3MCRmjvwH++luHK1E46xdk3E6iOq21XoDhu+LwPn+N9McY6cqo0/inJYebeEOucrk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcjffZAlChCsskX9e0SEsa1p/Tb93p6zsHqcPxoTp+EyXy4s9z
+	l9esvX+/0icEAEijo7yebq2ZMTnkj3U1rfO+raD/zh/iTPhzdno2X5CHZlg2vfVAA1luW0QhRNP
+	G/umzr8f5oJOOjEmlZ4hBUlorDZQ=
+X-Google-Smtp-Source: AGHT+IFmnD6S0h2LuEneHulsEtTDMn80TvgwIqntritFzKRRXZeaSL02qoZLaLax4SwuN7mFBnrlFXGzeG/WU+H/rhQ=
+X-Received: by 2002:a05:6870:d148:b0:295:9cb2:71ea with SMTP id
+ 586e51a60fabf-296d9e465e8mr310368fac.39.1732049422990; Tue, 19 Nov 2024
+ 12:50:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdXvvD9+2=GvH+AtZUvKx2dhMEtR3e5oXQBF8FgBOVL7eQ@mail.gmail.com>
+References: <2e8771be-3a0d-43d4-8787-41bc69d5287d@linaro.org>
+In-Reply-To: <2e8771be-3a0d-43d4-8787-41bc69d5287d@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 19 Nov 2024 21:50:11 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g0RaQSYmG6dk3nusBDLnuNHpE_+kXLe7fs-EKSGkUmWA@mail.gmail.com>
+Message-ID: <CAJZ5v0g0RaQSYmG6dk3nusBDLnuNHpE_+kXLe7fs-EKSGkUmWA@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal drivers for v6.13-rc1
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Colin Ian King <colin.i.king@gmail.com>, =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	=?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>, 
+	zhangjiao2 <zhangjiao2@cmss.chinamobile.com>, Rex Nie <rex.nie@jaguarmicro.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
+Hi Daniel,
 
-On 2024-11-18 11:30:17 +0100, Geert Uytterhoeven wrote:
-> Hi Niklas,
-> 
-> On Sat, Nov 16, 2024 at 6:30 PM Niklas Söderlund
-> <niklas.soderlund+renesas@ragnatech.se> wrote:
-> > The style of the driver is to use lowercase hex constants, correct the
-> > few outlines.
-> >
-> > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> 
-> Thanks for your patch!
-> 
-> > --- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-> > +++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-> > @@ -57,11 +57,11 @@
-> >  /* THSCP bits */
-> >  #define THSCP_COR_PARA_VLD     (BIT(15) | BIT(14))
-> >
-> > -#define CTEMP_MASK     0xFFF
-> > +#define CTEMP_MASK     0xfff
-> >
-> >  #define MCELSIUS(temp) ((temp) * 1000)
-> > -#define GEN3_FUSE_MASK 0xFFF
-> > -#define GEN4_FUSE_MASK 0xFFF
-> > +#define GEN3_FUSE_MASK 0xfff
-> > +#define GEN4_FUSE_MASK 0xfff
-> >
-> >  #define TSC_MAX_NUM    5
-> 
-> LGTM, but you missed a few:
-> 
-> $ git grep "\<0x.*[A-Z]" -- drivers/thermal/renesas/rcar_gen3_thermal.c
-> drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN3_IRQCTL
->          0x0C
-> drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN3_IRQTEMP3   0x1C
-> drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN4_THSFMON15  0x1BC
-> drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN4_THSFMON16  0x1C0
-> drivers/thermal/renesas/rcar_gen3_thermal.c:#define REG_GEN4_THSFMON17  0x1C4
+On Mon, Nov 18, 2024 at 12:11=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> please consider the following changes since commit
+> c285b11e289dbe8973735ab8dc84210bde417673:
+>
+>    Merge back thermal control material for 6.13 (2024-11-11 15:20:44 +010=
+0)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.13-rc1
+>
+> for you to fetch changes up to d303e3dd8d4648f2a1bb19944d4fb1c4a5030354:
+>
+>    tools/thermal: Fix common realloc mistake (2024-11-15 14:29:03 +0100)
+>
+> ----------------------------------------------------------------
+> - Add the SAR2130P compatible in the DT bindings for the QCom Tsens
+>    driver (Dmitry Baryshkov)
+>
+> - Add the static annotation to the arrays describing the platform
+>    sensors on the LVTS Mediatek driver (Colin Ian King)
+>
+> - Switch back to the struct platform_driver::remove() from the
+>    previous callbacks prototype rework (Uwe Kleine-K=C3=B6nig)
+>
+> - Add the MSM8937 compatible in the DT bindings and its support in the
+>    QCom Tsens driver (Barnab=C3=A1s Cz=C3=A9m=C3=A1n)
+>
+> - Remove a pointless sign test on an unsigned value in
+>    k3_bgp_read_temp() function on the k3_j72xx_bandgap driver (Rex Nie)
+>
+> - Fix a pointer reference lost when the call to realloc() fails in the
+>    thermal library (Zhang Jiao)
+>
+> ----------------------------------------------------------------
+> Barnab=C3=A1s Cz=C3=A9m=C3=A1n (2):
+>        dt-bindings: thermal: tsens: Add MSM8937
+>        thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
+>
+> Colin Ian King (1):
+>        thermal/drivers/mediatek/lvts_thermal: Make read-only arrays
+> static const
+>
+> Dmitry Baryshkov (1):
+>        dt-bindings: thermal: qcom-tsens: Add SAR2130P compatible
+>
+> Rex Nie (1):
+>        thermal/drivers/k3_j72xx_bandgap: Simplify code in k3_bgp_read_tem=
+p()
+>
+> Uwe Kleine-K=C3=B6nig (1):
+>        thermal: Switch back to struct platform_driver::remove()
+>
+> zhang jiao (1):
+>        tools/thermal: Fix common realloc mistake
+>
+>   .../devicetree/bindings/thermal/qcom-tsens.yaml     |  2 ++
+>   drivers/thermal/amlogic_thermal.c                   |  2 +-
+>   drivers/thermal/armada_thermal.c                    |  2 +-
+>   drivers/thermal/broadcom/bcm2835_thermal.c          |  2 +-
+>   drivers/thermal/broadcom/ns-thermal.c               |  2 +-
+>   drivers/thermal/da9062-thermal.c                    |  6 +++---
+>   drivers/thermal/dove_thermal.c                      |  2 +-
+>   drivers/thermal/hisi_thermal.c                      |  4 ++--
+>   drivers/thermal/imx8mm_thermal.c                    |  2 +-
+>   drivers/thermal/imx_thermal.c                       |  2 +-
+>   .../thermal/intel/int340x_thermal/int3400_thermal.c |  2 +-
+>   .../thermal/intel/int340x_thermal/int3401_thermal.c |  2 +-
+>   .../thermal/intel/int340x_thermal/int3402_thermal.c |  2 +-
+>   .../thermal/intel/int340x_thermal/int3403_thermal.c |  2 +-
+>   .../thermal/intel/int340x_thermal/int3406_thermal.c |  2 +-
+>   drivers/thermal/k3_bandgap.c                        |  2 +-
+>   drivers/thermal/k3_j72xx_bandgap.c                  |  4 ++--
+>   drivers/thermal/kirkwood_thermal.c                  |  2 +-
+>   drivers/thermal/mediatek/lvts_thermal.c             |  6 +++---
+>   drivers/thermal/qcom/tsens-v1.c                     | 21
+> ++++++++++++++-------
+>   drivers/thermal/qcom/tsens.c                        |  5 ++++-
+>   drivers/thermal/qcom/tsens.h                        |  2 +-
+>   drivers/thermal/renesas/rcar_gen3_thermal.c         |  2 +-
+>   drivers/thermal/renesas/rcar_thermal.c              |  2 +-
+>   drivers/thermal/renesas/rzg2l_thermal.c             |  2 +-
+>   drivers/thermal/rockchip_thermal.c                  |  2 +-
+>   drivers/thermal/samsung/exynos_tmu.c                |  2 +-
+>   drivers/thermal/spear_thermal.c                     |  2 +-
+>   drivers/thermal/sprd_thermal.c                      |  2 +-
+>   drivers/thermal/st/st_thermal_memmap.c              |  2 +-
+>   drivers/thermal/st/stm_thermal.c                    |  2 +-
+>   drivers/thermal/tegra/soctherm.c                    |  2 +-
+>   drivers/thermal/tegra/tegra-bpmp-thermal.c          |  2 +-
+>   drivers/thermal/ti-soc-thermal/ti-bandgap.c         |  2 +-
+>   drivers/thermal/uniphier_thermal.c                  |  2 +-
+>   tools/thermal/thermometer/thermometer.c             |  7 ++++---
+>   36 files changed, 62 insertions(+), 49 deletions(-)
 
-d00h, I just checked manually for things around the fuses, will fix.
-
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
--- 
-Kind Regards,
-Niklas Söderlund
+Pulled and added to linux-pm.git/thermal and linux-pm.git/linux-next, thank=
+s!
 
