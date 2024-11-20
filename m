@@ -1,393 +1,262 @@
-Return-Path: <linux-pm+bounces-17802-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6FC69D3538
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 09:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9648A9D3642
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 10:02:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E1CFB254B2
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 08:17:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AF24B26B2D
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 09:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1F7176AC7;
-	Wed, 20 Nov 2024 08:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BwClFSTq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C890199FB2;
+	Wed, 20 Nov 2024 09:01:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC1F156C69
-	for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2024 08:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED5818A935;
+	Wed, 20 Nov 2024 09:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732090651; cv=none; b=TL8EaAwaDrxMeyz6tWU14zXo7jLkbvQqqVaf86wRk2bzfccFlLaWE3l/WdvGj/o408SvXMETjjV8bF+S7osfV+c28Yry4YAEpaDl6QjNwDXgNwZLiXX0W/b9EQFO9oodC5bbifNYuZ45YmAiHO0R1nVhW85dCs/pOIp15OlJk3g=
+	t=1732093310; cv=none; b=sC9r6ojpFnXl/fC4It2aN1gspC0bc/lZqkA1s+ATtLkDEHNQjjdHt79LO2tAf1HlGa9JZPR6X+/YyJqsJVgvNnlfi+InzO+lFLwBWWii5GQSvmatoOu0PtmcY4WcdWIDU4FW4p4G3rGgDLyk+Ysc+v7lZoCSNaxui4AmdCOd//w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732090651; c=relaxed/simple;
-	bh=KxvvLJxOhsmkEuZ7tsUBNcmMv4Uw9jgZA1Bu2/smyHM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oPhqHUsENjmlEaJnmiRVkHrh6i+nVrZLrx2X3Xouf1eUsM0ZwhWbCFmnVHGqdb+J80M81j9fG3QMA0uaURhF5GYOfr49Qwi4JB/J1JUHCykfe35zn906WlnGBQfrz9/BmpdDF7B0c8oRVf4D94E0KUU10E3qFOGoBUoa2LPf+HE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BwClFSTq; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539f8490856so5632249e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2024 00:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1732090644; x=1732695444; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0rPLxVin86qVxaBviUILMlY9Mt6QWnFXzDCeYUyDgQ4=;
-        b=BwClFSTqhm5grR+Q4prOiBJVtZ+xCfUYD/GCgG7IzyZS5sDNuEDaysRCzWqlKTt0MA
-         vCkMWhUcvjZyNE7831BCvM6g4zXG4+C6QEQc9ocC4VMy37xJqZsutiErL0ApgYEvT0iN
-         99sP8EaR+E/sSwkauSbDUcDceK6y0jLalB/5U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732090644; x=1732695444;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0rPLxVin86qVxaBviUILMlY9Mt6QWnFXzDCeYUyDgQ4=;
-        b=F1aJr8yyV/N3GvAIkrABiPgRbRKu21giPfXD1ofuOnlqND21RxVZzeVrknRfX5LdvW
-         voUQDeGdp6lly78CffnnzBOCkHhyZvKTkgqCcjBfjOZWnxGXYpKHgy7Cag/Q+oEADPh5
-         buofEzLguv57+/oLY2bbSaomhC4JcZXSmy+Jn/XUYzKagmcVK41vqbx/Vymd7sy0yFGN
-         g3Wogvi7aCKRkHnz5i6Udn4TrQhkbjW0HJqP28WETlodJVni425rUni6dlF9RuruXrDp
-         Qa1fKnfy81qLp/+8BitxnBZyfPp9pLQ5oKi152H4IOeHr/TEqV68DGNdj/YvWbCfdCBB
-         M5lw==
-X-Forwarded-Encrypted: i=1; AJvYcCXzTRMYlT7kFchAFvNC78n+DMyc5zC3d6TN+mkTgAP5wKmSRKTp40hrEaDD+YusrVR3+xc1X9iLkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOe1vP+uNH85wQ1wYHqDIMRrWy2O16ZjweTFG+Ttqj8SptM8bC
-	9hMxQcdVC7kIfjs7fdk1qXXMr20nVZdGZutKuKG31rLiVVlPSvsGR/byv5Gt8x6OSmmSqOgexul
-	LGYPzMxtr0CPuiEhQSu4XTEZvDyjV5mBBpYQZ
-X-Google-Smtp-Source: AGHT+IGkI22u1NLSodJhKhZ52YvRVFdM1RGzXOGMqMkzvppadN6zLFr7R+oza5tHOattqImMPvqcQC2e4yo7sO166+c=
-X-Received: by 2002:a05:6512:3ba3:b0:53d:a4f9:6141 with SMTP id
- 2adb3069b0e04-53dc132de63mr626814e87.14.1732090644534; Wed, 20 Nov 2024
- 00:17:24 -0800 (PST)
+	s=arc-20240116; t=1732093310; c=relaxed/simple;
+	bh=Yze2IvZa6vi32TXVTNVGdJkV2KwARY1b3fM8sQWPC14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s7pMJ2hWNNxqkCEzj6JjuRAV8H3ltMaU9rQY44Apf4bool+AAKZzUtyM2jMDmS+XV45x9uz+y5dS44toCPt7Yellj+y59YZBfW/vtdKakq/zJvr2xOvcoUUw2cXJcOL5zJEfskCRLpItsyOeYArpVwbsAFI0+Q7KXErDBtQSP6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 20E891007;
+	Wed, 20 Nov 2024 01:02:16 -0800 (PST)
+Received: from [10.57.25.111] (unknown [10.57.25.111])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C5FE3F6A8;
+	Wed, 20 Nov 2024 01:01:42 -0800 (PST)
+Message-ID: <4daf0c32-9799-4eb5-8334-175d8089bc39@arm.com>
+Date: Wed, 20 Nov 2024 10:01:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241025-auxadc_thermal-v14-1-96ab5b60c02e@chromium.org> <5dd2d2a3-6eff-45fb-8af8-593945235dd3@linaro.org>
-In-Reply-To: <5dd2d2a3-6eff-45fb-8af8-593945235dd3@linaro.org>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Wed, 20 Nov 2024 16:17:13 +0800
-Message-ID: <CAGXv+5G80erqrfPNedF8GabyDvbsW_xmxcm=14vb=fZWpzt_zg@mail.gmail.com>
-Subject: Re: [PATCH v14] thermal/drivers/mediatek/auxadc_thermal: expose all
- thermal sensors
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Hsin-Te Yuan <yuanhsinte@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, James Lo <james.lo@mediatek.com>, 
-	Michael Kao <michael.kao@mediatek.com>, Hsin-Yi Wang <hsinyi@chromium.org>, 
-	Ben Tseng <ben.tseng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Nov 15, 2024 at 12:48=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi,
->
-> On 25/10/2024 14:05, Hsin-Te Yuan wrote:
-> > From: James Lo <james.lo@mediatek.com>
-> >
-> > Previously, the driver only supported reading the temperature from all
-> > sensors and returning the maximum value. This update adds another
-> > get_temp ops to support reading the temperature from each sensor
-> > separately.
-> >
-> > Especially, some thermal zones registered by this patch are needed by
-> > MT8183 since those thermal zones are necessary for mtk-svs driver.
->
-> The DT for the mt8183 describes the sensor id =3D 0 as the CPU. On this,
-> there is a cooling device with trip points.
->
-> The driver registers the id=3D0 as an aggregator for the sensors which
-> overloads the CPU thermal zone above.
->
-> Why do you need to aggregate all the sensors to retrieve the max value ?
->
-> They are all contributing differently to the heat and they should be
-> tied with their proper cooling device.
->
-> I don't think the thermal configuration is correct and I suggest to fix
-> this aggregator by removing it.
-
-We can't really do that if the existing device trees expect thermal sensor
-ID 0 to exist and work properly to trigger the CPU cooling device.
-
-And the driver is shared with other SoCs and those SoCs have no other
-thermal sensors or zones defined in the device tree. IOW we probably
-have no idea what the individual sensors actually monitor.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in
+ acpi_os_sleep().
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>
+Cc: Len Brown <lenb@kernel.org>, anna-maria@linutronix.de,
+ tglx@linutronix.de, peterz@infradead.org, frederic@kernel.org,
+ corbet@lwn.net, akpm@linux-foundation.org, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>,
+ Todd Brandt <todd.e.brandt@intel.com>
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+ <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+ <60f8eac0-9144-486b-983f-4ed09101cf0a@redhat.com>
+ <CAJZ5v0g7rpdUjrS969stJiqqtO5zG+FTr4TOxg+SYN2dPC_9jA@mail.gmail.com>
+Content-Language: en-US
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CAJZ5v0g7rpdUjrS969stJiqqtO5zG+FTr4TOxg+SYN2dPC_9jA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-ChenYu
 
-> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> > Signed-off-by: James Lo <james.lo@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> > Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
-> > ---
-> > Changes in v14:
-> > - Remove redundant error message.
-> > - Link to v13: https://lore.kernel.org/r/20241025-auxadc_thermal-v13-1-=
-a5231c52dccb@chromium.org
-> >
-> > Changes in v13:
-> > - Make subject and commit message more clear.
-> > - Make error message more clear.
-> > - Link to v12: https://lore.kernel.org/r/20241016-auxadc_thermal-v12-1-=
-c0433e9f61af@chromium.org
-> >
-> > Changes in v12:
-> > - Remove unnecessary check and unused variable assignment in mtk_read_s=
-ensor_temp.
-> > - Add more about what this patch achieves in the commit message.
-> > - Link to v11: https://lore.kernel.org/r/20240809-auxadc_thermal-v11-1-=
-af36cc74f3a3@chromium.org
-> >
-> > Changes in V11:
-> >      - Rebase on kernel v6.11-rc2
-> >      - Use mtk_thermal_temp_is_valid in mtk_read_sensor_temp just like
-> >        mtk_thermal_bank_temperature
-> >      - Change the error handling of devm_thermal_of_zone_register retur=
-n
-> >        value
-> >      - link to V10: https://lore.kernel.org/lkml/20220519101044.16765-1=
--james.lo@mediatek.com/
-> >
-> > Changes in V10:
-> >      - Rebase to kernel-v5.18-rc7
-> >      - Resend
-> >
-> > Changes in V9:
-> >      - Rebase to kernel-v5.14-rc1
-> >      - Bind raw_to_mcelsius_v1 or raw_to_mcelsius_v2 to compatible
-> >        data of struct mtk_thermal_data
-> >      - Remove duplicate struct 'mtk_thermal_bank'
-> >      - Remove unnecessary if condition check
-> >      - Return error if any thermal zone fail to register
-> >
-> > Changes in V8:
-> >      - Rebase to kernel-v5.13-rc1
-> >      - Resend
-> >
-> > Changes in v7:
-> >      - Fix build error in v6.
-> >
-> > Changes in v6:
-> >      - Rebase to kernel-5.11-rc1.
-> >      - [1/3]
-> >          - add interrupts property.
-> >      - [2/3]
-> >          - add the Tested-by in the commit message.
-> >      - [3/3]
-> >          - use the mt->conf->msr[id] instead of conf->msr[id] in the
-> >            _get_sensor_temp and mtk_thermal_bank_temperature.
-> >          - remove the redundant space in _get_sensor_temp and
-> >            mtk_read_sensor_temp.
-> >          - change kmalloc to dev_kmalloc in mtk_thermal_probe.
-> >
-> > Changes in v5:
-> >      - Rebase to kernel-5.9-rc1.
-> >      - Revise the title of cover letter.
-> >      - Drop "[v4,7/7] thermal: mediatek: use spinlock to protect PTPCOR=
-ESEL"
-> >      - [2/2]
-> >          -  Add the judgement to the version of raw_to_mcelsius.
-> >
-> > Changes in v4:
-> >      - Rebase to kernel-5.6-rc1.
-> >      - [1/7]
-> >          - Squash thermal zone settings in the dtsi from [v3,5/8]
-> >            arm64: dts: mt8183: Increase polling frequency for CPU therm=
-al zone.
-> >          - Remove the property of interrupts and mediatek,hw-reset-temp=
-.
-> >      - [2/7]
-> >          - Correct commit message.
-> >      - [4/7]
-> >          - Change the target temperature to the 80C and change the comm=
-it message.
-> >      - [6/7]
-> >          - Adjust newline alignment.
-> >          - Fix the judgement on the return value of registering thermal=
- zone.
-> >
-> > Changes in v3:
-> >      - Rebase to kernel-5.5-rc1.
-> >      - [1/8]
-> >          - Update sustainable power of cpu, tzts1~5 and tztsABB.
-> >      - [7/8]
-> >          - Bypass the failure that non cpu_thermal sensor is not find i=
-n thermal-zones
-> >            in dts, which is normal for mt8173, so prompt a warning here=
- instead of
-> >            failing.
-> >
-> >      Return -EAGAIN instead of -EACCESS on the first read of sensor tha=
-t
-> >          often are bogus values. This can avoid following warning on bo=
-ot:
-> >
-> >            thermal thermal_zone6: failed to read out thermal zone (-13)
-> >
-> > Changes in v2:
-> >      - [1/8]
-> >          - Add the sustainable-power,trips,cooling-maps to the tzts1~tz=
-tsABB.
-> >      - [4/8]
-> >          - Add the min opp of cpu throttle.
-> > ---
-> >
-> > ---
-> >   drivers/thermal/mediatek/auxadc_thermal.c | 70 ++++++++++++++++++++++=
-+++++----
-> >   1 file changed, 62 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/therma=
-l/mediatek/auxadc_thermal.c
-> > index 9ee2e7283435acfcbb1a956303b6122a08affecc..9a9079d559a3abe9e3823f7=
-44d4c9a159a8666bd 100644
-> > --- a/drivers/thermal/mediatek/auxadc_thermal.c
-> > +++ b/drivers/thermal/mediatek/auxadc_thermal.c
-> > @@ -847,7 +847,8 @@ static int mtk_thermal_bank_temperature(struct mtk_=
-thermal_bank *bank)
-> >
-> >   static int mtk_read_temp(struct thermal_zone_device *tz, int *tempera=
-ture)
-> >   {
-> > -     struct mtk_thermal *mt =3D thermal_zone_device_priv(tz);
-> > +     struct mtk_thermal_bank *bank =3D thermal_zone_device_priv(tz);
-> > +     struct mtk_thermal *mt =3D bank->mt;
-> >       int i;
-> >       int tempmax =3D INT_MIN;
-> >
-> > @@ -866,10 +867,41 @@ static int mtk_read_temp(struct thermal_zone_devi=
-ce *tz, int *temperature)
-> >       return 0;
-> >   }
-> >
-> > +static int mtk_read_sensor_temp(struct thermal_zone_device *tz, int *t=
-emperature)
-> > +{
-> > +     struct mtk_thermal_bank *bank =3D thermal_zone_device_priv(tz);
-> > +     struct mtk_thermal *mt =3D bank->mt;
-> > +     const struct mtk_thermal_data *conf =3D mt->conf;
-> > +     int id =3D bank->id - 1;
-> > +     int temp =3D INT_MIN;
-> > +     u32 raw;
-> > +
-> > +     raw =3D readl(mt->thermal_base + conf->msr[id]);
-> > +
-> > +     temp =3D mt->raw_to_mcelsius(mt, id, raw);
-> > +
-> > +     /*
-> > +      * The first read of a sensor often contains very high bogus
-> > +      * temperature value. Filter these out so that the system does
-> > +      * not immediately shut down.
-> > +      */
-> > +
-> > +     if (unlikely(!mtk_thermal_temp_is_valid(temp)))
-> > +             return -EAGAIN;
-> > +
-> > +     *temperature =3D temp;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >   static const struct thermal_zone_device_ops mtk_thermal_ops =3D {
-> >       .get_temp =3D mtk_read_temp,
-> >   };
-> >
-> > +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops =3D=
- {
-> > +     .get_temp =3D mtk_read_sensor_temp,
-> > +};
-> > +
-> >   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
-> >                                 u32 apmixed_phys_base, u32 auxadc_phys_=
-base,
-> >                                 int ctrl_id)
-> > @@ -1199,6 +1231,7 @@ static int mtk_thermal_probe(struct platform_devi=
-ce *pdev)
-> >       u64 auxadc_phys_base, apmixed_phys_base;
-> >       struct thermal_zone_device *tzdev;
-> >       void __iomem *apmixed_base, *auxadc_base;
-> > +     struct mtk_thermal_bank *tz;
-> >
-> >       mt =3D devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
-> >       if (!mt)
-> > @@ -1285,14 +1318,35 @@ static int mtk_thermal_probe(struct platform_de=
-vice *pdev)
-> >                       mtk_thermal_init_bank(mt, i, apmixed_phys_base,
-> >                                             auxadc_phys_base, ctrl_id);
-> >
-> > -     tzdev =3D devm_thermal_of_zone_register(&pdev->dev, 0, mt,
-> > -                                           &mtk_thermal_ops);
-> > -     if (IS_ERR(tzdev))
-> > -             return PTR_ERR(tzdev);
-> > +     for (i =3D 0; i <=3D mt->conf->num_sensors; i++) {
-> > +             tz =3D devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-> > +             if (!tz)
-> > +                     return -ENOMEM;
-> > +
-> > +             tz->mt =3D mt;
-> > +             tz->id =3D i;
-> > +
-> > +             tzdev =3D devm_thermal_of_zone_register(&pdev->dev, i,
-> > +                                                   tz, (i =3D=3D 0) ?
-> > +                                                   &mtk_thermal_ops
-> > +                                                   : &mtk_thermal_sens=
-or_ops);
-> > +
-> > +             if (IS_ERR(tzdev)) {
-> > +                     ret =3D PTR_ERR(tzdev);
-> > +                     if (ret =3D=3D -ENODEV) {
-> > +                             dev_warn(&pdev->dev,
-> > +                                      "Can't find thermal zone for sen=
-sor %d; sensor skipped.\n", i);
-> > +                             continue;
-> > +                     }
-> > +                     return dev_err_probe(&pdev->dev, ret,
-> > +                                          "Failed to register thermal =
-zone %d.\n", i);
-> > +             }
-> >
-> > -     ret =3D devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
-> > -     if (ret)
-> > -             dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
-> > +             ret =3D devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
-> > +             if (ret)
-> > +                     dev_warn(&pdev->dev,
-> > +                              "Sensor %d: Error in thermal_add_hwmon_s=
-ysfs: %d\n", i, ret);
-> > +     }
-> >
-> >       return 0;
-> >   }
-> >
-> > ---
-> > base-commit: b589839414be04b2b37e4bf6f84af576c99faf64
-> > change-id: 20240809-auxadc_thermal-9be338ec8b1c
-> >
-> > Best regards,
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+On 11/18/24 13:02, Rafael J. Wysocki wrote:
+> Hi Hans,
+> 
+> On Mon, Nov 18, 2024 at 12:38 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Hi Rafael, Len,
+>>
+>> On 18-Nov-24 12:03 PM, Rafael J. Wysocki wrote:
+>>> On Sat, Nov 16, 2024 at 12:11 AM Len Brown <lenb@kernel.org> wrote:
+>>>>
+>>>> From: Len Brown <len.brown@intel.com>
+>>>>
+>>>> Replace msleep() with usleep_range() in acpi_os_sleep().
+>>>>
+>>>> This has a significant user-visible performance benefit
+>>>> on some ACPI flows on some systems.  eg. Kernel resume
+>>>> time of a Dell XPS-13-9300 drops from 1943ms to 1127ms (42%).
+>>>
+>>> Sure.
+>>>
+>>> And the argument seems to be that it is better to always use more
+>>> resources in a given path (ACPI sleep in this particular case) than to
+>>> be somewhat inaccurate which is visible in some cases.
+>>>
+>>> This would mean that hrtimers should always be used everywhere, but they aren't.
+>>>
+>>> While I have nothing against addressing the short sleeps issue where
+>>> the msleep() inaccuracy is too large, I don't see why this requires
+>>> using a hrtimer with no slack in all cases.
+>>>
+>>> The argument seems to be that the short sleeps case is hard to
+>>> distinguish from the other cases, but I'm not sure about this.
+>>>
+>>> Also, something like this might work, but for some reason you don't
+>>> want to do it:
+>>>
+>>> if (ms >= 12 * MSEC_PER_SEC / HZ) {
+>>>          msleep(ms);
+>>> } else {
+>>>         u64 us = ms * USEC_PER_MSEC;
+>>>
+>>>        usleep_range(us, us / 8);
+> 
+> Should be
+> 
+>        usleep_range(us, us + us / 8);
+> 
+> (I notoriously confuse this API).
+> 
+>>> }
+>>
+>> FWIW I was thinking the same thing, that it would be good to still
+>> use msleep when the sleep is > (MSEC_PER_SEC / HZ), not sure
+>> why you added the 12 there ? Surely something like a sleep longer
+>> then 3 timerticks (I know we have NOHZ but still) would already be
+>> long enough to not worry about msleep slack ?
+> 
+> The typical msleep() overhead in 6.12 appears to be 1.5 jiffy which is
+> 1.5 * MSEC_PER_SEC / HZ and I want the usleep() delta to be less than
+> this, so
+> 
+> delta = ms / 8 <= 1.5 * MSEC_PER_SEC / HZ
+> 
+>> And I assume the usleep_range(us, us / 8); is a typo ? Ma can
+>> never be less then max, maybe you meant: usleep_range(us, us + 8) ?
+> 
+> No, please see above.
+> 
+>> OTOH it is not like we will hit these ACPI acpi_os_sleep()
+>> calls multiple times per second all the time. On a normal idle
+>> system I expect there to not be that many calls (could still
+>> be a few from ACPI managed devices going into + out of
+>> runtime-pm regularly). And if don't hit acpi_os_sleep() calls
+>> multiple times per second then the chances of time coalescing
+>> are not that big anyways.
+>>
+>> Still I think that finding something middle ground between always
+>> sleeping the exact min time and the old msleep() call, as Rafael
+>> is proposing, would be good IMHO.
+> 
+> Thanks for the feedback!
+> 
+> 
+>>>> usleep_range(min, min) is used because there is scant
+>>>> opportunity for timer coalescing during ACPI flows
+>>>> related to system suspend, resume (or initialization).
+>>>>
+>>>> ie. During these flows usleep_range(min, max) is observed to
+>>>> be effectvely be the same as usleep_range(max, max).
+>>>>
+>>>> Similarly, msleep() for long sleeps is not considered because
+>>>> these flows almost never have opportunities to coalesce
+>>>> with other activity on jiffie boundaries, leaving no
+>>>> measurably benefit to rounding up to jiffie boundaries.
+>>>>
+>>>> Background:
+>>>>
+>>>> acpi_os_sleep() supports the ACPI AML Sleep(msec) operator,
+>>>> and it must not return before the requested number of msec.
+>>>>
+>>>> Until Linux-3.13, this contract was sometimes violated by using
+>>>> schedule_timeout_interruptible(j), which could return early.
+>>>>
+>>>> Since Linux-3.13, acpi_os_sleep() uses msleep(),
+>>>> which doesn't return early, but is still subject
+>>>> to long delays due to the low resolution of the jiffie clock.
+>>>>
+>>>> Linux-6.12 removed a stray jiffie from msleep: commit 4381b895f544
+>>>> ("timers: Remove historical extra jiffie for timeout in msleep()")
+>>>> The 4ms savings is material for some durations,
+>>>> but msleep is still generally too course. eg msleep(5)
+>>>> on a 250HZ system still takes 11.9ms.
+>>>>
+>>>> System resume performance of a Dell XPS 13 9300:
+>>>>
+>>>> Linux-6.11:
+>>>> msleep HZ 250   2460 ms
+>>>>
+>>>> Linux-6.12:
+>>>> msleep HZ 250   1943 ms
+>>>> msleep HZ 1000  1233 ms
+>>>> usleep HZ 250   1127 ms
+>>>> usleep HZ 1000  1130 ms
+>>>>
+>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=216263
+>>>> Signed-off-by: Len Brown <len.brown@intel.com>
+>>>> Suggested-by: Arjan van de Ven <arjan@linux.intel.com>
+>>>> Tested-by: Todd Brandt <todd.e.brandt@intel.com>
+>>>> ---
+>>>>   drivers/acpi/osl.c | 4 +++-
+>>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+>>>> index 70af3fbbebe5..daf87e33b8ea 100644
+>>>> --- a/drivers/acpi/osl.c
+>>>> +++ b/drivers/acpi/osl.c
+>>>> @@ -607,7 +607,9 @@ acpi_status acpi_os_remove_interrupt_handler(u32 gsi, acpi_osd_handler handler)
+>>>>
+>>>>   void acpi_os_sleep(u64 ms)
+>>>>   {
+>>>> -       msleep(ms);
+>>>> +       u64 us = ms * USEC_PER_MSEC;
+>>>> +
+>>>> +       usleep_range(us, us);
+>>>>   }
+>>>>
+>>>>   void acpi_os_stall(u32 us)
+>>>> --
+>>>> 2.43.0
+>>>>
+>>>
+>>
+> 
+
+
+FWIW, testing the above version on an Arm Juno platform by executing
+the following method:
+
+Method (SLEE, 1, Serialized)  {
+   Sleep(Arg0)
+}
+
+_wo: without patch
+_w: with patch
+- Values in ns.
+- Requesting to sleep X ms
+- Tested over 10 iterations
+- HZ=250
++------+------------+----------+------------+---------+-----------+
+|   ms |    mean_wo |   std_wo |    mean_w  |  std_w  |     ratio |
++------+------------+----------+------------+---------+-----------+
+|    1 |    8087797 |  2079703 |    1313920 |   55066 | -83.75429 |
+|    2 |    7942471 |  2201985 |    2416064 |  111604 | -69.58044 |
+|    3 |    8373704 |   144274 |    3632537 |  111037 | -56.61970 |
+|    4 |    7946013 |  2214330 |    4606028 |  255838 | -42.03346 |
+|    5 |   11418920 |  1673914 |    5955548 |  131862 | -47.84490 |
+|    6 |   11427042 |  1677519 |    7045713 |  211439 | -38.34176 |
+|    7 |   12301242 |   221580 |    8174633 |  330050 | -33.54628 |
+|    8 |   11411606 |  1672182 |    9191048 |  431767 | -19.45877 |
+|    9 |   16722304 |  1288625 |   10517284 |  103274 | -37.10625 |
+|   10 |   16746542 |  1280385 |   11564426 |  417218 | -30.94439 |
+|   20 |   24294957 |    70703 |   22756497 |  673936 |  -6.33243 |
+|   30 |   36284782 |    74340 |   34131455 |  391473 |  -5.93452 |
+|   40 |   44703162 |  1199709 |   45407108 |  289715 |   1.57471 |
+|   50 |   56311282 |   281418 |   56098040 |  607739 |  -0.37868 |
+|   60 |   64225811 |   247587 |   64302246 |  132059 |   0.11901 |
+|   70 |   76299457 |    99853 |   76282497 |   83910 |  -0.02223 |
+|  100 |  104214393 |    38642 |  104212524 |  244424 |  -0.00179 |
+| 1000 | 1016131215 |   245725 | 1017051744 | 2748280 |   0.09059 |
+| 2000 | 2007711297 |  1325094 | 2007628922 | 1421807 |  -0.00410 |
++------+------------+----------+------------+---------+-----------+
+- With the patch, the min sleep duration is never below the requested
+   sleep duration
+
+So indeed the penalty of using msleep is big for small sleep durations.
 
