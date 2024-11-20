@@ -1,228 +1,126 @@
-Return-Path: <linux-pm+bounces-17816-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17817-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FDE69D3A2F
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 13:04:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 254AA9D3A40
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 13:07:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259481F21440
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 12:04:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0908284F5D
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 12:07:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8197F19F424;
-	Wed, 20 Nov 2024 12:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="mb5tlaod";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="3LqxJQaW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088EB1A2547;
+	Wed, 20 Nov 2024 12:07:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC721A255A;
-	Wed, 20 Nov 2024 12:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752F81A0BC4;
+	Wed, 20 Nov 2024 12:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732104251; cv=none; b=ZnGY39WxEW+1q5pqdrRJDc+WlDeCE/kSetweKyR3rlQo5GtGgYNXDEJQuBEY2dExZzhxpMG6eOz+k6DWTbCZbJGTVU4Yj6wOvJaEogoQjBlPCo2/ENxvI1xWQHfRcTj2Afxw1j9GeVMgtRKSC6amweUkJkKzelu75h2HOSU7QJo=
+	t=1732104444; cv=none; b=mfF8ezS2/3sER3omPNCTeo05WEhFC1hAboAhTUAwttkkU6SevT9wArIIakhuvzaOZJIY0zqsIi8UnH0GJMpzNgAOTDPJKbMJSVnJ+T6vICzXJfjZ/u/BKE1FW+xti9zu65Bks6NfPoBzjSM/3WSJ0j+K12PT5uYv22lgAT1wwIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732104251; c=relaxed/simple;
-	bh=hEd3g7fDPK11l/5d5FbPMXrF8PX2Wj8EbZwusGCBJlU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GLS0peK9zg1iOphJelhTFmP87JEPgKsnmb6+MCu2XVr1G7ZULnoD9x2Hj3Ltl/XY81cYAL5IMqEkTVNq4pHqEOHpUXO9OEUr0xSgu0DU04+/SA0doiG88XjEviBjG5D7AgtI3glAJp800IpEWgeAv8Xx/F4cYlM8psjKJTxwvwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=mb5tlaod; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=3LqxJQaW; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id AD81813806B6;
-	Wed, 20 Nov 2024 07:04:08 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Wed, 20 Nov 2024 07:04:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1732104248;
-	 x=1732190648; bh=BUZASvGHhI99mp2A2UEOVv5dmxCopVfkBTQJrK0adBI=; b=
-	mb5tlaodyBqoO9yheyScyNuwfZLkpP/7rcJ+rcFLh9TgREfHPG0pCqnmdj86uU33
-	UTJH4SpQPODv6rsqlLtmCzETN6XxNqolkNPe0WCT0EfWLag8f7DYCqvWkEEmANhs
-	mQeFZ7XaSzoSRlVx0d6uJkaipa2dOduzK9hEMyzMFVqFq1IS5xRyJu8gHsLit4Ht
-	eL4V8seVCJkluYNeQKcekkZ4vYWyc5sX7FHY7AQ6oJcKrKMP4EBzDLe1B8lMau0s
-	VMF6fsqY+3a0qwe3X5xicJVcVA3WEvtc50tZc37Nk/8qyNYyzNeccli3ZSNn3p4D
-	LYjg4NjWFXuSuXTIgXAkFA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1732104248; x=
-	1732190648; bh=BUZASvGHhI99mp2A2UEOVv5dmxCopVfkBTQJrK0adBI=; b=3
-	LqxJQaW/0dxgiu7pTOvpaVaC+3mFOsGP0Av1k6YwXeqkfIZpNf17KWODDAWkUseC
-	Xd/udivMbtbXsMhVyEaI1lO4/O1+SucD61FG4rg0OfBKL4oRoehQL1FogOWACMIU
-	WZHeO3kqSJl+K8+RgVYGYsj0XhwmBnt5ZBMGLXoI3DwJM/ydkR/FZ7ieIpPlJ1Cx
-	1BaYn95qQiJ3Ou8iuujCudIfYMdjwiDnlbUuMv7FA4RbwXY/xpodaBxPZgrgp0RG
-	B6qEbKa27+/BuM8QcOSWYxUNUvJjl5a4DUTbGlDsxnqhOZb1h6NFEGXjExpPRPcr
-	8aquueK25WV0XzTZZcirQ==
-X-ME-Sender: <xms:ONA9Z4jGo6J7fC4xUOfD_ctBQc2jw5haZqHyF5MTNRVB72wJItsT2A>
-    <xme:ONA9ZxDUb6EWZ66RPdHO9ibpOI3Ne8znly_xdxUPPKrUjWMi6SpABobS8ShH_nV5w
-    m_bnCXPhYlpnlTxumE>
-X-ME-Received: <xmr:ONA9ZwEDRIthJk4VHZQRHN5DQW-qh5qqd8899H7rBawNo9tghHZgJU1sS2euScdbZKp_AxUp0v7iZ4xhYdr--zA_2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeeggdefhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
-    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
-    hsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeen
-    ucfhrhhomheppfhikhhlrghsucfunpguvghrlhhunhguuceonhhikhhlrghsrdhsohguvg
-    hrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrdhsvgeqnecuggftrfgrthht
-    vghrnhepheeigfeuveeutdefhfehgeekvedtleeuueekveefudehhffhjeffgfegffelfe
-    egnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepnhhi
-    khhlrghsrdhsohguvghrlhhunhgusehrrghgnhgrthgvtghhrdhsvgdpnhgspghrtghpth
-    htohepjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhgrfhgrvghlsehkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrh
-    hordhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgt
-    phhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinh
-    hugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    hnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdr
-    shgv
-X-ME-Proxy: <xmx:ONA9Z5SZd04Pyxl36cNtDZHNIEtVu2OMIkD1lotYXHyuk4BCzOQPjw>
-    <xmx:ONA9Z1wgmwXTjw5b7zqwWLg-IRTWvdL5vS3xeLKpdRHOenmPr6rCbQ>
-    <xmx:ONA9Z34L1t-_k7UIC9ema9UA-AByIMNlVW5a1_D3PfR8xUomQDYhUw>
-    <xmx:ONA9ZyyqO-t2iQrzNu7hNh17YzH4Gu_V203fF4hrO7payBbury9Eug>
-    <xmx:ONA9Z0yCtuY5I4GJ-AFLNEyM738kdirGHkTEP1ySgglgcNswZrhwtAeA>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 20 Nov 2024 07:04:08 -0500 (EST)
-From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2 2/2] thermal: rcar_gen3: Reuse logic to read fuses on Gen3 and Gen4
-Date: Wed, 20 Nov 2024 13:03:36 +0100
-Message-ID: <20241120120336.1063979-3-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241120120336.1063979-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20241120120336.1063979-1-niklas.soderlund+renesas@ragnatech.se>
+	s=arc-20240116; t=1732104444; c=relaxed/simple;
+	bh=+ES4eCUGerDzw7CVIREWHBrZyVPMPYd3bfM8noBD5Mk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PT8JiKUvmA3+hchlAQZLy2YvJbeq7P6McYOYk2br8hMNhckyKFMMAs3/cSg01bNYiLt+aXAY+OCuUtch6Xo4xZ77gR62W38vgYbvFPslJEcqEX8HnFUUvNeHxGTbI5rxqPDEwL7jUW7TKPztnuOuOg0XSQYmku7XwoY2HKCV4l4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0C2E1480;
+	Wed, 20 Nov 2024 04:07:51 -0800 (PST)
+Received: from [192.168.178.6] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7039E3F66E;
+	Wed, 20 Nov 2024 04:07:19 -0800 (PST)
+Message-ID: <dbc2892f-0735-4510-9509-b225b65537c9@arm.com>
+Date: Wed, 20 Nov 2024 13:06:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in
+ acpi_os_sleep().
+To: Pierre Gondois <pierre.gondois@arm.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Hans de Goede <hdegoede@redhat.com>
+Cc: Len Brown <lenb@kernel.org>, anna-maria@linutronix.de,
+ tglx@linutronix.de, peterz@infradead.org, frederic@kernel.org,
+ corbet@lwn.net, akpm@linux-foundation.org, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>,
+ Todd Brandt <todd.e.brandt@intel.com>
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+ <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+ <60f8eac0-9144-486b-983f-4ed09101cf0a@redhat.com>
+ <CAJZ5v0g7rpdUjrS969stJiqqtO5zG+FTr4TOxg+SYN2dPC_9jA@mail.gmail.com>
+ <4daf0c32-9799-4eb5-8334-175d8089bc39@arm.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Language: en-US
+In-Reply-To: <4daf0c32-9799-4eb5-8334-175d8089bc39@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The hardware calibration is fused on some, but not all, Gen3 and Gen4
-boards. The calibrations values are the same on both generations but
-located at different register offsets.
+On 20/11/2024 10:01, Pierre Gondois wrote:
+> 
+> 
+> On 11/18/24 13:02, Rafael J. Wysocki wrote:
+>> Hi Hans,
+>>
+>> On Mon, Nov 18, 2024 at 12:38 PM Hans de Goede <hdegoede@redhat.com>
+>> wrote:
+>>>
+>>> Hi Rafael, Len,
+>>>
+>>> On 18-Nov-24 12:03 PM, Rafael J. Wysocki wrote:
+>>>> On Sat, Nov 16, 2024 at 12:11 AM Len Brown <lenb@kernel.org> wrote:
 
-Instead of having duplicated logic to read the and store the values
-create a helper function to do the reading and just feed it with the
-correct register addresses for each generation,
+[...]
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/thermal/renesas/rcar_gen3_thermal.c | 79 ++++++++-------------
- 1 file changed, 31 insertions(+), 48 deletions(-)
+> FWIW, testing the above version on an Arm Juno platform by executing
+> the following method:
+> 
+> Method (SLEE, 1, Serialized)  {
+>   Sleep(Arg0)
+> }
+> 
+> _wo: without patch
+> _w: with patch
+> - Values in ns.
+> - Requesting to sleep X ms
+> - Tested over 10 iterations
+> - HZ=250
+> +------+------------+----------+------------+---------+-----------+
+> |   ms |    mean_wo |   std_wo |    mean_w  |  std_w  |     ratio |
+> +------+------------+----------+------------+---------+-----------+
+> |    1 |    8087797 |  2079703 |    1313920 |   55066 | -83.75429 |
+> |    2 |    7942471 |  2201985 |    2416064 |  111604 | -69.58044 |
+> |    3 |    8373704 |   144274 |    3632537 |  111037 | -56.61970 |
+> |    4 |    7946013 |  2214330 |    4606028 |  255838 | -42.03346 |
+> |    5 |   11418920 |  1673914 |    5955548 |  131862 | -47.84490 |
+> |    6 |   11427042 |  1677519 |    7045713 |  211439 | -38.34176 |
+> |    7 |   12301242 |   221580 |    8174633 |  330050 | -33.54628 |
+> |    8 |   11411606 |  1672182 |    9191048 |  431767 | -19.45877 |
+> |    9 |   16722304 |  1288625 |   10517284 |  103274 | -37.10625 |
+> |   10 |   16746542 |  1280385 |   11564426 |  417218 | -30.94439 |
+> |   20 |   24294957 |    70703 |   22756497 |  673936 |  -6.33243 |
+> |   30 |   36284782 |    74340 |   34131455 |  391473 |  -5.93452 |
+> |   40 |   44703162 |  1199709 |   45407108 |  289715 |   1.57471 |
+> |   50 |   56311282 |   281418 |   56098040 |  607739 |  -0.37868 |
+> |   60 |   64225811 |   247587 |   64302246 |  132059 |   0.11901 |
+> |   70 |   76299457 |    99853 |   76282497 |   83910 |  -0.02223 |
+> |  100 |  104214393 |    38642 |  104212524 |  244424 |  -0.00179 |
+> | 1000 | 1016131215 |   245725 | 1017051744 | 2748280 |   0.09059 |
+> | 2000 | 2007711297 |  1325094 | 2007628922 | 1421807 |  -0.00410 |
+> +------+------------+----------+------------+---------+-----------+
+> - With the patch, the min sleep duration is never below the requested
+>   sleep duration
+> 
+> So indeed the penalty of using msleep is big for small sleep durations.
 
-diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
-index 95b636f79e07..5f54e235da2f 100644
---- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-+++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-@@ -253,60 +253,43 @@ static irqreturn_t rcar_gen3_thermal_irq(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static void rcar_gen3_thermal_fetch_fuses(struct rcar_gen3_thermal_priv *priv,
-+					  u32 ptat0, u32 ptat1, u32 ptat2,
-+					  u32 thcode0, u32 thcode1, u32 thcode2,
-+					  u32 mask)
-+{
-+	/*
-+	 * Set the pseudo calibration points with fused values.
-+	 * PTAT is shared between all TSCs but only fused for the first
-+	 * TSC while THCODEs are fused for each TSC.
-+	 */
-+	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], ptat0) & mask;
-+	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], ptat1) & mask;
-+	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], ptat2) & mask;
-+
-+	for (unsigned int i = 0; i < priv->num_tscs; i++) {
-+		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-+
-+		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, thcode0) & mask;
-+		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, thcode1) & mask;
-+		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, thcode2) & mask;
-+	}
-+}
-+
- static void rcar_gen3_thermal_read_fuses_gen3(struct rcar_gen3_thermal_priv *priv)
- {
--	unsigned int i;
--
--	/*
--	 * Set the pseudo calibration points with fused values.
--	 * PTAT is shared between all TSCs but only fused for the first
--	 * TSC while THCODEs are fused for each TSC.
--	 */
--	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT1) &
--		GEN3_FUSE_MASK;
--	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT2) &
--		GEN3_FUSE_MASK;
--	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT3) &
--		GEN3_FUSE_MASK;
--
--	for (i = 0; i < priv->num_tscs; i++) {
--		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
--
--		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE1) &
--			GEN3_FUSE_MASK;
--		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE2) &
--			GEN3_FUSE_MASK;
--		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE3) &
--			GEN3_FUSE_MASK;
--	}
-+	rcar_gen3_thermal_fetch_fuses(priv,
-+				      REG_GEN3_PTAT1, REG_GEN3_PTAT2, REG_GEN3_PTAT3,
-+				      REG_GEN3_THCODE1, REG_GEN3_THCODE2, REG_GEN3_THCODE3,
-+				      GEN3_FUSE_MASK);
- }
- 
- static void rcar_gen3_thermal_read_fuses_gen4(struct rcar_gen3_thermal_priv *priv)
- {
--	unsigned int i;
--
--	/*
--	 * Set the pseudo calibration points with fused values.
--	 * PTAT is shared between all TSCs but only fused for the first
--	 * TSC while THCODEs are fused for each TSC.
--	 */
--	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSFMON16) &
--		GEN4_FUSE_MASK;
--	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSFMON17) &
--		GEN4_FUSE_MASK;
--	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSFMON15) &
--		GEN4_FUSE_MASK;
--
--	for (i = 0; i < priv->num_tscs; i++) {
--		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
--
--		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN4_THSFMON01) &
--			GEN4_FUSE_MASK;
--		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN4_THSFMON02) &
--			GEN4_FUSE_MASK;
--		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN4_THSFMON00) &
--			GEN4_FUSE_MASK;
--	}
-+	rcar_gen3_thermal_fetch_fuses(priv,
-+				      REG_GEN4_THSFMON16, REG_GEN4_THSFMON17, REG_GEN4_THSFMON15,
-+				      REG_GEN4_THSFMON01, REG_GEN4_THSFMON02, REG_GEN4_THSFMON00,
-+				      GEN4_FUSE_MASK);
- }
- 
- static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
--- 
-2.47.0
+Just to make sure, this is with Rafael's proposal, using msleep() for
+values >= 48ms = (12 * 1000/250)ms and usleep_range() otherwise?
 
 
