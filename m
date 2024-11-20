@@ -1,110 +1,117 @@
-Return-Path: <linux-pm+bounces-17835-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17836-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD6B39D42A1
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 20:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA799D42D9
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 21:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66F7DB2345E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 19:42:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1140B23E16
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 20:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF6B1B5337;
-	Wed, 20 Nov 2024 19:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B491A9B27;
+	Wed, 20 Nov 2024 20:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUpOVj/y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FACraslG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED3013C83D;
-	Wed, 20 Nov 2024 19:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30D5170A30;
+	Wed, 20 Nov 2024 20:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732131727; cv=none; b=rzl0JNv4Imk3/8qkXuPb4+PSMPNLsdSuht6hjyNHN+H0Pji4oSQJJKJWHViZfRQ8X0vy804/OPH00fR56ZWwUk6b/sTtZlPHbzEOoZGdxqSlGFxTrDChD87SkEkPg4VuQITeTtzZiUCPfdeQ5WbM0pp3XoH8W7XVl8O0VtAldIs=
+	t=1732133311; cv=none; b=CBkzNajgwA0kz1LqM4wO/Zd7UV9lsonU8MFKuXt5NlNMqO5zAjLPswYhazdsT6WGyGfyByZOmvsDLzlb7DvhnA43Qf2GQe3WYr4nM5Di5/f8jIPE2mlP8CacPOKnqcJO7HyMbWvvbwVFCs8/HZRng8jWgaO79ezbKZej6XxSTJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732131727; c=relaxed/simple;
-	bh=yN0sDFO7YQ+zJTQvKFwhxk1ezDuCsdkQfmUNE4GkHG4=;
+	s=arc-20240116; t=1732133311; c=relaxed/simple;
+	bh=3adV8HrFmBBsK47jOerk6qZsRnE02LMSN6kjXvuoFuE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h4ZTh+hqbXJgMtQKneuxj1TJbD0vXL3fx+sNqEmCrBzbq6B/kBjR8zEsUm6w1STTC0+G/G9oJ/pleyqsX2UXKJuSWEK4130lVRkqvM0XsPHFbmfK4vPKs3dods85O9O4YQLpd1QojX9M3fjsIszxyMmU1vBhw98vKZ/F2ZZIVRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUpOVj/y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D3CC4CED2;
-	Wed, 20 Nov 2024 19:42:07 +0000 (UTC)
+	 To:Cc:Content-Type; b=iZci0uSR+hDOG4ECGBzJxd0uXKQm5xmL+7LIOzC2a+IeWFQsAVHxN2HlaF4EhmQl+a6YF3gDAtIbmJSjfGcwtVPtGbR1ZpMwTndwUM8fm+JruHuxQ7K2HrdIzWdSuAHXZDPIveBiNIwMJpnc6vaN0dVYCGjXRwGekDqxlaf7SfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FACraslG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38214C4CED3;
+	Wed, 20 Nov 2024 20:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732131727;
-	bh=yN0sDFO7YQ+zJTQvKFwhxk1ezDuCsdkQfmUNE4GkHG4=;
+	s=k20201202; t=1732133311;
+	bh=3adV8HrFmBBsK47jOerk6qZsRnE02LMSN6kjXvuoFuE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UUpOVj/yLwNwf1chXTAANr71IghKB5JEbWOTyIXyRugNj66L9O5XmVe1YfBHuUp0y
-	 x3EouCLaCKT/ckT0pRepo3E8X6OTZQRUokUSbo5dxvwVUz+FirKh3KNNJ4o5sF4Wca
-	 8oTF7OdO5K2cCP3CH1xlMIKShM4Pbi5yX/YYtTZjTmVi1UPucp2Bp7GPnZzwK/Xiy1
-	 XfjR1JmHA+/S0yCtyDdEZI5XXELwXwb8QMFuJbaF6R6PsCO5/XiRjlZiw+Dwvu+lFF
-	 rGIImglNlVUK3x8uPAuT9lfuzvvAg2//Tki7Encmwkn6pK1GVl+EXbZMNrT97bKXzo
-	 OHivNlV5h0mbA==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-29685066b8dso130265fac.1;
-        Wed, 20 Nov 2024 11:42:07 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV3PUOcCOrFI2j4mZMi2/P5v4C0+TbBJWyN6L2ohK0jfaMmecVxCfyd7/V6V5ZeohmIpudlnJB4L3I=@vger.kernel.org, AJvYcCWT629VUV3hRhDMAjQgqN7z/0PwOKrOTMA8PSJg3l0sFn6zFmmYwNnZb3+5roze7dv0qc+1PiXoH/+hDIC7@vger.kernel.org, AJvYcCX6cE6FXT6cPxwvrDnYziyOhlwJFirsjRK2EiBPDo2EZoYP65eVaFc9lb4n0/LNror/905NO6mXWFeY@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQrFZMpNe6oRdIUmcA8wzmLJ/NfePeI4hUKvUcVZ7sPPTxYsuR
-	ACrzZbLpCgz1JLH6E6TJKJuJ7ZXK+lnWC6cD6ql044QRm+tnDCq85FflyTwSNkfOlCH+xsTiJ2r
-	rgFqh1X52Dn4YzBdWzqI5BLVxz9k=
-X-Google-Smtp-Source: AGHT+IGDYWDMSigg45Kfzt6/U/rg/1cXOZtuboqOsLa+LgVcQIq+UvGZMbbNG+t2YfB+RKam834AQvV0z6VdIRN+Lig=
-X-Received: by 2002:a05:6871:630f:b0:296:c236:4f3c with SMTP id
- 586e51a60fabf-296d9dae044mr3625623fac.28.1732131726506; Wed, 20 Nov 2024
- 11:42:06 -0800 (PST)
+	b=FACraslGOjXUdwMaJUQB16BA8hZ0r8z0183dUJsT+JOJM+0cQeMDeGANxc77FugkO
+	 Rl8BMUWasqQMcqo557+P7YXditc1Lj83oQKxmD5uYhsTVVdwni6g6JFpXmpAXNd53N
+	 vi4wSTdL8JP290fX/kGysRp2mBfD+DH/vuHSzRo4RWTGARLnXMndnyTsP0PQP1/6z/
+	 eV1ZbPbeT/aWUPDC64QP0+N55o0mX38FoEo9SeRAEBM0+7iGaACi89u1+8DfA/4T4e
+	 SJcJn/RL8H91QuH3VLczRAzbsLt88X76Cax6PX0LHt4V/BxJLYFBGD8lNVz+ssxZ59
+	 2BekPh+rDjqlw==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-295cee3a962so145929fac.3;
+        Wed, 20 Nov 2024 12:08:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUBqClXtk+1oDfr5BEX2UAse8XpGRCQdqm+6cEp5+XPZeEM3DAqsd3vmlxb2htjP9fT30AWlt45MZ8Foak=@vger.kernel.org, AJvYcCW0Iv0CFG0zRbTParhrAfAGp+MyGpEMkynav1T4VmPqeLgsqv18M8uzdhLpuEoPp20RCoGOzSWM+I4=@vger.kernel.org, AJvYcCXfGairnPFZ3WJT3kcJkxzKup3lPIbraJMzivQ8cGlmU73QkMZSUwywLp2sCD+jXYoHjYRU1TCE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTZK9M7UXtbmaqoU+P3/L8tMh/tIG14b4PP/FScJ49uAltJM9o
+	2db/bcz3grHharzl0O1cjrUuxdqilfcqWVk1qfTULu+v+L03vzVQis9i78o9bXyLdU48YREAUwn
+	ZE4xDhiNcPzdEzap6dopmoZbTuQI=
+X-Google-Smtp-Source: AGHT+IGL/hP6CMZbWdPeJLDTJuxVmxaSUuYlnUcSm8vnjsiunRJiK4BrsaJCTvtwAmiO8Z61GAdeM3rx/BCjsUbQDXA=
+X-Received: by 2002:a05:6870:9123:b0:277:d9f6:26f6 with SMTP id
+ 586e51a60fabf-296d9bb710cmr4308325fac.12.1732133310505; Wed, 20 Nov 2024
+ 12:08:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
- <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
- <90818e23-0bdb-40ad-b2f9-5117c7d8045e@linux.intel.com> <CAJZ5v0gxNEQx5Q+KXs-AMn=bt7GD=jU-TseMHUc5mHp0tKSBtA@mail.gmail.com>
- <0147ea1a-3595-47ae-a9d5-5625b267b7a8@linux.intel.com> <CAJZ5v0itnn3T4bwiAO3eAoKH4mLFYswcNWBx6JCrK1GFDEy7vg@mail.gmail.com>
- <e0dd2cb8-eea2-443d-bf23-4d225528d33f@linux.intel.com> <CAJZ5v0h5=3LMVCa8kSoomNyF9r_7HLmpkH+YhYEO_N7H6-hAGQ@mail.gmail.com>
- <593c4be2-c21e-49fa-8bf7-a614c01c8e66@linux.intel.com>
-In-Reply-To: <593c4be2-c21e-49fa-8bf7-a614c01c8e66@linux.intel.com>
+References: <a4aa8842a3c3bfdb7fe9807710eef159cbf0e705.1731463305.git.len.brown@intel.com>
+ <c5f9c185-11b1-4bc8-96be-a81895c2a096@intel.com>
+In-Reply-To: <c5f9c185-11b1-4bc8-96be-a81895c2a096@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 20 Nov 2024 20:41:55 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h_hh8Rp2kG0xT_b5Bm5zWX6MscRo1rEx-jO-dBd7t5Aw@mail.gmail.com>
-Message-ID: <CAJZ5v0h_hh8Rp2kG0xT_b5Bm5zWX6MscRo1rEx-jO-dBd7t5Aw@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in acpi_os_sleep().
-To: Arjan van de Ven <arjan@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, anna-maria@linutronix.de, 
-	tglx@linutronix.de, peterz@infradead.org, frederic@kernel.org, corbet@lwn.net, 
-	akpm@linux-foundation.org, linux-acpi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Len Brown <len.brown@intel.com>, Todd Brandt <todd.e.brandt@intel.com>
+Date: Wed, 20 Nov 2024 21:08:18 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iCR5ZbNz=OF1MbJUJdhCRh2P8M_MTF7eszPe5uv9_R1w@mail.gmail.com>
+Message-ID: <CAJZ5v0iCR5ZbNz=OF1MbJUJdhCRh2P8M_MTF7eszPe5uv9_R1w@mail.gmail.com>
+Subject: Re: [PATCH v3] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Len Brown <lenb@kernel.org>, peterz@infradead.org, tglx@linutronix.de, 
+	x86@kernel.org, rafael@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 20, 2024 at 8:18=E2=80=AFPM Arjan van de Ven <arjan@linux.intel=
-.com> wrote:
+On Wed, Nov 20, 2024 at 8:12=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
 >
-> On 11/20/2024 10:49 AM, Rafael J. Wysocki wrote:
-> >>> I thought about something on the order of 199 us, but now I'm thinkin=
-g
-> >>> that 50 us would work too.  Less than this - I'm not sure.
-> >>
-> >> 50 usec is likely more than enough in practice.
+> On 11/12/24 18:07, Len Brown wrote:
+> > From: Len Brown <len.brown@intel.com>
 > >
-> > And would you use the same slack value regardless of the sleep
-> > duration, or make it somehow depend on the sleep duration?
+> > Under some conditions, MONITOR wakeups on Lunar Lake processors
+> > can be lost, resulting in significant user-visible delays.
+> >
+> > Add LunarLake to X86_BUG_MONITOR so that wake_up_idle_cpu()
+> > always sends an IPI, avoiding this potential delay.
 >
-> I don't see why you'd make it dependent on the sleep duration
-> sure in theory the longer the sleep -- you could pick a fixed percentage
->
-> but you're trying to amortize a theoretical timer register write, and a
-> cpu wakeup. the timer write is fixed cost and not THAT expensive after
-> some amount of this . the C state wake up --- sure that is more variable
-> but that is super important for high occurance things (thousands to milli=
-ons
-> of times per hour).
-> If your ACPI sleeps are high occurance on a system I suspect you have way
-> bigger problems than an occasional extra wakeup
+> This kinda implies that X86_BUG_MONITOR only does one thing.  What about
+> the two other places in the tree that check it.  Are those relevant?
 
-I generally think that if you are sleeping relatively long, you may as
-well sacrifice some precision for avoiding system stress so to speak,
-so I've been considering something like flat 50 us for sleeps between
-1 and 5 ms and then 1% of the sleep duration for longer sleeps.
+They are relevant, but related.
+
+The first one prevents mwait_idle() from becoming the default idle
+function, which only matters if cpuidle is not used, but this is
+consistent with the mwait_idle_with_hints() behavior.
+
+The second one prevents KVM from using MWAIT in the guest which I
+would think is a good idea in this case.
+
+> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219364
+> >
+> > Cc: stable@vger.kernel.org # 6.11
+> > Signed-off-by: Len Brown <len.brown@intel.com>
+>
+> This obviously conflicts with the VFM infrastructure, but shouldn't this
+> also get backported to even older stable kernels?
+
+As a matter of principle, it should go to all of the stable kernel
+series still in use, but it obviously needs backporting and I'm not
+really sure how attractive the old kernel series will be for LNL users
+(quite likely not at all).
+
+> I thought the "# 6.11" was to tell folks where it is *needed*, not where
+> it actually applies.
+
+My interpretation is slightly different: This is the oldest series one
+wants the given patch to go to.
 
