@@ -1,138 +1,153 @@
-Return-Path: <linux-pm+bounces-17796-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17797-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F7FB9D30EF
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 00:32:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F16DB9D31CE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 02:16:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E15C1B215CF
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2024 23:32:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D7EA1F2157A
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 01:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1FE11C4A3F;
-	Tue, 19 Nov 2024 23:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0BC11B95B;
+	Wed, 20 Nov 2024 01:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hGUa1kFh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hjPvmXU8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865EB13D279;
-	Tue, 19 Nov 2024 23:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228641EA80;
+	Wed, 20 Nov 2024 01:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732059147; cv=none; b=keSkzUBtUB/m85jZTGKGYPNQ02sysxvb1BdhncWb8s6TFDhj1Zfrhbq1mtu/ev3gM94Rd3G8mQ94uvsgTQ0Vsr+Tp2/Wh0C/Fa3shm+AOIIl1qK1LKGK4+6JgMm6xUr+bKNO1DHxEE3HGMhmYmZKkF6fLNzIiEEAgzk6k4Qa/B0=
+	t=1732065260; cv=none; b=BAARl78JllJkXnl0Z5chV6pRSdQnWxh+gktNvPRE8RIdbZtBmfGPlSYB3Nw39F2vFdlyWtqDD3M5DCfiOfd1WRfGvSEIrZpH84cg8iYWBauUCJ9Ie+NPVnL8rjjZpatRJsjIKymqT9BSByeiEXnjHA9L7ZM1ZX3JVSvKG5WqcmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732059147; c=relaxed/simple;
-	bh=94Hb0WDDrKNkc+w9VJTwGaTkgRFYoIoCP3YBnwtZjrk=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=i3plZcy2MbUi8MtUlHdxS2JCeO5FxjNEm3sJqR4oUkOsbq3KCcqChuucMCiMu4NzsDONV301+w/so9mrHhgQsgsEeGm2f+Dwm+O4TTt6yZ7+zlfPybhOnYZsoEr3mW3/2Eu1Fnl9TC52TEUUTHXLZq0ZfNf2p6j6XX9MQAp8/9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hGUa1kFh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF82C4CECF;
-	Tue, 19 Nov 2024 23:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732059147;
-	bh=94Hb0WDDrKNkc+w9VJTwGaTkgRFYoIoCP3YBnwtZjrk=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=hGUa1kFhVXzkTKEg1Ga5Miuhv41iwOv61TToSaqrNeEDMeCOVpSlydRIoQVMF9JZO
-	 JP1f9ZSldvGZvpLlUqwc/Yf/Y8k3k+dCry5fqcWxbpnDgf8KF1utPEgvdqz3vn/WNV
-	 2aHyA4691zWEkXwDy6aB4e53KbAc/v9XEiQWOiXI1bGdzxEkEyCaZNjjcn4noczGmx
-	 CmtsdaGBv61I+UpaHIKy/LvwOE1x6lQKfBncrAvOKXu97eDSiX+V3vnknW0E87pin5
-	 FfB8bqdGtujOWDf2v8geGQs9bUp+InRv8/zYUPOcsAIY5aBe2xEZgXXqb/4XUXIrLK
-	 Pds5H0vKzNUyA==
-Message-ID: <f6f171aed953b5ff8080290b1cef9f80.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1732065260; c=relaxed/simple;
+	bh=CchtCVTtZWpemdzarjCDqaFEHemolUA6d641/1V7IpI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=mOarweABp1VqIK8x0ltx1cDqJrtoOCM2dUaqnTyup+rOP3iWVaAWWVPn5N0ELBAbb3twdiPEBq/kF9QikBZfrU/UwTfTSh2qt+j7oCuye5L4+JdjoWjJxkV1CLcUAVwYvIcOj6wBybQaD0R4YIGQYN/ldMAYPBdpFiZNh0kpUmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hjPvmXU8; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4316cce103dso52133595e9.3;
+        Tue, 19 Nov 2024 17:14:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732065255; x=1732670055; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8u1cHBLy2nRoBqLa17zAhfXpRTEukBBEVletJcfclTU=;
+        b=hjPvmXU8vkAddCIFPMXxoaqlopSD/1yYCMw/X5a3wi8zKIxMYQ+oh2Y2L/aUDrPUqU
+         4bdDxxt2sFaTaB0PaRlWs1nT6Xas8fxjQUMTeeJMOFEOqKdxZeQgSBYt5HD9dgacRjy3
+         b0WU3D63m9q+Tz7u4oIXmHETfZ6LRsHswdliRaSA1GkPszm8Y1wPBN8iBxB8cLhsv0Qj
+         MOA+PqlUzixaybh5WhSbdpAZevQ4ch27l64jh453BSBOQgF9oUTK/meuyxNwrMUvDnL2
+         J3+III4iHWWHq1XbaMB9PcfDEssN8cE8gMXwWRSnV76t03Ww5C4jIGNpXY0J03gpPN3z
+         2xgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732065255; x=1732670055;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8u1cHBLy2nRoBqLa17zAhfXpRTEukBBEVletJcfclTU=;
+        b=HW8d1emwTkF+Y9lFueXp4m1qiD7k8A0MaB1GVViOOFU0LPNkD6rKptF7vtUY6L5drL
+         lXJhyU91ZUuAgBPEpVOLkN3KrAHWb0oBchJc6ajb9riW0n3tLQGec+Qdv0ZcD0ZaNuDx
+         X1LTL088IBxkESYmktTx1XPRu/4HkxYVcJgvRnoVBMiTFvcqxa32DiqYupn0Xu77faKM
+         xnfV6goVayS9iXRja3a8jYMXQScuiOFQgg/VJCJxUWK+M7RpdUwC2i+H+jdlbHPPW1Be
+         bqeTE8VVRgI8yv+0vKBJ6bN7xv3Wxe15Z7CaiuTlaBVpO9mlxV4xM6DCwyvlxtfWOP92
+         O1YA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsmToeRMssFD9pXXKwuBqEG39QHdtKf2xS8PLK2u+2QP9XOjiZgkcrB+x3UxRYPv8iHtYM3SSgQpXxPcwR@vger.kernel.org, AJvYcCVL2USoCJB+Ocz7XOTAfhNn1pp8s+IKAmr9bqZ3CjQdenvMf3ME3bOI4v3OSIGoNC9+ZLC6mHoQX4E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPNabP+M/HiZU7GfVRr0xXXow5OOuoi4JcG0Thq1BMtnYj0YF9
+	tGLCWR0FJ++f7xPB32nUqGTZ9xbJfT2PO1sJcMfCrVMVoZ1f8EtCwUzTDg==
+X-Google-Smtp-Source: AGHT+IH4ny5/INzEb8VSmq8l9JHiitIjkkGzy5s6QWu6pRai0HDdvQfIF8/Hw9wd/w/pIQ4TJCqDBA==
+X-Received: by 2002:a05:600c:502a:b0:42c:b508:750e with SMTP id 5b1f17b1804b1-433489a06ebmr8494935e9.11.1732065254996;
+        Tue, 19 Nov 2024 17:14:14 -0800 (PST)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-48fc-0cdb-fd19-6ed4.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:48fc:cdb:fd19:6ed4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382549107e8sm682379f8f.52.2024.11.19.17.14.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Nov 2024 17:14:13 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Wed, 20 Nov 2024 02:14:07 +0100
+Subject: [PATCH] Documentation: pwrseq: Fix trivial misspellings
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <14689f79-58fd-4be3-87ac-e56cba3deb26@linaro.org>
-References: <20241028163403.522001-1-eugen.hristev@linaro.org> <bb5d855954d5ff8694a3978a9f87a9d2.sboyd@kernel.org> <6f14d8d7-7b9a-49e3-8aa8-5c99571a7104@linaro.org> <b587012e868f8936463c46915b8588c3.sboyd@kernel.org> <7b57ccc2-7060-4adf-b896-8992ec05125c@linaro.org> <e6637dcc85ca23efaf72af906f364328.sboyd@kernel.org> <14689f79-58fd-4be3-87ac-e56cba3deb26@linaro.org>
-Subject: Re: [PATCH v2] soc: qcom: Rework BCM_TCS_CMD macro
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: andersson@kernel.org, konradybcio@kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, djakov@kernel.org, mturquette@baylibre.com, evgreen@chromium.org
-To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org
-Date: Tue, 19 Nov 2024 15:32:24 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241120-pwrseq-doc-trivial-fixes-v1-1-19a70f4dd156@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAN43PWcC/x3LSwqDQBBF0a1IjS2wmzZ+tiIZiP2iBeKnKqgg7
+ j1NhofLvcmgAqM2u0lxiMm6JLg8o2HqlxEsMZl84YNzvuDtVMPOcR34q3JIP/NHLhgDdRXCqyl
+ j6Sntm+If0t29n+cHIWQ5aGoAAAA=
+To: Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732065252; l=2567;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=CchtCVTtZWpemdzarjCDqaFEHemolUA6d641/1V7IpI=;
+ b=zt07yqt6g453uiYnMWSEvyPdCPqtfs4yK+IP2RhAwSI0tJnFRbVfTiVM+cpSh+Sp0Yee0WXwb
+ CkWiNVn1KtCDVatxY6hnJrmOwgoy6d5DgrYvjQw1V5cfyELlUYHv43U
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-Quoting Eugen Hristev (2024-11-11 05:05:02)
->=20
->=20
-> On 11/8/24 21:00, Stephen Boyd wrote:
-> > Quoting Eugen Hristev (2024-10-30 01:28:14)
-> >> On 10/30/24 02:40, Stephen Boyd wrote:
-> >>>=20
-> >>> If the rpmh-rsc code didn't use writel() or readl() I'd believe
-> >>> that the data member is simply a u32 container. But those
-> >>> writel() and readl() functions are doing a byte swap, which
-> >>> seems to imply that the data member is a native CPU endian u32
-> >>> that needs to be converted to little-endian. Sounds like
-> >>> BCM_TCS_CMD() should just pack things into a u32 and we can
-> >>> simply remove the cpu_to_l32() stuff in the macro?
-> >>=20
-> >> This review [1] from Evan Green on the original patch submission=20
-> >> requested the use of cpu_to_le32
-> >>=20
-> >> So that's how it ended up there.
-> >>=20
-> >=20
-> > Thanks. I still don't see why this can't just be treated as a u32
-> > and then we have writel() take care of it for us.
->=20
-> If the values are in the wrong endianness, e.g. 0xff11 instead of=20
-> 0x11ff, the corresponding field would be filled up wrongly, even=20
-> possibly writing unwanted bits. vote_x and vote_y have a mask of length=20
-> 14, so there is one byte and another 6 more bits. If the endianness of=20
-> the value is not correct, the one byte might end up written over the 6=20
-> bits and 2 extra bits which are supposed to be for another field.
-> In my example 0x11 should be in the first 6 bits and the 0xff in the=20
-> next byte, but if the endianness of the cpu is different, we might write =
+Use proper spelling for 'discrete'. When at it, capitalize 'Linux',
+which is common practice in the documentation.
 
-> 0xff on the 6 bit field.
-> So we must ensure that the multi-byte fields are in the correct=20
-> endianness that the hardware expects.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+ Documentation/driver-api/pwrseq.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-The vote_x field looks like it goes from bits 14 to 27. No matter the
-endian format of the _word_, bits 14 to 27 are for the vote_x field. So
-if I set bit 15 and 17 in a big-endian format word (vote_x is decimal
-10), pass that 32-bit word to writel(), swap the bytes, it is still set
-as bit 15 and 17 in little-endian format. That's because when I read the
-32-bit word as a little-endian machine, the first byte is for bits 0 to
-7, second byte is for bits 8 to 15, third byte is for 16 to 23, and
-fourth byte is for bits 24 to 31. The hardware assembles the 32-bit word
-out of that byte order, knowing that bits are mapped that way. Once I
-have the 32-bit word, it can be shifted right 14 times so that the
-vote_x field is from 0 to 13, and bits 1 and 3 are set, i.e. decimal 10.
+diff --git a/Documentation/driver-api/pwrseq.rst b/Documentation/driver-api/pwrseq.rst
+index a644084ded17..ad18b2326b68 100644
+--- a/Documentation/driver-api/pwrseq.rst
++++ b/Documentation/driver-api/pwrseq.rst
+@@ -11,7 +11,7 @@ Introduction
+ ============
+ 
+ This framework is designed to abstract complex power-up sequences that are
+-shared between multiple logical devices in the linux kernel.
++shared between multiple logical devices in the Linux kernel.
+ 
+ The intention is to allow consumers to obtain a power sequencing handle
+ exposed by the power sequence provider and delegate the actual requesting and
+@@ -25,7 +25,7 @@ The power sequencing API uses a number of terms specific to the subsystem:
+ 
+ Unit
+ 
+-    A unit is a discreet chunk of a power sequence. For instance one unit may
++    A unit is a discrete chunk of a power sequence. For instance one unit may
+     enable a set of regulators, another may enable a specific GPIO. Units can
+     define dependencies in the form of other units that must be enabled before
+     it itself can be.
+@@ -62,7 +62,7 @@ Provider interface
+ The provider API is admittedly not nearly as straightforward as the one for
+ consumers but it makes up for it in flexibility.
+ 
+-Each provider can logically split the power-up sequence into descrete chunks
++Each provider can logically split the power-up sequence into discrete chunks
+ (units) and define their dependencies. They can then expose named targets that
+ consumers may use as the final point in the sequence that they wish to reach.
+ 
+@@ -72,7 +72,7 @@ register with the pwrseq subsystem by calling pwrseq_device_register().
+ Dynamic consumer matching
+ -------------------------
+ 
+-The main difference between pwrseq and other linux kernel providers is the
++The main difference between pwrseq and other Linux kernel providers is the
+ mechanism for dynamic matching of consumers and providers. Every power sequence
+ provider driver must implement the `match()` callback and pass it to the pwrseq
+ core when registering with the subsystems.
 
-Fields that span bytes don't matter here. The hardware is going to read
-the word in the format that it is in, which is the order of bytes, and
-assemble a full 32-bit word out of it. We're just setting bits in the
-field that's shifted so many bits because it's part of a word. The order
-of the bits isn't changing.
+---
+base-commit: 414c97c966b69e4a6ea7b32970fa166b2f9b9ef0
+change-id: 20241120-pwrseq-doc-trivial-fixes-ee8744695d52
 
->=20
-> In other words, writel does not know about the multi-byte fields inside=20
-> this u32 which have a specific bit shift, and those fields are expected=20
-> to be in le32 order written to the hardware. Whether or not the cpu is=20
-> le32 is not important because using cpu_to_le32 will make it safe either =
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-> way.
->=20
-> I apologize for my not so great explanation
->=20
-
-I hope my explanation has helped. Long story short, the cpu_to_le32()
-usage here is wrong. Typically we try to operate with a type that's the
-same size and native format for as long as possible (u32), partially for
-performance reasons but also to make it easier to understand. When it
-comes time to write that value to the hardware, write it in the hardware
-format (writel), and read from the hardware in the hardware format
-(readl). Doing this lets you avoid thinking about the endianness almost
-entirely, and makes it so that code doesn't have to be rewritten when
-running on a different endian CPU to avoid suffering performance
-penalties with all the byte swapping.
 
