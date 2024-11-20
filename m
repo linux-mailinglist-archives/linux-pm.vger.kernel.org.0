@@ -1,373 +1,99 @@
-Return-Path: <linux-pm+bounces-17830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17831-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B0C59D4243
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 19:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDD9F9D4247
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 19:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CE1F28319A
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 18:54:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8413E283535
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2024 18:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35391B5ED2;
-	Wed, 20 Nov 2024 18:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E101B5821;
+	Wed, 20 Nov 2024 18:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcJUd8/W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tS4pPb9q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04003824A0;
-	Wed, 20 Nov 2024 18:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8F51A0BDC;
+	Wed, 20 Nov 2024 18:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732128879; cv=none; b=OhgV3X+BjSto34TVZ+EjsaZVIMj93AdUqiwZalaC95NBvUP4vQMmRv5A/BxJ8aaMUt5RwjUemvFwUGDu3Tfx5dGDvqu3/MyrLmwQtghtYZCooB5gMZNUPEivBzY9HTor4xn9Hreq/xqUPJo+cJ4QvJQDH46kgcxyTh+8RTr40Jc=
+	t=1732128906; cv=none; b=S1E9wsjmgT0KCkIBbUU7olQvj5HN90Ite2y1CUpTE7MRtlXVne15ATMY/3zhbEiIGi3zUF6Zo6WSsaV9PGPn+Fzx2BAMhHuPyKAfVG2JImptLvcQAW7W6g7HR8e72oeqefq/rDDRANT0olBMpRhkQUyBiJ9CNyeEqrD8Qep7dgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732128879; c=relaxed/simple;
-	bh=pgZb7KzJR7PCND8fGLHmXt4q8yO1ZiQtgM9nsPkQEyk=;
+	s=arc-20240116; t=1732128906; c=relaxed/simple;
+	bh=7iNlVObpcindp4mU4f5rY8q81sWe5uVVk4LFqLRBvCU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=px3MdRS+EACxTSK6rbYNOAnP9vCXiiY2ZgUX91eWvHYor9sPcJyVJHWEUNN2iMDDsQWUQ/GoOKByNi04pLAoLCVwA1hzNCB+odW58ekP5GDbcQnXF79keVq2Bp+nVWBeXob3kkTLt3/9siJH9bAmfjUM4VV1Qt7+BfvXAeiYimw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcJUd8/W; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-83aff992087so3757639f.3;
-        Wed, 20 Nov 2024 10:54:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732128877; x=1732733677; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ywphHwRJ47bemIP9RZfgn34nLun0kYe1BEdTqOds8Rs=;
-        b=RcJUd8/WKDmsJQINGxxLCPUAy4tta6TicnZjnKtZCizrEvIT8LaiCp0ybcmjd4v4Gv
-         xTRdZ1Z7G9NiLldpKcl1MxhVioQphiHKDki3tsH/WqdNUSV++hA/cRW/h9TG05xqmBPP
-         dIt40Y213M3/zgqDADMnNEex96DaRPcHkimT7UH/0++BKQ26SNyXz2HygXYphdY5DbES
-         Q9LoAZVh0lxzUjvQNrRVGVsgDHEAy801zW7mM6Y2b8VQEv/OTNBYsT91MU2K1+Ot/ncs
-         wATHOtK1LHPlTjquSETWY8uoSdGjdujmym8UrkdYk4xlq0M68viPnpupxLVWpp5sQRo+
-         LeWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732128877; x=1732733677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ywphHwRJ47bemIP9RZfgn34nLun0kYe1BEdTqOds8Rs=;
-        b=qDBoKHCwaPCemxM48yAJLjuveer5HnfcIfmG4Bhe3Y+sBzTqHANtMcSHD1ZPsQBeDG
-         JHIbIi5RPgQTpX0GUnWHBGPPgF2D5Kw+qyPQHUrAk6V0L+4ZUsgk8m8FhrIgPfkjOu99
-         WT2rpqNITtJfL76383KJIpRZGQFYLrZnhdQ27OP8tBUWtBS5li72L/UVYzFA0MYys6Ov
-         Ft4VdGEktEboFfTFpFt7ZPQDFiMIP7DhmSLLV7sgspNDx6dX9AgzGK/d6O85ZwwC1G/t
-         UNlO60uqaCpCEs9mVFhGievVT2KTj6Ylw2GG033Ewd5hYbPnr+V4D0qNHTiyo/gwPPu0
-         sC1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUR2LYHTMH1W0TVaO9ll19DsppF834T9vjPz9KjBXxIN5LUnjLt9hzWextUa2rlA0jtedW5HIaeEgk8Gboa@vger.kernel.org, AJvYcCUzH+TwUJYUzeS+kJZh82pN0jPPAzmzr15dBv7h4jEQfemNcrN6aN/koX3ZkOdETbDyVoY6khzGBJlHwgAFTQ==@vger.kernel.org, AJvYcCX3NAIEzmJEi1jQFhL4pezZVwUY70lxCP/qw+2VFZjCdLGdF40SfNQ4Qh+OJ+Lscpdt8zNLfvr6PBk=@vger.kernel.org, AJvYcCX3YhLPvB8J06Ap7p5Q28QYaX+mnwDB7baxroMrFvrbO4AGRuA+GC/adnW4JQRNEQJFN76ZMCDzVHG9@vger.kernel.org
-X-Gm-Message-State: AOJu0YyThiuzgQxDDjSkX3F8UwWhjlQSmW0uVg0EUa6Vjv7Jjtrjx1Sz
-	j71UJxl13cZdIYM5HnzVaP1NhckjTcWBsuuu3GSvLsvXes167ejIoxs4ro92vlGWlzPx6Mj+Dg8
-	+BciGKyMMWl8XP4G8guo2DBWCMFw=
-X-Gm-Gg: ASbGncuu8fkq/0mOY0dUsBE39D68tiFlMpVqtA8FgUoarYSRc5uvY4lA48zhrL/Kl9/
-	OJ3NaXRuEu/z/A2cV82w9KRweaHszK/QFdgx3ajTEQ8XBNJQOQv20SxJBhcpm
-X-Google-Smtp-Source: AGHT+IHd8C0gyOGxo8kEUV2MAn22vYluHbM6lDo81yALGvxv3opZ3P+eFDcZSWKWEXJFXyRB4VB0sPN5xiZpchHYexo=
-X-Received: by 2002:a05:6602:6d8e:b0:834:d7b6:4fea with SMTP id
- ca18e2360f4ac-83eb5fce118mr454937039f.6.1732128877090; Wed, 20 Nov 2024
- 10:54:37 -0800 (PST)
+	 To:Cc:Content-Type; b=DWtjCPUktNeuklSf77vUOP/4LS6jYN5mTSGemBDpqeBhb9MyE9//WEOi1MkbII4RkV7IvFEK1JvxxspXht5/ksUCNI0qGWda9zSCJoIa+5DtehBWZ3D1lmosylNPK5EvVf1+d5a7BxrHcpPkJ1on0F7DAoKSlzO4KenXftWLMc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tS4pPb9q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D9CFC4CED8;
+	Wed, 20 Nov 2024 18:55:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732128906;
+	bh=7iNlVObpcindp4mU4f5rY8q81sWe5uVVk4LFqLRBvCU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tS4pPb9qS1zHYqWlZ0+aEQoGlegmlD2l7SHUWRJ9KN3H2GNdvo5LA6osnDfhT7iXG
+	 bzktOGorzXT6LqT31xzolRS9479BV4mTj2FJlKi758XTFim0+1tIgUZj/9Z1QQsjkC
+	 ZaDabfnquLmHmP8W41QMFJfQGG09GVcJ9f97PHndnh+eYLXns6jyY4n1mnhxgaSo3C
+	 18Bqr0qMTqXmtis8lXcxCDOL4KbGIet9mpuZNcCwrPLvIqncxweNi/N+zh4cZhVzap
+	 zoLdDxw8LvWo7n38BwGMPKDUjnxdgs6wXoiCD5LvagiaE/WQD/zVBYBPeBUvGdRWlW
+	 BjBIwvwCn4d1g==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3e600ae1664so67725b6e.2;
+        Wed, 20 Nov 2024 10:55:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW+EyQdu4Dt6BVGhU2WmSiWmW5Z/qQjHwrXF5stDn4QXaBgFX6m77vizbzOlfNhLWX4oNKWl9hu11c=@vger.kernel.org, AJvYcCW93MmMjsKNGvWbS6PCXMof+cVwJdUG9p0968QD7DWYRyiPyeiPEdQmklzSVjhEci2ZYvUYThxubk7n@vger.kernel.org, AJvYcCXLuZrwJ4RPWzo1KFMLtrle9gYtBeX3hTvBpHpDMd+NjwGuAWCN0N6dcl1NfmBDEi71gjxAde+Al9I2g1OT@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLNFZHUf5AZcRjCdQItyb/9+KJjxj4OB30NkFCQUGTKGAIZgF7
+	b2wZ/Uvp+dKGLATNWuQtojsMPubvWBhOZwLzeIIFbO2MPQaFcJXmMXQoLNF7VakwUjNyYHUmN+T
+	am2SXz6/5QD23TiW7PyVA/bOYiwg=
+X-Google-Smtp-Source: AGHT+IEvr6u7FvVsflV5ZrLmCrlhPJkj7ve6zXLwwAB4za8pZzBbg+m/NmobsyNgM5TmRm76lnKu0OViaXX87/EP8Jo=
+X-Received: by 2002:a05:6808:3188:b0:3e7:a201:db0f with SMTP id
+ 5614622812f47-3e7eb738affmr3589483b6e.25.1732128905489; Wed, 20 Nov 2024
+ 10:55:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241119-topic-sm8x50-gpu-bw-vote-v2-0-4deb87be2498@linaro.org>
- <20241119-topic-sm8x50-gpu-bw-vote-v2-3-4deb87be2498@linaro.org> <fkezpguictntg2wkouwqipnaaiauo6vu46n7a2xzvlorzvyeaw@bbcpj3bs5eko>
-In-Reply-To: <fkezpguictntg2wkouwqipnaaiauo6vu46n7a2xzvlorzvyeaw@bbcpj3bs5eko>
-From: Rob Clark <robdclark@gmail.com>
-Date: Wed, 20 Nov 2024 10:54:24 -0800
-Message-ID: <CAF6AEGs6zT_kaTXNohUaA7KWZxZTr4byaoMoLAceuyqA7S+2CQ@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] drm/msm: adreno: move features bits in a
- separate variable
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, Akhil P Oommen <quic_akhilpo@quicinc.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Sean Paul <sean@poorly.run>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Connor Abbott <cwabbott0@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	devicetree@vger.kernel.org
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+ <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+ <90818e23-0bdb-40ad-b2f9-5117c7d8045e@linux.intel.com> <CAJZ5v0gxNEQx5Q+KXs-AMn=bt7GD=jU-TseMHUc5mHp0tKSBtA@mail.gmail.com>
+ <0147ea1a-3595-47ae-a9d5-5625b267b7a8@linux.intel.com> <CAJZ5v0itnn3T4bwiAO3eAoKH4mLFYswcNWBx6JCrK1GFDEy7vg@mail.gmail.com>
+ <e0dd2cb8-eea2-443d-bf23-4d225528d33f@linux.intel.com> <CAJZ5v0h5=3LMVCa8kSoomNyF9r_7HLmpkH+YhYEO_N7H6-hAGQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0h5=3LMVCa8kSoomNyF9r_7HLmpkH+YhYEO_N7H6-hAGQ@mail.gmail.com>
+From: Len Brown <lenb@kernel.org>
+Date: Wed, 20 Nov 2024 13:54:54 -0500
+X-Gmail-Original-Message-ID: <CAJvTdK=Q1kwWA6Wxn8Zcf0OicDEk6cHYFAvQVizgA47mXu63+g@mail.gmail.com>
+Message-ID: <CAJvTdK=Q1kwWA6Wxn8Zcf0OicDEk6cHYFAvQVizgA47mXu63+g@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in acpi_os_sleep().
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Arjan van de Ven <arjan@linux.intel.com>, anna-maria@linutronix.de, tglx@linutronix.de, 
+	peterz@infradead.org, frederic@kernel.org, corbet@lwn.net, 
+	akpm@linux-foundation.org, linux-acpi@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Len Brown <len.brown@intel.com>, Todd Brandt <todd.e.brandt@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 20, 2024 at 3:18=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Tue, Nov 19, 2024 at 06:56:38PM +0100, Neil Armstrong wrote:
-> > Now the features defines have the right name, introduce a features
-> > bitfield and move the features defines in it, fixing all code checking
-> > for them.
-> >
-> > No functional changes intended.
->
-> I think it might be better to squahs this patch into the previous one,
-> it would simplify checking that we use .quirks for ADRENO_QUIRK_foo and
-> .features for ADRENO_FEAT_bar.
->
+On Wed, Nov 20, 2024 at 1:50=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 
-IMHO better to keep this separated
-
-But we don't have _that_ many features/quirks so I don't find
-combining them all that problematic
-
-BR,
--R
-
-> >
-> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> > ---
-> >  drivers/gpu/drm/msm/adreno/a6xx_catalog.c  | 34 +++++++++++++++-------=
---------
-> >  drivers/gpu/drm/msm/adreno/a6xx_gpu.c      |  4 ++--
-> >  drivers/gpu/drm/msm/adreno/adreno_device.c |  2 +-
-> >  drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  7 +++---
-> >  4 files changed, 24 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_catalog.c b/drivers/gpu/dr=
-m/msm/adreno/a6xx_catalog.c
-> > index 825c820def315968d508973c8ae40c7c7b646569..93f0d4bf50ba773ecde93e6=
-c29a2fcec24ebb7b3 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
-> > @@ -743,7 +743,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a615_zap.mbn",
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -769,7 +769,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> >               .init =3D a6xx_gpu_init,
-> >               .a6xx =3D &(const struct a6xx_info) {
-> >                       .protect =3D &a630_protect,
-> > @@ -839,7 +839,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a615_zap.mdt",
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -864,7 +864,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                         ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a620_zap.mbn",
-> > @@ -892,7 +892,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_1M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a630_zap.mdt",
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -911,7 +911,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_1M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a640_zap.mdt",
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -934,7 +934,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_1M + SZ_128K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                       ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a650_zap.mdt",
-> > @@ -961,7 +961,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_1M + SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                       ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a660_zap.mdt",
-> > @@ -981,7 +981,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_1M + SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                       ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -1000,7 +1000,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_512K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                       ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a660_zap.mbn",
-> > @@ -1028,7 +1028,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_2M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a640_zap.mdt",
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -1046,7 +1046,7 @@ static const struct adreno_info a6xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_4M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                       ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a690_zap.mdt",
-> > @@ -1331,7 +1331,7 @@ static const struct adreno_info a7xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_128K,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_HW_APRIV,
-> > +             .features =3D ADRENO_FEAT_HAS_HW_APRIV,
-> >               .init =3D a6xx_gpu_init,
-> >               .zapfw =3D "a702_zap.mbn",
-> >               .a6xx =3D &(const struct a6xx_info) {
-> > @@ -1355,7 +1355,7 @@ static const struct adreno_info a7xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D SZ_2M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                         ADRENO_FEAT_HAS_HW_APRIV |
-> >                         ADRENO_FEAT_PREEMPTION,
-> >               .init =3D a6xx_gpu_init,
-> > @@ -1377,7 +1377,7 @@ static const struct adreno_info a7xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D 3 * SZ_1M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                         ADRENO_FEAT_HAS_HW_APRIV |
-> >                         ADRENO_FEAT_PREEMPTION,
-> >               .init =3D a6xx_gpu_init,
-> > @@ -1400,7 +1400,7 @@ static const struct adreno_info a7xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D 3 * SZ_1M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                         ADRENO_FEAT_HAS_HW_APRIV |
-> >                         ADRENO_FEAT_PREEMPTION,
-> >               .init =3D a6xx_gpu_init,
-> > @@ -1422,7 +1422,7 @@ static const struct adreno_info a7xx_gpus[] =3D {
-> >               },
-> >               .gmem =3D 3 * SZ_1M,
-> >               .inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> > -             .quirks =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> > +             .features =3D ADRENO_FEAT_HAS_CACHED_COHERENT |
-> >                         ADRENO_FEAT_HAS_HW_APRIV |
-> >                         ADRENO_FEAT_PREEMPTION,
-> >               .init =3D a6xx_gpu_init,
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/ms=
-m/adreno/a6xx_gpu.c
-> > index 2ebd3fac212576a1507e0b6afe2560cd0408dd89..654d0cff421f15901cd4bf3=
-3b41e70004634ec75 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > @@ -2478,7 +2478,7 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *=
-dev)
-> >       adreno_gpu->gmu_is_wrapper =3D of_device_is_compatible(node, "qco=
-m,adreno-gmu-wrapper");
-> >
-> >       adreno_gpu->base.hw_apriv =3D
-> > -             !!(config->info->quirks & ADRENO_FEAT_HAS_HW_APRIV);
-> > +             !!(config->info->features & ADRENO_FEAT_HAS_HW_APRIV);
-> >
-> >       /* gpu->info only gets assigned in adreno_gpu_init() */
-> >       is_a7xx =3D config->info->family =3D=3D ADRENO_7XX_GEN1 ||
-> > @@ -2495,7 +2495,7 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *=
-dev)
-> >       }
-> >
-> >       if ((enable_preemption =3D=3D 1) || (enable_preemption =3D=3D -1 =
-&&
-> > -         (config->info->quirks & ADRENO_FEAT_PREEMPTION)))
-> > +         (config->info->features & ADRENO_FEAT_PREEMPTION)))
-> >               ret =3D adreno_gpu_init(dev, pdev, adreno_gpu, &funcs_a7x=
-x, 4);
-> >       else if (is_a7xx)
-> >               ret =3D adreno_gpu_init(dev, pdev, adreno_gpu, &funcs_a7x=
-x, 1);
-> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/d=
-rm/msm/adreno/adreno_device.c
-> > index 09d4569f77528c2a20cabc814668c4c930dd07f1..11a228472fa0cef3b6e4e21=
-a366470fbbc3ea8df 100644
-> > --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> > +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> > @@ -207,7 +207,7 @@ static int adreno_bind(struct device *dev, struct d=
-evice *master, void *data)
-> >
-> >       priv->is_a2xx =3D info->family < ADRENO_3XX;
-> >       priv->has_cached_coherent =3D
-> > -             !!(info->quirks & ADRENO_FEAT_HAS_CACHED_COHERENT);
-> > +             !!(info->features & ADRENO_FEAT_HAS_CACHED_COHERENT);
-> >
-> >       gpu =3D info->init(drm);
-> >       if (IS_ERR(gpu)) {
-> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/=
-msm/adreno/adreno_gpu.h
-> > index 8782c25e8a393ec7d9dc23ad450908d039bd08c5..4702d4cfca3b58fb3cbb25c=
-b6805f1c19be2ebcb 100644
-> > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> > @@ -55,9 +55,9 @@ enum adreno_family {
-> >  #define ADRENO_QUIRK_FAULT_DETECT_MASK               BIT(1)
-> >  #define ADRENO_QUIRK_LMLOADKILL_DISABLE              BIT(2)
-> >
-> > -#define ADRENO_FEAT_HAS_HW_APRIV             BIT(3)
-> > -#define ADRENO_FEAT_HAS_CACHED_COHERENT              BIT(4)
-> > -#define ADRENO_FEAT_PREEMPTION                       BIT(5)
-> > +#define ADRENO_FEAT_HAS_HW_APRIV             BIT(0)
-> > +#define ADRENO_FEAT_HAS_CACHED_COHERENT              BIT(1)
-> > +#define ADRENO_FEAT_PREEMPTION                       BIT(2)
-> >
-> >  /* Helper for formating the chip_id in the way that userspace tools li=
-ke
-> >   * crashdec expect.
-> > @@ -98,6 +98,7 @@ struct adreno_info {
-> >       uint32_t revn;
-> >       const char *fw[ADRENO_FW_MAX];
-> >       uint32_t gmem;
-> > +     u64 features;
-> >       u64 quirks;
-> >       struct msm_gpu *(*init)(struct drm_device *dev);
-> >       const char *zapfw;
-> >
-> > --
-> > 2.34.1
-> >
+> > 50 usec is likely more than enough in practice.
 >
-> --
-> With best wishes
-> Dmitry
+> And would you use the same slack value regardless of the sleep
+> duration, or make it somehow depend on the sleep duration?
+
+timerslack_ns is 50 usec for all user-space, no matter the duration.
+
+This part was done right -- it doesn't depend on the sleep duration.
+
+Coalescing depends on the pattern of wakeups over time.
+That pattern doesn't necessarily depend on sleep duration,
+so it is a hard sell to tie them together.
+
+
+--=20
+Len Brown, Intel
 
