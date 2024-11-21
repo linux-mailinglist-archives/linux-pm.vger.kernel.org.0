@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-17888-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95A499D5250
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:05:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 381869D5263
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8585FB26DC0
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:05:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1E11F23890
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009EA1A7262;
-	Thu, 21 Nov 2024 18:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603711A0704;
+	Thu, 21 Nov 2024 18:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="miir7Kau"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gMv+IlXW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2053.outbound.protection.outlook.com [40.107.101.53])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A2B1C4A3F;
-	Thu, 21 Nov 2024 18:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616F319C555;
+	Thu, 21 Nov 2024 18:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732212288; cv=fail; b=WWUwQg0DgmALnqyYFkFibdKuRlSt5BqAzcdjSia4lDr2H8AgJybQJ9HoLkyZ8OvHhO2jIS65H5+BrFy0jxaq8Qs0uYftxZktVY0ALTTGeMmq9ML3F2BmRc2c1xee+vzpRb3LvuI11XY4o8Bfvn2rLE0cjDfGiWfIi70HKwPBKuk=
+	t=1732212954; cv=fail; b=UkwR5yzm7nIfmqZCAQ/c5/Q6u41/ShtGR5lhQBdownQNl6Tvx+8SmAhR7QLRIRu82TSmzJSFPuaIpaLzzzR8DbexzmenbkoAAjwxh6jdyJ2h6S0y53TehzklfmQ6FlsazQSkVN26bCUayXCwkGPtbQiNS1xpgflKJeCZkcJTrEU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732212288; c=relaxed/simple;
-	bh=OGlgqxkBAmtk0ygqQ1sAnK6UXSpXYIn7xL/b6Xj1Odw=;
+	s=arc-20240116; t=1732212954; c=relaxed/simple;
+	bh=fjd5wdXZCpnAD8urIP/inThZiHaKVGxVOOXQA1xIAoE=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=fGBMT0YfuZhWAZpKyx35MRhOnjIX/HwlGtSqgB5ta7yQdZ3GnsYa4Sj8ujJNyWxY1emz9/FQdhj7R6bEgxk58fhFgvgYZyVPHsgNpI4kw7wNdnh89FLaowxF/wH/G2o1y5hFdIumFQ7kB1f/fCeoW+M8gZi+UwYU6JfHwA1V4AY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=miir7Kau; arc=fail smtp.client-ip=40.107.101.53
+	 Content-Type:MIME-Version; b=fGm6Cis/i8GK3vAH16XP8gS3UryWepXZrcHfjkul6zzZgdpygaLChNMKPS3P+Zd3XV+FEfQayd4mD3rzB8XoKiyHtcLdGCL1ue6Wgw8B5Nu9AanuXq1F0F0uzQXlfNQYNjHDwRO16Ul+ZrPEBvNnAkIUOd7/HTTDGTIsJXTTwp8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gMv+IlXW; arc=fail smtp.client-ip=40.107.243.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OGkomdM8GAvBvgto1cimqt4fZinhtVk/bvcOvWjhEvXHNO32Ls9ghTfdAk8DqKmZDam5VcZOZ0UkMcjaAzKF4KHUmiJdrJps5m8F+Xfz7Zx8cKQ/qWQhtWv5Q5dr2EbaG4PGDPi7E3XGiT8V4C5hyDoOJs0Bm8kKssDhoXH4dKHzm1UMKCcyhjVW1E5LajEmTgIJRbQwI+0F/xBTIKgNuWwkvgLf+KGYhgO5s+jYlYw1FYsvTCQmk+UBSJXjtN7BgCrXgKox/GiTfI0mhw13JDaW98ahe4zugXmgSsaEBo3NfClIbrE1FTaFUzcPzlKEU7udE8rK80mlTLOIg8eKDQ==
+ b=DtHamftMeUmCpfh5WpGw/N2atiasBfaaIvMsUPNfu8mRQN3vntZprluok5jNie44HogsbKML9wAAqnAtaqwiIAoXPS9vtSE7pZQCuBIQ6rWdGX6EnLsNiTC9cnz6U7Lz+JPT5xhzhzvA57AVieLC+m0yHxVUxodKy0Kf3LrYSN7yKdDJHYVN6RuZ+m5ehFKSvQ1lfRtujYIB39YJNkLBIdIRdU7+8Iqbbrp/Hxm09LVolIOd8cAEZy4vkUaLzqGDoegKSWu8KBX72qC9bulkE1m/wyUZCD+SlwaPJfOezbw6motUr9pJSnNuCvUL5Ze394VYi4XM914ACyf5RWP3Xw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=88RAwZpZe/W9EU12OQq62gzPS88u+uLalnvhzv5Sf/k=;
- b=uo76B7kKiS1lXut11oOeBRkwo5OFN6bC1nE1Inv9W8EJOu7i9eMnw/h9+hTxuLOw9+y1HwcqfDFuqZBZZFr6Ll2txPXIwvH2XaEviewHOPErIVyANhe19i8ym3DH3hm4PB1saSZs0pCOb9NKyeOo26GqB+ozeItZwOvxQ5RqJ3MUl0Trb80ib/TgnPZqoyNCznpWAGE3Ao6sRYVoHW4LNdaaFBgeYehJblEdCoR2K6rVmZGSDt3fXhdw4264AE005Yk0diB17O3QpLK9odRML0gSEtF9t0VbRLJ2IcV7lJ6+WzAY1cOBWsbKcDMud8fQCWGR6olGXOOJ/bYlMBvmRw==
+ bh=skIMLLO+wdYX214c5oLWidupAJUMPiecSkro4RnrReM=;
+ b=bn/H8CvKDtT7KLzcc6S9veKAiEjj9VbGa7VYz7mwYfn8HaHiHCLftI3pPRJTrrkdrWX/KzKLS4aJyPXECsfcfGhrV1j0ISgiYMFCi8VwpzwUxrTkAVaSQRHTxxcEINW2CzfydZ3qO2M3Lm00X187AL/2tzb6z0cxUImHAG9Ns/FTqITtGwVJRbTLHhRsRcT9cYDHhUzZntUiztPhdqzxyuTQmwiqL4p/X/QANdU2Xa4j/ZWeio2VCbuTw8SxQI2iaJmlmJcTU3jo4nB5BFZmDDoc3D2xrsEFDBG8e0feYOkSZVr+QsPACnNkZa+mz8bMNvqOqvudM16nz1g/WAJWTw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=88RAwZpZe/W9EU12OQq62gzPS88u+uLalnvhzv5Sf/k=;
- b=miir7KauFOPTrNXa31e/QmUCn7GYs4/lzcXqoJPDB2Jgcm6vV0AhvrFyMvvI58+IQKsaJbY6YxYguQ06lG0Tg7zWCPn9It/MgQjWFZGAkeLLqxtx0JE126/Eu1cCadV093FNDG5x4vhxV1xYaMDaYJvZqpmeggTIDgyzLhV/lKM=
+ bh=skIMLLO+wdYX214c5oLWidupAJUMPiecSkro4RnrReM=;
+ b=gMv+IlXWUFUj6Mx2pzpH/sSM3iPjf5F7s43d4EQMZlxndr3tZlBMP1jloV5iuLvUloXMZpIrx4l+uFeizhZmncJjLN96GuxxdjACQDO+LD4AqIifu1SDRi9Ihi3BXS6NT5Ttn8mLID9M41OzzLx2XXIaB58GaeGy8tbevjM0b40=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN2PR12MB4205.namprd12.prod.outlook.com (2603:10b6:208:198::10) with
+ by MN6PR12MB8592.namprd12.prod.outlook.com (2603:10b6:208:478::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.16; Thu, 21 Nov
- 2024 18:04:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.15; Thu, 21 Nov
+ 2024 18:15:45 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8158.019; Thu, 21 Nov 2024
- 18:04:42 +0000
-Message-ID: <bdad36d9-aa0f-49dc-9780-ab72c7879a0f@amd.com>
-Date: Thu, 21 Nov 2024 12:04:40 -0600
+ 18:15:44 +0000
+Message-ID: <bee4cc61-ea6f-43fa-a752-6a69465e6517@amd.com>
+Date: Thu, 21 Nov 2024 12:15:42 -0600
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 11/13] acpi/x86: s2idle: add quirk table for modern standby
- delays
+Subject: Re: [RFC 05/13] acpi/x86: s2idle: add modern standby transition
+ function
 To: Antheas Kapenekakis <lkml@antheas.dev>, linux-pm@vger.kernel.org
 Cc: platform-driver-x86@vger.kernel.org, dri-devel@lists.freedesktop.org,
  Hans de Goede <hdegoede@redhat.com>, Kyle Gospodnetich <me@kylegospodneti.ch>
 References: <20241121172239.119590-1-lkml@antheas.dev>
- <20241121172239.119590-12-lkml@antheas.dev>
+ <20241121172239.119590-6-lkml@antheas.dev>
 Content-Language: en-US
 From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20241121172239.119590-12-lkml@antheas.dev>
+In-Reply-To: <20241121172239.119590-6-lkml@antheas.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0108.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c5::29) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN7PR04CA0200.namprd04.prod.outlook.com
+ (2603:10b6:806:126::25) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -81,240 +81,339 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN2PR12MB4205:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e91e3ec-11c5-425d-5a7c-08dd0a56f910
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN6PR12MB8592:EE_
+X-MS-Office365-Filtering-Correlation-Id: 763c7885-cdf5-48e3-059d-08dd0a5883a5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7053199007;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?L3hNcUVkdmlFV3hmcEJDV0MzVUVIVkUvbTVJWFVibG85d3RmU3VNcGtNZkJZ?=
- =?utf-8?B?aXJFTVpmakNIQXhXTXA1Vjlna2wvdmdkcDcvUFdEZjdXVWxMOUsxa1JXQmRM?=
- =?utf-8?B?RlY0NUJqMTRsRFd2MEloS0dINERUK21nSHJPaHlKZFBnT0lTTW9JdDNvZFJx?=
- =?utf-8?B?ZEhlZ1NjeE5jUHNMbXBjMVBmeHMxQ2wwUkR6dHBKUFp2YSs5QUdyZDB0SjdU?=
- =?utf-8?B?RW9JUGJSS1hZUTl4VkpabFNvYVoxbGU0VzNJTnNzZXlxTnpad3RDbUFOc2h1?=
- =?utf-8?B?NXVhV3l3VzJMSHlIcXI5dWVLK3dqbnIzNGM5OXM1SHVaTzE5M0FLLzVhZjQz?=
- =?utf-8?B?OHRuYSt0RC9PYUpUaDltVWRuc0ZNbzFpd1FXNzhuQzd0RTZ2aHA0QTUrOTBo?=
- =?utf-8?B?MTRGUnRkR2hvdWNvaUk5STg1b2lVekJnYzEyRW5zK2NHRTZ5NkhXdlBTSTBF?=
- =?utf-8?B?T2RGcldmMUdyWC96OFM1M2ZDVjhQU1lVY2MvSDlxa21QbE11UnlhU1FocGVR?=
- =?utf-8?B?NnhPZkhwMlFPZURtOExRSk1xYmcrR3BxaFRwK3pKM3ZPSlBKL2orOFdOdzVI?=
- =?utf-8?B?N0FaQzVtT0NPNEJGVklGcDVWRkJQMVFwVXZoT08zU3kvYlZVTGUyMmNqc2M2?=
- =?utf-8?B?ellrY1h1UmFDMXlwRXprb2dFZFN3ZTEzdjFablBRM3dSWGpjaTBkU3ljQ29Q?=
- =?utf-8?B?NW9rZlV0Y0V0TTBmaWpDN0lvczNUK1MrK2VLNEJVa3RadEpOWHZpekhrZ1V1?=
- =?utf-8?B?cCtCTnQyQ0JvVVdwK1lDRmlEbUp5V2dGcXJlMzQxelJiM2VXK3BGbFIxZEpZ?=
- =?utf-8?B?bzJZZVpqbkk3dGRPa0hMcjU2UEdwVmtnSlVYNlMxQnI0NlV5SDZzRnRGNWds?=
- =?utf-8?B?WG5GV2lTbXNXV0VsNEF3aEdaa3V3bUtBNE9wSmFlSVpkdHFJQjl3UFpoZTQv?=
- =?utf-8?B?Zk9uMHlSZ0F5enl2VC9DbEQyMzRIZXpYeDltUjBvMlFGR0V6d01CbkRwSThm?=
- =?utf-8?B?Z1Ywd2NHMjF0Yng3NE5sNFNpNkF3YlhkcDl4L280Q0pQZWxqbENpZXJsM0M3?=
- =?utf-8?B?aTNHY3dTMnJBTUtkejR4M0ZSb3cxNThjSElVN0sxNjhxK0JNbUJTamlsaitZ?=
- =?utf-8?B?QVI0ZnY1aHladW9URDdOaUo1REk3UFZlMm56TjRsNW82ZG91RkZwM01xMXVm?=
- =?utf-8?B?MUlucFpTWk1hNy9GbXNsdWN5aHY2UXh0Qmg1ODVHQVN0a0FTYVpENGhQYldy?=
- =?utf-8?B?N0dFRFkydUk0bWNvUko2L24xdzFKZk5lRXVSVlkwVWF5bG9TOHNjNWh6QTJj?=
- =?utf-8?B?OVpJOXVua2daam5lM3NzQXg5cnA0NUFoeW54eU1XekxXazBYTzJFQm1nNzcy?=
- =?utf-8?B?VnZ0RU1YcE5Gbk5GRnFGMDZSa1Rwek56NXZyaElXdDlWaE1ZRmc5M1ZGZkVI?=
- =?utf-8?B?OE1INUZlTnExZldnVWg0RUNTS09HRTZqTExKWEE0NXhZc0NUZWQ3cjF4ektI?=
- =?utf-8?B?RlhOSUhvV01zMHNFWVVoMzVQTjJOM0JaNlJrQSs2TWJDbndRWlFiVlBwclJO?=
- =?utf-8?B?cWl2Q2xBdTBhR3FLbEZlazhlcy90RE5TcC9JYVRtcitudjd0eDZvZ0xpQjUy?=
- =?utf-8?B?Vmsvek04d0xJRHQyZEo3cnFhMTJmNFRKaTZMVkNvVVd4aG1CdG1tSzI3WnY0?=
- =?utf-8?B?ZzkybXhiMUZIenVucjA1cDZEWHNVMXlRYklpcHBzR0hzT0dNQ0JYV1hnZnVX?=
- =?utf-8?Q?8XrBxhF+RNtrEj9fm4MrMpl0u5reaCKR6rbPjCt?=
+	=?utf-8?B?UW1rNCs2Z1BJeWIzQzdtN2JYVWJ1NnN1cXBwbEJ4Rzh0Wmx3dkgrVzFvSWFU?=
+ =?utf-8?B?dVhaclc0ZURTbWpwcGZkWnFNdGNSaXh6SEk3UGZhWjJRbU45NklLVW5iYlBS?=
+ =?utf-8?B?eWgxd0h6NThualloNTVaM3I2eFBlYUZVei8zSERZeWNDV08ydEJ4YUcyN2la?=
+ =?utf-8?B?c2haN0xPaUE0eHRuQi9mZkYrZm5uM2QvMUM0Y1NIQkwyY2RwMjVUeFVENmhN?=
+ =?utf-8?B?S2RtTEFHUVlTSGdhR29PNWdvOUJYNVIzUkNad29tWWtqTEVqMm1TVmVibHpy?=
+ =?utf-8?B?Z1lmaTVKMjlUYlBGUlk1ZG1ndmt1VkZvemUrVGlPMEZXeUZENEx3QVUxY2wz?=
+ =?utf-8?B?NGZYdUJjcWFwNVNBaHg1ZVRSRHJ4WkFGMmJUTVVYVEFEd0t0TDZBaTVZYnZ6?=
+ =?utf-8?B?K0kvU2JsSGNGUXZPU1RNNjllRUdYb3g1bmZMU1FoV0VBYkNwcHdKV2lmM2ZI?=
+ =?utf-8?B?RHBCS0FtSkFOb09ydnc4VVNxM1A4dzdPemVDNW9kdXBwZ010ZHRNVVF3QjJu?=
+ =?utf-8?B?T2xMLy9sbVlNeENuNko2SWNqREFRTWtZaXpESnU1d2c2MkNjUEVXZXNYSnR2?=
+ =?utf-8?B?M055Z09sZm5SY0pQaytOVmU0c1FGRkpCU0J6aktTUDRSZTBRbFFobENHR01B?=
+ =?utf-8?B?TWZxZTVqWWJpblVMd1JSdWNWUFl5YWRmcmk0VjRzMWlvT3ZzTlNZOXYxbVJD?=
+ =?utf-8?B?NXZpekR3dVZDUkxiU0Z1VVYzREhHS3lIVG0zZ0NuUWltYTVmZjlCMS80Qkpm?=
+ =?utf-8?B?bFdwSHJtTk5jRkhhUlBLNmFsL0JSTndETWNMVGxrd01sMFFqVTVsUjFqUGRG?=
+ =?utf-8?B?Vkx5SVZPSDRSMHgvT0JFRGNnbTIrcDBlUGdqRnZvbHRBZ082TEsyaFZWOTlo?=
+ =?utf-8?B?V2t5VXlqN2duajR1ODNXOWExWjJPL2ovbkFnYTJTVFhVcE5RUVlCQURIbHd6?=
+ =?utf-8?B?a3dvaS9oK043TkxWZDl1czFyZFA4VGZxRjhYTVRMbG9RaitKbTc3Q3JNdW94?=
+ =?utf-8?B?cFF5YmRtYjA4cXNLTlVaRHgyZUQ4YVNVSjZKQloyRHUzdVJNUnhsTlRra0lL?=
+ =?utf-8?B?SW9UNVRaUm5vZE5OcktJRDhVOXpTeWlVdWE1VkxUNkhOUE10SkJVQ25PUVBC?=
+ =?utf-8?B?cjRyc0c5YndwcW5CNWF3ZjFTeFZKOUhsR1RtR0pFM2RaOTN1ZHF0bGR5SU5p?=
+ =?utf-8?B?eFpsaVFTL1M1ckNWTHBnbHJQbFN5cHU5ZENHNmVyaTVrZnFUT1YyVEJvZHlk?=
+ =?utf-8?B?azduWUtHTCtOaGpXdmR0dXBvTkIwZ3NyUkt6TUo3RWxLZDUxZnZOQWhPdlYy?=
+ =?utf-8?B?aUZCdGpnQ2hDN3ZWdzR1VVJZT1ZUajBXWmY1Vm4ycFF0d2xmRUlGUm0zdmZZ?=
+ =?utf-8?B?dElKK0RJU1drSmgwZEp1eVMreFYvUmFFU0xpN3NKVnd6UlN0UC9vOUYxUkdV?=
+ =?utf-8?B?RXg5d1JUR0NhRTlWaHg1dUxDUlNoVlhOSWVJbUsrQlJyQko0UDBqeklTcFQ0?=
+ =?utf-8?B?RXlqeC93bW8rUUlpOGU3bXJZVjlLcW1sRXpWemQ5S3NicDRJSjJrZ1BTSmsw?=
+ =?utf-8?B?UU14SGJ1Y2M0cmY3dG9mcEJpMFJrL0VjTk5MRGk5S1ZsVUZja2wzR3p0OEFS?=
+ =?utf-8?B?RU5pbFBQZHN2OE9Nc2c5WnZpUlVlbC9lcUpQbHU0RitVOTN5UEphT2NDSUl6?=
+ =?utf-8?B?VFFUdFdVRHZUekhPcWhYVVNPUE10Z0xYVDEyYUt4V1MxYldJVnhyNzQ3dm4y?=
+ =?utf-8?Q?RPT6IV1eLhfy5keugpTz1xRnnw7nL5LLY4igh04?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VEpycXdHZlZhZTV6cWx4TlVTMzlVc0hQY1hIUlVxclJEeWd5WHE0VUk1ZzVz?=
- =?utf-8?B?OFlXNG5YMjlGNitmbzVtcFFtblNPdW1EWGZpbTVRY2p3UjJoYTZsTUZBNnFW?=
- =?utf-8?B?VCtYd3djdmkzZTN2cnZvY1JFMmZidGVQVGR6bm5pYzI4L0t4TmJuYTBQWERo?=
- =?utf-8?B?YlZmcjQrWENSQ1ZialFTbVgvMk5sRnhSYktLSVdOdXZxNEg0Q0hQd2k2cGZS?=
- =?utf-8?B?anVKbWQ2bDcwV0VOd3BPUnFwNmYraU80ZkFCREJhWUo2R1dHUWpPeDRac25O?=
- =?utf-8?B?V2VPWmcrb2g2T1Y1eTRjci9BQllveFloNGFURVNndmswWFV1WFpvMmxEUDgv?=
- =?utf-8?B?TGR4SWpYZnVCQmVIZ0Rwbkt4SktzNm9yM0FtZHBveURQUS9qWWNrT0NYYU1R?=
- =?utf-8?B?VVlnYmZFU1NJSXBpM3ltUUZDWkVIUmUweGNGTGRlZmZ2MnYzNGhyRjY1VS9s?=
- =?utf-8?B?NmltUTRpWTFXNkdxWHM4c3NhMFl0QlcwRjJjRlowblFQRFQ2SHNlbVBaKzlq?=
- =?utf-8?B?WmIzamJTTm1XZG9CZzk3VFNOZXoxbnBFYkhIU0hwaTZrN29QazFiRDNwTng5?=
- =?utf-8?B?MXNlTDlHeUo4c1l2RVlGY1dpOUx4L3d0ZmNPRmtTcitUN2pnbUFaM2Rucmh6?=
- =?utf-8?B?WGd0Y2JUOXIwOGpOR2tnbWFrdXNWa255Wmp4VVE1eGtZcmJyQWx4M2pBK2Iy?=
- =?utf-8?B?RHg5cnF1YzhqUkY1Z2VwYk5aOUJReGR0c2E4UHNwaXY5RTlPZFczU0ZNcTU4?=
- =?utf-8?B?cCswMUtHVG9NU215K0t2aWZZaHpxQ0NNZEZTN040NERhTGV6R3kzK2JURGRZ?=
- =?utf-8?B?Q2d1Ym5HNVJUaWVMUHhHMVFqUGd4ZC9pT0xkMzVTUTJJRDZhU3FJTUxvZm9x?=
- =?utf-8?B?UUtXNW5uOHluU3A4QnZuMWpuc2NvbXZ5b2J6eDhnUEprUjVnOUZqaUtjMDdy?=
- =?utf-8?B?a3crQzdyRWVTUGVyeE9adE1XZkdLV0hhME80SW9hUW1PV0FQYVVZMmI5czNL?=
- =?utf-8?B?eXBoYk10N0ZORUd4eFNuYWxlNVpEek16SjQxYjFxdDFrbHB6ZjlEUTVYOHdS?=
- =?utf-8?B?OENCTFo4TVNDWmRVRmZrbUJpdTZZa3k1d3R3aFVYNHRpWE5GTUVzSVNka2Fu?=
- =?utf-8?B?YlRDeHJLZlVMMlRTeGpJRWVhc0xRWHVLc2FBV1hxeFpwcWxiV0FLVWhhM1lv?=
- =?utf-8?B?Szg2U2lxOUQ5VCs1RmlSaXZWMWpmSUtxcWIrcnNFRUtPZ3hGVGdCUjNZdE0w?=
- =?utf-8?B?emxDckdZajRaSzhlNTk2TXpiMmlQU0IxV0V6UmJwQjEwd0V2cnZSM2xwUDdQ?=
- =?utf-8?B?dWlPRE1BcE5PdytiVnNXaEFzWjYzQ1p5QkMvOVdjSWxTU3Mzcms5QjZYOGM5?=
- =?utf-8?B?NENzREZSanFhTDFWa09kVjlIMURQRnZaRlhPZ0RiSk1hUDZVZ1hvTEl4Ri9j?=
- =?utf-8?B?eVpjUEpyMW9BUm1vaWlkS0U5U3U0MzRvc2ZoMkNsZEJrUm5IRjAzNzNvWEFH?=
- =?utf-8?B?NXZPSXNYTnBaNlR3aGp6anFmTGFMaStmbURPODVEdWJQTC9qc0FVbS9RV1d4?=
- =?utf-8?B?UXYraFFZTmpXVVpQSUY5cU5WazkyeVA4VnI4WDdDZmMyenpDa09BNk1iS1Y2?=
- =?utf-8?B?S3VYdXZ3ZHVzODVLckQyQTdKcy83Y2JtQXBLZC9SYmZ1QWsvb2E1TDA3SS9V?=
- =?utf-8?B?cENrR2swaldtd0lsY2E2OGVXeGtMaFRCQVVOM08za1ozRUJucHRNaEU5c09v?=
- =?utf-8?B?ZUN0S3hyQXp0WUpRaFg1Mkh6M3VHTWt0SzJCdVBiMXpNRWJwa2FFWEZ3Vjg4?=
- =?utf-8?B?cXB5OTV1amduS2tBRFpGa0lna3lFRGJwcmptUDhNUXovaXU4Sjg4QmsyY0FX?=
- =?utf-8?B?KzZSQ0tpaVNkUDJYQm54VDFuVzJZK0h3VTVJazR4aGZEL0hnMHlvQlA0My9j?=
- =?utf-8?B?UmJjRWpyNnZCVEhqci9vWC9VRHRoZFNXQ3FZdTFLZ2dOTFJpY256QkRoaStz?=
- =?utf-8?B?bzJ1Qlo1Nmk3Q2JPRHNaeEZVSU1ZZVF3WUhOTk9raWJLUjIwN1VxVVJIK1V5?=
- =?utf-8?B?S1FjYUFub010M3Y2NllwbVBUVThhQ2tKM3lUdzFkbUNFam9OOHFVNlRlcGw2?=
- =?utf-8?Q?n2A/jMbHAa29BTBj37n1iCAGa?=
+	=?utf-8?B?OEdJVnkxaTBVNnhrcyttMlV5a2RRV0FsU0MxYzlydlN3R1ROUEx1c0JsZnMy?=
+ =?utf-8?B?UGYwQXhtemQ1Yy9DdzgvN2FBUlpHdlZaMC9oOU15a2VyTFlnVEdNMldjQi9D?=
+ =?utf-8?B?WTR1aTVpTVdjRDNxWU0zQ3R4S0hDWlZ2bVJUd2Q3RC9zREs5VHhEekRneHpa?=
+ =?utf-8?B?eWFzajcxcFZRaDg2eUt5L3JWbFBEMjJSQmtHMTdiT0NBZ1IvWkIxbE5wZXZ2?=
+ =?utf-8?B?dGNUQ0xHRlhVYTFIUmV0VXhLUW5Yb1pGWFBlOURFQm83M2huOWV3c1BPVFdG?=
+ =?utf-8?B?REdqQ0pjblQ3eGR6VkhGRzRJQTJUcThKSTdjNGdBY0ovQzB0UnJzZjZHSnRX?=
+ =?utf-8?B?MDZmOTdXKzVkWHpCMEhmb25UY2NyU21iMCtrZ2lTRWZEYktUdEVrM1dXVGpn?=
+ =?utf-8?B?UWxMdWVKY3VtUmN1bEhHTmdndWhaZkZQUmV3aHd1Z2ZsMnIrZm1Kb0J4LzNS?=
+ =?utf-8?B?di9Ia0JxN05JWkU1em1pM3hmOEJtaTR5dkt0cVNoN0lPbVNRLytHWVBGK2xz?=
+ =?utf-8?B?cXltS1FyOE12ZlZ2T09kSUJ3NlB5dUY3dURHOWpMalVNLzE3Y3Nhc01QRVU2?=
+ =?utf-8?B?d2xqVlBhemtMSG9sbzUwZUhUaXFSbUpPSVRaazRaU21oenlTa3M5cGF6WG9i?=
+ =?utf-8?B?K0dIYW81Z3BKMnMwQjA3OTN4M2xrdHF6aFBoTGMyeW5GTFNSc050VUJwSVpH?=
+ =?utf-8?B?VlNMY0tMTUNGQktER2QyWEFGODVMRGhRSW9WTktSY0huN2xuMThDdFlnYS9V?=
+ =?utf-8?B?anNYSWJUbnh3bEZKbCttQzR2VUlYUk9GY3BPMmE4WUh3U1pnaGFnNXRvblBt?=
+ =?utf-8?B?VlRoTGxlcHZGTjNtNUo0ak5jZTJHOHFBZ2MwdklxQVVSUS9PMTNuMWdscTZp?=
+ =?utf-8?B?NXo5VGVKTllqRk9tbUhSa2UzY21HVEQ0VzNDS3dma25xVDVtSElwNnk5YXFL?=
+ =?utf-8?B?UkhyWEQyRlJGR0paQ0kyV1AxRUZCNFl6a1U4K0dmemMvQzd2TWVNZUxsK0F1?=
+ =?utf-8?B?RGM5eHJ2ZlpKME5tV1dmWGRlVGpEOWdKeGFkTTV6TGhLNHJacWlrZTdCeVJ3?=
+ =?utf-8?B?MnVLdlBIb21zNHFmZFF0emMyTnFZRGZDT2w4SEkzTVh5ODFHT2srSmlLWHAz?=
+ =?utf-8?B?dTQ5ZHZicUYzY085aFZmdXYwTmlreUdOVkpMRGZYZmZCS2NBNXZZNDV1T2RQ?=
+ =?utf-8?B?VFZKbnlmWkVKd2JGR2JCMnlxczJTdjFOYVNLb3lHQmxlcUpUWnRPT3U3Smpa?=
+ =?utf-8?B?NXhmcVg4SDVxbEhNaVJFL3NnOHU0eDl1UWMyek5VWS8xZzVYbjlrYXNqdjlu?=
+ =?utf-8?B?WVd4MDlUL2w5Q09WcUxOSDZnUEZqcklxSWZzNnBWaUxlMk9RcHNiUVJ3YS96?=
+ =?utf-8?B?Q0R0VmRpVHRobXRYNlhmcHpjRVNKVFRDOXkybkx2Skdma3RsOHJEV2xLVW5R?=
+ =?utf-8?B?TGJoRjV5bkM5M1ZUYzFMTDFtTlZxOGNkN21ZcGZQdXk2TXgzRlVqZW1tVEE0?=
+ =?utf-8?B?VTFaWHh5Z1gvK3dLSlB6OHFMdlNQRm5wS0N1clA4MFhRT0o3eGxRV2M4a2sz?=
+ =?utf-8?B?Q2tQYkxvS3VFZU5uaGtvTmI2WEs3alR3QlZTK3FEaFhhYlBkM3ArZ2czYUxw?=
+ =?utf-8?B?SHdDM2dySnA3SkpYMEFwRnBVeTlETTc3ZWJiVlAySHBRcmJRNEhZM1RZRHg1?=
+ =?utf-8?B?K2FuTzZmaW94ejJ5TkJIY3R6VmF0Yy92aXNpQXFZK2tBcWlKTCtaYlVySG0x?=
+ =?utf-8?B?SFFHeVc2UVRweTVmZXI0ODhKVXRKWXh4Zy8vTzcyQm9ISFgyMUdjVmpYNUo5?=
+ =?utf-8?B?QjJ1ZFVCczEyRzZtTy85eVBLZkFrcis5UzQrSkhUWjBhTHlqb3REWTc1cVZY?=
+ =?utf-8?B?RitpYTIrdVB6RTJmemd1SjgweWYrN3FaMjVVd1BoRzlzSFJqUXVGa09mV1JP?=
+ =?utf-8?B?WmxhL2FCL3FoS3luYllOcWU2Y1VoMys0T3lRZlhvcWlKUVNQZU4yZzZKWWlZ?=
+ =?utf-8?B?NVdEWVpDWXJBN3lPenh1aUJsdmxnMkNnNHlTbWhWQnUrTExzajVnWVQvMHp5?=
+ =?utf-8?B?a0xKeE9UUWJuRHNiaXk1b2hNQUpMdEluZ3Y2bFAwQ21zeFpyZjRZU2dZYWVj?=
+ =?utf-8?Q?9zT2OdbsVVyQCQpnbd+BI86Pn?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e91e3ec-11c5-425d-5a7c-08dd0a56f910
+X-MS-Exchange-CrossTenant-Network-Message-Id: 763c7885-cdf5-48e3-059d-08dd0a5883a5
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2024 18:04:42.0230
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2024 18:15:44.0006
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CdlKAFXmRXCA1JezOUho04uX4Ykb7rXPKpBLMSKvREzQ6eQXsMhJNXp29ju+UqCR9shcXyd2Vj2PVvWAOceWIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4205
+X-MS-Exchange-CrossTenant-UserPrincipalName: UaZjHE6l4N7Fs/1rSN2GKSAT6fqGHVI/PSBUG6/U1sGoj7JCbEfVd3CqhC5UcR6OBq58ZqPzqI/rj1NkVjswCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8592
 
 On 11/21/2024 11:22, Antheas Kapenekakis wrote:
-> Unfortunately, some modern standby systems, including the ROG Ally, rely
-> on a delay between modern standby transitions. Add a quirk table for
-> introducing delays between modern standby transitions, and quirk the
-> ROG Ally on "Display Off", which needs a bit of time to turn off its
-> controllers prior to suspending.
-> 
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> Add a new function to transition modern standby states and call it
+> as part of the suspend sequence to make sure it begins under the
+> Modern Standby "Sleep" state.
+ > > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->   drivers/acpi/x86/s2idle.c | 56 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 56 insertions(+)
+>   include/linux/suspend.h |  11 ++++
+>   kernel/power/power.h    |   1 +
+>   kernel/power/suspend.c  | 127 ++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 139 insertions(+)
 > 
-> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-> index d389c57d2963..504e6575d7ad 100644
-> --- a/drivers/acpi/x86/s2idle.c
-> +++ b/drivers/acpi/x86/s2idle.c
-> @@ -18,6 +18,7 @@
->   #include <linux/acpi.h>
->   #include <linux/device.h>
->   #include <linux/dmi.h>
-> +#include <linux/delay.h>
->   #include <linux/suspend.h>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 01ee64321cda..b8fe781d8026 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -40,6 +40,15 @@ typedef int __bitwise suspend_state_t;
+>   #define PM_SUSPEND_MIN		PM_SUSPEND_TO_IDLE
+>   #define PM_SUSPEND_MAX		((__force suspend_state_t) 4)
 >   
->   #include "../sleep.h"
-> @@ -91,11 +92,50 @@ struct lpi_device_constraint_amd {
->   	int min_dstate;
+> +typedef int __bitwise standby_state_t;
+
+As this is series is working on emulating semantics of "Modern Standby" 
+on Windows, why not name it all "modern_standby"?
+
+IE
+
+modern_standby_state_t
+PM_MODERN_STANDBY_ACTIVE
+PM_MODERN_STANDBY_SCREEN_OFF
+
+> +
+> +#define PM_STANDBY_ACTIVE		((__force standby_state_t) 0)
+> +#define PM_STANDBY_SCREEN_OFF	((__force standby_state_t) 1)
+> +#define PM_STANDBY_SLEEP		((__force standby_state_t) 2)
+> +#define PM_STANDBY_RESUME		((__force standby_state_t) 3)
+> +#define PM_STANDBY_MIN			PM_STANDBY_ACTIVE
+> +#define PM_STANDBY_MAX			((__force standby_state_t) 4)
+> +
+>   /**
+>    * struct platform_suspend_ops - Callbacks for managing platform dependent
+>    *	system sleep states.
+> @@ -281,6 +290,8 @@ extern void arch_suspend_enable_irqs(void);
+>   
+>   extern int pm_suspend(suspend_state_t state);
+>   extern bool sync_on_suspend_enabled;
+> +extern int pm_standby_transition(standby_state_t state);
+> +extern int pm_standby_state(void);
+>   #else /* !CONFIG_SUSPEND */
+>   #define suspend_valid_only_mem	NULL
+>   
+> diff --git a/kernel/power/power.h b/kernel/power/power.h
+> index de0e6b1077f2..4ee067cd0d4d 100644
+> --- a/kernel/power/power.h
+> +++ b/kernel/power/power.h
+> @@ -207,6 +207,7 @@ extern void swsusp_show_speed(ktime_t, ktime_t, unsigned int, char *);
+>   extern const char * const pm_labels[];
+>   extern const char *pm_states[];
+>   extern const char *mem_sleep_states[];
+> +extern const char *standby_states[];
+>   
+>   extern int suspend_devices_and_enter(suspend_state_t state);
+>   #else /* !CONFIG_SUSPEND */
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index a42e8514ee7a..1865db71a0c2 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -45,12 +45,21 @@ static const char * const mem_sleep_labels[] = {
+>   	[PM_SUSPEND_MEM] = "deep",
 >   };
->   
-> +struct s2idle_delay_quirks {
-> +	int delay_display_off;
-> +	int delay_sleep_entry;
-> +	int delay_sleep_exit;
-> +	int delay_display_on;
+>   const char *mem_sleep_states[PM_SUSPEND_MAX];
+> +static const char * const standby_labels[] = {
+> +	[PM_STANDBY_ACTIVE] = "active",
+> +	[PM_STANDBY_SCREEN_OFF] = "screen_off",
+> +	[PM_STANDBY_SLEEP] = "sleep",
+> +	[PM_STANDBY_RESUME] = "resume",
 > +};
-
-Historically these "kinds" of quirks are kept in drivers/acpi/x86/utils.c.
-
-Could it be moved there?  Or perhaps stored in the ASUS drivers and 
-callbacks?
-
-This feels cleaner if you used "struct acpi_s2idle_dev_ops" and 
-callbacks.  More below.
-
+> +const char *standby_states[PM_STANDBY_MAX];
+>   
+>   suspend_state_t mem_sleep_current = PM_SUSPEND_TO_IDLE;
+>   suspend_state_t mem_sleep_default = PM_SUSPEND_MAX;
+>   suspend_state_t pm_suspend_target_state;
+>   EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+>   
+> +standby_state_t standby_current = PM_STANDBY_ACTIVE;
 > +
-> +/*
-> + * The ROG Ally series disconnects its controllers on Display Off and performs
-> + * a fancy shutdown sequence, which requires around half a second to complete.
-> + * If the power is cut earlier by entering it into D3, the original Ally unit
-> + * might not disconnect its XInput MCU, causing excess battery drain, and the
-> + * Ally X will make the controller restart post-suspend. In addition, the EC
-> + * of the device rarely (1/20 attempts) may get stuck asserting PROCHOT after
-> + * suspend (for various reasons), so split the delay between Display Off and
-> + * Sleep Entry.
+>   unsigned int pm_suspend_global_flags;
+>   EXPORT_SYMBOL_GPL(pm_suspend_global_flags);
+>   
+> @@ -188,6 +197,16 @@ void __init pm_states_init(void)
+>   	 * initialize mem_sleep_states[] accordingly here.
+>   	 */
+>   	mem_sleep_states[PM_SUSPEND_TO_IDLE] = mem_sleep_labels[PM_SUSPEND_TO_IDLE];
+> +	/* All systems support the "active" state. */
+> +	standby_states[PM_STANDBY_ACTIVE] = standby_labels[PM_STANDBY_ACTIVE];
+> +	/*
+> +	 * Not all systems support these states, where they will have increased
+> +	 * power consumption. If deemed necessary, they should be gated to not
+> +	 * mislead userspace.
+> +	 */
+> +	standby_states[PM_STANDBY_SCREEN_OFF] = standby_labels[PM_STANDBY_SCREEN_OFF];
+> +	standby_states[PM_STANDBY_SLEEP] = standby_labels[PM_STANDBY_SLEEP];
+> +	standby_states[PM_STANDBY_RESUME] = standby_labels[PM_STANDBY_RESUME];
+
+Shouldn't these states only be enabled when LPS0 support was found?  IE 
+shouldn't they be enabled by acpi_register_lps0_dev() and disabled by 
+acpi_unregister_lps0_dev()
+
+>   }
+>   
+>   static int __init mem_sleep_default_setup(char *str)
+> @@ -354,6 +373,108 @@ static bool platform_suspend_again(suspend_state_t state)
+>   		suspend_ops->suspend_again() : false;
+>   }
+>   
+> +static int platform_standby_transition_internal(standby_state_t state)
+> +{
+> +	int error;
+> +
+> +	if (state == standby_current)
+> +		return 0;
+> +	if (state > PM_STANDBY_MAX)
+> +		return -EINVAL;
+> +
+> +	pm_pr_dbg("Transitioning from standby state %s to %s\n",
+> +		  standby_states[standby_current], standby_states[state]);
+> +
+> +	/* Resume can only be entered if we are on the sleep state. */
+> +	if (state == PM_STANDBY_RESUME) {
+> +		if (standby_current != PM_STANDBY_SLEEP)
+> +			return -EINVAL;
+> +		standby_current = PM_STANDBY_RESUME;
+> +		return platform_standby_turn_on_display();
+> +	}
+> +
+> +	/*
+> +	 * The system should not be able to re-enter Sleep from resume as it
+> +	 * is undefined behavior. As part of setting the state to "Resume",
+> +	 * were promised a transition to "Screen Off" or "Active".
+> +	 */
+> +	if (standby_current == PM_STANDBY_RESUME && state == PM_STANDBY_SLEEP)
+> +		return -EINVAL;
+> +
+> +	/* Resume is the Sleep state logic-wise. */
+> +	if (standby_current == PM_STANDBY_RESUME)
+> +		standby_current = PM_STANDBY_SLEEP;
+> +
+> +	if (standby_current < state) {
+> +		for (; standby_current < state; standby_current++) {
+> +			switch (standby_current + 1) {
+> +			case PM_STANDBY_SCREEN_OFF:
+> +				error = platform_standby_display_off();
+> +				break;
+> +			case PM_STANDBY_SLEEP:
+> +				error = platform_standby_sleep_entry();
+> +				break;
+> +			}
+> +
+> +			if (error)
+> +				return error;
+> +		}
+> +	} else if (standby_current > state) {
+> +		for (; standby_current > state; standby_current--) {
+> +			switch (standby_current) {
+> +			case PM_STANDBY_SLEEP:
+> +				error = platform_standby_sleep_exit();
+> +				break;
+> +			case PM_STANDBY_SCREEN_OFF:
+> +				error = platform_standby_display_on();
+> +				break;
+> +			}
+> +
+> +			if (error)
+> +				return error;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * pm_standby_transition - Transition between Modern Standby states
+> + *
+> + * Fires the appropriate firmware notifications to transition to the requested
+> + * state. Returns an error if the transition fails. The function does not
+> + * rollback. It is up to userspace to handle the error and re-transition when
+> + * appropriate.
 > + */
-> +static const struct s2idle_delay_quirks rog_ally_quirks = {
-> +	.delay_display_off = 350,
-> +	.delay_sleep_entry = 150,
-> +};
-
-Is this delay still needed with Ally MCU 319 that has the fixes from ASUS?
-
-I'm suspecting not, which means this quirk should be made more narrow IMO.
-
-In the various ASUS drivers you can lookup the MCU firmware version. 
-Those drivers can do acpi_register_lps0_dev() when the older firmware is 
-present and use the callbacks.  If the newer firmware is there less code 
-to worry about.
-
-This also would mean less static quirk tables in the kernel tree.
-
+> +int pm_standby_transition(standby_state_t state)
+> +{
+> +	unsigned int sleep_flags;
+> +	int error;
 > +
-> +static const struct dmi_system_id s2idle_delay_quirks[] = {
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_BOARD_NAME, "RC71L"),
-> +		},
-> +		.driver_data = (void *)&rog_ally_quirks
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_BOARD_NAME, "RC72L"),
-> +		},
-> +		.driver_data = (void *)&rog_ally_quirks
-> +	},
-> +	{}
-> +};
+> +	sleep_flags = lock_system_sleep();
+> +	error = platform_standby_transition_internal(state);
+> +	unlock_system_sleep(sleep_flags);
 > +
->   static LIST_HEAD(lps0_s2idle_devops_head);
->   
->   static struct lpi_constraints *lpi_constraints_table;
->   static int lpi_constraints_table_size;
->   static int rev_id;
-> +struct s2idle_delay_quirks *delay_quirks;
->   
->   #define for_each_lpi_constraint(entry)						\
->   	for (int i = 0;								\
-> @@ -566,6 +606,9 @@ static int acpi_s2idle_display_off(void)
->   		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_OFF,
->   				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
->   
-> +	if (delay_quirks && delay_quirks->delay_display_off)
-> +		msleep(delay_quirks->delay_display_off);
+> +	return error;
+> +}
+> +EXPORT_SYMBOL_GPL(pm_standby_transition);
 > +
->   	acpi_scan_lock_release();
->   
->   	return 0;
-> @@ -587,6 +630,9 @@ static int acpi_s2idle_sleep_entry(void)
->   		acpi_sleep_run_lps0_dsm(ACPI_LPS0_SLEEP_ENTRY,
->   				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
->   
-> +	if (delay_quirks && delay_quirks->delay_sleep_entry)
-> +		msleep(delay_quirks->delay_sleep_entry);
+> +/**
+> + * pm_standby_state - Returns the current standby state
+> + */
+> +int pm_standby_state(void)
+> +{
+> +	unsigned int sleep_flags;
+> +	int state;
 > +
->   	acpi_scan_lock_release();
->   
->   	return 0;
-> @@ -627,6 +673,9 @@ static int acpi_s2idle_sleep_exit(void)
->   	acpi_scan_lock_acquire();
->   
->   	/* Modern Standby Sleep Exit */
-> +	if (delay_quirks && delay_quirks->delay_sleep_exit)
-> +		msleep(delay_quirks->delay_sleep_exit);
+> +	sleep_flags = lock_system_sleep();
+> +	state = standby_current;
+> +	unlock_system_sleep(sleep_flags);
 > +
->   	if (lps0_dsm_func_mask_microsoft > 0)
->   		acpi_sleep_run_lps0_dsm(ACPI_LPS0_SLEEP_EXIT,
->   				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
-> @@ -648,6 +697,9 @@ static int acpi_s2idle_display_on(void)
->   	acpi_scan_lock_acquire();
->   
->   	/* Display on */
-> +	if (delay_quirks && delay_quirks->delay_display_on)
-> +		msleep(delay_quirks->delay_display_on);
+> +	return state;
+> +}
+> +EXPORT_SYMBOL_GPL(pm_standby_state);
 > +
->   	if (lps0_dsm_func_mask_microsoft > 0)
->   		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_ON,
->   				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
-> @@ -760,6 +812,10 @@ int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+>   #ifdef CONFIG_PM_DEBUG
+>   static unsigned int pm_test_delay = 5;
+>   module_param(pm_test_delay, uint, 0644);
+> @@ -586,6 +707,7 @@ static void suspend_finish(void)
+>   static int enter_state(suspend_state_t state)
+>   {
+>   	int error;
+> +	standby_state_t standby_prior;
 >   
->   	sleep_flags = lock_system_sleep();
->   	list_add(&arg->list_node, &lps0_s2idle_devops_head);
-> +	const struct dmi_system_id *s2idle_sysid = dmi_first_match(
-> +		s2idle_delay_quirks
-> +	);
-> +	delay_quirks = s2idle_sysid ? s2idle_sysid->driver_data : NULL;
->   	unlock_system_sleep(sleep_flags);
+>   	trace_suspend_resume(TPS("suspend_enter"), state, true);
+>   	if (state == PM_SUSPEND_TO_IDLE) {
+> @@ -601,6 +723,9 @@ static int enter_state(suspend_state_t state)
+>   	if (!mutex_trylock(&system_transition_mutex))
+>   		return -EBUSY;
 >   
->   	return 0;
+> +	standby_prior = standby_current;
+> +	platform_standby_transition_internal(PM_STANDBY_SLEEP);
+> +
+>   	if (state == PM_SUSPEND_TO_IDLE)
+>   		s2idle_begin();
+>   
+> @@ -630,6 +755,8 @@ static int enter_state(suspend_state_t state)
+>   	pm_pr_dbg("Finishing wakeup.\n");
+>   	suspend_finish();
+>    Unlock:
+> +	platform_standby_transition_internal(standby_prior);
+> +
+>   	mutex_unlock(&system_transition_mutex);
+>   	return error;
+>   }
 
 
