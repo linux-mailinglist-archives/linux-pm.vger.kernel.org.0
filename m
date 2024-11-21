@@ -1,212 +1,137 @@
-Return-Path: <linux-pm+bounces-17892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 177EA9D52A3
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:39:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BE059D52B2
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:44:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69987B21C0F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:39:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADE1E1F22A74
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694781AA1DB;
-	Thu, 21 Nov 2024 18:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCB7C1BDA8A;
+	Thu, 21 Nov 2024 18:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f+jmQgkQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gvCuZSEM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90145139597
-	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 18:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDFF1A76DA
+	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 18:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732214380; cv=none; b=nHttgPUuEgkq5srVr2QEVF07oqjXvBY+nLEeBFKhQK2u9D6E8mCZG61bY26cKYEga2ckwxmysIRQCdPrNYK0oLdhw+kTT5YqF1Mho+6P20ncWHbpNL2jUnt4qcCacXKnT9FxVQwVCRDHX5cuT1z/sQcWVXH1NBugqQbQXtAKMoQ=
+	t=1732214666; cv=none; b=UAgC+pP4/rxnvX93i0dVmy0UFQRN1z5ioLXHOCjDUrTifuXJBXWULHS3kf8wvY7dE+jHGD8sjBvXAnq2cZbZGN4Q8jh0UqxRJvPKrPWAREAzC6LrQvSLiKyFzScDKE5PGGDsbxrbB1VtJ7KlX9HHQkKWQRgLVf+sU7dJqM6LVpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732214380; c=relaxed/simple;
-	bh=G8XOSFc7W5LX9nk1d6dB9lDKaf8fszfFMsNH4VlGnZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aAI6sycASedCoSeNi55sThT2yIescG1zEI+HqzOrp2WpvnF1LADgBbEKw5G5rO8Spi2+3K8s1m4xGd7/nk6CGQZGTKi222GxCrFoy2SIevTA5W/np2kDPi6ClA4HZ9PVxG9xTqu2tQfwBXHGpHYaHsGSn8q7FCYwI5mmseeIkM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f+jmQgkQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732214377;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R8LxgwuAPowXuHoG85RopJJmji4cVIb+ptva+m06qdM=;
-	b=f+jmQgkQFFHHngHhuoXF4ZE521rj2rNJoiOUNOPJC2z8UGhZdTc82itSUBEFgCHjJlE3Sr
-	+xD/aoMQA5kpp14eA3W8HHkfHjAH0K4IfFMH2Yygeh5+puQdrh/46x7C9FubR2qyI80kz6
-	seG52ma6tYsLe9DpA2Z0bd28C936tNo=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-648-Z4pq2L6aM4Wn6pjxioRuUw-1; Thu, 21 Nov 2024 13:39:36 -0500
-X-MC-Unique: Z4pq2L6aM4Wn6pjxioRuUw-1
-X-Mimecast-MFC-AGG-ID: Z4pq2L6aM4Wn6pjxioRuUw
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-539e03bfd4aso787185e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 10:39:35 -0800 (PST)
+	s=arc-20240116; t=1732214666; c=relaxed/simple;
+	bh=0iXEZP10lMiFvqi+1JJCxNY441IVtcYkv7fsyr5IQSU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tI7rEZKpOGDqpY+9EO2AGS+Q/r12vKrz02zu+xPpK3wEOZBFDY70fofIJ38qX83Ob+VWNY9H/wy50H1IomohqML2pORHEl5R9oGpxpVV3EOd31eiD7FE8a91lkulFd19VWLzIomZvcSijTAPEBRgqo/yN2FBMnyaQxhD7Iucm00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gvCuZSEM; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-539d9fffea1so1156271e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 10:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732214663; x=1732819463; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TZyh5R6Jjbt7oN7KVsZQw9ZFXBRvyZ4Sk/f6o54iZsw=;
+        b=gvCuZSEMYZ9ionoELpCChVruD1ekPOwiLm8SwmoA3U7tXZc4H3T5isIRMvkDp5zQjx
+         pAXsW70fq+OW+b4glBXIRreI7bM4lf2tWv8a3GoFMgUaS4RxH2aFC3KIVXRWGPMS/Mmc
+         nQcWyf+4YfckdVN9P1t6KdCp0msGAmiywdEKT1psucrxPDN706R4DGGR7l8mdvJ2hiYJ
+         6a5wsjOrP+Qyn83+InSPWfdeDNd1WovU0okKGJ4dvCdnpEb4O9w3jsRrEDyvVElPzYAZ
+         hyG4rK2GKPACZnRZdMs/UgYKkLXL2eiYzn7ri3NWs9VW1rWnQhjuHK07wlBAydHLewCd
+         C0Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732214374; x=1732819174;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1732214663; x=1732819463;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8LxgwuAPowXuHoG85RopJJmji4cVIb+ptva+m06qdM=;
-        b=KYUGGvkl90Cb0twz2B5mlHY9p+8TOEQtYPqpnzWcCh+MM5tOfU9O9meuCqrkXsOx8D
-         yNVqqilpXZ17tbetE2qYXWLZSdfuxpHtAEwP3VKWfucWNAHXvgOTt5kXMGz05rl4AiIt
-         yVRuf/CZnlpsn/hNGSj+GT1afdIiXtGJIb5Ht5KmtTrqFVS9EDFvIs1wBv3a1I8/sy9e
-         dxGfI9O12nGRIa7UFakVmYnYnj2+/JMtO6NxEon7if9kus12XSE+xPdVJM0YHNukW7yo
-         eSUc8B8KnD03TXY/PLL9lH+VOFFfmENqxbpM9QFBvJbZyTNlF4VRDm8wqchv2F0DQTIv
-         K0DA==
-X-Forwarded-Encrypted: i=1; AJvYcCVBQb/VyBajXP6h/vucPYRBr028Fa7e8h1aT/c73gPY/bXJP6RthMxkHxjRLsBVKqLNXHZohlM4yQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1wjEeViyXC4XTIk3K519aYKSekmBvr29u7vSmPCrqxEt6fhUE
-	TkCkhoEiLQB3Tx5xLnQT7Llad4noIYx4jWhJneOq2hPapG3bIm4SVNljGCBvBM0B5rlb9ruBlLu
-	1nFrJHAG630scVMzDYeXKqFlK/wyaOjPR2bvkdv9bNhoiyYvExYzsb5bE
-X-Gm-Gg: ASbGnctY7e2SwB5ZJ94F/LSOBn6hK3QOwm3L8Wn4x2V0/v8IcPYHE9yQPBte7kPAiIB
-	IJ/wG9WXqSTV40aPZVUNWhwmiz95vIm74syQ8qVMOF6AS8Cw1lZ/nsEvkv5QqJ3EhfdDHjq30qK
-	8LVsWv2heNrbHPqHrQlgzIIZ5f6K/9sq8Ic/TSfKHdSq+SGHzRcTcK9hCAsKXAr2iNGtoUgPJwV
-	aL3xwZnj7lq4P28FF19o0kA3Yk9l8pu12jaLdoOWXRsM7+ZTpZjFjOYM46AEYTag71NJs5OdYdj
-	NAxCbp9lokQoyr25hDeynVF76wHjRIkAld6LeFfV/4b/TvmuuGOw9FVidSOHwxd3MC4t+e4lHxS
-	ytWwhnL1APVDW+7+klHt7l6bP
-X-Received: by 2002:a05:6512:1288:b0:53d:a025:14bc with SMTP id 2adb3069b0e04-53dc13670d0mr4202648e87.41.1732214374429;
-        Thu, 21 Nov 2024 10:39:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGsMRcWipCf+gqmLcfQGX437D2za5bWeNpvmmk4uIvuIwkT8PhxWA8oZeXW/HHOKWEX1LNOFQ==
-X-Received: by 2002:a05:6512:1288:b0:53d:a025:14bc with SMTP id 2adb3069b0e04-53dc13670d0mr4202627e87.41.1732214374020;
-        Thu, 21 Nov 2024 10:39:34 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b52fa36sm1718866b.122.2024.11.21.10.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2024 10:39:33 -0800 (PST)
-Message-ID: <c6315bb7-2943-4693-899b-da65cfecc7a6@redhat.com>
-Date: Thu, 21 Nov 2024 19:39:32 +0100
+        bh=TZyh5R6Jjbt7oN7KVsZQw9ZFXBRvyZ4Sk/f6o54iZsw=;
+        b=SO73y+Mx+SC2d7QJbi9PnWsPlwvyakETLaoCj7I/ZGzce8HBL6QpwZFfHysdwgeydx
+         9G4IYAp1E5f3OQUEkTJF4xlAECSRZNIQB9yead3bLWnzbo1+jhy+wMmbWd5s/FDdn0oc
+         RGOPrlH9o3Cx0QSPMOlqiz7wKqejQiW4bD5g0qoZR/5xNf6uLjoYwXbPlCdC0PJHnkV9
+         Qgjunv2NIYa5qZ5pPhwor5gymcwJ7BgxUTpUIlrC/2U6pkquD5n7JYRo9RgV6EHJF/Y9
+         Ids1DWKfCWdigNz1myRW/oRpoa732iLg5biOoIbyEuF2NnWlztkTWypgd0rlTXLtIFnj
+         Jilw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxornUdJ9bF5ZsD+1wjm0Yw/iPS/L335lyNlM4MAGbvsorOdkq7K6A6KrdcY1xBJsnHtdCgNNVKg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDkYzSKgdaxyetd/prnMtOspmgP4oxAhLyZeJay1z/xiFfLwlK
+	RAKz5Vt/S5ETYAOHXt41q7igisd7TA6jaHQdBoc+2SFxXVQZXLrZVGxnmal5l/zmPPnrgDB2rn5
+	5
+X-Gm-Gg: ASbGnctArBdrEtzr1KFVziLjLMDI3llQtVL2bfvnkZmMoYWqoaq4L6CSjnxepPhRquw
+	UgBCdGkpWUrrnv94BUK0btAm7ZpEzd8maEgIR1oZLnrXd2Xs1rjLw7tuqoUgpUs2aSFnFwACSv2
+	Zo3x4b8ZydZjlKSCErNExfFinaY777KFvNbkXI9PD8JdURra/YpsRMyYs3NigRIHRzTXhNWaDNI
+	lyl+WJdbciIiDQFcyYRv1FWvc5lOW9V+Epwf9aEOMkm8onP+tBWBiCLJ23q/Mh/zw4IBW6YJQol
+	H4UZHFtpCiJ3U00FsfV6BxYSMsKYRw==
+X-Google-Smtp-Source: AGHT+IG7nxOfbTTnTu4v1sr9zkOK5csQupd0P6YOCsdv1of5Sqk8kO39dWTULCj7D8rgDzFjdACzwA==
+X-Received: by 2002:ac2:430a:0:b0:539:adb0:b91 with SMTP id 2adb3069b0e04-53dc138a1ffmr3344284e87.57.1732214663097;
+        Thu, 21 Nov 2024 10:44:23 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53dd2496a37sm43307e87.234.2024.11.21.10.44.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2024 10:44:21 -0800 (PST)
+Date: Thu, 21 Nov 2024 20:44:19 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Rob Clark <robdclark@gmail.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+	Akhil P Oommen <quic_akhilpo@quicinc.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Connor Abbott <cwabbott0@gmail.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 03/11] drm/msm: adreno: move features bits in a
+ separate variable
+Message-ID: <dtt6d427u5yep3i3b3zxxef7uh572aeu3vtatmjvpbqfpjbvjc@epkkr7oumncn>
+References: <20241119-topic-sm8x50-gpu-bw-vote-v2-0-4deb87be2498@linaro.org>
+ <20241119-topic-sm8x50-gpu-bw-vote-v2-3-4deb87be2498@linaro.org>
+ <fkezpguictntg2wkouwqipnaaiauo6vu46n7a2xzvlorzvyeaw@bbcpj3bs5eko>
+ <CAF6AEGs6zT_kaTXNohUaA7KWZxZTr4byaoMoLAceuyqA7S+2CQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC/RFT][PATCH v0.1] ACPI: OSL: Use usleep_range() in
- acpi_os_sleep()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>,
- Pierre Gondois <pierre.gondois@arm.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-References: <5839859.DvuYhMxLoT@rjwysocki.net>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <5839859.DvuYhMxLoT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF6AEGs6zT_kaTXNohUaA7KWZxZTr4byaoMoLAceuyqA7S+2CQ@mail.gmail.com>
 
-Hi,
+On Wed, Nov 20, 2024 at 10:54:24AM -0800, Rob Clark wrote:
+> On Wed, Nov 20, 2024 at 3:18 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On Tue, Nov 19, 2024 at 06:56:38PM +0100, Neil Armstrong wrote:
+> > > Now the features defines have the right name, introduce a features
+> > > bitfield and move the features defines in it, fixing all code checking
+> > > for them.
+> > >
+> > > No functional changes intended.
+> >
+> > I think it might be better to squahs this patch into the previous one,
+> > it would simplify checking that we use .quirks for ADRENO_QUIRK_foo and
+> > .features for ADRENO_FEAT_bar.
+> >
+> 
+> IMHO better to keep this separated
 
-On 21-Nov-24 2:15 PM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> As stated by Len in [1], the extra delay added by msleep() to the
-> sleep time value passed to it can be significant, roughly between
-> 1.5 ns on systems with HZ = 1000 and as much as 15 ms on systems with
-> HZ = 100, which is hardly acceptable, at least for small sleep time
-> values.
-> 
-> Address this by using usleep_range() in acpi_os_sleep() instead of
-> msleep().  For short sleep times this is a no-brainer, but even for
-> long sleeps usleep_range() should be preferred because timer wheel
-> timers are optimized for cancellation before they expire and this
-> particular timer is not going to be canceled.
-> 
-> Add at least 50 us on top of the requested sleep time in case the
-> timer can be subject to coalescing, which is consistent with what's
-> done in user space in this context [2], but for sleeps longer than 5 ms
-> use 1% of the requested sleep time for this purpose.
-> 
-> The rationale here is that longer sleeps don't need that much of a timer
-> precision as a rule and making the timer a more likely candidate for
-> coalescing in these cases is generally desirable.  It starts at 5 ms so
-> that the delta between the requested sleep time and the effective
-> deadline is a contiuous function of the former.
-> 
-> Link: https://lore.kernel.org/linux-pm/c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com/ [1]
-> Link: https://lore.kernel.org/linux-pm/CAJvTdK=Q1kwWA6Wxn8Zcf0OicDEk6cHYFAvQVizgA47mXu63+g@mail.gmail.com/ [2]
-> Reported-by: Len Brown <lenb@kernel.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> This is a follow-up to the discussion started by [1] above and since
-> the beginning of it I have changed my mind a bit, as you can see.
-> 
-> Given Arjan's feedback, I've concluded that using usleep_range() for
-> all sleep values is the right choice and that some slack should be
-> used there.  I've taken 50 us as the minimum value of it because that's
-> what is used in user space FWICT and I'm not convinced that shorter
-> values would be suitable here.
-> 
-> The other part, using 1% of the sleep time as the slack for longer
-> sleeps, is likely more controversial.  It is roughly based on the
-> observation that if one timer interrupt is sufficient for something,
-> then using two of them will be wasteful even if this is just somewhat.
-> 
-> Anyway, please let me know what you think.  I'd rather do whatever
-> the majority of you are comfortable with.
+If they are separated, it is easy to overlook presense of a statement
+checking .quirks against ADRENO_FEAT_bar.
 
-I know it is a bit early for this, but the patch looks good to me, so:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/acpi/osl.c |   22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
 > 
-> Index: linux-pm/drivers/acpi/osl.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/osl.c
-> +++ linux-pm/drivers/acpi/osl.c
-> @@ -607,7 +607,27 @@ acpi_status acpi_os_remove_interrupt_han
->  
->  void acpi_os_sleep(u64 ms)
->  {
-> -	msleep(ms);
-> +	u64 usec = ms * USEC_PER_MSEC, delta_us = 50;
-> +
-> +	/*
-> +	 * Use a hrtimer because the timer wheel timers are optimized for
-> +	 * cancellation before they expire and this timer is not going to be
-> +	 * canceled.
-> +	 *
-> +	 * Set the delta between the requested sleep time and the effective
-> +	 * deadline to at least 50 us in case there is an opportunity for timer
-> +	 * coalescing.
-> +	 *
-> +	 * Moreover, longer sleeps can be assumed to need somewhat less timer
-> +	 * precision, so sacrifice some of it for making the timer a more likely
-> +	 * candidate for coalescing by setting the delta to 1% of the sleep time
-> +	 * if it is above 5 ms (this value is chosen so that the delta is a
-> +	 * continuous function of the sleep time).
-> +	 */
-> +	if (ms > 5)
-> +		delta_us = (USEC_PER_MSEC / 100) * ms;
-> +
-> +	usleep_range(usec, usec + delta_us);
->  }
->  
->  void acpi_os_stall(u32 us)
-> 
-> 
+> But we don't have _that_ many features/quirks so I don't find
+> combining them all that problematic
 > 
 
+-- 
+With best wishes
+Dmitry
 
