@@ -1,580 +1,187 @@
-Return-Path: <linux-pm+bounces-17929-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17930-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 562E59D54AE
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 22:24:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E66DD9D54C6
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 22:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D99E71F2248D
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 21:24:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4ABB0B20E59
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 21:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5E81CB33E;
-	Thu, 21 Nov 2024 21:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640781CB9EC;
+	Thu, 21 Nov 2024 21:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="wAEXXul9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="StjGwCVL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6212C199FC9;
-	Thu, 21 Nov 2024 21:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192CB1CB303;
+	Thu, 21 Nov 2024 21:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732224255; cv=none; b=EVfbamzVS5dUav61Z410sOPn5cqQLZA9+K+F5wsAeO2nGBoalIbAGYv7w3NKGlhGHacZfDo1RpcLvpxJ/EAhgw9ZrkOvSEQ089eQSieTduJGNWN5jBKPxhC9TFGAuuDt+cf9H/RkppqNHhcdccH5ObKnkzguHLz6SObQ7ZxP9IM=
+	t=1732224837; cv=none; b=oIaM9plt2E6wbYdAb2HnslkoxGnugvxEFQjNOe+neImTA5vDZ74lDcTnKfuaBY8sRzjjBIeSOYI83JlZQhYSuieKIWyDVYqVrc9vxW+s8TWruWawPjgZNVi5BzM8sgR9+Rk3/6PoLm8VrDdUpwibhgSCfszea6fSfrVfPBdTVvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732224255; c=relaxed/simple;
-	bh=w1D/FpyF12HhXKS9Z2FqUvfnDwEbulTZFH+XiK5zT7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KOl4uwG3y/gA/Hrd9VSYusum7RY3rWErVMQHk3q45dLfsuQcMfCVpwnOTMUrRawDAvKLwOHu6ZDEk8xrVclCgYXwyOnrA8IK0AWYVtAZAok3kRYMqjp+akuz270wP36NUNPwEAolFbTyVnPr8KS96bj+QhbfalTsK91JSptPOaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=wAEXXul9; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 30F942E09C15;
-	Thu, 21 Nov 2024 23:24:06 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1732224247;
-	bh=7ZVjrk915zSy9w29WGekzofmrulNwLjnRi3YYTZxzHw=;
-	h=Received:From:Subject:To;
-	b=wAEXXul9ZMor2tbZJGFg/1gm90bIijNO7Fx/4Bku5p8YCnswi3L1DkWD9+tZEngxZ
-	 4K/mC1kk1c52fo3DFV6mj70hgE3KBGnlR/782OrGX1jekC6Hvw5rXXwKNI+4LVMh9K
-	 tQA8ecMCZTa4Q90XKr6OFXzdz/QiTIFSvNiuSo/s=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.177) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f177.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f177.google.com with SMTP id
- 38308e7fff4ca-2fb5111747cso16457871fa.2;
-        Thu, 21 Nov 2024 13:24:06 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCU7WNo+6BAwNeRy23mnzDFbbfJY7lwr32rO57eujBJdSHhbSYquPospaBNvA+UztEm+YWT5qj2liVotxCalzO0eHfhr@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/nabvaxfw07Mg0H87ew0ksOakhqstx8ZeFNST4Au20t9IMFV2
-	XesiPjCM+Q9AwcYPiKXsIZ6miQ5oBUd2dfdJNf4+xPM0+xWxii3sXx9qNXD6MQAeTNfUf3peR+z
-	fASyODA41HqSOzdpRit4gJSy4s4M=
-X-Google-Smtp-Source: 
- AGHT+IEAMvoY7h2XrV92dBcjt/vWykr3Yg6PuzidwDQEnPRpEa9vkDyg124op69VlKm6nMMRIH/JZgRRd4NyZsBkrSY=
-X-Received: by 2002:a2e:a58d:0:b0:2fe:e44d:6162 with SMTP id
- 38308e7fff4ca-2ffa7180ae9mr1525361fa.26.1732224245139; Thu, 21 Nov 2024
- 13:24:05 -0800 (PST)
+	s=arc-20240116; t=1732224837; c=relaxed/simple;
+	bh=ozEspz3IEG+axixI1DQw4xiQmDuXAVIcqEP4uJpx7/g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UVeu+LEZ0Zs9ztJa9d1KQ+anVnv2vrgDt4iOFTbHFjRA0qYEuW+/IwmOj/pnpeLwjH6RtOKb9dIY5mn7hYX31R313I9H2nD6YlaH7/7gSBBFRtqxoRaMS4f5cB/B5kNUE/NINFnjwwpkK10cq1C6IdgG3979aXb0PJpFivom9qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=StjGwCVL; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732224835; x=1763760835;
+  h=date:from:to:cc:subject:message-id;
+  bh=ozEspz3IEG+axixI1DQw4xiQmDuXAVIcqEP4uJpx7/g=;
+  b=StjGwCVLOa1DKCyicyQQb9axism3Z2jWFzRDWrzITwHq2toPktsZp4+8
+   3rDD4cxxGRqyasZHEvorqqYwnRL3nmnuDaWL7B0OKxhCwW21V5fJZyGQq
+   fh7p3XEAwwBoqBvcp9LLl802KghHGgbgyam3XeoexNlduigvUATj+hfXV
+   p2udxj35EOxf0bMCGyEv1F874Yc7CHWDN6150dcQFvf1CfDBff4iqSbgG
+   9LIB48D7TGzRl9sh0Ah+wzLjwCplQ1pqFeBrBjjv1BPsS1jVXBWQAtoC/
+   HAWASIuaeiMNc8WWwizFP42Il4VTOePcQRU4otKbNJ0XEdQ01Vr7J8q2y
+   A==;
+X-CSE-ConnectionGUID: SmQcZvQOSlCMT5OSOXqe4g==
+X-CSE-MsgGUID: QTeiaR6IS2q0oduxP1gk1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32421864"
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="32421864"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:33:55 -0800
+X-CSE-ConnectionGUID: knciVBwzTvebIwTBuAqbdQ==
+X-CSE-MsgGUID: 6RK/be4oRQi/s28i7Kaasg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="95323281"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 21 Nov 2024 13:33:53 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEEoB-0003NO-0b;
+	Thu, 21 Nov 2024 21:33:51 +0000
+Date: Fri, 22 Nov 2024 05:33:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ f758bb9e2ac09eb8a943af96ef8a74df07937f4d
+Message-ID: <202411220511.oD5O4T6c-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241121172239.119590-1-lkml@antheas.dev>
- <20241121172239.119590-2-lkml@antheas.dev>
- <1e7057cc-c74e-48ff-8585-8b0db58e08bf@amd.com>
- <CAGwozwF9qzinGmyJQQ+KK02troC-u6+vULpExvYE8taYaBHCXw@mail.gmail.com>
- <80653958-2f34-4ed8-b77e-8f82d80ebbea@amd.com>
- <CAGwozwFtbxptqH1ZwLcpjibfRdnm5VvQoLSjAO8mtD=Aw9y=eg@mail.gmail.com>
- <9ecac3b6-c21f-4296-a855-ea7280b8b411@amd.com>
-In-Reply-To: <9ecac3b6-c21f-4296-a855-ea7280b8b411@amd.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Thu, 21 Nov 2024 22:23:53 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwHf2wtU1rZ+1Hp=rPc9rLX-4Lwr4Wfghk1qfR=kODFy_w@mail.gmail.com>
-Message-ID: 
- <CAGwozwHf2wtU1rZ+1Hp=rPc9rLX-4Lwr4Wfghk1qfR=kODFy_w@mail.gmail.com>
-Subject: Re: [RFC 01/13] Documentation: PM: Add documentation for S0ix Standby
- States
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-	Kyle Gospodnetich <me@kylegospodneti.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <173222424689.5396.4775815326096152474@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
 
-On Thu, 21 Nov 2024 at 22:08, Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> On 11/21/2024 14:33, Antheas Kapenekakis wrote:
-> > On Thu, 21 Nov 2024 at 20:40, Mario Limonciello
-> > <mario.limonciello@amd.com> wrote:
-> >>
-> >> On 11/21/2024 13:11, Antheas Kapenekakis wrote:
-> >>> On Thu, 21 Nov 2024 at 19:58, Mario Limonciello
-> >>> <mario.limonciello@amd.com> wrote:
-> >>>>
-> >>>> On 11/21/2024 11:22, Antheas Kapenekakis wrote:
-> >>>>> Add documentation about the S0ix Standby States that will be expose=
-d
-> >>>>> to userspace as part of this series.
-> >>>>>
-> >>>>> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> >>>>> ---
-> >>>>>     .../admin-guide/pm/standby-states.rst         | 133 +++++++++++=
-+++++++
-> >>>>>     Documentation/admin-guide/pm/system-wide.rst  |   1 +
-> >>>>>     2 files changed, 134 insertions(+)
-> >>>>>     create mode 100644 Documentation/admin-guide/pm/standby-states.=
-rst
-> >>>>>
-> >>>>> diff --git a/Documentation/admin-guide/pm/standby-states.rst b/Docu=
-mentation/admin-guide/pm/standby-states.rst
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..96727574312d
-> >>>>> --- /dev/null
-> >>>>> +++ b/Documentation/admin-guide/pm/standby-states.rst
-> >>>>> @@ -0,0 +1,133 @@
-> >>>>> +.. SPDX-License-Identifier: GPL-2.0
-> >>>>> +.. include:: <isonum.txt>
-> >>>>> +
-> >>>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>> +S0ix Standby States
-> >>>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>> +
-> >>>>> +:Copyright: |copy| 2024 Antheas Kapenekakis
-> >>>>> +
-> >>>>> +:Author: Antheas Kapenekakis <lkml@antheas.dev>
-> >>>>> +
-> >>>>> +With the advent of modern mobile devices, users have become accust=
-omed to instant
-> >>>>> +wake-up times and always-on connectivity. To meet these expectatio=
-ns, modern
-> >>>>> +standby was created, which is a standard that allows the platform =
-to seamlessly
-> >>>>> +transition between an S3-like low-power idle state and a set of lo=
-w power active
-> >>>>> +states, where connectivity is maintained, and the system is respon=
-sive to user
-> >>>>> +input. Current x86 hardware supports 5 different standby states, w=
-hich are:
-> >>>>> +"Deepest run-time idle platform state" or "DRIPS" (S3-like), "Slee=
-p", "Resume",
-> >>>>> +"Screen Off", and "Active".
-> >>>>> +
-> >>>>> +The system begins in the "Active" state. Either due to user inacti=
-vity or
-> >>>>> +user action (e.g., pressing the power button), it transitions to t=
-he "Screen Off"
-> >>>>> +state.
-> >>>>
-> >>>> So are you implicitly suggesting that userspace should be responsibl=
-e
-> >>>> for *telling* the kernel that the screen is off?  I feel some DRM
-> >>>> helpers are missing to make it easy, but after such helpers are made=
- the
-> >>>> kernel "should" be able to easily tell this on it's own.
-> >>>
-> >>> There are two issues with this
-> >>>     1) Windows implements a 5 second grace period on idle before firi=
-ng
-> >>> that firmware notification [1]. This is also a partial debounce, the
-> >>> kernel cannot do that reliably or with the finesse required for such =
-a
-> >>> notification
-> >>
-> >> Why can't the kernel do this?  I'm thinking something like this pseudo
-> >> code that is triggered when number of enabled CRTCs changes:
-> >>
-> >> if (in_suspend_sequence)
-> >>          return;
-> >> switch (old_num_displays) {
-> >> case 0:
-> >>          display_on_cb();
-> >> default:
-> >>          schedule_delayed_work(&drm_s2idle_wq);
-> >> }
-> >>
-> >> Then if the "normal" suspend sequence is started the delayed work is
-> >> cancelled.
-> >>
-> >> If the "normal" suspend sequence doesn't start when it fires then it
-> >> would call the display off callback.
-> >
-> > Fundamentally, it is more complicated and error prone than 2 systemd
-> > suspend targets that fire at the same time DEs lock the lock screen
-> > (or any init system for that matter).
->
-> 2 userspace jobs for the suspend sequence firing at same time vying for
-> similar resources?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: f758bb9e2ac09eb8a943af96ef8a74df07937f4d  Merge branches 'acpi-processor' and 'pm-cpuidle' into linux-next
 
-One presuspend target and one post suspend target
+elapsed time: 1451m
 
-> That sounds inherently racy.
->
-> > This pseudocode also hardcodes
-> > the delay and does not debounce the display on callback.
-> >
->
-> If sticking to the Microsoft way of doing this, then it would be
-> hardcoded.  But yeah if going this direction it "could" be something
-> configurable by userspace.
->
-> An actual implementation would need some locking protection like a mutex.
->
-> > There is the theoretical risk of a device misbehaving if the callbacks
-> > fire at the wrong time. But this risk is theoretical and could be
-> > solved by a device driver quirk that blocks the transition for that
-> > specific device. Which is also much simpler than trying to hardcode an
-> > implementation that works with all devices.
-> >
-> >>>     2) Windows clearly states virtual or real and virtual can really
-> >>> mean anything here.
-> >>
-> >> In the context of the kernel, to me this is a DRM driver that has made
-> >> outputs that are not tied to a physical display.  Does it mean anythin=
-g
-> >> else?  They should still be DRM connectors, and they should still have=
- a
-> >> CRTC AFAICT.
-> >
-> > For all the devices I tested, the display calls change the
-> > presentation of the device such as RGB or aux devices that drain power
-> > during suspend. I do not see a connection to DRM. This points me to
-> > userspace being more appropriate for handling this. It also solves all
-> > UX edge cases because userspace knows when it is inactive.
-> >
-> > Userspace handling this will not be backwards compatible in the sense
-> > that it will not fire when the displays turn off with current
-> > userspace. But it preserves current behavior and as such it is not a
-> > breaking change.
-> >
-> >>>
-> >>> In the end, only systemd and the compositor know if both conditions 1
-> >>> and 2 are met and as such can be responsible for the notification.
-> >>>
-> >>> However, if that notification firing before certain CRTCs are
-> >>> deactivated causes issues, such DRM helpers could be used to block th=
-e
-> >>> transition
-> >>>
-> >>> Link: https://learn.microsoft.com/en-us/windows-hardware/design/devic=
-e-experiences/display--sleep--and-hibernate-idle-timers
-> >>> [1]
-> >>>
-> >>>>> Afterwards, it is free to transition between the "Sleep", "DRIPS", =
-and
-> >>>>> +"Screen Off" states until user action is received. Once that happe=
-ns, the system
-> >>>>> +begins to transition to the "Active" state. From "DRIPS" or "Sleep=
-", it
-> >>>>> +transitions to "Resume", where the Power Limit (PLx) is restored t=
-o its normal
-> >>>>> +level, to speed up finishing "Sleep". Then, it transitions to "Scr=
-een Off".
-> >>>>> +If on "Screen Off" or after the transition, the display is prepare=
-d to turn on
-> >>>>> +and the system transitions to "Active" alongside turning it on.
-> >>>>> +
-> >>>>> +To maintain battery life, in the Windows implementation, the syste=
-m is allocated
-> >>>>> +a maximum percentage of battery and time it can use while staying =
-in idle states.
-> >>>>> +By default, this is 5% of battery or up to 2 days, where the syste=
-m designer/OEM
-> >>>>> +is able to tweak these values. If the system exceeds either the ba=
-ttery
-> >>>>> +percentage or time limit, it enters Hibernation (S4), through a co=
-ncept
-> >>>>> +called "Adaptive Hibernate".
-> >>>>> +
-> >>>>> +
-> >>>>> +S0ix Standby States
-> >>>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>> +The following idle states are supported::
-> >>>>> +
-> >>>>> +                 =E2=86=93=E2=86=92  <Hibernate (S4)>
-> >>>>
-> >>>> I think S4 distracts in this context.
-> >>>
-> >>> Sure, can be removed.
-> >>>
-> >>>>> +    <DRIPS> =E2=86=94 <Sleep> =E2=86=94 <Screen Off> =E2=86=94 <Ac=
-tive>
-> >>>>> +        =E2=86=92       =E2=86=92  <Resume>  =E2=86=91
-> >>>>> +
-> >>>>> +.. _s2idle_drips:
-> >>>>> +
-> >>>>> +DRIPS
-> >>>>> +-----
-> >>>>> +
-> >>>>> +The "Deepest run-time idle platform state" or "DRIPS" is the lowes=
-t power idle
-> >>>>> +state that the system can enter. It is similar to the S3 state, wi=
-th the
-> >>>>> +difference that the system may wake up faster than S3 and due to a=
- larger number
-> >>>>> +of interrupts (e.g., fingerprint sensor, touchpad, touchscreen). T=
-his state
-> >>>>> +is entered when the system is told to suspend to idle, through con=
-ventional
-> >>>>> +means (see :doc:`sleep states <sleep-states>`). The system can onl=
-y transition
-> >>>>> +to "DRIPS" while it is in the "Sleep" state. If it is not, the ker=
-nel will
-> >>>>> +automatically transition to the "Sleep" state before beginning the=
- suspend
-> >>>>> +sequence and restore the previous state afterwards. After the kern=
-el has
-> >>>>> +suspended, the notifications LSP0 Entry and Exit are used.
-> >>>>> +
-> >>>>> +.. _s2idle_sleep:
-> >>>>> +
-> >>>>> +Sleep
-> >>>>> +-----
-> >>>>> +
-> >>>>> +The "Sleep" state is a low power idle state where the kernel is fu=
-lly active.
-> >>>>> +However, userspace has been partially frozen, particularly desktop=
- applications,
-> >>>>> +and only essential "value adding" activities are allowed to run. T=
-his is not
-> >>>>> +enforced by the kernel and is the responsibility of userspace (e.g=
-., systemd).
-> >>>>> +Hardware wise, the Sleep Entry and Exit firmware notifications are=
- fired, which
-> >>>>> +may lower the Power Limit (PLx), pulse the suspend light, turn off=
- the keyboard
-> >>>>> +lighting or disable a handheld device's gamepad. This state is ass=
-ociated with
-> >>>>> +the firmware notifications "Sleep Entry" and "Sleep Exit".
-> >>>>> +
-> >>>>> +.. _s2idle_resume:
-> >>>>> +
-> >>>>> +Resume
-> >>>>> +------
-> >>>>> +
-> >>>>> +The "Resume" state is a faux "Sleep" state that is used to fire th=
-e Turn On
-> >>>>> +Display firmware notification when the system is in the "Sleep" st=
-ate but
-> >>>>> +intends to turn on the display. It solves the problem of system de=
-signers
-> >>>>> +limiting the Power Limit (PLx) while the system is in the "Sleep" =
-state causing
-> >>>>
-> >>>> AFAIK, PLx is an Intel specific acronym, it's probably better to be =
-more
-> >>>> generic in documentation.  You mentioned PLx in a commit too.
-> >>>
-> >>> Microsoft used this term in their documentation [2]. Can update to
-> >>> generic terms.
-> >>>
-> >>> Link: https://learn.microsoft.com/en-us/windows-hardware/design/devic=
-e-experiences/modern-standby-firmware-notifications#turn-on-display-notific=
-ation-function-9
-> >>> [2]
-> >>>
-> >>>>> +the system to wake up slower than desired. This firmware notificat=
-ion is used
-> >>>>> +to restore the normal Power Limit of the system, while having it s=
-tay in the
-> >>>>> +"Sleep" state.  As such, the system can only transition to the "Re=
-sume" state
-> >>>>> +while in the "Sleep" state and cannot re-transition to the "Sleep"=
- state
-> >>>>> +afterwards.
-> >>>>> +
-> >>>>> +.. _s2idle_screen_off:
-> >>>>> +
-> >>>>> +Screen Off
-> >>>>> +----------
-> >>>>> +
-> >>>>> +The "Screen Off" state is the state the system enters when all its=
- displays
-> >>>>> +(virtual or real) turn off. It is used to signify the user is not =
-actively
-> >>>>> +using the system. The associated firmware notifications of "Displa=
-y On" and
-> >>>>> +"Display Off" are used by manufacturers to turn off certain hardwa=
-re
-> >>>>> +components that are associated with the display being on, e.g., a =
-handheld
-> >>>>> +device's controller and RGB. Windows implements a 5-second grace p=
-eriod
-> >>>>> +before firing this callback when the screen turns off due to inact=
-ivity.
-> >>>>> +
-> >>>>> +.. _s2idle_active:
-> >>>>> +
-> >>>>> +Active
-> >>>>> +------
-> >>>>> +
-> >>>>> +Finally, the "Active" state is the default state of the system and=
- the one it
-> >>>>> +has when it is turned on. It is the state where the system is full=
-y operational,
-> >>>>> +the displays of the device are on, and the user is actively intera=
-cting with
-> >>>>> +the system.
-> >>>>> +
-> >>>>> +Basic ``sysfs`` Interface for S0ix Standby transitions
-> >>>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>> +
-> >>>>> +The file :file:`/sys/power/standby` can be used to transition the =
-system between
-> >>>>> +the different standby states. The file accepts the following value=
-s: ``active``,
-> >>>>> +``screen_off``, ``sleep``, and ``resume``. File writes will block =
-until the
-> >>>>> +transition completes. It will return ``-EINVAL`` when asking for a=
-n unsupported
-> >>>>> +state or, e.g., requesting ``resume`` when not in the ``sleep`` st=
-ate. If there
-> >>>>> +is an error during the transition, the transition will pause on th=
-e last
-> >>>>> +error-free state and return an error. The file can be read to retr=
-ieve the
-> >>>>> +current state (and potential ones) using the following format:
-> >>>>> +``[active] screen_off sleep resume``. The state "DRIPS" is omitted=
-, as it is
-> >>>>> +entered through the conventional suspend to idle path and userspac=
-e will never
-> >>>>> +be able to see its value due to being suspended.
-> >>>>
-> >>>> If you follow my above suggestion, I think this file is totally
-> >>>> unnecessary and then there is no compatibility issue.
-> >>>>
-> >>>> It would mean that userspace if it wants to see this "screen off" st=
-ate
-> >>>> and associated performance needs to do literally just that - turn th=
-e
-> >>>> screens off.
-> >>>
-> >>> Please see the reasoning above for Display On/Off. Also, you omitted
-> >>> sleep and resume, which have no hardware analogues you can hook into
-> >>> and are just as important if not more than Display On/Off.
-> >>
-> >> I suppose I'm not seeing the argument yet for why "sleep" and HW DRIPS
-> >> need to be different.  What kind of things would be allowed to run in
-> >> this state?  Who draws that line?
-> >
-> > The most useful thing would be maintaining some basic connectivity so
-> > that the device can resume faster if it suspended a couple of minutes
-> > before and handling transitions such as to hibernation. The transition
-> > to hibernation is especially important, as if both DPMS and the sleep
-> > transition fire the transition looks proper. Being able to run certain
-> > maintenance tasks without changing the presentation of the device from
-> > sleep (e.g., the APM timer to check the battery level) is important.
-> >
->
-> These points still seem to argue for "display on" vs "display off"
-> though, not a "sleep" vs "HW DRIPS".
+configs tested: 93
+configs skipped: 1
 
-So the way the spec is designed is that the sleep entry points are the
-ones that pulse the suspend light in new devices. The display off
-turns off the keyboard backlight.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Just tested my thinkpad and on state screen_off it turns off the
-keyboard light. It also pulses the suspend light. But its a 2021 intel
-model so I suspect it predates the Sleep entry points. The legion Go
-uses the sleep points.
+tested configs:
+alpha                   allnoconfig    gcc-14.2.0
+alpha                  allyesconfig    gcc-14.2.0
+arc                    allmodconfig    gcc-13.2.0
+arc                     allnoconfig    gcc-13.2.0
+arc                    allyesconfig    gcc-13.2.0
+arc         randconfig-001-20241121    gcc-13.2.0
+arc         randconfig-002-20241121    gcc-13.2.0
+arm                    allmodconfig    gcc-14.2.0
+arm                     allnoconfig    clang-20
+arm                    allyesconfig    gcc-14.2.0
+arm         randconfig-001-20241121    clang-20
+arm         randconfig-002-20241121    gcc-14.2.0
+arm         randconfig-003-20241121    clang-20
+arm         randconfig-004-20241121    gcc-14.2.0
+arm64                  allmodconfig    clang-20
+arm64                   allnoconfig    gcc-14.2.0
+arm64       randconfig-001-20241121    clang-20
+arm64       randconfig-002-20241121    clang-20
+arm64       randconfig-003-20241121    gcc-14.2.0
+arm64       randconfig-004-20241121    gcc-14.2.0
+csky                    allnoconfig    gcc-14.2.0
+csky        randconfig-001-20241121    gcc-14.2.0
+csky        randconfig-002-20241121    gcc-14.2.0
+hexagon                allmodconfig    clang-20
+hexagon                 allnoconfig    clang-20
+hexagon                allyesconfig    clang-20
+hexagon     randconfig-001-20241121    clang-20
+hexagon     randconfig-002-20241121    clang-15
+i386                   allmodconfig    gcc-12
+i386                    allnoconfig    gcc-12
+i386                   allyesconfig    gcc-12
+i386                      defconfig    clang-19
+loongarch              allmodconfig    gcc-14.2.0
+loongarch               allnoconfig    gcc-14.2.0
+loongarch   randconfig-001-20241121    gcc-14.2.0
+loongarch   randconfig-002-20241121    gcc-14.2.0
+m68k                   allmodconfig    gcc-14.2.0
+m68k                    allnoconfig    gcc-14.2.0
+m68k                   allyesconfig    gcc-14.2.0
+microblaze             allmodconfig    gcc-14.2.0
+microblaze              allnoconfig    gcc-14.2.0
+microblaze             allyesconfig    gcc-14.2.0
+mips                    allnoconfig    gcc-14.2.0
+nios2                   allnoconfig    gcc-14.2.0
+nios2       randconfig-001-20241121    gcc-14.2.0
+nios2       randconfig-002-20241121    gcc-14.2.0
+openrisc                allnoconfig    gcc-14.2.0
+openrisc               allyesconfig    gcc-14.2.0
+parisc                 allmodconfig    gcc-14.2.0
+parisc                  allnoconfig    gcc-14.2.0
+parisc                 allyesconfig    gcc-14.2.0
+parisc      randconfig-001-20241121    gcc-14.2.0
+parisc      randconfig-002-20241121    gcc-14.2.0
+powerpc                allmodconfig    gcc-14.2.0
+powerpc                 allnoconfig    gcc-14.2.0
+powerpc                allyesconfig    clang-20
+powerpc     randconfig-001-20241121    clang-15
+powerpc     randconfig-002-20241121    gcc-14.2.0
+powerpc     randconfig-003-20241121    clang-20
+powerpc64   randconfig-001-20241121    gcc-14.2.0
+powerpc64   randconfig-002-20241121    clang-20
+powerpc64   randconfig-003-20241121    clang-20
+riscv                  allmodconfig    clang-20
+riscv                   allnoconfig    gcc-14.2.0
+riscv                  allyesconfig    clang-20
+riscv       randconfig-001-20241121    gcc-14.2.0
+riscv       randconfig-002-20241121    gcc-14.2.0
+s390                   allmodconfig    clang-20
+s390                    allnoconfig    clang-20
+s390                   allyesconfig    gcc-14.2.0
+s390        randconfig-001-20241121    gcc-14.2.0
+s390        randconfig-002-20241121    clang-20
+sh                     allmodconfig    gcc-14.2.0
+sh                      allnoconfig    gcc-14.2.0
+sh                     allyesconfig    gcc-14.2.0
+sh          randconfig-001-20241121    gcc-14.2.0
+sh          randconfig-002-20241121    gcc-14.2.0
+sparc                  allmodconfig    gcc-14.2.0
+sparc64     randconfig-001-20241121    gcc-14.2.0
+sparc64     randconfig-002-20241121    gcc-14.2.0
+um                     allmodconfig    clang-20
+um                      allnoconfig    clang-17
+um                     allyesconfig    gcc-12
+um          randconfig-001-20241121    gcc-12
+um          randconfig-002-20241121    gcc-12
+x86_64                  allnoconfig    clang-19
+x86_64                 allyesconfig    clang-19
+x86_64                    defconfig    gcc-11
+x86_64                        kexec    clang-19
+x86_64                     rhel-9.4    gcc-12
+xtensa                  allnoconfig    gcc-14.2.0
+xtensa      randconfig-001-20241121    gcc-14.2.0
+xtensa      randconfig-002-20241121    gcc-14.2.0
 
-In any case, 90% of this patch series is controlling when the suspend
-light pulses and turning off the keyboard backlight.
-
->
-> > Even without that, if userspace transitions to sleep and fires DPMS
-> > before beginning freezing and the suspend sequence, it halfs the user
-> > perceived delay to sleep. It is a big deal. This is a planned feature
-> > for the next version of bazzite so I am testing it right now. It looks
-> > really professional.
-> >
->
-> I feel that what you're mostly vying for is "Dark Resume", which is
-> something that exists in the Chrome OS world:
->
-> https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/power_manag=
-er/docs/dark_resume.md
->
-> I feel with cooperation between the compositor and the initiator of
-> suspend the same thing can be done outside of ChromeOS.
->
-> >> As it stands today the kernel freezes all tasks when suspending, so in
-> >> this "half" suspend state I feel like there would need to be some sort
-> >> of allow list, no?
-> >
-> > I do sympathize with this. The most important part would be to lower
-> > the power limit of the device which the manufacturers can already do
-> > via the notification and perhaps other kernel drivers could do too.
-> > Non-root software can be limited by the init system in general.
->
-> Why does the power limit specifically need to be lowered?  The goal is
-> to avoid excessive power consumption in this kind of state, right?
-
-Moreso to avoid overheating in a bag
-
-> There are lots of other things that can be done to accomplish this:
-> For example:
-> * CPU boost be turned off
-> * EPP bias be adjusted to efficiency
-> * NVME APST can be tuned (idle timeout and transition latency tolerance)
-> See this table for more info on what Microsoft does while in Modern
-> Standby:
-> https://learn.microsoft.com/en-us/windows-hardware/design/component-guide=
-lines/power-management-for-storage-hardware-devices-nvme
-> See this comment in the kernel:
-> https://github.com/torvalds/linux/blob/4a4be1ad3a6efea16c56615f31117590fd=
-881358/drivers/nvme/host/core.c#L2503
-> * Wifi power savings can be enacted
->
-> Those are all things clearly that userspace can accomplish.
->
-> What I'm getting at is perhaps the "suspend initiator" would be better
-> to do things than change the flow from the kernel.
->
-> 1) Freeze relevant tasks
-> 2) Work with the compositor to disable the display
-> 3) Save/restore EPP, boost, APST and WPS values.
-> 4) After a timeout (or whatever reason) when ready to go into "HW DRIPS"
-> then it can call the traditional suspend routine.
->
-> Then when the system wakes up from "HW DRIPS" the "suspend initiator"
-> can decide when to restore all those values, work with compositor to
-> turn on the display etc.
-
-Yes, that is indeed what I am planning to work on. This patch series is par=
-t of.
-
-Systemd already has an applet that does some of that [1], and it can
-also calculate hibernate offsets, handle APM timer for battery
-warnings, and freeze userspace as of 255.
-
-It would also be able to transition between DRIPS to hibernation after
-a certain battery drop. It is quite limited now but the structure is
-there.
-
-[1] https://github.com/systemd/systemd/blob/main/src/sleep/sleep.c
-
-> >
-> > As a side note, after all tasks have frozen, including compositors,
-> > you can fire DPMS safely before beginning the suspend sequence for
-> > backwards compatibility and to lower the span the old framebuffer is
-> > shown. This would be a useful addition to this series.
-> >
-> >>>
-> >>>>> +
-> >>>>> +Before entering the "Screen Off" state or suspending, it is recomm=
-ended that
-> >>>>> +userspace marks all CRTCs as inactive (DPMS). Otherwise, there wil=
-l be a split
-> >>>>> +second where the display of the device is on, but the presentation=
- of the system
-> >>>>> +is inactive (e.g., the power button pulses), which is undesirable.
-> >>>>> \ No newline at end of file
-> >>>>> diff --git a/Documentation/admin-guide/pm/system-wide.rst b/Documen=
-tation/admin-guide/pm/system-wide.rst
-> >>>>> index 1a1924d71006..411775fae4ac 100644
-> >>>>> --- a/Documentation/admin-guide/pm/system-wide.rst
-> >>>>> +++ b/Documentation/admin-guide/pm/system-wide.rst
-> >>>>> @@ -8,4 +8,5 @@ System-Wide Power Management
-> >>>>>        :maxdepth: 2
-> >>>>>
-> >>>>>        sleep-states
-> >>>>> +   standby-states
-> >>>>>        suspend-flows
-> >>>>
-> >>
->
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
