@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-17867-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17868-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F83D9D5199
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:23:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E1EF9D519B
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:23:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 426302823B7
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 17:23:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9C511F2222C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 17:23:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9466C1ADFE9;
-	Thu, 21 Nov 2024 17:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD041AB6C0;
+	Thu, 21 Nov 2024 17:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="jyk0mZFC"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="FKI2hFuo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0500A1AB6C0;
-	Thu, 21 Nov 2024 17:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D0E1B0F2B;
+	Thu, 21 Nov 2024 17:23:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732209783; cv=none; b=GhkGxM5zFqgP3gNnx+uNQLZLelH4cJTXhak7v5Z59dReYVGdJcsFSvzHioFxM4D2dNu2zyUVjgK62RK85chq/fqhh71yF2Vq+1t/AJdjMOC4hPx8bobBYNLh4xcj4gM0wauLuYG0oHXWRxn9ONVA3pS4/ki2g1ABOUbjfAteoXM=
+	t=1732209785; cv=none; b=FE09ADVwra5UNAN9YPeVKdxdTm3wFD8IHzulcdwNYaQG0jWJ17Xl5cdIfev//JbHCdnLYQYK+PTj9wYnzskRkKHjaiLeS1LIg1MWcQGld+jRREIM6qSf0c9kgVzThtnP/dCIRLazidAArz6Swa4jtvtvFV2JJEQ2I/PfaYZ5L3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732209783; c=relaxed/simple;
-	bh=pICBVtaZg0n5UbIT/5BQPKYWqraIJQwrXAPwly/1lsc=;
+	s=arc-20240116; t=1732209785; c=relaxed/simple;
+	bh=TI9WUqJYccL+CwFDF1WKnHPI/ZVHxgkTkQ5fwWfGfNQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iLTq2xYNvUUcKhSQK63IBKnROr4CzXXhKthzbnxYkbX2XuCUlJA3mLcRp94gGzdDIt9UX+9/W0lnrtv7odC71U2gND2EXLt2WdtlBJ+kn5XkHisy7VuOC26J7+w+DiXUdfo8iXU8M/K+KNUnBj5J8dgs1B8B5xqIw+OuVvY2uw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=jyk0mZFC; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=INsoyXIPVw0vdPijlPJ8A6ZsEbWSztKeuoE4WpBxGIpnLcfmO+Q+y4bx27Z3u2Zym2YtfZTv5TUCTwg7YPda3eEvaCGiCAW6SWIk1B9pp4MtsxeVEd3gR7gA0sJmXOqboJrGLvPiLpUpjvzFBmmlg31uL56zMwSPqQnJp6YMdmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=FKI2hFuo; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 849D92E0963A;
-	Thu, 21 Nov 2024 19:22:57 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 301052E0966E;
+	Thu, 21 Nov 2024 19:22:59 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1732209778;
-	bh=nIjR2p0YcBkL2caLKP7kGbNnMWaOSQpHKmr9UXjFGMg=; h=From:To:Subject;
-	b=jyk0mZFCN3AlzgxqXnHx9+sIXZY525QfHl6fWv/1HzQ3MdLpxMcL3qRBNazW0xyGd
-	 P3vQ1Jlt3BB9JiWHSYdGNwdnsSVSQ8/Eyd2qdq7Pu3UDxK7PDr8ELj5gIabHiW/f/I
-	 t4XZVGMzjYIN0uHLtstsgD2ZqAhd0xwwMyXvr9F4=
+	s=default; t=1732209781;
+	bh=ciKMesMP9Mc1IdOCWc4ppsKpGwJlPYfRDo95aaXXzt4=; h=From:To:Subject;
+	b=FKI2hFuoBYe4NdD4JqhxeV0tCjKnTThOqV+7FE+B+xeZTusiOjcSkPCT0kQAoOhjp
+	 Umwj3OUKc85zGq7E0PifEkeWWyMu+CxfaCV/i6Y7UaE+rxxfAjZro7qVECCzKMYIiU
+	 ZXS1EMM40U4hPZ0BcG3tCYICee/MyCUW9uRrcS54=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -51,9 +51,10 @@ Cc: platform-driver-x86@vger.kernel.org,
 	Hans de Goede <hdegoede@redhat.com>,
 	Kyle Gospodnetich <me@kylegospodneti.ch>,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [RFC 06/13] acpi/x86: s2idle: rename Screen On/Off to Display On/Off
-Date: Thu, 21 Nov 2024 18:22:31 +0100
-Message-ID: <20241121172239.119590-7-lkml@antheas.dev>
+Subject: [RFC 07/13] acpi/x86: s2idle: call Display On/Off as part of
+ callbacks
+Date: Thu, 21 Nov 2024 18:22:32 +0100
+Message-ID: <20241121172239.119590-8-lkml@antheas.dev>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241121172239.119590-1-lkml@antheas.dev>
 References: <20241121172239.119590-1-lkml@antheas.dev>
@@ -65,110 +66,135 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <173220977865.5739.5786625115036377066@linux1587.grserver.gr>
+ <173220978051.6005.3661749764522674078@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Microsoft and Intel use the term "Display" to refer to the _DSM 3,4
-calls and the term "Screen" for the state ("Screen Off"). Currently,
-the code uses "Screen On/Off" to name the variables, which is about
-to become confusing as they become callbacks. To prepare for that,
-rename the variables to "Display On/Off".
+Move the Display On/Off notifications into dedicated callbacks that gate
+the ACPI mutex, so they can be called outside of the suspend path.
 
+Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/acpi/x86/s2idle.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ drivers/acpi/x86/s2idle.c | 67 +++++++++++++++++++++++++++++----------
+ 1 file changed, 51 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-index dd0b40b9bbe8..7391f87f3aa0 100644
+index 7391f87f3aa0..8b39e3b12ec0 100644
 --- a/drivers/acpi/x86/s2idle.c
 +++ b/drivers/acpi/x86/s2idle.c
-@@ -39,8 +39,8 @@ static const struct acpi_device_id lps0_device_ids[] = {
- #define ACPI_LPS0_DSM_UUID	"c4eb40a0-6cd2-11e2-bcfd-0800200c9a66"
+@@ -60,6 +60,7 @@ static int lps0_dsm_func_mask;
+ static guid_t lps0_dsm_guid_microsoft;
+ static int lps0_dsm_func_mask_microsoft;
+ static int lps0_dsm_state;
++static bool lsp0_dsm_in_display_off;
  
- #define ACPI_LPS0_GET_DEVICE_CONSTRAINTS	1
--#define ACPI_LPS0_SCREEN_OFF	3
--#define ACPI_LPS0_SCREEN_ON	4
-+#define ACPI_LPS0_DISPLAY_OFF	3
-+#define ACPI_LPS0_DISPLAY_ON	4
- #define ACPI_LPS0_ENTRY		5
- #define ACPI_LPS0_EXIT		6
- #define ACPI_LPS0_MS_ENTRY      7
-@@ -50,8 +50,8 @@ static const struct acpi_device_id lps0_device_ids[] = {
- #define ACPI_LPS0_DSM_UUID_AMD      "e3f32452-febc-43ce-9039-932122d37721"
- #define ACPI_LPS0_ENTRY_AMD         2
- #define ACPI_LPS0_EXIT_AMD          3
--#define ACPI_LPS0_SCREEN_OFF_AMD    4
--#define ACPI_LPS0_SCREEN_ON_AMD     5
-+#define ACPI_LPS0_DISPLAY_OFF_AMD   4
-+#define ACPI_LPS0_DISPLAY_ON_AMD    5
+ /* Device constraint entry structure */
+ struct lpi_device_info {
+@@ -539,17 +540,18 @@ static struct acpi_scan_handler lps0_handler = {
+ 	.attach = lps0_device_attach,
+ };
  
- static acpi_handle lps0_device_handle;
- static guid_t lps0_dsm_guid;
-@@ -361,10 +361,10 @@ static const char *acpi_sleep_dsm_state_to_str(unsigned int state)
+-int acpi_s2idle_prepare_late(void)
++static int acpi_s2idle_display_off(void)
  {
- 	if (lps0_dsm_func_mask_microsoft || !acpi_s2idle_vendor_amd()) {
- 		switch (state) {
--		case ACPI_LPS0_SCREEN_OFF:
--			return "screen off";
--		case ACPI_LPS0_SCREEN_ON:
--			return "screen on";
-+		case ACPI_LPS0_DISPLAY_OFF:
-+			return "display off";
-+		case ACPI_LPS0_DISPLAY_ON:
-+			return "display on";
- 		case ACPI_LPS0_ENTRY:
- 			return "lps0 entry";
- 		case ACPI_LPS0_EXIT:
-@@ -376,10 +376,10 @@ static const char *acpi_sleep_dsm_state_to_str(unsigned int state)
- 		}
- 	} else {
- 		switch (state) {
--		case ACPI_LPS0_SCREEN_ON_AMD:
--			return "screen on";
--		case ACPI_LPS0_SCREEN_OFF_AMD:
--			return "screen off";
-+		case ACPI_LPS0_DISPLAY_ON_AMD:
-+			return "display on";
-+		case ACPI_LPS0_DISPLAY_OFF_AMD:
-+			return "display off";
- 		case ACPI_LPS0_ENTRY_AMD:
- 			return "lps0 entry";
- 		case ACPI_LPS0_EXIT_AMD:
-@@ -552,12 +552,12 @@ int acpi_s2idle_prepare_late(void)
- 	/* Screen off */
+-	struct acpi_s2idle_dev_ops *handler;
+-
+ 	if (!lps0_device_handle || sleep_no_lps0)
+ 		return 0;
+ 
+-	if (pm_debug_messages_on)
+-		lpi_check_constraints();
++	if (WARN_ON(lsp0_dsm_in_display_off))
++		return -EINVAL;
++
++	lsp0_dsm_in_display_off = true;
++	acpi_scan_lock_acquire();
+ 
+-	/* Screen off */
++	/* Display off */
  	if (lps0_dsm_func_mask > 0)
  		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
--					ACPI_LPS0_SCREEN_OFF_AMD :
--					ACPI_LPS0_SCREEN_OFF,
-+					ACPI_LPS0_DISPLAY_OFF_AMD :
-+					ACPI_LPS0_DISPLAY_OFF,
- 					lps0_dsm_func_mask, lps0_dsm_guid);
- 
- 	if (lps0_dsm_func_mask_microsoft > 0)
--		acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_OFF,
-+		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_OFF,
+ 					ACPI_LPS0_DISPLAY_OFF_AMD :
+@@ -560,6 +562,47 @@ int acpi_s2idle_prepare_late(void)
+ 		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_OFF,
  				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
  
- 	/* LPS0 entry */
-@@ -626,12 +626,12 @@ void acpi_s2idle_restore_early(void)
- 
- 	/* Screen on */
- 	if (lps0_dsm_func_mask_microsoft > 0)
--		acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_ON,
++	acpi_scan_lock_release();
++
++	return 0;
++}
++
++static int acpi_s2idle_display_on(void)
++{
++	if (!lps0_device_handle || sleep_no_lps0)
++		return 0;
++
++	if (WARN_ON(!lsp0_dsm_in_display_off))
++		return -EINVAL;
++
++	lsp0_dsm_in_display_off = false;
++	acpi_scan_lock_acquire();
++
++	/* Display on */
++	if (lps0_dsm_func_mask_microsoft > 0)
 +		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_ON,
++				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
++	if (lps0_dsm_func_mask > 0)
++		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
++					ACPI_LPS0_DISPLAY_ON_AMD :
++					ACPI_LPS0_DISPLAY_ON,
++					lps0_dsm_func_mask, lps0_dsm_guid);
++
++	acpi_scan_lock_release();
++
++	return 0;
++}
++
++int acpi_s2idle_prepare_late(void)
++{
++	struct acpi_s2idle_dev_ops *handler;
++
++	if (!lps0_device_handle || sleep_no_lps0)
++		return 0;
++
++	if (pm_debug_messages_on)
++		lpi_check_constraints();
++
+ 	/* LPS0 entry */
+ 	if (lps0_dsm_func_mask > 0 && acpi_s2idle_vendor_amd())
+ 		acpi_sleep_run_lps0_dsm(ACPI_LPS0_ENTRY_AMD,
+@@ -623,19 +666,10 @@ void acpi_s2idle_restore_early(void)
+ 		acpi_sleep_run_lps0_dsm(ACPI_LPS0_MS_EXIT,
  				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
- 	if (lps0_dsm_func_mask > 0)
- 		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
--					ACPI_LPS0_SCREEN_ON_AMD :
--					ACPI_LPS0_SCREEN_ON,
-+						ACPI_LPS0_DISPLAY_ON_AMD :
-+						ACPI_LPS0_DISPLAY_ON,
- 					lps0_dsm_func_mask, lps0_dsm_guid);
+ 	}
+-
+-	/* Screen on */
+-	if (lps0_dsm_func_mask_microsoft > 0)
+-		acpi_sleep_run_lps0_dsm(ACPI_LPS0_DISPLAY_ON,
+-				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
+-	if (lps0_dsm_func_mask > 0)
+-		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
+-						ACPI_LPS0_DISPLAY_ON_AMD :
+-						ACPI_LPS0_DISPLAY_ON,
+-					lps0_dsm_func_mask, lps0_dsm_guid);
  }
  
+ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
++	.display_off = acpi_s2idle_display_off,
+ 	.begin = acpi_s2idle_begin,
+ 	.prepare = acpi_s2idle_prepare,
+ 	.prepare_late = acpi_s2idle_prepare_late,
+@@ -644,6 +678,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
+ 	.restore_early = acpi_s2idle_restore_early,
+ 	.restore = acpi_s2idle_restore,
+ 	.end = acpi_s2idle_end,
++	.display_on = acpi_s2idle_display_on,
+ };
+ 
+ void __init acpi_s2idle_setup(void)
 -- 
 2.47.0
 
