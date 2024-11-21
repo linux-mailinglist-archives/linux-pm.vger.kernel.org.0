@@ -1,97 +1,134 @@
-Return-Path: <linux-pm+bounces-17849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C24209D4AF3
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 11:34:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3B0A9D4BE9
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 12:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD3D9B239C7
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 10:34:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 991032839E4
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 11:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA371D0DF7;
-	Thu, 21 Nov 2024 10:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3344A1D0B8B;
+	Thu, 21 Nov 2024 11:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGIIl/AR"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B8VpjR/s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44511D0B83;
-	Thu, 21 Nov 2024 10:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247B21CACDB;
+	Thu, 21 Nov 2024 11:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732185238; cv=none; b=l6yp4zINrVwzoPvdsoCtwTp8glpmy2F9N5JEcoEtn4h4OgW55OcsE+YE+0B66FsmWLvhsG/zJkgq2VNcHVINIuzYgcf+ODEGdf3od2E5K2mR3GO9DGODicYZwUJsCxLM0WK5FgS9mKrNej5VEKj0GgaLdhNZ/Ru9dh9HfyhWztk=
+	t=1732188634; cv=none; b=f13d+Sx4E7j+uRxtvet70LiJaS3t3Xn6ybxIyEL6iCuAuxBAn6boh89nvw3SsYebbUzXyTV7UyqUxw5o6kDesX7crO79DbgXRXMZq9DuXPhSHrsL+jNWo3LT5cWn74lRc732WQBd96JR0jH98JVYc37lueNtirRH+CkCCpktEbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732185238; c=relaxed/simple;
-	bh=PRsd2mYUtqJDcJ1K7x7OCmAEwgu9V/n3Pf1REKc5WGE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gKpVmOflw7ocVu5aWDilkKntEuVIhiRUmmnfq47A55Xgd0rA64Soq8dXHeXf+VIfxtG333KodJUwEgzIJ6hNIDRaNF3MKYq324fuvUR7+0hxkFxi796c3dGYFKD5ZVjY9K92snv1z3jNWqgXm4iwcihdq8ivWIXMqv9CQKoH4TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGIIl/AR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 715A9C4CED0;
-	Thu, 21 Nov 2024 10:33:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732185237;
-	bh=PRsd2mYUtqJDcJ1K7x7OCmAEwgu9V/n3Pf1REKc5WGE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XGIIl/ARoIRb2tIpMRvqTygsb1uOfavVtcesqrwb7ivSAQtOd/bETVBCV6ARWOeG5
-	 cM5SdMgjTcovs79puYqRHEJz8Kp87za48LkAUefY2f1V7ZdmqJaRZYyE/hWTDfRo5U
-	 fK6PWuLI5qk5H79yL4MFFXWZTCon7F3IXVYaHsGhYMBbXG3sl9PfGpb/XOX2pfwJ/y
-	 fujTZY4lLRi2Ciimm4dTfs0CaDTZ7+BFAXBncFsjTpOxhefIIfWPWm4b8RTmiwtL2+
-	 qn+0xa31iNPUx3omM/2XGkoCcxr8u6YH+RNF2wZHz0i3AtrK74BojlzliD0W7P0a+r
-	 lRgPqUmJ4Dxqg==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5ee9db85af0so825711eaf.0;
-        Thu, 21 Nov 2024 02:33:57 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUpCkPQk2+tfV2jju1fmstOM+Q+onMuAxTtcuh+mtHyF7bIUZkqwdUebSZHFuJcTQVB6EPgZKS53Db91yT/@vger.kernel.org, AJvYcCWxdjDLmLSLVrCcfPr9pYUqqI6iD6YNd8EC4MNbe++PDzxwTjdjqXAiCRCL0x1AAajpIRDsFmXFtsAv@vger.kernel.org, AJvYcCXAgncB4X7syVXHgawJ3eSaPFkGY6P0PeK3MZfBdnhqE2kbcSWauZOGtdxqO6M8yr2++hHh//v0efE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTrpy/8OFF4TlE0auggAuo2O9FX3fiIhqj3MXdX0zsg/ALkDZ7
-	/pOo4a7yUXR9IpcCtTrj8SnHLVHPYWMcuW00VqvNRvKydeQPk2t67tAhznlPAs1SHp1XtTM/diS
-	P+vKhv4kFXo1WFaF9ELmOerlKT3k=
-X-Google-Smtp-Source: AGHT+IFk2dIFB0EhKFDmZLp6hggCtgy6vkiIpWWpYvjA8ubljmfDCLOq8wB9cYLG3YGFwFXLB+38mJUUXEkxj4XJp2o=
-X-Received: by 2002:a05:6830:12:b0:710:d4cd:bff3 with SMTP id
- 46e09a7af769-71b037b5bf3mr1346080a34.9.1732185236812; Thu, 21 Nov 2024
- 02:33:56 -0800 (PST)
+	s=arc-20240116; t=1732188634; c=relaxed/simple;
+	bh=UMreKP+v6tu8224jbuZZ9nmRAyt4+ugjB6wJMYoK2JM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FQPFyLjSZJkrERpgTdBXD/tXxigd5ex3uoNKuPqYzwdjOsj0jPRS4h9pcFcstZkG8zEhFepABhJxXwKaBoVffVZt+M7Cnyd9kAgZ9CCnPf6inhZndgiikYRjg1+FtPZ7b9FdRSv+yGvthQ/+23K3Ma7QHr1h3XrSeV/9N7pO68U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=B8VpjR/s; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AL8wTct007659;
+	Thu, 21 Nov 2024 11:30:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=MnhtH4MUV/BFBOZDW/xgAP
+	on4gBnsNZB1HJShLjHV0g=; b=B8VpjR/sJVtA6lvUS5pd/H6maJ5QzBF3k48Fct
+	4qa+aJt5QppezquHgt8gFjrfTfKYp3w4G4fAtUMGfzal+kfwxRRduoZXm2bq4d05
+	Gohrg/qy68ddEc5yjQXYNfeROWxbkgNb5EAeGU3q5hmXtEc0BjywuEWBK+kFso4P
+	DFxjoIIHRO2nk+bbK87U6WVEkgQrbDprRkJTtxFSJvRc5cKe4nxs7vvp7DiSLyrg
+	FClQc6GJEhW3ptO6iYW3TygzQ3Hs4i9UY8u2iB4ImARvs8iHKfoiN2y1MdhZzUjo
+	cryQyG7anZ8DlNa56Q9m8Iz285Gi1mKxZ2qbAdy16CPj8Gtg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4318uvmckg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Nov 2024 11:30:28 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ALBURHb019461
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Nov 2024 11:30:27 GMT
+Received: from 41ee23f3c785.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 21 Nov 2024 03:30:22 -0800
+From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>
+CC: Odelu Kukatla <quic_okukatla@quicinc.com>,
+        Mike Tipton
+	<quic_mdtipton@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V5 0/4] Add EPSS L3 provider support on SA8775P SoC
+Date: Thu, 21 Nov 2024 11:30:02 +0000
+Message-ID: <20241121113006.28520-1-quic_rlaggysh@quicinc.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
- <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
- <90818e23-0bdb-40ad-b2f9-5117c7d8045e@linux.intel.com> <CAJZ5v0gxNEQx5Q+KXs-AMn=bt7GD=jU-TseMHUc5mHp0tKSBtA@mail.gmail.com>
- <0147ea1a-3595-47ae-a9d5-5625b267b7a8@linux.intel.com> <CAJZ5v0itnn3T4bwiAO3eAoKH4mLFYswcNWBx6JCrK1GFDEy7vg@mail.gmail.com>
- <e0dd2cb8-eea2-443d-bf23-4d225528d33f@linux.intel.com> <CAJZ5v0h5=3LMVCa8kSoomNyF9r_7HLmpkH+YhYEO_N7H6-hAGQ@mail.gmail.com>
- <593c4be2-c21e-49fa-8bf7-a614c01c8e66@linux.intel.com> <CAJZ5v0h_hh8Rp2kG0xT_b5Bm5zWX6MscRo1rEx-jO-dBd7t5Aw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h_hh8Rp2kG0xT_b5Bm5zWX6MscRo1rEx-jO-dBd7t5Aw@mail.gmail.com>
-From: Len Brown <lenb@kernel.org>
-Date: Thu, 21 Nov 2024 05:33:45 -0500
-X-Gmail-Original-Message-ID: <CAJvTdKkYKj-PQhzQgDVGnx=oTwK5ufWNsLxOLtzDwQPGpteVfg@mail.gmail.com>
-Message-ID: <CAJvTdKkYKj-PQhzQgDVGnx=oTwK5ufWNsLxOLtzDwQPGpteVfg@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in acpi_os_sleep().
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Arjan van de Ven <arjan@linux.intel.com>, anna-maria@linutronix.de, tglx@linutronix.de, 
-	peterz@infradead.org, frederic@kernel.org, corbet@lwn.net, 
-	akpm@linux-foundation.org, linux-acpi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Len Brown <len.brown@intel.com>, Todd Brandt <todd.e.brandt@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wTvJruUlQZKCEfQCPGmLLWCPB-nKAssN
+X-Proofpoint-GUID: wTvJruUlQZKCEfQCPGmLLWCPB-nKAssN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411210090
 
-On Wed, Nov 20, 2024 at 2:42=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+Add Epoch Subsystem (EPSS) L3 provider support on SA8775P SoCs.
 
-> I generally think that if you are sleeping relatively long, you may as
-> well sacrifice some precision for avoiding system stress so to speak,
-> so I've been considering something like flat 50 us for sleeps between
-> 1 and 5 ms and then 1% of the sleep duration for longer sleeps.
+Changes since v4:
+ - Added generic compatible "qcom,epss-l3-perf" changes.
+ - Split the driver code into two patches, with one containing multidev
+   support and other containing the compatible additions.
 
-What is the maximum rate of acpi_os_sleep() invocations?
+Changes since v3:
+ - Removed epss-l3-perf generic compatible changes. These will be posted
+   as separate patch until then SoC specific compatible will be used for
+   probing.
 
-Assuming the reasoning for user-space timer-slack is sound @ fixed 50 usec,
-what logic supports acpi_os_sleep paying more timer slack delay than user s=
-pace?
+Changes since v2:
+ - Updated the commit text to reflect the reason for code change.
+ - Added SoC-specific and generic compatible to driver match table.
 
-What measurements can demonstrate the benefit of this proposed additional d=
-elay?
+Changes since v1:
+ - Removed the usage of static IDs and implemented dynamic ID assignment
+   for icc nodes using IDA.
+ - Removed separate compatibles for cl0 and cl1. Both cl0 and cl1
+   devices use the same compatible.
+ - Added new generic compatible for epss-l3-perf.
+
+Raviteja Laggyshetty (4):
+  dt-bindings: interconnect: Add EPSS L3 compatible for SA8775P
+  arm64: dts: qcom: sa8775p: add EPSS l3 interconnect provider
+  interconnect: qcom: Add EPSS L3 support on SA8775P
+  interconnect: qcom: osm-l3: Add epss compatibles for SA8775P SoC
+
+ .../bindings/interconnect/qcom,osm-l3.yaml    |  4 +
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 19 ++++
+ drivers/interconnect/qcom/osm-l3.c            | 87 ++++++++++++++-----
+ 3 files changed, 88 insertions(+), 22 deletions(-)
+
+-- 
+2.39.2
+
 
