@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-17915-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17916-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1EDD9D531F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 20:02:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 939669D5322
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 20:03:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A278E2810EF
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:02:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 197F31F21797
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE91C1E32A6;
-	Thu, 21 Nov 2024 18:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA57B1E32D3;
+	Thu, 21 Nov 2024 18:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uC6XDDIa"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j9JoyGno"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA97E1DB943
-	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 18:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840FC1E284D
+	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 18:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732215231; cv=none; b=WzCdWetLcBLmfsAnuq9/E99LYBUxiI+iu0qjFyLOtjhzESJ3TsDaVUUJN+rPEv0BXsSncXccS01HCsGRc3FngeEjoXATqiugN95Q1QF7X87VOeIxcuBW5uOKkhiSMBw445+ciKAmB/75+7SGxBMHXCZeJ88ocgFd4fdt6lzewdU=
+	t=1732215233; cv=none; b=daSdsBcUM8kOEBurqIvq64sCrqy1MW00h5Bce7BsESQCS+B4dbVBT9J9uoiWRtM3ngBHjbxpxAWzAuGwoGaU2s7j32rp/JJKywn8FH6b/i1tsUFZHJBQYaL2Ijy753R31jpyO6i4T586WYw8OX1lGzP9Pn1ene6CD0OoUK4+k4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732215231; c=relaxed/simple;
-	bh=qemrFZ+DR3sCl7VG4GKYwVD8L8FwjlVxsp3WJhJHwXU=;
+	s=arc-20240116; t=1732215233; c=relaxed/simple;
+	bh=cg2iyp4+CvEy683WYX+ECsqwzXyjhokH3kRioPhRAhA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=njUy9Mu9Gtven9p4pyYFKSXyh8GdxMg3jcfq96oVeZRtBtHwn88LtB+PJ8lvoGBxCg0z2GttihvlZ5sRjQEXGBixSE1gwAL5YmIVVUbT2E9DqoBpPtIF19RX6uovnElurmSMSGRUIccXRM/E/1R8l+HPvCvK9lafvNj2Jer2VfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mizhang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uC6XDDIa; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=bjVoQXn1m+w3C9h6yD+9+dHX3cAt1hD2CyJWzyiodM+wvJmz500P9sAasAu2iTxO7407skfqQa8PK0DTnAQ2cdZ53kvjtNd4GMip/4y33J01N1g8AsRFwVj8+OA4GN1wDNdWqpwt7EKnb574aKa83LaJdjwrISd9EberWNBes54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mizhang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j9JoyGno; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mizhang.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ea258fe4b6so27717667b3.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 10:53:49 -0800 (PST)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e38902a3200so2030786276.2
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 10:53:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732215229; x=1732820029; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1732215230; x=1732820030; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sh4pMBblHn1VD2N9Y2lp4abB6oxAsUcAPAYEWiOVGrA=;
-        b=uC6XDDIamI6lGnwNA6gWzfVX+QGACb4lytpRAYWk3pyND8yI3nGZ0+RV/UsoOxUdrT
-         1aP2aR3KJD4xok2SZLsolRHCoGqR0d0Ne8NavIDLJ0Q0GRsSkYeI/eL6OhT1BMWXBcW5
-         v7xi7ulDRvFQmZKC4qC7KQ5vx0aZaYDTG7qZApDlgJtOVrWkxRppfTmFQ3WEcnrp71Yv
-         lyH77bY2Qt/006ClS1xB7SV/w51EmhXaMSv6+e3z2/oDFVd44d5uM6cIFQrWvJjcqJ9u
-         YTzfHN/AQE6G/wLrmaolXadstknKakMTLYvZtQedyF+/EW+P8sGqF1rhUHap1QgeMpBw
-         AqdQ==
+        bh=umjqRaPxMOMBPCY2bbDeorL7OH9qU4LVOhrbwYAX8Gs=;
+        b=j9JoyGnokUtEHz3lfzkhbspaGKCa+33sm0MVSbCDRr0sBQBSR+grVb6mYQDOGsT93f
+         SOx9ViDC28yPoPUAQiNWP/NHAPKgOWxO9kCQ61n7uyeltW42CWGpdbTB+2bOK6r0O/54
+         O7d6PUgJflGfGf7l2FSbL5+nZ2rG2vHNOxgQCpy/HEKvs5KjDCvVpAouEf6pNEk36pdy
+         NEkeyXWCmQ1WdZmV/YhWg674h4UEqJEFPEhAYFaZL9C67LLyFmAE3eqcjdbWvHDymwZ7
+         soYq20UQisXLuW4e2dHtz/MIf8wTdYNCV1pzB9enM8ecQOXxF0bxvXKUsI9iz0d2Hx+b
+         iLbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732215229; x=1732820029;
+        d=1e100.net; s=20230601; t=1732215230; x=1732820030;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Sh4pMBblHn1VD2N9Y2lp4abB6oxAsUcAPAYEWiOVGrA=;
-        b=GQflEdidMWDIE2nuG+Bt0OAMiIzKA6Tr5Km451pQkdPGjAgIWIgbj4R0M02TcvGD6K
-         yF6587iRiU8tCkt7oe3zoy7vfYI9aY5xXlMefAIg0dwtmHi3A/P9rHWXKKy+RCNusDrB
-         MIDiCABnIyD1bhe8gNtdz+n9L5prP6aN/NPWzLwGR/tPIFVbrbafC6qhfXF2HlawYT7I
-         aYfeYCKW0XTk0T4k//92IO7kIkvqvu9SxpOTcgBcJWw08m4N8BC1jaBfuBL+MZ7xRVHk
-         VR12PP9KPXMeyl5RFIfkgUOCBN6sPQSa0NnwCtoOb4sewV5I/OVzpnzwP4iTXoTjlhj5
-         ovUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjuAFGNjk+7+2tZ662AJUMJJG5njHQjVbAYU28ATvk7HdjaNm3tv5usMo3TNzNlEQY/AuZWQjlIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsktCmyav5pj5FesCHUYjvpeAu3CDosP8GCh3560BveqZ2r+eB
-	qw/2jLkU4biw1a/2P7BNxDgT5rL1n2EHh/OlEX6LuqBU8piN92MBx4oDO+9Zq1PUVE0UR66Icyl
-	MeTnEfQ==
-X-Google-Smtp-Source: AGHT+IEJaYc97wodeOZjWOswXnwDACandNWSXkgUJpIhOpYXATvfyTkw2S5hqwBp9Sei4x4azZY6rZTmf+9J
-X-Received: from mizhang-super.c.googlers.com ([35.247.89.60]) (user=mizhang
- job=sendgmr) by 2002:a25:c581:0:b0:e30:d61e:b110 with SMTP id
- 3f1490d57ef6-e38cb5fbd2fmr9499276.5.1732215228789; Thu, 21 Nov 2024 10:53:48
+        bh=umjqRaPxMOMBPCY2bbDeorL7OH9qU4LVOhrbwYAX8Gs=;
+        b=eHBZ+0Yt94LOqR+pMgft0Y9rtV2lKoMCG6CCFGm61CRT3CaI4xMDOttCD7k/hYkgbD
+         Wl4xjYSn0sqO12frSAw9okwGdcVz5y/7ebNyh6o/oiJzeSW/biZpTNWPT/PcuXRVm91H
+         PtcTIY1jaKun0qN6mqc3S9sdZo3c9eXWUCcUYX3c1mQq70rpyQgsbFg8ZKA8uR+VAN20
+         JfMFHTizB0QQcKpvFvoS88oyOUX5BkMse2hihiuPFEc1rDLIRxml5MdRz5AfvbRUGhM1
+         AL4FSk/hA259MIhpiIqlJLFwBAhlBFxX3B2RjgFuUMygD/RcSGLW3R3JMFG/evoocmoY
+         EpVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWIspUKnDP4VsT8tigzmfBv2ndDK4GDw6kCS9sLLS3G8neoT0WLVk6NPhB3b+OzS/YKyKw3kx0eRQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2twt/+zNtUSJM1V7ORglu2nFxoXQ4DLLRB5odDDWnDw7RVPws
+	heQMKncwOvfhmr+36sCAv8yLBcaCk+/uu7TO0VKb2w+TrF0kLVjjG+4g9/yzdhPCB5c3bMkI/Lo
+	uBp0ecg==
+X-Google-Smtp-Source: AGHT+IG4i7fOAFePg97UFWHvr+E2Z6FO0kC5FD9Us3UIujj+wD5TBePM+4bKH0fL2aTTdEKp0RfkKSC8TCCi
+X-Received: from mizhang-super.c.googlers.com ([34.105.13.176]) (user=mizhang
+ job=sendgmr) by 2002:a25:ba4c:0:b0:e38:10a7:808e with SMTP id
+ 3f1490d57ef6-e38f889f2ddmr1276.0.1732215230445; Thu, 21 Nov 2024 10:53:50
  -0800 (PST)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date: Thu, 21 Nov 2024 18:53:10 +0000
+Date: Thu, 21 Nov 2024 18:53:11 +0000
 In-Reply-To: <20241121185315.3416855-1-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -76,9 +76,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241121185315.3416855-1-mizhang@google.com>
 X-Mailer: git-send-email 2.47.0.371.ga323438b13-goog
-Message-ID: <20241121185315.3416855-19-mizhang@google.com>
-Subject: [RFC PATCH 18/22] KVM: x86: Update aperfmperf on host-initiated
- MP_STATE transitions
+Message-ID: <20241121185315.3416855-20-mizhang@google.com>
+Subject: [RFC PATCH 19/22] KVM: x86: Allow host and guest access to IA32_[AM]PERF
 From: Mingwei Zhang <mizhang@google.com>
 To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
 	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
@@ -90,52 +89,101 @@ Cc: "H. Peter Anvin" <hpa@zytor.com>, Perry Yuan <perry.yuan@amd.com>, kvm@vger.
 	Jim Mattson <jmattson@google.com>, Mingwei Zhang <mizhang@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-From: Jim Mattson <jmattson@google.com>
+Implement MSR read/write handlers for IA32_APERF and IA32_MPERF to
+support both host and guest access:
 
-When the host modifies a vCPU's MP_STATE after the vCPU has started
-running, maintain the accuracy of guest aperfmperf tracking:
+- Host userspace access via KVM_[GS]ET_MSRS only reads/writes the
+  snapshot values in vcpu->arch.aperfmperf
+- Guest writes update both the hardware MSRs (via set_guest_[am]perf)
+  and the snapshots
+- For host-initiated writes of IA32_MPERF, record the current TSC to
+  establish a new baseline for background cycle accumulation
+- Guest reads don't reach these handlers as they access the MSRs directly
 
-1. For transitions from !HALTED to HALTED, add any accumulated
-   "background" TSC ticks to the guest_mperf checkpoint before
-   stopping the counter.
+Add both MSRs to msrs_to_save_base[] to ensure they are properly
+serialized during vCPU state save/restore operations.
 
-2. For transitions from HALTED to !HALTED, record the current TSC in
-   host_tsc to begin accumulating background cycles in guest_mperf.
-
-This ensures the guest MPERF counter properly reflects time spent in
-C0 vs C1 states, even when state transitions are initiated by the host
-rather than the guest.
-
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
+Co-developed-by: Jim Mattson <jmattson@google.com>
+Signed-off-by: Jim Mattson <jmattson@google.com>
 ---
- arch/x86/kvm/x86.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/x86/kvm/x86.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7c22bda3b1f7b..cd1f1ae86f83f 100644
+index cd1f1ae86f83f..4394ecb291401 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -11904,6 +11904,18 @@ int kvm_arch_vcpu_ioctl_set_mpstate(struct kvm_vcpu *vcpu,
- 	     mp_state->mp_state == KVM_MP_STATE_INIT_RECEIVED))
- 		goto out;
+@@ -334,6 +334,7 @@ static const u32 msrs_to_save_base[] = {
+ 	MSR_IA32_UMWAIT_CONTROL,
  
-+	if (kvm_vcpu_has_run(vcpu) &&
-+	    guest_can_use(vcpu, X86_FEATURE_APERFMPERF)) {
-+		if (mp_state->mp_state == KVM_MP_STATE_HALTED &&
-+		    vcpu->arch.mp_state != KVM_MP_STATE_HALTED) {
-+			kvm_accumulate_background_guest_mperf(vcpu);
-+			vcpu->arch.aperfmperf.loaded_while_running = false;
-+		} else if (mp_state->mp_state != KVM_MP_STATE_HALTED &&
-+			   vcpu->arch.mp_state == KVM_MP_STATE_HALTED) {
-+			vcpu->arch.aperfmperf.host_tsc = rdtsc();
-+		}
-+	}
+ 	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
++	MSR_IA32_APERF, MSR_IA32_MPERF,
+ };
+ 
+ static const u32 msrs_to_save_pmu[] = {
+@@ -4151,6 +4152,26 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			return 1;
+ 		vcpu->arch.msr_misc_features_enables = data;
+ 		break;
++	case MSR_IA32_APERF:
++		if ((data || !msr_info->host_initiated) &&
++		    !guest_can_use(vcpu, X86_FEATURE_APERFMPERF))
++			return 1;
 +
- 	if (mp_state->mp_state == KVM_MP_STATE_SIPI_RECEIVED) {
- 		vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
- 		set_bit(KVM_APIC_SIPI, &vcpu->arch.apic->pending_events);
++		vcpu->arch.aperfmperf.guest_aperf = data;
++		if (unlikely(!msr_info->host_initiated))
++			set_guest_aperf(data);
++		break;
++	case MSR_IA32_MPERF:
++		if ((data || !msr_info->host_initiated) &&
++		    !guest_can_use(vcpu, X86_FEATURE_APERFMPERF))
++			return 1;
++
++		vcpu->arch.aperfmperf.guest_mperf = data;
++		if (likely(msr_info->host_initiated))
++			vcpu->arch.aperfmperf.host_tsc = rdtsc();
++		else
++			set_guest_mperf(data);
++		break;
+ #ifdef CONFIG_X86_64
+ 	case MSR_IA32_XFD:
+ 		if (!msr_info->host_initiated &&
+@@ -4524,6 +4545,22 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		msr_info->data = vcpu->arch.guest_fpu.xfd_err;
+ 		break;
+ #endif
++	case MSR_IA32_APERF:
++		/* Guest read access should never reach here. */
++		if (!msr_info->host_initiated)
++			return 1;
++
++		msr_info->data = vcpu->arch.aperfmperf.guest_aperf;
++		break;
++	case MSR_IA32_MPERF:
++		/* Guest read access should never reach here. */
++		if (!msr_info->host_initiated)
++			return 1;
++
++		if (vcpu->arch.mp_state != KVM_MP_STATE_HALTED)
++			kvm_accumulate_background_guest_mperf(vcpu);
++		msr_info->data = vcpu->arch.aperfmperf.guest_mperf;
++		break;
+ 	default:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
+ 			return kvm_pmu_get_msr(vcpu, msr_info);
+@@ -7535,6 +7572,11 @@ static void kvm_probe_msr_to_save(u32 msr_index)
+ 		if (!(kvm_get_arch_capabilities() & ARCH_CAP_TSX_CTRL_MSR))
+ 			return;
+ 		break;
++	case MSR_IA32_APERF:
++	case MSR_IA32_MPERF:
++		if (!kvm_cpu_cap_has(KVM_X86_FEATURE_APERFMPERF))
++			return;
++		break;
+ 	default:
+ 		break;
+ 	}
 -- 
 2.47.0.371.ga323438b13-goog
 
