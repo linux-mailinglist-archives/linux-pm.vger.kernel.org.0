@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-17885-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17886-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8E459D5226
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:51:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB3B29D5223
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:51:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B799B244AB
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 17:50:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D4381F227C8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 17:51:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020401A3AB8;
-	Thu, 21 Nov 2024 17:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32A71B5ED2;
+	Thu, 21 Nov 2024 17:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QsFr0mZY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t3wUhqNB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A2E155CBF;
-	Thu, 21 Nov 2024 17:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3B71A2C0B;
+	Thu, 21 Nov 2024 17:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732211452; cv=none; b=nsUZQv7H5H0LKrhWPO027HN3aaOtku6Putmf0dnHqhU5JBP82XHIefMEFBVyCI8QziFc2q93CjtDJf4DzwALGT12Ox9fU8wY1XzlH9pX5kVrasFiIHzthP1IDZ98jYRUFPU0ob6KFMf9eRA73YleuGDaOHraDlpAx1FRjBHWS78=
+	t=1732211497; cv=none; b=UcdWmknP9EMQfY70WCHnLlk24KZLdLIkJD5VNmA8yjOZqgLnZjh/Ko58walpRiaXk865LIcjErl0RTAOTNb9YMaR0jI+Cp561Vu6JPq9EAAWKWvdAtem3A0dufGUgdT1lrbE/YxycVN6nd2F3ujPyDqJKNVQ88Vd+2tpui80a0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732211452; c=relaxed/simple;
-	bh=4Ml+P17lrWm+bXwVe+cHthrWGUIcUifUoH76IJNZ1YA=;
+	s=arc-20240116; t=1732211497; c=relaxed/simple;
+	bh=tIyuKwVzYt4lv1djHoHrdJQEtZZee9KgbdgMNNR+LoA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oynqj+PJgCFB3gtW+vRFTJDNSpMpQKsqZsW4s8hVbBa/9BsG5Tv5Clg9tleRujWkb+S2JCDZc1yC9Mi4KgGueBgEWDWjCTeKj6UXUPFw8Ah1029f2RBNUrCKcBwvLDjFhng2ie1va4WeGpms+ILRGGYaXhHeyTY5HB5IvcjvP60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QsFr0mZY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08930C4CECC;
-	Thu, 21 Nov 2024 17:50:47 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RE12UIdKGIA8Ps4V0SNzeCKY3U9jVQNkgVLiCo4tgkOlp2vXdn3XC4BFWSH2Bu4X3ZYCMRg3oPYlJHrzDDZCdKFsTWlxpVYXW71lXVUy3zT0FtMfMURkpcBKl4zKRBMNuU1KhuT6csxHl+3sLFlM4/rKNHg/b+4idtNVCauBvMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t3wUhqNB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FE9C4CECC;
+	Thu, 21 Nov 2024 17:51:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732211452;
-	bh=4Ml+P17lrWm+bXwVe+cHthrWGUIcUifUoH76IJNZ1YA=;
+	s=k20201202; t=1732211497;
+	bh=tIyuKwVzYt4lv1djHoHrdJQEtZZee9KgbdgMNNR+LoA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QsFr0mZYpuJrx4aChVRQwZNS8lEhvgGSK7yYP2xJPzD/Aaz2CqDs+30w5LjkWcqKd
-	 Y+iR5KbdhypyObdTEvaT9Xgli3JcDrrTSLORELcIsIBRGxBBq+NSmOpMA75fwnO89v
-	 wjl1CLasMyxE5BQ/6XIb1A6WOEd5B898mtzPGg+BKdEnEWbEUQRLPLmp8YlFWiEyc5
-	 lfppOwCwbpohnW7xTTIunS6sCHTR64yRDG0szKmc2/YwrwTWa2k2JV8VI08gym2Sdl
-	 Re90KCIWO9572m0sJZAOcy9kCKTlSlZz8sjLRYV68uDzPEQ6K7G3TCx0ygZ0R0Xc+X
-	 smAEXkr7Y/cAA==
-Message-ID: <53876db8-4401-481d-8684-af7e135d481e@kernel.org>
-Date: Thu, 21 Nov 2024 18:50:45 +0100
+	b=t3wUhqNBBq5LJPJPcb8miJOJby+P/k+qu9k7h89ULs4g2GONuQ9T5D7LF18wiZOkh
+	 WLg+d70/1AjCtJ5bPk3vrLPUEJSAORq/nJ3e8v0o9RXX2G8d6LygpX5M5PnhTFZ7qY
+	 sI4v0J07OI/G8fJ4550ozH96AQEOnyZHIHdKpX4TvaukSa3pzmCvfshMeSNZRwoNzV
+	 7k7sRxpmsIKwgrjcwSDo2ttW67mGIs0LIdd1nze7WMEa+m/M2LYSeghoVeUYKsLKHj
+	 1DL2mvY9CyRwUH+LqYaNoz8j3ga+awp/BjxsvdscV4i+NWtNhKDTDXKyrHPUkj/Ymp
+	 yNYxxiXQaPOEQ==
+Message-ID: <19dce115-097d-43f1-97d6-e80f0578cf91@kernel.org>
+Date: Thu, 21 Nov 2024 18:51:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 1/4] dt-bindings: interconnect: Add EPSS L3 compatible
- for SA8775P
+Subject: Re: [PATCH V5 2/4] arm64: dts: qcom: sa8775p: add EPSS l3
+ interconnect provider
 To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -63,9 +63,9 @@ Cc: Odelu Kukatla <quic_okukatla@quicinc.com>,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20241121113006.28520-1-quic_rlaggysh@quicinc.com>
- <20241121113006.28520-2-quic_rlaggysh@quicinc.com>
- <bda810ab-68d8-4265-87c3-a6d021092e62@kernel.org>
- <10e4fd4e-559d-4164-ab94-d5f0a60ffc22@quicinc.com>
+ <20241121113006.28520-3-quic_rlaggysh@quicinc.com>
+ <2b72c05e-eeb3-4c27-99b0-66bec8adba7c@kernel.org>
+ <41977702-51da-42d3-ad18-0d77ba9c8b5b@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,70 +111,47 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <10e4fd4e-559d-4164-ab94-d5f0a60ffc22@quicinc.com>
+In-Reply-To: <41977702-51da-42d3-ad18-0d77ba9c8b5b@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/11/2024 18:43, Raviteja Laggyshetty wrote:
+On 21/11/2024 18:49, Raviteja Laggyshetty wrote:
 > 
 > 
-> On 11/21/2024 5:23 PM, Krzysztof Kozlowski wrote:
+> On 11/21/2024 5:24 PM, Krzysztof Kozlowski wrote:
 >> On 21/11/2024 12:30, Raviteja Laggyshetty wrote:
->>> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
->>> SA8775P SoCs.
->>
->> This we see from the diff. Explain the hardware, why adding epps-l3-perf.
->>
-> The EPSS instance in SA8775P uses PERF_STATE register instead of REG_L3_VOTE to scale L3 clocks.Along with SoC specific compatible, add new generic compatible "qcom,epss-l3-perf" for PERF_STATE register based L3 scaling.
-
-Pasting the same replies as you pasted to others won't solve the
-problem. Solve the problem - fix the commit msg.
-
-> 
+>>> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SA8775P
+>>> SoCs.
 >>>
 >>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 >>> ---
->>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml         | 4 ++++
->>>  1 file changed, 4 insertions(+)
+>>>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 19 +++++++++++++++++++
+>>>  1 file changed, 19 insertions(+)
 >>>
->>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>> index 21dae0b92819..042ca44c32ec 100644
->>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>> @@ -34,6 +34,10 @@ properties:
->>>                - qcom,sm8250-epss-l3
->>>                - qcom,sm8350-epss-l3
->>>            - const: qcom,epss-l3
->>> +      - items:
->>> +          - enum:
->>> +              - qcom,sa8775p-epss-l3
->>> +          - const: qcom,epss-l3-perf
+>>> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+>>> index 9f315a51a7c1..dd7207eb3616 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+>>> @@ -10,6 +10,7 @@
+>>>  #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
+>>>  #include <dt-bindings/clock/qcom,sa8775p-gpucc.h>
+>>>  #include <dt-bindings/dma/qcom-gpi.h>
+>>> +#include <dt-bindings/interconnect/qcom,osm-l3.h>
+>>>  #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
+>>>  #include <dt-bindings/mailbox/qcom-ipcc.h>
+>>>  #include <dt-bindings/firmware/qcom,scm.h>
+>>> @@ -4282,6 +4283,15 @@ rpmhpd_opp_turbo_l1: opp-9 {
+>>>  			};
+>>>  		};
+>>>  
+>>> +		epss_l3_cl0: interconnect@18590000 {
 >>
->> I don't understand this change in context of driver. These are the same.
->> Isn't this compatible with sm8250?
 >>
-> 
-> The intention for adding "qcom,epss-l3-perf" generic compatible is to use it for the chipsets which use perf state register for l3 scaling.
-> Using generic compatible avoids the need for adding chipset specific compatible in match table.
+>> Drop unused label.
+>>
+> This will be used by DCVS driver for getting the interconnect path.
 
-
-Not true, specific compatibles used as fallback do the same and is a
-preferred way.
-
-
-> But received comment from konrad to add both SoC-specific and generic compatibles.
-
-I went through the history and don't see anything like that. Point to
-the specific email please, if you disagree.
-
-> Dmitry has suggested to update generic comaptibles for sc7280 and sm8250 SoCs, which makes use of perf state registers. 
-
-OK
-
-> It will be done as separate patch series.
-
-No. I expect to see full, correct picture, not half baked patches which
-contradict what is in current code.
+Fine then.
 
 
 Best regards,
