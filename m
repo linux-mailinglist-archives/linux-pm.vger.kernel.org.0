@@ -1,358 +1,212 @@
-Return-Path: <linux-pm+bounces-17891-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17892-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 059059D5286
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:29:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 177EA9D52A3
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 19:39:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E4C284068
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:29:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69987B21C0F
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 18:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8D81BBBC1;
-	Thu, 21 Nov 2024 18:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694781AA1DB;
+	Thu, 21 Nov 2024 18:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="ympKcLxU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f+jmQgkQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89F714BF87;
-	Thu, 21 Nov 2024 18:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90145139597
+	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 18:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732213773; cv=none; b=XrilfhrWy6WQGih4h0sf52lTp7kXin4Lc2IiRpi8MU5ZjZ9jOaKMdoJVGpOcFVBpRFyF3hNjJqU+oQMhHXxWHT+2yCMyxr0nl0GV9Ff4P/wsLGUr1LnKzpDZkQhkYsUb4b/LMQg11BWmM8g/+62zH3wV5GuBTyMkSwry147D7Jg=
+	t=1732214380; cv=none; b=nHttgPUuEgkq5srVr2QEVF07oqjXvBY+nLEeBFKhQK2u9D6E8mCZG61bY26cKYEga2ckwxmysIRQCdPrNYK0oLdhw+kTT5YqF1Mho+6P20ncWHbpNL2jUnt4qcCacXKnT9FxVQwVCRDHX5cuT1z/sQcWVXH1NBugqQbQXtAKMoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732213773; c=relaxed/simple;
-	bh=mI2H/Nxd4qd9x6WNZznbONc9sLhdlZ8jJSX1IZinMEk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QanzE1EYmK0PkG62XFkcQ6bdS2zZnhnBI/PepA97omS782fWAvMJZTc8RzC4kU/+hnlywJ03mT5wNvN8Y6/T2ppddYvg6H9b1xifCP7VcWGLBVNsIhGKzMGIk1ngyQq5+X2+md72arXSPXi1sLqEVSMhPrme0F9NPODtzpPbd6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=ympKcLxU; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 519552E096BE;
-	Thu, 21 Nov 2024 20:29:25 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1732213767;
-	bh=2EmKV4JJ+rT5f1YhVJu72OOYRIQ5iSHyakk7UTHywUc=;
-	h=Received:From:Subject:To;
-	b=ympKcLxU9QAysWIelOLk8sdnZezh6Y+e63Py+ADpI1OoMUVc5rDciAIUKiUtx5YRU
-	 aTUm3ASWtMhpAF7Dn3lBH6eQFON3AchczAnnJnmNxvZY3wR/6bQlXDd/4GR+c1mbaT
-	 R7gEZotuhtDT8gs80Rg2Onu1nlGlzNMypWgEV5T8=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.172) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f172.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f172.google.com with SMTP id
- 38308e7fff4ca-2fb561f273eso14276841fa.2;
-        Thu, 21 Nov 2024 10:29:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCXdJYv28RrseGcZnEKPgu4O+2ZbJgC/KxniLWr0bLcE5OkCCbxr8pgDh1OlhTXd7JYNrr/jMTystswaiwsTTTt0OkYH@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNmFNMMfU3swxG68R5q8YgFdaLGjcTuDAtroh1B5fvJr3hOPWh
-	HCv02mMVfLuykX18iht+fFfbmODpXwzwAzLn+zWGvkMaV4Aea+reiaPmjV1DHR4cTmFN0wy1cJC
-	XI+GruNOEvEOgfO7B1j1eg8qWGK0=
-X-Google-Smtp-Source: 
- AGHT+IEJRqWCS/dCL/O0lar/j0xLeGI4O/KFaQVuPjLoZj4tqY5aTi//5S3npdexsG15egMUPgZllCxV0mKjfuGzm7I=
-X-Received: by 2002:a05:651c:50b:b0:2f3:b71a:1e91 with SMTP id
- 38308e7fff4ca-2ff8dbe7af5mr46030871fa.17.1732213764720; Thu, 21 Nov 2024
- 10:29:24 -0800 (PST)
+	s=arc-20240116; t=1732214380; c=relaxed/simple;
+	bh=G8XOSFc7W5LX9nk1d6dB9lDKaf8fszfFMsNH4VlGnZQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aAI6sycASedCoSeNi55sThT2yIescG1zEI+HqzOrp2WpvnF1LADgBbEKw5G5rO8Spi2+3K8s1m4xGd7/nk6CGQZGTKi222GxCrFoy2SIevTA5W/np2kDPi6ClA4HZ9PVxG9xTqu2tQfwBXHGpHYaHsGSn8q7FCYwI5mmseeIkM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f+jmQgkQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732214377;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R8LxgwuAPowXuHoG85RopJJmji4cVIb+ptva+m06qdM=;
+	b=f+jmQgkQFFHHngHhuoXF4ZE521rj2rNJoiOUNOPJC2z8UGhZdTc82itSUBEFgCHjJlE3Sr
+	+xD/aoMQA5kpp14eA3W8HHkfHjAH0K4IfFMH2Yygeh5+puQdrh/46x7C9FubR2qyI80kz6
+	seG52ma6tYsLe9DpA2Z0bd28C936tNo=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-648-Z4pq2L6aM4Wn6pjxioRuUw-1; Thu, 21 Nov 2024 13:39:36 -0500
+X-MC-Unique: Z4pq2L6aM4Wn6pjxioRuUw-1
+X-Mimecast-MFC-AGG-ID: Z4pq2L6aM4Wn6pjxioRuUw
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-539e03bfd4aso787185e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 10:39:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732214374; x=1732819174;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8LxgwuAPowXuHoG85RopJJmji4cVIb+ptva+m06qdM=;
+        b=KYUGGvkl90Cb0twz2B5mlHY9p+8TOEQtYPqpnzWcCh+MM5tOfU9O9meuCqrkXsOx8D
+         yNVqqilpXZ17tbetE2qYXWLZSdfuxpHtAEwP3VKWfucWNAHXvgOTt5kXMGz05rl4AiIt
+         yVRuf/CZnlpsn/hNGSj+GT1afdIiXtGJIb5Ht5KmtTrqFVS9EDFvIs1wBv3a1I8/sy9e
+         dxGfI9O12nGRIa7UFakVmYnYnj2+/JMtO6NxEon7if9kus12XSE+xPdVJM0YHNukW7yo
+         eSUc8B8KnD03TXY/PLL9lH+VOFFfmENqxbpM9QFBvJbZyTNlF4VRDm8wqchv2F0DQTIv
+         K0DA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBQb/VyBajXP6h/vucPYRBr028Fa7e8h1aT/c73gPY/bXJP6RthMxkHxjRLsBVKqLNXHZohlM4yQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1wjEeViyXC4XTIk3K519aYKSekmBvr29u7vSmPCrqxEt6fhUE
+	TkCkhoEiLQB3Tx5xLnQT7Llad4noIYx4jWhJneOq2hPapG3bIm4SVNljGCBvBM0B5rlb9ruBlLu
+	1nFrJHAG630scVMzDYeXKqFlK/wyaOjPR2bvkdv9bNhoiyYvExYzsb5bE
+X-Gm-Gg: ASbGnctY7e2SwB5ZJ94F/LSOBn6hK3QOwm3L8Wn4x2V0/v8IcPYHE9yQPBte7kPAiIB
+	IJ/wG9WXqSTV40aPZVUNWhwmiz95vIm74syQ8qVMOF6AS8Cw1lZ/nsEvkv5QqJ3EhfdDHjq30qK
+	8LVsWv2heNrbHPqHrQlgzIIZ5f6K/9sq8Ic/TSfKHdSq+SGHzRcTcK9hCAsKXAr2iNGtoUgPJwV
+	aL3xwZnj7lq4P28FF19o0kA3Yk9l8pu12jaLdoOWXRsM7+ZTpZjFjOYM46AEYTag71NJs5OdYdj
+	NAxCbp9lokQoyr25hDeynVF76wHjRIkAld6LeFfV/4b/TvmuuGOw9FVidSOHwxd3MC4t+e4lHxS
+	ytWwhnL1APVDW+7+klHt7l6bP
+X-Received: by 2002:a05:6512:1288:b0:53d:a025:14bc with SMTP id 2adb3069b0e04-53dc13670d0mr4202648e87.41.1732214374429;
+        Thu, 21 Nov 2024 10:39:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGsMRcWipCf+gqmLcfQGX437D2za5bWeNpvmmk4uIvuIwkT8PhxWA8oZeXW/HHOKWEX1LNOFQ==
+X-Received: by 2002:a05:6512:1288:b0:53d:a025:14bc with SMTP id 2adb3069b0e04-53dc13670d0mr4202627e87.41.1732214374020;
+        Thu, 21 Nov 2024 10:39:34 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b52fa36sm1718866b.122.2024.11.21.10.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Nov 2024 10:39:33 -0800 (PST)
+Message-ID: <c6315bb7-2943-4693-899b-da65cfecc7a6@redhat.com>
+Date: Thu, 21 Nov 2024 19:39:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121172239.119590-1-lkml@antheas.dev>
- <20241121172239.119590-6-lkml@antheas.dev>
- <bee4cc61-ea6f-43fa-a752-6a69465e6517@amd.com>
-In-Reply-To: <bee4cc61-ea6f-43fa-a752-6a69465e6517@amd.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Thu, 21 Nov 2024 19:29:13 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwGjE633JL6BvvBfZcoKidCqvT+gFiVanPO3Bwot484mcg@mail.gmail.com>
-Message-ID: 
- <CAGwozwGjE633JL6BvvBfZcoKidCqvT+gFiVanPO3Bwot484mcg@mail.gmail.com>
-Subject: Re: [RFC 05/13] acpi/x86: s2idle: add modern standby transition
- function
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-	Kyle Gospodnetich <me@kylegospodneti.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <173221376614.2360.9359975455324368092@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC/RFT][PATCH v0.1] ACPI: OSL: Use usleep_range() in
+ acpi_os_sleep()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+References: <5839859.DvuYhMxLoT@rjwysocki.net>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <5839859.DvuYhMxLoT@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 21 Nov 2024 at 19:16, Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> On 11/21/2024 11:22, Antheas Kapenekakis wrote:
-> > Add a new function to transition modern standby states and call it
-> > as part of the suspend sequence to make sure it begins under the
-> > Modern Standby "Sleep" state.
->  > > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> > ---
-> >   include/linux/suspend.h |  11 ++++
-> >   kernel/power/power.h    |   1 +
-> >   kernel/power/suspend.c  | 127 ++++++++++++++++++++++++++++++++++++++++
-> >   3 files changed, 139 insertions(+)
-> >
-> > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> > index 01ee64321cda..b8fe781d8026 100644
-> > --- a/include/linux/suspend.h
-> > +++ b/include/linux/suspend.h
-> > @@ -40,6 +40,15 @@ typedef int __bitwise suspend_state_t;
-> >   #define PM_SUSPEND_MIN              PM_SUSPEND_TO_IDLE
-> >   #define PM_SUSPEND_MAX              ((__force suspend_state_t) 4)
-> >
-> > +typedef int __bitwise standby_state_t;
->
-> As this is series is working on emulating semantics of "Modern Standby"
-> on Windows, why not name it all "modern_standby"?
->
-> IE
->
-> modern_standby_state_t
-> PM_MODERN_STANDBY_ACTIVE
-> PM_MODERN_STANDBY_SCREEN_OFF
+Hi,
 
-I would rather keep the name more generalizable. Modern Standby is the
-Microsoft term. That was the idea behind it at least. If other drivers
-want to hook into this, I think it would be desirable as well. As far
-as the s2ildle x86 semantics thats up in the air htough.
+On 21-Nov-24 2:15 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> As stated by Len in [1], the extra delay added by msleep() to the
+> sleep time value passed to it can be significant, roughly between
+> 1.5 ns on systems with HZ = 1000 and as much as 15 ms on systems with
+> HZ = 100, which is hardly acceptable, at least for small sleep time
+> values.
+> 
+> Address this by using usleep_range() in acpi_os_sleep() instead of
+> msleep().  For short sleep times this is a no-brainer, but even for
+> long sleeps usleep_range() should be preferred because timer wheel
+> timers are optimized for cancellation before they expire and this
+> particular timer is not going to be canceled.
+> 
+> Add at least 50 us on top of the requested sleep time in case the
+> timer can be subject to coalescing, which is consistent with what's
+> done in user space in this context [2], but for sleeps longer than 5 ms
+> use 1% of the requested sleep time for this purpose.
+> 
+> The rationale here is that longer sleeps don't need that much of a timer
+> precision as a rule and making the timer a more likely candidate for
+> coalescing in these cases is generally desirable.  It starts at 5 ms so
+> that the delta between the requested sleep time and the effective
+> deadline is a contiuous function of the former.
+> 
+> Link: https://lore.kernel.org/linux-pm/c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com/ [1]
+> Link: https://lore.kernel.org/linux-pm/CAJvTdK=Q1kwWA6Wxn8Zcf0OicDEk6cHYFAvQVizgA47mXu63+g@mail.gmail.com/ [2]
+> Reported-by: Len Brown <lenb@kernel.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> This is a follow-up to the discussion started by [1] above and since
+> the beginning of it I have changed my mind a bit, as you can see.
+> 
+> Given Arjan's feedback, I've concluded that using usleep_range() for
+> all sleep values is the right choice and that some slack should be
+> used there.  I've taken 50 us as the minimum value of it because that's
+> what is used in user space FWICT and I'm not convinced that shorter
+> values would be suitable here.
+> 
+> The other part, using 1% of the sleep time as the slack for longer
+> sleeps, is likely more controversial.  It is roughly based on the
+> observation that if one timer interrupt is sufficient for something,
+> then using two of them will be wasteful even if this is just somewhat.
+> 
+> Anyway, please let me know what you think.  I'd rather do whatever
+> the majority of you are comfortable with.
 
-> > +
-> > +#define PM_STANDBY_ACTIVE            ((__force standby_state_t) 0)
-> > +#define PM_STANDBY_SCREEN_OFF        ((__force standby_state_t) 1)
-> > +#define PM_STANDBY_SLEEP             ((__force standby_state_t) 2)
-> > +#define PM_STANDBY_RESUME            ((__force standby_state_t) 3)
-> > +#define PM_STANDBY_MIN                       PM_STANDBY_ACTIVE
-> > +#define PM_STANDBY_MAX                       ((__force standby_state_t) 4)
-> > +
-> >   /**
-> >    * struct platform_suspend_ops - Callbacks for managing platform dependent
-> >    *  system sleep states.
-> > @@ -281,6 +290,8 @@ extern void arch_suspend_enable_irqs(void);
-> >
-> >   extern int pm_suspend(suspend_state_t state);
-> >   extern bool sync_on_suspend_enabled;
-> > +extern int pm_standby_transition(standby_state_t state);
-> > +extern int pm_standby_state(void);
-> >   #else /* !CONFIG_SUSPEND */
-> >   #define suspend_valid_only_mem      NULL
-> >
-> > diff --git a/kernel/power/power.h b/kernel/power/power.h
-> > index de0e6b1077f2..4ee067cd0d4d 100644
-> > --- a/kernel/power/power.h
-> > +++ b/kernel/power/power.h
-> > @@ -207,6 +207,7 @@ extern void swsusp_show_speed(ktime_t, ktime_t, unsigned int, char *);
-> >   extern const char * const pm_labels[];
-> >   extern const char *pm_states[];
-> >   extern const char *mem_sleep_states[];
-> > +extern const char *standby_states[];
-> >
-> >   extern int suspend_devices_and_enter(suspend_state_t state);
-> >   #else /* !CONFIG_SUSPEND */
-> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> > index a42e8514ee7a..1865db71a0c2 100644
-> > --- a/kernel/power/suspend.c
-> > +++ b/kernel/power/suspend.c
-> > @@ -45,12 +45,21 @@ static const char * const mem_sleep_labels[] = {
-> >       [PM_SUSPEND_MEM] = "deep",
-> >   };
-> >   const char *mem_sleep_states[PM_SUSPEND_MAX];
-> > +static const char * const standby_labels[] = {
-> > +     [PM_STANDBY_ACTIVE] = "active",
-> > +     [PM_STANDBY_SCREEN_OFF] = "screen_off",
-> > +     [PM_STANDBY_SLEEP] = "sleep",
-> > +     [PM_STANDBY_RESUME] = "resume",
-> > +};
-> > +const char *standby_states[PM_STANDBY_MAX];
-> >
-> >   suspend_state_t mem_sleep_current = PM_SUSPEND_TO_IDLE;
-> >   suspend_state_t mem_sleep_default = PM_SUSPEND_MAX;
-> >   suspend_state_t pm_suspend_target_state;
-> >   EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-> >
-> > +standby_state_t standby_current = PM_STANDBY_ACTIVE;
-> > +
-> >   unsigned int pm_suspend_global_flags;
-> >   EXPORT_SYMBOL_GPL(pm_suspend_global_flags);
-> >
-> > @@ -188,6 +197,16 @@ void __init pm_states_init(void)
-> >        * initialize mem_sleep_states[] accordingly here.
-> >        */
-> >       mem_sleep_states[PM_SUSPEND_TO_IDLE] = mem_sleep_labels[PM_SUSPEND_TO_IDLE];
-> > +     /* All systems support the "active" state. */
-> > +     standby_states[PM_STANDBY_ACTIVE] = standby_labels[PM_STANDBY_ACTIVE];
-> > +     /*
-> > +      * Not all systems support these states, where they will have increased
-> > +      * power consumption. If deemed necessary, they should be gated to not
-> > +      * mislead userspace.
-> > +      */
-> > +     standby_states[PM_STANDBY_SCREEN_OFF] = standby_labels[PM_STANDBY_SCREEN_OFF];
-> > +     standby_states[PM_STANDBY_SLEEP] = standby_labels[PM_STANDBY_SLEEP];
-> > +     standby_states[PM_STANDBY_RESUME] = standby_labels[PM_STANDBY_RESUME];
->
-> Shouldn't these states only be enabled when LPS0 support was found?  IE
-> shouldn't they be enabled by acpi_register_lps0_dev() and disabled by
-> acpi_unregister_lps0_dev()
+I know it is a bit early for this, but the patch looks good to me, so:
 
-This is a place i want to look more into. Yes I agree that these
-states should be hidden. However, we have the issue right now where
-s2idle is globally enabled too, even if the platform does not support
-S3 or advertise S0 support in the FADT. Windows correctly hibernates
-Ayaneo devices that do not advertise either for example, where linux
-just makes them enter a semi broken state. Ayaneo has started
-releasing updated BIOSes that fix that though so that fixes that issue
-until another manufacturer decides to do that.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-I would also like to see if it is possible to hide individual states
-if the hardware does not support them. However, I think ACPI does not
-advertise support for any of these states. IE you either support all
-of them or none of them through the UUID existing.
+Regards,
 
-> >   }
-> >
-> >   static int __init mem_sleep_default_setup(char *str)
-> > @@ -354,6 +373,108 @@ static bool platform_suspend_again(suspend_state_t state)
-> >               suspend_ops->suspend_again() : false;
-> >   }
-> >
-> > +static int platform_standby_transition_internal(standby_state_t state)
-> > +{
-> > +     int error;
-> > +
-> > +     if (state == standby_current)
-> > +             return 0;
-> > +     if (state > PM_STANDBY_MAX)
-> > +             return -EINVAL;
-> > +
-> > +     pm_pr_dbg("Transitioning from standby state %s to %s\n",
-> > +               standby_states[standby_current], standby_states[state]);
-> > +
-> > +     /* Resume can only be entered if we are on the sleep state. */
-> > +     if (state == PM_STANDBY_RESUME) {
-> > +             if (standby_current != PM_STANDBY_SLEEP)
-> > +                     return -EINVAL;
-> > +             standby_current = PM_STANDBY_RESUME;
-> > +             return platform_standby_turn_on_display();
-> > +     }
-> > +
-> > +     /*
-> > +      * The system should not be able to re-enter Sleep from resume as it
-> > +      * is undefined behavior. As part of setting the state to "Resume",
-> > +      * were promised a transition to "Screen Off" or "Active".
-> > +      */
-> > +     if (standby_current == PM_STANDBY_RESUME && state == PM_STANDBY_SLEEP)
-> > +             return -EINVAL;
-> > +
-> > +     /* Resume is the Sleep state logic-wise. */
-> > +     if (standby_current == PM_STANDBY_RESUME)
-> > +             standby_current = PM_STANDBY_SLEEP;
-> > +
-> > +     if (standby_current < state) {
-> > +             for (; standby_current < state; standby_current++) {
-> > +                     switch (standby_current + 1) {
-> > +                     case PM_STANDBY_SCREEN_OFF:
-> > +                             error = platform_standby_display_off();
-> > +                             break;
-> > +                     case PM_STANDBY_SLEEP:
-> > +                             error = platform_standby_sleep_entry();
-> > +                             break;
-> > +                     }
-> > +
-> > +                     if (error)
-> > +                             return error;
-> > +             }
-> > +     } else if (standby_current > state) {
-> > +             for (; standby_current > state; standby_current--) {
-> > +                     switch (standby_current) {
-> > +                     case PM_STANDBY_SLEEP:
-> > +                             error = platform_standby_sleep_exit();
-> > +                             break;
-> > +                     case PM_STANDBY_SCREEN_OFF:
-> > +                             error = platform_standby_display_on();
-> > +                             break;
-> > +                     }
-> > +
-> > +                     if (error)
-> > +                             return error;
-> > +             }
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/**
-> > + * pm_standby_transition - Transition between Modern Standby states
-> > + *
-> > + * Fires the appropriate firmware notifications to transition to the requested
-> > + * state. Returns an error if the transition fails. The function does not
-> > + * rollback. It is up to userspace to handle the error and re-transition when
-> > + * appropriate.
-> > + */
-> > +int pm_standby_transition(standby_state_t state)
-> > +{
-> > +     unsigned int sleep_flags;
-> > +     int error;
-> > +
-> > +     sleep_flags = lock_system_sleep();
-> > +     error = platform_standby_transition_internal(state);
-> > +     unlock_system_sleep(sleep_flags);
-> > +
-> > +     return error;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pm_standby_transition);
-> > +
-> > +/**
-> > + * pm_standby_state - Returns the current standby state
-> > + */
-> > +int pm_standby_state(void)
-> > +{
-> > +     unsigned int sleep_flags;
-> > +     int state;
-> > +
-> > +     sleep_flags = lock_system_sleep();
-> > +     state = standby_current;
-> > +     unlock_system_sleep(sleep_flags);
-> > +
-> > +     return state;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pm_standby_state);
-> > +
-> >   #ifdef CONFIG_PM_DEBUG
-> >   static unsigned int pm_test_delay = 5;
-> >   module_param(pm_test_delay, uint, 0644);
-> > @@ -586,6 +707,7 @@ static void suspend_finish(void)
-> >   static int enter_state(suspend_state_t state)
-> >   {
-> >       int error;
-> > +     standby_state_t standby_prior;
-> >
-> >       trace_suspend_resume(TPS("suspend_enter"), state, true);
-> >       if (state == PM_SUSPEND_TO_IDLE) {
-> > @@ -601,6 +723,9 @@ static int enter_state(suspend_state_t state)
-> >       if (!mutex_trylock(&system_transition_mutex))
-> >               return -EBUSY;
-> >
-> > +     standby_prior = standby_current;
-> > +     platform_standby_transition_internal(PM_STANDBY_SLEEP);
-> > +
-> >       if (state == PM_SUSPEND_TO_IDLE)
-> >               s2idle_begin();
-> >
-> > @@ -630,6 +755,8 @@ static int enter_state(suspend_state_t state)
-> >       pm_pr_dbg("Finishing wakeup.\n");
-> >       suspend_finish();
-> >    Unlock:
-> > +     platform_standby_transition_internal(standby_prior);
-> > +
-> >       mutex_unlock(&system_transition_mutex);
-> >       return error;
-> >   }
->
+Hans
+
+
+
+
+> ---
+>  drivers/acpi/osl.c |   22 +++++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
+> 
+> Index: linux-pm/drivers/acpi/osl.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/osl.c
+> +++ linux-pm/drivers/acpi/osl.c
+> @@ -607,7 +607,27 @@ acpi_status acpi_os_remove_interrupt_han
+>  
+>  void acpi_os_sleep(u64 ms)
+>  {
+> -	msleep(ms);
+> +	u64 usec = ms * USEC_PER_MSEC, delta_us = 50;
+> +
+> +	/*
+> +	 * Use a hrtimer because the timer wheel timers are optimized for
+> +	 * cancellation before they expire and this timer is not going to be
+> +	 * canceled.
+> +	 *
+> +	 * Set the delta between the requested sleep time and the effective
+> +	 * deadline to at least 50 us in case there is an opportunity for timer
+> +	 * coalescing.
+> +	 *
+> +	 * Moreover, longer sleeps can be assumed to need somewhat less timer
+> +	 * precision, so sacrifice some of it for making the timer a more likely
+> +	 * candidate for coalescing by setting the delta to 1% of the sleep time
+> +	 * if it is above 5 ms (this value is chosen so that the delta is a
+> +	 * continuous function of the sleep time).
+> +	 */
+> +	if (ms > 5)
+> +		delta_us = (USEC_PER_MSEC / 100) * ms;
+> +
+> +	usleep_range(usec, usec + delta_us);
+>  }
+>  
+>  void acpi_os_stall(u32 us)
+> 
+> 
+> 
+
 
