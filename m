@@ -1,96 +1,97 @@
-Return-Path: <linux-pm+bounces-17848-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17849-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38D9D9D4AC6
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 11:24:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C24209D4AF3
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 11:34:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E40CC1F22D56
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 10:24:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD3D9B239C7
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 10:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E80C1D07B7;
-	Thu, 21 Nov 2024 10:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA371D0DF7;
+	Thu, 21 Nov 2024 10:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W55cEP6h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGIIl/AR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F053C47B;
-	Thu, 21 Nov 2024 10:22:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44511D0B83;
+	Thu, 21 Nov 2024 10:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732184532; cv=none; b=WfpWCWKVmTSj24sUP65y6JQNbBRNduQNnugdpaFPVKMnyvQ28QdAE9J8JtOD+N/dsLpKWblVr0afx+b0E/W0PeluWVYWNEqvpcdU8eBlujXimB8ehf5V0sCu3BrH4uMaNULqO6rqP4jcbKv05br6jdHBVGLJ9JjGGJ8qeRDtReM=
+	t=1732185238; cv=none; b=l6yp4zINrVwzoPvdsoCtwTp8glpmy2F9N5JEcoEtn4h4OgW55OcsE+YE+0B66FsmWLvhsG/zJkgq2VNcHVINIuzYgcf+ODEGdf3od2E5K2mR3GO9DGODicYZwUJsCxLM0WK5FgS9mKrNej5VEKj0GgaLdhNZ/Ru9dh9HfyhWztk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732184532; c=relaxed/simple;
-	bh=zuHXyJgoGqJBsye9km5bCGjtLmQ4tcRl2042pukyyqw=;
+	s=arc-20240116; t=1732185238; c=relaxed/simple;
+	bh=PRsd2mYUtqJDcJ1K7x7OCmAEwgu9V/n3Pf1REKc5WGE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mve1LigTwmdvqMtDGyEQV9bpERFE4/ber7MMbhOkx74VbCt6voVUfmKTaFsQ5rh/zzp89pwQgT+m7LcUD1B2T0HppYR3ojIhpY1AyShqpf7SK54LNDR4TW4JKj9udF4TFNIPG9zZWEE30ivbFGnRWhioshofDjGY45JWSlX3oao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W55cEP6h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 810ECC4CED0;
-	Thu, 21 Nov 2024 10:22:11 +0000 (UTC)
+	 To:Cc:Content-Type; b=gKpVmOflw7ocVu5aWDilkKntEuVIhiRUmmnfq47A55Xgd0rA64Soq8dXHeXf+VIfxtG333KodJUwEgzIJ6hNIDRaNF3MKYq324fuvUR7+0hxkFxi796c3dGYFKD5ZVjY9K92snv1z3jNWqgXm4iwcihdq8ivWIXMqv9CQKoH4TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGIIl/AR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 715A9C4CED0;
+	Thu, 21 Nov 2024 10:33:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732184531;
-	bh=zuHXyJgoGqJBsye9km5bCGjtLmQ4tcRl2042pukyyqw=;
+	s=k20201202; t=1732185237;
+	bh=PRsd2mYUtqJDcJ1K7x7OCmAEwgu9V/n3Pf1REKc5WGE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=W55cEP6hYQITOmZVbqhb9z2Y5bhoQYbPl2qfsJrlYfAMJUJ+ZWboyX9kIexWwUmV9
-	 +b8l2A+x53UW98WMOp7MYNySOdgjHdkoxLGmhHp7h/SqkyP7Ev9xWO+kzC+uIJ+013
-	 OEptt9969HVpBxuZvD8NkPcrg85cdGjiSpnPILS/ZcMDFPc/zUNyYR8Wr4CCciKW14
-	 q/JMx1pENB6X0VsLN3x8yFLsGV7tdHLI/o/HZbVY6OzisH+7ytq9CpAcNYFqDGuuo6
-	 d2cvo0r9fd4LyRVDzEPiMy/DIqmZ35f1yXq4E+kosL7hZoZ6V59GwutfyIMfFbmE8d
-	 4YBNc9ltjaDrA==
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-71822fabf4fso340712a34.2;
-        Thu, 21 Nov 2024 02:22:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW7qBi9ArOHUepVfJF81UYEQPC2hsqGqZDzryiGJVpfjKaaV4x31HH0Iru0jQO0Z0AdIX98q1aeTiA=@vger.kernel.org, AJvYcCXZAY0bt9G4tq+u9rr3gUxnFpUyrZLssn55bl5A1cwHW+pHgwhmLwgYfyqkbCnJn56fQuLfPGwNUKV8kQ8=@vger.kernel.org, AJvYcCXgSdoWkDMnfZZoNROPjEBgx4mgA3v6QSEmEkLUMSdx9uZrcUI5RpvNITyjDYBjvBjZG2whlpOa@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjE25I3qc5Rxt8k3YnzZI5uLRpFBCteuxTzIshWXvYk2j3z1WN
-	OLYTK3Dac5VK7fSB0qGg9m4kTjho1dd7/HprL18YiE26VElbyuKh5kU2QZXup8ybq6PA5b5iBrg
-	omI1dzpOpuXDF37mR2v069w6Fx3Q=
-X-Google-Smtp-Source: AGHT+IEDFNyjZYCg7P5ba5VoO9RLm7dU12kagS1jW6IwroPdUYgZWLHTkvuOGEoVrkjH1OgaIyc/BFhL0/L9SY6iPlw=
-X-Received: by 2002:a05:6830:1245:b0:709:3431:94c3 with SMTP id
- 46e09a7af769-71ab31fac58mr5354895a34.23.1732184531014; Thu, 21 Nov 2024
- 02:22:11 -0800 (PST)
+	b=XGIIl/ARoIRb2tIpMRvqTygsb1uOfavVtcesqrwb7ivSAQtOd/bETVBCV6ARWOeG5
+	 cM5SdMgjTcovs79puYqRHEJz8Kp87za48LkAUefY2f1V7ZdmqJaRZYyE/hWTDfRo5U
+	 fK6PWuLI5qk5H79yL4MFFXWZTCon7F3IXVYaHsGhYMBbXG3sl9PfGpb/XOX2pfwJ/y
+	 fujTZY4lLRi2Ciimm4dTfs0CaDTZ7+BFAXBncFsjTpOxhefIIfWPWm4b8RTmiwtL2+
+	 qn+0xa31iNPUx3omM/2XGkoCcxr8u6YH+RNF2wZHz0i3AtrK74BojlzliD0W7P0a+r
+	 lRgPqUmJ4Dxqg==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5ee9db85af0so825711eaf.0;
+        Thu, 21 Nov 2024 02:33:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUpCkPQk2+tfV2jju1fmstOM+Q+onMuAxTtcuh+mtHyF7bIUZkqwdUebSZHFuJcTQVB6EPgZKS53Db91yT/@vger.kernel.org, AJvYcCWxdjDLmLSLVrCcfPr9pYUqqI6iD6YNd8EC4MNbe++PDzxwTjdjqXAiCRCL0x1AAajpIRDsFmXFtsAv@vger.kernel.org, AJvYcCXAgncB4X7syVXHgawJ3eSaPFkGY6P0PeK3MZfBdnhqE2kbcSWauZOGtdxqO6M8yr2++hHh//v0efE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTrpy/8OFF4TlE0auggAuo2O9FX3fiIhqj3MXdX0zsg/ALkDZ7
+	/pOo4a7yUXR9IpcCtTrj8SnHLVHPYWMcuW00VqvNRvKydeQPk2t67tAhznlPAs1SHp1XtTM/diS
+	P+vKhv4kFXo1WFaF9ELmOerlKT3k=
+X-Google-Smtp-Source: AGHT+IFk2dIFB0EhKFDmZLp6hggCtgy6vkiIpWWpYvjA8ubljmfDCLOq8wB9cYLG3YGFwFXLB+38mJUUXEkxj4XJp2o=
+X-Received: by 2002:a05:6830:12:b0:710:d4cd:bff3 with SMTP id
+ 46e09a7af769-71b037b5bf3mr1346080a34.9.1732185236812; Thu, 21 Nov 2024
+ 02:33:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <a4aa8842a3c3bfdb7fe9807710eef159cbf0e705.1731463305.git.len.brown@intel.com>
- <c5f9c185-11b1-4bc8-96be-a81895c2a096@intel.com> <CAJZ5v0iCR5ZbNz=OF1MbJUJdhCRh2P8M_MTF7eszPe5uv9_R1w@mail.gmail.com>
- <95c5a803-efac-4d90-b451-4c6ec298bdb7@intel.com>
-In-Reply-To: <95c5a803-efac-4d90-b451-4c6ec298bdb7@intel.com>
+References: <c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com>
+ <CAJZ5v0iC3mX7Yh_ETTw4FY3xUbZeAUgS0Nc9_88fnT1q5EGWyA@mail.gmail.com>
+ <90818e23-0bdb-40ad-b2f9-5117c7d8045e@linux.intel.com> <CAJZ5v0gxNEQx5Q+KXs-AMn=bt7GD=jU-TseMHUc5mHp0tKSBtA@mail.gmail.com>
+ <0147ea1a-3595-47ae-a9d5-5625b267b7a8@linux.intel.com> <CAJZ5v0itnn3T4bwiAO3eAoKH4mLFYswcNWBx6JCrK1GFDEy7vg@mail.gmail.com>
+ <e0dd2cb8-eea2-443d-bf23-4d225528d33f@linux.intel.com> <CAJZ5v0h5=3LMVCa8kSoomNyF9r_7HLmpkH+YhYEO_N7H6-hAGQ@mail.gmail.com>
+ <593c4be2-c21e-49fa-8bf7-a614c01c8e66@linux.intel.com> <CAJZ5v0h_hh8Rp2kG0xT_b5Bm5zWX6MscRo1rEx-jO-dBd7t5Aw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0h_hh8Rp2kG0xT_b5Bm5zWX6MscRo1rEx-jO-dBd7t5Aw@mail.gmail.com>
 From: Len Brown <lenb@kernel.org>
-Date: Thu, 21 Nov 2024 05:22:00 -0500
-X-Gmail-Original-Message-ID: <CAJvTdKmi6-nEwhq8edPw5g2b+ME2_HX+ctePpcPFoZPbNcXqhQ@mail.gmail.com>
-Message-ID: <CAJvTdKmi6-nEwhq8edPw5g2b+ME2_HX+ctePpcPFoZPbNcXqhQ@mail.gmail.com>
-Subject: Re: [PATCH v3] x86/cpu: Add INTEL_LUNARLAKE_M to X86_BUG_MONITOR
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, peterz@infradead.org, tglx@linutronix.de, 
-	x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Len Brown <len.brown@intel.com>, stable@vger.kernel.org
+Date: Thu, 21 Nov 2024 05:33:45 -0500
+X-Gmail-Original-Message-ID: <CAJvTdKkYKj-PQhzQgDVGnx=oTwK5ufWNsLxOLtzDwQPGpteVfg@mail.gmail.com>
+Message-ID: <CAJvTdKkYKj-PQhzQgDVGnx=oTwK5ufWNsLxOLtzDwQPGpteVfg@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPI: Replace msleep() with usleep_range() in acpi_os_sleep().
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Arjan van de Ven <arjan@linux.intel.com>, anna-maria@linutronix.de, tglx@linutronix.de, 
+	peterz@infradead.org, frederic@kernel.org, corbet@lwn.net, 
+	akpm@linux-foundation.org, linux-acpi@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Len Brown <len.brown@intel.com>, Todd Brandt <todd.e.brandt@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 20, 2024 at 3:21=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
+On Wed, Nov 20, 2024 at 2:42=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 
-> I'm not going to lose sleep over it, but as a policy, I think we should
-> backport CPU fixes to all the stable kernels. I don't feel like I have a
-> good enough handle on what kernels folks run on new systems to make a
-> prediction.
+> I generally think that if you are sleeping relatively long, you may as
+> well sacrifice some precision for avoiding system stress so to speak,
+> so I've been considering something like flat 50 us for sleeps between
+> 1 and 5 ms and then 1% of the sleep duration for longer sleeps.
 
-FWIW, I sent a backport of a slightly earlier version of this patch,
-but all I got back was vitriol about violating the kernel Documentation on
-sending to stable.
+What is the maximum rate of acpi_os_sleep() invocations?
 
-Maybe a native english speaker could re-write that Documentation,
-so that a native english speaker can understand it?
-Or better yet, somebody can write a script or update checkpatch so that
-developers can more likely avoid the Soup Nazi treatment?
+Assuming the reasoning for user-space timer-slack is sound @ fixed 50 usec,
+what logic supports acpi_os_sleep paying more timer slack delay than user s=
+pace?
 
-ie. I agree with you, and I'm happy to help, but it isn't clear how.
-
-Len Brown, Intel
+What measurements can demonstrate the benefit of this proposed additional d=
+elay?
 
