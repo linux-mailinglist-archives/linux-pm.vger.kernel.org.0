@@ -1,134 +1,169 @@
-Return-Path: <linux-pm+bounces-17842-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17843-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B988B9D4726
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 06:18:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DEEA9D480F
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 08:11:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19879B20DDA
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 05:18:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B0F52824CC
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 07:11:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A5513D638;
-	Thu, 21 Nov 2024 05:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F571AC89A;
+	Thu, 21 Nov 2024 07:11:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cuNj9h2O"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kn4ptSmZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7473132117
-	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 05:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB8D158D87
+	for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2024 07:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732166312; cv=none; b=AX5KJOpy+0jndxaA+ce9LbCrH1tklSPCARdMIga+DQaPC4fPoIqDv8vfMnhXtqArX/no/axk2PGH17AVWDLgqRfBkfUry7P1X0W8mWJHilyZpEPwlExyuHDZvwYc4unC5lYWB2zKh4NKbi9e8izsHWxmWvbOL/+/+5XOeciwihU=
+	t=1732173093; cv=none; b=gDAXDARW9K1WKDfDr9JFGLTDoYB21PcYarp+J5os0dBoKJ43CiXJCsmC9T8aJkwPE7Zkssh5fvcpGxUXL3dRV41IpDE6gu/qk+kSgD0NCb/OdLAY9i7oUOUJM5LiAga4bVgDn0UVUeniGMtM5cSsG7E27IZHL8mSWoffMNxoTgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732166312; c=relaxed/simple;
-	bh=3iNiMAaXuyRoPF8/xoY8wdLm6PfEbp5C9kJFn1jG7HY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sVzBvRqZCtj39Oq6q+j/5+lB+mjz8ewTm6O1AavK8egw7f59LuyK+vVbgBV6BOFO+74jOD4fuVTXjHHTYsRBB4E/TCtQXBVovVsLURj8STOPGlSFiNpjDYIP7yiLFPugQushjsQgBNJTQpVHRZ1wdh+DAwQyRhOfcE2gb5IO1Dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cuNj9h2O; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-212008b0d6eso3749255ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2024 21:18:30 -0800 (PST)
+	s=arc-20240116; t=1732173093; c=relaxed/simple;
+	bh=dR2xaYZLT8J72LgXJrYpTqW3JoYtXIm13DXRuOxZJb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkeoHHNvCnE5ZiLmgFw7YE3voejksEpmJrH9LCY+yE0TgWY4PXB5a8U3GTEeRLClAl7Qi3DTkwmBe5TM8+KbMvrNxRpemMYV49As1hJqIpQxhJwoDYecfEjuxfs26H9R0p3guUL6wQ0c09Sb3FCv+1O5Zwn5HWxLvd06VvCb+Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kn4ptSmZ; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7f3da2c2cb5so476705a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2024 23:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1732166310; x=1732771110; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gRRi5SKhoizpTYQ3Ei2ujEmx27mAv2VTQ/FPrSwu6V4=;
-        b=cuNj9h2OlzcMLa2lEVyAivsdwnn94AYN1lMS9i1Ml/EkwMEvuHLQFys8uMk8bz7FgM
-         U3uavUoicQkYHHPfn2zy3PGuB1FS4cKPRSeISSVKT7klpdJaQROcKMlJELuHcNPvySIy
-         xRxfvmMT/A5TwcRJzzT4zhSS5cqKF32lTNunE=
+        d=linaro.org; s=google; t=1732173091; x=1732777891; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwndOPs6zZlfAWU75NptZcH8ZvVkNsjK1khYdtyhMYo=;
+        b=kn4ptSmZzCPnbE851bx6eZxADkmjRZGCZ2x2f2ucSajOo/fOEeyDm1/J9jqWhOwrA9
+         Iwdh0h7/OAYOOdZ8R0qANoMZ27mrF/OcjVYdKJDzPMplUULG6aYspAfy6bAheRwZx/KC
+         hxwu5tccd4cFFM7Q4jorz+BKao40fnNcvXROoKeXhrDG9UtlkXzRxXeGIzoIZHAaeuRt
+         3/nGgrmGNmDGCYXlGJW5o4uy2A7QiwTK1pzXTAtp+AJDzPImtUzZajfIUUD1F0/vBBUI
+         Y0o/MuXsMXvFZrZQexPsPf88xomgJN30xDQX7F651BzBjo4XqIt056juogW704OW69T3
+         v6ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732166310; x=1732771110;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gRRi5SKhoizpTYQ3Ei2ujEmx27mAv2VTQ/FPrSwu6V4=;
-        b=LdcCxKwoYTTuGLRAqJfp6rzdsNkBq6NyP9FFgx5JsCgQbJLd+Nlo3m8NJDGqjtb6w8
-         7teOYOFxd9lh5k/IxyZI1SWeBVdz3RaWhWJh529guUniZiqtJhuixMLjcqwbOgJ0I22L
-         1q8AF4AFvkn8XHuAK0gViFT/G6olTHWjE1uPIIctHJc27+0w6YRA/BBwiwQFLtPTSOey
-         Kbfd3xwandLraLHSh690AHU2IRnc6tzeGVmEeRZ9lNpWr5QUbK0bcaTAgaVnlMXFojtd
-         hfsqpSxoWUiYZOWFsAU8QKd2Xx+/BIMun/TFA+xUynB6PkSXxadZVFw4TdQMkfhJZcQF
-         cY0w==
-X-Forwarded-Encrypted: i=1; AJvYcCX8xm5CfywIL3oVhDVp6z+rkQP80nsh05i4FoLk2sLOge3GGmPaDDxXIsERFfdHVkmsIcduw0Idsw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvLqSfbHR5FVvYwW4m5aOzXruQWTcv4UQNoVzn+1fbKYwAjabn
-	3lMe7g6xxYU0kLjHLtdLVogOdRsja5sYwkHhXZxHJhBUyTruALPP3GAAIhugIw==
-X-Google-Smtp-Source: AGHT+IEcYjVTkLz1aNR2Rs+b1/26fkT8XZws7jDLf+IzBe8rUwmQgktERWQyKYkQGUrBjuGfJRAwMA==
-X-Received: by 2002:a17:902:ce8c:b0:20c:9d9e:9049 with SMTP id d9443c01a7336-2126c130e74mr62613895ad.22.1732166309868;
-        Wed, 20 Nov 2024 21:18:29 -0800 (PST)
-Received: from lschyi-p920.tpe.corp.google.com ([2401:fa00:1:10:2c14:fcb:b86c:e723])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-212883e45c4sm4648955ad.218.2024.11.20.21.18.28
+        d=1e100.net; s=20230601; t=1732173091; x=1732777891;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lwndOPs6zZlfAWU75NptZcH8ZvVkNsjK1khYdtyhMYo=;
+        b=kJB6DQOhSCONhrcncd+xG8dO0m+KHIu379CfqyMBU7JAZ1NEPeaYtshQhmYzV0xwrm
+         ieAT3j67Thyeyhf40gFEH/gi6LbtFrhFHjy8frnsW1CcjcwG07SqR8rQahnB+yahbZ20
+         X26n/FLTsPt+uiAbJhX76i6WgepJIVzdh2qGZfEKw3fP6DlHVfZHVbeH4+yoJXfn/ZV7
+         ZOZwh+2WriAPMnj3IvFOG4E53febOAdG4aFAobNOKoAdn03jgQeM8KiMv3Hh1T8El9Po
+         gwq/iclqCOQS9JMLzhZUnMbpNhvto3G1a9TR8YFS11v3sMzXBRGLIJFbeM71wUXn6sLj
+         etvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUhU1Re673Og7xg7sq2Cwm7/InZQSYshqKoFeXKvR+w3Jab80gSzpaLKDHk9Rddb30GgSqKjj/g8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG583JkrRh3yD43jd2h8WRSGgi6Vz89w1S2MP9pxx4xdPSGClj
+	IIQBdDIwx4nyM39QxUKPVO2SCqtu6CpahCCtE10/5jkj1B9+qHS8IB6cf9apItY=
+X-Gm-Gg: ASbGncszt8Yz4jmbmBpKMmN2gopt88DGDLSxLy9P9gLYPSsLvfIKms+JYE0LA4QxKgH
+	SfrayNKkgD1OZwAjDGHZjki2kgmMKB/wvW10wMSjbKqoZZXf73UguAMpejJdJysfiF8TESolWy7
+	lPGqR7tmJAwp/n8zt5kQt9DqeB4d8//kDCeUUIWjlS/wb6FG0UqhCWs8aUApZU2Hr8xyZAEECXS
+	slZFjWiEMqaKE86no75El/mxS+zf3kiqfY7WmHc3o9WzchS1701
+X-Google-Smtp-Source: AGHT+IG1cAE++g+6JuO24wxOlmcC0eBMb+agSIobo0ZkO7QH+WoKZoKf3psQEBrm9NMN1Vi72tfcKg==
+X-Received: by 2002:a05:6a20:748d:b0:1d9:db4c:240e with SMTP id adf61e73a8af0-1ddb11d8450mr7427559637.45.1732173090552;
+        Wed, 20 Nov 2024 23:11:30 -0800 (PST)
+Received: from localhost ([122.172.86.146])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724beeb83easm2895696b3a.16.2024.11.20.23.11.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 21:18:29 -0800 (PST)
-From: Sung-Chi Li <lschyi@chromium.org>
-Date: Thu, 21 Nov 2024 13:18:26 +0800
-Subject: [PATCH] power:supply: cros_usbpd-charger: update command version
- to set limit
+        Wed, 20 Nov 2024 23:11:30 -0800 (PST)
+Date: Thu, 21 Nov 2024 12:41:27 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Javier Martinez Canillas <javierm@redhat.com>, robh@kernel.org,
+	arnd@linaro.org
+Cc: linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
+	Zhipeng Wang <zhipeng.wang_1@nxp.com>,
+	Maxime Ripard <mripard@kernel.org>, javier@dowhile0.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH] cpufreq: dt-platdev: Fix module autoloading
+Message-ID: <20241121071127.y66uoamjmroukjck@vireshk-i7>
+References: <20241119111918.1732531-1-javierm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241121-fix_power_limit_ec_cmd_version-v1-1-2f15dcf32084@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAKHCPmcC/x2NSQqAMAwAvyI5W7DFDb8iErSNGnAjFRXEv1s9z
- mFmbvAkTB6q6Aahgz2vSwAdR2DHdhlIsQsMJjGp1karni/c1pMEJ555R7JoZ4cHyaeqvDeuyFp
- Xpl0GIbIJBeMf1M3zvLEKxLpwAAAA
-To: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
- Sebastian Reichel <sre@kernel.org>
-Cc: chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Sung-Chi Li <lschyi@chromium.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732166308; l=1543;
- i=lschyi@chromium.org; s=20241113; h=from:subject:message-id;
- bh=3iNiMAaXuyRoPF8/xoY8wdLm6PfEbp5C9kJFn1jG7HY=;
- b=wiyA9RmRAL+z2Xb4sx2KiPSsmD8rPIGptfjrdwpzGCLziP+0NGFIMFXJuWuABi8UlZoTVd2bM
- HY64Bc6uCQ4Cs8s4b6esQTyCOQz8ayDYRVb6lM96SqS9fAkk0Q2qOjQ
-X-Developer-Key: i=lschyi@chromium.org; a=ed25519;
- pk=nE3PJlqSK35GdWfB4oVLOwi4njfaUZRhM66HGos9P6o=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241119111918.1732531-1-javierm@redhat.com>
 
-The request that sets the power limit on the ChromeOS Embedded
-Controller (EC) requires the command version to be 1, so update the
-command version used in the driver.
++Rob/Arnd,
 
-Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
----
-The ChromeOS Embedded Controller (EC) exposes a set of commands (host
-commands) for communicating with it, and the kernel driver
-cros_usbpd-charger uses host commands to get and set power settings on
-EC.
+On 19-11-24, 12:18, Javier Martinez Canillas wrote:
+> This driver can be built as a module since commit 3b062a086984 ("cpufreq:
+> dt-platdev: Support building as module"), but unfortunately this caused
+> a regression because the cputfreq-dt-platdev.ko module does not autoload.
+> 
+> Usually, this is solved by just using the MODULE_DEVICE_TABLE() macro to
+> export all the device IDs as module aliases. But this driver is special
+> due how matches with devices and decides what platform supports.
+> 
+> There are two of_device_id lists, an allow list that are for CPU devices
+> that always match and a deny list that's for devices that must not match.
+> 
+> The driver registers a cpufreq-dt platform device for all the CPU device
+> nodes that either are in the allow list or contain an operating-points-v2
+> property and are not in the deny list.
+> 
+> For the former just add a MODULE_DEVICE_TABLE(), and for the latter add a
+> module alias. That way the driver would always be autoloaded when needed.
+> 
+> Reported-by: Radu Rendec <rrendec@redhat.com>
+> Fixes: 3b062a086984 ("cpufreq: dt-platdev: Support building as module")
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> Posting as an RFC because I don't have a platform that uses this driver
+> but I'll let Radu test since he reported by issue.
+> 
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 2a3e8bd317c9..7ae7c897c249 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -97,6 +97,7 @@ static const struct of_device_id allowlist[] __initconst = {
+>  
+>  	{ }
+>  };
+> +MODULE_DEVICE_TABLE(of, allowlist);
 
-The host command needs to specify the version in the sent request. The
-set external power command (EC_CMD_EXTERNAL_POWER_LIMIT) requires the
-command version to be 1, so update that setting in the driver.
----
- drivers/power/supply/cros_usbpd-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is fine obviously.
 
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index 47d3f58aa15c..c496c7c4dd2c 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -325,7 +325,7 @@ static int cros_usbpd_charger_set_ext_power_limit(struct charger_data *charger,
- 	req.current_lim = current_lim;
- 	req.voltage_lim = voltage_lim;
- 
--	ret = cros_usbpd_charger_ec_command(charger, 0,
-+	ret = cros_usbpd_charger_ec_command(charger, 1,
- 					    EC_CMD_EXTERNAL_POWER_LIMIT,
- 					    &req, sizeof(req), NULL, 0);
- 	if (ret < 0)
+>  /*
+>   * Machines for which the cpufreq device is *not* created, mostly used for
+> @@ -236,4 +237,16 @@ static int __init cpufreq_dt_platdev_init(void)
+>  }
+>  core_initcall(cpufreq_dt_platdev_init);
+>  MODULE_DESCRIPTION("Generic DT based cpufreq platdev driver");
+> +/*
+> + * The module alias is needed because the driver automatically registers a
+> + * platform device for any CPU device node that has an operating-points-v2
+> + * property and is not in the block list.
+> + *
+> + * For this reason the MODULE_DEVICE_TABLE() macro can only export aliases
+> + * of the devices in the allow list, which means that the driver will not
+> + * autoload for devices whose cpufreq-dt will be registered automatically.
+> + *
+> + * Adding an "of:N*T*Coperating-points-v2" alias is a workaround for this.
+> + */
+> +MODULE_ALIAS("of:N*T*Coperating-points-v2");
 
----
-base-commit: ac24e26aa08fe026804f678599f805eb13374a5d
-change-id: 20241121-fix_power_limit_ec_cmd_version-6f2d75ad84b5
+How does this work? This will autoload the module for any platform with
+"operating-points-v2" property in the DT ? The driver though works only if the
+property is in the CPU node, while now we will try to load this driver even if a
+non-CPU node has the property now.
 
-Best regards,
+I am not sure what's the best way forward to fix this.
+
+Arnd, Rob, any inputs ?
+
+>  MODULE_LICENSE("GPL");
+
 -- 
-Sung-Chi Li <lschyi@chromium.org>
-
+viresh
 
