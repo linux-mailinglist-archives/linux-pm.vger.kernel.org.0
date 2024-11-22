@@ -1,186 +1,188 @@
-Return-Path: <linux-pm+bounces-17962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD2399D61B8
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 17:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B82D39D61DB
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 17:17:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CD85B20D3D
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 16:12:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16D5FB25698
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 16:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A0101B5ECB;
-	Fri, 22 Nov 2024 16:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FEE91D9598;
+	Fri, 22 Nov 2024 16:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="HvwiXI16"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fOfXgJla"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE61E13B797
-	for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2024 16:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CF51632C2
+	for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2024 16:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732291922; cv=none; b=Zqs/58obVnAghMbDi8wDM+TUGPvp+nxaMKPgfX2qCk7Fqm0ZHxzmXPFSy8QGZjI7IJtSWGkn20T30ckITGBHRJyqfDcVZjL2L1kiQXLRQ7Z3Bg1/rNblPkighp4S4OJwGLVHfGUDkrvex3Ybzf+c9skQ1M0kAGAbEvuxpTsLulI=
+	t=1732292213; cv=none; b=bWRxONPNdB3H0hmdxmCWqmJsLPYMcwZPEeMMR9rBMlewpHINrMgfObAEXZcx8j9svOD9P8BWMSJqMsSnjNN9MXPPmc4KjijZ7aznf07uxHrcNlFl/zS9MNRx712YdXiLKA2Lg1ZPFLmgzu9osEH7SFJpfQXveawdyybkeeOVVyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732291922; c=relaxed/simple;
-	bh=B2XuqM2k4vAqnNv/Q7MZKYMoyczUHCxuOfqeQWYko64=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DKAXgEfURSdz3cjUGFK7+bapxCfm4VgToIBwYhskyvVzjJxQhS1W/B2TzUv1T+bRr30jxUeVRKtF/7MeGR60IV3irV+zrak8S1ne6IvDFE92IbWpC2ASFDzG1AOj4aY9y4waXtSvhfqFgaWpYTQQoLv7hc3o93qnlVeV1ppvfSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=HvwiXI16; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21207f0d949so21351235ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2024 08:12:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1732291920; x=1732896720; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qeuSASKxqY15hjekOW/VX6sx+7ELWDbXW0lHusDBx0M=;
-        b=HvwiXI16KiGZ/DjFhSYONfzxGAb2rWtgiJhHEC6RSLEkpD+6SIMKd33EUEF8qQYyoZ
-         0kZnjn16dP/klrUZFapYf7/YIEdwD8F8gc7T9YIHgsdnnQSPY3mwvBdlKjzP+SNC2y3L
-         EzP67GmIBkA4pqAzIxTUUlPAoegu0OzoxhI60=
+	s=arc-20240116; t=1732292213; c=relaxed/simple;
+	bh=Bv/9ofc9ECBUiElXTbQzb4okhG/cF9jXPCdH7n9GtGk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XptlJQ8dDQUP1KsALNaH0oomcAn9Vkn/7y+ViXoHMhFX52KeLZE8LZJ4Wj3SJdaUxCEDhA5TY+YCFisAYHah4CJ7KgRsPWvbJ7ZSjyErTT/YEEUeHgHOUb5qNFpDDFENbTxIg8gNsniu7FHDecPcSDpkCxCTyyT5G/Nt2Cv3xL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fOfXgJla; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732292210;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tqYsenDaD0i9ZHsyIrHLDcCZPQ9SNx4buFBPvNXiB+A=;
+	b=fOfXgJlaHCH45oy3idUl7GG4gJz2W4YtqWBO4oRjX5JO9jVaFhCzGdUpG7+zAtB9N74Hz2
+	Hge09rqBjt2AzAQ46EFYSD0a9C/iPZGFq3w1Ftn9hHWkVmKlDdJE/bu8fgf12WTWxSsEvG
+	84nEvKFuqZfxTaVoAzy4scF0oGT/2r8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-475-4G59Ssb1NiGb3QQAvcPBxA-1; Fri, 22 Nov 2024 11:16:49 -0500
+X-MC-Unique: 4G59Ssb1NiGb3QQAvcPBxA-1
+X-Mimecast-MFC-AGG-ID: 4G59Ssb1NiGb3QQAvcPBxA
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7b1786fe413so275199385a.1
+        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2024 08:16:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732291920; x=1732896720;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qeuSASKxqY15hjekOW/VX6sx+7ELWDbXW0lHusDBx0M=;
-        b=W67+jXnE661fbT/SNQ1fy/zjch+vMwIag2c6uJTFNltK0meHlQq0o4fftsU8NUd/Yu
-         PJ3JX0sfZXRXr0uJ+gqZ/25u0QZDnqzM46lVkNrcQzum2RAYKA7e0St6ftQ6cEcL54AS
-         TGaq88RDo/F5yTHbyEP4iRgF+tF4jTM0u4x+kYPjkhN7yEsOHhBvPq4avHlQHTLdJcqs
-         tNBxmOtnUrSmr81CZVgz2JHJFK3fxPF/EVNR3lEuDqcp7A/HpLy7WSxvKPkSATP/Yzi7
-         IiIlFD1Mh8zHSldN0eYXgrSbER/yOb2Uvh9TZy0UTnxuz6Q6szy74GVgFE6PN83P1HNP
-         YPcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3EpRqt3WQF4SXtzvce2h0Dv9MrSRTr3hVkCKXcX8YyUHSZCZQLwnjuI6jXETTuwMLqlVzI8prZQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9rFaF2pvCph/qY6EiKcnvxLDzWHeoYREhOkurCdfs4oMsBUa4
-	6FAj9Kn/O0TtbbfUC7rNTozomyBrmggZvhAXmHAfFOWqgHoojYBYiiKxfFS6bg==
-X-Gm-Gg: ASbGnctdcdBG3asfUkkN1QZ/clfUhVElf4SanDl2IA0ocx0CffXAUYuyQ5+Mk+C0md3
-	IlxgS87QLDVVa+RuFFBmRqtbppAZZaDmcshJE1bH8kyh5bKMs19KrbS7Ju9tEd4NHELnXBfPlMc
-	cgVXXpyZAIn4H5jRNVps03E308dmrtveKN3ibiEsO+RbWVoMaj53ZurX14idtioVYHORvc55KMw
-	ryf9U9qibo3tXBoq5OeJIxeyzdS2mhREAmuaKWMtk47gCqWXLuVPyR6MrJZe6fSzxdIgSu72IhR
-	SkQGQvopp8P6LuvHA+LWPyde
-X-Google-Smtp-Source: AGHT+IHfRfcL3L8+ww9Y6Is7Dr5zOV4p7yRTBPSPTOb3uNC96+njIJuxJFE9xL4mmMRR9hbRp+Vazg==
-X-Received: by 2002:a17:902:f543:b0:212:1abb:fe65 with SMTP id d9443c01a7336-2129f5e7d2dmr44710335ad.35.1732291920011;
-        Fri, 22 Nov 2024 08:12:00 -0800 (PST)
-Received: from [192.168.1.3] (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de575d9asm1782022b3a.178.2024.11.22.08.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Nov 2024 08:11:59 -0800 (PST)
-Message-ID: <4823ecb4-d714-43a2-8fc0-dff7c9ff8a6d@broadcom.com>
-Date: Fri, 22 Nov 2024 08:11:57 -0800
+        d=1e100.net; s=20230601; t=1732292209; x=1732897009;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tqYsenDaD0i9ZHsyIrHLDcCZPQ9SNx4buFBPvNXiB+A=;
+        b=BTL1pX92OTcvKNfr07nehTYP03NSl15g9xuZrNlmEN2BI7nE6DUR8cavOYRBzKoA23
+         MNw7m+R7ALK9DFL0ryfMquOw2iH7jQ4lVh9Khz0iOlAfy1TOkatEgW2ibi3+XKuqonB7
+         eiEqUxEcUqQ4qfD1Xw3nqqPMHPQSleQRtR7mzzlXfTrU8TBjBmbhXhWApf4z0ve0U8qx
+         hr94Pl0mF2x6CB6+RavK/8jSlViK/a32bXEP6bQfevvxJaX2jelafoSQkiiEckWAA2YC
+         Rxz824fKHYgJvvqBXzobvG6mBLkoZfG/Ew2SZ8Gf471rpVTCMmgJbdeeWfGE2Q9Em1oO
+         Ac4w==
+X-Forwarded-Encrypted: i=1; AJvYcCWNjb95BhtiRUnU3CEhjdwzCSl8u210/tSUARn+RNJ7iqaqnGBxC32puqhG7rsgXFmEe+5SKlk2jw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXEgfTWfW2xVzGM2OMcv4ojGnuFgbj9LENMO+Fq2+RP/z6BSPA
+	O2Os6+03EDWhhdRyWJOLB39whGzc1TbCplqU9TgsQ7t9MY/tbWCPcLVQCvMUGQahyF5EGawpcQl
+	v2d7LPbul6HpFTqDURwaEIcXMzUBXKifpF5rkGp/sDz/fsTvGVbqsVxM4
+X-Gm-Gg: ASbGncvkh2ZtTmTSPY4a8KyD9QLeuFVkhB9T6oOunqPNz8A11jA9j6kpYSmMn3NQwgb
+	8SC2zeaud81caNo5rZ4wnFPWXERMsLhwwWtrLqtlsWfn3lMvGzqwuGy4KgB4LVLf4xoHmPMreRy
+	qFjXS/6ohUp//Hs+gLiNgx3K/XmHpBtmnYSGjWCRfY4aw32wZtstKQkjZK/qlUxams+fjipzzcH
+	wFKAxNUn4iQFPQEOycfiqdOEvDv6XyihNWxdNLVUZkMvcEzHw22WM3wVu6t+iW6EO448HjphhQB
+	tWg4Pzswti+jQS8KBP3uPbd6KaS3oh0ioq/mO1gwAg==
+X-Received: by 2002:a05:620a:1994:b0:7b0:6e8:94ef with SMTP id af79cd13be357-7b5143e427amr458832785a.0.1732292208641;
+        Fri, 22 Nov 2024 08:16:48 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHR6hqiPkDWQ3B2eG437kkPrGRq1PtOCZedZpuboUGW7qkMTNvEQd4gGaX5Hcs1CDt/wA1lCg==
+X-Received: by 2002:a05:620a:1994:b0:7b0:6e8:94ef with SMTP id af79cd13be357-7b5143e427amr458829385a.0.1732292208164;
+        Fri, 22 Nov 2024 08:16:48 -0800 (PST)
+Received: from thinkpad-p1.localdomain (pool-174-112-193-187.cpe.net.cable.rogers.com. [174.112.193.187])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b51416cd4bsm99077685a.117.2024.11.22.08.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Nov 2024 08:16:47 -0800 (PST)
+Message-ID: <1c5e13b7472917b5fa303553da04ae16590f3105.camel@redhat.com>
+Subject: Re: [RFC PATCH] cpufreq: dt-platdev: Fix module autoloading
+From: Radu Rendec <rrendec@redhat.com>
+To: Javier Martinez Canillas <javierm@redhat.com>, Viresh Kumar
+	 <viresh.kumar@linaro.org>
+Cc: robh@kernel.org, arnd@linaro.org, linux-kernel@vger.kernel.org, Zhipeng
+ Wang <zhipeng.wang_1@nxp.com>, Maxime Ripard <mripard@kernel.org>, 
+ javier@dowhile0.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ linux-pm@vger.kernel.org
+Date: Fri, 22 Nov 2024 11:16:46 -0500
+In-Reply-To: <87frnl3q63.fsf@minerva.mail-host-address-is-not-set>
+References: <20241119111918.1732531-1-javierm@redhat.com>
+	 <20241121071127.y66uoamjmroukjck@vireshk-i7>
+	 <87iksh3r4x.fsf@minerva.mail-host-address-is-not-set>
+	 <20241121090357.ggd4hc43n56xzo4m@vireshk-i7>
+	 <87frnl3q63.fsf@minerva.mail-host-address-is-not-set>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] pm: cpupower: Makefile: Fix cross compilation
-To: Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
- Peng Fan <peng.fan@nxp.com>,
- "open list:CPU POWER MONITORING SUBSYSTEM" <linux-pm@vger.kernel.org>
-References: <20241121044353.1753244-1-florian.fainelli@broadcom.com>
- <9d35ba5e-179e-4aef-b973-ad615489cfa4@linuxfoundation.org>
-Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <9d35ba5e-179e-4aef-b973-ad615489cfa4@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Thu, 2024-11-21 at 10:13 +0100, Javier Martinez Canillas wrote:
+> Viresh Kumar <viresh.kumar@linaro.org> writes:
+>=20
+> > On 21-11-24, 09:52, Javier Martinez Canillas wrote:
+> > > Will autload the driver for any platform that has a Device Tree node =
+with a
+> > > compatible =3D "operating-points-v2" (assuming that this node will be=
+ a phandle
+> > > for the "operating-points-v2" property.
+> > >=20
+> > > For example, in the case of the following DT snippet:
+> > >=20
+> > > cpus {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cpu@0 {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 operating-points-v2=C2=A0=C2=A0=C2=A0=C2=A0 =3D <&cpu=
+0_opp_table>;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+> > > };
+> > >=20
+> > > cpu0_opp_table: opp_table {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "operating-=
+points-v2";
+> > > ...
+> > > };
+> > >=20
+> > > It will autoload if OF finds the opp_table node, but it register the =
+cpufreq-dt
+> > > device only if there's a cpu@0 with a "operating-points-v2" property.
+> > >=20
+> > > Yes, there may be false positives because the autload semantics don't=
+ exactly
+> > > match the criteria for the driver to "match" but I believe is better =
+to load it
+> > > and not use for those cases, than needing the driver and not autoload=
+ing it.
+> > >=20
+> > > > I am not sure what's the best way forward to fix this.
+> > > >=20
+> > >=20
+> > > I couldn't find another way to solve it, if you have a better idea pl=
+ease let
+> > > me know. But IMO we should either workaround like this or revert the =
+commit=20
+> > > that changed the driver's Kconfig symbol to be tristate.
+> >=20
+> > Yeah, this needs to be fixed and this patch is one of the ways. Lets se=
+e if Arnd
+> > or Rob have something to add, else can apply this patch.
+> >=20
+>=20
+> Ok. Please notice though that this is an RFC, since all my arm64 machines=
+ have
+> their own CPUFreq driver and are not using cpufreq-dt-platdev. So I would=
+ not
+> apply it until someone actually tested the patch.
 
+I tested the patch on a Renesas R-Car S4 Spider (r8a779f0-spider.dts)
+board, and it didn't work. I think the problem is that the OPP table DT
+node does not have a corresponding device instance that is registered,
+and therefore no modalias uevent is reported to udev/kmod.
 
-On 11/22/2024 7:25 AM, Shuah Khan wrote:
-> On 11/20/24 21:43, Florian Fainelli wrote:
->> After f79473ed9220 ("pm: cpupower: Makefile: Allow overriding
->> cross-compiling env params") we would fail to cross compile cpupower in
->> buildroot which uses the recipe at [1] where only the CROSS variable is
->> being set.
->>
->> The issue here is the use of the lazy evaluation for all variables: CC,
->> LD, AR, STRIP, RANLIB, rather than just CROSS.
->>
->> [1]:
->> https://git.buildroot.net/buildroot/tree/package/linux-tools/linux- 
->> tool-cpupower.mk.in
->>
->> Fixes: f79473ed9220 ("pm: cpupower: Makefile: Allow overriding cross- 
->> compiling env params")
->> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
->> Change-Id: Id98f2c648c82c08044b7281714bc6a8e921629ad
->> ---
->>   tools/power/cpupower/Makefile | 10 +++++-----
->>   1 file changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/ 
->> Makefile
->> index 175004ce44b2..96bb1e5f3970 100644
->> --- a/tools/power/cpupower/Makefile
->> +++ b/tools/power/cpupower/Makefile
->> @@ -87,11 +87,11 @@ INSTALL_SCRIPT = ${INSTALL} -m 644
->>   # to something more interesting, like "arm-linux-".  If you want
->>   # to compile vs uClibc, that can be done here as well.
->>   CROSS ?= #/usr/i386-linux-uclibc/usr/bin/i386-uclibc-
->> -CC ?= $(CROSS)gcc
->> -LD ?= $(CROSS)gcc
->> -AR ?= $(CROSS)ar
->> -STRIP ?= $(CROSS)strip
->> -RANLIB ?= $(CROSS)ranlib
->> +CC = $(CROSS)gcc
->> +LD = $(CROSS)gcc
->> +AR = $(CROSS)ar
->> +STRIP = $(CROSS)strip
->> +RANLIB = $(CROSS)ranlib
->>   HOSTCC = gcc
->>   MKDIR = mkdir
-> 
-> Thank you for the patch. I will apply this once the merge window
-> closes.
+FWIW, the OPP table is defined at the top of r8a779f0.dtsi and
+referenced just a few more lines below, where the CPU nodes are
+defined.
 
-Thanks for taking a look, there is still an on-going discussion with 
-Peng about how to best approach this, the discussion is here:
+As far as I understand, there are two options to fix this:
+   1. Revert the patch that allows the cpufreq-dt-platdev driver to be
+      built as a module. There's little benefit in allowing that anyway
+      because the overhead at init time is minimal when the driver is
+      unused, and driver can't be unloaded.
+   2. Modify the driver and create an explicit of_device_id table of
+      supported platforms for v2 too (like the existing one for v1) and
+      use that instead of the cpu0_node_has_opp_v2_prop() call and the
+      blacklist. That would of course also eliminate the blacklist.
 
-https://lore.kernel.org/all/PAXPR04MB84595BA5BEAE2D21F015036688232@PAXPR04MB8459.eurprd04.prod.outlook.com/
-
-Let's wait until that settles before taking this patch, or Peng's.
--- 
-Florian
+--
+Best regards,
+Radu Rendec
 
 
