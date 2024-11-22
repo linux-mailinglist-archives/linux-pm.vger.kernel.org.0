@@ -1,174 +1,141 @@
-Return-Path: <linux-pm+bounces-17971-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08409D64E0
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 21:28:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883819D64F9
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 21:43:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 760A9B21EA8
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 20:28:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148DB1617FC
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 20:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B57186E34;
-	Fri, 22 Nov 2024 20:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D33187FEC;
+	Fri, 22 Nov 2024 20:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWccrsvr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WmJv6Kho"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9E216EBE8;
-	Fri, 22 Nov 2024 20:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC76917B428;
+	Fri, 22 Nov 2024 20:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732307324; cv=none; b=LePlS4ID8NoSF/zCpYjx0wM61A7vbgE4oL6jcncdifIxDQF3MhrakOoS3F40JQsu82FAcC7NLMJi6SHPjveNYFpLn7Q/yEOsnDCLnPbrmxQjfDPYrjGzGfq3429WEZPkIgkXyoRqgiQkaCRq0SlAgaqE4t7pV6SJsV27ZGnqlO4=
+	t=1732308221; cv=none; b=AaOSmWhn0drzeFMI7Au4EGn3aR1XCKcG72Xyx69s5kFIa5RVhrnDri3pukdgW0jsR1KjxCpuwt6BSbZMGpiLMHjAML+qBwkWbh8wn0OFBzJMavTok2kzAvZPxvujO1XR8lDKwZBhQMivR5+gzOCaLR8lJS9V081cw3cQqF1iLII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732307324; c=relaxed/simple;
-	bh=8pbwFD1pXlTE4I3rHgjDYEJfrvrrakHNiScBBGhMdMA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=B/SS3jT79eIp2QW03VL/HAmeCXXNlvVk3tdQvxlTyQkttULfZoC0pyrfW8P6PijMUlGbGn86ijUdQrLTqVGzIYhn5FQ0ZyKCvg2dBVVJMPn0/h9S4PokxUyS3Egae7nZCNoBb5H3DpySe1hdjsSVxMDMF9Zy72OQ3ddt4KXh49E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWccrsvr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF1C6C4CECE;
-	Fri, 22 Nov 2024 20:28:43 +0000 (UTC)
+	s=arc-20240116; t=1732308221; c=relaxed/simple;
+	bh=9ur4fx8g1n2aQGv6Iks60+fVeXS+jljxmXCqMX/FUJ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JSTJ/Tuos4ZSVw1zdDQWw38FD84A9zDgb9gZVqCXua5NJNdOyGqgXww6UK9Wtw5Zvjcpdlnuw5qEkdMsyiAutleUH0bkWCV+j8WvaUO1FWPH7Ca10dUJAXbq4eJMB2ZncScvSObOaVF8pdx7AbzUIjqokTfhKA/ooVvZM+fVa4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WmJv6Kho; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65824C4CED0;
+	Fri, 22 Nov 2024 20:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732307323;
-	bh=8pbwFD1pXlTE4I3rHgjDYEJfrvrrakHNiScBBGhMdMA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=jWccrsvr9rcszHkzM5Rm3GZHGDkoVMHO7VR5JBJzRq4qxUopepSUB6VGSutR+v76s
-	 IgrMKxc8Naz1sQVp143jlaGoSu8wjOrijCTjC7JkHk5gbQbnLw2PGuv+Yd6yjdYsrq
-	 cwz7kJ8bgcRhhTOGbyjt7YLoxWYgqZ7M8qzrNe8lmiFyY/pcv439MdrZD8Gs44e0CW
-	 qvtGZm2lU5BcwWa+pEIvnwErZnRxxacdvKf+zwdHTPoJtXD0ImIZ8qWBBwPafQb+jU
-	 g61nU7KyySvJKGOcDSABnhxG4+hcTdEgoHkYziJgvJJ+KRHMkd+EIQvaomRczf3ELK
-	 +t4XKH9n3A6mw==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2965e65ce89so1703666fac.3;
-        Fri, 22 Nov 2024 12:28:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWEhmDtGzvTF8Qo5VZoHKeXo9Hq7dPuZV2a+vy76FTYIchIJWkLMkT3iWkvoo77AbinJ8B1qfnLBPDgIj4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOW8XThed/SoxONKHtcpqlJOl8Eke0b5oTR5RA16BEIf4L1wic
-	Y3tsWLwTij3vIZpvA0dykjELCJy8+95V+jMvQvcG2pFx+kKuf7E5cbWkFUY+3Zrfbkl0dSBnTfO
-	2LkZOM92FFxXVDMCwqoCcZGsuZZc=
-X-Google-Smtp-Source: AGHT+IHHkuyFgu/8v41hqXbGWTQCaboHziVlllWNlj9zUOFing2gQnfgfHe3cytPQfsC645WdqmOvpdbkZ6xrJSztQU=
-X-Received: by 2002:a05:6870:d90c:b0:277:d8a7:f63b with SMTP id
- 586e51a60fabf-29720e60fb8mr4191795fac.39.1732307323146; Fri, 22 Nov 2024
- 12:28:43 -0800 (PST)
+	s=k20201202; t=1732308220;
+	bh=9ur4fx8g1n2aQGv6Iks60+fVeXS+jljxmXCqMX/FUJ4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WmJv6KhouoPjpYLnMmpuN8uVIn3pLQ0Vd7k2AQGH9abPMLZZhMmh9G6MWgp1q8m4I
+	 Pr/Vc3akz8klX7oxufe/3NkQDg5Xqh7480yRTyKme5dz5LHpLPSreF2O7o0qcfwUdQ
+	 pYpCWaGGkzeSZV6r3tdVuAQnq83X5DIBGBUrORRoVb+1zpbjA5SQHi4WbWgZjAuvqE
+	 hS+XC/Ouj4fPKANKiMnRvsh942pLYXZ6agsarnLBIMOtl9595DP4WIDVp3LB8yBFRq
+	 wlHudLoPFIOdYGvsdqu6nw/2VbtDWeGEJvzoOhab7RmDCoYYFouD97rsHObLFnfNiS
+	 ypKOd1a3pR0MA==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5ec1ee25504so1213094eaf.3;
+        Fri, 22 Nov 2024 12:43:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUER6iThg7MTu6Axtj3mJ4cg1reKPjWD7bcaybaXf5gLIxxRWowMmr7qJr2Xu6a5mnoPKhslxM+JN7SNumU@vger.kernel.org, AJvYcCUiChhOCMNvd/q4wZKzxz9NcpWtvjOnFwXbNS6G3gZlR+YaWXgjk/4+rV3GhwlQAzgNCMCMoPxXwUs=@vger.kernel.org, AJvYcCXCnhLQ4UBt3D0FthQ2Int6rdI+O/9z6bwgZRX2Q6CUFBjKuiPP5r+IHajCCnkTbD2LVUJf/DOjNl9xVII=@vger.kernel.org, AJvYcCXmKKRQ7W7GqYrSdnnv9OSxiip05TYsiLpXHEYCXO8NYVuzGEaVhbCjukueEErt73SikOGNDlQ8BoIsZWIV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+62R+E+1npT1UVEPwCP3cPFeMf9fUp0BXu3ZTqVy6BcX57Cyy
+	3oMAcTLC9wKR7OyHQ5T/lbVhjnDWNcHCte+AHS6hx1b9zPKbS3xEzdbudKbgOmsprdTaCyQjQV7
+	1Z8mnZsycJa4qo9tTOSU3P0bjuZg=
+X-Google-Smtp-Source: AGHT+IEutDuraKb6w9V+8CLjNMD2UYE+lNm29XfGmOiaTuVzMfm8AxFlD6kXcNxHi/+pw8cR8P3Zi9iHFF2EXbeKgV0=
+X-Received: by 2002:a05:6871:69c1:b0:287:d8df:7c22 with SMTP id
+ 586e51a60fabf-29720c59d21mr4407291fac.23.1732308219677; Fri, 22 Nov 2024
+ 12:43:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241010-b4-cleanup-h-of-node-put-thermal-v4-0-bfbe29ad81f4@linaro.org>
+In-Reply-To: <20241010-b4-cleanup-h-of-node-put-thermal-v4-0-bfbe29ad81f4@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 22 Nov 2024 21:28:32 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gm1JRjTCqNSmjTJ_xXhXMLyk4BJc97SxbAeopocDqc5A@mail.gmail.com>
-Message-ID: <CAJZ5v0gm1JRjTCqNSmjTJ_xXhXMLyk4BJc97SxbAeopocDqc5A@mail.gmail.com>
-Subject: [GIT PULL] More thermal control updates for v6.13-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Date: Fri, 22 Nov 2024 21:43:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jjjA6enruipTU9kTnuA6x5p_XUQyXc-4Cr4bo_b4VHtQ@mail.gmail.com>
+Message-ID: <CAJZ5v0jjjA6enruipTU9kTnuA6x5p_XUQyXc-4Cr4bo_b4VHtQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/6] thermal: scope/cleanup.h improvements
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	Chen-Yu Tsai <wenst@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi Daniel,
 
-Please pull from the tag
+On Thu, Oct 10, 2024 at 8:06=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Changes in v4:
+> - Patch 2: rewrite, significant change: kzalloc() also with
+>   scoped-handling so the entire error handling could be removed.
+>   Due to above, drop review-tags (Chen-Yu, Jonathan).
+> - Add Rb tags for other patches.
+> - Link to v3: https://lore.kernel.org/r/20241008-b4-cleanup-h-of-node-put=
+-thermal-v3-0-825122398f71@linaro.org
+>
+> Changes in v3:
+> - Rebase, because there was bigger rework in thermal code.
+>   This made two patches obsolete, but brought new one:
+>   1/6: thermal: of: Simplify thermal_of_should_bind with scoped for each =
+OF child
+> - Link to v2: https://lore.kernel.org/r/20240816-b4-cleanup-h-of-node-put=
+-thermal-v2-0-cee9fc490478@linaro.org
+>
+> Changes in v2:
+> - Drop left-over of_node_put in regular exit path (Chen-Yu)
+> - Link to v1: https://lore.kernel.org/r/20240814-b4-cleanup-h-of-node-put=
+-thermal-v1-0-7a1381e1627e@linaro.org
+>
+> Few code simplifications with scope/cleanup.h.
+>
+> Best regards,
+> Krzysztof
+>
+> ---
+> Krzysztof Kozlowski (6):
+>       thermal: of: Simplify thermal_of_should_bind with scoped for each O=
+F child
+>       thermal: of: Use scoped memory and OF handling to simplify thermal_=
+of_trips_init()
+>       thermal: of: Use scoped device node handling to simplify of_thermal=
+_zone_find()
+>       thermal: qcom-spmi-adc-tm5: Simplify with scoped for each OF child =
+loop
+>       thermal: tegra: Simplify with scoped for each OF child loop
+>       thermal: sun8i: Use scoped device node handling to simplify error p=
+aths
+>
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c |  7 ++---
+>  drivers/thermal/sun8i_thermal.c          | 11 +++----
+>  drivers/thermal/tegra/soctherm.c         |  5 ++-
+>  drivers/thermal/thermal_of.c             | 54 ++++++++++----------------=
+------
+>  4 files changed, 25 insertions(+), 52 deletions(-)
+> ---
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.13-rc1-2
+This seems to have fallen through cracks.
 
-with top-most commit fef664fd73c12c11a4c4a40bd38beb8542505573
-
- Merge tag 'thermal-v6.13-rc1' of
-ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
-
-on top of commit cd7fa3e1b0bc9c210eba23edbe8d6884f0368281
-
- Merge tag 'thermal-6.13-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more thermal control updates for 6.13-rc1.
-
-These update a few thermal drivers used on ARM platforms and thermal tools:
-
- - Add SAR2130P compatible to DT bindings in the QCom Tsens driver (Dmitry
-   Baryshkov).
-
- - Add static annotation to arrays describing platform sensors in the
-   LVTS Mediatek driver (Colin Ian King).
-
- - Switch back to struct platform_driver::remove() from the previous
-   callbacks prototype rework (Uwe Kleine-K=C3=B6nig).
-
- - Add MSM8937 compatible to DT bindings and its support in the QCom
-   Tsens driver (Barnab=C3=A1s Cz=C3=A9m=C3=A1n).
-
- - Remove a pointless sign test on an unsigned value in k3_bgp_read_temp()
-   in the k3_j72xx_bandgap driver (Rex Nie).
-
- - Fix a pointer reference loss when realloc() fails in the thermal
-   library (Zhang Jiao).
+Since all of the other 6.13 thermal changes have been integrated now,
+I'm going to apply it and push next week unless you have concerns (in
+which case please let me know).
 
 Thanks!
-
-
----------------
-
-Barnab=C3=A1s Cz=C3=A9m=C3=A1n (2):
-      dt-bindings: thermal: tsens: Add MSM8937
-      thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
-
-Colin Ian King (1):
-      thermal/drivers/mediatek/lvts_thermal: Make read-only arrays static c=
-onst
-
-Dmitry Baryshkov (1):
-      dt-bindings: thermal: qcom-tsens: Add SAR2130P compatible
-
-Rex Nie (1):
-      thermal/drivers/k3_j72xx_bandgap: Simplify code in k3_bgp_read_temp()
-
-Uwe Kleine-K=C3=B6nig (1):
-      thermal: Switch back to struct platform_driver::remove()
-
-zhang jiao (1):
-      tools/thermal: Fix common realloc mistake
-
----------------
-
- .../devicetree/bindings/thermal/qcom-tsens.yaml     |  2 ++
- drivers/thermal/amlogic_thermal.c                   |  2 +-
- drivers/thermal/armada_thermal.c                    |  2 +-
- drivers/thermal/broadcom/bcm2835_thermal.c          |  2 +-
- drivers/thermal/broadcom/ns-thermal.c               |  2 +-
- drivers/thermal/da9062-thermal.c                    |  6 +++---
- drivers/thermal/dove_thermal.c                      |  2 +-
- drivers/thermal/hisi_thermal.c                      |  4 ++--
- drivers/thermal/imx8mm_thermal.c                    |  2 +-
- drivers/thermal/imx_thermal.c                       |  2 +-
- .../thermal/intel/int340x_thermal/int3400_thermal.c |  2 +-
- .../thermal/intel/int340x_thermal/int3401_thermal.c |  2 +-
- .../thermal/intel/int340x_thermal/int3402_thermal.c |  2 +-
- .../thermal/intel/int340x_thermal/int3403_thermal.c |  2 +-
- .../thermal/intel/int340x_thermal/int3406_thermal.c |  2 +-
- drivers/thermal/k3_bandgap.c                        |  2 +-
- drivers/thermal/k3_j72xx_bandgap.c                  |  4 ++--
- drivers/thermal/kirkwood_thermal.c                  |  2 +-
- drivers/thermal/mediatek/lvts_thermal.c             |  6 +++---
- drivers/thermal/qcom/tsens-v1.c                     | 21 ++++++++++++++---=
-----
- drivers/thermal/qcom/tsens.c                        |  5 ++++-
- drivers/thermal/qcom/tsens.h                        |  2 +-
- drivers/thermal/renesas/rcar_gen3_thermal.c         |  2 +-
- drivers/thermal/renesas/rcar_thermal.c              |  2 +-
- drivers/thermal/renesas/rzg2l_thermal.c             |  2 +-
- drivers/thermal/rockchip_thermal.c                  |  2 +-
- drivers/thermal/samsung/exynos_tmu.c                |  2 +-
- drivers/thermal/spear_thermal.c                     |  2 +-
- drivers/thermal/sprd_thermal.c                      |  2 +-
- drivers/thermal/st/st_thermal_memmap.c              |  2 +-
- drivers/thermal/st/stm_thermal.c                    |  2 +-
- drivers/thermal/tegra/soctherm.c                    |  2 +-
- drivers/thermal/tegra/tegra-bpmp-thermal.c          |  2 +-
- drivers/thermal/ti-soc-thermal/ti-bandgap.c         |  2 +-
- drivers/thermal/uniphier_thermal.c                  |  2 +-
- tools/thermal/thermometer/thermometer.c             |  7 ++++---
- 36 files changed, 62 insertions(+), 49 deletions(-)
 
