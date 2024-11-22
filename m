@@ -1,58 +1,74 @@
-Return-Path: <linux-pm+bounces-17944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB6C9D595B
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 07:21:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A57EB9D597B
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 07:44:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29AF6B23875
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 06:21:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A8881F22883
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 06:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED62A176AB6;
-	Fri, 22 Nov 2024 06:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92961632FC;
+	Fri, 22 Nov 2024 06:44:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C730170A01;
-	Fri, 22 Nov 2024 06:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCF915ADA6;
+	Fri, 22 Nov 2024 06:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732256466; cv=none; b=LrjgipkLB+262fjLgZKAz3AiDCNLEP5lJZwQ4ZkClVUwDn8sqg8i6hSQQ/DMud/V5O0hlDmh1DvF/qu46/fxsP/BGajtPavdH1u70uzs8xaFmaUKQ6EhTPnNgjTkFYdDCIgbdDN72mpGLUxbTUys51gvy8QvAghDr8hRqyeNtcg=
+	t=1732257876; cv=none; b=FcltGv04BsJ7ERN/jRT++ua3G7/xw3r/nzRUOyItvws6TsrIN/SMcmXpFmhJyDmjbnpgpFZLOO/4GyZjlFsPSxaCY1Bbwy7vh4Ro05Tn2sdhQuC+2a4gQ23wy1bu9G6+LccwG4qafyWffPk++jq1cW8dKMDNhtvzmaLDHg/Opqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732256466; c=relaxed/simple;
-	bh=KegWEtr6BZ3xiNwobCQnLHFuCTh+SSPdH77v6AumHfE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tSX12Wgam+iqCv/GSA4HAfh5NztUvek63cBqpB/eQdbPQuBg8k+hoJZm1UfBG7pT3EOtRV4XbbyydZIgoOHuPzmSIuEgPr9Lh6sA2ywzLt6eBYhGxGa22qxbF7bOxyspBA1isWs9OpnFA514U4xi725Ozeo6HPgeVPGsKO7ya+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4XvlLV403Hz21lYC;
-	Fri, 22 Nov 2024 14:19:30 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id A2997180019;
-	Fri, 22 Nov 2024 14:20:54 +0800 (CST)
-Received: from localhost.huawei.com (10.50.165.33) by
- kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 22 Nov 2024 14:20:53 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<viresh.kumar@linaro.org>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <hepeng68@huawei.com>,
-	<fanghao11@huawei.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH v2 3/3] cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
-Date: Fri, 22 Nov 2024 14:20:51 +0800
-Message-ID: <20241122062051.3658577-4-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20241122062051.3658577-1-zhenglifeng1@huawei.com>
-References: <20241122062051.3658577-1-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1732257876; c=relaxed/simple;
+	bh=hRe073Qyfd3Ta4r1K3FtVgDRKPd+7AVOzmCZDc9HAtM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=C0h706kCzcM1zoHyR09R4UCOb3bFRTcBVLB8HtFpWOf4OYDy1+pP1aa7s0DF4RtKCLzjoi5Se3Xt5ZbbCXY8Y5EQIzy7ltNSr0wFd7jZAdHRptJBQICreRM9R2VH++Ko2yL9GK3ITDUFY98KnzcGTg9EeKzw5pBTldKTGy9iUh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-2ea45dac86eso1483719a91.3;
+        Thu, 21 Nov 2024 22:44:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732257872; x=1732862672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0dtFVYDQBbPu9F2seAqSmpYK0Qta0k2SVYOB9dve6KU=;
+        b=Ybx6sLFqhmTCJTHatMcb1Ap40z1TVTaRSHznpkCXBC0cW448dFoqX36Bx39ePNxJH+
+         BR+NUcJ3eXz3hhSvjvFhCwUCUVQAn9FkSNHLgMpnL8cT/16Mrlr9zEiNivz5rbDbTINr
+         o2UhQFCfLrS5fD65iW8R5E5YMfwVZhiI+w+f3Z/g7kE4CXZjjq8Aola8Q5ifxx3weDY8
+         OHOIfeOJvTGtIxphEbacApsx3SUHior9csKY2JBD9T+24ZZYXXR/KCs3kfDNZSJGqXH+
+         g+08KI70S7IXUUXqMTDheWnCjSVi7FAYKtDchTqJiJqjLU3aoBnKjWFBauBfcehyRxrK
+         lAyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZk90o7yl39XbREV8D4lqzNN6u+fnv3hvQ2uajW8IRFgqw/99Wa3gggRxUjugC50apkEvd2FoA51L4yPU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLoyXfqNcUNy7s3IxEKXPbLwCNoNucPX0DTrfY4ooLCIdnH5iO
+	paP3kyY35dwK2w17ZOL8WnhCC3EPw6BiBGjEQypxVoVr/yLe7dsc
+X-Gm-Gg: ASbGncsSWHS08/y5ojPLiUjYLW9LlOO8Y69nIE89RnZHtwzyvBDdIRYy87HAfggTruJ
+	qJlQjhMlMf7soWa/e1EBNUDnxyHQYxVfdUEP3ZueWkqGmLi+SrrjcjoCp8PkrvLVWGQlFKy7M/A
+	1QC1dCNhr8Sspn2Jp5AhNJHijKISy/44rZll01I3b+wbLc6B1PrKkoQTaFhQx9OvFF8LWw2fNRT
+	rCfQmnKorInE1NUnbehl9kwS974oXnmS4iR2SBrO9+OSb5cTN6D3cd5BkB2ZSx1H5pLTqjEDg==
+X-Google-Smtp-Source: AGHT+IEe2epVNQ5nqqj51zhX5oVmEqVcvpPiujnDE/Y7+L64yr9fdDW7YU5ZHjNAFtMAmf3wCvbtLg==
+X-Received: by 2002:a17:90b:2250:b0:2ea:b564:4b31 with SMTP id 98e67ed59e1d1-2eb0e51f7ecmr1860173a91.19.1732257872310;
+        Thu, 21 Nov 2024 22:44:32 -0800 (PST)
+Received: from kylin-ThinkBook-15-G2-ITL.. ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2eb0cfe45bdsm945163a91.9.2024.11.21.22.44.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2024 22:44:31 -0800 (PST)
+From: xueqin Luo <luoxueqin@kylinos.cn>
+To: rafael@kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	xiongxin@kylinos.cn,
+	xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH] drivers: base: power: Optimize array out-of-bounds access logic
+Date: Fri, 22 Nov 2024 14:44:22 +0800
+Message-Id: <20241122064422.73500-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,238 +76,39 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh100008.china.huawei.com (7.202.181.93)
 
-Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
-driver.
+The code previously used snprintf to format a string into a buffer and
+manually checked for potential buffer overflows by comparing the returned
+length with the buffer size. This approach introduced unnecessary
+complexity and was prone to subtle errors.
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+Replaced snprintf with scnprintf, which directly returns the actual number
+of characters written to the buffer (excluding the null terminator). This
+change eliminates the need for manual overflow checks and simplifies the
+buffer offset and size adjustment logic.
+
+Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
 ---
- .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++
- drivers/cpufreq/cppc_cpufreq.c                | 138 ++++++++++++++++++
- 2 files changed, 192 insertions(+)
+ drivers/base/power/trace.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 206079d3bd5b..3d87c3bb3fe2 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -268,6 +268,60 @@ Description:	Discover CPUs in the same CPU frequency coordination domain
- 		This file is only present if the acpi-cpufreq or the cppc-cpufreq
- 		drivers are in use.
- 
-+What:		/sys/devices/system/cpu/cpuX/cpufreq/auto_select
-+Date:		October 2024
-+Contact:	linux-pm@vger.kernel.org
-+Description:	Autonomous selection enable
-+
-+		Read/write interface to control autonomous selection enable
-+			Read returns autonomous selection status:
-+				0: autonomous selection is disabled
-+				1: autonomous selection is enabled
-+
-+			Write 'y' or '1' or 'on' to enable autonomous selection.
-+			Write 'n' or '0' or 'off' to disable autonomous selection.
-+
-+		This file only presents if the cppc-cpufreq driver is in use.
-+
-+What:		/sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
-+Date:		October 2024
-+Contact:	linux-pm@vger.kernel.org
-+Description:	Autonomous activity window
-+
-+		This file indicates a moving utilization sensitivity window to
-+		the platform's autonomous selection policy.
-+
-+		Read/write an integer represents autonomous activity window (in
-+		microseconds) from/to this file. The max value to write is
-+		1270000000 but the max significand is 127. This means that if 128
-+		is written to this file, 127 will be stored. If the value is
-+		greater than 130, only the first two digits will be saved as
-+		significand.
-+
-+		Writing a zero value to this file enable the platform to
-+		determine an appropriate Activity Window depending on the workload.
-+
-+		Writing to this file only has meaning when Autonomous Selection is
-+		enabled.
-+
-+		This file only presents if the cppc-cpufreq driver is in use.
-+
-+What:		/sys/devices/system/cpu/cpuX/cpufreq/energy_perf
-+Date:		October 2024
-+Contact:	linux-pm@vger.kernel.org
-+Description:	Energy performance preference
-+
-+		Read/write an 8-bit integer from/to this file. This file
-+		represents a range of values from 0 (performance preference) to
-+		0xFF (energy efficiency preference) that influences the rate of
-+		performance increase/decrease and the result of the hardware's
-+		energy efficiency and performance optimization policies.
-+
-+		Writing to this file only has meaning when Autonomous Selection is
-+		enabled.
-+
-+		This file only presents if the cppc-cpufreq driver is in use.
-+
- 
- What:		/sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
- Date:		August 2008
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 2b8708475ac7..351ecdd49ad4 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -792,10 +792,148 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
- 
- 	return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
- }
-+
-+static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
-+{
-+	u64 val;
-+	int ret;
-+
-+	ret = cppc_get_auto_sel(policy->cpu, &val);
-+
-+	/* show "<unsupported>" when this register is not supported by cpc */
-+	if (ret == -EOPNOTSUPP)
-+		return sysfs_emit(buf, "%s\n", "<unsupported>");
-+
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%llu\n", val);
-+}
-+
-+static ssize_t store_auto_select(struct cpufreq_policy *policy,
-+				 const char *buf, size_t count)
-+{
-+	bool val;
-+	int ret;
-+
-+	ret = kstrtobool(buf, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = cppc_set_auto_sel(policy->cpu, val);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+#define AUTO_ACT_WINDOW_SIG_BIT_SIZE	(7)
-+#define AUTO_ACT_WINDOW_EXP_BIT_SIZE	(3)
-+#define AUTO_ACT_WINDOW_MAX_SIG	((1 << AUTO_ACT_WINDOW_SIG_BIT_SIZE) - 1)
-+#define AUTO_ACT_WINDOW_MAX_EXP	((1 << AUTO_ACT_WINDOW_EXP_BIT_SIZE) - 1)
-+/* AUTO_ACT_WINDOW_MAX_SIG is 127, so 128 and 129 will decay to 127 when writing */
-+#define AUTO_ACT_WINDOW_SIG_CARRY_THRESH 129
-+
-+static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
-+{
-+	unsigned int exp;
-+	u64 val, sig;
-+	int ret;
-+
-+	ret = cppc_get_auto_act_window(policy->cpu, &val);
-+
-+	/* show "<unsupported>" when this register is not supported by cpc */
-+	if (ret == -EOPNOTSUPP)
-+		return sysfs_emit(buf, "%s\n", "<unsupported>");
-+
-+	if (ret)
-+		return ret;
-+
-+	sig = val & AUTO_ACT_WINDOW_MAX_SIG;
-+	exp = (val >> AUTO_ACT_WINDOW_SIG_BIT_SIZE) & AUTO_ACT_WINDOW_MAX_EXP;
-+
-+	return sysfs_emit(buf, "%llu\n", sig * int_pow(10, exp));
-+}
-+
-+static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
-+				     const char *buf, size_t count)
-+{
-+	unsigned long usec;
-+	int digits = 0;
-+	int ret;
-+
-+	ret = kstrtoul(buf, 0, &usec);
-+	if (ret)
-+		return ret;
-+
-+	if (usec > AUTO_ACT_WINDOW_MAX_SIG * int_pow(10, AUTO_ACT_WINDOW_MAX_EXP))
-+		return -EINVAL;
-+
-+	while (usec > AUTO_ACT_WINDOW_SIG_CARRY_THRESH) {
-+		usec /= 10;
-+		digits += 1;
-+	}
-+
-+	if (usec > AUTO_ACT_WINDOW_MAX_SIG)
-+		usec = AUTO_ACT_WINDOW_MAX_SIG;
-+
-+	ret = cppc_set_auto_act_window(policy->cpu,
-+				       (digits << AUTO_ACT_WINDOW_SIG_BIT_SIZE) + usec);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t show_energy_perf(struct cpufreq_policy *policy, char *buf)
-+{
-+	u64 val;
-+	int ret;
-+
-+	ret = cppc_get_epp_perf(policy->cpu, &val);
-+
-+	/* show "<unsupported>" when this register is not supported by cpc */
-+	if (ret == -EOPNOTSUPP)
-+		return sysfs_emit(buf, "%s\n", "<unsupported>");
-+
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%llu\n", val);
-+}
-+
-+#define ENERGY_PERF_MAX	(0xFF)
-+
-+static ssize_t store_energy_perf(struct cpufreq_policy *policy,
-+				 const char *buf, size_t count)
-+{
-+	unsigned long val;
-+	int ret;
-+
-+	ret = kstrtoul(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val > ENERGY_PERF_MAX)
-+		return -EINVAL;
-+
-+	ret = cppc_set_epp(policy->cpu, val);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
- cpufreq_freq_attr_ro(freqdomain_cpus);
-+cpufreq_freq_attr_rw(auto_select);
-+cpufreq_freq_attr_rw(auto_act_window);
-+cpufreq_freq_attr_rw(energy_perf);
- 
- static struct freq_attr *cppc_cpufreq_attr[] = {
- 	&freqdomain_cpus,
-+	&auto_select,
-+	&auto_act_window,
-+	&energy_perf,
- 	NULL,
- };
- 
+diff --git a/drivers/base/power/trace.c b/drivers/base/power/trace.c
+index cd6e559648b2..d8da7195bb00 100644
+--- a/drivers/base/power/trace.c
++++ b/drivers/base/power/trace.c
+@@ -238,10 +238,8 @@ int show_trace_dev_match(char *buf, size_t size)
+ 		unsigned int hash = hash_string(DEVSEED, dev_name(dev),
+ 						DEVHASH);
+ 		if (hash == value) {
+-			int len = snprintf(buf, size, "%s\n",
++			int len = scnprintf(buf, size, "%s\n",
+ 					    dev_driver_string(dev));
+-			if (len > size)
+-				len = size;
+ 			buf += len;
+ 			ret += len;
+ 			size -= len;
 -- 
-2.33.0
+2.34.1
 
 
