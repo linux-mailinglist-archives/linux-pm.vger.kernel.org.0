@@ -1,276 +1,326 @@
-Return-Path: <linux-pm+bounces-17935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17936-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E24409D5572
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 23:27:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD1FF9D5693
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 01:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C013B24742
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2024 22:27:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EBDE1F2220C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 00:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E845B1DC06D;
-	Thu, 21 Nov 2024 22:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8BD635;
+	Fri, 22 Nov 2024 00:13:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="V57iqUwO"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="KENN++4d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2072.outbound.protection.outlook.com [40.107.102.72])
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2078.outbound.protection.outlook.com [40.107.103.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAFB1CEAB8;
-	Thu, 21 Nov 2024 22:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8BB17C;
+	Fri, 22 Nov 2024 00:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.78
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732228053; cv=fail; b=NCc+2rzyii/xoTpiuIptly0esfQ76kofMnT8HOGQy1/3tX1DJepOoyVsJrngo7trIqhBAij8WN800QauJKOtvR+yBgqsAXtQaRjt3I2m7lkm/tFn2cipO9KC7xigZk/Grk4b2NirWtjJjUzocPt2NGr4olsNiwc30VjwFdvpbzo=
+	t=1732234426; cv=fail; b=OD1aXvKQIGL5zJml74yzVShEZxYCowPd/WNg6AMHzLbQ91UfK5nhGykUoVIA0aVg3rQqk/MzJOVZ50MHfGwyRK5BIfTSAepta9TvXod38GzSRYqruutRbT/AgUojZRBYVEkdnIsHjLkqKU6u7M9cEdG+D894KbVX4atVeUNRlZ4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732228053; c=relaxed/simple;
-	bh=GDk+yXC5PrgsK/yur8P9hzdNZtbb4G1ZQBi0h6Rb8Uc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Mtu+NwDreWcPjaE+YPEHSe2n7Hykj3+sT2CDqeZY6D/Svi0f1zxM2ZqSjoNwunCIoX8VBi+e3/Kn/OBdAw0XyiSLNP7WXkt8MqYtNR6UXLmEmIF+8iQcm6uO/Tb7p4H3OoWecJUg1VgFrYV4QQrvar9R6jP33Khrg1k57v48D1Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=V57iqUwO; arc=fail smtp.client-ip=40.107.102.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1732234426; c=relaxed/simple;
+	bh=uTSyZzFp+RwlyO0vZcWIxcmnuKZVF1oLwM1tvMf8jcE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=McrKIqpZFZ3w4fQzb41K+PaXlWFylS8skOdUIXtiOWJWi+t1qc0MEusjBx0z8M85j38T6SC+S86X8GVZubaX/s0v5aoOR69ZjRD863tKNRJw3MqKALnLY6CVQxCGApPipfpjCu9kIYirz3iR7uIwr5QrHxFThV99zv2yl96Dyso=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=KENN++4d; arc=fail smtp.client-ip=40.107.103.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PYfR/iTOz6Lh/HazLXSTVrkno7S4OElNaWn8IzuU77PRJvLAnXuZP+v8FEmGnEkVh7Mc6VqtJk2NfKEDwG2A89IlYDPP8l6pBRth2eORjKEY+Pdrxxs9wVl9EA1EW8pWT7qrCyk6u7dfr+L8T9Bg2r/5fjwTXHJXHQE3cg5OZ4yMUiSeMm4EhuCTht08mvoAU5Hy0nXP5bUkHvf2UoVUXX6Jj1F1u8+X58duikS3dVJyrXx98ch0iTxyKTyscYW716aNFqP3F/x7lbhfl5fLAd4Zj5cCIFWt9IdwAj0S80jgH9LTThBrj4hMnIAbQauvQheZ5NUza/X05l7IhrKarQ==
+ b=ScQCbw6yGRVNdjcmEfSR/VwDjRSB4Ax3AMu4EmgsbmnZXoIzmLUpdXGlY9a0XJ6NCryt80HRMyhf8eOr0YobNxRQcREAkWZiIQ6NZQ0RYg/f/Yuz3fJpr0b/jCLDP033gULhw7UPDqOKoR5W8D9F8tnNNBQ6OhTp070FzAsKqHfYu55NxqYoXF/VpRDvI7AyqnLcV3Xhc91oDDmVzgzamjupHIGtQMZjv4sq/apJPhOgXYVXjxvbnQfqQUn1io5xkcjxe+KGiujEge4j0HDGlND6W62CvVl74q+gsYqv91KVsZ6WZa1xu8V/ulyjW8AMgswzVgnyoa/lMj/qILzKIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=STs/C4EzTaM+L1iacuF0s0u/vUCK42v5AzMJm+5QMV8=;
- b=F3zDJvpotIaDPXIoDSbb26TvcrtNTUc1GdaGRZW7DrpNukECIattdbBrjv0DLpSm2idX7H5mRlcy7sFwFV2q5pI5gdpG2QWLevwpK3pfmRjLAGIKcV2v03bN4rh21HQWAX2BkWENpf2h9goMaajN72fXxp5nYiaBVUc6moaMwkh9lAwsvrMC51YMYAsIODCuGyboOefTYtFRru+b/h6vwyM/4iiyjQmb5DKCiL+ko6i3FUovkNBqD/lCeHhKXzTfhN3WfXW51z3vzytLJ6SvBYoHFz32L+/EmjsOKLiQcjMz58TPsBJ/pK3gxGHZap+VD4RM/m1cqQyW/hXvV8w3Mw==
+ bh=SMc4H+1sRPVT9Lorat4oVwseDCJqpKwYUpoAkfqPzDs=;
+ b=PUYQ+bTrIIWJqldsPpC1MHnOnk/PaXLJ3Y3afJzzhtCv87X29OEomBed826SXGBt1NE8xYg3yNxjy/CIJb3c1olRrbLi33QyuiE2J3CEzALh8bAn9uXPL7VgSWoIsWZXCRQw4zu3XMwLgrL3iEzv1R8y2oR/O48QPzpUvP4nsQZQe9IGWGqs0+fsb+AzMCOhX3Lidb3nUwY66cpJYyziWfIArrEGB0c7vXlU6yZoJdJmFawfKbpbqMY7vNrfSWy7vFXSl28nvFjPjbM+lKjGRR/oe3r8x9mL8oHwqul6l2dy0Sti5SIj8yb6SFERRXfXCkQR/1wg1zD1o6zoWKF+qQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=STs/C4EzTaM+L1iacuF0s0u/vUCK42v5AzMJm+5QMV8=;
- b=V57iqUwOfAJHhdk0FEV/IfSYT0B6M5k1mqAJf48rpsyzH7+C7/1FkIo/XlnIpj7qyAZtNk/Ut3DtoXRNp0oQK3ZO0vqhvDPYGGAfAzAhAfBDaXmixo6OXNiIliqFXeASpe5q5K9/O7tTEi2kOUWxWmi4C6P9IuaXWw52ZABjjpY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN0PR12MB5906.namprd12.prod.outlook.com (2603:10b6:208:37a::10) with
+ bh=SMc4H+1sRPVT9Lorat4oVwseDCJqpKwYUpoAkfqPzDs=;
+ b=KENN++4dHGrYinjJM0RUXuTmZ/tYkvfvoxH9NpURC+iyoq3uelW7G1fZZpDDuvNyAMrRzOyvLzk4JWMid+d+c6eBRNodpyPlOvbeyGE0rBwiYVGieM0SztiUxEoiSLt9dLv32b/bWE5A8dfkEySuJmPo707Vkf917kEkIY7y4GgWo2AGzMrwAMVTrcFa86DlW8AwXfib9AKEla0nL6ul7gsVkKyrSdGUYBxkLkN6jjwqxBEIa8B2AH8bTbClNA5QyKF2u1kzkndZl9UvA1zMka9E+IXL2mRLrwxHxmdaTvSKkAU2G7Ro3IAr6a8IaV/GXvaGVxGLkgLltaSZtPyW0A==
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by PAXPR04MB8814.eurprd04.prod.outlook.com (2603:10a6:102:20d::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.24; Thu, 21 Nov
- 2024 22:27:28 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8158.019; Thu, 21 Nov 2024
- 22:27:28 +0000
-Message-ID: <e7ac7561-f9ff-406a-b2d7-6d9e31ed6e98@amd.com>
-Date: Thu, 21 Nov 2024 16:27:26 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC/RFT][PATCH v0.1] ACPI: OSL: Use usleep_range() in
- acpi_os_sleep()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>,
- Pierre Gondois <pierre.gondois@arm.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Hans de Goede <hdegoede@redhat.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-References: <5839859.DvuYhMxLoT@rjwysocki.net>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.15; Fri, 22 Nov
+ 2024 00:13:40 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.8182.016; Fri, 22 Nov 2024
+ 00:13:40 +0000
+From: Peng Fan <peng.fan@nxp.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>, "Peng Fan (OSS)"
+	<peng.fan@oss.nxp.com>, Thomas Renninger <trenn@suse.com>, Shuah Khan
+	<shuah@kernel.org>, "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur
+	<jkacur@redhat.com>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] pm: cpupower: Makefile: Allow overriding
+ cross-compiling env params
+Thread-Topic: [PATCH v2 2/2] pm: cpupower: Makefile: Allow overriding
+ cross-compiling env params
+Thread-Index: AQHbCotjTSksRUq1mEyXqNdymTcGi7LBikwAgACE5UCAAEobgIAAeDyQ
+Date: Fri, 22 Nov 2024 00:13:40 +0000
+Message-ID:
+ <PAXPR04MB84595BA5BEAE2D21F015036688232@PAXPR04MB8459.eurprd04.prod.outlook.com>
+References: <20240919-pm-v2-0-0f25686556b5@nxp.com>
+ <20240919-pm-v2-2-0f25686556b5@nxp.com>
+ <48c0adb5-4ae8-48bc-8e83-3d1c413f6861@broadcom.com>
+ <DB9PR04MB846134093D2302B6D67E7E6288222@DB9PR04MB8461.eurprd04.prod.outlook.com>
+ <16411b6f-3e1d-4d52-a047-8c322774ec8c@broadcom.com>
+In-Reply-To: <16411b6f-3e1d-4d52-a047-8c322774ec8c@broadcom.com>
+Accept-Language: en-US
 Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <5839859.DvuYhMxLoT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0036.namprd04.prod.outlook.com
- (2603:10b6:806:120::11) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|PAXPR04MB8814:EE_
+x-ms-office365-filtering-correlation-id: 6769b0ae-3f15-42d1-10d9-08dd0a8a84be
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?BcMRqe/msYTiRkRK55VtXbUvjLlxzIY52nT2FdiA0IImZBfjFMK9DICTg3vQ?=
+ =?us-ascii?Q?nCQ7b1vgD11n8DkRYu6k8+dWq1pnZzYbou4QCyWQQxHvEeS+QU98VXGpPE8a?=
+ =?us-ascii?Q?LhYIJvDnl+FQwmCXUInUOUs3BIlBNcVH3MeJtKOwEQQEVU6LWUrnwqrmHRWS?=
+ =?us-ascii?Q?ToYRyokenZwsdAAEMc1M6DJIww/iHT5CmfkGEbE54IBj08HKcjqfw2WB11WU?=
+ =?us-ascii?Q?c9RoeHj+ppdNwT+fmAURE32PVkhSOMNPBSZBngS9Sng2Ok5nmu11tda1MkhY?=
+ =?us-ascii?Q?Y+oaNBBeBR+iup1y7TrYVHH9MK9Fa2YS9LRCKj8XeceHrG8pysDBRWa9hYjD?=
+ =?us-ascii?Q?CZ8suwRWpmrsuUe4bFr8Co87bokGd5a/ddz0zK13Fl36FYWhn6NLmORaV28V?=
+ =?us-ascii?Q?u8S0CDcwA3PLkance5NVk6XI00ChcIxxyiqtZsqYS5jYSKGVghLRf7iB9/76?=
+ =?us-ascii?Q?dW6QokTwhvH6qyM8rCnP446EX7CjKSN4q0KzeahAmeDL1VDQAiAwWBb+8ZTA?=
+ =?us-ascii?Q?tyvSOY1Uu/ilrtauLV8RVjRkvR4il0THCsEkqBTNAHCHh3i+gWkgkmeMiGVS?=
+ =?us-ascii?Q?ymoXI1lTT9fYsDoBK8w0xb7s2Dvv+ODo/mt5/LPw0E+tBbJEGGHpakSTUGyk?=
+ =?us-ascii?Q?ZV5RPskky0SAu6qI1/R7ZaoKsDbvoQ0msEfITuWh8VF1mmS0jj7M06pN5IeT?=
+ =?us-ascii?Q?elBcW+PEQWQ55e4fF5uFXMKgkDVKk61MVjBTCxEVADkl4lncLU2B7QDfn7B1?=
+ =?us-ascii?Q?yL+WGCY1sEphOXPmL0HsCLY+AxTxjVlsvaDkZAI7lhPFEsQwZahssNWVo9aK?=
+ =?us-ascii?Q?SHfsUnBy1WfN27NiARRNfpLOWsOc7ukqihid4TwS1E1Wtc/sa/1XdSwsGOPq?=
+ =?us-ascii?Q?8VZqeqHy19/hI/yQPLEPMZICr1VV71O7XbhVSprjuqAHQklbJQaFHh856Z3Q?=
+ =?us-ascii?Q?/gwY7yxxxT8xnS0b5cR4i6x/Nl4AlYzQEtoOaQqxUX65YPFkUGvzn1m9JWZb?=
+ =?us-ascii?Q?cJpT+94Hens9fLttP/dzb/zDFDN0ojTHVoa4zG2PtCl4T/aHGc5Fzzw9FjOr?=
+ =?us-ascii?Q?GrLxWXRMwpN8WmEL05+MMlbiPXOyxZJWoDrySEULE7aRofc+k6OA1FbXWckC?=
+ =?us-ascii?Q?KygvLXwM17BMOmvGmdskyuhqLbi21gSh4pldeuf+xMzWpiXUX64ZPVsI3iuR?=
+ =?us-ascii?Q?kR86wGrXi1LhJOvSH5tVgbmP6wv5dp4hHRWqf5eCs1eXdYb0thIdO7KdvZMZ?=
+ =?us-ascii?Q?9s9+qWwEX3Y761ASc4NEDqFZjkJCCFrLkiw4ZGeMQUtujR+MV260HJgRilPZ?=
+ =?us-ascii?Q?nSdfliIib7Kv6KuFtB6krsgQ?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?s+eZLQwRGhgWZ0EdayiUfQrFUSCya8G4Hg7CJyjZvlHOUlQkl5iUtsCUdWjE?=
+ =?us-ascii?Q?yctwDC2ZuCh5eIFJrWlQa0yWF3peFqnznQnKkclzt+nBi3SHt7v7y+AkGF6D?=
+ =?us-ascii?Q?1S//w4XIvVlfyJ+7odX4Gtl/IwDCcnWDaDejgbO4lsOEI5GHQ74v73BsgB/R?=
+ =?us-ascii?Q?eICXLiE5Ys3NCGhsK0yD8RKLSymDqHe327k3BB4or4O0M6KiX184d/bI0W+m?=
+ =?us-ascii?Q?OEByhOCz9TSVbtqk28mEIFOXSpybJn5SCJSi81WMVsS4ypZ8IupwAFJVqS3w?=
+ =?us-ascii?Q?/KNXspPV8oRRccNsu8iGtQdmkfseuWvAuG8iwTDQlaehXkXy3W3tvNpYmwSs?=
+ =?us-ascii?Q?qSn0U4BQPsJ2kCDtoKfAfVobuSXl9eZ5BLuXC/C+aU1QflQiN5hnDszjmN40?=
+ =?us-ascii?Q?2YcbrBiu6v+WfrshveoSMZIFxWic3ZzxysIiTKe/+6HE99EXCb0QWXstDyEx?=
+ =?us-ascii?Q?JhnvUjyUNbfgtHoc2MgCtxhHl5u23v+5bFum9q+htNvoRo194WgEaoHrXVT0?=
+ =?us-ascii?Q?PyVt98ZdbbyrjKBKDUNZuJPv4jc2gqrvTDQz7LSHpwPrgJHgHn/JwFJLxsJX?=
+ =?us-ascii?Q?7b59I0F0WBpRFncKcK/4ENr+tqtg12Qvh7S8fzDoEq07+7rgNnGuNXgqtqpf?=
+ =?us-ascii?Q?rmuMBoumtpBLCF//AnmjE/yitGoZYpIQQhs7WDj5jp38yRIryJuC7Yftuu2y?=
+ =?us-ascii?Q?mXtkfr92VA/wfxVF9hdBM3eO5cfYMgFTJ1xUf8hH8LCivFGqxme0cnMBCYDH?=
+ =?us-ascii?Q?NYUXaOIR7WGnxWwo4SA/WnlREnsaCFomLDyLUAzZ9CnKB2rEUMaTLbc+bNxU?=
+ =?us-ascii?Q?xKHRi4gi+5Q22MMMO/X4xRIDalTTQMHw7qFh/v8m25R7hY4vRuU0dsdjVTS/?=
+ =?us-ascii?Q?InxxLotdR4k78ygjs6HaM4791S4RQPeHZvfqACcTQQO0gmwKfE8GmNJ1ISIF?=
+ =?us-ascii?Q?QpyJ8uJxntcN4VE2xY/M+tmsEFf9cxxnSyWJYVCX5T47hNQJB99cEemrHzM+?=
+ =?us-ascii?Q?8A5EvR1qWfwSgYv8ywRd7zo2Rf0EqifnB/+93yGGv9BQoJRVdD/6nH/xPfD5?=
+ =?us-ascii?Q?VdDt5TtPHf5lYLIwIsnu6MWyaVfhDE8CIb1tiK4Ysnj5nBNb6X2vKYF10ZrT?=
+ =?us-ascii?Q?BPEuJ7z6s1Y0YQ90HQEWgal4jrI+MaXCTBTVihkQ50t6XfbibyLWDKc/JSp1?=
+ =?us-ascii?Q?XqJmS/NBTGwg0ZpCdmM+n8ZtBKEuJNGOgJ0xv8MlGKv7eqAr5eZTMcb8wnxM?=
+ =?us-ascii?Q?TQP1nTA7CdthoTtypBvf4MEx8uE68CX+R7rQIaD+VuSiVOMsmOTFvrPfioJ9?=
+ =?us-ascii?Q?+4I49blMa1GNN7T1K4rYUNVsCXfXgoDpibFZjK8rkfPpcSnAk5lIA4nVBXn3?=
+ =?us-ascii?Q?Z5xxe/Qak8ym6a8ogdeO7O4aAocgUcJeHCQ1JzidJf+7Ib6xCDknfiYY2ruN?=
+ =?us-ascii?Q?L7o7h/aOc87IBOBP6W7lhab61LRtMZPS1bIqzDXXMvLZ4n9t5laoCiDQ+sZb?=
+ =?us-ascii?Q?1wVeJ+Jasimiwpt+JCz8oP9a8MXLsVj8CUAjmD1qSp7WI7RWud/7ORb0Qy6P?=
+ =?us-ascii?Q?DJB+sLpzqJ6p/gNthIU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN0PR12MB5906:EE_
-X-MS-Office365-Filtering-Correlation-Id: 181a519f-e4c4-48d2-5626-08dd0a7bae9b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MjJzN2pmME5MNjIyRTBCZGdQYUVheDYxWmRhTlJ4OXk1Y3lwL0QwcUpmcmZh?=
- =?utf-8?B?Mm9iSlU0bFZiL2hmL25uL1VnM21Oc2svWmVaVW5rM2hVZU4wQ290c2pvbEZB?=
- =?utf-8?B?T0ZpbUgzVlRtYUFrNmRnMEkrS25oTlZjTkU0bVpmSWI4ek9PZEM1WG82MGNB?=
- =?utf-8?B?SVBiWElGOFRDZXdtSlZJUGFpSVkzR3JRVndURm80ZGtrTW8reWNNV09JTllL?=
- =?utf-8?B?MzlGdUpHd0ZKMmRQVjcwTEhtZHRGM2tkUmhDYjJDK2kwRjBZa2JpZE9ydXVa?=
- =?utf-8?B?MnNuN0dKWCt1TUdjRmhUTDl5NlpVOU02eUFvdVRCWGJZOFY2OGxidXdsTjk2?=
- =?utf-8?B?eDVMcWJueFdkWDNlZllPL3VOU3dXQ3FGbktFOXdDTDdkQzVRWXl5clp0TjRq?=
- =?utf-8?B?TGM0djFySXlxV3BXRDRETFh1a3F3ZmtkTmdIQkp4YU05ZkJkSi93TktZV2hY?=
- =?utf-8?B?L29FMkwwZ2VhTFZnSFNTeFN6RHZvaFRvbjV3aGhXNHdiQlF6UXZHMG5XajN6?=
- =?utf-8?B?czh1R1NhTk1CWUtIZE0rWDRqMytMaWVuWExjNFpHOEFLZWVQUEsxcERxdk5p?=
- =?utf-8?B?Sjg2bmFySC9JVlpWZ3JsR2djL1diWDFrYWIzQUZvbk1SNk9rU3F2KzVSK0Nx?=
- =?utf-8?B?NzZvdnczQ01acjVmcWw3ZWEyRjVyZHNjR0lSQ1Y1QzVCZ3hyREVWTWFrc3ZK?=
- =?utf-8?B?K2VjTzlNRGg3K1V4RVdNSWpJaXN4RC9SdnNHT25OOVg3eTR1clZpWTVsMG9R?=
- =?utf-8?B?UHdpSG9wQTN0ZThYbFRLd0JuZkdKMXF6SHcwRDQyWDdlcEdPYzNsSUxvK3h4?=
- =?utf-8?B?QWMvLzVSWUM5aVk5NFc5OG52Qk5COUg1Mjh1dThyTTd6TmM3OHFXbEV5ZUdu?=
- =?utf-8?B?VWEvL0NuOWxhQWdNRzRuZGM4QkZCRGlSYlppeHh6a3dGekNWeTZqKzV1RGlR?=
- =?utf-8?B?c01ZN0hMSFhmR1VxeW9WVXNkM0ozWFFWcDdoQm9qNXJVTGZhVjI2UUR1b0lm?=
- =?utf-8?B?T1ZoR0VpeUZscm90SEw3N08yNXdLd0haZjZhamx6WmJtL0pMbXZLczRIQjdR?=
- =?utf-8?B?di9CcXMzRDlEY25CMjZKZERZTlZqRU5TSnN5U3p0MHY1Ny8weWJucWxSQURh?=
- =?utf-8?B?cnBDSTVlNVU5ei9iRktVbjNRdmRyWU5SZEdjZ013em1QSWlxUGtWeTVIQ1RV?=
- =?utf-8?B?TXhwaUN3ek5wMmF3Z2Rqb0xLQitkTzZVR2Q1NHNpTC9DclJabno1WFdtcWV3?=
- =?utf-8?B?WXY4Q2I2VXdkQkdYeENPbmVaNm9KR0pPd3hMdmJBN3pCRk1vZFl3WWl3akx5?=
- =?utf-8?B?cG9LK2gwSENJZ0xIVzByWmRWNTNMZ05qMUUyUnlXYUFjVWtkUGhLODVFdE5V?=
- =?utf-8?B?T2hhUGF1MStyTXBjWXdFQ2ZQWFNndU9xaVBsN1FMbkVWM1JuWjgwMGNYWUhw?=
- =?utf-8?B?aVFvQ1JNRlNLZ1BhSjh0d0F1cDVFVEVGc2QzSGhTYlBXbGRELzg3MVdIVFlo?=
- =?utf-8?B?aFBHVks4MTdaU0diNGxnQVFueFdSaExJbzZiRktocXh6cytLcDNocHlJSnRM?=
- =?utf-8?B?L1daSEZKazVWY0N0ejUwdGZydUNKajk2Tzd1Njh5OERPNXdCdEx3VHBsZnEx?=
- =?utf-8?B?TGFkSzdPMzZuN3BHSjB4bkxxQ1hXWng4eVFUTHg1aHpDZFAvUEI3dTdmTHhV?=
- =?utf-8?B?M3lYYkozV2FKcjR5dEwxYzFMNEkzOFV0ZVFDTTY2eU1Md1BqVkl0eHFnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YzEwdUJuUWtFenExUXBSaXVsYTlUdmN5UEsvRC9ucXBMRUpLREt1VmJFZEJz?=
- =?utf-8?B?NFJ4WEZObWsyaG9qYk9RWkdSTW9oSjF0b3IweU94YXFqMUdXclQzMHpPYk5U?=
- =?utf-8?B?eDY5Mm9OWGJyTkRUYmJ4eW1HZlFZM3hZaGMwZU9ZZ1kzWTdMaTN6SmEzTC85?=
- =?utf-8?B?SGlhdE8zWWFvMU5MV2ZISFArdU1vVXFvV0wxRExtRElEUGc4eHhkTkNTL3d1?=
- =?utf-8?B?YnR0TjZGUHVodUk3a3BuUUc0YVp1djJCVlpSOXZ2OENyc1JKNW80a3hreHdS?=
- =?utf-8?B?R1NEM1BkeGFHVFJJanpPOExPdHBXNXYrekhYVjhZcmdtSnhhN1lyVnhmUTho?=
- =?utf-8?B?TnVZdHhLM2JNNyt3YXFneFZGVjRTTXJRdWgrYzI0eE9waFpvQUdtamkvb1Fl?=
- =?utf-8?B?SVRuZHhpZ2NHWmxFUktSKzRWK3pseFVOZm9SckFLZU9DQUZlc0hUZzdnN010?=
- =?utf-8?B?Q3VGTkxBUkZLd1lKU2JkcEljQ3F3MWdHcUZhelBxeURXSnlPbHRvWFdWZEdE?=
- =?utf-8?B?TDhuNFJVR0szVFdnNGs5dkVQWFd1NVpMUnpmWEc2S0lqR2tsSmEyRzQ1NmUy?=
- =?utf-8?B?ditXaWVlMDFTcU5SWSszd0wvUFN0Sk9abWtHS3JFRmE2NTFwaEZiK0NBSEs2?=
- =?utf-8?B?Ykd4K1RRL2ZWdFZlRVFtMEx0Ly9IMnhYWnZVN01BNmxmbEpqd0xSS0lYTEdU?=
- =?utf-8?B?WlgxWHZwZENQZnBKSHZ0Uy9jNk90clZmQ2pnOGVPbFZKUW1GVXN3NEw0WWxX?=
- =?utf-8?B?dFJWV0gya2J0Umxkb2RxeEdka1FBd1hvV0labDZhdk53Y2pua1E0dDZHbFZ1?=
- =?utf-8?B?R1phZGlzcGFEYWtTVWU0TlBYZllXWkp0ak9rMG1hUVZYTUYvTC9hNXpQeVMr?=
- =?utf-8?B?U0Y1d0o0cWxlRExPVW1nOUpOTWY5aktEL05GS25OaUNXYzRETDNjcEhmUnk0?=
- =?utf-8?B?U1hkeFNtQk4ydTVSZnN4RFRKbXhKaTVHVzhYengvQnBOV3MxcWtmMnluUDRJ?=
- =?utf-8?B?cmNyZlYrTjdhV1VIdnYrNFJpZ2svZkRZREIyTjdjRC9xam1helVZcFlXblRm?=
- =?utf-8?B?RVBJTEttWWJka3FUQ2VPMmFNT09xSzhpM3J0V2NBT2NhNWNSTFgyZmN1Yk5K?=
- =?utf-8?B?cVIwT3Z3Uk5nc3FjdWpGQ2VucnNrd3g2ZTlyeVpoTE5QRVVFbGRkc2JqdTdr?=
- =?utf-8?B?V0U0aU5tem02bnBSM0tPOEFUZHRYWGtGejhJRGhnczJRQ0NiR2VIS2tkSGp1?=
- =?utf-8?B?WjNHa2tZT29KZW53MEdUbkFjTGl5cHFPaTNwcDRxUkNaNElieC9sSmhCMEhN?=
- =?utf-8?B?anJQYVlNeG9TYlJMbmNNaUJ0UVcyTFZrbStvWmRaSmVKMjcvaFNtbXBLZkox?=
- =?utf-8?B?SENVSi9CdWRlS2FhcnR4TGpzY25Sb1pBYklyVTNTQ20vWDhlbGNEeEFybndU?=
- =?utf-8?B?QVBMQ1lKZGF4OEsxTXo1eExOY0ExblUwMWlUbTFPdFNJWkIwdjJsZjNmODhT?=
- =?utf-8?B?b3F0eTVTR1owT3R5MEgxZnRENDVPdHh4eWVlOHhZTk43YlNJUmR6WCtkTHVM?=
- =?utf-8?B?VUkyeUhBVkl3YmtZeE1PSWh1eGpIK2QyQndiRnEzZStWMHlFT20rQ3g1K2VP?=
- =?utf-8?B?dkdhdlF1aHB1RnZDcFFpckY0SW8waW1VMnVzb3FPWTlJempxcFhXVDVPTXlN?=
- =?utf-8?B?VTA1dzZJcktkMmd6RFg5QSt6M21sVGRSbytaVXdTeUM2TWxlSHphVTB0ZVc5?=
- =?utf-8?B?c1paYnJjM2ppQ1hGdWN6MXluZmpqU1lFMUxjbTc2UkljUDQ5WnZrT0I3bC80?=
- =?utf-8?B?QzBTbVFNK0ZtRXVjUkZycGd6MTdBdm05Y1Bzd3gyL3FkbzNJMWJ3Nk13UFR1?=
- =?utf-8?B?NkpyVlZsRHlzVnlVUU9QdmQvaXFMNnk4ZGdkSFg1eXg2T1BiYTRudVowaDFk?=
- =?utf-8?B?d0ZkQndvQWlpeVd6MVZ5a3FhTWg0bmh1WnQ2WlYrN2FLdVNUQkxYREgyY1lM?=
- =?utf-8?B?dGxJRFRnamoxdm5yTDEvVDJ2UGtIcnBVdDhQMjRmWDJZQ21mbExvcjlxcDdR?=
- =?utf-8?B?Zmo3MkhabS9mZG9Scm9wQ29IUjBBOEdiVUMweWNJM3BhWE9ZVFdJblc1Vzc3?=
- =?utf-8?Q?3pVQxf5LIcNFEtnHjzrAXCCVP?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 181a519f-e4c4-48d2-5626-08dd0a7bae9b
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2024 22:27:28.4928
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6769b0ae-3f15-42d1-10d9-08dd0a8a84be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2024 00:13:40.4759
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NikPibAU76R8SJx/7eQtOTN02NwYm4UKXzsLqv2u35DcfpIOsckpPcPBWyVWjBlcdIsXZRukia6LuUioSz2+Ew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5906
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B8R+o8paq/E4+ZktNgDkgIdOJRqY/l9fjt6VPHxLVCkaXLvtlwzYXPbVWHIEfAGvD09vN4UgMpcO3AqJ+eK0qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8814
 
-On 11/21/2024 07:15, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> As stated by Len in [1], the extra delay added by msleep() to the
-> sleep time value passed to it can be significant, roughly between
-> 1.5 ns on systems with HZ = 1000 and as much as 15 ms on systems with
-> HZ = 100, which is hardly acceptable, at least for small sleep time
-> values.
-> 
-> Address this by using usleep_range() in acpi_os_sleep() instead of
-> msleep().  For short sleep times this is a no-brainer, but even for
-> long sleeps usleep_range() should be preferred because timer wheel
-> timers are optimized for cancellation before they expire and this
-> particular timer is not going to be canceled.
-> 
-> Add at least 50 us on top of the requested sleep time in case the
-> timer can be subject to coalescing, which is consistent with what's
-> done in user space in this context [2], but for sleeps longer than 5 ms
-> use 1% of the requested sleep time for this purpose.
-> 
-> The rationale here is that longer sleeps don't need that much of a timer
-> precision as a rule and making the timer a more likely candidate for
-> coalescing in these cases is generally desirable.  It starts at 5 ms so
-> that the delta between the requested sleep time and the effective
-> deadline is a contiuous function of the former.
-> 
-> Link: https://lore.kernel.org/linux-pm/c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com/ [1]
-> Link: https://lore.kernel.org/linux-pm/CAJvTdK=Q1kwWA6Wxn8Zcf0OicDEk6cHYFAvQVizgA47mXu63+g@mail.gmail.com/ [2]
-> Reported-by: Len Brown <lenb@kernel.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Subject: Re: [PATCH v2 2/2] pm: cpupower: Makefile: Allow overriding
+> cross-compiling env params
+>=20
+> On 11/21/24 04:40, Peng Fan wrote:
+> >> Subject: Re: [PATCH v2 2/2] pm: cpupower: Makefile: Allow
+> overriding
+> >> cross-compiling env params
+> >>
+> >> Hi Peng,
+> >>
+> >> On 9/19/2024 5:08 AM, Peng Fan (OSS) wrote:
+> >>> From: Peng Fan <peng.fan@nxp.com>
+> >>>
+> >>> Allow overriding the cross-comple env parameters to make it
+> easier
+> >> for
+> >>> Yocto users. Then cross-compiler toolchains to build cpupower
+> with
+> >>> only two steps:
+> >>> - source (toolchain path)/environment-setup-armv8a-poky-linux
+> >>> - make
+> >>
+> >> This patch breaks the way that buildroot builds cpupower:
+> >>
+> >>
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
+> >> git.buildroot.net%2Fbuildroot%2Ftree%2Fpackage%2Flinux-
+> >> tools%2Flinux-tool-
+> >>
+> cpupower.mk.in&data=3D05%7C02%7Cpeng.fan%40nxp.com%7C246da9
+> >>
+> 2d8b6243d138c808dd09e6d644%7C686ea1d3bc2b4c6fa92cd99c5c3
+> >>
+> 01635%7C0%7C0%7C638677609234547728%7CUnknown%7CTWFpb
+> >>
+> GZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJX
+> >>
+> aW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdat
+> >>
+> a=3DnL1YUl%2F07Vd8F0GpW7uRqdpZT74avOku1ox9N3%2FFkUg%3D&r
+> >> eserved=3D0
+> >>
+> >> and after enabling verbose it becomes clear as to why, see below:
+> >>
+> >>   >>> linux-tools  Configuring
+> >>   >>> linux-tools  Building
+> >> GIT_DIR=3D.
+> >> PATH=3D"/local/users/fainelli/buildroot-
+> >> upstream/output/arm/host/bin:/local/users/fainelli/buildroot-
+> >>
+> upstream/output/arm/host/sbin:/projects/firepath/tools/bin:/home/ff
+> >>
+> 944844/bin:/home/ff944844/.local/bin:/opt/stblinux/bin:/usr/local/sb
+> >> in:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local
+> >> /ga mes:/snap/bin:/opt/toolchains/metaware-vctools-0.4.1/bin/"
+> >> /usr/bin/make -j97
+> >> CROSS=3D/local/users/fainelli/buildroot-
+> >> upstream/output/arm/host/bin/arm-linux-
+> >> CPUFREQ_BENCH=3Dfalse NLS=3Dfalse LDFLAGS=3D"-L.
+> >> -L/local/users/fainelli/buildroot-
+> upstream/output/arm/target/usr/lib"
+> >> DEBUG=3Dfalse V=3D1 -C
+> >> /local/users/fainelli/buildroot-upstream/output/arm/build/linux-
+> >> custom/tools
+> >> cpupower
+> >> mkdir -p power/cpupower && /usr/bin/make
+> subdir=3Dpower/cpupower
+> >> --no-print-directory -C power/cpupower cc -DVERSION=3D\"6.12.0\" -
+> >> DPACKAGE=3D\"cpupower\"
+> >> -DPACKAGE_BUGREPORT=3D\"linux-pm@vger.kernel.org\" -
+> D_GNU_SOURCE -pipe
+> >> -Wall -Wchar-subscripts -Wpointer-arith -Wsign- compare
+> >> -Wno-pointer-sign -Wdeclaration-after-statement -Wshadow - Os
+> >> -fomit-frame-pointer -fPIC -o lib/cpufreq.o -c lib/cpufreq.c
+> >
+> > You are building on an ARM host? Or you are cross compiling with cc
+> is
+> > actually arm gcc?
+>=20
+> This is cross compiling targeting ARM, which is why CROSS is set to
+> ../arm-linux-
+>=20
+> >
+> >>
+> >> Here we use cc, aka host compiler, rather than $(CROSS)gcc as we
+> >> should, so we are no longer cross compiling at all.
+> >
+> > I not understand. CROSS was set, but using cc to compile for host?
+>=20
+> See below.
+>=20
+> >
+> >>
+> >> The issue is the use of the lazy set if absent for *all* of CC, LD,
+> >> AR, STRIP, RANLIB, rather than just for CROSS. The following fixes it
+> for me:
+> >>
+> >> diff --git a/tools/power/cpupower/Makefile
+> >> b/tools/power/cpupower/Makefile index
+> >> 175004ce44b2..96bb1e5f3970 100644
+> >> --- a/tools/power/cpupower/Makefile
+> >> +++ b/tools/power/cpupower/Makefile
+> >> @@ -87,11 +87,11 @@ INSTALL_SCRIPT =3D ${INSTALL} -m 644
+> >>    # to something more interesting, like "arm-linux-".  If you want
+> >>    # to compile vs uClibc, that can be done here as well.
+> >>    CROSS ?=3D #/usr/i386-linux-uclibc/usr/bin/i386-uclibc-
+> >> -CC ?=3D $(CROSS)gcc
+> >> -LD ?=3D $(CROSS)gcc
+> >> -AR ?=3D $(CROSS)ar
+> >> -STRIP ?=3D $(CROSS)strip
+> >> -RANLIB ?=3D $(CROSS)ranlib
+> >> +CC =3D $(CROSS)gcc
+> >> +LD =3D $(CROSS)gcc
+> >> +AR =3D $(CROSS)ar
+> >> +STRIP =3D $(CROSS)strip
+> >> +RANLIB =3D $(CROSS)ranlib
+> >
+> > The ? is just allow to override CC/LD/AR.., so in your env, CC is set,
+> > but should not be used for cpupower compling?
+>=20
+> Adding debug to show the origin of the CC variable shows the following:
+>=20
+> CROSS=3D/local/users/fainelli/buildroot-
+> upstream/output/arm/host/bin/arm-linux-
+> CC origin is (default) and value is (cc) LD origin is (default) and value=
+ is
+> (ld) CC=3Dcc LD=3Dld AR=3Dar STRIP=3D RANLIB=3D
 
-You probably should also pick up this tag from the earlier version.
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=216263
+How about
+CROSS ?=3D #/usr/i386-linux-uclibc/usr/bin/i386-uclibc-
+ifneq ($(CROSS), )
+CC =3D $(CROSS)gcc
+LD =3D $(CROSS)gcc
+AR =3D $(CROSS)ar
+STRIP =3D $(CROSS)strip
+RANLIB =3D $(CROSS)ranlib
+else
+CC ?=3D $(CROSS)gcc
+LD ?=3D $(CROSS)gcc
+AR ?=3D $(CROSS)ar
+STRIP ?=3D $(CROSS)strip
+RANLIB ?=3D $(CROSS)ranlib
+Endif
 
-> ---
-> 
-> This is a follow-up to the discussion started by [1] above and since
-> the beginning of it I have changed my mind a bit, as you can see.
-> 
-> Given Arjan's feedback, I've concluded that using usleep_range() for
-> all sleep values is the right choice and that some slack should be
-> used there.  I've taken 50 us as the minimum value of it because that's
-> what is used in user space FWICT and I'm not convinced that shorter
-> values would be suitable here.
-> 
-> The other part, using 1% of the sleep time as the slack for longer
-> sleeps, is likely more controversial.  It is roughly based on the
-> observation that if one timer interrupt is sufficient for something,
-> then using two of them will be wasteful even if this is just somewhat.
-> 
-> Anyway, please let me know what you think.  I'd rather do whatever
-> the majority of you are comfortable with.
+Thanks,
+Peng.
 
-Generally I'm fine with this.
-
-I'm about to head on US holiday, but I will forward this to folks that 
-aren't and get some testing input on it to bring back later when I'm back.
-
-> 
-> ---
->   drivers/acpi/osl.c |   22 +++++++++++++++++++++-
->   1 file changed, 21 insertions(+), 1 deletion(-)
-> 
-> Index: linux-pm/drivers/acpi/osl.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/osl.c
-> +++ linux-pm/drivers/acpi/osl.c
-> @@ -607,7 +607,27 @@ acpi_status acpi_os_remove_interrupt_han
->   
->   void acpi_os_sleep(u64 ms)
->   {
-> -	msleep(ms);
-> +	u64 usec = ms * USEC_PER_MSEC, delta_us = 50;
-> +
-> +	/*
-> +	 * Use a hrtimer because the timer wheel timers are optimized for
-> +	 * cancellation before they expire and this timer is not going to be
-> +	 * canceled.
-> +	 *
-> +	 * Set the delta between the requested sleep time and the effective
-> +	 * deadline to at least 50 us in case there is an opportunity for timer
-> +	 * coalescing.
-> +	 *
-> +	 * Moreover, longer sleeps can be assumed to need somewhat less timer
-> +	 * precision, so sacrifice some of it for making the timer a more likely
-> +	 * candidate for coalescing by setting the delta to 1% of the sleep time
-> +	 * if it is above 5 ms (this value is chosen so that the delta is a
-> +	 * continuous function of the sleep time).
-> +	 */
-> +	if (ms > 5)
-> +		delta_us = (USEC_PER_MSEC / 100) * ms;
-> +
-> +	usleep_range(usec, usec + delta_us);
->   }
->   
->   void acpi_os_stall(u32 us)
-> 
-> 
-> 
-
+>=20
+> See
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
+> www.gnu.org%2Fsoftware%2Fmake%2Fmanual%2Fhtml_node%2FOrig
+> in-Function.html%23Origin-
+> Function&data=3D05%7C02%7Cpeng.fan%40nxp.com%7C02c643288e1e
+> 456e69e108dd0a4e58d7%7C686ea1d3bc2b4c6fa92cd99c5c301635%
+> 7C0%7C0%7C638678053808856433%7CUnknown%7CTWFpbGZsb3d8
+> eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiI
+> sIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=3DL4xd4j
+> ijUJXibguQnxUTzcAUA%2FGSUGUQzmA5FfVaaAQ%3D&reserved=3D0
+> --
+> Florian
 
