@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-17946-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17947-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D5DA9D59D0
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 08:17:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 375269D59D7
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 08:19:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D7C9B21FE0
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 07:17:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BE44B20AC3
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2024 07:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 170B417B428;
-	Fri, 22 Nov 2024 07:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3211632EE;
+	Fri, 22 Nov 2024 07:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jpm+hlmx"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Oag1xQDF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA06176AAE;
-	Fri, 22 Nov 2024 07:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5618C2309A3;
+	Fri, 22 Nov 2024 07:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732259810; cv=none; b=FUVM3GqCU8VOzKWa8+VY+mIUpzJpx+4DBnZFbkGbGC4sPUfPcdZbVVhmbI8B4igLiozCNjbOWFbYrq05iSXmV+fCmAhZKXzgR4KSjPMk/JnrmrDfNiW2NQzYGtI0ZGQRspK4pzlg5H68hBaVkiBz0zpudcn8F4yDUiSC68QEpjM=
+	t=1732259951; cv=none; b=Js3Kv+0WaNMKGjqo8X7KRTReBIr7GQyKdyiZgIBeFOncy60irgJ67wDjNceHl8QvMi6ZxxCV4CttU+3jPZFXkoBglj3E6TZDM9EDUoi4a9doWu/iVbXIW15klc39FfSWn305aR3VPcp594xdz8FEgsFvcGqAFmF8nU3PcWEsH64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732259810; c=relaxed/simple;
-	bh=4sHOO51s1jATnfOtut1zLDZ8BCLU3WdBaeHgaCW3LJo=;
+	s=arc-20240116; t=1732259951; c=relaxed/simple;
+	bh=16hylzq8vbeBZPqayqaT4IF79jDLZFTRFsX9J+wURes=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=G+UjjU6k9Pzf0zWqW2Sp9h/qT5m8OMYIw+YhjChT+6mvoK9ldzCvqgr5FzGUNy12aSXN3HWGh7aK+BN/S3BqKCraqW8GJrR5ulxkjyqDk7wxRxMDun6mHDBvyBD1tu+YCf2T96RiRWpmJFN0Y/l6F8vDrGyKubD43AyQuIxtZPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jpm+hlmx; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:Content-Type; b=TP+0/BpUcG6Mtmisb5tTH5OSIf/M6uXc08poeXspgacLE2KacMX1e9iDicwNCdsRWXsUabJ8inbZeArbH7dM+4pnZbTJegpkSisOAkStBITlSthDtl54ciiNpMfS4C787BqUd6Ax6XfNVUWyDnEumfdjZpFED0+tN4b/O2SL8FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Oag1xQDF; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AM77Jcq015637;
-	Fri, 22 Nov 2024 07:16:46 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AM6bDF2015521;
+	Fri, 22 Nov 2024 07:19:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	jXvsgXYeibjTq3pz62fi6/hRFtAf2bKrPnSHlgDAuMA=; b=jpm+hlmxSzOcks+5
-	hvcJsKGaYqZ5xRyy+P9L1IAaF6UkRvLUKcAaLkGcB4CEj3xZ0OT7URFas0RaQWXW
-	G9ZOfiaVFTiBWxzFTtlgoBPKvcVdV31i+cJcsbJv9fbSs1DgXipei+QbbMs6U3CP
-	abYZjShVzyTH8Yi8Fcn0xHZm0nilIfMEe9jU6epC6MPZspYiv3qsy1XivGD4e+rd
-	PToJl+iEBH2rAjQbEQexQKEhAB+k4EGmzOU7Y2sxE5Rhhm9BX0kbW0rrA6/0+byG
-	1zYRg9SoCksSFNL9YSnyXOya9jyqD7Ntxbyw3qL0HDKsSsbf+3UoJTF1l4fEuD7/
-	9BT0rQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4320y9kajj-1
+	VUh0+HLIEv6okl/7bFQMe+M3ucNSJ0sohjL+hEcHiD4=; b=Oag1xQDFb1xHj6LO
+	IdLwTovUK7NjygtaO4mQ4H4NRwegsM//yiotQo/4N2T0T1R+cbrtEvLTa4aCglPD
+	5/ifz32IC9mfno2mrA6hXdCKm2lVcT+0BrAG5MR2bDSNogi+i+PUEeHLctxqh1pY
+	yYQFcXtCTZqttAoSsgiKizlPBfjzRkMVhrZKhqMXjHPMveu0bsc3mmDy78L99KT0
+	ICDiC9hz5RYtpSUMcAtHGw53VAh+1sZQvg0uB0QDXJ0hVEOZdlg0eXybwVu+S+v4
+	0QUSUALhpURgz1NEwBVIqqZ+gzxzK7F/HzHqgoDTpEUZaW/QvxT7YFab5ZaKxfiW
+	cmwVig==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4320y9kaqx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Nov 2024 07:16:45 +0000 (GMT)
+	Fri, 22 Nov 2024 07:19:06 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AM7GjAR026282
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AM7J5sD014144
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Nov 2024 07:16:45 GMT
+	Fri, 22 Nov 2024 07:19:05 GMT
 Received: from [10.216.2.20] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 21 Nov
- 2024 23:16:40 -0800
-Message-ID: <82fc7b99-bc3e-4a9b-a472-c1b70671f21a@quicinc.com>
-Date: Fri, 22 Nov 2024 12:46:37 +0530
+ 2024 23:19:00 -0800
+Message-ID: <00cb0942-08cb-4cd2-b84a-bc265686eae2@quicinc.com>
+Date: Fri, 22 Nov 2024 12:48:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,36 +65,37 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 1/4] dt-bindings: interconnect: Add EPSS L3 compatible
- for SA8775P
-To: Krzysztof Kozlowski <krzk@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+Subject: Re: [PATCH V5 3/4] interconnect: qcom: Add EPSS L3 support on SA8775P
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Krzysztof Kozlowski <krzk@kernel.org>, Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Mike Tipton
-	<quic_mdtipton@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Odelu Kukatla
+	<quic_okukatla@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        "Sibi
+ Sankar" <quic_sibis@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20241121113006.28520-1-quic_rlaggysh@quicinc.com>
- <20241121113006.28520-2-quic_rlaggysh@quicinc.com>
- <bda810ab-68d8-4265-87c3-a6d021092e62@kernel.org>
- <10e4fd4e-559d-4164-ab94-d5f0a60ffc22@quicinc.com>
- <53876db8-4401-481d-8684-af7e135d481e@kernel.org>
+ <20241121113006.28520-4-quic_rlaggysh@quicinc.com>
+ <bc926d6d-e3d1-4fbf-9b6a-bbd3816a766d@kernel.org>
+ <b2a05dfb-a820-4450-a156-8d6b4bd59be3@quicinc.com>
+ <u2jfxvmn6qazhpvmehrh7ifc3ei7qucuwbk5dq5jzpoqkxmdbk@tsx4di2fdj4h>
 Content-Language: en-US
 From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <53876db8-4401-481d-8684-af7e135d481e@kernel.org>
+In-Reply-To: <u2jfxvmn6qazhpvmehrh7ifc3ei7qucuwbk5dq5jzpoqkxmdbk@tsx4di2fdj4h>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tpQHuPRYC9LisQ4lqI77GbTVtwFSu45O
-X-Proofpoint-ORIG-GUID: tpQHuPRYC9LisQ4lqI77GbTVtwFSu45O
+X-Proofpoint-GUID: C3YxZj5MHzEPTZRXaf52F1fiVEz1lhJN
+X-Proofpoint-ORIG-GUID: C3YxZj5MHzEPTZRXaf52F1fiVEz1lhJN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
@@ -106,79 +107,146 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorit
 
 
 
-On 11/21/2024 11:20 PM, Krzysztof Kozlowski wrote:
-> On 21/11/2024 18:43, Raviteja Laggyshetty wrote:
+On 11/22/2024 3:44 AM, Dmitry Baryshkov wrote:
+> On Thu, Nov 21, 2024 at 11:33:04PM +0530, Raviteja Laggyshetty wrote:
 >>
 >>
->> On 11/21/2024 5:23 PM, Krzysztof Kozlowski wrote:
+>> On 11/21/2024 5:28 PM, Krzysztof Kozlowski wrote:
 >>> On 21/11/2024 12:30, Raviteja Laggyshetty wrote:
->>>> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
->>>> SA8775P SoCs.
->>>
->>> This we see from the diff. Explain the hardware, why adding epps-l3-perf.
->>>
->> The EPSS instance in SA8775P uses PERF_STATE register instead of REG_L3_VOTE to scale L3 clocks.Along with SoC specific compatible, add new generic compatible "qcom,epss-l3-perf" for PERF_STATE register based L3 scaling.
-> 
-> Pasting the same replies as you pasted to others won't solve the
-> problem. Solve the problem - fix the commit msg.
-> 
->>
+>>>> Add Epoch Subsystem (EPSS) L3 interconnect provider on
+>>>> SA8775P SoCs with multiple device support.
 >>>>
->>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>>> ---
->>>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml         | 4 ++++
->>>>  1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>> index 21dae0b92819..042ca44c32ec 100644
->>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>> @@ -34,6 +34,10 @@ properties:
->>>>                - qcom,sm8250-epss-l3
->>>>                - qcom,sm8350-epss-l3
->>>>            - const: qcom,epss-l3
->>>> +      - items:
->>>> +          - enum:
->>>> +              - qcom,sa8775p-epss-l3
->>>> +          - const: qcom,epss-l3-perf
 >>>
->>> I don't understand this change in context of driver. These are the same.
->>> Isn't this compatible with sm8250?
 >>>
+>>> ...
+>>>
+>>>> -DEFINE_QNODE(osm_l3_master, OSM_L3_MASTER_NODE, 16, OSM_L3_SLAVE_NODE);
+>>>> -DEFINE_QNODE(osm_l3_slave, OSM_L3_SLAVE_NODE, 16);
+>>>> +DEFINE_QNODE(osm_l3_master, 16, osm_l3_slave);
+>>>> +DEFINE_QNODE(osm_l3_slave, 16);
+>>>>  
+>>>> -static const struct qcom_osm_l3_node * const osm_l3_nodes[] = {
+>>>> +static struct qcom_osm_l3_node * const osm_l3_nodes[] = {
+>>>>  	[MASTER_OSM_L3_APPS] = &osm_l3_master,
+>>>>  	[SLAVE_OSM_L3] = &osm_l3_slave,
+>>>>  };
+>>>>  
+>>>> -DEFINE_QNODE(epss_l3_master, OSM_L3_MASTER_NODE, 32, OSM_L3_SLAVE_NODE);
+>>>> -DEFINE_QNODE(epss_l3_slave, OSM_L3_SLAVE_NODE, 32);
+>>>> +DEFINE_QNODE(epss_l3_master, 32, epss_l3_slave);
+>>>> +DEFINE_QNODE(epss_l3_slave, 32);
+>>>>  
+>>>> -static const struct qcom_osm_l3_node * const epss_l3_nodes[] = {
+>>>> +static struct qcom_osm_l3_node * const epss_l3_nodes[] = {
+>>>
+>>>
+>>> I think dropping const makes the code worse, not better. Commit msg does
+>>> not explain all these changes and I could not figure out the intention
+>>> (except modifying but that's just obvious).
 >>
->> The intention for adding "qcom,epss-l3-perf" generic compatible is to use it for the chipsets which use perf state register for l3 scaling.
->> Using generic compatible avoids the need for adding chipset specific compatible in match table.
+>> EPSS L3 on SA8775P has two instances and this requires creation of two device nodes in devicetree.
+>> As Interconnect framework requires a unique node id, each device node needs to have different compatible and data.
+>> To overcome the need of having two different compatibles and data, driver code has been modified to acquire unique node id from IDA 
+>> and the node name is made dynamic (nodename@address).
+>> Updating node id and node name is not possible with const.
 > 
-> 
-> Not true, specific compatibles used as fallback do the same and is a
-> preferred way.
->
+> Has this been described in the commit message? No. Have you had similar
+> questions since v1? Yes. What does that tell us?
 
-Will make use of sm8250 compatibles for sa8775p in the next patch revision.
- 
+I will update the commit message in the next patch revision.
 > 
->> But received comment from konrad to add both SoC-specific and generic compatibles.
-> 
-> I went through the history and don't see anything like that. Point to
-> the specific email please, if you disagree.
-> 
-https://patchwork.kernel.org/project/linux-pm/patch/20241026123058.28258-2-quic_rlaggysh@quicinc.com/#26104591
+> Also, while we are at it. Please fix your email client settings to wrap
+> message body text on some sensible (72-75) width.
 
-
->> Dmitry has suggested to update generic comaptibles for sc7280 and sm8250 SoCs, which makes use of perf state registers. 
+Thanks for suggesting!
 > 
-> OK
+>>>
+>>>
+>>>
+>>>>  	[MASTER_EPSS_L3_APPS] = &epss_l3_master,
+>>>>  	[SLAVE_EPSS_L3_SHARED] = &epss_l3_slave,
+>>>>  };
+>>>> @@ -123,6 +125,19 @@ static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
+>>>>  	.reg_perf_state = EPSS_REG_L3_VOTE,
+>>>>  };
+>>>>  
+>>>> +static u16 get_node_id_by_name(const char *node_name,
+>>>> +			       const struct qcom_osm_l3_desc *desc)
+>>>> +{
+>>>> +	struct qcom_osm_l3_node *const *nodes = desc->nodes;
+>>>> +	int i;
+>>>> +
+>>>> +	for (i = 0; i < desc->num_nodes; i++) {
+>>>> +		if (!strcmp(nodes[i]->name, node_name))
+>>>> +			return nodes[i]->id;
+>>>> +	}
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>>  static int qcom_osm_l3_set(struct icc_node *src, struct icc_node *dst)
+>>>>  {
+>>>>  	struct qcom_osm_l3_icc_provider *qp;
+>>>> @@ -164,10 +179,11 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>>>  	const struct qcom_osm_l3_desc *desc;
+>>>>  	struct icc_onecell_data *data;
+>>>>  	struct icc_provider *provider;
+>>>> -	const struct qcom_osm_l3_node * const *qnodes;
+>>>> +	struct qcom_osm_l3_node * const *qnodes;
+>>>>  	struct icc_node *node;
+>>>>  	size_t num_nodes;
+>>>>  	struct clk *clk;
+>>>> +	u64 addr;
+>>>>  	int ret;
+>>>>  
+>>>>  	clk = clk_get(&pdev->dev, "xo");
+>>>> @@ -188,6 +204,10 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>>>  	if (!qp)
+>>>>  		return -ENOMEM;
+>>>>  
+>>>> +	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>> +
+>>>>  	qp->base = devm_platform_ioremap_resource(pdev, 0);
+>>>>  	if (IS_ERR(qp->base))
+>>>>  		return PTR_ERR(qp->base);
+>>>> @@ -242,8 +262,13 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>>>  
+>>>>  	icc_provider_init(provider);
+>>>>  
+>>>> +	/* Allocate unique id for qnodes */
+>>>> +	for (i = 0; i < num_nodes; i++)
+>>>> +		qnodes[i]->id = ida_alloc_min(&osm_l3_id, OSM_L3_NODE_ID_START, GFP_KERNEL);
+>>>> +
+>>>>  	for (i = 0; i < num_nodes; i++) {
+>>>> -		size_t j;
+>>>> +		char *node_name;
+>>>> +		size_t j, len;
+>>>>  
+>>>>  		node = icc_node_create(qnodes[i]->id);
+>>>>  		if (IS_ERR(node)) {
+>>>> @@ -251,13 +276,29 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>>>  			goto err;
+>>>>  		}
+>>>>  
+>>>> -		node->name = qnodes[i]->name;
+>>>> +		/* len = strlen(node->name) + @ + 8 (base-address) + NULL */
+>>>> +		len = strlen(qnodes[i]->name) + OSM_NODE_NAME_SUFFIX_SIZE;
+>>>> +		node_name = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+>>>> +		if (!node_name) {
+>>>> +			ret = -ENOMEM;
+>>>> +			goto err;
+>>>> +		}
+>>>> +
+>>>> +		snprintf(node_name, len, "%s@%08llx", qnodes[i]->name, addr);
+>>>> +		node->name = node_name;
+>>>
+>>>
+>>> Why the node name becomes dynamic?
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>
 > 
->> It will be done as separate patch series.
-> 
-> No. I expect to see full, correct picture, not half baked patches which
-> contradict what is in current code.
-> 
->
-Ok, I will update the generic compatibles for sm8250, sc7280 SoCs in the 
-next patch revision and will include them along with sa8775p dt patch.
- 
-> Best regards,
-> Krzysztof
 
 
