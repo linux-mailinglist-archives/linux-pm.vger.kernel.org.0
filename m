@@ -1,175 +1,181 @@
-Return-Path: <linux-pm+bounces-17986-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-17989-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 656C99D6BFE
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2024 00:01:06 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EF2316175C
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Nov 2024 23:00:20 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60751AA789;
-	Sat, 23 Nov 2024 23:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BozWns9o"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E21F59D6C18
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2024 00:14:04 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F064C1A4E9E;
-	Sat, 23 Nov 2024 23:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A360A281682
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Nov 2024 23:14:03 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4BC1AC44D;
+	Sat, 23 Nov 2024 23:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="cOKhxZfg"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8541A157A48;
+	Sat, 23 Nov 2024 23:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732402820; cv=none; b=Kg+7gpnNXG7cASRUeNFKA50aLhMKvHGHEkMcuOqotuY9CeF9hY0RRZP3Ubk5YeUplqu8m/1aSq8NfeJlGIaNPQWmQ2uHFaiU0t7fp2vQkDbPDMUMIC7ADwei5EJPgskt82L4oykVkypzRhePmHM82PqEcigcXpqd+cQe01f7QNU=
+	t=1732403630; cv=none; b=flXl6jV4YYIroQUk0JV+4mYcIeYAAqu5CJuObcePILHMB1j50grfrmjDH2+94ONVuxzDSU69AXWpUFZFfYK2beiFYA7kZO7K39aKUP4BlxMFgRWuPKH+OyWdFcp8PjxFVyKjeAIWM4DxYGONNfIVGZyVQVdaTDEuJ8J1pLv7vlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732402820; c=relaxed/simple;
-	bh=uN74WQ2ZwE3oU4k1atJsAUJRMs5T5pzS3BqepRuHv4o=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V6c9CnNFsFypIT4skCJOjgMgf1zVtQvp8Qu4524eS+dq+dbMGwEc9JlT77UDlW4zQvlqmnqEbulZMYB/lsonhnGfL4SnFeW405Eq2QnbkHzyYrvRi8sv/Lgdv204GqpGqjqAGGrRwc4WBQFWGmTdqzHprPP1JB8jiJaRmCRVOu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BozWns9o; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ANMlUeN020736;
-	Sat, 23 Nov 2024 23:00:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=z1Th407nZNKUJgy0+yOGqGyJ
-	+2HnOT3I/5BrbLrTlfc=; b=BozWns9ohixfdCf/+oBB1JgFEV4/p+Xp3tL5mk0o
-	G0qoOVnYU+zXFlvZpFXFM+967ltCskaIY0adtU7eMt+4kmzJM9Ix1A9m6lVOY7Sh
-	CTNiZZorID+yINvafUZfL2YWSzI7e/WbTiPEeLv96Au2Us2crm5MfNamZ0M058f4
-	tpH3hXETpeY7YqmXijN9KlWnQJPLLHAJCgBJev0sJYm/aMDs9TKLxRs8N+/0bifD
-	ct9ACYBiI9T3e+zveC/6I4ou2YkW5q1NjqFOw+h6ufUHhWT00uqLBIknlBLddey8
-	FTAzhKGW902OJPtBi/z8ElBOS/foZjbtFX0sLMaZpQObfQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4336mx9dnh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Nov 2024 23:00:06 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ANN05PF028434
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Nov 2024 23:00:05 GMT
-Received: from hu-akhilpo-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Sat, 23 Nov 2024 14:59:58 -0800
-Date: Sun, 24 Nov 2024 04:29:54 +0530
-From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-CC: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Stephen
- Boyd" <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark
-	<robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "Dmitry
- Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten
-	<marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, "Simona
- Vetter" <simona@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>, Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>,
-        Connor Abbott <cwabbott0@gmail.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 08/11] drm/msm: adreno: request for maximum bus
- bandwidth usage
-Message-ID: <20241123225954.lv3k2fxk7rxyh67z@hu-akhilpo-hyd.qualcomm.com>
-References: <20241119-topic-sm8x50-gpu-bw-vote-v2-0-4deb87be2498@linaro.org>
- <20241119-topic-sm8x50-gpu-bw-vote-v2-8-4deb87be2498@linaro.org>
+	s=arc-20240116; t=1732403630; c=relaxed/simple;
+	bh=hmKsj1Kmoig7skxnuCJnziJWFkrnNUegWisx4nPcWxw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TMds6sPXWLIsy7qtr3fvXbtAJlApG8kxBLAWCMnM+8SYMDq+LuqhhZLgzpgP1+exFRbhPHR7HDs1AlvYYFSk1pDgDXZOXZJERiheWi9jMOiVhAIqoXc6k9v1IKTDPPfPwMy0wDBYsp+gAGGJkB/pePXZ0XuEWiHYkz0cisfxUmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=cOKhxZfg; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+Received: from [192.168.149.162] (254C22A6.nat.pool.telekom.hu [37.76.34.166])
+	by mail.mainlining.org (Postfix) with ESMTPSA id 5995AE47FC;
+	Sat, 23 Nov 2024 23:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
+	s=psm; t=1732403618;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=A1IjIuzmePlBChypxgkUHW8StKqlREwLvjwJVP3i4Ek=;
+	b=cOKhxZfgFJojLAMDVs/awBa7CV5zJr4zsoYskwrXwpPwfBOsdZT/2GSVQhTxVak9o4e90t
+	u6a8ICRiArSNd31wWh3ziYzP5iyT41jIMmtZCONuB3C+VgDGhaIwG5ToeafRrhttjr/VjW
+	XZEjcRyKKG3FU5iJ5LJ2qep1DCU3cUBYhJCJx09f7Pt5/FSe+EeI5FCn9usNapgQdPkbeB
+	eX/MELP1orenFn54unnOpu3JJRsJltsx9y9PSlodbMHBsiFsujaF7d5N+rNBDLBuaezHO8
+	MzWPJFSDSRurkPBwuk1UdZYKeN0RAb8hZM7iWgs/B2hakjFP+g34GPP3c8SeVA==
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v7 0/8] Add MSM8917/PM8937/Redmi 5A
+Date: Sun, 24 Nov 2024 00:13:18 +0100
+Message-Id: <20241124-msm8917-v7-0-612729834656@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20241119-topic-sm8x50-gpu-bw-vote-v2-8-4deb87be2498@linaro.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: v9k5cxrwlBXoB2WC5EZWTBQoTzJsZLpU
-X-Proofpoint-GUID: v9k5cxrwlBXoB2WC5EZWTBQoTzJsZLpU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- adultscore=0 impostorscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411230192
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI9hQmcC/23Py27DIBAF0F+JWJeK4WGYrvofUReYh4NU2xVUV
+ qrI/16cDUjx8o44d5gHKSGnUMjH5UFy2FJJ61KDfrsQd7PLFGjyNRPOuAQGSOcyGwRNQTvhWYz
+ SKk7q658cYro/m65fNd9S+V3z37N4g2P62rEBZTRCFM6CNyaoz9mm5TstaZne1zyRo2jjHRbQM
+ K/YWKZVtNbgCKdYNAxMNywqHrx3yjqP2oynWPa4+7Y8No8BkUmN3J5j1WHgDauK68FCeiEA4Rw
+ PPRYNDxU7IU0cFWIM8QXv+/4PAKU0CtQBAAA=
+X-Change-ID: 20241019-msm8917-17c3d0ff4a52
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Dang Huynh <danct12@riseup.net>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732403617; l=3512;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=hmKsj1Kmoig7skxnuCJnziJWFkrnNUegWisx4nPcWxw=;
+ b=vA+xSz4h4tyFicz58+tYzZHvNNNw0ti/c9/hgSTBLLzGxjWONwTmdsJA7ERGqgAyC+StMCrko
+ QcQHAYPLAESBQY0V7d8XAa0/XJ+F9Riq1E291IPlthiOxPZ+6nn85rd
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-On Tue, Nov 19, 2024 at 06:56:43PM +0100, Neil Armstrong wrote:
-> When requesting a DDR bandwidth level along a GPU frequency
-> level via the GMU, we can also specify the bus bandwidth usage in a 16bit
-> quantitized value.
-> 
-> For now simply request the maximum bus usage.
+This patch series add support for MSM8917 soc with PM8937 and
+Xiaomi Redmi 5A (riva).
 
-Why? You don't care about power efficiency?
-Lets drop this patch. We don't care about AB vote yet.
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v7:
+- msm8917-xiaomi-riva:
+  - Add pinctrls for used GPIO pins.
+  - Use interrupts-extend for charger.
+  - Order properies.
+- Link to v6: https://lore.kernel.org/r/20241113-msm8917-v6-0-c348fb599fef@mainlining.org
 
--Akhil
+Changes in v6:
+- msm8917:
+  - Consolidate SDC pins, remove sdc2-cd-on/off pins.
+  - Remove cluster-sleep-0 and cluster-sleep-1
+  and rename cluster-sleep-2 to cluster-sleep-0.
+  - Fix spi, i2c and related pinctrl namings.
+- msm8917-xiaomi-riva: follow i2c name changes.
+- Link to v5: https://lore.kernel.org/r/20241112-msm8917-v5-0-3ca34d33191b@mainlining.org
 
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 11 +++++++++++
->  drivers/gpu/drm/msm/adreno/a6xx_hfi.h |  5 +++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> index dc2d0035544e7848e5c4ea27f1ea9a191f9c4991..36c0f67fd8e109aabf09a0804bacbed3593c39d7 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> @@ -134,6 +134,17 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
->  			if (bw == gmu->gpu_bw_table[bw_index])
->  				break;
->  		}
-> +
-> +		if (bw_index) {
-> +			/*
-> +			 * Append AB vote to the maximum bus usage.
-> +			 * AB represents a quantitized 16bit value of the
-> +			 * max ddr bandwidth we could use, let's simply
-> +			 * request the maximum for now.
-> +			 */
-> +			bw_index |= AB_VOTE(MAX_AB_VOTE);
-> +			bw_index |= AB_VOTE_ENABLE;
-> +		}
->  	}
->  
->  	gmu->current_perf_index = perf_index;
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
-> index 528110169398f69f16443a29a1594d19c36fb595..52ba4a07d7b9a709289acd244a751ace9bdaab5d 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
-> @@ -173,6 +173,11 @@ struct a6xx_hfi_gx_bw_perf_vote_cmd {
->  	u32 bw;
->  };
->  
-> +#define AB_VOTE_MASK		GENMASK(31, 16)
-> +#define MAX_AB_VOTE		(FIELD_MAX(AB_VOTE_MASK) - 1)
-> +#define AB_VOTE(vote)		FIELD_PREP(AB_VOTE_MASK, (vote))
-> +#define AB_VOTE_ENABLE		BIT(8)
-> +
->  #define HFI_H2F_MSG_PREPARE_SLUMBER 33
->  
->  struct a6xx_hfi_prep_slumber_cmd {
-> 
-> -- 
-> 2.34.1
-> 
+Changes in v5:
+- msm8917:
+  - Remove aliases.
+  - Rename spi, i2c labels and pins.
+  - Remove clock-frequency from timers
+  - Remove unused mpss_mem region.
+  - Use mboxes where it can be used, only smd-edge uses qcom,ipc.
+- msm8917-xiaomi-riva: Follow i2c label changes.
+- Link to v4: https://lore.kernel.org/r/20241109-msm8917-v4-0-8be9904792ab@mainlining.org
+
+Changes in v4:
+- msm8917 pinctrl: Fix gpio regexp in the schema.
+- msm8937 tsens: Rename ops_msm8976 to ops_common and use it for msm8937.
+- msm8917: fix address padding, naming and ordering, remove polling-delays.
+- Remove applied patches from the series.
+- Link to v3: https://lore.kernel.org/r/20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org
+
+Changes in v3:
+- msm8917-xiaomi-riva: Fix issues addressed by Konrad.
+- msm8917: Fix node addresses, orders of some properties.
+- pm8937: simplify vadc channels.
+- msm8917 pinctrl: Fix schema issues addressed by Krzysztof. 
+- Remove applied tcsr patch from this series.
+- Reword some commit title.
+- Link to v2: https://lore.kernel.org/r/20241031-msm8917-v2-0-8a075faa89b1@mainlining.org
+
+Changes in v2:
+- Add msm8937 tsens support.
+- Fix issues addressed by reviews.
+- Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
+
+---
+Barnabás Czémán (5):
+      dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
+      dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU to SMMUv1 compatibles
+      dt-bindings: nvmem: Add compatible for MS8917
+      dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
+      arm64: dts: qcom: Add Xiaomi Redmi 5A
+
+Dang Huynh (1):
+      arm64: dts: qcom: Add PM8937 PMIC
+
+Otto Pflüger (2):
+      pinctrl: qcom: Add MSM8917 tlmm pinctrl driver
+      arm64: dts: qcom: Add initial support for MSM8917
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
+ .../devicetree/bindings/iommu/qcom,iommu.yaml      |    1 +
+ .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
+ .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     |  160 ++
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  335 ++++
+ arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1946 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8937.dtsi               |  152 ++
+ drivers/pinctrl/qcom/Kconfig.msm                   |    6 +
+ drivers/pinctrl/qcom/Makefile                      |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm8917.c             | 1620 ++++++++++++++++
+ 11 files changed, 4230 insertions(+)
+---
+base-commit: cfba9f07a1d6aeca38f47f1f472cfb0ba133d341
+change-id: 20241019-msm8917-17c3d0ff4a52
+
+Best regards,
+-- 
+Barnabás Czémán <barnabas.czeman@mainlining.org>
+
 
