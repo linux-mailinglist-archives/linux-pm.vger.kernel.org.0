@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-18056-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43E799D8641
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 14:22:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 108369D87B9
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 15:20:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A04B28495E
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 13:22:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F9C2B3FBB0
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 13:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4AC31B21A9;
-	Mon, 25 Nov 2024 13:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B5E71ACDED;
+	Mon, 25 Nov 2024 13:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MV4RL0o3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cGDYSa7f"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528D91B21B8;
-	Mon, 25 Nov 2024 13:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3221B393E;
+	Mon, 25 Nov 2024 13:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732540871; cv=none; b=afqNU7fo/iUYeUBYaAHWhoN0gZzoKwH58wPQZQlvnFg/8OkQ0ArHywvDcFW8OuW2wELmuJ3IF+9sWC+unaesqAM/FjgmQ+wL6qL2ZO4ve4cT1tG6WLOixqG6Isbqoii1X1Ko0GBVJVnyB0Fxqer57s92K0FpQFqrHCj7sAsLhl0=
+	t=1732540876; cv=none; b=uf7KC2LtA21BmObzHeKbDCQJpYIZIkRpEBSzNW+xAXRMovfw2rwwxiP2qN+LHHOQDVk9zNo9mB4rIgsOKWJTA1iyyeAdcS1YLWOxyXOQ9QwvmatXNf04Ex/p0B2QEm5ruJlApMCZQ/wgMTGEuDmHwtl3e30gE6DEgTS6XfJMg6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732540871; c=relaxed/simple;
-	bh=nK+FjxLYCzmOviioR/C/S44LMaHEzHb2qOLPW+eGqHY=;
+	s=arc-20240116; t=1732540876; c=relaxed/simple;
+	bh=VF9mEYDyF8AVV2/MlyLqhDnzQPABSbqh+jPmpb/z4GA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YlQfmQ5PpEgbl4pqXXMSH6F+SU8uu3T8Mq2sfg5pVpSf70GqlcwrvrvhJrPLWD3USCibFkUFImFMTo3bPzE4amslfRPEbeqyGJHnpL5DbnOzTgnV5NVxgp1bEZ/O0u1J1+JPxZGmTRoL0JjRhUKkBgqrZairUuIE8IGTFlVXlG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MV4RL0o3; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=L8h4T9Y+3rXr10wrB10iAasfm+ef6AP/+Aggmemue6kLJKyF7r7SB4hdHhPM4/FEQLaRvZJrS/MoIO3MbPFAej3i2PbreMvtHMXC8Z/L2JAVrbEsLO3avXpZqBRlRpHlkb3ny/N0YnlJGCL6RcVSG4deFdy/1jZqQw1OyiDAGZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cGDYSa7f; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732540871; x=1764076871;
+  t=1732540875; x=1764076875;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nK+FjxLYCzmOviioR/C/S44LMaHEzHb2qOLPW+eGqHY=;
-  b=MV4RL0o3HTizuI//mbA9mssnSwAxS928woD7PVc7RrElsX2iqK2G7pH4
-   M5J+w23gAXTI+6aZ7Oi7smg8Y1Ut+EYjn5iD0G0vYj0Rouy8jqiGrMNN9
-   UAz1LHrYMU4C1aq8Z1GR3+tHDtvBwFuiimK+u4XNv/TMYeeHTOHX8tWPv
-   AtVjLkppjKAhHpJonmrPSnNd7y8QQT5t9kpWCtwT2jmCV8QqYEzYAXfm6
-   My6MM5/zGDuXlHQP3feQemvTGRELQ21Qi1XcT1KiDtI6y5mRjvmTvmmAx
-   NnGa5Z5FV6uARGKT5st71WwXMb9YDH0HCyjanPTqIffecLKZLx8u3qX/E
-   Q==;
-X-CSE-ConnectionGUID: M5lU2zavQEq0k61rKR9krw==
-X-CSE-MsgGUID: f3ts6vNKTCyFppUxo8yl/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="43145491"
+  bh=VF9mEYDyF8AVV2/MlyLqhDnzQPABSbqh+jPmpb/z4GA=;
+  b=cGDYSa7f2oPqofrr8/Om0efVj2cVqmABSYveCIWtJbJ+Q1c0FxxiWzcL
+   PZP7wZ+2Hshn7CDbfCbUakYqTwe0kXez6SfB2DFHIjHWANCvpEZD5Mg3f
+   KQKG99nxCSKPEz6Jc8W+n7QJLgPqID4OB6pT1/c5i4Q8dk8m9n6lTE52S
+   bFxMS0+KDd9DJv92JLvb3Vp9pyTRYQkbwLG6H94lmK3JNRx+Cb2Ul0Lk9
+   m4rDjdrlM6R4CFNkUM3aagCsR0BAB7+L1i0Dc3UitC2ywxUdrE6fIj8uS
+   sxuBXQtsICv3W2/FJwj7eynAfXsYoKiMJ4JiYd5/zRzReRuPPe+N3YciT
+   w==;
+X-CSE-ConnectionGUID: J9rbj7tZRlOCw8EDpVnAhg==
+X-CSE-MsgGUID: DdMXJPivRCuwD2Skdq2tTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="43145502"
 X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="43145491"
+   d="scan'208";a="43145502"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 05:21:10 -0800
-X-CSE-ConnectionGUID: lN4oCRZ6RUuEvF/X2Drt4Q==
-X-CSE-MsgGUID: K2Ita2/6QzSaHz6fpDtnmQ==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 05:21:15 -0800
+X-CSE-ConnectionGUID: aW1aLRTmT+iMba12+wKY7g==
+X-CSE-MsgGUID: +RaUdqgcSEWsApBy7VKLQA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="91161766"
+   d="scan'208";a="91161778"
 Received: from bergbenj-mobl1.ger.corp.intel.com (HELO pwlazlyn-mobl1.intel.com) ([10.245.245.34])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 05:21:06 -0800
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 05:21:10 -0800
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -70,9 +70,9 @@ Cc: linux-kernel@vger.kernel.org,
 	peterz@infradead.org,
 	tglx@linutronix.de,
 	gautham.shenoy@amd.com
-Subject: [RFC PATCH v4 6/8] intel_idle: Provide enter_dead() handler for SRF
-Date: Mon, 25 Nov 2024 14:20:26 +0100
-Message-ID: <20241125132029.7241-7-patryk.wlazlyn@linux.intel.com>
+Subject: [RFC PATCH v4 7/8] acpi_idle: Add FFH cstate handling
+Date: Mon, 25 Nov 2024 14:20:27 +0100
+Message-ID: <20241125132029.7241-8-patryk.wlazlyn@linux.intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241125132029.7241-1-patryk.wlazlyn@linux.intel.com>
 References: <20241125132029.7241-1-patryk.wlazlyn@linux.intel.com>
@@ -84,83 +84,82 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Intel's Sierra Forest report two C6 substates in cpuid leaf 5:
-    C6S  (hint 0x22)
-    C6SP (hint 0x23)
-
-Hints 0x20 and 0x21 are skipped entirely, causing the generic
-implementation in mwait_play_dead() to compute the wrong hint, when
-looking for the deepest cstate. As a result, package with an offlined
-CPU can never reach PC6.
-
-Define the enter_dead() handler for SRF.
-
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 ---
- drivers/idle/intel_idle.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ arch/x86/kernel/acpi/cstate.c      | 9 +++++++++
+ drivers/acpi/processor_idle.c      | 2 ++
+ include/acpi/processor.h           | 5 +++++
+ 4 files changed, 17 insertions(+)
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index ac4d8faa3886..c2ca01e74add 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -56,6 +56,7 @@
- #include <asm/mwait.h>
- #include <asm/spec-ctrl.h>
- #include <asm/fpu/api.h>
-+#include <asm/smp.h>
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index ea33439a5d00..1da5e08de257 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -236,6 +236,7 @@
+ #define X86_FEATURE_PVUNLOCK		( 8*32+20) /* PV unlock function */
+ #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* PV vcpu_is_preempted function */
+ #define X86_FEATURE_TDX_GUEST		( 8*32+22) /* "tdx_guest" Intel Trust Domain Extensions Guest */
++#define X86_FEATURE_NO_MWAIT_OFFLINE    ( 8*32+23) /* Don't use MWAIT states for offlined CPUs */
  
- #define INTEL_IDLE_VERSION "0.5.1"
- 
-@@ -227,6 +228,16 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 	return 0;
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (EBX), word 9 */
+ #define X86_FEATURE_FSGSBASE		( 9*32+ 0) /* "fsgsbase" RDFSBASE, WRFSBASE, RDGSBASE, WRGSBASE instructions*/
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index f3ffd0a3a012..c80a3e6dba5f 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -204,6 +204,15 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
  }
+ EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_probe);
  
-+static __cpuidle void intel_idle_enter_dead(struct cpuidle_device *dev,
-+					    int index)
++void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
 +{
-+	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-+	struct cpuidle_state *state = &drv->states[index];
-+	unsigned long eax = flg2MWAIT(state->flags);
++	unsigned int cpu = smp_processor_id();
++	struct cstate_entry *percpu_entry;
 +
-+	mwait_play_dead_with_hint(eax);
++	percpu_entry = per_cpu_ptr(cpu_cstate_entry, cpu);
++	mwait_play_dead_with_hint(percpu_entry->states[cx->index].eax);
 +}
 +
- /*
-  * States are indexed by the cstate number,
-  * which is also the index into the MWAIT hint array.
-@@ -1391,6 +1402,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 1,
- 		.target_residency = 1,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.name = "C1E",
-@@ -1399,6 +1411,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 2,
- 		.target_residency = 10,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.name = "C6S",
-@@ -1408,6 +1421,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 270,
- 		.target_residency = 700,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.name = "C6SP",
-@@ -1417,6 +1431,7 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 		.exit_latency = 310,
- 		.target_residency = 900,
- 		.enter = &intel_idle,
-+		.enter_dead = &intel_idle_enter_dead,
- 		.enter_s2idle = intel_idle_s2idle, },
- 	{
- 		.enter = NULL }
+ void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cx)
+ {
+ 	unsigned int cpu = smp_processor_id();
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index 698897b29de2..586cc7d1d8aa 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -590,6 +590,8 @@ static void acpi_idle_play_dead(struct cpuidle_device *dev, int index)
+ 			raw_safe_halt();
+ 		else if (cx->entry_method == ACPI_CSTATE_SYSTEMIO) {
+ 			io_idle(cx->address);
++		} else if (cx->entry_method == ACPI_CSTATE_FFH) {
++			acpi_processor_ffh_play_dead(cx);
+ 		} else
+ 			return;
+ 	}
+diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+index a17e97e634a6..63a37e72b721 100644
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -280,6 +280,7 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
+ 				    struct acpi_processor_cx *cx,
+ 				    struct acpi_power_register *reg);
+ void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cstate);
++void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx);
+ #else
+ static inline void acpi_processor_power_init_bm_check(struct
+ 						      acpi_processor_flags
+@@ -300,6 +301,10 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
+ {
+ 	return;
+ }
++static inline void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
++{
++	return;
++}
+ #endif
+ 
+ static inline int call_on_cpu(int cpu, long (*fn)(void *), void *arg,
 -- 
 2.47.0
 
