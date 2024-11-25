@@ -1,160 +1,120 @@
-Return-Path: <linux-pm+bounces-18070-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18071-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECCD09D8824
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 15:36:09 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 333CE9D87A0
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 15:18:01 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 953B9B3E6F2
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 14:12:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64B1162C0D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 14:17:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4E11B0F02;
-	Mon, 25 Nov 2024 14:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D9B1D5175;
+	Mon, 25 Nov 2024 14:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMYr8Gm7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kNxPid+1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A710D1B6CE3;
-	Mon, 25 Nov 2024 14:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7C81D5172;
+	Mon, 25 Nov 2024 14:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732543840; cv=none; b=oS9N0CA4dmeFO/LtpyEX1eno4PHgd6pbEa64dxHEFxEJUEryPSiNjGhZklqrFb5X3iEqM1DxvSM18F4V7bomrinjC1sl9CLM+s0U9xXtbDZT6CC0r9BO9IPT1BlM6XkggffDelDm/BsRmHYQpaHzpbeBNPRasq9jD96KSWVsbIo=
+	t=1732543884; cv=none; b=XxxglhMyKRsZJNBZiqNXTzbFmi9QaIKB8rUVEU5342t7XRDVrQQxc5IO0EeXP9+edfiouhrKHaVSDAWQFTTWI1Wn3/HEWdleQTayxpeaW+i6c1uwOgowDnyDjt5SgtHL3C7cC9mjCjC/YzSaepTnHzPIGToHtN2Kg5p9rYUfpJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732543840; c=relaxed/simple;
-	bh=bN1vT3x9zxVArM4Cza5XYilQfVfL33GOYfQuhlEcVew=;
+	s=arc-20240116; t=1732543884; c=relaxed/simple;
+	bh=2xTc35I6thzQLxndB6Oqp6UXDYaoWGlcGj/Q4rqRyds=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NLpDHNdl012NhOePqbH/494WpsdqeNaD3SscO7j75nB+u9LQ7Qlq2x2hlq2uphzYdPeCJD/26u0pnOulyhj6PPBlmwEcquhPtFFAYAf/nzU86UMIbzcjO9eWSCNxEk4Yj4lZ4ZZ8XrcyflfluXMO9q0EdBHnYsbCAHWhkRvMFT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMYr8Gm7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0B9C4CED2;
-	Mon, 25 Nov 2024 14:10:40 +0000 (UTC)
+	 To:Cc:Content-Type; b=u9Zcm1Ku6FfrVZyquyWDQKSwQdmivMmKs4vS8MStbj3JZCv8lVC4N6aI4HEzmtRdscNBM0NCodTPZQtYbin8c9Wtu88HecGtD9uuHXuPCruSNJ5cPGNJEPJsO6EHgH/fCTaXorLj6Wd0kY9Ivdzi1S8BglTB4qTemGGvQovtcXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kNxPid+1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4B6C4CED2;
+	Mon, 25 Nov 2024 14:11:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732543840;
-	bh=bN1vT3x9zxVArM4Cza5XYilQfVfL33GOYfQuhlEcVew=;
+	s=k20201202; t=1732543884;
+	bh=2xTc35I6thzQLxndB6Oqp6UXDYaoWGlcGj/Q4rqRyds=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GMYr8Gm7B9kDO+eOxSikz3D5J20Uhu/k2A9UhyNW1v8ZONh9yavxdaiIopo0GDOxR
-	 /WUXcilx+26gQLjuITWoYHYnFE1bKsWcjojnWsrmpZyjKuLu+uR8FT3V1Ycp3jgvRI
-	 aydkz1Mb2lSR+nvi28f5RQWp9TliuXo0xysFss8SPgLwSYxb/oO21nO2UcTLj06v8M
-	 cWkQx7kDAhDwpcylLNsy2ld4ftKk1hqkkD3ztRbuhG9NLEGYIfkVlhtQYOORiiAHKk
-	 UJeSjN4yYq0G5G54wyQu1cPAqRXfRdWvkXTp7gDm90ueS67eavXGUl67piIRrhq/wz
-	 fWvTRu0o4ICZA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2969ae2c99fso2393244fac.3;
-        Mon, 25 Nov 2024 06:10:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVbgnVKoEb4ZF1MhYUh2n8oTYVgqviJghQhUaeU4jEXthh1VYZhI5z4gSNzMXZf4HJf+8hiyEeu9wM=@vger.kernel.org, AJvYcCXjKole97uNIeAIu5vST8yWjl5CjoUkgg2hHCZc+QxdHrBB5i4/CoL//rhaowIRFWLZmtCMvJ5PAsa1OZg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFvwMJAV2T8+/vZ4T1BTwI74cHQbBUGM0vOSHppTLzZ7/3caf2
-	CUv0EprJdc80DjHHKyfyEE32Lmq4SWpIrITQjCnRP84KrdEYigrOeDb5AM/z0WM+x1nMtTuLhA+
-	WDLFOQ10dsP+S3s3pP46onfJt918=
-X-Google-Smtp-Source: AGHT+IGZtSQ5evNeuuOQ8u1WsE6nENodwSlmRKxRYWUWaSKo3BgOcZV2CgPdHpcgjy/R8PlvkAYZFfX0OjT2urK2nPw=
-X-Received: by 2002:a05:6871:68a:b0:297:285e:f824 with SMTP id
- 586e51a60fabf-297285efa25mr10268908fac.10.1732543839773; Mon, 25 Nov 2024
- 06:10:39 -0800 (PST)
+	b=kNxPid+1cVN0fi4x18puBFX/Ao+jSFRpjzyLpet6Hu5zUoEt2PuTfU5NfQEF/6YUR
+	 ITmRDFA3qzr/+3Xv4mne6nogx5Jpe58iZ5dFIUgDpUgxWR2u5Q9p5WkmqOngIxqhIc
+	 wr5gpmJLJRGQvJJGyLKGz/9j0lRaqCq+dZ7xUp/A5jXBhrKzZ5SGyOsF9cXVtFYWxg
+	 8RZU64iBnI0ifR6PQlt4dxe4IqpxRtiQCDf8LZguOBKc76L1BQMrLep9L5K0p9I2Et
+	 jnCBKUzNKIIOucS6bxixYMTIfaUQKxhZwKhBkfKZnh+7YtXZpcFKBZpxLWLCwnxOh/
+	 xq1FQi8n+E/Pw==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2689e7a941fso2614668fac.3;
+        Mon, 25 Nov 2024 06:11:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWCHR229XhPFOEorOD7YoFVSlqHF/Eusij7X6zupid8yy5D1HX5E640Q0j+AwmRAKrxoM15xMHb@vger.kernel.org, AJvYcCWxbLUmqkTpLacybNvnxkDdEBv3wJ7zGJ3gCaihM/15oalLAIHYBe/3zO1F5jDhEe8VYvO67WRk3ZKpH/c=@vger.kernel.org, AJvYcCXnlEZ3ZhdhcP9qBS6BzLnd67qjceIeBpI6mXeoPbBiepStr3vp6d37lOl6rzPOlDKKser3AY2u40w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSoW9fJQkjOMND8fg2qTdirixqGKXJFxvCZyeBo2/3kKD37SFK
+	dleZSfsGSuEOKDmM5Q/pUrdUp/t8Pj+gatJqLxKoP5/uoZ4izxubwK/UtJkafk3oymOGgGdmQGX
+	E3uuwDVOscr3T+HV83NqIVoMl4rA=
+X-Google-Smtp-Source: AGHT+IHwD0ONTDAPv/44fpKZqgmGDncHi5ACNYkjLPoiuWZk/rrHR1ziCylC8yybGghptvN1cpM6MEjbHYmnAhl1/x4=
+X-Received: by 2002:a05:6870:b153:b0:295:ed17:3ec0 with SMTP id
+ 586e51a60fabf-29720c5dee4mr9676711fac.24.1732543883562; Mon, 25 Nov 2024
+ 06:11:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121-sysfs-const-bin_attr-int340x_thermal-v1-1-2436facf9dae@weissschuh.net>
-In-Reply-To: <20241121-sysfs-const-bin_attr-int340x_thermal-v1-1-2436facf9dae@weissschuh.net>
+References: <20241114200213.422303-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20241114200213.422303-1-srinivas.pandruvada@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 25 Nov 2024 15:10:28 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jEEAidAEn4C6eb0ShG06+UQRaYhsFCF9uOiMuO-Gn3Jg@mail.gmail.com>
-Message-ID: <CAJZ5v0jEEAidAEn4C6eb0ShG06+UQRaYhsFCF9uOiMuO-Gn3Jg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int3400: Remove unneeded data_vault attribute_group
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Mon, 25 Nov 2024 15:11:12 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hcqw37cVT4Hd2f8Rv-HEnZX=+N+2zR0hGhDD9nPxJ2zA@mail.gmail.com>
+Message-ID: <CAJZ5v0hcqw37cVT4Hd2f8Rv-HEnZX=+N+2zR0hGhDD9nPxJ2zA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int3400: Fix display of current_uuid for active policy
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org, 
+	lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 21, 2024 at 5:29=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
+On Fri, Nov 15, 2024 at 4:42=E2=80=AFAM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> The group only contains a single entry and the conditionals around its
-> lifecycle make clear that this won't change.
-> Remove the unnecessary group.
+> When the current_uuid attribute is set to active policy UUID, reading
+> back the same attribute is displaying uuid as "INVALID" instead of active
+> policy UUID on some platforms before Ice Lake.
 >
-> This saves some memory and it's easier to read.
-> The removal of a non-const bin_attribute[] instance is also a
-> preparation for the constification of struct bin_attributes.
+> In platforms before Ice Lake, firmware provides list of supported thermal
+> policies. In this case user space can select any of the supported thermal
+> policy via a write to attribute "current_uuid".
 >
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> With the 'commit c7ff29763989 ("thermal: int340x: Update OS policy
+> capability handshake")', OS policy handshake is updated to support
+> Ice Lake and later platforms. But this treated priv->current_uuid_index=
+=3D0
+> as invalid. This priv->current_uuid_index=3D0 is for active policy.
+> Only priv->current_uuid_index=3D-1 is invalid.
+>
+> Fix this issue by treating priv->current_uuid_index=3D0 as valid.
+>
+> Fixes: c7ff29763989 ("thermal: int340x: Update OS policy capability hands=
+hake")
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> CC: stable@vger.kernel.org # 5.18+
 > ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 16 +++--------=
------
->  1 file changed, 3 insertions(+), 13 deletions(-)
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/dr=
 ivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index b0c0f0ffdcb046607b4478390f39a77ae316a511..558a08f1727fc48c37181f8d3=
-45e236f879dab27 100644
+> index b0c0f0ffdcb0..f547d386ae80 100644
 > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
 > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -75,11 +75,6 @@ struct odvp_attr {
+> @@ -137,7 +137,7 @@ static ssize_t current_uuid_show(struct device *dev,
+>         struct int3400_thermal_priv *priv =3D dev_get_drvdata(dev);
+>         int i, length =3D 0;
 >
->  static BIN_ATTR_SIMPLE_RO(data_vault);
+> -       if (priv->current_uuid_index > 0)
+> +       if (priv->current_uuid_index >=3D 0)
+>                 return sprintf(buf, "%s\n",
+>                                int3400_thermal_uuids[priv->current_uuid_i=
+ndex]);
 >
-> -static struct bin_attribute *data_attributes[] =3D {
-> -       &bin_attr_data_vault,
-> -       NULL,
-> -};
-> -
->  static ssize_t imok_store(struct device *dev, struct device_attribute *a=
-ttr,
->                           const char *buf, size_t count)
->  {
-> @@ -108,10 +103,6 @@ static const struct attribute_group imok_attribute_g=
-roup =3D {
->         .attrs =3D imok_attr,
->  };
->
-> -static const struct attribute_group data_attribute_group =3D {
-> -       .bin_attrs =3D data_attributes,
-> -};
-> -
->  static ssize_t available_uuids_show(struct device *dev,
->                                     struct device_attribute *attr,
->                                     char *buf)
-> @@ -624,8 +615,7 @@ static int int3400_thermal_probe(struct platform_devi=
-ce *pdev)
->         }
->
->         if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
-> -               result =3D sysfs_create_group(&pdev->dev.kobj,
-> -                                           &data_attribute_group);
-> +               result =3D device_create_bin_file(&pdev->dev, &bin_attr_d=
-ata_vault);
->                 if (result)
->                         goto free_uuid;
->         }
-> @@ -648,7 +638,7 @@ static int int3400_thermal_probe(struct platform_devi=
-ce *pdev)
->  free_sysfs:
->         cleanup_odvp(priv);
->         if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
-> -               sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group=
-);
-> +               device_remove_bin_file(&pdev->dev, &bin_attr_data_vault);
->                 kfree(priv->data_vault);
->         }
->  free_uuid:
-> @@ -683,7 +673,7 @@ static void int3400_thermal_remove(struct platform_de=
-vice *pdev)
->                 acpi_thermal_rel_misc_device_remove(priv->adev->handle);
->
->         if (!ZERO_OR_NULL_PTR(priv->data_vault))
-> -               sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group=
-);
-> +               device_remove_bin_file(&pdev->dev, &bin_attr_data_vault);
->         sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
->         sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
->         thermal_zone_device_unregister(priv->thermal);
->
-> ---
+> --
 
 Applied as 6.13-rc material, thanks!
 
