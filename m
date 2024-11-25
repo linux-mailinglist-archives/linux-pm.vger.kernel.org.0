@@ -1,188 +1,136 @@
-Return-Path: <linux-pm+bounces-18032-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18033-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87A919D7CBD
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 09:17:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 551DF9D7CE3
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 09:31:33 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62D92B21CD4
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 08:17:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E438D1632E0
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 08:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45AB18873F;
-	Mon, 25 Nov 2024 08:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F9B185B77;
+	Mon, 25 Nov 2024 08:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r8PdVuYV"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R0nYKnJH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09455103F
-	for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2024 08:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135B12A1BA
+	for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2024 08:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732522612; cv=none; b=YdjVY7RJsQU866fpeQ2T8VmPMTs0KdzQ8HlLhUwz1+Y9fu5S9rUAiNHFQN37hF42seAqX9xOBWWeqEpX+FJq3rMUucaXwjUjIW+0a4K0La/VI1kN5mnNr0CQQuwJjedAUFgOLbGxyc8DYbCq3YH6da3kD13eCYwalAC6FEV3V1Q=
+	t=1732523489; cv=none; b=lfKKzqQ6sIy3m535tHgu/CWLsmdEqhB7W3bImHLs63coOJ+Zg90mxh0719sabwVlhMVkiM1Lcw+QrG6YDUHQ0PZ/GChS63ZZ8hBvyve9DYbn4OrVTW5fluHg0ehnouMeYoxQBsu+ivE4+IJTMq+R7ReZXPEeoolFxUV6JrQO/4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732522612; c=relaxed/simple;
-	bh=Wn8WbXy4R2JTFTHi8lxXWT4zCxEbVpkKy/jG2BmbjZM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=WQuAG17+q+pMRQdbVFS4iwbabiFbwtQXGMRQnqxsLJOVPdoKbteyAWxCCa6AnVlgeeM9LBQRKlAGLSvjLKiBK9nD2Kb3wFew9mjsQKnR3KeGyOOgtSQ5kWvnSOSSAf0CGOmin9CiPYFL9gCCqnzlu+t3rr6h8+BbIt8hrQ/snh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r8PdVuYV; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43497839b80so10694355e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2024 00:16:49 -0800 (PST)
+	s=arc-20240116; t=1732523489; c=relaxed/simple;
+	bh=He1DTAeJIyTPOcYmAq6cC2VSNdhtBdgya1P84hM+ZK8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SxWkehO7/WIzrzslKfzXvhBSQBDFZ4uG5Riq8Rvoe+pCEuWm5sCb7+wJrTHz0/riIZ/sBzYAPCC8TYVjnNZKoXX1jL72a9E5C9Fy5KIC8M2n1mz+2e7Nm06DVt+yEEQ7zxPeCQ8grdcUAAxLSC3rLDkwPnx4J0HvKhFopIKm4/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=R0nYKnJH; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7251731d2b9so73799b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2024 00:31:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732522608; x=1733127408; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D9tDhyHhmMtVAvULrIAhFRVk5xrXZSSMlYMbhL2ls4g=;
-        b=r8PdVuYVLt5hg4Ju86fl2d3nhMDyOuoWCy3Q5EVbKiscBzhxUYqPX+PY/tg6qPpuwS
-         +ZjcqfkcBbWpjterNXWO2qeOEpBwFe6Vwj9UQxzfC98eTpQdTY9p0wzVJ18Mj1IRhCXp
-         DZoHfn+VvaG8Y+rbdYQWqDNDfalT89p5nMLlrbhjXSTV948MEag6mU4pNe1AJGw6b9UY
-         uPmXQD2UVh4FsRdp0cDoZVeNDLWDwgrhQEV2OpQ60kbjvvuQLA0k2yWYqmTaMsAo66fz
-         WBhfHPG77WoGR7+EX/LnBlpmWqoZZsd7h/37I139cOG8GWLPPNjcqtAu2JV2r2VzHOJs
-         0IAA==
+        d=chromium.org; s=google; t=1732523487; x=1733128287; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g/Vcboz9yqJnuOCvwaptZL2oHcohzZsxdO1sPf8vDF8=;
+        b=R0nYKnJHez2N5o8ZhBS2IVS7ji7thAdrMTQpcEW3r5Jl/FekL1t9cVYeMc3b/Nka+n
+         jURe07RKHdzPVYaI7/8WicCC4pkttwbNrvHo6CMa6FAbJRmLqbKPWuRdznOlNAVPewe9
+         H1CRsIal1tweaxkb3GrwBZafxzDTcaV83+vEc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732522608; x=1733127408;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=D9tDhyHhmMtVAvULrIAhFRVk5xrXZSSMlYMbhL2ls4g=;
-        b=pG98K65rmofIZu9RKm7nRjl8ldAmHv/NDV9RNYS1P0wSvkwtOTpcLZxw12SI9rxZff
-         KiOUHNvEx7OW2gwm3wt3bfU5G6QHL8zZfX3kAtoGOvzyMfuZFDV2B5PeulpRF8lhhiWh
-         CXC3Lpd/X+wMQ83cTydhBNH7SgsnkLSRnPT+E2wWZICTlrYeOo9v5Z+eSqqxZn5rM7yu
-         7Fx+umfhAEALG9+45Ivvz/hekrdZtVlKokTxcDsmP1fRTFGXCnpW8ajDY2aRjufztrZR
-         MJXHcPy0RULiK1dNsCbzzhsLXs9TKBElFmVcejoQg39bp3YjmZu1RnoehxNzACybguYA
-         eMzw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2QA+wg2m5xNoV6OMjQ1lwPDCmd69vgWehOukj/eKPVeQEch3NPrGGnNPTriKMry0vOv+ZHFw3CQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFjW5FJ2ODJHOWxdxrsI2iU/cPPA6bAYyGRmeYxT1pULUmTen/
-	/YnOyQ80hppMVOS+pbVcX9WFn4++pf0OW8r/CYXGz7+NbhJ8kVqFCdCaKJv4Svg=
-X-Gm-Gg: ASbGnctJ/0rqKWjaKaqL/Um2ZFXAieqg1h/xTKXQ2SemCni9JtKPSt7vIjrhip4L2vm
-	ggnzh9sIXuZ0qzMt3ZKRGH1KTljSykeDYeru+pq4o+KUHLD6GSpDNS9m2Dmt7+8NiO538EJkVyt
-	wc8H96GTAlNAXDtvrJrxcmRyQYnaVYRZS7ZTt7vHt8Bnu8KLbcB92Vg8oGnuncpZRNfil6COoBg
-	IDKBOFhWZ+gZJoDhllLGGObjVOwDKtNyAbFnBoR29zf/bwiwRPhNIvkUOPSzfOMGnjoAETrAoto
-	BoNtrCwXWnlHuj4S0MxpBPho104=
-X-Google-Smtp-Source: AGHT+IEHqbnxQqxNnabskvp/0vuLynuKH8d+VUfNVbcCpoeFlsv4NGAWYmcyUTS6ZjyH1Zls0XDyDQ==
-X-Received: by 2002:a05:600c:4690:b0:431:2b66:44f7 with SMTP id 5b1f17b1804b1-433ce4d4c6emr114888875e9.31.1732522607986;
-        Mon, 25 Nov 2024 00:16:47 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:9dc0:6c46:415c:5f8b? ([2a01:e0a:982:cbb0:9dc0:6c46:415c:5f8b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-433b463ab6csm187362095e9.35.2024.11.25.00.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2024 00:16:47 -0800 (PST)
-Message-ID: <a936a9fc-6632-4f44-94d1-db304218b5a5@linaro.org>
-Date: Mon, 25 Nov 2024 09:16:47 +0100
+        d=1e100.net; s=20230601; t=1732523487; x=1733128287;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g/Vcboz9yqJnuOCvwaptZL2oHcohzZsxdO1sPf8vDF8=;
+        b=OE4WtXOLSUCem5zdU32exOFODbeNbU+n2eWiR3ZB34gGTc8SuIHL+1WmBZ9k5IANHu
+         W9teJ2Z17Q3kc5uTqAnIuu7XUWXngvWuUPimp7xz25pqA6OjTFtgkA0KNOjGnXXKAppW
+         YkVjCXOA3Tdr77dbQOO4sbZLvp+hVcN3H5ghtN9yE/tnYNKmvabmOpBlGm3pLPx11cOh
+         aE7loq9UQTw9tAXgBrDbKuTX410//e/e/LlryqZw0s7iiMp6Q+efnTqCr3JbERw45Ajv
+         WdGv89CrvhkrzVKfejExKhnaUeH663s4iSh2B5XlBW09WhXjJx/QxfDIl+giUMTsVdP1
+         i9jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXlYQ0h1+IbDgNWh+jWilL/20m6Djc2fXlVHa9OkuFT4oFEZXnryotsh9TQ40KrXUtOhrl9xQcCiw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyFEkLJ1+AJ2soQJS2a9D6eKTsgMHgDIEqhOzM6ShBFzrOxKrr
+	0zK6Jgqsgk9ENJb1+h2NwaHr1nvxU+vGAC7Xwi+ziSxL+zaPakUD81SwzoZZRA==
+X-Gm-Gg: ASbGncvmfK9llP10OLJSm95+ZiAjTOw3iquxfi5z5nzCNMNN4qFX0tg6sI40ifwTE7C
+	EZ8sizh+nweHzhBi6cYnlSBmaX1sqXC2mR7Hrs1h098F0l4BJCXcl6rFEgxw/yzpkKklSuOaA9y
+	XZumgyF/Fni9TbmYTJTbcWyfufvvfjBnel5CGxSmdmQ79n6gHozOTnvPjWzB7A0bGZsi3I5geKE
+	QAp0vjCbs07SdUda/CRABstVBdUponBjRhDh6ltBYZNFstSi6z+XozoT4EdIcGZSn/YYmch
+X-Google-Smtp-Source: AGHT+IHErz94EiqWWoHbBTw76REJa1NEGWWXxWddsah0jH/Nk15nl1D8qZYS9TdahVOTmzplFY3DdQ==
+X-Received: by 2002:a17:902:dac4:b0:20b:a41f:6e4d with SMTP id d9443c01a7336-2129fe38e54mr183070215ad.15.1732523487360;
+        Mon, 25 Nov 2024 00:31:27 -0800 (PST)
+Received: from lschyi-p920.tpe.corp.google.com ([2401:fa00:1:10:66a3:d18f:544f:227a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2129dbfece2sm59090025ad.157.2024.11.25.00.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Nov 2024 00:31:27 -0800 (PST)
+From: Sung-Chi Li <lschyi@chromium.org>
+Subject: [PATCH v2 0/2] Extend the cros_usbpd-charger to make it a passive
+ thermal cooling device
+Date: Mon, 25 Nov 2024 16:31:15 +0800
+Message-Id: <20241125-extend_power_limit-v2-0-c3266a86e9b1@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 04/11] drm/msm: adreno: add GMU_BW_VOTE feature flag
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Connor Abbott <cwabbott0@gmail.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-References: <20241119-topic-sm8x50-gpu-bw-vote-v2-0-4deb87be2498@linaro.org>
- <20241119-topic-sm8x50-gpu-bw-vote-v2-4-4deb87be2498@linaro.org>
- <20241123194316.yqvovktcptfep4dr@hu-akhilpo-hyd.qualcomm.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20241123194316.yqvovktcptfep4dr@hu-akhilpo-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANM1RGcC/32NQQ6CMBBFr0JmbQ0dDagr7mEIqe0Akwgl04oYw
+ t2tHMDle8l/f4VAwhTglq0gNHNgPybAQwa2N2NHil1iwBzPWiMqWiKNrpn8m6R58sBRFWjRXY1
+ 5tKaENJyEWl726L1O3HOIXj77x6x/9m9u1ipX5kTWXUqTkkVle/EDv4ajlw7qbdu+zny85rcAA
+ AA=
+To: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+ Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ Sung-Chi Li <lschyi@chromium.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732523485; l=1270;
+ i=lschyi@chromium.org; s=20241113; h=from:subject:message-id;
+ bh=He1DTAeJIyTPOcYmAq6cC2VSNdhtBdgya1P84hM+ZK8=;
+ b=OLCwUcBUsou2+ABwP0UXSKV7vUZPaomRddZGrl+h86RNJ+x71QSs7oiW+L7DP3Q1wvzytKfKH
+ 4ENfVmX64huAdUGwGKP6ecaGmBEYsfU1426QNSxPlqFMMjHCDNGYxz5
+X-Developer-Key: i=lschyi@chromium.org; a=ed25519;
+ pk=nE3PJlqSK35GdWfB4oVLOwi4njfaUZRhM66HGos9P6o=
 
-On 23/11/2024 20:43, Akhil P Oommen wrote:
-> On Tue, Nov 19, 2024 at 06:56:39PM +0100, Neil Armstrong wrote:
->> The Adreno GMU Management Unit (GNU) can also scale the DDR Bandwidth
->> along the Frequency and Power Domain level, but by default we leave the
->> OPP core vote for the interconnect ddr path.
->>
->> While scaling via the interconnect path was sufficient, newer GPUs
->> like the A750 requires specific vote paremeters and bandwidth to
->> achieve full functionality.
->>
->> While the feature will require some data in a6xx_info, it's safer
->> to only enable tested platforms with this flag first.
->>
->> Add a new feature enabling DDR Bandwidth vote via GMU.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/adreno/adreno_gpu.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->> index 4702d4cfca3b58fb3cbb25cb6805f1c19be2ebcb..394b96eb6c83354ae008b15b562bedb96cd391dd 100644
->> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->> @@ -58,6 +58,7 @@ enum adreno_family {
->>   #define ADRENO_FEAT_HAS_HW_APRIV		BIT(0)
->>   #define ADRENO_FEAT_HAS_CACHED_COHERENT		BIT(1)
->>   #define ADRENO_FEAT_PREEMPTION			BIT(2)
->> +#define ADRENO_FEAT_GMU_BW_VOTE			BIT(3)
-> 
-> Do we really need a feature flag for this? We have to carry this for every
-> GPU going forward. IB voting is supported on all GMUs from A6xx GEN2 and
-> newer. So we can just check that along with whether the bw table is
-> dynamically generated or not.
+The cros_usbpd-charger already supports limiting input current, so we
+can easily extend it as a passive thermal cooling device. By limiting
+the current flow into the system, we can reduce the heat generated by
+related chips, which results in reserving more thermal budget for the
+system.
 
-It depends on the bw table _and_ the a6xx_info.gmu table, I don't want to
-check both in all parts on the driver.
+This series will only works on making it a OF style thermal cooling
+device, so related code are guarded by #ifdef macros.
 
-Neil
+---
+Changes in v2:
+- Revise commit message for including the reason of change for this
+  series.
+- Remove uses of `ifdef CONFIG_THERMAL_OF`, and use
+  `IS_ENABLED(CONFIG_THERMAL_OF)` when needed.
+- Does not failing the driver probing if failed to register the usbpd
+  device as a cooling device.
 
-> 
-> -Akhil
-> 
->>   
->>   /* Helper for formating the chip_id in the way that userspace tools like
->>    * crashdec expect.
->>
->> -- 
->> 2.34.1
->>
+---
+Sung-Chi Li (2):
+      power: supply: cros_usbpd-charger: extend as a thermal of cooling device
+      dt-bindings: mfd: cros-ec: add properties for thermal cooling cells
+
+ .../devicetree/bindings/mfd/google,cros-ec.yaml    |  3 +
+ drivers/power/supply/cros_usbpd-charger.c          | 84 +++++++++++++++++++++-
+ 2 files changed, 85 insertions(+), 2 deletions(-)
+---
+base-commit: ac24e26aa08fe026804f678599f805eb13374a5d
+change-id: 20241122-extend_power_limit-62c2d9aabfa7
+
+Best regards,
+-- 
+Sung-Chi Li <lschyi@chromium.org>
 
 
