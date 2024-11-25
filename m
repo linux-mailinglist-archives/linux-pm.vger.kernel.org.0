@@ -1,82 +1,48 @@
-Return-Path: <linux-pm+bounces-18025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18026-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67D6B9D7B8D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 07:32:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3E94162921
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 06:32:44 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D42E38382;
-	Mon, 25 Nov 2024 06:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pGz2L3fk"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF709D7BF7
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 08:32:34 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1122500DE;
-	Mon, 25 Nov 2024 06:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A62F5B2195B
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 07:32:31 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3FDF13A271;
+	Mon, 25 Nov 2024 07:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QzpChmLX"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858F72500D8;
+	Mon, 25 Nov 2024 07:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732516364; cv=none; b=GYJi7MLV6NQ8x6t/e96E8hOq/jJ/tK1V3+ocaZ+zZVX4rFcGkFCRK7AeR/yuqYokFq7YEzgyiGg1FNWubxnwW7qlEST6XKMbt3eH1cbAjf5WxM13RX5ftOf8cqZ9Kdi4Q4n17I//q4/8RsErhihzBjAZjjA9qsLBaOOfdtuy7h0=
+	t=1732519945; cv=none; b=fJX4Rzyb8mx5xqLEX5HfBCRohGL9eZ7iAHEueLXolp9jpXNi5jlwb3nnkEmSBhfqAP7Ce9Bp/4VDJc5iFKkh7rr+pMN3RhZtdmHWtZobZ+a+VBLonP/AC1K6mU3FDF7zLZUkbXw9mxVPW6gb9vcDDXzie/oWpnm69U71o4XWnz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732516364; c=relaxed/simple;
-	bh=ayX8poqt/2duoplls0XbaSyfTU+NTTv8T+bVE1sx8Gg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UizrqQwz4uxfiQVJiAh6wUQDRbXPlHRaDNs1GYz4ZB064q9eMwjQxYV7UI8u7zo/mSiEDbjXLbEylr19Db79gviLW7n7qwJPn4bdd6crevfHTQwJiMnHi7uyDFb1yuW7zJekd0TcKwNS/QLwkwxc+B0NSnrgNQMzirU4LsCda6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pGz2L3fk; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AP5HM3E011278;
-	Mon, 25 Nov 2024 06:32:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ayX8po
-	qt/2duoplls0XbaSyfTU+NTTv8T+bVE1sx8Gg=; b=pGz2L3fk1ANpJqj4VSh8W1
-	FRt5ah/JbsLOne1cy0lh5az6Cf4SRn9sNEgyUQPQPIQ+3NMwWpJ9bdDThFuIrKJ/
-	S/EjcRo5K70YLJDALv7CDEiyvOOCSfkBXpitDV+vNdI82NLfkQkHU09uIj7Q7QX/
-	cLGC/jksH9WnF26zwuv5mDD2PIlU1FMsJQkEPQfh04Hfus3MoHVND3GawHdEMOOY
-	al7v9u5oZ2iynxszWYxNRg2WdgYg2EmP27UKRmvLS/Mt80rz0X+EkFU6s5Z09lLG
-	xHlGGiCOAW2twUDRvsEupZExOvjp8sh3t/2DbZvVuSX9Qf5OPFNXySFIgdIWM+VA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43386n6ttp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 06:32:26 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4AP6VbNB009177;
-	Mon, 25 Nov 2024 06:32:26 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43386n6ttj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 06:32:26 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AP5QRHd027210;
-	Mon, 25 Nov 2024 06:32:25 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 433ukj1xfv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 06:32:25 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4AP6WNQX50594238
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 25 Nov 2024 06:32:23 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4F60720049;
-	Mon, 25 Nov 2024 06:32:23 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CC3AB20040;
-	Mon, 25 Nov 2024 06:32:19 +0000 (GMT)
-Received: from [9.109.204.70] (unknown [9.109.204.70])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 25 Nov 2024 06:32:19 +0000 (GMT)
-Message-ID: <886aa016-a439-4981-892d-3e92df526f41@linux.ibm.com>
-Date: Mon, 25 Nov 2024 12:02:18 +0530
+	s=arc-20240116; t=1732519945; c=relaxed/simple;
+	bh=FwUKQ2/SnMOuxfcp6dHNTgjAOTFfQRRwa2FdtHO0dSU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VBT9O2z43Hcp9dDX/09/OLfnEX0OoXBRElN8EoaCqczw85X3Q913aTyP3DcnBzpNeNbUC7Jn+fO/xcEs38udgrBxcG8Yw4MzRc4qS32fQi9fg2LyvT0e/vrVaIcDfhml4HeBbRct96tcTXFsMZ2WcQ6wFNrUTJ5ZMKBBQpwhrMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QzpChmLX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCCBEC4CECE;
+	Mon, 25 Nov 2024 07:32:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732519945;
+	bh=FwUKQ2/SnMOuxfcp6dHNTgjAOTFfQRRwa2FdtHO0dSU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QzpChmLXdlxxV7uo4kUaVfqf0OHik/wBqzLXgxxbpKVCaOePk+Ge7aLkqrinoWO4N
+	 g0jmfQWeQK7XjrcDdInIokcxTcPU7u521ek+9JfJ3VjXB+bsbjtzPee77k2E1C9Fu0
+	 HZ14IPrUAQinlIj72zoOz3H3oDAwczK0tRtCWvJjlYaKIi5hGQWGzYdvQ6LRr9Rmsq
+	 /6DIH8foQ4jnytaiZps4yvc8LxwPJ7GK1JZ+0SIX0y8Pp/D6QYmBE78EiGnZronqPz
+	 WcTBGx4edumYlYv1/IOJwxurVNeYmQEAjYoAb6+A6ztyQRcHdx0JDnnjFlB1vIc251
+	 W8aHxMG9sKe0w==
+Message-ID: <c2e9a97e-129d-4a82-9e81-b1391b4b6ff9@kernel.org>
+Date: Mon, 25 Nov 2024 08:32:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,109 +50,125 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
-From: Anjali K <anjalik@linux.ibm.com>
-To: Christian Loehle <christian.loehle@arm.com>,
-        Qais Yousef <qyousef@layalina.io>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Hongyan Xia
- <hongyan.xia2@arm.com>, John Stultz <jstultz@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240728184551.42133-1-qyousef@layalina.io>
- <ae65e4aa-3407-4fb0-b1f1-eb7c2626f768@linux.ibm.com>
- <fa2f15b1-1602-4fd0-80ff-9d33303b7b5a@arm.com>
- <a1cac0d3-c17d-478e-8a6b-40399a9428b6@linux.ibm.com>
+Subject: Re: [PATCH 2/2] dt-bindings: mfd: cros-ec: add properties for thermal
+ cooling cells
+To: "Sung-Chi, Li" <lschyi@chromium.org>
+Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+ Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, chrome-platform@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20241122-extend_power_limit-v1-0-a3ecd87afa76@chromium.org>
+ <20241122-extend_power_limit-v1-2-a3ecd87afa76@chromium.org>
+ <4f5sahkxxqb5qonh676igaiadkxv2pbhbibu6wtx4yenplfn4o@yvidi4ujavhr>
+ <Z0Pl3muZx716QSed@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-In-Reply-To: <a1cac0d3-c17d-478e-8a6b-40399a9428b6@linux.ibm.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <Z0Pl3muZx716QSed@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 39T-hClF59H4MkQy9cvEim0Y7teHx8il
-X-Proofpoint-ORIG-GUID: zejLQytzzKW6aUA1hOiFPf6Wjwn2opAO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 suspectscore=0 impostorscore=0 malwarescore=0 spamscore=0
- clxscore=1015 adultscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2411250053
+Content-Transfer-Encoding: 7bit
 
-On 19/10/24 00:02, Anjali K wrote:
->> Do you mind trying schedutil with a reasonable rate_limit_us, too?
-> I think the schedutil governor is not working on my system because the cpu
-> frequency shoots to the maximum (3.9GHz) even when the system is only 10%
-> loaded.
-> I ran stress-ng --cpu `nproc` --cpu-load 10.
-> The mpstat command shows that the system is 10% loaded:
-> 10:55:25 AM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
-> 10:56:50 AM  all   10.03    0.00    0.02    0.00    0.18    0.00    0.00    0.00    0.00   89.76
-> But cpupower frequency-info showed that the system is at max frequency
-> root@ltczz10:~# cpupower frequency-info
-> <snipped>
->   available cpufreq governors: conservative ondemand performance schedutil
->   current policy: frequency should be within 2.30 GHz and 3.90 GHz.
->                   The governor "schedutil" may decide which speed to use
->                   within this range.
->   current CPU frequency: 3.90 GHz (asserted by call to hardware)
-> <snipped>
-> This is not expected, right?
-> I will work on finding out why the schedutil governor is not working on
-> this system and get back.
-Hi, I found that the schedutil governor is working on this system. I 
-concluded this because when I printed the util parameter passed in
-get_next_freq() when running stress-ng --cpu `nproc` --cpu-load 10, the
-util parameter was always 1024 ( equal to the cpu capacity) and so the
-frequency gets set to the maximum as expected. Adding `--cpu-load-slice 10`
-to the stress-ng commandline, I got lower util values and found that the
-frequency is being set as per the system load as shown below:
+On 25/11/2024 03:50, Sung-Chi, Li wrote:
+> On Fri, Nov 22, 2024 at 08:49:14AM +0100, Krzysztof Kozlowski wrote:
+>> On Fri, Nov 22, 2024 at 11:47:22AM +0800, Sung-Chi Li wrote:
+>>> The cros_ec supports limiting the input current to act as a passive
+>>> thermal cooling device. Add the property '#cooling-cells' bindings, such
+>>> that thermal framework can recognize cros_ec as a valid thermal cooling
+>>> device.
+>>>
+>>> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
+>>> ---
+>>>  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+>>> index aac8819bd00b..2b6f098057af 100644
+>>> --- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+>>> +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+>>> @@ -96,6 +96,9 @@ properties:
+>>>    '#gpio-cells':
+>>>      const: 2
+>>>  
+>>> +  '#cooling-cells':
+>>> +    const: 2
+>>
+>> This is not a cooling device. BTW, your commit msg is somehow circular.
+>> "Add cooling to make it a cooling device because it will be then cooling
+>> device."
+>>
+>> Power supply already provides necessary framework for managing charging
+>> current and temperatures. If this is to stay, you need to explain why
+>> this is suitable to be considered a thermal zone or system cooling
+>> device (not power supply or input power cooling).
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Thank you, I will rephrase the commit message. The reason to not to use the
+> managing charging current and temperatures in the power supply framework is
+> that:
+> 
+> - The EC may not have the thermal sensor value for the charger, and there is no
+>   protocol for getting the thermal sensor value for the charger (there is
+>   command for reading thermal sensor values, but there is no specification for
+>   what sensor index is for the charger, if the charger provides thermal value).
+> - The managing mechanism only take the charger thermal value into account, and
+>   I would like to control the current based on the thermal condition of the
+>   whole device.
+> 
+> I will include these explanation in the following changes.
 
-+-------------+------------+------------+
-|  stress-ng  |    avg     | run-to-run |
-|   load %    |  cpu freq  |  std dev%  |
-|             |    (Hz)    |            |   
-+-------------+------------+------------+   
-|     10%     |    2.80    |    1.51    |   
-|     30%     |    3.53    |    2.47    |   
-|     50%     |    3.70    |    0.01    |   
-|     70%     |    3.61    |    0.08    |   
-|     90%     |    3.54    |    0.04    |   
-+-------------+------------+------------+  
-Note that the frequency range for this system is 2.3GHz - 3.9Ghz.
 
-The results with the schedutil governor for the same set of benchmarks is
-as follows. Each benchmark is run 3 times:
-+------------------------------------------------------+--------------------+----------+--------+---------+------------+
-|                     Benchmark                        |      Baseline      | Baseline |Baseline|Baseline |Regression% |                                                                                          
-|                                                      |  (6.10.0-rc1 tip   | + patch  |        |+ patch  |            |
-|                                                      |  sched/core)       |          |stdev % | stdev % |            |
-+------------------------------------------------------+--------------------+----------+--------+---------+------------+
-|Hackbench run duration (sec)                          |         1          |   1.01   |  1.60  |  1.80   |    0.69    |
-|Lmbench simple fstat (usec)                           |         1          |   0.99   |  0.40  |  0.07   |   -0.66    |
-|Lmbench simple open/close (usec)                      |         1          |   0.99   |  0.01  |  0.04   |   -0.51    |
-|Lmbench simple read (usec)                            |         1          |   1      |  0.23  |  0.41   |   -0.05    |
-|Lmbench simple stat (usec)                            |         1          |   0.98   |  0.13  |  0.03   |   -1.54    |
-|Lmbench simple syscall (usec)                         |         1          |   0.99   |  0.89  |  0.69   |   -0.59    |
-|Lmbench simple write (usec)                           |         1          |   1      |  0.27  |  0.80   |    0       |
-|Unixbench execl throughput (lps)                      |         1          |   1      |  0.44  |  0.13   |    0.17    |
-|Unixbench Process Creation (lps)                      |         1          |   0.99   |  0.11  |  0.13   |   -0.68    |
-|Unixbench Shell Scripts (1 concurrent) (lpm)          |         1          |   1      |  0.07  |  0.05   |    0.03    |
-|Unixbench Shell Scripts (8 concurrent) (lpm)          |         1          |   1      |  0.05  |  0.11   |   -0.13    |
-+------------------------------------------------------+--------------------+----------+--------+---------+------------+
-I did not see any significant improvements/regressions on applying the patch.
-I ignored the Stress-ng and Unixbench Pipebased Context Switching
-benchmarks as they showed high run-to-run variation with the schedutil
-governor (without applying the patch) of 10.68% and 12.5% respectively.
+This does not explain me why this is supposed to be thermal zone. I
+already said it, but let's repeat: This is not a thermal zone. This
+isn't thermal zone sensor, either.
 
-Thank you,
-Anjali K
+
+Best regards,
+Krzysztof
 
