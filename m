@@ -1,207 +1,160 @@
-Return-Path: <linux-pm+bounces-18069-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18070-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD1DA9D8959
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 16:28:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECCD09D8824
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 15:36:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44F73B28410
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 14:01:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 953B9B3E6F2
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2024 14:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D771714AC;
-	Mon, 25 Nov 2024 14:01:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4E11B0F02;
+	Mon, 25 Nov 2024 14:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jwbp7L21"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMYr8Gm7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D21376E0;
-	Mon, 25 Nov 2024 14:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A710D1B6CE3;
+	Mon, 25 Nov 2024 14:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732543264; cv=none; b=s5Opll1DEvWkYVTDBNlEoZHyIlarkrgsY64G3whX4SWSOtviM+duSjMR9wyc7H1Ju4tN2XKn3roGnQ/vMt6cPxyLT4eHAhqhxDvrKEPCPqQTVVlkJiKavbupR0UT2pxByhDOCRROfhpfIp7OJOU75CNm9fhNqPJIJF44PMEzN30=
+	t=1732543840; cv=none; b=oS9N0CA4dmeFO/LtpyEX1eno4PHgd6pbEa64dxHEFxEJUEryPSiNjGhZklqrFb5X3iEqM1DxvSM18F4V7bomrinjC1sl9CLM+s0U9xXtbDZT6CC0r9BO9IPT1BlM6XkggffDelDm/BsRmHYQpaHzpbeBNPRasq9jD96KSWVsbIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732543264; c=relaxed/simple;
-	bh=aNwvFziG+OEXvjc0LvFXKapmtPJlGg2QFLp0RvY+CWM=;
+	s=arc-20240116; t=1732543840; c=relaxed/simple;
+	bh=bN1vT3x9zxVArM4Cza5XYilQfVfL33GOYfQuhlEcVew=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AuHBw5gpvohyseKHTrxA42M78ck2/Ol60RYKgyxCP/xR26trnKY+Ocl/2kbhRFpTITA+RZ1+AA9g4PJSbEryWn6ErPXKsnfx/9qAbjhTafgNmP3Pp4J8Zc7Vael4jzqGjFwK2dH5hPnlpRaEl2XEYTmACBKPEzIBL6gOA8NEUYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jwbp7L21; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E7EC4CED9;
-	Mon, 25 Nov 2024 14:01:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=NLpDHNdl012NhOePqbH/494WpsdqeNaD3SscO7j75nB+u9LQ7Qlq2x2hlq2uphzYdPeCJD/26u0pnOulyhj6PPBlmwEcquhPtFFAYAf/nzU86UMIbzcjO9eWSCNxEk4Yj4lZ4ZZ8XrcyflfluXMO9q0EdBHnYsbCAHWhkRvMFT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMYr8Gm7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0B9C4CED2;
+	Mon, 25 Nov 2024 14:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732543263;
-	bh=aNwvFziG+OEXvjc0LvFXKapmtPJlGg2QFLp0RvY+CWM=;
+	s=k20201202; t=1732543840;
+	bh=bN1vT3x9zxVArM4Cza5XYilQfVfL33GOYfQuhlEcVew=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jwbp7L21e5lntyiJA1ZTHxZXqzqi3QekKY2xR4KBWAXtQFdm2mdGb25gsPj+uIyEB
-	 MI9oHrW+gY6mVlM8yIbSNA8FKxPCWA92SEuotXek7XfBkN0o08LAaaONQpKpYRh5AF
-	 mv+VC06uiOT47sfMBxvUGWBrNgGy1WNcPqjOr+qR8vTX/1nNJrridf2EPPOXu9ClXt
-	 GALjQGNb3PWSsP4FrfplofMEPmmCsmOBnvCEdgBdJfq+Ei/OZmKbcHzHRd8h17x0DZ
-	 nySOxFi/ZS0riSj86CdqcMebPJ8xx/S15+PAOnAnZDDuoqYwh0Hl3PYCCU/SNeM84K
-	 kq7GdhFpYFF6w==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2964645d2b7so2660439fac.2;
-        Mon, 25 Nov 2024 06:01:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUDKcA57tEMO46vu204X/UoiWSGJyhCTh0RIk3Iey5wK81f1FB+dXIeK+QBn0pYtGfg1Eos0iXZG68=@vger.kernel.org, AJvYcCVktV3aCxWSchCktRrsppKxwJ4qPFJMUO6BTbN7XwKG4wsQChPhsaIeIH9wWcECnahpfM8AU5aCnhDL/fs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeXB+QqMTKjh7XapDXn002YvA1CfGpO+22HHlUxGM6RGtEFhOK
-	1nSalFxRsW1035SeoCV7NpGJPkIVZWiB7PHanlPLPFxb15w3QYhiErjBqrsjLlF0kKcY5UeRTVL
-	YsEgxXhoUw61bYpHPdFMAPiJRDW8=
-X-Google-Smtp-Source: AGHT+IEC0itJZ0kxw5zhXv/UjTyunaQmX25Rsgu9bK3/zTrVbO6wIKPP/UZKqCKVuYtF1uyzZ4+ilkW3XF5WbSXMWtA=
-X-Received: by 2002:a05:6870:9618:b0:296:827c:9067 with SMTP id
- 586e51a60fabf-29720dfa05amr11875762fac.27.1732543262688; Mon, 25 Nov 2024
- 06:01:02 -0800 (PST)
+	b=GMYr8Gm7B9kDO+eOxSikz3D5J20Uhu/k2A9UhyNW1v8ZONh9yavxdaiIopo0GDOxR
+	 /WUXcilx+26gQLjuITWoYHYnFE1bKsWcjojnWsrmpZyjKuLu+uR8FT3V1Ycp3jgvRI
+	 aydkz1Mb2lSR+nvi28f5RQWp9TliuXo0xysFss8SPgLwSYxb/oO21nO2UcTLj06v8M
+	 cWkQx7kDAhDwpcylLNsy2ld4ftKk1hqkkD3ztRbuhG9NLEGYIfkVlhtQYOORiiAHKk
+	 UJeSjN4yYq0G5G54wyQu1cPAqRXfRdWvkXTp7gDm90ueS67eavXGUl67piIRrhq/wz
+	 fWvTRu0o4ICZA==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2969ae2c99fso2393244fac.3;
+        Mon, 25 Nov 2024 06:10:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVbgnVKoEb4ZF1MhYUh2n8oTYVgqviJghQhUaeU4jEXthh1VYZhI5z4gSNzMXZf4HJf+8hiyEeu9wM=@vger.kernel.org, AJvYcCXjKole97uNIeAIu5vST8yWjl5CjoUkgg2hHCZc+QxdHrBB5i4/CoL//rhaowIRFWLZmtCMvJ5PAsa1OZg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFvwMJAV2T8+/vZ4T1BTwI74cHQbBUGM0vOSHppTLzZ7/3caf2
+	CUv0EprJdc80DjHHKyfyEE32Lmq4SWpIrITQjCnRP84KrdEYigrOeDb5AM/z0WM+x1nMtTuLhA+
+	WDLFOQ10dsP+S3s3pP46onfJt918=
+X-Google-Smtp-Source: AGHT+IGZtSQ5evNeuuOQ8u1WsE6nENodwSlmRKxRYWUWaSKo3BgOcZV2CgPdHpcgjy/R8PlvkAYZFfX0OjT2urK2nPw=
+X-Received: by 2002:a05:6871:68a:b0:297:285e:f824 with SMTP id
+ 586e51a60fabf-297285efa25mr10268908fac.10.1732543839773; Mon, 25 Nov 2024
+ 06:10:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241125132029.7241-1-patryk.wlazlyn@linux.intel.com>
- <20241125132029.7241-8-patryk.wlazlyn@linux.intel.com> <CAJZ5v0gCHzptE5kW6ScpRB-ytvi_5uCS9Mghy6Vv4680VMEbTQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gCHzptE5kW6ScpRB-ytvi_5uCS9Mghy6Vv4680VMEbTQ@mail.gmail.com>
+References: <20241121-sysfs-const-bin_attr-int340x_thermal-v1-1-2436facf9dae@weissschuh.net>
+In-Reply-To: <20241121-sysfs-const-bin_attr-int340x_thermal-v1-1-2436facf9dae@weissschuh.net>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 25 Nov 2024 15:00:50 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gtUp9MK=0-g2kqAKccJDV_P01PwmuhPEJwv82EzvVECA@mail.gmail.com>
-Message-ID: <CAJZ5v0gtUp9MK=0-g2kqAKccJDV_P01PwmuhPEJwv82EzvVECA@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 7/8] acpi_idle: Add FFH cstate handling
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	rafael.j.wysocki@intel.com, len.brown@intel.com, 
-	artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com, 
-	peterz@infradead.org, tglx@linutronix.de, gautham.shenoy@amd.com
+Date: Mon, 25 Nov 2024 15:10:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jEEAidAEn4C6eb0ShG06+UQRaYhsFCF9uOiMuO-Gn3Jg@mail.gmail.com>
+Message-ID: <CAJZ5v0jEEAidAEn4C6eb0ShG06+UQRaYhsFCF9uOiMuO-Gn3Jg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int3400: Remove unneeded data_vault attribute_group
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 25, 2024 at 2:41=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Thu, Nov 21, 2024 at 5:29=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
+chuh.net> wrote:
 >
-> On Mon, Nov 25, 2024 at 2:21=E2=80=AFPM Patryk Wlazlyn
-> <patryk.wlazlyn@linux.intel.com> wrote:
-> >
-> > Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+> The group only contains a single entry and the conditionals around its
+> lifecycle make clear that this won't change.
+> Remove the unnecessary group.
 >
-> The changes below look good to me, but the patch needs a changelog
-> which should explain why it is needed or useful.
+> This saves some memory and it's easier to read.
+> The removal of a non-const bin_attribute[] instance is also a
+> preparation for the constification of struct bin_attributes.
 >
-> In this particular case, you want to change the code ordering in
-> native_play_dead() so that it calls cpuidle_play_dead() first and only
-> fall back to anything else if that fails.
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 16 +++--------=
+-----
+>  1 file changed, 3 insertions(+), 13 deletions(-)
 >
-> In particular, this needs to work when intel_idle is not in use and
-> the entry method for at least one idle state in the _CST return
-> package for at least one CPU is ACPI_CSTATE_FFH, so this case needs to
-> be added to acpi_idle_play_dead().
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/dr=
+ivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index b0c0f0ffdcb046607b4478390f39a77ae316a511..558a08f1727fc48c37181f8d3=
+45e236f879dab27 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -75,11 +75,6 @@ struct odvp_attr {
 >
-> You may also make a note in the changelog that had there been a
-> non-Intel x86 platform with a _CST returning idle states where CPU is
-> ACPI_CSTATE_FFH had been the entry method, it wouldn't have been
-> handled correctly today (but this is academic because of the lack of
-> such platforms).
+>  static BIN_ATTR_SIMPLE_RO(data_vault);
 >
-> Also, this can be the first patch in your series if [1-3/7] are dropped.
+> -static struct bin_attribute *data_attributes[] =3D {
+> -       &bin_attr_data_vault,
+> -       NULL,
+> -};
+> -
+>  static ssize_t imok_store(struct device *dev, struct device_attribute *a=
+ttr,
+>                           const char *buf, size_t count)
+>  {
+> @@ -108,10 +103,6 @@ static const struct attribute_group imok_attribute_g=
+roup =3D {
+>         .attrs =3D imok_attr,
+>  };
+>
+> -static const struct attribute_group data_attribute_group =3D {
+> -       .bin_attrs =3D data_attributes,
+> -};
+> -
+>  static ssize_t available_uuids_show(struct device *dev,
+>                                     struct device_attribute *attr,
+>                                     char *buf)
+> @@ -624,8 +615,7 @@ static int int3400_thermal_probe(struct platform_devi=
+ce *pdev)
+>         }
+>
+>         if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
+> -               result =3D sysfs_create_group(&pdev->dev.kobj,
+> -                                           &data_attribute_group);
+> +               result =3D device_create_bin_file(&pdev->dev, &bin_attr_d=
+ata_vault);
+>                 if (result)
+>                         goto free_uuid;
+>         }
+> @@ -648,7 +638,7 @@ static int int3400_thermal_probe(struct platform_devi=
+ce *pdev)
+>  free_sysfs:
+>         cleanup_odvp(priv);
+>         if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
+> -               sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group=
+);
+> +               device_remove_bin_file(&pdev->dev, &bin_attr_data_vault);
+>                 kfree(priv->data_vault);
+>         }
+>  free_uuid:
+> @@ -683,7 +673,7 @@ static void int3400_thermal_remove(struct platform_de=
+vice *pdev)
+>                 acpi_thermal_rel_misc_device_remove(priv->adev->handle);
+>
+>         if (!ZERO_OR_NULL_PTR(priv->data_vault))
+> -               sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group=
+);
+> +               device_remove_bin_file(&pdev->dev, &bin_attr_data_vault);
+>         sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
+>         sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
+>         thermal_zone_device_unregister(priv->thermal);
+>
+> ---
 
-Ah sorry, not quite.
-
-You need to introduce mwait_play_dead_with_hint() first of course, so
-it could be the second patch in your series and the intel_idle one
-would be the third.
-
-> > ---
-> >  arch/x86/include/asm/cpufeatures.h | 1 +
-> >  arch/x86/kernel/acpi/cstate.c      | 9 +++++++++
-> >  drivers/acpi/processor_idle.c      | 2 ++
-> >  include/acpi/processor.h           | 5 +++++
-> >  4 files changed, 17 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/=
-cpufeatures.h
-> > index ea33439a5d00..1da5e08de257 100644
-> > --- a/arch/x86/include/asm/cpufeatures.h
-> > +++ b/arch/x86/include/asm/cpufeatures.h
-> > @@ -236,6 +236,7 @@
-> >  #define X86_FEATURE_PVUNLOCK           ( 8*32+20) /* PV unlock functio=
-n */
-> >  #define X86_FEATURE_VCPUPREEMPT                ( 8*32+21) /* PV vcpu_i=
-s_preempted function */
-> >  #define X86_FEATURE_TDX_GUEST          ( 8*32+22) /* "tdx_guest" Intel=
- Trust Domain Extensions Guest */
-> > +#define X86_FEATURE_NO_MWAIT_OFFLINE    ( 8*32+23) /* Don't use MWAIT =
-states for offlined CPUs */
-> >
-> >  /* Intel-defined CPU features, CPUID level 0x00000007:0 (EBX), word 9 =
-*/
-> >  #define X86_FEATURE_FSGSBASE           ( 9*32+ 0) /* "fsgsbase" RDFSBA=
-SE, WRFSBASE, RDGSBASE, WRGSBASE instructions*/
-> > diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstat=
-e.c
-> > index f3ffd0a3a012..c80a3e6dba5f 100644
-> > --- a/arch/x86/kernel/acpi/cstate.c
-> > +++ b/arch/x86/kernel/acpi/cstate.c
-> > @@ -204,6 +204,15 @@ int acpi_processor_ffh_cstate_probe(unsigned int c=
-pu,
-> >  }
-> >  EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_probe);
-> >
-> > +void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
-> > +{
-> > +       unsigned int cpu =3D smp_processor_id();
-> > +       struct cstate_entry *percpu_entry;
-> > +
-> > +       percpu_entry =3D per_cpu_ptr(cpu_cstate_entry, cpu);
-> > +       mwait_play_dead_with_hint(percpu_entry->states[cx->index].eax);
-> > +}
-> > +
-> >  void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_c=
-x *cx)
-> >  {
-> >         unsigned int cpu =3D smp_processor_id();
-> > diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idl=
-e.c
-> > index 698897b29de2..586cc7d1d8aa 100644
-> > --- a/drivers/acpi/processor_idle.c
-> > +++ b/drivers/acpi/processor_idle.c
-> > @@ -590,6 +590,8 @@ static void acpi_idle_play_dead(struct cpuidle_devi=
-ce *dev, int index)
-> >                         raw_safe_halt();
-> >                 else if (cx->entry_method =3D=3D ACPI_CSTATE_SYSTEMIO) =
-{
-> >                         io_idle(cx->address);
-> > +               } else if (cx->entry_method =3D=3D ACPI_CSTATE_FFH) {
-> > +                       acpi_processor_ffh_play_dead(cx);
-> >                 } else
-> >                         return;
-> >         }
-> > diff --git a/include/acpi/processor.h b/include/acpi/processor.h
-> > index a17e97e634a6..63a37e72b721 100644
-> > --- a/include/acpi/processor.h
-> > +++ b/include/acpi/processor.h
-> > @@ -280,6 +280,7 @@ int acpi_processor_ffh_cstate_probe(unsigned int cp=
-u,
-> >                                     struct acpi_processor_cx *cx,
-> >                                     struct acpi_power_register *reg);
-> >  void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cstate)=
-;
-> > +void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx);
-> >  #else
-> >  static inline void acpi_processor_power_init_bm_check(struct
-> >                                                       acpi_processor_fl=
-ags
-> > @@ -300,6 +301,10 @@ static inline void acpi_processor_ffh_cstate_enter=
-(struct acpi_processor_cx
-> >  {
-> >         return;
-> >  }
-> > +static inline void acpi_processor_ffh_play_dead(struct acpi_processor_=
-cx *cx)
-> > +{
-> > +       return;
-> > +}
-> >  #endif
-> >
-> >  static inline int call_on_cpu(int cpu, long (*fn)(void *), void *arg,
-> > --
-> > 2.47.0
-> >
-> >
+Applied as 6.13-rc material, thanks!
 
