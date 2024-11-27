@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-18172-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18173-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19229DACF0
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 19:18:32 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6868B9DACF6
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 19:22:16 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 524EA162DA8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 18:18:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D215EB2159F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 18:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B0113D8B5;
-	Wed, 27 Nov 2024 18:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1615F145A16;
+	Wed, 27 Nov 2024 18:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLB5Y0k5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MSAutrsH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B8A13B590;
-	Wed, 27 Nov 2024 18:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D849438DC8;
+	Wed, 27 Nov 2024 18:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732731507; cv=none; b=ad0HXO1aMsF6Wr0khKg9OVumFs4+O9CXENx7B8/RnRYZSYx4S54lOkger9dD/vvRFrcNnsYDqnZiSwoLBV7jv2DHcbBgql6UBGXXyvtaAluzUnOZ2mbha7mR9iMWU62qck49v+FNAcSaYzxp0zL+1okDj5iY4idftg3eWj9mxts=
+	t=1732731729; cv=none; b=G8bzts+jG9Jk/oFHtiOJZNYzvPYWlq2xC/dM1I17lFwoRUq2WIj9SNjwT89jQ1imhvTScoTuHjxgKKCp++DWDbzGG8kSXPpAQMCsS8v/KF2xldWjVscXbeEcWJFWNpQeUbs5S4vlot4y3+CklzPjhviTlIO57oRQJGkc0lvCpf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732731507; c=relaxed/simple;
-	bh=jH9hFyDsj5qy8d3Xdek4ANgiFz8D8REKGKgXZ+vpk74=;
+	s=arc-20240116; t=1732731729; c=relaxed/simple;
+	bh=e4TACbjkLk9qiqFFP7frplWfLyvtBZLnw2arK8reBzI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gtc/gQJ4GvOspn5b2QgcyAqywFdyPp4Qh0DsgKIohaGA8pEEcohKoeMaNgRCEqXRd4l17v3MC0BefyzvGGMIp85cgXDQl/zBk6guf1V98/GHyc6IdEoXkzGMGtJxoFqj/narfDxpsSIvDCxOpcDE/4CpdP5u9mT4G2v20aHy5OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLB5Y0k5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EEFAC4CECC;
-	Wed, 27 Nov 2024 18:18:23 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ZShBI0Y6EeHgzsL+qzM9B/3mH2FCwPs3HGoU300JcUuBAypK5P8GA01dEEqhGm7aqpoBD8+WCBw8M5pZh8tGIYa5M2WNnvZmBdgpHEX5oaP6pEqVTZhm0nBDO1gd5TKYd1O+P7sanS2H0GPwdeFZ+dGZglqFPZ4UjizNpxpLDnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MSAutrsH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D95C4CECC;
+	Wed, 27 Nov 2024 18:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732731507;
-	bh=jH9hFyDsj5qy8d3Xdek4ANgiFz8D8REKGKgXZ+vpk74=;
+	s=k20201202; t=1732731728;
+	bh=e4TACbjkLk9qiqFFP7frplWfLyvtBZLnw2arK8reBzI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gLB5Y0k5QRu/FBm+tZ1p18EZnEWztw1Cjgkuw4c/OES/7h72bd0jHKNwSF7Vpr5qS
-	 di/7tDwtMw7ZNhmeekgRmjIWOVN4fCj434hwF6CO0ENmodljAe5BwHE6Wlj9qZZcsl
-	 W68oCylC4KPqSqFvrahG+P/E3MaRPfg8fz4b52VLFAXe3nnSWBeEhhGvnFzrs7wP4M
-	 IECDh7crLIKpnb5K7WLaiEeFkD52pMr7ulxnCSyZYcDRgMYqRdsiK0fpyye5bQSk9/
-	 N01Ywcso0aFeddnLuWtWerPso+Km6X0RvRjw4pGBKTOx4NQNR7ImPEDDzIQV8qfKQe
-	 x8HvRxOzrHNMw==
-Message-ID: <21c08a45-34f1-443c-97d4-6baf9fa01b67@kernel.org>
-Date: Wed, 27 Nov 2024 19:18:22 +0100
+	b=MSAutrsHKX7nWrd1atf43K7niuW0ontwmBzz6vtKmBGRVMQHCrKePbK6McPEZMYut
+	 l/0Hai8mTnh1VMWhecprk2x6IpQHIPAqmDN5Wh17d+m3kNRtUqXP8v8LFrABUaVuX3
+	 fhslSs4BPXkQBHM3B0dpHStQOeNrBOw9xRYmNggz9tgsmJQUu0CXnTbT9iZKFEPCii
+	 1DQrNX4yCPlWtqrL/1nUuJ5HXgtYXaFvUC4xsz3BtocpcCDp/PinQKloV+xF4coxgC
+	 ENBmZ6BnYF2JA06GIF687xfE8fMzmI23mmdgv2tp6EiM3CcPACneAR7ZKdwqUS3qFW
+	 wbkfVlmmSPSjA==
+Message-ID: <3eb06a70-cafb-4d89-aa68-524ec91e3850@kernel.org>
+Date: Wed, 27 Nov 2024 19:22:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,13 +50,14 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] power: supply: Add STC3117 Fuel Gauge
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Add STC3117 Fuel Gauge
 To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>, sre@kernel.org,
  krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
 Cc: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20241127151953.29550-1-bhavin.sharma@siliconsignals.io>
+ <20241127151953.29550-2-bhavin.sharma@siliconsignals.io>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,21 +103,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241127151953.29550-1-bhavin.sharma@siliconsignals.io>
+In-Reply-To: <20241127151953.29550-2-bhavin.sharma@siliconsignals.io>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/11/2024 16:19, Bhavin Sharma wrote:
-> From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-> 
-> Adds initial support for the STC3117 fuel gauge.
-> 
-> v3 -> v4
-> 
-> - Added support for current, soc, temp, and status properties.
-> - Addressed comments and feedback provided by Krzysztof and Sebastian.
+> +
+> +allOf:
+> +  - $ref: power-supply.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stc3117
+> +
+> +  reg:
+> +    maxItems: 1
 
-Which comments? What changed exactly? This has to be precise.
+I asked you some questions on v2, then on v3 and no responses.
+
+You implemented some changes but still did not answer my question. I am
+not going to ask again, obviously expecting different result on the same
+makes little sense.
+
+No ack from me.
 
 Best regards,
 Krzysztof
