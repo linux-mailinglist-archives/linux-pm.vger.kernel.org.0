@@ -1,186 +1,114 @@
-Return-Path: <linux-pm+bounces-18147-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18148-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 328929DA730
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 12:52:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 519F19DA7DB
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 13:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB659281636
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 11:52:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8377DB21880
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 12:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761E11F9F5D;
-	Wed, 27 Nov 2024 11:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VReTf/mQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048101FBEAA;
+	Wed, 27 Nov 2024 12:24:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83A01F9F55;
-	Wed, 27 Nov 2024 11:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C831FBEA8;
+	Wed, 27 Nov 2024 12:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732708309; cv=none; b=C8vGpkmRiC9yRj32n2XuxxDyQF/6EgCAXHHj19fwn/Jy+mweDZ+a+ixDhCyx+mWXS+2geQGHMhYSK61piRFTRz1XBfuPuqxr6TYS7kScnsBsXtx8F1VjPShaw0ckuM4w9g7q9afnzvMW76Wz/plshGuvAbsT/w4RGjJ7cRZgaVw=
+	t=1732710247; cv=none; b=lYvyYWV91jCeKvnz3QCbizS6Xmdk5Wc8OwFvmd15sSFJbNPl+daKqwT64fJJReMYrlfyQHeph4asPlRD8VEXLPfDK9gcshCTftL/TLT3KGK3SewJoyEYxT9OtgOuxA7YAIdQJMn+SB2B/KJ5vR1Y/XTKlu2oyjYbMGD8xS3ACMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732708309; c=relaxed/simple;
-	bh=ErPP9c4l3QF+6gCsJyaNXV9lUGfHlw8xtchr84nZNUc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n+2up/oaY/EuMF1HpHRDM2MGogeGQyn2dgfxk+LQwBmjmlumS8hDwn3sLotXRJPc/uYO/AxadZEhB8U6Zkjx9bvp/dz7r51QQsXdT49d1YZq2r9JYKyZRGAVdGrFgvCwfE0VXt0PFUMfLoDBXdFAFSqphD+89YBK8r3hpWfI3TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VReTf/mQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AR8BnrL009576;
-	Wed, 27 Nov 2024 11:51:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=1L6EbXGa4gjKewlKK1VepByH
-	J/Y1UHlLv72Bl04ORAU=; b=VReTf/mQlYe4hoPN57uXsB1rzLArhNZT6wVtqGY6
-	sBE3SAnYzslWSZoM9nw7kugRp6e+uPd3JGT5U+xPuA4rGqqOyMcBmAIkyMylF5JA
-	azVaRbHt+YJy4zU5vrmmVJJKnlxsQq7Ua9qlfV5ApmcuS+13AlWDmIhUkVqGnbkW
-	FWSZqeThyeV3eDuDrjmgvjEe1Ze0MbN6FLaimdEsYyrfYH+0id6tGpYWwOPtlZGm
-	w3Wfs/SflgQglf/50Y927/d7HrMxM201AFDef8lYnTeJRHgiJ0ryoiYeFUG/21vs
-	i2pbhsqfIg90XMu1ocPplJ0z5P0Wlt4r3zTpl16OeNorXA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 435ffyu9ba-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Nov 2024 11:51:40 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ARBpcuC025967
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Nov 2024 11:51:38 GMT
-Received: from hu-janathot-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 27 Nov 2024 03:51:32 -0800
-From: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        "Rob
- Herring" <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konradybcio@kernel.org>,
-        Marcel Holtmann
-	<marcel@holtmann.org>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-CC: <quic_mohamull@quicinc.com>, <quic_hbandi@quicinc.com>,
-        <quic_anubhavg@quicinc.com>,
-        Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: [PATCH v4 2/2] regulator: dt-bindings: qcom,qca6390-pmu: document WCN6750
-Date: Wed, 27 Nov 2024 17:21:07 +0530
-Message-ID: <20241127115107.11549-3-quic_janathot@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20241127115107.11549-1-quic_janathot@quicinc.com>
-References: <20241127115107.11549-1-quic_janathot@quicinc.com>
+	s=arc-20240116; t=1732710247; c=relaxed/simple;
+	bh=2xyqF7R5BBjLbNh4gI4Md/YFXkgS97KqFmr0wKaER5s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i3VnNyPqbh7W/0D8Vu6YpEw3uZVSEUkvisiaMfbeuGvEeIPoWbw4E0PBGpNpfxF6gaUwW6BjJWZd5YgPf1I5/3uMq1CPpfGZw0GgNNrwmUQ80f7sTKwITomV08EifcRvTYMAIZp6GlO4XA0kbjsiMrAuy9C+Epx0gvJ7k9CdaP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4af122fb98aso1008701137.1;
+        Wed, 27 Nov 2024 04:24:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732710244; x=1733315044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eJmD8VGU1XR+wNB0IA5Up4mnKITrJR2nrWnVBu6wRTQ=;
+        b=IUK2y4E+1ImzBoWZ40H2SUmOO13KQ4I18GG8wU2uep13ic4jWD9tBf9iJVS5Jazvvs
+         brx9qWDtrxyBkEamCyu8rg4RmBcwkimkC6udlcUqmmSEKISudjMYyOlquL6pIcBMx+m7
+         bZVYBo2th5Y5TJdGHJv8GRPnEfw5XrrFVh98P4grtlQekjcuWcwHxl7wMd7kFfMJK3JV
+         dhsg/7amuCcNy7z8NCInieNwtbSkwA6RL8PwVIgz8zZj6DVSXjxF0mu+iU9DTn4brwG8
+         YoOIYZlJzsguitjlPFCHhgI32azF4lSylMAz3pZJejVvkw94WiFOQ+mYrlBvRokGW72s
+         TBhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVRcHmRkemUVEnNmFnGs5f5UNBYRp8V6FXuwKVc3M8N6lLLaph9WpV76/9eWdrSqgzFYe5BN/dhTfH61rv3rTW5TME=@vger.kernel.org, AJvYcCWrwVerKz84agVtiDOeSOgiodqsz62zL2E4zJ//cmmfGfWXPMj3Gt3RCFgTlqZWYPqMPRY2kKLsCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQkn0suDcLsYqji7vMms/U0FTTDqIxynAGDWfZ9xUsKruTltsG
+	H9gj4rG9kNO4KV0OcU71xemufsK/JW7bBBA5dTv36uyoZu/CcpWeDFrr6Yel05U=
+X-Gm-Gg: ASbGncutn21XM58YRlorfKWZ3mohpIZ2UGlrcNPZhf8VAqbOwtf7Xq1sFnlVMkOAiL5
+	P0SRaVQssaEpu8Si6PEzMPkX/E7fWP5LGJpSXqfoA39oX3WTk9/myXJQDh+yk3NXKgZiKWB96tL
+	BNScBZzonYDgmMKy9WlXSb4i2MiiZ+jFMEtC6sWvmTQ0Ac0UB0rBz/r6q2Y5j0lC5qSkpazQuve
+	RQ08NaKsAOkHnwfiTZ0RUZKIXuQUo7rZP+Jd5beV7Mp6x08XEvopJinolAAKh8rS6Yn46BZEJe9
+	BCWGAD6WMUYQ
+X-Google-Smtp-Source: AGHT+IGhPVAHyiLw8h/PESrrz6gtM3D2EciAxoiYerdKtBPevHV0gdtvVGyjOv1eHczRlUAjzCIXtg==
+X-Received: by 2002:a05:6102:e0a:b0:4af:3f28:77cc with SMTP id ada2fe7eead31-4af4487db32mr2880175137.10.1732710244492;
+        Wed, 27 Nov 2024 04:24:04 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4af358234c7sm722405137.18.2024.11.27.04.24.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Nov 2024 04:24:04 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4af3de962a7so315135137.0;
+        Wed, 27 Nov 2024 04:24:03 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV9HJDpyBQFnrEPyyndOWxTnkMDU65m7eIjN3uAcbUdhKAIHl1ltY6Eubz76vdLJ7Ds+oKzVTPIefHLgLPPV3mU6qc=@vger.kernel.org, AJvYcCX+7vLkI9wFOAbj57kis8V2cqIRuRI572UxH76io3GvpPk3Y034UKMX17yNDgFwlv8pHiNyC3BYBw==@vger.kernel.org
+X-Received: by 2002:a05:6102:32c3:b0:4ae:3a0e:e11d with SMTP id
+ ada2fe7eead31-4af448c57abmr3127893137.13.1732710243607; Wed, 27 Nov 2024
+ 04:24:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _pBDr6Aqp9p_24q6N-01cBBsS6A7Uc-h
-X-Proofpoint-ORIG-GUID: _pBDr6Aqp9p_24q6N-01cBBsS6A7Uc-h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- bulkscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411270097
+References: <20241120120336.1063979-1-niklas.soderlund+renesas@ragnatech.se> <20241120120336.1063979-2-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20241120120336.1063979-2-niklas.soderlund+renesas@ragnatech.se>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 27 Nov 2024 13:23:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWT7tg8H0iQd1OdQ8CUzmC6702kFmHPePvCZ7XDccO-_w@mail.gmail.com>
+Message-ID: <CAMuHMdWT7tg8H0iQd1OdQ8CUzmC6702kFmHPePvCZ7XDccO-_w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] thermal: rcar_gen3: Use lowercase hex constants
+To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add description of the PMU node for the WCN6750 module.
+On Wed, Nov 20, 2024 at 1:04=E2=80=AFPM Niklas S=C3=B6derlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> The style of the driver is to use lowercase hex constants, correct the
+> few outlines.
+>
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
+> ---
+> * Changes since v1
+> - Update a few more defines not related to the fuses missed and pointed
+>   out by Geert, thanks!
 
-Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
----
- .../bindings/regulator/qcom,qca6390-pmu.yaml  | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,qca6390-pmu.yaml b/Documentation/devicetree/bindings/regulator/qcom,qca6390-pmu.yaml
-index ca401a209cca..47c425c9fff1 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,qca6390-pmu.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,qca6390-pmu.yaml
-@@ -18,6 +18,7 @@ properties:
-   compatible:
-     enum:
-       - qcom,qca6390-pmu
-+      - qcom,wcn6750-pmu
-       - qcom,wcn6855-pmu
-       - qcom,wcn7850-pmu
- 
-@@ -27,6 +28,9 @@ properties:
-   vddaon-supply:
-     description: VDD_AON supply regulator handle
- 
-+  vddasd-supply:
-+    description: VDD_ASD supply regulator handle
-+
-   vdddig-supply:
-     description: VDD_DIG supply regulator handle
- 
-@@ -42,6 +46,9 @@ properties:
-   vddio1p2-supply:
-     description: VDD_IO_1P2 supply regulator handle
- 
-+  vddrfa0p8-supply:
-+    description: VDD_RFA_0P8 supply regulator handle
-+
-   vddrfa0p95-supply:
-     description: VDD_RFA_0P95 supply regulator handle
- 
-@@ -51,12 +58,18 @@ properties:
-   vddrfa1p3-supply:
-     description: VDD_RFA_1P3 supply regulator handle
- 
-+  vddrfa1p7-supply:
-+    description: VDD_RFA_1P7 supply regulator handle
-+
-   vddrfa1p8-supply:
-     description: VDD_RFA_1P8 supply regulator handle
- 
-   vddrfa1p9-supply:
-     description: VDD_RFA_1P9 supply regulator handle
- 
-+  vddrfa2p2-supply:
-+    description: VDD_RFA_2P2 supply regulator handle
-+
-   vddpcie1p3-supply:
-     description: VDD_PCIE_1P3 supply regulator handle
- 
-@@ -119,6 +132,20 @@ allOf:
-         - vddpcie1p3-supply
-         - vddpcie1p9-supply
-         - vddio-supply
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,wcn6750-pmu
-+    then:
-+      required:
-+        - vddaon-supply
-+        - vddasd-supply
-+        - vddpmu-supply
-+        - vddrfa0p8-supply
-+        - vddrfa1p2-supply
-+        - vddrfa1p7-supply
-+        - vddrfa2p2-supply
-   - if:
-       properties:
-         compatible:
--- 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
