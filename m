@@ -1,116 +1,138 @@
-Return-Path: <linux-pm+bounces-18150-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18151-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C672C9DA81C
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 13:54:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C48D69DA838
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 14:06:19 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6588B165991
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 12:54:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FD5DB22AC6
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 13:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3D41FCD08;
-	Wed, 27 Nov 2024 12:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DE41FCD16;
+	Wed, 27 Nov 2024 13:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VFjp4YnR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BdJ0xnkE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F101A1FBE8C
-	for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2024 12:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F247E1FBEAB;
+	Wed, 27 Nov 2024 13:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732712087; cv=none; b=EHaIW/823oPnUWWL03DeDwNjP7wabNSftpN29DaVGeeOC1Jlt8Dd0wpqLoJOtfDineFLVbpjtfpfc20ZNKF3ITJ7vwCI+eYxMhXsXpgivC3j/8Mcy+EboJt90X63wGv7iaGP+tp4t1mnFz1yBVvhCBvzjrYCLyxsjZy0ML5lKLQ=
+	t=1732712756; cv=none; b=KRKuMZ7ThbsGtGhSla7gxrMhbwVfabU2f8WSxrm7ESCthKRWH+gBrF+bVGi0u4qxk/H8JsJ+4gN4kG3+E5tnc9SIDNfVUVYjRkXVSLDLYH3qP668raRZ2fiL5ya0v9mMRfExF5qb3R0CSeOXcUGv07dKrrzxNlYXK38wwWcJ090=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732712087; c=relaxed/simple;
-	bh=Lh+K93JZ+oSO4iAA1pLiUmBkVGI7gz64mN0R2XehEKI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AcpX9sbFnXPVn5yCOfN5fsNFcn17hGoD3G0eVfz2TmXNPw/Z/ZSdPF10/WhT5wgfdgYTI0lo9K0Pzep9uwu+k6wO8TuS2aKDlXxz+g5mBop2zDI6VQvUN59ilfKciZFim91Lq5a1BRIR9BMkQxowx7iIJVSCvI5V4OTIrKYL6so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VFjp4YnR; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53de92be287so3560963e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2024 04:54:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1732712084; x=1733316884; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VMlguYsXBaHTG8IIPiymhg5zN1IoRUyw9vVeQdmNnoE=;
-        b=VFjp4YnR2BMoy20IxOEMJ6AK3Ujrzz3qmqIca2qOFLtkK55WJsWT28V1CueF2zG9oA
-         obvV4ErO6bOWG4IoF9wTGVCsRzKyKxGlc1aUqRrTHzjWb0AFe1QVeXte1QXSQNi/Fy9h
-         ZDqJZrq9ZY5pdpybQD0+pDTk/X/IyN4E+fD7GMadGmvERoPh9zQijAE4j1em4simzM0z
-         RNVJzhnGtNKpW4usO8p2lPDZdkI7/cOnkHbnKpAPZtECWpT8mKCGuIGuEhHIW2WP4UFP
-         oWvuf8iJR9xR47rt3XMM0mFg/L2TVpUfUHKFj9SPPKxO4RMU4k68P0JHutPQYPkSRbV+
-         wJMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732712084; x=1733316884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VMlguYsXBaHTG8IIPiymhg5zN1IoRUyw9vVeQdmNnoE=;
-        b=shvznUVB2xiADgq6uWth/ZpT9mICOQDX/L5PzMklW/v6cG7NiJ84xRqFNghmjKFIGX
-         O2D2Q/ndPo8va5fLm5QTgNgUtbUjEgLrwWJK6F418q9rGUHBPkBk9AY77M1+RY/OLm5V
-         G5eCVvHAKSNhzsqf+a6u85UI7aoKfxSlkj+Ka2hzFWcXLYVuU+ELfbgPGzKZz1QuLeDR
-         I/szbuDU2fDV4ipkgtlInXoIS2Q1dLoW143fguD+MzD+3uqP4Btjl3AQv2WIvi00x7bi
-         METkY6BOJ6CP8GpvYBc75KQEhyhrPc1q6/amSsym+chYaYCjdGYeOx0d8tAWZ2nijNUY
-         VqNA==
-X-Forwarded-Encrypted: i=1; AJvYcCVi7CETLIFSsBqYnUUgGWWWhUWNCMvlIxV1TUkKmGT1K54HvmzIcxbwCCXQMGJwGcMzyuQXHDJSeg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yztc8pSi9aWUihXPilzFs6RP/XtXhk6vMNCFvQLWT2ZP37RILxY
-	B/n/EJi/IAs6kRvXv35Y71xM8fJpbRVGCKDQQORXo68kCzVH4L1DYm44lHYTkAld8rNkAk/CkUA
-	rSVSguEXl2HNKvtFADg/9mSVvfYgXr39RIbt93w==
-X-Gm-Gg: ASbGnctjRtgbaxc5DpivHGOQvg0fnJfX95Ht+1qXZyKX/Ts364pcqf6X5xXz4sye/xQ
-	zrXXHwdUtxr+dwl+an4I6zmwDr1JF9XnwWGuJjBqkqNIis6PVZWaKX0Dhkbk7aj0=
-X-Google-Smtp-Source: AGHT+IHx709SaQ1FKdkFFszRfWrjL9xRjWY5udSKu4C3NKATAFjJLfJrvyExi7rrNp0NGOcrVq8wkyZ207HqatYcYLA=
-X-Received: by 2002:a05:6512:b26:b0:53d:efc7:70c6 with SMTP id
- 2adb3069b0e04-53df00d9d1fmr2573513e87.30.1732712083923; Wed, 27 Nov 2024
- 04:54:43 -0800 (PST)
+	s=arc-20240116; t=1732712756; c=relaxed/simple;
+	bh=t4x+zXxzN+CMQJb1v8tfF8WhsKY6tzACFte+sm30xaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VfyFF+XFrVucZHoE4cOwXXMatbPVk8/ap9zQGeOjZSF9QUVR8oQ1gYWvoOEugx5C62JPadWAe+5rTeUKjFwuOzfAt/dvkXkxhYQLCFWnE5SNGR9FnxyfW6dMVCCMkCybaFbSPHYyYebOTK0hehLLA+VyJcJoqjsmGPVhr90aX2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BdJ0xnkE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E501C4CECC;
+	Wed, 27 Nov 2024 13:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732712755;
+	bh=t4x+zXxzN+CMQJb1v8tfF8WhsKY6tzACFte+sm30xaw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BdJ0xnkE7AYSdA2eXM5E6RlH+ABJk6N7BvTEJkT6zYSFLk7OZ3hzFiNbn13EJpS4Y
+	 jWdMjTz5+e2VS+tojoq4TbDo++K8GiiCPlBG9wM9DyFvRfhNPtSZglo+CgQ1AZaqlT
+	 t69pGht7fv0UOM2ylxRcUwD4FT+sU1dTFqLMrwdgJL52Q0kSXT06VlH7PUcDEvxetC
+	 J3swYav/WtGRkiSUizWHtjwq0KL6PfJHrDbWcE9FZeF65U5e6Rn26SZHBwFuSfDZ0s
+	 tYYUqk8tIBR4Jc2HuBvpoXTcgMJ8boIyDlVHQzCFxiGMx49RofTAz46HX90urCiAki
+	 U6zUntZJEwYhg==
+Message-ID: <873e45b4-bcca-43fa-ab90-81754b28629f@kernel.org>
+Date: Wed, 27 Nov 2024 14:05:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] arm64: dts: qcom: qcs6490-rb3gen2: enable
+ Bluetooth
+To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Marcel Holtmann
+ <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: quic_mohamull@quicinc.com, quic_hbandi@quicinc.com,
+ quic_anubhavg@quicinc.com,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-pm@vger.kernel.org
 References: <20241127115107.11549-1-quic_janathot@quicinc.com>
-In-Reply-To: <20241127115107.11549-1-quic_janathot@quicinc.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 27 Nov 2024 13:54:32 +0100
-Message-ID: <CAMRc=McvKvHy8sxhHE2-5LO7-MAjtPMLks6x9bufTjmpG4cT6Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] Enable Bluetooth on qcs6490-rb3gen2 board
-To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, quic_mohamull@quicinc.com, 
-	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20241127115107.11549-2-quic_janathot@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241127115107.11549-2-quic_janathot@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 27, 2024 at 12:51=E2=80=AFPM Janaki Ramaiah Thota
-<quic_janathot@quicinc.com> wrote:
->
-> - Patch 1/2 enable WCN6750 Bluetooth node for qcs6490-rb3gen2 board
->   along with onchip PMU.
-> - Patch 2/2 add qcom,wcn6750-pmu bindings.
->
-> Janaki Ramaiah Thota (2):
->   arm64: dts: qcom: qcs6490-rb3gen2: enable Bluetooth
->   regulator: dt-bindings: qcom,qca6390-pmu: document WCN6750
->
->  .../bindings/regulator/qcom,qca6390-pmu.yaml  |  27 +++
->  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  | 174 +++++++++++++++++-
->  drivers/bluetooth/hci_qca.c                   |   2 +-
->  drivers/power/sequencing/pwrseq-qcom-wcn.c    |  22 +++
->  4 files changed, 223 insertions(+), 2 deletions(-)
->
-> --
+On 27/11/2024 12:51, Janaki Ramaiah Thota wrote:
+> Add a PMU node for the WCN6750 module present on the qcs6490-rb3gen board
+> and use the power sequencer for the same.
+> 
+> Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 174 ++++++++++++++++++-
+>  drivers/bluetooth/hci_qca.c                  |   2 +-
+>  drivers/power/sequencing/pwrseq-qcom-wcn.c   |  22 +++
+>  3 files changed, 196 insertions(+), 2 deletions(-)
 
-Is there no associated change to the pwrseq-qcom-wcn driver?
+DTS is always separate and cannot go via the same (driver) tree,
 
-Bart
+Missing bindings.
+
+Missing changelog, it's v4 so what happened here?
+
+Best regards,
+Krzysztof
 
