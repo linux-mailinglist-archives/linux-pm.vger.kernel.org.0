@@ -1,177 +1,115 @@
-Return-Path: <linux-pm+bounces-18142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A25399DA314
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 08:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E39A9DA3FE
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 09:33:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63FED2841BD
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 07:28:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E952280F28
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 08:33:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D7414EC4E;
-	Wed, 27 Nov 2024 07:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC201865E2;
+	Wed, 27 Nov 2024 08:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bQMSM+4t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gFhhgZXB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F191474BF
-	for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2024 07:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354F0C133;
+	Wed, 27 Nov 2024 08:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732692478; cv=none; b=FApmrBs34x3Io42HZE3TIsM/o2b0OKu5Ge/oZ92WEDw4RJuqpjSywFx8lI8KCDtdeFniJaFCqqxoJbc6YXPT3DV5DzJajI7LR6RVwk2lkZUpSrJ/O2QEr9Q0N4e/y1fLvwY4AeoEnRgIvR97T55EPgh9/mlD+rQkXoEbmz0ZrQ0=
+	t=1732696385; cv=none; b=AmggJWCnLgYWiRb41C6NGpBnwvsf3mn/JWBA0U9MG8BWME23mkzOYOVfB+C5u5tRbjbZi1TgcLJavXi11x0LpjOAYrQlL6cBSPZpK9oiA/5A9/v1ej7hzq3sOaANukKMxH0nzavEFte+WyK8AVN4TAB6neQQKdtdxKoKIuw2KR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732692478; c=relaxed/simple;
-	bh=KuWXTb4LcW8/bpSbKWNdmhYeKVa50JrbQlRXOqHDf6g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nwVazttEmhKSVsz+bYi2OT+GljxcdXt+oH5uasjRvxlCmvnH3aIFVN7IZWAI9tYLiAViyK4VbdBeJKhWHgUn0KbuU49uEtizLLRWmpp8qK4TNWK97ChkVgLlNT0jWZCsPZrs8xOSjSzDjKQS9sA2zpeOtUDCBgqs+XBMRRg90iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bQMSM+4t; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-aa531a70416so261680766b.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2024 23:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1732692474; x=1733297274; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1oZqeCiNDi+VUMlqaFu0Cj3Hfsp6EOFS1u82qR+tNuM=;
-        b=bQMSM+4tw/vjfOX+jZyDjv6kOnjYxGY04hohNtiyyh0l4iXojvwLIiUZUqUbiEBFw1
-         WoNz3d8wxTmWLHjZfdRGmWnxGBY6A6mSnM4NP7VGU3yLHBHTwo8HvN0J6AMJ7o8aoL9N
-         Rj0Tu291pV8Htx5XSYXxFOeGqTWxQe65v0Vc0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732692474; x=1733297274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1oZqeCiNDi+VUMlqaFu0Cj3Hfsp6EOFS1u82qR+tNuM=;
-        b=ufYhIuBQu1+8vCDv5b+cdZqzv+T+VWTZhpyTaJyOlCHms8BPar5GwZ1bEctrbAN77n
-         GDiwUBo8KBE7V78KNDFeWCOosN544k6YqbMLUVKD4S/xARZXA72VUNChTPJG+z0syZ0n
-         1PUkvDu6+mwrh1r00MbtdXjjsL6FCLGLEERq7hcru7T/NBYYDlni7F7p7IK/TOKZvQXK
-         0P1+ufdeq7wkF9OSV+cdN/SkiFaQmaqV1x5gl+kkdHNp1RUZMTXQvduNiD9WRtopsCaX
-         SGA9G3TE7a+t9H6I+0cUO/iiN9SXYc9BZQH6VJClbbRAqNQEWzKofRQv2R6PdEQ9G0Te
-         Bj8g==
-X-Forwarded-Encrypted: i=1; AJvYcCUakVAzbB8803sW/2NJOQ1UDm46edSuMl2Z+GUuSTRPRJ2QXOhrW1i1Nn56yziXznsBGUW+tOrQbA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLVcBhgVaOOj/PGHXm4sg4ayL2G6zLi9D4A1lxEvQQCj+AvRzi
-	lqnT1ZNyn/VspRArkgPDEBCAylEAL25WGMFmy4qvOt4KHe44ONVOjvWOCItcNchOofK7hdzaJph
-	IP99I
-X-Gm-Gg: ASbGncssK31jN7XV/wa1CAEFtOB3/28h+lkE6iqNjW7TVT6CgVwPIDAdsqqvxT+2tBe
-	vnJXZ9zLVZRDhPiprfy7v8dN7k2rm6SZj7yIG6bCXow0vnxUy34SCxgJP/XN1MHbxkxqxkOB2Hk
-	7S+LKAOMwswLS39Cv432Rm7dW58sA+94RdAUrF+LVxk8sWumeCDSDKEH6mHAE7ww1f2/mFqck8K
-	sNmQm6mUcBkDQ67Xbw7rYgoN9T9IUGJejQEX3/Ebia62P/hTKTx7Q+xYNKTMBKKDGbB7xXNUudf
-	400lgjy41vIDVolW
-X-Google-Smtp-Source: AGHT+IGppW1Qd19xCXi6HJe83SmCYZ7SlVJKGJJjltXlvgTIANrDzPucrs7Ro3p3zODPH5eW80YBUw==
-X-Received: by 2002:a05:6402:348c:b0:5d0:35ba:f12f with SMTP id 4fb4d7f45d1cf-5d080be41fbmr2277083a12.14.1732692474127;
-        Tue, 26 Nov 2024 23:27:54 -0800 (PST)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b5b9040sm678666666b.186.2024.11.26.23.27.53
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Nov 2024 23:27:53 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5cfc264b8b6so4723a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2024 23:27:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUwMPP2sAQwfB8t9R/SMAS5WOKuJ/da3zj34QJ1g6fUuwQyhTBkHPmNkt8tb0t2lBOITqQzwOOVzg==@vger.kernel.org
-X-Received: by 2002:aa7:d80b:0:b0:5d0:3ddd:c773 with SMTP id
- 4fb4d7f45d1cf-5d0819b8bf8mr48974a12.4.1732692472728; Tue, 26 Nov 2024
- 23:27:52 -0800 (PST)
+	s=arc-20240116; t=1732696385; c=relaxed/simple;
+	bh=M00Qhe2c1TyxMErLdNGS0w3/e24/ozEJ+9La09g5Ny4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kReCpjbpwzOJ7SO/d+OXofwKWZAcnvHDCHtIL6GywGUAPrg9BWHP7BdUetkl/qLPjQsoZ3TPNXN++dZ3HdsUJ6/P2tnGAJwjSkpI6U2ZlNK56hbS0fPz2lPixMBjYTAVuMiUnNH0oMcnctypI3EJGc+qZGkKzfPhB7g0VfwOODY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gFhhgZXB; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732696385; x=1764232385;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M00Qhe2c1TyxMErLdNGS0w3/e24/ozEJ+9La09g5Ny4=;
+  b=gFhhgZXBHuLLGQV/uv+jEzpOxAZWFLmO84nYIDlYNGgzyxd7+VuFyzXE
+   B30FzBBKzXvCm3/Ad5kfzNq6rF6d+Mj3ZSqumc797o4isI5+WiVF3n/V8
+   PV6GHPbortEGaYxtN2AVKtNgnoOoi4JFPQ5Tz1sRoH2UpNeWwtbwovTHl
+   jw0WvAGTfBxlo71fBZt9Zq9t6yZOGFVk/5YTDLc9O4EBE48vLwm6kufx3
+   Aq5sRAxttpH3qTT8HkaKDABVjsibWbLziPF745ZAjfFGWkhI6F0UaKDaR
+   EG87izjNlleF9JA5O/G2sd4+3GqghtgoFZxFWeJJiXGqf2hVOfxGwe9hv
+   Q==;
+X-CSE-ConnectionGUID: EXBRFwfzSTqblG4wnO2S2w==
+X-CSE-MsgGUID: Ys8N09OgQ5yBXYVaS8cE3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11268"; a="44270137"
+X-IronPort-AV: E=Sophos;i="6.12,189,1728975600"; 
+   d="scan'208";a="44270137"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 00:33:04 -0800
+X-CSE-ConnectionGUID: tA1MtW3XQ9amREhmESy8GA==
+X-CSE-MsgGUID: yNROq1b9Se2bQqSJsIorQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,189,1728975600"; 
+   d="scan'208";a="92186043"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO [10.245.244.42]) ([10.245.244.42])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 00:33:01 -0800
+Message-ID: <9a918226-4f93-4ee5-8673-20d82802f126@linux.intel.com>
+Date: Wed, 27 Nov 2024 09:32:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241125-mt8192-lvts-filtered-suspend-fix-v1-0-42e3c0528c6c@collabora.com>
- <20241125-mt8192-lvts-filtered-suspend-fix-v1-1-42e3c0528c6c@collabora.com>
- <CAHc4DNKmGA-MjTWdZhKygiaRwN7mHnMCf8UPUxH_V16uZifzFg@mail.gmail.com> <f38e4283-7133-4865-b4fe-eafb6bd30534@notapiano>
-In-Reply-To: <f38e4283-7133-4865-b4fe-eafb6bd30534@notapiano>
-From: Hsin-Te Yuan <yuanhsinte@chromium.org>
-Date: Wed, 27 Nov 2024 15:27:16 +0800
-X-Gmail-Original-Message-ID: <CAHc4DN+S6mBy_VRTWEqp-uA13zUyadtqPoo+-WZTmwYHofpkcg@mail.gmail.com>
-Message-ID: <CAHc4DN+S6mBy_VRTWEqp-uA13zUyadtqPoo+-WZTmwYHofpkcg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] thermal/drivers/mediatek/lvts: Disable monitor mode
- during suspend
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: Hsin-Te Yuan <yuanhsinte@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Alexandre Mergnat <amergnat@baylibre.com>, Balsam CHIHI <bchihi@baylibre.com>, kernel@collabora.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	Chen-Yu Tsai <wenst@chromium.org>, =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/3] x86/smp: Allow calling mwait_play_dead with an
+ arbitrary hint
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael.j.wysocki@intel.com, peterz@infradead.org,
+ dave.hansen@linux.intel.com, tglx@linutronix.de, len.brown@intel.com,
+ artem.bityutskiy@linux.intel.com
+References: <20241126201539.477448-1-patryk.wlazlyn@linux.intel.com>
+ <20241126201539.477448-2-patryk.wlazlyn@linux.intel.com>
+ <Z0a0JNRPuRYaVrcI@BLRRASHENOY1.amd.com>
+Content-Language: en-US
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+In-Reply-To: <Z0a0JNRPuRYaVrcI@BLRRASHENOY1.amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 26, 2024 at 9:37=E2=80=AFPM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
+> Hello Patryk,
 >
-> On Tue, Nov 26, 2024 at 04:00:42PM +0800, Hsin-Te Yuan wrote:
-> > On Tue, Nov 26, 2024 at 5:21=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
-> > <nfraprado@collabora.com> wrote:
-> > >
-> > > When configured in filtered mode, the LVTS thermal controller will
-> > > monitor the temperature from the sensors and trigger an interrupt onc=
-e a
-> > > thermal threshold is crossed.
-> > >
-> > > Currently this is true even during suspend and resume. The problem wi=
-th
-> > > that is that when enabling the internal clock of the LVTS controller =
-in
-> > > lvts_ctrl_set_enable() during resume, the temperature reading can gli=
-tch
-> > > and appear much higher than the real one, resulting in a spurious
-> > > interrupt getting generated.
-> > >
-> > This sounds weird to me. On my end, the symptom is that the device
-> > sometimes cannot suspend.
-> > To be more precise, `echo mem > /sys/power/state` returns almost
-> > immediately. I think the irq is more
-> > likely to be triggered during suspension.
+> Apologies for what may appear as bikeshedding, after this patch, the
+> cpuidle code still won't call any mwait based play dead loop since the
+> support for enter_dead for FFh based idle states in acpi_idle and
+> intel_idle only gets added in Patches 2 and 3.
 >
-> Hi Hsin-Te,
+> Does it make sense to split this Patch 1 into 2 patches : 1/4 and 4/4
 >
-> please also check the first paragraph of the cover letter, and patch 2, t=
-hat
-> should clarify it. But anyway, I can explain it here too:
+> 1/4 just introduces the mwait_play_dead_with_hint() helper which will
+> be used by patches 2 and 3.
 >
-> The issue you observed is caused by two things combined:
-> * When returning from resume with filtered mode enabled, the sensor tempe=
-rature
->   reading can glitch, appearing much higher. (fixed by this patch)
-> * Since the Stage 3 threshold is enabled and configured to take the maxim=
-um
->   reading from the sensors, it will be triggered by that glitch and bring=
- the
->   system into a state where it can no longer suspend, it will just resume=
- right
->   away. (fixed by patch 2)
+> 4/4 get rids of the of logic to find the deepest state from
+> mwait_play_dead() and modifies native_play_dead() to call
+> cpuidle_play_dead() followed by hlt_play_dead() thus removing any
+> reference to mwait_play_dead(). Optionally you can even rename
+> mwait_play_dead_with_hints() to mwait_play_dead().
 >
-> So currently, every so often, during resume both these things will happen=
-, and
-> any future suspend will resume right away. That's why this was never obse=
-rved by
-> me when testing a single suspend/resume. It only breaks on resume, and on=
-ly
-> affects future suspends, so you need to test multiple suspend/resumes on =
-the
-> same run to observe this issue.
+> That way the changelog that you have for this patch can be used in 4/4
+> since with the addition of play_dead support for FFh states in both
+> acpi_idle and intel_idle via patches 2 and 3, the logic to find the
+> deepest ffh state in mwait_play_dead() is no longer required.
 >
-> And also since both things are needed to cause this issue, if you apply o=
-nly
-> patch 1 or only patch 2, it will already fix the issue.
->
-> Hope this clarifies it.
->
-> Thanks,
-> N=C3=ADcolas
+> Thoughts ?
 
-Thanks for the explanation!
+Yeah, makes sense. I just wanted to simplify, but at some point crossed my mind
+that submitting it like you suggested may be better. I am going to split that
+if I don't see any objections.
 
-Regards,
-Hsin-Te
 
