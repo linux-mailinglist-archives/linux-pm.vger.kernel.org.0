@@ -1,183 +1,116 @@
-Return-Path: <linux-pm+bounces-18149-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18150-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 819019DA7F1
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 13:37:53 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C672C9DA81C
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 13:54:52 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41775280A1D
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 12:37:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6588B165991
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2024 12:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEAF61FC7EC;
-	Wed, 27 Nov 2024 12:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3D41FCD08;
+	Wed, 27 Nov 2024 12:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VFjp4YnR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AB91FA82F;
-	Wed, 27 Nov 2024 12:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F101A1FBE8C
+	for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2024 12:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732711068; cv=none; b=oFDznZlhpp7SQBXg+Ne7Df0Ov/dIMz1WYknFzQggebZEX/MzlhKgs/aYmUbe4fhw8ugqj04v13UdqgGnwYCULu6mWRiLQ6K21lBRDX7HCx+cIPC5jSwWtQT7ixGup9I3DxQHnqBFKFNgh83AbJs927Ra4DeVAa8VIX8SifUcO/g=
+	t=1732712087; cv=none; b=EHaIW/823oPnUWWL03DeDwNjP7wabNSftpN29DaVGeeOC1Jlt8Dd0wpqLoJOtfDineFLVbpjtfpfc20ZNKF3ITJ7vwCI+eYxMhXsXpgivC3j/8Mcy+EboJt90X63wGv7iaGP+tp4t1mnFz1yBVvhCBvzjrYCLyxsjZy0ML5lKLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732711068; c=relaxed/simple;
-	bh=Eia71GaAygkYAk8zVXAdJYbkcsXTdozswH/He1FKNUA=;
+	s=arc-20240116; t=1732712087; c=relaxed/simple;
+	bh=Lh+K93JZ+oSO4iAA1pLiUmBkVGI7gz64mN0R2XehEKI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sIQiSOsXxaGRZ8BFha9MxbGx0I/LFqCPGtTkuwYO9hgcoFteZPvP+p8T7nuL3oJ6Ls0b4Ko/axQyrAEAFM05g8wr2CWKufFvwLyFZW98XvJlXCA4GcSHbf2F8EEuZrcGya5QLf41gS6i0atxQ9lHLeqA1EkwYOaovbNMdkqxZFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3ea49cc8b88so1613559b6e.2;
-        Wed, 27 Nov 2024 04:37:46 -0800 (PST)
+	 To:Cc:Content-Type; b=AcpX9sbFnXPVn5yCOfN5fsNFcn17hGoD3G0eVfz2TmXNPw/Z/ZSdPF10/WhT5wgfdgYTI0lo9K0Pzep9uwu+k6wO8TuS2aKDlXxz+g5mBop2zDI6VQvUN59ilfKciZFim91Lq5a1BRIR9BMkQxowx7iIJVSCvI5V4OTIrKYL6so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VFjp4YnR; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53de92be287so3560963e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2024 04:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1732712084; x=1733316884; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VMlguYsXBaHTG8IIPiymhg5zN1IoRUyw9vVeQdmNnoE=;
+        b=VFjp4YnR2BMoy20IxOEMJ6AK3Ujrzz3qmqIca2qOFLtkK55WJsWT28V1CueF2zG9oA
+         obvV4ErO6bOWG4IoF9wTGVCsRzKyKxGlc1aUqRrTHzjWb0AFe1QVeXte1QXSQNi/Fy9h
+         ZDqJZrq9ZY5pdpybQD0+pDTk/X/IyN4E+fD7GMadGmvERoPh9zQijAE4j1em4simzM0z
+         RNVJzhnGtNKpW4usO8p2lPDZdkI7/cOnkHbnKpAPZtECWpT8mKCGuIGuEhHIW2WP4UFP
+         oWvuf8iJR9xR47rt3XMM0mFg/L2TVpUfUHKFj9SPPKxO4RMU4k68P0JHutPQYPkSRbV+
+         wJMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732711065; x=1733315865;
+        d=1e100.net; s=20230601; t=1732712084; x=1733316884;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wFWuqVuxrfa4q4CwwnmEJbNVtao5d8ytAMdXvXH9sNs=;
-        b=t4raDBRxmwLjsWO8Q/Rcr3L6usaKPsc3dAwKESLzi4V8aOexmlsR8Ty0aE6Gy8kLFT
-         JlEa2kZ+TqpRQqfe6Et+lJd74OzLK7g2dviX3KjXj+qebTNitDx5OjfYcD0XLqfcqap7
-         WA+2gC5Gt7uUaaU8aiXGQQINxWSp8YoDLfNwJFqZTG3qqW8/1uJuprrvdJ89nnlCAr46
-         W2ihQQRKJVYVZo/dhgOs9B+1SVgf5Cl2C/vHqUh+GPNJyBU9WLGgdaMQGk6k982TRInd
-         HaV14ix+GPWkD0LMD13Rhz4dLKJdL962yZX40VQ4j+foSp0IK+hN0VNba6r0mRjKzMmV
-         NeaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5pp1vWduqIE/WvcpK/YSmTbx73hSQN5OfThMsgCSMChwO+8TyqXoNTDMOj6IBEPCdHP8pnAwMog/oQJfAEdnbCkE=@vger.kernel.org, AJvYcCUSjK23K/CEw1uSxVbvP6VnzL6jdJ9y0JaEIrDdJxGrWKX4eaCr20KNgmyBk8rV+PDmZkx5saEQAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYR5452Z9iP6MeWkuHpNgDUAP0hOGcIlyTYrie4lA+okAKX80D
-	ZOX8WoZrNjyi6ue41Ts/7DJEx8upDBFsZOKYGa/9dwPuHLfIGT7Vy/P9AtgCYEQ=
-X-Gm-Gg: ASbGncumgatQoo0X5WrNybZABehclmyJwEeU0NLE+YaoLDQV3q9byJ7HREHPlmqLfS+
-	jArWlB6KtQpQlLgb5QRcHxTpEFprpVLqHwye58EVSgCnILcrCAxCjn3yyenxe5tga+H2bV9sG81
-	hKEPhYW7KrWB5UxTrOzYNeGWZsoNc8CumKeQfn7SFMOrK8YqUfyYwOiHx0kAaWwE75Z3yKLsqaN
-	x8pLTYw7sjD3ovy77pTjjRjW26+9OIdOfDXRxTJux7OQIIuPXyzhjchhnx1vsRCg9kY4temfzcu
-	D0SuqUpk/SpW
-X-Google-Smtp-Source: AGHT+IHdpembfqwpmswWFFz9cZsdx7AK9umfrrVDdCjPCqRhimX7DijoOUMJTXh45mBMme+hH86wMg==
-X-Received: by 2002:a05:6808:1829:b0:3db:1cd1:cadd with SMTP id 5614622812f47-3ea6dbd8ffemr3071179b6e.18.1732711065629;
-        Wed, 27 Nov 2024 04:37:45 -0800 (PST)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com. [209.85.161.42])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71d565285b9sm1480609a34.61.2024.11.27.04.37.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Nov 2024 04:37:45 -0800 (PST)
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5f1ff6a2128so731201eaf.2;
-        Wed, 27 Nov 2024 04:37:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWiUGXy3Gf8BVULSYmvIeh9P8FI/AVYAojQuuQgmurd65QdH+9PFxGJHgbn/hoyEnB6AgG0gsJuLQ==@vger.kernel.org, AJvYcCXp8mi1CSO0dZLtiq63m5Ui52Xko6bIHtyodA1ZTblsmXh9Y3qsURqnCKmZUEkZPmscEBWTJmkmxsFYxKqFhCnL3nA=@vger.kernel.org
-X-Received: by 2002:a05:6358:d39c:b0:1c3:77fc:3bb6 with SMTP id
- e5c5f4694b2df-1cab16a47f0mr195065855d.21.1732711064426; Wed, 27 Nov 2024
- 04:37:44 -0800 (PST)
+        bh=VMlguYsXBaHTG8IIPiymhg5zN1IoRUyw9vVeQdmNnoE=;
+        b=shvznUVB2xiADgq6uWth/ZpT9mICOQDX/L5PzMklW/v6cG7NiJ84xRqFNghmjKFIGX
+         O2D2Q/ndPo8va5fLm5QTgNgUtbUjEgLrwWJK6F418q9rGUHBPkBk9AY77M1+RY/OLm5V
+         G5eCVvHAKSNhzsqf+a6u85UI7aoKfxSlkj+Ka2hzFWcXLYVuU+ELfbgPGzKZz1QuLeDR
+         I/szbuDU2fDV4ipkgtlInXoIS2Q1dLoW143fguD+MzD+3uqP4Btjl3AQv2WIvi00x7bi
+         METkY6BOJ6CP8GpvYBc75KQEhyhrPc1q6/amSsym+chYaYCjdGYeOx0d8tAWZ2nijNUY
+         VqNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVi7CETLIFSsBqYnUUgGWWWhUWNCMvlIxV1TUkKmGT1K54HvmzIcxbwCCXQMGJwGcMzyuQXHDJSeg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yztc8pSi9aWUihXPilzFs6RP/XtXhk6vMNCFvQLWT2ZP37RILxY
+	B/n/EJi/IAs6kRvXv35Y71xM8fJpbRVGCKDQQORXo68kCzVH4L1DYm44lHYTkAld8rNkAk/CkUA
+	rSVSguEXl2HNKvtFADg/9mSVvfYgXr39RIbt93w==
+X-Gm-Gg: ASbGnctjRtgbaxc5DpivHGOQvg0fnJfX95Ht+1qXZyKX/Ts364pcqf6X5xXz4sye/xQ
+	zrXXHwdUtxr+dwl+an4I6zmwDr1JF9XnwWGuJjBqkqNIis6PVZWaKX0Dhkbk7aj0=
+X-Google-Smtp-Source: AGHT+IHx709SaQ1FKdkFFszRfWrjL9xRjWY5udSKu4C3NKATAFjJLfJrvyExi7rrNp0NGOcrVq8wkyZ207HqatYcYLA=
+X-Received: by 2002:a05:6512:b26:b0:53d:efc7:70c6 with SMTP id
+ 2adb3069b0e04-53df00d9d1fmr2573513e87.30.1732712083923; Wed, 27 Nov 2024
+ 04:54:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241120120336.1063979-1-niklas.soderlund+renesas@ragnatech.se> <20241120120336.1063979-3-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20241120120336.1063979-3-niklas.soderlund+renesas@ragnatech.se>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 27 Nov 2024 13:37:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUX9X-TA7O0xcEF1ktaF+7sbPC14dMsYvuqyCGiyTPq-Q@mail.gmail.com>
-Message-ID: <CAMuHMdUX9X-TA7O0xcEF1ktaF+7sbPC14dMsYvuqyCGiyTPq-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: rcar_gen3: Reuse logic to read fuses on
- Gen3 and Gen4
-To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20241127115107.11549-1-quic_janathot@quicinc.com>
+In-Reply-To: <20241127115107.11549-1-quic_janathot@quicinc.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 27 Nov 2024 13:54:32 +0100
+Message-ID: <CAMRc=McvKvHy8sxhHE2-5LO7-MAjtPMLks6x9bufTjmpG4cT6Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] Enable Bluetooth on qcs6490-rb3gen2 board
+To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, quic_mohamull@quicinc.com, 
+	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Niklas,
-
-On Wed, Nov 20, 2024 at 1:04=E2=80=AFPM Niklas S=C3=B6derlund
-<niklas.soderlund+renesas@ragnatech.se> wrote:
-> The hardware calibration is fused on some, but not all, Gen3 and Gen4
-> boards. The calibrations values are the same on both generations but
-> located at different register offsets.
+On Wed, Nov 27, 2024 at 12:51=E2=80=AFPM Janaki Ramaiah Thota
+<quic_janathot@quicinc.com> wrote:
 >
-> Instead of having duplicated logic to read the and store the values
-> create a helper function to do the reading and just feed it with the
-> correct register addresses for each generation,
+> - Patch 1/2 enable WCN6750 Bluetooth node for qcs6490-rb3gen2 board
+>   along with onchip PMU.
+> - Patch 2/2 add qcom,wcn6750-pmu bindings.
 >
-> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
-se>
-
-Thanks for your patch!
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Still, some suggestions for improvement below...
-
-> --- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-> @@ -253,60 +253,43 @@ static irqreturn_t rcar_gen3_thermal_irq(int irq, v=
-oid *data)
->         return IRQ_HANDLED;
->  }
+> Janaki Ramaiah Thota (2):
+>   arm64: dts: qcom: qcs6490-rb3gen2: enable Bluetooth
+>   regulator: dt-bindings: qcom,qca6390-pmu: document WCN6750
 >
-> +static void rcar_gen3_thermal_fetch_fuses(struct rcar_gen3_thermal_priv =
-*priv,
-> +                                         u32 ptat0, u32 ptat1, u32 ptat2=
-,
-
-Perhaps ptat[1-3], to match REG_GEN3_PTAT[1-3]?
-
-> +                                         u32 thcode0, u32 thcode1, u32 t=
-hcode2,
-> +                                         u32 mask)
-> +{
-
->  static void rcar_gen3_thermal_read_fuses_gen3(struct rcar_gen3_thermal_p=
-riv *priv)
->  {
-
-[...]
-
-> +       rcar_gen3_thermal_fetch_fuses(priv,
-> +                                     REG_GEN3_PTAT1, REG_GEN3_PTAT2, REG=
-_GEN3_PTAT3,
-> +                                     REG_GEN3_THCODE1, REG_GEN3_THCODE2,=
- REG_GEN3_THCODE3,
-> +                                     GEN3_FUSE_MASK);
->  }
+>  .../bindings/regulator/qcom,qca6390-pmu.yaml  |  27 +++
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  | 174 +++++++++++++++++-
+>  drivers/bluetooth/hci_qca.c                   |   2 +-
+>  drivers/power/sequencing/pwrseq-qcom-wcn.c    |  22 +++
+>  4 files changed, 223 insertions(+), 2 deletions(-)
 >
->  static void rcar_gen3_thermal_read_fuses_gen4(struct rcar_gen3_thermal_p=
-riv *priv)
->  {
+> --
 
-[...]
+Is there no associated change to the pwrseq-qcom-wcn driver?
 
-> +       rcar_gen3_thermal_fetch_fuses(priv,
-> +                                     REG_GEN4_THSFMON16, REG_GEN4_THSFMO=
-N17, REG_GEN4_THSFMON15,
-> +                                     REG_GEN4_THSFMON01, REG_GEN4_THSFMO=
-N02, REG_GEN4_THSFMON00,
-> +                                     GEN4_FUSE_MASK);
->  }
->
->  static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *=
-priv)
-
-As both rcar_gen3_thermal_read_fuses_gen[34] became wrappers around
-rcar_gen3_thermal_fetch_fuses(), what about parameterizing by data
-instead of by code? I.e. replace the rcar_thermal_info.read_fuse()
-function pointer by a pointer to a structure?
-
-    struct rcar_gen3_thermal_fuse_info {
-            u32 ptat[3];
-            u32 thcode[3];
-            u32 mask;
-    };
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Bart
 
