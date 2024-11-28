@@ -1,79 +1,116 @@
-Return-Path: <linux-pm+bounces-18213-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18214-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1160A9DBC6E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 20:19:47 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CA5D9DBD47
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 22:18:35 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 663FBB220BC
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 19:19:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDFB41649A1
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 21:18:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BAD71C1F1C;
-	Thu, 28 Nov 2024 19:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257511C3033;
+	Thu, 28 Nov 2024 21:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rylO2s/j"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lbLAEJpG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F50142E9F;
-	Thu, 28 Nov 2024 19:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C00513DDB5;
+	Thu, 28 Nov 2024 21:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732821579; cv=none; b=ANrpR4Egy5CGKSEbpiAxqlqmWFc0Gq3UPyznjOqOxKdZ0ph08Sa8OIrMXNcrqe4n3YeXueKnxf23kHE5tR4Jt19aco53bu4Bffn/e/d0cBSj545Vz/5N2rklhV5xzTd/XNU0ESO2bwOQ5oiD3nj0gg/MM3E3MQ3gJ4EWywjh8kw=
+	t=1732828712; cv=none; b=X5/4jxYCsUck1BCdQk9GjTSpNDTJOiz9fAamO1V05pLhscHnkhxcCRDEeVQrn3gHMSPvtJTIfRyzLU7t1c5Mo6h0qG0ejw/+GqixUuaQrx3eQ1JmhD9TLGFolZ87QHgdVlLavHLPsJhrA27NmfqXQ6RoyPdNET0FJ9wqO7QIp2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732821579; c=relaxed/simple;
-	bh=QOLi7nm3hrTWKr8+MCs6wPe6Peg2QaFLYz5OGw4L7Nk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=nXtlv5I2mJPx5tdn0ql1W546v2BdlHdmwATMnPUGSGp1lLxx56y+h0MSfeKBXEpNPRWzLJ714CIgyCcxjivJc4oxZiyYcyPytUD1+3Q7kka9jyWTtzVLRnvmQyXdkdBHYfjJOo1xBEPebbWxYGgh03kapQiMeA/0AOXSfupQl0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rylO2s/j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B68C4CECE;
-	Thu, 28 Nov 2024 19:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732821578;
-	bh=QOLi7nm3hrTWKr8+MCs6wPe6Peg2QaFLYz5OGw4L7Nk=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=rylO2s/jiySAdGg9Q4eplpkNSOMez9QPZanROSrgZpKcK6o1gM4pvGkZ+f1GRezyt
-	 tvaHbwihMJkl6Yq3S5D0mxrtUjuXA4sm6cgw24n9EQm5AcKAUteYXXLbF0bchobyXp
-	 r2OEFqttByl5X+gzZS+me/tgBxQ4DId7MA7WnR+8fGGKCk7z6xhgWQhcqa+Q7hnAFY
-	 T+pexFDAeFKcypVzIyf4JzGL0bfsWruUGntRgbBOGPJud6nO6X/4Vy0kZmWRXDaC3a
-	 tVOvX/Gx3MgjQiykW6Euk9EQRLMTLl3E0DtwZLFxDNOZK9VqixYg/S+MsPP5C/NKKO
-	 ThiHR5/2nDSEg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CE2380A944;
-	Thu, 28 Nov 2024 19:19:53 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 6.13
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <rxg72umwpo3ltl4inbidhmgqpzxmqluk4wr6irmhwuo7ukpmnc@liqfo2svz3in>
-References: <rxg72umwpo3ltl4inbidhmgqpzxmqluk4wr6irmhwuo7ukpmnc@liqfo2svz3in>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <rxg72umwpo3ltl4inbidhmgqpzxmqluk4wr6irmhwuo7ukpmnc@liqfo2svz3in>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.13
-X-PR-Tracked-Commit-Id: b6d445f6724deda3fd87fa33358009d947a64c5d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 448ecd5771e255629bef0fb16c9b78c4bbd7bd56
-Message-Id: <173282159206.1826869.16816433115140337802.pr-tracker-bot@kernel.org>
-Date: Thu, 28 Nov 2024 19:19:52 +0000
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+	s=arc-20240116; t=1732828712; c=relaxed/simple;
+	bh=JR9HIv6Zf/V0Hie08szqxWG0je4RV0/U+w5I+NNf6Yk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IOuSlUdOCk00tiYdR/zAeSlQqGqd9jAzOU76CqBpiaq4uqWixPA1H5AhXel2sJ3EhaL1HKwHSV+dQDPBFsXRELRY7fQsET4P2bY26Pj/MRU5UNziwkMo5DUU4+CTngSyzhKOggQNkHHnAkzld7bf5gsNlfZrnBXWms/5jfCbO7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lbLAEJpG; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732828709; x=1764364709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JR9HIv6Zf/V0Hie08szqxWG0je4RV0/U+w5I+NNf6Yk=;
+  b=lbLAEJpGS/saMPHmtSLJ1yHjIOxTApMW1o/GRkrUFZhZM7RQmBDq5PoQ
+   0FwQwU/CFdeIE/n3DzpdTnpWaP2NL0m79ReQUxovguIZyCqicptVhRYc6
+   F6TjrCVBQGwK9D5t4rXBmC44x7uJAqiihQl42NteApbLGxbvhrzsTvwu6
+   T1T+YGjxSHqdjqoE9WQzZVoFW6FhFpVdlzGEcrVLCPRd0DvAYSjvCNLdB
+   ICdU2uQ6GVsD4aqKLeSfG3GZdQ3SIqUzkPBLnTDlMRooVrT7xLYxTY9sn
+   0L+6/ultRsDTE0JLBh1yNNiK6ifTJ2w5auojV4x+vh5XfMlGiozZsWZea
+   A==;
+X-CSE-ConnectionGUID: KPM9uGOjT/KaExYAO7pMXw==
+X-CSE-MsgGUID: ZwFw3yHcT7Sn5pTSt9PXgA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11270"; a="36999180"
+X-IronPort-AV: E=Sophos;i="6.12,193,1728975600"; 
+   d="scan'208";a="36999180"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 13:18:28 -0800
+X-CSE-ConnectionGUID: 6CABNMLSR9inCOZZwNzSnQ==
+X-CSE-MsgGUID: W2DK+mzwT125fBiIjGFPfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,193,1728975600"; 
+   d="scan'208";a="129819821"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 28 Nov 2024 13:18:25 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tGlu3-000A3d-1M;
+	Thu, 28 Nov 2024 21:18:23 +0000
+Date: Fri, 29 Nov 2024 05:17:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+	peterz@infradead.org, dave.hansen@linux.intel.com,
+	gautham.shenoy@amd.com, tglx@linutronix.de, len.brown@intel.com,
+	artem.bityutskiy@linux.intel.com, patryk.wlazlyn@linux.intel.com
+Subject: Re: [PATCH v6 2/4] ACPI: processor_idle: Add FFH state handling
+Message-ID: <202411290550.AphAcYyW-lkp@intel.com>
+References: <20241127161518.432616-3-patryk.wlazlyn@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241127161518.432616-3-patryk.wlazlyn@linux.intel.com>
 
-The pull request you sent on Thu, 28 Nov 2024 00:05:37 +0100:
+Hi Patryk,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.13
+kernel test robot noticed the following build warnings:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/448ecd5771e255629bef0fb16c9b78c4bbd7bd56
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.12 next-20241128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thank you!
+url:    https://github.com/intel-lab-lkp/linux/commits/Patryk-Wlazlyn/x86-smp-Allow-calling-mwait_play_dead-with-an-arbitrary-hint/20241128-113851
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20241127161518.432616-3-patryk.wlazlyn%40linux.intel.com
+patch subject: [PATCH v6 2/4] ACPI: processor_idle: Add FFH state handling
+config: x86_64-randconfig-074-20241128 (https://download.01.org/0day-ci/archive/20241129/202411290550.AphAcYyW-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241129/202411290550.AphAcYyW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411290550.AphAcYyW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: acpi_processor_ffh_play_dead+0xb9: mwait_play_dead_with_hint() is missing a __noreturn annotation
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
