@@ -1,221 +1,147 @@
-Return-Path: <linux-pm+bounces-18211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F9B99DBB0B
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 17:11:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86E3A9DBBD5
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 18:38:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0C92B21252
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 16:11:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D0CA281E26
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 17:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2571BD9F2;
-	Thu, 28 Nov 2024 16:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97EDC1C1758;
+	Thu, 28 Nov 2024 17:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="oj7sLfEs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DAmaXley"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5774F3232;
-	Thu, 28 Nov 2024 16:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEDE1C173C
+	for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2024 17:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732810311; cv=none; b=Sqiv6kPNrCZ/fFaXfnmBjNRAwC4DB9euiuFVlfNyIv3a8fGHqHF1KRzeMvu9RhQaXlITTaU8mSReZ665L1Ow3JHe8rG2ppVZWia2q84VJ7LOV4sYT3nIXWRvWuzGH8knfJbNggQvEuvei29vggdMRrJdl17CEq2t0AkJZoq2ZO4=
+	t=1732815497; cv=none; b=aOnkuI2HCMY9xDgT/BDzW7kBLy59LIObEIM24dazWtFUzB5S2mDBIBKrGKo8LK5Khn3gjAjF0qxNlN7XgPPsMsDYbI2wbtMPJXVHPaGjaZwclmadlN95s1Z6BskKTRIlPh+rLfbW2M0zxoXTdIwmrP/qJeVDPiwf7E+fA3mmbeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732810311; c=relaxed/simple;
-	bh=hk8fpGiKL3O9Sh34djHrjeiSXuSViWedgIE4zr39bXI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dkbac5zC6KkK9hSJwyy09Ug+uLkrbYdBd0yxeAEEPvSubUyrgtGUIghZoUUxGwm4rexhTdVMrw1FSsQNCnLD/NhFuRxD6CrkPrMqPM+WWMM3Gya7ZPLV0iLWznNHu7dSmnfTKyU7L953qvxFLshx+Al80jCHk++9V6h+FZtgMgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=oj7sLfEs; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=fEbXQkB4IJYXc22/B7PWcP9nVPx5MuixvHf7IuMVJrg=; b=oj7sLfEs8oHFPkrx
-	cah6DeKryAR3itpdcsZ4mcsKq1FrI+IbxK6S1XfOrpdGu+o1Ku6YYJ3jbM+IqkW3ieeiHyVukbsYo
-	CQCIEQzhYDF8pXNI1cIZ4wHfFvbAnPRTCR65UcQ526G5b8BgNEw76d61mbeyWKSdGLVBfwx77cXp6
-	u9hgZ1VEJu96JfwVPdVQQntt8BZzC+R6uAEbvpqnFgTFPEZ4uN/bYQ3h8WN9nozX58zk+Y96n1jSO
-	/nJEBJP0v5BS/6Vz+BhjuWzlqWTOLlTg/0wYvbdoPlQjzJkKJzRnfTi/KVqDaeo1fsD1XkIYnHC46
-	oOV3bCcsFP3kKlfm6A==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1tGh7E-002Qml-1t;
-	Thu, 28 Nov 2024 16:11:40 +0000
-Date: Thu, 28 Nov 2024 16:11:40 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-	cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM / devfreq: Remove unused
- devm_devfreq_(un)register_notifier
-Message-ID: <Z0iWPCzjv9YQ4kO_@gallifrey>
-References: <20241028021344.477984-1-linux@treblig.org>
+	s=arc-20240116; t=1732815497; c=relaxed/simple;
+	bh=7Wg7RpuZOM/HyrjX0bWWh7XXJ/yOw0T82VzA/PUnTxw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qLwXSIExMfYVJ6KSfPOFMrIgIEYFQBCyemdZUjUjBg585EqBvnmrjKRnwBFFPMNHIRvdKFkK8rnewq84YBivz3k1QezRsdFl0Hilq/lNND7ZsT8hl0UqSkIhY6y1KLnIL6LZw2OpXzNYfM0sPRoyoDuwpHm+mNvu89oRLyRALTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DAmaXley; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-434a14d6bf4so9568945e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2024 09:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732815494; x=1733420294; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=10gOONKYd0Gk3rZPYV0aoJyh1TGfB9PFutKnizLk6Y4=;
+        b=DAmaXleyI2w5Pod442rCsFxEJe2rHFKbx6/Iyj4/XGok5Yq/jKCjntGw12ynFMS3n4
+         T8iStoSQH18DMLcWWOEhECChaZ/ITXGhw0/bZY/aTxwtDmd7g2szUxTREken1V+wjiGA
+         EkOPZKATsV1Nuy0Yy0rKPbM0sdiazZoj5SigVGJnur/Hpdhl/8VotdUBHsJzqWZDExWA
+         c9atkGBBBY2384aFg+GK1VYST97pUmNAtj4O9YH6hrgMzA+Ej7LFgzglzENnNNEiHn8d
+         6cqQOVPfxpsi/d95U0kg/S0NAGiJc8QjVK4jGpdk1XVPM9E900SsWU7B/kdB4E2ImvkE
+         ey/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732815494; x=1733420294;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=10gOONKYd0Gk3rZPYV0aoJyh1TGfB9PFutKnizLk6Y4=;
+        b=pEQ3OKCfraOkt+RXXuCaP53C+K0EkNSvnP8jfh57lXN/XHbRBkv04tkbl/2vHYLt/Y
+         +gBOh0i6k11RqT48jsE5j5ao4waqZ1PRg77HM+AMI/9ix4hrM8xbf20JQPGBn6Dtj5+c
+         qjqXhbmxcdKXn7BxmkCeIeaFgssT+olmXDOmKNg0LDv43s5zPGbGCn2Cm38veT3Def24
+         7uGka4I2TQiwCzAiJgl9EYOQT1p22p98LBs56pMj5Dr6KKKiaD/KRikwH5KfmUm6HtZg
+         qCVvnOnzlR8/0YE6a+yBRUxfgg7splzUalobIHGIqxXkrefPwzlQ9w/17p1lnHVX9+VY
+         0zRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKgi+AQ/o6ej4u1EQhLk8+WjvcyNXw8GHXDIxEDN2Ngti6x7hCC/IZ4d8h4Xd2PxyRitr3wVAcTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKCJfqwPxqYBRVV9o2d+ZTGvPoDdt2V+Y7354daXtBhsy5rEL7
+	A1FBcaotoAiK58FQa4gS56eVWRzsM30tZHdPD5rjgHX+vxVCxuyYIxt3wTwvSc0=
+X-Gm-Gg: ASbGnctiBIlPBgilWWnBlkSbMbNDKUvdw0J7reXrqutf5YDpDWObSY6ChdE+/pSjncL
+	bNhuG0ama6PH6niD3HC9WoNocWfWzXvq88EkVedGXXEi1HnCMsANJaxw4aZbhGFSoTWNc9oV3sl
+	/JEMVjQHW2bRn2BiiNfSuFwbtWHUMN7+yrWprwwQCYjomuX49ywDF5iLFwDCjsxTiUHQCISsPCC
+	JBprLXyyd8rPKG0kAUXvzM1WBZCoxGPKcaWEifBW5SPZgaYr0KQzdGZ4Gp8zQZKzAlDIja3RtZ+
+	+/pY6DSnUdJqeQ==
+X-Google-Smtp-Source: AGHT+IGyiJDbepmBMbDSY4970QLlGU0+MdW25rYKAMlGZRbsCkkVDjf5WuEnqq8LxT5+l+e+vpF+ww==
+X-Received: by 2002:a05:600c:4447:b0:42c:b9c8:2bb0 with SMTP id 5b1f17b1804b1-434a9dbaed6mr78728755e9.4.1732815494001;
+        Thu, 28 Nov 2024 09:38:14 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-434b0dbf95fsm28022775e9.15.2024.11.28.09.38.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Nov 2024 09:38:13 -0800 (PST)
+Message-ID: <c1c14ada-c0bf-4353-a8ba-7b3a2fb6d971@linaro.org>
+Date: Thu, 28 Nov 2024 18:38:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20241028021344.477984-1-linux@treblig.org>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
-X-Uptime: 16:11:27 up 204 days,  3:25,  1 user,  load average: 0.02, 0.03,
- 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] thermal: multi-sensor aggregation support
+To: Nicolas Pitre <nico@fluxnic.net>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Alexandre Bailon <abailon@baylibre.com>
+References: <20241112052211.3087348-1-nico@fluxnic.net>
+ <s120q967-4r69-pps2-1qo3-9952r9173125@syhkavp.arg>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <s120q967-4r69-pps2-1qo3-9952r9173125@syhkavp.arg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-* linux@treblig.org (linux@treblig.org) wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> 
-> devm_devfreq_register_notifier() and devm_devfreq_unregister_notifier()
-> have been unused since 2019's
-> commit 0ef7c7cce43f ("PM / devfreq: passive: Use non-devm notifiers")
-> 
-> Remove them, and the helpers they used.
-> 
-> Note, devm_devfreq_register_notifier() is still used as an example
-> in Documentation/doc-guide/contributing.rst but that's just
-> an example of an old doc bug rather than anything about the function
-> itself.
-> 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
-Ping.
+Hi Nicolas,
 
-Thanks,
+On 27/11/2024 23:05, Nicolas Pitre wrote:
+> Gentle ping, feedback appreciated.
 
-Dave
-> ---
->  drivers/devfreq/devfreq.c | 67 ---------------------------------------
->  include/linux/devfreq.h   | 23 --------------
->  2 files changed, 90 deletions(-)
+I'm currently reviewing the series.
+
+We have been discussing this feature since a long time and multiple 
+times at different plumbers without any progress since then. So thank 
+you for proposing an implementation of this feature.
+
+I have some concerns regarding the approach I will raise tomorrow.
+
+Thanks
+
+   -- Daniel
+
+> On Tue, 12 Nov 2024, Nicolas Pitre wrote:
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 98657d3b9435..6c3b241b4458 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -2224,70 +2224,3 @@ int devfreq_unregister_notifier(struct devfreq *devfreq,
->  	return ret;
->  }
->  EXPORT_SYMBOL(devfreq_unregister_notifier);
-> -
-> -struct devfreq_notifier_devres {
-> -	struct devfreq *devfreq;
-> -	struct notifier_block *nb;
-> -	unsigned int list;
-> -};
-> -
-> -static void devm_devfreq_notifier_release(struct device *dev, void *res)
-> -{
-> -	struct devfreq_notifier_devres *this = res;
-> -
-> -	devfreq_unregister_notifier(this->devfreq, this->nb, this->list);
-> -}
-> -
-> -/**
-> - * devm_devfreq_register_notifier()
-> - *	- Resource-managed devfreq_register_notifier()
-> - * @dev:	The devfreq user device. (parent of devfreq)
-> - * @devfreq:	The devfreq object.
-> - * @nb:		The notifier block to be unregistered.
-> - * @list:	DEVFREQ_TRANSITION_NOTIFIER.
-> - */
-> -int devm_devfreq_register_notifier(struct device *dev,
-> -				struct devfreq *devfreq,
-> -				struct notifier_block *nb,
-> -				unsigned int list)
-> -{
-> -	struct devfreq_notifier_devres *ptr;
-> -	int ret;
-> -
-> -	ptr = devres_alloc(devm_devfreq_notifier_release, sizeof(*ptr),
-> -				GFP_KERNEL);
-> -	if (!ptr)
-> -		return -ENOMEM;
-> -
-> -	ret = devfreq_register_notifier(devfreq, nb, list);
-> -	if (ret) {
-> -		devres_free(ptr);
-> -		return ret;
-> -	}
-> -
-> -	ptr->devfreq = devfreq;
-> -	ptr->nb = nb;
-> -	ptr->list = list;
-> -	devres_add(dev, ptr);
-> -
-> -	return 0;
-> -}
-> -EXPORT_SYMBOL(devm_devfreq_register_notifier);
-> -
-> -/**
-> - * devm_devfreq_unregister_notifier()
-> - *	- Resource-managed devfreq_unregister_notifier()
-> - * @dev:	The devfreq user device. (parent of devfreq)
-> - * @devfreq:	The devfreq object.
-> - * @nb:		The notifier block to be unregistered.
-> - * @list:	DEVFREQ_TRANSITION_NOTIFIER.
-> - */
-> -void devm_devfreq_unregister_notifier(struct device *dev,
-> -				      struct devfreq *devfreq,
-> -				      struct notifier_block *nb,
-> -				      unsigned int list)
-> -{
-> -	WARN_ON(devres_release(dev, devm_devfreq_notifier_release,
-> -			       devm_devfreq_dev_match, devfreq));
-> -}
-> -EXPORT_SYMBOL(devm_devfreq_unregister_notifier);
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index d312ffbac4dd..ea161657ebc6 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -263,14 +263,6 @@ int devfreq_register_notifier(struct devfreq *devfreq,
->  int devfreq_unregister_notifier(struct devfreq *devfreq,
->  				struct notifier_block *nb,
->  				unsigned int list);
-> -int devm_devfreq_register_notifier(struct device *dev,
-> -				struct devfreq *devfreq,
-> -				struct notifier_block *nb,
-> -				unsigned int list);
-> -void devm_devfreq_unregister_notifier(struct device *dev,
-> -				struct devfreq *devfreq,
-> -				struct notifier_block *nb,
-> -				unsigned int list);
->  struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node);
->  struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
->  				const char *phandle_name, int index);
-> @@ -420,21 +412,6 @@ static inline int devfreq_unregister_notifier(struct devfreq *devfreq,
->  	return 0;
->  }
->  
-> -static inline int devm_devfreq_register_notifier(struct device *dev,
-> -					struct devfreq *devfreq,
-> -					struct notifier_block *nb,
-> -					unsigned int list)
-> -{
-> -	return 0;
-> -}
-> -
-> -static inline void devm_devfreq_unregister_notifier(struct device *dev,
-> -					struct devfreq *devfreq,
-> -					struct notifier_block *nb,
-> -					unsigned int list)
-> -{
-> -}
-> -
->  static inline struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)
->  {
->  	return ERR_PTR(-ENODEV);
-> -- 
-> 2.47.0
-> 
+>> This series provides support for thermal aggregation of multiple sensors.
+>> The "one sensor per zone" model is preserved for all its advantages.
+>> Aggregation is performed via the creation of a special zone whose purpose
+>> consists in aggregating its associated primary zones using a weighted
+>> average.
+>>
+>> Motivation for this work stems from use cases where multiple sensors are
+>> contained within the same performance domain. In such case it is preferable
+>> to apply thermal mitigation while considering all such sensors as a whole.
+>>
+>> Previous incarnation by Alexandre Bailon can be found here:
+>> https://patchwork.kernel.org/project/linux-pm/cover/20240613132410.161663-1-abailon@baylibre.com/
+>>
+>> diffstat:
+>>   .../bindings/thermal/thermal-zones.yaml       |   5 +-
+>>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 210 +-----
+>>   drivers/thermal/Kconfig                       |  27 +
+>>   drivers/thermal/thermal_core.c                | 643 ++++++++++++++++++
+>>   drivers/thermal/thermal_core.h                |  14 +
+>>   drivers/thermal/thermal_of.c                  |  86 ++-
+>>   6 files changed, 780 insertions(+), 205 deletions(-)
+>>
+
+
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
