@@ -1,119 +1,93 @@
-Return-Path: <linux-pm+bounces-18204-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18205-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73EA39DB5B6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 11:29:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F0889DB5BC
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 11:30:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9EF5B291FD
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 10:28:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60179B29C38
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 10:28:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57BE919049B;
-	Thu, 28 Nov 2024 10:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WGJnH+Mi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B931917E4;
+	Thu, 28 Nov 2024 10:28:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [195.16.41.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A49157493
-	for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2024 10:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3809A15383C;
+	Thu, 28 Nov 2024 10:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.16.41.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732789700; cv=none; b=dquv8I9scK3CKQQFJJMcw1/dOjwxRLgGnkO1LOnoUrUESowwuecF9C5Y+Z1ZpKoURyVOPBcz/6oqy9aR3CxklfVLgV6hFCpv0FKCssMwXYxGRX6aZ+DmnpNgyppCiSdplz870k1PLsJXc6w940n3tFifKOHN7Y0KtYCMaJld0BQ=
+	t=1732789717; cv=none; b=GpAm572mUh/ZIOuqGpj13T56xn7s0vtOW/LCfhOmFTh8K07upLlLKqExyWHBEarxe/feQzKPmKrRt8teiPj+wC6SvAstQTP3BgQKs9Eh8nCpUCf0GGefxx8BXJriFVg5P72d2nivRVzFr+Y4L1KSdkY56PhJqsddmCPD83t9hCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732789700; c=relaxed/simple;
-	bh=xBez7rpBLjMzyjYwf7HZa9dlrkgJrg+yAQKT8Au5N6I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rsVQ3sM1sOSehpbVv5pn6/KKpXalRssHY8SyTKyuqROxlsLO3NoC5V9K45UJ3PtvcmDAeZHJb4jXNyx5ZjNxoDL7w4M42KzfizLK3xq8g/HR7JtW9kHRsVncAxEvgH3OyR3yZWyJWIUiizypQof8CJD9Rs/7Gs408xDaRTkmg4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WGJnH+Mi; arc=none smtp.client-ip=209.85.217.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4aef7d0cc2dso175427137.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2024 02:28:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732789698; x=1733394498; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CKy9NFeqlqcw1t7BKiitB8spU33tefaJ6SaLKo921pw=;
-        b=WGJnH+MiNnbq8GdTtyvTArrp29CWeieCAwYA18o+6AxJcUfuCp9Joto2Ey0eXVB5Xe
-         40Gxi+4YKGtbmw1KJ7zp3U9PSuLRHyIYMbSoUC7mOv2M9QYFUrQrwnf9Lm/jWVUTCk1p
-         G1W1/HI/ImWEv97USJwNtRVnTlIiWxiL3DN/1+DQNGf2OGva7hzYmlNDBKQCcahkpc4z
-         mSlN7D6qOiDfg8pXslIGbpjpGddCV+med1Lv0hFDhb9h8vKZXHFooZyIuGZa7/Mlq9qt
-         bsbqq1qTtBbGSag8AzMBwqk4i87GIB2UOu+kWVr+VuSStWpdz5vM3A5Vu1fk7JOxCg96
-         nVNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732789698; x=1733394498;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CKy9NFeqlqcw1t7BKiitB8spU33tefaJ6SaLKo921pw=;
-        b=XC7IxL5KE7KkBiAnyGgtkuoiTfn6eqKbXzI+C3+8PTNJCPbNj8JQR139lq6IsSOyb/
-         CsEb/YiurJkk6KehB3ZAFuXsfDv0IEPWk7KpSmq50aaLqD0L/YOt6tWrIVziIq0ezRAs
-         6t3R4IerjXzQXtJqDv5AziAEO6oHcRJmkSv9SxzJx+xFNRx3yzemU9LeKXu1So1EJhyo
-         peXODHEwwr2gtpGTDBJQ85MHyfwIxGQFU+pwew0nCzfCWhcIWX3LLS6tXugaQaJN9Dc8
-         /FELye7TLXWFH3KokcsTRyCw0yuDSQtf5vuCzaj4MlbIRVXq3kveYrhFJ3sBUYudSSmp
-         AFVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdme4Xmk0yTKMecaN6ek//xERqUTpuGzzUyHWKkVsPb08jCf7yMUbmWVpf1jQ9vHxKHYmKcE2yUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxp9G5ouqS/Ahn6mEvATC5eJSEwCxQv1CfZXJfwjKiJPgqhCU/d
-	9pSIQ3F/QG8W4dQMJ2DzRK5MJ/ZozoL21HsF2ySLRau+z6v01uSF1Iq08HpYnHXp9S0Mn5gzKmq
-	FXIzgrLQaKbjEKOyL/oNbQHnXQp4qwB68Zplycg==
-X-Gm-Gg: ASbGncs7qlw2x8tc2JWCvHIQNUdPP3tf0E1/3aOXBy2Ox/RSeKT2T0y9yLuN9NsCdoI
-	v/nhJpQpF7hqLHASjTfw6qwvPug4ugG6mdg==
-X-Google-Smtp-Source: AGHT+IHNjCHSookykhJ0jiELmB8RMX1pmwKtceJGivKe5r9uvyYhkK2Li/fKdNaKGIC1FiwJ9jTRq09+7ToPFKBO6rs=
-X-Received: by 2002:a05:6102:82cc:b0:4af:497f:aaa4 with SMTP id
- ada2fe7eead31-4af497fac19mr5014052137.4.1732789697607; Thu, 28 Nov 2024
- 02:28:17 -0800 (PST)
+	s=arc-20240116; t=1732789717; c=relaxed/simple;
+	bh=A1fyuFy9gsngzEu0z1FTuhaQpjoqcTyIz5KAtOws9TY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DA/EB9JpkEA3hGGD7m0kQwbDBEkN9do4yGCudV5HF3CPoJwwOBf+B2vOjvdTyfc5dH4fTml1hBswJLSFQTJPqSaK2ewFbj5/5edKjYFO+DfJ3gzi/QTv4DqxLw2vlIfUx8+mBfAMvrLoZ4kuwSx9DINooq7hjxqgtNeYcR6J5VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=195.16.41.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
+	by mail-gw02.astralinux.ru (Postfix) with ESMTP id A52F21F9AF;
+	Thu, 28 Nov 2024 13:28:32 +0300 (MSK)
+Received: from new-mail.astralinux.ru (gca-yc-ruca-srv-mail03.astralinux.ru [10.177.185.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
+	Thu, 28 Nov 2024 13:28:32 +0300 (MSK)
+Received: from [10.198.18.73] (unknown [10.198.18.73])
+	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4XzXb15cJcz1gywG;
+	Thu, 28 Nov 2024 13:28:29 +0300 (MSK)
+Message-ID: <fd6c77ab-667f-4368-8be5-63e040c362ad@astralinux.ru>
+Date: Thu, 28 Nov 2024 13:28:21 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYs+2mBz1y2dAzxkj9-oiBJ2Acm1Sf1h2YQ3VmBqj_VX2g@mail.gmail.com>
- <CA+G9fYvh8n=CTCmcCdLViH=o-UXH1Euncn+7YuYkvt5O-k8NMg@mail.gmail.com> <20241125154235.GC2067874@thelio-3990X>
-In-Reply-To: <20241125154235.GC2067874@thelio-3990X>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 28 Nov 2024 15:58:06 +0530
-Message-ID: <CA+G9fYshK6+AuXSnu7c=j+QJ38kN6O6t7B=DdzqQrMN_rGsJhA@mail.gmail.com>
-Subject: Re: pc : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:269) :
- Dragonboard 410c - arm64 - boot failed
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-arm-msm <linux-arm-msm@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Georgi Djakov <djakov@kernel.org>, konradybcio@kernel.org, quic_okukatla@quicinc.com, 
-	quic_rlaggysh@quicinc.com, quic_jjohnson@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.6 0/1] cpufreq: amd-pstate: add check for
+ cpufreq_cpu_get's return value
+Content-Language: ru
+To: stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: lvc-project@linuxtesting.org, Huang Rui <ray.huang@amd.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241106182000.40167-1-abelova@astralinux.ru>
+From: Anastasia Belova <abelova@astralinux.ru>
+In-Reply-To: <20241106182000.40167-1-abelova@astralinux.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Envelope-From: abelova@astralinux.ru
+X-KSMG-AntiSpam-Info: LuaCore: 42 0.3.42 bec10d90a7a48fa5da8c590feab6ebd7732fec6b, {Tracking_from_domain_doesnt_match_to}, new-mail.astralinux.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;astralinux.ru:7.1.1, FromAlignment: s
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiSpam-Lua-Profiles: 189476 [Nov 28 2024]
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Version: 6.1.1.7
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2024/11/28 08:54:00 #26904895
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 1
 
-On Mon, 25 Nov 2024 at 21:12, Nathan Chancellor <nathan@kernel.org> wrote:
+Just a friendly reminder.
+
+On 11/6/24 9:19 PM, Anastasia Belova wrote:
+> NULL-dereference is possible in amd_pstate_adjust_perf in 6.6 stable
+> release.
 >
-> On Mon, Nov 25, 2024 at 08:43:44PM +0530, Naresh Kamboju wrote:
-> > [Small correction]
-> >
-> > On Mon, 25 Nov 2024 at 20:33, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > The arm64 Dragonboard 410c has failed with the Linux next, mainline
-> > > and the Linux stable. Please find boot log and build links.
-> >
-> > This boot regression is noticed only on Dragonboard 845c.
-> > Linux next-20241125 tag.
-> >
-> > Good: next-20241122
-> > Bad: next-20241125
+> The problem has been fixed by the following upstream patch that was adapted
+> to 6.6. The patch couldn't be applied clearly but the changes made are
+> minor.
 >
-> Can you bisect to see what change introduced this?
-
-The bisection did not provide any good results.
-
-I have been tracking these boot failures on db410c and then the boot
-test got passed on next-20241126, next-20241127 and next-20241128.
-
-Boot test history:
------------------
--  https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/history/
-
-- Naresh
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
