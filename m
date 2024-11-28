@@ -1,101 +1,146 @@
-Return-Path: <linux-pm+bounces-18191-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18192-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 505FB9DB306
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 08:12:26 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 636F99DB3D2
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 09:33:21 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03943166700
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 07:12:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 038A8B20C91
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2024 08:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF21A146A62;
-	Thu, 28 Nov 2024 07:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B771F14AD22;
+	Thu, 28 Nov 2024 08:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNFKXpMd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxKBzZjt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B1817C7C;
-	Thu, 28 Nov 2024 07:12:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B932149C7B;
+	Thu, 28 Nov 2024 08:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732777941; cv=none; b=rTvGLXV1rFJTJyWu+8Fem82FNNW8OacJgSDExCJdxu2LmkNEjWAKiZmXhD7WJ4uRXOTqI7cfe+KK7O/6JRA7BypT5baTPulpJ8Z1f5cSWTElbGOFcmpzqo1KLxIhLkb0xborB0cBoNK/0LPQ6Z2/5fugblqWnkAV8OOrmCq1FMw=
+	t=1732782795; cv=none; b=YBv4tMbpF+go6C2aO/g4c4y1v85ynVotyDH/oSwTP8driMBwQcjcl8l+BktXSkutjJkTgi8gvPunrvWi1W1gdFrSKet5VmN83Klj/+DZmnBEjZOMiKNY4d/pwUysjKLoYJuYGmihK2Htks8WOD3zY9D9D8bEnO+3ZZ6goQ5JnC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732777941; c=relaxed/simple;
-	bh=RXztPqWcga+lFf91NyCRDW4b0oQ6s7jySmyXx8o6G5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a15GJ4F+asPFUbrAP63tfW1lKMEWHj2u1yRuxTyULhgBonNruZ8lEvLWLUHyat7S1JvkvV+6Ish8+4EkImLjwCTeiCZlSZmreVj3cc0ksxf3KLsp5PRfQ7YZNTK8benJdpjVYww4zK5NUYYztKT7EdEg0ByErv8hzZv8VLK1shg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNFKXpMd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF01C4CECE;
-	Thu, 28 Nov 2024 07:12:19 +0000 (UTC)
+	s=arc-20240116; t=1732782795; c=relaxed/simple;
+	bh=k6wDS0Aya7nSOBHzHqz6oo4Mn4rCQ1bBs4S8sYU4RzI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=WP5DKhsG8HdUMB+vR+KDJgZZy0Ynwc4REE3Byp5yt+f2IZwDPRxxLWdh24uTwXznaqkP0yg2GglodCUw9U2vHEAf1GqW2suIF/TwbmGjLCW5wvJ/WMLUtlewCwgwHy+SMQqfz5qbp9FL4iGskznubR7YjkYMfFShjSVbJDgv9LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxKBzZjt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D869EC4CED3;
+	Thu, 28 Nov 2024 08:33:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732777940;
-	bh=RXztPqWcga+lFf91NyCRDW4b0oQ6s7jySmyXx8o6G5s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cNFKXpMdIRcHSTu+UGqT6Mzpd1ARVvK1MtQnUHDa+kEvsfZbxkreJFEQEHt+Ze5fo
-	 WF38+ZCYkPXpIDB2VM4ttbv7+cQ+78aAtzideMiY4acnLoeoyORO68IRaLu35+QoLE
-	 QLPTKYrmr8IEVDnAzCM+8spJ7QLdhctrQ6+MUTfI0UlQLUiijhvYZme96KDZmJ4/hZ
-	 dCP/N6hun2bpILdj9vizf0dO2EAiCbIAlh8BYJYTRJcPG2ZkC+OYHicpvTdBeDAHG1
-	 QDtfYxWdeLuvcyVsGlAG+ipi9nAiw4zDfu5R6MrSkYV5XcO7A4GrMAEd3jzHz6WYSL
-	 jmK7/Qm+WL2WQ==
-Date: Thu, 28 Nov 2024 08:12:16 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>, quic_mohamull@quicinc.com, 
-	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] regulator: dt-bindings: qcom,qca6390-pmu:
- document WCN6750
-Message-ID: <725gjpoubhbexpah5uch7rgsozgeb4mjc662idf7rmoe2rish5@uar366jby3qm>
-References: <20241127115107.11549-1-quic_janathot@quicinc.com>
- <20241127115107.11549-3-quic_janathot@quicinc.com>
+	s=k20201202; t=1732782795;
+	bh=k6wDS0Aya7nSOBHzHqz6oo4Mn4rCQ1bBs4S8sYU4RzI=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=MxKBzZjtVh5yTH0CA8ItcZaZW1n1kgQ8uJ7bqRYblEsEV6OO2uZyDnMG4SrU4anU+
+	 k/OmsCVTW3ITa2/POXKZLnzW6iRI0HQRP4lFFdfbuaM90aGCTOgeOwTbHxbchqs7KF
+	 tXITBH0r6cvQoUl+uEAh3C8amaCpOh+QQjrRDHaoKDbAMzbINYncpyeoeg8LEpenBJ
+	 xCdjXp4/CYsNru6gPXKXw+aCceaHkDOga7fQH9F1tV1GnZ9ZPSbHkT1xHT/xUPOUrB
+	 nJwc3cJy/b5qkCdW6m1rr4i5Km7IOUDxpb0fyN+r4+XU9cAPKtHk58GU5rH+tkYBQ3
+	 WD7YEPqN54UBw==
+Message-ID: <68e7f5cf-ff62-4184-8bf1-6338dc44fd2d@kernel.org>
+Date: Thu, 28 Nov 2024 09:33:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241127115107.11549-3-quic_janathot@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Add STC3117 Fuel Gauge
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>, sre@kernel.org,
+ krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
+Cc: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241127151953.29550-1-bhavin.sharma@siliconsignals.io>
+ <20241127151953.29550-2-bhavin.sharma@siliconsignals.io>
+ <3eb06a70-cafb-4d89-aa68-524ec91e3850@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <3eb06a70-cafb-4d89-aa68-524ec91e3850@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 27, 2024 at 05:21:07PM +0530, Janaki Ramaiah Thota wrote:
-> Add description of the PMU node for the WCN6750 module.
+On 27/11/2024 19:22, Krzysztof Kozlowski wrote:
+> On 27/11/2024 16:19, Bhavin Sharma wrote:
+>> +
+>> +allOf:
+>> +  - $ref: power-supply.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - st,stc3117
+>> +
+>> +  reg:
+>> +    maxItems: 1
 > 
-> Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-> ---
->  .../bindings/regulator/qcom,qca6390-pmu.yaml  | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
+> I asked you some questions on v2, then on v3 and no responses.
+> 
+> You implemented some changes but still did not answer my question. I am
+> not going to ask again, obviously expecting different result on the same
+> makes little sense.
+> 
+> No ack from me.
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+You responded privately - I am not going to do any talks under NDA. I
+also do not provide some sort of personal support service. Keep *ALL*
+discussions public.
 
----
+Explaining what you asked:
 
-<form letter>
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, you can skip it (please do
-not feel offended by me posting it here - no bad intentions intended).
-If you do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-</form letter>
+Some of these are from monitored-battery. Sense resistor should be
+separate property. But different question is about missing resources,
+like supplies (VCC) and interrupts. Just look at datasheet.
 
 Best regards,
 Krzysztof
-
 
