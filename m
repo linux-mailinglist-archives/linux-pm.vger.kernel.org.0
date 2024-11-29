@@ -1,343 +1,208 @@
-Return-Path: <linux-pm+bounces-18215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18216-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EFBD9DBE41
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 01:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D47289DBE5A
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 02:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1C5CB20E34
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 00:38:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE665B21BDA
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 01:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAC98BF8;
-	Fri, 29 Nov 2024 00:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2CEB8BF8;
+	Fri, 29 Nov 2024 01:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="g7gk+Rjm"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="UqlRpglx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2068.outbound.protection.outlook.com [40.107.20.68])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2049.outbound.protection.outlook.com [40.107.22.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5013211C;
-	Fri, 29 Nov 2024 00:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C3222F11;
+	Fri, 29 Nov 2024 01:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732840731; cv=fail; b=aVwY4LakZAJD3lFapano0SscOMngORzk+0sJw1sI5hkhCj5tH0nJYr81AtWZpeqd7WPdWIbZWKAxDKJeFKKQINUrW9lbGmdA++HOE/RvcdmFjWrPWRv3yt3TUjmB/r9EfthQYoSJPAICBAYkU5OSGtLucoNMbjgy8958GqiRrsw=
+	t=1732843238; cv=fail; b=FbZ4E1E1xP/VIa1xZhTP76g/c2iktzIEnsCiZtR2NOidkq4QxbZS54+XsQ6nFgZbw12KQlfq+ff3sN14+J52Ib843YTLHJmAJDDcM+JteHYM1o/vjlnDe1FMZUck8ouZr2sdzRse9IJoGSlFClmxvS9q/nM6W1kCGjB35LbLbL0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732840731; c=relaxed/simple;
-	bh=uQgpmd9XygN16vJui3j5hwSCLazYjRlCwiH45Qh70/U=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=raWUmKoG+uszAEZhGqvLfOvW9PquOwCUeMRzVzXemjgb7n8zupBv4ijpfr4zk+QstI6UdrO4lDMJyLFcXlNPAmpaqdSRRF+7cou5T8DoTbA9a31hqmEhXJ6b2PMNCqN6kadXZWJcDUUZYMW5fZANeASA+SAGx4hYDOLcUBrDSUM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=g7gk+Rjm; arc=fail smtp.client-ip=40.107.20.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1732843238; c=relaxed/simple;
+	bh=2h6/+doDSMCE0YKKFc9lVRvOIjj4Xscxpbbm+PdJgag=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=bBYz45tRpnmZwjPdogQB6jq7K5C1R7RNPtHDjtiKHrXFIINbVTsZDCik/FwD49XdUU3cskzbn8aSytnRjdIhQZYLWXMw/PP5B1839Nj3TiLt3jHaJ5pW8pyMrSLRXxK1hgBuuhyOhk2zWWBGfpwu1lVvlG0xl7W6INvAAYj2Dig=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=UqlRpglx; arc=fail smtp.client-ip=40.107.22.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wtWOPtcnIdaZcZfS4D8Jl70X0BDU/N+Ho9cNYED4KmZTId2WK1VjFt8eGoo5uCo57XP7E0b94OJruQJIFQEDDaJ6FhQ5LBPER9sSi6QksjOxrAYTSuJotx2tsfPvrdup1YKZHroqdbugHTKu18tRTqraRgwrYxw91yIPQwKcCLY5oZVbDODV1LdKVUnUHe02WeeFG1RzDd2QtoRbtgpesndwa+A021KtqiosvCdroxmRndUKOVasmtq8QuXLpm3CMR+9OYXBshoPQyyPb40nscWgzmHYlG3qr91Xj5Gzf1KLfkoHjSNpQvPjxZR53JQmo1bTYMQ2AVRi9b3xKiAosQ==
+ b=llDmcvv0LzPAmm18veDozXrl51CHLe8wLn7TCq0M8uKHJhX0915ADT/36t2RH2CB22SoKXKEL/oDsUKgVaNHCcVpiaZKpTebd4Y0pYCFFt2za9I3uanAeqlGNgmu7DnszjlOr5hMARyKWQWgBrKPfJyspXCxK3harrcS26IiPFhPWil+KU8MQTDv5SK2R8l2mrPO+kdLA6jtB/y0DPsBNS5o0ZTHOE0ipZ5Md4qgQWfE48xdyrBCofAutD2q1XdSfA2JO3ZWod4sSdMoP+uQMU8YtoLVIvqE6jfJLE7QXIHAUpiO4yWfh429JYOGVpPZR2vlPOql4YKDMJes7iNvbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MjuvRVRULDKUNYFnY+p/NeeWHfO2GbIbXGUTSC/Wltg=;
- b=BjvEsfrtibCteKhC+aoE550jPV6Xxw8iEwH9fyL1OY7ERYQ5gB3keNbowgvmVMQ8+sXa6LFch/PJ9ZVnonAQCy5kRjXvmy6digi05o2eNQlIfj+XpVwME8xVCwliR6w1oc7eAkXFKBLurLC+jwR3Yz6vpOHTbN0BcOJ+o3YlcdAosB0wp0B65kvBSZLMJ6Rwtc4JPyd/YPb6+2Zw+l1iTfXsUXe2p3/OA8l7MKZ2SQitEwACWCOf/VlM/39AsMqmKkvwX993NHVx089UOlcMbzgjpOBzEVFOMKOkJ5fJGoHoGmLxSCVxINGUge43RNmtDFz8NEKmEQlJHeX0wkMDzg==
+ bh=SRQ9Zx/kOm/fhA13yibaMpnxaKKzadnkOcIsL6IFun8=;
+ b=n8PU4MLkqP4vhkF9CCdsbT7oxdQgcEYxpqVw5UITNSX8hlP6VZaUN/dYx65CBuabU3oEaCIXoQ3knTQ+hBd6KYoD6W9kuz57G+G/UaZMQrgWDauKh92DQ/SD/pZOFZnNmgMH5ZGwoKGugts1bQUOWSf69TosCORdtD7tBNL84Cn3+JELAKaBO+Ej2YQE/XAShuSan5E9sONvIduSlDHsU/JmmBV9cwCOBy30p+NNXzP7XZdyipKE3+Q5Q84DnID9Sc2+H0d2de1VhZjxoWa1Sf2zn22GfSnSwM1mXAN50onGYtBb3dp2fGIqLT2DKnQ/gQmrlv2VeybKDt//8sHRHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MjuvRVRULDKUNYFnY+p/NeeWHfO2GbIbXGUTSC/Wltg=;
- b=g7gk+RjmQOvtH1EFP4ZMDgEXPngKOOemJgTBE/dPXL+qVZKf75uQPZBsqolw9fzDQG+YI/wnmyZrpwVWt4PSZNnSaTazleywROYihWsGQ4rwZlCisLQuZ7FJtohlQXODisqHfNIrAHhq6YBbSM0GrN1VhVdrTaXEMIt6FhXkzIRiGxKgX1vdkXcEVS5zZ+5+6TdlDD3euLAmwjZZ08nJcjMTQ9GIB2JhqSZF+UeVepegs1nDuYKS+1l1nGDCcue0aMihLW6bOUyHLPnAx88GJpc4OdKE3k97W3NvN/G9j94AP7jUHJwhw5J0hYilU0BYK+8bBIH1tLe/pcr7uQ7MsQ==
+ bh=SRQ9Zx/kOm/fhA13yibaMpnxaKKzadnkOcIsL6IFun8=;
+ b=UqlRpglxvQ4xYBOH23SUsyzwTlFB4wh8Q0VbknNZ059NUsxopiJ1L8bTAKka0u5R9TjOvU4TGnMv6GZeKPXxN3Ch7NjcjHqz/Ea6Xqs8cQfiDynO3H2Xzxn0iTpIy5lLUCqneoO2OpB9/mHwfyB0gCJoNPQS3ETYZqVCibvq/qNt9kNsU0Nbs9yDpRZrkdXzfPd9heUP7Nxct6IrHDH1Ur31qGm9mfw+TDiYD08hHPKKlCwX1QrR6zDeeOAg29X0DrbFIUcvBQRlr2k5niQsn2Dz8fvCTtM1iQfAkPFJ8mE4fFOxUBf3brtgKmecZavZWrO3W6/wh6pIMuNCneI09Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by PA1PR04MB10321.eurprd04.prod.outlook.com (2603:10a6:102:44f::9) with
+ by DU2PR04MB8600.eurprd04.prod.outlook.com (2603:10a6:10:2db::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.15; Fri, 29 Nov
- 2024 00:38:46 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.13; Fri, 29 Nov
+ 2024 01:20:32 +0000
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630%5]) with mapi id 15.20.8207.014; Fri, 29 Nov 2024
- 00:38:46 +0000
-From: Peng Fan <peng.fan@nxp.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>, "Peng Fan (OSS)"
-	<peng.fan@oss.nxp.com>, Thomas Renninger <trenn@suse.com>, Shuah Khan
-	<shuah@kernel.org>, "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur
-	<jkacur@redhat.com>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] pm: cpupower: Makefile: Allow overriding
- cross-compiling env params
-Thread-Topic: [PATCH v2 2/2] pm: cpupower: Makefile: Allow overriding
- cross-compiling env params
-Thread-Index:
- AQHbCotjTSksRUq1mEyXqNdymTcGi7LBikwAgACE5UCAAEobgIAAeDyQgAEi9QCACeReYA==
-Date: Fri, 29 Nov 2024 00:38:45 +0000
-Message-ID:
- <PAXPR04MB845918523309488B79BB617A882A2@PAXPR04MB8459.eurprd04.prod.outlook.com>
-References: <20240919-pm-v2-0-0f25686556b5@nxp.com>
- <20240919-pm-v2-2-0f25686556b5@nxp.com>
- <48c0adb5-4ae8-48bc-8e83-3d1c413f6861@broadcom.com>
- <DB9PR04MB846134093D2302B6D67E7E6288222@DB9PR04MB8461.eurprd04.prod.outlook.com>
- <16411b6f-3e1d-4d52-a047-8c322774ec8c@broadcom.com>
- <PAXPR04MB84595BA5BEAE2D21F015036688232@PAXPR04MB8459.eurprd04.prod.outlook.com>
- <2bbabd2c-24ef-493c-a199-594e5dada3da@broadcom.com>
-In-Reply-To: <2bbabd2c-24ef-493c-a199-594e5dada3da@broadcom.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|PA1PR04MB10321:EE_
-x-ms-office365-filtering-correlation-id: fab58dcf-ef2a-4c72-b93f-08dd100e2ef1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?3hvAmo/LRpd7yxplX6syEl/HlhxE/PVaoFew5TXTHEzwbSok+9TlsyzwwHx4?=
- =?us-ascii?Q?E1wNHgy2lhT+5UNiO4+7/HYu7nXAWnyaD0v1STcWHJRzvIntC7tZeWdab5ju?=
- =?us-ascii?Q?VLK381UmnWFXLxnF7Y4NUkFTk8cmznAO7JSP6Td/mYt3tCLuKaW0IKrT68VD?=
- =?us-ascii?Q?yfHhccEvRV+mah8kYpbmYu/tDTygG4keIrakonQmLtf/kadS2j5ZMW4X/5ni?=
- =?us-ascii?Q?objEBxAKItKPDxkMaCmanoVqUKZGrZKwViN4LTYrav632W3uYllPqfpe+v6U?=
- =?us-ascii?Q?0RpXjbnVe3iNNpHoDfwbOHU2G4hyC3SH+FbweqHf2k7ODzZfS7qIj8zTTKIA?=
- =?us-ascii?Q?ReOwQGYnv7YGKEYDUNYJQp3hABjjTkDwOsCCqk2Jy24mvsXBzdNsQIBl+o5i?=
- =?us-ascii?Q?3B2jf4/5ThqFCh2s2wpsG2BNbs3777whvNtuVL+THwcXW3cNfJ20SRKFmJYW?=
- =?us-ascii?Q?+1uI1mYdsf7TBeP1ZZF9if3ni+QBrW3Gj+m5Wo7CRTnNuPlQ9bluKxoXjo5C?=
- =?us-ascii?Q?6KBWo9jGy6Fmi1p5DYqlMgxlyrbhNueVqN5unajyRjYScAhSPcWMga17Uqa+?=
- =?us-ascii?Q?x7J5bkcRV6z0WkpWMIH/2hKpgij1MhkKbRuHLvVATTkIPVheElKQn57HUfes?=
- =?us-ascii?Q?PCgowaZMVOmfis7Q2oFRCVtKY6mEWZCo85SeR762tmsW1iP4mEbhjm+xliY5?=
- =?us-ascii?Q?T4pDb0vZXpJLS6BhWo1yGK+mIONur5tNTjZb2/nS1z0WXzRS7/Mh+KkRHOkk?=
- =?us-ascii?Q?kOTc7ShSkTMmBI4CJo+VY2jIjqh/1M5CMNSCATH3DYVDXYfVr3YwMh77etJn?=
- =?us-ascii?Q?u6DYRW0//sYcbj+W+n2yAcbnsnkf6GJZvEMZz2SO2oo70pDOYL1ez4L0voJH?=
- =?us-ascii?Q?kKf5bdUlN++HnIRi7rvk2r4OAv4OSG4y3k4rj/vhxJcu3CMFNo39tpXwqLVH?=
- =?us-ascii?Q?BF5zKGFswxI4kBm4bLl5gLBSEfzJujGbNjOfuzrbxkizgGrKMinmYr8B9PXt?=
- =?us-ascii?Q?uoFy6Io5jLkxCM87LAmltx66kANj6hM1FGl27yVALGdEYNvbd5rkU2EkvxxK?=
- =?us-ascii?Q?Dw9olkYznLAu0x/lXnUdcSs7F+KK3STS7Z76vRxSoRKN1wBorKKQHgwOaPIP?=
- =?us-ascii?Q?4E/hY53zV4p7JFRayVQq1qzdjhXvj0/ghW1dRl4Wts029YXjs8e3oSGQePBa?=
- =?us-ascii?Q?cHPaASyv7AYSRiXqmBV6Dvl/fMb7ZDxKzt2UgnLqU4dnnPxeFxSAz5F6NECf?=
- =?us-ascii?Q?YItUzclrIQV/WPugEFbEdBt0/foZHEFEDr7uZKbmua5KHFmZl5N5cDA8/pdj?=
- =?us-ascii?Q?9NVX4374LEr4NxyhPyKiFlfxr/AlTwuV2rZD428lkjkMVcn5FPO7GNnfJCwr?=
- =?us-ascii?Q?2MpWaf4=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?UxV/IwEL7HkBuQQSn8k8g0PdP9cdWTqHHCjFQKmqgn3fLPPnwNTy6PkrWUQQ?=
- =?us-ascii?Q?ccQh6cS3DxLlSgmfaT0hXP5VO1lIzz42bTUBwYXq+ZyvCb5LDC1gVIl56Nea?=
- =?us-ascii?Q?78iuqqlCh+lAFVx9hUw0y9Ca9UywI7wT4tPg/xLyktruxMyhr+RpVKR46KGG?=
- =?us-ascii?Q?u83CDi8/0BYBE0NDcpQGGAaPeSgOZpOVqj7MjZhSTW/2VYBWcFLwCv3rXf6o?=
- =?us-ascii?Q?Y6MvYfNRBFtxRnRtJjiQNru0WTuMu/04H9rI035FijBh7fMB586KbbceI9bO?=
- =?us-ascii?Q?531+fhkTUrF/3XzRZHkEpiSxKlFS4gO0tIy56JQAWQ5sMLVOGonjSQgvDYqn?=
- =?us-ascii?Q?Wb/pSra5FoYLvE3wQgG59JvvItNHj9tmdwao9CiGW086srUbYwrsBTvp9oyC?=
- =?us-ascii?Q?2fcBHlhnTJogZsIGOr8XGezho29dJ3bZbEzihQdL6688G6IFhTroNBvrN5r3?=
- =?us-ascii?Q?dV/OelShRuiIiyxPdjg14Iamf7PTc3B5x5WAjNtCbJRMLkDqptNB9KjVrFNw?=
- =?us-ascii?Q?P62VBjjy1FGCclmSM8/H1rwx8/1DCWFe3RPsg044wrTqLDiOJt7DU0TpMqK1?=
- =?us-ascii?Q?lF8PO/7uT/YdKgPQLcJL/apoiqNM60x+1vILF+Q1xDmOWk/II/W9xid2H2o9?=
- =?us-ascii?Q?ueL5A496jhBK5iBn3dHwjPCx/bHG68jhnWXMSN6GdaEyh/VRcA4kLhCxOfZn?=
- =?us-ascii?Q?9gu0GgR1yyUN4E9RoYZlapkBsv7LDJyYFUPWnmvfi9RKdZ7PvK6RZkXF7ENK?=
- =?us-ascii?Q?3Nfq+shLNQD85PooXaR12c1pKE3C6LV7LVWp/UfdCuwC7knYnW3i2C3uJY7A?=
- =?us-ascii?Q?Xww4lWGDg70Ih1UsF/RgMhr4j5WoyoAAqdBtiVHbypQFGJQy+CRnU22D6Ew1?=
- =?us-ascii?Q?5Jz6SMwtrnwAbJSn6+TMNVJzSJjOWtyl8XQFm62O4W2Sh0+fe8/smUwfJ/0P?=
- =?us-ascii?Q?e9elcKgPxjIPYaqaSezkzU7tufhZbDoXOrlfMmYtwKH74YPrzpkchZAHM2zA?=
- =?us-ascii?Q?Mv9y/VBzkM0ZOOailcVs017QcNvMOwZONLNC1yYCoWVepriVyY6n93H4BZ8z?=
- =?us-ascii?Q?JB/0vAfXg6fcm4E77CSUL7LTWLN3P//7Y1a8VGyiFlKnMAK9XpRjSd8ZjBMV?=
- =?us-ascii?Q?YESOza+JaWcqAcgfJ17z+YynJW23/Q2pNSuEVeZXYxpkBONRFL3CL9T3cnWw?=
- =?us-ascii?Q?g/nptkR6DAv9czwusxYuRbwOjD+iF9jvkmqsw5GkZrIfq02hcFs6wcsyFCax?=
- =?us-ascii?Q?VsNcVWsKGpOCaCav26706MyTQl6MT9sBgzmZiU5G91CgKAURr5C9ARaMEKki?=
- =?us-ascii?Q?lP/667iwUvgYRhXDtjpweexlVGaAHPg2cxarJ4vdvS0VxoJu9Shen+aFei30?=
- =?us-ascii?Q?8tDSVA3YMzO0YrjlzIXjyqKTGHCgSF+4VZ6iErrveURP5Z7Q8WAjcPO/t1Nn?=
- =?us-ascii?Q?i1KVMbCwTzX9ms6MWKa4s1e8D1lsUcTZOBVmef/qxhhzzfKLRo5g2sdLFHKw?=
- =?us-ascii?Q?zB3AyLCnbBOOcMyo56g8UTXQ0YGCw4jyOBxLFH6BB9Acoxn6QGvX/8ShBK48?=
- =?us-ascii?Q?fc+uX9Bu84CgLq7niiM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 01:20:32 +0000
+From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To: Thomas Renninger <trenn@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"John B. Wyatt IV" <jwyatt@redhat.com>,
+	John Kacur <jkacur@redhat.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	linux-pm@vger.kernel.org (open list:CPU POWER MONITORING SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+Subject: [PATCH] pm: cpupower: Makefile: Fix cross compilation
+Date: Fri, 29 Nov 2024 09:20:05 +0800
+Message-Id: <20241129012006.3068626-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0003.apcprd06.prod.outlook.com
+ (2603:1096:4:186::14) To PAXPR04MB8459.eurprd04.prod.outlook.com
+ (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|DU2PR04MB8600:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0ec0caa-1154-4e48-d456-08dd10140478
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?w+10AAVWivb6TdfDalZplfTh6yUqbyCkjMsOHfVqVZ5jZN31FknfzWje2J4e?=
+ =?us-ascii?Q?Hcb5LeKNIDjxr1beNoAJjZfIeFTkyBMCRxWKPfW+GFUQRqTDk4t71gXUTf2T?=
+ =?us-ascii?Q?0DXXLqy4xSiOvS7lmoVQc3Scw3qRHZuWAtY75yWuXm2OuvXUl6ZqHMgYNZwA?=
+ =?us-ascii?Q?ZsMhK+PsLceKfWYLxe3U4PVSLY9BiTocpK1tnxIx0Lof5BZlb18VHTFLOS5F?=
+ =?us-ascii?Q?68fOzzACTwcl83eiwg6NUIeoe4lsd3DPS14/OkNpxWObfcbJFBP3lLuB5uvL?=
+ =?us-ascii?Q?0FuH1rRc2zvvEBv/0J3LvlsErTAILFzSUjrnAZi5HbI8y8j9zatGpEu5/GEu?=
+ =?us-ascii?Q?+GjoXWnWS2U6DvuQy0I5CQWfFuvuMomwiUb47+wOmDmrjEmlqHQC1UToQDXw?=
+ =?us-ascii?Q?MATBv4wM9DKg+fE/MI1N4Uxr569yyoLm1H9YEZrRCoRJNJB9gL/KMqUIdDln?=
+ =?us-ascii?Q?V2d9jYQxumKcFy7h8q9sNmP+ExWn/02PY0bFkPUmHDGwlq45BPNRdgo5KnoZ?=
+ =?us-ascii?Q?CV9bom/7rh/RbTEAJ2H68+264F2uGlqUZT5YXoJT54vLNOe57D6RfT6bPgMu?=
+ =?us-ascii?Q?TXlz/ZX6WtUEsj9cxGCyut1D3i6Q5ZOViYlUbOuYHYNY9PEuUk6on/Pop1xX?=
+ =?us-ascii?Q?yOdRBHm6zz7kbzRXPZS3CpG4oBSQyfC0w0Ki7J0XO8BVNEhUndyCHMmBON9l?=
+ =?us-ascii?Q?4VQACo8MfXePrHYM2TTEeplEB+S7KscD7V6iHjXQ95pcauyFD/evoCasbu0F?=
+ =?us-ascii?Q?Clml4OUaNDSz+diHF3A6uDNBR8eolJG+PUHNBwE4qMMg33GKm6wBZgC0zo6o?=
+ =?us-ascii?Q?GFdJLroJpY21kKY25fmz/O0BOAM72g1JV3MeZZWhaF4FY9xmINAn+pdFJTUZ?=
+ =?us-ascii?Q?d8nGGzAL2P2DvtqnD/NOWOq7T1QB5ed8N3jV3nZz/lVyrlqFNq5QHUKoew8V?=
+ =?us-ascii?Q?rbgvzm3Ymt5jIfZ8ihMc38Nzsev9rHIOwht9uC2i4sesUmbBmneAboGfu1+u?=
+ =?us-ascii?Q?yV8rV3pPHMEiEWq7vCTvrVVdUEZt4HWuOEJvf+Nw11CJ80UFd0xlJyUgmf7E?=
+ =?us-ascii?Q?sQnGg4JiBdpguLjJVQmIfDrtDevpVqqYns3LP2rSQnu1kX7uw1VyFC70AL2A?=
+ =?us-ascii?Q?XFclgD1KZ03dkNSh7cdwOI2RMAZelQmXndbCRlwDK/2aFZfp43Y5kXME9FdO?=
+ =?us-ascii?Q?DZ23X6KT4zReAH7nuM6Fxnnk4KvFMkXAtknhfOSHJN0M4M2zySRdgN9/7asv?=
+ =?us-ascii?Q?uEG/pM47XSzLRbmleBci351OR34CITp0BB+P44dHOvs1F99svUMwbwrOsM/Q?=
+ =?us-ascii?Q?wFciaT3pLCSBhRal2KFBP4kteRnF9BiOrpdNHWFon/SDB39ZhGEY1bqtx9FK?=
+ =?us-ascii?Q?D3XgUGQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?kcGKNAe3SxKQRexRJaoyfpo6+wudPBfc4BODbpI27sIKggngZsE+GFD/m1ky?=
+ =?us-ascii?Q?GpcnqE8ORGkzgKAGSL5lgpR4OvW2yPv0CdaaUTUZ59vEeloLlHFrSxI05Ret?=
+ =?us-ascii?Q?QSV3+Zvp3A8pf/bdk+wlCOvk2nwR4NgegnnIRZvlJjQq2Xm5FqYoAJhpcWQW?=
+ =?us-ascii?Q?hmJ8FzSwCuz3RcL0P1iswMsqOlhqP/oKaOyx2gx1nFfipf+b2ktKzV15OpvV?=
+ =?us-ascii?Q?+lDKpKv2+k+PwhA00EI4dQ87pjgEqbJSfsRJ23d/1YbPwmeH7PsN4nPJmM9K?=
+ =?us-ascii?Q?/1RpDAO0eqRN756yhTHhXZYyCjqNMi2r44TiZ9Y3TqSH9rnzlSRIN2A3Zc1g?=
+ =?us-ascii?Q?/1V5Z1HF/QjX1vaqKqheO9BRzGx0qhIFqVAN/eIvgxVHaYQnCHfqvlHideZ0?=
+ =?us-ascii?Q?aOFimNYTrj+o0d8d+Ibrii+jibGJEjSqKKcjfTb46xlsIyGH4wTHZCxHW5jm?=
+ =?us-ascii?Q?gsWs0gwnPBkhLnEshA1xPj33Vs/QS0VA3RFyqyflOVbT6yusXIBPnVs+X6wu?=
+ =?us-ascii?Q?uW2M5T7eCRwqyz3oZdF2GP66pMb5sy0G0mXKi0Vl2CoDZKb9MuTETAQwByrU?=
+ =?us-ascii?Q?OEytuEkbQ00CXdpcSTtgT6J4WeAKlak4Qqr2zqFD3uvDeUqCa62WKUhBkn17?=
+ =?us-ascii?Q?edNavvCr2tdUtoAlxzDEA5H03xRhld55D6R5ZadFUcOJQPJmBxt8JZ9W/r8s?=
+ =?us-ascii?Q?yN8qY/Of/Kymzkrq7k6fVr5f8U4mNTMZFxk1qtZvoc530lppsuhlLpGoKOWH?=
+ =?us-ascii?Q?pZ1LIgQ5bkz2nvoeNSYRDMwy7Cg71yRSq4B3GQrUkKGFHzdh/MVHFEaG4fCE?=
+ =?us-ascii?Q?hOofKgQnrdbnLYojddf8OjEMHvduTuJMQS51y7K1dPB72rJszdjgF3DU0Gvp?=
+ =?us-ascii?Q?CgBILplSI8NVZzJQ+HcXc0YQIBlB4gvrA2074iPnBW7kApjd0740TzF/5r1U?=
+ =?us-ascii?Q?Wn9uHPHHsyu+b9j6+bIw31FezU343LrDPxWu5LqRAQpVq4YlmCfNYhoHJdtT?=
+ =?us-ascii?Q?Iz/GF8NkR5LFCo5BSBngap2QHX9dLCZS7ZhtMYPSC0j7drrJN2f7y4/05pcT?=
+ =?us-ascii?Q?Uq4fnTPM7f/mC6Lk3CfoloUnAMXH+qEjJ7ogjcNgXJYjY3kbjJb94W3Tj4Mj?=
+ =?us-ascii?Q?eeSN/Kl76xTRVG11shviQkkhNeOq/1rtXOtbDeDIuJ2KOTgcHbpRsbTyMEVN?=
+ =?us-ascii?Q?g6VRl8XFB/4VtIW7EaxkiKbzuGHFYVUPu5r2LwjIrbCr1cD1HrUuHpwQhkDt?=
+ =?us-ascii?Q?r7K5ekraUT8XjVHG2jHCEY+3+aPC83JMvQOJmcZZjbqAGBhgxRr6q/N0jDGm?=
+ =?us-ascii?Q?7nrFkWFcdDET9lLGEYpT11iWdxN2YCG1y35bJEZL8VIxPLvpF1PviFKSsmxe?=
+ =?us-ascii?Q?GkqUDEaRRBnRw8xiL+vRGsR0r576MlaEKOK9I+MGWJtGFCpCyogVB7T1Q2i2?=
+ =?us-ascii?Q?D+xPjS1M5B2VP8oEajsxoDMXlEDU6aaAowDAnjLK7jM9javB9QaKIcO9RqKa?=
+ =?us-ascii?Q?8M/+96I8maVm98f7zJvWmIhIPA+f1+TXjiEQKnFjZllerPpx7sNdwuvETVTb?=
+ =?us-ascii?Q?AXj9lshit7LpYqLcgR57KWG4yk9N7pt4FlevThAq?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0ec0caa-1154-4e48-d456-08dd10140478
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fab58dcf-ef2a-4c72-b93f-08dd100e2ef1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2024 00:38:45.9386
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2024 01:20:31.9472
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tQJm4yDHrmaT3ARy5dv1jlLcvEocYvmAeI+gndp3Z2aNYs3SSCr8RU8QRsFZYoFbd7LtqUSTeZ3t24b5xBoMKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10321
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QVcJ0i3i+/uYZs3xhT8WXS9fOPslmNfmbuFnMDS3880bXK/wO22B7HxWjJYKiM4BbXre2hD9LacrFg6MGKgF2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8600
 
-> Subject: Re: [PATCH v2 2/2] pm: cpupower: Makefile: Allow overriding
-> cross-compiling env params
->=20
-> On 11/21/24 16:13, Peng Fan wrote:
-> >> Subject: Re: [PATCH v2 2/2] pm: cpupower: Makefile: Allow
-> overriding
-> >> cross-compiling env params
-> >>
-> >> On 11/21/24 04:40, Peng Fan wrote:
-> >>>> Subject: Re: [PATCH v2 2/2] pm: cpupower: Makefile: Allow
-> >> overriding
-> >>>> cross-compiling env params
-> >>>>
-> >>>> Hi Peng,
-> >>>>
-> >>>> On 9/19/2024 5:08 AM, Peng Fan (OSS) wrote:
-> >>>>> From: Peng Fan <peng.fan@nxp.com>
-> >>>>>
-> >>>>> Allow overriding the cross-comple env parameters to make it
-> >> easier
-> >>>> for
-> >>>>> Yocto users. Then cross-compiler toolchains to build cpupower
-> >> with
-> >>>>> only two steps:
-> >>>>> - source (toolchain path)/environment-setup-armv8a-poky-linux
-> >>>>> - make
-> >>>>
-> >>>> This patch breaks the way that buildroot builds cpupower:
-> >>>>
-> >>>>
-> >>
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
-> >>>> git.buildroot.net%2Fbuildroot%2Ftree%2Fpackage%2Flinux-
-> >>>> tools%2Flinux-tool-
-> >>>>
-> >>
-> cpupower.mk.in&data=3D05%7C02%7Cpeng.fan%40nxp.com%7C246da9
-> >>>>
-> >>
-> 2d8b6243d138c808dd09e6d644%7C686ea1d3bc2b4c6fa92cd99c5c3
-> >>>>
-> >>
-> 01635%7C0%7C0%7C638677609234547728%7CUnknown%7CTWFpb
-> >>>>
-> >>
-> GZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJX
-> >>>>
-> >>
-> aW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdat
-> >>>>
-> >>
-> a=3DnL1YUl%2F07Vd8F0GpW7uRqdpZT74avOku1ox9N3%2FFkUg%3D&r
-> >>>> eserved=3D0
-> >>>>
-> >>>> and after enabling verbose it becomes clear as to why, see below:
-> >>>>
-> >>>>    >>> linux-tools  Configuring
-> >>>>    >>> linux-tools  Building
-> >>>> GIT_DIR=3D.
-> >>>> PATH=3D"/local/users/fainelli/buildroot-
-> >>>> upstream/output/arm/host/bin:/local/users/fainelli/buildroot-
-> >>>>
-> >>
-> upstream/output/arm/host/sbin:/projects/firepath/tools/bin:/home/ff
-> >>>>
-> >>
-> 944844/bin:/home/ff944844/.local/bin:/opt/stblinux/bin:/usr/local/sb
-> >>>> in:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/loc
-> >>>> al /ga mes:/snap/bin:/opt/toolchains/metaware-vctools-
-> 0.4.1/bin/"
-> >>>> /usr/bin/make -j97
-> >>>> CROSS=3D/local/users/fainelli/buildroot-
-> >>>> upstream/output/arm/host/bin/arm-linux-
-> >>>> CPUFREQ_BENCH=3Dfalse NLS=3Dfalse LDFLAGS=3D"-L.
-> >>>> -L/local/users/fainelli/buildroot-
-> >> upstream/output/arm/target/usr/lib"
-> >>>> DEBUG=3Dfalse V=3D1 -C
-> >>>> /local/users/fainelli/buildroot-upstream/output/arm/build/linux-
-> >>>> custom/tools
-> >>>> cpupower
-> >>>> mkdir -p power/cpupower && /usr/bin/make
-> >> subdir=3Dpower/cpupower
-> >>>> --no-print-directory -C power/cpupower cc -DVERSION=3D\"6.12.0\"
-> -
-> >>>> DPACKAGE=3D\"cpupower\"
-> >>>> -DPACKAGE_BUGREPORT=3D\"linux-pm@vger.kernel.org\" -
-> >> D_GNU_SOURCE -pipe
-> >>>> -Wall -Wchar-subscripts -Wpointer-arith -Wsign- compare
-> >>>> -Wno-pointer-sign -Wdeclaration-after-statement -Wshadow - Os
-> >>>> -fomit-frame-pointer -fPIC -o lib/cpufreq.o -c lib/cpufreq.c
-> >>>
-> >>> You are building on an ARM host? Or you are cross compiling with
-> cc
-> >> is
-> >>> actually arm gcc?
-> >>
-> >> This is cross compiling targeting ARM, which is why CROSS is set to
-> >> ../arm-linux-
-> >>
-> >>>
-> >>>>
-> >>>> Here we use cc, aka host compiler, rather than $(CROSS)gcc as we
-> >>>> should, so we are no longer cross compiling at all.
-> >>>
-> >>> I not understand. CROSS was set, but using cc to compile for host?
-> >>
-> >> See below.
-> >>
-> >>>
-> >>>>
-> >>>> The issue is the use of the lazy set if absent for *all* of CC, LD,
-> >>>> AR, STRIP, RANLIB, rather than just for CROSS. The following fixes
-> >>>> it
-> >> for me:
-> >>>>
-> >>>> diff --git a/tools/power/cpupower/Makefile
-> >>>> b/tools/power/cpupower/Makefile index
-> >>>> 175004ce44b2..96bb1e5f3970 100644
-> >>>> --- a/tools/power/cpupower/Makefile
-> >>>> +++ b/tools/power/cpupower/Makefile
-> >>>> @@ -87,11 +87,11 @@ INSTALL_SCRIPT =3D ${INSTALL} -m 644
-> >>>>     # to something more interesting, like "arm-linux-".  If you want
-> >>>>     # to compile vs uClibc, that can be done here as well.
-> >>>>     CROSS ?=3D #/usr/i386-linux-uclibc/usr/bin/i386-uclibc-
-> >>>> -CC ?=3D $(CROSS)gcc
-> >>>> -LD ?=3D $(CROSS)gcc
-> >>>> -AR ?=3D $(CROSS)ar
-> >>>> -STRIP ?=3D $(CROSS)strip
-> >>>> -RANLIB ?=3D $(CROSS)ranlib
-> >>>> +CC =3D $(CROSS)gcc
-> >>>> +LD =3D $(CROSS)gcc
-> >>>> +AR =3D $(CROSS)ar
-> >>>> +STRIP =3D $(CROSS)strip
-> >>>> +RANLIB =3D $(CROSS)ranlib
-> >>>
-> >>> The ? is just allow to override CC/LD/AR.., so in your env, CC is
-> >>> set, but should not be used for cpupower compling?
-> >>
-> >> Adding debug to show the origin of the CC variable shows the
-> following:
-> >>
-> >> CROSS=3D/local/users/fainelli/buildroot-
-> >> upstream/output/arm/host/bin/arm-linux-
-> >> CC origin is (default) and value is (cc) LD origin is (default) and
-> >> value is
-> >> (ld) CC=3Dcc LD=3Dld AR=3Dar STRIP=3D RANLIB=3D
-> >
-> >
-> > How about
-> > CROSS ?=3D #/usr/i386-linux-uclibc/usr/bin/i386-uclibc-
-> > ifneq ($(CROSS), )
-> > CC =3D $(CROSS)gcc
-> > LD =3D $(CROSS)gcc
-> > AR =3D $(CROSS)ar
-> > STRIP =3D $(CROSS)strip
-> > RANLIB =3D $(CROSS)ranlib
-> > else
-> > CC ?=3D $(CROSS)gcc
-> > LD ?=3D $(CROSS)gcc
-> > AR ?=3D $(CROSS)ar
-> > STRIP ?=3D $(CROSS)strip
-> > RANLIB ?=3D $(CROSS)ranlib
-> > Endif
->=20
-> Yes, this works just as well, do you want to submit this if that works in
-> your environment as well?
+From: Peng Fan <peng.fan@nxp.com>
 
-I will prepare a patch.
+After commit f79473ed9220 ("pm: cpupower: Makefile: Allow overriding
+cross-compiling env params") we would fail to cross compile cpupower in
+buildroot which uses the recipe at [1] where only the CROSS variable is
+being set.
 
-Thanks,
-Peng.
+The issue here is the use of the lazy evaluation for all variables: CC,
+LD, AR, STRIP, RANLIB, rather than just CROSS.
 
-> --
-> Florian
+[1]:
+https://git.buildroot.net/buildroot/tree/package/linux-tools/linux-tool-cpupower.mk.in
+
+Fixes: f79473ed9220 ("pm: cpupower: Makefile: Allow overriding cross-compiling env params")
+Reported-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Closes: https://lore.kernel.org/all/2bbabd2c-24ef-493c-a199-594e5dada3da@broadcom.com/
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ tools/power/cpupower/Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index 175004ce44b2..51a95239fe06 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -87,11 +87,19 @@ INSTALL_SCRIPT = ${INSTALL} -m 644
+ # to something more interesting, like "arm-linux-".  If you want
+ # to compile vs uClibc, that can be done here as well.
+ CROSS ?= #/usr/i386-linux-uclibc/usr/bin/i386-uclibc-
++ifneq ($(CROSS), )
++CC = $(CROSS)gcc
++LD = $(CROSS)gcc
++AR = $(CROSS)ar
++STRIP = $(CROSS)strip
++RANLIB = $(CROSS)ranlib
++else
+ CC ?= $(CROSS)gcc
+ LD ?= $(CROSS)gcc
+ AR ?= $(CROSS)ar
+ STRIP ?= $(CROSS)strip
+ RANLIB ?= $(CROSS)ranlib
++endif
+ HOSTCC = gcc
+ MKDIR = mkdir
+ 
+-- 
+2.34.1
+
 
