@@ -1,215 +1,132 @@
-Return-Path: <linux-pm+bounces-18260-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18261-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 384A59DEC11
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 19:23:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D049DEC92
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 21:00:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96FAD282D19
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 18:23:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AF12281D40
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 20:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC8F1A42D8;
-	Fri, 29 Nov 2024 18:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACB61A0AE1;
+	Fri, 29 Nov 2024 20:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b5mkdzgm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V1s8HmIY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB611A3AAD;
-	Fri, 29 Nov 2024 18:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A1F154C04
+	for <linux-pm@vger.kernel.org>; Fri, 29 Nov 2024 20:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732904582; cv=none; b=t0uvpymxStEAI6tGoS2ao4BFho/sl0TV2ze5Jp8L1FzVTHzfXrDFnse/MhGfLM3ieZn427dsgptHXsRgLaY9eCvw6QzKQ2BQpKSDnkHr4Fwp9y+FRQ8auX+AV1J78hC5nU8PniP994JlEItkkWHJt6FTSR2ItGgnYJ0uW0Q5mCk=
+	t=1732910445; cv=none; b=lSSmiFV8bjZzpy3io96IGru8hiNKrs4Hq0mKzUxvdLLRBFMwzVbx2zC+2WPxwNZXq3Ud67afHOtbR2Xa2GOh3nDj+KWakZiZ1zsjhMpxKy/fqQY9r7ZURorlVNRBCFY/Xckp+XFcj98+68I76W3jmu7NKfkN73a9KsH+vWLxOS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732904582; c=relaxed/simple;
-	bh=jSfeu3b1BSR9b7pUV+96xj7SJhfr7jFy1eJNwTV9sy0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r+r5ubSLYsUA/rKmceqMgCFEiaHIXSd9q8cHiD/nHM7NzssWM2UcOxlUTf8XEFkqPntmyLOXtAqjKgVZh039eEq0SFnmz+VR7AL3Jyd8qCqp6pKzpJBzspLXfcXSL5F673/rs9cJR/uW4yGg72HMx4YoTc6Wd52/V0FGKn4jAoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b5mkdzgm; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732904581; x=1764440581;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jSfeu3b1BSR9b7pUV+96xj7SJhfr7jFy1eJNwTV9sy0=;
-  b=b5mkdzgmU8Fw6IZYwgRpFXCSPBk4hWkhc11LfypbAb/S7+dJxg+jdEPU
-   ylOtmshcq7UfoayTk4lGY5C1u0gQJ3M5mFtZ9DyIG+g/ytJrB3uGaVCQM
-   fOQSlpB4goBMdDZj7ybpYOT9Zp+HcXfvCQkDPsg2uzH/Ez3dLB9qYzpJV
-   FWZEOP2e+VFKyWDuA0UmLmiNwbhGC085Bv7qGHz/EyCKjHv5QSSqkb6Hk
-   dmIAOfMtoukd9EHLJd/ZDkkWRdamufJU2WrpSSNsrqvQ+GpJtDQ8Sr+OS
-   uDegZ/zauC9ouOIki6Bbrrj1lMyFQJ3+gvSWTwlS7AEYvIryrfsY5Az/s
-   w==;
-X-CSE-ConnectionGUID: AAgNFthkQ9Kd2cBER922Cw==
-X-CSE-MsgGUID: a48xXcEATJKVGfxhyK11Tg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11271"; a="36811968"
-X-IronPort-AV: E=Sophos;i="6.12,196,1728975600"; 
-   d="scan'208";a="36811968"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 10:23:01 -0800
-X-CSE-ConnectionGUID: YfFSxJCRScO2yNseuMymEA==
-X-CSE-MsgGUID: OaGZ7WSaSMyMK4MLiUcLqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,196,1728975600"; 
-   d="scan'208";a="92422167"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.203])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 10:22:58 -0800
-From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-To: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rafael.j.wysocki@intel.com,
-	peterz@infradead.org,
-	dave.hansen@linux.intel.com,
-	gautham.shenoy@amd.com,
-	tglx@linutronix.de,
-	len.brown@intel.com,
-	artem.bityutskiy@linux.intel.com,
-	patryk.wlazlyn@linux.intel.com
-Subject: [PATCH v7 4/4] x86/smp native_play_dead: Prefer cpuidle_play_dead() over mwait_play_dead()
-Date: Fri, 29 Nov 2024 19:22:32 +0100
-Message-ID: <20241129182232.14987-5-patryk.wlazlyn@linux.intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241129182232.14987-1-patryk.wlazlyn@linux.intel.com>
-References: <20241129182232.14987-1-patryk.wlazlyn@linux.intel.com>
+	s=arc-20240116; t=1732910445; c=relaxed/simple;
+	bh=I6vhUfkKB8L2+0ZseqkvOp9WgX+MEIh0yWn2aYb0khM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ga7ZXp6/wpjf+miAgZRt5hcdjn+nKU4VORm2+jyqTMqWpWkmJqMR3yJdbHMswWQQzkXl15smcDbnk13KpLRLZXz0FIIl4vuWD679FdxudWtTT6uLvmmEPmJVUSdY+eHIE8jbAFsv+kP1SDQnHpRXyBAyU0YGyQuVfWX9eXqGPg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V1s8HmIY; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-434a8b94fb5so13947285e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 29 Nov 2024 12:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732910441; x=1733515241; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hXMhlKyNUyXAehCvYmXtBGlWlyuXZ6rNCKB5eusJ9ok=;
+        b=V1s8HmIYRyEM9tsFI7IyM23vAUitjHwPNrT4JW8qSFf7hWAkH/dCn9vfCnzpeGhyNC
+         mhgkLsuI52EJRCjl37E4I1ju+GFdQM68g9RruVjqI9QesKCheVb1mO5FxPQUwvyTyUdi
+         8dmOCJ00GshE8BYyh68x1LzvNFgE8CGT4yNzYt7xleK15e1nQdKsLmgvGFYi669EF5RL
+         IZ0PLdwl/GZ6vAOHx+pvYMSwXPhu3LcF1DH3ef7YxCiooPa+LOiJBzgKY7mVBQ0guYzm
+         2ctJbW4EzZr48TcdGN7q8FIXyixXW6pWEoXtpyOqwj398xWJYV2osXFaiDFZau//ibBq
+         A20Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732910441; x=1733515241;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hXMhlKyNUyXAehCvYmXtBGlWlyuXZ6rNCKB5eusJ9ok=;
+        b=tUjxWAzW6ntr7FcmKEpxhrHiwvWaziiow287UhyiaKwYpoUmIn3U0r36kyQ33Mgmn0
+         vYseLStYLyKeq+NRZ0jVFc0Pza9fUz85bDUrhwWkNGO2bSNCWJL5Xq3Cxrvkm99yuewT
+         Rr1rSl7qZpmghxAd+W/g+O8pEGpQbJdwJ6iEzhg1GTuK7pd+rZONgnQCgf1G21AeM41X
+         88CjoTWBXyMQueI0cLKJFjMbZ0PgPpTNCKIm8H25RjKKPgjZsuCMWjNu0WnsZB9+qu/C
+         iQPV+djLQw85Yt7CmHD+6fUkIidtEh6qGBSlxQwxcE/mwmgbGBNR8b9S/ORtGGM7OovK
+         +INQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWf54P+n6zbS3V5kX0qmvqhDFj9n+GPlXWJsCXNhyBbZuz4zB77RnmfZdIFGh2i8I3bk0jimXv8oA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylPfMsxXkjL1onOkNdef0C8nf1+TH3j+rk/TCH8GeqQ8zjjkSH
+	bnO3UV4bBAjFNMR6iXFo7Jah1rCrtrrJWsdwBGtJ1YNFZNVgQxUM7Dkn+a6X0RY=
+X-Gm-Gg: ASbGncvolFdAFg+m+TFgCkI676nnwxBmj7qzj6qOPqvarzOiK/3I+qlNboZsB1L7tQM
+	Bm7ya+qgaKBF6cojLtgxyN4iGHL6F0r4+M6XG5f9p88dCRTohDSWVBzvCuVZymRoVOnOAf4sXaa
+	4a/NtaI1ObHUNfhMFBacfGmNf/M52Jm2KaJ2vU7WrVPHIlrvmeTafMPgooR4zcgufqhC0DgTYdO
+	qsyqNgPE2ff+SqnDSnTNIEclPuFFqTnILlZGntG2bbgYlYrNZBmA5Symfc/8xDWBAodNC+yCfKS
+	ncYVerREFt2hgA==
+X-Google-Smtp-Source: AGHT+IERDYwDGnHxt4PkrEbc7nYmk1O9LCWEyDw4b8b+mn5ibUuFnpDyTpQ+9yD3eVcYFhLRJEKXzA==
+X-Received: by 2002:a05:600c:3b16:b0:434:92f8:54a8 with SMTP id 5b1f17b1804b1-434afb29148mr77259745e9.0.1732910441500;
+        Fri, 29 Nov 2024 12:00:41 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-434b0f325fdsm63936945e9.30.2024.11.29.12.00.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Nov 2024 12:00:40 -0800 (PST)
+Message-ID: <20d3a0be-ba5f-439f-80ff-2e2bda3bb144@linaro.org>
+Date: Fri, 29 Nov 2024 21:00:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] thermal: multi-sensor aggregation support
+To: Nicolas Pitre <nico@fluxnic.net>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Nicolas Pitre <npitre@baylibre.com>,
+ Alexandre Bailon <abailon@baylibre.com>
+References: <20241112052211.3087348-1-nico@fluxnic.net>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20241112052211.3087348-1-nico@fluxnic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The current algorithm* for looking up the mwait hint for the deepest
-cstate, in mwait_play_dead() code works by inspecting CPUID leaf 0x5 and
-calculates the mwait hint based on the number of reported substates.
-This approach depends on the hints associated with them to be continuous
-in the range [0, NUM_SUBSTATES-1]. This continuity is not documented and
-is not met on the recent Intel platforms.
+On 12/11/2024 06:19, Nicolas Pitre wrote:
+> This series provides support for thermal aggregation of multiple sensors.
+> The "one sensor per zone" model is preserved for all its advantages.
+> Aggregation is performed via the creation of a special zone whose purpose
+> consists in aggregating its associated primary zones using a weighted
+> average.
+> 
+> Motivation for this work stems from use cases where multiple sensors are
+> contained within the same performance domain. In such case it is preferable
+> to apply thermal mitigation while considering all such sensors as a whole.
 
- * The current algorithm is implemented in the for loop inspecting edx
-   in mwait_play_dead().
+Do we have a real use case where we can compare the per sensor vs 
+aggregated sensors approach ?
 
-For example, Intel's Sierra Forest report two cstates with two substates
-each in cpuid leaf 0x5:
 
-  Name*   target cstate    target subcstate (mwait hint)
-  ===========================================================
-  C1      0x00             0x00
-  C1E     0x00             0x01
 
-  --      0x10             ----
+> Previous incarnation by Alexandre Bailon can be found here:
+> https://patchwork.kernel.org/project/linux-pm/cover/20240613132410.161663-1-abailon@baylibre.com/
+> 
+> diffstat:
+>   .../bindings/thermal/thermal-zones.yaml       |   5 +-
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 210 +-----
+>   drivers/thermal/Kconfig                       |  27 +
+>   drivers/thermal/thermal_core.c                | 643 ++++++++++++++++++
+>   drivers/thermal/thermal_core.h                |  14 +
+>   drivers/thermal/thermal_of.c                  |  86 ++-
+>   6 files changed, 780 insertions(+), 205 deletions(-)
 
-  C6S     0x20             0x22
-  C6P     0x20             0x23
 
-  --      0x30             ----
-
-  /* No more (sub)states all the way down to the end. */
-  ===========================================================
-
-   * Names of the cstates are not included in the CPUID leaf 0x5, they are
-     taken from the product specific documentation.
-
-Notice that hints 0x20 and 0x21 are skipped entirely for the target
-cstate 0x20 (C6), being a cause of the problem for the current cpuid
-leaf 0x5 algorithm.
-
-Remove the old implementation of play_dead MWAIT hint calculation based
-on the CPUID leaf 0x5 in mwait_play_dead() and delegate calling of the
-mwait_play_dead_with_hint() to the idle driver.
-
-Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
----
- arch/x86/kernel/smpboot.c | 56 +++++----------------------------------
- 1 file changed, 7 insertions(+), 49 deletions(-)
-
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 8a3545c2cae9..82801137486d 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1272,6 +1272,10 @@ void play_dead_common(void)
- 	local_irq_disable();
- }
- 
-+/*
-+ * We need to flush the caches before going to sleep, lest we have
-+ * dirty data in our caches when we come back up.
-+ */
- void __noreturn mwait_play_dead(unsigned int eax_hint)
- {
- 	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
-@@ -1317,52 +1321,6 @@ void __noreturn mwait_play_dead(unsigned int eax_hint)
- 	}
- }
- 
--/*
-- * We need to flush the caches before going to sleep, lest we have
-- * dirty data in our caches when we come back up.
-- */
--static inline void mwait_play_dead_cpuid_hint(void)
--{
--	unsigned int eax, ebx, ecx, edx;
--	unsigned int highest_cstate = 0;
--	unsigned int highest_subcstate = 0;
--	int i;
--
--	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
--	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
--		return;
--	if (!this_cpu_has(X86_FEATURE_MWAIT))
--		return;
--	if (!this_cpu_has(X86_FEATURE_CLFLUSH))
--		return;
--	if (__this_cpu_read(cpu_info.cpuid_level) < CPUID_MWAIT_LEAF)
--		return;
--
--	eax = CPUID_MWAIT_LEAF;
--	ecx = 0;
--	native_cpuid(&eax, &ebx, &ecx, &edx);
--
--	/*
--	 * eax will be 0 if EDX enumeration is not valid.
--	 * Initialized below to cstate, sub_cstate value when EDX is valid.
--	 */
--	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED)) {
--		eax = 0;
--	} else {
--		edx >>= MWAIT_SUBSTATE_SIZE;
--		for (i = 0; i < 7 && edx; i++, edx >>= MWAIT_SUBSTATE_SIZE) {
--			if (edx & MWAIT_SUBSTATE_MASK) {
--				highest_cstate = i;
--				highest_subcstate = edx & MWAIT_SUBSTATE_MASK;
--			}
--		}
--		eax = (highest_cstate << MWAIT_SUBSTATE_SIZE) |
--			(highest_subcstate - 1);
--	}
--
--	mwait_play_dead(eax);
--}
--
- /*
-  * Kick all "offline" CPUs out of mwait on kexec(). See comment in
-  * mwait_play_dead().
-@@ -1413,9 +1371,9 @@ void native_play_dead(void)
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
- 
--	mwait_play_dead_cpuid_hint();
--	if (cpuidle_play_dead())
--		hlt_play_dead();
-+	/* Below returns only on error. */
-+	cpuidle_play_dead();
-+	hlt_play_dead();
- }
- 
- #else /* ... !CONFIG_HOTPLUG_CPU */
 -- 
-2.47.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
