@@ -1,104 +1,108 @@
-Return-Path: <linux-pm+bounces-18219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 652FD9DBF26
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 05:58:01 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B417164AC9
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 04:57:58 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A281537DA;
-	Fri, 29 Nov 2024 04:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KVJIeaFt"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F368F9DC09E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 09:41:02 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B95D22EE4;
-	Fri, 29 Nov 2024 04:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4CBE7B2081B
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 08:41:00 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4945A165F1F;
+	Fri, 29 Nov 2024 08:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mKIhLVOH"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7D915A87C
+	for <linux-pm@vger.kernel.org>; Fri, 29 Nov 2024 08:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732856277; cv=none; b=rkbYZhznmMrd1qa1b49JH7KldkVRe+no7NfMyYXSNZPw+EHw5IakdxXGoobsB20Ij9zdU/gFOtLDtDen3D0z2C07dYJKXR4UWkgFO2oRxkMzvQncCFVxQO/SwADuQ4yVIip5a0vDrmrR/Iz3qZ6HVvDzYYnv+foM22f7eOjFgWw=
+	t=1732869657; cv=none; b=MmWnYNm5gZ63CXv3KZbFHuF8DGgTkJTljO1Y6kaFUOY4MMZImL08mOQJxG55JW1PdwTjqo/JIk99sc7yimwrmMEE6AqLKQY0BzjTLhjBQhTR36+GslauPGsHYQWgaPyV2Tj6hw2t9QABYHiGOUC1jOoaHDNNRRO2VJwgyrHDoVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732856277; c=relaxed/simple;
-	bh=5U6h1Z5fr+R0QY54TWNq1gNMDGrt+6cwosjjIV8xsQY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sWej5a4uC9DZS6XVHvuS4Fx/0HrvwLVuBoWDc8gKjE+88NtIiiFL1MB7GXgRf023ssWPk0henbffuclMlbX0YCgYGg/u4zMjDpCw23Xbdj8nSGS46IoXOTcN+WAUCNfYw9+xkWvCzjSRwV4gzK9U1YaF+mfLLQ87Awcjh3PeV6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=KVJIeaFt; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=1rLvYlqK/58eJQCTQLKYZ9N7ZVCL+zhzpVOIkaFzhEo=; b=KVJIeaFtZFPs8bCw2fpoeycqQD
-	mePfPq5n/MSSPkBZ7r9S5/W/et/5RiLFiKgF0+q5nnqBGsdkcKkE6Rl9sM6UiRjkiCsgJ8V7Qn5tg
-	YuOVrMsKXLemwqWcJlOQ8uRc3MRUBhrAqdMHRe9lmhVuEu7s+c6H1ShMkL3eFxTaAW5yHlQftoWN8
-	Tn5zOPHWEkaBQBvOE+yukOTxkrwdk74GBboWVQM5StCsT7m2GP1sZtYCTP3Tk3WFcJLVoSihFweQQ
-	XQMqnzqCNUlae6IodP+qbEjfgBC8l/QJnxtKcetnIpeeAh0mHrwFkB8P/OkVrjbdW0sUT5QqyFgy+
-	1+vdxA4Q==;
-Received: from [50.53.2.24] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tGt4j-0000000GtuG-35QM;
-	Fri, 29 Nov 2024 04:57:54 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	linux-pm@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH] kernel.h: add comments for system_states
-Date: Thu, 28 Nov 2024 20:57:50 -0800
-Message-ID: <20241129045750.456251-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1732869657; c=relaxed/simple;
+	bh=ltzMSsQLYC/4qUZo1d3pV9RN8/HZ7OnfIqYqFX8gARM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYrzBO9Qi0wR+iQ1AtUDHSIzxMZ131voamuDK6V3+1qvDoWdINjwaXhExTtTQrsGxDWL5QaG7SfVN0Wchg0w2oY/Mc0iwLi31gULO5XW+kkSTXXB2u5wsIhCahyFJpX7QCjloOQ2CtaDxekS4SUGfj/p9wVS4Blw7QJfhAdSnYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mKIhLVOH; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-724ffe64923so1665504b3a.2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Nov 2024 00:40:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732869655; x=1733474455; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nbwQYpitovH5oQlteNzxBXcjWfkad4Wni/HhJDybuVI=;
+        b=mKIhLVOHjjP8eIzyq+7Qkm40Mg3TYu7Qf1RIUWlt1Tn8dGqPIXATDWVT+b1jkUa+PR
+         xpEtHabOZKCILFqPKw8D5QceYFe6PcEJDJ3l8gleTEwlSR8TC6OjuuwZHa39m8+MoF14
+         LtgYrHOrM9e3lUP++wIvBqbDzYOKfdf1JRL4d0Ky47sAThbNTKr8hysTLmkwJTyIAyhz
+         JtSdPA3v1g4KGs+oNhj/58rWk6nZf+Y21f5D4JMLjLvZyF4ZoQF1udxi0MrRCs+Zna8Z
+         8xa8Dd5pxB01BzuD/mDU2x0uXaxx0/3f31ROFGj0vrROVJbRxzqRFN714bPpgUiQpkRO
+         r+Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732869655; x=1733474455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nbwQYpitovH5oQlteNzxBXcjWfkad4Wni/HhJDybuVI=;
+        b=ehjZtzBG4KfgQpTmaoM8TY7XkX8UtiimPPfzhf79UcC5B0vfR/ldGw2bRPsef74nrM
+         h7C7UPs1FJvVdmkQULjfGavwWb//S+v0Zy9i3WxDHnWyCMQ1tN0Nk2Bpl/02KO6gQCtT
+         ssBIJvSWgk/DaXgfT2P5mPjh6WwifyHkrHm1bTVhM4zcTQ0RzhD2gi+DlhW+48FsbTmx
+         y59Y5AtllA+u3fxeqy6k6442Q4zZraKDAYAuTpnk0qLXtwjluVDPM3hUUArUB2lDwu6T
+         G9mD+tDW+XTnQ/QibrSoQgvxWy+XadISZ6PdR8guGUR1hUM5eghXFF3MCzmBEPH+GXRL
+         IFtw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3zftABKiQN9QP72QyBfXpcOeMrjfsQKvmTaFCmGuS+LEwvCiQ6UgsQg91/e5JNWY1O1PiofRLbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4yiTfy47GjBjOvapmHJWxe8TagRJXTSqOHAqqSi1Sr93Kseoi
+	Ex/pGsy2O/kBqJ15mT2N7D+7t+rgCnYuK2X8cC2Vl/VvnlBz6vdjKTCmo7DMx28=
+X-Gm-Gg: ASbGncsfAwol4M0hwFmg8x1+a04ckW1XuyjOKIi+Zm6iMJGEqzW8phXAQa+lfvez+uq
+	cjqyHNn8VsKSfKeUk+FmZeQShv8sZsiqNd3rRWrzt0lpEz3A42IxWxiYGIAHlXW7GeFS6Zvn4Ab
+	iFlKw1SCzvTMenMln1g0qFyrW061dB8N43J3vlHmY85Du+07VPvRtHt9upYRqBAiqkG5Bm6HVh6
+	/4aoQKShQSAJGBtM/lcZxvM2pUWsE1UAD11c5JTy/IjIVTRKj5r
+X-Google-Smtp-Source: AGHT+IES7KHozRR3CC4f/KofJkNoePMuMocdqyoM2Vahg/s90rTfb4PjPf5nBfVGqPl3tpw4jaSNHg==
+X-Received: by 2002:a05:6a00:22ce:b0:71e:5b92:b036 with SMTP id d2e1a72fcca58-7253013e930mr14090384b3a.22.1732869655100;
+        Fri, 29 Nov 2024 00:40:55 -0800 (PST)
+Received: from localhost ([122.172.86.146])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72541828c61sm2936394b3a.163.2024.11.29.00.40.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2024 00:40:54 -0800 (PST)
+Date: Fri, 29 Nov 2024 14:10:52 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] OPP: add index check to assert to avoid buffer
+ overflow in _read_freq()
+Message-ID: <20241129084052.wfi7nakgcnt3zkur@vireshk-i7>
+References: <20241128-topic-opp-fix-assert-index-check-v1-0-cb8bd4c0370e@linaro.org>
+ <20241128-topic-opp-fix-assert-index-check-v1-1-cb8bd4c0370e@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241128-topic-opp-fix-assert-index-check-v1-1-cb8bd4c0370e@linaro.org>
 
-Provide some basic comments about the system_states and what they imply.
-Also convert the comments to kernel-doc format.
+On 28-11-24, 11:07, Neil Armstrong wrote:
+> Pass the freq index to the assert function to make sure
+> we do not read a freq out of the opp->rates[] table.
+> 
+> Without that the index value is never checked when called from
+> dev_pm_opp_find_freq_exact_indexed() or
+> dev_pm_opp_find_freq_ceil/floor_indexed().
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
----
- include/linux/kernel.h |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+These APIs aren't supported for cases where we have more than one clks
+available and hence assert for single clk.
 
---- linux-next-20241125.orig/include/linux/kernel.h
-+++ linux-next-20241125/include/linux/kernel.h
-@@ -176,9 +176,19 @@ extern int root_mountflags;
- 
- extern bool early_boot_irqs_disabled;
- 
--/*
-- * Values used for system_state. Ordering of the states must not be changed
-+/**
-+ * enum system_states - Values used for system_state.
-+ * Ordering of the states must not be changed
-  * as code checks for <, <=, >, >= STATE.
-+ *
-+ * @SYSTEM_BOOTING:	%0, no init needed
-+ * @SYSTEM_SCHEDULING:	system is ready for scheduling; OK to use RCU
-+ * @SYSTEM_FREEING_INITMEM: system is freeing all of initmem; almost running
-+ * @SYSTEM_RUNNING:	system is up and running
-+ * @SYSTEM_HALT:	system entered clean system halt state
-+ * @SYSTEM_POWER_OFF:	system entered shutdown/clean power off state
-+ * @SYSTEM_RESTART:	system entered emergency power off or normal restart
-+ * @SYSTEM_SUSPEND:	system entered suspend or hibernate state
-  */
- extern enum system_states {
- 	SYSTEM_BOOTING,
+-- 
+viresh
 
