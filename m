@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-18254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18251-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF7E39DEAFF
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 17:29:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F6D99DEAFB
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 17:28:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A9D5B214BE
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 16:29:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78506B21219
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 16:28:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AC31A0BE1;
-	Fri, 29 Nov 2024 16:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F5419F421;
+	Fri, 29 Nov 2024 16:28:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Zai49uL5"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="WayB0odm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC901547FF;
-	Fri, 29 Nov 2024 16:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B28A14E2E6;
+	Fri, 29 Nov 2024 16:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732897713; cv=none; b=KtvYWwgEChj0HjHVXsu5eEXJtsYxBHHv0FAZciXpMKbWDUJvWAwB4cq/tk7QMt+IAe9Yy15hlE0o91nWdOrM7P9B2RjcRyzKuECY2CZ/JORz8jOyGPU2dhhCnRnHWDWxDCmx39ItHENwfE5SIBWx1G9bhOluWAZyiRK2L6zl9is=
+	t=1732897711; cv=none; b=hIrXiMEZKhrxgtu4V2jgIHl0IDhjQold0LxVx1IpMRBxx6fuqantVkq/6RC1Nyj3rFy244H9Ku+LeKb2vA7GFELfhVNCg1tcOVkwFojbdjwXUZL0DZZwzubbfAo3BMe5NPO7Welqvd586fwZ+HVzmk60b4a8xevwAsTVcoz+70o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732897713; c=relaxed/simple;
-	bh=XX0C2Et9q0+fKcYAwfuxgwl2sGZuOMtPTUd6hhHkFNM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aLHnFCr0GxCDYk4sjatIZ2Hs2xlYAjfCc7PeyY1Q+7uoQMZRx/pTxY9OFT7srRTVbIhdzwhbGSP7zRDVdCSXuAXtxEeeZx+VXwqtJfre6//vrS4gKCkY/L8ZWjElMFj6uVOvSFJWZbmL6SPRcbdHiq+RWFJLNSACiGDIETSmTbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Zai49uL5; arc=none smtp.client-ip=79.96.170.134
+	s=arc-20240116; t=1732897711; c=relaxed/simple;
+	bh=HMGBZOXSMMvv1IfoZw8Sx2HA/3BEClrax5ORvrtMt1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uAm3EcpV4PPDpcHCkl/x8ucOHVpkE3RF9Ltn+lGa0XSdgQNke91A14g2aq0qVmhdVA5IRNqGJYb76yetJmKe9AYc/g3qPK2MOv8RjdDuIKxCizJ+lj7iG+V1sHE6bgTtHhigAOD26UQrs+ashtmR+t1DvLEcw8iB18wQve/0u8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=WayB0odm; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 6c5d0463aa7c4814; Fri, 29 Nov 2024 17:28:28 +0100
+ id 62129d98bd018b2f; Fri, 29 Nov 2024 17:28:27 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7827CA47B8B;
-	Fri, 29 Nov 2024 17:28:27 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9874DA47B8B;
+	Fri, 29 Nov 2024 17:28:26 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1732897708;
-	bh=XX0C2Et9q0+fKcYAwfuxgwl2sGZuOMtPTUd6hhHkFNM=;
+	s=dkim; t=1732897707;
+	bh=HMGBZOXSMMvv1IfoZw8Sx2HA/3BEClrax5ORvrtMt1c=;
 	h=From:Subject:Date;
-	b=Zai49uL5kavDQ1GzqDEGlTZiuaHXweevroflx4QEtTgc+OcG3PiBxyxnTT2DNwb4m
-	 R1hZIGPMrY1TUckWGrFwXH13VDw7I7XBacmRezX2XC/eLyI/CiI8fIgmVEoAQEF++6
-	 60xEaNjZcJfQyZ0lpyc5znwxudThusbqfKeSNNL3LbtDJhqYBGemp8F0sh2CHhprQN
-	 kZXuTu7bK3oy4TFTyzXPqGaOyMi8Ca6bN7M30etyg0aL0NRjEAkmQCPX0NUFjun4m1
-	 /V8ebXRX8jufZb/Y83B7Q3YfDLsyCDUloTVW5c7gZQup4CRhrmnApE8t+VjkX6/XDV
-	 Boa0Q54i5lgww==
+	b=WayB0odmVKpfkTFhPGYu6Q3Jf/EApccNMChSPAFk/PcN4BVo+3wCyYfkE90EXoYkV
+	 a6wOAcs/KNaHSdajOFqvqLMdkdWZMGvCnz9AIJUB20Ccgmen/8UZIx08EcbeOefExH
+	 RLNMhXucYzeM/wOWUrhPwdx8hsohYkgraR2ltNI943v0/opq/ShyAxrmnHwroJ3mMI
+	 LoIPaZGZ9j3qKnS/8c9oQQsnrrySgd3isxqD40rYgBZNIzQGaYXU1UPj8GuPF6tJKG
+	 SgjSFs0ntyi2HJ3zp6MlGKW96HPpOHXhhljRzsi4+Rq7a8NOGye0EQvEU8mir7vnET
+	 9uWwRKPJfDyCw==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
@@ -60,10 +61,11 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
  Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
  Pierre Gondois <pierre.gondois@arm.com>
 Subject:
- [RFC][PATCH v021 0/9] cpufreq: intel_pstate: Enable EAS on hybrid platforms
- without SMT
-Date: Fri, 29 Nov 2024 16:55:12 +0100
-Message-ID: <5861970.DvuYhMxLoT@rjwysocki.net>
+ [RFC][PATCH v021 1/9] cpufreq: intel_pstate: Use CPPC to get scaling factors
+Date: Fri, 29 Nov 2024 16:56:15 +0100
+Message-ID: <4992622.31r3eYUQgx@rjwysocki.net>
+In-Reply-To: <5861970.DvuYhMxLoT@rjwysocki.net>
+References: <5861970.DvuYhMxLoT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,108 +77,132 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrheefgdekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddtpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhg
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrheefgdekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthg
 X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-Hi Everyone,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This is a new iteration of the "EAS for intel_pstate" work:
+If the P-core hybrid scaling factor for the given processor model is not
+known, use CPPC to compute hybrid scaling factors for all CPUs.
 
-https://lore.kernel.org/linux-pm/3607404.iIbC2pHGDl@rjwysocki.net/
+Since the current default hybrid scaling factor is only suitable for a
+few early hybrid platforms, add intel_hybrid_scaling_factor[] entries
+for them and initialize the scaling factor to zero ("unknown") by
+default.
 
-It contains a few new patches and almost all of the patches sent previously
-have been updated.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |   59 +++++++++++++++++++++++------------------
+ 1 file changed, 34 insertions(+), 25 deletions(-)
 
-The following paragraph from the original cover letter still applies:
-
-"The underlying observation is that on the platforms targeted by these changes,
-Lunar Lake at the time of this writing, the "small" CPUs (E-cores), when run at
-the same performance level, are always more energy-efficient than the "big" or
-"performance" CPUs (P-cores).  This means that, regardless of the scale-
-invariant utilization of a task, as long as there is enough spare capacity on
-E-cores, the relative cost of running it there is always lower."
-
-Thus the idea is still to register a perf domain per CPU type, but this time
-there may be more than just two of them because of the first patch.
-
-The states table in each of these perf domains is still one-element and that
-element only contains the cost value, but this time the costs are computed
-and not prescribed (see the last patch).  Nevertheless, the expected effect
-is still that the perf domains (or CPU types) with lower cost values will
-be preferred so long as there is enough spare capacity in them.
-
-The first two patches are not really RFC, but they are included here because
-patches [8-9/9] depend on patch [1/9].  They will be resent next week as
-non-RFC 6.14-candidate material.
-
-The difference made by them is significant because it is now not known in
-advance how many CPU types will be there and the cost values for each of
-them cannot be prescribed.
-
-Patch [3/9] is also a change that I'd like to make regardless of what
-happens to the rest of the series because it effectively moves EM code
-from the schedutil governor to EM where it belongs.  Of course, it is also
-depended on by patch [9/9].
-
-Patch [4/9] differs from its previous version,
-
-https://lore.kernel.org/linux-pm/1889415.atdPhlSkOF@rjwysocki.net/
-
-because gov is NULL not only when it is not used at all, but also during the
-cpufreq policy init and exit, so the check in the patch had to be adjusted
-to match the former case only.  [As a side note, I don't think that the code
-modified by patch [4/9] belongs to sched/topology as it messes around the
-cpufreq internals.  At least, it should be moved to cpufreq and called by
-sched_is_eas_possible(), but I'm also not convinced that it is necessary
-at all.  This is not directly related to the $subject series, though.]
-
-Patch [5/9] adds a new function needed by patch [9/9] and it is the same as
-its previous version:
-
-https://lore.kernel.org/linux-pm/2223963.Mh6RI2rZIc@rjwysocki.net/
-
-Patch [6/9] is almost the same as its previous version:
-
-https://lore.kernel.org/linux-pm/1821040.VLH7GnMWUR@rjwysocki.net/
-
-but its changelog has been expanded a bit as suggested by Dietmar.  It
-simply rearranges the EM code without changing its functionality, so the
-next patch looks more straightforward.
-
-Patch [7/9] is a somewhat updated counterpart of
-
-https://lore.kernel.org/linux-pm/2017201.usQuhbGJ8B@rjwysocki.net/
-
-It still changes the EM code to allow a perf domains with one-element states
-table to be registered without providing the :active_power() callback (which
-is then done in the last patch), but it is somewhat simpler.  It also
-contains some discussion regarding the requirement that the capacity of
-all CPUs in a perf domain must be the same.  In a short summary, I'm not
-convinced that it is actually valid.
-
-Patches [8-9/9] modify intel_pstate.  The first one is preparatory, but it
-is useful for explaining the basic concept, which is "hybrid domains" that
-each contain CPUs of the same type.
-
-The last patch is just the registration of EM perf domains (one for each hybrid
-domain), expanding them when needed and rebuilding sched domains in some corner
-cases.  It also contains some discussion that doesn't technically belong to the
-changelog, but is useful for explaining the background for some decisions.
-
-Please refer to the individual patch changelogs for details.
-
-For easier access, the series is available on the experimental/intel_ostate
-branch in linux-pm.git:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=experimental/intel_pstate
-
-Thanks!
-
-or
-
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=experimental/intel_pstate
-
-Thanks!
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -28,6 +28,7 @@
+ #include <linux/pm_qos.h>
+ #include <linux/bitfield.h>
+ #include <trace/events/power.h>
++#include <linux/units.h>
+ 
+ #include <asm/cpu.h>
+ #include <asm/div64.h>
+@@ -302,11 +303,11 @@ static bool hwp_is_hybrid;
+ 
+ static struct cpufreq_driver *intel_pstate_driver __read_mostly;
+ 
+-#define HYBRID_SCALING_FACTOR		78741
++#define HYBRID_SCALING_FACTOR_ADL	78741
+ #define HYBRID_SCALING_FACTOR_MTL	80000
+ #define HYBRID_SCALING_FACTOR_LNL	86957
+ 
+-static int hybrid_scaling_factor = HYBRID_SCALING_FACTOR;
++static int hybrid_scaling_factor;
+ 
+ static inline int core_get_scaling(void)
+ {
+@@ -414,18 +415,15 @@ static int intel_pstate_get_cppc_guarant
+ static int intel_pstate_cppc_get_scaling(int cpu)
+ {
+ 	struct cppc_perf_caps cppc_perf;
+-	int ret;
+-
+-	ret = cppc_get_perf_caps(cpu, &cppc_perf);
+ 
+ 	/*
+-	 * If the nominal frequency and the nominal performance are not
+-	 * zero and the ratio between them is not 100, return the hybrid
+-	 * scaling factor.
+-	 */
+-	if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
+-	    cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq)
+-		return hybrid_scaling_factor;
++	 * Compute the perf-to-frequency scaling factor for the given CPU if
++	 * possible, unless it would be 0.
++	 */
++	if (!cppc_get_perf_caps(cpu, &cppc_perf) &&
++	    cppc_perf.nominal_perf && cppc_perf.nominal_freq)
++		return div_u64(cppc_perf.nominal_freq * KHZ_PER_MHZ,
++			       cppc_perf.nominal_perf);
+ 
+ 	return core_get_scaling();
+ }
+@@ -2211,24 +2209,30 @@ static void hybrid_get_type(void *data)
+ 
+ static int hwp_get_cpu_scaling(int cpu)
+ {
+-	u8 cpu_type = 0;
++	if (hybrid_scaling_factor) {
++		u8 cpu_type = 0;
++
++		smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
+ 
+-	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
+-	/* P-cores have a smaller perf level-to-freqency scaling factor. */
+-	if (cpu_type == 0x40)
+-		return hybrid_scaling_factor;
++		/*
++		 * Return the hybrid scaling factor for P-cores and use the
++		 * default core scaling for E-cores.
++		 */
++		if (cpu_type == 0x40)
++			return hybrid_scaling_factor;
+ 
+-	/* Use default core scaling for E-cores */
+-	if (cpu_type == 0x20)
++		if (cpu_type == 0x20)
++			return core_get_scaling();
++	}
++
++	/* Use core scaling on non-hybrid systems. */
++	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
+ 		return core_get_scaling();
+ 
+ 	/*
+-	 * If reached here, this system is either non-hybrid (like Tiger
+-	 * Lake) or hybrid-capable (like Alder Lake or Raptor Lake) with
+-	 * no E cores (in which case CPUID for hybrid support is 0).
+-	 *
+-	 * The CPPC nominal_frequency field is 0 for non-hybrid systems,
+-	 * so the default core scaling will be used for them.
++	 * The system is hybrid, but the hybrid scaling factor is not known or
++	 * the CPU type is not one of the above, so use CPPC to compute the
++	 * scaling factor for this CPU.
+ 	 */
+ 	return intel_pstate_cppc_get_scaling(cpu);
+ }
+@@ -3665,6 +3669,11 @@ static const struct x86_cpu_id intel_epp
+ };
+ 
+ static const struct x86_cpu_id intel_hybrid_scaling_factor[] = {
++	X86_MATCH_VFM(INTEL_ALDERLAKE, HYBRID_SCALING_FACTOR_ADL),
++	X86_MATCH_VFM(INTEL_ALDERLAKE_L, HYBRID_SCALING_FACTOR_ADL),
++	X86_MATCH_VFM(INTEL_RAPTORLAKE, HYBRID_SCALING_FACTOR_ADL),
++	X86_MATCH_VFM(INTEL_RAPTORLAKE_P, HYBRID_SCALING_FACTOR_ADL),
++	X86_MATCH_VFM(INTEL_RAPTORLAKE_S, HYBRID_SCALING_FACTOR_ADL),
+ 	X86_MATCH_VFM(INTEL_METEORLAKE_L, HYBRID_SCALING_FACTOR_MTL),
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE, HYBRID_SCALING_FACTOR_MTL),
+ 	X86_MATCH_VFM(INTEL_LUNARLAKE_M, HYBRID_SCALING_FACTOR_LNL),
 
 
 
