@@ -1,200 +1,224 @@
-Return-Path: <linux-pm+bounces-18283-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18285-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C22849DF16D
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 16:13:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 873789DF177
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 16:21:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88C25281532
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 15:13:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C9BB28176E
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 15:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A18619F118;
-	Sat, 30 Nov 2024 15:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C76C1A01BD;
+	Sat, 30 Nov 2024 15:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="YFIxG0vq"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aOxM3EU9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8066C199E84
-	for <linux-pm@vger.kernel.org>; Sat, 30 Nov 2024 15:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732979577; cv=none; b=e3LLz/fmJLHKaP1zlAjCWw8++oPJKYa3jk3caDB9QX35DtC5eph9n5vzVRo7+BqKHNhgSeBfP0mSx/MiIiCO2YgMIFv6xJUR+G1/2Mh4jdWa0e+rVYtZDWUfqc7Kdjes7TX6KDS2Cxi4n9M67nwDq+c+YtN36JyQc0xwoD0GLNs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732979577; c=relaxed/simple;
-	bh=swP3eR9q5AxgACiSp3JiCAYHD6r93GGEio/MMIcxNoY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aGZmsN+6ox2oE3JqI769Zz4pER9LQuUwoZcroofalleNjhw9sNzYX+5Gf9WpfM6h7xhdlY7bvpnpmwI46X9jdSo7CszMSNWnh9cYCU9U8HuwakgVThyd7PNkbVyoSxKWdTpzIq/hvoYrIcLCxE26ylS1ZmLnBB43uvS/+D8ea6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=YFIxG0vq; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AUEwKmm023487
-	for <linux-pm@vger.kernel.org>; Sat, 30 Nov 2024 15:12:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	piF9tu5HqYnrC9XnrkL0QyKgSzjororBfB+7R09Q5Vk=; b=YFIxG0vq8OaJMKRI
-	XkRqU5lmxT7zZic+Lmwb3sXAunBdad6vzyETPvrIPKEdnEOrVGIeg4dUtutAdhyD
-	/xl0lvdX9+5zjfMzPeX14BbKz1biLeQGCkk7Rrx12kc06X4+E5XQyA3iJo6lM9cd
-	RZ2VgS3jwlENUoIWYw1gGxt5hZhRC5runNbMrtgzm7nrL8QaYn+njTFJSuo4UgOc
-	sHcyapfHutrJ7GcPhMimXhAqIACa6vwbY2SNYXUdS16cwJRLFcx4jqg/fu6CjPbX
-	tdph5TantWaX4rAOBcr3SM1xeyp2KEkAjZpKv1vC6vWPSYAuS75fSDY63rQ2c+wH
-	fNEmSw==
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 437ufe0uan-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sat, 30 Nov 2024 15:12:54 +0000 (GMT)
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6d407624cedso6398026d6.1
-        for <linux-pm@vger.kernel.org>; Sat, 30 Nov 2024 07:12:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732979573; x=1733584373;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=piF9tu5HqYnrC9XnrkL0QyKgSzjororBfB+7R09Q5Vk=;
-        b=M70kGRYY5F0ycF2MuGlZRZ1SwP2Cdo8LEHH4wKnelC3k6qJjWBqNqU1AHgasqgFVsc
-         hGbljALzyKPysU+CBAlaF6hwhHBuQ6Q/+DcPTcUJLbx7aVBsOIZygiZR56RyFXMNhyAU
-         9MDTHOzYLvkViUlTFh02ZqT+fCC2860COPmHoXOJogrL//NJ2LuSVbg5JnK+eENGhZET
-         hPfcNqjC8wSxMqvGBBnMKBVqFp44Tq/+0llkt88bicqOjTTj1kBzvPyXp1gq8X918AUA
-         ubpgvjowjda7lX6rEYocg0odyz+Jhm4AZHxc/hSSxuucGU/6jAKZ1qaw2xDXe/+BLFA4
-         U3LA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZoHhc+OWRE9RRizphZZurL2l+KXYNnKg+lb/yoe5gqp8Ru1JDExt1BkeLUCfM0yEtxUt/EReUZg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBnraCSauqDa4e12BmpM4koEVEGD4mbLevImEveJIVvX87Pcbp
-	GpORbIoT0VgUI7YAdfTf4mEBypWb158/f6QxrEuxkpDCj7PW/OY/d3PLyJLbz0kQSs5+P3VsOzt
-	GTlVhF1oPPNRFOYATEXruJpnaSbMEmNx7ie9zecjrTmFw3euua8A+K3/N6A==
-X-Gm-Gg: ASbGncsDF0ETwx4CT7xz939GXdjWlW0AMf+3qkwf7Sg5YdGmduAP7wqSZ7VE30JXSrd
-	ojBybH6MculJlTrozj5vH87gaBX2EsxuhBChXOZLIcuEzulfv1qDID5lNj35C2jLcOf5FyHyAUA
-	tFbeYTU67/h7zo0aNYUtIESK0/1FRzP8XEE3gN7ikOYpkjM702b5EIxjVPZnkXPDCpIejpxNZWs
-	6v2QAQ9fcfA9c+lGTNF1NAF0wVFptlVV5ArDD+hha/IRK25T7GWjO7ismhJ/v5XG5BCSUJ+E3Of
-	h48q60VUQ1xjxVFAj7/vH40IM2uwmkk=
-X-Received: by 2002:ac8:570a:0:b0:462:fb51:7801 with SMTP id d75a77b69052e-466b35d689amr89837931cf.8.1732979573226;
-        Sat, 30 Nov 2024 07:12:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEHQyT6/DO0GMjgKj4/WCNKD0HwRh5XZtvFSFNn7j2Rzd6x6vgIxFx8jVCHofXYxn6dWgObkg==
-X-Received: by 2002:ac8:570a:0:b0:462:fb51:7801 with SMTP id d75a77b69052e-466b35d689amr89837771cf.8.1732979572760;
-        Sat, 30 Nov 2024 07:12:52 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5998e649csm286979266b.110.2024.11.30.07.12.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Nov 2024 07:12:52 -0800 (PST)
-Message-ID: <0881289f-db05-4e33-91a7-ffd415c2f37e@oss.qualcomm.com>
-Date: Sat, 30 Nov 2024 16:12:49 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D285C15539F;
+	Sat, 30 Nov 2024 15:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732980054; cv=fail; b=YNhZPl25FbtauGsGKDwmYQu+9UckDW4TWaIRTom08gXonxdT+P/O3zM+GSKM99NRXUMEMAzMzMlV/3SB7gkFNbq1DFI31WBbEX7Pdg0Z1S05wX8+jmE76jTPgR6IQnTGq+LEFJfED/Qh0qJnbsJoNLu0Z+rLDFgnBDOo/2XPdy8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732980054; c=relaxed/simple;
+	bh=Ym4yT35wGMMQbxcWlPxkIQTjx8JE5uBWKCiNtRMfpzo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PMkyi9SfOI1bzzpR6+GbNG6wLgu00+SHAUB89u+kBUg1QcAo3ykoTzp7zB4pWNcn5B2g1+jJeN3nAV4TK/wUaorQlcH0buBx7pfEMJ5bZ7kGG2XargQ5YwXfxruo5btO2GuPzaVLhnjFa37TogNur+jN0SDivtR5gVjfgrLteiI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aOxM3EU9; arc=fail smtp.client-ip=40.107.94.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YULwknrUvuH5wq2tt0eIvFCbfU9ZXIb/0cp3tYmfwKV8cHOz0BMOuVuoHRzVAhfyptYSemyvvmQhGhwIW0m/X2ANuW7Y8tIajoo815FnkNoI3EdL3oJ5HD64hGat7YxOlE1IkfZMvXbfganraKv6Z5DrIM02fvZORv6LVdwRxaHcX5kL8PL3XF2p4LYo5J1pr3BHW3n+wq+/YQih6Y+WOYvFriYJ+Csvf9ddxJpvt1XCd/lfk+bqYpWMfFijtDXQ6XDf3XmboSRAqEKQxUiJkIA6o/iHiNSALcD5vkeq3fH/YrrkxcmLeTfBdYfWkPxd41iJvemMcQR3asItQ1zP/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2IfDqWf+Mkd3RsyQnyNtAVKMN0tvP5deMjCf8zrT6EY=;
+ b=pN2hN73eGa5T3DmC005GPaD4MXty6Rw4GPqtbNd7s8YUm6C8YAEiFqLxe3hP/eRHyb6jCgrYSV3a0zDJYE5vPtfA2i4/ftSOABhQ8qPZrL+KHqbpoJ96PuZspEpk9oJ9RFjg4fYDGKhWGtVqOb0hB+TKnGeb2QveEBVXPR7FIaZPsjaTLTMI4Vx7Y6z03FTWBlux04N3bTEPyL3bDsTNCBuYMSzxtacL9AB2an2uWonQy4lFB9rW2nltkpzsCltNSOtwg4RELh7c76tTOkhtj1cw80RBdLPzTOniBPihnUFLnlCf/o2CyQaPmakY+OJJ7PqxlWt2/IRoD9WVjqp6zg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2IfDqWf+Mkd3RsyQnyNtAVKMN0tvP5deMjCf8zrT6EY=;
+ b=aOxM3EU9S0a2T9MmUCR4S596sVoipn6MVdtUK/uj04sgQhBYwvYasrh5D//C84FnD9vhnO3Sr3tEpjICpc0Y4RxIYEq+RA3llGZwEPmw+7kgQYUGFEyYoN2WY2AuWyBgSvJ2MHVY9rszuDkOojByvk7BsCya3jqjhuxK085kgC8=
+Received: from CH0PR03CA0324.namprd03.prod.outlook.com (2603:10b6:610:118::18)
+ by PH7PR12MB5855.namprd12.prod.outlook.com (2603:10b6:510:1d6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.16; Sat, 30 Nov
+ 2024 15:20:46 +0000
+Received: from DS3PEPF0000C37B.namprd04.prod.outlook.com
+ (2603:10b6:610:118:cafe::59) by CH0PR03CA0324.outlook.office365.com
+ (2603:10b6:610:118::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.15 via Frontend Transport; Sat,
+ 30 Nov 2024 15:20:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS3PEPF0000C37B.mail.protection.outlook.com (10.167.23.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8230.7 via Frontend Transport; Sat, 30 Nov 2024 15:20:45 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 30 Nov
+ 2024 09:20:43 -0600
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC: <x86@kernel.org>, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, "Mario
+ Limonciello" <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>, "Shyam
+ Sundar S K" <Shyam-sundar.S-k@amd.com>
+Subject: [PATCH v7 00/12] Add support for AMD hardware feedback interface
+Date: Sat, 30 Nov 2024 09:20:11 -0600
+Message-ID: <20241130152023.684-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V6 1/4] interconnect: qcom: Add multidev EPSS L3 support
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Sibi Sankar
- <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20241125174511.45-1-quic_rlaggysh@quicinc.com>
- <20241125174511.45-2-quic_rlaggysh@quicinc.com>
- <2b95cc25-a842-4edd-a5f3-2351038d264e@oss.qualcomm.com>
- <5egskepgsr52ulnbw7jhvazfjayg5ge5vhg6pi7mllyxx2vwqw@a2ojvabzd36o>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <5egskepgsr52ulnbw7jhvazfjayg5ge5vhg6pi7mllyxx2vwqw@a2ojvabzd36o>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: -zzlRsjmHs-7xCEyMn3jardosp2arvUo
-X-Proofpoint-GUID: -zzlRsjmHs-7xCEyMn3jardosp2arvUo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- spamscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 adultscore=0 bulkscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2411300126
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37B:EE_|PH7PR12MB5855:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54b526bf-a020-4172-3465-08dd11528fa3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?R2RseXNKakdRYmdhWmJlYjRSRktYZDFla1FoQ05NTS90YzErTmxzclFmQkZE?=
+ =?utf-8?B?dG1hejVMb1U2eTRpMExrbFRQV1crdk81ZmlSem51NTU3R0hqdU1FTkNtMUE0?=
+ =?utf-8?B?UEZXN3VZOHJEdTFGR3I4d3FKR1B1dThUWFJEZlFsQzRwZTBWeGdCUis0d1hn?=
+ =?utf-8?B?NjFzSmVPdStMbm0vTzlyRUxRSXZFMFQ3TVREd3NrNlBVeVdOKzVuY0pjVXlO?=
+ =?utf-8?B?MzAwN1ZhLzVUMnRCdElWS28xZm5UNHVDY0RMcFU2VFNpdUdJcEYzNXpRSWJu?=
+ =?utf-8?B?aEd2Rk1ZRTFtRkFxQnZtUDBacTk5VHZ4YnBoM2lMNlRQalRsQWhRRmFPa3d1?=
+ =?utf-8?B?WkNDODl0SjNvanhLcXpkV1ZOVTFWZTJoTDZOVUxYcWwvZHFhWjRYRDE3eUw2?=
+ =?utf-8?B?ZUJwQmFrTVljRmVlRWtodS9ZR3ZPamRUVEZDdU5Fb0xCZjhoYnpCeXd4bHVR?=
+ =?utf-8?B?cmtVUnBtRXBIOHpaY2F6RDh1TkVza1cvd1RhTWdtSkFXRUVTYkhaYzlnQnM5?=
+ =?utf-8?B?TzJYSlVXMWlXai9CVU5NbU0yR3R0WFA3blFLajNPakZhY05MN1Z2RGJ2WjVp?=
+ =?utf-8?B?L3cyOWVPUTZMS3dmWHl3WXVOQUhqYW5XYTFYRlUrWFBsZ2tWOThpMWdXQTY1?=
+ =?utf-8?B?b1NVbHF2TjVYSDl0cTRodGUvYytlT1c1L25DQWZRbWgveFIyVm4vVGFHeEtI?=
+ =?utf-8?B?WGlJQ0htT0NYcGdDdmVCOHFhcXBJTzYyYjhPcklIR1ZtUlcwUU1TOURqWTBl?=
+ =?utf-8?B?amh1Tm4yYWsrWW1CM3JQcU1sK01ZSG1aQXJ0VGNWVnpYTzIzVjF4VFBjd3hp?=
+ =?utf-8?B?WWdaNDhoY0d0M0hUVjBIWVFIeVNQQzF5ODgzNjNib2FKamtKVUxQanpESytp?=
+ =?utf-8?B?TnlzVXVnYmc5QzY3SHl3anRzQXVzbmdMMjZxeXc3OE82VXJJaHVKdGJMUnVk?=
+ =?utf-8?B?cG5Ydi8rYUpPMG9ONjVXdHpQYjJyc20rcWtZVHNDaXlIbXgxbUdiTDRmVWVZ?=
+ =?utf-8?B?WStINDBPdzJhekhaOEFhQWRFSGNzMllSQWY3L1BjWWpPTk9vMVQ3aE1xRjFh?=
+ =?utf-8?B?RThZK042VUp2V1B4NnhXQWhhUUdsazdHaVlKcGtJdTdXV3JsaEJlbXpCc01X?=
+ =?utf-8?B?TnlYUVU0R3p6NmZpd1RDbE5BYm5FQnB6TDA4bG1KcmVaR3ZQQ2FKL1BKWnRV?=
+ =?utf-8?B?cVFyZHF2WVZXRFpWWitRU0oyNUtPVGQvSnljMWlQWEdUMlF2eTJYTHlUVmUz?=
+ =?utf-8?B?MUpSQUZsaEFiUU5mM1Z5L0greENsdjcwQ0J3S2l6N1ppOVpTalBvMHo3aVFI?=
+ =?utf-8?B?cW8wY2xlREJsd2I0blQ4cTBQTWVvMEgzT1hoTmlsd0ZsMHRhSmJOVDlMbWUv?=
+ =?utf-8?B?a2RXcG5wdlYwV2VocElySGk3RlBiVUViQXF5U0ozQXFQYkxlODVvb0tjYm5C?=
+ =?utf-8?B?RlFybkRQNTdmNjZXU1hHMStCczR5OU1VUUZITk8rZWx6Q1l2NHpsUG05aTRj?=
+ =?utf-8?B?aWdianc1TSt0b25adWtCdzhTT3d2cnBDK3p5d1VYQUo1VzVmRkNRQXBuY3NY?=
+ =?utf-8?B?NjFJSHROc1NUelMxZ2c2NEdORDByWlo2UGdNM0tSc1VLSEJrOTdZY1dhYms0?=
+ =?utf-8?B?SnBGOU9pQndVUXBaWlc3ejczY3AyRHJ4TEpvUkN3WjZuSEFsOWdFUVVsNGZT?=
+ =?utf-8?B?anQ1VGlnVUVuL0NDaEtybkxPdjBNSVJpdTk3NGsxLzNVNElCN2FSZjltbVBS?=
+ =?utf-8?B?eDhLVDYzU0VMMkMvVnZhVkd2UEd4QmhYMDZxYVhQSmtGM0xHdktrSmFRV2l3?=
+ =?utf-8?B?OGU1Y0VqbFhFYzB3S29NZ2hQRXlic0ZCbmxWc0ZJd21SYjNPbGVwYklYZ3BK?=
+ =?utf-8?B?emlBOGNpMFQrVzU3Yi9OdTEzL28wRElqRTQ3aFJYZE5UbW5pY2VOeHQ3WlA5?=
+ =?utf-8?Q?nVh2jJYqK72FxLLtgZ5wOpFO/BExAaKs?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2024 15:20:45.0369
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54b526bf-a020-4172-3465-08dd11528fa3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF0000C37B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5855
 
-On 30.11.2024 4:09 PM, Dmitry Baryshkov wrote:
-> On Sat, Nov 30, 2024 at 01:49:56PM +0100, Konrad Dybcio wrote:
->> On 25.11.2024 6:45 PM, Raviteja Laggyshetty wrote:
->>> EPSS on SA8775P has two instances which requires creation of two device
->>> nodes with different compatible and device data because of unique
->>> icc node id and name limitation in interconnect framework.
->>> Add multidevice support to osm-l3 code to get unique node id from IDA
->>> and node name is made unique by appending node address.
->>>
->>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>> ---
->>
->> [...]
->>
->>> +	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>>  	qp->base = devm_platform_ioremap_resource(pdev, 0);
->>>  	if (IS_ERR(qp->base))
->>>  		return PTR_ERR(qp->base);
->>> @@ -242,8 +262,13 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->>>  
->>>  	icc_provider_init(provider);
->>>  
->>> +	/* Allocate unique id for qnodes */
->>> +	for (i = 0; i < num_nodes; i++)
->>> +		qnodes[i]->id = ida_alloc_min(&osm_l3_id, OSM_L3_NODE_ID_START, GFP_KERNEL);
->>
->> As I've said in my previous emails, this is a framework-level problem.
->>
->> Up until now we've simply silently ignored the possibility of an
->> interconnect provider having more than one instance, as conveniently
->> most previous SoCs had a bunch of distinct bus masters.
->>
->> Currently, debugfs-client.c relies on the node names being unique.
->> Keeping them as such is also useful for having a sane sysfs/debugfs
->> interface. But it's not always feasible, and a hierarchical approach
->> (like in pmdomain) may be a better fit.
->>
->> Then, node->id is used for creating links, and we unfortunately cannot
->> assume that both src and dst are within the same provider.
->> I'm not a fan of these IDs being hardcoded, but there are some drivers
->> that rely on that, which itself is also a bit unfortunate..
->>
->>
->> If Mike (who introduced debugfs-client and is probably the main user)
->> doesn't object to a small ABI break (which is "fine" with a debugfs
->> driver that requires editing the source code to be compiled), we could
->> add a property within icc_provider like `bool dynamic_ids` and have an
->> ICC-global IDA that would take care of any conflicts.
-> 
-> Frankly speaking, I think this just delays the inevitable. We have been
-> there with GPIOs and with some other suppliers. In my opinion the ICC
-> subsystem needs to be refactored in order to support linking based on
-> the supplier (fwnode?) + offset_id, but that's a huuuge rework.
+The AMD Heterogeneous core design and Hardware Feedback Interface (HFI)
+provide behavioral classification and a dynamically updated ranking table
+for the scheduler to use when choosing cores for tasks.
 
-I thought about this too, but ended up not including it in the email..
+Threads are classified during runtime into enumerated classes.
+Currently, the driver supports 3 classes (0 through 2). These classes
+represent thread performance/power characteristics that may benefit from
+special scheduling behaviors. The real-time thread classification is
+consumed by the operating system and is used to inform the scheduler of
+where the thread should be placed for optimal performance or energy efficiency.
 
-I think this will be more difficult with ICC, as tons of circular
-dependencies are inevitable by design and we'd essentially have to
-either provide placeholder nodes (like it's the case today) or probe
-only parts of a device, recursively, to make sure all links can be
-created
+The thread classification helps to select CPU from a ranking table that describes
+an efficiency and performance ranking for each classification from two dimensions.
 
-Konrad
+The ranking data provided by the ranking table are numbers ranging from 0 to 255,
+where a higher performance value indicates higher performance capability and a higher
+efficiency value indicates greater efficiency. All the CPU cores are ranked into
+different class IDs. Within each class ranking, the cores may have different ranking
+values. Therefore, picking from each classification ID will later allow the scheduler
+to select the best core while threads are classified into the specified workload class.
 
->> Provider drivers whose consumers don't already rely on programmatical
->> use of hardcoded IDs *and* don't have cross-provider links could then
->> enable that flag and have the node IDs and names set like you did in
->> this patch. This also sounds very useful for icc-clk.
-> 
+This series was originally submitted by Perry Yuan [1] but he is now doing a different
+role and he asked me to take over.
+
+Link: https://lore.kernel.org/all/cover.1724748733.git.perry.yuan@amd.com/
+
+On applicable hardware this series has between a 2% and 5% improvement across various
+benchmarks.
+
+There is however a cost associated with clearing history on the process context switch.
+On average it increases the delay by 119ns, and also has a wider range in delays
+(the standard deviation is 25% greater).
+---
+Sorry for those of you that got this twice. I picked the wrong entry in my gitconfig
+and it didn't use platform-x86.
+
+Mario Limonciello (4):
+  MAINTAINERS: Add maintainer entry for AMD Hardware Feedback Driver
+  cpufreq/amd-pstate: Disable preferred cores on designs with workload
+    classification
+  platform/x86/amd: hfi: Set ITMT priority from ranking data
+  platform/x86/amd: hfi: Add debugfs support
+
+Perry Yuan (8):
+  Documentation: x86: Add AMD Hardware Feedback Interface documentation
+  x86/msr-index: define AMD heterogeneous CPU related MSR
+  platform/x86: hfi: Introduce AMD Hardware Feedback Interface Driver
+  platform/x86: hfi: parse CPU core ranking data from shared memory
+  platform/x86: hfi: init per-cpu scores for each class
+  platform/x86: hfi: add online and offline callback support
+  platform/x86: hfi: add power management callback
+  x86/process: Clear hardware feedback history for AMD processors
+
+ Documentation/arch/x86/amd-hfi.rst    | 127 ++++++
+ Documentation/arch/x86/index.rst      |   1 +
+ MAINTAINERS                           |   9 +
+ arch/x86/include/asm/msr-index.h      |   5 +
+ arch/x86/kernel/process_32.c          |   4 +
+ arch/x86/kernel/process_64.c          |   4 +
+ drivers/cpufreq/amd-pstate.c          |   6 +
+ drivers/platform/x86/amd/Kconfig      |   1 +
+ drivers/platform/x86/amd/Makefile     |   1 +
+ drivers/platform/x86/amd/hfi/Kconfig  |  21 +
+ drivers/platform/x86/amd/hfi/Makefile |   7 +
+ drivers/platform/x86/amd/hfi/hfi.c    | 546 ++++++++++++++++++++++++++
+ 12 files changed, 732 insertions(+)
+ create mode 100644 Documentation/arch/x86/amd-hfi.rst
+ create mode 100644 drivers/platform/x86/amd/hfi/Kconfig
+ create mode 100644 drivers/platform/x86/amd/hfi/Makefile
+ create mode 100644 drivers/platform/x86/amd/hfi/hfi.c
+
+-- 
+2.43.0
+
 
