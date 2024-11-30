@@ -1,61 +1,60 @@
-Return-Path: <linux-pm+bounces-18295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72BBC9DF1A3
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 16:23:30 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C16501636B3
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 15:23:11 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE861B3B28;
-	Sat, 30 Nov 2024 15:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uduERjtb"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F19E9DF1A4
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 16:23:37 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86CA1AE006;
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3F4A281768
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 15:23:35 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7329C1B85C1;
+	Sat, 30 Nov 2024 15:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="i320SDkv"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D250E1AE00B;
 	Sat, 30 Nov 2024 15:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.42
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732980067; cv=fail; b=hvSlpEUGJZpqnfMttYvKdMXNhsXtvzV7OYt97q8UBVDpbSLqZpImOMK/Klw4+ZKFJCat+8j1tdqoCUG1ThozfWjdHmUUnXrMdpgAHW+Wg5HoLdInDit4xU5z2Mg+EfqPi3o1bBNKYCgSIE45T62UASNXPyjZieEYInvArtedM3M=
+	t=1732980070; cv=fail; b=Ik5HIJ0Y0q4ahnKJD9UJzDSlLk5i/6JAdKZXVpo5GuLpplzmq0I2+Q1AauxpPOZB7CkPmOYOs4zxJ8u1WcZ5WjNccssro1s3tVI94tavj0g+HwxPN03TQhV3dfWPdofoYIY9yFFdWcsRZbbxRhd3nQ/Mla9HhFzQDKZF4Fzfw0s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732980067; c=relaxed/simple;
-	bh=SyTSHZsCUn82tUVuRI0O8Q8JYKLMIYs/4RA3IHHMzq0=;
+	s=arc-20240116; t=1732980070; c=relaxed/simple;
+	bh=Q7DY709JgBs+QNd6i5wQZjcCds4ZMiJT05soWR23iNM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gtPZfVQJjCVHOlDniD2AoKAHkwU2wqxYlBK5A6IeW9KAd/tPjGM3cO2lV9XGTT5//Pb7zjSGMwN+pdq2YHDWaO9bXJAFqgx79X6HDeQ56wNBTR5snrAwM5oKOnj0X+QrhL2Lj0NiaSG7HNTwcX7TAvC25AZXEZKhIkSDypMoTkI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uduERjtb; arc=fail smtp.client-ip=40.107.223.42
+	 MIME-Version:Content-Type; b=rlred2T8S1hVbs6Oy2i9FE6w6qIAzebNF+OMh125ggQELfv1hE9X1JRkAF4whuzoVF2dXx3CzzGo+rlyQESSPq3tWD9NjEscgYu3/OoGYmDssufDle3hdtWwvn+eSruHGpGRYu1Dt5L26BiF6fKsnmvja9NHq0HRvg1P0ieZ1/g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=i320SDkv; arc=fail smtp.client-ip=40.107.93.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ozgUoshgbkTvsisF8hv420LRqVT23WURwFaa//koQ3bQ6by3Gl61t+ovHN0zKlxz2JQaFJOBwD3U82nsbcOuTM5C9F5s/iuDuLEDVmkCpwo9JdLr9tP4YXAcqkudVyI4iRsJnxFvR6+IZTICF45nZy/e1TO6fryD1vVklRaavE5YICS1jur2MX0Sr9LeeYMRMeGbmp/6kY24n371NDEw+ehfwe7WYYeLpqu4HeIw2dsrLmawNjLWFsHHqZ8eHp/jR3Wu2Ipv/uBp5eILV4OEywQcqYXb9REiVotPh++/cpJQoMiU26DLIYV2KjyG4QUhVQ7H4HubTcnLcDkD8QPepw==
+ b=nM7K1JICHPbHqy5SNC0aQFd/6hCC3BziwTR4andiGpCK5kBGIEC/hVu5D+q+7k/2qdPw3oetV2Bcvau1sOBvtC5uxNmecfwXA+eNZTTT86gMKWWCrHNZ5/nKY6BlQJTL1SnYWtn3uCMBMp2G55oOb3rSgoU1O1R4BZEf0dQdINiX97uh9Uv9vPmx+O1FIXOOIjHnmX7QBGg0ocY+daKvNVSybnbw2FFTkVQjGvw50+Ak2rLyXOmg/o9ctN1IyhLhDjy6lZ9rYwWupSkE7D5YQ6ejIGzKkvJ/nZ7YTNxNLRZxgyt8qi/DQzQ6/5stukwvwUgk+VnQ5W0Smb5Kz2s/sQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jynr0rR5oKbG7uuIa/0APhD+gIeciu7tVnGInLD4URk=;
- b=wpdrWQvuMGN5Fr56sKH/Cyf7jI1qV9GrOYwlcDMz7ZL6EDeDQqJBed+qsCwwJob4UoO4I+iX6sLZEsO00sBJDyNoGeb7PZKB9lcae0GTwlL+3wrd4InKXkzUfqNMHwJ6l1j8I7PSv9JAWPSqaKi3gJqGPy2Y/B7iYtW5LP9Wh1xUZuIS46IJPowddYzjwkpH0II973CAqrs219isbAKSm/a2DmL7lUrBetyMKgdMzYoByCb0iyPBOwC2r7QZQVaiC25dcG0xXgM4UfJkygZFT2Mpl2QGyB1jVtXnxIkqFlIljgrg3o2Cqp4YePWDeVROE/Fdq9yJTvelZYmWBsMbAg==
+ bh=CbsR33tA3QUueZBtjGdlP0wv8lbAXeI77bNgCXHd8C8=;
+ b=GF8jRaqtgR0g3hV/FArZEYXUpmtFoQfAih24LHJ4TXqMuJ3AP7YJ235Cfrp7Tij5Wh1Ot/xtklmF8tl8kyj0yLHnwf/uHiw41wBoYzDRyVnUYKHYi3TRyvlTmVwMVbJsg5Ay6aSA9ZUkqxJ2HZNEJQuFEb1dKexlrq//aDPwGA9ngNgt29T4LlckZ74vLB9XIbrYEmog+VQ2dw/QsZOST3FO1T+eI2wCTIEDooIcK5BW8nQQR3aKAQZ5hKMPrlef8B5oTWfT0548Wo66mt1gxXT4/NEUGqi8kfwOnStTOfPeCv/iyTcwxL39tbtA8OgvdEfOuprJK6+hrNizdAg3Qg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jynr0rR5oKbG7uuIa/0APhD+gIeciu7tVnGInLD4URk=;
- b=uduERjtbkCXHnz1YGjJxTW7ruTjFbCfP078j6O7zv7kLmgWD2JoA/QXA5/arapHqZ34ApJTTgVwjgvW9un+IfC5M+VP7HbhOsm1wcFoKorjxFk6FiuvtPSs/039GBZQfp038q7QpkmWgg2oxyHY41ATHkwU3ciNp5Of3MtsT7Ho=
-Received: from DM5PR07CA0070.namprd07.prod.outlook.com (2603:10b6:4:ad::35) by
- PH0PR12MB7093.namprd12.prod.outlook.com (2603:10b6:510:21d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.16; Sat, 30 Nov
- 2024 15:21:02 +0000
+ bh=CbsR33tA3QUueZBtjGdlP0wv8lbAXeI77bNgCXHd8C8=;
+ b=i320SDkv1UiOVNs/dNFeE1ESCf6+P1bInDa+6qazFHdGovb+PAxQXnyfbahtd3Pqg8cyibzaCIa1JpWEUbFcp8UxNdcqkcKk8CZJnhEfsvloH1Y6wWs/DlY+E2lJoZ4o5lm8mcvnZLU5zLyUqUm8As+6g2BdVvE8QjMzbXP+DVo=
+Received: from DM5PR07CA0057.namprd07.prod.outlook.com (2603:10b6:4:ad::22) by
+ DS0PR12MB8341.namprd12.prod.outlook.com (2603:10b6:8:f8::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8207.16; Sat, 30 Nov 2024 15:21:02 +0000
 Received: from DS3PEPF0000C37F.namprd04.prod.outlook.com
- (2603:10b6:4:ad:cafe::ba) by DM5PR07CA0070.outlook.office365.com
- (2603:10b6:4:ad::35) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:4:ad:cafe::80) by DM5PR07CA0057.outlook.office365.com
+ (2603:10b6:4:ad::22) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.15 via Frontend Transport; Sat,
- 30 Nov 2024 15:21:01 +0000
+ 30 Nov 2024 15:21:02 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,11 +64,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DS3PEPF0000C37F.mail.protection.outlook.com (10.167.23.9) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8230.7 via Frontend Transport; Sat, 30 Nov 2024 15:21:01 +0000
+ 15.20.8230.7 via Frontend Transport; Sat, 30 Nov 2024 15:21:02 +0000
 Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 30 Nov
- 2024 09:20:58 -0600
+ 2024 09:21:00 -0600
 From: Mario Limonciello <mario.limonciello@amd.com>
 To: Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
@@ -78,9 +77,9 @@ CC: <x86@kernel.org>, "Gautham R . Shenoy" <gautham.shenoy@amd.com>, "Mario
 	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
 	<linux-pm@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>, "Shyam
  Sundar S K" <Shyam-sundar.S-k@amd.com>
-Subject: [PATCH v7 11/12] platform/x86/amd: hfi: Set ITMT priority from ranking data
-Date: Sat, 30 Nov 2024 09:20:22 -0600
-Message-ID: <20241130152023.684-12-mario.limonciello@amd.com>
+Subject: [PATCH v7 12/12] platform/x86/amd: hfi: Add debugfs support
+Date: Sat, 30 Nov 2024 09:20:23 -0600
+Message-ID: <20241130152023.684-13-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241130152023.684-1-mario.limonciello@amd.com>
 References: <20241130152023.684-1-mario.limonciello@amd.com>
@@ -96,110 +95,143 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37F:EE_|PH0PR12MB7093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96d9e9f9-93ad-4145-0f63-08dd1152996e
+X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37F:EE_|DS0PR12MB8341:EE_
+X-MS-Office365-Filtering-Correlation-Id: b04c5e12-6ba0-4744-2f76-08dd11529a10
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
+	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?dbGvBZD2cPhVfnyi4uBqhfJ7FCxxfFYhR9e3i1wXFkeY8468nx2lraKv/YoU?=
- =?us-ascii?Q?jQS7NlaRYko435pJLkcxHDSbigCMbuHz6R+Cp8kmumXQrvIMPwmB6VN4UtGs?=
- =?us-ascii?Q?0DdQ8ElLfedrVRQU+KHxUYalgTLNS0cS1ubqVQ/wi8/uZzSkcseGcbshsBAr?=
- =?us-ascii?Q?z7uoDAzPy81Y5OUIEhS4DO05g+mh1PEVldbWBjKiZkPeGRDKLEoMJgkKN5IW?=
- =?us-ascii?Q?VC+lT2hdiQLKNZ8gI2M7/qC8ns7JifszumfaM2ZoieOsxVxlPJHm5vk4sWmm?=
- =?us-ascii?Q?QIDdPocIP4vU5FI9JYHXm0c0lBZ4aYprxjqSrp8RcgLMyQmVNxyfKZaUb5jr?=
- =?us-ascii?Q?aZeUO/1HCdnIRIHu9U5US4C0rcvmj7eQlyyDN1gB3KjNLrfJSpVafZaFMgtC?=
- =?us-ascii?Q?xEOwrgAQoLAhIAzjrBd1o+iF2tvfvQ0wEJe1+nn0KxQlMSFr7mg9b1K2RppA?=
- =?us-ascii?Q?gXvuE42NF1UB9AKjBspgc5ktdTNFwYpRSNV8gmAb+A1alAGh0BVKiiwA9uYQ?=
- =?us-ascii?Q?sWbMj8qwfzbOTWqSOUsV+AWWhB9AUqTXirJXNfDeMhwGOKVRsuWLLMIm52Os?=
- =?us-ascii?Q?d7Mh8nI9QQgzJgSEE8b/bFSQFif/g7CvT11TOc0FvavBd9kk9DpqEn/boqsH?=
- =?us-ascii?Q?kl6ea7Oanqji81GcwfpeJtrOok/GzfHMAF9o8agNkGdJSlHkRl4BME0FTAVY?=
- =?us-ascii?Q?y7oXS6ucnrs2gs55KV1u4dY2FbBypYuma65A84ekMSNDLBLcIrRFu4IuZIBa?=
- =?us-ascii?Q?hB6ZjK2JSBCZQqr94AbQcps3xS8Q7Qj74qjZqcpqdm9UffPx4HW2HClRfhv8?=
- =?us-ascii?Q?XR8Vch4KuXGcA67gIjWIkcDdQ8aKT/uIGwFbPQvcxR+sVtutADaB7TDGv7ur?=
- =?us-ascii?Q?TAoTrBQBkpaJ9QYCEszlUy/Tirl3ogghhMDzsHVLTbyfiN7cbG4seBkcXdOD?=
- =?us-ascii?Q?tek2hkNuGwO6ZKzF5t5FxnywNL9O5EId6w547NfLVmig4RnuCXXg9kkUHLTf?=
- =?us-ascii?Q?2XnrQvG+mpFDctNgMaLf1KomVD1RjRKYf6aSbLrr88+U3b+g1gmEIivPGs9G?=
- =?us-ascii?Q?BT/ve6JQilcqAtTAqK/+0973nUJBEB4pcHLY2zkktBs1NXLGvEgfWkDa2D+w?=
- =?us-ascii?Q?fpqfb8FudxH+eHYK/Z5LpIqgIjtZXsRakApiG2A3ZzBfbg6i6Q4YFbvrS5T9?=
- =?us-ascii?Q?FxECUmoEEMiGfoo0qPGg+FGi8oG48HoZiieLf+yhbGhmiAeYHBEwCdQo4QH3?=
- =?us-ascii?Q?cpFxfQlieruUB3Oox145ae0dGBbGQmbpsT+47PPD2WNuXSDn08OexJL0zPDX?=
- =?us-ascii?Q?eMHURAwmNlnDMRox5ywITTEzbBs/7O52+mKc3Ve8pFIyICCeKaQaewmZBttn?=
- =?us-ascii?Q?Cl5hEl74YsjxtIQwZ45aSQg9PWaClT0LRevA+wRrzz4/HAXgluQG3bH/WhEm?=
- =?us-ascii?Q?yKqT9oUnTqKpTsRs6xVtIhqrK4sozkth?=
+	=?us-ascii?Q?7wz+gVJQMHftqp9NqYnNyyZQwV0+1QDiuaf0bB/Ht0Kz/Qll23XCL+tN2eRL?=
+ =?us-ascii?Q?hMgid1A4rekBhrVmvQpBxZMdPEc8c2ZP1L6CLhlibpRR+BVvZYuJz/zYfapc?=
+ =?us-ascii?Q?T615bsxxMHoDA13OpHvJSmP0qOqUa9WrXCUlELc5Io5xkdnDYFWM0PZWBVmR?=
+ =?us-ascii?Q?fAWmM4AN8zTJzI+tyK3GA0gNzoBeg+MBsrnlx0g6krt4/9s9xR2paC2G47HY?=
+ =?us-ascii?Q?rk2T9Jal8SyDpID5gQWFpl0ed2o7g/ZlrTjkKZmTjTRju+BtaxH2yDayacVz?=
+ =?us-ascii?Q?LsbO1JBlb1KDo06vD9yUsYlt2cnU8k3g/OBoTbyWbQkbkFaUuatfB4j07rzY?=
+ =?us-ascii?Q?iM3lQBA9Kc12JS31gBh5uJrOYvQtmpbGWeFUKLkSQrft7uuW4IMd9c3NfpuR?=
+ =?us-ascii?Q?jfcNnFjgL693EG8e2Q913xgFMuBq1fiTSeO9mBzyf0x4G1/74I0taAkE31DE?=
+ =?us-ascii?Q?ruilF2WuEV+LMcDcsBxMvvu7xuapqVAKlF8LRDHVWpHf1x8FFmtxhV/f4v+H?=
+ =?us-ascii?Q?SQhcmfH7s5IySOe5aSLgYNhgkVfhAmxxS3bilUw9dkDn1bUcEEjES0fY3kxl?=
+ =?us-ascii?Q?vBHR/uoyx7sWemT29iZdCGpf6OK2GLqUIfZwtfXzrqqQehEyw0YlowiyGMHL?=
+ =?us-ascii?Q?slZWaK7qwCCuG4BsTrzojs1u+Mcwz+iMGqJwAamizB4XYSv/QhR+w3XaIr14?=
+ =?us-ascii?Q?or+D4uvUTkTM7JkjcwFxgnVDJxHBrXG5Unwk2Wqz8qZ9cPaWix9TRQxrwjp+?=
+ =?us-ascii?Q?kUtSvCWsWr4i5JaeDoMeN4xtzJxaoQKyxd4lEov+TBmwP0HBOyjj1FkqY4tl?=
+ =?us-ascii?Q?lAs8O7DV+GNFlXjQY8huI1b9QkEggFsYto72W+LrEBkd2H/BviOiSMxAqAl9?=
+ =?us-ascii?Q?pkni6/1SnFi6uC930Haynwfo5vPNwR+9hMKQ9tzx76qM+g1I9ZKoAEGkD8Dl?=
+ =?us-ascii?Q?Dtk26/fNt01L/Tb7wkP5jX0cmmd0Wr7UA3oVzJAzAQh07KTAC27tlG9d9jsR?=
+ =?us-ascii?Q?Gl4pqBLNuY7EksHbsPn6uqUwE5RLSuv+7QpQ1dNXyT6BDjLakWt7JnsN86mq?=
+ =?us-ascii?Q?zyitkoMhNRVvNfkHkXRFQft+VP1C6QwIjt3t9z5Vlzk/iRgxchNaEOwZGvUF?=
+ =?us-ascii?Q?OfPC9SAOxF2Y+VzwYPobbLFT/xn+LoHh0iG94BU9XUjxvjeCaXY22nTJSLI3?=
+ =?us-ascii?Q?LfKMsMtTyYNk196JAwImf3k3rpRA330ArSi8wzUzLO2Ml8DpmJQZAIvAT71O?=
+ =?us-ascii?Q?RhyMJu2gv0z0eZ7sAOPYy3v5wdaa8BgtcOmjzXp9h114hicMq3n8AoASXXxm?=
+ =?us-ascii?Q?BLNLUOdx8mPIEkGnL45ErO9Ly2BHwBOwHTVqC76pqb4agiZK8HesPTs7fAkj?=
+ =?us-ascii?Q?1MzOjBGCR927XW03eDNbWlFXU2vwySbnSLum39a4qvcwq/rYT0fGs4ezcFp4?=
+ =?us-ascii?Q?WRGmLySHyJQ7B6KsDWZ/PN9D2yTXnbgw?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2024 15:21:01.4502
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2024 15:21:02.5127
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96d9e9f9-93ad-4145-0f63-08dd1152996e
+X-MS-Exchange-CrossTenant-Network-Message-Id: b04c5e12-6ba0-4744-2f76-08dd11529a10
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	DS3PEPF0000C37F.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7093
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8341
 
-The static ranking data that is read at module load should be used
-to set up the priorities for the cores relative to the performance
-values.
+Add a dump of the class and capabilities table to debugfs to assist
+with debugging scheduler issues.
 
 Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/platform/x86/amd/hfi/Kconfig |  1 +
- drivers/platform/x86/amd/hfi/hfi.c   | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+ drivers/platform/x86/amd/hfi/hfi.c | 36 ++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/drivers/platform/x86/amd/hfi/Kconfig b/drivers/platform/x86/amd/hfi/Kconfig
-index 532939eb08a6a..045f598f4866c 100644
---- a/drivers/platform/x86/amd/hfi/Kconfig
-+++ b/drivers/platform/x86/amd/hfi/Kconfig
-@@ -7,6 +7,7 @@ config AMD_HFI
- 	bool "AMD Hetero Core Hardware Feedback Driver"
- 	depends on ACPI
- 	depends on CPU_SUP_AMD
-+	depends on SCHED_MC_PRIO
- 	help
- 	 Select this option to enable the AMD Heterogeneous Core Hardware
- 	 Feedback Interface. If selected, hardware provides runtime thread
 diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-index 80ccc50ee0914..0940950dd7adc 100644
+index 0940950dd7adc..b6dc379bfd546 100644
 --- a/drivers/platform/x86/amd/hfi/hfi.c
 +++ b/drivers/platform/x86/amd/hfi/hfi.c
-@@ -115,6 +115,12 @@ static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index =
+@@ -13,6 +13,7 @@
+ #include <linux/acpi.h>
+ #include <linux/cpu.h>
+ #include <linux/cpumask.h>
++#include <linux/debugfs.h>
+ #include <linux/gfp.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+@@ -74,6 +75,8 @@ struct amd_hfi_data {
+ 	void __iomem		*pcc_comm_addr;
+ 	struct acpi_subtable_header	*pcct_entry;
+ 	struct amd_shmem_info	*shmem;
++
++	struct dentry *dbgfs_dir;
+ };
  
- static DEFINE_MUTEX(hfi_cpuinfo_lock);
+ /**
+@@ -234,6 +237,13 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+ 	return 0;
+ }
  
-+static void amd_hfi_sched_itmt_work(struct work_struct *work)
++static void amd_hfi_remove(struct platform_device *pdev)
 +{
-+	sched_set_itmt_support();
++	struct amd_hfi_data *dev = platform_get_drvdata(pdev);
++
++	debugfs_remove_recursive(dev->dbgfs_dir);
 +}
-+static DECLARE_WORK(sched_amd_hfi_itmt_work, amd_hfi_sched_itmt_work);
 +
- static int find_cpu_index_by_apicid(unsigned int target_apicid)
+ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
  {
- 	int cpu_index;
-@@ -234,6 +240,8 @@ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
- 		WRITE_ONCE(hfi_cpuinfo->ipcc_scores[i],
- 			   hfi_cpuinfo->amd_hfi_classes[i].perf);
+ 	for (int i = 0; i < hfi_cpuinfo->nr_class; i++)
+@@ -388,6 +398,27 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
+ 	return ret;
+ }
  
-+	sched_set_itmt_core_prio(hfi_cpuinfo->ipcc_scores[0], cpu);
++static int class_capabilities_show(struct seq_file *s, void *unused)
++{
++	int cpu, idx;
++
++	seq_puts(s, "CPU #\tWLC\tPerf\tEff\n");
++	for_each_present_cpu(cpu) {
++		struct amd_hfi_cpuinfo *hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
++
++		seq_printf(s, "%d", cpu);
++		for (idx = 0; idx < hfi_cpuinfo->nr_class; idx++) {
++			seq_printf(s, "\t%d\t%d\t%d\n",
++				   idx,
++				   hfi_cpuinfo->amd_hfi_classes[idx].perf,
++				   hfi_cpuinfo->amd_hfi_classes[idx].eff);
++		}
++	}
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(class_capabilities);
++
+ static int amd_hfi_pm_resume(struct device *dev)
+ {
+ 	int ret, cpu;
+@@ -463,6 +494,10 @@ static int amd_hfi_probe(struct platform_device *pdev)
+ 
+ 	schedule_work(&sched_amd_hfi_itmt_work);
+ 
++	amd_hfi_data->dbgfs_dir = debugfs_create_dir("amd_hfi", arch_debugfs_dir);
++	debugfs_create_file("class_capabilities", 0644, amd_hfi_data->dbgfs_dir, pdev,
++			    &class_capabilities_fops);
 +
  	return 0;
  }
  
-@@ -453,6 +461,8 @@ static int amd_hfi_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
+@@ -474,6 +509,7 @@ static struct platform_driver amd_hfi_driver = {
+ 		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
+ 	},
+ 	.probe = amd_hfi_probe,
++	.remove = amd_hfi_remove,
+ };
  
-+	schedule_work(&sched_amd_hfi_itmt_work);
-+
- 	return 0;
- }
- 
+ static int __init amd_hfi_init(void)
 -- 
 2.43.0
 
