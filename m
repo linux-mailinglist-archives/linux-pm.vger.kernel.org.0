@@ -1,132 +1,116 @@
-Return-Path: <linux-pm+bounces-18261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85D049DEC92
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 21:00:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0AEA9DEFD6
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 11:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AF12281D40
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2024 20:00:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65820B2186D
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Nov 2024 10:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACB61A0AE1;
-	Fri, 29 Nov 2024 20:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721B4155C88;
+	Sat, 30 Nov 2024 10:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V1s8HmIY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b3GBR9rd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A1F154C04
-	for <linux-pm@vger.kernel.org>; Fri, 29 Nov 2024 20:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CAD1547FE
+	for <linux-pm@vger.kernel.org>; Sat, 30 Nov 2024 10:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732910445; cv=none; b=lSSmiFV8bjZzpy3io96IGru8hiNKrs4Hq0mKzUxvdLLRBFMwzVbx2zC+2WPxwNZXq3Ud67afHOtbR2Xa2GOh3nDj+KWakZiZ1zsjhMpxKy/fqQY9r7ZURorlVNRBCFY/Xckp+XFcj98+68I76W3jmu7NKfkN73a9KsH+vWLxOS4=
+	t=1732961283; cv=none; b=Uz2NqVVL72bIbuMr60glb2JcRPmlLtZfmA9Wl9+fv3n9p1CWMcvALyG//PEpnVdLVdRa/SR8krOwlh4uLnB2L+Spna/wvBMXIzbb1Sx4RLO0oYW2CrrC6tysGHlxEtKZgDbw91t17Shbl3gehUQcu5ez/L0Q6+DhvRRY4culpeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732910445; c=relaxed/simple;
-	bh=I6vhUfkKB8L2+0ZseqkvOp9WgX+MEIh0yWn2aYb0khM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ga7ZXp6/wpjf+miAgZRt5hcdjn+nKU4VORm2+jyqTMqWpWkmJqMR3yJdbHMswWQQzkXl15smcDbnk13KpLRLZXz0FIIl4vuWD679FdxudWtTT6uLvmmEPmJVUSdY+eHIE8jbAFsv+kP1SDQnHpRXyBAyU0YGyQuVfWX9eXqGPg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V1s8HmIY; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1732961283; c=relaxed/simple;
+	bh=7zmpFrkNE9b9fiTObZOVjwcI3iZNrUR2CLn6+i8hq2o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pJwcJCR2Sn+vBoQHRV9E0+9+Fi8pJyuQSvXo4hst/gc3+HSYDsDT4Vc/frNBusfRPC+pr26imwtdwF1CME3r5XITwcUeMNKcZ12zkUwiXAsz8H412fIeOce1IYp7/6xfqAaPmVxuU1KiEqsJEDfTrbVTd2NRNa1a4T/GerDK9Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b3GBR9rd; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-434a8b94fb5so13947285e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 29 Nov 2024 12:00:42 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a9a0ef5179dso361149366b.1
+        for <linux-pm@vger.kernel.org>; Sat, 30 Nov 2024 02:08:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732910441; x=1733515241; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1732961280; x=1733566080; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hXMhlKyNUyXAehCvYmXtBGlWlyuXZ6rNCKB5eusJ9ok=;
-        b=V1s8HmIYRyEM9tsFI7IyM23vAUitjHwPNrT4JW8qSFf7hWAkH/dCn9vfCnzpeGhyNC
-         mhgkLsuI52EJRCjl37E4I1ju+GFdQM68g9RruVjqI9QesKCheVb1mO5FxPQUwvyTyUdi
-         8dmOCJ00GshE8BYyh68x1LzvNFgE8CGT4yNzYt7xleK15e1nQdKsLmgvGFYi669EF5RL
-         IZ0PLdwl/GZ6vAOHx+pvYMSwXPhu3LcF1DH3ef7YxCiooPa+LOiJBzgKY7mVBQ0guYzm
-         2ctJbW4EzZr48TcdGN7q8FIXyixXW6pWEoXtpyOqwj398xWJYV2osXFaiDFZau//ibBq
-         A20Q==
+        bh=bF1qKdUD6G82UToWOeQ2OIejZEXXxD5wyzBbKqaeajo=;
+        b=b3GBR9rd0hyfCgYKbu8TnWR3qKxYGOMQvNRF3pPW54jLcHrFjMguPv5NyYyQOP/YDm
+         xS1dSKvt+9R/eR5S8HICejlOgGrg3re5qSYaL0q8UW9qmQNmxllmN1YcAEP3qHENpyQH
+         wtFEK6EJmi0nPi4VAVQzhJyVXj6cK9+e4yCfq0eNHGQyBIUWhrTiA4TZx1E50Puvuyqm
+         Hc5hO/jiXVBPKMBe5EBA3D5G/sNkyeHn1qALIuKFAW+NtTiZ/13P0b0jKei9fEPxKTSv
+         ET4wwN1gmBSt5AT9FUTVpAMrMVG4RqqC1cq3D3k5B5asl4+ABWPuQje1Yh6MyZDfwdJH
+         VlTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732910441; x=1733515241;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1732961280; x=1733566080;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXMhlKyNUyXAehCvYmXtBGlWlyuXZ6rNCKB5eusJ9ok=;
-        b=tUjxWAzW6ntr7FcmKEpxhrHiwvWaziiow287UhyiaKwYpoUmIn3U0r36kyQ33Mgmn0
-         vYseLStYLyKeq+NRZ0jVFc0Pza9fUz85bDUrhwWkNGO2bSNCWJL5Xq3Cxrvkm99yuewT
-         Rr1rSl7qZpmghxAd+W/g+O8pEGpQbJdwJ6iEzhg1GTuK7pd+rZONgnQCgf1G21AeM41X
-         88CjoTWBXyMQueI0cLKJFjMbZ0PgPpTNCKIm8H25RjKKPgjZsuCMWjNu0WnsZB9+qu/C
-         iQPV+djLQw85Yt7CmHD+6fUkIidtEh6qGBSlxQwxcE/mwmgbGBNR8b9S/ORtGGM7OovK
-         +INQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWf54P+n6zbS3V5kX0qmvqhDFj9n+GPlXWJsCXNhyBbZuz4zB77RnmfZdIFGh2i8I3bk0jimXv8oA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YylPfMsxXkjL1onOkNdef0C8nf1+TH3j+rk/TCH8GeqQ8zjjkSH
-	bnO3UV4bBAjFNMR6iXFo7Jah1rCrtrrJWsdwBGtJ1YNFZNVgQxUM7Dkn+a6X0RY=
-X-Gm-Gg: ASbGncvolFdAFg+m+TFgCkI676nnwxBmj7qzj6qOPqvarzOiK/3I+qlNboZsB1L7tQM
-	Bm7ya+qgaKBF6cojLtgxyN4iGHL6F0r4+M6XG5f9p88dCRTohDSWVBzvCuVZymRoVOnOAf4sXaa
-	4a/NtaI1ObHUNfhMFBacfGmNf/M52Jm2KaJ2vU7WrVPHIlrvmeTafMPgooR4zcgufqhC0DgTYdO
-	qsyqNgPE2ff+SqnDSnTNIEclPuFFqTnILlZGntG2bbgYlYrNZBmA5Symfc/8xDWBAodNC+yCfKS
-	ncYVerREFt2hgA==
-X-Google-Smtp-Source: AGHT+IERDYwDGnHxt4PkrEbc7nYmk1O9LCWEyDw4b8b+mn5ibUuFnpDyTpQ+9yD3eVcYFhLRJEKXzA==
-X-Received: by 2002:a05:600c:3b16:b0:434:92f8:54a8 with SMTP id 5b1f17b1804b1-434afb29148mr77259745e9.0.1732910441500;
-        Fri, 29 Nov 2024 12:00:41 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-434b0f325fdsm63936945e9.30.2024.11.29.12.00.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Nov 2024 12:00:40 -0800 (PST)
-Message-ID: <20d3a0be-ba5f-439f-80ff-2e2bda3bb144@linaro.org>
-Date: Fri, 29 Nov 2024 21:00:39 +0100
+        bh=bF1qKdUD6G82UToWOeQ2OIejZEXXxD5wyzBbKqaeajo=;
+        b=tFySBPn1tCwUFPAP9IqmkKIcyyp1iARsaG8GloidFEzOP6Z6auqdnGWiNbwbqdUW/D
+         BGW2xd2VUUMRaLWy8FvBQ9HxmdcoLuEkAt52pmRM3ZCIFxfC5j6N4E8CmCic7tSsouAk
+         lZl42ZglrjfqVgllztlOafpS8hdnBxdJuXV/08/l90iskpIPs+5HPknWfSVsxIsq8O0Z
+         wM4Ar8axz5frMWZjF7m90Gw/syxm9Ga7O/Fw8G7wAa8eMPU0r4tAshbi8aFKUWCEYfKe
+         Qa5sZUZNJAoUtNz+CgXksRB25p6LIyaTykFz9FDJnLU4JJ13XHiwc8z2yDwTYo6OtiSe
+         seMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXD/GclLpMESl+34/Dib54bFEugBLEsoYH1csuQAK0Y5YkWDKdbY7VWwNqh9uMRp6MiMqhckXp7Og==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/0tLnb9D8VqUZixh4ZK2Dfr6FaJ52oljzKrrZ0h136Dl/TMia
+	H3ztnzSE6de2MF0uKHPGQECnmt+xKTCMNMH+qLOFfrn/9+TovqPF26RPaCIV1qI=
+X-Gm-Gg: ASbGncslcot+KSysD75AL7xuOchsmoijENbA343l6YaY1hRxFlG50PXbScGpBcDOsBj
+	O7JR+n0fNsfLn9n35ml6Odqay2ymH481dUr8QTj3OJywIq3igPBnPraKMZAxtlWbcB4zXMatFwt
+	u6xGRu06t2tbPNZDXVvs5H+sN1dBYwz3sV/2aJGx5WEgg0YWKVypRhQLnG2c9Fwf0TAjXcUL4rb
+	qJfS+nWZy0b43HvFEOAmJ1ZzAq/iOVjqX+jLxk2FQknLzzoH4RTpdUui3zgghvQDixnCuJp
+X-Google-Smtp-Source: AGHT+IGFFkuSzUzBV6MpzgZNlz2YgAq3cRPDWZKCNGkjjw0xQWjwQCZY0kfL1J0lIP1VbayZcSBWxw==
+X-Received: by 2002:a17:907:7819:b0:aa5:b2b:f236 with SMTP id a640c23a62f3a-aa580f353f3mr1240877266b.28.1732961280003;
+        Sat, 30 Nov 2024 02:08:00 -0800 (PST)
+Received: from localhost (h1109.n1.ips.mtn.co.ug. [41.210.145.9])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5996de7e7sm264394866b.71.2024.11.30.02.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Nov 2024 02:07:59 -0800 (PST)
+Date: Sat, 30 Nov 2024 13:07:56 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] opp: core: Fix off by one in dev_pm_opp_get_bw()
+Message-ID: <41ae307c-f6ff-49fb-a962-eb488152de71@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] thermal: multi-sensor aggregation support
-To: Nicolas Pitre <nico@fluxnic.net>, "Rafael J . Wysocki"
- <rafael@kernel.org>, linux-pm@vger.kernel.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Nicolas Pitre <npitre@baylibre.com>,
- Alexandre Bailon <abailon@baylibre.com>
-References: <20241112052211.3087348-1-nico@fluxnic.net>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20241112052211.3087348-1-nico@fluxnic.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On 12/11/2024 06:19, Nicolas Pitre wrote:
-> This series provides support for thermal aggregation of multiple sensors.
-> The "one sensor per zone" model is preserved for all its advantages.
-> Aggregation is performed via the creation of a special zone whose purpose
-> consists in aggregating its associated primary zones using a weighted
-> average.
-> 
-> Motivation for this work stems from use cases where multiple sensors are
-> contained within the same performance domain. In such case it is preferable
-> to apply thermal mitigation while considering all such sensors as a whole.
+The "opp->bandwidth" array has "opp->opp_table->path_count" number of
+elements.  It's allocated in _opp_allocate().  So this > needs to be >=
+to prevent an out of bounds access.
 
-Do we have a real use case where we can compare the per sensor vs 
-aggregated sensors approach ?
+Fixes: d78653dcd8bf ("opp: core: implement dev_pm_opp_get_bw")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/opp/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
-> Previous incarnation by Alexandre Bailon can be found here:
-> https://patchwork.kernel.org/project/linux-pm/cover/20240613132410.161663-1-abailon@baylibre.com/
-> 
-> diffstat:
->   .../bindings/thermal/thermal-zones.yaml       |   5 +-
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 210 +-----
->   drivers/thermal/Kconfig                       |  27 +
->   drivers/thermal/thermal_core.c                | 643 ++++++++++++++++++
->   drivers/thermal/thermal_core.h                |  14 +
->   drivers/thermal/thermal_of.c                  |  86 ++-
->   6 files changed, 780 insertions(+), 205 deletions(-)
-
-
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index d4a0030a0228..09a1432561f6 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -121,7 +121,7 @@ unsigned long dev_pm_opp_get_bw(struct dev_pm_opp *opp, bool peak, int index)
+ 		return 0;
+ 	}
+ 
+-	if (index > opp->opp_table->path_count)
++	if (index >= opp->opp_table->path_count)
+ 		return 0;
+ 
+ 	if (!opp->bandwidth)
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.45.2
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
