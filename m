@@ -1,250 +1,140 @@
-Return-Path: <linux-pm+bounces-18333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD75C9DFDDA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 10:55:37 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD9219DFE99
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:16:35 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63234281F41
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 09:55:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EB5A161A98
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 10:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309CD1FBEB2;
-	Mon,  2 Dec 2024 09:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDA51FA829;
+	Mon,  2 Dec 2024 10:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X8Iv3OOg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mUzrRIhk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5583F1F949
-	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 09:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1C21D8E10;
+	Mon,  2 Dec 2024 10:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733133326; cv=none; b=JZNq1LsArCsHJ1VpY3tAQCU3r49ySrHmscn2FVZXBbMykQRveinx65OuiIiByUjUR16M2nXHvVFt6jhlJtWAckJpdWiegQweAIu/c2kSP5ZHTLdolsEkfTktCSy6gmdUoO/iFj1tmeyDhm7p3yvwk8vGJMRf+5kUVaNhXwI4hJ8=
+	t=1733134589; cv=none; b=aRVRc0mjQiWxhJBvdBl3XlwoP0UEb2oAjoU81B8gbveZxJFjDScl4fyRh00gaK53k+QZNVDPIG3gfmd5lDidWKniAPBvAFX3sFNfrKtWJq/PcxFMsr7V9NlsG63vrDUzRvgZs+MtkbJ+eyW6OQJRkSpfV68Uut9xqN5e4PSr1t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733133326; c=relaxed/simple;
-	bh=giKLGGK03twsti8r6koMTfcd/cXGRA56MS0yGykpzlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dG9sTj/zBT8TPg9XEza2s2avhHgywALm0bUuswN3EHDdSqxQrJQz1CYICCh1gQ+Ks9xAvUdDccPRZx2f7njLgJr0YIKxe0JsLzldWeFTMvu6KckPZP11MBC3C9b7ygA1PcH+omvPFaoBohV9IkOXPguvp1XWVmy/bzB7+ZgIhI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X8Iv3OOg; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733133323;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=09MvrDFOXfmr7yZyk+mt+cZonVT5Z8HMfNE6DtwKO3c=;
-	b=X8Iv3OOgshy6hHfTzZ3Y+GQMy3uNbTDBb9dm2/7MUdYnKAfrvaCLuAQaUGqk2wkMPC3LQJ
-	imc1Z9gHeCoUOMTg+vyRIcJKQKKTtUxp7CmOEJ3aIVVEEfwWYUOkZNh5RuClt95/RC17wQ
-	wuygd6ZFIQEYK4NpKDUvGQ0lcMTdWQU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-446-G8KY9jUXN5qeA6EBGRa8sA-1; Mon, 02 Dec 2024 04:55:22 -0500
-X-MC-Unique: G8KY9jUXN5qeA6EBGRa8sA-1
-X-Mimecast-MFC-AGG-ID: G8KY9jUXN5qeA6EBGRa8sA
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4349cbf726cso29868105e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 01:55:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733133319; x=1733738119;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=09MvrDFOXfmr7yZyk+mt+cZonVT5Z8HMfNE6DtwKO3c=;
-        b=sHs6uToNuQDvelDY91m7ZyCxiciL2JXUeNr2SedgIsTNZVT6FJl7StepMZIiEalQZ+
-         McGg2hKiDFcb+sKWNU9Z6DNFw5fjrI+Gn5kZW9+EsZZ+C3+bPIuTIGS7OkDFzd8AEa4L
-         t0JnLzS7kfBOfJ+VJWGQqowIKFHyXWBSjm/5tuzQi8yH114nSSCpBpdA3vBcPfBK6v4u
-         kyUJ/s5WKnMVaCqRlA4Ne4unLxpef+wm2KEFA/ufQ4wtazGGCHDsEU8vDrRVVd5v833V
-         ETBugkTTcdMPQXWfUxmkxYaMtO5VBAmLYcpGiVkK5tiNYmkmYHtR1Dkg4QleLJs4PMoS
-         Mknw==
-X-Gm-Message-State: AOJu0Yzfq2ErEwsloNqkFe1EudH3wsuvGtBdiJ9CMcYyPTFNyA7mfPOL
-	274X3hQSKa7bHtS9qBV0S4zWVxwLS0wyx4mB50gN7I7r7Vv4bid2QTZjLsyGzEr2K6/bvA7ay87
-	64lJU5++ZjPr+SPpqgd6mpLXv/XolsvN4i61nF7GbeD2/+M/wMVps34i559rLHSvtvhZMCn9qMv
-	s0q4B6pr4mTxol0fMeoYbwoS2DeSMxeOX6D6ofEZ8TEi0=
-X-Gm-Gg: ASbGncvjdMnDeCPAeavyDldnXky9eoBwKaVdMUwkXrPymnOo6ajpQ1IBtP+k7fgNxf+
-	Mn5fXE0+WBLdQMzmT4TJfeennGGOUzv1Gca+9QJGXd8jA0gDqixm+BK0oEx0lMbnHKnxjQBkoTS
-	oayoFd1nOqc+gTLFC3hlv4tW/+JDaiZKJlIKvBfSww97WweyzLCmGWjvCbwI6VUbd/6tw4kZ1ke
-	/vHQfREfU6h7A6dUkOHBFzLEv2LTBbp4DkUUJe1sLZVAhl6behNS9ELj3tAyRb0iDR2EEp/w1wH
-	fDE=
-X-Received: by 2002:a05:600c:1c09:b0:431:44fe:fd9f with SMTP id 5b1f17b1804b1-434a9de8cc2mr172537555e9.23.1733133319157;
-        Mon, 02 Dec 2024 01:55:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFdrZW7CnHqIPba+h3rdUQEPKdX49BX6A51BtPfyAqpRIpHzFbEJP1x+SVenKFW+la85OBsJA==
-X-Received: by 2002:a05:600c:1c09:b0:431:44fe:fd9f with SMTP id 5b1f17b1804b1-434a9de8cc2mr172537265e9.23.1733133318732;
-        Mon, 02 Dec 2024 01:55:18 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.75.19])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434b0dbf95fsm144865155e9.15.2024.12.02.01.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 01:55:17 -0800 (PST)
-Date: Mon, 2 Dec 2024 10:55:16 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-	Frauke =?iso-8859-1?Q?J=E4ger?= <frauke@linutronix.de>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>
-Subject: Re: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux
- Kernel VII edition (OSPM-summit 2025)
-Message-ID: <Z02EBA_0SwWPhTAi@jlelli-thinkpadt14gen4.remote.csb>
-References: <ZytlAkTiuZApK23Y@jlelli-thinkpadt14gen4.remote.csb>
+	s=arc-20240116; t=1733134589; c=relaxed/simple;
+	bh=VeyGyrt8lzSc0gMCv+H0+uTSDCYGlOKoYE+GGCTCvkU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tVDAxxs5oa5NSoLbbsvRjy9qHcOTSQVMupVcwc1ioNC9IdvULkU6CNF65Lo+QFwUAbhV5eHgJxg3l4GtWLLCKZcL5c0ThveyRWIjqm8/ViZ599ZeCgYM62zzvuVchswsj0iuIY0wZYVjL1zJCuAxIXcxSNM87D8K7i1JJckzSCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mUzrRIhk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC6FC4CED2;
+	Mon,  2 Dec 2024 10:16:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733134588;
+	bh=VeyGyrt8lzSc0gMCv+H0+uTSDCYGlOKoYE+GGCTCvkU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mUzrRIhkQEz61XGkipCLG2mjUF92JUEAHCboc1hDJ2ddG/3hcE8TXaWyMnduTvom4
+	 8JDaxAtgOZNV+Zhq7ofNfwAkk0IQ8jdB4UE0jKBzFDyM3q/pAhT0CTc4Sh6P0yYuM9
+	 Dum4Y3n2Vyc/0y55EM4SIrCCJnNYAeoZyzaFtGZ2uk8FJxxGkcuQAzXAW0who/bRwP
+	 iRyR+KRNXajrhLN2zrxXErJUb651MxZ4a3G+8rIa6C9fNm56486rWciJ4/JiaAz7dB
+	 Dq7IXyzN337B875oMMcSPO/w6KAO13bpJa0WmjFc9II/5Y6RzSSL6bLlFLZJjNqLub
+	 NMR65y3GRkOqA==
+Message-ID: <666145e0-d8c8-47cc-92d4-08d6877786c0@kernel.org>
+Date: Mon, 2 Dec 2024 11:16:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZytlAkTiuZApK23Y@jlelli-thinkpadt14gen4.remote.csb>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 2/9] dt-bindings: power: supply: max17042: add max77705
+ support
+To: Dzmitry Sankouski <dsankouski@gmail.com>,
+ Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+ Purism Kernel Team <kernel@puri.sm>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org
+References: <20241202-starqltechn_integration_upstream-v9-0-a1adc3bae2b8@gmail.com>
+ <20241202-starqltechn_integration_upstream-v9-2-a1adc3bae2b8@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241202-starqltechn_integration_upstream-v9-2-a1adc3bae2b8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Everybody,
-
-Quick reminder that deadline for topics submission is approaching
-(December 9, 2024 - next Monday).
-
-Please use the form to submit your topic(s) or reply to me privately
-with topic's details.
-
-https://forms.gle/Vbvpxsh8pqBffx8b6
-
-Don't wait until last minute or Santa will add you to the naughty list!
-
-Best,
-Juri
-
-On 06/11/24 13:45, Juri Lelli wrote:
-> Power Management and Scheduling in the Linux Kernel (OSPM-summit) VII edition
+On 02/12/2024 10:47, Dzmitry Sankouski wrote:
+> Add max77705 fuel gauge support.
 > 
-> March 18-20, 2025
-> Alte Fabrik
-> Uhldingen-Mühlhofen, Germany
-> 
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 > ---
+>  Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> .:: FOCUS
-> 
-> OSPM is moving to Germany!
-> 
-> The VII edition of the Power Management and Scheduling in the Linux
-> Kernel (OSPM) summit aims at fostering discussions on power management
-> and (real-time) scheduling techniques. Summit will be held in Uhldingen
-> (Germany) on March 18-20, 2025.
-> 
-> We welcome anybody interested in having discussions on the broad scope
-> of scheduler techniques for reducing energy consumption while meeting
-> performance and latency requirements, real-time systems, real-time and
-> non-real-time scheduling, tooling, debugging and tracing.
-> 
-> Feel free to take a look at what happened previous years:
-> 
->  I   edition - https://lwn.net/Articles/721573/
->  II  edition - https://lwn.net/Articles/754923/
->  III edition - https://lwn.net/Articles/793281/
->  IV  edition - https://lwn.net/Articles/820337/ (online)
->  V   edition - https://lwn.net/Articles/934142/
->                https://lwn.net/Articles/934459/
->                https://lwn.net/Articles/935180/
->  VI  edition - https://lwn.net/Articles/981371/
-> 
-> .:: FORMAT
-> 
-> The summit is organized to cover three days of discussions and talks.
-> 
-> The list of topics of interest includes (but it is not limited to):
-> 
->  * Power management techniques
->  * Scheduling techniques (real-time and non real-time)
->  * Energy consumption and CPU capacity aware scheduling
->  * Real-time virtualization
->  * Mobile/Server power management real-world use cases (successes and
->    failures)
->  * Power management and scheduling tooling (configuration, integration,
->    testing, etc.)
->  * Tracing
->  * Recap/lightning talks
-> 
-> Presentations (50 min) can cover recently developed technologies,
-> ongoing work and new ideas. Please understand that this workshop is not
-> intended for presenting sales and marketing pitches.
-> 
-> .:: SUBMIT A TOPIC/PRESENTATION
-> 
-> To submit a topic/presentation use the form available at
-> https://forms.gle/Vbvpxsh8pqBffx8b6.
-> 
-> Or, if you prefer, simply reply (only to me, please :) to this email
-> specifying:
-> 
-> - name/surname
-> - affiliation
-> - short bio
-> - email address
-> - title
-> - abstract
-> 
-> Deadline for submitting topics/presentations is December 9, 2024.
-> Notifications for accepted topics/presentations will be sent out
-> December 16, 2024.
-> 
-> .:: ATTENDING
-> 
-> Attending the OSPM-summit is free of charge, but registration to the
-> event is mandatory. The event can allow a maximum of 50 people (so, be
-> sure to register early!).
-> 
-> Registrations open on December 16, 2024.
-> To register fill in the registration form available at
-> https://forms.gle/Yvk7aS79pvNR6hbv8.
-> 
-> While it is not strictly required to submit a topic/presentation,
-> registrations with a topic/presentation proposal will take precedence.
-> 
-> .:: VENUE
-> 
-> The conference will take place at Alte Fabrik [1], Daisendorfer Str. 4,
-> 88689 Uhldingen-Mühlhofen, Germany
-> 
-> The conference venue is located in a 2 minute walking distance [2] to
-> the Hotel Sternen [3] that has been pre-reserved for the participants.
-> Since it is a very rural area, we recommend booking this hotel as it is
-> close to the conference room. The price ranges per night incl. breakfast
-> between 85€ (Standard Single Room) up to 149€ (Junior Suite). There is
-> an availability of 37 rooms in the hotel. Another 13 rooms are
-> pre-reserved in the Hotel Kreuz which is also a 5min walking distance to
-> the conference location [4]. Cost is 75€ inkl. breakfast. Please choose
-> your hotel (and room) and arrange booking yourself. We recommend arrival
-> on March 17 and departure on March 21 due to the length of the trip.
-> 
-> Please use the code ‘LINUTRONIX’ when booking your hotel room. 
-> Deadline for hotel booking in Hotel Sternen is February 28, 2025.
-> Deadline for hotel booking in Hotel Kreuz is January 17, 2025.  
-> After these dates, cancellations are not free of charge anymore.
-> 
-> You can reach Uhldingen-Mühlhofen best from Zürich Airport [5] or
-> Friedrichshafen Airport [6]. From both airports there are train and/or
-> bus connections to Uhldingen-Mühlhofen which you can check here [7]. The
-> rides are quite long, so another possibility is to organize yourself in
-> groups and share a taxi/shuttle [8].
-> 
-> [1] https://www.fabrik-muehlhofen.de/
-> [2] https://maps.app.goo.gl/S6cnTgx1KJAGRkMr7
-> [3] https://www.steAlte Fabrik Mühlhofenrnen-muehlhofen.de/
-> [4] https://www.bodensee-hotel-kreuz.de/
-> [5] https://www.flughafen-zuerich.ch/de/passagiere/praktisches/parking-und-transport/zug-tram-und-bus
-> [6] https://www.bodensee-airport.eu/passagiere-besucher/anreise-parken-uebernachten/
-> [7] https://www.bahn.de/
-> [8] https://airporttaxi24.ch/?gad_source=1&gclid=EAIaIQobChMIo_y9l56iiQMVfp6DBx16NxPtEAAYAiAAEgJOO_D_BwE
-> 
-> .:: ORGANIZERS
-> 
-> Juri Lelli (Red Hat)
-> Frauke Jäger (Linutronix)
-> Tommaso Cucinotta (SSSA)
-> Lorenzo Pieralisi (Linaro)
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> index 085e2504d0dc..f929e7e2b82a 100644
+> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> @@ -20,6 +20,7 @@ properties:
+>        - maxim,max17050
+>        - maxim,max17055
+>        - maxim,max77849-battery
+> +      - maxim,max77705-battery
 
+Keep alphabetical order.
+
+Best regards,
+Krzysztof
 
