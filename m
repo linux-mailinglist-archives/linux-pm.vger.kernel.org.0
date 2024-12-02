@@ -1,133 +1,125 @@
-Return-Path: <linux-pm+bounces-18382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18384-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8AA49E0E1A
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 22:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0486A9E0DDE
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 22:29:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64857B340DD
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 20:57:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89AACB29E21
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 21:03:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A4781DEFF9;
-	Mon,  2 Dec 2024 20:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3CE1DF249;
+	Mon,  2 Dec 2024 21:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLdvUXL0"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IH3XR5Oq";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VLKUAJA/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4B619BBA;
-	Mon,  2 Dec 2024 20:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17AFA94A;
+	Mon,  2 Dec 2024 21:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733173062; cv=none; b=qw1JxMoqGQzIm/Mpn4ImrcStWwmHokyif47P4Age/AehTHupR+IbC0bXJty8srio6+RrXr0vV1CbDV40Z1llTbAGR32tyKa0vEtqMpoUiMSPjdv+SP6Y1ijRO8MuxmhaiQn3UeRM+ON6LooKXzrztcXphA0CBkz/3472dO+zpVI=
+	t=1733173430; cv=none; b=QM22D1TL65B0rzxhN7dM4SIyQP5EZoG5a8OGXFGxuMF848DQTXd3EuYkkqWBw1uqPz49T3TInGMXxBCMIe0dFSPmHDuPBSWavVA5OV5E/Cok/SFIrwzJz3/61NBF0zKa6rMmOEaMfJH5jOh40vKKFx/QBWg809ixoIEfbjnr0m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733173062; c=relaxed/simple;
-	bh=y8VzxnsyxdZ299ksar2rMfEnBfUOR8Om3RcJKlRKg8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UUKdtso5qrhFLwXgP4xsh1iA3F2gp9LxUfmZ3K1KGO3Nagyqwt2Pa3N2hLrxi4rveXZXLH91+I1ocVNE7u2oLA9cvwMn6OdVjlpIlq1Ett+VrBFvS+R7xje5r05MAspLURXf0bYDM+Hqf0x300OWu86dcxUXbPCNZixOQHudsBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLdvUXL0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555E6C4CED1;
-	Mon,  2 Dec 2024 20:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733173061;
-	bh=y8VzxnsyxdZ299ksar2rMfEnBfUOR8Om3RcJKlRKg8Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BLdvUXL0NmalifhfD7a9PThBw2rUv5zYnuaYUEM8G9ffDYemWzgSOpLhQtw1rx0Q9
-	 xFcv6FIpo0VLKdU2ROAGpRhQg3kqMuo9HqhxQQ3LglT/9sYWKt+MQgrCjRQ+MajkpZ
-	 QvungpfEPoysMEZpJUauAih5kMLy7VGkv5XU6X70215SN6BGJ8OgAnFpWHo47exZtj
-	 956t2OmsZJ4ZWj1u6aZEF8Q0XK9sFrMv4UH05P9nbFgL6q7J9AvEvvyykdtzrCW3q0
-	 lFmDZCw5dPS9PpyXaX9j9XNUToEZ/vSjrrJi5ivFjxNwGeQxXCFeM8+j7wjk/HgpN1
-	 bx6z6sEmYdXkg==
-Date: Mon, 2 Dec 2024 14:57:38 -0600
-From: Rob Herring <robh@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@airoha.com
-Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: Document support for Airoha
- EN7581 CPUFreq
-Message-ID: <20241202205738.GA3149730-robh@kernel.org>
-References: <20241202151228.32609-1-ansuelsmth@gmail.com>
- <CAPDyKFqrY7uLD8ATqH0LghmkHgApQSsGtvGkOTd8UVazGu0_uA@mail.gmail.com>
- <674dd60f.7b0a0220.2ba255.7b7a@mx.google.com>
+	s=arc-20240116; t=1733173430; c=relaxed/simple;
+	bh=vLUZ5k+c0qQj50mqVkJ/qwvhEf2wa3vsjB0XW38D4rE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rvXKMKalHu+k+oPes+NZCB6khQx6dKyzshh7oVeU78K4rmwLVzVg6+cdNiMmlb3hTulQvDi5/EIwcNxtpvLHBNG30yzvXd4LlSs3P7RTviz7iw/UXqx5CZ/enTX8PH76ZgA22irCJmR7TElK4y7UmkCDMXlth+ZVjmX6ZTDFa68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IH3XR5Oq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VLKUAJA/; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1733173426;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JAbKsbnsziIXiGhjcBxtSdueB/xYO7LsnWwodvNhQE0=;
+	b=IH3XR5Oq5J30CrhyMejMAMCWFzEMywOB8oA1KABYd32vlyPtoy2Wr5NyRAGLe/w6yyfoWn
+	4cwBFUby+yeCKl1vigIvvmwQypIksVnJPBv0c2j+GzBv+wpimOO98YMmizuZBJhb63RItn
+	AGnPEzDBYCx4kLXUStcGjApJA8KzUXlfTyhqMEH6oUyjdIFv7d4uUfn5kGSubMGyVQ9pRm
+	gcyvX/u0PD1pNp3PqaFrr4P1yya5j/kdaxkwkaNwHl5Bbewrdo2ccaOnzjYoO81uz6IcRl
+	NdB4qToq7Dr7InMmMztyQ1Qs0VLXe3uvZB0sunVPPIkeF0xhP/cWOt7aJXEsSQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1733173426;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JAbKsbnsziIXiGhjcBxtSdueB/xYO7LsnWwodvNhQE0=;
+	b=VLKUAJA/sfuoNOZCdIc4gMvY9VsnZnsNqbDpRSVJhOcNAgsSb+eAmhoYkfwO/BWpXThDzL
+	a9JCwCaNBqbQdTBw==
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
+ 20241015061522.25288-1-rui.zhang@intel.com, Zhang Rui
+ <rui.zhang@intel.com>, hpa@zytor.com, peterz@infradead.org,
+ thorsten.blum@toblux.com, yuntao.wang@linux.dev, tony.luck@intel.com,
+ len.brown@intel.com, srinivas.pandruvada@intel.com,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, mingo@redhat.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, rafael.j.wysocki@intel.com,
+ x86@kernel.org, linux-pm@vger.kernel.org, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] modpost: Add .irqentry.text to OTHER_SECTIONS
+In-Reply-To: <CAK7LNARWpcbVsJFYCDN28vuuLfEibZmT+m5=qMEJcKD9Abzv4Q@mail.gmail.com>
+References: <20241128111844.GE10431@google.com> <87o71xvuf3.ffs@tglx>
+ <20241130114549.GI10431@google.com> <87iks3wt2t.ffs@tglx>
+ <CAK7LNARWpcbVsJFYCDN28vuuLfEibZmT+m5=qMEJcKD9Abzv4Q@mail.gmail.com>
+Date: Mon, 02 Dec 2024 22:03:46 +0100
+Message-ID: <87iks1vlu5.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <674dd60f.7b0a0220.2ba255.7b7a@mx.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 02, 2024 at 04:45:17PM +0100, Christian Marangi wrote:
-> On Mon, Dec 02, 2024 at 04:42:33PM +0100, Ulf Hansson wrote:
-> > On Mon, 2 Dec 2024 at 16:20, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> > >
-> > > Document required property for Airoha EN7581 CPUFreq .
-> > >
-> > > On newer Airoha SoC, CPU Frequency is scaled indirectly with SMCCC commands
-> > > to ATF and no clocks are exposed to the OS.
-> > >
-> > > The SoC have performance state described by ID for each OPP, for this a
-> > > Power Domain is used that sets the performance state ID according to the
-> > > required OPPs defined in the CPU OPP tables.
-> > >
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > > Changes v4:
-> > > - Add this patch
-> > >
-> > >  .../cpufreq/airoha,en7581-cpufreq.yaml        | 259 ++++++++++++++++++
-> > >  1 file changed, 259 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
-> > > new file mode 100644
-> > > index 000000000000..a5bdea7f34b5
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
-> > 
-> > [...]
-> > 
-> > > +examples:
-> > > +  - |
-> > > +    / {
-> > > +        #address-cells = <2>;
-> > > +       #size-cells = <2>;
-> > > +
-> > > +        cpus {
-> > > +            #address-cells = <1>;
-> > > +            #size-cells = <0>;
-> > > +
-> > > +            cpu0: cpu@0 {
-> > > +                device_type = "cpu";
-> > > +                compatible = "arm,cortex-a53";
-> > > +                reg = <0x0>;
-> > > +                operating-points-v2 = <&cpu_opp_table>;
-> > > +                enable-method = "psci";
-> > > +                clocks = <&cpufreq>;
-> > > +                clock-names = "cpu";
-> > > +                power-domains = <&cpufreq>;
-> > > +                power-domain-names = "cpu_pd";
-> > 
-> > Nitpick: Perhaps clarify the name to be "perf" or "cpu_perf", to
-> > indicate it's a power-domain with performance scaling support.
-> > 
-> 
-> Will change to cpu_perf. Thanks a lot for the review!
+On Mon, Dec 02 2024 at 11:02, Masahiro Yamada wrote:
+> On Sun, Dec 1, 2024 at 8:17=E2=80=AFPM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+>>
+>> The compiler can fully inline the actual handler function of an interrupt
+>> entry into the .irqentry.text entry point. If such a function contains an
+>> access which has an exception table entry, modpost complains about a
+>> section mismatch:
+>>
+>>   WARNING: vmlinux.o(__ex_table+0x447c): Section mismatch in reference .=
+..
+>>
+>>   The relocation at __ex_table+0x447c references section ".irqentry.text"
+>>   which is not in the list of authorized sections.
+>>
+>> Add .irqentry.text to OTHER_SECTIONS to cure the issue.
+>>
+>> Reported-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+>
+> I found the context in LKML.
+> Closes: https://lore.kernel.org/all/20241128111844.GE10431@google.com/
+>
+> However, is this still relevant to the mainline kernel?
+>
+> In Linux 5.4.y, I agree this because smp_apic_timer_interrupt()
+> is annotated as __irq_entry:
 
-Is that defined in arm/cpus.yaml? No.
+Correct.
 
-The current choices are perf or psci though those aren't enforced (yet). 
-Or nothing which is my preference if there is only 1 power domain.
- 
-Rob
+> In this mainline kernel, DEFINE_IDTENTRY_SYSVEC()
+> expands to a normal .text function which is explicitly
+> annotated 'noinline'.
+
+It's not annotated noinline, it's annotated 'noinstr', which puts the
+code into the .noinstr.text section. That one is indeed covered.
+
+So yes, the fix is only required for pre 5.8 kernels.
+
+Thanks,
+
+        tglx
 
