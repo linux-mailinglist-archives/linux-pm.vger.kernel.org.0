@@ -1,98 +1,127 @@
-Return-Path: <linux-pm+bounces-18341-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18342-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BD5D9E00B3
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 12:36:57 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4892A162515
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:35:54 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6751FA244;
-	Mon,  2 Dec 2024 11:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ITYYuTg+"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F2F9E00DD
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 12:45:36 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADF41FC7C7;
-	Mon,  2 Dec 2024 11:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733139193; cv=none; b=tinn1CUAXJIPEdUh5ltYdVUmUIlHh21bMktRW39loX2DP2RuS4yDMMv++71MsVWk+loDhZXG5YJ8d4IpUaJXyvlrIdiN5epambfLAvGiNGXXfclGAxDlpEehEHtUo1GgAJPoRVHM5TfSa6CZMvHYvsjTwssa6tdnX3UlzuRgI/M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733139193; c=relaxed/simple;
-	bh=Jsl069Z7B15EOI+tkFE003qkYdLsc0cZrKK5DwfnEcM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J9TWtj0tc5xpm8f4Gjnoen0NU92F4ChmVzeq6oHSWZXBL9MYdgxdrzD8imrSjfdC9fZ2mb3pEKt/ZsXsmxqV6pZJYmbjDPbqISSl/86W0iZ6PvsAnGIYEKfHtDGZkBWQ/9vs3ZSJLVZREjTIIAT+xcj6UILszfP9WFRvZKLZHuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ITYYuTg+; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1733139189;
-	bh=Jsl069Z7B15EOI+tkFE003qkYdLsc0cZrKK5DwfnEcM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ITYYuTg+SxY9g0kPy84cu0XpYjv4mjm0R/MclZQ3GPtgBIs3K2ogTX8hhXxZ2SzXQ
-	 kuau5iLXO+nHJZkz15FOaBmtxgFTO0yV28U2oZL78xV65xYo1TVx6SqvYH3rBthTzA
-	 bE7LeGSKnKwsRH0xxDkV6lLMwqfSu01o0sS9smtJ/d0RKVaQHkNPxx7I9cp9j0CWCI
-	 BKe0+8s/n2wXhoJt21LhfGX9zVwjiHBHJ5173wmzKc4Ha4Cuxgo1auxdEhxqLvRMc5
-	 Qolf5xPUBepQmMDRJJXZbT8SljiviLED/e56iLx9QQ9HTFOfZYGghjEnGgjuaFIdig
-	 jKn5qTyYlrsPQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B092BB27B86
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:36:18 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F6A1FC7D7;
+	Mon,  2 Dec 2024 11:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OgLH+sLN"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 35DC017E3626;
-	Mon,  2 Dec 2024 12:33:09 +0100 (CET)
-Message-ID: <000cf951-1afc-4bcf-9f72-c484dcfa1b2d@collabora.com>
-Date: Mon, 2 Dec 2024 12:33:08 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E1C1FA245;
+	Mon,  2 Dec 2024 11:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733139330; cv=none; b=k/Ia2yC2+//nMp+phcot/fO/PkzegFN5SK90M5Jp0hnBX+dmMXV6MIZ3RNsJ96obvqiUdsoDhahil3buP9aNIG9Bv9jo+khTuzPRzGBjnTSo0xpmhOFWIj+10cQaDp61cY3QAJ4d7r7IXRx6uFymJKr9wQYcKEmpmrLWyXIQ8DA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733139330; c=relaxed/simple;
+	bh=9tNZcpjj1t7vWcFXyssqY/2Oi977Kh2rWYxRFEsh0YA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cCsY9gKUzcpQ60wCSWbMxDdxQOL5xxpMG5FfEsVUfme6jk6jzLSjE5sEki4tUH8QAHTxaFaSgPW3T4YLlXnJkdTqoJmBhGdIuS3ScPozoEGrgCWkQNu8zl4JzHQnClcYwTa08g3ig2KMhe0WX/+uKnxThViIaCYpC79h2svOYw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OgLH+sLN; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=wF2I4tT7MqbewWmtnwf7ZhQdUn1g7F7H02RXRJD34KA=; b=OgLH+sLN9eaY85gIL0HAmTyE7Z
+	05Ait8dHXa/J9L7QzeZ9v1JpmM42U8OjeXXLSiYVFPIP2j7ShKg7SD+jwg2YgJ7d5gW4XELOtU1w4
+	fYp1pD5ipdI3tQZqEPzedlWZzf+p21seOKT1q4oEUZgnK5S1Gc88H848vxvsdWTAeLsYWsl4/XqBk
+	jMVdUyxWR0qxCNuBxcdh1TLn1A9/hvsATdE2q2bAMGEwWr1z/WSFCGkRxJWissjxsHqmrnjHrW4O4
+	cljl36zNa7AoC73ChOkdG+rRWFZas3ZFDUyS+Q0MrN9E3U7o99UO2TJwpaLHTOJ1HcqymByy5GU48
+	qFaKl6PQ==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tI4hs-00000007uc1-3AzO;
+	Mon, 02 Dec 2024 11:35:14 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 07A4330050D; Mon,  2 Dec 2024 12:35:13 +0100 (CET)
+Date: Mon, 2 Dec 2024 12:35:12 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Li RongQing <lirongqing@baidu.com>,
+	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: Re: [PATCH v7 04/12] platform/x86: hfi: Introduce AMD Hardware
+ Feedback Interface Driver
+Message-ID: <20241202113512.GA8562@noisy.programming.kicks-ass.net>
+References: <20241130140703.557-1-mario.limonciello@amd.com>
+ <20241130140703.557-5-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] devfreq: Switch back to struct platform_driver::remove()
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham
- <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Matthias Brugger <matthias.bgg@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20241130135813.895628-2-u.kleine-koenig@baylibre.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20241130135813.895628-2-u.kleine-koenig@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241130140703.557-5-mario.limonciello@amd.com>
 
-Il 30/11/24 14:58, Uwe Kleine-König ha scritto:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
-> 
-> Convert all platform drivers below drivers/devfreq to use .remove(),
-> with the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
-> 
-> While touching these drivers, make the alignment of the touched
-> initializers consistent.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+On Sat, Nov 30, 2024 at 08:06:55AM -0600, Mario Limonciello wrote:
 
-For MediaTek
+> +/**
+> + * struct amd_hfi_cpuinfo - HFI workload class info per CPU
+> + * @cpu:		cpu index
+> + * @cpus:		mask of cpus associated with amd_hfi_cpuinfo
+> + * @class_index:	workload class ID index
+> + * @nr_class:		max number of workload class supported
+> + * @amd_hfi_classes:	current cpu workload class ranking data
+> + *
+> + * Parameters of a logical processor linked with hardware feedback class
+> + */
+> +struct amd_hfi_cpuinfo {
+> +	int		cpu;
+> +	cpumask_var_t	cpus;
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This appears unused.
 
+> +	s16		class_index;
+> +	u8		nr_class;
+> +	struct amd_hfi_classes	*amd_hfi_classes;
+> +};
+> +
+> +static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index = -1};
+> +
+> +static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+> +{
+> +	struct amd_hfi_cpuinfo *hfi_cpuinfo;
+> +	struct device *dev = &pdev->dev;
+> +	int idx;
+> +	int nr_class_id;
+> +
+> +	nr_class_id = cpuid_eax(AMD_HETERO_CPUID_27);
+> +	if (nr_class_id < 0 || nr_class_id > 255) {
+> +		dev_err(dev, "failed to get number of supported classes: %d\n",
+> +			nr_class_id);
+> +		return -EINVAL;
+> +	}
+> +
+> +	for_each_present_cpu(idx) {
+
+This uses present, but does not have means of handling changes to
+present. Does this want to be possible?
 
 
