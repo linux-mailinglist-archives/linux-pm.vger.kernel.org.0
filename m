@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-18338-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CAD09DFEE3
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:28:19 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEE39DFEF0
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:30:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE8E4161D1F
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 10:28:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6236C28215E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 10:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5131FC114;
-	Mon,  2 Dec 2024 10:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DAA1FC7DF;
+	Mon,  2 Dec 2024 10:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j+6Ds/Ai"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikhjkACi"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2902018AEA;
-	Mon,  2 Dec 2024 10:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91B61FC119;
+	Mon,  2 Dec 2024 10:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733135296; cv=none; b=AGlLDqag8ZlS78Rk5aX92hEXJQdGbCR9sveLJOrdC0DosLycscG7sXGQ9ASUkF/gksOjmdhYaY4IUN5GyJi/0/Q5btuKEPhmjzK7kgFK2Fw1BI/aDTjOtsNcjdTLNkr6KM2xhXXm0FE1wipTii5hBAuFx23H4VqGloA7htysfpg=
+	t=1733135402; cv=none; b=txKCpco/3scPb5EseulNB+WfY3vO+3kZSCQRcvcJ6yHiB7THnUTkfPdCIdx0X6mwOiye+n5y3DyCUriMXEqHdGdY/0gThaQWFb0cFSNKPk85KTDZurk8gFGHo0fpFvt4qfkyD/NcRZTlnNXNKk7QpX8U5uIOoXg3hIKBOO7jDh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733135296; c=relaxed/simple;
-	bh=dmAO+00hD77a0xSfiVTts1xUU/62BM73uZLkMdxPVFw=;
+	s=arc-20240116; t=1733135402; c=relaxed/simple;
+	bh=LuFsk7gRGBuCuEnZFd0Z5kjf8SQVkInCv2kWohtubqk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rg3pFRP7AFv3ehu4N8mr4nDYM0kJ1eDC34dHV7U630Ce7dlKWh0F/TPBOXz11kXHI+6V0BUDJovU2W+K5tmj0jE+8E2UQAUxd+biZsMsCm8385evnklKSwsZHxxBE1Nz/hA5UICUu/f2epqYU/hKp565E18BlaCGuzZyz9psm1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j+6Ds/Ai; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DFEC4CED1;
-	Mon,  2 Dec 2024 10:28:09 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Jm8LYo7TN47dq8RfdAGMiOHpIbAnGjiJAi7uRaOQxSnmQ3KWwBmtsfj5JvtbmAsD4wWaz2YPUqbgpGaDKKKIIK22AyqvoVPSF25tuSbdnFF1LdO0w28Gor33KWgT0U9zRS+pcVdWnQj2pWTM0c0kBOMeDLOQV7KHBcLyVWodv48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikhjkACi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D399C4CED1;
+	Mon,  2 Dec 2024 10:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733135295;
-	bh=dmAO+00hD77a0xSfiVTts1xUU/62BM73uZLkMdxPVFw=;
+	s=k20201202; t=1733135401;
+	bh=LuFsk7gRGBuCuEnZFd0Z5kjf8SQVkInCv2kWohtubqk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j+6Ds/AimDuv/Im3j3QOYKPEjaL3Oe7hW4vzSsWfGDxz8EN+TXZkhYMgdOgiQqkQz
-	 0qlTlaD0t7Mb1Qs039F6pw03cG7IhPqHKVd8GQs5lE9ll+tXN1XM+FmtUIlRAonEZz
-	 Z5io3bjCvG9QT17MM37+b6IWbZmlWG51RJV/Q/fwbQ+W8cXd1mUguQ/TyvIuJwjpUs
-	 FzIhTt4hrERMY4H5sd7strUi6XK+9GtIp5jjrRdnZSjwULu/jf7N+Wnc5pZsJG+j6L
-	 vSlcrYT0MIllO0oeJ+hXP3mxg/3qF2Ut+GA4Bfl8S2ZbEltRShD/QyfQi+Ok5fSG9w
-	 TNR2q7ngRZjAA==
-Message-ID: <9b88a26c-088d-44a8-9226-8317a0bf63f1@kernel.org>
-Date: Mon, 2 Dec 2024 11:28:07 +0100
+	b=ikhjkACihn+xC0pbMrkkFlVcoFHZag2jhTZJ60iU9/et26klYWxrv6eJdU74GDyaS
+	 1apJVYRRuCyNDXXFgLyvs+WnpF0dEoKpKIOVGWeAJOy14chBW62C8/R3gENIsKDTbx
+	 QbxjcJdo4B6qpc9vxFtICOsIl/vrayaE4Sc1wutLTBNNXN1dljAviJRqJCLY3EtN/y
+	 pOl+9lP5qnsQ3bzb5E6+8Eu9/YK1Sj+l5c1kxj92uwNjUYWACBwd14naoJqk6z+f6L
+	 mVB9tX5qnByqNqTbi+YsXOM5vZkKwqq2PNQvZlPIXHSoo2K2b4sOwufxkmJGIsf2mh
+	 ZDujRu2/s69QA==
+Message-ID: <b7e4162a-a7f7-462d-9dde-121eeb59d148@kernel.org>
+Date: Mon, 2 Dec 2024 11:29:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 8/9] power: supply: max77705: Add charger driver for
- Maxim 77705
+Subject: Re: [PATCH v9 9/9] leds: max77705: Add LEDs support
 To: Dzmitry Sankouski <dsankouski@gmail.com>,
  Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -65,7 +64,7 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org,
  linux-leds@vger.kernel.org
 References: <20241202-starqltechn_integration_upstream-v9-0-a1adc3bae2b8@gmail.com>
- <20241202-starqltechn_integration_upstream-v9-8-a1adc3bae2b8@gmail.com>
+ <20241202-starqltechn_integration_upstream-v9-9-a1adc3bae2b8@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,189 +110,89 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241202-starqltechn_integration_upstream-v9-8-a1adc3bae2b8@gmail.com>
+In-Reply-To: <20241202-starqltechn_integration_upstream-v9-9-a1adc3bae2b8@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/12/2024 10:48, Dzmitry Sankouski wrote:
-> Add driver for Maxim 77705 switch-mode charger (part of max77705
-> MFD driver) providing power supply class information to userspace.
-> 
-> The driver is configured through DTS (battery and system related
-> settings).
+> This adds basic support for LEDs for the max77705 PMIC.
 > 
 > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 > 
+> ---
+> Changes for v8:
+> - join line where possible to fit in 100 chars
+
+
+Coding style asks for 80. checkpatch is not a coding style, unless this
+came from maintainer's review.
+
+> - change comment style C++ -> C
+> 
+
+> Changes for v6:
+> - change compatible suffix to 'rgb'
+> - remove I2C dependency in Kconfig
+> - remove copyright and author from 'based on' header statement
+> - replace MFD abbreviation with PMIC
+> - MAINTAINERS: alphabetic order
+> - max77705_rgb_blink: replace ternary operators with if..else if sequence
+> - max77705_rgb_blink: move hardcoded numbers to constants
+> - max77705_led_brightness_set: move ret to the bottom
+> - s/map/regmap
+> - replace device_for_each_child_node with scoped version
+> - s/rv/ret
+> Changes for v5:
+> - use same hardware name in Kconfig and module descriptions
+> - remove copyrighter owner from module authors
+> 
+> Changes in v4:
+> - inline BLINK_(ON|OFF) macro
+> - remove camel case
+> - drop backwards compatibility(new driver)
+> - drop module alias
+> ---
+>  MAINTAINERS                          |   1 +
+>  drivers/leds/Kconfig                 |   6 ++++++
+>  drivers/leds/Makefile                |   1 +
+>  drivers/leds/leds-max77705.c         | 167 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max77705-private.h |  18 ++++++++++++++++
+>  5 files changed, 193 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
 
 
 ...
 
+> diff --git a/include/linux/mfd/max77705-private.h b/include/linux/mfd/max77705-private.h
+> index be781a0f9802..2140693ce747 100644
+> --- a/include/linux/mfd/max77705-private.h
+> +++ b/include/linux/mfd/max77705-private.h
+> @@ -35,6 +35,24 @@
+>  #define MAX77705_SYSTEM_IRQ_SYSOVLO_INT	BIT(5)
+>  #define MAX77705_SYSTEM_IRQ_TSHDN_INT	BIT(6)
+>  #define MAX77705_SYSTEM_IRQ_TM_INT	BIT(7)
+> +/* MAX77705_RGBLED_REG_LEDEN register */
+> +#define MAX77705_RGBLED_EN_WIDTH	2
+> +/* MAX77705_RGBLED_REG_LEDBLNK register */
+> +#define MAX77705_RGB_DELAY_100_STEP_LIM 500
+> +#define MAX77705_RGB_DELAY_100_STEP_COUNT 4
+> +#define MAX77705_RGB_DELAY_100_STEP 100
+> +#define MAX77705_RGB_DELAY_250_STEP_LIM 3250
+> +#define MAX77705_RGB_DELAY_250_STEP 250
+> +#define MAX77705_RGB_DELAY_500_STEP 500
+> +#define MAX77705_RGB_DELAY_500_STEP_COUNT 10
+> +#define MAX77705_RGB_DELAY_500_STEP_LIM 5000
+> +#define MAX77705_RGB_DELAY_1000_STEP_LIM 8000
+> +#define MAX77705_RGB_DELAY_1000_STEP_COUNT 13
+> +#define MAX77705_RGB_DELAY_1000_STEP 1000
+> +#define MAX77705_RGB_DELAY_2000_STEP 2000
+> +#define MAX77705_RGB_DELAY_2000_STEP_COUNT 13
+> +#define MAX77705_RGB_DELAY_2000_STEP_LIM 12000
 > +
-> +static int max77705_charger_probe(struct platform_device *pdev)
-> +{
-> +	struct power_supply_config pscfg = {};
-> +	struct i2c_client *i2c_chg;
-> +	struct max77693_dev *max77705;
-> +	struct max77705_charger_data *chg;
-> +	struct device *dev, *parent;
-> +	struct regmap_irq_chip_data *irq_data;
-> +	int ret;
-> +
-> +	dev = &pdev->dev;
-> +	parent = dev->parent;
-> +	max77705 = dev_get_drvdata(parent);
-> +
-> +	chg = devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
-> +	if (!chg)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, chg);
-> +
-> +	i2c_chg = devm_i2c_new_dummy_device(dev, max77705->i2c->adapter, I2C_ADDR_CHG);
-> +
+>  
 
-Same problems as in other patchset. This really needs some work to look
-closer to Linux coding style.
-
-
-> +	if (IS_ERR(i2c_chg))
-> +		return PTR_ERR(i2c_chg);
-> +
-> +	chg->regmap = devm_regmap_init_i2c(i2c_chg, &max77705_chg_regmap_config);
-> +
-> +	if (IS_ERR(chg->regmap))
-> +		return PTR_ERR(chg->regmap);
-> +
-> +	chg->dev = dev;
-> +
-> +	ret = regmap_update_bits(chg->regmap,
-> +				MAX77705_CHG_REG_INT_MASK,
-> +				MAX77705_CHGIN_IM, 0);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	pscfg.of_node = dev->of_node;
-> +	pscfg.drv_data = chg;
-> +
-> +	chg->psy_chg = devm_power_supply_register(dev, &max77705_charger_psy_desc, &pscfg);
-> +	if (IS_ERR(chg->psy_chg))
-> +		return PTR_ERR(chg->psy_chg);
-> +
-> +	max77705_charger_irq_chip.irq_drv_data = chg;
-> +	ret = devm_regmap_add_irq_chip(chg->dev, chg->regmap, max77705->irq,
-> +					IRQF_ONESHOT | IRQF_SHARED, 0,
-> +					&max77705_charger_irq_chip,
-> +					&irq_data);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add irq chip: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	chg->wqueue = create_singlethread_workqueue(dev_name(dev));
-> +	if (IS_ERR(chg->wqueue)) {
-> +		dev_err(dev, "failed to create workqueue\n");
-> +		return PTR_ERR(chg->wqueue);
-> +	}
-> +	INIT_WORK(&chg->chgin_work, max77705_chgin_isr_work);
-> +
-> +	max77705_charger_initialize(chg);
-> +
-> +	return max77705_charger_enable(chg);
-> +}
-> +
-> +static void max77705_charger_remove(struct platform_device *pdev)
-> +{
-> +	struct max77705_charger_data *chg = platform_get_drvdata(pdev);
-> +
-> +	max77705_charger_disable(chg);
-
-
-Use devm for this. You use shared interrupt, so you are not suppose to
-mix devm and non-devm, even if this is actually safe.
-
-> +}
-> +
-> +static const struct of_device_id max77705_charger_of_match[] = {
-> +	{ .compatible = "maxim,max77705-charger" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, max77705_charger_of_match);
-> +
-> +static struct platform_driver max77705_charger_driver = {
-> +	.driver = {
-> +		.name = "max77705-charger",
-> +		.of_match_table = max77705_charger_of_match,
-> +	},
-> +	.probe = max77705_charger_probe,
-> +	.remove = max77705_charger_remove,
-> +};
-> +module_platform_driver(max77705_charger_driver);
-> +
-> +MODULE_AUTHOR("Dzmitry Sankouski <dsankouski@gmail.com>");
-> +MODULE_DESCRIPTION("Maxim MAX77705 charger driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/power/max77705_charger.h b/include/linux/power/max77705_charger.h
-> new file mode 100644
-> index 000000000000..44ecd6b32cbe
-> --- /dev/null
-> +++ b/include/linux/power/max77705_charger.h
-> @@ -0,0 +1,216 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Maxim MAX77705 definitions.
-> + *
-> + * Copyright (C) 2015 Samsung Electronics, Inc.
-> + * Copyright (C) 2024 Dzmitry Sankouski <dsankouski@gmail.com>
-> + */
-
-
-...
-
-> +
-> +/* MAX77705_CHG_REG_CNFG_10 */
-> +#define MAX77705_CHG_WCIN_LIM		GENMASK(5, 0)
-> +
-> +/* MAX77705_CHG_REG_CNFG_11 */
-> +#define MAX77705_VBYPSET_SHIFT		0
-> +#define MAX77705_VBYPSET_MASK		GENMASK(6, 0)
-> +
-> +/* MAX77705_CHG_REG_CNFG_12 */
-> +#define MAX77705_CHGINSEL_SHIFT		5
-> +#define MAX77705_CHGINSEL_MASK		BIT(MAX77705_CHGINSEL_SHIFT)
-> +#define MAX77705_WCINSEL_SHIFT		6
-> +#define MAX77705_WCINSEL_MASK		BIT(MAX77705_WCINSEL_SHIFT)
-> +#define MAX77705_VCHGIN_REG_MASK	GENMASK(4, 3)
-> +#define MAX77705_WCIN_REG_MASK		GENMASK(2, 1)
-> +#define MAX77705_REG_DISKIP_SHIFT	0
-> +#define MAX77705_REG_DISKIP_MASK	BIT(MAX77705_REG_DISKIP_SHIFT)
-> +/* REG=4.5V, UVLO=4.7V */
-> +#define MAX77705_VCHGIN_4_5		0
-> +/* REG=4.5V, UVLO=4.7V */
-> +#define MAX77705_WCIN_4_5		0
-> +#define MAX77705_DISABLE_SKIP		1
-> +#define MAX77705_AUTO_SKIP		0
-> +
-> +/* mA */
-> +#define MAX77705_CURRENT_STEP		25
-> +#define MAX77705_CURRENT_WCIN_MAX	1600
-> +#define MAX77705_CURRENT_CHGIN_MAX	3200
-> +
-> +/* Convert current in mA to corresponding CNFG09 value */
-> +inline u8 max77705_convert_ma_to_chgin_ilim_value(unsigned int cur)
-> +{
-> +	if (cur < MAX77705_CURRENT_STEP)
-> +		return 0;
-> +	if (cur < MAX77705_CURRENT_CHGIN_MAX)
-> +		return (cur / MAX77705_CURRENT_STEP) - 1;
-> +	else
-> +		return (MAX77705_CURRENT_CHGIN_MAX / MAX77705_CURRENT_STEP) - 1;
-> +}
-
-
-Drop all inlines from header. You are not suppose to have such driver
-functions inlined all over the users.
-
+No need for multiple line breaks.
 
 Best regards,
 Krzysztof
