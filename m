@@ -1,57 +1,60 @@
-Return-Path: <linux-pm+bounces-18318-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18319-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B85C99DFB32
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 08:28:34 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B70DE9DFB91
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 09:01:03 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 830321624BB
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 07:28:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D810281BFB
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 08:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 935DD1F9428;
-	Mon,  2 Dec 2024 07:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B871F9406;
+	Mon,  2 Dec 2024 08:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q0nMoGKU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiY8l3p7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599EC1F9418;
-	Mon,  2 Dec 2024 07:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C80FF9E6;
+	Mon,  2 Dec 2024 08:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733124511; cv=none; b=ALULShKaSBAz6T/yCIw4EqIOYzc9YPvDdk38UbWBoKnZ+aNVT1+SzxXNItyDQ0ol3mBGrtQCoD2Sk6O/T+RrV7Q/dt62ZkNVfxC0cXoJlzPR1iWrlV6L2xdFddo3WMRF3VUHERuSbYaXDpi5FwnxsLIkocuuMpVmYgDGBFGs0Uw=
+	t=1733126459; cv=none; b=UvSOm9trZJG0mggzvHL523OYSGTN3ERITrZHJKgEiaW50brf4cCCQWxRyiaZUftAp4enUB9oPqCKGivrhnoqQdpNFduYSqbOILjt7XudVhP23J36kgUBx10nM1u4A5StWAyWGoJEZ5upsnl4yNI0D+lVB+GPOVY47P+XGb5iAD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733124511; c=relaxed/simple;
-	bh=EnysZ7zRMcevxzZrPHotIoBrdN8hMuJ09Y6hOQq4L4I=;
+	s=arc-20240116; t=1733126459; c=relaxed/simple;
+	bh=cKBxlD9oIvW3qwky/x/hjrqOR1DuqNbxWT7KDNIlPqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bNDrFti6949xPkyYehrqbSo4iAuneA6knERQqnct0BqWAecpX5FXZDdlE2kG49NjT0BhDv5iZdmFQlU56jyXvAxUDILVc1i4H/2D0oMyUg6rnBLq8Gzp/M4XzlWP4lCQ2YkFgATlU6DnD25oV8/nc2dzgKs2dZrBKEIIpytoVl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q0nMoGKU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2A1C4CED2;
-	Mon,  2 Dec 2024 07:28:30 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qj7FO3SJvTecTZyMB/zTbIlN9j1heSKZFPxA4zDoVKV0MOAVOgvZRyIroSXAVyEMXMH44ASiadAf04tmsvj2A1aT8LpUf0WkPYQIpcd2uUu1O7HRhoEHecRY05MN/g9ac37+LY3wjYn4wBf5DL57oVSrrFA6TST3JQti30fI+Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiY8l3p7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EE0C4CED2;
+	Mon,  2 Dec 2024 08:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733124510;
-	bh=EnysZ7zRMcevxzZrPHotIoBrdN8hMuJ09Y6hOQq4L4I=;
+	s=k20201202; t=1733126458;
+	bh=cKBxlD9oIvW3qwky/x/hjrqOR1DuqNbxWT7KDNIlPqM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q0nMoGKU3iABfhTQJ9N6WwtPQCq5oHM74ef2DjMiA7Ld40xp4j7l+/aqazXbSptZm
-	 uj/ees7CWH9Cs8U8pwwWKEmKxqqR+5IfSuIjaVyQ9cp1G7NkS/+fTCFv4MOr1TvC3Z
-	 9fGtVhVy3Ml6e+tH2uWduC95P17SOSBXGwBaOdmcOQLcBpFNmDANpu1SloACwbrzmn
-	 SdK87fXXYvOEtrey8mTmuaHedmiVf9qGpW49qrgkUkG8Yp1Y3n9LR8Cdn4gYsLzI0p
-	 8r4VOGJjQ0n7GF0X6Ifk3O26giSHPWLfiH8dIy6YGz/v67ddWqi3XX8FOJA/EPP6O9
-	 7dbd8jxxC37ZA==
-Date: Mon, 2 Dec 2024 08:28:28 +0100
+	b=aiY8l3p7SZwggHaDbYmUcdWfR2qpRzyaCyA2smpmjaSJOaJzSbz52hFbcDkUJLPRr
+	 jRVOif4iR8t7lwZyFUhY2wEK78dx5LfjR/rktxJYWzcFQBFNRXnYZllTIBgdCisXNp
+	 sBufH6nBla0vn/kL3m2C7El9KqxCWyXYCFT0n97nXS4QEyj2jqETc8fZiGJHreLKHB
+	 W/V2aU6CPj6QFXEc+2KOdF4lV6C4MuI1Qx9921BN63gp01hA/ZhWAFzrXOZqkwWicW
+	 xtlGcqfCqohFw1sy69tGNuJcmzSCvBhZ7HiCEzthaAqrcMSdJ8a9BTIbsrsaduF261
+	 LlM20nHY4faPg==
+Date: Mon, 2 Dec 2024 09:00:55 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-Cc: krzk+dt@kernel.org, sre@kernel.org, 
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] dt-bindings: power: supply: Add STC3117 Fuel Gauge
-Message-ID: <saixxbiree3iy5rsftxee5r2lpvwgipg5d2u54artlqs3vmye4@r5n7ihczlm43>
-References: <20241130094531.14885-1-bhavin.sharma@siliconsignals.io>
- <20241130094531.14885-2-bhavin.sharma@siliconsignals.io>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: domain-idle-state: Allow
+ idle-state-name
+Message-ID: <ci253udczwm4ovo2prpbyuqd5d2x73t52auf7adyhlyzvuzkaf@v4krfcgcvrpu>
+References: <20241130-topic-idle_state_name-v1-0-d0ff67b0c8e9@oss.qualcomm.com>
+ <20241130-topic-idle_state_name-v1-1-d0ff67b0c8e9@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,20 +63,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241130094531.14885-2-bhavin.sharma@siliconsignals.io>
+In-Reply-To: <20241130-topic-idle_state_name-v1-1-d0ff67b0c8e9@oss.qualcomm.com>
 
-On Sat, Nov 30, 2024 at 03:14:18PM +0530, Bhavin Sharma wrote:
-> The STC3117 provides a simple fuel gauge via I2C.
-> Add a DT schema to describe how to set it up in the device tree.
+On Sat, Nov 30, 2024 at 05:39:36PM +0100, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-> Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+> Allow specifying a name for idle states, similar to CPU idle states
+> in cpu/idle-states.yaml
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
->  .../bindings/power/supply/st,stc3117.yaml     | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+>  Documentation/devicetree/bindings/power/domain-idle-state.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/domain-idle-state.yaml b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> index ec1f6f669e50b2e7b0756cb6a737c685ad81045b..4dd4f59bbbec3058cf20f064aeec4c9602a99eb7 100644
+> --- a/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> +++ b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> @@ -54,6 +54,11 @@ patternProperties:
+>            (i.e. idle states node with entry-method property is set to "psci")
+>            must specify this property.
+>  
+> +      idle-state-name:
+> +        $ref: /schemas/types.yaml#/definitions/string
+> +        description:
+> +          A string used as a descriptive name for the idle state.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For user-visible strings we have 'label' property, but I see cpu idle
+states already use this one, so I guess it is fine.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
