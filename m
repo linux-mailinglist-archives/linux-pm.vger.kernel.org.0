@@ -1,103 +1,81 @@
-Return-Path: <linux-pm+bounces-18317-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18318-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC7BA9DFAC0
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 07:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B85C99DFB32
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 08:28:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 761B81626BD
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 06:33:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 830321624BB
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 07:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4C71F8AE5;
-	Mon,  2 Dec 2024 06:33:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 935DD1F9428;
+	Mon,  2 Dec 2024 07:28:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N4LdHVlH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q0nMoGKU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F30F33F6
-	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 06:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599EC1F9418;
+	Mon,  2 Dec 2024 07:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733121196; cv=none; b=qvuGPxpWx6YDsntqwgQ/7QAQ9IkW7oZ9dq+UCInknvcf8Q6O8NeGeEjIC5XxgEneq11BFqZAd7Exuhk3Ig6PP/ns1dYLukTZhR/AG2FoHEyn9Fre63UhzHlzL/aQ+w5yKua/ZNUDoDbjeH7X5R3U4rSLTaJLxepAD5id23qKWnU=
+	t=1733124511; cv=none; b=ALULShKaSBAz6T/yCIw4EqIOYzc9YPvDdk38UbWBoKnZ+aNVT1+SzxXNItyDQ0ol3mBGrtQCoD2Sk6O/T+RrV7Q/dt62ZkNVfxC0cXoJlzPR1iWrlV6L2xdFddo3WMRF3VUHERuSbYaXDpi5FwnxsLIkocuuMpVmYgDGBFGs0Uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733121196; c=relaxed/simple;
-	bh=5a0S2upxKeJHX5ca/O2fBI/NQyJIHNd673SOJDKYZtw=;
+	s=arc-20240116; t=1733124511; c=relaxed/simple;
+	bh=EnysZ7zRMcevxzZrPHotIoBrdN8hMuJ09Y6hOQq4L4I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QD1TNwr7TNbT8NYkhxOZKg1j6aDDzgnMMH1Ny5hdB1ZUat8JpLacKgqkoRTDAVgq8qkhsWetku3uyJtfxSrbx1nnLh+bXfZrZiMUQ+mXt9PT1J/kHZR6zavQY0OdO3obV/bWhUwcupTitAzp9DeV9KekEYemiqydG8M1WhR3naI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N4LdHVlH; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-724f1ce1732so2920925b3a.1
-        for <linux-pm@vger.kernel.org>; Sun, 01 Dec 2024 22:33:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733121194; x=1733725994; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CISoFXqsKABybYb3NAOx5HlkcJ7x+PNKD4DJwNr0UAg=;
-        b=N4LdHVlHQieEf+hMcAAU5rjxAWpU4dJR5qD7RQJMAqvOEBimAfs6t7rKTj64zqtvfi
-         FPy0q7cZW8BdM61m+lYtj20mbnirMxYOEHXZ5ZtOff1AN6+ppQgYEmBM7SzI2MbIwWDK
-         qi8K2rwTkqjVLYVksiwcXqIYOlkNgbRSWYxH68f65YSP1mH1I/HsQ9XbgldctAx7G5Vf
-         zNrGS50d+G5CQx53QF3c892i3abmeMiHEx3ReGqNjmCAdGMR1uScLx/ZSIHqJp7OHm82
-         UVg2rXO0aKWmhy4WPlT7YSgESlWM2oHHWrS4z0XM8HaabSw2Wtz134UugQAcLYjvL6kc
-         fpug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733121194; x=1733725994;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CISoFXqsKABybYb3NAOx5HlkcJ7x+PNKD4DJwNr0UAg=;
-        b=CF+wUSLptMbaavNfB7PKp8e9//oVwztE0OU2XwTnYCcpLFzix3f7JYTSj5KDirT94/
-         Oly5WNueGqIqiv2sSUzwQJqHS7z3GKdtQ9mCY1RCFUpKWGI5Yqj5Z/MJdc3zDNCJ3NRX
-         392YZs0Syd3uOtWzlSQkoE/Rzr01txOCaDBYoRDDyU6B68wrU7HI8Gz+OW/dcg9S/Ys+
-         3L3ndBsZPSn8z3UIC/zH57WMCPL/Prs/+clAeetmE904xXdnBzZ0GgFmrgV2HjS6Cgfc
-         gtVCXhOOkYky0At7OSZCngtVdozIh8gmiP5CRiQplJvWa+5zq0cBtg2EZSt57ZcYCL3h
-         x1NA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSmtp/rhZkZjwf7po2I6KBF41IiRHAPpd23q2NIDPDvhMeqvV6j8qF3T0YFALcZPx//ULu890VVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3nXMyeI0cEIeRnZIYmluweqXierenbsDvsYU1tX5l3emVRFk3
-	bhB7tClZLlNEaXNtk0jQNmgdeUa5QqalfCQjGDvT0U2uaIj40jo2HBSBtAMVcRI=
-X-Gm-Gg: ASbGncuD5va4Idr5h6aFc8poqzstLWrfQmGTHuR2Miq1hYgYTGsUI3p6poQNDB0ng6X
-	VAtHddbLLY5RWN1DjGj7sTphAnkPwmKnSiAM6aM4lEiGTqYljOCDcZDjNdFNIOJoIqEl7/fQB/4
-	dbmcWFuAwkV1Ra4I88cX5yI16ObfOToRd8ZuUvXwqW9YIrHJavtYrhbyE3VPJ7phG+QMjGN/Ien
-	Qo22xip5W7YuMEiY7i2R6Gmmiq5hCti606Pi3M64drGUvEiiDpv
-X-Google-Smtp-Source: AGHT+IFBrdbTTxdw4pY2MNjQE6aYwaMoUjfwBbdWHnsYcntsEY5IUKvNqcvwdTm9QrHO2jax6Cxsgw==
-X-Received: by 2002:a05:6a20:3944:b0:1e0:d632:b9e0 with SMTP id adf61e73a8af0-1e0e0b0f127mr33630997637.13.1733121194026;
-        Sun, 01 Dec 2024 22:33:14 -0800 (PST)
-Received: from localhost ([122.172.86.146])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7254e7685desm5806896b3a.90.2024.12.01.22.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Dec 2024 22:33:13 -0800 (PST)
-Date: Mon, 2 Dec 2024 12:03:11 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] OPP: add index check to assert to avoid buffer
- overflow in _read_freq()
-Message-ID: <20241202063311.g3333gi7ztblx2hr@vireshk-i7>
-References: <20241129-topic-opp-fix-assert-index-check-v2-0-386b2dcbb9a6@linaro.org>
- <20241129-topic-opp-fix-assert-index-check-v2-1-386b2dcbb9a6@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bNDrFti6949xPkyYehrqbSo4iAuneA6knERQqnct0BqWAecpX5FXZDdlE2kG49NjT0BhDv5iZdmFQlU56jyXvAxUDILVc1i4H/2D0oMyUg6rnBLq8Gzp/M4XzlWP4lCQ2YkFgATlU6DnD25oV8/nc2dzgKs2dZrBKEIIpytoVl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q0nMoGKU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2A1C4CED2;
+	Mon,  2 Dec 2024 07:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733124510;
+	bh=EnysZ7zRMcevxzZrPHotIoBrdN8hMuJ09Y6hOQq4L4I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q0nMoGKU3iABfhTQJ9N6WwtPQCq5oHM74ef2DjMiA7Ld40xp4j7l+/aqazXbSptZm
+	 uj/ees7CWH9Cs8U8pwwWKEmKxqqR+5IfSuIjaVyQ9cp1G7NkS/+fTCFv4MOr1TvC3Z
+	 9fGtVhVy3Ml6e+tH2uWduC95P17SOSBXGwBaOdmcOQLcBpFNmDANpu1SloACwbrzmn
+	 SdK87fXXYvOEtrey8mTmuaHedmiVf9qGpW49qrgkUkG8Yp1Y3n9LR8Cdn4gYsLzI0p
+	 8r4VOGJjQ0n7GF0X6Ifk3O26giSHPWLfiH8dIy6YGz/v67ddWqi3XX8FOJA/EPP6O9
+	 7dbd8jxxC37ZA==
+Date: Mon, 2 Dec 2024 08:28:28 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+Cc: krzk+dt@kernel.org, sre@kernel.org, 
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] dt-bindings: power: supply: Add STC3117 Fuel Gauge
+Message-ID: <saixxbiree3iy5rsftxee5r2lpvwgipg5d2u54artlqs3vmye4@r5n7ihczlm43>
+References: <20241130094531.14885-1-bhavin.sharma@siliconsignals.io>
+ <20241130094531.14885-2-bhavin.sharma@siliconsignals.io>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241129-topic-opp-fix-assert-index-check-v2-1-386b2dcbb9a6@linaro.org>
+In-Reply-To: <20241130094531.14885-2-bhavin.sharma@siliconsignals.io>
 
-On 29-11-24, 16:06, Neil Armstrong wrote:
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> +static bool assert_single_clk(struct opp_table *opp_table, int __always_unused index)
+On Sat, Nov 30, 2024 at 03:14:18PM +0530, Bhavin Sharma wrote:
+> The STC3117 provides a simple fuel gauge via I2C.
+> Add a DT schema to describe how to set it up in the device tree.
+> 
+> Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+> Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+> ---
+>  .../bindings/power/supply/st,stc3117.yaml     | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
 
-Shouldn't the index be unsigned int here ?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-viresh
+Best regards,
+Krzysztof
+
 
