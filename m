@@ -1,409 +1,165 @@
-Return-Path: <linux-pm+bounces-18359-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2977C9E071F
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 16:34:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3759E06C8
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 16:22:18 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD1AD16486E
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 15:20:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6B6B282DEE
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 15:22:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340C820C029;
-	Mon,  2 Dec 2024 15:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C9D207A26;
+	Mon,  2 Dec 2024 15:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y/ag1EWL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQ4irreq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E03B20A5E1;
-	Mon,  2 Dec 2024 15:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0732B205ACD;
+	Mon,  2 Dec 2024 15:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733152393; cv=none; b=WiEvYaqptO/MkFV/e0Dp384wezlKiNtkyrJeo3LodWefyclcZVwVZgcJjHSjzaTODeLHW86csTXEc5xS0UVLLlEL9LU5GoJbyMzSMU2nrmy3aXCjN2NhhsbOUBj+D3ff/aWt4a4QkIbrbtLRsgmNeInTAgJf9gZeuwdIZn3rFzk=
+	t=1733152690; cv=none; b=r/xYa0J3Q91wHqID6PumYTJggtdRB5KBHGbbWW+IEoMxXbXDvMd6k//xwKBZeQJnw60fCsACrJ1BTx7/lcV1ejYKTHgTWzGBIHUpraDtqvG4BgZKMbXRld1kxqDZFA4pi3hL2BXlYVDW9pItfrE1F0pnH4RCoWwr99RSrOT7JTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733152393; c=relaxed/simple;
-	bh=hgyWZH4F62jNxavKD66RRs0vHTyEatO7/IFqiiAsdUo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=imsKS5JqimC4xuB3KoTgjdUXi6G+1H+QeeCYDpJdc75N0vqY9HNX9Fgk+iolrXS7d6tnbjTeJlziYapxRONreLKyCWv/nBFdntIMK8CDmCDFkfKUbf3Dgvuq3cD50NeGMd9bhd7gyUr29shycMClOXmhM+E6Z0qRjUs8lvA6FSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y/ag1EWL; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1733152690; c=relaxed/simple;
+	bh=epsKa02lgjRq/EvyESY+6wcUtaLtir2MXbx6s6so3CU=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XyvxiqyeLEmmfMWtd92hThGWofdxj+hVNOwanQFG7+v0SMw1GKMYlH9lawlo+Yv+MCUriJYbwtcU905iacPr8WFTqLASDpFpuNiNWzCvCsFznkhNoy9FzPJyn0RNmojlhUKW2cgmNKtqQepRNVQJpcD3v2ECHE2kEZ3hX/yQoXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQ4irreq; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-432d86a3085so36430705e9.2;
-        Mon, 02 Dec 2024 07:13:10 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-434a95095efso31591975e9.0;
+        Mon, 02 Dec 2024 07:18:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733152389; x=1733757189; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PbreFTMSILvFmiIjtGhpGrlLSi8p4N40sJ7ueFzO6Sk=;
-        b=Y/ag1EWLdHqTT/RO6v75+6to+n/0dPTT8+ybL9hkrkGgZ6sDQdq0R/k0g08ixhcMDl
-         CFMPMM/DWJEEjvt+18b0nNH0Lerhw7W9QzvIVKYid4df11/OD3fJdy8UeAwFFDxCfkTR
-         iF0ZSMVm5m0WD+3t48yD7oCSA9TXQWGXGUCjIF8BLoAjrV0msoSd2f5pbrXbhOfjT8PC
-         qyzVhAo9vbtyHXGmF4ybBv0r+qKgH1yP3/gF6YPPsA5Cg+I/KcnDSKx45L3gKAcFYahH
-         SfoKzkuLaBR56lj64rlnRh5d6txGrUZ+jLZxpmuaqadWY0qxfrq7uvu1uKmWbISsB0WV
-         HU8w==
+        d=gmail.com; s=20230601; t=1733152687; x=1733757487; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TD2Kez+EwJNQZ8hSRecZkUtcdwA0yP1phsQ1edA+02Q=;
+        b=UQ4irreqbF2ie4X8qBEiojGOjDt6n93ghwVcyLEmNg8Ql7RgaO43R8eURUGyaGSIvN
+         +nlwJHpR/DHp2ZxlxdAF51laFsh8pDIwvstSijhDqpElvoBXYUSBaH39m4uKldsEr2rn
+         AzrMm6z31EY7WbzLWZUr8ERfakVDZi38FBaEApOCIiovN8ZvFC1/Mm1Y2s5a/+Ya92M9
+         oh3Iax68qrH7wjQeMPjqIMUdgu0EUx2Y5zQl+7IfeMqct5HIc3QEaZTkBL+CIHCCG1wn
+         pB+P0EEpP6mvGN2nGU8Hj66EmcOp0c6ebqYZKMrYaXfzJPu4fQSnCEErutJnI4EExYyD
+         pVpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733152389; x=1733757189;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PbreFTMSILvFmiIjtGhpGrlLSi8p4N40sJ7ueFzO6Sk=;
-        b=j8hWXq5SXmxq63ITII3YH5miL2ESlDY3Bg0c27wKPizv22iJ6C1sGh5V54Yf48Bwsf
-         1nAt0lWJziCtM2fz9pWdMKGpVjW/hSQMUkBp2FROXqRoOuPm+EmZhUzc8U1nOpl5Xlsi
-         sG2oyqN3GxFZwzUTXtOE2yD9rhjrmNHv8LDgkliGVQmBloZ2SnlIXgKxp/tdrZqL1e9C
-         ipNI0mTbyU5OImMzcJi85RxLNLdONkW5fRI2UHEX+pKdWKZDsuF1owaHp9YwVd6IRu0L
-         dZyTFSlc21YltVni7dwQueeEcNvnxnNyMY8S6aBRxz1xEMTC3p6SbQsAB2uEbjoBq18T
-         A5vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0fEvrs4ap18nTFHGk9FKSKNGHMlHBYmmOIYicizVOiK6ly3oCZDf5E0HbgnLU4UoMjTjO97xYEI77@vger.kernel.org, AJvYcCVHaP4XIbCmOmq86bqhNu1+mi57xosRwglsf6cb1ql4+p4EBxERN+gex2o8GgdIHDCnlZsb448P/p0=@vger.kernel.org, AJvYcCXrYaJ0Z+jD5fGXBJ93t4oHKileyCHGqQ4eGyjewnH7Si2PhmqWEKWVVzNPIz8AxS/pymuQ9Uw6HylDRd5B@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLYJ6tksS2OBOD9N2M8yVHcD7UXkYbSBtbora7SXwcni+lcVAd
-	hV/Zh1GDjYaOJcaCibrycXD6Y8b6otXypFdQzB50oyfePfcvIuUs
-X-Gm-Gg: ASbGncuTmhtyC7HJhxp7kgue1rTGbMZUHm60LU2XvIE5BGB8ke7mvVO9+v6swVNNVtt
-	iynaZJXYlHNw3fcpVpSZt/MmDXelKyiEGr2MC2TqPR4BNkpM7p+NfbVHPwvz8Ch/xowtdWIMdS4
-	saqIoOLKWOsEYfqNbmzLXQJHI77ZUT7d9arDZCFMAFfmg5lgWJu/0Cm+lyN7pZlIp1do7SAJ+Jk
-	Upw26YJVpPh6m+cwhs+ZWimRFZtY3vBWHEmjsjdWATn6vWKrgTeBM4up0GdorjqhgNRrI2G8WTE
-	t7xZ4MsUzhpziS/IlAE=
-X-Google-Smtp-Source: AGHT+IGSsRVgA0BiMHuiHxh7Njn4BSULa5d7LgbN5teLIdHLWcwjTW+pXzYn9yV3HoT3hxIyL8yCYA==
-X-Received: by 2002:a05:6000:1787:b0:382:4ab4:b43c with SMTP id ffacd0b85a97d-385c6eb736dmr17380038f8f.21.1733152388287;
-        Mon, 02 Dec 2024 07:13:08 -0800 (PST)
-Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-434b0dc6831sm154173915e9.20.2024.12.02.07.13.07
+        d=1e100.net; s=20230601; t=1733152687; x=1733757487;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TD2Kez+EwJNQZ8hSRecZkUtcdwA0yP1phsQ1edA+02Q=;
+        b=bDN+k9sjwCdkfyM/v1bBXmFoMcqch2Jo+baD0GtaP+xoLTanIJWFG4k2KR9XfWTU8E
+         NlQEBNMcGoFksamvks//EZ6oboE4DJGEt8X8DP8r08uUBUzv1B9f7CbQvzWDy4ar4Gp9
+         1H0ZENGjdRiue8/7z/wdLzwJ4ltNQ+qRAWTZLzwtVjXu97h8B0AFu7rWmHh0u+/6Nc3A
+         jpd3G/jJTrU+q+1bW7trsiEGkNMgaVi+1UxROfCx5DT8niFie0cyBOHEUcA/OFzU8Gat
+         41I5qDns+tTOq66cRy+O7lxrolWGFuqgoCClAXxGUdQhbzHSgtKbuhisrjM8HQDQNpB+
+         3uHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGVAD45oxdGqc4m3wyhhK4D5w1y/qACXZeZAipXsaw8D7Ok5+iSx8HJY3DRlZcZmvBeqJ9ZNQ7za4yahQ=@vger.kernel.org, AJvYcCVbMhAjy3kxmyG08kbspe2XxmfTRWxI2abdK/aTZK0i/YvPOjBBDx7A2N5hNh7PqXrrszPXpQA2y/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUybq2vqvjSPAHuLrtVPYWUfCoCOt4gpEYH1C1FT2L2U4EaFD6
+	Ewy14kfopXh1evKxoKLABDQ8SUM44eo2GrrzfNFRv3PwKTYTEqKj
+X-Gm-Gg: ASbGncvW2qwtQPiX487F8eOa8JANxuDNXJvhq3EgPueN/Dy5PsMaeNM+JcTpEfHt6HC
+	tZGd9bLJWYVzQ/GApQPWiWzvJs0dv5ZHcDol+jwS1ThPg49xMHfqlCqIsKoD7uDjghlFQCuLU35
+	22Pfev1X18tNqvaEG0Yw1lfyfn/62pbhDQiYK8NeFaUkxaq6JpVzoYPnyMt/sjFjpUJy9n+KLNz
+	PpHenAc8vlGpZVtqa2U5Y/zWqzwmSGUTuuCk5beH7bzBfht7DRiQXtUIrhwXWGvFU91zY+HLz+8
+	eCq4/g==
+X-Google-Smtp-Source: AGHT+IFcSULjdaN7t5h+TsvQGpnBOmeaUpqb6hRSZUfNtZBcrLVx8jxCGeSpZmNlhrsyBjhzGyYFcw==
+X-Received: by 2002:a05:6000:144e:b0:385:fa30:4f87 with SMTP id ffacd0b85a97d-385fa30503emr1100550f8f.0.1733152686789;
+        Mon, 02 Dec 2024 07:18:06 -0800 (PST)
+Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385df9ef1d6sm9581922f8f.102.2024.12.02.07.18.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 07:13:07 -0800 (PST)
+        Mon, 02 Dec 2024 07:18:06 -0800 (PST)
+Message-ID: <674dcfae.df0a0220.2cb93b.c1bd@mx.google.com>
+X-Google-Original-Message-ID: <Z03PqWEPlJ45pq4Z@Ansuel-XPS.>
+Date: Mon, 2 Dec 2024 16:18:01 +0100
 From: Christian Marangi <ansuelsmth@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	upstream@airoha.com
-Subject: [PATCH v4 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-Date: Mon,  2 Dec 2024 16:12:04 +0100
-Message-ID: <20241202151228.32609-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241202151228.32609-1-ansuelsmth@gmail.com>
-References: <20241202151228.32609-1-ansuelsmth@gmail.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+	upstream@airoha.com, ulf.hansson@linaro.org
+Subject: Re: [PATCH v2] cpufreq: airoha: Add EN7581 Cpufreq SMC driver
+References: <20241017190809.16942-1-ansuelsmth@gmail.com>
+ <20241119072054.64hi347qmv7ng3un@vireshk-i7>
+ <673c549c.5d0a0220.3a3476.517a@mx.google.com>
+ <20241119104421.hqsil2uvklxok7lz@vireshk-i7>
+ <674470dc.5d0a0220.119e75.b012@mx.google.com>
+ <20241129040234.enfb2vpehpzhmtmc@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241129040234.enfb2vpehpzhmtmc@vireshk-i7>
 
-Add simple CPU Freq driver for Airoha EN7581 SoC that control CPU
-frequency scaling with SMC APIs and register a generic "cpufreq-dt"
-device.
+On Fri, Nov 29, 2024 at 09:32:34AM +0530, Viresh Kumar wrote:
+> On 25-11-24, 13:43, Christian Marangi wrote:
+> > sorry for the delay... I checked the example and other cpufreq driver
+> > that register a simple cpufreq-dt. None of the current driver implements
+> > a full clk provider internally
+> 
+> Yeah, that may be done from platform code for those drivers instead of the
+> cpufreq driver.
+> 
+> > and I have some fear it might be
+> > problematic to have mixed stuff, eventually I feel I should implement a
+> > small clk driver that implements determine_rate, set_rate, a compatible
+> > and all sort. And still we would have the double reference of OPP
+> > Index->Freq Clock->OPP index.
+> 
+> One way to avoid that would be to use performance-state stuff and model this as
+> a genpd. In that case, opp->level field (which you can set as index only in your
+> case) will be programmed as is by the genpd core. That's why I cc'd Ulf earlier
+> as it looked more suited to your case.
+>
 
-CPUFreq driver registers a get-only clock to get the current global CPU
-frequency from SMC and a Power Domain to configure the performance state
-for each OPP to apply the requested frequency from cpufreq-dt. This is
-needed as SMC use index instead of raw frequency.
+Hi I just sent v4 that exactly implement that. It was hard but at the
+end I manage to make use of it :D
 
-All CPU share the same frequency and can't be controlled independently.
-Current shared CPU frequency is returned by the related SMC command.
+> > I wonder if a much easier and better solution for this is (similar to
+> > how we do with suspend and resume) add entry in the struct
+> > cpufreq_dt_platform_data, to permit to define simple .target_index and
+> > .get and overwrite the default one cpufreq-dt.
+> 
+> Easier, sure. Better, I doubt that :(
+> 
+> The OPP core currently configures a lot of stuff from set-opp API, like clk,
+> regulators, genpd (performance state), bandwidth, etc and I really want to use
+> that infrastructure for everyone instead of starting to open code that in
+> drivers. The suspend/resume callbacks are special as the OPP core doesn't know
+> what to do in that case and so it was left for the drivers to handle that.
+> 
 
-Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
-driver is needed with OPP v2 nodes declared in DTS.
+Yep, totally understandable and i can see the problem in open coding it.
+Easier fort devs but leaves space for random implementation that can be
+implemented with OPP and PD
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
-Changes v4:
-- Rework to clk-only + PM set_performance_state implementation
-Changes v3:
-- Adapt to new cpufreq-dt APIs
-- Register cpufreq-dt instead of custom freq driver
-Changes v2:
-- Fix kernel bot error with missing slab.h and bitfield.h header
-- Limit COMPILE_TEST to ARM64 due to smcc 1.2
+> > This permits to both reduce greatly the airoha-cpufreq driver, register
+> > a simple cpufreq-dt and prevent any kind of overhead. After all the
+> > .target_index and .get doesn't do anything fancy, they just call the OPP
+> > set and clk get rate.
+> 
+> Yeah, clk-get is pretty simple but opp-set isn't and then there is scope of
+> further enhancements / improvements in the future which can be best handled if
+> we keep that code common for everyone.
+> 
+> > What do you think? Changes are really trivial since this is already
+> > implemented for suspend and resume.
+> 
+> I think you can model it as a performance state (which lot of platforms are
+> doing as well), and then you won't have the index->clk->index issue anymore.
+>
 
- drivers/cpufreq/Kconfig.arm          |   9 ++
- drivers/cpufreq/Makefile             |   1 +
- drivers/cpufreq/airoha-cpufreq.c     | 222 +++++++++++++++++++++++++++
- drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
- 4 files changed, 234 insertions(+)
- create mode 100644 drivers/cpufreq/airoha-cpufreq.c
+Hope you can check v4 if everything is OK. A dedicated node was required
+for the clk provider and the PD provider but that is O.K. if that means
+transparent handling for cpufreq-dt.
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 5f7e13e60c80..b6f72ee41364 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -15,6 +15,15 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called sun50i-cpufreq-nvmem.
- 
-+config ARM_AIROHA_SOC_CPUFREQ
-+	tristate "Airoha EN7581 SoC CPUFreq support"
-+	depends on ARCH_AIROHA || (COMPILE_TEST && ARM64)
-+	select PM_OPP
-+	select PM_GENERIC_DOMAINS
-+	default ARCH_AIROHA
-+	help
-+	  This adds the CPUFreq driver for Airoha EN7581 SoCs.
-+
- config ARM_APPLE_SOC_CPUFREQ
- 	tristate "Apple Silicon SoC CPUFreq support"
- 	depends on ARCH_APPLE || (COMPILE_TEST && 64BIT)
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 0f184031dd12..8e5a37a95d36 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -52,6 +52,7 @@ obj-$(CONFIG_X86_AMD_FREQ_SENSITIVITY)	+= amd_freq_sensitivity.o
- 
- ##################################################################################
- # ARM SoC drivers
-+obj-$(CONFIG_ARM_AIROHA_SOC_CPUFREQ)	+= airoha-cpufreq.o
- obj-$(CONFIG_ARM_APPLE_SOC_CPUFREQ)	+= apple-soc-cpufreq.o
- obj-$(CONFIG_ARM_ARMADA_37XX_CPUFREQ)	+= armada-37xx-cpufreq.o
- obj-$(CONFIG_ARM_ARMADA_8K_CPUFREQ)	+= armada-8k-cpufreq.o
-diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
-new file mode 100644
-index 000000000000..46f57236c4db
---- /dev/null
-+++ b/drivers/cpufreq/airoha-cpufreq.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/arm-smccc.h>
-+#include <linux/bitfield.h>
-+#include <linux/cpufreq.h>
-+#include <linux/clk-provider.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/slab.h>
-+
-+#include "cpufreq-dt.h"
-+
-+#define AIROHA_SIP_AVS_HANDLE			0x82000301
-+#define AIROHA_AVS_OP_BASE			0xddddddd0
-+#define AIROHA_AVS_OP_MASK			GENMASK(1, 0)
-+#define AIROHA_AVS_OP_FREQ_DYN_ADJ		(AIROHA_AVS_OP_BASE | \
-+						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x1))
-+#define AIROHA_AVS_OP_GET_FREQ			(AIROHA_AVS_OP_BASE | \
-+						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
-+
-+struct airoha_cpufreq_priv {
-+	struct clk_hw hw;
-+	struct generic_pm_domain pd;
-+
-+	int opp_token;
-+	struct dev_pm_domain_list *pd_list;
-+	struct platform_device *cpufreq_dt;
-+};
-+
-+static long airoha_cpufreq_clk_round(struct clk_hw *hw, unsigned long rate,
-+				     unsigned long *parent_rate)
-+{
-+	return rate;
-+}
-+
-+static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
-+					    unsigned long parent_rate)
-+{
-+	const struct arm_smccc_1_2_regs args = {
-+		.a0 = AIROHA_SIP_AVS_HANDLE,
-+		.a1 = AIROHA_AVS_OP_GET_FREQ,
-+	};
-+	struct arm_smccc_1_2_regs res;
-+
-+	arm_smccc_1_2_smc(&args, &res);
-+
-+	/* SMCCC returns freq in MHz */
-+	return (int)(res.a0 * 1000 * 1000);
-+}
-+
-+/* Airoha CPU clk SMCC is always enabled */
-+static int airoha_cpufreq_clk_is_enabled(struct clk_hw *hw)
-+{
-+	return true;
-+}
-+
-+static const struct clk_ops airoha_cpufreq_clk_ops = {
-+	.recalc_rate = airoha_cpufreq_clk_get,
-+	.is_enabled = airoha_cpufreq_clk_is_enabled,
-+	.round_rate = airoha_cpufreq_clk_round,
-+};
-+
-+static const char * const airoha_cpufreq_clk_names[] = { "cpu", NULL };
-+
-+/* NOP function to disable OPP from setting clock */
-+static int airoha_cpufreq_config_clks_nop(struct device *dev,
-+					  struct opp_table *opp_table,
-+					  struct dev_pm_opp *opp,
-+					  void *data, bool scaling_down)
-+{
-+	return 0;
-+}
-+
-+static const char * const airoha_cpufreq_pd_names[] = { "cpu_pd" };
-+
-+static int airoha_cpufreq_set_performance_state(struct generic_pm_domain *domain,
-+						unsigned int state)
-+{
-+	const struct arm_smccc_1_2_regs args = {
-+		.a0 = AIROHA_SIP_AVS_HANDLE,
-+		.a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
-+		.a3 = state,
-+	};
-+	struct arm_smccc_1_2_regs res;
-+
-+	arm_smccc_1_2_smc(&args, &res);
-+
-+	/* SMC signal correct apply by unsetting BIT 0 */
-+	return res.a0 & BIT(0) ? -EINVAL : 0;
-+}
-+
-+static int airoha_cpufreq_probe(struct platform_device *pdev)
-+{
-+	const struct dev_pm_domain_attach_data attach_data = {
-+		.pd_names = airoha_cpufreq_pd_names,
-+		.num_pd_names = ARRAY_SIZE(airoha_cpufreq_pd_names),
-+		.pd_flags = PD_FLAG_DEV_LINK_ON | PD_FLAG_REQUIRED_OPP,
-+	};
-+	struct dev_pm_opp_config config = {
-+		.clk_names = airoha_cpufreq_clk_names,
-+		.config_clks = airoha_cpufreq_config_clks_nop,
-+	};
-+	struct platform_device *cpufreq_dt;
-+	struct airoha_cpufreq_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	const struct clk_init_data init = {
-+		.name = "cpu",
-+		.ops = &airoha_cpufreq_clk_ops,
-+		/* Clock with no set_rate, can't cache */
-+		.flags = CLK_GET_RATE_NOCACHE,
-+	};
-+	struct generic_pm_domain *pd;
-+	struct device *cpu_dev;
-+	int ret;
-+
-+	/* CPUs refer to the same OPP table */
-+	cpu_dev = get_cpu_device(0);
-+	if (!cpu_dev)
-+		return -ENODEV;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	/* Init and register a get-only clk for Cpufreq */
-+	priv->hw.init = &init;
-+	ret = devm_clk_hw_register(dev, &priv->hw);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+					  &priv->hw);
-+	if (ret)
-+		return ret;
-+
-+	/* Init and register a PD for Cpufreq */
-+	pd = &priv->pd;
-+	pd->name = "cpu_pd";
-+	pd->flags = GENPD_FLAG_ALWAYS_ON;
-+	pd->set_performance_state = airoha_cpufreq_set_performance_state;
-+
-+	ret = pm_genpd_init(pd, NULL, false);
-+	if (ret)
-+		return ret;
-+
-+	ret = of_genpd_add_provider_simple(dev->of_node, pd);
-+	if (ret)
-+		goto err_add_provider;
-+
-+	/* Set OPP table conf with NOP config_clks */
-+	priv->opp_token = dev_pm_opp_set_config(cpu_dev, &config);
-+	if (priv->opp_token < 0) {
-+		ret = priv->opp_token;
-+		dev_err(dev, "Failed to set OPP config\n");
-+		goto err_set_config;
-+	}
-+
-+	/* Attach PM for OPP */
-+	ret = dev_pm_domain_attach_list(cpu_dev, &attach_data,
-+					&priv->pd_list);
-+	if (ret)
-+		goto err_attach_pm;
-+
-+	cpufreq_dt = platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
-+	ret = PTR_ERR_OR_ZERO(cpufreq_dt);
-+	if (ret) {
-+		dev_err(dev, "failed to create cpufreq-dt device: %d\n", ret);
-+		goto err_register_cpufreq;
-+	}
-+
-+	priv->cpufreq_dt = cpufreq_dt;
-+	platform_set_drvdata(pdev, priv);
-+
-+	return 0;
-+
-+err_register_cpufreq:
-+	dev_pm_domain_detach_list(priv->pd_list);
-+err_attach_pm:
-+	dev_pm_opp_clear_config(priv->opp_token);
-+err_set_config:
-+	of_genpd_del_provider(dev->of_node);
-+err_add_provider:
-+	pm_genpd_remove(pd);
-+
-+	return ret;
-+}
-+
-+static void airoha_cpufreq_remove(struct platform_device *pdev)
-+{
-+	struct airoha_cpufreq_priv *priv = platform_get_drvdata(pdev);
-+
-+	platform_device_unregister(priv->cpufreq_dt);
-+
-+	dev_pm_domain_detach_list(priv->pd_list);
-+
-+	dev_pm_opp_clear_config(priv->opp_token);
-+
-+	of_genpd_del_provider(pdev->dev.of_node);
-+	pm_genpd_remove(&priv->pd);
-+}
-+
-+static const struct of_device_id airoha_cpufreq_of_match[] = {
-+	{ .compatible = "airoha,en7581-cpufreq" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, airoha_cpufreq_of_match);
-+
-+static struct platform_driver airoha_cpufreq_driver = {
-+	.probe = airoha_cpufreq_probe,
-+	.remove_new = airoha_cpufreq_remove,
-+	.driver = {
-+		.name = "airoha-cpufreq",
-+		.of_match_table = airoha_cpufreq_of_match,
-+	},
-+};
-+module_platform_driver(airoha_cpufreq_driver);
-+
-+MODULE_AUTHOR("Christian Marangi <ansuelsmth@gmail.com>");
-+MODULE_DESCRIPTION("CPUfreq driver for Airoha SoCs");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 18942bfe9c95..5ecd8234bfac 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -103,6 +103,8 @@ static const struct of_device_id allowlist[] __initconst = {
-  * platforms using "operating-points-v2" property.
-  */
- static const struct of_device_id blocklist[] __initconst = {
-+	{ .compatible = "airoha,en7581", },
-+
- 	{ .compatible = "allwinner,sun50i-h6", },
- 	{ .compatible = "allwinner,sun50i-h616", },
- 	{ .compatible = "allwinner,sun50i-h618", },
+Thanks a lot on the hint on how to correctly implement this!
+
 -- 
-2.45.2
-
+	Ansuel
 
