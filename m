@@ -1,145 +1,154 @@
-Return-Path: <linux-pm+bounces-18361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18362-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 410779E07FE
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 17:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5FF99E079C
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 16:53:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D38A016C3B3
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 15:31:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6EB7162BDF
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 15:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09F2207A30;
-	Mon,  2 Dec 2024 15:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE98D209F4D;
+	Mon,  2 Dec 2024 15:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="tBd9BWrr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IqmPlnHq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97961D545
-	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 15:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF09209681
+	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 15:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733153512; cv=none; b=SOpH5PyXasnZYJq0Kmp+mOMu2k6IUKEBY22NPk+VoHsUAL2xtkXMo0ykM/EZqMGQ20b924MTxS0Ua7P8fmr9h+gOaeE7gBwa4WAITnX1POYjZSp9f26K+O+gmLj73n243Nhl646e2L42ujHKjq+ZZ9npKORLgT6eTOXaHOE20gk=
+	t=1733154192; cv=none; b=R8OCv9CJGUbXChJmvukKjBMxcn1U65AnmqscKdBWTNS+Czq2qH5FQrzeX61M0yr0sJe1yeQCqMbAM75ppfokRPxwqYG4U+QHnlAtTx73eovmbz3bhgqZV4HFyjQojuAJtDD793f6lfOlcSk1/+683BiCKS4fZmd35tY0/eLG2GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733153512; c=relaxed/simple;
-	bh=QJFQOhHvRWMfU0TK3Z+kwO6rmT9pNjzCjW1otfK4k08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lbP095J93l0xkoku/GpPy2BvnwhxH4TzTzQsBKNCpYF81eI0kuUUlkCkkuAzgVVpYdSm3BpfvpcHP/BotxkEqEWuYpyFal1+jy+wgsqgxsWAzpJdsvQIZFoYtGY6oLPwfEMJYAn3+zPBQvmP/94mAHgUV8ltcmO3Z421Dr4RITM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=tBd9BWrr; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-434a736518eso55633865e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 07:31:48 -0800 (PST)
+	s=arc-20240116; t=1733154192; c=relaxed/simple;
+	bh=k/f3AXTfh4IjLpqTVVBdk7brWdn7oU78wvX2hwXU6+I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MhMWLtee40ORTeLNSrxpMWvaz+Yx6D6bq5/JrFmeD3gsh6oRaELhAuLnFdOCW3L5jnR/lOtJQsPaH3uHqC4Addn+dcC7dVkM4EOBdeOvUzkGsmZK0Va3FtayBMQy4CIpL5ZKi/CJYujzvrVJoUAFnpP+CLHaV0rNQ7gtB9pMjKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IqmPlnHq; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e3983f8ff40so2780941276.1
+        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 07:43:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733153507; x=1733758307; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QJFQOhHvRWMfU0TK3Z+kwO6rmT9pNjzCjW1otfK4k08=;
-        b=tBd9BWrrOCYbG2KkScuJEGKmBM495QVvzh/ZTTnfy+iPKEPocGLy/lx+h0ueIUzRlb
-         ARjqd1troIlOPJLORm2KTVSz2lCHRCsv4OYNUm5CIa5mcXMr1WxdD6NuMMkUTLe67Huu
-         q6gRAs0X3wZir1URceK33LuewXp8zfwR7m3iZq+27vtJYL+b8L2hae/iUvSO9kIdmq95
-         g24oqpd75j08JfwMP7QVTASLTpag95K/2elwaR6velEpuOD3HWNTX/k/8eysSshl3JFW
-         AojPX31Y/QbHasc+Vn1pWvigm1yH4J4i0vHUYoxXL14W28FWNBn9KQElzkb4zHAFrfxL
-         G3Ew==
+        d=linaro.org; s=google; t=1733154190; x=1733758990; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbUP+dvKWDKM0wMQ0TznKmY7PM7PyjlXbsmxh8B0to8=;
+        b=IqmPlnHqHkx9fZ4PM+jApLoKAxqFgyHu6GrVatp2BwLJ07iS9QBXBVJrZ1CpBcK9ms
+         KgHIbGlEBRDZYqOV9hVaNq+l2El+qTmIXDNdLk2r3i8HoJEFgBNi2JzXOArI7dEu212B
+         Dpi8RwRQAnxRWXM6NIgh/ahe+nfDCtWUTP/siTnKXuCcv5FQKYYK2FuI4zaWEH1UpIGF
+         Pmvvgh+qz/5HNGdLLH20AtP57Kn5ZgfkCQnyKPu2uaENfRMsoKoYmJrZRhWupu18u9ZF
+         I/t3OgvNbmWC187Ow7OUC8NCP9lnovuj1xm3Qs8WU8/8rHfuOJsCtKwwWr/sUiX5vF0x
+         5Ldg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733153507; x=1733758307;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QJFQOhHvRWMfU0TK3Z+kwO6rmT9pNjzCjW1otfK4k08=;
-        b=eqpI0ECahKOGDuR4/bcb74I6Imtbd4lqV4ZHnBu8ogxeTUi6XKl/92tslRxMmun5WQ
-         1sv8wlGtm8sSxq4E30D9R2TxG9UWB7LEYEuNpYdfYTLiTizNMs0LGXVMbvcArMdlKArK
-         JXBeC1FHkFZWu4wim4vN7G1qjFvnsOoGMHaRyaP2Rr0HKFrDyX7qygy5IDVbXDh+hNRz
-         D7iSevvZTn0OohBRB4V/RYtZVMk88RpnUg4WoslUej39jMAIWaEabd0AxpjSgZOzE0k7
-         ZNnzTGjOTCM03uEniClLywvA0RgaY0xjSlkfAXeH82ddRkSpIWxz83Wbr+e2/qHv32TP
-         ImkA==
-X-Forwarded-Encrypted: i=1; AJvYcCWne5abgHAPfNTq1BT47lpyrRO2jBqX0+e+L8vt8pxJW6y1wgGMxPN4or5/dPgw14r4G+Vj4RQC2Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/2ym+uF1tQ8gIIjSqSCMqXt94/ZylWZV7XjkiJ+DUlQGwuuHn
-	WJbT/RiIzGQjkxdSb1yvJXxB1Z6edDIFneNZJiZtx0J6aS0HPWU8yi6XpWG48/8=
-X-Gm-Gg: ASbGncvxuMt0MnS3Sck0rGlyazlVJ5/Y11LwuvFtHK5MKP2V/hGJbLFjF8MQwxT5oFZ
-	C32rRPmdvjH10YeBQrVaCsna5SD0AIvNP+vzKBYuMtyKY/NkycRQE5vZoagyjQWWt5WgT9q9hN+
-	441n7hMkDbsqN832sg2rtaS587X3c3ThPOISwnjMpFUEGNZn0rlv3KKWQB/VXpQz8rtr2xO8fIG
-	wb0plHN7BddIzpOZ3EsSfVzdZVnIBVFQZ/hlLqisKV9mzG75UlApRo=
-X-Google-Smtp-Source: AGHT+IHMBE300Bcm54Mmq/v3tBkO0lxgfJUVqj14Z7wnWfcFOCNvI3wDAreuaFWCRfOaW1RTUGcZhg==
-X-Received: by 2002:a05:600c:458b:b0:42f:8229:a09e with SMTP id 5b1f17b1804b1-434a9df7b85mr236310305e9.29.1733153507008;
-        Mon, 02 Dec 2024 07:31:47 -0800 (PST)
-Received: from localhost ([2a02:8071:b783:6940:ebc7:b34e:f4a6:7947])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434a5dfc03csm105063765e9.2.2024.12.02.07.31.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 07:31:46 -0800 (PST)
-Date: Mon, 2 Dec 2024 16:31:44 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Chanwoo Choi <cw00.choi@samsung.com>, 
-	MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] devfreq: Switch back to struct platform_driver::remove()
-Message-ID: <ecae7326gzjpwpg4a3ba2dgddh4jg362ybsf64xla4lyff3mk4@x3q6bocz2car>
-References: <20241130135813.895628-2-u.kleine-koenig@baylibre.com>
+        d=1e100.net; s=20230601; t=1733154190; x=1733758990;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QbUP+dvKWDKM0wMQ0TznKmY7PM7PyjlXbsmxh8B0to8=;
+        b=wrQZlz9FDDgbMnBQKyF/gSUoPBU3pSF6sVS+LeSOFdnC6K3d7olGcwRgTI56vCDFzT
+         06a9YDO6ZU5L9cDC8jhxRYkRYyHrurK5mx+7WqWRxQzw0N2LiNp4/e6/x0ZMP1g0m6SP
+         9YGNzwWGPK2XzjcPLQfhC2OWWGbG58U4LV3wPTYtThh4zU6goqe2TZuHx3K++iIH2/+2
+         Ifhh8UqXUQ/2SYihSJNL2NQKIIDRIFT9pnMxIqjafc3lZW94trDPK4a8BemjWxdPzdwT
+         VHt23mdfn6bHdMmoP1AknYQXQDOHNhCKAyaikT3E/uDkxgJNu7g6ucwGu7NsurH3LwkW
+         DDRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUONL8bgo3LXrbKN5IXFXvOSspSlKmSHM+N5vmENoJ77ayFOBMWK2/W3vcylH7vab1wVr12cfnxDw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDFD/gSrfHQKKd0xEUYe3lhGe3RKxOD49V9w02IYVKAroVaL8j
+	MkWcylt+JATXlyG7ZNywCnf3Yc9RQ+G3P482SVNZ+qopZBSU4/fNfWVKzG0dhRRGFXtFkZHdXCf
+	/qRtuRW7gY0cNEYItz7YIqu60Z4qzvL10I2Td6g==
+X-Gm-Gg: ASbGnctUw3Y19eEd3KNNUEJckNxtTmFJAyqXvFA8QQ1rIrPf03TqoSngIneb1Wdb9ri
+	/2GY00ICvfWE+FFQnR3W+1w2RfjdcWh0x
+X-Google-Smtp-Source: AGHT+IGP8X//RtopJ14zcmxJJXKBWB66Fq15r096151qIaf1u6T7kK82VeRXbbWQnNMTUe+do88W/Mt9VjkNBUNU2jY=
+X-Received: by 2002:a05:6902:2804:b0:e2e:440e:d29f with SMTP id
+ 3f1490d57ef6-e395b8939bdmr23346211276.20.1733154190066; Mon, 02 Dec 2024
+ 07:43:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="peon3ci7jqimuqo3"
-Content-Disposition: inline
-In-Reply-To: <20241130135813.895628-2-u.kleine-koenig@baylibre.com>
+References: <20241202151228.32609-1-ansuelsmth@gmail.com>
+In-Reply-To: <20241202151228.32609-1-ansuelsmth@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 2 Dec 2024 16:42:33 +0100
+Message-ID: <CAPDyKFqrY7uLD8ATqH0LghmkHgApQSsGtvGkOTd8UVazGu0_uA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: Document support for Airoha
+ EN7581 CPUFreq
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, upstream@airoha.com
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, 2 Dec 2024 at 16:20, Christian Marangi <ansuelsmth@gmail.com> wrote:
+>
+> Document required property for Airoha EN7581 CPUFreq .
+>
+> On newer Airoha SoC, CPU Frequency is scaled indirectly with SMCCC commands
+> to ATF and no clocks are exposed to the OS.
+>
+> The SoC have performance state described by ID for each OPP, for this a
+> Power Domain is used that sets the performance state ID according to the
+> required OPPs defined in the CPU OPP tables.
+>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+> Changes v4:
+> - Add this patch
+>
+>  .../cpufreq/airoha,en7581-cpufreq.yaml        | 259 ++++++++++++++++++
+>  1 file changed, 259 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+> new file mode 100644
+> index 000000000000..a5bdea7f34b5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
 
---peon3ci7jqimuqo3
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] devfreq: Switch back to struct platform_driver::remove()
-MIME-Version: 1.0
+[...]
 
-Hello,
+> +examples:
+> +  - |
+> +    / {
+> +        #address-cells = <2>;
+> +       #size-cells = <2>;
+> +
+> +        cpus {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            cpu0: cpu@0 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a53";
+> +                reg = <0x0>;
+> +                operating-points-v2 = <&cpu_opp_table>;
+> +                enable-method = "psci";
+> +                clocks = <&cpufreq>;
+> +                clock-names = "cpu";
+> +                power-domains = <&cpufreq>;
+> +                power-domain-names = "cpu_pd";
 
-On Sat, Nov 30, 2024 at 02:58:11PM +0100, Uwe Kleine-K=F6nig wrote:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
->=20
-> Convert all platform drivers below drivers/devfreq to use .remove(),
-> with the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
->=20
-> While touching these drivers, make the alignment of the touched
-> initializers consistent.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
+Nitpick: Perhaps clarify the name to be "perf" or "cpu_perf", to
+indicate it's a power-domain with performance scaling support.
 
-Note this patch is obsoleted by
-https://git.kernel.org/linus/e70140ba0d2b1a30467d4af6bcfe761327b9ec95
-=2E
+> +                next-level-cache = <&l2>;
+> +                #cooling-cells = <2>;
+> +            };
+> +
 
-Best regards
-Uwe
+[...]
 
---peon3ci7jqimuqo3
-Content-Type: application/pgp-signature; name="signature.asc"
+Other than the very minor thing above, feel free to add:
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdN0t0ACgkQj4D7WH0S
-/k6qNwgAiyaoRUBzt+ES/sXpbjU1ikMyNnk8Olj+yqwh6q3TT7T/cGK/mJZ+n8Jx
-Kf/b7GtwcRk3RScaL6SOlRNRgJCTKyfH7s8Ko1mLum0vsaTXMeCq2v3LWmKvMqk8
-IKYihoDhPxfvbFrY6VlUixTkGip8fHGONhs/PShKhoM0Q5UeBXRq0jtssisQqaDj
-MD4pC+pZn9OtMP1OzIoYDm9txIY+TIQfYil1fC3HJLrS+i19CGizdK1R0gaJPl4t
-YRrVt/aAZ09xtLiGt1FM8hS+DbwwIi4/t5eYPFEEzUMxFE1IAMuSkiwcr2GIQ2Wg
-9eZ8IqZADcB+nKoGJhVo+lkPfeR5fQ==
-=TKo+
------END PGP SIGNATURE-----
-
---peon3ci7jqimuqo3--
+Kind regards
+Uffe
 
