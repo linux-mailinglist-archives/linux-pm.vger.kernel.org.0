@@ -1,226 +1,242 @@
-Return-Path: <linux-pm+bounces-18393-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18394-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D8579E0E9E
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 23:09:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD19E9E0F4A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 00:28:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DFF928569D
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 22:09:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2495BB23139
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 23:28:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781001DFD96;
-	Mon,  2 Dec 2024 22:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28601DFD86;
+	Mon,  2 Dec 2024 23:28:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a+P4AJsd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EWqHvV7c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BD51DF982;
-	Mon,  2 Dec 2024 22:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441021DF244
+	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 23:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733177083; cv=none; b=bZiFyMtsArzr/pwosMxtxfan0o4aNPtBjCVh2K7s5jXilxk1D28nSI3a1aa9qhGnAwwb3MdAWLHB+RwTr3MV4Hf5LIvt82ujEQrxQ1UNgnBiTCNr2ZylDOoHGSbvjU6QDYDKbKk+IeOchJNy8cvmcmpgpeGcB0+ra/Z0fO4axqA=
+	t=1733182094; cv=none; b=AC8FFtzQoyhTdORkhYYSngecLOuBy+QAVhsYq2rE1WsRY3Dzk0NmWXSGcTuhoBRzRGrsoKgour/QdZEFltNHPXD/d4esvuJ1wxmqbcAS+jxGi27mG6bPRMFJXTpAT8kb0psJ+cGBFH4CGc4bIzGlDLn4oTfs6JMhlF5m38rkUpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733177083; c=relaxed/simple;
-	bh=q/Ic+s3SZvETNGJok37A4PwA4bp+UZZj/hgihTIel9k=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=qD1o+XJcfqVrFMrV/3g4ggGTeSV7KGf6vPbSu37JJCQ5ud5J5oUhVmZwlc55i/Q3aiR7SHpyMY3553MXp+RRB9VnzpGaZcCUmhJ918VLjQEewnd5KrjvL+Ec+mUvvYbhOBcgYhZyevw9BzGISuMJcHzoHWpBerePzgBNS0/pN18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a+P4AJsd; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B2J08Z7014485;
-	Mon, 2 Dec 2024 22:04:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	MlGH2do0xST6uhPx34NtEeQA5aEeqEZm7SPrhK5pCCQ=; b=a+P4AJsdRWZfMTzW
-	BPXAjxmCJCveDq0QCki3QvBV+9Y/Fq5vJ2NyT5JWe4VKVKikvtFsmoW1iw1bvpsN
-	QjyH2iyIvUr//Y0fHHpA6QSU3eFlcgi4nwBS/okz2svwWtKiYqVWw0ZWY6rffLaZ
-	jKsRF9WkJJWeRujQrgamvU1w3es4ikpfAQxRejl0T1LQjSP5m68DQLHOuK5Y/+B2
-	GmYJL6XgVVVnVGWQdFTMRpnVop1R6PmrMh+yxNvu+8vAFcAYmKfPtfyWzveg9nPp
-	LEbLusKGvqzUs4xq5o0jUNp/YEYIsn0WqE+rDFxnzT6n5zi6WXBEbUL0KOykJ6Va
-	IhXrYQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 437ta2x2xt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Dec 2024 22:04:32 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B2M4VoX016181
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 2 Dec 2024 22:04:31 GMT
-Received: from [10.71.111.113] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 2 Dec 2024
- 14:04:30 -0800
-Message-ID: <828dbdb1-d987-43e6-8cd1-7ba267da9e67@quicinc.com>
-Date: Mon, 2 Dec 2024 14:04:30 -0800
+	s=arc-20240116; t=1733182094; c=relaxed/simple;
+	bh=jwdcVue+nHHQCNc8y1qV+V5+3ZT64hNhWwiKhcS7sE8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nKKAkHomYmRZ9z+SpiwF7DMjgEL+xONxwpop5MiGLvFze2zotttnSZ2kYgXiavMYTApeVBrUV5m7OELFvKt9BVNO3zppLsbX4iLKB3FcdjFVd04UpAmpu+QqzMHGEfnwfY4SAQOG6SuQPeySAgGjxPchBeo5ZXVtlE+eHQl79Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EWqHvV7c; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53de7321675so5135036e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 15:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1733182090; x=1733786890; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n3sbXCn2Rh0xH7nuuep2iyHgGbFrRI3XCnsb9RhyJDQ=;
+        b=EWqHvV7cuWu6Qwb7D+Fmg67lEJXEYt3x9vqqDdthGR0F4gVXK4ohvWMNyCORsma8dt
+         NVnEUMuBExAXZSRK5vgzD6QdEviPs/qR9ork6rAXpgtqlbOAArgQARRAHsdyVtB2X4xy
+         YgTpoOy42eSAJyIMPr4nl3kUEQWp9qzg0pYdYlNQQ+hf1bdljLF+xuMJC+WcotnV/bjM
+         jstF1UjnqbGXdjw0/UCMChlREqCH40SnYSB6kqzNESRxpIar2rlD3cqxHkQHbz+QED7G
+         Y4WNoQpSzK4/xutXWocYgJfnKVa8xoVBzvFjmY519TPjuRI9VcUINen2AUrugAlVijqS
+         y/rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733182090; x=1733786890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n3sbXCn2Rh0xH7nuuep2iyHgGbFrRI3XCnsb9RhyJDQ=;
+        b=LDfNIWY7XqH0IZCvSr6lDmvLgjef7pXzUscXKAJZibkgmqHJPAdK+oQhTCU8ymK620
+         9+f0DGDBFidXDVzfsniGPrsvvLKoLkdZS8EJ3xyAgI5XFbCTY57zfAj3wEdilckowlsX
+         cZzNdDFg1rxqVn8u7usRYUa0WTt7w+Xd/0LWN3UdF9pkHcYOm9hUGzKcj+nU/MtJELIq
+         1YAgt1U9W0Pdv5J3jcVLnSXju5ETw3qlA1G+amDcCSY3zRMXNDpO/P+2oOPF8W/2N4/8
+         hvu58ZTsqZBoVcyo73zM2eRi7nO0eTIWoMgN0FI3i7hJMWTqm6kuG9tv3OaNcp9RlhsY
+         fing==
+X-Forwarded-Encrypted: i=1; AJvYcCV5u/mag5ufUGt5zd6SIt0IOFrcnIhB8MxjpizmmM7x0J9Gr6yOlk5q8btle7HtjoPWz32hPMzW1w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEhh+lRNyaBA4fr9kM+0z5+h/PsjX99OT7tSMsA7UcfHcdiVyp
+	MioZHtf+iy6Foa5kK+46c5UPv4Czt3UMMOKiwzbfJy9YcFPlQDCOud/e+FS5pB1Tv+MPwyRNX/E
+	+fdzdIDQFHihKwyTD//U5l7bDeB2ktalhG5Io
+X-Gm-Gg: ASbGncuQzx0xZEL1o7KQanON4NQo7GGJC7y7XEreQsUK1V3myvWgIlnjQxgdu+VtWB6
+	LSiFLss/g7QlUtIejWx0lPbzbkXKIuw==
+X-Google-Smtp-Source: AGHT+IEhy6WbRnDJO91BppdUDAlEmi+S9zeMSCFE571EcNiY/nN7FU0teqcVwTaqqVL2IKReSprg6M9g51mDFLUkHN8=
+X-Received: by 2002:a05:6512:118e:b0:53d:f095:ffec with SMTP id
+ 2adb3069b0e04-53e129cd2d9mr190550e87.8.1733182090221; Mon, 02 Dec 2024
+ 15:28:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add interconnect provider
- driver for SM8750
-From: Melody Olvera <quic_molvera@quicinc.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
-	<u.kleine-koenig@baylibre.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Danila Tikhonov <danila@jiaxyga.com>,
-        Raviteja Laggyshetty
-	<quic_rlaggysh@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Mike Tipton
-	<quic_mdtipton@quicinc.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Trilok Soni
-	<quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20241112003017.2805670-1-quic_molvera@quicinc.com>
- <20241112003017.2805670-3-quic_molvera@quicinc.com>
- <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
- <0ca812e7-bf5b-463a-83dc-9195aee14589@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <0ca812e7-bf5b-463a-83dc-9195aee14589@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VPkTGJhjafRwf07vrgV4XwT-yILOP9Sf
-X-Proofpoint-GUID: VPkTGJhjafRwf07vrgV4XwT-yILOP9Sf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 impostorscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
- phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412020183
+References: <20241114220921.2529905-1-saravanak@google.com>
+ <20241114220921.2529905-3-saravanak@google.com> <CAJZ5v0jPO24JR5um0gv5U5AwiR_RHx37x6DisG-nUxaZt9gfGA@mail.gmail.com>
+ <CAJZ5v0iLq9L5nMp13BrBmbWavFs1ZEAtJ-WeyRzv3D2GXPNuag@mail.gmail.com>
+ <CAGETcx-9XSdXcuGQFSoS-mMPwp=UJ3_FfTJ1Cx+9jddyjYTKEg@mail.gmail.com> <CAJZ5v0iWCWdjP9Gku2uV0Qz-Hp6ZEHDspaPVzHPPzHfvyREeWA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iWCWdjP9Gku2uV0Qz-Hp6ZEHDspaPVzHPPzHfvyREeWA@mail.gmail.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Mon, 2 Dec 2024 15:27:33 -0800
+Message-ID: <CAGETcx_5oRA-kTzU7WtWSV2=Bp0cKcT=2kPa0+ZkwkHTA+rwOQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/5] PM: sleep: Remove unnecessary mutex lock when
+ waiting on parent
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Marek Vasut <marex@denx.de>, 
+	Bird@google.com, Tim <Tim.Bird@sony.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Dec 2, 2024 at 1:15=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> On Mon, Dec 2, 2024 at 9:46=E2=80=AFPM Saravana Kannan <saravanak@google.=
+com> wrote:
+> >
+> > On Mon, Dec 2, 2024 at 12:16=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
+l.org> wrote:
+> > >
+> > > On Mon, Dec 2, 2024 at 9:11=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> > > >
+> > > > Sorry for the delay.
+> > > >
+> > > > On Thu, Nov 14, 2024 at 11:09=E2=80=AFPM Saravana Kannan <saravanak=
+@google.com> wrote:
+> > > > >
+> > > > > Locking is not needed to do get_device(dev->parent). We either ge=
+t a NULL
+> > > > > (if the parent was cleared) or the actual parent. Also, when a de=
+vice is
+> > > > > deleted (device_del()) and removed from the dpm_list, its complet=
+ion
+> > > > > variable is also complete_all()-ed. So, we don't have to worry ab=
+out
+> > > > > waiting indefinitely on a deleted parent device.
+> > > >
+> > > > The device_pm_initialized(dev) check before get_device(dev->parent)
+> > > > doesn't make sense without the locking and that's the whole point o=
+f
+> > > > it.
+> > >
+> > > Hmm, not really.
+> > >
+> > > How is the parent prevented from going away in get_device() right
+> > > after the initial dev check without the locking?
+> >
+> > Not sure what you mean by "go away"? But get_device() is going to keep
+> > a non-zero refcount on the parent so that struct doesn't get freed.
+>
+> That's after it has returned.
+>
+> There is nothing to prevent dev from being freed in get_device()
+> itself before the kobject_get(&dev->kobj) call.
+>
+> So when get_device() is called, there needs to be an active ref on the
+> device already or something else to prevent the target device object
+> from being freed.
+>
+> In this particular case it is the lock along with the
+> device_pm_initialized(dev) check on the child.
 
+Ugh... my head hurts whenever I think about get_device(). Yeah, I
+think you are right.
 
-On 11/18/2024 10:01 AM, Melody Olvera wrote:
->
->
-> On 11/15/2024 7:27 AM, Dmitry Baryshkov wrote:
->> On Mon, Nov 11, 2024 at 04:30:17PM -0800, Melody Olvera wrote:
->>> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>>
->>> Introduce SM8750 interconnect provider driver using the interconnect
->>> framework.
->>>
->>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>> ---
->>>   drivers/interconnect/qcom/Kconfig  |    9 +
->>>   drivers/interconnect/qcom/Makefile |    2 +
->>>   drivers/interconnect/qcom/sm8750.c | 1585 
->>> ++++++++++++++++++++++++++++
->>>   drivers/interconnect/qcom/sm8750.h |  132 +++
->>>   4 files changed, 1728 insertions(+)
->>>   create mode 100644 drivers/interconnect/qcom/sm8750.c
->>>   create mode 100644 drivers/interconnect/qcom/sm8750.h
->>>
->>> diff --git a/drivers/interconnect/qcom/Kconfig 
->>> b/drivers/interconnect/qcom/Kconfig
->>> index 362fb9b0a198..1219f4f23d40 100644
->>> --- a/drivers/interconnect/qcom/Kconfig
->>> +++ b/drivers/interconnect/qcom/Kconfig
->>> @@ -337,6 +337,15 @@ config INTERCONNECT_QCOM_SM8650
->>>         This is a driver for the Qualcomm Network-on-Chip on 
->>> SM8650-based
->>>         platforms.
->>>   +config INTERCONNECT_QCOM_SM8750
->>> +    tristate "Qualcomm SM8750 interconnect driver"
->>> +    depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
->>> +    select INTERCONNECT_QCOM_RPMH
->>> +    select INTERCONNECT_QCOM_BCM_VOTER
->>> +    help
->>> +      This is a driver for the Qualcomm Network-on-Chip on 
->>> SM8750-based
->>> +      platforms.
->>> +
->>>   config INTERCONNECT_QCOM_X1E80100
->>>       tristate "Qualcomm X1E80100 interconnect driver"
->>>       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
->>> diff --git a/drivers/interconnect/qcom/Makefile 
->>> b/drivers/interconnect/qcom/Makefile
->>> index 9997728c02bf..7887b1e8d69b 100644
->>> --- a/drivers/interconnect/qcom/Makefile
->>> +++ b/drivers/interconnect/qcom/Makefile
->>> @@ -40,6 +40,7 @@ qnoc-sm8350-objs            := sm8350.o
->>>   qnoc-sm8450-objs            := sm8450.o
->>>   qnoc-sm8550-objs            := sm8550.o
->>>   qnoc-sm8650-objs            := sm8650.o
->>> +qnoc-sm8750-objs            := sm8750.o
->>>   qnoc-x1e80100-objs            := x1e80100.o
->>>   icc-smd-rpm-objs            := smd-rpm.o icc-rpm.o icc-rpm-clocks.o
->>>   @@ -80,5 +81,6 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += 
->>> qnoc-sm8350.o
->>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
->>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8550) += qnoc-sm8550.o
->>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8650) += qnoc-sm8650.o
->>> +obj-$(CONFIG_INTERCONNECT_QCOM_SM8750) += qnoc-sm8750.o
->>>   obj-$(CONFIG_INTERCONNECT_QCOM_X1E80100) += qnoc-x1e80100.o
->>>   obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
->>> diff --git a/drivers/interconnect/qcom/sm8750.c 
->>> b/drivers/interconnect/qcom/sm8750.c
->>> new file mode 100644
->>> index 000000000000..bc72954d54ff
->>> --- /dev/null
->>> +++ b/drivers/interconnect/qcom/sm8750.c
->>> @@ -0,0 +1,1585 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights 
->>> reserved.
->>> + *
->>> + */
->>> +
->>> +#include <linux/device.h>
->>> +#include <linux/interconnect.h>
->>> +#include <linux/interconnect-provider.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of_platform.h>
->>> +#include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
->>> +
->>> +#include "bcm-voter.h"
->>> +#include "icc-rpmh.h"
->>> +#include "sm8750.h"
->> Nit: please merge sm8750.h here, there is no need to have a separate
->> header, there are no other users.
->
-> Ack.
->
->>
->> Also, is there QoS support? I see no qcom_icc_qosbox entries.
->
-> Unsure; will let Raviteja comment.
->
+Hmm... I wanted to have this function be replaced by a call to a
+generic helper function dpm_for_each_superior() in the next patch. But
+that helper function could be called from places where the dpm_list
+lock is held. Also, I was planning on making it even more generic (not
+specific to dpm) in the future. So, depending on dpm_list lock didn't
+make sense.
 
-Spoke w Raviteja; looks like he wants to do this later.
+Any other ideas on how I could do this without grabbing the dpm_list mutex?
+
+Actually, with the rewrite and at the end of this series, we don't
+have to worry about this race because each device's suspend/resume is
+only started after all the dependencies are done. So, if the parent
+deletes a child and itself, the child device's suspend wouldn't have
+been triggered at all.
+
+So, another option is to just squash the series and call it a day. Or
+add a comment to the commit text that this adds a race that's fixed by
+the time we get to the end of the series.
+
+Thoughts?
 
 Thanks,
-Melody
+Saravana
 
 
-
+>
+> > The parent itself can still "go away" in terms of unbinding or
+> > removing the children from the dpm_list(). But that's what the
+> > device_pm_initialized() check is for. When a device_del() is called,
+> > it's removed from the dpm_list. The actual freeing comes later. But we
+> > aren't/weren't checking for that anyway.
+> >
+> > >
+> > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > > ---
+> > > > >  drivers/base/power/main.c | 13 ++-----------
+> > > > >  1 file changed, 2 insertions(+), 11 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.=
+c
+> > > > > index 86e51b9fefab..9b9b6088e56a 100644
+> > > > > --- a/drivers/base/power/main.c
+> > > > > +++ b/drivers/base/power/main.c
+> > > > > @@ -284,18 +284,9 @@ static bool dpm_wait_for_superior(struct dev=
+ice *dev, bool async)
+> > > > >          * counting the parent once more unless the device has be=
+en deleted
+> > > > >          * already (in which case return right away).
+> > > > >          */
+> > > > > -       mutex_lock(&dpm_list_mtx);
+> > > > > -
+> > > > > -       if (!device_pm_initialized(dev)) {
+> > > > > -               mutex_unlock(&dpm_list_mtx);
+> > > > > -               return false;
+> > > > > -       }
+> > > > > -
+> > > > >         parent =3D get_device(dev->parent);
+> > > > > -
+> > > > > -       mutex_unlock(&dpm_list_mtx);
+> > > > > -
+> > > > > -       dpm_wait(parent, async);
+> > > > > +       if (device_pm_initialized(dev))
+> > > > > +               dpm_wait(parent, async);
+> > > >
+> > > > This is racy, so what's the point?
+> > > >
+> > > > You can just do
+> > > >
+> > > > parent =3D get_device(dev->parent);
+> > > > dpm_wait(parent, async);
+> >
+> > Parent struct device being there isn't the same as whether this device
+> > is in the dpm_list? So, shouldn't we still check this?
+> >
+> > Also, is it really racy anymore with the new algorithm? We don't kick
+> > off the subordinates until after the parent is done.
+> >
+> > > >
+> > > > and please update the comment above this.
+> >
+> > Will do.
+> >
+> > Thanks,
+> > Saravana
+> > > >
+> > > > >         put_device(parent);
+> > > > >
+> > > > >         dpm_wait_for_suppliers(dev, async);
+> > > > > --
 
