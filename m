@@ -1,135 +1,114 @@
-Return-Path: <linux-pm+bounces-18346-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18347-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10E2F9E03D0
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 14:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 647449E046D
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 15:10:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93980B3A2AF
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 12:20:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A420B25C8E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 13:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E24813C8E8;
-	Mon,  2 Dec 2024 12:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8751FC115;
+	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TCZtvObd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UiNEk7Os"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9395E1FCFF5
-	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 12:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9FDEEDE;
+	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733142033; cv=none; b=qZZpyDbwemlAnezzAAz+PHR1Bq5jBW3L/Fm6EKDyjEM9wFJMdwPAVSPWFzYMPVbJu3PQjrZsgO8DnxenrK+kzU+sfz4XVaN9vMjZTO0G7o72i29zpPxVo0NGEiZn0BIMGTXfLLReK32LAY7xSXkoLvTfD8s6faDr5aFh6OH/Jo4=
+	t=1733144901; cv=none; b=ahGXB+RgzX1QZ5fU6/XOZShwsroYuWHaopfcbywo2igoYCtzOD28/jq6FB99QLpzmtN6GoIPJzUAQIcAhdfRAAMmIscUfhleRbi+ptBEU1T7NWsLIznGN1L/0yaU1v/5zCuBkXgb/wTXIdWsRcfRDeYIbcC3WnL3gvJcTaBA2rQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733142033; c=relaxed/simple;
-	bh=u378XDx4WG4IL/2dCVgpOQRG8DFhsOKnAQ0gTpFbO7I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lkaM5mTZPXiyg7+oGyLC8uKPfiRp/2orYtxG9WgK5G6GPECGsoBa1IGQxPIvTD4vkkUuWGfydrMC2yzCTzInwJTymdj2giWYGqPrtvjBb9wyi9KJLcfwi0n1sELdHBDZpHqS0M7AZZVEjm9mQl08O1RTlqx24J+KIUdXQGpqUCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TCZtvObd; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-385e1f12c82so2495409f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 04:20:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733142029; x=1733746829; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u378XDx4WG4IL/2dCVgpOQRG8DFhsOKnAQ0gTpFbO7I=;
-        b=TCZtvObd7KHmihuMpK5vNskKjhKS3w2wJUT25u4flN/bNv5CVBuFwNIhddZzvrc4kt
-         jtQId+lWmc6aRDpT5Q+FkN8tU6k1XNtW4E5qWn1fx4N0yCoNP5maGWAT8LhEDGpBmHYr
-         u9oOlqTC8tOHU4IG5vIOnr5XEZDNky0R80xgJ/DiZuf4ITArB5SQ93wDdYw8F6KtIxTw
-         AKloK9WPaKL0l+kdvgDO9XOIdmRtVcQbEtUdfYanmIKTY+btB9OoG0insJGlA64C7AQq
-         OUPSyuyTwfTucbDjyi+2mwN+xudRAylcq130G4661NSDBLYmnKzbqHnChmUpdT6ziK64
-         y3Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733142029; x=1733746829;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u378XDx4WG4IL/2dCVgpOQRG8DFhsOKnAQ0gTpFbO7I=;
-        b=luxQwS+mTR08nW5WubDqfaFAvmLN1aj/11+EWSR+8Z1GA39FOKpPHDKTzL0z0KCivc
-         DH2lqV5nWZB+ex/szPlbxP10+wNMEUnUY7Gku2ECFN4ZubXI9dxaNvjRjhaDVD1314Ib
-         1CCz96idtbYPWvw0e/DJf+uoq0ePd6rV/6pyYJhK1Zv79ytAnET3jmso0cZT7chAca7h
-         zvJ95UCpeMm2/eMZlzYLVAkiucKrQdiOUTIqV+Jb0mlkkhZZ/B4vP9LUnqYHa68qMKg8
-         pnczv+ZOkU/SAm52FkoiAh2XIhOCpqIyi32vBb1GsuOwONSzyQuFVeThCcomxvl1HvNv
-         cEBw==
-X-Gm-Message-State: AOJu0YzN/z0tsoOpvvEeGNVrZpkrGUnf6WgHUeKMIl/pCyDm7cjF8X7J
-	LAW9391h8cGKtYQHBwSh0cvqyzOgzK1T41uUX5wRk0VqeloIobIsXTKEx7/3KLQ=
-X-Gm-Gg: ASbGnctjZ9oE/OPIs3SjXxj/e+/5SeWs8LDntE4w2afCN5xLx0OFL68WoJaryUOh1OT
-	WMCFtavFMqXHiF/PuABOzw4koiIJFj+ZRjWH01TTBvr1PSmmaVlKaFFxJaN3MP7waPeTkrI1BgV
-	lHGsAB+g+dRwGGr7bqMOnTTm/AXNcYKmoZ7sbZidRsu0Ox3mFZfUrufvmVwcPWY/6OBuQekc+Sz
-	0xjFmxNnqpygkQMPvigD13/0En3MKTaJHcvHZlzmC9tUnCtS96t5q6gDsdJqxkC9T3xCvfXdOZu
-	G9Xm
-X-Google-Smtp-Source: AGHT+IGf+OvmTZwKTtzXYs9qne71qztg+HmqmaDV8f4rBxZC85P7ds5jnT+F6OPKkt5tMs8EWORR8A==
-X-Received: by 2002:a5d:64cc:0:b0:385:ebaf:3824 with SMTP id ffacd0b85a97d-385ebaf3c1bmr6637399f8f.27.1733142028900;
-        Mon, 02 Dec 2024 04:20:28 -0800 (PST)
-Received: from localhost (p5dc6838f.dip0.t-ipconnect.de. [93.198.131.143])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd368easm12329689f8f.25.2024.12.02.04.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 04:20:28 -0800 (PST)
-Date: Mon, 2 Dec 2024 13:20:27 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] PM / devfreq: sun8i-a33-mbus: Simplify by using more
- devm functions
-Message-ID: <7taeakaeqyfu4x5h3r6z6lkdorxav4ox2sgjikw7zqkmnfmffs@2n2lpk4uqe4l>
-References: <20241111112237.336310-2-u.kleine-koenig@baylibre.com>
+	s=arc-20240116; t=1733144901; c=relaxed/simple;
+	bh=gutyObQKsachHq0/nA2oAKqQxOFoQ3uvLG/DLWbnDiw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D1pQFnlTl3E6f/kd80sv5PcjlgE3W0LTnGfT/yM41pTrwr/FclW2/VHd2UVEhm1f18pQpoF8R/XXk/0tvGccY3/5CjBbH6t/P6azuRrvaK7c8DKCepyKStpqZw3Xpe6BOJfBGVhZ5nap5bU8DBOx+7X+QQLXfURaGCN0ZDBMVsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UiNEk7Os; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 23D19C4CED1;
+	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733144901;
+	bh=gutyObQKsachHq0/nA2oAKqQxOFoQ3uvLG/DLWbnDiw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=UiNEk7OsXFe+cdf8+I5BfuYbG8+O7eT9931PcfkI5ezc7fUDYYY/w1NfNsGWA7ZbQ
+	 5GTh6RHIfgTqm1+DfLmV9/HAB9RUanscHZanEj/iU5thJWnRRIwfxyTc+24F+RJSuQ
+	 qaDyYcfek3n0lFdt/cEKenRoDhBab0CBwe61xLf2b4hbJ5kk0sRA0A/1aF8Ru6/rvv
+	 VIV4ODtHr/mo/l6nReLjupBo8WUASknk5cPV5WvmLk05triWjuwuKBeWUKtW6WWSaB
+	 ocE5Uf/t6Fjd9bi9olvKvfDbXL4VFDjojurvGnYhO+JL7rKJAe5nuiUbAJdvPANJI4
+	 Oi8MkTR9L95dw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC3B3D7831B;
+	Mon,  2 Dec 2024 13:08:20 +0000 (UTC)
+From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
+Subject: [PATCH 0/4] Google Pixel 6 (oriole): max77759 fuel gauge
+ enablement and driver support
+Date: Mon, 02 Dec 2024 14:07:14 +0100
+Message-Id: <20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="npsbh5lctdjw63a2"
-Content-Disposition: inline
-In-Reply-To: <20241111112237.336310-2-u.kleine-koenig@baylibre.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAKxTWcC/x2MywqAIBAAfyX2nOCqIfUrEWG12h56oBCC9O9Jl
+ 4E5zBRIFJkSDE2BSA8nvs4q2Daw7u4MJHirDkoqgxViMSIklDgfLltru372QRipSGl0ZtEaanp
+ H8pz/7Ti97wc7Q2hxZgAAAA==
+X-Change-ID: 20241202-b4-gs101_max77759_fg-402e231a4b33
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733144859; l=1133;
+ i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
+ bh=gutyObQKsachHq0/nA2oAKqQxOFoQ3uvLG/DLWbnDiw=;
+ b=Bhzd4ybqtj55n/U2YOZSfbuvXzTGyNb206Tg8GJtVh03aqvqpmF8Nj8CDa4qgOCKVsNZyXzzf
+ NKlykWlpZGdAQoXH5iuxKaEXiFeZPBrvAsOb3+wQlD3Lviex1H6Bmen
+X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
+ pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
+X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
+ auth_id=289
+X-Original-From: Thomas Antoine <t.antoine@uclouvain.be>
+Reply-To: t.antoine@uclouvain.be
+
+The Google Pixel 6 has a Maxim max77759 which provides a fuel gauge with
+the same interface as the Maxim max1720x, except for the non-volatile
+memory.
+
+Modify the Maxim max1720x driver to be compatible with the Maxim max77759 and
+enable it for the gs101-oriole board.
+
+Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+---
+Thomas Antoine (4):
+      power: supply: add support for max77759 fuel gauge
+      dt-bindings: power: supply: add max77759-fg flavor and don't require nvme address
+      arm64: defconfig: enable Maxim max1720x driver
+      arm64: dts: exynos: gs101-oriole: enable Maxim max77759 fuel gauge
+
+ .../bindings/power/supply/maxim,max17201.yaml      | 14 +++++
+ arch/arm64/boot/dts/exynos/google/gs101-oriole.dts |  7 +++
+ arch/arm64/configs/defconfig                       |  1 +
+ drivers/power/supply/max1720x_battery.c            | 71 ++++++++++++++++++----
+ 4 files changed, 81 insertions(+), 12 deletions(-)
+---
+base-commit: 12e0a4072e8edc49c99418a4303bd7b96916de95
+change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
+
+Best regards,
+-- 
+Thomas Antoine <t.antoine@uclouvain.be>
 
 
---npsbh5lctdjw63a2
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] PM / devfreq: sun8i-a33-mbus: Simplify by using more
- devm functions
-MIME-Version: 1.0
-
-Hello,
-
-On Mon, Nov 11, 2024 at 12:22:36PM +0100, Uwe Kleine-K=F6nig wrote:
-> Use devm allocators for enabling the bus clock and
-> clk_rate_exclusive_get(). This simplifies error handling and the remove
-> callback.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
-
-Is this patch still on someones radar for review (or application even)?
-
-Best regards
-Uwe
-
---npsbh5lctdjw63a2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdNpggACgkQj4D7WH0S
-/k67GAf+P1XZfxK/FMwYqAbTJVZUiZwlfGN74ndrhxFPbHPThdAPRaVOh0IRAYua
-nNRvgUgKYgvOKLADNuGv/G8+SbN6Znh9b+kW0BXye3Xb93OIMPJgSzoURb3DyXp9
-LsFA4cuWBBUg6dUv6WT67/7HV08jK46kQ0xaUIsadtoZpqCTlSsZulNGmI1FUFd6
-wsrbhwPKyO3c4s9lLNmKpfskNaEJcbiwf15UxBwtylwYS9ZujFbRyc0781JIWef5
-NCNISsYYWdjX81tLApo3S7HWo7qLQLjMZnkhY8wuAE+TfYKB8usuz/d8gHJWrX+s
-l3pwP9dao9owYBPAIPPnfTgv6L3Diw==
-=0LW+
------END PGP SIGNATURE-----
-
---npsbh5lctdjw63a2--
 
