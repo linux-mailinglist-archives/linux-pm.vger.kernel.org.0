@@ -1,169 +1,226 @@
-Return-Path: <linux-pm+bounces-18392-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18393-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 302DD9E0E44
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 22:57:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4095165211
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 21:57:46 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 766C31DF74A;
-	Mon,  2 Dec 2024 21:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f/4G0Rx+"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D8579E0E9E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 23:09:18 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CEB1DF73E;
-	Mon,  2 Dec 2024 21:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DFF928569D
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 22:09:17 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781001DFD96;
+	Mon,  2 Dec 2024 22:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a+P4AJsd"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BD51DF982;
+	Mon,  2 Dec 2024 22:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733176665; cv=none; b=q+fLzpD80/HdYHa1MzAx5su6xWXkXCXZ3zqBU6mpOYZxVQ5A0HDmMVP9yAR76jCydi724uR4ePWXpue6qRm3uccZZqNgyp0RlfoUgMC/BUOpHGAeCsLZA9hf5IOkEjzeoTLmKVHeHD1v8BrZdzyEk/M8EF8cYlJw+AOnZF8ECFY=
+	t=1733177083; cv=none; b=bZiFyMtsArzr/pwosMxtxfan0o4aNPtBjCVh2K7s5jXilxk1D28nSI3a1aa9qhGnAwwb3MdAWLHB+RwTr3MV4Hf5LIvt82ujEQrxQ1UNgnBiTCNr2ZylDOoHGSbvjU6QDYDKbKk+IeOchJNy8cvmcmpgpeGcB0+ra/Z0fO4axqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733176665; c=relaxed/simple;
-	bh=RFvp6yN6jBhOnl9yNX5r6yOEdmP0gF9huWIWIJu8HwE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MP+lI7v7kCLaucl3iruUtvudTyXSVGbxd/wIUHyNrNqKEf96aZNmD/h6lVkK1ScFh5HEnpfSAxaus8cTHmEmYfWJdpRkHqrSKnv362sNxtJ3imFLgoF80SNE3eiRhpy408Hpya5en6kVLmfr25rbycxCY6/uuonXccJomLPFheU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/4G0Rx+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61C1C4AF09;
-	Mon,  2 Dec 2024 21:57:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733176664;
-	bh=RFvp6yN6jBhOnl9yNX5r6yOEdmP0gF9huWIWIJu8HwE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=f/4G0Rx+gKZ9GabpY6Zj/SHP2Wz2sJQrf2sWAMF/Zc7scxDuK7AZ2DnRAfJgGwZE1
-	 GbnHIiKzNOMmNad/8coPkm1QPOBtSUymVIuSaP3oNNgzm6+iS9gJhZXMJA8nsZVR4m
-	 KW7wTJpKNP2FioPpKh17fHUSTbiMcT3OZHk7b0SgkJrR0RSkPgW/sWP75xelEEZ5X+
-	 bZJvAzmrGlaasL0/tNHPZv915QZ/LMmGc2TTgqZ9f3KDBsuSXtKFzOqhoD4VuiKdVj
-	 E+J0+9fl5L1as3mExe0kQKgTWAZTnR8VYuL/tm61XqgVYh5LECdMRvrmpVdYLVGClt
-	 nJ5lNhT8OkKsg==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-29e579b9e9aso1221335fac.1;
-        Mon, 02 Dec 2024 13:57:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUS3WMlUK+CVNLNvvZCU558xVct3Z6lpsfTqMnYZOYe974LOoHLPxN6d6F9pWXxmJHLSNtenCEQEda68v2v@vger.kernel.org, AJvYcCW7h9yZTzkwxJd+RQJ2IGd7Jh+h4tv9D8oOk4Co/McBiD6jIk/bt7WvbsofhWx5S0TdhoBZgAFGbxT/@vger.kernel.org, AJvYcCXNL4Pgji0yXJWNuXdoXkD+VzrE/nL6mOu9mcD6mgbImGqPudXuSIdh2eP8nK3ta6DNhNQOaztqzzs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTa8O/TdYkSq4KUdFoQqYvxcTWveVAgvkRYTdvYnktg4i5BlXa
-	zHupG/rguu2AoxEATCdNciHV5Pv2oixwA2B+ewK/23oCdQwkfzGus9jy8faINjBXnsipdCjivX6
-	hmJwkcdVa7xQ0ULlLsIDCJnz2Y0Q=
-X-Google-Smtp-Source: AGHT+IGjT7UhCSlQzCRqiK0vAEcWrtduRuURyCC4FER6z2SA9H1hptDouJ1MiN3IqqnHRP30af/ixc415L8ntrISDkg=
-X-Received: by 2002:a05:6870:af0a:b0:29e:559b:d6a0 with SMTP id
- 586e51a60fabf-29e885808bemr16554fac.2.1733176663925; Mon, 02 Dec 2024
- 13:57:43 -0800 (PST)
+	s=arc-20240116; t=1733177083; c=relaxed/simple;
+	bh=q/Ic+s3SZvETNGJok37A4PwA4bp+UZZj/hgihTIel9k=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=qD1o+XJcfqVrFMrV/3g4ggGTeSV7KGf6vPbSu37JJCQ5ud5J5oUhVmZwlc55i/Q3aiR7SHpyMY3553MXp+RRB9VnzpGaZcCUmhJ918VLjQEewnd5KrjvL+Ec+mUvvYbhOBcgYhZyevw9BzGISuMJcHzoHWpBerePzgBNS0/pN18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a+P4AJsd; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B2J08Z7014485;
+	Mon, 2 Dec 2024 22:04:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	MlGH2do0xST6uhPx34NtEeQA5aEeqEZm7SPrhK5pCCQ=; b=a+P4AJsdRWZfMTzW
+	BPXAjxmCJCveDq0QCki3QvBV+9Y/Fq5vJ2NyT5JWe4VKVKikvtFsmoW1iw1bvpsN
+	QjyH2iyIvUr//Y0fHHpA6QSU3eFlcgi4nwBS/okz2svwWtKiYqVWw0ZWY6rffLaZ
+	jKsRF9WkJJWeRujQrgamvU1w3es4ikpfAQxRejl0T1LQjSP5m68DQLHOuK5Y/+B2
+	GmYJL6XgVVVnVGWQdFTMRpnVop1R6PmrMh+yxNvu+8vAFcAYmKfPtfyWzveg9nPp
+	LEbLusKGvqzUs4xq5o0jUNp/YEYIsn0WqE+rDFxnzT6n5zi6WXBEbUL0KOykJ6Va
+	IhXrYQ==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 437ta2x2xt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 02 Dec 2024 22:04:32 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B2M4VoX016181
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 2 Dec 2024 22:04:31 GMT
+Received: from [10.71.111.113] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 2 Dec 2024
+ 14:04:30 -0800
+Message-ID: <828dbdb1-d987-43e6-8cd1-7ba267da9e67@quicinc.com>
+Date: Mon, 2 Dec 2024 14:04:30 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5839859.DvuYhMxLoT@rjwysocki.net> <e7ac7561-f9ff-406a-b2d7-6d9e31ed6e98@amd.com>
- <CAJZ5v0jTxBt8+bc+EgUZmE84N+Vok_aM16D8HyLQUv=BSoqRCw@mail.gmail.com> <35873f78-4935-492e-a9fe-ef06c1b2d0f4@amd.com>
-In-Reply-To: <35873f78-4935-492e-a9fe-ef06c1b2d0f4@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 2 Dec 2024 22:57:32 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gLtbixTDEeKrEb5m6VjEn6oeXJJDSOTTrcvFe5EEf-gA@mail.gmail.com>
-Message-ID: <CAJZ5v0gLtbixTDEeKrEb5m6VjEn6oeXJJDSOTTrcvFe5EEf-gA@mail.gmail.com>
-Subject: Re: [RFC/RFT][PATCH v0.1] ACPI: OSL: Use usleep_range() in acpi_os_sleep()
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Len Brown <len.brown@intel.com>, 
-	Arjan van de Ven <arjan@linux.intel.com>, Pierre Gondois <pierre.gondois@arm.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Hans de Goede <hdegoede@redhat.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add interconnect provider
+ driver for SM8750
+From: Melody Olvera <quic_molvera@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+	<u.kleine-koenig@baylibre.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Danila Tikhonov <danila@jiaxyga.com>,
+        Raviteja Laggyshetty
+	<quic_rlaggysh@quicinc.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Mike Tipton
+	<quic_mdtipton@quicinc.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20241112003017.2805670-1-quic_molvera@quicinc.com>
+ <20241112003017.2805670-3-quic_molvera@quicinc.com>
+ <em4vkg4totsg435s4usu7kqn45vfqfot2j7sikzmnof2kkyidi@26b6kkpz7z4c>
+ <0ca812e7-bf5b-463a-83dc-9195aee14589@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <0ca812e7-bf5b-463a-83dc-9195aee14589@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VPkTGJhjafRwf07vrgV4XwT-yILOP9Sf
+X-Proofpoint-GUID: VPkTGJhjafRwf07vrgV4XwT-yILOP9Sf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412020183
 
-On Mon, Dec 2, 2024 at 10:54=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> On 11/22/2024 13:27, Rafael J. Wysocki wrote:
-> > On Thu, Nov 21, 2024 at 11:27=E2=80=AFPM Mario Limonciello
-> > <mario.limonciello@amd.com> wrote:
-> >>
-> >> On 11/21/2024 07:15, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> As stated by Len in [1], the extra delay added by msleep() to the
-> >>> sleep time value passed to it can be significant, roughly between
-> >>> 1.5 ns on systems with HZ =3D 1000 and as much as 15 ms on systems wi=
-th
-> >>> HZ =3D 100, which is hardly acceptable, at least for small sleep time
-> >>> values.
-> >>>
-> >>> Address this by using usleep_range() in acpi_os_sleep() instead of
-> >>> msleep().  For short sleep times this is a no-brainer, but even for
-> >>> long sleeps usleep_range() should be preferred because timer wheel
-> >>> timers are optimized for cancellation before they expire and this
-> >>> particular timer is not going to be canceled.
-> >>>
-> >>> Add at least 50 us on top of the requested sleep time in case the
-> >>> timer can be subject to coalescing, which is consistent with what's
-> >>> done in user space in this context [2], but for sleeps longer than 5 =
-ms
-> >>> use 1% of the requested sleep time for this purpose.
-> >>>
-> >>> The rationale here is that longer sleeps don't need that much of a ti=
-mer
-> >>> precision as a rule and making the timer a more likely candidate for
-> >>> coalescing in these cases is generally desirable.  It starts at 5 ms =
-so
-> >>> that the delta between the requested sleep time and the effective
-> >>> deadline is a contiuous function of the former.
-> >>>
-> >>> Link: https://lore.kernel.org/linux-pm/c7db7e804c453629c116d508558eaf=
-46477a2d73.1731708405.git.len.brown@intel.com/ [1]
-> >>> Link: https://lore.kernel.org/linux-pm/CAJvTdK=3DQ1kwWA6Wxn8Zcf0OicDE=
-k6cHYFAvQVizgA47mXu63+g@mail.gmail.com/ [2]
-> >>> Reported-by: Len Brown <lenb@kernel.org>
-> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>
-> >> You probably should also pick up this tag from the earlier version.
-> >>
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D216263
-> >
-> > Good point.
-> >
-> >>> ---
-> >>>
-> >>> This is a follow-up to the discussion started by [1] above and since
-> >>> the beginning of it I have changed my mind a bit, as you can see.
-> >>>
-> >>> Given Arjan's feedback, I've concluded that using usleep_range() for
-> >>> all sleep values is the right choice and that some slack should be
-> >>> used there.  I've taken 50 us as the minimum value of it because that=
-'s
-> >>> what is used in user space FWICT and I'm not convinced that shorter
-> >>> values would be suitable here.
-> >>>
-> >>> The other part, using 1% of the sleep time as the slack for longer
-> >>> sleeps, is likely more controversial.  It is roughly based on the
-> >>> observation that if one timer interrupt is sufficient for something,
-> >>> then using two of them will be wasteful even if this is just somewhat=
-.
-> >>>
-> >>> Anyway, please let me know what you think.  I'd rather do whatever
-> >>> the majority of you are comfortable with.
-> >>
-> >> Generally I'm fine with this.
-> >>
-> >> I'm about to head on US holiday, but I will forward this to folks that
-> >> aren't and get some testing input on it to bring back later when I'm b=
-ack.
-> >
-> > Thanks!
->
-> Hi Rafael,
->
-> I loaded this onto my personal laptop before the holiday and also got
-> others in AMD to do testing on a wider variety of client hardware.
-> No concerns were raised with this patch.
->
-> Feel free to include:
->
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Thank you!
+
+On 11/18/2024 10:01 AM, Melody Olvera wrote:
+>
+>
+> On 11/15/2024 7:27 AM, Dmitry Baryshkov wrote:
+>> On Mon, Nov 11, 2024 at 04:30:17PM -0800, Melody Olvera wrote:
+>>> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>>>
+>>> Introduce SM8750 interconnect provider driver using the interconnect
+>>> framework.
+>>>
+>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>> ---
+>>>   drivers/interconnect/qcom/Kconfig  |    9 +
+>>>   drivers/interconnect/qcom/Makefile |    2 +
+>>>   drivers/interconnect/qcom/sm8750.c | 1585 
+>>> ++++++++++++++++++++++++++++
+>>>   drivers/interconnect/qcom/sm8750.h |  132 +++
+>>>   4 files changed, 1728 insertions(+)
+>>>   create mode 100644 drivers/interconnect/qcom/sm8750.c
+>>>   create mode 100644 drivers/interconnect/qcom/sm8750.h
+>>>
+>>> diff --git a/drivers/interconnect/qcom/Kconfig 
+>>> b/drivers/interconnect/qcom/Kconfig
+>>> index 362fb9b0a198..1219f4f23d40 100644
+>>> --- a/drivers/interconnect/qcom/Kconfig
+>>> +++ b/drivers/interconnect/qcom/Kconfig
+>>> @@ -337,6 +337,15 @@ config INTERCONNECT_QCOM_SM8650
+>>>         This is a driver for the Qualcomm Network-on-Chip on 
+>>> SM8650-based
+>>>         platforms.
+>>>   +config INTERCONNECT_QCOM_SM8750
+>>> +    tristate "Qualcomm SM8750 interconnect driver"
+>>> +    depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>>> +    select INTERCONNECT_QCOM_RPMH
+>>> +    select INTERCONNECT_QCOM_BCM_VOTER
+>>> +    help
+>>> +      This is a driver for the Qualcomm Network-on-Chip on 
+>>> SM8750-based
+>>> +      platforms.
+>>> +
+>>>   config INTERCONNECT_QCOM_X1E80100
+>>>       tristate "Qualcomm X1E80100 interconnect driver"
+>>>       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>>> diff --git a/drivers/interconnect/qcom/Makefile 
+>>> b/drivers/interconnect/qcom/Makefile
+>>> index 9997728c02bf..7887b1e8d69b 100644
+>>> --- a/drivers/interconnect/qcom/Makefile
+>>> +++ b/drivers/interconnect/qcom/Makefile
+>>> @@ -40,6 +40,7 @@ qnoc-sm8350-objs            := sm8350.o
+>>>   qnoc-sm8450-objs            := sm8450.o
+>>>   qnoc-sm8550-objs            := sm8550.o
+>>>   qnoc-sm8650-objs            := sm8650.o
+>>> +qnoc-sm8750-objs            := sm8750.o
+>>>   qnoc-x1e80100-objs            := x1e80100.o
+>>>   icc-smd-rpm-objs            := smd-rpm.o icc-rpm.o icc-rpm-clocks.o
+>>>   @@ -80,5 +81,6 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += 
+>>> qnoc-sm8350.o
+>>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
+>>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8550) += qnoc-sm8550.o
+>>>   obj-$(CONFIG_INTERCONNECT_QCOM_SM8650) += qnoc-sm8650.o
+>>> +obj-$(CONFIG_INTERCONNECT_QCOM_SM8750) += qnoc-sm8750.o
+>>>   obj-$(CONFIG_INTERCONNECT_QCOM_X1E80100) += qnoc-x1e80100.o
+>>>   obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
+>>> diff --git a/drivers/interconnect/qcom/sm8750.c 
+>>> b/drivers/interconnect/qcom/sm8750.c
+>>> new file mode 100644
+>>> index 000000000000..bc72954d54ff
+>>> --- /dev/null
+>>> +++ b/drivers/interconnect/qcom/sm8750.c
+>>> @@ -0,0 +1,1585 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights 
+>>> reserved.
+>>> + *
+>>> + */
+>>> +
+>>> +#include <linux/device.h>
+>>> +#include <linux/interconnect.h>
+>>> +#include <linux/interconnect-provider.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/of_platform.h>
+>>> +#include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
+>>> +
+>>> +#include "bcm-voter.h"
+>>> +#include "icc-rpmh.h"
+>>> +#include "sm8750.h"
+>> Nit: please merge sm8750.h here, there is no need to have a separate
+>> header, there are no other users.
+>
+> Ack.
+>
+>>
+>> Also, is there QoS support? I see no qcom_icc_qosbox entries.
+>
+> Unsure; will let Raviteja comment.
+>
+
+Spoke w Raviteja; looks like he wants to do this later.
+
+Thanks,
+Melody
+
+
+
 
