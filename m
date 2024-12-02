@@ -1,53 +1,52 @@
-Return-Path: <linux-pm+bounces-18347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 647449E046D
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 15:10:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3837A9E02DB
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 14:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A420B25C8E
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED0E4285A6F
 	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 13:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8751FC115;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DAE1FDE2E;
 	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UiNEk7Os"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jYqXDeHD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9FDEEDE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA408F6B;
 	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733144901; cv=none; b=ahGXB+RgzX1QZ5fU6/XOZShwsroYuWHaopfcbywo2igoYCtzOD28/jq6FB99QLpzmtN6GoIPJzUAQIcAhdfRAAMmIscUfhleRbi+ptBEU1T7NWsLIznGN1L/0yaU1v/5zCuBkXgb/wTXIdWsRcfRDeYIbcC3WnL3gvJcTaBA2rQ=
+	t=1733144901; cv=none; b=l/eOsTKP6vvcvFNoiDGwhfzCRLx1BghbZ13ILa3XGI6psCN7lokl81qe0GLmOO9NLGNcDXAM6c8qwl5mauj5J4fNLkdNu3iAU2dhX2iDpbSUVbRRnf3mO2JEmDnftRZL1M4tcy5kEQtmzYweXprGs7L4clwGfW2F8Qti6awoRPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733144901; c=relaxed/simple;
-	bh=gutyObQKsachHq0/nA2oAKqQxOFoQ3uvLG/DLWbnDiw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D1pQFnlTl3E6f/kd80sv5PcjlgE3W0LTnGfT/yM41pTrwr/FclW2/VHd2UVEhm1f18pQpoF8R/XXk/0tvGccY3/5CjBbH6t/P6azuRrvaK7c8DKCepyKStpqZw3Xpe6BOJfBGVhZ5nap5bU8DBOx+7X+QQLXfURaGCN0ZDBMVsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UiNEk7Os; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23D19C4CED1;
+	bh=IQep3vYgtWd8FCL4D6A8WGJH6FjqAultu89nScGyyPo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Zlrr7FzfGlq78BtS7cD5SiEEmmz4t42XIDIgGT0y/rPSQTE4+0uzgIWd2AxkH6R+UxM2+1i6dqa6hyGlICNYIJUuJ+RJ1DCIav2eh//3PXvjlHT4rUywHRz5SkQVyEuowc8UjZK8+98SKKklaVF6OMAEpqUIC38EAxWQ5k6+pWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jYqXDeHD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42E8CC4CED6;
 	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1733144901;
-	bh=gutyObQKsachHq0/nA2oAKqQxOFoQ3uvLG/DLWbnDiw=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=UiNEk7OsXFe+cdf8+I5BfuYbG8+O7eT9931PcfkI5ezc7fUDYYY/w1NfNsGWA7ZbQ
-	 5GTh6RHIfgTqm1+DfLmV9/HAB9RUanscHZanEj/iU5thJWnRRIwfxyTc+24F+RJSuQ
-	 qaDyYcfek3n0lFdt/cEKenRoDhBab0CBwe61xLf2b4hbJ5kk0sRA0A/1aF8Ru6/rvv
-	 VIV4ODtHr/mo/l6nReLjupBo8WUASknk5cPV5WvmLk05triWjuwuKBeWUKtW6WWSaB
-	 ocE5Uf/t6Fjd9bi9olvKvfDbXL4VFDjojurvGnYhO+JL7rKJAe5nuiUbAJdvPANJI4
-	 Oi8MkTR9L95dw==
+	bh=IQep3vYgtWd8FCL4D6A8WGJH6FjqAultu89nScGyyPo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=jYqXDeHD2KBV2dD8HKo1Xk16v7elrcJR3Dh6bDQaXtHQmIi6bExaFKs+u50x7+sdc
+	 wrXadhKuz1mmA8qVG6GQX11D9KJELYFlx8UqSNHH4IdHPRhDtJJtiZRDtdT6oy6h3K
+	 4O4WMW1vi3n11akbsnatra3d1UXnhKNMpsayPB3UMFm2yrV9p8JaR+1YnKJAUjYqWU
+	 y6nQJ2uE60zrKFWYn2ETf8rUC+RndxBHIQjQBc6h2mb5M2XLqYkqxXgOZJPOHUaIX0
+	 wpYlSgEUoocyCIkyV5QJgFj+hDhR5gDa2vPZXrtTefJ0r33yWryHgXO+hrHh25BKhc
+	 SeYqPUYye1FEg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC3B3D7831B;
-	Mon,  2 Dec 2024 13:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22E06D7831A;
+	Mon,  2 Dec 2024 13:08:21 +0000 (UTC)
 From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
-Subject: [PATCH 0/4] Google Pixel 6 (oriole): max77759 fuel gauge
- enablement and driver support
-Date: Mon, 02 Dec 2024 14:07:14 +0100
-Message-Id: <20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be>
+Date: Mon, 02 Dec 2024 14:07:15 +0100
+Subject: [PATCH 1/4] power: supply: add support for max77759 fuel gauge
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,10 +55,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAKxTWcC/x2MywqAIBAAfyX2nOCqIfUrEWG12h56oBCC9O9Jl
- 4E5zBRIFJkSDE2BSA8nvs4q2Daw7u4MJHirDkoqgxViMSIklDgfLltru372QRipSGl0ZtEaanp
- H8pz/7Ti97wc7Q2hxZgAAAA==
-X-Change-ID: 20241202-b4-gs101_max77759_fg-402e231a4b33
+Message-Id: <20241202-b4-gs101_max77759_fg-v1-1-98d2fa7bfe30@uclouvain.be>
+References: <20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be>
+In-Reply-To: <20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, 
@@ -70,11 +68,11 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-samsung-soc@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733144859; l=1133;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733144859; l=5861;
  i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
- bh=gutyObQKsachHq0/nA2oAKqQxOFoQ3uvLG/DLWbnDiw=;
- b=Bhzd4ybqtj55n/U2YOZSfbuvXzTGyNb206Tg8GJtVh03aqvqpmF8Nj8CDa4qgOCKVsNZyXzzf
- NKlykWlpZGdAQoXH5iuxKaEXiFeZPBrvAsOb3+wQlD3Lviex1H6Bmen
+ bh=8/hl8HCrAHHJ3VeFvt/t1hZ/LAyPgByR74YhR463vjQ=;
+ b=H9K7tMUAoGnrOOR2rqtXyyTvA8qiFvlZ3DCQkaWfcS2uiHCV/MFpnBLMUiTYIHlnaQAMz1kUP
+ nYlq+ZLHwpkChbCaaLqOoZw3CBZxxpq0xOXTiND8Diy6ypVR8Q9xGMS
 X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
  pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
 X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
@@ -82,33 +80,183 @@ X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
 X-Original-From: Thomas Antoine <t.antoine@uclouvain.be>
 Reply-To: t.antoine@uclouvain.be
 
-The Google Pixel 6 has a Maxim max77759 which provides a fuel gauge with
-the same interface as the Maxim max1720x, except for the non-volatile
-memory.
+From: Thomas Antoine <t.antoine@uclouvain.be>
 
-Modify the Maxim max1720x driver to be compatible with the Maxim max77759 and
-enable it for the gs101-oriole board.
+The Maxim max77759 fuel gauge has the same interface as the Maxim max1720x
+except for the non-volatile memory slave address which is not available.
+No slave is available at address 0xb of the i2c bus, which is coherent
+with the following driver from google: line 5836 disables non-volatile
+memory for m5 gauge.
+
+Link: https://android.googlesource.com/kernel/google-modules/bms/+/1a68c36bef474573cc8629cc1d121eb6a81ab68c/max1720x_battery.c
+
+Add support for the max77759 by allowing to use the non-volatile
+memory or not based on the chip. Value for RSense comes from the following
+stock devicetree:
+
+Link: https://android.googlesource.com/kernel/devices/google/gs101/+/33eca36d43da6c2b6a546806eb3e7411bbe6d60d/dts/gs101-raviole-battery.dtsi
 
 Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
 ---
-Thomas Antoine (4):
-      power: supply: add support for max77759 fuel gauge
-      dt-bindings: power: supply: add max77759-fg flavor and don't require nvme address
-      arm64: defconfig: enable Maxim max1720x driver
-      arm64: dts: exynos: gs101-oriole: enable Maxim max77759 fuel gauge
+ drivers/power/supply/max1720x_battery.c | 71 +++++++++++++++++++++++++++------
+ 1 file changed, 59 insertions(+), 12 deletions(-)
 
- .../bindings/power/supply/maxim,max17201.yaml      | 14 +++++
- arch/arm64/boot/dts/exynos/google/gs101-oriole.dts |  7 +++
- arch/arm64/configs/defconfig                       |  1 +
- drivers/power/supply/max1720x_battery.c            | 71 ++++++++++++++++++----
- 4 files changed, 81 insertions(+), 12 deletions(-)
----
-base-commit: 12e0a4072e8edc49c99418a4303bd7b96916de95
-change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
+diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
+index 33105419e2427bb37963bda9948b647c239f8faa..faf336938dd4306dd2ceeb0a84b90ca80ad41a9f 100644
+--- a/drivers/power/supply/max1720x_battery.c
++++ b/drivers/power/supply/max1720x_battery.c
+@@ -13,6 +13,7 @@
+ #include <linux/nvmem-provider.h>
+ #include <linux/power_supply.h>
+ #include <linux/regmap.h>
++#include <linux/types.h>
+ 
+ #include <linux/unaligned.h>
+ 
+@@ -39,6 +40,7 @@
+ #define MAX172XX_DEV_NAME_TYPE_MASK	GENMASK(3, 0)
+ #define MAX172XX_DEV_NAME_TYPE_MAX17201	BIT(0)
+ #define MAX172XX_DEV_NAME_TYPE_MAX17205	(BIT(0) | BIT(2))
++#define MAX172XX_DEV_NAME_TYPE_MAX77759	0
+ #define MAX172XX_QR_TABLE10		0x22
+ #define MAX172XX_BATT			0xDA	/* Battery voltage */
+ #define MAX172XX_ATAVCAP		0xDF
+@@ -46,6 +48,7 @@
+ static const char *const max1720x_manufacturer = "Maxim Integrated";
+ static const char *const max17201_model = "MAX17201";
+ static const char *const max17205_model = "MAX17205";
++static const char *const max77759_model = "MAX77759";
+ 
+ struct max1720x_device_info {
+ 	struct regmap *regmap;
+@@ -54,6 +57,21 @@ struct max1720x_device_info {
+ 	int rsense;
+ };
+ 
++struct chip_data {
++	u16 default_nrsense; /* in regs in 10^-5 */
++	u8 has_nvmem;
++};
++
++static const struct chip_data max1720x_data  = {
++	.default_nrsense = 1000,
++	.has_nvmem = 1,
++};
++
++static const struct chip_data max77759_data = {
++	.default_nrsense = 500,
++	.has_nvmem = 0,
++};
++
+ /*
+  * Model Gauge M5 Algorithm output register
+  * Volatile data (must not be cached)
+@@ -369,6 +387,8 @@ static int max1720x_battery_get_property(struct power_supply *psy,
+ 			val->strval = max17201_model;
+ 		else if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX17205)
+ 			val->strval = max17205_model;
++		else if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX77759)
++			val->strval = max77759_model;
+ 		else
+ 			return -ENODEV;
+ 		break;
+@@ -416,7 +436,6 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
+ 		.priv = info,
+ 	};
+ 	struct nvmem_device *nvmem;
+-	unsigned int val;
+ 	int ret;
+ 
+ 	info->ancillary = i2c_new_ancillary_device(client, "nvmem", 0xb);
+@@ -438,6 +457,27 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
+ 		return PTR_ERR(info->regmap_nv);
+ 	}
+ 
++	nvmem = devm_nvmem_register(dev, &nvmem_config);
++	if (IS_ERR(nvmem)) {
++		dev_err(dev, "Could not register nvmem!");
++		return PTR_ERR(nvmem);
++	}
++
++	return 0;
++}
++
++static int max1720x_get_rsense(struct device *dev,
++					 struct max1720x_device_info *info,
++					 const struct chip_data *data)
++{
++	unsigned int val;
++	int ret;
++
++	if (!data->has_nvmem) {
++		info->rsense = data->default_nrsense;
++		return 0;
++	}
++
+ 	ret = regmap_read(info->regmap_nv, MAX1720X_NRSENSE, &val);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to read sense resistor value\n");
+@@ -446,14 +486,9 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
+ 
+ 	info->rsense = val;
+ 	if (!info->rsense) {
+-		dev_warn(dev, "RSense not calibrated, set 10 mOhms!\n");
+-		info->rsense = 1000; /* in regs in 10^-5 */
+-	}
+-
+-	nvmem = devm_nvmem_register(dev, &nvmem_config);
+-	if (IS_ERR(nvmem)) {
+-		dev_err(dev, "Could not register nvmem!");
+-		return PTR_ERR(nvmem);
++		dev_warn(dev, "RSense not calibrated, set %d mOhms!\n",
++						data->default_nrsense/100);
++		info->rsense = data->default_nrsense;
+ 	}
+ 
+ 	return 0;
+@@ -474,6 +509,7 @@ static int max1720x_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct max1720x_device_info *info;
+ 	struct power_supply *bat;
++	const struct chip_data *data;
+ 	int ret;
+ 
+ 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+@@ -488,9 +524,19 @@ static int max1720x_probe(struct i2c_client *client)
+ 		return dev_err_probe(dev, PTR_ERR(info->regmap),
+ 				     "regmap initialization failed\n");
+ 
+-	ret = max1720x_probe_nvmem(client, info);
++	data = device_get_match_data(dev);
++	if (!data)
++		return dev_err_probe(dev, ret, "Failed to get chip data\n");
++
++	if (data->has_nvmem) {
++		ret = max1720x_probe_nvmem(client, info);
++		if (ret)
++			return dev_err_probe(dev, ret, "Failed to probe nvmem\n");
++	}
++
++	ret = max1720x_get_rsense(dev, info, data);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to probe nvmem\n");
++		return dev_err_probe(dev, ret, "Failed to get RSense");
+ 
+ 	bat = devm_power_supply_register(dev, &max1720x_bat_desc, &psy_cfg);
+ 	if (IS_ERR(bat))
+@@ -501,7 +547,8 @@ static int max1720x_probe(struct i2c_client *client)
+ }
+ 
+ static const struct of_device_id max1720x_of_match[] = {
+-	{ .compatible = "maxim,max17201" },
++	{ .compatible = "maxim,max17201", .data = (void *) &max1720x_data },
++	{ .compatible = "maxim,max77759-fg", .data = (void *) &max77759_data},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, max1720x_of_match);
 
-Best regards,
 -- 
-Thomas Antoine <t.antoine@uclouvain.be>
+2.47.1
 
 
 
