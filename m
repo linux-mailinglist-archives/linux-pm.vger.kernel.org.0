@@ -1,48 +1,81 @@
-Return-Path: <linux-pm+bounces-18339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEEE39DFEF0
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:30:05 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D0379DFF13
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 11:36:51 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6236C28215E
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 10:30:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7655E163A61
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 10:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DAA1FC7DF;
-	Mon,  2 Dec 2024 10:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05FA1FCFDF;
+	Mon,  2 Dec 2024 10:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikhjkACi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PgoqD9ly"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91B61FC119;
-	Mon,  2 Dec 2024 10:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BCB1FCFDA
+	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 10:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733135402; cv=none; b=txKCpco/3scPb5EseulNB+WfY3vO+3kZSCQRcvcJ6yHiB7THnUTkfPdCIdx0X6mwOiye+n5y3DyCUriMXEqHdGdY/0gThaQWFb0cFSNKPk85KTDZurk8gFGHo0fpFvt4qfkyD/NcRZTlnNXNKk7QpX8U5uIOoXg3hIKBOO7jDh0=
+	t=1733135791; cv=none; b=ho+uVrx52WFjxnF5rR04E3TntU84E4MXQjol8Ry3ovGrlHJXaTazIN/C0Om8dtL2r/8wy/fl8f/kM+9bv7+Apkd2g2hlASFWZ+TDVvurx5g4WJ4peK8LlW69KIVI4xofdi+cAsZCDyGR+oUaGEN9gSOiXKZYWZsRIFnFFdz9OMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733135402; c=relaxed/simple;
-	bh=LuFsk7gRGBuCuEnZFd0Z5kjf8SQVkInCv2kWohtubqk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jm8LYo7TN47dq8RfdAGMiOHpIbAnGjiJAi7uRaOQxSnmQ3KWwBmtsfj5JvtbmAsD4wWaz2YPUqbgpGaDKKKIIK22AyqvoVPSF25tuSbdnFF1LdO0w28Gor33KWgT0U9zRS+pcVdWnQj2pWTM0c0kBOMeDLOQV7KHBcLyVWodv48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikhjkACi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D399C4CED1;
-	Mon,  2 Dec 2024 10:29:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733135401;
-	bh=LuFsk7gRGBuCuEnZFd0Z5kjf8SQVkInCv2kWohtubqk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ikhjkACihn+xC0pbMrkkFlVcoFHZag2jhTZJ60iU9/et26klYWxrv6eJdU74GDyaS
-	 1apJVYRRuCyNDXXFgLyvs+WnpF0dEoKpKIOVGWeAJOy14chBW62C8/R3gENIsKDTbx
-	 QbxjcJdo4B6qpc9vxFtICOsIl/vrayaE4Sc1wutLTBNNXN1dljAviJRqJCLY3EtN/y
-	 pOl+9lP5qnsQ3bzb5E6+8Eu9/YK1Sj+l5c1kxj92uwNjUYWACBwd14naoJqk6z+f6L
-	 mVB9tX5qnByqNqTbi+YsXOM5vZkKwqq2PNQvZlPIXHSoo2K2b4sOwufxkmJGIsf2mh
-	 ZDujRu2/s69QA==
-Message-ID: <b7e4162a-a7f7-462d-9dde-121eeb59d148@kernel.org>
-Date: Mon, 2 Dec 2024 11:29:54 +0100
+	s=arc-20240116; t=1733135791; c=relaxed/simple;
+	bh=SpVvQveKxiNQvzdBswELA+LyVOPATjwCrjSbwVYdBmo=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CqD3znCIKfhxvMM00CsVR9Kfx41MovqtRhNVPPwmosWzZaUH/JBhTwtrM330O/BWrlSfOlD1xp42resICE5xaE9CjnAxdRydLb190f1v3a3izc0qnhM90bh1ooAQO+sbpaAH1VCrtc0pCLW18ds+9WlQ04R7/7ia4uA0YAutofk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PgoqD9ly; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-434a0fd9778so37428455e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 02:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733135788; x=1733740588; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jT5KvV791CFakvqVD4nDqzeY5ycP2MP9JkUV7Z1sqOM=;
+        b=PgoqD9lyJmylPqdRos5gvcKc8QQwxpGQOFkIe0EQ3v39fVioPnBmLp03TzUSKNMxUa
+         IF2etBjQ8QAN2T4R3Rg1ciXZCgAMdXkFrNgNWilNKUGFWVipQuxmJImBUIwYyx7svlv9
+         8ATNC7D8jC5TR9aVF+h9NrQ+6Kk2a/nZFjxjc4b0nyr9aHKY2mDb5jDYc7g0IveKtAXu
+         H2v3L8UsuHAu2Nmt7ME0q9LWs+qPjxvYu3sD+Uhn9GwMOFUfZ/PrHcVPJ+ffeorGdpFb
+         FYgEf8Wmej/CNeomO9iSw+raRD5Ark2nqm9XrvPX61xAw6M9uoB25I+3Ufn6wNr5jiUh
+         NJ+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733135788; x=1733740588;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jT5KvV791CFakvqVD4nDqzeY5ycP2MP9JkUV7Z1sqOM=;
+        b=F8Us2gfQ5CaOihhbG1qBgEPDDshCFzpB+3TkRT0y5zUMFR/Mn0AgX/ZCYVlGTX8gw4
+         vsHdsDB/rWySS6BRb8O9Itnc9KHWUfZGZDf2/XeLLxOK2M0toO+wHQLVMj/8xtJ4fl8/
+         tBcOSVvEJha6FiNOLviV7UmbBfEm3dlWmG5xJhVhTc2g12G8sH5y3WLPZ5aOhQA2qhWC
+         YQXXTsiNxZna3m1RSAqt9O53LmXZny2nugB472NDf0Rb27AQZn1QNgubALVQf09kGBCy
+         mG01Ipn7gysgVm3my2MS8y5HOstNmYevElVonVwu9/UNidrCV/ABSVsw2e1FERtibcVF
+         XGFg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTGciYJ4SB+W83GymbJwanpcd9GnyM1OALUHE6f5Mlc1FnRetFrhW6WOUrqSY/C9srkJU6Ewjd/A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgnbwzNI4ThqlWu+6bGP+x0pwiOBKJ7f/ybFOx3oaT+1zcH0M0
+	YOhorkwge6Mk3ZZmoRENSR83e7AblFs68cEJ4/avv5Ku+s83smxZHJc3ezhoLMY=
+X-Gm-Gg: ASbGncumlOvFiGzPwHiWuAB+4kCD1vxAxHPA5k3YpJVONlBIFwsqDOlFnMDNAdg5b7k
+	FEP9H7B6HMuya8BDfbSJWq3ImIUTinQZjyhDTH37hrcFPHw6G/UlLZPRs189TJHvt46jZP8qHDf
+	b0yz6j1gGETrI+UAPIQlPHbz0t5ubt4upWWTwIU3VJEf4199gdWl9lZNLFdcOFxvNN9nvisZjCb
+	7LYAyEb59Dis30d0raepNCmHfkgjNGxYrtIGo/VmO6n+iy8+Fuo04B2QTBDYRzkA5hScGyxp8zE
+	BW/N+KQEcGAEPkUvSSngcQaAJfU=
+X-Google-Smtp-Source: AGHT+IFRy9RZUNp8ERNv8snQhR6iNB+4RIFpjf/OrMOMYeZ+gVloBql9BUB0vkomr0RQYQBfBtfSYw==
+X-Received: by 2002:a5d:5f4f:0:b0:385:ecdf:a30a with SMTP id ffacd0b85a97d-385ecdfa4ddmr4438963f8f.33.1733135788377;
+        Mon, 02 Dec 2024 02:36:28 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1485:2a78:787c:c669? ([2a01:e0a:982:cbb0:1485:2a78:787c:c669])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385f0d38a89sm3180538f8f.97.2024.12.02.02.36.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2024 02:36:27 -0800 (PST)
+Message-ID: <64dc6a89-7245-4546-a3e3-33bc2820388f@linaro.org>
+Date: Mon, 2 Dec 2024 11:36:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,150 +83,58 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 9/9] leds: max77705: Add LEDs support
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Hans de Goede <hdegoede@redhat.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org
-References: <20241202-starqltechn_integration_upstream-v9-0-a1adc3bae2b8@gmail.com>
- <20241202-starqltechn_integration_upstream-v9-9-a1adc3bae2b8@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241202-starqltechn_integration_upstream-v9-9-a1adc3bae2b8@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 1/2] OPP: add index check to assert to avoid buffer
+ overflow in _read_freq()
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241129-topic-opp-fix-assert-index-check-v2-0-386b2dcbb9a6@linaro.org>
+ <20241129-topic-opp-fix-assert-index-check-v2-1-386b2dcbb9a6@linaro.org>
+ <20241202063311.g3333gi7ztblx2hr@vireshk-i7>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20241202063311.g3333gi7ztblx2hr@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 02/12/2024 10:48, Dzmitry Sankouski wrote:
-> This adds basic support for LEDs for the max77705 PMIC.
+On 02/12/2024 07:33, Viresh Kumar wrote:
+> On 29-11-24, 16:06, Neil Armstrong wrote:
+>> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+>> +static bool assert_single_clk(struct opp_table *opp_table, int __always_unused index)
 > 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> 
-> ---
-> Changes for v8:
-> - join line where possible to fit in 100 chars
-
-
-Coding style asks for 80. checkpatch is not a coding style, unless this
-came from maintainer's review.
-
-> - change comment style C++ -> C
+> Shouldn't the index be unsigned int here ?
 > 
 
-> Changes for v6:
-> - change compatible suffix to 'rgb'
-> - remove I2C dependency in Kconfig
-> - remove copyright and author from 'based on' header statement
-> - replace MFD abbreviation with PMIC
-> - MAINTAINERS: alphabetic order
-> - max77705_rgb_blink: replace ternary operators with if..else if sequence
-> - max77705_rgb_blink: move hardcoded numbers to constants
-> - max77705_led_brightness_set: move ret to the bottom
-> - s/map/regmap
-> - replace device_for_each_child_node with scoped version
-> - s/rv/ret
-> Changes for v5:
-> - use same hardware name in Kconfig and module descriptions
-> - remove copyrighter owner from module authors
-> 
-> Changes in v4:
-> - inline BLINK_(ON|OFF) macro
-> - remove camel case
-> - drop backwards compatibility(new driver)
-> - drop module alias
-> ---
->  MAINTAINERS                          |   1 +
->  drivers/leds/Kconfig                 |   6 ++++++
->  drivers/leds/Makefile                |   1 +
->  drivers/leds/leds-max77705.c         | 167 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/max77705-private.h |  18 ++++++++++++++++
->  5 files changed, 193 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
+Yes, I'll respin a v3 with that.
 
-
-...
-
-> diff --git a/include/linux/mfd/max77705-private.h b/include/linux/mfd/max77705-private.h
-> index be781a0f9802..2140693ce747 100644
-> --- a/include/linux/mfd/max77705-private.h
-> +++ b/include/linux/mfd/max77705-private.h
-> @@ -35,6 +35,24 @@
->  #define MAX77705_SYSTEM_IRQ_SYSOVLO_INT	BIT(5)
->  #define MAX77705_SYSTEM_IRQ_TSHDN_INT	BIT(6)
->  #define MAX77705_SYSTEM_IRQ_TM_INT	BIT(7)
-> +/* MAX77705_RGBLED_REG_LEDEN register */
-> +#define MAX77705_RGBLED_EN_WIDTH	2
-> +/* MAX77705_RGBLED_REG_LEDBLNK register */
-> +#define MAX77705_RGB_DELAY_100_STEP_LIM 500
-> +#define MAX77705_RGB_DELAY_100_STEP_COUNT 4
-> +#define MAX77705_RGB_DELAY_100_STEP 100
-> +#define MAX77705_RGB_DELAY_250_STEP_LIM 3250
-> +#define MAX77705_RGB_DELAY_250_STEP 250
-> +#define MAX77705_RGB_DELAY_500_STEP 500
-> +#define MAX77705_RGB_DELAY_500_STEP_COUNT 10
-> +#define MAX77705_RGB_DELAY_500_STEP_LIM 5000
-> +#define MAX77705_RGB_DELAY_1000_STEP_LIM 8000
-> +#define MAX77705_RGB_DELAY_1000_STEP_COUNT 13
-> +#define MAX77705_RGB_DELAY_1000_STEP 1000
-> +#define MAX77705_RGB_DELAY_2000_STEP 2000
-> +#define MAX77705_RGB_DELAY_2000_STEP_COUNT 13
-> +#define MAX77705_RGB_DELAY_2000_STEP_LIM 12000
-> +
->  
-
-No need for multiple line breaks.
-
-Best regards,
-Krzysztof
+Thanks,
+Neil
 
