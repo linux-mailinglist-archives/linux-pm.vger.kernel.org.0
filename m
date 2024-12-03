@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-18412-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18413-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 716C19E149B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA1579E149F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:51:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14C8A282C15
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 07:51:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 800BC282CCF
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 07:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A34D199235;
-	Tue,  3 Dec 2024 07:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5255A1C8FD4;
+	Tue,  3 Dec 2024 07:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HStLTfRo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMpEtrmN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0B614389F;
-	Tue,  3 Dec 2024 07:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D541AC42C;
+	Tue,  3 Dec 2024 07:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733212281; cv=none; b=Sj4jpW/oAfF8tTpcrAsyEOTFnCghTQnMvqfu/ptgYQv6M65haQJ+jYctrrr012ubYdNp04KnpMkp4HuD3C+O60mnkzaYEdIWB6y83DCaIG7rzC85EeEk2iB+ZhvZ8Xhfgvumlo2Bfwgo68uDd1xqgJ7tXsNY1FdZmww1GzFFL90=
+	t=1733212284; cv=none; b=c0uC6JMQ3sC0OHCApRXRpFZlLEZcFsAmZ8VB3oFBefbtpGHFCWSvZ9WCdlQ+vmZGa8P2qySg/cJ4WkIwRo4e1PwZa27qnZSLtiFtFQMFqEDi6rbwA8GApcCxptqOUvuzpPd279Lm+jc9ebWEi4/bdSgutcWGq7CmCVQX9v8gCW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733212281; c=relaxed/simple;
-	bh=YK5PQc2Gdt7Umaut3Cs1wIcHAQhwiZ8j7lJAoblrO9g=;
+	s=arc-20240116; t=1733212284; c=relaxed/simple;
+	bh=+yIOxg7UD6tb/FP26lMAhHqnhMvbQO7H+dY3oMrMgiY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VfKipbAFDNpUppjS+RtStD8PmKbRI0aj3v8K1iZPTtkyV3dRkbTyjQJP71lbYFOf+e4+c/YI+VsF/K4j1VqCw7gLsdrGup71N35og8/JvOlB5x2rNELHs/idrw4s9rh7pmNtp/x9U5TwWwLXIvDwEwikFa2EG4KBpY7mNO294Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HStLTfRo; arc=none smtp.client-ip=198.175.65.10
+	 MIME-Version; b=Hty2e8Ur2ONYJhbDdvtUsfNxZZXkAMC2oGwJvCcoGunV1I/4q+XX04NoYMWXMMeovZK4aMoamcdVAf3nTXVdpsBACL1ak7eS2bidGAAkbhEcyGO6mwp+XOBXxaPTErUYY79j7hvW+ELKT5RISa7tta4/SSjkVEa1Xi+HA6cRP0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMpEtrmN; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733212280; x=1764748280;
+  t=1733212282; x=1764748282;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YK5PQc2Gdt7Umaut3Cs1wIcHAQhwiZ8j7lJAoblrO9g=;
-  b=HStLTfRoGcoV1XHR70UsmKyBDCYUH4NPiPHhO853QWybFlcJrSpNOHsn
-   DABRIGcjSbpu0jRKWmBZF8D3Z01irQndsgSHbcY6Kfi1rX5N61KODqfZg
-   yidF1Zo5qPiLhmM0N4wYpFB+K+ocsHVoNa8F/mF9TkJHWvZpVOx7S84ac
-   TbOXqiHZEb63/wWBN4oHFBXw8rCEP4jmtu42w4eAvOIEWno2DrSPdJS63
-   tTOX6/7v5klpJ1YsPNP0pjIF6PBkfsfD9Mux6jj3g9Hhjg+yVeRxB5LUP
-   1V0p2a7Zcv36I1EzW7okb4zbEKYIh9HyOKVcIU7J2anQhXtmek7g+UHfJ
-   w==;
-X-CSE-ConnectionGUID: cMFY1tdyRVyFfO3jNPdGww==
-X-CSE-MsgGUID: eawJz99NTtCplZURW5Mf+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="50822847"
+  bh=+yIOxg7UD6tb/FP26lMAhHqnhMvbQO7H+dY3oMrMgiY=;
+  b=SMpEtrmN9EZaZ41iAo9ZbSnRibP+B27toKRLkhN5bG0XRX98NkXT/oh7
+   S/F7kU3YlVWM5liE56/G1I6AfQAWVCtoU8l+72vpwNscK9hVvqQCVlMlx
+   sWhnPROEomY5vTl+uabm8BxABOe6GN5g92t6lvpa0Rx5UZgPUckmOHgBu
+   NeYTdQBubd1aYQ3pgB7uOO1SMRFT9/0Et6/IhRyuq58TVAigYX0dqChYl
+   /rr2m4fv8JHeyoEdGnP9G+dUpovtQ1jTsBO1cA3HmSKc0M9oC4UMN2x8l
+   hC3ph27JPfP+kjxswNeNWl2Qfbg9UoTdPJobGSHakIvCLN3knhh37w26k
+   g==;
+X-CSE-ConnectionGUID: 0V6kPoWeT7KOFUH/7FPPwA==
+X-CSE-MsgGUID: X+2aNNYJTk21gs0WCS2V0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="50822851"
 X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="50822847"
+   d="scan'208";a="50822851"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:51:19 -0800
-X-CSE-ConnectionGUID: 9QHA8wSHQDOMatwmTBM38w==
-X-CSE-MsgGUID: D5lL1Zs3QqyqEASzBbQM+w==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:51:20 -0800
+X-CSE-ConnectionGUID: hMtNNo0mRYu9GArDgl+pyw==
+X-CSE-MsgGUID: xcvWm42BRTWzXz+z6dpUQQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="124183016"
+   d="scan'208";a="124183026"
 Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2024 23:51:18 -0800
+  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2024 23:51:20 -0800
 From: Zhang Rui <rui.zhang@intel.com>
 To: rafael.j.wysocki@intel.com,
 	lenb@kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH 1/4] tools/power turbostat: Exit on unsupported Intel models
-Date: Tue,  3 Dec 2024 15:51:16 +0800
-Message-ID: <20241203075119.584419-2-rui.zhang@intel.com>
+Subject: [PATCH 2/4] tools/power turbostat: Exit on unsupported Vendors
+Date: Tue,  3 Dec 2024 15:51:17 +0800
+Message-ID: <20241203075119.584419-3-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241203075119.584419-1-rui.zhang@intel.com>
 References: <20241203075119.584419-1-rui.zhang@intel.com>
@@ -77,40 +77,55 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Turbostat requires per-platform enabling for Intel CPU models due to
-platform-specific features. When running on unsupported Intel CPU
-models, turbostat currently operates with limited default features,
-which can lead to users unknowingly using an outdated version of the
-tool.
+Turbostat currently supports x86 processors from Intel, AMD, and Hygon.
+The behavior of turbostat on CPUs from other vendors has not been
+evaluated and may lead to incorrect or undefined behavior.
 
-Enhance turbostat to exit by default when run on unsupported Intel CPU
-models, with a clear message to users, informing them that their CPU
-model is not supported and advising them to update to the latest version
-of turbostat for full functionality.
+Enhance turbostat to exit by default when running on an unsupported CPU
+vendor. This ensures that users are aware that their CPU is not
+currently supported by turbostat, guiding them to seek support for their
+specific hardware through future patches.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index e203f109dd2e..bb65c5e1273c 100644
+index bb65c5e1273c..508d65e60981 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1079,6 +1079,13 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 			return;
+@@ -1056,9 +1056,9 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ {
+ 	int i;
+ 
+-	platform = &default_features;
+ 
+ 	if (authentic_amd || hygon_genuine) {
++		platform = &default_features;
+ 		if (max_extended_level >= 0x80000007) {
+ 			unsigned int eax, ebx, ecx, edx;
+ 
+@@ -1071,7 +1071,7 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ 	}
+ 
+ 	if (!genuine_intel)
+-		return;
++		goto end;
+ 
+ 	for (i = 0; turbostat_pdata[i].features; i++) {
+ 		if (VFM_FAMILY(turbostat_pdata[i].vfm) == family && VFM_MODEL(turbostat_pdata[i].vfm) == model) {
+@@ -1080,6 +1080,10 @@ void probe_platform_features(unsigned int family, unsigned int model)
  		}
  	}
-+
-+	fprintf(stderr, "Unsupported platform detected.\n"
-+		"\tTo get latest turbostat support, please contact\n"
-+		"\t   lenb@kernel.org\n"
-+		"\tor pull from\n"
-+		"\t   https://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat\n");
-+	exit(1);
- }
  
- /* Model specific support End */
++end:
++	if (platform)
++		return;
++
+ 	fprintf(stderr, "Unsupported platform detected.\n"
+ 		"\tTo get latest turbostat support, please contact\n"
+ 		"\t   lenb@kernel.org\n"
 -- 
 2.43.0
 
