@@ -1,164 +1,152 @@
-Return-Path: <linux-pm+bounces-18499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3B959E2D95
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 21:52:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E5C29E2C13
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 20:33:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B6CBB35840
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 19:08:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14E57B2662B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 19:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AFC82040BB;
-	Tue,  3 Dec 2024 19:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3B51FECC3;
+	Tue,  3 Dec 2024 19:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pWv0hY6H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rEOSSMAw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF391FF7C3
-	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 19:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B705F1F8910;
+	Tue,  3 Dec 2024 19:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733252872; cv=none; b=ogd1tCTWj7rzZAW1E/0AI/UQE8cBpQps2tkeDGTzKqq89lsd/fwjmocPD6dBZnQU+CycS2TKMmtzx1PqVBknsMiIa/G/sMh8iM6L5oLYtg6F0/kTUkTbGlILfQaIRuj0R36RNQaOOJhU4J3VTF+hRXjYE7bTARzSDUkYT+DxjEs=
+	t=1733254210; cv=none; b=dRwIZKPPemSgMvPXrsk98QcH+TtqxGI2YgLCb9u4UwMkx1O2QQmeE+F5C3XAuIanWJk5CPKPfWmHsz1gU/Yw981po7wyn9OUN+Fzfg3GbeWYgymbxw+8G/bty9nR+IlFr75DZ/uwP5w2eY7FAKk6s/nDHU7LBQV1F97d0VUygsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733252872; c=relaxed/simple;
-	bh=MJR7wMKmDqS5aFmAfPznb4O85+40BOjFkprVenAI+OE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TpcUM5AAbneniGVt9DdFQfhViZAIGkJYKJO4Hhn12P6UAmb/KzMSQ0pwBtoeqGJap3701uAwuHNeVqJs4yYjYBcaaKb6FnOTrY3/y/513tfnzqfFW+7ZlyfTn5uJIoTKOGj7U4a3hmh0T38s+q6blnYh4r5TN1A6uKHmn7qsPK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pWv0hY6H; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2eea4f2bba0so2965900a91.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 11:07:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733252869; x=1733857669; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PaCdFtyuZCc6AtbaS5uMRjDy7Mq8Hk8zYjV/jOWuGVc=;
-        b=pWv0hY6H1ZbDJXZq8K56SPd9d/5CdYLTRtI5I8rRnhH8VXQWtc6OIeTsO5lYUQeUhk
-         ToQDUxS5JHRFw5tsmgB8GozyH7+ddc2Mmx2UnFLZ+TsaJf4hIAxPHq9LscBjb2ij7ll6
-         z3HO3YY/IEHQcn5q1sCOfe4/LU0RTQmAa00CUrZ6QcT0aUZBVx0xpVNGcYMs9/nhROPW
-         E6u9Uq/2zA4epZaKnYpPT7HUbQZkyIVtKcyWJPyIfO1imtEW0KwKwmdqOQZHSI3sZvta
-         WZOcq9Jq/7Q+LWj0f1tA3heaiJsy2sghzmTfUCWOwL8RAJp2q+Nlna2TzDUkssngaovM
-         Fteg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733252869; x=1733857669;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PaCdFtyuZCc6AtbaS5uMRjDy7Mq8Hk8zYjV/jOWuGVc=;
-        b=vRNS3WcP2Aj1a1bx+h7cIx+89BP3yJ33iJN0I/4vC7cUStCNzRQuXCGzpX5fXQ7xPW
-         mPMHUQe/PmiSEKcB/ZHacSfjb95hyGLSyqv4I6W1BkUhlyWtiUaskIIXPcUULCMh+3HY
-         cDE8hUrhKql/JZuB5sizaiWno5wVFfJpPaCa9Zoru3UAhf+/sLys81kcE1DFbJ3aSyYS
-         DsPNytstcqASX1glfIe4pWXnAZn8jG7BVcqv1Wy7rwZ6/WXE9wh20EuhJqp9vrxCha5n
-         gro6f72rtdcLvahF0nqnZWUNLURa7/iqfxlxGl4SG+YGqHL20R8Rhnl850AGHd40oMJO
-         sVcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWGMMBjv+7VB2Or7LteTDtcIZJ60sIXL2X9Q0Iva9zNQL/1ImYxUVaaY3mraF1h5AlleqA1718wyg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJGaoBTuvA+A4Ke9BiRhL7DcHjY2RTVQJLnoDsdWDtwLU448TY
-	RhgwSYho6eiQ9cD3j83dHy4wYqd88WcWbbRWmX4lCmj4N/qVWfBW+aPEIPva154UwihZMtAhy0P
-	guA==
-X-Google-Smtp-Source: AGHT+IHjoirwBfWtmi9PaYx/CFYut1Vj6FLcEXqUtE33259R8PXsBNLecTER6HtXRPmwtYfrA0AIIAqHdZ4=
-X-Received: from pjbsb14.prod.google.com ([2002:a17:90b:50ce:b0:2ee:3882:175b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c4a:b0:2ee:e18b:c1fa
- with SMTP id 98e67ed59e1d1-2ef0125b2e5mr4090519a91.28.1733252869223; Tue, 03
- Dec 2024 11:07:49 -0800 (PST)
-Date: Tue, 3 Dec 2024 11:07:47 -0800
-In-Reply-To: <20241121185315.3416855-7-mizhang@google.com>
+	s=arc-20240116; t=1733254210; c=relaxed/simple;
+	bh=2K+i1S/3sf74gdv4NXTCEB0ZkasLUdboMLKU7Q6QF+A=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=ekvC1lDLFht7kGFWCUwNNBr+fTwPH7mC10Z1a91jafKpMCo5Vi5WjykIdiMs+6ocoPSNoOTDHNtNUIRn4M/iOCKZeYIYkJzg3+FfdL65JwigSalijp+LqJmzqIBeamNXjOYbO0wmzbLKwKkh7G/nUTw73VQauYIpOCMVOJ4R7gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rEOSSMAw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15598C4CECF;
+	Tue,  3 Dec 2024 19:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733254210;
+	bh=2K+i1S/3sf74gdv4NXTCEB0ZkasLUdboMLKU7Q6QF+A=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=rEOSSMAw4aRVIFfjkZ/b9s5WQsVAdJl8UqHu4CEvzDgMSq+RMuqTHTq8lEghwGUKz
+	 bO/TpYbMyqWPDII5AOo6Y+XjPIF4RAWz7fHDNUjOirbOKvSIMZ/jKH5esQ+11WelbV
+	 UnYzdUOIDRvWH/Gqhmb9IPBkGk5/VTlkc9794+uD/RzQ5I2HZTDWg/WQJTIiZl/UJb
+	 yuOJf+zJOreYn2LK12Fh9NTPEhONJdWfdERUoESArOvdsDoJg7vLwjt5hQXygmHvLI
+	 2zVSBEvJ3JpWm0xgNVM+25l7YjenhetnbxAs0bpmGBFsirgmULEBQvbGItgCnGVxY6
+	 wihVM8k+X4Uhw==
+Message-ID: <afa086b0b30ab5b810178f92fac96837.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241121185315.3416855-1-mizhang@google.com> <20241121185315.3416855-7-mizhang@google.com>
-Message-ID: <Z09XA-2ao5CbXhV5@google.com>
-Subject: Re: [RFC PATCH 06/22] KVM: x86: INIT may transition from HALTED to RUNNABLE
-From: Sean Christopherson <seanjc@google.com>
-To: Mingwei Zhang <mizhang@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Huang Rui <ray.huang@amd.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Perry Yuan <perry.yuan@amd.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241203092151.izcsgzqep4imbcwe@thinkpad>
+References: <20241202100621.29209-1-johan+linaro@kernel.org> <3fd004add188460bf2bdd1a718387c7f.sboyd@kernel.org> <Z07AXbQvvZwI8Ki6@hovoldconsulting.com> <20241203092151.izcsgzqep4imbcwe@thinkpad>
+Subject: Re: [PATCH] Revert "clk: Fix invalid execution of clk_set_rate"
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Johan Hovold <johan+linaro@kernel.org>, Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, regressions@lists.linux.dev, Aishwarya TCV <aishwarya.tcv@arm.com>, Chuan Liu <chuan.liu@amlogic.com>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org
+To: Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Date: Tue, 03 Dec 2024 11:30:07 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-The shortlog is an observation, not a proper summary of the change.
+Quoting Manivannan Sadhasivam (2024-12-03 01:21:51)
+> On Tue, Dec 03, 2024 at 09:25:01AM +0100, Johan Hovold wrote:
+> > [ +CC: Viresh and Sudeep ]
+> >=20
+> > On Mon, Dec 02, 2024 at 05:20:06PM -0800, Stephen Boyd wrote:
+> > > Quoting Johan Hovold (2024-12-02 02:06:21)
+> > > > This reverts commit 25f1c96a0e841013647d788d4598e364e5c2ebb7.
+> > > >=20
+> > > > The offending commit results in errors like
+> > > >=20
+> > > >         cpu cpu0: _opp_config_clk_single: failed to set clock rate:=
+ -22
+> > > >=20
+> > > > spamming the logs on the Lenovo ThinkPad X13s and other Qualcomm
+> > > > machines when cpufreq tries to update the CPUFreq HW Engine clocks.
+> > > >=20
+> > > > As mentioned in commit 4370232c727b ("cpufreq: qcom-hw: Add CPU clo=
+ck
+> > > > provider support"):
+> > > >=20
+> > > >         [T]he frequency supplied by the driver is the actual freque=
+ncy
+> > > >         that comes out of the EPSS/OSM block after the DCVS operati=
+on.
+> > > >         This frequency is not same as what the CPUFreq framework ha=
+s set
+> > > >         but it is the one that gets supplied to the CPUs after
+> > > >         throttling by LMh.
+> > > >=20
+> > > > which seems to suggest that the driver relies on the previous behav=
+iour
+> > > > of clk_set_rate().
+> > >=20
+> > > I don't understand why a clk provider is needed there. Is anyone look=
+ing
+> > > into the real problem?
+> >=20
+> > I mentioned this to Mani yesterday, but I'm not sure if he has had time
+> > to look into it yet. And I forgot to CC Viresh who was involved in
+> > implementing this. There is comment of his in the thread where this
+> > feature was added:
+> >=20
+> >       Most likely no one will ever do clk_set_rate() on this new
+> >       clock, which is fine, though OPP core will likely do
+> >       clk_get_rate() here.
+> >=20
+> > which may suggest that some underlying assumption has changed. [1]
+> >=20
 
-  KVM: x86: Handle side effects of receiving INIT while vCPU is HALTED
+Yikes.
 
-On Thu, Nov 21, 2024, Mingwei Zhang wrote:
-> From: Jim Mattson <jmattson@google.com>
-> 
-> When a halted vCPU is awakened by an INIT signal, it might have been
-> the target of a previous KVM_HC_KICK_CPU hypercall, in which case
-> pv_unhalted would be set. This flag should be cleared before the next
-> HLT instruction, as kvm_vcpu_has_events() would otherwise return true
-> and prevent the vCPU from entering the halt state.
-> 
-> Use kvm_vcpu_make_runnable() to ensure consistent handling of the
-> HALTED to RUNNABLE state transition.
-> 
-> Fixes: 6aef266c6e17 ("kvm hypervisor : Add a hypercall to KVM hypervisor to support pv-ticketlocks")
-> Signed-off-by: Jim Mattson <jmattson@google.com>
+>=20
+> I just looked into the issue this morning. The commit that triggered the =
+errors
+> seem to be doing the right thing (although the commit message was a bit h=
+ard to
+> understand), but the problem is this check which gets triggered now:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
+rivers/clk/clk.c?h=3Dv6.13-rc1#n2319
+>=20
+> Since the qcom-cpufreq* clocks doesn't have parents now (they should've b=
+een
+> defined anyway) and there is no CLK_SET_RATE_PARENT flag set, the check r=
+eturns
+> NULL for the 'top' clock. Then clk_core_set_rate_nolock() returns -EINVAL,
+> causing the reported error.
+>=20
+> But I don't quite understand why clk_core_set_rate_nolock() fails if ther=
+e is no
+> parent or CLK_SET_RATE_PARENT is not set. The API is supposed to set the =
+rate of
+> the passed clock irrespective of the parent. Propagating the rate change =
+to
+> parent is not strictly needed and doesn't make sense if the parent is a f=
+ixed
+> clock like XO.
 
-Mingwei's SoB is missing.
+The recalc_rate clk_op is telling the framework that the clk is at a
+different rate than is requested by the clk consumer _and_ than what the
+framework thinks the clk is currently running at. The clk_set_rate()
+call is going to attempt to satisfy that request, and because there
+isn't a determine_rate/round_rate clk_op it assumes the clk can't change
+rate so it looks to see if there's a parent that can be changed to
+satisfy the rate. There isn't a parent either, so the clk_set_rate()
+call fails because the rate can't be achieved on this clk.
 
-> ---
->  arch/x86/kvm/lapic.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 95c6beb8ce279..97aa634505306 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -3372,9 +3372,8 @@ int kvm_apic_accept_events(struct kvm_vcpu *vcpu)
->  
->  	if (test_and_clear_bit(KVM_APIC_INIT, &apic->pending_events)) {
->  		kvm_vcpu_reset(vcpu, true);
-> -		if (kvm_vcpu_is_bsp(apic->vcpu))
-> -			vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-> -		else
-> +		kvm_vcpu_make_runnable(vcpu);
-
-This is arguably wrong.  APs are never runnable after receiving.  Nothing should
-ever be able to observe the "bad" state, but that doesn't make it any less
-confusing.
-
-This series also fails to address the majority cases where KVM transitions to RUNNABLE:
-
-  __set_sregs_common()
-  __sev_snp_update_protected_guest_state()
-  kvm_arch_vcpu_ioctl_set_mpstate()
-  kvm_xen_schedop_poll()
-  kvm_arch_async_page_present()
-  kvm_arch_vcpu_ioctl_get_mpstate()
-  kvm_apic_accept_events() (SIPI path)
-
-Yeah, some of those don't _need_ to be converted, and the existing behavior of
-pv_unhalted is all kinds of sketchy, but fixing a few select paths just so that
-APERF/MPERF virtualization does what y'all want it to do does not leave KVM in a
-better place.
-
-I also think we should add a generic setter, e.g. kvm_set_mp_state(), and take
-this opportunity to sanitize pv_unhalted.  Specifically, I think pv_unhalted
-should be clear on _any_ state transition, and unconditionally cleared when KVM
-enters the guest.  The PV kick should only wake a vCPU that is currently halted.
-Unfortunately, the cross-vCPU nature means KVM can't easily handle that when
-delivering APIC_DM_REMRD.
-
-Please also send these fixes as a separate series.  My crystal ball says APERF/MPERF
-virtualization isn't going to land in the near future, and I would like to get
-the mp_state handling cleaned up soonish.
-
-> +		if (!kvm_vcpu_is_bsp(apic->vcpu))
->  			vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
->  	}
->  	if (test_and_clear_bit(KVM_APIC_SIPI, &apic->pending_events)) {
-> -- 
-> 2.47.0.371.ga323438b13-goog
-> 
+It may work to have a determine_rate clk_op that is like the recalc_rate
+one that says "this rate you requested is going to turn into whatever
+the hardware is running at" by simply returning the rate that the clk is
+running at.
 
