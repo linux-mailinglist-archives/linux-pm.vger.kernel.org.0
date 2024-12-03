@@ -1,246 +1,397 @@
-Return-Path: <linux-pm+bounces-18397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18398-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C681C9E1277
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 05:39:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EEA49E127B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 05:41:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18901B2051F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 04:39:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E4DB282F68
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 04:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378FB43AB0;
-	Tue,  3 Dec 2024 04:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163691547CF;
+	Tue,  3 Dec 2024 04:41:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WBMIb/Do"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xjwv1XfZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718051F95A;
-	Tue,  3 Dec 2024 04:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733200772; cv=fail; b=dPXHUHb2RJQ+Q/qlZ3xxStYznXnc0h9dNVLs5qWnVJiJLO60o17iDdzo9Rqi5WlLABqNnlSdxKdQlCfCx0Hj74NSs2VSFULROUhiQZ8oE1VwhFvaig8MZW/aIizRMvZINjoCnlRbF8Cub3tUwZrwhuQtZ1lfGVweVJ4mMED/azI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733200772; c=relaxed/simple;
-	bh=n82JtkAYQz1uiuTGAALAWWnvYGl6IuXHlpE6ZfO5Y7M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=WjXsO7BUwKgHOY2oQJldRYJ7PTGfxKLKLDCYtsvKJ4TE817XFznPoMvsI6xlzi+0DW2fsLWJyjQOmtOUScq07JVdLrvbgHw11Xu7EDGQKqnVFCHxlxg8lNT29taZQNqoBBIUo2X3ouPTBk8Pl/tR3DVJ1+V8YxAzuEorAaJ7Ia0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WBMIb/Do; arc=fail smtp.client-ip=40.107.220.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Mgxhg0CRsMPjA0sBDNAeQn3q1IYsedYQC6YYqN4mSa89kKsep8bp90swbe/hD1E7Jn8i9MirEGdd7uWsSzfqk6WxDvWptSd5s3zWmlrvlhExVwvdeCuiwry0ALsESXvyjiZ39K4cYKoHXkzLm7MdponCcE5vSphHfztbBdezfpG20R1faue3/LUF9x5nYODnZydXU9MKDgKTayDR9eq+9U2saNmboLvet+5Zlsgm9HIyYyanUyJWGFAPOZGLW6SrFQS8pHROH3i9YvgcmYfChutta+mhh8Sbz35LfFv/qjUPDxs7zMM88A/s28MSSk7o3CA5MDfsS83VW3ZbJAMfog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=caZwv75r9ZfF3PZBoRTxrOEGMcUlriGpEMWE87k1CEk=;
- b=MPU+xro/5RQBOvVO7t7s7rETn1qCSAr2SVEPcNMANwQj72TVHiVWpxqZi5pg2lbUpVlKaj5LfneD8NwRVe5Z4edDmp7gDp21hIp0h9tUcGFHN0GRtbm2Yv3wXAUfDgo4/+kZGDs0icVR3JTPuIA0rA8TAWBNfwvoUP92/ZMnS8MixkNjBb2X2fskw92f/C4A7v5aLay3xmjPAMIf4QohQ49y2hX8YFfiLZrBY7qVjwzLhiUNt/7/4eYYUjrySsVbDx2ZdC3D/t7QmJpm3uJM8skqVzIpRvwhF/odqpwrEwHHPsebwxPhC6ge/jVdYtmFwXqE/JymJn56V3LlmEWgYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=caZwv75r9ZfF3PZBoRTxrOEGMcUlriGpEMWE87k1CEk=;
- b=WBMIb/DoN4aNm7bZdoSE+l4lOZiOtOCUMq5J9XP/nTmBxcJkjTLADUGQN+HJxsQkCtEprf9o4MLq5CuDDfJibLDNeizGtopTq/w+Y9eYQkhBBm0ygj/9fMI29WlzluSi9enl4557qiIfk/LUCaCo6UBltADJIFyky8Kg1k+t3nU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- SJ2PR12MB8033.namprd12.prod.outlook.com (2603:10b6:a03:4c7::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Tue, 3 Dec
- 2024 04:39:28 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8207.017; Tue, 3 Dec 2024
- 04:39:28 +0000
-Date: Tue, 3 Dec 2024 10:09:19 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	rafael.j.wysocki@intel.com, peterz@infradead.org,
-	dave.hansen@linux.intel.com, tglx@linutronix.de,
-	len.brown@intel.com, artem.bityutskiy@linux.intel.com
-Subject: Re: [PATCH v7 2/4] ACPI: processor_idle: Add FFH state handling
-Message-ID: <Z06Ld/hobdnAQF5w@BLRRASHENOY1.amd.com>
-References: <20241129182232.14987-1-patryk.wlazlyn@linux.intel.com>
- <20241129182232.14987-3-patryk.wlazlyn@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241129182232.14987-3-patryk.wlazlyn@linux.intel.com>
-X-ClientProxiedBy: PN3PR01CA0129.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:bf::8) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4672AF0B
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 04:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733200909; cv=none; b=QQcKrB5xWNPOiA7WKypfGZDuCDFnDTIujAe4lq/CvokFSaDUM3OB0TEC7r7e569ViHXXazysGSiD2i1SfhBl0qGOPWjkMmXL5M/Eog5e51zZwYFxvjsKyP1xQUfyvFjLI0RANe4bBlLnl/L01e4HQ5onIRKQTROTUJZtgYD2yBo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733200909; c=relaxed/simple;
+	bh=KkEHBJb5iizoXNlEGcsYR+n/M+K+3aREiySKSqjQ54s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ku4hVt08H7DdtF13+yrWRWedv/TXFy4Am3a0UhyjfOawjc0GUVp4GaBJ9+cMiRFiepZ3kGVPHm2Vpp0EnyyjwvvsI2aSA06KPeXn8fXFk3A8G8MhFhLEZyKQGcQR5kWGltEW3SuQmHORgTzYrEuz3RS0/pgvTWjhOFTQN4xcQGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xjwv1XfZ; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a73e045cf3so22841015ab.1
+        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 20:41:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733200906; x=1733805706; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8U3UF7Pxyr798vO9RJ4++5ToJjZOuQoyng/CosrxMXg=;
+        b=xjwv1XfZPgo2Ti3zxqcWei3fQ+1qKtF+hWMgyeJx2Ko6Di2RqkxAwFonIQieWOrCYE
+         9HJHS+Ssg0SFt5sI1aUvTO+H7IePfttObCw4LqrR5WXMJ6L3Q7p9wk6EWgO5BhlX6abj
+         EOneXhZQp63/E9idKbS+jxqLcF5cXXrNaTQD7gzME0nKB6H9nKQV6AQ1ErRJY4U5+v+l
+         AXx+Lqzwg3l9nADSm6YxsaS/wAhknlMW+DIgwKCNJRfyJXfRR7MxHQY3P4WbDLGPu7tw
+         p7+UjCYmghm8PoDDJh7THdPCJbMNczJDBL9fbNdf4DPPJf1LM5H86vFVbhMi8l2e62PY
+         XNDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733200906; x=1733805706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8U3UF7Pxyr798vO9RJ4++5ToJjZOuQoyng/CosrxMXg=;
+        b=R6DFz+Kh2xgLqIOp7o07WjiNdMQHtwpFaJwMuk0LuSqfJsAlftG1E7ZoAxstJcjFCW
+         csMkP8GtwWaAaEEkBoDb1319SMh71QT9y0AvEtFABr/84YnTb74b9dhj/d2xlo21nkp2
+         D9r+GvrvTWvag4is8faYn5WLnw5WqPoQ/RwrDEpPfjV1RzbiC2eLa7JOkGklL7WRuH9k
+         g4GCrN7Kv9+w1EQWg6Pm3MtuY2UHWFQHJQJbu4GeujOgFC2bq7YlAsl+Ranrlfq4iUEl
+         blTbQGndXmUJMq8V5ORE8xlvJLX+4a0oDgWfkisEV+fyfG8mmZbAeYKXPw/xhZstWTex
+         CdcA==
+X-Forwarded-Encrypted: i=1; AJvYcCWpahtGoDReBFoA3ZInemWoL1V8SUfMbbHK5Jdy3WM0kIK9cuvKG+8L52+MPa8Kpu4OEcNQb6icVQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YySot0PdMGF67uE1zFwHsnbMTAPddRBF1236GGDS93HxlvsVhcZ
+	HuwwgiwjDCETwXrpjkFoqNDTzlQwpxdfJecTLSUasez0tlSlY8AAE9mFuCYSCzs=
+X-Gm-Gg: ASbGncv3PDx0G7XtDbMNzOt0S0E2f4jIIYkJ5S7Ub4eNT1aYupWkxiRKl0a3QHLv9Gc
+	9mzP28/yiOkGhMoAnoo6yrXpRHE6WkIc3cbmU2Ykua/1uJYJjy0tL0o7X2vCrPdNP+OmF0s9NeP
+	Pbp+YNEmOAz+hDCYjthQP2HLMeOvrP10PVs6Oj2mxaVHoDvkc/0mXpPe9zD15CM3xTDs/whHauE
+	Wc4VkSNGYwOzLjCFJufpEpH9e1ep2qagIU7MEQ358a4Mvq+26/9
+X-Google-Smtp-Source: AGHT+IFlYwGjdh72SYebStmh8bsKByHr//8BObGnEzaaFtQKpUvdCiK03e9ZPwtd3kvcOo6bxIOWOw==
+X-Received: by 2002:a05:6e02:198f:b0:3a7:7e0f:777d with SMTP id e9e14a558f8ab-3a7f9a4c697mr10745545ab.11.1733200906191;
+        Mon, 02 Dec 2024 20:41:46 -0800 (PST)
+Received: from localhost ([122.172.86.146])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c30e4cfsm7515252a12.36.2024.12.02.20.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 20:41:45 -0800 (PST)
+Date: Tue, 3 Dec 2024 10:11:43 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Christian Marangi <ansuelsmth@gmail.com>, ulf.hansson@linaro.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: Document support for Airoha
+ EN7581 CPUFreq
+Message-ID: <20241203044143.yptllspwjef3bya7@vireshk-i7>
+References: <20241202151228.32609-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SJ2PR12MB8033:EE_
-X-MS-Office365-Filtering-Correlation-Id: debe79ea-06e8-408a-89db-08dd135478ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?EZLuSn3fZouccCV8wef4C6SOMU04ERfNDaSUz02kaaG5oSHgEwT+r28rSI6M?=
- =?us-ascii?Q?6XHq1/2PEdse9UA1aqGoIFGylHBbAc1dqt/YKOD3hWQe1jPYZWRmoiAT3gM2?=
- =?us-ascii?Q?M1WNeZyl7XbISmL4c44J73F7MhL1LXMZYmbRZt0aAZNmf/35vzHR32vqVMOL?=
- =?us-ascii?Q?7VYRkbikwfMt45wdS8nWTJpA5pPMSPzZjsvqWO+q8EpbtGKTOosZwbrkSQJO?=
- =?us-ascii?Q?pmvgENiT3bsoQXOvv2VYWoamcH81+6vCOHZ5DqCG5Q0NYYBJrZP3O/47O+bo?=
- =?us-ascii?Q?h0t4dxAu2uCWinT2Q1vN/ZPBmhkBHdalrqFBOA31/SG2CDvUoarFUarer895?=
- =?us-ascii?Q?+7s8gu/f/zpEVkAiuo94e1tg7PFEpmpTWCzDoTM4PfbXNfdMR7dT81nn9B2m?=
- =?us-ascii?Q?YhJW8bXVNCqxLL7X8c9vIchQvJXIMV69xXOUD/zdp/RLUOgWopZDYouSaWSo?=
- =?us-ascii?Q?aZ4feU/1s3yN42jRE9prPT1aAB0lxQQet7Z14YvuI2nx7XjYhTq9DQkqyi3w?=
- =?us-ascii?Q?uiOK8C+Gk/piSssJaw1kbrQX6Ih+rKcMb8g7sTtgUCAx1r8UBoP1gPTlO5Xg?=
- =?us-ascii?Q?jFJi1J5okCPFPuE9fA0+DxG5L4yvVNmSOS8kBdu9ZyOlI4fDMiBn4gJVY/wt?=
- =?us-ascii?Q?G/iPEMnBE0sMHE+W9kkRJrGgcPFr6EJPOb3Fy18d1PXYQHm25aSwduEiOMVK?=
- =?us-ascii?Q?fgyjv2RdaFAf1JCtMGTAU45seaW01Pu3MdPSvnZ8562cZn9xMlGiSBbHICAh?=
- =?us-ascii?Q?xC2UsV7JZUzvZzHUZuHnS6lf++Daz/tVdilur5HQld90kMe+0amVMdti3xmB?=
- =?us-ascii?Q?zrqZU5aQLKRcBakg3a24tCwmvO0xLbrzyKCevsuDYObyGoe2TrKdUrwE+otW?=
- =?us-ascii?Q?+lZCkQVFN+hvQTPDRh8D5twA4hazHdNVqePTTFwNzVfWOmoaCoqLt6h5PIC+?=
- =?us-ascii?Q?m64BSBW2JgD0OTzWZE+ohsHne/3S8Y6mib+8AdTY2WHbmLObdthEKOf9JH4g?=
- =?us-ascii?Q?aNm1bIX4VDMlk1ZWE7qCon4/poen85hm6kkETpI3lxHWvRafzqEHEUdoVMFk?=
- =?us-ascii?Q?se+ueSKOp+aItko0XMf/tI2FgDx2/O3lhS20FLTSvSrKasjte7cs2ABLgJLv?=
- =?us-ascii?Q?GXAJxcgXQR8uO3Ec1HoKda1bYCa3gbxcDH6coXYigiuW2TzbOTfKGwDAgOnk?=
- =?us-ascii?Q?P8yHjXfOlUyLXXAWwQH3/zOg01aDVLdwSFM4a6fy6cTC1HarjVbQ9UfErufJ?=
- =?us-ascii?Q?XgyCLSad/jHdf2C5Nx/ggTjp82YKbuF84CIMceLSFI+kqUeZXXZeQB8EVPaM?=
- =?us-ascii?Q?QtaIoVzDCJoZ1MEwJcDbXQnLiIrLjp2RNCRpzD0o39GKqg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?+noawn8wjnCjiHaHEdgJGHmTzwi2q0aq9hJdsl1kudSUJfH8/q2xXmAlPTK6?=
- =?us-ascii?Q?bmCm3GPDCU/wL7Ao3vzadN6d8kMimLnaEO818XrRPqnTmWN1BHGyfepqTLcH?=
- =?us-ascii?Q?BOgSTE0ZxyCjB4tlX/SITBkoVdy3tPR+LB5OCg7dyTXdCSvN90nbwc7DKhW0?=
- =?us-ascii?Q?YmJR5yo0iO7+bjOeamQxSqEOB7hD5DUiRPfOuY2oaXGaYt0fOjliAIdj3zEu?=
- =?us-ascii?Q?UKLCJjpkGUhNUCEgsmLbOnXtlZGpq1RtK6E4XwgnUqusMXZWz9czVK3K6PxI?=
- =?us-ascii?Q?DYhEyIFHBGz7w84rKGE/rn4kYWWUkom/UA1zmLnuUtd/yenT48w0oancnjt6?=
- =?us-ascii?Q?DbibS4x30CEDmfYZEYY8DZpLQMTWP7GS8jIJSAngRFsMYmt/xQRTL5Nx4QHw?=
- =?us-ascii?Q?/L3LqlcaPMsyvMEV8CFupiS4ZVVRyrDsnSRXkqlt7NxSVy8Jlkp2MmWIAKwt?=
- =?us-ascii?Q?YMdkb47eFz9EHFAZoaidHYR76/ihXdPzeGhQiUbmcfMlH8YQbEeP976f87Iy?=
- =?us-ascii?Q?nAQGn7Bb8yc466/4Dp1G/IVmBC0WGZMRWVCKk1yigYqQIjAxtrFxGL49uwQe?=
- =?us-ascii?Q?i9v41qBRqRT15d/aL2jHvw+lbGffBvZ6G/t9Fs4+WqduLUP1kJ+sKgqYE9r/?=
- =?us-ascii?Q?yoDuIhlnLGNqWw3aJJo4APbKEzGvcBEcNOXQLte7rzZRjyTc0e3x9M6RMyYe?=
- =?us-ascii?Q?VbPMX1Ao/0qu4Fx+It45nhqSiRi1vdLotOE+awMz6c7aL5ZZ3RTcXurkf2PT?=
- =?us-ascii?Q?ljDDj0GwvFAOcAHfrvfwrjwhh3Iid79LJbsvJ4xr9xcKspiHz//49M0OfDX8?=
- =?us-ascii?Q?/iZD5fVUPzZYxYsSfepdazStt7Nmo4AfniCLTCKrwOr2P20vlFzRIGu4aW1u?=
- =?us-ascii?Q?9VUkZ0TtyhelIQ2EbbihEOS1eAdxdcdXf2bWtZmmwiFHLIhE9cT1mrSRVRb/?=
- =?us-ascii?Q?oE+i15JpZZOW+hkefOY80BJ26ubAJDixYc5Hrdnq+SXa2lhOz1ex76Qsx1G7?=
- =?us-ascii?Q?8dk3P0CpEK4Cl9t4JMhWYeU0PGIgdfN81CPzR/lkczrT0LvJ/eSlv+/6w6fp?=
- =?us-ascii?Q?i9cq7nGAOnrDFJLmzGyekKBc+J6eqKQpcg0P1U31bKYHc3tiGatFUyz5RT2o?=
- =?us-ascii?Q?HTzxox3QlODskUfcjoNDySurS5YN9L7ZgYs/yww2xqnFsJlXKnix5ViVnoMr?=
- =?us-ascii?Q?tJa8ktCWdlzQ94EySDnF92nRRxxthAxbPfFdT3oFbKpTMET+kO/h4LdR2VEF?=
- =?us-ascii?Q?2RP2j73LXJupqDjjpAQ6MvkDWQOOcd8U8wrownAR5ZENVOtkai4Y1GWw4pZB?=
- =?us-ascii?Q?pmu8P+TitDKBAX83EDmdfxYFVIUsGWOBT64DfBEsViNdV6ofPofMY+mNtJM/?=
- =?us-ascii?Q?Y3QT+TvDr9/6Fq/9CcH47I+Q4epA0nG4zm47S8rfmBfKfsPoIG6tYmdmFX+T?=
- =?us-ascii?Q?PDRCT8DjJx2bEl+qH4IuZ17TFe7RPt4rYkW7cPqYUUJMHuAHuLOt1FDpPj61?=
- =?us-ascii?Q?P+G2ywHQqwsN0Pdfzq9RZuh0UMbje3gNzxAPSWs5T7sKfm5dwutOwEjIZ2CJ?=
- =?us-ascii?Q?WsrKWcshUU+AjTLtph5w0b8DJvPo8qiUtcGl5iCS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: debe79ea-06e8-408a-89db-08dd135478ba
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 04:39:28.3204
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5qkJTvqlTSF5stxMZqLN4VQipSZR18123sm3lSxifo8NGEI9EM35MqXRP0kL6xD0YZ0mBoUCbQCMspNB8gWrWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8033
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241202151228.32609-1-ansuelsmth@gmail.com>
 
-On Fri, Nov 29, 2024 at 07:22:30PM +0100, Patryk Wlazlyn wrote:
-> Recent Intel platforms will depend on the idle driver to pass the
-> correct hint for playing dead via mwait_play_dead_with_hint(). Expand
-> the existing enter_dead interface with handling for FFH states and pass
-> the MWAIT hint to the mwait_play_dead code.
++Ulf,
+
+On 02-12-24, 16:12, Christian Marangi wrote:
+> Document required property for Airoha EN7581 CPUFreq .
 > 
-> Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-> Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-
-Looks good to me.
-
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-
---
-Thanks and Regards
-gautham.
-
+> On newer Airoha SoC, CPU Frequency is scaled indirectly with SMCCC commands
+> to ATF and no clocks are exposed to the OS.
+> 
+> The SoC have performance state described by ID for each OPP, for this a
+> Power Domain is used that sets the performance state ID according to the
+> required OPPs defined in the CPU OPP tables.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  arch/x86/kernel/acpi/cstate.c | 10 ++++++++++
->  drivers/acpi/processor_idle.c |  2 ++
->  include/acpi/processor.h      |  5 +++++
->  3 files changed, 17 insertions(+)
+> Changes v4:
+> - Add this patch
 > 
-> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-> index f3ffd0a3a012..8d7b8b02ddb9 100644
-> --- a/arch/x86/kernel/acpi/cstate.c
-> +++ b/arch/x86/kernel/acpi/cstate.c
-> @@ -15,6 +15,7 @@
->  #include <acpi/processor.h>
->  #include <asm/mwait.h>
->  #include <asm/special_insns.h>
-> +#include <asm/smp.h>
->  
->  /*
->   * Initialize bm_flags based on the CPU cache properties
-> @@ -204,6 +205,15 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
->  }
->  EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_probe);
->  
-> +void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
-> +{
-> +	unsigned int cpu = smp_processor_id();
-> +	struct cstate_entry *percpu_entry;
+>  .../cpufreq/airoha,en7581-cpufreq.yaml        | 259 ++++++++++++++++++
+>  1 file changed, 259 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+> new file mode 100644
+> index 000000000000..a5bdea7f34b5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+> @@ -0,0 +1,259 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/airoha,en7581-cpufreq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	percpu_entry = per_cpu_ptr(cpu_cstate_entry, cpu);
-> +	mwait_play_dead(percpu_entry->states[cx->index].eax);
-> +}
+> +title: Airoha EN7581 CPUFreq
 > +
->  void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cx)
->  {
->  	unsigned int cpu = smp_processor_id();
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index ce728cf7e301..83213fa47c1b 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -590,6 +590,8 @@ static void acpi_idle_play_dead(struct cpuidle_device *dev, int index)
->  			raw_safe_halt();
->  		else if (cx->entry_method == ACPI_CSTATE_SYSTEMIO) {
->  			io_idle(cx->address);
-> +		} else if (cx->entry_method == ACPI_CSTATE_FFH) {
-> +			acpi_processor_ffh_play_dead(cx);
->  		} else
->  			return;
->  	}
-> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
-> index a17e97e634a6..63a37e72b721 100644
-> --- a/include/acpi/processor.h
-> +++ b/include/acpi/processor.h
-> @@ -280,6 +280,7 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
->  				    struct acpi_processor_cx *cx,
->  				    struct acpi_power_register *reg);
->  void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cstate);
-> +void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx);
->  #else
->  static inline void acpi_processor_power_init_bm_check(struct
->  						      acpi_processor_flags
-> @@ -300,6 +301,10 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
->  {
->  	return;
->  }
-> +static inline void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
-> +{
-> +	return;
-> +}
->  #endif
->  
->  static inline int call_on_cpu(int cpu, long (*fn)(void *), void *arg,
+> +maintainers:
+> +  - Christian Marangi <ansuelsmth@gmail.com>
+> +
+> +description: |
+> +  On newer Airoha SoC, CPU Frequency is scaled indirectly with SMCCC commands
+> +  to ATF and no clocks are exposed to the OS.
+> +
+> +  The SoC have performance state described by ID for each OPP, for this a
+> +  Power Domain is used that sets the performance state ID according to the
+> +  required OPPs defined in the CPU OPP tables.
+> +
+> +properties:
+> +  compatible:
+> +    const: airoha,en7581-cpufreq
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +  '#power-domain-cells':
+> +    const: 0
+> +
+> +  operating-points-v2: true
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - '#power-domain-cells'
+> +  - operating-points-v2
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    / {
+> +        #address-cells = <2>;
+> +      	#size-cells = <2>;
+> +
+> +        cpus {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            cpu0: cpu@0 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a53";
+> +                reg = <0x0>;
+> +                operating-points-v2 = <&cpu_opp_table>;
+> +                enable-method = "psci";
+> +                clocks = <&cpufreq>;
+> +                clock-names = "cpu";
+> +                power-domains = <&cpufreq>;
+> +                power-domain-names = "cpu_pd";
+> +                next-level-cache = <&l2>;
+> +                #cooling-cells = <2>;
+> +            };
+> +
+> +            cpu1: cpu@1 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a53";
+> +                reg = <0x1>;
+> +                operating-points-v2 = <&cpu_opp_table>;
+> +                enable-method = "psci";
+> +                clocks = <&cpufreq>;
+> +                clock-names = "cpu";
+> +                power-domains = <&cpufreq>;
+> +                power-domain-names = "cpu_pd";
+> +                next-level-cache = <&l2>;
+> +                #cooling-cells = <2>;
+> +            };
+> +
+> +            cpu2: cpu@2 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a53";
+> +                reg = <0x2>;
+> +                operating-points-v2 = <&cpu_opp_table>;
+> +                enable-method = "psci";
+> +                clocks = <&cpufreq>;
+> +                clock-names = "cpu";
+> +                power-domains = <&cpufreq>;
+> +                power-domain-names = "cpu_pd";
+> +                next-level-cache = <&l2>;
+> +                #cooling-cells = <2>;
+> +            };
+> +
+> +            cpu3: cpu@3 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a53";
+> +                reg = <0x3>;
+> +                operating-points-v2 = <&cpu_opp_table>;
+> +                enable-method = "psci";
+> +                clocks = <&cpufreq>;
+> +                clock-names = "cpu";
+> +                power-domains = <&cpufreq>;
+> +                power-domain-names = "cpu_pd";
+> +                next-level-cache = <&l2>;
+> +                #cooling-cells = <2>;
+> +            };
+> +        };
+> +
+> +        cpu_opp_table: opp-table {
+> +            compatible = "operating-points-v2";
+> +            opp-shared;
+> +
+> +            opp-500000000 {
+> +                opp-hz = /bits/ 64 <500000000>;
+> +                required-opps = <&smcc_opp0>;
+
+In your case I think you can simply mention opp-level here itself and remove the
+OPP table for the genpd. Right Ulf ?
+
+> +            };
+> +
+> +            opp-550000000 {
+> +                opp-hz = /bits/ 64 <550000000>;
+> +                required-opps = <&smcc_opp1>;
+> +            };
+> +
+> +            opp-600000000 {
+> +                opp-hz = /bits/ 64 <600000000>;
+> +                required-opps = <&smcc_opp2>;
+> +            };
+> +
+> +            opp-650000000 {
+> +                opp-hz = /bits/ 64 <650000000>;
+> +                required-opps = <&smcc_opp3>;
+> +            };
+> +
+> +            opp-7000000000 {
+> +                opp-hz = /bits/ 64 <700000000>;
+> +                required-opps = <&smcc_opp4>;
+> +            };
+> +
+> +            opp-7500000000 {
+> +                opp-hz = /bits/ 64 <750000000>;
+> +                required-opps = <&smcc_opp5>;
+> +            };
+> +
+> +            opp-8000000000 {
+> +                opp-hz = /bits/ 64 <800000000>;
+> +                required-opps = <&smcc_opp6>;
+> +            };
+> +
+> +            opp-8500000000 {
+> +                opp-hz = /bits/ 64 <850000000>;
+> +                required-opps = <&smcc_opp7>;
+> +            };
+> +
+> +            opp-9000000000 {
+> +                opp-hz = /bits/ 64 <900000000>;
+> +                required-opps = <&smcc_opp8>;
+> +            };
+> +
+> +            opp-9500000000 {
+> +                opp-hz = /bits/ 64 <950000000>;
+> +                required-opps = <&smcc_opp9>;
+> +            };
+> +
+> +            opp-10000000000 {
+> +                opp-hz = /bits/ 64 <1000000000>;
+> +                required-opps = <&smcc_opp10>;
+> +            };
+> +
+> +            opp-10500000000 {
+> +                opp-hz = /bits/ 64 <1050000000>;
+> +                required-opps = <&smcc_opp11>;
+> +            };
+> +
+> +            opp-11000000000 {
+> +                opp-hz = /bits/ 64 <1100000000>;
+> +                required-opps = <&smcc_opp12>;
+> +            };
+> +
+> +            opp-11500000000 {
+> +                opp-hz = /bits/ 64 <1150000000>;
+> +                required-opps = <&smcc_opp13>;
+> +            };
+> +
+> +            opp-12000000000 {
+> +                opp-hz = /bits/ 64 <1200000000>;
+> +                required-opps = <&smcc_opp14>;
+> +            };
+> +        };
+> +
+> +        cpu_smcc_opp_table: opp-table-cpu-smcc {
+
+So this won't be required I guess.
+
+> +            compatible = "operating-points-v2";
+> +
+> +            smcc_opp0: opp0 {
+> +               opp-level = <0>;
+> +            };
+> +
+> +            smcc_opp1: opp1 {
+> +                opp-level = <1>;
+> +            };
+> +
+> +            smcc_opp2: opp2 {
+> +               opp-level = <2>;
+> +            };
+> +
+> +            smcc_opp3: opp3 {
+> +               opp-level = <3>;
+> +            };
+> +
+> +            smcc_opp4: opp4 {
+> +                opp-level = <4>;
+> +            };
+> +
+> +            smcc_opp5: opp5 {
+> +                opp-level = <5>;
+> +            };
+> +
+> +            smcc_opp6: opp6 {
+> +               opp-level = <6>;
+> +            };
+> +
+> +            smcc_opp7: opp7 {
+> +               opp-level = <7>;
+> +            };
+> +
+> +            smcc_opp8: opp8 {
+> +                opp-level = <8>;
+> +            };
+> +
+> +            smcc_opp9: opp9 {
+> +               opp-level = <9>;
+> +            };
+> +
+> +            smcc_opp10: opp10 {
+> +                opp-level = <10>;
+> +            };
+> +
+> +            smcc_opp11: opp11 {
+> +                opp-level = <11>;
+> +            };
+> +
+> +            smcc_opp12: opp12 {
+> +                opp-level = <12>;
+> +            };
+> +
+> +            smcc_opp13: opp13 {
+> +                opp-level = <13>;
+> +            };
+> +
+> +            smcc_opp14: opp14 {
+> +                opp-level = <14>;
+> +            };
+> +        };
+> +
+> +        cpufreq: cpufreq {
+
+And I would name it like a genpd, instead of cpufreq. But I am not sure what's
+the right name is..
+
+> +            compatible = "airoha,en7581-cpufreq";
+> +
+> +            operating-points-v2 = <&cpu_smcc_opp_table>;
+> +
+> +            #power-domain-cells = <0>;
+> +            #clock-cells = <0>;
+> +        };
+> +    };
 > -- 
-> 2.47.1
-> 
+> 2.45.2
+
+-- 
+viresh
 
