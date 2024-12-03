@@ -1,173 +1,136 @@
-Return-Path: <linux-pm+bounces-18419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8829E1561
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:14:23 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0A889E1543
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:11:19 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83CD2B23B8B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:00:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73F53166248
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024321E0499;
-	Tue,  3 Dec 2024 07:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B812A1DAC93;
+	Tue,  3 Dec 2024 08:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uu+yYS4S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ha7Qq0p3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A72319CCF9;
-	Tue,  3 Dec 2024 07:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3491DA636;
+	Tue,  3 Dec 2024 08:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733212686; cv=none; b=UN0gvC3lYh9SGBmqx0ewBGUimEbAQRUYBTWOn0Tqxw9DW83OigxTMv3/5xgmEKPjUWrW6kdsoHOUSFAlbGpspzym2fsYPWcQgYLKZBAH4WRk3D7YWSP5L/KU+oLr6vSrvseKnsSjVtxMKsepKlE+4AWYZbm4MhEFlmxp7G9rY2U=
+	t=1733213086; cv=none; b=s/J40ICWyjWlWxa7KB9fkpOIFbTV1YA6PRdYvLpApzJcSQikROeT7m4nMBqfuzSOGrE8d7YfcB/m0ZOK0iOer9/6YGKJ2tvNiH/gswBN4p13kMpld5+n8j0EDsSmfVi/VtsiwvCmG5LtuT29vdhnL7iN05WWenDmEjj6Cv3xOto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733212686; c=relaxed/simple;
-	bh=QXDy5IjLLk2Mod7vhumHaQqfStgg1w95tN0WENVgpsI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IHtENlxUD4pGtBwA+U0QMyGZkqKyg7bQFe1kz+G9MOhJ4TtgOknz1MTAExrFnEHeOPIvLI5QboiL7ZJP+03Zrdq7hDrK/tXb4OEQnBUXg8wVs9dS9vgrbjFGyfyy5mHYXQ8jd+Groqn56pVyMrJJP5QHEK4w4ZrZZFT0zP9q9iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uu+yYS4S; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733212685; x=1764748685;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QXDy5IjLLk2Mod7vhumHaQqfStgg1w95tN0WENVgpsI=;
-  b=Uu+yYS4S0oW7iXcgKG2IS3MoefrEc54I5YeclS10NgXVvVRo7/IxWLNm
-   lD/JpZm30hcTYcBCrTywwheuwHR+Ad34zmZWOJtvzHyBMqTwnYTpYBW3I
-   d7tHR33Fzh520iNcjhfdpXjOJ4IDupkLgC1FV3wxA8cbtbhK/yeFo19Aa
-   dIdnVXT/098BFhvzpP/3tjJUOfQIBKS4e4KGV+gCSVnbQIGLNqHzk/QBt
-   rFddAw1QoKeImWsdYrZtFDVBzZUhYhQ4b015LjNLF72SFX9Y9O28zulBv
-   QWOEEncO15o7PcJcLyzXlcN7wPSjIhqmP96IHctrzwEFY3GGd0Y8FcB5A
-   g==;
-X-CSE-ConnectionGUID: 9OSyNrOPQUueSNRp3MRieg==
-X-CSE-MsgGUID: wHFBUcF5QYqd3cJ1aBl4ig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="32758209"
-X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="32758209"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:58:05 -0800
-X-CSE-ConnectionGUID: ynGyqaoJRAe9xXYFdZy6+Q==
-X-CSE-MsgGUID: 6truSVWUR0mYamNP+jgYsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="93759614"
-Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa007.jf.intel.com with ESMTP; 02 Dec 2024 23:58:03 -0800
-From: Zhang Rui <rui.zhang@intel.com>
-To: rafael.j.wysocki@intel.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	srinivas.pandruvada@intel.com
-Subject: [PATCH 3/3] ACPI: DPTF: Support Panther Lake
-Date: Tue,  3 Dec 2024 15:58:02 +0800
-Message-ID: <20241203075802.584741-4-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241203075802.584741-1-rui.zhang@intel.com>
-References: <20241203075802.584741-1-rui.zhang@intel.com>
+	s=arc-20240116; t=1733213086; c=relaxed/simple;
+	bh=LvEfLAz0g5jWylQkuc4jmKfRUuAwIhqD5Odb9MxBipU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LGftQJS1AIn7BnMyaYhUtnMXIh3tQjPXo2xLeRTigg3lqUFL+Cb41GA1DLtY2r2PqG9PonUE9U8n5JWmmlWVouf1UlPV/xufyzPnwgspO0HvnJ/Yk6YQPwSCTrxvOj3gUY8QngvHOVzmdlU+XmN83mP1C4xvrG4eiDzC88jYxbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ha7Qq0p3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFB22C4CED6;
+	Tue,  3 Dec 2024 08:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733213086;
+	bh=LvEfLAz0g5jWylQkuc4jmKfRUuAwIhqD5Odb9MxBipU=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=ha7Qq0p3hspUwfLb7xYgvZI/6TJ+eLtHFRsw1hvMMxAyH/MYKdn4Xreui/c8T+SIB
+	 0mNQAVq20t7EWv8n3ttUJJ3ORd1J+Re259S2p9RC1ZeUk3VwoFWTdi5syKggep8DQy
+	 +X13Gj7lpORjf4/OcygaIbMnUmx/zR9/Q6MZLXhXjn9TdgmoDVk3LuN2FJbjCmdoyo
+	 7TKOEjQyVc/AM42+igX1s4q1Dh150iS9z3GZ1KrBvYNM7ZuqGt0tzoqkH9DJreTzpd
+	 4rMpEQfPhANaLNqJoKjr5526ti/RO/eXxYlP47bwtcX8yLw9lwpM1+SRCgnAecd9ML
+	 oVzZWDAIzKoPQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB89CE6C616;
+	Tue,  3 Dec 2024 08:04:45 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Date: Tue, 03 Dec 2024 09:04:36 +0100
+Subject: [PATCH] power: supply: max1720x: add charge full property
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241203-max1720x-charge-full-prop-v1-1-b02776b43f17@liebherr.com>
+X-B4-Tracking: v=1; b=H4sIAJO7TmcC/yWOQQ6DIBBFr0JYFwOIAVz1Ho2LEcaWRNSCNibGu
+ 5fWzSRvfubNP2jGFDDTlhw04SfkME8FxI1Q94LpiSz4wlRyqUQZLMIutOQ7K3Eq8bCNI1vSvDB
+ sBLcWRC2coOV+STiE/e9+dBcnfG/lxXotaQ8ZmZtjDGtLFK+NckZxBGGV8to1UFuJxuoGPTcG3
+ cD7Wv/UGSfPruZsnVviQ4RqQJ9guz8jhLEqVtqd5xcJ9lfv4AAAAA==
+X-Change-ID: 20241202-max1720x-charge-full-prop-e51099a131c1
+To: Sebastian Reichel <sre@kernel.org>, 
+ Thomas Antoine <t.antoine@uclouvain.be>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733213084; l=2122;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=RkkK3ElM3J0WHWfD2Z/jYMO3Bs/oJAsns7dWA0uLXxM=;
+ b=R2TCaDXPn2Qv3gJ51ltJ4JB+0wLrzZC7+cyy7KSIYDcb9xrdrCO8K9MA66Ba+k70QHKg3legf
+ otvN7CcWBaMB9TBziV61YoV7k08ePRK/0G46kND7GVL/GcTbXfBfpjj
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
 
-Add Panther Lake ACPI IDs for DPTF devices.
+From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Charge full holds the calculated full capacity of the cell based on all
+inputs from the ModelGauge m5 algorithm including empty compensation. A
+new full-capacity value is calculated continuously as application
+conditions change.
+
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 ---
- drivers/acpi/dptf/dptf_pch_fivr.c                       | 1 +
- drivers/acpi/dptf/dptf_power.c                          | 2 ++
- drivers/acpi/dptf/int340x_thermal.c                     | 6 ++++++
- drivers/acpi/fan.h                                      | 1 +
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
- 6 files changed, 12 insertions(+)
+ drivers/power/supply/max1720x_battery.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_pch_fivr.c
-index 624fce67ce43..952216c67d58 100644
---- a/drivers/acpi/dptf/dptf_pch_fivr.c
-+++ b/drivers/acpi/dptf/dptf_pch_fivr.c
-@@ -152,6 +152,7 @@ static const struct acpi_device_id pch_fivr_device_ids[] = {
- 	{"INTC1064", 0},
- 	{"INTC106B", 0},
- 	{"INTC10A3", 0},
-+	{"INTC10D7", 0},
- 	{"", 0},
+diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
+index 33105419e2427bb37963bda9948b647c239f8faa..9c7e14d2c7b87b8194511f36ade16e774281333e 100644
+--- a/drivers/power/supply/max1720x_battery.c
++++ b/drivers/power/supply/max1720x_battery.c
+@@ -29,6 +29,7 @@
+ #define MAX172XX_TEMP			0x08	/* Temperature */
+ #define MAX172XX_CURRENT		0x0A	/* Actual current */
+ #define MAX172XX_AVG_CURRENT		0x0B	/* Average current */
++#define MAX172XX_FULL_CAP		0x10	/* Calculated full capacity */
+ #define MAX172XX_TTE			0x11	/* Time to empty */
+ #define MAX172XX_AVG_TA			0x16	/* Average temperature */
+ #define MAX172XX_CYCLES			0x17
+@@ -250,6 +251,7 @@ static const enum power_supply_property max1720x_battery_props[] = {
+ 	POWER_SUPPLY_PROP_TEMP,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_AVG,
++	POWER_SUPPLY_PROP_CHARGE_FULL,
+ 	POWER_SUPPLY_PROP_MODEL_NAME,
+ 	POWER_SUPPLY_PROP_MANUFACTURER,
  };
- MODULE_DEVICE_TABLE(acpi, pch_fivr_device_ids);
-diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_power.c
-index 3d3edd81b172..e8caf4106ff9 100644
---- a/drivers/acpi/dptf/dptf_power.c
-+++ b/drivers/acpi/dptf/dptf_power.c
-@@ -236,6 +236,8 @@ static const struct acpi_device_id int3407_device_ids[] = {
- 	{"INTC106D", 0},
- 	{"INTC10A4", 0},
- 	{"INTC10A5", 0},
-+	{"INTC10D8", 0},
-+	{"INTC10D9", 0},
- 	{"", 0},
- };
- MODULE_DEVICE_TABLE(acpi, int3407_device_ids);
-diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int340x_thermal.c
-index 014ada759954..aef7aca2161d 100644
---- a/drivers/acpi/dptf/int340x_thermal.c
-+++ b/drivers/acpi/dptf/int340x_thermal.c
-@@ -55,6 +55,12 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- 	{"INTC10A3"},
- 	{"INTC10A4"},
- 	{"INTC10A5"},
-+	{"INTC10D4"},
-+	{"INTC10D5"},
-+	{"INTC10D6"},
-+	{"INTC10D7"},
-+	{"INTC10D8"},
-+	{"INTC10D9"},
- 	{""},
- };
- 
-diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-index db25a3898af7..488b51e2cb31 100644
---- a/drivers/acpi/fan.h
-+++ b/drivers/acpi/fan.h
-@@ -19,6 +19,7 @@
- 	{"INTC1063", }, /* Fan for Meteor Lake generation */ \
- 	{"INTC106A", }, /* Fan for Lunar Lake generation */ \
- 	{"INTC10A2", }, /* Fan for Raptor Lake generation */ \
-+	{"INTC10D6", }, /* Fan for Panther Lake generation */ \
- 	{"PNP0C0B", } /* Generic ACPI fan */
- 
- #define ACPI_FPS_NAME_LEN	20
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 8660ef2175be..5805e08d71be 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -690,6 +690,7 @@ static const struct acpi_device_id int3400_thermal_match[] = {
- 	{"INTC1042", 0},
- 	{"INTC1068", 0},
- 	{"INTC10A0", 0},
-+	{"INTC10D4", 0},
- 	{}
- };
- 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index 04aa0afb3b1d..5a925a8df7b3 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -275,6 +275,7 @@ static const struct acpi_device_id int3403_device_ids[] = {
- 	{"INTC1062", 0},
- 	{"INTC1069", 0},
- 	{"INTC10A1", 0},
-+	{"INTC10D5", 0},
- 	{"", 0},
- };
- MODULE_DEVICE_TABLE(acpi, int3403_device_ids);
+@@ -362,6 +364,10 @@ static int max1720x_battery_get_property(struct power_supply *psy,
+ 		ret = regmap_read(info->regmap, MAX172XX_AVG_CURRENT, &reg_val);
+ 		val->intval = max172xx_current_to_voltage(reg_val) / info->rsense;
+ 		break;
++	case POWER_SUPPLY_PROP_CHARGE_FULL:
++		ret = regmap_read(info->regmap, MAX172XX_FULL_CAP, &reg_val);
++		val->intval = max172xx_capacity_to_ps(reg_val);
++		break;
+ 	case POWER_SUPPLY_PROP_MODEL_NAME:
+ 		ret = regmap_read(info->regmap, MAX172XX_DEV_NAME, &reg_val);
+ 		reg_val = FIELD_GET(MAX172XX_DEV_NAME_TYPE_MASK, reg_val);
+
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20241202-max1720x-charge-full-prop-e51099a131c1
+
+Best regards,
 -- 
-2.43.0
+Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
 
 
