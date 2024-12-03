@@ -1,119 +1,170 @@
-Return-Path: <linux-pm+bounces-18453-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18451-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA2549E1C02
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 13:22:00 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB639E1DAC
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 14:36:40 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A614C161D56
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 12:21:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D42FB25FA7
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 11:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08A51E47B9;
-	Tue,  3 Dec 2024 12:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494D01632E6;
+	Tue,  3 Dec 2024 11:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BE355tkF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="swIpzDOq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625834F218;
-	Tue,  3 Dec 2024 12:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2044E1DA0F5
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 11:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733228515; cv=none; b=iqK+/b9j5V3KoGPkIXvD2cqVOzSnKWtGbDQz4/Q0UCT6+SX67/NJxvgBZxBRHGmhSqpogQ7wSVsySxFt94feNwCSIYcBPQGsDNsmYEdWbXGjlujfTnswzdfjTmFmYgNW34LZw82EkwJD7K++mx0rU+UEdTpvFQTm3koWv8IXQRg=
+	t=1733226907; cv=none; b=XAkfDU26vhZWa5EJDg6tTfXOSsxhW//OXbrNbXKGGEnrHX0Ji6en9/RZNEWId40tDJfizxrJSSVOEJi8/Oabqf/Qkb/KqNw/lRvMAoBIKESwqkgrlPzxH74EICjy13WHB/QIQHAoLG8zV9mk9BrMDBGdHY1uZaw31SS/iQgSU3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733228515; c=relaxed/simple;
-	bh=MpIXVp6qOzjwdqyxitDOtzmLzxJa7XWFAuMvx362IEI=;
+	s=arc-20240116; t=1733226907; c=relaxed/simple;
+	bh=N/o9QrpTvLGERh33N1iKh6DaRqNYdNgXwjWQfAK0g9k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WMD7td/PtxMYf0l1emoAbLv2hfwH4DPqWlSXfKQDDp6GVtjlJ4oxNhqFEFdGw5Dgq0IAsri8bUg0NpoX8TYo2BltNI/8zPiBWU4UtWR/C1NlGxbLH3ayaxjAE/8AvJC+CNF5NimOR/WNJsadilQ/hRLu+cOyq5G+cy1miOESWq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BE355tkF; arc=none smtp.client-ip=209.85.222.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-85b988ec4f0so559818241.1;
-        Tue, 03 Dec 2024 04:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733228513; x=1733833313; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MpIXVp6qOzjwdqyxitDOtzmLzxJa7XWFAuMvx362IEI=;
-        b=BE355tkFrSSVnuJuQQMWEtC2yOodZU+b7z0fhvFbvXv6q8EFgk/GgJnokwMHFLnMTl
-         z8Ce42MgXxAUz/KIAFejC7wsqaiEA3ZtbnMUl0+C71Puw8Qe6jClqJl/r+U3YG+VdUUB
-         9HrUdy2Ss15Go3Mh0HEDykJHgT9o5Jzn7t+oMI+YiCchwOpVnzU+1AVDsTE3mB+jFuOB
-         fMRxfHpP2f3a3It1ZuA+GprrKB5JHqfhpZ1tvEl0nmN/FJByu+zuBWNkhu6WMWM+aL0p
-         GOnv4B0Wh/oZmBhmymQY3hr3BMnK51glLdaBbxetSTQT6h/axQVtxUwMG1M8bYtjIRax
-         G/Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733228513; x=1733833313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MpIXVp6qOzjwdqyxitDOtzmLzxJa7XWFAuMvx362IEI=;
-        b=dp8psN6VqofIF0Wv4pkdj0Ia963Pv2jp8aKJDu0GOUn6AaqRQdjiSeowNIX1lsGIX8
-         myWM2qOuX5C748ubcRtB1sMEu9SyPovH4E9/q2PQ56LLBWoUdPop/zowGdPtKwTx0+T0
-         Sblh7V7opL8BumjaIPDgTVP/E35dY8HPjxlk5gSAWKeeNVEPGIdd4toB4h3y3BLyH8Ne
-         Fs+c4b9SlG/DXZxTGgqjJxGYa3e3fLYoQQ3rGEkZrvRCkjG0NFf8W3Z3w45ZMBpy/13I
-         dxTcbiJxi9KJ4th6Vy+ws+GLXhgx7oqSi84MM0b0eoEe0xE5NB0A9kidv7b3xKMi/at/
-         B3bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKznPFiUQE7aVd3gyBY28Kun8Zm7Ua5Tf2BlJ4lE30BG8Nttzdn/qL0oA0Tqhz/nKGssGOhvCvEZHr@vger.kernel.org, AJvYcCVLsCv6B6JUbKrLcA2lXhaVeX7FPXrf5ptlutTzCYx7r/okvwI8yesylfgpUyJ/F7iwA3Rq9SWY2/m2Nw==@vger.kernel.org, AJvYcCViwbvQHH8nsWF6b32WnGfrve1NOun58cgMFwHfcWdVlKWAHWv6TYuNTxrbxEXk8OQSFH/HWAqBCMK4a6nS@vger.kernel.org, AJvYcCWKNGCjxmhmEymIE9XmwNsEu+Z6sX5L9E20TVAGxJfGsRQxSGymaL1POiNXat1anrQuyoSqIRCyQE8=@vger.kernel.org, AJvYcCXQcA9twTyMGLaRyPfHUNzv+1ynmbCNnLiHTBcwvePYYbxOsFHFtW7x/TqrTvyXschfFwlA2vToM19ie2A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxE7ygWV5ZBMXwUDH+vGABc7LJaao2jQozeN7l/IcsGsLNxTno
-	xA18u+yfr8uaqBQ977JLaXeFpYjQb1xRZYvnH73nnNxnsARCMaSWI6OLx9yRuWAKORzX67w+IBE
-	b3sS7Dpm3V4255LjIWZ3OXLIdRmY=
-X-Gm-Gg: ASbGncuHLKnOtYJxjQLI+ympqPo4vwBEmjP9LiTPpXJ3FqI0yApalzkjHI2yx66rBx9
-	R5cTflgg9A0bq35qolhlCOS6hjJLk5w==
-X-Google-Smtp-Source: AGHT+IHvSfIxxZEFrMUMf9JkQ6m84tL4tuWoNpHCUoaLftm4kgpv9pueuEl2AvhcVOPltmicw6auZhK0Kuc4LSVYVTI=
-X-Received: by 2002:a05:6102:38d4:b0:4af:48a6:79d4 with SMTP id
- ada2fe7eead31-4af971fc9c4mr2434948137.6.1733228513292; Tue, 03 Dec 2024
- 04:21:53 -0800 (PST)
+	 To:Cc:Content-Type; b=pwu7J3q6Ig9vYwJsDbiNluYMFd4QaTw1pb7VovPbUb9zTKxKmxiqK50Bm6rbYloYE/UhOLcem7xTVGzh+Bl/SLVTezPhks9inPFkGU25CefP9ljQRZkgSC+Zc/N1NOFEwqKuaSyKvOUeACWhG+8xuq8Fg32kRs2AlXVTumZycDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=swIpzDOq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA50C4CEDA
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 11:55:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733226906;
+	bh=N/o9QrpTvLGERh33N1iKh6DaRqNYdNgXwjWQfAK0g9k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=swIpzDOqw+Ean7bXywtFyc96sxzlE+L9v2fFpXgTLoFrh4L8ISWn8Xl6P69kGerS1
+	 p57OgE5hQwnvXODczvo39EhrCMS07BNHWB4UvrGANNhRkddda+3Jc68mNkjelb/YtJ
+	 2FQ3SfAmbEz2pVB8OcB/WM0IRxQMpC9xyNP+iUY1fx7I0UxGwhKB6DKVcfgyLSfcPF
+	 gDzkIEZg8kC3k79Jh1uwO22VVPJ+v17v66O1yf3muzjkyW3UcbiGPj6KWMdUthzliw
+	 n0IM6+qkCzYDX6sPgZbF0siM7zWo5a3SpLQdr7iSTYtulf0iJa4Jqqfvkh2EDGRdqE
+	 MnFO/UPALfhMQ==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5f1dc7c6c67so1677652eaf.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 03:55:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXarMTSblQAFIzPL1oYJtw9uKE2+JlbnRHuPX68426ycKpGL0ac4K2qWXdX056m+o5l6Ez92jud6A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyReJvYpVVidj6bVdNkPTXRO55YdxlpStAV7GJkaYCjIUUsPpBz
+	0r3Ielz3OwC8uCTWN16QECUzY4qGWWzZl6DkGQ2hTl1UJmxLgUjt3EdmhAM236OfwAIj9ng+Nx1
+	gZ3VisnrbTFV4Lqv7DOJGnFhSXEo=
+X-Google-Smtp-Source: AGHT+IGwR11wmC26MnR8qrUzuGc81R3ZFhKQnYAGjMelBFIRYZk3yBB7hTR2KVin5ABaPEhvg7rYJaJEzZPTOUD7+lk=
+X-Received: by 2002:a05:6870:46ac:b0:29e:6b6a:d6f4 with SMTP id
+ 586e51a60fabf-29e8890fbccmr1953346fac.37.1733226905887; Tue, 03 Dec 2024
+ 03:55:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241202-starqltechn_integration_upstream-v9-0-a1adc3bae2b8@gmail.com>
- <20241202-starqltechn_integration_upstream-v9-9-a1adc3bae2b8@gmail.com> <b7e4162a-a7f7-462d-9dde-121eeb59d148@kernel.org>
-In-Reply-To: <b7e4162a-a7f7-462d-9dde-121eeb59d148@kernel.org>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Tue, 3 Dec 2024 15:21:42 +0300
-Message-ID: <CABTCjFDyoF7g-5tj_dr6k7ScB_313dwEmfdJ+49rwMYfN63x1Q@mail.gmail.com>
-Subject: Re: [PATCH v9 9/9] leds: max77705: Add LEDs support
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, Lee Jones <lee@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org
+References: <SJ1PR11MB6129CCD82CD78D8EE6E27EF4B9362@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <SJ1PR11MB612965ACA3E84745346F0400B9362@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <5e405ad4-34d6-4507-978f-3d81d4af2455@t-8ch.de>
+In-Reply-To: <5e405ad4-34d6-4507-978f-3d81d4af2455@t-8ch.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Dec 2024 12:54:54 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iXKvaxz-hmW2+qwTcSmtPJ23Hv04CMnmT=qPE0ytNwLg@mail.gmail.com>
+Message-ID: <CAJZ5v0iXKvaxz-hmW2+qwTcSmtPJ23Hv04CMnmT=qPE0ytNwLg@mail.gmail.com>
+Subject: Re: Regression on linux-next (next-20241120) and drm-tip
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>, 
+	"Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>, "Coelho, Luciano" <luciano.coelho@intel.com>, 
+	"Saarinen, Jani" <jani.saarinen@intel.com>, "Nikula, Jani" <jani.nikula@intel.com>, 
+	"De Marchi, Lucas" <lucas.demarchi@intel.com>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-=D0=BF=D0=BD, 2 =D0=B4=D0=B5=D0=BA. 2024=E2=80=AF=D0=B3. =D0=B2 13:30, Krzy=
-sztof Kozlowski <krzk@kernel.org>:
+On Tue, Dec 3, 2024 at 7:51=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@weisssc=
+huh.net> wrote:
 >
-> On 02/12/2024 10:48, Dzmitry Sankouski wrote:
-> > This adds basic support for LEDs for the max77705 PMIC.
+> (+Cc Sebastian)
+>
+> Hi Chaitanya,
+>
+> On 2024-12-03 05:07:47+0000, Borah, Chaitanya Kumar wrote:
+> > Hope you are doing well. I am Chaitanya from the linux graphics team in=
+ Intel.
 > >
-> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> > This mail is regarding a regression we are seeing in our CI runs[1] on =
+linux-next repository.
+>
+> Thanks for the report.
+>
+> > Since the version next-20241120 [2], we are seeing the following regres=
+sion
 > >
-> > ---
-> > Changes for v8:
-> > - join line where possible to fit in 100 chars
+> > ```````````````````````````````````````````````````````````````````````=
+``````````
+> > <4>[   19.990743] Oops: general protection fault, probably for non-cano=
+nical address 0xb11675ef8d1ccbce: 0000 [#1] PREEMPT SMP NOPTI
+> > <4>[   19.990760] CPU: 21 UID: 110 PID: 867 Comm: prometheus-node Not t=
+ainted 6.12.0-next-20241120-next-20241120-gac24e26aa08f+ #1
+> > <4>[   19.990771] Hardware name: Intel Corporation Arrow Lake Client Pl=
+atform/MTL-S UDIMM 2DPC EVCRB, BIOS MTLSFWI1.R00.4400.D85.2410100007 10/10/=
+2024
+> > <4>[   19.990782] RIP: 0010:power_supply_get_property+0x3e/0xe0
+> > ```````````````````````````````````````````````````````````````````````=
+``````````
+> > Details log can be found in [3].
+> >
+> > After bisecting the tree, the following patch [4] seems to be the first=
+ "bad"
+> > commit
+> >
+> > ```````````````````````````````````````````````````````````````````````=
+``````````````````````````````````
+> > Commit 49000fee9e639f62ba1f965ed2ae4c5ad18d19e2
+> > Author:     Thomas Wei=C3=9Fschuh <mailto:linux@weissschuh.net>
+> > AuthorDate: Sat Oct 5 12:05:03 2024 +0200
+> > Commit:     Sebastian Reichel <mailto:sebastian.reichel@collabora.com>
+> > CommitDate: Tue Oct 15 22:22:20 2024 +0200
+> >     power: supply: core: add wakeup source inhibit by power_supply_conf=
+ig
+> > ```````````````````````````````````````````````````````````````````````=
+``````````````````````````````````
+> >
+> > This is now seen in our drm-tip runs as well. [5]
+> >
+> > Could you please check why the patch causes this regression and provide=
+ a fix if necessary?
 >
->
-> Coding style asks for 80. checkpatch is not a coding style, unless this
-> came from maintainer's review.
->
+> I don't see how this patch can lead to this error.
 
-On v6 discussion, Lee Jones stated 'This is old guidance':
-https://patchwork.kernel.org/project/linux-input/patch/20241007-starqltechn=
-_integration_upstream-v6-7-0d38b5090c57@gmail.com/
+It looks like the cfg->no_wakeup_source access reaches beyond the
+struct boundary for some reason.
 
---=20
-Best regards and thanks for review,
-Dzmitry
+
+
+> Could you doublecheck the bisect?
+>
+> Note: Having line numbers in the trace would be very useful.
+>
+> > Thank you.
+> >
+> > Regards
+> >
+> > Chaitanya
+>
+> Thanks,
+> Thomas
+>
+>
+> >
+> > P.S. We could not revert the patch cleanly and therefore we are yet to =
+verify the bisect but we are currently working on it.
+> >
+> >
+> > [1] https://intel-gfx-ci.01.org/tree/linux-next/combined-alt.html?
+> > [2]https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/=
+commit/?h=3Dnext-20241120
+> > [3] https://intel-gfx-ci.01.org/tree/linux-next/next-20241120/bat-arls-=
+6/boot0.txt
+> > [4] https://cgit.freedesktop.org/drm-tip/commit/?id=3D49000fee9e639f62b=
+a1f965ed2ae4c5ad18d19e2
+> > [5] https://intel-gfx-ci.01.org/tree/drm-tip/index.html?
+>
 
