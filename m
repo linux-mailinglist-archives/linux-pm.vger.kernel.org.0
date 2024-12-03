@@ -1,78 +1,77 @@
-Return-Path: <linux-pm+bounces-18396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 873739E1275
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 05:37:41 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6F7E164B10
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 04:37:37 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53953166F29;
-	Tue,  3 Dec 2024 04:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NK9zEHPp"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2064.outbound.protection.outlook.com [40.107.220.64])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C681C9E1277
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 05:39:38 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B121514EE;
-	Tue,  3 Dec 2024 04:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.64
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18901B2051F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 04:39:36 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378FB43AB0;
+	Tue,  3 Dec 2024 04:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WBMIb/Do"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718051F95A;
+	Tue,  3 Dec 2024 04:39:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.72
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733200654; cv=fail; b=BvEtcCkFE4wXcx1Hjf2t8L531hbUR3aSseRWm/8UDEsYhXapIycpeSRIIaK7qtPwDYwx6QYK7q89Bh8cPHc4zcx3yui13kN82PTNCcX3rZA48Oc9uoKcEGJwBWaReJfFTM13OvHzi/7TgDTEdLD6Gytq8EjK8E8wnBcjzoVZZSs=
+	t=1733200772; cv=fail; b=dPXHUHb2RJQ+Q/qlZ3xxStYznXnc0h9dNVLs5qWnVJiJLO60o17iDdzo9Rqi5WlLABqNnlSdxKdQlCfCx0Hj74NSs2VSFULROUhiQZ8oE1VwhFvaig8MZW/aIizRMvZINjoCnlRbF8Cub3tUwZrwhuQtZ1lfGVweVJ4mMED/azI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733200654; c=relaxed/simple;
-	bh=cnZ2JztMJoYdjxjCSyLTkYsbWAH0ZHb0DZTOMk8dVPE=;
+	s=arc-20240116; t=1733200772; c=relaxed/simple;
+	bh=n82JtkAYQz1uiuTGAALAWWnvYGl6IuXHlpE6ZfO5Y7M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=BtIqUCqFHGOvSLBeRDyOXiemCkkFSv4dicm+Rec3rkZv8GRyYq9Ctgu46MUYb4TkBAFdEOURw01U75bMig+K4Ez1ctlGuAgOo9M/+R8LyKkpW/Yq5hkGMRqPTQV5MjRE28+KqRudZxq8psm5PWIpO/YxhH8BCsNilZZMY5L8eXg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NK9zEHPp; arc=fail smtp.client-ip=40.107.220.64
+	 Content-Disposition:In-Reply-To:MIME-Version; b=WjXsO7BUwKgHOY2oQJldRYJ7PTGfxKLKLDCYtsvKJ4TE817XFznPoMvsI6xlzi+0DW2fsLWJyjQOmtOUScq07JVdLrvbgHw11Xu7EDGQKqnVFCHxlxg8lNT29taZQNqoBBIUo2X3ouPTBk8Pl/tR3DVJ1+V8YxAzuEorAaJ7Ia0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WBMIb/Do; arc=fail smtp.client-ip=40.107.220.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DtbsY/C21na2LSbDR4Ew447/JjZWIfTPalwqAUoyFhg83+GSzmYfU6uLDjBs223SRfipMhJDA1tyzfkfyGV8VKDIrx+DZvbQrfelVJdFzYjK4Aj0bB6FVo/IttnDBC7Ti2ryqGZzV5xNKXtbCl1qaMXFmJf9L3d0469MxqN74nf3wZWjGWY89OV/FJrWjZFIMkZN1ud1htfwphQyIPcE3F47z3U7Ph28V4MRBwGLpIz1agwEXU0tpLpy7W/+ew5OmHWW1x6a/zCrVPZkfzQ6y/XPs/RKEnRGZhhiZmmgzh2xXdZRbPx4abLELN8NeCDePTWqg/KS1jFBqYF0dPRhbw==
+ b=Mgxhg0CRsMPjA0sBDNAeQn3q1IYsedYQC6YYqN4mSa89kKsep8bp90swbe/hD1E7Jn8i9MirEGdd7uWsSzfqk6WxDvWptSd5s3zWmlrvlhExVwvdeCuiwry0ALsESXvyjiZ39K4cYKoHXkzLm7MdponCcE5vSphHfztbBdezfpG20R1faue3/LUF9x5nYODnZydXU9MKDgKTayDR9eq+9U2saNmboLvet+5Zlsgm9HIyYyanUyJWGFAPOZGLW6SrFQS8pHROH3i9YvgcmYfChutta+mhh8Sbz35LfFv/qjUPDxs7zMM88A/s28MSSk7o3CA5MDfsS83VW3ZbJAMfog==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eq+tWep50DpcU4m3sb9iMyNGv8krFiNpqgo2+MXpFos=;
- b=xrBnNA43OGT0r5nUcGDyxhO1RzguGnm6DORVDIWuN+xzqMpB+yS2itlC1AboBsQKHi4rU138biPxgSLDXEqFRZv/OgC9Vt9eba13oce1AZcQHYEwAFKx+mSFQv0F/T/2aaHV0l8e+HAmvy8K51UFteL93WD+l7RyNnKJlpdTv2a89eZd8g3UaWVZsqCmunOJja4LVxC8Ff4F9JZ3cA/LIDN7v5DMeS8KsUjb6zF/0XY4jCQDeFWSbo+44P+9wPmdrGlXRnBKjxVVsPI0tmuERKPPastgVyidObtLkbMNcNDmPG8qtPfko3ypGQFPmyGvIjPWG0Zt1dPaJBfhcOonKw==
+ bh=caZwv75r9ZfF3PZBoRTxrOEGMcUlriGpEMWE87k1CEk=;
+ b=MPU+xro/5RQBOvVO7t7s7rETn1qCSAr2SVEPcNMANwQj72TVHiVWpxqZi5pg2lbUpVlKaj5LfneD8NwRVe5Z4edDmp7gDp21hIp0h9tUcGFHN0GRtbm2Yv3wXAUfDgo4/+kZGDs0icVR3JTPuIA0rA8TAWBNfwvoUP92/ZMnS8MixkNjBb2X2fskw92f/C4A7v5aLay3xmjPAMIf4QohQ49y2hX8YFfiLZrBY7qVjwzLhiUNt/7/4eYYUjrySsVbDx2ZdC3D/t7QmJpm3uJM8skqVzIpRvwhF/odqpwrEwHHPsebwxPhC6ge/jVdYtmFwXqE/JymJn56V3LlmEWgYg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eq+tWep50DpcU4m3sb9iMyNGv8krFiNpqgo2+MXpFos=;
- b=NK9zEHPp3E/ZNs2KOEDfauVL6vVat2lSXDeljg7L6m+Z7OIcNnKHXMOD3WCn1mk5U3mvMpo4mdrGRrg1FroJU8pmqGaclpsn9743MQ4T9diZJA2pe5I3UuiyoI3u89ARakP+wNkIRrZbxlHm9oaq2UKYKt6S4za4FDpCzjVXAZA=
+ bh=caZwv75r9ZfF3PZBoRTxrOEGMcUlriGpEMWE87k1CEk=;
+ b=WBMIb/DoN4aNm7bZdoSE+l4lOZiOtOCUMq5J9XP/nTmBxcJkjTLADUGQN+HJxsQkCtEprf9o4MLq5CuDDfJibLDNeizGtopTq/w+Y9eYQkhBBm0ygj/9fMI29WlzluSi9enl4557qiIfk/LUCaCo6UBltADJIFyky8Kg1k+t3nU=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
  SJ2PR12MB8033.namprd12.prod.outlook.com (2603:10b6:a03:4c7::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Tue, 3 Dec
- 2024 04:37:29 +0000
+ 2024 04:39:28 +0000
 Received: from DS7PR12MB8252.namprd12.prod.outlook.com
  ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
  ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8207.017; Tue, 3 Dec 2024
- 04:37:29 +0000
-Date: Tue, 3 Dec 2024 10:07:20 +0530
+ 04:39:28 +0000
+Date: Tue, 3 Dec 2024 10:09:19 +0530
 From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	rafael.j.wysocki@intel.com, peterz@infradead.org,
 	dave.hansen@linux.intel.com, tglx@linutronix.de,
 	len.brown@intel.com, artem.bityutskiy@linux.intel.com
-Subject: Re: [PATCH v7 1/4] x86/smp: Allow calling mwait_play_dead with an
- arbitrary hint
-Message-ID: <Z06LAJybfN1mdWAk@BLRRASHENOY1.amd.com>
+Subject: Re: [PATCH v7 2/4] ACPI: processor_idle: Add FFH state handling
+Message-ID: <Z06Ld/hobdnAQF5w@BLRRASHENOY1.amd.com>
 References: <20241129182232.14987-1-patryk.wlazlyn@linux.intel.com>
- <20241129182232.14987-2-patryk.wlazlyn@linux.intel.com>
+ <20241129182232.14987-3-patryk.wlazlyn@linux.intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241129182232.14987-2-patryk.wlazlyn@linux.intel.com>
-X-ClientProxiedBy: PN3PR01CA0106.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::14) To DS7PR12MB8252.namprd12.prod.outlook.com
+In-Reply-To: <20241129182232.14987-3-patryk.wlazlyn@linux.intel.com>
+X-ClientProxiedBy: PN3PR01CA0129.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:bf::8) To DS7PR12MB8252.namprd12.prod.outlook.com
  (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -82,88 +81,88 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SJ2PR12MB8033:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3d3fa95-4510-45fe-d1a8-08dd135431d3
+X-MS-Office365-Filtering-Correlation-Id: debe79ea-06e8-408a-89db-08dd135478ba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hsyav+vAanmYIL8xTnydy46lRfihMWRArDilvh/zqqmXNt8AK6IyWY7dkOE9?=
- =?us-ascii?Q?Th14Fx5mYD34sqg7M3NHeZ5LBqkljF4pHiBfUsDEdgNzgTSgGHqh7HdPLyv0?=
- =?us-ascii?Q?7Ih60ebij/dvxUVrq4rjxBM+JfcEoekbmS/wBqJJBvYf16DP58ZGS31FH9Lw?=
- =?us-ascii?Q?9T7g/eLfYsEsT54Zt7bl9BQAIGbrpif2Q5l4TkkuqZpB7Bi2gnPkBMf4ShW7?=
- =?us-ascii?Q?S3DFOFBek3n3R4z1aOkchydbgH1pIMXGUwzJ1YRj+hcpKiPZdrNa8FWGkJyV?=
- =?us-ascii?Q?uC3UNobEa2yWP9gCAHcE6Jpnpi/SHDWWeIhFLTEaAN6wck6s5SBq6Ld9QmUG?=
- =?us-ascii?Q?DGXmnxZpjrV6y00kS1Hkn1cI5YXEHO3rpMATf7p3gXQcuTeYEeSSI/yv7Tse?=
- =?us-ascii?Q?ghI8LZjZDxxxlw6WX5/wS6hBZ29i+vZsuxcH6Nlzhv9KQ2uLMZ1OY+Z7Okzl?=
- =?us-ascii?Q?no1NPlylDXrEXrAaEH0hf+I83QCj/naH1wdfxLLALtfeBDNfxRI+K5ZD5PHr?=
- =?us-ascii?Q?c9iRXvWP5AHaje50RNC7tktIV/lHBm8eO5046ZXUCcNqpeqmIOORk74zJ+Gf?=
- =?us-ascii?Q?8jLKrl49b34/qERmKCaYBQPMxO6WNAQzB9l68DJti51HocJV9vYctmSRf0zN?=
- =?us-ascii?Q?OINe8XRSIYJgDkMMGBroZdk0bkwxJSJBCoZZpBjM0gFYsEjN4I+2NnuXhEy4?=
- =?us-ascii?Q?OgCKCx3myjXUoCcwDjc25gcSvmJspvNumEU8vanQG7ocKGuuzjCfQigT2avh?=
- =?us-ascii?Q?j+EEvgZiIyRZHzXS4K8p1K6GisohLcyeXBCIXQ8vmVsQFjcHzXx0tZdZ9Tar?=
- =?us-ascii?Q?AgEWVRnCJBpN+zUYEIzJrMF6Oi682Pp0wPWF8OzA9EXEH//BNq9x9wlV0eah?=
- =?us-ascii?Q?tjla6qUC+RN2nzCP1gyjdEt3tP1ba49Xg5J6xQypCE/V3idSha8nHhg384M8?=
- =?us-ascii?Q?Irpl+eQ3YocCOWpXcXpK/O+srhoj7FGedQVV7YhMSTlTGX0qW8l8RYzYK1Ac?=
- =?us-ascii?Q?KtX1ktUV6fx1zCgdY3C90SW2yDfxTx47sEspYKlxIFhBudbdzovjfOt4kPms?=
- =?us-ascii?Q?fKczrNuPMArc8jRgkgv07OcTRqxj8vb9WCZDcyd/XAwHVanMKz8rfjV6x/fE?=
- =?us-ascii?Q?AMcACQxuacIy+l74n3H2cq+JEtdGXTRrEh2BMnX7s8E7STLfP0vzjHTu0RfK?=
- =?us-ascii?Q?43yZWmxRMuQWiqP91+umdoRyafMXHmTW47vbWtvlxQPBSPSrq/Bk505ER/pz?=
- =?us-ascii?Q?L9H48WYaYjvZyGZKzgUM0Z55ikxIjtUR8BPlFvFb/EDpo/hmcTtewmUwiaf3?=
- =?us-ascii?Q?Rm9R5ML8HihiQzWzmlPC2EVaVFcg+qq6HTxZYfuP38pFSw=3D=3D?=
+	=?us-ascii?Q?EZLuSn3fZouccCV8wef4C6SOMU04ERfNDaSUz02kaaG5oSHgEwT+r28rSI6M?=
+ =?us-ascii?Q?6XHq1/2PEdse9UA1aqGoIFGylHBbAc1dqt/YKOD3hWQe1jPYZWRmoiAT3gM2?=
+ =?us-ascii?Q?M1WNeZyl7XbISmL4c44J73F7MhL1LXMZYmbRZt0aAZNmf/35vzHR32vqVMOL?=
+ =?us-ascii?Q?7VYRkbikwfMt45wdS8nWTJpA5pPMSPzZjsvqWO+q8EpbtGKTOosZwbrkSQJO?=
+ =?us-ascii?Q?pmvgENiT3bsoQXOvv2VYWoamcH81+6vCOHZ5DqCG5Q0NYYBJrZP3O/47O+bo?=
+ =?us-ascii?Q?h0t4dxAu2uCWinT2Q1vN/ZPBmhkBHdalrqFBOA31/SG2CDvUoarFUarer895?=
+ =?us-ascii?Q?+7s8gu/f/zpEVkAiuo94e1tg7PFEpmpTWCzDoTM4PfbXNfdMR7dT81nn9B2m?=
+ =?us-ascii?Q?YhJW8bXVNCqxLL7X8c9vIchQvJXIMV69xXOUD/zdp/RLUOgWopZDYouSaWSo?=
+ =?us-ascii?Q?aZ4feU/1s3yN42jRE9prPT1aAB0lxQQet7Z14YvuI2nx7XjYhTq9DQkqyi3w?=
+ =?us-ascii?Q?uiOK8C+Gk/piSssJaw1kbrQX6Ih+rKcMb8g7sTtgUCAx1r8UBoP1gPTlO5Xg?=
+ =?us-ascii?Q?jFJi1J5okCPFPuE9fA0+DxG5L4yvVNmSOS8kBdu9ZyOlI4fDMiBn4gJVY/wt?=
+ =?us-ascii?Q?G/iPEMnBE0sMHE+W9kkRJrGgcPFr6EJPOb3Fy18d1PXYQHm25aSwduEiOMVK?=
+ =?us-ascii?Q?fgyjv2RdaFAf1JCtMGTAU45seaW01Pu3MdPSvnZ8562cZn9xMlGiSBbHICAh?=
+ =?us-ascii?Q?xC2UsV7JZUzvZzHUZuHnS6lf++Daz/tVdilur5HQld90kMe+0amVMdti3xmB?=
+ =?us-ascii?Q?zrqZU5aQLKRcBakg3a24tCwmvO0xLbrzyKCevsuDYObyGoe2TrKdUrwE+otW?=
+ =?us-ascii?Q?+lZCkQVFN+hvQTPDRh8D5twA4hazHdNVqePTTFwNzVfWOmoaCoqLt6h5PIC+?=
+ =?us-ascii?Q?m64BSBW2JgD0OTzWZE+ohsHne/3S8Y6mib+8AdTY2WHbmLObdthEKOf9JH4g?=
+ =?us-ascii?Q?aNm1bIX4VDMlk1ZWE7qCon4/poen85hm6kkETpI3lxHWvRafzqEHEUdoVMFk?=
+ =?us-ascii?Q?se+ueSKOp+aItko0XMf/tI2FgDx2/O3lhS20FLTSvSrKasjte7cs2ABLgJLv?=
+ =?us-ascii?Q?GXAJxcgXQR8uO3Ec1HoKda1bYCa3gbxcDH6coXYigiuW2TzbOTfKGwDAgOnk?=
+ =?us-ascii?Q?P8yHjXfOlUyLXXAWwQH3/zOg01aDVLdwSFM4a6fy6cTC1HarjVbQ9UfErufJ?=
+ =?us-ascii?Q?XgyCLSad/jHdf2C5Nx/ggTjp82YKbuF84CIMceLSFI+kqUeZXXZeQB8EVPaM?=
+ =?us-ascii?Q?QtaIoVzDCJoZ1MEwJcDbXQnLiIrLjp2RNCRpzD0o39GKqg=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?fNXHSX0P7Zd1VHydfcBqbW9ZI7UfpbpLbs//Oso4xoCRYhexmj+FTJyWYdFp?=
- =?us-ascii?Q?HpZGe4EUh1CYTPvEhWN2Lg4byqs3VkM1BGrIIQF+KQshbPnSAYZtC7GIYdWF?=
- =?us-ascii?Q?V/c6zffMQ9fuH0ZV52EImVfQcP3DsZiZ8HtgIQzOwBFbNKqpPAC76mjUz3aB?=
- =?us-ascii?Q?ujP+cPG1tLblQshNsFoMsEbjvXYQxd/0HsoZ5igMMEgf3C9elBuD2b5LUDMm?=
- =?us-ascii?Q?CfVh7Ve7CJPfD3t6btYJzodwfsckNgLW+FjhSWAWIsOHe+V3oskuGtgv0/QF?=
- =?us-ascii?Q?rG+iUomo+Un33x03nKFX+jAY1l+Fz46CZ2xHVN/nFMLe9AF2+Ok5W2Jicqgh?=
- =?us-ascii?Q?jE88SMSH5h+g9Pr4Si26svTyRCC6L+TpVjIPDT9wm+/LyOhRRv+xbBzVFFrN?=
- =?us-ascii?Q?WbNF8rctT+/5xHGyv9Hl+GbnZm+bTGq4ndHZtvxtDj6Map6yOhkZV/DcA29Z?=
- =?us-ascii?Q?QzjjuNAeNwGFF6MW3Z54clwIOv8S4noSi2BkopxcsUsYonNeyx45jlr16ttY?=
- =?us-ascii?Q?WFiQD0ZCFdogyvUFdrBam72jglAZNKm/La5DTqDXUJprKUzwb3WN6WkeqG1w?=
- =?us-ascii?Q?EvvqQvYlqJOHPJZMkY6ppkfi3mjnjP9Jjl/vMQ+ircHQONEmxUANv/FEae9y?=
- =?us-ascii?Q?o2FViEWWYr0JIHehVzJdRa/vd31lSPoBUNevFQV4XqLSLbTtkbZ5viA6lwce?=
- =?us-ascii?Q?MkoX2fWyJiRo/VSmQTzJ3PjSMlYe8GmBSXdurAYNhjdUGyjq57uMQ4M4PV+p?=
- =?us-ascii?Q?56oSLOCqDikBhncWw8bcrGT8a1to+pMgHdxWm8Dhiy4MNeZHVk12iRTX+dSO?=
- =?us-ascii?Q?fQgEJZ0HZBydOZDi6n6mJ+5cGfM37Mydg51Q1B+LpGOnTjkKOG4tWIgy2WQ9?=
- =?us-ascii?Q?LrzETdMtlBEUMSf24Wj4P7Lq9Dv1bOPNOXgSF8C4VCVyBP5uSjLaxPneNvy5?=
- =?us-ascii?Q?LsUoxkowZ8rn+GepPa6IhF0k+z+VKUq0WC+ths5WOhCTae5feWA50Wj+GceS?=
- =?us-ascii?Q?XWD76A3MfdqJv8UeLsUJAGKNFJdUtlEYdY3p9rGpFZH6U88ZL8GrfGem/AcZ?=
- =?us-ascii?Q?9DG6st6f8Bwo/1JUYU5Sc8PsuXbf4S/l4Fopikm/jzoQQhOpbGHxYk+06tIv?=
- =?us-ascii?Q?vUkAKYO2z2XW8PKxQuiF7gLFAs0dMwcTXOiycrrgS3/KKbCEAQqfwQBGVINA?=
- =?us-ascii?Q?MKRGfWTac9EkLyeb82qGgSpPrqKb/FwNAf6KxgFHAKCpc3AVZEO618ypVUtA?=
- =?us-ascii?Q?bk/71pToAjsB9wZQ6M4SdfjlQWI6RVmlawy2kVCI1lTR3YzDto2XtscKX76E?=
- =?us-ascii?Q?3qVKKeCuxesMgrpYyEzu/V3pt9762Hur58BNi6ZV/jlDai3Ll24239OEOSjw?=
- =?us-ascii?Q?IIHbr07EA5ANpMjBq/bBQlgHXm0sYAsVceqqCkHZvWAyv/BnVA3wr8pYD8LC?=
- =?us-ascii?Q?7AB7S/33bdhM6FGlmHybrCl9r7eHEAvGlKdPObmdYOM8+glCkL7mnm8CK4gQ?=
- =?us-ascii?Q?0S8b4/wbv2igbJ+YpgLfDDg5FEzlhnE+fpM9JoJH/dAaRbt+ZrjjHye2dQD1?=
- =?us-ascii?Q?wD7lskfD+mKfoc2KKkL9cO/lGe0rxrVQKmadvcgQ?=
+	=?us-ascii?Q?+noawn8wjnCjiHaHEdgJGHmTzwi2q0aq9hJdsl1kudSUJfH8/q2xXmAlPTK6?=
+ =?us-ascii?Q?bmCm3GPDCU/wL7Ao3vzadN6d8kMimLnaEO818XrRPqnTmWN1BHGyfepqTLcH?=
+ =?us-ascii?Q?BOgSTE0ZxyCjB4tlX/SITBkoVdy3tPR+LB5OCg7dyTXdCSvN90nbwc7DKhW0?=
+ =?us-ascii?Q?YmJR5yo0iO7+bjOeamQxSqEOB7hD5DUiRPfOuY2oaXGaYt0fOjliAIdj3zEu?=
+ =?us-ascii?Q?UKLCJjpkGUhNUCEgsmLbOnXtlZGpq1RtK6E4XwgnUqusMXZWz9czVK3K6PxI?=
+ =?us-ascii?Q?DYhEyIFHBGz7w84rKGE/rn4kYWWUkom/UA1zmLnuUtd/yenT48w0oancnjt6?=
+ =?us-ascii?Q?DbibS4x30CEDmfYZEYY8DZpLQMTWP7GS8jIJSAngRFsMYmt/xQRTL5Nx4QHw?=
+ =?us-ascii?Q?/L3LqlcaPMsyvMEV8CFupiS4ZVVRyrDsnSRXkqlt7NxSVy8Jlkp2MmWIAKwt?=
+ =?us-ascii?Q?YMdkb47eFz9EHFAZoaidHYR76/ihXdPzeGhQiUbmcfMlH8YQbEeP976f87Iy?=
+ =?us-ascii?Q?nAQGn7Bb8yc466/4Dp1G/IVmBC0WGZMRWVCKk1yigYqQIjAxtrFxGL49uwQe?=
+ =?us-ascii?Q?i9v41qBRqRT15d/aL2jHvw+lbGffBvZ6G/t9Fs4+WqduLUP1kJ+sKgqYE9r/?=
+ =?us-ascii?Q?yoDuIhlnLGNqWw3aJJo4APbKEzGvcBEcNOXQLte7rzZRjyTc0e3x9M6RMyYe?=
+ =?us-ascii?Q?VbPMX1Ao/0qu4Fx+It45nhqSiRi1vdLotOE+awMz6c7aL5ZZ3RTcXurkf2PT?=
+ =?us-ascii?Q?ljDDj0GwvFAOcAHfrvfwrjwhh3Iid79LJbsvJ4xr9xcKspiHz//49M0OfDX8?=
+ =?us-ascii?Q?/iZD5fVUPzZYxYsSfepdazStt7Nmo4AfniCLTCKrwOr2P20vlFzRIGu4aW1u?=
+ =?us-ascii?Q?9VUkZ0TtyhelIQ2EbbihEOS1eAdxdcdXf2bWtZmmwiFHLIhE9cT1mrSRVRb/?=
+ =?us-ascii?Q?oE+i15JpZZOW+hkefOY80BJ26ubAJDixYc5Hrdnq+SXa2lhOz1ex76Qsx1G7?=
+ =?us-ascii?Q?8dk3P0CpEK4Cl9t4JMhWYeU0PGIgdfN81CPzR/lkczrT0LvJ/eSlv+/6w6fp?=
+ =?us-ascii?Q?i9cq7nGAOnrDFJLmzGyekKBc+J6eqKQpcg0P1U31bKYHc3tiGatFUyz5RT2o?=
+ =?us-ascii?Q?HTzxox3QlODskUfcjoNDySurS5YN9L7ZgYs/yww2xqnFsJlXKnix5ViVnoMr?=
+ =?us-ascii?Q?tJa8ktCWdlzQ94EySDnF92nRRxxthAxbPfFdT3oFbKpTMET+kO/h4LdR2VEF?=
+ =?us-ascii?Q?2RP2j73LXJupqDjjpAQ6MvkDWQOOcd8U8wrownAR5ZENVOtkai4Y1GWw4pZB?=
+ =?us-ascii?Q?pmu8P+TitDKBAX83EDmdfxYFVIUsGWOBT64DfBEsViNdV6ofPofMY+mNtJM/?=
+ =?us-ascii?Q?Y3QT+TvDr9/6Fq/9CcH47I+Q4epA0nG4zm47S8rfmBfKfsPoIG6tYmdmFX+T?=
+ =?us-ascii?Q?PDRCT8DjJx2bEl+qH4IuZ17TFe7RPt4rYkW7cPqYUUJMHuAHuLOt1FDpPj61?=
+ =?us-ascii?Q?P+G2ywHQqwsN0Pdfzq9RZuh0UMbje3gNzxAPSWs5T7sKfm5dwutOwEjIZ2CJ?=
+ =?us-ascii?Q?WsrKWcshUU+AjTLtph5w0b8DJvPo8qiUtcGl5iCS?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3d3fa95-4510-45fe-d1a8-08dd135431d3
+X-MS-Exchange-CrossTenant-Network-Message-Id: debe79ea-06e8-408a-89db-08dd135478ba
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 04:37:29.4998
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 04:39:28.3204
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ADhGgbSc+4gPIdwbqhpXN7NCBpiMCeqHylbdIYO7KDMQ3AD7YQefgtHVF9F17LG+iQxANkxmYh8J5nXaeu9xTw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5qkJTvqlTSF5stxMZqLN4VQipSZR18123sm3lSxifo8NGEI9EM35MqXRP0kL6xD0YZ0mBoUCbQCMspNB8gWrWQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8033
 
-On Fri, Nov 29, 2024 at 07:22:29PM +0100, Patryk Wlazlyn wrote:
-> Introduce a helper function to allow offlined CPUs to enter FFh idle
-> states with a specific MWAIT hint. The new helper will be used in
-> subsequent patches by the acpi_idle and intel_idle drivers.
-> 
-> No functional change intended.
+On Fri, Nov 29, 2024 at 07:22:30PM +0100, Patryk Wlazlyn wrote:
+> Recent Intel platforms will depend on the idle driver to pass the
+> correct hint for playing dead via mwait_play_dead_with_hint(). Expand
+> the existing enter_dead interface with handling for FFH states and pass
+> the MWAIT hint to the mwait_play_dead code.
 > 
 > Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+> Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
-This looks good to me.
+Looks good to me.
 
 Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
@@ -172,151 +171,75 @@ Thanks and Regards
 gautham.
 
 > ---
->  arch/x86/include/asm/smp.h |  3 ++
->  arch/x86/kernel/smpboot.c  | 90 ++++++++++++++++++++------------------
->  2 files changed, 51 insertions(+), 42 deletions(-)
+>  arch/x86/kernel/acpi/cstate.c | 10 ++++++++++
+>  drivers/acpi/processor_idle.c |  2 ++
+>  include/acpi/processor.h      |  5 +++++
+>  3 files changed, 17 insertions(+)
 > 
-> diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-> index ca073f40698f..dfd09a1e09bf 100644
-> --- a/arch/x86/include/asm/smp.h
-> +++ b/arch/x86/include/asm/smp.h
-> @@ -114,6 +114,7 @@ void wbinvd_on_cpu(int cpu);
->  int wbinvd_on_all_cpus(void);
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index f3ffd0a3a012..8d7b8b02ddb9 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -15,6 +15,7 @@
+>  #include <acpi/processor.h>
+>  #include <asm/mwait.h>
+>  #include <asm/special_insns.h>
+> +#include <asm/smp.h>
 >  
->  void smp_kick_mwait_play_dead(void);
-> +void mwait_play_dead(unsigned int hint);
->  
->  void native_smp_send_reschedule(int cpu);
->  void native_send_call_func_ipi(const struct cpumask *mask);
-> @@ -164,6 +165,8 @@ static inline struct cpumask *cpu_llc_shared_mask(int cpu)
->  {
->  	return (struct cpumask *)cpumask_of(0);
+>  /*
+>   * Initialize bm_flags based on the CPU cache properties
+> @@ -204,6 +205,15 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
 >  }
-> +
-> +static inline void mwait_play_dead(unsigned int eax_hint) { }
->  #endif /* CONFIG_SMP */
+>  EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_probe);
 >  
->  #ifdef CONFIG_DEBUG_NMI_SELFTEST
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index b5a8f0891135..8a3545c2cae9 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1272,13 +1272,57 @@ void play_dead_common(void)
->  	local_irq_disable();
->  }
->  
-> +void __noreturn mwait_play_dead(unsigned int eax_hint)
+> +void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
 > +{
-> +	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
+> +	unsigned int cpu = smp_processor_id();
+> +	struct cstate_entry *percpu_entry;
 > +
-> +	/* Set up state for the kexec() hack below */
-> +	md->status = CPUDEAD_MWAIT_WAIT;
-> +	md->control = CPUDEAD_MWAIT_WAIT;
-> +
-> +	wbinvd();
-> +
-> +	while (1) {
-> +		/*
-> +		 * The CLFLUSH is a workaround for erratum AAI65 for
-> +		 * the Xeon 7400 series.  It's not clear it is actually
-> +		 * needed, but it should be harmless in either case.
-> +		 * The WBINVD is insufficient due to the spurious-wakeup
-> +		 * case where we return around the loop.
-> +		 */
-> +		mb();
-> +		clflush(md);
-> +		mb();
-> +		__monitor(md, 0, 0);
-> +		mb();
-> +		__mwait(eax_hint, 0);
-> +
-> +		if (READ_ONCE(md->control) == CPUDEAD_MWAIT_KEXEC_HLT) {
-> +			/*
-> +			 * Kexec is about to happen. Don't go back into mwait() as
-> +			 * the kexec kernel might overwrite text and data including
-> +			 * page tables and stack. So mwait() would resume when the
-> +			 * monitor cache line is written to and then the CPU goes
-> +			 * south due to overwritten text, page tables and stack.
-> +			 *
-> +			 * Note: This does _NOT_ protect against a stray MCE, NMI,
-> +			 * SMI. They will resume execution at the instruction
-> +			 * following the HLT instruction and run into the problem
-> +			 * which this is trying to prevent.
-> +			 */
-> +			WRITE_ONCE(md->status, CPUDEAD_MWAIT_KEXEC_HLT);
-> +			while(1)
-> +				native_halt();
-> +		}
-> +	}
+> +	percpu_entry = per_cpu_ptr(cpu_cstate_entry, cpu);
+> +	mwait_play_dead(percpu_entry->states[cx->index].eax);
 > +}
 > +
->  /*
->   * We need to flush the caches before going to sleep, lest we have
->   * dirty data in our caches when we come back up.
->   */
-> -static inline void mwait_play_dead(void)
-> +static inline void mwait_play_dead_cpuid_hint(void)
+>  void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cx)
 >  {
-> -	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
->  	unsigned int eax, ebx, ecx, edx;
->  	unsigned int highest_cstate = 0;
->  	unsigned int highest_subcstate = 0;
-> @@ -1316,45 +1360,7 @@ static inline void mwait_play_dead(void)
->  			(highest_subcstate - 1);
+>  	unsigned int cpu = smp_processor_id();
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+> index ce728cf7e301..83213fa47c1b 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -590,6 +590,8 @@ static void acpi_idle_play_dead(struct cpuidle_device *dev, int index)
+>  			raw_safe_halt();
+>  		else if (cx->entry_method == ACPI_CSTATE_SYSTEMIO) {
+>  			io_idle(cx->address);
+> +		} else if (cx->entry_method == ACPI_CSTATE_FFH) {
+> +			acpi_processor_ffh_play_dead(cx);
+>  		} else
+>  			return;
 >  	}
->  
-> -	/* Set up state for the kexec() hack below */
-> -	md->status = CPUDEAD_MWAIT_WAIT;
-> -	md->control = CPUDEAD_MWAIT_WAIT;
-> -
-> -	wbinvd();
-> -
-> -	while (1) {
-> -		/*
-> -		 * The CLFLUSH is a workaround for erratum AAI65 for
-> -		 * the Xeon 7400 series.  It's not clear it is actually
-> -		 * needed, but it should be harmless in either case.
-> -		 * The WBINVD is insufficient due to the spurious-wakeup
-> -		 * case where we return around the loop.
-> -		 */
-> -		mb();
-> -		clflush(md);
-> -		mb();
-> -		__monitor(md, 0, 0);
-> -		mb();
-> -		__mwait(eax, 0);
-> -
-> -		if (READ_ONCE(md->control) == CPUDEAD_MWAIT_KEXEC_HLT) {
-> -			/*
-> -			 * Kexec is about to happen. Don't go back into mwait() as
-> -			 * the kexec kernel might overwrite text and data including
-> -			 * page tables and stack. So mwait() would resume when the
-> -			 * monitor cache line is written to and then the CPU goes
-> -			 * south due to overwritten text, page tables and stack.
-> -			 *
-> -			 * Note: This does _NOT_ protect against a stray MCE, NMI,
-> -			 * SMI. They will resume execution at the instruction
-> -			 * following the HLT instruction and run into the problem
-> -			 * which this is trying to prevent.
-> -			 */
-> -			WRITE_ONCE(md->status, CPUDEAD_MWAIT_KEXEC_HLT);
-> -			while(1)
-> -				native_halt();
-> -		}
-> -	}
-> +	mwait_play_dead(eax);
+> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> index a17e97e634a6..63a37e72b721 100644
+> --- a/include/acpi/processor.h
+> +++ b/include/acpi/processor.h
+> @@ -280,6 +280,7 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
+>  				    struct acpi_processor_cx *cx,
+>  				    struct acpi_power_register *reg);
+>  void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cstate);
+> +void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx);
+>  #else
+>  static inline void acpi_processor_power_init_bm_check(struct
+>  						      acpi_processor_flags
+> @@ -300,6 +301,10 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
+>  {
+>  	return;
 >  }
+> +static inline void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
+> +{
+> +	return;
+> +}
+>  #endif
 >  
->  /*
-> @@ -1407,7 +1413,7 @@ void native_play_dead(void)
->  	play_dead_common();
->  	tboot_shutdown(TB_SHUTDOWN_WFS);
->  
-> -	mwait_play_dead();
-> +	mwait_play_dead_cpuid_hint();
->  	if (cpuidle_play_dead())
->  		hlt_play_dead();
->  }
+>  static inline int call_on_cpu(int cpu, long (*fn)(void *), void *arg,
 > -- 
 > 2.47.1
 > 
