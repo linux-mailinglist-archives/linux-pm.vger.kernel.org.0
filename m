@@ -1,74 +1,71 @@
-Return-Path: <linux-pm+bounces-18415-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18416-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71AC69E14A1
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:52:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D9C9E14CE
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:59:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9E4A1604B8
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 07:52:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD4AC164653
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 07:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E2F1D6188;
-	Tue,  3 Dec 2024 07:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491DE1A4F2F;
+	Tue,  3 Dec 2024 07:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/+NMBRl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hn3q1VgW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AA01C9B62;
-	Tue,  3 Dec 2024 07:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FB71A01B9;
+	Tue,  3 Dec 2024 07:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733212285; cv=none; b=MIu3Y9SPY9481MaxIXS42MZ4qZ1QKRBd24DFDJlSqUjoijGLH+RcDFtca1punRHqKVIXYKK1WlT9X6kR2nCx+36kf/oAqsiHi1f0HsIsmAswdslNRbuVVMqEzHLvDgFQ3AE71zRiWhgEuYt4BA1/+6FujuitUcsZep18kdCHGO0=
+	t=1733212683; cv=none; b=qSSJz/st7zGz14q6lA1tQCMx9EhqSgp8RKECuVHwuxudCjEnXz9cuFkWupUOUQOu4XDZDrZx7jMskR5VyEsF1paOViYkKsX6sCPmSOYVagp3tI4W8t6Dqtk7Bln3lB1n7eFoh7fJmRJMFs9IIljl2gW6kJaMKMrrXnNsaijoN6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733212285; c=relaxed/simple;
-	bh=f4CC0b0D5MIZ2ZEL/VKxCZPBavAVHtWJayN/GtBBJlc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rr/SXTBGDg1e5ZJBSqCTtvunLnACxC+S/KZz8YdF3pJLcbk+3gVUys/oSe9JA3A5ptHqEyJF6yfdszGyKiPaeXAJLCQ8V8rIgl1xrDAzNoqRCYjw5AHefIW2S3POqH0smkbjalgUB8cfKYPR4lIrgpWWuWT+exFeYnJknu50I2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/+NMBRl; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1733212683; c=relaxed/simple;
+	bh=RNrauZ03gbhL439ylRK6V/lHHYG5ntkXf7AtvkPxyEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o6Yg3lQoL0XV/oBsMVKGbfz3c8SkmCgRAb5MuzFznKUMESiiDKOdt0zw+Q5nLyYwycvwmosDrLYhT/NnMY6SjTgvb/t7JslJgB0D9CahFBAMsRr5hnsnAI2uJC4PEhkuzCR4ixiTKuqc1yjPOJBk3RKG+nbdutkg0Li9q8U0Gd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hn3q1VgW; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733212284; x=1764748284;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=f4CC0b0D5MIZ2ZEL/VKxCZPBavAVHtWJayN/GtBBJlc=;
-  b=l/+NMBRltXnXbAx5EQYtIkWW0jhTVAhSFgzI424nyEBeoqp4hlA4ihBW
-   e28eyVp985of987VFc4yO5znwY6AfebolQg23lCJl24xuLRCUgPOPqGqC
-   nASehSy+I2IFFhpXAhEUyqaPMmnRZXdkIwbdJfFVpRUtRzE+ogaXFi6PS
-   SVysPR/p1JtItmtDHsWT9Xf+fTthIrNW4Nir1KiVtaAZ1I1R7Ik5ICVtt
-   lYLo/bWdB/0G3r+AfHVtia4Fz7IImDKsNz8Yc4lI6eyfb7hWavzaH9JWu
-   VsWgZBPkcqmyBaupBov1MxZwf721b3EcGsn+k66Dor2OdY3JRlObHXRno
-   w==;
-X-CSE-ConnectionGUID: OTwwIMeUQB6WiK5dvCuLrg==
-X-CSE-MsgGUID: sn6Nu4OZSe+fPIRJZqzUyQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="50822856"
+  t=1733212681; x=1764748681;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RNrauZ03gbhL439ylRK6V/lHHYG5ntkXf7AtvkPxyEc=;
+  b=hn3q1VgWdAV624pmOdNA49iOakqeD1B0pEGne7aveu5GOCSbGpic8gF+
+   5kc/vzK3B1Im12tNlyPQSXkf8BjSp480pQuhBe2hxgac1/7jh2qU2PDRP
+   hHKbaQPzj8wnq37ivgYoY70pEBzZ5hJS642Li+biHtcdBDfxKUYFaoCIe
+   YvcLkPyxN8ayLTHfFxoBTrtJhxKuNT8Jfq8U3rB7zXMotKmXaS54u+j++
+   7hLFgmXoEMnOm6XFsDE5XJi+IOouSj1yZwYA+2yapq3p4PIQco+ZWB4cQ
+   sWxp/5Emq0KTr2NVEGKJEONJ1XuFQOb+73BZqiUh2aplcP8YI5zOHzBGO
+   g==;
+X-CSE-ConnectionGUID: 5huOrXuQTMKRn/0Myz1bfA==
+X-CSE-MsgGUID: E9gkD1vAQg+OLh/Ljh4BHQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="32758206"
 X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="50822856"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:51:24 -0800
-X-CSE-ConnectionGUID: 509+CLIETPujef2W0E6IAg==
-X-CSE-MsgGUID: YbZNBhVCTR2eCqkkqRDpMQ==
+   d="scan'208";a="32758206"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:58:01 -0800
+X-CSE-ConnectionGUID: 7wz6IbXvT2y0dJrnDzRjtw==
+X-CSE-MsgGUID: OHj/MQefQyKmPDaGH7mMCA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="124183040"
+   d="scan'208";a="93759594"
 Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2024 23:51:23 -0800
+  by orviesa007.jf.intel.com with ESMTP; 02 Dec 2024 23:57:59 -0800
 From: Zhang Rui <rui.zhang@intel.com>
-To: rafael.j.wysocki@intel.com,
-	lenb@kernel.org
+To: rafael.j.wysocki@intel.com
 Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 4/4] tools/power turbostat: Introduce --force parameter
-Date: Tue,  3 Dec 2024 15:51:19 +0800
-Message-ID: <20241203075119.584419-5-rui.zhang@intel.com>
+	linux-pm@vger.kernel.org,
+	srinivas.pandruvada@intel.com
+Subject: [PATCH 0/3] Add RAPL/DPTF support for Pantherlake
+Date: Tue,  3 Dec 2024 15:57:59 +0800
+Message-ID: <20241203075802.584741-1-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241203075119.584419-1-rui.zhang@intel.com>
-References: <20241203075119.584419-1-rui.zhang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,95 +74,27 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Turbostat currently exits under the following conditions:
-1. When running on non-Intel/AMD/Hygon x86 vendors.
-2. When running on Intel models that lack specific platform features.
+There is an effort on going to avoid per CPU model ID enabling for RAPL
+support. But this takes some time and requires sufficient test to make
+sure no regression introduced. So enable PantherLake RAPL support before
+any rework.
 
-Introduce a new `--force` parameter that allows turbostat to run on
-these unsupported platforms with minimal default feature support. This
-provides users with the flexibility to gather basic information even on
-unsupported systems.
+Zhang Rui (3):
+  powercap: intel_rapl: Add support for PantherLake platform
+  thermal: intel: int340x: processor: Enable MMIO RAPL for PantherLake
+  ACPI: DPTF: Support Panther Lake
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/acpi/dptf/dptf_pch_fivr.c                           | 1 +
+ drivers/acpi/dptf/dptf_power.c                              | 2 ++
+ drivers/acpi/dptf/int340x_thermal.c                         | 6 ++++++
+ drivers/acpi/fan.h                                          | 1 +
+ drivers/powercap/intel_rapl_common.c                        | 1 +
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c     | 1 +
+ drivers/thermal/intel/int340x_thermal/int3403_thermal.c     | 1 +
+ .../intel/int340x_thermal/processor_thermal_device.h        | 1 +
+ .../intel/int340x_thermal/processor_thermal_device_pci.c    | 1 +
+ 9 files changed, 15 insertions(+)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 442a993c5114..123eb9ead7df 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -326,6 +326,7 @@ unsigned int rapl_joules;
- unsigned int summary_only;
- unsigned int list_header_only;
- unsigned int dump_only;
-+unsigned int force_load;
- unsigned int has_aperf;
- unsigned int has_aperf_access;
- unsigned int has_epb;
-@@ -1058,7 +1059,8 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 
- 
- 	if (authentic_amd || hygon_genuine) {
--		platform = &default_features;
-+		/* fallback to default features on unsupported models */
-+		force_load++;
- 		if (max_extended_level >= 0x80000007) {
- 			unsigned int eax, ebx, ecx, edx;
- 
-@@ -1067,7 +1069,7 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 			if ((edx & (1 << 14)) && family >= 0x17)
- 				platform = &amd_features_with_rapl;
- 		}
--		return;
-+		goto end;
- 	}
- 
- 	if (!genuine_intel)
-@@ -1081,10 +1083,16 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 	}
- 
- end:
-+	if (force_load && !platform) {
-+		fprintf(outf, "Unsupported platform detected. Force running with minimum default support.\n");
-+		platform = &default_features;
-+	}
-+
- 	if (platform)
- 		return;
- 
- 	fprintf(stderr, "Unsupported platform detected.\n"
-+		"\tUse \"--force\" parameter to launch turbostat with minimum default support.\n"
- 		"\tTo get latest turbostat support, please contact\n"
- 		"\t   lenb@kernel.org\n"
- 		"\tor pull from\n"
-@@ -2163,6 +2171,8 @@ void help(void)
- 		"		displays the raw counter values\n"
- 		"  -e, --enable [all | column]\n"
- 		"		shows all or the specified disabled column\n"
-+		"  -f, --force\n"
-+		"		force load turbostat with minimum default features on unsupported platforms.\n"
- 		"  -H, --hide [column | column,column,...]\n"
- 		"		hide the specified column(s)\n"
- 		"  -i, --interval sec.subsec\n"
-@@ -9945,6 +9955,7 @@ void cmdline(int argc, char **argv)
- 		{ "Dump", no_argument, 0, 'D' },
- 		{ "debug", no_argument, 0, 'd' },	/* internal, not documented */
- 		{ "enable", required_argument, 0, 'e' },
-+		{ "force", no_argument, 0, 'f' },
- 		{ "interval", required_argument, 0, 'i' },
- 		{ "IPC", no_argument, 0, 'I' },
- 		{ "num_iterations", required_argument, 0, 'n' },
-@@ -10005,6 +10016,9 @@ void cmdline(int argc, char **argv)
- 			/* --enable specified counter */
- 			bic_enabled = bic_enabled | bic_lookup(optarg, SHOW_LIST);
- 			break;
-+		case 'f':
-+			force_load++;
-+			break;
- 		case 'd':
- 			debug++;
- 			ENABLE_BIC(BIC_DISABLED_BY_DEFAULT);
 -- 
 2.43.0
 
