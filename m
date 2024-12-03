@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-18414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F3AC9E14A3
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:52:41 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71AC69E14A1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:52:06 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D9A6B23EF0
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 07:51:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9E4A1604B8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 07:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700E91CCEE0;
-	Tue,  3 Dec 2024 07:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E2F1D6188;
+	Tue,  3 Dec 2024 07:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFQYhFB9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/+NMBRl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11171B0F14;
-	Tue,  3 Dec 2024 07:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AA01C9B62;
+	Tue,  3 Dec 2024 07:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733212284; cv=none; b=nHrjDsAkTIOIWjg+LQfhwu1+L4Cjcj3alcVGEkiZtUDGr367rQiWDt8JTs/PgHoihIh02HUDfEWQCZISyxC4QGDyRXqIdBR8CVP6nUGUmDmPJZUI8C4H6w4KNGfDz0nS3OroTc6+ryNmzl7pOWkV1zOZOaY+G+/31Mn911XR1/Y=
+	t=1733212285; cv=none; b=MIu3Y9SPY9481MaxIXS42MZ4qZ1QKRBd24DFDJlSqUjoijGLH+RcDFtca1punRHqKVIXYKK1WlT9X6kR2nCx+36kf/oAqsiHi1f0HsIsmAswdslNRbuVVMqEzHLvDgFQ3AE71zRiWhgEuYt4BA1/+6FujuitUcsZep18kdCHGO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733212284; c=relaxed/simple;
-	bh=v3qwmxpDKqg3xwk9gjV3fcUAEJOvWXxp7rHJ7S8iLmc=;
+	s=arc-20240116; t=1733212285; c=relaxed/simple;
+	bh=f4CC0b0D5MIZ2ZEL/VKxCZPBavAVHtWJayN/GtBBJlc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VnIvFF+d9IJUpMfoYoy2kMzCFgEpsMUZkcGT8JWcEKjyHapxxQjE+NoSkIhHwu5Rhf79p3ZEByzF6c0NhUyyGN3yrQrfJh4qIiVP5mIODMJSq2KcHlhpuXjqNIncJ9Q0VbqgD1+Fc54vdqW6eF/cz4r8csKXGLvtrFzGtT2Zjtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFQYhFB9; arc=none smtp.client-ip=198.175.65.10
+	 MIME-Version; b=rr/SXTBGDg1e5ZJBSqCTtvunLnACxC+S/KZz8YdF3pJLcbk+3gVUys/oSe9JA3A5ptHqEyJF6yfdszGyKiPaeXAJLCQ8V8rIgl1xrDAzNoqRCYjw5AHefIW2S3POqH0smkbjalgUB8cfKYPR4lIrgpWWuWT+exFeYnJknu50I2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/+NMBRl; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733212283; x=1764748283;
+  t=1733212284; x=1764748284;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=v3qwmxpDKqg3xwk9gjV3fcUAEJOvWXxp7rHJ7S8iLmc=;
-  b=iFQYhFB92vW0YJDFesXP3Sv44Z5I1obBBgstFi4qP0RlNN4Z36UKCsec
-   yb7jEg1/4uUE2vFfrrXJegcOC5kTtLKc6+ejpGVY9fhu7ZHSv3J/Fvps3
-   2wRSJ4Xg8Uf28b9WWHSCTKPTSNe4jrDSUr5nmXCRSc+wd9Z8QjJB8GWfB
-   2XiwRX1KbjDsxa2ptlG0Y9DvzwfGD1XUarGGYBL31WKT/zfF6aA+35Nyv
-   ndlcp5Mk5MjyEXDbDxYmuaUfXJF8fz5fke8g7N0LSw2Ded/elXDwU2+F4
-   FiCHTZhXa5fnxXnXvtTUS+m7uSWIb6d/7SKokX+Cl5Oy5SFV3J/kguGnV
-   A==;
-X-CSE-ConnectionGUID: mrZuU0CtSUqD/uaphFDZpA==
-X-CSE-MsgGUID: UEhlQh+KQtqH4LdNIGWE6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="50822853"
+  bh=f4CC0b0D5MIZ2ZEL/VKxCZPBavAVHtWJayN/GtBBJlc=;
+  b=l/+NMBRltXnXbAx5EQYtIkWW0jhTVAhSFgzI424nyEBeoqp4hlA4ihBW
+   e28eyVp985of987VFc4yO5znwY6AfebolQg23lCJl24xuLRCUgPOPqGqC
+   nASehSy+I2IFFhpXAhEUyqaPMmnRZXdkIwbdJfFVpRUtRzE+ogaXFi6PS
+   SVysPR/p1JtItmtDHsWT9Xf+fTthIrNW4Nir1KiVtaAZ1I1R7Ik5ICVtt
+   lYLo/bWdB/0G3r+AfHVtia4Fz7IImDKsNz8Yc4lI6eyfb7hWavzaH9JWu
+   VsWgZBPkcqmyBaupBov1MxZwf721b3EcGsn+k66Dor2OdY3JRlObHXRno
+   w==;
+X-CSE-ConnectionGUID: OTwwIMeUQB6WiK5dvCuLrg==
+X-CSE-MsgGUID: sn6Nu4OZSe+fPIRJZqzUyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="50822856"
 X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="50822853"
+   d="scan'208";a="50822856"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:51:22 -0800
-X-CSE-ConnectionGUID: jdO5AyTcTNe2dPY4K8miag==
-X-CSE-MsgGUID: jWphu4LmRBeMB15khgxaPA==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:51:24 -0800
+X-CSE-ConnectionGUID: 509+CLIETPujef2W0E6IAg==
+X-CSE-MsgGUID: YbZNBhVCTR2eCqkkqRDpMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="124183034"
+   d="scan'208";a="124183040"
 Received: from rzhang1-mobl.sh.intel.com ([10.239.158.59])
-  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2024 23:51:21 -0800
+  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2024 23:51:23 -0800
 From: Zhang Rui <rui.zhang@intel.com>
 To: rafael.j.wysocki@intel.com,
 	lenb@kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH 3/4] tools/power turbostat: Improve --help output
-Date: Tue,  3 Dec 2024 15:51:18 +0800
-Message-ID: <20241203075119.584419-4-rui.zhang@intel.com>
+Subject: [PATCH 4/4] tools/power turbostat: Introduce --force parameter
+Date: Tue,  3 Dec 2024 15:51:19 +0800
+Message-ID: <20241203075119.584419-5-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241203075119.584419-1-rui.zhang@intel.com>
 References: <20241203075119.584419-1-rui.zhang@intel.com>
@@ -77,97 +77,95 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Improve the `--help` output of turbostat by standardizing the format
-and enhancing readability. The following changes are made to ensure
-consistency and clarity in the help message:
-1. Use a consistent pattern for each parameter's help message:
-   - Display the parameter and its input (if any) on the same line,
-     separated by a space.
-   - Provide the detailed description on a separate line.
-2. Ensure that the first character of each description is in lower-case.
+Turbostat currently exits under the following conditions:
+1. When running on non-Intel/AMD/Hygon x86 vendors.
+2. When running on Intel models that lack specific platform features.
 
-These changes make the help output more uniform and easier to read,
-helping users quickly understand the available options and their usage.
-
-No functional change.
+Introduce a new `--force` parameter that allows turbostat to run on
+these unsupported platforms with minimal default feature support. This
+provides users with the flexibility to gather basic information even on
+unsupported systems.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 41 +++++++++++++++++----------
- 1 file changed, 26 insertions(+), 15 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 508d65e60981..442a993c5114 100644
+index 442a993c5114..123eb9ead7df 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2148,41 +2148,52 @@ void help(void)
- 		"when COMMAND completes.\n"
- 		"If no COMMAND is specified, turbostat wakes every 5-seconds\n"
- 		"to print statistics, until interrupted.\n"
--		"  -a, --add	add a counter\n"
-+		"  -a, --add counter\n"
-+		"		add a counter\n"
- 		"		  eg. --add msr0x10,u64,cpu,delta,MY_TSC\n"
- 		"		  eg. --add perf/cstate_pkg/c2-residency,package,delta,percent,perfPC2\n"
- 		"		  eg. --add pmt,name=XTAL,type=raw,domain=package0,offset=0,lsb=0,msb=63,guid=0x1a067102\n"
--		"  -c, --cpu	cpu-set	limit output to summary plus cpu-set:\n"
-+		"  -c, --cpu cpu-set\n"
-+		"		limit output to summary plus cpu-set:\n"
- 		"		  {core | package | j,k,l..m,n-p }\n"
--		"  -d, --debug	displays usec, Time_Of_Day_Seconds and more debugging\n"
-+		"  -d, --debug\n"
-+		"		displays usec, Time_Of_Day_Seconds and more debugging\n"
- 		"		debug messages are printed to stderr\n"
--		"  -D, --Dump	displays the raw counter values\n"
--		"  -e, --enable	[all | column]\n"
-+		"  -D, --Dump\n"
-+		"		displays the raw counter values\n"
-+		"  -e, --enable [all | column]\n"
+@@ -326,6 +326,7 @@ unsigned int rapl_joules;
+ unsigned int summary_only;
+ unsigned int list_header_only;
+ unsigned int dump_only;
++unsigned int force_load;
+ unsigned int has_aperf;
+ unsigned int has_aperf_access;
+ unsigned int has_epb;
+@@ -1058,7 +1059,8 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ 
+ 
+ 	if (authentic_amd || hygon_genuine) {
+-		platform = &default_features;
++		/* fallback to default features on unsupported models */
++		force_load++;
+ 		if (max_extended_level >= 0x80000007) {
+ 			unsigned int eax, ebx, ecx, edx;
+ 
+@@ -1067,7 +1069,7 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ 			if ((edx & (1 << 14)) && family >= 0x17)
+ 				platform = &amd_features_with_rapl;
+ 		}
+-		return;
++		goto end;
+ 	}
+ 
+ 	if (!genuine_intel)
+@@ -1081,10 +1083,16 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ 	}
+ 
+ end:
++	if (force_load && !platform) {
++		fprintf(outf, "Unsupported platform detected. Force running with minimum default support.\n");
++		platform = &default_features;
++	}
++
+ 	if (platform)
+ 		return;
+ 
+ 	fprintf(stderr, "Unsupported platform detected.\n"
++		"\tUse \"--force\" parameter to launch turbostat with minimum default support.\n"
+ 		"\tTo get latest turbostat support, please contact\n"
+ 		"\t   lenb@kernel.org\n"
+ 		"\tor pull from\n"
+@@ -2163,6 +2171,8 @@ void help(void)
+ 		"		displays the raw counter values\n"
+ 		"  -e, --enable [all | column]\n"
  		"		shows all or the specified disabled column\n"
--		"  -H, --hide [column|column,column,...]\n"
-+		"  -H, --hide [column | column,column,...]\n"
++		"  -f, --force\n"
++		"		force load turbostat with minimum default features on unsupported platforms.\n"
+ 		"  -H, --hide [column | column,column,...]\n"
  		"		hide the specified column(s)\n"
  		"  -i, --interval sec.subsec\n"
--		"		Override default 5-second measurement interval\n"
--		"  -J, --Joules	displays energy in Joules instead of Watts\n"
--		"  -l, --list	list column headers only\n"
--		"  -M, --no-msr Disable all uses of the MSR driver\n"
--		"  -P, --no-perf Disable all uses of the perf API\n"
-+		"		override default 5-second measurement interval\n"
-+		"  -J, --Joules\n"
-+		"		displays energy in Joules instead of Watts\n"
-+		"  -l, --list\n"
-+		"		list column headers only\n"
-+		"  -M, --no-msr\n"
-+		"		disable all uses of the MSR driver\n"
-+		"  -P, --no-perf\n"
-+		"		disable all uses of the perf API\n"
- 		"  -n, --num_iterations num\n"
- 		"		number of the measurement iterations\n"
- 		"  -N, --header_iterations num\n"
- 		"		print header every num iterations\n"
- 		"  -o, --out file\n"
- 		"		create or truncate \"file\" for all output\n"
--		"  -q, --quiet	skip decoding system configuration header\n"
--		"  -s, --show [column|column,column,...]\n"
-+		"  -q, --quiet\n"
-+		"		skip decoding system configuration header\n"
-+		"  -s, --show [column | column,column,...]\n"
- 		"		show only the specified column(s)\n"
- 		"  -S, --Summary\n"
- 		"		limits output to 1-line system summary per interval\n"
- 		"  -T, --TCC temperature\n"
- 		"		sets the Thermal Control Circuit temperature in\n"
- 		"		  degrees Celsius\n"
--		"  -h, --help	print this help message\n"
--		"  -v, --version	print version information\n" "\n" "For more help, run \"man turbostat\"\n");
-+		"  -h, --help\n"
-+		"		print this help message\n"
-+		"  -v, --version\n"
-+		"		print version information\n" "\n" "For more help, run \"man turbostat\"\n");
- }
- 
- /*
+@@ -9945,6 +9955,7 @@ void cmdline(int argc, char **argv)
+ 		{ "Dump", no_argument, 0, 'D' },
+ 		{ "debug", no_argument, 0, 'd' },	/* internal, not documented */
+ 		{ "enable", required_argument, 0, 'e' },
++		{ "force", no_argument, 0, 'f' },
+ 		{ "interval", required_argument, 0, 'i' },
+ 		{ "IPC", no_argument, 0, 'I' },
+ 		{ "num_iterations", required_argument, 0, 'n' },
+@@ -10005,6 +10016,9 @@ void cmdline(int argc, char **argv)
+ 			/* --enable specified counter */
+ 			bic_enabled = bic_enabled | bic_lookup(optarg, SHOW_LIST);
+ 			break;
++		case 'f':
++			force_load++;
++			break;
+ 		case 'd':
+ 			debug++;
+ 			ENABLE_BIC(BIC_DISABLED_BY_DEFAULT);
 -- 
 2.43.0
 
