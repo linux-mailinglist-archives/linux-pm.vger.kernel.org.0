@@ -1,117 +1,163 @@
-Return-Path: <linux-pm+bounces-18473-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18474-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BE8E9E1F0F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 15:25:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA37F9E1F43
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 15:33:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3030B1643D8
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 14:25:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A2E1283D61
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 14:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7BE1F7062;
-	Tue,  3 Dec 2024 14:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A5D1F4279;
+	Tue,  3 Dec 2024 14:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ViPykzP+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tgycmLxe"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE461F6696;
-	Tue,  3 Dec 2024 14:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420EB1F4707
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 14:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733235903; cv=none; b=HFgpiU7BWXUuP+T5mJUTgArc4gyYCAnXevyEFyqOx1VJiHYpG35xR8Xv70MR896luDMGsA0LaNB2TBNLuDFIjKnddgmGAXnG8/Q42ODwDSrmjJibTZw7h8Pd+LAJ4Xtd2Jtyu2cGMGcpsKO9AyX0HAeN91RFxAXCmP0oW7wnkQg=
+	t=1733236414; cv=none; b=LULMDmMhpsRtjFJY6p0p5qw64w97l20nkvXcmL05+13n0cMCwWoxnrIQZ1CrGjquVAWmrg/AvrIPodPl2V087F9sCCM4tWfjbvJK8C9thQ5oo8hdh6YODeMrjHBmDqZAWs5a5wfKUgLNj3HeT0EQ+TvsWUJFZjRCMKAbr19SAVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733235903; c=relaxed/simple;
-	bh=3TKmXmpGABry9oSTFFXvSq6pX10XyahRQRIHFkooJ9U=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=JCZFdekgyyWaTGgHBbMVRP4b9ttrvxwuEAbKTmRgzzMU3wdmLlGRRSLkBdhILZ0X8V/6+RCiadylftYiMPvYvQ2eqbDQW666TJNV4GSe0c6dafWxmqXnSDBq9nIrG3hWmo2L+VzxY3ydASF68+rpZtDMKz//8JY8ZRfcJNjZCEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ViPykzP+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C3FC4CED8;
-	Tue,  3 Dec 2024 14:25:02 +0000 (UTC)
+	s=arc-20240116; t=1733236414; c=relaxed/simple;
+	bh=vkfocJidFOsWJ8j4r+2upwNbeaCg2X4r0idWMhyeuzk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NbfGIc9dXl1NC4Okezyl8LKPCIejXOYyk3dUBTnPwxtB3oXPLo1Wq3MXetOWTbdWey3RZeaiyHcS2SAzICpxqne2dmYjWo4LS/xipkNbhYyK0PB2BdHKQZO6I/wytAguUzB9+mspuV9lCzOiSrUxVT/YAtcKtBI/Pgedof/wkE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tgycmLxe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0647C4CEDE
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 14:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733235902;
-	bh=3TKmXmpGABry9oSTFFXvSq6pX10XyahRQRIHFkooJ9U=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=ViPykzP+sBvHyHt7Xd0oRVDSF+xonpAPnOrijJ+0Pbp26DGv0Cdvrht8+TIpc2sWE
-	 kJPD2rafQfO3kcF4UuE4GtuYKOBXphzyGjrTTwcTXAmzC3ez56j+n4MDHUjiRbWSTf
-	 96usMdwPzLVCKTZq9txbogysHjFofNHPuVnJ2Sknt4qwn1kbHYr5WqRPrDI6Pdqqap
-	 yRkFb5eMkdEvzsZMUdKUxD7ExbAkQ5KaFqhtfpAyH2PjJjxPeldOyIfhRbJEkI0ms0
-	 b/FWkBWN6+yyPWtmW3TD2UAYGwaHNxr8r8j/dGsRMFF1dS/O3IbqfkMSn0Md3+C9WO
-	 PHgCOkz0SFcsQ==
-Date: Tue, 03 Dec 2024 08:25:00 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1733236413;
+	bh=vkfocJidFOsWJ8j4r+2upwNbeaCg2X4r0idWMhyeuzk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tgycmLxenk4BVErw7oDmDKzYWEi/lJ7j2qV1fODOZzNJ+DBrJOFj9wKp9h1vZucQL
+	 mVX3bd/uYvyRkKFAANZREdfo6hmau6A8AwmNafB2ws4feDnzmEh28ulv32qRszIf2W
+	 tJ/k48U3z0Pj4gfjskzqpJu9sXXf9bqa2FC9QtaeOH0XGRmAEh4OPB6zlo8h8LRlX+
+	 mDqdDnRHEgm4lAEyxdIufrrH+Rhlz9jBeXl0ELbPsMjdKq9VVMSKeTuiBdy7Hjh44W
+	 dNF01Zj30SIjSM0p1en7HNjWN40zgFz2WQWC5HicRJXNjMz1byjRgUjuDpQSVQ7tjc
+	 zRhWOgpTqN+Xg==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-29e3721ded9so1960309fac.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 06:33:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV66v4NtQPOfrZ3RDXbjtdwClwDXva5VBQvyZXrAVYetT/NJ+DW/2UzneZ3koyHwVW3xe/KoFfTMA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy61WhhiEHiyEOnNjkieSPBhps8ItpyGtaOLM0RqJbekBajGw9T
+	Kfr4bhhxVBLT6WlUB2CrF9ONOI5WileXDvjcB89+VEzgpn5A/cdsUbNkOlDNbWPwwz+xLc29Ely
+	tOeAcNGnlyKFjEiHNy0dJhWGBsqs=
+X-Google-Smtp-Source: AGHT+IHpr7QHC7AIP/SBz1FrBthPRXkSIECwIwn6uZOMArYMtH1Q7RTuZ78swhIHEAEOKi+pvFatzpdTEtl4v9YyFFo=
+X-Received: by 2002:a05:6871:606:b0:296:ee2e:a23c with SMTP id
+ 586e51a60fabf-29e88560c9bmr2902777fac.5.1733236413021; Tue, 03 Dec 2024
+ 06:33:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: mripard@kernel.org, frank.binns@imgtec.com, aou@eecs.berkeley.edu, 
- jszhang@kernel.org, sboyd@kernel.org, guoren@kernel.org, 
- m.szyprowski@samsung.com, dri-devel@lists.freedesktop.org, 
- maarten.lankhorst@linux.intel.com, wefu@redhat.com, 
- jassisinghbrar@gmail.com, simona@ffwll.ch, conor+dt@kernel.org, 
- devicetree@vger.kernel.org, mturquette@baylibre.com, 
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, krzk+dt@kernel.org, 
- ulf.hansson@linaro.org, palmer@dabbelt.com, paul.walmsley@sifive.com, 
- linux-riscv@lists.infradead.org, tzimmermann@suse.de, drew@pdp7.com, 
- airlied@gmail.com, matt.coster@imgtec.com, linux-pm@vger.kernel.org
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <20241203134137.2114847-7-m.wilczynski@samsung.com>
-References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
- <CGME20241203134156eucas1p2326d84fcef2ee0914586122520b18dcc@eucas1p2.samsung.com>
- <20241203134137.2114847-7-m.wilczynski@samsung.com>
-Message-Id: <173323589751.1743555.13494050245769190862.robh@kernel.org>
-Subject: Re: [RFC PATCH v1 06/14] dt-bindings: clock: thead,th1520: Rename
- YAML schema file
+References: <SJ1PR11MB6129CCD82CD78D8EE6E27EF4B9362@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <SJ1PR11MB612965ACA3E84745346F0400B9362@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <5e405ad4-34d6-4507-978f-3d81d4af2455@t-8ch.de> <CAJZ5v0iXKvaxz-hmW2+qwTcSmtPJ23Hv04CMnmT=qPE0ytNwLg@mail.gmail.com>
+ <56d574c6-6eab-4388-8cb8-70cd615a8941@t-8ch.de>
+In-Reply-To: <56d574c6-6eab-4388-8cb8-70cd615a8941@t-8ch.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Dec 2024 15:33:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gFwu+6Cm7ORs7+TAc5jzXZRBO1uGcttBTTvK4OqT3Q6g@mail.gmail.com>
+Message-ID: <CAJZ5v0gFwu+6Cm7ORs7+TAc5jzXZRBO1uGcttBTTvK4OqT3Q6g@mail.gmail.com>
+Subject: Re: Regression on linux-next (next-20241120) and drm-tip
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	"Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>, 
+	"Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>, "Coelho, Luciano" <luciano.coelho@intel.com>, 
+	"Saarinen, Jani" <jani.saarinen@intel.com>, "Nikula, Jani" <jani.nikula@intel.com>, 
+	"De Marchi, Lucas" <lucas.demarchi@intel.com>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Dec 3, 2024 at 1:04=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisssc=
+huh.net> wrote:
+>
+> On 2024-12-03 12:54:54+0100, Rafael J. Wysocki wrote:
+> > On Tue, Dec 3, 2024 at 7:51=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@wei=
+ssschuh.net> wrote:
+> > >
+> > > (+Cc Sebastian)
+> > >
+> > > Hi Chaitanya,
+> > >
+> > > On 2024-12-03 05:07:47+0000, Borah, Chaitanya Kumar wrote:
+> > > > Hope you are doing well. I am Chaitanya from the linux graphics tea=
+m in Intel.
+> > > >
+> > > > This mail is regarding a regression we are seeing in our CI runs[1]=
+ on linux-next repository.
+> > >
+> > > Thanks for the report.
+> > >
+> > > > Since the version next-20241120 [2], we are seeing the following re=
+gression
+> > > >
+> > > > ```````````````````````````````````````````````````````````````````=
+``````````````
+> > > > <4>[   19.990743] Oops: general protection fault, probably for non-=
+canonical address 0xb11675ef8d1ccbce: 0000 [#1] PREEMPT SMP NOPTI
+> > > > <4>[   19.990760] CPU: 21 UID: 110 PID: 867 Comm: prometheus-node N=
+ot tainted 6.12.0-next-20241120-next-20241120-gac24e26aa08f+ #1
+> > > > <4>[   19.990771] Hardware name: Intel Corporation Arrow Lake Clien=
+t Platform/MTL-S UDIMM 2DPC EVCRB, BIOS MTLSFWI1.R00.4400.D85.2410100007 10=
+/10/2024
+> > > > <4>[   19.990782] RIP: 0010:power_supply_get_property+0x3e/0xe0
+> > > > ```````````````````````````````````````````````````````````````````=
+``````````````
+> > > > Details log can be found in [3].
+> > > >
+> > > > After bisecting the tree, the following patch [4] seems to be the f=
+irst "bad"
+> > > > commit
+> > > >
+> > > > ```````````````````````````````````````````````````````````````````=
+``````````````````````````````````````
+> > > > Commit 49000fee9e639f62ba1f965ed2ae4c5ad18d19e2
+> > > > Author:     Thomas Wei=C3=9Fschuh <mailto:linux@weissschuh.net>
+> > > > AuthorDate: Sat Oct 5 12:05:03 2024 +0200
+> > > > Commit:     Sebastian Reichel <mailto:sebastian.reichel@collabora.c=
+om>
+> > > > CommitDate: Tue Oct 15 22:22:20 2024 +0200
+> > > >     power: supply: core: add wakeup source inhibit by power_supply_=
+config
+> > > > ```````````````````````````````````````````````````````````````````=
+``````````````````````````````````````
+> > > >
+> > > > This is now seen in our drm-tip runs as well. [5]
+> > > >
+> > > > Could you please check why the patch causes this regression and pro=
+vide a fix if necessary?
+> > >
+> > > I don't see how this patch can lead to this error.
+> >
+> > It looks like the cfg->no_wakeup_source access reaches beyond the
+> > struct boundary for some reason.
+>
+> But the access to this field is only done in __power_supply_register().
+> The error reports however don't show this function at all,
+> they come from power_supply_uevent() and power_supply_get_property() by
+> which time the call to __power_supply_register() is long over.
+>
+> FWIW there is an uninitialized 'struct power_supply_config' in
+> drivers/hid/hid-corsair-void.c. But I highly doubt the test machines are
+> using that. (I'll send a patch later for it)
 
-On Tue, 03 Dec 2024 14:41:29 +0100, Michal Wilczynski wrote:
-> As support for clocks from new subsystems is being added to the T-Head
-> TH1520 SoC, the Device Tree binding YAML schema file name should reflect
-> this broader scope.  The existing schema file 'thead,th1520-clk-ap.yaml'
-> includes the '-ap' suffix, indicating it's specific to the Application
-> Processor (AP) subsystem.
-> 
-> Rename the YAML schema file to 'thead,th1520-clk.yaml' to generalize it
-> for all subsystems. Update all references to this schema file
-> accordingly.
-> 
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
->  .../clock/{thead,th1520-clk-ap.yaml => thead,th1520-clk.yaml}   | 2 +-
->  MAINTAINERS                                                     | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->  rename Documentation/devicetree/bindings/clock/{thead,th1520-clk-ap.yaml => thead,th1520-clk.yaml} (96%)
-> 
+So the only way I can think about in which the commit in question may
+lead to the reported issues is that changing the size of struct
+power_supply_config or its alignment makes an unexpected functional
+difference somewhere.
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241203134137.2114847-7-m.wilczynski@samsung.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+AFAICS, this commit cannot be reverted by itself, so which commits on
+top of it need to be reverted in order to revert it cleanly?
 
