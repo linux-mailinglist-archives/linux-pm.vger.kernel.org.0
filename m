@@ -1,133 +1,226 @@
-Return-Path: <linux-pm+bounces-18424-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2FB09E1591
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70A039E1682
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 10:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8664281074
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:25:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F7182839F1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35FC1C6F56;
-	Tue,  3 Dec 2024 08:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2479F1DE4E3;
+	Tue,  3 Dec 2024 08:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckxK2dTU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R1HkmmoX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA641BD9EB;
-	Tue,  3 Dec 2024 08:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92111DE4DF;
+	Tue,  3 Dec 2024 08:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733214307; cv=none; b=U1GDNIJM4l4a9a62akNAyzt8vAjRU0wkTnZY+ATfz8fX5r6D54uNNwE5YlGSHE4vFBGMd9sqJH4exxlfBUWg6XM2b03gBRDXcXo1FUpOPzI1G9hSnP0fXgr9J4ctT3PAmWNvXloZ2UY3Ui5VM4tFj/bLWFoJ6iok2yQz+4U5Ug0=
+	t=1733216358; cv=none; b=oJOdm0wSMjNpNWcPnx63G/tDIfhouW7FhaLov0GhBqL6MeYF7yGbJH8uyu9rDjM/9S2DijK21e6NXQhnffnULWPLCKb05ifk09IBs+h/8uNfCezjwufwZXQ1E8j+6PiSKoPPABQAliQfx0jLt8wWKsa4uOfk/IjkfqLRom1c5Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733214307; c=relaxed/simple;
-	bh=BTa+wgiNyFIm2OTLgqY7mmgwN8DZyO7pNyzVFgh+TMg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gnufi+d/LAcR06WHRwA08R+abQCjqjxoWtL3lv/EhCb8L+hGpvu/6Bd1tl3PNbURxNPSX01kvoFVi14UYcsKSVoQpaNA1f1nb8SVWtNNznEGJvHWtxWbrsAcztXzbjCJhRuuJ5lbwrqggVOATYVasUPZj5d6Br8YhUyygbJ9ZFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckxK2dTU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C84C4CECF;
-	Tue,  3 Dec 2024 08:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733214307;
-	bh=BTa+wgiNyFIm2OTLgqY7mmgwN8DZyO7pNyzVFgh+TMg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ckxK2dTUgLzQ2DQRimHhuFTZClvmg9v2v6qZS5ZW0HEZnEHX0Z9eN6C5SXg8A9DTz
-	 RwVg/W0dCHB+K9d5zC0zxTHlRp+jrc3LBuUREF8+/+7ZCaR0IqJMITxwZKu9AxPUBq
-	 juo6vTmP4pnjcH40huRrykLqxdvwUNlm0JrL0O0s7+dXX1aCrImZzWUCC7HwXFMvH+
-	 l8cqYI570GOD5Unw6DhAgn4RuuRPddA7Z5b7Yd9L+CEirC3AxjpL/hJ906pLS2HJGv
-	 uoGxRgeknk0X+D0bw6c5aoFF7bFixA/20M4dG/5SzmujY6Qqw8uwUPdgZuubr+T4yD
-	 gWv8VrbCKXxAA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tIODN-0000000082S-3VtQ;
-	Tue, 03 Dec 2024 09:25:02 +0100
-Date: Tue, 3 Dec 2024 09:25:01 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev, Aishwarya TCV <aishwarya.tcv@arm.com>,
-	Chuan Liu <chuan.liu@amlogic.com>,
-	Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] Revert "clk: Fix invalid execution of clk_set_rate"
-Message-ID: <Z07AXbQvvZwI8Ki6@hovoldconsulting.com>
-References: <20241202100621.29209-1-johan+linaro@kernel.org>
- <3fd004add188460bf2bdd1a718387c7f.sboyd@kernel.org>
+	s=arc-20240116; t=1733216358; c=relaxed/simple;
+	bh=216y/JwJRc9Rw/jR9BtNpHzSocQbW2QJLkmgKgwJNb4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SSouRCW0pFA6gS5KWqCHpZZ+k/7s4GPSh3l4ccDejIqo60lavJ7xyvAESXlnj99lCwgQyJeiMhcpofmD0tkaG9slGao+cADkqzgOmLGjE2tVLXPZz274TgFI4qzynjT9mVCM+9YxuwL1kwU4TuLbytuMH0oyDd/OirsthXTA+34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R1HkmmoX; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733216356; x=1764752356;
+  h=date:from:to:cc:subject:message-id;
+  bh=216y/JwJRc9Rw/jR9BtNpHzSocQbW2QJLkmgKgwJNb4=;
+  b=R1HkmmoXedLHFJ+pJYsQsO4lLNJTg1jgeeIdMzsKTZ/OE6uy+xo7o2r5
+   L/nKa+E5qHuv9eWYWpS8fMUirsXOHPVM0XyB5l/QuEG7o8OU6ntXHvi74
+   HYxMGDOA+9LM/JSiYJHBOcyVCaRK+FOtIk2zPlNGXavaDZ6QqknfEp1v9
+   AASgHmHzunW0xbr8clwuc7r2my4Wt04epXiGD++3Ed2unJeUvvt8r0Y3x
+   jsZmkvBbOBromgwjh0hjyiloAzkj8hAJya5luaZNeD2JgHgpAmrGiJA1f
+   hBExz14sMvRAW1ZY+sOpDLazHC4IufMYfdWxWQRUM+NFZI44C2OYvzzq5
+   w==;
+X-CSE-ConnectionGUID: sp14uF5WRs+4Tj9F2shMtA==
+X-CSE-MsgGUID: bfUHQ6JgTMuEbR3ihMjhuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="44801659"
+X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
+   d="scan'208";a="44801659"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 00:59:15 -0800
+X-CSE-ConnectionGUID: N6JPwd0cTqajCkQbNhHkZw==
+X-CSE-MsgGUID: F5nj7zhXTgScETOdoSh2XQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
+   d="scan'208";a="130835254"
+Received: from lkp-server01.sh.intel.com (HELO 388c121a226b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 03 Dec 2024 00:59:14 -0800
+Received: from kbuild by 388c121a226b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tIOkR-0000RF-1F;
+	Tue, 03 Dec 2024 08:59:11 +0000
+Date: Tue, 03 Dec 2024 16:56:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 4d27d1319cc08e4c4ed497c97360eb6e1489eeb1
+Message-ID: <202412031612.UVfLbXnt-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3fd004add188460bf2bdd1a718387c7f.sboyd@kernel.org>
 
-[ +CC: Viresh and Sudeep ]
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 4d27d1319cc08e4c4ed497c97360eb6e1489eeb1  Merge branch 'experimental/intel_pstate' into bleeding-edge
 
-On Mon, Dec 02, 2024 at 05:20:06PM -0800, Stephen Boyd wrote:
-> Quoting Johan Hovold (2024-12-02 02:06:21)
-> > This reverts commit 25f1c96a0e841013647d788d4598e364e5c2ebb7.
-> > 
-> > The offending commit results in errors like
-> > 
-> >         cpu cpu0: _opp_config_clk_single: failed to set clock rate: -22
-> > 
-> > spamming the logs on the Lenovo ThinkPad X13s and other Qualcomm
-> > machines when cpufreq tries to update the CPUFreq HW Engine clocks.
-> > 
-> > As mentioned in commit 4370232c727b ("cpufreq: qcom-hw: Add CPU clock
-> > provider support"):
-> > 
-> >         [T]he frequency supplied by the driver is the actual frequency
-> >         that comes out of the EPSS/OSM block after the DCVS operation.
-> >         This frequency is not same as what the CPUFreq framework has set
-> >         but it is the one that gets supplied to the CPUs after
-> >         throttling by LMh.
-> > 
-> > which seems to suggest that the driver relies on the previous behaviour
-> > of clk_set_rate().
-> 
-> I don't understand why a clk provider is needed there. Is anyone looking
-> into the real problem?
+elapsed time: 900m
 
-I mentioned this to Mani yesterday, but I'm not sure if he has had time
-to look into it yet. And I forgot to CC Viresh who was involved in
-implementing this. There is comment of his in the thread where this
-feature was added:
+configs tested: 132
+configs skipped: 14
 
-	Most likely no one will ever do clk_set_rate() on this new
-	clock, which is fine, though OPP core will likely do
-	clk_get_rate() here.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-which may suggest that some underlying assumption has changed. [1]
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    clang-20
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    clang-20
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-20
+arc                            hsdk_defconfig    gcc-14.2.0
+arc                        nsim_700_defconfig    clang-14
+arc                   randconfig-001-20241203    clang-20
+arc                   randconfig-001-20241203    gcc-13.2.0
+arc                   randconfig-002-20241203    clang-20
+arc                   randconfig-002-20241203    gcc-13.2.0
+arc                    vdk_hs38_smp_defconfig    gcc-14.2.0
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    clang-20
+arm                         at91_dt_defconfig    gcc-14.2.0
+arm                          ep93xx_defconfig    gcc-14.2.0
+arm                   milbeaut_m10v_defconfig    clang-14
+arm                         mv78xx0_defconfig    gcc-14.2.0
+arm                            qcom_defconfig    clang-14
+arm                   randconfig-001-20241203    clang-20
+arm                   randconfig-002-20241203    clang-20
+arm                   randconfig-002-20241203    gcc-14.2.0
+arm                   randconfig-003-20241203    clang-20
+arm                   randconfig-004-20241203    clang-20
+arm                        realview_defconfig    clang-14
+arm                           stm32_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20241203    clang-20
+arm64                 randconfig-001-20241203    gcc-14.2.0
+arm64                 randconfig-002-20241203    clang-20
+arm64                 randconfig-002-20241203    gcc-14.2.0
+arm64                 randconfig-003-20241203    clang-20
+arm64                 randconfig-003-20241203    gcc-14.2.0
+arm64                 randconfig-004-20241203    clang-20
+csky                             alldefconfig    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-20
+i386        buildonly-randconfig-001-20241203    clang-19
+i386        buildonly-randconfig-001-20241203    gcc-12
+i386        buildonly-randconfig-002-20241203    clang-19
+i386        buildonly-randconfig-002-20241203    gcc-12
+i386        buildonly-randconfig-003-20241203    clang-19
+i386        buildonly-randconfig-004-20241203    clang-19
+i386        buildonly-randconfig-005-20241203    clang-19
+i386        buildonly-randconfig-006-20241203    clang-19
+i386        buildonly-randconfig-006-20241203    gcc-12
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                       m5275evb_defconfig    clang-14
+m68k                        stmark2_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                  cavium_octeon_defconfig    gcc-14.2.0
+mips                          eyeq5_defconfig    gcc-14.2.0
+mips                           ip28_defconfig    gcc-14.2.0
+mips                      maltaaprp_defconfig    clang-14
+mips                        qi_lb60_defconfig    gcc-14.2.0
+nios2                            alldefconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+openrisc                         alldefconfig    gcc-14.2.0
+openrisc                          allnoconfig    clang-20
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-20
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                generic-32bit_defconfig    clang-14
+parisc                generic-64bit_defconfig    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-20
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    gcc-14.2.0
+powerpc                     asp8347_defconfig    gcc-14.2.0
+powerpc                   currituck_defconfig    gcc-14.2.0
+powerpc                       eiger_defconfig    gcc-14.2.0
+powerpc                        fsp2_defconfig    clang-14
+powerpc                  iss476-smp_defconfig    gcc-14.2.0
+powerpc                   motionpro_defconfig    gcc-14.2.0
+powerpc                     mpc5200_defconfig    clang-14
+powerpc                     tqm8541_defconfig    gcc-14.2.0
+riscv                            allmodconfig    gcc-14.2.0
+riscv                             allnoconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    gcc-14.2.0
+s390                             allmodconfig    clang-20
+s390                             allmodconfig    gcc-14.2.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                        edosk7705_defconfig    gcc-14.2.0
+sh                        edosk7760_defconfig    gcc-14.2.0
+sh                               j2_defconfig    gcc-14.2.0
+sh                 kfr2r09-romimage_defconfig    gcc-14.2.0
+sh                            migor_defconfig    gcc-14.2.0
+sh                          r7780mp_defconfig    gcc-14.2.0
+sh                          rsk7203_defconfig    clang-14
+sh                           se7705_defconfig    clang-14
+sh                           se7724_defconfig    gcc-14.2.0
+sh                           se7780_defconfig    gcc-14.2.0
+sh                        sh7763rdp_defconfig    gcc-14.2.0
+sh                        sh7785lcr_defconfig    gcc-14.2.0
+sh                              ul2_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc64                          alldefconfig    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-17
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                               allyesconfig    gcc-12
+x86_64      buildonly-randconfig-001-20241203    gcc-11
+x86_64      buildonly-randconfig-002-20241203    gcc-11
+x86_64      buildonly-randconfig-003-20241203    gcc-11
+x86_64      buildonly-randconfig-004-20241203    gcc-11
+x86_64      buildonly-randconfig-005-20241203    gcc-11
+x86_64      buildonly-randconfig-006-20241203    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                  cadence_csp_defconfig    clang-14
+xtensa                         virt_defconfig    gcc-14.2.0
 
-There are some more details in that thread that should explain why
-things were implemented the way they were:
-
-	https://lore.kernel.org/linux-arm-msm/20221117053145.10409-1-manivannan.sadhasivam@linaro.org/
-
-> > Since this affects many Qualcomm machines, let's revert for now.
-> > 
-> > Fixes: 25f1c96a0e84 ("clk: Fix invalid execution of clk_set_rate")
-> > Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
-> > Link: https://lore.kernel.org/all/e2d83e57-ad07-411b-99f6-a4fc3c4534fa@arm.com/
-> > Cc: Chuan Liu <chuan.liu@amlogic.com>
-> > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> 
-> Applied to clk-fixes
-
-Thanks.
-
-Johan
-
-[1] https://lore.kernel.org/linux-arm-msm/20221118055730.yrzpuih3zfko5c2q@vireshk-i7/
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
