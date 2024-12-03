@@ -1,66 +1,67 @@
-Return-Path: <linux-pm+bounces-18436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C4769E18EF
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 11:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C1489E192C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 11:24:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CA522807F3
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 10:12:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CB2028752F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 10:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC941E0E17;
-	Tue,  3 Dec 2024 10:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCABD1E1C05;
+	Tue,  3 Dec 2024 10:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b="U/KazvYA"
+	dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b="MerHWp9T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2114.outbound.protection.outlook.com [40.107.241.114])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2090.outbound.protection.outlook.com [40.107.20.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFDC1E0DE9;
-	Tue,  3 Dec 2024 10:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A6E1B5336;
+	Tue,  3 Dec 2024 10:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.90
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733220725; cv=fail; b=B9AQsPbIZY8nytL6QB68DnJHULu6Sfw5FxFytCd1OnINd5dnRP99Cn/So/xjTGuRwPecjoPP967UG4THzbvXxr+ntkB091n8p41dK+wEbNIbhhQtLsAVCDzXtSnW6bDPyui7AD1zR/5zZkGZs2KX6wIHP0caJIesEqIqxQnIW4A=
+	t=1733221470; cv=fail; b=W2xcfXTaoj/FT53nFo0f6SH7CLJ50YRuc91x2A6VNqSIZ3UfBJMeTe/RdbLTNGw3Igs1Cu5ZvBPm9L3EKDGi0Cjx4dWtVvR/CIFLGUPSLA/DGxExjTm+7Obqq2MVuZ8sg5/m2AhsBWsyYfG40JxRhLwsIu8nRT9k9vLveeQoz+Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733220725; c=relaxed/simple;
-	bh=ab7FWO+9TVuPGmJTsFPOtUYiDYAS+X/h1GInV2A6Ilo=;
+	s=arc-20240116; t=1733221470; c=relaxed/simple;
+	bh=s1IAhiKAMfbV4V4cE1v1AIGpGWnBs4ZWUSI+lW68Mhs=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=PntqrZsm6hGvgqJZFwY7/7FOmJJUgeFH+1nKz/EjBL8Eu3aoCif5dg0V7LKJATWqrWSppKO6eBTCJu+ex4CNFSQ+MGoL8DwOnrAZubYuVAPzHBxL2naYsYc0cxcVZ9xAa0GrDdyt4Cp3wyti1WYRRKGt/R4v5mhtXHkk7To2m94=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be; spf=pass smtp.mailfrom=uclouvain.be; dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b=U/KazvYA; arc=fail smtp.client-ip=40.107.241.114
+	 Content-Type:MIME-Version; b=Sc8CULlxLeuG4qBDSiuwe1DGoH+WkbF8GnZcZJki+6a4dABjrGJ+d0bTloF0vxtO8PvL1d2GcY8FWfssqPBD3hlHx+MBByU/IC6JB1ue9keBouz5QvBhfoZd8B4PjNUOzQd/O/3lPgID4Zmq8Z96vdrslNVOTgZJYps+79uEZ4g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be; spf=pass smtp.mailfrom=uclouvain.be; dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b=MerHWp9T; arc=fail smtp.client-ip=40.107.20.90
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uclouvain.be
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WJwXCd7WJKteERkfpuaa1wVi2DmD2xC7fgztIa/+4Gf5O/AaWSMVWtyrDaMhrJVpq5Lv0vKa2qsN6JYQEs58iCrEUJWyY+rgeCf8wmMhD8T2OuJEZGxoztpY5980RK7dBslidJAUZ5x0zlkwbNhI+sGKe9uCUEQksjurwH0Qidz9ncZ0cvbgDvv8ELruNI4Vf8nrJpz0d8cBr3HuVb6bIbMjsKF/LRYD/04etVEHIAs/xS0QsIYBVY4OOv8hmHZdkj9rHaaWlCjKo2ozPpJzR+pbDeKEqWrct2+yAmLTZDCNMSzJaaFLNb0WGP1t+jG2WjqwLkC27UdHzReC03nrOg==
+ b=IMb0zJnGVUAhdvwHgwUa9fhCqbKtUWIusAkxAePowy8qQA2Eg9/dyZZ8cctIdYzRoQZRAOMhAtgpZp2no9MfWOu80Wr+RnoF7OEESnyRWs7GZ/GkmCXTvAluBKEK1pOXFcfwjNSnd8RcGiGRsw/JImiXnVa3ZArkFHiZ9oiIRmsaG1DzOsPKltBOLc5xlxw83FTE/u9Wa8ia5sClyW+q5arjJGmf91pB7QLABwOXpDTriXJaG1GLHHHmXYCrZ7X7sNx2U9Mod3Lq2k7AYAHw9snODGf8pt8TkurDyFhLJINHvL3tjTNNiqGHbbCXP2kwC7juEFgrepVUJpo82fnkiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jItZPVFxCk2giPMXionZZIUvsaqSVulFYvSoEHHQ0nw=;
- b=P+F5g0Ef3w+QqLI4gtfIPEskiVxZ6jzc68BhhfDzfQbASp1zJ9mU8c5j7WFXseOfIWYBNlglhcz8xj3lbNdd/2PgZK7s2br5/mJMGtwrhHujHLCriPHiV8w6eqMD+JNL6AgxOnuZOnOfisos0ojX3GwuRGEJYzPCDnE0g55A4NkSJ/XKC6WdQPdH4ojg7GW6az6r8Yu23J2GQ+jd7Vy7XQx4bLpM5qBXFCRJvHAkv9dhVLhvFg0Jzng0zvHz3oHaPiaFRC2D4YSkFdzSWsxqzYx/Ri+IF6jZXZ6iqsHsSfnPvGBqXV6aQSHG8dykHk4jRqZJHs3oHPQ3N8dvNVM/Iw==
+ bh=Lms3eAQIvFdZRyNDCU3C27FqLFuhMcPmxckF36LATyc=;
+ b=Iv4+xlV19AN5dCJk+22kStkVtBYvIvecyKeI2UjRZ4DwMjDM6fwK+8t2CfuRK1ZrNwu1+r856jdOxkGJuW2FYo+nPowluB007LydBCb2pzJn8VZ21xFCUB0igz1653xiVQGTz/pFpTV2BY5uxrJkMCkAu/GfQk9355CvxOi59t+q3a6Lb32yQ7Z146XIqKdJ3xLVHlqdcEjAW04/aKRYC/rHOj+0YAZDkDAEH1no5/JpydwFvf4nLEMPQ7UCDIaTw9Ixup9OK7SDGC4f0ivUq1SRfe/WXx6RCbVy0n165Xl/VkCO0umoSoXma/xKx53dR/2hDteTBzmdUcQahadLjQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=uclouvain.be; dmarc=pass action=none header.from=uclouvain.be;
  dkim=pass header.d=uclouvain.be; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uclouvain.be;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jItZPVFxCk2giPMXionZZIUvsaqSVulFYvSoEHHQ0nw=;
- b=U/KazvYAHo7r7vo01QJ/yB6pEkRO7hZob8KIfFhh993ndEERd1wGewP0ue0BKB4snw/WGYWRyBDzxg91ClKjS/bBC2p41arbqhQ4fs/kw7LLjgLvvMw2OKMtoEqbJe2FXHakz3jASXSEXIwbjF6GFIB8T/R4G8TzJr3Ta2IjFTOjyGq60VoZ2al7zGRlgfou/LJ3Ay0uJaR59FSMVdXtjO+RDWFAINfDpymSDlulbW28OgISrNcnS5Xcp4NCkP3UxU697L7BwkBVyrh7eqKnHl5zWM/upOIHx2CEOap1Jc1usJetmxZNeSE/ZyAaNY/N2Z5RuhfarimeQzDceHC9Ng==
+ bh=Lms3eAQIvFdZRyNDCU3C27FqLFuhMcPmxckF36LATyc=;
+ b=MerHWp9TTss/BythT+DtlZ6VVfua+F1uG7iDYtavId34WvGlzsnqD57GYDKRYhe1ZVzVIYGfCMy076ntKDD4lJF3GJINpJRkghUY/qGIi9kHkOhYMB/qfmbw+5vePBkUiylQXLAdjhoZqlL1tfMDISAUHTRWR2NHTYVyqaAx0BV4k7u/kBo8YOYhN1b1rjcdjh58iPOCBA7xUjJBFhMr9V0ZHNKls6ElaeoOaxvR5IMhbQnwp6WFSWQ+jEAqGKCFMUotDkH5O88D6rX/e11p5nwt8fDIc7/PrWbEyKtL4/FInzAXj1QOB0BEilBNxkNjMlPv0TMSn7461N/LcPfLow==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=uclouvain.be;
 Received: from AS8PR03MB9047.eurprd03.prod.outlook.com (2603:10a6:20b:5b6::13)
- by AS2PR03MB9561.eurprd03.prod.outlook.com (2603:10a6:20b:59a::21) with
+ by DB3PR0302MB9064.eurprd03.prod.outlook.com (2603:10a6:10:428::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Tue, 3 Dec
- 2024 10:11:58 +0000
+ 2024 10:24:24 +0000
 Received: from AS8PR03MB9047.eurprd03.prod.outlook.com
  ([fe80::c90e:deef:6dcf:538c]) by AS8PR03MB9047.eurprd03.prod.outlook.com
  ([fe80::c90e:deef:6dcf:538c%6]) with mapi id 15.20.8207.017; Tue, 3 Dec 2024
- 10:11:58 +0000
-Message-ID: <bce22ca8-aed2-41ae-b2ef-fdc71266709a@uclouvain.be>
-Date: Tue, 3 Dec 2024 11:11:15 +0100
+ 10:24:24 +0000
+Message-ID: <575b3275-b2fa-4e5c-bb6b-759394b02e18@uclouvain.be>
+Date: Tue, 3 Dec 2024 11:23:41 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] power: supply: add support for max77759 fuel gauge
+Subject: Re: [PATCH 2/4] dt-bindings: power: supply: add max77759-fg flavor
+ and don't require nvme address
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -72,17 +73,15 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-samsung-soc@vger.kernel.org
 References: <20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be>
- <20241202-b4-gs101_max77759_fg-v1-1-98d2fa7bfe30@uclouvain.be>
- <c377f3302c6c282ad826211c859e2b65bb1222cb.camel@linaro.org>
- <9387c0cf-d291-485a-8cd1-1aced7eba14e@uclouvain.be>
- <2883fb0dd22312d5da9039d4fef869276a0bd430.camel@linaro.org>
+ <20241202-b4-gs101_max77759_fg-v1-2-98d2fa7bfe30@uclouvain.be>
+ <e23721ebd766f410103ddfb8705f3d7d6e5ae3e9.camel@linaro.org>
 Content-Language: en-US
 From: Thomas Antoine <t.antoine@uclouvain.be>
-In-Reply-To: <2883fb0dd22312d5da9039d4fef869276a0bd430.camel@linaro.org>
+In-Reply-To: <e23721ebd766f410103ddfb8705f3d7d6e5ae3e9.camel@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MI0P293CA0015.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:44::8) To AS8PR03MB9047.eurprd03.prod.outlook.com
+X-ClientProxiedBy: MI0P293CA0009.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:44::6) To AS8PR03MB9047.eurprd03.prod.outlook.com
  (2603:10a6:20b:5b6::13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -91,207 +90,112 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR03MB9047:EE_|AS2PR03MB9561:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0e2c8a0-64b2-4a60-4fd3-08dd1382ec1e
+X-MS-TrafficTypeDiagnostic: AS8PR03MB9047:EE_|DB3PR0302MB9064:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3db1632c-b56f-4e23-d966-08dd1384a85c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|10070799003|7416014|376014|921020;
+	BCL:0;ARA:13230040|7416014|376014|10070799003|1800799024|366016|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?T3pUZzJTSmJxN2lUSENCSUlTQlJRYXFhdVRUc1RkZHkyWjVvNW5FRG1wRHF4?=
- =?utf-8?B?SDFLQmhqWnFGUkMrZ1kvbGt4LzUvUm1maXpZVEhZQzBGSWc4aVp6UXRHMnB3?=
- =?utf-8?B?SHJNRmFlUzd2dnBGYlRlMXdqZkJvdXBOTW5UcXdhUndka0VvMGZRMnVUaDg0?=
- =?utf-8?B?M3l0VXBSanhGK3hMRDNMNXFWYzdGdHFaY0xwUWthZTBlTVVpYXVFVTVydkR1?=
- =?utf-8?B?VnpvM0dUbXlSSy9Da3ZMWDJ2Z0oySFVIU1BXdzNVNnJzcWNTKzNCdUUybTgr?=
- =?utf-8?B?dXZ0d2tjeEVtcmZEcVRLZTNTbUFYYlR0V21SSFh4ejVnMEtuYjJEYXRCVjlp?=
- =?utf-8?B?YncvaHJrNjdHKy9sVVJPNFRHbFJUZjM4Wk8wbGFxSE94ZnQzZ2ZuMDJ5eEtn?=
- =?utf-8?B?MndjSjlzUFRYaEpJd3NGNVVXRUNJMlZsUmZ3SC9GRXNBUlN6T2had1VKN1Z6?=
- =?utf-8?B?djhRK3F4TlkvOUVUTmx4YmdUWXBHcTlNVTAyZnRUUklFYVZTU2tSN2ZIZ1kr?=
- =?utf-8?B?UXBtMWJuZWRkRXFUTDRReEF5WFV2THlqZERWTFUwdzRoRENGMk1QQjVIM1Zx?=
- =?utf-8?B?WlZaYU92c3lRSU5kNzVieGJBWGwyZTZhRVBLVW96a3NZanFScUh4UGFLeGov?=
- =?utf-8?B?aE9FWmFWQ1pzcm1GTC9sb2RDWnJldWRiMFNlelhHYkFIdkZ1YjJWc1B1OVJD?=
- =?utf-8?B?S2JxcTUvYkFUelJtNTZWcFFtM0plWHBoUVF4cUdPWTIyNVdnYjErNzRoVnEw?=
- =?utf-8?B?ekJTMHlRR2tVYlNUSzlkbisvOHMwbVMvWTJCT2NYcFJBTklQeGJJQVBPT0Y5?=
- =?utf-8?B?dnJqeWk2YkNWZ3l3QStrOUpoSkdEczY0K0VkS3pHNXVvVFhDNVRJUVpHNm5Z?=
- =?utf-8?B?ZHRuMmIzYnlHUDVxQXdmNmJGTmgwaGw5YjlIR2I1OWpIRDErQ0UzcUZkTHhy?=
- =?utf-8?B?T3dZYjVLRGV0RW52TDlJUGJoUElSSE9CZCtJM2pDYnVtZWpPK1A5R0xpS2sx?=
- =?utf-8?B?OGNCYitZMnNEb1FjYlVyTm5zUHo0L3RMRHRBL0I3VkR4b3BhTXM3WWI3cWZ4?=
- =?utf-8?B?NUJyamU0OGxqZzg5dTFPYW9uZEpsQ3phUTlPcG1GVDJVaGlHYmFNNWNxR3No?=
- =?utf-8?B?czVWMXQvTzAwYmxoNUx4clhpZ2xmeUpHT0pTNVZKbEtnUEpEekhmZ3gzZ2U3?=
- =?utf-8?B?OUVCenlLSE84K3hGT3ZOWDNuaFlVeEVGbVNvUkNPbnBFMFVIcGV2VGJSME5X?=
- =?utf-8?B?ZEVaOHh3YUJIVEJCb0JCSkdVY1FKZUZENzlUN05EUHZqV1p5YnJVMkgrdi9F?=
- =?utf-8?B?M0RxRG9pdncwWFhhckRYbzBKSHhrU2dkejlkazZEeTZUdi9VUjR3SG83Kzl5?=
- =?utf-8?B?RFZJWDdXRy9UWnNjelN0MnY1M0hscjVybGtDUnJwNE9XejN0VGkyQTNnQTNn?=
- =?utf-8?B?Wm5MemRuUXRmLzV5M2FMNkoxdnVZeW05SHNZM05TTTNhZDlUSHJCeDRhblpQ?=
- =?utf-8?B?TjVMRGxKbGJxSXpiZkVldEs3K1NtU1FtZ3BoMzk3TlJ4ZUxQWHNPMU9rbTRY?=
- =?utf-8?B?dXZaZk0rb1BvZkt4em9ZaFQ4bGhKTTVWdUFhb04vSElkdDVUdEVkTVEwanpq?=
- =?utf-8?B?MmhPanRsZ1ZKVktVcXhHVHZndWZ4K0kvb2k3U2tha1NMK3gxSno1RnFoLzJG?=
- =?utf-8?B?WjNuM0FPVTdvaWZLL0lOR3pOUVVyS093VFBWci9XVkNCVlR3OG5LUy9yZlpM?=
- =?utf-8?B?TENEMHdmQldMZDA5eGdRbWM4azJ5OXJLb2w0Y3llNWZaMnZPLzRRenoyNTBP?=
- =?utf-8?B?ZCtzQy81RTR0aFZRUFZldz09?=
+	=?utf-8?B?SUVUdE9KMTBkNWFDR3NuYXJPb0lzVy8vWGZZNms1amJuc0hpOUFZL2t3WVhH?=
+ =?utf-8?B?YUF4MU9PcHJ0Qk1qTlhsK2t4bG9HYUNxQWJHSlpFd3hiaS9CVm04WFNHY2N3?=
+ =?utf-8?B?NkpDRGQ0RFZTYitodzZmMlRoY3lSai9DZk1ISU5Db0VSMEZUNlFtUjZLLzZG?=
+ =?utf-8?B?WklwM1JZZmVqZ2dBMEgzd2JvTGNqTHJNa2JqUzBFbzNFK25rbTlTNWRVQWJ6?=
+ =?utf-8?B?SjcwTW8xU1lHbko2Yi9KNXEzall0c1ByS0hPR0lnVUZZWVU5dUZ4aThGaWIv?=
+ =?utf-8?B?bWp5RlRGQkNZZW5iUjNpWGE2MTk1dGRVREZ5ajhKT2FNQ1RJbFRFUCtrSzlS?=
+ =?utf-8?B?cjRtZ21vbEdGNm5XTXU5R0lxYjZvc3EyL3duT21NUkRlN0J5S01nbG96ZWxO?=
+ =?utf-8?B?eE4vcDJMUzRnd1pZWGZBSnB0NjRoSnArQWJZSnUvc3FBOU1WSWZHTGNOYk5M?=
+ =?utf-8?B?Rlp1TnFyODJTbnRXeUFTSWdRUHhRUEU2dkpLSUR1bm1Lb3E2QkpURUQwTHcz?=
+ =?utf-8?B?U0ROVjR0cmk2YXNjVG8vNlVRM0lxR0NnRGU5dkM3cHZ1M3pUNnhHSVFwMGtt?=
+ =?utf-8?B?WjNKLzZReks0cFYxWlpqNmJROThDRHRrMXFFdE9pVmZ1cDFvbzhGejU0blBX?=
+ =?utf-8?B?QjFwYUtGWVBOTUhUcDB4VStQRjE4NmsrSC82UWlMeHkyWG5YL2xPbThVdFln?=
+ =?utf-8?B?Wko5WC9GeEdwdGlORTAvVE5nNVM5MDJyZHlZS1JLT25LUktRcnYxU05vSnNJ?=
+ =?utf-8?B?dzF3R2FQbWRudEhRTXMvZHVQekdmLzNvV3lHVXhnMXlzSU5FRlA4VVhVUXBz?=
+ =?utf-8?B?SHVTNUpkcUp0ZjN6dkhzTTJLa2U5UHh2SG52MzZWYXRtSmF6ZUpPVUtoNlBv?=
+ =?utf-8?B?Tmc1SjVVNUs0VW9PbWQxb3JrVEJ4ckNrWEVWUy9GM29sWlU1ZjdxMHFJUzM5?=
+ =?utf-8?B?OUVLLzd2SEFRK29CTFVNWHk0SVRDdkR3Z0JSWGFFSFJ2TWo0OWFrYzJIOVk5?=
+ =?utf-8?B?dGdCSzl1b1lMbUJna2tIeFFNRjM4NllLQTE1T05QYm5KMVJBS0JTQW5YOUdJ?=
+ =?utf-8?B?YW9DVksyOEgvYXNwaXBaTHM5cVBOVkxYanJyR1BXVEJnZENxMHpFcUdjVzV5?=
+ =?utf-8?B?TlNSYWNSTXZEK2t5Y0tmaXhiait1cmU5YjBCZENHbjhEQm1kUVMyWmc3M2Vl?=
+ =?utf-8?B?QVMveFl2dVNwOTF1TTVCUUZGeFdSaTdxYkZ0MTY5aVQ5UmU4eiswOUFRNWE5?=
+ =?utf-8?B?K2hkMjgwdXhMZ212UlROVEF1a2pSMysyblllemlmYkdrdDdpVytKdnlTTzhY?=
+ =?utf-8?B?R1g0RHh5RVFBU25mM00yaHYyWEZVRGFMQWU5Tnd3cnQ2a1RUYkI3bkxVNzZY?=
+ =?utf-8?B?OERRVXRvaStua3JtMW1NVWhOY3phNDhKaVp2YWMzWVVLTFpZZ3Q2YXBiSmxm?=
+ =?utf-8?B?cWxOK1lER3Fab0tWajZmdWNrYk9TV1B5V3dsODlDUitrNTBOQjBrZHlMdllE?=
+ =?utf-8?B?K0lTczJNdVozbFkvYWRlTEhBSng0MHArVU1YREFGdFJEd2dRYU9ROTJwYzlp?=
+ =?utf-8?B?cG13RE5ZU0N6aHg2SlVOSGZEaWlWeFVHYmhSUmZkYjgzWGRFenFxZ3lWUzVB?=
+ =?utf-8?B?Nk5RUzJCbGwxVnAxd0pGakRhVmJySGpnaElCd3NIM1gwNVowRG5Ybk9hVWdJ?=
+ =?utf-8?B?MkQzUUhyQnhhMExvZ1JaWHdHRjh6ZjAxUWpDa0xTalNHV2V5SHNWRkpHb3JR?=
+ =?utf-8?B?Y2pYUXdBWVpieHIyZ0FpbmM3bWJCV3l3b0NaZ2FqL09vaFR1Sll4cit1eWFN?=
+ =?utf-8?B?YnV1SmIxUktERTJWV1BBamcwNEwyWGpnZkRNa2dhK0J0Z3Z4NkhhTmI0Y1ZQ?=
+ =?utf-8?Q?67kEcYrfP7jLl?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB9047.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(10070799003)(7416014)(376014)(921020);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB9047.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(10070799003)(1800799024)(366016)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b3p1RjBaQkVqOFZtTFZ2dXkxU0l2TTl6NWRPUW15UkRtUk5JZ3VTZTZrUUdq?=
- =?utf-8?B?UWlnamlid200TFpwblJ5M25tQmUxZE9yMmZsZjkyOG12Tkt2Mm80My9JZ3Y5?=
- =?utf-8?B?WUVRQjZ6OXpienJJTjFKYXNrbWYzWTVnNXVHVXM3NFdVVksxckkydXFScFZx?=
- =?utf-8?B?NDVSTHc1YmNWR3NvVDhDNFJXYklURmNyRkgwbjU2dE1zcXd6MHJCaThkVEJ6?=
- =?utf-8?B?Vm9US1p3QzRnbGtldmN4eVY2SkIzUW1sWFgwZGdQQklrWmlIVmZXaUVGMkRX?=
- =?utf-8?B?dnl2d25PRWpvbDlRZW9yYkNxb0J4R2lJTlBTbWlJd1BDUndQd1AvS0MxYXlm?=
- =?utf-8?B?b1JoWkV6dVprQXFxT3dYN1djUFJYazJsME1pS0VnTlNMNUYxdGprV2prbFdF?=
- =?utf-8?B?SDI1UmdUWEFjL1RIaGRPV0g2OGhJbktkcXhTQUNPK01KVXBGTHJwMFJjN0J2?=
- =?utf-8?B?cjY3TnFTZnZqT0dKbUVuL2YwRCtoYTd0OHhKSlZyZXc0Z05TZnBhRUZBU2Fv?=
- =?utf-8?B?OHFVckU4VWQ1d01EL0ErbjhFRUhreDkxUTd2WE53bnU5T3kwalVtSXJkK0g4?=
- =?utf-8?B?NkFtRHllRlhBYndJRkw3bkRSUE5uOVBHazgzT0VPQStJQTlONFlUcThYOFlX?=
- =?utf-8?B?b3Z5cm4yZXhvNWFPU2RXMXNFWEYwYlNsWHd0NUQ3cHVsMUhjTU9MMUtrbytC?=
- =?utf-8?B?VlFzcVpPbzZmcTM5R2VHRlYzY2NYZ1g3cC80azBKalVjZi94WWZkVmJYQ2la?=
- =?utf-8?B?M3VwTDNoeFVTdlJBT2lxQmhrQktaZXpzQVkrZWFnQ2RubDlxL2x2V1FHRnE1?=
- =?utf-8?B?V1JjeHJQTTBsZkhWa1NXTno4Mit3a05yMndDdkRQaXBpaWt2YjV1VzdXVTZK?=
- =?utf-8?B?R2xYU200ejFqbE13bUZLOG5yZU5OQU9ReHc2ZmFXcnMyL2tTcTBWQkZvMWdS?=
- =?utf-8?B?VjFkNVN2Z1dKMGk2ZUZXR0VGYlBiWHJ0RlAzMXRvSStkMXY0YkUwdHhBdG4y?=
- =?utf-8?B?dWx2MVQ1Rmh0UzBqWXFzTnZCYTB2eENhUDEwL1pTV2d2aFN1dVgvS2JpSUpD?=
- =?utf-8?B?VVI0RFlEcEExVGpUVU5PTUVvZ25BQXBxY29DYndRRDJDNVVGampBUmU0NnEr?=
- =?utf-8?B?K0hrTHJaM0NydDBUbEdwc1Y1dHd6UVpXSHFrMTdETHZmVndOSWp3RGZtUnJi?=
- =?utf-8?B?dGFRVHV0R3p4RFBPWElmcnU2Y0poVUgzeGRLNyt5OFFQc1B3eS9EMzR4S2JE?=
- =?utf-8?B?MFBWT3VoUG0yMFJ1cEt6QUM0NHhYZkFBVVZzZlNEcllGYzcvZUNlRWRFc0NZ?=
- =?utf-8?B?M1U2MEJuOEhTQVdDZHA3amNSSXd2blJRak5PQk51QnJEQ0NDb3ZRREVtSXo0?=
- =?utf-8?B?S2xHVjdpMW5GdncveGkxdjhtcGZSTFJ5RFF4YmgxMmFsbjBxc0g0UUpKeVlK?=
- =?utf-8?B?ZHJIL3VsYVVyTVFabVZwbVVTMnF0ckIrbm50bzdnY2s4MnNnWVJCYk90WExj?=
- =?utf-8?B?UzdjRUJKaEFvekdyaHhOM2hqeVRnWFBVNHRVSGZMeTl4UFAyK1o1dktwSGpy?=
- =?utf-8?B?di9QUk95WmoyRXdYZUhOVnRHSlM2alU3eU9yeFlFaWdRYjFQbEhFNGVzaVNX?=
- =?utf-8?B?ZXhNNkprcVhHTnhwLzI1NWhaN2Y4UzdmRjg5WnV1eXYzamZ5RWVrVU0xc3U4?=
- =?utf-8?B?cUx0UitkN01JUjdUK3d6UjJ3dTM1dkt5c0U2NHgxT1VGcmxNKzhqaHd2bUVJ?=
- =?utf-8?B?NmJBL1Y1SzhETmpFVitucE9Tc3BhYjViekhhUmlOeFpHVm51dGE0MkNiM0Vj?=
- =?utf-8?B?K1EydXVqL2owQ1FBVWxreUtNemVJb3VJUy9xSnBybHovM3praGFVU3N6KzJz?=
- =?utf-8?B?cUFmc3RRQ3VGYjQ2eFZtNzhQTmcvbEpJcEtBK25DM2Jha09tbUh1V2owUzFv?=
- =?utf-8?B?VDNRSzZYV1NXdlpsczFQZ21jeGRiZVlrVnl3TW92bUNKNjc0T3NFd2RxT01t?=
- =?utf-8?B?UmdWdG9heXVUWTU1c2hIcFh4eTRDajNNQWdmSE1xNVdpeVM3M1Q5d3pqUHRy?=
- =?utf-8?B?NDk5a3NOWFVDSHk0enFHRFlsYmVYNk9DL1E5T2pPaVpFYTdUamYwVEdSREVp?=
- =?utf-8?B?NDNkZ25PSTBjeHM2eUdaM1J1cGNrUXpPK3BydVJVelI1aDNXNCs2NHUwc1ds?=
- =?utf-8?Q?YqJ8jfdzpAjMhfRaciuX/iAy/sSP1nDgV7EQthS10G1Y?=
+	=?utf-8?B?T0FVTHh1dXZTdC9jZnBRN21DTkZialZaU3YvY2IwMjhNTFhJdDdWc1FFU1VB?=
+ =?utf-8?B?YmtROHdiaWxMK09xQzNiR1FncytkV245V29Ld3RwYnVOb0NiNHBja0JZaVVF?=
+ =?utf-8?B?Z1o3bnpPeFZnWHNPWmlVRWZBUVY2TzNPNEw3ODRyK3cwZ1FYVUJCWFFLR2Va?=
+ =?utf-8?B?VHlyY2Y1cVBBcUUwSlJueEExRlY2RlNDOHMxSXk0UmNkSzZVZzRoSERrSHpN?=
+ =?utf-8?B?Z1cwbHo2ZzZvRWZ1blpaOGUxdTFSTDl5TDZkYTJ0ek1JVTlaeXRHVDAvWHZp?=
+ =?utf-8?B?UmlNanphKy90WWM2akdTY1JtVnNEbzFQT3JXUjYyelVvTkRsRXIvTzI4UVRY?=
+ =?utf-8?B?a2ZmeEw3VkxQTy95L0JEUnIrVEZiV3pHcDRRT21QQkIwRU9hbGVGcXZyRURM?=
+ =?utf-8?B?Q3pnTGxBVFZFVG5BZ0V1RFltYXdkS1I5QVdGL25DRXNiclVRczBhZGtLaDZP?=
+ =?utf-8?B?WkpwbkNub2RyU3NpRzdaMko1L0Q2M2lxSVBRbjQzOUFtYzdQTTdYTE1pMFdF?=
+ =?utf-8?B?ekpLUXV1WC9NcnRnSlo1cFBuSEF5VHZJb2x1TlRSWDhYaEdDTW9DZjZhZVhI?=
+ =?utf-8?B?K2dNRW84NzdERlpPL21HNk1CeVBnd1BqdVZBVWlCL3BqV0c4Mk5YNG1Ebk0x?=
+ =?utf-8?B?VlV1dUZWaHNJbWRhRmVLQUE2RGRicDNhYjFtSlUySXMrZTQvSHRzYW5jK2Vq?=
+ =?utf-8?B?RVNGbVlnYnhSaUQrZ202ZXhtYlpVWkZQSmswQjNvdGZveDg2N1VJUFBudEtI?=
+ =?utf-8?B?QmRIZlhpVVUrbnRxVVE4RWZUM1pkUFNVdm9UZFZ6dlZ1b1h6amYzM0wxQmc3?=
+ =?utf-8?B?RHQyWnlRQmd0MzhHVHFpU2F5c1hRTDBybDVDYm9sRnVoR3B0bjZLNWd3WWUw?=
+ =?utf-8?B?NEcwQWRVeFJlOGZVM0pITzhlTkg4VnFxMTFlRFN1d0N1UGl5WmJLbXJpMjNa?=
+ =?utf-8?B?dkU1Tnl0UllZZGVqVHo5WTNYb1RLRGs3WWo3ZnhRMnN4TUcwUUg4QXAwbDAw?=
+ =?utf-8?B?Rzd3aVlhblNPMmFwdjlLMVppcmZrWWlGNHNoQStxT082RkR3U1pLQWJPWmRE?=
+ =?utf-8?B?amJhOFZ2VkhTMjdDQll5d0daVmRuZUx2K2tqUVU1dGlzSVdCZ2svUXNHR3h4?=
+ =?utf-8?B?cFdNODlKZnhXajh6Wkh2dzFJUk9jT1gzdi85ZkNUQ2xRWkdUWmNXVmJpOE1M?=
+ =?utf-8?B?ajAwd1oySVI2cjdQTkNHYStQQmtxaTdLSEFDZmEzQ2c5NmxiVWpUMFZwY3VR?=
+ =?utf-8?B?cHdBSlhiVU9XN05lTEFQVm1KYXEzbzNCNDBjLzY1dk9SZ0xia3dLOCtiWTVT?=
+ =?utf-8?B?R0VBQ0xadWx6Z0xJbEtSZnFRNmdsdlNtTTRjaHN4NU1SS2JHWGMrZitpaUIw?=
+ =?utf-8?B?T29HK1d2S1FkYllJZFhhVkZQRHBKYVQ5Z25udlZwUDRRNlY5aUF4ZEdQaXVh?=
+ =?utf-8?B?STJBYm5kMklvUEZQYlUzbEdaQ3hwc0xTN2psK2FER0R5bWdCRzBVUEtBR0dI?=
+ =?utf-8?B?Yks0b3AzVU5FTUFJZ3orSS9KanQ2Q3lURTJvQTc5eWVhRUl0Nmg1QmMrY0pN?=
+ =?utf-8?B?YlZOYmd3dzBZRlFVb3ByNXBOeXp2RzZOVFljVDZpWXlYdSttU1U0UnZ2dWNn?=
+ =?utf-8?B?TTl4My9CelpLSUt6Rk52bTFaSnpGRkhOQnhXSVFaYjlNZ2VLUnd6Zzl4cmF3?=
+ =?utf-8?B?eDdpNE9XdjM5dFZSMXN3MTlJUTNvS0Q0WGRpN1gxSmwwOHFpb1doWm9mQUV0?=
+ =?utf-8?B?MzE5a0JFb1BYUG9rY1F6OGd5NVdYOTZzUWY0WWRYTDhBVGc4bXl3aUtqYkpo?=
+ =?utf-8?B?YndzNHRYakFianRRSmFrNldQUFc4MEJZVzJKTm96RzhlZW9MY2FzYlFDM1d1?=
+ =?utf-8?B?RTFjdk5wRXdyeW1hdFVkalJXK2FXSGFuQjRldDFxUE5MSHh0RkE0WGNiN3JJ?=
+ =?utf-8?B?TlM0VmVGQ0JGY3lDaFlDTXBLdEhKZ2tnZTE0TzZCbEV2cFZhUmFFVmRtZk9t?=
+ =?utf-8?B?L1hYRWhqRUxwRDkwVW5IbTYzWjhVUDNsa3Zsa0FFM3ZoakRUNDFnT1JaUlR6?=
+ =?utf-8?B?VGx2NUNabERjVWR4WEUzdHY4Rjc5eGoybkMwRlhkRDBxclprdUJxc04zSllG?=
+ =?utf-8?B?c0FpQVpvVUdVdTRuZ0E2ZFh2eW4zU2lvNS9XSmdRbCthNFByL3cxaDR6Smlu?=
+ =?utf-8?Q?N7ximnP8ofJ/Hf9UU4Rc6kFfEY9gWLKmTLfwFYcqiI6k?=
 X-OriginatorOrg: uclouvain.be
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0e2c8a0-64b2-4a60-4fd3-08dd1382ec1e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3db1632c-b56f-4e23-d966-08dd1384a85c
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB9047.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 10:11:58.6199
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 10:24:23.9708
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HMsfuIjpAUZ9GVaTJKvl4+QOWP9tBtNVrhSd1XW7T+fxv5wJZI40NGa/wKTkTgkDAeCO0DnY8Yh2hwv2kuGLZw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR03MB9561
+X-MS-Exchange-CrossTenant-UserPrincipalName: LO6TtyukR09RaKEBwNlh8HnqT0FDPtpcwSVywnf0zM4yV2ASQI9wlJIEL1tnvsgVgNp/HPWdtpYG8YTYpSTEkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0302MB9064
 
-On 12/3/24 10:31, André Draszik wrote:
-> On Tue, 2024-12-03 at 10:08 +0100, Thomas Antoine wrote:
->> On 12/3/24 07:47, André Draszik wrote:
->>>> From: Thomas Antoine <t.antoine@uclouvain.be>
->>>>
->>>> The Maxim max77759 fuel gauge has the same interface as the Maxim max1720x
->>>> except for the non-volatile memory slave address which is not available.
->>>
->>> It is not fully compatible, and it also has a lot more registers.
->>>
->>> For example, the voltage now is not in register 0xda as this driver assumes.
->>> With these changes, POWER_SUPPLY_PROP_VOLTAGE_NOW just reads as 0. 0xda
->>> doesn't exist in max77759
->>>
->>> I haven't compared in depth yet, though.
+On 12/3/24 08:12, André Draszik wrote:
+> On Mon, 2024-12-02 at 14:07 +0100, Thomas Antoine via B4 Relay wrote:
+>> From: Thomas Antoine <t.antoine@uclouvain.be>
 >>
->> Is the voltage necessary for the driver? If so, we could just not
->> read the voltage. If it is necessary, I can try to kook into it and try
->> to find in which register it is located (if there is one).
+>> As the Maxim max77759 fuel gauge has no non-volatile memory slave address,
+>> make it non-obligatory. Except for this, the max77759 seems to behave the
+>> same as the max1720x.
 > 
-> Downstream reports it in
-> https://android.googlesource.com/kernel/google-modules/bms/+/refs/heads/android-gs-raviole-mainline/max1720x_battery.c#2400
-> 
-> so upstream should do, too.
+> What about the battery characterization tables? Aren't they needed for
+> correct reporting?
 
-I should have checked before answering. Indeed, I will try to see the
-best way to choose the register based on the chip. From what I see, it
-will also be necessary to change the translation of the reg value to microvolt
-as downstream does *78125/1000 when it is currently *1250 in mainline:
-https://android.googlesource.com/kernel/google-modules/bms/+/refs/heads/android-gs-raviole-mainline/max1720x_battery.h#49
- 
->>>>  static const char *const max17205_model = "MAX17205";
->>>> +static const char *const max77759_model = "MAX77759";
->>>>
->>>>  struct max1720x_device_info {
->>>>       struct regmap *regmap;
->>>> @@ -54,6 +57,21 @@ struct max1720x_device_info {
->>>>       int rsense;
->>>>  };
->>>>
->>>> +struct chip_data {
->>>> +     u16 default_nrsense; /* in regs in 10^-5 */
->>>> +     u8 has_nvmem;
->>>> +};
->>>> +
->>>> +static const struct chip_data max1720x_data  = {
->>>> +     .default_nrsense = 1000,
->>>> +     .has_nvmem = 1,
->>>> +};
->>>> +
->>>> +static const struct chip_data max77759_data = {
->>>> +     .default_nrsense = 500,
->>>> +     .has_nvmem = 0,
->>>> +};
->>>
->>> This should be made a required devicetree property instead, at least for
->>> max77759, as it's completely board dependent, 'shunt-resistor-micro-ohms'
->>> is widely used.
->>>
->>> I also don't think there should be a default. The driver should just fail
->>> to probe if not specified in DT (for max77759).
->>
->> I hesitated to do this but I didn't know what would be better. Will change
->> for v2.
-> 
-> Just to clarify, has_nvmem can stay here in the driver, just rsense should
-> go into DT is what I mean.
-
-It was clear don't worry. This answer is related to the same subject:
-https://lore.kernel.org/linux-devicetree/20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be/T/#ma55f41d42bf39be826d6cbf8987138bcc4eb52e3
-
->>>> +
->>>>  /*
->>>>   * Model Gauge M5 Algorithm output register
->>>>   * Volatile data (must not be cached)
->>>> @@ -369,6 +387,8 @@ static int max1720x_battery_get_property(struct
->>>> power_supply *psy,
->>>>                       val->strval = max17201_model;
->>>>               else if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX17205)
->>>>                       val->strval = max17205_model;
->>>> +             else if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX77759)
->>>> +                     val->strval = max77759_model;
->>>>               else
->>>
->>> This is a 16 bit register, and while yes, MAX172XX_DEV_NAME_TYPE_MASK only
->>> cares about the bottom 4 bits, the register is described as 'Firmware
->>> Version Information'.
->>>
->>> But maybe it's ok to do it like that, at least for now.
->>
->> I thought this method would be ok as long as there is no collision on
->> values. I hesitated to change the model evaluation method based on chip
->> model, where the max77759 would thus have an hard-coded value and the
->> max1720x would still evaluate the register value. I did not do it because
->> it led to a lot more changes for no difference.
-> 
-> Downstream uses the upper bits for max77759:
-> https://android.googlesource.com/kernel/google-modules/bms/+/refs/heads/android-gs-raviole-mainline/max_m5.h#135
-> 
-> I don't know what the original max17201/5 report in this register
-> for those bits, though. Given for max77759 this register returns
-> the firmware version, I assume the lower bits can change.
-
-Based on this datasheet of the max1720x, the upper bits are the revision
-and the four lower bits are device. So it could change.
-https://www.analog.com/media/en/technical-documentation/data-sheets/MAX17201-MAX17215.pdf#MAX17201%20DS.indd%3A.213504%3A15892
-
-If the four lower bits are not always 0 for the max77759 then I guess it
-is necessary to change this as it wouldn't work with all max77759.
-
+I checked some other patches which added fuel gauge and other bindings and I
+couldn't find such characterization table. Can you point me to an example or
+explain what it should contain if there needs one?
 
 Best regards,
 Thomas
