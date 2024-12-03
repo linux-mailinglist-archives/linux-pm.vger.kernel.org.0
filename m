@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-18467-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18465-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAFCD9E1E62
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 14:57:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF549E1DF3
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 14:43:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF145B2F57E
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 13:43:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C12628243F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 13:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18871F7550;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C8641F754A;
 	Tue,  3 Dec 2024 13:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Laz41T5+"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NFZj3W56"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E6F1F4733
-	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 13:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A227B1F6694
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 13:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733233331; cv=none; b=PQeMloaGHkLFgwaszTmRoywcvoFpupMTl4QK0th6R8z5CWkKzojLCCOsD6d77OniO4QidXtqyGkH9HbG88yuU9ISo1+NHb5ehbeVpG16QwZBc56XF0iDaIGZ8hMlyzlomZLntdN/eVjWQhmhW5w+CTP6ny0Y8ovY7E/S72opzqw=
+	t=1733233331; cv=none; b=umcJFLNaiAnXDpeuP6bR5aZGI0gZQbv8JyD045+ESHS2a6g0Hr7tEDjScdYe56X1AVX7XBt2+L4o+1UER1GnM63sxNdqe+sE10H9NBTd51poV7flyjD9brj4gEhzHUj4Jp0sIIY/W1q5YSXBl3C+CT57LkQO6IKdvvdCHzbmpHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733233331; c=relaxed/simple;
-	bh=AvOuBhpS/RO4n/V2TKEgU+sci1oVNo2VYWPMwnRe7lc=;
+	bh=74GQQ1iARGV4ZZF6Ipw2I6AC9+HTNWo1SPXdL5hc2yc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=oBeN58YbgdKhTT3cj8jOCI+2B1CDAFs1hCszFdYYk4SfxEeFOMV4QOpuRmdNXJVYVhNXIXs/by0DdPJeCYaLDLOQfFEE2cE14FCxcLs3gelY82+Xt+xR3yDCqcXZxrmpNgITdGupI0a7DB6utyRZr8rC4dHEiOcPW05LgpXlhNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Laz41T5+; arc=none smtp.client-ip=210.118.77.11
+	 Content-Type:References; b=K4lB+HHl94n2SoJ7I32Zm9JAbHMF13aBwra5+/07MRGEcD4GrgZO4fojm2ag0VRDHEDQiGsRdDBlOsXU0ZR06q6Io5VXJa6SfUg/3qSRVvT2/lwkN/b3isvIPB2DaN02esOHoczXACswY+6RhzFbJK+jzF5HDXVtJVJQX9gvLC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NFZj3W56; arc=none smtp.client-ip=210.118.77.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20241203134201euoutp01053946d1fec672b9a2a1370359526a5b~NroXuzlYV2559325593euoutp01a
-	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 13:42:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20241203134201euoutp01053946d1fec672b9a2a1370359526a5b~NroXuzlYV2559325593euoutp01a
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241203134204euoutp02e7ca691fb9881acde8fdcb98204150e7~NroaZg1vX0144901449euoutp02R
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 13:42:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241203134204euoutp02e7ca691fb9881acde8fdcb98204150e7~NroaZg1vX0144901449euoutp02R
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1733233321;
-	bh=db70OtbkcGzgNDsJliSTwbkZ7rSF5HHS/kqbDimn6GA=;
+	s=mail20170921; t=1733233324;
+	bh=DgeFHCAIbeFBF+0nDHhjAGX/VqaqfX2KAeQLuxONDpc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Laz41T5+HmPMIG+67C62UYZmxkD2bCiCaEraeVi+LK/lqaoagaauHUIghzbATyfai
-	 P9JFLsCvVMDuQPax1Irbjb8UnfHKOk0Uro5fJBQcnq8NSjEpPglYChhZ+sORD93ISI
-	 FBkt7YSEMJEyEe8xelhOA9LAsKgEcVw/FzD8Sgbk=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20241203134201eucas1p2acef324be66dffaec3a120a1b4da68ad~NroXMQ7zH2525425254eucas1p2C;
-	Tue,  3 Dec 2024 13:42:01 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id FC.CA.20821.9AA0F476; Tue,  3
-	Dec 2024 13:42:01 +0000 (GMT)
+	b=NFZj3W56ljtXnHvc1tmGFjM5qZGLUbULsATE25DYlUfR8PmHWh5XBugSUbSkHTo08
+	 Cmf06iPw+f5tBMp8R1PeseCefC0rYvp5MdArlhxQPmoouTsihyq1f11dOpljrg4D2Y
+	 ooHh0yjmlH2gKI0u/kHlojVBFmUXvseZ7zkUV/Go=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20241203134203eucas1p1bdae5662b85b434acdc7f54e36d382ed~NroZpJgjr2516025160eucas1p1G;
+	Tue,  3 Dec 2024 13:42:03 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 5C.8F.20409.BAA0F476; Tue,  3
+	Dec 2024 13:42:03 +0000 (GMT)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20241203134200eucas1p25a1f81ea1ce3f10d507be381da750b31~NroWsSPli0763507635eucas1p25;
-	Tue,  3 Dec 2024 13:42:00 +0000 (GMT)
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20241203134203eucas1p11a2e36f777af362a333d8865bcb5d34e~NroZNpAIw1266212662eucas1p1-;
+	Tue,  3 Dec 2024 13:42:03 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
 	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20241203134200eusmtrp15f1e86e10afeadabdf4b8e4062a35b0e~NroWrSGoh0887308873eusmtrp1T;
-	Tue,  3 Dec 2024 13:42:00 +0000 (GMT)
-X-AuditID: cbfec7f2-b09c370000005155-80-674f0aa9bd57
+	20241203134203eusmtrp1e72591d8410ed2d962a249230bcc7207~NroZG6yke0887308873eusmtrp1c;
+	Tue,  3 Dec 2024 13:42:03 +0000 (GMT)
+X-AuditID: cbfec7f4-c39fa70000004fb9-9b-674f0aab1bb6
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id A3.D8.19920.8AA0F476; Tue,  3
-	Dec 2024 13:42:00 +0000 (GMT)
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 2A.D8.19920.BAA0F476; Tue,  3
+	Dec 2024 13:42:03 +0000 (GMT)
 Received: from AMDC4942.home (unknown [106.210.136.40]) by
 	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241203134159eusmtip220458ce3abcd87999c00db6ae33bca7d~NroVWYeUR3160631606eusmtip2F;
-	Tue,  3 Dec 2024 13:41:59 +0000 (GMT)
+	20241203134201eusmtip29d9c18c2428730d69c4023606adce934~NroXzhmyc3133331333eusmtip2j;
+	Tue,  3 Dec 2024 13:42:01 +0000 (GMT)
 From: Michal Wilczynski <m.wilczynski@samsung.com>
 To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
 	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
@@ -77,10 +77,10 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
 	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
 	<m.wilczynski@samsung.com>
-Subject: [RFC PATCH v1 09/14] riscv: Enable PM_GENERIC_DOMAINS for T-Head
- SoCs
-Date: Tue,  3 Dec 2024 14:41:32 +0100
-Message-Id: <20241203134137.2114847-10-m.wilczynski@samsung.com>
+Subject: [RFC PATCH v1 11/14] drm/imagination: Enable PowerVR driver for
+ RISC-V
+Date: Tue,  3 Dec 2024 14:41:34 +0100
+Message-Id: <20241203134137.2114847-12-m.wilczynski@samsung.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241203134137.2114847-1-m.wilczynski@samsung.com>
 Precedence: bulk
@@ -90,84 +90,80 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTVxje6b29tzQpuxScJyBhYFDcXFH2dQzoWDLjTVxQYgbZh9k6uKmk
-	fNmCk8kCXaETKIvjQ7YCK1gY0IENtVToBDaGdICCKF/O2rEp2ypUBIQNR2BtL27+e97nfZ73
-	ed+Tw8OErYQ/Lyk1g5GlipNDCD5u7lsZfqGJf0iyq8IgQD9NnOOgtn80JGruHOIgbe8QF9mv
-	mzhodGmOQOenr5Hoz04FjsYbq0mk7DMQyKGxE2hebeeiG5YqAi0W9wJkXswjUEvvbRIZlrQc
-	VDvfhqO6dgtAqoJvuGhkYD9y3FBjSKV5Gq1faifR2ngrjirvd5PINPsFF1lb4lFedxkeHUjP
-	TeaT9KzDgdM/nn5I0p3LNTjdoblN0uqOK4A26gsI2jZ+iaC/7o+lfymycugLdTl0Xksfh57r
-	GiPoz016QF9XTpD0hcFTh33e4UclMslJJxhZ+L4P+Mcum5ux9DKvk3kVzWQuGCQLgRcPUi9B
-	Y6Xdhfk8IdUIYIlzAGOLhwC26PIwt0pILQI4YPV+7LD1V2zwDQB+O/s2a5gFsG70Z89YgoqA
-	Uw1arrvhR81gcHLpJuEuMOoPAM13qwi3ypc6DG1tOo8Dp0Lh/eKznrECKhoWrFQCNi4Idv9w
-	1cN7ufiZ8kIuq/GB/V/dxd0Yc2mUbZWevSHVxIfr0wqMNb8BJ681cFnsC+9ZTRtXb4GDpWqc
-	xWlwqm1hQ58NO9TWDRwJbUOPXIvyXAE7oMESztKvQ33TRQ8NKW846fRhV/CGJWb3q7hpATyt
-	ErLqbbBcXfxf6FCjmcNiGlruOMEZEKx54hjNE8do/s+tAZgebGYy5SkSRr47lflIJBenyDNT
-	JaKEtBQjcP3qwTXrQjuovjcv6gEcHugBkIeF+AkaDAclQkGiOOtjRpb2viwzmZH3gAAeHrJZ
-	EJoYxAgpiTiDkTJMOiN73OXwvPxzOYXKer/X9oRF6Wr7tWZpdmZhuCOpK8qxdUER1jUi3XNE
-	FJCucYYONPV/l93LC1erpgX55TqjYkf8+raCi6Qx8GUpcfOZ6E23rh4ZEw9HMPrtSX/HLYfF
-	Dfkrvzy5lnHrcsrw/mAvZ+S6tDq//tGd+ZDFT1ZzfM/rEg6KTL9bogJGQjWr9sCZnu53u5eD
-	Y65onJ9tqS6LXdl6olS6d6Je9Onep2K+14WXtm6qOVMoVpEHXow9/mbWaNyzHyoGsiJr6v4q
-	fv54bpGp6tTUA9srxqbfBOn2qrfeO/pq8kIEXmGwDe/iHvg14ei++hLtztpDRQvxfvadQT45
-	2gfEWtiUdjXGdywpBJcfE+9+DpPJxf8C+paWuEQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xe7oruPzTDfrWqVqcuL6IyWLr71ns
-	Fmv2nmOymH/kHKvFvUtbmCyufH3PZrHu6QV2ixd7G1ksrq2Yy27RfGw9m8XLWffYLD723GO1
-	uLxrDpvF594jjBbbPrewWaw9cpfdYv3X+UwWCz9uZbFYsmMXo0Vb5zJWi4unXC1eXu5htmib
-	xW/xf88Odot/1zayWMx+t5/dYsubiawWx9eGW7Tsn8LiIOvx/kYru8ebly9ZPA53fGH32Ptt
-	AYvHzll32T16dp5h9Ni0qpPN4861PWwe804GetzvPs7ksXlJvUfL2mNMHu/3XWXz6NuyitHj
-	UvN1do/Np6sDBKP0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLL
-	Uov07RL0Mo5uW8NcMIWzomX6GvYGxtPsXYycHBICJhJ3Tk5n7mLk4hASWMoo0d/wmRkiISNx
-	rfslC4QtLPHnWhcbRNErRomzW/+zgSTYBIwkHiyfzwqSEBHoZJF4u3ktI4jDLPCWUeL6zI1g
-	7cICfhKPJveD2SwCqhLveqeBreAVcJDo/DmbEWKFvMT+g2fB4pxA8ddTu1hBbCEBe4kdfw+z
-	QtQLSpyc+QRsDjNQffPW2cwTGAVmIUnNQpJawMi0ilEktbQ4Nz232FCvODG3uDQvXS85P3cT
-	IzCxbDv2c/MOxnmvPuodYmTiYDzEKMHBrCTCu3y9d7oQb0piZVVqUX58UWlOavEhRlOguycy
-	S4km5wNTW15JvKGZgamhiZmlgamlmbGSOK/b5fNpQgLpiSWp2ampBalFMH1MHJxSDUyhlzbk
-	6em5h31P+JIcvqD/q9eXnOUazwomBqtPLpn5fovj519pjk8nZuSLxgiwyoVKTOzP2HSC/c7H
-	9u/8KW5qNqsnhc96mDHrvnLj/1r1OZ45ynm8a9ZI2GwsjC3UW/f9ykkXvogn9zrTNkgmLkk7
-	rKy/svl1lbPiv7cP2uvuzcq/IzF/reXMmZevlbbnT76cfmaKImt7pQuH6JbT+xNfhHM3Rkx1
-	W3S61HFWQW30piaTJ+5ecyzz/a5tncAfrtySmflmeV31jCPMvV+mRIVtLPU3mXD/dTNzWo5E
-	cXh+5WLtI7viv72+t65xkWCwXvNepZ9C6bLL9k709D1zbf9En6jCjoJ3TwtO9ymlpiixFGck
-	GmoxFxUnAgCBrnbPtQMAAA==
-X-CMS-MailID: 20241203134200eucas1p25a1f81ea1ce3f10d507be381da750b31
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1CTdRzH+T7Ps+d5WDd6GHj7ShAnBld2oiJn38vqMLWezlDpnzrO0p08
+	zQkM3ByZesmvFtAoSBg5SBYh0BBJxhYsafLjmLBcCIUQ8qOLMGS5kB9XGayNB8v/Xp/35/25
+	9+dz96FxcRMZQssVxzmlQpoSQQoJS/dfzo31wn2yzSOeLejazSoMme/rKXSxzYmhyi6nAI31
+	N2PohwU3iS792keh39qyCDRY9xmFcrobSTStHyPRrHZMgAasFSSaK+wCyDKXS6KGrlEKNS5U
+	YujzWTOBqlusAGnyawToRu9uND2gxZFG/yjyXGmh0PLgZQKV37VRqNlVLED2htdRrq2EiAtj
+	3UPvU6xreppgO/PmKbZt0UCwrfpRitW2fgfYJmM+yd4avEKy53sS2PEP7Rhrqj7D5jZ0Y6z7
+	2x9J9qNmI2D7c25SrMlxan9govC5JC5FnsEpN71wSHjkqvUelm6lTxRPLuGZ4AOqAPjTkImF
+	dcvZRAEQ0mKmDkBdUSHOF/MAns01UHwxB2Bn+ceCByPnvyheGRcztQC6NQd4kwvA5XOTuK9B
+	MjFworZS4GsEMzM4HFoYJn0FztwG0DJZQfpcQUwCvDw8ssIEEwk7bk9iPhYxcdCu7cH5uHBo
+	a7++wv5efaa0QMB7AmHPuUnCx7jXk2MuX1kcMheEcNzgWD1vF+ztM5M8B8E79uZVPRQ6zmoJ
+	ntPghPneathp2Kq1r/J2eMv5t3eW9gY8BRutm3h5B9S7C4BPhkwAHPo9kF8hAH5iKcN5WQTz
+	NGLeHQVLtYX/hTrrLBjPLPz0n2ZBEVinf+gY/UPH6P/PNQDcCCScWpUq41QxCu6daJU0VaVW
+	yKIPp6U2Ae9bO5bt8y2g9s5sdAfAaNABII1HBItqG/fIxKIk6bsnOWXaQaU6hVN1gMdoIkIi
+	ikwK58SMTHqcS+a4dE75oIvR/iGZmJG2LZX5HTrhr5dkySq+OXbdefirhJKBN2p//j7b9efb
+	r2hNnr2nD7gvnJHJbBtmrnnCl7IPtiX2HS08elenzlfv7fd7fsfwRnHMnl07e967KlkXHxW7
+	pqqkKObl9mMvRT2TNE7ndAuqwiuSnqZCkk1bDV3y7DJDKPt1EMqzBYneWhtbSf4yrj+5dluv
+	Kb3CdEk+l7Ho2bzwmm27rTPOocmc+oN50xmj/inglCv0xkh7SbDzCWWI9n70kwo59+z6pou7
+	q2YXE4X1fVNme2LNqyOG+v2YLnGNLsS1/hHdzjbP1qnq+NLSdvOX8ROPJ0vqB4vDIo01WRlh
+	Uy+SgdtGPfv8UG8EoToi3bIBV6qk/wJ0jQjbRQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xe7qrufzTDRqb+S1OXF/EZLH19yx2
+	izV7zzFZzD9yjtXi3qUtTBZXvr5ns1j39AK7xYu9jSwW11bMZbdoPraezeLlrHtsFh977rFa
+	XN41h83ic+8RRottn1vYLNYeuctusf7rfCaLhR+3slgs2bGL0aKtcxmrxcVTrhYvL/cwW7TN
+	4rf4v2cHu8W/axtZLGa/289useXNRFaL42vDLVr2T2FxkPV4f6OV3ePNy5csHoc7vrB77P22
+	gMVj56y77B49O88wemxa1cnmcefaHjaPeScDPe53H2fy2Lyk3qNl7TEmj/f7rrJ59G1Zxehx
+	qfk6u8fm09UBglF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZll
+	qUX6dgl6GQd2fWIq2MVRMfHJX+YGxnb2LkZODgkBE4l5iycC2VwcQgJLGSUa5pyHSshIXOt+
+	yQJhC0v8udbFBlH0ilGi4/FhNpAEm4CRxIPl81lBEiICnSwSbzevZQRxmAXeMkpcn7kRrF1Y
+	wF9i6sEnYGNZBFQlDj1/wgRi8wo4SBzvOckMsUJeYv/Bs2A2J1D89dQuVhBbSMBeYsffw6wQ
+	9YISJ2c+AZvJDFTfvHU28wRGgVlIUrOQpBYwMq1iFEktLc5Nzy021CtOzC0uzUvXS87P3cQI
+	TCzbjv3cvINx3quPeocYmTgYDzFKcDArifAuX++dLsSbklhZlVqUH19UmpNafIjRFOjuicxS
+	osn5wNSWVxJvaGZgamhiZmlgamlmrCTO63b5fJqQQHpiSWp2ampBahFMHxMHp1QDkx57bcDm
+	FYkFPZfbZ9zfwdyUfplbcX/XoY0+Ts/nx1dZNe/xWJJw4lhzkgD/VDlZpiVrNtQujmG3iVLZ
+	++fr5NnfN1wQtDCSt+O+myuW87oxwt571/eFYf5XL3DKVOv5mh6b0KYpNlfFkkNEJnBfpALX
+	jMNSia8zzG+ERizmiJmm9b437MWvJd6vd7ltZC1ROvHl6/t/07kFraJ26+ZfkUhheuFZ7HY7
+	tTfjt/7vs8vcnrxuXd9j8MFxl4Jz/fTr4tPYPEy6jluL3XttMjN705ZP8x6+i9Ba6Sxfl9u2
+	97yYEteqRW98cm4vr/11Je1D6tGoQKtv77lXXfav+bU+bpn5tHlOX6YdKzp79DfbXyWW4oxE
+	Qy3mouJEAFZ2wvS1AwAA
+X-CMS-MailID: 20241203134203eucas1p11a2e36f777af362a333d8865bcb5d34e
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20241203134200eucas1p25a1f81ea1ce3f10d507be381da750b31
+X-RootMTR: 20241203134203eucas1p11a2e36f777af362a333d8865bcb5d34e
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20241203134200eucas1p25a1f81ea1ce3f10d507be381da750b31
+X-CMS-RootMailID: 20241203134203eucas1p11a2e36f777af362a333d8865bcb5d34e
 References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
-	<CGME20241203134200eucas1p25a1f81ea1ce3f10d507be381da750b31@eucas1p2.samsung.com>
+	<CGME20241203134203eucas1p11a2e36f777af362a333d8865bcb5d34e@eucas1p1.samsung.com>
 
-T-Head SoCs feature separate power domains (power islands) for major
-components like the GPU, Audio, and NPU. To manage the power states of
-these components effectively, the kernel requires generic power domain
-support.
+Several RISC-V boards feature Imagination GPUs that are compatible with
+the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
+4A board. This commit adjusts the driver's Kconfig dependencies to allow
+the PowerVR driver to be compiled on the RISC-V architecture.
 
-This commit enables `CONFIG_PM_GENERIC_DOMAINS` for T-Head SoCs,
-allowing the power domain driver for these components to be compiled and
-integrated. This ensures proper power management and energy efficiency
-on T-Head platforms.
-
-By selecting `PM_GENERIC_DOMAINS`, we provide the necessary framework
-for the power domain drivers to function correctly on RISC-V
-architecture with T-Head SoCs.
+By enabling compilation on RISC-V, we expand support for these GPUs,
+providing graphics acceleration capabilities and enhancing hardware
+compatibility on RISC-V platforms.
 
 Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 ---
- arch/riscv/Kconfig.socs | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/imagination/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index f51bb24bc84c..c414dc618b66 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -48,6 +48,7 @@ config ARCH_THEAD
- 	bool "T-HEAD RISC-V SoCs"
- 	depends on MMU && !XIP_KERNEL
- 	select ERRATA_THEAD
-+	select PM_GENERIC_DOMAINS if PM
- 	help
- 	  This enables support for the RISC-V based T-HEAD SoCs.
+diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
+index 3bfa2ac212dc..5f218896114c 100644
+--- a/drivers/gpu/drm/imagination/Kconfig
++++ b/drivers/gpu/drm/imagination/Kconfig
+@@ -3,7 +3,7 @@
  
+ config DRM_POWERVR
+ 	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
+-	depends on ARM64
++	depends on (ARM64 || RISCV)
+ 	depends on DRM
+ 	depends on PM
+ 	select DRM_EXEC
 -- 
 2.34.1
 
