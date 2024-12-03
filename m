@@ -1,92 +1,94 @@
-Return-Path: <linux-pm+bounces-18434-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18435-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F38B09E1820
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 10:46:45 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED2A9E18D1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 11:07:32 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5316166E94
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:46:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93AA0280E9D
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 10:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DA01DFE21;
-	Tue,  3 Dec 2024 09:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5E51E0B87;
+	Tue,  3 Dec 2024 10:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xnZl65/I"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vCwMQb0S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0D51E1A3E
-	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 09:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCC81E0B6F
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 10:07:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733219107; cv=none; b=PbJI9gjmDfsFre8ZmOApmbvhthCA/wQXZYvWjtzXPpbv2BvCDoeaCkrRPcFw8HOZq9SnilltWe07EYa5J33nXwMFjvSE1Ww9BVzEXtc83R3UdvbI+8Zsvi1TkhW7x4FnKYvVcxI6eCEZKfRboZ0hgH90jWENHOhI+zUx8IyNdfk=
+	t=1733220448; cv=none; b=nlp5Ak/srsbKYmWP6TGPYF2fdtHXsh+vyeARHG/Nr5/uyCdmNO4Ep/6DZ4YMxVH8V/+kTEazudXK+1sjWwakGaQrqZnVGhZ9HZrc0JCGcHh5BBpWElHzfRYPjC6gwInIGbRGs1H/mHsPdeYEQ5p1chbnoq+url0BqvcV+lqfrK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733219107; c=relaxed/simple;
-	bh=hbOn365bs5yETVST5WjLlAm0HzV2j1n+Xuu8Puz7x0s=;
+	s=arc-20240116; t=1733220448; c=relaxed/simple;
+	bh=rDhrWjqsitQOm02p1yx3Crr6aSKeDzrUUQOFa0Mc4Mk=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GZ12T1rNXMzqG29yrTVXyRjVhTBWXnmTEg/9D7UlKLTBhRbvfEbVf9T5jcVnCZk4hm2kfvPYVhNLt1sDd7sAyzB4pQPqceo/3QUVjfu4c2lktMHur/YATMMi2qvOZqFfyi5+3XJ0k4QiiIMDjPsOWA9oJamTOau25MhRJLnvw2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xnZl65/I; arc=none smtp.client-ip=209.85.128.50
+	 Content-Type:MIME-Version; b=qLWJ5jNYUq4XPvo+GF5vpWbG5MaS+QwOr18m/geBfRKQkk1XAcmqlWBvgSUSYXWtlFTH/X4RWKUbds1wGaA1Uv3pmOVs/J9eD2yi49kQ7Zx6/JsuoS+21eAUsj/MFRDLNm7LKmm8hR+Q0/+503WZfZwvZ2TvHyUA9fY2uWfirCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vCwMQb0S; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-434a852bb6eso48623015e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 01:45:05 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-434acf1f9abso48828775e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 02:07:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733219104; x=1733823904; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1733220445; x=1733825245; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=5PWEsu+fpHnvhGCoqgtGpn1xa8q98K4tuJDqTm0nOwI=;
-        b=xnZl65/ImMnYWxdhg14cs26lbqM0mCf2zh2SJxVC+DOuBUd3h5nNChTdPgU+i7CXcU
-         XN58mMttUm0ZFG83QkI+cEDc+Y0ZrZIVUQH73nYfUK1WLuJKZIHiu5stqNrz2fbGwrFo
-         1YyWEnPZTc4lJdDTbdNeN6irljsEUlW7YtgVc16RBq82tRvBh7Z3K5xB0Vr61TwY4fpK
-         s0Et8SSpEpG+JJF5MtiYv7MLA0e/vrF2IH/1RyS52lXD010U9/kryMOBdc1GLrAOh+4E
-         c0rEmIILig22Esl0oM/qnOXfXQfqdYt2ocu+eEvJe9P8ui2aKo2uoWhN8dOuFbeNM3dI
-         ZaFQ==
+        bh=rDhrWjqsitQOm02p1yx3Crr6aSKeDzrUUQOFa0Mc4Mk=;
+        b=vCwMQb0SpDy6GVSKib02Jg57j7HApfpkqcfpQS/BnOjiGD1ZCy9h4w3Thg3lFz5yzT
+         WgrawZDKABwPc0125SnoRrjb0be25/+d4vBzHHMswGAhraylixSKGley+BADQ9f5l78g
+         /OMn7BvXNx5kwNCub+dOGTxz383LRO9rKHt6sQAyvam5g+j9p9WDIR/lkcWFwWKXj85Q
+         eKODLwywcm/r0oTnochlw0Ly9EbNhzKTKG4Z0R2f8W5pAyXsCNl4PYQzDCR7Yh2QriH1
+         HULh2sPg6Zts1OCcopPRSW867orysHWB6sa7IIEzzZJKJUa/FTYUxY+rh0EQgzubUHX0
+         loKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733219104; x=1733823904;
+        d=1e100.net; s=20230601; t=1733220445; x=1733825245;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5PWEsu+fpHnvhGCoqgtGpn1xa8q98K4tuJDqTm0nOwI=;
-        b=kW/y+7DMK+yLpf7OKJT9R+3SmXCIqhLsTLbrLkiKeegleWAI5O59kBGFCqWTO0xT1c
-         sX+70JXgA/FGaDqLH0FhBareRUsUOmyeolREz+tjtw29srxiEAiz4BvB3Ii8j8gPf/2e
-         PgJxG3vmE9YFnTqQEQD0JCl5Zovhf0FozZcfwqCQhkATlofyozwyRfVhcUVUowZN5ZpW
-         v0WLrVuRZtN/R0G/wBZ5MSYrThucbtJjZYJFMNa8RVkeckHT+g50hUgX1OYvBoYRMuWj
-         KPoeTNJUi1cNBks8x+AZhUqc9FmXiq92PabLKpCsoo4Xkc+5/5o9HSNdQOOOVyFo0h4v
-         I1xA==
-X-Gm-Message-State: AOJu0Yz94lM6TJr3FkJZPEv8aVXizSNlhEIZLAk1vz3ROmT5G2sFi8lY
-	4sXCsHzMfY28F6eZSDlolE6oL8mk1L6F7K/EPvRMKerFWYurjoJkpbmV6AEYYoI=
-X-Gm-Gg: ASbGnctK32+NFHY2slORow5qFggv205omjrwW922yPFVyjBK1rovovvAeqVTwGBeob0
-	50uZJcV7grtTiu/IZgqNJJZffIumXVB+lTaUwkfm4uGZ7EqQhaxZ3OXrD5AhpFvFP9+v0AEsodn
-	aqOgrLg2cDGGxaGUFZWA5Oik2e3dqOLL8YiFVGnxA2Xk2DSTtEh/2CE6JElCYnXQaXoFtxg+LCp
-	AMAI2mFOh1+ktQ9JeUoZPdqoeEM50A0nydLJ8jMqEp9YMGtnzn9ckE=
-X-Google-Smtp-Source: AGHT+IEwrGlccw2Q5NJeLCrjOJfzlF1e1ATvEELN9LKQRaP3CAlsVnOMmTkjoN9Q1iKRn0Rh/ruRRA==
-X-Received: by 2002:a05:600c:46d0:b0:434:a160:3647 with SMTP id 5b1f17b1804b1-434d09c0babmr15386255e9.12.1733219104223;
-        Tue, 03 Dec 2024 01:45:04 -0800 (PST)
+        bh=rDhrWjqsitQOm02p1yx3Crr6aSKeDzrUUQOFa0Mc4Mk=;
+        b=fRuZvbxWjRwJBOlZM1peZvZC4WT9mbmc1lFP0ASzLme5a5l0GkAK7Hp6F6EOD2Hg8h
+         6IGWwIqZHSInGsktvKYW0kIr5jk1tiQGod+Z7PhLsTQbKl1f2r5gugA23+IQMWCyDtxx
+         FcPmSJqe7PhmRXHH0r64blke8WvjPLXvRp0JCpr37Rl0F13hO3dy2ZLireiPOvFWsU1e
+         YYOZlp4PJfPeaEhhNwiqTGPCkQo+72uhn1ALiZ5M50TPcHi9YByVW9M6VtqxTNsp/TGB
+         n535PPf1jy4j+ssowze0bkIYOs1LBPwKoduJSznuyzVsPq+MOcYaw3mtNbtupqExLbRW
+         X40A==
+X-Gm-Message-State: AOJu0YzcR4WODbE/0IMKW337qXWLya+J3CaDSxdQf3UIUyI271559tu1
+	uqod1j7GqSIhKztCiT5DZ9Z2rP+HU4mlxIzL3G0EBXhtiRSdh3diETp9NEA8rkI=
+X-Gm-Gg: ASbGncuAW693L764hFzB5mvykbWTqXXhbz1Qo8apQ3tsTamSU7T5m1/SkZHaeUWqny6
+	qc7zYXOK+Qm3vl7CbwrNQ0zqasy9Tg1wgVMAom3LsRIN4bMDt4S4LVXrYwZXMezUkIFNARtPa01
+	rkBcGuEKNAoSzysvoHc3PljZzz478SkaPp93YOIbpcKNP3lD62dOAIBJU/z0NhFfDvotHGVp9Tn
+	qUsXsm36kQRF8BhkR+4ndLopgyMnqC1dd+hx5jgzlOp0Q0Cw+32Dto=
+X-Google-Smtp-Source: AGHT+IEX3CBzUR11qB9xMFFVxV7orqiKJB6nzE3kEEtb8duUyFuW0fDSGHNnay9m/wWpgm8QQt4SVg==
+X-Received: by 2002:a05:600c:1f8e:b0:434:9efd:26b0 with SMTP id 5b1f17b1804b1-434d09c0c12mr16633575e9.13.1733220445220;
+        Tue, 03 Dec 2024 02:07:25 -0800 (PST)
 Received: from [10.1.1.109] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa78c202sm213466555e9.26.2024.12.03.01.45.03
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7e5b9csm215194865e9.43.2024.12.03.02.07.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 01:45:03 -0800 (PST)
-Message-ID: <18629c9edd295a524a1c9764f013a0e97e0b275f.camel@linaro.org>
-Subject: Re: [PATCH 1/4] power: supply: add support for max77759 fuel gauge
+        Tue, 03 Dec 2024 02:07:24 -0800 (PST)
+Message-ID: <b311b50e0f54959cd8dac1ef21dd798dd6204331.camel@linaro.org>
+Subject: Re: [PATCH 2/4] dt-bindings: power: supply: add max77759-fg flavor
+ and don't require nvme address
 From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: t.antoine@uclouvain.be, Sebastian Reichel <sre@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Peter
- Griffin <peter.griffin@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>
+To: Thomas Antoine <t.antoine@uclouvain.be>, Sebastian Reichel
+ <sre@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Dimitri Fedrau
+ <dima.fedrau@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>,  Peter Griffin <peter.griffin@linaro.org>, Alim
+ Akhtar <alim.akhtar@samsung.com>
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-samsung-soc@vger.kernel.org
-Date: Tue, 03 Dec 2024 09:45:02 +0000
-In-Reply-To: <8f585460a1bc52f78a6d0867aed87398bde30152.camel@linaro.org>
+Date: Tue, 03 Dec 2024 10:07:23 +0000
+In-Reply-To: <20588923-a660-49fe-8efb-766bee22f215@uclouvain.be>
 References: <20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be>
-	 <20241202-b4-gs101_max77759_fg-v1-1-98d2fa7bfe30@uclouvain.be>
-	 <c377f3302c6c282ad826211c859e2b65bb1222cb.camel@linaro.org>
-	 <8f585460a1bc52f78a6d0867aed87398bde30152.camel@linaro.org>
+	 <20241202-b4-gs101_max77759_fg-v1-2-98d2fa7bfe30@uclouvain.be>
+	 <fe254a002000f2bbfbe51d074cf28f7427a27f9a.camel@linaro.org>
+	 <20588923-a660-49fe-8efb-766bee22f215@uclouvain.be>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.1-4 
@@ -97,59 +99,29 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2024-12-03 at 07:23 +0000, Andr=C3=A9 Draszik wrote:
-> On Tue, 2024-12-03 at 06:47 +0000, Andr=C3=A9 Draszik wrote:
-> > Hi Thomas,
-> >=20
-> > Thanks for looking into this!
-> >=20
+On Tue, 2024-12-03 at 10:32 +0100, Thomas Antoine wrote:
+> On 12/3/24 07:57, Andr=C3=A9 Draszik wrote:
+> > On Mon, 2024-12-02 at 14:07 +0100, Thomas Antoine via B4 Relay wrote:
 > > > From: Thomas Antoine <t.antoine@uclouvain.be>
 > > >=20
-> > > The Maxim max77759 fuel gauge has the same interface as the Maxim max=
-1720x
-> > > except for the non-volatile memory slave address which is not availab=
-le.
+> > > As the Maxim max77759 fuel gauge has no non-volatile memory slave add=
+ress,
+> > > make it non-obligatory. Except for this, the max77759 seems to behave=
+ the
+> > > same as the max1720x.
 > >=20
-> > It is not fully compatible, and it also has a lot more registers.
-> >=20
-> > For example, the voltage now is not in register 0xda as this driver ass=
-umes.
-> > With these changes, POWER_SUPPLY_PROP_VOLTAGE_NOW just reads as 0. 0xda
-> > doesn't exist in max77759
-> >=20
-> > I haven't compared in depth yet, though.
+> > It also needs an interrupt line, and the previously mentioned shunt-
+> > resistor-micro-ohms, and probably a power supply.
 >=20
-> Regarding the regmap in this driver, please see below comparison I had
-> collected some time ago:
->=20
-> 	regmap_reg_range(0x24, 0x26), // exists
-> 	regmap_reg_range(0x30, 0x31), // exists
-> 	regmap_reg_range(0x33, 0x34), // exists
-> 	regmap_reg_range(0x37, 0x37), // exists
-> 	regmap_reg_range(0x3B, 0x3C), // exists
-> 	regmap_reg_range(0x40, 0x41), // exists
-> 	regmap_reg_range(0x43, 0x44), // exists
-> 	regmap_reg_range(0x47, 0x49), // exists
-> 	regmap_reg_range(0x4B, 0x4C), // exists
-> 	regmap_reg_range(0x4E, 0xAF), // 0x4e 0x4f exists
-> 	regmap_reg_range(0xB1, 0xB3), // exists
-> 	regmap_reg_range(0xB5, 0xB7), // exists
-> 	regmap_reg_range(0xBF, 0xD0), // 0xd0 exists
-> 	0xd1 .. 0xdb don't exist
-> 	regmap_reg_range(0xDB, 0xDB),
-> 	regmap_reg_range(0xE0, 0xFF), // 0xfb 0xff exist
->=20
-> the comments refer to whether or not the register exists in max77759
+> I will try to add the interrupt line for v2. About the power supply, I
+> didn't see anything about it in the devicetree from Google. Even it
+> there is one, I guess it would be a single power supply for the whole
+> max77759, not just the fuel gauge. Wouldn't it be more logical to have an
+> mfd which activates the supply when other functions of the max77759 have
+> been implemented?
 
-I think this should make it more clear:
-allow:
-	regmap_reg_range(0x00, 0xff),
-deny:
-	regmap_reg_range(0x50, 0xaf),
-	regmap_reg_range(0xc0, 0xcf),
-	regmap_reg_range(0xd1, 0xdb),
-	regmap_reg_range(0xe0, 0xfa),
-	regmap_reg_range(0xfc, 0xfe),
+I've looked it up now and for power supply nothing indeed seems necessary.
+
 
 Cheers,
 Andre'
