@@ -1,242 +1,146 @@
-Return-Path: <linux-pm+bounces-18394-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18395-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD19E9E0F4A
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 00:28:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7EAE9E10AF
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 02:12:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2495BB23139
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2024 23:28:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BAED281D0A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 01:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28601DFD86;
-	Mon,  2 Dec 2024 23:28:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25068C11;
+	Tue,  3 Dec 2024 01:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EWqHvV7c"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Q47MkIi5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441021DF244
-	for <linux-pm@vger.kernel.org>; Mon,  2 Dec 2024 23:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8615D2500C5
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 01:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733182094; cv=none; b=AC8FFtzQoyhTdORkhYYSngecLOuBy+QAVhsYq2rE1WsRY3Dzk0NmWXSGcTuhoBRzRGrsoKgour/QdZEFltNHPXD/d4esvuJ1wxmqbcAS+jxGi27mG6bPRMFJXTpAT8kb0psJ+cGBFH4CGc4bIzGlDLn4oTfs6JMhlF5m38rkUpY=
+	t=1733188332; cv=none; b=Gb4+l28gX27UYZ9shf5CkF1r0KulwYz7NO8ZBefhtKmZ/I64caeiJJhg9fL9xMeFCTK3Ds/YoozZOKJTa3n9i56G8SZJnMabocSxWSEYRjPrdgAGwLipdilStIJe0yWyKHzAjwiVuvYxTgdL3DamZA3V56+ThCIlfASORp/eH6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733182094; c=relaxed/simple;
-	bh=jwdcVue+nHHQCNc8y1qV+V5+3ZT64hNhWwiKhcS7sE8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nKKAkHomYmRZ9z+SpiwF7DMjgEL+xONxwpop5MiGLvFze2zotttnSZ2kYgXiavMYTApeVBrUV5m7OELFvKt9BVNO3zppLsbX4iLKB3FcdjFVd04UpAmpu+QqzMHGEfnwfY4SAQOG6SuQPeySAgGjxPchBeo5ZXVtlE+eHQl79Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EWqHvV7c; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53de7321675so5135036e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2024 15:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733182090; x=1733786890; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3sbXCn2Rh0xH7nuuep2iyHgGbFrRI3XCnsb9RhyJDQ=;
-        b=EWqHvV7cuWu6Qwb7D+Fmg67lEJXEYt3x9vqqDdthGR0F4gVXK4ohvWMNyCORsma8dt
-         NVnEUMuBExAXZSRK5vgzD6QdEviPs/qR9ork6rAXpgtqlbOAArgQARRAHsdyVtB2X4xy
-         YgTpoOy42eSAJyIMPr4nl3kUEQWp9qzg0pYdYlNQQ+hf1bdljLF+xuMJC+WcotnV/bjM
-         jstF1UjnqbGXdjw0/UCMChlREqCH40SnYSB6kqzNESRxpIar2rlD3cqxHkQHbz+QED7G
-         Y4WNoQpSzK4/xutXWocYgJfnKVa8xoVBzvFjmY519TPjuRI9VcUINen2AUrugAlVijqS
-         y/rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733182090; x=1733786890;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3sbXCn2Rh0xH7nuuep2iyHgGbFrRI3XCnsb9RhyJDQ=;
-        b=LDfNIWY7XqH0IZCvSr6lDmvLgjef7pXzUscXKAJZibkgmqHJPAdK+oQhTCU8ymK620
-         9+f0DGDBFidXDVzfsniGPrsvvLKoLkdZS8EJ3xyAgI5XFbCTY57zfAj3wEdilckowlsX
-         cZzNdDFg1rxqVn8u7usRYUa0WTt7w+Xd/0LWN3UdF9pkHcYOm9hUGzKcj+nU/MtJELIq
-         1YAgt1U9W0Pdv5J3jcVLnSXju5ETw3qlA1G+amDcCSY3zRMXNDpO/P+2oOPF8W/2N4/8
-         hvu58ZTsqZBoVcyo73zM2eRi7nO0eTIWoMgN0FI3i7hJMWTqm6kuG9tv3OaNcp9RlhsY
-         fing==
-X-Forwarded-Encrypted: i=1; AJvYcCV5u/mag5ufUGt5zd6SIt0IOFrcnIhB8MxjpizmmM7x0J9Gr6yOlk5q8btle7HtjoPWz32hPMzW1w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEhh+lRNyaBA4fr9kM+0z5+h/PsjX99OT7tSMsA7UcfHcdiVyp
-	MioZHtf+iy6Foa5kK+46c5UPv4Czt3UMMOKiwzbfJy9YcFPlQDCOud/e+FS5pB1Tv+MPwyRNX/E
-	+fdzdIDQFHihKwyTD//U5l7bDeB2ktalhG5Io
-X-Gm-Gg: ASbGncuQzx0xZEL1o7KQanON4NQo7GGJC7y7XEreQsUK1V3myvWgIlnjQxgdu+VtWB6
-	LSiFLss/g7QlUtIejWx0lPbzbkXKIuw==
-X-Google-Smtp-Source: AGHT+IEhy6WbRnDJO91BppdUDAlEmi+S9zeMSCFE571EcNiY/nN7FU0teqcVwTaqqVL2IKReSprg6M9g51mDFLUkHN8=
-X-Received: by 2002:a05:6512:118e:b0:53d:f095:ffec with SMTP id
- 2adb3069b0e04-53e129cd2d9mr190550e87.8.1733182090221; Mon, 02 Dec 2024
- 15:28:10 -0800 (PST)
+	s=arc-20240116; t=1733188332; c=relaxed/simple;
+	bh=B4Sx+xF70GMxFfVfB9+wAhK7C2qf9G7NzE3Mpx8R8Ig=;
+	h=Mime-Version:Subject:From:To:CC:In-Reply-To:Message-ID:Date:
+	 Content-Type:References; b=YDsLc6Zh9BSmTy7EyY3ZU9/Hacri7gMe43dttHHTZhF4cSFDpZemn+buIhGFnCQs2jCbI50XETrej61iBJkH3iZm5qiWXkThUdo5UwZRVJJyEW01Jq1TaUhMaCcwT1VDbQ8kJdA2yWq/k4sLaADd0YByDGyzw9VS0qy1v6rcVUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Q47MkIi5; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20241203011202epoutp02672f9062755e7ada653523579b828b81~NhZixBGvJ2625826258epoutp02P
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 01:12:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20241203011202epoutp02672f9062755e7ada653523579b828b81~NhZixBGvJ2625826258epoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1733188322;
+	bh=B4Sx+xF70GMxFfVfB9+wAhK7C2qf9G7NzE3Mpx8R8Ig=;
+	h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+	b=Q47MkIi51uODx3/CT6Q5FUz+Go1ClLbVJvRDEBbxZGs6wXQabwVAVl7J9WWVFumuY
+	 qZW2hY8XRyINHB7cVBnguJHqgeqosM00gk6EBuWH7P9T0mUZZ0VGM9ASeF9ajqhQZL
+	 4bnayb3AdxaljCkxVh/NSvVR7q2q6vNIun42TFgQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+	20241203011201epcas1p30b33f73d2a3087a0b1488e64741ef1fc~NhZiF4eJl1180511805epcas1p37;
+	Tue,  3 Dec 2024 01:12:01 +0000 (GMT)
+Received: from epsmgec1p1-new.samsung.com (unknown [182.195.36.134]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4Y2N0c5g3Pz4x9Q2; Tue,  3 Dec
+	2024 01:12:00 +0000 (GMT)
+X-AuditID: b6c32a4c-ad1fe70000007bf7-93-674e5ae0de6d
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+	epsmgec1p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	4B.AB.31735.0EA5E476; Tue,  3 Dec 2024 10:12:00 +0900 (KST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241114220921.2529905-1-saravanak@google.com>
- <20241114220921.2529905-3-saravanak@google.com> <CAJZ5v0jPO24JR5um0gv5U5AwiR_RHx37x6DisG-nUxaZt9gfGA@mail.gmail.com>
- <CAJZ5v0iLq9L5nMp13BrBmbWavFs1ZEAtJ-WeyRzv3D2GXPNuag@mail.gmail.com>
- <CAGETcx-9XSdXcuGQFSoS-mMPwp=UJ3_FfTJ1Cx+9jddyjYTKEg@mail.gmail.com> <CAJZ5v0iWCWdjP9Gku2uV0Qz-Hp6ZEHDspaPVzHPPzHfvyREeWA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iWCWdjP9Gku2uV0Qz-Hp6ZEHDspaPVzHPPzHfvyREeWA@mail.gmail.com>
-From: Saravana Kannan <saravanak@google.com>
-Date: Mon, 2 Dec 2024 15:27:33 -0800
-Message-ID: <CAGETcx_5oRA-kTzU7WtWSV2=Bp0cKcT=2kPa0+ZkwkHTA+rwOQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/5] PM: sleep: Remove unnecessary mutex lock when
- waiting on parent
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Marek Vasut <marex@denx.de>, 
-	Bird@google.com, Tim <Tim.Bird@sony.com>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Subject: RE: [PATCH] devfreq: Switch back to struct
+ platform_driver::remove()
+Reply-To: myungjoo.ham@samsung.com
+Sender: MyungJoo Ham <myungjoo.ham@samsung.com>
+From: MyungJoo Ham <myungjoo.ham@samsung.com>
+To: =?UTF-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <u.kleine-koenig@baylibre.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>, Kyungmin Park
+	<kyungmin.park@samsung.com>
+CC: Krzysztof Kozlowski <krzk@kernel.org>, ALIM AKHTAR
+	<alim.akhtar@samsung.com>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-samsung-soc@vger.kernel.org"
+	<linux-samsung-soc@vger.kernel.org>, "linux-mediatek@lists.infradead.org"
+	<linux-mediatek@lists.infradead.org>, "linux-sunxi@lists.linux.dev"
+	<linux-sunxi@lists.linux.dev>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20241130135813.895628-2-u.kleine-koenig@baylibre.com>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20241203011200epcms1p3fbf79a0ca20c982ea472c5f19a2bfbee@epcms1p3>
+Date: Tue, 03 Dec 2024 10:12:00 +0900
+X-CMS-MailID: 20241203011200epcms1p3fbf79a0ca20c982ea472c5f19a2bfbee
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAJsWRmVeSWpSXmKPExsWy7bCmvu6DKL90g+OXdCwezNvGZnFppYTF
+	9S/PWS2ez1/HaHH+/AZ2i7NNb9gtNj2+xmpxufkio8Xn3iOMFjPO72OymLJvF5tFU4uxxfNH
+	nWwW879+YrP4eeg8kwO/x/sbreweO+4uYfTY8Gg1q8fOWXfZPTat6mTz2Lyk3uPF5pmMHn1b
+	VjF6vPo6l9Hj8ya5AK6obJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxU
+	WyUXnwBdt8wcoCeUFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQWmBXrFibnFpXnp
+	enmpJVaGBgZGpkCFCdkZU/auYi/Yz1tx/VZSA+MJni5GTg4JAROJX13v2boYuTiEBPYwSvy4
+	P5+1i5GDg1dAUOLvDmGQGmEBf4nz7+4zgthCAkoSDTf3MUPE9SU6HmwDi7MJ6Eps3XCXBWSO
+	iMAcRommf9+YQRxmgZmsEmu6fzNDbOOVmNH+lAXClpbYvnwrWDengLPEpDswNaISN1e/ZYex
+	3x+bzwhhi0i03jsLVSMo8eDnbqi4pETfnb1MIMskBLYxSuw4MocNwtnPKDHlYRvUJH2JM3NP
+	soHYvAK+Eh/3bwS7gkVAVaLh/WWoqS4SG1dPA7OZBbQlli18zQwKCmYBTYn1u/QhwnwS7772
+	sMI8s2PeEyYIW03i0O4lUKtkJE5PXwg10kPi2/UlzJDg7WKUuHXlJcsERvlZiBCehWTbLIRt
+	CxiZVzFKpRYU56anJhsWGOrmpZbD4zU5P3cTIzgpa/nsYPy+/q/eIUYmDsZDjBIczEoivMvX
+	e6cL8aYkVlalFuXHF5XmpBYfYjQF+nUis5Rocj4wL+SVxBuaWBqYmBkZm1gYmhkqifOeuVKW
+	KiSQnliSmp2aWpBaBNPHxMEp1cDUpRL54bBF82k73dxg2TnTEr9050dHKEoF87RsP8S9l++u
+	fRWnN+v5cKOWBd5zLq4o+bij7fHz9xfZ53zjP6S1+vNto123rj2wXlP2t3fT5+kOi3q9dU7X
+	X6pZ9lDDvla3+8xVgYjeVPUt02O8Lie+Ydyv99s4IOVma8HD6aaWCjkmd9a0zD/6+f/ZdM2k
+	83Evj/CLseXwitRoWx1Kmui1VShkM2vK/iuV+zjPcSaq9e09rGvVKa3PrnjQU3DigfpnV9lL
+	Jd/aRIhO/zNTKn+mMceMbaf/yz3Uu1tfoqD6OOFp5MXJTkyL306Y7eKWE3ucM+pHxuZmoe3Z
+	17wivh8qNDTTOW4lmLuucd6RMl0lluKMREMt5qLiRACtT/jpUwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241130135828epcas1p405d9dbb7df745f6aa81ae2033b9a281a
+References: <20241130135813.895628-2-u.kleine-koenig@baylibre.com>
+	<CGME20241130135828epcas1p405d9dbb7df745f6aa81ae2033b9a281a@epcms1p3>
 
-On Mon, Dec 2, 2024 at 1:15=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+>After commit 0edb555a65d1 (=22platform: Make platform_driver::remove()
+>return void=22) .remove() is (again) the right callback to implement for
+>platform drivers.
 >
-> On Mon, Dec 2, 2024 at 9:46=E2=80=AFPM Saravana Kannan <saravanak@google.=
-com> wrote:
-> >
-> > On Mon, Dec 2, 2024 at 12:16=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
-l.org> wrote:
-> > >
-> > > On Mon, Dec 2, 2024 at 9:11=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
-el.org> wrote:
-> > > >
-> > > > Sorry for the delay.
-> > > >
-> > > > On Thu, Nov 14, 2024 at 11:09=E2=80=AFPM Saravana Kannan <saravanak=
-@google.com> wrote:
-> > > > >
-> > > > > Locking is not needed to do get_device(dev->parent). We either ge=
-t a NULL
-> > > > > (if the parent was cleared) or the actual parent. Also, when a de=
-vice is
-> > > > > deleted (device_del()) and removed from the dpm_list, its complet=
-ion
-> > > > > variable is also complete_all()-ed. So, we don't have to worry ab=
-out
-> > > > > waiting indefinitely on a deleted parent device.
-> > > >
-> > > > The device_pm_initialized(dev) check before get_device(dev->parent)
-> > > > doesn't make sense without the locking and that's the whole point o=
-f
-> > > > it.
-> > >
-> > > Hmm, not really.
-> > >
-> > > How is the parent prevented from going away in get_device() right
-> > > after the initial dev check without the locking?
-> >
-> > Not sure what you mean by "go away"? But get_device() is going to keep
-> > a non-zero refcount on the parent so that struct doesn't get freed.
+>Convert all platform drivers below drivers/devfreq to use .remove(),
+>with the eventual goal to drop struct platform_driver::remove_new(). As
+>.remove() and .remove_new() have the same prototypes, conversion is done
+>by just changing the structure member name in the driver initializer.
 >
-> That's after it has returned.
+>While touching these drivers, make the alignment of the touched
+>initializers consistent.
 >
-> There is nothing to prevent dev from being freed in get_device()
-> itself before the kobject_get(&dev->kobj) call.
->
-> So when get_device() is called, there needs to be an active ref on the
-> device already or something else to prevent the target device object
-> from being freed.
->
-> In this particular case it is the lock along with the
-> device_pm_initialized(dev) check on the child.
-
-Ugh... my head hurts whenever I think about get_device(). Yeah, I
-think you are right.
-
-Hmm... I wanted to have this function be replaced by a call to a
-generic helper function dpm_for_each_superior() in the next patch. But
-that helper function could be called from places where the dpm_list
-lock is held. Also, I was planning on making it even more generic (not
-specific to dpm) in the future. So, depending on dpm_list lock didn't
-make sense.
-
-Any other ideas on how I could do this without grabbing the dpm_list mutex?
-
-Actually, with the rewrite and at the end of this series, we don't
-have to worry about this race because each device's suspend/resume is
-only started after all the dependencies are done. So, if the parent
-deletes a child and itself, the child device's suspend wouldn't have
-been triggered at all.
-
-So, another option is to just squash the series and call it a day. Or
-add a comment to the commit text that this adds a race that's fixed by
-the time we get to the end of the series.
-
-Thoughts?
-
-Thanks,
-Saravana
-
-
->
-> > The parent itself can still "go away" in terms of unbinding or
-> > removing the children from the dpm_list(). But that's what the
-> > device_pm_initialized() check is for. When a device_del() is called,
-> > it's removed from the dpm_list. The actual freeing comes later. But we
-> > aren't/weren't checking for that anyway.
-> >
-> > >
-> > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > > ---
-> > > > >  drivers/base/power/main.c | 13 ++-----------
-> > > > >  1 file changed, 2 insertions(+), 11 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.=
-c
-> > > > > index 86e51b9fefab..9b9b6088e56a 100644
-> > > > > --- a/drivers/base/power/main.c
-> > > > > +++ b/drivers/base/power/main.c
-> > > > > @@ -284,18 +284,9 @@ static bool dpm_wait_for_superior(struct dev=
-ice *dev, bool async)
-> > > > >          * counting the parent once more unless the device has be=
-en deleted
-> > > > >          * already (in which case return right away).
-> > > > >          */
-> > > > > -       mutex_lock(&dpm_list_mtx);
-> > > > > -
-> > > > > -       if (!device_pm_initialized(dev)) {
-> > > > > -               mutex_unlock(&dpm_list_mtx);
-> > > > > -               return false;
-> > > > > -       }
-> > > > > -
-> > > > >         parent =3D get_device(dev->parent);
-> > > > > -
-> > > > > -       mutex_unlock(&dpm_list_mtx);
-> > > > > -
-> > > > > -       dpm_wait(parent, async);
-> > > > > +       if (device_pm_initialized(dev))
-> > > > > +               dpm_wait(parent, async);
-> > > >
-> > > > This is racy, so what's the point?
-> > > >
-> > > > You can just do
-> > > >
-> > > > parent =3D get_device(dev->parent);
-> > > > dpm_wait(parent, async);
-> >
-> > Parent struct device being there isn't the same as whether this device
-> > is in the dpm_list? So, shouldn't we still check this?
-> >
-> > Also, is it really racy anymore with the new algorithm? We don't kick
-> > off the subordinates until after the parent is done.
-> >
-> > > >
-> > > > and please update the comment above this.
-> >
-> > Will do.
-> >
-> > Thanks,
-> > Saravana
-> > > >
-> > > > >         put_device(parent);
-> > > > >
-> > > > >         dpm_wait_for_suppliers(dev, async);
-> > > > > --
+>Signed-off-by: Uwe Kleine-K=C3=B6nig=20<u.kleine-koenig=40baylibre.com>=0D=
+=0A=0D=0AAcked-by:=20MyungJoo=20Ham=20<myungjoo.ham=40samsung.com>=0D=0A=0D=
+=0A=0D=0ACheers,=0D=0AMyungJoo=0D=0A=0D=0A>---=0D=0A>Hello,=0D=0A>=0D=0A>th=
+is=20is=20based=20on=20Friday's=20next,=20feel=20free=20to=20drop=20changes=
+=20that=20result=20in=0D=0A>a=20conflict=20when=20you=20come=20around=20to=
+=20apply=20this.=20I'll=20care=20for=20the=20fallout=0D=0A>at=20a=20later=
+=20time=20then.=20(Having=20said=20that,=20if=20you=20use=20b4=20am=20-3=20=
+and=20git=20am=0D=0A>-3,=20there=20should=20be=20hardly=20any=20conflict.)=
+=0D=0A>=0D=0A>This=20is=20merge=20window=20material.=0D=0A>=0D=0A>Best=20re=
+gards=0D=0A>Uwe=0D=0A>=0D=0A>=20drivers/devfreq/event/exynos-nocp.c=20=7C=
+=206=20+++---=0D=0A>=20drivers/devfreq/event/exynos-ppmu.c=20=7C=206=20+++-=
+--=0D=0A>=20drivers/devfreq/mtk-cci-devfreq.c=20=20=20=7C=204=20++--=0D=0A>=
+=20drivers/devfreq/rk3399_dmc.c=20=20=20=20=20=20=20=20=7C=208=20++++----=
+=0D=0A>=20drivers/devfreq/sun8i-a33-mbus.c=20=20=20=20=7C=202=20+-=0D=0A>=
+=205=20files=20changed,=2013=20insertions(+),=2013=20deletions(-)=0D=0A>=0D=
+=0A
 
