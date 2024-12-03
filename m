@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-18483-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18485-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F0339E2440
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 16:47:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE5E59E249C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 16:50:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B063287936
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 15:47:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ACD0286E24
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 15:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9914C1F9F5B;
-	Tue,  3 Dec 2024 15:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF4F1F76D0;
+	Tue,  3 Dec 2024 15:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dHMpibXa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1dypc95"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6512D1F9EAC;
-	Tue,  3 Dec 2024 15:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E1B1F76AD;
+	Tue,  3 Dec 2024 15:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733240770; cv=none; b=Xs5Fqkj9CfcjNFoMBMKu7Q1sdVhQm/DPChh0zUzMa2SwQKR7Pi9hjzouto8DkNTJoybMz+RahqhBGLVFLV7Ddr4stl9MwsxRNMs+EIH6HiQwZWtLugVIDYtJqKpRa//gI5v7clgUbF+iukM0OVcliW/Cv3SZheTBygMruvDpG0g=
+	t=1733240997; cv=none; b=S5FUBe+se3vINaRHNqgPV8caXYqFMR1dNmqAReWWWYPoH5/Q5O4g2kgGVA2G7n9+Z33QCGQxL8CFRRvdU2Lb8KbacXHNZKMgI6aIUGckied14h6p11NT7UU2jxMMZOJdUaGUTUgwaoY6ZbgvwSBFS/SG7sgxNWHBdVUERWfD5jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733240770; c=relaxed/simple;
-	bh=dn8LjBbhrt8WWvRtmZ7EWYAwQ3mVvCiOwBxFtAvZTX4=;
+	s=arc-20240116; t=1733240997; c=relaxed/simple;
+	bh=mo2eNlwmx704hDWUW46aIuAMajnwh8WGQqvrFgIwYgc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GuwfGT2TUQoYLUtRlCfoVJwu+b1VuBvMqDNOhk03jyo4jPlK/idUUTtGKx8VpFMIGMPks9S3R9XZsbis1WMY0u+ZmU+ZMmRLIzGr7CtEJ4U1t6LxN6O5PQYOf4EzN2z4GrtS2vw9ON8Udh6aAqDcgxpLWfyXvleM02Pa8bRNUqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dHMpibXa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960D9C4CECF;
-	Tue,  3 Dec 2024 15:46:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=eyXyB+EkvMhffRR20yttjzpAZnvhqmShA6yHjgK2jh+L8rfByqIxk46MY1FHoOd5cGFc8uF8YcrqZjQj53xe7WJjtRDJV10MKXMP2JlOOS/9pXvEJmfpU+6Z9Pl+1IO8IcBX8pWMQHerdDXWN7EzQwdmxYs+iWlzA7NhBItIkLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1dypc95; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CDDDC4CECF;
+	Tue,  3 Dec 2024 15:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733240770;
-	bh=dn8LjBbhrt8WWvRtmZ7EWYAwQ3mVvCiOwBxFtAvZTX4=;
+	s=k20201202; t=1733240997;
+	bh=mo2eNlwmx704hDWUW46aIuAMajnwh8WGQqvrFgIwYgc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dHMpibXaqK0yq9OaoKSg9V16Zdq1zQ3wAMLefrf1cYqT7huFlQ+U3kiz/5KoJl1eU
-	 Go9vBhDJxi8arAFFrZG4QTojSLxGFvuB8Jh/JlFLTjZki6ZKgPYq+v879eAyePbtVT
-	 DXuQ1gq+ljCtJsUnlbNF6syZeE3Qe+feqpLSykxk5dIjE6WyIV92mD6d1Hmicj+FUv
-	 e8DZWuXUAidrrrIZuPrhTWZLAG6s4oM5IzYpU5K09GhcYBMwgbczGPBYSg9pBKUOmD
-	 rU5+cnxz/NpbjS+Uyu+M8goAFRk+wHN2U8mKljZT+BUYsxoOtTQMM4DByPsG6yMfaI
-	 GOH6bl1gm7bcg==
-Message-ID: <7d09f311-b9a2-4c40-9fca-4b5d0acc112d@kernel.org>
-Date: Tue, 3 Dec 2024 16:45:59 +0100
+	b=r1dypc95hlsb7L7JFQUACDi2B9hUki7rh4OVT6W38L7/aN8P86pv0goz2IXeUaVwI
+	 QdByPHqG3MqS8xFenSsBFgerb/ms6TpLOlK8ANXXXdDSDNTX+dFxw8lRwkor7VxlMg
+	 yopbD7M8pzGCjddiK8cl9ETKROr3ziUo4DCs1bJ77FBaoNztkmjzag7ELSppU9jRa0
+	 +BGrH+F4e0dOqUS3KADCJLlp0LFoft5TOL4GEQw9RSXMhoqR6ms3CwqgvgUp+IjlD+
+	 N7GuNRLyNPns99c8cZT3ZuW0BI2PyRGHAJaFfAp3TgQVU91GBZOZL6uMQV7zLpQv8c
+	 GKcZ564Pvxmvw==
+Message-ID: <37b65029-8310-48d1-bb6e-de5e47b2a403@kernel.org>
+Date: Tue, 3 Dec 2024 16:49:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 06/14] dt-bindings: clock: thead,th1520: Rename
- YAML schema file
+Subject: Re: [RFC PATCH v1 10/14] drm/imagination: Add support for IMG
+ BXM-4-64 GPU
 To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
@@ -64,8 +64,8 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
- <CGME20241203134156eucas1p2326d84fcef2ee0914586122520b18dcc@eucas1p2.samsung.com>
- <20241203134137.2114847-7-m.wilczynski@samsung.com>
+ <CGME20241203134202eucas1p26bdcec486ee42440ded94ff801678ba0@eucas1p2.samsung.com>
+ <20241203134137.2114847-11-m.wilczynski@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,28 +111,47 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241203134137.2114847-7-m.wilczynski@samsung.com>
+In-Reply-To: <20241203134137.2114847-11-m.wilczynski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 03/12/2024 14:41, Michal Wilczynski wrote:
-> As support for clocks from new subsystems is being added to the T-Head
-> TH1520 SoC, the Device Tree binding YAML schema file name should reflect
-> this broader scope.  The existing schema file 'thead,th1520-clk-ap.yaml'
-> includes the '-ap' suffix, indicating it's specific to the Application
-> Processor (AP) subsystem.
+> The IMG BXM-4-64 GPU is integrated into the T-Head TH1520 SoC. This
+> commit adds the compatible string "img,img-bxm-4-64" to the device tree
+> match table in the drm/imagination driver, enabling support for this
+> GPU.
 > 
-> Rename the YAML schema file to 'thead,th1520-clk.yaml' to generalize it
-> for all subsystems. Update all references to this schema file
-> accordingly.
+> By including this GPU in the compatible devices list, the driver can
+> initialize and manage the BXM-4-64 GPU on the TH1520 SoC, providing
+> graphics acceleration capabilities upstream.
+> 
+> This commit doesn't touch the img,powervr-rogue.yaml on purpose, as the
+> new dt-bindings schema was proposed [1], but not merged yet.
+
+
+That's not related to the commit. This commit *cannot ever* touch the
+bindings.
+
+> 
+> Link: https://lore.kernel.org/all/20241118-sets-bxs-4-64-patch-v1-v2-1-3fd45d9fb0cf@imgtec.com/ [1]
 > 
 > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
->  .../clock/{thead,th1520-clk-ap.yaml => thead,th1520-clk.yaml}   | 2 +-
->  MAINTAINERS                                                     | 2 +-
+>  drivers/gpu/drm/imagination/pvr_drv.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/imagination/pvr_drv.c b/drivers/gpu/drm/imagination/pvr_drv.c
+> index 85ee9abd1811..8633a3a315b7 100644
+> --- a/drivers/gpu/drm/imagination/pvr_drv.c
+> +++ b/drivers/gpu/drm/imagination/pvr_drv.c
+> @@ -1475,6 +1475,7 @@ static void pvr_remove(struct platform_device *plat_dev)
+>  
+>  static const struct of_device_id dt_match[] = {
+>  	{ .compatible = "img,img-axe", .data = NULL },
+> +	{ .compatible = "img,img-bxm-4-64", .data = NULL },
 
-NAK, don't rename just because you added one more compatible (and anyway
-never a separate patch).
+Undocumented compatible. Combine relevant patches into one patchsets, so
+we see entire picture.
 
 Best regards,
 Krzysztof
