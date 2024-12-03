@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-18485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18486-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE5E59E249C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 16:50:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECE1F9E24A8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 16:51:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ACD0286E24
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 15:50:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE50D28751A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 15:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF4F1F76D0;
-	Tue,  3 Dec 2024 15:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99C61F890C;
+	Tue,  3 Dec 2024 15:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1dypc95"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DVIq3Jb9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E1B1F76AD;
-	Tue,  3 Dec 2024 15:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B95C71DAC9F;
+	Tue,  3 Dec 2024 15:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733240997; cv=none; b=S5FUBe+se3vINaRHNqgPV8caXYqFMR1dNmqAReWWWYPoH5/Q5O4g2kgGVA2G7n9+Z33QCGQxL8CFRRvdU2Lb8KbacXHNZKMgI6aIUGckied14h6p11NT7UU2jxMMZOJdUaGUTUgwaoY6ZbgvwSBFS/SG7sgxNWHBdVUERWfD5jU=
+	t=1733241048; cv=none; b=LaZG80PyYuGYYrkF08UQiOLDc0YrvNF5ednsvGvPx43G8/cN5Ygd+ryGWMqVkK9pKmO6JA2DTKjSPVQ8/E2VewfrGSGAZr6L+Oa0Bo9/1d4kHbJvqGnUPWLXoqLdaLto4ls3uymui3xh3oqAWmiubdwqkqfOiaza1F38kJsLHiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733240997; c=relaxed/simple;
-	bh=mo2eNlwmx704hDWUW46aIuAMajnwh8WGQqvrFgIwYgc=;
+	s=arc-20240116; t=1733241048; c=relaxed/simple;
+	bh=n570EuIKkUoOlNy2/evG9Hp7xcrgmKhixIkmq6odSOk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eyXyB+EkvMhffRR20yttjzpAZnvhqmShA6yHjgK2jh+L8rfByqIxk46MY1FHoOd5cGFc8uF8YcrqZjQj53xe7WJjtRDJV10MKXMP2JlOOS/9pXvEJmfpU+6Z9Pl+1IO8IcBX8pWMQHerdDXWN7EzQwdmxYs+iWlzA7NhBItIkLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1dypc95; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CDDDC4CECF;
-	Tue,  3 Dec 2024 15:49:47 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=K0dPuFYGagAViv8XP6CuL/KDab9QjGLDr5zVh1EkoNJdnlJmR/Hdnb8CIIR3YAyff8iuW+1RoiSMQEWRi9WtJmXe8jAS19FytbRW7MRQIAMmA33+b6KxKP6mFBUYd1OiYGBmcjsLIO7ditj4KXTf1r0r/XR56x26qoafaoaAgS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DVIq3Jb9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A14C4CECF;
+	Tue,  3 Dec 2024 15:50:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733240997;
-	bh=mo2eNlwmx704hDWUW46aIuAMajnwh8WGQqvrFgIwYgc=;
+	s=k20201202; t=1733241048;
+	bh=n570EuIKkUoOlNy2/evG9Hp7xcrgmKhixIkmq6odSOk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r1dypc95hlsb7L7JFQUACDi2B9hUki7rh4OVT6W38L7/aN8P86pv0goz2IXeUaVwI
-	 QdByPHqG3MqS8xFenSsBFgerb/ms6TpLOlK8ANXXXdDSDNTX+dFxw8lRwkor7VxlMg
-	 yopbD7M8pzGCjddiK8cl9ETKROr3ziUo4DCs1bJ77FBaoNztkmjzag7ELSppU9jRa0
-	 +BGrH+F4e0dOqUS3KADCJLlp0LFoft5TOL4GEQw9RSXMhoqR6ms3CwqgvgUp+IjlD+
-	 N7GuNRLyNPns99c8cZT3ZuW0BI2PyRGHAJaFfAp3TgQVU91GBZOZL6uMQV7zLpQv8c
-	 GKcZ564Pvxmvw==
-Message-ID: <37b65029-8310-48d1-bb6e-de5e47b2a403@kernel.org>
-Date: Tue, 3 Dec 2024 16:49:45 +0100
+	b=DVIq3Jb9WNnCnWE+4MjokfsdEdsdVthLx80K0FNxA9Y5NyCIQdrJsKKgqO8/Qb8cB
+	 dqxEZ3cjofXHsdxsEWGQQ/wyqom0G2srbFzbNGKKntbDRfIn11xovzS4MEBrVxyRWN
+	 KFWXLDvwRwN4dIw2eQ16uVslgLJF+rRKbf9Tqi4se//x9I0JjNZxzGqzfQDZpgSlfW
+	 TOBiY06rvErj1N77Dr/RMSj6yq8ZqqQMkDZ4mfiYejedThybvlmIS+VA3a+037XyVm
+	 H43pD97ZHm3cZALD+7r6DQfGVXkQ/avEWTKHHbeBF4CnREfvV4xR98meNMzCh7ot0k
+	 6jE1s+gDVz1yQ==
+Message-ID: <2b6ffc5a-4021-459d-ae4c-b2c472960c60@kernel.org>
+Date: Tue, 3 Dec 2024 16:50:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 10/14] drm/imagination: Add support for IMG
- BXM-4-64 GPU
+Subject: Re: [RFC PATCH v1 12/14] riscv: dts: Add Video Output clock and
+ syscon regmap nodes
 To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
@@ -64,8 +64,8 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
- <CGME20241203134202eucas1p26bdcec486ee42440ded94ff801678ba0@eucas1p2.samsung.com>
- <20241203134137.2114847-11-m.wilczynski@samsung.com>
+ <CGME20241203134204eucas1p1d0df90a265637542f0652fd407dc7989@eucas1p1.samsung.com>
+ <20241203134137.2114847-13-m.wilczynski@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,47 +111,61 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241203134137.2114847-11-m.wilczynski@samsung.com>
+In-Reply-To: <20241203134137.2114847-13-m.wilczynski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 03/12/2024 14:41, Michal Wilczynski wrote:
-> The IMG BXM-4-64 GPU is integrated into the T-Head TH1520 SoC. This
-> commit adds the compatible string "img,img-bxm-4-64" to the device tree
-> match table in the drm/imagination driver, enabling support for this
-> GPU.
+> The address space controlling the Video Output (VO) subsystem clocks
+> also contains control registers for GPU resets. To properly synchronize
+> access to this shared address space, create a syscon Device Tree node
+> for the VO registers and reference it in the clock controller node.
 > 
-> By including this GPU in the compatible devices list, the driver can
-> initialize and manage the BXM-4-64 GPU on the TH1520 SoC, providing
-> graphics acceleration capabilities upstream.
-> 
-> This commit doesn't touch the img,powervr-rogue.yaml on purpose, as the
-> new dt-bindings schema was proposed [1], but not merged yet.
-
-
-That's not related to the commit. This commit *cannot ever* touch the
-bindings.
-
-> 
-> Link: https://lore.kernel.org/all/20241118-sets-bxs-4-64-patch-v1-v2-1-3fd45d9fb0cf@imgtec.com/ [1]
+> This change ensures coordinated access to the VO registers between the
+> clock controller and other drivers, preventing conflicts and maintaining
+> system stability.
 > 
 > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
->  drivers/gpu/drm/imagination/pvr_drv.c | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/riscv/boot/dts/thead/th1520.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/imagination/pvr_drv.c b/drivers/gpu/drm/imagination/pvr_drv.c
-> index 85ee9abd1811..8633a3a315b7 100644
-> --- a/drivers/gpu/drm/imagination/pvr_drv.c
-> +++ b/drivers/gpu/drm/imagination/pvr_drv.c
-> @@ -1475,6 +1475,7 @@ static void pvr_remove(struct platform_device *plat_dev)
+> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
+> index dc2d554b4a71..39d39059160d 100644
+> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
+> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
+> @@ -489,6 +489,18 @@ clk: clock-controller@ffef010000 {
+>  			#clock-cells = <1>;
+>  		};
 >  
->  static const struct of_device_id dt_match[] = {
->  	{ .compatible = "img,img-axe", .data = NULL },
-> +	{ .compatible = "img,img-bxm-4-64", .data = NULL },
+> +		vosys_clk: clock-controller {
 
-Undocumented compatible. Combine relevant patches into one patchsets, so
-we see entire picture.
+Missing address space. You cannot have here nodes without unit address.
+
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check W=1` (see
+Documentation/devicetree/bindings/writing-schema.rst or
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+for instructions).
+
+> +			compatible = "thead,th1520-clk-vo";
+> +			thead,vosys-regmap = <&vosys_reg>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		vosys_reg: vosys@ffef528000 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+
+> +			compatible = "thead,th1520-vosys", "syscon";
+> +			reg = <0xff 0xef528000 0x0 0x1000>;
+> +			status = "okay";
+
+Where is it disabled? Drop.
 
 Best regards,
 Krzysztof
