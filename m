@@ -1,183 +1,177 @@
-Return-Path: <linux-pm+bounces-18423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18425-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9D8C9E155B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:13:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75BE09E1593
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 09:25:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89F37284C39
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:13:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36F162815E0
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2024 08:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6466C1CD204;
-	Tue,  3 Dec 2024 08:13:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 873F81D279F;
+	Tue,  3 Dec 2024 08:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O4BjREfV"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="OcqWM21b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5462D198A0E
-	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 08:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFF218FDC9
+	for <linux-pm@vger.kernel.org>; Tue,  3 Dec 2024 08:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733213590; cv=none; b=GKJiNFkX2Jg8SzFI2uexwZtwcqJPYsmb4mlO3Dq5CfzfFaxeB8LfWSFbchxX9qYrr7TXiwl+FaPlR3CLpIlmmkcV+q6sI+boFE5TSUgIEgz0e6TqCo7EkGoRQMV3mJAZN05y/s0jFXaFRfZVokrodnYdK1U2zqHdX2ck+aZ8VCc=
+	t=1733214308; cv=none; b=UXBA8MUddN5KxNGwjl6eoMvSlM7AnSuaHo9NCeI/WIL9Rk3+4lcRoDpGtdGSXMha4FRx+wz0ZKiWoZ/oqZpN2u2DyeAm4iPPhfi/31Xl6BuwA+obwdqTxwGEk8ktVcMWtskzTlp3YWYx4H5MfKvdVPP5wZVq8/E+o4CnG0xTP8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733213590; c=relaxed/simple;
-	bh=GfIxjX3fUAG9xD0E7y4Y7LPGVwA/ovHOoj/JqoQo4b8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ot43wjG2Ot0ZDxMu3V4VZ1uNzp99khPW68Iq+CC5aAU4OmTLOWKjWyGjHcarSqBWQT+hqmDco/tJxOWoF6L8NDmZCw8Twi5jodSE4YInHTtmPE/cAtu6IeGGIG03PJMTeQrfDFlE7QN1AC4HJNvXTITW2u5EfjZJjk2a8V4Gf+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=O4BjREfV; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53df7f6a133so5513363e87.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 00:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733213585; x=1733818385; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2919edKa0scKH1VFTPp4m2/Qq3wOxmRVQ7yuQJSD4N0=;
-        b=O4BjREfVVVXTSe5ArYQqnCSlBSSLQdVhil3OvX8RF4iZ0bRgfrNQGTcXdkZL2FYNfV
-         GFBNNWtzGzEfOybCSOgI+gmmqu5Ovl8D/EjFx4iGDVQYCMPCv3LwJt9V4FjNpicqn+m9
-         cTgaPIbKbrFyPW0t7zeFwbw7z7xzs960gj1X5Q0v0t7oge2xj36/VZRmuySHz7NZpjnN
-         tRiPSJTx45hr67Y52zJtMqV73s+AilHOnBZJGF1CnjfrQONVok6mh8jjJiZaJlOcLJHv
-         06jcGYjaBauFSm3cfMUwvAQKvDFHdnPQnkk2lW2fQKG9FlzsNQsygLh27b3ZwcemBnA/
-         b1nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733213585; x=1733818385;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2919edKa0scKH1VFTPp4m2/Qq3wOxmRVQ7yuQJSD4N0=;
-        b=A5y5o3KcYb+SFtsVkwHqS1uJGC+p5MAgKWbci3CCOdT0LHJcdmn63XDxmdMu73+MJt
-         6ZzKUYoFz8Bq3aJS0GKajN3d/ZsF10zFWcCHmbzICnI7KZoOstsrH4ksuOvUjrJ7Z3Ci
-         4BumOlp8x7zPo+iBOcwyVJdDMiPlcKLTyNm+RXG/x9/JB05JCBR7yrI1CgP4FTRJT6WS
-         OVFRvmQChSL4jH2h2I6bF1MxhdSuH//IHG2DSI4ZRjcgQr0wytHhRuYUjmZEcgCQny1w
-         EfbSiXs3NF+Whkb3NLiIwxUy1+TSTuO2fYw4De9kA6r8vCGh4C6byqT46cMQr4IgCPFj
-         2mNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWIsBF9iCRbzjX+TkIsyCoBOdUmKIBLtqwIPTd2gCtDUo0DyAh/hMaBm1NfhXKiW023YnR1oTiI9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycbOj0n2g0JduRn0tC3HzgHiXDo3ak8rDI/jpoGGBbt3mXRHC/
-	Gow9y/iaka/EQMPnNgd1JqUzOZRY+oSjpmBaa2H61fVExh6AEKsvvNA+eZShJp4=
-X-Gm-Gg: ASbGncvI9jFvBZC2iMHMkdoofM0qvKT8rmrmbWpc3NsniA0zE/fqFU1qVTmkMBxLDaY
-	FGYsV1mHfVT9NXiBwLXFzQHccSZk/+SLU+Jh41/ixj7MSVFDwxgsnXFOcIs3BiIMp6cWv9MHhxc
-	K1+XLyiQIKcKCIIk0y1yIJTmTS/Gy0iVbOihaZyJ7X16ZC9u119vrBqDpt8tp01BdWaUHOokQhq
-	WLUmaAXunpVRqGFwznNxI3FQCpWhjmMsNvfl5ynnrAkha1MNVeUt7x0qqEZRRxL7hJkOvw=
-X-Google-Smtp-Source: AGHT+IF96tm1kW0L+6Eafet2kokvnQva3vx6OFst6liTSpf4L4XZltWOm8ICfrYv1DvfjDe/iDx2Pg==
-X-Received: by 2002:a05:6512:2810:b0:53d:e76b:5e6e with SMTP id 2adb3069b0e04-53e12a058a2mr876514e87.31.1733213585423;
-        Tue, 03 Dec 2024 00:13:05 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa74f2c7sm215212575e9.2.2024.12.03.00.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 00:13:04 -0800 (PST)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Tue, 03 Dec 2024 09:13:00 +0100
-Subject: [PATCH v3 2/2] OPP: fix dev_pm_opp_find_bw_*() when bandwidth
- table not initialized
+	s=arc-20240116; t=1733214308; c=relaxed/simple;
+	bh=teX4mb1jPQ2CVPW1mtArPbbk7sHjrq60MC03+FzvSAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MzIbNiFZxkRN5lnXondolxAsMK+aTXba5ljFWEI/0R2e0Gd1CIXGQ//k/DEoZeKFAgt6M+tr7SzORSOuJm1wknMl/4BrWyg5LGlBx4CKDrJ6rh1edcEz1idJSaJvY1a8VkSC9kWErOrZDskLgBy0sFNA6t2FTASQIviz++ut6LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=OcqWM21b; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1733214301;
+	bh=teX4mb1jPQ2CVPW1mtArPbbk7sHjrq60MC03+FzvSAA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OcqWM21bDQTqWp/lWSrqZBmsc3AdZWag5EgBmDRnR3lt/s3ufgUPU6axe3AwOlTc/
+	 CUmvNV/DDf2MXlGtn8OBYcu+au/hLNXHqZ8fnUbwig6Etvp9NPWAgdRx7XWCGPGSjH
+	 8/h2heoLpURJKUK+D5NZSol8kNxxfH0ig2RP2ozk=
+Date: Tue, 3 Dec 2024 09:25:00 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Luca Coelho <luca@coelho.fi>
+Cc: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>, 
+	"Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>, "Coelho, Luciano" <luciano.coelho@intel.com>, 
+	"Saarinen, Jani" <jani.saarinen@intel.com>, "Nikula, Jani" <jani.nikula@intel.com>, 
+	"De Marchi, Lucas" <lucas.demarchi@intel.com>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: Regression on linux-next (next-20241120) and drm-tip
+Message-ID: <82f1c285-ae2c-4a41-af10-016b52c149c1@t-8ch.de>
+References: <SJ1PR11MB6129CCD82CD78D8EE6E27EF4B9362@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <SJ1PR11MB612965ACA3E84745346F0400B9362@SJ1PR11MB6129.namprd11.prod.outlook.com>
+ <5e405ad4-34d6-4507-978f-3d81d4af2455@t-8ch.de>
+ <7a84d900879c555dab675605ba925bc91b02510d.camel@coelho.fi>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241203-topic-opp-fix-assert-index-check-v3-2-1d4f6f763138@linaro.org>
-References: <20241203-topic-opp-fix-assert-index-check-v3-0-1d4f6f763138@linaro.org>
-In-Reply-To: <20241203-topic-opp-fix-assert-index-check-v3-0-1d4f6f763138@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2351;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=GfIxjX3fUAG9xD0E7y4Y7LPGVwA/ovHOoj/JqoQo4b8=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBnTr2Ong2+ZytkxIK3MGstGfV86Kj9+CTp9OMCqeeK
- qFhNAI6JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ069jgAKCRB33NvayMhJ0Q+DEA
- CKQjhM+SeZZOaLtTPK/swZ1Re+qNDLT9wUIMuCZzOIjbuuoMQHa6PjyLiDt9KVK/9pmnoCMEPPo6y3
- BPw+JM37Mc+rzES+XO6axgc9gE80c6DpMLIpf00WLnOybpsYMz+OuRX8ElA9bY5Z/PH2cV9UO4sEQs
- wHPxccYfZaPy8hZn/w/OO+49SBfCPV2iTTFtyi3EQQLx97ZB9olfvnZvzND7QbV8Vs+PvDYXridrMl
- zLrnSmivO3ZkThQzBXXekIy9ADKUTGbQCJu3zoHp11zhXZbIZKe6Qy7pnWqgkQmgXjZ7mNnBHppqNd
- vGQDkGW57bl7U/Gfqa/BpVoU1e0BH0UVt78jUpW5k3MZ3/4FwDCQVKEGJWGhrDST9mdU3umhTFHMqR
- yhV2oHDMh771Z9YNP9a/xO3yA2AgDbcdezwRcouR6iTj0N9Vq2N9sKS3OK8B4DMF9EJ1j/U68J3ME1
- tiiLUvsFSQJe9XEnUUMsDm9oN/UG/QNwxcFNjlY3/UbMUZH1zjYDxzhG1/Hhveh0HttP0pUnTddILK
- a2+MUCWrQeibDF0ropeuGdyPAv6MlHfCpqviUjWqoX6553b17u6rm2ncFpWFDUrDVcNn4kdHV5JjW3
- XG43HgIQ+dxFCbvCJsfk6EJR6TDqkZV/AfR6DnKlgCj3r+Pv3X1rFuBBirsQ==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7a84d900879c555dab675605ba925bc91b02510d.camel@coelho.fi>
 
-If a driver calls dev_pm_opp_find_bw_ceil/floor() the retrieve bandwidth
-from the OPP table but the bandwidth table was not created because the
-interconnect properties were missing in the OPP consumer node, the
-kernel will crash with:
+On 2024-12-03 09:50:05+0200, Luca Coelho wrote:
+> On Tue, 2024-12-03 at 07:50 +0100, Thomas Weißschuh wrote:
+> > (+Cc Sebastian)
+> > 
+> > Hi Chaitanya,
+> > 
+> > On 2024-12-03 05:07:47+0000, Borah, Chaitanya Kumar wrote:
+> > > Hope you are doing well. I am Chaitanya from the linux graphics team in Intel.
+> > > 
+> > > This mail is regarding a regression we are seeing in our CI runs[1] on linux-next repository.
+> > 
+> > Thanks for the report.
+> > 
+> > > Since the version next-20241120 [2], we are seeing the following regression
+> > > 
+> > > `````````````````````````````````````````````````````````````````````````````````
+> > > <4>[   19.990743] Oops: general protection fault, probably for non-canonical address 0xb11675ef8d1ccbce: 0000 [#1] PREEMPT SMP NOPTI
+> > > <4>[   19.990760] CPU: 21 UID: 110 PID: 867 Comm: prometheus-node Not tainted 6.12.0-next-20241120-next-20241120-gac24e26aa08f+ #1
+> > > <4>[   19.990771] Hardware name: Intel Corporation Arrow Lake Client Platform/MTL-S UDIMM 2DPC EVCRB, BIOS MTLSFWI1.R00.4400.D85.2410100007 10/10/2024
+> > > <4>[   19.990782] RIP: 0010:power_supply_get_property+0x3e/0xe0
+> > > `````````````````````````````````````````````````````````````````````````````````
+> > > Details log can be found in [3]. 
+> > > 
+> > > After bisecting the tree, the following patch [4] seems to be the first "bad"
+> > > commit
+> > > 
+> > > `````````````````````````````````````````````````````````````````````````````````````````````````````````
+> > > Commit 49000fee9e639f62ba1f965ed2ae4c5ad18d19e2
+> > > Author:     Thomas Weißschuh <mailto:linux@weissschuh.net>
+> > > AuthorDate: Sat Oct 5 12:05:03 2024 +0200
+> > > Commit:     Sebastian Reichel <mailto:sebastian.reichel@collabora.com>
+> > > CommitDate: Tue Oct 15 22:22:20 2024 +0200
+> > >     power: supply: core: add wakeup source inhibit by power_supply_config    
+> > > `````````````````````````````````````````````````````````````````````````````````````````````````````````
+> > > 
+> > > This is now seen in our drm-tip runs as well. [5]
+> > > 
+> > > Could you please check why the patch causes this regression and provide a fix if necessary?
+> > 
+> > I don't see how this patch can lead to this error.
+> > Could you doublecheck the bisect?
+> 
+> FWIW I also bisected this and came to the same conclusion, this is the
+> first bad commit.  My guess is that some component is not yet setting
+> things up properly for the new feature.
 
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000004
-...
-pc : _read_bw+0x8/0x10
-lr : _opp_table_find_key+0x9c/0x174
-...
-Call trace:
-  _read_bw+0x8/0x10 (P)
-  _opp_table_find_key+0x9c/0x174 (L)
-  _find_key+0x98/0x168
-  dev_pm_opp_find_bw_ceil+0x50/0x88
-...
+The thing is that at this point nothing is using this feature.
+And the new code runs during registration while the error happens later.
 
-In order to fix the crash, create an assert function to check
-if the bandwidth table was created before trying to get a
-bandwidth with _read_bw().
+> This is very easily reproducible in our system, with vanila 6.13-rc1,
+> so if there's anything you want to try, let us know.
 
-Fixes: add1dc094a74 ("OPP: Use generic key finding helpers for bandwidth key")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/opp/core.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+Can you try the following diffs, each alone on top of
+49000fee9e639f62ba1f965ed2ae4c5ad18d19e2?
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index ebe7887a27d3c1dd6c652c8bf9f5f9a285d7e74e..137764f2ac7c72585953d0928b6f917fb6f1fe7c 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -116,6 +116,15 @@ static bool assert_clk_index(struct opp_table *opp_table,
- 	return opp_table->clk_count > index;
- }
- 
-+/*
-+ * Returns true if bandwidth table is large enough to contain the bandwidth index.
-+ */
-+static bool assert_bandwidth_index(struct opp_table *opp_table,
-+				   unsigned int index)
-+{
-+	return opp_table->path_count > index;
-+}
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index a2005e3c6f38..c6e7ca5b1283 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1411,7 +1411,7 @@ __power_supply_register(struct device *parent,
+                goto device_add_failed;
+
+        if (cfg && cfg->no_wakeup_source)
+-               ws = false;
++               ;
+
+        rc = device_init_wakeup(dev, ws);
+        if (rc)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index a2005e3c6f38..5aefba2ddcda 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1410,9 +1410,6 @@ __power_supply_register(struct device *parent,
+        if (rc)
+                goto device_add_failed;
+
+-       if (cfg && cfg->no_wakeup_source)
+-               ws = false;
+-
+        rc = device_init_wakeup(dev, ws);
+        if (rc)
+                goto wakeup_init_failed;
+
+
+Could you also print the name of the device?
+
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index a2005e3c6f38..63e9e339cc01 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1356,6 +1356,8 @@ __power_supply_register(struct device *parent,
+                pr_warn("%s: Expected proper parent device for '%s'\n",
+                        __func__, desc->name);
+
++       pr_warn("PSY: name=%s\n", desc->name);
 +
- /**
-  * dev_pm_opp_get_bw() - Gets the bandwidth corresponding to an opp
-  * @opp:	opp for which bandwidth has to be returned for
-@@ -915,7 +924,8 @@ struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev, unsigned int *bw,
- 	unsigned long temp = *bw;
- 	struct dev_pm_opp *opp;
- 
--	opp = _find_key_ceil(dev, &temp, index, true, _read_bw, NULL);
-+	opp = _find_key_ceil(dev, &temp, index, true, _read_bw,
-+			     assert_bandwidth_index);
- 	*bw = temp;
- 	return opp;
- }
-@@ -946,7 +956,8 @@ struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
- 	unsigned long temp = *bw;
- 	struct dev_pm_opp *opp;
- 
--	opp = _find_key_floor(dev, &temp, index, true, _read_bw, NULL);
-+	opp = _find_key_floor(dev, &temp, index, true, _read_bw,
-+			      assert_bandwidth_index);
- 	*bw = temp;
- 	return opp;
- }
+        psy = kzalloc(sizeof(*psy), GFP_KERNEL);
+        if (!psy)
+                return ERR_PTR(-ENOMEM);
 
--- 
-2.34.1
 
+Also line numbers would be useful.
+Is this configuration running KASAN?
+
+
+Thanks a lot,
+Thomas
 
