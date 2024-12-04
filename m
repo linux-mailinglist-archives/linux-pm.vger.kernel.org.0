@@ -1,92 +1,97 @@
-Return-Path: <linux-pm+bounces-18519-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18520-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 391F09E3501
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 09:10:26 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1ACF9E354C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 09:29:03 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDAA428289B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 08:10:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D8FD167D37
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 08:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A54018C907;
-	Wed,  4 Dec 2024 08:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C313F193091;
+	Wed,  4 Dec 2024 08:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZvwGu+w9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nX5cXpuX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2031FA4;
-	Wed,  4 Dec 2024 08:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8EB192D87;
+	Wed,  4 Dec 2024 08:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733299821; cv=none; b=t3B0mGYw5QCYzy30a22K3hez+xKCN9B/6Sq5SZRfcsH4SxDlHKJFw5m2NIJQ0xVopFC7M2iKKTOsLEz07+hs9QTnziLHz57ZjF06euEJv5IhaxkHC0j+HT1fYUFl8Dav67rk/L3eBybpSfo4K/ZiOepa507p+O2xP7FU15I2HVo=
+	t=1733300940; cv=none; b=pUC2tozQFqorQINEsWBBh6yGY4khRRCIQYse6MJ7yzpsgd87UeEFj7us2FyH3Iok1OaEOAqlViNvEdZ1WgyCSM+diY+V4tf3e2E8aj38KXtL4Ca1HQDhA0JiHxTthH3pzcLBh41NdY5rVcc1i2imgzTo4KxyBfaSnl9Bk+195fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733299821; c=relaxed/simple;
-	bh=WUawS9XNP8c3d2doKds4JvReeI2uvWaigDw2I6FJsCA=;
-	h=Message-ID:Date:From:To:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nB9gYud1HBeFiSjEP7uVLPWPALo5utoBPJTL9P2gwJRQhkURHlX3rxgkKXNnPbSOX1//YHIjJKs+V0jhGttDzgRkpEyDi073nQHra9VNQ2Do1GBkqw3kOxRkA3gc8n527t9/f5bJaY3ynim43rhN2HkRQc1K5f1P9R9ARdXI24g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZvwGu+w9; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1733300940; c=relaxed/simple;
+	bh=txIE/I72Y8y4XvomCX31CWB0nBeznf49Izae2g+/X2U=;
+	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=J+HIOC1K5EIxj4QQAkLDaU8cva4FkIgJ0NxTAEojeHMoogSGbEM59hkQOVDO2Jz11vTVi5OhiswlcqfRTrvgacIJ15YcBr/pAcUUFWFEszAZZ3P/hqafVWLEW6xKqyIBMbuDrj6mVxq8lVkqtXXZGG+Ul9B1gI85z1dSWkrRaxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nX5cXpuX; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-385e1fcb0e1so2320247f8f.2;
-        Wed, 04 Dec 2024 00:10:18 -0800 (PST)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-215c4000c20so15207445ad.3;
+        Wed, 04 Dec 2024 00:28:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733299817; x=1733904617; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:to
-         :from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=fZ9eVjs+6mWlP9P3iqs25nJjg2fN1NzBMTr4VrGDn+M=;
-        b=ZvwGu+w97RhJzu1tZ42tev8kvbF3g8gPu+SKZy4qZ91o6zT5MGAbTatZ1DNcs86kLk
-         iWB8ZRV8yiCzlVjAT31r5dJDiEj2F94Bd36wGzrmkX9x4jO9JyjhQEBxov/PhJgM65eB
-         Y34cJ5NuIh++C2XHU9RpGtMUsieOetWWVUS1dYwCVJKRJPPGahwk/WHarHVSqMjXN6Y3
-         NngI8FIMDfqa0BDPK+ETzr0iQ6Y2vfwcGBWuTvVz7LPFLN54aYC4yDopo+cSdV9wAdH/
-         G363ARtr/az/Ad7rogqkGhBxPq6hct6d5iqFnoZatuh6gXo9T5ooL9axAErwDGQGAS02
-         X7sw==
+        d=gmail.com; s=20230601; t=1733300938; x=1733905738; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GUWkO09ScmfYLGTWW9HNvL8CRZ3OvigAhD+dzpuCh8U=;
+        b=nX5cXpuXM0a0Mx2y3z/bi2a6yjHfKST1i7eM3FoW1P9dpa+3gAyGVuKUBuA2VTtPhD
+         RSNyJ0ybJtD3hIv4mTzNFerTVPVMpx6RwrHx8tcW5xLKv4l3OQUhH1vvYfgFF3QKX5BE
+         b2bxI+KUKmRa2JYt/L4ClRfQjpvzVoctppXxmN+hdzoGGSOkFBnDSXgFi525taT3t8+M
+         2goVZN/ZNQLTMrf2UQrzpR9gkx5kXGM+2aLtTDanLbekP0WjAVORhKlbFSFjxMn2cxtt
+         V8u3AWzRjuxt4R8ysShn16pmB+KQ3ZhETGDB9MW4y2Qzuk0b4wz4z3nUdeXrTYWWm5fB
+         YCPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733299817; x=1733904617;
-        h=in-reply-to:content-disposition:mime-version:references:subject:to
-         :from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fZ9eVjs+6mWlP9P3iqs25nJjg2fN1NzBMTr4VrGDn+M=;
-        b=O1NleDtBR1kRvClBWaSy+8KMSATmxqJiDexCDheOcG5GTK8Cp4mIdhR85Of5tI9rzS
-         xXC43QeaYKjWcvrLoO3G9xs/JmgLQuwRruDim9JdUneXZgUroSL5DdidOPO/WGtPh/+y
-         afuZtJHvcrRdoTd1ONtgt+Xtm+3SkfU0nP9cB/2YBmGVGc8dUqSC6M1qm767S7cwf55q
-         eVEC4SFg+cDHLHn8PcJGCvm9WdmMqEk9CgfhdsGnUwwtGQhTwOC7aZU0jxT8gDAiUTmG
-         Omvd4aSrgbhwi94OflCwqMIPVHBIbif0pBko3unZCEsKCg9SiXIfy/BlJDUniMxGBd5g
-         YneQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMxJ7M+XMMfRr2r19jieeBYGqZtsjVNEGAypuiG9mQhn/JvFyigaygcqT+NwTbwAjcLQz8rBfAAM36piSz@vger.kernel.org, AJvYcCUkgAGy8KWHAoqBM9CxMy2G8AqbMoDOt5oJoSiGe2MbXzwPiKQ9ot87aNKKJpt5uBZGQMsAXRsEsCI=@vger.kernel.org, AJvYcCUnPAwr4L9UQMcbMhXR6eO7BIlnH/zEbvl/hRCf01z1l7maOQXox9AoSUc8ky2fiFq405MuVHLJEKjH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9vWEFqpdzmQDnEGn8b+Vd3f+nP9c1cv5+TGgnXZL2fa89CVYm
-	KVFM/3PAKzOps/FPhlZp3D5oMvSwUlTnWMggioh4P9WqnBOJuaz9
-X-Gm-Gg: ASbGncv2wkTywhPf898v4C6imGa85O9/Ho9gs6ncW0UN9xmpsJqSu8rMdv/RGgaVbwX
-	AuKzTTsQZKLNx5Qwxr2KGQgFA2UW59k2KK+IQDKX0fkDFpVcVocRE+NJ60uskaO6LdGHlYKabN9
-	I4cR/YYYrDeQAqGmlq+eNYbp8BwFgDI0NyqEYOPIlM2SFWMad+vO9f4fDYe5zIvMScge/ypr9xa
-	QpQyFLogrhPfOsIeUetOOIt/BIM1k1C2KyjpU0uzWxX/cFkd8JGbD7AoDewnzNX5FJ2KICOm7x4
-	EdxIvw==
-X-Google-Smtp-Source: AGHT+IGBBdWdqXBu+yYRALH5lOzPQr7jM9OP9wfUJ4oAbtRRm/dgtKRMHATPNJWIY35eUMPcJapYPg==
-X-Received: by 2002:a5d:47cc:0:b0:382:31a1:8dc3 with SMTP id ffacd0b85a97d-38607ae5ee6mr2579229f8f.35.1733299816899;
-        Wed, 04 Dec 2024 00:10:16 -0800 (PST)
-Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434d52b66ecsm15381865e9.39.2024.12.04.00.10.16
+        d=1e100.net; s=20230601; t=1733300938; x=1733905738;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GUWkO09ScmfYLGTWW9HNvL8CRZ3OvigAhD+dzpuCh8U=;
+        b=lHH2yGK/5osigesCNuKplcUBPyBusz+aWGAKs+GhVqMEThxtXo7roWwJZDAZ5SPQ2y
+         QM2GA1S7Kq4eVC+rH7zUAFUs6VR/x6Y4/gR9PJZD8C3D1vgDjIz+xAFoeCZlYJu1Bt7c
+         lvlcH3Bq2wWMpe5g5oCAkLOgwlzbAxIMl8SY/MivhGF5s9vmokMp00CWH4ICLFZmaTj9
+         3E6jyRmJ7NSWMa0SgrSpWi7IYObH+njJs+VSH7YUHjGHhvojI6vPy3MVsHV9sFVA3IYS
+         db7SENKVSGE0ByqdrupzHrkp5HOR8o/cYD19ZKq9K5VXXqjRDtqqaYvpgNXggWJIRFSx
+         w5fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5xlHMdY80Htvk8DA9vQSBiTlGqB+QW6AsT10/fE+bCCFui2XAGAaMMPZBJ1UmNQLwlsslwTWw+LHboSj1@vger.kernel.org, AJvYcCVw4/K2qV7aI7qjbBfj5yV+BcBepoZRUIh+y7oPguJegWHU6PHAQ4ucNx1Iu02tZBZbfviAthcOCmv9@vger.kernel.org, AJvYcCWL4xK3gPH98v+P5o2qT4D7BEAZEmoB73Fd1a8a08q3hFZyf9u8QnNiwfQEBzAt5Vzp8rqgmVzviZI=@vger.kernel.org, AJvYcCX40PDvodNOjapy37hxSXwttG4MuEd4dkU8GTPEzXK1q7GehvqKpVWN9vXc0R9KOMvUlBu3Exdofn7Q8x/8TA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXjYGJ9aaoR20kIwkJnY9YWkBcXfq/NjrNdKA0WCBY8P0GyZwZ
+	9visETcJaMjLWbo4BDraaEizLZmmgxFw8ADUb55icSi4UpSr+FJ0
+X-Gm-Gg: ASbGnct3Inkv9ipearv8OgYsN6dXXP+F5hqFZ1R8OSW3dm4oddCXHpgVZPDuSGbPIIu
+	JNNyS/2HsHDHfmLL1aamw++hX0mwLfgLX23aN1w+y+sRTwq/2QDAfbV+FjWsyM/l0w9R54cEV33
+	UVcDxPKJ3rsd5s/bLfFap4T8lYsCaEU+8j76vMlSS2MV7scDtXOn+ioJSQnwBUsKZbGLte9WlJb
+	fnb2mnHsr/qu51zjAmWY9LhWALGe9mSkrJb1ON9lOIq8E7YhU1Vd+x5RpM=
+X-Google-Smtp-Source: AGHT+IHBB8zm57kTineu1HQVncxbz7lNJJvZp2gDMacf/P23sMkeqR8Um6ILeNeARtCklWIsKTJOgg==
+X-Received: by 2002:a17:903:183:b0:215:acb3:375d with SMTP id d9443c01a7336-215bd1ce3a6mr68186245ad.18.1733300937791;
+        Wed, 04 Dec 2024 00:28:57 -0800 (PST)
+Received: from gmail.com ([113.240.217.127])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2155f195b2asm71157375ad.273.2024.12.04.00.28.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 00:10:16 -0800 (PST)
-Message-ID: <67500e68.050a0220.2f3736.2ccb@mx.google.com>
-X-Google-Original-Message-ID: <Z1AOZQK-WAFKYiqj@Ansuel-XPS.>
-Date: Wed, 4 Dec 2024 09:10:13 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Wed, 04 Dec 2024 00:28:57 -0800 (PST)
+From: Dmitry Baryshkov <lee.lockhey@gmail.com>
+X-Google-Original-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Wed, 4 Dec 2024 16:28:49 +0800
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Akhil P Oommen <quic_akhilpo@quicinc.com>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Bjorn Andersson <andersson@kernel.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@airoha.com
-Subject: Re: [PATCH v4 2/2] thermal: Add support for Airoha EN7581 thermal
- sensor
-References: <20241114211958.32137-1-ansuelsmth@gmail.com>
- <20241114211958.32137-2-ansuelsmth@gmail.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	Connor Abbott <cwabbott0@gmail.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] drm/msm: adreno: add GMU_BW_VOTE feature flag
+Message-ID: <Z1ASwcMuxEWmudzP@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -95,44 +100,59 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241114211958.32137-2-ansuelsmth@gmail.com>
 
-On Thu, Nov 14, 2024 at 10:19:19PM +0100, Christian Marangi wrote:
-> Add support for Airoha EN7581 thermal sensor. This provide support for
-> reading the CPU or SoC Package sensor and to setup trip points for hot
-> and critical condition. An interrupt is fired to react on this and
-> doesn't require passive poll to read the temperature.
+On Wed, Nov 20, 2024 at 01:37:48PM +0100, Neil Armstrong wrote:
+> On 20/11/2024 12:19, Dmitry Baryshkov wrote:
+> > On Tue, Nov 19, 2024 at 06:56:39PM +0100, Neil Armstrong wrote:
+> > > The Adreno GMU Management Unit (GNU) can also scale the DDR Bandwidth
+> > > along the Frequency and Power Domain level, but by default we leave the
+> > > OPP core vote for the interconnect ddr path.
+> > > 
+> > > While scaling via the interconnect path was sufficient, newer GPUs
+> > > like the A750 requires specific vote paremeters and bandwidth to
+> > > achieve full functionality.
+> > > 
+> > > While the feature will require some data in a6xx_info, it's safer
+> > > to only enable tested platforms with this flag first.
+> > > 
+> > > Add a new feature enabling DDR Bandwidth vote via GMU.
+> > 
+> > Squash into the implementation patch.
 > 
-> The thermal regs provide a way to read the ADC value from an external
-> register placed in the Chip SCU regs. Monitor will read this value and
-> fire an interrupt if the trip condition configured is reached.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> Changes v4:
-> - Handle offset and slope in priv driver
-> Changes v3:
-> - Handle thermal_zone_device moved in different header
-> - Enable interrupt after thermal register
-> - Use new way to provide slope and offset
-> Changes v2:
-> - Add missing Makefile and Kconfig entry (somehow not included in v1)
-> - Sort include header
-> - Add missing bitfield.h
-> 
->  drivers/thermal/Kconfig          |   9 +
->  drivers/thermal/Makefile         |   1 +
->  drivers/thermal/airoha_thermal.c | 480 +++++++++++++++++++++++++++++++
->  3 files changed, 490 insertions(+)
->  create mode 100644 drivers/thermal/airoha_thermal.c
-> 
+> Which one ? the flag is use in the next 3 patches
 
-Hi Daniel,
+First one which uses it
 
-sorry if I get annoying just to not lose track of this on my side,
-I dropped the sysfs change and now it's handled in priv... Should be ok
-now?
+> 
+> > 
+> > > 
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > ---
+> > >   drivers/gpu/drm/msm/adreno/adreno_gpu.h | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> > > index 4702d4cfca3b58fb3cbb25cb6805f1c19be2ebcb..394b96eb6c83354ae008b15b562bedb96cd391dd 100644
+> > > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> > > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> > > @@ -58,6 +58,7 @@ enum adreno_family {
+> > >   #define ADRENO_FEAT_HAS_HW_APRIV		BIT(0)
+> > >   #define ADRENO_FEAT_HAS_CACHED_COHERENT		BIT(1)
+> > >   #define ADRENO_FEAT_PREEMPTION			BIT(2)
+> > > +#define ADRENO_FEAT_GMU_BW_VOTE			BIT(3)
+> > >   /* Helper for formating the chip_id in the way that userspace tools like
+> > >    * crashdec expect.
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> 
 
 -- 
-	Ansuel
+With best wishes
+Dmitry
+
+
+----- End forwarded message -----
 
