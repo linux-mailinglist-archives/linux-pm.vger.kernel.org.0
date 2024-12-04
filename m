@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-18511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 087CD9E3286
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 05:00:27 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD22C9E32FF
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 06:11:46 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAB40281CFF
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 04:00:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A91E6166432
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 05:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA2678C75;
-	Wed,  4 Dec 2024 04:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E0417B50E;
+	Wed,  4 Dec 2024 05:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ixCdqJLs"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bTO8gjm6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31870376E0
-	for <linux-pm@vger.kernel.org>; Wed,  4 Dec 2024 04:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8246F1591E3
+	for <linux-pm@vger.kernel.org>; Wed,  4 Dec 2024 05:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733284822; cv=none; b=QT94UZkadMEmUNUxvszEFVxzIEEJvN6SQ2XoH4C2DaPbhNDc+/yCxAxbhAWpFpGyMjO+BePQpcDAouBqUimGYYwwlxM7uzzI+1XrDTeUD5sD+PKMptBcdQGfI75m1orBc/N4aF7nvOJhz2i3ifQVcnRlI8/U/Dv/yT5i9H1YPDU=
+	t=1733289103; cv=none; b=VTA/bP9925ZRxdpAnCgHfqo5JrZAHZK1Oos0M3ONhORLwuHcudslMqFMrxnwZ7Kat3oVt/IVVig97OpLhKfxvNUUVgyAEu7ahVnz8QEwb58m4GEh0wZQ/5XYQRXNs7NqXB/qjv3ObLpXFbmIdy3j6X8Eqsh25PbgzCRLdY/6UeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733284822; c=relaxed/simple;
-	bh=plu8dRbwA//TIE7V3u7EkRjHASWu+GTYdXd54J9egbw=;
+	s=arc-20240116; t=1733289103; c=relaxed/simple;
+	bh=xffhHSYwhEi8ZBeG9FEdhfkMsJOeKckYEI5eS9txTmo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KwZK0h4icr0K6qp3p4q2wToYZ+CZbpqgPaNeeM+4BH/DJrIXuoNoQPkkBwqOrVpGD0vxrXMs9cy/RACav4wRJzzQQHCnXY3M0OZOUeTCszlkpNxokcCLi+WgJLgtZEQWsQZpVln73u7vLg2PB4P7jHrBMJlxIeKMigb2PH1v5d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ixCdqJLs; arc=none smtp.client-ip=209.85.166.174
+	 To:Cc:Content-Type; b=EcLg2Ny83R4tUokUikosEsoV505DnULRSONAaP+yBgJSNg+5Gdfm2LVZas09XaWOc4YHI+5AKF0LK7Byt3bcTvy64t4Tvr+KKEYSfad8CbhgVlf2WRnZNFW4N/Yeeb/b3zgeFyY3+9t6ZSGX/P5yIcWbQAdW2vpWzDOgYfiTvvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bTO8gjm6; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a77ab3ebfaso57435ab.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 20:00:20 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6d88282980bso52117316d6.3
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 21:11:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733284820; x=1733889620; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1733289100; x=1733893900; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CngGMvpmpyr10C47QW7O8tll8PdmhQ22t96lvuVqUS8=;
-        b=ixCdqJLszwdzQwoUWVJOSX5EVQClSBiYYHB5aqLwFrhOjXghzpGkn3RrUYmtKj3yWD
-         9D60WEl5Iklp1HM0rQBGvr+H8APj+cPBXLMy8E6rxtSOga29kBH1Xqz5RqSCl9+0mj+m
-         /EokJT31NrYeNom6zu2mvTU29BPZ6N5aLWd8gztCzwGQCadcypFxcqYrP2SaKR+WBgKB
-         GutZT37xzMHhVMUbKSbphwQKs1rpo4cuDSfBgQAguw7U/qCHVGYzWdPeHKPvTDWBOPzO
-         3+n7BqGGAkWa2XZTOgSnfoowU0BLICkQx/AMHNZVCRpLavx/4K36puraljq1CEVBLRRZ
-         ib+w==
+        bh=q0PEPY4Svd+G/rAUjBuAPsk0Dzw54MiAt9xCf3ocSeQ=;
+        b=bTO8gjm6O2NkGPizDO4McuLGghL2oJh4HJhEaVFvG62NDXYpFpmN2SFYHB1WTnDNLq
+         wx70+oBjgeb4/tpUz5EDRmVz9Kw91UdS0oEvLMM+WNfZEilu9YkiEWstQ3bfOnzsSV8z
+         mErGvknE7yqXLa/3iP/7OLBLxxiW1XHi/RfWe2QdcDCfzoe3fQLQhsfwxRm6/r/NRQum
+         BeS+IZ82JBf+JWZ1Si9XNqm/a0TUJj8fUfgW/aghlZ1f1QDuci8qvgoMNCoPjNwZlaov
+         lRgJwD0FMFlvj9NT6WTfrsxMnPxjXw5MGyOoauqA+hB3QR35O4dtIb4+Hq0YMw+HwKjj
+         0/jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733284820; x=1733889620;
+        d=1e100.net; s=20230601; t=1733289100; x=1733893900;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CngGMvpmpyr10C47QW7O8tll8PdmhQ22t96lvuVqUS8=;
-        b=pJCvxY/htloHnrAjEir/mk96ibC7ywo5wtU/pwfKCHqMh1hdXXU/Q/TpSyICjHnm80
-         aNXI/5/p5whE3EgMdDKRGbG0IW6BKxi9lqKZfHLiQDQgmIR8KPDf1B2V2VSq20e35zbk
-         OpuZpdK87NAq8jsT5O5FhKvl4JaiTO4oUFIY73MSErSYrxQve8aY7v6Oe+7gH6iRYkKj
-         32GHSAdYNm0wQJEIntCvfZ2XXAsVdnJ+2EmUXCVGqHe9wFK1VAqgq475ThQhGEnXxprJ
-         G4POnxnXKYokeNkkCt3TxrCwCtgufIhcNoYnVAMJF8wfzpbyHlDOSunY+xtVhrpanmAG
-         JOnw==
-X-Forwarded-Encrypted: i=1; AJvYcCXibOYFh9yASkOITGHbvaJDAhtdK5Ns18yMR+aCt4tUjk7wsQ77V3uukL4Qui9n/G8GNryfnkN6Cw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9yqaGN91qMGsfhDHLx6uK4oqvk+8gW1e2Fp2EXEE1uxbAvl5l
-	umqD3FMkvEJnIVe8B7w9xlhiAmIppc6gKWSjykgxB44SUXnmwE0MZZgmW5wnJmvMltocifJkU4w
-	fX02AncE7Dul1SUZWlyukSoRG56ucjLGS5qGC
-X-Gm-Gg: ASbGncsXLZ+/P3cPwTkOFP0o7O+4Y7c5rmymqfNAu46ERLxdRsULXkf9M+FTfzkqIDw
-	kaRkG8tDwzd7JdGree/xVNHqan7pgtw==
-X-Google-Smtp-Source: AGHT+IFSAC1wz2QxEeAFRYo7HSv2GzEQcAHLbAsspH6/KMJCC8WlUpKuMmIDvejZ+31FQWIAyUvMlyBEiyGwx5JATfo=
-X-Received: by 2002:a05:6e02:3f8d:b0:3a7:cd21:493f with SMTP id
- e9e14a558f8ab-3a8001a949dmr1896425ab.26.1733284820117; Tue, 03 Dec 2024
- 20:00:20 -0800 (PST)
+        bh=q0PEPY4Svd+G/rAUjBuAPsk0Dzw54MiAt9xCf3ocSeQ=;
+        b=Ve8U1aD0eTwPgu4AiYhPiq569sicc/TdX/7mUckCQTC7i91VJcW8cOrbHokkLaGiRs
+         wGXHTylccSUhROU8cUeBYOfJ/OYowFvdtQTUJUdqbtM1wYMFpx33/0wOS+vULzUSgBfu
+         ANvE23zKnI0OGB7EYiINOPrQT44xbSgS8ouPRc4CsCdlEVrEqHHNo18N3fiyizeE/89v
+         xFNwSglFBFDbwTbURek6RX+IolWp/7FmmV1h6Rv1O1jhBJ31rLQxrv2EeZThsedYGlg3
+         TRI1GEmx9BCxVSSMiEYHt5Szp2j6GaH5zpvz1+oTGjG245bqvmBHqPe+53O5xPLkUZlm
+         MimQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVucnCylk6XQ8RBa+e681/cpaY5k4bW0EbhuRmY8ftvVNzrLM70UiwyVHibp5QSsM20PGkXMT7IAw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNzZf7mRvRYrEsxVk1irHkhxIAjvZdGgfWkLU+hSLP3ezKVUGh
+	+cj0nr/K1sPqQcYtLkHc5Ki42+gmguXKF/MO5Ot4J1gOZ2nupwfI8zlh0uLHtHrhI3m4MyL/ulw
+	mqut5a9MOeM2pT2tZC8EN+xswZA1b2omimQgo
+X-Gm-Gg: ASbGncsxxhhqNVpEfysHIwk995W90mb7x22qamkEmhSuyhy0wsoV9PUkcd9VF+Dee4b
+	0gCgzSv1hYKFBHcqHb+YlF5Dj+8o8QrTs7w==
+X-Google-Smtp-Source: AGHT+IH/Vmo/+QbxWem6WulFZ1R02aWj+agCguGICQRZ1nvhXgATs70hrnLLhl9CSVs2QCJw5CIz7HwFc8sOX/H1g+M=
+X-Received: by 2002:ad4:5bce:0:b0:6d8:a70d:5e41 with SMTP id
+ 6a1803df08f44-6d8b73fd386mr66881906d6.33.1733289100166; Tue, 03 Dec 2024
+ 21:11:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,12 +76,12 @@ MIME-Version: 1.0
 References: <20241121185315.3416855-1-mizhang@google.com> <Z0-R-_GPWu-iVAYM@google.com>
  <CALMp9eTCe1-ZA47kcktTQ4WZ=GUbg8x3HpBd0Rf9Yx_pDFkkNg@mail.gmail.com> <Z0-3bc1reu1slCtL@google.com>
 In-Reply-To: <Z0-3bc1reu1slCtL@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Tue, 3 Dec 2024 20:00:09 -0800
-Message-ID: <CALMp9eT9ne4HmwqMED0nGT1aEem7VjTHbehQhb1MPn-Z-Lg9=Q@mail.gmail.com>
+From: Mingwei Zhang <mizhang@google.com>
+Date: Tue, 3 Dec 2024 21:11:03 -0800
+Message-ID: <CAL715W+Av8FLod00zxkniwn1q3ZnZDHUatN7R8iKBpf1+K5h2Q@mail.gmail.com>
 Subject: Re: [RFC PATCH 00/22] KVM: x86: Virtualize IA32_APERF and IA32_MPERF MSRs
 To: Sean Christopherson <seanjc@google.com>
-Cc: Mingwei Zhang <mizhang@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
 	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
 	Mario Limonciello <mario.limonciello@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
 	Viresh Kumar <viresh.kumar@linaro.org>, 
@@ -90,6 +90,9 @@ Cc: Mingwei Zhang <mizhang@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+
+Sorry for the duplicate message...
+
 
 On Tue, Dec 3, 2024 at 5:59=E2=80=AFPM Sean Christopherson <seanjc@google.c=
 om> wrote:
@@ -148,6 +151,25 @@ id, what
 > made you come to the conclusion that the "best" boundary is on sched_out(=
 ) and
 > return to userspace.
+
+Even for the slice of hardware case, KVM still needs to maintain the
+guest aperfmperf context and do the context switch. Even if vcpu is
+pinned, the host system design always has corner cases. For instance,
+the host may want to move a bunch of vCPUs from one chunk to another,
+say from 1 CCX to another CCX in AMD. Or maybe in some cases,
+balancing the memory usage by moving VMs from one (v)NUMA to another.
+Those should be corner cases and thus rare, but could happen in
+reality.
+
+Even for the slice of hardware case, KVM still needs to maintain the
+guest aperfmperf context and do the context switch. Even if vcpu is
+pinned, the host system design always has corner cases. For instance,
+the host may want to move a bunch of vCPUs from one chunk to another,
+say from 1 CCX to another CCX in AMD. Or maybe in some cases,
+balancing the memory usage by moving VMs from one (v)NUMA to another.
+Those should be corner cases and thus rare, but could happen in
+reality.
+
 >
 > > that you would not be happy with the answers anyway, but if you really =
 are
@@ -220,21 +242,7 @@ ve
 > when the userspace VMM is processing emulated I/O probably isn't going to=
  be all
 > that helpful.
-
-(a) is your constraint, not mine, and (b) certainly sounds pointless,
-but that isn't the behavior of this patch set, so I'm not sure why
-you're even going there.
-
-With this patch set, host APERF/MPERF still reports all cycles
-accumulated on the logical processor, regardless of whether in the
-host or the guest. There will be a small loss every time the MSRs are
-written, but that loss is minimized by writing the MSRs as
-infrequently as possible.
-
-I get ahead of myself, but I just couldn't let this
-mischaracterization stand uncorrected while I get the rest of my
-response together.
-
+>
 > And gifting APERF/MPERF to VMs doesn't have to mean the host can't read t=
 he MSRs,
 > e.g. via turbostat.  It just means the kernel won't use APERF/MPERF for s=
@@ -251,6 +259,15 @@ cheduling
 > stare at it just so, but devoid of details on why X was done instead of Y=
 , and
 > seemingly ignores multiple edge cases.
+
+ah, I can understand your feelings :) In the existing implementation
+of vPMU, the guest counter value is really really hard to fetch
+because part of it is always located in the perf subsystem. But in the
+case of aperfmperf, the guest value is always in one place when code
+is within the KVM loop. We pass through rdmsr to aperfmperf. Writes
+need some adjustment, but it is on the host-level offset, not the
+guest value. The offset we maintain is quite simple math.
+
 >
 > I'm not saying you and Mingwei haven't thought about edge cases and desig=
 n
