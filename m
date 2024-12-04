@@ -1,163 +1,141 @@
-Return-Path: <linux-pm+bounces-18584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18585-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22EAE9E470B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:42:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D18269E4710
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:42:32 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1A52280D75
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 21:42:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 689951880183
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 21:42:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F1F1922D7;
-	Wed,  4 Dec 2024 21:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB551922FD;
+	Wed,  4 Dec 2024 21:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GtnTQzqc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NF4IIZNQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EF918FC9F;
-	Wed,  4 Dec 2024 21:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418F918C930;
+	Wed,  4 Dec 2024 21:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733348517; cv=none; b=Jj27IQdOeAkYzqJvjkbRS+ccS17c1jyl0S8GyZyNdG0M3YLInb7WxlZOhPS0yCl2JLoCrv7R7MWtumO97V045vj7ZqsMRDhdADQSKsejs2QO6Q1xrlhI5KLnWOpcPtykigw0OIjUXwnm6dxpR1i86/NLYn1IJJQEfdixlbVE21w=
+	t=1733348547; cv=none; b=a2Xdry92AQFbctABX+ChtVW7fFea7i2QGUEZypnxt3bynvTRQ1R+VLB67++Pej78UyHU8w0HZr1NBk+bpI9rQehSKOKaAjOnTzLq1WsdtypjWcgGoUoBgMYCwOvOfqZLthcDR4cDH0V2ImGOZ8uJjpOyF7LTwKwERNBzdIGk3uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733348517; c=relaxed/simple;
-	bh=L+MXiSrlAdeLzXu2q7KS7LTJbiV6hJ7FNtxsnAgyNcc=;
+	s=arc-20240116; t=1733348547; c=relaxed/simple;
+	bh=WljylZvYrPZsQ37b/hMdisXffK2FmvviroNKLZTZ6Qw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SiPv5gXTclDfsijcWSdmRaK1BFhgvRxgKk7qQXtw3kyKlMOO5feEsQujkDMWj7fvFcVvkHv1LfBnAQVnuTCTyGIqQMV7G0c6sGX6krdOc9X9FavY/ZuU7AtOxZnABLpVs9glJv+2J/ArbB3seO++iJsnj5FdCCmIkkacE3xwrL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GtnTQzqc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47428C4AF09;
-	Wed,  4 Dec 2024 21:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733348516;
-	bh=L+MXiSrlAdeLzXu2q7KS7LTJbiV6hJ7FNtxsnAgyNcc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GtnTQzqcklmOErMSkXxjbNWK7Ek5JkdzQJKWaDrPjZ5zbDC/BZdbJ4q2M9CFGnwfJ
-	 pYegjtrE8zKvicVOQkY9RqlNe8/x3BQ6FPaxQJpWafpy4v/YytZV96cjW4UzoEaW31
-	 3fd+GXymWy3vGOVLYGoBj5f8NJNncThN7zOVQK/KlEvgRl/43DWI692B2S2cGhbpCC
-	 /chZWbWXbVWAYUA+Zr+7+k3L9TBNMEjj/nplo5KEn2rHuC9L339RXOZJr2PKe/XPBp
-	 Btam+AgdvJjcPLk8ACS7FVCyYoV2QOgwuf6I2NT58KSPLvtdXxBHwlA/KEVz6hp8XU
-	 dfFZYS2/nn0zQ==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3ea49150430so207402b6e.1;
-        Wed, 04 Dec 2024 13:41:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU/hF19VJRR3IWBCTCAXb0M5MfxG4bZdoKsjiwQe8u+3pksE1LeZsYOcg5pnmrtHLjvUHwN94GvWvjPkK0=@vger.kernel.org, AJvYcCW2o7XT6mOFjUUqjM5CPI/kx5Yi6AHbKGvbpivr3XNHAqc+3zou1LHU2p6dyEL+ZCtS1yUPTOnT90Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIqKHnfsDf8wpGaOkPHVISzeezYp9QV3aqSMrdU646iujD/JFM
-	0ZIZjGvcqcpOyhui3xShDlM0uT1+VR6MnHkoVmocKzRC72xcGMfGRVHbYBCm2iq4CDAlzu2r7Bj
-	ubR7p+JGgWktGoe2+mUeDuKP8OpI=
-X-Google-Smtp-Source: AGHT+IE2Y9fFiN5Lqdk+EEY5xp07PQODyKcqal+d0LX+D3tS2vLCiPjO3uaVoBhtjCh3hIVLrk3A++1UpJqLGOy5oAo=
-X-Received: by 2002:a05:6808:1c0d:b0:3ea:4bcc:4d9b with SMTP id
- 5614622812f47-3eae4f3b758mr10479653b6e.18.1733348515605; Wed, 04 Dec 2024
- 13:41:55 -0800 (PST)
+	 To:Cc:Content-Type; b=ZcgMW1Cxg/UB8Ab4Be935pTo+roIcowIIUN6aORbLWciz7cUNi6QLnpuyVMJKUDWeN5EkYozprXs6w6VA1YXaBQrXyU36Y1QKN9MYPdcJjp1okr/xEVakuJAf1aTbMQ7KFt39boPWWjB+QtUUXZsqh6z2yqCv8QDiVPWa2HJXeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NF4IIZNQ; arc=none smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-4af5dd908bfso40979137.2;
+        Wed, 04 Dec 2024 13:42:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733348545; x=1733953345; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8PlB8MgNt8fmwPOvk1DchCxtKyzjQviw1ZTp7fhr/VI=;
+        b=NF4IIZNQGN/IbKWjPl3M7TwCE5Ode+7L9kQpEUSarkv5R8lUVUPCkx0LYQI2CR66cn
+         PITvA4S/uYxq/brBXEf813UjRq6SSE6LUeio30ziD/fXYPmn8phw1yQ7r5ODOpzwSY5k
+         N0as7qOhzAC8uCoBvOXIJXf6BAywd3n4s3H3qq4QAeY+afiJ5vXdjBibfE6SHAkE4z5c
+         j/WX6JHJhKagtW0Tajc1At9b+amtscZjDzbET/qm/tswEoK7LH8bRRMiW4Kljj68/9z5
+         mwu5CZifNrT4O+Q2SnXN6bhYf191uWTSVeXJ5YfRQO3z9iyT3S6mGwYx314is7qZvPOR
+         8LWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733348545; x=1733953345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8PlB8MgNt8fmwPOvk1DchCxtKyzjQviw1ZTp7fhr/VI=;
+        b=jUgZt4GIDb/AdynreIwUNG4S+rpYaexhu4nXhr1kUnpEW/XAK5sPGvci5earG7Xr1J
+         fpWJPDaj+6ekmzsXZUbyGhFIWMhOoQH+89EJX+CBLJKGejS6KU9ce+gvU5vCTmNQd/bI
+         kxQwUWcjmmdZcAEke0UamY6KL2FxC6vOODmC/rOhOyK+Xwjkd2IQwCPNsiTlPCTzjY6r
+         xAdOmhvihO/GfiZhZ/GucoQ6yNLjVu+SajksDSwzW5WtlzPSrUbCZROC4+Q3otRhEmcb
+         J4W4JqkfKGu6JO0wzgK+do8SLz6f/0Ok47eIY10MWxvyKqzEp96oqCRMQqmM+AGGr8A6
+         VRsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6gHoEYzNnvtHVoTC5TsLzGEv4F4M5KSNS4V5t+64IH0X9efcgkoZl9zGIsEjvL9mvyqBlcg9RZj7yZEnI@vger.kernel.org, AJvYcCUBJKWQne8nXSaUodUo9vqFo5CUti0MWTTM5cTg34f0Ra1I9r2mutlrQVIVe++JZPuTTnQytG/DYmE=@vger.kernel.org, AJvYcCUBqtXZRwPY1uE6r/WrfRSZ/oD2GuMZ3mWYFgTlFsOWo7awY6BhKB4NJLWxcHeYz4Cm1sOR4afHmr3a@vger.kernel.org, AJvYcCV2C4vLysj6lHhjOqKUyET1li3ixnUDWUbG8zhCRzM8MLZl+of+fxuzD5J5k6YI8R1UVXzJsdI9Yxdo3A==@vger.kernel.org, AJvYcCXxOP/ceEiMKPkELTdPDM35qonO0ApE8e5hTwBcgctmjCnRrQpVDcjrkE3dhYKSN0mXd5UGQWw/W1ji2IM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHPrhs+yDjenapgkBDylpoY7uSB4NkDdhnLeG6oS6pTgIKm1Pw
+	WnXxYUknM1qW1V5iODayshzJbymkAaRNoPPTjGFLeJ98/DbZVyLgCIjsw5pmAmQ+BTGMQbwJnZi
+	sXEi0sHl0tDoMvu65iOcEO+76LXI=
+X-Gm-Gg: ASbGncsV7sZ40iAkGFiVW+XOy3w9HAI1bpd259YON8Qhdy5exvfArA/ucbNuQETv2vM
+	jVFWyf+E85MvVq5tofZROxa+U10eNeA==
+X-Google-Smtp-Source: AGHT+IHu70LYWpj6fa8sLfwZLKiur4I+k6WrPOjUKSVGLsxhae1PVK6ehP7mUleD81MziKWVusLXX7Uk2MAsiOQwXF8=
+X-Received: by 2002:a05:6102:5106:b0:4af:bae7:893b with SMTP id
+ ada2fe7eead31-4afbae78afemr754768137.15.1733348544953; Wed, 04 Dec 2024
+ 13:42:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5839859.DvuYhMxLoT@rjwysocki.net>
-In-Reply-To: <5839859.DvuYhMxLoT@rjwysocki.net>
-From: Len Brown <lenb@kernel.org>
-Date: Wed, 4 Dec 2024 16:41:43 -0500
-X-Gmail-Original-Message-ID: <CAJvTdKm4Fermz1zgTWohEGSoGpoB3CJL2FF-u6y9FAEBwBbcnQ@mail.gmail.com>
-Message-ID: <CAJvTdKm4Fermz1zgTWohEGSoGpoB3CJL2FF-u6y9FAEBwBbcnQ@mail.gmail.com>
-Subject: Re: [RFC/RFT][PATCH v0.1] ACPI: OSL: Use usleep_range() in acpi_os_sleep()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Len Brown <len.brown@intel.com>, 
-	Arjan van de Ven <arjan@linux.intel.com>, Pierre Gondois <pierre.gondois@arm.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Hans de Goede <hdegoede@redhat.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+References: <20241204-starqltechn_integration_upstream-v10-0-7de85e48e562@gmail.com>
+ <20241204-starqltechn_integration_upstream-v10-3-7de85e48e562@gmail.com> <173334780474.1329015.17978320703905985001.robh@kernel.org>
+In-Reply-To: <173334780474.1329015.17978320703905985001.robh@kernel.org>
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Date: Thu, 5 Dec 2024 00:42:14 +0300
+Message-ID: <CABTCjFCDGWe1XnUDNcHaEwFMrdyJdwBfz3dKk5pb209BCMikVg@mail.gmail.com>
+Subject: Re: [PATCH v10 3/8] dt-bindings: mfd: add maxim,max77705
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
+	linux-input@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
+	Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, linux-pm@vger.kernel.org, 
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+	Pavel Machek <pavel@ucw.cz>, Marek Szyprowski <m.szyprowski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 21, 2024 at 8:15=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.ne=
-t> wrote:
+=D1=87=D1=82, 5 =D0=B4=D0=B5=D0=BA. 2024=E2=80=AF=D0=B3. =D0=B2 00:30, Rob =
+Herring (Arm) <robh@kernel.org>:
 >
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> As stated by Len in [1], the extra delay added by msleep() to the
-> sleep time value passed to it can be significant, roughly between
-> 1.5 ns on systems with HZ =3D 1000 and as much as 15 ms on systems with
-> HZ =3D 100, which is hardly acceptable, at least for small sleep time
-> values.
+> On Wed, 04 Dec 2024 23:09:53 +0300, Dzmitry Sankouski wrote:
+> > Add maxim,max77705 binding.
+> >
+(...)
+>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/m=
+fd/maxim,max77705.example.dtb: pmic@66: fuel-gauge@36:compatible:0: 'maxim,=
+max77705-battery' is not one of ['maxim,max17042', 'maxim,max17047', 'maxim=
+,max17050', 'maxim,max17055', 'maxim,max77849-battery']
+>         from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705=
+.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/m=
+fd/maxim,max77705.example.dtb: pmic@66: fuel-gauge@36: Unevaluated properti=
+es are not allowed ('compatible' was unexpected)
+>         from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705=
+.yaml#
+> Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: /exampl=
+e-0/i2c/pmic@66/fuel-gauge@36: failed to match any schema with compatible: =
+['maxim,max77705-battery']
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202412=
+04-starqltechn_integration_upstream-v10-3-7de85e48e562@gmail.com
+>
+> The base for the series is generally the latest rc1. A different dependen=
+cy
+> should be noted in *this* patch.
 
-Maybe the problem statement is more clear with a concrete example:
+Hmm, I added 'maxim,max77705-battery' in previous patch of the series:
+https://lore.kernel.org/all/20241204-starqltechn_integration_upstream-v10-2=
+-7de85e48e562@gmail.com/
 
-msleep(5) on the default HZ=3D250 on a modern PC takes about 11.9 ms.
-This results in over 800 ms of spurious system resume delay
-on systems such as the Dell XPS-13-9300, which use ASL Sleep(5ms)
-in a tight loop.
+Does your bot run checks patch-by-patch, not the whole series?
 
-(yes, this additional cost used to be over 1200 ms before the v6.12
-msleep rounding fix)
-
-> -       msleep(ms);
-> +       u64 usec =3D ms * USEC_PER_MSEC, delta_us =3D 50;
-
-> +       if (ms > 5)
-> +               delta_us =3D (USEC_PER_MSEC / 100) * ms
-
-I measured 100 resume cycles on the Dell XPS 13 9300 on 4 kernels.
-Here is the measured fastest kernel resume time in msec for each:
-
-1. 1921.292 v6.12 msleep (baseline)
-2. 1115.579 v6.12 delta_us =3D (USEC_PER_MSEC / 100) * ms (this patch)
-3. 1113.396 v6.12 delta_us =3D 50
-4. 1107.835 v6.12 delta_us =3D 0
-
-(I didn't average the 100 runs, because random very long device
-hiccups  throw off the average)
-
-So any of #2, #3 and #4 are a huge step forward from what is shipping today=
-!
-
-So considering #2 vs #3 vs #4....
-
-I agree that it is a problem for the timer sub-system to work to
-maintain a 1ns granularity
-that it can't actually deliver.
-
-I think it is fine for the timer sub-system to allow calls to opt into
-timer slack --
-some callers may actually know what number to use.
-
-However, I don't think that the timer sub-system should force callers to gu=
-ess
-how much slack is appropriate.  I think that a caller with 0 slack
-should be internally
-rounded up by the timer sub-system to the granularity that it can
-actually deliver
-with the timer that is currently in use on that system.
-
-Note also that slack of 0 doesn't mean that no coalescing can happen.
-A slack=3D0 timer can land within the slack another timer, and the other
-timer will be pulled forward to coalesce.
-
-The 50 usec default for user timer slack is certainly a magic number born
-of tests of interesting workloads on interesting systems on a certain date.
-It may not be the right number for other workloads, or other systems
-with other timers on other dates.
-
-My opinion...
-
-I don't see a justification for increasing timer slack with increasing dura=
-tion.
-User-space timers don't pay this additional delay, why should the ASL
-programmer?
-
-Also, the graduated increasing slack with duration is a guess no more
-valid than the guess of a flat 50 usec.
-
-A flat 50 or a flat 0 have the virtue of being simple -- they will be simpl=
-er
-to understand and maintain in the future.
-
-But I can live with any of these options, since they are all a big step for=
-ward.
-
-thanks,
-Len Brown, Intel Open Source Technology Center
+--=20
+Best regards and thanks for review,
+Dzmitry
 
