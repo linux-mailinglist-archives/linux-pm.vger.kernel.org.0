@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-18540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DC4C9E3C35
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 15:09:13 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 633819E3C37
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 15:09:31 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 633261652F8
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 14:09:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28FA1281B40
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 14:09:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BF61FCCE0;
-	Wed,  4 Dec 2024 14:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8000207A05;
+	Wed,  4 Dec 2024 14:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BWs2YcZV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cTrdZlU9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F881F8AD6;
-	Wed,  4 Dec 2024 14:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A0D204087;
+	Wed,  4 Dec 2024 14:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733321325; cv=none; b=VWE0knzNreWJHsTYTi697nV6pIYEOHV8w3K/m0fh/am8iTlIizVxdddaPqQb7vAebmLHXpwbqDe4cuwSjNIcYOKFptmECMgxKN4/xX1Q2V3OoPoxKeFaqGN5xBJCf2U/6NWhJl8cWvdUQcUyGeMLNw/5O5U0CWKOylGifWNER44=
+	t=1733321328; cv=none; b=rW+TwgjczTbgwO0Rex2fxU970yVuFmjLQgObSTanTVqOsUUWEe4LwYkhkr9z58Jh7tUay+sCUTLNLaopzzRhcyksF6/c3AlU/IQZfjRK8nUewP/Cfmqv9IOmBJpLjBgvksVN2ve4Rq2gN6Z1YuuuzCOvsoqb+mp2b3Jrn9AB9gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733321325; c=relaxed/simple;
-	bh=hiq3NjmqUPpOUOzdilX8riGPqCTp70rQ6V6K84wJDUY=;
+	s=arc-20240116; t=1733321328; c=relaxed/simple;
+	bh=kMW48E7qpSBZTt1YOx6YAvCT+CU+LS/A1l7cEYEL4ig=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QHmlWi+t5QKCFyFw0W68xwGmh5CnVX4bVDOie2d3eHcoS1udnCQ99z+wA7ByZllVsYcPTSv22UkAjwucciITzzOnfY7tfqICEnvsSjVb9rpAdD6eUtaF4vCu+hByDp2zaJFE72I5NLak1qibEgEuAxd+7OJc5juqtof1femvE5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BWs2YcZV; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=NpekXG6XwUHwRqQxgH/gSpzU64poLhS+eIhGHVuj4bA+wdnzf6fXLxa0zK2qw1Idf4/rceDm6zwL7LET57CN1FKV37wyHpK+xOJtxIadsiJNbyGtFhoJnFONQtpZwbimf5sAyQSebhh866jYhgCzsCJCB2Q2A9j1JOFO207Alrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cTrdZlU9; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733321324; x=1764857324;
+  t=1733321327; x=1764857327;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hiq3NjmqUPpOUOzdilX8riGPqCTp70rQ6V6K84wJDUY=;
-  b=BWs2YcZV+RD4LX9mwL0P9vnMdPW/UTrwjrtTdR7BChdslj85qE6rv8sZ
-   WFhlwS0K0JUUAKzwPVip1qJrt/1xw9xY6WKY604VkG5vPFOD3gqxhBG67
-   F1Do1g3ySi2QJFQF/eOqsxWcmduhSOmYFvej6xs/AMxIi3dNKX6+p108O
-   RitNcWm1J2rEk2eoSJls29stI9fcanyLmpVWaCB7yoAMtq0TdItjRV90J
-   Q6wVHiLt9ecKpXuFRNRXXepudb+fHTuWV8aBflA0CU8EHdJnbIteMtBJe
-   ewonGM4Jox62mdqs7j4TRpH9mS8cKGvVnBqCwE2CZGkLbTAlJOEfd9+4e
-   w==;
-X-CSE-ConnectionGUID: DPutB5hBSjusQ3CjEKOkhg==
-X-CSE-MsgGUID: sAqofvFCQ0GiisvPTiCK6A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="56071342"
+  bh=kMW48E7qpSBZTt1YOx6YAvCT+CU+LS/A1l7cEYEL4ig=;
+  b=cTrdZlU9mZRnFPZc608///AFaUFcNF0Ll70RDfyQXPzHqwlchkEuDIsN
+   69Rdxzo9EcDz+Flq521MBbmgFCr+dGgLC20iCyQeD8AdGLCGXT5PeyBIl
+   8Ge1RFtI4PLVxt+EG/9lEeeUgk5cyZGgXREqFMXTpO99o16MbFJWeRrld
+   +CkPHnvdi1j96E+XdLVnzJ/ey21F/uw5Y1mGHByt/KcOsUFncPYuskvJR
+   mSFxafj/ZEDp11ILdyeGgztKXNfbazc1TvvmMD3YlC+GGd7AanRjejdJb
+   Vhv9JE9f7heHxETCP4JFADkmrj3QzX8qYBy+YPDx4MRRgufTQz+Zlsug0
+   Q==;
+X-CSE-ConnectionGUID: nXa7S9S6Tny6A0rqyLasUw==
+X-CSE-MsgGUID: ni10x1BhTPCYgPaTHB62JA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="56071360"
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="56071342"
+   d="scan'208";a="56071360"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 06:08:44 -0800
-X-CSE-ConnectionGUID: +18tohteRkKeTuDiqtZ7Fg==
-X-CSE-MsgGUID: UZ4F0g70Qn2kAfqbeuoQIg==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 06:08:47 -0800
+X-CSE-ConnectionGUID: 2ByUnF43RqiUmNuM97FBlg==
+X-CSE-MsgGUID: efvytN1xRiSf7nR6WdWNqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="98202772"
+   d="scan'208";a="98202780"
 Received: from dhhellew-desk2.ger.corp.intel.com.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.116])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 06:08:41 -0800
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 06:08:44 -0800
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -70,9 +70,9 @@ Cc: linux-kernel@vger.kernel.org,
 	len.brown@intel.com,
 	artem.bityutskiy@linux.intel.com,
 	patryk.wlazlyn@linux.intel.com
-Subject: [PATCH v8 1/4] x86/smp: Allow calling mwait_play_dead with an arbitrary hint
-Date: Wed,  4 Dec 2024 15:08:25 +0100
-Message-ID: <20241204140828.11699-2-patryk.wlazlyn@linux.intel.com>
+Subject: [PATCH v8 2/4] ACPI: processor_idle: Add FFH state handling
+Date: Wed,  4 Dec 2024 15:08:26 +0100
+Message-ID: <20241204140828.11699-3-patryk.wlazlyn@linux.intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241204140828.11699-1-patryk.wlazlyn@linux.intel.com>
 References: <20241204140828.11699-1-patryk.wlazlyn@linux.intel.com>
@@ -84,160 +84,83 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce a helper function to allow offlined CPUs to enter FFh idle
-states with a specific MWAIT hint. The new helper will be used in
-subsequent patches by the acpi_idle and intel_idle drivers.
-
-No functional change intended.
+Recent Intel platforms will depend on the idle driver to pass the
+correct hint for playing dead via mwait_play_dead_with_hint(). Expand
+the existing enter_dead interface with handling for FFH states and pass
+the MWAIT hint to the mwait_play_dead code.
 
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 ---
- arch/x86/include/asm/smp.h |  3 ++
- arch/x86/kernel/smpboot.c  | 90 ++++++++++++++++++++------------------
- 2 files changed, 51 insertions(+), 42 deletions(-)
+ arch/x86/kernel/acpi/cstate.c | 10 ++++++++++
+ drivers/acpi/processor_idle.c |  2 ++
+ include/acpi/processor.h      |  5 +++++
+ 3 files changed, 17 insertions(+)
 
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index ca073f40698f..dfd09a1e09bf 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -114,6 +114,7 @@ void wbinvd_on_cpu(int cpu);
- int wbinvd_on_all_cpus(void);
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index f3ffd0a3a012..8d7b8b02ddb9 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -15,6 +15,7 @@
+ #include <acpi/processor.h>
+ #include <asm/mwait.h>
+ #include <asm/special_insns.h>
++#include <asm/smp.h>
  
- void smp_kick_mwait_play_dead(void);
-+void mwait_play_dead(unsigned int hint);
- 
- void native_smp_send_reschedule(int cpu);
- void native_send_call_func_ipi(const struct cpumask *mask);
-@@ -164,6 +165,8 @@ static inline struct cpumask *cpu_llc_shared_mask(int cpu)
- {
- 	return (struct cpumask *)cpumask_of(0);
+ /*
+  * Initialize bm_flags based on the CPU cache properties
+@@ -204,6 +205,15 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
  }
-+
-+static inline void mwait_play_dead(unsigned int eax_hint) { }
- #endif /* CONFIG_SMP */
+ EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_probe);
  
- #ifdef CONFIG_DEBUG_NMI_SELFTEST
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index b5a8f0891135..8a3545c2cae9 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1272,13 +1272,57 @@ void play_dead_common(void)
- 	local_irq_disable();
- }
- 
-+void __noreturn mwait_play_dead(unsigned int eax_hint)
++void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
 +{
-+	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
++	unsigned int cpu = smp_processor_id();
++	struct cstate_entry *percpu_entry;
 +
-+	/* Set up state for the kexec() hack below */
-+	md->status = CPUDEAD_MWAIT_WAIT;
-+	md->control = CPUDEAD_MWAIT_WAIT;
-+
-+	wbinvd();
-+
-+	while (1) {
-+		/*
-+		 * The CLFLUSH is a workaround for erratum AAI65 for
-+		 * the Xeon 7400 series.  It's not clear it is actually
-+		 * needed, but it should be harmless in either case.
-+		 * The WBINVD is insufficient due to the spurious-wakeup
-+		 * case where we return around the loop.
-+		 */
-+		mb();
-+		clflush(md);
-+		mb();
-+		__monitor(md, 0, 0);
-+		mb();
-+		__mwait(eax_hint, 0);
-+
-+		if (READ_ONCE(md->control) == CPUDEAD_MWAIT_KEXEC_HLT) {
-+			/*
-+			 * Kexec is about to happen. Don't go back into mwait() as
-+			 * the kexec kernel might overwrite text and data including
-+			 * page tables and stack. So mwait() would resume when the
-+			 * monitor cache line is written to and then the CPU goes
-+			 * south due to overwritten text, page tables and stack.
-+			 *
-+			 * Note: This does _NOT_ protect against a stray MCE, NMI,
-+			 * SMI. They will resume execution at the instruction
-+			 * following the HLT instruction and run into the problem
-+			 * which this is trying to prevent.
-+			 */
-+			WRITE_ONCE(md->status, CPUDEAD_MWAIT_KEXEC_HLT);
-+			while(1)
-+				native_halt();
-+		}
-+	}
++	percpu_entry = per_cpu_ptr(cpu_cstate_entry, cpu);
++	mwait_play_dead(percpu_entry->states[cx->index].eax);
 +}
 +
- /*
-  * We need to flush the caches before going to sleep, lest we have
-  * dirty data in our caches when we come back up.
-  */
--static inline void mwait_play_dead(void)
-+static inline void mwait_play_dead_cpuid_hint(void)
+ void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cx)
  {
--	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
- 	unsigned int eax, ebx, ecx, edx;
- 	unsigned int highest_cstate = 0;
- 	unsigned int highest_subcstate = 0;
-@@ -1316,45 +1360,7 @@ static inline void mwait_play_dead(void)
- 			(highest_subcstate - 1);
+ 	unsigned int cpu = smp_processor_id();
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index ce728cf7e301..83213fa47c1b 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -590,6 +590,8 @@ static void acpi_idle_play_dead(struct cpuidle_device *dev, int index)
+ 			raw_safe_halt();
+ 		else if (cx->entry_method == ACPI_CSTATE_SYSTEMIO) {
+ 			io_idle(cx->address);
++		} else if (cx->entry_method == ACPI_CSTATE_FFH) {
++			acpi_processor_ffh_play_dead(cx);
+ 		} else
+ 			return;
  	}
- 
--	/* Set up state for the kexec() hack below */
--	md->status = CPUDEAD_MWAIT_WAIT;
--	md->control = CPUDEAD_MWAIT_WAIT;
--
--	wbinvd();
--
--	while (1) {
--		/*
--		 * The CLFLUSH is a workaround for erratum AAI65 for
--		 * the Xeon 7400 series.  It's not clear it is actually
--		 * needed, but it should be harmless in either case.
--		 * The WBINVD is insufficient due to the spurious-wakeup
--		 * case where we return around the loop.
--		 */
--		mb();
--		clflush(md);
--		mb();
--		__monitor(md, 0, 0);
--		mb();
--		__mwait(eax, 0);
--
--		if (READ_ONCE(md->control) == CPUDEAD_MWAIT_KEXEC_HLT) {
--			/*
--			 * Kexec is about to happen. Don't go back into mwait() as
--			 * the kexec kernel might overwrite text and data including
--			 * page tables and stack. So mwait() would resume when the
--			 * monitor cache line is written to and then the CPU goes
--			 * south due to overwritten text, page tables and stack.
--			 *
--			 * Note: This does _NOT_ protect against a stray MCE, NMI,
--			 * SMI. They will resume execution at the instruction
--			 * following the HLT instruction and run into the problem
--			 * which this is trying to prevent.
--			 */
--			WRITE_ONCE(md->status, CPUDEAD_MWAIT_KEXEC_HLT);
--			while(1)
--				native_halt();
--		}
--	}
-+	mwait_play_dead(eax);
+diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+index a17e97e634a6..63a37e72b721 100644
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -280,6 +280,7 @@ int acpi_processor_ffh_cstate_probe(unsigned int cpu,
+ 				    struct acpi_processor_cx *cx,
+ 				    struct acpi_power_register *reg);
+ void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *cstate);
++void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx);
+ #else
+ static inline void acpi_processor_power_init_bm_check(struct
+ 						      acpi_processor_flags
+@@ -300,6 +301,10 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
+ {
+ 	return;
  }
++static inline void acpi_processor_ffh_play_dead(struct acpi_processor_cx *cx)
++{
++	return;
++}
+ #endif
  
- /*
-@@ -1407,7 +1413,7 @@ void native_play_dead(void)
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
- 
--	mwait_play_dead();
-+	mwait_play_dead_cpuid_hint();
- 	if (cpuidle_play_dead())
- 		hlt_play_dead();
- }
+ static inline int call_on_cpu(int cpu, long (*fn)(void *), void *arg,
 -- 
 2.47.1
 
