@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-18569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8275D9E4687
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 575BF9E46AD
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:30:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFA0CB3E38F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 20:10:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 246FCB44A6E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 20:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821BE1F542D;
-	Wed,  4 Dec 2024 20:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32321202C2A;
+	Wed,  4 Dec 2024 20:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FoSPspbL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DcjmpqrF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3841F03F6;
-	Wed,  4 Dec 2024 20:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2051F6691;
+	Wed,  4 Dec 2024 20:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733343012; cv=none; b=SGAFKJcdsUEd4qx4ytgACSqhBoXNHUsNxH4pHa6Tl4ZdwXfVboC+6C/yn8kDjBo/8oR17YOgsBY+YY682lyRRaM2eHJsZ8YtAUELHLGPd+B07nNRbX+uomsuxLevQxAbQQOI4ZjbtK3dGCVxHZ9OhZx3P1kcMj2f9GFXnB+swHQ=
+	t=1733343015; cv=none; b=hedDK8z0lOojMoUrOzcoPEXpXxgg3e9SUVSlT1qLic247iZhKexKoAYIDZnZ3SYGU/DFAiXVesHXcmoJtPTnHr8NZx+UvTP2xs2kx7IM9icLxxZEYorVeqFg0oI2ska3qMsCJKIfVX2FJQMToxJhMeGOebktgwvxOq/rif7NhrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733343012; c=relaxed/simple;
-	bh=tdGTuOCygyKLTzrZkn4w+l/pmKktzi0hDq2Y4cLiQJI=;
+	s=arc-20240116; t=1733343015; c=relaxed/simple;
+	bh=RPQPYzIUrIV7KUtwuEchVeJdACROjNk9ItK/nS5eUAg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=apKgSRpjZJpZAsOLBvMIWPFwS+ey01hfqgXUB6Tp5r7G8r7n+y7fc1q4kiX9IA1GddYLy04T4nab61/jmrqU7HY5oeOzqT6JNWEp0XXv7IGOPB1C7WbhPijLfxoqLbvuzMFOH9EL0ijUOAnHImv9YAD4dWrVOWA6PWLyXSrqGuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FoSPspbL; arc=none smtp.client-ip=209.85.208.47
+	 In-Reply-To:To:Cc; b=sxKhuVd0fK+5FUCkSrVvDcA7QD9yB8ihGvRYb570pvGZic2902fP1TMUIGM+ASZEcTj2QhGJ9OgVdLlchj6dgwdhZ1WzfBazbifEta366SLlGDupWd1xGnAMLKHYJw9NHHOZUIMaWjIRBQ7No6QV2LV8TFFGWn8qfm+R95R+1/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DcjmpqrF; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso136273a12.0;
-        Wed, 04 Dec 2024 12:10:10 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d0bf6ac35aso138780a12.1;
+        Wed, 04 Dec 2024 12:10:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733343009; x=1733947809; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733343011; x=1733947811; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FKMQu9Put2whTLlJmXR7bTTxcNbkqOf+6o99Kc/4Euo=;
-        b=FoSPspbLnBX8YxvBMeorznCQ9wr7rZQkWRcktqNg+0PBO0yUmYI76PiV6YCIGEkn8w
-         Wn+mm7slg504TY2Zylk94JryKh4TApqvECaeKnrUUKVawRn0OF/gm2GQgkcpoHOiyuou
-         PROZbRARZQdEwtY10pGkETy8Q0n3uv5kNU30B7vmWm5cf6rxWS53toK7mitjglm+8w9h
-         3E0s53b2nVSEWQAJPQQ/ucvvZ4Grh7c0F+f8O9hcR0v/3C3TYCdGMfeTttBG4OWQrgn9
-         mz80rFRV+DjnlBVTUXPOyjbiy3QTtyJhd248XOQ7sCfXXCXB+2zIEO/DgeDlgtAHL754
-         9XrA==
+        bh=TvEYgr/6tTPCr/J7KKhyXeJ8K6wnSFjt2RRmJPjvqmw=;
+        b=DcjmpqrFgfEI404mWsTxUM1AbcI9+RxLbRx2lrutnTI9ocrFjDxmwgDaGMYvlGxUFj
+         Mq5XF309TSv787UvgusTlCaqyaVqzg2gsbFsDXatzCGG1Fol09SjSnpD+PNTOUKFFlSW
+         fb01AArMHqM1Wzc4Zhfm1vamJukw8gheajUARQSKKIt/gL/N4VU9H3dpYt+8cCaKoapy
+         ML860WnJ+LpKC5vBHqMJXkI+BJCfw4Oa6PLCB0V9a/wum4Uva8r4SyBIam9i7zF9SONC
+         HyVzKPfPqwWIaZfSZUmT8gPYbJG+x3ThjsfbINoSq/gYvl5SWyDvWzqJKPjCvus/9H3j
+         7khQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733343009; x=1733947809;
+        d=1e100.net; s=20230601; t=1733343011; x=1733947811;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FKMQu9Put2whTLlJmXR7bTTxcNbkqOf+6o99Kc/4Euo=;
-        b=pEJDmbdGQuYaQpv8/IdWNiZGkAfne/gI1H8pxOpEsyiuYbUhcex5dWzSwZFp01gDPS
-         cqzsDoQ7cWpvAaoZKbKI7AFNLr/FJ9nSZ/0D7s/6I5TeiQzs/4T8oPHCnd+wEbnwDaMq
-         emyH01JdSHfea3433SM0sb4Il/sCTouycP2SK0LBJtla8112cUANOnZsIrAMoSYNlgfx
-         KqGhAv7Dy0M1TQU4x8+MSKStbp4RfP9Idex7v61R6427GK4tvEl3JBPnwwsAurNE2xjI
-         YY9225Zhxs1zVboqm1yen7CIcjnMkLv986rroKinEEcw/UcEYCSoN+HcY3XWFfZLOIy6
-         VY0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUkHihGgrAawZjKDaCPEuoq3gc8z8TWT1hqSI6HUBqQforl57iMkcKPy87fX9XdPmKF8sw7gPII8kaQ@vger.kernel.org, AJvYcCXhTUS3pJXWTomCnUdA09Ym2jleZIxQkIqsCNIeSf0eBatK5TDKVWeuHl2IGH3+0u+EPjGHRMFaJtF8Hb0=@vger.kernel.org, AJvYcCXkD2zN90lUmGu+uErTfzcB2N7KUVZNvbbeirDOHbAGMwB/paq2/OvmrTIQoIG+d8Cve81J84+i1HG+KQ==@vger.kernel.org, AJvYcCXkO7rSikKY3wHgQ5n/3HFyncSfkJ1rj1ihm4/OfhH52bwwWubbJD8Hjne6oDr7eLz1jA/NveHvUfaaAeNr@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjI3G9tf1uyISE9tFcAg+92/wH0Kif38e6dEFYD7bUthmZyje1
-	ad6cEfpXYSz7G2sNu5tvIrxShQ6XufxDGiZc3FTCwaEquLjF/z06GtVftQ==
-X-Gm-Gg: ASbGncvOHHb4o/Dx0/2aSk/Q06pyyUmG6RlllBsJj0U2CLd3XblFSN/ahjRL0PhrWkM
-	sqNx+faQFjjBmVkAqLT3ozH1hRboF8l1JyKK/LaRmuVE1VqxuD+NZIcMt1HVe0eftSUY7tUVqr5
-	Gm9WxTuQzcQTeFPJb2s4rYwW+OmlRrO/dCRLuympRDthlVGPvnFPn1y0bpLuZa3pN/O/SkakJUh
-	AOqkCW8HRbhF4u9twmnl4fKO2H2BOmTP+oTa3N/ckk0mC/l
-X-Google-Smtp-Source: AGHT+IGwXKLjeKxVeZz0jTdMNawaoorRsxT+cnf6ab+DEplm6GK1dKbSi6GDgZ91AhjzC7g7TyuIhQ==
-X-Received: by 2002:aa7:d455:0:b0:5d0:fb56:3f with SMTP id 4fb4d7f45d1cf-5d10cb5649emr9607975a12.12.1733343008574;
-        Wed, 04 Dec 2024 12:10:08 -0800 (PST)
+        bh=TvEYgr/6tTPCr/J7KKhyXeJ8K6wnSFjt2RRmJPjvqmw=;
+        b=FOiUOkpLqNGjPQ0hXDUYKQHQy2PvPKAbzuxmdCF7JKktjYG0sZ6R6DSxVod7tfWQKH
+         MsStbT6zlrkzaQoPd74zwgI5n5wSlVE+Ar9X8qlu3ZqYhvyNzRyVoto6kLdBOqVuchTm
+         BfH53kQnpW97RIpOjmBKs/0yy6OuURX1jdDsaUu6loZdh6HLdQIrp19xHR7LBOIVZogh
+         YCP371K+oW6v5m2VGiOtl2ghKvu+RHzIEFfv/OkPlhokYj2o5veVR0FcSJun5RSWnOrv
+         n5G87/6OIXAs2K5AQgrbEGDQz/Uxjn+ynO21x9tPhGLZyvs3/BsYwl0umWMo8YpJQMuM
+         /82A==
+X-Forwarded-Encrypted: i=1; AJvYcCU9AmFHosOXCbQGUYHR5svwKqGkTkHZzrq9605N5mzpY2XnFoVIRWGLfn1zaQQjh55JubOR+wAs10yCTQ==@vger.kernel.org, AJvYcCXb1lfS9JFthiMRPKRFTGnN53KC3ECeEHU2DCqpj2fpDujtuLQo7I6ke2btqcK3L1EcsFeB2bCrZRWvnUVE@vger.kernel.org, AJvYcCXggeDm6ukm24qaE+FBhS5MF5O6paOujGlhpRhvhM0/ZSnQ0yDMK4NpXz0bfO+tiFQ8bFfFKotbQ2fVKPY=@vger.kernel.org, AJvYcCXsOnRfYumqehe1GguC27MgWjMLZsDCqVJIRyAVTOhre1QghBX9TZqP9LhwIT05lWO6X+ThQCLkBNm0@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/febtmUfFsoZW1y23rt7oRzwujBcoUGObyzUmFLSm3/AFYdip
+	AMz/CIukENgUgeN3PoX3+rafKrU4nyYvsn71yKsYkEqYN5je6qbiretbnA==
+X-Gm-Gg: ASbGncvnz5XFmRXO4RTDE5WchmZTvp2hODbjZBQSt3JVEKstrFf6CQ8dlxx8pQm0Kok
+	5KERuZ3ZML7ZdhV7OzTAmoqv9P4Te5RoQbjuSzgnEG1XCxvk8JaVdIh0xCCoy1pqSkwYGw8QvdV
+	S3GkReUIYJh7BWu34cr1A9Ps07sTuvhAX5ReHsHa8+Az4R9CM7htAWaeS5j1CvvDZw7bbm3cHhz
+	VcgZMMiXKwEBE6VrAJ6w+rOlG/KUe/HZzC94+dUAE/lkNfT
+X-Google-Smtp-Source: AGHT+IEzr7ntDpPcQS/5uHc9iPibkZ0jlntra62Tz5y3XbWzANT8GEqg00Aa+rtdPGIWpW6yd87VAg==
+X-Received: by 2002:a05:6402:4301:b0:5d0:ce1d:44ef with SMTP id 4fb4d7f45d1cf-5d10cb564c1mr11264596a12.13.1733343011214;
+        Wed, 04 Dec 2024 12:10:11 -0800 (PST)
 Received: from [127.0.1.1] ([46.53.242.72])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5d0b7ce5584sm6266526a12.54.2024.12.04.12.10.06
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5d0b7ce5584sm6266526a12.54.2024.12.04.12.10.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 12:10:07 -0800 (PST)
+        Wed, 04 Dec 2024 12:10:10 -0800 (PST)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Wed, 04 Dec 2024 23:09:51 +0300
-Subject: [PATCH v10 1/8] power: supply: add undervoltage health status
- property
+Date: Wed, 04 Dec 2024 23:09:52 +0300
+Subject: [PATCH v10 2/8] dt-bindings: power: supply: max17042: add max77705
+ support
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241204-starqltechn_integration_upstream-v10-1-7de85e48e562@gmail.com>
+Message-Id: <20241204-starqltechn_integration_upstream-v10-2-7de85e48e562@gmail.com>
 References: <20241204-starqltechn_integration_upstream-v10-0-7de85e48e562@gmail.com>
 In-Reply-To: <20241204-starqltechn_integration_upstream-v10-0-7de85e48e562@gmail.com>
 To: Sebastian Reichel <sre@kernel.org>, 
@@ -99,65 +99,37 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
  linux-leds@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733343003; l=2343;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733343003; l=797;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=tdGTuOCygyKLTzrZkn4w+l/pmKktzi0hDq2Y4cLiQJI=;
- b=ZOJIa6ovLTepPQBmB/i8cyTPdsHGMAV1RHRQ/+DQ4XvoXvYhQk074sqiIQxkDM5aRFdqgKgAw
- Gz8+g4EFYbyDys7qeFUA8O/zmm22i4jkTrySrb8CNhxBqBtNZ7bOZUK
+ bh=RPQPYzIUrIV7KUtwuEchVeJdACROjNk9ItK/nS5eUAg=;
+ b=BzSHFDbt7Ayfe9wdSGOHsd8aYVzWhRvmUFcvQYnbo0RRXTFjhxXESfEHqEmyWQxuqjSY0Kd0R
+ b1C/GDcBx3fCI7SJ9S20o4RkAUTekhksMzBQsOTv/uScOUP8KaNuyfr
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Add POWER_SUPPLY_HEALTH_UNDERVOLTAGE status for power supply
-to report under voltage lockout failures.
+Add max77705 fuel gauge support.
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
----
-Changes for v5:
-- update Documentation/ABI/testing/sysfs-class-power and
-  drivers/power/supply/power_supply_sysfs.c
----
- Documentation/ABI/testing/sysfs-class-power | 2 +-
- drivers/power/supply/power_supply_sysfs.c   | 1 +
- include/linux/power_supply.h                | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 45180b62d426..32c018c5d088 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -433,7 +433,7 @@ Description:
+---
+Changes in v10:
+- keep alphabetical order
+---
+ Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+index 085e2504d0dc..14242de7fc08 100644
+--- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+@@ -19,6 +19,7 @@ properties:
+       - maxim,max17047
+       - maxim,max17050
+       - maxim,max17055
++      - maxim,max77705-battery
+       - maxim,max77849-battery
  
- 		Valid values:
- 			      "Unknown", "Good", "Overheat", "Dead",
--			      "Over voltage", "Unspecified failure", "Cold",
-+			      "Over voltage", "Under voltage", "Unspecified failure", "Cold",
- 			      "Watchdog timer expire", "Safety timer expire",
- 			      "Over current", "Calibration required", "Warm",
- 			      "Cool", "Hot", "No battery"
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 571de43fcca9..247c2910ba34 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -99,6 +99,7 @@ static const char * const POWER_SUPPLY_HEALTH_TEXT[] = {
- 	[POWER_SUPPLY_HEALTH_OVERHEAT]		    = "Overheat",
- 	[POWER_SUPPLY_HEALTH_DEAD]		    = "Dead",
- 	[POWER_SUPPLY_HEALTH_OVERVOLTAGE]	    = "Over voltage",
-+	[POWER_SUPPLY_HEALTH_UNDERVOLTAGE]	    = "Under voltage",
- 	[POWER_SUPPLY_HEALTH_UNSPEC_FAILURE]	    = "Unspecified failure",
- 	[POWER_SUPPLY_HEALTH_COLD]		    = "Cold",
- 	[POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE] = "Watchdog timer expire",
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index b98106e1a90f..e96d262f3c2b 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -58,6 +58,7 @@ enum {
- 	POWER_SUPPLY_HEALTH_OVERHEAT,
- 	POWER_SUPPLY_HEALTH_DEAD,
- 	POWER_SUPPLY_HEALTH_OVERVOLTAGE,
-+	POWER_SUPPLY_HEALTH_UNDERVOLTAGE,
- 	POWER_SUPPLY_HEALTH_UNSPEC_FAILURE,
- 	POWER_SUPPLY_HEALTH_COLD,
- 	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+   reg:
 
 -- 
 2.39.5
