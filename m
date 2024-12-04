@@ -1,100 +1,79 @@
-Return-Path: <linux-pm+bounces-18530-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18531-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A0759E3AC7
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 14:02:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B56459E3B74
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 14:40:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF008281183
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 13:02:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC586B2940E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 13:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5D51B3929;
-	Wed,  4 Dec 2024 13:02:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487141B4F02;
+	Wed,  4 Dec 2024 13:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="yNRIddB0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="m4AxG7g6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E124A33;
-	Wed,  4 Dec 2024 13:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAE71EB2A;
+	Wed,  4 Dec 2024 13:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733317337; cv=none; b=AyS5PN9YpzFz86MMjV0OsZUlbbfcI9S5VFstwxCt+6/dVd2adJwOZlKKFXPAeKX9INQr+g+mmmJ3ZSpc+MamFJ46tNBUIdIQa+Vm8DUwXscIypusMOpdfOYXNgt5CeqloBgKtJDroSnnTu159O549VO8JbO0EA8H1KpWdOTzjjs=
+	t=1733317941; cv=none; b=VuZocxTKJQrjRFwECTfrc9OpImB2TS3jn37ak+jrVpi8IqCZ3PUYWQEFwAeUpQXZJhwCDw41aYAW6cCUgI0sUk8QxhvHDIRrExGp98mLssLlQon+Twm4jYxEmB4+CRfOBofAICOWE+HKcPuWXQAwBuix9jtKrvEB7+BkmF9womo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733317337; c=relaxed/simple;
-	bh=2f6+ZfJ66V2yVm3Va9NQ9julH0I/H15wAzhHr6xBEso=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WECbhOPJ0wZAL4JS/K+DbwRj/BfcWWfn34/vvVJ+3M9v6nnkH9QiX84w0mJW7ow45Oqo9bHBbOUVSgGNKOBBbX42ODmFFGJNsLjkCIMTS4VZ/h3i8NA/iAHTJxV06CQPRTl2G0gRzg6pp4sgaoanSEi6aLY53xORGTbUl04gAnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=yNRIddB0; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 46ef63e342e61e00; Wed, 4 Dec 2024 14:02:05 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E5E0215F0345;
-	Wed,  4 Dec 2024 14:02:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1733317325;
-	bh=2f6+ZfJ66V2yVm3Va9NQ9julH0I/H15wAzhHr6xBEso=;
-	h=From:Subject:Date;
-	b=yNRIddB0U4vKNidNAxnaD7VRGwdeUzW1K070Gd4O7T8kUm8k7dNDmMgIJtDfhGDbT
-	 tF/hqc06ngMJVLSzPjArmJpBDDQA+3pyv7zclQGYmoTJ2EHhPTJKt50EkdRXm48Skr
-	 AWRbqO+hWZcWDBYwEfnh6++xmdZSTt4jPZm2T9vaGe0/CkE3lgzUyjXUIG8iG5RLPL
-	 y4yTXyV68FV/OoFXmcbYUfFWlZm8hWWjFZT0ax4iKVle/yk+p17W3vyiN5wYOeQwlS
-	 wWJqCayEh1DrzIbpwfH/dmScNTcIdXrRBfazkQrAqxKST+X+ovXlBxzMAlOpv2Cm6p
-	 0Y16mBuD3RaZg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Saravana Kannan <saravanak@google.com>
-Subject: [PATCH v1] PM: sleep: Update stale comment in device_resume()
-Date: Wed, 04 Dec 2024 14:02:04 +0100
-Message-ID: <2787627.mvXUDI8C0e@rjwysocki.net>
+	s=arc-20240116; t=1733317941; c=relaxed/simple;
+	bh=IY8wv+1b2k0zyhlHNkdoP8JGOIyyLU3NwsvjFwQnsNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o5Qe2F2x2C64/UAe9N7bCzgWBOJxYsgE+LTLDIHlxayhkwRQvkJ6apYNkjq0Gyv6nB59QWrEWt3i+C+TqKiwvE3qZR30wMYRCy+1xQiH0S78/lmuHRgSlTdSD8FaqtcBTKz0gspvylDcul4wmvlThBhLoFjBE/uJ2JQqsvrhEiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=m4AxG7g6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE73C4CED1;
+	Wed,  4 Dec 2024 13:12:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1733317939;
+	bh=IY8wv+1b2k0zyhlHNkdoP8JGOIyyLU3NwsvjFwQnsNc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m4AxG7g6KlhfeeH4Yk6jZLMFYFcbX+9+q1Q8YXw9YcszNqpiOOJtt2BLlF9ZqZzYj
+	 iwK81wEQUlxHsVML8MNhlXbp+OcXLeKg5sU5KQxVssyhxHdz8xAqFL8cN5NS4wjdY7
+	 09wKHeaI6gYmaEXlwmqqTHVXDXar92wtgY/8AXmE=
+Date: Wed, 4 Dec 2024 14:12:16 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH v1] PM: sleep: Update stale comment in device_resume()
+Message-ID: <2024120450-makeshift-haggler-625c@gregkh>
+References: <2787627.mvXUDI8C0e@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrieehgdeggecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegoufhprghmkfhpucdlfedttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2787627.mvXUDI8C0e@rjwysocki.net>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Dec 04, 2024 at 02:02:04PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> There is no function called __device_suspend() any more and it is still
+> mentioned in a comment in device_resume(), so update that comment.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/main.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Index: linux-pm/drivers/base/power/main.c
+> ===================================================================
 
-There is no function called __device_suspend() any more and it is still
-mentioned in a comment in device_resume(), so update that comment.
+Are you not using git?  This looks like the old cvs output :)
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux-pm/drivers/base/power/main.c
-===================================================================
---- linux-pm.orig/drivers/base/power/main.c
-+++ linux-pm/drivers/base/power/main.c
-@@ -914,7 +914,7 @@ static void device_resume(struct device
- 		goto Complete;
- 
- 	if (dev->power.direct_complete) {
--		/* Match the pm_runtime_disable() in __device_suspend(). */
-+		/* Match the pm_runtime_disable() in device_suspend(). */
- 		pm_runtime_enable(dev);
- 		goto Complete;
- 	}
-
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 
