@@ -1,169 +1,175 @@
-Return-Path: <linux-pm+bounces-18526-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E81E9E395C
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 12:58:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1EC9E39C5
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 13:22:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 681C3B310B0
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 11:23:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14E64285F98
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 12:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330341B392A;
-	Wed,  4 Dec 2024 11:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A16E1B5ED0;
+	Wed,  4 Dec 2024 12:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jI7OsA3u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iv1N7JLk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524521B219B;
-	Wed,  4 Dec 2024 11:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CDF1B415E;
+	Wed,  4 Dec 2024 12:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733311389; cv=none; b=cZ9WWlAhb67LN8CX7wRL5gNc/Ymzm3P0sz4P5B4RYeQ6BISDMZSbHpB79tdmYGE0VNRGNqvbhqKgjRDwCdXAO95l18A+qoNlx900zbQPicDZBgaiqOOER17h6DVxKuU4yHNjoVZLybGm7gzc9W8QKxJhXErQAlHHioRLQ5yBovU=
+	t=1733314932; cv=none; b=T9aPrGx7lkiAFzhyxzx3Gsp8YrCDqN94ImOhEZBPiD0L5sAZsxuAtpxnI7leWhzAdmKkP9IwL18YTPl/XiBaLs3wBccErOhUIpMUw4ojVSjy39HerS4D9pn7a6jga8OZ6RrzStvQofaeffQbKlW0PdKsNXVxEe8g8n9P2RTraa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733311389; c=relaxed/simple;
-	bh=1UrW0T5gTeFR5ZqJIagqMlnLwC4w48IaQA0fvyV/TAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BhrfGNnxdjH4YDPORX+MUDrwiFPqS7DqrRVpbcXRzrU2jILMAQp/tLUD9yiX/IdAjM9TVed9sOMMasXcVmRgsb5ILnpFyWqy2M0HQ8E1CI9n4EM2KQDK5uRvSpIp+Pq8HNcvLjkNJQEYYwnjBDdqmZwN842cKEVkRSFcjJcyefY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jI7OsA3u; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733311387; x=1764847387;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1UrW0T5gTeFR5ZqJIagqMlnLwC4w48IaQA0fvyV/TAk=;
-  b=jI7OsA3uAZdPJXpzS0vmdONBHaGkzJi2MfcFx8pN7C80f2o9Cz8A6myT
-   hqfDkBTotcpvuZc3ivQ42ZxNXKWNmGMUDXXKfQihW8eXkVRUbUk1SqTgL
-   9lu6UB7liVUMtC5Drpfb+sBnWlZEcYn1v6y2GNOohIVtCX+jtHDwBhhM3
-   bAqeqhRzUBz0aFwJ/m0/om+aiWo8PbmmXeqI6wWflXD1e3IISiO5z0oAg
-   4NxVn2yR4Ylu6Z1cavN09LzDwutcL7wyw/QmHVloqstEqNgCcQV9YA0o/
-   VCVmZO9y+tsARpOTvOjyJDhvZWkNLXiuGaB9IGdlH0F88ExWVQ8UBo/6C
-   Q==;
-X-CSE-ConnectionGUID: fDm92dahQwWAaEKP5UkBsg==
-X-CSE-MsgGUID: B5Av/RNjScSeRp3wO3bLyA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="51104512"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="51104512"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 03:23:06 -0800
-X-CSE-ConnectionGUID: Bw0VxzZDTAWBEAGeAPt7Jg==
-X-CSE-MsgGUID: u8JqkpE1QnyTeWMV2ZXw7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="98726048"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 04 Dec 2024 03:23:03 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tInTA-0002wW-1q;
-	Wed, 04 Dec 2024 11:23:00 +0000
-Date: Wed, 4 Dec 2024 19:22:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@airoha.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-Message-ID: <202412041929.8aCqrGnO-lkp@intel.com>
-References: <20241203163158.580-2-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1733314932; c=relaxed/simple;
+	bh=tjr1M7MkQ0S2HPXGlwpING1TuiC6eFQWfJLpc6ksvG4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l8FlMGKKbWn05nblZueKt+YmUxXJ933/JxE1LrgzHq0gUDL217tHYnQqVYtJGPAIJb+OikkYoEE4j2TCj0uyEUwVB11N3/TqtnH0yP1APa+uDqkKtRXcF2qfOSV9gSj5NXHXXFe2X/XBguC9hwSk2hKjUljKUZHisjjagGzmskQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iv1N7JLk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44EDC4CEE2;
+	Wed,  4 Dec 2024 12:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733314931;
+	bh=tjr1M7MkQ0S2HPXGlwpING1TuiC6eFQWfJLpc6ksvG4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iv1N7JLk1vqTGr0DsJB/X/R0S+Latl5026ItxHYFjH9X6WH4fE9ldhyVMPSu72cF8
+	 QVYdjWoOupeUOMbn1C4Mu/gNqku/imioPex3qhr2vYmKCWwHCHqleAxkt83B9lYlgJ
+	 MjEZbapCbE8xpzMwo+2Lx/Jr8qDMc/H1YPkeUdQI1byc4KOCLZG7AwEMVfAjaWQhxd
+	 bFspyR5JP5lqmA9bukcewmSlLy2UnPeXgKjRsOQiY5kJ+2Zbkw5rdvjvhWg/FKp/zh
+	 6guO30I7JpuvXz5aMu/fqhotKV1TPzzyp6jry2hTJwlzK2HiV7BjScNABiyjqrl3pD
+	 nlYcoAsksy7NA==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2689e7a941fso3411423fac.3;
+        Wed, 04 Dec 2024 04:22:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU2/J3lK+d/Koj7PULk9ycIdGdEExNkQ+AgA6QxmgBtPlLmWMlTmEM6NH9uJF6mUG9QnVwj4hW/ogJgbd8=@vger.kernel.org, AJvYcCU3zUnFqO6dPTA4RAG755MYQuAqyar9ViyzkZMYtbWbfqhBqG13okeqHN77zPPCQVW3140lfP0MAfc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwA/lDsrnTxenrWQZC+rVQ4SDCuWX0KhAHvuq0hw/mFTuSETxR8
+	bfzqbwKa9HGenmIH3cOoTsPKoetj9jMT27vzFpiAsmyZ05XavHzkjujj+/hYG4eK5AcShN6XOlY
+	GI3jit7bwG4dXIIMWM+oJqPNC5oM=
+X-Google-Smtp-Source: AGHT+IERIngqodiQUKumdns0sgwYfBGFnnGJz/Q7vcS7j43S3kf6FXOgyEPZgrNo2Zav3OpogvXLOI35ZnvKullWCIc=
+X-Received: by 2002:a05:6871:150:b0:29e:719b:7837 with SMTP id
+ 586e51a60fabf-29e88664fdbmr3978287fac.13.1733314931192; Wed, 04 Dec 2024
+ 04:22:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203163158.580-2-ansuelsmth@gmail.com>
+References: <20241114220921.2529905-1-saravanak@google.com>
+ <20241114220921.2529905-3-saravanak@google.com> <CAJZ5v0jPO24JR5um0gv5U5AwiR_RHx37x6DisG-nUxaZt9gfGA@mail.gmail.com>
+ <CAJZ5v0iLq9L5nMp13BrBmbWavFs1ZEAtJ-WeyRzv3D2GXPNuag@mail.gmail.com>
+ <CAGETcx-9XSdXcuGQFSoS-mMPwp=UJ3_FfTJ1Cx+9jddyjYTKEg@mail.gmail.com>
+ <CAJZ5v0iWCWdjP9Gku2uV0Qz-Hp6ZEHDspaPVzHPPzHfvyREeWA@mail.gmail.com> <CAGETcx_5oRA-kTzU7WtWSV2=Bp0cKcT=2kPa0+ZkwkHTA+rwOQ@mail.gmail.com>
+In-Reply-To: <CAGETcx_5oRA-kTzU7WtWSV2=Bp0cKcT=2kPa0+ZkwkHTA+rwOQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 4 Dec 2024 13:21:57 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g9A1pZ5FjPAjdLY5ybNmefnBVVMJM7h3czW38p1fTfqQ@mail.gmail.com>
+Message-ID: <CAJZ5v0g9A1pZ5FjPAjdLY5ybNmefnBVVMJM7h3czW38p1fTfqQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/5] PM: sleep: Remove unnecessary mutex lock when
+ waiting on parent
+To: Saravana Kannan <saravanak@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Marek Vasut <marex@denx.de>, 
+	Bird@google.com, Tim <Tim.Bird@sony.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+On Tue, Dec 3, 2024 at 12:28=E2=80=AFAM Saravana Kannan <saravanak@google.c=
+om> wrote:
+>
+> On Mon, Dec 2, 2024 at 1:15=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
+> >
+> > On Mon, Dec 2, 2024 at 9:46=E2=80=AFPM Saravana Kannan <saravanak@googl=
+e.com> wrote:
+> > >
+> > > On Mon, Dec 2, 2024 at 12:16=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
+nel.org> wrote:
+> > > >
+> > > > On Mon, Dec 2, 2024 at 9:11=E2=80=AFPM Rafael J. Wysocki <rafael@ke=
+rnel.org> wrote:
+> > > > >
+> > > > > Sorry for the delay.
+> > > > >
+> > > > > On Thu, Nov 14, 2024 at 11:09=E2=80=AFPM Saravana Kannan <saravan=
+ak@google.com> wrote:
+> > > > > >
+> > > > > > Locking is not needed to do get_device(dev->parent). We either =
+get a NULL
+> > > > > > (if the parent was cleared) or the actual parent. Also, when a =
+device is
+> > > > > > deleted (device_del()) and removed from the dpm_list, its compl=
+etion
+> > > > > > variable is also complete_all()-ed. So, we don't have to worry =
+about
+> > > > > > waiting indefinitely on a deleted parent device.
+> > > > >
+> > > > > The device_pm_initialized(dev) check before get_device(dev->paren=
+t)
+> > > > > doesn't make sense without the locking and that's the whole point=
+ of
+> > > > > it.
+> > > >
+> > > > Hmm, not really.
+> > > >
+> > > > How is the parent prevented from going away in get_device() right
+> > > > after the initial dev check without the locking?
+> > >
+> > > Not sure what you mean by "go away"? But get_device() is going to kee=
+p
+> > > a non-zero refcount on the parent so that struct doesn't get freed.
+> >
+> > That's after it has returned.
+> >
+> > There is nothing to prevent dev from being freed in get_device()
+> > itself before the kobject_get(&dev->kobj) call.
+> >
+> > So when get_device() is called, there needs to be an active ref on the
+> > device already or something else to prevent the target device object
+> > from being freed.
+> >
+> > In this particular case it is the lock along with the
+> > device_pm_initialized(dev) check on the child.
+>
+> Ugh... my head hurts whenever I think about get_device(). Yeah, I
+> think you are right.
+>
+> Hmm... I wanted to have this function be replaced by a call to a
+> generic helper function dpm_for_each_superior() in the next patch. But
+> that helper function could be called from places where the dpm_list
+> lock is held. Also, I was planning on making it even more generic (not
+> specific to dpm) in the future. So, depending on dpm_list lock didn't
+> make sense.
+>
+> Any other ideas on how I could do this without grabbing the dpm_list mute=
+x?
 
-kernel test robot noticed the following build errors:
+You don't need to replace the existing function with a new helper.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge robh/for-next linus/master v6.13-rc1 next-20241203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Just add the helper, use it going forward and drop the old function in
+a separate patch when there are no more users of it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/cpufreq-airoha-Add-EN7581-CPUFreq-SMCCC-driver/20241204-113105
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20241203163158.580-2-ansuelsmth%40gmail.com
-patch subject: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-config: arm-randconfig-003 (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/reproduce)
+> Actually, with the rewrite and at the end of this series, we don't
+> have to worry about this race because each device's suspend/resume is
+> only started after all the dependencies are done. So, if the parent
+> deletes a child and itself, the child device's suspend wouldn't have
+> been triggered at all.
+>
+> So, another option is to just squash the series and call it a day.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412041929.8aCqrGnO-lkp@intel.com/
+No, no.  This is complicated enough and the code is super-sensitive.
 
-All errors (new ones prefixed by >>):
+I think that you need to split the changes even more.
 
->> drivers/cpufreq/airoha-cpufreq.c:41:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
-      41 |         const struct arm_smccc_1_2_regs args = {
-         |                                         ^
-   drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
-      41 |         const struct arm_smccc_1_2_regs args = {
-         |                      ^
->> drivers/cpufreq/airoha-cpufreq.c:45:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
-      45 |         struct arm_smccc_1_2_regs res;
-         |                                   ^
-   drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
-      41 |         const struct arm_smccc_1_2_regs args = {
-         |                      ^
->> drivers/cpufreq/airoha-cpufreq.c:47:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      47 |         arm_smccc_1_2_smc(&args, &res);
-         |         ^
-   drivers/cpufreq/airoha-cpufreq.c:81:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
-      81 |         const struct arm_smccc_1_2_regs args = {
-         |                                         ^
-   drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
-      81 |         const struct arm_smccc_1_2_regs args = {
-         |                      ^
-   drivers/cpufreq/airoha-cpufreq.c:86:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
-      86 |         struct arm_smccc_1_2_regs res;
-         |                                   ^
-   drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
-      81 |         const struct arm_smccc_1_2_regs args = {
-         |                      ^
-   drivers/cpufreq/airoha-cpufreq.c:88:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      88 |         arm_smccc_1_2_smc(&args, &res);
-         |         ^
-   6 errors generated.
+> Or add a comment to the commit text that this adds a race that's fixed by
+> the time we get to the end of the series.
 
-
-vim +41 drivers/cpufreq/airoha-cpufreq.c
-
-    37	
-    38	static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
-    39						    unsigned long parent_rate)
-    40	{
-  > 41		const struct arm_smccc_1_2_regs args = {
-    42			.a0 = AIROHA_SIP_AVS_HANDLE,
-    43			.a1 = AIROHA_AVS_OP_GET_FREQ,
-    44		};
-  > 45		struct arm_smccc_1_2_regs res;
-    46	
-  > 47		arm_smccc_1_2_smc(&args, &res);
-    48	
-    49		/* SMCCC returns freq in MHz */
-    50		return (int)(res.a0 * 1000 * 1000);
-    51	}
-    52	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That would create a bisection trap, so not really.
 
