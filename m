@@ -1,96 +1,143 @@
-Return-Path: <linux-pm+bounces-18578-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18580-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D25969E4686
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:22:05 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 428C29E4698
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:26:30 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4241B2CA8E
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 20:22:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27354164D20
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 21:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC3C1F5403;
-	Wed,  4 Dec 2024 20:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00ED191F6A;
+	Wed,  4 Dec 2024 21:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ii4Df9ET"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oT1t4ck+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8741C3BF5;
-	Wed,  4 Dec 2024 20:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED62E18FC9F;
+	Wed,  4 Dec 2024 21:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733343770; cv=none; b=MCoPm1HoSO+Q+9GJ2uQxWHX8ARS6azDr/Nl42svDkuMbFPzuMopVWM3y/773cNrxfqaTXwuCnTkc+yQ20KRvK3tkZrxmmBwgNdbi5+DR1l3jl7GvbHfcc5TyNQlT4K8fXLXEdM6xd7MmcEH7he7ldeniJovp7dL92nZDr6cLORc=
+	t=1733347585; cv=none; b=WGex3X4DFwebklzhTc7GyRNIfrDzW1FejZ3NqIAWOrXGv7Req4J9jVbwqzpnM0xLHNrBBRfgpyCHsmm28lZkZaqg6ZfkpT2FwGPMDBC6aavD/SZZNi/ws6pqEHZI93+hsbQa+U813rpRWiXBDA31K6Xhg4FS7/mAyCHilWWt3tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733343770; c=relaxed/simple;
-	bh=0trD3xgMuTcQ522NBjE3lOKrUeCloP+XOtSvdc704e8=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=QW84uhxvmFtc2BRmyq4ASOcY32CBRpySdg5Ub3hzxxppDBYmUyRZGtUrUN4TEm6fmJRQCmVhqTXr36T+8dQ2A56Ta9FUxNKkKgbLT1uDdkfW0NmYVAxWV5F3kL5SASAI8twjp0rdqrLyx6MJsPdSWgWKLOU4q9bM6jy49FtDBzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ii4Df9ET; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5556C4CECD;
-	Wed,  4 Dec 2024 20:22:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733343769;
-	bh=0trD3xgMuTcQ522NBjE3lOKrUeCloP+XOtSvdc704e8=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=Ii4Df9ETJjJlTt+OFI6XJ4qtn4c1zLT2QMdivBw/V6WxCbffn+5GnT/x9V0jfnriG
-	 Ckj+ctFI030Oqp5kY2Ttv0zR6kOW749IuqszjgSBILW1RheoF2Qa5KYC5gQAeHkeYY
-	 60YmmVLwIiVObrU/sYeTsQfk677+TlpgqBD3deYZ0bMgchJ8BxteVjNdjA/02aIGEH
-	 dFzHP0jZ+vrXV/0LwSRwq4WXz2bREIb3pdAc/V4tfUOzKq/PcbQEXs5+DxByl0mhPX
-	 DX69u3WXwSYfdZICNYAciKuIOrB+b/3OnAnc+F9VlSw4N7qgQRppPV9nKXsxdcxBle
-	 T2bU/8iVNzqkQ==
-Message-ID: <d15dc75cb5d0346bb56c58d4a933cf7e.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733347585; c=relaxed/simple;
+	bh=5G3TI8FG7sx1hTKz198fF2W7ZL8MBP0RnBOKm4yaOA4=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=gDxMalyGHSJ1JGnFaM7pVJeb+otbhfjZA+7fTAqkvyquXrN053ORIchPrdZWSiwVcBSU80Z+BylJzfWblsX+9+eLqMGHorAIiT5ZgekcpcOGzBNfOMwJzHbvgWhRRex9ANzNsFglvi6HG4ejbXAwtvGYFS7B8dO1Bq9El0CYMrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oT1t4ck+; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4FamBT023344;
+	Wed, 4 Dec 2024 21:26:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=wyOcFOKWssh3221kmAxkUj
+	HamyXIeCZqHEsBuUMyod0=; b=oT1t4ck+o3yyRmGVKFkbASCxbAzlFbJq9NHL0Z
+	QNravvUcxTBYMajP8hc7QZ7qPM15TPk5DGX3TAtXeI5OEKOj24tUuvIDHYcB50PI
+	y+pebh2LeFigkVGXP4Wr9mfO+DJU/n2LW48KEuBZLNnTBr167irXJ4GRY5HUHf9+
+	lXSvgSceNOW9L0hR0QotwYpg5Kqk60HC8s6FF3JQaGNxzEtyaoGBJA3gS++VOfAR
+	qNzN5/zu2tDMy3X4QieRTbzfqASuOu2Wc6aDJfFepKtjbVvTWztUJQWte2CgnH0x
+	KQC4btLrOsiF/TDoEBCrtAhFMV4Hnk8B2GJgPhqCygCObc5Q==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43aj42a7bc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Dec 2024 21:26:19 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B4LQI5W023737
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Dec 2024 21:26:18 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 4 Dec 2024 13:26:17 -0800
+From: Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v3 0/2] interconnect: qcom: Introduce interconnects for
+ SM8750
+Date: Wed, 4 Dec 2024 13:26:04 -0800
+Message-ID: <20241204-sm8750_master_interconnects-v3-0-3d9aad4200e9@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1b05b11b2a8287c0ff4b6bdd079988c7.sboyd@kernel.org>
-References: <20241203134137.2114847-1-m.wilczynski@samsung.com> <CGME20241203134155eucas1p1e90c71c4f8eb5da41d2cc8a500f54dc7@eucas1p1.samsung.com> <20241203134137.2114847-6-m.wilczynski@samsung.com> <f21ffd12-167b-4d10-9017-33041ec322b0@kernel.org> <07bfb02a-1df3-4a03-83bb-d7edc540739d@samsung.com> <1b05b11b2a8287c0ff4b6bdd079988c7.sboyd@kernel.org>
-Subject: Re: [RFC PATCH v1 05/14] dt-bindings: clock: thead,th1520: Add support for Video Output subsystem
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-To: Krzysztof Kozlowski <krzk@kernel.org>, Michal Wilczynski <m.wilczynski@samsung.com>, airlied@gmail.com, aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com, frank.binns@imgtec.com, guoren@kernel.org, jassisinghbrar@gmail.com, jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com, maarten.lankhorst@linux.intel.com, matt.coster@imgtec.com, mripard@kernel.org, mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com, robh@kernel.org, simona@ffwll.ch, tzimmermann@suse.de, ulf.hansson@linaro.org, wefu@redhat.com
-Date: Wed, 04 Dec 2024 12:22:47 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOzIUGcC/x3MSwqAMAwA0atI1hZitfi5iohIjZqFUZoignh3i
+ 5uBt5kHlAKTQpc9EOhi5UMSyjwDv02ykuE5GSzaqrBYGd2b2uG4TxopjCyp/hAhH9U4bFrvWpw
+ XcpAOZ6CF7//eD+/7AaEvLVJtAAAA
+X-Change-ID: 20241204-sm8750_master_interconnects-5089c590dfe5
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733347577; l=1291;
+ i=quic_molvera@quicinc.com; s=20241204; h=from:subject:message-id;
+ bh=5G3TI8FG7sx1hTKz198fF2W7ZL8MBP0RnBOKm4yaOA4=;
+ b=icVDrlcbHKuXpmcJFvAOZXy8n1nhVtUGFHk/nLDyT/LcU8c1Dw8FzHkQs+9EF4kpix94/H1cl
+ pK5ii4xKoJ1CvHI0IFrdO/bBsLsgCe/pMIFk/yvXnNDmhbO5HvPJlHI
+X-Developer-Key: i=quic_molvera@quicinc.com; a=ed25519;
+ pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: B5wiJXMgj_mT11rTF0wxszeozJCdXf4H
+X-Proofpoint-ORIG-GUID: B5wiJXMgj_mT11rTF0wxszeozJCdXf4H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=638 lowpriorityscore=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412040165
 
-Quoting Stephen Boyd (2024-12-04 12:21:11)
-> Quoting Michal Wilczynski (2024-12-04 02:11:26)
-> >=20
-> > To address this, I'll specify the 'reg' property in each node to define
-> > the address ranges explicitly fragmenting the address space for the VOS=
-YS
-> > manually.
-> >=20
-> > vosys_clk: clock-controller@ffef528050 {
-> >         compatible =3D "thead,th1520-clk-vo";
-> >         reg =3D <0xff 0xef528050 0x0 0x8>;
-> >         #clock-cells =3D <1>;
-> > };
-> >=20
-> > pd: power-domain@ffef528000 {
-> >         compatible =3D "thead,th1520-pd";
-> >         reg =3D <0xff 0xef528000 0x0 0x8>;
-> >         #power-domain-cells =3D <1>;
-> > };
->=20
-> You should have one node:
->=20
->     clock-controller@ffef528000 {
->       compatible =3D "thead,th1520-vo";
->       reg =3D <0xff 0xef528050 0x0 0x1a04>;
+Add interconnect support for SM8750 SoC.
 
-Apologies for the typo. Here's the correct line:
+The Qualcomm Technologies, Inc. SM8750 SoC is the latest in the line of
+consumer mobile device SoCs. See more at:
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/images/company/news-media/media-center/press-kits/snapdragon-summit-2024/day-1/documents/Snapdragon8EliteProductBrief.pdf
 
-	reg =3D <0xff 0xef528000 0x0 0x1a04>;
+Changes in V3:
+- merged sm8750.h into sm8750.c
 
->       #clock-cells =3D <1>;
->       #power-domain-cells =3D <1>;
->     };
->
+Changes in V2:
+- updating style to be consistent with other interconnect drivers
+- removed dead code
+
+Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+---
+Raviteja Laggyshetty (2):
+      dt-bindings: interconnect: add interconnect bindings for SM8750
+      interconnect: qcom: Add interconnect provider driver for SM8750
+
+ .../bindings/interconnect/qcom,sm8750-rpmh.yaml    |  136 ++
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/sm8750.c                 | 1705 ++++++++++++++++++++
+ .../dt-bindings/interconnect/qcom,sm8750-rpmh.h    |  143 ++
+ 5 files changed, 1995 insertions(+)
+---
+base-commit: bcf2acd8f64b0a5783deeeb5fd70c6163ec5acd7
+change-id: 20241204-sm8750_master_interconnects-5089c590dfe5
+
+Best regards,
+-- 
+Melody Olvera <quic_molvera@quicinc.com>
+
 
