@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-18558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 297409E40F0
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 18:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9438E9E413E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 18:21:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1653161822
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 17:14:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FD3E167EDE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 17:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A01212B10;
-	Wed,  4 Dec 2024 17:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01848216387;
+	Wed,  4 Dec 2024 17:02:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VKttlDLX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvy++nzZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B7D212B09;
-	Wed,  4 Dec 2024 17:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C750F21C9EF;
+	Wed,  4 Dec 2024 17:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331639; cv=none; b=LBKVHvZrdZhfb+ysH4fJYlc4v1cMW7xa6H/Sc7noQk7urMlv3Hb8bmWx0FDPycLdWswmKfu2oEFPxOHyJCqZGDr5nTA6JlbchFMZ+QN5mbuXvh1gPrnpHLZpfh6pWufOMu8GumA1DjQ5JF+eFP628ZeZSdTebceUI92H2h1rywY=
+	t=1733331726; cv=none; b=QMSy/gKicoFSz/HR2e7ub6BPVWVIXbh/UQAEFuY4wpZHd/xRdfMzV+wSpVZlaYmKS8lgI//x1P41qViMFH18f2IgcuLStLVaCPdYq8fzCRM6f2SR7INDp0rN8fSmFZMzBb7rzeRKBzrLezn67mUAkTpGsqH7oySbGfVUk82VZ6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331639; c=relaxed/simple;
-	bh=mykbys0+YchcE0EdWY+/Z5/c1q2jIeezT1RFg2xckFg=;
+	s=arc-20240116; t=1733331726; c=relaxed/simple;
+	bh=kHYfCnF2W10W2c/6rhFhdRAr3NERXQwySnI8TYIPp24=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uN0fW0fX8pmFB5iVrGCouBr8X4938kJx7dWM8m6yD04ece866SbcmVnNq7mClxQVv5FhMCt1j6y/9AE7z9uiAyyUQT2w13BkVRi03wio8TYfODdA7av95tr3ys/9C/HV+LKW7eCl6H2xugMlqNVp3yUzO8d84DLqJ70IzX3F6r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VKttlDLX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D923C4CEDF;
-	Wed,  4 Dec 2024 17:00:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=UgfwOx2jzjm2kCdzpTU55S6hUZjSU3xPRm4uMQpC9xEc9mT1B2z3dLZrUGOEIfM9wQQ08H4JMdP7npLjhEMBOT9LBL2WUURhw7xN5Q/Sehg8v4/GtAmlx4wmFthFXu7ZpVknRBSH8DG9s7qvzr1Hbi44oT0s/G+A01OSvOWupuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvy++nzZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6A1C4CECD;
+	Wed,  4 Dec 2024 17:02:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331639;
-	bh=mykbys0+YchcE0EdWY+/Z5/c1q2jIeezT1RFg2xckFg=;
+	s=k20201202; t=1733331726;
+	bh=kHYfCnF2W10W2c/6rhFhdRAr3NERXQwySnI8TYIPp24=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VKttlDLXHdnK1ldpoBwZ2WjDOByGnjua24MiXFaH3Ei5racTw8x4OXfHmnwumi+qP
-	 XwvAn1kf1toM8y4eKo4rGk/IRF2qjRi4qRvduuDne89hunHn1Q90JJSoR9dX+5QLMw
-	 /5AI8iZaIFiXw/3L4ai8gNTC224lV6BI3k1ftO7pCsWHdApKW7uu2NxCwOa2+zmFZ9
-	 umqGDo+1HIoiX8Lvnw4/75RlrVFZxSGQxs3Oa0yZieJCDS6e1dlBoxLVB4OSONl972
-	 nJ9CmTwQdvzGn9wJ6JzQGr6KbXjLeQ9esGGa6ynK4H0xbyOo4I0WmatG+/UEEHauSr
-	 1qzhLA0yA+qhQ==
+	b=lvy++nzZ1xg3O2v6Q0urBopf4aD2JTmsSey4tuOdFgeSVUs/lATWdmNnnyLJ4WMoN
+	 6rycgG4tpZijPyuKwZqycSsN1blKirSZgjig/4NcYG8Jczh6zOq9wQvE1vfsMHakNm
+	 ikf8T3NZToTTQige+/E4WD8A1jqGLoGpgHZhj/so3AVcsf0CGVk1/AzfSt2TUENA8J
+	 5K+gyYO2MFpN0O8m9zdUaLCo4EWqwu6QxE3AHS7qDU/MmOzpxjDiD56uoOD84pGyg4
+	 R64q8Mo2YpGcJxxpSefpPm95X39mch2qUXlmRBhKnEYpRSsbGI7q4XmDq4tNZEnQhi
+	 tVmLe6AuG/GJw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,14 +51,14 @@ Cc: =?UTF-8?q?Barnab=C3=A1s=20Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org
 	amitk@kernel.org,
 	thara.gopinath@gmail.com,
 	rafael@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.11 28/33] thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
-Date: Wed,  4 Dec 2024 10:47:41 -0500
-Message-ID: <20241204154817.2212455-28-sashal@kernel.org>
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 21/24] thermal/drivers/qcom/tsens-v1: Add support for MSM8937 tsens
+Date: Wed,  4 Dec 2024 10:49:41 -0500
+Message-ID: <20241204155003.2213733-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204154817.2212455-1-sashal@kernel.org>
-References: <20241204154817.2212455-1-sashal@kernel.org>
+In-Reply-To: <20241204155003.2213733-1-sashal@kernel.org>
+References: <20241204155003.2213733-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.10
+X-stable-base: Linux 6.6.63
 Content-Transfer-Encoding: 8bit
 
 From: Barnabás Czémán <barnabas.czeman@mainlining.org>
@@ -137,10 +137,10 @@ index dc1c4ae2d8b01..1a7874676f68e 100644
  	.fields		= tsens_v1_regfields,
  };
 diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 0b4421bf47854..d2db804692f01 100644
+index ee22672471e81..0aff3318aa19a 100644
 --- a/drivers/thermal/qcom/tsens.c
 +++ b/drivers/thermal/qcom/tsens.c
-@@ -1119,6 +1119,9 @@ static const struct of_device_id tsens_table[] = {
+@@ -1118,6 +1118,9 @@ static const struct of_device_id tsens_table[] = {
  	}, {
  		.compatible = "qcom,msm8916-tsens",
  		.data = &data_8916,
@@ -151,10 +151,10 @@ index 0b4421bf47854..d2db804692f01 100644
  		.compatible = "qcom,msm8939-tsens",
  		.data = &data_8939,
 diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index cab39de045b10..7b36a0318fa6a 100644
+index 2805de1c68279..b94a84c94e29a 100644
 --- a/drivers/thermal/qcom/tsens.h
 +++ b/drivers/thermal/qcom/tsens.h
-@@ -647,7 +647,7 @@ extern struct tsens_plat_data data_8960;
+@@ -642,7 +642,7 @@ extern struct tsens_plat_data data_8960;
  extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8974, data_9607;
  
  /* TSENS v1 targets */
