@@ -1,156 +1,189 @@
-Return-Path: <linux-pm+bounces-18554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18555-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 107D09E3DBB
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 16:06:58 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E646165333
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 15:06:49 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396FA20ADDA;
-	Wed,  4 Dec 2024 15:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nYZ/tOLM"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9774E9E3DED
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 16:13:56 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238541B21BA;
-	Wed,  4 Dec 2024 15:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 538562812AC
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 15:13:55 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECA920B804;
+	Wed,  4 Dec 2024 15:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4IQ0q8H"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24E420B1F7;
+	Wed,  4 Dec 2024 15:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733324809; cv=none; b=a8gLtV2KRSHysxCUcqeGn0eyBkJx2XoH++JyycLQhdEeXjTS5e5hTPWbj8t96pkau3IKC/pZDJCB+k4VR6UpQlgEtHQLZAScLAbv/IIFiHdxDfYVlATxhrb4GxVDqg72wXCGPZ5A2egtewrlSroERl5oGlb1/LshDloJ4vRZs6o=
+	t=1733325231; cv=none; b=p9y5tITPShmOQS6qbc64fSVpX9eJ0uo2Y66pQQmJTWKEAVLO9oyYNkbS9Twe3DCsS901n5XH+POq5oFbB5NbYhN7TF/8X3cgDblFPJnknaS3K3hPKfd95CN/0MiUBYFwbTRUEM3ii3By0NwwlHYpmk/r+klRmjEfroNMcgIf7wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733324809; c=relaxed/simple;
-	bh=HI19w34WI6cqPU47FjTARhORcgDBSvzCxSsLVKHwJwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FQys/plU2iAAtzqKmDUrwBsHpqF6lMzndueL78KaqitcsYYM1uUVolvEGhn9r3KE9JQGjErR3mpDrTo95CqzoIiY0xNZPX3Kls8KlEb29cLfPJ0W/wbbIsgvHsqO/h6wBcl0ss2zW7dnppwik/dn7vutKe9+EjP4vDsqM7F9T/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nYZ/tOLM; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733324807; x=1764860807;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HI19w34WI6cqPU47FjTARhORcgDBSvzCxSsLVKHwJwg=;
-  b=nYZ/tOLMac++tX9iPyUHX/O1ddoKyfRPU26l6fYveU+zB2/AJ/zVt/aJ
-   t+EY9RA/y17CYZY/1juIxyGGLVDvHFxfvkwyXGzh3EIheSAvgRXJe6pRi
-   J/EMYVAFy11S19KW+Rg0dVL1xGj9OeSR+Mxbwowam+RgEh4zmyuCRC+19
-   TF+Y7Hoo80hqJ66cl/vO896IbQ6rrXZkdhkC7dAiKkF0OhvimyoAJLytY
-   obDbYoIRbO1yQdiN5AWWrWQ6m37t4mm1AyOCsQjjZpcGi7jG6PGmza9sZ
-   kEolOAwEuNvNzx7hTy0BIvhn4nGgKbgdJvquTpFz4jsBfkjfxSuqqNSxR
-   w==;
-X-CSE-ConnectionGUID: s5LYzpsCQ2qgOd4hkkSnRA==
-X-CSE-MsgGUID: hS+RVtmBTgK4C6CDcmuyVw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="37256142"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="37256142"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 07:06:46 -0800
-X-CSE-ConnectionGUID: zIWZrCt/SZSobVFE+XV57g==
-X-CSE-MsgGUID: 8A+/0/u/Sz6SzFvqDI6B0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="93471508"
-Received: from dgramcko-desk.amr.corp.intel.com (HELO [10.124.223.226]) ([10.124.223.226])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 07:05:14 -0800
-Message-ID: <e45dbc7c-5506-4343-b6b1-ba610e5088af@intel.com>
-Date: Wed, 4 Dec 2024 07:05:14 -0800
+	s=arc-20240116; t=1733325231; c=relaxed/simple;
+	bh=EEf76SgX/3puazt8ufia4uZKilO394GYwACgLeP/Df8=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ns/YOO+lGL3fL4XOAMKOJuHGe7pd5jirrZxMG2LbbRkE/qhPNzoDXeI5qbKEFBEGcuSW/49//dxtAKw6rkV9igHUur0hwN1Ul7Ao7mO5JIntvEtnqpfwD3PNT8by1v2ixeiJEkLq0M6X1D404j1fyYnzoBsVBdj7fD1Smsi9u2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4IQ0q8H; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434a10588f3so45357535e9.1;
+        Wed, 04 Dec 2024 07:13:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733325228; x=1733930028; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=K67aLAUzSfbUuMMVxrZ7xG6js3aZNsZytWIuEf4fsUo=;
+        b=C4IQ0q8HeQT/BKuAjnV4MA+fh/7s4fm00qxOCzdV1zteEXEXuQk+Je0+BnVY25pA7a
+         x7eexYzBzXdYUZJn5av4cLh0sSFbsumeQ8wxr+cmclBOeQWpFM17TVIrbfqI75uCGXrm
+         w/CuxHljucCS0YzoJI9WBVMcmzqKPJatrtXS6+hSbJApORWk4IR3v27iMzvjCmqU7vIn
+         t2a7aI8W0XpZ0rZ4Swc1ejMIFLyoxLC+OtR3LS5wW/mAiea3FYML9L5M1lAgb0as49g2
+         LTdk9Kd13eUBoNlnaMsuIcecWf5TX1uLnfSXWnM2wqQpJTAy2N3N3mmbGZBeROm4C/Vp
+         7ANw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733325228; x=1733930028;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K67aLAUzSfbUuMMVxrZ7xG6js3aZNsZytWIuEf4fsUo=;
+        b=o59UXcUL8okyEK5wYD2tb1RUgqi3Z8hFGT2iEx8AwdWiueAS2Zn2GEhxg2X+hPu8h/
+         wpwL15CJlTbb2hpJ9e9yCc+oCNXChk3crO2DL2vAbwe0zkPkopZAHHYZDXNhpYTlf0oL
+         zGQHf1XDWDf/vh71YgwPL2WrROwr+sFm/YiL2S5IG0o9m5X/l04WK93CF0M0uH72SgRC
+         RLZ/eB5jK1D0jfKck/paL8P0CAVAx2MHp3Td8j9r1o/nuPKTvq2xEApLIbpYI9DkND7E
+         qaQCLreDD9rCNw8qvYyE/KWWJpi+/4vSaSGihSIbF++5lcu5SWYPJYxyPNzTMRcqG1TQ
+         XxBg==
+X-Forwarded-Encrypted: i=1; AJvYcCWqRYh9ZljQpb5Tq03LxpQdGQnGoI2WviFJ6GkrOk+l/W54fQSVOSqIRIyy381zfQ9WFE9kqKoW2iIx@vger.kernel.org, AJvYcCXTpqQ0+lDveLEv3kDakRah/W3lUVNEa5w8LONQ5HxzfzQXbmiUfkr0FljJJWrxpVdsw+8y6mYO4vE=@vger.kernel.org, AJvYcCXa1tt8IEWP6b2XURceeL9ue9SuvBZXIn6lJfq4KCtPaARX6wJpb2a8ZyBAA+ya74xbpxFjShJbTHIqz154@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqUxnHJ2sW5W2wKz2ZvQ0ogBwvvvVKP9nBgi0AHGe3WGDP72aF
+	ubn8BsO1ZxN3gIl1eX0gy6Ge+yUQPwPVtZ6bRU1OjHS6YjyH9pwlyISLLw==
+X-Gm-Gg: ASbGncs0JPkVesa7ECWE2rSn7mg/BjKS3EfJpR0Xz45hocSjo+uDWf+xxwd0ax3C04v
+	SxITgTsy0d7zMhVmo4KAZ6qxaJhvAe9DShP/q0a9+/8b3xsxRR4+icLLhQWHOzhZfY2xHrmAwQf
+	mpOC85l5vyxq4G1v2G/YHfTE0NRsG+nWp/BVeuNYSbH3w9zAZ9uCxVEv+ljeL/L75cZB5bMTkzN
+	1RUu7XBvqBmZ+WULNwTB6KYPsF9DFqrVYqxPTUdtCP3OA7TAWfvHWiFR3+ov9kASX8RwUL72w3M
+	Iq53qw==
+X-Google-Smtp-Source: AGHT+IGZWimo8j6jMFRask/atuO/zxTgFDYDzsdxIc9v2gqFWxahTgIfn6oEZjIvWK770r9mpIOd6Q==
+X-Received: by 2002:a05:600c:1c1d:b0:434:932b:a44c with SMTP id 5b1f17b1804b1-434d3fe339emr38546645e9.27.1733325227755;
+        Wed, 04 Dec 2024 07:13:47 -0800 (PST)
+Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434d5288e02sm27431415e9.20.2024.12.04.07.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 07:13:47 -0800 (PST)
+Message-ID: <675071ab.7b0a0220.183cea.8610@mx.google.com>
+X-Google-Original-Message-ID: <Z1Bxp0xQYLa6G0a6@Ansuel-XPS.>
+Date: Wed, 4 Dec 2024 16:13:43 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+References: <20241203163158.580-2-ansuelsmth@gmail.com>
+ <202412041929.8aCqrGnO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 0/4] SRF: Fix offline CPU preventing pc6 entry
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael.j.wysocki@intel.com, peterz@infradead.org,
- dave.hansen@linux.intel.com, gautham.shenoy@amd.com, tglx@linutronix.de,
- len.brown@intel.com, artem.bityutskiy@linux.intel.com
-References: <20241204140828.11699-1-patryk.wlazlyn@linux.intel.com>
-Content-Language: en-US
-From: Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20241204140828.11699-1-patryk.wlazlyn@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202412041929.8aCqrGnO-lkp@intel.com>
 
-On 12/4/24 06:08, Patryk Wlazlyn wrote:
-> Changes since v7:
->   * Doing the s/mwait_play_dead/mwait_play_dead_cpuid_hint/
->           and s/mwait_play_dead_with_hint/mwait_play_dead/
+On Wed, Dec 04, 2024 at 07:22:41PM +0800, kernel test robot wrote:
+> Hi Christian,
 > 
->     as suggested by Gautham. It was a left-over from previous patches.
->     The function(s) got renamed in the patches and I forgot to update
->     the changelog accordingly for patch 4/4.
+> kernel test robot noticed the following build errors:
 > 
-> Patryk Wlazlyn (4):
->   x86/smp: Allow calling mwait_play_dead with an arbitrary hint
->   ACPI: processor_idle: Add FFH state handling
->   intel_idle: Provide the default enter_dead() handler
->   x86/smp native_play_dead: Prefer cpuidle_play_dead() over
->     mwait_play_dead()
+> [auto build test ERROR on rafael-pm/linux-next]
+> [also build test ERROR on rafael-pm/bleeding-edge robh/for-next linus/master v6.13-rc1 next-20241203]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
->  arch/x86/include/asm/smp.h    |  3 +++
->  arch/x86/kernel/acpi/cstate.c | 10 ++++++++
->  arch/x86/kernel/smpboot.c     | 46 ++++-------------------------------
->  drivers/acpi/processor_idle.c |  2 ++
->  drivers/idle/intel_idle.c     | 18 ++++++++++++--
->  include/acpi/processor.h      |  5 ++++
->  6 files changed, 41 insertions(+), 43 deletions(-)
+> url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/cpufreq-airoha-Add-EN7581-CPUFreq-SMCCC-driver/20241204-113105
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+> patch link:    https://lore.kernel.org/r/20241203163158.580-2-ansuelsmth%40gmail.com
+> patch subject: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+> config: arm-randconfig-003 (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412041929.8aCqrGnO-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/cpufreq/airoha-cpufreq.c:41:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
+>       41 |         const struct arm_smccc_1_2_regs args = {
+>          |                                         ^
+>    drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       41 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+> >> drivers/cpufreq/airoha-cpufreq.c:45:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
+>       45 |         struct arm_smccc_1_2_regs res;
+>          |                                   ^
+>    drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       41 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+> >> drivers/cpufreq/airoha-cpufreq.c:47:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>       47 |         arm_smccc_1_2_smc(&args, &res);
+>          |         ^
+>    drivers/cpufreq/airoha-cpufreq.c:81:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
+>       81 |         const struct arm_smccc_1_2_regs args = {
+>          |                                         ^
+>    drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       81 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+>    drivers/cpufreq/airoha-cpufreq.c:86:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
+>       86 |         struct arm_smccc_1_2_regs res;
+>          |                                   ^
+>    drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       81 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+>    drivers/cpufreq/airoha-cpufreq.c:88:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>       88 |         arm_smccc_1_2_smc(&args, &res);
+>          |         ^
+>    6 errors generated.
+> 
+> 
+> vim +41 drivers/cpufreq/airoha-cpufreq.c
+> 
+>     37	
+>     38	static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
+>     39						    unsigned long parent_rate)
+>     40	{
+>   > 41		const struct arm_smccc_1_2_regs args = {
+>     42			.a0 = AIROHA_SIP_AVS_HANDLE,
+>     43			.a1 = AIROHA_AVS_OP_GET_FREQ,
+>     44		};
+>   > 45		struct arm_smccc_1_2_regs res;
+>     46	
+>   > 47		arm_smccc_1_2_smc(&args, &res);
+>     48	
+>     49		/* SMCCC returns freq in MHz */
+>     50		return (int)(res.a0 * 1000 * 1000);
+>     51	}
+>     52	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-Hey Patryk,
+False positive or better say my error in the kconfig depends logic
 
-I know this series is up to v8 and we all know what it's about. But it
-would be much appreciated in the future if you could send along a cover
-letter. It's important and really does help reviewers dive into a series
-more efficiently.
+This driver REQUIRE ARM64 bit for smccc and the target SoC is 64bit
+only. The randconfig catch a situation with ARCH_AIROHA and 32bit.
+
+-- 
+	Ansuel
 
