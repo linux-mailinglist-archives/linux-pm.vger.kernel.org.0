@@ -1,280 +1,158 @@
-Return-Path: <linux-pm+bounces-18512-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18513-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD22C9E32FF
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 06:11:46 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 415089E3315
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 06:32:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A91E6166432
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 05:11:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF3D5B23A02
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 05:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E0417B50E;
-	Wed,  4 Dec 2024 05:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706B317AE1D;
+	Wed,  4 Dec 2024 05:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bTO8gjm6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gl4Xng5u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8246F1591E3
-	for <linux-pm@vger.kernel.org>; Wed,  4 Dec 2024 05:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EEA170A23
+	for <linux-pm@vger.kernel.org>; Wed,  4 Dec 2024 05:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733289103; cv=none; b=VTA/bP9925ZRxdpAnCgHfqo5JrZAHZK1Oos0M3ONhORLwuHcudslMqFMrxnwZ7Kat3oVt/IVVig97OpLhKfxvNUUVgyAEu7ahVnz8QEwb58m4GEh0wZQ/5XYQRXNs7NqXB/qjv3ObLpXFbmIdy3j6X8Eqsh25PbgzCRLdY/6UeA=
+	t=1733290336; cv=none; b=UcxTFLhP9p3NaUuQMEDWKJjA6qVC0txef35dA9XkF27YB+dPd9OcQ2+Y34kVZS69JtpUzqHoypIo+X0TsZmD0JztzfFBVjhpYeiWtBDsAtbxs1aM53v3mr2lS01IhhWWii04gJ3qFOQX/e00qvfUXHBb3ovyBcB/gOJlGaIN9/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733289103; c=relaxed/simple;
-	bh=xffhHSYwhEi8ZBeG9FEdhfkMsJOeKckYEI5eS9txTmo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EcLg2Ny83R4tUokUikosEsoV505DnULRSONAaP+yBgJSNg+5Gdfm2LVZas09XaWOc4YHI+5AKF0LK7Byt3bcTvy64t4Tvr+KKEYSfad8CbhgVlf2WRnZNFW4N/Yeeb/b3zgeFyY3+9t6ZSGX/P5yIcWbQAdW2vpWzDOgYfiTvvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bTO8gjm6; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6d88282980bso52117316d6.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 21:11:41 -0800 (PST)
+	s=arc-20240116; t=1733290336; c=relaxed/simple;
+	bh=7yzDt2THE5UiqFlbGqXqjqL/3debzqNeA00lnjfD6RQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TgDrTu5m4GbGcN/6PZcqKIvSJ4HPG8eg2ENuGnUHqP2c5tGQVR43/xipZZK5CyTf3ZhpqElCFefORYGhaVcdEJoL/byt9tBITJGoOWTKLD6Sfan80SKOEP7iemCkGpTXxmSRLYHPADU/jGOg0EAhsvh77ixiYzbyvoO1iEVjMEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gl4Xng5u; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-215e194b65aso750505ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2024 21:32:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733289100; x=1733893900; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q0PEPY4Svd+G/rAUjBuAPsk0Dzw54MiAt9xCf3ocSeQ=;
-        b=bTO8gjm6O2NkGPizDO4McuLGghL2oJh4HJhEaVFvG62NDXYpFpmN2SFYHB1WTnDNLq
-         wx70+oBjgeb4/tpUz5EDRmVz9Kw91UdS0oEvLMM+WNfZEilu9YkiEWstQ3bfOnzsSV8z
-         mErGvknE7yqXLa/3iP/7OLBLxxiW1XHi/RfWe2QdcDCfzoe3fQLQhsfwxRm6/r/NRQum
-         BeS+IZ82JBf+JWZ1Si9XNqm/a0TUJj8fUfgW/aghlZ1f1QDuci8qvgoMNCoPjNwZlaov
-         lRgJwD0FMFlvj9NT6WTfrsxMnPxjXw5MGyOoauqA+hB3QR35O4dtIb4+Hq0YMw+HwKjj
-         0/jA==
+        d=linaro.org; s=google; t=1733290334; x=1733895134; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+xH+XGfz/MFflVGjWhhbYcbFyLOKyHtqNKF1p6JTm9o=;
+        b=gl4Xng5u+KyebJym4yGuyIFGO51WJHaDqkq1AhrFE5E44nz4QSBmfRZEhh4I2NVxqW
+         iMn/uuoaqfOW2X27o+JeZn7kTy+QJZ98uDtv1Yi9yqvOBtApxC6EwWE0u8C3zand7IyT
+         9A+UhUsG7b4NucWZ4bFe+md1nkN7aONV5imKtAvVFsB0dMjOHvWWLNxHs5AogkOXhDot
+         m0ZP0qSAimjMYUJDCtvKic1ctJdeMJ505sfwCamgBRvFKi/cI7j5KrdBB0e+/Uv+lYCI
+         V4UjpnSJxUU4pQsjRtmzjbOfFCtqNtmP25UMnKhQeMaWhXFQM/59lNdHD7HU0vSr+dDL
+         HiWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733289100; x=1733893900;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q0PEPY4Svd+G/rAUjBuAPsk0Dzw54MiAt9xCf3ocSeQ=;
-        b=Ve8U1aD0eTwPgu4AiYhPiq569sicc/TdX/7mUckCQTC7i91VJcW8cOrbHokkLaGiRs
-         wGXHTylccSUhROU8cUeBYOfJ/OYowFvdtQTUJUdqbtM1wYMFpx33/0wOS+vULzUSgBfu
-         ANvE23zKnI0OGB7EYiINOPrQT44xbSgS8ouPRc4CsCdlEVrEqHHNo18N3fiyizeE/89v
-         xFNwSglFBFDbwTbURek6RX+IolWp/7FmmV1h6Rv1O1jhBJ31rLQxrv2EeZThsedYGlg3
-         TRI1GEmx9BCxVSSMiEYHt5Szp2j6GaH5zpvz1+oTGjG245bqvmBHqPe+53O5xPLkUZlm
-         MimQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVucnCylk6XQ8RBa+e681/cpaY5k4bW0EbhuRmY8ftvVNzrLM70UiwyVHibp5QSsM20PGkXMT7IAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNzZf7mRvRYrEsxVk1irHkhxIAjvZdGgfWkLU+hSLP3ezKVUGh
-	+cj0nr/K1sPqQcYtLkHc5Ki42+gmguXKF/MO5Ot4J1gOZ2nupwfI8zlh0uLHtHrhI3m4MyL/ulw
-	mqut5a9MOeM2pT2tZC8EN+xswZA1b2omimQgo
-X-Gm-Gg: ASbGncsxxhhqNVpEfysHIwk995W90mb7x22qamkEmhSuyhy0wsoV9PUkcd9VF+Dee4b
-	0gCgzSv1hYKFBHcqHb+YlF5Dj+8o8QrTs7w==
-X-Google-Smtp-Source: AGHT+IH/Vmo/+QbxWem6WulFZ1R02aWj+agCguGICQRZ1nvhXgATs70hrnLLhl9CSVs2QCJw5CIz7HwFc8sOX/H1g+M=
-X-Received: by 2002:ad4:5bce:0:b0:6d8:a70d:5e41 with SMTP id
- 6a1803df08f44-6d8b73fd386mr66881906d6.33.1733289100166; Tue, 03 Dec 2024
- 21:11:40 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733290334; x=1733895134;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+xH+XGfz/MFflVGjWhhbYcbFyLOKyHtqNKF1p6JTm9o=;
+        b=u3lGAPLHH5KpW7+uKg/EtEvL28gEVL/+UJFgc70c+9pKjI30+XC27xnVJqrdhA8z6B
+         E1+ZBROoltzgonzkOfOKOOaACHU7avy0AHg1k4AsW037//yMoeGCHO8MMq6zcf6N/1q9
+         1SSfx0MklpwJpUYjlnpi3WluNkozfx9M+8TIM/9I26NO4sLa/991BQPGInUm4OF8Semt
+         llKic8dlmmm07jaej7MVtzmOeofNJO6mSs8fzNu4mPSDFQpCzde8o90rgHl+nPgxGhlv
+         DdfyqMeA1XJrs8UOtJsL/hspq2KE1WMArO72lFtPFo5mi5zF6AfbEALNSv5uBQ1DAuJu
+         D8eg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+qE6nU6gzrAHgW1pvSdOXhlYCBA0rxCmhbnKuGxNO90AHvIPv86qKe8b3uyBhCvJkNQTGymD9tg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMfRkWbSJov+1Gy8hNM189WpBRcFXSjWAJxQHmLHc7sE6C3tl5
+	RDp7eDDktUwg7hlm7nJvQp4jRqjd7QQDDSoRom+9i5c4oMpbnqcPIW/Fv4MTNOs=
+X-Gm-Gg: ASbGncvnRIbGLg1BzW98lK7FSqkgEOdJh9FvzNndYzCfcmK9iX7I1Vp9LQ9xM4Dltnq
+	f23geyQ3fJjQOXW+MezTY0wkUpo2b71gSvaaIaMJnZG73+xOTaKWqtB+ltuGRpzyv2/jitnaBDh
+	0gy6/LZGlwVg3T7mT4dopahYh0+Hy/rr8MYqmJj85p0n4vd+U+61ztgeim5WFTPOVFWaG+6bZFp
+	xyCusX7QL13ab8Hh7ITsKg0vrOVlvcfVZkCrW3eKUNTkNp1WDDB
+X-Google-Smtp-Source: AGHT+IHI2jzyqH0buZt4jEgwjAnflBCcsEvaoj9C3brK3XgP4S7w4dRM1Ni3AlMJnPowOpakPzhdzg==
+X-Received: by 2002:a17:902:da81:b0:215:5d43:6f0e with SMTP id d9443c01a7336-215bd24af1cmr62921975ad.41.1733290334226;
+        Tue, 03 Dec 2024 21:32:14 -0800 (PST)
+Received: from localhost ([122.172.86.146])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215b08965b4sm28711185ad.180.2024.12.03.21.32.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Dec 2024 21:32:13 -0800 (PST)
+Date: Wed, 4 Dec 2024 11:02:11 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Subject: Re: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+Message-ID: <20241204053211.6gdogcpi4g3eavw5@vireshk-i7>
+References: <20241203163158.580-1-ansuelsmth@gmail.com>
+ <20241203163158.580-2-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121185315.3416855-1-mizhang@google.com> <Z0-R-_GPWu-iVAYM@google.com>
- <CALMp9eTCe1-ZA47kcktTQ4WZ=GUbg8x3HpBd0Rf9Yx_pDFkkNg@mail.gmail.com> <Z0-3bc1reu1slCtL@google.com>
-In-Reply-To: <Z0-3bc1reu1slCtL@google.com>
-From: Mingwei Zhang <mizhang@google.com>
-Date: Tue, 3 Dec 2024 21:11:03 -0800
-Message-ID: <CAL715W+Av8FLod00zxkniwn1q3ZnZDHUatN7R8iKBpf1+K5h2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/22] KVM: x86: Virtualize IA32_APERF and IA32_MPERF MSRs
-To: Sean Christopherson <seanjc@google.com>
-Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Perry Yuan <perry.yuan@amd.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241203163158.580-2-ansuelsmth@gmail.com>
 
-Sorry for the duplicate message...
+On 03-12-24, 17:31, Christian Marangi wrote:
+> diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
+> +struct airoha_cpufreq_priv {
+> +	struct clk_hw hw;
+> +	struct generic_pm_domain pd;
+> +
+> +	int opp_token;
+> +	struct dev_pm_domain_list *pd_list;
+> +	struct platform_device *cpufreq_dt;
+> +};
+> +
+> +static long airoha_cpufreq_clk_round(struct clk_hw *hw, unsigned long rate,
+> +				     unsigned long *parent_rate)
+> +{
+> +	return rate;
+> +}
+> +
+> +static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
+> +					    unsigned long parent_rate)
+> +{
+> +	const struct arm_smccc_1_2_regs args = {
+> +		.a0 = AIROHA_SIP_AVS_HANDLE,
+> +		.a1 = AIROHA_AVS_OP_GET_FREQ,
+> +	};
+> +	struct arm_smccc_1_2_regs res;
+> +
+> +	arm_smccc_1_2_smc(&args, &res);
+> +
+> +	/* SMCCC returns freq in MHz */
+> +	return (int)(res.a0 * 1000 * 1000);
 
+Why casting to "int" when we can return ulong ?
 
-On Tue, Dec 3, 2024 at 5:59=E2=80=AFPM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Tue, Dec 03, 2024, Jim Mattson wrote:
-> > On Tue, Dec 3, 2024 at 3:19=E2=80=AFPM Sean Christopherson <seanjc@goog=
-le.com> wrote:
-> > >
-> > > On Thu, Nov 21, 2024, Mingwei Zhang wrote:
-> > > > Linux guests read IA32_APERF and IA32_MPERF on every scheduler tick
-> > > > (250 Hz by default) to measure their effective CPU frequency. To av=
-oid
-> > > > the overhead of intercepting these frequent MSR reads, allow the gu=
-est
-> > > > to read them directly by loading guest values into the hardware MSR=
-s.
-> > > >
-> > > > These MSRs are continuously running counters whose values must be
-> > > > carefully tracked during all vCPU state transitions:
-> > > > - Guest IA32_APERF advances only during guest execution
-> > >
-> > > That's not what this series does though.  Guest APERF advances while =
-the vCPU is
-> > > loaded by KVM_RUN, which is *very* different than letting APERF run f=
-reely only
-> > > while the vCPU is actively executing in the guest.
-> > >
-> > > E.g. a vCPU that is memory oversubscribed via zswap will account a si=
-gnificant
-> > > amount of CPU time in APERF when faulting in swapped memory, whereas =
-traditional
-> > > file-backed swap will not due to the task being scheduled out while w=
-aiting on I/O.
-> >
-> > Are you saying that APERF should stop completely outside of VMX
-> > non-root operation / guest mode?
-> > While that is possible, the overhead would be significantly
-> > higher...probably high enough to make it impractical.
->
-> No, I'm simply pointing out that the cover letter is misleading/inaccurat=
-e.
->
-> > > In general, the "why" of this series is missing.  What are the use ca=
-ses you are
-> > > targeting?  What are the exact semantics you want to define?  *Why* d=
-id are you
-> > > proposed those exact semantics?
-> >
-> > I get the impression that the questions above are largely rhetorical, a=
-nd
->
-> Nope, not rhetorical, I genuinely want to know.  I can't tell if ya'll th=
-ought
-> about the side effects of things like swap and emulated I/O, and if you d=
-id, what
-> made you come to the conclusion that the "best" boundary is on sched_out(=
-) and
-> return to userspace.
+> +}
+> +
+> +/* Airoha CPU clk SMCC is always enabled */
+> +static int airoha_cpufreq_clk_is_enabled(struct clk_hw *hw)
+> +{
+> +	return true;
+> +}
+> +
+> +static const struct clk_ops airoha_cpufreq_clk_ops = {
+> +	.recalc_rate = airoha_cpufreq_clk_get,
+> +	.is_enabled = airoha_cpufreq_clk_is_enabled,
+> +	.round_rate = airoha_cpufreq_clk_round,
+> +};
+> +
+> +static const char * const airoha_cpufreq_clk_names[] = { "cpu", NULL };
+> +
+> +/* NOP function to disable OPP from setting clock */
+> +static int airoha_cpufreq_config_clks_nop(struct device *dev,
+> +					  struct opp_table *opp_table,
+> +					  struct dev_pm_opp *opp,
+> +					  void *data, bool scaling_down)
+> +{
+> +	return 0;
+> +}
 
-Even for the slice of hardware case, KVM still needs to maintain the
-guest aperfmperf context and do the context switch. Even if vcpu is
-pinned, the host system design always has corner cases. For instance,
-the host may want to move a bunch of vCPUs from one chunk to another,
-say from 1 CCX to another CCX in AMD. Or maybe in some cases,
-balancing the memory usage by moving VMs from one (v)NUMA to another.
-Those should be corner cases and thus rare, but could happen in
-reality.
+I wonder whats better here. Provide this helper or provide a dummy clk-set-rate
+at the provider itself ?
 
-Even for the slice of hardware case, KVM still needs to maintain the
-guest aperfmperf context and do the context switch. Even if vcpu is
-pinned, the host system design always has corner cases. For instance,
-the host may want to move a bunch of vCPUs from one chunk to another,
-say from 1 CCX to another CCX in AMD. Or maybe in some cases,
-balancing the memory usage by moving VMs from one (v)NUMA to another.
-Those should be corner cases and thus rare, but could happen in
-reality.
-
->
-> > that you would not be happy with the answers anyway, but if you really =
-are
-> > inviting a version 2, I will gladly expound upon the why.
->
-> No need for a new version at this time, just give me the details.
->
-> > > E.g. emulated I/O that is handled in KVM will be accounted to APERF, =
-but I/O that
-> > > requires userspace exits will not.  It's not necessarily wrong for he=
-avy userspace
-> > > I/O to cause observed frequency to drop, but it's not obviously corre=
-ct either.
-> > >
-> > > The use cases matter a lot for APERF/MPERF, because trying to reason =
-about what's
-> > > desirable for an oversubscribed setup requires a lot more work than d=
-efining
-> > > semantics for setups where all vCPUs are hard pinned 1:1 and memory i=
-s more or
-> > > less just partitioned.  Not to mention the complexity for trying to s=
-upport all
-> > > potential use cases is likely quite a bit higher.
-> > >
-> > > And if the use case is specifically for slice-of-hardware, hard pinne=
-d/partitioned
-> > > VMs, does it matter if the host's view of APERF/MPERF is not accurate=
-ly captured
-> > > at all times?  Outside of maybe a few CPUs running bookkeeping tasks,=
- the only
-> > > workloads running on CPUs should be vCPUs.  It's not clear to me that=
- observing
-> > > the guest utilization is outright wrong in that case.
-> >
-> > My understanding is that Google Cloud customers have been asking for th=
-is
-> > feature for all manner of VM families for years, and most of those VM
-> > families are not slice-of-hardware, since we just launched our first su=
-ch
-> > offering a few months ago.
->
-> But do you actually want to expose APERF/MPERF to those VMs?  With my ups=
-tream
-> hat on, what someone's customers are asking for isn't relevant.  What's r=
-elevant
-> is what that someone wants to deliver/enable.
->
-> > > One idea for supporting APERF/MPERF in KVM would be to add a kernel p=
-aram to
-> > > disable/hide APERF/MPERF from the host, and then let KVM virtualize/p=
-assthrough
-> > > APERF/MPERF if and only if the feature is supported in hardware, but =
-hidden from
-> > > the kernel.  I.e. let the system admin gift APERF/MPERF to KVM.
-> >
-> > Part of our goal has been to enable guest APERF/MPERF without impacting=
- the
-> > use of host APERF/MPERF, since one of the first things our support team=
-s look
-> > at in response to a performance complaint is the effective frequencies =
-of the
-> > CPUs as reported on the host.
->
-> But is looking at the host's view even useful if (a) the only thing runni=
-ng on
-> those CPUs is a single vCPU, and (b) host userspace only sees the effecti=
-ve
-> frequencies when _host_ code is running?  Getting the effective frequency=
- for
-> when the userspace VMM is processing emulated I/O probably isn't going to=
- be all
-> that helpful.
->
-> And gifting APERF/MPERF to VMs doesn't have to mean the host can't read t=
-he MSRs,
-> e.g. via turbostat.  It just means the kernel won't use APERF/MPERF for s=
-cheduling
-> decisions or any other behaviors that rely on an accurate host view.
->
-> > I can explain all of this in excruciating detail, but I'm not really
-> > motivated by your initial response, which honestly seems a bit hostile.
->
-> Probably because this series made me a bit grumpy :-)  As presented, this=
- feels
-> way, way too much like KVM's existing PMU "virtualization".  Mostly works=
- if you
-> stare at it just so, but devoid of details on why X was done instead of Y=
-, and
-> seemingly ignores multiple edge cases.
-
-ah, I can understand your feelings :) In the existing implementation
-of vPMU, the guest counter value is really really hard to fetch
-because part of it is always located in the perf subsystem. But in the
-case of aperfmperf, the guest value is always in one place when code
-is within the KVM loop. We pass through rdmsr to aperfmperf. Writes
-need some adjustment, but it is on the host-level offset, not the
-guest value. The offset we maintain is quite simple math.
-
->
-> I'm not saying you and Mingwei haven't thought about edge cases and desig=
-n
-> tradeoffs, but nothing in the cover letter, changelogs, comments (none), =
-or
-> testcases (also none) communicates those thoughts to others.
->
-> > At least you looked at the code, which is a far warmer reception than I
-> > usually get.
+-- 
+viresh
 
