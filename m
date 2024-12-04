@@ -1,249 +1,118 @@
-Return-Path: <linux-pm+bounces-18586-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18587-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F54B9E4758
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 23:01:14 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E37B9E47B9
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 23:21:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1787C16A7C9
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:01:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45C9928554B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2024 22:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3255D1946B3;
-	Wed,  4 Dec 2024 22:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B975E1F03E2;
+	Wed,  4 Dec 2024 22:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="bp2KUPjQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dmxe6/43"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CB11922CC;
-	Wed,  4 Dec 2024 22:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC3B1C3C03
+	for <linux-pm@vger.kernel.org>; Wed,  4 Dec 2024 22:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733349669; cv=none; b=bFlXtJs0s6AwvdFhXuWCxsS93bLblm0PwPwgV9uT1ltaIzcM0KwTVLRcMSlJeE6Fnh4GosDr4dUxvjJEVVOwmawBIMj9c0L2gkHzVST+to64kSL8fnmitF+mCFNsrBL0j0GYvmbFolH+Do/B5cD24kK7KfY12L2D3y7EwM+8GpU=
+	t=1733350871; cv=none; b=mgut4ujdm9X6EK8oeteVTCb3hEu0zdZ6M9+g+P772jXwXVVks/XOheaKwDhDhKYqhNXHyMZgxZGRRqYhNbLwgoCvseWRW4KiscX6KKxgtYhCwtiXpS0leO8JDtUvvKqOjQsB0l65xSTFtGWode6lZ9VIMICwhlh3Cl3Pb9Sclz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733349669; c=relaxed/simple;
-	bh=657Ovy0HJodj6dPNC/6YLDl4wZSQOJ/3NePzsiUh0lw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cS6bshVhf7qj+zeKtH8//5NvpJRv7VuA+2yPuhkiWrK2gu2fDBdammwpnxm8Rx4gH+VJcqQ2onLk01MHWuk7qZMZ91U11QB/Dx1chZsnv2e2mcN+eBOyZZ5JX6g/7on1IK4I744HXz5La8TkmZqP1kGOZcB0c6yzS1CqYyKD7K8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=bp2KUPjQ; arc=none smtp.client-ip=80.12.242.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id IxPTtIDrcnKDzIxPTtIyVH; Wed, 04 Dec 2024 22:59:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733349594;
-	bh=qmm2EnZh4yKKWPoPQOh3lTfrcYbc7B9Zyo8CHOXMMzI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=bp2KUPjQlR1kM3nSRPoe0C0H/59ejCORfn+6OkR3zVAyB3hI0PSe3/6o3p9XQ0vZS
-	 rNR1h3tpiF4IztjPcltYg7zSQfl6OJwRdW3Z1mMvov+P9yLF+RqZ1Ddy7l6qZqB0dC
-	 pqhVfT9lCzHrrPH0k+H7Vn41HcOj/GLIemh1zYmP/PGcwehnl9Z4n5YMYdEDf96CGj
-	 TZbQrZ+jc/sv+WgMd9bRGVk/T4yFN8EhIP7ixM4oljQj/22te/OsNW0b/wBe6TzCZJ
-	 ISrSME+RlO0aLP9xKNDLWP1bSM1EitsVBX1LS1lpPN7OEzArw2kVTPx536zowLGnR+
-	 RSK8vBYbknHaQ==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 04 Dec 2024 22:59:54 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <87e26131-7793-49fc-a2be-73126bce86ba@wanadoo.fr>
-Date: Wed, 4 Dec 2024 22:59:50 +0100
+	s=arc-20240116; t=1733350871; c=relaxed/simple;
+	bh=1XfksjHiUmLDBwfWEVhZRw6suaxhtKcDRmMSFnlRbIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SL29CWStRDyT25mJ5Q1uGQaDmINdChwdyVBjatJf3vcwci+2fhJP8tKyYbH/07g8U6NHgdDMJMMedCY/59jIqWKVn+TBivNfvNKP0OfIJaDbR95tEUPoJp+T4CsM9iejktIGIWtdK8OE0TEOJ+32yX+IK0pTYXrJhMXWmqKH4+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dmxe6/43; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ffa49f623cso2297061fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2024 14:21:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733350868; x=1733955668; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OH4y0lMP3bH1lveKpeX+aBwZ95mtO7UpbBtdFwlO2l8=;
+        b=dmxe6/43c5nCrEDsG3SuGqFFn2sZ5xxLPNi64hW6yfrIbDLs7Mmwrz+Qocjc1aNx+e
+         zKfk5JCTscvALQor1UUfbV71YrNF0Dm3KTlpQrjtV2iAMX7KwuodapleVx0PDMbiSAmh
+         WEw72zL+NiJ1AXsd5PSCyElTaN2JLQbhEv8TcmwE8GuixEK8c4b+bsYpCI2YB2A0snOx
+         6u7ouy14GrUisYNRT5QGnVMFGdtL2DKWS3G+AFJTWlDDwRXFZcTVb+2PxIq/ID5pxsDx
+         zPSmFXeG0E4XZa4bBZvkSiNRr+bJ/IOhBEPl8c2z/SFxAiDTmiIbBjt1MBq6XbNumeAe
+         fBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733350868; x=1733955668;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OH4y0lMP3bH1lveKpeX+aBwZ95mtO7UpbBtdFwlO2l8=;
+        b=XxCOe1OoaJczs2T0GZSSyQBFgy42RWzHFwBxPYcUtA7Ry9e2QcSbCGBYWFYk2lBmWs
+         cTmzjNMGbSNqWAGnEfwlFI9NLBp601WQ2BR2+OV0x3MFV5vUy919Pd9v3YHRN9oOH8Sn
+         5A6OJjv5efzCHlSebdJmlG4LZ5g2eQtY/4smNJaSrs2YrUml9J8o7VhSKwdo7D23/Gx7
+         uL2uMcdUmOdrd2PpijKp+HMun9MCjSR7+Z8ZL//733kyAUAEa5qkwCzQQ65DTeE+Qt+m
+         bAsUPMbTcGB2GulQC52uJxbqauHSISoyW32EIgGhSvoVFFi8bYF/EGeLfQmz/xk6LqsO
+         4BpA==
+X-Forwarded-Encrypted: i=1; AJvYcCXxLfS1uNGRiT65fnz3CK2pAXZ6YT5vqCu7wkurpRxdWbcav+UABQMUrj4c5cIy1oTBHxtA8sAAkg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHcs43FxuFYvKm7F1iHWYooTcPQ8c/lPmiXdmtd1JZyqm3O1zt
+	Koo90ytk1rBzBEIoEQEvbDf3qRMp1fUw25Zn0oU3g2bIhQh4h5PgQqEoIRW7nYQ=
+X-Gm-Gg: ASbGncuDMATkTPg5hwYESbiP5r2xh7cWc4EzZe07AoULjuCUHG3h/1OOVtjdOcEz5tl
+	AO1UFzB2rvut4Hyz0oiKmh53CWxOUXWS8ByEMBTyOvLN+k96WfeNffopghf2p1WrYhuJ52N2/jH
+	HjLc0iAIg0g5ag0bEZXRsPnokB246JV2POIl45qphz31Dqe5ziTm1hpbZXO3eM4XGPQKH7W7gwS
+	+GsIb8F0Xlpe5nItz09k9Vf4Io2mpIIDCvmwIV67Mdv4eEYr670GwwRCjmLyZxgnost4gZjaWVn
+	7TNnUpQssdYpIWtu9onCn86yeubn7A==
+X-Google-Smtp-Source: AGHT+IFQNKupoOz5B2N+8vVrOXLHYn4xv4Wtyf/8DA/aT70hkUWOnF+im9j6wqbTorBqmEkgbKr9BA==
+X-Received: by 2002:a2e:a904:0:b0:2fa:cac0:2a14 with SMTP id 38308e7fff4ca-30009c30156mr45544571fa.11.1733350868075;
+        Wed, 04 Dec 2024 14:21:08 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30020e20aa9sm23431fa.80.2024.12.04.14.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 14:21:06 -0800 (PST)
+Date: Thu, 5 Dec 2024 00:21:04 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Melody Olvera <quic_molvera@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Trilok Soni <quic_tsoni@quicinc.com>, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Subject: Re: [PATCH v3 2/2] interconnect: qcom: Add interconnect provider
+ driver for SM8750
+Message-ID: <snccv4rebzwolmqknc2jm6nkfxchi3hm2vauxnneefsisc3xwe@slfyaiss2vat>
+References: <20241204-sm8750_master_interconnects-v3-0-3d9aad4200e9@quicinc.com>
+ <20241204-sm8750_master_interconnects-v3-2-3d9aad4200e9@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 7/8] power: supply: max77705: Add charger driver for
- Maxim 77705
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Hans de Goede <hdegoede@redhat.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org
-References: <20241204-starqltechn_integration_upstream-v10-0-7de85e48e562@gmail.com>
- <20241204-starqltechn_integration_upstream-v10-7-7de85e48e562@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20241204-starqltechn_integration_upstream-v10-7-7de85e48e562@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241204-sm8750_master_interconnects-v3-2-3d9aad4200e9@quicinc.com>
 
-Le 04/12/2024 à 21:09, Dzmitry Sankouski a écrit :
-> Add driver for Maxim 77705 switch-mode charger (part of max77705
-> MFD driver) providing power supply class information to userspace.
+On Wed, Dec 04, 2024 at 01:26:06PM -0800, Melody Olvera wrote:
+> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > 
-> The driver is configured through DTS (battery and system related
-> settings).
+> Introduce SM8750 interconnect provider driver using the interconnect
+> framework.
 > 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
+>  drivers/interconnect/qcom/Kconfig  |    9 +
+>  drivers/interconnect/qcom/Makefile |    2 +
+>  drivers/interconnect/qcom/sm8750.c | 1705 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 1716 insertions(+)
+> 
 
-Hi,
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> +static int max77705_check_battery(struct max77705_charger_data *charger, int *val)
-> +{
-> +	unsigned int reg_data;
-> +	unsigned int reg_data2;
-> +	struct regmap *regmap = charger->regmap;
-> +
-> +
-> +	regmap_read(regmap, MAX77705_CHG_REG_INT_OK, &reg_data);
-> +
-> +	dev_dbg(charger->dev, "CHG_INT_OK(0x%x)\n", reg_data);
-> +
-> +	regmap_read(regmap,
-> +			  MAX77705_CHG_REG_DETAILS_00, &reg_data2);
-
-This can fit on a single line, I think.
-
-> +
-> +	dev_dbg(charger->dev, "CHG_DETAILS00(0x%x)\n", reg_data2);
-> +
-> +	if ((reg_data & MAX77705_BATP_OK) || !(reg_data2 & MAX77705_BATP_DTLS))
-> +		*val = true;
-> +	else
-> +		*val = false;
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static int max77705_get_input_current(struct max77705_charger_data *charger,
-> +					int *val)
-> +{
-> +	unsigned int reg_data;
-> +	int get_current = 0;
-> +	struct regmap *regmap = charger->regmap;
-> +
-> +	regmap_read(regmap,
-> +			  MAX77705_CHG_REG_CNFG_09, &reg_data);
-
-It can fit on a single line, I think.
-
-> +
-> +	reg_data &= MAX77705_CHG_CHGIN_LIM_MASK;
-> +
-> +	if (reg_data <= 3)
-> +		get_current = 100;
-> +	else if (reg_data >= MAX77705_CHG_CHGIN_LIM_MASK)
-> +		get_current = MAX77705_CURRENT_CHGIN_MAX;
-> +	else
-> +		get_current = (reg_data + 1) * 25;
-> +
-> +	*val = get_current;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max77705_get_charge_current(struct max77705_charger_data *charger,
-> +					int *val)
-> +{
-> +	unsigned int reg_data;
-> +	struct regmap *regmap = charger->regmap;
-> +
-> +
-
-No need for to empty lines.
-
-> +	regmap_read(regmap, MAX77705_CHG_REG_CNFG_02, &reg_data);
-> +	reg_data &= MAX77705_CHG_CC;
-> +
-> +	*val = reg_data <= 0x2 ? 100 : reg_data * 50;
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static int max77705_charger_probe(struct platform_device *pdev)
-> +{
-> +	struct power_supply_config pscfg = {};
-> +	struct i2c_client *i2c_chg;
-> +	struct max77693_dev *max77705;
-> +	struct max77705_charger_data *chg;
-> +	struct device *dev, *parent;
-> +	struct regmap_irq_chip_data *irq_data;
-> +	int ret;
-> +
-> +	dev = &pdev->dev;
-> +	parent = dev->parent;
-> +	max77705 = dev_get_drvdata(parent);
-> +
-> +	chg = devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
-> +	if (!chg)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, chg);
-> +
-> +	i2c_chg = devm_i2c_new_dummy_device(dev, max77705->i2c->adapter, I2C_ADDR_CHG);
-> +	if (IS_ERR(i2c_chg))
-> +		return PTR_ERR(i2c_chg);
-> +
-> +	chg->regmap = devm_regmap_init_i2c(i2c_chg, &max77705_chg_regmap_config);
-> +	if (IS_ERR(chg->regmap))
-> +		return PTR_ERR(chg->regmap);
-> +
-> +	chg->dev = dev;
-> +
-> +	ret = regmap_update_bits(chg->regmap,
-> +				MAX77705_CHG_REG_INT_MASK,
-> +				MAX77705_CHGIN_IM, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pscfg.of_node = dev->of_node;
-> +	pscfg.drv_data = chg;
-> +
-> +	chg->psy_chg = devm_power_supply_register(dev, &max77705_charger_psy_desc, &pscfg);
-> +	if (IS_ERR(chg->psy_chg))
-> +		return PTR_ERR(chg->psy_chg);
-> +
-> +	max77705_charger_irq_chip.irq_drv_data = chg;
-> +	ret = devm_regmap_add_irq_chip(chg->dev, chg->regmap, max77705->irq,
-> +					IRQF_ONESHOT | IRQF_SHARED, 0,
-> +					&max77705_charger_irq_chip,
-> +					&irq_data);
-> +	if (ret)
-> +		dev_err_probe(dev, ret, "failed to add irq chip\n");
-> +
-> +	chg->wqueue = create_singlethread_workqueue(dev_name(dev));
-> +	if (IS_ERR(chg->wqueue))
-> +		dev_err_probe(dev, PTR_ERR(chg->wqueue), "failed to create workqueue\n");
-
-Is it fine if chg->wqueue is an ERR?
-I think that max77705_chgin_irq() won't like it.
-
-Missing return?
-
-Same for the test above. Is it fine to continue if 
-devm_regmap_add_irq_chip() fails?
-
-> +
-> +	INIT_WORK(&chg->chgin_work, max77705_chgin_isr_work);
-> +
-> +	max77705_charger_initialize(chg);
-> +
-> +	ret = devm_add_action_or_reset(dev, max77705_charger_disable, chg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return max77705_charger_enable(chg);
-> +}
-
-...
-
-CJ
+-- 
+With best wishes
+Dmitry
 
