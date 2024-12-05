@@ -1,170 +1,185 @@
-Return-Path: <linux-pm+bounces-18645-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B394D9E5FCB
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 21:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F9A99E6088
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 23:29:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC422285A4E
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 20:58:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C45202844A9
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 22:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CCD1C07C0;
-	Thu,  5 Dec 2024 20:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4EEA1CEE82;
+	Thu,  5 Dec 2024 22:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UBXYARqy"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2iD1sXzv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2069.outbound.protection.outlook.com [40.107.101.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833941BD9CD
-	for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2024 20:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733432316; cv=none; b=sHnsUQxBUwsYcaWY2keLKkPBF+gSLcFEA2lcv3ur3L0mV3XofnHv+euaAMKihIpEfZnEB15z5MqyPhjAk1+zQzhsavD0uG0go1l6/r5ZLsXQu1FeUYiJl71XUDco4IIDe6rCw8m3SUamdjExSRYIxZIg5gLmhqzHYHbUEQRJa+s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733432316; c=relaxed/simple;
-	bh=bMicQtsMNQVm02WIs6cu0LU/nIJuALuKx/crjZaeWK8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ohUose4ZSvwrxSV7vDgN4HWhf4Ju32rHmCQl4+E+DI/cxPg5mj4Ohxe9YGZhmzvDDic9lhWvjksnfrdZnvAj1HXP2tGydoom//qs0rYnhr48N3fLLupj9kkAsQRSwyhggvrEUo1YXg7uj+4ATsrO9JDy7ZaR7SCHwNMg/mLGYS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UBXYARqy; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53de79c2be4so1493183e87.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2024 12:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733432313; x=1734037113; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WRmvhDyJMv49jiqonPHAeKnA3QIYKzHJY1yeXH6PQc4=;
-        b=UBXYARqyKSHcUfJbZu2d1EpKlM4/HsivD6dq+RUfAz8BOY6PNnTN8znhcpRqyaW8Y4
-         u8lK83CSR57JDbpAAHxlqMZmIeC7EUNEGNf2hXJfgfPjAyzqH9pqN6IcUFhxtW9yxm86
-         w/P6lHEPLejrpCzYR5MEtQgG7Olk64/NrTWKuU5VtzOhCOe6uo3D6cOHLWtJ4GnvzQGb
-         kzJAEsgdyIfxNPUtGSULyJsUG+lsF2IdG+wFYQKj3fwreHUd/XQRz1R+zO4c54rWvYI9
-         PbIQ8DJl4/RREj2qUDx5hW039oTUkTOIznct/OZTeMjgy7qMbfDqJ7hir2pzojQafNWy
-         N4nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733432313; x=1734037113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WRmvhDyJMv49jiqonPHAeKnA3QIYKzHJY1yeXH6PQc4=;
-        b=BbkEbhhP7InonXNwcklcxNHUeKuXLwxtZRz+m01uyqNedOm5ENzPhBJEwUlgH/FyId
-         s0fJ+yhxQwSqTifOvCap5dcqythdaPlhfRnKGhb/vgoMimLglA691oPRTC5/5Q/4dxDn
-         OPtmSryBGv8jaSgDdBa6lBN0tutxf1a9WVmfxOyMUNkCO7Uujk+pmz3BujKutLbv6aG4
-         JxLS5K93iOlcYG2r8HKxmtK0f9EkgPyoGGuMpGrA7i7Lv3sVwCDG24YjD5unSynEeQ1y
-         x4ILpy/0svROJrr1PhCGYmvYOh0dvt7bEF6tq1pfQ1B1eisamJZ00jscZmdFYlMp5zQe
-         g5Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7J3Xw7GARN8yBLA8jqW2l5LTQ7ZmGpEuW0JOFjTE//tTuKVgD180+lcrykjRL0OuTkvGSL1kXIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1f3zSYlhVW2tExhkWwHB/TWqzpXUFSwQVS0OdDyKklvbw9PLC
-	VLs8ysTBiakIHR40ybM+HN8rlebT8Uuro5DGVb5e8lw1hB3Ufeaf63BcrPX+cawuuXhcFR0QOZT
-	YEHvfvw+ZPvboJcCCbY57Tv9PcAFuyvW7YLEb
-X-Gm-Gg: ASbGncstlFVHPUIJ6pHeoFCDNJYRVmrq0SORWH2iDTK6UjXUSkMsjbmnamupvTtKGYT
-	IvH/N9eRzM415JzTNaMsx9MFjRUDRlA==
-X-Google-Smtp-Source: AGHT+IGK1MAbWBO65ag8JQFr3JuHH7jl3Jlj6sjAdvMtG/HIraalYyXevkYEMF1iK+KsP8rtE3hLpD1JYNoji0HGzM8=
-X-Received: by 2002:a05:6512:2214:b0:53d:e41a:c182 with SMTP id
- 2adb3069b0e04-53e2c2c4b80mr111899e87.31.1733432312372; Thu, 05 Dec 2024
- 12:58:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDC11CBEA4;
+	Thu,  5 Dec 2024 22:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733437751; cv=fail; b=qjztgX5CCVvjCI+WeSeqM+uzihVIPSy+olozNIKvufHcMrXJzIE8Dwlb0jWGWMekZvt50WGyeN5cYChwZ3tDpOzQ02+S8nh/6ajXkoJjLuhseAZ7AjuHnTJ9RG01ErDUSYHlrTVofdRva6Mp7Jw/FdQ71AyBzi2HceLkcoraQvM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733437751; c=relaxed/simple;
+	bh=c0uIe+UTK6/R1DFCQQ4zfMzZy1p5S5fvhOXc/MPzH7U=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DlRIua10ySCaDINqd6h+rXq1izw4YVAoOFguVvjPwBYoKOSiOxbTIcVDHNiGAvFghrBatSrwKGm/Ie72xihQ0uAhsk5eB/9di4cKMwT0aI4E74DFCH5bCpyQc6k1+e5W6sGl9nDWSJBjX6JFs05SGb92zYYNWZeAqkONPd6rauI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2iD1sXzv; arc=fail smtp.client-ip=40.107.101.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=U55rs2oDEl8wLI2U7B443s4KSNd9RLFjuPW8jJSdqAKgr0EyrmFh5Cdre2n8e2DUPOGx3DJJmdyJWtV2Qk+ayxiJAnqbZr1ql+OV9IFu3YsK4rsH92vlxpVR9Isk4zPKuHjVJ+pSEgDQtZqeOzCp9G87MFhZKhrCC+fbvTIIlOf7ltUwwAfiVlBBtqR4usFbgf42LK/283YtT44S1i7CzuaIeI6tY+VcltzptkhBU9R0fD60bTptMKrsIcGm0UQemnqdoc4HNtMHViY4QMZyMfus/yB3rnp7n+ME5F1zXYST6l3QCBRiuCP4/huctjUqsyR1A9zPJ/v2tCZO8i5bJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=anmIpxE0+wTruxd3v3xe2G2c1S/JP+CK+/+dppTZwxk=;
+ b=QldMGwvlb0d8zPWkQaBE2SLbsGNw5oLjiiBBfOUqwqBpOtFEJRDNsitvJBts1YdCHW52PVFbI8addhuIi45J+sX5faEI0S9vFcQaVvzGgxREDt9XcEcMu2DrQkJRCQ4iU67o57J60OaAE1lBEzThCR6auUiW+eUs9O8yMpV912zT5ajoIrf4ZBf4ltLQn1koJVFstt1SCWQaquCDmhdPyf8Mxu62+VU0QYws6BPbSES7rosGR+tn6y4k4Gq3ZLg/YzMfHozbXB7EWzMQKCpCZT4HM656L4KvSW8/9J2iKWnQwnZXOOpSi7aXleXD0zc73g4iD3bgzx7gw0nx2xwPow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=anmIpxE0+wTruxd3v3xe2G2c1S/JP+CK+/+dppTZwxk=;
+ b=2iD1sXzv/dVIIcQGjGow8gV9iMS/ip6t04XQAcRZxvPajxP2fg9i1EazrkpRi2h+0msRo8T4n81kvjOrPvT8YR2KTda0bb4kKoopnAoR8ps1Z3YEM3coNolKgxF8YQISkngVjlcQenuenlYux4zBAUunRZSqCNIdmaWiCFoKQfo=
+Received: from CH0PR03CA0387.namprd03.prod.outlook.com (2603:10b6:610:119::21)
+ by MN2PR12MB4454.namprd12.prod.outlook.com (2603:10b6:208:26c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Thu, 5 Dec
+ 2024 22:29:03 +0000
+Received: from CH1PEPF0000A349.namprd04.prod.outlook.com
+ (2603:10b6:610:119:cafe::17) by CH0PR03CA0387.outlook.office365.com
+ (2603:10b6:610:119::21) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8230.12 via Frontend Transport; Thu,
+ 5 Dec 2024 22:29:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH1PEPF0000A349.mail.protection.outlook.com (10.167.244.9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8230.7 via Frontend Transport; Thu, 5 Dec 2024 22:29:03 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 5 Dec
+ 2024 16:29:01 -0600
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+CC: Perry Yuan <perry.yuan@amd.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 00/15] amd-pstate 6.14 cleanups and improvements
+Date: Thu, 5 Dec 2024 16:28:32 -0600
+Message-ID: <20241205222847.7889-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <08f3bd66d7fc8e218bb6958777f342786b2c3705.1731554471.git.len.brown@intel.com>
- <CAJZ5v0g1JwGRECd2JVKScWO9a=hmrY03YQx95JKZ+q5KisRb1w@mail.gmail.com>
- <f6621a09-d5e4-4d3b-9b5c-55294c22030f@rowland.harvard.edu>
- <CAPDyKFoJ45PZ_o6VdaCiyat+BC6XOZ5AMnxmsZVzk16cCxmDkw@mail.gmail.com>
- <CAJvTdKkqO5D8tZt3L_dbXkXftUOz+zijEjQiWHginn4t_o4gKQ@mail.gmail.com> <7c3c49e8-95fa-4382-a5bc-eccef6d89ed2@broadcom.com>
-In-Reply-To: <7c3c49e8-95fa-4382-a5bc-eccef6d89ed2@broadcom.com>
-From: Saravana Kannan <saravanak@google.com>
-Date: Thu, 5 Dec 2024 12:57:56 -0800
-Message-ID: <CAGETcx8gG1_rRrt1fSJpY8c-J6RYMo5e2h_TSzg1FExu0Ge1pQ@mail.gmail.com>
-Subject: Re: [RFC/RFT PATCH] PM: sleep: Ignore device driver suspend()
- callback return values
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Len Brown <lenb@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000A349:EE_|MN2PR12MB4454:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c3849f6-8b52-45b1-7867-08dd157c391d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?CWLsMfzBkPvUKPGdqK26OpFYrFieuw4MO7wuXlKhUGVtVTXgu4mhuq7jQx7V?=
+ =?us-ascii?Q?luGY96A6amU4HY1v5e5oX2UZhpT0sSOg9rLFOxJi8jD407lfu2vClidUy/9B?=
+ =?us-ascii?Q?jT6Vroyzrrms21BzxrXwBksGX7uyWoDKMBpQ8WBhtw+dxlCsbbCHWCQlqrXQ?=
+ =?us-ascii?Q?s0qJOFIxYsbCoqIttQLnz2bTz1CfY7+JUGAY3xONafOL8crALHgMgFNoRoR6?=
+ =?us-ascii?Q?SsM6GNwbrkGoL9KfQQMsR+lJsNXPsBUYXXjVxJCwQ9rhkz6olWC9jiVRm5Hu?=
+ =?us-ascii?Q?cdcwNVIwWzU2t2/jpBI4N/m3USXdQYz4b9dStYAJEg/EWsy0NBLrwt/i1064?=
+ =?us-ascii?Q?NQNSX9FrLJfZw0XDwAz1IY+cbtCAXKGVbNsAa2r4n/lZlyNrVxz0eYBHsjCB?=
+ =?us-ascii?Q?8U1nH0IiUF4cnZAYELAm5zY70DchlifAVBcQG+FozlNYc2qgh6amI12Mds4U?=
+ =?us-ascii?Q?CL+ZRSO+WCeHMjHTw5z/td4vOKHAaxY+9s10sgKualHc2eNb+Mb+Oq/IVU/z?=
+ =?us-ascii?Q?qMR7nbAfIatHddJ9hqZSVyFfLWDmkR1bmiT/1KFCH1wFfCcRWhc75JA4Z65c?=
+ =?us-ascii?Q?qE72QM5Wjy9tA+FxGUo0sFNJMT8fZREb1ejCDzI9ni/oJbq7Vp6uE0ok7bCW?=
+ =?us-ascii?Q?rB17GkXpNWjQ89Q6apAVBa81x73mB7embRJQDDmDj/S1FbFU81manhYK+j0U?=
+ =?us-ascii?Q?XdS/Ehx4RxMIsuc5KsJph4RyIat95sxY+aTu5nU0KtoPjWx1FpCUOVeRBtoS?=
+ =?us-ascii?Q?n2Am+cc6mcOFcIZ3nRsDtOqNgUeRrXK1FTSZYl2uEoFcKn2zjBUr1o9Yi1Da?=
+ =?us-ascii?Q?GuOj/NislcLFnHPV4Uf/l3wKkbMzjPQeM+CkyWrmEOStXcN3eT2zbiK7Y/tX?=
+ =?us-ascii?Q?ZXNPFP/izM9PjjvMx/mDHbzatfR6nNUPcBk0H3RY6xUMwyZBo57+Fq/ceJGv?=
+ =?us-ascii?Q?p0egD8Wnp3bpypwhkoCJjB/26ve6ttbaS3201L7A4CEphGgGf1JJdRPbTTIf?=
+ =?us-ascii?Q?Hcp+IYYsRbptJALlBKZB3IYClcH7Zvx3tCLpO9Fb+ua1pcfNh2LYr9sg3Bqe?=
+ =?us-ascii?Q?XKK+7VENQQZpsNcx48QI9MKdeJ/jYblzX9MKRyp7CMF+o9CyadUGh70USe8X?=
+ =?us-ascii?Q?Y+vF8UuKHXB0vhwObxLcRC8BcKGprN9VPGPUbonMWgdiwXX9+WSxrAResW55?=
+ =?us-ascii?Q?ArRphWccHbD45vYLuY92KS0+6+jDgBmJo6UNxxhVeCpdmC7gQiGSFuoqSPRw?=
+ =?us-ascii?Q?/TvV+ZvVHiyJ3Et3HDSyoWXhmiirF8hwqOU8D5wrE44Fk7RPqRd50mhw8WMu?=
+ =?us-ascii?Q?CSAqhMKq49Rv78ga0QgKsoFKls0SqQ/qAtrHZ+SOCfJxK2fx11DA6ndcRjCp?=
+ =?us-ascii?Q?DZdFOsKk7eSxWenLszO8dwFkMaqKR7ASZbfjl767lo+C+pYHZ+GuNYbHRrMX?=
+ =?us-ascii?Q?DqBLBwCRGFKt1Ch+ktNmA1+S7R2DCLv6?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2024 22:29:03.4057
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c3849f6-8b52-45b1-7867-08dd157c391d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000A349.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4454
 
-On Thu, Dec 5, 2024 at 9:57=E2=80=AFAM Florian Fainelli
-<florian.fainelli@broadcom.com> wrote:
->
-> On 12/5/24 09:36, Len Brown wrote:
-> > On Thu, Dec 5, 2024 at 10:33=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro=
-.org> wrote:
-> >
-> >> ...I also think this looks a bit risky as the current behaviour
-> >> has really been there for a long time. Who knows what depends on this.
-> >
-> > If everything were working 100% of the time, no risk would be justified
-> > because no improvement is possible.
->  > > But we run over 1,000,000 suspend resume cycles per release in our l=
-ab,
-> > and this issue as a category, is the single most common failure.
->
-> But you are starting to enter the big number category here, eventually
-> something is going to fail with that many iterations.
->
-> How was this 1 million iterations determined to be a good pass/fail
-> criteria and just not an arbitrarily high number intended to shake off
-> issues? Surely with such a big number you start getting an idea of which
-> specific drivers within your test devices tend to fail to suspend?
->
-> FWIW, with the products I work with, which are mainly set-top-box
-> devices, we just set a pass/fail criteria at 100k which is essentially
-> assuming there will be 27 suspend/resume cycles per day for the next 10
-> years, given the lifespan of the products, that seemed way overboard,
-> realistically there is going to be more like 2-3 suspend/resume cycles
-> per day.
->
-> >
-> > Worse, there is a huge population of drivers, and we can't possibly tes=
-t
-> > them all into correctness.  Every release this issue crops when another
-> > driver hiccups in response to some device specific transient issue.
-> >
-> > The current implementation is not a viable design.
->
-> Neither is this approach because it assumes that drivers that need to
-> abort the system suspend call pm_system_wakeup(), which most do not,
+This series started as work on the behavior around boost numerator that
+was changed in the last few kernels to make it more expected.
 
-Agree completely with Ulf and Florian. This patch series is way too
-optimistic in thinking that all drivers are/should be calling
-pm_system_wakeup().
+As part of the process, of these improvements I found various other
+optimizations that made a lot of sense in the context of the code.
 
-I'd argue it makes more sense and is intuitive to return an error if a
-device suspend fails and have the framework act on it immediately than
-setting some global flag and then looking at a later point in the
-framework.
+While I was working on the issues I found it was really helpful to have
+ftrace for EPP, so it introduces that as well.
 
-Based on the rest of the emails in this thread, this seems more like a
-driver problem than a framework issue. If you see a driver that's
-returning an error when it shouldn't, fix it.
+Lastly a bug was reported requesting that amd-pstate default policy be
+changed for client systems that don't use other software after bootup
+so it includes that change too.
 
-If you are testing this only on some specific set of hardware to claim
-it works without problems, then you can also just go fix the drivers
-for that specific set of hardware and call it a day. If that's "too
-many drivers to fix", then the amount of untested drivers surely is
-orders of magnitude more than that.
+Mario Limonciello (15):
+  cpufreq/amd-pstate: Add trace event for EPP perf updates
+  cpufreq/amd-pstate: convert mutex use to guard()
+  cpufreq/amd-pstate: Drop cached epp_policy variable
+  cpufreq/amd-pstate: Use FIELD_PREP and FIELD_GET macros
+  cpufreq/amd-pstate: Store the boost numerator as highest perf again
+  cpufreq/amd-pstate: Use boost numerator for upper bound of frequencies
+  cpufreq/amd-pstate: Only update the cached value in msr_set_epp() on
+    success
+  cpufreq/amd-pstate: store all values in cpudata struct in khz
+  cpufreq/amd-pstate: Change amd_pstate_update_perf() to return an int
+  cpufreq/amd-pstate: Move limit updating code
+  cpufreq/amd-pstate: Cache EPP value and use that everywhere
+  cpufreq/amd-pstate: Always write EPP value when updating perf
+  cpufreq/amd-pstate: Check if CPPC request has changed before writing
+    to the MSR or shared memory
+  cpufreq/amd-pstate: Drop ret variable from
+    amd_pstate_set_energy_pref_index()
+  cpufreq/amd-pstate: Set different default EPP policy for Epyc and
+    Ryzen
 
-At best this should be a driver specific flag (why not just fix the
-driver in that case) or a commandline arg that's default disabled.
-Then whoever wants to use this sledgehammer for their hardware can do
-so without affecting others.
+ Documentation/admin-guide/pm/amd-pstate.rst |   4 +-
+ drivers/cpufreq/amd-pstate-trace.h          |  52 ++-
+ drivers/cpufreq/amd-pstate-ut.c             |  12 +-
+ drivers/cpufreq/amd-pstate.c                | 395 ++++++++++----------
+ drivers/cpufreq/amd-pstate.h                |   2 -
+ 5 files changed, 244 insertions(+), 221 deletions(-)
 
--Saravana
 
-> they return -EBUSY or something like that. There is a total of 12 or so
-> drivers calling pm_system_wakeup(), that's not the majority.
->
-> How about you flipped the logic around, introduce an option that lets
-> you ignore the suspend callback return value gated by a Kconfig option?
-> --
-> Florian
->
+base-commit: ab9e5b2eb56412cb8c63b46b935878d29205418e
+-- 
+2.43.0
+
 
