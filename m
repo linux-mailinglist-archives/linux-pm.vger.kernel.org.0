@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-18604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18605-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1B5F9E4F49
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 09:08:05 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F8BD9E4F4C
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 09:08:37 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E3132884E0
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 08:08:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1BEA18817C6
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 08:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D9E1CEEB4;
-	Thu,  5 Dec 2024 08:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00BD1CEEB4;
+	Thu,  5 Dec 2024 08:08:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aOsOAnGY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ARwt+egT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC25EC0;
-	Thu,  5 Dec 2024 08:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAF11CEE83;
+	Thu,  5 Dec 2024 08:08:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733386080; cv=none; b=sUqtz7OFcud76HHMDOp/nD6v1ZJr4vsST7GygOvwYSO0Y87Ttj588IvVlleli/y0rL+LJeRWmt8x8asuiE2ksSym2EinMjMY8aO2kQzi888jiAGomlKafU1My7o+3LN6atrqES+MJugUOascABJTM0rfXwGR8XiGZpp7zd737Bs=
+	t=1733386112; cv=none; b=HYa8LmRjgItlRldUZilOcn2oOTx/aDekH3372ZsM082gISO0x1OLJ9JDKp26CSLFb4gWNsufvwSs4j3wArV6mEz+KCwpfk6xX285U3z5MZxHqDb3dHy7UxOJlYfai01EJh7JfndG66UGnf2ispP/eqhnRrGdvCSXuECmfwuEvrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733386080; c=relaxed/simple;
-	bh=VV++W7MV/knILy+1Ihxx+85hraOXG32eoC+C6TADWL8=;
+	s=arc-20240116; t=1733386112; c=relaxed/simple;
+	bh=0XPBVm8XQVo+Eho5kSSzu8H/zE0gAJIp1ohiMKNlTfM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eihp2nwRyK/3RpGyES6r+S+unMLkmQCiL4UAz3Ln/Qc4MKKkuBQLi59Kx6gKCdzsS25qfteHsb+ftYdF6DybBxX7J+CdJ0yiWGpy88WvUfGzoMoBtui9/R/Cbm72VSLcPZI3XJsLuC/iJAKzss8yJkksVL7LvOcuZM46tWJNVAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aOsOAnGY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3335C4CED1;
-	Thu,  5 Dec 2024 08:07:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dXBqsYDsZ6xBmBjWUEwbUH+6GLuCMExNdbeo3nBlA1975GpCRnsAarIC1tPK1klnNnQSM9pF7F0iiu9kSG6IoYqok5Nw5RORcCsb2Jb8ZF8Jnad189bID7ZkD9uEhhnxkFWpzBg/RY7PrSzyGfGzmWUamtvUHVtwJbQ5zpE+rsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ARwt+egT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D49C4CED1;
+	Thu,  5 Dec 2024 08:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733386079;
-	bh=VV++W7MV/knILy+1Ihxx+85hraOXG32eoC+C6TADWL8=;
+	s=k20201202; t=1733386112;
+	bh=0XPBVm8XQVo+Eho5kSSzu8H/zE0gAJIp1ohiMKNlTfM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aOsOAnGYb8GZIAK4VwUnu3WydQTFvmMQPJLzsSPPBarCgDBN45FfresV7QpdGQcZF
-	 EXTKw3ccTUwELrDs5Mc073prX0E5laYpgTTgVRjWKNCsJEBNox/OAmth3p18bA88jR
-	 8qqj+yxW2iA8F3xGQPYXTr1iWm20OyfFGT5+DPSKR69z8IMQlla/o/dejBRP9L2xPs
-	 P0dYw20LZvFvJMz9tajy4kAv6UgIyjyWl3Qs13NPTwO3EPNcpgxB97WAG9K6xVXway
-	 RBDD576eKBC9tSeX/eWRZD+VcCIpA387ZulXf7aVmJ3Rwo1yQT5pc8VSXCkGx4tb85
-	 sYZjWg8WS7U5Q==
-Date: Thu, 5 Dec 2024 09:07:56 +0100
+	b=ARwt+egTYTrqk2OROjy8tBxHi0tjDbB8PAHQ9QjyvWQf2c8OjyMN0NZ/VQBLolZ+S
+	 7RixT9vFAHoR7FWYmoWh6ljiSJhWXZSe4X6vHD4bi29GAD5dlWzHd+HtrCNqLjzFtu
+	 Ky71/PVUtacUKgySoOHIzdO02pzWFo1dZW5XQkWW/B20CBzw5aS7qsTAPd9gn2B7Mb
+	 jXBEMCPdoEZwm828WR/eGPBWDv1TmlVQkv+QmDVTZ1BifP63qsUZL3hu8osDmatxZq
+	 qZ/YiZezES+miOrYWH4K5KazQRMQwK9ZFtl4NMdnHvHv9YIuBNb2FZTDxVSb+bPBwE
+	 LdK5nufqWjBSg==
+Date: Thu, 5 Dec 2024 09:08:29 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -52,11 +52,11 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
 	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: qcs6490-rb3gen: add and enable
- BT node
-Message-ID: <aidraihg7zkbaojj72zsstwfwdrth4734tiozli2qd6cu36ybs@ea3y3oaiexgy>
+Subject: Re: [PATCH v4 4/4] power: sequencing: qcom-wcn: add support for the
+ WCN6750 PMU
+Message-ID: <4tzvbkm2ohicisgllkwsbd56uiorrcgv4zhipspnjjcuoc7dr4@ifqgn374ppjj>
 References: <20241204131706.20791-1-quic_janathot@quicinc.com>
- <20241204131706.20791-3-quic_janathot@quicinc.com>
+ <20241204131706.20791-5-quic_janathot@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,218 +65,54 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241204131706.20791-3-quic_janathot@quicinc.com>
+In-Reply-To: <20241204131706.20791-5-quic_janathot@quicinc.com>
 
-On Wed, Dec 04, 2024 at 06:47:04PM +0530, Janaki Ramaiah Thota wrote:
-> Add a node for the PMU module of the WCN6750 present on the
-> qcs6490-rb3gen board and assign its power outputs to the Bluetooth
-> module.
+On Wed, Dec 04, 2024 at 06:47:06PM +0530, Janaki Ramaiah Thota wrote:
+> Enable support for controlling the power-up sequence of the PMU inside
+> the WCN6750 model.
 > 
 > Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 165 ++++++++++++++++++-
->  1 file changed, 164 insertions(+), 1 deletion(-)
+>  drivers/power/sequencing/pwrseq-qcom-wcn.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> index 27695bd54220..07650648214e 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: BSD-3-Clause
->  /*
-> - * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
->   */
->  
->  /dts-v1/;
-> @@ -33,6 +33,7 @@
->  
->  	aliases {
->  		serial0 = &uart5;
-> +		serial1 = &uart7;
->  	};
->  
->  	chosen {
-> @@ -217,6 +218,63 @@
->  		regulator-min-microvolt = <3700000>;
->  		regulator-max-microvolt = <3700000>;
->  	};
-> +
-> +	wcn6750-pmu {
-> +		compatible = "qcom,wcn6750-pmu";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&bt_en>;
-> +		vddaon-supply = <&vreg_s7b_0p972>;
-> +		vddasd-supply = <&vreg_l11c_2p8>;
-> +		vddpmu-supply = <&vreg_s7b_0p972>;
-> +		vddrfa0p8-supply = <&vreg_s7b_0p972>;
-> +		vddrfa1p2-supply = <&vreg_s8b_1p272>;
-> +		vddrfa1p7-supply = <&vreg_s1b_1p872>;
-> +		vddrfa2p2-supply = <&vreg_s1c_2p19>;
-> +
-> +		bt-enable-gpios = <&tlmm 85 GPIO_ACTIVE_HIGH>;
-> +
-> +		regulators {
-> +			vreg_pmu_rfa_cmn: ldo0 {
-> +				regulator-name = "vreg_pmu_rfa_cmn";
-> +			};
-> +
-> +			vreg_pmu_aon_0p59: ldo1 {
-> +				regulator-name = "vreg_pmu_aon_0p59";
-> +			};
-> +
-> +			vreg_pmu_wlcx_0p8: ldo2 {
-> +				regulator-name = "vreg_pmu_wlcx_0p8";
-> +			};
-> +
-> +			vreg_pmu_wlmx_0p85: ldo3 {
-> +				regulator-name = "vreg_pmu_wlmx_0p85";
-> +			};
-> +
-> +			vreg_pmu_btcmx_0p85: ldo4 {
-> +				regulator-name = "vreg_pmu_btcmx_0p85";
-> +			};
-> +
-> +			vreg_pmu_rfa_0p8: ldo5 {
-> +				regulator-name = "vreg_pmu_rfa_0p8";
-> +			};
-> +
-> +			vreg_pmu_rfa_1p2: ldo6 {
-> +				regulator-name = "vreg_pmu_rfa_1p2";
-> +			};
-> +
-> +			vreg_pmu_rfa_1p7: ldo7 {
-> +				regulator-name = "vreg_pmu_rfa_1p7";
-> +			};
-> +
-> +			vreg_pmu_pcie_0p9: ldo8 {
-> +				regulator-name = "vreg_pmu_pcie_0p9";
-> +			};
-> +
-> +			vreg_pmu_pcie_1p8: ldo9 {
-> +				regulator-name = "vreg_pmu_pcie_1p8";
-> +			};
-> +		};
-> +	};
+> diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> index 682a9beac69e..e38da79f0ada 100644
+> --- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> +++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> @@ -293,6 +293,24 @@ static const struct pwrseq_qcom_wcn_pdata pwrseq_wcn6855_of_data = {
+>  	.targets = pwrseq_qcom_wcn6855_targets,
 >  };
 >  
->  &apps_rsc {
-> @@ -758,6 +816,39 @@
->  	status = "okay";
->  };
->  
-> +&qup_uart7_cts {
-> +	/*
-> +	 * Configure a bias-bus-hold on CTS to lower power
-> +	 * usage when Bluetooth is turned off. Bus hold will
-> +	 * maintain a low power state regardless of whether
-> +	 * the Bluetooth module drives the pin in either
-> +	 * direction or leaves the pin fully unpowered.
-> +	 */
-> +	bias-bus-hold;
+> +static const char *const pwrseq_wcn6750_vregs[] = {
+> +	"vddaon",
+> +	"vddasd",
+> +	"vddpmu",
+> +	"vddrfa0p8",
+> +	"vddrfa1p2",
+> +	"vddrfa1p7",
+> +	"vddrfa2p2",
 > +};
 > +
-> +&qup_uart7_rts {
-> +	/* We'll drive RTS, so no pull */
-> +	drive-strength = <2>;
-> +	bias-disable;
+> +static const struct pwrseq_qcom_wcn_pdata pwrseq_wcn6750_of_data = {
+> +	.vregs = pwrseq_wcn6750_vregs,
+> +	.num_vregs = ARRAY_SIZE(pwrseq_wcn6750_vregs),
+> +	.pwup_delay_ms = 50,
+> +	.gpio_enable_delay_ms = 5,
+> +	.targets = pwrseq_qcom_wcn_targets,
 > +};
 > +
-> +&qup_uart7_rx {
-> +	/*
-> +	 * Configure a pull-up on RX. This is needed to avoid
-> +	 * garbage data when the TX pin of the Bluetooth module is
-> +	 * in tri-state (module powered off or not driving the
-> +	 * signal yet).
-> +	 */
-> +	bias-pull-up;
-> +};
-> +
-> +&qup_uart7_tx {
-> +	/* We'll drive TX, so no pull */
-> +	drive-strength = <2>;
-> +	bias-disable;
-> +};
-> +
->  &qupv3_id_0 {
->  	status = "okay";
->  };
-> @@ -801,12 +892,84 @@
->  &tlmm {
->  	gpio-reserved-ranges = <32 2>, /* ADSP */
->  			       <48 4>; /* NFC */
-> +	bt_en: bt-en-state {
-> +		pins = "gpio85";
-> +		function = "gpio";
-> +		output-low;
-> +		bias-disable;
-> +	}
+>  static const char *const pwrseq_wcn7850_vregs[] = {
+>  	"vdd",
+>  	"vddio",
+> @@ -431,6 +449,10 @@ static const struct of_device_id pwrseq_qcom_wcn_of_match[] = {
+>  		.compatible = "qcom,wcn7850-pmu",
+>  		.data = &pwrseq_wcn7850_of_data,
+>  	},
+> +	{
+> +		.compatible = "qcom,wcn6750-pmu",
 
-Missing blank line
-
-> +	qup_uart7_sleep: qup_uart7_sleep {
-> +		qup_uart7_sleep_cts: qup-uart7-sleep-cts-state {
-> +			pins = "gpio28";
-> +			function = "gpio";
-> +			/*
-> +			 * Configure a bias-bus-hold on CTS to lower power
-> +			 * usage when Bluetooth is turned off. Bus hold will
-> +			 * maintain a low power state regardless of whether
-> +			 * the Bluetooth module drives the pin in either
-> +			 * direction or leaves the pin fully unpowered.
-> +			 */
-> +			bias-bus-hold;
-> +		};
-> +
-> +		qup_uart7_sleep_rts: qup-uart7-sleep-rts-state {
-> +			pins = "gpio29";
-> +			function = "gpio";
-> +			/*
-> +			 * Configure pull-down on RTS. As RTS is active low
-> +			 * signal, pull it low to indicate the BT SoC that it
-> +			 * can wakeup the system anytime from suspend state by
-> +			 * pulling RX low (by sending wakeup bytes).
-> +			 */
-> +			bias-pull-down;
-> +		};
-> +
-> +		qup_uart7_sleep_rx: qup-uart7-sleep-rx-state {
-> +			pins = "gpio31";
-> +			function = "gpio";
-> +			/*
-> +			 * Configure a pull-up on RX. This is needed to avoid
-> +			 * garbage data when the TX pin of the Bluetooth module
-> +			 * is floating which may cause spurious wakeups.
-> +			 */
-> +			bias-pull-up;
-> +		};
-> +
-> +		qup_uart7_sleep_tx: qup-uart7-sleep-tx-state {
-> +			pins = "gpio30";
-> +			function = "gpio";
-> +			/*
-> +			 * Configure pull-up on TX when it isn't actively driven
-> +			 * to prevent BT SoC from receiving garbage during sleep.
-> +			 */
-> +			bias-pull-up;
-> +		};
-> +	};
->  };
->  
->  &uart5 {
->  	status = "okay";
->  };
->  
-> +&uart7 {
-> +	/delete-property/interrupts;
-> +	interrupts-extended = <&intc GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>,
-> +				<&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
-> +	pinctrl-1 = <&qup_uart7_sleep>;
-> +	pinctrl-names = "default", "sleep";
-> +	status = "okay";
-
-Missing blank line
-
+Don't stuff things at the end of lists. Keep proper order instead.
 
 Best regards,
 Krzysztof
