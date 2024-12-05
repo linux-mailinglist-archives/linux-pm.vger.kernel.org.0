@@ -1,101 +1,167 @@
-Return-Path: <linux-pm+bounces-18616-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18621-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9101E9E5386
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 12:17:46 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B532E9E554C
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 13:24:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B972285654
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 11:17:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8262016B944
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 12:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726381DFE37;
-	Thu,  5 Dec 2024 11:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435AD217F4A;
+	Thu,  5 Dec 2024 12:24:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ioLKkfr9"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YpOQGx8j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456F81DFE16;
-	Thu,  5 Dec 2024 11:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9604F1C3C03;
+	Thu,  5 Dec 2024 12:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733397464; cv=none; b=kFOfGczrModmHTiQjSVwsKlIqOLdhDhi6evj8IpepLWG/Cr65n6GRIvAAXYv1f3MMJwLax14mY4SF7GWZFbUn+RzfSrMihueAIzJfTI5KX1vxmwuomc3KC4HTt1tuh/YymkzJaRKcrIG8mUUWjMMTdfksOHTzJidRJLqlSU/IwI=
+	t=1733401481; cv=none; b=pHKpf4PiVmRCt0Ey0UpHp8T1diWtSW6nrYTtzFpGqpC6PWbg9sWj1iIRowXMrY+7DCaBbUgP+HfiR+RhMpxzPUeQMY0btBfQ2piDrcLLr0rS2m60BbG0ZpayrcOkaJOTODWZXE6a30HdXLZSz3cuTg1dLVXerXjhiEGMba+2JTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733397464; c=relaxed/simple;
-	bh=u9mfEkwS/F0LXCkeBbReWFy8k6OGAUx7jGWeoTnvIqI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mo3bYsfFjApFAQdC9akRrJoaN1+lnUjkgnjHADzrfDlFiibaq+SgYvGRvYCJ9yIjkCRoavOsfoFGLmp625rPucouPEkfgcfh8PdVxlkuy9bL7cnSLLiidBVa4CKtLRGNH22BkVkZPou2z8FhhwXX4ZiXhoxmUBbVbrcH76oWJls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ioLKkfr9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CC9C4CEE2;
-	Thu,  5 Dec 2024 11:17:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733397463;
-	bh=u9mfEkwS/F0LXCkeBbReWFy8k6OGAUx7jGWeoTnvIqI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ioLKkfr9r04+OwkcNMhG4NZ1LF0+oTrtJMPKJa2xRmougMtMOrz4xHERkrxvH7u2W
-	 ywAROKO8AtQJtwD0sbs1zrCW911gFcK7IE5/6blrm7oM7tFUQ8Q/+6XvT8QHHkd0eA
-	 C5zNQ7+W8hx0okL19P5jnXZa+tilXoDaiEGbYNn+glvl/1PnSglB8hy4glLkqi/Lbr
-	 PhhwF9jh2G+5Y+lV1WO+7T3nzVqJOZFJwuE8kM2/tcyF8YL3RBb2MHtYkl+wkyVwfj
-	 uc/QUeQad0/clgCn304DxyAH5ZGHnEdhGwnSH6SBUke68ahIGjX9y257QbRbYBlbnh
-	 aNMxBy/quDMQw==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-29645a83b1bso472815fac.1;
-        Thu, 05 Dec 2024 03:17:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXrtoIZ1koO8bAyO9lzDtrFElegQJpzn75WuekgG1lzj1OwFV9MLogK3zNHdaE2CfxBmdbHMB2qsA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHW+jLzdYiht+6eRenhxB7QzMHamMhm7H1UoAaAihnVzs6RwRq
-	crbSLp3iBzzS/z40qqhVPBufIv+S7ogWMjyurx+ygZvjlA0Uf0yT9ItdfVJAa/KoUW0Aekwm3Q/
-	AKJJR9742LjWby4i6agDBTxUcDWU=
-X-Google-Smtp-Source: AGHT+IHu1YddXwtQKIAVMNtRYmCSeaH/o2sQ+KXE1+zg9Aj8K/DviKHsBiVJSHi2yFhUNS6ViQV2Quy4FsgA7NOyFs4=
-X-Received: by 2002:a05:6870:912b:b0:29e:8068:e089 with SMTP id
- 586e51a60fabf-29e9b1853b5mr4712672fac.19.1733397463016; Thu, 05 Dec 2024
- 03:17:43 -0800 (PST)
+	s=arc-20240116; t=1733401481; c=relaxed/simple;
+	bh=6HOpsc625EGjC9PL02c3HToHWwFMARP9I2Vi0twgIrs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UnKNiHkdmZ76Z8I7IVRL4rOqykEhyTqXvtuPBhw3EMHqopwH930zy56G9Isqoe8wf28SlDtcEdWiw3/y8UIAwWhyYXy0QAcs+lyvcgBSI95PXVMt9k8Td1QLnc13seBDoNDnufIg+c9ADwtx2Wd3xeKdlhNfCrsWff4RgnfeiUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YpOQGx8j; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id a11382d7935d7579; Thu, 5 Dec 2024 12:24:36 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 88CB515F00FF;
+	Thu,  5 Dec 2024 12:24:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1733397876;
+	bh=6HOpsc625EGjC9PL02c3HToHWwFMARP9I2Vi0twgIrs=;
+	h=From:Subject:Date;
+	b=YpOQGx8j1i8ximeDtP0jet2Kgcq/S07XVQDZoWoGp549h4TA9ib79Wzi+isWkIYLc
+	 t4iehrv36QW2woWClLQ+SsKLY7EIDFI+9pYGQjActjoXR61TcZVvVSs1EFZCEaGh7j
+	 +18l7IxfFBkbQ0Bs0FRJWoOLHksaltggG5peethbxmToy+CaH04pLxlqYqvmElJ6HU
+	 l2AfzGk3tHQKvF4zmQ5LBbRMd4qScppx2pVimiM1zznpaSyyUK9w8D+kxDvqz8I4m7
+	 ebhVOnB5aFrU186PGLbpgQI2VNwnqjQF6dHBSzFT6MRYasBFm1fLIPCtco7Za6CcO8
+	 O1yMY0+NVLk+Q==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Len Brown <len.brown@intel.com>, Arjan van de Ven <arjan@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Subject: [PATCH v1] ACPI: OSL: Use usleep_range() in acpi_os_sleep()
+Date: Thu, 05 Dec 2024 12:24:35 +0100
+Message-ID: <5857066.DvuYhMxLoT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241118072917.3853-1-wsa+renesas@sang-engineering.com> <20241118072917.3853-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20241118072917.3853-3-wsa+renesas@sang-engineering.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 5 Dec 2024 12:17:30 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iJgQuuHVbQxom6VLKHZvSnAzP75oQMDcr-3a1GAdzAFQ@mail.gmail.com>
-Message-ID: <CAJZ5v0iJgQuuHVbQxom6VLKHZvSnAzP75oQMDcr-3a1GAdzAFQ@mail.gmail.com>
-Subject: Re: [PATCH 02/15] drivers core: don't include 'pm_wakeup.h' directly
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrieejgddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegoufhprghmkfhpucdlfedttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddtpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-On Mon, Nov 18, 2024 at 8:29=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> The header clearly states that it does not want to be included directly,
-> only via 'device.h'. 'platform_device.h' works equally well. Remove the
-> direct inclusion.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/base/power/sysfs.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index a1474fb67db9..82ce2d9f54e5 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -6,7 +6,6 @@
->  #include <linux/export.h>
->  #include <linux/pm_qos.h>
->  #include <linux/pm_runtime.h>
-> -#include <linux/pm_wakeup.h>
->  #include <linux/atomic.h>
->  #include <linux/jiffies.h>
->  #include "power.h"
-> --
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH v0.1] ACPI: OSL: Use usleep_range() in acpi_os_sleep()
 
-Applied as 6.14 material, thanks!
+As stated by Len in [1], the extra delay added by msleep() to the
+sleep time value passed to it can be significant, roughly between
+1.5 ns on systems with HZ = 1000 and as much as 15 ms on systems with
+HZ = 100, which is hardly acceptable, at least for small sleep time
+values.
+
+msleep(5) on the default HZ = 250 in Ubuntu on a modern PC takes about
+12 ms.  This results in over 800 ms of spurious system resume delay on
+systems such as the Dell XPS-13-9300, which use ASL Sleep(5ms) in a
+tight loop.
+
+Address this by using usleep_range() in acpi_os_sleep() instead of
+msleep().  For short sleep times this is a no brainer, but even for
+long sleeps usleep_range() should be preferred because timer wheel
+timers are optimized for cancelation before they expire and this
+particular timer is not going to be canceled.
+
+Add at least 50 us on top of the requested sleep time in case the
+timer can be subject to coalescing, which is consistent with what's
+done in user space in this context [2], but for sleeps longer than 5 ms
+use 1% of the requested sleep time for this purpose.
+
+The rationale here is that longer sleeps don't need that much of a timer
+precision as a rule and making the timer a more likely candidate for
+coalescing in these cases is generally desirable.  It starts at 5 ms so
+that the delta between the requested sleep time and the effective
+deadline is a contiuous function of the former.
+
+Link: https://lore.kernel.org/linux-pm/c7db7e804c453629c116d508558eaf46477a2d73.1731708405.git.len.brown@intel.com/ [1]
+Link: https://lore.kernel.org/linux-pm/
+CAJvTdK=Q1kwWA6Wxn8Zcf0OicDEk6cHYFAvQVizgA47mXu63+g@mail.gmail.com/ [2]
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=216263
+Reported-by: Len Brown <lenb@kernel.org>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+The previous RFC version of this patch is here:
+
+https://lore.kernel.org/linux-pm/5839859.DvuYhMxLoT@rjwysocki.net/
+
+The difference between this version and the RFC is a changelog update
+suggested by Len, the Closes: tag and the tags from Hans and Mario.
+
+---
+ drivers/acpi/osl.c |   22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+Index: linux-pm/drivers/acpi/osl.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/osl.c
++++ linux-pm/drivers/acpi/osl.c
+@@ -607,7 +607,27 @@ acpi_status acpi_os_remove_interrupt_han
+ 
+ void acpi_os_sleep(u64 ms)
+ {
+-	msleep(ms);
++	u64 usec = ms * USEC_PER_MSEC, delta_us = 50;
++
++	/*
++	 * Use a hrtimer because the timer wheel timers are optimized for
++	 * cancelation before they expire and this timer is not going to be
++	 * canceled.
++	 *
++	 * Set the delta between the requested sleep time and the effective
++	 * deadline to at least 50 us in case there is an opportunity for timer
++	 * coalescing.
++	 *
++	 * Moreover, longer sleeps can be assumed to need somewhat less timer
++	 * precision, so sacrifice some of it for making the timer a more likely
++	 * candidate for coalescing by setting the delta to 1% of the sleep time
++	 * if it is above 5 ms (this value is chosen so that the delta is a
++	 * continuous function of the sleep time).
++	 */
++	if (ms > 5)
++		delta_us = (USEC_PER_MSEC / 100) * ms;
++
++	usleep_range(usec, usec + delta_us);
+ }
+ 
+ void acpi_os_stall(u32 us)
+
+
+
 
