@@ -1,131 +1,164 @@
-Return-Path: <linux-pm+bounces-18625-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18626-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4139E5962
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 16:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D82409E5979
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 16:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B52B918825F2
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 15:09:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F14D1885187
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 15:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C9C21A44B;
-	Thu,  5 Dec 2024 15:09:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8063721C9F2;
+	Thu,  5 Dec 2024 15:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="pTr+GQVS"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="AMFR03pa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B37F21A42B
-	for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2024 15:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2ED21A44B
+	for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2024 15:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733411391; cv=none; b=VKZ1doTy/tpwD0brYvHFBf/Ia32i29R66bgt5J256zB/JHF17IPPgq243nKfvy+fZazKPtLNAiXq7E8HR6/KALzv+dqUlDaZQupVBb5+2GCOBi77ZLsjmREKGIws+eNnx6xnRYamLFaWSa7aPICvoxMMskMkBPHRIb3gQ0oMtBw=
+	t=1733411587; cv=none; b=vFoMyRwrBUy3MzsTEzkxCJljuHeGX/GQQAwCnLrPbwou+/FCql0x/OjxEUtdWUpjh09GtpKbr7r/uZ0qyyttH9H7/Hm1qCoRxcXGrHJzeIeG8gGbCQKj0k4d1c2KeP88kmg/ZKYhFn+EDtfnigUl1w0YXQnEe4FAka8uW8ucLEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733411391; c=relaxed/simple;
-	bh=kuDwn5MNGL8adcYkNgcDkUlwY1RIiGi86ZN+oVM7n88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Et4NjXJH8CbawyDwQh52Jf6uCm2VDUX7WN8eLrJczMuos/iOJpzfMIm979yL3cAFauhkbjHVi9c8HkVn3XDHcxMqA11e7zbgr/JrFS3bLVyXK+HzYKhwTDE0Gl72ldFoHrsA4Rf8qGDyivnjUMHyHwSBC1eAfd+A8OpVUQ9UAwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=pTr+GQVS; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7b672a70f4eso81103685a.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2024 07:09:50 -0800 (PST)
+	s=arc-20240116; t=1733411587; c=relaxed/simple;
+	bh=3weUk4iB77O9B3Vu+VdOtyHO5IHEoisW4SItE5WMi28=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QZJ6v3wNgBPawTlsvU9xpn+cVV9tHp0dmnlVlJqv2SkOxP1EShY2wgoPFnGrEM9at/va52gEh2nv+m+zye2S6Npz7P3YQMmaQEw4ZKLwPnXJkk3q1tSkKcIKcVbUS/t3T/Jr9CZ48AEVF3arnWU84cd/Wh9HIwxzgdgNkZw2Wa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=AMFR03pa; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2ffc3f2b3a9so9409061fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2024 07:13:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1733411389; x=1734016189; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PQOjMRYvtbhFCrEpt4LKpQp+egpXGKfp+zEXaVand9M=;
-        b=pTr+GQVSEBdXCHfRc7MlFWfrTl3TaR42/zz/0KKrzLFfcX43Mo8/7iiylCN96BSKZl
-         o9ufFCDF/MoGlOAQWj/eD90WdDm+C/bNLlBaMMYoJjItJ770CoMUEke4fSmazmLvbjd+
-         PXCZC4Wc+Eil5WThzfLM/RSA/gcQaCxxtkIY45rgKGERPrf7kPVdCOppPztEUc2DMry4
-         LhH1w6msmU5QGDW+HN7kbR/w/ln3rkk/YicCjwS2GkSzGJnYJElp+XI8+ZCqLuaohgne
-         qj1qTOijcgorvoRyqm2xGUKynNMZPz1xhLWXNADC+GsXB+MCb1ZdY39CRT3Fgzonf70j
-         2HPg==
+        d=ventanamicro.com; s=google; t=1733411582; x=1734016382; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xoG8I2gOfAa1nhpr3MtzTH/bpYIZ43v6YhQ9f0tgVvU=;
+        b=AMFR03paJTo3Mt/jpJPjsi+PGpQD0af8XtUaAuhaaUT6IxZUuwm764x8EbxEcOaOSp
+         ZS28y5Q1ceejuLT/r1ElwOD/IGR9DbBQO5XZpgdQokholZO07EDlYFLpoY303WsjHPEN
+         nZkT0se7qMByYrvjLedUP2ljzif/N7jYRcP1RTBeQFFUp6+MrFvfp8+uW3jLHlbdxUmo
+         jmi0t9sWPjrryi85QJaAb4MX3u9NY28qxzwq6O9WmAtYuk+MdkUCIq0iIn8fKI0sBH2J
+         N5Q1OHFqbbyTjxBzdrlFyXCPara4xYAWGCItIpP13EASblQrn1bcEslURHJ6UKzQYqWI
+         f53w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733411389; x=1734016189;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQOjMRYvtbhFCrEpt4LKpQp+egpXGKfp+zEXaVand9M=;
-        b=aVl6CapnyEt/ypoeNNQZAx4yxgWH/OO1lmoMo/tCvB8hXhGlky25lU+OdLm47Hw/DH
-         3Gog9kUieWIBDBlXA8Y9opyKGz52CCTBZfB8OsAwT717MhbWKsUMHUr6zyTyb4xCXAJX
-         SjSGvLW0RMoDMmzDnR7xkp8OF/ZfOdBZ1AeYQ0m9+6/yR7jcfivK8LsUjTlxwhUjvoq6
-         sHSlLL2DQ4f3Sw6oHE3m+sJT6v3aro9U6NHSEADV0Hv09xl3LOzZB94+1cw78f5OsVys
-         sul78eoFbf8fmmw7wVptwLtLGrAouOKjNs35L0mQ9tIvtvWm4m6+8VdssAs3zENu1bEl
-         IfXg==
-X-Forwarded-Encrypted: i=1; AJvYcCWy/F4t9ottzLXAfpQ5LHcI0alG6/u5cGPe/I+cSkD0TNTwXO3OeT8g2oP02gxC29tftRhe/sB/JQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk9VDNhN0lZex3IAXAM++SfxJdacUH2fGpAzG/0dA9GD6zqg+j
-	u6CTibXBHc7Nsg3LzdJhMSLZeM5Qycs0aBbkIOz0jDMkO7s5WQnNeYbljtVWkw==
-X-Gm-Gg: ASbGncvetSroocZSlxwIShDLV84/Up/96b2u59l4OmL+mTydLWgfqG5kQoY27JAcSIU
-	EqmBhnOoy+2u/jyo3daeRw5rSOxZ1d3BGjE67W49exUyNrzaoNzO1QBIUylvXru5d+HFtS02XFM
-	YKstjecEdCO1USCFUQZByqXyOYfsDH8yTVRXtvcmtgla9SXt1H0o6s9ci+xB4vTywLyNXsffbri
-	HPe49uBTo9BW1mOdnWLTBLw95Ae1O2pvR8xlrW6pCky2r4nsTE=
-X-Google-Smtp-Source: AGHT+IHhbf/pZzCcxgVHVLVyaXCHOzFn02c6Zf1CQlCRr1jsnO2iE7Rk8YDhgArk93K5vr5mhEnW9g==
-X-Received: by 2002:a05:6214:27e4:b0:6d8:8f14:2f5c with SMTP id 6a1803df08f44-6d8b73a6cb9mr151197666d6.23.1733411389235;
-        Thu, 05 Dec 2024 07:09:49 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::d4d1])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d8da695c98sm7453136d6.33.2024.12.05.07.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2024 07:09:48 -0800 (PST)
-Date: Thu, 5 Dec 2024 10:09:46 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-	Saravana Kannan <saravanak@google.com>
-Subject: Re: [RFC/RFT PATCH] PM: sleep: Ignore device driver suspend()
- callback return values
-Message-ID: <f6621a09-d5e4-4d3b-9b5c-55294c22030f@rowland.harvard.edu>
-References: <08f3bd66d7fc8e218bb6958777f342786b2c3705.1731554471.git.len.brown@intel.com>
- <CAJZ5v0g1JwGRECd2JVKScWO9a=hmrY03YQx95JKZ+q5KisRb1w@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1733411582; x=1734016382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xoG8I2gOfAa1nhpr3MtzTH/bpYIZ43v6YhQ9f0tgVvU=;
+        b=QWE8WzS4F/wvsuNaZiKg9I8ejz9ooH2/kNNY9wrdVyKdxnZI4R0X6sMlDNveFTMsin
+         o6AkEi1MdJNb9w5mWaCVi8Dp8bzXQui/wj9zt/ZZQpEFtMirtS3zOlQYR5PqmRw3vZ/0
+         FnAwZMz5tGO74J8GQ8X59Dr54fBP5YaIG1BGVk2NCcFU2jdoe3SSCmk+BgKrXIOgwQZt
+         8lqbWDcpuxSgvxnX2Gyywh7R10xFrpV6mAe3tnkKtY2p/VLAtGkFe3Lt6HJjphP2k70I
+         VzFJ/+ZCUqxP9MPWfLCrVHidGKREibj/1zKQUOjIHErw7YZYYEzp438NGkUqEwbi03lR
+         AGvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYwRvEeDJkgiX6vMfv48sPXSrnZVXyFs5D9+MBf0072eopRfJlJ6GtNu1hhT3iT6qVHPOWWMDZmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2NQMpOiEr8HyV1cPHVDTTFRHLWwo6CpEt9R58jhMGWCPMhPmM
+	gvC+BCARePjvWkzrTKBsPNMntqayUi8HXkFvrCkn6nrOOWxCL4zGcb1UGUTG+YCO7m4P5idCPgr
+	/wfpDg4GxLmL+LovXf1pS8bhBTYGbWQ37DqUa3A==
+X-Gm-Gg: ASbGnctCG0wL4nF8qFIsoUlYR02gC2HBkpBxh5EeFZG/Gpy5mpOP1wK6AVYLF0HcseP
+	uD4lsHIuoTz1/9RH1XtEAqcMliRCu78HIcA==
+X-Google-Smtp-Source: AGHT+IGH/8TdnaDUdGz4vg1jz4T+IjoxlkEVgzEnW/Whszlzb3/tE/OJ68+7OcMZC/v7h9xiQOOLAepDgrXh5t82PkQ=
+X-Received: by 2002:a2e:9907:0:b0:300:16c0:9ba with SMTP id
+ 38308e7fff4ca-30016c00c13mr33128631fa.31.1733411582083; Thu, 05 Dec 2024
+ 07:13:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0g1JwGRECd2JVKScWO9a=hmrY03YQx95JKZ+q5KisRb1w@mail.gmail.com>
+References: <20241116-cpuidle-riscv-sbi-cleanup-v3-1-a3a46372ce08@gmail.com> <eee10593-eb0b-4660-80cf-3027d6a99435@ghiti.fr>
+In-Reply-To: <eee10593-eb0b-4660-80cf-3027d6a99435@ghiti.fr>
+From: Anup Patel <apatel@ventanamicro.com>
+Date: Thu, 5 Dec 2024 20:42:50 +0530
+Message-ID: <CAK9=C2W3uxt9aO7NbCfzi6zdp14W_MXvOn2MtGqfzwX89J5aUQ@mail.gmail.com>
+Subject: Re: [PATCH v3] cpuidle: riscv-sbi: fix device node release in early
+ exit of for_each_possible_cpu
+To: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, Anup Patel <anup@brainfault.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Atish Patra <atishp@rivosinc.com>, 
+	Palmer Dabbelt <palmer@rivosinc.com>, linux-pm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Andrew Jones <ajones@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 05, 2024 at 12:55:08PM +0100, Rafael J. Wysocki wrote:
-> Expanded CC list.
-> 
-> On Thu, Nov 14, 2024 at 4:23 AM Len Brown <lenb@kernel.org> wrote:
+On Thu, Dec 5, 2024 at 8:10=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> wrot=
+e:
+>
+> Hi Anup,
+>
+> On 16/11/2024 00:32, Javier Carrasco wrote:
+> > The 'np' device_node is initialized via of_cpu_device_node_get(), which
+> > requires explicit calls to of_node_put() when it is no longer required
+> > to avoid leaking the resource.
 > >
-> > From: Len Brown <len.brown@intel.com>
+> > Instead of adding the missing calls to of_node_put() in all execution
+> > paths, use the cleanup attribute for 'np' by means of the __free()
+> > macro, which automatically calls of_node_put() when the variable goes
+> > out of scope. Given that 'np' is only used within the
+> > for_each_possible_cpu(), reduce its scope to release the nood after
+> > every iteration of the loop.
 > >
-> > Drivers commonly return non-zero values from their suspend
-> > callbacks due to transient errors, not realizing that doing so
-> > aborts system-wide suspend.
-> >
-> > Log, but do not abort system suspend on non-zero return values
-> > from driver's .suspend/.suspend_noirq/.suspend_late callbacks.
-> >
-> > Both before and after this patch, the correct method for a
-> > device driver to abort system-wide suspend is to invoke
-> > pm_system_wakeup() during the suspend flow.
-> >
-> > Legacy behaviour can be restored by adding this line to your .config:
-> > CONFIG_PM_SLEEP_LEGACY_CALLBACK_ABORT=y
-> >
-> > Signed-off-by: Len Brown <len.brown@intel.com>
+> > Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 > > ---
+> > Changes in v3:
+> > - Unwrap line (100 char width).
+> > - Link to v2: https://lore.kernel.org/r/20241031-cpuidle-riscv-sbi-clea=
+nup-v2-1-aae62d383118@gmail.com
+> >
+> > Changes in v2:
+> > - Squash patches for mainline solution without intermediate steps.
+> > - Link to v1: https://lore.kernel.org/r/20241030-cpuidle-riscv-sbi-clea=
+nup-v1-0-5e08a22c9409@gmail.com
+> > ---
+> >   drivers/cpuidle/cpuidle-riscv-sbi.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpui=
+dle-riscv-sbi.c
+> > index 14462c092039..0c92a628bbd4 100644
+> > --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > @@ -504,12 +504,12 @@ static int sbi_cpuidle_probe(struct platform_devi=
+ce *pdev)
+> >       int cpu, ret;
+> >       struct cpuidle_driver *drv;
+> >       struct cpuidle_device *dev;
+> > -     struct device_node *np, *pds_node;
+> > +     struct device_node *pds_node;
+> >
+> >       /* Detect OSI support based on CPU DT nodes */
+> >       sbi_cpuidle_use_osi =3D true;
+> >       for_each_possible_cpu(cpu) {
+> > -             np =3D of_cpu_device_node_get(cpu);
+> > +             struct device_node *np __free(device_node) =3D of_cpu_dev=
+ice_node_get(cpu);
+> >               if (np &&
+> >                   of_property_present(np, "power-domains") &&
+> >                   of_property_present(np, "power-domain-names")) {
+> >
+> > ---
+> > base-commit: 744cf71b8bdfcdd77aaf58395e068b7457634b2c
+> > change-id: 20241029-cpuidle-riscv-sbi-cleanup-e9b3cb96e16d
+> >
+> > Best regards,
+>
+>
+> Will you make a PR for this? Or should this go through the riscv tree?
 
-> 
-> I'm wondering if there are any opinions on this.
-> 
-> IMV, drivers returning errors from their suspend callbacks without a
-> sufficiently serious reason are kind of a problem.
+It's not KVM related so better take it through the RISC-V tree.
 
-There is a least one driver whose suspend callback returns an error if 
-the device is enabled for wakeup and a wakeup event occurs during the 
-suspend procedure.  We don't want to ignore those races.
-
-Alan Stern
+Regards,
+Anup
 
