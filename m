@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-18631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18630-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B0749E5C1E
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 17:51:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E11D9E5C14
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 17:50:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 431671882CF2
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 16:50:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB37F16596D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 16:50:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687C722258D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32933221457;
 	Thu,  5 Dec 2024 16:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Clce7oIH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gZAVJh5B"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392BB221463;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F146721D592;
 	Thu,  5 Dec 2024 16:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733417449; cv=none; b=Yl+fC/QnkiN9257FRDCL3u8HEDwOV6i+OuO2l8G8wgzaMs8HfCoeJ/3vDR/355JsXJEjQhflpS43tjArVKfpGsH2aXhIXKgdV6+1akrIL5GE8sn64lsA8RnKRXwneKxoS9tM1Qqpq8YXQYutSGBoHrhzucHaG5q8+uKeTqQzWR4=
+	t=1733417449; cv=none; b=HXoKXwU5CyzB4Z+jj3q6PJBHlREJ6AUrCys1hGQDyJ2/0OM3oH8EZtcwJxFhYNx8/2Z/0w7/YDIk3y6TV64TnHJhXZ8edKtTOea1CD/o6kGjS/FDGOFGSt9CU+JB1XIF2atNlJzJDBeS53T0duXc+rJ87qoeS7ZGNSW0F/JdeV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733417449; c=relaxed/simple;
-	bh=eRPnmWYSQhSAftRfnhYQ4HXep5ZbnD5fgGUew/TmFlk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RxYnQN+a0UNOeoIc4RYsgeLgixuYspFJfOC7L4OiDhvtcO+HPF52F0jdXEPOdH3PnuDNreSjtK8ISFLxpb98yIqm5Sypv0HBiLQckIgw0qhdpb7rSXDNB5E9/nUxzprcHriw3HEOV/ZGwrz98lf0VSceDu7/n66/F4U/V1z+O4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Clce7oIH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B4C7FC4CED1;
+	bh=dJ3uHGKm141EUtpjkl8lgeTC3Mt+dxJ7luN1jss0jFM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=cJAz4kE4cp+a5O5J3i13FXj7KQAysVhoKGZax41kS8Kf0mxj75QpC3fYvCAKb0OsrEL57bOQd7G2XeeOWM0y2tSn4EOPLkzZU042twLn+IL6uO85qn06xgk72LInsQWp8qXSTPgDmfKdzuiX63RrB0tYfd9yJIlq1GTsFoeBmn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZAVJh5B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C617EC4CEDD;
 	Thu,  5 Dec 2024 16:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1733417448;
-	bh=eRPnmWYSQhSAftRfnhYQ4HXep5ZbnD5fgGUew/TmFlk=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=Clce7oIHQ8D58lkYxmHINUg+XNNoK/LhpP0LOOuhTb0Bxa44m+4NL5+0mFWvgkl2V
-	 rKNJozgLbbJtE+XvoWzSx7xBW+XrMYQHUKNdT/Dqi4oi+uSCpE+tdSyml1p+CT1NLr
-	 RA40iYXECF8WqKXnbLU6gQMS9x8cf7ouJA01YuhFG7FhxqomIhQu6XqheVjMfbIOMU
-	 +609M9hPhPFKilP3gRd78Qzc0aNkaJEOH+9bTl/OdAdrc2a0tOa66RewpEIvl7poe6
-	 c50dx9ebUyXD54lr2Jz7jLjQfQisxGkZQe7A3WV/y/Tqmf0KVoOpwJwC+lnFST61lx
-	 XTeeELDtC0L9A==
+	bh=dJ3uHGKm141EUtpjkl8lgeTC3Mt+dxJ7luN1jss0jFM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=gZAVJh5BBUOaJnfr6AeKfhpdnlNQv4qH4+7vjs4QJ8xgYCT51IbYFpcLSu+9E8WHR
+	 MdN2oJC54IZnnxdkqtrF6VORnCN9R/+hou+OvZscDwA3kthKHjFfsMOLp+Wyd5fbrD
+	 iLsEHJ87EEQKhtFxQ1zrs4ggXjDHwhrcmmAV6do5AnmVBzj9cBuFUi8Z8JGBu+idbB
+	 hQZapT4kcT3cdKcJYSYjKPMiJoQkZ+qtWMyAyPU/rCmLiYmX44qQr4JuugrS8thCG5
+	 DaG3Wlh7l0OV3qg8HYjObpCL0vUV6VM30S1waf43nVd/S/wZt5wLQq7dYhdENTyrhE
+	 O04WKSFnUtaVg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99FF3E77170;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2E30E77178;
 	Thu,  5 Dec 2024 16:50:48 +0000 (UTC)
 From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.linaro.org@kernel.org>
-Subject: [PATCH 0/2] cpufreq: qcom: Clock provider fixes
-Date: Thu, 05 Dec 2024 22:20:27 +0530
-Message-Id: <20241205-qcom-cpufreq-clk-fix-v1-0-de46c82e0fe5@linaro.org>
+Date: Thu, 05 Dec 2024 22:20:28 +0530
+Subject: [PATCH 1/2] cpufreq: qcom: Fix qcom_cpufreq_hw_recalc_rate() to
+ query LUT if LMh IRQ is not available
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,9 +56,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANPZUWcC/x2MSQqAMBDAviJzdqAWN/yKeKjtVAe3LiiC+HeLx
- wSSByIFpghd9kCgiyMfe4Iiz0DPap8I2SQGKWRZSFGh18eG2p02kEe9Lmj5RlULO1pjmrEtIaU
- uUNL/th/e9wNM/J98ZgAAAA==
+Message-Id: <20241205-qcom-cpufreq-clk-fix-v1-1-de46c82e0fe5@linaro.org>
+References: <20241205-qcom-cpufreq-clk-fix-v1-0-de46c82e0fe5@linaro.org>
+In-Reply-To: <20241205-qcom-cpufreq-clk-fix-v1-0-de46c82e0fe5@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
  Viresh Kumar <viresh.kumar@linaro.org>, 
  Xiu Jianfeng <xiujianfeng@huawei.com>
@@ -66,16 +67,16 @@ Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  Johan Hovold <johan+linaro@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1286;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3875;
  i=manivannan.sadhasivam@linaro.org; h=from:subject:message-id;
- bh=eRPnmWYSQhSAftRfnhYQ4HXep5ZbnD5fgGUew/TmFlk=;
- b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBnUdnlN4Zr7BQSl7WojL2S8I1Hp6T7Kvw8mk7HT
- 09RtBftfCWJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCZ1HZ5QAKCRBVnxHm/pHO
- 9aA/CACJ/g/EEk/bHPAxG0CiFqR6jDDHBhVCpzWWDbQv+5L+cQDLw5GmgiiZ/sYzcHS3+pXS09p
- cDdXyDqQjZaN+up+agDGQc9EPzSuaE6I1PWoNJ/eyeR3UjB5/x7eBBAwmJdVTo4chS7AdYUv18V
- ghz7NBoCQvqFXKmEf2r3RbHn/D0lI9kTpxfs7SepHAqzifg8bHYq1gw+XWbYazjgzM8OBGAKb1c
- CUnWjysjDfvL/ilLiJgONqPH00Wzh6JBeZ5jtIovE+uwW0DTHSTEBbwegIWKIUMsx3Vyxh8bR4F
- NtA+Eqgc0IEKyNYa+NAYPmAstOnOjVPV91gWFt7/jw5OuL+A
+ bh=xmiEc5cOXq2ANoWwzxjIO5rWx7Q3nJD+YIF6y04T2iQ=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBnUdnlBP1CABLHnZzjSP6jNwaGz5daIXzuoAOAa
+ WynAPeIWE+JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCZ1HZ5QAKCRBVnxHm/pHO
+ 9azSB/0cw6Y73j0oaalOLQST8EQUx/erBarpb7V+I1aDXzmr42UHP7Q38PGRYMkav9CBTh2zjBb
+ WovoRP8hFtZMawolRvd7Bh0p19K2V2+qpRWhE9e3J7lV0qDSAuFAQwmPEvsQzrrR5NvDv5bPgCx
+ xkcYO60T771CLqonKOsVlzgLmhlynuZCfH/nMg4bPir9GrsXS5gePTegdda3uHFpkDn+rPVx+IW
+ flrIk+fpDfAmYzgs9Ve8cjld4lWGXQ2OoqorR+NeQ6Uz8RPWw6YfCmARQq8c96a4n3/ZnL1b+7j
+ 3UvvX+sPxa/Q8RkV5wY0VHqPDBNOKRa4m0dhJjOIJFofTNnu
 X-Developer-Key: i=manivannan.sadhasivam@linaro.org; a=openpgp;
  fpr=C668AEC3C3188E4C611465E7488550E901166008
 X-Endpoint-Received: by B4 Relay for
@@ -83,35 +84,110 @@ X-Endpoint-Received: by B4 Relay for
 X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Reply-To: manivannan.sadhasivam@linaro.org
 
-Hi,
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-This series has a couple of fixes for the Qcom CPUFreq clock provider.
-Patch 1 fixes an issue where incorrect rate might be reported if LMh IRQ is not
-available for a platform (issue identified based on code inspection). Patch 2
-fixes a regression reported for v6.13-rc1 [1]. The regression was triggered by
-commit 25f1c96a0e84 ("clk: Fix invalid execution of clk_set_rate"), which fixed
-the behavior of the clk_set_rate() API. Even though the commit got reverted now,
-patch 2 fixes the issue in the clock provider code.
+Currently, qcom_cpufreq_hw_recalc_rate() returns the LMh throttled
+frequency for the domain even if LMh IRQ is not available. But as per
+qcom_cpufreq_hw_get(), the driver has to query LUT entries to get the
+actual frequency of the domain. So do the same in
+qcom_cpufreq_hw_recalc_rate().
 
-This series is tested on Qcom RB5 development board.
+While doing so, refactor the existing qcom_cpufreq_hw_get() function so
+that qcom_cpufreq_hw_recalc_rate() can make use of the existing code and
+avoid code duplication. This also requires setting the
+qcom_cpufreq_data::policy even if LMh IRQ is not available.
 
-[1] https://lore.kernel.org/all/20241202100621.29209-1-johan+linaro@kernel.org
-
+Fixes: 4370232c727b ("cpufreq: qcom-hw: Add CPU clock provider support")
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
-Manivannan Sadhasivam (2):
-      cpufreq: qcom: Fix qcom_cpufreq_hw_recalc_rate() to query LUT if LMh IRQ is not available
-      cpufreq: qcom: Implement clk_ops::determine_rate() for qcom_cpufreq* clocks
+ drivers/cpufreq/qcom-cpufreq-hw.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
- drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
----
-base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
-change-id: 20241205-qcom-cpufreq-clk-fix-a60fbfdd7b84
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 98129565acb8..c145ab7b0bb2 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -143,14 +143,12 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+ }
+ 
+ /* Get the frequency requested by the cpufreq core for the CPU */
+-static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
++static unsigned int qcom_cpufreq_get_freq(struct cpufreq_policy *policy)
+ {
+ 	struct qcom_cpufreq_data *data;
+ 	const struct qcom_cpufreq_soc_data *soc_data;
+-	struct cpufreq_policy *policy;
+ 	unsigned int index;
+ 
+-	policy = cpufreq_cpu_get_raw(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+@@ -163,12 +161,10 @@ static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
+ 	return policy->freq_table[index].frequency;
+ }
+ 
+-static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
++static unsigned int __qcom_cpufreq_hw_get(struct cpufreq_policy *policy)
+ {
+ 	struct qcom_cpufreq_data *data;
+-	struct cpufreq_policy *policy;
+ 
+-	policy = cpufreq_cpu_get_raw(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+@@ -177,7 +173,12 @@ static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
+ 	if (data->throttle_irq >= 0)
+ 		return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
+ 
+-	return qcom_cpufreq_get_freq(cpu);
++	return qcom_cpufreq_get_freq(policy);
++}
++
++static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
++{
++	return __qcom_cpufreq_hw_get(cpufreq_cpu_get_raw(cpu));
+ }
+ 
+ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+@@ -363,7 +364,7 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 	 * If h/w throttled frequency is higher than what cpufreq has requested
+ 	 * for, then stop polling and switch back to interrupt mechanism.
+ 	 */
+-	if (throttled_freq >= qcom_cpufreq_get_freq(cpu))
++	if (throttled_freq >= qcom_cpufreq_get_freq(cpufreq_cpu_get_raw(cpu)))
+ 		enable_irq(data->throttle_irq);
+ 	else
+ 		mod_delayed_work(system_highpri_wq, &data->throttle_work,
+@@ -441,7 +442,6 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
+ 		return data->throttle_irq;
+ 
+ 	data->cancel_throttle = false;
+-	data->policy = policy;
+ 
+ 	mutex_init(&data->throttle_lock);
+ 	INIT_DEFERRABLE_WORK(&data->throttle_work, qcom_lmh_dcvs_poll);
+@@ -552,6 +552,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ 
+ 	policy->driver_data = data;
+ 	policy->dvfs_possible_from_any_cpu = true;
++	data->policy = policy;
+ 
+ 	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy);
+ 	if (ret) {
+@@ -622,7 +623,7 @@ static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned lon
+ {
+ 	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
+ 
+-	return qcom_lmh_get_throttle_freq(data);
++	return __qcom_cpufreq_hw_get(data->policy) * HZ_PER_KHZ;
+ }
+ 
+ static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
 
-Best regards,
 -- 
-Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+2.25.1
 
 
 
