@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-18599-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18600-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BEA89E4E4E
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 08:28:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988EE9E4E64
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 08:31:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7DD61881921
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 07:28:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E178F16167F
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2024 07:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B841AF0DA;
-	Thu,  5 Dec 2024 07:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7271A1B0F37;
+	Thu,  5 Dec 2024 07:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TWT2MG99"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4S6usSu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30C3193;
-	Thu,  5 Dec 2024 07:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0701AB517;
+	Thu,  5 Dec 2024 07:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733383723; cv=none; b=mok3KseYx45k6rZhS01hVbFytk77EfqQX8nqHRyj1HFilCqxmIootsXhDUtDjOb2qbAFsp9rUpOQbfMr+4bEoVR6K1mmjLHL9zgxaSu05xhloNnO5LHZVq4HVGnqrDcD2pDiVYwiFFrlbuh0Zvk5UANF6U5VhcsPr5gQdmGiQH8=
+	t=1733383889; cv=none; b=kwkh59D3pFWQwGAR61cAjy2P1W8BaSd4o8i/WHLqYlmwrj4mvVS/vPuw/gE+0kYeHuwm449U/v1xbX5tDcg8cN/wuEXVOV73q4lqr2VmJVPjmC/nW2rbnUejHA1Ye0Sdwq19Mh8TU1X9YMMLuIbsMTLbLvPzFhMfV/RSeqnvBNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733383723; c=relaxed/simple;
-	bh=d9RVmBnjc+7Rz3EcXgbJd1R8pcShtevZX/vVfoCaVQU=;
+	s=arc-20240116; t=1733383889; c=relaxed/simple;
+	bh=tl7z5khqHwgfmMC1yiN0DCsWW590Zda7OF1raNXX9wo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y6xmbgrzZIKUYjjWmVCrevV4vpW1bn402MpKnMnLsjyrxWAbmBT7T5zabNWWJ7iXWhcGp4toxVHWpZ5hoxMP8mwDjwLpPgED9j3VR/9wgll4WdK3WisLKA2vYHtPujSa61PmK+Y2r0v075OEg3zVggBLbal7uKe0OWQ7W4Twp1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TWT2MG99; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DAF0C4CED1;
-	Thu,  5 Dec 2024 07:28:33 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=gB18VIcCndzTzi/cOFwZGGdC92MN248Q2yRf1hm6zE9VjOJ6dwZwX4HVK4rLFZ4ypFVv2fgCjwpmFFVmK576bdu+UrYgLoh3tiEldBi7ZhUYAWLZ/YgIaF2ifigUykOyCcpV4tQv4EnsjnTepbZ/6NED4I+LEcU+vQNCyYmpuCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4S6usSu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC662C4CED1;
+	Thu,  5 Dec 2024 07:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733383723;
-	bh=d9RVmBnjc+7Rz3EcXgbJd1R8pcShtevZX/vVfoCaVQU=;
+	s=k20201202; t=1733383888;
+	bh=tl7z5khqHwgfmMC1yiN0DCsWW590Zda7OF1raNXX9wo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TWT2MG99jaEORtLsTyEL3B9M/HfBcFMyu2Bev/rYVVZCVc6ioluM1uxEhxbTGBdJu
-	 +MFp2D9GDPlS/S58wskAkM0Fg0LDVM3e7hjxlEjx7mbqf+ORRlg/J/xlwmHXBkXjn8
-	 CZRFnAsyvbI0CL84iO4OoH1EXf/WDJGUhCNDSsfQ1YcOD4YrcK15BWYUUDJxRdN0Sa
-	 8KaAZnE/oAy6cWdLIqFWqoLx2r7UcRw0/cbVFqwPIK8RfKgZVQSFmQepxQhvmbHBqW
-	 Hyxho/G7aVGP6z2ujouWY/iBGV+4m/infSyrmY/++9sJ9lnoiVr31Q8+JA7KHhNCeN
-	 vhmoY2TLiGnfg==
-Message-ID: <2842aa7b-e369-4c80-b651-a3a9b09d17ff@kernel.org>
-Date: Thu, 5 Dec 2024 08:28:32 +0100
+	b=e4S6usSuH5khmzNH0uwBG77QC78odPh/2kq0qMDeGd/ANo+7o2nuziV3Jq2mSUKpf
+	 dYh0PvwQehqhnJyfTH3JzGBmNODJ3u2eAe148ta1ZpfjuBKmVMLPV4NocVHUKWoVjq
+	 47LRw2chq/03glgPtpgZXYl56+3EnT6q6xyJn9sTqzfZ48rgWzZmnLyyw4+uiPb8Z3
+	 8bee0JOBwaP+qne5ecQ3OM4X//OzcNyaQoh8nCp1Qan5gXLNjtt4b1rpc52tBzQ9OD
+	 5o1V2PKEQhmjkiZvIZH3ExgEzAXYvfmGOHDhvJiqDnUjXCX2xfcJdJyJ+DQQSyx7c2
+	 QzyjbZrPQP62g==
+Message-ID: <5206c6a1-0473-40c2-b651-5dbca1204729@kernel.org>
+Date: Thu, 5 Dec 2024 08:31:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,13 +50,13 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 05/14] dt-bindings: clock: thead,th1520: Add
- support for Video Output subsystem
-To: Stephen Boyd <sboyd@kernel.org>,
- Michal Wilczynski <m.wilczynski@samsung.com>, airlied@gmail.com,
- aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com,
- frank.binns@imgtec.com, guoren@kernel.org, jassisinghbrar@gmail.com,
- jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com,
+Subject: Re: [RFC PATCH v1 01/14] clk: thead: Refactor TH1520 clock driver to
+ share common code
+To: Michal Wilczynski <m.wilczynski@samsung.com>,
+ Stephen Boyd <sboyd@kernel.org>, airlied@gmail.com, aou@eecs.berkeley.edu,
+ conor+dt@kernel.org, drew@pdp7.com, frank.binns@imgtec.com,
+ guoren@kernel.org, jassisinghbrar@gmail.com, jszhang@kernel.org,
+ krzk+dt@kernel.org, m.szyprowski@samsung.com,
  maarten.lankhorst@linux.intel.com, matt.coster@imgtec.com,
  mripard@kernel.org, mturquette@baylibre.com, palmer@dabbelt.com,
  paul.walmsley@sifive.com, robh@kernel.org, simona@ffwll.ch,
@@ -65,11 +65,10 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
- <CGME20241203134155eucas1p1e90c71c4f8eb5da41d2cc8a500f54dc7@eucas1p1.samsung.com>
- <20241203134137.2114847-6-m.wilczynski@samsung.com>
- <f21ffd12-167b-4d10-9017-33041ec322b0@kernel.org>
- <07bfb02a-1df3-4a03-83bb-d7edc540739d@samsung.com>
- <1b05b11b2a8287c0ff4b6bdd079988c7.sboyd@kernel.org>
+ <CGME20241203134150eucas1p24ba8d2fbf2af5b8f9abe503b4334127d@eucas1p2.samsung.com>
+ <20241203134137.2114847-2-m.wilczynski@samsung.com>
+ <94a57c718a09a20d148101884bf2e5f2.sboyd@kernel.org>
+ <94356242-7c94-4da5-a9ad-684d03ddedd6@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,49 +114,115 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <1b05b11b2a8287c0ff4b6bdd079988c7.sboyd@kernel.org>
+In-Reply-To: <94356242-7c94-4da5-a9ad-684d03ddedd6@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/12/2024 21:21, Stephen Boyd wrote:
->>> No, that's a clear NAK. You claim you have no address space but in the
->>> same time you have address space via regmap.
->>
->> I see your concern. The VOSYS subsystem's address space includes
->> registers for various components, such as clock gates and reset
->> controls, which are scattered throughout the address space as specified
->> in the manual 4.4.1 [2]. Initially, I attempted to use a shared syscon
->> regmap for access, but I realize this might not be the best approach.
->>
->> To address this, I'll specify the 'reg' property in each node to define
->> the address ranges explicitly fragmenting the address space for the VOSYS
->> manually.
->>
->> vosys_clk: clock-controller@ffef528050 {
->>         compatible = "thead,th1520-clk-vo";
->>         reg = <0xff 0xef528050 0x0 0x8>;
->>         #clock-cells = <1>;
->> };
->>
->> pd: power-domain@ffef528000 {
->>         compatible = "thead,th1520-pd";
->>         reg = <0xff 0xef528000 0x0 0x8>;
->>         #power-domain-cells = <1>;
->> };
+On 04/12/2024 14:54, Michal Wilczynski wrote:
 > 
-> You should have one node:
 > 
->     clock-controller@ffef528000 {
->       compatible = "thead,th1520-vo";
->       reg = <0xff 0xef528050 0x0 0x1a04>;
+> On 12/3/24 20:56, Stephen Boyd wrote:
+>> Quoting Michal Wilczynski (2024-12-03 05:41:24)
+>>> diff --git a/drivers/clk/thead/Makefile b/drivers/clk/thead/Makefile
+>>> index 7ee0bec1f251..d7cf88390b69 100644
+>>> --- a/drivers/clk/thead/Makefile
+>>> +++ b/drivers/clk/thead/Makefile
+>>> @@ -1,2 +1,2 @@
+>>>  # SPDX-License-Identifier: GPL-2.0
+>>> -obj-$(CONFIG_CLK_THEAD_TH1520_AP) += clk-th1520-ap.o
+>>> +obj-$(CONFIG_CLK_THEAD_TH1520_AP) += clk-th1520.o clk-th1520-ap.o
+>>
+>> Can the -ap driver be extended instead? Or are the clks in a different
+>> IO region?
+> 
+> The Video Output (VO) clocks reside in a different address space as
+> defined in the T-HEAD manual 4.4.1 [1]. Therefore, creating a separate
+> driver made sense to maintain clarity and adhere to the existing
 
-Yes, obviously, but probably entire block:
+There is no such rule, no convention even. But there is a rule and
+convention of re-using drivers.
 
-<0xff 0xef528000 0x0 0x1000>;
+> convention of having one driver per subsystem, similar to the
 
->       #clock-cells = <1>;
->       #power-domain-cells = <1>;
->     };
+You have here two drivers per subsystem, so even if there was such a
+rule, you just broke it.
+
+> AP-specific driver.
+> 
+> [1] - https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf
+>>
+>>> diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/clk-th1520-ap.c
+>>> index 17e32ae08720..a6015805b859 100644
+>>> --- a/drivers/clk/thead/clk-th1520-ap.c
+>>> +++ b/drivers/clk/thead/clk-th1520-ap.c
+>>> @@ -5,297 +5,9 @@
+>>>   *  Authors: Yangtao Li <frank.li@vivo.com>
+>>>   */
+>>>  
+>>> -#include <dt-bindings/clock/thead,th1520-clk-ap.h>
+>>
+>> Presumably this should stay here.
+>>
+>>> -#include <linux/bitfield.h>
+>>> -#include <linux/clk-provider.h>
+>>> -#include <linux/device.h>
+>>> -#include <linux/module.h>
+>>> -#include <linux/platform_device.h>
+>>> -#include <linux/regmap.h>
+>>
+
+...
+
+>>> +static inline struct ccu_common *hw_to_ccu_common(struct clk_hw *hw)
+>>> +{
+>>> +       return container_of(hw, struct ccu_common, hw);
+>>> +}
+>>> +
+>>> +static inline struct ccu_mux *hw_to_ccu_mux(struct clk_hw *hw)
+>>> +{
+>>> +       struct ccu_common *common = hw_to_ccu_common(hw);
+>>> +
+>>> +       return container_of(common, struct ccu_mux, common);
+>>> +}
+>>> +
+>>> +static inline struct ccu_pll *hw_to_ccu_pll(struct clk_hw *hw)
+>>> +{
+>>> +       struct ccu_common *common = hw_to_ccu_common(hw);
+>>> +
+>>> +       return container_of(common, struct ccu_pll, common);
+>>> +}
+>>> +
+>>> +static inline struct ccu_div *hw_to_ccu_div(struct clk_hw *hw)
+>>> +{
+>>> +       struct ccu_common *common = hw_to_ccu_common(hw);
+>>> +
+>>> +       return container_of(common, struct ccu_div, common);
+>>> +}
+>>> +
+>>> +static inline struct ccu_gate *hw_to_ccu_gate(struct clk_hw *hw)
+>>> +{
+>>> +       struct ccu_common *common = hw_to_ccu_common(hw);
+>>> +
+>>> +       return container_of(common, struct ccu_gate, common);
+>>> +}
+>>> +
+>>> +extern const struct clk_ops ccu_div_ops;
+>>> +extern const struct clk_ops clk_pll_ops;
+>>> +extern const struct regmap_config th1520_clk_regmap_config;
+>>
+>> Why is the regmap config exported?
+> 
+> The regmap_config is exported to allow reuse across multiple drivers.
+> Initially, I passed the clock VOSYS address space using the reg property
+> and created the regmap from it, enabling other drivers to utilize the
+> same configuration. Later, I switched to a regmap-based syscon approach
+> but haven’t moved the regmap_config back to the AP driver.
+
+
+It anyway in your original code cannot be exported. If you want to use
+syscon, then use syscon, not exporting regmaps manually.
+
+
 
 
 Best regards,
