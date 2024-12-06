@@ -1,146 +1,196 @@
-Return-Path: <linux-pm+bounces-18717-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18718-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 469AE9E79DA
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 21:08:00 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DA8D18822FC
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 20:07:53 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2B7204594;
-	Fri,  6 Dec 2024 20:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sz1ZQ6VZ"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D21DB9E7A7F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 22:16:32 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12981FFC7C;
-	Fri,  6 Dec 2024 20:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9239728661A
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 21:16:31 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C285213E97;
+	Fri,  6 Dec 2024 21:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLozwkjv"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9754B213E73;
+	Fri,  6 Dec 2024 21:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733515648; cv=none; b=J9pn/Tp9QDj2Yoab3YTKNDVh1y6niqC5iZas79WaH5r842yNqgBpm5/bLIcXhp4iKuICk/HEAHiAFtaXUzkXVkIaTf444Gwt/0LgsyilpQVK9yOo9UNu1MLq777yfKRMEf9qr82rnX8kwJ8DURR92Xh7P96xVnKvm6sUkUxf5Cc=
+	t=1733519789; cv=none; b=qodJOUi3aQShORIXv9LJsc/z8gHdQiankfOqt0EOLwLQlO960ywiOBR0hMFTEyhD6F8uMS02dPfKeJ6w2YRdDpgBY1e5S15a0PVjX4+XyFSwCoL3SfguvWR1eP3HLdERB7bsPCr3JAoxj80IVC6qXaBG3iLg/9ADxAansgORuSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733515648; c=relaxed/simple;
-	bh=uGfxSyRGVeBwdHWc9pTH40OuKII8hEjlZwn2yGW62D8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PFSCEk0h1lxALsX8dCJVSIGE7RNEQZu3x+UcVGN76A+egAMJ+f6KkBC36Y56gAJuvl4nYmTJxy7/3wGRniWqhD2SVXYvzrBsxPFi0QZNk7ZU4XLUQZlaugIfT6N3CYaVQk6OSP5YGHpgnL+dCvB+mzGJvVBDBE1GD2fVo9xw1HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sz1ZQ6VZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C65C4CED1;
-	Fri,  6 Dec 2024 20:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733515647;
-	bh=uGfxSyRGVeBwdHWc9pTH40OuKII8hEjlZwn2yGW62D8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Sz1ZQ6VZggn5FL7ycFaMdQxO8PcdAydik04mS3J5qIP2vvTMd0KQ6KIk6ghJ9Op/c
-	 hm/mJkZMTQ1it6H4Umy5POw9soTbv0HgkgSm2ZJhLy8pypnily8wU9JlBpz5NIoDG7
-	 V6QqYXmCwkoEH2B2PdrGgnFQe+bbgwP74OkjKa2+2ePafsIQHbRdbMwCKgNBX4pXon
-	 lR9vTD6kELM2rA23PUQ0n/zepQNizOVxk1/GWm/EvLemBGagoWzq+CDBHg5Wsy8Kqr
-	 YR7ZL5sYWDkGYSMUPBecidRlwFdtBj2Q10MAhZTNVuNIhQ4hysQPDQeTrBny36WRIl
-	 cU7oLC0J2fGWw==
-Message-ID: <7a4a9d51a9105bd5ca2c850c26fed6435b5e90e9.camel@kernel.org>
-Subject: Re: [PATCH v9 6/9] PCI/bwctrl: Re-add BW notification portdrv as
- PCIe BW controller
-From: Niklas Schnelle <niks@kernel.org>
-To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, Lorenzo
- Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?=	 <kw@linux.com>, "Maciej W . Rozycki"
- <macro@orcam.me.uk>, Jonathan Cameron	 <Jonathan.Cameron@Huawei.com>, Lukas
- Wunner <lukas@wunner.de>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, Krishna
- chaitanya chundru <quic_krichai@quicinc.com>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
- <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
- <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
- <amitk@kernel.org>,  Zhang Rui <rui.zhang@intel.com>, Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>, niks@kernel.org
-Date: Fri, 06 Dec 2024 21:07:20 +0100
-In-Reply-To: <91b501c0ce92de681cc699eb6064840caad28803.camel@kernel.org>
-References: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
-				 <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
-			 <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
-		 <91b501c0ce92de681cc699eb6064840caad28803.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1733519789; c=relaxed/simple;
+	bh=zOmh9qAGwU6c3133KkRN8o4kWKNoEwXt1SHwu/dxEBc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NWvQvSX/cJWodJXnGNt6Nly6BRlvOZrukg8rlnhjP7uKPIybUaP+ax7aruZ57NJ+gtgmv7KjeWE0FjnbGDP93do2jQLsnsEq4iMWerO23AQqlU1Mwxy9K6pGTUF9Niecn8EBLxKSqUhbfDO8xsPL5YiPRq4m3C9Ap2OnzX+rxCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLozwkjv; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-434ab114753so17105805e9.0;
+        Fri, 06 Dec 2024 13:16:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733519786; x=1734124586; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nRW+iOVyps5/7zvlNQKW1GtyxDHbc6Ru5QmYKpc6JyI=;
+        b=cLozwkjvvDJ0fO7v9FQP3904H3OH2IC8QJys1MabluRDMnD0LkJTdJqVvoKRvaeyY3
+         69I1P98b3MXEqmwqULcxVaUaRwzTXeLGAZhkk4XxZqJrPphXIQITXF5e+KDt1LG/WBaw
+         crV/tX1jGlMkLw5j3n6We4Ympcq0Qm5wuivSOnJJSeYZueMD9CSwUlz/68iAqlt3MKWF
+         Kf4EaXOncgleq/XhU4diArk5XWNamrqR48KH3w3GdaaZIFd/jHgrbMVv0KvTSqn0pyTb
+         8ER9PHN2lmrXJaeJwgt9dLcSftC7qxCgLQdrbO0pX4DMGo3OCmqlXD9J6hSbqyzZStQi
+         C6Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733519786; x=1734124586;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nRW+iOVyps5/7zvlNQKW1GtyxDHbc6Ru5QmYKpc6JyI=;
+        b=UIp8sp+g7ldfc89B4pwMK5s5eXicKEYU4zqKzpcoRnI5kl40sMPceMNvtR8K+BHpcN
+         rSbIucdMqn7FKkM5938jQEwHGWqsFplsTABWK0aRo3+Ff4eeN3eOc6kDuP5j3IJRYEpN
+         +aEXSrFUVKLyF0BXo/ddjZc2mkjWxKtbQQqJae9xOQOaHV9JPGMeP3PZyZFOKTnzHfgn
+         pjxxV0OgPnnQFMjiRUaKDtbk20T0wanAYE2xD1KlgCJJUWV234csGhRUS2dvKCqCvIhO
+         oTzsMqaN98vW/o7YazGdzjcsCtvHdu6nkYsH48QJKW+T3sNJREjMbL2JjQMJGIElZtm5
+         PGzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVSOjYOUdFTOw5NwtVgjBa3RJNQasuMCG2nqfKUzZAXG2kI9svMC7URLusnyFBdDL6G0hwTIHjxL58I@vger.kernel.org, AJvYcCWo/gWOPSniUPSlsQZW68q+pgAxpxX94OdzcMb6r/DDHFV05JknkhpE3yWemXsj2tEapC5ldJRDL7k=@vger.kernel.org, AJvYcCXZZsrqjzwvW2e2u84CwjOi8zMfQC26f6F/Ogt6/gzoRPqw0eDaJ3soIdAfus1/R/qLohcHwW0A3BLJDbKl@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWu75om19ma4IQVpqs2zrYhFvQJ++VtKG3FzzE3ex6C4eHNW4z
+	a41RQz3KJO9IhPJuQaTnqq7Gd5JJH+bhIcJ5X0rUJS3l25znVhXx
+X-Gm-Gg: ASbGncvkpyRM7I96YX+acBYIMCBimRpb5NqHkCcT09XBKphzzu8cIvobGI2ztVECFw1
+	jZKKyw1xCw/+6b+kNNpertBP60aAr+wz5YVwqYifVnhWGtZeH67AaMNwBdEBMlwsMyj+V6Ld7N2
+	8wStEW97y0FwHY/lXwvf9SefDudSeUqNmGcBSYbQIG6YnmwwxjDlnglC3iaVmO21a4T+XwB0FdG
+	U7vxednMR69AtxRONgB18mXN4HftOeaYofhB1dOH5UGwtPbuVFrKQRPZBTrCdoWe7BhOcvrXHBU
+	zOUPzZ+XZwN0D0oCotc=
+X-Google-Smtp-Source: AGHT+IEIKgSj99gQZ0yfIujLV4jW/0ASuy6eVEaAycAy7rwgJQxjyx7hj/onKqQL6rPYk6CO5v+K8g==
+X-Received: by 2002:a5d:5f8c:0:b0:385:e1eb:a7af with SMTP id ffacd0b85a97d-3862b3e7bd7mr2996674f8f.48.1733519785502;
+        Fri, 06 Dec 2024 13:16:25 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-434d526b375sm105978835e9.9.2024.12.06.13.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 13:16:24 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v7 1/2] dt-bindings: cpufreq: Document support for Airoha EN7581 CPUFreq
+Date: Fri,  6 Dec 2024 22:11:24 +0100
+Message-ID: <20241206211145.2823-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2024-12-06 at 20:31 +0100, Niklas Schnelle wrote:
-> On Fri, 2024-12-06 at 19:12 +0100, Niklas Schnelle wrote:
-> > On Fri, 2024-10-18 at 17:47 +0300, Ilpo J=C3=A4rvinen wrote:
-> > > This mostly reverts the commit b4c7d2076b4e ("PCI/LINK: Remove
-> > > bandwidth notification"). An upcoming commit extends this driver
-> > > building PCIe bandwidth controller on top of it.
-> > >=20
-> > > The PCIe bandwidth notification were first added in the commit
-> > > e8303bb7a75c ("PCI/LINK: Report degraded links via link bandwidth
-> > > notification") but later had to be removed. The significant changes
-> > > compared with the old bandwidth notification driver include:
-> > >=20
-> ---8<---
-> > > ---
-> >=20
-> > Hi Ilpo,
-> >=20
-> > I bisected a v6.13-rc1 boot hang on my personal workstation to this
-> > patch. Sadly I don't have much details like a panic or so because the
-> > boot hangs before any kernel messages, or at least they're not visible
-> > long enough to see. I haven't yet looked into the code as I wanted to
-> > raise awareness first. Since the commit doesn't revert cleanly on
-> > v6.13-rc1 I also haven't tried that yet.
-> >=20
-> > Here are some details on my system:
-> > - AMD Ryzen 9 3900X=20
-> > - ASRock X570 Creator Motherboard
-> > - Radeon RX 5600 XT
-> > - Intel JHL7540 Thunderbolt 3 USB Controller (only USB 2 plugged)
-> > - Intel 82599 10 Gigabit NIC with SR-IOV enabled with 2 VFs
-> > - Intel n I211 Gigabit NIC
-> > - Intel Wi-Fi 6 AX200
-> > - Aquantia AQtion AQC107 NIC
-> >=20
-> > If you have patches or things to try just ask.
-> >=20
-> > Thanks,
-> > Niklas
-> >=20
->=20
-> Ok I can now at least confirm that bluntly disabling the new bwctrl
-> driver with the below diff on top of v6.13-rc1 circumvents the boot
-> hang I'm seeing. So it's definitely this.
->=20
-> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> index 5e10306b6308..6fa54480444a 100644
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -828,7 +828,7 @@ static void __init pcie_init_services(void)
->         pcie_aer_init();
->         pcie_pme_init();
->         pcie_dpc_init();
-> -       pcie_bwctrl_init();
-> +       /* pcie_bwctrl_init(); */
->         pcie_hp_init();
->  }
->=20
+On newer Airoha SoC, CPU Frequency is scaled indirectly with SMC commands
+to ATF.
 
-Also here is the full lspci -vvv output running the above on v6.13-rc1:
-https://paste.js.org/9UwQIMp7eSgp
+A virtual clock is exposed. This virtual clock is a get-only clock and
+is used to expose the current global CPU clock. The frequency info comes
+by the output of the SMC command that reports the clock in MHz.
 
-Also note that I have CONFIG_PCIE_THERMAL unset so it's also not the
-cooling device portion that's causing the issue. Next I guess I should
-narrow it down to the specific port where enabling the bandwidth
-monitoring is causing trouble, not yet sure how best to do this with
-this many devices.
+The SMC sets the CPU clock by providing an index, this is modelled as
+performance states in a power domain.
 
-Thanks,
-Niklas
+CPUs can't be individually scaled as the CPU frequency is shared across
+all CPUs and is global.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+Changes v7:
+- Add more info to the description for usage of clock and
+  performance-domain
+- Drop redundant nodes from example
+Changes v6:
+- No changes
+Changes v5:
+- Add Reviewed-by tag
+- Fix OPP node name error
+- Rename cpufreq node name to power-domain
+- Rename CPU node power domain name to perf
+- Add model and compatible to example
+Changes v4:
+- Add this patch
+
+ .../cpufreq/airoha,en7581-cpufreq.yaml        | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+new file mode 100644
+index 000000000000..7d4510b3219c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/cpufreq/airoha,en7581-cpufreq.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Airoha EN7581 CPUFreq
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++description: |
++  On newer Airoha SoC, CPU Frequency is scaled indirectly with SMC commands
++  to ATF.
++
++  A virtual clock is exposed. This virtual clock is a get-only clock and
++  is used to expose the current global CPU clock. The frequency info comes
++  by the output of the SMC command that reports the clock in MHz.
++
++  The SMC sets the CPU clock by providing an index, this is modelled as
++  performance states in a power domain.
++
++  CPUs can't be individually scaled as the CPU frequency is shared across
++  all CPUs and is global.
++
++properties:
++  compatible:
++    const: airoha,en7581-cpufreq
++
++  '#clock-cells':
++    const: 0
++
++  '#power-domain-cells':
++    const: 0
++
++  operating-points-v2: true
++
++required:
++  - compatible
++  - '#clock-cells'
++  - '#power-domain-cells'
++  - operating-points-v2
++
++additionalProperties: false
++
++examples:
++  - |
++    performance-domain {
++        compatible = "airoha,en7581-cpufreq";
++
++        operating-points-v2 = <&cpu_smcc_opp_table>;
++
++        #power-domain-cells = <0>;
++        #clock-cells = <0>;
++    };
+-- 
+2.45.2
+
 
