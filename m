@@ -1,184 +1,168 @@
-Return-Path: <linux-pm+bounces-18711-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18712-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 154029E769D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 18:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CDFB9E77D9
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 19:12:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAA0E28231F
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 17:03:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B80BE284C79
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 18:12:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6CE20628B;
-	Fri,  6 Dec 2024 17:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 662E51FFC65;
+	Fri,  6 Dec 2024 18:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JJuHNEgc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UnhFn1Sj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CAA1487D1
-	for <linux-pm@vger.kernel.org>; Fri,  6 Dec 2024 17:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C8C2206A5;
+	Fri,  6 Dec 2024 18:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733504580; cv=none; b=CWOKC2543CokmxwKOsCT/SuUwxQj5+du9nh3of1C+pfZLNjS+BFi/SifOlXis8v1dV+ENGUNO7dXnhun68FBnVfObe4Q4U1q9iiPvEPvnBuXZqPQQX05TQMsyFU8PeRM9aPx3V9KzVEjklX68BLLTARs8JVFOm4UuBZr4B4pO5A=
+	t=1733508764; cv=none; b=WuH/HsppV8kVeRTte6jmys6qshsrEfkNHYMuqdRei5+VnkjxutxfZo70xf/0UXJ7ICzjLBbAQ8pOu4/1/HB1VvXHiAxhT/bC8ft8WTGp1F85XNULAzduy+iHSbMof9UuLAP8vGxDwPuDJ4uuug9Ai/888T0qKywuk7QAXk1Qkzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733504580; c=relaxed/simple;
-	bh=ux0yYXEb1iC9mXDwPqR6kY3Tu9X3mqmnqOo1y4A/1No=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Skbe9jeSEIn98biWDnGx1rim1vmqIyX/fK2wIdvTGiLDIkKAt8I6CVuTtfHVMmzNEPGitgT5G1IWoTEUm9ak4h62HfBQIoSsP+ZnHiMP/uR6SKmTtfkErUw6osvAvotRZZSpH+x60vi+sc8q6mLtCx48rn5d7lUQY0t6gUUx8UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JJuHNEgc; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733504579; x=1765040579;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ux0yYXEb1iC9mXDwPqR6kY3Tu9X3mqmnqOo1y4A/1No=;
-  b=JJuHNEgcjUepe7Yn/bixd5s+W03rH2WTIdORHroW45rboh46SHh4SXjw
-   yr9uqkVXrzMvU6bxJhqNFCL/aDnNp5vqW2p3nFScYdUDut9EF8TwIwPrf
-   ZO9k2sjXOtQ5y8oeJmQJudWQigQRrsjOy4ya1wi4jgpD3cIFVT0zQwgzI
-   epe6JScdy0Npapop7N3iplzrHWXPXjBZLvwfTpnfDPiHNKIwFHwb04lDU
-   5ulKg0oX+n+LbS5CbqYhzcbfypbzw+OJcwqaZ0Afgh9H6Ywh/FpYq4ffK
-   s30GWx5uNHDgpoX833a0K4Ob+IEhZCrv9aCmlpqvD0BaS7rZFdQiADcKV
-   w==;
-X-CSE-ConnectionGUID: tRNej2vWT/qhRAzpgg3kBg==
-X-CSE-MsgGUID: AEjHBg9xSruVQz7Ju0ljgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="33599514"
-X-IronPort-AV: E=Sophos;i="6.12,213,1728975600"; 
-   d="scan'208";a="33599514"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2024 09:02:58 -0800
-X-CSE-ConnectionGUID: ZZhvRsQ7R9KErjCWDQCrlA==
-X-CSE-MsgGUID: 9tSE8WBwRny3zmQW2QFSZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,213,1728975600"; 
-   d="scan'208";a="99268400"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 06 Dec 2024 09:02:56 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJbjC-00026f-0p;
-	Fri, 06 Dec 2024 17:02:54 +0000
-Date: Sat, 7 Dec 2024 01:02:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nam Cao <namcao@linutronix.de>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [chanwoo:devfreq-next 2/4]
- drivers/devfreq/event/rockchip-dfi.c:645:9: error: implicit declaration of
- function 'hrtimer_setup'; did you mean 'timer_setup'?
-Message-ID: <202412070000.0qhtOPGl-lkp@intel.com>
+	s=arc-20240116; t=1733508764; c=relaxed/simple;
+	bh=BD3rylJF4VrjXkyOGEszmEdPAFS1XWWp9p8/lp3GP64=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LFIRKc40oEmTFQKM3MHF4DRUorDKVPMDANLmzMUns8+1uf2pZujxibLRmG5TH8TbTgT0PJLbtNj4bZC+QyddIF/OhQ7W3izntNkdnqLH5Fpct2GItIofBA/cmEOt4A5JZHX1r0s+8hv/fDD1FpmVgOgydvpI2JxM4Ejsv9rGz7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UnhFn1Sj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C059C4CEDE;
+	Fri,  6 Dec 2024 18:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733508763;
+	bh=BD3rylJF4VrjXkyOGEszmEdPAFS1XWWp9p8/lp3GP64=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=UnhFn1SjccuH+OFK60OheALghOj1seL4qxUwCxMDgCtWshCfchYrhZAiM0/zdPmvF
+	 +SiyoHXrN4t+ibGfSNtTE9NoJsciM1orOlCfwkLTbNrxL+5xUcwlq9MryDozQlhW8D
+	 lmAVFAWO0oTduGBDYvlD951tyX7PwopARsqBEj2jyANXyqWDcZBVwc5lTiPhAR5mwS
+	 Dw7UplPiVya34VmGLg2PzXuv8rdh04Ied7jgWQqx32iIog2iePtmzjDEuf9nKwIA7x
+	 vzqxe0ZMJQo29Uo5lXIq+eqO6rh3Dq1W5HMYkISZzgShLRT6r8R8dXAFOY5tZxNBWR
+	 flSdXIHXIKXtA==
+Message-ID: <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
+Subject: Re: [PATCH v9 6/9] PCI/bwctrl: Re-add BW notification portdrv as
+ PCIe BW controller
+From: Niklas Schnelle <niks@kernel.org>
+To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, Lorenzo
+ Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?=	 <kw@linux.com>, "Maciej W . Rozycki"
+ <macro@orcam.me.uk>, Jonathan Cameron	 <Jonathan.Cameron@Huawei.com>, Lukas
+ Wunner <lukas@wunner.de>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, Krishna
+ chaitanya chundru <quic_krichai@quicinc.com>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
+ <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>,  Zhang Rui <rui.zhang@intel.com>, Christophe JAILLET
+ <christophe.jaillet@wanadoo.fr>, 	linux-pci@vger.kernel.org
+Date: Fri, 06 Dec 2024 19:12:37 +0100
+In-Reply-To: <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
+References: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
+	 <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-next
-head:   27d1a5d95c5202f927f1155ad8f919778cd9f155
-commit: ba13bb7cee6699cfa97ea0f9f84f8d683a5c001d [2/4] PM / devfreq: rockchip-dfi: Switch to use hrtimer_setup()
-config: arm-randconfig-002-20241206 (https://download.01.org/0day-ci/archive/20241207/202412070000.0qhtOPGl-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070000.0qhtOPGl-lkp@intel.com/reproduce)
+On Fri, 2024-10-18 at 17:47 +0300, Ilpo J=C3=A4rvinen wrote:
+> This mostly reverts the commit b4c7d2076b4e ("PCI/LINK: Remove
+> bandwidth notification"). An upcoming commit extends this driver
+> building PCIe bandwidth controller on top of it.
+>=20
+> The PCIe bandwidth notification were first added in the commit
+> e8303bb7a75c ("PCI/LINK: Report degraded links via link bandwidth
+> notification") but later had to be removed. The significant changes
+> compared with the old bandwidth notification driver include:
+>=20
+> 1) Don't print the notifications into kernel log, just keep the Link
+> =C2=A0=C2=A0 Speed cached in struct pci_bus updated. While somewhat
+> unfortunate,
+> =C2=A0=C2=A0 the log spam was the source of complaints that eventually le=
+ad to
+> =C2=A0=C2=A0 the removal of the bandwidth notifications driver (see the l=
+inks
+> =C2=A0=C2=A0 below for further information).
+>=20
+> 2) Besides the Link Bandwidth Management Interrupt, enable also Link
+> =C2=A0=C2=A0 Autonomous Bandwidth Interrupt to cover the other source of
+> =C2=A0=C2=A0 bandwidth changes.
+>=20
+> 3) Use threaded IRQ with IRQF_ONESHOT to handle Bandwidth
+> Notification
+> =C2=A0=C2=A0 Interrupts to address the problem fixed in the commit 3e82a7=
+f9031f
+> =C2=A0=C2=A0 ("PCI/LINK: Supply IRQ handler so level-triggered IRQs are
+> acked")).
+>=20
+> 4) Handle Link Speed updates robustly. Refresh the cached Link Speed
+> =C2=A0=C2=A0 when enabling Bandwidth Notification Interrupts, and solve t=
+he
+> race
+> =C2=A0=C2=A0 between Link Speed read and LBMS/LABS update in
+> =C2=A0=C2=A0 pcie_bwnotif_irq_thread().
+>=20
+> 5) Use concurrency safe LNKCTL RMW operations.
+>=20
+> 6) The driver is now called PCIe bwctrl (bandwidth controller)
+> instead
+> =C2=A0=C2=A0 of just bandwidth notifications because of increased scope a=
+nd
+> =C2=A0=C2=A0 functionality within the driver.
+>=20
+> 7) Coexist with the Target Link Speed quirk in
+> =C2=A0=C2=A0 pcie_failed_link_retrain(). Provide LBMS counting API for it=
+.
+>=20
+> 8) Tweaks to variable/functions names for consistency and length
+> =C2=A0=C2=A0 reasons.
+>=20
+> Bandwidth Notifications enable the cur_bus_speed in the struct
+> pci_bus
+> to keep track PCIe Link Speed changes.
+>=20
+> Link:
+> https://lore.kernel.org/all/20190429185611.121751-1-helgaas@kernel.org/
+> Link:
+> https://lore.kernel.org/linux-pci/20190501142942.26972-1-keith.busch@inte=
+l.com/
+> Link:
+> https://lore.kernel.org/linux-pci/20200115221008.GA191037@google.com/
+> Suggested-by: Lukas Wunner <lukas@wunner.de> # Building bwctrl on top
+> of bwnotif
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412070000.0qhtOPGl-lkp@intel.com/
+Hi Ilpo,
 
-All errors (new ones prefixed by >>):
+I bisected a v6.13-rc1 boot hang on my personal workstation to this
+patch. Sadly I don't have much details like a panic or so because the
+boot hangs before any kernel messages, or at least they're not visible
+long enough to see. I haven't yet looked into the code as I wanted to
+raise awareness first. Since the commit doesn't revert cleanly on
+v6.13-rc1 I also haven't tried that yet.
 
-   drivers/devfreq/event/rockchip-dfi.c: In function 'rockchip_ddr_perf_init':
->> drivers/devfreq/event/rockchip-dfi.c:645:9: error: implicit declaration of function 'hrtimer_setup'; did you mean 'timer_setup'? [-Wimplicit-function-declaration]
-     645 |         hrtimer_setup(&dfi->timer, rockchip_dfi_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-         |         ^~~~~~~~~~~~~
-         |         timer_setup
+Here are some details on my system:
+- AMD Ryzen 9 3900X=20
+- ASRock X570 Creator Motherboard
+- Radeon RX 5600 XT
+- Intel JHL7540 Thunderbolt 3 USB Controller (only USB 2 plugged)
+- Intel 82599 10 Gigabit NIC with SR-IOV enabled with 2 VFs
+- Intel n I211 Gigabit NIC
+- Intel Wi-Fi 6 AX200
+- Aquantia AQtion AQC107 NIC
 
+If you have patches or things to try just ask.
 
-vim +645 drivers/devfreq/event/rockchip-dfi.c
+Thanks,
+Niklas
 
-   596	
-   597	static int rockchip_ddr_perf_init(struct rockchip_dfi *dfi)
-   598	{
-   599		struct pmu *pmu = &dfi->pmu;
-   600		int ret;
-   601	
-   602		seqlock_init(&dfi->count_seqlock);
-   603	
-   604		pmu->module = THIS_MODULE;
-   605		pmu->capabilities = PERF_PMU_CAP_NO_EXCLUDE;
-   606		pmu->task_ctx_nr = perf_invalid_context;
-   607		pmu->attr_groups = attr_groups;
-   608		pmu->event_init  = rockchip_ddr_perf_event_init;
-   609		pmu->add = rockchip_ddr_perf_event_add;
-   610		pmu->del = rockchip_ddr_perf_event_del;
-   611		pmu->start = rockchip_ddr_perf_event_start;
-   612		pmu->stop = rockchip_ddr_perf_event_stop;
-   613		pmu->read = rockchip_ddr_perf_event_update;
-   614	
-   615		dfi->cpu = raw_smp_processor_id();
-   616	
-   617		ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
-   618					      "rockchip_ddr_perf_pmu",
-   619					      NULL,
-   620					      ddr_perf_offline_cpu);
-   621	
-   622		if (ret < 0) {
-   623			dev_err(dfi->dev, "cpuhp_setup_state_multi failed: %d\n", ret);
-   624			return ret;
-   625		}
-   626	
-   627		dfi->cpuhp_state = ret;
-   628	
-   629		rockchip_dfi_enable(dfi);
-   630	
-   631		ret = devm_add_action_or_reset(dfi->dev, rockchip_ddr_cpuhp_remove_state, dfi);
-   632		if (ret)
-   633			return ret;
-   634	
-   635		ret = cpuhp_state_add_instance_nocalls(dfi->cpuhp_state, &dfi->node);
-   636		if (ret) {
-   637			dev_err(dfi->dev, "Error %d registering hotplug\n", ret);
-   638			return ret;
-   639		}
-   640	
-   641		ret = devm_add_action_or_reset(dfi->dev, rockchip_ddr_cpuhp_remove_instance, dfi);
-   642		if (ret)
-   643			return ret;
-   644	
- > 645		hrtimer_setup(&dfi->timer, rockchip_dfi_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-   646	
-   647		switch (dfi->ddr_type) {
-   648		case ROCKCHIP_DDRTYPE_LPDDR2:
-   649		case ROCKCHIP_DDRTYPE_LPDDR3:
-   650			dfi->burst_len = 8;
-   651			break;
-   652		case ROCKCHIP_DDRTYPE_LPDDR4:
-   653		case ROCKCHIP_DDRTYPE_LPDDR4X:
-   654			dfi->burst_len = 16;
-   655			break;
-   656		}
-   657	
-   658		ret = perf_pmu_register(pmu, "rockchip_ddr", -1);
-   659		if (ret)
-   660			return ret;
-   661	
-   662		return devm_add_action_or_reset(dfi->dev, rockchip_ddr_perf_remove, dfi);
-   663	}
-   664	#else
-   665	static int rockchip_ddr_perf_init(struct rockchip_dfi *dfi)
-   666	{
-   667		return 0;
-   668	}
-   669	#endif
-   670	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
