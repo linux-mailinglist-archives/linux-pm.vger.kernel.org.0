@@ -1,175 +1,151 @@
-Return-Path: <linux-pm+bounces-18727-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18728-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEE659E7C36
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 00:06:59 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E12E79E7C56
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 00:19:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B8AB283EFF
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 23:06:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 943731885139
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 23:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3021FFC7C;
-	Fri,  6 Dec 2024 23:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5FF204582;
+	Fri,  6 Dec 2024 23:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GwevWi3z"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="UND0e9v7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2161EF090;
-	Fri,  6 Dec 2024 23:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342A922C6CD;
+	Fri,  6 Dec 2024 23:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733526415; cv=none; b=TjAfkBjcoaI/70HbS9CGAMh08qT3rJrfJ39aPGgj4YgDWNyTLrPqaPvybSDUSTvEa0lmjRYFNES2wVGGRkkBNap0wIr6rA6UFulO6c7a1/I6Yd7bNd09TF8HD6W9SQ3JjcwO69zTUs+Ml3YRasLYQmqDO6coRokbp8JGVV5rm7w=
+	t=1733527146; cv=none; b=bN6aCX0MIHA3+HH89OYjhIjF8yhlBBdecsrXTTdHjY2segbae35A79n8f6y6iHhEk6r53tmOINXVmL61hOPKkie6lFgtIcIXpuRG8ZEx29jOt8UZliAw0lYqIqeHEYSjpYCCcpS0R6uF9J5x8qLvqDeRQVGxFGg2tdayvQ614iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733526415; c=relaxed/simple;
-	bh=ZtoiAjQ2U+lEx4d4Q+20KSR/KUtr9wtqJss8xBJgrck=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JuARf8kXdWkJZWcZgHg6UC+oMRIT/Fxu6hZD92yYBXdlwTlNm2ksoKvgrD2EkmlkEpGnghW4VNvF15M87bgJ3xjWfhEUo3695sQiYpeGeb5G6eDIFj6dI0fQqOeQL59lLQ0ij1AJGetDaym+6EVpsjKyA3r2G5Hacq/dl1Vfw/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GwevWi3z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A704C4CED1;
-	Fri,  6 Dec 2024 23:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733526415;
-	bh=ZtoiAjQ2U+lEx4d4Q+20KSR/KUtr9wtqJss8xBJgrck=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=GwevWi3zEYTROksNfCuVInm2/ZJETA3X2Omp/Nz3xcxMo2mI3KyQLeGRMdIZ3i2hi
-	 Ghk+KC7pFawEoLcBHwDUsaUo15ija/rUOtN4E1Sw/jYgqxaZ2BCQunRqu8BZvvsTod
-	 XWRSfjTgOXtxW88x+SPkzCrkBTiqGCPjSUQTBn6ApxX5Wv3zwvh15yMawHxLJQiSTl
-	 AAhLLApcTm4v1CRpe0yZ/0aEb1UOGVgE1rmsHCzbS7O+oZ+QN91j3jAgXG9hwYYX72
-	 gmrnBOUbdkKc/JjyODzR9kC9ZdlwLglkj2GgDVusG5k2GXusx0nZGLgboAvDL5d3zC
-	 AD+VUkhOMamww==
-Message-ID: <5f27c14467aa728358ebfe1686517aabe7c1e878.camel@kernel.org>
-Subject: Re: [PATCH v9 6/9] PCI/bwctrl: Re-add BW notification portdrv as
- PCIe BW controller
-From: Niklas Schnelle <niks@kernel.org>
-To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, Lorenzo
- Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?=	 <kw@linux.com>, "Maciej W . Rozycki"
- <macro@orcam.me.uk>, Jonathan Cameron	 <Jonathan.Cameron@Huawei.com>, Lukas
- Wunner <lukas@wunner.de>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, Krishna
- chaitanya chundru <quic_krichai@quicinc.com>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
- <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
- <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
- <amitk@kernel.org>,  Zhang Rui <rui.zhang@intel.com>, Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>, niks@kernel.org
-Date: Sat, 07 Dec 2024 00:06:49 +0100
-In-Reply-To: <7a4a9d51a9105bd5ca2c850c26fed6435b5e90e9.camel@kernel.org>
-References: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
-						 <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
-					 <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
-				 <91b501c0ce92de681cc699eb6064840caad28803.camel@kernel.org>
-		 <7a4a9d51a9105bd5ca2c850c26fed6435b5e90e9.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1733527146; c=relaxed/simple;
+	bh=JxTIiy96rTE1YU9SbWroA1I8AUFKzVQGZ7a3IGFt6oE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=icNyJwfkva7i5XVv6SDG5He5strtiL8LNYjBkrU8VssqBMhqx88EArUKFU2V9DeDZ13lIjx2qPw+dH5uz6XfDlmE5AVWc9+4zMkpltdYAa+FyiYlhV85MM9NG4MMS4ZjnTAXBpzEufthXWWpU75j4D/ekvFHu5n7GIsqRzIS6Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=UND0e9v7; arc=none smtp.client-ip=80.12.242.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id Jhb3tmgoI3wKNJhb3tAfoD; Sat, 07 Dec 2024 00:18:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1733527135;
+	bh=iJWW7bjs8XwyN4BIQGqjB9cOcNKN/bIWxDUv1xg8da4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=UND0e9v7tzPGGp6E7+obUozTJf8mcAnHD1ZLR04dZmh9hwHwg7MJeljXmKQlTurrR
+	 6vPurxc5khR3hKArvHM/P43taifzDRf55tZZXpPxwqIidy0cghUl4u1Ah9TJbSIjvx
+	 f69wvY9VZuKlgP9HaLs2gZMRZM4oQ96c0Ka3biZk3Hg0Xarbnx485nO+KhyQKiq/nP
+	 cLqZt/lDNE4/izURS6lCWscrGB8PoU5KTr+sSxkMQj2fhV5k3b719bEo/ssSpR0RQC
+	 n0jb/rbn7eBWMdwtlAYIWm82InCM3+oQ87hPOQ5A5IUf1/tYNLlwvaB4woT5Oz8tzE
+	 sOgzvC3DtjUxQ==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Sat, 07 Dec 2024 00:18:55 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <81e0e916-b14b-4ecf-b70a-2ce334c174cf@wanadoo.fr>
+Date: Sat, 7 Dec 2024 00:18:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] thermal/drivers/qoriq: Use dev_err_probe() simplify
+ the code
+To: Frank Li <Frank.Li@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ "open list:THERMAL" <linux-pm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20241206225624.3744880-1-Frank.Li@nxp.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20241206225624.3744880-1-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2024-12-06 at 21:07 +0100, Niklas Schnelle wrote:
-> On Fri, 2024-12-06 at 20:31 +0100, Niklas Schnelle wrote:
-> > On Fri, 2024-12-06 at 19:12 +0100, Niklas Schnelle wrote:
-> > > On Fri, 2024-10-18 at 17:47 +0300, Ilpo J=C3=A4rvinen wrote:
-> > > > This mostly reverts the commit b4c7d2076b4e ("PCI/LINK: Remove
-> > > > bandwidth notification"). An upcoming commit extends this driver
-> > > > building PCIe bandwidth controller on top of it.
-> > > >=20
-> > > > The PCIe bandwidth notification were first added in the commit
-> > > > e8303bb7a75c ("PCI/LINK: Report degraded links via link bandwidth
-> > > > notification") but later had to be removed. The significant changes
-> > > > compared with the old bandwidth notification driver include:
-> > > >=20
-> > ---8<---
-> > > > ---
-> > >=20
-> > > Hi Ilpo,
-> > >=20
-> > > I bisected a v6.13-rc1 boot hang on my personal workstation to this
-> > > patch. Sadly I don't have much details like a panic or so because the
-> > > boot hangs before any kernel messages, or at least they're not visibl=
-e
-> > > long enough to see. I haven't yet looked into the code as I wanted to
-> > > raise awareness first. Since the commit doesn't revert cleanly on
-> > > v6.13-rc1 I also haven't tried that yet.
-> > >=20
-> > > Here are some details on my system:
-> > > - AMD Ryzen 9 3900X=20
-> > > - ASRock X570 Creator Motherboard
-> > > - Radeon RX 5600 XT
-> > > - Intel JHL7540 Thunderbolt 3 USB Controller (only USB 2 plugged)
-> > > - Intel 82599 10 Gigabit NIC with SR-IOV enabled with 2 VFs
-> > > - Intel n I211 Gigabit NIC
-> > > - Intel Wi-Fi 6 AX200
-> > > - Aquantia AQtion AQC107 NIC
-> > >=20
-> > > If you have patches or things to try just ask.
-> > >=20
-> > > Thanks,
-> > > Niklas
-> > >=20
-> >=20
-> > Ok I can now at least confirm that bluntly disabling the new bwctrl
-> > driver with the below diff on top of v6.13-rc1 circumvents the boot
-> > hang I'm seeing. So it's definitely this.
-> >=20
-> > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> > index 5e10306b6308..6fa54480444a 100644
-> > --- a/drivers/pci/pcie/portdrv.c
-> > +++ b/drivers/pci/pcie/portdrv.c
-> > @@ -828,7 +828,7 @@ static void __init pcie_init_services(void)
-> >         pcie_aer_init();
-> >         pcie_pme_init();
-> >         pcie_dpc_init();
-> > -       pcie_bwctrl_init();
-> > +       /* pcie_bwctrl_init(); */
-> >         pcie_hp_init();
-> >  }
-> >=20
->=20
-> Also here is the full lspci -vvv output running the above on v6.13-rc1:
-> https://paste.js.org/9UwQIMp7eSgp
->=20
-> Also note that I have CONFIG_PCIE_THERMAL unset so it's also not the
-> cooling device portion that's causing the issue. Next I guess I should
-> narrow it down to the specific port where enabling the bandwidth
-> monitoring is causing trouble, not yet sure how best to do this with
-> this many devices.
->=20
-> Thanks,
-> Niklas
+Le 06/12/2024 à 23:56, Frank Li a écrit :
+> Use dev_err_probe() and devm_clk_get_optional_enabled() to simplify the
+> code.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>   drivers/thermal/qoriq_thermal.c | 33 ++++++++++-----------------------
+>   1 file changed, 10 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index 52e26be8c53df..baf1b75b97cbe 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -296,38 +296,27 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>   
+>   	base = devm_platform_ioremap_resource(pdev, 0);
+>   	ret = PTR_ERR_OR_ZERO(base);
+> -	if (ret) {
+> -		dev_err(dev, "Failed to get memory region\n");
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to get memory region\n");
+>   
+>   	data->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
+>   	ret = PTR_ERR_OR_ZERO(data->regmap);
+> -	if (ret) {
+> -		dev_err(dev, "Failed to init regmap (%d)\n", ret);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to init regmap\n");
+>   
+> -	data->clk = devm_clk_get_optional(dev, NULL);
+> +	data->clk = devm_clk_get_optional_enabled(dev, NULL);
+>   	if (IS_ERR(data->clk))
+>   		return PTR_ERR(data->clk);
+>   
+> -	ret = clk_prepare_enable(data->clk);
+> -	if (ret) {
+> -		dev_err(dev, "Failed to enable clock\n");
+> -		return ret;
+> -	}
+> -
+>   	ret = devm_add_action_or_reset(dev, qoriq_tmu_action, data);
 
-Ok did some fiddeling and it's the thunderbolt ports. The below diff
-works around the issue. That said I guess for a proper fix this would
-should get filtered by the port service matching? Also as can be seen
-in lspci the port still claims to support bandwidth management so maybe
-other thunderbolt ports actually do.
+clk_disable_unprepare() in qoriq_tmu_action() should be removed as-well.
 
-Thanks,
-Niklas
-
-diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
-index b59cacc740fa..76a14f959c7f 100644
---- a/drivers/pci/pcie/bwctrl.c
-+++ b/drivers/pci/pcie/bwctrl.c
-@@ -294,6 +294,9 @@ static int pcie_bwnotif_probe(struct pcie_device *srv)
-        struct pci_dev *port =3D srv->port;
-        int ret;
-
-+       if (srv->port->is_thunderbolt)
-+               return -EOPNOTSUPP;
-+
-        struct pcie_bwctrl_data *data =3D devm_kzalloc(&srv->device,
-                                                     sizeof(*data), GFP_KER=
-NEL);
-        if (!data)
+>   	if (ret)
+>   		return ret;
+>   
+>   	/* version register offset at: 0xbf8 on both v1 and v2 */
+>   	ret = regmap_read(data->regmap, REGS_IPBRR(0), &ver);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "Failed to read IP block version\n");
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,  "Failed to read IP block version\n");
+> +
+>   	data->ver = (ver >> 8) & 0xff;
+>   
+>   	qoriq_tmu_init_device(data);	/* TMU initialization */
+> @@ -337,10 +326,8 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>   		return ret;
+>   
+>   	ret = qoriq_tmu_register_tmu_zone(dev, data);
+> -	if (ret < 0) {
+> -		dev_err(dev, "Failed to register sensors\n");
+> -		return ret;
+> -	}
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to register sensors\n");
+>   
+>   	platform_set_drvdata(pdev, data);
+>   
 
 
