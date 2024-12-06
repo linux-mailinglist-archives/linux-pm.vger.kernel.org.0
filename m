@@ -1,79 +1,146 @@
-Return-Path: <linux-pm+bounces-18716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18717-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 464AE9E79BD
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 21:05:08 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 469AE9E79DA
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 21:08:00 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 076B5287EDF
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 20:05:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DA8D18822FC
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2024 20:07:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A7620458A;
-	Fri,  6 Dec 2024 20:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2B7204594;
+	Fri,  6 Dec 2024 20:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDqE0swt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sz1ZQ6VZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B73204582;
-	Fri,  6 Dec 2024 20:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12981FFC7C;
+	Fri,  6 Dec 2024 20:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733515418; cv=none; b=ojaesHW7MMpHO3rLj0xtEToEVMbBDT6b41TBdHsV0Qcv+KGNPwOm3r0ngPG8PRHqzgGtBylIzpwNof04t/dtwzcY8aUZE1I8KZkHZVgPkGroPPEwDExCnq5/3kujwykiXVmVYDgj3QgDli86Lnywx3ayIiT9lsDRDizWpFwB7kk=
+	t=1733515648; cv=none; b=J9pn/Tp9QDj2Yoab3YTKNDVh1y6niqC5iZas79WaH5r842yNqgBpm5/bLIcXhp4iKuICk/HEAHiAFtaXUzkXVkIaTf444Gwt/0LgsyilpQVK9yOo9UNu1MLq777yfKRMEf9qr82rnX8kwJ8DURR92Xh7P96xVnKvm6sUkUxf5Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733515418; c=relaxed/simple;
-	bh=r7ptKlFmA2ZVJjWRFUORfxleHTv707uFZT8qK+s5Xd0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Z+VzD/R2fh3oD5a+FrIldG7rHMr8dfBEyJnqeq+xCLfKH5GZ6yl6WW08xIj7+w5INBZklWwWcUGgK8KxYMMVcchOIkn175sc3V8C6D57BSt0JCBOKzPkve2CjXJcDtdX1qI2K14g2jGb2gd5Ez5HFR2TWslASxF6N/dmxCjUdto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDqE0swt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FB7C4CED1;
-	Fri,  6 Dec 2024 20:03:37 +0000 (UTC)
+	s=arc-20240116; t=1733515648; c=relaxed/simple;
+	bh=uGfxSyRGVeBwdHWc9pTH40OuKII8hEjlZwn2yGW62D8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PFSCEk0h1lxALsX8dCJVSIGE7RNEQZu3x+UcVGN76A+egAMJ+f6KkBC36Y56gAJuvl4nYmTJxy7/3wGRniWqhD2SVXYvzrBsxPFi0QZNk7ZU4XLUQZlaugIfT6N3CYaVQk6OSP5YGHpgnL+dCvB+mzGJvVBDBE1GD2fVo9xw1HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sz1ZQ6VZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C65C4CED1;
+	Fri,  6 Dec 2024 20:07:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733515417;
-	bh=r7ptKlFmA2ZVJjWRFUORfxleHTv707uFZT8qK+s5Xd0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=CDqE0swtsh0x3JDKGSbqsK3LQEEoU6tAXTCb8DwzA+wApk1WPZyIsouIqoR7X8EIz
-	 6D789QCW/1khOg8T2E4qMxTH2eI0ho8IvF80oYTX1eukrlAV/wUTeq3Razs3GvI3cy
-	 MkYuSEeiAmdxs+ASOAKXyKtgxaTurB0STKhw33pITr+EGEt55GSdi+CUt+Lr0sjvvW
-	 GnmIvz88IVz0GARB6OSRAnXnfA+7SzAyjn9G0eUUnjhJFhAbTtunVXU6Rpnz6zLStt
-	 iGlVG06iXC0fQ4hiMyt1Ymjc0ab9zKWspMDleHqIFrSBlxstjfqrkAjv1RKXQJoICi
-	 q0UCqWUEY0qjA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB135380A95C;
-	Fri,  6 Dec 2024 20:03:53 +0000 (UTC)
-Subject: Re: [GIT PULL] pmdomain fixes for v6.13-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20241206084031.119041-1-ulf.hansson@linaro.org>
-References: <20241206084031.119041-1-ulf.hansson@linaro.org>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20241206084031.119041-1-ulf.hansson@linaro.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.13-rc1
-X-PR-Tracked-Commit-Id: 2379fb937de5333991c567eefd7d11b98977d059
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fa4c221fa153211d80acaf54fe5e5b1859c99796
-Message-Id: <173351543257.2778953.46327491607829835.pr-tracker-bot@kernel.org>
-Date: Fri, 06 Dec 2024 20:03:52 +0000
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>, linux-arm-kernel@lists.infradead.org
+	s=k20201202; t=1733515647;
+	bh=uGfxSyRGVeBwdHWc9pTH40OuKII8hEjlZwn2yGW62D8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=Sz1ZQ6VZggn5FL7ycFaMdQxO8PcdAydik04mS3J5qIP2vvTMd0KQ6KIk6ghJ9Op/c
+	 hm/mJkZMTQ1it6H4Umy5POw9soTbv0HgkgSm2ZJhLy8pypnily8wU9JlBpz5NIoDG7
+	 V6QqYXmCwkoEH2B2PdrGgnFQe+bbgwP74OkjKa2+2ePafsIQHbRdbMwCKgNBX4pXon
+	 lR9vTD6kELM2rA23PUQ0n/zepQNizOVxk1/GWm/EvLemBGagoWzq+CDBHg5Wsy8Kqr
+	 YR7ZL5sYWDkGYSMUPBecidRlwFdtBj2Q10MAhZTNVuNIhQ4hysQPDQeTrBny36WRIl
+	 cU7oLC0J2fGWw==
+Message-ID: <7a4a9d51a9105bd5ca2c850c26fed6435b5e90e9.camel@kernel.org>
+Subject: Re: [PATCH v9 6/9] PCI/bwctrl: Re-add BW notification portdrv as
+ PCIe BW controller
+From: Niklas Schnelle <niks@kernel.org>
+To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, Lorenzo
+ Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?=	 <kw@linux.com>, "Maciej W . Rozycki"
+ <macro@orcam.me.uk>, Jonathan Cameron	 <Jonathan.Cameron@Huawei.com>, Lukas
+ Wunner <lukas@wunner.de>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, Krishna
+ chaitanya chundru <quic_krichai@quicinc.com>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
+ <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>,  Zhang Rui <rui.zhang@intel.com>, Christophe JAILLET
+ <christophe.jaillet@wanadoo.fr>, niks@kernel.org
+Date: Fri, 06 Dec 2024 21:07:20 +0100
+In-Reply-To: <91b501c0ce92de681cc699eb6064840caad28803.camel@kernel.org>
+References: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
+				 <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
+			 <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
+		 <91b501c0ce92de681cc699eb6064840caad28803.camel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-The pull request you sent on Fri,  6 Dec 2024 09:40:31 +0100:
+On Fri, 2024-12-06 at 20:31 +0100, Niklas Schnelle wrote:
+> On Fri, 2024-12-06 at 19:12 +0100, Niklas Schnelle wrote:
+> > On Fri, 2024-10-18 at 17:47 +0300, Ilpo J=C3=A4rvinen wrote:
+> > > This mostly reverts the commit b4c7d2076b4e ("PCI/LINK: Remove
+> > > bandwidth notification"). An upcoming commit extends this driver
+> > > building PCIe bandwidth controller on top of it.
+> > >=20
+> > > The PCIe bandwidth notification were first added in the commit
+> > > e8303bb7a75c ("PCI/LINK: Report degraded links via link bandwidth
+> > > notification") but later had to be removed. The significant changes
+> > > compared with the old bandwidth notification driver include:
+> > >=20
+> ---8<---
+> > > ---
+> >=20
+> > Hi Ilpo,
+> >=20
+> > I bisected a v6.13-rc1 boot hang on my personal workstation to this
+> > patch. Sadly I don't have much details like a panic or so because the
+> > boot hangs before any kernel messages, or at least they're not visible
+> > long enough to see. I haven't yet looked into the code as I wanted to
+> > raise awareness first. Since the commit doesn't revert cleanly on
+> > v6.13-rc1 I also haven't tried that yet.
+> >=20
+> > Here are some details on my system:
+> > - AMD Ryzen 9 3900X=20
+> > - ASRock X570 Creator Motherboard
+> > - Radeon RX 5600 XT
+> > - Intel JHL7540 Thunderbolt 3 USB Controller (only USB 2 plugged)
+> > - Intel 82599 10 Gigabit NIC with SR-IOV enabled with 2 VFs
+> > - Intel n I211 Gigabit NIC
+> > - Intel Wi-Fi 6 AX200
+> > - Aquantia AQtion AQC107 NIC
+> >=20
+> > If you have patches or things to try just ask.
+> >=20
+> > Thanks,
+> > Niklas
+> >=20
+>=20
+> Ok I can now at least confirm that bluntly disabling the new bwctrl
+> driver with the below diff on top of v6.13-rc1 circumvents the boot
+> hang I'm seeing. So it's definitely this.
+>=20
+> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> index 5e10306b6308..6fa54480444a 100644
+> --- a/drivers/pci/pcie/portdrv.c
+> +++ b/drivers/pci/pcie/portdrv.c
+> @@ -828,7 +828,7 @@ static void __init pcie_init_services(void)
+>         pcie_aer_init();
+>         pcie_pme_init();
+>         pcie_dpc_init();
+> -       pcie_bwctrl_init();
+> +       /* pcie_bwctrl_init(); */
+>         pcie_hp_init();
+>  }
+>=20
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.13-rc1
+Also here is the full lspci -vvv output running the above on v6.13-rc1:
+https://paste.js.org/9UwQIMp7eSgp
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fa4c221fa153211d80acaf54fe5e5b1859c99796
+Also note that I have CONFIG_PCIE_THERMAL unset so it's also not the
+cooling device portion that's causing the issue. Next I guess I should
+narrow it down to the specific port where enabling the bandwidth
+monitoring is causing trouble, not yet sure how best to do this with
+this many devices.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Niklas
 
