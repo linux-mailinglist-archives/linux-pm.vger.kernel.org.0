@@ -1,170 +1,137 @@
-Return-Path: <linux-pm+bounces-18740-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18741-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB719E817E
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 19:18:38 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41E089E81A5
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 19:44:34 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F019928181F
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 18:18:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 258FF18842EC
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 18:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C57D1482F5;
-	Sat,  7 Dec 2024 18:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142FB14EC73;
+	Sat,  7 Dec 2024 18:44:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HyyixNDV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNg2bEsO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9933FF1;
-	Sat,  7 Dec 2024 18:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C931B2E822;
+	Sat,  7 Dec 2024 18:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733595514; cv=none; b=TSehneTEQhekvTsh10RwaCFyRZYH7rnx4AoiVzXE71QxAVJis3P/Gx3MXA4guVEqYEkrvVidM3Hr021fvK8nc61fp+3bAQEdFpGStYHOPMWtxRGSr1PUgiWzf2+gNRMeHEkruDKq0hq7hlgoAa9vUJyKVtBRxz+sINymP3jCXCA=
+	t=1733597068; cv=none; b=IUHT7F/oTmT8yNtdt8yqMKKPnR085F7pLXGxOh5g96UbQz/LKbbAP1oZA6I7FbWjZ8hWIbRCDBKt24TD3Er0yncTRQvuUNrjH+bTAqdIb4aKkNinfzyaAkOobPFR8B2B6uBINKQX4oOjk7bDus2OLA5YGhYqEkqaONQQkrUvKxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733595514; c=relaxed/simple;
-	bh=cDkEobS2aski+JFPLJVhb5pmqltEfNy1h3hATzOB8c8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Io6f0bzrW1SLzGRpRqczh8bXN4v1A7IFopzP2VgaLav9J1bf/mz94mCMKZzsmoAG7cn89gdvPttWXJrPGTJFWsw7G3FxV0dSGLvx6L3usCiIWxwp48V5cvqJHZOZR5i11lFY5gQmaoLr/8RoOjQBXpbLVsVQjOWIfsCSOCBONIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HyyixNDV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8F7C4CECD;
-	Sat,  7 Dec 2024 18:18:29 +0000 (UTC)
+	s=arc-20240116; t=1733597068; c=relaxed/simple;
+	bh=P0Tz+o0ppzWiPXWBhrr7FTaRZO/5732ZljC69tIiaeI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pIMF30RqxQhI3MFUXomF/tVyikk6j77jWIjDp4YFfyhYYpe3hub+sTDTO45RRMH/FuYQdvMON17J4X2plm6YAA3QeG3PFC8CVLuOrvbNNHFSHdA2uIPDNuI6MfnWduezZAhLFdjkwjGnMb7pqGWMc4w4X28jRxvu2Mjua0meDCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNg2bEsO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D79C4CECD;
+	Sat,  7 Dec 2024 18:44:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733595513;
-	bh=cDkEobS2aski+JFPLJVhb5pmqltEfNy1h3hATzOB8c8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=HyyixNDVKhjVU2Gx8hXFLYokEoJRrDjyeTelMB6qQJE5ofj+zQ0dMnBU5bgJU4ykA
-	 Eo/+bqdt4C40QA+r2DNU2kJBbxNtb1CuSIuZRQ+Pjq92UDnawtoW1f5wQf9aKk9c3U
-	 YGBKZ+IW5af6tba3mK//CyhHB6c+iGAuacEE9A5VPQfRIOvzdfO6WLAOB8o+2Dq9s5
-	 3KFrC1pPZvzNZk5Qt0fngTXymUcxZqlc+il74nAQJ8D/RWNPAVMu2+YUAjt7MCZMAn
-	 Mjy550hBlhhvAJMNujWRuwa27wH85Odqgs1QmASM0Q7cLjbitpYwlcmxPsuah1sEv6
-	 Wi8ws6nkrVtYQ==
-Message-ID: <43fc3e56e969be45278054e9adb91419668bd762.camel@kernel.org>
-Subject: Re: [PATCH v9 6/9] PCI/bwctrl: Re-add BW notification portdrv as
- PCIe BW controller
+	s=k20201202; t=1733597068;
+	bh=P0Tz+o0ppzWiPXWBhrr7FTaRZO/5732ZljC69tIiaeI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=SNg2bEsOR26tW9s04pPMuXjOtkLwIiRN4+AdL/DXXm/fOCIbhFpl4c/alaKerOjFk
+	 eaIg9oIceNo9PDWmzSTPHZXMZ6K4+YBTDP98WlzaDPDpRSvjHR4yWDuVz0z4YrZv9Z
+	 g7aYNaue3BBfQ1ZSaRK3Ag3MCUPvH6JAGsGYwZFEjVsIM4KgUHmqWCuDuqKW4WjEuo
+	 /67eqeZNZxGveOoD0mD6VHuEGb6uuFt4SoBXas2asBs/zH1eA3sUAFCmjp72yX1vSK
+	 jQZE2+3mWzzxpZGMlIRU0LqK49N3rDaRot7xYhfY3QrGrYCUH2DlBXx0tSJpWD0wHF
+	 eVcEeVTdyrr9w==
 From: Niklas Schnelle <niks@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, Lorenzo
- Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Wilczy??ski	 <kw@linux.com>, "Maciej W . Rozycki"
- <macro@orcam.me.uk>, Jonathan Cameron	 <Jonathan.Cameron@huawei.com>,
- Alexandru Gagniuc <mr.nuke.me@gmail.com>,  Krishna chaitanya chundru	
- <quic_krichai@quicinc.com>, Srinivas Pandruvada	
- <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
- <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
- <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
- <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,  Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>, Mika Westerberg
- <mika.westerberg@linux.intel.com>
-Date: Sat, 07 Dec 2024 19:18:27 +0100
-In-Reply-To: <Z1R4VNwCOlh9Sg9n@wunner.de>
-References: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
-	 <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
-	 <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
-	 <91b501c0ce92de681cc699eb6064840caad28803.camel@kernel.org>
-	 <7a4a9d51a9105bd5ca2c850c26fed6435b5e90e9.camel@kernel.org>
-	 <5f27c14467aa728358ebfe1686517aabe7c1e878.camel@kernel.org>
-	 <Z1R4VNwCOlh9Sg9n@wunner.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+Date: Sat, 07 Dec 2024 19:44:09 +0100
+Subject: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
+ 2.5 GT/s
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHiXVGcC/x2MWwqAIBAArxL7nZAWva4SEZlrLYTFag+I7p70O
+ TAzD3hkQg9t8gDjSZ42F0GmCUzL6GYUZCKDylQhVVYJS/egrynwOoTlcAZZb2sQ2kjblDo3TW0
+ hxjtjNP9x17/vB+BxVCtoAAAA
+X-Change-ID: 20241207-fix_bwctrl_thunderbolt-bd1f96b3d98f
+To: =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>
+Cc: linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+ Krzysztof Wilczy??ski <kw@linux.com>, 
+ "Maciej W . Rozycki" <macro@orcam.me.uk>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
+ Krishna chaitanya chundru <quic_krichai@quicinc.com>, 
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+ "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+ Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, 
+ linux-kernel@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ Niklas Schnelle <niks@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1958; i=niks@kernel.org;
+ h=from:subject:message-id; bh=P0Tz+o0ppzWiPXWBhrr7FTaRZO/5732ZljC69tIiaeI=;
+ b=owGbwMvMwCX2Wz534YHOJ2GMp9WSGNJDpjcGNbbuPzVVuuxeitx919Kcetv0awlCgUvmnPLNC
+ 9p+T7K/o5SFQYyLQVZMkWVRl7PfuoIppnuC+jtg5rAygQxh4OIUgInoJTH84dryVpiRIY7laYuA
+ xfWWy7+c1os9/zBzz+W6LTm64vGGDgz/a+3m6L533xbrtfjU9MdZfL/nWe5Mnmz//Le2z+6wiQu
+ m8wMA
+X-Developer-Key: i=niks@kernel.org; a=openpgp;
+ fpr=9DB000B2D2752030A5F72DDCAFE43F15E8C26090
 
-On Sat, 2024-12-07 at 17:31 +0100, Lukas Wunner wrote:
-> [cc +=3D Mika, start of thread:
-> https://lore.kernel.org/all/db8e457fcd155436449b035e8791a8241b0df400.came=
-l@kernel.org/
-> ]
->=20
-> On Sat, Dec 07, 2024 at 12:06:49AM +0100, Niklas Schnelle wrote:
-> > > > On Fri, 2024-12-06 at 19:12 +0100, Niklas Schnelle wrote:
-> > > > > I bisected a v6.13-rc1 boot hang on my personal workstation to th=
-is
-> > > > > patch. Sadly I don't have much details like a panic or so because=
- the
-> > > > > boot hangs before any kernel messages, or at least they're not vi=
-sible
-> > > > > long enough to see. I haven't yet looked into the code as I wante=
-d to
-> > > > > raise awareness first. Since the commit doesn't revert cleanly on
-> > > > > v6.13-rc1 I also haven't tried that yet.
-> > > > >=20
-> > > > > Here are some details on my system:
-> > > > > - AMD Ryzen 9 3900X=20
-> > > > > - ASRock X570 Creator Motherboard
-> > > > > - Radeon RX 5600 XT
-> > > > > - Intel JHL7540 Thunderbolt 3 USB Controller (only USB 2 plugged)
-> > > > > - Intel 82599 10 Gigabit NIC with SR-IOV enabled with 2 VFs
-> > > > > - Intel n I211 Gigabit NIC
-> > > > > - Intel Wi-Fi 6 AX200
-> > > > > - Aquantia AQtion AQC107 NIC
-> >=20
-> > Ok did some fiddeling and it's the thunderbolt ports. The below diff
-> > works around the issue. That said I guess for a proper fix this would
-> > should get filtered by the port service matching? Also as can be seen
-> > in lspci the port still claims to support bandwidth management so maybe
-> > other thunderbolt ports actually do.
-> [...]
-> > --- a/drivers/pci/pcie/bwctrl.c
-> > +++ b/drivers/pci/pcie/bwctrl.c
-> > @@ -294,6 +294,9 @@ static int pcie_bwnotif_probe(struct pcie_device *s=
-rv)
-> >         struct pci_dev *port =3D srv->port;
-> >         int ret;
-> >=20
-> > +       if (srv->port->is_thunderbolt)
-> > +               return -EOPNOTSUPP;
-> > +
->=20
-> Thanks for reporting and analyzing this.
->=20
-> The PCIe bandwidth controller is only instantiated on Downstream Ports.
-> Per the spec, Thunderbolt PCIe Downstream Ports are just tunnel endpoints
-> with a fake Max Link Speed of 2.5 GT/s (USB4 v2 sec 11.2.1):
->=20
->    "Max Link Speed field in the Link Capabilities Register set to 0001b
->     (data rate of 2.5 GT/s only).
->     Note: These settings do not represent actual throughput.
->     Throughput is implementation specific and based on the USB4 Fabric
->     performance."
->=20
-> So your patch does make sense in so far as the link speed of Thunderbolt
-> PCIe Downstream Ports is fixed to 2.5 GT/s and cannot be throttled becaus=
-e
-> that's already the lowest possible PCIe speed.  The actual speed is
-> determined by the Thunderbolt links.
->=20
-> The check for the is_thunderbolt bit should be moved to the if-clause in
-> get_port_device_capability() which sets the PCIE_PORT_SERVICE_BWCTRL bit
-> in the services mask.
->=20
-> Alternatively, it may be worth considering not to instantiate the
-> bandwidth controller if the only link speed supported is 2.5 GT/s.
+Trying to enable bwctrl on a Thunderbolt port causes a boot hang on some
+systems though the exact reason is not yet understood. As per the spec
+Thunderbolt PCIe Downstream Ports have a fake Max Link Speed of 2.5 GT/s
+(USB4 v2 sec 11.2.1):
 
-Thanks for the great explanation. I think your last point is also a
-good one, if 2.5 GT/s is the only possible link speed why even
-instantiate the bandwidth controller. As get_port_device_capability()
-already reads PCI_EXP_LNKCAP we also have that information right there
-already. Since I put time and effort in already I've gone ahead and
-cooked up a patch with this approach and will send that shortly.
+   "Max Link Speed field in the Link Capabilities Register set to 0001b
+    (data rate of 2.5 GT/s only).
+    Note: These settings do not represent actual throughput.
+    Throughput is implementation specific and based on the USB4 Fabric
+    performance."
 
->=20
-> We should try to find out what actually causes the boot hang
-> (some interrupt storm maybe?), but that can hopefully be done
-> internally at Intel if the boot hang is reproducible.
+More generally if 2.5 GT/s is the only supported link speed there is no
+point in throtteling as this is already the lowest possible PCIe speed
+so don't advertise the capability stopping bwctrl from being probed on
+these ports.
 
-Makes sense, I do remember that this was one of very few motherboards
-for AMD CPUs with Thunderbolt.
+Link: https://lore.kernel.org/linux-pci/Z1R4VNwCOlh9Sg9n@wunner.de/
+Fixes: 665745f27487 ("PCI/bwctrl: Re-add BW notification portdrv as PCIe BW controller")
+Tested-by: Niklas Schnelle <niks@kernel.org>
+Signed-off-by: Niklas Schnelle <niks@kernel.org>
+---
+Note: This issue causes a boot hang on my personal workstation see the
+Link for details.
+---
+ drivers/pci/pcie/portdrv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks,
-Niklas
+diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+index 5e10306b63081b1ddd13e0a545418e2a8610c14c..e5f80e4a11aad4ce60b2ce998b40ec9fda8c653d 100644
+--- a/drivers/pci/pcie/portdrv.c
++++ b/drivers/pci/pcie/portdrv.c
+@@ -270,7 +270,8 @@ static int get_port_device_capability(struct pci_dev *dev)
+ 		u32 linkcap;
+ 
+ 		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
+-		if (linkcap & PCI_EXP_LNKCAP_LBNC)
++		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
++		    (linkcap & PCI_EXP_LNKCAP_SLS) != PCI_EXP_LNKCAP_SLS_2_5GB)
+ 			services |= PCIE_PORT_SERVICE_BWCTRL;
+ 	}
+ 
+
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20241207-fix_bwctrl_thunderbolt-bd1f96b3d98f
+
+Best regards,
+-- 
+Niklas Schnelle <niks@kernel.org>
+
 
