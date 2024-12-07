@@ -1,298 +1,247 @@
-Return-Path: <linux-pm+bounces-18737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F4489E8041
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 15:27:24 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74C4B9E8096
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 17:17:23 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA1B22820C7
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 14:27:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C08C188432D
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Dec 2024 16:17:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48EE214830A;
-	Sat,  7 Dec 2024 14:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20494149DE8;
+	Sat,  7 Dec 2024 16:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4uPveSM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from MA0PR01CU009.outbound.protection.outlook.com (mail-southindiaazon11020075.outbound.protection.outlook.com [52.101.227.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C531DFE1;
-	Sat,  7 Dec 2024 14:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.227.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733581640; cv=fail; b=s9pGYd3hMndC5DI0zfGx13UxAmVvBb28quOxrYaihmwUbF1k3WUMSnby3vvscUULay80rsf6rV/cPVJyPb5scHvVVyjWnd8NV9oR/3mGcYRx9kMLeHD/TPiLFXxjFEFlAjld5sSNkHZVDbwhIBUeLXuaGBe+vzP8et8MrCgaXFY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733581640; c=relaxed/simple;
-	bh=z7cSk8IIRqtv5R59zFb7jSbULj58OfdgEEnWZb90ed0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rk12SzaxOh7RU1RB7JlE0l9qoaDxjaddhKuFQZO7D88+F+p5PkBJohmv6TdT/NuowWWHL1cw29eLRy4NoaY5RFop0sA+rxNY9Bhh/x3XuPgw94nIXn/ZI/knUF4urE+o4U3QpOI4mcOb9u8VGlGxiXlUwduVurSTVdfDwO7IHFg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.227.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AJI0UjIl/2e3derhXMRV2o+YjtPA+WxWQ45qLJxf8tjsrx6KaVviy4vV57lOLFD+H9uyQsWQ/MvqbM2lUxtBpjBeRMxwd3lVOK9n29qJ/VyM4DO/PzRRA2vcZAPwrtZt79Ko/mbnYlYVxkI9r5RZY0lUbxEM7B4WOoV+kQz+18wN1iB3jPZ1WFBUHDBmltX5FlutrI5ZeUJG6ZpJkCux8WNWg59cojxCVwnFIz/QICd0kmpQb6Em/EtfxCZtHU+21JcZBSx27njT0K3OhP3IiOTrYnAbVaSEpTZRJen6Q3Qo53fIJl8W/AOXiDXwZIw55hGOvhJIhwSNQ0jIFLjdmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XIjwFCI4ZuBOXEucrAaH0znW3LrpFDb3oaZUiRiQEjQ=;
- b=DIj9e+HuB5GXP6rSZcxk3QhKpGxz/ESmjxJO5lX6WpgyjKnZBHS68/Y+rddP/FVEOph39NmBfWjTKQ+7WKm+dS4OdZRPwZNeHt7x5kRXC1nxzpdrXu5Ah8gQ9jY/oW2K5O9P+c/ChOyUwoGJiWDewWjhkFET9dz0LSg1yofu1F+x+Bc5W+gbzcGfgpN06sZaFNMKkC47Am9HMyXR736wbojmBVy/oN9Fc41Jh1K6CnE7DmI/1UadXwBpCKdN9Wb6R7q98pU/iqISlQxgB5lhi4KkaCsmMthy1d5Wy0g7qFDdoSkPyKI6HCtHTNvKDE2DBSIl+dYzwlm2Z74OcvjNNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM (2603:1096:c04:1::15d)
- by PN3P287MB1032.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:17c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Sat, 7 Dec
- 2024 14:27:13 +0000
-Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
- ([fe80::740f:ab98:2be1:538]) by PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
- ([fe80::740f:ab98:2be1:538%4]) with mapi id 15.20.8230.010; Sat, 7 Dec 2024
- 14:27:12 +0000
-From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-CC: "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 2/2] power: supply: Add STC3117 fuel gauge unit driver
-Thread-Topic: [PATCH v7 2/2] power: supply: Add STC3117 fuel gauge unit driver
-Thread-Index: AQHbRJ6/jwy1FDqx5067UiykHyVizbLZKtGAgAGzE0c=
-Date: Sat, 7 Dec 2024 14:27:12 +0000
-Message-ID:
- <PN2PPFF679F9759E522908216724F696B21F2322@PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM>
-References: <20241202094328.14395-1-bhavin.sharma@siliconsignals.io>
- <20241202094328.14395-3-bhavin.sharma@siliconsignals.io>
- <6ccn5xnsfwxeepsft7tfozbhsvs3w3m2qpmcj74xua74qzkny3@s5rg3ytmcgzn>
-In-Reply-To: <6ccn5xnsfwxeepsft7tfozbhsvs3w3m2qpmcj74xua74qzkny3@s5rg3ytmcgzn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN2PPFF679F9759:EE_|PN3P287MB1032:EE_
-x-ms-office365-filtering-correlation-id: aa4376e9-9ff3-4863-92c0-08dd16cb3ddb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|10070799003|1800799024|366016|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?bJxoMcPHQuIRQ/8MrMt1xcIWfU1rsm9t5A3/ykvcQahZGRUDCoA9TF1+Ja?=
- =?iso-8859-1?Q?vqtC44imPzgEZXDuwyqv8/KtNRjVhtMKeYvNtWciYo7L+VJKleeGQCSeAP?=
- =?iso-8859-1?Q?XyRgR4oVakjFkKPD3/Rvh2ds/5htq7thoKzw/qnnkeed8oAnviuT7IXD6m?=
- =?iso-8859-1?Q?RuRlCooXYNADiDuUMfiBYK5o9EWBEzjUeLzndhytNwfTFhyrTF2LjwqrJI?=
- =?iso-8859-1?Q?ZGC+ZCDVlei+Z/ybHpXPXxoJzEv8zAeKzfwj1V5J/Q32sYhLYRYBESxIJl?=
- =?iso-8859-1?Q?QwMYRhPJpi+JINSclt4w0wcRxla1j5i9Q/QH5EmRZFRit2VWhIqqyKokKr?=
- =?iso-8859-1?Q?1xUpPoiELQdqNKiT4gJGeXCPB8nYaUBtWjhVdXFPEOuP3i8zxL57sw06Iv?=
- =?iso-8859-1?Q?r07jcHF8DZ9VmzLUA2cX/G0HRASYjw2DS8+6J6mCI4x13ML1xplSYMaGqs?=
- =?iso-8859-1?Q?owfuVDUb40D2gW218aZcZQCZhq9RV/GmKfoqdKPeG/xG8QrqbAWBYoUKGb?=
- =?iso-8859-1?Q?I8bTzAu1A6ATn58BNX0Bdu99pFf5LBc7IpP0e1O9W2kwQDbLRwnNhdGMyX?=
- =?iso-8859-1?Q?b3cPhSkNQtEAp7jxcyosx3BCD8fw15em12wq3Ay8dkpuK7G97hje4vkKY4?=
- =?iso-8859-1?Q?PXjVILaw9shafOicVYu0xyupIQpWe3xXOc1F5+dGQlJ4WeqtqDOuZrE7NN?=
- =?iso-8859-1?Q?tHhHabeBmBijbQqMnbRZTp4hJmfRMuYHtysESc/jZnMpb5v654JpMgG64g?=
- =?iso-8859-1?Q?r6Iz68UbU6/r5S3FneEnFoPhmsrYb+7l+BjZFkG+L5ky7i+lQcjIh5yo35?=
- =?iso-8859-1?Q?LTpM1bZY5R+PUYxIMYXZJaDYGKST9dasm7RQgsTDQ25itz/S64+ZLj+O19?=
- =?iso-8859-1?Q?MFHlwLwRdueVq0JqeLD3UocLgumHyyeBOczh8I7TENjQUjINuita1MMWXj?=
- =?iso-8859-1?Q?L58pxGOXmDlAkml76OsIpfmMqUVM6qUGQ+hNRYRKwXqZRytkDNvmIfUzZY?=
- =?iso-8859-1?Q?FpvtyQialcYFPs7fGUqhYw4EXqBZ6Laems2n2HGq6yCUCIO3IxXqggBQhl?=
- =?iso-8859-1?Q?+7KMUY3cBM8wgGCBiDQF4UfCNPDPBN46rpJMpkAYHHdDio31Rg1jRalnpI?=
- =?iso-8859-1?Q?zx3A81exvUWkqU/hSDJ/AeKWd5z+I8wmXhlKAlyenJhKc6GjTL6/NvFthK?=
- =?iso-8859-1?Q?nSpnq97TsAL6zrvRWwW61qvmaCdym5BQ3HoZWbo0agy1SkyYoGLAjgQUFi?=
- =?iso-8859-1?Q?/d0LiIano0tKMWl7/4dYDi+1pZd79hL3fFHJTcjo8j0cCQ6ZLmr9UbR4oy?=
- =?iso-8859-1?Q?5M93OJ7zSAHbCuA6VkPS4XeDANLCfFmdxfiLUHuPgCdbTKM4LAYhUx7ap2?=
- =?iso-8859-1?Q?TOkNxFDlgt09RFj1+MeG9Ki51gLsZCm+mX/2J+szXslnN8ODck8JErQGPE?=
- =?iso-8859-1?Q?RTnMumCZ8Au8SewWyGPOfdV3r+t32tY0cM9LSQ=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?8VHRp2BRDVQSd22k5EdV6LnSLGAoNjtCOtyHMmunaSwmPTj9PHwKtsnCCN?=
- =?iso-8859-1?Q?ogYr7i+qR689Pxew1dhi0MqFfVhvpd5miSKcdU5mfZC1iGUGHjfdpk5Oqi?=
- =?iso-8859-1?Q?MygQ+frunPlLd70nokaipqw12rqcbYvU4LyLSjuf92m70argiirTmclMNU?=
- =?iso-8859-1?Q?BYUhUmtCyHuGFwJ8u41riYlOz7zqcdYJE2JhLvsdVxFjvBIs8KFDTnoMwq?=
- =?iso-8859-1?Q?dtmCwbpZ9as+Fzr4oIA92YRpwabJr+omvzC5gEf7FGMJXTBVoNLLyr+0ce?=
- =?iso-8859-1?Q?QbdX2BCrvkEWz9b+4/hbqAGJvKgX8xbt9hO17FESHL3BeAA5Yh5a0rnAzl?=
- =?iso-8859-1?Q?4BgNsHu/DoXT55OvFeNV/V3EqfHAYB3bafOyN+aTYrYQ/8TXWfYfjLqGSG?=
- =?iso-8859-1?Q?lRlIJvavq71zZoEBEP2AdzQICHGR3RAG/wbgnZBAlFeNIyDS5+qlmZ+loF?=
- =?iso-8859-1?Q?0wRl1W7+jFtfnDrYKQCkZV+BiPIdxkKQh6/MsRUIBAYN9LtbxB0HKzAJ3b?=
- =?iso-8859-1?Q?7kfk4DuD3Id57a5njv4DGvZj7wzrMV1bIrw6k79x4o0q4ZYzE0ZKRTHss2?=
- =?iso-8859-1?Q?nbJrTBpS7kjWIm2ZQFOoFNUAOjcwTXppK8T09WfeFomhJg8kfShOA+WMiB?=
- =?iso-8859-1?Q?9g6YDj8av94I/x4fP1u5UKYpqNrG/KZ3J5jlwBWoC1ppwvPVtRYOyeEaRv?=
- =?iso-8859-1?Q?EhEdOK3fEQiavVCJIC68hwOgUjL/R04LMwXon+HiKvyJi5os8QxFJVRoRS?=
- =?iso-8859-1?Q?rkvJXXcsbUoIfBU1HmiIexyorBPFaCMpCAuHuPG9zzQmUC0fY96QFqbhxG?=
- =?iso-8859-1?Q?ubWZt3wBgROsx3aL0XKoHGXX94i5OTAAAQKT83q/Mpr/1PRmGDGn5rFoxt?=
- =?iso-8859-1?Q?WQCNGR0aN0QOU1yz9BuEm6yCu82Lg++QfqcbejQLdLX8flShzgGNTovgus?=
- =?iso-8859-1?Q?Tllu8AeNjbe5qFJlVjAyQU8ECd58Hg3lOyYnVT/5Ru8vUHrVzzTjgSaOuH?=
- =?iso-8859-1?Q?kHS78Ymi51KuH4tWKVYxteD96PjRZZuFO5WjLkC3sKbbhIj80VXW5h4nZI?=
- =?iso-8859-1?Q?uT5EkOj22m73hRV8bpmO9LdCQNrB5AtQtmjP5Fko8Ox/e5S7KatK5apT3Q?=
- =?iso-8859-1?Q?bXhO5/QuCZ/cc/GgZ74kuxZ6rZRWRenqXnTooiE0EITBcPYDOnCqaA/ZIi?=
- =?iso-8859-1?Q?qrPela0etLxk3O1nblU3T17Z7UKikNPJQ46Baud/Pur8Gy2V8K64TtJPBC?=
- =?iso-8859-1?Q?Q0bfBdnf1q/IlBghEZcwGZLX9E4WpbmjUXiVaq4c9MISfMRftVdCDp79M7?=
- =?iso-8859-1?Q?r7fv3Ik1gRDuiI94j03J8I4mdhiiwkxx/9VMnpLSKi+J4rTS4Jmfz6BeZ7?=
- =?iso-8859-1?Q?oD55Kot/f0pCxfcTrs4iqNwvTZXdM3W6dzB1VFhygJ1o0skzSNSxbSypkB?=
- =?iso-8859-1?Q?ZqzWOCFBiqRd6XPdxA0Yo3NLnP87wDSrMWVyp4KB8ZbhBDTMbee2l9F1C+?=
- =?iso-8859-1?Q?DKQEdTni6BwRSGUvTg0al3X8sa0M+OR9Gkn+NBf0xpY/qZNysmvq1iOiDv?=
- =?iso-8859-1?Q?xXo98Pk0UIeHse+Gihxi52CvWYr3NAQ+YiXYPDQdp2p6yxpCvh45514tYx?=
- =?iso-8859-1?Q?ttZ34HD9rB5Jt//KIoodFdBJrlf7Di87yGnagEEjrSybPcvl4sBK9zcR6g?=
- =?iso-8859-1?Q?uw7YrL03ADOdd66AXhvF8vyRPBm4C2DnfHIAz4aIB9Nlt8wh3YUFKcXfqp?=
- =?iso-8859-1?Q?AsZA=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9AE1DFE1;
+	Sat,  7 Dec 2024 16:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733588238; cv=none; b=jUYcnLPHJlKU9pg0KT0noKJrHqw4Ra/PJMebiTCgYvzwsStXcnK4UkblQ7g+U9G99umPMxz24WaOSjZ752L0So1fmpIxTdpq+SDOb/IXNH0GrqHpN8qHdMclQ04FVY3pGHVg0Sd4GB+f2Qlt2jXTl2ulIOsac7kySMentHR5Ivc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733588238; c=relaxed/simple;
+	bh=jnmC/9SGTHlP2v0Inubz8Hb/ROZA8v1ie5BTlI9X1I8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j6fwY0T9N3FqHea+E8PFNYTWjv70Lw4FYkahMPjTRPGWo38U/AjtxqQ+RPrOX1DZ8Q2VgG/VmMHcggki4fslGEUTWgH5xPb9bvM3Syo1hBZVP9YaZN1/RGcJRHZrZNQq0ANs5vRkK88LQPvqqW7FYG4kliJpm6VbLEshYpH95DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4uPveSM; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7fd377ff3c5so543757a12.0;
+        Sat, 07 Dec 2024 08:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733588235; x=1734193035; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nQVo/h69eP7W7+1c9cYInjm18ZQ/NruUHHKzUMPfb2g=;
+        b=G4uPveSM5y52Mxd7lVj5RVXTHsr5A/ojmcXQQQoe3ccck+UB5DddN78QbpQBvDmxUD
+         whaqrEfAqiViRflv7504j8s2kc9cB5Who64f4WYhQuML8yYiuOTCgefLazv13kWw+0RA
+         1Vzf4n6pBx2cCS1HpSjtuLTGLFNZG6euSTKqW4OFrElRhsegAM8BQYKmo6uBTuJO4iLO
+         f+iWvfDVnPiPgruh76bdfTCKmzPTbT4QKSGdR4K8oiPYVNxsUQ9lnwWqqa6u99mx5XwY
+         lcnjjg8kgWF3GINt75xV8G3mvnGWsd9NYwYZBLw9nnfmCwegaFlxT4sJqLP2ItmiKotu
+         mvQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733588235; x=1734193035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nQVo/h69eP7W7+1c9cYInjm18ZQ/NruUHHKzUMPfb2g=;
+        b=lKUwolwMpGEAES+FlD9SwHnE3OkIFdgxBQMHShVo+INLaSH7KCk2tv+qRmZHRiWtYM
+         V+WKIuKW+dptEauInDlIoVx0iTo3HhOuSUWHMISWbtcQsPopq1MeNrICxpQQKsoOIgIz
+         2l/PRJQ0kFlCyA5FhKEwa5Qr1iUdVL5Rt10fVBy5Yxn4LI6k8tsE+CDapOMowU63O0Ly
+         Dg2+d/ZK593wPGpHdW3Uz87XrmSSAav0pEpCKlLVMKa6E2d+ChJhqGmxVz9YoJGfZzfS
+         Kqr1PSEXREHPkNkuzVF3VKzB/0tCrxlnIwe1v+sRv5zxDaJbfC7C3L3iEl+yrTCOp9vd
+         OF5g==
+X-Forwarded-Encrypted: i=1; AJvYcCUwX7Bq92xdEFGzDUUUKll9UeNTfcMV4LiAUtiFbFQkI35VfaMoKoGG+B/RJpYcsDNb2ChO2IBoP7U=@vger.kernel.org, AJvYcCWb2axFKcStqY+vn+Zs6JaHe2Dd875pZVZth6emLKFyqlH7pbkWf7xyUy4+G3PYeAsdXz+vly4DDaF77X10@vger.kernel.org, AJvYcCXVHKrzjUpQpVT/N82GQNtglEDvacZ8C6jV9Enjo2jUcdRwAMEWyM6ls+tB3b7crvRHFfdINHqMeKZ9Nhfs@vger.kernel.org, AJvYcCXqVTT4+4mesVcfpzpFPKdwbv1BZcDIpTaXBwhEuQMLC0xhN9bTVZ3FbBE2MDU5IN2Wzj79VH4hlzy1KY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx/9qCaTH8dijBAtDGbZKFnRYgItXbrUENppENpQV+RgTCHMaQ
+	MyNYZgjLMAEv/W4uDS1Zts/pogKVgxUWwdG5Ov+9/FB5/SA3KbDw
+X-Gm-Gg: ASbGncuH2mcZuesyRiSuf8njxm8utHhyt3uI9iGQoZQDfTW9UB6vbdlzQ1GJZVitZ4S
+	D4KhSiyutAk615c0GNuFbFKu0S3m349zAPeTE2Rh/q0fSrKvHOvYq3pouCtxt9SGoEQJTvReeG/
+	r76KbvrNSErK3LMH0BTGqCdcef9Apq779cA3impH3TFiscRuIphmokLJCPPrymza8qx+slacklm
+	0AtZfSccYB6RyYYpO+PTF3fe6Ip77kfIHMWCxKVAUwYIEFE18P19enP1g+rhyiNKGKchwKdkI4C
+	eriKqm00
+X-Google-Smtp-Source: AGHT+IEmvFnBaDTFAw3iJraQEGMF/iUDVX5tXZvZVfuIO2OYpZL0lZpXEUIfhOJmviPs0qS6KOnT/w==
+X-Received: by 2002:a17:90b:2015:b0:2ef:6ef4:817d with SMTP id 98e67ed59e1d1-2ef6ef486ebmr9437262a91.6.1733588235412;
+        Sat, 07 Dec 2024 08:17:15 -0800 (PST)
+Received: from localhost (c-73-37-105-206.hsd1.or.comcast.net. [73.37.105.206])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ef8610ee98sm1426630a91.5.2024.12.07.08.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Dec 2024 08:17:14 -0800 (PST)
+From: Rob Clark <robdclark@gmail.com>
+To: dri-devel@lists.freedesktop.org
+Cc: freedreno@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org,
+	Connor Abbott <cwabbott0@gmail.com>,
+	Akhil P Oommen <quic_akhilpo@quicinc.com>,
+	Rob Clark <robdclark@chromium.org>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	=?UTF-8?q?Barnab=C3=A1s=20Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>,
+	Carl Vanderlip <quic_carlv@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Jun Nie <jun.nie@linaro.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b),
+	linux-kernel@vger.kernel.org (open list),
+	linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b),
+	linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Paloma Arellano <quic_parellan@quicinc.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Sean Paul <sean@poorly.run>,
+	Stephen Boyd <swboyd@chromium.org>
+Subject: [RFC 00/24] drm/msm: sparse / "VM_BIND" support
+Date: Sat,  7 Dec 2024 08:15:00 -0800
+Message-ID: <20241207161651.410556-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa4376e9-9ff3-4863-92c0-08dd16cb3ddb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2024 14:27:12.8244
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dqmkYX40UKKzNKChc2IGNlg390zei+kt1iyR5V8WxgeqXoVjNk7engoXmcADcXDP0jxk2fFv/SD/HSe3vJdWwNhqOw9pjGTcEQa/fLaWIvg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB1032
+Content-Transfer-Encoding: 8bit
 
-Hi Sebastian,=0A=
-=0A=
-Thanks for your feedbacks=0A=
-=0A=
-> > Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.=
-io>=0A=
-> > Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>=0A=
-> > ---=0A=
-> =0A=
-> Please add the output from running the following script on a system=0A=
-> without your fuel gauge to the cover letter in the next submission.=0A=
-> It helps to check that the values are properly converted:=0A=
-> =0A=
-> ./tools/testing/selftests/power_supply/test_power_supply_properties.sh=0A=
-=0A=
-Sure, i will attach output of the test =0A=
-> > +#define STC3117_ADDR_CC_ADJ_H                        0X1C=0A=
-> > +#define STC3117_ADDR_VM_ADJ_L                        0X1D=0A=
-> > +#define STC3117_ADDR_VM_ADJ_H                        0X1E=0A=
->=0A=
-> Please keep the x in 0X lower case. It suddenly changes after 0x0A=0A=
-=0A=
-okay =0A=
-> > +     data->soc =3D (value * 10 + 256) / 512;=0A=
-> > +=0A=
-> > +     /* cureent in mA*/=0A=
->=0A=
-> typo (cureent -> currrent)=0A=
-=0A=
-okay=0A=
-> > +=0A=
-> > +     /* temp */=0A=
->=0A=
-> Looks like temp is in =B0C?=0A=
-okay =0A=
-> > +=0A=
-> > +     /* ocv */=0A=
->=0A=
-> I guess ocv is also in mV?=0A=
-=0A=
-okay=0A=
-> > +     default:=0A=
-> > +             data->battery_state =3D BATT_IDLE;=0A=
-> > +     }=0A=
-> > +=0A=
-> > +     return 0;=0A=
-> > +}=0A=
->=0A=
-> You are never using data->battery_state, so the whole function can=0A=
-> be removed and battery_state can be removed from the data struct.=0A=
-=0A=
-yes will remove in next version=0A=
-=0A=
-> > +{=0A=
-> > +     int ID, mode, ret;=0A=
->=0A=
-> why is ID in upper case like a constant?=0A=
-=0A=
-okay will change into lower case=0A=
-> > +     if (ram_data.reg.state !=3D STC3117_RUNNING) {=0A=
-> > +             data->batt_current =3D 0;=0A=
-> > +             data->temp =3D 250;=0A=
->=0A=
-> why 250?=0A=
-=0A=
-temperature range for this sensor is specified in the datasheet=0A=
-as -40=B0C to 125=B0C.=0A=
-The value 250 lies outside this range, which means that the temperature=0A=
-data is unavailable or invalid. This approach is consistent with the vendor=
-'s=0A=
-Arduino driver, where 250 is also used in similar conditions to indicate th=
-at=0A=
-the sensor is not in running mode.=0A=
-=0A=
-> > +     struct stc3117_data *data =3D container_of(to_delayed_work(work),=
-=0A=
-> > +                                     struct stc3117_data, update_work)=
-;=0A=
-> > +     stc3117_task(data);=0A=
->=0A=
-> Please run checkpatch before patch submission.=0A=
-=0A=
-I did this i am not getting any warnings here =0A=
-> > +     case POWER_SUPPLY_PROP_VOLTAGE_NOW:=0A=
-> > +             val->intval =3D data->voltage;=0A=
-> =0A=
-> This has to be in uV.=0A=
-okay=0A=
-> > +             break;=0A=
-> > +     case POWER_SUPPLY_PROP_CURRENT_NOW:=0A=
-> > +             val->intval =3D data->batt_current;=0A=
-> > +             break;=0A=
->=0A=
-> This has to be in uA.=0A=
-okay =0A=
-> > +     case POWER_SUPPLY_PROP_CAPACITY:=0A=
-> > +             val->intval =3D data->soc;=0A=
-> > +             break;=0A=
-> > +     case POWER_SUPPLY_PROP_TEMP:=0A=
-> > +             val->intval =3D data->temp;=0A=
-> > +             break;=0A=
->=0A=
-> This has to be in 1/10 of =B0C.=0A=
-=0A=
-okay =0A=
-> > +     POWER_SUPPLY_PROP_TEMP,=0A=
-> > +     POWER_SUPPLY_PROP_PRESENT,=0A=
-> > +};=0A=
-> =0A=
-> During the read process you are also getting OCV and average=0A=
-> current. Why are you not exporting them via the following=0A=
-> properties (in uV and uA) when you are getting them anyways?=0A=
->=0A=
-> POWER_SUPPLY_PROP_VOLTAGE_OCV=0A=
-> POWER_SUPPLY_PROP_CURRENT_AVG=0A=
-=0A=
-okay will add this property=0A=
-> > +             return PTR_ERR(data->regmap);=0A=
-> > +=0A=
-> > +     psy_cfg.drv_data =3D data;=0A=
->=0A=
-> psy_cfg.fwnode =3D dev_fwnode(dev);=0A=
- =0A=
-okay =0A=
-> > +                             "failed to initialize of stc3117\n");=0A=
-> > +=0A=
-> > +     INIT_DELAYED_WORK(&data->update_work, fuel_gauge_update_work);=0A=
->=0A=
-> This is not being stopped on module removal. You need=0A=
-> devm_delayed_work_autocancel() instead of INIT_DELAYED_WORK.=0A=
-=0A=
-sure =0A=
-=0A=
-Best regards,=0A=
-Bhavin=
+From: Rob Clark <robdclark@chromium.org>
+
+Conversion to DRM GPU VA Manager[1], and adding support for Vulkan Sparse
+Memory[2] in the form of:
+1. A new VM_BIND submitqueue type for executing VM MSM_SUBMIT_BO_OP_MAP/
+   MAP_NULL/UNMAP commands
+2. Extending the SUBMIT` ioctl to allow submitting batches of one or more
+   MAP/MAP_NULL/UNMAP commands to a VM_BIND submitqueue
+
+The UABI takes a slightly different approach from what other drivers have
+done, and what would make sense if starting from a clean sheet, ie separate
+VM_BIND and EXEC ioctls.  But since we have to maintain support for the
+existing SUBMIT ioctl, and because the fence, syncobj, and BO pinning is
+largely the same between legacy "BO-table" style SUBMIT ioctls, and new-
+style VM updates submitted to a VM_BIND submitqueue, I chose to go the
+route of extending the existing `SUBMIT` ioctl rather than adding a new
+ioctl.
+
+I also did not implement support for synchronous VM_BIND commands.  Since
+userspace could just immediately wait for the `SUBMIT` to complete, I don't
+think we need this extra complexity in the kernel.
+
+The corresponding mesa MR: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32533
+
+### Notes/TODOs/Open Questions:
+1. The first handful of patches are from Bibek Kumar Patro's series, 
+   "iommu/arm-smmu: introduction of ACTLR implementation for Qualcomm SoCs[3],
+   which introduces PRR (Partially-Resident-Region) support, needed to
+   implement MAP_NULL (for Vulkan Sparse Residency[4]
+2. Why do VM_BIND commands need fence fd support, instead of just syncobjs?
+   Mainly for the benefit of virtgpu drm native context guest<->host fence
+   passing[5], where the host VMM is operating in terms of fence fd's
+   (syncobs are just a convenience wrapper above a dma_fence, and don't
+   exist below the guest kernel).
+3. Currently shrinker support is disabled (hence this being in Draft/RFC
+   state).  To properly support the shrinker, we need to pre-allocate
+   various objects and pages needed for the pagetables themselves, to
+   move memory allocations out of the fence signaling path.  This short-
+   cut was taken to unblock userspace implementation of sparse buffer/
+   image support.
+4. Could/should we do all the vm/vma updates synchronously and defer _only_
+   the io-pgtable updates to the VM_BIND scheduler queue?  This would
+   simplify the previous point, in that we'd only have to pre-allocate
+   pages for the io-pgtable updates.
+5. Currently we lose support for BO dumping for devcoredump.  Ideally we'd
+   plumb `MSM_SUBMIT_BO_DUMP` flag in a `MAP` commands thru to the resulting
+   drm_gpuva's.  To do this, I think we need to extend drm_gpuva with a
+   flags field.. the flags can be driver defined, but drm_gpuvm needs to
+   know not to merge drm_gpuva's with different flags.
+
+This series can be found in MR form, if you prefer:
+https://gitlab.freedesktop.org/drm/msm/-/merge_requests/144
+
+[1] https://www.kernel.org/doc/html/next/gpu/drm-mm.html#drm-gpuvm
+[2] https://docs.vulkan.org/spec/latest/chapters/sparsemem.html
+[3] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=909700
+[4] https://docs.vulkan.org/spec/latest/chapters/sparsemem.html#sparsememory-partially-resident-buffers
+[5] https://patchew.org/linux/20231007194747.788934-1-dmitry.osipenko@collabora.com/
+
+Rob Clark (24):
+  HACK: drm/msm: Disable shrinker
+  drm/gpuvm: Don't require obj lock in destructor path
+  drm/gpuvm: Remove bogus lock assert
+  drm/msm: Rename msm_file_private -> msm_context
+  drm/msm: Improve msm_context comments
+  drm/msm: Rename msm_gem_address_space -> msm_gem_vm
+  drm/msm: Remove vram carveout support
+  drm/msm: Collapse vma allocation and initialization
+  drm/msm: Collapse vma close and delete
+  drm/msm: drm_gpuvm conversion
+  drm/msm: Use drm_gpuvm types more
+  drm/msm: Split submit_pin_objects()
+  drm/msm: Lazily create context VM
+  drm/msm: Add opt-in for VM_BIND
+  drm/msm: Mark VM as unusable on faults
+  drm/msm: Extend SUBMIT ioctl for VM_BIND
+  drm/msm: Add VM_BIND submitqueue
+  drm/msm: Add _NO_SHARE flag
+  drm/msm: Split out helper to get iommu prot flags
+  drm/msm: Add mmu support for non-zero offset
+  drm/msm: Add PRR support
+  drm/msm: Rename msm_gem_vma_purge() -> _unmap()
+  drm/msm: Wire up gpuvm ops
+  drm/msm: Bump UAPI version
+
+ drivers/gpu/drm/drm_gpuvm.c                   |  10 +-
+ drivers/gpu/drm/msm/Kconfig                   |   1 +
+ drivers/gpu/drm/msm/adreno/a2xx_gpu.c         |  19 +-
+ drivers/gpu/drm/msm/adreno/a2xx_gpummu.c      |   5 +-
+ drivers/gpu/drm/msm/adreno/a3xx_gpu.c         |   4 +-
+ drivers/gpu/drm/msm/adreno/a4xx_gpu.c         |   4 +-
+ drivers/gpu/drm/msm/adreno/a5xx_debugfs.c     |   4 +-
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |  24 +-
+ drivers/gpu/drm/msm/adreno/a5xx_power.c       |   2 +-
+ drivers/gpu/drm/msm/adreno/a5xx_preempt.c     |  10 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |  32 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h         |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c         |  51 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c   |   6 +-
+ drivers/gpu/drm/msm/adreno/a6xx_preempt.c     |  10 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c       |  78 ++-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h       |  22 +-
+ .../drm/msm/disp/dpu1/dpu_encoder_phys_wb.c   |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_formats.c   |  18 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h   |   2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |  18 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c     |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h     |   4 +-
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_crtc.c     |   6 +-
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c      |  28 +-
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_plane.c    |  12 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c     |   4 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c      |  19 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c    |  12 +-
+ drivers/gpu/drm/msm/dsi/dsi_host.c            |  14 +-
+ drivers/gpu/drm/msm/msm_drv.c                 | 175 ++----
+ drivers/gpu/drm/msm/msm_drv.h                 |  31 +-
+ drivers/gpu/drm/msm/msm_fb.c                  |  18 +-
+ drivers/gpu/drm/msm/msm_fbdev.c               |   2 +-
+ drivers/gpu/drm/msm/msm_gem.c                 | 403 ++++++-------
+ drivers/gpu/drm/msm/msm_gem.h                 | 193 +++++--
+ drivers/gpu/drm/msm/msm_gem_prime.c           |  15 +
+ drivers/gpu/drm/msm/msm_gem_submit.c          | 223 +++++--
+ drivers/gpu/drm/msm/msm_gem_vma.c             | 543 +++++++++++++++---
+ drivers/gpu/drm/msm/msm_gpu.c                 |  66 ++-
+ drivers/gpu/drm/msm/msm_gpu.h                 | 132 +++--
+ drivers/gpu/drm/msm/msm_iommu.c               |  84 ++-
+ drivers/gpu/drm/msm/msm_kms.c                 |  14 +-
+ drivers/gpu/drm/msm/msm_kms.h                 |   2 +-
+ drivers/gpu/drm/msm/msm_mmu.h                 |   2 +-
+ drivers/gpu/drm/msm/msm_ringbuffer.c          |   4 +-
+ drivers/gpu/drm/msm/msm_submitqueue.c         |  86 ++-
+ include/uapi/drm/msm_drm.h                    |  98 +++-
+ 48 files changed, 1637 insertions(+), 903 deletions(-)
+
+-- 
+2.47.1
+
 
