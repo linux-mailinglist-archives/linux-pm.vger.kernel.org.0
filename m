@@ -1,130 +1,185 @@
-Return-Path: <linux-pm+bounces-18783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A7529E85A7
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 15:59:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ABAE164C0F
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 14:59:40 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4231B14F9FA;
-	Sun,  8 Dec 2024 14:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="kGfTZjG/"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4657C9E8631
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 17:13:01 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8137D149C4D;
-	Sun,  8 Dec 2024 14:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0096C2815C4
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 16:13:00 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B04D1591EA;
+	Sun,  8 Dec 2024 16:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iFZmwuLc"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DCB13B2B6;
+	Sun,  8 Dec 2024 16:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733669977; cv=none; b=bdLxR/g6kTYicMMt1bmEnMGiPZRz+8kocisawghMNfWO8sK0aCVz5TUdaJH3npVRgEP2FvUEWWcS90KvuWtcydk2OWM4GqH6lHVwmB6YFo9wWP4VmRtIkfehx1+2mEIKMj9+F2ATXPqb/q71uQJmro+GGjqP5snvtfWc+ctSc8Q=
+	t=1733674376; cv=none; b=hj+hPGhFm62MpWw+MyidlVgynvZsIz73HDp//Lu//FqXwmeeCIoJg+VMBFY89iR9HpaSgLl72L1yeOOXZ2HBUi0mqpc6Haoi1ok5wALnwk2W0aJ02N5RavQkGDqAz4MlRtGrBVoCmCDz/EHYgPt7rSkt0hTpYnf6lp6ametxf84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733669977; c=relaxed/simple;
-	bh=za3Dkm3Zck5C4BmBz90pqL2Z3JihLGLCqJq5inSro9w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jypyMz/tVwNIeKJFRItvw2z0328Jfg0BVawo68AnPAjcRg2mkV6goR4FuVslMuhysA+wyvFm2u+1BahiDGV+Cb90lx+jPlQ+4FZ08MYGwQHUNANbE/gnranweRO7i9npARMs03cl+gwSziQF19mu/CwHnNrYrvLZVmdyyGV7wn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=kGfTZjG/; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1733669973;
-	bh=za3Dkm3Zck5C4BmBz90pqL2Z3JihLGLCqJq5inSro9w=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kGfTZjG/1FQM6BZi5NANBbvq7rCk+3XIE5MSu/bcvg804QjUlzq2m9T5Xxf11Aqvi
-	 Lp+lt3rlldgY4dkZ5sca5sxGGQPTnZLsQZRc/xYgQaqjl6bnEPkdWLLmc1POO0HyED
-	 g/HoaQn+uqjOJJJ3gHmwAejcXd33wT0f9xxW+MAY=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 08 Dec 2024 15:59:28 +0100
-Subject: [PATCH 3/3] power: supply: cros_charge-control: hide start
- threshold on v2 cmd
+	s=arc-20240116; t=1733674376; c=relaxed/simple;
+	bh=TsI8s95ukz52F4dFjZU0phGSfOtwTyjzbFM/oksHDWQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=V0lNZ2oGg83b7qZmTOnqT0NF3P1N+MsJJXsCXU8mTYcAwkovBN1hDHA/L1//zK1Q/OJesCH840IgdpPctJzaeINq0l1cpHloVTM2V5WmObsVEZ5e1wH3mclIsxp96c4fFolAj1l5feazhIRjKlx0qc68ZSIBwujL8yGr0d1j5Pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iFZmwuLc; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B8EnNce016104;
+	Sun, 8 Dec 2024 16:12:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	tfYZlBzDBXMUAgDb2EyeHqUuMw1X88nJinjqD5B5u5k=; b=iFZmwuLcOBjmJ80B
+	B/K3aE/WSKPqI785kf8OCQmdt1Nr6ak0MkscfAUl8ZuGKi+S+XYniZXd4827w4qm
+	AmHjq05Tvt1uZHYrwdibo3kqaDd+5RaHHnhxKup2U65KzaTFM9s+t+w3YfqNpOhk
+	KAFDFCMHfo8lIczevb6OSYl25evobSKtML3r9jDjWzsghdx1NIkFCSPP6uOH/gIt
+	Ii1eDIYUpfobMrIZjK9QFhkg50C4n/6fegDdtWzJsbhuN7yDXZUYA8xtY6HGc8iu
+	32somT5NxxssupDAOVE13xsr8SAc5eCJsQTbSd0a4jxL2vipOBz4WcTk2+IkwIvX
+	IZIQnA==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43cdpgjekj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 08 Dec 2024 16:12:32 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B8GCVuo005677
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 8 Dec 2024 16:12:31 GMT
+Received: from [10.216.58.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 8 Dec 2024
+ 08:12:25 -0800
+Message-ID: <d68907f0-15e4-486a-9077-31e8a8659e02@quicinc.com>
+Date: Sun, 8 Dec 2024 21:42:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241208-cros_charge-control-v2-v1-3-8d168d0f08a3@weissschuh.net>
-References: <20241208-cros_charge-control-v2-v1-0-8d168d0f08a3@weissschuh.net>
-In-Reply-To: <20241208-cros_charge-control-v2-v1-0-8d168d0f08a3@weissschuh.net>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>, 
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
- Sebastian Reichel <sre@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Thomas Koch <linrunner@gmx.net>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- stable@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733669972; l=2140;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=za3Dkm3Zck5C4BmBz90pqL2Z3JihLGLCqJq5inSro9w=;
- b=+0EygRWKP9SttMXFlFgC9ncZpGD99nkUvVZGjw06/U4VxGBhCFJqTpVtZNopI4yKgl9mBS5kQ
- d1KlWsmvkthCrk7KUbcH6JbEOsAxCH1nrhdy6vVZH1XFtzNT8SyFHB8
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: qcs6490-rb3gen: add and enable
+ BT node
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konradybcio@kernel.org>,
+        Marcel Holtmann
+	<marcel@holtmann.org>,
+        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, <quic_mohamull@quicinc.com>,
+        <quic_hbandi@quicinc.com>, <quic_anubhavg@quicinc.com>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+References: <20241204131706.20791-1-quic_janathot@quicinc.com>
+ <20241204131706.20791-3-quic_janathot@quicinc.com>
+ <pzkijkdswskaq6232uldapz3b6v6zplif7uah24iwq3ymlezft@skbcy2vod3c5>
+ <53d44689-798e-4b5f-a0f1-8a39bea2f19b@quicinc.com>
+ <hjui7cn4iuo4id2q4mmqx2i7c3eyu6ae43fcft6psflypb3aya@ia5i5s4ya45e>
+Content-Language: en-US
+From: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+In-Reply-To: <hjui7cn4iuo4id2q4mmqx2i7c3eyu6ae43fcft6psflypb3aya@ia5i5s4ya45e>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2sbgzf7YqgO8AauF1AblMxRu4vkbnUU-
+X-Proofpoint-ORIG-GUID: 2sbgzf7YqgO8AauF1AblMxRu4vkbnUU-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 suspectscore=0 mlxscore=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412080135
 
-ECs implementing the v2 command will not stop charging when the end
-threshold is reached. Instead they will begin discharging until the
-start threshold is reached, leading to permanent charge and discharge
-cycles. This defeats the point of the charge control mechanism.
 
-Avoid the issue by hiding the start threshold on v2 systems.
-Instead on those systems program the EC with start == end which forces
-the EC to reach and stay at that level.
 
-v1 does not support thresholds and v3 works correctly,
-at least judging from the code.
+On 12/8/2024 5:35 PM, Dmitry Baryshkov wrote:
+> On Fri, Dec 06, 2024 at 08:15:35PM +0530, Janaki Ramaiah Thota wrote:
+>>
+>>
+>> On 12/5/2024 4:29 AM, Dmitry Baryshkov wrote:
+>>> On Wed, Dec 04, 2024 at 06:47:04PM +0530, Janaki Ramaiah Thota wrote:
+>>>> Add a node for the PMU module of the WCN6750 present on the
+>>>> qcs6490-rb3gen board and assign its power outputs to the Bluetooth
+>>>> module.
+>>>>
+>>>> Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 165 ++++++++++++++++++-
+>>>>    1 file changed, 164 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+>>>> index 27695bd54220..07650648214e 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+>>>> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+>>>> @@ -1,6 +1,6 @@
+>>>>    // SPDX-License-Identifier: BSD-3-Clause
+>>>>    /*
+>>>> - * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>>> + * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+>>>>     */
+>>>>    /dts-v1/;
+>>>> @@ -33,6 +33,7 @@
+>>>>    	aliases {
+>>>>    		serial0 = &uart5;
+>>>> +		serial1 = &uart7;
+>>>>    	};
+>>>>    	chosen {
+>>>> @@ -217,6 +218,63 @@
+>>>>    		regulator-min-microvolt = <3700000>;
+>>>>    		regulator-max-microvolt = <3700000>;
+>>>>    	};
+>>>> +
+>>>> +	wcn6750-pmu {
+>>>> +		compatible = "qcom,wcn6750-pmu";
+>>>> +		pinctrl-names = "default";
+>>>> +		pinctrl-0 = <&bt_en>;
+>>>> +		vddaon-supply = <&vreg_s7b_0p972>;
+>>>> +		vddasd-supply = <&vreg_l11c_2p8>;
+>>>> +		vddpmu-supply = <&vreg_s7b_0p972>;
+>>>> +		vddrfa0p8-supply = <&vreg_s7b_0p972>;
+>>>> +		vddrfa1p2-supply = <&vreg_s8b_1p272>;
+>>>> +		vddrfa1p7-supply = <&vreg_s1b_1p872>;
+>>>> +		vddrfa2p2-supply = <&vreg_s1c_2p19>;
+>>>> +
+>>>> +		bt-enable-gpios = <&tlmm 85 GPIO_ACTIVE_HIGH>;
+>>>
+>>> Doesn't WCN6750 also have SW_CTRL and wifi-enable pins?
+>>>
+>>
+>> For Bluetooth, these pins are not needed. We have verified Bluetooth
+>> functionality, and it is working fine.
+> 
+> You are describing the hardware (PMU), not "a part of the PMU for the
+> BT". Please check if there should be a wifi enable pin and adjust
+> accordingly.
+> 
 
-Reported-by: Thomas Koch <linrunner@gmx.net>
-Fixes: c6ed48ef5259 ("power: supply: add ChromeOS EC based charge control driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/power/supply/cros_charge-control.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+We further checked with WiFi team. For wcn6750, sw_ctrl and wifi-enable 
+pins handled from WiFi firmware/controller. So it is not needed to 
+handle in PMU.
 
-diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
-index 108b121db4423187fb65548396fb9195b8801006..9b0a7500296b4d7eb8cd53153e148926bb98aec1 100644
---- a/drivers/power/supply/cros_charge-control.c
-+++ b/drivers/power/supply/cros_charge-control.c
-@@ -139,6 +139,10 @@ static ssize_t cros_chctl_store_threshold(struct device *dev, struct cros_chctl_
- 		return -EINVAL;
- 
- 	if (is_end_threshold) {
-+		/* Start threshold is not exposed, use fixed value */
-+		if (priv->cmd_version == 2)
-+			priv->current_start_threshold = val == 100 ? 0 : val;
-+
- 		if (val < priv->current_start_threshold)
- 			return -EINVAL;
- 		priv->current_end_threshold = val;
-@@ -234,12 +238,10 @@ static umode_t cros_chtl_attr_is_visible(struct kobject *kobj, struct attribute
- {
- 	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(attr, n);
- 
--	if (priv->cmd_version < 2) {
--		if (n == CROS_CHCTL_ATTR_START_THRESHOLD)
--			return 0;
--		if (n == CROS_CHCTL_ATTR_END_THRESHOLD)
--			return 0;
--	}
-+	if (n == CROS_CHCTL_ATTR_START_THRESHOLD && priv->cmd_version < 3)
-+		return 0;
-+	else if (n == CROS_CHCTL_ATTR_END_THRESHOLD && priv->cmd_version < 2)
-+		return 0;
- 
- 	return attr->mode;
- }
-
--- 
-2.47.1
+Thanks,
+Janakiram
 
 
