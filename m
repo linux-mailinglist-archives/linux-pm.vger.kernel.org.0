@@ -1,124 +1,115 @@
-Return-Path: <linux-pm+bounces-18780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D754D9E854F
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 14:05:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00F8A9E8559
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 14:15:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 807E91881310
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 13:05:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE7F716461A
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 13:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F2916A95B;
-	Sun,  8 Dec 2024 13:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7390145B25;
+	Sun,  8 Dec 2024 13:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ifPLwV3t"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="YUnWpuGK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB41155359;
-	Sun,  8 Dec 2024 13:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FB95A4D5;
+	Sun,  8 Dec 2024 13:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733662968; cv=none; b=BiT6rzvaM/v9MGlWOfFXkLVl3EPTX+x6ViXOczIbexcgvanlWdkbHKZN0viYD0lZr6PKycggHOPMPhJo2GAIyarvrPlMfK5W2EijDbkOvdxhJEQ6FG08isqplwRKUTCiE69pfJvYxdlXfKxqsOn4SQQ2gC5TE+sKApAlvcdQ5FM=
+	t=1733663751; cv=none; b=or3TyxR4Iyr1jNf1j1M1cx+okdwTh5H2Gr9ujx5QV8uCd5ydWv4I16Cp3N7tZo89GOnLlBlLY1OlOlPKSIKviyGgHvfh0ZoFzmf8Uk2y7p3QRNX8r1aYaeII58ebVyv3ncCIsfD5knx4M7X7K8ifbS8hVL36RKJbtlK93jSJ5is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733662968; c=relaxed/simple;
-	bh=YYfsTx2rAnMr87VKqCAX8bpgiZpeQGkncIQMEpK07sc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ta5x5p8ZslyV7LmV1PxOAGPI6h+sTiCJKiKg8u1gBGubEMTn5FF5YnhXjRIq8E5xy1ZGWFQqueutLGcya8gp7PNi0Fw0yuybZGJXK9B0BA0LLH3rR5QNvj3j/YiHWMu9zU0Ehy28L8m+Ls4/G43Mmvk6tzQxYa3mOA4Lv911R/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ifPLwV3t; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1733662959;
-	bh=YYfsTx2rAnMr87VKqCAX8bpgiZpeQGkncIQMEpK07sc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ifPLwV3t+qQKDH9pvJU4LD0a2Mnm3N031ahUHIuWIcm2x1CUrk7P5Ot/Wgu0E3Fxc
-	 tI45iewOY06gkA0pEoEeoz2YkbKLRWuUim6K0ts8sNvqyHCSHgP5jmE/Q/0yVEbsiZ
-	 LU9rc6qdUqDVwjXWF3VejRz87iCwKTe2AJ6sgg78=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 08 Dec 2024 14:02:46 +0100
-Subject: [PATCH 14/14] power: supply: bq24257_charger: use dev_to_psy()
+	s=arc-20240116; t=1733663751; c=relaxed/simple;
+	bh=Zy+BiXCgJkXzmbZKNg4JIOZSni09+NJt26bJv765OeE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DWOeGox8h0cHPuDEIWJ59AsyNQVy1hrmGql3dfF9E8YvDgoaT+aoeJuWjq7f/sP6zevhI2PKyT4m9X9mD29PSfsHN/Wcg0MOQWT2eh+89wRUjJDz0ncWvoao/V/q5VYrtGUfFFUpdbv1mlye7HLa9JEWz2UG7CXL7LgQj9hCpQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=YUnWpuGK; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id D19C2A0ABF;
+	Sun,  8 Dec 2024 14:15:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=g0j7uEQzEdIZe0t6bf6kIsjV47fqKToNQDecUmLy4A8=; b=
+	YUnWpuGKYtOySFxuFCBGxvwcY0eX4vaufP/kui0yrTIQhYE7kcAq252q2WRwQWBn
+	BIhM9umwFUUGsZERIWKgOGaTIObhcf0awUs5aIQffKMlmKcWed0RnSnJz1J5M3Xn
+	qid6RiMAIRnMSwv5gwd3xYZ0fJoJJ1Ge8poRuM5AVW7bfMUg27HBJuSqmfGhB/3n
+	xs1GYGJqQEM9hMAfxSU8Cwem6cq6+VRIdPejTHwHrmqQKJWciWkgBWA155xLOnW/
+	G4/joorSMJmMJEm74bHNddGrdoK8O5Cg7QLoyiwF5HyDnBelq7QB6oBaJdsyjVuk
+	+Yng+17nOaaqau0O1ULqTGQZr84eadX4FC8oITMI6VGBx8WTNYNuzN4xLb4vvXi0
+	nT8hl5uyhHfOpJGehimpthAYsQgIjjztWEM2G9F6jZzpVMqGyk01aei9UPgtqsJr
+	BxcP1h/YXM5vpOcE6JU3rwS/e+X9oPBjdPF0LRi3OM8qq9s9/opc1Gk9itxDCVap
+	hBSWyzNwkqKZeV80JGKlKxIadU3VpU06CXiBWIhGJxUWyCT9QCB7pMhtTHFx7lnE
+	a4leoj/vzLkKTryY52b6sjz/W7tZ5qamAjkY1bjA4PtipH4bJgFdlAqFWpgpBmCE
+	D+pRytKQiRekhOC2PTnz8WrKnBAOrmRiEiKHE5HQa3s=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Kees Bakker <kees@ijzerbout.nl>, Samuel Holland <samuel@sholland.org>,
+	Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH] power: ip5xxx_power: Fix uninitialized variable read
+Date: Sun, 8 Dec 2024 14:15:31 +0100
+Message-ID: <20241208131532.1028581-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241208-power-supply-dev_to_psy-v1-14-f95de9117558@weissschuh.net>
-References: <20241208-power-supply-dev_to_psy-v1-0-f95de9117558@weissschuh.net>
-In-Reply-To: <20241208-power-supply-dev_to_psy-v1-0-f95de9117558@weissschuh.net>
-To: Sebastian Reichel <sre@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Maximilian Luz <luzmaximilian@gmail.com>, 
- =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- platform-driver-x86@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733662957; l=1965;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=YYfsTx2rAnMr87VKqCAX8bpgiZpeQGkncIQMEpK07sc=;
- b=HtYfIhudGG8LoSgvdPwoIseIvof5QxFj5IIIjTbWAnDmfOS6hHkygtWwM8Bgk+/gnVOQeDaza
- 1aXak81DvnfATClQdU8W11NWpZcVBxYMCql+mIJ/8SrM1Cu19AmBvRJ
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1733663746;VERSION=7982;MC=3149856342;ID=289680;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD9485562766B
 
-Use the new, explicit accessor to go from a 'struct device' to its
-'struct power_supply'.
+The check for whether a charger supports the requested
+battery voltage was incorrectly added to the
+`ip5xxx_battery_get_voltage_max()` function, instead of
+`set_voltage_max()`. This commit fixes it.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Reported-by: Kees Bakker <kees@ijzerbout.nl>
+Closes: https://lore.kernel.org/linux-kernel/b547c228-df70-4137-9e96-175923f62404@ijzerbout.nl/
+Fixes: 8584bc5df539 ("power: ip5xxx_power: Allow for more parameters to be configured")
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
 ---
- drivers/power/supply/bq24257_charger.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/power/supply/ip5xxx_power.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/bq24257_charger.c b/drivers/power/supply/bq24257_charger.c
-index 801d0d2c5f2eae90c9c1cbbbfcfb258d257038d5..1416586f2459109b29fe57a5ee86fa3704013aac 100644
---- a/drivers/power/supply/bq24257_charger.c
-+++ b/drivers/power/supply/bq24257_charger.c
-@@ -759,7 +759,7 @@ static ssize_t bq24257_show_ovp_voltage(struct device *dev,
- 					struct device_attribute *attr,
- 					char *buf)
- {
--	struct power_supply *psy = dev_get_drvdata(dev);
-+	struct power_supply *psy = dev_to_psy(dev);
- 	struct bq24257_device *bq = power_supply_get_drvdata(psy);
+diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
+index 46f8eb7100c1..d076b4e46194 100644
+--- a/drivers/power/supply/ip5xxx_power.c
++++ b/drivers/power/supply/ip5xxx_power.c
+@@ -367,9 +367,6 @@ static int ip5xxx_battery_get_voltage_max(struct ip5xxx *ip5xxx, int *val)
+ 	if (ret)
+ 		return ret;
  
- 	return sysfs_emit(buf, "%u\n", bq24257_vovp_map[bq->init_data.vovp]);
-@@ -769,7 +769,7 @@ static ssize_t bq24257_show_in_dpm_voltage(struct device *dev,
- 					   struct device_attribute *attr,
- 					   char *buf)
- {
--	struct power_supply *psy = dev_get_drvdata(dev);
-+	struct power_supply *psy = dev_to_psy(dev);
- 	struct bq24257_device *bq = power_supply_get_drvdata(psy);
- 
- 	return sysfs_emit(buf, "%u\n", bq24257_vindpm_map[bq->init_data.vindpm]);
-@@ -779,7 +779,7 @@ static ssize_t bq24257_sysfs_show_enable(struct device *dev,
- 					 struct device_attribute *attr,
- 					 char *buf)
- {
--	struct power_supply *psy = dev_get_drvdata(dev);
-+	struct power_supply *psy = dev_to_psy(dev);
- 	struct bq24257_device *bq = power_supply_get_drvdata(psy);
+-	if (*val > ip5xxx->vbat_max)
+-		return -EINVAL;
+-
+ 	/*
+ 	 * It is not clear what this will return if
+ 	 * IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN is not set...
+@@ -504,6 +501,9 @@ static int ip5xxx_battery_set_voltage_max(struct ip5xxx *ip5xxx, int val)
+ 	unsigned int rval;
  	int ret;
  
-@@ -801,7 +801,7 @@ static ssize_t bq24257_sysfs_set_enable(struct device *dev,
- 					const char *buf,
- 					size_t count)
- {
--	struct power_supply *psy = dev_get_drvdata(dev);
-+	struct power_supply *psy = dev_to_psy(dev);
- 	struct bq24257_device *bq = power_supply_get_drvdata(psy);
- 	long val;
- 	int ret;
-
++	if (val > ip5xxx->vbat_max)
++		return -EINVAL;
++
+ 	switch (val) {
+ 	case 4200000:
+ 		rval = IP5XXX_BAT_TYPE_4_2V;
 -- 
-2.47.1
+2.34.1
+
 
 
