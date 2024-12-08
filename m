@@ -1,107 +1,165 @@
-Return-Path: <linux-pm+bounces-18760-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18761-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8699E842C
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 08:54:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D6769E84F3
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 13:06:11 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F202281A71
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 07:54:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79395164917
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 12:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D904E1CA;
-	Sun,  8 Dec 2024 07:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794E3145A17;
+	Sun,  8 Dec 2024 12:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqE6gxQn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HjadUx1o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF298EEB2;
-	Sun,  8 Dec 2024 07:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7C313C9A4
+	for <linux-pm@vger.kernel.org>; Sun,  8 Dec 2024 12:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733644485; cv=none; b=Fh56TaGu9RclP4rF5/mQ4n5gREF/PNKXcByOHOy1y28SBJmUAf4p5lkEBU8JIuYEzq/3mUZyvgxkwj8LH38Y0CkMDFfS0Nfl/dQpPwje9rWm7gUEpuKtsq65IWb3bEHHB0YIQCB6OxCa0BcqfyCB0gOr6T1b9fzNuzzwR7LbWMU=
+	t=1733659564; cv=none; b=Uj4I4FvLAXOV3DlpUEUO0rncquGj0hL489qD4Za+bhNbtGLzi/DiEOxMsJNgjBIeKbokEobGI3jB1Nc87mjl3dSyv5PAuKgYY81mjKw4cFtk6/FgE7zywWAVW44wPB1VyBkUnwRh5bjtUOzsbJHUh22M1fAsTqdP/Y4G+yz475o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733644485; c=relaxed/simple;
-	bh=2juaYAzq0y55e3ru8WkiY+6F+WScBCBLuFR/2tiHgyg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NLOEcF2HaED3Pd4N3sKak3ZA3jibbrWpkxOdY1uOl8ZFdf6KP6Zcqtr7h0d2heT2iRXul+hYWawunxghtFcVeutfMv4A42IppOUQtrW14/NhU3ZKaUFKS9gAn0TK4cKSFK7G/PFHpIbKtyKis2m422wPvGbBTTXc7vTBU+foD/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqE6gxQn; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5d122cf8e52so5304324a12.1;
-        Sat, 07 Dec 2024 23:54:43 -0800 (PST)
+	s=arc-20240116; t=1733659564; c=relaxed/simple;
+	bh=7OLu/I3KbdAmUn3E2jNeRFtg91yq17Itmd5TAN+jdFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K1otERVO1WwVxoObnFCmtxol5zsSWWO9FALIqKcERJjyASan8pLzwk6nLW8zx5nhQ4jhJhHj4zjfokFll06nkBxxm8Up+ylQkxTo+bVxGkZG4sbeiQNWtdWePxXR/2DlGOjoTeRlBavyLxYRtrrwDj2i0FSZvkm8Edsqf8I86H0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HjadUx1o; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5401bd6cdb7so310264e87.2
+        for <linux-pm@vger.kernel.org>; Sun, 08 Dec 2024 04:06:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733644482; x=1734249282; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id:sender:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2juaYAzq0y55e3ru8WkiY+6F+WScBCBLuFR/2tiHgyg=;
-        b=WqE6gxQnrwv/ZN1rOh65d+Y2btiQ/13T7Xv6i2K4pbCi+UJu54VGdbwLISItHRP3Fi
-         UXTVf0DlF7svxr1KflzHHrIbkePMvreryv1DqCRVkB4oNBcgYHpaxOs4np3rOupVXWQa
-         JLttWdwBK9eukAm5vrLHBJtzLZOnwDKSDZF1avaYWkXF7b0Hzho+KdSXXYwECveaDT7g
-         CKLL2IQvle8KCW03z8opyNrrIjP5xJmc/3gQbX1O+lVr+uAK52J60Cq9m6O/UwL6U2+g
-         D1SfuVE4/t/W998gn5DkppzrDov1qG//C6xD5dals/PtCBGqJ5N8Ne+iep9ztEn9Iqb/
-         R43g==
+        d=linaro.org; s=google; t=1733659560; x=1734264360; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lx68hB7Zpl0dAySaNA/WYlqeVEbWVfGCTLK0VrOdlAY=;
+        b=HjadUx1oRbUREzkeK2E4143dNrFG+BRiCMGdRFjk73bGv0xsYZt9pgPfMVQ2FApvAR
+         AObJIr10VQe8aBv1vF1us3et8j07o5d19poJb/tFA3h2jAnXg9rpPmL1nCEtV011IJzU
+         iJXw9kEfet9c/irdnTZYLInlWNo4OYWUmD2DzsqZxUu5RXUI90m3PGG4gNlVj5+v2XMX
+         nek2VCUVVt/n1fSRPt7YLURN78GA5PJwwIP6/drgHA57ziYu9O0YGEg/wx3CZkjmfpPZ
+         ivIjOblGvVk3J86mBnekohqNv8pf1/HTe1hN/22gmtFkfLy96TVkZP+rrMUWMl8i+Ijr
+         jvhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733644482; x=1734249282;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2juaYAzq0y55e3ru8WkiY+6F+WScBCBLuFR/2tiHgyg=;
-        b=wQ3Kbjpm6fO/tU4OvXpk7sBDS8O4Dp2hlCzmjIDfdDD0SI9oFpIeVooyX+2U1R1v4a
-         3AgCZEx2zSousV23R9TZEnaWzmCHqVdN5A3uM7idkgsw5zfSWWe2+UruRkiR4fssO0L5
-         /TwAeQ+XFsgqQmyHWe2k+MDjMqWbTM7Alre1ATDHCknLSk51Q8MaOiZ7X0F9s5eAp5yB
-         NLFxJNdjhPfDDZKVRLgf5WOR2h7ODcFEp9LVjEyWg/R3ouLrNc5vAHv0dwV9M4Gcrx6M
-         UbMks54Q5QufLLCP06EjED69xUG4qtESFSNfjJNCNXT3Gbswl9Gbct77RQ62bf52WBFw
-         O3IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwOCrG2Lh8hN6c3erIHyatMX+XW5KQgNqUoPSH9fqpiTY3D8Ru05vrUjnYfZI1RJRU8kK4cU5Z5nFoUnI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzL+uV3TC4qI7Q1yqHbpr9mnCo1cX606S4QLBqZKjRARd183uI3
-	ulp2k4Lb01ts+mLS/pouFSbcmlsXHaPiB2eoZ6zN0bpTr8OZOmSyXMQPW1la
-X-Gm-Gg: ASbGncvJ12/JKjaRcWaGQTmTGvkK2aYIfbsB0sHLTHmV6QOv6Wj9zZiheHsGSIlEP9k
-	TwqZvRQ5k+WjkmfpvLQ8vo6mefEypNPyS03ZOd//Fo8o3ZODtzIh5ksPvQM8FltQUdjekTFSr/N
-	oUhaL/smYU59vqx13Sk4i/oCy0/Vzu/OggbhyRDaZKx3o1vVNtT7MLWus8ybBsXlLGrQiIVyyNM
-	ROWaeJ8SAHG4cx/joT/jAWcRhrxPgor5sWapCVuaqxwbOW/XJb9AgR0/Z2jfKz7YGAgJLB3WoQh
-	yUpeqQ0kB0eWcbBhKl0NP7OlK1RLzo7XOA==
-X-Google-Smtp-Source: AGHT+IFSPk6mYG/PHxHP6Xs2Q2ZU+AP7CzEmRU4+ps7Mu9mb8FtngyMq8uWvbGVd0Hq/CccrMlPREQ==
-X-Received: by 2002:a05:6402:e81:b0:5d0:cca6:233a with SMTP id 4fb4d7f45d1cf-5d3be6b506bmr10059439a12.10.1733644481952;
-        Sat, 07 Dec 2024 23:54:41 -0800 (PST)
-Received: from 127.0.0.1 (136.169.149.122.dynamic.ufanet.ru. [136.169.149.122])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d3ec8ef816sm995630a12.59.2024.12.07.23.54.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Dec 2024 23:54:41 -0800 (PST)
-Sender: <irecca.kun@gmail.com>
-Message-ID: <d89bfc1b-37cb-4d8b-b944-8dc385915bcf@gmail.com>
-Date: Sun, 8 Dec 2024 07:54:38 +0000
+        d=1e100.net; s=20230601; t=1733659560; x=1734264360;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lx68hB7Zpl0dAySaNA/WYlqeVEbWVfGCTLK0VrOdlAY=;
+        b=ir9PPIEwa83f5EeLVuP/uMzRhjYE6C4WVSEoKvWJsjMUzPVpBIKu/yNnEuMXDd3/82
+         rrfTifujGFZULW2M7r4Ppoc996U7w05EIx0BXFKZhdf4QiGwN438kK7hFGKmOc1dDOOA
+         Rcuk8dgo+cBrot/h1kOhqYCh8KHJs4bkmliwW4+VdUYy26yRl+Ey3I6qfJt7AJ/uCdER
+         AKe1xx1F/jaVhqvIbuCSxhc+hG2Y3GMdW4qCEDceOHalGZvh1ZcbB10MkTxrz4onl7gm
+         bh8jl+aKdp0PgpN3GZZKaDs9oDQy+cn0O/KDW5yDuZUmMS8Bh+SVAWyN6EXpwx7119Eq
+         2CvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJX6D3yTMuc49zoYK5RKP2li8z5zdgPN70ojv+3ZdqaGygrcAi2IPi0gftX72DgjelyWQFw4/1Zg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyS/CC3OhPryO3u65cHLFDj2BPKLtR91HchIQwXt7ALWqhMXuL8
+	jKlUtm0Pas7eTYG3rjrgzrZpmgU3ZaC22f5i/es0qUlC/c46yP189628liUGZwc=
+X-Gm-Gg: ASbGncs/vdRZItSTrqM/L5AWi/Ba1JEiH7YmvnHXC2P608R7qSVLtoXNFT/weR7Bh3i
+	2yzStLpq+ZwPaskN7QJZOk+swL3SbNz7l4+DgVEuSh9K+5uO8aXGdSJ2lA6thKKl8qd6Qw+Bq09
+	CAGk/SR4o+Bclfh0H0teqLSVva20TSA8w3gh7qvqYN9eERdulLFzCfrPnDCeNhswOlIRabx7d+O
+	pUndiLiKBYjh+Gqj/h7SzgokK1dsk1h5WQb6F32f+mN4OCV5rBd5vctd6/dF46E2Jpe052Ns3DV
+	z6LIrmyouNJ2VYvGyvUwgd1YFnSIYQ==
+X-Google-Smtp-Source: AGHT+IGvsRQ2B7XobCDNbx1+tDzWDsM8MW8qgWQNqGXtl3/Y/aZoodCtsatud1RQBz8SZrVJpchqVg==
+X-Received: by 2002:a05:6512:3988:b0:53e:df2b:df25 with SMTP id 2adb3069b0e04-53edf2be017mr1390532e87.16.1733659559586;
+        Sun, 08 Dec 2024 04:05:59 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5401a26babesm304562e87.11.2024.12.08.04.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Dec 2024 04:05:57 -0800 (PST)
+Date: Sun, 8 Dec 2024 14:05:56 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>, quic_mohamull@quicinc.com, 
+	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: qcs6490-rb3gen: add and enable
+ BT node
+Message-ID: <hjui7cn4iuo4id2q4mmqx2i7c3eyu6ae43fcft6psflypb3aya@ia5i5s4ya45e>
+References: <20241204131706.20791-1-quic_janathot@quicinc.com>
+ <20241204131706.20791-3-quic_janathot@quicinc.com>
+ <pzkijkdswskaq6232uldapz3b6v6zplif7uah24iwq3ymlezft@skbcy2vod3c5>
+ <53d44689-798e-4b5f-a0f1-8a39bea2f19b@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/2] cpufreq/amd-pstate: Set initial min_freq to
- lowest_nonlinear_freq
-To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>, gautham.shenoy@amd.com,
- mario.limonciello@amd.com, perry.yuan@amd.com, rafael@kernel.org,
- viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241017053927.25285-1-Dhananjay.Ugwekar@amd.com>
-Content-Language: en-US
-From: Hanabishi <i.r.e.c.c.a.k.u.n+kernel.org@gmail.com>
-In-Reply-To: <20241017053927.25285-1-Dhananjay.Ugwekar@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53d44689-798e-4b5f-a0f1-8a39bea2f19b@quicinc.com>
 
-Hello. Maybe I'm too late on this, but I have some concerns.
+On Fri, Dec 06, 2024 at 08:15:35PM +0530, Janaki Ramaiah Thota wrote:
+> 
+> 
+> On 12/5/2024 4:29 AM, Dmitry Baryshkov wrote:
+> > On Wed, Dec 04, 2024 at 06:47:04PM +0530, Janaki Ramaiah Thota wrote:
+> > > Add a node for the PMU module of the WCN6750 present on the
+> > > qcs6490-rb3gen board and assign its power outputs to the Bluetooth
+> > > module.
+> > > 
+> > > Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+> > > ---
+> > >   arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 165 ++++++++++++++++++-
+> > >   1 file changed, 164 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> > > index 27695bd54220..07650648214e 100644
+> > > --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> > > @@ -1,6 +1,6 @@
+> > >   // SPDX-License-Identifier: BSD-3-Clause
+> > >   /*
+> > > - * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> > > + * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> > >    */
+> > >   /dts-v1/;
+> > > @@ -33,6 +33,7 @@
+> > >   	aliases {
+> > >   		serial0 = &uart5;
+> > > +		serial1 = &uart7;
+> > >   	};
+> > >   	chosen {
+> > > @@ -217,6 +218,63 @@
+> > >   		regulator-min-microvolt = <3700000>;
+> > >   		regulator-max-microvolt = <3700000>;
+> > >   	};
+> > > +
+> > > +	wcn6750-pmu {
+> > > +		compatible = "qcom,wcn6750-pmu";
+> > > +		pinctrl-names = "default";
+> > > +		pinctrl-0 = <&bt_en>;
+> > > +		vddaon-supply = <&vreg_s7b_0p972>;
+> > > +		vddasd-supply = <&vreg_l11c_2p8>;
+> > > +		vddpmu-supply = <&vreg_s7b_0p972>;
+> > > +		vddrfa0p8-supply = <&vreg_s7b_0p972>;
+> > > +		vddrfa1p2-supply = <&vreg_s8b_1p272>;
+> > > +		vddrfa1p7-supply = <&vreg_s1b_1p872>;
+> > > +		vddrfa2p2-supply = <&vreg_s1c_2p19>;
+> > > +
+> > > +		bt-enable-gpios = <&tlmm 85 GPIO_ACTIVE_HIGH>;
+> > 
+> > Doesn't WCN6750 also have SW_CTRL and wifi-enable pins?
+> > 
+> 
+> For Bluetooth, these pins are not needed. We have verified Bluetooth
+> functionality, and it is working fine.
 
-On 10/17/24 05:39, Dhananjay Ugwekar wrote:
-> In other systems, power consumption has increased but so has the
-> throughput/watt.
+You are describing the hardware (PMU), not "a part of the PMU for the
+BT". Please check if there should be a wifi enable pin and adjust
+accordingly.
 
-I just want to bring up the fact that this change affects all governors. It sounds good for the performance governor, but not so much for the powersave governor.
-
-So the question is: don't we want the lowest power consumption possible in the powersave mode? Even if it means decreased efficiency. Powersave by definition supposed to make battery last as long as possible no matter what, isn't it?
-
+-- 
+With best wishes
+Dmitry
 
