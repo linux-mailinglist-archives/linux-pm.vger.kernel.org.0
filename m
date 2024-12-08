@@ -1,119 +1,120 @@
-Return-Path: <linux-pm+bounces-18765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A6579E8523
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 14:01:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C60B164064
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 13:01:00 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12A16146A7A;
-	Sun,  8 Dec 2024 13:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="WBrGrfgt"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B9239E853B
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 14:03:51 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC3D80BFF;
-	Sun,  8 Dec 2024 13:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C72502816FC
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 13:03:49 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913A5156C71;
+	Sun,  8 Dec 2024 13:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="rQPkwjb8"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6109E154439;
+	Sun,  8 Dec 2024 13:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733662860; cv=none; b=mw6Er2R+KLyBY01l247QKF/bqpDaAHLa2mNT/rtPVsNR19r/6bBWMEQ5GomsEzY4yqe7NZFt8JeKnxi0npwpFkXa132xJs78ADdBEH1kqTvquxlWG+eUicW2oygxcmY+VI8ZLseKCwUqNd1wsUWfIT8XQPhEDzfbTx6wyuem33c=
+	t=1733662966; cv=none; b=ibtBGrrcY6jnMertBrZQjW0BJSPYShnkKgyMJX0nYHzrp2TkMJmiI1+zWG9ZWx4B9CyhhOeHcPYZbrgT34P2WUTk8N6D82j9/XLnXI8GianjH4qMPe17uXQiNK64MCRSoyBqVhdhi0H+BvbVzoKrQfuYa63ba+OJERhTIP/bJTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733662860; c=relaxed/simple;
-	bh=+aPB+YlkJlsHizTK+0IOYjfWrhg9jBu9ryfLATLQtNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=c/2svpOw2CsvbW3SJ24Lxbo97BsuCdseGQav3FMWEXDlrIg707DQ4yKkv0KmhEepE4o/+X9RNqg955VRbT81msAJlg822gniYqSnFIoe/bwft3qWyC+esskHyLGcWvU+X1XWL1mMOumK6WkEVczNmaDc4i16+PL699Y1IL8vpaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=WBrGrfgt; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 9530FA1039;
-	Sun,  8 Dec 2024 14:00:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=KIsdPwZwMzoULAharfGI
-	5X61H/X1wnWEEF757phQrFk=; b=WBrGrfgtgK354XS1BhVu2v/T3psxnGkpf/yF
-	2zdd1Hc2uh/RyDvAK/xld2Sj0vHQrG8QlFUmeDQ1DY383Mn7QoZWH8lOklZxeeKB
-	KNALTvMI/Wo2AFG67wAxCnTU1MYveFS9KU6RiYRXZobS+e8jR4KCZmlLMxhhu2IW
-	+ZTASCPs02tMrppQMyVxat+gsVkhAa04OKMv/7YLR7A98mgiq7gsTDZAKhnFqQCK
-	iIBpebfgaoMO5tzmIoYYGnrlv+oWZJKfxPOjF1dGsOi+4DhUY7Du5Ny1NiaaMt1f
-	D6ckodfXTWWUr9FY7KaGRrnDID1d/CNAN0NhJ8dzEpciMUduUedAX6BNNl4ommfQ
-	Ly0pRToKzRYrJqWTjazwUwwnXf1ICZV1KQticWfQ1MImQKiJeHTedZz1Np/rL17e
-	10jhHGBI/GqxAsXsOrsScHUSJXcE6BJZt+bQ+d+mutOiN3VwCkvAOC9KIOkA6XvL
-	oA637ej7JjrapM1H8TQ4bJOFXT40tC/+YosfHxU0qGKxH5zrROQfP9hsp5K+dsSC
-	7muzSXmQVNiogi9aS3+XnYyfR89FU8OGY+2DqqAANzgqtdC6oqaIPtXhsIhzmxt1
-	zCJRf2JVo1cA3tok0LlkWUadyzli2dvvanzQdjCcD/xoqviUWmKh8J3/LSlKk4MR
-	cwFiGQ4=
-Message-ID: <f042fea0-3977-40cb-a3b1-129ceee5b3bd@prolan.hu>
-Date: Sun, 8 Dec 2024 14:00:52 +0100
+	s=arc-20240116; t=1733662966; c=relaxed/simple;
+	bh=rdh35BFI5KygGq7wxSw7wcqfjLu8NG5cFAZXr6CdRq0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ArOmmrqaFVPh4hqKcUxyq6IrKkQdzY77bMO2V/dA4dtx0VV1cBxyzlOlNW9axF9ZF4o/EqJp56wZbZ8ne+sjgBXOXio5rBcKNON4mnGiVEB+jxlIL2MNHRHGq5zNFaU4XqW5ntpJambdfpjYJtzSu/RiMIYetGTte2n0tkIXZKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=rQPkwjb8; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1733662958;
+	bh=rdh35BFI5KygGq7wxSw7wcqfjLu8NG5cFAZXr6CdRq0=;
+	h=From:Subject:Date:To:Cc:From;
+	b=rQPkwjb8/Ttf8YyipUrISj3kZKfBQzRoA/csHHYTCE20ILL0bsHZ9T/gO/vkZF8vH
+	 nFGRMoxQe4D4311jM9G3AgRP2Kodo6gXI/ei/2RCaVFGBUJyXo+uab84gFWM8hQzOq
+	 K58Qb8NUihT3atddIvf0puwAe6x9qHFk7ukSIVB8=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 00/14] power: supply: intruduce and use
+ power_supply_for_each_psy() and dev_to_psy()
+Date: Sun, 08 Dec 2024 14:02:32 +0100
+Message-Id: <20241208-power-supply-dev_to_psy-v1-0-f95de9117558@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/8] power: ip5xxx_power: Allow for more parameters to
- be configured
-To: Kees Bakker <kees@ijzerbout.nl>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Samuel Holland <samuel@sholland.org>, Sebastian Reichel <sre@kernel.org>
-References: <20241119180741.2237692-1-csokas.bence@prolan.hu>
- <20241119180741.2237692-3-csokas.bence@prolan.hu>
- <b547c228-df70-4137-9e96-175923f62404@ijzerbout.nl>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <b547c228-df70-4137-9e96-175923f62404@ijzerbout.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D9485562766B
+X-B4-Tracking: v=1; b=H4sIAOiYVWcC/x3MQQqDMBBA0avIrB1IohTxKqVIqpM6IGbIWFuR3
+ N3g8i3+P0EpMSn01QmJdlaOa4GtKxhnv34IeSoGZ1xrnelQ4o8S6ldkOXCifdjiIHpgeDfBt2S
+ Df3gotSQK/L/Pz1fOF0YbisRpAAAA
+X-Change-ID: 20241208-power-supply-dev_to_psy-fb3fa4e1fa6a
+To: Sebastian Reichel <sre@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Maximilian Luz <luzmaximilian@gmail.com>, 
+ =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ platform-driver-x86@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733662957; l=2038;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=rdh35BFI5KygGq7wxSw7wcqfjLu8NG5cFAZXr6CdRq0=;
+ b=eFtpEtqbLdCpo+fFPwd3xVD6L27ddGIoGN+MiqXRp3yDm7OrXnWhml0hJKSPx9zwbDQymC9Dh
+ MKKx2AxGy0XC+qJl08N5rzJnWlkaeFI8z9akrHlghmZDRZ6HPcNJdsI
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Hi,
+Add two new functions with easier to use and safer APIs.
+Switch over a bunch of in-tree users.
 
-On 2024. 12. 06. 20:51, Kees Bakker wrote:
-> Op 19-11-2024 om 19:07 schreef Csókás, Bence:
->> Other parts such as IP5306 may support other battery voltages and
->> have different constants for input voltage regulation. Allow these
->> to be passed from `struct ip5xxx_regfield_config`.
->>
->> Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
->> ---
->>   drivers/power/supply/ip5xxx_power.c | 43 ++++++++++++++++++++++++++---
->>   1 file changed, 39 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/power/supply/ip5xxx_power.c 
->> b/drivers/power/supply/ip5xxx_power.c
->> index 41d91504eb32..a939dbfe8d23 100644
->> --- a/drivers/power/supply/ip5xxx_power.c
->> +++ b/drivers/power/supply/ip5xxx_power.c
->> [...]
->>   /*
->> @@ -328,6 +348,9 @@ static int ip5xxx_battery_get_voltage_max(struct 
->> ip5xxx *ip5xxx, int *val)
->>       if (ret)
->>           return ret;
->> +    if (*val > ip5xxx->vbat_max)
->> +        return -EINVAL;
-> This is introducing the read of an uninitialized variable.
-> You have to check all the callers of ip5xxx_battery_get_voltage_max()
-> and what variable *val is pointing to. For example in
-> ip5xxx_battery_get_property() the variable vmax is not initialized,
-> while its address is passed to ip5xxx_battery_get_voltage_max()
-> 
-> But maybe the intention was to check rval instead of *val?
-> [...]
+The first commit is not directly related but fits the general theme of
+the series.
 
-That was supposed to go in set_voltage_max()... I'll send a fix shortly.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (14):
+      power: supply: mm8013: use accessor for driver data
+      power: supply: core: introduce power_supply_for_each_psy()
+      power: supply: core: use power_supply_for_each_psy()
+      power: supply: ab8500: use power_supply_for_each_psy()
+      power: supply: apm_power: use power_supply_for_each_psy()
+      power: supply: core: remove power_supply_for_each_device()
+      power: supply: core: introduce dev_to_psy()
+      power: supply: core: use dev_to_psy()
+      power: supply: sysfs: use dev_to_psy()
+      power: supply: ab8500: use dev_to_psy()
+      power: supply: surface_battery: use dev_to_psy()
+      power: supply: bq2415x_charger: use dev_to_psy()
+      power: supply: bq24190_charger: use dev_to_psy()
+      power: supply: bq24257_charger: use dev_to_psy()
 
-Bence
+ drivers/power/supply/ab8500_btemp.c       |  5 +--
+ drivers/power/supply/ab8500_chargalg.c    |  5 +--
+ drivers/power/supply/ab8500_charger.c     |  5 +--
+ drivers/power/supply/ab8500_fg.c          | 33 ++++++++--------
+ drivers/power/supply/apm_power.c          |  6 +--
+ drivers/power/supply/bq2415x_charger.c    | 24 +++++------
+ drivers/power/supply/bq24190_charger.c    |  4 +-
+ drivers/power/supply/bq24257_charger.c    |  8 ++--
+ drivers/power/supply/mm8013.c             |  2 +-
+ drivers/power/supply/power_supply_core.c  | 66 ++++++++++++++++++-------------
+ drivers/power/supply/power_supply_sysfs.c |  8 ++--
+ drivers/power/supply/surface_battery.c    |  4 +-
+ include/linux/power_supply.h              |  4 +-
+ 13 files changed, 92 insertions(+), 82 deletions(-)
+---
+base-commit: 39f3bd9c9a27d526858da153090376decdf7bfea
+change-id: 20241208-power-supply-dev_to_psy-fb3fa4e1fa6a
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
 
