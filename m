@@ -1,213 +1,120 @@
-Return-Path: <linux-pm+bounces-18829-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18830-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824B59E9A43
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 16:19:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2679E9AC1
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 16:42:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35FA218874EB
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 15:19:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2D1A1887DF5
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 15:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A721F0E5F;
-	Mon,  9 Dec 2024 15:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A3C1C5CA7;
+	Mon,  9 Dec 2024 15:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KTGbg1eZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kDU4vQJe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9781F0E20;
-	Mon,  9 Dec 2024 15:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A172A1B4236;
+	Mon,  9 Dec 2024 15:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733757505; cv=none; b=CyRRJ5v20ohX0FgeCGARCVM4ao6x6D6vQVzYgBAH2jX9TbqnHq0Mxa37OwB2gA9YL7ik2j8v6hv7WVMRexq5D1IuVoIzIdgg7orZQmlnIWMQK1a/2x+ga8xOos2HjY99AJHW7DQ8OWVaDGNY5DWwfNIdQGg4y+uRFTMjHodXFAg=
+	t=1733758939; cv=none; b=MxYKQ66yED0F5PYmfzWu87xjaYU1DNSjTlpmO7CVE+ulCTUJm++9xkFDA+83oDO8ev7v4kNt6MEbWROf45hwD02yVpII1mXXRrq4U8y4/C7w/dRS2zvapCAc+ltqiUbLwiMVsCwbiIDJeUVAFQ3Uzs2oKyirNDaGs1NywIYKO5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733757505; c=relaxed/simple;
-	bh=gI2qNtFYnW75fraXNbboTDNcdxl/zpGRAljaNN0+FWU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=WzYA0UUaad1o72G/F06gt3p5RI7u7W00KMM1jLUF/96w7OWCHZjo+ye3YOeBO+3v86VQE7P2MZ80HB3IeVVcmGKBIx81l4zRfnb6lf2CHHeM8+wjg4qsEbJuX9cpuWIEPaPHwc/2g4f2tCGyPNCBPB0IzCH47bDct6eQ1Nsetbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KTGbg1eZ; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1733758939; c=relaxed/simple;
+	bh=P18b2PlB0MwGNJ/eQCw45a7as/FOYe1k97RGjVLARlg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=as1zyWglSznPb4o50QKAHUrhCHwxN6hqOGtc/Lisjh8IIb2zfZLqFx7y5LxtgscgFsq4t1Re8DxCuJv4u3NyCjE/slwchoObocYiOaL5BwMeRRAYWAAiGZrrp9rYDmSJCBsos532cmjkul9SCYBEL++qGmO1osXQHTcsYGPraVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kDU4vQJe; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733757504; x=1765293504;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=gI2qNtFYnW75fraXNbboTDNcdxl/zpGRAljaNN0+FWU=;
-  b=KTGbg1eZADrK+9/Djhfm+3xn8MoQyqUelkQAb1B2R/l2riChkm39wZUM
-   xaBY8NAlziVKjJPxUIP6SmxJTaXs+bOUtsxkgpz0E3wSbruOP3ZOSc70I
-   a8UJ8F6oGSNtDQpw5db0QbGnGAPsmIRvk8YwI7IdrkqfE5zouXxkoN3Qc
-   S3xLfPl4wYA+ImhI2Ftz+uyf7ehvtx5SDMFTIJk6PGZsABEkzl18mt8wc
-   DgyWauyMrIAy1STwghNuNluDdAEE8Rii6ZoWb3f1AnkkygkQ5uMkOeaP6
-   5JS8shyC62TxN4QqHONRaZNIJ0Nqv0xUmOuYnOsH0myJ3vSXHyqNH6dAm
+  t=1733758938; x=1765294938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P18b2PlB0MwGNJ/eQCw45a7as/FOYe1k97RGjVLARlg=;
+  b=kDU4vQJe5tdMQxjtWyK0WwIjSec5WgLrq1g7przjm9GTc8NuLYxlrt/u
+   MoboT1M087pzk6arXUhDQiH7hcOUT5Ef7tsT8z2CBueG69W3zsgpR5yGI
+   nlZsF+F5O1lnQEc5inTbvN+hPPnqYEmxA3QqW32mmPRraydb7TlyXb5uM
+   SiQZ3E87UWdkMscnA2IQvkz/9CuCzGMRb0pOeXgp5X0VMYb4edamNrIKl
+   q1WBFtdFM3cOiR2HztUEpYZhsdO+OlxO5vjT00EFk+QuQ/YWHYlgscHQJ
+   Rn1S8jnsBrsfQ0AqUMGcoEoc3xjFWbJmnRwkDZwRElBtYn7gmQ5Ua2HV5
    w==;
-X-CSE-ConnectionGUID: R1ClQcwNQyCCJ5iZvFOf2A==
-X-CSE-MsgGUID: rOeoDVFUToa8XHgVJBTfEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="34118531"
+X-CSE-ConnectionGUID: AO6ovWqXTqWMOYQbOHyaIQ==
+X-CSE-MsgGUID: 6lcw4Ev5Rqyd2VPF/oz4MQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="45466889"
 X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
-   d="scan'208";a="34118531"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 07:18:23 -0800
-X-CSE-ConnectionGUID: bAb3zxMgQmGHQXCR9Acs7Q==
-X-CSE-MsgGUID: cT/dnomUSLaLKf0ylOtq0Q==
+   d="scan'208";a="45466889"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 07:42:17 -0800
+X-CSE-ConnectionGUID: vBpVhrnzR9mGjzDWG200ag==
+X-CSE-MsgGUID: ifEavL7+SWa8OkyWYs+vYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
-   d="scan'208";a="95458641"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.121])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 07:18:21 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 9 Dec 2024 17:18:17 +0200 (EET)
-To: Xi Pardee <xi.pardee@linux.intel.com>
-cc: rajvi0912@gmail.com, irenic.rajneesh@gmail.com, 
-    david.e.box@linux.intel.com, Hans de Goede <hdegoede@redhat.com>, 
-    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/3] platform/x86:intel/pmc: Create info structure for
- pmc device
-In-Reply-To: <20241207053607.14806-3-xi.pardee@linux.intel.com>
-Message-ID: <a8c0ba82-9ea0-d761-f6c3-193de5fe2bbd@linux.intel.com>
-References: <20241207053607.14806-1-xi.pardee@linux.intel.com> <20241207053607.14806-3-xi.pardee@linux.intel.com>
+   d="scan'208";a="94954637"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 09 Dec 2024 07:42:12 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 18D6644B; Mon, 09 Dec 2024 17:42:10 +0200 (EET)
+Date: Mon, 9 Dec 2024 17:42:10 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Niklas Schnelle <niks@kernel.org>
+Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>
+Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
+ 2.5 GT/s
+Message-ID: <20241209154210.GL4955@black.fi.intel.com>
+References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
 
-On Fri, 6 Dec 2024, Xi Pardee wrote:
-
-> Create an info structure to store platform specific information.
-> For Tiger Lake and Arrow Lake platforms, multiple platform variations
-> could share one generic init function. Using info structure could
-> avoid if () forest. Modify tgl.c to use the info structure.
+On Sat, Dec 07, 2024 at 07:44:09PM +0100, Niklas Schnelle wrote:
+> Trying to enable bwctrl on a Thunderbolt port causes a boot hang on some
+> systems though the exact reason is not yet understood. As per the spec
+> Thunderbolt PCIe Downstream Ports have a fake Max Link Speed of 2.5 GT/s
+> (USB4 v2 sec 11.2.1):
 > 
-> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/pmc/core.h | 15 ++++++++++++
->  drivers/platform/x86/intel/pmc/tgl.c  | 33 +++++++++++++++------------
->  2 files changed, 33 insertions(+), 15 deletions(-)
+>    "Max Link Speed field in the Link Capabilities Register set to 0001b
+>     (data rate of 2.5 GT/s only).
+>     Note: These settings do not represent actual throughput.
+>     Throughput is implementation specific and based on the USB4 Fabric
+>     performance."
 > 
-> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-> index a1886d8e1ef3e..3124315d2b925 100644
-> --- a/drivers/platform/x86/intel/pmc/core.h
-> +++ b/drivers/platform/x86/intel/pmc/core.h
-> @@ -428,6 +428,21 @@ struct pmc_dev {
->  	struct pmc_info *regmap_list;
->  };
->  
-> +/**
-> + * struct pmc_dev_info - Structure to keep pmc device info
-> + * @func:		function number of the primary pmc
-> + * @map:		pointer to a pmc_reg_map struct that contains platform
-> + *			specific attributes of the primary pmc
-> + * @suspend:		Function to perform platform specific suspend
-> + * @resume:		Function to perform platform specific resume
-> + */
-> +struct pmc_dev_info {
-> +	u8 func;
-> +	const struct pmc_reg_map *map;
-> +	void (*suspend)(struct pmc_dev *pmcdev);
-> +	int (*resume)(struct pmc_dev *pmcdev);
-> +};
-> +
->  enum pmc_index {
->  	PMC_IDX_MAIN,
->  	PMC_IDX_SOC = PMC_IDX_MAIN,
-> diff --git a/drivers/platform/x86/intel/pmc/tgl.c b/drivers/platform/x86/intel/pmc/tgl.c
-> index 4fec43d212d01..c6fc3a0225a55 100644
-> --- a/drivers/platform/x86/intel/pmc/tgl.c
-> +++ b/drivers/platform/x86/intel/pmc/tgl.c
-> @@ -13,11 +13,6 @@
->  #define ACPI_S0IX_DSM_UUID		"57a6512e-3979-4e9d-9708-ff13b2508972"
->  #define ACPI_GET_LOW_MODE_REGISTERS	1
->  
-> -enum pch_type {
-> -	PCH_H,
-> -	PCH_LP
-> -};
-> -
->  const struct pmc_bit_map tgl_pfear_map[] = {
->  	{"PSF9",		BIT(0)},
->  	{"RES_66",		BIT(1)},
-> @@ -285,18 +280,26 @@ void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev)
->  	ACPI_FREE(out_obj);
->  }
->  
-> -static int tgl_core_generic_init(struct pmc_dev *pmcdev, int pch_tp)
-> +static struct pmc_dev_info tgl_l_pmc_dev = {
-> +	.map = &tgl_reg_map,
-> +	.suspend = cnl_suspend,
-> +	.resume = cnl_resume,
-> +};
-> +
-> +static struct pmc_dev_info tgl_pmc_dev = {
-> +	.map = &tgl_h_reg_map,
-> +	.suspend = cnl_suspend,
-> +	.resume = cnl_resume,
-> +};
-> +
-> +static int tgl_core_generic_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->  {
->  	struct pmc *pmc = pmcdev->pmcs[PMC_IDX_MAIN];
->  	int ret;
->  
-> -	if (pch_tp == PCH_H)
-> -		pmc->map = &tgl_h_reg_map;
-> -	else
-> -		pmc->map = &tgl_reg_map;
-> -
-> -	pmcdev->suspend = cnl_suspend;
-> -	pmcdev->resume = cnl_resume;
-> +	pmc->map = pmc_dev_info->map;
-> +	pmcdev->suspend = pmc_dev_info->suspend;
-> +	pmcdev->resume = pmc_dev_info->resume;
->  
->  	ret = get_primary_reg_base(pmc);
->  	if (ret)
-> @@ -310,10 +313,10 @@ static int tgl_core_generic_init(struct pmc_dev *pmcdev, int pch_tp)
->  
->  int tgl_l_core_init(struct pmc_dev *pmcdev)
->  {
-> -	return tgl_core_generic_init(pmcdev, PCH_LP);
-> +	return tgl_core_generic_init(pmcdev, &tgl_l_pmc_dev);
->  }
->  
->  int tgl_core_init(struct pmc_dev *pmcdev)
->  {
-> -	return tgl_core_generic_init(pmcdev, PCH_H);
-> +	return tgl_core_generic_init(pmcdev, &tgl_pmc_dev);
->  }
+> More generally if 2.5 GT/s is the only supported link speed there is no
+> point in throtteling as this is already the lowest possible PCIe speed
+> so don't advertise the capability stopping bwctrl from being probed on
+> these ports.
 > 
+> Link: https://lore.kernel.org/linux-pci/Z1R4VNwCOlh9Sg9n@wunner.de/
+> Fixes: 665745f27487 ("PCI/bwctrl: Re-add BW notification portdrv as PCIe BW controller")
+> Tested-by: Niklas Schnelle <niks@kernel.org>
+> Signed-off-by: Niklas Schnelle <niks@kernel.org>
 
-While adding the struct seems right direction, I don't feel good about the 
-scoping in this patch. It seems that we'll still end up duplicating lots
-of init code.
+Makes sense to me,
 
-If I do (in drivers/platform/x86/intel/pmc):
-
-git grep -A7 -B7 -e 'suspend =' -e 'resume =' -e '->map ='
-
-...I see basically:
-
-- assign those variables (minor variations: PMC_IDX_MAIN/PMC_IDX_SOC 
-  index, NULL resume/suspend that is already handled)
-- if regmap_list is set, call to pmc_core_ssram_init() (the pointer put 
-  into ->regmap_list seems another candidate to be included into the info 
-  struct.)
-- else (or if ssram init failed), call get_primary_reg_base()
-- call pmc_core_get_low_power_modes()
-
-Why cannot we like have a common init function which handles all those and 
-remove all that duplication from per arch files? I don't see anything that 
-looked meaningful variations so the current archs should be all 
-generalizable I think. Why leave all those into per arch init as done in 
-this series?
-
--- 
- i.
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
