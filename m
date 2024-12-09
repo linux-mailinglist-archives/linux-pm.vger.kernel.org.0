@@ -1,123 +1,119 @@
-Return-Path: <linux-pm+bounces-18810-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18811-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A11FA9E90C9
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 11:46:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD1EA9E9106
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 11:56:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22CF8280C92
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 10:46:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FF122813F9
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 10:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADC1216393;
-	Mon,  9 Dec 2024 10:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9320216E28;
+	Mon,  9 Dec 2024 10:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZoItZtL1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cJ3NfQyg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B42130AC8;
-	Mon,  9 Dec 2024 10:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3699D189B85
+	for <linux-pm@vger.kernel.org>; Mon,  9 Dec 2024 10:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733741202; cv=none; b=qsGg9SaQRn0OWaK2cUXE0lvxnaQAg33yhIoWkNCT07/DRfMJu+2ccxp4frJtTz8t1OIcHArKZx6dCvT/XHCmr9cXjvkYsV1u+epApmOAxqJdf6aQoHb8DIDu019FVGyD/1g5By/JAoyU2+1MZkNuNG5gBfsyZif1DYbJ80pPyc8=
+	t=1733741780; cv=none; b=prErrBywYdElS6lWNpHdhSecZ4A8DgM+ntbbn9NRUlfOCQjYkVjFohzrEMh9PsDaBjLLE44g3lNzV0SaP/Y9nuKBzvcAF7gpl3OR4QuEtzRI0Ckh3TaMz6IGcgsqunSzVhse/sQCjrOky/AGw5AtGB9HBxKOphS5o/dcMI+kl/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733741202; c=relaxed/simple;
-	bh=ficvqIcjUVmyYtMbNfutVkfgvZVWzK9sxXwvtshVcDg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dmPfPoil1yFWLqotdqu/P+/yv2KbNCFVmAinUHtqd5uNNgMdENYcvfz7eU/UQ2Nt1W/Jen9qz3qCFXoBE90pXsV0eI9oE3yAFE86RUFOdEvTBa5qd+cI7i2R1V7QUXRHQWRLLy2zqjwDzPjKAmjDY1gTbGvzMwrZHglE3rnlnOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZoItZtL1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7113C4CED1;
-	Mon,  9 Dec 2024 10:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733741200;
-	bh=ficvqIcjUVmyYtMbNfutVkfgvZVWzK9sxXwvtshVcDg=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=ZoItZtL1ryOcxTz9cH/n2GgrlJXRTgRd8X3JmrOl9dK9+BTUUyBCaNZUPJBk5oEcP
-	 m77Js3Otu6rOdzSVXPAXSDz1VQyrDW8pPDqlUx84cC0QbKkj7KMF2qSbJwVa1t1EXF
-	 KvQ6RIonAGaJEI2XvL9O7OedPV5BFWphSuGQTURBnyH0zSYoH8dmek/Siz9U5CkK0N
-	 vg7QSx6KbY70otFsGzJtDjXy1FJYHhGnCfDh26KXfY6UE/VK47J4VWwP+2q/X+RRX3
-	 3iPJgm/RJYo5ktYSKjdvOxZ8aBgRzpc4Uwq/w6PZoqn+z2JNL4tk6m370bh1uTAhsm
-	 rc5Lb//mlqbOQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA342E7717D;
-	Mon,  9 Dec 2024 10:46:40 +0000 (UTC)
-From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Date: Mon, 09 Dec 2024 11:46:15 +0100
-Subject: [PATCH] power: supply: gpio-charger: Fix set charge current limits
+	s=arc-20240116; t=1733741780; c=relaxed/simple;
+	bh=MvjEr+QmcBYSFD+4yOMfFy5J+y5/erO43wRjxGBp134=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JyZNU8z+y7+UrVX5SJ1ubsBFH+5sJqn3djtef5sSWq4aDb+rp6pakrmYm7rnuzxcWd3kGz5UMplGaEcYOG/9jEkO7HYY/kWa9//n4taz0FZnU4bpTQKPxYP+06EhBJ6qV5vLCohRrrqnPGFeeQPwHi1TzYpSOpjDcxbDQ3hb1xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cJ3NfQyg; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5401c37d8afso1100278e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2024 02:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733741777; x=1734346577; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1LCGkepE9BNY41wwancZQPMjgbX9qpsMb1C/mBNuBo=;
+        b=cJ3NfQygvrCnHUz1YhqypYJYiFuhT4uUwvhmpez3mjHDRzZZRMBdFD3aBlcQocSGVP
+         QMi9lDv2NlEC9MDche/rEAOuJn0/+NKCZUQaM3JZvP/s0eavqk9x/oZQ4/8i0OwnNJ79
+         y7OWe777vevFgqZ4gsWQJG1FpXm50ZYyihn5tOKOw6sqz/MX7fJW1/rQru9iQDUpLZc2
+         gSgyqQQAM9ODTyP99A1dr+DRz2hUgN5NXcaPNJv7NREy0v+kAma9Zaj3qbG9AqFLpkC/
+         yyrxMf5SSXNA24r+g0+leBQupql+B1aG1LhQANzOnk9wwS880CRLDnL/cUHnEhSPFNmX
+         9w8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733741777; x=1734346577;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s1LCGkepE9BNY41wwancZQPMjgbX9qpsMb1C/mBNuBo=;
+        b=cQLOTkv4TOXMpHFahNHwWmR3Jz2QkuM8pnehydl3xR8Q6x657uTxu7DYb+yHT9IWn8
+         BPPqux4frLL0CobKrt1PsHJS1xsHkRRekkiaTQcNSOIQnwxe/0FBRD8ArfLm9guXodW+
+         bSFMeHort3f/D4mJjuV1FbYrvD4mxjMfrrikeJkSaUumAbVSSb2QtC4lHWD88a6BD0+e
+         ArocHbB7i4VQjR+hyK+3eNRWkRHSFZyJuDoW7H8BrHShV8cN1AvDt57VdPjIaaAu9kel
+         FdbIahHPgtCCbGFUpy1fOyJlV6c/9QGpr1z+iGquvvmTTJlKKZZMl8aoLwjFv+XmfOvT
+         SXNg==
+X-Forwarded-Encrypted: i=1; AJvYcCWwKlxdGAcT8pKiTXqzKoU0M+bmMPIim3PNnTq2Dvw2V1ALZHzZM8H0aVFaDEIaHprW1Mws064jmg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4FvHCngstAZDSpLa4peXFnll9IyrpXpHmniYTADj7hugwxds9
+	6xoDqRZR9zP5+fqjO240bBTSdOExaRi4IZFCY9UthIDiajn8SCoPwMBPydJYvJ8=
+X-Gm-Gg: ASbGncuuVBFC64d8FD7EArM4PkwF7M7qW67pER2B72SJ3X7Yx5CojYmpWG8W/5PSnis
+	Q34N03jH0duC45vQN4Sw47krTOvc21Ng/M8JQEvezpFVpRzktfc1wAtljdhPhZ2iLp9Bh0CMW20
+	/DhXvwp2ijkx+rt1UNmoTx9H0jxPcxor3/cAuecbysOB5dGL4Au28teZYJMFEHTCuQkZVylnuGj
+	kl+H8HgPKq4q1XTy8IZgPiO8D8h1HVzjNzrQZPOUoRN7YsO63e07TYHYQdqIl+sDw+eR5VXlViy
+	rKaLrDdMiVUrRhDrZj9LUOdyurx2Iw==
+X-Google-Smtp-Source: AGHT+IHLQhW4yrOheTO3FKBH2BMc3+YO6hNqRhmWtxjdDrWhydjjQ8nuO7eWSOcahHRapkZ5ee4u3A==
+X-Received: by 2002:a05:6512:3990:b0:53d:a321:db74 with SMTP id 2adb3069b0e04-5402411a69cmr1638e87.50.1733741777425;
+        Mon, 09 Dec 2024 02:56:17 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53e3745b0bbsm930193e87.185.2024.12.09.02.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2024 02:56:17 -0800 (PST)
+Date: Mon, 9 Dec 2024 12:56:15 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>, quic_mohamull@quicinc.com, 
+	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 2/4] arm64: dts: qcom: qcs6490-rb3gen: add and enable
+ BT node
+Message-ID: <cros4yf4mwtu24xdpevpixlmtt5si6ywjzacezemhsmkfsomgx@gtjaznwqvjsm>
+References: <20241209103455.9675-1-quic_janathot@quicinc.com>
+ <20241209103455.9675-3-quic_janathot@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241209-fix-charge-current-limit-v1-1-760d9b8f2af3@liebherr.com>
-X-B4-Tracking: v=1; b=H4sIAHbKVmcC/x2MQQqAMAwEvyI5G7BFD/oV8VBrqgGtkqoI0r8bP
- A6zsy8kEqYEXfGC0M2J96hgygL84uJMyJMy2MrWxlYtBn5QjajxlwjFE1fe+ETXUDOOLkzBGND
- 8ENLtf90POX+owkMkagAAAA==
-X-Change-ID: 20241209-fix-charge-current-limit-a5e5bbafdf11
-To: Sebastian Reichel <sre@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dimitri Fedrau <dima.fedrau@gmail.com>, 
- Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733741199; l=1471;
- i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=JMP/YPv48CKxY8k+OHWu1fWQP76Gr1cU/J9kXPrJcps=;
- b=BYybNBmEiGJm6J9m12P59VausTgYIExWvufe6VUrPuap1Hx5eJ7OG9YSOmiA/l0w0NPXVI/EY
- ZT1wKRPwS8uAgh5NI+K3CIJdEfSKOsTWHGLMq+HhoSwguHe5ryQ6IC7
-X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
- pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
-X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
- with auth_id=290
-X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Reply-To: dimitri.fedrau@liebherr.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241209103455.9675-3-quic_janathot@quicinc.com>
 
-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+On Mon, Dec 09, 2024 at 04:04:53PM +0530, Janaki Ramaiah Thota wrote:
+> Add the PMU node for WCN6750 present on the qcs6490-rb3gen
+> board and assign its power outputs to the Bluetooth module.
+> 
+> In WCN6750 module sw_ctrl and wifi-enable pins are handled
+> in the wifi controller firmware. Therefore, it is not required
+> to have those pins' entries in the PMU node.
+> 
+> Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 168 ++++++++++++++++++-
+>  1 file changed, 167 insertions(+), 1 deletion(-)
+> 
 
-Fix set charge current limits for devices which allow to set the lowest
-charge current limit to be greater zero. If requested charge current limit
-is below lowest limit, the index equals current_limit_map_size which leads
-to accessing memory beyond allocated memory.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Fixes: be2919d8355e ("power: supply: gpio-charger: add charge-current-limit feature")
-Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
----
- drivers/power/supply/gpio-charger.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/power/supply/gpio-charger.c b/drivers/power/supply/gpio-charger.c
-index 68212b39785beabfe5536a18fa15bc249f7b1eea..6139f736ecbe4ffc74848797a72095f4cadf3b62 100644
---- a/drivers/power/supply/gpio-charger.c
-+++ b/drivers/power/supply/gpio-charger.c
-@@ -67,6 +67,14 @@ static int set_charge_current_limit(struct gpio_charger *gpio_charger, int val)
- 		if (gpio_charger->current_limit_map[i].limit_ua <= val)
- 			break;
- 	}
-+
-+	/*
-+	 * If a valid charge current limit isn't found, default to smallest
-+	 * current limitation for safety reasons.
-+	 */
-+	if (i >= gpio_charger->current_limit_map_size)
-+		i = gpio_charger->current_limit_map_size - 1;
-+
- 	mapping = gpio_charger->current_limit_map[i];
- 
- 	for (i = 0; i < ndescs; i++) {
-
----
-base-commit: 88e4a7dc04b7828315292eb3acaa466c9c123d8b
-change-id: 20241209-fix-charge-current-limit-a5e5bbafdf11
-
-Best regards,
 -- 
-Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-
-
+With best wishes
+Dmitry
 
