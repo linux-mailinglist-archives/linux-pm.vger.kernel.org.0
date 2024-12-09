@@ -1,331 +1,372 @@
-Return-Path: <linux-pm+bounces-18795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B00A9E8DAC
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 09:40:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E9DA9E8DB2
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 09:42:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4015F188538B
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 08:40:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3628116129F
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 08:42:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D2F2156E2;
-	Mon,  9 Dec 2024 08:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F207E2156F2;
+	Mon,  9 Dec 2024 08:42:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="1y23mgng"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2069.outbound.protection.outlook.com [40.107.236.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BE012CDAE;
-	Mon,  9 Dec 2024 08:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733733631; cv=none; b=DQhzRt1j+GxtmBjRzFGuK4so/oIWsVivsDPG/4FrmbTufwln+si7o4Cxmk7M0FXGSGmJCwh4vs7bppWsUEsWK6XrpW1XClTeWholhUDXuQ4LhHhcG3rOQ+bcZep0ghW9iz6Uzm/rHmxlU9XzKi3kVHfayMJ7pkAc92PjTJTmoYc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733733631; c=relaxed/simple;
-	bh=COaN4ltrUDVu3wzgAQeHvftfqfKn3xsnGObd9ezVMps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Fz1yXG8NgD19zlPgZEWYfvg9BH7K4XflG5Y6nKZpxa0cZSwE1IkOK3W5Gp3rC4RnlmDmpI6JpFhZBpiGOI0koAMp4UVjwxnAX7TJ1orMzbhFNK+LpycABAA7bnNn+pYFYwKaT6MKaXVsjkBjWTQGDPwj0Q8yg5ERvSzL2VdRIrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Y6FcV4l2XzhZV7;
-	Mon,  9 Dec 2024 16:38:02 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0BC32140123;
-	Mon,  9 Dec 2024 16:40:25 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 9 Dec
- 2024 16:40:24 +0800
-Message-ID: <fc7cbe88-64a3-4b65-ae37-3a1f50257f22@huawei.com>
-Date: Mon, 9 Dec 2024 16:40:23 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB9A136357;
+	Mon,  9 Dec 2024 08:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733733750; cv=fail; b=u+ctQuiQNe+ZYEJJfpiqLr0MbIDxeQKT5A2YXdOOlQluH1KfAqGM0ot4DV0GNMtYu/8m+mEjVx9I5BlL5KwS5nhYETVLT6Cy1GwHq/Dj/GYRoZuceSacUagUTZkz/hIpW6G4rH3Q8NErW0BFszNWklBkxUMd5LOKFSlGifxg/YA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733733750; c=relaxed/simple;
+	bh=ZrLfjKW8547+Ny3YS+hl+jpa9eVFgfkjN5ACUJVym34=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Bisjqz/pXPYrG6mK/F5khOAMfQuJVkyc838mgxuJ4KsOP/VejIfFmyZ6KwF+OiG7f3DZTKHUvtyB19c8Gv756v01gUe5HJ7AUOgg2KaQzJ7s1qbUAQmjYSpbkJ9gNL2eajN2BgbgQp/T6mWy7C5HrduL+CRcJVuQqB5K63ucxP8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=1y23mgng; arc=fail smtp.client-ip=40.107.236.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fnfZ1/+HPW9JsjUqWmZ3PLrU+dc5/ODQhU6oNb5gd2dYRo2kS9rW9HhNKKBe76XigRfCw87bUoIu3M7OjLrwgXMF1dtO05RXhzuNTB76gkh0XhlaOlLLuVyIL2Ybg8D8dU/vU+3G2D9zVQA4Iw3+n2uQrZFAFPKbH4QydE185iHoJXTg4vWXyk9Oi+O6q0SJl6sjNVIH4Qr9H8wbIwPEMaXUxw3GBqTWCklF43ziUnXU5iAi7YnU/D9Uvp8RNEW3U+/iWJH2hx2nWnI3Pc3gZzuj53dW8EzER48t/kD6nxN5D54yqtprXZ5XPLmYBLVW+kZlUlqpYXo5VXQLzLkQ9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jIfdz+LPIG91BCsOvka1Yu3yIJS922sz0X8U9Dx2GRg=;
+ b=ugd1zeDIuslzUkJe7xapXpf07LDIB8dlFtyxxLoH9tvSYAELj0D1oPQ/xBKPipIZYeNqVBAOvt2KSADUeGOTR3eu+VZ1QGTnhcRWylI6bdnLvXplutSjVkdYXBFK0Ve4tfXfQdzx7fgzUwRc0WGBz2AzMTcyIA/McvCBnAaNxGN17hU1mmCwX+GBbvw+1QinwZkBn3GcHNgc8fIZx1rD+ZRh1WmsvO3qcaDmmKZ47MhAviXF+d6W8mQmqtOyhsD0mSryS5LQlWqrd7E0bBCyj8NQs9PRklnQqaLCRgcaDlqI03xwVGHHkVnvq2od9AtX1PGlVlNi24Vcz0CPOqQHOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jIfdz+LPIG91BCsOvka1Yu3yIJS922sz0X8U9Dx2GRg=;
+ b=1y23mgngVt4vznZVEmQu5fgzHqjto+b9cN+E8Q8PDBZpPRTvD4Ym5lMVoBULgs2FAh7/51Sq6xi9CHbQbwhfYsSiqm5eMGk0w3D71+tp5XjhXlShH2Q2XqurqacarYJC9MJ5e4p1KxRKTbefZO2H+nFvQ1GBAKc7NYOFai+l348=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ SN7PR12MB7910.namprd12.prod.outlook.com (2603:10b6:806:34b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.11; Mon, 9 Dec
+ 2024 08:42:26 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8207.017; Mon, 9 Dec 2024
+ 08:42:25 +0000
+Date: Mon, 9 Dec 2024 14:12:13 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Perry Yuan <perry.yuan@amd.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+Subject: Re: [PATCH v2 12/16] cpufreq/amd-pstate: Always write EPP value when
+ updating perf
+Message-ID: <Z1atZRyH3dbWQYjv@BLRRASHENOY1.amd.com>
+References: <20241208063031.3113-1-mario.limonciello@amd.com>
+ <20241208063031.3113-13-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241208063031.3113-13-mario.limonciello@amd.com>
+X-ClientProxiedBy: PN2PR01CA0231.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::7) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] cpufreq: CPPC: Support for autonomous selection in
- cppc_cpufreq
-To: Pierre Gondois <pierre.gondois@arm.com>, <rafael@kernel.org>,
-	<lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <fanghao11@huawei.com>,
-	"zhenglifeng (A)" <zhenglifeng1@huawei.com>
-References: <20241114084816.1128647-1-zhenglifeng1@huawei.com>
- <20241114084816.1128647-4-zhenglifeng1@huawei.com>
- <9f46991d-98c3-41f5-8133-6612b397e33a@arm.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <9f46991d-98c3-41f5-8133-6612b397e33a@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SN7PR12MB7910:EE_
+X-MS-Office365-Filtering-Correlation-Id: f611227d-16ac-45d1-86ab-08dd182d683a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Z//mI9iJEPMB7/0va6NDvU0Xq7wOdI7jjmQiQop91ZN7zp6iGZC6u/BS6IZ/?=
+ =?us-ascii?Q?lZ5d3jdEdon7NmBjXL8i4zwP3C7Gpt8SpnHeGv+VAHgzhDbkZDy101Fpf6xL?=
+ =?us-ascii?Q?HugAHFB6ILjjL626ueJH/D7Ju4Od7Lz0kS1EEPEVgDUPmoJsv089ka5TYKBW?=
+ =?us-ascii?Q?Uh9k+yenGGvl46pJdVlqXaoTBSwFXz9tjuVzo1MwfHZBMHAXtmEsFaZvF1W0?=
+ =?us-ascii?Q?PnSEpIrQKU+kvsNc4sQzUTesRNJTRKtp4W6FzFbDnNbgRPpDmb6VrO1HCKuo?=
+ =?us-ascii?Q?4NXCegtb7NKjnn1yE4gqhbppnKVdjZkqm0uQXF3PJGAgFUzuSWfMmUEDtVrS?=
+ =?us-ascii?Q?jCLYZAhM98EBrfB4FgJLhWoPziZi79DTuO7OOu9zcjd4qbWc772FuitO9IKA?=
+ =?us-ascii?Q?6thlspfbBkzfQn9jgScnqX9ph70EvAbs4B3M4pntC02GaOK6O1zXfPdXphVD?=
+ =?us-ascii?Q?dMGmJCRmXBX4q9VqWebB0nV3awWPrrQxwprrkFscs/UPvJ5mJLU0ASH7gRsv?=
+ =?us-ascii?Q?GdbgM6T8Wes4qDBtoLEP2Z9fHiZdmwTQ6ZOr81qcUNLQ0+0ptxlUyELVepe0?=
+ =?us-ascii?Q?xjuehqOg/BGrMewdEYssw2sBMG2hB43GWdvs3UWpErKxI1AUUHLu/LECn0I3?=
+ =?us-ascii?Q?6NFrgNr9Bmk20s2K5qiV9eJfVnFhlpC5GOdrWxMNhvC+zPGbO/nmz3hQx6ge?=
+ =?us-ascii?Q?JKnETkrI8CvKq3Vu1eftu3L8xuUsghbTxPm9BtdzA4aqVSzPei6RmVzGcutd?=
+ =?us-ascii?Q?5lZytjuZlfysr8cz9YEt0D/ruoHY6pzo/sBimrw9rae+axi6MFk9mZlcQgdd?=
+ =?us-ascii?Q?sleK0if7vJbhv8G1i59X0OzAnenrHyT47TRpLSp/VqmMRvGsGTCnAkudNtp3?=
+ =?us-ascii?Q?eXi7r/1wQcopfeGJCZaG7W2xhPJhskpCUJ2LcBHUlH6tNrpQmYy8S+rjkow9?=
+ =?us-ascii?Q?2Ma+2nZEIamLoO4L70VsJw4sjpGe2g4WHRMIEG/Wj1YSzRQJHAs4rzvuErhF?=
+ =?us-ascii?Q?SQmG5ycujt/qpTH+KEnNLBpVRTaJGSHposu8/4fhEdLZU/+9gUUhobp2nmAh?=
+ =?us-ascii?Q?iYvO3+ioTw7Tfy1Ez5va/fW0qopAHr4qEIeNxnApfirPsk6W1sJtMMt5fjY4?=
+ =?us-ascii?Q?Y9YnXlghqn8AdzYdIyAqeXfSsqLSszUTb4ljdbMMXvCgqtxqRKtmQeTSyv7N?=
+ =?us-ascii?Q?ex0hNzIIQouU0BZWwhgPG8x0xAqAL+b6CZyoVR/UVc/TFUB9GWu9lQH1VdKE?=
+ =?us-ascii?Q?HH2NAY5QBBIEgt92RWxSg0rXRMGK3zhEzscBM6jQgQHLb0pWeQ3Ra9F/jgEw?=
+ =?us-ascii?Q?P7/3h5Kz9zsY5E2UVYHX6NxSpqRcEt4+2eBGKLKcxBwyg5IBq/QZbT2q+WOc?=
+ =?us-ascii?Q?D/BKehQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?tQF8TxX4ntPB4UlqaaAifuJGjwxWIzPuvDkOB7xPoUxW7W4LEBr1PVQfoTct?=
+ =?us-ascii?Q?gVY0yKheI4DTfYdBULc3Q2GbVwbDyyff+/JabZqfgtv2EVFq+2nSlUdoLkaW?=
+ =?us-ascii?Q?6o9qKW0pg5xM6zu+DqU2i7L/b+pya4ZxuruqAdHcW5EUbHGYqTzsZp0SiAEL?=
+ =?us-ascii?Q?05KJTpK1mHXzgGX3wwoEXT0mGOqjiYUNDspp16LUHNCteKFPzX4Sg26tHbq2?=
+ =?us-ascii?Q?jNqfcH507NrUHmYVBJbU26ZqIIxkVolDqIOAdV5VnSDq/aAX2bYUtP1KgxEE?=
+ =?us-ascii?Q?9J/wjb9mI2WYS6D6IQpM6aUhE+y5ty8anqgzm3HrUqPI7lJFDfadB6SOpZCm?=
+ =?us-ascii?Q?HQTATqFkGXYOFKDQ9KZD530WUwonC314s0oB7DbVmN3PVfMqcG+zsWzQIltJ?=
+ =?us-ascii?Q?sq5r3ecdneVz4nAD+NvU+QETvzN9WdaGMoQDbL8PSrb9xi9c1Lv51gtD8Nst?=
+ =?us-ascii?Q?aC1KbdFf3bDXH8mdalPsQsmvh9xdy5uJRZVbqnYSX8idAdhFFHnhycxKGNNJ?=
+ =?us-ascii?Q?+bxL+SkOHZ7sk0tQxq6D7jyiCAAhcn0ItqCU+HUNsiE9jm7Xq6RzXbD4Imv2?=
+ =?us-ascii?Q?8cd8Y5ybStTXpFL03aZEFAmlJxh6BP+MQx0d0ns0b+psikZXS02e6TaG/itd?=
+ =?us-ascii?Q?lhnjQkW8nf/890E3srWL60ELARp3KHAoHPB6oKiANUG/2tWvP23hDV4he6hq?=
+ =?us-ascii?Q?J1ZKsuWc0fRqKHncRpFAjkcEzsJqb9cgZSd/7R3OvxwVNuoRbuSepvJw3wcP?=
+ =?us-ascii?Q?JrNUScj7J5Fp805Vg7Nrmpirmu7KorUGD8UaD1gWIdGZYfFjd0kvCNnnUuNR?=
+ =?us-ascii?Q?3Hz731vhkrjWYqhoukhZbr0Af9lMO1gwvz69AhMq8NhtQxI3BrfKcLxtxsM5?=
+ =?us-ascii?Q?4QFeCh7PuhfyzKz4L9Dk499aF3vBdiggTYNUa4wG5ZJBUkEn+C9K9Vc61i61?=
+ =?us-ascii?Q?OCuN6iVIP1jfQ4jOkWHsyKI96HDYzcUT4dREUn8g67lhqsKaXqtn3w7UU2sn?=
+ =?us-ascii?Q?tS70dpL9Aw2t66De1mcoHg4MoMWWC+t5S0BhN3AxbG07Ja/D5Kvx7wItt1dy?=
+ =?us-ascii?Q?tHfdB/3aEC2cmnBNzuVWazCghx4ACxuOeofki1YgspgP66WBCyMppandpnYJ?=
+ =?us-ascii?Q?+s08e/qHz9IAWu1T4rOA+8e1CuP3oB+puUGFCZ2cZUmuaXxF7wdsE68xaKg8?=
+ =?us-ascii?Q?PYR6g1TULXYXPtqLIFTJ171KvuyZeyS/cre1fx4v2EXiDsqF8zC2hk/QZ+tr?=
+ =?us-ascii?Q?lf/yEuRQ8zlK9xZQPgmLgAy5thHSZrXMlhvrdu+ZlDaEBB+qisgOMB+r4u5F?=
+ =?us-ascii?Q?EfKYF3UxKjWtOE4ZyS7tgQf1F0gXsJ3j4CFRk2iuEcGkHmP7t4mP8QosDZ7f?=
+ =?us-ascii?Q?LleWhXTatgBYtqDkBKzFrvutHRzZWL5UV4q5EhuZVgpUKF1tznKmna4y6T3e?=
+ =?us-ascii?Q?TLOMFQtwMB1tkpsYZ8BzcBj/CljxpaUvB+WVGv4LVvaKfzWBGI4Dmp+K695O?=
+ =?us-ascii?Q?58Y/2RmC6Om+WMWpb+aDaP+dmiXGHpcY5BESNQ0E0Q0GqBE4ZukDzUN127dc?=
+ =?us-ascii?Q?+SyCzcwdS2P+/JV18z7FZutb7HjC9+oi6XHjbQlE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f611227d-16ac-45d1-86ab-08dd182d683a
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2024 08:42:25.9195
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +yQDy7LGxbW2oZRCJ/4yPMWx0YQXHOpmvDrPS8MY9c7tUfyZwPn9JJFjGoEO5QnjqsFH0EQdi1Ljlh1Vsf5TuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7910
 
-Hello Pierre,
+Hello Mario,
 
-On 2024/12/6 22:23, Pierre Gondois wrote:
-> Hello Lifeng,
+On Sun, Dec 08, 2024 at 12:30:27AM -0600, Mario Limonciello wrote:
+> For MSR systems the EPP value is in the same register as perf targets
+> and so divding them into two separate MSR writes is wasteful.
 > 
-> On 11/14/24 09:48, Lifeng Zheng wrote:
->> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
->> driver.
->>
->> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->> ---
->>   .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++
->>   drivers/cpufreq/cppc_cpufreq.c                | 141 ++++++++++++++++++
->>   2 files changed, 195 insertions(+)
->>
->> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
->> index 206079d3bd5b..ba7b8ea613e5 100644
->> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
->> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
->> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
->>           This file is only present if the acpi-cpufreq or the cppc-cpufreq
->>           drivers are in use.
->>   +What:        /sys/devices/system/cpu/cpuX/cpufreq/auto_select
->> +Date:        October 2024
->> +Contact:    linux-pm@vger.kernel.org
->> +Description:    Autonomous selection enable
->> +
->> +        Read/write interface to control autonomous selection enable
->> +            Read returns autonomous selection status:
->> +                0: autonomous selection is disabled
->> +                1: autonomous selection is enabled
->> +
->> +            Write '1' to enable autonomous selection.
->> +            Write '0' to disable autonomous selection.
->> +
->> +        This file only presents if the cppc-cpufreq driver is in use.
->> +
->> +What:        /sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
->> +Date:        October 2024
->> +Contact:    linux-pm@vger.kernel.org
->> +Description:    Autonomous activity window
->> +
->> +        This file indicates a moving utilization sensitivity window to
->> +        the platform's autonomous selection policy.
->> +
->> +        Read/write an integer represents autonomous activity window (in
->> +        microseconds) from/to this file. The max value to write is
->> +        1270000000 but the max significand is 127. This means that if 128
->> +        is written to this file, 127 will be stored. If the value is
->> +        greater than 130, only the first two digits will be saved as
->> +        significand.
->> +
->> +        Writing a zero value to this file enable the platform to
->> +        determine an appropriate Activity Window depending on the workload.
->> +
->> +        Writing to this file only has meaning when Autonomous Selection is
->> +        enabled.
->> +
->> +        This file only presents if the cppc-cpufreq driver is in use.
->> +
->> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
->> +Date:        October 2024
->> +Contact:    linux-pm@vger.kernel.org
->> +Description:    Energy performance preference
->> +
->> +        Read/write an 8-bit integer from/to this file. This file
->> +        represents a range of values from 0 (performance preference) to
->> +        0xFF (energy efficiency preference) that influences the rate of
->> +        performance increase/decrease and the result of the hardware's
->> +        energy efficiency and performance optimization policies.
->> +
->> +        Writing to this file only has meaning when Autonomous Selection is
->> +        enabled.
->> +
->> +        This file only presents if the cppc-cpufreq driver is in use.
->> +
->>     What:        /sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
->>   Date:        August 2008
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index 2b8708475ac7..b435e1751d0d 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -792,10 +792,151 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
->>         return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
->>   }
->> +
->> +static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
->> +{
->> +    u64 val;
->> +    int ret;
->> +
->> +    ret = cppc_get_auto_sel(policy->cpu, &val);
->> +
->> +    /* show "<unsupported>" when this register is not supported by cpc */
->> +    if (ret == -EOPNOTSUPP)
->> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
->> +
->> +    if (ret)
->> +        return ret;
->> +
->> +    return sysfs_emit(buf, "%lld\n", val);
->> +}
->> +
->> +static ssize_t store_auto_select(struct cpufreq_policy *policy,
->> +                 const char *buf, size_t count)
->> +{
->> +    unsigned long val;
->> +    int ret;
->> +
->> +    ret = kstrtoul(buf, 0, &val);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (val > 1)
->> +        return -EINVAL;
->> +
->> +    ret = cppc_set_auto_sel(policy->cpu, val);
->> +    if (ret)
->> +        return ret;
->> +
->> +    return count;
->> +}
->> +
->> +#define AUTO_ACT_WINDOW_SIG_BIT_SIZE    (7)
->> +#define AUTO_ACT_WINDOW_EXP_BIT_SIZE    (3)
->> +#define AUTO_ACT_WINDOW_MAX_SIG    ((1 << AUTO_ACT_WINDOW_SIG_BIT_SIZE) - 1)
->> +#define AUTO_ACT_WINDOW_MAX_EXP    ((1 << AUTO_ACT_WINDOW_EXP_BIT_SIZE) - 1)
->> +/* AUTO_ACT_WINDOW_MAX_SIG is 127, so 128 and 129 will decay to 127 when writing */
->> +#define AUTO_ACT_WINDOW_SIG_CARRY_THRESH 129
+> In msr_update_perf(), update both EPP and perf values in one write to
+> MSR_AMD_CPPC_REQ, and cache them if successful.
 > 
-> Maybe this would be better to place these macros in include/acpi/cppc_acpi.h
-> (with a CPPC_XXX prefix)
+> To accomplish this plumb the EPP value into the update_perf call and modify
+> all its callers to check the return value.
+> 
+> Reviewed-and-tested-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 71 ++++++++++++++++++++++--------------
+>  1 file changed, 43 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index d21acd961edcd..dd11ba6c00cc3 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -222,25 +222,36 @@ static s16 shmem_get_epp(struct amd_cpudata *cpudata)
+>  }
+>  
+>  static int msr_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+> -			       u32 des_perf, u32 max_perf, bool fast_switch)
+> +			   u32 des_perf, u32 max_perf, u32 epp, bool fast_switch)
+>  {
+> +	u64 value;
+> +
+> +	value = READ_ONCE(cpudata->cppc_req_cached);
 
-Will move them, Thanks.
 
-> 
->> +
->> +static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
->> +{
->> +    int sig, exp;
->> +    u64 val;
->> +    int ret;
->> +
->> +    ret = cppc_get_auto_act_window(policy->cpu, &val);
->> +
->> +    /* show "<unsupported>" when this register is not supported by cpc */
->> +    if (ret == -EOPNOTSUPP)
->> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
->> +
->> +    if (ret)
->> +        return ret;
->> +
->> +    sig = val & AUTO_ACT_WINDOW_MAX_SIG;
->> +    exp = (val >> AUTO_ACT_WINDOW_SIG_BIT_SIZE) & AUTO_ACT_WINDOW_MAX_EXP;
->> +
->> +    return sysfs_emit(buf, "%lld\n", sig * int_pow(10, exp));
->> +}
->> +
->> +static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
->> +                     const char *buf, size_t count)
->> +{
->> +    unsigned long usec;
->> +    int digits = 0;
->> +    int ret;
->> +
->> +    ret = kstrtoul(buf, 0, &usec);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (usec > AUTO_ACT_WINDOW_MAX_SIG * int_pow(10, AUTO_ACT_WINDOW_MAX_EXP))
->> +        return -EINVAL;
->> +
->> +    while (usec > AUTO_ACT_WINDOW_SIG_CARRY_THRESH) {
->> +        usec /= 10;
->> +        digits += 1;
->> +    }
->> +
->> +    if (usec > AUTO_ACT_WINDOW_MAX_SIG)
->> +        usec = AUTO_ACT_WINDOW_MAX_SIG;
->> +
->> +    ret = cppc_set_auto_act_window(policy->cpu,
->> +                       (digits << AUTO_ACT_WINDOW_SIG_BIT_SIZE) + usec);
->> +    if (ret)
->> +        return ret;
->> +
->> +    return count;
->> +}
->> +
->> +static ssize_t show_energy_perf(struct cpufreq_policy *policy, char *buf)
->> +{
->> +    u64 val;
->> +    int ret;
->> +
->> +    ret = cppc_get_epp_perf(policy->cpu, &val);
->> +
->> +    /* show "<unsupported>" when this register is not supported by cpc */
->> +    if (ret == -EOPNOTSUPP)
->> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
->> +
->> +    if (ret)
->> +        return ret;
->> +
->> +    return sysfs_emit(buf, "%lld\n", val);
->> +}
->> +
->> +#define ENERGY_PERF_MAX    (0xFF)
-> 
-> Same comment to move to include/acpi/cppc_acpi.h
-> 
->> +
->> +static ssize_t store_energy_perf(struct cpufreq_policy *policy,
->> +                 const char *buf, size_t count)
->> +{
->> +    unsigned long val;
->> +    int ret;
->> +
->> +    ret = kstrtoul(buf, 0, &val);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (val > ENERGY_PERF_MAX)
->> +        return -EINVAL;
->> +
->> +    ret = cppc_set_epp(policy->cpu, val);
->> +    if (ret)
->> +        return ret;
->> +
->> +    return count;
->> +}
->> +
->>   cpufreq_freq_attr_ro(freqdomain_cpus);
->> +cpufreq_freq_attr_rw(auto_select);
->> +cpufreq_freq_attr_rw(auto_act_window);
->> +cpufreq_freq_attr_rw(energy_perf);
-> 
-> It might be better from a user PoV to hide the following entries:
-> - auto_act_window
-> - energy_perf
-> if auto_select is not available or disabled.
+There seems to be a mismatch here between what the API is passing and
+parameters and how this function is *not* using them, and instead
+using cpudata->cppc_req_cached.
 
-Users might like to modify the value of auto_act_window and energy_perf
-before turning on auto_select. So I think it is freer for users to read and
-write them no matter what auto_select is. What do you think?
+The expectation seems to be that the max_perf, min_perf, des_perf and
+epp fields in cpudata->cppc_req_cached would be the same as @des_perf,
+@max_perf, @min_perf and @ep, no ?
 
-> 
-> ------
-> 
-> Also just for reference, in ACPI 6.5, s8.4.6.1.2.3 Desired Performance Register
-> """
-> When Autonomous Selection is enabled, it is not necessary for OSPM to assess processor workload performance
-> demand and convey a corresponding performance delivery request to the platform via the Desired Register. If the
-> Desired Performance Register exists, OSPM may provide an explicit performance requirement hint to the platform by
-> writing a non-zero value.
-> """
-> 
-> So it seems it still makes sense to have cpufreq requesting a certain performance
-> level even though autonomous selection is enabled.
+Or is it that for the MSR update, the value in
+cpudata->cppc_req_cached take precedence over the arguments passed ?
 
-We did struggle with this. This solves our doubts. Thanks!
+Ideally, the "value" should be recomputed here using (@min_perf |
+@max_perf | @des_perf | @epp) and that value should be cached as you
+are doing below.
 
+
+>  	if (fast_switch) {
+>  		wrmsrl(MSR_AMD_CPPC_REQ, READ_ONCE(cpudata->cppc_req_cached));
+>  		return 0;
+> +	} else {
+> +		int ret = wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+> +					READ_ONCE(cpudata->cppc_req_cached));
+> +		if (ret)
+> +			return ret;
+>  	}
+>  
+> -	return wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+> -			     READ_ONCE(cpudata->cppc_req_cached));
+> +	WRITE_ONCE(cpudata->cppc_req_cached, value);
+
+Since cppc_req_cached is not changed, why write it again ?
+
+> +	WRITE_ONCE(cpudata->epp_cached, epp);
+> +
+> +	return 0;
+>  }
+>  
+>  DEFINE_STATIC_CALL(amd_pstate_update_perf, msr_update_perf);
+>  
+>  static inline int amd_pstate_update_perf(struct amd_cpudata *cpudata,
+>  					  u32 min_perf, u32 des_perf,
+> -					  u32 max_perf, bool fast_switch)
+> +					  u32 max_perf, u32 epp,
+> +					  bool fast_switch)
+>  {
+>  	return static_call(amd_pstate_update_perf)(cpudata, min_perf, des_perf,
+> -						   max_perf, fast_switch);
+> +						   max_perf, epp, fast_switch);
+>  }
+>  
+>  static int msr_set_epp(struct amd_cpudata *cpudata, u32 epp)
+> @@ -459,12 +470,19 @@ static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+>  	return static_call(amd_pstate_init_perf)(cpudata);
+>  }
+>  
+> -static int shmem_update_perf(struct amd_cpudata *cpudata,
+> -			     u32 min_perf, u32 des_perf,
+> -			     u32 max_perf, bool fast_switch)
+> +static int shmem_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+> +			     u32 des_perf, u32 max_perf, u32 epp, bool fast_switch)
+>  {
+>  	struct cppc_perf_ctrls perf_ctrls;
+>  
+> +	if (cppc_state == AMD_PSTATE_ACTIVE) {
+> +		int ret = shmem_set_epp(cpudata, epp);
+> +
+> +		if (ret)
+> +			return ret;
+> +		WRITE_ONCE(cpudata->epp_cached, epp);
+> +	}
+> +
+>  	perf_ctrls.max_perf = max_perf;
+>  	perf_ctrls.min_perf = min_perf;
+>  	perf_ctrls.desired_perf = des_perf;
+> @@ -545,10 +563,10 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  
+>  	WRITE_ONCE(cpudata->cppc_req_cached, value);
+>  
+> -	amd_pstate_update_perf(cpudata, min_perf, des_perf,
+> -			       max_perf, fast_switch);
+> +	amd_pstate_update_perf(cpudata, min_perf, des_perf, max_perf, 0, fast_switch);
+>  
+>  cpufreq_policy_put:
+> +
+>  	cpufreq_cpu_put(policy);
+>  }
+>  
+> @@ -1545,6 +1563,7 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>  {
+>  	struct amd_cpudata *cpudata = policy->driver_data;
+>  	u64 value;
+> +	u32 epp;
+>  
+>  	amd_pstate_update_min_max_limit(policy);
+>  
+> @@ -1557,23 +1576,19 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>  	value |= FIELD_PREP(AMD_CPPC_MIN_PERF_MASK, cpudata->min_limit_perf);
+>  
+>  	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
+> -		WRITE_ONCE(cpudata->epp_cached, 0);
+> -	value |= FIELD_PREP(AMD_CPPC_EPP_PERF_MASK, cpudata->epp_cached);
+> -
+> -	WRITE_ONCE(cpudata->cppc_req_cached, value);
+> +		epp = 0;
+> +	else
+> +		epp = READ_ONCE(cpudata->epp_cached);
+>  
+>  	if (trace_amd_pstate_epp_perf_enabled()) {
+> -		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf,
+> -					  cpudata->epp_cached,
+> +		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf, epp,
+>  					  cpudata->min_limit_perf,
+>  					  cpudata->max_limit_perf,
+>  					  policy->boost_enabled);
+>  	}
+>  
+> -	amd_pstate_update_perf(cpudata, cpudata->min_limit_perf, 0U,
+> -			       cpudata->max_limit_perf, false);
+> -
+> -	return amd_pstate_set_epp(cpudata, READ_ONCE(cpudata->epp_cached));
+> +	return amd_pstate_update_perf(cpudata, cpudata->min_limit_perf, 0U,
+> +				      cpudata->max_limit_perf, epp, false);
+>  }
+>  
+>  static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+> @@ -1602,7 +1617,7 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+>  	return 0;
+>  }
+>  
+> -static void amd_pstate_epp_reenable(struct amd_cpudata *cpudata)
+> +static int amd_pstate_epp_reenable(struct amd_cpudata *cpudata)
+>  {
+>  	u64 max_perf;
+>  	int ret;
+> @@ -1620,17 +1635,19 @@ static void amd_pstate_epp_reenable(struct amd_cpudata *cpudata)
+>  					  max_perf, cpudata->boost_state);
+>  	}
+>  
+> -	amd_pstate_update_perf(cpudata, 0, 0, max_perf, false);
+> -	amd_pstate_set_epp(cpudata, cpudata->epp_cached);
+> +	return amd_pstate_update_perf(cpudata, 0, 0, max_perf, cpudata->epp_cached, false);
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+					       
+On an MSR based system, none of the values passed here will be used,
+and instead the value in cpudata->cppc_req_cached will be used, no?
+
+>  }
+>  
+>  static int amd_pstate_epp_cpu_online(struct cpufreq_policy *policy)
+>  {
+>  	struct amd_cpudata *cpudata = policy->driver_data;
+> +	int ret;
+>  
+>  	pr_debug("AMD CPU Core %d going online\n", cpudata->cpu);
+>  
+> -	amd_pstate_epp_reenable(cpudata);
+> +	ret = amd_pstate_epp_reenable(cpudata);
+> +	if (ret)
+> +		return ret;
+>  	cpudata->suspended = false;
+>  
+>  	return 0;
+> @@ -1654,10 +1671,8 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+>  					  min_perf, min_perf, policy->boost_enabled);
+>  	}
+>  
+> -	amd_pstate_update_perf(cpudata, min_perf, 0, min_perf, false);
+> -	amd_pstate_set_epp(cpudata, AMD_CPPC_EPP_BALANCE_POWERSAVE);
+> -
+> -	return 0;
+> +	return amd_pstate_update_perf(cpudata, min_perf, 0, min_perf,
+> +				      AMD_CPPC_EPP_BALANCE_POWERSAVE, false);
+>  }
+>  
+>  static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
+> -- 
+> 2.43.0
 > 
 
+--
+Thanks and Regards
+gautham.
 
