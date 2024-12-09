@@ -1,158 +1,164 @@
-Return-Path: <linux-pm+bounces-18807-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18808-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CFE39E907E
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 11:38:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E8249E9084
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 11:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17F191636AE
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 10:38:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3D04162504
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 10:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0166D21B90D;
-	Mon,  9 Dec 2024 10:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KMDK/OqN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D012185A3;
+	Mon,  9 Dec 2024 10:36:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5382A217F34;
-	Mon,  9 Dec 2024 10:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A50217F44;
+	Mon,  9 Dec 2024 10:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733740549; cv=none; b=i8FPPKdJRXShQpE/oxPmwdt590ic+CuwNmqQdBUag/go42tBgdFdoRA7OuggPk7IPP3qy/JPiFvayLP+fgSYJwQXWdvIIe11JN1ikFljraX4MCtNHaFRGe3BMtm6KGzHDfrmfNb1lc7aIZo0ajZRf65IotFJDqoZKJvcK5sn/Rw=
+	t=1733740594; cv=none; b=Ivv8O4eonPUJZGU95sEbqhqvxAP8dlwPHNxh/HD0EieKtipMUxPGq3D4P/0iz0U6WFT/Qmm22DopwdjBmYuFN/rhpkCRdZOm0OUEgzA66GCPCqRwc2fD23k2SutuJhPBYWuTx7TfYpr6FZpiDdblLq2VWxg2+Vp57NnUd0X3ab8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733740549; c=relaxed/simple;
-	bh=lO0NSY8LMiuJW05Xvn1QEhsQUDgF7azuqtl0fNHFRuo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jyyh1ouwhvbff/PSsgo/7L8OmXD1tPC+pGwFPREfHrQvXBiVXSs/33YX6Ri+WCcEN78iVbd4o55OevSdOhA607Ubl0Fqhwu3vcX+CXbMMtz3KlJmUyCXx2B1oYIkGlnC58+5Z/pqSw/KArL/BxfNA1dOfosYcs6Tht6LwdsPxt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KMDK/OqN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B9AFEfa011260;
-	Mon, 9 Dec 2024 10:35:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=qhj1nivFGwsGQuyh9FdQA0o+
-	5GmWqgiquJCRJfoBXuQ=; b=KMDK/OqNn7Shu7BwK8ke3I9GFRd0mKuRjrOB2Ksl
-	RlpIH5RfYv7CcoT/shR1kssAMmJh2afC402j5Ky0XXkvx8YVeoZ9bslYJ2EQgVCo
-	C+d68gn0ArZzoeExnSzKUWhJlH6pu5Vy7r1V8oHlg3lIoexV7bCowfU82Wj7PSJd
-	mYR8hTAOaggx/p6JpE4i0Fw7/V5SxVsXykBvPzK82fzoWD617+NkhdWup/SdbAsm
-	ru8Vhqm6BmXWbCTZ2JX6Bqg+JssRBkPUCEtz3qSi44TXXEatasKFtaoeTGUmAg3E
-	ZZFnZuJYE0v2CR/4VSaKhVWSeu8UG+4tOpzy3cjRIJmPIw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43cdc6cc7g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 10:35:42 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B9AZfCe009261
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 9 Dec 2024 10:35:41 GMT
-Received: from hu-janathot-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 9 Dec 2024 02:35:35 -0800
-From: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        "Rob
- Herring" <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konradybcio@kernel.org>,
-        Marcel Holtmann
-	<marcel@holtmann.org>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-CC: <quic_mohamull@quicinc.com>, <quic_hbandi@quicinc.com>,
-        <quic_anubhavg@quicinc.com>,
-        Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: [PATCH v5 4/4] power: sequencing: qcom-wcn: add support for the WCN6750 PMU
-Date: Mon, 9 Dec 2024 16:04:55 +0530
-Message-ID: <20241209103455.9675-5-quic_janathot@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20241209103455.9675-1-quic_janathot@quicinc.com>
-References: <20241209103455.9675-1-quic_janathot@quicinc.com>
+	s=arc-20240116; t=1733740594; c=relaxed/simple;
+	bh=T5aO+Tj718wETGZ7W2trjzi2rdQbKIPvyHWipOm+IyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qacXhUH7HvoJWt6UOehv4sDkJtWsuEDvZaiy2ADzyDm19gpzlHM6oKZ3SF+SUAp+wI2Rr1vYMA5+AgyD428avJWuGX45vTlotbE70meFPb8dSpnBGK7B9k2KaO/FPpl3X0BDN3J+DqB+dQUZVDidPKy8XDBshES6dxD65SvxKP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAFA9113E;
+	Mon,  9 Dec 2024 02:36:59 -0800 (PST)
+Received: from [10.1.39.16] (e127648.arm.com [10.1.39.16])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9FA93F720;
+	Mon,  9 Dec 2024 02:36:29 -0800 (PST)
+Message-ID: <09acd46b-ec63-46ec-a239-e792c3061e52@arm.com>
+Date: Mon, 9 Dec 2024 10:36:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 125Oze-hPZU82v66ayb2kUqB43xu4-lR
-X-Proofpoint-GUID: 125Oze-hPZU82v66ayb2kUqB43xu4-lR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- mlxlogscore=999 malwarescore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 spamscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412090082
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] cpufreq: userspace: Add fast-switch support for
+ userspace
+To: Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+ viresh.kumar@linaro.org, linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, guohua.yan@unisoc.com, ke.wang@unisoc.com,
+ xuewen.yan94@gmail.com
+References: <20241209081429.1871-1-xuewen.yan@unisoc.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20241209081429.1871-1-xuewen.yan@unisoc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Enable support for controlling the power-up sequence of the PMU inside
-the WCN6750 model.
+On 12/9/24 08:14, Xuewen Yan wrote:
+> Now, the userspace governor does not support userspace,
+> if the driver only use the fast-switch and not add target_index(),
 
-Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
----
- drivers/power/sequencing/pwrseq-qcom-wcn.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Which driver does that? Is that actually valid?
+No mainline driver from what I can see.
 
-diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-index 682a9beac69e..cc03b5aaa8f2 100644
---- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
-+++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-@@ -272,6 +272,24 @@ static const struct pwrseq_qcom_wcn_pdata pwrseq_qca6390_of_data = {
- 	.targets = pwrseq_qcom_wcn_targets,
- };
- 
-+static const char *const pwrseq_wcn6750_vregs[] = {
-+	"vddaon",
-+	"vddasd",
-+	"vddpmu",
-+	"vddrfa0p8",
-+	"vddrfa1p2",
-+	"vddrfa1p7",
-+	"vddrfa2p2",
-+};
-+
-+static const struct pwrseq_qcom_wcn_pdata pwrseq_wcn6750_of_data = {
-+	.vregs = pwrseq_wcn6750_vregs,
-+	.num_vregs = ARRAY_SIZE(pwrseq_wcn6750_vregs),
-+	.pwup_delay_ms = 50,
-+	.gpio_enable_delay_ms = 5,
-+	.targets = pwrseq_qcom_wcn_targets,
-+};
-+
- static const char *const pwrseq_wcn6855_vregs[] = {
- 	"vddio",
- 	"vddaon",
-@@ -431,6 +449,10 @@ static const struct of_device_id pwrseq_qcom_wcn_of_match[] = {
- 		.compatible = "qcom,wcn7850-pmu",
- 		.data = &pwrseq_wcn7850_of_data,
- 	},
-+	{
-+		.compatible = "qcom,wcn6750-pmu",
-+		.data = &pwrseq_wcn6750_of_data,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, pwrseq_qcom_wcn_of_match);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> it will cause uerspace not work.
+
+s/uerspace/userspace
+to not work?
+
+> So add fast-switch support for userspace governor.
+> 
+> Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
+> Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
+> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> ---
+>  drivers/cpufreq/cpufreq_userspace.c | 35 +++++++++++++++++++++++++----
+>  1 file changed, 31 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
+> index 2c42fee76daa..3a99197246ed 100644
+> --- a/drivers/cpufreq/cpufreq_userspace.c
+> +++ b/drivers/cpufreq/cpufreq_userspace.c
+> @@ -21,6 +21,30 @@ struct userspace_policy {
+>  	struct mutex mutex;
+>  };
+>  
+> +static int cpufreq_userspace_target_freq(struct cpufreq_policy *policy,
+> +			unsigned int target_freq, unsigned int relation)
+> +{
+> +	int ret;
+
+not really necessary
+
+> +
+> +	if (policy->fast_switch_enabled) {
+> +		unsigned int idx;
+> +
+> +		target_freq = clamp_val(target_freq, policy->min, policy->max);
+> +
+> +		if (!policy->freq_table)
+> +			return target_freq;
+> +
+> +		idx = cpufreq_frequency_table_target(policy, target_freq, relation);
+> +		policy->cached_resolved_idx = idx;
+> +		policy->cached_target_freq = target_freq;
+> +		ret = !cpufreq_driver_fast_switch(policy, policy->freq_table[idx].frequency);
+> +	} else {
+> +		ret = __cpufreq_driver_target(policy, target_freq, relation);
+
+NIT: could save the indent if you reverse conditions and ret early on !fast_switch
+
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  /**
+>   * cpufreq_set - set the CPU frequency
+>   * @policy: pointer to policy struct where freq is being set
+> @@ -41,7 +65,7 @@ static int cpufreq_set(struct cpufreq_policy *policy, unsigned int freq)
+>  
+>  	userspace->setspeed = freq;
+>  
+> -	ret = __cpufreq_driver_target(policy, freq, CPUFREQ_RELATION_L);
+> +	ret = cpufreq_userspace_target_freq(policy, freq, CPUFREQ_RELATION_L);
+>   err:
+>  	mutex_unlock(&userspace->mutex);
+>  	return ret;
+> @@ -62,6 +86,8 @@ static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
+>  
+>  	mutex_init(&userspace->mutex);
+>  
+> +	cpufreq_enable_fast_switch(policy);
+> +
+>  	policy->governor_data = userspace;
+>  	return 0;
+>  }
+> @@ -72,6 +98,7 @@ static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
+>   */
+>  static void cpufreq_userspace_policy_exit(struct cpufreq_policy *policy)
+>  {
+> +	cpufreq_disable_fast_switch(policy);
+>  	kfree(policy->governor_data);
+>  	policy->governor_data = NULL;
+>  }
+> @@ -112,13 +139,13 @@ static void cpufreq_userspace_policy_limits(struct cpufreq_policy *policy)
+>  		 policy->cpu, policy->min, policy->max, policy->cur, userspace->setspeed);
+>  
+>  	if (policy->max < userspace->setspeed)
+> -		__cpufreq_driver_target(policy, policy->max,
+> +		cpufreq_userspace_target_freq(policy, policy->max,
+>  					CPUFREQ_RELATION_H);
+>  	else if (policy->min > userspace->setspeed)
+> -		__cpufreq_driver_target(policy, policy->min,
+> +		cpufreq_userspace_target_freq(policy, policy->min,
+>  					CPUFREQ_RELATION_L);
+>  	else
+> -		__cpufreq_driver_target(policy, userspace->setspeed,
+> +		cpufreq_userspace_target_freq(policy, userspace->setspeed,
+>  					CPUFREQ_RELATION_L);
+>  
+>  	mutex_unlock(&userspace->mutex);
 
 
