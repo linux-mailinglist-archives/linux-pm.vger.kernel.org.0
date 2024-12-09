@@ -1,158 +1,331 @@
-Return-Path: <linux-pm+bounces-18794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EB3C9E8D1B
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 09:16:40 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B00A9E8DAC
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 09:40:35 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3B2E280A13
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 08:16:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4015F188538B
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 08:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACCA2144A4;
-	Mon,  9 Dec 2024 08:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D2F2156E2;
+	Mon,  9 Dec 2024 08:40:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842AD54918;
-	Mon,  9 Dec 2024 08:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BE012CDAE;
+	Mon,  9 Dec 2024 08:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733732195; cv=none; b=K61NhBNp+PSp+xz0yjWLu8gfrVUBDeyt9CqS2gE8xPZpgpGIuLif6qM+TQSRigZCGRhdiFSBmxdavMrRi51T/nuHVUM/O2OIKS9Dg4AlEmu0mG5GiKx7k1DpFRCe89KKhZnfu9hAAcgsbSlKxMajxBQtzBsrvw64Y8DZHT33WrY=
+	t=1733733631; cv=none; b=DQhzRt1j+GxtmBjRzFGuK4so/oIWsVivsDPG/4FrmbTufwln+si7o4Cxmk7M0FXGSGmJCwh4vs7bppWsUEsWK6XrpW1XClTeWholhUDXuQ4LhHhcG3rOQ+bcZep0ghW9iz6Uzm/rHmxlU9XzKi3kVHfayMJ7pkAc92PjTJTmoYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733732195; c=relaxed/simple;
-	bh=FsqqDwgE2TDVdwyc/1L7H+hXF8l1UCyvklow5IYYd6E=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AmIUkGXWz+TbFtAR5O0NtRflqDyXw2SQVZ5UiVLEOBCbwhTPWLy/tMZowU1mZGLuxl5chFzCwPkjpwIgpp1nLXwekM39zCtHUniIC953klTUd2INOpDAJqhJYri28I1Ru4JYOEvXFf56U7rfK9uNBqUEZbC2nbn0M9o2OlCZMLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
-Received: from SHSQR01.spreadtrum.com (localhost [127.0.0.2] (may be forged))
-	by SHSQR01.spreadtrum.com with ESMTP id 4B98GSnQ060615;
-	Mon, 9 Dec 2024 16:16:28 +0800 (+08)
-	(envelope-from Xuewen.Yan@unisoc.com)
-Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 4B98EYk9052216;
-	Mon, 9 Dec 2024 16:14:34 +0800 (+08)
-	(envelope-from Xuewen.Yan@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4Y6F390kLwz2K7ZyH;
-	Mon,  9 Dec 2024 16:12:37 +0800 (CST)
-Received: from BJ10918NBW01.spreadtrum.com (10.0.73.73) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 9 Dec 2024 16:14:32 +0800
-From: Xuewen Yan <xuewen.yan@unisoc.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <guohua.yan@unisoc.com>,
-        <ke.wang@unisoc.com>, <xuewen.yan94@gmail.com>
-Subject: [RFC PATCH] cpufreq: userspace: Add fast-switch support for userspace
-Date: Mon, 9 Dec 2024 16:14:29 +0800
-Message-ID: <20241209081429.1871-1-xuewen.yan@unisoc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1733733631; c=relaxed/simple;
+	bh=COaN4ltrUDVu3wzgAQeHvftfqfKn3xsnGObd9ezVMps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Fz1yXG8NgD19zlPgZEWYfvg9BH7K4XflG5Y6nKZpxa0cZSwE1IkOK3W5Gp3rC4RnlmDmpI6JpFhZBpiGOI0koAMp4UVjwxnAX7TJ1orMzbhFNK+LpycABAA7bnNn+pYFYwKaT6MKaXVsjkBjWTQGDPwj0Q8yg5ERvSzL2VdRIrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Y6FcV4l2XzhZV7;
+	Mon,  9 Dec 2024 16:38:02 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0BC32140123;
+	Mon,  9 Dec 2024 16:40:25 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 9 Dec
+ 2024 16:40:24 +0800
+Message-ID: <fc7cbe88-64a3-4b65-ae37-3a1f50257f22@huawei.com>
+Date: Mon, 9 Dec 2024 16:40:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: Pierre Gondois <pierre.gondois@arm.com>, <rafael@kernel.org>,
+	<lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <fanghao11@huawei.com>,
+	"zhenglifeng (A)" <zhenglifeng1@huawei.com>
+References: <20241114084816.1128647-1-zhenglifeng1@huawei.com>
+ <20241114084816.1128647-4-zhenglifeng1@huawei.com>
+ <9f46991d-98c3-41f5-8133-6612b397e33a@arm.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <9f46991d-98c3-41f5-8133-6612b397e33a@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL:SHSQR01.spreadtrum.com 4B98EYk9052216
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-Now, the userspace governor does not support userspace,
-if the driver only use the fast-switch and not add target_index(),
-it will cause uerspace not work.
-So add fast-switch support for userspace governor.
+Hello Pierre,
 
-Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
-Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
-Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
----
- drivers/cpufreq/cpufreq_userspace.c | 35 +++++++++++++++++++++++++----
- 1 file changed, 31 insertions(+), 4 deletions(-)
+On 2024/12/6 22:23, Pierre Gondois wrote:
+> Hello Lifeng,
+> 
+> On 11/14/24 09:48, Lifeng Zheng wrote:
+>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+>> driver.
+>>
+>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>> ---
+>>   .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++
+>>   drivers/cpufreq/cppc_cpufreq.c                | 141 ++++++++++++++++++
+>>   2 files changed, 195 insertions(+)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>> index 206079d3bd5b..ba7b8ea613e5 100644
+>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
+>>           This file is only present if the acpi-cpufreq or the cppc-cpufreq
+>>           drivers are in use.
+>>   +What:        /sys/devices/system/cpu/cpuX/cpufreq/auto_select
+>> +Date:        October 2024
+>> +Contact:    linux-pm@vger.kernel.org
+>> +Description:    Autonomous selection enable
+>> +
+>> +        Read/write interface to control autonomous selection enable
+>> +            Read returns autonomous selection status:
+>> +                0: autonomous selection is disabled
+>> +                1: autonomous selection is enabled
+>> +
+>> +            Write '1' to enable autonomous selection.
+>> +            Write '0' to disable autonomous selection.
+>> +
+>> +        This file only presents if the cppc-cpufreq driver is in use.
+>> +
+>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
+>> +Date:        October 2024
+>> +Contact:    linux-pm@vger.kernel.org
+>> +Description:    Autonomous activity window
+>> +
+>> +        This file indicates a moving utilization sensitivity window to
+>> +        the platform's autonomous selection policy.
+>> +
+>> +        Read/write an integer represents autonomous activity window (in
+>> +        microseconds) from/to this file. The max value to write is
+>> +        1270000000 but the max significand is 127. This means that if 128
+>> +        is written to this file, 127 will be stored. If the value is
+>> +        greater than 130, only the first two digits will be saved as
+>> +        significand.
+>> +
+>> +        Writing a zero value to this file enable the platform to
+>> +        determine an appropriate Activity Window depending on the workload.
+>> +
+>> +        Writing to this file only has meaning when Autonomous Selection is
+>> +        enabled.
+>> +
+>> +        This file only presents if the cppc-cpufreq driver is in use.
+>> +
+>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
+>> +Date:        October 2024
+>> +Contact:    linux-pm@vger.kernel.org
+>> +Description:    Energy performance preference
+>> +
+>> +        Read/write an 8-bit integer from/to this file. This file
+>> +        represents a range of values from 0 (performance preference) to
+>> +        0xFF (energy efficiency preference) that influences the rate of
+>> +        performance increase/decrease and the result of the hardware's
+>> +        energy efficiency and performance optimization policies.
+>> +
+>> +        Writing to this file only has meaning when Autonomous Selection is
+>> +        enabled.
+>> +
+>> +        This file only presents if the cppc-cpufreq driver is in use.
+>> +
+>>     What:        /sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
+>>   Date:        August 2008
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 2b8708475ac7..b435e1751d0d 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -792,10 +792,151 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
+>>         return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
+>>   }
+>> +
+>> +static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
+>> +{
+>> +    u64 val;
+>> +    int ret;
+>> +
+>> +    ret = cppc_get_auto_sel(policy->cpu, &val);
+>> +
+>> +    /* show "<unsupported>" when this register is not supported by cpc */
+>> +    if (ret == -EOPNOTSUPP)
+>> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
+>> +
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return sysfs_emit(buf, "%lld\n", val);
+>> +}
+>> +
+>> +static ssize_t store_auto_select(struct cpufreq_policy *policy,
+>> +                 const char *buf, size_t count)
+>> +{
+>> +    unsigned long val;
+>> +    int ret;
+>> +
+>> +    ret = kstrtoul(buf, 0, &val);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    if (val > 1)
+>> +        return -EINVAL;
+>> +
+>> +    ret = cppc_set_auto_sel(policy->cpu, val);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return count;
+>> +}
+>> +
+>> +#define AUTO_ACT_WINDOW_SIG_BIT_SIZE    (7)
+>> +#define AUTO_ACT_WINDOW_EXP_BIT_SIZE    (3)
+>> +#define AUTO_ACT_WINDOW_MAX_SIG    ((1 << AUTO_ACT_WINDOW_SIG_BIT_SIZE) - 1)
+>> +#define AUTO_ACT_WINDOW_MAX_EXP    ((1 << AUTO_ACT_WINDOW_EXP_BIT_SIZE) - 1)
+>> +/* AUTO_ACT_WINDOW_MAX_SIG is 127, so 128 and 129 will decay to 127 when writing */
+>> +#define AUTO_ACT_WINDOW_SIG_CARRY_THRESH 129
+> 
+> Maybe this would be better to place these macros in include/acpi/cppc_acpi.h
+> (with a CPPC_XXX prefix)
 
-diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
-index 2c42fee76daa..3a99197246ed 100644
---- a/drivers/cpufreq/cpufreq_userspace.c
-+++ b/drivers/cpufreq/cpufreq_userspace.c
-@@ -21,6 +21,30 @@ struct userspace_policy {
- 	struct mutex mutex;
- };
- 
-+static int cpufreq_userspace_target_freq(struct cpufreq_policy *policy,
-+			unsigned int target_freq, unsigned int relation)
-+{
-+	int ret;
-+
-+	if (policy->fast_switch_enabled) {
-+		unsigned int idx;
-+
-+		target_freq = clamp_val(target_freq, policy->min, policy->max);
-+
-+		if (!policy->freq_table)
-+			return target_freq;
-+
-+		idx = cpufreq_frequency_table_target(policy, target_freq, relation);
-+		policy->cached_resolved_idx = idx;
-+		policy->cached_target_freq = target_freq;
-+		ret = !cpufreq_driver_fast_switch(policy, policy->freq_table[idx].frequency);
-+	} else {
-+		ret = __cpufreq_driver_target(policy, target_freq, relation);
-+	}
-+
-+	return ret;
-+}
-+
- /**
-  * cpufreq_set - set the CPU frequency
-  * @policy: pointer to policy struct where freq is being set
-@@ -41,7 +65,7 @@ static int cpufreq_set(struct cpufreq_policy *policy, unsigned int freq)
- 
- 	userspace->setspeed = freq;
- 
--	ret = __cpufreq_driver_target(policy, freq, CPUFREQ_RELATION_L);
-+	ret = cpufreq_userspace_target_freq(policy, freq, CPUFREQ_RELATION_L);
-  err:
- 	mutex_unlock(&userspace->mutex);
- 	return ret;
-@@ -62,6 +86,8 @@ static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
- 
- 	mutex_init(&userspace->mutex);
- 
-+	cpufreq_enable_fast_switch(policy);
-+
- 	policy->governor_data = userspace;
- 	return 0;
- }
-@@ -72,6 +98,7 @@ static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
-  */
- static void cpufreq_userspace_policy_exit(struct cpufreq_policy *policy)
- {
-+	cpufreq_disable_fast_switch(policy);
- 	kfree(policy->governor_data);
- 	policy->governor_data = NULL;
- }
-@@ -112,13 +139,13 @@ static void cpufreq_userspace_policy_limits(struct cpufreq_policy *policy)
- 		 policy->cpu, policy->min, policy->max, policy->cur, userspace->setspeed);
- 
- 	if (policy->max < userspace->setspeed)
--		__cpufreq_driver_target(policy, policy->max,
-+		cpufreq_userspace_target_freq(policy, policy->max,
- 					CPUFREQ_RELATION_H);
- 	else if (policy->min > userspace->setspeed)
--		__cpufreq_driver_target(policy, policy->min,
-+		cpufreq_userspace_target_freq(policy, policy->min,
- 					CPUFREQ_RELATION_L);
- 	else
--		__cpufreq_driver_target(policy, userspace->setspeed,
-+		cpufreq_userspace_target_freq(policy, userspace->setspeed,
- 					CPUFREQ_RELATION_L);
- 
- 	mutex_unlock(&userspace->mutex);
--- 
-2.25.1
+Will move them, Thanks.
+
+> 
+>> +
+>> +static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
+>> +{
+>> +    int sig, exp;
+>> +    u64 val;
+>> +    int ret;
+>> +
+>> +    ret = cppc_get_auto_act_window(policy->cpu, &val);
+>> +
+>> +    /* show "<unsupported>" when this register is not supported by cpc */
+>> +    if (ret == -EOPNOTSUPP)
+>> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
+>> +
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    sig = val & AUTO_ACT_WINDOW_MAX_SIG;
+>> +    exp = (val >> AUTO_ACT_WINDOW_SIG_BIT_SIZE) & AUTO_ACT_WINDOW_MAX_EXP;
+>> +
+>> +    return sysfs_emit(buf, "%lld\n", sig * int_pow(10, exp));
+>> +}
+>> +
+>> +static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
+>> +                     const char *buf, size_t count)
+>> +{
+>> +    unsigned long usec;
+>> +    int digits = 0;
+>> +    int ret;
+>> +
+>> +    ret = kstrtoul(buf, 0, &usec);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    if (usec > AUTO_ACT_WINDOW_MAX_SIG * int_pow(10, AUTO_ACT_WINDOW_MAX_EXP))
+>> +        return -EINVAL;
+>> +
+>> +    while (usec > AUTO_ACT_WINDOW_SIG_CARRY_THRESH) {
+>> +        usec /= 10;
+>> +        digits += 1;
+>> +    }
+>> +
+>> +    if (usec > AUTO_ACT_WINDOW_MAX_SIG)
+>> +        usec = AUTO_ACT_WINDOW_MAX_SIG;
+>> +
+>> +    ret = cppc_set_auto_act_window(policy->cpu,
+>> +                       (digits << AUTO_ACT_WINDOW_SIG_BIT_SIZE) + usec);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return count;
+>> +}
+>> +
+>> +static ssize_t show_energy_perf(struct cpufreq_policy *policy, char *buf)
+>> +{
+>> +    u64 val;
+>> +    int ret;
+>> +
+>> +    ret = cppc_get_epp_perf(policy->cpu, &val);
+>> +
+>> +    /* show "<unsupported>" when this register is not supported by cpc */
+>> +    if (ret == -EOPNOTSUPP)
+>> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
+>> +
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return sysfs_emit(buf, "%lld\n", val);
+>> +}
+>> +
+>> +#define ENERGY_PERF_MAX    (0xFF)
+> 
+> Same comment to move to include/acpi/cppc_acpi.h
+> 
+>> +
+>> +static ssize_t store_energy_perf(struct cpufreq_policy *policy,
+>> +                 const char *buf, size_t count)
+>> +{
+>> +    unsigned long val;
+>> +    int ret;
+>> +
+>> +    ret = kstrtoul(buf, 0, &val);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    if (val > ENERGY_PERF_MAX)
+>> +        return -EINVAL;
+>> +
+>> +    ret = cppc_set_epp(policy->cpu, val);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return count;
+>> +}
+>> +
+>>   cpufreq_freq_attr_ro(freqdomain_cpus);
+>> +cpufreq_freq_attr_rw(auto_select);
+>> +cpufreq_freq_attr_rw(auto_act_window);
+>> +cpufreq_freq_attr_rw(energy_perf);
+> 
+> It might be better from a user PoV to hide the following entries:
+> - auto_act_window
+> - energy_perf
+> if auto_select is not available or disabled.
+
+Users might like to modify the value of auto_act_window and energy_perf
+before turning on auto_select. So I think it is freer for users to read and
+write them no matter what auto_select is. What do you think?
+
+> 
+> ------
+> 
+> Also just for reference, in ACPI 6.5, s8.4.6.1.2.3 Desired Performance Register
+> """
+> When Autonomous Selection is enabled, it is not necessary for OSPM to assess processor workload performance
+> demand and convey a corresponding performance delivery request to the platform via the Desired Register. If the
+> Desired Performance Register exists, OSPM may provide an explicit performance requirement hint to the platform by
+> writing a non-zero value.
+> """
+> 
+> So it seems it still makes sense to have cpufreq requesting a certain performance
+> level even though autonomous selection is enabled.
+
+We did struggle with this. This solves our doubts. Thanks!
+
+> 
 
 
