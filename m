@@ -1,97 +1,76 @@
-Return-Path: <linux-pm+bounces-18788-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18790-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 012049E86FA
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 18:15:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26329E8A24
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 05:09:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B97D11883F26
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Dec 2024 17:15:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2A051633E1
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 04:09:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2678E18A93E;
-	Sun,  8 Dec 2024 17:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5DA156F5F;
+	Mon,  9 Dec 2024 04:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Vyzlni3H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LxfBSZ70"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307CF189BB0
-	for <linux-pm@vger.kernel.org>; Sun,  8 Dec 2024 17:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDF0156676
+	for <linux-pm@vger.kernel.org>; Mon,  9 Dec 2024 04:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733678105; cv=none; b=fel8pBXPjH0qH3EcLu7xbA3+zXoc+3O5AzFUj+pXd6ujU9QcerIb3cFHvRepN+NdA1jP/bY19E4GfC+kJRsGlp255MDcAikAE+KF28MADr6P89AlrVsHDhbiFl8DJFpO5r2be9UIgiTVCzrghvBpCyLOzSsw8uXTwEf7QhadEnw=
+	t=1733717352; cv=none; b=QNY2oKNhyQGVVW2eWPvIJrVNOaMHVonyxuCgXHjcMx7nziet6xtAUGviqbFrldVw2/WOZjJlXEZ+o4i19hvrrqBf8vm5tUo5A1LQeJ9/xdit7rSpC8c0msQR5w055s7mRcpmNxyK4nY50MfJHpykDCrLTS3Ei34+5meF2/GvBek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733678105; c=relaxed/simple;
-	bh=CNbRGW8g8fcfrwiNfo+C/cJDf1YMo9RhfdZTo8iq2f4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZshP6rv6hyLd1um5+Um3CGIzjKJJ6ZjxnQuoOTxxOYtA/fDs2vzFXX0JJmNCQSUyZkGNA0Sm4R3G6YcUqmhYBTAUsbSPlfrJ9nJU8JZgvfgAlAOxGZcn4AMRRSZa/qRWdMjsFr+T+YmEzbjrsIwQMXM1dLUuyFX8xU+4f/knkXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Vyzlni3H; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53e399e3310so1646412e87.1
-        for <linux-pm@vger.kernel.org>; Sun, 08 Dec 2024 09:15:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733678101; x=1734282901; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dqFplj0uMB8EInw65XscKncVTRnpYupnLVJWyaDnZYI=;
-        b=Vyzlni3HuXPl2eCGwnRBEuKwFbjlFI/vrgF8eNTCVYJycVrd/JUVoSEGQsTSi0yAlD
-         ylFdN/AiR1Q2ZVnQkypXxYeKcuvDkhfnwC9koj1IxOTUxB9J9/JaHGBaTqwkrpDL7PyZ
-         3qweteucYvi5cFNWRHrF0hE8fJPgz65MpcuYk84oSordFKr8/lvUG4BItSY/CBAxljOk
-         lnnw2NF/jwlgthtfz3RQnR/PUo2Oz7zT56988HtuvaR4dzkhwdXlIROEcma1MhvLc2vP
-         +mE0p9FirEA5nwu5RzhluLVxArLjDvW/R2XXrhGlLkphq8G20P8mqbN2wVEM+heHK1m1
-         jxXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733678101; x=1734282901;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dqFplj0uMB8EInw65XscKncVTRnpYupnLVJWyaDnZYI=;
-        b=DLcbyx3Tyo0yUwR1kE6QbUJ9NpyUE2S+5Edny1ea8kVuViq2Ei6eNyipB25ISSrno0
-         nAUn6wekFc4k5HmAXvVt4ylJEroAMzzPITQR5pUK09RMR9qtf3owNdOerAAn915SKwO1
-         O9CFNzFH7zUH0a4mIJJzaNfHvacCvtqqVYTY0TaWrMM/kOlonvavbQLn63SCcG1OpWfH
-         FM213F0uHfDhCA/VspoXYV/3GVwu4qvLRCOcw0UB4DfsTSiEzM5ZaqhmsgvZWS3NlOGQ
-         w3RC3zo1sbPktBiT0KhQwa1ivm8Jcos5KRZATJpCmsM9PD6HU1i0TYKtNHs5Iz77V65T
-         WjuA==
-X-Forwarded-Encrypted: i=1; AJvYcCVcD3SPIYtiJP77GWS9mw7dqSPQyJri0DaqvqHxFHdVfScz9IKhijbqzAqpGVlVrt8WPvxx0cbGBg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+vfCT9GMefrhRTrQ5sWz1cSXwXlJ8TnFQr1KCbtJlgKQANRfo
-	HpmbiQC5EzL3o3UxqyFsMw1n3rDbP+hxbjYebS5phJ09PEkWQV72Gi3rjml2i1KnV1YKUhmUTin
-	e+E2tzw==
-X-Gm-Gg: ASbGncvvfCPnODn6GnesgCvxBLWfYKKIrqu4+BvDyVyRO2vyMGolymhqD9CjTZ/L/6G
-	wqFjTDW7NjcOmemM6maLXySiJ9pd3BZkFsj2C/1WmnhwKcNKzRviLNiUrRBalZbThs4ldHWPSNP
-	YL9xuTNvXPODcihvB3yxr7Agg44U2DDxQtRSLA2GQMHzXJ2iYOG0oiyUYQGp72NmDq5WQhc8/UN
-	8KOvQD/lwPcPEXtLYBRrevwoVlZsjm/x0tK8CLahmrbMCs3HGHNDlEZCL85WwQD1Z0Riji43CdJ
-	9p4md88+ouazq8RnXNqioXleM2jA7A==
-X-Google-Smtp-Source: AGHT+IFkgC4CY00uHOEhGCDb+lElZAAae4ogeFkb0UE5GLOs3gylH/vk0xRefOvLftIPM6MTtA/XpQ==
-X-Received: by 2002:a05:6512:138f:b0:53e:1b94:7279 with SMTP id 2adb3069b0e04-53e2c2b9319mr3748035e87.23.1733678100986;
-        Sun, 08 Dec 2024 09:15:00 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53e33ac12fesm787746e87.108.2024.12.08.09.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Dec 2024 09:15:00 -0800 (PST)
-Date: Sun, 8 Dec 2024 19:14:58 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>, quic_mohamull@quicinc.com, 
-	quic_hbandi@quicinc.com, quic_anubhavg@quicinc.com, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: qcs6490-rb3gen: add and enable
- BT node
-Message-ID: <7y6mu2mtujloctxwi5voszmeo4ctheceiypbnbslyxv34jknm4@ewkooz5fi4w6>
-References: <20241204131706.20791-1-quic_janathot@quicinc.com>
- <20241204131706.20791-3-quic_janathot@quicinc.com>
- <pzkijkdswskaq6232uldapz3b6v6zplif7uah24iwq3ymlezft@skbcy2vod3c5>
- <53d44689-798e-4b5f-a0f1-8a39bea2f19b@quicinc.com>
- <hjui7cn4iuo4id2q4mmqx2i7c3eyu6ae43fcft6psflypb3aya@ia5i5s4ya45e>
- <d68907f0-15e4-486a-9077-31e8a8659e02@quicinc.com>
+	s=arc-20240116; t=1733717352; c=relaxed/simple;
+	bh=GYJ4c0AYqXdCp+BmoltJWMTnHa4voLeKfkhTOewFYRk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lBYu5I/2OdXKeT6YGHdNfoTb07ncw19y3YtNzipf3kNCIC0BnFUtbOWyiA0JpjQiS1oryeULgXGuXqtSxJ9tuankBLD3Gdb4sDxIMLtGSzmv6W8g20TyHP0rnqrY3t0TKIrBJDrW30WuRhe4OWzljrbeq0nOSaiuIY92obHsWbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LxfBSZ70; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733717350; x=1765253350;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GYJ4c0AYqXdCp+BmoltJWMTnHa4voLeKfkhTOewFYRk=;
+  b=LxfBSZ702I6T7CxRs7F/02nl3kPaAe+28zHXV0oThx7PB5w74Y6uUga4
+   4dv67GvfAJ9Gg3ungdsIKT2L+TvZp/3BJvakwnVf2ewjhNPQ2v1fBKMdA
+   7T9v7ZUrdnWlclP4zUnPdNH0xWTHqPwvy+v8tvDQZNT6HQC8bmyFmi9Yq
+   xTGH0zvX6Op3eSo8ZITu2CnRr3Cgj+nQ3xT5sc1ommChWIB9NQoFDIksH
+   9LE6vTPJeLy1M57gw0ZZCr83QUeWjOcIBUhymNooGwReFjaI305TSynwe
+   KzOq14kY4VA8Wv5v0UkVUCXJmkGDFHjWR/OYDX0WoThKwn2qNEHn/xg44
+   g==;
+X-CSE-ConnectionGUID: yP1I1CxmRV6gIZViZjWamw==
+X-CSE-MsgGUID: 4OTa3jYJQFWtGeZUcSNdPA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="36841941"
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="36841941"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:09:08 -0800
+X-CSE-ConnectionGUID: sXsl04c1Raend5gDccZ/iQ==
+X-CSE-MsgGUID: vlPGBQkcR9m+YajMVSGHNA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="95044954"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 08 Dec 2024 20:09:06 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tKV4x-0003nN-1x;
+	Mon, 09 Dec 2024 04:09:03 +0000
+Date: Mon, 9 Dec 2024 12:08:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nam Cao <namcao@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [chanwoo:devfreq-next 2/4]
+ drivers/devfreq/event/rockchip-dfi.c:645:2: error: call to undeclared
+ function 'hrtimer_setup'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202412071429.JnFmSoBv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -100,80 +79,195 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d68907f0-15e4-486a-9077-31e8a8659e02@quicinc.com>
 
-On Sun, Dec 08, 2024 at 09:42:21PM +0530, Janaki Ramaiah Thota wrote:
-> 
-> 
-> On 12/8/2024 5:35 PM, Dmitry Baryshkov wrote:
-> > On Fri, Dec 06, 2024 at 08:15:35PM +0530, Janaki Ramaiah Thota wrote:
-> > > 
-> > > 
-> > > On 12/5/2024 4:29 AM, Dmitry Baryshkov wrote:
-> > > > On Wed, Dec 04, 2024 at 06:47:04PM +0530, Janaki Ramaiah Thota wrote:
-> > > > > Add a node for the PMU module of the WCN6750 present on the
-> > > > > qcs6490-rb3gen board and assign its power outputs to the Bluetooth
-> > > > > module.
-> > > > > 
-> > > > > Signed-off-by: Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-> > > > > ---
-> > > > >    arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 165 ++++++++++++++++++-
-> > > > >    1 file changed, 164 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> > > > > index 27695bd54220..07650648214e 100644
-> > > > > --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> > > > > +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> > > > > @@ -1,6 +1,6 @@
-> > > > >    // SPDX-License-Identifier: BSD-3-Clause
-> > > > >    /*
-> > > > > - * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> > > > > + * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
-> > > > >     */
-> > > > >    /dts-v1/;
-> > > > > @@ -33,6 +33,7 @@
-> > > > >    	aliases {
-> > > > >    		serial0 = &uart5;
-> > > > > +		serial1 = &uart7;
-> > > > >    	};
-> > > > >    	chosen {
-> > > > > @@ -217,6 +218,63 @@
-> > > > >    		regulator-min-microvolt = <3700000>;
-> > > > >    		regulator-max-microvolt = <3700000>;
-> > > > >    	};
-> > > > > +
-> > > > > +	wcn6750-pmu {
-> > > > > +		compatible = "qcom,wcn6750-pmu";
-> > > > > +		pinctrl-names = "default";
-> > > > > +		pinctrl-0 = <&bt_en>;
-> > > > > +		vddaon-supply = <&vreg_s7b_0p972>;
-> > > > > +		vddasd-supply = <&vreg_l11c_2p8>;
-> > > > > +		vddpmu-supply = <&vreg_s7b_0p972>;
-> > > > > +		vddrfa0p8-supply = <&vreg_s7b_0p972>;
-> > > > > +		vddrfa1p2-supply = <&vreg_s8b_1p272>;
-> > > > > +		vddrfa1p7-supply = <&vreg_s1b_1p872>;
-> > > > > +		vddrfa2p2-supply = <&vreg_s1c_2p19>;
-> > > > > +
-> > > > > +		bt-enable-gpios = <&tlmm 85 GPIO_ACTIVE_HIGH>;
-> > > > 
-> > > > Doesn't WCN6750 also have SW_CTRL and wifi-enable pins?
-> > > > 
-> > > 
-> > > For Bluetooth, these pins are not needed. We have verified Bluetooth
-> > > functionality, and it is working fine.
-> > 
-> > You are describing the hardware (PMU), not "a part of the PMU for the
-> > BT". Please check if there should be a wifi enable pin and adjust
-> > accordingly.
-> > 
-> 
-> We further checked with WiFi team. For wcn6750, sw_ctrl and wifi-enable pins
-> handled from WiFi firmware/controller. So it is not needed to handle in PMU.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-next
+head:   27d1a5d95c5202f927f1155ad8f919778cd9f155
+commit: ba13bb7cee6699cfa97ea0f9f84f8d683a5c001d [2/4] PM / devfreq: rockchip-dfi: Switch to use hrtimer_setup()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241207/202412071429.JnFmSoBv-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412071429.JnFmSoBv-lkp@intel.com/reproduce)
 
-Please mention that in the commit message and add a brief comment in the
-PMU node.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412071429.JnFmSoBv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/devfreq/event/rockchip-dfi.c:8:
+   In file included from include/linux/devfreq-event.h:12:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/devfreq/event/rockchip-dfi.c:12:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/devfreq/event/rockchip-dfi.c:12:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/devfreq/event/rockchip-dfi.c:12:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/devfreq/event/rockchip-dfi.c:645:2: error: call to undeclared function 'hrtimer_setup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     645 |         hrtimer_setup(&dfi->timer, rockchip_dfi_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+         |         ^
+   drivers/devfreq/event/rockchip-dfi.c:645:2: note: did you mean 'hrtimer_start'?
+   include/linux/hrtimer.h:272:20: note: 'hrtimer_start' declared here
+     272 | static inline void hrtimer_start(struct hrtimer *timer, ktime_t tim,
+         |                    ^
+   16 warnings and 1 error generated.
+
+
+vim +/hrtimer_setup +645 drivers/devfreq/event/rockchip-dfi.c
+
+   596	
+   597	static int rockchip_ddr_perf_init(struct rockchip_dfi *dfi)
+   598	{
+   599		struct pmu *pmu = &dfi->pmu;
+   600		int ret;
+   601	
+   602		seqlock_init(&dfi->count_seqlock);
+   603	
+   604		pmu->module = THIS_MODULE;
+   605		pmu->capabilities = PERF_PMU_CAP_NO_EXCLUDE;
+   606		pmu->task_ctx_nr = perf_invalid_context;
+   607		pmu->attr_groups = attr_groups;
+   608		pmu->event_init  = rockchip_ddr_perf_event_init;
+   609		pmu->add = rockchip_ddr_perf_event_add;
+   610		pmu->del = rockchip_ddr_perf_event_del;
+   611		pmu->start = rockchip_ddr_perf_event_start;
+   612		pmu->stop = rockchip_ddr_perf_event_stop;
+   613		pmu->read = rockchip_ddr_perf_event_update;
+   614	
+   615		dfi->cpu = raw_smp_processor_id();
+   616	
+   617		ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
+   618					      "rockchip_ddr_perf_pmu",
+   619					      NULL,
+   620					      ddr_perf_offline_cpu);
+   621	
+   622		if (ret < 0) {
+   623			dev_err(dfi->dev, "cpuhp_setup_state_multi failed: %d\n", ret);
+   624			return ret;
+   625		}
+   626	
+   627		dfi->cpuhp_state = ret;
+   628	
+   629		rockchip_dfi_enable(dfi);
+   630	
+   631		ret = devm_add_action_or_reset(dfi->dev, rockchip_ddr_cpuhp_remove_state, dfi);
+   632		if (ret)
+   633			return ret;
+   634	
+   635		ret = cpuhp_state_add_instance_nocalls(dfi->cpuhp_state, &dfi->node);
+   636		if (ret) {
+   637			dev_err(dfi->dev, "Error %d registering hotplug\n", ret);
+   638			return ret;
+   639		}
+   640	
+   641		ret = devm_add_action_or_reset(dfi->dev, rockchip_ddr_cpuhp_remove_instance, dfi);
+   642		if (ret)
+   643			return ret;
+   644	
+ > 645		hrtimer_setup(&dfi->timer, rockchip_dfi_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+   646	
+   647		switch (dfi->ddr_type) {
+   648		case ROCKCHIP_DDRTYPE_LPDDR2:
+   649		case ROCKCHIP_DDRTYPE_LPDDR3:
+   650			dfi->burst_len = 8;
+   651			break;
+   652		case ROCKCHIP_DDRTYPE_LPDDR4:
+   653		case ROCKCHIP_DDRTYPE_LPDDR4X:
+   654			dfi->burst_len = 16;
+   655			break;
+   656		}
+   657	
+   658		ret = perf_pmu_register(pmu, "rockchip_ddr", -1);
+   659		if (ret)
+   660			return ret;
+   661	
+   662		return devm_add_action_or_reset(dfi->dev, rockchip_ddr_perf_remove, dfi);
+   663	}
+   664	#else
+   665	static int rockchip_ddr_perf_init(struct rockchip_dfi *dfi)
+   666	{
+   667		return 0;
+   668	}
+   669	#endif
+   670	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
