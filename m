@@ -1,40 +1,65 @@
-Return-Path: <linux-pm+bounces-18808-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18809-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E8249E9084
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 11:39:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 269309E909A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 11:40:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3D04162504
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 10:38:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 053DA18870C4
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2024 10:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D012185A3;
-	Mon,  9 Dec 2024 10:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B1A21767D;
+	Mon,  9 Dec 2024 10:39:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="moObM4C8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A50217F44;
-	Mon,  9 Dec 2024 10:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E40D215071;
+	Mon,  9 Dec 2024 10:39:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733740594; cv=none; b=Ivv8O4eonPUJZGU95sEbqhqvxAP8dlwPHNxh/HD0EieKtipMUxPGq3D4P/0iz0U6WFT/Qmm22DopwdjBmYuFN/rhpkCRdZOm0OUEgzA66GCPCqRwc2fD23k2SutuJhPBYWuTx7TfYpr6FZpiDdblLq2VWxg2+Vp57NnUd0X3ab8=
+	t=1733740747; cv=none; b=K9wMy7UnMgqDKpbsDEm7jOdR6q93NU+vgqmwvWKJ2zYmkiYZyHe6LHfG5zIMNVNIkHEeDs5Da5mYkh3wWQ0uNOYFFnNFIUu0L0Z3lIn4hBZlCBZRMf/V9wIlTJDD4Bv6Wu0nFatloaaV6tjNLvGkDyKGChE8LSD/CyIT6VxLx5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733740594; c=relaxed/simple;
-	bh=T5aO+Tj718wETGZ7W2trjzi2rdQbKIPvyHWipOm+IyY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qacXhUH7HvoJWt6UOehv4sDkJtWsuEDvZaiy2ADzyDm19gpzlHM6oKZ3SF+SUAp+wI2Rr1vYMA5+AgyD428avJWuGX45vTlotbE70meFPb8dSpnBGK7B9k2KaO/FPpl3X0BDN3J+DqB+dQUZVDidPKy8XDBshES6dxD65SvxKP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAFA9113E;
-	Mon,  9 Dec 2024 02:36:59 -0800 (PST)
-Received: from [10.1.39.16] (e127648.arm.com [10.1.39.16])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9FA93F720;
-	Mon,  9 Dec 2024 02:36:29 -0800 (PST)
-Message-ID: <09acd46b-ec63-46ec-a239-e792c3061e52@arm.com>
-Date: Mon, 9 Dec 2024 10:36:27 +0000
+	s=arc-20240116; t=1733740747; c=relaxed/simple;
+	bh=/JJ5xuhZMmN+7I/M37TWgPtKyGD3AwfUs61Os4hBQYc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=HQqdT4Nhht2xabT6HncY9Kw3Y/hvNeXM+KC8EeZvlq4tP6b2fvGgxl1TpwLhD9OkcEwpqhQ/1ZdJH+uKGIZ1W2oVBOz1jFsoagm2hggb4hTEME3gCa6FaZxqcl3x7vMLk9oMhVoSueXXhcf7OKmtnh83Ja2IvRwlTr4XF4SL46c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=moObM4C8; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733740746; x=1765276746;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=/JJ5xuhZMmN+7I/M37TWgPtKyGD3AwfUs61Os4hBQYc=;
+  b=moObM4C88tNU2+NrV8hm8IFUf8t0dWHLFKwx1sdmRrp2Ddd3pf4mJLo1
+   Ph7ZfbmBBa8yoQhHKNa2DcWi2r/6vLGirpMtL2RWHg7Uf6/yatayXF5Lp
+   re5sooFTPIlnEqF95oV8M7czwjEc/no0o53eQFpkcutEbYeaJSJ6/WHjq
+   iuPmiK0NQFPHanlduioSlzhEACLhDeDCfMgx+aiC9S7wUW5ndb2rbzNRl
+   qkjGZyPVyZSQ8WdHfkiGr1MgGqBae23I3YiRvVAOq+zZoCOt9mICzgGgf
+   +oWDRWOxPrOpCK63BhQvzT4kCU2IY0MJGgrf6CiEvosaN7X275kBJTBRW
+   g==;
+X-CSE-ConnectionGUID: rmWm8sWPTRethexDBLhMxw==
+X-CSE-MsgGUID: yhwAKaw5RNq7DdG30nHGww==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34175700"
+X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
+   d="scan'208";a="34175700"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 02:39:05 -0800
+X-CSE-ConnectionGUID: R4y3m4cXR82ZRbOk8/nYFQ==
+X-CSE-MsgGUID: +UKR2m5vSoSZWh4hm6wkYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
+   d="scan'208";a="99851197"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.245.89.141])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 02:39:02 -0800
+Message-ID: <7b5fcb3e-e3e7-4d87-9a7b-5570e2e85a0e@intel.com>
+Date: Mon, 9 Dec 2024 12:38:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,123 +67,111 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] cpufreq: userspace: Add fast-switch support for
- userspace
-To: Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
- viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, guohua.yan@unisoc.com, ke.wang@unisoc.com,
- xuewen.yan94@gmail.com
-References: <20241209081429.1871-1-xuewen.yan@unisoc.com>
+Subject: Re: [PATCH v2 1/6] mmc: sdhci: Use EXPORT_PM_FN_NS_GPL() for
+ exporting PM functions
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Victor Shih <victor.shih@genesyslogic.com.tw>, linux-mmc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Linux PM list <linux-pm@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20241101101441.3518612-1-andriy.shevchenko@linux.intel.com>
+ <20241101101441.3518612-2-andriy.shevchenko@linux.intel.com>
 Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <20241209081429.1871-1-xuewen.yan@unisoc.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20241101101441.3518612-2-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/9/24 08:14, Xuewen Yan wrote:
-> Now, the userspace governor does not support userspace,
-> if the driver only use the fast-switch and not add target_index(),
+On 1/11/24 12:11, Andy Shevchenko wrote:
+> Switch from ugly ifdeffery to using EXPORT_PM_FN_NS_GPL()
+> for exporting PM functions. This helps cleaning up the other
+> SDHCI drivers in the future.
 
-Which driver does that? Is that actually valid?
-No mainline driver from what I can see.
+It seems sdhci is the first code in the kernel to use
+EXPORT_PM_FN_NS_GPL() but it was not asked for ;-)
 
-> it will cause uerspace not work.
+As such, can you fill in a little background.  I am not
+sure what it achieves.  Why have CONFIG_PM if not to
+#ifdef dependent code behind it?
 
-s/uerspace/userspace
-to not work?
-
-> So add fast-switch support for userspace governor.
 > 
-> Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
-> Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/cpufreq/cpufreq_userspace.c | 35 +++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
+>  drivers/mmc/host/sdhci.c | 14 ++++----------
+>  drivers/mmc/host/sdhci.h |  2 --
+>  2 files changed, 4 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
-> index 2c42fee76daa..3a99197246ed 100644
-> --- a/drivers/cpufreq/cpufreq_userspace.c
-> +++ b/drivers/cpufreq/cpufreq_userspace.c
-> @@ -21,6 +21,30 @@ struct userspace_policy {
->  	struct mutex mutex;
->  };
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index f4a7733a8ad2..2214280ca5fb 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -3733,8 +3733,6 @@ EXPORT_SYMBOL_GPL(sdhci_thread_irq);
+>   *                                                                           *
+>  \*****************************************************************************/
 >  
-> +static int cpufreq_userspace_target_freq(struct cpufreq_policy *policy,
-> +			unsigned int target_freq, unsigned int relation)
-> +{
-> +	int ret;
-
-not really necessary
-
-> +
-> +	if (policy->fast_switch_enabled) {
-> +		unsigned int idx;
-> +
-> +		target_freq = clamp_val(target_freq, policy->min, policy->max);
-> +
-> +		if (!policy->freq_table)
-> +			return target_freq;
-> +
-> +		idx = cpufreq_frequency_table_target(policy, target_freq, relation);
-> +		policy->cached_resolved_idx = idx;
-> +		policy->cached_target_freq = target_freq;
-> +		ret = !cpufreq_driver_fast_switch(policy, policy->freq_table[idx].frequency);
-> +	} else {
-> +		ret = __cpufreq_driver_target(policy, target_freq, relation);
-
-NIT: could save the indent if you reverse conditions and ret early on !fast_switch
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  /**
->   * cpufreq_set - set the CPU frequency
->   * @policy: pointer to policy struct where freq is being set
-> @@ -41,7 +65,7 @@ static int cpufreq_set(struct cpufreq_policy *policy, unsigned int freq)
+> -#ifdef CONFIG_PM
+> -
+>  static bool sdhci_cd_irq_can_wakeup(struct sdhci_host *host)
+>  {
+>  	return mmc_card_is_removable(host->mmc) &&
+> @@ -3814,8 +3812,7 @@ int sdhci_suspend_host(struct sdhci_host *host)
 >  
->  	userspace->setspeed = freq;
->  
-> -	ret = __cpufreq_driver_target(policy, freq, CPUFREQ_RELATION_L);
-> +	ret = cpufreq_userspace_target_freq(policy, freq, CPUFREQ_RELATION_L);
->   err:
->  	mutex_unlock(&userspace->mutex);
->  	return ret;
-> @@ -62,6 +86,8 @@ static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
->  
->  	mutex_init(&userspace->mutex);
->  
-> +	cpufreq_enable_fast_switch(policy);
-> +
->  	policy->governor_data = userspace;
 >  	return 0;
 >  }
-> @@ -72,6 +98,7 @@ static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
->   */
->  static void cpufreq_userspace_policy_exit(struct cpufreq_policy *policy)
+> -
+> -EXPORT_SYMBOL_GPL(sdhci_suspend_host);
+> +EXPORT_PM_FN_GPL(sdhci_suspend_host);
+>  
+>  int sdhci_resume_host(struct sdhci_host *host)
 >  {
-> +	cpufreq_disable_fast_switch(policy);
->  	kfree(policy->governor_data);
->  	policy->governor_data = NULL;
+> @@ -3853,8 +3850,7 @@ int sdhci_resume_host(struct sdhci_host *host)
+>  
+>  	return ret;
 >  }
-> @@ -112,13 +139,13 @@ static void cpufreq_userspace_policy_limits(struct cpufreq_policy *policy)
->  		 policy->cpu, policy->min, policy->max, policy->cur, userspace->setspeed);
+> -
+> -EXPORT_SYMBOL_GPL(sdhci_resume_host);
+> +EXPORT_PM_FN_GPL(sdhci_resume_host);
 >  
->  	if (policy->max < userspace->setspeed)
-> -		__cpufreq_driver_target(policy, policy->max,
-> +		cpufreq_userspace_target_freq(policy, policy->max,
->  					CPUFREQ_RELATION_H);
->  	else if (policy->min > userspace->setspeed)
-> -		__cpufreq_driver_target(policy, policy->min,
-> +		cpufreq_userspace_target_freq(policy, policy->min,
->  					CPUFREQ_RELATION_L);
->  	else
-> -		__cpufreq_driver_target(policy, userspace->setspeed,
-> +		cpufreq_userspace_target_freq(policy, userspace->setspeed,
->  					CPUFREQ_RELATION_L);
+>  int sdhci_runtime_suspend_host(struct sdhci_host *host)
+>  {
+> @@ -3876,7 +3872,7 @@ int sdhci_runtime_suspend_host(struct sdhci_host *host)
 >  
->  	mutex_unlock(&userspace->mutex);
+>  	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(sdhci_runtime_suspend_host);
+> +EXPORT_PM_FN_GPL(sdhci_runtime_suspend_host);
+>  
+>  int sdhci_runtime_resume_host(struct sdhci_host *host, int soft_reset)
+>  {
+> @@ -3927,9 +3923,7 @@ int sdhci_runtime_resume_host(struct sdhci_host *host, int soft_reset)
+>  
+>  	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(sdhci_runtime_resume_host);
+> -
+> -#endif /* CONFIG_PM */
+> +EXPORT_PM_FN_GPL(sdhci_runtime_resume_host);
+>  
+>  /*****************************************************************************\
+>   *                                                                           *
+> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+> index cd0e35a80542..4ee2695b0202 100644
+> --- a/drivers/mmc/host/sdhci.h
+> +++ b/drivers/mmc/host/sdhci.h
+> @@ -874,12 +874,10 @@ irqreturn_t sdhci_thread_irq(int irq, void *dev_id);
+>  void sdhci_adma_write_desc(struct sdhci_host *host, void **desc,
+>  			   dma_addr_t addr, int len, unsigned int cmd);
+>  
+> -#ifdef CONFIG_PM
+>  int sdhci_suspend_host(struct sdhci_host *host);
+>  int sdhci_resume_host(struct sdhci_host *host);
+>  int sdhci_runtime_suspend_host(struct sdhci_host *host);
+>  int sdhci_runtime_resume_host(struct sdhci_host *host, int soft_reset);
+> -#endif
+>  
+>  void sdhci_cqe_enable(struct mmc_host *mmc);
+>  void sdhci_cqe_disable(struct mmc_host *mmc, bool recovery);
 
 
