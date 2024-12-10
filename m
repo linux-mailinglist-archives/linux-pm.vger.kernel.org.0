@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-18930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BAF79EB795
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 18:11:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 259129EB792
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 18:11:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B371C1887EED
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:11:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5890163433
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A517B23D41E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C00D23D417;
 	Tue, 10 Dec 2024 17:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="djH8PAyv"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SW/wKDO0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8DE23A594;
-	Tue, 10 Dec 2024 17:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F31823A58F;
+	Tue, 10 Dec 2024 17:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733850629; cv=none; b=nVX5yQm54tOrRyYE6m+7VTDumcoQRHx3c0NRWWZLZJSZbp70ZIMWeojSKSQBGViMHhVamb5CTL1qPhCEPDinuC85Muj43i/nqdb6CrWweBx9Qxu07bjYz5iEeaR81eaYvvcTuP72RK8FUIhEa/jmCJmzsHK4AQp6woEBlS6JZBw=
+	t=1733850629; cv=none; b=Bcx99mi/zA0x5SHltbl1aZALtCiIU3tm7WG0EreiPxP1Ee8AVWhPREXxbzv64S+70ou4vVPd+ENPvS9mPYoVsiVanQdaV9l5XGU7f90xY9W/J1ZzYfAx7DUoXY97kHGWZ+XYu/TKr90mRaCLinNjeYqAQhpvJMH0KO2XaW+AYgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733850629; c=relaxed/simple;
-	bh=FEWnd3vRw56+0zU9iQm+h5IV4wTiZ4mx1GMYuoKmShg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BOP3SjGJi1EyI0N4wa+q1mHketCK6t1VPyGcGYtIQoKIc3stUA51ydDltvUMoHOZv9ZvywmEPyDSMEjDMtQ8mdzqxEKGtsdnPh/qilcy4FSdx/tEBmZKys0cX1q8if5R+hnwX/M1EJStQ+cNzZzPo86ABd/UINgmMssQ9PTPIhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=djH8PAyv; arc=none smtp.client-ip=148.251.105.195
+	bh=O5swrGRgXY7L7+HtzQsEkzO+Z95c/1GCTlkAs6oxEew=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Kl1FeJg1x12IxjO9Bo5LQP8MqkwyPJMzKlgOlGZ6vEVy5BDTyv4R1raeOAueUOBLNVkjTZwb4cyNiR4RD2sAQWzyxdMoUnvkh8rHU9wsgI8sTMBP6jDIe1KogY9dDQbX1oeJ/ciCxkwtOG2Aw1FWbRp4yDi+hGsxGjju6ig8TTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=SW/wKDO0; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1733850625;
-	bh=FEWnd3vRw56+0zU9iQm+h5IV4wTiZ4mx1GMYuoKmShg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=djH8PAyv2m0Piy9QfdK2AsmiP3iTCg/H1JJv4rastS0dG3vSRKHmCB0X4ZKWA+nRn
-	 Y1KgCMD/JXS1cnArN4PB59DPTBieyRAEoQlnHR41ekjbnJm+NaQMQbX2lYHY+dSzcY
-	 8zVlRSfIaZKbeoKVktVBMiDaJM0rObgpFiYkFzQA12xMT9laTdOWQIjk6s9PAegBz4
-	 aVRCpkXTKhZ5gPB1mO5cxl/ktAShsZPgy53sTUAE6Pu3iItYn9yf5x8rrZvbM5Vju0
-	 RhNgue7UcvWezuVQHpLVb90Qe6FjBLwVgCE/hEO5626soFEf7yWB7yEWwCFFoZrOjF
-	 pghi4SibnATlw==
+	bh=O5swrGRgXY7L7+HtzQsEkzO+Z95c/1GCTlkAs6oxEew=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SW/wKDO0tnLpo1jojfF0BkUouqwgtHaKZb485qFSpXKZ1F7Hn1K462/uNWKjBcH5e
+	 5XzF2pHOxeo++3An3Y/mA3uF1AoRX1LXuy6J4Ax5Q+EfRtPBAIAYVIsn8n+wJ/ZFl8
+	 dAN/7kUlXmET66DCPNkxW4jk+wPMfgJ6R2MgU5z43IxfSgNofqKdweZt0o8JR2LrZ0
+	 2CirWwNYdInMiHcsA+WB7mCrOSbbi8ZxSENZ35LnAX0UkCxB+d3ilBWrS6T471vXV5
+	 inaDE0Rwaw/zQVIWMCjyT3dl9vXrrHohKh/v0eC8emIqEO2AfW/JLFY+bqI0ocDsCK
+	 rBtb2fU+A68Zg==
 Received: from jupiter.universe (dyndsl-091-248-190-127.ewe-ip-backbone.de [91.248.190.127])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 265A717E37C5;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 23FE717E37C2;
 	Tue, 10 Dec 2024 18:10:25 +0100 (CET)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id A401648CC8A; Tue, 10 Dec 2024 18:10:24 +0100 (CET)
+	id A51AA48CC3B; Tue, 10 Dec 2024 18:10:24 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -67,118 +68,114 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>,
 	linux-pm@vger.kernel.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v4 0/7] Fix RK3588 GPU power domain
-Date: Tue, 10 Dec 2024 18:06:40 +0100
-Message-ID: <20241210171023.141162-1-sebastian.reichel@collabora.com>
+Subject: [PATCH v4 1/7] regulator: Add (devm_)of_regulator_get()
+Date: Tue, 10 Dec 2024 18:06:41 +0100
+Message-ID: <20241210171023.141162-2-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241210171023.141162-1-sebastian.reichel@collabora.com>
+References: <20241210171023.141162-1-sebastian.reichel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The Rockchip power-domain controller also plans to make use of
+per-domain regulators similar to the MediaTek power-domain controller.
+Since existing DTs are missing the regulator information, the kernel
+should fallback to the automatically created dummy regulator if
+necessary. Thus the version without the _optional suffix is needed.
 
-I got a report, that the Linux kernel crashes on Rock 5B when the panthor
-driver is loaded late after booting. The crash starts with the following
-shortened error print:
+The Rockchip driver plans to use the managed version, but to be
+consistent with existing code the unmanaged version is added at the
+same time.
 
-rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'gpu', val=0
-rockchip-pm-domain fd8d8000.power-management:power-controller: failed to get ack on domain 'gpu', val=0xa9fff
-SError Interrupt on CPU4, code 0x00000000be000411 -- SError
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/regulator/devres.c         | 17 +++++++++++++++++
+ drivers/regulator/of_regulator.c   | 21 +++++++++++++++++++++
+ include/linux/regulator/consumer.h |  6 ++++++
+ 3 files changed, 44 insertions(+)
 
-This series first does some cleanups in the Rockchip power domain
-driver and changes the driver, so that it no longer tries to continue
-when it fails to enable a domain. This gets rid of the SError interrupt
-and long backtraces. But the kernel still hangs when it fails to enable
-a power domain. I have not done further analysis to check if that can
-be avoided.
-
-Last but not least this provides a fix for the GPU power domain failing
-to get enabled - after some testing from my side it seems to require the
-GPU voltage supply to be enabled.
-
-This introduces devm_of_regulator_get without the _optional suffix, since
-that is more sensible for the Rockchip usecase. Longer explanation can be
-seen in patch 6, which adds the handling to the Rockchip driver. My merge
-suggestion would be that Mark provides an immutable branch.
-
-The last patch, which updates the RK3588 board files should cover all RK3588
-boards that are currently in Heiko's for-next branch. Any board missing the
-update will behave as before, so it is perfectly fine not to update all DT
-files at once (in case I missed any).
-
-Changes since PATCHv3:
- * https://lore.kernel.org/linux-rockchip/20241022154508.63563-1-sebastian.reichel@collabora.com/
- * Rebase to Heiko's for-next branch
-   - update DT patch to handle new RK3588(s) boards
-   - make sure to use a clean topic branch without HDMI-RX code (Heiko Stübner)
- * Add Tested-by from Heiko Stübner
-
-Changes since PATCHv2:
- * https://lore.kernel.org/linux-rockchip/20240919091834.83572-1-sebastian.reichel@collabora.com/
- * Rebase to 6.12-rc1 + devm_of_regulator_get_optional branch (Ulf Hansson, Chen-Yu Tsai)
-  - Introduce devm_of_regulator_get()
-  - Add code to only request regulators for domains needing them
- * Mention other platforms in the DT binding patch (Rob Murphy)
- * Update more RK3588 DT files (Jonas Karlman)
-
-Changes since PATCHv1:
- * https://lore.kernel.org/all/20240910180530.47194-1-sebastian.reichel@collabora.com/
- * Collect Reviewed-by/Acked-by/Tested-by
- * swap first and second patch to avoid introducing and directly removing a mutex_unlock
- * fix spelling of indentation
- * fix double empty line after rockchip_pd_regulator_disable()
-
-Greetings,
-
--- Sebastian
-
-Sebastian Reichel (7):
-  regulator: Add (devm_)of_regulator_get()
-  pmdomain: rockchip: cleanup mutex handling in rockchip_pd_power
-  pmdomain: rockchip: forward rockchip_do_pmu_set_power_domain errors
-  pmdomain: rockchip: reduce indentation in rockchip_pd_power
-  dt-bindings: power: rockchip: add regulator support
-  pmdomain: rockchip: add regulator support
-  arm64: dts: rockchip: Add GPU power domain regulator dependency for
-    RK3588
-
- .../power/rockchip,power-controller.yaml      |   3 +
- .../boot/dts/rockchip/rk3588-armsom-sige7.dts |   4 +
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi |   2 +-
- .../boot/dts/rockchip/rk3588-coolpi-cm5.dtsi  |   4 +
- .../rockchip/rk3588-edgeble-neu6a-common.dtsi |   4 +
- .../boot/dts/rockchip/rk3588-evb1-v10.dts     |   4 +
- .../boot/dts/rockchip/rk3588-fet3588-c.dtsi   |   4 +
- .../rockchip/rk3588-friendlyelec-cm3588.dtsi  |   4 +
- .../arm64/boot/dts/rockchip/rk3588-jaguar.dts |   4 +
- .../boot/dts/rockchip/rk3588-nanopc-t6.dtsi   |   4 +
- .../boot/dts/rockchip/rk3588-ok3588-c.dts     |   4 +
- .../dts/rockchip/rk3588-orangepi-5-plus.dts   |   4 +
- .../boot/dts/rockchip/rk3588-quartzpro64.dts  |   4 +
- .../boot/dts/rockchip/rk3588-rock-5-itx.dts   |   4 +
- .../boot/dts/rockchip/rk3588-rock-5b.dts      |   4 +
- .../arm64/boot/dts/rockchip/rk3588-tiger.dtsi |   4 +
- .../boot/dts/rockchip/rk3588-toybrick-x0.dts  |   4 +
- .../boot/dts/rockchip/rk3588-turing-rk1.dtsi  |   4 +
- .../boot/dts/rockchip/rk3588s-coolpi-4b.dts   |   4 +
- .../dts/rockchip/rk3588s-gameforce-ace.dts    |   4 +
- .../dts/rockchip/rk3588s-indiedroid-nova.dts  |   4 +
- .../dts/rockchip/rk3588s-khadas-edge2.dts     |   4 +
- .../boot/dts/rockchip/rk3588s-nanopi-r6s.dts  |   4 +
- .../boot/dts/rockchip/rk3588s-odroid-m2.dts   |   4 +
- .../boot/dts/rockchip/rk3588s-orangepi-5.dts  |   4 +
- .../boot/dts/rockchip/rk3588s-rock-5a.dts     |   4 +
- drivers/pmdomain/rockchip/pm-domains.c        | 190 +++++++++++-------
- drivers/regulator/devres.c                    |  17 ++
- drivers/regulator/of_regulator.c              |  21 ++
- include/linux/regulator/consumer.h            |   6 +
- 30 files changed, 266 insertions(+), 69 deletions(-)
-
+diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
+index 36164aec30e8..a3a3ccc711fc 100644
+--- a/drivers/regulator/devres.c
++++ b/drivers/regulator/devres.c
+@@ -771,6 +771,23 @@ static struct regulator *_devm_of_regulator_get(struct device *dev, struct devic
+ 	return regulator;
+ }
+ 
++/**
++ * devm_of_regulator_get - Resource managed of_regulator_get()
++ * @dev: device used for dev_printk() messages and resource lifetime management
++ * @node: device node for regulator "consumer"
++ * @id:  supply name or regulator ID.
++ *
++ * Managed of_regulator_get(). Regulators returned from this
++ * function are automatically regulator_put() on driver detach. See
++ * of_regulator_get() for more information.
++ */
++struct regulator *devm_of_regulator_get(struct device *dev, struct device_node *node,
++						 const char *id)
++{
++	return _devm_of_regulator_get(dev, node, id, NORMAL_GET);
++}
++EXPORT_SYMBOL_GPL(devm_of_regulator_get);
++
+ /**
+  * devm_of_regulator_get_optional - Resource managed of_regulator_get_optional()
+  * @dev: device used for dev_printk() messages and resource lifetime management
+diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
+index 3d85762beda6..31a5bacd99b4 100644
+--- a/drivers/regulator/of_regulator.c
++++ b/drivers/regulator/of_regulator.c
+@@ -682,6 +682,27 @@ struct regulator *_of_regulator_get(struct device *dev, struct device_node *node
+ 	return _regulator_get_common(r, dev, id, get_type);
+ }
+ 
++/**
++ * of_regulator_get - get regulator via device tree lookup
++ * @dev: device used for dev_printk() messages
++ * @node: device node for regulator "consumer"
++ * @id: Supply name
++ *
++ * Return: pointer to struct regulator corresponding to the regulator producer,
++ *	   or PTR_ERR() encoded error number.
++ *
++ * This is intended for use by consumers that want to get a regulator
++ * supply directly from a device node. This will _not_ consider supply
++ * aliases. See regulator_dev_lookup().
++ */
++struct regulator *of_regulator_get(struct device *dev,
++					    struct device_node *node,
++					    const char *id)
++{
++	return _of_regulator_get(dev, node, id, NORMAL_GET);
++}
++EXPORT_SYMBOL_GPL(of_regulator_get);
++
+ /**
+  * of_regulator_get_optional - get optional regulator via device tree lookup
+  * @dev: device used for dev_printk() messages
+diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/consumer.h
+index 8c3c372ad735..5903ae7444ae 100644
+--- a/include/linux/regulator/consumer.h
++++ b/include/linux/regulator/consumer.h
+@@ -169,6 +169,12 @@ void regulator_put(struct regulator *regulator);
+ void devm_regulator_put(struct regulator *regulator);
+ 
+ #if IS_ENABLED(CONFIG_OF)
++struct regulator *__must_check of_regulator_get(struct device *dev,
++						struct device_node *node,
++						const char *id);
++struct regulator *__must_check devm_of_regulator_get(struct device *dev,
++						     struct device_node *node,
++						     const char *id);
+ struct regulator *__must_check of_regulator_get_optional(struct device *dev,
+ 							 struct device_node *node,
+ 							 const char *id);
 -- 
 2.45.2
 
