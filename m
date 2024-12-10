@@ -1,188 +1,263 @@
-Return-Path: <linux-pm+bounces-18948-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18949-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4DAA9EBAF4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 21:45:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2966B9EBB1B
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 21:51:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6CFB28378F
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:45:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BEA328361E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBE8722ACD8;
-	Tue, 10 Dec 2024 20:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD4022B599;
+	Tue, 10 Dec 2024 20:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuPefJyw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsFFWUt8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A5D22A1C3;
-	Tue, 10 Dec 2024 20:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B6822ACEB;
+	Tue, 10 Dec 2024 20:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733863528; cv=none; b=XEMT6wx38qDmkSAqUr6pt6y7wtuQabmHxMBtUbcLZheSe3/ZYOJAm9CC3xNw0MPQ4tPH8yRwFUkCsnmsmUJBiRyHA0Pm9k6QZaUTwrSiQUV7TngZl9GsKumWTSDbeKcofFvTupgZgpIEaE1Q60xqviCpJV0gs9fAnmyEztSwOrg=
+	t=1733863862; cv=none; b=U4TdocZBx/Ngu/h7RULs9Godh1qcEn+0JvLx0JmxUW1qS6P7fdnah5HyxlxPrVT2YJA+Qh5vBsmH/1+kYdrjflezPJipYhzsA56UB37a0LT8raTW66yYlwJa7Qp6nNSuoi38sjTfw8XbCpkuVViyvsTbE2P8Cflq2Kxrom5f3yI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733863528; c=relaxed/simple;
-	bh=ju4X+yZhI1BnsMkCLu3fV4gRYkOlFHLyiHLIqGY2oAI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XQa/wcEk6QKQvhRuASxSr/nVmg0/70awf+tc0fcocZjB7qBiOz3kluNNVAG361bgABl9TwTWk3QtflfcXmWqYYgbZ4bYlnlqoFuPVcJ/dPJgLPRETdpSqITy7VGwloW/q/h3XIeuye+zRN/wnVg5YPPlasokXU2ny2L0yJTWDpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuPefJyw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C215C4CED6;
-	Tue, 10 Dec 2024 20:45:20 +0000 (UTC)
+	s=arc-20240116; t=1733863862; c=relaxed/simple;
+	bh=dyEwqP/LvOfSb6lgImb0PrZsCaEvBCLNxC8XvejNDrc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dHBO3Madm9Vf/5vblhw1XzR2j22bv/bzDSuihYFyRm3UUCms1k8R+lBI0E8WybZ+BtOo1xnwy91IWVlVEUrb0epRL02fmO91zh8MuaQ0KuCqHejqOcQ9zbv6I9n9HFHqhzXglVX8j0J2hACGSDdLQjjAUP7I2X/MP7rgzlLJMVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsFFWUt8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C7B9C4CEE2;
+	Tue, 10 Dec 2024 20:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733863526;
-	bh=ju4X+yZhI1BnsMkCLu3fV4gRYkOlFHLyiHLIqGY2oAI=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=fuPefJywZSC3M5DKCRmu3ip8euNlDXxGdFXxooGSAULaGIOQ5Nr3J7A8yuFDyXspy
-	 oQHvIsVL3v9/2MJzNtHGIBnOWUMkQV9CLVYggHAk4mUIFLn8ppTNLaDNDJ5mzYNClN
-	 VSAnWePQkypQYcUCAZYFVZbYW58OhC0MG5N26Q+r34e0hFf3ycJbcxEAjSzibf320q
-	 lE8PTVeXmLFx2jA3BhWto17ogq/CBBuZPWRn1hOW/idRHZkiH8d3NfUHD4mV420G9X
-	 OPPTNfH92OPYM86pO92Jhv5vAAilHptux61V7er22TPoa0+IyydzfwsiBKB9tsj9Ta
-	 dmZsLMaPudTMQ==
-Message-ID: <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org>
-Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
- 2.5 GT/s
-From: Niklas Schnelle <niks@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,  Bjorn
- Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, Rob Herring
- <robh@kernel.org>, Krzysztof Wilczy??ski	 <kw@linux.com>, "Maciej W .
- Rozycki" <macro@orcam.me.uk>, Jonathan Cameron	
- <Jonathan.Cameron@huawei.com>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
- Krishna chaitanya chundru	 <quic_krichai@quicinc.com>, Srinivas Pandruvada	
- <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
- <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
- <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
- <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,  Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>, Mika Westerberg
- <mika.westerberg@linux.intel.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>
-Date: Tue, 10 Dec 2024 21:45:18 +0100
-In-Reply-To: <Z1gSZCdv3fwnRRNk@wunner.de>
-References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
-		 <Z1gSZCdv3fwnRRNk@wunner.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=k20201202; t=1733863862;
+	bh=dyEwqP/LvOfSb6lgImb0PrZsCaEvBCLNxC8XvejNDrc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HsFFWUt8Yn1wHjyYXuteu5LDa/b/JLcpPd7D4pQcsrKTOEN9cX7PlFUa+j1mh2VHm
+	 jXBOUJT42zHmK+pWacPrxzGI8QBGD0yJ/e2ySg+6JN2/lT2WaIZ9Vhstq8UHO5nbO5
+	 Fbjb+16qBIpAyM+W5M7BszVYgPOt9BpdPFru0cuG6mHZ/yQsE+l2zjKtEmtHGYlMhh
+	 Rcz/1U2hhVmCeqAoimpCNkG7eVcHU9QtBM4bjnNtgJJwFWtm661s9HcSkFRJGy/dDj
+	 mcGKEJEjkcQ5yXQw+1U5WYH0Qhyd7FttLQP+Pg6O9h7zK80KE36kNkY/sX7uQrvb2e
+	 VHfmIGEHLsmZA==
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-71e1597e3b4so151464a34.3;
+        Tue, 10 Dec 2024 12:51:02 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUi6G98XXzKoZeEKF5QuxpDM3G6KT4Zd3sdJDvjbOnR0m8UGMXHKF/5AqmwuPMjcO6++8Ebvx/T7bs=@vger.kernel.org, AJvYcCV+O/AoABODF99Tv6f0qa8cUPdqYbHIX10wIQImvThKhMyeGVXNAef9QyNhbJ89v/kAi+V44I+1JbYQ8Eo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoB+YRWAm+CzDAo2HIMiE67xW/SoVJDaZdZLxfMHUihvKmqtIY
+	psTsGutEp1hwdq5as0H7/7dSMboJ3w2sqdSgqprjnNTrSzicewfGo/VFmp+01L5CW6SPzNRlZdD
+	AWgRcNmDT+53fmfWfwkld6TOgoRQ=
+X-Google-Smtp-Source: AGHT+IGT9d7iT2gDD2FgF/dK56idJ+pYXy+Fpv94tY9xP3Sd08ivYMCbdZtwuqM6bySxNyrFk7iIJhdTpF3x9R97dnc=
+X-Received: by 2002:a05:6830:2a89:b0:71d:fe25:1a88 with SMTP id
+ 46e09a7af769-71e197f0d99mr213801a34.17.1733863861526; Tue, 10 Dec 2024
+ 12:51:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241204140828.11699-1-patryk.wlazlyn@linux.intel.com> <20241204140828.11699-5-patryk.wlazlyn@linux.intel.com>
+In-Reply-To: <20241204140828.11699-5-patryk.wlazlyn@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 10 Dec 2024 21:50:50 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jg2pyeYOLZF8BEP3ptEsQT6bsz1H4AzWdp9kJ36Zj00g@mail.gmail.com>
+Message-ID: <CAJZ5v0jg2pyeYOLZF8BEP3ptEsQT6bsz1H4AzWdp9kJ36Zj00g@mail.gmail.com>
+Subject: Re: [PATCH v8 4/4] x86/smp native_play_dead: Prefer
+ cpuidle_play_dead() over mwait_play_dead()
+To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	rafael.j.wysocki@intel.com, peterz@infradead.org, dave.hansen@linux.intel.com, 
+	gautham.shenoy@amd.com, tglx@linutronix.de, len.brown@intel.com, 
+	artem.bityutskiy@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-12-10 at 11:05 +0100, Lukas Wunner wrote:
-> On Sat, Dec 07, 2024 at 07:44:09PM +0100, Niklas Schnelle wrote:
-> > Trying to enable bwctrl on a Thunderbolt port causes a boot hang on som=
+First off, I'd change the subject to something like "x86/smp:
+Eliminate mwait_play_dead_cpuid_hint()" because that's what the patch
+is doing.
+
+On Wed, Dec 4, 2024 at 3:08=E2=80=AFPM Patryk Wlazlyn
+<patryk.wlazlyn@linux.intel.com> wrote:
+>
+> The current algorithm* for looking up the mwait hint for the deepest
+> cstate, in mwait_play_dead_cpuid_hint() code works by inspecting CPUID
+> leaf 0x5 and calculates the mwait hint based on the number of reported
+> substates.
+
+I would just say
+
+"Currently, mwait_play_dead_cpuid_hint() looks up the MWAIT hint of
+the deepest idle state by inspecting CPUID leaf 0x5 with the
+assumption that, if the number of sub-states for a given major C-state
+is nonzero, those sub-states are always represented by consecutive
+numbers starting from 0."
+
+>  This approach depends on the hints associated with them to
+> be continuous in the range [0, NUM_SUBSTATES-1]. This continuity is not
+> documented and is not met on the recent Intel platforms.
+
+And then
+
+"This assumption is not based on the documented platform behavior and
+in fact it is not met on recent Intel platforms."
+
+>
+>  * The current algorithm is implemented in the for loop inspecting edx
+>    in mwait_play_dead_cpuid_hint().
+
+The above sentence does not add any value IMV.
+
+> For example, Intel's Sierra Forest report two cstates with two substates
+> each in cpuid leaf 0x5:
+
+It's "Intel Sierra Forest" and if you said C-states above, please be
+consistent and say C-states here too.
+
+>
+>   Name*   target cstate    target subcstate (mwait hint)
+>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>   C1      0x00             0x00
+>   C1E     0x00             0x01
+>
+>   --      0x10             ----
+>
+>   C6S     0x20             0x22
+>   C6P     0x20             0x23
+>
+>   --      0x30             ----
+>
+>   /* No more (sub)states all the way down to the end. */
+>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>    * Names of the cstates are not included in the CPUID leaf 0x5, they ar=
 e
-> > systems though the exact reason is not yet understood.
->=20
-> Probably worth highlighting the discrete Thunderbolt chip which exhibits
-> this issue, i.e. Intel JHL7540 (Titan Ridge).
+>      taken from the product specific documentation.
+>
+> Notice that hints 0x20 and 0x21 are skipped entirely for the target
+> cstate 0x20 (C6), being a cause of the problem for the current cpuid
+> leaf 0x5 algorithm.
 
-Agree will ad for v2.
+And here
 
->=20
-> > --- a/drivers/pci/pcie/portdrv.c
-> > +++ b/drivers/pci/pcie/portdrv.c
-> > @@ -270,7 +270,8 @@ static int get_port_device_capability(struct pci_de=
-v *dev)
-> >  		u32 linkcap;
-> > =20
-> >  		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
-> > -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
-> > +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
-> > +		    (linkcap & PCI_EXP_LNKCAP_SLS) !=3D PCI_EXP_LNKCAP_SLS_2_5GB)
-> >  			services |=3D PCIE_PORT_SERVICE_BWCTRL;
-> >  	}
->=20
-> This is fine in principle because PCIe r6.2 sec 8.2.1 states:
->=20
->    "A device must support 2.5 GT/s and is not permitted to skip support
->     for any data rates between 2.5 GT/s and the highest supported rate."
->=20
-> However the Implementation Note at the end of PCIe r6.2 sec 7.5.3.18
-> cautions:
->=20
->    "It is strongly encouraged that software primarily utilize the
->     Supported Link Speeds Vector instead of the Max Link Speed field,
+"Notice that hints 0x20 and 0x21 are not defined for C-state 0x20
+(C6), so the existing MWAIT hint lookup in
+mwait_play_dead_cpuid_hint() based on the CPUID leaf 0x5 contents does
+not work in this case."
 
->     so that software can determine the exact set of supported speeds
->     on current and future hardware. This can avoid software being
->     confused if a future specification defines Links that do not
->     require support for all slower speeds."
->=20
-> First of all, the Supported Link Speeds field in the Link Capabilities
-> register (which you're querying here) was renamed to Max Link Speed in
-> PCIe r3.1=C2=A0and a new Link Capabilities 2 register was added which con=
-tains
-> a new Supported Link Speeds field.  Software is supposed to query the
-> latter if the device implements the Link Capabilities 2 register
-> (see the other Implementation Note at the end of PCIe r6.2 sec 7.5.3.18).
+> Remove the old implementation of play_dead MWAIT hint calculation based
+> on the CPUID leaf 0x5 in mwait_play_dead_cpuid_hint() and delegate
+> calling of the mwait_play_dead() to the idle driver.
 
-Would it maybe make sense to update the comment for PCI_EXP_LNKCAP_SLS
-in pci_regs.h to point out that in PCIe r3.1 and newer this is called
-the Max Link Speed field? This would certainly helped me here.
+Well, the above is not exactly what's going on.
 
->=20
-> Second, the above-quoted Implementation Note says that software should
-> not rely on future spec versions to mandate that *all* link speeds
-> (2.5 GT/s and all intermediate speeds up to the maximum supported speed)
-> are supported.
->=20
-> Since v6.13-rc1, we cache the supported speeds in the "supported_speeds"
-> field in struct pci_dev, taking care of the PCIe 3.0 versus later version=
-s
-> issue.
->=20
-> So to make this future-proof what you could do is check whether only a
-> *single* speed is supported (which could be something else than 2.5 GT/s
-> if future spec versions allow that), i.e.:
->=20
-> -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
-> +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
-> +		    hweight8(dev->supported_speeds) > 1)
+I'd say something like
 
-This also makes sense to me in that the argument holds that if there is
-only one supported speed bwctrl can't control it. That said it is
-definitely more general than this patch.
+"Instead of using MWAIT hint lookup that is not guaranteed to work,
+make native_play_dead() rely on the idle driver for the given platform
+to put CPUs going offline into appropriate idle state and, if that
+fails, fall back to hlt_play_dead().
 
-Sadly, I tried it and in my case it doesn't work. Taking a closer look
-at lspci -vvv of the Thunderbolt port as well as a debug print reveals
-why:
+Accordingly, drop mwait_play_dead_cpuid_hint() altogether and make
+native_play_dead() call cpuidle_play_dead() instead of it
+unconditionally with the assumption that it will not return if it is
+successful.  Still, in case cpuidle_play_dead() fails, call
+hlt_play_dead() at the end."
 
-07:00.0 PCI bridge: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan R=
-idge 4C 2018] (rev 06) (prog-if 00 [Normal decode])
-       ...
-                LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Lat=
-ency L1 <1us
-                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
-                LnkCtl: ASPM Disabled; LnkDisable- CommClk+
-                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-                LnkSta: Speed 2.5GT/s, Width x4
-                        TrErr- Train- SlotClk+ DLActive- BWMgmt+ ABWMgmt-
-	...
-                LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retim=
-er- 2Retimers- DRS-
-                LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- Speed=
-Dis-, Selectable De-emphasis: -6dB
-                         Transmit Margin: Normal Operating Range, EnterModi=
-fiedCompliance- ComplianceSOS-
-                         Compliance Preset/De-emphasis: -6dB de-emphasis, 0=
-dB preshoot
-	...
-
-So it seems that on this Thunderbolt chip the LnkCap field
-says 2.5 GT/s only as per the USB 4 spec you quoted but LnkCap2
-is 0x0E i.e. 2.5-8 GT/s.
-
-I wonder if this is related to why the hang occurs. Could it be that
-bwctrl tries to enable speeds above 2.5 GT/s and that causes links to
-fail?
-
-Thanks,
-Niklas
-
+> Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> ---
+>  arch/x86/kernel/smpboot.c | 56 +++++----------------------------------
+>  1 file changed, 7 insertions(+), 49 deletions(-)
+>
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 8a3545c2cae9..82801137486d 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -1272,6 +1272,10 @@ void play_dead_common(void)
+>         local_irq_disable();
+>  }
+>
+> +/*
+> + * We need to flush the caches before going to sleep, lest we have
+> + * dirty data in our caches when we come back up.
+> + */
+>  void __noreturn mwait_play_dead(unsigned int eax_hint)
+>  {
+>         struct mwait_cpu_dead *md =3D this_cpu_ptr(&mwait_cpu_dead);
+> @@ -1317,52 +1321,6 @@ void __noreturn mwait_play_dead(unsigned int eax_h=
+int)
+>         }
+>  }
+>
+> -/*
+> - * We need to flush the caches before going to sleep, lest we have
+> - * dirty data in our caches when we come back up.
+> - */
+> -static inline void mwait_play_dead_cpuid_hint(void)
+> -{
+> -       unsigned int eax, ebx, ecx, edx;
+> -       unsigned int highest_cstate =3D 0;
+> -       unsigned int highest_subcstate =3D 0;
+> -       int i;
+> -
+> -       if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD ||
+> -           boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_HYGON)
+> -               return;
+> -       if (!this_cpu_has(X86_FEATURE_MWAIT))
+> -               return;
+> -       if (!this_cpu_has(X86_FEATURE_CLFLUSH))
+> -               return;
+> -       if (__this_cpu_read(cpu_info.cpuid_level) < CPUID_MWAIT_LEAF)
+> -               return;
+> -
+> -       eax =3D CPUID_MWAIT_LEAF;
+> -       ecx =3D 0;
+> -       native_cpuid(&eax, &ebx, &ecx, &edx);
+> -
+> -       /*
+> -        * eax will be 0 if EDX enumeration is not valid.
+> -        * Initialized below to cstate, sub_cstate value when EDX is vali=
+d.
+> -        */
+> -       if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED)) {
+> -               eax =3D 0;
+> -       } else {
+> -               edx >>=3D MWAIT_SUBSTATE_SIZE;
+> -               for (i =3D 0; i < 7 && edx; i++, edx >>=3D MWAIT_SUBSTATE=
+_SIZE) {
+> -                       if (edx & MWAIT_SUBSTATE_MASK) {
+> -                               highest_cstate =3D i;
+> -                               highest_subcstate =3D edx & MWAIT_SUBSTAT=
+E_MASK;
+> -                       }
+> -               }
+> -               eax =3D (highest_cstate << MWAIT_SUBSTATE_SIZE) |
+> -                       (highest_subcstate - 1);
+> -       }
+> -
+> -       mwait_play_dead(eax);
+> -}
+> -
+>  /*
+>   * Kick all "offline" CPUs out of mwait on kexec(). See comment in
+>   * mwait_play_dead().
+> @@ -1413,9 +1371,9 @@ void native_play_dead(void)
+>         play_dead_common();
+>         tboot_shutdown(TB_SHUTDOWN_WFS);
+>
+> -       mwait_play_dead_cpuid_hint();
+> -       if (cpuidle_play_dead())
+> -               hlt_play_dead();
+> +       /* Below returns only on error. */
+> +       cpuidle_play_dead();
+> +       hlt_play_dead();
+>  }
+>
+>  #else /* ... !CONFIG_HOTPLUG_CPU */
+> --
 
