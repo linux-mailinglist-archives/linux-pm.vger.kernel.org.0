@@ -1,63 +1,46 @@
-Return-Path: <linux-pm+bounces-18887-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BBFC9EA881
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 07:05:58 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E01A9EA96E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 08:20:52 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0633D282ADA
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 06:05:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FDB5188AEB4
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 07:20:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E15C22B58E;
-	Tue, 10 Dec 2024 06:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MWK8/Auv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF9022CBEC;
+	Tue, 10 Dec 2024 07:20:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CD822ACF4;
-	Tue, 10 Dec 2024 06:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2FC13B280;
+	Tue, 10 Dec 2024 07:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733810750; cv=none; b=qe3W9s017TeibbTn5LD42+b5uVBfkcVe/cWgbMCocabLDGm7vxc0HmjidG2nPO1jzB4AB3cMC+oSXTb7C3CVmJBMjoVSOmAmoj/PhI6QOkAWVWIBwODN21rKolXIDx928ralwRgqbXECqDJC1XWCXe7eyob/rbK3iCS4fCPoGQQ=
+	t=1733815250; cv=none; b=QYZFFiTWR0M090wXu6Uc9N7OMagwuIuYvBC0tcVAxRHZr1IrbPUorxJqMaIBBk1RnAIjL6IOlAT5gICxFvVO/LjfyFxntYfS/oYVvlSldWNLfHzbY4Y5sTeSyb7O3wFjPDSkwo9vI7S/cfNrU1lTkGEIgHZgWZLw7AZQjCIws38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733810750; c=relaxed/simple;
-	bh=xZMsiGPBr3KFig/eCS1hup6EpQX6vIIfRri5xQ6Mjd4=;
+	s=arc-20240116; t=1733815250; c=relaxed/simple;
+	bh=4NlQbx3T63+OULWemSfy5ocPZ6KErYVuWVssn3kaxdY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OaKHmw/nNDEDJrAvUozpfTdBIB62PfcFH7LRmCCA9TAIbioyzUd+QIG1R/uxinKARdbwv6NUyWx+G9skwk9QwObePvP4s1/9mKvm02EK3KVqudsjFM2gzo4LJkO6kOYtNSxDfhM0TUj5zCP/fw6YcnynXWU0gcsl2uZnHBKzijM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MWK8/Auv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B9HTibF020616;
-	Tue, 10 Dec 2024 06:05:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	MkWs26YblvhxfVtPRExuYqoHOIwLLa6mY+IhrSx6f48=; b=MWK8/AuvQy+1JffB
-	FSoloKpyyciLhXV6kHj85TQ5SrLBMc4lgEqsDRbtEnTlpDb6KLX3q98MqNYJKxaP
-	nZigo3WYkttIdac9L6ToYcnhzqxkodauyt2f8YHlQ5fEn16vtli5Z/Jkz0XPmAoO
-	jTM+Q8SA6BtFQ6g3CicPKtlGIZlQJt7UEHuiCNTxU/tWZhm+RCs52raviJIUYSyY
-	xCKPNyspC75XeKdwR8OQeOyeYuWcqQEYRTAbjSdAhLj7bwv9rQpviEBXWsYpqb+i
-	pMRmeoUzbYQbEkegIpaTvjQC8FoWDcIDP9MZk55l/BwPTUC+8Err2A1JMCdgBMZ9
-	Ppu8iw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43cdpgqbh0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 06:05:29 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BA65Smj032646
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 06:05:28 GMT
-Received: from [10.217.217.28] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 9 Dec 2024
- 22:05:20 -0800
-Message-ID: <0aee9aeb-1e3e-4d86-8dd5-d134d33c4e11@quicinc.com>
-Date: Tue, 10 Dec 2024 11:35:17 +0530
+	 In-Reply-To:Content-Type; b=RS6lOF0d0SbA4BHCsCa4JES9pLCa4wDPHUhGKaHxszXnNKduk4C4gB6xGHqSRg6ou3utjEgqs0PVAHHu01bN/j68IJXamU/mlZHeRAWKnHdBxMW/O+nZmSeGK6V+X7urlnu+dferUKSQpj8ltOkJIwVh5yUaNfjjX3MEWy4nKjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Y6qps1Z15z21mVL;
+	Tue, 10 Dec 2024 15:19:01 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id D25C01A0188;
+	Tue, 10 Dec 2024 15:20:44 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 10 Dec
+ 2024 15:20:44 +0800
+Message-ID: <522721da-1a5c-439c-96a8-d0300dd0f906@huawei.com>
+Date: Tue, 10 Dec 2024 15:20:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,225 +48,320 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V4 2/4] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <jic23@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <konrad.dybcio@linaro.org>,
-        <daniel.lezcano@linaro.org>, <sboyd@kernel.org>,
-        <quic_subbaram@quicinc.com>, <quic_collinsd@quicinc.com>,
-        <quic_amelende@quicinc.com>, <quic_kamalw@quicinc.com>,
-        <amitk@kernel.org>
-CC: <lee@kernel.org>, <rafael@kernel.org>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <lars@metafoo.de>, <quic_skakitap@quicinc.com>,
-        <neil.armstrong@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>
-References: <20241030185854.4015348-1-quic_jprakash@quicinc.com>
- <20241030185854.4015348-3-quic_jprakash@quicinc.com>
- <6daaee01-36a0-4dc5-86c7-106aabbfff4e@linaro.org>
- <bb877daa-8cdb-4c52-a70a-2206e67d014e@quicinc.com>
- <7a078fd9-65b1-4f8b-a076-ff56c537e8ad@linaro.org>
-Content-Language: en-US
-From: Jishnu Prakash <quic_jprakash@quicinc.com>
-In-Reply-To: <7a078fd9-65b1-4f8b-a076-ff56c537e8ad@linaro.org>
+Subject: Re: [PATCH 3/3] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <fanghao11@huawei.com>,
+	Pierre Gondois <pierre.gondois@arm.com>, <lenb@kernel.org>,
+	<robert.moore@intel.com>, "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+References: <20241114084816.1128647-1-zhenglifeng1@huawei.com>
+ <20241114084816.1128647-4-zhenglifeng1@huawei.com>
+ <9f46991d-98c3-41f5-8133-6612b397e33a@arm.com>
+ <fc7cbe88-64a3-4b65-ae37-3a1f50257f22@huawei.com>
+ <43b4cdee-ba78-4421-bdc6-cefebe3eaf8b@arm.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <43b4cdee-ba78-4421-bdc6-cefebe3eaf8b@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ozOahXidBJ_LG31NkPNbIDXgSSrbNuct
-X-Proofpoint-ORIG-GUID: ozOahXidBJ_LG31NkPNbIDXgSSrbNuct
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 clxscore=1015 suspectscore=0 mlxscore=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412100043
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-Hi Krzysztof,
+Hello Rafael & Viresh
 
-On 11/19/2024 2:32 PM, Krzysztof Kozlowski wrote:
-> On 13/11/2024 15:05, Jishnu Prakash wrote:
->> Hi Krzysztof,
+On 2024/12/9 21:15, Pierre Gondois wrote:
+> Hello Lifeng,
+> 
+> On 12/9/24 09:40, zhenglifeng (A) wrote:
+>> Hello Pierre,
 >>
->> On 10/31/2024 4:28 PM, Krzysztof Kozlowski wrote:
->>> On 30/10/2024 19:58, Jishnu Prakash wrote:
->>>> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
->>>> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
+>> On 2024/12/6 22:23, Pierre Gondois wrote:
+>>> Hello Lifeng,
+>>>
+>>> On 11/14/24 09:48, Lifeng Zheng wrote:
+>>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+>>>> driver.
 >>>>
->>>> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
->>>> going through PBS(Programmable Boot Sequence) firmware through a single
->>>> register interface. This interface is implemented on an SDAM (Shared
->>>> Direct Access Memory) peripheral on the master PMIC PMK8550 rather
->>>> than a dedicated ADC peripheral.
->>>>
->>>> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
->>>> channels and virtual channels (combination of ADC channel number and
->>>> PMIC SID number) per PMIC, to be used by clients of this device.
->>>>
->>>> Co-developed-by: Anjelique Melendez <quic_amelende@quicinc.com>
->>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->>>> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 >>>> ---
->>>
->>> This has still test failures, so limited review follows.
->>>
->>>>  properties:
->>>>    compatible:
->>>> @@ -23,14 +27,20 @@ properties:
->>>>            - const: qcom,pms405-adc
->>>>            - const: qcom,spmi-adc-rev2
->>>>        - enum:
->>>> -          - qcom,spmi-vadc
->>>> -          - qcom,spmi-adc5
->>>>            - qcom,spmi-adc-rev2
->>>> +          - qcom,spmi-adc5
->>>> +          - qcom,spmi-adc5-gen3
->>>>            - qcom,spmi-adc7
->>>> +          - qcom,spmi-vadc
->>>>  
->>>>    reg:
->>>> -    description: VADC base address in the SPMI PMIC register map
->>>> -    maxItems: 1
->>>> +    description:
->>>> +      For compatible properties "qcom,spmi-vadc", "qcom,spmi-adc5", "qcom,spmi-adc-rev2"
->>>> +      and "qcom,spmi-adc7", reg is the VADC base address in the SPMI PMIC register map.
->>>> +      For compatible property "qcom,spmi-adc5-gen3", each reg corresponds to an SDAM
->>>> +      peripheral base address that is being used for ADC functionality.
->>>
->>> This description is not really needed. You need to provide constraints
->>> in schema.
-
-...
-
->>>>        qcom,hw-settle-time:
->>>> @@ -135,9 +153,24 @@ patternProperties:
->>>>              from the ADC that is an average of multiple samples. The value
->>>>              selected is 2^(value).
->>>>  
->>>> +      qcom,adc-tm:
->>>> +        description:
->>>> +          Indicates if ADC_TM monitoring is done on this channel.
->>>
->>> What is "ADC_TM"? Why this would be property of a board? This does not
->>> look like suitable for DT, at least based on such very vague explanation.
->>>
->>>> +          Defined for compatible property "qcom,spmi-adc5-gen3".
->>>
->>> Drop redundant.
->>>
->>>> +          This is the same functionality as in the existing QCOM ADC_TM
->>>> +          device, documented at devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml.
->>>
->>> What does it mean? How property can represent functionality of entire
->>> binding?
->>>
->>> BTW, use full paths when refering to files.
->>>
->>
->> To address all your above questions for ADC_TM:
->>
->> The file "Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml" describes
->> the Qualcomm ADC thermal monitoring device, which existed as a separate device on older
->> PMIC generations. ADC_TM refers to this functionality.
->>
->> In ADC5 Gen3, ADC_TM functionality is combined with the existing ADC read functionality
->> described in this file, under a single device.
->>
->> In the earlier ADC_TM DT nodes, each child node would describe one of the IIO ADC channels being
->> monitored by ADC_TM HW. In this ADC5 Gen3 device, setting the property 'qcom,adc-tm' for a channel
->> node means that it will also be monitored in HW exactly like an ADC_TM channel.
->>
->> It can be considered a hardware property as the monitoring is done by a sequence under
->> PBS (Programmable Boot Sequence, can be considered firmware), which periodically gets the
->> channel reading and checks it against upper/lower thresholds set by clients of this driver, 
->> for threshold violations.
-> 
-> So you want to configure channels in different way? Then specify it
-> precisely - what is the nature of this feature/configuration. I have no
-> clue what is ADC TM and you keep using it over and over.
-> 
-
-Yes, it is a different channel configuration, I'll update the explanation in the next patch.
-
-For now, to explain the ADC_TM functionality:
-
-ADC_TM is a *threshold monitoring* feature in HW which can be enabled on *any* ADC channel, to trigger an IRQ for threshold violation.
-It was implemented in a separate device earlier, for which we had a separate ADC_TM driver.
-
-In Gen3, this feature can be enabled in the same ADC device for any channel and threshold monitoring/IRQ triggering is handled in FW (PBS)
-instead of having another dedicated HW block (old design).
-
-
-> I still wait for answer why this is a property of a board.
-> 
-
-Setting this property on a channel indicates that HW is capable of monitoring that channel and this monitoring requirement would be based on board design.
-
->>
->>
->>>> +        type: boolean
+>>>>    .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++
+>>>>    drivers/cpufreq/cppc_cpufreq.c                | 141 ++++++++++++++++++
+>>>>    2 files changed, 195 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>> index 206079d3bd5b..ba7b8ea613e5 100644
+>>>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
+>>>>            This file is only present if the acpi-cpufreq or the cppc-cpufreq
+>>>>            drivers are in use.
+>>>>    +What:        /sys/devices/system/cpu/cpuX/cpufreq/auto_select
+>>>> +Date:        October 2024
+>>>> +Contact:    linux-pm@vger.kernel.org
+>>>> +Description:    Autonomous selection enable
 >>>> +
->>>>      required:
->>>>        - reg
->>>>  
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - '#address-cells'
->>>> +  - '#size-cells'
->>>> +  - '#io-channel-cells'
+>>>> +        Read/write interface to control autonomous selection enable
+>>>> +            Read returns autonomous selection status:
+>>>> +                0: autonomous selection is disabled
+>>>> +                1: autonomous selection is enabled
 >>>> +
-
-...
-
+>>>> +            Write '1' to enable autonomous selection.
+>>>> +            Write '0' to disable autonomous selection.
 >>>> +
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            const: qcom,spmi-adc5-gen3
+>>>> +        This file only presents if the cppc-cpufreq driver is in use.
 >>>> +
->>>> +    then:
->>>> +      properties:
->>>> +        reg:
->>>> +          minItems: 1
+>>>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
+>>>> +Date:        October 2024
+>>>> +Contact:    linux-pm@vger.kernel.org
+>>>> +Description:    Autonomous activity window
+>>>> +
+>>>> +        This file indicates a moving utilization sensitivity window to
+>>>> +        the platform's autonomous selection policy.
+>>>> +
+>>>> +        Read/write an integer represents autonomous activity window (in
+>>>> +        microseconds) from/to this file. The max value to write is
+>>>> +        1270000000 but the max significand is 127. This means that if 128
+>>>> +        is written to this file, 127 will be stored. If the value is
+>>>> +        greater than 130, only the first two digits will be saved as
+>>>> +        significand.
+>>>> +
+>>>> +        Writing a zero value to this file enable the platform to
+>>>> +        determine an appropriate Activity Window depending on the workload.
+>>>> +
+>>>> +        Writing to this file only has meaning when Autonomous Selection is
+>>>> +        enabled.
+>>>> +
+>>>> +        This file only presents if the cppc-cpufreq driver is in use.
+>>>> +
+>>>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
+>>>> +Date:        October 2024
+>>>> +Contact:    linux-pm@vger.kernel.org
+>>>> +Description:    Energy performance preference
+>>>> +
+>>>> +        Read/write an 8-bit integer from/to this file. This file
+>>>> +        represents a range of values from 0 (performance preference) to
+>>>> +        0xFF (energy efficiency preference) that influences the rate of
+>>>> +        performance increase/decrease and the result of the hardware's
+>>>> +        energy efficiency and performance optimization policies.
+>>>> +
+>>>> +        Writing to this file only has meaning when Autonomous Selection is
+>>>> +        enabled.
+>>>> +
+>>>> +        This file only presents if the cppc-cpufreq driver is in use.
+>>>> +
+>>>>      What:        /sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
+>>>>    Date:        August 2008
+>>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>>> index 2b8708475ac7..b435e1751d0d 100644
+>>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>>> @@ -792,10 +792,151 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
+>>>>          return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
+>>>>    }
+>>>> +
+>>>> +static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
+>>>> +{
+>>>> +    u64 val;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = cppc_get_auto_sel(policy->cpu, &val);
+>>>> +
+>>>> +    /* show "<unsupported>" when this register is not supported by cpc */
+>>>> +    if (ret == -EOPNOTSUPP)
+>>>> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
+>>>> +
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    return sysfs_emit(buf, "%lld\n", val);
+>>>> +}
+>>>> +
+>>>> +static ssize_t store_auto_select(struct cpufreq_policy *policy,
+>>>> +                 const char *buf, size_t count)
+>>>> +{
+>>>> +    unsigned long val;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = kstrtoul(buf, 0, &val);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    if (val > 1)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    ret = cppc_set_auto_sel(policy->cpu, val);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    return count;
+>>>> +}
+>>>> +
+>>>> +#define AUTO_ACT_WINDOW_SIG_BIT_SIZE    (7)
+>>>> +#define AUTO_ACT_WINDOW_EXP_BIT_SIZE    (3)
+>>>> +#define AUTO_ACT_WINDOW_MAX_SIG    ((1 << AUTO_ACT_WINDOW_SIG_BIT_SIZE) - 1)
+>>>> +#define AUTO_ACT_WINDOW_MAX_EXP    ((1 << AUTO_ACT_WINDOW_EXP_BIT_SIZE) - 1)
+>>>> +/* AUTO_ACT_WINDOW_MAX_SIG is 127, so 128 and 129 will decay to 127 when writing */
+>>>> +#define AUTO_ACT_WINDOW_SIG_CARRY_THRESH 129
 >>>
->>> Why this is flexible?
+>>> Maybe this would be better to place these macros in include/acpi/cppc_acpi.h
+>>> (with a CPPC_XXX prefix)
 >>
->> I'm assuming you are asking why it can be either 1 or 2 instead of exactly 2.
->> Both configurations can be supported in HW and it varies between boards. Some of them
->> have exactly one SDAM peripheral assigned for ADC usage and some may have two.
+>> Will move them, Thanks.
+>>
+>>>
+>>>> +
+>>>> +static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
+>>>> +{
+>>>> +    int sig, exp;
+>>>> +    u64 val;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = cppc_get_auto_act_window(policy->cpu, &val);
+>>>> +
+>>>> +    /* show "<unsupported>" when this register is not supported by cpc */
+>>>> +    if (ret == -EOPNOTSUPP)
+>>>> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
+>>>> +
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    sig = val & AUTO_ACT_WINDOW_MAX_SIG;
+>>>> +    exp = (val >> AUTO_ACT_WINDOW_SIG_BIT_SIZE) & AUTO_ACT_WINDOW_MAX_EXP;
+>>>> +
+>>>> +    return sysfs_emit(buf, "%lld\n", sig * int_pow(10, exp));
+>>>> +}
+>>>> +
+>>>> +static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
+>>>> +                     const char *buf, size_t count)
+>>>> +{
+>>>> +    unsigned long usec;
+>>>> +    int digits = 0;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = kstrtoul(buf, 0, &usec);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    if (usec > AUTO_ACT_WINDOW_MAX_SIG * int_pow(10, AUTO_ACT_WINDOW_MAX_EXP))
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    while (usec > AUTO_ACT_WINDOW_SIG_CARRY_THRESH) {
+>>>> +        usec /= 10;
+>>>> +        digits += 1;
+>>>> +    }
+>>>> +
+>>>> +    if (usec > AUTO_ACT_WINDOW_MAX_SIG)
+>>>> +        usec = AUTO_ACT_WINDOW_MAX_SIG;
+>>>> +
+>>>> +    ret = cppc_set_auto_act_window(policy->cpu,
+>>>> +                       (digits << AUTO_ACT_WINDOW_SIG_BIT_SIZE) + usec);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    return count;
+>>>> +}
 > 
-> That's odd. How this can vary between boards with the same, exactly the
-> same PMIC? Do you program entirely different FW for different boards
-> with the same hardware (PMIC)?
+> Also I tested the logic and it was working correctly for me.
+> 
+>>>> +
+>>>> +static ssize_t show_energy_perf(struct cpufreq_policy *policy, char *buf)
+>>>> +{
+>>>> +    u64 val;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = cppc_get_epp_perf(policy->cpu, &val);
+>>>> +
+>>>> +    /* show "<unsupported>" when this register is not supported by cpc */
+>>>> +    if (ret == -EOPNOTSUPP)
+>>>> +        return sysfs_emit(buf, "%s\n", "<unsupported>");
+>>>> +
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    return sysfs_emit(buf, "%lld\n", val);
+>>>> +}
+>>>> +
+>>>> +#define ENERGY_PERF_MAX    (0xFF)
+>>>
+>>> Same comment to move to include/acpi/cppc_acpi.h
+>>>
+>>>> +
+>>>> +static ssize_t store_energy_perf(struct cpufreq_policy *policy,
+>>>> +                 const char *buf, size_t count)
+>>>> +{
+>>>> +    unsigned long val;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = kstrtoul(buf, 0, &val);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    if (val > ENERGY_PERF_MAX)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    ret = cppc_set_epp(policy->cpu, val);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    return count;
+>>>> +}
+>>>> +
+>>>>    cpufreq_freq_attr_ro(freqdomain_cpus);
+>>>> +cpufreq_freq_attr_rw(auto_select);
+>>>> +cpufreq_freq_attr_rw(auto_act_window);
+>>>> +cpufreq_freq_attr_rw(energy_perf);
+>>>
+>>> It might be better from a user PoV to hide the following entries:
+>>> - auto_act_window
+>>> - energy_perf
+>>> if auto_select is not available or disabled.
+>>
+>> Users might like to modify the value of auto_act_window and energy_perf
+>> before turning on auto_select. So I think it is freer for users to read and
+>> write them no matter what auto_select is. What do you think?
+> 
+> Autonomous selection is not the most common case for the CPPC cpufreq drivers,
+> so these new files might bring questions to people currently using it.
+> 
+> On the other side, making these files visible only when 'auto_select' is enabled
+> will require additional logic in the code (while the current implementation is
+> quite clear).
+> 
+> I think Rafael or Viresh should take the decision. So it might be better to
+> directly ping them,
+> 
+> Regards,
+> Pierre
 
-That is actually true, the FW can be different per SOC.
+Since Pierre and me have discussed about whether or not to show
+auto_act_window and energy_perf when auto_select is disabled. It seems
+like whether to show these two files has their own points. We'd like to
+ask your advice and look forward to your reply!
 
-The number of PMIC SDAM peripherals allocated for ADC is not correlated with the PMIC used, 
-it is programmed in FW (PBS) and is fixed per SOC, based on the SOC requirements.
-
-The number of ADC SDAMs used on a given SOC with a given PMIC (like PMK8550) will be fixed, but it is possible for
-the same PMIC to have 1 of its SDAMs allocated for ADC when used on one SOC and 2 SDAMs allocated for ADC when the PMIC is used on another SOC.  
-
-All boards using a particular (SOC + PMIC) combination will have the same number of ADC SDAMs supported on that PMIC.
-
-Thanks,
-Jishnu
-
+Regards,
+Lifeng
 
 > 
-> This is programming model, so any differences here must be obvious.
-> 
-> Best regards,
-> Krzysztof
+>>
+>>>
+>>> ------
+>>>
+>>> Also just for reference, in ACPI 6.5, s8.4.6.1.2.3 Desired Performance Register
+>>> """
+>>> When Autonomous Selection is enabled, it is not necessary for OSPM to assess processor workload performance
+>>> demand and convey a corresponding performance delivery request to the platform via the Desired Register. If the
+>>> Desired Performance Register exists, OSPM may provide an explicit performance requirement hint to the platform by
+>>> writing a non-zero value.
+>>> """
+>>>
+>>> So it seems it still makes sense to have cpufreq requesting a certain performance
+>>> level even though autonomous selection is enabled.
+>>
+>> We did struggle with this. This solves our doubts. Thanks!
+>>
+>>>
+>>
 > 
 
 
