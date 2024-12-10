@@ -1,136 +1,141 @@
-Return-Path: <linux-pm+bounces-18913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F06D9EB292
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 15:03:33 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68F469EB2A0
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 15:05:40 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 071E42898AE
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 14:03:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E94FF16E3E9
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 14:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8511B5EA4;
-	Tue, 10 Dec 2024 14:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07ADE1BC065;
+	Tue, 10 Dec 2024 14:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MxHEZvkj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mUuKazj7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F151B4220
-	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 14:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484CA1B86E9
+	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 14:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733839359; cv=none; b=T+FsvgKvDXstw2E7AA6JNYZiyPxjtNPUi2w7IMJITqOW//RvqOM3AqA6tov5cRS+IXWnjj7EArn9FksZ+PNQtQ33gf8JCZ5e9BhYjg18FuX0gDcA/Op+JYxriCU9IjKKL/eU4hRBuDpxMGIlEDd8xlYHMBQPy1nIgg6oo1V24tQ=
+	t=1733839362; cv=none; b=cFQ5MnJWy2TQ2koYkQqVu0RZkfkDyfmCI1WtcT6ikOBCXQtfmTlKdqJ9RHPLfwSWVbAdXKsjjBFDA1ebFTRLWCiR21T8FnL6gvQ+IqmrbkwFGeeIeBvmp7BHznKPvg70zuP0uK24q2ioXFo+7Jlg/329igoTgPbHBmRyvS1HI4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733839359; c=relaxed/simple;
-	bh=+VAbStbA6Dtk2xH4PoQloVbS2Ysd+xnTztR7r3KJspw=;
+	s=arc-20240116; t=1733839362; c=relaxed/simple;
+	bh=aMYlasDeJRUJ32CNMkhoq5ueHiY13RagJkPagQJl8N8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bfmJw4dSXWaHGeZWHGznuNTvf/gLwxaj6sB5HM1mSo60crRZ5yYIhDuNY0oKwiHNrmEgrSHoVbqzwrh3S7JOV+WJZnOJOixEQox+xnHdBrwN0sP2+sTQSoWLTj3Px55tUUi25pV65c0p0FvBl09TzSSJzz9F23JrdkoMKNoAaxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MxHEZvkj; arc=none smtp.client-ip=209.85.219.182
+	 To:Cc:Content-Type; b=uvKu9gwsRKIi9iV9AI7BSHeso4wsE2zIUYPD5EONxgHmullEZE7HrSacJJTOMi7VMSbAYCQLceRsu7Y9cEf06bherTeP86DQUOQ7Mi6+ENELQTvnZcx7Vpt8ztqccg6cSiAqrBVPb1sS++watE2sB9N/0hawnnPuS9YLS9qukXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mUuKazj7; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e398823d6aaso6153979276.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 06:02:37 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6efa1e49ef0so56519657b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 06:02:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733839357; x=1734444157; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1733839360; x=1734444160; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=svYQuLfhEmqpsKGv5zmj/4CoEXZ8crstXQtR8B+VCUI=;
-        b=MxHEZvkjU5pWnoR5pH6qtN/gX7VR/YJlN4Qaokl/dCjTrvFJ+XD9nDW3YRARTDddyK
-         4dIm+8h2kJ9a4honmbTqN1FfqzMAKktZkrlWPS8QeValUU7eUmoY3/deTa3JA0th6rhd
-         YIxjS18T0tnBoawtwAB2WAYMDd1vJBM8Ma8r4lka5lpXeRtTznWsDz6/Vc0kOeyY4stG
-         Bl9c7nSgBe2zchdjy91LYRPOe9MdyF9RBS/rhvQLfP9HqHoy3bOh8Xpbt2VweRYAA3L3
-         T9D+xJjWr9BnhtM6ty3w9YZaVmhVHCcvkAfZAx1XKuBmipouBtrcUIPI0WkitRdtdVXZ
-         v/PQ==
+        bh=nf1alUKYDHbJzrOQtPD7/2cDvoI+WL/sLXAyfBpVNbU=;
+        b=mUuKazj7oh0+fOTEh7Tag7gmc0Jyg5J4mXkorkdrP2Zxh/VEwlyzskqutYES5r+lAo
+         hyJuq8fzsbK6BGzFlAM3ItLQqdd4dUeJlCdwxFMzPjXrkZwrTbLZ9630hxXPWZ83hafp
+         7YVpmQDcWinpREjS14P4grJ0l+AITeiNItnXZYyzySQfBPCsmvxWpK97Dd8tAnayMMhv
+         Ph0N5cDYNrpzj/6ee3ejyrt4Brcwnjnn9EF5tPnyVNpfiI5TpeAW+z1oQW1H271/pXAv
+         PqFzBkylbr0UaaCKifiu/7BIL/BvFY42GoVUBGwoKpHsY25XXo7nvckaAinDyjVULsLp
+         m2Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733839357; x=1734444157;
+        d=1e100.net; s=20230601; t=1733839360; x=1734444160;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=svYQuLfhEmqpsKGv5zmj/4CoEXZ8crstXQtR8B+VCUI=;
-        b=mX6DMVbaN9NQwCOot91+FfOAtbV8QhjB2Hmj3u2mzptGA5AyXD6Rab3MiyRUzIbfCs
-         zzIVLxG85vKMASxf275+fszLOQxkTgiW9XwEPSSlJzgmScqCrJZB6cAvPMZv+29jY1cV
-         i/nLBw0Vpo+CXjmq2shTGlre0uy2IzfHWFEPgCzAqsfjUA/I+XzPOD3160/nDgDdDZ8p
-         SyFh+uqJ7O0x3twY0+AAWWzmVfUzay94wpFUEK9XgwUa0y7JRpabxKCOAZt4htRr6QNJ
-         MqmqmHE0klPAZjIsf32Y2eXnYjmclYdGXM38kmw5kiOT5tSGCfV7e3xNDauYs/nJ/UBq
-         zshQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6mB+a5RIEoF3ew1kM+yocIaWGkxDCC3XXdUyJSaKBah952V1g4x1eB9BQ9/+SO45rCMnEuvT2VA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzryaRrDmLhTyrXyvPd2O9B/JYHH4v6tyY7rmVL/ebxFbMeon6q
-	XcsaPVEerlLxhsJ83ERsN7RTGa9QO+BCpjAzhtF5l+UAVwSZE9epi/1DXxqUk4G/74eBEgU7pnv
-	lviykAX2Tubl6TdXmo7ZPyMIejBoWlI0bkmXCzyFqa35HrbHV
-X-Gm-Gg: ASbGnct3JtoZfFm69vCy3fVJFyNR8c+dNHYB7Ws37c/gToWN4o2CdsyJoi7eGNBnJYP
-	nYEpUlAMv7SWFbZeOCtAPAjxhxCilx/vQ+T9G
-X-Google-Smtp-Source: AGHT+IEzJ57H7PCrVou6RI7FrtDurF9EfDkpfB6eGI/q6LZuE371TG4kiUTgbNmxJFhn26kfli9GuUqdDrNxsUfzIjY=
-X-Received: by 2002:a05:6902:1501:b0:e38:b399:590b with SMTP id
- 3f1490d57ef6-e3a5da3808amr3395172276.2.1733839357084; Tue, 10 Dec 2024
- 06:02:37 -0800 (PST)
+        bh=nf1alUKYDHbJzrOQtPD7/2cDvoI+WL/sLXAyfBpVNbU=;
+        b=QLUlv6MxPXX29wgFm1HdEWnc6XDpngkqlRfCoeyDJovtxchzJtvDo4rHBDY6IDB5YU
+         8Hcwiw54gKjxGSGY7Qnerv6tONZ4wtWg3K07KCU9EBRZNSySigNjlO0xDUrhW/i/a5T3
+         JPUB/oCLhUZW7I31365Gx+ZoYhZBLYTADjPDSV6gAC8Jpn2PTZLUBCvfV6j2xuZJaD4k
+         XS/9V28XpPnwptgThbuuB5PhyVDH3MmFK6pekbkBhsOtNV5sPa9MZC/t5BA2WZyCZeCk
+         Jo/ju/dAq1eMeAIIsc8/DKhZ1WtQALkygj9BxhK/f/01yd3Unv+YqcIp0ToddxV4CeqB
+         NvpQ==
+X-Gm-Message-State: AOJu0YwXQVXWb7+552Ngdi6xP/Dw+wgRfjIS2X68ixApnZgMbMp7Ty+3
+	OPRtlTtaGe2mr2uTYMexQOSQb7Odxd6/ArqxCvkbqnSsjgnDvuw7bpr1JKSN5/VpvkP7Yo3oauG
+	MGlHdFVsFHa9vPENgli/KkcaY7bsiOBdPFHkGkw==
+X-Gm-Gg: ASbGncu68bp6dbG9fclaxB4r6qo8U9jNJaBqpK8PrvpGnLoUM+KGEvZKf/cghcdAAz2
+	MpQNRGam6qY6uAibjX7AqyzETO2bM1maD2sX3
+X-Google-Smtp-Source: AGHT+IHLRbGi59lCkKe21fHCD52MhJo63vY1GxLN7FsYIjyR+ox+8Qq2xjQAj0m60a2wLlxdHI5Bsw1heijOTMpYZdc=
+X-Received: by 2002:a05:6902:1ac3:b0:e38:dfe:3c88 with SMTP id
+ 3f1490d57ef6-e3a0b0bd7cfmr16666843276.12.1733839360151; Tue, 10 Dec 2024
+ 06:02:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241206112731.98244-1-peng.fan@oss.nxp.com> <20241206112731.98244-2-peng.fan@oss.nxp.com>
-In-Reply-To: <20241206112731.98244-2-peng.fan@oss.nxp.com>
+References: <20241206-lpm-v6-10-constraints-pmdomain-v6-0-833980158c68@baylibre.com>
+In-Reply-To: <20241206-lpm-v6-10-constraints-pmdomain-v6-0-833980158c68@baylibre.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 10 Dec 2024 15:02:01 +0100
-Message-ID: <CAPDyKFpWfqpgmMpuq+69ee2FU7wOSgHUmfEcLpS1Dy2vx8c-MA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] pmdomain: gpcv2: Suppress bind attrs
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, linux-pm@vger.kernel.org, aford173@gmail.com, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Date: Tue, 10 Dec 2024 15:02:04 +0100
+Message-ID: <CAPDyKFo9N8M73Z6Ltsbnd-WR-jYAqBedAHndViSD7YaKKYgBsA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/3] pmdomain: ti_sci: collect and send low-power mode constraints
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Dhruva Gole <d-gole@ti.com>, 
+	Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
+	Markus Schneider-Pargmann <msp@baylibre.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 6 Dec 2024 at 12:28, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+On Fri, 6 Dec 2024 at 23:13, Kevin Hilman <khilman@baylibre.com> wrote:
 >
-> From: Peng Fan <peng.fan@nxp.com>
+> The latest (10.x) version of the firmware for the PM co-processor (aka
+> device manager, or DM) adds support for a "managed" mode, where the DM
+> firmware will select the specific low power state which is entered
+> when Linux requests a system-wide suspend.
 >
-> The gpcv2 drivers on imx8m series are registered as platform
-> devices and this opens the possibility of reloading the driver
-> at runtime.
+> In this mode, the DM will always attempt the deepest low-power state
+> available for the SoC.
 >
-> But this doesn't actually work. There are some hardware sequence
-> dependecy between blk ctrl and gpc, also power domains are used
-> by other peripherals, so fix this by explicitly suppressing bind
-> attrs.
+> However, Linux (or OSes running on other cores) may want to constrain
+> the DM for certain use cases.  For example, the deepest state may have
+> a wakeup/resume latency that is too long for certain use cases.  Or,
+> some wakeup-capable devices may potentially be powered off in deep
+> low-power states, but if one of those devices is enabled as a wakeup
+> source, it should not be powered off.
 >
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> These kinds of constraints are are already known in Linux by the use
+> of existing APIs such as per-device PM QoS and device wakeup APIs, but
+> now we need to communicate these constraints to the DM.
+>
+> For TI SoCs with TI SCI support, all DM-managed devices will be
+> connected to a TI SCI PM domain.  So the goal of this series is to use
+> the PM domain driver for TI SCI devices to collect constraints, and
+> communicate them to the DM via the new TI SCI APIs.
+>
+> This is all managed by TI SCI PM domain code.  No new APIs are needed
+> by Linux drivers.  Any device that is managed by TI SCI will be
+> checked for QoS constraints or wakeup capability and the constraints
+> will be collected and sent to the DM.
+>
+> This series depends on the support for the new TI SCI APIs (v10) and
+> was also tested with this series to update 8250_omap serial support
+> for AM62x[2].
+>
+> [1] https://lore.kernel.org/all/20240801195422.2296347-1-msp@baylibre.com
+> [2] https://lore.kernel.org/all/20240807141227.1093006-1-msp@baylibre.com/
+>
+> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> ---
+> Changes in v6:
+> - fix build warning on arm32 when building with W=1 and CONFIG_PM_SLEEP=n
+> - rebase onto v6.13-rc1
+> - fix latency units: convert usecs (PM QoS) to msecs (TI SCI)
+> - all dependencies are now merged in v6.13-rc1
+> - Link to v5: https://lore.kernel.org/r/20241101-lpm-v6-10-constraints-pmdomain-v5-0-3011aa04622f@baylibre.com
 
-Applied for next, thanks!
+v6 applied for next and by amending patch1 to deal with the sorting of
+include files, thanks!
+
+[...]
 
 Kind regards
 Uffe
-
-
-> ---
->  drivers/pmdomain/imx/gpcv2.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
-> index e67ecf99ef84..4db4d666f5bf 100644
-> --- a/drivers/pmdomain/imx/gpcv2.c
-> +++ b/drivers/pmdomain/imx/gpcv2.c
-> @@ -1437,6 +1437,7 @@ static struct platform_driver imx_pgc_domain_driver = {
->         .driver = {
->                 .name = "imx-pgc",
->                 .pm = &imx_pgc_domain_pm_ops,
-> +               .suppress_bind_attrs = true,
->         },
->         .probe    = imx_pgc_domain_probe,
->         .remove = imx_pgc_domain_remove,
-> @@ -1549,6 +1550,7 @@ static struct platform_driver imx_gpc_driver = {
->         .driver = {
->                 .name = "imx-gpcv2",
->                 .of_match_table = imx_gpcv2_dt_ids,
-> +               .suppress_bind_attrs = true,
->         },
->         .probe = imx_gpcv2_probe,
->  };
-> --
-> 2.37.1
->
 
