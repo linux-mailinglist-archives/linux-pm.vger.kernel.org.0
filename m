@@ -1,147 +1,129 @@
-Return-Path: <linux-pm+bounces-18924-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18925-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFD9A9EB712
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:51:51 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 374709EB71F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:52:35 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D275165BD2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 16:52:24 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F963231C8C;
+	Tue, 10 Dec 2024 16:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="EeTvAvgX"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE8C52831B6
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 16:51:49 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EECE32153DC;
-	Tue, 10 Dec 2024 16:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYini5tk"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCD61A76AC;
-	Tue, 10 Dec 2024 16:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754A5230D2C;
+	Tue, 10 Dec 2024 16:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733849506; cv=none; b=BjilVpQYJ9GWz2XPuMrGq2ObS7Rf9jwcn4ay07gFKxPijQmRGBgD7+Q9uo8UtM3ta2oVC2VAPw2mvZRtsxatMSqbIb4jfsMpSU9mG9CakwXO9/i1BgVkfaX758lfIk2oRczwClli6NmCfiDXJswf7+rE5bRKN1q0t7MJxDl8tjs=
+	t=1733849517; cv=none; b=LBbX5OYXCbvCOzmgw/XTLvZiaf5c//uYteBieKlkJZ5+yV4FUDHpiSOdLsI/kgcrhYUzmpgRcYXU785nnS7O5zm5Qq5I1IC4WN5esLzjndnXLS4a1XzN1jkiC+U0BxZRtefrKUU0konkYq5BtbJ/f2Dv7vrqLE6BDn9728XsEso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733849506; c=relaxed/simple;
-	bh=Mxw/pGwRlstlF+sMsnwXXRjVPqmnOa+upzVXrXLGTd8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ng53blHNkMe5wX5GUgknG3nmm+E19UOBAPwU6CcjKBGikfsFVPZeBjpzQSDjjC9s3C+g2t+N9WThgbACzsLHOLmT0+MNS4Er1hH3/QUw1G5OoAEpwrdycUvKlFgV810ikEt/geVn8vRSqNqu5057ryNcfqrku47ZgyvVn+5uKok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYini5tk; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21636268e43so35163455ad.2;
-        Tue, 10 Dec 2024 08:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733849505; x=1734454305; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuzEEwZKQf9j9mqhaN0lST/eQY9CbMt5tK8I46FKdZM=;
-        b=XYini5tkdpS1NzH6m0i0TTJ6MkThJ1d+n9qrQNzp7/1DvLw24m1iFxqeiWhVymJi5B
-         3oQY5WNEcP+zPdNX+bRqqBkHtIDpj9OBt7LZ67tlWZpowCdC9QqpTdNvfUX4r5NxN/A6
-         BRCDKOXYiFeT/HJC8XUGe+VtjWKHWn27NVL8aM6nHbudtJAlsTOHRIQLbJDRkA9Ioomg
-         +NGEimPDf2BRvJFHcYM5eRfV0RKZuhsYkbhZln0ikmZuO4MJY2xM+Ym20pteNtZauaPg
-         xvWkVwdt9465CAS1cwVZHKkAFhJ84WPFwp1ixeBHbccdggLOFCMILuX6V94gzKe44N1w
-         xMFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733849505; x=1734454305;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JuzEEwZKQf9j9mqhaN0lST/eQY9CbMt5tK8I46FKdZM=;
-        b=bpvRMZMjtSxQqUJeMyuMZlaq0/2irSdVVNp9EOltpvO/IXPRyG+hTjUT3zVe7o2SR3
-         yCgPKv8TDcbNi3iQ4ptAVYnjeEPK9j5SO2urCOjFTzzjHW2DMwdmbpoAyBx9IvuC5L6b
-         oIu84la+o2yg8UXAcOOqxAdyqeybeQKN8aaIsKfO42CTqpgCjWNy+eZg2jmpNBYu7MBl
-         0fnqzbkU9dT7bl9PzlI26d5WXoPReWrzKZ/HnugAfVR/EHv2KPTBIFelg5lD1Q/RMl3S
-         PZy5HqSuPs6e1nd5ihY3D8BtyVVQ7sgR5LvsHu2vkDRssiiS7um0q9zHS3yfEFmJPra4
-         wNSg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2Gq+as6KUo51q0HvTxz3Ky7hhtmQiB40LGwHm3MyG0Is+k9f7hSgRoANh37E4kXqX4Yn/B9M7czg=@vger.kernel.org, AJvYcCWIsc6PWJ9iQp4GXeeHctnxOboE16XnyinQJ6Z4Lkx3W8xWh9YSdvGIVDTzbfsbhzxgmhi2goeDKST0bNk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8qRa/JeTtCN1I0jGCgNLcQcie0eC9HbFMeDGov8uerGuDo8OL
-	MXzZgbp6vlUJKv5DBv0GqTrw4i8f/Nh1MIk4JY2lh9xVg+K+8/c8
-X-Gm-Gg: ASbGncv0b06jAnfgvW5ssBG6LodDDy2C20u4xJoZ6f0rv0yGe9YxXOGDwK4o76IlWsG
-	VS/FRzSdz83o4i91nySSOBGOAcd9Q+BIcJA/cxunthRbEgwb1ekJ+ATfGX5oPqe80DmkIVZBibe
-	9ZWraGCBco4rsm0IDcp0uZAamPsBGKwvIWXEw/DvnKWIBPmYNsOUXtraBxOi2Y4Xz1tocxecJ61
-	UodmxDRimbgGXS8UsDH0/1iem7ATi88Mcjp1fnsHgjSyX6SzWvQzkLYod+/L4+YMPGKJ4G6EKkK
-	D85s1BzOx7MzdI0c7XITqVJlgAth
-X-Google-Smtp-Source: AGHT+IHq5GJLA69hWJIqMBI3xX9I2B1vs+oiOQMLHk1Gt8OrfhdtpCShimUSU+G1kzy0p/Cgwakamg==
-X-Received: by 2002:a17:902:e750:b0:216:3c36:69a7 with SMTP id d9443c01a7336-2166a0987ddmr69103725ad.45.1733849504588;
-        Tue, 10 Dec 2024 08:51:44 -0800 (PST)
-Received: from localhost ([2a00:79e1:2e00:1301:12e9:d196:a1e9:ab67])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216363a3176sm51054905ad.246.2024.12.10.08.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2024 08:51:44 -0800 (PST)
-From: Rob Clark <robdclark@gmail.com>
-To: iommu@lists.linux.dev
-Cc: linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org,
-	Mostafa Saleh <smostafa@google.com>,
-	Will Deacon <will@kernel.org>,
-	Rob Clark <robdclark@chromium.org>,
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVER for Qualcomm Adreno GPUs),
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
-	linux-kernel@vger.kernel.org (open list),
-	linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sean Paul <sean@poorly.run>
-Subject: [PATCH v11 0/4] io-pgtable-arm + drm/msm: Extend iova fault debugging
-Date: Tue, 10 Dec 2024 08:51:18 -0800
-Message-ID: <20241210165127.600817-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1733849517; c=relaxed/simple;
+	bh=gaQySQkwwY6ayjIjivNHXPWGhrJ5ONC+ndSahpeBSoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PYGhjhEgK6uyAFPsHhrp3BU8CLXUPQ8wMiaw4dJKLFRYL42nJ6/VRmV7t/1kgWQuSlpSy4FZCV5MWOMUMLBCDJe3XdrCjoZooeCLWGejOkHj3IkY48k40g95hTWuIgFrgdlot8Br//uwWHyf5RIscHyGyFgr7zRprPByQcfkIzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=EeTvAvgX; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1733849512;
+	bh=gaQySQkwwY6ayjIjivNHXPWGhrJ5ONC+ndSahpeBSoc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EeTvAvgX1qb/7GmvdO0QmEFIBHqL+vxwdfZwwbB+R1TyvJAlbc2toHg6+SgmcNL6q
+	 nTpg4HgEb4a3xe3uKhVN12W343dqZcRCP7JZtHH/5l6svufNaBBGOBOKjoCBXAqMUB
+	 vHL4KOAMb3kvdXmUheLDvPAXmH4gbVIBMzZkdHWY=
+Date: Tue, 10 Dec 2024 17:51:51 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Andy Shevchenko <andy@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	platform-driver-x86@vger.kernel.org, Jelle van der Waa <jelle@vdwaa.nl>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] power: supply: bq24190_charger: Add support for
+ "charge_types" property
+Message-ID: <1ea66f67-d9d1-4dad-b911-a5e32d3a68d2@t-8ch.de>
+References: <20241209204051.8786-1-hdegoede@redhat.com>
+ <20241209204051.8786-4-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241209204051.8786-4-hdegoede@redhat.com>
 
-From: Rob Clark <robdclark@chromium.org>
+On 2024-12-09 21:40:50+0100, Hans de Goede wrote:
+> The bq24190 power_supply class device has a writeable "charge_type"
+> property, add support for the new "charge_types" property. Reading this
+> returns a list of supported charge-types with the currently active type
+> surrounded by square brackets, allowing userspace to find out which
+> enum power_supply_charge_type values are supported.
+> 
+> This has been tested on a GPD win gaming-handheld.
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-This series extends io-pgtable-arm with a method to retrieve the page
-table entries traversed in the process of address translation, and then
-beefs up drm/msm gpu devcore dump to include this (and additional info)
-in the devcore dump.
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 
-This is a respin of https://patchwork.freedesktop.org/series/94968/
-(minus a patch that was already merged)
-
-v2:  Fix an armv7/32b build error in the last patch
-v3:  Incorperate Will Deacon's suggestion to make the interface
-     callback based.
-v4:  Actually wire up the callback
-v5:  Drop the callback approach
-v6:  Make walk-data struct pgtable specific and rename
-     io_pgtable_walk_data to arm_lpae_io_pgtable_walk_data
-v7:  Re-use the pgtable walker added for arm_lpae_read_and_clear_dirty()
-v8:  Pass pte pointer to callback so it can modify the actual pte
-v9:  Fix selftests_running case
-v10: Call visit cb for all nodes traversed, leave the decision about
-     whether to care about non-leaf nodes to the callback
-v11: Adjust logic in 3/4 [smostafa@]
-
-Rob Clark (4):
-  iommu/io-pgtable-arm: Make pgtable walker more generic
-  iommu/io-pgtable-arm: Re-use the pgtable walk for iova_to_phys
-  iommu/io-pgtable-arm: Add way to debug pgtable walk
-  drm/msm: Extend gpu devcore dumps with pgtbl info
-
- drivers/gpu/drm/msm/adreno/adreno_gpu.c |  10 ++
- drivers/gpu/drm/msm/msm_gpu.c           |   9 ++
- drivers/gpu/drm/msm/msm_gpu.h           |   8 ++
- drivers/gpu/drm/msm/msm_iommu.c         |  22 ++++
- drivers/gpu/drm/msm/msm_mmu.h           |   3 +-
- drivers/iommu/io-pgtable-arm.c          | 157 +++++++++++++++---------
- include/linux/io-pgtable.h              |  15 +++
- 7 files changed, 167 insertions(+), 57 deletions(-)
-
--- 
-2.47.1
-
+> ---
+>  drivers/power/supply/bq24190_charger.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+> index 2b393eb5c282..0101aaca1a97 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -1313,6 +1313,7 @@ static int bq24190_charger_get_property(struct power_supply *psy,
+>  
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPES:
+>  		ret = bq24190_charger_get_charge_type(bdi, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_HEALTH:
+> @@ -1393,6 +1394,7 @@ static int bq24190_charger_set_property(struct power_supply *psy,
+>  		ret = bq24190_charger_set_temp_alert_max(bdi, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPES:
+>  		ret = bq24190_charger_set_charge_type(bdi, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> @@ -1421,6 +1423,7 @@ static int bq24190_charger_property_is_writeable(struct power_supply *psy,
+>  	case POWER_SUPPLY_PROP_ONLINE:
+>  	case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+>  	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPES:
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> @@ -1469,6 +1472,7 @@ static void bq24190_charger_external_power_changed(struct power_supply *psy)
+>  
+>  static enum power_supply_property bq24190_charger_properties[] = {
+>  	POWER_SUPPLY_PROP_CHARGE_TYPE,
+> +	POWER_SUPPLY_PROP_CHARGE_TYPES,
+>  	POWER_SUPPLY_PROP_HEALTH,
+>  	POWER_SUPPLY_PROP_ONLINE,
+>  	POWER_SUPPLY_PROP_STATUS,
+> @@ -1498,6 +1502,9 @@ static const struct power_supply_desc bq24190_charger_desc = {
+>  	.set_property		= bq24190_charger_set_property,
+>  	.property_is_writeable	= bq24190_charger_property_is_writeable,
+>  	.external_power_changed	= bq24190_charger_external_power_changed,
+> +	.charge_types		= BIT(POWER_SUPPLY_CHARGE_TYPE_NONE)    |
+> +				  BIT(POWER_SUPPLY_CHARGE_TYPE_TRICKLE) |
+> +				  BIT(POWER_SUPPLY_CHARGE_TYPE_FAST),
+>  };
+>  
+>  /* Battery power supply property routines */
+> -- 
+> 2.47.1
+> 
 
