@@ -1,259 +1,147 @@
-Return-Path: <linux-pm+bounces-18923-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18924-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 595089EB70B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:50:49 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC89D18829BF
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 16:50:45 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191EF22FE1E;
-	Tue, 10 Dec 2024 16:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="d03JJPwx"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD9A9EB712
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:51:51 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6AA22FE15;
-	Tue, 10 Dec 2024 16:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE8C52831B6
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 16:51:49 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EECE32153DC;
+	Tue, 10 Dec 2024 16:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYini5tk"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCD61A76AC;
+	Tue, 10 Dec 2024 16:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733849436; cv=none; b=Mk2Bwma8maUwPbvZJIZ4hcrXkDyM7yVcB3kSv+JMi0Vn0B6r5je5JE42N1JkkI9JjuCCMy7qyoqzlfCo9019aiXhwD+Nl/Rv+k0R5T9eCiBzRX0VJQT+vfAkaxygdblD7+QhLimiHzRrp3adSztv+zHJgPRJNG/CRPgTxGOARwU=
+	t=1733849506; cv=none; b=BjilVpQYJ9GWz2XPuMrGq2ObS7Rf9jwcn4ay07gFKxPijQmRGBgD7+Q9uo8UtM3ta2oVC2VAPw2mvZRtsxatMSqbIb4jfsMpSU9mG9CakwXO9/i1BgVkfaX758lfIk2oRczwClli6NmCfiDXJswf7+rE5bRKN1q0t7MJxDl8tjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733849436; c=relaxed/simple;
-	bh=zxZSWOMmUryEr6zRrQCsXK2cjC135qdU1twm+VkmFow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=taQXMuBwQkehmDAXQYRtltxPWmFF47L47AtHHHqxJGPZpCOcR4ICf3lCzMLymybmnoWs5CfDTkLaj/VL7T7pdwpQtJHQPSxFKyqtIP2r47mC/0FBSrJvP+yikCeYd0rpxx419Nk8FfueC+7KTT4k3p7l2sJ8Gl7o+BGoFZysqFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=d03JJPwx; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1733849430;
-	bh=zxZSWOMmUryEr6zRrQCsXK2cjC135qdU1twm+VkmFow=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d03JJPwxoTySBdJmt7yqxtCD3Mqj1JTs8xG47CyStSAljW6IHtV3Ei1vzyHzjQEcf
-	 BQ+x1jaRrVg0iyuz7cTd93Ul8B1Jr0nedCZgb9bWM2kCoNOPrWJ/ecpWa8mqmFtPTj
-	 3nblKGDvV9RBjqS+/IAnDoFHt/MYNkSuAQ5nJpSY=
-Date: Tue, 10 Dec 2024 17:50:30 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	platform-driver-x86@vger.kernel.org, Jelle van der Waa <jelle@vdwaa.nl>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] power: supply: core: Add new "charge_types"
- property
-Message-ID: <9aa6ad55-d0c3-4cdc-82a9-0c3906f77f30@t-8ch.de>
-References: <20241209204051.8786-1-hdegoede@redhat.com>
- <20241209204051.8786-3-hdegoede@redhat.com>
+	s=arc-20240116; t=1733849506; c=relaxed/simple;
+	bh=Mxw/pGwRlstlF+sMsnwXXRjVPqmnOa+upzVXrXLGTd8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ng53blHNkMe5wX5GUgknG3nmm+E19UOBAPwU6CcjKBGikfsFVPZeBjpzQSDjjC9s3C+g2t+N9WThgbACzsLHOLmT0+MNS4Er1hH3/QUw1G5OoAEpwrdycUvKlFgV810ikEt/geVn8vRSqNqu5057ryNcfqrku47ZgyvVn+5uKok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYini5tk; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21636268e43so35163455ad.2;
+        Tue, 10 Dec 2024 08:51:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733849505; x=1734454305; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JuzEEwZKQf9j9mqhaN0lST/eQY9CbMt5tK8I46FKdZM=;
+        b=XYini5tkdpS1NzH6m0i0TTJ6MkThJ1d+n9qrQNzp7/1DvLw24m1iFxqeiWhVymJi5B
+         3oQY5WNEcP+zPdNX+bRqqBkHtIDpj9OBt7LZ67tlWZpowCdC9QqpTdNvfUX4r5NxN/A6
+         BRCDKOXYiFeT/HJC8XUGe+VtjWKHWn27NVL8aM6nHbudtJAlsTOHRIQLbJDRkA9Ioomg
+         +NGEimPDf2BRvJFHcYM5eRfV0RKZuhsYkbhZln0ikmZuO4MJY2xM+Ym20pteNtZauaPg
+         xvWkVwdt9465CAS1cwVZHKkAFhJ84WPFwp1ixeBHbccdggLOFCMILuX6V94gzKe44N1w
+         xMFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733849505; x=1734454305;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JuzEEwZKQf9j9mqhaN0lST/eQY9CbMt5tK8I46FKdZM=;
+        b=bpvRMZMjtSxQqUJeMyuMZlaq0/2irSdVVNp9EOltpvO/IXPRyG+hTjUT3zVe7o2SR3
+         yCgPKv8TDcbNi3iQ4ptAVYnjeEPK9j5SO2urCOjFTzzjHW2DMwdmbpoAyBx9IvuC5L6b
+         oIu84la+o2yg8UXAcOOqxAdyqeybeQKN8aaIsKfO42CTqpgCjWNy+eZg2jmpNBYu7MBl
+         0fnqzbkU9dT7bl9PzlI26d5WXoPReWrzKZ/HnugAfVR/EHv2KPTBIFelg5lD1Q/RMl3S
+         PZy5HqSuPs6e1nd5ihY3D8BtyVVQ7sgR5LvsHu2vkDRssiiS7um0q9zHS3yfEFmJPra4
+         wNSg==
+X-Forwarded-Encrypted: i=1; AJvYcCW2Gq+as6KUo51q0HvTxz3Ky7hhtmQiB40LGwHm3MyG0Is+k9f7hSgRoANh37E4kXqX4Yn/B9M7czg=@vger.kernel.org, AJvYcCWIsc6PWJ9iQp4GXeeHctnxOboE16XnyinQJ6Z4Lkx3W8xWh9YSdvGIVDTzbfsbhzxgmhi2goeDKST0bNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8qRa/JeTtCN1I0jGCgNLcQcie0eC9HbFMeDGov8uerGuDo8OL
+	MXzZgbp6vlUJKv5DBv0GqTrw4i8f/Nh1MIk4JY2lh9xVg+K+8/c8
+X-Gm-Gg: ASbGncv0b06jAnfgvW5ssBG6LodDDy2C20u4xJoZ6f0rv0yGe9YxXOGDwK4o76IlWsG
+	VS/FRzSdz83o4i91nySSOBGOAcd9Q+BIcJA/cxunthRbEgwb1ekJ+ATfGX5oPqe80DmkIVZBibe
+	9ZWraGCBco4rsm0IDcp0uZAamPsBGKwvIWXEw/DvnKWIBPmYNsOUXtraBxOi2Y4Xz1tocxecJ61
+	UodmxDRimbgGXS8UsDH0/1iem7ATi88Mcjp1fnsHgjSyX6SzWvQzkLYod+/L4+YMPGKJ4G6EKkK
+	D85s1BzOx7MzdI0c7XITqVJlgAth
+X-Google-Smtp-Source: AGHT+IHq5GJLA69hWJIqMBI3xX9I2B1vs+oiOQMLHk1Gt8OrfhdtpCShimUSU+G1kzy0p/Cgwakamg==
+X-Received: by 2002:a17:902:e750:b0:216:3c36:69a7 with SMTP id d9443c01a7336-2166a0987ddmr69103725ad.45.1733849504588;
+        Tue, 10 Dec 2024 08:51:44 -0800 (PST)
+Received: from localhost ([2a00:79e1:2e00:1301:12e9:d196:a1e9:ab67])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216363a3176sm51054905ad.246.2024.12.10.08.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2024 08:51:44 -0800 (PST)
+From: Rob Clark <robdclark@gmail.com>
+To: iommu@lists.linux.dev
+Cc: linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org,
+	Mostafa Saleh <smostafa@google.com>,
+	Will Deacon <will@kernel.org>,
+	Rob Clark <robdclark@chromium.org>,
+	dri-devel@lists.freedesktop.org (open list:DRM DRIVER for Qualcomm Adreno GPUs),
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Sean Paul <sean@poorly.run>
+Subject: [PATCH v11 0/4] io-pgtable-arm + drm/msm: Extend iova fault debugging
+Date: Tue, 10 Dec 2024 08:51:18 -0800
+Message-ID: <20241210165127.600817-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241209204051.8786-3-hdegoede@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On 2024-12-09 21:40:49+0100, Hans de Goede wrote:
-> Add a new "charge_types" property, this is identical to "charge_type" but
-> reading returns a list of supported charge-types with the currently active
-> type surrounded by square brackets, e.g.:
-> 
-> Fast [Standard] "Long_Life"
-> 
-> This has the advantage over the existing "charge_type" property that this
-> allows userspace to find out which charge-types are supported for writable
-> charge_type properties.
-> 
-> Drivers which already support "charge_type" can easily add support for
-> this by setting power_supply_desc.charge_types to a bitmask representing
-> valid charge_type values. The existing "charge_type" get_property() and
-> set_property() code paths can be re-used for "charge_types".
+From: Rob Clark <robdclark@chromium.org>
 
-IMO it would be nice to have the psy core implement "charge_type" in
-terms of "charge_types" if that is available.
-(And reject a custom "charge_type" in that case)
+This series extends io-pgtable-arm with a method to retrieve the page
+table entries traversed in the process of address translation, and then
+beefs up drm/msm gpu devcore dump to include this (and additional info)
+in the devcore dump.
 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> Changes in v2:
-> - Add "Check charge_types to get the values supported by the battery."
->   to Documentation/ABI/testing/sysfs-class-power
-> - Add a note about labels with spaces having these replaced by '_'
->   to Documentation/ABI/testing/sysfs-class-power
-> - Use power_supply_match_string() in power_supply_charge_types_parse()
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 20 ++++++++++++
->  drivers/power/supply/power_supply_sysfs.c   | 34 +++++++++++++++++++++
->  include/linux/power_supply.h                | 23 +++++++++++++-
->  3 files changed, 76 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> index 45180b62d426..4421815cfb40 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -407,10 +407,30 @@ Description:
->  
->  		Access: Read, Write
->  
-> +		Reading this returns the current active value, e.g. 'Standard'.
-> +		Check charge_types to get the values supported by the battery.
-> +
->  		Valid values:
->  			      "Unknown", "N/A", "Trickle", "Fast", "Standard",
->  			      "Adaptive", "Custom", "Long Life", "Bypass"
->  
-> +What:		/sys/class/power_supply/<supply_name>/charge_types
-> +Date:		November 2024
-> +Contact:	linux-pm@vger.kernel.org
-> +Description:
-> +		Identical to charge_type but reading returns a list of supported
-> +		charge-types with the currently active type surrounded by square
-> +		brackets, e.g.: "Fast [Standard] Long_Life".
-> +
-> +		power_supply class devices may support both charge_type and
-> +		charge_types for backward compatibility. In this case both will
-> +		always have the same active value and the active value can be
-> +		changed by writing either property.
-> +
-> +		Note charge-types which contain a space such as "Long Life" will
-> +		have the space replaced by a '_' resulting in e.g. "Long_Life".
-> +		When writing charge-types both variants are accepted.
-> +
->  What:		/sys/class/power_supply/<supply_name>/charge_term_current
->  Date:		July 2014
->  Contact:	linux-pm@vger.kernel.org
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 034e1848f1ca..48a9bf791a38 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -182,6 +182,8 @@ static struct power_supply_attr power_supply_attrs[] __ro_after_init = {
->  	POWER_SUPPLY_ATTR(CHARGE_CONTROL_START_THRESHOLD),
->  	POWER_SUPPLY_ATTR(CHARGE_CONTROL_END_THRESHOLD),
->  	POWER_SUPPLY_ENUM_ATTR(CHARGE_BEHAVIOUR),
-> +	/* Same enum value texts as "charge_type" without the 's' at the end */
-> +	_POWER_SUPPLY_ENUM_ATTR(CHARGE_TYPES, POWER_SUPPLY_CHARGE_TYPE_TEXT),
->  	POWER_SUPPLY_ATTR(INPUT_CURRENT_LIMIT),
->  	POWER_SUPPLY_ATTR(INPUT_VOLTAGE_LIMIT),
->  	POWER_SUPPLY_ATTR(INPUT_POWER_LIMIT),
-> @@ -335,6 +337,10 @@ static ssize_t power_supply_show_property(struct device *dev,
->  		ret = power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
->  							 value.intval, buf);
->  		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_TYPES:
+This is a respin of https://patchwork.freedesktop.org/series/94968/
+(minus a patch that was already merged)
 
-This should only show a single value for uevent. The same as
-charge_behaviours above (done in a recent change).
+v2:  Fix an armv7/32b build error in the last patch
+v3:  Incorperate Will Deacon's suggestion to make the interface
+     callback based.
+v4:  Actually wire up the callback
+v5:  Drop the callback approach
+v6:  Make walk-data struct pgtable specific and rename
+     io_pgtable_walk_data to arm_lpae_io_pgtable_walk_data
+v7:  Re-use the pgtable walker added for arm_lpae_read_and_clear_dirty()
+v8:  Pass pte pointer to callback so it can modify the actual pte
+v9:  Fix selftests_running case
+v10: Call visit cb for all nodes traversed, leave the decision about
+     whether to care about non-leaf nodes to the callback
+v11: Adjust logic in 3/4 [smostafa@]
 
-> +		ret = power_supply_charge_types_show(dev, psy->desc->charge_types,
-> +						     value.intval, buf);
-> +		break;
->  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
->  		ret = sysfs_emit(buf, "%s\n", value.strval);
->  		break;
-> @@ -571,3 +577,31 @@ int power_supply_charge_behaviour_parse(unsigned int available_behaviours, const
->  	return -EINVAL;
->  }
->  EXPORT_SYMBOL_GPL(power_supply_charge_behaviour_parse);
-> +
-> +ssize_t power_supply_charge_types_show(struct device *dev,
-> +				       unsigned int available_types,
-> +				       enum power_supply_charge_type current_type,
-> +				       char *buf)
-> +{
-> +	return power_supply_show_enum_with_available(
-> +				dev, POWER_SUPPLY_CHARGE_TYPE_TEXT,
-> +				ARRAY_SIZE(POWER_SUPPLY_CHARGE_TYPE_TEXT),
-> +				available_types, current_type, buf);
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_charge_types_show);
-> +
-> +int power_supply_charge_types_parse(unsigned int available_types, const char *buf)
-> +{
-> +	int i = power_supply_match_string(POWER_SUPPLY_CHARGE_TYPE_TEXT,
-> +					  ARRAY_SIZE(POWER_SUPPLY_CHARGE_TYPE_TEXT),
-> +					  buf);
-> +
-> +	if (i < 0)
-> +		return i;
-> +
-> +	if (available_types & BIT(i))
-> +		return i;
-> +
-> +	return -EINVAL;
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_charge_types_parse);
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index b98106e1a90f..60c7f669ec3e 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -40,7 +40,7 @@ enum {
->  };
->  
->  /* What algorithm is the charger using? */
-> -enum {
-> +enum power_supply_charge_type {
->  	POWER_SUPPLY_CHARGE_TYPE_UNKNOWN = 0,
->  	POWER_SUPPLY_CHARGE_TYPE_NONE,
->  	POWER_SUPPLY_CHARGE_TYPE_TRICKLE,	/* slow speed */
-> @@ -135,6 +135,7 @@ enum power_supply_property {
->  	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
->  	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
->  	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-> +	POWER_SUPPLY_PROP_CHARGE_TYPES,
+Rob Clark (4):
+  iommu/io-pgtable-arm: Make pgtable walker more generic
+  iommu/io-pgtable-arm: Re-use the pgtable walk for iova_to_phys
+  iommu/io-pgtable-arm: Add way to debug pgtable walk
+  drm/msm: Extend gpu devcore dumps with pgtbl info
 
-Could the related enum values be kept together?
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c |  10 ++
+ drivers/gpu/drm/msm/msm_gpu.c           |   9 ++
+ drivers/gpu/drm/msm/msm_gpu.h           |   8 ++
+ drivers/gpu/drm/msm/msm_iommu.c         |  22 ++++
+ drivers/gpu/drm/msm/msm_mmu.h           |   3 +-
+ drivers/iommu/io-pgtable-arm.c          | 157 +++++++++++++++---------
+ include/linux/io-pgtable.h              |  15 +++
+ 7 files changed, 167 insertions(+), 57 deletions(-)
 
->  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
->  	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
->  	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
-> @@ -245,6 +246,7 @@ struct power_supply_desc {
->  	const char *name;
->  	enum power_supply_type type;
->  	u8 charge_behaviours;
-> +	u32 charge_types;
->  	u32 usb_types;
->  	const enum power_supply_property *properties;
->  	size_t num_properties;
-> @@ -944,6 +946,11 @@ ssize_t power_supply_charge_behaviour_show(struct device *dev,
->  					   char *buf);
->  
->  int power_supply_charge_behaviour_parse(unsigned int available_behaviours, const char *buf);
-> +ssize_t power_supply_charge_types_show(struct device *dev,
-> +				       unsigned int available_types,
-> +				       enum power_supply_charge_type current_type,
-> +				       char *buf);
-> +int power_supply_charge_types_parse(unsigned int available_types, const char *buf);
->  #else
->  static inline
->  ssize_t power_supply_charge_behaviour_show(struct device *dev,
-> @@ -959,6 +966,20 @@ static inline int power_supply_charge_behaviour_parse(unsigned int available_beh
->  {
->  	return -EOPNOTSUPP;
->  }
-> +
-> +static inline
-> +ssize_t power_supply_charge_types_show(struct device *dev,
-> +				       unsigned int available_types,
-> +				       enum power_supply_charge_type current_type,
-> +				       char *buf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline int power_supply_charge_types_parse(unsigned int available_types, const char *buf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->  #endif
->  
->  #endif /* __LINUX_POWER_SUPPLY_H__ */
-> -- 
-> 2.47.1
-> 
+-- 
+2.47.1
+
 
