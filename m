@@ -1,198 +1,131 @@
-Return-Path: <linux-pm+bounces-18895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F19A99EAA6E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 09:18:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E459EABE2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 10:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED06E1888BB4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 08:18:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADCF8164D48
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 09:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0B322CBF8;
-	Tue, 10 Dec 2024 08:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0553B233D8A;
+	Tue, 10 Dec 2024 09:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="lCnsrTK/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L6LHjU0F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B21194C6A;
-	Tue, 10 Dec 2024 08:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A94D233D7A;
+	Tue, 10 Dec 2024 09:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733818713; cv=none; b=hWG42KenuNJ7Cw5EzAl3sDHGHv59YglAIZavMnT/EISiZX+axdPxjC8hzigm5xnZM59xS9tUV4pYFaoCLlMNpakqY820XRnaWIx33BNv+/d1qq1rY5SHpFgi3Qb07M0Vb+BoGLNRvD6YZSUJYEfebEfwkRFOGbna8rhwF6Iowbc=
+	t=1733822724; cv=none; b=qFatOC+uCEznLi3BhE1wQDvnNvYwVrvyJD61EYx0gCaEht5ZMryHxXkBF8BblyJ94D5j87vS5zedyfV7onbHb4hxsKhrzVHh0K2PH+sDLcEIKYl1wtDYAETPf7LSh6pd/4OphkMnIr2XV94AEZd0X2LXGu6ZfheiCgcbC1a1Qmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733818713; c=relaxed/simple;
-	bh=Arg7OrEgQ5P5XaIEN6YzBpSxCRtj4S3r8eDC4bJdgbM=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=JDSJwzQaRfIIO50N7mMszYQ3maQxGfP1W8rRXvsOoDWTfjFG+btAFWlj2LxH4dhOFywb8tnxBqvlJCU0DrjSbaZetio3/qqZ3pdcRN6p0VZPmzzKRlSS+gyGcczL0c+OpFCZS5qdkpH7N/f9wQ7ZbACBKcnLhCNxsB6//SSSEAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=lCnsrTK/; arc=none smtp.client-ip=116.203.91.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+	s=arc-20240116; t=1733822724; c=relaxed/simple;
+	bh=U4EIJduUVU+AZu1bT10Rl02jbPPXAi6Xe1i11IgFCoc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=BDpT2gvUrYaiI4Ji5IZNKpOsMMeKS7uC628jqpkYUj4anwdKWhII8Xv5DOuJNhDaRqdPyjwiga1cJ3G6E8WnPcU9lLbyZhSZkNnRmXjGsDBDFoGB0dYccEt7q12L7a8jbBolz8o3ajSCrbnFVK1OPyTjwamZY+qVqRAYk4tYCFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L6LHjU0F; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aa6413fc7c5so524164466b.0;
+        Tue, 10 Dec 2024 01:25:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733822721; x=1734427521; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eM2aY2jhSfrimDAy8nlYTfo5e6PgwQ/aXGIc2H8RXPo=;
+        b=L6LHjU0FUWoSqIWW463MvKLTW44bAgqwupecpZ9kUQYHgZYlzGZ2G1ApIPd9WcZHNF
+         dW1tvD1JiWlfLmqoZ4OovsIHSs4i6Iridxfh6j1VnwgG3JUfioJtyYxGlef6qB8VBhPp
+         Cx+CfVTRZZ6JWATQ8q1bmAH36yZBgZSUuIkTjJrzZ+G031/jvCTJuHjVAGsA02Ffd3b+
+         PKLgzLiXJV0XyLiUP9dA2fcFU0rliw60RVXzl3MVL45E2EaAXLZIGp6N8Wsz9/JfgaoY
+         XyY/Uz7OszmPqWVNVyePwK8fqjSH0h52s/wbGDS1ocjHiE+9WIAOoKaGjYsTJHYPCGlO
+         bgMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733822721; x=1734427521;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eM2aY2jhSfrimDAy8nlYTfo5e6PgwQ/aXGIc2H8RXPo=;
+        b=kBZHl2Unv91VVIRF+iwy3IXulyBScJbxBuA3WYbtemDDJgXGyI5krPSWctQUHUgMTN
+         fZTKxAkWlln7vzv5TwYnOZGCqSXLulg+VGC6Mxyv+k7rzJHdcwiXEm7e/x64S5XWG/Q5
+         sN9VoSF7R6THgZI3PftxseKF6J1bmyh8ZlqjKn16yjF/IXHV+A16Zyyb2iE8PsiaS5HM
+         3Q19aCKY9/NCBW6iuztHdySbnayNtQKud2C0GYqfd5PYgF2KN0bofxkhbBbEy/JTm5O8
+         ht/aHDc/C/iDKkb5bVZeR7POb8/lVTAQoZYFdkDRXc4ZE0NXhCGMHGV6/u20O1tglJiH
+         DxLg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0/pkp+lIS78R9fJfoqJGsD6qJjUBNkY1wXcmaKf+zuYc6+ArwNXqWTzPCxlqOyqFsfAyWWbQJvTA=@vger.kernel.org, AJvYcCUGRJbOlf68Eux4p7cvrwT1v7KPUOBleKnlx/ywy1RwMWXY4AxumwIM67kQF57SxA5Etl/hVb2/TEHI@vger.kernel.org, AJvYcCWBfhv4+D5LZUqIpH/Q2+dm4jpJTYa+kKxxA2YS2nw8w60vPQCO0EGxO0vfGvrIC9klT1mNL/W0Vz4LgDzR@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEx0Avj3nukb/2XYysGKA+6hk3gWF0EmmqBdOwkAyVlb0jqLty
+	QORqcfWJnBQYpbgeSgwxTxFsfettMxj6vxynCDkpF/v+751YopSu
+X-Gm-Gg: ASbGncsRvGbuEqgzbnp+bfBB4bQ1fZNL+hg1jhwsEABJmShlezur84fdVq1VGESQljF
+	HTxu7r7wlj0awjkQdH/V1MFpYSZSKmOgAZfuAFSlD+wgIFiReF6YUrfLCKcYrndkFM+KvEyyI00
+	kM7xdYr82majbXVQtoIQwdn8YvqR5NWxil/AjyHXFi1sRgQftkG7PPrFtcn5wE7rpICqZXHy6K1
+	GSus0qABBaMC6ZAsjMWyzAJ58YPWjcsAzesIEGBdISpnwxC16SdL5k2ATGUkjNPzliCx+hCzCZX
+	b9HoezQ=
+X-Google-Smtp-Source: AGHT+IHEQM19BfQF/lOFgKzNDopfEPFPaCxM8uKvUeAbQ00HxI70ZFCiAZYyARi3xHbuM3EzCkVukw==
+X-Received: by 2002:a05:6402:35d3:b0:5d0:d3eb:a78f with SMTP id 4fb4d7f45d1cf-5d4183c5564mr9697753a12.0.1733822721407;
+        Tue, 10 Dec 2024 01:25:21 -0800 (PST)
+Received: from stefan.beckhoff.com ([195.226.174.194])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aa6260e2c31sm817095166b.180.2024.12.10.01.25.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2024 01:25:21 -0800 (PST)
+From: Stefan Raufhake <raufhakestefan@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: s.raufhake@beckhoff.com,
+	s.dirkwinkel@beckhoff.com,
+	Stefan Raufhake <s.raufhake@beckhoff.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: [PATCH v2 0/1] power: supply: gpio-charger: Support to disable charger
+Date: Tue, 10 Dec 2024 09:23:42 +0000
+Message-Id: <20241210092343.3537-1-raufhakestefan@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1733818707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OBUKULQdeAj3srAOUfNxAcrVMqtQrzmaJVxl5Kec0tI=;
-	b=lCnsrTK/1akQyLYVUjsKpfdC8FWRqa7ttTUhWa+bmTGtlWuysFdJ4hPh2dTiFKuIOQCOwJ
-	4djFAfDBuB1rMbjD3u5D0wiscNu/ACTFmIwg20YCsZKVlRnZJCmOdtsmRv8pdBsW7bFSgZ
-	ElVF7gfrMcl3d+S61cKqC1AYIZmocKBQ8iw3DHsl8eunXfoQdQ6Y1CPyEgTceanMUJYcvL
-	Q33kPgQLTgTDP6XbIxdX4b+Cq1mhN5ICozlogDEDU05rvrBFN0DjSn1xu4Sv4m7a8BMRje
-	BkQHwZ6YP6iMg6V5++lL6Mqpfx/SVcKe4bQbuHMrHISVa3KA98iI0y7K91Dpkg==
-Date: Tue, 10 Dec 2024 09:18:25 +0100
-From: Dragan Simic <dsimic@manjaro.org>
-To: Peter Geis <pgwipeout@gmail.com>
-Cc: Heiko Stuebner <heiko@sntech.de>, Caesar Wang <wxt@rock-chips.com>,
- Detlev Casanova <detlev.casanova@collabora.com>, Finley Xiao
- <finley.xiao@rock-chips.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Kevin Hilman <khilman@linaro.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski@linaro.org>, Ulf Hansson
- <ulf.hansson@linaro.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 1/6] pmdomain: rockchip: fix rockchip_pd_power error
- handling
-In-Reply-To: <20241210013010.81257-2-pgwipeout@gmail.com>
-References: <20241210013010.81257-1-pgwipeout@gmail.com>
- <20241210013010.81257-2-pgwipeout@gmail.com>
-Message-ID: <1b323d6e9ef873bfc770e9d54b7a3a64@manjaro.org>
-X-Sender: dsimic@manjaro.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello Peter,
+From: Stefan Raufhake <s.raufhake@beckhoff.de>
 
-On 2024-12-10 02:30, Peter Geis wrote:
-> The calls rockchip_pd_power makes to rockchip_pmu_set_idle_request lack
-> any return error handling, causing device drivers to incorrectly 
-> believe
-> the hardware idle requests succeed when they may have failed. This 
-> leads
-> to software possibly accessing hardware that is powered off and the
-> subsequent SError panic that follows.
-> 
-> Add error checking and return errors to the calling function to prevent
-> such crashes.
-> 
-> gst-launch-1.0 videotestsrc num-buffers=2000 ! v4l2jpegenc ! fakesink
-> Setting pipeline to PAUSED ...er-x64
-> Pipeline is PREROLLING ...
-> Redistribute latency...
-> rockchip-pm-domain ff100000.syscon:power-controller: failed to get ack 
-> on
-> domain 'hevc', val=0x98260, idle = 0
-> SError Interrupt on CPU2, code 0x00000000bf000002 -- SError
-> CPU: 2 UID: 0 PID: 804 Comm: videotestsrc0:s Not tainted 6.12.0-rc5+ 
-> #54
-> Hardware name: Firefly roc-rk3328-cc (DT)
-> pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : rockchip_vpu2_jpeg_enc_run+0x168/0xbc8
-> lr : device_run+0xb0/0x128
-> sp : ffff800082143a20
-> x29: ffff800082143a20 x28: 0000000000000140 x27: 0000000000000000
-> x26: ffff582c47a313e8 x25: ffff582c53e95000 x24: ffff582c53e92800
-> x23: ffff582c5bbe0000 x22: 0000000000000000 x21: ffff582c47a31080
-> x20: ffffa0d78cfa4168 x19: ffffa0d78cfa4168 x18: ffffb755b0519000
-> x17: 000000040044ffff x16: 00500072b5503510 x15: a7a6a5a4a3a29a99
-> x14: 989796959493928a x13: 0000000051eb851f x12: 00000000000000ff
-> x11: ffffa0d78d812880 x10: ffffa0d78d7fbca0 x9 : 000000000000003f
-> x8 : 0000000000000063 x7 : 000000000000003f x6 : 0000000000000040
-> x5 : ffff80008010d000 x4 : ffffa0d78cfa4168 x3 : ffffa0d78cfbfdd8
-> x2 : ffff80008010d0f4 x1 : 0000000000000020 x0 : 0000000000000140
-> Kernel panic - not syncing: Asynchronous SError Interrupt
-> CPU: 2 UID: 0 PID: 804 Comm: videotestsrc0:s Not tainted 6.12.0-rc5+ 
-> #54
-> Hardware name: Firefly roc-rk3328-cc (DT)
-> Call trace:
-> dump_backtrace+0xa0/0x128
-> show_stack+0x20/0x38
-> dump_stack_lvl+0xc8/0xf8
-> dump_stack+0x18/0x28
-> panic+0x3ec/0x428
-> nmi_panic+0x48/0xa0
-> arm64_serror_panic+0x6c/0x88
-> do_serror+0x30/0x70
-> el1h_64_error_handler+0x38/0x60
-> el1h_64_error+0x7c/0x80
-> rockchip_vpu2_jpeg_enc_run+0x168/0xbc8
-> device_run+0xb0/0x128
-> v4l2_m2m_try_run+0xac/0x230
-> v4l2_m2m_ioctl_streamon+0x70/0x90
-> v4l_streamon+0x2c/0x40
-> __video_do_ioctl+0x194/0x400
-> video_usercopy+0x10c/0x808
-> video_ioctl2+0x20/0x80
-> v4l2_ioctl+0x48/0x70
-> __arm64_sys_ioctl+0xb0/0x100
-> invoke_syscall+0x50/0x120
-> el0_svc_common.constprop.0+0x48/0xf0
-> do_el0_svc+0x24/0x38
-> el0_svc+0x38/0x100
-> el0t_64_sync_handler+0xc0/0xc8
-> el0t_64_sync+0x1a8/0x1b0
-> SMP: stopping secondary CPUs
-> Kernel Offset: 0x20d70c000000 from 0xffff800080000000
-> PHYS_OFFSET: 0xffffa7d3c0000000
-> CPU features: 0x00,00000090,00200000,0200421b
-> Memory Limit: none
-> ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
-> 
-> Fixes: 7c696693a4f5 ("soc: rockchip: power-domain: Add power domain 
-> driver")
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Hello,
+We have a device with a simple built-in UPS, which
+is controlled by GPIOs. For the control of the UPS,
+we used the “gpio-charger” driver module from the
+power-supply. For our usecase we want to support 
+enabing and disabling the ups. When the UPS is 
+disabled, the device turns off immediately if the
+supply power is switched off. When the UPS is
+enabled, the device has power as long as the UPS
+has enough energy for the device. Now, we are
+looking for the best way to implement this
+function. This patch contains our first proposal.
 
-This patch is obviously correct, because not checking what
-rockchip_pmu_set_idle_request() returns was simply wrong.
-Thanks for the patch!
+Changes since v1:
+=================
 
-Though, shouldn't we improve further the way proper error
-handling is performed in rockchip_do_pmu_set_power_domain(),
-by "rolling back" what rockchip_do_pmu_set_power_domain()
-did after powering up fails?
+- Rework of the commit message
+- Changed the property name from "charge-disable-gpios" to "enable-gpios".
+- Inverted the logic of charge_type to 0 = disable and 1 = enable for the 
+charger.
 
-> ---
-> 
->  drivers/pmdomain/rockchip/pm-domains.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c
-> b/drivers/pmdomain/rockchip/pm-domains.c
-> index cb0f93800138..57e8fa25d2bd 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -590,14 +590,18 @@ static int rockchip_pd_power(struct
-> rockchip_pm_domain *pd, bool power_on)
->  			rockchip_pmu_save_qos(pd);
-> 
->  			/* if powering down, idle request to NIU first */
-> -			rockchip_pmu_set_idle_request(pd, true);
-> +			ret = rockchip_pmu_set_idle_request(pd, true);
-> +			if (ret < 0)
-> +				return ret;
->  		}
-> 
->  		rockchip_do_pmu_set_power_domain(pd, power_on);
-> 
->  		if (power_on) {
->  			/* if powering up, leave idle mode */
-> -			rockchip_pmu_set_idle_request(pd, false);
-> +			ret = rockchip_pmu_set_idle_request(pd, false);
-> +			if (ret < 0)
-> +				return ret;
-> 
->  			rockchip_pmu_restore_qos(pd);
->  		}
+
+Stefan Raufhake (1):
+  power: supply: gpio-charger: Support to disable charger
+
+ .../bindings/power/supply/gpio-charger.yaml   |  6 +++
+ drivers/power/supply/gpio-charger.c           | 43 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+-- 
+2.25.1
+
 
