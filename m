@@ -1,316 +1,444 @@
-Return-Path: <linux-pm+bounces-18936-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18937-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14AE89EB8AC
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 18:52:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CFC19EB920
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 19:15:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11D4D1888C84
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 17:51:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E874167BA9
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 18:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4575E1AA786;
-	Tue, 10 Dec 2024 17:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41772046AC;
+	Tue, 10 Dec 2024 18:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="DzHcu05s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VxLGqill"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0577386336;
-	Tue, 10 Dec 2024 17:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97ECE86349;
+	Tue, 10 Dec 2024 18:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733853113; cv=none; b=evFcUWSDq3hPoaxe4yXyLEs8+ji9z2gvPwvjYDYPurZ8FMVgNbhAIv/VIZ+Nie8Mp7eBCuXIcPn2mpMO9jg5GLjgPX9CLczYZx9kB9a5Bv6Yu8yaWToqG6o+Wn8Tv61pNna33hG6Ti6tiLrTo77gX6cowKft42DJw2nDop0paFA=
+	t=1733854511; cv=none; b=lyshMEFbUmoX9knC+tTxapdq39e66PRNpgR+wGKwvd8ys9Tkphr/BFHTVxf0JcksZL+Y1dq8LHS2HlordQom7DxKxqRxbT49WVBdHsW5c8MCBz2maGMibBwCYZ3naBvZU1fS4fo41sII0KbT8EsgpuRCzYFHYmXcAFdeJ/+xLxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733853113; c=relaxed/simple;
-	bh=kIUfhctXtHp/HILQ548PNDcOS8oDknHHSfOedoQ6L/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NflRNxi6S9LNx25/0l4QPHqk+h/fOX5+d2toSxd1bgOQmuM5KJyVKylvRUPfjiGjlkKD1VtTq6Kc8QgR7oD3Z+WDV/C81FDQLBs4+6THTvbLgsNtA04kmUShN2qO1DsGC5R1wuVStbGu5CWRzF16f07L/UlXgYbUl1wIgzkClfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=DzHcu05s; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WoKlAx2lCcPCu7/whr69+RY7ecshkhAuKHIc6JJIKNM=; b=DzHcu05sWfX6pdzjMZLdq+T7DV
-	nmGtLf+z+G+qdBtlrUlkYHGgB34pcga1S7HYighWzIZq8QNsSDuEnY9HW1pTSQG7gXs1jKY3jTK/b
-	0flnPv1NbqbNGrqnaFPONGw8nkz9T8fQYsq045bulbwfSGIeGW1S1bG77vwrI5p1WaqeDk+d41oeg
-	obIoukA/vxqioHKyu3zXQ4B+ui1THJoZ3qHJXzIVKMZOOHiBirycxIxfUGwhVocmY/FnPg8GF8U10
-	h9ubijuPHp+lBnqsBhUTJ/mxTGxrAo+ukmCv4FZ8GuTbiaoGYL8YBq4ghB9YBl4g1+veWQSF8UP3N
-	whgwynhw==;
-Received: from i53875bc4.versanet.de ([83.135.91.196] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1tL4OV-0000DD-Tt; Tue, 10 Dec 2024 18:51:36 +0100
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>,
- Elaine Zhang <zhangqing@rock-chips.com>,
- =?ISO-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com
-Subject: Re: [PATCH v4 6/7] pmdomain: rockchip: add regulator support
-Date: Tue, 10 Dec 2024 18:51:34 +0100
-Message-ID: <4082877.3daJWjYHZt@diego>
-In-Reply-To: <20241210171023.141162-7-sebastian.reichel@collabora.com>
-References:
- <20241210171023.141162-1-sebastian.reichel@collabora.com>
- <20241210171023.141162-7-sebastian.reichel@collabora.com>
+	s=arc-20240116; t=1733854511; c=relaxed/simple;
+	bh=RWNr3vVhHnPrVOyjZD5oMiOFzVgk4i/HCFKtx2yA70g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a0lBT8z8mLJp/7+e1YUvFM4DJ7pp0SRW/cw1JvaR+SNEnYY6D07R9aCInkHugW1VHEkpxTYgrTmKBwu4Oi0GXahMfTyEybAoBdti222DNb1pXg2F8m3OAFU6aTy+fJfAXk0dNksyu64dLwx6vWzSLljcYYWq4TXW1ke1sPIHI1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VxLGqill; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50036C4CEE2;
+	Tue, 10 Dec 2024 18:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733854511;
+	bh=RWNr3vVhHnPrVOyjZD5oMiOFzVgk4i/HCFKtx2yA70g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VxLGqillv37Sh2NDOi4e2o91C27OTlJx6tGWnMlYBK27BSHt+7qFW8ZscJo4ilazd
+	 fueKb4UXxlI7TRsq6PXwBj7nBoNnoHJZiFqwYRfoGumG/UyOwUh8Kmjba9zygGN927
+	 AKLSK2hYtrz7yXNKWI5rh2l/nL+Nck00fz9bJxDVJDTgLWXZAj/iAOoTTcWAQpNwEK
+	 GZqw5xpl3AowYoyWqE1kVRNAy+PMrzDOofHnEk4Pc4x1nCzsZA0S5HOvHKXr30n1Jr
+	 XaTcRJdh5h8DFCd5yF/gDzh8ziUzeBWeC3iEe1sLNuuZZFAahtRSXF7xaO0HH+o/mN
+	 azjK5PxrmyM/Q==
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3eb66b02e1cso522804b6e.3;
+        Tue, 10 Dec 2024 10:15:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU37h2NNLJ/fQ+Fk5sdqdDXrKg7vqrs7OaBzQeejGcrBylaAtkbWOOnSWHy5LX2p6QG2cgFWafB/X0=@vger.kernel.org, AJvYcCWZjMdFrU+CnmjCEoDQ+s0JMoaIAdQ33eheCiEaK1rJbr130aSx4pN+Reie80u7uEeCeOWzE/FYTAplILGP@vger.kernel.org, AJvYcCXycY3EH5cNmO7Y+hhSS71vlhTXJ0AWLAfC8Yfpgut7dY2gRgly6uR7hqndHJrEdGUyXh4KzfZZFwjS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzntc/hN5D7yKYNdRiVw4IUsb1uXVAk552BXkfta/DiXBpujkt6
+	bTrls6s4sJevcNbDJ093sw0v48My48zwwJS9hybFXS1QaT6kigbYy9I0ojpg0YJuhHX3KDnzwL0
+	Oly9ZQvrSsxtITPQ115R1i+JSS8M=
+X-Google-Smtp-Source: AGHT+IH2o+tbT3bBgK+gbTK2BdnZ++ux+IuNI9duS6lHtkOdfFLBqwXFm3jXPIjmwvGayBzTQA90Pb3DbmaNkmzNeAw=
+X-Received: by 2002:a05:6808:1919:b0:3eb:63c9:fe7f with SMTP id
+ 5614622812f47-3eb66f8c27cmr3740676b6e.40.1733854510425; Tue, 10 Dec 2024
+ 10:15:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20241122062051.3658577-1-zhenglifeng1@huawei.com> <20241122062051.3658577-2-zhenglifeng1@huawei.com>
+In-Reply-To: <20241122062051.3658577-2-zhenglifeng1@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 10 Dec 2024 19:14:59 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jnF82WX_=4KtqwnLd=vcHYt_pbtyvQV74p0ojKr33D=A@mail.gmail.com>
+Message-ID: <CAJZ5v0jnF82WX_=4KtqwnLd=vcHYt_pbtyvQV74p0ojKr33D=A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] ACPI: CPPC: Refactor register get and set ABIs
+To: Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com, 
+	viresh.kumar@linaro.org, acpica-devel@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com, 
+	fanghao11@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Am Dienstag, 10. Dezember 2024, 18:06:46 CET schrieb Sebastian Reichel:
-> Some power domains require extra voltages to be applied. For example
-> trying to enable the GPU power domain on RK3588 fails when the SoC
-> does not have VDD GPU enabled. The same is expected to happen for
-> the NPU, which also has a dedicated supply line.
-> 
-> We get the regulator using devm_of_regulator_get(), so a missing
-> dependency in the devicetree is handled gracefully by printing a warning
-> and creating a dummy regulator. This is necessary, since existing DTs do
-> not have the regulator described. They might still work if the regulator
-> is marked as always-on. It is also working if the regulator is enabled
-> at boot time and the GPU driver is probed before the kernel disables
-> unused regulators.
-> 
-> The regulator itself is not acquired at driver probe time, since that
-> creates an unsolvable circular dependency. The power domain driver must
-> be probed early, since SoC peripherals need it. Regulators on the other
-> hand depend on SoC peripherals like SPI, I2C or GPIO. MediaTek does not
-> run into this, since they have two power domain drivers.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On Fri, Nov 22, 2024 at 7:21=E2=80=AFAM Lifeng Zheng <zhenglifeng1@huawei.c=
+om> wrote:
+>
+> Refactor register get and set ABIs using cppc_get_reg() and cppc_set_reg(=
+).
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+I don't quite like the cppc_get_reg() name.  I think that
+cppc_get_reg_val() would be better.
 
+> Rename cppc_get_perf() to cppc_get_reg() as a generic function to read cp=
+pc
+> registers, with two changes:
+>
+> 1. Change the error kind to "no such device" when pcc_ss_id < 0, which
+> means that this cpu cannot get a valid pcc_ss_id.
+>
+> 2. Add a check to verify if the register is a cpc supported one before
+> using it.
 
-sidenote:
-part of me is asking, why we're limiting regulator handling only to
-specific individual domains when all domains sort of have supplying
-regulators - just ones that normally always stay on.
+So it's not just a rename, but also a change in behavior.  Can this
+change in behavior become user-visible?
 
-But, the binding is generic, so we can extend that later on in the driver
-if needed. Especially as this fixes a problem that happens right now.
+> Add cppc_set_reg() as a generic function for setting cppc registers.
 
+Again, I would prefer cppc_set_reg_val().
 
-Heiko
+> Unlike other set reg ABIs, this function checks CPC_SUPPORTED right after=
+ getting
+> the register, because the rest of the operations are meaningless if this
+> register is not a cpc supported one.
 
+And the new function is used to reduce some existing code duplication,
+isn't it?  Which would be good to mention here.
 
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 > ---
->  drivers/pmdomain/rockchip/pm-domains.c | 113 +++++++++++++++++--------
->  1 file changed, 79 insertions(+), 34 deletions(-)
-> 
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> index f4e555dac20a..31c71b6fddf1 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -18,6 +18,7 @@
->  #include <linux/of_clk.h>
->  #include <linux/clk.h>
->  #include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/mfd/syscon.h>
->  #include <soc/rockchip/pm_domains.h>
->  #include <dt-bindings/power/px30-power.h>
-> @@ -44,6 +45,7 @@ struct rockchip_domain_info {
->  	int idle_mask;
->  	int ack_mask;
->  	bool active_wakeup;
-> +	bool need_regulator;
->  	int pwr_w_mask;
->  	int req_w_mask;
->  	int clk_ungate_mask;
-> @@ -92,6 +94,8 @@ struct rockchip_pm_domain {
->  	u32 *qos_save_regs[MAX_QOS_REGS_NUM];
->  	int num_clks;
->  	struct clk_bulk_data *clks;
-> +	struct device_node *node;
-> +	struct regulator *supply;
->  };
->  
->  struct rockchip_pmu {
-> @@ -129,7 +133,7 @@ struct rockchip_pmu {
->  	.active_wakeup = wakeup,			\
+>  drivers/acpi/cppc_acpi.c | 191 +++++++++++++++------------------------
+>  1 file changed, 72 insertions(+), 119 deletions(-)
+>
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index c1f3568d0c50..9aab22d8136a 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1179,10 +1179,13 @@ static int cpc_write(int cpu, struct cpc_register=
+_resource *reg_res, u64 val)
+>         return ret_val;
 >  }
->  
-> -#define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup)	\
-> +#define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup, regulator)	\
->  {							\
->  	.name = _name,					\
->  	.pwr_offset = p_offset,				\
-> @@ -145,6 +149,7 @@ struct rockchip_pmu {
->  	.idle_mask = (idle),				\
->  	.ack_mask = (ack),				\
->  	.active_wakeup = wakeup,			\
-> +	.need_regulator = regulator,			\
->  }
->  
->  #define DOMAIN_M_O_R_G(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, g_mask, wakeup)	\
-> @@ -303,8 +308,8 @@ void rockchip_pmu_unblock(void)
->  }
->  EXPORT_SYMBOL_GPL(rockchip_pmu_unblock);
->  
-> -#define DOMAIN_RK3588(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, wakeup)	\
-> -	DOMAIN_M_O_R(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, idle, wakeup)
-> +#define DOMAIN_RK3588(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, wakeup, regulator)	\
-> +	DOMAIN_M_O_R(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, idle, wakeup, regulator)
->  
->  static bool rockchip_pmu_domain_is_idle(struct rockchip_pm_domain *pd)
+>
+> -static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
+> +static int cppc_get_reg(int cpunum, enum cppc_regs reg_idx, u64 *val)
 >  {
-> @@ -619,18 +624,57 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
->  	return 0;
+>         struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpunum);
+> +       struct cppc_pcc_data *pcc_ss_data =3D NULL;
+
+Why are you moving this here?  This change is not related to the rest
+of the patch, is it?
+
+>         struct cpc_register_resource *reg;
+> +       int pcc_ss_id;
+> +       int ret =3D 0;
+
+And here?
+
+>
+>         if (!cpc_desc) {
+>                 pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+> @@ -1191,20 +1194,23 @@ static int cppc_get_perf(int cpunum, enum cppc_re=
+gs reg_idx, u64 *perf)
+>
+>         reg =3D &cpc_desc->cpc_regs[reg_idx];
+>
+> +       if (!CPC_SUPPORTED(reg)) {
+> +               pr_debug("CPC register (reg_idx=3D%d) is not supported\n"=
+, reg_idx);
+> +               return -EOPNOTSUPP;
+> +       }
+> +
+>         if (CPC_IN_PCC(reg)) {
+> -               int pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpunum);
+> -               struct cppc_pcc_data *pcc_ss_data =3D NULL;
+> -               int ret =3D 0;
+> +               pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpunum);
+>
+>                 if (pcc_ss_id < 0)
+> -                       return -EIO;
+> +                       return -ENODEV;
+>
+>                 pcc_ss_data =3D pcc_data[pcc_ss_id];
+>
+>                 down_write(&pcc_ss_data->pcc_lock);
+>
+>                 if (send_pcc_cmd(pcc_ss_id, CMD_READ) >=3D 0)
+> -                       cpc_read(cpunum, reg, perf);
+> +                       cpc_read(cpunum, reg, val);
+>                 else
+>                         ret =3D -EIO;
+>
+> @@ -1213,21 +1219,65 @@ static int cppc_get_perf(int cpunum, enum cppc_re=
+gs reg_idx, u64 *perf)
+>                 return ret;
+>         }
+>
+> -       cpc_read(cpunum, reg, perf);
+> +       cpc_read(cpunum, reg, val);
+>
+>         return 0;
 >  }
->  
-> +static int rockchip_pd_regulator_disable(struct rockchip_pm_domain *pd)
+>
+> +static int cppc_set_reg(int cpu, enum cppc_regs reg_idx, u64 val)
 > +{
-> +	return IS_ERR_OR_NULL(pd->supply) ? 0 : regulator_disable(pd->supply);
+> +       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
+> +       struct cppc_pcc_data *pcc_ss_data =3D NULL;
+> +       struct cpc_register_resource *reg;
+> +       int pcc_ss_id;
+> +       int ret;
+> +
+> +       if (!cpc_desc) {
+> +               pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+> +               return -ENODEV;
+> +       }
+> +
+> +       reg =3D &cpc_desc->cpc_regs[reg_idx];
+> +
+> +       if (!CPC_SUPPORTED(reg)) {
+> +               pr_debug("CPC register (reg_idx=3D%d) is not supported\n"=
+, reg_idx);
+> +               return -EOPNOTSUPP;
+> +       }
+> +
+> +       if (CPC_IN_PCC(reg)) {
+> +               pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpu);
+
+Please declare the variables that are only needed in the PCC case here.
+
+Also, I think it would be better to define a new function, say
+cppc_set_reg_val_in_pcc() for this code and then have
+
+if (CPC_IN_PCC(reg))
+        return cppc_set_reg_val_in_pcc(reg, val);
+
+> +
+> +               if (pcc_ss_id < 0) {
+> +                       pr_debug("Invalid pcc_ss_id\n");
+> +                       return -ENODEV;
+> +               }
+> +
+> +               ret =3D cpc_write(cpu, reg, val);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               pcc_ss_data =3D pcc_data[pcc_ss_id];
+> +
+> +               down_write(&pcc_ss_data->pcc_lock);
+> +               /* after writing CPC, transfer the ownership of PCC to pl=
+atform */
+> +               ret =3D send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> +               up_write(&pcc_ss_data->pcc_lock);
+> +               return ret;
+> +       }
+> +
+> +       return cpc_write(cpu, reg, val);
 > +}
 > +
-> +static int rockchip_pd_regulator_enable(struct rockchip_pm_domain *pd)
-> +{
-> +	struct rockchip_pmu *pmu = pd->pmu;
-> +
-> +	if (!pd->info->need_regulator)
-> +		return 0;
-> +
-> +	if (IS_ERR_OR_NULL(pd->supply)) {
-> +		pd->supply = devm_of_regulator_get(pmu->dev, pd->node, "domain");
-> +
-> +		if (IS_ERR(pd->supply))
-> +			return PTR_ERR(pd->supply);
-> +	}
-> +
-> +	return regulator_enable(pd->supply);
-> +}
-> +
->  static int rockchip_pd_power_on(struct generic_pm_domain *domain)
+>  /**
+>   * cppc_get_desired_perf - Get the desired performance register value.
+>   * @cpunum: CPU from which to get desired performance.
+>   * @desired_perf: Return address.
+>   *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+>   */
+>  int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
 >  {
->  	struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
-> +	int ret;
-> +
-> +	ret = rockchip_pd_regulator_enable(pd);
-> +	if (ret) {
-> +		dev_err(pd->pmu->dev, "Failed to enable supply: %d\n", ret);
-> +		return ret;
-> +	}
->  
-> -	return rockchip_pd_power(pd, true);
-> +	ret = rockchip_pd_power(pd, true);
-> +	if (ret)
-> +		rockchip_pd_regulator_disable(pd);
-> +
-> +	return ret;
+> -       return cppc_get_perf(cpunum, DESIRED_PERF, desired_perf);
+> +       return cppc_get_reg(cpunum, DESIRED_PERF, desired_perf);
 >  }
->  
->  static int rockchip_pd_power_off(struct generic_pm_domain *domain)
+>  EXPORT_SYMBOL_GPL(cppc_get_desired_perf);
+>
+> @@ -1236,11 +1286,11 @@ EXPORT_SYMBOL_GPL(cppc_get_desired_perf);
+>   * @cpunum: CPU from which to get nominal performance.
+>   * @nominal_perf: Return address.
+>   *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+
+What do you mean by ERRNO?
+
+>   */
+>  int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
 >  {
->  	struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
-> +	int ret;
->  
-> -	return rockchip_pd_power(pd, false);
-> +	ret = rockchip_pd_power(pd, false);
-> +	if (ret)
-> +		return ret;
-> +
-> +	rockchip_pd_regulator_disable(pd);
-> +	return ret;
+> -       return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
+> +       return cppc_get_reg(cpunum, NOMINAL_PERF, nominal_perf);
 >  }
->  
->  static int rockchip_pd_attach_dev(struct generic_pm_domain *genpd,
-> @@ -711,6 +755,7 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
->  
->  	pd->info = pd_info;
->  	pd->pmu = pmu;
-> +	pd->node = node;
->  
->  	pd->num_clks = of_clk_get_parent_count(node);
->  	if (pd->num_clks > 0) {
-> @@ -1174,35 +1219,35 @@ static const struct rockchip_domain_info rk3576_pm_domains[] = {
->  };
->  
->  static const struct rockchip_domain_info rk3588_pm_domains[] = {
-> -	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
-> -	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false),
-> -	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false),
-> -	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false),
-> -	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false),
-> -	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false),
-> -	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false),
-> -	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false),
-> -	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false),
-> -	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false),
-> -	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false),
-> -	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false),
-> -	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false),
-> -	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       0x0, BIT(21), BIT(12), 0x0, BIT(10), BIT(10), false),
-> -	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       0x0, BIT(22), BIT(13), 0x0, 0,       0,       false),
-> -	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       0x0, BIT(23), BIT(14), 0x0, BIT(11), BIT(11), false),
-> -	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       0x0, BIT(24), BIT(15), 0x0, BIT(12), BIT(12), false),
-> -	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       0x0, BIT(25), BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false),
-> -	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       0x0, BIT(26), BIT(17), 0x0, BIT(15), BIT(15), false),
-> -	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       0x0, BIT(27), BIT(18), 0x4, BIT(0),  BIT(16), false),
-> -	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       0x0, BIT(28), BIT(19), 0x4, BIT(1),  BIT(17), false),
-> -	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       0x0, BIT(29), BIT(20), 0x4, BIT(5),  BIT(21), false),
-> -	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       0x0, BIT(30), BIT(21), 0x0, 0,       0,       false),
-> -	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       0x0, BIT(31), BIT(22), 0x0, 0,       0,       true),
-> -	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0x4, 0,       0,       0x4, BIT(2),  BIT(18), false),
-> -	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       0x4, BIT(1),  BIT(23), 0x0, 0,       0,       false),
-> -	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       0x4, BIT(2),  BIT(24), 0x4, BIT(3),  BIT(19), false),
-> -	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       0x4, BIT(3),  BIT(25), 0x4, BIT(4),  BIT(20), true),
-> -	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       0x4, BIT(5),  BIT(26), 0x0, 0,       0,       false),
-> +	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false, true),
-> +	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false, true),
-> +	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false, false),
-> +	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false, false),
-> +	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false, false),
-> +	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false, false),
-> +	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, false),
-> +	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, false),
-> +	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, false),
-> +	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, false),
-> +	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false, false),
-> +	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false, false),
-> +	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false, false),
-> +	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       0x0, BIT(21), BIT(12), 0x0, BIT(10), BIT(10), false, false),
-> +	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       0x0, BIT(22), BIT(13), 0x0, 0,       0,       false, false),
-> +	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       0x0, BIT(23), BIT(14), 0x0, BIT(11), BIT(11), false, false),
-> +	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       0x0, BIT(24), BIT(15), 0x0, BIT(12), BIT(12), false, false),
-> +	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       0x0, BIT(25), BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false, false),
-> +	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       0x0, BIT(26), BIT(17), 0x0, BIT(15), BIT(15), false, false),
-> +	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       0x0, BIT(27), BIT(18), 0x4, BIT(0),  BIT(16), false, false),
-> +	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       0x0, BIT(28), BIT(19), 0x4, BIT(1),  BIT(17), false, false),
-> +	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       0x0, BIT(29), BIT(20), 0x4, BIT(5),  BIT(21), false, false),
-> +	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       0x0, BIT(30), BIT(21), 0x0, 0,       0,       false, false),
-> +	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       0x0, BIT(31), BIT(22), 0x0, 0,       0,       true, false),
-> +	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0x4, 0,       0,       0x4, BIT(2),  BIT(18), false, false),
-> +	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       0x4, BIT(1),  BIT(23), 0x0, 0,       0,       false, false),
-> +	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       0x4, BIT(2),  BIT(24), 0x4, BIT(3),  BIT(19), false, false),
-> +	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       0x4, BIT(3),  BIT(25), 0x4, BIT(4),  BIT(20), true, false),
-> +	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       0x4, BIT(5),  BIT(26), 0x0, 0,       0,       false, false),
->  };
->  
->  static const struct rockchip_pmu_info px30_pmu = {
-> 
+>
+>  /**
+> @@ -1248,11 +1298,11 @@ int cppc_get_nominal_perf(int cpunum, u64 *nomina=
+l_perf)
+>   * @cpunum: CPU from which to get highest performance.
+>   * @highest_perf: Return address.
+>   *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+>   */
+>  int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
+>  {
+> -       return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
+> +       return cppc_get_reg(cpunum, HIGHEST_PERF, highest_perf);
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+>
+> @@ -1261,11 +1311,11 @@ EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+>   * @cpunum: CPU from which to get epp preference value.
+>   * @epp_perf: Return address.
+>   *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
 
+Same here?
 
+>   */
+>  int cppc_get_epp_perf(int cpunum, u64 *epp_perf)
+>  {
+> -       return cppc_get_perf(cpunum, ENERGY_PERF, epp_perf);
+> +       return cppc_get_reg(cpunum, ENERGY_PERF, epp_perf);
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_get_epp_perf);
 
+It would be cleaner to do the changes below in a separate patch IMV.
 
+> @@ -1545,44 +1595,14 @@ EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
+>   */
+>  int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>  {
+> -       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpunum);
+> -       struct cpc_register_resource *auto_sel_reg;
+> -       u64  auto_sel;
+> -
+> -       if (!cpc_desc) {
+> -               pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+> -               return -ENODEV;
+> -       }
+> -
+> -       auto_sel_reg =3D &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+> -
+> -       if (!CPC_SUPPORTED(auto_sel_reg))
+> -               pr_warn_once("Autonomous mode is not unsupported!\n");
+> -
+> -       if (CPC_IN_PCC(auto_sel_reg)) {
+> -               int pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpunum);
+> -               struct cppc_pcc_data *pcc_ss_data =3D NULL;
+> -               int ret =3D 0;
+> -
+> -               if (pcc_ss_id < 0)
+> -                       return -ENODEV;
+> -
+> -               pcc_ss_data =3D pcc_data[pcc_ss_id];
+> -
+> -               down_write(&pcc_ss_data->pcc_lock);
+> -
+> -               if (send_pcc_cmd(pcc_ss_id, CMD_READ) >=3D 0) {
+> -                       cpc_read(cpunum, auto_sel_reg, &auto_sel);
+> -                       perf_caps->auto_sel =3D (bool)auto_sel;
+> -               } else {
+> -                       ret =3D -EIO;
+> -               }
+> -
+> -               up_write(&pcc_ss_data->pcc_lock);
+> +       u64 auto_sel;
+> +       int ret;
+>
+> +       ret =3D cppc_get_reg(cpunum, AUTO_SEL_ENABLE, &auto_sel);
+> +       if (ret)
+>                 return ret;
+> -       }
+>
+> +       perf_caps->auto_sel =3D (bool)auto_sel;
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_get_auto_sel_caps);
+> @@ -1594,43 +1614,7 @@ EXPORT_SYMBOL_GPL(cppc_get_auto_sel_caps);
+>   */
+>  int cppc_set_auto_sel(int cpu, bool enable)
+>  {
+> -       int pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpu);
+> -       struct cpc_register_resource *auto_sel_reg;
+> -       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
+> -       struct cppc_pcc_data *pcc_ss_data =3D NULL;
+> -       int ret =3D -EINVAL;
+> -
+> -       if (!cpc_desc) {
+> -               pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+> -               return -ENODEV;
+> -       }
+> -
+> -       auto_sel_reg =3D &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+> -
+> -       if (CPC_IN_PCC(auto_sel_reg)) {
+> -               if (pcc_ss_id < 0) {
+> -                       pr_debug("Invalid pcc_ss_id\n");
+> -                       return -ENODEV;
+> -               }
+> -
+> -               if (CPC_SUPPORTED(auto_sel_reg)) {
+> -                       ret =3D cpc_write(cpu, auto_sel_reg, enable);
+> -                       if (ret)
+> -                               return ret;
+> -               }
+> -
+> -               pcc_ss_data =3D pcc_data[pcc_ss_id];
+> -
+> -               down_write(&pcc_ss_data->pcc_lock);
+> -               /* after writing CPC, transfer the ownership of PCC to pl=
+atform */
+> -               ret =3D send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> -               up_write(&pcc_ss_data->pcc_lock);
+> -       } else {
+> -               ret =3D -ENOTSUPP;
+> -               pr_debug("_CPC in PCC is not supported\n");
+> -       }
+> -
+> -       return ret;
+> +       return cppc_set_reg(cpu, AUTO_SEL_ENABLE, enable);
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_set_auto_sel);
+>
+> @@ -1644,38 +1628,7 @@ EXPORT_SYMBOL_GPL(cppc_set_auto_sel);
+>   */
+>  int cppc_set_enable(int cpu, bool enable)
+>  {
+> -       int pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpu);
+> -       struct cpc_register_resource *enable_reg;
+> -       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
+> -       struct cppc_pcc_data *pcc_ss_data =3D NULL;
+> -       int ret =3D -EINVAL;
+> -
+> -       if (!cpc_desc) {
+> -               pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+> -               return -EINVAL;
+> -       }
+> -
+> -       enable_reg =3D &cpc_desc->cpc_regs[ENABLE];
+> -
+> -       if (CPC_IN_PCC(enable_reg)) {
+> -
+> -               if (pcc_ss_id < 0)
+> -                       return -EIO;
+> -
+> -               ret =3D cpc_write(cpu, enable_reg, enable);
+> -               if (ret)
+> -                       return ret;
+> -
+> -               pcc_ss_data =3D pcc_data[pcc_ss_id];
+> -
+> -               down_write(&pcc_ss_data->pcc_lock);
+> -               /* after writing CPC, transfer the ownership of PCC to pl=
+atfrom */
+> -               ret =3D send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> -               up_write(&pcc_ss_data->pcc_lock);
+> -               return ret;
+> -       }
+> -
+> -       return cpc_write(cpu, enable_reg, enable);
+> +       return cppc_set_reg(cpu, ENABLE, enable);
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_set_enable);
+>
+> --
 
