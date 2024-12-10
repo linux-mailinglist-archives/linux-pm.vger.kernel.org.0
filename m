@@ -1,220 +1,162 @@
-Return-Path: <linux-pm+bounces-18974-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18975-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E95109EBE55
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 23:54:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2E089EBF41
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 00:28:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1378A164081
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 22:54:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D14C188A68E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 23:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B5423A596;
-	Tue, 10 Dec 2024 22:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8BA21126D;
+	Tue, 10 Dec 2024 23:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtboAx0B"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="RsRnJV2+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F413923A566;
-	Tue, 10 Dec 2024 22:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733871090; cv=none; b=fqmypQOCtFrvbSnz8mm50QSwypXMgKl9IpvffN2FPbpKfsoioXY3Sp8FaG+JFSsVr58bxBOsQDmEMOSgQ18c40MqHHuNqfQW8XxNwICQy/L3N1sz4g+5asDGQ+RDjInQRF6jd7SsGZA2dkU/B2kGRLDpIbbNDGEu4VxamxxkxUw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733871090; c=relaxed/simple;
-	bh=n5pG/TYyBwfqRQtEQJbQZiEr58WKn9aE5efNPAZov7Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sl5nmXvPySSf4BOnFGNaNgKjRJscEuW94HNTL/DdmiFoz8U4zvUUl5AVR0zRHe1XOO1G/3fbuaRM93LOiBO0vsyfo0r5KzoCyE8FNia3Tt3/keicfm5KOe44f+lipyuD4HgI4357HklSUXswfCczBDHFf11nq067PswEhtNd7sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtboAx0B; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-71ddcdc445dso75953a34.0;
-        Tue, 10 Dec 2024 14:51:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733871088; x=1734475888; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XWRlOS/1Rlfm48UyQ1PyZDHyVL86Gb45oXxEsMJ/ync=;
-        b=DtboAx0B9Zy1ML6wAeMicEKSWRJNT+JBcpsXg/DTSQHVnol3BFX94WNcys9galOQm2
-         JWLyY1Oe+3N5vdY3eTThIFdG86qxCfMCrTNmpU+9pAZMooqypRWOy85GC61AvrymEuc8
-         /V5k28/1LqAlcXq4Oa1RpTTQqS3/Jhe7pl9DtaKmYCVAUIn9rwXfO+OsMNsweX1Pu4N4
-         z3efkUHl5mmyugFcY2TXulCIHdKCe1bk+eHCLccU/o81UyS8UMYErjhzeehV4rZVp9DX
-         qGEwmNyxYCpR+EzV9FYaRGaHkus2KYP/mAVij4rPR7sLWt+1X3N043pDFO8Utt4wR0W+
-         bWHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733871088; x=1734475888;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XWRlOS/1Rlfm48UyQ1PyZDHyVL86Gb45oXxEsMJ/ync=;
-        b=sljfxqQB1Lzm8XxnJRPZ+jJ2gzGYNge4FZjHzuIr1Fo/2KRGxewm7x5UqJxXaZEgLg
-         jfXC92QGFLF+PjYUvmbZzljUMziTR1RbOFVd/vlm0u/0YCXB37McyjVAA95w58He/aYL
-         xcmmAtIXT/uFLcWyIzgsfa7HVrLrKZk1akmUYyp436JGkSvQB00+CFgwJHkg/Ck8iPYg
-         UNuj7sGfuS0fpEa44S1Irp/4IOVVE7epTyjX4WtDCpKLg64r4h0o9CA+u8PAFT+TMzj6
-         1X+4pykaxdEyOq7yebwM/jvIk6HSEieayFBc1pdKpjBctr3NmR+DymDTHQ1cajTCltX3
-         9paA==
-X-Gm-Message-State: AOJu0Yxv2YBxbqSmaEcrXI/gBp3MHDkQ/PxgwYz3+gUbySb2lw1Btajx
-	F7Pbr/kbX0q7ANIaOkwqt+bDhVHBZW51B5zyXk2vQedWNwSoBwRZIpGAkg==
-X-Gm-Gg: ASbGncsr4gLmlr1wfuNVak/gEHdoPBJodlGG7jsSofhTBuvTh5JyMn6I1nE4mbz5oID
-	aW8e8wJq69CN85SbDJbF8monyyGhpKITsvgYtIQxDhmwG8bP9UimAAfkJHMxdUHNwla/oOjMmDx
-	WIY/GApsBmQNdGXAZApQwEmKU6LP4O6isg9UXDyDC0geCh/40rO5KZvMWUtmIBdu0EOJO7tVpdd
-	sdIqAIzMmaDIz8Fakweyw/Q3kZN2/gmN7x5XHMAcEyeMIqgOPC9
-X-Google-Smtp-Source: AGHT+IGEiwxPq74eA4rSCC4kG14soSRpIJQDfPDrxZrNkVAU/bFf3Ano6imm6xa4F50w7uxedzW2UA==
-X-Received: by 2002:a9d:6a19:0:b0:71e:1d:5e09 with SMTP id 46e09a7af769-71e1a10e638mr238943a34.11.1733871087792;
-        Tue, 10 Dec 2024 14:51:27 -0800 (PST)
-Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5f2a9d525f2sm1704136eaf.4.2024.12.10.14.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2024 14:51:27 -0800 (PST)
-From: Chris Morgan <macroalpha82@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: linux-iio@vger.kernel.org,
-	andre.przywara@arm.com,
-	lee@kernel.org,
-	wens@csie.org,
-	sre@kernel.org,
-	lars@metafoo.de,
-	jic23@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 2/2] power: supply: axp20x: Use devm_iio_channel_get_sys() for iio chans
-Date: Tue, 10 Dec 2024 16:48:59 -0600
-Message-ID: <20241210224859.58917-3-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241210224859.58917-1-macroalpha82@gmail.com>
-References: <20241210224859.58917-1-macroalpha82@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BEB986324;
+	Tue, 10 Dec 2024 23:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733873276; cv=pass; b=cOLU3B5n/8eITrH/Q6Ay4AYQJiz1MPRA6Gp0dc7OT3cCgXNcEafWkFaFNMMucgTM5KLypbFWfagGkjdt1O699zX+ZqNNuHT1IC/md1IiQT5DwCjejcEF/MiYwbuu2nEWQ5wI9vvtLzl2kpiTQBw8/S43Nwygtbc+zFvhHbxTVSM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733873276; c=relaxed/simple;
+	bh=S5Y+gIihRXFWBQSH13/S3EIEmvAEO9vUhJ1pyTVGmIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sBeq7ZCbsVbgQxVUUbvjwiiwTClS0MdDKXwssLkujMGIz3UJgmyAMVOmUiPh7F4SCd6zutfefKNrvsVPdpDBNswseFnC3CdB/O3f1TLYbG6TECKVdDkKl6Fl5rySUGVWhSXtaudGwghaWQ/kLl0J9oex24+lD0b/TqGIkSzyUZQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=RsRnJV2+; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1733873245; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=T8mwsCj1K4qwWnOKCe3SMccU8Ee2A9OLp88pJzI+MH+en/awE5CNLBeEO/pvHVYnFAwgGIm1Sjm9ckMVzdfGidIqN5GFWd0fJ4JNLdr184lS/izkbeUN3uHh11ttGiyxfGnE6RG6z5SPdrQMbHWa1KkiM8cRPlAQrxvXiiRadVA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1733873245; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=S5Y+gIihRXFWBQSH13/S3EIEmvAEO9vUhJ1pyTVGmIQ=; 
+	b=YrVJGnKk5kp8/0z3KhHJ7MdaLvwCY6eE4mivEgobUI1JEmNdHvUBizSQtMfLTgg6bbmsRvqJ4+mJFzaOAuTytomUfCdw4vs0nkBZrpkFVk+gW4M1nTs0NPAVb7znjMtULrFbMPZ+O0hEa55yw4NzQdl4Kz7/2t+MMXr132fNI8A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733873245;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=S5Y+gIihRXFWBQSH13/S3EIEmvAEO9vUhJ1pyTVGmIQ=;
+	b=RsRnJV2+l1Dn3E0d12RhK64YIRQDl4uN6YDfJdEPIVrBD27U9kSLyuq/yJXlufCI
+	YhBg8p4e5RanCxvLKGKKdd0trEskEAKZJqycXkOHd6U/10D2tn8TQ+nMboqg8AmCO8Y
+	D4DvXzestQDc9C7Y8IjYtbQ5R1uinbE991r5wqew=
+Received: by mx.zohomail.com with SMTPS id 1733873242779286.3544610017565;
+	Tue, 10 Dec 2024 15:27:22 -0800 (PST)
+Received: by mercury (Postfix, from userid 1000)
+	id 85DE110604B1; Wed, 11 Dec 2024 00:27:17 +0100 (CET)
+Date: Wed, 11 Dec 2024 00:27:17 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?utf-8?B?QWRyacOhbiBNYXJ0w61uZXo=?= Larumbe <adrian.larumbe@collabora.com>, Boris Brezillon <boris.brezillon@collabora.com>, 
+	Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v4 6/7] pmdomain: rockchip: add regulator support
+Message-ID: <vkeenncm2azxe6topeajc5d43d7gqgqrjtqadaz6cxbe4f7ucm@c4nhv5rrjvhd>
+References: <20241210171023.141162-1-sebastian.reichel@collabora.com>
+ <20241210171023.141162-7-sebastian.reichel@collabora.com>
+ <4082877.3daJWjYHZt@diego>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6k6r4c3ojau36eyv"
+Content-Disposition: inline
+In-Reply-To: <4082877.3daJWjYHZt@diego>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/233.863.1
+X-ZohoMailClient: External
 
-From: Chris Morgan <macromorgan@hotmail.com>
 
-Since commit e37ec3218870 ("mfd: axp20x: Allow multiple regulators")
-the drivers for AC, battery, and USB have failed to probe when the
-option of CONFIG_AXP20X_ADC is enabled. This appears to be because
-the existing function devm_iio_channel_get() no longer calls
-iio_channel_get_sys(). Use the newly created function of
-devm_iio_channel_get_sys() instead.
+--6k6r4c3ojau36eyv
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 6/7] pmdomain: rockchip: add regulator support
+MIME-Version: 1.0
 
-Fixes: e37ec3218870 ("mfd: axp20x: Allow multiple regulators")
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
----
- drivers/power/supply/axp20x_ac_power.c  |  4 ++--
- drivers/power/supply/axp20x_battery.c   | 16 ++++++++--------
- drivers/power/supply/axp20x_usb_power.c |  6 +++---
- 3 files changed, 13 insertions(+), 13 deletions(-)
+Hi,
 
-diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
-index e5733cb9e19e..07de889af16b 100644
---- a/drivers/power/supply/axp20x_ac_power.c
-+++ b/drivers/power/supply/axp20x_ac_power.c
-@@ -343,14 +343,14 @@ static int axp20x_ac_power_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	if (axp_data->acin_adc) {
--		power->acin_v = devm_iio_channel_get(&pdev->dev, "acin_v");
-+		power->acin_v = devm_iio_channel_get_sys(&pdev->dev, "acin_v");
- 		if (IS_ERR(power->acin_v)) {
- 			if (PTR_ERR(power->acin_v) == -ENODEV)
- 				return -EPROBE_DEFER;
- 			return PTR_ERR(power->acin_v);
- 		}
- 
--		power->acin_i = devm_iio_channel_get(&pdev->dev, "acin_i");
-+		power->acin_i = devm_iio_channel_get_sys(&pdev->dev, "acin_i");
- 		if (IS_ERR(power->acin_i)) {
- 			if (PTR_ERR(power->acin_i) == -ENODEV)
- 				return -EPROBE_DEFER;
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-index fa27195f074e..152e556a4417 100644
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -906,23 +906,23 @@ static const struct power_supply_desc axp717_batt_ps_desc = {
- static int axp209_bat_cfg_iio_channels(struct platform_device *pdev,
- 				       struct axp20x_batt_ps *axp_batt)
- {
--	axp_batt->batt_v = devm_iio_channel_get(&pdev->dev, "batt_v");
-+	axp_batt->batt_v = devm_iio_channel_get_sys(&pdev->dev, "batt_v");
- 	if (IS_ERR(axp_batt->batt_v)) {
- 		if (PTR_ERR(axp_batt->batt_v) == -ENODEV)
- 			return -EPROBE_DEFER;
- 		return PTR_ERR(axp_batt->batt_v);
- 	}
- 
--	axp_batt->batt_chrg_i = devm_iio_channel_get(&pdev->dev,
--							"batt_chrg_i");
-+	axp_batt->batt_chrg_i = devm_iio_channel_get_sys(&pdev->dev,
-+							 "batt_chrg_i");
- 	if (IS_ERR(axp_batt->batt_chrg_i)) {
- 		if (PTR_ERR(axp_batt->batt_chrg_i) == -ENODEV)
- 			return -EPROBE_DEFER;
- 		return PTR_ERR(axp_batt->batt_chrg_i);
- 	}
- 
--	axp_batt->batt_dischrg_i = devm_iio_channel_get(&pdev->dev,
--							   "batt_dischrg_i");
-+	axp_batt->batt_dischrg_i = devm_iio_channel_get_sys(&pdev->dev,
-+							    "batt_dischrg_i");
- 	if (IS_ERR(axp_batt->batt_dischrg_i)) {
- 		if (PTR_ERR(axp_batt->batt_dischrg_i) == -ENODEV)
- 			return -EPROBE_DEFER;
-@@ -935,15 +935,15 @@ static int axp209_bat_cfg_iio_channels(struct platform_device *pdev,
- static int axp717_bat_cfg_iio_channels(struct platform_device *pdev,
- 				       struct axp20x_batt_ps *axp_batt)
- {
--	axp_batt->batt_v = devm_iio_channel_get(&pdev->dev, "batt_v");
-+	axp_batt->batt_v = devm_iio_channel_get_sys(&pdev->dev, "batt_v");
- 	if (IS_ERR(axp_batt->batt_v)) {
- 		if (PTR_ERR(axp_batt->batt_v) == -ENODEV)
- 			return -EPROBE_DEFER;
- 		return PTR_ERR(axp_batt->batt_v);
- 	}
- 
--	axp_batt->batt_chrg_i = devm_iio_channel_get(&pdev->dev,
--							"batt_chrg_i");
-+	axp_batt->batt_chrg_i = devm_iio_channel_get_sys(&pdev->dev,
-+							 "batt_chrg_i");
- 	if (IS_ERR(axp_batt->batt_chrg_i)) {
- 		if (PTR_ERR(axp_batt->batt_chrg_i) == -ENODEV)
- 			return -EPROBE_DEFER;
-diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index 9722912268fe..c82f05cef379 100644
---- a/drivers/power/supply/axp20x_usb_power.c
-+++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -577,14 +577,14 @@ static int axp717_usb_power_prop_writeable(struct power_supply *psy,
- static int axp20x_configure_iio_channels(struct platform_device *pdev,
- 					 struct axp20x_usb_power *power)
- {
--	power->vbus_v = devm_iio_channel_get(&pdev->dev, "vbus_v");
-+	power->vbus_v = devm_iio_channel_get_sys(&pdev->dev, "vbus_v");
- 	if (IS_ERR(power->vbus_v)) {
- 		if (PTR_ERR(power->vbus_v) == -ENODEV)
- 			return -EPROBE_DEFER;
- 		return PTR_ERR(power->vbus_v);
- 	}
- 
--	power->vbus_i = devm_iio_channel_get(&pdev->dev, "vbus_i");
-+	power->vbus_i = devm_iio_channel_get_sys(&pdev->dev, "vbus_i");
- 	if (IS_ERR(power->vbus_i)) {
- 		if (PTR_ERR(power->vbus_i) == -ENODEV)
- 			return -EPROBE_DEFER;
-@@ -597,7 +597,7 @@ static int axp20x_configure_iio_channels(struct platform_device *pdev,
- static int axp717_configure_iio_channels(struct platform_device *pdev,
- 					 struct axp20x_usb_power *power)
- {
--	power->vbus_v = devm_iio_channel_get(&pdev->dev, "vbus_v");
-+	power->vbus_v = devm_iio_channel_get_sys(&pdev->dev, "vbus_v");
- 	if (IS_ERR(power->vbus_v)) {
- 		if (PTR_ERR(power->vbus_v) == -ENODEV)
- 			return -EPROBE_DEFER;
--- 
-2.43.0
+On Tue, Dec 10, 2024 at 06:51:34PM +0100, Heiko St=FCbner wrote:
+> Am Dienstag, 10. Dezember 2024, 18:06:46 CET schrieb Sebastian Reichel:
+> > Some power domains require extra voltages to be applied. For example
+> > trying to enable the GPU power domain on RK3588 fails when the SoC
+> > does not have VDD GPU enabled. The same is expected to happen for
+> > the NPU, which also has a dedicated supply line.
+> >=20
+> > We get the regulator using devm_of_regulator_get(), so a missing
+> > dependency in the devicetree is handled gracefully by printing a warning
+> > and creating a dummy regulator. This is necessary, since existing DTs do
+> > not have the regulator described. They might still work if the regulator
+> > is marked as always-on. It is also working if the regulator is enabled
+> > at boot time and the GPU driver is probed before the kernel disables
+> > unused regulators.
+> >=20
+> > The regulator itself is not acquired at driver probe time, since that
+> > creates an unsolvable circular dependency. The power domain driver must
+> > be probed early, since SoC peripherals need it. Regulators on the other
+> > hand depend on SoC peripherals like SPI, I2C or GPIO. MediaTek does not
+> > run into this, since they have two power domain drivers.
+> >=20
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>=20
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+>=20
+> sidenote:
+> part of me is asking, why we're limiting regulator handling only to
+> specific individual domains when all domains sort of have supplying
+> regulators - just ones that normally always stay on.
+>=20
+> But, the binding is generic, so we can extend that later on in the driver
+> if needed. Especially as this fixes a problem that happens right now.
 
+I agree, that this should probably be extended to some additional
+power domains, like the NPU in the future (as mentioned in the commit
+message). Specifying the full requirements for all internal power
+domains would result in some dependency cycles since the regulators
+(for RK3588) need the SPI PMIC and for SPI controller needs some
+power domains to probe :) We are also missing the necessary
+information which regulators are needed for each particular power
+domain. I don't think its worth the trouble.
+
+Greetings,
+
+-- Sebastian
+
+--6k6r4c3ojau36eyv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdYzksACgkQ2O7X88g7
++poMUA//Z2Lub03b71/y64gXVTcpEunaBBeUzXwykw75YBgwV4DgdWbU7pSNKqXH
+cyvQB3s9AcyeiW+qkww0CG9DOSTxNW2Ce44VEeoFP1/TMMxk4iLcjCUWyRDUfGiN
+MDYlMX9LLgdJpwKvw5LsUduzpDcSc3TLgM90m7Zk+G+qxHThst6F7seiiT4Y2oX3
+bmbIVQ9jSirM4mTTCyLQM/ekpD7rTiwjEVbka3n6bCD9O9VeN+bujUogtm6MWUwq
+VX/PknC8B7aL1wzcqd38PMueA2WBLkNJJJGMD/RWY4LJGZj6/Ons1Rk5mKOuMxyg
+HBwOpUyZhK/8I21j5QSnOvkq1NtCg35WFnfdlv8Ih2S+nHH3Og1yeSanuMCz3kSW
+W7BsOaDpX+0oFBE0Bl31uohykfTmGvJfV6+Urn3NrseYLatGJ8ywLtv7zBfijhfp
+2gOP7IOwlzlbwGHJyPWlwo7U3vSRdsFQLZliTTuaxQg3hKpk+mM3hu+wYRgeAWCm
+ZeFclbVkgBkWUoFha42eNOHJ9SEKav0oqfnowBVOFfG90y+yzQNmes6gL75w2JFZ
+loTX3O3I3iEgLcSXWN3vCuH0NuVsykVjPCIByXzOzSPZhz/S2CE8RByxaMkh6C5J
+gf/tLVo4mOsqQYitJNWnySLTVjSapJ8sKgdm4PGzRvxx+3lwDmk=
+=rwns
+-----END PGP SIGNATURE-----
+
+--6k6r4c3ojau36eyv--
 
