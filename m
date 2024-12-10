@@ -1,229 +1,262 @@
-Return-Path: <linux-pm+bounces-18944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 651759EBAAC
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 21:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E0E29EBAB2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 21:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E138F16678C
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:12:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4889166818
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EE0B226883;
-	Tue, 10 Dec 2024 20:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF4C6226889;
+	Tue, 10 Dec 2024 20:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmLkVM/7"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ixC3Uco/";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="DxG2UiSV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573E58633A;
-	Tue, 10 Dec 2024 20:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733861572; cv=none; b=qVYj2nUU6jiBqcLKdVdtta9JG+eHXkLg8dQ7AX6MHxlXqij/XZywklz1MKfoCJJp31jvX9DmygcMc7B6Bacd6yiux24HPVDt6QFmv2J9uwGeyK/9HOLsJHLGZMb2D0a6aUu/d6gbKmovi6tztR9XB/jjKzK/S98IthrQVe+0DRk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733861572; c=relaxed/simple;
-	bh=8amKu6S5ARdj771WQ62rtbtoxNf+lJl/eHouAKRMmX8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eRo7vZwKCxb70FlSI6Epf0179KmlKBHq1/36/2j64bZjhI42yLVNCp/Vd2QSnCpxdm4GmTG63+n48G7aK/SvxD20nXlrT06FMboJaf5wpTBE/qAKmlkjQji6VFFL+CKcUkWmE9nNGbMoIrcr5Yxzax7/6PFPX1JI6OWn7p87Z0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmLkVM/7; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a9a977d6cc7so883841066b.3;
-        Tue, 10 Dec 2024 12:12:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF4D8633A;
+	Tue, 10 Dec 2024 20:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733861699; cv=fail; b=BUHyAIX8dbgJCney36HS6Oqb35uMStaQTkq77bIEnFsv3d7F1lexfTxwVMLWZiMca+MGJzyv6SxvLZPxPdfl39GBlzsuSUjXWHV/1EyTaJYUETUyb5i65qi48lL/NNTdR7ZyiXVdihZYeBbHUu0HFja+qHb1cfI/PxEOgKi16pU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733861699; c=relaxed/simple;
+	bh=5BouSDfJUs3CuDdrJ2qGU8YZ0gnYGKcWaP9fGu+YWPw=;
+	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
+	 Content-Type:MIME-Version; b=DVCZBSWcRQBLz1FjIXfg5MV2yNYutgz3YUfjCS+wkqUlOs84OkO06lqSxdeu4UIKnqbAdfY8/CeZoPFouE/wjHQL8WnTyP3WSFBBT5ONcYcp1FXUgPs1Dwlu9D5jKMT5JYxVZYqCODzdXe3y59cl2k8pCobg8bUF/5UiVK2PmJs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ixC3Uco/; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=DxG2UiSV; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BAJJJKi019123;
+	Tue, 10 Dec 2024 20:14:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=EAtSV4hnYHtksUDHbr
+	KgTUdsSmwz/sbq0Nfhrup685M=; b=ixC3Uco/RQ8aW0rrS9BjXyx9f16fjdYygo
+	OP0Fv8dMdcMJ6N3Mvo1YpXnc4Fw42JLCc7uNlUEsSsLsyTrnoNZylbeiLF/NOU9X
+	obYciIE6WHHp6jzIhB+CL8B45OAb9SaLNzBj4T+R7WNWVsgBQFbGYhm3rJ/X9Oyb
+	mc6Og7wLJVHJlqL1Blr3XiZzyXUU7Cl/qo1jfPmtfwv8F0i+3Vr7PJbdG8SAVHKd
+	95VgcOLbyrjdQkjJ7dbQzZKTqDi/hOuFWzCFRIPNE3c5Ix0SWry4bF+PDHFRylA/
+	ZmOI4hTJGltTS86wjV+hkRn+AtHXgu2ugoY3ClVjdgdaIFOcpKDQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43cewt6udt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 Dec 2024 20:14:06 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4BAJALqD008623;
+	Tue, 10 Dec 2024 20:14:05 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43cct8uy0t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 Dec 2024 20:14:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DRafTKZ5Wl0XyiB1KmoMLHiQ0mu8woYmLW6pX8blkD6fTzyc6ofLahV+gYWl71a3qxIYET7miUCiUhETZfQoKJCUF9AoyoXYZWXDqj/+Je91Q7Rc+d42XLFFlvb2jYI9xiiGgtXG8i3A+XJdjXAy92u63Dma2+ZeTARdk+xzUxvdD/A4ENMreuL4/4r/ss5kdyfMk7+lJjIJufq/dMjoqG6QkAwBe+TBIE9jJZnbFljbtOSRNE5i3CDGBkoNNU3dTJeyIqllGBJh7zv7kFVv0uyYQQQ5Nlcob6+JfJp9KI3jmI8PW1aNos6d/lOpgNy3Z6KcOiXQByzRfsrZHEGypQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EAtSV4hnYHtksUDHbrKgTUdsSmwz/sbq0Nfhrup685M=;
+ b=zIYr6FQWNzeLwMj0HIIuV2HPEihOitUdx1gFu2r/muszLDExP2NmX/BXI5FTUWvstQlr/tnZxpu1j0SQDzlGn4ynhY4wCRLLZeIfpTKrrCi9Dkf0Q2d7bf+b6QD6uGeq4dDB4oOZuNXqIiBBW5S7bGVeu0u1spX8xxchngxhe+DqCGu3uaRMrA0O41gGFviqAd9QicLSoRJ+nbYnaav3iBlHYRASKwb5X6fuu9vSgXU2TBA3HcclhC0fgJERKA7ZrXP4OlLtij6M5FrQoDeTHq+PuRsULVQ4Z8pU6kb/P0cWjpye/8hOpYFWwZ9gE81eCm9DHaYHUhltOI7JA8He+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733861568; x=1734466368; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j9lbLBBO8kM2n2jRi2Qb1qwlvQ3SeySuQW/fRe7E1eA=;
-        b=fmLkVM/7mq1S9y4dbUzV0VgThGtGmC9Pz7raTrQo+Uo8o6640Q1LsU0JeGmw09LJbo
-         xeCD6j4vomftvUJT4si92BSk3UyTpO5D7NZ3Fsu5bzWJHjDBqRGoT1naF6gpB5a13I9K
-         HXA22iNC0RcJH+h7CL8hFPXREcs/Cdmv6gQPnRxZTllWIOKJr/xlsAV/t1gf2+1wT25I
-         CW+b3dPBfLk8CPxCuCaPefPh7agZLVxtmZ5zoxC8E9fZUkhJJpxC5KM9UZdSb9N4uTCX
-         Ec4FmqvVwrzR4f4ww4PTv6WI4qUZrNfc196O67U4RoQwlN4wv4Wjr94r0VguBlS+JDKJ
-         rZxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733861568; x=1734466368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j9lbLBBO8kM2n2jRi2Qb1qwlvQ3SeySuQW/fRe7E1eA=;
-        b=WAdCzB6Nf8QM9wXXvxDbXQo6wKCb/H5kLdTD+AWZUmtN+ob/rhfeBhNU+YcRjFSPiT
-         kykECqzTXk1qIPxV442ocnhpyPA+nLDlH1C7lDT3dHgRjbCce1NzfKQV3JOEX87j6iEA
-         Ws8MSiKYmP/kDxk5EXuiCxC50X7urLBzMZ4of85AC//BYLSmqTIXF9BtB40JaPGyebyq
-         M9XvrsecF1UxwMaHBuI3PiPw0M/rpUUNBocx59vF1gJwFKxuaqNixEcbpGFksXVWl9r/
-         /ME6vQWuwKKg23PLJdP7QnxN62LKgls5YT6xcLkGyrkrwDXjUKJe/0mr7DcdWKam+hsp
-         PLcg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3E04enslu81ljV7sxWJygy+Fe4mfTj9aOP9r7dWMX9ig7hZcfXByY+M+wgJYKHn9RzYPmgwk1m1s=@vger.kernel.org, AJvYcCWOFYABfQdUi0rwNURrn32bnI0PCTkC2HtgHPOJ/av36qNgjJM2Ae6eFldgVPU5Yej0Ks22u2YXldTdDpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4ISaiH4xlGm6I05pyNRNrA0jN4QV4LKz/SAG00fapQ1WEiLo7
-	saH6Xmq4/vvgEFfZQYUBuOXPLBYGhN7T3UyH/6MB8mHaoIXKGP2WAIQPvTCxcJmN4CWYjMbmlMz
-	4XeeHCzqXVLQYTt9/OmRYIzMslyw=
-X-Gm-Gg: ASbGncut8Yz30JU61cpRaqXQ6fnV5T16tsF/xWAmuAS6AU2BTPaCMnrmXgPLBvL7ye/
-	l5toPA815C1+GqySkbhczLh2ZvuffOblgsQKu
-X-Google-Smtp-Source: AGHT+IGiPfuPBW3oKmG36OHVBhNiaww+/ndbWSRkgdBaXKVg4Zbsas+aQCY8I9lvfIp5/gr9+wqDTDl1YykwOSpcYwM=
-X-Received: by 2002:a05:6402:2808:b0:5d3:ce7f:abdf with SMTP id
- 4fb4d7f45d1cf-5d433163d71mr192647a12.29.1733861568260; Tue, 10 Dec 2024
- 12:12:48 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EAtSV4hnYHtksUDHbrKgTUdsSmwz/sbq0Nfhrup685M=;
+ b=DxG2UiSVX3g9D/UQM0NcggvE6eLlUAn7lXojJD3ZqPVH5AjetZmVQU+/X/aV5zF7jgaa0evf11cI0YnuEb9WlblxFwQ7ma2BUtzFp7HcytSGVTCN9NfcihLtz6lZjXLTXBT6dl1fpZlmb3dvlEnJJef4Gaa4FBw9uy8H1nZ158s=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by MW4PR10MB6536.namprd10.prod.outlook.com (2603:10b6:303:22d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.18; Tue, 10 Dec
+ 2024 20:14:02 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e%3]) with mapi id 15.20.8230.016; Tue, 10 Dec 2024
+ 20:14:02 +0000
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+ <20241107190818.522639-6-ankur.a.arora@oracle.com>
+ <20241210135052.GB15607@willie-the-truck>
+User-agent: mu4e 1.4.10; emacs 27.2
+From: Ankur Arora <ankur.a.arora@oracle.com>
+To: Will Deacon <will@kernel.org>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org,
+        arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
+        harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com,
+        cl@gentwo.org, maz@kernel.org, misono.tomohiro@fujitsu.com,
+        maobibo@loongson.cn, zhenglifeng1@huawei.com,
+        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 05/15] arm64: barrier: add support for
+ smp_cond_relaxed_timeout()
+In-reply-to: <20241210135052.GB15607@willie-the-truck>
+Date: Tue, 10 Dec 2024 12:14:00 -0800
+Message-ID: <878qsn9tyv.fsf@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR04CA0307.namprd04.prod.outlook.com
+ (2603:10b6:303:82::12) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210013010.81257-1-pgwipeout@gmail.com> <20241210013010.81257-2-pgwipeout@gmail.com>
- <1b323d6e9ef873bfc770e9d54b7a3a64@manjaro.org>
-In-Reply-To: <1b323d6e9ef873bfc770e9d54b7a3a64@manjaro.org>
-From: Peter Geis <pgwipeout@gmail.com>
-Date: Tue, 10 Dec 2024 15:12:36 -0500
-Message-ID: <CAMdYzYqmn0UktNfz7L352zcjgmxf4tsRs2fwiFXF7NbfPY4zSg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] pmdomain: rockchip: fix rockchip_pd_power error handling
-To: Dragan Simic <dsimic@manjaro.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, Caesar Wang <wxt@rock-chips.com>, 
-	Detlev Casanova <detlev.casanova@collabora.com>, Finley Xiao <finley.xiao@rock-chips.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Kevin Hilman <khilman@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|MW4PR10MB6536:EE_
+X-MS-Office365-Filtering-Correlation-Id: 913b8812-344e-4139-7342-08dd19573068
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?nsTiJP5J3oiQ79cPgTzoo+pBMdaRg8ciC1lGvtYgXwH2mGfrN3TqcI8o5n7M?=
+ =?us-ascii?Q?5zB4ZsGlUc/7NfHhut0ojdO1DhRa1TR4brV/DD7m40YTexsnoQ0Q8nHflqfX?=
+ =?us-ascii?Q?yRgLGVFYr52WEW0sVr2UozMUo8jNWZalboMgKICs81atr3Cug4M/xzJ5FWM2?=
+ =?us-ascii?Q?wZZCVvJhHtdjwZKXM6X+JtTIBAN2GTjYpd/8FRacQFNyfvlNpN2Itn1cgCeA?=
+ =?us-ascii?Q?bv9u2YLTvguCOB/ENR02u9lPNrQft5OMX9MjWQ5NhDhFz/gcVpBzLNWryRfb?=
+ =?us-ascii?Q?M19MZREESU4/4YN+QmmbvtGoThr8CUvBvUdWK5pdPW95CFCdi2UdQhMbykNT?=
+ =?us-ascii?Q?735EjzAPjHvo8vnfQCNBNX0+TcvjwVwh2tFn3L2sHO3NY4ZnwgFapDWoUGs6?=
+ =?us-ascii?Q?L+hDZcu6f3JAoPqdPSGXD3IRxdqmuqgXHnbsU1Ffu0y24dyK379gNMpiXLgB?=
+ =?us-ascii?Q?8lNkrYzSEw9tpZov374LI7v/cjOQ8hYYH4QICqXFNV+eMbNwoLyeAfAUhWgW?=
+ =?us-ascii?Q?xkNyGcFQzjDGyTNBpgu+6MPzDOCLeTvSndKXHG8bTi+6XQeiqNHmZ2E4vAfd?=
+ =?us-ascii?Q?EL9wQVLsiH4vQYlXwwZP+RBLk6NC5o/Oz0ofg/f6hTqyswbVkCGQYzvtbbQb?=
+ =?us-ascii?Q?ARKiBsNHIZAF/7b8zU1o7wtUrQY5eomd0rFG6B1j1a8Abopujnw30MWmd5VL?=
+ =?us-ascii?Q?xLn02ubrq3TJesyXkIvf63li1ZWYxhvkz6HpObuWd2eUTjgCCfOm6zqxUVi5?=
+ =?us-ascii?Q?BavpIw8+r12+kbuNw3XzT5dx6YLXCWtjfVMp6OGsQwjXgRT5V5M/6tiov4WE?=
+ =?us-ascii?Q?iivloFUpPfZNwqxoVnukLgR/Ubgxk7CHM27U5X0+0KQywTAWvs8Svp/tb6XT?=
+ =?us-ascii?Q?fEUceyetYm7yjFkrx8FCDaF1liLwV4N1Ma2i6YHVvvWaP0sszXTW9hepslgO?=
+ =?us-ascii?Q?weMgsbNrDxQiALJZ0YfO9iIlRdPPIlAJuSTgGwlDGUsisAloB89ewz5KklOP?=
+ =?us-ascii?Q?HBVQaWIRVAFUb24dv5hpqxwRQiRMZTxtwgPjy3Ua2eZqzkDGlG+YEmNuJ+li?=
+ =?us-ascii?Q?Pne+TKFpKWhajF5U5tuB84Q1cxe2acuJyDImbhMijHtKalSzyQmdBDf/J8sc?=
+ =?us-ascii?Q?Cmb+BWdeCWgJWaA/nq+DlZiSzamxziuQY3jKf5Y6pbpx2pkKGn0lcTmQZdHn?=
+ =?us-ascii?Q?eMhidw5V/2VNB7HmOTsCo/RcecvrvVhTnMSIRlSZybZM2WHxADp/S+uDZ/6r?=
+ =?us-ascii?Q?/QfQC3bGxrlcIWCJqpzhhcJHrLKKZnxpe7bENZxzJs3chGVZYSpSkWHPtBDH?=
+ =?us-ascii?Q?OnRmbRmbkuXIiXqF200qLbuQPJEeYwrjeShUAmrH7VjBKg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?DbNxkzWUpKSJIpNsMSr17iDWBKZ2JScky9WoDGv6WJm29vwTGGJXSZZE5cMj?=
+ =?us-ascii?Q?TMxxH857zibensz6DNtqX2DWchj32Rq97MJtgcPNl4+3APLppknGCF2LpdFV?=
+ =?us-ascii?Q?czBkax3ClGSAFGSFX1vrRwHsg658OD3wSqcpAfaDxvYLjNkW0EEFPhddqa14?=
+ =?us-ascii?Q?DaGCr6kZzR2XgAb8zQbfHGdnATaB69M/CKK00uw4k1ND0qag9tjESWNXukke?=
+ =?us-ascii?Q?5Bc1Fl694WHm00aFm8kpU2yApUNvWzdR0i1b7nvRmnDHYlp6KdV83HMoW6bP?=
+ =?us-ascii?Q?7EHr/sUWFMM+5eMNjCjTIwZuucs0JqZ7411Mqjt0JiS2wR3LQ5+bx+SRmDwY?=
+ =?us-ascii?Q?OusklLFN0+eA3+aAR6TDWRPzkawAKSzDKPlfOE4pwqOjpGUpjvGq3vxCfLn5?=
+ =?us-ascii?Q?braa/oSJlFySh2jcqh4wLKlc5WA5qcBOXIvYFUk0ORl+hehk7+VZmsDuDJQd?=
+ =?us-ascii?Q?3lxvARVbeTBq+FVXWXFF5NOs/08mIZSQCY6+Rm8DX5sY5VibTzKljSGbzP7X?=
+ =?us-ascii?Q?ofLaVD9Ded9rtlh/KMv+t7VSgVgZMq/FaqEODPk7K/HfX7r4E/9ZreKruzeK?=
+ =?us-ascii?Q?qQ3TBNPYEBRPEpLIbmg0RdUnIXheUw1MWcF8jaDvP2YZs1k1YwnEkjDwLDxT?=
+ =?us-ascii?Q?Er5nVWxRz+ALGwQmxRfu8Gw/hT8fl+N064NyQv0R1DMuz3W2rzCpF/9PA5Qi?=
+ =?us-ascii?Q?VjaJmcTyMlWEOJ+4YuDInxrV/DDw9agek1QqfYHqslVjM2//64EzFzd8N8Xt?=
+ =?us-ascii?Q?sNqRAoszMfjYNwMR6r8BwA/wnI6/Ro8e3XWzL/3MSEnJqw9afL7/LTlRqUp/?=
+ =?us-ascii?Q?9R2BBrmIqAkvUftGBZJ2FK6Hxkiwf3WHOgI2OGAVIkbXbx3RzzdDz13ksX1r?=
+ =?us-ascii?Q?4hn55HUBHnaAkKYLpNgyfOjdZYCktcvSlEce73QH9X8pOXzhR1HsUzWieH9a?=
+ =?us-ascii?Q?yF+cudpa2x6zQKr8MGW4bvtpDoDYYBcfHbIE8Hi/cjmczOhsabjiFUlXDO5/?=
+ =?us-ascii?Q?jVeLkAhdmmQEYQZsQf4ScJ+oen53KdusMmvb8UrpNFjQyWJ2Xfq95zNNUbGh?=
+ =?us-ascii?Q?cNBV5Ed5dZQ7s7m3V0AMmAgdCy/cGqgPUgy+jr8huCjQYig7gL3nMybG+2aW?=
+ =?us-ascii?Q?kwHZcP5iU9esBGi//9Pk0ijB4qnDcRFyLDVP04JfOHdBuv+Ht/9vhuUiAbVY?=
+ =?us-ascii?Q?DnXJtcvKuGgFsZIvD3gM2iR5fD+xudnCg18NW++ak7q5jpUQTMI7LIz48xpI?=
+ =?us-ascii?Q?2J4q1pjQbk+KABRM517y7yroQRWjqR4r9hooGBA0SSbW11FRk5Qd2o2+w9nu?=
+ =?us-ascii?Q?jWTPEA113NeQC429jcc34HQpup0Tj8UdIJliMpr6ALligaeh179TzfxE7NfM?=
+ =?us-ascii?Q?Q2Hc17mZ7gMmxX2zkoWSnWzSfKLbNyEvsoLxnLE5bUugqK0Y5jAB0fCdYP31?=
+ =?us-ascii?Q?vgmh3bnzbA1Xxu9LnGld+y5rSzvqySi7am36C53ygUGEehxEt9tqs1DoMCP9?=
+ =?us-ascii?Q?yBu+RHa3fRVSe4eLgnVfV6YAUo8GIS56Px8TUzftPM8elSat56QlxahSdrwE?=
+ =?us-ascii?Q?03DLV0fIdrTnp9atmMSMLaeNh5g0QoVYp/5yLvqNOwqPSBOdZ/2eONFrfoTq?=
+ =?us-ascii?Q?aw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	+OK7gZLyT1frRWLApURgZ8W3y9oT7MRTLKsIphI1NIZV7I9Og+AVnX+RzEK7sC2WEuOQSLNdO6delg7iRBE2Q2ZULOimewYC0buc52y4V3naNarhXKVZJLSPlulQnBVT+okkN45aBbnuQcMWVfSLErE7wbcKQEPpPhFVnJtYLOcF9yfaYp9lNWQ9mGg9F6pIF9v0m6O+0rv8sSFO+uQNOGKlEtJ5G+Dv8CiMFrb8Hams9e9CzxTempviG9Eev14qAblPfULrn9A/Q8k9eJDC47eKoaw2/H237nrOfslhP323dHEIV4PwZyRH30W3Ml/CJiSA6mb2gXZ7Rm4988urC8SZ0v1XG0VZDdldE7e28IeFuemWWkQPYZFYMYdE6xO7bDHkQ+hq51+R8aYQquKG2vtjVVlX3ardeXc/qAetJAGYWXfve+X0PkMWOM4VncjKLixALBDHQ77Xid0F8GfsqV8PlufVrBYxPO202uTWKBSYSrtyZRSjy4DetlwttKmdgGS7CDwb5xP2yABcHuwvFLE4GlBw6IiWMdYUF7EAPasV+VLe8b1529kxVldNL5IsI9fSczpScn5EYtblsRQv/ihWlG0oUosVSDqcNUBbHyo=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 913b8812-344e-4139-7342-08dd19573068
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2024 20:14:02.4027
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8UVZCt9G9Wt35o/epmYd5pDQ0ywXCYGZFpwnoZzSr7GhW/wuiauus8zenVqsiYH9UgDrXoUThogLHzk92H3oNEDwf1/jNeytX6ENV9FEun0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6536
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-10_12,2024-12-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
+ definitions=main-2412100146
+X-Proofpoint-ORIG-GUID: 1vZraNKsAPDauMQ976n2SqP_3dtihJd5
+X-Proofpoint-GUID: 1vZraNKsAPDauMQ976n2SqP_3dtihJd5
 
-On Tue, Dec 10, 2024 at 3:18=E2=80=AFAM Dragan Simic <dsimic@manjaro.org> w=
-rote:
->
-> Hello Peter,
->
-> On 2024-12-10 02:30, Peter Geis wrote:
-> > The calls rockchip_pd_power makes to rockchip_pmu_set_idle_request lack
-> > any return error handling, causing device drivers to incorrectly
-> > believe
-> > the hardware idle requests succeed when they may have failed. This
-> > leads
-> > to software possibly accessing hardware that is powered off and the
-> > subsequent SError panic that follows.
-> >
-> > Add error checking and return errors to the calling function to prevent
-> > such crashes.
-> >
-> > gst-launch-1.0 videotestsrc num-buffers=3D2000 ! v4l2jpegenc ! fakesink
-> > Setting pipeline to PAUSED ...er-x64
-> > Pipeline is PREROLLING ...
-> > Redistribute latency...
-> > rockchip-pm-domain ff100000.syscon:power-controller: failed to get ack
-> > on
-> > domain 'hevc', val=3D0x98260, idle =3D 0
-> > SError Interrupt on CPU2, code 0x00000000bf000002 -- SError
-> > CPU: 2 UID: 0 PID: 804 Comm: videotestsrc0:s Not tainted 6.12.0-rc5+
-> > #54
-> > Hardware name: Firefly roc-rk3328-cc (DT)
-> > pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
-> > pc : rockchip_vpu2_jpeg_enc_run+0x168/0xbc8
-> > lr : device_run+0xb0/0x128
-> > sp : ffff800082143a20
-> > x29: ffff800082143a20 x28: 0000000000000140 x27: 0000000000000000
-> > x26: ffff582c47a313e8 x25: ffff582c53e95000 x24: ffff582c53e92800
-> > x23: ffff582c5bbe0000 x22: 0000000000000000 x21: ffff582c47a31080
-> > x20: ffffa0d78cfa4168 x19: ffffa0d78cfa4168 x18: ffffb755b0519000
-> > x17: 000000040044ffff x16: 00500072b5503510 x15: a7a6a5a4a3a29a99
-> > x14: 989796959493928a x13: 0000000051eb851f x12: 00000000000000ff
-> > x11: ffffa0d78d812880 x10: ffffa0d78d7fbca0 x9 : 000000000000003f
-> > x8 : 0000000000000063 x7 : 000000000000003f x6 : 0000000000000040
-> > x5 : ffff80008010d000 x4 : ffffa0d78cfa4168 x3 : ffffa0d78cfbfdd8
-> > x2 : ffff80008010d0f4 x1 : 0000000000000020 x0 : 0000000000000140
-> > Kernel panic - not syncing: Asynchronous SError Interrupt
-> > CPU: 2 UID: 0 PID: 804 Comm: videotestsrc0:s Not tainted 6.12.0-rc5+
-> > #54
-> > Hardware name: Firefly roc-rk3328-cc (DT)
-> > Call trace:
-> > dump_backtrace+0xa0/0x128
-> > show_stack+0x20/0x38
-> > dump_stack_lvl+0xc8/0xf8
-> > dump_stack+0x18/0x28
-> > panic+0x3ec/0x428
-> > nmi_panic+0x48/0xa0
-> > arm64_serror_panic+0x6c/0x88
-> > do_serror+0x30/0x70
-> > el1h_64_error_handler+0x38/0x60
-> > el1h_64_error+0x7c/0x80
-> > rockchip_vpu2_jpeg_enc_run+0x168/0xbc8
-> > device_run+0xb0/0x128
-> > v4l2_m2m_try_run+0xac/0x230
-> > v4l2_m2m_ioctl_streamon+0x70/0x90
-> > v4l_streamon+0x2c/0x40
-> > __video_do_ioctl+0x194/0x400
-> > video_usercopy+0x10c/0x808
-> > video_ioctl2+0x20/0x80
-> > v4l2_ioctl+0x48/0x70
-> > __arm64_sys_ioctl+0xb0/0x100
-> > invoke_syscall+0x50/0x120
-> > el0_svc_common.constprop.0+0x48/0xf0
-> > do_el0_svc+0x24/0x38
-> > el0_svc+0x38/0x100
-> > el0t_64_sync_handler+0xc0/0xc8
-> > el0t_64_sync+0x1a8/0x1b0
-> > SMP: stopping secondary CPUs
-> > Kernel Offset: 0x20d70c000000 from 0xffff800080000000
-> > PHYS_OFFSET: 0xffffa7d3c0000000
-> > CPU features: 0x00,00000090,00200000,0200421b
-> > Memory Limit: none
-> > ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
-> >
-> > Fixes: 7c696693a4f5 ("soc: rockchip: power-domain: Add power domain
-> > driver")
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
->
-> This patch is obviously correct, because not checking what
-> rockchip_pmu_set_idle_request() returns was simply wrong.
-> Thanks for the patch!
->
-> Though, shouldn't we improve further the way proper error
-> handling is performed in rockchip_do_pmu_set_power_domain(),
-> by "rolling back" what rockchip_do_pmu_set_power_domain()
-> did after powering up fails?
 
-Eventually, but the reality is if we hit this path the hardware is
-already broken. I wanted to provide a fix with the least amount of
-risk of breaking things further. I'm open to suggestions for further
-improvements here.
+Will Deacon <will@kernel.org> writes:
 
-Current behavior with this patch with the example above causes
-gstreamer to wait indefinitely. I'll trace the return path and see if
-returning an error other than -ETIMEDOUT triggers more robust
-handling.
-
+> On Thu, Nov 07, 2024 at 11:08:08AM -0800, Ankur Arora wrote:
+>> Support a waited variant of polling on a conditional variable
+>> via smp_cond_relaxed_timeout().
+>>
+>> This uses the __cmpwait_relaxed() primitive to do the actual
+>> waiting, when the wait can be guaranteed to not block forever
+>> (in case there are no stores to the waited for cacheline.)
+>> For this we depend on the availability of the event-stream.
+>>
+>> For cases when the event-stream is unavailable, we fallback to
+>> a spin-waited implementation which is identical to the generic
+>> variant.
+>>
+>> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+>> ---
+>>  arch/arm64/include/asm/barrier.h | 54 ++++++++++++++++++++++++++++++++
+>>  1 file changed, 54 insertions(+)
+>>
+>> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+>> index 1ca947d5c939..ab2515ecd6ca 100644
+>> --- a/arch/arm64/include/asm/barrier.h
+>> +++ b/arch/arm64/include/asm/barrier.h
+>> @@ -216,6 +216,60 @@ do {									\
+>>  	(typeof(*ptr))VAL;						\
+>>  })
+>>
+>> +#define __smp_cond_load_timeout_spin(ptr, cond_expr,			\
+>> +				     time_expr_ns, time_limit_ns)	\
+>> +({									\
+>> +	typeof(ptr) __PTR = (ptr);					\
+>> +	__unqual_scalar_typeof(*ptr) VAL;				\
+>> +	unsigned int __count = 0;					\
+>> +	for (;;) {							\
+>> +		VAL = READ_ONCE(*__PTR);				\
+>> +		if (cond_expr)						\
+>> +			break;						\
+>> +		cpu_relax();						\
+>> +		if (__count++ < smp_cond_time_check_count)		\
+>> +			continue;					\
+>> +		if ((time_expr_ns) >= time_limit_ns)			\
+>> +			break;						\
+>> +		__count = 0;						\
+>> +	}								\
+>> +	(typeof(*ptr))VAL;						\
+>> +})
 >
-> > ---
-> >
-> >  drivers/pmdomain/rockchip/pm-domains.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/pmdomain/rockchip/pm-domains.c
-> > b/drivers/pmdomain/rockchip/pm-domains.c
-> > index cb0f93800138..57e8fa25d2bd 100644
-> > --- a/drivers/pmdomain/rockchip/pm-domains.c
-> > +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> > @@ -590,14 +590,18 @@ static int rockchip_pd_power(struct
-> > rockchip_pm_domain *pd, bool power_on)
-> >                       rockchip_pmu_save_qos(pd);
-> >
-> >                       /* if powering down, idle request to NIU first */
-> > -                     rockchip_pmu_set_idle_request(pd, true);
-> > +                     ret =3D rockchip_pmu_set_idle_request(pd, true);
-> > +                     if (ret < 0)
-> > +                             return ret;
-> >               }
-> >
-> >               rockchip_do_pmu_set_power_domain(pd, power_on);
-> >
-> >               if (power_on) {
-> >                       /* if powering up, leave idle mode */
-> > -                     rockchip_pmu_set_idle_request(pd, false);
-> > +                     ret =3D rockchip_pmu_set_idle_request(pd, false);
-> > +                     if (ret < 0)
-> > +                             return ret;
-> >
-> >                       rockchip_pmu_restore_qos(pd);
-> >               }
+> This is a carbon-copy of the asm-generic timeout implementation. Please
+> can you avoid duplicating that in the arch code?
+
+Yeah I realized a bit late that I could avoid the duplication quite
+simply. Will fix.
+
+Thanks
+
+--
+ankur
 
