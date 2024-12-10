@@ -1,162 +1,188 @@
-Return-Path: <linux-pm+bounces-18947-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18948-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FD209EBACE
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 21:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4DAA9EBAF4
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 21:45:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9538A282CCF
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:26:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6CFB28378F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:45:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309C1226876;
-	Tue, 10 Dec 2024 20:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBE8722ACD8;
+	Tue, 10 Dec 2024 20:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9cPzPfu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuPefJyw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0786C23ED44;
-	Tue, 10 Dec 2024 20:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A5D22A1C3;
+	Tue, 10 Dec 2024 20:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733862389; cv=none; b=GC0d/sr2SHP7aP8tanvs/RFcugOmeGK5T8TQLO+mkkHraSm5KgsGtyORkLTjilgxKrv+RNRCGVFIxaCYGDL7feKfL8BRa1XPXGVzlQi0tpAnvGTnS7YM+YK7g/FLup378pOA5UnrcQ/DWT6LJjtyOV+qbSOmo38sBGV7u8u+Oug=
+	t=1733863528; cv=none; b=XEMT6wx38qDmkSAqUr6pt6y7wtuQabmHxMBtUbcLZheSe3/ZYOJAm9CC3xNw0MPQ4tPH8yRwFUkCsnmsmUJBiRyHA0Pm9k6QZaUTwrSiQUV7TngZl9GsKumWTSDbeKcofFvTupgZgpIEaE1Q60xqviCpJV0gs9fAnmyEztSwOrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733862389; c=relaxed/simple;
-	bh=Mr8Qa/vYrrZI/ef3Lx4QEUCO5zvzeKXwDX87KYC582A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F9fvs5/vxRDAsBhnFLZ0StJ5Xo0wsthjQv+JHhU3G6Y76XW7GpRLJgAYDQK+r6sInzeg6IAshOEtKuHUSBOAgsn7WYOuwGdJTVF8mMmG4p2fHl9rVQssNOdEvZ/aANFOHTi8dXoxkFWWJyDgXpURUv/mfxV45gLUhfJaS8Z/xqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9cPzPfu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C29C4CEE3;
-	Tue, 10 Dec 2024 20:26:28 +0000 (UTC)
+	s=arc-20240116; t=1733863528; c=relaxed/simple;
+	bh=ju4X+yZhI1BnsMkCLu3fV4gRYkOlFHLyiHLIqGY2oAI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XQa/wcEk6QKQvhRuASxSr/nVmg0/70awf+tc0fcocZjB7qBiOz3kluNNVAG361bgABl9TwTWk3QtflfcXmWqYYgbZ4bYlnlqoFuPVcJ/dPJgLPRETdpSqITy7VGwloW/q/h3XIeuye+zRN/wnVg5YPPlasokXU2ny2L0yJTWDpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuPefJyw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C215C4CED6;
+	Tue, 10 Dec 2024 20:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733862388;
-	bh=Mr8Qa/vYrrZI/ef3Lx4QEUCO5zvzeKXwDX87KYC582A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=E9cPzPfuL7RlWcx0zJBUDFUu09gSQvZUzF5qETBJw9yn5Ml+lIdMbVZcBXaLcW4tN
-	 4zkiuH/7U3TSZ+4FyXEyH4eyULAGIGobEw0PWSgkGV31vm5o0zJsmyOJFGa9PCGsmI
-	 qMC1AUO7/9IYVLvHoN614iOm9KrWPOn/TJZpIVhdtsKyNo/rIkr+z3HYzvuSJimSdk
-	 +Lf1DRR/YMag/sgXHWLBM4y2XUKRed9vt16Zfhr88aCGvlEr34FAdJh8TZQvZvdx7B
-	 OjuipqDB3VSylCELYBYDPbXUhqLjzv4cwo+yOZuz4MX2IrNhk8Oq/LjEv0jn3YffhT
-	 6BYGvtt5RcvxA==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5ee645cf763so2645057eaf.2;
-        Tue, 10 Dec 2024 12:26:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW8pm1grYE20aA/O1N/mzXIappu5TsG4vWUl0PmOrbbGDF4IBFBGnFn2GnyB/k/Tt3ziS0rJBQZPXQ=@vger.kernel.org, AJvYcCWqHia60c0wNUm8qG86Ad0RYEeDPgmCeG6FTJWtznG93bMhMXg8wp7NHxhXyL+O872f2Wd6M1eemZkgyQo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM7akv8d64+lFvdHhngw5LX9Jkc3W0eszq6rf8IrXGWvd+73zf
-	Oun9jMKsUw0O4gXjj8ByTdFRmY9Ta/sUZ89NxOO7WIxqUJl+jPA+OY6ZprDjYdsY3ym4Ze8hZN7
-	tW8N5z9kTJ2VWbXx920VRdWg0BJI=
-X-Google-Smtp-Source: AGHT+IGAyRNiwYKTrTG0yZbrE3WcttNIKtNYMbg2SWTIT69NpV3P18Z9BP+LFfelVuGw/M81CP1lh6zjOKjDWKu5KO0=
-X-Received: by 2002:a4a:ee98:0:b0:5f1:e293:e102 with SMTP id
- 006d021491bc7-5f2da12c63amr160202eaf.8.1733862387732; Tue, 10 Dec 2024
- 12:26:27 -0800 (PST)
+	s=k20201202; t=1733863526;
+	bh=ju4X+yZhI1BnsMkCLu3fV4gRYkOlFHLyiHLIqGY2oAI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=fuPefJywZSC3M5DKCRmu3ip8euNlDXxGdFXxooGSAULaGIOQ5Nr3J7A8yuFDyXspy
+	 oQHvIsVL3v9/2MJzNtHGIBnOWUMkQV9CLVYggHAk4mUIFLn8ppTNLaDNDJ5mzYNClN
+	 VSAnWePQkypQYcUCAZYFVZbYW58OhC0MG5N26Q+r34e0hFf3ycJbcxEAjSzibf320q
+	 lE8PTVeXmLFx2jA3BhWto17ogq/CBBuZPWRn1hOW/idRHZkiH8d3NfUHD4mV420G9X
+	 OPPTNfH92OPYM86pO92Jhv5vAAilHptux61V7er22TPoa0+IyydzfwsiBKB9tsj9Ta
+	 dmZsLMaPudTMQ==
+Message-ID: <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org>
+Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
+ 2.5 GT/s
+From: Niklas Schnelle <niks@kernel.org>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,  Bjorn
+ Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, Rob Herring
+ <robh@kernel.org>, Krzysztof Wilczy??ski	 <kw@linux.com>, "Maciej W .
+ Rozycki" <macro@orcam.me.uk>, Jonathan Cameron	
+ <Jonathan.Cameron@huawei.com>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
+ Krishna chaitanya chundru	 <quic_krichai@quicinc.com>, Srinivas Pandruvada	
+ <srinivas.pandruvada@linux.intel.com>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, 	linux-pm@vger.kernel.org, Smita Koralahalli	
+ <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,  Christophe JAILLET
+ <christophe.jaillet@wanadoo.fr>, Mika Westerberg
+ <mika.westerberg@linux.intel.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>
+Date: Tue, 10 Dec 2024 21:45:18 +0100
+In-Reply-To: <Z1gSZCdv3fwnRRNk@wunner.de>
+References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
+		 <Z1gSZCdv3fwnRRNk@wunner.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241204140828.11699-1-patryk.wlazlyn@linux.intel.com> <20241204140828.11699-4-patryk.wlazlyn@linux.intel.com>
-In-Reply-To: <20241204140828.11699-4-patryk.wlazlyn@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 10 Dec 2024 21:26:16 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hL0QOT17DnsUKONHVy1+Yy84soPWU74gHAxjsozerPgg@mail.gmail.com>
-Message-ID: <CAJZ5v0hL0QOT17DnsUKONHVy1+Yy84soPWU74gHAxjsozerPgg@mail.gmail.com>
-Subject: Re: [PATCH v8 3/4] intel_idle: Provide the default enter_dead() handler
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	rafael.j.wysocki@intel.com, peterz@infradead.org, dave.hansen@linux.intel.com, 
-	gautham.shenoy@amd.com, tglx@linutronix.de, len.brown@intel.com, 
-	artem.bityutskiy@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 4, 2024 at 3:08=E2=80=AFPM Patryk Wlazlyn
-<patryk.wlazlyn@linux.intel.com> wrote:
->
-> Recent Intel platforms require idle driver to provide information about
-> the MWAIT hint used to enter the deepest idle state in the play_dead
-> code.
->
-> Provide the default enter_dead() handler for all of the platforms and
-> allow overwriting with a custom handler for each platform if needed.
+On Tue, 2024-12-10 at 11:05 +0100, Lukas Wunner wrote:
+> On Sat, Dec 07, 2024 at 07:44:09PM +0100, Niklas Schnelle wrote:
+> > Trying to enable bwctrl on a Thunderbolt port causes a boot hang on som=
+e
+> > systems though the exact reason is not yet understood.
+>=20
+> Probably worth highlighting the discrete Thunderbolt chip which exhibits
+> this issue, i.e. Intel JHL7540 (Titan Ridge).
 
-My changelog for this patch:
+Agree will ad for v2.
 
-"A subsequent change is going to make native_play_dead() rely on the
-idle driver to put CPUs going offline into appropriate idle states.
+>=20
+> > --- a/drivers/pci/pcie/portdrv.c
+> > +++ b/drivers/pci/pcie/portdrv.c
+> > @@ -270,7 +270,8 @@ static int get_port_device_capability(struct pci_de=
+v *dev)
+> >  		u32 linkcap;
+> > =20
+> >  		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
+> > -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
+> > +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
+> > +		    (linkcap & PCI_EXP_LNKCAP_SLS) !=3D PCI_EXP_LNKCAP_SLS_2_5GB)
+> >  			services |=3D PCIE_PORT_SERVICE_BWCTRL;
+> >  	}
+>=20
+> This is fine in principle because PCIe r6.2 sec 8.2.1 states:
+>=20
+>    "A device must support 2.5 GT/s and is not permitted to skip support
+>     for any data rates between 2.5 GT/s and the highest supported rate."
+>=20
+> However the Implementation Note at the end of PCIe r6.2 sec 7.5.3.18
+> cautions:
+>=20
+>    "It is strongly encouraged that software primarily utilize the
+>     Supported Link Speeds Vector instead of the Max Link Speed field,
 
-For this reason, provide the default :enter_dead() handler for all of
-the idle states on all platforms supported by intel_idle with an
-option to override it with a custom handler if needed."
+>     so that software can determine the exact set of supported speeds
+>     on current and future hardware. This can avoid software being
+>     confused if a future specification defines Links that do not
+>     require support for all slower speeds."
+>=20
+> First of all, the Supported Link Speeds field in the Link Capabilities
+> register (which you're querying here) was renamed to Max Link Speed in
+> PCIe r3.1=C2=A0and a new Link Capabilities 2 register was added which con=
+tains
+> a new Supported Link Speeds field.  Software is supposed to query the
+> latter if the device implements the Link Capabilities 2 register
+> (see the other Implementation Note at the end of PCIe r6.2 sec 7.5.3.18).
 
-> Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-> ---
->  drivers/idle/intel_idle.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index ac4d8faa3886..c6874a6dbe95 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -56,6 +56,7 @@
->  #include <asm/mwait.h>
->  #include <asm/spec-ctrl.h>
->  #include <asm/fpu/api.h>
-> +#include <asm/smp.h>
->
->  #define INTEL_IDLE_VERSION "0.5.1"
->
-> @@ -227,6 +228,16 @@ static __cpuidle int intel_idle_s2idle(struct cpuidl=
-e_device *dev,
->         return 0;
->  }
->
-> +static __cpuidle void intel_idle_enter_dead(struct cpuidle_device *dev,
-> +                                           int index)
-> +{
-> +       struct cpuidle_driver *drv =3D cpuidle_get_cpu_driver(dev);
-> +       struct cpuidle_state *state =3D &drv->states[index];
-> +       unsigned long eax =3D flg2MWAIT(state->flags);
-> +
-> +       mwait_play_dead(eax);
-> +}
-> +
->  /*
->   * States are indexed by the cstate number,
->   * which is also the index into the MWAIT hint array.
-> @@ -1798,6 +1809,7 @@ static void __init intel_idle_init_cstates_acpi(str=
-uct cpuidle_driver *drv)
->                         state->flags |=3D CPUIDLE_FLAG_TIMER_STOP;
->
->                 state->enter =3D intel_idle;
-> +               state->enter_dead =3D intel_idle_enter_dead;
->                 state->enter_s2idle =3D intel_idle_s2idle;
->         }
->  }
-> @@ -2143,10 +2155,12 @@ static void __init intel_idle_init_cstates_icpu(s=
-truct cpuidle_driver *drv)
->                 if (intel_idle_max_cstate_reached(cstate))
->                         break;
->
-> -               if (!cpuidle_state_table[cstate].enter &&
-> -                   !cpuidle_state_table[cstate].enter_s2idle)
-> +               if (!cpuidle_state_table[cstate].enter)
+Would it maybe make sense to update the comment for PCI_EXP_LNKCAP_SLS
+in pci_regs.h to point out that in PCIe r3.1 and newer this is called
+the Max Link Speed field? This would certainly helped me here.
 
-I don't think that the above change belongs to this patch.  If I'm
-mistaken, it should be mentioned in the changelog and the reason for
-making it should be explained.
+>=20
+> Second, the above-quoted Implementation Note says that software should
+> not rely on future spec versions to mandate that *all* link speeds
+> (2.5 GT/s and all intermediate speeds up to the maximum supported speed)
+> are supported.
+>=20
+> Since v6.13-rc1, we cache the supported speeds in the "supported_speeds"
+> field in struct pci_dev, taking care of the PCIe 3.0 versus later version=
+s
+> issue.
+>=20
+> So to make this future-proof what you could do is check whether only a
+> *single* speed is supported (which could be something else than 2.5 GT/s
+> if future spec versions allow that), i.e.:
+>=20
+> -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
+> +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
+> +		    hweight8(dev->supported_speeds) > 1)
 
->                         break;
->
-> +               if (!cpuidle_state_table[cstate].enter_dead)
-> +                       cpuidle_state_table[cstate].enter_dead =3D intel_=
-idle_enter_dead;
-> +
->                 /* If marked as unusable, skip this state. */
->                 if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_UNUS=
-ABLE) {
->                         pr_debug("state %s is disabled\n",
-> --
+This also makes sense to me in that the argument holds that if there is
+only one supported speed bwctrl can't control it. That said it is
+definitely more general than this patch.
+
+Sadly, I tried it and in my case it doesn't work. Taking a closer look
+at lspci -vvv of the Thunderbolt port as well as a debug print reveals
+why:
+
+07:00.0 PCI bridge: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan R=
+idge 4C 2018] (rev 06) (prog-if 00 [Normal decode])
+       ...
+                LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Lat=
+ency L1 <1us
+                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+                LnkCtl: ASPM Disabled; LnkDisable- CommClk+
+                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                LnkSta: Speed 2.5GT/s, Width x4
+                        TrErr- Train- SlotClk+ DLActive- BWMgmt+ ABWMgmt-
+	...
+                LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retim=
+er- 2Retimers- DRS-
+                LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- Speed=
+Dis-, Selectable De-emphasis: -6dB
+                         Transmit Margin: Normal Operating Range, EnterModi=
+fiedCompliance- ComplianceSOS-
+                         Compliance Preset/De-emphasis: -6dB de-emphasis, 0=
+dB preshoot
+	...
+
+So it seems that on this Thunderbolt chip the LnkCap field
+says 2.5 GT/s only as per the USB 4 spec you quoted but LnkCap2
+is 0x0E i.e. 2.5-8 GT/s.
+
+I wonder if this is related to why the hang occurs. Could it be that
+bwctrl tries to enable speeds above 2.5 GT/s and that causes links to
+fail?
+
+Thanks,
+Niklas
+
 
