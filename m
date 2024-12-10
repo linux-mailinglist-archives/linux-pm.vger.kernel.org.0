@@ -1,139 +1,131 @@
-Return-Path: <linux-pm+bounces-18898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B43E89EAD90
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 11:05:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 342619EADE2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 11:21:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9292928468A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 10:05:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E2118889F2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 10:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2553A23DEB5;
-	Tue, 10 Dec 2024 10:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA5C2080C2;
+	Tue, 10 Dec 2024 10:20:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A9323DE9D;
-	Tue, 10 Dec 2024 10:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863DD23DEB5;
+	Tue, 10 Dec 2024 10:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733825139; cv=none; b=E2mVRpBvwZjSSSNzQx1BbB3QFkydc5y2AWiALeFbfk+1SpEMle6eamZZsBe+8fNx4NJTCTJ5yRx9EWuyjz/ZNNjmdzvuqs+eZQuFvoyemPJVkijKLKtacEwBXshg9uEhmYsQv8MIepCWHVCB8NYnunSzczfeq9ogAQK2YT4mXNU=
+	t=1733826048; cv=none; b=li6cybmmteS14q7j/4GUH8SY67ebgZLL/mdmrQSO2252SEz0Pd/FZ/RiaQz8qWYWX4fy4XKUtANzhArx8Wf0n3GL3EvN/9En0HIfPY96jRNtAIKXozbVkDks2iqXcbqhi8L75hblNFv1787RWqOJ6ZOWBJHcfPUNMsmx4JOGtwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733825139; c=relaxed/simple;
-	bh=lyfeqoW7UDdpbTjJvfagr193PybcKSPetWVvLfyXFgc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mh0n2k+WO1p7QCmlccqkojeFzGc49TbExeXDofpJWYXYKiXLQ7UKDQKzuJ8Vq0cNSgvrHVD8ktD0xJ22dc2cUlqzU+pTVeKunUFLSIYymQUqZZJminrmf35e5mMxXyupYjRx0aftlJVNl9nvDP6N5M0BHz1MQpiaqly4UR3TyM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id E7CD52800BB73;
-	Tue, 10 Dec 2024 11:05:24 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id C309A5F845F; Tue, 10 Dec 2024 11:05:24 +0100 (CET)
-Date: Tue, 10 Dec 2024 11:05:24 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Niklas Schnelle <niks@kernel.org>
-Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>
-Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
- 2.5 GT/s
-Message-ID: <Z1gSZCdv3fwnRRNk@wunner.de>
-References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
+	s=arc-20240116; t=1733826048; c=relaxed/simple;
+	bh=HFMBzk/3OHtaxGCN7f0imP3Rl1I2jxN8hDs0RGXi31A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EY0ygWErTNJeaVsvGkuvNjUzBvTCAQysK2eD/CHNkgt9oZ6icgLy8F6NQTzuYjxM2whqdicJrMVyprPNGk+R8kEwUrGf2BdhleRlc8/kXn+lCX8hBvk2MFjRdsenP5XMKKpJSK8sH/v2cjrpDfmlWZwOiDnULlzkRgSkq/quJek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01449113E;
+	Tue, 10 Dec 2024 02:21:13 -0800 (PST)
+Received: from [10.1.31.84] (e127648.arm.com [10.1.31.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E3D8E3F58B;
+	Tue, 10 Dec 2024 02:20:42 -0800 (PST)
+Message-ID: <a3a4852f-5d22-4440-ac0c-f24f97d3b3d4@arm.com>
+Date: Tue, 10 Dec 2024 10:20:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] cpufreq: userspace: Add fast-switch support for
+ userspace
+To: Xuewen Yan <xuewen.yan94@gmail.com>
+Cc: Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+ viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, guohua.yan@unisoc.com, ke.wang@unisoc.com
+References: <20241209081429.1871-1-xuewen.yan@unisoc.com>
+ <09acd46b-ec63-46ec-a239-e792c3061e52@arm.com>
+ <CAB8ipk92xYEkZ_+m+xKnn2Z0DNOkum+6cgHUhSd_gbdzjAbOXA@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAB8ipk92xYEkZ_+m+xKnn2Z0DNOkum+6cgHUhSd_gbdzjAbOXA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Dec 07, 2024 at 07:44:09PM +0100, Niklas Schnelle wrote:
-> Trying to enable bwctrl on a Thunderbolt port causes a boot hang on some
-> systems though the exact reason is not yet understood.
+On 12/10/24 03:27, Xuewen Yan wrote:
+> On Mon, Dec 9, 2024 at 6:36 PM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> On 12/9/24 08:14, Xuewen Yan wrote:
+>>> Now, the userspace governor does not support userspace,
+>>> if the driver only use the fast-switch and not add target_index(),
+>>
+>> Which driver does that? Is that actually valid?
+>> No mainline driver from what I can see.
+>>
+> 
+> Yes, indeed no mainline driver, It's on our own driver.
 
-Probably worth highlighting the discrete Thunderbolt chip which exhibits
-this issue, i.e. Intel JHL7540 (Titan Ridge).
+Fair enough. 
+There seems to be handling for that case in cpufreq anyway.
 
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -270,7 +270,8 @@ static int get_port_device_capability(struct pci_dev *dev)
->  		u32 linkcap;
->  
->  		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
-> -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
-> +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
-> +		    (linkcap & PCI_EXP_LNKCAP_SLS) != PCI_EXP_LNKCAP_SLS_2_5GB)
->  			services |= PCIE_PORT_SERVICE_BWCTRL;
->  	}
+> 
+>>> it will cause uerspace not work.
+>>
+>> s/uerspace/userspace
+>> to not work?
+>>
+>>> So add fast-switch support for userspace governor.
+>>>
+>>> Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
+>>> Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
+>>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+>>> ---
+>>>  drivers/cpufreq/cpufreq_userspace.c | 35 +++++++++++++++++++++++++----
+>>>  1 file changed, 31 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
+>>> index 2c42fee76daa..3a99197246ed 100644
+>>> --- a/drivers/cpufreq/cpufreq_userspace.c
+>>> +++ b/drivers/cpufreq/cpufreq_userspace.c
+>>> @@ -21,6 +21,30 @@ struct userspace_policy {
+>>>       struct mutex mutex;
+>>>  };
+>>>
+>>> +static int cpufreq_userspace_target_freq(struct cpufreq_policy *policy,
+>>> +                     unsigned int target_freq, unsigned int relation)
+>>> +{
+>>> +     int ret;
+>>
+>> not really necessary
+> 
+> In cpufreq_set(), we need the return value.
 
-This is fine in principle because PCIe r6.2 sec 8.2.1 states:
+Sorry for not being clear enough, I suggested rewriting it
+like this, although personal preference.
 
-   "A device must support 2.5 GT/s and is not permitted to skip support
-    for any data rates between 2.5 GT/s and the highest supported rate."
+---
+static int cpufreq_userspace_target_freq(struct cpufreq_policy *policy,
+			unsigned int target_freq, unsigned int relation)
+{
+	unsigned int idx;
 
-However the Implementation Note at the end of PCIe r6.2 sec 7.5.3.18
-cautions:
+	if (!policy->fast_switch_enabled)
+		return __cpufreq_driver_target(policy, target_freq, relation);
 
-   "It is strongly encouraged that software primarily utilize the
-    Supported Link Speeds Vector instead of the Max Link Speed field,
-    so that software can determine the exact set of supported speeds
-    on current and future hardware. This can avoid software being
-    confused if a future specification defines Links that do not
-    require support for all slower speeds."
+	target_freq = clamp_val(target_freq, policy->min, policy->max);
+	if (!policy->freq_table)
+		return target_freq;
 
-First of all, the Supported Link Speeds field in the Link Capabilities
-register (which you're querying here) was renamed to Max Link Speed in
-PCIe r3.1 and a new Link Capabilities 2 register was added which contains
-a new Supported Link Speeds field.  Software is supposed to query the
-latter if the device implements the Link Capabilities 2 register
-(see the other Implementation Note at the end of PCIe r6.2 sec 7.5.3.18).
+	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
+	policy->cached_resolved_idx = idx;
+	policy->cached_target_freq = target_freq;
+	return !cpufreq_driver_fast_switch(policy, policy->freq_table[idx].frequency);
+}
 
-Second, the above-quoted Implementation Note says that software should
-not rely on future spec versions to mandate that *all* link speeds
-(2.5 GT/s and all intermediate speeds up to the maximum supported speed)
-are supported.
-
-Since v6.13-rc1, we cache the supported speeds in the "supported_speeds"
-field in struct pci_dev, taking care of the PCIe 3.0 versus later versions
-issue.
-
-So to make this future-proof what you could do is check whether only a
-*single* speed is supported (which could be something else than 2.5 GT/s
-if future spec versions allow that), i.e.:
-
--		if (linkcap & PCI_EXP_LNKCAP_LBNC)
-+		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
-+		    hweight8(dev->supported_speeds) > 1)
-
-...and optionally add a code comment, e.g.:
-
-	/* Enable bandwidth control if more than one speed is supported. */
-
-Thanks,
-
-Lukas
 
