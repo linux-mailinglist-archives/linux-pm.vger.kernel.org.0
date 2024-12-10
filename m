@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-18875-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18876-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE3CC9EA3BA
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 01:43:45 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 781649EA3F3
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 01:59:00 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E329F18863E2
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 00:43:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 788442889AE
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 00:58:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD62818E3F;
-	Tue, 10 Dec 2024 00:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30EB322612;
+	Tue, 10 Dec 2024 00:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PgnA62os"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Jfn8WX97"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943A3111A8
-	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 00:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BE93C0C
+	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 00:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733791419; cv=none; b=bfwFDIAKV/JgzzN9dcmX7mm7OKBVsf9k/tTjYBT1wL5wZnu60c8Of4mTSc26QWBHXBNCRu36JP+9QbensZ7nsZ922Tai/tsUm9Kykh9s+gX+IPyDfddznxtxET4JaIzo3gEbBpnTkNHgzSqIIneFai7CiPwa8DjuKPo166Q1e38=
+	t=1733792335; cv=none; b=PCVmpEqnHKq0TKIGOwf3JwjfholwdfJQxX2r0Kj2wjHx2DHvANeS38j4orIhcc6DUiMM/aPNs2yqMKtuJFlM0tPM/i4FbxKkkPLa6t89yq4kO3/lOjrNDy9skCYAUFSJWb9ic3hl+WTSRrAUo2SZYDpeT8N8WjzKWvKLcB0mikQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733791419; c=relaxed/simple;
-	bh=7s8cXBHP/4C+GO2k56/2eFfcYIYomUQvCh2uoFWNhto=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iL254iX0DQcg6Ijjl7XmTOU2zCXVe9N69EvakUqRsZ164QT1GUJWJuSMsgdL08258zqEKmu1KbtUFGMBAvpTK4nl4GkjSWWpTLjmkLFiEP97mr4qbbJ5vFCxfsKsTZdIcwt4AqDnQJb6eweG1W6luLh7itsne/CNPY7bwYNW6+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PgnA62os; arc=none smtp.client-ip=209.85.166.48
+	s=arc-20240116; t=1733792335; c=relaxed/simple;
+	bh=DxAm7kB2JcECl7gkapIzceGKJiE+AFE7Hpp0h/5e9u0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=EQSn9WZgR4hY6KMnzrR6QB6wt/tJCCSgmlrBDfNyXu3jdhsOA93lOEQ5LSUlfy/DfuFzRLG7/X6bRLeCyuLTQIMxY9wC5csX727PA1dT+8UGD6Y71CfCs4RX4Rld3dvA+qQm6PEByDXExLipTaEzcCDfxzyrtzi21b4Y4V8+Y8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Jfn8WX97; arc=none smtp.client-ip=209.85.166.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-843e3b49501so160972939f.0
-        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2024 16:43:37 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-841acc8151aso362658139f.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2024 16:58:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1733791416; x=1734396216; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1733792332; x=1734397132; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uxQj4mFkPuCMF5g/bHPAP+ehf22UWQDWDQ3gf17TMVs=;
-        b=PgnA62oso5qKw3Cryin9/fmfASCNwmh9+HvR8/5+uGLLkGhtmDBtP1PF235C3cJZH7
-         8ZMhhd92uvfc0pBu+f236n0EWlm4Zaf9aNO0bHQvYHzpYrH9dCOcTpxQDT8N5Z2vs/H9
-         CCvE8+k99zWJXBEMJkdwEBHZd/jeoCs+tEvk4=
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SEjpZPJq8u289IHUov+/X17hbI/fbgadb77smhqlSX8=;
+        b=Jfn8WX97H8LZp5TPqijjgUZ8sJQk9GamWeVOdaxZafHte8TNTTuk/4IjTGnyTCBnI/
+         AlmoWE/r7JAj+OSLU2TlTxXu6dvq30Sklij+ZY25ydjBDjjU5VeuLmR5D3nZQtYXzdwd
+         7b83Qnt+n3cZIp0FZz63AJuj1lWSh6kOEhc00=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733791416; x=1734396216;
+        d=1e100.net; s=20230601; t=1733792332; x=1734397132;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uxQj4mFkPuCMF5g/bHPAP+ehf22UWQDWDQ3gf17TMVs=;
-        b=f0nF37o4+saYXA8duUJmHLk2GSKeJWr5/OQhnEPv9b1J5tGQ7P8OaMSohM7tk4SBDN
-         62GbJm9W/4gaB9c818dW4877cOECh1p/q8Auv6gEMyJS2ddTyo3GtIiLNSWim21L0ueg
-         sK1jdYojrLvpkXfnwwbt1WLE5dyzGs/3wrbYi/8zEe3P+NSbJbqvOUVmB9j+DzrD9jCg
-         ckkTjxYUrVLekZQSITs1k5roISn+9BDs/79SfdMqu7vk8p1srrLBPSq6t7GJl/zulVrx
-         Y26OSCfQIHX1W/b7Vv15XeTAdd9Tvg59ZSgBrjque549RKFgZGw5FSOy2Wkik1VX+GO0
-         +Y1w==
-X-Forwarded-Encrypted: i=1; AJvYcCWTcs9Maa78qGHZZaBcFk4Lz1Z5YMSD2W75ol5NEdsaPoZ9FI/IKJv39oW1KOCxkJQjehEZy0VOAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGAf/3VWItnlKmPbnORWh4hnSA+cSUSGiLpfBA02zZ7yqAnF+i
-	/WKQksAiNsVwFSFqMVAmztbAlYJkzclcSzN01D6WqKJpP6k9RR2xC7mIMwjg0Jw=
-X-Gm-Gg: ASbGncvaFaFVUvlJq6GXLvVF6tmp/E6Z0DXvimJpUwdu9PyZdME7Jz7eFki1kh+BB6A
-	J3jJTTMgdsplEJOx2ftPCDGV91vk7sLlcnmptsc+hiWCZoh7G4T6gty+WRm1n4VgbeHZEkhDKp2
-	m1hwA+0fVJudUHrFVpGmemNizbsdKW0iMc3SqTYjuIPWEEqePBb/76TIQCpVGxzRSh9j3eiGLUv
-	O+7TZCtDEbWVPpzJ3Qd3YH7AAX3uq3c3DO7wL6pOchVnufHBsOxOqMLpoKJqJDIsQ==
-X-Google-Smtp-Source: AGHT+IEfT6QHF9o4tTU+ARq3U2kLw293RMSpojeZMjocSBS13RSPmW2lOyXE12NqKCYYgMLVBKBVng==
-X-Received: by 2002:a05:6602:1482:b0:835:4931:b110 with SMTP id ca18e2360f4ac-844b51791a0mr375170339f.5.1733791415202;
-        Mon, 09 Dec 2024 16:43:35 -0800 (PST)
+        bh=SEjpZPJq8u289IHUov+/X17hbI/fbgadb77smhqlSX8=;
+        b=XdrUClF9Q+IlAiJbTC6w/CvvQ63P3QnDmWz+EvAgSdqmCQ9BU9M98ivP2OZtRtjGsm
+         +OfQfPwSKSzHrWxN2v2AfvFgac+y7pk0mNz5jNFRdZGOumMQ2g1y0DsjRb1Jf3X2wesP
+         cmdbtsyVwa+tFonCYUpXICQpF5IybHcB650388o5cKFigEUANYYGkS0LQj3UoQiqJE9s
+         BLrPRNv7uLqQ+jQVOvwpzOsdSOJcMz7KNHKsHKLZt0vNA8b/mc/V/61oGtAoo30si69J
+         rg5CwrOPvCOhPU8aGoPf3VHkA8ekYTQfZSArAUIbwjk8k/+T7DImkDpPvYwHRtQ/bZV+
+         UDww==
+X-Forwarded-Encrypted: i=1; AJvYcCUkz6R3tqoBm4vp8Fj7PysshmYoHwM2U/Xo1INIvphZ1JNGLJZKY8bgqwRi+V2n9a6R2GS5vyzrEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yznjmar8nSl0twA3l+2I2XfndQ3VLmkNMURcYkwPn9XjRMO0NsC
+	m7kwEl9EpYe9x7q92s1fIcB7IgpxP22Ccf9FLYtRObTEpZBVoMI1lnowVkHaeV0=
+X-Gm-Gg: ASbGnctI3waraffHWhRN3nZ/Ctqqk3q0Rti9HcUDwXrJxM+4gNwsZpk7iNOQNqmungZ
+	/qjSJLW95kwMUfL8rwDXawjMX70vHiKv8X90qcHm4ph5m05XX+lgTSw7nkzktr/U8i1gQAturZB
+	Sx6cc1Ml3FodV15iSZW71zAuXTJ5vIgM5lrYotMU2rBCsIdZiimZlQh5V+YsVX3kVOEY4l/HJ2Z
+	Hz8s/yVVkMSmlJK/Rxza3pn65o1Phc0UQ2afZy2c18MMXz1gN4bnGTWSphaQ3uD4w==
+X-Google-Smtp-Source: AGHT+IFtcBzpMhyjSQe9UzBOfjoOKfl8uNNpbJPlBJbRvrs/Ojhx1komTQp0qnO6A25grb08jLMKjQ==
+X-Received: by 2002:a05:6e02:1cab:b0:3a4:eca2:95f1 with SMTP id e9e14a558f8ab-3a9dbac0352mr35106495ab.6.1733792332487;
+        Mon, 09 Dec 2024 16:58:52 -0800 (PST)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-84473a5b3b9sm291700439f.35.2024.12.09.16.43.34
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2c64c24a7sm540644173.78.2024.12.09.16.58.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2024 16:43:34 -0800 (PST)
-Message-ID: <e5b0996d-be80-47a9-af28-ee9776638ab7@linuxfoundation.org>
-Date: Mon, 9 Dec 2024 17:43:33 -0700
+        Mon, 09 Dec 2024 16:58:51 -0800 (PST)
+Message-ID: <16615e97-268e-4daf-a991-6cad7803ac16@linuxfoundation.org>
+Date: Mon, 9 Dec 2024 17:58:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,54 +77,49 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: fix TSC MHz calculation for Mperf monitor
-To: He Rongguang <herongguang@linux.alibaba.com>, trenn@suse.com,
- shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com, wyes.karny@amd.com
-Cc: linux-kernel@vger.kernel.org, shannon.zhao@linux.alibaba.com,
- linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <269b8bb2-85b5-4cc9-9354-a1270f2eed35@linux.alibaba.com>
+Subject: Re: [PATCH] pm: cpupower: Makefile: Fix cross compilation
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Renninger <trenn@suse.com>,
+ Shuah Khan <shuah@kernel.org>, "John B. Wyatt IV" <jwyatt@redhat.com>,
+ John Kacur <jkacur@redhat.com>, Peng Fan <peng.fan@nxp.com>,
+ "open list:CPU POWER MONITORING SUBSYSTEM" <linux-pm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241129012006.3068626-1-peng.fan@oss.nxp.com>
+ <ae5eba41-e2ae-48c4-b25d-daece4d329ca@broadcom.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <269b8bb2-85b5-4cc9-9354-a1270f2eed35@linux.alibaba.com>
+In-Reply-To: <ae5eba41-e2ae-48c4-b25d-daece4d329ca@broadcom.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/28/24 02:50, He Rongguang wrote:
-> Commit 'cpupower: Make TSC read per CPU for Mperf monitor' (c2adb1877b7)
-> changes TSC counter reads to per cpu, but left time diff global (from
-> start of all cpus to end of all cpus), thus diff(time) is too large for
-> a cpu's tsc counting, resulting in far less than acutal TSC_Mhz and thus
-> `cpupower monitor` showing far less than actual cpu realtime frequency.
+On 12/2/24 10:12, Florian Fainelli wrote:
+> On 11/28/24 17:20, Peng Fan (OSS) wrote:
+>> From: Peng Fan <peng.fan@nxp.com>
+>>
+>> After commit f79473ed9220 ("pm: cpupower: Makefile: Allow overriding
+>> cross-compiling env params") we would fail to cross compile cpupower in
+>> buildroot which uses the recipe at [1] where only the CROSS variable is
+>> being set.
+>>
+>> The issue here is the use of the lazy evaluation for all variables: CC,
+>> LD, AR, STRIP, RANLIB, rather than just CROSS.
+>>
+>> [1]:
+>> https://git.buildroot.net/buildroot/tree/package/linux-tools/linux-tool-cpupower.mk.in
+>>
+>> Fixes: f79473ed9220 ("pm: cpupower: Makefile: Allow overriding cross-compiling env params")
+>> Reported-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>> Closes: https://lore.kernel.org/all/2bbabd2c-24ef-493c-a199-594e5dada3da@broadcom.com/
+>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > 
-> Fix this by making timediff also per cpu.
+> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
 > 
-> /proc/cpuinfo shows frequency:
-> cat /proc/cpuinfo | egrep -e 'processor' -e 'MHz'
-> ...
-> processor : 171
-> cpu MHz   : 4108.498
-> ...
-> 
-> before fix (System 100% busy):
->      | Mperf              || Idle_Stats
->   CPU| C0   | Cx   | Freq  || POLL | C1   | C2
->   171|  0.77| 99.23|  2279||  0.00|  0.00|  0.00
-> 
-> after fix (System 100% busy):
->      | Mperf              || Idle_Stats
->   CPU| C0   | Cx   | Freq  || POLL | C1   | C2
->   171|  0.46| 99.54|  4095||  0.00|  0.00|  0.00
-> 
-> Fixes: c2adb1877b76f ("cpupower: Make TSC read per CPU for Mperf monitor")
-> Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
-> ---
+> Thanks!
 
-This patch has several warnings and seems to corrupt. Can you
-look into this and send v2?
-
-scripts/checkpatch.pl will show you the problems.
+Thank you. Applied to linux-cpupower for my next full request to
+Rafael.
 
 thanks,
 -- Shuah
-
 
