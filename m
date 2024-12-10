@@ -1,110 +1,120 @@
-Return-Path: <linux-pm+bounces-18906-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18907-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA3D9EAFA9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 12:17:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A689EB184
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 14:02:04 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7BF8188012B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 11:17:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 985922887BD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 13:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847C6210F6A;
-	Tue, 10 Dec 2024 11:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE2AE1A9B5C;
+	Tue, 10 Dec 2024 13:00:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oPiwb6ii"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myzlr3nP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5378C2080C3;
-	Tue, 10 Dec 2024 11:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986A51B3938;
+	Tue, 10 Dec 2024 13:00:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733829298; cv=none; b=QhpIVeTAEsU4E5C4U4YOX00bumUmeaSSpL0p9BCP3RKTTL7HU7SOoIgUwIt2ITmEKFqX3j6Tv8GSHOTrAfPoBVYmyCmQLOEGdKq0epIsDXtrNGZAggF592B0zgfJ2MnZRlqNcKZhcQ977z265ocoOmBE6rzEUpR/ZmkFkSwkMts=
+	t=1733835643; cv=none; b=bDgtvgIfoTcWxK1wjxihTLoZmbwVk+kv67DyDB/3Yyim22vUoMti4EBhzP5u19jqdRAcDecO0SKJp3EjVvtdHSfnfTFTGXpVGsmBREcSu6PD5lDwmNoLKI8bq5rkzvhZPpvymbeYiVEwVG73daBLyplBkUfl+Wy+xSYnV8+IQCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733829298; c=relaxed/simple;
-	bh=lhICE9COOAdzLbeeCIG0N4z0GPEAUpsD9Gqft5qjfv4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cjpCoC09h17PNsFpwP4t1ribzWfcKoS7Cq82TKnFb5Jvj/kgMDwUvHnw+zkn/DypUUAuFfKBjxqkeZQ6UUyz0k/6QUrQRGlSa1+B5WMP3Y+R9IoPDFDgBcnQsQ1ZrB15aA33Onwl5GpTK5DDBpcf4w/G3jiMyyxrIZ3WgT9O7wU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oPiwb6ii; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3CDC4CED6;
-	Tue, 10 Dec 2024 11:14:54 +0000 (UTC)
+	s=arc-20240116; t=1733835643; c=relaxed/simple;
+	bh=7G7GfT4yW3zCpkGqBz2K23Qi2P4CWzTVgsILI8yLq8o=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=sgAeHDvPxsSUZEiJ868zvQllQf3PcpYo+TNnSGV3bn9p3QuoBj/2VhBZwRFkblvJ4WDF9jL5VRtrtMh8HeC8GTnNuXFg4JLJO/8oIPmGa9pbSAWDbk4WUTsK4uzZPbHj48+6yqfcmHxtUP76GUK0cYwmHF2tsQmHlwf/k/AYbeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myzlr3nP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F094C4CED6;
+	Tue, 10 Dec 2024 13:00:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733829297;
-	bh=lhICE9COOAdzLbeeCIG0N4z0GPEAUpsD9Gqft5qjfv4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oPiwb6iiYNDZ/WGH9n+gRvMNUl6iGEU0HBgF/24GiCfBXOtlBxpMlXU2u10//8QC8
-	 WqMttv5upsoZ3Tccjav4vJtLriG2z2rEYDsmEwVN/VvwArcRysn0T6bYIm41crkJJi
-	 sl87IZYqvkQV6kkCxvZux0h/iSCXHxL+rzPJIg7IUXYsrf8XX7OdYAOgsTC9Mt6yrS
-	 i0cjfLiLJFBKdSeY8auwuEVGyBJjgmQdF1jsB9TmQsBJLu/1gUHvM1k0/M620uRqjc
-	 LqySKf6zHG+OnkBUJPKGWGfTB29xpI/OQhVkIq7IrAf3p6AyEoCARe02X2SdIi2UIZ
-	 uzdvgQ8KgEQ0Q==
-Date: Tue, 10 Dec 2024 11:14:51 +0000
-From: Will Deacon <will@kernel.org>
-To: Rob Clark <robdclark@gmail.com>
-Cc: iommu@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org,
-	Robin Murphy <robin.murphy@arm.com>,
-	Mostafa Saleh <smostafa@google.com>,
-	Rob Clark <robdclark@chromium.org>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	"open list:DRM DRIVER for Qualcomm Adreno GPUs" <dri-devel@lists.freedesktop.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Joerg Roedel <jroedel@suse.de>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	"moderated list:ARM SMMU DRIVERS" <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Sean Paul <sean@poorly.run>, Steven Price <steven.price@arm.com>
-Subject: Re: [PATCH v10 0/4] io-pgtable-arm + drm/msm: Extend iova fault
- debugging
-Message-ID: <20241210111450.GA14735@willie-the-truck>
-References: <20241028213146.238941-1-robdclark@gmail.com>
+	s=k20201202; t=1733835643;
+	bh=7G7GfT4yW3zCpkGqBz2K23Qi2P4CWzTVgsILI8yLq8o=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=myzlr3nPEt0OthL5kbLhQpwnV1PTKaxRgW/URgQv9tsEAswweBdDjRnp/JLpdKFQv
+	 NpuCNUSbgDe/ylBd3hJQOZX7mr1OUADsFxFpqpD9nconhWgOF8PM1B62JF/Qj/lL61
+	 9KWWTX7sG2RGT1FBZcm0A7x8h7PERX+1KNPQYtSFxlnMdC6kU+Qtzs3KrSu5vx30+K
+	 vNPVYdgLeP7lG/9usdwAANSRVOgc9BtBFLdFRgJ0kCa0qJczFsVl11NXeeEFI9scWJ
+	 0NqKiGfxmI6Q3DOcxh78TYm2eUAmoFQia9AHIlHpHCk+EMjhAbc+xUa77jgCGapUul
+	 YKrUaxWuPfctw==
+From: Mark Brown <broonie@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Marcel Holtmann <marcel@holtmann.org>, 
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Janaki Ramaiah Thota <quic_janathot@quicinc.com>
+Cc: quic_mohamull@quicinc.com, quic_hbandi@quicinc.com, 
+ quic_anubhavg@quicinc.com, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+ linux-pm@vger.kernel.org
+In-Reply-To: <20241209103455.9675-1-quic_janathot@quicinc.com>
+References: <20241209103455.9675-1-quic_janathot@quicinc.com>
+Subject: Re: (subset) [PATCH v5 0/4] Enable Bluetooth on qcs6490-rb3gen2
+ board
+Message-Id: <173383563938.33920.16190333165637044320.b4-ty@kernel.org>
+Date: Tue, 10 Dec 2024 13:00:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241028213146.238941-1-robdclark@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-9b746
 
-Hi Rob,
+On Mon, 09 Dec 2024 16:04:51 +0530, Janaki Ramaiah Thota wrote:
+> - Patch 1/4 Add description of the PMU of the WCN6750 module.
+> - Patch 2/4 add and enable BT node for qcs6490-rb3gen board.
+> - Patch 3/4 use the power sequencer for wcn6750.
+> - Patch 4/4 add support for the WCN6750 PMU.
+> 
+> ----
+> Changes from v4:
+> * Added reviewed tag by Krzysztof in p1
+> * Updated the p2 commit message with sw_ctrl and wifi-enable are
+>   handled in wifi FW.
+> * Added blank line between the nodes in p2
+> * Placed the structures in proper order in p4
+> * Link to v4: https://lore.kernel.org/all/20241204131706.20791-1-quic_janathot@quicinc.com/
+> 
+> [...]
 
-On Mon, Oct 28, 2024 at 02:31:36PM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> This series extends io-pgtable-arm with a method to retrieve the page
-> table entries traversed in the process of address translation, and then
-> beefs up drm/msm gpu devcore dump to include this (and additional info)
-> in the devcore dump.
-> 
-> This is a respin of https://patchwork.freedesktop.org/series/94968/
-> (minus a patch that was already merged)
-> 
-> v2:  Fix an armv7/32b build error in the last patch
-> v3:  Incorperate Will Deacon's suggestion to make the interface
->      callback based.
-> v4:  Actually wire up the callback
-> v5:  Drop the callback approach
-> v6:  Make walk-data struct pgtable specific and rename
->      io_pgtable_walk_data to arm_lpae_io_pgtable_walk_data
-> v7:  Re-use the pgtable walker added for arm_lpae_read_and_clear_dirty()
-> v8:  Pass pte pointer to callback so it can modify the actual pte
-> v9:  Fix selftests_running case
-> v10: Call visit cb for all nodes traversed, leave the decision about
->      whether to care about non-leaf nodes to the callback
+Applied to
 
-Do you plan to respin this? I see Mostafa left a proposal on patch 3.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/4] regulator:·dt-bindings:·qcom,qca6390-pmu:·document wcn6750-pmu
+      commit: 8099b1f7e37e98f73664b883464d54e2e2d9522f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
+Mark
 
-Will
 
