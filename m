@@ -1,100 +1,111 @@
-Return-Path: <linux-pm+bounces-18940-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18941-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E59539EB9C2
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:03:12 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 356759EB9CD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 20:06:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 825C128356A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 19:03:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CF281674E7
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 19:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3459C20469D;
-	Tue, 10 Dec 2024 19:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D232046BB;
+	Tue, 10 Dec 2024 19:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="drBGaFYM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RZieEOc4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A953A94D;
-	Tue, 10 Dec 2024 19:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F652046AE
+	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 19:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733857387; cv=none; b=XJ8t7HtJc6B9iMh1jOZIwqQYpyAykYxrYgmcHtxdvPEEXyhA1eGUR/hBsMOUUb76Mq/J/ACeSwHULnmlvkitVz5e99zvU7JrlNnvlOZCF2kwGkIWpnXiTzpKw9wtsqFSyFGjAjl52W/1eJQbaQzjxWTtPcNzCdyBIo/1wujPkQM=
+	t=1733857600; cv=none; b=l8QWUgjkJtR/izDY0rb/hWLyXBhzlfY7XT9vJ5a4i3VTWOb6OigThctOHkuyYhDfQLMxJ8+8wAYHw+jVqnmPD0hCBzvbDixHN1yrC+c9FeNctlLHA+ZLwcResL/zmtQsGvHY3axn/qJjPSdDqZ9kIjNObu4j/doazcZl5tdfVEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733857387; c=relaxed/simple;
-	bh=d6ROkkJrqNfgyixg9hx2zDBh0CYKajb8GtnqVhhCW4o=;
+	s=arc-20240116; t=1733857600; c=relaxed/simple;
+	bh=bg3qDfQE0vN50DaaZPRwJJc/vWdcF907WITtedF3LL4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CaSycBfbU6dVeUzF73nBerwGy2CSlbr+irzw++Mq0wWHzrzPDvOPK76DYnFfaPDZ9J9kYlYR8gULjIvnOy3SGOhcLzqXSVbj5IrU0vS0iKrVN4Hqeoh7eEiffk8dbzY19Ut2POxtowhjibT5DzlEFgX/Rn9RQ01H4npM6MMkvRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=drBGaFYM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E2BAC4CEDD;
-	Tue, 10 Dec 2024 19:03:05 +0000 (UTC)
+	 To:Cc:Content-Type; b=EEWiqr3A+ruSi0VPPQ8FykWq2bpaRn3ZTI+f+lbEt6TZkO/jmEU2o+Qm9u+bfFfsON4X1JS+u7Tf6ZSs7eM5hcyVx7UVXwP9Cgg/YS91IrYKlaDXm5Kwn8rsvbee98WGj6xBBL9gDbEgf7Smv0KFwRCABf3i/UaUHOFwFSfmgZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RZieEOc4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18298C4CEDF
+	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 19:06:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733857385;
-	bh=d6ROkkJrqNfgyixg9hx2zDBh0CYKajb8GtnqVhhCW4o=;
+	s=k20201202; t=1733857600;
+	bh=bg3qDfQE0vN50DaaZPRwJJc/vWdcF907WITtedF3LL4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=drBGaFYM20iRv91K05nnf9KZY0a9wRZZP1650dl6f++TAUL7QOCsWH78St0cV8pjD
-	 b5D9FU/SBXAeGentGyCokV3f1CTIIXsDQCpuIcDZTawTbvUeKEEX7PiAQfd+qPBE7+
-	 oX9grfYYF3VLaGOKMwN9+Mo8W3u9bmxqQqHjB2V0x0s4OJeoOSyVcMzjCETccSr2Ny
-	 HqrsKrowTmXxyuyF1L04MhywufTdTfkQ95P3PHfzY0mKEyASsAoDQRgWCgGsaGW1au
-	 /i4SgCiHzePIufk8FLOTCN1aPE7bbvCA2BvewoT/a/9AXKFl641uo987aPYy9KfZTT
-	 CBrSE5EOggPJA==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5f2ba68b40aso973701eaf.1;
-        Tue, 10 Dec 2024 11:03:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUd4aHyJoWdfp2sAsuAvD1IONn5qvn5/zMlZvHPeIke3WYqC6EZFJ8mCUpdJZXApC4NXHHkkSJd1mcA//Y=@vger.kernel.org, AJvYcCX249J94/LsQ4y8+aPNwuEFg+Rhd+bZ4HMAao1lyh3ePZuLXHpyaVzeEmuLc6hvAVNvBLEdg5n2I/0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydTvA9UQJXnu56VIYkaEaz8V+NzZjFc5NEgTdfyk3QV4jLlkHH
-	xBuLwHNh3CXKiyFi32fQktM2pqESjvgSKxhMZWej7LFDYaHVbsMBbRDLT4wfVgz1WSRehLRhHo/
-	+U5U40c5WGLEGG3J1ulCXBZR3vZY=
-X-Google-Smtp-Source: AGHT+IG7/ZJyrVp7WSUfRkKlrMa8ovsO4i/bL/jbEw1fNfRq7T80SzE9HpRlAaD6DuPTci5BdmAuTg26uNQjo6hh/6w=
-X-Received: by 2002:a05:6820:2604:b0:5f2:9d29:2c4c with SMTP id
- 006d021491bc7-5f2da147485mr41456eaf.6.1733857384917; Tue, 10 Dec 2024
- 11:03:04 -0800 (PST)
+	b=RZieEOc4trr/cGGMKvEqPLFdPg1in3u8eDoFofqRNTDkYbC6baQiNngBOZy3A0rFv
+	 Rps8kL8Tk+SKFIoK2iGayuYiuJMB4gRUx0Et6xTrsGacpm/X7dYvTDyCsGdL/Xg6hc
+	 3Mtk8nC6BeeX6lqmSR6JZEYiVGF/ZWTfCUo+VNah+seKoFMN+Ab3hmPrpRgnDJ/ADU
+	 /kOyUznI2PWIx9eqX+6hs3Yp0FoK04h11Dgggux2z4eyavLdLYxTxU4uMV2zft57wa
+	 IcZHzc0f2S4/UASnoZ6niENRFpARz9sTk8u1KqM7JW/sQgv4wynMlOmTLVlPa95kel
+	 Y0IfGBE2LYZpQ==
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-71decc7de4eso712617a34.2
+        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 11:06:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWREyq9HKQsaRxEseRiCPCDkIayPihJW186aavHLO/WQX/6LEPMBkZ2BNJ6wV2MV7saIJwqys9cBQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi1+DqDfQQevGl7peWGwbns227EIkvhNhz69JB6cy67uVVsBac
+	aqm97wMe2MthIAdEXRftfG2pRyOCvV49wqotHJjEcET4JUV1MzUpzvK56Ko013Znb0E/7JDJvfu
+	Uh1n4e0Ne7jdbrjDWGs6KzPjJWOs=
+X-Google-Smtp-Source: AGHT+IHZ89WLW2w1ljNHkgStLGdAAZXqBbPeBCUhskWu2mQp9x0hi/a0zRoRMzxVtEVMwUpEzAmi6LK2b6KIHIZrARw=
+X-Received: by 2002:a05:6830:650b:b0:718:1163:ef8f with SMTP id
+ 46e09a7af769-71e1979c23amr21994a34.2.1733857599407; Tue, 10 Dec 2024 11:06:39
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241203075802.584741-1-rui.zhang@intel.com>
-In-Reply-To: <20241203075802.584741-1-rui.zhang@intel.com>
+References: <20241203130306.1559024-1-artem.bityutskiy@linux.intel.com>
+In-Reply-To: <20241203130306.1559024-1-artem.bityutskiy@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 10 Dec 2024 20:02:54 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hwAz_9avAMhyY6AfAg2ZdffrhnS5EUPi-pU7LyQfdKHA@mail.gmail.com>
-Message-ID: <CAJZ5v0hwAz_9avAMhyY6AfAg2ZdffrhnS5EUPi-pU7LyQfdKHA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Add RAPL/DPTF support for Pantherlake
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, srinivas.pandruvada@intel.com
+Date: Tue, 10 Dec 2024 20:06:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jMXOUQD1AR7GHFZzc0SnvtdNj6fEq=NQ_ei5MR4YC2wA@mail.gmail.com>
+Message-ID: <CAJZ5v0jMXOUQD1AR7GHFZzc0SnvtdNj6fEq=NQ_ei5MR4YC2wA@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: add Clearwater Forest SoC support
+To: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>, 
+	Artem Bityutskiy <dedekind1@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 3, 2024 at 8:58=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wrot=
-e:
+On Tue, Dec 3, 2024 at 2:03=E2=80=AFPM Artem Bityutskiy
+<artem.bityutskiy@linux.intel.com> wrote:
 >
-> There is an effort on going to avoid per CPU model ID enabling for RAPL
-> support. But this takes some time and requires sufficient test to make
-> sure no regression introduced. So enable PantherLake RAPL support before
-> any rework.
+> Clearwater Forest (CWF) SoC has the same C-states as Sierra Forest (SRF)
+> SoC.  Add CWF support by re-using the SRF C-states table.
 >
-> Zhang Rui (3):
->   powercap: intel_rapl: Add support for PantherLake platform
->   thermal: intel: int340x: processor: Enable MMIO RAPL for PantherLake
->   ACPI: DPTF: Support Panther Lake
+> Note: it is expected that CWF C-states will have same or very similar
+> characteristics as SRF C-states (latency and target residency). However,
+> there is a possibility that the characteristics will end up being
+> different enough when the CWF platform development is finished. In that
+> case, a separate CWF C-states table will be created and populated with
+> the CWF-specific characteristics (latency and target residency).
 >
->  drivers/acpi/dptf/dptf_pch_fivr.c                           | 1 +
->  drivers/acpi/dptf/dptf_power.c                              | 2 ++
->  drivers/acpi/dptf/int340x_thermal.c                         | 6 ++++++
->  drivers/acpi/fan.h                                          | 1 +
->  drivers/powercap/intel_rapl_common.c                        | 1 +
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c     | 1 +
->  drivers/thermal/intel/int340x_thermal/int3403_thermal.c     | 1 +
->  .../intel/int340x_thermal/processor_thermal_device.h        | 1 +
->  .../intel/int340x_thermal/processor_thermal_device_pci.c    | 1 +
->  9 files changed, 15 insertions(+)
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> ---
+>  drivers/idle/intel_idle.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> Note: the patch is against the 'linux-pm' gree.
+> base-commit: e70140ba0d2b1a30467d4af6bcfe761327b9ec95
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index ac4d8faa3886..23d0cd27a581 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1651,6 +1651,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
+nitconst =3D {
+>         X86_MATCH_VFM(INTEL_ATOM_TREMONT_D,     &idle_cpu_snr),
+>         X86_MATCH_VFM(INTEL_ATOM_CRESTMONT,     &idle_cpu_grr),
+>         X86_MATCH_VFM(INTEL_ATOM_CRESTMONT_X,   &idle_cpu_srf),
+> +       X86_MATCH_VFM(INTEL_ATOM_DARKMONT_X,    &idle_cpu_srf),
+>         {}
+>  };
+>
 >
 > --
 
-All applied as 6.14 material, thanks!
+Applied as 6.14 material, thanks!
 
