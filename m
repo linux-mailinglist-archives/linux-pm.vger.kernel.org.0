@@ -1,138 +1,125 @@
-Return-Path: <linux-pm+bounces-18908-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18909-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAAA29EB1F2
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 14:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE6D9EB239
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 14:51:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 948BC188977B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 13:32:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97F6A188D6AE
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2024 13:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F211A9B21;
-	Tue, 10 Dec 2024 13:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4214F1A9B47;
+	Tue, 10 Dec 2024 13:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="awaWyo2x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yf/VLn2I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE80E19DF4B
-	for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 13:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4451E515;
+	Tue, 10 Dec 2024 13:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733837529; cv=none; b=SC7Kbu7eQ0YpS6OEd2u/Q5pgjGHJE4sLHnInwsbGgszXcRv/gMRS1cdbpbl+VMkoJXfnbbVsW/OLtAS9Io1WqGTXTTluWSGHskZM55XBu2Kn0KbvMFesyGiV7tFknbltSCyhNuKeC9mmiaXfVfVwB7/rC09l4QKf6fA8IlUfaic=
+	t=1733838662; cv=none; b=QgYTyH/ba9TZzFOC4JoGSCOD7/xnswXl9hNm6wZ8Wubc7Y5UeuSW6WFB8skzwkX6ftO9Mjrd9+BG+SZX6jrVnOEac4TeZ2MooY9cvCjtYopd8QwOMu5mrJtLZE+cgHmIcsFjFvLUYRXRPlbxXuOrTxySrGTUlD6MGyO3Q55RND8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733837529; c=relaxed/simple;
-	bh=tpxahU2EMEbtUoO2KLIKrt6Ras5uDKSg0IgF0I2BlhE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=saB+id6iPM85OjklcH2bFh0hIl7pP639fM6ECSVGgUUg4D20nt3MeMulfmAUK4oVWjQfK2njGmv21lSH0/TTEJ7ugb06bUpiPdFXNhzlXUR/GO6fzhovgRxuqFQz9X3U5sPbX9VwGyYwKx+k5Ksg2xuij8Z85oAhAtAo/hIi9tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=awaWyo2x; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3862d16b4f5so2447065f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2024 05:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1733837526; x=1734442326; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+XYf7bwDLYGGQXHqNGMCMwv3MtNzDyFAtjldQ9r+Oyc=;
-        b=awaWyo2xbVyYEpv+QlX+DXPRI7qQMD7eUaMgvrLxPl0wtdjx1EjN+JI1akv76LeUai
-         VjRgYBH/EFKEdXcTdlJmYrmQE83yNngSJPP1DhAiujCsL7cMwgnunH9OZS/GzNsVOXFl
-         NG5gslJxUBOl+79OSmRORxRysIQDzC4RZ2fLcp7zUwxGQztjT3OmxgBq2x5Ss/+bnNMF
-         b24H92tIp2l8dlbQg+nQZwpZgIDRoJW7BEf94cBJgMt450g3Tw0IWeXYx6698RJIhZPj
-         kLrPe8ODq6H5srHAsKzxPeqmT8Jjf1yE1Yn770/An9C5ULqFLBZv1sB4O2+53B9/SAJU
-         yscA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733837526; x=1734442326;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+XYf7bwDLYGGQXHqNGMCMwv3MtNzDyFAtjldQ9r+Oyc=;
-        b=oi8D6Ync/V1aAQaSM8qWDXj+XCZrq1APGe9mKlHfXxGIszvMOIfo8/e0yexvfXrKx4
-         3Du06JZ/yM3NtJrc3JEBt5DOksxuCoRZlTf7kpJHiopRd4PsL/ML3GBd08+1aEaXEIrX
-         6qnu5YjfUlaf0QKPvvNFSB0pVTjCayD63oZAl6LNMWc3FDx/Z9Y4l9naYHaGFEr6r4cL
-         ElWJ6aqNsFiAdq+uShT2aA0/haVpKhO/D+yu874tsYCD03uajSPWlAETs9UkxAqQQMoj
-         I3ASsVKvosXj5upWo3DwZ7pDm6pmVAAXRmq4k/vItxocntJvuWwkBCvImP+bHdxX3pMp
-         KbVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWw444H6jsWxGzUiN9Ppq3NphQWfh9HmbieMh+kA3ZrBN9eAEYs6ros+yn9aMXiex4kLRqEbFDY9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyilq+LSKZ6/lTKmiYwoPwLNVUTHT6lfwSTgd7y1D4m418f8jvI
-	flr2yMjFECCF/Hs9cLpYH7VhOglaLbfHZfrmHNob0QdOPrv/6SB9urX4g2eJou0=
-X-Gm-Gg: ASbGncusgGmvtI9YoKHjRlcDq5RdbOqghAzKCZ43lqA1ftipVIq9Y5W7y3HHXTUCBcI
-	0EscLbGRZm7UNf4csvo/1nkFDpxWA9aHAWf+wG6cUuu5gtV/oEn2W+IYZTnuWiZDpFFs8xKfWBw
-	eORAOpuTcvqXxZ83CclVVKgyp1M3SZng7fl/KsXLgX5ljOzfG/X9KRXo8M3atc6CuDHwKCsCyNs
-	+ZABAdl9JN17ZTOIeoZKvufaq0ArBnuQ7HL3dt+Ux3xkgQgvYoBPg==
-X-Google-Smtp-Source: AGHT+IF2eLcwq8DKDelHta8/7SVIEYxjxekiDTZf2TdmNWcwDe+jbysbuh2/9Uh+e7rg5d2e9vNgiA==
-X-Received: by 2002:a5d:598d:0:b0:385:e90a:b7de with SMTP id ffacd0b85a97d-386469a0e74mr2361037f8f.5.1733837526062;
-        Tue, 10 Dec 2024 05:32:06 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:4c2b:c454:658c:f771])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-386367f7c71sm10212405f8f.41.2024.12.10.05.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2024 05:32:05 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Janaki Ramaiah Thota <quic_janathot@quicinc.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	quic_mohamull@quicinc.com,
-	quic_hbandi@quicinc.com,
-	quic_anubhavg@quicinc.com,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: (subset) [PATCH v5 0/4] Enable Bluetooth on qcs6490-rb3gen2 board
-Date: Tue, 10 Dec 2024 14:32:03 +0100
-Message-ID: <173383751206.65568.8559892224432754385.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241209103455.9675-1-quic_janathot@quicinc.com>
-References: <20241209103455.9675-1-quic_janathot@quicinc.com>
+	s=arc-20240116; t=1733838662; c=relaxed/simple;
+	bh=ZXg1bGozVdzn4a1tzlvDLtBv4mWbQKIU/XP6jeBIDvc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bqz6aH7Fn4JBy3lOvF+4aWs8EHGs+nskYxyR6U2Q23auIDb34LbTuzzllkxnULI1B6HBAbLYEaMtpz6eW4U8xTTF/zmEJt3l2ZgY3kKHsldKXRjPzK8Pggf0rpaZYKF+IpVj6V8bZ8Kt8Pyg/YqTZYXaBGI1OjFrxUVuhVrq09I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yf/VLn2I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C58C4CED6;
+	Tue, 10 Dec 2024 13:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733838661;
+	bh=ZXg1bGozVdzn4a1tzlvDLtBv4mWbQKIU/XP6jeBIDvc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yf/VLn2IQhrXOEzbHiLZVrJssWuYF5wdEhW0xeWpZnpKA5ogq7bmRblmgPOoIPExb
+	 qDmFeAJsOhFmvg0N8uuL+IpFFeLdmUXKNtt3zQNIy5mHNEEXSYHX4BbLa6cxzh7SVM
+	 3Fj7X0jnC1pipSs1zsUOkP7Jd5r0jLEEEWudF1d+cH7SQwKvghPYc+4HEjGYEcxLC7
+	 TQ2GNtjGAnkN9RNJSFrEprr6Ri7FngS8zf38cVNimyVvSfa/GuCJZ2YleDRGEFoiGQ
+	 JUs7rG7AUMKGfPAIDS7ylefYJM5qU+wqsAWuURPi0BwNpx3MyzbEGtmMlYMWeSZ0e0
+	 nuu81ImImT/ng==
+Date: Tue, 10 Dec 2024 13:50:52 +0000
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, catalin.marinas@arm.com,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+	lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+	mtosatti@redhat.com, sudeep.holla@arm.com, cl@gentwo.org,
+	maz@kernel.org, misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	zhenglifeng1@huawei.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 05/15] arm64: barrier: add support for
+ smp_cond_relaxed_timeout()
+Message-ID: <20241210135052.GB15607@willie-the-truck>
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+ <20241107190818.522639-6-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107190818.522639-6-ankur.a.arora@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-
-
-On Mon, 09 Dec 2024 16:04:51 +0530, Janaki Ramaiah Thota wrote:
-> - Patch 1/4 Add description of the PMU of the WCN6750 module.
-> - Patch 2/4 add and enable BT node for qcs6490-rb3gen board.
-> - Patch 3/4 use the power sequencer for wcn6750.
-> - Patch 4/4 add support for the WCN6750 PMU.
+On Thu, Nov 07, 2024 at 11:08:08AM -0800, Ankur Arora wrote:
+> Support a waited variant of polling on a conditional variable
+> via smp_cond_relaxed_timeout().
 > 
-> ----
-> Changes from v4:
-> * Added reviewed tag by Krzysztof in p1
-> * Updated the p2 commit message with sw_ctrl and wifi-enable are
->   handled in wifi FW.
-> * Added blank line between the nodes in p2
-> * Placed the structures in proper order in p4
-> * Link to v4: https://lore.kernel.org/all/20241204131706.20791-1-quic_janathot@quicinc.com/
+> This uses the __cmpwait_relaxed() primitive to do the actual
+> waiting, when the wait can be guaranteed to not block forever
+> (in case there are no stores to the waited for cacheline.)
+> For this we depend on the availability of the event-stream.
 > 
-> [...]
+> For cases when the event-stream is unavailable, we fallback to
+> a spin-waited implementation which is identical to the generic
+> variant.
+> 
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+>  arch/arm64/include/asm/barrier.h | 54 ++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+> index 1ca947d5c939..ab2515ecd6ca 100644
+> --- a/arch/arm64/include/asm/barrier.h
+> +++ b/arch/arm64/include/asm/barrier.h
+> @@ -216,6 +216,60 @@ do {									\
+>  	(typeof(*ptr))VAL;						\
+>  })
+>  
+> +#define __smp_cond_load_timeout_spin(ptr, cond_expr,			\
+> +				     time_expr_ns, time_limit_ns)	\
+> +({									\
+> +	typeof(ptr) __PTR = (ptr);					\
+> +	__unqual_scalar_typeof(*ptr) VAL;				\
+> +	unsigned int __count = 0;					\
+> +	for (;;) {							\
+> +		VAL = READ_ONCE(*__PTR);				\
+> +		if (cond_expr)						\
+> +			break;						\
+> +		cpu_relax();						\
+> +		if (__count++ < smp_cond_time_check_count)		\
+> +			continue;					\
+> +		if ((time_expr_ns) >= time_limit_ns)			\
+> +			break;						\
+> +		__count = 0;						\
+> +	}								\
+> +	(typeof(*ptr))VAL;						\
+> +})
 
-Applied, thanks!
+This is a carbon-copy of the asm-generic timeout implementation. Please
+can you avoid duplicating that in the arch code?
 
-[4/4] power: sequencing: qcom-wcn: add support for the WCN6750 PMU
-      commit: 93e3c990fcd90e578fd23b572a6c89020c7a453e
-
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Will
 
