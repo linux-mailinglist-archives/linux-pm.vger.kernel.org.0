@@ -1,190 +1,147 @@
-Return-Path: <linux-pm+bounces-19032-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19033-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76AB49ECF33
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 15:59:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04D169ED023
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 16:45:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B06A518874A8
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 14:59:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9462616ACC1
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 15:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C851A2872;
-	Wed, 11 Dec 2024 14:59:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15161DCB09;
+	Wed, 11 Dec 2024 15:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZqUSXot9"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="LudMsiQs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF98419F116;
-	Wed, 11 Dec 2024 14:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E8B1D5CF5
+	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 15:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733929159; cv=none; b=OOLm07ja1fc6gPzPsagLSOUIvyvhmXPfp0U2EBrXuCYH/4kR1phuHyqQpXBHQFft2SxX1l82Y70idi9p+V/g6vjZHC4wddAdIg4qQf9Bd+Wlo6xKmwXo4hJmAEt8RV3btv2YG5lZ8KTXKgqjdLFJ8Gb5YM0K2GG69Xsu+GK07Ps=
+	t=1733931720; cv=none; b=RVnL7gaq2Gk4iJDypnK/xq6p5I0fvQA+3YXgPirqcBOfV8R0nGLHndZwGzSafVc25AL+joU40kHsaCb8rIsgmb3NFR0BmftBQBDkTPO2J1VKG+nDWGBW7PVqtZiyJtH6nqkjqAiF1n08AYRgGXOEcsEL2A7CEl0pAmWiqXo8FxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733929159; c=relaxed/simple;
-	bh=tm+XYf5eyhi5AgwnwhFjnz+5HTDe+tvhTnN4isbxBIs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YGIDRLO8RPGKfzIxOFSPG+BFmCI1sXG9+mXyHUUzOCA7SNELzgbT1lbJ0Ljs9WIL28vejv8xuGIXJ90+xO7V1tcz8bJjLdggiQIpjWjWEyNW2iOMTnu5jemQoJpAy7EGF2Y1iOb6Nyacar3B4SaU1T0Epq73upUjiipR6vqZc0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZqUSXot9; arc=none smtp.client-ip=209.85.222.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-85c4c9349b3so1157916241.3;
-        Wed, 11 Dec 2024 06:59:17 -0800 (PST)
+	s=arc-20240116; t=1733931720; c=relaxed/simple;
+	bh=9WXVRx/C0BrKo7ppuXd8NFYWBvQIlT4HwsewDeKEJjc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Fm0L7/ht21HnYMwnTQALag5i79Q+MhBMw9huCs7lkyq/NrNpE2b408vA8+Pcp72IWVOsSwq+zO/ghSGN/RhDq1ayNzW1TZQDG5jcI/nl8uAx/E5u5ZtIUn0fvIprAZb3aySlkZCn1Waux6mq3b+BV5bW/ngUCUC7W1Nhu0+wHkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=LudMsiQs; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21680814d42so14166055ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 07:41:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733929156; x=1734533956; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qISq7GajMdBCcxBbvv6KzdEHLpfNlyE+uR1h/30xNC8=;
-        b=ZqUSXot9D9GoFGHIHt1/f2mzBl3Qz/F7E3gi6c6ZX961It8TFEfAye8FzQ1REylUKr
-         xQ0V6i2HY2exMKDui/Db/F7CuiovehjgLhrpQ7R99oNezzENInG/37vYI1FdeNcRRBgz
-         Bxx7rGhwOv7yp6mbadGcD/qlgtrJzVIFCiJn1iVyK8y7rFFJnXfJceObzDfphVpmQLVz
-         WZpmeqXOuMMuKHcqhPDUW1PghCbWjZcUDKqkaX0+WBj1uo0UdkHaWBfCbvcBZvstWHhc
-         p8aPwGxrUJLaNUzMAZdsjBFTEEgX0nExGi3WQFL4jHwoVTm3r2mmnHjWdLV8E0E0t2Pn
-         vANA==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733931716; x=1734536516; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=//mDW/gsbivh5WLVGk2+QEkus5s+/UGSEuoa5vork+c=;
+        b=LudMsiQsgXUK4rADU+ylntIbxa9NCQLzKgITqHHgfRW6KR7ETmJrlQ7v+SxvJlZb5r
+         qZkp5Qq4uaXN3L+4NxQOICnRRqYhuy6Kbnaj0iXSTSyFdVbdV6o9mB+5afYBx+EHJ9ES
+         3aVgnqk0D0VUtrvL57LaD2DQcV3Dx39nr5mEW1maO+xBsMTUXXwa/R7fUBI7d/uQUHIL
+         cqKytdJobnEm39yvAy9zLlmv6Jt6lGOEZljpMMGp/jrWEMdkuEuzbAzN1ZxYnXPoRju6
+         LyjPylyyxPusouw4EcVCs4pZHWdnz13Wb3z0A+WeFkJ13fLvSc8viD9WO/EyMzUfvGny
+         T9fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733929156; x=1734533956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qISq7GajMdBCcxBbvv6KzdEHLpfNlyE+uR1h/30xNC8=;
-        b=NUf4u3Sn1ySkD96jGCd2Hg1aokUiCtSqtphPMNfIHc1BBYEaOfPUnDa7mt2ZT2FAL9
-         9c0Va5DkAorQfmPLQuK0e0hv13Ubfriaj2i5Mgk5PPgWBZ8dE6ATPE7zQ9my0Nc6Tii2
-         PQqRaHvTaXHOXPkAYHESuru59VlEso6tI6IejQT46EcGsnDjq+lMvbZV3wS5ZWi1F/kn
-         x7B0qNtdAnDx0HZVXTTu8JkLCJDXd7rHwtwHdffMxlbs9V1jN+yBtBr+LYc6gg02c1tz
-         DZKSRY/g2BsRrE2T9yphwUkF/NWbcsU7P3gTDCiyBgO6mDaNT8DXnsee4uRMAwyFdFRy
-         acXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUpKBy3c6Sz4+FGaUdCS0Ky2lRyTXZZcAlB+Uk0XqVZ+D75FFDv8qmu3hpMfUA6cuc6o1LDjxZOScoXJRE=@vger.kernel.org, AJvYcCUr2FjC6hAl0V4BMiXERVj4+A+ZlxyILcS1OdJa8fIQZfR8Pp1TahwGxKeNSZD8F19jStldfZcv+A1s@vger.kernel.org, AJvYcCV7aiQHcIPt58QyBIvCLLhw7bV0BF1tKyzMJOgtirs9fbj+z61EcI3GLKhLe++qrfqhm/rcBW4AGiQ=@vger.kernel.org, AJvYcCXMLfuSndeIf1xrCk2CWofc0lrgfWPlJJd45+P3NDqVmI/sRuTVXkxERZWoUjcZd0u6JyqU3gg7/mtFLA==@vger.kernel.org, AJvYcCXgsLj7cO28HHgKWMMMQGlhLDvLKKnY3wRZgbPzgg1syUs/5il25cSCVc2DxvQbYc2Up/GLZLXbsLX+nFJ5@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBeUW/4HrBXYqZ7EH7J+pzu3Il52GK/uBT43wAfGWjPLY8ufxw
-	4uPvymC899tJXyyog7g9mK9fpY/0m3HmLo8+0b3T+G6yBHgu+fexGsXGlx7TPgr5H9rceaB+BRT
-	4mUGq0vdUy1fdk4zBVrtJrLPfrWw=
-X-Gm-Gg: ASbGncuaynHAHfdk43aktfedFN7cAwQ2qtHnRFua6h4NtO1DhcKVkWff6O3V0SFvkNe
-	+aAOTvR7qQ2EGIuCm7JLyRGtkndRaqMK2CQ==
-X-Google-Smtp-Source: AGHT+IFDABXEejeuf1IKWb+Gu9FePZZpIgNOQ4IYdnMw3Kzd/38DL0IjJiFWqIpwT6VMj6TTqmfk4vxvTsyrCXE6AH8=
-X-Received: by 2002:a05:6102:4b89:b0:4b1:5cc5:8ffd with SMTP id
- ada2fe7eead31-4b15cc59238mr3092106137.11.1733929156563; Wed, 11 Dec 2024
- 06:59:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733931716; x=1734536516;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=//mDW/gsbivh5WLVGk2+QEkus5s+/UGSEuoa5vork+c=;
+        b=Nfzjh2FRDd8oZWzU4XiOStGP+Jz/AcGTHbEaozwrjCSsAy/bnqMHt6/CTTY0P3/gfO
+         gSb1qIbzl5VjIxvzABJFSOgnAw708XnPIUUC6KR1qbFZ9QquM+Or1zuRtE+DHwxj5FdK
+         zPhcyw29gPSKITZ6AWblxbHKezeHR3EdNAMvWIT931MlahAU/3lio+mS/lpI5BaWPPbw
+         ey1kr7zC/tedpFii7wsi7CbkHtC4aEDhaCLtjDONbwPP4lQC5A6cKi4ciMmKUwo/riOk
+         Ss1u/05A6rOPeyZ0Si4+FFwan+banaWhaEyq2WH8LQKwbHG2HxqECApO/xSRAOAXUxsF
+         WquA==
+X-Gm-Message-State: AOJu0YxlmtyT9rDb9KD2hcMbP8tiQGVa/TJh1JVXnTmhqzO1g3FHClXF
+	4+O5EhTpF0c11XCs0JE7PHyNzHWylgvV5+2MlwnRpoA+L8h7gopY52nd1dYQBUc=
+X-Gm-Gg: ASbGnctcVhbhu7a1mEKMsH8M7ZMnpdKo2fgreH+yARqrdKyx3v8twjqvc+9nyzCB04y
+	wZw31y8GrqPUmHJ93RRjgyMTO9XMg1tRogWA+M55vJZaRXFpk/0tX+a1lS5nOT9eiRfW72jQ0JI
+	SuZHGgoDJ+wSAY9VrBMvHE1WMzdwCe29k6Insg8IDh4iMfevoAIEJS4Rse1yueTcxZ5KLFWt1dQ
+	Gpsi0VAtbIC5iOhMo2ZRjOuy+a/uPY6U10lF5wjNjsCfacQUr4R
+X-Google-Smtp-Source: AGHT+IGgFiqQwkckid54v7HaXWCbBV/jyXAb4y5c25/cFVUIUVFXXoOTd9qO/0TbDhMvaeZjSbFGWg==
+X-Received: by 2002:a17:902:cf0a:b0:215:854c:a71a with SMTP id d9443c01a7336-21778532306mr57358265ad.34.1733931716599;
+        Wed, 11 Dec 2024 07:41:56 -0800 (PST)
+Received: from localhost ([97.126.182.119])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2162e21321asm74338275ad.279.2024.12.11.07.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 07:41:56 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Dhruva Gole
+ <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis
+ <sebin.francis@ti.com>, Markus Schneider-Pargmann <msp@baylibre.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] pmdomain: ti_sci: collect and send low-power
+ mode constraints
+In-Reply-To: <CAPDyKFo9N8M73Z6Ltsbnd-WR-jYAqBedAHndViSD7YaKKYgBsA@mail.gmail.com>
+References: <20241206-lpm-v6-10-constraints-pmdomain-v6-0-833980158c68@baylibre.com>
+ <CAPDyKFo9N8M73Z6Ltsbnd-WR-jYAqBedAHndViSD7YaKKYgBsA@mail.gmail.com>
+Date: Wed, 11 Dec 2024 07:41:55 -0800
+Message-ID: <7ho71ifcqk.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241209-starqltechn_integration_upstream-v11-0-dc0598828e01@gmail.com>
- <20241209-starqltechn_integration_upstream-v11-3-dc0598828e01@gmail.com> <7qt7thbuh5mvoaknxaiteusbmcmiusc23k2oiyvq3bwn4l6wsw@p4qid73hmiry>
-In-Reply-To: <7qt7thbuh5mvoaknxaiteusbmcmiusc23k2oiyvq3bwn4l6wsw@p4qid73hmiry>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Wed, 11 Dec 2024 17:59:05 +0300
-Message-ID: <CABTCjFD4ipvapWX9gJF1KXWpzj_jhL9pYB0z+Q4sEi-cu6mx7Q@mail.gmail.com>
-Subject: Re: [PATCH v11 3/9] dt-bindings: power: supply: max17042: split on 2 files
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, Lee Jones <lee@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-=D0=B2=D1=82, 10 =D0=B4=D0=B5=D0=BA. 2024=E2=80=AF=D0=B3. =D0=B2 10:38, Krz=
-ysztof Kozlowski <krzk@kernel.org>:
+Ulf Hansson <ulf.hansson@linaro.org> writes:
+
+> On Fri, 6 Dec 2024 at 23:13, Kevin Hilman <khilman@baylibre.com> wrote:
+>>
+>> The latest (10.x) version of the firmware for the PM co-processor (aka
+>> device manager, or DM) adds support for a "managed" mode, where the DM
+>> firmware will select the specific low power state which is entered
+>> when Linux requests a system-wide suspend.
+>>
+>> In this mode, the DM will always attempt the deepest low-power state
+>> available for the SoC.
+>>
+>> However, Linux (or OSes running on other cores) may want to constrain
+>> the DM for certain use cases.  For example, the deepest state may have
+>> a wakeup/resume latency that is too long for certain use cases.  Or,
+>> some wakeup-capable devices may potentially be powered off in deep
+>> low-power states, but if one of those devices is enabled as a wakeup
+>> source, it should not be powered off.
+>>
+>> These kinds of constraints are are already known in Linux by the use
+>> of existing APIs such as per-device PM QoS and device wakeup APIs, but
+>> now we need to communicate these constraints to the DM.
+>>
+>> For TI SoCs with TI SCI support, all DM-managed devices will be
+>> connected to a TI SCI PM domain.  So the goal of this series is to use
+>> the PM domain driver for TI SCI devices to collect constraints, and
+>> communicate them to the DM via the new TI SCI APIs.
+>>
+>> This is all managed by TI SCI PM domain code.  No new APIs are needed
+>> by Linux drivers.  Any device that is managed by TI SCI will be
+>> checked for QoS constraints or wakeup capability and the constraints
+>> will be collected and sent to the DM.
+>>
+>> This series depends on the support for the new TI SCI APIs (v10) and
+>> was also tested with this series to update 8250_omap serial support
+>> for AM62x[2].
+>>
+>> [1] https://lore.kernel.org/all/20240801195422.2296347-1-msp@baylibre.com
+>> [2] https://lore.kernel.org/all/20240807141227.1093006-1-msp@baylibre.com/
+>>
+>> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+>> ---
+>> Changes in v6:
+>> - fix build warning on arm32 when building with W=1 and CONFIG_PM_SLEEP=n
+>> - rebase onto v6.13-rc1
+>> - fix latency units: convert usecs (PM QoS) to msecs (TI SCI)
+>> - all dependencies are now merged in v6.13-rc1
+>> - Link to v5: https://lore.kernel.org/r/20241101-lpm-v6-10-constraints-pmdomain-v5-0-3011aa04622f@baylibre.com
 >
-> On Mon, Dec 09, 2024 at 02:26:27PM +0300, Dzmitry Sankouski wrote:
-> > Move max17042 common binding part to separate file, to
-> > reuse it for MFDs with platform driver version.
-> >
-> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/power/supply/maxim,max17042-base.yam=
-l | 66 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> >  Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml    =
-  | 49 +------------------------------------------------
-> >  MAINTAINERS                                                           =
-  |  2 +-
-> >  3 files changed, 68 insertions(+), 49 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17=
-042-base.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max170=
-42-base.yaml
-> > new file mode 100644
-> > index 000000000000..1653f8ae11f7
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042-bas=
-e.yaml
-> > @@ -0,0 +1,66 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/power/supply/maxim,max17042-base.ya=
-ml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Maxim 17042 fuel gauge series
-> > +
-> > +maintainers:
-> > +  - Sebastian Reichel <sre@kernel.org>
-> > +
-> > +allOf:
-> > +  - $ref: power-supply.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - maxim,max17042
-> > +      - maxim,max17047
-> > +      - maxim,max17050
-> > +      - maxim,max17055
-> > +      - maxim,max77705-battery
-> > +      - maxim,max77849-battery
->
-> Shared schemas define only shared properties, not compatibles. But the
-> main problem is you did not answer nor resolve my previous concerns -
-> either this device has separate address and probably is a separate
-> device on the same or different bus.
->
-> Plus this was not tested and does not really work, but anyway let's
-> focus on my previous concerns first.
->
+> v6 applied for next and by amending patch1 to deal with the sorting of
+> include files, thanks!
 
-Ah, indeed, the device tree in this and previous patches doesn't
-reflect hardware wiring.
+Thank you for the fixuup.
 
-MAX77705 fuel gauge has a separate i2c address, i.e. I may move it out of t=
-he
-MAX77705 MFD node. However, the device on that address has additional featu=
-res,
-like measuring system and input current, which is out of fuel gauge
-responsibility.
-
-So I guess I should create another MFD for fuel gauge, i. e. max77705 examp=
-le
-would look like:
-
-...
-  pmic@66 {
-    compatible =3D "maxim,max77705";
-...
-  };
-
-  meter@36 {
-    compatible =3D "maxim,max77705-meter";
-
-    // max17042 fuel gauge driver in platform mode
-    fuel-gauge {
-      power-supplies =3D <&max77705_charger>;
-      maxim,rsns-microohm =3D <5000>;
-      interrupt-parent =3D <&pm8998_gpios>;
-      interrupts =3D <11 IRQ_TYPE_LEVEL_LOW>;
-    };
-  };
-
---=20
-Best regards and thanks for review,
-Dzmitry
+Kevin
 
