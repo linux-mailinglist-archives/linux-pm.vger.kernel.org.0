@@ -1,74 +1,101 @@
-Return-Path: <linux-pm+bounces-18982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620C49EC34C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 04:27:42 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 305C018834E4
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 03:27:41 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDE120C496;
-	Wed, 11 Dec 2024 03:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="dXfiSrWq"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B06669EC3EA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 05:14:28 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD86F9E6;
-	Wed, 11 Dec 2024 03:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 903C2282968
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 04:14:25 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FB61BC07E;
+	Wed, 11 Dec 2024 04:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gD/RnhMt"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B392451C0;
+	Wed, 11 Dec 2024 04:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733887656; cv=none; b=SINcrSd3vopOUQiostiaG6UNd96PBrHZUrdDEgCqax58h8GBuLX0Zbs6qb8cn8eEArbxGMsfoHgauU2syJfRy+47pMyXoyZWHyvOoAs6uQxQmbOG6Y299DDDLznUf8tVhxAuQfkhBNkEndthxEWs0wKKpL+7Gp572YiXL0LAE6I=
+	t=1733890462; cv=none; b=Ines8mSA2ZRNjdCw64BhZ4w3pbkoMkxBFmLmSzg9aPOa/TgIJioEJAaRJ1wYeCJRfaDBqcFxdodfsHrERmdDdStgJOgaF2WIyIqookTZuKs17VRXPddz/VBIkI0rpiFAwwK7IRY45RHFuQfWE+MOGzpZiW2xkSoHmRVIdyaaVAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733887656; c=relaxed/simple;
-	bh=oGIxq/iI1wo851xpx2ELhPZvEQBtBsTQWKCbZPaS/GE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XwkpyCX2AnBQeDaqV/GqbBsrTZ8Mnd0a6aoXJzkn1zdYSB0mOU2qfyCZ0UdKRw3j0NtxavQ1y1K8c5mFMPTT2jidmtfaKVA5wZwLzKoDR3hryWzHYWFXs5f3tW1riqG8RFcikxvY0Y+g5pbQXM0xgpM5BkxRWJizzRNPaXPAqVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=dXfiSrWq; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1733887645; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=de+rcCjnDfrt3AiRrV5ZVb4VpCQXlSQK7WzvWfzrnqg=;
-	b=dXfiSrWqK4NnWPe9x3J+JnGGG6KJJxD2YjU4XlcVj2Te9U6WoJ7aePeH7qx9JFEPXhVsQ8XrWbMlLOUnGpRZ3YBrOvXaoma/hENGZfPFbrpAUORsdZUyTM3WWvVen/g3+jaR3r2I6p3g4ZV6twF6QvQ8zhfO8NyS5CtNDvBeSj0=
-Received: from 30.221.97.190(mailfrom:herongguang@linux.alibaba.com fp:SMTPD_---0WLGp5-G_1733887324 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 11 Dec 2024 11:22:06 +0800
-Message-ID: <8508d3be-e069-440c-a1f7-7da7785753e7@linux.alibaba.com>
-Date: Wed, 11 Dec 2024 11:22:05 +0800
+	s=arc-20240116; t=1733890462; c=relaxed/simple;
+	bh=+e4v88J6jf/VKEw98bjfYEKUWyC4gE2ctFEbFpZJNy8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oJK+9w0lcGCjqmRP/HlTlEEW/PnX6WExy41Pz/nAvX1kzWwZZJiK3CbxrFEx4gWXKdndSJ0XpqBekju0ur4CzuKmNteRqh/rAn2lcipmNLVObDZei77VXPXIKp+RrfM/mexPtQEzIiajqwGoGRYIAeNIkylHLiAkUQtqjR+d+Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gD/RnhMt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29773C4CEE3;
+	Wed, 11 Dec 2024 04:14:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733890462;
+	bh=+e4v88J6jf/VKEw98bjfYEKUWyC4gE2ctFEbFpZJNy8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gD/RnhMt+MlrZ1pYTo7Ob5+1kSZ7Nkv7Z7WQNfTG29d6mBGy99WMIxtbZITYS12RY
+	 Srx1z7fN2/N1h43Yy+3FH1yXTUrWGWh6AI4TVSHmcfNzJRMtSF/eax7vRegMvlkA3R
+	 LG/SaDDmkiQ5AkZWtCMdXK2pZF9YglBv4NSgHdwFJJThoQmuHbx3axcFvR1SpfHcQf
+	 ngCud6OywJSq9ZFPBIVtbwPTfXelx/+43BQwIldmrbCSmN6lfHAuEW6v7kAlecSTiL
+	 ZYkxkICfenIZi0zNC58/WAZCdbJO6nhooXEmz1t6t+aKSIJ5BIxKI5kNnQ7juIrdsW
+	 uzQclfGmrYqMQ==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-29ff039dab2so923956fac.3;
+        Tue, 10 Dec 2024 20:14:22 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUtPuPYUUmCs+2AU6OFRjMwuOC3o4Il+x+55bty51/e1CigAc/6h8bgijgaDiDYyn6SEcmDPCVsDzw=@vger.kernel.org, AJvYcCX8MuU2rzlg0Q2E9/ObMN18vvY0wp4P1GnOIeZZ3Flq41HYOBGkYGBSnjnIfXGJa5qGPOlQ7wNJVLG47DM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+jjWR8r3knXyoIdvjN7MB1lE1p5k1J9sf8B41D8EutIsgUvN+
+	yc2bOnzZ+nRdOr+xQ+CH3Ll4ntp52LbJYH8VHQJ/X6Pj9Gw14GBIsA93Rw2umx3ZfelhLazr0Qe
+	EOj+rK5vaQC5QMhI+HAGQJjGHYfY=
+X-Google-Smtp-Source: AGHT+IHaQYyfKaCYrrO5PY0A1AaQ6ry6adjyCVqRy01qcTQV6W5SJ11rEAcjgmsWvM8iqB+f5ZXCmIF+n1kRL/kuB+Y=
+X-Received: by 2002:a05:6870:7188:b0:297:24ad:402f with SMTP id
+ 586e51a60fabf-2a012c12ff1mr739977fac.12.1733890461481; Tue, 10 Dec 2024
+ 20:14:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: fix TSC MHz calculation for Mperf monitor
-To: Shuah Khan <skhan@linuxfoundation.org>, trenn@suse.com, shuah@kernel.org,
- jwyatt@redhat.com, jkacur@redhat.com, wyes.karny@amd.com
-Cc: linux-kernel@vger.kernel.org, shannon.zhao@linux.alibaba.com,
- linux-pm@vger.kernel.org
-References: <269b8bb2-85b5-4cc9-9354-a1270f2eed35@linux.alibaba.com>
- <e5b0996d-be80-47a9-af28-ee9776638ab7@linuxfoundation.org>
-From: He Rongguang <herongguang@linux.alibaba.com>
-In-Reply-To: <e5b0996d-be80-47a9-af28-ee9776638ab7@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <5857066.DvuYhMxLoT@rjwysocki.net>
+In-Reply-To: <5857066.DvuYhMxLoT@rjwysocki.net>
+From: Len Brown <lenb@kernel.org>
+Date: Tue, 10 Dec 2024 23:14:10 -0500
+X-Gmail-Original-Message-ID: <CAJvTdKmXHpXOBBAb7vU-8x4AN0V_q8w+JUVJJxtDtMw7yavUvQ@mail.gmail.com>
+Message-ID: <CAJvTdKmXHpXOBBAb7vU-8x4AN0V_q8w+JUVJJxtDtMw7yavUvQ@mail.gmail.com>
+Subject: Re: [PATCH v1] ACPI: OSL: Use usleep_range() in acpi_os_sleep()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, Len Brown <len.brown@intel.com>, 
+	Arjan van de Ven <arjan@linux.intel.com>, Pierre Gondois <pierre.gondois@arm.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Hans de Goede <hdegoede@redhat.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-在 2024/12/10 8:43, Shuah Khan 写道:
->> ---
-> 
-> This patch has several warnings and seems to corrupt. Can you
-> look into this and send v2?
-> 
-> scripts/checkpatch.pl will show you the problems.
-> 
-> thanks,
-> -- Shuah
-Ok, sent a v2, thanks.
+On Thu, Dec 5, 2024 at 7:24=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.net=
+> wrote:
+>
+> Add at least 50 us on top of the requested sleep time in case the
+> timer can be subject to coalescing, which is consistent with what's
+> done in user space in this context [2], but for sleeps longer than 5 ms
+> use 1% of the requested sleep time for this purpose.
+>
+> The rationale here is that longer sleeps don't need that much of a timer
+> precision as a rule and making the timer a more likely candidate for
+> coalescing in these cases is generally desirable.  It starts at 5 ms so
+> that the delta between the requested sleep time and the effective
+> deadline is a contiuous function of the former.
+
+timerslack_ns defaults to 50,000 ns.
+
+So when a user invokes nanosleep(50ms), they get slacked out to 50.050 ms
+
+With this patch, if the AML BIOS programmer invokes Sleep(50ms),
+it gets slacked out to 50.500 ms -- a 10x longer slack period.
+
+I have not seen an explanation for why these cases should be treated
+differently.
+
+Len Brown, Intel Open Source Technology Center
 
