@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-19023-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A17119ECE99
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 15:31:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E12F9ECEA7
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 15:31:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EA9E1884090
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 14:30:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAEFD188B3E7
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 14:31:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C825185B4C;
-	Wed, 11 Dec 2024 14:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C31B1D88A4;
+	Wed, 11 Dec 2024 14:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ftMBKcon"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="i14yQJHm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B8F13B2A9;
-	Wed, 11 Dec 2024 14:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C62D1ABEA1;
+	Wed, 11 Dec 2024 14:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733927449; cv=none; b=JRdcNm6p2CQFQZQglxZeEb+Xy95kxCWhe9tSUwPrSttJGh61hQm/0BQKcOXgBofszsuoC84+LWB/PUrsrDIzG7Ywa0+ENYqzvT2rfxx19KRaGVgAzvzjBWxTf1gFICUeUXExAXi77v4KYxs/BHuWQvnwy+DrFGXYbziyrrn0zMo=
+	t=1733927453; cv=none; b=EfBknobCWK0C4/9u4DSqq1EdtD9Zu/XTYruOr5p6pYCtjoItr7swseyhKD9r9BeBChHzwooE+wRMAOF9FCuJ6AxfxitgZtamOCB2WNj5U9LAGCgoh1EmHDiGJBTluKyVqRw69qEEooMTtuMCrADv97Cq5s/YTPPUXAkVPzSCXjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733927449; c=relaxed/simple;
-	bh=jP19wEdhWfz0RGr3EeS8+c0hyJi31NuOGQuMuKbiP3g=;
+	s=arc-20240116; t=1733927453; c=relaxed/simple;
+	bh=uHHGduZ2BKlU4IHkiqF1QN6VWlslBkCbj9nVEBVqKsk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TlX5z0ehl5p3nRcOuL7Tb7lJ5nyVPZipcVb73Rv6/Lc8U/8cas8Z+TSU1Kq8UtyHDfhQQOi2GJnrxEolZBOu+l0Ni21P278Wnqn8Nr35k6HMdrY0MpaTRrIcesIXs42chtfj+hppHlxoouwyY4UXJm3M/2V/awDqqGjBmr54wLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ftMBKcon; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=k/w/Io3HLQel3/mcLZoS+S3oN8EgGzrBWFrWtjc6wTS/3EAo8UhQ7+q4FgV5siNfnnAIhTKOy5yLjomfoElClDPcLeKN9j/q99hdbW1rPoetDBBcdSLinc+KSzr2sT5deVK6UgrSNed3hgUcTt+rI+7dG8XWND0kECKeNDDdfto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=i14yQJHm; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1733927446;
-	bh=jP19wEdhWfz0RGr3EeS8+c0hyJi31NuOGQuMuKbiP3g=;
+	bh=uHHGduZ2BKlU4IHkiqF1QN6VWlslBkCbj9nVEBVqKsk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ftMBKconAIvegJx96DcsifmGojNfECuYoZal4pz1FUWTEydH9Wq2ipPMOfj9SZarx
-	 5D4LdNlvAwyV5wpga0NPlBu81y9cXY63IbjkV0nF5rRUyQ5gJrnAMPt9tPWrXbSOD4
-	 /5stQSmaSQDXkKg20xCMGgoNe+IDvZtFIijZDRzbRw+FXU7Smga28w/YNA6ShWifZ2
-	 TaUnKXKs4eywSRfnlHdNG0m26hEGOYjBJjYg9FZoktCsl3AzbZqEoUwITu6xbm9i5u
-	 BaXt9HE6XAqWb1cruWUQIcGxW/3xtKODyT452LJoA5D1zGcHhRTF3ue3KtF6HWjNKr
-	 IBWNNR1+PlQlw==
+	b=i14yQJHmR6eCtqPhv+McqO9qCN17xPMDYKjc/4A7L+7KYC5RTHzYk+lJ9CwBavJfT
+	 Mlui4ZDNhh5AyyR4DFPb7vOGvdSjmKHIBhTDqQfggm9NUZwA2cBlxNrDj75t0qw7dT
+	 PZCDurbPDMQdGdnBh8YzVU3B1YEdF2nDWSmFHAuk4+VwOAz8KmCoenHdgzP7Q23QXe
+	 HxSK06+Ch0hFpruaOJ7kWTTf2K0TScPAhdHaWep+nIPUGOG5uyyK3qM1gZQJu/o6Sv
+	 uToCXhL127bBrkhqYL4uh3M56DQm8u422AGK8REESoZXB975s4230cRf9Wk3Osmjkx
+	 CBIJuNds1PX9Q==
 Received: from jupiter.universe (dyndsl-091-248-215-089.ewe-ip-backbone.de [91.248.215.89])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 43B3417E3779;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9561617E377F;
 	Wed, 11 Dec 2024 15:30:46 +0100 (CET)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 7DECD48CC8E; Wed, 11 Dec 2024 15:30:45 +0100 (CET)
+	id 7FD6548CC8F; Wed, 11 Dec 2024 15:30:45 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>,
 	linux-pm@vger.kernel.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v5 4/7] pmdomain: rockchip: reduce indentation in rockchip_pd_power
-Date: Wed, 11 Dec 2024 15:26:49 +0100
-Message-ID: <20241211143044.9550-5-sebastian.reichel@collabora.com>
+Subject: [PATCH v5 5/7] dt-bindings: power: rockchip: add regulator support
+Date: Wed, 11 Dec 2024 15:26:50 +0100
+Message-ID: <20241211143044.9550-6-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241211143044.9550-1-sebastian.reichel@collabora.com>
 References: <20241211143044.9550-1-sebastian.reichel@collabora.com>
@@ -82,88 +82,38 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rework the logic, so that the function exits early when the
-power domain state is already correct to reduce code indentation.
+Add optional support for a voltage supply required to enable a
+power domain. The binding follows the way it is handled by the
+Mediatek binding to keep things consistent.
 
-No functional change intended.
+This will initially be used by the RK3588 GPU power domain, which
+fails to be enabled when the GPU regulator is not enabled. It is
+not limited to that platform, since older generations have similar
+requirements. They worked around this by marking the regulators
+as always-on instead of describing the dependency.
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/pmdomain/rockchip/pm-domains.c | 49 +++++++++++++-------------
- 1 file changed, 25 insertions(+), 24 deletions(-)
+ .../devicetree/bindings/power/rockchip,power-controller.yaml   | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index 8f440f2883db..f4e555dac20a 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -582,39 +582,40 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
+diff --git a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
+index 650dc0aae6f5..ebab98987e49 100644
+--- a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
++++ b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
+@@ -132,6 +132,9 @@ $defs:
+           A number of phandles to clocks that need to be enabled
+           while power domain switches state.
  
- 	guard(mutex)(&pmu->mutex);
- 
--	if (rockchip_pmu_domain_is_on(pd) != power_on) {
--		ret = clk_bulk_enable(pd->num_clks, pd->clks);
--		if (ret < 0) {
--			dev_err(pmu->dev, "failed to enable clocks\n");
--			return ret;
--		}
-+	if (rockchip_pmu_domain_is_on(pd) == power_on)
-+		return 0;
- 
--		rockchip_pmu_ungate_clk(pd, true);
-+	ret = clk_bulk_enable(pd->num_clks, pd->clks);
-+	if (ret < 0) {
-+		dev_err(pmu->dev, "failed to enable clocks\n");
-+		return ret;
-+	}
- 
--		if (!power_on) {
--			rockchip_pmu_save_qos(pd);
-+	rockchip_pmu_ungate_clk(pd, true);
- 
--			/* if powering down, idle request to NIU first */
--			rockchip_pmu_set_idle_request(pd, true);
--		}
-+	if (!power_on) {
-+		rockchip_pmu_save_qos(pd);
- 
--		ret = rockchip_do_pmu_set_power_domain(pd, power_on);
--		if (ret < 0) {
--			clk_bulk_disable(pd->num_clks, pd->clks);
--			return ret;
--		}
-+		/* if powering down, idle request to NIU first */
-+		rockchip_pmu_set_idle_request(pd, true);
-+	}
- 
--		if (power_on) {
--			/* if powering up, leave idle mode */
--			rockchip_pmu_set_idle_request(pd, false);
-+	ret = rockchip_do_pmu_set_power_domain(pd, power_on);
-+	if (ret < 0) {
-+		clk_bulk_disable(pd->num_clks, pd->clks);
-+		return ret;
-+	}
- 
--			rockchip_pmu_restore_qos(pd);
--		}
-+	if (power_on) {
-+		/* if powering up, leave idle mode */
-+		rockchip_pmu_set_idle_request(pd, false);
- 
--		rockchip_pmu_ungate_clk(pd, false);
--		clk_bulk_disable(pd->num_clks, pd->clks);
-+		rockchip_pmu_restore_qos(pd);
- 	}
- 
-+	rockchip_pmu_ungate_clk(pd, false);
-+	clk_bulk_disable(pd->num_clks, pd->clks);
++      domain-supply:
++        description: domain regulator supply.
 +
- 	return 0;
- }
- 
+       pm_qos:
+         $ref: /schemas/types.yaml#/definitions/phandle-array
+         items:
 -- 
 2.45.2
 
