@@ -1,223 +1,185 @@
-Return-Path: <linux-pm+bounces-19063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19067-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E1B39ED6D8
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 20:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 190949ED6E5
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 20:58:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D21228238D
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 19:53:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA2A02824CE
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 19:58:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A795201249;
-	Wed, 11 Dec 2024 19:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 119092210E5;
+	Wed, 11 Dec 2024 19:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYzPXr6S"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="sxIkc2cz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A098C1C3F27;
-	Wed, 11 Dec 2024 19:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DAE200BA9;
+	Wed, 11 Dec 2024 19:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733946831; cv=none; b=rGRvtV5HKrQWjfMsT2rdK2zsO7QutDgSqbydK2PtSpcYyJBNfO1KvgTxtM1SOy4X5bBIH28EDMY55gViRpBQu4M6YreJi3SK1D1eQCOjT7akoa/sE/MgQf1ppg9CHLqBBkSX+cz/cYmTyYaMnQayGfsKWsxjNmGTZv/o3a427UI=
+	t=1733947085; cv=none; b=aveAQyqcteKA1O/dq+nshXZHO+nuz3ozY/uSSg7sMG9WrqkN9xxGLstG5aqUP+ZgEtyIbPi0zTlkYSnfJVNqD5uznkPrQ6f1o+1Ec8DoqWjJOTZ04p8zJRRJM8Wq3VjrOxMdePbqZQ/9TQwV6KbsqbcG5jUM7HiYKgn3UzHyW4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733946831; c=relaxed/simple;
-	bh=awILHNQ8O38EIuFqxBPqIuRrNjOaY4wzupNrF0qkS2s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oL9Z4CXxEGgUvq1Ckl4fMFsbRXSJVRR1gTSbNyUjbqFnEd+2PH1k8uqotmVhw732QBYEMiVoLO8NwIkeDNyJxmUR7eI2fo+/3kjSm0lZs7r5Af+ycx+uI4E+zYKzdkIRBgz4yOzyJugu2OAdhSZa52HqUGdVYtaPhrRMdaM5nQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYzPXr6S; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5cfa1ec3b94so9833188a12.2;
-        Wed, 11 Dec 2024 11:53:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733946828; x=1734551628; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pUkg/yF7ykYCR3YM3sPZ1dL76jj3S9T17dsWcGrfYpk=;
-        b=XYzPXr6S1lgMtHO80dSrwg3Vk/LlcO70wjcZ3tyKuLJMEtx1tPd8duBges0+GFqs0k
-         r2jeAgF+z8TMYaHBexMllhdShTeynBNF1xScrL1Tq1aHN3NB56MOfWBv50/1gPSt9BQJ
-         ZgbkOcbGOkU+AeDtQZP6uOlJWHUA1IY+sDVtLZCK0zj0bIZppZ6YyDOmdoyRmPUG/5P4
-         41lnF22+PagWVuhaNk46YsFoLOlRDpYGSSAM80/zCQHojquBk3zCEv67ELNcwHmEmRX7
-         dOLFKom9L7oezJvGB11e2a+Tr317elDgsljrgHQeexkNAV0CgNcnOXOuxTUXISdeXDT2
-         wMfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733946828; x=1734551628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pUkg/yF7ykYCR3YM3sPZ1dL76jj3S9T17dsWcGrfYpk=;
-        b=F3cLukEbNozsL6AA9cppq6tBG2FvqGCEeLFpphJs7RIurpwyRyOuMG8wuc+dyB8OV1
-         NGaXMI8x1OSKPT9oMmYVFzyiKjB8C75tOxysqcFlifEhRMGWIyVxCp+FFn115f3X5iLc
-         fs4xNVHBc5+ksLjy52FQB4wRFkICkeoo5thWt8ydMoDxCPurwVDHD9gIBf6mvMlIphiJ
-         IjRYYgqm+vkMXAbwQLhRC81tFskzO228s/BpicB8LhoSt7terpECmRTPNLlCkjF3t+IF
-         t9mlRUPORD9TCFAdedZy5cbz9o/LUdzLj+5S7GyQ0lZQ0TvUseF/kV5L89iK8HDI6ts1
-         uaSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU3mzbjMxdxO8iWvREWYYF7KOpreBoWhd3vhaQQsHkImR2PTwd0nhmh+1MgTM0ZTkz6/42on2AE96D/@vger.kernel.org, AJvYcCVIE95vvHkkm2fp2S9s4Dj5vzQ97XRKCii4rtcOk9FkcFo2seHBC1uqQ+lvqDPKlhMsKEp006lSl9EmlTWR@vger.kernel.org, AJvYcCVwzORWP5JOf1Bn0bU5yVDQIaOEz/TQcuwMITXMVAlpZiHRO5gG7ZPZdCJobMe2kARgsKjWIZOWJtk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf59oY7Nzcf3JJyn7JMxZnSTAHgJMOKQkxf8AaE2QFKEFkGb2f
-	ShTIrlYkZEojwTo0y9YZ9r9YZkd3ekakImoRsFAJHoGA+uRWWodZXc0/dWigVDiQyz2AcDBPa49
-	aCWHBUW5D1jxUaHW1lXOvVbfkpdk=
-X-Gm-Gg: ASbGnct2wYPv3mwriT/6lQuf9KnkeiBkX5BrftnKcGgOq+s8fDuxYesfFDmDTOMPU0o
-	jWPbPWBjmsSwSLKKykElABzoWwuMAIOwW4vVN
-X-Google-Smtp-Source: AGHT+IFv9Sczsd0mQ9Rbff05mKNUzboS24htjzD9Z2VVbj8mRpyVeCykSOxdH3C+PWYJ9RVkG/vNjP/KNUylPlL22qo=
-X-Received: by 2002:a17:906:23f1:b0:aa6:a228:afa9 with SMTP id
- a640c23a62f3a-aa6c1ab6290mr122294366b.3.1733946827671; Wed, 11 Dec 2024
- 11:53:47 -0800 (PST)
+	s=arc-20240116; t=1733947085; c=relaxed/simple;
+	bh=K9yc/Ys1CTbFvSWOmqHUjMgumzjvSVyWlxbVSYFSEYE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=igCBtscO1Wgms+KCuhzfYPlEZwEUD36tuLUxQkeadDBaBKbXCAgkVoSk0Ii6sEMJDS0LAloZSM20UVrNumfLdzY8ldPcHvVppa5wPOcRr2xDM7kIKORQ0Mb+2LIGgit9qeSh8v1bApfeOwQIViQjLTamzrRPGzqCOlWR5VZrVFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=sxIkc2cz; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1733947079;
+	bh=K9yc/Ys1CTbFvSWOmqHUjMgumzjvSVyWlxbVSYFSEYE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=sxIkc2czWxgHvbnmj/729epw7ynwppG2nql9bh1BsYYp+RCiu1/MqPs9gMY+jJwgp
+	 NA0U1/QOp1/aMTcwxfu2CIdudFdnZli6jEAoe+gFaPMKM0s7Q2o8NwsUjqKW9UnkRx
+	 f36jWVQo7kLRK7uKLx77EIJUkWc6zmwq8ytu90bg=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v6 0/4] power: supply: extension API
+Date: Wed, 11 Dec 2024 20:57:54 +0100
+Message-Id: <20241211-power-supply-extensions-v6-0-9d9dc3f3d387@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241211143044.9550-1-sebastian.reichel@collabora.com> <20241211143044.9550-4-sebastian.reichel@collabora.com>
-In-Reply-To: <20241211143044.9550-4-sebastian.reichel@collabora.com>
-From: Peter Geis <pgwipeout@gmail.com>
-Date: Wed, 11 Dec 2024 14:53:34 -0500
-Message-ID: <CAMdYzYqLq=kSC8fiBapRS_8w0s8PaL9Yd46VgM56YbTEmUG1xA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/7] pmdomain: rockchip: forward rockchip_do_pmu_set_power_domain
- errors
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
-	=?UTF-8?Q?Adri=C3=A1n_Mart=C3=ADnez_Larumbe?= <adrian.larumbe@collabora.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Chen-Yu Tsai <wens@csie.org>, 
-	devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kernel@collabora.com, 
-	Dragan Simic <dsimic@manjaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMLuWWcC/3XRTW6DMBAF4KtEXtfV2NgGd9V7VFkAHhdLFVAbS
+ KKIu2dIf1Kp2Ltnab4Z6V1ZwhgwsZfDlUVcQgpDT8E8HVjb1f078uAoMwlSgQHJx+GEkad5HD8
+ uHM8T9ttI4lA6q6zXYJ1lND1G9OF8l9+OlLuQpiFe7osWsf3+mCZrLoIDb5Q2xkoLjWtfTxhSS
+ m03d889TmyDF/kXq/KYJEy61hW6ASFrt4sVD8yCymMFYUaix8YWvsL9y9QvJujlMUVYSRuFUq6
+ uK9zF9AOToPOYJsyDt9a4RhWq/IetX+1E/Jyp7um7onW9ARLPDdgMAgAA
+X-Change-ID: 20240602-power-supply-extensions-07d949f509d9
+To: Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>, 
+ Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>
+Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733947078; l=4647;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=K9yc/Ys1CTbFvSWOmqHUjMgumzjvSVyWlxbVSYFSEYE=;
+ b=tt178b2xZNdHPRXo0xYqx035UAXyRX1iIb/2ucabjHIoOaMBEu5K/r3k/r6qByVcbhMHsPAYV
+ 8+M8sbBglvzCkDLVbYw46wp0vjcNnXOZFKI9mTLF8GsmXFKIM4DsAnU
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Wed, Dec 11, 2024 at 9:32=E2=80=AFAM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> Currently rockchip_do_pmu_set_power_domain prints a warning if there
-> have been errors turning on the power domain, but it does not return
-> any errors and rockchip_pd_power() tries to continue setting up the
-> QOS registers. This usually results in accessing unpowered registers,
-> which triggers an SError and a full system hang.
->
-> This improves the error handling by forwarding the error to avoid
-> kernel panics.
+Introduce a mechanism for drivers to extend the properties implemented
+by a power supply.
 
-Good Afternoon,
+Motivation
+----------
 
-I think we should merge your patch here with my patch for returning
-errors from rockchip_pmu_set_idle_request [1].
+Various drivers, mostly in platform/x86 extend the ACPI battery driver
+with additional sysfs attributes to implement more UAPIs than are
+exposed through ACPI by using various side-channels, like WMI,
+nonstandard ACPI or EC communication.
 
->
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/pmdomain/rockchip/pm-domains.c | 34 +++++++++++++++++---------
->  1 file changed, 22 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/ro=
-ckchip/pm-domains.c
-> index a161ee13c633..8f440f2883db 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -533,16 +533,17 @@ static int rockchip_pmu_domain_mem_reset(struct roc=
-kchip_pm_domain *pd)
->         return ret;
->  }
->
-> -static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *=
-pd,
-> -                                            bool on)
-> +static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *p=
-d,
-> +                                           bool on)
->  {
->         struct rockchip_pmu *pmu =3D pd->pmu;
->         struct generic_pm_domain *genpd =3D &pd->genpd;
->         u32 pd_pwr_offset =3D pd->info->pwr_offset;
->         bool is_on, is_mem_on =3D false;
-> +       int ret;
->
->         if (pd->info->pwr_mask =3D=3D 0)
-> -               return;
-> +               return 0;
->
->         if (on && pd->info->mem_status_mask)
->                 is_mem_on =3D rockchip_pmu_domain_is_mem_on(pd);
-> @@ -557,16 +558,21 @@ static void rockchip_do_pmu_set_power_domain(struct=
- rockchip_pm_domain *pd,
->
->         wmb();
->
-> -       if (is_mem_on && rockchip_pmu_domain_mem_reset(pd))
-> -               return;
-> +       if (is_mem_on) {
-> +               ret =3D rockchip_pmu_domain_mem_reset(pd);
-> +               if (ret)
-> +                       return ret;
-> +       }
->
-> -       if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_o=
-n,
-> -                                     is_on =3D=3D on, 0, 10000)) {
-> -               dev_err(pmu->dev,
-> -                       "failed to set domain '%s', val=3D%d\n",
-> -                       genpd->name, is_on);
-> -               return;
-> +       ret =3D readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, =
-is_on,
-> +                                       is_on =3D=3D on, 0, 10000);
-> +       if (ret) {
-> +               dev_err(pmu->dev, "failed to set domain '%s' %s, val=3D%d=
-\n",
-> +                       genpd->name, on ? "on" : "off", is_on);
-> +               return ret;
->         }
-> +
-> +       return 0;
->  }
->
->  static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_o=
-n)
-> @@ -592,7 +598,11 @@ static int rockchip_pd_power(struct rockchip_pm_doma=
-in *pd, bool power_on)
->                         rockchip_pmu_set_idle_request(pd, true);
->                 }
->
-> -               rockchip_do_pmu_set_power_domain(pd, power_on);
-> +               ret =3D rockchip_do_pmu_set_power_domain(pd, power_on);
-> +               if (ret < 0) {
-> +                       clk_bulk_disable(pd->num_clks, pd->clks);
-> +                       return ret;
+While the created sysfs attributes look similar to the attributes
+provided by the powersupply core, there are various deficiencies:
 
-Looking at it, we shouldn't return directly from here because the
-mutex never gets unlocked.
-Instead of repeating clk_bulk_disable and return ret for each failure,
-we can initialize ret =3D 0, have a goto: out pointing to
-clk_bulk_disable, and change return 0 to return ret at the end.
+* They don't show up in uevent payload.
+* They can't be queried with the standard in-kernel APIs.
+* They don't work with triggers.
+* The extending driver has to reimplement all of the parsing,
+  formatting and sysfs display logic.
+* Writing a extension driver is completely different from writing a
+  normal power supply driver.
+* ~Properties can not be properly overriden.~
+  (Overriding is now explicitly forbidden)
 
-What do you think?
+The proposed extension API avoids all of these issues.
+An extension is just a "struct power_supply_ext" with the same kind of
+callbacks as in a normal "struct power_supply_desc".
 
-Very Respectfully,
-Peter Geis
+The API is meant to be used via battery_hook_register(), the same way as
+the current extensions.
+Further usecases are fuel gauges and the existing battery_info
+properties.
 
-[1] https://lore.kernel.org/linux-rockchip/20241210013010.81257-2-pgwipeout=
-@gmail.com/
+When testing, please enable lockdep to make sure the locking is correct.
 
-> +               }
->
->                 if (power_on) {
->                         /* if powering up, leave idle mode */
-> --
-> 2.45.2
->
->
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+The series is based on the linux-power-supply/for-next branch.
+It also depends on some recent fixes not yet available in the for-next
+branch [0].
+
+[0] https://lore.kernel.org/lkml/20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v6:
+- Drop alreay picked up ACPI battery hook rename patch
+- Only return bool from power_supply_property_is_writeable()
+- Improve naming for test_power symbols
+- Integrate cros_charge-control fixes from the psy/fixes branch
+- Add sysfs UAPI for extension discovery
+- Use __must_check on API
+- Make power_supply_for_each_extension() safer.
+  (And uglier, ideas welcome)
+- Link to v5: https://lore.kernel.org/r/20241205-power-supply-extensions-v5-0-f0f996db4347@weissschuh.net
+
+Changes in v5:
+- Drop already picked up patches
+- Simplify power_supply_ext_has_property()
+- Handle failure of power_supply_update_sysfs_and_hwmon()
+- Reduce some locking scopes
+- Add missing locking to power_supply_show_charge_behaviour()
+- Improve sanity checks in power_supply_register_extension()
+- Implement writeable property in test_power battery
+- Rename ACPI battery hook messages for clarity
+- Link to v4: https://lore.kernel.org/r/20241111-power-supply-extensions-v4-0-7240144daa8e@weissschuh.net
+
+Changes in v4:
+- Drop RFC state
+- Integrate locking commit
+- Reregister hwmon device
+- Link to v3: https://lore.kernel.org/r/20240904-power-supply-extensions-v3-0-62efeb93f8ec@weissschuh.net
+
+Changes in v3:
+- Make naming more consistent
+- Readd locking
+- Allow multiple active extensions
+- Allow passing a "void *ext_data" when registering
+- Switch example driver from system76 to cros_charge-control
+- Link to v2: https://lore.kernel.org/r/20240608-power-supply-extensions-v2-0-2dcd35b012ad@weissschuh.net
+
+Changes in v2:
+- Drop locking patch, let's figure out the API first
+- Allow registration of multiple extensions
+- Pass extension to extension callbacks as parameter
+- Disallow property overlap between extensions and core psy
+- Drop system76/pdx86 maintainers, as the system76 changes are only RFC
+  state anyways
+- Link to v1: https://lore.kernel.org/r/20240606-power-supply-extensions-v1-0-b45669290bdc@weissschuh.net
+
+---
+Thomas Weißschuh (4):
+      power: supply: core: implement extension API
+      power: supply: test-power: implement a power supply extension
+      power: supply: cros_charge-control: implement a power supply extension
+      power: supply: core: add UAPI to discover currently used extensions
+
+ Documentation/ABI/testing/sysfs-class-power |   9 ++
+ drivers/power/supply/cros_charge-control.c  | 200 ++++++++++++----------------
+ drivers/power/supply/power_supply.h         |  19 +++
+ drivers/power/supply/power_supply_core.c    | 177 ++++++++++++++++++++++--
+ drivers/power/supply/power_supply_sysfs.c   |  36 ++++-
+ drivers/power/supply/test_power.c           | 113 ++++++++++++++++
+ include/linux/power_supply.h                |  35 +++++
+ 7 files changed, 467 insertions(+), 122 deletions(-)
+---
+base-commit: 810dde9dad8222f3b831cf5179927fc66fc6a006
+change-id: 20240602-power-supply-extensions-07d949f509d9
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
 
