@@ -1,174 +1,213 @@
-Return-Path: <linux-pm+bounces-19071-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19072-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D39349ED786
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 21:54:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F5149ED8FA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 22:48:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D15D188B64E
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 21:44:20 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF63D1F0E29;
+	Wed, 11 Dec 2024 21:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HeNBSH9z"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82EC5283499
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 20:54:42 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE902210E9;
-	Wed, 11 Dec 2024 20:54:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hgs2mhW4"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CB92288F4
-	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 20:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14001EC4F0
+	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 21:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733950473; cv=none; b=rWnIX6c8C9Eo7gRJzClaM71TfF0cmNSI2eAjlaj5UJo1kqwF/oIpeUfhZr/vq2greF7Aiv3lUE+Ao1p8xsDTcpNQUZjIVR+nPLwoWX+vjE88VN6I2G6yVeMxYJunTaMqdTmJ8cjF6jd4nEdyETY1C8CqMaE5Qm8fGjaCg2r+gm4=
+	t=1733953449; cv=none; b=DGGXwRZNbAyoPcA6P7C4CAPhGIY9LkZgTSOUNEn0tjXIajqSCW0rLws5MTUPPh/lzMpGBD8h0dV4o6zHBPrwA6IIbyt+XQqu63ivgMFVQtOnLucsEnkBvGxq/AVfeRDAIxJAsOypmW9ZvLQvaKXVdB/MzggTTAEyPRTT5aB6Q60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733950473; c=relaxed/simple;
-	bh=M8rBj1IljQtNyRfls9tPtsK1h0RFHLNTVO3V2E4tMqk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VdQOZKfNiCh51MitXDLEn9gGYq9wOQsPVCEX+UjGktDyznp+5pWHlFuzD3Bm5unO4da+eMV6nTzTCSmxGw0sfWMv0MzuEd48pj1Tr2u7T50SpwvDmrbZ5wem4JU/X446tM4MHO7eGyaS6VRb1IqY2gwvgq5CRJ7TXkzrodELyQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hgs2mhW4; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a9cb667783so25065285ab.1
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 12:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1733950470; x=1734555270; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vdUZxJPlOyqm9HlhNWGKr+g7jlb5DGzBTeX9RjzfBIk=;
-        b=hgs2mhW4SyJK0rx3o6qCjz21ixamGYhqQO59pp8VVqz3mDli496Q4PFzOLpEglt9Bn
-         pMW5osnn1kzXHc8Ntq+UcICDGxZbg+cxulHkmqlXTlvsNxtitygVia0E65xHo2fMvDD9
-         IMmDdF+ZN3H6fhmGs7bYQzV9qjPpKpxxDjwYs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733950470; x=1734555270;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vdUZxJPlOyqm9HlhNWGKr+g7jlb5DGzBTeX9RjzfBIk=;
-        b=A8XPeNl4Ua3n9z0WKRMNwSfBd5PzeWedmi/934iH+aaiesLM1YwXODE+ZrAxXYi90B
-         f8OK+PdUCAGzeu8Yttxj8ytv1xrRa5IyGtmQ1x+kxiDjgIR0UxJYepBOZFH+3gepIU0g
-         ++yRKrmhgaPWOtDusu5MNctru6iygNobbTcEX2wqhqRGZ/eHxSfdMBMQB0iiv8gDns7Z
-         B9KkfENPrv5YO+Cq+UswKaZefAi7qBWdWIK8cGXDdVCVmSm8rk6BiZNePyuP79KDjwPq
-         5nSLpWpVDASc1OV7jPQaovMKUa0VBw9ZNDOd+9xaqOYz8dxUTOYHdLhtJrYRiF3CtbFd
-         F+VA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNmmudEcC3tNwi5Ni1TpWEjW2GvFA8ZVBeG7krH9FH1/kNhejbfbatlGrfuQeqHhGgoBohXkzRig==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyoxy1j/kV/EkwY85mdhfBjq1W4caTe1KOziooPGmhyK3n7nrbX
-	TC2fi9D8OG41x/2Ygz1eN2rLu3KcBxAgQhHUL6opAAZfV8M+764i1CC2ZVMbqLo=
-X-Gm-Gg: ASbGncuyNsbyvnZlgkPB9Wy/6FxUrXhi+nSyeZySF5sGJKH8bERjTN3bIoMZxMSHjYP
-	gxB2K7lsIX9ybvs9TT10tkleP5t8Zy0clrD0KbqB9fNCREc3j1TMQnglNSp9iDq6nEONgqP4jdX
-	VKILJBGRZI775HSnUoF0dUD7NvwvUaezVV24zomuWsTWPQK/NwjwVobz0fe07riIMP9080widXn
-	7b/movGv2CwtaHkAJvOPLArrcbGxk2kfpgvEBo6DqmTy0NZFc3FAeAc4uOJUDY/VA==
-X-Google-Smtp-Source: AGHT+IFZWSEkNX9E1xvb5Yis84qOQViHxVTlB7kMTpgprOsy8jLaKebBWk2JUnkf5Ygn4PNGztoSvw==
-X-Received: by 2002:a05:6e02:1685:b0:3a7:44d9:c7dd with SMTP id e9e14a558f8ab-3ac483fe4bfmr12769875ab.6.1733950470069;
-        Wed, 11 Dec 2024 12:54:30 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a816297961sm32619605ab.19.2024.12.11.12.54.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Dec 2024 12:54:29 -0800 (PST)
-Message-ID: <0985bb0c-091e-4e5a-b066-5b9cfd072aa8@linuxfoundation.org>
-Date: Wed, 11 Dec 2024 13:54:28 -0700
+	s=arc-20240116; t=1733953449; c=relaxed/simple;
+	bh=3uDbOis2J08VjiN6Xw0HI7l6S+YxTMe2wkSdfgvnyXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=S2oVTkVohQYNMCMl9GnlUJYw6u/aqyi5uxz4kKJog0z7SlqxNBuGtQL4ouuMnFDQu1FPSwgixYtYQMcZNqffpsOdYy6iP6v46UQPt+1vqccF6kXvv7Da0jt2J54Di7rT55X7yfaNxW4I7B7juS9AHLv4APK8qLhMCQyQixtLy5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HeNBSH9z; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733953448; x=1765489448;
+  h=date:from:to:cc:subject:message-id;
+  bh=3uDbOis2J08VjiN6Xw0HI7l6S+YxTMe2wkSdfgvnyXQ=;
+  b=HeNBSH9zTPz7E+kv9KbsfuJD/XC/efWuDvNoTRbyBDWy4owH1a4S36XG
+   ySiFN124z1Jfb51XUNIKfCatkq0jCCEEwgQOdGf+dO3W64r2MbxnMPG4K
+   QH7wX1/omczBNAiTv/D7YxLQJnsWy2nK/QWFiASLobdvvmNwNcS7/CVtI
+   rNLlWCCRGikqdkGD3U9JKnGDF9CMzFLGeVyXVaLBGfuFDYkISC5Ybbm81
+   54UJHNGSVY52lIYjiEVENXoWNSHeJOThzDTNWyyJdirfLngn0B9aHXVSJ
+   HNWZGp5tPFnwTt1cKEoLmxN5+Q/UNwvvHWoShYqOCrRaBL1GE9/aQw4j+
+   g==;
+X-CSE-ConnectionGUID: jtyw1qw7STSP8WdsG7oj4w==
+X-CSE-MsgGUID: t2xhPQ3HRu+7sQXZRSjtRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="38137894"
+X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
+   d="scan'208";a="38137894"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 13:44:06 -0800
+X-CSE-ConnectionGUID: pKiq5p3QQSG7kGVuv7QZbg==
+X-CSE-MsgGUID: QSo+HQXVTMutSQG+TuOV5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
+   d="scan'208";a="95820837"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Dec 2024 13:44:05 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tLUV0-00077B-2B;
+	Wed, 11 Dec 2024 21:44:02 +0000
+Date: Thu, 12 Dec 2024 05:43:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:amd-pstate-fixes] BUILD SUCCESS
+ 2993b29b2a98f2bc9d55dfd37ef39f56a2908748
+Message-ID: <202412120541.U4yxO8Wi-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpupower: fix TSC MHz calculation for Mperf monitor
-To: He Rongguang <herongguang@linux.alibaba.com>, trenn@suse.com,
- shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com
-Cc: linux-kernel@vger.kernel.org, shannon.zhao@linux.alibaba.com,
- linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <60562222-6186-4eec-9c20-08b1cebb1311@linux.alibaba.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <60562222-6186-4eec-9c20-08b1cebb1311@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 12/10/24 20:20, He Rongguang wrote:
->  From e17f252433c923578e9c386a998200e488d9567d Mon Sep 17 00:00:00 2001
-> From: He Rongguang <herongguang@linux.alibaba.com>
-> Date: Thu, 28 Nov 2024 16:50:05 +0800
-> Subject: [PATCH] cpupower: fix TSC MHz calculation
-> 
-> Commit 'cpupower: Make TSC read per CPU for Mperf monitor' (c2adb1877b7)
-> changes TSC counter reads per cpu, but left time diff global (from start
-> of all cpus to end of all cpus), thus diff(time) is too large for a
-> cpu's tsc counting, resulting in far less than acutal TSC_Mhz and thus
-> `cpupower monitor` showing far less than actual cpu realtime frequency.
-> 
-> /proc/cpuinfo shows frequency:
-> cat /proc/cpuinfo | egrep -e 'processor' -e 'MHz'
-> ...
-> processor : 171
-> cpu MHz   : 4108.498
-> ...
-> 
-> before fix (System 100% busy):
->      | Mperf              || Idle_Stats
->   CPU| C0   | Cx   | Freq  || POLL | C1   | C2
->   171|  0.77| 99.23|  2279||  0.00|  0.00|  0.00
-> 
-> after fix (System 100% busy):
->      | Mperf              || Idle_Stats
->   CPU| C0   | Cx   | Freq  || POLL | C1   | C2
->   171|  0.46| 99.54|  4095||  0.00|  0.00|  0.00
-> 
-> Fixes: c2adb1877b76 ("cpupower: Make TSC read per CPU for Mperf monitor")
-> Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
-> ---
-> Changes in v2:
-> - Fix scripts/checkpatch.pl style warnings.
-> - Link to v1:
-> https://lore.kernel.org/linux-pm/269b8bb2-85b5-4cc9-9354-a1270f2eed35@linux.alibaba.com/T/#u
-> ---
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git amd-pstate-fixes
+branch HEAD: 2993b29b2a98f2bc9d55dfd37ef39f56a2908748  cpufreq/amd-pstate: Use boost numerator for upper bound of frequencies
 
-Are you sure you sent me the right patch. I am seeing exact
-same errors. How are you sending your patches.
+elapsed time: 1478m
 
-Here are the problems I am seeing:
+configs tested: 120
+configs skipped: 3
 
-ERROR: patch seems to be corrupt (line wrapped?)
-#103: FILE: :173:
-double *percent,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-WARNING: It's generally not useful to have the filename in the file
-#108: FILE: :177:
-+		timediff = max_frequency * timespec_diff_us(time_start[cpu],
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20241211    gcc-13.2.0
+arc                   randconfig-002-20241211    gcc-13.2.0
+arc                        vdk_hs38_defconfig    gcc-13.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                         axm55xx_defconfig    clang-17
+arm                   randconfig-001-20241211    clang-18
+arm                   randconfig-002-20241211    gcc-14.2.0
+arm                   randconfig-003-20241211    clang-20
+arm                   randconfig-004-20241211    gcc-14.2.0
+arm                        realview_defconfig    clang-19
+arm                           tegra_defconfig    gcc-14.2.0
+arm                       versatile_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20241211    gcc-14.2.0
+arm64                 randconfig-002-20241211    clang-18
+arm64                 randconfig-003-20241211    gcc-14.2.0
+arm64                 randconfig-004-20241211    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20241211    gcc-14.2.0
+csky                  randconfig-002-20241211    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon               randconfig-001-20241211    clang-20
+hexagon               randconfig-002-20241211    clang-17
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241211    clang-19
+i386        buildonly-randconfig-002-20241211    gcc-11
+i386        buildonly-randconfig-003-20241211    clang-19
+i386        buildonly-randconfig-004-20241211    gcc-11
+i386        buildonly-randconfig-005-20241211    gcc-12
+i386        buildonly-randconfig-006-20241211    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20241211    gcc-14.2.0
+loongarch             randconfig-002-20241211    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                        m5407c3_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                           xway_defconfig    clang-20
+nios2                 randconfig-001-20241211    gcc-14.2.0
+nios2                 randconfig-002-20241211    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20241211    gcc-14.2.0
+parisc                randconfig-002-20241211    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                        icon_defconfig    gcc-14.2.0
+powerpc                    mvme5100_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20241211    clang-18
+powerpc               randconfig-002-20241211    clang-16
+powerpc               randconfig-003-20241211    gcc-14.2.0
+powerpc                     tqm8540_defconfig    gcc-14.2.0
+powerpc64                        alldefconfig    clang-20
+powerpc64             randconfig-001-20241211    gcc-14.2.0
+powerpc64             randconfig-002-20241211    clang-20
+powerpc64             randconfig-003-20241211    clang-20
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                               defconfig    clang-19
+riscv                 randconfig-001-20241211    gcc-14.2.0
+riscv                 randconfig-002-20241211    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20241211    clang-20
+s390                  randconfig-002-20241211    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                            hp6xx_defconfig    gcc-14.2.0
+sh                               j2_defconfig    gcc-14.2.0
+sh                    randconfig-001-20241211    gcc-14.2.0
+sh                    randconfig-002-20241211    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                 randconfig-001-20241211    gcc-14.2.0
+sparc                 randconfig-002-20241211    gcc-14.2.0
+sparc                       sparc32_defconfig    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20241211    gcc-14.2.0
+sparc64               randconfig-002-20241211    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-20
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20241211    gcc-12
+um                    randconfig-002-20241211    gcc-12
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241211    gcc-12
+x86_64      buildonly-randconfig-002-20241211    gcc-11
+x86_64      buildonly-randconfig-003-20241211    gcc-12
+x86_64      buildonly-randconfig-004-20241211    gcc-12
+x86_64      buildonly-randconfig-005-20241211    gcc-12
+x86_64      buildonly-randconfig-006-20241211    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                randconfig-001-20241211    gcc-14.2.0
+xtensa                randconfig-002-20241211    gcc-14.2.0
 
-WARNING: It's generally not useful to have the filename in the file
-#119: FILE: :210:
-+		time_diff = timespec_diff_us(time_start[cpu], time_end[cpu]);
-
-WARNING: It's generally not useful to have the filename in the file
-#130: FILE: :230:
-+		clock_gettime(CLOCK_REALTIME, &time_start[cpu]);
-
-WARNING: It's generally not useful to have the filename in the file
-#138: FILE: :245:
-+		clock_gettime(CLOCK_REALTIME, &time_end[cpu]);
-
-WARNING: It's generally not useful to have the filename in the file
-#149: FILE: :351:
-+	time_start = calloc(cpu_count, sizeof(struct timespec));
-
-WARNING: It's generally not useful to have the filename in the file
-#150: FILE: :352:
-+	time_end = calloc(cpu_count, sizeof(struct timespec));
-
-WARNING: It's generally not useful to have the filename in the file
-#158: FILE: :365:
-+	free(time_start);
-
-WARNING: It's generally not useful to have the filename in the file
-#159: FILE: :366:
-+	free(time_end);
-
-thanks,
--- Shuah
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
