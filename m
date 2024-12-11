@@ -1,197 +1,185 @@
-Return-Path: <linux-pm+bounces-19050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07B129ED42C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 18:56:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57A1D9ED462
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 19:05:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E07081610F8
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 17:55:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DBFC16727F
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 18:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82DBB202F95;
-	Wed, 11 Dec 2024 17:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01174202F9D;
+	Wed, 11 Dec 2024 18:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qOMh91Nt"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="O7k1Zazs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59024202F8B;
-	Wed, 11 Dec 2024 17:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAEC1DE4C8;
+	Wed, 11 Dec 2024 18:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733939722; cv=none; b=p0Zwaxg10C+LmjzwhJE4Y5m7CxaqZ+YNH9iX6LpMg9Xwqb2r3xECQSrMoE6F3aUIzQRCStrCwUiU09cUeScIcqe3Aq+JtG7pG90Eyp0wO4zUX6+6XZMy4/U716FB22lgNvxjN7mf42BZvuXRZ+xDw6rGMe43ssALygEsAslEz0k=
+	t=1733940287; cv=none; b=HUZpFtIGqToAGdBoXRtMus4Rh5XHmJG7V7zTakaDGeqLKHs/7lNnB+r10V+335yr0weRn25hFvRD8wue9UI1D1b7TVcB0Ax2OlDmPABx93JL3p00VN/OvUIbxi5NxIyiurJYwBmYJrO12EdkkXEtCRsy7ODiY98HTqOVXPDRlG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733939722; c=relaxed/simple;
-	bh=YXnChH557clDWDb3jcusaiok67MTcpiBTGjKwVBCGpI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YB1Zo5cLmH65VgF9W8/939V/5kGCULTZZN50dZBbDMMtEYnpZLgMa0ab9m3TxH3c2nXs7xpmr/+Stgc9lxoKrrNjlZjHtZFutN941HizGxGKANtlA6iqAsE0mdY7ZCm2aM8KE74tnodblzItmE0Hfb/33csPfsdJZ29thMNlkNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qOMh91Nt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA43EC4CED2;
-	Wed, 11 Dec 2024 17:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733939721;
-	bh=YXnChH557clDWDb3jcusaiok67MTcpiBTGjKwVBCGpI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qOMh91NtnRCy/vn0Ez/Z9asD6xQ2FEYCi2+xvqN5mxtH5E8bY0gqcZMRsldfvx9o4
-	 ZIZHOZAacDUhIMqOFByKZBDeX8yJVc/Gpvg4LN0CiB2gZXWWFTnXRWy4smOJ7iegs5
-	 Tvt9fA6JvtIfDsjIMqJVaSpDcKyTpYwe6/pq1sHRsRN3gVG7KVNZJG/RBTriuFpdlt
-	 hzFModzbStO+X6K5L/+NceQpoFWtkKYBy0WnQbwBwTVf/fzBcpYA+jAQYMuqkJyxgL
-	 6SDnfn8t4dYMZERZrBOCjLdshK9lqtpmKJDmQNywhg2Uj2t7uRw3bvkO3i6fVHQX04
-	 CtPCBTS9xnMhQ==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-71e10e6a1ceso461024a34.0;
-        Wed, 11 Dec 2024 09:55:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU/TX/A/VZTX2To6Sa6wbiOONjnjOEhgjzeGPQhS706bww+zFix0NSLQRtBPquyNZxVlT5cxUN3Elys05c=@vger.kernel.org, AJvYcCUi5HE97KH2OV/sRHD1B5d3zhRHlxofBY7+WeBqthw24/3AqRJEOQEGCQAkKH8xJtX2eGe34K21UA8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5EfRvBs7uJMt3POksI8CzUE2ZuOxHTYmsy1qCJxC3TwPvrk4H
-	q6EZoFrhU/KKNqH+0mt38nV8g7lBw4UNFvoKfsrPEBudDqK8tmJWBiF1dZgBXcGsD1us1NawDYu
-	EM5mFdl2mpkNyERSwAtof9LsHwk4=
-X-Google-Smtp-Source: AGHT+IHgFpDok5Z9icu9THpfdFq4QAxY1inlJflsNV45n6IxLUiWiXPSHPcFm614cyU/XCwJazCjGTnHKOkSk8CvHMk=
-X-Received: by 2002:a05:6830:903:b0:718:123e:922d with SMTP id
- 46e09a7af769-71e29bf2cbbmr263539a34.18.1733939721083; Wed, 11 Dec 2024
- 09:55:21 -0800 (PST)
+	s=arc-20240116; t=1733940287; c=relaxed/simple;
+	bh=l94BK7mrqrW7wfB86W1pvJPZMlYxTL4bfJJgI4EhRVQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D737FP4bGt//0vnxDeNMCUNConCof1L/YVXtxpR5m3nknAAey7tUWQgvKikYBtRd4I4tXbeltOtnakalkrHIUtNeXfA3H9kCeOjsLiFC0tRpyhliuPAtc1TnUowfZkv2d+w1IFQ5Qd4Cc+TBmqe7+pWsyE1WbthrM2a3h9Z6r7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=O7k1Zazs; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+Received: from [192.168.118.162] (254C2319.nat.pool.telekom.hu [37.76.35.25])
+	by mail.mainlining.org (Postfix) with ESMTPSA id BFA8CE44CE;
+	Wed, 11 Dec 2024 17:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
+	s=psm; t=1733939950;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AQb1l6P2tQO5E8YgADPihN0HvZV+3EZDBO65HMerFUg=;
+	b=O7k1ZazsmnVW8KqgLQWR1tYndN87ZMRb1G6rvZLqC7AWNO1TblfK3J2aJ3rCdFQg1w7I43
+	Z09r/5fmOZfTznjhJtgbqQa+Woi9pgX1A5uPyRjxdHHvRj5Tv7MOgStJbbWrJmgpauht5e
+	V9tAzk932GZHrDbx5EeuMLtrCZg+PEKmgtVeCgF7E+mhJtI2dpjjm13aYqm/Y+t7majLfL
+	gcq9bE+pqWsBOlMfCB4GK40wSOKugig5+JpUTgaEwYohQdJWPerRXoxUv/L3hXCel/Qh33
+	lYu8hN5s8STLx/3fczhgC2ph6t+IRBxOyhtB5q2i7UM0vndKiTUTh9yiAx4/Xw==
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v8 0/8] Add MSM8917/PM8937/Redmi 5A
+Date: Wed, 11 Dec 2024 18:59:04 +0100
+Message-Id: <20241211-msm8917-v8-0-197acc042036@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5861970.DvuYhMxLoT@rjwysocki.net> <2989520.e9J7NaK4W3@rjwysocki.net>
- <4d601707-8269-4c2b-86d2-62951ea0353c@arm.com> <CAJZ5v0jvOYACAn-of=e7zirfzQ5gT+CTPM2w29T-jPzk7Z+SOg@mail.gmail.com>
- <CAKfTPtAdo7OADEFuMeg1PpO=rk=bXmiw1Avj7frsoNWZuceewA@mail.gmail.com>
- <CAJZ5v0h5yt5z=dHLJjQhQQChsnr+krcxzBdb6VXj9W4gMY_PSA@mail.gmail.com> <CAKfTPtBJsDPGeRdqk0Ag8dPFxYn0r0ow_xb4s+=Y=QzLWiX9uQ@mail.gmail.com>
-In-Reply-To: <CAKfTPtBJsDPGeRdqk0Ag8dPFxYn0r0ow_xb4s+=Y=QzLWiX9uQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 11 Dec 2024 18:55:09 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j-o=03hWrSkk2nx9uWctKaRSJmRNXY6d=e0b46_+fNzA@mail.gmail.com>
-Message-ID: <CAJZ5v0j-o=03hWrSkk2nx9uWctKaRSJmRNXY6d=e0b46_+fNzA@mail.gmail.com>
-Subject: Re: [RFC][PATCH v021 4/9] sched/topology: Adjust cpufreq checks for EAS
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle <christian.loehle@arm.com>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Pierre Gondois <pierre.gondois@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOjSWWcC/23PTW7DIBAF4KtErOuKYcAwXfUeUReYHweptitTW
+ aki3704G5Di5RvxvWEeLIc1hcw+Lg+2hi3ltMwlmLcLczc7j6FLvmQmuJDAgbopT4ZAd6Adeh6
+ jtEqw8vpnDTHdn03Xr5JvKf8u69+zeINj+tqxQce7CBGdBW9MUJ+TTfN3mtM8vi/ryI6iTTQYo
+ WJRsLFcq2itoQFOMVYMXFeMBffeO2WdJ22GUyxb3HxbHpuHQMSlJmHPsWowiIpVweVglB4RCM5
+ x32KsuC/YoTRxUEQxxFOsGyxkxfq4GYQWZFD2qn/B+77/A+i7qgMRAgAA
+X-Change-ID: 20241019-msm8917-17c3d0ff4a52
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Dang Huynh <danct12@riseup.net>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733939948; l=3685;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=l94BK7mrqrW7wfB86W1pvJPZMlYxTL4bfJJgI4EhRVQ=;
+ b=R633mGFXByhKcb6oYnzij7wzGsygYNA9ivAfglNKI0x1s9HqtWuDx2IWw8tx9a1zMvvCxc3Sa
+ IyqzwT7Ae7qAFZYq90Vw5wSb0ga8bUwu+ovbvbdQkRUMcZUbaOVkkOw
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-On Wed, Dec 11, 2024 at 6:08=E2=80=AFPM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-> On Wed, 11 Dec 2024 at 17:38, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Wed, Dec 11, 2024 at 2:25=E2=80=AFPM Vincent Guittot
-> > <vincent.guittot@linaro.org> wrote:
-> > >
-> > > On Wed, 11 Dec 2024 at 12:29, Rafael J. Wysocki <rafael@kernel.org> w=
-rote:
-> > > >
-> > > > On Wed, Dec 11, 2024 at 11:33=E2=80=AFAM Christian Loehle
-> > > > <christian.loehle@arm.com> wrote:
-> > > > >
-> > > > > On 11/29/24 16:00, Rafael J. Wysocki wrote:
-> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >
-> > > > > > Make it possible to use EAS with cpufreq drivers that implement=
- the
-> > > > > > :setpolicy() callback instead of using generic cpufreq governor=
-s.
-> > > > > >
-> > > > > > This is going to be necessary for using EAS with intel_pstate i=
-n its
-> > > > > > default configuration.
-> > > > > >
-> > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > ---
-> > > > > >
-> > > > > > This is the minimum of what's needed, but I'd really prefer to =
-move
-> > > > > > the cpufreq vs EAS checks into cpufreq because messing around c=
-pufreq
-> > > > > > internals in topology.c feels like a butcher shop kind of exerc=
-ise.
-> > > > >
-> > > > > Makes sense, something like cpufreq_eas_capable().
-> > > > >
-> > > > > >
-> > > > > > Besides, as I said before, I remain unconvinced about the usefu=
-lness
-> > > > > > of these checks at all.  Yes, one is supposed to get the best r=
-esults
-> > > > > > from EAS when running schedutil, but what if they just want to =
-try
-> > > > > > something else with EAS?  What if they can get better results w=
-ith
-> > > > > > that other thing, surprisingly enough?
-> > > > >
-> > > > > How do you imagine this to work then?
-> > > > > I assume we don't make any 'resulting-OPP-guesses' like
-> > > > > sugov_effective_cpu_perf() for any of the setpolicy governors.
-> > > > > Neither for dbs and I guess userspace.
-> > > > > What about standard powersave and performance?
-> > > > > Do we just have a cpufreq callback to ask which OPP to use for
-> > > > > the energy calculation? Assume lowest/highest?
-> > > > > (I don't think there is hardware where lowest/highest makes a
-> > > > > difference, so maybe not bothering with the complexity could
-> > > > > be an option, too.)
-> > > >
-> > > > In the "setpolicy" case there is no way to reliably predict the OPP
-> > > > that is going to be used, so why bother?
-> > > >
-> > > > In the other cases, and if the OPPs are actually known, EAS may sti=
-ll
-> > > > make assumptions regarding which of them will be used that will mat=
-ch
-> > > > the schedutil selection rules, but if the cpufreq governor happens =
-to
-> > > > choose a different OPP, this is not the end of the world.
-> > >
-> > > Should we add a new cpufreq governor fops to return the guest estimat=
-e
-> > > of the compute capacity selection ? something like
-> > > cpufreq_effective_cpu_perf(cpu, actual, min, max)
-> > > EAS needs to estimate what would be the next OPP; schedutil uses
-> > > sugov_effective_cpu_perf() and other governor could provide their own
-> >
-> > Generally, yes.  And documented for that matter.
-> >
-> > But it doesn't really tell you the OPP, but the performance level that
-> > is going to be set for the given list of arguments IIUC.  An energy
->
-> Yes, the governor return what performance level it will select and asl
-> to the cpufreq driver so EAS can directly map it to an OPP and a cost
->
-> > model is needed to find an OPP for the given perf level.  Or generally
-> > the cost of it for that matter.
-> >
-> > > > Yes, you could have been more energy-efficient had you chosen to us=
-e
-> > > > schedutil, but you chose otherwise and that's what you get.
-> > >
-> > > Calling sugov_effective_cpu_perf() for another governor than scheduti=
-l
-> > > doesn't make sense.
-> >
-> > It will work for intel_pstate in the "setpolicy" mode to a reasonable
-> > approximation AFAICS.
-> >
-> > > and do we handle the case when
-> > > CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not selected
-> >
-> > I don't think it's necessary to handle it.
->
-> I don't think that CI and others will be happy to possibly get an
-> undeclared function. Or you put a dependency of other governors with
-> CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
+This patch series add support for MSM8917 soc with PM8937 and
+Xiaomi Redmi 5A (riva).
 
-Do you mean CONFIG_CPU_FREQ_GOV_SCHEDUTIL?  Because
-CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is only about whether or not schedutil
-is the default governor.
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v8:
+- pm8937, msm8917, msm8917-xiaomi-riva: remove unused includes
+- Link to v7: https://lore.kernel.org/r/20241124-msm8917-v7-0-612729834656@mainlining.org
 
-I think that it is fine to require CONFIG_CPU_FREQ_GOV_SCHEDUTIL for EAS.
+Changes in v7:
+- msm8917-xiaomi-riva:
+  - Add pinctrls for used GPIO pins.
+  - Use interrupts-extend for charger.
+  - Order properies.
+- Link to v6: https://lore.kernel.org/r/20241113-msm8917-v6-0-c348fb599fef@mainlining.org
+
+Changes in v6:
+- msm8917:
+  - Consolidate SDC pins, remove sdc2-cd-on/off pins.
+  - Remove cluster-sleep-0 and cluster-sleep-1
+  and rename cluster-sleep-2 to cluster-sleep-0.
+  - Fix spi, i2c and related pinctrl namings.
+- msm8917-xiaomi-riva: follow i2c name changes.
+- Link to v5: https://lore.kernel.org/r/20241112-msm8917-v5-0-3ca34d33191b@mainlining.org
+
+Changes in v5:
+- msm8917:
+  - Remove aliases.
+  - Rename spi, i2c labels and pins.
+  - Remove clock-frequency from timers
+  - Remove unused mpss_mem region.
+  - Use mboxes where it can be used, only smd-edge uses qcom,ipc.
+- msm8917-xiaomi-riva: Follow i2c label changes.
+- Link to v4: https://lore.kernel.org/r/20241109-msm8917-v4-0-8be9904792ab@mainlining.org
+
+Changes in v4:
+- msm8917 pinctrl: Fix gpio regexp in the schema.
+- msm8937 tsens: Rename ops_msm8976 to ops_common and use it for msm8937.
+- msm8917: fix address padding, naming and ordering, remove polling-delays.
+- Remove applied patches from the series.
+- Link to v3: https://lore.kernel.org/r/20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org
+
+Changes in v3:
+- msm8917-xiaomi-riva: Fix issues addressed by Konrad.
+- msm8917: Fix node addresses, orders of some properties.
+- pm8937: simplify vadc channels.
+- msm8917 pinctrl: Fix schema issues addressed by Krzysztof. 
+- Remove applied tcsr patch from this series.
+- Reword some commit title.
+- Link to v2: https://lore.kernel.org/r/20241031-msm8917-v2-0-8a075faa89b1@mainlining.org
+
+Changes in v2:
+- Add msm8937 tsens support.
+- Fix issues addressed by reviews.
+- Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
+
+---
+Barnabás Czémán (5):
+      dt-bindings: pinctrl: qcom: Add MSM8917 pinctrl
+      dt-bindings: iommu: qcom,iommu: Add MSM8917 IOMMU to SMMUv1 compatibles
+      dt-bindings: nvmem: Add compatible for MS8917
+      dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
+      arm64: dts: qcom: Add Xiaomi Redmi 5A
+
+Dang Huynh (1):
+      arm64: dts: qcom: Add PM8937 PMIC
+
+Otto Pflüger (2):
+      pinctrl: qcom: Add MSM8917 tlmm pinctrl driver
+      arm64: dts: qcom: Add initial support for MSM8917
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
+ .../devicetree/bindings/iommu/qcom,iommu.yaml      |    1 +
+ .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
+ .../bindings/pinctrl/qcom,msm8917-pinctrl.yaml     |  160 ++
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  333 ++++
+ arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1944 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8937.dtsi               |  150 ++
+ drivers/pinctrl/qcom/Kconfig.msm                   |    6 +
+ drivers/pinctrl/qcom/Makefile                      |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm8917.c             | 1620 ++++++++++++++++
+ 11 files changed, 4224 insertions(+)
+---
+base-commit: 1b2ab8149928c1cea2d7eca30cd35bb7fe014053
+change-id: 20241019-msm8917-17c3d0ff4a52
+
+Best regards,
+-- 
+Barnabás Czémán <barnabas.czeman@mainlining.org>
+
 
