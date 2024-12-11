@@ -1,136 +1,174 @@
-Return-Path: <linux-pm+bounces-18988-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-18989-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B00679EC58A
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 08:29:44 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45ECF9EC68C
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 09:06:31 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26DD52850A8
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 07:29:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2170F1681D9
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 08:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F871C5F1F;
-	Wed, 11 Dec 2024 07:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQtqNQ5i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F101C9DD7;
+	Wed, 11 Dec 2024 08:06:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71311C5F0C;
-	Wed, 11 Dec 2024 07:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B2578F40;
+	Wed, 11 Dec 2024 08:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733902174; cv=none; b=G6IxB13x9eshP1UEdF7nBLraI8xNYQQ3T5QenbMdPSmYPzzJG4QrSa8+b7Hq2tWyQVTqsCmPge4+iM74OcsJVL2yBCw6OzAuit+qKZuM6OuoGzmACfINHgwaKYi/NtwibseJbRJaLcpCWTqlyghoakzGvTg5DNgynFKM65humGM=
+	t=1733904370; cv=none; b=OH+3Iexu4VXXUVNR17XIlkMuPKoHV/Gdk0UkTNCMER6lSwEq7t8kjDQnLvH0in9Yt3zfT69a3MLTbUYbjhOisV12oD39FarZ9HkxKIawCQYYf0ufdrwDgdTTcQEJK6n2A022g6ddgx05deTTQ8SHRLz1wChJU0mYZ8/IW2uVBO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733902174; c=relaxed/simple;
-	bh=kE9grQmLn6LHMLUwo50GIjdSNUInWEzzqpTKkKa/hkc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pWZDScTYEu08I0Y3PQJNCDEnL5b53jkZ6wIGiSqKXxn+aAaH+od6jkqbjSkbODjEdtPIPA2c5e7y+sljFviLq5DHqKVvqCqmNHHXTVWrxTczCAMgaY4ANmgW8eAJRphQ5/nfna2veGJIaBUMFVOUyhNo2k/kW2oO+bI30wDu0zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQtqNQ5i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 46846C4CEDF;
-	Wed, 11 Dec 2024 07:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733902174;
-	bh=kE9grQmLn6LHMLUwo50GIjdSNUInWEzzqpTKkKa/hkc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=OQtqNQ5i83nJoTgEiQRuOvahuc+ongdQ8RMDh6WVZcHY6Nt8P2k4hkzeoUaYok5Zl
-	 kNnnp/5WUBjy8daGfUrsO9LuUCNdBYWrvWJwGh0qLzHNogLaBEvSpZkyebVhQB+CSt
-	 oJU4Gk2KJtMJsh3PtUoL2fz+DvxUZTxlr76+veAKNIgYyyZXPz8iVN+NB5jdFE0Cuu
-	 YKYWwVn/I3ilhYHMGL4SfQQeVP/uN53u7y2LLE3iBYji4DmjAxBr9elmO2xIrWCHyI
-	 tIJRkeFkt+2H99iiGtxyCQPJHIA5K+juoKMbelGsgJvlp1AqtxBIIv2hp0WGADBFqd
-	 io+ch03Tp0ecg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22782E77183;
-	Wed, 11 Dec 2024 07:29:34 +0000 (UTC)
-From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Date: Wed, 11 Dec 2024 08:29:10 +0100
-Subject: [PATCH 2/2] power: supply: gpio-charger: add support for default
- charge current limit
+	s=arc-20240116; t=1733904370; c=relaxed/simple;
+	bh=2lpg8Qm3GiRa97KUHnH0N1dMtBglvRTfu1J7vBXsmmY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fgjbiwa6RMqL/CM3QYxGdq2njCZN5rHnhGAIsklQJKvpzfZwR1hrKM0PN5ty/u7bS50fui+0vPzDOw2XkvHIMM4RcxZHvDzG1TrOgjuEXpC1CBfj4WQhoC1SI8Qb46Og4Sq8B2giB9eTm521CCF7FiPxc5+vnyeUKVGPcwAJLPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id DF9BF100D9401;
+	Wed, 11 Dec 2024 08:57:23 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id AD03A603AE3; Wed, 11 Dec 2024 08:57:23 +0100 (CET)
+Date: Wed, 11 Dec 2024 08:57:23 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Niklas Schnelle <niks@kernel.org>
+Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>
+Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
+ 2.5 GT/s
+Message-ID: <Z1lF468L8c84QJkD@wunner.de>
+References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
+ <Z1gSZCdv3fwnRRNk@wunner.de>
+ <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241211-default-charge-current-limit-v1-2-7819ba06ee2a@liebherr.com>
-References: <20241211-default-charge-current-limit-v1-0-7819ba06ee2a@liebherr.com>
-In-Reply-To: <20241211-default-charge-current-limit-v1-0-7819ba06ee2a@liebherr.com>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
- Dimitri Fedrau <dima.fedrau@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733902172; l=1905;
- i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=5B4rPOB+5702QfWy45U125DyTvkQjxqeDuDwvqB5EFA=;
- b=l8QShK3uZiH18nY4r7xOEo4cv0gfqVRaW/2J265DhezaihkaAy0HwBwCqQ+G6mRZfyWcwg0Sa
- 0VNOLf+2hZQD7E3yzorunI2tX/1KVje4RqETuOmCDQ7PLRD3q3h3ut6
-X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
- pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
-X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
- with auth_id=290
-X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Reply-To: dimitri.fedrau@liebherr.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org>
 
-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+On Tue, Dec 10, 2024 at 09:45:18PM +0100, Niklas Schnelle wrote:
+> On Tue, 2024-12-10 at 11:05 +0100, Lukas Wunner wrote:
+> > First of all, the Supported Link Speeds field in the Link Capabilities
+> > register (which you're querying here) was renamed to Max Link Speed in
+> > PCIe r3.1 and a new Link Capabilities 2 register was added which contains
+> > a new Supported Link Speeds field.  Software is supposed to query the
+> > latter if the device implements the Link Capabilities 2 register
+> > (see the other Implementation Note at the end of PCIe r6.2 sec 7.5.3.18).
+> 
+> Would it maybe make sense to update the comment for PCI_EXP_LNKCAP_SLS
+> in pci_regs.h to point out that in PCIe r3.1 and newer this is called
+> the Max Link Speed field? This would certainly helped me here.
 
-The driver defaults to smallest current limitation for safety reasons. Add
-support for setting default current limitation via DT.
+The macros for the individual speeds (e.g. PCI_EXP_LNKCAP_SLS_2_5GB)
+already have code comments which describe their new meaning.
 
-Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
----
- drivers/power/supply/gpio-charger.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+I guess the reason why the code comment for PCI_EXP_LNKCAP_SLS wasn't
+updated is that it seeks to document the meaning of the "SLS" acronym
+(Supported Link Speeds).
 
-diff --git a/drivers/power/supply/gpio-charger.c b/drivers/power/supply/gpio-charger.c
-index 68212b39785beabfe5536a18fa15bc249f7b1eea..1c1fce6579464b61dbaf4125d0a91dc34c18c4d0 100644
---- a/drivers/power/supply/gpio-charger.c
-+++ b/drivers/power/supply/gpio-charger.c
-@@ -187,6 +187,8 @@ static int init_charge_current_limit(struct device *dev,
- {
- 	int i, len;
- 	u32 cur_limit = U32_MAX;
-+	bool set_def_limit;
-+	u32 def_limit;
- 
- 	gpio_charger->current_limit_gpios = devm_gpiod_get_array_optional(dev,
- 		"charge-current-limit", GPIOD_OUT_LOW);
-@@ -220,6 +222,9 @@ static int init_charge_current_limit(struct device *dev,
- 	if (len < 0)
- 		return len;
- 
-+	set_def_limit = !device_property_read_u32(dev,
-+						  "charge-current-limit-default",
-+						  &def_limit);
- 	for (i=0; i < gpio_charger->current_limit_map_size; i++) {
- 		if (gpio_charger->current_limit_map[i].limit_ua > cur_limit) {
- 			dev_err(dev, "charge-current-limit-mapping not sorted by current in descending order\n");
-@@ -227,8 +232,16 @@ static int init_charge_current_limit(struct device *dev,
- 		}
- 
- 		cur_limit = gpio_charger->current_limit_map[i].limit_ua;
-+		if (set_def_limit && def_limit == cur_limit) {
-+			set_charge_current_limit(gpio_charger, cur_limit);
-+			return 0;
-+		}
- 	}
- 
-+	if (set_def_limit)
-+		dev_warn(dev, "charge-current-limit-default %u not listed in charge-current-limit-mapping\n",
-+			 def_limit);
-+
- 	/* default to smallest current limitation for safety reasons */
- 	len = gpio_charger->current_limit_map_size - 1;
- 	set_charge_current_limit(gpio_charger,
+But yes, amending that with something like...
 
--- 
-2.39.5
+/* Max Link Speed (Supported Link Speeds before PCIe r3.1) */
+
+...probably make sense, so feel free to propose that in a separate patch.
 
 
+> > So to make this future-proof what you could do is check whether only a
+> > *single* speed is supported (which could be something else than 2.5 GT/s
+> > if future spec versions allow that), i.e.:
+> > 
+> > -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
+> > +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
+> > +		    hweight8(dev->supported_speeds) > 1)
+> 
+> This also makes sense to me in that the argument holds that if there is
+> only one supported speed bwctrl can't control it. That said it is
+> definitely more general than this patch.
+> 
+> Sadly, I tried it and in my case it doesn't work. Taking a closer look
+> at lspci -vvv of the Thunderbolt port as well as a debug print reveals
+> why:
+> 
+> 07:00.0 PCI bridge: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] (rev 06) (prog-if 00 [Normal decode])
+>        ...
+>                 LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L1 <1us
+>                         ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+>                 LnkCtl: ASPM Disabled; LnkDisable- CommClk+
+>                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+>                 LnkSta: Speed 2.5GT/s, Width x4
+>                         TrErr- Train- SlotClk+ DLActive- BWMgmt+ ABWMgmt-
+> 	...
+>                 LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
+>                 LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- SpeedDis-, Selectable De-emphasis: -6dB
+>                          Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+>                          Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
+> 	...
+> 
+> So it seems that on this Thunderbolt chip the LnkCap field
+> says 2.5 GT/s only as per the USB 4 spec you quoted but LnkCap2
+> is 0x0E i.e. 2.5-8 GT/s.
+> 
+> I wonder if this is related to why the hang occurs. Could it be that
+> bwctrl tries to enable speeds above 2.5 GT/s and that causes links to
+> fail?
+
+Ilpo knows this code better than I do but yes, that's plausible.
+The bandwidth controller does't change the speed by itself,
+it only monitors speed changes.  But it does provide a
+pcie_set_target_speed() API which is called by the thermal driver
+as well as the pcie_failed_link_retrain() quirk.  I suspect the
+latter is the culprit here.  If that suspicion is correct,
+you should be seeing messages such as...
+
+"removing 2.5GT/s downstream link speed restriction"
+
+...in dmesg but I think you wrote that you're not getting any
+messages at all, right?  Perhaps if you add "early_printk=efi"
+to the kernel command line you may see what's going on.
+
+One idea in this case would be to modify pcie_get_supported_speeds()
+such that it filters out any speeds in the Link Capabilities 2 register
+which exceed the Max Link Speed in the Link Capabilties register.
+However the spec says that software should look at the Link Capabilities 2
+register to determine supported speeds if that register is present.
+So I think we may not conform to the spec then.
+
+The better option is thus probably to add a DECLARE_PCI_FIXUP_EARLY()
+quirk for Titan Ridge which sets the supported_speeds to just 2.5 GT/s.
+*If* you want to go with the future-proof option which checks that
+just one speed is supported.
+
+Titan Ridge is an old chip.  I'm not sure if newer discrete Thunderbolt
+controllers exhibit the same issue but likely not.
+
+Thanks,
+
+Lukas
 
