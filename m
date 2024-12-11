@@ -1,450 +1,543 @@
-Return-Path: <linux-pm+bounces-19054-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19060-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC12D9ED445
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 18:59:56 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2D0E9ED625
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 20:15:07 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D969A283A97
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 17:59:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C13816AEA8
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 19:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0876C20896A;
-	Wed, 11 Dec 2024 17:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Zo0g1d0n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA8A242EFA;
+	Wed, 11 Dec 2024 18:57:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FE0202F9D;
-	Wed, 11 Dec 2024 17:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C2C242EEC
+	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 18:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733939966; cv=none; b=lsr3Hc6MXEXIOvy/CFGicdkbuepGS9DsoILpHgfINn+kfwBcOAzC48Jw776jISdGePUx81qabQyumk6ZkzTO/DJQTkBMaHeroSdXPlk2UHDqV8MErhaRFQtIZlsLikrTRz9j1bLt6nMmeqFIhUaqpUw5nNTq+Scl7h8bzo/GFsE=
+	t=1733943452; cv=none; b=kB9Ott+AjdLutvsLCr9F9FfHfL74M7RdC3cnzGoe0l8BUzfnOkAinglxVGXrt80DHINclUkdGKJ833i2F1UfgIStKwpWQypM6paxMMv0aBWpf1WCRAMW38r+ce8LQhVNrQ9Cbi05eM8ZG7y+bq3mD14imlmWeX8/XtezTJiMe3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733939966; c=relaxed/simple;
-	bh=+CyLWlVJTG7DJbK23BLbREkYGd65h/jJ8p09RcWgB9M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Eu6d26LJ5WTNkK4x3AdLAdIWgartyPvWmsqAmx1FwkS9/UQUGA8Z+QaHqE+U2075vxKLcRtPVytYGuJNvaMzDSLs7+qwZQeXuOxnoxvEfFDC+oW1yqrzJ1DKY2ZHEvJ8QIJBpuZlv7Wik6jWnS1iTAM4AVzrb7d6sfn//nLPvJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Zo0g1d0n; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [192.168.118.162] (254C2319.nat.pool.telekom.hu [37.76.35.25])
-	by mail.mainlining.org (Postfix) with ESMTPSA id CBDBBE482E;
-	Wed, 11 Dec 2024 17:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1733939963;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ua5tHwuVwE9psNf3/7tv1OI/aaQ0u+NeoIVn2PvXMzY=;
-	b=Zo0g1d0nUKm4b4ZA941o/0DE79MTGH2UZBpFyz0WlqfarDG9SLmt6Hg03h0yqSNWvnKOV6
-	lDQUYVqlQ7Rv4Jly78ouWfK3RKmRgIv26tch8XkbGRhaYxCJk8kUVpIR0MpKZQCfmDEqK5
-	M6h6hy6zqx/DmnOzZGdJCdthDjnZyNL+b3HCa3n7GsdCad3S/e9oJkoxnoeGxCiXB8vpPS
-	WH/sD8JGUAcbWwTL7dAn3KUIuy6YroR+gXmySB5q1Y33HnH+KFHjH8EGVntLpsmzhpAsQ9
-	JCD9DniAT6wVOiDmzfQYV05IhpTS8LT6eFumCxz+HYOiOsHI4IUG3ROg+flvAA==
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Wed, 11 Dec 2024 18:59:12 +0100
-Subject: [PATCH v8 8/8] arm64: dts: qcom: Add Xiaomi Redmi 5A
+	s=arc-20240116; t=1733943452; c=relaxed/simple;
+	bh=gzLaOdE//ITNtAZIxkl55EsI846FM5MiEbUHNlwkhoQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VRqNcnz57ccdC8GkQtv8SUPSJLjCMsenvgdJf58LCqLbgeTBNVg7hfvWvdbH/ZTqmXlb/klu39U9vellp5zWDy5gIUgZTxLp9WD3i/KpVzFN8OXFW6PLVY2I1Kt/HMoIQeh7lwnD2YYJWoG3mDPAwE6ggW5OxyuQOWun4E4qVDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tLRtS-0005ua-OL; Wed, 11 Dec 2024 19:57:06 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tLRtQ-002uPB-2r;
+	Wed, 11 Dec 2024 19:57:05 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tLRtR-00AYei-1k;
+	Wed, 11 Dec 2024 19:57:05 +0100
+Date: Wed, 11 Dec 2024 19:57:05 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Frank Li <Frank.li@nxp.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengfei Li <pengfei.li_1@nxp.com>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v2 2/2] thermal: imx91: Add support for i.MX91 thermal
+ monitoring unit
+Message-ID: <20241211185705.7b5uw26loobibzln@pengutronix.de>
+References: <20241210-imx91tmu-v2-0-5032aad4d88e@nxp.com>
+ <20241210-imx91tmu-v2-2-5032aad4d88e@nxp.com>
+ <20241211154622.f2jwwrqansk6il3o@pengutronix.de>
+ <Z1m+O1UV4HD+7Rr2@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241211-msm8917-v8-8-197acc042036@mainlining.org>
-References: <20241211-msm8917-v8-0-197acc042036@mainlining.org>
-In-Reply-To: <20241211-msm8917-v8-0-197acc042036@mainlining.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733939948; l=8938;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=+CyLWlVJTG7DJbK23BLbREkYGd65h/jJ8p09RcWgB9M=;
- b=7jfr1ggBMH+87YSnchEspbwgXDYzsmITUbCbqpN7Eeh29hXcp3+U3v0yPVHX5rx4PYQcKeArl
- 80/24Fl/NG+CvZegRdC9aIjNAwDSIOhKpx+hOKyHn5eTDOXMCRbkg1+
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z1m+O1UV4HD+7Rr2@lizhi-Precision-Tower-5810>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Add initial support for Xiaomi Redmi 5A (riva).
+On 24-12-11, Frank Li wrote:
+> On Wed, Dec 11, 2024 at 04:46:22PM +0100, Marco Felsch wrote:
+> > On 24-12-10, Frank Li wrote:
+> > > From: Pengfei Li <pengfei.li_1@nxp.com>
+> > >
+> > > Introduce support for the i.MX91 thermal monitoring unit, which features a
+> > > single sensor for the CPU. The register layout differs from other chips,
+> > > necessitating the creation of a dedicated file for this.
+> > >
+> > > Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
+> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > ---
+> > > change from v1 to v2
+> > > - use low case for hexvalue
+> > > - combine struct imx91_tmu and tmu_sensor
+> > > - simplify imx91_tmu_start() and imx91_tmu_enable()
+> > > - use s16 for imx91_tmu_get_temp(), which may negative value
+> > > - use reverse christmas tree style
+> > > - use run time pm
+> > > - use oneshot to sample temp
+> > > - register thermal zone after hardware init
+> > > ---
+> > >  drivers/thermal/Kconfig         |  10 ++
+> > >  drivers/thermal/Makefile        |   1 +
+> > >  drivers/thermal/imx91_thermal.c | 265 ++++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 276 insertions(+)
+> > >
+> > > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > > index d3f9686e26e71..da403ed86aeb1 100644
+> > > --- a/drivers/thermal/Kconfig
+> > > +++ b/drivers/thermal/Kconfig
+> > > @@ -296,6 +296,16 @@ config IMX8MM_THERMAL
+> > >  	  cpufreq is used as the cooling device to throttle CPUs when the passive
+> > >  	  trip is crossed.
+> > >
+> > > +config IMX91_THERMAL
+> > > +	tristate "Temperature sensor driver for NXP i.MX91 SoC"
+> > > +	depends on ARCH_MXC || COMPILE_TEST
+> > > +	depends on OF
+> > > +	help
+> > > +	  Support for Temperature sensor found on NXP i.MX91 SoC.
+> > > +	  It supports one critical trip point and one passive trip point. The
+> > > +	  cpufreq is used as the cooling device to throttle CPUs when the passive
+> > > +	  trip is crossed.
+> > > +
+> > >  config K3_THERMAL
+> > >  	tristate "Texas Instruments K3 thermal support"
+> > >  	depends on ARCH_K3 || COMPILE_TEST
+> > > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > > index 9abf43a74f2bb..08da241e6a598 100644
+> > > --- a/drivers/thermal/Makefile
+> > > +++ b/drivers/thermal/Makefile
+> > > @@ -50,6 +50,7 @@ obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
+> > >  obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
+> > >  obj-$(CONFIG_IMX_SC_THERMAL)	+= imx_sc_thermal.o
+> > >  obj-$(CONFIG_IMX8MM_THERMAL)	+= imx8mm_thermal.o
+> > > +obj-$(CONFIG_IMX91_THERMAL)	+= imx91_thermal.o
+> > >  obj-$(CONFIG_MAX77620_THERMAL)	+= max77620_thermal.o
+> > >  obj-$(CONFIG_QORIQ_THERMAL)	+= qoriq_thermal.o
+> > >  obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
+> > > diff --git a/drivers/thermal/imx91_thermal.c b/drivers/thermal/imx91_thermal.c
+> > > new file mode 100644
+> > > index 0000000000000..ebb59eda92951
+> > > --- /dev/null
+> > > +++ b/drivers/thermal/imx91_thermal.c
+> > > @@ -0,0 +1,265 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright 2024 NXP.
+> > > + */
+> > > +
+> > > +#include <linux/bitfield.h>
+> > > +#include <linux/clk.h>
+> > > +#include <linux/err.h>
+> > > +#include <linux/iopoll.h>
+> > > +#include <linux/nvmem-consumer.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/of.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/platform_device.h>
+> > > +#include <linux/pm_runtime.h>
+> > > +#include <linux/thermal.h>
+> > > +
+> > > +#define CTRL0			0x0
+> >
+> > Unused
+> >
+> > > +
+> > > +#define STAT0			0x10
+> > > +#define STAT0_DRDY0_IF_MASK	BIT(16)
+> > > +
+> > > +#define DATA0			0x20
+> > > +
+> > > +#define THR_CTRL01		0x30
+> > > +#define THR_CTRL23		0x40
+> >
+> > Both are unused too
+> >
+> > > +#define CTRL1			0x200
+> >
+> > Unused
+> >
+> > > +#define CTRL1_SET		0x204
+> > > +#define CTRL1_CLR		0x208
+> > > +#define CTRL1_EN		BIT(31)
+> > > +#define CTRL1_START		BIT(30)
+> > > +#define CTRL1_STOP		BIT(29)
+> > > +#define CTRL1_RES_MASK		GENMASK(19, 18)
+> > > +#define CTRL1_MEAS_MODE_MASK	GENMASK(25, 24)
+> > > +#define   CTRL1_MEAS_MODE_SINGLE	0
+> > > +#define   CTRL1_MEAS_MODE_CONTINUES	1
+> > > +#define   CTRL1_MEAS_MODE_PERIODIC	2
+> > > +
+> > > +#define REF_DIV			0x280
+> > > +#define DIV_EN			BIT(31)
+> > > +#define DIV_MASK		GENMASK(23, 16)
+> > > +
+> > > +#define PUD_ST_CTRL		0x2B0
+> > > +#define PUDL_MASK		GENMASK(23, 16)
+> > > +
+> > > +#define TRIM1			0x2E0
+> > > +#define TRIM2			0x2F0
+> > 					^
+> > 				still upper-case
+> >
+> > > +#define TMU_TEMP_LOW_LIMIT	-40000
+> > > +#define TMU_TEMP_HIGH_LIMIT	125000
+> > > +
+> > > +#define DEFAULT_TRIM1_CONFIG 0xb561bc2d
+> > > +#define DEFAULT_TRIM2_CONFIG 0x65d4
+> > > +
+> > > +struct imx91_tmu {
+> > > +	void __iomem *base;
+> > > +	struct clk *clk;
+> > > +	struct device *dev;
+> > > +	struct thermal_zone_device *tzd;
+> > > +};
+> > > +
+> > > +static void imx91_tmu_start(struct imx91_tmu *tmu, bool start)
+> > > +{
+> > > +	u32 val = start ? CTRL1_START : CTRL1_STOP;
+> > > +
+> > > +	writel_relaxed(val, tmu->base + CTRL1_SET);
+> > > +}
+> > > +
+> > > +static void imx91_tmu_enable(struct imx91_tmu *tmu, bool enable)
+> > > +{
+> > > +	u32 reg = enable ? CTRL1_SET : CTRL1_CLR;
+> > > +
+> > > +	writel_relaxed(CTRL1_EN, tmu->base + reg);
+> > > +}
+> > > +
+> > > +static int imx91_tmu_get_temp(struct thermal_zone_device *tz, int *temp)
+> > > +{
+> > > +	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
+> > > +	s16 data;
+> > > +	int ret;
+> > > +	u32 val;
+> > > +
+> > > +	ret = pm_runtime_resume_and_get(tmu->dev);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	ret = readl_relaxed_poll_timeout(tmu->base + STAT0, val,
+> > > +					 val & STAT0_DRDY0_IF_MASK, 1000,
+> > > +					 40000);
+> > > +	if (ret)
+> > > +		return -EAGAIN;
+> > 		 ^
+> > Missing pm_runtime_put(). Instead goto out;
+> >
+> > > +
+> > > +	/* DATA0 is 16bit signed number */
+> > > +	data = readw_relaxed(tmu->base + DATA0);
+> > > +	*temp = data * 1000 / 64;
+> > > +	if (*temp < TMU_TEMP_LOW_LIMIT || *temp > TMU_TEMP_HIGH_LIMIT)
+> > > +		return -EAGAIN;
+> > 			^
+> > 		ret = -EAGAIN;
+> > 		goto out;
+> >
+> > out:
+> > > +
+> > > +	pm_runtime_put(tmu->dev);
+> > > +
+> > > +	return 0;
+> >
+> > 	return ret;
+> > > +}
+> > > +
+> > > +static struct thermal_zone_device_ops tmu_tz_ops = {
+> > > +	.get_temp = imx91_tmu_get_temp,
+> > > +};
+> > > +
+> > > +static int imx91_init_from_nvmem_cells(struct imx91_tmu *tmu)
+> > > +{
+> > > +	struct device *dev = tmu->dev;
+> > > +	u32 trim1, trim2;
+> > > +	int ret;
+> > > +
+> > > +	ret = nvmem_cell_read_u32(dev, "trim1", &trim1);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	ret = nvmem_cell_read_u32(dev, "trim2", &trim2);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	if (trim1 == 0 || trim2 == 0)
+> > > +		return -EINVAL;
+> > > +
+> > > +	writel_relaxed(trim1, tmu->base + TRIM1);
+> > > +	writel_relaxed(trim2, tmu->base + TRIM2);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int imx91_tmu_probe(struct platform_device *pdev)
+> > > +{
+> > > +	struct device *dev = &pdev->dev;
+> >
+> > Since you already have the dev pointer, you can make use of it...
+> >
+> > > +	struct imx91_tmu *tmu;
+> > > +	unsigned long rate;
+> > > +	u32 div;
+> > > +	int ret;
+> > > +
+> > > +	tmu = devm_kzalloc(&pdev->dev, sizeof(struct imx91_tmu), GFP_KERNEL);
+> > 				^
+> > 				here
+> > > +	if (!tmu)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	tmu->dev = &pdev->dev;
+> >
+> > 	and here
+> >
+> > > +
+> > > +	tmu->base = devm_platform_ioremap_resource(pdev, 0);
+> > > +	if (IS_ERR(tmu->base))
+> > > +		return PTR_ERR(tmu->base);
+> > 			^
+> > 		dev_err_probe();
+> >
+> > > +
+> > > +	tmu->clk = devm_clk_get_enabled(dev, NULL);
+> > > +	if (IS_ERR(tmu->clk))
+> > > +		return dev_err_probe(dev, PTR_ERR(tmu->clk), "failed to get tmu clock\n");
+> > > +
+> > > +	platform_set_drvdata(pdev, tmu);
+> > > +
+> > > +	/* disable the monitor during initialization */
+> > > +	imx91_tmu_enable(tmu, false);
+> > > +	imx91_tmu_start(tmu, false);
+> >
+> > No need to disable it here since both bits (ENABLE and START) are 0
+> > after a reset.
+> 
+> Maybe uboot enable it. We can't depend on reset value without really set
+> hardware reset bit.
 
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
- arch/arm64/boot/dts/qcom/Makefile                |   1 +
- arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts | 333 +++++++++++++++++++++++
- 2 files changed, 334 insertions(+)
+So the module can't be rested e.g. by disabling module power? Having a
+dedicated reset mechanism would be much simpler instead of writing each
+reg-field to the default value.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 4686f2a8ddd897227360b4de48a0618499ad463e..ee9b262b0e0fc3ec9d6515174c33f8b69b524842 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -62,6 +62,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86518.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt86528.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..f1d22535fedd94467ba3f0a88b2110ce5360e7e1
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts
-@@ -0,0 +1,333 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023, Barnabas Czeman
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include "msm8917.dtsi"
-+#include "pm8937.dtsi"
-+
-+/delete-node/ &qseecom_mem;
-+
-+/ {
-+	model = "Xiaomi Redmi 5A (riva)";
-+	compatible = "xiaomi,riva", "qcom,msm8917";
-+	chassis-type = "handset";
-+
-+	qcom,msm-id = <QCOM_ID_MSM8917 0>;
-+	qcom,board-id = <0x1000b 2>, <0x2000b 2>;
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3000000>;
-+		energy-full-design-microwatt-hours = <11500000>;
-+		constant-charge-current-max-microamp = <1000000>;
-+		constant-charge-voltage-max-microvolt = <4400000>;
-+		precharge-current-microamp = <256000>;
-+		charge-term-current-microamp = <60000>;
-+		voltage-min-design-microvolt = <3400000>;
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		stdout-path = "framebuffer0";
-+
-+		framebuffer0: framebuffer@90001000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x0 0x90001000 0x0 (720 * 1280 * 3)>;
-+			width = <720>;
-+			height = <1280>;
-+			stride = <(720 * 3)>;
-+			format = "r8g8b8";
-+
-+			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_MDSS_AXI_CLK>,
-+				 <&gcc GCC_MDSS_VSYNC_CLK>,
-+				 <&gcc GCC_MDSS_MDP_CLK>,
-+				 <&gcc GCC_MDSS_BYTE0_CLK>,
-+				 <&gcc GCC_MDSS_PCLK0_CLK>,
-+				 <&gcc GCC_MDSS_ESC0_CLK>;
-+			power-domains = <&gcc MDSS_GDSC>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&gpio_keys_default>;
-+		pinctrl-names = "default";
-+
-+		key-volup {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	vph_pwr: regulator-vph-pwr {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	reserved-memory {
-+		qseecom_mem: qseecom@84a00000 {
-+			reg = <0x0 0x84a00000 0x0 0x1900000>;
-+			no-map;
-+		};
-+
-+		framebuffer_mem: memory@90001000 {
-+			reg = <0x0 0x90001000 0x0 (720 * 1280 * 3)>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c3 {
-+	status = "okay";
-+
-+	touchscreen@38 {
-+		compatible = "edt,edt-ft5306";
-+		reg = <0x38>;
-+		interrupts-extended = <&tlmm 65 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+		pinctrl-0 = <&tsp_int_rst_default>;
-+		pinctrl-names = "default";
-+		vcc-supply = <&pm8937_l10>;
-+		iovcc-supply = <&pm8937_l5>;
-+		touchscreen-size-x = <720>;
-+		touchscreen-size-y = <1280>;
-+	};
-+};
-+
-+&blsp2_i2c1 {
-+	status = "okay";
-+
-+	bq27426@55 {
-+		compatible = "ti,bq27426";
-+		reg = <0x55>;
-+		monitored-battery = <&battery>;
-+	};
-+
-+	bq25601@6b{
-+		compatible = "ti,bq25601";
-+		reg = <0x6b>;
-+		interrupts-extended = <&tlmm 61 IRQ_TYPE_EDGE_FALLING>;
-+		pinctrl-0 = <&bq25601_int_default>;
-+		pinctrl-names = "default";
-+		input-voltage-limit-microvolt = <4400000>;
-+		input-current-limit-microamp = <1000000>;
-+		monitored-battery = <&battery>;
-+	};
-+};
-+
-+&pm8937_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm8937-regulators";
-+
-+		vdd_s1-supply = <&vph_pwr>;
-+		vdd_s2-supply = <&vph_pwr>;
-+		vdd_s3-supply = <&vph_pwr>;
-+		vdd_s4-supply = <&vph_pwr>;
-+
-+		vdd_l1_l19-supply = <&pm8937_s3>;
-+		vdd_l2_l23-supply = <&pm8937_s3>;
-+		vdd_l3-supply = <&pm8937_s3>;
-+		vdd_l4_l5_l6_l7_l16-supply = <&pm8937_s4>;
-+		vdd_l8_l11_l12_l17_l22-supply = <&vph_pwr>;
-+		vdd_l9_l10_l13_l14_l15_l18-supply = <&vph_pwr>;
-+
-+		pm8937_s1: s1 {
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8937_s3: s3 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8937_s4: s4 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8937_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8937_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l8: l8 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l9: l9 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l10: l10 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8937_l11: l11 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+			regulator-allow-set-load;
-+			regulator-system-load = <200000>;
-+		};
-+
-+		pm8937_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8937_l13: l13 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+
-+		pm8937_l14: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l16: l16 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l17: l17 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l19: l19 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8937_l22: l22 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+		};
-+
-+		pm8937_l23: l23 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+	};
-+
-+};
-+
-+&sdhc_1 {
-+	vmmc-supply = <&pm8937_l8>;
-+	vqmmc-supply = <&pm8937_l5>;
-+
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 67 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&pm8937_l11>;
-+	vqmmc-supply = <&pm8937_l12>;
-+	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
-+	pinctrl-names = "default", "sleep";
-+
-+	status = "okay";
-+};
-+
-+&sleep_clk {
-+	clock-frequency = <32768>;
-+};
-+
-+&tlmm {
-+	bq25601_int_default: bq25601-int-default-state {
-+		pins = "gpio61";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	gpio_keys_default: gpio-keys-default-state {
-+		pins = "gpio91";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio67";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_int_rst_default: tsp-int-rst-default-state {
-+		pins = "gpio64", "gpio65";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&wcnss {
-+	vddpx-supply = <&pm8937_l5>;
-+
-+	status = "okay";
-+};
-+
-+&wcnss_iris {
-+	compatible = "qcom,wcn3620";
-+	vddxo-supply = <&pm8937_l7>;
-+	vddrfa-supply = <&pm8937_l19>;
-+	vddpa-supply = <&pm8937_l9>;
-+	vdddig-supply = <&pm8937_l5>;
-+};
-+
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
-+&xo_board {
-+	clock-frequency = <19200000>;
-+};
+> > > +	ret = imx91_init_from_nvmem_cells(tmu);
+> > > +	if (ret) {
+> > > +		writel_relaxed(DEFAULT_TRIM1_CONFIG, tmu->base + TRIM1);
+> > > +		writel_relaxed(DEFAULT_TRIM2_CONFIG, tmu->base + TRIM2);
+> > 			^
+> > Can you please anwer if _relaxed API is sufficient? I don't know why you
+> > making use of the _relaxed API here anyway. We have only a few MMIO
+> > accesses here, so why can't we use the writel() instead? This applies to
+> > the whole driver.
+> 
+> There are not big difference writel_relaxed() or writel() for this driver.
+> Just original owner pick one.
 
--- 
-2.47.1
+NACK, the difference is that _relaxed() APIs don't guarantee the order
+the register access is done.
 
+> > > +	}
+> > > +
+> > > +	/* The typical conv clk is 4MHz, the output freq is 'rate / (div + 1)' */
+> > > +	rate = clk_get_rate(tmu->clk);
+> > > +	div = (rate / 4000000) - 1;
+> > > +	if (div > FIELD_GET(DIV_MASK, DIV_MASK))
+> > 			^
+> > This misuse the FIELD_GET() API. Instead please add a define e.g. DIV_MAX.
+> 
+> I don't think so, It avoid define another macro DIV_MAX, which may miss
+> defined, the related marco should come from one source.
+> 
+> For example:
+> 
+> DIV_MASK is GENMASK(23, 16),  DIV_MAX is 256. But if hardware upgrade,
+> DIV_MASK to GENMASK(24, 16), DIV_MAX is quite easy to forget update it and
+> hard to find such mis-match when div value < 256.
+
+We not talking about "possible" other HW. For now it's just this one and
+using FIELD_GET() this way is seems odd, at least to me.
+
+> > > +		return -EINVAL;
+> > 			^
+> > 		dev_err_probe()
+> > > +
+> > > +	/* Set divider value and enable divider */
+> > > +	writel_relaxed(DIV_EN | FIELD_PREP(DIV_MASK, div), tmu->base + REF_DIV);
+> > > +
+> > > +	/* Set max power up delay: 'Tpud(ms) = 0xFF * 1000 / 4000000' */
+> > > +	writel_relaxed(FIELD_PREP(PUDL_MASK, 100U), tmu->base + PUD_ST_CTRL);
+> > 		^
+> > You dont need to repeat the default value, so this line can be dropped.
+> >
+> > > +
+> > > +	/*
+> > > +	 * Set resolution mode
+> > > +	 * 00b - Conversion time = 0.59325 ms
+> > > +	 * 01b - Conversion time = 1.10525 ms
+> > > +	 * 10b - Conversion time = 2.12925 ms
+> > > +	 * 11b - Conversion time = 4.17725 ms
+> > > +	 */
+> > > +	writel_relaxed(FIELD_PREP(CTRL1_RES_MASK, 0x3), tmu->base + CTRL1_CLR);
+> > > +	writel_relaxed(FIELD_PREP(CTRL1_RES_MASK, 0x1), tmu->base + CTRL1_SET);
+> >
+> > Same here, you repeat the module default after reset, so please drop it.
+> >
+> > > +	writel_relaxed(CTRL1_MEAS_MODE_MASK, tmu->base + CTRL1_CLR);
+> > > +	writel_relaxed(FIELD_PREP(CTRL1_MEAS_MODE_MASK, CTRL1_MEAS_MODE_SINGLE),
+> > > +		       tmu->base + CTRL1_SET);
+> > > +
+> > > +	clk_disable_unprepare(tmu->clk);
+> >
+> > Drop this, and
+> >
+> > > +	pm_runtime_set_suspended(dev);
+> >
+> > replace this with: pm_runtime_set_active();
+> 
+> No big difference, if set_active, we need add Enable TMU here. I can
+> change to set_active.
+
+You don't need to manually disable the clock, it would be done by the
+runtime-pm.
+
+Regards,
+  Marco
+
+
+> Frank
+> 
+> >
+> > > +	pm_runtime_enable(dev);
+> > 		^
+> > devm_pm_runtime_enable()
+> >
+> > > +	tmu->tzd = devm_thermal_of_zone_register(dev, 0, tmu, &tmu_tz_ops);
+> > > +	if (IS_ERR(tmu->tzd))
+> > > +		return dev_err_probe(dev, PTR_ERR(tmu->tzd),
+> > > +				     "failed to register thermal zone sensor\n");
+> >
+> >
+> > pm_runtime_put()
+> >
+> >
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void imx91_tmu_remove(struct platform_device *pdev)
+> > > +{
+> > > +	struct imx91_tmu *tmu = platform_get_drvdata(pdev);
+> > > +
+> > > +	/* disable tmu */
+> > > +	imx91_tmu_start(tmu, false);
+> >
+> > No need to clear the START bit since we are running in
+> > single-shot-measurements now.
+> >
+> > > +	imx91_tmu_enable(tmu, false);
+> > > +}
+> > > +
+> > > +static int imx91_tmu_runtime_suspend(struct device *dev)
+> > > +{
+> > > +	struct imx91_tmu *tmu = dev_get_drvdata(dev);
+> > > +
+> > > +	/* disable tmu */
+> > > +	imx91_tmu_start(tmu, false);
+> >
+> > Can be dropped.
+> >
+> > > +	imx91_tmu_enable(tmu, false);
+> > > +
+> > > +	clk_disable_unprepare(tmu->clk);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int imx91_tmu_runtime_resume(struct device *dev)
+> > > +{
+> > > +	struct imx91_tmu *tmu = dev_get_drvdata(dev);
+> > > +	int ret;
+> > > +
+> > > +	ret = clk_prepare_enable(tmu->clk);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	imx91_tmu_enable(tmu, true);
+> > > +	imx91_tmu_start(tmu, true);
+> >
+> > Drop imx91_tmu_start() from the resume since this isn't related to the
+> > runtime-pm. Instead the function needs to be called within
+> > imx91_tmu_get_temp().
+> >
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static const struct dev_pm_ops imx91_tmu_pm_ops = {
+> > > +	SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
+> > > +	RUNTIME_PM_OPS(imx91_tmu_runtime_suspend, imx91_tmu_runtime_resume, NULL)
+> > > +};
+> >
+> > DEFINE_RUNTIME_DEV_PM_OPS()
+> >
+> > > +
+> > > +static const struct of_device_id imx91_tmu_table[] = {
+> > > +	{ .compatible = "fsl,imx91-tmu", },
+> > > +	{ },
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, imx91_tmu_table);
+> > > +
+> > > +static struct platform_driver imx91_tmu = {
+> > > +	.driver = {
+> > > +		.name	= "i.MX91_thermal",
+> > 				^
+> > Please don't use such names, instead use imx91_thermal.
+> >
+> > Regards,
+> >   Marco
+> >
+> > > +		.pm	= pm_ptr(&imx91_tmu_pm_ops),
+> > > +		.of_match_table = imx91_tmu_table,
+> > > +	},
+> > > +	.probe = imx91_tmu_probe,
+> > > +	.remove = imx91_tmu_remove,
+> > > +};
+> > > +module_platform_driver(imx91_tmu);
+> > > +
+> > > +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
+> > > +MODULE_DESCRIPTION("i.MX91 Thermal Monitor Unit driver");
+> > > +MODULE_LICENSE("GPL");
+> > >
+> > > --
+> > > 2.34.1
+> > >
+> > >
+> 
 
