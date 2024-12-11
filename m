@@ -1,212 +1,211 @@
-Return-Path: <linux-pm+bounces-19018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CD69ECCD9
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 14:08:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 599B2167B09
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 13:07:58 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55A81F193D;
-	Wed, 11 Dec 2024 13:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LeM6G5y1"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 129879ECD1D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 14:25:38 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30C623FD04;
-	Wed, 11 Dec 2024 13:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 669FB281AD5
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 13:25:32 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091E7229151;
+	Wed, 11 Dec 2024 13:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jiiwCirL"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F16523FD06
+	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 13:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733922476; cv=none; b=nE+uCZ66lpCfI8DVEzQ4IfStwj7BAPQO42b9Q8uBzmOwe3f6lSzwlSEEJyzYgJt5dSodhG2Va0PF2IUiq2ifa9jxlGRmqoWqO0oV3sits30tSd7oT3TXjg7qKFbTNcS0Ok0yTHyAgEDDKVSXAirluaxl2KRGVPw2UoCtbHPi4zA=
+	t=1733923529; cv=none; b=Iw5XnmA+K9jlcs/8dFQuH/y7ub94H254hmGwCjjNBYarZtOtp7AElb+xvNbHbGF3VsWQl450f7raFZ1iX/TMEnKlNc18jPtLnLnUibkyL9y2polSn+jSbrRvc7O2U3wzdz7Tjq9uRlPEmp3JScV/yHE+woXV4FLT2Wfq+9zDTIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733922476; c=relaxed/simple;
-	bh=hwP08iiTroZvYMaXoxZcWTR5L5tzLEbjFJD4C4lJnrI=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=W4V/W9NM+qdn10fgsRvtciw2nHb875BFNqeEpnwI9m9feWnwH+RYbZT1OZuSJ9NrcVC6UkGmMO5V5XlP4hYUn87cTH5s7MpE4stweNo9IWTzRKNTqi9p098h/9po8RsRlG0ETnk7tvdhqvzy3UmbG4kDrb4Wo6pwy3MmUBULlYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LeM6G5y1; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733922475; x=1765458475;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=hwP08iiTroZvYMaXoxZcWTR5L5tzLEbjFJD4C4lJnrI=;
-  b=LeM6G5y1ipxqKsBRHmHP5kWmEaiHbo5eXEY+QTzICZZ2ELE5Khm4L0w4
-   MCsCaM4xMaKR3SFBjOlhXvp7e28FvSEMnf5XRr6cZ52aC14AwMz0TbiUx
-   zKeq9HUEuNQbA7AAaiZkpMi8Eg2b/LoPEO/EwL5EueWlRcy5mT2S/waKS
-   0tC2kcIzxLZMMRBnzMyBU8jPazN+coN9w9htimAGhdCzwf3F+bJxXx9HW
-   yvxP0LNZamwfeWT7JnpOnjCgAwpwdh7HbAgdoipRjNufSmqInEYINHNNX
-   GToDhMrjkk3ixVFV9gFVXPtnm4U+c71a5f3AohOSGIYHguUwcq6g3QstT
-   Q==;
-X-CSE-ConnectionGUID: LjdeCertQMO1u+9qcwg/dQ==
-X-CSE-MsgGUID: 5dXMInu/RBONQV1mD5c9IQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="37133985"
-X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
-   d="scan'208";a="37133985"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 05:07:54 -0800
-X-CSE-ConnectionGUID: QHYyk0tvSOWwbtQActBYmA==
-X-CSE-MsgGUID: pKNJ3BVFTUSDmPc/iC9WLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="126739102"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.214])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 05:07:41 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 11 Dec 2024 15:07:38 +0200 (EET)
-To: Lukas Wunner <lukas@wunner.de>
-cc: Niklas Schnelle <niks@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-    linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-    Krzysztof Wilczy??ski <kw@linux.com>, 
-    "Maciej W . Rozycki" <macro@orcam.me.uk>, 
-    Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-    Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
-    Krishna chaitanya chundru <quic_krichai@quicinc.com>, 
-    Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-    "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-    Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, 
-    LKML <linux-kernel@vger.kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-    Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-    Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-    Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
- 2.5 GT/s
-In-Reply-To: <Z1lF468L8c84QJkD@wunner.de>
-Message-ID: <dc6e677f-4c19-dd25-8878-8eae9154cff4@linux.intel.com>
-References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org> <Z1gSZCdv3fwnRRNk@wunner.de> <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org> <Z1lF468L8c84QJkD@wunner.de>
+	s=arc-20240116; t=1733923529; c=relaxed/simple;
+	bh=F7ClRSDPlmowTlTkYA2vtwRH/X0CYiJxPiRuh6lXYdo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kDj53idhspIBkLEDoE4D9jRIff/ShwiGigxfIuIEiwz5davjBjCNr5PkApSuCHpXPUpupQg0AkZYy/Uoc0QAp35dVOY5d850oLsACrkAfPsLZcNMUbvH391hruqNQgQZ348RB41Jimz9UwU3utXiW/8+IEvnGDJsZDweySZFAnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jiiwCirL; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-728f1e66418so449291b3a.2
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 05:25:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733923526; x=1734528326; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=52qsJbrEZBJTL67kYW0LzbQH1uz/zTKWXiiEV8CLW5g=;
+        b=jiiwCirLVcSDzUznPwnq5orItEpouivq+veabgM6hG/c4RtINN/C0wJj0+nGyAtdAp
+         LoDXc4bZQT58825+ghJWYMKNFaerYWm4P/tHMdT+9PwtFDlIGLoeN1/2IP/5yJg0pAS3
+         LEddRTOSqjUsvAwgkM1IJYMfKMH/8Z2zX22LKA+mSnqIAyH2YXLTIgz2UnHPf4XW/1r5
+         XlgUKsGEaEvNZztb/De04RlZrLlUzs653D7iXEDXSq/zqgx5U/PyT6+9zRbU2+sxZsu6
+         5DD7YPhxeoAFmTSK6Igxlda/sz1Uk2/x7EyLaD4tbzQdCMqoBixO5N4C1w5XTsDCZgMs
+         /pJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733923526; x=1734528326;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=52qsJbrEZBJTL67kYW0LzbQH1uz/zTKWXiiEV8CLW5g=;
+        b=Rg0A5wVMlzz23EENMtwnB0Vk0Kyxj7NZ12XlhzvP6ufJatRR2XHPGUu8G0jbNi6J7q
+         LlQqXgnJe7AHSdiJi+UwhyuPFFqBWJtZvNtZdzU6dyAfni9+yjm99VvSLSRnIoze4jXt
+         IqOu20z7ZcSHa1DzqNrTGvOaZDejxJZ7k4u8wJF2JBKv/N5aRPPBkYeW6Nmf04NSQ9U8
+         FYb2dSWOGSjlb8+vI50VfyQcZiHi1XMJZ62HV72ydctILdOB+OIsXrzmLC+6X2Q30u/W
+         21NOhCoQA0ewMptGAZ7wxBqmtUMqPNk22Zam70E2hIjBLBzcigLefkaFM/VN52oTMz8e
+         1G/g==
+X-Forwarded-Encrypted: i=1; AJvYcCUhG/gt8JzdYa0I92Wrnh7jtvQ51SwgbMIAH4mQxhDmfzZINFI8nChzs1dKhbxOQxYoNan/9X9VVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFIy4SnKa9O9D39FRwONf0EQsA+jpg9Nn9FB3MyqKwgANNHrjR
+	QmHd6Hhp7RAJMAnrDmrkz/96ygujdcKT6tes0q5s5uzC9xzIel/9IkdJoV5gdtx6fzG9bnMp5CT
+	e54GFDCxMFtqDOv/Scxpj2JM00X8OrRJa4djh2Q==
+X-Gm-Gg: ASbGncuw/XXb/JBHokhN18nRXd5aSbHgYNtYOOEWMLDvnuZOmRyBysHWhL5p63Bf3cl
+	EaAi9r7TAHEXN0ZNoPjjEfFM8J0xVhlwIDr1AHeXVaDSa3GOFTbhXqBDq2vtgMUXo
+X-Google-Smtp-Source: AGHT+IGTCHkH/wdKKewfl7Mq3kAimCKhjttvHwdMKbWRkk/0ABXJnggUAYQVK6V95ADdRM3Tir/W2Qni7OFgz2q4CqY=
+X-Received: by 2002:a05:6a20:d50c:b0:1e1:3a97:bdb0 with SMTP id
+ adf61e73a8af0-1e1c12aabc8mr5272462637.9.1733923526475; Wed, 11 Dec 2024
+ 05:25:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <5861970.DvuYhMxLoT@rjwysocki.net> <2989520.e9J7NaK4W3@rjwysocki.net>
+ <4d601707-8269-4c2b-86d2-62951ea0353c@arm.com> <CAJZ5v0jvOYACAn-of=e7zirfzQ5gT+CTPM2w29T-jPzk7Z+SOg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jvOYACAn-of=e7zirfzQ5gT+CTPM2w29T-jPzk7Z+SOg@mail.gmail.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Wed, 11 Dec 2024 14:25:14 +0100
+Message-ID: <CAKfTPtAdo7OADEFuMeg1PpO=rk=bXmiw1Avj7frsoNWZuceewA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v021 4/9] sched/topology: Adjust cpufreq checks for EAS
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
+	Pierre Gondois <pierre.gondois@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 11 Dec 2024, Lukas Wunner wrote:
-
-> On Tue, Dec 10, 2024 at 09:45:18PM +0100, Niklas Schnelle wrote:
-> > On Tue, 2024-12-10 at 11:05 +0100, Lukas Wunner wrote:
-> > > First of all, the Supported Link Speeds field in the Link Capabilities
-> > > register (which you're querying here) was renamed to Max Link Speed in
-> > > PCIe r3.1 and a new Link Capabilities 2 register was added which contains
-> > > a new Supported Link Speeds field.  Software is supposed to query the
-> > > latter if the device implements the Link Capabilities 2 register
-> > > (see the other Implementation Note at the end of PCIe r6.2 sec 7.5.3.18).
-> > 
-> > Would it maybe make sense to update the comment for PCI_EXP_LNKCAP_SLS
-> > in pci_regs.h to point out that in PCIe r3.1 and newer this is called
-> > the Max Link Speed field? This would certainly helped me here.
-> 
-> The macros for the individual speeds (e.g. PCI_EXP_LNKCAP_SLS_2_5GB)
-> already have code comments which describe their new meaning.
-> 
-> I guess the reason why the code comment for PCI_EXP_LNKCAP_SLS wasn't
-> updated is that it seeks to document the meaning of the "SLS" acronym
-> (Supported Link Speeds).
-> 
-> But yes, amending that with something like...
-> 
-> /* Max Link Speed (Supported Link Speeds before PCIe r3.1) */
-> 
-> ...probably make sense, so feel free to propose that in a separate patch.
+On Wed, 11 Dec 2024 at 12:29, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> > > So to make this future-proof what you could do is check whether only a
-> > > *single* speed is supported (which could be something else than 2.5 GT/s
-> > > if future spec versions allow that), i.e.:
-> > > 
-> > > -		if (linkcap & PCI_EXP_LNKCAP_LBNC)
-> > > +		if (linkcap & PCI_EXP_LNKCAP_LBNC &&
-> > > +		    hweight8(dev->supported_speeds) > 1)
-> > 
-> > This also makes sense to me in that the argument holds that if there is
-> > only one supported speed bwctrl can't control it. That said it is
-> > definitely more general than this patch.
-> > 
-> > Sadly, I tried it and in my case it doesn't work. Taking a closer look
-> > at lspci -vvv of the Thunderbolt port as well as a debug print reveals
-> > why:
-> > 
-> > 07:00.0 PCI bridge: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] (rev 06) (prog-if 00 [Normal decode])
-> >        ...
-> >                 LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L1 <1us
-> >                         ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
-> >                 LnkCtl: ASPM Disabled; LnkDisable- CommClk+
-> >                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> >                 LnkSta: Speed 2.5GT/s, Width x4
-> >                         TrErr- Train- SlotClk+ DLActive- BWMgmt+ ABWMgmt-
-> > 	...
-> >                 LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
-> >                 LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- SpeedDis-, Selectable De-emphasis: -6dB
-> >                          Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-> >                          Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
-> > 	...
-> > 
-> > So it seems that on this Thunderbolt chip the LnkCap field
-> > says 2.5 GT/s only as per the USB 4 spec you quoted but LnkCap2
-> > is 0x0E i.e. 2.5-8 GT/s.
-> > 
-> > I wonder if this is related to why the hang occurs. Could it be that
-> > bwctrl tries to enable speeds above 2.5 GT/s and that causes links to
-> > fail?
-> 
-> Ilpo knows this code better than I do but yes, that's plausible.
-> The bandwidth controller does't change the speed by itself,
-> it only monitors speed changes.  But it does provide a
-> pcie_set_target_speed() API which is called by the thermal driver
-> as well as the pcie_failed_link_retrain() quirk.  I suspect the
-> latter is the culprit here.  If that suspicion is correct,
-> you should be seeing messages such as...
+> On Wed, Dec 11, 2024 at 11:33=E2=80=AFAM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+> >
+> > On 11/29/24 16:00, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Make it possible to use EAS with cpufreq drivers that implement the
+> > > :setpolicy() callback instead of using generic cpufreq governors.
+> > >
+> > > This is going to be necessary for using EAS with intel_pstate in its
+> > > default configuration.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >
+> > > This is the minimum of what's needed, but I'd really prefer to move
+> > > the cpufreq vs EAS checks into cpufreq because messing around cpufreq
+> > > internals in topology.c feels like a butcher shop kind of exercise.
+> >
+> > Makes sense, something like cpufreq_eas_capable().
+> >
+> > >
+> > > Besides, as I said before, I remain unconvinced about the usefulness
+> > > of these checks at all.  Yes, one is supposed to get the best results
+> > > from EAS when running schedutil, but what if they just want to try
+> > > something else with EAS?  What if they can get better results with
+> > > that other thing, surprisingly enough?
+> >
+> > How do you imagine this to work then?
+> > I assume we don't make any 'resulting-OPP-guesses' like
+> > sugov_effective_cpu_perf() for any of the setpolicy governors.
+> > Neither for dbs and I guess userspace.
+> > What about standard powersave and performance?
+> > Do we just have a cpufreq callback to ask which OPP to use for
+> > the energy calculation? Assume lowest/highest?
+> > (I don't think there is hardware where lowest/highest makes a
+> > difference, so maybe not bothering with the complexity could
+> > be an option, too.)
 >
-> "removing 2.5GT/s downstream link speed restriction"
-
-That block is conditioned by pci_match_id() so I don't think it would 
-execute.
-
-The block that prints "retraining failed" is the one which attempts to 
-restore the old Target Link Speed. TLS seems to also be set to 8GT/s as 
-per the lspci from Niklas which is another inconsistency in the config 
-space.
-
-Although, I'd tend to think if these trigger the quirk/retraining now, 
-kernel has done some retraining for these links prior to bwctrl was added, 
-so perhaps that 8GT/s TLS is not going to be found as the culprit.
-
-What could be tried though is to not do the LBMIE enabled at all which is 
-one clearly new thing which comes with bwctrl. Commenting out the calls to 
-pcie_bwnotif_enable() should achieve that.
-
-> ...in dmesg but I think you wrote that you're not getting any
-> messages at all, right?  Perhaps if you add "early_printk=efi"
-> to the kernel command line you may see what's going on.
+> In the "setpolicy" case there is no way to reliably predict the OPP
+> that is going to be used, so why bother?
 >
-> One idea in this case would be to modify pcie_get_supported_speeds()
-> such that it filters out any speeds in the Link Capabilities 2 register
-> which exceed the Max Link Speed in the Link Capabilties register.
-> However the spec says that software should look at the Link Capabilities 2
-> register to determine supported speeds if that register is present.
-> So I think we may not conform to the spec then.
-> 
-> The better option is thus probably to add a DECLARE_PCI_FIXUP_EARLY()
-> quirk for Titan Ridge which sets the supported_speeds to just 2.5 GT/s.
-> *If* you want to go with the future-proof option which checks that
-> just one speed is supported.
+> In the other cases, and if the OPPs are actually known, EAS may still
+> make assumptions regarding which of them will be used that will match
+> the schedutil selection rules, but if the cpufreq governor happens to
+> choose a different OPP, this is not the end of the world.
+
+Should we add a new cpufreq governor fops to return the guest estimate
+of the compute capacity selection ? something like
+cpufreq_effective_cpu_perf(cpu, actual, min, max)
+EAS needs to estimate what would be the next OPP; schedutil uses
+sugov_effective_cpu_perf() and other governor could provide their own
+
 >
-> Titan Ridge is an old chip.  I'm not sure if newer discrete Thunderbolt
-> controllers exhibit the same issue but likely not.
+> Yes, you could have been more energy-efficient had you chosen to use
+> schedutil, but you chose otherwise and that's what you get.
 
-I recall taking note of this inconsistency in some lspci dumps I've from 
-Mika (but forgot it until now). So I'm afraid it might be more widespread 
-than just TR.
+Calling sugov_effective_cpu_perf() for another governor than schedutil
+doesn't make sense. and do we handle the case when
+CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not selected
 
--- 
- i.
-
+>
+> > >
+> > > ---
+> > >  kernel/sched/topology.c |   10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > >
+> > > Index: linux-pm/kernel/sched/topology.c
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > --- linux-pm.orig/kernel/sched/topology.c
+> > > +++ linux-pm/kernel/sched/topology.c
+> > > @@ -217,6 +217,7 @@ static bool sched_is_eas_possible(const
+> > >       bool any_asym_capacity =3D false;
+> > >       struct cpufreq_policy *policy;
+> > >       struct cpufreq_governor *gov;
+> > > +     bool cpufreq_ok;
+> > >       int i;
+> > >
+> > >       /* EAS is enabled for asymmetric CPU capacity topologies. */
+> > > @@ -251,7 +252,7 @@ static bool sched_is_eas_possible(const
+> > >               return false;
+> > >       }
+> > >
+> > > -     /* Do not attempt EAS if schedutil is not being used. */
+> > > +     /* Do not attempt EAS if cpufreq is not configured adequately *=
+/
+> > >       for_each_cpu(i, cpu_mask) {
+> > >               policy =3D cpufreq_cpu_get(i);
+> > >               if (!policy) {
+> > > @@ -261,11 +262,14 @@ static bool sched_is_eas_possible(const
+> > >                       }
+> > >                       return false;
+> > >               }
+> > > +             /* Require schedutil or a "setpolicy" driver */
+> > >               gov =3D policy->governor;
+> > > +             cpufreq_ok =3D gov =3D=3D &schedutil_gov ||
+> > > +                             (!gov && policy->policy !=3D CPUFREQ_PO=
+LICY_UNKNOWN);
+> > >               cpufreq_cpu_put(policy);
+> > > -             if (gov !=3D &schedutil_gov) {
+> > > +             if (!cpufreq_ok) {
+> > >                       if (sched_debug()) {
+> > > -                             pr_info("rd %*pbl: Checking EAS, schedu=
+til is mandatory\n",
+> > > +                             pr_info("rd %*pbl: Checking EAS, unsuit=
+able cpufreq governor\n",
+> > >                                       cpumask_pr_args(cpu_mask));
+> > >                       }
+> > >                       return false;
+> >
+> > The logic here looks fine to me FWIW.
+> >
+> >
 
