@@ -1,213 +1,155 @@
-Return-Path: <linux-pm+bounces-19072-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19073-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F5149ED8FA
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 22:48:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D15D188B64E
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 21:44:20 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF63D1F0E29;
-	Wed, 11 Dec 2024 21:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HeNBSH9z"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A7719ED92B
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 22:58:47 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14001EC4F0
-	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 21:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F52E28225B
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 21:58:45 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A9B1F0E3F;
+	Wed, 11 Dec 2024 21:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/jfkras"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7601F0E49;
+	Wed, 11 Dec 2024 21:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733953449; cv=none; b=DGGXwRZNbAyoPcA6P7C4CAPhGIY9LkZgTSOUNEn0tjXIajqSCW0rLws5MTUPPh/lzMpGBD8h0dV4o6zHBPrwA6IIbyt+XQqu63ivgMFVQtOnLucsEnkBvGxq/AVfeRDAIxJAsOypmW9ZvLQvaKXVdB/MzggTTAEyPRTT5aB6Q60=
+	t=1733954315; cv=none; b=J6vBVQi1pb1BssU0SwtB07NGnxZt4WuTFNcqhczBKGc1yrnqM9L4xjlGiK1XAEQfBSnFMd6l5SWEw7Hy2ENBcZXwStAMaRYT5HXm1x+GCk6c2taVsoSBeQFThEjKE6Iwy8gqVQhklIBQtD0PGRwJPG8slIRK1Mt9wMftzDZqFnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733953449; c=relaxed/simple;
-	bh=3uDbOis2J08VjiN6Xw0HI7l6S+YxTMe2wkSdfgvnyXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=S2oVTkVohQYNMCMl9GnlUJYw6u/aqyi5uxz4kKJog0z7SlqxNBuGtQL4ouuMnFDQu1FPSwgixYtYQMcZNqffpsOdYy6iP6v46UQPt+1vqccF6kXvv7Da0jt2J54Di7rT55X7yfaNxW4I7B7juS9AHLv4APK8qLhMCQyQixtLy5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HeNBSH9z; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733953448; x=1765489448;
-  h=date:from:to:cc:subject:message-id;
-  bh=3uDbOis2J08VjiN6Xw0HI7l6S+YxTMe2wkSdfgvnyXQ=;
-  b=HeNBSH9zTPz7E+kv9KbsfuJD/XC/efWuDvNoTRbyBDWy4owH1a4S36XG
-   ySiFN124z1Jfb51XUNIKfCatkq0jCCEEwgQOdGf+dO3W64r2MbxnMPG4K
-   QH7wX1/omczBNAiTv/D7YxLQJnsWy2nK/QWFiASLobdvvmNwNcS7/CVtI
-   rNLlWCCRGikqdkGD3U9JKnGDF9CMzFLGeVyXVaLBGfuFDYkISC5Ybbm81
-   54UJHNGSVY52lIYjiEVENXoWNSHeJOThzDTNWyyJdirfLngn0B9aHXVSJ
-   HNWZGp5tPFnwTt1cKEoLmxN5+Q/UNwvvHWoShYqOCrRaBL1GE9/aQw4j+
-   g==;
-X-CSE-ConnectionGUID: jtyw1qw7STSP8WdsG7oj4w==
-X-CSE-MsgGUID: t2xhPQ3HRu+7sQXZRSjtRQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="38137894"
-X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
-   d="scan'208";a="38137894"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 13:44:06 -0800
-X-CSE-ConnectionGUID: pKiq5p3QQSG7kGVuv7QZbg==
-X-CSE-MsgGUID: QSo+HQXVTMutSQG+TuOV5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
-   d="scan'208";a="95820837"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Dec 2024 13:44:05 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tLUV0-00077B-2B;
-	Wed, 11 Dec 2024 21:44:02 +0000
-Date: Thu, 12 Dec 2024 05:43:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:amd-pstate-fixes] BUILD SUCCESS
- 2993b29b2a98f2bc9d55dfd37ef39f56a2908748
-Message-ID: <202412120541.U4yxO8Wi-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1733954315; c=relaxed/simple;
+	bh=mtRfsIDJx8TKtmUkrUZxBiLI1Kd/1ErosmAyqYokDjY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RW8UC/IgcL2B8OZGogstpE0VtzYL7Cb2lPHjLPQcKMQQ/huTfl4Yq7/xxUHL0jlROY8o+uBTFcEBEDbf8MUfyPVcb+XGZUplxCWphWyy2sysifLN/GPwZdupapNwhRGJmXXzH7HR0n3NJ6IoKWmny0G20H8eQhEvQbbjYepiZ9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/jfkras; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35399C4CED2;
+	Wed, 11 Dec 2024 21:58:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733954314;
+	bh=mtRfsIDJx8TKtmUkrUZxBiLI1Kd/1ErosmAyqYokDjY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=j/jfkras2NRtVqAh7LiClOWpI5RyUvhMDUbgIz3VV9uaaMHJCupsi0QORUIk1XSxy
+	 Wu3rJ3MWiS9av/p85iwBVrqJiSzIUPiZXcqU0OuMRPMJA7VaaQS9LRlrB+Bdue/xH0
+	 bB32VTAULDRvBoZAm1s97Xss/8XYLQqKDiOuuGiJz9Ky8nnDtcraedbRVpxVt51w2/
+	 c4T2k3LfFp0AdiWX/OvMa7qXWF/5mvZ59H6tSXgCFpExuTD7G+mQZWj/7uUlUiU/zs
+	 5iP+aIJibDrKFGM3dR/LIGjnZJM5yhdLeMA5p+TS18ajwsjnQnTpUlmYekO/qCnHp4
+	 xOSvzVUpPp5fg==
+Date: Wed, 11 Dec 2024 21:58:26 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+ andre.przywara@arm.com, lee@kernel.org, wens@csie.org, sre@kernel.org,
+ lars@metafoo.de, Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 0/2] Fix Regression with AXP20X for 6.13-rc1
+Message-ID: <20241211215826.06162190@jic23-huawei>
+In-Reply-To: <20241210224859.58917-1-macroalpha82@gmail.com>
+References: <20241210224859.58917-1-macroalpha82@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git amd-pstate-fixes
-branch HEAD: 2993b29b2a98f2bc9d55dfd37ef39f56a2908748  cpufreq/amd-pstate: Use boost numerator for upper bound of frequencies
+On Tue, 10 Dec 2024 16:48:57 -0600
+Chris Morgan <macroalpha82@gmail.com> wrote:
 
-elapsed time: 1478m
+> From: Chris Morgan <macromorgan@hotmail.com>
+> 
+> After performing a git bisect, I identified a commit that broke the
+> battery and charger driver for my AXP717 PMIC. This was caused by
+> commit e37ec3218870 ("mfd: axp20x: Allow multiple regulators").
+> 
+> After digging into it, it appears when mfd_add_devices was called with
+> a platform ID of PLATFORM_DEVID_NONE, the devm_iio_channel_get() call
+> made by the various AXP20X power drivers would not be able to generate
+> a dev_name(dev) for some reason, and the iio_channel_get() call used in
+> the devm_ helper would fall back to making a iio_channel_get_sys()
+> call. After the platform ID was updated, now iio_channel_get() is no
+> longer falling back to iio_channel_get_sys(). At least this is my
+> limited understanding of what happened.
 
-configs tested: 120
-configs skipped: 3
+The dev_name(dev) not getting a name doesn't sound quite right to me.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Time to look at the ancient creaking ghost that is the iio_map handling. 
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20241211    gcc-13.2.0
-arc                   randconfig-002-20241211    gcc-13.2.0
-arc                        vdk_hs38_defconfig    gcc-13.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                         axm55xx_defconfig    clang-17
-arm                   randconfig-001-20241211    clang-18
-arm                   randconfig-002-20241211    gcc-14.2.0
-arm                   randconfig-003-20241211    clang-20
-arm                   randconfig-004-20241211    gcc-14.2.0
-arm                        realview_defconfig    clang-19
-arm                           tegra_defconfig    gcc-14.2.0
-arm                       versatile_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20241211    gcc-14.2.0
-arm64                 randconfig-002-20241211    clang-18
-arm64                 randconfig-003-20241211    gcc-14.2.0
-arm64                 randconfig-004-20241211    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20241211    gcc-14.2.0
-csky                  randconfig-002-20241211    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon               randconfig-001-20241211    clang-20
-hexagon               randconfig-002-20241211    clang-17
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20241211    clang-19
-i386        buildonly-randconfig-002-20241211    gcc-11
-i386        buildonly-randconfig-003-20241211    clang-19
-i386        buildonly-randconfig-004-20241211    gcc-11
-i386        buildonly-randconfig-005-20241211    gcc-12
-i386        buildonly-randconfig-006-20241211    clang-19
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20241211    gcc-14.2.0
-loongarch             randconfig-002-20241211    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                        m5407c3_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                           xway_defconfig    clang-20
-nios2                 randconfig-001-20241211    gcc-14.2.0
-nios2                 randconfig-002-20241211    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20241211    gcc-14.2.0
-parisc                randconfig-002-20241211    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                        icon_defconfig    gcc-14.2.0
-powerpc                    mvme5100_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20241211    clang-18
-powerpc               randconfig-002-20241211    clang-16
-powerpc               randconfig-003-20241211    gcc-14.2.0
-powerpc                     tqm8540_defconfig    gcc-14.2.0
-powerpc64                        alldefconfig    clang-20
-powerpc64             randconfig-001-20241211    gcc-14.2.0
-powerpc64             randconfig-002-20241211    clang-20
-powerpc64             randconfig-003-20241211    clang-20
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-20
-riscv                               defconfig    clang-19
-riscv                 randconfig-001-20241211    gcc-14.2.0
-riscv                 randconfig-002-20241211    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    clang-15
-s390                  randconfig-001-20241211    clang-20
-s390                  randconfig-002-20241211    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                            hp6xx_defconfig    gcc-14.2.0
-sh                               j2_defconfig    gcc-14.2.0
-sh                    randconfig-001-20241211    gcc-14.2.0
-sh                    randconfig-002-20241211    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                 randconfig-001-20241211    gcc-14.2.0
-sparc                 randconfig-002-20241211    gcc-14.2.0
-sparc                       sparc32_defconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-14.2.0
-sparc64               randconfig-001-20241211    gcc-14.2.0
-sparc64               randconfig-002-20241211    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-20
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20241211    gcc-12
-um                    randconfig-002-20241211    gcc-12
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241211    gcc-12
-x86_64      buildonly-randconfig-002-20241211    gcc-11
-x86_64      buildonly-randconfig-003-20241211    gcc-12
-x86_64      buildonly-randconfig-004-20241211    gcc-12
-x86_64      buildonly-randconfig-005-20241211    gcc-12
-x86_64      buildonly-randconfig-006-20241211    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                randconfig-001-20241211    gcc-14.2.0
-xtensa                randconfig-002-20241211    gcc-14.2.0
+struct iio_channel *iio_channel_get(struct device *dev,
+				    const char *channel_name)
+{
+	const char *name = dev ? dev_name(dev) : NULL;
+	struct iio_channel *channel;
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	if (dev) {
+		channel = fwnode_iio_channel_get_by_name(dev_fwnode(dev),
+							 channel_name);
+		if (!IS_ERR(channel) || PTR_ERR(channel) != -ENODEV)
+			return channel;
+	}
+
+	return iio_channel_get_sys(name, channel_name);
+}
+EXPORT_SYMBOL_GPL(iio_channel_get);
+
+We didn't invent the relevant phandle stuff in DT via the patch you point at
+so all that matters is what gets passed to that iio_channel_get_sys()
+
+So key here is that dev should be set, so we are passing dev_name(dev) into
+iio_channel_get_sys()
+I'm guessing that changed... 
+
+Ah.  The iio_maps in
+https://elixir.bootlin.com/linux/v6.12.4/source/drivers/iio/adc/axp20x_adc.c#L158
+are our problem. Those hardcode the consumer_dev name. The fix just changed
+those names. Back when this infrastructure was written we were in the world of
+board files, so everything was hard coded in them - or in an MFD like this
+it was treated as a singleton device.
+
+So as to how to fix it... Assuming the new device names are the same for all
+the mfd parts that make up each pmic, then you should be able to figure out the
+ extra the number and build the channel maps to allow you to find the numbered
+devices.
+
+That's a lot lighter change than moving over to DT based phandles for all this.
+(which is the modern way to handle it).
+
+As a cheeky check, just edit those maps to whatever IDs you have and see
+if it works.  Probably not an upstreamable solution but will confirm we have
+it correct.
+
+Your patch works because we allow for some fuzzy matching (I can't remember
+why) that doesn't use the consumer device name.
+That works as long as there is only one instance.  I'm guessing all this
+mess came about because someone has a board with two of these devices. On such
+a board we need the precise matching including the device name.
+
+Jonathan
+
+> 
+> To fix this, I added a new devm_ helper of devm_iio_channel_get_sys()
+> that directly calls iio_channel_get_sys(), and I updated all the
+> affected drivers with the new routine. I then no longer experienced
+> any issues with the drivers on my devices.
+> 
+> Chris Morgan (2):
+>   iio: core: Add devm_ API for iio_channel_get_sys
+>   power: supply: axp20x: Use devm_iio_channel_get_sys() for iio chans
+> 
+>  drivers/iio/inkern.c                    | 18 ++++++++++++++++++
+>  drivers/power/supply/axp20x_ac_power.c  |  4 ++--
+>  drivers/power/supply/axp20x_battery.c   | 16 ++++++++--------
+>  drivers/power/supply/axp20x_usb_power.c |  6 +++---
+>  include/linux/iio/consumer.h            | 20 ++++++++++++++++++++
+>  5 files changed, 51 insertions(+), 13 deletions(-)
+> 
+
 
