@@ -1,202 +1,197 @@
-Return-Path: <linux-pm+bounces-19049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A01669ED3EA
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 18:45:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07B129ED42C
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 18:56:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FE391612F6
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 17:45:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E07081610F8
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 17:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EAFB1FECDD;
-	Wed, 11 Dec 2024 17:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82DBB202F95;
+	Wed, 11 Dec 2024 17:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OGEiYeTn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qOMh91Nt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD73E1DE880
-	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 17:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59024202F8B;
+	Wed, 11 Dec 2024 17:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733939125; cv=none; b=H9PxbMLmKzy93FW6A6WGCVoXat074b0CXAlaYvj308oVkTIOAijwMt8TdOp0DUfgyf1Jv3kiJD5YuJ7CqCLmiTbb4FPQ6Ot886O0It/aEl/Z7Fq3wUiJPAsYmAoiqOACw7keygoBj/k7rWSG69Rl++Gq7m/97aE9yGkkfx/WIw8=
+	t=1733939722; cv=none; b=p0Zwaxg10C+LmjzwhJE4Y5m7CxaqZ+YNH9iX6LpMg9Xwqb2r3xECQSrMoE6F3aUIzQRCStrCwUiU09cUeScIcqe3Aq+JtG7pG90Eyp0wO4zUX6+6XZMy4/U716FB22lgNvxjN7mf42BZvuXRZ+xDw6rGMe43ssALygEsAslEz0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733939125; c=relaxed/simple;
-	bh=TwI4kcw5E9dXvSi8E3cuhfIKNw9o/lb2MgRfPnYXifI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u7JY7ZaD6EvjUguLfUfkGdSIO8zr/jYNxywQ4LftvY2QGuKPDI3/+wkRuBTz04ANB82IKbVTNXgTDJ/f/fQHXAZNnR11OIhjgju+CKp5xEsVXwcvz0uNCvvu2xrHvJ2oh3l4j/jF+CaYlkucw2OdGkicKiwaW1M74zLRqq+rLZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OGEiYeTn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733939122;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hNZ3RmF3vV/5HrOiNLwpkU5SzMysJ0TEKo30ECSVbhE=;
-	b=OGEiYeTn2v3kssaGyoTp2sIMDgHiq6+RwyKHH10aWih+1vLi4bzbUI5r8zGZD1UigvZpZR
-	R0ToKQzjoU2ulpDv1ztNtnIdbRztDatuVWglVXvIWCRD7dOexBDPGz1ZBHpaE7DwaOnFJ2
-	u1jn/V7LBRWQkrkRikhX1pVK0V0nER8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-687-QHu25gL-MUOOgUignDX3lg-1; Wed,
- 11 Dec 2024 12:45:19 -0500
-X-MC-Unique: QHu25gL-MUOOgUignDX3lg-1
-X-Mimecast-MFC-AGG-ID: QHu25gL-MUOOgUignDX3lg
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A7DE19560B6;
-	Wed, 11 Dec 2024 17:45:15 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.61])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3D2271956048;
-	Wed, 11 Dec 2024 17:45:13 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Jelle van der Waa <jelle@vdwaa.nl>,
-	platform-driver-x86@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v4 4/4] platform/x86: dell-laptop: Use power_supply_charge_types_show/_parse() helpers
-Date: Wed, 11 Dec 2024 18:44:51 +0100
-Message-ID: <20241211174451.355421-5-hdegoede@redhat.com>
-In-Reply-To: <20241211174451.355421-1-hdegoede@redhat.com>
-References: <20241211174451.355421-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1733939722; c=relaxed/simple;
+	bh=YXnChH557clDWDb3jcusaiok67MTcpiBTGjKwVBCGpI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YB1Zo5cLmH65VgF9W8/939V/5kGCULTZZN50dZBbDMMtEYnpZLgMa0ab9m3TxH3c2nXs7xpmr/+Stgc9lxoKrrNjlZjHtZFutN941HizGxGKANtlA6iqAsE0mdY7ZCm2aM8KE74tnodblzItmE0Hfb/33csPfsdJZ29thMNlkNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qOMh91Nt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA43EC4CED2;
+	Wed, 11 Dec 2024 17:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733939721;
+	bh=YXnChH557clDWDb3jcusaiok67MTcpiBTGjKwVBCGpI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qOMh91NtnRCy/vn0Ez/Z9asD6xQ2FEYCi2+xvqN5mxtH5E8bY0gqcZMRsldfvx9o4
+	 ZIZHOZAacDUhIMqOFByKZBDeX8yJVc/Gpvg4LN0CiB2gZXWWFTnXRWy4smOJ7iegs5
+	 Tvt9fA6JvtIfDsjIMqJVaSpDcKyTpYwe6/pq1sHRsRN3gVG7KVNZJG/RBTriuFpdlt
+	 hzFModzbStO+X6K5L/+NceQpoFWtkKYBy0WnQbwBwTVf/fzBcpYA+jAQYMuqkJyxgL
+	 6SDnfn8t4dYMZERZrBOCjLdshK9lqtpmKJDmQNywhg2Uj2t7uRw3bvkO3i6fVHQX04
+	 CtPCBTS9xnMhQ==
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-71e10e6a1ceso461024a34.0;
+        Wed, 11 Dec 2024 09:55:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/TX/A/VZTX2To6Sa6wbiOONjnjOEhgjzeGPQhS706bww+zFix0NSLQRtBPquyNZxVlT5cxUN3Elys05c=@vger.kernel.org, AJvYcCUi5HE97KH2OV/sRHD1B5d3zhRHlxofBY7+WeBqthw24/3AqRJEOQEGCQAkKH8xJtX2eGe34K21UA8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5EfRvBs7uJMt3POksI8CzUE2ZuOxHTYmsy1qCJxC3TwPvrk4H
+	q6EZoFrhU/KKNqH+0mt38nV8g7lBw4UNFvoKfsrPEBudDqK8tmJWBiF1dZgBXcGsD1us1NawDYu
+	EM5mFdl2mpkNyERSwAtof9LsHwk4=
+X-Google-Smtp-Source: AGHT+IHgFpDok5Z9icu9THpfdFq4QAxY1inlJflsNV45n6IxLUiWiXPSHPcFm614cyU/XCwJazCjGTnHKOkSk8CvHMk=
+X-Received: by 2002:a05:6830:903:b0:718:123e:922d with SMTP id
+ 46e09a7af769-71e29bf2cbbmr263539a34.18.1733939721083; Wed, 11 Dec 2024
+ 09:55:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+References: <5861970.DvuYhMxLoT@rjwysocki.net> <2989520.e9J7NaK4W3@rjwysocki.net>
+ <4d601707-8269-4c2b-86d2-62951ea0353c@arm.com> <CAJZ5v0jvOYACAn-of=e7zirfzQ5gT+CTPM2w29T-jPzk7Z+SOg@mail.gmail.com>
+ <CAKfTPtAdo7OADEFuMeg1PpO=rk=bXmiw1Avj7frsoNWZuceewA@mail.gmail.com>
+ <CAJZ5v0h5yt5z=dHLJjQhQQChsnr+krcxzBdb6VXj9W4gMY_PSA@mail.gmail.com> <CAKfTPtBJsDPGeRdqk0Ag8dPFxYn0r0ow_xb4s+=Y=QzLWiX9uQ@mail.gmail.com>
+In-Reply-To: <CAKfTPtBJsDPGeRdqk0Ag8dPFxYn0r0ow_xb4s+=Y=QzLWiX9uQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 11 Dec 2024 18:55:09 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j-o=03hWrSkk2nx9uWctKaRSJmRNXY6d=e0b46_+fNzA@mail.gmail.com>
+Message-ID: <CAJZ5v0j-o=03hWrSkk2nx9uWctKaRSJmRNXY6d=e0b46_+fNzA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v021 4/9] sched/topology: Adjust cpufreq checks for EAS
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle <christian.loehle@arm.com>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
+	Pierre Gondois <pierre.gondois@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Make battery_modes a map between tokens and enum power_supply_charge_type
-values instead of between tokens and strings and use the new
-power_supply_charge_types_show/_parse() helpers for show()/store()
-to ensure that things are handled in the same way as in other drivers.
+On Wed, Dec 11, 2024 at 6:08=E2=80=AFPM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> On Wed, 11 Dec 2024 at 17:38, Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+> >
+> > On Wed, Dec 11, 2024 at 2:25=E2=80=AFPM Vincent Guittot
+> > <vincent.guittot@linaro.org> wrote:
+> > >
+> > > On Wed, 11 Dec 2024 at 12:29, Rafael J. Wysocki <rafael@kernel.org> w=
+rote:
+> > > >
+> > > > On Wed, Dec 11, 2024 at 11:33=E2=80=AFAM Christian Loehle
+> > > > <christian.loehle@arm.com> wrote:
+> > > > >
+> > > > > On 11/29/24 16:00, Rafael J. Wysocki wrote:
+> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > >
+> > > > > > Make it possible to use EAS with cpufreq drivers that implement=
+ the
+> > > > > > :setpolicy() callback instead of using generic cpufreq governor=
+s.
+> > > > > >
+> > > > > > This is going to be necessary for using EAS with intel_pstate i=
+n its
+> > > > > > default configuration.
+> > > > > >
+> > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > > ---
+> > > > > >
+> > > > > > This is the minimum of what's needed, but I'd really prefer to =
+move
+> > > > > > the cpufreq vs EAS checks into cpufreq because messing around c=
+pufreq
+> > > > > > internals in topology.c feels like a butcher shop kind of exerc=
+ise.
+> > > > >
+> > > > > Makes sense, something like cpufreq_eas_capable().
+> > > > >
+> > > > > >
+> > > > > > Besides, as I said before, I remain unconvinced about the usefu=
+lness
+> > > > > > of these checks at all.  Yes, one is supposed to get the best r=
+esults
+> > > > > > from EAS when running schedutil, but what if they just want to =
+try
+> > > > > > something else with EAS?  What if they can get better results w=
+ith
+> > > > > > that other thing, surprisingly enough?
+> > > > >
+> > > > > How do you imagine this to work then?
+> > > > > I assume we don't make any 'resulting-OPP-guesses' like
+> > > > > sugov_effective_cpu_perf() for any of the setpolicy governors.
+> > > > > Neither for dbs and I guess userspace.
+> > > > > What about standard powersave and performance?
+> > > > > Do we just have a cpufreq callback to ask which OPP to use for
+> > > > > the energy calculation? Assume lowest/highest?
+> > > > > (I don't think there is hardware where lowest/highest makes a
+> > > > > difference, so maybe not bothering with the complexity could
+> > > > > be an option, too.)
+> > > >
+> > > > In the "setpolicy" case there is no way to reliably predict the OPP
+> > > > that is going to be used, so why bother?
+> > > >
+> > > > In the other cases, and if the OPPs are actually known, EAS may sti=
+ll
+> > > > make assumptions regarding which of them will be used that will mat=
+ch
+> > > > the schedutil selection rules, but if the cpufreq governor happens =
+to
+> > > > choose a different OPP, this is not the end of the world.
+> > >
+> > > Should we add a new cpufreq governor fops to return the guest estimat=
+e
+> > > of the compute capacity selection ? something like
+> > > cpufreq_effective_cpu_perf(cpu, actual, min, max)
+> > > EAS needs to estimate what would be the next OPP; schedutil uses
+> > > sugov_effective_cpu_perf() and other governor could provide their own
+> >
+> > Generally, yes.  And documented for that matter.
+> >
+> > But it doesn't really tell you the OPP, but the performance level that
+> > is going to be set for the given list of arguments IIUC.  An energy
+>
+> Yes, the governor return what performance level it will select and asl
+> to the cpufreq driver so EAS can directly map it to an OPP and a cost
+>
+> > model is needed to find an OPP for the given perf level.  Or generally
+> > the cost of it for that matter.
+> >
+> > > > Yes, you could have been more energy-efficient had you chosen to us=
+e
+> > > > schedutil, but you chose otherwise and that's what you get.
+> > >
+> > > Calling sugov_effective_cpu_perf() for another governor than scheduti=
+l
+> > > doesn't make sense.
+> >
+> > It will work for intel_pstate in the "setpolicy" mode to a reasonable
+> > approximation AFAICS.
+> >
+> > > and do we handle the case when
+> > > CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not selected
+> >
+> > I don't think it's necessary to handle it.
+>
+> I don't think that CI and others will be happy to possibly get an
+> undeclared function. Or you put a dependency of other governors with
+> CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
 
-This also changes battery_supported_modes to be a bitmap of charge-types
-(enum power_supply_charge_type values) rather then a bitmap of indices
-into battery_modes[].
+Do you mean CONFIG_CPU_FREQ_GOV_SCHEDUTIL?  Because
+CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is only about whether or not schedutil
+is the default governor.
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/platform/x86/dell/dell-laptop.c | 54 ++++++++++++-------------
- 1 file changed, 25 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
-index 5671bd0deee7..9a4cfcb8bbe0 100644
---- a/drivers/platform/x86/dell/dell-laptop.c
-+++ b/drivers/platform/x86/dell/dell-laptop.c
-@@ -103,15 +103,15 @@ static bool mute_led_registered;
- 
- struct battery_mode_info {
- 	int token;
--	const char *label;
-+	enum power_supply_charge_type charge_type;
- };
- 
- static const struct battery_mode_info battery_modes[] = {
--	{ BAT_PRI_AC_MODE_TOKEN,   "Trickle" },
--	{ BAT_EXPRESS_MODE_TOKEN,  "Fast" },
--	{ BAT_STANDARD_MODE_TOKEN, "Standard" },
--	{ BAT_ADAPTIVE_MODE_TOKEN, "Adaptive" },
--	{ BAT_CUSTOM_MODE_TOKEN,   "Custom" },
-+	{ BAT_PRI_AC_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_TRICKLE },
-+	{ BAT_EXPRESS_MODE_TOKEN,  POWER_SUPPLY_CHARGE_TYPE_FAST },
-+	{ BAT_STANDARD_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_STANDARD },
-+	{ BAT_ADAPTIVE_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE },
-+	{ BAT_CUSTOM_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_CUSTOM },
- };
- static u32 battery_supported_modes;
- 
-@@ -2261,46 +2261,42 @@ static ssize_t charge_types_show(struct device *dev,
- 		struct device_attribute *attr,
- 		char *buf)
- {
--	ssize_t count = 0;
-+	enum power_supply_charge_type charge_type;
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
--		bool active;
-+		charge_type = battery_modes[i].charge_type;
- 
--		if (!(battery_supported_modes & BIT(i)))
-+		if (!(battery_supported_modes & BIT(charge_type)))
- 			continue;
- 
--		active = dell_battery_mode_is_active(battery_modes[i].token);
--		count += sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
--				battery_modes[i].label);
-+		if (!dell_battery_mode_is_active(battery_modes[i].token))
-+			continue;
-+
-+		return power_supply_charge_types_show(dev, battery_supported_modes,
-+						      charge_type, buf);
- 	}
- 
--	/* convert the last space to a newline */
--	if (count > 0)
--		count--;
--	count += sysfs_emit_at(buf, count, "\n");
--
--	return count;
-+	/* No active mode found */
-+	return -EIO;
- }
- 
- static ssize_t charge_types_store(struct device *dev,
- 		struct device_attribute *attr,
- 		const char *buf, size_t size)
- {
--	bool matched = false;
--	int err, i;
-+	int charge_type, err, i;
-+
-+	charge_type = power_supply_charge_types_parse(battery_supported_modes, buf);
-+	if (charge_type < 0)
-+		return charge_type;
- 
- 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
--		if (!(battery_supported_modes & BIT(i)))
--			continue;
--
--		if (sysfs_streq(battery_modes[i].label, buf)) {
--			matched = true;
-+		if (battery_modes[i].charge_type == charge_type)
- 			break;
--		}
- 	}
--	if (!matched)
--		return -EINVAL;
-+	if (i == ARRAY_SIZE(battery_modes))
-+		return -EIO;
- 
- 	err = dell_battery_set_mode(battery_modes[i].token);
- 	if (err)
-@@ -2430,7 +2426,7 @@ static u32 __init battery_get_supported_modes(void)
- 
- 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
- 		if (dell_smbios_find_token(battery_modes[i].token))
--			modes |= BIT(i);
-+			modes |= BIT(battery_modes[i].charge_type);
- 	}
- 
- 	return modes;
--- 
-2.47.1
-
+I think that it is fine to require CONFIG_CPU_FREQ_GOV_SCHEDUTIL for EAS.
 
