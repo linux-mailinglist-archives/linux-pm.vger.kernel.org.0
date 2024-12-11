@@ -1,261 +1,174 @@
-Return-Path: <linux-pm+bounces-19070-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19071-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA7F69ED771
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 21:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D39349ED786
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 21:54:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1965F280DA2
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 20:46:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82EC5283499
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2024 20:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263DE204F82;
-	Wed, 11 Dec 2024 20:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE902210E9;
+	Wed, 11 Dec 2024 20:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="Sino7N4R"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hgs2mhW4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3208D259486;
-	Wed, 11 Dec 2024 20:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733950008; cv=pass; b=SPB7AJJHLwWKBZiWhOrrnh8FZ8BHD3AeJXGcSTnz97JbxSoLwOsh6xEMiLHe9n7NvWKTDVbNeDWncGm8S0qCGPT/3UxxmOsckOtViAcy7QUq4AEuJHpSOHJcMlru6CYsmY+GCVPcuCMral9L41eAMwndTdXNn/+XpxuMhOwSe4w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733950008; c=relaxed/simple;
-	bh=RmSK6AsmG2uId15th8lKdy6IVZGu7c1GXJwp4ekgKmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nMwq+GH2oRZ8yCw1IvTkG+SjZ6HBptxN4+OHA/k4Ewagq4kG+COpjuSd7a8jW5T/QSyfez5MgghtuaWNnoJgoGyV6E4hk4wCY4twQaO03DBJN4X5+RUyCbXYVh/QhJt16xQVfKHiq6XGBkTiwn0YKYgykh9wZfrt+u/WOKb9tBA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=Sino7N4R; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1733949964; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=QWcyrFWnH4Y8H6dcwOzQqEaV0SEsvqACGw54o4ftlIBQZQMPCflngtcHs5EKV73OQ0aXa9gPSDaOuQR7OOmH9rwu04smquzcA1ixDtnn49s4W/lbYyuwClyH8xAyy2zoDIe+wx/IbNJ4MFli2D14/Pf1MPyr2Gb6nERd1YfyDRA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1733949964; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=VXPnSM3GTeNHeZYS08ax4CHEV8xlYT9lwfiCoPy3wAo=; 
-	b=TV1XJ29RZRs8Pi93Xy3tFq6zNZEBDkQqe5CMpOdunqWrQFCi/HwxJsQMTulUUbph1rMUPvX4+2u0C1YSReKi5spqU67NoyKHp9+fVkaIk7ioYy/SoURdEuOYT9VnRFnb0yX1yiSIVJ/gnYIz+BPcSsV0Y1zfjkbHPQR1MvIevls=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733949964;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=VXPnSM3GTeNHeZYS08ax4CHEV8xlYT9lwfiCoPy3wAo=;
-	b=Sino7N4RbmipXtCFYryGQLF7QQDQl7IENYBxr4OW4yWdWQMtTU0qZTVA2UprbBnW
-	O9hqjiALFjS8CkIS23V6c4EEt89XgASA6+0+A5ByUc1g0myWRG0SqEfebzHsNebTYXt
-	RRvuFBDhaQCDEcgatpw+zwDBG/gCu9e7ZZOVqOHA=
-Received: by mx.zohomail.com with SMTPS id 1733949962296297.8827041831578;
-	Wed, 11 Dec 2024 12:46:02 -0800 (PST)
-Received: by mercury (Postfix, from userid 1000)
-	id BCA1A10604B1; Wed, 11 Dec 2024 21:45:56 +0100 (CET)
-Date: Wed, 11 Dec 2024 21:45:56 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Peter Geis <pgwipeout@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Elaine Zhang <zhangqing@rock-chips.com>, 
-	=?utf-8?B?QWRyacOhbiBNYXJ0w61uZXo=?= Larumbe <adrian.larumbe@collabora.com>, Boris Brezillon <boris.brezillon@collabora.com>, 
-	Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kernel@collabora.com, 
-	Dragan Simic <dsimic@manjaro.org>
-Subject: Re: [PATCH v5 3/7] pmdomain: rockchip: forward
- rockchip_do_pmu_set_power_domain errors
-Message-ID: <xe2wqm4ktutycxj7x4rskz4pn4cfmoci6zcgfxecmvc5bu7cqi@mqxi3pnehqq3>
-References: <20241211143044.9550-1-sebastian.reichel@collabora.com>
- <20241211143044.9550-4-sebastian.reichel@collabora.com>
- <CAMdYzYqLq=kSC8fiBapRS_8w0s8PaL9Yd46VgM56YbTEmUG1xA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CB92288F4
+	for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 20:54:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733950473; cv=none; b=rWnIX6c8C9Eo7gRJzClaM71TfF0cmNSI2eAjlaj5UJo1kqwF/oIpeUfhZr/vq2greF7Aiv3lUE+Ao1p8xsDTcpNQUZjIVR+nPLwoWX+vjE88VN6I2G6yVeMxYJunTaMqdTmJ8cjF6jd4nEdyETY1C8CqMaE5Qm8fGjaCg2r+gm4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733950473; c=relaxed/simple;
+	bh=M8rBj1IljQtNyRfls9tPtsK1h0RFHLNTVO3V2E4tMqk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VdQOZKfNiCh51MitXDLEn9gGYq9wOQsPVCEX+UjGktDyznp+5pWHlFuzD3Bm5unO4da+eMV6nTzTCSmxGw0sfWMv0MzuEd48pj1Tr2u7T50SpwvDmrbZ5wem4JU/X446tM4MHO7eGyaS6VRb1IqY2gwvgq5CRJ7TXkzrodELyQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hgs2mhW4; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a9cb667783so25065285ab.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 12:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1733950470; x=1734555270; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vdUZxJPlOyqm9HlhNWGKr+g7jlb5DGzBTeX9RjzfBIk=;
+        b=hgs2mhW4SyJK0rx3o6qCjz21ixamGYhqQO59pp8VVqz3mDli496Q4PFzOLpEglt9Bn
+         pMW5osnn1kzXHc8Ntq+UcICDGxZbg+cxulHkmqlXTlvsNxtitygVia0E65xHo2fMvDD9
+         IMmDdF+ZN3H6fhmGs7bYQzV9qjPpKpxxDjwYs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733950470; x=1734555270;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vdUZxJPlOyqm9HlhNWGKr+g7jlb5DGzBTeX9RjzfBIk=;
+        b=A8XPeNl4Ua3n9z0WKRMNwSfBd5PzeWedmi/934iH+aaiesLM1YwXODE+ZrAxXYi90B
+         f8OK+PdUCAGzeu8Yttxj8ytv1xrRa5IyGtmQ1x+kxiDjgIR0UxJYepBOZFH+3gepIU0g
+         ++yRKrmhgaPWOtDusu5MNctru6iygNobbTcEX2wqhqRGZ/eHxSfdMBMQB0iiv8gDns7Z
+         B9KkfENPrv5YO+Cq+UswKaZefAi7qBWdWIK8cGXDdVCVmSm8rk6BiZNePyuP79KDjwPq
+         5nSLpWpVDASc1OV7jPQaovMKUa0VBw9ZNDOd+9xaqOYz8dxUTOYHdLhtJrYRiF3CtbFd
+         F+VA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNmmudEcC3tNwi5Ni1TpWEjW2GvFA8ZVBeG7krH9FH1/kNhejbfbatlGrfuQeqHhGgoBohXkzRig==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyoxy1j/kV/EkwY85mdhfBjq1W4caTe1KOziooPGmhyK3n7nrbX
+	TC2fi9D8OG41x/2Ygz1eN2rLu3KcBxAgQhHUL6opAAZfV8M+764i1CC2ZVMbqLo=
+X-Gm-Gg: ASbGncuyNsbyvnZlgkPB9Wy/6FxUrXhi+nSyeZySF5sGJKH8bERjTN3bIoMZxMSHjYP
+	gxB2K7lsIX9ybvs9TT10tkleP5t8Zy0clrD0KbqB9fNCREc3j1TMQnglNSp9iDq6nEONgqP4jdX
+	VKILJBGRZI775HSnUoF0dUD7NvwvUaezVV24zomuWsTWPQK/NwjwVobz0fe07riIMP9080widXn
+	7b/movGv2CwtaHkAJvOPLArrcbGxk2kfpgvEBo6DqmTy0NZFc3FAeAc4uOJUDY/VA==
+X-Google-Smtp-Source: AGHT+IFZWSEkNX9E1xvb5Yis84qOQViHxVTlB7kMTpgprOsy8jLaKebBWk2JUnkf5Ygn4PNGztoSvw==
+X-Received: by 2002:a05:6e02:1685:b0:3a7:44d9:c7dd with SMTP id e9e14a558f8ab-3ac483fe4bfmr12769875ab.6.1733950470069;
+        Wed, 11 Dec 2024 12:54:30 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a816297961sm32619605ab.19.2024.12.11.12.54.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Dec 2024 12:54:29 -0800 (PST)
+Message-ID: <0985bb0c-091e-4e5a-b066-5b9cfd072aa8@linuxfoundation.org>
+Date: Wed, 11 Dec 2024 13:54:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pgyuyhmom73rgyyw"
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYqLq=kSC8fiBapRS_8w0s8PaL9Yd46VgM56YbTEmUG1xA@mail.gmail.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/233.945.80
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: fix TSC MHz calculation for Mperf monitor
+To: He Rongguang <herongguang@linux.alibaba.com>, trenn@suse.com,
+ shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com
+Cc: linux-kernel@vger.kernel.org, shannon.zhao@linux.alibaba.com,
+ linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <60562222-6186-4eec-9c20-08b1cebb1311@linux.alibaba.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <60562222-6186-4eec-9c20-08b1cebb1311@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 12/10/24 20:20, He Rongguang wrote:
+>  From e17f252433c923578e9c386a998200e488d9567d Mon Sep 17 00:00:00 2001
+> From: He Rongguang <herongguang@linux.alibaba.com>
+> Date: Thu, 28 Nov 2024 16:50:05 +0800
+> Subject: [PATCH] cpupower: fix TSC MHz calculation
+> 
+> Commit 'cpupower: Make TSC read per CPU for Mperf monitor' (c2adb1877b7)
+> changes TSC counter reads per cpu, but left time diff global (from start
+> of all cpus to end of all cpus), thus diff(time) is too large for a
+> cpu's tsc counting, resulting in far less than acutal TSC_Mhz and thus
+> `cpupower monitor` showing far less than actual cpu realtime frequency.
+> 
+> /proc/cpuinfo shows frequency:
+> cat /proc/cpuinfo | egrep -e 'processor' -e 'MHz'
+> ...
+> processor : 171
+> cpu MHz   : 4108.498
+> ...
+> 
+> before fix (System 100% busy):
+>      | Mperf              || Idle_Stats
+>   CPU| C0   | Cx   | Freq  || POLL | C1   | C2
+>   171|  0.77| 99.23|  2279||  0.00|  0.00|  0.00
+> 
+> after fix (System 100% busy):
+>      | Mperf              || Idle_Stats
+>   CPU| C0   | Cx   | Freq  || POLL | C1   | C2
+>   171|  0.46| 99.54|  4095||  0.00|  0.00|  0.00
+> 
+> Fixes: c2adb1877b76 ("cpupower: Make TSC read per CPU for Mperf monitor")
+> Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
+> ---
+> Changes in v2:
+> - Fix scripts/checkpatch.pl style warnings.
+> - Link to v1:
+> https://lore.kernel.org/linux-pm/269b8bb2-85b5-4cc9-9354-a1270f2eed35@linux.alibaba.com/T/#u
+> ---
 
---pgyuyhmom73rgyyw
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 3/7] pmdomain: rockchip: forward
- rockchip_do_pmu_set_power_domain errors
-MIME-Version: 1.0
+Are you sure you sent me the right patch. I am seeing exact
+same errors. How are you sending your patches.
 
-Hello Peter,
+Here are the problems I am seeing:
 
-On Wed, Dec 11, 2024 at 02:53:34PM -0500, Peter Geis wrote:
-> On Wed, Dec 11, 2024 at 9:32=E2=80=AFAM Sebastian Reichel
-> <sebastian.reichel@collabora.com> wrote:
-> >
-> > Currently rockchip_do_pmu_set_power_domain prints a warning if there
-> > have been errors turning on the power domain, but it does not return
-> > any errors and rockchip_pd_power() tries to continue setting up the
-> > QOS registers. This usually results in accessing unpowered registers,
-> > which triggers an SError and a full system hang.
-> >
-> > This improves the error handling by forwarding the error to avoid
-> > kernel panics.
->=20
-> I think we should merge your patch here with my patch for returning
-> errors from rockchip_pmu_set_idle_request [1].
+ERROR: patch seems to be corrupt (line wrapped?)
+#103: FILE: :173:
+double *percent,
 
-I will have a look.
+WARNING: It's generally not useful to have the filename in the file
+#108: FILE: :177:
++		timediff = max_frequency * timespec_diff_us(time_start[cpu],
 
-> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  drivers/pmdomain/rockchip/pm-domains.c | 34 +++++++++++++++++---------
-> >  1 file changed, 22 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/=
-rockchip/pm-domains.c
-> > index a161ee13c633..8f440f2883db 100644
-> > --- a/drivers/pmdomain/rockchip/pm-domains.c
-> > +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> > @@ -533,16 +533,17 @@ static int rockchip_pmu_domain_mem_reset(struct r=
-ockchip_pm_domain *pd)
-> >         return ret;
-> >  }
-> >
-> > -static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain=
- *pd,
-> > -                                            bool on)
-> > +static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain =
-*pd,
-> > +                                           bool on)
-> >  {
-> >         struct rockchip_pmu *pmu =3D pd->pmu;
-> >         struct generic_pm_domain *genpd =3D &pd->genpd;
-> >         u32 pd_pwr_offset =3D pd->info->pwr_offset;
-> >         bool is_on, is_mem_on =3D false;
-> > +       int ret;
-> >
-> >         if (pd->info->pwr_mask =3D=3D 0)
-> > -               return;
-> > +               return 0;
-> >
-> >         if (on && pd->info->mem_status_mask)
-> >                 is_mem_on =3D rockchip_pmu_domain_is_mem_on(pd);
-> > @@ -557,16 +558,21 @@ static void rockchip_do_pmu_set_power_domain(stru=
-ct rockchip_pm_domain *pd,
-> >
-> >         wmb();
-> >
-> > -       if (is_mem_on && rockchip_pmu_domain_mem_reset(pd))
-> > -               return;
-> > +       if (is_mem_on) {
-> > +               ret =3D rockchip_pmu_domain_mem_reset(pd);
-> > +               if (ret)
-> > +                       return ret;
-> > +       }
-> >
-> > -       if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is=
-_on,
-> > -                                     is_on =3D=3D on, 0, 10000)) {
-> > -               dev_err(pmu->dev,
-> > -                       "failed to set domain '%s', val=3D%d\n",
-> > -                       genpd->name, is_on);
-> > -               return;
-> > +       ret =3D readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd=
-, is_on,
-> > +                                       is_on =3D=3D on, 0, 10000);
-> > +       if (ret) {
-> > +               dev_err(pmu->dev, "failed to set domain '%s' %s, val=3D=
-%d\n",
-> > +                       genpd->name, on ? "on" : "off", is_on);
-> > +               return ret;
-> >         }
-> > +
-> > +       return 0;
-> >  }
-> >
-> >  static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power=
-_on)
-> > @@ -592,7 +598,11 @@ static int rockchip_pd_power(struct rockchip_pm_do=
-main *pd, bool power_on)
-> >                         rockchip_pmu_set_idle_request(pd, true);
-> >                 }
-> >
-> > -               rockchip_do_pmu_set_power_domain(pd, power_on);
-> > +               ret =3D rockchip_do_pmu_set_power_domain(pd, power_on);
-> > +               if (ret < 0) {
-> > +                       clk_bulk_disable(pd->num_clks, pd->clks);
-> > +                       return ret;
->=20
-> Looking at it, we shouldn't return directly from here because the
-> mutex never gets unlocked.
+WARNING: It's generally not useful to have the filename in the file
+#119: FILE: :210:
++		time_diff = timespec_diff_us(time_start[cpu], time_end[cpu]);
 
-Yes, we should do that after patch 2/7 from this series :)
+WARNING: It's generally not useful to have the filename in the file
+#130: FILE: :230:
++		clock_gettime(CLOCK_REALTIME, &time_start[cpu]);
 
-> Instead of repeating clk_bulk_disable and return ret for each failure,
-> we can initialize ret =3D 0, have a goto: out pointing to
-> clk_bulk_disable, and change return 0 to return ret at the end.
+WARNING: It's generally not useful to have the filename in the file
+#138: FILE: :245:
++		clock_gettime(CLOCK_REALTIME, &time_end[cpu]);
 
-Right now there is only a single clk_bulk_disable() in an error
-case, so I did not use the typical error goto chain. I suppose
-it makes a lot more sense with proper error handling for the calls
-to rockchip_pmu_set_idle_request().
+WARNING: It's generally not useful to have the filename in the file
+#149: FILE: :351:
++	time_start = calloc(cpu_count, sizeof(struct timespec));
 
-Greetings,
+WARNING: It's generally not useful to have the filename in the file
+#150: FILE: :352:
++	time_end = calloc(cpu_count, sizeof(struct timespec));
 
--- Sebastian
+WARNING: It's generally not useful to have the filename in the file
+#158: FILE: :365:
++	free(time_start);
 
->=20
-> What do you think?
->=20
-> Very Respectfully,
-> Peter Geis
->=20
-> [1] https://lore.kernel.org/linux-rockchip/20241210013010.81257-2-pgwipeo=
-ut@gmail.com/
->=20
-> > +               }
-> >
-> >                 if (power_on) {
-> >                         /* if powering up, leave idle mode */
-> > --
-> > 2.45.2
-> >
-> >
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+WARNING: It's generally not useful to have the filename in the file
+#159: FILE: :366:
++	free(time_end);
 
---pgyuyhmom73rgyyw
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
+-- Shuah
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdZ+fcACgkQ2O7X88g7
-+poitxAApbTTrpEjlB2v52/YhGg5DXkiutsrUhEmLjEn5X8QpxlCWLwT0NXPGdgi
-VbJKJtKTrJAHlE1ckkg3XApoJbqSHWqsjOtvc6m8D1GINUKOiK3sj8DUg6EK/dTy
-PVGXwigbmpjud6JcbRLSLarsdoCu4SAuuIr77Lvw/b8f29mpA5AeAEQBEgEdCGpX
-WBcNaYdmnSKy341CqQHISRteNiTwooY0s+22MaSfMErxyv1yfCYdzKBHq9p5wSi5
-Txq5w6oKZ5ASPzStI7jX/KK7Dl6eqi8I91bxbP+ddPHtVw+7LWzPmk3lu4/Zc8pq
-qiPHQ20psK4XeSfhFHGl0aElE8x3LD/CFydUa3VM1gkz8tofcgQgtfZ9p/in7TKj
-e7uc4I+KbJQx89Gz20ioAC3q92o179O6JqbomKoYyEcsXfSpzrDwZ2X4g3X+mvsM
-IRetDXYaakkfYfiRK8I36FjP/kiPRBaS3vlch1k+j8wgyVJmgV8bGrNejET/U0ls
-+hrz3lheTZoPw4caoqn7mGQy6iIcMfk6C26IgYWtGgmhgTJn5L/K/r6pJHXrevq6
-m9yKdkJcXbbH5lh5zVFQnbrcGTDI5v+oV5hNKcxpIAwZZF0mJAwb+HWgkn1uSuJu
-cBbLIBr5U2ZcT1DmSNDsYSCRufYW87NXv0l8wVVKAvgtc66TQrg=
-=FhZH
------END PGP SIGNATURE-----
-
---pgyuyhmom73rgyyw--
 
