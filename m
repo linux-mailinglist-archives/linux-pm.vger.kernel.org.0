@@ -1,143 +1,120 @@
-Return-Path: <linux-pm+bounces-19106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E9C89EDFEF
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 08:07:23 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C949EE015
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 08:16:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 010702865D5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:07:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3F6418880E0
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D4A2063D0;
-	Thu, 12 Dec 2024 07:07:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40F020ADF1;
+	Thu, 12 Dec 2024 07:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ySUzYznP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MH4zeCUu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5612063C8
-	for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 07:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2688620ADE0
+	for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 07:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733987237; cv=none; b=Q55CpgCK+c2+vDlTr8RKs5N14DKJX1FMZ0yMxRs+XIGfRrCldmU+6VE3zXO0P/BzKNAENhppKtzSRmDRFIeWstSsZEAwRkqypBnRhtDJWR2p1qxmxi4Zo/o2J42xYI4bNG3On1XffnwMRMeP0IaEHrWjayWkD/e+DQ5ghX0n9mQ=
+	t=1733987762; cv=none; b=JZE+oS9eMQp6oxftIw0EHKCU0uMc8SaVDw15Sqp0pblNBM/mFDy5KJlR6LFZlFpLv9b6pK0FXDb7bBMPpAjj41Q2WP2d0QkxqETVPUnR5FNQBzuzQAU6d/d8bXvX66ke/EZCFd5tGJhT93cSzbnVfPsvh+OGmJLjhYDvzHj4KuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733987237; c=relaxed/simple;
-	bh=xFmBnyAttvMuOzVsTjQlhULu1cgriZXvVbXqOa49GL4=;
+	s=arc-20240116; t=1733987762; c=relaxed/simple;
+	bh=/GRsmos36cXMIlpR9JSwG1RkBUOM946AIKMMDjyXANQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vb4KM2P5IXN06Mi7Blfn9r9hDHiriCPMc16apO4bc3/XGXrp63p87cOwDKQfPuklrV/BG78YF6hYKhqx6NoehKj+4N9fvuhSoOjoXC8epx3jPbUA9ILRmhaWWEC6HZxNjtACUehxRBM3K4iOSTaS0x6+Y3Z6LQdatIHT4je4xlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ySUzYznP; arc=none smtp.client-ip=209.85.210.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=R1kuVGWGC0a0yJOb+d53xID7+QU6DVRIG0paQrurgDxc7qymSlfxPfqkD4gTMDzEsLF6Y7v6qNKzlPOK1XxGL5NNG7VfX5Lmns8gnq47UqKQwFg7ZWJda3z5n4tAySvT6DCODBseTGA1zf8iodjyi2M7Gn25b2pQNgh5cB3MAm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MH4zeCUu; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-728f1525565so327627b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 23:07:15 -0800 (PST)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ee709715d9so174862a91.3
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 23:16:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733987235; x=1734592035; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gWUSTVMYq8BWWEAYYe37DF6F5cN3F7NwUno8STAUMA4=;
-        b=ySUzYznP30RE94EN/ZXNY0aNU+SKblS60dGgXPZWYhGevHzhrMgSHHZUC7SefVL4xF
-         t+H3/SAKBzFYy3zNKE4FCJl3hkwV/2wj/qa/BSymTy1RhESYCoDTGRago07DiV4P9Y29
-         tENxUjcDECY8CFqgVsfD7CDSafP86DcMTW0xLmtQbrpYCdqXkN7PGU+5y9kfI89PlgTD
-         9ZX1G6uLFcLNHYarXHv0SmCOk51LCjx4C300fF3dsSxdyRHvw3jkFQgJjlEFF+SXpZ68
-         2cA2Ojxa1g46l7uO5f0CkxXdt/FwMzsUvetl74NwUTNOdYRb0y0wGx240AfjWovYrPoV
-         0lvw==
+        d=linaro.org; s=google; t=1733987760; x=1734592560; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3L98iE6iEgWKW2dRYjbdeCK1aiyyhjOykPkAdKGjuiA=;
+        b=MH4zeCUu+Ca5VInJmSz6Xa7lXCkjv0TH9VZokTjrQW5AAp9gEbVCyQnW5KxR++4bRT
+         jJFgMpwhXWSHSTX3bqdCf3KQBKKGnUsAeDVygS9h8OkBK0RSKOoMx4CHO9RLp/Nr9WtG
+         2N6zRByEjp6ShHIpPuuKjrrJ4ZiE+E9bS5vyse+JpzmUyb43GOhBVFmNbFp9w+4LIB/3
+         AtVRn7LtIRlwqNbdHxHhguj3hdUlcLkH2A/FlvX4gG5xfD3xH8g+4+B/4HDvnuKmYPVG
+         AGevP3CMCxCt1KS6qjjjWJtNqfpAc6pQTMwFlwLY90H3WAFeXeJbO3J7Kb4Feo4mHtGS
+         60YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733987235; x=1734592035;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gWUSTVMYq8BWWEAYYe37DF6F5cN3F7NwUno8STAUMA4=;
-        b=j2ODmCGpA5+sY6ypSMvBhI7i5eZj4/AHhVtMtkq8JtIRYelJK74FdNwxfOfuHKdO78
-         EB7CziPKHT+zyRj3Pn8XhdioYihtOPxqcdLc9Z5lZfd0zS32it/T+6coKyQzf5a/fpfD
-         07GR2/9HAF6a4DKC2SUHF0VxIFNWUzUJFfpkzvUf0c+xtCniZpZ16qS8erC6Z2Mb7xtq
-         kndebkqHNGzElOlGqKiDzh2q3hmTi12FvqVWIFn98U38MKcVZqXwttz22mVPsxjVcCMQ
-         C0tRpbC23S4sdBWXV236IQLti80h1jwtqY27bfvfNxWRmYcf766Hk9DHA5FItpV1E3yu
-         B4BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8ak037ak4NkbF5YNbaohIdET0rLrVeSfpMSUTHD6lDFQiOFJp1cC8AqmmIA+a7t1AXdFFQHn6XA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxvpk5QxBswaFmOL0YPktmhEkuF5B4VvZBnL267y0Yk73ndVrz5
-	HLeQzvpavgwSRiFAqjzAc1XvTtqq3y5mS6rSW7z7ja01QtEcmns9EioGU8bvpYY=
-X-Gm-Gg: ASbGncu6e8Ojf58x+ol4SzNeC/UHFV32vSS09S8l3rGsSQr7JMvvkYJQJBELd9NCgot
-	hKG8Wrx59yRAQrBdOfq+JHGfUfj5KqsrvpT5OQaezi4bVEHH+Wiw3qoZoExDJLSZdWQl3UTdKf8
-	qm3OKkgmkVafNkwMI3yHbj0LVk8YsaVY05MtgjntJIPi316kpcYpGE82/Q/uk5soCjeYRMM/qJp
-	+dcSlp3Xg1iiJNaOOjVI9dd2AdZMDEKdmGriruBE4dekpqj1sksUJq6Kdg=
-X-Google-Smtp-Source: AGHT+IENxoHonYKam4dKHihrFBZZ3t2m1GlwpQo36E6FIiGVq5NKmR5l1Fyzj203B0EBrt1cbsUdog==
-X-Received: by 2002:a05:6a20:7289:b0:1e0:be48:177d with SMTP id adf61e73a8af0-1e1cea52e56mr3771734637.3.1733987234861;
-        Wed, 11 Dec 2024 23:07:14 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733987760; x=1734592560;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3L98iE6iEgWKW2dRYjbdeCK1aiyyhjOykPkAdKGjuiA=;
+        b=Bvhy1AycM5tZLNl5US4smxbOXwE0U8B7CoySTfFXoaL9KMfVEZQIDoRwTtFfaHRCC5
+         1OA0dqwD8ff/iL1Y5hKVknyS3mvxWW7lDB1rtqL/jldlVByqJEcYDDcATAe9Bo5xRebi
+         rUSh5LA7nFVBwSPyJ6nwqUKfjanDDt0lKo9nDnben97fIRB9/uIihzsbJAZp/TNTHCPx
+         0xBk4LrH4Gt6N2E+i5YDPOCq1JkZAoGNBB27YRO1K3AcjU3IciTjOYoxXc5qIKjizBZq
+         DfLmgGZctBpuVKxeMY2K0kdpNlzK1ctwFGk8sbeRZRjv0a2yZfWqKfPKAOZfrzHA7sqH
+         lYXA==
+X-Forwarded-Encrypted: i=1; AJvYcCXda7rjrU5JBtO8jsWq1/DhWPEntEFrPX0SxnWmt1nX7K4qeVOOh0ko39byvau1jkpOerr6Hfpsfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxt6c1i9KwIml1Yd7M5g8KfrQrfgIzyihaD7jS7GIGcIsj8QA05
+	Lu80er2z+B4pfTdyW05wFnFdUwnr/NgyeETG0lYGtiAbVZQEDgTAqqUNqyRWdw4=
+X-Gm-Gg: ASbGncuIAeFIHQ/YB/Ucy/R/gWeg1uftXn2KEot6o99kegt2nDVpaph6NOtz33AINCC
+	qzCU1js2T7gJGKJwWF+dJuJarGdv/zrDiWGsmrknJpu48FpvmkuL3e8RZvSEUuFnvcZt5lIfQei
+	SFS2ayKnxtlwLJN8Xc7nzMvSfnKju2NAoIGTEyMBp6dNOztfQFEzHDNiSIEjOHFHOhZI3Y1DLfT
+	DRnhkfhj/j8YZ8CLTDHvNckegPm41tLX1J4JXdxV84lNI5dwxa5X7ZHCMA=
+X-Google-Smtp-Source: AGHT+IEUOkvi+y7f3A5lyEr4YtS9iRRSj52GzIA+ZuP4cB/sOWfFEYg7en1hPsQli/qSrMewFNomsQ==
+X-Received: by 2002:a17:90b:38cc:b0:2ee:7a4f:9265 with SMTP id 98e67ed59e1d1-2f127fc7463mr10057310a91.15.1733987760404;
+        Wed, 11 Dec 2024 23:16:00 -0800 (PST)
 Received: from localhost ([122.172.83.132])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725d3dd4cbasm8926045b3a.142.2024.12.11.23.07.13
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142e0ce50sm563653a91.39.2024.12.11.23.15.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 23:07:14 -0800 (PST)
-Date: Thu, 12 Dec 2024 12:37:12 +0530
+        Wed, 11 Dec 2024 23:15:59 -0800 (PST)
+Date: Thu, 12 Dec 2024 12:45:57 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: bschnei@gmail.com, Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Benjamin Schneider <ben@bens.haus>,
-	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: Re: [PATCH] cpufreq: enable 1200Mhz clock speed for armada-37xx
-Message-ID: <20241212070712.txkxgmiugzji3doz@vireshk-i7>
-References: <20241125211452.14987-1-ben@bens.haus>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v7 1/2] dt-bindings: cpufreq: Document support for Airoha
+ EN7581 CPUFreq
+Message-ID: <20241212071557.76viy5b7ottf7jck@vireshk-i7>
+References: <20241206211145.2823-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241125211452.14987-1-ben@bens.haus>
+In-Reply-To: <20241206211145.2823-1-ansuelsmth@gmail.com>
 
-Marek,
-
-On 25-11-24, 13:14, bschnei@gmail.com wrote:
-> From: Benjamin Schneider <ben@bens.haus>
+On 06-12-24, 22:11, Christian Marangi wrote:
+> On newer Airoha SoC, CPU Frequency is scaled indirectly with SMC commands
+> to ATF.
 > 
-> This frequency was disabled because of stability problems whose source could
-> not be accurately identified[1]. After seven months of testing, the evidence
-> points to an incorrectly configured bootloader as the source of the historical
-> instability. Testing was performed on two A3720 devices with this frequency
-> enabled and the ondemand policy in use. Marvell merged[2] changes to their
-> bootloader source needed to address the stability issue. This driver should
-> expose this frequency option to users.
+> A virtual clock is exposed. This virtual clock is a get-only clock and
+> is used to expose the current global CPU clock. The frequency info comes
+> by the output of the SMC command that reports the clock in MHz.
 > 
-> [1] https://github.com/torvalds/linux/commit/484f2b7c61b9ae58cc00c5127bcbcd9177af8dfe
-> [2] https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell/pull/44
+> The SMC sets the CPU clock by providing an index, this is modelled as
+> performance states in a power domain.
 > 
-> Signed-off-by: Benjamin Schneider <ben@bens.haus>
-> Reviewed-by: Pali Rohár <pali@kernel.org>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> CPUs can't be individually scaled as the CPU frequency is shared across
+> all CPUs and is global.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-> index bea41ccabf1f..f28a4435fba7 100644
-> --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> @@ -102,11 +102,7 @@ struct armada_37xx_dvfs {
->  };
->  
->  static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
-> -	/*
-> -	 * The cpufreq scaling for 1.2 GHz variant of the SOC is currently
-> -	 * unstable because we do not know how to configure it properly.
-> -	 */
-> -	/* {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} }, */
-> +	{.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} },
->  	{.cpu_freq_max = 1000*1000*1000, .divider = {1, 2, 4, 5} },
->  	{.cpu_freq_max = 800*1000*1000,  .divider = {1, 2, 3, 4} },
->  	{.cpu_freq_max = 600*1000*1000,  .divider = {2, 4, 5, 6} },
+> Changes v7:
+> - Add more info to the description for usage of clock and
+>   performance-domain
+> - Drop redundant nodes from example
 
-Any inputs on this before I apply it ?
+Applied. Thanks.
 
 -- 
 viresh
