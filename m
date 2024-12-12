@@ -1,121 +1,86 @@
-Return-Path: <linux-pm+bounces-19107-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19108-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1C949EE015
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 08:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 257219EE132
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 09:25:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3F6418880E0
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:16:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53C70188737B
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 08:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40F020ADF1;
-	Thu, 12 Dec 2024 07:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E0A20DD5C;
+	Thu, 12 Dec 2024 08:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MH4zeCUu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bJK6subi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2688620ADE0
-	for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 07:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0A820D4F1;
+	Thu, 12 Dec 2024 08:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733987762; cv=none; b=JZE+oS9eMQp6oxftIw0EHKCU0uMc8SaVDw15Sqp0pblNBM/mFDy5KJlR6LFZlFpLv9b6pK0FXDb7bBMPpAjj41Q2WP2d0QkxqETVPUnR5FNQBzuzQAU6d/d8bXvX66ke/EZCFd5tGJhT93cSzbnVfPsvh+OGmJLjhYDvzHj4KuQ=
+	t=1733991911; cv=none; b=EpBnONYJ+WiYIxOtnWPKQDkCnVb7NnDuS5GRolGRJaoQzCfju/QvculgQDF6yCP+JtB/vpGwG9cOGbrtQGIoNSl4/eNWLUYkVlw97kC0B3wOBb75P+3CUkt+FPovoowQewzzqVxXv7PLGFEvGaVNF3U1CYGZESW7KK2BLzn+OgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733987762; c=relaxed/simple;
-	bh=/GRsmos36cXMIlpR9JSwG1RkBUOM946AIKMMDjyXANQ=;
+	s=arc-20240116; t=1733991911; c=relaxed/simple;
+	bh=ugwQc1RwWiUB2k1DlePOXPHk9EZtb/h2RNYw3kRvsz8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1kuVGWGC0a0yJOb+d53xID7+QU6DVRIG0paQrurgDxc7qymSlfxPfqkD4gTMDzEsLF6Y7v6qNKzlPOK1XxGL5NNG7VfX5Lmns8gnq47UqKQwFg7ZWJda3z5n4tAySvT6DCODBseTGA1zf8iodjyi2M7Gn25b2pQNgh5cB3MAm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MH4zeCUu; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ee709715d9so174862a91.3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2024 23:16:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733987760; x=1734592560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3L98iE6iEgWKW2dRYjbdeCK1aiyyhjOykPkAdKGjuiA=;
-        b=MH4zeCUu+Ca5VInJmSz6Xa7lXCkjv0TH9VZokTjrQW5AAp9gEbVCyQnW5KxR++4bRT
-         jJFgMpwhXWSHSTX3bqdCf3KQBKKGnUsAeDVygS9h8OkBK0RSKOoMx4CHO9RLp/Nr9WtG
-         2N6zRByEjp6ShHIpPuuKjrrJ4ZiE+E9bS5vyse+JpzmUyb43GOhBVFmNbFp9w+4LIB/3
-         AtVRn7LtIRlwqNbdHxHhguj3hdUlcLkH2A/FlvX4gG5xfD3xH8g+4+B/4HDvnuKmYPVG
-         AGevP3CMCxCt1KS6qjjjWJtNqfpAc6pQTMwFlwLY90H3WAFeXeJbO3J7Kb4Feo4mHtGS
-         60YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733987760; x=1734592560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3L98iE6iEgWKW2dRYjbdeCK1aiyyhjOykPkAdKGjuiA=;
-        b=Bvhy1AycM5tZLNl5US4smxbOXwE0U8B7CoySTfFXoaL9KMfVEZQIDoRwTtFfaHRCC5
-         1OA0dqwD8ff/iL1Y5hKVknyS3mvxWW7lDB1rtqL/jldlVByqJEcYDDcATAe9Bo5xRebi
-         rUSh5LA7nFVBwSPyJ6nwqUKfjanDDt0lKo9nDnben97fIRB9/uIihzsbJAZp/TNTHCPx
-         0xBk4LrH4Gt6N2E+i5YDPOCq1JkZAoGNBB27YRO1K3AcjU3IciTjOYoxXc5qIKjizBZq
-         DfLmgGZctBpuVKxeMY2K0kdpNlzK1ctwFGk8sbeRZRjv0a2yZfWqKfPKAOZfrzHA7sqH
-         lYXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXda7rjrU5JBtO8jsWq1/DhWPEntEFrPX0SxnWmt1nX7K4qeVOOh0ko39byvau1jkpOerr6Hfpsfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt6c1i9KwIml1Yd7M5g8KfrQrfgIzyihaD7jS7GIGcIsj8QA05
-	Lu80er2z+B4pfTdyW05wFnFdUwnr/NgyeETG0lYGtiAbVZQEDgTAqqUNqyRWdw4=
-X-Gm-Gg: ASbGncuIAeFIHQ/YB/Ucy/R/gWeg1uftXn2KEot6o99kegt2nDVpaph6NOtz33AINCC
-	qzCU1js2T7gJGKJwWF+dJuJarGdv/zrDiWGsmrknJpu48FpvmkuL3e8RZvSEUuFnvcZt5lIfQei
-	SFS2ayKnxtlwLJN8Xc7nzMvSfnKju2NAoIGTEyMBp6dNOztfQFEzHDNiSIEjOHFHOhZI3Y1DLfT
-	DRnhkfhj/j8YZ8CLTDHvNckegPm41tLX1J4JXdxV84lNI5dwxa5X7ZHCMA=
-X-Google-Smtp-Source: AGHT+IEUOkvi+y7f3A5lyEr4YtS9iRRSj52GzIA+ZuP4cB/sOWfFEYg7en1hPsQli/qSrMewFNomsQ==
-X-Received: by 2002:a17:90b:38cc:b0:2ee:7a4f:9265 with SMTP id 98e67ed59e1d1-2f127fc7463mr10057310a91.15.1733987760404;
-        Wed, 11 Dec 2024 23:16:00 -0800 (PST)
-Received: from localhost ([122.172.83.132])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142e0ce50sm563653a91.39.2024.12.11.23.15.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 23:15:59 -0800 (PST)
-Date: Thu, 12 Dec 2024 12:45:57 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@airoha.com, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v7 1/2] dt-bindings: cpufreq: Document support for Airoha
- EN7581 CPUFreq
-Message-ID: <20241212071557.76viy5b7ottf7jck@vireshk-i7>
-References: <20241206211145.2823-1-ansuelsmth@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fznb+QKFtDtk3oUWmeb9Pj0ixH78fbeanLTj23mJjmCmcyx7NuF68Qa3tBFbWIWGcHfBF1KIM2wPzfDfzAwf+9mAteRpuAhwYHs6cjchBTR+Ipm9ywUmqTbl8qHjC8NaMFFxfHQFcjrgTqPJLlDrkpf8a3xUCzgKGJEmysAIDlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bJK6subi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25D2C4CECE;
+	Thu, 12 Dec 2024 08:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733991911;
+	bh=ugwQc1RwWiUB2k1DlePOXPHk9EZtb/h2RNYw3kRvsz8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bJK6subic4H5yc5DmT1goNA5KHVw5ury6O4813bvE2j0JvE8Vuom5vACfYmvBVLQP
+	 F7ek6FLf9b6OoD+RJo/Bj8WdeLccMoDuLyj0EESGHdilYZLBGJBEwQADnM0PNMLJ+E
+	 kHgvJjE/YK9oBKoYbYCxbmCUPbyC46Te+BA1lWLEnYcTRa7JiwuOGyaYF/KiddaFVK
+	 vqTUPGJ6H/eMwJDK0HQzgwNZW9MqGogacLB8s2b73DT14qyOqd39jQwrvAGGbDttd5
+	 rdw58Buife0wajhKDnZ3NqTtHfvHukbSP5vg4u1PCxW/Vtpllbl/sHbwoZibSnddQZ
+	 q7ZZzSABa4bdw==
+Date: Thu, 12 Dec 2024 09:25:08 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Nick Chan <towinchenmi@gmail.com>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Asahi Linux <asahi@lists.linux.dev>, 
+	Linux ARM Kernel Architecture <linux-arm-kernel@lists.infradead.org>, Linux power management <linux-pm@vger.kernel.org>, 
+	Devicetree <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/7] dt-bindings: cpufreq: apple,cluster-cpufreq: Add
+ A7-A11, T2 compatibles
+Message-ID: <f7whbncdt3yud3loe6xane4gwzpvyygfdju6e55gf6s2s3k75k@n7ehtngsrqxp>
+References: <20241212070344.3858-1-towinchenmi@gmail.com>
+ <20241212070344.3858-2-towinchenmi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241206211145.2823-1-ansuelsmth@gmail.com>
+In-Reply-To: <20241212070344.3858-2-towinchenmi@gmail.com>
 
-On 06-12-24, 22:11, Christian Marangi wrote:
-> On newer Airoha SoC, CPU Frequency is scaled indirectly with SMC commands
-> to ATF.
+On Thu, Dec 12, 2024 at 03:03:00PM +0800, Nick Chan wrote:
+> Add compatibles for Apple A7-A11, T2 SoCs.
 > 
-> A virtual clock is exposed. This virtual clock is a get-only clock and
-> is used to expose the current global CPU clock. The frequency info comes
-> by the output of the SMC command that reports the clock in MHz.
+> Apple A7, A8, A8X gets the per-SoC compatible and the A7
+> "apple,s5l8960x-cluster-cpufreq" compatible.
 > 
-> The SMC sets the CPU clock by providing an index, this is modelled as
-> performance states in a power domain.
+> Apple A9, A9X, A10, A10X, T2, A11 gets the per-SoC compatible, M1
+> "apple,t8103-cluster-cpufreq" compatible, then the
+> "apple,cluster-cpufreq" fallback compatible.
 > 
-> CPUs can't be individually scaled as the CPU frequency is shared across
-> all CPUs and is global.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
-> Changes v7:
-> - Add more info to the description for usage of clock and
->   performance-domain
-> - Drop redundant nodes from example
+> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 
-Applied. Thanks.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-viresh
+Best regards,
+Krzysztof
+
 
