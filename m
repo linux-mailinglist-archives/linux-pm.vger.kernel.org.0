@@ -1,116 +1,160 @@
-Return-Path: <linux-pm+bounces-19145-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19146-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842F99EF104
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 17:34:10 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 701659EF41F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 18:05:57 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 360F71898DB8
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 16:27:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CE2A2901D3
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 17:05:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881022288C3;
-	Thu, 12 Dec 2024 16:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePv9cUcY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7DA223E9D;
+	Thu, 12 Dec 2024 17:04:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9A1222D58;
-	Thu, 12 Dec 2024 16:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D5E2144A2;
+	Thu, 12 Dec 2024 17:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734020183; cv=none; b=Y/FaTVdgnbSsEFmeO4vNkL0lFs4mu0C5BQ2qlfao1h4ZHHP9b+ANVqfo5m0vVU7Euso7gRL0cX3fGKjFF8XpjwSc7CbA3Bg9JLFLS0OK8VZODdL25/dQRF58pBgjHHkv9j10zU3LityxCMDVbVAiiLCS74c69+nDAdhF8JoOp8c=
+	t=1734023052; cv=none; b=J95h/UFgBx83ZGif16qsX8bv6LuhpbWEU3eBd+6fkBI7eTu00rF+HxE340t385MyyFsF4OOXAVUFhnAhD5j8mx7zvJzBJeh+yTyIFHjXkYj95K+VUmaawiM++Pf1iiw1280qF38UTHm6fSMEFLecLeLYYFUF8aYLPhjo/alIzcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734020183; c=relaxed/simple;
-	bh=TjGodR5hu1Gx6t7hM03aocyeOSrB2pegLpifR3VHwd0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=og2Mz+oHz7/A/az8Zj0ZpEMgHBo1frZkav1sKJOvJG5Wav4Wa/EapBSTJHXzj4R47fxtnKuQR4jvPqs4mtrxWTEmgh9pDV9KMjoEYUbdKNgB7RRprABBdWNGMfo7pVLPo6FBmYc+MBXljiXW4BF9Ti1Nz+HW6Z7YDIzFTLMfxsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePv9cUcY; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2166f1e589cso8611945ad.3;
-        Thu, 12 Dec 2024 08:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734020179; x=1734624979; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hhcbENBLvyiywWML6Td/u4lWtS/ChkEco8wP+66XFfs=;
-        b=ePv9cUcYyJC5VM7YQUrXam7sKOBco1NRnI0JKsKdLHTFc6DBV6K5oJISHnpm2kjmMm
-         ptn7SWpHMQSryLtjNxduNmWVu4JoY2yyUK7IE8UHMdjhHkGb4LX7AWvHBIzIixFjjfF0
-         IPedGditaJdC3Aca7M1Yn+hzd/XlJqpoOM7iCiATGOiyAuOXmVBiuBQJqlkzV9l+yu9S
-         /UF58MRk5BKXwAZUItMsVR3WQqYT0D//mcAkZCRtSn4ryPBBr0rgChtIaMXmXHSeDDoE
-         nNH9bkEqSDcHxL0A6osNrNRw5CCo39ec0HBsZGlNyLpIfHGROCVpN7SsOWkVBOLb5B+r
-         yZqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734020179; x=1734624979;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hhcbENBLvyiywWML6Td/u4lWtS/ChkEco8wP+66XFfs=;
-        b=SIgu7PrURb6eob+JY5PL1oQ957IDxIh/MpIvH0dAQtETvsPlJVz6F+s76EUEwXVMwk
-         Whw1XCh7VCM0qYKHSumz1kI5eQ5FleS1wzqAXrt407ZVOEtbgQAS3Qw/oaLRuYYLm03i
-         8Favup1YniJvR7wKo1iEyKRtertbUwiuT8to+c36WRWYd+t+IIsckk1hIpzRws9G1h61
-         EYSeWmaRcS9qt8OK+R392P4qtLyS8GDcZkqCvS9TQXP7U3vzqMI5kxyNnvcRUFrMjbdJ
-         hIvjCo8aSlK5khf2m3Uve2HPhAxPOeb4tN20y7lzmPCV45Q29z7pddLPCG0K7r9B/Sd4
-         3PRA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAk1IxQRRa2cSE81WNzrmBvpxtHpq4bT0wfLZRl1PB9UsPAt1NHsw4IFYR4wqXD0HAZBye0n3lmN2PLLc=@vger.kernel.org, AJvYcCXvrsSghDKtuQq1BB/oP7PUGQPKZeahcDQ9k4s4Ojx6PPJFLnQMLKr3ASr5sZ7KKrrn77hK6KMKA/g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzP4+LjekEcoig5d9UUxF3I3f4uaX7K64GPJRqSVCMGuEawwVnG
-	8nmNpWM9ElTQ09NKZT4pF7JIF1ejU6GfhvzHcHAHxWe7ZgScDABq
-X-Gm-Gg: ASbGncuvu1tDh7OcFH6gleLAv4bx2ZMVZ1IugiaRLTlw4Endo/RFsbZZPZfp9MetBdW
-	Itmj/9pNPvXg5pNB2+mEj6RMW15w+v5DjzsB91P8cWy8ZhvjgJJAHvb64zIeSiInJRXUCbnI2Eb
-	yiwI1+4jaHJSSftWJ5RDHfi8WALzL1CAIPV0YqcdsomdviLGr5R2zKlqXhnTe+HeDSXP6gbJM7k
-	qbLPMyqEi8qC7h6ZiHcdDnch2JQmeWcOfER0ss0XCCzTd9XB+uGnh1eUyhvoisC
-X-Google-Smtp-Source: AGHT+IHEUWdru1Ja1yJorUunulqsObj/yJEncvR3Tslnwit0r8PnlnPLzyb9G4POrBy4PJ/RnSlv3Q==
-X-Received: by 2002:a17:902:eccc:b0:215:5d43:6f0e with SMTP id d9443c01a7336-217786a9b73mr118702355ad.41.1734020179166;
-        Thu, 12 Dec 2024 08:16:19 -0800 (PST)
-Received: from prabhav.. ([2401:4900:883c:16bd:f11e:c756:2c8e:6cf4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21630fee27bsm90295755ad.269.2024.12.12.08.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 08:16:18 -0800 (PST)
-From: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
-To: rafael@kernel.org,
-	pavel@ucw.cz,
-	len.brown@intel.com
-Cc: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] doc: power: Add missing parameter description for memory_bm_create
-Date: Thu, 12 Dec 2024 21:46:08 +0530
-Message-Id: <20241212161608.24730-1-pvkumar5749404@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1734023052; c=relaxed/simple;
+	bh=qEEzfqsh2vdv8z94+nPCE2Myefm6po3pERQ9A6NZWZs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bayp2ETzDyJrExyUU0JSFGvrhqb5xrsgqrqmJjTYOQdc2cOgYmflOSxKh7ZXO7/+IvvWtNQqAMSvEhRn+92b3dbRnK8dqDHLZgdVEVDtswa0m4ka4AHimbEbkhggwvv/4ZrUoSVfppS6fJXXKt3Z+jx2zskxWQG9o4S/hBsWotw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CD641762;
+	Thu, 12 Dec 2024 09:04:37 -0800 (PST)
+Received: from [10.1.37.59] (e127648.arm.com [10.1.37.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4D643F58B;
+	Thu, 12 Dec 2024 09:04:06 -0800 (PST)
+Message-ID: <ea90a77e-91fa-423d-9f11-9345db6d1482@arm.com>
+Date: Thu, 12 Dec 2024 17:04:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH v021 8/9] cpufreq: intel_pstate: Introduce hybrid
+ domains
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>
+References: <5861970.DvuYhMxLoT@rjwysocki.net>
+ <2030654.usQuhbGJ8B@rjwysocki.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <2030654.usQuhbGJ8B@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Added the parameter description for bm, gfp_mask and safe_needed
-for the function memory_bm_create
+On 11/29/24 16:21, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Hybrid platforms contain different types of CPUs.  They may differ
+> by micro-architecture, by cache topology, by manufacturing process, by
+> the interconnect access design etc.  Of course, this means that power-
+> performance curves for CPUs of different types are generally different.
+> 
+> Because of these differences, CPUs of different types need to be handled
+> differently in certain situations and so it is convenient to operate
+> groups of CPUs that each contain CPUs of the same type.  In intel_pstate,
+> each of them will be represented by a struct hybrid_domain object and
+> referred to as a hybrid domain.
+> 
+> A key problem is how to identify the type of a CPUs so as to know which
+> hybrid domain it belongs to.  In principle, there are a few ways to do
+> it, but none of them is perfectly reliable.
+> 
+> From the computational perspective, an important factor is how many
+> instructions (on average) can be executed by the given CPU when it is
+> running at a specific frequency, often referred to as the IPC
+> (instructions per cycle) ratio of the given CPU to the least-capable
+> CPU in the system.  In intel_pstate this ratio is represented by the
+> performance-to-frequency scaling factor which needs to be used to get
+> a frequency in kHz for a given HWP performance level of the given CPU.
+> Since HWP performance levels are in the same units for all CPUs in a
+> hybrid system, the smaller the scaling factor, the larger the IPC ratio
+> for the given CPU.
+> 
+> Of course, the performance-to-frequency scaling factor must be the
+> same for all CPUs of the same type.  While it may be the same for CPUs
+> of different types, there is only one case in which that actually
+> happens (Meteor Lake platforms with two types of E-cores) and it is not
+> expected to happen again in the future.  Moreover, when it happens,
+> there is no straightforward way to distinguish CPUs of different types
+> with the same scaling factor in general.
+> 
+> For this reason, the scaling factor is as good as it gets for CPU
+> type identification and so it is used for building hybrid domains in
+> intel_pstate.
+> 
+> On hybrid systems, every CPU is added to a hybrid domain at the
+> initialization time.  If a hybrid domain with a matching scaling
+> factor is already present at that point, the CPU will be added to it.
+> Otherwise, a new hybrid domain will be created and the CPU will be
+> put into it.  The domain's scaling factor will then be set to the
+> one of the new CPU.
 
-Signed-off-by: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
----
- kernel/power/snapshot.c | 3 +++
- 1 file changed, 3 insertions(+)
+Just two irrelevant typos below, although for the unfamiliar maybe an
+example debug message output from any Arrow Lake would make this more
+concrete?
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 30894d8f0a78..690dd1f467b9 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -680,6 +680,9 @@ static int create_mem_extents(struct list_head *list, gfp_t gfp_mask)
- 
- /**
-  * memory_bm_create - Allocate memory for a memory bitmap.
-+ * @bm: Memory bitmap.
-+ * @gfp_mask: GFP mask for the allocation.
-+ * @safe_needed: Get pages not used before hibernation (restore only)
-  */
- static int memory_bm_create(struct memory_bitmap *bm, gfp_t gfp_mask,
- 			    int safe_needed)
--- 
-2.34.1
+> 
+> So far, the new code doesn't do much beyond printing debud messages,
+
+s/debud/debug
+
+> but subsequently the EAS support for intel_pstate will be based on it.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c |   57 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -943,6 +943,62 @@ static struct cpudata *hybrid_max_perf_c
+>   */
+>  static DEFINE_MUTEX(hybrid_capacity_lock);
+>  
+> +#ifdef CONFIG_ENERGY_MODEL
+> +/*
+> + * A hybrid domain is a collection of CPUs with the same perf-to-frequency
+> + * scaling factor.
+> + */
+> +struct hybrid_domain {
+> +	struct hybrid_domain *next;
+> +	cpumask_t cpumask;
+> +	int scaling;
+> +};
+> +
+> +static struct hybrid_domain *hybrid_domains;
+> +
+> +static void hybrid_add_to_domain(struct cpudata *cpudata)
+> +{
+> +	int scaling = cpudata->pstate.scaling;
+> +	int cpu = cpudata->cpu;
+> +	struct hybrid_domain *hd;
+> +
+> +	/* Do this only on hubrid platforms. */
+
+s/hubrid/hybrid
 
 
