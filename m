@@ -1,121 +1,131 @@
-Return-Path: <linux-pm+bounces-19131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A2A9EE754
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 14:05:13 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FDD39EE79A
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 14:24:53 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51C0318873B2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:05:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A03B282D02
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE8B212F9E;
-	Thu, 12 Dec 2024 13:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HtXPo7dn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7269213E8B;
+	Thu, 12 Dec 2024 13:24:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED7B1EEE6
-	for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 13:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A0F8460;
+	Thu, 12 Dec 2024 13:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734008709; cv=none; b=iDSygxF0fcyyLgdxzT49cvD6OTYEdwOILYMDQCOWHoUwbgF047gngWFgLBJ991gmhjt6zrn/jydCkUaV+cjq9+nRNLfjLO6IWa1xm4xAaN/3XAqa7kme1oTidPSOv5m6QalPHFszxncYFY0/E1doRQVcUpLAHgziXINsRTmaneI=
+	t=1734009889; cv=none; b=claHMtEWlr4m8V7xMZ+vDD1NmTVLl1tJFGdufCHcfvTmAiSE9N2lNIWv5wJ34uKbvo6VcGEEji82pCcik/0yLIh3q2pStFAL+tI0zvtjDha/HahLheWSHQXWDD0CFqQVPBhSM/hevpsZkGhiNEpBHNhtV9YaQMW3QmeZ2x4YIvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734008709; c=relaxed/simple;
-	bh=rYnq0aqrIJMTKPo4hjf0/GkvxY/WiG4bL7Y/9E+s1jk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g0u3UuDq9Kx0Q4SdHBeIybyeaOFI8zHWEfB2wmkCW0eL/aC4VGoCmZ5zU2wf1QCknv0tWyIDVKoTAYHdUPffKWMNuTWarD9UJwQ8uXuho+KhdLNDDuxYgaPVIeATeAqAfvcwD0dOeBCyp/znO+tkr+BUppTqnd3O+L9rvTB/BnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HtXPo7dn; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21669fd5c7cso4809785ad.3
-        for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 05:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734008708; x=1734613508; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BpGyFRxnTe3o19mkxTCsqcozZChRiTdOOydr9QyF298=;
-        b=HtXPo7dnOxU8kK2M/Y2YXPrisDnu1IXawn1xhCig8iQi1aCbeQDpJSvwjjo12GAf0K
-         gNDakvbxeToeqsKA7uOuQtVE1/RLPbAg+3iimx8KajQc+PxKK26wigL6obl7j7s2FJSi
-         4wjogxeCIyYGUWSVFJqvQoWCvthbWWsqIcCzyOlpYQyT7lQ/5TxddyrZXhflaEyhCWCL
-         N7du+f72ZllnwicW5Mh9C4MH8qBrqgwXDXc0Xi7i7Jbsuhv40iQ9kfa7TgVpHhrNcBEo
-         v7B5uVqmF5Z+1HogvUih7/lWWyfqsP6VQbJjNWvMOxBlpqk+bp1F7IJMjxcehGbTg7s7
-         2z+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734008708; x=1734613508;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BpGyFRxnTe3o19mkxTCsqcozZChRiTdOOydr9QyF298=;
-        b=jJ+6Fnplrx9JkqilYDPi6bTE8m8PRuiVsk8IHgC/lIHK2rIDT3cH1FtN1/oMNdopKV
-         8lx8wRNd3LNG6BDcb+LcevOBcr8iuvqjB01/Y6dDabFke+94YDFS4LN1ha7Vv2aEwFq0
-         FcUdwjl2AcL+aciZ9dW0bjkJT+dvrCS0F5lunY9TFrm77Gygdao+MqMhdbRTylGB2Mqo
-         GzleMe9aqjFQAkr+U9aqCfRSWtMOvhmuUrnPmVe1MSBLyT41wTUWf7d3jAj96Slj5EyO
-         vzHVLft47I1RDls2k9c9efW/6pvMm02Zc3n4TwY5Co0VlbosJr4QCoFveoRrn8203XcA
-         3NvA==
-X-Gm-Message-State: AOJu0YwbNUu5l/7NWdGPGSGUMQoE+POWZXhjX1lrSvX5F0QuudoLbM6I
-	oCjDhP2WGKYKTKdsmFcC1QpiravZTaAMKdixLW5fSVY30+icA5NsCi4dCw==
-X-Gm-Gg: ASbGncsUu3shhA7yL0cYBmkeaDGLAhl/ZmlQroBhMIPKv8KUrdR8KRbRjg5gvdKoJMS
-	OxirZ1u94YYB8oC3hTlub/u06z/YJ+t42d/lHdMAJYItO6x3I9R4bdLMBmggqOHGiWdT4POgx3f
-	A1I6YOg34oE9LAV3d5CPmWJ0EV6xefRv/QM2BQhCanhDhzLOJMBv/549uB4cu4Xt+pxAzRfJks0
-	3dTL/XEt+nZsOZpt9eCHFcA3rq5leQ6cd2mHjgSqShss+dxgbkI/3rmQcnYU92r3Az5mUs=
-X-Google-Smtp-Source: AGHT+IFBQDyUXZszJP3ptKndtfi+bsOwCtWevUJIKxcKAWmeYps+JdHs8r8oVw657weH3Du8YuTlLA==
-X-Received: by 2002:a17:902:f608:b0:216:554a:2127 with SMTP id d9443c01a7336-2178aec111fmr62922115ad.41.1734008707516;
-        Thu, 12 Dec 2024 05:05:07 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:1176:b16b:e3e7:580d])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd484640aasm6403429a12.22.2024.12.12.05.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 05:05:06 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: sre@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] power: reset: gpio-poweroff: Clarify the warning message
-Date: Thu, 12 Dec 2024 10:04:56 -0300
-Message-Id: <20241212130456.580197-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1734009889; c=relaxed/simple;
+	bh=AwF2HAFLChPof7herRsaFKUAK8o/hg6wRJj4JqspYgE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HAM+odCWof1Ek6GH3MPJ0rdGFLVobk7yChldVijZ42V7CkrdaXeYnFp/MofmOJRYod4gbA+lnVdnfMCEsdIsmIDxE+EuOXa22Wx+8d2NQ51yJjI39TDd/luiDMukvBpEar+nGt2OCtCh5RsXSJ+Uvp7bo4bpirY+RiiKLTxyfZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2027153B;
+	Thu, 12 Dec 2024 05:25:13 -0800 (PST)
+Received: from [10.1.37.59] (e127648.arm.com [10.1.37.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2FD73F58B;
+	Thu, 12 Dec 2024 05:24:42 -0800 (PST)
+Message-ID: <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
+Date: Thu, 12 Dec 2024 13:24:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] cpufreq: schedutil: Fix superfluous updates caused by
+ need_freq_update
+To: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241212015734.41241-1-sultan@kerneltoast.com>
+ <20241212015734.41241-2-sultan@kerneltoast.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20241212015734.41241-2-sultan@kerneltoast.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When gpio-poweroff fails, a WARN_ON() is triggered without
-an explanation to the user about the failure.
+On 12/12/24 01:57, Sultan Alsawaf wrote:
+> From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
+> 
+> A redundant frequency update is only truly needed when there is a policy
+> limits change with a driver that specifies CPUFREQ_NEED_UPDATE_LIMITS.
+> 
+> In spite of that, drivers specifying CPUFREQ_NEED_UPDATE_LIMITS receive a
+> frequency update _all the time_, not just for a policy limits change,
+> because need_freq_update is never cleared.
+> 
+> Furthermore, ignore_dl_rate_limit()'s usage of need_freq_update also leads
+> to a redundant frequency update, regardless of whether or not the driver
+> specifies CPUFREQ_NEED_UPDATE_LIMITS, when the next chosen frequency is the
+> same as the current one.
+> 
+> Fix the superfluous updates by only honoring CPUFREQ_NEED_UPDATE_LIMITS
+> when there's a policy limits change, and clearing need_freq_update when a
+> requisite redundant update occurs.
+> 
+> This is neatly achieved by moving up the CPUFREQ_NEED_UPDATE_LIMITS test
+> and instead setting need_freq_update to false in sugov_update_next_freq().
+>
 
-Add some comments explaining that the attempt to poweroff the system
-via gpio-poweroff failed and convert it to a WARN() message with a
-bit of context to provide some hint to the user.
+Good catch!
+Fixes:
+600f5badb78c ("cpufreq: schedutil: Don't skip freq update when limits change")
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+
+> Signed-off-by: Sultan Alsawaf (unemployed) <sultan@kerneltoast.com>
+
+Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 28c77904ea74..e51d5ce730be 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -83,7 +83,7 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+>  
+>  	if (unlikely(sg_policy->limits_changed)) {
+>  		sg_policy->limits_changed = false;
+> -		sg_policy->need_freq_update = true;
+> +		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);>  		return true;
+>  	}
+>  
+> @@ -96,7 +96,7 @@ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+>  				   unsigned int next_freq)
+>  {
+>  	if (sg_policy->need_freq_update)
+> -		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+> +		sg_policy->need_freq_update = false;
+>  	else if (sg_policy->next_freq == next_freq)
+>  		return false;
+
+I guess you could rewrite this into just one if like
+
 ---
- drivers/power/reset/gpio-poweroff.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/reset/gpio-poweroff.c b/drivers/power/reset/gpio-poweroff.c
-index 52cfeee2cb28..3eaae352ffb9 100644
---- a/drivers/power/reset/gpio-poweroff.c
-+++ b/drivers/power/reset/gpio-poweroff.c
-@@ -44,7 +44,13 @@ static int gpio_poweroff_do_poweroff(struct sys_off_data *data)
- 	/* give it some time */
- 	mdelay(gpio_poweroff->timeout_ms);
- 
--	WARN_ON(1);
-+	/*
-+	 * If code reaches this point, it means that gpio-poweroff has failed
-+	 * to actually power off the system.
-+	 * Warn the user that the attempt to poweroff via gpio-poweroff
-+	 * has gone wrong.
-+	 */
-+	WARN(1, "Failed to poweroff via gpio-poweroff mechanism\n");
- 
- 	return NOTIFY_DONE;
- }
--- 
-2.34.1
+	if (sg_policy->next_freq == next_freq && !sg_policy->need_freq_update))
+		return false;
 
+	sg_policy->need_freq_update = false
+	sg_policy->next_freq = next_freq;
+	sg_policy->last_freq_update_time = time;
 
