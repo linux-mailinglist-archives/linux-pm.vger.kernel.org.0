@@ -1,165 +1,133 @@
-Return-Path: <linux-pm+bounces-19096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19098-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F129EDFB3
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:59:37 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18FEA188B9B0
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 06:59:34 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D853204F79;
-	Thu, 12 Dec 2024 06:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VH2tGkHZ"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2B729EDFD0
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 08:04:49 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BACF204C2D;
-	Thu, 12 Dec 2024 06:58:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B75072829A3
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:04:45 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC0A204C27;
+	Thu, 12 Dec 2024 07:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gK4wPw2D"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23DFF1632D9;
+	Thu, 12 Dec 2024 07:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733986693; cv=none; b=QqvVJBEGoDXSf3E1a5x/nBGRzA0BOxjUnU3SrwSLGNZava2/74rNoUhDCGKfACn/ypkKLVffmm4WFGGFig2do+zjEVqxflRy5tZr3aSN1vlTbT09hrCLnklRV3wLFB4azOFeeXP5YIeri5YeO2sjBdogSMoztXnIZhNRMDPyrgU=
+	t=1733987081; cv=none; b=cfOQuPisugi+GOZEVR0AB5CtQ1zVzj6hQ8BES8+nLRpoE9Tle9fhdKKU08tqfapdkSONF9d9Th7zeYDz3nkuTg3Zw8SehSsvj73V0nBp184LqbQelcR5CWFRj8zk6UPiTfj5lNG3V3v31md3260j2Vk0HUNBP4zBUsbMlPRQbbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733986693; c=relaxed/simple;
-	bh=VhCYiqyYvaqC3KiVmWV3iXEcW4mzn2QL662FFwdB0gg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ItPj40n4tIP14DKp0t1QBCo8B68faHZcpk3bcwC7lpjDW0U0flvWjpi9zy++C4p0Q+OVNh3fHaTlJY2bQoJafD8uJw8LO407ppBmfH04jgqoQNPAYXioM1WQN9mFgZ6ovZFtLVmYDCvMo5VoD8UqpfhcarKgpXi9Ru28tpEaqtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VH2tGkHZ; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733986692; x=1765522692;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VhCYiqyYvaqC3KiVmWV3iXEcW4mzn2QL662FFwdB0gg=;
-  b=VH2tGkHZLX+qWDZFjzJxqeBZ9afdWUDbHrgvQ6wpCtZnY69cnKSyc4WV
-   cOf4yjLTe/IcOqOHW++dETZDi19OVkiEtwQe4rLor5ofVm+0Je6duarDj
-   UjI6KrvrWfW1j+qwp7Q7oVP0mVCvdk3ic7IEG60gnxKTXt9M2gVUGHhsd
-   EIYbndj7AGguPSPYDDDM28c1a3aJx961yHM1yMjfvYOQDQemXROA7d+Gt
-   yCEafNyRYGtp9imMwE8OO9jZXQ/1BQ1//MXwoNgcYDjX5jgfFUhu5k9+t
-   Jgj70ZZjblCGIr1LJw1EHklN4KlOZ8Q1PTNLxXMjxl8Lx3wcFwKxJ9ad2
-   w==;
-X-CSE-ConnectionGUID: iWVQH/MfSy+UJHs22kjMww==
-X-CSE-MsgGUID: 4ASbv9jpQAifrHP/SC7MYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="37231041"
-X-IronPort-AV: E=Sophos;i="6.12,227,1728975600"; 
-   d="scan'208";a="37231041"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 22:58:11 -0800
-X-CSE-ConnectionGUID: qDCc1EIfQI2BpWkROLzIOw==
-X-CSE-MsgGUID: BloVe2i4RwG3tFszWvxFaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="127127232"
-Received: from unknown (HELO desk) ([10.125.145.3])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 22:58:09 -0800
-Date: Wed, 11 Dec 2024 22:58:09 -0800
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Brice Goglin <brice.goglin@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH v5 9/9] x86/rfds: Exclude P-only parts from the RFDS affected
- list
-Message-ID: <20241211-add-cpu-type-v5-9-2ae010f50370@linux.intel.com>
-X-Mailer: b4 0.14.1
-References: <20241211-add-cpu-type-v5-0-2ae010f50370@linux.intel.com>
+	s=arc-20240116; t=1733987081; c=relaxed/simple;
+	bh=2clUMBF+zfM0MT3b4JiMSxRP50eR+oc99K9vxRX3gc0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gKWRQ+jYNKWqumI1YfGglBw4xZgUtFC02WqwFLCsUGpgIs6C97Qiwt/sc78+JieVRuxEhzqrhIY14K7NrCD8feeA4FqBT0wT7tQeG7llAZCUt+0GPME+OeHcOs8ar18tpcnW7FUZaTdB+c17XnRXbgbe5ajswdbF+mvHxYfaw0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gK4wPw2D; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-728e81257bfso220132b3a.2;
+        Wed, 11 Dec 2024 23:04:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733987079; x=1734591879; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SIv08M5NuYFMrbLnuplDgqYvTP/RY0BpL7xzh6gruXQ=;
+        b=gK4wPw2DFDiJQy4ZyQryEGZ/8tuvEf5a+/kCyTjjH5XmVYXOZXEThq2reW7JMdHRbs
+         dSGlgnwaXOIPjJs8x/Mfjsn0iKVrpHpMnayuDBfjr/uBtMvFy2BnD/0wTEVWGguUhiTL
+         GKBtFYnHKOPPxjsHPfXNd4sq9v4bzNh5TY4SSCyU9/rGtbUHZ6TdVzpSSfUBuRDOXmqn
+         Nn1jQE4aONWTlfde5CX8yePooTNiIIDGsTA8TnvaEably+yK6JM8jp8qUu1kYNSwQavZ
+         4TqQpgs27nRl4xZS92me1WNRkgh5pUEQMBN5CBZUEgcLvuOSYW4p8mF/6e92bzoBNdwT
+         C+wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733987079; x=1734591879;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SIv08M5NuYFMrbLnuplDgqYvTP/RY0BpL7xzh6gruXQ=;
+        b=ZFnyL+v4TCPFp+74HWRZbVMMiZbodR94BrJRhoxV5JzWMELUA/CA0QLW8DcQpiOJbi
+         xxS+WuQDVRiGkM/cAO4iVIH/mhuBQBzzvXq9insft///ursW4/hNwrE6qMxcCg134Xzh
+         0wEid6Vn2ItzjDHfdn3cVe6R47fWujhqlBSKGtUyBopYfKZZ+zrEA/3PahAxFkYMFeL2
+         Ao2ywud3NtVtem4zlu3/ZSfhJSk44IARqVnIyPlCTnv549agLMyQwmw3qCTH0Wc1WWfn
+         whQKqb2r9KxhJl3DXcvzEO0YfGwGOCC7tWXFGfMpOW+W6V527uTmQ+9T4G/5vrnaCq5u
+         lzww==
+X-Forwarded-Encrypted: i=1; AJvYcCVlpCyHSyncuSKpqe41GgXihiSfPvgzR5Eec7mChW66nMpiAJJxG0C4FxtBzegNPxiwaMVMuA07i7Q=@vger.kernel.org, AJvYcCX0h3n7R8+0sJDm5yiN0Vts9IqU2tp21cJ2kBAaNPWtCSi0l9NBqBI0HjAQ/GRm0fu6ow9Lw5zJGPv2QbPB@vger.kernel.org, AJvYcCXDXSpByIB+y+kZ7xWaggdB5HLfmOqEaJ/2XBrSzAU/88GhyvWO4kz/MaC4F3HNpmMOWRVz9pP9l3AL@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNVT4TNwdYn5YbZW0aYWwjvyhLe0mLQ33jxmZtkIgcm5PWDWD6
+	UfJxhqRRd74Ln+cj9y/D15l7hsDiHvIiCXyjx0UxWexKTHvoH1r8Xke4UUM7
+X-Gm-Gg: ASbGnctyLPElWGwAp2N/XkhaTbdxvggeibXIGU+P9ppPR2Z+hmIuPb11J8JAsyHQVTl
+	yLNadJMqYS9G9Ia6aTs2RWp5TUKkkGSCk4c9sBrjTo9IXNMty5SiUbuA2VVwkjZslegy01lead0
+	NaKCCy78lv+iaPCxIDDLqkEJ5127wXrSH9K87Ntt/Ld9+6Ld8j+G6rs6+WmawbM6dRdeyOvJ5sf
+	CK80xfbDMVPMNov51w+QPy+ss8vQDQqIphVb4CS1itNS30TGeiblRAlpclGYL1yRWtUt7bs
+X-Google-Smtp-Source: AGHT+IE2taDr2+F/QNnwkBgUaYbLlW++dErTzZng9ixbTcmDK5lHBmPiyyr/YT2Yg8/ifsjbQynqqA==
+X-Received: by 2002:a05:6a20:7347:b0:1e0:d32f:24e2 with SMTP id adf61e73a8af0-1e1cebdfe8bmr3622509637.38.1733987079385;
+        Wed, 11 Dec 2024 23:04:39 -0800 (PST)
+Received: from localhost.localdomain ([59.188.211.160])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-725ee10f928sm6519386b3a.32.2024.12.11.23.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 23:04:38 -0800 (PST)
+From: Nick Chan <towinchenmi@gmail.com>
+To: Hector Martin <marcan@marcan.st>,
+	Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Asahi Linux <asahi@lists.linux.dev>,
+	Linux ARM Kernel Architecture <linux-arm-kernel@lists.infradead.org>,
+	Linux power management <linux-pm@vger.kernel.org>,
+	Devicetree <devicetree@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Cc: Nick Chan <towinchenmi@gmail.com>
+Subject: [PATCH v2 0/7] Apple A7-A11, T2 SoC cpufreq support
+Date: Thu, 12 Dec 2024 15:02:59 +0800
+Message-ID: <20241212070344.3858-1-towinchenmi@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241211-add-cpu-type-v5-0-2ae010f50370@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-RFDS only affects Atom parts. Vendor/Family/Model matching in the affected
-processor table makes Alderlake and Raptorlake P-only parts affected (which
-are not affected in reality). This is because the affected hybrid and
-E-only parts have the same Family/Model as the unaffected P-only parts.
+This series add driver support for cpufreq Apple A7-A11, T2 SoCs.
+Device Tree nodes will be included in another series.
 
-Match CPU-type as Atom to exclude P-only parts as RFDS affected.
+Changes since v1:
+- transition_latency is in ns, APPLE_DVFS_TRANSITION_TIMEOUT in us.
+Multiply APPLE_DVFS_TRANSITION_TIMEOUT by 1000 before setting it as
+transition_latency.
 
-Note, a guest with the same Family/Model as the affected part may not have
-leaf 1A enumerated to know its CPU-type, but it should not be a problem as
-guest's Family/Model can anyways be inaccurate. Moreover, RFDS_NO or
-RFDS_CLEAR enumeration by the VMM decides the affected status of the guest.
+v1: https://lore.kernel.org/asahi/20241211112244.18393-1-towinchenmi@gmail.com/T
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Nick Chan
 ---
- Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst | 8 --------
- arch/x86/kernel/cpu/common.c                                 | 9 +++++++--
- 2 files changed, 7 insertions(+), 10 deletions(-)
+Hector Martin (1):
+  cpufreq: apple-soc: Drop setting the PS2 field on M2+
 
-diff --git a/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst b/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst
-index 0585d02b9a6c..ad15417d39f9 100644
---- a/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst
-+++ b/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst
-@@ -29,14 +29,6 @@ Below is the list of affected Intel processors [#f1]_:
-    RAPTORLAKE_S            06_BFH
-    ===================  ============
- 
--As an exception to this table, Intel Xeon E family parts ALDERLAKE(06_97H) and
--RAPTORLAKE(06_B7H) codenamed Catlow are not affected. They are reported as
--vulnerable in Linux because they share the same family/model with an affected
--part. Unlike their affected counterparts, they do not enumerate RFDS_CLEAR or
--CPUID.HYBRID. This information could be used to distinguish between the
--affected and unaffected parts, but it is deemed not worth adding complexity as
--the reporting is fixed automatically when these parts enumerate RFDS_NO.
--
- Mitigation
- ==========
- Intel released a microcode update that enables software to clear sensitive
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 6c45b8bed9fc..a82d6184e1d0 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1207,6 +1207,11 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- #define VULNBL_INTEL_STEPPINGS(vfm, steppings, issues)	\
- 	X86_MATCH_VFM_STEPPINGS(INTEL_##vfm, steppings, issues)
- 
-+#define VULNBL_INTEL_TYPE(vfm, cpu_type, issues)			\
-+	X86_MATCH_VFM_CPU_TYPE(INTEL_##vfm,				\
-+			       INTEL_CPU_TYPE_##cpu_type,	\
-+			       issues)
-+
- #define VULNBL_AMD(family, blacklist)		\
- 	VULNBL(AMD, family, X86_MODEL_ANY, blacklist)
- 
-@@ -1255,9 +1260,9 @@ static const struct x86_cpu_id cpu_vuln_blacklist[] __initconst = {
- 	VULNBL_INTEL(		TIGERLAKE,		GDS),
- 	VULNBL_INTEL(		LAKEFIELD,		MMIO | MMIO_SBDS | RETBLEED),
- 	VULNBL_INTEL(		ROCKETLAKE,		MMIO | RETBLEED | GDS),
--	VULNBL_INTEL(		ALDERLAKE,		RFDS),
-+	VULNBL_INTEL_TYPE(	ALDERLAKE,	ATOM,	RFDS),
- 	VULNBL_INTEL(		ALDERLAKE_L,		RFDS),
--	VULNBL_INTEL(		RAPTORLAKE,		RFDS),
-+	VULNBL_INTEL_TYPE(	RAPTORLAKE,	ATOM,	RFDS),
- 	VULNBL_INTEL(		RAPTORLAKE_P,		RFDS),
- 	VULNBL_INTEL(		RAPTORLAKE_S,		RFDS),
- 	VULNBL_INTEL(		ATOM_GRACEMONT,		RFDS),
+Nick Chan (6):
+  dt-bindings: cpufreq: apple,cluster-cpufreq: Add A7-A11, T2
+    compatibles
+  cpufreq: apple-soc: Allow per-SoC configuration of APPLE_DVFS_CMD_PS1
+  cpufreq: apple-soc: Use 32-bit read for status register
+  cpufreq: apple-soc: Increase cluster switch timeout to 400us
+  cpufreq: apple-soc: Set fallback transition latency to
+    APPLE_DVFS_TRANSITION_TIMEOUT
+  cpufreq: apple-soc: Add Apple A7-A8X SoC cpufreq support
 
+ .../cpufreq/apple,cluster-cpufreq.yaml        | 10 +++-
+ drivers/cpufreq/apple-soc-cpufreq.c           | 56 +++++++++++++++----
+ 2 files changed, 54 insertions(+), 12 deletions(-)
+
+
+base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
 -- 
-2.34.1
-
+2.47.1
 
 
