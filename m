@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-19090-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19091-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BED449EDFA4
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:57:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8354A168C3B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 06:57:51 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2AD204C36;
-	Thu, 12 Dec 2024 06:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C7AbxUcc"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA7E39EDFA7
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 07:58:07 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6311F37C5;
-	Thu, 12 Dec 2024 06:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 394BC2849EC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 06:58:05 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970FE204F66;
+	Thu, 12 Dec 2024 06:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vws8QZ/t"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA81204F60;
+	Thu, 12 Dec 2024 06:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733986653; cv=none; b=qde2L0+fqpeV2v7PSYHFK6e/6A4U2lw3BdH0Ke3c/SWEh1vtZ3LT3gjxIVErzY2C0dp4a4qW1aPrwYEBqo0bU37jJrk+Yu/n0x5mCeQwPc2VHDFK49NM0yPgsFsDXHRqqeEbEbcxhOqugfNr5TPja66LaD9Rv9qkO/x7K2zf9yo=
+	t=1733986659; cv=none; b=EYeNM9pv456A0Vc5zQQBGxRm7JcunTq7VekO+eXHt0IFn5rLD7kfECSFJ3l2O2ZtHrPCNRohD8E8+yqO114M88pWmGFH0N5OVgvkgWC3Dcr1ZIfO7OpuH6+YU7Y2c+mQHdLilE3qeiaoajUfrIKvLB0S8RrXWCQwix2V/nB0Xqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733986653; c=relaxed/simple;
-	bh=Lo7FysfxpdbAhJ5Br5uh/0z/2AfqddNm+WK8FwzxFkg=;
+	s=arc-20240116; t=1733986659; c=relaxed/simple;
+	bh=SK/+JtQICpEJjfQtv2u02HuEDGoEPxUqFzCzGowfj88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4nHKnoSyc8fEUr2/F4HbCgE6Qc9sXeyVl7hSPr+TMEDDZpp11D6drjvZmnJeBF9oZpjQaJodK232zstgTSt9naf6adtcJIjLDzbhiDJK7Bi19zT1M0iiPatuKi6NrW6hx3qzobSIycu2aQdARf6kPRWC2/49dxBvuL1uIAZhOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C7AbxUcc; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=qTduDxwd6NNRbNZZqeoXROQ1x0pjkGlBC/+jFBTIUHmZJ5tDZfwUJvyxsRjbCx4b49nuLf707IvtAdk2NarhsM2NON2A3gFFa+ZLYN9y4TydyHwWks00ivVx557h3PlE/ocYah9R42lXVUI+5kL0pV7b7wjN1U07DpVpcFEha+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vws8QZ/t; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733986652; x=1765522652;
+  t=1733986658; x=1765522658;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Lo7FysfxpdbAhJ5Br5uh/0z/2AfqddNm+WK8FwzxFkg=;
-  b=C7AbxUccXAXPLXNECuiGHV4XVa0zpxKt3yjS2mq9D9i/Q9bgi80KuvWz
-   B+KSGOBTxLNQlQ5zCawWIWSvy+YYDwbwaTm1WXdymDjtz1DGq1aFtF6b6
-   Y5A2x5vF1Sc91tbeNW25m/Ilac8shLcEv9QWkSEo/3wYA00ZqIQK7aLS4
-   EghcTZJlJWCrq+AF1POx5tFp6j1dGcCbFa1nlJp8IheC111JTpgtIvvYS
-   gKbPxaVx9ee1m9W7yNqQyZGK4cHE2YC8F3SAf3iAfGFYJFBlA7v7PqdUT
-   HmIigxYS3slB1ABSd1WoY2L001atll2okPOlr22A7YstEk6sX1YbnGwiF
+  bh=SK/+JtQICpEJjfQtv2u02HuEDGoEPxUqFzCzGowfj88=;
+  b=Vws8QZ/t1iwUKjvQ2abBplxCXgep1ZQJirhlNf+gKLJdcqDyU6Sec1n6
+   rnEgLvGLoQ3Vnk/+nX6bksudZ9ixLDuKQ63aCbjuQZsVRlwOoZvOcrpXH
+   7x3BwqT/GLCK5uLMyoi4LhCDtMvRf+MzIxj9ozR7kaQEYqal1DN9f4odA
+   GY1Od4dqqXILkwSQ6Hb0J5iMXY9a8RNEak7YvilMoujULVSb1AWBnSwYU
+   MnE/LSBv2GgUTkS6znuuOAIHrOn/crBr71Bs0ARiG6RN9k2vMnILUFMxu
+   I55LC/TPHQKW30nW3+CKghCb8Dgz2gtv+E7ULeJ2vew5bG4ORc9aLKjZC
    Q==;
-X-CSE-ConnectionGUID: dy7Stwg2Si2Yefk188Kqow==
-X-CSE-MsgGUID: 3C2ePYppRFKZichQ7yOm7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="59786328"
+X-CSE-ConnectionGUID: hFOzFKBySkmaeZAb/lk4zQ==
+X-CSE-MsgGUID: fsdk6Hb4Q+uctdefZOaL4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="34533430"
 X-IronPort-AV: E=Sophos;i="6.12,227,1728975600"; 
-   d="scan'208";a="59786328"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 22:57:32 -0800
-X-CSE-ConnectionGUID: 19zjN0qVRpujMghuBWxiAw==
-X-CSE-MsgGUID: ty9UeVlPQmalsexxyNZcxA==
+   d="scan'208";a="34533430"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 22:57:37 -0800
+X-CSE-ConnectionGUID: HGZ+w1bbSw+w1norqgHTmQ==
+X-CSE-MsgGUID: bNlpoya6R5GVxi5VQVXvqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,227,1728975600"; 
-   d="scan'208";a="96372377"
+   d="scan'208";a="96223518"
 Received: from unknown (HELO desk) ([10.125.145.3])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 22:57:31 -0800
-Date: Wed, 11 Dec 2024 22:57:30 -0800
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 22:57:37 -0800
+Date: Wed, 11 Dec 2024 22:57:36 -0800
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -75,10 +75,10 @@ Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
 	Brice Goglin <brice.goglin@gmail.com>,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v5 2/9] cpufreq: intel_pstate: Avoid SMP calls to get cpu-type
-Message-ID: <20241211-add-cpu-type-v5-2-2ae010f50370@linux.intel.com>
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [PATCH v5 3/9] perf/x86/intel: Use cache cpu-type for hybrid PMU
+ selection
+Message-ID: <20241211-add-cpu-type-v5-3-2ae010f50370@linux.intel.com>
 X-Mailer: b4 0.14.1
 References: <20241211-add-cpu-type-v5-0-2ae010f50370@linux.intel.com>
 Precedence: bulk
@@ -91,52 +91,160 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20241211-add-cpu-type-v5-0-2ae010f50370@linux.intel.com>
 
-Intel pstate driver relies on SMP calls to get the cpu-type of a given CPU.
-Remove the SMP calls and instead use the cached value of cpu-type which is
-more efficient.
+get_this_hybrid_cpu_type() misses a case when cpu-type is populated
+regardless of X86_FEATURE_HYBRID_CPU. This is particularly true for hybrid
+variants that have P or E cores fused off.
+
+Instead use the cpu-type cached in struct x86_topology, as it does not rely
+on hybrid feature to enumerate cpu-type. This can also help avoid the
+model-specific fixup get_hybrid_cpu_type(). Also replace the
+get_this_hybrid_cpu_native_id() with its cached value in struct
+x86_topology.
+
+While at it, remove enum hybrid_cpu_type as it serves no purpose when we
+have the exact cpu-types defined in enum intel_cpu_type. Also rename
+atom_native_id to intel_native_id and move it to intel-family.h where
+intel_cpu_type lives.
 
 Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- drivers/cpufreq/intel_pstate.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ arch/x86/events/intel/core.c        | 19 ++++++++++---------
+ arch/x86/events/perf_event.h        | 19 +------------------
+ arch/x86/include/asm/intel-family.h | 15 ++++++++++++++-
+ 3 files changed, 25 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index b8e2396a708a..c767680daa03 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2202,24 +2202,17 @@ static int knl_get_turbo_pstate(int cpu)
- 	return ret;
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index bb284aff7bfd..9e9ab9d1938e 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -4588,9 +4588,9 @@ static int adl_hw_config(struct perf_event *event)
+ 	return -EOPNOTSUPP;
  }
  
--static void hybrid_get_type(void *data)
--{
--	u8 *cpu_type = data;
--
--	*cpu_type = get_this_hybrid_cpu_type();
--}
--
- static int hwp_get_cpu_scaling(int cpu)
+-static enum hybrid_cpu_type adl_get_hybrid_cpu_type(void)
++static enum intel_cpu_type adl_get_hybrid_cpu_type(void)
  {
--	u8 cpu_type = 0;
+-	return HYBRID_INTEL_CORE;
++	return INTEL_CPU_TYPE_CORE;
+ }
+ 
+ static inline bool erratum_hsw11(struct perf_event *event)
+@@ -4928,7 +4928,8 @@ static void intel_pmu_check_hybrid_pmus(struct x86_hybrid_pmu *pmu)
+ 
+ static struct x86_hybrid_pmu *find_hybrid_pmu_for_cpu(void)
+ {
+-	u8 cpu_type = get_this_hybrid_cpu_type();
 +	struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
-+	u8 cpu_type = c->topo.intel_type;
- 
--	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
- 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
--	if (cpu_type == 0x40)
-+	if (cpu_type == INTEL_CPU_TYPE_CORE)
- 		return hybrid_scaling_factor;
- 
- 	/* Use default core scaling for E-cores */
--	if (cpu_type == 0x20)
-+	if (cpu_type == INTEL_CPU_TYPE_ATOM)
- 		return core_get_scaling();
++	enum intel_cpu_type cpu_type = c->topo.intel_type;
+ 	int i;
  
  	/*
+@@ -4937,7 +4938,7 @@ static struct x86_hybrid_pmu *find_hybrid_pmu_for_cpu(void)
+ 	 * on it. There should be a fixup function provided for these
+ 	 * troublesome CPUs (->get_hybrid_cpu_type).
+ 	 */
+-	if (cpu_type == HYBRID_INTEL_NONE) {
++	if (cpu_type == INTEL_CPU_TYPE_UNKNOWN) {
+ 		if (x86_pmu.get_hybrid_cpu_type)
+ 			cpu_type = x86_pmu.get_hybrid_cpu_type();
+ 		else
+@@ -4954,16 +4955,16 @@ static struct x86_hybrid_pmu *find_hybrid_pmu_for_cpu(void)
+ 		enum hybrid_pmu_type pmu_type = x86_pmu.hybrid_pmu[i].pmu_type;
+ 		u32 native_id;
+ 
+-		if (cpu_type == HYBRID_INTEL_CORE && pmu_type == hybrid_big)
++		if (cpu_type == INTEL_CPU_TYPE_CORE && pmu_type == hybrid_big)
+ 			return &x86_pmu.hybrid_pmu[i];
+-		if (cpu_type == HYBRID_INTEL_ATOM) {
++		if (cpu_type == INTEL_CPU_TYPE_ATOM) {
+ 			if (x86_pmu.num_hybrid_pmus == 2 && pmu_type == hybrid_small)
+ 				return &x86_pmu.hybrid_pmu[i];
+ 
+-			native_id = get_this_hybrid_cpu_native_id();
+-			if (native_id == skt_native_id && pmu_type == hybrid_small)
++			native_id = c->topo.intel_native_model_id;
++			if (native_id == INTEL_ATOM_SKT_NATIVE_ID && pmu_type == hybrid_small)
+ 				return &x86_pmu.hybrid_pmu[i];
+-			if (native_id == cmt_native_id && pmu_type == hybrid_tiny)
++			if (native_id == INTEL_ATOM_CMT_NATIVE_ID && pmu_type == hybrid_tiny)
+ 				return &x86_pmu.hybrid_pmu[i];
+ 		}
+ 	}
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 82c6f45ce975..3c7d2ef5963a 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -668,18 +668,6 @@ enum {
+ #define PERF_PEBS_DATA_SOURCE_GRT_MAX	0x10
+ #define PERF_PEBS_DATA_SOURCE_GRT_MASK	(PERF_PEBS_DATA_SOURCE_GRT_MAX - 1)
+ 
+-/*
+- * CPUID.1AH.EAX[31:0] uniquely identifies the microarchitecture
+- * of the core. Bits 31-24 indicates its core type (Core or Atom)
+- * and Bits [23:0] indicates the native model ID of the core.
+- * Core type and native model ID are defined in below enumerations.
+- */
+-enum hybrid_cpu_type {
+-	HYBRID_INTEL_NONE,
+-	HYBRID_INTEL_ATOM	= 0x20,
+-	HYBRID_INTEL_CORE	= 0x40,
+-};
+-
+ #define X86_HYBRID_PMU_ATOM_IDX		0
+ #define X86_HYBRID_PMU_CORE_IDX		1
+ #define X86_HYBRID_PMU_TINY_IDX		2
+@@ -696,11 +684,6 @@ enum hybrid_pmu_type {
+ 	hybrid_big_small_tiny	= hybrid_big   | hybrid_small_tiny,
+ };
+ 
+-enum atom_native_id {
+-	cmt_native_id           = 0x2,  /* Crestmont */
+-	skt_native_id           = 0x3,  /* Skymont */
+-};
+-
+ struct x86_hybrid_pmu {
+ 	struct pmu			pmu;
+ 	const char			*name;
+@@ -993,7 +976,7 @@ struct x86_pmu {
+ 	 */
+ 	int				num_hybrid_pmus;
+ 	struct x86_hybrid_pmu		*hybrid_pmu;
+-	enum hybrid_cpu_type (*get_hybrid_cpu_type)	(void);
++	enum intel_cpu_type (*get_hybrid_cpu_type)	(void);
+ };
+ 
+ struct x86_perf_task_context_opt {
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index 6d7b04ffc5fd..8c7076445893 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -182,10 +182,23 @@
+ /* Family 19 */
+ #define INTEL_PANTHERCOVE_X		IFM(19, 0x01) /* Diamond Rapids */
+ 
+-/* CPU core types */
++/*
++ * Intel CPU core types
++ *
++ * CPUID.1AH.EAX[31:0] uniquely identifies the microarchitecture
++ * of the core. Bits 31-24 indicates its core type (Core or Atom)
++ * and Bits [23:0] indicates the native model ID of the core.
++ * Core type and native model ID are defined in below enumerations.
++ */
+ enum intel_cpu_type {
++	INTEL_CPU_TYPE_UNKNOWN,
+ 	INTEL_CPU_TYPE_ATOM = 0x20,
+ 	INTEL_CPU_TYPE_CORE = 0x40,
+ };
+ 
++enum intel_native_id {
++	INTEL_ATOM_CMT_NATIVE_ID = 0x2,  /* Crestmont */
++	INTEL_ATOM_SKT_NATIVE_ID = 0x3,  /* Skymont */
++};
++
+ #endif /* _ASM_X86_INTEL_FAMILY_H */
 
 -- 
 2.34.1
