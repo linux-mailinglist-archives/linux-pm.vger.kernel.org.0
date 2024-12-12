@@ -1,245 +1,271 @@
-Return-Path: <linux-pm+bounces-19150-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19151-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7783E9EFC0A
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 20:07:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C079EFC24
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 20:14:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D7E4188C456
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 19:07:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C07316BA95
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 19:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA7F198A01;
-	Thu, 12 Dec 2024 19:07:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9741D1925AF;
+	Thu, 12 Dec 2024 19:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lfo7eVSg"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="WqwLGXMR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E5D189BBB
-	for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 19:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734030466; cv=none; b=VwHrrP3DzrNej12kNtEFQDCbDCkFhaDbsyVE3o9mvAV9MjRZvZ6+CBulxbyTOlaVhAqyFC7kBB16o068wvcIqsujSHdWQcLBUZ4BCIM9RsQltNNsed5/4sIfCGnCspWvV4aHTAXuSn51hCDuYFq+guwUSXjOAUfmQ7/wgh4exd8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734030466; c=relaxed/simple;
-	bh=T7EmwOm+5QAq3VwZ2pscSRpuN5xU6tNaMs3NfT8sSFI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ALwOAhjr9XzA3DvQJavsqWCbFzwp7eC/HJJGmzjxFkkmmSf7pwaeHjkaCKZzRBIIMeDA+dlGEjFDxUy0SlQ8+EqjmYc1+TkEIT2/PBGLYRudMBvhhVWHsuvdrrToX+xxWNExRCUa8R0SbakS8Ngry9Kw3KgbaAVajCh5+amCEo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lfo7eVSg; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3862d16b4f5so676387f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 11:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734030462; x=1734635262; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlbsAVW8lCP//800lKz1P/SW6I5QfvrNa4yDeu8gbJA=;
-        b=lfo7eVSgaGgorly8dVbXLz99l3P7dJlsgPRS5KvyCaOFAQxAEetsHrUlMUFF12cERz
-         CRacdjdwocknMk/gBPR3p3HHJY7gpqgI6Je+PRqbTNi7YNuYDYkw1Ko5AoTby4bg0SiH
-         X3+N3Tj8UzcBqvwyrwVw3P3vPk3O2Oc/jrnJzin1Iue4b+eO+6o9SGIAV1fq3MxZVeP7
-         hAJGroOwsnm2d4OpnMEx2atChsUy3/gM9aJaCniaw0l5TQ4LhQrnlw+O/lQDx4iWkaG6
-         q4KiWNrYaOtnQDV51O7dt1ifqmCh2/hIVhuz6nsQIT3mMQ0wORPTpGoqNhQ4b42llD2g
-         CujQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734030462; x=1734635262;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GlbsAVW8lCP//800lKz1P/SW6I5QfvrNa4yDeu8gbJA=;
-        b=kQS9c2HWBaQLP1M9CHMAdvBaFHLmoyulh2fAj59Mv7WEfUU1GWgJpV8Yx2JPAI7LC9
-         dwGf8CXKPOXP1W+m74/2ozsb+OgqzCAU+2lcOtydZzGld9mqFc/5C1aXQzB4ADx52qje
-         wzrNvoCE+/LhF/o0QDBTUjfTWILX//o4sYVzdhiZ3tWFVtCGAYTWsU/3Gm9HhniKEvVj
-         mBnG8RDXawka0dRe5SZOdcmhiMmbbIZMbtYKNBtqZmKXVPTvH9hsYgm7ZH3JU8WJKQLr
-         UdbN6LsWuAXol3TsLRxz33IHDmm8LIRHOdMXg2K246jZj380RFJM1/FTHfGNAdY0UD9S
-         pzuA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2lm/W/2AcL+b/6VRv553IKxEvyGKjJzTHjvqgtmt0CQie5PLSAxdh+JN7gdChIis8uwr4d4DZUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkeJzSwWjK4j//cxvb7lsZmfHSvncsrLSjfDJeaojF+WI3u8U5
-	zkcoTFfmNKwfMbC6BG0jKKyxlZlynOAg1DYqispnj9sfRSS7l9klUEDfelagtS8=
-X-Gm-Gg: ASbGncuOqbOsVegVL1rSZF9EEgkKsXWZiYndenxJxXOZBwAiJIHHHRQ8Kjxf2UhksZA
-	4/qv7gsqkjG/ffJIzL3j/MqwxTsd7Il9SPd9GIi73s9ZwUwGuV+uugFm0fA2pAmRscYRlKLogJV
-	3p14kcqgzLfb6tP/aTAQ2h9jmI4uBzz6jLZEETjlzgIkmyEjahkEGwIUAW4sObABAZlyHHYHzra
-	fyYNSAJe0/3C+SAJNFLRxOH3Ff1aAx5QLzt6LTT+yPBwhGxFT1S6W8d2P/M5YVssv39bPDQgFaK
-	x1knay4=
-X-Google-Smtp-Source: AGHT+IEMmb9t6PGdS5PoKr867mn9VHlZ8lICzDvFeUaKJtxwimOog2NMetPxeIcTVA8sTcncAD35Iw==
-X-Received: by 2002:a05:6000:2ae:b0:386:3c93:70ff with SMTP id ffacd0b85a97d-387887df1a0mr3843306f8f.8.1734030462343;
-        Thu, 12 Dec 2024 11:07:42 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-387824bd990sm4834365f8f.46.2024.12.12.11.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 11:07:41 -0800 (PST)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: rafael@kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org (open list:THERMAL),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal/thresholds: Fix boundaries and detection routine
-Date: Thu, 12 Dec 2024 20:07:36 +0100
-Message-ID: <20241212190737.4127274-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9284818CBFB;
+	Thu, 12 Dec 2024 19:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734030870; cv=pass; b=BmWK464poV9L57zvl9nRdzQHoSLGcKuIp3kIqSaViw8Uu6fWGa1YA1scu0KJ277z21FvZdlTyDg8tp5BDywEBAK0w0f/neFxyshHgegPawwpVjvUAh45IMcvrVq76je0X4Qkrmi7UWNhXGE649qy1XVc+DxMYdcYfFpwKYPU8do=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734030870; c=relaxed/simple;
+	bh=vr23ACFYNAg50do9K/bY+cFmocw4LsFbCTJIv7y69YU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MIQgZqS891qNU3WSI3XXjWtyPE+paS3zHFw4e0EFGrpD8YipxVyyR2kyIzBHbSuRe/I3koeCulBW/YiO9RNT7LRo4gJuk7RYDaYNsEMtAy5aG5avAfbf6oQQ0/JfBKqq746hV/wR4+GS7tp2JpqJPy2vWn4V3MJZk5GaB9JY7Uk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=WqwLGXMR; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1734030828; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=d2KhIrTRCwsnrSEx5Awba5uvk41EF0jtrltCD/UEiBzj4zr8GnyyDi2B+GdQIb2QWV+v4mSWCXQPGQ/Tekvhw2llABm+j9ThHIAGkIZZqArnYHYyZGodb/cHX5DsB/2qDjNgeyetDXFdnlfDKfyMUgG/qBjtuUozXu6GseYPQvI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1734030828; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=wbJ8cGeT9Wi00jHtRJfO1mPAsezSL7iwI1iLiBCnwhA=; 
+	b=IPVolFHtc9XoXkZrf0RDz5Eezr1fbuG2+z6OLT/6GeL/pGBNuHen0xgU8IOMBtVZaV1RMFx4gPQrvhn+DAHXzVWK5k1ZW7zhvIQ1iEzNuSITBCJdvSMXFtzE8W85iWgeG017ZqHL87SsTuvcYmC4PYZ6bIglLpHB+x43rEJF4ZA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1734030828;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=wbJ8cGeT9Wi00jHtRJfO1mPAsezSL7iwI1iLiBCnwhA=;
+	b=WqwLGXMRlElCdIE54gl2MEFu8Olymm/zI0A6KavVx//bqv1lC38iqgsDk1MCnlhR
+	8zuCEnt0YIfSiexjncqGMSlzj+7tu4a2d4JKcphkKphuYAgUlT8nzB4IJoW9WhLzQui
+	nrzigylBi3iG7drL+xY0KvCptv6yXWL8YM4/q7hQ=
+Received: by mx.zohomail.com with SMTPS id 1734030825629780.8771974478221;
+	Thu, 12 Dec 2024 11:13:45 -0800 (PST)
+Received: by mercury (Postfix, from userid 1000)
+	id 57EE810604B1; Thu, 12 Dec 2024 20:13:40 +0100 (CET)
+Date: Thu, 12 Dec 2024 20:13:40 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Peter Geis <pgwipeout@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Mark Brown <broonie@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?utf-8?B?QWRyacOhbiBNYXJ0w61uZXo=?= Larumbe <adrian.larumbe@collabora.com>, Boris Brezillon <boris.brezillon@collabora.com>, 
+	Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kernel@collabora.com, 
+	Dragan Simic <dsimic@manjaro.org>
+Subject: Re: [PATCH v5 3/7] pmdomain: rockchip: forward
+ rockchip_do_pmu_set_power_domain errors
+Message-ID: <v4oh6r5lr6eg3rg2poucotbuoddjllfp63lvmf7vuaawe2spvy@f2gv4nvubiw3>
+References: <20241211143044.9550-1-sebastian.reichel@collabora.com>
+ <20241211143044.9550-4-sebastian.reichel@collabora.com>
+ <CAMdYzYqLq=kSC8fiBapRS_8w0s8PaL9Yd46VgM56YbTEmUG1xA@mail.gmail.com>
+ <xe2wqm4ktutycxj7x4rskz4pn4cfmoci6zcgfxecmvc5bu7cqi@mqxi3pnehqq3>
+ <CAMdYzYpDXHtz_Fq5NJXqTdxVTcJcHkjcjU4-J=zwmE0BWmSsNw@mail.gmail.com>
+ <CAPDyKFoW5-U8hLcU-sryuMSP5-E2_yudFZ2-wH8-s62jn4qJ8A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="j6fd2ncdfhcvqlku"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoW5-U8hLcU-sryuMSP5-E2_yudFZ2-wH8-s62jn4qJ8A@mail.gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/233.989.0
+X-ZohoMailClient: External
 
-The current implementation does not work if the thermal zone is
-interrupt driven only.
 
-The boundaries are not correctly checked and computed as it happens
-only when the temperature is increasing or decreasing.
+--j6fd2ncdfhcvqlku
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5 3/7] pmdomain: rockchip: forward
+ rockchip_do_pmu_set_power_domain errors
+MIME-Version: 1.0
 
-The problem arises because the routine to detect when we cross a
-threshold is correlated with the computation of the boundaries. We
-assume we have to recompute the boundaries when a threshold is crossed
-but actually we should do that even if the it is not the case.
+Hi,
 
-Mixing the boundaries computation and the threshold detection for the
-sake of optimizing the routine is much more complex as it appears
-intuitively and prone to errors.
-
-This fix separates the boundaries computation and the threshold
-crossing detection into different routines. The result is a code much
-more simple to understand, thus easier to maintain.
-
-The drawback is we browse the thresholds list several time but we can
-consider that as neglictible because that happens when the temperature
-is updated. There are certainly some aeras to improve in the
-temperature update routine but it would be not adequate as this change
-aims to fix the thresholds for v6.13.
-
-Fixes: 445936f9e258 ("thermal: core: Add user thresholds support")
-Tested-by: Daniel Lezcano <daniel.lezcano@linaro.org> # rock5b, Lenovo x13s
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_thresholds.c | 68 +++++++++++++++-------------
- 1 file changed, 36 insertions(+), 32 deletions(-)
-
-diff --git a/drivers/thermal/thermal_thresholds.c b/drivers/thermal/thermal_thresholds.c
-index d9b2a0bb44fc..dc2852721151 100644
---- a/drivers/thermal/thermal_thresholds.c
-+++ b/drivers/thermal/thermal_thresholds.c
-@@ -69,58 +69,60 @@ static struct user_threshold *__thermal_thresholds_find(const struct list_head *
- 	return NULL;
- }
- 
--static bool __thermal_threshold_is_crossed(struct user_threshold *threshold, int temperature,
--					   int last_temperature, int direction,
--					   int *low, int *high)
-+static bool thermal_thresholds_handle_raising(struct list_head *thresholds, int temperature,
-+					      int last_temperature)
+On Thu, Dec 12, 2024 at 12:26:42PM +0100, Ulf Hansson wrote:
+> On Thu, 12 Dec 2024 at 00:11, Peter Geis <pgwipeout@gmail.com> wrote:
+> > On Wed, Dec 11, 2024 at 3:46=E2=80=AFPM Sebastian Reichel
+> > <sebastian.reichel@collabora.com> wrote:
+> > > On Wed, Dec 11, 2024 at 02:53:34PM -0500, Peter Geis wrote:
+> > > > On Wed, Dec 11, 2024 at 9:32=E2=80=AFAM Sebastian Reichel
+> > > > <sebastian.reichel@collabora.com> wrote:
+> > > > >
+> > > > > Currently rockchip_do_pmu_set_power_domain prints a warning if th=
+ere
+> > > > > have been errors turning on the power domain, but it does not ret=
+urn
+> > > > > any errors and rockchip_pd_power() tries to continue setting up t=
+he
+> > > > > QOS registers. This usually results in accessing unpowered regist=
+ers,
+> > > > > which triggers an SError and a full system hang.
+> > > > >
+> > > > > This improves the error handling by forwarding the error to avoid
+> > > > > kernel panics.
+> > > >
+> > > > I think we should merge your patch here with my patch for returning
+> > > > errors from rockchip_pmu_set_idle_request [1].
+> > >
+> > > I will have a look.
+> > >
+> > > > > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> > > > > Tested-by: Heiko Stuebner <heiko@sntech.de>
+> > > > > Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Roc=
+k 5B
+> > > > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > > > > ---
+> > > > >  drivers/pmdomain/rockchip/pm-domains.c | 34 +++++++++++++++++---=
+------
+> > > > >  1 file changed, 22 insertions(+), 12 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmd=
+omain/rockchip/pm-domains.c
+> > > > > index a161ee13c633..8f440f2883db 100644
+> > > > > --- a/drivers/pmdomain/rockchip/pm-domains.c
+> > > > > +++ b/drivers/pmdomain/rockchip/pm-domains.c
+> > > > > @@ -533,16 +533,17 @@ static int rockchip_pmu_domain_mem_reset(st=
+ruct rockchip_pm_domain *pd)
+> > > > >         return ret;
+> > > > >  }
+> > > > >
+> > > > > -static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_=
+domain *pd,
+> > > > > -                                            bool on)
+> > > > > +static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_d=
+omain *pd,
+> > > > > +                                           bool on)
+> > > > >  {
+> > > > >         struct rockchip_pmu *pmu =3D pd->pmu;
+> > > > >         struct generic_pm_domain *genpd =3D &pd->genpd;
+> > > > >         u32 pd_pwr_offset =3D pd->info->pwr_offset;
+> > > > >         bool is_on, is_mem_on =3D false;
+> > > > > +       int ret;
+> > > > >
+> > > > >         if (pd->info->pwr_mask =3D=3D 0)
+> > > > > -               return;
+> > > > > +               return 0;
+> > > > >
+> > > > >         if (on && pd->info->mem_status_mask)
+> > > > >                 is_mem_on =3D rockchip_pmu_domain_is_mem_on(pd);
+> > > > > @@ -557,16 +558,21 @@ static void rockchip_do_pmu_set_power_domai=
+n(struct rockchip_pm_domain *pd,
+> > > > >
+> > > > >         wmb();
+> > > > >
+> > > > > -       if (is_mem_on && rockchip_pmu_domain_mem_reset(pd))
+> > > > > -               return;
+> > > > > +       if (is_mem_on) {
+> > > > > +               ret =3D rockchip_pmu_domain_mem_reset(pd);
+> > > > > +               if (ret)
+> > > > > +                       return ret;
+> > > > > +       }
+> > > > >
+> > > > > -       if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, =
+pd, is_on,
+> > > > > -                                     is_on =3D=3D on, 0, 10000))=
  {
-+	struct user_threshold *t;
- 
--	if (temperature >= threshold->temperature) {
--		if (threshold->temperature > *low &&
--		    THERMAL_THRESHOLD_WAY_DOWN & threshold->direction)
--			*low = threshold->temperature;
-+	list_for_each_entry(t, thresholds, list_node) {
- 
--		if (last_temperature < threshold->temperature &&
--		    threshold->direction & direction)
--			return true;
--	} else {
--		if (threshold->temperature < *high && THERMAL_THRESHOLD_WAY_UP
--		    & threshold->direction)
--			*high = threshold->temperature;
-+		if (!(t->direction & THERMAL_THRESHOLD_WAY_UP))
-+		    continue;
- 
--		if (last_temperature >= threshold->temperature &&
--		    threshold->direction & direction)
-+		if (temperature >= t->temperature &&
-+		    last_temperature < t->temperature)
- 			return true;
- 	}
- 
- 	return false;
- }
- 
--static bool thermal_thresholds_handle_raising(struct list_head *thresholds, int temperature,
--					      int last_temperature, int *low, int *high)
-+static bool thermal_thresholds_handle_dropping(struct list_head *thresholds, int temperature,
-+					       int last_temperature)
- {
- 	struct user_threshold *t;
- 
--	list_for_each_entry(t, thresholds, list_node) {
--		if (__thermal_threshold_is_crossed(t, temperature, last_temperature,
--						   THERMAL_THRESHOLD_WAY_UP, low, high))
-+	list_for_each_entry_reverse(t, thresholds, list_node) {
-+
-+		if (!(t->direction & THERMAL_THRESHOLD_WAY_DOWN))
-+		    continue;
-+
-+		if (temperature < t->temperature &&
-+		    last_temperature >= t->temperature)
- 			return true;
- 	}
- 
- 	return false;
- }
- 
--static bool thermal_thresholds_handle_dropping(struct list_head *thresholds, int temperature,
--					       int last_temperature, int *low, int *high)
-+static void thermal_threshold_find_boundaries(struct list_head *thresholds, int temperature,
-+					      int *low, int *high)
- {
- 	struct user_threshold *t;
- 
--	list_for_each_entry_reverse(t, thresholds, list_node) {
--		if (__thermal_threshold_is_crossed(t, temperature, last_temperature,
--						   THERMAL_THRESHOLD_WAY_DOWN, low, high))
--			return true;
-+	list_for_each_entry(t, thresholds, list_node) {
-+		if (temperature < t->temperature &&
-+		    (t->direction & THERMAL_THRESHOLD_WAY_UP) &&
-+		    *high > t->temperature)
-+			*high = t->temperature;
- 	}
- 
--	return false;
-+	list_for_each_entry_reverse(t, thresholds, list_node) {
-+		if (temperature > t->temperature &&
-+		    (t->direction & THERMAL_THRESHOLD_WAY_DOWN) &&
-+		    *low < t->temperature)
-+			*low = t->temperature;
-+	}
- }
- 
- void thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *high)
-@@ -132,6 +134,8 @@ void thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *hi
- 
- 	lockdep_assert_held(&tz->lock);
- 
-+	thermal_threshold_find_boundaries(thresholds, temperature, low, high);
-+
- 	/*
- 	 * We need a second update in order to detect a threshold being crossed
- 	 */
-@@ -151,12 +155,12 @@ void thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *hi
- 	 * - decreased : thresholds are crossed the way down
- 	 */
- 	if (temperature > last_temperature) {
--		if (thermal_thresholds_handle_raising(thresholds, temperature,
--						      last_temperature, low, high))
-+		if (thermal_thresholds_handle_raising(thresholds,
-+						      temperature, last_temperature))
- 			thermal_notify_threshold_up(tz);
- 	} else {
--		if (thermal_thresholds_handle_dropping(thresholds, temperature,
--						       last_temperature, low, high))
-+		if (thermal_thresholds_handle_dropping(thresholds,
-+						       temperature, last_temperature))
- 			thermal_notify_threshold_down(tz);
- 	}
- }
--- 
-2.43.0
+> > > > > -               dev_err(pmu->dev,
+> > > > > -                       "failed to set domain '%s', val=3D%d\n",
+> > > > > -                       genpd->name, is_on);
+> > > > > -               return;
+> > > > > +       ret =3D readx_poll_timeout_atomic(rockchip_pmu_domain_is_=
+on, pd, is_on,
+> > > > > +                                       is_on =3D=3D on, 0, 10000=
+);
+> > > > > +       if (ret) {
+> > > > > +               dev_err(pmu->dev, "failed to set domain '%s' %s, =
+val=3D%d\n",
+> > > > > +                       genpd->name, on ? "on" : "off", is_on);
+> > > > > +               return ret;
+> > > > >         }
+> > > > > +
+> > > > > +       return 0;
+> > > > >  }
+> > > > >
+> > > > >  static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool=
+ power_on)
+> > > > > @@ -592,7 +598,11 @@ static int rockchip_pd_power(struct rockchip=
+_pm_domain *pd, bool power_on)
+> > > > >                         rockchip_pmu_set_idle_request(pd, true);
+> > > > >                 }
+> > > > >
+> > > > > -               rockchip_do_pmu_set_power_domain(pd, power_on);
+> > > > > +               ret =3D rockchip_do_pmu_set_power_domain(pd, powe=
+r_on);
+> > > > > +               if (ret < 0) {
+> > > > > +                       clk_bulk_disable(pd->num_clks, pd->clks);
+> > > > > +                       return ret;
+> > > >
+> > > > Looking at it, we shouldn't return directly from here because the
+> > > > mutex never gets unlocked.
+> > >
+> > > Yes, we should do that after patch 2/7 from this series :)
+> >
+> > That's excellent!
+> >
+> > >
+> > > > Instead of repeating clk_bulk_disable and return ret for each failu=
+re,
+> > > > we can initialize ret =3D 0, have a goto: out pointing to
+> > > > clk_bulk_disable, and change return 0 to return ret at the end.
+> > >
+> > > Right now there is only a single clk_bulk_disable() in an error
+> > > case, so I did not use the typical error goto chain. I suppose
+> > > it makes a lot more sense with proper error handling for the calls
+> > > to rockchip_pmu_set_idle_request().
+> >
+> > If you'd like, I can base my v2 on this patch series with the changes
+> > I'm suggesting?
+>=20
+> I leave you guys to decide the best way forward, but please keep in
+> mind that fixes/stable patches are easier managed if they are as
+> simple as possible and without relying on cleanup patches. Better fix
+> the problem first, then clean up the code.
 
+I had this ordered the other way around initially and as Heiko
+pointed out that makes things more complicated overall:
+
+https://lore.kernel.org/linux-rockchip/4864529.A9s0UXYOmP@diego/
+
+Greetings,
+
+-- Sebastian
+
+--j6fd2ncdfhcvqlku
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdbNd0ACgkQ2O7X88g7
++ponTw//SV9QzhiNNpwaJEZ72Yh6NxpJRGo86MsMBSZ9/hhH/EzUuwcgl/xGydss
+96U9t15iugFbrra/alLpoMJVQX9qb8Y/xU3ClWUC6Anf8mKGVl1/6wZEewzkFG1b
+WTEwIbH1U7Smvoqu7y6U6GkdHlcqqm3HQinG6VJS92KMyXtWvPs6pwOb0Ta/sSGY
+qLxHPKGurxofPQOqc5/NDouHad5Hv07K4Ef8gaG6ng1fhAAu/zdt3Cr/kMzgfzPu
+VEBHcdaFbMfVAv+GbLjy6oos/jP1ZeOeTsFxBZAysVH7E++h5JRvAJayIdKzjN6i
+7K9EQ0qeBmGQES/8MirUlfBifYce62uVGsIRg1FfL7PxTRovwZGZEryyusq4FF0p
+cxSX4yQF8ZqaP/XclJVB4zZBZefltZaRh8WVkQvUJc/Y6VjuyV91MTnbVWOmOR7i
+j6t7k8L8ZwGIZ2n3PxMibZLsNZlSk40sgo7ox9DbwsdXaJO+13sdDIdcapUTjUOe
+jFrrvK0KnJfB+Jyg9f8W5Ur0BwX2of+seHNyRaUzDNkYHAXv/BNQqxzLXH9Ki0NA
+1M+juByBONsbRsCLAXyeg+IhosEooD841w09hs8PvYuPbNbw/Xlawz18oVp15GbG
+I5SmjfEeWnwDI7amjbsahRXQa8OvYYm7mRSPfLUUw9c3aLtikyo=
+=rS7x
+-----END PGP SIGNATURE-----
+
+--j6fd2ncdfhcvqlku--
 
