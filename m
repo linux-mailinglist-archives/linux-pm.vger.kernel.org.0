@@ -1,427 +1,218 @@
-Return-Path: <linux-pm+bounces-19121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093729EE626
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:03:59 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A45B29EE647
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:06:56 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 583942888D1
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 12:03:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0472218811A0
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 12:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBB92144BA;
-	Thu, 12 Dec 2024 12:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LQYh1J7D"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27DE211A1E;
+	Thu, 12 Dec 2024 12:06:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CFA2139D2
-	for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 12:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6BB41A841D;
+	Thu, 12 Dec 2024 12:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734004905; cv=none; b=LqjD2gjUITq+ON9Ev3taRaD/A2LF/wBKAcZh9UQlg0+mBc61gwGtlPdr8LOQoGTgQ7uJCFkx2+Rvb6FSRfQA5wmdGeuPgCnEcyugN6/AbaOoBfCHHdBWox0wWx74zvBYRQxd6ul7fcuZAyjl/S6CyFg3dI6beEwnQg0J7o/CJlc=
+	t=1734005191; cv=none; b=MKGQIbfE7qJgQpyaWD7tLW8CsoZQQp8YM6R6Uhi3M1MDXQHx5VGzda78Kbj8FTYHV7+n4Ya+Nuh4J8CKQGk+7/eRrx2+oJl3XVDofFjubK3dJXvHZO7BYkKBAZIO47QtyOTIFtjl6J/0Ey2EHJMYWds3Ru+94tkA2aR+Dy/oG8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734004905; c=relaxed/simple;
-	bh=thTEqjZhO0uJctWFXfTOFjrfLUjwXgiTkiv3EAYL7Js=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s+RSQOdAhhuzAc7TNZYq42SqN03B/xfTbxxhFHUjCTsjGpToquzYWFi1D4wz5nblpIdBFXN4QAJtE1vwZYjb0OLksGNV92mPcbL8xGDwI90g4DJrAufggZwpM1MHcqJxYFH5yS3lFVLaQBFfQ8cS7zyANQ8yVlEzUBLd8mFIpbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LQYh1J7D; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6ef8028fe9fso4296127b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2024 04:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734004901; x=1734609701; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iL/TED2L5EPgHGL0qZeZ/VF051K9HiM9yUbvKz7B9O4=;
-        b=LQYh1J7DyHotmFig7rMnqJfZr5jyw13Rc1+WYJHU8WuR3q1B/SJq90t52dWMMVcVV+
-         q/pZqfTaELJqHFl/3u/uAMQBVvGYzuc5hlL3z3L8vEkb4i+24lVGhbT7sc3jY8YfKFCs
-         a3T5RPkAMaYej8oLIfXUCiatiflPp6zzV5WAX3/jcLZfj4xQnnIhohUnc4//rjvJy4hN
-         LR3c5W258ESerRvGoIKFs8B3p91eTND6LicurM9rWhjGGnRXlvNKop7H0B2R65P7NPXn
-         LtldFYKso/X0iA2O1gH4HJXq9H7YF4YoyN2ki/fBefVwoKgHnBrro7P+waRB3TK7R1Gl
-         euzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734004901; x=1734609701;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iL/TED2L5EPgHGL0qZeZ/VF051K9HiM9yUbvKz7B9O4=;
-        b=HOdC1D3THdJbla/IDWFgbR3ft1Tc3T8Z9OR1m+P3rTkBuxzjbWl3jK+keJXTbFn1Ns
-         y5WYH+Rt6YVg8BCHrlqnIZieqUqalCNqx8H4MmC/CUqnAGGJg0WLUdknv7ATBsk+L/qk
-         2zf/ueX/Ym4MWTblQBL2Ma/iDX/sB6si5162vZUJx/4x+462yydbjaQeU5mLF8e5uQIt
-         C0cPRINtpgQY0Ds+Qy4gvMDGXHpo2yacY+An43VgJvg3wJzsSJYk+FTJX0bg6pR/ptEk
-         m6Ffaze3FnctpYFJBoU8RxyqQhBGReCjnH7PH3I9JL/ZqRaVqes+DiAKtqTHwwfUJprA
-         k/iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXrTLCK9L4FkEWR/VK0h+37SMSwCOQf09RYat1Jt7vOFiB+F5Oy48XlsUIXbslRSz87LJT+897iLA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxT3+PlnaSwzitt0DNWl9XnWdT3Mm+kxyryRZy0/G/z6ejbM7Q3
-	MI5C+Aqz9fdbg0kIA1dFCKWFCpy5SBKGynIZK3YT/xFQXXr73R99Jg60lrbmYr7gESxVT2cmCBP
-	ZIiNEaMG/F2oIWrC0GAKy+RDw3giyep3/9cgR+g==
-X-Gm-Gg: ASbGncvi+/gjLMaHBtOce3RwuAGTy23t8kn795EDmuAGPj60vlrJUbAkhu3HAdjF1zO
-	6IKe/uGFxyiPyVoZpc5TaxS39aTA3s+D+clz9wkc=
-X-Google-Smtp-Source: AGHT+IGAcN25/DE763+eXjuOHtrxjGBWK3sGZbgN/Fv/0VQNSh9q5A0iw4w/kpblCHe5qE0qQMkhsjdQ7Shv5zzAqe0=
-X-Received: by 2002:a05:690c:6f87:b0:6ef:6a91:4965 with SMTP id
- 00721157ae682-6f275382a61mr816677b3.37.1734004901389; Thu, 12 Dec 2024
- 04:01:41 -0800 (PST)
+	s=arc-20240116; t=1734005191; c=relaxed/simple;
+	bh=hBlpEh26Bst9cNZHzQZCHocOCXzfhyNIb15FPFX9j/Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sj8S4o2p5ibRjs2Wk/kDNZS1KKb/+A+p12jpJFZbN15zo8XG2uovEZjuax3AsqCIkReDrRbU8xcOdmK9fRe9JwBlJsUiKKCTiE4biA21xANCYbdjM2xLFKirD9tnXh5gNMeHBXmV/RYkiNBUw9R+bjcKUi2o3DxA7CkD9zdNKCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0330E153B;
+	Thu, 12 Dec 2024 04:06:55 -0800 (PST)
+Received: from [10.1.37.59] (e127648.arm.com [10.1.37.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D38713F720;
+	Thu, 12 Dec 2024 04:06:22 -0800 (PST)
+Message-ID: <a383eb2a-7752-4c2c-8792-dda9a05b2a53@arm.com>
+Date: Thu, 12 Dec 2024 12:06:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241206211145.2823-1-ansuelsmth@gmail.com> <20241206211145.2823-2-ansuelsmth@gmail.com>
-In-Reply-To: <20241206211145.2823-2-ansuelsmth@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 12 Dec 2024 13:01:05 +0100
-Message-ID: <CAPDyKFovtfR7BiXBfH-79Cyf1=rd-kmOoEnEdMArjGUxSks-Aw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-To: Christian Marangi <ansuelsmth@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, upstream@airoha.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] cpufreq: schedutil: Ignore rate limit when scaling up
+ with FIE present
+To: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Beata Michalska <Beata.Michalska@arm.com>, Qais Yousef
+ <qyousef@layalina.io>, Pierre Gondois <pierre.gondois@arm.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+References: <20241212015734.41241-1-sultan@kerneltoast.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20241212015734.41241-1-sultan@kerneltoast.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 6 Dec 2024 at 22:16, Christian Marangi <ansuelsmth@gmail.com> wrote:
->
-> Add simple CPU Freq driver for Airoha EN7581 SoC that control CPU
-> frequency scaling with SMC APIs and register a generic "cpufreq-dt"
-> device.
->
-> CPUFreq driver registers a get-only clock to get the current global CPU
-> frequency from SMC and a Power Domain to configure the performance state
-> for each OPP to apply the requested frequency from cpufreq-dt. This is
-> needed as SMC use index instead of raw frequency.
->
-> All CPU share the same frequency and can't be controlled independently.
-> Current shared CPU frequency is returned by the related SMC command.
->
-> Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
-> driver is needed with OPP v2 nodes declared in DTS.
->
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+On 12/12/24 01:57, Sultan Alsawaf wrote:
+> From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
+
+Hi Sultan,
+(Adding further CCs that might be interested in this)
+Good to see some input here again, if it becomes a regular thing,
+which I would welcome, you might want to look into git send-email
+or b4 relay, at least in my inbox this series looks strange.
+Also no cover letter.
+
+> 
+> When schedutil disregards a frequency transition due to the transition rate
+> limit, there is no guaranteed deadline as to when the frequency transition
+> will actually occur after the rate limit expires. For instance, depending
+> on how long a CPU spends in a preempt/IRQs disabled context, a rate-limited
+> frequency transition may be delayed indefinitely, until said CPU reaches
+> the scheduler again. This also hurts tasks boosted via UCLAMP_MIN.
+
+Realistically this will be the tick at worst for the systems you care about,
+I assume.
+
+> 
+> For frequency transitions _down_, this only poses a theoretical loss of
+> energy savings since a CPU may remain at a higher frequency than necessary
+> for an indefinite period beyond the rate limit expiry.
+
+theoretical?
+
+> 
+> For frequency transitions _up_, however, this poses a significant hit to
+> performance when a CPU is stuck at an insufficient frequency for an
+> indefinitely long time. In latency-sensitive and bursty workloads
+> especially, a missed frequency transition up can result in a significant
+> performance loss due to a CPU operating at an insufficient frequency for
+> too long.
+
+The term significant implies you have some numbers, please go ahead and
+share them then.
+
+I'm not sure if you're aware of Qais' series that also intends to ignore the
+rate-limit (in certain cases).
+https://lore.kernel.org/lkml/20240728184551.42133-1-qyousef@layalina.io/
+I would mostly agree with your below argument regarding FIE and did lean
+towards dropping it altogether. The main issue I had with Qais' series
+was !fast_switch platforms and the resulting preemption by the DL task
+(Often on a remote, possibly idle CPU of the same perf-domain).
+Unlimited frequency updates can really hurt both power and throughput there.
+
+Fortunately given the low-pass filter nature of PELT, without some special
+workloads, most calls to cpufreq_update_util() are dropped because there
+is no resulting frequency change anyway.
+
+You keeping the rate-limit when reducing the frequency might be enough to
+work around the issue though. I will run some experiments like I did for
+Qais' series.
+
+I'll also go and check for unintended changes in iowait boost (that
+interacts with the rate-limit too).
+
+> 
+> When support for the Frequency Invariant Engine (FIE) _isn't_ present, a
+> rate limit is always required for the scheduler to compute CPU utilization
+> with some semblance of accuracy: any frequency transition that occurs
+> before the previous transition latches would result in the scheduler not
+> knowing the frequency a CPU is actually operating at, thereby trashing the
+> computed CPU utilization.
+> 
+> However, when FIE support _is_ present, there's no technical requirement to
+> rate limit all frequency transitions to a cpufreq driver's reported
+> transition latency. With FIE, the scheduler's CPU utilization tracking is
+> unaffected by any frequency transitions that occur before the previous
+> frequency is latched.
+> 
+> Therefore, ignore the frequency transition rate limit when scaling up on
+> systems where FIE is present. This guarantees that transitions to a higher
+> frequency cannot be indefinitely delayed, since they simply cannot be
+> delayed at all.
+> 
+> Signed-off-by: Sultan Alsawaf (unemployed) <sultan@kerneltoast.com>
 > ---
-> Changes v7:
-> - No changes
-> Changes v6:
-> - Improve Kconfig depends logic
-> - Select PM (PM_GENERIC_DOMAINS depends on it)
-> - Drop (int) cast for
-> Changes v5:
-> - Rename cpu_pd to perf for power domain name
-> - Use remove instead of remove_new
-> Changes v4:
-> - Rework to clk-only + PM set_performance_state implementation
-> Changes v3:
-> - Adapt to new cpufreq-dt APIs
-> - Register cpufreq-dt instead of custom freq driver
-> Changes v2:
-> - Fix kernel bot error with missing slab.h and bitfield.h header
-> - Limit COMPILE_TEST to ARM64 due to smcc 1.2
->
->  drivers/cpufreq/Kconfig.arm          |  10 ++
->  drivers/cpufreq/Makefile             |   1 +
->  drivers/cpufreq/airoha-cpufreq.c     | 222 +++++++++++++++++++++++++++
-
-Hmm, it looks like this needs to be moved and possibly split up.
-
-The provider part (for the clock and power-domain) belongs in
-/drivers/pmdomain/*, along with the other power-domain providers.
-
-Other than that, I was really expecting the cpufreq-dt to take care of the rest.
-
->  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
->  4 files changed, 235 insertions(+)
->  create mode 100644 drivers/cpufreq/airoha-cpufreq.c
->
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index 5f7e13e60c80..8494faac58ae 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -15,6 +15,16 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
->           To compile this driver as a module, choose M here: the
->           module will be called sun50i-cpufreq-nvmem.
->
-> +config ARM_AIROHA_SOC_CPUFREQ
-> +       tristate "Airoha EN7581 SoC CPUFreq support"
-> +       depends on ARM64 && (ARCH_AIROHA || COMPILE_TEST)
-> +       select PM
-> +       select PM_OPP
-> +       select PM_GENERIC_DOMAINS
-> +       default ARCH_AIROHA
-> +       help
-> +         This adds the CPUFreq driver for Airoha EN7581 SoCs.
+>  kernel/sched/cpufreq_schedutil.c | 35 +++++++++++++++++++++++++++-----
+>  1 file changed, 30 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index e51d5ce730be..563baab89a24 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -59,10 +59,15 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
+>  
+>  /************************ Governor internals ***********************/
+>  
+> -static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+> +static bool sugov_should_rate_limit(struct sugov_policy *sg_policy, u64 time)
+>  {
+> -	s64 delta_ns;
+> +	s64 delta_ns = time - sg_policy->last_freq_update_time;
 > +
->  config ARM_APPLE_SOC_CPUFREQ
->         tristate "Apple Silicon SoC CPUFreq support"
->         depends on ARCH_APPLE || (COMPILE_TEST && 64BIT)
-> diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-> index d35a28dd9463..890fff99f37d 100644
-> --- a/drivers/cpufreq/Makefile
-> +++ b/drivers/cpufreq/Makefile
-> @@ -53,6 +53,7 @@ obj-$(CONFIG_X86_AMD_FREQ_SENSITIVITY)        += amd_freq_sensitivity.o
->
->  ##################################################################################
->  # ARM SoC drivers
-> +obj-$(CONFIG_ARM_AIROHA_SOC_CPUFREQ)   += airoha-cpufreq.o
->  obj-$(CONFIG_ARM_APPLE_SOC_CPUFREQ)    += apple-soc-cpufreq.o
->  obj-$(CONFIG_ARM_ARMADA_37XX_CPUFREQ)  += armada-37xx-cpufreq.o
->  obj-$(CONFIG_ARM_ARMADA_8K_CPUFREQ)    += armada-8k-cpufreq.o
-> diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
-> new file mode 100644
-> index 000000000000..29738f61f401
-> --- /dev/null
-> +++ b/drivers/cpufreq/airoha-cpufreq.c
-> @@ -0,0 +1,222 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/arm-smccc.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/slab.h>
-> +
-> +#include "cpufreq-dt.h"
-> +
-> +#define AIROHA_SIP_AVS_HANDLE                  0x82000301
-> +#define AIROHA_AVS_OP_BASE                     0xddddddd0
-> +#define AIROHA_AVS_OP_MASK                     GENMASK(1, 0)
-> +#define AIROHA_AVS_OP_FREQ_DYN_ADJ             (AIROHA_AVS_OP_BASE | \
-> +                                                FIELD_PREP(AIROHA_AVS_OP_MASK, 0x1))
-> +#define AIROHA_AVS_OP_GET_FREQ                 (AIROHA_AVS_OP_BASE | \
-> +                                                FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
-> +
-> +struct airoha_cpufreq_priv {
-> +       struct clk_hw hw;
-> +       struct generic_pm_domain pd;
-> +
-> +       int opp_token;
-> +       struct dev_pm_domain_list *pd_list;
-> +       struct platform_device *cpufreq_dt;
-> +};
-> +
-> +static long airoha_cpufreq_clk_round(struct clk_hw *hw, unsigned long rate,
-> +                                    unsigned long *parent_rate)
-> +{
-> +       return rate;
+> +	return delta_ns < sg_policy->freq_update_delay_ns;
 > +}
-> +
-> +static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
+>  
+> +static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
 > +{
-> +       const struct arm_smccc_1_2_regs args = {
-> +               .a0 = AIROHA_SIP_AVS_HANDLE,
-> +               .a1 = AIROHA_AVS_OP_GET_FREQ,
-> +       };
-> +       struct arm_smccc_1_2_regs res;
-> +
-> +       arm_smccc_1_2_smc(&args, &res);
-> +
-> +       /* SMCCC returns freq in MHz */
-> +       return res.a0 * 1000 * 1000;
-> +}
-> +
-> +/* Airoha CPU clk SMCC is always enabled */
-> +static int airoha_cpufreq_clk_is_enabled(struct clk_hw *hw)
-> +{
-> +       return true;
-> +}
-> +
-> +static const struct clk_ops airoha_cpufreq_clk_ops = {
-> +       .recalc_rate = airoha_cpufreq_clk_get,
-> +       .is_enabled = airoha_cpufreq_clk_is_enabled,
-> +       .round_rate = airoha_cpufreq_clk_round,
-> +};
-> +
-> +static const char * const airoha_cpufreq_clk_names[] = { "cpu", NULL };
-> +
-> +/* NOP function to disable OPP from setting clock */
-> +static int airoha_cpufreq_config_clks_nop(struct device *dev,
-> +                                         struct opp_table *opp_table,
-> +                                         struct dev_pm_opp *opp,
-> +                                         void *data, bool scaling_down)
-> +{
-> +       return 0;
-> +}
-> +
-> +static const char * const airoha_cpufreq_pd_names[] = { "perf" };
-> +
-> +static int airoha_cpufreq_set_performance_state(struct generic_pm_domain *domain,
-> +                                               unsigned int state)
-> +{
-> +       const struct arm_smccc_1_2_regs args = {
-> +               .a0 = AIROHA_SIP_AVS_HANDLE,
-> +               .a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
-> +               .a3 = state,
-> +       };
-> +       struct arm_smccc_1_2_regs res;
-> +
-> +       arm_smccc_1_2_smc(&args, &res);
-> +
-> +       /* SMC signal correct apply by unsetting BIT 0 */
-> +       return res.a0 & BIT(0) ? -EINVAL : 0;
-> +}
-> +
-> +static int airoha_cpufreq_probe(struct platform_device *pdev)
-> +{
-> +       const struct dev_pm_domain_attach_data attach_data = {
-> +               .pd_names = airoha_cpufreq_pd_names,
-> +               .num_pd_names = ARRAY_SIZE(airoha_cpufreq_pd_names),
-> +               .pd_flags = PD_FLAG_DEV_LINK_ON | PD_FLAG_REQUIRED_OPP,
-> +       };
-> +       struct dev_pm_opp_config config = {
-> +               .clk_names = airoha_cpufreq_clk_names,
-> +               .config_clks = airoha_cpufreq_config_clks_nop,
-> +       };
-> +       struct platform_device *cpufreq_dt;
-> +       struct airoha_cpufreq_priv *priv;
-> +       struct device *dev = &pdev->dev;
-> +       const struct clk_init_data init = {
-> +               .name = "cpu",
-> +               .ops = &airoha_cpufreq_clk_ops,
-> +               /* Clock with no set_rate, can't cache */
-> +               .flags = CLK_GET_RATE_NOCACHE,
-> +       };
-> +       struct generic_pm_domain *pd;
-> +       struct device *cpu_dev;
-> +       int ret;
-> +
-> +       /* CPUs refer to the same OPP table */
-> +       cpu_dev = get_cpu_device(0);
-> +       if (!cpu_dev)
-> +               return -ENODEV;
-> +
-> +       priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
-> +               return -ENOMEM;
-> +
-> +       /* Init and register a get-only clk for Cpufreq */
-> +       priv->hw.init = &init;
-> +       ret = devm_clk_hw_register(dev, &priv->hw);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-> +                                         &priv->hw);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Init and register a PD for Cpufreq */
-> +       pd = &priv->pd;
-> +       pd->name = "cpu_pd";
-> +       pd->flags = GENPD_FLAG_ALWAYS_ON;
-> +       pd->set_performance_state = airoha_cpufreq_set_performance_state;
-> +
-> +       ret = pm_genpd_init(pd, NULL, false);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = of_genpd_add_provider_simple(dev->of_node, pd);
-> +       if (ret)
-> +               goto err_add_provider;
-> +
+>  	/*
+>  	 * Since cpufreq_update_util() is called with rq->lock held for
+>  	 * the @target_cpu, our per-CPU data is fully serialized.
+> @@ -87,17 +92,37 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+>  		return true;
+>  	}
+>  
+> -	delta_ns = time - sg_policy->last_freq_update_time;
+> +	/*
+> +	 * When frequency-invariant utilization tracking is present, there's no
+> +	 * rate limit when increasing frequency. Therefore, the next frequency
+> +	 * must be determined before a decision can be made to rate limit the
+> +	 * frequency change, hence the rate limit check is bypassed here.
+> +	 */
+> +	if (arch_scale_freq_invariant())
+> +		return true;
+>  
+> -	return delta_ns >= sg_policy->freq_update_delay_ns;
+> +	return !sugov_should_rate_limit(sg_policy, time);
+>  }
+>  
+>  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+>  				   unsigned int next_freq)
+>  {
+> +	/*
+> +	 * When a frequency update isn't mandatory (!need_freq_update), the rate
+> +	 * limit is checked again upon frequency reduction because systems with
+> +	 * frequency-invariant utilization bypass the rate limit check entirely
+> +	 * in sugov_should_update_freq(). This is done so that the rate limit
+> +	 * can be applied only for frequency reduction when frequency-invariant
+> +	 * utilization is present. Now that the next frequency is known, the
+> +	 * rate limit can be selectively applied to frequency reduction on such
+> +	 * systems. A check for arch_scale_freq_invariant() is omitted here
+> +	 * because unconditionally rechecking the rate limit is cheaper.
+> +	 */
+>  	if (sg_policy->need_freq_update)
+>  		sg_policy->need_freq_update = false;
+> -	else if (sg_policy->next_freq == next_freq)
+> +	else if (next_freq == sg_policy->next_freq ||
+> +		 (next_freq < sg_policy->next_freq &&
+> +		  sugov_should_rate_limit(sg_policy, time)))
+>  		return false;
+>  
+>  	sg_policy->next_freq = next_freq;
 
-To me, the above code belongs in a power-domain provider driver. While
-the below should be taken care of in cpufreq-dt, except for the device
-registration of the cpufreq-dt device, I guess.
+Code seems to match your description FWIW.
+Maybe the comments could be trimmed somewhat.
 
-Viresh, what's your view on this?
-
-> +       /* Set OPP table conf with NOP config_clks */
-> +       priv->opp_token = dev_pm_opp_set_config(cpu_dev, &config);
-> +       if (priv->opp_token < 0) {
-> +               ret = priv->opp_token;
-> +               dev_err(dev, "Failed to set OPP config\n");
-> +               goto err_set_config;
-> +       }
-> +
-> +       /* Attach PM for OPP */
-> +       ret = dev_pm_domain_attach_list(cpu_dev, &attach_data,
-> +                                       &priv->pd_list);
-> +       if (ret)
-> +               goto err_attach_pm;
-> +
-> +       cpufreq_dt = platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
-> +       ret = PTR_ERR_OR_ZERO(cpufreq_dt);
-> +       if (ret) {
-> +               dev_err(dev, "failed to create cpufreq-dt device: %d\n", ret);
-> +               goto err_register_cpufreq;
-> +       }
-> +
-> +       priv->cpufreq_dt = cpufreq_dt;
-> +       platform_set_drvdata(pdev, priv);
-> +
-> +       return 0;
-> +
-> +err_register_cpufreq:
-> +       dev_pm_domain_detach_list(priv->pd_list);
-> +err_attach_pm:
-> +       dev_pm_opp_clear_config(priv->opp_token);
-> +err_set_config:
-> +       of_genpd_del_provider(dev->of_node);
-> +err_add_provider:
-> +       pm_genpd_remove(pd);
-> +
-> +       return ret;
-> +}
-> +
-> +static void airoha_cpufreq_remove(struct platform_device *pdev)
-> +{
-> +       struct airoha_cpufreq_priv *priv = platform_get_drvdata(pdev);
-> +
-> +       platform_device_unregister(priv->cpufreq_dt);
-> +
-> +       dev_pm_domain_detach_list(priv->pd_list);
-> +
-> +       dev_pm_opp_clear_config(priv->opp_token);
-> +
-> +       of_genpd_del_provider(pdev->dev.of_node);
-> +       pm_genpd_remove(&priv->pd);
-> +}
-> +
-> +static const struct of_device_id airoha_cpufreq_of_match[] = {
-> +       { .compatible = "airoha,en7581-cpufreq" },
-> +       { },
-> +};
-> +MODULE_DEVICE_TABLE(of, airoha_cpufreq_of_match);
-> +
-> +static struct platform_driver airoha_cpufreq_driver = {
-> +       .probe = airoha_cpufreq_probe,
-> +       .remove = airoha_cpufreq_remove,
-> +       .driver = {
-> +               .name = "airoha-cpufreq",
-> +               .of_match_table = airoha_cpufreq_of_match,
-> +       },
-> +};
-> +module_platform_driver(airoha_cpufreq_driver);
-> +
-> +MODULE_AUTHOR("Christian Marangi <ansuelsmth@gmail.com>");
-> +MODULE_DESCRIPTION("CPUfreq driver for Airoha SoCs");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 9c198bd4f7e9..2aa00769cf09 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -103,6 +103,8 @@ static const struct of_device_id allowlist[] __initconst = {
->   * platforms using "operating-points-v2" property.
->   */
->  static const struct of_device_id blocklist[] __initconst = {
-> +       { .compatible = "airoha,en7581", },
-> +
->         { .compatible = "allwinner,sun50i-a100" },
->         { .compatible = "allwinner,sun50i-h6", },
->         { .compatible = "allwinner,sun50i-h616", },
-> --
-> 2.45.2
->
->
-
-Kind regards
-Uffe
+Regards,
+Christian
 
