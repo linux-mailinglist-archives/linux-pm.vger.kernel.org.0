@@ -1,82 +1,110 @@
-Return-Path: <linux-pm+bounces-19123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 868529EE658
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:09:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0D39EE68C
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:22:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60570160E4D
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 12:09:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 242E018872DC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 12:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CEC211A1E;
-	Thu, 12 Dec 2024 12:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B94212D8D;
+	Thu, 12 Dec 2024 12:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="X08qOiSZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DD7259495;
-	Thu, 12 Dec 2024 12:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6838D158DB1;
+	Thu, 12 Dec 2024 12:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734005384; cv=none; b=eIOYeW6bE/ky/EDdYtwVJ6hB1TePifMG3Ig4gxjgppWQhxKA0tRJtnjQMiw9fJUUhCnN/MWfCj4AnKTTI+08YqR3DGltcnNKkjR2cg+VLe+U1SV7bL5dOTbUOhT3l+pQqkIN6ECRS3dbsAjSZI/1sXn6L8As09+pLf+aBOX3ue4=
+	t=1734006115; cv=none; b=c7cC9oVcNUgAZWPBYmLC1VyvQ5NBU2dfH8t8GNXAqMp1cCbaM9RRCVBBb1YJEZ9uITOoKce9w6xqD3Dp5jVTIaSwl8CyskTdyunQ2IoiiqgRcUYW8/z+dzjqRciVQIp2lhH54qS311PAEyn1xrFGkgw4+VmmXv+uy5rMrQTjphM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734005384; c=relaxed/simple;
-	bh=XF4noY+86Jp0DsYD/q3KZwDyyRyJQ4sWwBl4yWo4NwA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b6Mm8jLh0Hz3qYiccbcnwvEKpt6xi6i5s04qpvf0InaN8MGSooojjTyfI6j7M4LxpOihquNWebx1mWgkHzWJDgZlOewhW97kHMR1UQntmo5iO4e3HnXkshMuVYanQabT6o11UQtDbIJxEtaw921u5ziYA0pGFC4DBfVkOfbU7XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9EEA9153B;
-	Thu, 12 Dec 2024 04:10:08 -0800 (PST)
-Received: from [10.1.37.59] (e127648.arm.com [10.1.37.59])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A01EC3F720;
-	Thu, 12 Dec 2024 04:09:38 -0800 (PST)
-Message-ID: <097bee29-64b5-444d-a3ae-81c2dcc35ae7@arm.com>
-Date: Thu, 12 Dec 2024 12:09:36 +0000
+	s=arc-20240116; t=1734006115; c=relaxed/simple;
+	bh=kWUPjvQaoxNBzOTT4VbNlf0Zq+E3gREB48uYjM0Jcyc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ldIfz69cO77JHRedD/JRv8KjRnVJKgWRrmYlKeNXun4uM30utbaGLac24grabrt9yQ6WNVB/ayhw20xyEUfabKnWZvw2TJ/gbZnXRtEJHlm+wz8uVbYJ9DsQFrVpr6dT2Hmmx/vdZS7586R/JPWP6IBoiMd4HKu6ZuaHYVoIexw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=X08qOiSZ; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 9bd38cac647772b5; Thu, 12 Dec 2024 13:21:51 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id BBC377F5D85;
+	Thu, 12 Dec 2024 13:21:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1734006111;
+	bh=kWUPjvQaoxNBzOTT4VbNlf0Zq+E3gREB48uYjM0Jcyc=;
+	h=From:Subject:Date;
+	b=X08qOiSZDhFsu40YznaIwmRogZC0ucTkN/P6t6t7Oni4/pxdDDc6cvKFulHy/qPED
+	 6FNFLl2A9hywmOBg5RyN4qSSA1maGKhSCdB/LoiYVaEhNW2tXx2EfupwCFJypliYe6
+	 3ypuD9fMQ5dr97faASrG95dzZEj1e6foEMTRoGRGlB7AXIJUcJrg2g4SunoR2ggsda
+	 PEjHm+c7/mkD3JwjjAqCV3+liaoQ7R60dgG0iDwK0T0APd3+UtdS8dmEr6Cvg5rNF1
+	 DbTwbUnSw7iiF5Ju8ayK6U2peHwGvRebBjwUq6HG4QDSZqyluTFTtKCVkJdgW4dL5Z
+	 UROxHiBKNw6cw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Christoph Hellwig <hch@lst.de>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org, axboe@kernel.dk,
+ sagi@grimberg.me, linux-nvme@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+ andersson@kernel.org, konradybcio@kernel.org,
+ Ulf Hansson <ulf.hansson@linaro.org>, Len Brown <len.brown@intel.com>,
+ linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
+Subject:
+ Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by the user
+Date: Thu, 12 Dec 2024 13:21:50 +0100
+Message-ID: <13662231.uLZWGnKmhe@rjwysocki.net>
+In-Reply-To: <20241212055920.GB4825@lst.de>
+References:
+ <20241205232900.GA3072557@bhelgaas>
+ <20241209143821.m4dahsaqeydluyf3@thinkpad> <20241212055920.GB4825@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] PM: EM: Move sched domains rebuild function from
- schedutil to EM
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Pierre Gondois <pierre.gondois@arm.com>
-References: <4977135.31r3eYUQgx@rjwysocki.net>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <4977135.31r3eYUQgx@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrkeehgdefkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeduhedprhgtphhtthhopehmrghnihhvrghnnhgrnhdrshgrughhrghsihhvrghmsehlihhnrghrohdrohhrghdprhgtphhtthhopehhtghhsehlshhtrdguvgdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehksghushgthheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprgigsghovgeskhgvrhhnvghlrdgukhdprhgtphhtthhopehsrghgihesghhrihhmsggvrhhgrdhmvgdprhgtphh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=15 Fuz1=15 Fuz2=15
 
-On 12/12/24 12:01, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thursday, December 12, 2024 6:59:20 AM CET Christoph Hellwig wrote:
+> On Mon, Dec 09, 2024 at 08:08:21PM +0530, Manivannan Sadhasivam wrote:
+> > > 
+> > > The istory here is the the NVMe internal power states are significantly
+> > > better for the SSDs.  It avoid shutting down the SSD frequently, which
+> > > creates a lot of extra erase cycles and reduces life time.  It also
+> > > prevents the SSD from performing maintainance operations while the host
+> > > system is idle, which is the perfect time for them.  But the idea of
+> > > putting all periphals into D3 is gaining a lot of ground because it
+> > > makes the platform vendors life a lot simpler at the cost of others.
+> > 
+> > No, I disagree with the last comment. When the system goes to low power mode
+> > (like S2R/hibernate), it *does* makes a lot of sense to put the devices into
+> > D3Cold to save power.
 > 
-> Function sugov_eas_rebuild_sd() defined in the schedutil cpufreq governor
-> implements generic functionality that may be useful in other places.  In
-> particular, there is a plan to use it in the intel_pstate driver in the
-> future.
-> 
-> For this reason, move it from schedutil to the energy model code and
-> rename it to em_rebuild_sched_domains().
-> 
-> This also helps to get rid of some #ifdeffery in schedutil which is a
-> plus.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Yes.  That's what the pm_suspend_via_firmware call in nvme_suspend is
+> supposed to catch.
 
-As already mentioned during the RFC, fine with me FWIW.
-Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+pm_suspend_via_firmware() is to distinguish different flavors of system
+suspend.
+
+For runtime-suspend, there are different callbacks, but it doesn't look
+like they are used by NVMe.  At least nvme_dev_pm_ops doesn't set them.
+
+
+
 
