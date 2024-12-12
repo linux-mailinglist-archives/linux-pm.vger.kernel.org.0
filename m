@@ -1,244 +1,220 @@
-Return-Path: <linux-pm+bounces-19134-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19136-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27FBD9EE887
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 15:12:57 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2B00166E5E
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 14:12:49 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE09215178;
-	Thu, 12 Dec 2024 14:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="G4EoXK4z"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CDBF9EE8C2
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 15:28:12 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D782147FE;
-	Thu, 12 Dec 2024 14:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CACE282729
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 14:28:10 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B41215048;
+	Thu, 12 Dec 2024 14:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="UTCMwipG"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0942147E3;
+	Thu, 12 Dec 2024 14:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734012769; cv=none; b=mQzFCplhzjirDS4OWA7b7AVrNOb8fhiNt7f0vWZ5Z7JJR+O+lIwK8tJ61/7QrXccKuAGndBSaElFBVz6Ip2W00PCJ++nrIIYPvcYid7Fyp/uWaDV/eioscI6sHgsGedDY/gK/675sCpEr7tp6oOuT0Ew4R9P28fDbCZoJdkd/eA=
+	t=1734013685; cv=none; b=NZFme7H8Tb+eiIHo5ndACuxOhI71DOWvMBnf2uvv2nt1kPFIwwt570D292cP/HskBjhDGd11F0s1Um8HJsWMjyvCrfr1FtiP8yt8yTew9SKDqbOryuQgI96jJB6eHsSPFJwSFLXnFkKzpkuiVZkAUP1TD7/lDWMmLXORFAfkb/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734012769; c=relaxed/simple;
-	bh=oZvwUxmIt9Jb89+cOwAu5t9V0/+kjzARYOr+wFyil0E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ITjUngZoF8Vw551Pwk81g/mqWCcgZFNQfiN9MR+enuPn71k3+SeOTmvPa7HiPJEoyiyDrgpJif7N+CMZNnr5woJKdxa0+SgKU1w43Z6E5JBpaxp5pZGhy0kCNAfK7Zoy/5NfWtw/fu5a7rqAVnrvnC2FTWzzhqcPcQNtdqztt7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=G4EoXK4z; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC60jos000945;
-	Thu, 12 Dec 2024 14:12:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=+pWSyD
-	a1SC+4rapagG9/qybDkMk3cUimnwFclPP/tiE=; b=G4EoXK4zm9hm6Ax9uq9VkR
-	znNgZEuh8HpdZJWqtBZdQUhkfY1MiYj/OZyvfZnHReXmC40a+1igS+t6x+o+2dYp
-	jYJOIzgcriW3Ho0mtVKHIhN2c98xtc3893vImv5Tbdwo41aCuwt16naTNJMzLdUP
-	bl1ihv5+saya2CSH8hIG0/Dy79XfU2mqkyWUFfokQqKq7VA7kdkxqiAgzLIU1l5W
-	nLKoTHW9/D++ODr5q+jI57sqWY2M/036U7ZsFGNYx2K/Yq1lIpPqj8bm2gbWsvrz
-	Xgd1fpG+MkNHN/RAo9+yYuTqBPhPHcWfl8RWBiDxEL8GBf0uak+6r1eTnFAWK4Dg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ft6d2fsk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 14:12:24 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BCECNQc002412;
-	Thu, 12 Dec 2024 14:12:23 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ft6d2fsf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 14:12:23 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BCBmULt017364;
-	Thu, 12 Dec 2024 14:12:22 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 43d3d20fqa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 14:12:22 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BCECLNm51511924
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Dec 2024 14:12:22 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D5B2558053;
-	Thu, 12 Dec 2024 14:12:21 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3C07B58043;
-	Thu, 12 Dec 2024 14:12:18 +0000 (GMT)
-Received: from [9.152.212.155] (unknown [9.152.212.155])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 12 Dec 2024 14:12:18 +0000 (GMT)
-Message-ID: <f13b7b0c668c7e3df2842ee1e66ca4645421b055.camel@linux.ibm.com>
-Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
- 2.5 GT/s
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Niklas Schnelle	 <niks@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, Krzysztof
- Wilczy??ski	 <kw@linux.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Jonathan Cameron	 <Jonathan.Cameron@huawei.com>,
-        Alexandru Gagniuc
- <mr.nuke.me@gmail.com>,
-        Krishna chaitanya chundru	
- <quic_krichai@quicinc.com>,
-        Srinivas Pandruvada	
- <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J . Wysocki"
- <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Smita Koralahalli	
- <Smita.KoralahalliChannabasappa@amd.com>,
-        LKML
- <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano
- <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, Zhang Rui
- <rui.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mika Westerberg	
- <mika.westerberg@linux.intel.com>
-Date: Thu, 12 Dec 2024 15:12:17 +0100
-In-Reply-To: <Z1rX1BgdsPHIHOv4@wunner.de>
-References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
-	 <Z1gSZCdv3fwnRRNk@wunner.de>
-	 <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org>
-	 <Z1lF468L8c84QJkD@wunner.de>
-	 <dc6e677f-4c19-dd25-8878-8eae9154cff4@linux.intel.com>
-	 <Z1qoDmF6urJDN5jh@wunner.de>
-	 <97bbbdecb8c65cfa2625b47aa2585a7417ddcb81.camel@linux.ibm.com>
-	 <Z1rX1BgdsPHIHOv4@wunner.de>
-Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 (3.54.2-1.fc41) 
+	s=arc-20240116; t=1734013685; c=relaxed/simple;
+	bh=zhbWlbfmCT2R0OnXcZwGTaUYbhyJtBWfLrYAfXhKGAQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XiA63rB1UvJ18QB6PLzownT+kVgJik48k9mJWjO35Q3WQYjCCcV7NQ/S31xjykXIpbuEr3bR9Cl1MfnDg+yZi8OaHWIHUDdOMa4lx4EMWCndGaesICHLxnqYoYOsvvKz4JVu0o+oiidbO8rJM3HrI3Mtipr+fbojSXYfqq0r1q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=UTCMwipG; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1734013673; x=1734618473; i=w_armin@gmx.de;
+	bh=gBO0h3mLD00rm/CE/bkTi0A3SpHw5vASQnim86ZPijs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UTCMwipGh9hwCseroJ5piu4qvZgnYkINmW9nsBZ3QHSB9MCM2GDN2cjjbNtWQtDd
+	 QMWrUxzLn56HrwOQR24h+vhQkz+68pRaKzVDTcsWaB4jCWrCGyL3oHpWKk2ANndxt
+	 eLhw5xyzsDIfgNZHjqLzBZsRsu0Zo+Nuc6GUN3IaDcjiOJ13dCXGfbE5tCVabd9xU
+	 cWRajQj6EMKv4P3bTXJqICandg9UW9sLqQ27sAgu5bbkEfvOVPC0F9/mNqqw1UJbG
+	 E3seexqY/h/TlP4YL5dDUmJlPdv6pa7IpAXdMXraUWJN6zu5VEOiIDz0hSfIbZ46V
+	 ePr29r6oZ0QON3yPPA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.16.42.132] ([141.76.178.168]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M89L1-1tH3D032wN-00GllY; Thu, 12
+ Dec 2024 15:27:53 +0100
+Message-ID: <2e2f4845-7500-40ec-985d-3a495842e020@gmx.de>
+Date: Thu, 12 Dec 2024 15:27:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FwrEK2dmnrQAaJ_bi0sXIZPtagrsOtA-
-X-Proofpoint-ORIG-GUID: O3Py7kVZg1nVcHAyfIRyRWSrCY4v9tED
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- priorityscore=1501 malwarescore=0 phishscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 mlxlogscore=916 mlxscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412120097
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/4] power: supply: extension API
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
+ Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>
+Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+ linux-pm@vger.kernel.org
+References: <20241211-power-supply-extensions-v6-0-9d9dc3f3d387@weissschuh.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20241211-power-supply-extensions-v6-0-9d9dc3f3d387@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:K4Q5wxQsGKPsci0M0ApYakQMV8M0E6bpoyZdHGjpQ3Z7+7AhLMR
+ lRSliIne7RKZuAB8fO0tzzlQuQ5dGwxPTxJYor1myGKDgpEgCdwkbGzKxCuP84yYktzxUVm
+ 5H6XsPqJPD/U+h/OGsqxhJolz+AgSY2I3ZVhkYwzSamin8rt4AjvrP1G/D2dISV9Lv/BUe5
+ gkpZ3TFohGshh5xxH9pfw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4pLWmrWe7W0=;mzg2ZehVALyF+rvW/20+kkVWeio
+ 45oRq0QYMTgtCWcTlehvCTOPpz4dQZKkJmYMWt2YzlJzPdzlR8dvFK6T2bdT+zuXA+EfSfAup
+ 0JxJlU6FWNBpHNFV2MY/aP+r8PamDpk0+tkP6MJADyNxmqTWrQFxyU3xPzqShXWzIexqgkyFn
+ iiybogy0cZt2V3mqxQ1R+O2uIKphvx2FHzmHvq4sS+2lZB0e0CDKF23HmR0l3XbN+/l3a+nlZ
+ i9K3Bi6VpeuUP5RBxQ0BcKgvoiOdkfgjxd9cspffqsaEK1WdB0xwEEJFnCaaXBnzQADqWEpVY
+ HRIxE5xPtPGmTu5MhCczLFwxNrZw98quqhNDz+7b9GrWWYeRsy+2rMJEdpPblDqWNmJRtifGZ
+ lCt/f9Rm3ye4sgH4HMd86LCMvceCxeic22jSc/i5nTS91tiz7MMSb3k9QY4aUwB8HuoS2wOxM
+ KRXDX0vA5U8QS+X0Igeq4sAuXFbtxm+qL0EXqCYfC0EXgjRUvwGTj0ybH7Lt+kZP3ng141SEq
+ mpkigP/x/2XYGjlBd1nkMJlKisx7LAqeum9CUGoI36cSk+Zx6WSCr1vGozhrCtwxwc5UItEMe
+ KRvoiVtVkPd9Bs8yyekegWDlA04aTpbDh5SaRB/yThiu6jNdYIq0BfrUFGFQuwvCuuPtAmUUa
+ y9MsTeqCgv2IPEEp+/tI0O7jcsG8rQazvU/VmzKBNqf1+BnjPfLLCNvrSQA8gh+EcfCpMqHAM
+ TAIHI1fFT60hRw663fGCr7oWrWujE4tg6ikIhG+PkuMx6i7K1lYBpfiKTxUgWGjU0Xedb7d5v
+ FnvGnd83E4TEsJqTACy/UiWurvt74/4yMQeFiTNHoGijTzl/njKyRZk8kzf7Zu78p4noMhqVR
+ 4SPSUHQ6RTk6tXklqKUed0RNJan2Tn/OsOQ6ytKicJ/De9TuDuB5PhPJu+G58hNvuG6AaDxYm
+ Zx7V8ibeBVR+sXKV4eHrolL9HGU0bCsDndRw7BufTz5CR/LFiGc8VKsckWYtSeCE/eIMZWU7e
+ Z76olwJeA9AQNIHlvvO3XOQFQr8iPdSb9K9SSZxZ4YT6VSDlUQ80Rn+W/5tCBrxmM0J/5h5QV
+ KqVOQ+9R8sf61k9r375JT6RMn5upls
 
-On Thu, 2024-12-12 at 13:32 +0100, Lukas Wunner wrote:
-> On Thu, Dec 12, 2024 at 10:17:21AM +0100, Niklas Schnelle wrote:
-> > On Thu, 2024-12-12 at 10:08 +0100, Lukas Wunner wrote:
-> > > After re-reading the spec I'm convinced now
-> > > that we're doing this wrong and that we should honor the Max Link Spe=
-ed
-> > > instead of blindly deeming all set bits in the Link Capabilities 2
-> > > Register as supported speeds:
-> > >=20
-> > > https://lore.kernel.org/r/e3386d62a766be6d0ef7138a001dabfe563cdff8.17=
-33991971.git.lukas@wunner.de/
-> > >=20
-> > > @Niklas, could you test if this is sufficient to avoid the issue?
-> > > Or do we still need to stop instantiating the bandwidth controller
-> > > if more than one speed is supported?
-> >=20
-> > Yes, I will test this but will only get to do so tonight (UTC +2).
->=20
-> Hey, no worries.  We're not on the run!
->=20
-> > If it's not sufficient I think we could use the modified
-> > pcie_get_supported_speeds() to check if only one link speed is
-> > supported, right?
->=20
-> pcie_get_supported_speeds() is used to fill in the supported_speeds
-> field in struct pci_dev.
->=20
-> And that field is used in a number of places (exposure of the max link
-> speed in sysfs, delay handling in pci_bridge_wait_for_secondary_bus(),
-> link tuning in radeon/amdgpu drivers, etc).
->=20
-> So we can't use pcie_get_supported_speeds() to (exclusively) influence
-> the behavior of the bandwidth controller.  Instead, the solution is your
-> patch for get_port_device_capability(), but future-proofed such that
-> bwctrl is only instantiated if more than one link speed is supported.
->=20
-> Thanks!
->=20
-> Lukas
+Am 11.12.24 um 20:57 schrieb Thomas Wei=C3=9Fschuh:
 
-Yeah right, I was imprecise, should have said that we can use the use
-the updated pcie_get_supported_speeds() via the now correct dev-
->supported_speeds. But first let's see if it alone already fixes
-things.
+> Introduce a mechanism for drivers to extend the properties implemented
+> by a power supply.
+>
+> Motivation
+> ----------
+>
+> Various drivers, mostly in platform/x86 extend the ACPI battery driver
+> with additional sysfs attributes to implement more UAPIs than are
+> exposed through ACPI by using various side-channels, like WMI,
+> nonstandard ACPI or EC communication.
+>
+> While the created sysfs attributes look similar to the attributes
+> provided by the powersupply core, there are various deficiencies:
+>
+> * They don't show up in uevent payload.
+> * They can't be queried with the standard in-kernel APIs.
+> * They don't work with triggers.
+> * The extending driver has to reimplement all of the parsing,
+>    formatting and sysfs display logic.
+> * Writing a extension driver is completely different from writing a
+>    normal power supply driver.
+> * ~Properties can not be properly overriden.~
+>    (Overriding is now explicitly forbidden)
+>
+> The proposed extension API avoids all of these issues.
+> An extension is just a "struct power_supply_ext" with the same kind of
+> callbacks as in a normal "struct power_supply_desc".
+>
+> The API is meant to be used via battery_hook_register(), the same way as
+> the current extensions.
+> Further usecases are fuel gauges and the existing battery_info
+> properties.
+>
+> When testing, please enable lockdep to make sure the locking is correct.
+>
+> The series is based on the linux-power-supply/for-next branch.
+> It also depends on some recent fixes not yet available in the for-next
+> branch [0].
+>
+> [0] https://lore.kernel.org/lkml/20240528-cros_ec-charge-control-v2-0-81=
+fb27e1cff4@weissschuh.net/
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
+> Changes in v6:
+> - Drop alreay picked up ACPI battery hook rename patch
+> - Only return bool from power_supply_property_is_writeable()
+> - Improve naming for test_power symbols
+> - Integrate cros_charge-control fixes from the psy/fixes branch
+> - Add sysfs UAPI for extension discovery
+> - Use __must_check on API
+> - Make power_supply_for_each_extension() safer.
+>    (And uglier, ideas welcome)
 
-Thanks,
-Niklas
+Maybe we can use a do { ... } while (0) construct here.
 
+> - Link to v5: https://lore.kernel.org/r/20241205-power-supply-extensions=
+-v5-0-f0f996db4347@weissschuh.net
+>
+> Changes in v5:
+> - Drop already picked up patches
+> - Simplify power_supply_ext_has_property()
+> - Handle failure of power_supply_update_sysfs_and_hwmon()
+> - Reduce some locking scopes
+> - Add missing locking to power_supply_show_charge_behaviour()
+> - Improve sanity checks in power_supply_register_extension()
+> - Implement writeable property in test_power battery
+> - Rename ACPI battery hook messages for clarity
+> - Link to v4: https://lore.kernel.org/r/20241111-power-supply-extensions=
+-v4-0-7240144daa8e@weissschuh.net
+>
+> Changes in v4:
+> - Drop RFC state
+> - Integrate locking commit
+> - Reregister hwmon device
+> - Link to v3: https://lore.kernel.org/r/20240904-power-supply-extensions=
+-v3-0-62efeb93f8ec@weissschuh.net
+>
+> Changes in v3:
+> - Make naming more consistent
+> - Readd locking
+> - Allow multiple active extensions
+> - Allow passing a "void *ext_data" when registering
+> - Switch example driver from system76 to cros_charge-control
+> - Link to v2: https://lore.kernel.org/r/20240608-power-supply-extensions=
+-v2-0-2dcd35b012ad@weissschuh.net
+>
+> Changes in v2:
+> - Drop locking patch, let's figure out the API first
+> - Allow registration of multiple extensions
+> - Pass extension to extension callbacks as parameter
+> - Disallow property overlap between extensions and core psy
+> - Drop system76/pdx86 maintainers, as the system76 changes are only RFC
+>    state anyways
+> - Link to v1: https://lore.kernel.org/r/20240606-power-supply-extensions=
+-v1-0-b45669290bdc@weissschuh.net
+>
+> ---
+> Thomas Wei=C3=9Fschuh (4):
+>        power: supply: core: implement extension API
+>        power: supply: test-power: implement a power supply extension
+>        power: supply: cros_charge-control: implement a power supply exte=
+nsion
+>        power: supply: core: add UAPI to discover currently used extensio=
+ns
+>
+>   Documentation/ABI/testing/sysfs-class-power |   9 ++
+>   drivers/power/supply/cros_charge-control.c  | 200 ++++++++++++--------=
+--------
+>   drivers/power/supply/power_supply.h         |  19 +++
+>   drivers/power/supply/power_supply_core.c    | 177 ++++++++++++++++++++=
+++--
+>   drivers/power/supply/power_supply_sysfs.c   |  36 ++++-
+>   drivers/power/supply/test_power.c           | 113 ++++++++++++++++
+>   include/linux/power_supply.h                |  35 +++++
+>   7 files changed, 467 insertions(+), 122 deletions(-)
+> ---
+> base-commit: 810dde9dad8222f3b831cf5179927fc66fc6a006
+> change-id: 20240602-power-supply-extensions-07d949f509d9
+>
+> Best regards,
 
