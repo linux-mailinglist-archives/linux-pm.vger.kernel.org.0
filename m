@@ -1,175 +1,117 @@
-Return-Path: <linux-pm+bounces-19127-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19128-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8433A9EE6B2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:27:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF7779EE6C2
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 13:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0AB41885700
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 12:27:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F40E165817
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2024 12:32:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585A22063E6;
-	Thu, 12 Dec 2024 12:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IhoYhCIm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCE292135AC;
+	Thu, 12 Dec 2024 12:32:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E9C2135A9;
-	Thu, 12 Dec 2024 12:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFA11F0E55;
+	Thu, 12 Dec 2024 12:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734006447; cv=none; b=S0tcBUQwHs2rOBrFzfnEq/p8GBPKGk/koodgRoQyBUJZKtQvaFbiR3HpIMmMcUexBfFlJ0Xc0n3Mqt2BxEcCz3pblPhCxbzDPuWV+nFNOXNz9nnbDQadrILzZ4pPWhu4cX65xNGgUvYjyP2akvRtlx7plyp1jc3dAhS90Kt1EP4=
+	t=1734006746; cv=none; b=M/7nwW2CN9bNhFnp7dDhqtVN2kBCklzsLAByL50Y4W2UPnVoAJw1Zf68Kbez6+Gi2ciiGQRhPFmMYYW8Aa7h1m+IDzo8cOyP4c1kuELXbaoa3Cg4+WP2odQvAntIa199SZ+nH44861PqYARdxIvltfopwdzdMu1FEyGTED37dvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734006447; c=relaxed/simple;
-	bh=tjTVi1Lkd/yduavLI55pAe7unxITEcfJKFMcvf65e6I=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jtyepjxvNVVOxw6QLSU9LTJy6zlx5PBihfJ4uK/jw3Uv1ja0TJIM7A4w/iIo0sc5PCY08PIgmSNuOgFcpiw/2MFbBl9wZ8HlY2j311M1ynOq10y1H9XgM6QXmYbft6roOGQYcmgHQLZ3Dxt/5WbvWOiTmLtImo6WR2tvAj5JOP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IhoYhCIm; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734006445; x=1765542445;
-  h=date:from:to:cc:subject:message-id;
-  bh=tjTVi1Lkd/yduavLI55pAe7unxITEcfJKFMcvf65e6I=;
-  b=IhoYhCImK1/P+ERvq7OQADueEN/Xt8PkVcuG+yWZc7zqVu1OK+diSxzs
-   vgRjL3du+gpThztDbQvM7voKUPkn8nMQiHuxXUCWD/sXMHpT9Lds6eEx7
-   ALP2JBVQ8CNEa2hJeKAm8UaY0lUzaFWAdHx7SOwTcH91AxDnGO/z9PQE9
-   9g1hGazdAjzJtqmP5vgFMdVS3I50Heo2cXSy0b11+CYpJm3N7+nz3/TSy
-   9xtuyH0x21Vy2AWJfQjmdYcwux5J6ziUh6asjhWYt/b+FGE5zgsBib681
-   K/aeHEygtr3drT2WIgZbMfaImqDn11XhqZ9vDpBX8MIFR0LVjmYudw/n4
-   w==;
-X-CSE-ConnectionGUID: f9HtzudYTxiBLhE41kHP+A==
-X-CSE-MsgGUID: vOSI0wScS8qlUoS4WGHpHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="45028344"
-X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
-   d="scan'208";a="45028344"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 04:27:25 -0800
-X-CSE-ConnectionGUID: ZkQ2TYuuTC6fn35RlbA8rQ==
-X-CSE-MsgGUID: NWgVknB3Qye+4JwWhIt4Kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="101311707"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 12 Dec 2024 04:27:23 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tLiHo-0007pV-23;
-	Thu, 12 Dec 2024 12:27:20 +0000
-Date: Thu, 12 Dec 2024 20:27:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- bf041214ff9adfbaac0e54cdc99e4af8f91f5c86
-Message-ID: <202412122004.19rk3Cvj-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1734006746; c=relaxed/simple;
+	bh=ZLwwr0tTdqUWrrcfKUdBCuN7WEO36OZq9JdJjbVxAnc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SXdz+dgbuBcUFLUyTQcMgpeGxLcPHIVIC6MhDLxMViIqcHI/YpvO+zLXAp8qiU5BV6/oEnsYj6zURxQRpuFE8O0Cb1qhDmgwHZv3T73abm1MBKmHd6LdA/HjWkMiUffmw5dzqfsVEE/SAlXhUYR5TkZ7XL4ba/X4kXP4lX2rTM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id D1748300002D5;
+	Thu, 12 Dec 2024 13:32:20 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id BB8BA3A0E76; Thu, 12 Dec 2024 13:32:20 +0100 (CET)
+Date: Thu, 12 Dec 2024 13:32:20 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Niklas Schnelle <niks@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PCI/portdrv: Disable bwctrl service if port is fixed at
+ 2.5 GT/s
+Message-ID: <Z1rX1BgdsPHIHOv4@wunner.de>
+References: <20241207-fix_bwctrl_thunderbolt-v1-1-b711f572a705@kernel.org>
+ <Z1gSZCdv3fwnRRNk@wunner.de>
+ <70829798889c6d779ca0f6cd3260a765780d1369.camel@kernel.org>
+ <Z1lF468L8c84QJkD@wunner.de>
+ <dc6e677f-4c19-dd25-8878-8eae9154cff4@linux.intel.com>
+ <Z1qoDmF6urJDN5jh@wunner.de>
+ <97bbbdecb8c65cfa2625b47aa2585a7417ddcb81.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97bbbdecb8c65cfa2625b47aa2585a7417ddcb81.camel@linux.ibm.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: bf041214ff9adfbaac0e54cdc99e4af8f91f5c86  Merge branch 'pm-runtime' into fixes
+On Thu, Dec 12, 2024 at 10:17:21AM +0100, Niklas Schnelle wrote:
+> On Thu, 2024-12-12 at 10:08 +0100, Lukas Wunner wrote:
+> > After re-reading the spec I'm convinced now
+> > that we're doing this wrong and that we should honor the Max Link Speed
+> > instead of blindly deeming all set bits in the Link Capabilities 2
+> > Register as supported speeds:
+> > 
+> > https://lore.kernel.org/r/e3386d62a766be6d0ef7138a001dabfe563cdff8.1733991971.git.lukas@wunner.de/
+> > 
+> > @Niklas, could you test if this is sufficient to avoid the issue?
+> > Or do we still need to stop instantiating the bandwidth controller
+> > if more than one speed is supported?
+> 
+> Yes, I will test this but will only get to do so tonight (UTC +2).
 
-elapsed time: 1467m
+Hey, no worries.  We're not on the run!
 
-configs tested: 81
-configs skipped: 0
+> If it's not sufficient I think we could use the modified
+> pcie_get_supported_speeds() to check if only one link speed is
+> supported, right?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+pcie_get_supported_speeds() is used to fill in the supported_speeds
+field in struct pci_dev.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                   randconfig-001-20241212    gcc-13.2.0
-arc                   randconfig-002-20241212    gcc-13.2.0
-arm                               allnoconfig    clang-17
-arm                   randconfig-001-20241212    gcc-14.2.0
-arm                   randconfig-002-20241212    clang-20
-arm                   randconfig-003-20241212    clang-19
-arm                   randconfig-004-20241212    clang-20
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20241212    clang-20
-arm64                 randconfig-002-20241212    clang-15
-arm64                 randconfig-003-20241212    clang-20
-arm64                 randconfig-004-20241212    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20241212    gcc-14.2.0
-csky                  randconfig-002-20241212    gcc-14.2.0
-hexagon                           allnoconfig    clang-20
-hexagon               randconfig-001-20241212    clang-14
-hexagon               randconfig-002-20241212    clang-16
-i386        buildonly-randconfig-001-20241212    clang-19
-i386        buildonly-randconfig-002-20241212    clang-19
-i386        buildonly-randconfig-003-20241212    clang-19
-i386        buildonly-randconfig-004-20241212    clang-19
-i386        buildonly-randconfig-005-20241212    clang-19
-i386        buildonly-randconfig-006-20241212    gcc-12
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20241212    gcc-14.2.0
-loongarch             randconfig-002-20241212    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20241212    gcc-14.2.0
-nios2                 randconfig-002-20241212    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20241212    gcc-14.2.0
-parisc                randconfig-002-20241212    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20241212    gcc-14.2.0
-powerpc               randconfig-002-20241212    clang-20
-powerpc               randconfig-003-20241212    clang-15
-powerpc64             randconfig-001-20241212    clang-20
-powerpc64             randconfig-002-20241212    gcc-14.2.0
-powerpc64             randconfig-003-20241212    gcc-14.2.0
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20241212    clang-17
-riscv                 randconfig-002-20241212    clang-20
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20241212    clang-18
-s390                  randconfig-002-20241212    clang-20
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20241212    gcc-14.2.0
-sh                    randconfig-002-20241212    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20241212    gcc-14.2.0
-sparc                 randconfig-002-20241212    gcc-14.2.0
-sparc64               randconfig-001-20241212    gcc-14.2.0
-sparc64               randconfig-002-20241212    gcc-14.2.0
-um                                allnoconfig    clang-18
-um                    randconfig-001-20241212    gcc-12
-um                    randconfig-002-20241212    clang-20
-x86_64      buildonly-randconfig-001-20241212    clang-19
-x86_64      buildonly-randconfig-002-20241212    gcc-12
-x86_64      buildonly-randconfig-003-20241212    clang-19
-x86_64      buildonly-randconfig-004-20241212    clang-19
-x86_64      buildonly-randconfig-005-20241212    gcc-11
-x86_64      buildonly-randconfig-006-20241212    clang-19
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20241212    gcc-14.2.0
-xtensa                randconfig-002-20241212    gcc-14.2.0
+And that field is used in a number of places (exposure of the max link
+speed in sysfs, delay handling in pci_bridge_wait_for_secondary_bus(),
+link tuning in radeon/amdgpu drivers, etc).
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+So we can't use pcie_get_supported_speeds() to (exclusively) influence
+the behavior of the bandwidth controller.  Instead, the solution is your
+patch for get_port_device_capability(), but future-proofed such that
+bwctrl is only instantiated if more than one link speed is supported.
+
+Thanks!
+
+Lukas
 
