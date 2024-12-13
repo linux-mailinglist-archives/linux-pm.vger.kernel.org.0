@@ -1,108 +1,155 @@
-Return-Path: <linux-pm+bounces-19193-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90BAF9F0F4F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 15:35:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 196ED9F1033
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 16:05:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED9A01883CDE
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 14:35:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B34416B37C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 15:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26131E0DD9;
-	Fri, 13 Dec 2024 14:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28351E1C1B;
+	Fri, 13 Dec 2024 15:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8Arj+08"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T5GoCgJg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8654E53BE;
-	Fri, 13 Dec 2024 14:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F1D1DFD9A;
+	Fri, 13 Dec 2024 15:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734100530; cv=none; b=GWk+HqUDKaQ4CIYgxy/rfUb/Lx2qu+xWO1ckYj42u/ohNPhuj9a0w5WqirSLE2MGy4c/yDiBR0CrmTy5AW2Mc9tj24w02iTJ6aVYrQyswc9Im7X4o3DtwHCEfTo/UFXb3C5d5pzGyD8wESwPBlU5+sxLgcQJWyYw8a7NXglAt2U=
+	t=1734102167; cv=none; b=hK/2lFbeHY2PnI1MgZJ+9MdTwffpEc9JDoXryi6lqCqq5JF27VebPrLlz1xcxW7dtPpXWfPPue88yWbaB566Ee8yrBxM+2UKzixOYZC+O1+djgwKSiAt0JjPwwG2sV1ijF09Hb+FhdhjZQ1j9jg3llaFi1tV0dNTvC5Gsqyfxyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734100530; c=relaxed/simple;
-	bh=rNJFAtYA5eksohwxJIjGyRtuHzibdqKAMtZF33hOZnE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R36zrMNL3d0sg/YGRZV5q+IaOSYgq2f0KP4okbGk1Ukh9Cj6m51biJavhp9h3ggjBLMODZAwKMkvCU6i3x/Tm3praGB4HFsqCYpeOe63aMCFs0BLq+hWv45MjORY6gZjLpiZBESEZQPZdtttRRvMziNO0ag3M5o/FVvsEpmMN0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8Arj+08; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09088C4CEDF;
-	Fri, 13 Dec 2024 14:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734100530;
-	bh=rNJFAtYA5eksohwxJIjGyRtuHzibdqKAMtZF33hOZnE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=N8Arj+080Q8Bvt4gcIRleZGalv0b18WNi6SIWaofAWCs9cgsmHcbUbn3UlcUzQGBj
-	 18bHWSs/NC0i1jAOZCLRKflqQzoWJrZKjGlE+waELgKUVDTtTRsF5iOEQa/oQtFZKA
-	 8d7XVzgdmvBcX1VmhK4bTdLSjP2lU2OFDspzKDjEv4GdPdwHldaMBbQUkyAvetRCXj
-	 pwRhvy9OcqPHvPYg9MIw5wjqE2r3cYqxT7Z9ozr5u4ZxLimRQhf7X2VMj//2deOnZe
-	 ij9tcOqijr0jR5dr3qmaQrHnc4Wy0ceg7Mh2qlDQOhD+oXb9GmaGsou8blRg9MmUEc
-	 isX/ijNh2jctw==
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3eba347aa6fso756968b6e.3;
-        Fri, 13 Dec 2024 06:35:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWW/dCcsTSEzyzh83nNaXNNAwblI0BnA8V5mnX4y6XOIO3TjA7r0tIeAOuyEwaErBehvGDpXkt+0foP@vger.kernel.org, AJvYcCWa/sxtqNyqFrZy+omRbHyMRrNZBXFVfrRuFg811DTd5ce6hm/CaeWpEbPdo22s6zLFOSB6I0vPoSM=@vger.kernel.org, AJvYcCXnEqpwf+YOK/X1jHxj9dx7EgtiqJojWHatN7Zer7EssS1yHfgMw4jYxeGcM/ZBZeZfnA5xhNadAahHU2I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSwPXWoufPGx5II2V+EYOP6HTDPMj0JKb/Fjh+HBOe9DxhsqUP
-	6GJQDiFH5BQQnDtIr9BNzDQJSEUW9pRi7SQ0xfHdJFQlg9ob7HPBtlU4pz7e8f5je+0wpwffLll
-	V6dG86VXpRrMB0kIbQP19Z2IINss=
-X-Google-Smtp-Source: AGHT+IFfOFfVyFc4e2ZBGKXJgwfpRMnnYPRRl89VhFh3RmkUkQjqu6RTHIO8ptQLeagYlw8Qi6Fx0hYaADxx5ZLz+kA=
-X-Received: by 2002:a05:6808:13c6:b0:3eb:60e9:eae1 with SMTP id
- 5614622812f47-3eba6948a1amr1662834b6e.29.1734100529125; Fri, 13 Dec 2024
- 06:35:29 -0800 (PST)
+	s=arc-20240116; t=1734102167; c=relaxed/simple;
+	bh=c4RK0KdshLVnlcNk7ar6uYyJybsvc5HvNX/IW4sbOg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P24hR6p05O7hq7m19/YvPymqWG0cRA9KRCFLI72y9dJsau1TV28HERySdXG+7U1pAnL4wj4Ucwb0QRTvuwe9iYe8A51MaCAHnrJScQdI45Rp25gxwAD332xUwy5pB4v9W+4Xm1FU3aoYzp5dM1W+dOH0WR9wVohr1vtrGEqT7B4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T5GoCgJg; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3a8aed87a0dso6302305ab.3;
+        Fri, 13 Dec 2024 07:02:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734102165; x=1734706965; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4XVYtKwTonTRAAEz/VpBAxqfQVzXNgnMIhjLVHKGIec=;
+        b=T5GoCgJggZwunJF+juSxvAmVqGUjdKbP+Xu2qQeuiyx0TMRs5jvH+2qQsfJIlB0mgz
+         G5QkF2HC8xvcc4xCdXao6fCUesVNhcf0o8Rc/8XTdh4+RqORl2ooDTt1xCMexYhFekyd
+         udCmXT+y+JjlgcTio6CCCq5TXdIJP4UCL34iwRe0rhmBbIvt2FigJXHC+fOYZef+hfYm
+         uaRNHShDP+8N4IyVY6Zk2RHLMsZQGkDYeumEc/nPOT50C8ofWeSAFZbLJq+FzgnlmqIU
+         k2/CkjnLNCsFbKVJ01ss/zATE0XJyKI/gMC7l86DsCZsT+2WJqind7O+0EhI3T79AJlS
+         66DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734102165; x=1734706965;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4XVYtKwTonTRAAEz/VpBAxqfQVzXNgnMIhjLVHKGIec=;
+        b=woMBbpSDkQMvcwX6e7+rhoANsJD5WJI/m2wY9bYgxEa35CbWUjlbjcc1IQWkPgLlWG
+         iN9XqYaWM+KIEGbBM4EOLd8MyC4ZwjYqf/KraxZvGdRNaI4L7xZZ44Rm+zi+acFHQQgG
+         bUDSp+HYcVR1pXrPdg8ZjKX8xXF3MZYI6BvBW/cUi9/cPy/IWaTF5LeWnqThuK0HcWLQ
+         0spkDQen7uEvXyhVktuAD9JKxnGrOOOXgW5wYTkwfCHy0X8JAP30Fdpk5PUUspWWZvKG
+         NWoDEqpDolMAtkYiH2xYsrl3eOUaA6UhG2TbXe9U51N6H5awfX1w0upqPyUTdD+p0l1K
+         Wmuw==
+X-Forwarded-Encrypted: i=1; AJvYcCWu7qI4r3cRSyaTLuHHXrhIuH+rSsAAdMBP4SmDhpU5UG5a6I6xaGYsb8qZLDfLhYuHjXpueew/ZQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6xuuRmYkp8xx/U/oGNmI3mnS0ngCAuLcUoTuWKOCHOjFNpc1y
+	dngl5PWGnmE+L5cuKxe1B0UgCQViaMY2r/AetflMjrV8vBlKDw1daTqg5g==
+X-Gm-Gg: ASbGncvhGCBoBlPoa1oZX9Xk95bUnxPrBtRbThCNrzrdMATj9ypSpnbola/5gynNrdq
+	nai72Q9YBmmWvolPi/4eOD4y+Mp2E3c9O2tbfHOX+oswgFBbSWfXXyHsDi7pHKUiikMm3x2cpTH
+	mNjCdEhVj8nD5UhhbI1Lc605HTUey9Y7Fm+y/v5Ullk86BpVenTZXnRnWM/OtJeZLsZQVTWdI7k
+	n1DN9AxFn6BhuTVJeDbqoyKkX2nFuDNfBxjEZZ8M70h9mJ1fU98VZCbXn8XExtSgifeFSpT6aKJ
+	vPpqG9zsyueLzEyjm+KXqGSvIWM=
+X-Google-Smtp-Source: AGHT+IH8IbuI7F6ky2rFAaRDM1zteBgZSha56oCzRrTXKDMqenUD4Nu189RS6ql+CVybbNzCPg37RA==
+X-Received: by 2002:a92:c26a:0:b0:3a7:635e:d365 with SMTP id e9e14a558f8ab-3aff69dc06amr34304945ab.6.1734102165197;
+        Fri, 13 Dec 2024 07:02:45 -0800 (PST)
+Received: from localhost.localdomain (65-128-205-244.mpls.qwest.net. [65.128.205.244])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ab2189b6c4sm12220525ab.26.2024.12.13.07.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 07:02:43 -0800 (PST)
+From: Shimrra Shai <shimrrashai@gmail.com>
+To: krzk@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	shimrrashai@gmail.com
+Subject: Re: Re: [PATCH v1 2/2] [Draft] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
+Date: Fri, 13 Dec 2024 09:02:25 -0600
+Message-ID: <20241213150225.3538-1-shimrrashai@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <c1b662d8-6470-49f2-a904-139a33061885@kernel.org>
+References: <c1b662d8-6470-49f2-a904-139a33061885@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241205232900.GA3072557@bhelgaas> <20241209143821.m4dahsaqeydluyf3@thinkpad>
- <20241212055920.GB4825@lst.de> <13662231.uLZWGnKmhe@rjwysocki.net>
- <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com> <20241212151354.GA7708@lst.de>
-In-Reply-To: <20241212151354.GA7708@lst.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 13 Dec 2024 15:35:15 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
-Message-ID: <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
-Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by the user
-To: Christoph Hellwig <hch@lst.de>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org, 
-	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, andersson@kernel.org, 
-	konradybcio@kernel.org, Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org, 
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 12, 2024 at 4:14=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrot=
-e:
->
-> On Thu, Dec 12, 2024 at 01:49:15PM +0100, Ulf Hansson wrote:
-> > Right. This seems to somewhat work for ACPI types of systems, because
-> > ACPI is controlling the low power state for all the devices. Based on
-> > the requested system wide low power state, ACPI can then decide to
-> > call pm_set_suspend_via_firmware() or not.
-> >
-> > Still there is a problem with this for ACPI too.
-> >
-> > How does ACPI know whether it's actually a good idea to keep the NVMe
-> > storage powered in s2idle (ACPI calls pm_set_suspend_via_firmware()
-> > only for S2R and S2disk!?)? Especially when my laptop only supports
-> > s2idle and that's what I will use when I close the lid. In this way,
-> > the NMVe storage will certainly contribute to draining the battery,
-> > especially when I won't be using my laptop for a couple of days.
-> >
-> > In my opinion, we need a better approach that is both flexible and
-> > that dynamically adjusts based upon the use case.
->
-> Agreed.  I'd be happy to work with the PM maintainers to do this,
-> but I don't really know enough about the PM core to drive it
-> (as the reply from Rafael to my mail makes pretty clear :))
+On 2024-12-13, Krzysztof Kozlowski wrote:
 
-I'm here to help.
+> Explain why this is draft, what does it even mean. Do you expect any
+> review or not?
 
-Let me know what exactly you want to achieve and we'll see how to make it w=
-ork.
+Correct. As I pointed out, not 100% of things work.
+
+> Please run scripts/checkpatch.pl and fix reported warnings. Then please
+> run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
+> Some warnings can be ignored, especially from --strict run, but the code
+> here looks like it needs a fix. Feel free to get in touch if the warning
+> is not clear.
+
+I did this, but I do not see any warnings beyond
+
+"Prefer a maximum 75 chars per line (possible unwrapped commit
+description?)"
+
+for the 0th patch, which does not seem to be from the description and
+
+"Missing commit description - Add an appropriate one"
+
+for the others, and
+
+"added, moved or deleted file(s), does MAINTAINERS need updating?"
+
+on the 1st.
+
+There don't seem to be any substantial errors indicated with the code
+itself. What issues did you find, as you said it "looks like it needs a
+fix"? Nonetheless I wasn't planning on this one being a final submit
+anyway, since as I said it was a draft because there were things not
+working yet. But if there are other problems with it, I need to know what
+they are esp. given as I said those tools have not indicated more problems
+than those and they seem to do more with not adding further info to the
+emails than the code itself, yet you say the actual code needs a fix.
+
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC. It might happen, that command when run on an older
+> kernel, gives you outdated entries. Therefore please be sure you base
+> your patches on recent Linux kernel.
+
+Thanks for all this part. When you say this though:
+
+> You missed at least devicetree list (maybe more), so this won't be
+> tested by automated tooling. Performing review on untested code might be
+> a waste of time.
+
+what do you mean by "device tree list"? I was not aware of this part of
+the kernel source code. I modeled this submission off of others I've seen
+here and I have only seen them submit the .dts, Makefile entry, and .yaml
+entry in rockchip.yaml. I have not seen a "device tree list" different from
+those. E.g. for this submission for the Orange Pi 5,
+
+https://lore.kernel.org/linux-rockchip/20241111045408.1922-1-honyuenkwun@gmail.com/
+
+those are the only items touched that I can see unless I missed something
+really subtle.
+
+   Shimrra Shai
 
