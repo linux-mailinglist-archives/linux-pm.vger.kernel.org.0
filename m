@@ -1,124 +1,112 @@
-Return-Path: <linux-pm+bounces-19207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BF499F14DE
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 19:23:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DCF69F14F6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 19:32:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C1CF1671CC
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 18:23:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A79D8168E54
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 18:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600561E570B;
-	Fri, 13 Dec 2024 18:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8971C18A92C;
+	Fri, 13 Dec 2024 18:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="EcCr8kT5"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="spOKTCR2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFF2188A3B;
-	Fri, 13 Dec 2024 18:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30421DA5F;
+	Fri, 13 Dec 2024 18:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734114188; cv=none; b=dpAoIhYabjwR4OuT1ZmMsgJHJYnl/y05BGKmrYfrlyR8HQShy9ct3cwnLO9kwuerJyJC15cI3QcBhAV+V/lNKgNmfyDa265WMVv/9lhfGzU91mre8xDLi3JPTzLRTMvpy4n0AdtFEdy+96NBU72KQ33yKsRID45xIo+wGnU0sBM=
+	t=1734114720; cv=none; b=gACWWdbF3oEWyv3U7aGXEpHhRXhAiKzdpvBANOmgWSdvSOpiV4gnmJVdsCN2mUvww3TNYV6WW31R9FTdUhZ82Af5jV688mLKwpjHBEklNX1orFnB6dCLCyP8JvfsbnZ6Zbz8X5gbQCk7lj2n9/84ZACmeJpf7Dq2+yIF/wIMOmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734114188; c=relaxed/simple;
-	bh=GiqVSUISJqJr5NiO8mWU9AKAaONp+d/mksQ49e50zm4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RIOsV98XSH/VZdQCUIzcPtXfSh9HWTOEBBldtA/DzdFErtjmg/vO0veMXnsDWMOVd1rDan7+KC63aV/JkTtPuAsZPTYYTxBpzOo1zUGcZxfO6PYTer5A1GBoHOI+hMKy/T6zHKC/nH4p4vlmvC3NFJEuJV3ErpafPtsPMHkRd3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=EcCr8kT5; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=i3YibXlXnh2nxnKraQDFOv5AxvjsQSovo3m91FxIX/E=; b=EcCr8kT5LaBT0fWsCrzlHiDjVM
-	wMpYf4dYNpORW0wp2+AlVVBHRZYQrQdLli0jqD5dCV0mCDe9pdbRssQasOALVpAkkX9S82rGvk6Mv
-	P3jTVRsraO0MdM0uHxBZ6l3iUNckAA9J1XG3ubEx63BeffX6bGu05/bPSZzD+V7c/eZKHq/3WfP+R
-	5RZqWzvdEvDavL7l59FVJmdzO0e0C8fOe1RW5moZErd4uY25TAK6EtzwelXWhYyFW/jyRNM0H8zKr
-	GZMk0lSsr5o1X4dYTb+7nZYQZzSydDPM3NnVmd//vHXfdEpIlfyP5cLrfkY20N/BZ/aNRI9bTCWKX
-	qPKb6DUg==;
-Received: from i53875bc4.versanet.de ([83.135.91.196] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1tMAJR-0008Ao-8N; Fri, 13 Dec 2024 19:22:53 +0100
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: linux-kernel@vger.kernel.org, Shimrra Shai <shimrrashai@gmail.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
- Shimrra Shai <shimrrashai@gmail.com>
-Subject:
- Re: [PATCH v2 2/2] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
-Date: Fri, 13 Dec 2024 19:22:52 +0100
-Message-ID: <1908542.tdWV9SEqCh@diego>
-In-Reply-To: <20241213180855.16472-3-shimrrashai@gmail.com>
-References:
- <20241213180855.16472-1-shimrrashai@gmail.com>
- <20241213180855.16472-3-shimrrashai@gmail.com>
+	s=arc-20240116; t=1734114720; c=relaxed/simple;
+	bh=T3PCOXRgslDvYFRSEyw1FHGZH0CB9Yc0PyTvw+XPkoQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PGq9myfIO+t8HFkCeP6629wEvTJVp4NfnIBtR4jINylYsIdmhEG8G0yMxiSoMfsE5CxwKE3sl5Unj+rK35qR7TuWXhl7awsU5PAFkcOara7HPJ8I6gxKpoBDvVsLUbwQcJKGOOstuthKZ7d6OoCyb/MFw+8PIF1LIlN+LruOBeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=spOKTCR2; arc=none smtp.client-ip=80.12.242.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id MAS2tfinZ16pxMAS3tV7CF; Fri, 13 Dec 2024 19:31:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1734114707;
+	bh=eumrcL79IYeHxeu0sdLBZY1C8OjtUoFdZuO5pn6cZsc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=spOKTCR24mb13/tR68WrnfEApE33WVzBY19rozmP9jHnvr9bYWBwerhQ5S1sawKZh
+	 i0JutCMzzN5zEkQIxmoAzE5xMFG3nsaMWfkyhGBSGYOXMa4180JzLsTXMyudlY8OBG
+	 bD0pdtSKVERASfsWb2kkq1DH4zvlVvX+urKGs7DQcguxCUNCD4Q6m1VaJqJ0kisNTm
+	 Nk6d2Mu4/4mLDDIhOHqhBcM99Y44TG1ZL1xl47AYb5B0QOgj2169XEd+41bjFqw35t
+	 RvGuciYXfmFUgJKsIWMjJcTuIJd7Y5n3JZAbfuiPmNHVLWE5adSGKtuPTisbeGlZ3w
+	 f2mb4ZRP/4o2Q==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Fri, 13 Dec 2024 19:31:47 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <723a8253-a936-4901-9a05-a20f27fdb07c@wanadoo.fr>
+Date: Fri, 13 Dec 2024 19:31:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 2/2] power/supply: Add support for ltc4162-f/s and
+ ltc4015
+To: Kim Seer Paller <kimseer.paller@analog.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Kim Seer Paller <kimseer.paller@analog.com>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Mike Looijmans <mike.looijmans@topic.nl>
+References: <20241213023746.34168-1-kimseer.paller@analog.com>
+ <20241213023746.34168-3-kimseer.paller@analog.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20241213023746.34168-3-kimseer.paller@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Le 13/12/2024 à 03:37, Kim Seer Paller a écrit :
+> LTC4162-L 35V/3.2A Multi-Cell Lithium-Ion Step-Down Battery Charger
+> LTC4162-F 35V/3.2A Multi-Cell LiFePO4 Step-Down Battery Charger
+> LTC4162-S 35V/3.2A Lead-Acid Step-Down Battery Charger
+> LTC4015 35V/3.2A Multichemistry Buck Battery Charger Controller
 
-Am Freitag, 13. Dezember 2024, 19:08:55 CET schrieb Shimrra Shai:
-> Document the compatibles for the new board.
-> 
-> Signed-off-by: Shimrra Shai <shimrrashai@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> index 753199a12..9ee96acdc 100644
-> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> @@ -190,6 +190,11 @@ properties:
->            - const: firefly,firefly-rk3399
->            - const: rockchip,rk3399
->  
-> +      - description: Firefly ITX-3588J
-> +        items:
-> +          - const: firefly,itx-3588j
-> +          - const: rockchip,rk3588
+...
+
+> +static int ltc4015_get_vcharge(struct ltc4162l_info *info,
+> +			       unsigned int reg,
+> +			       union power_supply_propval *val)
+>   {
+> -	u8 cell_count = ltc4162l_get_cell_count(info);
+> +	unsigned int regval, chem_type;
+> +	int ret;
+> +	u32 voltage;
 > +
+> +	ret = regmap_read(info->regmap, reg, &regval);
+> +	if (ret)
+> +		return ret;
+>   
+> -	if (!cell_count)
+> -		return -EBUSY; /* Not available yet, try again later */
+> +	regval &= BIT(6) - 1; /* Only the lower 5 bits */
 
-looking at the product-page, this is not _one_ complete board. Instead
-it seems to be a system-on-module + baseboard design.
+Nitpick, should there be a v7:
+	Would using GENMASK(5, 0) be clearer and self-explanatory?
 
-It looks like it uses the Core-3588J system-on-module [0].
+> +
+> +	/*
+> +	 * charge voltage setting can be computed from:
+> +	 * cell_count × (vcharge_setting × a + b)
+> +	 * where vcharge_setting ranges from 0 to c (d).
+...
 
-We already have a number of those in the binding file to take as example
-on how to structure that. For example FriendlyElec CM3588-based boards .
-
-So you could do
-
-      - description: Firefly Core-3588J-based boards
-        items:
-          - enum:
-              - firefly,itx-3588j
-          - const: firefly,core-rk3588j
-          - const: rockchip,rk3588
-
-
-Thanks
-Heiko
-
-
-
-[0] https://en.t-firefly.com/product/core/core3588j
-
-
+CJ
 
