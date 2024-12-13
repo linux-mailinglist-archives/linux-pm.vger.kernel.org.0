@@ -1,191 +1,126 @@
-Return-Path: <linux-pm+bounces-19195-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19196-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBAF99F1084
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 16:13:09 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B1EC1882F06
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 15:10:17 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 554BD1E1C07;
-	Fri, 13 Dec 2024 15:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZH2HMLXh"
-X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60E009F112C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 16:41:38 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFB91E105B;
-	Fri, 13 Dec 2024 15:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B193282937
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 15:41:37 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344001E2838;
+	Fri, 13 Dec 2024 15:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hyjDDCii"
+X-Original-To: linux-pm@vger.kernel.org
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A075D1E2615;
+	Fri, 13 Dec 2024 15:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734102612; cv=none; b=MhWrV1E6Q/wV+18yC0LZn0xveY6zLpRyr9lRG8MQBuPRK5vrJbJV6FDpOVqLQ5FpOZ46AWbsFJNyHNOEy5q9JZyqP3LSaBW7RKjGnf5h+okOOm2K8HvF56dfjctSqh+vaAZ+Q5AgowxTmCfOHNkBUiTopNk5AUABA3uT+8K3WL0=
+	t=1734104494; cv=none; b=mWh/ohzyTRTvVgc+jKoaL8nPlX/uVHX2OwOhDKHSogVLRa6q8AwNLO7GAqIMwXRBbPaUx0xjDT3fqafM/uBRzvn0P/TEwsktg1eByCgaWnWh3CWTahSp+w5v9z+GT3UmNLsZv5rlXqXVnwLQQWg5OQRhmWk5pBGfHzar/3HCtiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734102612; c=relaxed/simple;
-	bh=pu7CV/W001EZcdH5bxBKbdu6/xFC5CpjJ1xPFnY9AB4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b8GcIBaSR2EjlXZ4nUuhuRzcS6CwxYenmWEyc0hFv7H3p1+bzI2Wo8Xr2HsAr8qMkH6Jr76l+6FsnHmaJO6SOnAdYvUeD5abWj835l65t2wh3rxvcpQYRaHtLOZlg8uHnwCaYQfXOF9ErOfeBhSTThkntLZMoH3Ukpx58u8dwa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZH2HMLXh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B49C4CED2;
-	Fri, 13 Dec 2024 15:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734102611;
-	bh=pu7CV/W001EZcdH5bxBKbdu6/xFC5CpjJ1xPFnY9AB4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZH2HMLXhf+HaXkVd4g7VWSnt05dxkfUUn6CE7dA1EwwNwzB+7o1duGdBiPY2HHRM7
-	 CBGaC4Nl03QUmtvpXohss4cpoqmS2Vc0RO7+jxY5qetSMDg40U7ni1Flrn8kNJ8Ilo
-	 VxVXjlKmgNODyDYW2e1pYikP0Wu7I7UmfHcjXO6BvC5sx8ZSNncjzl+74W8uFHZI30
-	 kiIappyHpwF9T0dw8QRDra2c8fA9YmotkxmoZf5Y7ZpoqmGSokhNsWFaMF2P9TDHq2
-	 7sMMp2nE8ahRWbLF80Z+wS9zwoLKu/WfoNGLRJnfEJoEqxOHzG/Xa8UkuxwloU7PE1
-	 j8wVejcH2qC1g==
-Message-ID: <ca3f43f8-f96a-4d2b-9273-a4d936fab6a6@kernel.org>
-Date: Fri, 13 Dec 2024 16:10:07 +0100
+	s=arc-20240116; t=1734104494; c=relaxed/simple;
+	bh=h9f2IPsO/xNe1+THhOsHQZkxK8oH5Xk2Qbl9ZG+DE+I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QdMx++8WqZhD8y5gsHXJQUZM0K4SJuPk6nNLajkVgVixdHYT5qEZCIQilvUKwpw2I9FGChTyi/ivxrL4gInpG5KEibLR24FoTvI1DnUKzn6U/lDIb1Ox+QFV3isZk7DdPTJOIV6M/eX2n9/322am5pafCkQqce/GmPs/i68lObo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hyjDDCii; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-844de072603so159233039f.0;
+        Fri, 13 Dec 2024 07:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734104491; x=1734709291; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c4wKn96MiedFl6ia4ZZdGHhhDmKHeXzJLuTF6TNk3g4=;
+        b=hyjDDCiiQrP8eVu1/GPsfnzbp7Ss74mkcFrIJhCKMvjwGNxXM2P8jnoB9OtdGYwYcj
+         khq2uDXRm9+RbhCvncQvto7AAG+pw8+yv5EyAXOi8aILVdxzp3IY6vq0fGAkPSZtOW1V
+         xR99ElicnYVTvmOG3lKNRrWHmtV9w77NbnBiINdLfgbGaW29sgm+GM97PpzMm4BJCvkp
+         blcFxtMLdPO4/ZSrJLZGdT1+xrM6HCEmdzyjHRWTPOGDOz4ri99GnViDP8RuPODMhjiv
+         6kUTgpi3QNktTpdykC/cbQIFhfhZM+we9Fk2gbZ3rsw2+y4cMZHjiHycrH/dhB4OmwVr
+         ynDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734104491; x=1734709291;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c4wKn96MiedFl6ia4ZZdGHhhDmKHeXzJLuTF6TNk3g4=;
+        b=Jw1cNoElwYlilaV39PEwlEexsuEEME35Lc6YhVyj9eRSV2XI51LeDPz/jWRiiPh3Qx
+         yhAYUA8SmSEt0h2hj3KNbEfpFsmfRwm2Y2HG2Q7l+3WavZdnN9YdcVaQsk6uZLP7sDy3
+         LzE6cBKPdRENCP3eXKHFiEQ4m78vcYpFyDvNp2qsLGxnFZEH3lD32d/X+6FgTqVh/N5O
+         GpanP92rygRgf1dqtNNdtXZQtTBygwqIWYA6nnLBT7tkohssHcPcnVs9Hy0LDOYOUYu2
+         GrYqHQoyx6azvYkMUtlCP7be/ZW6BPNGr/k6LY1ygBHFRWV46CQbiH0uj/cJW0Ffqewm
+         4ujg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmGihfMju61AnrcrIhmihCnGvUHmkWgoXpUW7pVx/6J1oDk3+m6z7tVmCP3Wg4ceoDjmspG6XFMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsB44cVdBtiK45HyIELk6FjcDkJsNtDEdatrsYluPPx9fobDN3
+	9SU3BLjLtIophxHJ0F4evW7vJIYI5cRywZPj50lBj1TFIBjHR6bq
+X-Gm-Gg: ASbGncvhPbt5vO4B4fsm0AMqBonf7bvAbAJjIKkDJBwERhOL2PZRbBUnuN97iJos21S
+	1+64YVfEkVIAi4QbVmWVQXoM8imO44ZQsa+QQ+DeVf2Xz/6/c4TE2gHzJJGuNPXTJKvetqyTes6
+	iy+ymd4DZLS11S8aLj1d3yNRsYSxso9+MmlR1iH3MBiK7Mkq/cCPyCG8bzbXyI/+DGTF029YylF
+	QvUshyZPFaeLovto+yBU0H7C2jO9/04SrFM9QyCb6u7foU8zwuEl05zfjEwtNzNbeMONDnEym6Z
+	CnMqdvA63gY2m2HcMPmIGu30M40=
+X-Google-Smtp-Source: AGHT+IG7zKmTTY+3cU4+IRgs+3snv2XaZhum1/jfja2GkIpicjF9Tf6CDhdfxxuVlVsfE7nj39hb0A==
+X-Received: by 2002:a05:6602:2cd0:b0:844:debf:2c8f with SMTP id ca18e2360f4ac-844e88ea5c0mr342460839f.14.1734104490740;
+        Fri, 13 Dec 2024 07:41:30 -0800 (PST)
+Received: from localhost.localdomain (65-128-205-244.mpls.qwest.net. [65.128.205.244])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-844cceb0c34sm148704339f.21.2024.12.13.07.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 07:41:29 -0800 (PST)
+From: Shimrra Shai <shimrrashai@gmail.com>
+To: krzk@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	shimrrashai@gmail.com
+Subject: Re: Re: Re: [PATCH v1 2/2] [Draft] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
+Date: Fri, 13 Dec 2024 09:41:14 -0600
+Message-ID: <20241213154114.5078-1-shimrrashai@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <ca3f43f8-f96a-4d2b-9273-a4d936fab6a6@kernel.org>
+References: <ca3f43f8-f96a-4d2b-9273-a4d936fab6a6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] [Draft] dt-bindings: arm: rockchip: Add Firefly
- ITX-3588J board
-To: Shimrra Shai <shimrrashai@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org
-References: <c1b662d8-6470-49f2-a904-139a33061885@kernel.org>
- <20241213150225.3538-1-shimrrashai@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241213150225.3538-1-shimrrashai@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 13/12/2024 16:02, Shimrra Shai wrote:
-> On 2024-12-13, Krzysztof Kozlowski wrote:
-> 
->> Explain why this is draft, what does it even mean. Do you expect any
->> review or not?
-> 
-> Correct. As I pointed out, not 100% of things work.
-> 
->> Please run scripts/checkpatch.pl and fix reported warnings. Then please
->> run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
->> Some warnings can be ignored, especially from --strict run, but the code
->> here looks like it needs a fix. Feel free to get in touch if the warning
->> is not clear.
-> 
-> I did this, but I do not see any warnings beyond
-> 
-> "Prefer a maximum 75 chars per line (possible unwrapped commit
-> description?)"
-> 
-> for the 0th patch, which does not seem to be from the description and
-> 
-> "Missing commit description - Add an appropriate one"
-> 
-> for the others, and
-> 
-> "added, moved or deleted file(s), does MAINTAINERS need updating?"
-> 
-> on the 1st.
-> 
-> There don't seem to be any substantial errors indicated with the code
-> itself. What issues did you find, as you said it "looks like it needs a
+On 2024-12-13, Krzysztof Kozlowski wrote:
 
-""Missing commit description - Add an appropriate one"" is a substantial
-one - clearly we cannot take empty commits.
+> I mean exactly what is written. Use the tools and the tools will do the
+> job.
 
-> fix"? Nonetheless I wasn't planning on this one being a final submit
-> anyway, since as I said it was a draft because there were things not
-> working yet. But if there are other problems with it, I need to know what
-> they are esp. given as I said those tools have not indicated more problems
-> than those and they seem to do more with not adding further info to the
-> emails than the code itself, yet you say the actual code needs a fix.
-> 
->> Please use scripts/get_maintainers.pl to get a list of necessary people
->> and lists to CC. It might happen, that command when run on an older
->> kernel, gives you outdated entries. Therefore please be sure you base
->> your patches on recent Linux kernel.
-> 
-> Thanks for all this part. When you say this though:
-> 
->> You missed at least devicetree list (maybe more), so this won't be
->> tested by automated tooling. Performing review on untested code might be
->> a waste of time.
-> 
-> what do you mean by "device tree list"? I was not aware of this part of
+Since the remainder of your post is talking about CCs and the only other
+tools listed are related to CCs does this mean that by "device tree list"
+you were referring to a place to send messages, not a file in the source
+code with a list of device trees in it? I was interpreting your statement
+as referring to the latter, not the former. You also mentioned things being
+wrong with the code, too, even though they did not show up on the scripts/
+checkpatch.pl tool.
 
-I mean exactly what is written. Use the tools and the tools will do the job.
+> This does not work like this. Use the tools, not other people's
+> incorrect CC list.
 
-> the kernel source code. I modeled this submission off of others I've seen
+> I gave you instruction which tools to use, so I do not understand why do
+> you insist on not using them.
 
-This does not work like this. Use the tools, not other people's
-incorrect CC list.
+I am having trouble understanding is why. Are you talking about messaging
+or a part of the source code itself when you say "device tree list"? As you
+said that is necessary "for automated tools to work" and that makes me
+think it's some part of the source code run by such a tool, but here you
+are talking about "CC lists" i.e. messaging. So I do not understand what
+that word is referring to - that is my confusion. I certainly can use those
+CC tools but if there is also something that needs change in the code it
+won't be changed unless I know exactly what that is and thus I need to know
+if there are any outstanding code changes indicated before I make another
+submission using the CC tools.
 
-> here and I have only seen them submit the .dts, Makefile entry, and .yaml
-> entry in rockchip.yaml. I have not seen a "device tree list" different from
-> those. E.g. for this submission for the Orange Pi 5,
-> 
-> https://lore.kernel.org/linux-rockchip/20241111045408.1922-1-honyuenkwun@gmail.com/
-> 
-> those are the only items touched that I can see unless I missed something
-
-Cc list is entirely different... Did you really read my message? I state
-you Cc wrong addresses and you claim that above link has the same as
-yours, which is obviously not correct. So two things - my earlier
-message and above link - are kind of proofs. What else do you need?
-
-I gave you instruction which tools to use, so I do not understand why do
-you insist on not using them.
-
-
-
-Best regards,
-Krzysztof
+     Shimrra
 
