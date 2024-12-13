@@ -1,151 +1,138 @@
-Return-Path: <linux-pm+bounces-19202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4310A9F1270
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 17:43:42 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAFD29F14B6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 19:10:17 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED58D2831E4
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 16:43:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60D09188E327
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 18:10:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9941E1A08;
-	Fri, 13 Dec 2024 16:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51481E32A3;
+	Fri, 13 Dec 2024 18:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fysSowvu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0fNbn+X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBB716A395;
-	Fri, 13 Dec 2024 16:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263B02E62B;
+	Fri, 13 Dec 2024 18:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734108217; cv=none; b=pW7ZgL3WqLZKo05ZF0H1pe7WdsRSRnNPgxN1X/PeMZNaS4pu29ofg59XOM8aMLZKnnPVGmd1efPrYA4jMy5Kd2Hl6aA3HscNj2URWQBvz2UuyOi9LjOvFrPDL2nV/Y0RSnuCrM9272QkZ+ASmyQyoJzAjaKERHjjc9FcgMESRRU=
+	t=1734113408; cv=none; b=qTppu5bFNPrx5X3PCip/htOjYSN7CLvgx1XW4BXJNqWCBopqaJN0gFYrFkoPKszHUCsPSFj2wWrVlTKQRDyRMvzzwsXr3ix06Nqj/Yh0wt4HvzKQNOd6Xzo/MKgRQa1hZoGXvSLdmripMn6qiR5563vTWztFBwxC4Yr1DKx9BMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734108217; c=relaxed/simple;
-	bh=7SMi3ynl1by2FW9RHSSDMVVshYHz6HwImISHlqdcnQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=I6lPJofRJ4Y7VQsyxN/00++m7WPsvayE9LHV0EIA4MGIqQQHlBdCHCHL1xZzb9eQCYlvc4yEGTQ1E+Mfl3e4KEMmpaezCkK62MazbC0i6520KSPzTieeTo63BA1K6PN3uT9IVu3dTSSeK9173agy/bQSeT7QTd8DLognoYvLJzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fysSowvu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E81C4CED0;
-	Fri, 13 Dec 2024 16:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734108217;
-	bh=7SMi3ynl1by2FW9RHSSDMVVshYHz6HwImISHlqdcnQU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=fysSowvuU/8vugTZiQthQ6TNE2s1XsrWgdqVk9NFrIY3NQO/pLMC9/u2UMBAJyYo3
-	 6MYIUxV0gfBGefeDgm8WVDdm60WOf5PTrehZHz90y1PwHTpVWxq+YkadxYjPACDVV0
-	 0O5+ca/z6l2PlmlBLuciAnwmDJhDUD05SKdCCIrw0fC1Nh/R+5GzQfyi0cDbzbZeSr
-	 tiwgiOnrgHkrI1LxMK+r9eNDx5RC8SMCatkm5Lq9mhsukDbxvVzjco+/JYrX10+3Nf
-	 rzD25qwjMYCIOb/fwiLwCvXiJjj7S+CX/xz+rUurItLTjt01cUUayE6rXURv+oRaz6
-	 kayEOM8KTNEvg==
-Date: Fri, 13 Dec 2024 10:43:35 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Kenneth Crudup <kenny@panix.com>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Vidya Sagar <vidyas@nvidia.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Andrea Righi <andrea.righi@canonical.com>,
-	You-Sheng Yang <vicamo.yang@canonical.com>,
-	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-	"David E. Box" <david.e.box@linux.intel.com>,
-	Nirmal Patel <nirmal.patel@linux.ntel.com>
-Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
- standby/low-power modes
-Message-ID: <20241213164335.GA3381091@bhelgaas>
+	s=arc-20240116; t=1734113408; c=relaxed/simple;
+	bh=Sp15gpzV51tDfhfppbLq6aK8glX6u5u00Igfbyv4PB4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g1VS+MvkkL4gpFZQJQ260cb7V+HQx+2JMW5i29jRoQocYg2CfR9/u7SbGpbBJdT+xR/U+vRw68zP5KKtVjzRDYERT/g0+F4Si7pqro+A/TD/EE91xZXINgfFQTM4B/sW9yzSmDZQzjZ2VAon4aHvnmbsfe8dTZIUfXScQs1Lapc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I0fNbn+X; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3a8c7b02d68so16299255ab.3;
+        Fri, 13 Dec 2024 10:10:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734113406; x=1734718206; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZaUJxyWODTPt/EHA59a8Xm+chAdP/ldBcjz3rSODr3s=;
+        b=I0fNbn+XX9to1j2K5ohAGGqduT7bTkmk0Xlyruwa7o5cy75jurEZ/GEHIVs4ro3R8D
+         IEKgZ8zRembWliVJGEe3ROf7qU0FX/PlRvNiCOebk0Cw4+3VQUwL5SXxRU67Aq/QbFdZ
+         i8GsLsQnPa8saQYMUQbRy0NH5dYUdy+iKXJDogDz4rETmF5wsflqPDZNvA50wfmCueWP
+         yK1M28/HiPqfpxsPTNFDDu5PK9mHM6HQBmTORddSPGSlUDtSzEA/uyZOxzteuGZH3Osz
+         PiUvInEgMexrZq8GM7fHcgf5yyU/KtG48np4DqtioCZZm0vw07yNIbWrAomgAJN1R+qB
+         Rudg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734113406; x=1734718206;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZaUJxyWODTPt/EHA59a8Xm+chAdP/ldBcjz3rSODr3s=;
+        b=fYsuQ8KUgrMZrwsfPH6ZYcUFiWtKPzRUlKp6+SSBov2130ivCBY2BKwkzxpqEpIJ/8
+         9vSA7qtIgxs5eiFz9c8J7/tJvzNziAP4zYFd94nK8ian5mfZZYLyxetWSUthE8P31QuF
+         DCFi2WoSt2/WSLIDftaUc2bL9xKLsfVWFZ8x9ypIA3o/ZfUIbojg4H7l7kdXTe10xYur
+         0GRULGnjUXBEeMdfxlyCiBuovdgPOkWsfjVEJg9ucAYJpEW+1AE0nXnt6ewicxSsMDuD
+         MDfmuSdz8EoHcu8deROem8UhkXTnnlyrtDQ4b3OKSkYyfDUMX0MqzF6ZaMSAc0sNP6qp
+         7ZxA==
+X-Forwarded-Encrypted: i=1; AJvYcCWkUgezQtNKzgHXgP0l8G2OdWSB6tpL+OMrSDe7Q+/1uOQc28e2Z2/yT4IX3CegvbKE0T11XDVevcQ=@vger.kernel.org, AJvYcCXo9x7JHRdrCfC9lbKfZH2NTFv9plDJESXCJpYh17vkHiPIFHmOX2loahQgzS4YFm8oxMbelkBQ8D9v@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHOwdxL+xrotGiSiLqcOWdcZnfVbeysZksC1fujwlCGsdJCf0Y
+	2h0dHw2DdvNaXxA1489s2WKKYiTnKOisns9HGjsnKkqXHvstlllK+XyauQ==
+X-Gm-Gg: ASbGncs3Dc4Gt3cwwzfvqCW39q0QDrBoSPPtn0vgeIF5/63uPqhwwRF6NSX/JtJcvh0
+	TjPiEUujmFrE2IfrU8ZcFnVk+REHhXx1zBYBpGS0w/+KHzK8/8h+2bHU9IwsA1DhglCcouRiRDf
+	c3Z50g9WwgqPl68HqJ73LNnrqy/q8M08xcYZoXkjO7httjr+QqWk28/GuAjOeDi5Xu7uXVFjatT
+	pkGf5hdujQ1/QfbAjIAAefTeHREziHlzC7X5pXa3vQySKt7KsXCWMg4JlZ3S2E9yZv3MV/eu2Ya
+	5YwdlLDj8mKumLxkgWxYIyO+wsI=
+X-Google-Smtp-Source: AGHT+IH/MEREg6rxAa0/RtNlAsBMr5UpSbMTYOPeTSadT3t2wf9euEA3XWXtBYuE66GNqav6oNdK0g==
+X-Received: by 2002:a05:6e02:1aa8:b0:3a7:d84c:f2b0 with SMTP id e9e14a558f8ab-3aff50b340emr43862345ab.8.1734113405813;
+        Fri, 13 Dec 2024 10:10:05 -0800 (PST)
+Received: from localhost.localdomain (65-128-205-244.mpls.qwest.net. [65.128.205.244])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2baf714cesm2922533173.101.2024.12.13.10.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 10:10:05 -0800 (PST)
+From: Shimrra Shai <shimrrashai@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	heiko@sntech.de,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Shimrra Shai <shimrrashai@gmail.com>
+Subject: [PATCH v2 0/2] arm64: dts: rockchip: Add Firefly ITX-3588J Board
+Date: Fri, 13 Dec 2024 12:08:53 -0600
+Message-ID: <20241213180855.16472-1-shimrrashai@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <402b2e32-3b54-4e80-92fd-9237549ffa14@panix.com>
+Content-Transfer-Encoding: 8bit
 
-[+cc David, Nirmal, linux-pci]
+NOTE: This is a resubmit of a previous submission with corrected
+recipients list and some small changes to make it more suited for the
+general kernel (e.g. eMMC is enabled now).
 
-On Thu, Dec 12, 2024 at 03:04:53PM -0800, Kenneth Crudup wrote:
-> On 12/12/24 12:56, Bjorn Helgaas wrote:
-> > On Wed, Dec 11, 2024 at 03:26:37PM -0800, Kenneth Crudup wrote:
-> > > So we're on 6.13-rc2 and the patches are getting closer and
-> > > closer, but they still need to be manually added.
-> > > 
-> > > The good news is now only (variants of) "PCI/ASPM: Enable LTR
-> > > for endpoints behind VMD" and "PCI/ASPM: Enable ASPM for links
-> > > under VMD domain" are needed.
-> ...
+---
 
-> https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/lunar/commit/?id=47c7bfd31514e7b54a1f830f7707297aebbb8679
+I am proposing a Device Tree Blob for the Firefly ITX-3588J board.
+This is another Mini-ITX form-factor board for the Rockchip RK3588
+SoC, along with the ROCK 5 ITX. This version still has some outstanding
+issues, however, so I am unsure if it is ready for incorporation in this
+state and I have not yet found a fix for them as of now. I invite any
+comments.
 
-This is "UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind
-VMD", which writes PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT
-for PCI_CLASS_STORAGE_EXPRESS devices directly below VMDs with Device
-IDs 0x9a09, 0xa0b0, or 0xa0bc.
+Issues outstanding:
+ * Suspend does not work.
+ * The USB-C port does not work.
+ * Unsure how to get control over the main LED; the commented part
+   seems to cause a failure.
+ * Audio output on the back green port does not seem to work; but I
+   found this may be due to slight inadequacy of the still-new ES8323
+   driver - can suggest a patch for that too separately.
+ * Not sure if there are other board features that could still be enabled
+   with the present kernel drivers.
 
-This looks equivalent in spirit to upstream
-https://git.kernel.org/linus/f492edb40b54 ("PCI: vmd: Add quirk to
-configure PCIe ASPM and LTR"), which writes PCI_LTR_MAX_SNOOP_LAT and
-PCI_LTR_MAX_NOSNOOP_LAT for any kind of device below VMDs tagged with
-VMD_FEATS_CLIENT, which includes 0x467f, 0x4c3d, 0x7d0b, 0x9a0b,
-0xa77f, 0xad0b, 0xb06f, 0xb60b.
+Thanks,
+Shimrra
 
-However, IDs 0x9a09, 0xa0b0, and 0xa0bc are NOT tagged with
-VMD_FEATS_CLIENT.  In fact, they're not included in vmd_ids[] at all,
-so I'd be surprised if VMD worked for those devices unless BIOS set
-up the VMD itself.
+Shimrra Shai (2):
+  arm64: dts: rockchip: add DTs for Firefly ITX-3588J
+  dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
 
-Maybe David or Nirmal can comment on this?
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../dts/rockchip/rk3588-firefly-itx-3588j.dts | 1133 +++++++++++++++++
+ .../boot/dts/rockchip/rockchip-pca9555.h      |   31 +
+ 4 files changed, 1170 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-firefly-itx-3588j.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rockchip-pca9555.h
 
-> https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/lunar/commit/?id=1a0102a08f206149d9abd56c2b28877c878b5526
+-- 
+2.45.2
 
-This is "UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD
-domain", which adds "link->aspm_default = ASPM_STATE_ALL" for device
-IDs 0x9a09 and 0xa0b0.
-
-This looks like it should also be handled by upstream f492edb40b54
-("PCI: vmd: Add quirk to configure PCIe ASPM and LTR") [1], which adds
-"pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL)".
-
-But again, the Device IDs mentioned in the Ubuntu commit are NOT
-included in the upstream VMD_FEATS_CLIENT list.
-
-> https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/lunar/commit/?id=154d48da2c57514e4b5dadc7b8c70a4edb550981
-
-This is "UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name
-instead", which applies the quirk that writes PCI_LTR_MAX_SNOOP_LAT
-and PCI_LTR_MAX_NOSNOOP_LAT for PCI_CLASS_STORAGE_EXPRESS devices
-below any VMD claimed by the "vmd" driver, not just VMDs with Device
-IDs 0x9a09, 0xa0b0, or 0xa0bc.
-
-I think the only thing that's missing is that the upstream vmd_ids[]
-needs to be updated with some new VMD Device IDs that are tagged with
-VMD_FEATS_CLIENT.
-
-I don't know what the vmd_ids[] strategy is, but Kenneth, you might
-try an upstream patch like the one below.  If that resolves the
-standby/low-power issues, maybe David or Nirmal can figure out the
-"right" way to do this.
-
-Bjorn
-
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 9d9596947350..4de7ff3bbf23 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -1109,6 +1109,12 @@ static const struct pci_device_id vmd_ids[] = {
-                 .driver_data = VMD_FEATS_CLIENT,},
- 	{PCI_VDEVICE(INTEL, 0xb06f),
-                 .driver_data = VMD_FEATS_CLIENT,},
-+	{PCI_VDEVICE(INTEL, 0x9a09),
-+                .driver_data = VMD_FEATS_CLIENT,},
-+	{PCI_VDEVICE(INTEL, 0xa0b0),
-+                .driver_data = VMD_FEATS_CLIENT,},
-+	{PCI_VDEVICE(INTEL, 0xa0bc),
-+                .driver_data = VMD_FEATS_CLIENT,},
- 	{0,}
- };
- MODULE_DEVICE_TABLE(pci, vmd_ids);
 
