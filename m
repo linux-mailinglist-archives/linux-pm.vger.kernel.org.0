@@ -1,164 +1,100 @@
-Return-Path: <linux-pm+bounces-19185-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19186-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B5339F0A3F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 11:58:56 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B7939F0A4C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 12:00:59 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF35F2833C8
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 10:58:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46E7A1889E22
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 11:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A27D1D88D0;
-	Fri, 13 Dec 2024 10:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92D41C9DC6;
+	Fri, 13 Dec 2024 11:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mUPDLJcf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCTtHUZ2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830281C3C05;
-	Fri, 13 Dec 2024 10:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798A61C3C0D;
+	Fri, 13 Dec 2024 11:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734087516; cv=none; b=rpx/n/BBBjSobvhuZBzg3+pcC9KyAcD4mdfsVLp1aosH1S2pBvudnx6PXtlc+miwWVjNm/kjfhAPeLqQ/GyilF9zBXMCQUwOpQLYRg7oJHMg8JejX+gNcPGUCONzppP8OEcCojAEVnVOUcuV4BGHKd8QcQTxk/30F4ncYbN1adw=
+	t=1734087650; cv=none; b=aB162fH6UknkMZZlp2pt83XGtA8115A1IiisTejytArnELauP2Qzk6VBWFLmeO2fZ5qRq4oCkfZlnAxAvqEN3covZeTYU/0YZyJETXPl7ZbmxZl4mnmtU0VE0gwNiEg/GqzWhQUQlM8jPrtZIOrF7WG6q7PQmhy7z8LAdbwsqsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734087516; c=relaxed/simple;
-	bh=WHwwhGR0mqZ1PJuHXa6WE/npAJ7nlcGOlL0R7dFoqL4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UeqK+YPJeB+IGG+Rubgh4xpYkYv3j2SaNd3cLpntMTHU4dnLf5C06vz994qZ+iwjFx5WUWD2586y/s3aKNE8kViZCErM7KRgDodIbsgMMHe9BkpCXVUisk1KiBlIQYg2rx2Aif017GrISg9Cf+OsVBv+3WRIVvfvPO92j4YGIUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mUPDLJcf; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BD9nY8C017413;
-	Fri, 13 Dec 2024 10:58:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2pSo3lXRJQtSh+qipR8QpslKqMs5fLPQd7tWTHgAK1k=; b=mUPDLJcfkrwjKqi6
-	u+ctPccu8fKQbbSvAeZiUUy9rQ53WsWC05hiWN+JinJZ3nvULI8OSDErFWbwo/W8
-	oxeV6tvqBxE15n1+wYuFSZSxXel4llgNjPTyDNJqC/eeMdmp+8HYJ06joGxfxyPz
-	0slUcKlcNJnApqEZ2RQoxD+n+H/JzP1gqYdfigLqqSdS37HoptBBK+VsK9TiQhDs
-	cEG5qOJIEnuZV3hq0YPcLpfJmhL8+O2tYRXCHqbOfnxrJ4LS53arnAI52Z1g8oBn
-	lOgiSVMF+SQtUE2jnMM9h6ujPog8Y/Yg7TFGdFZnUFHS16rqERhD2tqImU1pEkpQ
-	xaeGcQ==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43gjmt07tv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Dec 2024 10:58:30 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BDAwTgK028537
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Dec 2024 10:58:29 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 13 Dec 2024 02:58:25 -0800
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <djakov@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC: Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v1 2/2] clk: qcom: ipq5424: Use icc-clk for enabling NoC related clocks
-Date: Fri, 13 Dec 2024 16:28:08 +0530
-Message-ID: <20241213105808.674620-2-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241213105808.674620-1-quic_varada@quicinc.com>
-References: <20241213105808.674620-1-quic_varada@quicinc.com>
+	s=arc-20240116; t=1734087650; c=relaxed/simple;
+	bh=xPaMFLDu/nqHKKwyxV+rOSMISn75qqvM0XYS7WHwLm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aYtpApwoYHkNrKK0VMhfpaUcETHsiizu34lrR8k0WIn2m8Tvcr5O84aItKomh39p0zkLbxNe8iEaPmXz9L3qZkZ/Xi2wKpkqr87b5c+/F/XUwtkc7+JdxYxvtdd4EVsWtYxthk3EvBLQnRVhtCUKbsXrhkYk+QMUrXOFJPU06B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCTtHUZ2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1F5C4CED0;
+	Fri, 13 Dec 2024 11:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734087650;
+	bh=xPaMFLDu/nqHKKwyxV+rOSMISn75qqvM0XYS7WHwLm4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KCTtHUZ2gVegt6m+OrBB7y4SCt2ZBKFaFwu1SPqbNnnseaJ0DA8SifYwRV4jrFIw2
+	 aSxC4v4Ys6jG+wRxdWvepBgVhrrMbSqXbS4tW5TpnxZyONZAr8EYDrdaa7drcdPYU6
+	 cpYMTCTds95rfXWrMMDNfEt+yKaBOAQyjKzWfV6T3m6Fcex97a3h5xqsFnCGJrUoag
+	 fIoMgfADo2muryZClr/+uRE/XkI8tsOJfa6uaipolfX4VmNxR7D8opDDfxIKAo+kqA
+	 7CxNMYP0Ml6huMx2YfRnjU0Fxh1bvlIeKblQHNUK2IyyDP51V2asbjcELaCg3RXfrI
+	 A6sjTO/KN1FTw==
+Date: Fri, 13 Dec 2024 12:00:46 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dimitri Fedrau <dima.fedrau@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: gpio-charger: add
+ support for default charge current limit
+Message-ID: <4lef2r5lblj5waulkc56xbfa4xnlxbrk7rawdjgmkatgfnlj3z@vmtcvza6wcna>
+References: <20241211-default-charge-current-limit-v1-0-7819ba06ee2a@liebherr.com>
+ <20241211-default-charge-current-limit-v1-1-7819ba06ee2a@liebherr.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: i3MzLJyya9fDYA7EAzrp8MpZ-q2iB9RQ
-X-Proofpoint-ORIG-GUID: i3MzLJyya9fDYA7EAzrp8MpZ-q2iB9RQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
- malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412130075
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241211-default-charge-current-limit-v1-1-7819ba06ee2a@liebherr.com>
 
-Use the icc-clk framework to enable few clocks to be able to
-create paths and use the peripherals connected on those NoCs.
+On Wed, Dec 11, 2024 at 08:29:09AM +0100, Dimitri Fedrau wrote:
+> Add binding for default charge current limit.
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- drivers/clk/qcom/gcc-ipq5424.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Why?
 
-diff --git a/drivers/clk/qcom/gcc-ipq5424.c b/drivers/clk/qcom/gcc-ipq5424.c
-index 88a7d5b2e751..eb16f44f6864 100644
---- a/drivers/clk/qcom/gcc-ipq5424.c
-+++ b/drivers/clk/qcom/gcc-ipq5424.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/clk-provider.h>
-+#include <linux/interconnect-provider.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -12,6 +13,7 @@
- #include <linux/regmap.h>
- 
- #include <dt-bindings/clock/qcom,ipq5424-gcc.h>
-+#include <dt-bindings/interconnect/qcom,ipq5424.h>
- #include <dt-bindings/reset/qcom,ipq5424-gcc.h>
- 
- #include "clk-alpha-pll.h"
-@@ -3230,6 +3232,20 @@ static const struct qcom_reset_map gcc_ipq5424_resets[] = {
- 	[GCC_QUSB2_1_PHY_BCR] = { 0x3C030, 0 },
- };
- 
-+#define IPQ_APPS_ID			5424	/* some unique value */
-+
-+static const struct qcom_icc_hws_data icc_ipq5424_hws[] = {
-+	{ MASTER_ANOC_PCIE0, SLAVE_ANOC_PCIE0, GCC_ANOC_PCIE0_1LANE_M_CLK },
-+	{ MASTER_CNOC_PCIE0, SLAVE_CNOC_PCIE0, GCC_CNOC_PCIE0_1LANE_S_CLK },
-+	{ MASTER_ANOC_PCIE1, SLAVE_ANOC_PCIE1, GCC_ANOC_PCIE1_1LANE_M_CLK },
-+	{ MASTER_CNOC_PCIE1, SLAVE_CNOC_PCIE1, GCC_CNOC_PCIE1_1LANE_S_CLK },
-+	{ MASTER_ANOC_PCIE2, SLAVE_ANOC_PCIE2, GCC_ANOC_PCIE2_2LANE_M_CLK },
-+	{ MASTER_CNOC_PCIE2, SLAVE_CNOC_PCIE2, GCC_CNOC_PCIE2_2LANE_S_CLK },
-+	{ MASTER_ANOC_PCIE3, SLAVE_ANOC_PCIE3, GCC_ANOC_PCIE3_2LANE_M_CLK },
-+	{ MASTER_CNOC_PCIE3, SLAVE_CNOC_PCIE3, GCC_CNOC_PCIE3_2LANE_S_CLK },
-+	{ MASTER_CNOC_USB, SLAVE_CNOC_USB, GCC_CNOC_USB_CLK },
-+};
-+
- static const struct of_device_id gcc_ipq5424_match_table[] = {
- 	{ .compatible = "qcom,ipq5424-gcc" },
- 	{ }
-@@ -3260,6 +3276,8 @@ static const struct qcom_cc_desc gcc_ipq5424_desc = {
- 	.num_resets = ARRAY_SIZE(gcc_ipq5424_resets),
- 	.clk_hws = gcc_ipq5424_hws,
- 	.num_clk_hws = ARRAY_SIZE(gcc_ipq5424_hws),
-+	.icc_hws = icc_ipq5424_hws,
-+	.num_icc_hws = ARRAY_SIZE(icc_ipq5424_hws),
- };
- 
- static int gcc_ipq5424_probe(struct platform_device *pdev)
-@@ -3272,6 +3290,7 @@ static struct platform_driver gcc_ipq5424_driver = {
- 	.driver = {
- 		.name   = "qcom,gcc-ipq5424",
- 		.of_match_table = gcc_ipq5424_match_table,
-+		.sync_state = icc_sync_state,
- 	},
- };
- 
--- 
-2.34.1
+> 
+> Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> ---
+>  Documentation/devicetree/bindings/power/supply/gpio-charger.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> index 89f8e2bcb2d7836c6a4308aff51721bd83fa3ba1..545fdd7133daf67b5bc238c5af26d0cbd8b44eae 100644
+> --- a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> @@ -58,6 +58,10 @@ properties:
+>              charge-current-limit-gpios property. Bit 1 second to last
+>              GPIO and so on.
+>  
+> +  charge-current-limit-default:
+
+Use standard property suffixes - see other bindings how they define
+charge current.
+git grep charge -- Documentation/devicetree/bindings/power/supply/
+
+But what I don't get is why GPIO chager needs it, since this is
+non-configurable for GPIO charger.
+
+You have entire commit msg or property description to explain such
+things.
+
+Best regards,
+Krzysztof
 
 
