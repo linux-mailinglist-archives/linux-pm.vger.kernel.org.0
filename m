@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-19197-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19198-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1AB9F1152
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 16:49:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 900569F115C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 16:50:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8366C1645B3
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 15:49:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4B711883F9C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 15:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C667A1E3784;
-	Fri, 13 Dec 2024 15:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A3F1E378C;
+	Fri, 13 Dec 2024 15:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aDUqG6+E"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ldGQ9MtP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099571E0DE3
-	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 15:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC7A1E1C26
+	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 15:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734104946; cv=none; b=ZkQn2Zk99C84/f5vMf9yUNb0QfF1yDLtXuXtT8DN5GbSPFU8BVgeGu7ehZPtVFlAedpAqa5ft1vMDSUTGWklV4XJO7B0/fI2R2B+hY2zUrMVg2l+9GpnCLIvWJayTR69dLktUbwa2KwaYDoxZ/t3EvGfUqBRaqpm272ylfA88VE=
+	t=1734105048; cv=none; b=nICPCbhnqbnMghOVY/AIR3zUnYwg41gNtW5wE2BM0yW6Oem0q7F7FjRgmyXtgw2GnbbMRrbThABVSM4iwhYXjlUQ0uIZsyfU8KJCZID97xtnzn/+7mN9xBUj/cGFKNBRTdAzM+TCO2pPgN1erYYJqmb1hJs+JUU/kZm3K20XGtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734104946; c=relaxed/simple;
-	bh=SUN86OTg3oSsKCRZVACrjqSmjlxZVvrn66k1sDZJlqA=;
+	s=arc-20240116; t=1734105048; c=relaxed/simple;
+	bh=AH4YC3G4oAqm/Dy3ioJZ79XaboCBCeJ5Sqlc8mVdEvY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eKd9OZLvxIaFYzXXf34Ugn8+RDwGQRUWsalTKnyMYcqlRUi5sskBUvd69GQ1qNwqbLiOI4uVBhMnF18MthoD+VPRvC15JT8mVldmO8FciZsoIvWhF6l2M1sdXk42OoVe6sq1Gya1fPLAoyS6hENafhNotSlLck7efN7XFOFsvG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aDUqG6+E; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:Content-Type; b=ZOC08OBomTj8Tik+cEvstPWWkJzF5MoBIdjnFvMpKTAw9nK+QsxLREIMOu6ZZ2RvWQs9P9e9Tend0T/KXMeOF2xgB2UG2G1ZQcJ5f2K7tlgalP7Cy2eK09gmMU3mrZ8Oy+2N4Ws2nScl+GM+WYP7Cc3HIbRNO9WA716ZaqZWE4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ldGQ9MtP; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BD8Y6we022791
-	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 15:49:03 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BD81rA2022366
+	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 15:50:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	GJyiqMg7R2avm0R6ZZwjEI0oop3bR44+CCKR5spqj9U=; b=aDUqG6+EPgapuDPN
-	2+2t/gOChzwwbn2G1AINxT3HHJJkmCj/ZMw1Hk4Wt2Rof3o5D4oO1/a6AsKb7p6P
-	FnzmFks+euKaNggX7vTXOjMKRDzLBhxYW1ubq5QcRDspT9WdT3JpbYG6r3MoSRvY
-	hdGGuft5hOg0MLJ7kC7bNZHOodO+jUZ6syu9B1QsPtp0NdeycewRmk58vCwTVn63
-	rKKKe4MdDnXVejMl6zvlNHMYST/oEy8VOwaoGe8orjcycGgHQItPId3f+05Yfkdi
-	3PFOjrd8PEhRKYRwcANyZ82675VeyUqx1r5pn+M3RvaqQalktNJAkPfBcZD034mh
-	jgei+A==
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43g4wnaya3-1
+	4lWamNQAIDfM3yyUtey6LSacCJIPjLImwXtS4zXm6hU=; b=ldGQ9MtPJZ2QCo2F
+	RrlTV+WYdn25DDHsj2e3mZI049VVUyl1EIgquJhPbXwWBnVw30GQ8SpqpOE0tjfv
+	OxFLtcJ1iJs9a0qTp8Xxr6R6DCfdld+o+mkLV0dVEe3wrazbbzkJ6WSnIu3V1+zY
+	PklmGuuL5g/l5gQUlkyD3R5xM6nvswao9FTVG0sobvYQPj3SEQKlans3hhJFpNA0
+	qrKS2qBbots7YBYRduiD5TPOtkF4ghQ4uapPBDVvcw0yYcYfFjDav8Oh4BJDtyzK
+	1GMHo90qrqd0fM13cR2x4SHy55CrfF/8CnsUsh565zCFzdHSgjKsqJ44QeFjXlDt
+	Uy1oYA==
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43gh271b0q-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 15:49:03 +0000 (GMT)
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6dadb08366eso3026046d6.0
-        for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 07:49:03 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 15:50:44 +0000 (GMT)
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6db1009a608so3483286d6.2
+        for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 07:50:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734104942; x=1734709742;
+        d=1e100.net; s=20230601; t=1734105043; x=1734709843;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GJyiqMg7R2avm0R6ZZwjEI0oop3bR44+CCKR5spqj9U=;
-        b=iSVMqgrigZv7LK4GR8wH6lEGjyw9R21afWQV7kRxTXBz8cATKqBvu8wtyNTAoGljEU
-         NChPQJaAr/SnLxGF0Pk2IQrCU6dAcddxtZ1pyLIKKCammlshjFEQ8S9vF3J2eF/yBHgn
-         H67DMtf4wFRdyUGM9UmmIp/N5EqEWBAfV49jcst9vYCN5kFhvZGDZHiWWPEia4zu4YHZ
-         Y1xsLMi5Uqi2d8l6XkW3pdLiqH2oVItNuESFbdNZRYnrlq1dhSBEoDjqHO/h64caIgI6
-         8cDKBAYUeU3rXUN+vZtmrtJGXmSGCBbLgFow0RipQ0JLsMMzhYDhPTtizxbPL6J/eJ+r
-         2ywA==
-X-Forwarded-Encrypted: i=1; AJvYcCWY9PaPKAz9IAVydJ7PoZSRHOnZ4ldAgd9jclUxTYb6oaZpBa3LCa5tXzxHcq3Gl5f1e6RY2RjMgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfsDFXduvXv5Txtae3PbkHjrQRoMjyO+/f0breRrEKQvaw3/db
-	iJLOGiePWmVAvIMKsqj6Vymdt9SODuNPrkRI/3L0bX7tAY37qdXhwOsfvJU4tNiBT1/nx5NPgJf
-	WlOTZwpGZikFWsTSnn4U5CdjgqgwWZuRm38rSM0UjqRj5+cXzGdsdr9D0vw==
-X-Gm-Gg: ASbGncuHgc3ibVRmReBGtWkwC5ImB42PQ/dn52aDuKtK5nHEsJKGMVdBaUQdtkirk/o
-	3Ts6Q1GcjetxUqlxGJN6+UlD2T0PE0n924naAAyfu3JWfoN0GEFEuos1DBs3R9JP4Y1nsinYPgk
-	HNSVY+slXiy4HiMBCQWrSCQx21WPNAOlL3WRZ+/NlsP5nVu7n/Ksav+40gZBYGOAlaCBTo+RuYl
-	qEcO9Dkondq1CCZQ9KAi1mWQuR2r5Vmyxbk7tSRnVJ9vnVxEOYhNGIYIjXBreR6R0pjG6ibzlBM
-	tSMH8V4Z9X6R5am28RsbBaKwBy/LJm3yux/l
-X-Received: by 2002:ad4:5baa:0:b0:6d8:a091:4f52 with SMTP id 6a1803df08f44-6dc92b2eeffmr17583716d6.7.1734104941794;
-        Fri, 13 Dec 2024 07:49:01 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGE+qB0FdfOJjWc+2QkxT9xY69wgePX46Wl2NvBYUy+KbqjiWFvYHVQDOK69Tnl2WZXI51+UQ==
-X-Received: by 2002:ad4:5baa:0:b0:6d8:a091:4f52 with SMTP id 6a1803df08f44-6dc92b2eeffmr17583436d6.7.1734104941325;
-        Fri, 13 Dec 2024 07:49:01 -0800 (PST)
+        bh=4lWamNQAIDfM3yyUtey6LSacCJIPjLImwXtS4zXm6hU=;
+        b=IqyxlZQDf8a3ncrwjHErM6jEzNl9SKI2G7w17MBh6XjOdPBXfV/oqZ3zLW4cLAg/Cl
+         OttKHA90x5gl57Umr4TUpUY2FyteRTNwYK52DKUDxBX1mTlUPiasTM8sx/PDJnxJgkq9
+         FMvcLodWHv8na/q6lvctzbVIbSWAbKDjnNUdjypfsXUEwMDtgzaNH9D5QHLyKDPLOwQt
+         rf/ISnkKPIEeJiMDLodCNX/y5uGsgofo5BIp3AxZIgVMOaqudyBhSJ4JiYiCHKUPpjQK
+         xR3U1wH0mHIja7YtvkpIndLOpOTsloA7sD5h8V5y/yK6DonXtENr0JtRYp5+/MSCT9ej
+         vwrg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzVnmezEgVAX/q9bJKLR3m7pYIByw4nr3feOgqYZL7kf+a9FOXFhb0mr7TLAN6V8pZMKdLdgMszQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyADDEItI2mSQ7Z8hKTnJVr6E22sZGZglu29PMGofv825PaNPnA
+	2P2PBQjHwu2f+Ahe6dWgtqUxIfiMaAXHybx+lm3YOiM85pNxX8Xdj6HtYWObP4mo0S4NC7j5k8i
+	ZKIsbetj4tlx0yoJgGs4ZEkzFNe2F9Q2edvEKU1AFefr1oS0BYbWYuGKzPQ==
+X-Gm-Gg: ASbGncs0MSOg7epOnI1j4wF0gKRVNusjcN3EHcKM3R03XBbQDQin/di8kQq24Y+g8dj
+	I4x02XLtFTggSXOBNkscIWZXRhq3oB0vxZ6oaImed3k0LgZmxLKDfll9buKTQWsxr4sXJQhSrRd
+	EbXitxHzSYy+UDS1T7nuCsDAG6bw8PD238MmPoqz1XYMfOSfOwP2p9HRYH/wCNY1W9plR6uBD01
+	s87+3pM0iF6qt6uU1RohaBc4EK/vjXvFuPUu86zhon9u2FOBOFOsV4XLOoBxtPWlo8y9fpyVYlt
+	dZw+76u4aJK5UtNYhnNDXHVSt8xq6RHuvfQU
+X-Received: by 2002:a05:620a:4593:b0:7b6:dc5c:de2 with SMTP id af79cd13be357-7b6fbf402e6mr165103785a.13.1734105043587;
+        Fri, 13 Dec 2024 07:50:43 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEm8l6zBqCg8QGl9x4UXubkofdFN5ahIp8JE2QujG9aG5B1WdYVDkhDOOL+l9SSQJV+oU85hQ==
+X-Received: by 2002:a05:620a:4593:b0:7b6:dc5c:de2 with SMTP id af79cd13be357-7b6fbf402e6mr165102485a.13.1734105043193;
+        Fri, 13 Dec 2024 07:50:43 -0800 (PST)
 Received: from [192.168.58.241] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa68222d3c7sm755805266b.199.2024.12.13.07.48.59
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d3df2fc65bsm8769201a12.54.2024.12.13.07.50.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2024 07:49:00 -0800 (PST)
-Message-ID: <cf2f2510-9d27-4473-bf50-45b14725f4c5@oss.qualcomm.com>
-Date: Fri, 13 Dec 2024 16:48:58 +0100
+        Fri, 13 Dec 2024 07:50:42 -0800 (PST)
+Message-ID: <2911fa29-1ecb-4d2d-a89b-2068f6fe3022@oss.qualcomm.com>
+Date: Fri, 13 Dec 2024 16:50:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,8 +89,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 3/5] thermal: qcom: Add support for MBG thermal
- monitoring
+Subject: Re: [PATCH RFC v2 1/5] dt-bindings: thermal: Add MBG thermal monitor
+ support
 To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -113,214 +113,67 @@ Cc: Ajit Pandey <quic_ajipan@quicinc.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
 References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
- <20241212-mbg-v2-support-v2-3-3249a4339b6e@quicinc.com>
+ <20241212-mbg-v2-support-v2-1-3249a4339b6e@quicinc.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241212-mbg-v2-support-v2-3-3249a4339b6e@quicinc.com>
+In-Reply-To: <20241212-mbg-v2-support-v2-1-3249a4339b6e@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: cyCGpeAeSlzZXdpCNpthhaOxTteOvTzz
-X-Proofpoint-GUID: cyCGpeAeSlzZXdpCNpthhaOxTteOvTzz
+X-Proofpoint-ORIG-GUID: z9OQ_fwZrDwYuUdMayQeo7r7ed8qjYCg
+X-Proofpoint-GUID: z9OQ_fwZrDwYuUdMayQeo7r7ed8qjYCg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
- mlxscore=0 clxscore=1015 adultscore=0 phishscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2412130112
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=999 impostorscore=0
+ suspectscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412130112
 
 On 12.12.2024 5:11 PM, Satya Priya Kakitapalli wrote:
-> Add driver for the MBG thermal monitoring device. It monitors
-> the die temperature, and when there is a level 1 upper threshold
-> violation, it receives an interrupt over spmi. The driver reads
-> the fault status register and notifies thermal accordingly.
+> Add PM8775 ADC5 GEN3 Channel info and bindings for the MBG Temp
+> alarm peripheral found on PM8775 pmic.
 > 
 > Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
 > ---
+>  .../bindings/thermal/qcom-spmi-mbg-tm.yaml         | 86 ++++++++++++++++++++++
+>  .../iio/adc/qcom,spmi-adc5-gen3-pm8775.h           | 41 +++++++++++
+>  2 files changed, 127 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-mbg-tm.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-mbg-tm.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..909373eb758e4a8b7c2bbd0022c56ab2e823ca13
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-mbg-tm.yaml
+> @@ -0,0 +1,86 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/qcom-spmi-mbg-tm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. SPMI PMIC MBG Thermal Monitoring
+> +
+> +maintainers:
+> +  - Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+> +
+> +description:
+> +  Qualcomm's MBG(Master Bandgap) temperature alarm monitors the die
+> +  temperature and generates an interrupt if the PMIC die temperature is
+> +  over a set of programmable temperature thresholds. It allows monitoring
+> +  for both hot and cold, LVL1 and LVL2 thresholds, which makes it different
+> +  from the existing temp alarm peripheral. The interrupt comes over SPMI
+> +  and the MBG's fault status register gives details to understand whether
+> +  it is a hot/cold and LVL1/LVL2 violation.
+> +
+> +allOf:
+> +  - $ref: thermal-sensor.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,spmi-pm8775-mbg-tm
 
-[...]
-
-> +static const struct mbg_map_table map_table[] = {
-
-Is this peripheral/pmic-specific?
-
-> +	/* minT	vtemp0	tc */
-> +	{ -60000, 4337, 1967 },
-> +	{ -40000, 4731, 1964 },
-> +	{ -20000, 5124, 1957  },
-> +	{ 0,      5515, 1949 },
-> +	{ 20000,  5905, 1940 },
-> +	{ 40000,  6293, 1930 },
-> +	{ 60000,  6679, 1921 },
-> +	{ 80000,  7064, 1910 },
-> +	{ 100000, 7446, 1896 },
-> +	{ 120000, 7825, 1878 },
-> +	{ 140000, 8201, 1859 },
-> +};
-> +
-> +static int mbg_tm_get_temp(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	struct mbg_tm_chip *chip = thermal_zone_device_priv(tz);
-> +	int ret, milli_celsius;
-> +
-> +	if (!temp)
-> +		return -EINVAL;
-> +
-> +	if (chip->last_thres_crossed) {
-> +		pr_debug("last_temp: %d\n", chip->last_temp);
-
-Use dev_dbg for consistency with the other debug prints
-
-> +		chip->last_thres_crossed = false;
-> +		*temp = chip->last_temp;
-> +		return 0;
-> +	}
-> +
-> +	ret = iio_read_channel_processed(chip->adc, &milli_celsius);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "failed to read iio channel %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	*temp = milli_celsius;
-> +
-> +	return 0;
-> +}
-> +
-> +static int temp_to_vtemp(int temp)
-> +{
-> +
-> +	int idx, vtemp, tc = 0, t0 = 0, vtemp0 = 0;
-> +
-> +	for (idx = 0; idx < ARRAY_SIZE(map_table); idx++)
-> +		if (temp >= map_table[idx].min_temp &&
-> +				temp < (map_table[idx].min_temp + 20000)) {
-
-Please align the two lines, tab width is 8 for kernel code
-
-> +			tc = map_table[idx].tc;
-> +			t0 = map_table[idx].min_temp;
-> +			vtemp0 = map_table[idx].vtemp0;
-> +			break;
-> +		}
-> +
-> +	/*
-> +	 * Formula to calculate vtemp(mV) from a given temp
-> +	 * vtemp = (temp - minT) * tc + vtemp0
-> +	 * tc, t0 and vtemp0 values are mentioned in the map_table array.
-> +	 */
-> +	vtemp = ((temp - t0) * tc + vtemp0 * 100000) / 1000000;
-
-So you say vtemp = ... and the func is called temp_to_vtemp
-
-> +	return abs(vtemp - MBG_TEMP_DEFAULT_TEMP_MV) / MBG_TEMP_STEP_MV;
-
-But you end up returning a scaled version of it..
-Please clarify that in the code
-
-
-> +}
-> +
-> +static int mbg_tm_set_trip_temp(struct thermal_zone_device *tz, int low_temp,
-> +						int temp)
-> +{
-> +	struct mbg_tm_chip *chip = thermal_zone_device_priv(tz);
-> +	int ret = 0;
-> +
-> +	guard(mutex)(&chip->lock);
-> +
-> +	/* The HW has a limitation that the trip set must be above 25C */
-> +	if (temp > MBG_MIN_TRIP_TEMP && temp < MBG_MAX_SUPPORTED_TEMP) {
-> +		regmap_set_bits(chip->map,
-> +			chip->base + MBG_TEMP_MON2_MISC_CFG, MON2_UP_THRESH_EN);
-> +		ret = regmap_write(chip->map, chip->base + MON2_LVL1_UP_THRESH,
-> +						temp_to_vtemp(temp));
-> +		if (ret < 0)
-> +			return ret;
-> +	} else {
-> +		dev_dbg(chip->dev, "Set trip b/w 25C and 160C\n");
-> +		regmap_clear_bits(chip->map,
-> +			chip->base + MBG_TEMP_MON2_MISC_CFG, MON2_UP_THRESH_EN);
-> +	}
-> +
-> +	/*
-> +	 * Configure the last_temp one degree higher, to ensure the
-> +	 * violated temp is returned to thermal framework when it reads
-> +	 * temperature for the first time after the violation happens.
-> +	 * This is needed to account for the inaccuracy in the conversion
-> +	 * formula used which leads to the thermal framework setting back
-> +	 * the same thresholds in case the temperature it reads does not
-> +	 * show violation.
-> +	 */
-> +	chip->last_temp = temp + MBG_TEMP_CONSTANT;
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct thermal_zone_device_ops mbg_tm_ops = {
-> +	.get_temp = mbg_tm_get_temp,
-> +	.set_trips = mbg_tm_set_trip_temp,
-> +};
-> +
-> +static irqreturn_t mbg_tm_isr(int irq, void *data)
-> +{
-> +	struct mbg_tm_chip *chip = data;
-> +	int ret, val;
-> +
-> +	scoped_guard(mutex, &chip->lock) {
-> +		ret = regmap_read(chip->map,
-> +			chip->base + MBG_TEMP_MON2_FAULT_STATUS, &val);
-> +		if (ret < 0)
-> +			return IRQ_HANDLED;
-> +	}
-> +
-> +	if ((val & MON_FAULT_STATUS_MASK) & MON_FAULT_STATUS_LVL1) {
-> +		if ((val & MON_POLARITY_STATUS_MASK) & MON_POLARITY_STATUS_UPR) {
-
-Just checking the last argument to AND in both lines is enough, as
-they're both parts of the bitfield
-
-[...]
-
-> +	ret = device_property_read_u32(chip->dev, "reg", &res);
-> +	if (ret < 0)
-> +		return ret;
-
-return dev_err_probe(dev, ret, "Couldn't read reg property"\n);
-
-> +
-> +	chip->base = res;
-> +
-> +	chip->irq = platform_get_irq(pdev, 0);
-> +	if (chip->irq < 0)
-> +		return chip->irq;
-
-Similarly here
-
-> +
-> +	chip->adc = devm_iio_channel_get(&pdev->dev, "thermal");
-> +	if (IS_ERR(chip->adc))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(chip->adc),
-> +			       "failed to get adc channel\n");
-> +
-> +	chip->tz_dev = devm_thermal_of_zone_register(&pdev->dev, 0,
-> +						chip, &mbg_tm_ops);
-> +	if (IS_ERR(chip->tz_dev))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(chip->tz_dev),
-> +			       "failed to register sensor\n");
-
-Please also make the error messages start with an uppercase letter
-
-> +
-> +	return devm_request_threaded_irq(&pdev->dev, chip->irq, NULL,
-> +			mbg_tm_isr, IRQF_ONESHOT, node->name, chip);
-> +}
-> +
-> +static const struct of_device_id mbg_tm_match_table[] = {
-> +	{ .compatible = "qcom,spmi-pm8775-mbg-tm" },
-
-I don't think the 'spmi' bit belongs here
+The bus the chip is connected over shouldn't be part of the compatible
 
 Konrad
 
