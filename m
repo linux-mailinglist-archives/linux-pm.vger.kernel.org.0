@@ -1,126 +1,144 @@
-Return-Path: <linux-pm+bounces-19205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 123709F14BB
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 19:10:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73CC69F14D1
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 19:19:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FF11188E3DE
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 18:10:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF2F27A038E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2024 18:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6CC1E8823;
-	Fri, 13 Dec 2024 18:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443011E570B;
+	Fri, 13 Dec 2024 18:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QZC352md"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LuwtijXt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618AD1E6DCF;
-	Fri, 13 Dec 2024 18:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9E21E25F8
+	for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 18:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734113429; cv=none; b=lcZu3NOGOF8dckUYpsOtqpjvlnD1NAaAHh5LJ7cS51TiGT/+M+3IIWWJdP1ENiJlfsWvdzO6z9PsLpe/7/kMgzFd/7+mtABUBiBknLYCmbRiiW2MW94v4fVx+df3AAXpV2ksgM9jyupnwfmFpx81UWPL8w2GL/RPyj/sovXzfLk=
+	t=1734113982; cv=none; b=cJH9TvEBAD+tPLBNOqKGufopGBnHm1QgKCaXUWEwyWjN3A9IrNKFEOLf2PqbH14vwjeSTkoOoJIJIqQkpeh/4aZBi5tKzFkLEm06/rMiGjRQ485W+MMYbZ7b0FVIAlbfvNNmnUCoxQWLLt7C1zwm5R5XepvM9d31Z40Yn+MtDiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734113429; c=relaxed/simple;
-	bh=wCwlt+7GCLxcopJC5MJMifpu7xdIRDMWb2raqFoT4oQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kjurkQpmN24oPpdfPKrSvdkKIHyUforwsUzXQbby6eYdKOwWJUmSAq/WbtQiKAAdSlnQmm5qrXeHsLcwtC2N6xk1smYHL42UN0wAxDoTQEHUOnDJ0dTlKRwLb3N99y+CLkb1AFXCsPTVr2PCuP5SgnGVZlr+KPrRPg63rTiYLLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QZC352md; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-844e394395aso53293439f.3;
-        Fri, 13 Dec 2024 10:10:28 -0800 (PST)
+	s=arc-20240116; t=1734113982; c=relaxed/simple;
+	bh=IXFSUo9E+OzDGGUDNTXnj4BxB8uJdqmPFLE01xbjzvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJPxW1sU+xYM7mBjre46cjF5YPoolToAA0wgWkWRFuzxhJ9qIKMZWBSxpdVlCZcz3TmkquisrBqLUswiJJdbP5iONnlYfpO4dPUV5KG9fGySID5VbaGhU6ZCRWfSOrFXrEf32/E3l07REb0S5wVOir38Mwi+p1644NGi+yyzgwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LuwtijXt; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-aa69107179cso393665566b.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 10:19:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734113427; x=1734718227; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JXPrXpI449ov9UhSKua2z+0yiJDVS90M3hJvDU48AIU=;
-        b=QZC352mdwrs4oWUP97qY7JU1MawykQfJatAAZsVQ0saNDbjeXWpDKaTB1T642RyjGO
-         znBBHIFcUU6qYTm1kKHdv+2iNTibHRT3cAciQRAYFyODTVnqjm+taBw5M33mEfVU0977
-         kJ26onMvmFfd+VUY1/oe8GQQ1qz5EVDu0JkvHtj3M+3rQNXCuZQ1DgpGnanp+6lIfajx
-         V7ACXO3NY5g6KrUpKr6xkmV0q2Pb9Y7pe9QZcqwDr2cqDDrnxWGddCo/Em00xeyh0RoY
-         lBlOgQ5fUKaSOLJsKIeGYPaEnfp16bfPhziLVGErInixXJClg4d0mPjQLNAFN42EvC97
-         ZIpQ==
+        d=linaro.org; s=google; t=1734113978; x=1734718778; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=twtqvRoan+eYnSO74DE1z5GWOoJn7U/yFtJVJQT99vU=;
+        b=LuwtijXtu/TRtp8x3r3V33FBl+U2XY24OHV1c/q5xZEQNVUAWx0/XcHoyz7AgdfO+d
+         XAw5FBiJkP64DW9W2Jo7harql/rFbt9X8oM+KvWxgUGB7I9rfT5xhZyH3sl4pM6D5iPU
+         mwc4PnpD0mZm8PZRJrvlHstWEBlNAbiYpBCc7wT0uTuOQuurKsIFGJAyh35qzKCKYzdb
+         U6esIPbmRThhXK9yU/D9QuaujiJZkttnMMOoJLfDq5R/i6PDaIBXeLHcZtaOFce5bRM0
+         YBvkMoZ/Mch32Skz2fuJa+WFCTMBeBtv4Z1TWzDWztJqWsdWPZSItWXjsH+6kedfBVRZ
+         o+VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734113427; x=1734718227;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JXPrXpI449ov9UhSKua2z+0yiJDVS90M3hJvDU48AIU=;
-        b=i5H+yHCC3pR6teUTmuyvfIluLCrKiMZM4dv2V2Q2W9icv+y89BTPpRafgdvL9BmWEP
-         kJ1Gy6ZOZuo543hhbC64NqnRp6KkBxkVJUS213bvqDikcoKNTYN2R8/zP7ThnoEt2LnE
-         q6K9DvzcE1PId1XiqzwxPZmlAAAbBMV1g4LRweg3u6KFMWFy7T7cqJE4oEprJfHSPL1V
-         KcBKnNic7g2lMNbFoaVbNY7UVSADZva6ojWAy4R1vvMAIAOQd+7QNiZUeR9/QgenEPry
-         HNgof6b4f/TUqL1n3gBOw+lh3+Ie30f3lVZCJQSl3jEpJE4ijv2MQjQw5kvmOq27F9Lt
-         72Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCXOMwuFQQ8oaiqnRjjZXg8jqcWhj/1jUc4H4rb5GXtlAXYcHHniR9h+4p3nh9yMZc3kja1H40iN5vU=@vger.kernel.org, AJvYcCXjqxb40Fin5tY2hZS+pwpEwnQOJQ9uGysC9waRXFxhtP0xCeM4yoSkgRJrced7uun8MCLrrOqBZeHE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxn1SfvWBnZiRct1Ah4BvJDK5R3AZQn/c9lUSK9cBab8DlbZQcp
-	be6kplq9LMbNb8qdXlsEcnT+FGzGdcXmY00JxYrowb6uoVzJEcp/Pu9Vzw==
-X-Gm-Gg: ASbGncuioVX+a8II95kEdi6ysafhMT0xgNFNi3f63yO3i3n/OxEBt5CacndBhvkct8W
-	QVeUfNC99XmL6ejJLPlAkYUEVZ8x4BehpqJP0fvdPGvWWkNMep1WI02vsromTyu7ex6H9ga3Gai
-	KNUJHx+SL0U9eWybmrVUgSNUju6YBh3FzeESDU9+mxfW8NCxtXCQmqq6QpR3sK4bcTlObiKCP2u
-	SGkieV0rIwlobo7L4R83Q2TxpA6mz3+YoW6/lY3dmjG7SvqKGgvo8guW/3gm2CfAaEwxC+x2rh2
-	nZVk0YSARV8hwX9HyWVFVpbpMd8=
-X-Google-Smtp-Source: AGHT+IHLYxooB8Sqn2S8F7OH0vGMIzkYzZ3Jr/Pux0565zJs3ssqRpJ8c0d/gYSGr71vt+GOdL6q1Q==
-X-Received: by 2002:a05:6602:6416:b0:841:a678:de3f with SMTP id ca18e2360f4ac-844e8698247mr499346639f.0.1734113426981;
-        Fri, 13 Dec 2024 10:10:26 -0800 (PST)
-Received: from localhost.localdomain (65-128-205-244.mpls.qwest.net. [65.128.205.244])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2baf714cesm2922533173.101.2024.12.13.10.10.23
+        d=1e100.net; s=20230601; t=1734113978; x=1734718778;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=twtqvRoan+eYnSO74DE1z5GWOoJn7U/yFtJVJQT99vU=;
+        b=opm8l8gxWvgwSw4sXPP9xyzzAw1uqd5hihJd1IhUeOEUIkq0vJDVlTkQJ72tr3BGQH
+         sA1x+i8b9wEXfvdZIOJtZuL3wK1mtxOUtAIhktPNyp+nW3gRcpXKJacDhxadPkA1Mmgq
+         mzZDOln4VgVonVAP0WMgqtbyOXrbqZW7nHwkriVNyaMMGQaS5AbcjseOWYhltzTcO6E8
+         bUcpwg8b1clY4SyxIpHC/Ct9oKJ4phRXxGhT+lRaosroGzqp4gV/+oodotcz5V1q9AA8
+         rJGQbcXoO+0gdRWs0qWDzzQzLr8NIhT6fsUwTrVff8TjU6Mh9CypJI1nW8ILxf1SpDds
+         mP7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWnfGiFrvUub4V6ygC3WfAjxtXtqa1FvcFww7nqNxyXJom8T0t07cfpsL9s5VlHYHQtSZnrrwPPUA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBKiejNtuxXXS2r0fDa15HsRJXlfTuRbnHZP0ZA6ACiA44zeci
+	FTwlj6lynZeztaX9aj7tIEpQmMqkIy1G5Otn4rgH/xEgRjeGFUyrsMhLrfu8/lE=
+X-Gm-Gg: ASbGncs4e8/a+xPE2P2PvkfmkGlQXr+8YkuqBhnMBQ8XY/eH6+fBc1qIwFzwQ9BYffq
+	3qHWdBPLb6tnJWp997VjtFY432BN3rXZEWT4INrV0VrF90Go3y8LrqwW4QF0IiSxJ8/PWqVq/US
+	L+LLoWDR2xKYzOjP8RiZ1RMHpYz0EodDVKSDP6C+sNZaEB7htNSsxVEF9PTO7MVuun6j43ZNSbQ
+	P9fR2KDIr1V581esV0O1NHWCkZAPgyn1E/XWWTnwpuHHNNoJ846XOeNDSw802DDapLw
+X-Google-Smtp-Source: AGHT+IFInGnVF4NBCAH9r+c7HVFvAHAWd9NOi/wF6K5xsJ3aU4eMArDXdSpkJ1YVcIZmOno3oVCykA==
+X-Received: by 2002:a17:907:9615:b0:aa6:5603:e03d with SMTP id a640c23a62f3a-aab77ed3aefmr369683966b.59.1734113978431;
+        Fri, 13 Dec 2024 10:19:38 -0800 (PST)
+Received: from linaro.org ([2a02:2454:ff21:ef80:79ff:3949:ffc2:a553])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab9638ac24sm286066b.137.2024.12.13.10.19.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 10:10:26 -0800 (PST)
-From: Shimrra Shai <shimrrashai@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	Shimrra Shai <shimrrashai@gmail.com>
-Subject: [PATCH v2 2/2] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
-Date: Fri, 13 Dec 2024 12:08:55 -0600
-Message-ID: <20241213180855.16472-3-shimrrashai@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241213180855.16472-1-shimrrashai@gmail.com>
-References: <20241213180855.16472-1-shimrrashai@gmail.com>
+        Fri, 13 Dec 2024 10:19:37 -0800 (PST)
+Date: Fri, 13 Dec 2024 19:19:34 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [RFT PATCH] Revert "power: sequencing: request the WLAN enable
+ GPIO as-is"
+Message-ID: <Z1x6ti2KaMdKS1Hn@linaro.org>
+References: <20241203141251.11735-1-brgl@bgdev.pl>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241203141251.11735-1-brgl@bgdev.pl>
 
-Document the compatibles for the new board.
+On Tue, Dec 03, 2024 at 03:12:51PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> This reverts commit a9aaf1ff88a8cb99a1335c9eb76de637f0cf8c10.
+> 
+> With the changes recently merged into the PCI/pwrctrl/ we now have
+> correct ordering between the pwrseq provider and the PCI-pwrctrl
+> consumers. With that, the pwrseq WCN driver no longer needs to leave the
+> GPIO state as-is and we can remove the workaround.
+> 
 
-Signed-off-by: Shimrra Shai <shimrrashai@gmail.com>
----
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Should probably revert commit d8b762070c3f ("power: sequencing:
+qcom-wcn: set the wlan-enable GPIO to output") as well?
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 753199a12..9ee96acdc 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -190,6 +190,11 @@ properties:
-           - const: firefly,firefly-rk3399
-           - const: rockchip,rk3399
- 
-+      - description: Firefly ITX-3588J
-+        items:
-+          - const: firefly,itx-3588j
-+          - const: rockchip,rk3588
-+
-       - description: Firefly ROC-RK3308-CC
-         items:
-           - const: firefly,roc-rk3308-cc
--- 
-2.45.2
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  drivers/power/sequencing/pwrseq-qcom-wcn.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> index 682a9beac69eb..bb8c47280b7bc 100644
+> --- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> +++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> @@ -379,7 +379,7 @@ static int pwrseq_qcom_wcn_probe(struct platform_device *pdev)
+>  				     "Failed to get the Bluetooth enable GPIO\n");
+>  
+>  	ctx->wlan_gpio = devm_gpiod_get_optional(dev, "wlan-enable",
+> -						 GPIOD_ASIS);
+> +						 GPIOD_OUT_LOW);
+>  	if (IS_ERR(ctx->wlan_gpio))
+>  		return dev_err_probe(dev, PTR_ERR(ctx->wlan_gpio),
+>  				     "Failed to get the WLAN enable GPIO\n");
+> -- 
+> 2.30.2
+> 
 
+I'm not sure why but applying this patch brings back the error I had
+before. It does seem like setting wlan-enable GPIO happens early enough,
+but maybe some timing is still wrong.
+
+[   17.132161] <gpiod_set_value_cansleep(ctx->wlan_gpio, 1);>
+[   17.480619] ath12k_pci 0004:01:00.0: of_irq_parse_pci: failed with rc=134
+[   17.491997] ath12k_pci 0004:01:00.0: pci device id mismatch: 0xffff 0x1107
+[   17.492000] ath12k_pci 0004:01:00.0: failed to claim device: -5
+[   17.492075] ath12k_pci 0004:01:00.0: probe with driver ath12k_pci failed with error -5
+
+Any ideas/suggestions?
+
+Thanks,
+Stephan
 
