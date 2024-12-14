@@ -1,180 +1,200 @@
-Return-Path: <linux-pm+bounces-19231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3DF9F1C17
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 03:27:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF1BB9F1C1F
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 03:35:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 383CF188EADF
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 02:27:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B554F1618DF
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 02:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE2F11712;
-	Sat, 14 Dec 2024 02:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="wWq8rTej"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF20B101DE;
+	Sat, 14 Dec 2024 02:35:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6081C36
-	for <linux-pm@vger.kernel.org>; Sat, 14 Dec 2024 02:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0693323AD;
+	Sat, 14 Dec 2024 02:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734143218; cv=none; b=sP2CP1zqSnxt2avL6vn8LxBRphCQr5yOGa88vahx53TOfnwrHo6yA+6fYL/0EMFuO8T3FvT1fYsFJPkvykX8BW3bIrUUZsdC6MeY8Doqq8A12J6a5gbx2/eLcDHfp7mbmZeOowWSvp7z4Jp416rTi+UGOUYguHKuLBfE3um/Xd8=
+	t=1734143748; cv=none; b=HoEAmi5MX+MoJN4/EGGrlhj24XKD597636skRmQ9WSWD7It3pG7YJHtYVrQYyhCKxM5BiEhDPaufHxaRh3QbjE8wFVtRFmWeB5QzmDwq+4SnUKtwLG7iUjeFeQx0caalcGXNUXV5x8sQjKYzmZaXoN+AXeyiDl3oyw7HWSW/Bf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734143218; c=relaxed/simple;
-	bh=Ao1NMpM9H0qoA13oyUJCPZXljfgJn720+aFyXdx2FXM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eqYLExZ9y5ThV2xir7wMSki4AuQYMsL1CykEQNSRERPMeN7Q7ynXzGW2XJjQJQjWcaZc6TIwdGYR+vOBPIRJ4foHh4agFSavyC4aLiqEQfQEW0XxiYbDTdhj42UuMnfYH78ACe0edmQvgUwAygwMKAsJBoEzzGvgJVZa5jOitVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=wWq8rTej; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ef87d24c2dso1809317a91.1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Dec 2024 18:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1734143216; x=1734748016; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k1GXrUV001dErBvzcYJfNgPyRsL7+homNHBWUvWv40M=;
-        b=wWq8rTejur1ydABJrmd19UajZFkpYd97WL6paPNR66VxgqDXOfpSu6dcIJlbMcxcF2
-         QP1qGD8dKehDGXTI6ECNnToH4o+g5VQjmJ+olXaRveVjDcnvux0znflAt/MzaHSSPBK9
-         8a7XXOyZp7GGIIyW+IcDYuQXLPJR8MuajWMc3ey1YjAHUJ12L2a7zZAz6ytpt6m/H3ns
-         eS64V6wcp7VuYj+yLpjGcZfOHHFCgO/1v6bbGKqZ+Tjqh0CxRmR9wjQnNKsQdL0YsGSm
-         bJMdOqrXC0WqRK55966iJ5eDetwqy5v0lHLpiEWzH3sflOQzBPtD7bacKjfyusN6nrp5
-         TtAg==
+	s=arc-20240116; t=1734143748; c=relaxed/simple;
+	bh=4wqap3t1XSWLu8ztdQ7Cu8789k+uDEU+NcHW1Y8XLuM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZOMXC4OaDuOlYjpMQ2VSPYMM8dG+jNLD1qPRY6IwvjyzMTFNr1g9CPUceowCuvy9qTuTkbnvpf0oBviZ/wwD0VWAw6/fGhcBwhP8vnSsHRp0vUE3U/jeHzsMEnmiulanLJbeSh8GWGVIyzIIazslRyBkz+DhkiIqS3J5rTDhMIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7e9e38dd5f1so1764844a12.0;
+        Fri, 13 Dec 2024 18:35:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734143216; x=1734748016;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1GXrUV001dErBvzcYJfNgPyRsL7+homNHBWUvWv40M=;
-        b=c9RNzobS3Ku/VbD3eGvymgFuUYZJPU/qciY7PfvJeypaEuryrZyEO0psf5HwjA0WUI
-         R18OAu6FEnCjktrKNR73ssd2ea9pNe+NK83x/BClTuw/0kr5d5Y7HyN6PBxsYdsQgIK+
-         z3cCO+NSHg908UH1oa3LoZkGzy0/D4jYnvJVbK/UqNCqzF50OWrGbTfbDJcXQhLzz4Kk
-         zccVv3kiwH3sMfJcBsbUxhrFhzgVbQtBbSIdKB+2KwRlqEBCuMP3TjJav8imyExoV3mT
-         blYvsYXHcUfkLUrd0qYd9/KmEefVep/UUjkoTFMwkOvVHKK1/kY1TjS6C7pL21VzlPXo
-         MMcA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6TOG/6AltlvuxKgt23FQZ940dZtEsKUd/Sg7Wo+h1niWz2zMq9KbhwhBu/1g4kdMz6BR/VVqyjw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycamszAN2upS3v7j360qHhj3Dd4aomkR/ZmHm5Y5NOdsfDSPw7
-	GNHR1ywrAaRRLUS5p5zcBOufFL44uxNxKoixiS2aP3y0NTie24crcN7KPtIm9wE=
-X-Gm-Gg: ASbGncvTdrrZXgfh3mFiZS6F8zRzxlIWa2GVimZIXGGCorClTnLFbZB+sFbdpMqjCo+
-	+CouiJ/bg61tp6d8QbbG/gP2nDkpV5IsKHLfBVRbgbn5dUEWHWq9bStMfeiHCRREqnSUwsBqcg6
-	u1e2uWmiDdMOsIHIiN8BFTR0UX7e2unXE/jOY3S6kQyZfDUKkcbaQoKqGwg11Ecx0CwWpFTmilT
-	B51Z5cKOtVXUv+Sz24IIcZ8zqTsxznXOyapMR2Bf4H25zPbHxbjWd5LStO1ovQZafCQJGQVy9ex
-	5eCnioEOmp3xtLjquCM908hkvx3DOi+lQA==
-X-Google-Smtp-Source: AGHT+IH5JoWIXpfewW3B4IHy8HMSuUfyPLEMNUb8eLGidzqep51HdSMVZcLn/JASahvllA2PNckiiw==
-X-Received: by 2002:a17:90b:3fc7:b0:2ee:693e:ed7c with SMTP id 98e67ed59e1d1-2f2901b1169mr7734298a91.33.1734143215700;
-        Fri, 13 Dec 2024 18:26:55 -0800 (PST)
-Received: from [192.168.0.78] (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1dcc4e3sm4203355ad.69.2024.12.13.18.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2024 18:26:55 -0800 (PST)
-Message-ID: <8219826d-62fe-406f-a750-6e901dee0690@pf.is.s.u-tokyo.ac.jp>
-Date: Sat, 14 Dec 2024 11:26:52 +0900
+        d=1e100.net; s=20230601; t=1734143746; x=1734748546;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FPRhjEJVxQTQSLdLSuZF+NUxMFxgovEYaBdCXHPfWoc=;
+        b=PxkK1S8S5VjgRp2h9sCKk/UuEogru7TxYFZHiy9ErEqr1ysU04vA1k0uZxSQ2b/Qc7
+         5bdSkEKNHXjKgFB/8vhEgVKyIdX/+BGWzrwufbzdUv5MccG+tRrhwTk8L3WgzVY4y7hp
+         MOWzkxspLQ8xXeTmCq+j0T1W9SbzvGkVsp2F1KY9eciD9S0H0I3Fc0QGsaCsdlfi6jDq
+         xresfCN+jM4iThmzIg30IjrFbiYKzgIJ0/HaKN4s0ugDDXEA991nQoYnKUTN1OPEb3hL
+         rROMlcTXBo8E6pMyiCG+co0NFGlZKAnWkdLXkkl3XfV9W47mmgC+MZLYS0ji81EmvVBQ
+         ybhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ0oMNKnZACnKBLR2yFrkLWKyCtQfehu/jMbz86zIMU73FKpyfBvNBY28//+grZSWlasO47sWV7MQ=@vger.kernel.org, AJvYcCWG2VI5aSi/xyAG9sh0vADDuqk9bcWnGfKgRcfdhEbXIUi+VUXcpdn56zyRZYwoA9Sjgx3mOBfy+us2m7o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9mHaaEx54kUoUt/xxitaxv0Ab9x7pVRGKOI8ONMgawIKY400y
+	g8/bWCbLJulKH5YDjdeWBVtzZRjMaVo1+wMehhED3Xr4tA136Yvupij+g20b
+X-Gm-Gg: ASbGncsy1rRYnHrpHXTWx3tPUNfjo7i9UyjRQPg6uHiX5qUGQ5puy8oUtikYmQQOBlg
+	cWImTh1OG4dw4Tw6aB6zalRuZv4PZsl3DwBUEW4/4nnMKm15RyVuE56CIXddYxxL6ta5U2sbUzY
+	BfAHUue4hcoTQx3hfaOxPif4oklFUaLqhqH7A0VAphjIACRfHCLj6K/N0AZduBto4QWLbHWnv4n
+	dpQhpaAUl4+RaSHQFJnlMUaIk7MeME7mQNVhI8Agr0pf7tNsLAh8VxdqHBfPFN+aRECmtUmZFA=
+X-Google-Smtp-Source: AGHT+IHxR7O4ws5JgiDlhLRgvzI0NMOJdvjjQoVfbkd0GPtBPu+2RIHPfLAM2ibiKTPZXKZpNkfSRQ==
+X-Received: by 2002:a17:90b:3b48:b0:2ee:7415:4768 with SMTP id 98e67ed59e1d1-2f28fd6f5c1mr8909669a91.17.1734143746232;
+        Fri, 13 Dec 2024 18:35:46 -0800 (PST)
+Received: from sultan-box.localdomain ([142.147.89.231])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2a1e9dfa1sm557652a91.20.2024.12.13.18.35.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 18:35:45 -0800 (PST)
+Date: Fri, 13 Dec 2024 18:35:42 -0800
+From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq: schedutil: Fix superfluous updates caused
+ by need_freq_update
+Message-ID: <Z1zu_nDQcik0cZLx@sultan-box.localdomain>
+References: <20241212015734.41241-1-sultan@kerneltoast.com>
+ <20241212015734.41241-2-sultan@kerneltoast.com>
+ <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM: wakeup: implement devm_device_init_wakeup() helper
-To: Dhruva Gole <d-gole@ti.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20241213035235.2479642-1-joe@pf.is.s.u-tokyo.ac.jp>
- <20241213092642.sq44raaty2ub6c7s@lcpd911>
-Content-Language: en-US
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-In-Reply-To: <20241213092642.sq44raaty2ub6c7s@lcpd911>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
 
-Hi Dhruva,
+On Thu, Dec 12, 2024 at 01:24:41PM +0000, Christian Loehle wrote:
+> On 12/12/24 01:57, Sultan Alsawaf wrote:
+> > From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
+> > 
+> > A redundant frequency update is only truly needed when there is a policy
+> > limits change with a driver that specifies CPUFREQ_NEED_UPDATE_LIMITS.
+> > 
+> > In spite of that, drivers specifying CPUFREQ_NEED_UPDATE_LIMITS receive a
+> > frequency update _all the time_, not just for a policy limits change,
+> > because need_freq_update is never cleared.
+> > 
+> > Furthermore, ignore_dl_rate_limit()'s usage of need_freq_update also leads
+> > to a redundant frequency update, regardless of whether or not the driver
+> > specifies CPUFREQ_NEED_UPDATE_LIMITS, when the next chosen frequency is the
+> > same as the current one.
+> > 
+> > Fix the superfluous updates by only honoring CPUFREQ_NEED_UPDATE_LIMITS
+> > when there's a policy limits change, and clearing need_freq_update when a
+> > requisite redundant update occurs.
+> > 
+> > This is neatly achieved by moving up the CPUFREQ_NEED_UPDATE_LIMITS test
+> > and instead setting need_freq_update to false in sugov_update_next_freq().
+> >
+> 
+> Good catch!
+> Fixes:
+> 600f5badb78c ("cpufreq: schedutil: Don't skip freq update when limits change")
+> 
+> 
+> > Signed-off-by: Sultan Alsawaf (unemployed) <sultan@kerneltoast.com>
+> 
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
-Thank you for your review.
+Thanks for the review and digging up the bug provenance!
 
-On 12/13/24 18:26, Dhruva Gole wrote:
-> On Dec 13, 2024 at 12:52:35 +0900, Joe Hattori wrote:
->> Some drivers that enable device wakeup fail to properly disable it
->> during their cleanup, which results in a memory leak.
->>
->> To address this, introduce devm_device_init_wakeup(), a managed variant
->> of device_init_wakeup(dev, true). With this managed helper, wakeup
->> functionality will be automatically disabled when the device is
->> released, ensuring a more reliable cleanup process.
->>
->> This need for this addition arose during a previous discussion [1].
->>
->> [1]:
->> https://lore.kernel.org/linux-rtc/20241212100403.3799667-1-joe@pf.is.s.u-tokyo.ac.jp/
+> > ---
+> >  kernel/sched/cpufreq_schedutil.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index 28c77904ea74..e51d5ce730be 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -83,7 +83,7 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+> >  
+> >  	if (unlikely(sg_policy->limits_changed)) {
+> >  		sg_policy->limits_changed = false;
+> > -		sg_policy->need_freq_update = true;
+> > +		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);>  		return true;
+> >  	}
+> >  
+> > @@ -96,7 +96,7 @@ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+> >  				   unsigned int next_freq)
+> >  {
+> >  	if (sg_policy->need_freq_update)
+> > -		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+> > +		sg_policy->need_freq_update = false;
+> >  	else if (sg_policy->next_freq == next_freq)
+> >  		return false;
 > 
-> CC Alexandre who I see is an important part of this thread.
+> I guess you could rewrite this into just one if like
+> 
+> ---
+> 
+> 	if (sg_policy->next_freq == next_freq && !sg_policy->need_freq_update))
+> 		return false;
+> 
+> 	sg_policy->need_freq_update = false
+> 	sg_policy->next_freq = next_freq;
+> 	sg_policy->last_freq_update_time = time;
 
-Yes, just sent a v2 patch with Alexandre in CC and in the "Suggested-by" 
-tag.
+Hmm, asm seems worse since it adds an extra store to one of the branch targets:
 
-> 
->>
->> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
->> ---
->>   include/linux/pm_wakeup.h | 27 +++++++++++++++++++++++++++
->>   1 file changed, 27 insertions(+)
->>
->> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
->> index 222f7530806c..baf4f982858a 100644
->> --- a/include/linux/pm_wakeup.h
->> +++ b/include/linux/pm_wakeup.h
->> @@ -240,4 +240,31 @@ static inline int device_init_wakeup(struct device *dev, bool enable)
->>   	return 0;
->>   }
->>   
->> +static void devm_device_disable_wakeup(void *data)
->> +{
->> +	struct device *dev = data;
->> +
->> +	device_wakeup_disable(dev);
->> +	device_set_wakeup_capable(dev, false);
->> +}
->> +
->> +/**
->> + * devm_device_init_wakeup - Resource managed device wakeup initialization.
->> + * @dev: Device to handle.
->> + *
->> + * This function is the devm managed version of device_init_wakeup(dev, true).
->> + */
->> +static inline int devm_device_init_wakeup(struct device *dev)
->> +{
->> +	int err;
->> +
->> +	device_set_wakeup_capable(dev, true);
->> +	err = device_wakeup_enable(dev);
->> +	if (err) {
->> +		device_set_wakeup_capable(dev, false);
->> +		return err;
->> +	}
->> +	return devm_add_action_or_reset(dev, devm_device_disable_wakeup, dev);
-> 
-> Why not just call in device_init_wakeup which already does all this for
-> you?
+Before:
+-------
+        00100020 e3 03 00 aa     mov        x3,x0
+        00100024 00 a8 43 39     ldrb       w0,[x0, #0xea]
+        00100028 3f 23 03 d5     paciasp
+        0010002c c0 00 00 36     tbz        w0,#0x0,LAB_00100044
+        00100030 7f a8 03 39     strb       wzr,[x3, #0xea]
+                             LAB_00100034
+        00100034 20 00 80 52     mov        w0,#0x1
+        00100038 61 14 00 f9     str        x1,[x3, #0x28]
+        0010003c 62 38 00 b9     str        w2,[x3, #0x38]
+        00100040 ff 0b 5f d6     retaa
+                             LAB_00100044
+        00100044 64 38 40 b9     ldr        w4,[x3, #0x38]
+        00100048 9f 00 02 6b     cmp        w4,w2
+        0010004c 41 ff ff 54     b.ne       LAB_00100034
+        00100050 ff 0b 5f d6     retaa
 
-Makes sense, applied in the v2 patch.
+After:
+------
+        00100020 e3 03 00 aa     mov        x3,x0
+        00100024 00 38 40 b9     ldr        w0,[x0, #0x38]
+        00100028 3f 23 03 d5     paciasp
+        0010002c 1f 00 02 6b     cmp        w0,w2
+        00100030 c0 00 00 54     b.eq       LAB_00100048
+                             LAB_00100034
+        00100034 20 00 80 52     mov        w0,#0x1
+        00100038 61 14 00 f9     str        x1,[x3, #0x28]
+        0010003c 62 38 00 b9     str        w2,[x3, #0x38]
+        00100040 7f a8 03 39     strb       wzr,[x3, #0xea]
+        00100044 ff 0b 5f d6     retaa
+                             LAB_00100048
+        00100048 60 a8 43 39     ldrb       w0,[x3, #0xea]
+        0010004c 40 ff 07 37     tbnz       w0,#0x0,LAB_00100034
+        00100050 ff 0b 5f d6     retaa
 
-> 
-> 
-> Then the devm_disable will just be device_init_wakeup(dev, false);
-> 
-> 
-> See for eg. how runtime pm does it:
-> 
-> 	int devm_pm_runtime_enable(struct device *dev)
-> 	{
-> 		pm_runtime_enable(dev);
-> 
-
-Best,
-Joe
+Sultan
 
