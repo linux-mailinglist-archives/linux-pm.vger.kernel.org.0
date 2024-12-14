@@ -1,160 +1,118 @@
-Return-Path: <linux-pm+bounces-19235-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19236-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38EC99F1D2C
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 08:53:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 570CF9F1F38
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 15:17:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A55B218838ED
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 07:53:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8717D167260
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2024 14:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3319713A26F;
-	Sat, 14 Dec 2024 07:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1941925B9;
+	Sat, 14 Dec 2024 14:17:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="JfMtAxSB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAsIehzk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3ABE1CD2C;
-	Sat, 14 Dec 2024 07:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908D6653;
+	Sat, 14 Dec 2024 14:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734162804; cv=none; b=ENyyXst81cMbyeFDOiH9ryiqQ3CIZCeC50HQahL6g0aQAYK8UPCT/2YVvk3VP76qUSmk2Dw5BEtByMCmlsveOpP6XdB/lyelIU28/yr1nL2WB+j4npLmntfVCSO4xTyvdQMa85v1MPFd2JmiX+1zA6C2TTKfn5mXiFlfjIZWwsw=
+	t=1734185871; cv=none; b=VFyvwfEWW+qQKdywgKt689FepAhpGUcqgMVqyK5Fwuew2aazIDvmAXUsWmU/4fuL8mQ6v6v8q91WDltQXAk+KKpwHgBAg97jGLGv14lOs40smOu5tSB3Y2TEH/MFnR7W8556yLkU/RIlqLZBOmTTr7RlW5K4Fff4QcwTHbWjc6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734162804; c=relaxed/simple;
-	bh=fxw6X+UXrcG3EGEQM/Ie6kxNM6DUBbOk+RNZ1QExddQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V75G0w/3N+VQmF5rtf6SX834gMs3X9buMu/AdwMfLgZOEQ583vL2jNnaBP7sXaXf+//VaPtk5NG7Q+iUYP+vzpU52IZXo+cWps/805Xs9Z2aPFFJ7bbmL9LvehZO5HHQWx5i5gjp/EN8CBGvFNf+5HDLS/ODE6hoNDBxElu/n3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=JfMtAxSB; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734162791;
-	bh=fxw6X+UXrcG3EGEQM/Ie6kxNM6DUBbOk+RNZ1QExddQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JfMtAxSB7IcVJUONVbaIURRMZ4LacN4mOFZq92a/bS9FA6CiZJ/IVNstLX105pIaK
-	 Aazk8XuxQaBxT/8JyC13YoAnpVmIdbxCYHqXQUP0TUJSyKe04k4hQuTesIkyMcp5RX
-	 YlQL0TtuvR2K+48ktOy4X6666FF+4AOoLbFw9WZI=
-Date: Sat, 14 Dec 2024 08:53:10 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>, 
-	Hans de Goede <hdegoede@redhat.com>, Benson Leung <bleung@chromium.org>, 
-	Guenter Roeck <groeck@chromium.org>
-Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] power: supply: core: add UAPI to discover
- currently used extensions
-Message-ID: <12c775fd-0adc-4dca-aac8-91b353e4f01f@t-8ch.de>
-References: <20241211-power-supply-extensions-v6-0-9d9dc3f3d387@weissschuh.net>
- <20241211-power-supply-extensions-v6-4-9d9dc3f3d387@weissschuh.net>
+	s=arc-20240116; t=1734185871; c=relaxed/simple;
+	bh=QO3n4VP0ZVPU7aLYGFfEVVIxCLvXX1E3ymy4xvCKQ9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZX2RUT8H9zCKf4bMATPi2vvJ8oncJ4dEVQ5dhhpllvTIYAD+zhOG0oI6hs4s40zbPCEtZUgaBGVZtyVaVmAOaXzVUo5iNjyhTnzLqUW5EAQ+bYpKe8kCMk4aKTWTv6XEpBjLnCzgN5kSLYUytkRhfdHZngDIuX3ATdMaABKcp7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAsIehzk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2385BC4CED1;
+	Sat, 14 Dec 2024 14:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734185871;
+	bh=QO3n4VP0ZVPU7aLYGFfEVVIxCLvXX1E3ymy4xvCKQ9E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WAsIehzkr7Vrpt+MWeba4fCvbWVgiUhrTq80W/iIq4Y4NUYiU2WUwZ87VFMQRA0XX
+	 8kb4uYYM4v/CM4jvQteW8VEC945/P7NVUZ+y85SqkZ/elrxi3qx/L5aDFsAJPxndfU
+	 KmrqCk/hnsbe0GuiYcc7xfGO7YW0zu/lUiIez9Ig/vxBRV9CZGgEOALMI9ey1Ulkx2
+	 kX28OjeHFwmlNTk8Z7TI/lI78WR9W4BcfweyocmY97an5lkTIbYy5XKMspw42YjsbM
+	 TuAGLh2IUh5BjtM8FJ7+dxJcoMXAcazCUMRZaorhauFiuopsXm8oYyb3AUgCQhgE+n
+	 Eygv395A5BSIA==
+Date: Sat, 14 Dec 2024 14:17:37 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lars-Peter
+ Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Stephen Boyd
+ <sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>, Thara Gopinath
+ <thara.gopinath@gmail.com>, "Bjorn Andersson" <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Ajit Pandey
+ <quic_ajipan@quicinc.com>, Imran Shaik <quic_imrashai@quicinc.com>, Taniya
+ Das <quic_tdas@quicinc.com>, "Jagadeesh Kona" <quic_jkona@quicinc.com>,
+ <quic_kamalw@quicinc.com>, <quic_jprakash@quicinc.com>,
+ <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 3/5] thermal: qcom: Add support for MBG thermal
+ monitoring
+Message-ID: <20241214141737.1c3a305e@jic23-huawei>
+In-Reply-To: <20241212-mbg-v2-support-v2-3-3249a4339b6e@quicinc.com>
+References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
+	<20241212-mbg-v2-support-v2-3-3249a4339b6e@quicinc.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241211-power-supply-extensions-v6-4-9d9dc3f3d387@weissschuh.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2024-12-11 20:57:58+0100, Thomas Weißschuh wrote:
-> Userspace wants to now about the used power supply extensions,
-> for example to handle a device extended by a certain extension
-> differently or to discover information about the extending device.
+On Thu, 12 Dec 2024 21:41:22 +0530
+Satya Priya Kakitapalli <quic_skakitap@quicinc.com> wrote:
+
+> Add driver for the MBG thermal monitoring device. It monitors
+> the die temperature, and when there is a level 1 upper threshold
+> violation, it receives an interrupt over spmi. The driver reads
+> the fault status register and notifies thermal accordingly.
 > 
-> Add a sysfs directory to the power supply device.
-> This directory contains links which are named after the used extension
-> and point to the device implementing that extension.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  Documentation/ABI/testing/sysfs-class-power |  9 +++++++++
->  drivers/power/supply/cros_charge-control.c  |  5 ++++-
->  drivers/power/supply/power_supply.h         |  2 ++
->  drivers/power/supply/power_supply_core.c    | 19 +++++++++++++++++--
->  drivers/power/supply/power_supply_sysfs.c   | 10 ++++++++++
->  drivers/power/supply/test_power.c           |  4 +++-
->  include/linux/power_supply.h                |  2 ++
->  7 files changed, 47 insertions(+), 4 deletions(-)
+> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+Just a quick comment on consistency of formatting.
 
-[..]
-
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1346,17 +1346,21 @@ static int power_supply_update_sysfs_and_hwmon(struct power_supply *psy)
->  }
->  
->  int power_supply_register_extension(struct power_supply *psy, const struct power_supply_ext *ext,
-> -				    void *data)
-> +				    struct device *dev, void *data)
->  {
->  	struct power_supply_ext_registration *reg;
->  	size_t i;
->  	int ret;
->  
-> -	if (!psy || !ext || !ext->properties || !ext->num_properties)
-> +	if (!psy || !dev || !ext || !ext->name || !ext->properties || !ext->num_properties)
->  		return -EINVAL;
->  
->  	guard(rwsem_write)(&psy->extensions_sem);
->  
-> +	power_supply_for_each_extension(reg, psy)
-> +		if (strcmp(ext->name, reg->ext->name) == 0)
-> +			return -EEXIST;
+> +static int mbg_tm_set_trip_temp(struct thermal_zone_device *tz, int low_temp,
+> +						int temp)
+> +{
+> +	struct mbg_tm_chip *chip = thermal_zone_device_priv(tz);
+> +	int ret = 0;
 > +
->  	for (i = 0; i < ext->num_properties; i++)
->  		if (power_supply_has_property(psy, ext->properties[i]))
->  			return -EEXIST;
-> @@ -1366,9 +1370,15 @@ int power_supply_register_extension(struct power_supply *psy, const struct power
->  		return -ENOMEM;
->  
->  	reg->ext = ext;
-> +	reg->dev = dev;
->  	reg->data = data;
->  	list_add(&reg->list_head, &psy->extensions);
->  
-> +	ret = sysfs_add_link_to_group(&psy->dev.kobj, power_supply_extension_group.name,
-> +				      &dev->kobj, ext->name);
-> +	if (ret)
-> +		goto sysfs_link_failed;
+> +	guard(mutex)(&chip->lock);
 > +
->  	ret = power_supply_update_sysfs_and_hwmon(psy);
->  	if (ret)
->  		goto sysfs_hwmon_failed;
-> @@ -1376,6 +1386,8 @@ int power_supply_register_extension(struct power_supply *psy, const struct power
->  	return 0;
->  
->  sysfs_hwmon_failed:
-> +	sysfs_remove_link_from_group(&psy->dev.kobj, power_supply_extension_group.name, ext->name);
-> +sysfs_link_failed:
->  	list_del(&reg->list_head);
->  	kfree(reg);
->  	return ret;
-> @@ -1392,6 +1404,9 @@ void power_supply_unregister_extension(struct power_supply *psy, const struct po
->  		if (reg->ext == ext) {
->  			list_del(&reg->list_head);
->  			kfree(reg);
-> +			sysfs_remove_link_from_group(&psy->dev.kobj,
-> +						     power_supply_extension_group.name,
-> +						     reg->ext->name);
+> +	/* The HW has a limitation that the trip set must be above 25C */
+> +	if (temp > MBG_MIN_TRIP_TEMP && temp < MBG_MAX_SUPPORTED_TEMP) {
+> +		regmap_set_bits(chip->map,
+> +			chip->base + MBG_TEMP_MON2_MISC_CFG, MON2_UP_THRESH_EN);
+> +		ret = regmap_write(chip->map, chip->base + MON2_LVL1_UP_THRESH,
+> +						temp_to_vtemp(temp));
+Alignment in this driver should be consistent / tidied up.
 
-Dan Carpenter's sparse bot detected a use after free here.
-Could you move the call to sysfs_remove_link_from_group() before the
-kfree() when applying?
-
-(Or switch reg->ext->name to ext->name)
-
->  			power_supply_update_sysfs_and_hwmon(psy);
->  			return;
->  		}
-
-[..]
+I'm not sure on style preferred in thermal, but I'd always default to align
+after the opening bracket + wrap at 80 chars unless readability is hurt.
 
 
-Thanks,
-Thomas
+> +		if (ret < 0)
+> +			return ret;
+> +	} else {
+> +		dev_dbg(chip->dev, "Set trip b/w 25C and 160C\n");
+> +		regmap_clear_bits(chip->map,
+> +			chip->base + MBG_TEMP_MON2_MISC_CFG, MON2_UP_THRESH_EN);
+> +	}
+
+
+
 
