@@ -1,130 +1,116 @@
-Return-Path: <linux-pm+bounces-19246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 365C09F221C
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 04:28:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 140669F2274
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 08:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 576037A11FB
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 03:28:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 657C17A076B
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 07:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CC2101DE;
-	Sun, 15 Dec 2024 03:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE0314263;
+	Sun, 15 Dec 2024 07:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYOmxKWC"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="TemHNU3n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170F92940D;
-	Sun, 15 Dec 2024 03:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0F3881E
+	for <linux-pm@vger.kernel.org>; Sun, 15 Dec 2024 07:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734233248; cv=none; b=mlBJlzdL/tJonXAZlHylx3HLNctvl8ae2gtN13koTStmG57LfMs9aLl6afoLU9AdlarplsjIudcAcJJgFIZurXRXSTtwZemYQvkWjVYpqKOhImfGVEVMehUpySvlnmH46rsjBHW5kAWzuKOaBdIh0vgDYXvNyesPtqV5EYH7zbk=
+	t=1734246623; cv=none; b=gd0YtvFwaajvuWJOzq1VOG9Xifi0CkWSql/pNg3z4+lVIeo97T4OYYnl4/JyeWrNezI7dtv52rQIEx2STQuP37vNZ7Mk4yFgUO6ZO7U9bZDFyl/TSjgGHxqF7/JSVCSnfwAbGyP0z9Os/tZ0YBFFFNXjq6AmYt0UP3XfnIX2vm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734233248; c=relaxed/simple;
-	bh=nWMqBh6v7cRgm+XJUOPQB1YJclxvbH+Y2uWnFBbVcJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HDS8xGC24FftsqO4N6BvkcTZSJL75bjBvzlWdvErIA7oKs/I6MSOTecBncR8OVxqcrT7kUhZhwNd8uAS4USxms1d3R7v5Rtj1pk/OtxSi9Ow1ZY+CYe67PJd+y+8+SvX1Q9Vi8Utu/FU/0lBQ4faRsFPoEsywZiKTgGmYAxQk9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYOmxKWC; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-844bff5ba1dso225434039f.1;
-        Sat, 14 Dec 2024 19:27:26 -0800 (PST)
+	s=arc-20240116; t=1734246623; c=relaxed/simple;
+	bh=4y8pyZl0sDO4uolquMxdGIbrAQbmpwf4Sq00Vc2dSk4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LC7jRe4DPBSIZCKvVIkC+sCknG9N77QRxzAFxRHYOH4yyDaAqtEYxAnj7j8xs6oiL/i4vWB6Axv9Q1UTpg48/JjeXmxlBGH+nqHB9/6s4a24t8OeMMe9WWE0jSx4/i8K7kjNdP7FA8u+PLnjX09aQuIQ4igTDitB8pUDvDUUyvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=TemHNU3n; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ef87d24c2dso2319893a91.1
+        for <linux-pm@vger.kernel.org>; Sat, 14 Dec 2024 23:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734233246; x=1734838046; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XMKOxO+QQQnpK/gqTmp5of8X6K9CuNI4LFknE1hYc2M=;
-        b=SYOmxKWCKf+30mCsZbL2phmry4pNdL2KNMjvIKd13gHFBlIhQusDt0I9zCUlZX2nLV
-         DaLjX40D9Ez18RRxFVO7EEY30HxJHauJ8OlcB8Yw3oyy9qFJpGCGI3vJqsSSBkFNjpdp
-         28kT9RrvPgRwR14BwBO7W2Vq0wjkuTlorgexQo4500i7A5F8fMzPzoTOjIL/NgwKXTCx
-         BiF+33ldPvGefPGU5jvkOOiDQ/LPLEBtoKQDJYpGlD1Y4HQccRrSrWV/tkD11RFlU368
-         6uca7PNUEUbPfJ4b3BSej6LT7I/c4MCtokwnyhd6H7iVKQA0JBkMFVO1A7VcTGtnHa9n
-         gbYw==
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1734246620; x=1734851420; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4+Cu+jWnEpuv2bxfR77QO1MKzm+m0kZ0gvNUZL6BOc=;
+        b=TemHNU3n1upChBDmeL5rf5XGjw22/oNCAkoyCfvnSV4VjsR6itL/Rs/Zmi4fpeH4Ue
+         ZJnFZxx8EJR553wVuwcMhpweZazN+sIvKlhqK5oMghvrWinN/8bUX9yUXGSee369URF/
+         ujDVD+4cPG7DBL3Bt4SYPdW188WnBkR58WnQ2riZwp440TVIzudTiZc1MLJIEBzsavbr
+         mPCcD78CpO9Q2LgtLe/lOU1dQ+AQ8VozBecggbBnLUbSr6uJima8uQUk1fp7kgMc1c/z
+         muGYVCOxvWU4cbyZBJuZD0/bwInoq5nFWh6V72nPcflI6/tNWXSpzVbTeQV7RXWQ9e0l
+         eYsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734233246; x=1734838046;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XMKOxO+QQQnpK/gqTmp5of8X6K9CuNI4LFknE1hYc2M=;
-        b=IY5rodvXd8iGiDHBSz+bzTZ3RAaka7c6ujr91KmRbxA0EOYStAidXZKl874v2lLjnY
-         LRDMKxSZrx53gJgUX/AvL06nt+PCb0FopycUITdLs7FZbEV/1ix8LGlNR3Npud0JWCIW
-         URCBKU+X+00INtlkS5sZiZGEsUdD+p03tjjRBZK8P6A8I5fClfqd70NB3MAkEms7UIVs
-         d2QuL0rP2P/B7M21h86SbAxmCGWlQeg8QagpiiUEmHRs472ARKXpw5+RwqMGN6g2Yw5k
-         6dwfoY9RTJufVuK9BvbTF/w4GlbZd1mt7xoGPG+ikVjUsFatcf65xEEbd20kFPgAbW9a
-         5oxw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyXa4FKsrjT/SQ6wevTXkIfM0GdvjfPUKNymHNzgyCStAeHA9xRgiSfYrouFdS5lj1pZGHNen2vMbc@vger.kernel.org, AJvYcCWK2rSvjsZmufhqUqoh8c/F4ZCQICIraWN0kq/sOlW7bK3MZ8U2t6l7+70EOWX5Sz3kQzIlhcmv5qk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC/ws/TPnkhdkYDoyuKbwhAlUhQ4injuc8s+zuxhqdrk6uAP1S
-	mmMm68e8s/OPopBZstPUHNgfY02DzlcfvrQQp8FfVtNlsGIKxPAd9oCanA==
-X-Gm-Gg: ASbGncv69FnybscfpOEk6ySGbFdcxW4SM7ojZVg0HKDQtBdpeKGASHUMP5gQx0EXYXR
-	GVfJq2+1mGyFeYAaYg825r07LsRzVYIvTQIJzh/dbAkmfhcluFaqS+sIZ4o7hoDCLEuRm9znrKI
-	qZrn6MFPHc3zvATV3VK/NtvEVETjlNgw0dIxBREOX5m0dxmltDfpQO+Ocuj+AxaEP/SI1xPRuU9
-	sUbHC2Q6LvqhHYQhU4qP9Ayu+4U4uxiddDh60IujFULXHsoTlDlDF3ZmyhA4/xtKiucQVlRiNPn
-	2oNiKh8VnDJbUg3mbmJb2D5FXCs=
-X-Google-Smtp-Source: AGHT+IH/Ga5WHa4WgsKsLSKgbEehuyqvn8KfLn7YekgXK2iiDYMjq8AZzP29aqVzMkcLbvuitLywqw==
-X-Received: by 2002:a05:6e02:3308:b0:3a7:fe8c:b012 with SMTP id e9e14a558f8ab-3aff8c92a85mr86513735ab.18.1734233245607;
-        Sat, 14 Dec 2024 19:27:25 -0800 (PST)
-Received: from localhost.localdomain (65-128-205-244.mpls.qwest.net. [65.128.205.244])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3b2482298c6sm7755575ab.31.2024.12.14.19.27.20
+        d=1e100.net; s=20230601; t=1734246620; x=1734851420;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S4+Cu+jWnEpuv2bxfR77QO1MKzm+m0kZ0gvNUZL6BOc=;
+        b=wwjNXOkxvY/+xwz4+/Zg7Q6qXKBKB4/zzOEQnPs+r7jGEaEH37tYgdecOPmkGyjhT7
+         nhIAn/Yniu7v2T0BnqjCtsE4VA/eqM7JfIuB+KaE9ANh7T1s1D7CQW/Fli+lgMeiRVfq
+         +ThMcT8ABAK8/1J3nFH26koPg7cCr9edQII1peCxeu7BfZZ2U7ta6xH5eR+4jrN0SPnS
+         ZcMTkrgTGZP8d2m/axb+ZTDFKDGlz96Iirgj7WdzbNqbGrUNZ92SdgpbiBM9DjTeBJCh
+         YOguUR5KQFggzqV7HTyxGBworHxvq9uT6K43JGETSYm0eHVRyd/EmYv2c95y1P1ilJcI
+         HxQA==
+X-Gm-Message-State: AOJu0YxAlHlMKYtzbRol/hr/rryuwvZcscwtu3Iue3CV14YvxoWkHYnk
+	ECcmy4fv3Ixyo6HJN5ExiaA6Wo45DNnTzrq3e1oIsaEauq6yxjlzfz9g7cqIpki0D0LgkRrq1mY
+	ts+StGw==
+X-Gm-Gg: ASbGncs41S/kbbe8UBtNSRE4MAaEL2mbReaC2K55IzwLgoLVTz/mE8214W6Q4Jhbgdv
+	JQ1TJO/K8JRqc59WPgXPgz3f1txB/SKLvLGRcJdVjEbrxz9L8Y78r8S5knVl0QDMnjbTPwKnI27
+	mUrsLV2KaPhmG5qam3dxYB/CQi/l7rqwsvl3aQVcCVew9DFCbH6eemvXpReAhP7KeanRcyaiOjN
+	PU8gVxLEAda3EQeAdZWsO4ot9ZPh+puQT73st5WjsXr9jakz4JmNf432TEJrfi/nurT3IhYhAAE
+	+0CrMbGvkCB6ZfxR33jb8nEf99h3Nid14td7xvu6i4A=
+X-Google-Smtp-Source: AGHT+IG+DsXSN0bl8CWTYwEETCpDiFXAqw6pzdz5hUm44u15iXc5achy7KhSDOVyPHPM0d6rB5aF+A==
+X-Received: by 2002:a17:90b:1c05:b0:2ee:889b:b11e with SMTP id 98e67ed59e1d1-2f28ffa7df0mr12595803a91.30.1734246620309;
+        Sat, 14 Dec 2024 23:10:20 -0800 (PST)
+Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1db7c82sm22269925ad.13.2024.12.14.23.10.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Dec 2024 19:27:24 -0800 (PST)
-From: Shimrra Shai <shimrrashai@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	heiko@sntech.de,
-	krzk+dt@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	robh@kernel.org,
-	Shimrra Shai <shimrrashai@gmail.com>
-Subject: [PATCH v3 3/3] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
-Date: Sat, 14 Dec 2024 21:24:55 -0600
-Message-ID: <20241215032507.4739-4-shimrrashai@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241215032507.4739-1-shimrrashai@gmail.com>
-References: <20241215032507.4739-1-shimrrashai@gmail.com>
+        Sat, 14 Dec 2024 23:10:18 -0800 (PST)
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+To: rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Subject: [PATCH] powercap: balance device refcount in powercap_register_control_type()
+Date: Sun, 15 Dec 2024 16:10:12 +0900
+Message-Id: <20241215071012.59208-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Updated DT binding documentation per @Heiko Stübner's suggestion, to
-reflect the bipartite nature of the board.
+powercap_register_control_type() calls device_register(), but does not
+release the refcount of the device when it fails. Call put_device()
+before returning an error to balance the refcount.
 
-Signed-off-by: Shimrra Shai <shimrrashai@gmail.com>
+This bug was found by an experimental static analysis tool that I am
+developing.
+
+Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/powercap/powercap_sys.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 753199a12..fc7ee86e2 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -167,6 +167,13 @@ properties:
-           - const: engicam,px30-core
-           - const: rockchip,px30
- 
-+      - description: Firefly Core-3588J-based boards
-+        items:
-+          - enum:
-+              - firefly,itx-3588j
-+          - const: firefly,core-3588j
-+          - const: rockchip,rk3588
-+
-       - description: Firefly Core-PX30-JD4 on MB-JD4-PX30 baseboard
-         items:
-           - const: firefly,px30-jd4-core-mb
+diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+index 52c32dcbf7d8..c2d36dbe29e1 100644
+--- a/drivers/powercap/powercap_sys.c
++++ b/drivers/powercap/powercap_sys.c
+@@ -627,6 +627,7 @@ struct powercap_control_type *powercap_register_control_type(
+ 	dev_set_name(&control_type->dev, "%s", name);
+ 	result = device_register(&control_type->dev);
+ 	if (result) {
++		put_device(&control_type->dev);
+ 		if (control_type->allocated)
+ 			kfree(control_type);
+ 		return ERR_PTR(result);
 -- 
-2.45.2
+2.34.1
 
 
