@@ -1,67 +1,71 @@
-Return-Path: <linux-pm+bounces-19259-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19258-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E5929F24F8
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 18:21:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6066B9F24F9
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 18:21:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08763188585B
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 17:21:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98B347A10EC
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2024 17:21:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072AD1B218E;
-	Sun, 15 Dec 2024 17:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDDD919993D;
+	Sun, 15 Dec 2024 17:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MakJlDUH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eAtApgtZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A48D199252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328624C80
 	for <linux-pm@vger.kernel.org>; Sun, 15 Dec 2024 17:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734283307; cv=none; b=uV/NhsqsuV8UYwP7Bl2Fhes62dLxDebYBp2K2syajlTZRFxzVNmkA9YIwehMigyL8RIvlOq9XrUG0lyF3XGxHk+7RIFvtl/B9TwH8AuYWKrJzjJUrM2PMrJeVoQcAZXEOdiyEvGmi+CxhjwTLHmJM0K6OfMPrYiIiMgjUCOmxr4=
+	t=1734283307; cv=none; b=uTukWCr4JJmMI+IfpERP4I9KBvgyyCfscsuxElKaiYA6ST0MMEJPHz/hn084JgkSDN/15YaqzxXcIA8lGtrFm9BlCGVq8dAD9vdHNI1ujlK65/Rd3pkDLhUtr6Bb21notQSMiIQXXhxsN4PJPlIW2hYcM88DZCknHSCmzuLBq4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734283307; c=relaxed/simple;
-	bh=K74D4NWgxmzqnKqHkj+Fvglt4iX9P7fMgSzMjGIT9lg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uzcMgkmonM0IN/X+fqoo2Xf8NpG+AUW4AULOGLgmjO/GXLdkctADfqFk8fgyuLDPI5Q/a/JO/qOA7Rh1Wm56InvYr86/N4gXOJ7NsUIV2jJBEXNyjzxlxdN5bbrYt7Fd/EPbNrBh7qs3D+u80mlDqMWwZUk6ROdTpVfuGDGH6Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MakJlDUH; arc=none smtp.client-ip=170.10.129.124
+	bh=BLwC3WwoDUlLpGQKyzAtZQKR+rqkAQoUqDZK7nZ6UTA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uDJihlBp3ToYzORwNV1FbYfIfjPlLa7OOZhk7rEE5R1ZljcYFBTnfvjSR4UKDaI1BncdIXNiRCEPa1A7w/dH0fTubBCtpctlvbbupeApNSxDMLXfhoMiHI8cP+8o4Gk5XYHHwe0Qz1Ga1CyJE2Ur0JKW8MTtMRGTuJDhnqHuVW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eAtApgtZ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1734283305;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=o9HigzFmA/maEFn4DAZCyJGyH27YHnzQEF8DOTMIUZU=;
-	b=MakJlDUHn37CKi+ASFktzpR/cClPV/bfLTSEzH/RZmwXCb8hxX3V1Xvq8a1/AGoeqG2iZr
-	1447Mh/6pPvfU1VPpbL0hYxKELr0g5rvs9JnpTjbivID6leZeGKOtky7aAVb4SnWI1FQZ7
-	IK4fqNmzLF5NTSc/jb4+0/PxaBoFQBo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iYwhi850U32uEuTPC8+/nR1O8eC3/lakGHGU3/SHSFQ=;
+	b=eAtApgtZ030HlOss23bkOg9MupoZbnEqUWLK85bYrgqmHgbU5qtelxPBc3H9kWZRRTPFJ/
+	jhzPtsoYhQtT3eD5h2efCbe6J+/o8SP8d3Pqf9xcvUQZQpfNknqqcC55jYqSkDt+iy1vmA
+	RdbsLGXVX2d+jH6my/WEwFyzx5gjOUc=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-267-dcoqO4ZtO1O2q3jX_tAZFA-1; Sun,
- 15 Dec 2024 12:21:41 -0500
-X-MC-Unique: dcoqO4ZtO1O2q3jX_tAZFA-1
-X-Mimecast-MFC-AGG-ID: dcoqO4ZtO1O2q3jX_tAZFA
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-390-EoR1iIyJNNq5WEoku9wXRw-1; Sun,
+ 15 Dec 2024 12:21:43 -0500
+X-MC-Unique: EoR1iIyJNNq5WEoku9wXRw-1
+X-Mimecast-MFC-AGG-ID: EoR1iIyJNNq5WEoku9wXRw
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E28B91956058;
-	Sun, 15 Dec 2024 17:21:40 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7B3551956086;
+	Sun, 15 Dec 2024 17:21:42 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.51])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C6654195605A;
-	Sun, 15 Dec 2024 17:21:39 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5E5DC195605A;
+	Sun, 15 Dec 2024 17:21:41 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sebastian Reichel <sre@kernel.org>
 Cc: Hans de Goede <hdegoede@redhat.com>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH 0/8] power: supply: Add adc-battery-helper lib and Intel Dollar Cove TI CC battery driver
-Date: Sun, 15 Dec 2024 18:21:23 +0100
-Message-ID: <20241215172133.178460-1-hdegoede@redhat.com>
+Subject: [PATCH 1/8] power: supply: Use power_supply_external_power_changed() in __power_supply_changed_work()
+Date: Sun, 15 Dec 2024 18:21:24 +0100
+Message-ID: <20241215172133.178460-2-hdegoede@redhat.com>
+In-Reply-To: <20241215172133.178460-1-hdegoede@redhat.com>
+References: <20241215172133.178460-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,59 +75,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Hi All,
+The power-supply core is designed so that power-supply driver callbacks
+such as get_property() and external_power_changed() will not be called
+until the power-supply's parent driver's probe() function has completed.
 
-Here is a patch-series which primary goal is to add support for
-using the coulomb-counter in the Intel Dollar Cove TI PMIC as
-battery power-supply class device.
+There is a race where power_supply_changed() can be called for a supplier
+of a power-supply which is being probed after the device_add() in
+__power_supply_register() but before the parent driver's probe() function
+has completed. Hitting this race breaks the power-supply core's design
+to not call power-supply driver callbacks before probe() completion.
 
-This PMIC used on some Intel Bay/Cherry Trail systems has some builtin
-fuel-gauge functionality which just like the UG3105 fuel-gauge is not
-a full featured autonomous fuel-gauge.
+This problem is caused by __power_supply_changed_work() calling
+the external_power_changed() directly rather then going through
+the power_supply_external_power_changed() helper which correcly checks
+psy->use_cnt .
 
-To prepare for adding support for this, this series factors out the UG3105
-capacity estimating code, generalized so that it can be re-used in other
-drivers.
+Switch to using power_supply_external_power_changed() to fix this race.
 
-While working on this I also noticed several other small issues in the now
-factored out adc-batter-helper code as well as in the ug3105 driver. These
-issues are addressed in separate patches.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/power_supply_core.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-This series has been tested on an Asus ME176C tablet with UG3105 fuel-gauge
-and on an Acer A1 840 tablet which uses the Intel Dollar Cove TI coulomb-
-counter as fuel-gauge.
-
-Regards,
-
-Hans
-
-
-Hans de Goede (8):
-  power: supply: Use power_supply_external_power_changed() in
-    __power_supply_changed_work()
-  power: supply: Add adc-battery-helper
-  power: supply: ug3105_battery: Let the core handle
-    POWER_SUPPLY_PROP_TECHNOLOGY
-  power: supply: ug3105_battery: Switch to adc-battery-helper
-  power: supply: ug3105_battery: Put FG in standby on remove and
-    shutdown
-  power: supply: adc-battery-helper: Fix reporting capacity > 100%
-  power: supply: adc-battery-helper: Add support for optional
-    charge_finished GPIO
-  power: supply: Add new Intel Dollar Cove TI battery driver
-
- drivers/power/supply/Kconfig               |  16 +
- drivers/power/supply/Makefile              |   2 +
- drivers/power/supply/adc-battery-helper.c  | 380 ++++++++++++++++++
- drivers/power/supply/adc-battery-helper.h  |  61 +++
- drivers/power/supply/intel_dc_ti_battery.c | 429 +++++++++++++++++++++
- drivers/power/supply/power_supply_core.c   |   6 +-
- drivers/power/supply/ug3105_battery.c      | 397 +++----------------
- 7 files changed, 954 insertions(+), 337 deletions(-)
- create mode 100644 drivers/power/supply/adc-battery-helper.c
- create mode 100644 drivers/power/supply/adc-battery-helper.h
- create mode 100644 drivers/power/supply/intel_dc_ti_battery.c
-
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 76ebaef403ed..54ee4c83b32f 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -70,10 +70,8 @@ static int __power_supply_changed_work(struct power_supply *pst, void *data)
+ {
+ 	struct power_supply *psy = data;
+ 
+-	if (__power_supply_is_supplied_by(psy, pst)) {
+-		if (pst->desc->external_power_changed)
+-			pst->desc->external_power_changed(pst);
+-	}
++	if (__power_supply_is_supplied_by(psy, pst))
++		power_supply_external_power_changed(pst);
+ 
+ 	return 0;
+ }
 -- 
 2.47.1
 
