@@ -1,143 +1,247 @@
-Return-Path: <linux-pm+bounces-19303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 559429F308F
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 13:32:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D23C79F3170
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 14:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 463A37A2831
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 12:32:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5865518879AB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 13:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2578B204F88;
-	Mon, 16 Dec 2024 12:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2D220550E;
+	Mon, 16 Dec 2024 13:24:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lAOz7yPO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xe4bZQ4l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725E8204C0B
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 12:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC4F2054EE
+	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 13:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734352317; cv=none; b=EER7qjcxiQq/Kg1bkb6St6XZXR6gLdslLMHlHLlSwk5OtXTYieAp977EgNqQIxA1lAo0sGYwalJwwfGcDxwkqPF873ESLVr4SFxFwOYjOHXizgQYDK7XaekwDZLkM/AfcfQ2enHkiKx60LQZoz7oW+T6pXnuPdw/IuOM8R0+BTc=
+	t=1734355492; cv=none; b=lP06DoltOezmOcJiNOij2agyyhRMjQ3lI5SpL4zHBK3Jm+RNoEAq/YhdafRt/ofKbXcJTUpvtoD6kyiKPnoOISv40JvcGIiwi+dZWmnOOL5HBWylRrGJ8zYYrBRvI0M7Jv7avq8Yd9sbykNEHmmhhaaTr+w9c+5caFY4adkkNpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734352317; c=relaxed/simple;
-	bh=NOGmwuUhx41uLN0wHBW0LLXHIBm/+VxTjHL0qIfPIxg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xvo/uolupbkxCDaS++aT+SLUNu31H6s4MODH4JDkY52o8VkoSuiTfBTw4E3p8Jb3VKjZ4y7A5H/emT6DeJhEbWCxHeoclvtixPZZqrfPXNofb1D+4HBS/skfMmC1zN6/Q56xTYcJcfIsAIbsw0hTOiP9nj9eCQG5EFsBQvadJ7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lAOz7yPO; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG86k1C008709
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 12:31:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	WeqvPqxs/zm+neW3dpwcGc7WggbqVo4nB/s2S/wzmDg=; b=lAOz7yPOamfLxjv/
-	ODjMV5+2Kb003nv5eIAiAcD0qLYO56rc/VB+tbw7aRnoUGG8/Dm1/0Et8FZuYcm5
-	aoPo506w01Wt5nshlTRiNec3s4xm/Du435v9FH7MISnroT/yAwcubt80H3Bae6xU
-	NMok72cGviDIFgvgNmfeKhNTAtvqi7XI7L3pbByJXhhR11/pGYo6PLArEZDeQ8hB
-	FbjV5hP9LuDWrmriFIA0dV1E07txNVzzjLEbIpjljX6y6MomInUIZFeGBX8oCOzD
-	WACcOX451b1oLqdycuhiSLNVMGwmg9jjSXeWErLlWrAN49md/bv0HIAw/Ew3Ti8j
-	U2RfEA==
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43jgdj0r9b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 12:31:54 +0000 (GMT)
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6d880eea0a1so15162086d6.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 04:31:54 -0800 (PST)
+	s=arc-20240116; t=1734355492; c=relaxed/simple;
+	bh=2KrBqpSB2RlPtMqWx0iCUQp1GTm67K2ZGNgYmIKgjRg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UsCMcau2622aEirD/FSP6zm5EG2hTEo9iRmXZbRp76AjAyHiyVVzWbNWbagFdp+n2Ud1FD3Vw7133S6l3mfMdc5PVTRnv6cmrK89wbTImHo+vbV34LLD4ixOyxVXnjPUxdDxkDeUYTJFZmeVF3DpKxMOC6Co+WPynJWjvUNHyv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xe4bZQ4l; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2164b1f05caso36945315ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 05:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734355489; x=1734960289; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qQ2PcWqmGEaXJGaCT9qDrihbcy/Fp9edeGdzGz/zoDw=;
+        b=Xe4bZQ4lYjRuavqafhcIFJC1ZgBNxFll2vrFcACFGNvJiUyOEXsznokNk+iaKX58Iv
+         2BiSWCG+BangmiashZaFQjFDw2Qd5zhlMEy/HwlGSRXxkuSZf4RA6We8KBUfht0ZNcq3
+         1+M3seV4bwK2lQPVsjiWdHa/q6W419O0YUbOlBkebRd7VLx0BDm87ZDfCEeycj2aFYSv
+         VfDAMbPRXN3dfIFqX0pAJvVVImn1ENL13jBW4JTkWOWVUt0v5K1ysWjmmCwdkOdL351o
+         OLacCSpiGJz2iiE3DApMsRXGf3CPV3baSRV2NjbOmkXIRR6m/PRCx6lg+orNOSjRvUBj
+         yAcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734352313; x=1734957113;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1734355489; x=1734960289;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WeqvPqxs/zm+neW3dpwcGc7WggbqVo4nB/s2S/wzmDg=;
-        b=HbRKD8VXWgSyS8neJKtqrUZOA8tOr4KciyDNj4Z/1q5P70LWC7mgIiZgrdQlNM1z+C
-         So/VbHuPdkTpIXHz/CX7vvL0dPSnZ4nGoulEnSYzbBReRLCJK+skq59r1mqDeO+IaNK8
-         Kd5vZfcU350daGUiGp1MQqEhZCIogjy18pbdgJqaufSvB0sWWUpCER1MmrYScXKFKwXj
-         WYkhgqpVdR+ZlM/1LLpw//eOnxMdTVndu0hxi9RCfVrDvrxgcLYfWCTDW725mUC59WPA
-         98ViqLLu9kxyApR1ypZm0gNwapnR7b1P/Aqx988SmtndDUxfCx33JDjyJWbybHd7ow7Y
-         QRvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVTchrR/iwTOXBchx27nM7mVv8coi2yrtpC2E0kJnPg5/3uEyhgiub+/PqM3lucc05mEVGYjyGYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEi8BmvjGlSKKSj0ibO3Uqkn/F17229RAQ2b0A7nwZQGoglB7c
-	Xy1IrY7ooqTOGdZ78nBpCSNfxnZ3KJZtaa4Sl2ZHybkvRrzxAmjWfwi5sZqCuCvF4j6gtL5NDQd
-	DJfA3nhtID7I4pQy83GDgemApnQBcmG6+0szD3EXEeb3eutdQ6M3gZ5k67Q==
-X-Gm-Gg: ASbGncuVDavlfluC+EXzTL4nnP/y+mVhapq0VuVxijfz5YlLs4mYs1+SYL3mSWa16w9
-	WwYF64EoZSQEcbsZwce40BeBbiFbukBJN8v4B1fiSmLoNHbBJ5zl+Wc1N8IihEtSRXS0PMcyo5S
-	6ImCTiRIoSULpF8GqUzBJO5YOdJq67z5DT7RYcUJwbQvbXHkEFk+3B6pAmBjsQQqrWwGEXZM/Sy
-	Kr95Y+6Hy42Qj1o5NHjS95s5wDLFfNW1RRNFkTz7pgIxke9ojPLRZ/+Al+Js0w/055LQ7qmdEpl
-	comC7QkX6AVFTDXyx6agG7NvyvZyifJx3kM=
-X-Received: by 2002:a05:6214:c4f:b0:6d8:8db8:43a8 with SMTP id 6a1803df08f44-6dc9683b11fmr74596686d6.9.1734352313560;
-        Mon, 16 Dec 2024 04:31:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHdrHVfyoU2etuQqyfIbiSLQe3FMVsNgCETbPhLwAWfRSOxp7xzi9URabDJLwUjep6ho8lswQ==
-X-Received: by 2002:a05:6214:c4f:b0:6d8:8db8:43a8 with SMTP id 6a1803df08f44-6dc9683b11fmr74596476d6.9.1734352313221;
-        Mon, 16 Dec 2024 04:31:53 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d652ab5198sm3112039a12.8.2024.12.16.04.31.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2024 04:31:52 -0800 (PST)
-Message-ID: <ee5460db-2459-4ea5-ad35-e9520247cb98@oss.qualcomm.com>
-Date: Mon, 16 Dec 2024 13:31:50 +0100
+        bh=qQ2PcWqmGEaXJGaCT9qDrihbcy/Fp9edeGdzGz/zoDw=;
+        b=XOTYBv5o/EBT8JAz+s75DbePIHAQncTGywD8qnf9GAncHqPBPCGzIHfFRglv7szsJC
+         1NnhPhbE0FyvhcTCNMMZvEFRZpNcTftu/XwD9dkgh3BQ5D6WnpRMYKqRFNOgRZlan3uN
+         V72x6uVl04yovwbJ8wkUcI8w2GjNqfmf8/t3gyCFuCIDg5CzNP8I17DGVDHGOdpngb+v
+         RIEUH4nvOGKiOLxc5MNwae18D2NV8UG2q+0PpsVfpMX3k9GqFFXPKDiTOb0tj02RssJ5
+         H6BVKzu2DhVuJs2PC8nYYD6qfskPrTNqnvdWbO8FX2UjqwpvhrV6k0MDgwCfO4b1BUEw
+         qUxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVAg+wVGYoVAIBi+PWI4zNhk2b4ge5FhnLiG5+V4iIRkJmdiPAEL1MiQGwYPfE/Dbivf1cxK8KRsQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzAgP8e75vu/1i68OrNj/fGORzrj7WKsT1G1RX09A20dxTZ9IZ
+	BtLeiiKgAI8G4tyUGs/DpNPYnd6XhS9qieWlVRhObV9GUwPUDk897xyWooXzIw==
+X-Gm-Gg: ASbGncvJjDxopCYAl61HMmFKU1XpJHRjvw2BJlC+eiL4k0FS5+POHzlneOtHTlxPV9Q
+	ubGjp6NIttBJMZmXw73TjfTOnSbr2bPS6sOD6ogQSIlC+cWIc3FmjFx2p8sDbuO4TljffIeSFxb
+	iRtSbpwqbdoxVmbzrgtC0AV8A2e2WXZz5NUyhMrfHV67CBZ0AMcA9G7vaUSazkz5CQnQvnBFemX
+	V1OPfkIxtb9zEWKagXP5Y/uyN27A4ApS3+U14orn8AKY7iJhcMUTC/OvCtCtInIg6wi
+X-Google-Smtp-Source: AGHT+IGbmUlVe8dk0ois4qkbR6zHbskbm9qvTKT+GOxinPVoLMRUvMrSVeO2Feozd+tQg8RZgRA83A==
+X-Received: by 2002:a17:902:d509:b0:216:4499:b836 with SMTP id d9443c01a7336-218929d6b85mr182378955ad.26.1734355489546;
+        Mon, 16 Dec 2024 05:24:49 -0800 (PST)
+Received: from thinkpad ([120.56.200.168])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e50340sm42302525ad.148.2024.12.16.05.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2024 05:24:49 -0800 (PST)
+Date: Mon, 16 Dec 2024 18:54:45 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [RFT PATCH] Revert "power: sequencing: request the WLAN enable
+ GPIO as-is"
+Message-ID: <20241216132445.vjkxxknvzaht2ltq@thinkpad>
+References: <20241203141251.11735-1-brgl@bgdev.pl>
+ <Z1x6ti2KaMdKS1Hn@linaro.org>
+ <20241216070554.ym54ozdw45zhveo7@thinkpad>
+ <Z2AF56PDj1m1BS1S@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/8] arm64: dts: qcom: Add initial support for MSM8917
-To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-        =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-References: <20241215-msm8917-v9-0-bacaa26f3eef@mainlining.org>
- <20241215-msm8917-v9-6-bacaa26f3eef@mainlining.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241215-msm8917-v9-6-bacaa26f3eef@mainlining.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: UWTgPgO3-uti2IxKBTGinu9y1Ckjg-zx
-X-Proofpoint-ORIG-GUID: UWTgPgO3-uti2IxKBTGinu9y1Ckjg-zx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- mlxscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 impostorscore=0
- bulkscore=0 malwarescore=0 priorityscore=1501 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412160105
+In-Reply-To: <Z2AF56PDj1m1BS1S@linaro.org>
 
-On 15.12.2024 12:15 PM, Barnabás Czémán wrote:
-> From: Otto Pflüger <otto.pflueger@abscue.de>
+On Mon, Dec 16, 2024 at 11:50:20AM +0100, Stephan Gerhold wrote:
+> On Mon, Dec 16, 2024 at 12:35:54PM +0530, Manivannan Sadhasivam wrote:
+> > On Fri, Dec 13, 2024 at 07:19:34PM +0100, Stephan Gerhold wrote:
+> > > On Tue, Dec 03, 2024 at 03:12:51PM +0100, Bartosz Golaszewski wrote:
+> > > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > > > 
+> > > > This reverts commit a9aaf1ff88a8cb99a1335c9eb76de637f0cf8c10.
+> > > > 
+> > > > With the changes recently merged into the PCI/pwrctrl/ we now have
+> > > > correct ordering between the pwrseq provider and the PCI-pwrctrl
+> > > > consumers. With that, the pwrseq WCN driver no longer needs to leave the
+> > > > GPIO state as-is and we can remove the workaround.
+> > > > 
+> > > 
+> > > Should probably revert commit d8b762070c3f ("power: sequencing:
+> > > qcom-wcn: set the wlan-enable GPIO to output") as well?
+> > > 
+> > > > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > > > ---
+> > > >  drivers/power/sequencing/pwrseq-qcom-wcn.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> > > > index 682a9beac69eb..bb8c47280b7bc 100644
+> > > > --- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> > > > +++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> > > > @@ -379,7 +379,7 @@ static int pwrseq_qcom_wcn_probe(struct platform_device *pdev)
+> > > >  				     "Failed to get the Bluetooth enable GPIO\n");
+> > > >  
+> > > >  	ctx->wlan_gpio = devm_gpiod_get_optional(dev, "wlan-enable",
+> > > > -						 GPIOD_ASIS);
+> > > > +						 GPIOD_OUT_LOW);
+> > > >  	if (IS_ERR(ctx->wlan_gpio))
+> > > >  		return dev_err_probe(dev, PTR_ERR(ctx->wlan_gpio),
+> > > >  				     "Failed to get the WLAN enable GPIO\n");
+> > > > -- 
+> > > > 2.30.2
+> > > > 
+> > > 
+> > > I'm not sure why but applying this patch brings back the error I had
+> > > before. It does seem like setting wlan-enable GPIO happens early enough,
+> > > but maybe some timing is still wrong.
+> > >
+> > 
+> > There should be no room for timing issue now :/
+> >  
+> > > [   17.132161] <gpiod_set_value_cansleep(ctx->wlan_gpio, 1);>
+> > > [   17.480619] ath12k_pci 0004:01:00.0: of_irq_parse_pci: failed with rc=134
+> > > [   17.491997] ath12k_pci 0004:01:00.0: pci device id mismatch: 0xffff 0x1107
+> > > [   17.492000] ath12k_pci 0004:01:00.0: failed to claim device: -5
+> > > [   17.492075] ath12k_pci 0004:01:00.0: probe with driver ath12k_pci failed with error -5
+> > > 
+> > 
+> > Are you sure that this is the same error that you noticed before?
+> > 
 > 
-> Add initial support for MSM8917 SoC.
+> Yes, "pci device id mismatch: 0xffff 0x1107" is definitely the same
+> error I saw before.
 > 
-> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
-> [reword commit, rebase, fix schema errors]
-> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
-> ---
+> > > Any ideas/suggestions?
+> > > 
+> > 
+> > Can you verify that the pwrctrl driver's probe is completed *before* ath12k
+> > driver starting to probe by adding the debug prints in both drivers?
+> > 
+> 
+> I tried booting with "modprobe.blacklist=ath12k" and manually loaded the
+> module several seconds after the boot completed. Error is unchanged:
+> 
+> [   16.628165] <gpiod_set_value_cansleep(ctx->wlan_gpio, 1);>
+> [   55.065794] ath12k_pci 0004:01:00.0: of_irq_parse_pci: failed with rc=134
+> [   55.073354] ath12k_pci 0004:01:00.0: pci device id mismatch: 0xffff 0x1107
+> [   55.080457] ath12k_pci 0004:01:00.0: failed to claim device: -5
+> [   55.088977] ath12k_pci 0004:01:00.0: probe with driver ath12k_pci failed with error -5
+> 
+> I played around a bit more and it looks like the problem is that the PCI
+> device is still being enumerated during startup, before the pwrseq
+> driver is loaded. Not with the ath12k driver, but the internal PCI
+> subsystem state. And then the PCI link dies briefly when the pwrseq
+> driver loads.
+> 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Ok, this seems to be the cause. There is a known issue with Qcom PCIe
+controllers where if the device is powered off abrubtly (without controller
+driver noticing) the PCIe link moves to link down state. Then we need to
+bring the link back by reinitializing the controller. I have it in my todo list
+but no one noticed this issue unless they tried powering down and powering up
+the device (which is rare except on hot pluggable slots).
 
-Konrad
+> If I add some hacks to the DT to force the wlan-enable GPIO low before
+> the entire PCI _controller_ is probed, then it works correctly:
+> 
+> [   16.607359] <gpiod_set_value_cansleep(ctx->wlan_gpio, 1);>
+> [   16.668533] pci 0004:01:00.0: [17cb:1107] type 00 class 0x028000 PCIe Endpoint
+> [   16.668606] pci 0004:01:00.0: BAR 0 [mem 0x00000000-0x001fffff 64bit]
+> [   16.669055] pci 0004:01:00.0: PME# supported from D0 D3hot D3cold
+> [   16.675546] pcieport 0004:00:00.0: bridge window [mem 0x7c400000-0x7c5fffff]: assigned
+> [   16.675555] pci 0004:01:00.0: BAR 0 [mem 0x7c400000-0x7c5fffff 64bit]: assigned
+> [   16.862083] ath12k_pci 0004:01:00.0: BAR 0 [mem 0x7c400000-0x7c5fffff 64bit]: assigned
+> [   16.870358] ath12k_pci 0004:01:00.0: enabling device (0000 -> 0002)
+> [   16.888792] ath12k_pci 0004:01:00.0: MSI vectors: 16
+> [   16.893954] ath12k_pci 0004:01:00.0: Hardware name: wcn7850 hw2.0
+> 
+> Note the pci messages after enabling the GPIO, before the first
+> ath12k_pci messages. Without the hack, those appear already before the
+> pwrseq driver is being loaded (during initramfs).
+> 
+> [    5.888688] pci 0004:01:00.0: [17cb:1107] type 00 class 0x028000 PCIe Endpoint
+> [    5.888758] pci 0004:01:00.0: BAR 0 [mem 0x00000000-0x001fffff 64bit]
+> [    5.889207] pci 0004:01:00.0: PME# supported from D0 D3hot D3cold
+> [    5.902692] pci 0004:00:00.0: bridge window [mem 0x7c400000-0x7c5fffff]: assigned
+> [    5.910311] pci 0004:01:00.0: BAR 0 [mem 0x7c400000-0x7c5fffff 64bit]: assigned
+> ...
+> [   21.227565] <gpiod_set_value_cansleep(ctx->wlan_gpio, 1);>
+> [   21.305496] ath12k_pci 0004:01:00.0: of_irq_parse_pci: failed with rc=134
+> [   21.318382] ath12k_pci 0004:01:00.0: pci device id mismatch: 0xffff 0x1107
+> [   21.338489] ath12k_pci 0004:01:00.0: failed to claim device: -5
+> [   21.338555] ath12k_pci 0004:01:00.0: probe with driver ath12k_pci failed with error -5
+> 
+> Can we skip scanning the PCI bus until the power sequencing is done?
+>
+
+This won't help (but a good idea anyway that I'll implement). See below...
+ 
+> The hack I used (see below) works, but is a bit odd since it requires
+> assigning the wcn7850-pmu pinctrl to the PCI bus in the DT. Otherwise
+> the GPIO is not forced low early enough.
+> 
+
+Your hack is making sure that the default state of the GPIO is not changed at
+all after initializing the controller. So even if the pwrctrl driver probes
+later, it will try to enable the module by doing,
+'gpiod_set_value_cansleep(ctx->wlan_gpio, 1)', which would do nothing to the
+device state.
+
+So the issue is not with the pwrctrl driver but with the controller
+implementation. Ideally, once the device is removed, the PCIe link should move
+to Detect state and then to Polling state once the receiver is detected on the
+lanes. But the DWC and Qcom glue has other logics that prevents the controller
+from doing so.
+
+So until the link down handling is implemented in the controller driver, we need
+to carry this hack that preserves the GPIO state.
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
