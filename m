@@ -1,105 +1,82 @@
-Return-Path: <linux-pm+bounces-19294-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19295-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E1EF9F2D42
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 10:47:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEF0F9F2DBB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 11:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB5F8188AC54
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 09:47:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3459C1882E6A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 10:04:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B34202C37;
-	Mon, 16 Dec 2024 09:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C61120126C;
+	Mon, 16 Dec 2024 10:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yBXk3t29"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/nNDfii"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235E8202C2D
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 09:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5FC1B6D1A;
+	Mon, 16 Dec 2024 10:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734342436; cv=none; b=XDn+jxe60RkpIg8HXuUrHshQIfZbuJ30rJLc8ZVFiYqUI/RJglkrQpRweLpnYJW9+5IMV344NtOhIZDtGXWro7fioPxOPa9iUqCbNE9Kj1DBnBWq4tTMLM72Lubq384xeGFKkEjofCyiZt9X5Jn3bRqcpm+mntT2kUKuXYkx1Ig=
+	t=1734343485; cv=none; b=kF65zPlazoC6Ua4mcEAJd3VZnWjVR2jWyuJzvON0khttXZKzsNSb5/6UL5i7dR6BuZFBfZ5w+lwe+Jnn4lqaMStZ1eRYh9QGosVPTxd8JMdsTFAo2AvGeFQp9D1RhB3uiqyN+wvpRyT7CUX194+DxsXMWDkBqqVe1X0hREDhV2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734342436; c=relaxed/simple;
-	bh=19iOc77d3Ggxe5Rbnf3je/CltOApn7PKClOcHLYSvXM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F1r/YCapnXJN+J3VKB0QRkDJ9Tb6ZtSY97qIxH/YkJ27DFER5zaKEoO46sphSUwEdkjPZq1pR7RhjqgA9VqDBFpGAPuua47ahHH3I5hXDc/BwY6m8AKunaygCuhFTO6oBe4NPmqr2MXEiFW+H/eiuhsJARp8y5sfEUX7OXggZzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yBXk3t29; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e46c6547266so1422119276.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 01:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734342434; x=1734947234; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pe83r7EBJNwLbpxEmYOqE9O4vpWE1qwYOlTzzIj1ce0=;
-        b=yBXk3t29stKCnwWM+1/3xp1BOw6qt/5hLZKp7bXcfNanD97UCX4bsqjWpIwfLBqwgu
-         6UGNt50K6iv/0vvqFSn8eNRPMKeQ8LptUEu51NRnkb0VoqZepXmSuVeinmOR4uCj/+Xt
-         Rgg7S5LIu6UkUrn/CeNtgSAlIGHzoMRPCzXjD65xEgpXYHWePuXB6AWerF+/MOC6vL2N
-         V1PSKrlYvVOndLSECkG09VCJ6YfNxcTB3EuEM9O3jRyv/BbIEwkTK3jFjgWQ93FTd25D
-         139uAY4PflTmG7ysM89eESR+04yPLGNp/33PQOgFilV1QTqPfDDSxttOuOO0/0P6xMop
-         IhKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734342434; x=1734947234;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pe83r7EBJNwLbpxEmYOqE9O4vpWE1qwYOlTzzIj1ce0=;
-        b=UJK+ud72SuJmsCjXwn9P1NVmkXxaIHxUkYMNUS7SnZy4hYjQNzzz76xOxagJ4GZEKG
-         ZTFYhU6mUe30nOE5YBxmDp9I4pfxCvfFXeLKhkiamk017+qofm2OR3IYS09u2AMoaRER
-         T5UWoM2TxN7n82yCKbHWMhJUisey64nuiEukglEbEDE3P6dEKwKm3+8pIaS/Ut8iFeh5
-         VzD92whM5fwgNrEWYnchd9bhCcGf3WIpqvbHniNp+RilXxkgLpKPAnfmO8EdhwRmd47B
-         U9dq8ApUEqvWb9q3JuIrZeLE7zHbMGggZzk+I/+6F/jfbjwqjHRUtHutCIhcsMweDMbt
-         Yd3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU68zSamdxOSVR9u0YiD9xvblCoRrAnjD6f8NpUPkX+pmHNuFklWkgIw5hmByZuDUVVDjJYAqPvMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHEEFsk0Mf6GAL6LF8Jj3hpuw+vF4/wUzuqnfzl4J8F7Zk7WZJ
-	p6G0g5mSDcey+0WKNlKTCpxwKnBwaqOBPMIvck3PLStBRCQDxEvjt+eCTpnfoEQ37tTvNvmhmUc
-	x3PJFlB+GJ0Z74DLcsbHOdYV4i1VgSppUfnKcGA==
-X-Gm-Gg: ASbGnctYM6wLi/HWnwvyvSFeeXP+PiTb1uYYVqBr3RjlEX1vQtfHb+uougBoiE8iUgV
-	DMGJymWkHkL9g2u5Lclp55R7v6dWs4QlMs+Sau2R6gsrbEfvDlGdp
-X-Google-Smtp-Source: AGHT+IHRPs0kD+k0X6sSUYa5phjbHrCCd1shK+RWsI7yxEyO0+bZ0KInAecHsFuw4uGBN8uxjf/k72J1QGR369kOv+M=
-X-Received: by 2002:a05:6902:842:b0:e39:8e5f:adab with SMTP id
- 3f1490d57ef6-e43508ccebemr9859633276.39.1734342434208; Mon, 16 Dec 2024
- 01:47:14 -0800 (PST)
+	s=arc-20240116; t=1734343485; c=relaxed/simple;
+	bh=h3soJ/GHXkglGzwy5t8lMwa1WecVZ+A4tzP9OiFFs0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5rxUDaPZwo2iKmfGNBy95qDnm4z3K6rbrYQDePSjzDgHp5GGCHf0A8ZZRaG2Eza8Lc+bXKzUyPNKPX7BzeeJ0tBa7aX2/weRledjJ/DUvkq8A6SAuEz5Klib3LTRATh+XsmY09RUKadAr+4V8R2OgHBeoSQndtAkOcapPCJUtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/nNDfii; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D81C4CED0;
+	Mon, 16 Dec 2024 10:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734343484;
+	bh=h3soJ/GHXkglGzwy5t8lMwa1WecVZ+A4tzP9OiFFs0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y/nNDfiiC2ajeCwW6rWTUCQkCQIfOjjUNv2t6PsGHaBBVHmwoXWXV2VWugaPfsmsD
+	 xwUXl8twRFFBOSTAjJL8i0DkEgSDvJcZtGE5GZCRXQk5yi12c9w5n6gWZhB00fQDDp
+	 3Na9pEYCULKLBs5Iqw58dl/uSvcBXJcXyY65jS/uAvXjoK3jXpQQeSODWnFZ1IHhi8
+	 f10ORT3zFI+2TeeG29kl4Heo1DUHZDNN3JvBYHFomchuQF4PwR+f0OlZtumvFdxMMO
+	 eD2EIiLVmbxelXmv8mXQhqKHFEYneGeN2RyBvyR+sOwuIh+FuFd336/ayPvL8JhQve
+	 SKf8xYxsj5qwA==
+Date: Mon, 16 Dec 2024 11:04:40 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dimitri Fedrau <dima.fedrau@gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: gpio-charger: add
+ support for default charge current limit
+Message-ID: <2tk4mnzzhr3se3sts7gyt27izhlsmzajvdgfszubgy74wggeom@kggdt4go667b>
+References: <20241213-default-charge-current-limit-v2-0-45886fce905c@liebherr.com>
+ <20241213-default-charge-current-limit-v2-1-45886fce905c@liebherr.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241202165723.17292-1-brgl@bgdev.pl>
-In-Reply-To: <20241202165723.17292-1-brgl@bgdev.pl>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 16 Dec 2024 11:47:03 +0200
-Message-ID: <CAA8EJpreFMAz9wWN1sJWDfm+ijATK72JwTOJ+OjfQTq48d0mDw@mail.gmail.com>
-Subject: Re: [PATCH] interconnect: icc-clk: check return values of devm_kasprintf()
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241213-default-charge-current-limit-v2-1-45886fce905c@liebherr.com>
 
-On Mon, 2 Dec 2024 at 18:57, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> devm_kasprintf() can fail and return NULL, add missing return value
-> checks.
->
-> Fixes: 0ac2a08f42ce ("interconnect: add clk-based icc provider support")
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/interconnect/icc-clk.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+On Fri, Dec 13, 2024 at 08:32:33PM +0100, Dimitri Fedrau wrote:
+> With DT properties charge-current-limit-gpios and
+> charge-current-limit-mapping one can define charge current limits in uA
+> using up to 32 GPIOs. Add property charge-current-limit-default-microamp
+> which selects a default charge current limit that must be listed in
+> charge-current-limit-mapping.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Last time you wrote the point of it is to avoid defaulting to 0 A for
+charging, because existing implementation uses smallest possible value.
+This is supposed to be here in commit msg.
 
--- 
-With best wishes
-Dmitry
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
