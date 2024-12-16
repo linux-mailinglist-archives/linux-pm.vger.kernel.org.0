@@ -1,104 +1,113 @@
-Return-Path: <linux-pm+bounces-19285-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19289-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD1B9F2C0E
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 09:38:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B4F39F2CB8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 10:17:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 636FF18807F8
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 08:38:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0DCA1678BB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 09:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCFF91FF615;
-	Mon, 16 Dec 2024 08:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="1lIz0zXr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C2C202C58;
+	Mon, 16 Dec 2024 09:16:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61EF1FFC41
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 08:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E1C20101E;
+	Mon, 16 Dec 2024 09:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734338278; cv=none; b=o0FU9itc/cVBIbNkaWvJEHv7nagMViCdcBur9paZR/qC0lsp1kEou7srUiRrNdWfoWF8P73TFt88Xq1N8Xza7KU2k7eQGDyH6N9J0HPWUW/+LvG5ibfDzbTR426lGC0ZFHRLvI0Bh0KiYxuyD29b/wy16hEK0/jesK5ee+7b3H0=
+	t=1734340576; cv=none; b=PwZMPV/9JiLNcrT1is9QPwd5NQ7F7RQc9tnPAmIdT6jD//5ig3dunMZEMHK2HqEk/qmbozvTTj/srHy0Ik27EnHEAHVpdvTKom3lJCvXNMRfQHu9sw1s7KKWkLsjagReHBSaWIB3TIW9/jRjjunTEaaqpFIqqoxqWrA+XvCi6hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734338278; c=relaxed/simple;
-	bh=dwL4oyCtuYrCZ6yF/bR5QHEDHgK3LUp6b+1GIr7tsfg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t16h2/5yaRmoMMduQrk9+86YGQqHNCeJv5gufIYjm7KjkB13GMkV0QB+J/A5acgdj807foinG5iUOmGOk7yoFcYIvmJ+YW0PowVidSTQlayY7NdvT3Z/OzB8Y6WMVta1MqI3Q9fpjQ5GVXbUG0afyj5Ya9mDjIot8/3UpmUHvvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=1lIz0zXr; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-300479ca5c6so37697841fa.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 00:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1734338275; x=1734943075; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PhuQsaT5H6o7+J7ElfZP8hf7dLA1Xda/1J2z/GHfUlo=;
-        b=1lIz0zXrxz2Bt+ACzNhoBTs3FLt82bLmCAH1FFEVb5mEbrHWyKrtzKOf3XMJMsxe7x
-         Ssq/KcYTCWCVmG8ntLAbrZVxwSFeQpAmALvxJxOb4L7alPYPKr3COq6PacxIA4fSsLmt
-         v0rm1ASu+hDoNnhX2z58UfH/t9xYraXG7eXc4oCTAQ1+8HecsSGBqo0TY74ypooJ92Pq
-         caelUONH7mdLP7TQh6REAVkHM4OUo4/TpFyyUAoobM5no8Fd2XUcUXFXgLxONlwrdb1A
-         yzwc1/J/qsag14rlb2xOKoEBfQQj3pm2OYqBVe4569zPAFFX+esaMmJELkYaMDPTJ/R0
-         UPvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734338275; x=1734943075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PhuQsaT5H6o7+J7ElfZP8hf7dLA1Xda/1J2z/GHfUlo=;
-        b=EnPsB2YkCvkrrF6KpFmd2a+U3CBzULs6CUbfqiE9b9QKEFjPHYjASZJGqrTNrIJBK+
-         Tv88586CO67aO5/glzp6rUO5BMv4g4/aWeRwre2dBNNmceUn4Ackv6glP/ptJIOJHX3g
-         c3tfV1/0uvUq90i8Ft/m5tPYs2QQwf53gdfUoD4Fzua5ZlZLfG3qGH7CPr8U0cQsy12T
-         Mbq65iZg9mkwqcfKoqO6YSSwv6PKzJNz4kKXIbFem6igmmH74s4zT6Qyb24JUVUoWLeJ
-         NTYWUyIUusUc5hSUl+LJZ9oDGMivuC4ozunc2+XHPzByySnVhyqjoGbYiaKRKqaiDvgB
-         WfIA==
-X-Gm-Message-State: AOJu0YwEzuJ9pSCYrlI07xAiJD/6uIRVXMLY3q6ES0zxt3A+kHaciDac
-	XAcwj+MpSIVGRCpwk5q98CJfMcT7voKhuQ/6g2DsZuJBNtwCXuovpXJWFvhtrVmQGzTsdFDssve
-	5aIczGa7u8U0r1+b0938X2AHeUTH0zVtkOZT6xw==
-X-Gm-Gg: ASbGncswxFxd0FjZ0B/fbbnEL8P7darCvV6aK+Z8UJmkmgGTmayx0PYwcmCwk7FCFIR
-	URmMn5v2Lj2WwLpaFqUS+nk+VrD4rGEz0ELuYeJCtVk56ZNWU8HUUAIyrdK6e4nou8uY1QQ==
-X-Google-Smtp-Source: AGHT+IHGoOBxZInoO9/bLGpfbpoKkckOqpofRNQ0i1v/Phpq4yTUAC0eZCfCprZDfuAMk0DaFCGKGOn7jaMLHHmiaik=
-X-Received: by 2002:a2e:a7c1:0:b0:302:1861:6de7 with SMTP id
- 38308e7fff4ca-3025448d109mr35383821fa.24.1734338274879; Mon, 16 Dec 2024
- 00:37:54 -0800 (PST)
+	s=arc-20240116; t=1734340576; c=relaxed/simple;
+	bh=aX4HqyGzLzka94xiZImooBUJwmdy7RYEVbUgjk6BaS4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tMkjzFxv4JeDam1VgeWGjLq8acAYCXVMVIrhgcgR0GNyKc5EUg23OKw/NfJ5bR1AfTcMV31DlLSgR18CcPUTEfgMxbY5vsxpsfQ2pJ0cxcWytZpw32PUZJx4+BEVgk5GiC8TlNceXkfhnAhdTDxYPWElZVm/CXoT/7ysqvcVCf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YBZ4H08G0zhZWW;
+	Mon, 16 Dec 2024 17:13:35 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id F361F1400D5;
+	Mon, 16 Dec 2024 17:16:04 +0800 (CST)
+Received: from localhost.huawei.com (10.50.165.33) by
+ kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 16 Dec 2024 17:16:04 +0800
+From: Lifeng Zheng <zhenglifeng1@huawei.com>
+To: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<viresh.kumar@linaro.org>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <pierre.gondois@arm.com>, <ionela.voinescu@arm.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <zhenglifeng1@huawei.com>, <hepeng68@huawei.com>,
+	<fanghao11@huawei.com>
+Subject: [PATCH v3 0/4] Support for autonomous selection in cppc_cpufreq
+Date: Mon, 16 Dec 2024 17:15:59 +0800
+Message-ID: <20241216091603.1247644-1-zhenglifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241202165723.17292-1-brgl@bgdev.pl>
-In-Reply-To: <20241202165723.17292-1-brgl@bgdev.pl>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 16 Dec 2024 09:37:44 +0100
-Message-ID: <CAMRc=MeNCj0kY8OGxyHMa9pOEtSeEysOhrP5cVcwyTUdF95dkA@mail.gmail.com>
-Subject: Re: [PATCH] interconnect: icc-clk: check return values of devm_kasprintf()
-To: Georgi Djakov <djakov@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On Mon, Dec 2, 2024 at 5:57=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> devm_kasprintf() can fail and return NULL, add missing return value
-> checks.
->
-> Fixes: 0ac2a08f42ce ("interconnect: add clk-based icc provider support")
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/interconnect/icc-clk.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+driver.
 
-Gentle ping.
+The patch series is organized in two parts:
 
-Bart
+ - patch 1-2 refactor out the general CPPC register get and set functions
+   in cppc_acpi.c
+
+ - patches 3-4 expose sysfs files for users to control CPPC autonomous
+   selection when supported
+
+Since Pierre and me have discussed about whether or not to show
+auto_act_window and energy_perf when auto_select is disabled. It seems
+like whether to show these two files has their own points. We'd like to
+ask for some advice.
+
+Relevant discussion:
+[1] https://lore.kernel.org/all/522721da-1a5c-439c-96a8-d0300dd0f906@huawei.com/
+
+Change since v2:
+ - change cppc_get_reg() and cppc_set_reg() name to cppc_get_reg_val() and
+   cppc_set_reg_val()
+ - extract cppc_get_reg_val_in_pcc() and cppc_set_reg_val_in_pcc()
+ - return the result of cpc_read() in cppc_get_reg_val()
+ - add pr_debug() in cppc_get_reg_val_in_pcc() when pcc_ss_id < 0
+ - rename 'cpunum' to 'cpu' in cppc_get_reg_val()
+ - move some macros from drivers/cpufreq/cppc_cpufreq.c to
+   include/acpi/cppc_acpi.h with a CPPC_XXX prefix
+
+Change since v1:
+ - fix some incorrect placeholder
+ - change kstrtoul to kstrtobool in store_auto_select
+
+Lifeng Zheng (4):
+  ACPI: CPPC: Add cppc_get_reg_val and cppc_set_reg_val function
+  ACPI: CPPC: Refactor register value get and set ABIs
+  ACPI: CPPC: Add autonomous selection ABIs
+  cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
+
+ .../ABI/testing/sysfs-devices-system-cpu      |  54 ++++
+ drivers/acpi/cppc_acpi.c                      | 266 +++++++++---------
+ drivers/cpufreq/cppc_cpufreq.c                | 129 +++++++++
+ include/acpi/cppc_acpi.h                      |  29 ++
+ 4 files changed, 347 insertions(+), 131 deletions(-)
+
+-- 
+2.33.0
+
 
