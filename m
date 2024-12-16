@@ -1,128 +1,213 @@
-Return-Path: <linux-pm+bounces-19315-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19316-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C47A79F33DC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 15:59:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D2F9F3493
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 16:33:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5102718847FA
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 14:58:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A3E51887E10
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 15:33:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29090481B1;
-	Mon, 16 Dec 2024 14:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXu7Jbhu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C75136349;
+	Mon, 16 Dec 2024 15:33:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A1A45945;
-	Mon, 16 Dec 2024 14:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DB417C64;
+	Mon, 16 Dec 2024 15:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734361102; cv=none; b=rKNSryPOiRak4N55upUNmoyqbmwp7d+pLIgSfgoKRpa4MlYs2knr8QHIQtgc6t4CQ0Kt4/W39LnEpIe0718LjNLf6JQfeQrTg588mj/JxWxQ8m3Oz9l8ewSdBS4PFr2knkZIHJt7z1rIB7IWqrNDPFqBCqjZor8WRPQlcQUQI30=
+	t=1734363183; cv=none; b=ESrJNMgSgWjRQqIj2O7rsi9YmkpY5G729FABRem/06X9B8HwzwA5a0nokSIQvlq0MHmOgCCRv7SfFbUWUSMO2JJCouAH1dHQi2rZcn4ZaTmtl7vZCB4HhFActOyq4FhcI5Nuw8y2y2qYC6HdedX5hxrgvULqi2hzNEIHSofBKB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734361102; c=relaxed/simple;
-	bh=C3MVMZgRHAOSpa/URd0wdg3HiGaBzg1E1nQJQEP98x8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XMGVeQQPy4wojRWqaljIPcUOq2leibwBW1IzfnncDELa/0MUOuR4G1Ldc7mp/3lvToQSCQl+uV4NYAdXTV0ZKoWoo8GK4Yd2zQGPhOD4RW978FuVecvMKjFLJqfOROSXiYlME6VI9AWwMMhxl/fTMhHXtiNQOgGmsxDxM5vHevY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXu7Jbhu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EDDDC4CED7;
-	Mon, 16 Dec 2024 14:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734361101;
-	bh=C3MVMZgRHAOSpa/URd0wdg3HiGaBzg1E1nQJQEP98x8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IXu7JbhujYBFY+k3ehibZMGvU6EJdnzu/M9FjlqxUXAwuyDsMCzmnPGXwh/dECRa5
-	 /6/PAOQwatrHnA/1uJ2sDgjo4VUVH0fmOnCYheZbWQwFxp7MGQEy8ZHbhR5BQpTxTZ
-	 WqP+BGiCBC5/fRlxtEG3+UrJY5I7uq53eb+Mo499EWr+K4wgOn07zh9vV0zGB7L5uD
-	 2WWAfLj9a1bvsdb7X2IxHUkbYjUXcF9bsoLDaG7sM3vfGOjUMxQ8Q8e/rzF5NwQoUt
-	 44Fllnb0H7f7y/OGTIFm+ld9EmvIkHvemG4PUxE3/mpn8842MzsQD184L2lBF2bmqc
-	 0HaC8wTfRYPTw==
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3eb8bdcac2eso747429b6e.0;
-        Mon, 16 Dec 2024 06:58:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVAH7BISbdPQaSuWxW3tUPYLixQ2EVHIKLR+HwZye3NwBIKFCRzTyN8uX4LXtzmcE94lrByvmZcuGfbu6E=@vger.kernel.org, AJvYcCVSAAltLDSai/dgHdpZ/wIpG6pHMVidPwQ4MkWmDadW4IvYi1SpWHWmwVdDyW8a+NplEQR6JBnHP4E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyhp6R9NlR18DiRvRqT/71N2/36UQrSXeEJ5Q8EalzoGdUDAC3r
-	IL3mGEkRiS4xWS7dTQCIyONyvubotoOKdsTZVv7Y4KT0NeAL2B3ovQ1MxzucRjG4VIknEXorCRx
-	eFT+21Qtk6Iyj/Ex7Gsvu8Jxc9Yw=
-X-Google-Smtp-Source: AGHT+IGKgopEcsCmD0qdLr3F0fGuQ5+5rd09OzLSjOeQ2Hgr0Kb8lWmQtQi8w4tWTddESFeKUoxS0/NQNA9VejyH0xQ=
-X-Received: by 2002:a05:6808:6385:b0:3eb:4137:53bb with SMTP id
- 5614622812f47-3eba693acb5mr6172952b6e.31.1734361100760; Mon, 16 Dec 2024
- 06:58:20 -0800 (PST)
+	s=arc-20240116; t=1734363183; c=relaxed/simple;
+	bh=FIjk2JadPX3SOeaRmRdQ5IzfvRfOxxHL8+Hs00XtXWU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g4KFnTohkXzN1qKVer4CMb8Sd/np1Fb4U2TS7ZpPpDu/knBMdyX40qbLrYcjQW0N3dy46MnM0fpT8pXa07GHrcx7KtsK55u47Zx9+CXlQIZKdeF8ohO1CGCz2wHmFbgZWOppYb2IIjfjMCz9DrMpASO3IAh1M8aL0vaR6cQIcGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69396113E;
+	Mon, 16 Dec 2024 07:33:28 -0800 (PST)
+Received: from [10.57.62.54] (unknown [10.57.62.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A19B53F528;
+	Mon, 16 Dec 2024 07:32:57 -0800 (PST)
+Message-ID: <c920700c-9969-4c23-a1fc-a88c87dc98a6@arm.com>
+Date: Mon, 16 Dec 2024 16:32:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5861970.DvuYhMxLoT@rjwysocki.net> <2989520.e9J7NaK4W3@rjwysocki.net>
- <7ca98023-df18-4973-8c4f-18ab381b7aba@arm.com>
-In-Reply-To: <7ca98023-df18-4973-8c4f-18ab381b7aba@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 16 Dec 2024 15:58:09 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gLv1ybYWM4BfmXoW5cHtZXW3tUL+PoXDKQqSBa2UCj0w@mail.gmail.com>
-Message-ID: <CAJZ5v0gLv1ybYWM4BfmXoW5cHtZXW3tUL+PoXDKQqSBa2UCj0w@mail.gmail.com>
-Subject: Re: [RFC][PATCH v021 4/9] sched/topology: Adjust cpufreq checks for EAS
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Morten Rasmussen <morten.rasmussen@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Pierre Gondois <pierre.gondois@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH v0.1 6/6] cpufreq: intel_pstate: Add basic EAS
+ support on hybrid platforms
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Len Brown <len.brown@intel.com>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Christian Loehle <Christian.Loehle@arm.com>
+References: <3607404.iIbC2pHGDl@rjwysocki.net>
+ <115421572.nniJfEyVGO@rjwysocki.net>
+ <2b0953b5-4978-446a-b686-5b8d1541a265@arm.com>
+ <CAJZ5v0hH424_4N1TZVVgKCegUsAisjdAXr7KekafJteSSLEnHA@mail.gmail.com>
+Content-Language: en-US
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CAJZ5v0hH424_4N1TZVVgKCegUsAisjdAXr7KekafJteSSLEnHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 16, 2024 at 3:49=E2=80=AFPM Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
->
-> On 29/11/2024 17:00, Rafael J. Wysocki wrote:
->
-> [...]
->
-> > @@ -261,11 +262,14 @@ static bool sched_is_eas_possible(const
-> >                       }
-> >                       return false;
-> >               }
-> > +             /* Require schedutil or a "setpolicy" driver */
-> >               gov =3D policy->governor;
-> > +             cpufreq_ok =3D gov =3D=3D &schedutil_gov ||
-> > +                             (!gov && policy->policy !=3D CPUFREQ_POLI=
-CY_UNKNOWN);
-> >               cpufreq_cpu_put(policy);
-> > -             if (gov !=3D &schedutil_gov) {
-> > +             if (!cpufreq_ok) {
-> >                       if (sched_debug()) {
-> > -                             pr_info("rd %*pbl: Checking EAS, scheduti=
-l is mandatory\n",
-> > +                             pr_info("rd %*pbl: Checking EAS, unsuitab=
-le cpufreq governor\n",
-> >                                       cpumask_pr_args(cpu_mask));
-> >                       }
-> >                       return false;
->
-> build_perf_domains() which calls sched_is_eas_possible() has schedutil
-> (4) mentioned in the function header as well:
->
-> /*
->  * EAS can be used on a root domain if it meets all the following
-> conditions:
->  *    1. an Energy Model (EM) is available;
->  *    2. the SD_ASYM_CPUCAPACITY flag is set in the sched_domain hierarch=
-y.
->  *    3. no SMT is detected.
->  *    4. schedutil is driving the frequency of all CPUs of the rd; <-- !
->  *    5. frequency invariance support is present;
->  */
->
-> IMHO, his patch should remove the function header since the conditions
-> in sched_is_eas_possible() have comments already or are self-explanatory.
 
-Fair enough.
 
-I'm considering a patch moving these checks to cpufreq, then I'll
-change all of that.
+On 11/19/24 18:20, Rafael J. Wysocki wrote:
+> On Mon, Nov 18, 2024 at 5:34 PM Pierre Gondois <pierre.gondois@arm.com> wrote:
+>>
+>>
+>>
+>> On 11/8/24 17:46, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Modify intel_pstate to register stub EM perf domains for CPUs on
+>>> hybrid platforms via em_dev_register_perf_domain() and to use
+>>> em_dev_expand_perf_domain() introduced previously for adding new
+>>> CPUs to existing EM perf domains when those CPUs become online for
+>>> the first time after driver initialization.
+>>>
+>>> This change is targeting platforms (for example, Lunar Lake) where
+>>> "small" CPUs (E-cores) are always more energy-efficient than the "big"
+>>> or "performance" CPUs (P-cores) when run at the same HWP performance
+>>> level, so it is sufficient to tell the EAS that E-cores are always
+>>> preferred (so long as there is enough spare capacity on one of them
+>>> to run the given task).
+>>>
+>>> Accordingly, the perf domains are registered per CPU type (that is,
+>>> all P-cores belong to one perf domain and all E-cores belong to another
+>>> perf domain) and they are registered only if asymmetric CPU capacity is
+>>> enabled.  Each perf domain has a one-element states table and that
+>>> element only contains the relative cost value (the other fields in
+>>> it are not initialized, so they are all equal to zero), and the cost
+>>> value for the E-core perf domain is lower.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>    drivers/cpufreq/intel_pstate.c |  110 ++++++++++++++++++++++++++++++++++++++---
+>>>    1 file changed, 104 insertions(+), 6 deletions(-)
+>>>
+>>> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+>>> ===================================================================
+>>> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+>>> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+>>> @@ -8,6 +8,7 @@
+>>>
+>>>    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>>
+>>> +#include <linux/energy_model.h>
+>>>    #include <linux/kernel.h>
+>>>    #include <linux/kernel_stat.h>
+>>>    #include <linux/module.h>
+>>> @@ -938,6 +939,12 @@ static struct freq_attr *hwp_cpufreq_att
+>>>        NULL,
+>>>    };
+>>>
+>>> +enum hybrid_cpu_type {
+>>> +     HYBRID_PCORE = 0,
+>>> +     HYBRID_ECORE,
+>>> +     HYBRID_NR_TYPES
+>>> +};
+>>> +
+>>>    static struct cpudata *hybrid_max_perf_cpu __read_mostly;
+>>>    /*
+>>>     * Protects hybrid_max_perf_cpu, the capacity_perf fields in struct cpudata,
+>>> @@ -945,6 +952,86 @@ static struct cpudata *hybrid_max_perf_c
+>>>     */
+>>>    static DEFINE_MUTEX(hybrid_capacity_lock);
+>>>
+>>> +#ifdef CONFIG_ENERGY_MODEL
+>>> +struct hybrid_em_perf_domain {
+>>> +     cpumask_t cpumask;
+>>> +     struct device *dev;
+>>> +     struct em_data_callback cb;
+>>> +};
+>>> +
+>>> +static int hybrid_pcore_cost(struct device *dev, unsigned long freq,
+>>> +                          unsigned long *cost)
+>>> +{
+>>> +     /*
+>>> +      * The number used here needs to be higher than the analogous
+>>> +      * one in hybrid_ecore_cost() below.  The units and the actual
+>>> +      * values don't matter.
+>>> +      */
+>>> +     *cost = 2;
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int hybrid_ecore_cost(struct device *dev, unsigned long freq,
+>>> +                          unsigned long *cost)
+>>> +{
+>>> +     *cost = 1;
+>>> +     return 0;
+>>> +}
+>>
+>> The artificial EM was introduced for CPPC based platforms since these platforms
+>> only provide an 'efficiency class' entry to describe the relative efficiency
+>> of CPUs. The case seems similar to yours.
+> 
+> It is, but I don't particularly like the CPPC driver's approach to this.
+> 
+>> 'Fake' OPPs were created to have an incentive for EAS to balance the load on
+>> the CPUs in one perf. domain. Indeed, in feec(), during the energy
+>> computation of a pd, if the cost is independent from the max_util value,
+>> then one CPU in the pd could end up having a high util, and another CPU a
+>> NULL util.
+> 
+> Isn't this a consequence of disabling load balancing by EAS?
+
+Yes. Going in that direction, this patch from Vincent should help balancing
+the load in your case I think. The patch evaluates other factors when the energy
+cost of multiple CPU-candidates is the same.
+
+Meaning, if all CPUs of the same type have only one OPP, the number of tasks
+and the the load of the CPUs is then compared. This is not the case currently.
+Doing so will help to avoid having one CPU close to being overutilized while
+others are idle.
+
+However I think it would still be better to have multiple OPPs in the energy model.
+Indeed, it would be closer to reality as I assume that for Intel aswell, there
+might be frequency domains and the frequency of the domain is lead by the most
+utilized CPU.
+This would also avoid hitting corner cases. As if there is one big task and many
+small tasks, balancing on the number of tasks per CPU is not the best idea.
+
+https://lore.kernel.org/all/20240830130309.2141697-4-vincent.guittot@linaro.org/
+
+> 
+>> For CPPC platforms, this was problematic as a lower OPP could have been
+>> selected for the same load, so energy was lost for no reason.
+>>
+>> In your case it seems that the OPP selection is done independently on each
+>> CPU. However I assume it is still more energy efficient to have 2 CPUs
+>> loaded at 50% than one CPU loaded at 100% and an idle CPU.
+> 
+> Maybe.
+> 
+> It really depends on the cost of the idle state etc.
+> 
+>> Also as Dietmar suggested, maybe it would make sense to have some
+>> way to prefer an CPU with a "energy saving" HFI configuration than
+>> a similar CPU with a "performance" HFI configuration.
+> 
+> As it happens, E-cores have higher energy-efficiency scores in HFI AFAICS.
+> 
+>> Also, out of curiosity, do you have energy numbers to share ?
+> 
+> Not yet, but there will be some going forward.
+> 
+> Thanks!
 
