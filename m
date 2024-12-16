@@ -1,248 +1,268 @@
-Return-Path: <linux-pm+bounces-19326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBBEB9F3710
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 18:11:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 228C69F3784
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 18:26:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 747E4188E921
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 17:11:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD2D1188350A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 17:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F286E20457E;
-	Mon, 16 Dec 2024 17:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED3B206266;
+	Mon, 16 Dec 2024 17:25:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mQxsM093"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="toTUnwew"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AB11C54A6
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 17:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93988205E17;
+	Mon, 16 Dec 2024 17:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734369076; cv=none; b=XKlI8l3Uq6jLt/Kn4GY4zGqEn+gnlfmiYKZE9n4rxbMHipT35I1oWXvdqNqqr97mPQJ/ayZpMfh6820bNUE1K27RPPOBZshHY+Rz0nNyiy4TXEhmL7SJX7axtEUUkR2QPRQUc9x0YK3pIa5+bn+8zEkMABU3gFXaMSfvMMgk9+c=
+	t=1734369947; cv=none; b=Bvnl2kak+uq0zFDxbWDEk3h1TrX+KtSgNx4C4adVGx8K0PS2FKnXRX3Ozmr1zeyoRUfqUFbnR+7vMAJSOoJhV3wCcBv5lq2Yl1Q85vannNEn22HH+/bLYEX7jz2kzGyY0pCDop2S2GoTtO4TvrhvjFjkg5mIexru4/GH6AXKobc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734369076; c=relaxed/simple;
-	bh=u4yaTsv3e1tUVlJXkBgUd6T1wCq2SLfuwXSDZ5txg0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j90FuXumnJxn374lmPi05bMhqMXUxPNKUVI9+nNUV/N9lt0/bZXZ8XlxIZwFbIzaX9PSFx0DOiorHWK0oKWD+JPnei3Ro9SefkT04gy2rI8k/1euYZY1yQv3lwTxdtcEPW2u4UHoHNZyTYxgRpfYbz8fU1IyWxxREv3P5LQE4iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mQxsM093; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2166360285dso37356785ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 09:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734369074; x=1734973874; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KESVQtKZqZa3Yfy4tilcv/lLnaFc43UVwOF5TEnaANw=;
-        b=mQxsM0939hwxEXtVSijAMhoF7JxDPg1ZZGTkszwZiOp3y5oSsHL0eMsAVgod61sHhT
-         olyq5CMAuhHB0v8X+6Rtk8va5cEbknrS5Soj4gNnsC6sRcCtuIkh6dTPKrnV3iUAiudz
-         8y6FNq7iodquAtdYz+SBiYPsEg2i4X6arjulCIfbi59ni5HSXWGkhn4/a7obTfeh6oJD
-         USl1oJZpjb4HehjIx7k4tD5jQTtRE/7IKshqvzGJyk/MVu+Iaq3ePINVnPmJeE0FE/qg
-         BZYvDVhfgUW7dxfoCLNqVu+hkk5hcSwS/mcedsMvNLpztgMNvgopqax8IpMF9JupwsuH
-         5z0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734369074; x=1734973874;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KESVQtKZqZa3Yfy4tilcv/lLnaFc43UVwOF5TEnaANw=;
-        b=t9sdMAwh3iGvqVdYRZ8JIg4YJc0V74/FhQHDYBwdUGVky/wLC0h6ELWY4WfUnUdqDw
-         0Nql+a8AhcO0myaazsQJjMS23NUI+YlGf61zTz66m6Y01Be0wfiIf0dkbtA566vEBEdV
-         HmN3qbgW8LQxwWFlP8StWR0y0P+2suwmM3LPjwIK38sKHOct5EzYz8kS9wi+JXXNkan+
-         mf1bMXfIdeuasY5qD0mKva1czI8zV9Rp9754qnHhqgvVRIvBjQcd0939rOND1eOiaFOh
-         gf9bIuD4yLPM8cPRr/qYdI1ykspnNsLOk8gIc/ghEzpulUp16eAS26w7LDZ9LwYNU5Ne
-         z/Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCX6VfPFp2KQOO0iBxHJige0YrqOqY4/GUwApMzdgDwLSNs3KfLuPl1Gpe5F3UO5vPDpwmVZbWJGwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxReifWlPGTDXyGVdn4N1rDlRvQaLnPNcCLS232TMoK6dVCllNQ
-	LOY7nCeUfxlRGPbe7XVVmTIAe2vH+vpdVxFDk0Mnt5jNQzSLc6bePXV42ziFZw==
-X-Gm-Gg: ASbGncuFfogJUYJmsT7+7bLiu6eo/xOrnxD6k2n3P9Vpw/bRv3Q1vRajz3pyiHEejBp
-	MJqfF+LamfExUYdnCZxLw6nC/tMPjumVYdS598CUuqcmGW2TmIDX6GC++Y0bL3JZ8wEPmh1cAwu
-	YUHAPpJ0ZDRa7gqG4RW/KuYctLhboqyj18xv9rhpafnIAANHTupfz14Ynv5Nl2EDQpZKwD+d63t
-	Q7xJElmZJP9mzb7QzdMrPDPwcvw6EYM36bPBTtsx2nwjfup8v84gm09Dm1WZZOH84pb
-X-Google-Smtp-Source: AGHT+IGuw2osrWwyy8PDxgoa5NFmZ8dgBrl4BEXKTy6du57U+4dL9QoOD0UuDYSbH38/mphybyPo2Q==
-X-Received: by 2002:a17:903:32cf:b0:215:54a1:8584 with SMTP id d9443c01a7336-218929c3970mr177479665ad.17.1734369074480;
-        Mon, 16 Dec 2024 09:11:14 -0800 (PST)
-Received: from thinkpad ([120.56.200.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e50aadsm45034765ad.156.2024.12.16.09.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 09:11:14 -0800 (PST)
-Date: Mon, 16 Dec 2024 22:41:08 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Ulf Hansson <ulf.hansson@linaro.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
-	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	andersson@kernel.org, konradybcio@kernel.org,
-	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by
- the user
-Message-ID: <20241216171108.6ssulem3276rkycb@thinkpad>
-References: <20241205232900.GA3072557@bhelgaas>
- <20241209143821.m4dahsaqeydluyf3@thinkpad>
- <20241212055920.GB4825@lst.de>
- <13662231.uLZWGnKmhe@rjwysocki.net>
- <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com>
- <20241212151354.GA7708@lst.de>
- <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
- <20241214063023.4tdvjbqd2lrylb7o@thinkpad>
- <CAJZ5v0gLMx+tBo+MA3AQZ7qP28Z91d04oVBHVeTNcd-QD=kJZg@mail.gmail.com>
+	s=arc-20240116; t=1734369947; c=relaxed/simple;
+	bh=vrhax0uCiqAGQOLYSpdt9ZOKtlA1P7bIl0Zey18a2nA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ED2msNDRptqrP//TLLqMIWJlb8ZxUBwa3xOntgtovcz4QIV927FPiac7idR824Oy8aYKM4uFehGfM9TbG5K0coNo0VYG2af7LCJgjY4iGbEAvv1FekS7DpZPuHnMU4XP1gH85GKY4xLZeoNk/KLlWKOdUnPftRP/t/7HnynBacc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=toTUnwew; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A020C4CEDF;
+	Mon, 16 Dec 2024 17:25:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734369947;
+	bh=vrhax0uCiqAGQOLYSpdt9ZOKtlA1P7bIl0Zey18a2nA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=toTUnwewEEZTYhL+I2YLM2oNfs7M+hKzJ92JGBAX03Us784/Gosfx/Tl6Nr7F8PdC
+	 +oFTemCZiwohqst6Zg7/O2u1nj3Vh8P1iy8xSsAhoOtClQL4KI9TSYiCeS1314kcvs
+	 kdPGrknwz6phBaVtNJptpWL+y3uZi8ZV3ohc5IgDQYf1Tc6gbLD/owcYPMrZEeOteJ
+	 Z0G+NCIbmfng1UyRCs6KX0w7NUmzZmsqpLsMyaSy/lTxa1WdsBbGqrS6vS2oG/h4g5
+	 J1UMzAhr6bO+arR1x7x8OBJ8DpQCDzrkeK9buZa1f0Mb0ZHo+tSHigxrZXnTNcxtIL
+	 8PqNVcYkqIrxA==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3e63e5c0c50so2231395b6e.0;
+        Mon, 16 Dec 2024 09:25:47 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVcL7GJ0sEREPlyQUtamEBRIiwzfws2sJr2N4oOjmzCdG5ld+DknsANA93uhnUojjsK7EJPVZQxoEUVVSA=@vger.kernel.org, AJvYcCVvDqqDDdeFnl5kS9mgzMgth6RrDcYPlynPmddohQlCBB6XsCjkT5u30U2Bl5b6YpQgicxw4keKLj0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz5ge+rSQEyB4VBSh434qJyOKRGOizzPjASAKZ3ALzUZL8rl9g
+	IruQ5g9JKuEcPQxxOfe1Hu1mj6Gon0nkXfhtMRIQEO7X6jNexP5pMTIHh1K0hUdXfVwalY01wrV
+	yUCzZ/JOQjQVSCVXaTKxp+lZzTns=
+X-Google-Smtp-Source: AGHT+IFDBJrOSWDGX2nbG+PjKRGvDraMZbwtcEXMHLHOXB92iCn9tAWqUkN27WJXftFoueYL+mx32GZFNIGAnWzmXww=
+X-Received: by 2002:a05:6808:2114:b0:3e6:22d4:d2c8 with SMTP id
+ 5614622812f47-3ebca7212cfmr86184b6e.12.1734369946282; Mon, 16 Dec 2024
+ 09:25:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gLMx+tBo+MA3AQZ7qP28Z91d04oVBHVeTNcd-QD=kJZg@mail.gmail.com>
+References: <3607404.iIbC2pHGDl@rjwysocki.net> <115421572.nniJfEyVGO@rjwysocki.net>
+ <2b0953b5-4978-446a-b686-5b8d1541a265@arm.com> <CAJZ5v0hH424_4N1TZVVgKCegUsAisjdAXr7KekafJteSSLEnHA@mail.gmail.com>
+ <c920700c-9969-4c23-a1fc-a88c87dc98a6@arm.com>
+In-Reply-To: <c920700c-9969-4c23-a1fc-a88c87dc98a6@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 16 Dec 2024 18:25:34 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hTC20LB1ifbGmesYQULGS4-uEfu2Tgc17OMftvFqvnJg@mail.gmail.com>
+Message-ID: <CAJZ5v0hTC20LB1ifbGmesYQULGS4-uEfu2Tgc17OMftvFqvnJg@mail.gmail.com>
+Subject: Re: [RFC][PATCH v0.1 6/6] cpufreq: intel_pstate: Add basic EAS
+ support on hybrid platforms
+To: Pierre Gondois <pierre.gondois@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <len.brown@intel.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
+	Christian Loehle <Christian.Loehle@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 16, 2024 at 05:24:40PM +0100, Rafael J. Wysocki wrote:
-> On Sat, Dec 14, 2024 at 7:30 AM Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
+On Mon, Dec 16, 2024 at 4:33=E2=80=AFPM Pierre Gondois <pierre.gondois@arm.=
+com> wrote:
+>
+>
+>
+> On 11/19/24 18:20, Rafael J. Wysocki wrote:
+> > On Mon, Nov 18, 2024 at 5:34=E2=80=AFPM Pierre Gondois <pierre.gondois@=
+arm.com> wrote:
+> >>
+> >>
+> >>
+> >> On 11/8/24 17:46, Rafael J. Wysocki wrote:
+> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>
+> >>> Modify intel_pstate to register stub EM perf domains for CPUs on
+> >>> hybrid platforms via em_dev_register_perf_domain() and to use
+> >>> em_dev_expand_perf_domain() introduced previously for adding new
+> >>> CPUs to existing EM perf domains when those CPUs become online for
+> >>> the first time after driver initialization.
+> >>>
+> >>> This change is targeting platforms (for example, Lunar Lake) where
+> >>> "small" CPUs (E-cores) are always more energy-efficient than the "big=
+"
+> >>> or "performance" CPUs (P-cores) when run at the same HWP performance
+> >>> level, so it is sufficient to tell the EAS that E-cores are always
+> >>> preferred (so long as there is enough spare capacity on one of them
+> >>> to run the given task).
+> >>>
+> >>> Accordingly, the perf domains are registered per CPU type (that is,
+> >>> all P-cores belong to one perf domain and all E-cores belong to anoth=
+er
+> >>> perf domain) and they are registered only if asymmetric CPU capacity =
+is
+> >>> enabled.  Each perf domain has a one-element states table and that
+> >>> element only contains the relative cost value (the other fields in
+> >>> it are not initialized, so they are all equal to zero), and the cost
+> >>> value for the E-core perf domain is lower.
+> >>>
+> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>> ---
+> >>>    drivers/cpufreq/intel_pstate.c |  110 ++++++++++++++++++++++++++++=
+++++++++++---
+> >>>    1 file changed, 104 insertions(+), 6 deletions(-)
+> >>>
+> >>> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> >>> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> >>> @@ -8,6 +8,7 @@
+> >>>
+> >>>    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >>>
+> >>> +#include <linux/energy_model.h>
+> >>>    #include <linux/kernel.h>
+> >>>    #include <linux/kernel_stat.h>
+> >>>    #include <linux/module.h>
+> >>> @@ -938,6 +939,12 @@ static struct freq_attr *hwp_cpufreq_att
+> >>>        NULL,
+> >>>    };
+> >>>
+> >>> +enum hybrid_cpu_type {
+> >>> +     HYBRID_PCORE =3D 0,
+> >>> +     HYBRID_ECORE,
+> >>> +     HYBRID_NR_TYPES
+> >>> +};
+> >>> +
+> >>>    static struct cpudata *hybrid_max_perf_cpu __read_mostly;
+> >>>    /*
+> >>>     * Protects hybrid_max_perf_cpu, the capacity_perf fields in struc=
+t cpudata,
+> >>> @@ -945,6 +952,86 @@ static struct cpudata *hybrid_max_perf_c
+> >>>     */
+> >>>    static DEFINE_MUTEX(hybrid_capacity_lock);
+> >>>
+> >>> +#ifdef CONFIG_ENERGY_MODEL
+> >>> +struct hybrid_em_perf_domain {
+> >>> +     cpumask_t cpumask;
+> >>> +     struct device *dev;
+> >>> +     struct em_data_callback cb;
+> >>> +};
+> >>> +
+> >>> +static int hybrid_pcore_cost(struct device *dev, unsigned long freq,
+> >>> +                          unsigned long *cost)
+> >>> +{
+> >>> +     /*
+> >>> +      * The number used here needs to be higher than the analogous
+> >>> +      * one in hybrid_ecore_cost() below.  The units and the actual
+> >>> +      * values don't matter.
+> >>> +      */
+> >>> +     *cost =3D 2;
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>> +static int hybrid_ecore_cost(struct device *dev, unsigned long freq,
+> >>> +                          unsigned long *cost)
+> >>> +{
+> >>> +     *cost =3D 1;
+> >>> +     return 0;
+> >>> +}
+> >>
+> >> The artificial EM was introduced for CPPC based platforms since these =
+platforms
+> >> only provide an 'efficiency class' entry to describe the relative effi=
+ciency
+> >> of CPUs. The case seems similar to yours.
 > >
-> > On Fri, Dec 13, 2024 at 03:35:15PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Dec 12, 2024 at 4:14 PM Christoph Hellwig <hch@lst.de> wrote:
-> > > >
-> > > > On Thu, Dec 12, 2024 at 01:49:15PM +0100, Ulf Hansson wrote:
-> > > > > Right. This seems to somewhat work for ACPI types of systems, because
-> > > > > ACPI is controlling the low power state for all the devices. Based on
-> > > > > the requested system wide low power state, ACPI can then decide to
-> > > > > call pm_set_suspend_via_firmware() or not.
-> > > > >
-> > > > > Still there is a problem with this for ACPI too.
-> > > > >
-> > > > > How does ACPI know whether it's actually a good idea to keep the NVMe
-> > > > > storage powered in s2idle (ACPI calls pm_set_suspend_via_firmware()
-> > > > > only for S2R and S2disk!?)? Especially when my laptop only supports
-> > > > > s2idle and that's what I will use when I close the lid. In this way,
-> > > > > the NMVe storage will certainly contribute to draining the battery,
-> > > > > especially when I won't be using my laptop for a couple of days.
-> > > > >
-> > > > > In my opinion, we need a better approach that is both flexible and
-> > > > > that dynamically adjusts based upon the use case.
-> > > >
-> > > > Agreed.  I'd be happy to work with the PM maintainers to do this,
-> > > > but I don't really know enough about the PM core to drive it
-> > > > (as the reply from Rafael to my mail makes pretty clear :))
-> > >
-> > > I'm here to help.
-> > >
-> > > Let me know what exactly you want to achieve and we'll see how to make it work.
+> > It is, but I don't particularly like the CPPC driver's approach to this=
+.
 > >
-> > I'll try to summarize the requirement here since I started this thread:
+> >> 'Fake' OPPs were created to have an incentive for EAS to balance the l=
+oad on
+> >> the CPUs in one perf. domain. Indeed, in feec(), during the energy
+> >> computation of a pd, if the cost is independent from the max_util valu=
+e,
+> >> then one CPU in the pd could end up having a high util, and another CP=
+U a
+> >> NULL util.
 > >
-> > Problem statement
-> > =================
-> >
-> > We need a PM core API that tells the device drivers when it is safe to powerdown
-> > the devices. The usecase here is with PCIe based NVMe devices but the problem is
-> > applicable to other devices as well.
-> >
-> > Drivers are relying on couple of options now:
-> >
-> > 1. If pm_suspend_via_firmware() returns true, then drivers will shutdown the
-> > device assuming that the firmware is going to handle the suspend. But this API
-> > is currently used only by ACPI. Even there, ACPI relies on S2R being supported
-> > by the platform and it sets pm_set_suspend_via_firmware() only when the suspend
-> > is S2R. But if the platform doesn't support S2R (current case of most of the
-> > Qcom SoCs), then pm_suspend_via_firmware() will return false and NVMe won't be
-> > powered down draining the battery.
-> 
-> So my question here would be why is it not powered down always during
-> system-wide suspend?
-> 
-> Why exactly is it necessary to distinguish one case from the other
-> (assuming that we are talking about system-wide suspend only)?
-> 
+> > Isn't this a consequence of disabling load balancing by EAS?
+>
+> Yes. Going in that direction, this patch from Vincent should help balanci=
+ng
+> the load in your case I think. The patch evaluates other factors when the=
+ energy
+> cost of multiple CPU-candidates is the same.
+>
+> Meaning, if all CPUs of the same type have only one OPP, the number of ta=
+sks
+> and the the load of the CPUs is then compared. This is not the case curre=
+ntly.
+> Doing so will help to avoid having one CPU close to being overutilized wh=
+ile
+> others are idle.
+>
+> However I think it would still be better to have multiple OPPs in the ene=
+rgy model.
+> Indeed, it would be closer to reality as I assume that for Intel aswell, =
+there
+> might be frequency domains and the frequency of the domain is lead by the=
+ most
+> utilized CPU.
 
-To support Android like usecase with firmware that only supports
-suspend-to-idle (Qcom platforms). This usecase is not applicable right now, but
-one can't just rule out the possibility in the near future.
+There are a couple of problems with this on my target platforms.
 
-And the problem is that we need to support both Android and non-Android systems
-with same firmware :/
+First, it is not actually known what the real OPPs are and how the
+coordination works.
 
-> There are drivers that use pm_suspend_via_firmware() to check whether
-> or not something special needs to be done to the device because if
-> "false" is returned, the platform firmware is not going to remove
-> power from it.
-> 
-> However, you seem to be talking about the opposite, so doing something
-> special to the device if "true" is returned.  I'm not sure why this is
-> necessary.
-> 
+For some cores (P-cores mostly) the voltage can be adjusted per-core
+and for some others there are coordination domains, but the
+coordination there involves idle states (for instance, one core may be
+allowed to run at the max turbo frequency when the other ones in the
+same domain are in idle states, but not otherwise) and dynamic
+balancing (that is, the effective capacity depends on how much energy
+is used by the domain over time).
 
-Because, since 'false' is returned, drivers like NVMe are assuming that the
-platform won't remove power on all DT systems and they just keep the devices in
-low power state (not powering them down). But why would I want my NVMe in DT
-based laptop to be always powered in system suspend?
+Thus whatever is put into the perf states table will be way off most
+of the time and there isn't even a good way to choose the numbers to
+put in there.  Using the entire range of HWP P-states for that would
+be completely impractical IMV because it would only increase overhead
+for no real benefit.  Either it would need to be done per-CPU, which
+doesn't really make sense because CPUs of the same type really share
+the same cost-performance curve, or the assumption that the entire
+domain is led by the most utilized CPU would need to be lifted to some
+extent.  That would require some more intrusive changes in EAS which
+I'd rather avoid unless the simplest approach doesn't work.
 
-> > If the platform is using DT, then there is no entity setting
-> > pm_set_suspend_via_firmware().
-> 
-> That's true and so the assumption is that in this case the handling of
-> all devices will always be the same regardless of which flavor of
-> system suspend is chosen by user space.
-> 
+The second problem is that the current platforms are much smaller than
+what we're expecting to see in the future and whatever is done today
+needs to scale.
 
-Right and that's why the above concern is raised.
+Also, I really wouldn't want to have to register special perf domains
+for favored cores that share the cost-performance curve with the other
+cores of the same type except that they can turbo-up higher if
+everyone else is idle or similar.
 
-> > So NVMe will be kept in low power state all the
-> > time (still draining the battery).
-> 
-> So what would be the problem with powering it down unconditionally?
-> 
+> This would also avoid hitting corner cases. As if there is one big task a=
+nd many
+> small tasks, balancing on the number of tasks per CPU is not the best ide=
+a.
+>
+> https://lore.kernel.org/all/20240830130309.2141697-4-vincent.guittot@lina=
+ro.org/
 
-I'm not sure how would you do that (by checking dev_of_node()?). Even so, it
-will wear out the NVMe devices if used in Android tablets etc...
-
-> > There were attempts to set this flag from
-> > PSCI [1], but there were objections on setting this flag when PSCI_SUSPEND is
-> > not supported by the platform (again, the case with Qcom SoCs). Even if this
-> > approach succeeds, then there are concerns that if the platform is used in an
-> > OS like Android where the S2Idle cycle is far more high, NVMe will wear out
-> > very quickly.
-> 
-> I see.
-> 
-> > So this is where the forthcoming API need to "dynamically adjusts
-> > based upon the use case" as quoted by Ulf in his previous reply. One way to
-> > achieve would be by giving the flexibility to the userspace to choose the
-> > suspend state (if platform has options to select). UFS does something similar
-> > with 'spm_lvl' [2] sysfs attribute that I believe Android userspace itself makes
-> > use of.
-> 
-> Before we're talking about APIs, let's talk about the desired behavior.
-> 
-> It looks like there are cases in which you'd want to turn the device
-> off completely (say put it into D3cold in the PCI terminology) and
-> there are cases in which you'd want it to stay in a somewhat-powered
-> low-power state.
-> 
-> It is unclear to me what they are at this point.
-> 
-
-I hope that my above explanation clarifies. Here is the short version of the
-suspend requirement across platforms:
-
-1. D3Cold (power down) - Laptops/Automotive
-2. D3hot (low power) - Android Tablets
-
-FWIW, I did receive feedback from people asking to just ignore the Android
-usecase and always power down the devices for DT platforms. But I happen to
-disagree with them. Let me know if I was wrong and I should not worry about
-Android usecase as it is for the future.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+Understood.
 
