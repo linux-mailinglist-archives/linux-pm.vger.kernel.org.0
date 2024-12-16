@@ -1,164 +1,132 @@
-Return-Path: <linux-pm+bounces-19306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690E09F31B4
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 14:39:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67EF89F31BA
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 14:40:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73EA77A2B76
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 13:39:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E0E2166B9B
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 13:40:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B824C205511;
-	Mon, 16 Dec 2024 13:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 209552054F3;
+	Mon, 16 Dec 2024 13:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="JAHJH70O"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QHtDWwpv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0D82054E6;
-	Mon, 16 Dec 2024 13:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753753FD4
+	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 13:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734356360; cv=none; b=VUsdBjm7aEy0Fn11EcgHB2ChMVktGmSyGyNGsctuUXEj9aJGH2dJErfSl2ttlh5dnfYYfzWqV945Itz/te8uwCjR7n8vFC5381mi3+jrrE0WpREnnySAH9FoSLvNOGkbbVuybwo1V17PrISUFpeswMcZQOO3PN0m3GHuT3hu2gk=
+	t=1734356413; cv=none; b=Oz0TtZK0A9ojO9EdfmGda/qHzMBhtZOO5C8HdHDOIKhEHGdkitP1thqTTIaJaaIiEOAfyrPCwNfvcHK7Y+RdyGcJPRukVWYOLbBZxeRwIKr4WKhq5jzHJM+QoQ+4TnGSFOd9p4+/bGdVOpZYhxPiR1jM4M2T7P/USMn6oqV+Res=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734356360; c=relaxed/simple;
-	bh=maLJvdHMGdaeWjPEplAdgY7968lccnwkwy0LuI9OVYk=;
-	h=From:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ebftinTa+JR12ed1JeVv9K5xY47abD4AAB4ATjSClpT67p/j53AnwTA2xkSmWQ1a4dsjO7wJXfu8HTvs5k+/xm1EEU8nKbLJytbJ4uyJEmYexqZlUofj7T+IQJ8blHO17A76moUBQ58LyMPAIoDsuC74wSYG9y5PnIhDCZZw6t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=JAHJH70O; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id a219ac7d98729a14; Mon, 16 Dec 2024 14:39:09 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 50665841E0A;
-	Mon, 16 Dec 2024 14:39:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1734356349;
-	bh=maLJvdHMGdaeWjPEplAdgY7968lccnwkwy0LuI9OVYk=;
-	h=From:Subject:Date;
-	b=JAHJH70O/hbZhNcbZlYBrKxsnUqZawhQpfMmNnl2mqXXEqvHC4nOw9GKTZ945zyn6
-	 sc4uNlbwPJeM52zppVQ96XLYF9koQp/NV0tm00+lloZgkVR1qOhYMiuS8YTO3oNneo
-	 Mi/7r0Fc4WJtWEyMp89pbjSX2LzTPl64durmBHcKEE9qnK7gxGCcgQBxlTn71ZgIXl
-	 I1GJd4etWRxMFPQ4p0rTaQp3MQ+bmL0Nw5W1SrFltQjjlx8e1dJopufn7VRzAEM7fD
-	 T0lmnrYJBQF/17nlmlWGoYA6YzxQ/ubBDP2TEvGWP9zwtG3d2T6Bo0AqABV2hFWWzm
-	 T2B42qcphYOWg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Eric Biederman <ebiederm@xmission.com>,
- David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ming Lei <ming.lei@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Subject:
- [PATCH v1] kexec_core: Add and update comments regarding the KEXEC_JUMP flow
-Date: Mon, 16 Dec 2024 14:39:09 +0100
-Message-ID: <4968818.GXAFRqVoOG@rjwysocki.net>
+	s=arc-20240116; t=1734356413; c=relaxed/simple;
+	bh=D/uvSqLEeDS9Op44MoBmxMHKOE6+s52+bTzYPdHFTlg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MgoHJ+2hiP47d5MM95srWA82ZFS2hh9xVrvGB5uUjKNp+aN0mdPfpODXHn6NkmYcO2uGzGKdXOTWCPwXXfQlqPxxVwi4YC/OYPTCuRycT4ibXs56wwH8F8uvwkX3qB/JaHYWSfSgcl1F0vGYfZZqj5LemGwEF+BHHHexS6yzUTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QHtDWwpv; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-72909c459c4so2496063b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 05:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734356411; x=1734961211; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xNbqTCrGZMZzefPzauDW5eoAcfNyutFYXR4KBYQHxXo=;
+        b=QHtDWwpvWRYi7UsQTxJ9wWVh8jmYiPYmApjjSle8xDQ9k9UmUXXoVGG3BNVoNuLUHM
+         YFDMvQUUK6fdM2KXwf7JXEMU96idjsQqH6fqxTp5iGhAMzfYsgaml2pqfPwJDc+4246z
+         6TuMUUUVlsW8d3tQYZvD3pVIKcmYQaVZf914XoIiDLruDdw+dYy4BTAecNm2Akkmuo5s
+         enP2Dz/hyGnMsANFZpOSWVw20G9psO1snQr5ZqsnaBzYuxp2Uw0iYPNTt8DhhNnM5L+i
+         FSj6B1/BSyKUpiYcsYdQ6RFZVLn1ILxCItKTsRIEbumUQvPkpcr3BaVAKawNcsl4jfva
+         Ulww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734356411; x=1734961211;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xNbqTCrGZMZzefPzauDW5eoAcfNyutFYXR4KBYQHxXo=;
+        b=eHHVfYb3hGObFh//YIbpeQBiMXMj+aghLpzKvxaANAz2xKv+p624GTSb3aSyR+rz/1
+         Roo5mpke1114B9gIncktYk9tkn8/7akT/Wy1qmQrFl0VJxat48vQwletv86SJ0oxj5st
+         r+jM3qhSkHOZIH9mG6ZatAmcY5W8U91SQ6v8uNaexnEKmKwKl0g//hyLg4Cq5pupv95Z
+         XPh30LG/dvkzDjzCZHr9KSJ5sqWM1jH5I0WZlQH89qBayp0qGmQsc75UuR/jQKc/8LEo
+         X+H4HUdLi0rwN89vpMDWYbxCLzTZX9tBlg7mN1GINepQSVDmARWVUijhDTqzZ1+90usg
+         VHZA==
+X-Forwarded-Encrypted: i=1; AJvYcCX/OzzT9S4SiksZSqrfnzsqxuO11i6yDnAIb3H1bH55n7mu6rxLWoJodzOzkr1ZPAifZYY+7gSuaw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOTcZ9yzS1kumvXDkLsNJ+8GyPiMcl0c7Z/N8og7kh4zHW6hbu
+	txnifJb8mOkvegMqg1gpVdu1VYR8nvd6ZFJCs5FkxWmrBDZ2aUGuyFQ/2EBRHA==
+X-Gm-Gg: ASbGncv4WtrQrNk/jwBuk57sZMrCxXYowpYVZTclpTXFFGa6MvH4F0NZl4DwhvwpHdu
+	sec6sj8LmT9I7KTwbCUzUDiZZwYAMbBXY1nl4gS+sTQ440p4irw9PVuQxFtdQCZTYblp9MmQI5U
+	PBoy0lr0i2T4EFp/09YUXiAYcQ9cBdcNBikit5yerMZsyOCQFN1Pnb2NI5aeynMSGdg44wdoC9W
+	eQe1dJMXQC6VdJ8pYXB6x3b7tOTm0TlULA8gGG+8+330VDo8nYurynHoEv51yN/K1cZ
+X-Google-Smtp-Source: AGHT+IHtU3bNVTDqxmrxLIdO6qRoEtt3sZYQHonGIC2rgqRgj+BLKFKHXozqcq+GoPpoJAqJTibUNA==
+X-Received: by 2002:a05:6a00:330a:b0:729:597:4f97 with SMTP id d2e1a72fcca58-7290c243231mr19778124b3a.20.1734356410414;
+        Mon, 16 Dec 2024 05:40:10 -0800 (PST)
+Received: from thinkpad ([120.56.200.168])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918ac7789sm4725660b3a.12.2024.12.16.05.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2024 05:40:09 -0800 (PST)
+Date: Mon, 16 Dec 2024 19:10:05 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [RFT PATCH] Revert "power: sequencing: request the WLAN enable
+ GPIO as-is"
+Message-ID: <20241216134005.bjmw5vo4hn6fzp34@thinkpad>
+References: <20241203141251.11735-1-brgl@bgdev.pl>
+ <Z1x6ti2KaMdKS1Hn@linaro.org>
+ <20241216070554.ym54ozdw45zhveo7@thinkpad>
+ <Z2AF56PDj1m1BS1S@linaro.org>
+ <20241216132445.vjkxxknvzaht2ltq@thinkpad>
+ <CAMRc=McmTUPqhF9uTdxBttm9RUxLgd68uanbxAVt-jbHe27h2A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrleefgdehgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnehmihhsshhinhhgucfvqfcufhhivghlugculdeftddmnecujfgurhephfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfevledvvdetkedthfehgeetheehgfekheevtdeljeegiedvtefhtdetgeffheetnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepiedprhgtphhtthhopegvsghivgguvghrmhesgihmihhsshhiohhnrdgtohhmpdhrtghpthhtohepugifmhifvdesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehmihhnghdrlhgvihesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=McmTUPqhF9uTdxBttm9RUxLgd68uanbxAVt-jbHe27h2A@mail.gmail.com>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Dec 16, 2024 at 02:36:24PM +0100, Bartosz Golaszewski wrote:
 
-The KEXEC_JUMP flow is analogous to hibernation flows occurring before
-and after creating an image and before and after jumping from the
-restore kernel to the image one, which is why it uses the same device
-callbacks as those hibernation flows.
+[...]
 
-Add comments explaining that to the code in question and update an
-existing comment in it which appears a bit out of context.
+> > Your hack is making sure that the default state of the GPIO is not changed at
+> > all after initializing the controller. So even if the pwrctrl driver probes
+> > later, it will try to enable the module by doing,
+> > 'gpiod_set_value_cansleep(ctx->wlan_gpio, 1)', which would do nothing to the
+> > device state.
+> >
+> > So the issue is not with the pwrctrl driver but with the controller
+> > implementation. Ideally, once the device is removed, the PCIe link should move
+> > to Detect state and then to Polling state once the receiver is detected on the
+> > lanes. But the DWC and Qcom glue has other logics that prevents the controller
+> > from doing so.
+> >
+> > So until the link down handling is implemented in the controller driver, we need
+> > to carry this hack that preserves the GPIO state.
+> >
+> 
+> Thanks for the explanation Mani. Regarding this patch: I suggest we
+> keep it for now but maybe I'll add a comment saying why it's still
+> necessary?
+> 
 
-No functional changes.
+Yeah, that makes sense.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+- Mani
 
-The kexec_jump code has a few problems AFAICS.
-
-First off, it should use lock_system_sleep() or "interesting" things may
-happen when it is run in parallel to a system-wide PM transition.
-
-Second, it looks like it should use pm_sleep_disable/enable_decondary_cpus()
-instead of the "raw" suspend_disable/enable_secondary_cpus() because running
-it with unpaused cpuidle is kind of a slippery slope.
-
-Moreover, it wouldn't hurt to somehow call acpi_pm_freeze() somewhere during
-it to prevent background platform activity from interfering with the "resume"
-part of it.
-
-It also might be useful to unify it with the analogous hibernation flows more
-directly, but that would require some rearrangements of the latter.
-
-I'm going to send patches along these lines at one point in the future
-unless I'm told that this is a bad idea.
-
-Thanks!
-
----
- kernel/kexec_core.c |   23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -1001,6 +1001,12 @@
- 
- #ifdef CONFIG_KEXEC_JUMP
- 	if (kexec_image->preserve_context) {
-+		/*
-+		 * This flow is analogous to hibernation flows that occur before
-+		 * creating an image and before jumping from the restore kernel
-+		 * to the image one, so it uses the same device device callbacks
-+		 * as those two flows.
-+		 */
- 		pm_prepare_console();
- 		error = freeze_processes();
- 		if (error) {
-@@ -1011,12 +1017,10 @@
- 		error = dpm_suspend_start(PMSG_FREEZE);
- 		if (error)
- 			goto Resume_console;
--		/* At this point, dpm_suspend_start() has been called,
--		 * but *not* dpm_suspend_end(). We *must* call
--		 * dpm_suspend_end() now.  Otherwise, drivers for
--		 * some devices (e.g. interrupt controllers) become
--		 * desynchronized with the actual state of the
--		 * hardware at resume time, and evil weirdness ensues.
-+		/*
-+		 * dpm_suspend_end() must be called after dpm_suspend_start()
-+		 * to complete the transition, like in the hibernation flows
-+		 * mentioned above.
- 		 */
- 		error = dpm_suspend_end(PMSG_FREEZE);
- 		if (error)
-@@ -1052,6 +1056,13 @@
- 
- #ifdef CONFIG_KEXEC_JUMP
- 	if (kexec_image->preserve_context) {
-+		/*
-+		 * This flow is analogous to hibernation flows that occur after
-+		 * creating an image and after the image hernel has got control
-+		 * back, and in case the devices have been reset or otherwise
-+		 * manipulated in the meantime, it uses the device callbacks
-+		 * used by the latter.
-+		 */
- 		syscore_resume();
-  Enable_irqs:
- 		local_irq_enable();
-
-
-
+-- 
+மணிவண்ணன் சதாசிவம்
 
