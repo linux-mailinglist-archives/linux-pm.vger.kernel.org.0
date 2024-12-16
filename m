@@ -1,88 +1,73 @@
-Return-Path: <linux-pm+bounces-19271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C3269F29AC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 06:43:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3392B9F2A2A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 07:31:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E5D27A168A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 05:43:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D8F164B2C
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 06:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97C41C4A2C;
-	Mon, 16 Dec 2024 05:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Y+vN6So3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0111CDFCE;
+	Mon, 16 Dec 2024 06:31:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2051.outbound.protection.outlook.com [40.107.94.51])
+Received: from MA0PR01CU009.outbound.protection.outlook.com (mail-southindiaazon11020134.outbound.protection.outlook.com [52.101.227.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B456F1C3F0E;
-	Mon, 16 Dec 2024 05:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DE819258E;
+	Mon, 16 Dec 2024 06:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.227.134
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734327799; cv=fail; b=ftcFw18uGIRazJLGQDrEVB41uH5QUX3UbOWtzsIjXDq1LnmVDGiheNPFB3Z3cWGTAstuGxkxrt9fsW3BwLBYivzAW/LPrJcHE2F0h0XDfdctpWSZHThUqfcSasmdUcp2raUpuiRV2e+qp9z4eMuX276EWpWqQpJIrmUMjMdBCsc=
+	t=1734330666; cv=fail; b=cEj+7jB45XmoX9Gzvc/C/YGrI/OQ/ygvRqFa7yFHVEHD5KhXVdQSJOLVFQdd7YzXsgpBMfaNhoyLaQ4r9aH6qThulrxo+KUDqdTNchHkHBMAnAA/6+MG2cieByYrgvTVvEQsvLTl9RVMYSDUoWZuEqUF4SZnpZ/xCJIXqXGART4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734327799; c=relaxed/simple;
-	bh=k609KnFB+YrBM1OW56O9jm+ez78OJDcdN7YPJbmaqc8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=qg71/VQ2EK5xdYqZMxigXMqt55QuHewgIgMLc730QApwJ6FRBpH6/pof+ype+FFT9ygWG/s/b7ZDQ31CA/NytC/zeQxNKN+3tywxmfbqbuB820Hkhofz9cSwQQPzrfzkndwtGH3WQxkPHA6oD4+RaAwjYdKG7c3weO1NhOxAX8Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Y+vN6So3; arc=fail smtp.client-ip=40.107.94.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1734330666; c=relaxed/simple;
+	bh=4YDCee/31iyCS0iF1HHy+CtN3lQC/OLBVibz0xs4SLU=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=ZwDu5bjuhJYF8TVruHeffsRuXhNsF+4x+NbFIAs9S6MFKY3Wqi3ryyK5IKdSYLggwTWIJc5r2BuL41ppMdxjvUgF2WGi39WlAO0BSiw+f6A09gOLzVFfMAHsBYGXB4ddGrHCgAdP491VoLq0KJU4c/fb+EtCbMjpE7BtOK5h6wo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.227.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Sn7X0kGExorb2tztAVYZX2VdiyOIuZaW69hCiuW9CiUofT1h05qYSqkDxMrSy7ru463UQGMjtNXJUDCdMd9Z7rmlSBOZ1DseRGj5JKYmAHsgnnJHikLSDmIU4eLM7VuxrUkfSPKAjpwDac3PnCx1w5Ry2l3+wMANsTCCI6H60gX5Vd5IVh+2iS4+irtp0lcH3CDZTptxIQ/O4IfQzcOt9ODHN3Mb4oowj8043p/bHPvjCwmJE12MyWbGKH+SXldep360gibUAIZatTrCBTmYDi37wtV6vWnhA5mGo2anxbgW+JXViaHEnhbQ67XObzniHGUH93+dNRaHFqChuka43w==
+ b=YVGqh0pzHEyQjY7PdJwMJ/aJOZYI35yrQZFTTSmzwogx4TICFKDEzFv604BzY/cnOuWvDKl6HwNo4OKa8SHqs3PtAo+8xmbXt2YgWOpChR0TFsVwIDdCc9bQ39j7RiT+FcbOOxXwE7MUAvUF1RdtGK6uqOP/3bUAMFWpXGZwlylvM5RFwa6G/o+KYJFssudccWmAJEP2FIOyYEoXqa+5FsQbt+MoIVTDWOGGCZj5KouSsV11JuPp+MEUH9a/SV3h7HksoVVr+sMcbzNvG0yuS//HjP0KY7EmKR96zryGy6u44FatJXmtlgAj5KF9D7yxvo7HanC1KenHyRCmvVkNrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eKE712LNTnq5OnoswiWWPkoFcG2Yq5+YIV5fgh+FYjU=;
- b=J0fsicavv9hrZdg2BCjEKCC9/kLiFmie7sBilg7u8MbnsvEr0gk7JC/e1zf6HF1IgyQAKIDE3qY6D3hF0yTbXmmr1ZMynLUMeOTLZK+IcwVX7rZ+jTL0s98KS/Uz0pxuTr0ctB2aiT7sPhlHLXTlYLVPn8hKozYoJWwXbTR9NZqWA+Rp8ZPugAKwujAXKNr3kbfMG7mTPAB4sNv30hIcBjsHu5FiOu9j/jKGTE6WOgPTVgVtu9/fU3L8u0j9Tqtpltadn/MU1zogjG2mfUIXDXXEud4NvLvWIyheEAAVchnNjrFIg8JFMiIAewUoa0XscefUuGFQOxJFoI1s5JKmWw==
+ bh=MIUPhinBdxgS2rycyUlQiSDVS5N83C5nRtnMktgyzZg=;
+ b=hWSfP/Joxj22u+xzG47r+7UhN4ZgmIxJ+TGZ4VvOXTmcNzDFKMpXA3MWXgsJR6+n11k7OGgYAF49ie8Ny4psL5PwNiC6sFE6jI3BCrH8MVVoWandIBNMpf1OSwyPHCE+20qNq5Aljms6UDG4tXOqtr3tB1VH0rPe9mg8+Jhkw+QTervLsFS8wajDMYQSoizdaUEPrZDlYxfOn82DI4U7BkFN7UZqu/r5rJcxQehM16JlCXHGUtdFUVVRFrdBSDOO3aBnpCUJ+WXfJgbgsNCtnemLYD9bJUYh0DFp6vAqwQF93pN0QJexpP5OGzfggjmoK6fWk99w6SHzuDFVPNQNlw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eKE712LNTnq5OnoswiWWPkoFcG2Yq5+YIV5fgh+FYjU=;
- b=Y+vN6So3Xg3Kznvr+rnLoZ9k0jsvvfU7IlTym7pZEV/sSmGwuyH6hlaajkoEJFmWGFjag8fW3ZYurAJOcbR5Cqkh02Uoi0CyjOQH3nuK7YR/AswibXW+Yen/IccJGNT93As6VGyc33UYFqSpzCaL3VBVRqefJWH3hUO/TWRACQZjLzBI1fK0+6SzvWgm3BgrsBRsgzGabUmOmyKlGzTJDXL3kka8MDVTClMNk1qd3AEWAK8QJXpaF9/JdoQ7Kx+iz/Q4Edr51uoTFDejAxqpshAYuo67qzk32H3K0M/w0cA80T9yn6oj27TCta3eF3tWq0FD2E0wQK6wxWED2Snv3g==
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB7914.namprd12.prod.outlook.com (2603:10b6:510:27d::13)
- by DS0PR12MB6414.namprd12.prod.outlook.com (2603:10b6:8:cd::12) with
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM (2603:1096:c04:1::15d)
+ by PN3P287MB2154.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1d4::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.21; Mon, 16 Dec
- 2024 05:43:15 +0000
-Received: from PH7PR12MB7914.namprd12.prod.outlook.com
- ([fe80::8998:fe5c:833c:f378]) by PH7PR12MB7914.namprd12.prod.outlook.com
- ([fe80::8998:fe5c:833c:f378%6]) with mapi id 15.20.8251.015; Mon, 16 Dec 2024
- 05:43:14 +0000
-Message-ID: <3f19c5a8-9ee6-42fe-8b4c-3a66c65c8d35@nvidia.com>
-Date: Mon, 16 Dec 2024 13:43:02 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 1/4] cpufreq: Introduce an optional cpuinfo_avg_freq
- sysfs entry
-To: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org,
- catalin.marinas@arm.com, rafael@kernel.org, viresh.kumar@linaro.org
-Cc: sumitg@nvidia.com, yang@os.amperecomputing.com,
- vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
- zhanjie9@hisilicon.com, Jonathan Corbet <corbet@lwn.net>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
- x86@kernel.org, linux-doc@vger.kernel.org, Carol Soto <csoto@nvidia.com>
-References: <20241206135600.4083965-1-beata.michalska@arm.com>
- <20241206135600.4083965-2-beata.michalska@arm.com>
-Content-Language: en-US
-From: Kai-Heng Feng <kaihengf@nvidia.com>
-In-Reply-To: <20241206135600.4083965-2-beata.michalska@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0025.apcprd02.prod.outlook.com
- (2603:1096:4:195::21) To PH7PR12MB7914.namprd12.prod.outlook.com
- (2603:10b6:510:27d::13)
+ 2024 06:31:00 +0000
+Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
+ ([fe80::740f:ab98:2be1:538]) by PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
+ ([fe80::740f:ab98:2be1:538%4]) with mapi id 15.20.8251.015; Mon, 16 Dec 2024
+ 06:30:58 +0000
+From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+To: sre@kernel.org
+Cc: Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v10 0/2] power: supply: Add STC3117 Fuel Gauge
+Date: Mon, 16 Dec 2024 11:59:14 +0530
+Message-Id: <20241216062920.7228-1-bhavin.sharma@siliconsignals.io>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN3PR01CA0150.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:c8::8) To PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:c04:1::15d)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,359 +75,242 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB7914:EE_|DS0PR12MB6414:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab0a2187-970e-4d05-77e8-08dd1d948852
+X-MS-TrafficTypeDiagnostic: PN2PPFF679F9759:EE_|PN3P287MB2154:EE_
+X-MS-Office365-Filtering-Correlation-Id: a275beb5-c069-4298-e308-08dd1d9b33a0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|7053199007|921020;
+	BCL:0;ARA:13230040|376014|1800799024|52116014|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZitiSUMwNWJyQjZCcGhrSnJuQUpqUHFUVndGR0pjYjRON0N5bDE5b2E0Q1l2?=
- =?utf-8?B?cEtBUVhaSWhwekJhQ1BOdjJBTTNEZ2ZvZjhOTVBrZ016VG00TmdEUmdlT0lY?=
- =?utf-8?B?WTV0VGp5c0VJQ2d3dEZmZWFIR0lJZE5QaVJvRDRWNGpJeXRkSkM3b05VdGhx?=
- =?utf-8?B?UXFhNE1CVTFvekFmZm1NU1RSdUVDc0hWdzI4V2FLTDFYaGhkeEJ6dGYyanBn?=
- =?utf-8?B?VHVqc25yRDhDd1V5S0xJSCtOQlVoMy9tVEtHRSsrR096Nmx5b2tRZG5zUkg2?=
- =?utf-8?B?c0swNGh5Mnd2eVJUR0w1THdMdVZNODFtSTZzcDY0eVV5SGJteVkxdUNkdENZ?=
- =?utf-8?B?MHVPaGVvTWQzZVlRM0pVYThveEZyWG1XVUo0aWx6cVFCSTBBL21MTWpHRG4w?=
- =?utf-8?B?a0pGSmFIT3VZYnRPN2xmeVFEYTNaV3I1WjFWZjIrSjdsaTFRb3F6R1hqSW84?=
- =?utf-8?B?U1dEUGs1V2FlY3M3SGJ6VldFSkhiT0cyblprVWM4V0RBNXRJamdGM2Q4SmhL?=
- =?utf-8?B?ZHVDbjIvUTdPZnpqZUxMWGJtOGY1OTJYOThjWk9ITmVJNDJRTE5EM1N4U1Rm?=
- =?utf-8?B?UlppYXM1ekxtdmhsYnJQSzZXUSsxQWhUZU4rTjd0OTRGbEsvZ0JhSGlxbXZz?=
- =?utf-8?B?NGdFMTVqR1RqR2Z5QkxsQXhEYmlFVTRPS2lzb21qRmhNVDZPSEJVQ1E3cTJj?=
- =?utf-8?B?OUc3aTR5ck5sWFlXNTJISHhLTVUxK3c0aUxnQU4zL3ZJcDFmN0VWUGpERGV4?=
- =?utf-8?B?RDk1bjZlQ0lyblRrT2g5bW9BNlc2amJQeG1oUDFIZStCaDc5cGpHYndrU1dV?=
- =?utf-8?B?bnlyL3p5ZWxSbngxeXMwdW9yTnNFdXhYSnA4K08xVnZYT2ltNk0waVVCRHRL?=
- =?utf-8?B?LzJEZWk4bWNTSVhmcFB2UlZEOWNLbGpZMnNXUEdaRnhzQlBTbml0U1ZqUUxM?=
- =?utf-8?B?SW4zQ0hCbVl4eTdmYitqUW9DRzdFbVY3anJ5eERyc3VqK1VrNkZBK0MyN2xj?=
- =?utf-8?B?UW9WWlJYM0xaVDd3SkRtUUo4Q0U4cFY3NXhXSzhuK1hsOUE0dGliK0srcjRK?=
- =?utf-8?B?L3c0OFNnRnloY01SWnpKb0dkelB3K0VLNGtSMkY2bmJVYkxnL2I3NnNVMlZG?=
- =?utf-8?B?VitLc0c1eTYydjhKRllyNGtmNHF5TVJxWXBTcER2RDFtcWE5K0t3OEU2d09K?=
- =?utf-8?B?enNQVk9uSkEyV05kMzl4b1ZjUy9LQTU3S2I3cWw5WEJrQit6ME5zWTEyUUE4?=
- =?utf-8?B?LzZBWW5DMzN1MC9WUzRqWUgzVHNwdThWQndReVBmK1RFUElXcU5RMnlQdUxh?=
- =?utf-8?B?NXlLK3dIS3V0THdTN0RYLzNJL1dzaTU4WUsxWkZaajIxOTRLTGppOHBQWGxL?=
- =?utf-8?B?R0c1OWFYQkttYkxHM2lLT25UQ3l1bE8vRDRSdFhGZ2dFQWVDQVhqNktnRjc3?=
- =?utf-8?B?MFZvdXVzMnBzbjRPYTZ3Yis0UzhOdXJhdXJpSG1QZkMrcWoxd245U0txOFFK?=
- =?utf-8?B?Mmh1UU5BU2xjNmFOT0k0R3k4bXF0RnQ3RWxTZkJwVis1NjErUVorWU9SS05v?=
- =?utf-8?B?L2hkUzlqYkZ2MXpWQ1ZpZGJreXVRQkdIdkVHN1NrUTJad3VtZG51M1JlSnBa?=
- =?utf-8?B?T0RadUlYcmR2eVArQUJYblp3LzRXNE0wSDlNNjlxT0hYVTZycTdsWDJKa0xj?=
- =?utf-8?B?UjgwMzdXUE5LbGp1eTkxS0xVbzNEN3RUcUlMK05HUkMxUVk1cFBGbWlsWXUr?=
- =?utf-8?B?K1U2WG5wZ3p5NWpFbVdlY2piRFBoODZNejArd0R2d2U2NWYwWjJXVkd2Y2VI?=
- =?utf-8?B?SERFTDdQUVpjOHNhZVV5QjNsOXNwdk80RDllamcrS0tnNUo3VkhTTHdGQTBJ?=
- =?utf-8?B?czJDU0RtYThKUDFIckNyMHJvVG9jbHBZcWt6RkdUOUFXenFKZzN1MjhOSkJL?=
- =?utf-8?Q?u3PcZdl0lBw=3D?=
+	=?utf-8?B?elJIcHlnci9CcmVXQ1BUMlplYm1ySHpGNkxMdjFmVUxEcWw5V1VhWXpKSzlt?=
+ =?utf-8?B?eEZDL09GTjJsUW9ZUkNHczhUSHlCVkV5UmtMMDVJUHlRbkh2d2oza0p6VDBw?=
+ =?utf-8?B?ZHZoazNPeU50UnRiU0RQVHZXR2FGMkRDSmNYVmtSSVR3cDNtMk1wWG5aRHc1?=
+ =?utf-8?B?WmNtS1RSdTkwYTFlMytzUTViL2ZMVVRRTkUrdFNBTGZyaWNYMkhtSlVYYlVX?=
+ =?utf-8?B?UGQ2QVZIS3Z5eXBGQ09qZTgxdE9iZ3RTaFoyeDJQd3JOWEg1T1U4c2RrcDMx?=
+ =?utf-8?B?b0Q5QVJTUHdDa0tGZ2htOTY1MS9sWWlzeW1WUmd5aGR4aWFYZjZOeW9qanhG?=
+ =?utf-8?B?Q3R6ZDhmYmlMRXo2dFNMRzgvUWF5QS9iMFR4aTBUUk1rcHAyR3lheTdWeUpB?=
+ =?utf-8?B?WUZISHloMlQyWjBpTDVOWXkreUM2WmxTNXRrZ0VvU1FZU3gvbVNycG16Z2hz?=
+ =?utf-8?B?aVlkOWgrV3lBYWtjUXllV3g0N2JPNW5VVkp1QWRlUTloeUx6S0xqVmdZUGU2?=
+ =?utf-8?B?TVo1OGFDTzQzd2sxb2E3YTUzN0t6SUN6UUZwOS9BcXJqQ0VOUHBLRU5NVEdC?=
+ =?utf-8?B?TmJXSSs0WkxRWU9OTlBPZTYxLy82eTN1ZnhUMjdsYXZCUm9nekJoTm4zdjA2?=
+ =?utf-8?B?S05GUitHSjJnaGhOT3YwVUFUZThDdDViYkxOdE1laUZJbVJmaUcvdnJrSlBq?=
+ =?utf-8?B?WHRRcmFBMUM4VGcvcGQ2aUNyak5PSWZ2M3ZwOWwyUWVqdU9kc3ZhV3Q3enVF?=
+ =?utf-8?B?K3Z0SUlNWmsxeGdWTFFFSlBZMEZzdmJSL1JOcUgwWEw4bWNWNkhmbHBrZ2lx?=
+ =?utf-8?B?bVk1Y0JTWThKVEEvV1oyNml2b3kzZWNvRlBrMWpDMEZWaFJoR3dZdVgxcVdQ?=
+ =?utf-8?B?MSt1QkphQ3BKM1hKOFBrTTJvRnRLSHA1allzTjhndUJhcVBaZU1jQ3FpUlFO?=
+ =?utf-8?B?S3o1ZFRhZStCZStQRnM4RGtFcFNiZ0diUjJYdkJWRVIzSGhranlQakovWnM1?=
+ =?utf-8?B?enQ5R1kzaVdRRkRHalVsSWFHQ3ZFWTQycWxXR1g5Vk5ua3NYZTh0eXpqZnJ1?=
+ =?utf-8?B?aTlucjEwSE10Zi83cGphemp1Y09hNWZndVdvUHFjV1JmUUVHazRyWHJVemxk?=
+ =?utf-8?B?YThnRXVENTdBL3gySWJpaWY2Rk5rb3U5RHdKR0c2ZkZPdGlkZzQ4dkFLNUs4?=
+ =?utf-8?B?WmZzUVM2RUk5TXRac2dEd1Y0bVMvV2FNenc1ZHRuMm5EL0FTMWxnRmRxQ3Fs?=
+ =?utf-8?B?U1k3LzE1YmRQcHFYOUpFcDZRN1FrN0N6VmdzRlBhN0V6aGRKZHJ3V2NiTHhC?=
+ =?utf-8?B?c3dOdlpFcmhWTXlDaldWVnN1UFNkTWIyWHdweFc1N2JMYTFtLzVnc3FQM3Ar?=
+ =?utf-8?B?WnZSNzc0dTNDWVJlcTUvQkRZdlVVNmxCbDVtR20yTUdxRWp0T3JrRzNPL1hV?=
+ =?utf-8?B?MjFMcmZGeHZCcURZLzMzaXFWYjZweU5kRXE5d0w2Nm9ENU5IWC9FZDEyVG51?=
+ =?utf-8?B?a253U1FxNUhkTktpYXNyRG4zV3pPNDBpdkl2WmtyYWMyN3FMZEp2N0dYTExY?=
+ =?utf-8?B?UWtwa3F5S25tUmZkbnkrU0M1UW1QRFYyNVJFeExSMTZyd0cwbkVRaHNyZjhT?=
+ =?utf-8?B?bHJRRDZYVzhNTjI4MjFrNjJhbXg4U21XU1RnZ2k2WmJjMEJ6Ui9wZWh1VlFD?=
+ =?utf-8?B?YUI5UE9PWVFiWmUxUUxrblI3cnJGbm0xRGt3WW1hMzNCTTlmQmUxVTAydFJr?=
+ =?utf-8?B?OXRKZmFNQVB6eURkVVU3SXJiWHZRcHFPOTZEeXU2aitiMjQ5VkdLNHhHeElp?=
+ =?utf-8?B?Y0Nob0NLdHFQLzB0VkE5R2RBTlp1SkpZU0JvTTRENlB0OEU1OGN4NUpwL0Yx?=
+ =?utf-8?Q?p1hiKidq8VlaV?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB7914.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(7053199007)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(52116014)(366016)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TEJzM0trU2VkNUV2UU4ybjlSbGJMVDdSQ2VEWmpwQnpONzZKRHVCRWNLOXZu?=
- =?utf-8?B?RXFRaDgzdCtqWXcwcHFHZ2pZZWVQUVVmeTEwMmFSN3lhaFNLSSttUGpKcEdS?=
- =?utf-8?B?bStOQUlEanQzcy9QMHYzTXZlSG82amFTU0xRak81N3d6K3VaV09BZFNTZ2p1?=
- =?utf-8?B?bjFFUTVLN3VwNG13aFMxdXdaVWJPS05DRnlTc01weFlUdHVDTEFKSjUrTUI2?=
- =?utf-8?B?RG0vYVBHU0h1bERkalpRaGgrVm5FT1NabnBVZTVWcTZ3d3NiTURSYlRaSkl6?=
- =?utf-8?B?elZoeURJQno1cXpoTDNNWCt2N051MkdTbE4vbXk1UWlWa3ZRZUdCTHNsYmdI?=
- =?utf-8?B?YWw2YzFqay81UktmUmFCYXgyMFI3UTlIK2liMXhIYUNHVXJtOUdsVWd3SENN?=
- =?utf-8?B?ZCtKL2N0SnN5K2FheVRjS3JCUlNzOUUwUlVtenZleENGZnFLcDhWaU9oK0NT?=
- =?utf-8?B?YmpvWkFKQ0JmNnFEQWxZYXZSWjBvamd4K0M3NFA3d3lINlJRb0U5ZGtjakVm?=
- =?utf-8?B?NUZ3WHpHZG1JWHF1NnVpWldpdjF0aVpMaThjaDl4cGlEaXM1ZXBzV1ZDc2pK?=
- =?utf-8?B?QktBd0h1TXRYNEtZVmxYdzdoNTF0Ty85WjkvOFdPQzVyVTl1QjJGUndLWjJM?=
- =?utf-8?B?MENjNElUQlRldXlGU243emsvd1UrVTVoUkUzUnNPczQ5WEFJRVhIMU9EZ2k5?=
- =?utf-8?B?MVVMWTkyazZJbTQ4R21NbzF6cjJKa1JiaEtGK3BWVGFBcWZvcG5LZFNTek9m?=
- =?utf-8?B?Y05XYTNoWit2Wm9DTE5IQTY1a3FYWlk5VlRmNTVORkNTYXVDLzZscCthaVVR?=
- =?utf-8?B?TU03cWdWS3hvaE1COWVuVUsxUHluMTJzUnIyUWtFaU5NSzYwS0p3a2FweXdp?=
- =?utf-8?B?emh6K0gxOUkvdWthNU56MnN3UlJMekdBTEpCakhtdzhEbmc3eE0wREt6Uyto?=
- =?utf-8?B?Njk4blJ3QUV2MVBRd1NKNWljOUgrZ3c0MDZRSWVzN01WZ2lDQkd4eGV1Y01n?=
- =?utf-8?B?KzN4cXFNNXJzaThGdHBGcWlGSnptN1QzYmpKbXp4eGZRdEk2UVAzWllNQ3NX?=
- =?utf-8?B?VFg5RGlraksxWUN3QW13S0NTUE94NlFyaDI0cXltUUlVS2o4MXUvNFc3amk5?=
- =?utf-8?B?OE1xTTU4TERsZWFUcjgreTQ4ZVVOWnhZdSs4Vm9KWC9aOVRBbW51c1hBclh5?=
- =?utf-8?B?WDdNelNIeUd0dEpscExVZSs2OFd6SWd1ajJJc1BROG81eWtReUxZSlNpeW9z?=
- =?utf-8?B?azBWd3VtRTNRdkRNQjQ1Z0t5KzZrZE0yUEtjYUlGNTZ4dm9BNlVMa2dIYnZi?=
- =?utf-8?B?a0hUZUNtdjllUFhlWWNOUVJyei9YNW52cXkxbjU0V3JHb25jQjZyMFd4Uk11?=
- =?utf-8?B?ZFcwbm45NnIwdXVqVjR0RU5WSGxHVVh2TGdtSzZ6bUVvYWR6NEFDZEx6OEpq?=
- =?utf-8?B?WlM2WTRzM3o4MVA0bXRKMlRiTWtxaHBSUHRwVUI0TUkzT0UxRlNNM0FmeUp1?=
- =?utf-8?B?eDJEbG5wbTB4VlQ5RjhqbEJhdWNGdmxPY2VRa2hOc0I2T1h3OFYwcTY5VllC?=
- =?utf-8?B?bThqbjVNUWNmZkNUWjJaYUZhQm9XWGw5NUNFcDdoS0xmblE1ZmJ4MzlNaWR5?=
- =?utf-8?B?RXBtbG9PaWZWRUkrRTdsS0VhWnBaWHExVXJJbkJpbStMcTBvZVZlWDVOY1M4?=
- =?utf-8?B?bTNCdGlJdkloZys1WWZZWXJ3RUREVU1iODdtdGt1VkdacFEzcUlmTlNsWDdn?=
- =?utf-8?B?NzhHeHFYL2hXRHU0dmxUV0N2VGZIQnZieXBVRkpSdDZjdU9rSWtsNWY1MXNu?=
- =?utf-8?B?R0puUjN6aFFsV1BsQ01EeXhxMmJkTjQ1OGRkajd1dEtXSFlIUHJSdE1oRlFw?=
- =?utf-8?B?VG42cGlRUkkxZUNqSHR5Z09VQlBpeEJSMDhXZkJVTTNXeDdGNGU5ZVZSNUxY?=
- =?utf-8?B?aVlJeHVvQ0VQNEhIY1MxTFVjZ2MrUCtqM1JGaXo5c1BpMXBUVmxUQjRZaFJL?=
- =?utf-8?B?cGIvSUlHaWJWNUllTHhsZUt6YlNFMENNWWFyS1B0cnRzSTFRbHozeENlOXFz?=
- =?utf-8?B?VE85b2RhVnRmZGFIZlc3TC9EZnZrRDdhdGEvQ3A4MFJQcFd6SWNDQTFnVU81?=
- =?utf-8?Q?UlYYk7pybXPdHbEK9gl36b5t8?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab0a2187-970e-4d05-77e8-08dd1d948852
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB7914.namprd12.prod.outlook.com
+	=?utf-8?B?bmRZL0JEaThybEh3SXM3bVliRzQyaHVkMGlMcTdVc1NVRmo0a0p4Tkx6R0dm?=
+ =?utf-8?B?NVF0TUtlajdVSWRSOHRIbjhVN2N0eEdBcDdHZnMrb29UVXJKSVZJSEpSbkFG?=
+ =?utf-8?B?ZUxKTlp4anZQUmw5Q2MwTmVYeGhkcXE1bHFqa251eDRzbTdEdVZXYjgzVmd4?=
+ =?utf-8?B?cDVIRFZvNTFGNFI1M25nSWs4TDFVdTU0cWE5Y09zZHcyZWVUSnh3LzRERWZw?=
+ =?utf-8?B?L1JIYW55dk0rRE43TThFVUZ3ZDRLSnBuRk1QTzJhQTZSc1FDTTNBL3l4M1Fy?=
+ =?utf-8?B?WUtUWjJPTFdUZ00yTk1Udlp3cWozRURCc2tveTZMSXZpekFBOEhFQUxIR2Iy?=
+ =?utf-8?B?b2tRWlhvdVNpcjBMZ0pTZUprNi9IQkRkbnNZU29wZEhCTjlqTlcwb25jaFRx?=
+ =?utf-8?B?bUxHZVpMWFRkZEJYakpKeVpjUTAwUFh4czVxYU1TR2VXSm8vdlEzWUdtelZx?=
+ =?utf-8?B?UmpZUEdhRjFzZ1JvN0JLQ3pjbHNFL1NQam9OVG04cWpMQW5rZmMrcHdCNnN5?=
+ =?utf-8?B?NzJPYWZmQkVTeUhibWh0UXhlRzdFYldEczdUZXp1ZnJGajAzM0ZwMnNVUmZh?=
+ =?utf-8?B?ZGZndWdiU1B6OUtEL0JTS05PM09McWY4NkhzMXlDRkVVMEM5MUQxYVo4ZmVu?=
+ =?utf-8?B?VGIycEJsZlpzKy94bjBiR2lPdWt3azlPTFc2K0k3c0ZlMUFMSVR1UHZJWC96?=
+ =?utf-8?B?QkIwaTZzSitPajlTRkxUSkxadjFvQkU3bUc0WE5MMlJqZnpnQ0N4S0I0bVRW?=
+ =?utf-8?B?dWh4L0tXSWc0bFVWeFZKSEgxdS8rK0VpVURPcUNjVW5UVitOS0lnVlVXelU1?=
+ =?utf-8?B?RHZXblBKUUdLalo4UzJTM0luK2x5QUM1aWE1dm15eHk4VFJSWTE3USs0dW5F?=
+ =?utf-8?B?eFMwcnRkUGs0VVI3K21veVNoZFFOcE9YdWwrQXU2Nno1WDBpc2tZbnJuTHFl?=
+ =?utf-8?B?WWNHM2liT3NmNDhlSHkyaVN4V0ZCL0ZSNVNTVWYrcTZJQ0NGZ2N5U3l1TVAv?=
+ =?utf-8?B?VXJyZE1GUTNkSnVLNVB3RmdPZ0NSTVpjaUJCZDByNU1WVkpiaUxuWXJnekFt?=
+ =?utf-8?B?MlBOWFQ5bVRJK3hSZldSYThMQTBzYWkzcGN5Sk1kbnFiQjdhK09QeVZWdktj?=
+ =?utf-8?B?RThMUGRqbjg2RFZIMHdNRUFxSERCTndxZExTNlJmTENrckoycEdpa043WkhK?=
+ =?utf-8?B?MWI4MHpxNVh3R0wwR0pLZHhZazJ2MVhLUGdERVNRRXhaZFFNK2hEbXM3MzVF?=
+ =?utf-8?B?MURrd3F1T3ltUFFkOHV5UWlmWGRsTmxRMEJxOGcxdTROOG9EcEJPTjVwWi9R?=
+ =?utf-8?B?Y1BEbDlIYXpDZlZkTlFuVHlkdEZHM0dXL3NWV3BibVVwVXNObWRSSEg0NG0z?=
+ =?utf-8?B?ck1oRUZzSE5ZUStBNnlZWDNSVUlEY1lzUnZqQlMxOUJqeU0vVkpyUnU3V0ZD?=
+ =?utf-8?B?OEdYSkhKVGpzZElpclplUjB0cHdaS1V2eTUyMCt1clp1TmNGL21NRjJHZHVW?=
+ =?utf-8?B?T3hrY1BlNS9LN2ZiR01pYk03NGpYSWM4RGpLNHdZT0g1VzRvY1FmOHQ5WTRw?=
+ =?utf-8?B?dEVIeUJTc0VsNkpTcTVXc3FkWU5GaEhsZ01JTjl2cHpEeEVpRFJhelBHZWlG?=
+ =?utf-8?B?dlBNanJZaXErT1N3cEpTZFNHQlpXTzJSY09QRHR1TFpBVjI1ZWk0SHBvdHdC?=
+ =?utf-8?B?S1h6bVFMUGV2YWtqZUJ1ZnFBUWxSdVlMK0ZLV0FqREdWbElSMXU1RWJMbTI4?=
+ =?utf-8?B?Rm1mUGlVM2RxUEl6NW9sTnBVeUtFY2lSWXBrY3BLbnBZZklaNzZaMCs0MmVW?=
+ =?utf-8?B?UVIrWGNHdm1NZm9ibkpvclA5RW9QTTU0bkhaVUNXdjJrb2V0M2I1Ui9rNUVP?=
+ =?utf-8?B?UU95Z2FZQjFqUVpFZ3FpTEpZcmFEdVA4eVNwVTgyN2FBN2V1R29BdlNCbGdW?=
+ =?utf-8?B?aVcrK3lsZ3FFcXBlSzFXaFB3S3ZVYzFWUlkyeUdhc21FRkI1R3R2RkNZR3oy?=
+ =?utf-8?B?bWNqZlo4a1c2QkVuQ1AwMVFrQmpyY2h2M3VzSmgvb1o4Tkh1TDJCNDdYU0Yw?=
+ =?utf-8?B?M2dnN0kycXBSZTU3SFcyY0x5dkdlcmx3azFzWTNrdTVuWkl5WXozQkJwKy9i?=
+ =?utf-8?B?a29YWVFZNUg0UmhOeEZZalZPQnJOTDVwZWUzTlREMDZ1S2tWQW5UWjdwa0FN?=
+ =?utf-8?Q?RrFRbFhDmZT884LI5fYbM9k=3D?=
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-Network-Message-Id: a275beb5-c069-4298-e308-08dd1d9b33a0
+X-MS-Exchange-CrossTenant-AuthSource: PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2024 05:43:13.7982
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2024 06:30:58.1496
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kRnZc2KxpzcKiZHRC1d5f4JHKQRniNOXA2PIps2lVRUO+3+Dafl9lrgDoYXez1Pg65e/mlBdehMswRPw8WE23A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6414
+X-MS-Exchange-CrossTenant-UserPrincipalName: HHPPcuoWa9UaUl0kRHHm7n82BTcyGZq/5L/kjmK7lyFrSikSoXElgtNZG2/S/u0++1piMjUF93UKxgwYvHGkadTCZy1H8XfnjLeHzHv1k/Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB2154
 
-Hi Beata,
+Adds initial support for the STC3117 fuel gauge.
 
-On 2024/12/6 9:55 PM, Beata Michalska wrote:
-> Currently the CPUFreq core exposes two sysfs attributes that can be used
-> to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
-> and scaling_cur_freq. Both provide slightly different view on the
-> subject and they do come with their own drawbacks.
-> 
-> cpuinfo_cur_freq provides higher precision though at a cost of being
-> rather expensive. Moreover, the information retrieved via this attribute
-> is somewhat short lived as frequency can change at any point of time
-> making it difficult to reason from.
-> 
-> scaling_cur_freq, on the other hand, tends to be less accurate but then
-> the actual level of precision (and source of information) varies between
-> architectures making it a bit ambiguous.
-> 
-> The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
-> distinct interface, exposing an average frequency of a given CPU(s), as
-> reported by the hardware, over a time frame spanning no more than a few
-> milliseconds. As it requires appropriate hardware support, this
-> interface is optional.
-> 
-> Note that under the hood, the new attribute relies on the information
-> provided by arch_freq_get_on_cpu, which, up to this point, has been
-> feeding data for scaling_cur_freq attribute, being the source of
-> ambiguity when it comes to interpretation. This has been amended by
-> restoring the intended behavior for scaling_cur_freq, with a new
-> dedicated config option to maintain status quo for those, who may need
-> it.
-> 
-> CC: Jonathan Corbet <corbet@lwn.net>
-> CC: Thomas Gleixner <tglx@linutronix.de>
-> CC: Ingo Molnar <mingo@redhat.com>
-> CC: Borislav Petkov <bp@alien8.de>
-> CC: Dave Hansen <dave.hansen@linux.intel.com>
-> CC: H. Peter Anvin <hpa@zytor.com>
-> CC: Phil Auld <pauld@redhat.com>
-> CC: x86@kernel.org
-> CC: linux-doc@vger.kernel.org
-> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> ---
->   Documentation/admin-guide/pm/cpufreq.rst | 16 ++++++++++-
->   arch/x86/kernel/cpu/aperfmperf.c         |  2 +-
->   arch/x86/kernel/cpu/proc.c               |  7 +++--
->   drivers/cpufreq/Kconfig.x86              | 12 ++++++++
->   drivers/cpufreq/cpufreq.c                | 36 +++++++++++++++++++++---
->   include/linux/cpufreq.h                  |  2 +-
->   6 files changed, 66 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
-> index fe1be4ad88cb..76f3835afe01 100644
-> --- a/Documentation/admin-guide/pm/cpufreq.rst
-> +++ b/Documentation/admin-guide/pm/cpufreq.rst
-> @@ -248,6 +248,19 @@ are the following:
->   	If that frequency cannot be determined, this attribute should not
->   	be present.
->   
-> +``cpuinfo_avg_freq``
-> +        An average frequency (in KHz) of all CPUs belonging to a given policy,
-> +        derived from a hardware provided feedback and reported on a time frame
-> +        spanning at most few milliseconds.
-> +
-> +        This is expected to be based on the frequency the hardware actually runs
-> +        at and, as such, might require specialised hardware support (such as AMU
-> +        extension on ARM). If one cannot be determined, this attribute should
-> +        not be present.
-> +
-> +        Note, that failed attempt to retrieve current frequency for a given
-> +        CPU(s) will result in an appropriate error.
-> +
->   ``cpuinfo_max_freq``
->   	Maximum possible operating frequency the CPUs belonging to this policy
->   	can run at (in kHz).
-> @@ -293,7 +306,8 @@ are the following:
->   	Some architectures (e.g. ``x86``) may attempt to provide information
->   	more precisely reflecting the current CPU frequency through this
->   	attribute, but that still may not be the exact current CPU frequency as
-> -	seen by the hardware at the moment.
-> +	seen by the hardware at the moment. This behavior though, is only
-> +	available via c:macro:``CPUFREQ_ARCH_CUR_FREQ`` option.
->   
->   ``scaling_driver``
->   	The scaling driver currently in use.
-> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> index 0b69bfbf345d..a00059139ca4 100644
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -413,7 +413,7 @@ void arch_scale_freq_tick(void)
->    */
->   #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
->   
-> -unsigned int arch_freq_get_on_cpu(int cpu)
-> +int arch_freq_get_on_cpu(int cpu)
->   {
->   	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
->   	unsigned int seq, freq;
-> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> index e65fae63660e..34d8fb93fb70 100644
-> --- a/arch/x86/kernel/cpu/proc.c
-> +++ b/arch/x86/kernel/cpu/proc.c
-> @@ -86,9 +86,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->   		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
->   
->   	if (cpu_has(c, X86_FEATURE_TSC)) {
-> -		unsigned int freq = arch_freq_get_on_cpu(cpu);
-> +		int freq = arch_freq_get_on_cpu(cpu);
->   
-> -		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
-> +		if (freq <= 0)
-> +			seq_puts(m, "cpu MHz\t\t: Unknown\n");
-> +		else
-> +			seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
->   	}
->   
->   	/* Cache size */
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index 97c2d4f15d76..212e1b9afe21 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -340,3 +340,15 @@ config X86_SPEEDSTEP_RELAXED_CAP_CHECK
->   	  option lets the probing code bypass some of those checks if the
->   	  parameter "relaxed_check=1" is passed to the module.
->   
-> +config CPUFREQ_ARCH_CUR_FREQ
-> +	default y
-> +	bool "Current frequency derived from HW provided feedback"
-> +	help
-> +	  This determines whether the scaling_cur_freq sysfs attribute returns
-> +	  the last requested frequency or a more precise value based on hardware
-> +	  provided feedback (as architected counters).
-> +	  Given that a more precise frequency can now be provided via the
-> +	  cpuinfo_avg_cur_freq attribute, by enabling this option,
-> +	  scaling_cur_freq maintains the provision of a counter based frequency,
-> +	  for compatibility reasons.
-> +
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 04fc786dd2c0..70df2a24437b 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -747,9 +747,14 @@ show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
->   show_one(scaling_min_freq, min);
->   show_one(scaling_max_freq, max);
->   
-> -__weak unsigned int arch_freq_get_on_cpu(int cpu)
-> +__weak int arch_freq_get_on_cpu(int cpu)
->   {
-> -	return 0;
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline bool cpufreq_avg_freq_supported(struct cpufreq_policy *policy)
-> +{
-> +	return arch_freq_get_on_cpu(policy->cpu) != -EOPNOTSUPP;
->   }
->   
->   static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> @@ -757,8 +762,11 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->   	ssize_t ret;
->   	unsigned int freq;
->   
-> -	freq = arch_freq_get_on_cpu(policy->cpu);
-> -	if (freq)
-> +	freq = IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
-> +		? arch_freq_get_on_cpu(policy->cpu)
-> +		: 0;
-> +
-> +	if (freq > 0)
->   		ret = sysfs_emit(buf, "%u\n", freq);
->   	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
->   		ret = sysfs_emit(buf, "%u\n", cpufreq_driver->get(policy->cpu));
-> @@ -802,6 +810,19 @@ static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
->   	return sysfs_emit(buf, "<unknown>\n");
->   }
->   
-> +/*
-> + * show_cpuinfo_avg_freq - average CPU frequency as detected by hardware
-> + */
-> +static ssize_t show_cpuinfo_avg_freq(struct cpufreq_policy *policy,
-> +				     char *buf)
-> +{
-> +	int avg_freq = arch_freq_get_on_cpu(policy->cpu);
+Output of test_power_supply_properties.sh
 
-We are seeing issues when reading cpuinfo_avg_freq on an ARM64 system:
+TAP version 13                                                                  
+1..33                                                                           
+# Testing device stc3117-battery                                                
+ok 1 stc3117-battery.exists                                                     
+ok 2 stc3117-battery.uevent.NAME                                                
+ok 3 stc3117-battery.sysfs.type                                                 
+ok 4 stc3117-battery.uevent.TYPE                                                
+ok 5 stc3117-battery.sysfs.usb_type # SKIP                                      
+ok 6 stc3117-battery.sysfs.online # SKIP                                        
+# Reported: '1' ()                                                              
+ok 7 stc3117-battery.sysfs.present                                              
+# Reported: 'Discharging'                                                       
+ok 8 stc3117-battery.sysfs.status                                               
+# Reported: '38' % ()                                                           
+ok 9 stc3117-battery.sysfs.capacity                                             
+ok 10 stc3117-battery.sysfs.capacity_level # SKIP                               
+ok 11 stc3117-battery.sysfs.model_name # SKIP                                   
+ok 12 stc3117-battery.sysfs.manufacturer # SKIP                                 
+ok 13 stc3117-battery.sysfs.serial_number # SKIP                                
+ok 14 stc3117-battery.sysfs.technology # SKIP                                   
+ok 15 stc3117-battery.sysfs.cycle_count # SKIP                                  
+ok 16 stc3117-battery.sysfs.scope # SKIP                                        
+ok 17 stc3117-battery.sysfs.input_current_limit # SKIP                          
+ok 18 stc3117-battery.sysfs.input_voltage_limit # SKIP                          
+# Reported: '3704000' uV (3.704 V)                                              
+ok 19 stc3117-battery.sysfs.voltage_now                                         
+ok 20 stc3117-battery.sysfs.voltage_min # SKIP                                  
+ok 21 stc3117-battery.sysfs.voltage_max # SKIP                                  
+# Reported: '3200000' uV (3.2 V)                                                
+ok 22 stc3117-battery.sysfs.voltage_min_design                                  
+# Reported: '4200000' uV (4.2 V)                                                
+ok 23 stc3117-battery.sysfs.voltage_max_design                                  
+# Reported: '325000' uA (325 mA)                                                
+ok 24 stc3117-battery.sysfs.current_now                                         
+ok 25 stc3117-battery.sysfs.current_max # SKIP                                  
+ok 26 stc3117-battery.sysfs.charge_now # SKIP                                   
+ok 27 stc3117-battery.sysfs.charge_full # SKIP                                  
+# Reported: '3000000' uAh (3 Ah)                                                
+ok 28 stc3117-battery.sysfs.charge_full_design                                  
+ok 29 stc3117-battery.sysfs.power_now # SKIP                                    
+ok 30 stc3117-battery.sysfs.energy_now # SKIP                                   
+ok 31 stc3117-battery.sysfs.energy_full # SKIP                                  
+ok 32 stc3117-battery.sysfs.energy_full_design # SKIP                           
+ok 33 stc3117-battery.sysfs.energy_full_design # SKIP                           
+# Totals: pass:12 fail:0 xfail:0 xpass:0 skip:21 error:0                        
 
-$ cat /sys/devices/system/cpu/cpufreq/policy1/cpuinfo_avg_freq
-cat: /sys/devices/system/cpu/cpufreq/policy1/cpuinfo_avg_freq: Resource 
-temporarily unavailable
+v9 -> v10
 
-The CPU is in idle state, so arch_freq_get_on_cpu() can't find a good 
-alternative source for frequency info.
+- Use error code instead of arbitrary values
+- Use Co-developed-by tag 
 
-One way to resolve this is to have fallback methods in show_cpuinfo_avg_freq() 
-so it will look like this:
+Link for V9: https://lore.kernel.org/linux-pm/20241213063813.32371-1-bhavin.sharma@siliconsignals.io/T/#t
 
-static ssize_t show_cpuinfo_avg_freq(struct cpufreq_policy *policy,
-                                      char *buf)
-{
-         int avg_freq = arch_freq_get_on_cpu(policy->cpu);
-         int ret;
+v8 -> v9                                                                        
+                                                                                
+- Corrected the error message                                                   
+                                                                                
+Link for V8: https://lore.kernel.org/linux-pm/20241210080954.5067-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v7 -> v8                                                                        
+                                                                                
+- Add output of test_power_supply_properties.sh script.                         
+- Change 0X to 0x in macros.                                                    
+- Fix typos and Specify units in property comments.                             
+- Remove stc3117_update_battery_status function.                                
+- Convert voltage and current from mV/mA to uV/uA.                              
+- Represent temperature in tenths of a degree Celsius (1/10 °C).                
+- Export average current and open-circuit voltage (OCV).                        
+- Use devm_delayed_work_autocancel.                                             
+                                                                                
+Link for V7: https://lore.kernel.org/linux-pm/20241202094328.14395-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v6 -> v7                                                                        
+                                                                                
+- Removes extra spaces.                                                         
+- Fixes error handling.                                                         
+- Fixes the logic for checking battery status.                                  
+- Fixes typos.                                                                  
+- Removes unnecessary commas.                                                   
+                                                                                
+Link for v6: https://lore.kernel.org/linux-pm/20241130094531.14885-2-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v5 -> v6                                                                        
+                                                                                
+- Use shunt-resistor-micro-ohms property instead of sense-resistor.             
+- Remove the battery node from the binding examples.                            
+- Add interrupt bindings to the example.                                        
+- Correct the Signed-off-by (SoB) order in the commit.                          
+                                                                                
+Link for v5: https://lore.kernel.org/linux-pm/20241129114200.13351-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v4 -> v5                                                                        
+                                                                                
+- Fix variable names                                                            
+- Limit code line length to 80 columns                                          
+- Add interrupt and monitor-battery properties to bindings                      
+- Correct error handling with return dev_err_probe()                            
+                                                                                
+Link for v4: https://lore.kernel.org/linux-pm/21c08a45-34f1-443c-97d4-6baf9fa01b67@kernel.org/T/#t
+                                                                                
+v3 -> v4                                                                        
+                                                                                
+- Added support for current, soc, temp, and status properties.                  
+- Addressed comments and feedback provided by Krzysztof and Sebastian.          
+                                                                                
+Link for v3: https://lore.kernel.org/linux-pm/20240205051321.4079933-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v2 -> v3                                                                        
+                                                                                
+- Resolved DTC warnings and errors                                              
+- Formatted the changelogs                                                      
+- Added monitored battery properties                                            
+- Replaced 'additionalProperties' with 'unevaluatedProperties'                  
+- Replaced '&i2c6' with 'i2c'                                                   
+                                                                                
+Link for v2: https://lore.kernel.org/linux-pm/202401080530.0hMWnrIg-lkp@intel.com/T/#t
+                                                                                
+v1 -> v2                                                                        
+                                                                                
+- String value is redundantly quoted with any quotes (quoted-strings)           
+- Found character '\t' that cannot start any token                              
+                                                                                
+Link for v1: https://lore.kernel.org/linux-pm/46bba29c-330d-417d-ad84-ceb5207fdb55@wanadoo.fr/T/#t
+                                                                                
+Hardevsinh Palaniya(1):                                                         
+  dt-bindings: power: supply: Add STC3117 Fuel Gauge                            
+                                                                                
+Bhavin Sharma (2):                                                              
+  power: supply: Add STC3117 fuel gauge unit driver                             
 
-         if (avg_freq > 0)
-                 ret = sysfs_emit(buf, "%u\n", avg_freq);
-         else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-                 ret = sysfs_emit(buf, "%u\n", cpufreq_driver->get(policy->cpu));
-         else
-                 ret = sysfs_emit(buf, "%u\n", policy->cur);
-         return ret;
-}
+ .../bindings/power/supply/st,stc3117.yaml     |  74 +++
+ MAINTAINERS                                   |   8 +
+ drivers/power/supply/Kconfig                  |   7 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/stc3117_fuel_gauge.c     | 608 ++++++++++++++++++
+ 5 files changed, 698 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+ create mode 100644 drivers/power/supply/stc3117_fuel_gauge.c
 
-But that also makes show_cpuinfo_avg_freq() pretty much the same as 
-show_scaling_cur_freq().
-
-So is it possible to consolidate show_cpuinfo_avg_freq() into 
-show_scaling_cur_freq(), by making CONFIG_CPUFREQ_ARCH_CUR_FREQ also available 
-to ARM64?
-
-Kai-Heng
-
-> +
-> +	if (avg_freq > 0)
-> +		return sysfs_emit(buf, "%u\n", avg_freq);
-> +	return avg_freq != 0 ? avg_freq : -EINVAL;
-> +}
-> +
->   /*
->    * show_scaling_governor - show the current policy for the specified CPU
->    */
-> @@ -964,6 +985,7 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
->   }
->   
->   cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
-> +cpufreq_freq_attr_ro(cpuinfo_avg_freq);
->   cpufreq_freq_attr_ro(cpuinfo_min_freq);
->   cpufreq_freq_attr_ro(cpuinfo_max_freq);
->   cpufreq_freq_attr_ro(cpuinfo_transition_latency);
-> @@ -1091,6 +1113,12 @@ static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
->   			return ret;
->   	}
->   
-> +	if (cpufreq_avg_freq_supported(policy)) {
-> +		ret = sysfs_create_file(&policy->kobj, &cpuinfo_avg_freq.attr);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->   	ret = sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
->   	if (ret)
->   		return ret;
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index d4d2f4d1d7cb..a7b6c0ccf9bc 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -1194,7 +1194,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
->   }
->   #endif
->   
-> -extern unsigned int arch_freq_get_on_cpu(int cpu);
-> +extern int arch_freq_get_on_cpu(int cpu);
->   
->   #ifndef arch_set_freq_scale
->   static __always_inline
+-- 
+2.34.1
 
 
