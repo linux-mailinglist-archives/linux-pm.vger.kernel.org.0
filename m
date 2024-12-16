@@ -1,299 +1,195 @@
-Return-Path: <linux-pm+bounces-19331-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19332-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 545559F37FF
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 18:53:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 391E09F3889
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 19:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7392F188F38C
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 17:53:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 869B518964AB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2024 18:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E5EA206F05;
-	Mon, 16 Dec 2024 17:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D08420B207;
+	Mon, 16 Dec 2024 18:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JiQ2VrgG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KpXevEET"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227FA2066F9
-	for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 17:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621F220B1F7;
+	Mon, 16 Dec 2024 18:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734371549; cv=none; b=sxjfNuDcuF6XcYYoEKYkUu+9SBzC354bdr4qGUJYp1g+6p++8WLWDrjHka4d0M9VRe4CzL73UTsGngtErL/56OEXeFbz1mGY6kd7MNE0oAj9GRbuPUV4kxmRQ1GHuR7bAO3FFap7HHxE9Ikp+u7mgsYYg/PfKGllykK8BOO81Ks=
+	t=1734372109; cv=none; b=CEzV6Kl6K+8aLPwWJR9WeG7enSOCz77KI3uY8CJVeQoMl2j/PSS/jhn1iDucHDJagaysuYFA/vef/VxuWeGUgiR6+FF1WBgIKw0s61qWIvIjyf57N3ki2oua9OmNSH0gAJ07nk5LaW2Sm2a5JWWfEgXO6EKjC/daDYFeeyEdTjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734371549; c=relaxed/simple;
-	bh=iQRgE9Rcu1KUs6xXY8YfJ2nds9R5OXRboroFHyRVbao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FTAZdlT/rhsj+K/oPE1fnQIv0Rcos7rvBao8tvq0T2/etAuNXfsHHrmItMfKCTeq+pOsi7p0p05ALpmFCU9TA4RobIGP/4FrNpkiAvHFk+fa4z+pJTbHP0cKY1eK/vdBEfw8Eiwl28TIRZuvdbCH8HJrLvfRmWMbko0hOpgDERk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JiQ2VrgG; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21683192bf9so41606075ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 09:52:27 -0800 (PST)
+	s=arc-20240116; t=1734372109; c=relaxed/simple;
+	bh=bMkdDg7KXMyQUIXyWwV466xkGSRLO/v4NElIK9lbNMA=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2nmTURpjWhss1jRNn7z1rDMs8OqgTqB3eLoo+vCXnb+J/Gyxm6A6HvtmVa+e3D3pb8gmc6xQUxEDg4iCeEW6l1jKo6DfRKurxPV9M4qJusnpj3c2UcGWlHeHNsmXSEAUojv33kAzuMoQeZ1/2YSbvMlWfaNY8Gqz+Nuvzqwnpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KpXevEET; arc=none smtp.client-ip=209.85.210.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-71e17ab806bso2399618a34.2;
+        Mon, 16 Dec 2024 10:01:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734371547; x=1734976347; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AGS1MlFpafeO/WKDSXrB+UcdagNLniFx8svINS1DDrg=;
-        b=JiQ2VrgGhjfu8N+ZKprGnywp2Q+Pmmucifes9BMAOq4+YdXYVVfDX+xNgHneRohy4k
-         IC0TG6fG/DeTCQyjzPnHlQ4B3f7qOF3qW1h/xnqaAjwi5ZspCSnNyYo/bzmVKkiIL/T5
-         z43g4YF8+QLbohb2I3uKjZmNwVZpVLzpT3ZKATthqZAENOscPrhRlBJlHRV8j6RxwRR2
-         eaEY2lThwACcVULG6elxGWsMCf0YE6y0qdV6E8euEattv/8FOehS7ohH/V4SKk9r5wt5
-         dV+YGiAJtgYXfu2HfyvxxxY7U/vZIJNW69+c4C2TPPHP0HcxqxQ/4ZJWwZwQqsBcVtQh
-         Wzmw==
+        d=gmail.com; s=20230601; t=1734372106; x=1734976906; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xw+uyCaVO9HpfMH4azX0y4S8Gld/qa/5jQMFg0G1Me0=;
+        b=KpXevEET5h3Uc5WbykPnkEoxAl36kS0olAlemfNdtHjjoNWTFlhwPdx+C5Iw0+dD/j
+         KPFXOM+hDM4JWZ8Ohi53f5+549qEnMA3O7GjJCp9fvGG92+MBBOKjVnh1nql1TsXx3xl
+         nnCeM3f6BvRedEaa5IN7SdyKrJBox2QG0+NJC8MOmXvpL0ePksmyRO2FaL3I+Oqd0l7A
+         y+OPwCHa568by0mRmzEppTrirWXoKMQiqojZmh8ZuwGm9S/2o9oUyk8Ip5cGzFOE2oRi
+         xzzgkj+AO2uTHK0ZukB52C6wq0zgR/mcMssGLnjsPwX8rEEbf7sri8BXUapMCOItKcrz
+         bJeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734371547; x=1734976347;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AGS1MlFpafeO/WKDSXrB+UcdagNLniFx8svINS1DDrg=;
-        b=FtrhA88NTsc5duNANMiYvohaoUUyeRm4opImFGpbAJ1xoxfjeeWjlTtaQwVpNeLGc9
-         khCr0lqP2g/59YzYPcjohueudkwk72pACg/xEHyHdazdoM7RDUKSfkngmqks9neFFzxF
-         xLY7nEXDxZH4dSdVMboF11HV9z4bPiYkbMTImqARXx+4TjU/jrz03dYXk+CRWjH/VbMk
-         lzBfukvx2WwWtY3HL8zQ/9Ilz075KuAUaCCDtvIS569cqlfWtqM72UIeSNmyHqOlbZkw
-         FEM3RVJnE15P7yUcgUpWm0wI5Mwp5itnGltkUIn+04VZwHqC0kOWCkh2RZq/C40i+V6w
-         1urQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWF/VuxbkSYPIAdgejDXC16yYJjFVPAU99ZOSNQhxay2FoJsbGq7L55I3IGVaO94CceJvQh6f5qeQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg2ubY+RWWMjgsl3EmdALxjdyJl/jxi0nqyKoDgxnS42ykJrgz
-	sp+NdJheXB76uvb69yvBOJcws5uHRAuil39fT/R11DmSFK60ejl1/n9seq/dnw==
-X-Gm-Gg: ASbGncvX7Wuu9BvFTSndpgQGkTOdtsJwhmnSoOtzadVRKeIvt9UH96aDadHr8wuKhi9
-	0IdbO07I2a74eAXTAsvJukDYb8eusx4JP/KJg/jl81iRwTX0VvXyyxn3Kmddt+l1E4r4IDvhBEt
-	DVE1d24PKxepcU3DSiJydZPnFjZzEsgMIR79jrgwZauIlRei7yi20Mw1EfO6t+e4zRuu4y3Act3
-	6L2mrS64GSSliEnIF38HApEKebC/2RhwFj6zjrx/S3BtB58isQNWHbmEky7wwFtKyOZ
-X-Google-Smtp-Source: AGHT+IGvWV6mfCj2/Ercn+vVqs5fNl4+6j1t5Xlmhx+sET9hOWmhhuc1oXLoQDebjet3XKapMZVhsw==
-X-Received: by 2002:a17:902:ec89:b0:215:7421:27c with SMTP id d9443c01a7336-21892a01fddmr196614925ad.29.1734371547288;
-        Mon, 16 Dec 2024 09:52:27 -0800 (PST)
-Received: from thinkpad ([120.56.200.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e50299sm45812965ad.143.2024.12.16.09.52.22
+        d=1e100.net; s=20230601; t=1734372106; x=1734976906;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xw+uyCaVO9HpfMH4azX0y4S8Gld/qa/5jQMFg0G1Me0=;
+        b=Uw2NaT0m/K2qCa6jnDM6YKKnOauekrVw9c19p2MeAGSBSgLe96+ZZMYl2fMM6+qeN+
+         E55WO7bV0BFADA8CCSwcd01fjaCD8KgZFbBtU+9NxDM0ouafLKbFLaqSvm5nqw+PS4Iu
+         WjCbbHqiZtbGfTd3mcAiPRNbbPfdj/pD5dymHXGTay90EFQmiYoQT5W3SCGIa4ocA+Mk
+         cjvxnaLIP3ge9WmP5bCGJs5Iwr56G9kx81MRo7TiIDV/NNkOXJola+SCVZwYb+HaIKVf
+         f3ujkem+g97pqmwcEvchmsgtZy9FlknyG2C5oF1CfN9QkMjPxHeh8H3xwERC8qVpY4ks
+         tCyg==
+X-Forwarded-Encrypted: i=1; AJvYcCXa5EYXqmmtR3hdUJjdKImJ5kyeZEgbU6M2uBX+f9yzH5pd4x4b3lMaHevx7jRS9IyWri6JJfWLYQo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmdnuLwS9eea8YOUDyPY1HnCjGB1sLmDEDZyFyKFW8VqU0y/MQ
+	AV3zgY3FiGD8+LJB1hqg6kpmw5Q4jIQKFNGBmSkK9RQpZhaQ1NlFIP3gzg==
+X-Gm-Gg: ASbGncusYRFcNBDg0Id1wE1eiuj6AyC3tzB+a/q5rgo4+Wrr9l60gNgJqhNYYHwkh9V
+	M2GtUIArt6nuw/Z3RyEqrRiHwQvWzjZDes1KsHhE53n2UasJssB33uiELIZq69xPp7hx1rCn/jm
+	aQMdKecNENRqqwa9SERv/UX/bTl3OzYxkc8neuacthknsTrbupExaaIE/jewTvre8VR1iNkxSnH
+	LnVKwiJeFDPPWFbjzuTjf8pBs18+HJMwQok7/7V4NU41XX12+Gat8ykWuGH4SXN
+X-Google-Smtp-Source: AGHT+IFNpt9P3jjKrQ3tdUWXTe5N3G5KayaUEXJF/46JwvzV6qYJNy/ZAB0lqY9CHLJU/n7/WD8wTQ==
+X-Received: by 2002:a05:6830:6995:b0:717:fdb4:c207 with SMTP id 46e09a7af769-71e3ba62e68mr8759599a34.26.1734372106025;
+        Mon, 16 Dec 2024 10:01:46 -0800 (PST)
+Received: from neuromancer. ([2600:1700:fb0:1bcf:4090:604c:955c:7697])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71e484cc754sm1519713a34.60.2024.12.16.10.01.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 09:52:26 -0800 (PST)
-Date: Mon, 16 Dec 2024 23:22:10 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Ulf Hansson <ulf.hansson@linaro.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
-	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	andersson@kernel.org, konradybcio@kernel.org,
-	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by
- the user
-Message-ID: <20241216175210.mnc5kp6646sq7vzm@thinkpad>
-References: <20241209143821.m4dahsaqeydluyf3@thinkpad>
- <20241212055920.GB4825@lst.de>
- <13662231.uLZWGnKmhe@rjwysocki.net>
- <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com>
- <20241212151354.GA7708@lst.de>
- <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
- <20241214063023.4tdvjbqd2lrylb7o@thinkpad>
- <CAJZ5v0gLMx+tBo+MA3AQZ7qP28Z91d04oVBHVeTNcd-QD=kJZg@mail.gmail.com>
- <20241216171108.6ssulem3276rkycb@thinkpad>
- <CAJZ5v0j+4xjSOOy8TYE0pBuqd_GdQa683Qq0GEyJ9WAFad9Z=A@mail.gmail.com>
+        Mon, 16 Dec 2024 10:01:45 -0800 (PST)
+Message-ID: <67606b09.050a0220.3905d.5bc7@mx.google.com>
+X-Google-Original-Message-ID: <Z2BrByIyx87KHMRR@neuromancer.>
+Date: Mon, 16 Dec 2024 12:01:43 -0600
+From: Chris Morgan <macroalpha82@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+	andre.przywara@arm.com, lee@kernel.org, wens@csie.org,
+	sre@kernel.org, lars@metafoo.de,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 0/2] Fix Regression with AXP20X for 6.13-rc1
+References: <20241210224859.58917-1-macroalpha82@gmail.com>
+ <20241211215826.06162190@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0j+4xjSOOy8TYE0pBuqd_GdQa683Qq0GEyJ9WAFad9Z=A@mail.gmail.com>
+In-Reply-To: <20241211215826.06162190@jic23-huawei>
 
-On Mon, Dec 16, 2024 at 06:35:52PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Dec 16, 2024 at 6:11 PM Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Mon, Dec 16, 2024 at 05:24:40PM +0100, Rafael J. Wysocki wrote:
-> > > On Sat, Dec 14, 2024 at 7:30 AM Manivannan Sadhasivam
-> > > <manivannan.sadhasivam@linaro.org> wrote:
-> > > >
-> > > > On Fri, Dec 13, 2024 at 03:35:15PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Thu, Dec 12, 2024 at 4:14 PM Christoph Hellwig <hch@lst.de> wrote:
-> > > > > >
-> > > > > > On Thu, Dec 12, 2024 at 01:49:15PM +0100, Ulf Hansson wrote:
-> > > > > > > Right. This seems to somewhat work for ACPI types of systems, because
-> > > > > > > ACPI is controlling the low power state for all the devices. Based on
-> > > > > > > the requested system wide low power state, ACPI can then decide to
-> > > > > > > call pm_set_suspend_via_firmware() or not.
-> > > > > > >
-> > > > > > > Still there is a problem with this for ACPI too.
-> > > > > > >
-> > > > > > > How does ACPI know whether it's actually a good idea to keep the NVMe
-> > > > > > > storage powered in s2idle (ACPI calls pm_set_suspend_via_firmware()
-> > > > > > > only for S2R and S2disk!?)? Especially when my laptop only supports
-> > > > > > > s2idle and that's what I will use when I close the lid. In this way,
-> > > > > > > the NMVe storage will certainly contribute to draining the battery,
-> > > > > > > especially when I won't be using my laptop for a couple of days.
-> > > > > > >
-> > > > > > > In my opinion, we need a better approach that is both flexible and
-> > > > > > > that dynamically adjusts based upon the use case.
-> > > > > >
-> > > > > > Agreed.  I'd be happy to work with the PM maintainers to do this,
-> > > > > > but I don't really know enough about the PM core to drive it
-> > > > > > (as the reply from Rafael to my mail makes pretty clear :))
-> > > > >
-> > > > > I'm here to help.
-> > > > >
-> > > > > Let me know what exactly you want to achieve and we'll see how to make it work.
-> > > >
-> > > > I'll try to summarize the requirement here since I started this thread:
-> > > >
-> > > > Problem statement
-> > > > =================
-> > > >
-> > > > We need a PM core API that tells the device drivers when it is safe to powerdown
-> > > > the devices. The usecase here is with PCIe based NVMe devices but the problem is
-> > > > applicable to other devices as well.
-> > > >
-> > > > Drivers are relying on couple of options now:
-> > > >
-> > > > 1. If pm_suspend_via_firmware() returns true, then drivers will shutdown the
-> > > > device assuming that the firmware is going to handle the suspend. But this API
-> > > > is currently used only by ACPI. Even there, ACPI relies on S2R being supported
-> > > > by the platform and it sets pm_set_suspend_via_firmware() only when the suspend
-> > > > is S2R. But if the platform doesn't support S2R (current case of most of the
-> > > > Qcom SoCs), then pm_suspend_via_firmware() will return false and NVMe won't be
-> > > > powered down draining the battery.
-> > >
-> > > So my question here would be why is it not powered down always during
-> > > system-wide suspend?
-> > >
-> > > Why exactly is it necessary to distinguish one case from the other
-> > > (assuming that we are talking about system-wide suspend only)?
-> > >
-> >
-> > To support Android like usecase with firmware that only supports
-> > suspend-to-idle (Qcom platforms). This usecase is not applicable right now, but
-> > one can't just rule out the possibility in the near future.
+On Wed, Dec 11, 2024 at 09:58:26PM +0000, Jonathan Cameron wrote:
+> On Tue, 10 Dec 2024 16:48:57 -0600
+> Chris Morgan <macroalpha82@gmail.com> wrote:
 > 
-> This doesn't explain anything to me, sorry.
+> > From: Chris Morgan <macromorgan@hotmail.com>
+> > 
+> > After performing a git bisect, I identified a commit that broke the
+> > battery and charger driver for my AXP717 PMIC. This was caused by
+> > commit e37ec3218870 ("mfd: axp20x: Allow multiple regulators").
+> > 
+> > After digging into it, it appears when mfd_add_devices was called with
+> > a platform ID of PLATFORM_DEVID_NONE, the devm_iio_channel_get() call
+> > made by the various AXP20X power drivers would not be able to generate
+> > a dev_name(dev) for some reason, and the iio_channel_get() call used in
+> > the devm_ helper would fall back to making a iio_channel_get_sys()
+> > call. After the platform ID was updated, now iio_channel_get() is no
+> > longer falling back to iio_channel_get_sys(). At least this is my
+> > limited understanding of what happened.
 > 
-> > And the problem is that we need to support both Android and non-Android systems
-> > with same firmware :/
+> The dev_name(dev) not getting a name doesn't sound quite right to me.
 > 
-> So what technically is the problem?
+> Time to look at the ancient creaking ghost that is the iio_map handling. 
 > 
+> struct iio_channel *iio_channel_get(struct device *dev,
+> 				    const char *channel_name)
+> {
+> 	const char *name = dev ? dev_name(dev) : NULL;
+> 	struct iio_channel *channel;
+> 
+> 	if (dev) {
+> 		channel = fwnode_iio_channel_get_by_name(dev_fwnode(dev),
+> 							 channel_name);
+> 		if (!IS_ERR(channel) || PTR_ERR(channel) != -ENODEV)
+> 			return channel;
+> 	}
+> 
+> 	return iio_channel_get_sys(name, channel_name);
+> }
+> EXPORT_SYMBOL_GPL(iio_channel_get);
+> 
+> We didn't invent the relevant phandle stuff in DT via the patch you point at
+> so all that matters is what gets passed to that iio_channel_get_sys()
+> 
+> So key here is that dev should be set, so we are passing dev_name(dev) into
+> iio_channel_get_sys()
+> I'm guessing that changed... 
+> 
+> Ah.  The iio_maps in
+> https://elixir.bootlin.com/linux/v6.12.4/source/drivers/iio/adc/axp20x_adc.c#L158
+> are our problem. Those hardcode the consumer_dev name. The fix just changed
+> those names. Back when this infrastructure was written we were in the world of
+> board files, so everything was hard coded in them - or in an MFD like this
+> it was treated as a singleton device.
+> 
+> So as to how to fix it... Assuming the new device names are the same for all
+> the mfd parts that make up each pmic, then you should be able to figure out the
+>  extra the number and build the channel maps to allow you to find the numbered
+> devices.
 
-NVMe wear out is the problem.
+Is there a way to figure out the device number at runtime? The issue is
+each time the device attempts to probe and fails, the device number
+increments, making it a "hitting a moving target" problem.
 
-> > > There are drivers that use pm_suspend_via_firmware() to check whether
-> > > or not something special needs to be done to the device because if
-> > > "false" is returned, the platform firmware is not going to remove
-> > > power from it.
-> > >
-> > > However, you seem to be talking about the opposite, so doing something
-> > > special to the device if "true" is returned.  I'm not sure why this is
-> > > necessary.
-> > >
-> >
-> > Because, since 'false' is returned, drivers like NVMe are assuming that the
-> > platform won't remove power on all DT systems and they just keep the devices in
-> > low power state (not powering them down). But why would I want my NVMe in DT
-> > based laptop to be always powered in system suspend?
-> 
-> Because it causes the system to use less energy when suspended.
-> 
+Thank you,
+Chris
 
-But the NVMe driver would be still operational. Powering it down would cause the
-system to use much less energy. There is also a case where some devices like
-(Laptops made out of Qcom SCX Gen3 SoCs) require all the PCIe devices to be
-powered down in order for the SoC to reach its low power state (CX power
-collapse in Qcom terms). If not, the SoC would continue to draw more power
-leading to battery draining quickly. This platform is supported in upstream and
-we keep the PCIe interconnect voted during suspend as the NVMe driver is
-expecting the device to retain its state during resume. Because of this
-requirement, this platform is not reaching SoC level low power state with
-upstream kernel.
-
-> > > > If the platform is using DT, then there is no entity setting
-> > > > pm_set_suspend_via_firmware().
-> > >
-> > > That's true and so the assumption is that in this case the handling of
-> > > all devices will always be the same regardless of which flavor of
-> > > system suspend is chosen by user space.
-> > >
-> >
-> > Right and that's why the above concern is raised.
 > 
-> And it is still unclear to me what the problem with it is.
+> That's a lot lighter change than moving over to DT based phandles for all this.
+> (which is the modern way to handle it).
 > 
-> What exactly can go wrong?
+> As a cheeky check, just edit those maps to whatever IDs you have and see
+> if it works.  Probably not an upstreamable solution but will confirm we have
+> it correct.
 > 
-> > > > So NVMe will be kept in low power state all the
-> > > > time (still draining the battery).
-> > >
-> > > So what would be the problem with powering it down unconditionally?
-> > >
-> >
-> > I'm not sure how would you do that (by checking dev_of_node()?). Even so, it
-> > will wear out the NVMe devices if used in Android tablets etc...
+> Your patch works because we allow for some fuzzy matching (I can't remember
+> why) that doesn't use the consumer device name.
+> That works as long as there is only one instance.  I'm guessing all this
+> mess came about because someone has a board with two of these devices. On such
+> a board we need the precise matching including the device name.
 > 
-> I understand the wear-out concern.
+> Jonathan
 > 
-> Is there anything else?
+> > 
+> > To fix this, I added a new devm_ helper of devm_iio_channel_get_sys()
+> > that directly calls iio_channel_get_sys(), and I updated all the
+> > affected drivers with the new routine. I then no longer experienced
+> > any issues with the drivers on my devices.
+> > 
+> > Chris Morgan (2):
+> >   iio: core: Add devm_ API for iio_channel_get_sys
+> >   power: supply: axp20x: Use devm_iio_channel_get_sys() for iio chans
+> > 
+> >  drivers/iio/inkern.c                    | 18 ++++++++++++++++++
+> >  drivers/power/supply/axp20x_ac_power.c  |  4 ++--
+> >  drivers/power/supply/axp20x_battery.c   | 16 ++++++++--------
+> >  drivers/power/supply/axp20x_usb_power.c |  6 +++---
+> >  include/linux/iio/consumer.h            | 20 ++++++++++++++++++++
+> >  5 files changed, 51 insertions(+), 13 deletions(-)
+> > 
 > 
-
-No, that's the only concern.
-
-> > > > There were attempts to set this flag from
-> > > > PSCI [1], but there were objections on setting this flag when PSCI_SUSPEND is
-> > > > not supported by the platform (again, the case with Qcom SoCs). Even if this
-> > > > approach succeeds, then there are concerns that if the platform is used in an
-> > > > OS like Android where the S2Idle cycle is far more high, NVMe will wear out
-> > > > very quickly.
-> > >
-> > > I see.
-> > >
-> > > > So this is where the forthcoming API need to "dynamically adjusts
-> > > > based upon the use case" as quoted by Ulf in his previous reply. One way to
-> > > > achieve would be by giving the flexibility to the userspace to choose the
-> > > > suspend state (if platform has options to select). UFS does something similar
-> > > > with 'spm_lvl' [2] sysfs attribute that I believe Android userspace itself makes
-> > > > use of.
-> > >
-> > > Before we're talking about APIs, let's talk about the desired behavior.
-> > >
-> > > It looks like there are cases in which you'd want to turn the device
-> > > off completely (say put it into D3cold in the PCI terminology) and
-> > > there are cases in which you'd want it to stay in a somewhat-powered
-> > > low-power state.
-> > >
-> > > It is unclear to me what they are at this point.
-> > >
-> >
-> > I hope that my above explanation clarifies.
-> 
-> Sorry, but not really.
-> 
-> > Here is the short version of the suspend requirement across platforms:
-> >
-> > 1. D3Cold (power down) - Laptops/Automotive
-> > 2. D3hot (low power) - Android Tablets
-> 
-> Where do the above requirements come from?
-> 
-
-In my case, it is coming from the SoC vendor, Qcom.
-
-> > FWIW, I did receive feedback from people asking to just ignore the Android
-> > usecase and always power down the devices for DT platforms. But I happen to
-> > disagree with them. Let me know if I was wrong and I should not worry about
-> > Android usecase as it is for the future.
-> 
-> I'm not sure what you mean by the "Android usecase" TBH.  Do you mean
-> the wear-out concern in the Android usage scenario or is there more to
-> it?
-
-No, just the wear out concern in Android usecase.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
 
