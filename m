@@ -1,126 +1,294 @@
-Return-Path: <linux-pm+bounces-19370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D95CA9F4BFC
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 14:24:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA7D9F4CC4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 14:48:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 434F01896E12
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 13:12:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C5407A4D56
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 13:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1141F472A;
-	Tue, 17 Dec 2024 13:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="b/sEJ3gG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DCF31F427C;
+	Tue, 17 Dec 2024 13:48:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A041EE026
-	for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 13:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4721EF1D;
+	Tue, 17 Dec 2024 13:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734440841; cv=none; b=SP0sWk3DSHbdMc8/LhuAvJMxNhd4iwa4Wyuu19S1cxNWsi0ucW5hAfnrG1JLs7odgs6xXolacHPwpULPCaWTcQ6Nv215hlpoUzaH/ysM7dJHACtt7PR0TgrAsno6ceNUyv7AsUGPwHJTJbm8K6VAxZLWPwUpVaOjh/NaKMtV4Z8=
+	t=1734443310; cv=none; b=rYv1iflBaN0Pf8thbo6AECLQBtIFTv5ypk28EqWPv6Wezvw0AiRTSM9qft69MpKdr4gUGTPKgUX+BhE6Dd/5uYWKo20pXfQQZurz8Y2JC/x2kBnZXEF+ZH/3fIJKajDVSoiMy+8GmXQmRvjDywGupcgWBaLv+ezjWI4eAZkZbM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734440841; c=relaxed/simple;
-	bh=tiFDbuiLhdgo9Mpr0DUuNilHyCSbQ7kNQKNgVyN9Ab4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tSdY9jAtldPGw0tkgqKDfea3/YwADaFbogtLUFLuh5CpwF79gFVsL+/ew2N5+94QHPQ4h5TF7YRroRN+ErySC9bi6aTpRluEiFPYXg4oqUvE7/ZxqbKF789L9ZnyFfOZpIdsTMYccKCIbZiLjebtRANZIF1uySuBIRQ/l+EJsk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=b/sEJ3gG; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-38632b8ae71so3918259f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 05:07:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1734440838; x=1735045638; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RKZH+3oGIzxnCr2Yt/BTYyEjHKZwxfdTXrPGk9BiJzI=;
-        b=b/sEJ3gGgHTapuU0Djl6NbwvA10hokQ6/8jlaemZlGuCI0mzasiUTHyEYBBElGfbFo
-         V0C5+LiaBkg5gCAAsZhaAcpkKJtSyiDo4NgHX8o/jMV5iCO5IxlNUWGCIJTxe3ohbiso
-         lnTU0T9BybocVsdjBPu/GyHajCSkOR/yxzk3jr0f/EsdZxppHhGuK9WnLJCb65JajfF1
-         4ghEiaY9ETW2QRQ/yp/XhpJFN/JyY1DVISXku1Xn7j1wz7KP4GorhvOrJVb5dzquW9hs
-         PSVtgfeqBOEnQ0bTF55pEMRMCl+Fki/r3LPzMxuM1e/qmrvPdfHJfcRkEroqClYNtuD1
-         c2rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734440838; x=1735045638;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RKZH+3oGIzxnCr2Yt/BTYyEjHKZwxfdTXrPGk9BiJzI=;
-        b=lILO3k0t4Qw6oBboUWVB+IDP3YDgQ8T8qWqypQYOcy0uM7j0iwbSWEx1JrzP+bBl47
-         GCvkZIv7Hd44tQubzNTWVTzPGez0P4YZxh+ZazawN5dhi42hMROn2O2aZW4oym9VxL9i
-         DNu7ha3IMkfmZtgNHM0PQfiptuqT0kJfHENVaGhKqHAsMQbdXb5eO/UCiWy9jf+grYar
-         nsxRCorSd4M/ROGu/MW77uLW1tZNvXRPjjmDunckbDdxglcipvBRiLfQvEkueO3xQvd8
-         fL6bBQUy3C3qaZtBEhbCjarAuBNPVNXFLB70fDU02G+l4IYYPfd7vOjpFU85VVsJ0S2r
-         uwrQ==
-X-Gm-Message-State: AOJu0YxJ8XTBLZERI10nZAfUwjRDWwunTLCUeJaKAPvZolW5FQNUFnnU
-	JmLF15uTOy39+D4IounkoTqzCwj1tzHZVJaQBbpsxvpoQ557sMHFtd4JcirHds8=
-X-Gm-Gg: ASbGncvFsSIrlSGWF6H/3kAFfMd/YuC4ujHzGlz5mhrcqG/mI85LiF1OgmLUDei723A
-	bEqBHj0ab90Aup0PBtSeebfg9jIBa+BjbZ5duYpSfi8ymhKadcUzFDqwFsWWqXauGmHMbqtMLk4
-	FxIZoxO1cbaRwiOMqt1ZvuclqvcoMSwrPbf9R3bbT6xAXBK0v6iznOGaL5irCzbEsMTzFun7Cbm
-	b3XQ6uMU7nuiZM99w9kGo4jRDVrBKWCb1bFzi5t5bUk4vwJyzQDAIKe
-X-Google-Smtp-Source: AGHT+IEgPO9ABbOL7ucdASbUynPyCJFyYcZhfnFIvIt0jen9/oVFeATEDojSNgDCknf4p2ZBBQdeOw==
-X-Received: by 2002:a5d:47a2:0:b0:385:e176:4420 with SMTP id ffacd0b85a97d-38880ac2e1emr13175713f8f.10.1734440837798;
-        Tue, 17 Dec 2024 05:07:17 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:4699:6189:1775:3ce7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c801bb00sm10970196f8f.62.2024.12.17.05.07.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2024 05:07:17 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] power: sequencing: qcom-wcn: explain why we need the WLAN_EN GPIO hack
-Date: Tue, 17 Dec 2024 14:07:14 +0100
-Message-ID: <20241217130714.51406-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1734443310; c=relaxed/simple;
+	bh=Dec/BYNYnRrGFmxGH3FDut30oCKG3o6pxweQtg4CNvI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HfPHJsF6Ri2avXyCuh8FrN4gRvvI8bKVq8ihxPGHd68+86KdIcIloNlBBQZ88iQNwR3xUgcdqtRQ6wg8I1mqdYAij61fvrH8oObJEaPML4Xa14pTjkhVxJnUU328LW3pAJKuLx0/SSp6f9GujXUAcn2RqtXjlEPho/QIO/YbRec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6A3A497;
+	Tue, 17 Dec 2024 05:48:52 -0800 (PST)
+Received: from [10.34.129.42] (e126645.nice.arm.com [10.34.129.42])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 597833F528;
+	Tue, 17 Dec 2024 05:48:21 -0800 (PST)
+Message-ID: <8e9c1ede-3277-458b-bd44-ca0c7615a4ab@arm.com>
+Date: Tue, 17 Dec 2024 14:48:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] ACPI: CPPC: Add cppc_get_reg_val and
+ cppc_set_reg_val function
+To: Lifeng Zheng <zhenglifeng1@huawei.com>, rafael@kernel.org,
+ lenb@kernel.org, robert.moore@intel.com, viresh.kumar@linaro.org
+Cc: acpica-devel@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com,
+ ionela.voinescu@arm.com, jonathan.cameron@huawei.com,
+ zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com,
+ fanghao11@huawei.com
+References: <20241216091603.1247644-1-zhenglifeng1@huawei.com>
+ <20241216091603.1247644-2-zhenglifeng1@huawei.com>
+Content-Language: en-US
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20241216091603.1247644-2-zhenglifeng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hello Lifeng,
 
-With the recent rework of the PCI power control code, the workaround for
-the wlan-enable GPIO - where we don't set a default (low) state in the
-power sequencing driver, but instead request the pin as-is - should no
-longer be needed but some platforms still fail to probe the WLAN
-controller. This is caused by the Qcom PCIe controller and needs a
-workaround in the controller driver so add a FIXME to eventually remove
-the hack from this driver once this is done.
+On 12/16/24 10:16, Lifeng Zheng wrote:
+> Rename cppc_get_perf() to cppc_get_reg_val() as a generic function to read
+> cppc registers, with four changes:
+> 
+> 1. Change the error kind to "no such device" when pcc_ss_id < 0, which
+> means that this cpu cannot get a valid pcc_ss_id.
+> 
+> 2. Add a check to verify if the register is a cpc supported one before
+> using it.
+> 
+> 3. Extract the operations if register is in pcc out as
+> cppc_get_reg_val_in_pcc().
+> 
+> 4. Return the result of cpc_read() instead of 0.
+> 
+> Add cppc_set_reg_val_in_pcc() and cppc_set_reg_val() as generic functions
+> for setting cppc registers value. Unlike other set reg ABIs,
+> cppc_set_reg_val() checks CPC_SUPPORTED right after getting the register,
+> because the rest of the operations are meaningless if this register is not
+> a cpc supported one.
+> 
+> These functions can be used to reduce some existing code duplication.
+> 
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> ---
+>   drivers/acpi/cppc_acpi.c | 111 +++++++++++++++++++++++++++++----------
+>   1 file changed, 84 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index c1f3568d0c50..bb5333a503a2 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1179,43 +1179,100 @@ static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
+>   	return ret_val;
+>   }
+>   
+> -static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
+> +static int cppc_get_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 *val)
+>   {
+> -	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> +	struct cppc_pcc_data *pcc_ss_data = NULL;
+> +	int ret;
+> +
+> +	if (pcc_ss_id < 0) {
+> +		pr_debug("Invalid pcc_ss_id\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	pcc_ss_data = pcc_data[pcc_ss_id];
+> +
+> +	down_write(&pcc_ss_data->pcc_lock);
+> +
+> +	if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
+> +		ret = cpc_read(cpu, reg, val);
+> +	else
+> +		ret = -EIO;
+> +
+> +	up_write(&pcc_ss_data->pcc_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int cppc_get_reg_val(int cpu, enum cppc_regs reg_idx, u64 *val)
+> +{
+> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>   	struct cpc_register_resource *reg;
+>   
+>   	if (!cpc_desc) {
+> -		pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+> +		pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+>   		return -ENODEV;
+>   	}
+>   
+>   	reg = &cpc_desc->cpc_regs[reg_idx];
+>   
+> -	if (CPC_IN_PCC(reg)) {
+> -		int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+> -		struct cppc_pcc_data *pcc_ss_data = NULL;
+> -		int ret = 0;
+> -
+> -		if (pcc_ss_id < 0)
+> -			return -EIO;
+> +	if (!CPC_SUPPORTED(reg)) {
+> +		pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
+> +		return -EOPNOTSUPP;
+> +	}
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/power/sequencing/pwrseq-qcom-wcn.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I think this is only valid for optional fields. Meaning that:
+- if the function is used one day for the mandatory 'Lowest Performance'
+field, an integer value of 0 would be valid.
+- if the function is used for a mandatory field containing a NULL Buffer,
+it seems we would return -EFAULT currently, through cpc_read(). -EOPNOTSUPP
+doesn't seem appropriate as the field would be mandatory.
 
-diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-index cc03b5aaa8f2..9d6a68ac719f 100644
---- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
-+++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-@@ -396,6 +396,14 @@ static int pwrseq_qcom_wcn_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(ctx->bt_gpio),
- 				     "Failed to get the Bluetooth enable GPIO\n");
- 
-+	/*
-+	 * FIXME: This should actually be GPIOD_OUT_LOW. The driver model can
-+	 * correctly handle provider <-> consumer dependencies but there is a
-+	 * known issue with Qcom PCIe controllers where, if the device is
-+	 * powered off abrubtly (without controller driver noticing), the PCIe
-+	 * link moves to link down state. Until the link-down handling is
-+	 * addressed in the controller driver, we need to keep this workaround.
-+	 */
- 	ctx->wlan_gpio = devm_gpiod_get_optional(dev, "wlan-enable",
- 						 GPIOD_ASIS);
- 	if (IS_ERR(ctx->wlan_gpio))
--- 
-2.45.2
+Maybe the function needs an additional 'bool optional' input parameter
+to do these check conditionally.
 
+>   
+> -		pcc_ss_data = pcc_data[pcc_ss_id];
+> +	if (CPC_IN_PCC(reg))
+> +		return cppc_get_reg_val_in_pcc(cpu, reg, val);
+>   
+> -		down_write(&pcc_ss_data->pcc_lock);
+> +	return cpc_read(cpu, reg, val);
+> +}
+>   
+> -		if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
+> -			cpc_read(cpunum, reg, perf);
+> -		else
+> -			ret = -EIO;
+> +static int cppc_set_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 val)
+> +{
+> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> +	struct cppc_pcc_data *pcc_ss_data = NULL;
+> +	int ret;
+>   
+> -		up_write(&pcc_ss_data->pcc_lock);
+> +	if (pcc_ss_id < 0) {
+> +		pr_debug("Invalid pcc_ss_id\n");
+> +		return -ENODEV;
+> +	}
+>   
+> +	ret = cpc_write(cpu, reg, val);
+> +	if (ret)
+>   		return ret;
+> +
+> +	pcc_ss_data = pcc_data[pcc_ss_id];
+> +
+> +	down_write(&pcc_ss_data->pcc_lock);
+> +	/* after writing CPC, transfer the ownership of PCC to platform */
+> +	ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> +	up_write(&pcc_ss_data->pcc_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int cppc_set_reg_val(int cpu, enum cppc_regs reg_idx, u64 val)
+> +{
+> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +	struct cpc_register_resource *reg;
+> +
+> +	if (!cpc_desc) {
+> +		pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+> +		return -ENODEV;
+>   	}
+>   
+> -	cpc_read(cpunum, reg, perf);
+> +	reg = &cpc_desc->cpc_regs[reg_idx];
+>   
+> -	return 0;
+> +	if (!CPC_SUPPORTED(reg)) {
+> +		pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
+> +		return -EOPNOTSUPP;
+> +	}
+
+Similarly to cppc_get_reg_val(), if a field is:
+- mandatory + integer: currently doesn't exist. Not sure we should
+try to detect that, but might be safer.
+- mandatory + buffer: should not return -EOPNOTSUPP I think
+- optional + integer: e.g.: 'Autonomous Selection Enable Register',
+we should return -EOPNOTSUPP. It seems that currently, if the integer
+value is 1, I get a 'write error: Bad address'
+- optional + buffer:
+should effectively return -EOPNOTSUPP if the buffer is NULL.
+
+> +
+> +	if (CPC_IN_PCC(reg))
+> +		return cppc_set_reg_val_in_pcc(cpu, reg, val);
+> +
+> +	return cpc_write(cpu, reg, val);
+>   }
+>   
+>   /**
+> @@ -1223,11 +1280,11 @@ static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
+>    * @cpunum: CPU from which to get desired performance.
+>    * @desired_perf: Return address.
+>    *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+>    */
+>   int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
+>   {
+> -	return cppc_get_perf(cpunum, DESIRED_PERF, desired_perf);
+> +	return cppc_get_reg_val(cpunum, DESIRED_PERF, desired_perf);
+>   }
+>   EXPORT_SYMBOL_GPL(cppc_get_desired_perf);
+>   
+> @@ -1236,11 +1293,11 @@ EXPORT_SYMBOL_GPL(cppc_get_desired_perf);
+>    * @cpunum: CPU from which to get nominal performance.
+>    * @nominal_perf: Return address.
+>    *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+>    */
+>   int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+>   {
+> -	return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
+> +	return cppc_get_reg_val(cpunum, NOMINAL_PERF, nominal_perf);
+>   }
+>   
+>   /**
+> @@ -1248,11 +1305,11 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+>    * @cpunum: CPU from which to get highest performance.
+>    * @highest_perf: Return address.
+>    *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+>    */
+>   int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
+>   {
+> -	return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
+> +	return cppc_get_reg_val(cpunum, HIGHEST_PERF, highest_perf);
+>   }
+>   EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+>   
+> @@ -1261,11 +1318,11 @@ EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+>    * @cpunum: CPU from which to get epp preference value.
+>    * @epp_perf: Return address.
+>    *
+> - * Return: 0 for success, -EIO otherwise.
+> + * Return: 0 for success, -ERRNO otherwise.
+>    */
+>   int cppc_get_epp_perf(int cpunum, u64 *epp_perf)
+>   {
+> -	return cppc_get_perf(cpunum, ENERGY_PERF, epp_perf);
+> +	return cppc_get_reg_val(cpunum, ENERGY_PERF, epp_perf);
+>   }
+>   EXPORT_SYMBOL_GPL(cppc_get_epp_perf);
+>   
 
